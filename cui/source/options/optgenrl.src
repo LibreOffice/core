@@ -33,7 +33,7 @@
 #include <sfx2/sfx.hrc>
 
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optgenrl.hrc"
 
 // RID_SFXPAGE_GENERAL ------------------------------------------------------
@@ -275,24 +275,6 @@ QueryBox RID_SVXQB_CHANGEDATA
     DEFBUTTON = WB_DEF_NO ;
     Message [ en-US ] = "The User Data have been changed.\nNote that, if you continue, the registration key will become invalid.\nTherefore, a new registration key is needed within 30 days.\nYou can find the registration form in the menu Help - Registration...\nDo you really want to change your User Data?";
 };
-
- // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
-
-StringArray RID_SVXSTR_FIELDUNIT_TABLE
-{
-    ItemList [ en-US ] =
-    {
-        < "Millimeter" ; FUNIT_MM ; > ;
-        < "Centimeter" ; FUNIT_CM ; > ;
-        < "Meter" ; FUNIT_M ; > ;
-        < "Kilometer" ; FUNIT_KM ; > ;
-        < "Inch" ; FUNIT_INCH ; > ;
-        < "Foot" ; FUNIT_FOOT ; > ;
-        < "Miles" ; FUNIT_MILE ; > ;
-        < "Pica" ; FUNIT_PICA ; > ;
-        < "Point" ; FUNIT_POINT ; > ;
-    };
-    };
 
  // ********************************************************************** EOF
 

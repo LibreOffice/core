@@ -34,7 +34,7 @@
 // include ---------------------------------------------------------------
 
 #include "radiobtnbox.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 namespace svx {
 

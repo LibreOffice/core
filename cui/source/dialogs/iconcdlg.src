@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 String RID_SVXSTR_ICONCHOICEDLG_RESETBUT
 {

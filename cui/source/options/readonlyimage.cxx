@@ -33,8 +33,8 @@
 
 #include <readonlyimage.hxx>
 #include <vcl/help.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 
 /*-- 26.02.2004 13:31:04---------------------------------------------------
 
@@ -43,7 +43,7 @@ ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
     sal_Bool bHighContrast = pParent->GetDisplayBackground().GetColor().IsDark();
-    SetImage( Image(SVX_RES(bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK )));
+    SetImage( Image(CUI_RES(bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK )));
 }
 
 /*-- 26.02.2004 13:31:04---------------------------------------------------
@@ -79,6 +79,6 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
   -----------------------------------------------------------------------*/
 const String& ReadOnlyImage::GetHelpTip()
 {
-     static String  aStr(SVX_RES(RID_SVXSTR_READONLY_CONFIG_TIP));
+     static String  aStr(CUI_RES(RID_SVXSTR_READONLY_CONFIG_TIP));
      return aStr;
 }

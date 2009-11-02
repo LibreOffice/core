@@ -40,10 +40,10 @@
 
 #include "multipat.hxx"
 #include "multifil.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #include "multipat.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 // #97807# -------------
 #include <com/sun/star/ucb/XContentProvider.hpp>
@@ -63,8 +63,8 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 
     if ( IsClassPathMode() )
     {
-        aDlg.SetTitle( SVX_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
-        aDlg.AddFilter( SVX_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), String::CreateFromAscii("*.jar;*.zip") );
+        aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
+        aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), String::CreateFromAscii("*.jar;*.zip") );
     }
 
     if ( aDlg.Execute() == ERRCODE_NONE )
@@ -131,7 +131,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 
         if ( bDuplicated ) // #97807# --------------------
         {
-            String sMsg( SVX_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+            String sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg.SearchAndReplaceAscii( "%1", sInsFile );
             InfoBox( pBtn, sMsg ).Execute();
         }
@@ -173,8 +173,8 @@ SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, BOOL bEmptyAllowed ) :
 {
     aAddBtn.SetClickHdl( LINK( this, SvxMultiFileDialog, AddHdl_Impl ) );
     aDelBtn.SetClickHdl( LINK( this, SvxMultiFileDialog, DelHdl_Impl ) );
-    SetText( SVX_RES( RID_SVXSTR_FILE_TITLE ) );
-    aPathFL.SetText( SVX_RES( RID_SVXSTR_FILE_HEADLINE ) );
+    SetText( CUI_RES( RID_SVXSTR_FILE_TITLE ) );
+    aPathFL.SetText( CUI_RES( RID_SVXSTR_FILE_HEADLINE ) );
     aDelBtn.Enable();
 }
 

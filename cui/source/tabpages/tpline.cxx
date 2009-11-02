@@ -44,7 +44,7 @@
 
 #define _SVX_TPLINE_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "tabline.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
@@ -52,7 +52,7 @@
 #include "svx/drawitem.hxx"
 #include "cuitabline.hxx"
 #include "dlgname.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/svdmodel.hxx>
 #include "svx/svxgrahicitem.hxx"
@@ -72,6 +72,8 @@
 #include <svx/xbitmap.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "svx/opengrf.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
@@ -105,33 +107,33 @@ SvxLineTabPage::SvxLineTabPage
     Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
-    SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_LINE ), rInAttrs ),
-    aFtLineStyle        ( this, SVX_RES( FT_LINE_STYLE ) ),
-    aLbLineStyle        ( this, SVX_RES( LB_LINE_STYLE ) ),
-    aFtColor            ( this, SVX_RES( FT_COLOR ) ),
-    aLbColor            ( this, SVX_RES( LB_COLOR ) ),
-    aFtLineWidth        ( this, SVX_RES( FT_LINE_WIDTH ) ),
-    aMtrLineWidth       ( this, SVX_RES( MTR_FLD_LINE_WIDTH ) ),
-    aFtTransparent      ( this, SVX_RES( FT_TRANSPARENT ) ),
-    aMtrTransparent     ( this, SVX_RES( MTR_LINE_TRANSPARENT ) ),
-    aFlLine             ( this, SVX_RES( FL_LINE ) ),
-    aFtLineEndsStyle    ( this, SVX_RES( FT_LINE_ENDS_STYLE ) ),
-    aLbStartStyle       ( this, SVX_RES( LB_START_STYLE ) ),
-    aFtLineEndsWidth    ( this, SVX_RES( FT_LINE_ENDS_WIDTH ) ),
-    aMtrStartWidth      ( this, SVX_RES( MTR_FLD_START_WIDTH ) ),
-    aTsbCenterStart     ( this, SVX_RES( TSB_CENTER_START ) ),
-    aLbEndStyle         ( this, SVX_RES( LB_END_STYLE ) ),
-    aMtrEndWidth        ( this, SVX_RES( MTR_FLD_END_WIDTH ) ),
-    aTsbCenterEnd       ( this, SVX_RES( TSB_CENTER_END ) ),
-    aCbxSynchronize     ( this, SVX_RES( CBX_SYNCHRONIZE ) ),
-    aFlLineEnds         ( this, SVX_RES( FL_LINE_ENDS ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
-    aFLSeparator        ( this, SVX_RES( FL_SEPARATOR ) ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_LINE ), rInAttrs ),
+    aFtLineStyle        ( this, CUI_RES( FT_LINE_STYLE ) ),
+    aLbLineStyle        ( this, CUI_RES( LB_LINE_STYLE ) ),
+    aFtColor            ( this, CUI_RES( FT_COLOR ) ),
+    aLbColor            ( this, CUI_RES( LB_COLOR ) ),
+    aFtLineWidth        ( this, CUI_RES( FT_LINE_WIDTH ) ),
+    aMtrLineWidth       ( this, CUI_RES( MTR_FLD_LINE_WIDTH ) ),
+    aFtTransparent      ( this, CUI_RES( FT_TRANSPARENT ) ),
+    aMtrTransparent     ( this, CUI_RES( MTR_LINE_TRANSPARENT ) ),
+    aFlLine             ( this, CUI_RES( FL_LINE ) ),
+    aFtLineEndsStyle    ( this, CUI_RES( FT_LINE_ENDS_STYLE ) ),
+    aLbStartStyle       ( this, CUI_RES( LB_START_STYLE ) ),
+    aFtLineEndsWidth    ( this, CUI_RES( FT_LINE_ENDS_WIDTH ) ),
+    aMtrStartWidth      ( this, CUI_RES( MTR_FLD_START_WIDTH ) ),
+    aTsbCenterStart     ( this, CUI_RES( TSB_CENTER_START ) ),
+    aLbEndStyle         ( this, CUI_RES( LB_END_STYLE ) ),
+    aMtrEndWidth        ( this, CUI_RES( MTR_FLD_END_WIDTH ) ),
+    aTsbCenterEnd       ( this, CUI_RES( TSB_CENTER_END ) ),
+    aCbxSynchronize     ( this, CUI_RES( CBX_SYNCHRONIZE ) ),
+    aFlLineEnds         ( this, CUI_RES( FL_LINE_ENDS ) ),
+    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
+    aFLSeparator        ( this, CUI_RES( FL_SEPARATOR ) ),
 
     // #116827#
-    maFLEdgeStyle       ( this, SVX_RES( FL_EDGE_STYLE ) ),
-    maFTEdgeStyle       ( this, SVX_RES( FT_EDGE_STYLE ) ),
-    maLBEdgeStyle       ( this, SVX_RES( LB_EDGE_STYLE ) ),
+    maFLEdgeStyle       ( this, CUI_RES( FL_EDGE_STYLE ) ),
+    maFTEdgeStyle       ( this, CUI_RES( FT_EDGE_STYLE ) ),
+    maLBEdgeStyle       ( this, CUI_RES( LB_EDGE_STYLE ) ),
 
     pSymbolList(NULL),
     bNewSize(false),
@@ -139,13 +141,13 @@ SvxLineTabPage::SvxLineTabPage
     nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), //unbekannt bzw. unchanged
     pSymbolAttr(NULL),
     //#58425# Symbole auf einer Linie (z.B. StarChart)
-    aFlSymbol           ( this, SVX_RES(FL_SYMBOL_FORMAT)),
-    aSymbolMB           ( this, SVX_RES(MB_SYMBOL_BITMAP)),
-    aSymbolWidthFT      ( this, SVX_RES(FT_SYMBOL_WIDTH)),
-    aSymbolWidthMF      ( this, SVX_RES(MF_SYMBOL_WIDTH)),
-    aSymbolHeightFT     ( this, SVX_RES(FT_SYMBOL_HEIGHT)),
-    aSymbolHeightMF     ( this, SVX_RES(MF_SYMBOL_HEIGHT)),
-    aSymbolRatioCB      ( this, SVX_RES(CB_SYMBOL_RATIO)),
+    aFlSymbol           ( this, CUI_RES(FL_SYMBOL_FORMAT)),
+    aSymbolMB           ( this, CUI_RES(MB_SYMBOL_BITMAP)),
+    aSymbolWidthFT      ( this, CUI_RES(FT_SYMBOL_WIDTH)),
+    aSymbolWidthMF      ( this, CUI_RES(MF_SYMBOL_WIDTH)),
+    aSymbolHeightFT     ( this, CUI_RES(FT_SYMBOL_HEIGHT)),
+    aSymbolHeightMF     ( this, CUI_RES(MF_SYMBOL_HEIGHT)),
+    aSymbolRatioCB      ( this, CUI_RES(CB_SYMBOL_RATIO)),
 
     bLastWidthModified(FALSE),
     aSymbolLastSize(Size(0,0)),
@@ -286,14 +288,13 @@ void SvxLineTabPage::Construct()
 
 void SvxLineTabPage::FillListboxes()
 {
-    ResMgr& rMgr = DIALOG_MGR();
     USHORT nOldSelect = aLbLineStyle.GetSelectEntryPos();
     aLbLineStyle.FillStyles();
     aLbLineStyle.Fill( pDashList );
     aLbLineStyle.SelectEntryPos( nOldSelect );
 
     // LinienEndenStile
-    String sNone( ResId( RID_SVXSTR_NONE, rMgr ) );
+    String sNone( SVX_RES( RID_SVXSTR_NONE ) );
     nOldSelect = aLbStartStyle.GetSelectEntryPos();
     aLbStartStyle.Clear();
     aLbStartStyle.InsertEntry( sNone );
@@ -315,7 +316,6 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         SetPageType(pPageTypeItem->GetValue()); //add CHINA001 end
     if( nDlgType == 0 && pDashList )  //CHINA001 if( *pDlgType == 0 && pDashList ) // Linien-Dialog
     {
-        ResMgr& rMgr = DIALOG_MGR();
         USHORT nPos;
         USHORT nCount;
 
@@ -333,9 +333,9 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
             aLbLineStyle.Clear();
             aLbLineStyle.InsertEntry(
-                String( ResId( RID_SVXSTR_INVISIBLE, rMgr ) ) );
+                SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
             aLbLineStyle.InsertEntry(
-                String( ResId( RID_SVXSTR_SOLID, rMgr ) ) );
+                SVX_RESSTR( RID_SVXSTR_SOLID ) );
             aLbLineStyle.Fill( pDashList );
             nCount = aLbLineStyle.GetEntryCount();
 
@@ -376,7 +376,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             *pnLineEndListState = CT_NONE;
 
             nPos = aLbLineStyle.GetSelectEntryPos();
-            String sNone( ResId( RID_SVXSTR_NONE, rMgr ) );
+            String sNone( SVX_RES( RID_SVXSTR_NONE ) );
             aLbStartStyle.Clear();
             aLbStartStyle.InsertEntry( sNone );
 
@@ -1762,7 +1762,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         break;
         default:
         {
-            SvxOpenGraphicDialog aGrfDlg(SVX_RES(RID_STR_EDIT_GRAPHIC));
+            SvxOpenGraphicDialog aGrfDlg(CUI_RES(RID_STR_EDIT_GRAPHIC));
             aGrfDlg.EnableLink(sal_False);
             aGrfDlg.AsLink(sal_False);
             if( !aGrfDlg.Execute() )

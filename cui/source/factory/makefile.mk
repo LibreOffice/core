@@ -47,6 +47,7 @@ CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/i
 SLOFILES+=\
         $(SLO)$/dlgfact.obj \
         $(SLO)$/cuiexp.obj \
+        $(SLO)$/cuiresmgr.obj \
         $(SLO)$/init.obj \
 
 

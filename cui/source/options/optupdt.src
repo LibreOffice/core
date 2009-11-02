@@ -30,7 +30,7 @@
 
 // include --------------------------------------------------------------
 #include "optupdt.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 
  // RID_SVXPAGE_ONLINEUPDATE --------------------------------------------

@@ -64,13 +64,13 @@
 #include <svx/xpool.hxx>
 #include <svx/dlgutil.hxx>
 #include "cuitabarea.hxx"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optmemory.hrc"
 #include "optmemory.hxx"
 #include <svx/ofaitem.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #define CONFIG_LANGUAGES "OfficeLanguages"
 
@@ -127,30 +127,30 @@ int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 
 OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( OFA_TP_MEMORY ), rSet ),
+    SfxTabPage( pParent, CUI_RES( OFA_TP_MEMORY ), rSet ),
 
-    aUndoBox                ( this, SVX_RES( GB_UNDO ) ),
-    aUndoText               ( this, SVX_RES( FT_UNDO ) ),
-    aUndoEdit               ( this, SVX_RES( ED_UNDO ) ),
-    aGbGraphicCache         ( this, SVX_RES( GB_GRAPHICCACHE ) ),
-    aFtGraphicCache         ( this, SVX_RES( FT_GRAPHICCACHE ) ),
-    aNfGraphicCache         ( this, SVX_RES( NF_GRAPHICCACHE ) ),
-    aFtGraphicCacheUnit     ( this, SVX_RES( FT_GRAPHICCACHE_UNIT         ) ),
-    aFtGraphicObjectCache   ( this, SVX_RES( FT_GRAPHICOBJECTCACHE ) ),
-    aNfGraphicObjectCache   ( this, SVX_RES( NF_GRAPHICOBJECTCACHE ) ),
-    aFtGraphicObjectCacheUnit(this, SVX_RES( FT_GRAPHICOBJECTCACHE_UNIT ) ),
-    aFtGraphicObjectTime    ( this, SVX_RES( FT_GRAPHICOBJECTTIME ) ),
-    aTfGraphicObjectTime    ( this, SVX_RES( TF_GRAPHICOBJECTTIME ) ),
-    aFtGraphicObjectTimeUnit( this, SVX_RES( FT_GRAPHICOBJECTTIME_UNIT     ) ),
+    aUndoBox                ( this, CUI_RES( GB_UNDO ) ),
+    aUndoText               ( this, CUI_RES( FT_UNDO ) ),
+    aUndoEdit               ( this, CUI_RES( ED_UNDO ) ),
+    aGbGraphicCache         ( this, CUI_RES( GB_GRAPHICCACHE ) ),
+    aFtGraphicCache         ( this, CUI_RES( FT_GRAPHICCACHE ) ),
+    aNfGraphicCache         ( this, CUI_RES( NF_GRAPHICCACHE ) ),
+    aFtGraphicCacheUnit     ( this, CUI_RES( FT_GRAPHICCACHE_UNIT         ) ),
+    aFtGraphicObjectCache   ( this, CUI_RES( FT_GRAPHICOBJECTCACHE ) ),
+    aNfGraphicObjectCache   ( this, CUI_RES( NF_GRAPHICOBJECTCACHE ) ),
+    aFtGraphicObjectCacheUnit(this, CUI_RES( FT_GRAPHICOBJECTCACHE_UNIT ) ),
+    aFtGraphicObjectTime    ( this, CUI_RES( FT_GRAPHICOBJECTTIME ) ),
+    aTfGraphicObjectTime    ( this, CUI_RES( TF_GRAPHICOBJECTTIME ) ),
+    aFtGraphicObjectTimeUnit( this, CUI_RES( FT_GRAPHICOBJECTTIME_UNIT     ) ),
 
-    aGbOLECache             ( this, SVX_RES( GB_OLECACHE ) ),
-    aFtOLECache             ( this, SVX_RES( FT_OLECACHE ) ),
-    aNfOLECache             ( this, SVX_RES( NF_OLECACHE ) ),
-    aQuickLaunchFL          ( this, SVX_RES( FL_QUICKLAUNCH ) ),
-    aQuickLaunchCB          ( this, SVX_RES( CB_QUICKLAUNCH ) )//,
+    aGbOLECache             ( this, CUI_RES( GB_OLECACHE ) ),
+    aFtOLECache             ( this, CUI_RES( FT_OLECACHE ) ),
+    aNfOLECache             ( this, CUI_RES( NF_OLECACHE ) ),
+    aQuickLaunchFL          ( this, CUI_RES( FL_QUICKLAUNCH ) ),
+    aQuickLaunchCB          ( this, CUI_RES( CB_QUICKLAUNCH ) )//,
 {
 #if defined(UNX)
-    aQuickLaunchCB.SetText( SVX_RES( STR_QUICKLAUNCH_UNX ) );
+    aQuickLaunchCB.SetText( CUI_RES( STR_QUICKLAUNCH_UNX ) );
 #endif
     FreeResource();
 

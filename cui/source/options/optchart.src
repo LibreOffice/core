@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #include "optchart.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 
 // tab page for setting the default colors used for new charts

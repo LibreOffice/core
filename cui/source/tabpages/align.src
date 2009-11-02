@@ -28,10 +28,10 @@
  *
  ************************************************************************/
  // include ---------------------------------------------------------------
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include "align.hrc"
- // pragma ----------------------------------------------------------------
+#include <svx/dialogs.hrc>
 
 #define MASKCOLOR \
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }

@@ -29,9 +29,9 @@
  ************************************************************************/
  // include ---------------------------------------------------------------
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "postdlg.hrc"
- // pragma ----------------------------------------------------------------
+#include <svx/dialogs.hrc>
 
  // RID_SVXDLG_POSTIT -----------------------------------------------------
 ModalDialog RID_SVXDLG_POSTIT

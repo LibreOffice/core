@@ -37,8 +37,8 @@
 #include <svl/zforlist.hxx>
 #include "optupdt.hxx"
 #include "optupdt.hrc"
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
@@ -66,20 +66,20 @@ namespace util = ::com::sun::star::util;
 
 SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_ONLINEUPDATE ), rSet ),
-        m_aOptionsLine( this, SVX_RES( FL_OPTIONS ) ),
-        m_aAutoCheckCheckBox( this, SVX_RES( CB_AUTOCHECK ) ),
-        m_aEveryDayButton( this, SVX_RES( RB_EVERYDAY ) ),
-        m_aEveryWeekButton( this, SVX_RES( RB_EVERYWEEK ) ),
-        m_aEveryMonthButton( this, SVX_RES( RB_EVERYMONTH ) ),
-        m_aCheckNowButton( this, SVX_RES( PB_CHECKNOW ) ),
-        m_aAutoDownloadCheckBox( this, SVX_RES( CB_AUTODOWNLOAD ) ),
-        m_aDestPathLabel( this, SVX_RES( FT_DESTPATHLABEL ) ),
-        m_aDestPath( this, SVX_RES( FT_DESTPATH ) ),
-        m_aChangePathButton( this, SVX_RES( PB_CHANGEPATH ) ),
-        m_aLastChecked( this, SVX_RES( FT_LASTCHECKED ) )
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_ONLINEUPDATE ), rSet ),
+        m_aOptionsLine( this, CUI_RES( FL_OPTIONS ) ),
+        m_aAutoCheckCheckBox( this, CUI_RES( CB_AUTOCHECK ) ),
+        m_aEveryDayButton( this, CUI_RES( RB_EVERYDAY ) ),
+        m_aEveryWeekButton( this, CUI_RES( RB_EVERYWEEK ) ),
+        m_aEveryMonthButton( this, CUI_RES( RB_EVERYMONTH ) ),
+        m_aCheckNowButton( this, CUI_RES( PB_CHECKNOW ) ),
+        m_aAutoDownloadCheckBox( this, CUI_RES( CB_AUTODOWNLOAD ) ),
+        m_aDestPathLabel( this, CUI_RES( FT_DESTPATHLABEL ) ),
+        m_aDestPath( this, CUI_RES( FT_DESTPATH ) ),
+        m_aChangePathButton( this, CUI_RES( PB_CHANGEPATH ) ),
+        m_aLastChecked( this, CUI_RES( FT_LASTCHECKED ) )
 {
-    m_aNeverChecked = String( SVX_RES( STR_NEVERCHECKED ) );
+    m_aNeverChecked = String( CUI_RES( STR_NEVERCHECKED ) );
     FreeResource();
 
     m_aAutoCheckCheckBox.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );

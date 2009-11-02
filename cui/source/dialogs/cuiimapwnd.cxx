@@ -42,8 +42,8 @@
 #include <svtools/imappoly.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 #include <svx/svxids.hrc>
 #include <cuiimapdlg.hrc>
 #include <cuiimapwnd.hxx>
@@ -68,21 +68,21 @@
 \************************************************************************/
 
 URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeText, const String& rDescription, const String& rTarget, const String& rName, TargetList& rTargetList )
-: ModalDialog( pWindow, SVX_RES( RID_SVXDLG_IMAPURL ) )
-, maFtURL( this, SVX_RES( FT_URL1 ) )
-, maEdtURL( this, SVX_RES( EDT_URL ) )
-, maFtTarget( this, SVX_RES( FT_TARGET ) )
-, maCbbTargets( this, SVX_RES( CBB_TARGETS ) )
-, maFtName( this, SVX_RES( FT_NAME ) )
-, maEdtName( this, SVX_RES( EDT_NAME ) )
-, maFtAlternativeText( this, SVX_RES( FT_URLDESCRIPTION ) )
-, maEdtAlternativeText( this, SVX_RES( EDT_URLDESCRIPTION ) )
-, maFtDescription( this, SVX_RES( FT_DESCRIPTION ) )
-, maEdtDescription( this, SVX_RES( EDT_DESCRIPTION ) )
-, maFlURL( this, SVX_RES( FL_URL ) )
-, maBtnHelp( this, SVX_RES( BTN_HELP1 ) )
-, maBtnOk( this, SVX_RES( BTN_OK1 ) )
-, maBtnCancel( this, SVX_RES( BTN_CANCEL1 ) )
+: ModalDialog( pWindow, CUI_RES( RID_SVXDLG_IMAPURL ) )
+, maFtURL( this, CUI_RES( FT_URL1 ) )
+, maEdtURL( this, CUI_RES( EDT_URL ) )
+, maFtTarget( this, CUI_RES( FT_TARGET ) )
+, maCbbTargets( this, CUI_RES( CBB_TARGETS ) )
+, maFtName( this, CUI_RES( FT_NAME ) )
+, maEdtName( this, CUI_RES( EDT_NAME ) )
+, maFtAlternativeText( this, CUI_RES( FT_URLDESCRIPTION ) )
+, maEdtAlternativeText( this, CUI_RES( EDT_URLDESCRIPTION ) )
+, maFtDescription( this, CUI_RES( FT_DESCRIPTION ) )
+, maEdtDescription( this, CUI_RES( EDT_DESCRIPTION ) )
+, maFlURL( this, CUI_RES( FL_URL ) )
+, maBtnHelp( this, CUI_RES( BTN_HELP1 ) )
+, maBtnOk( this, CUI_RES( BTN_OK1 ) )
+, maBtnCancel( this, CUI_RES( BTN_CANCEL1 ) )
 {
     FreeResource();
 

@@ -37,6 +37,8 @@
 #include <tools/shl.hxx>
 #include "svx/ofaitem.hxx"  // add CHINA001
 #include <sfx2/request.hxx> // add CHINA001
+#include <svx/dialogs.hrc>
+
 #define _SVX_CONNECT_CXX
 
 #include <svx/svdoedge.hxx>
@@ -47,10 +49,10 @@
 #include "svx/connctrl.hxx"
 #include "connect.hxx"
 #include "connect.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 static USHORT pRanges[] =
 {
@@ -95,31 +97,31 @@ SvxConnectionDialog::~SvxConnectionDialog()
 \************************************************************************/
 
 SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SfxTabPage      ( pWindow, SVX_RES( RID_SVXPAGE_CONNECTION ),
+                SfxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_CONNECTION ),
                                   rInAttrs ),
 
-        aFtType                 ( this, SVX_RES( FT_TYPE ) ),
-        aLbType                 ( this, SVX_RES( LB_TYPE ) ),
+        aFtType                 ( this, CUI_RES( FT_TYPE ) ),
+        aLbType                 ( this, CUI_RES( LB_TYPE ) ),
 
-        aFlDelta                ( this, SVX_RES( FL_DELTA ) ),
-        aFtLine1                ( this, SVX_RES( FT_LINE_1 ) ),
-        aMtrFldLine1            ( this, SVX_RES( MTR_FLD_LINE_1 ) ),
-        aFtLine2                ( this, SVX_RES( FT_LINE_2 ) ),
-        aMtrFldLine2            ( this, SVX_RES( MTR_FLD_LINE_2 ) ),
-        aFtLine3                ( this, SVX_RES( FT_LINE_3 ) ),
-        aMtrFldLine3            ( this, SVX_RES( MTR_FLD_LINE_3 ) ),
+        aFlDelta                ( this, CUI_RES( FL_DELTA ) ),
+        aFtLine1                ( this, CUI_RES( FT_LINE_1 ) ),
+        aMtrFldLine1            ( this, CUI_RES( MTR_FLD_LINE_1 ) ),
+        aFtLine2                ( this, CUI_RES( FT_LINE_2 ) ),
+        aMtrFldLine2            ( this, CUI_RES( MTR_FLD_LINE_2 ) ),
+        aFtLine3                ( this, CUI_RES( FT_LINE_3 ) ),
+        aMtrFldLine3            ( this, CUI_RES( MTR_FLD_LINE_3 ) ),
 
-        aFlDistance             ( this, SVX_RES( FL_DISTANCE ) ),
-        aFtHorz1                ( this, SVX_RES( FT_HORZ_1 ) ),
-        aMtrFldHorz1            ( this, SVX_RES( MTR_FLD_HORZ_1 ) ),
-        aFtVert1                ( this, SVX_RES( FT_VERT_1 ) ),
-        aMtrFldVert1            ( this, SVX_RES( MTR_FLD_VERT_1 ) ),
-        aFtHorz2                ( this, SVX_RES( FT_HORZ_2 ) ),
-        aMtrFldHorz2            ( this, SVX_RES( MTR_FLD_HORZ_2 ) ),
-        aFtVert2                ( this, SVX_RES( FT_VERT_2 ) ),
-        aMtrFldVert2            ( this, SVX_RES( MTR_FLD_VERT_2 ) ),
+        aFlDistance             ( this, CUI_RES( FL_DISTANCE ) ),
+        aFtHorz1                ( this, CUI_RES( FT_HORZ_1 ) ),
+        aMtrFldHorz1            ( this, CUI_RES( MTR_FLD_HORZ_1 ) ),
+        aFtVert1                ( this, CUI_RES( FT_VERT_1 ) ),
+        aMtrFldVert1            ( this, CUI_RES( MTR_FLD_VERT_1 ) ),
+        aFtHorz2                ( this, CUI_RES( FT_HORZ_2 ) ),
+        aMtrFldHorz2            ( this, CUI_RES( MTR_FLD_HORZ_2 ) ),
+        aFtVert2                ( this, CUI_RES( FT_VERT_2 ) ),
+        aMtrFldVert2            ( this, CUI_RES( MTR_FLD_VERT_2 ) ),
 
-        aCtlPreview             ( this, SVX_RES( CTL_PREVIEW ), rInAttrs ),
+        aCtlPreview             ( this, CUI_RES( CTL_PREVIEW ), rInAttrs ),
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() )
 {

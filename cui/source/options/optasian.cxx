@@ -35,8 +35,8 @@
 #include <svx/langitem.hxx>
 #include <svx/unolingu.hxx>
 #include <optasian.hrc>
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 #include <tools/table.hxx>
 #include <tools/shl.hxx>
 #include <svx/asiancfg.hxx>
@@ -151,23 +151,23 @@ void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
 static LanguageType eLastUsedLanguageTypeForForbiddenCharacters = USHRT_MAX;
 
 SvxAsianLayoutPage::SvxAsianLayoutPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_ASIAN_LAYOUT ), rSet),
-    aKerningGB(             this, SVX_RES(GB_KERNING            )),
-    aCharKerningRB(         this, SVX_RES(RB_CHAR_KERNING       )),
-    aCharPunctKerningRB(    this, SVX_RES(RB_CHAR_PUNCT     )),
-    aCharDistGB(            this, SVX_RES(GB_CHAR_DIST      )),
-    aNoCompressionRB(       this, SVX_RES(RB_NO_COMP            )),
-    aPunctCompressionRB(    this, SVX_RES(RB_PUNCT_COMP     )),
-     aPunctKanaCompressionRB(this, SVX_RES(RB_PUNCT_KANA_COMP   )),
-    aStartEndGB(            this, SVX_RES(GB_START_END      )),
-    aLanguageFT(            this, SVX_RES(FT_LANGUAGE           )),
-    aLanguageLB(            this, SVX_RES(LB_LANGUAGE           )),
-    aStandardCB(            this, SVX_RES(CB_STANDARD           )),
-    aStartFT(               this, SVX_RES(FT_START          )),
-    aStartED(               this, SVX_RES(ED_START          )),
-    aEndFT(                 this, SVX_RES(FT_END                )),
-    aEndED(                 this, SVX_RES(ED_END                )),
-    aHintFT(                this, SVX_RES(FT_HINT               )),
+    SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_ASIAN_LAYOUT ), rSet),
+    aKerningGB(             this, CUI_RES(GB_KERNING            )),
+    aCharKerningRB(         this, CUI_RES(RB_CHAR_KERNING       )),
+    aCharPunctKerningRB(    this, CUI_RES(RB_CHAR_PUNCT     )),
+    aCharDistGB(            this, CUI_RES(GB_CHAR_DIST      )),
+    aNoCompressionRB(       this, CUI_RES(RB_NO_COMP            )),
+    aPunctCompressionRB(    this, CUI_RES(RB_PUNCT_COMP     )),
+     aPunctKanaCompressionRB(this, CUI_RES(RB_PUNCT_KANA_COMP   )),
+    aStartEndGB(            this, CUI_RES(GB_START_END      )),
+    aLanguageFT(            this, CUI_RES(FT_LANGUAGE           )),
+    aLanguageLB(            this, CUI_RES(LB_LANGUAGE           )),
+    aStandardCB(            this, CUI_RES(CB_STANDARD           )),
+    aStartFT(               this, CUI_RES(FT_START          )),
+    aStartED(               this, CUI_RES(ED_START          )),
+    aEndFT(                 this, CUI_RES(FT_END                )),
+    aEndED(                 this, CUI_RES(ED_END                )),
+    aHintFT(                this, CUI_RES(FT_HINT               )),
     pImpl(new SvxAsianLayoutPage_Impl)
 {
     FreeResource();

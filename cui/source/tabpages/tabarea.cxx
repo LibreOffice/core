@@ -41,10 +41,11 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
+#include <svx/dialogs.hrc>
 
 #define _SVX_TABAREA_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svx/xtable.hxx>
 #include "svx/globl3d.hxx"
 #include <svx/svdmodel.hxx>
@@ -53,7 +54,7 @@
 #include "tabarea.hrc"
 #include "dlgname.hxx"
 //#include "dlgname.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -71,7 +72,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     const SdrView* /* pSdrView */
 ) :
 
-    SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_AREA ), pAttr ),
+    SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_AREA ), pAttr ),
 
     mpDrawModel          ( pModel ),
 //    mpView               ( pSdrView ),
@@ -108,7 +109,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
 
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
-//! rBtnCancel.SetText( SVX_RESSTR( RID_SVXSTR_CLOSE ) );
+//! rBtnCancel.SetText( CUI_RESSTR( RID_SVXSTR_CLOSE ) );
 }
 
 // -----------------------------------------------------------------------

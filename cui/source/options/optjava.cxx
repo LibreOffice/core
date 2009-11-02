@@ -34,10 +34,10 @@
 // include ---------------------------------------------------------------
 
 #include "optjava.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #include "optjava.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -149,16 +149,16 @@ bool areListsEqual( const Sequence< ::rtl::OUString >& rListA, const Sequence< :
 
 SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_OPTIONS_JAVA ), rSet ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_OPTIONS_JAVA ), rSet ),
 
-    m_aJavaLine         ( this, SVX_RES( FL_JAVA ) ),
-    m_aJavaEnableCB     ( this, SVX_RES( CB_JAVA_ENABLE ) ),
-    m_aJavaFoundLabel   ( this, SVX_RES( FT_JAVA_FOUND ) ),
-    m_aJavaList         ( this, SVX_RES( LB_JAVA ) ),
-    m_aJavaPathText     ( this, SVX_RES( FT_JAVA_PATH ) ),
-    m_aAddBtn           ( this, SVX_RES( PB_ADD ) ),
-    m_aParameterBtn     ( this, SVX_RES( PB_PARAMETER ) ),
-    m_aClassPathBtn     ( this, SVX_RES( PB_CLASSPATH ) ),
+    m_aJavaLine         ( this, CUI_RES( FL_JAVA ) ),
+    m_aJavaEnableCB     ( this, CUI_RES( CB_JAVA_ENABLE ) ),
+    m_aJavaFoundLabel   ( this, CUI_RES( FT_JAVA_FOUND ) ),
+    m_aJavaList         ( this, CUI_RES( LB_JAVA ) ),
+    m_aJavaPathText     ( this, CUI_RES( FT_JAVA_PATH ) ),
+    m_aAddBtn           ( this, CUI_RES( PB_ADD ) ),
+    m_aParameterBtn     ( this, CUI_RES( PB_PARAMETER ) ),
+    m_aClassPathBtn     ( this, CUI_RES( PB_CLASSPATH ) ),
 
     m_pParamDlg         ( NULL ),
     m_pPathDlg          ( NULL ),
@@ -167,9 +167,9 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_pClassPath        ( NULL ),
     m_nInfoSize         ( 0 ),
     m_nParamSize        ( 0 ),
-    m_sInstallText      (       SVX_RES( STR_INSTALLED_IN ) ),
-    m_sAccessibilityText(       SVX_RES( STR_ACCESSIBILITY ) ),
-    m_sAddDialogText    (       SVX_RES( STR_ADDDLGTEXT ) ),
+    m_sInstallText      (       CUI_RES( STR_INSTALLED_IN ) ),
+    m_sAccessibilityText(       CUI_RES( STR_ACCESSIBILITY ) ),
+    m_sAddDialogText    (       CUI_RES( STR_ADDDLGTEXT ) ),
 
     xDialogListener     ( new ::svt::DialogClosedListener() )
 
@@ -192,11 +192,11 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 
     m_aJavaList.SvxSimpleTable::SetTabs( aStaticTabs );
     String sHeader( '\t' );
-    sHeader += String( SVX_RES( STR_HEADER_VENDOR ) );
+    sHeader += String( CUI_RES( STR_HEADER_VENDOR ) );
     sHeader += '\t';
-    sHeader += String( SVX_RES( STR_HEADER_VERSION ) );
+    sHeader += String( CUI_RES( STR_HEADER_VERSION ) );
     sHeader += '\t';
-    sHeader += String( SVX_RES( STR_HEADER_FEATURES ) );
+    sHeader += String( CUI_RES( STR_HEADER_FEATURES ) );
     sHeader += '\t';
     m_aJavaList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
 
@@ -365,7 +365,7 @@ IMPL_LINK( SvxJavaOptionsPage, ParameterHdl_Impl, PushButton *, EMPTYARG )
             (void)eErr;
             if ( bRunning )
             {
-                WarningBox aWarnBox( this, SVX_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
+                WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
                 aWarnBox.Execute();
             }
         }
@@ -409,7 +409,7 @@ IMPL_LINK( SvxJavaOptionsPage, ClassPathHdl_Impl, PushButton *, EMPTYARG )
             (void)eErr;
             if ( bRunning )
             {
-                WarningBox aWarnBox( this, SVX_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
+                WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
                 aWarnBox.Execute();
             }
         }
@@ -634,12 +634,12 @@ void SvxJavaOptionsPage::AddFolder( const ::rtl::OUString& _rFolder )
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
     {
-        ErrorBox aErrBox( this, SVX_RES( RID_SVXERR_JRE_NOT_RECOGNIZED ) );
+        ErrorBox aErrBox( this, CUI_RES( RID_SVXERR_JRE_NOT_RECOGNIZED ) );
         aErrBox.Execute();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
-        ErrorBox aErrBox( this, SVX_RES( RID_SVXERR_JRE_FAILED_VERSION ) );
+        ErrorBox aErrBox( this, CUI_RES( RID_SVXERR_JRE_FAILED_VERSION ) );
         aErrBox.Execute();
     }
 
@@ -716,7 +716,7 @@ BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
                     if ( bRunning ||
                         ( ( pInfo->nRequirements & JFW_REQUIRE_NEEDRESTART ) == JFW_REQUIRE_NEEDRESTART ) )
                     {
-                        WarningBox aWarnBox( this, SVX_RES( RID_SVX_MSGBOX_JAVA_RESTART ) );
+                        WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_JAVA_RESTART ) );
                         aWarnBox.Execute();
                     }
 
@@ -775,19 +775,19 @@ void SvxJavaOptionsPage::FillUserData()
 
 SvxJavaParameterDlg::SvxJavaParameterDlg( Window* pParent ) :
 
-    ModalDialog( pParent, SVX_RES( RID_SVXDLG_JAVA_PARAMETER ) ),
+    ModalDialog( pParent, CUI_RES( RID_SVXDLG_JAVA_PARAMETER ) ),
 
-    m_aParameterLabel   ( this, SVX_RES( FT_PARAMETER ) ),
-    m_aParameterEdit    ( this, SVX_RES( ED_PARAMETER ) ),
-    m_aAssignBtn        ( this, SVX_RES( PB_ASSIGN ) ),
-    m_aAssignedLabel    ( this, SVX_RES( FT_ASSIGNED ) ),
-    m_aAssignedList     ( this, SVX_RES( LB_ASSIGNED ) ),
-    m_aExampleText      ( this, SVX_RES( FT_EXAMPLE ) ),
-    m_aRemoveBtn        ( this, SVX_RES( PB_REMOVE ) ),
-    m_aButtonsLine      ( this, SVX_RES( FL_BUTTONS ) ),
-    m_aOKBtn            ( this, SVX_RES( PB_PARAMETER_OK ) ),
-    m_aCancelBtn        ( this, SVX_RES( PB_PARAMETER_ESC ) ),
-    m_aHelpBtn          ( this, SVX_RES( PB_PARAMETER_HLP ) )
+    m_aParameterLabel   ( this, CUI_RES( FT_PARAMETER ) ),
+    m_aParameterEdit    ( this, CUI_RES( ED_PARAMETER ) ),
+    m_aAssignBtn        ( this, CUI_RES( PB_ASSIGN ) ),
+    m_aAssignedLabel    ( this, CUI_RES( FT_ASSIGNED ) ),
+    m_aAssignedList     ( this, CUI_RES( LB_ASSIGNED ) ),
+    m_aExampleText      ( this, CUI_RES( FT_EXAMPLE ) ),
+    m_aRemoveBtn        ( this, CUI_RES( PB_REMOVE ) ),
+    m_aButtonsLine      ( this, CUI_RES( FL_BUTTONS ) ),
+    m_aOKBtn            ( this, CUI_RES( PB_PARAMETER_OK ) ),
+    m_aCancelBtn        ( this, CUI_RES( PB_PARAMETER_ESC ) ),
+    m_aHelpBtn          ( this, CUI_RES( PB_PARAMETER_HLP ) )
 
 {
     FreeResource();
@@ -915,17 +915,17 @@ void SvxJavaParameterDlg::SetParameters( Sequence< ::rtl::OUString >& rParams )
 
 SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
 
-    ModalDialog( pParent, SVX_RES( RID_SVXDLG_JAVA_CLASSPATH ) ),
+    ModalDialog( pParent, CUI_RES( RID_SVXDLG_JAVA_CLASSPATH ) ),
 
-    m_aPathLabel        ( this, SVX_RES( FT_PATH ) ),
-    m_aPathList         ( this, SVX_RES( LB_PATH ) ),
-    m_aAddArchiveBtn    ( this, SVX_RES( PB_ADDARCHIVE ) ),
-    m_aAddPathBtn       ( this, SVX_RES( PB_ADDPATH ) ),
-    m_aRemoveBtn        ( this, SVX_RES( PB_REMOVE_PATH ) ),
-    m_aButtonsLine      ( this, SVX_RES( FL_PATH_BUTTONS ) ),
-    m_aOKBtn            ( this, SVX_RES( PB_PATH_OK ) ),
-    m_aCancelBtn        ( this, SVX_RES( PB_PATH_ESC ) ),
-    m_aHelpBtn          ( this, SVX_RES( PB_PATH_HLP ) )
+    m_aPathLabel        ( this, CUI_RES( FT_PATH ) ),
+    m_aPathList         ( this, CUI_RES( LB_PATH ) ),
+    m_aAddArchiveBtn    ( this, CUI_RES( PB_ADDARCHIVE ) ),
+    m_aAddPathBtn       ( this, CUI_RES( PB_ADDPATH ) ),
+    m_aRemoveBtn        ( this, CUI_RES( PB_REMOVE_PATH ) ),
+    m_aButtonsLine      ( this, CUI_RES( FL_PATH_BUTTONS ) ),
+    m_aOKBtn            ( this, CUI_RES( PB_PATH_OK ) ),
+    m_aCancelBtn        ( this, CUI_RES( PB_PATH_ESC ) ),
+    m_aHelpBtn          ( this, CUI_RES( PB_PATH_HLP ) )
 
 {
     FreeResource();
@@ -977,8 +977,8 @@ SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
 {
     sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    aDlg.SetTitle( SVX_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
-    aDlg.AddFilter( SVX_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), String::CreateFromAscii("*.jar;*.zip") );
+    aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
+    aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), String::CreateFromAscii("*.jar;*.zip") );
     String sFolder;
     if ( m_aPathList.GetSelectEntryCount() > 0 )
     {
@@ -1000,7 +1000,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
         }
         else
         {
-            String sMsg( SVX_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+            String sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg.SearchAndReplaceAscii( "%1", sFile );
             ErrorBox( this, WB_OK, sMsg ).Execute();
         }
@@ -1038,7 +1038,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
         }
         else
         {
-            String sMsg( SVX_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+            String sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg.SearchAndReplaceAscii( "%1", sNewFolder );
             ErrorBox( this, WB_OK, sMsg ).Execute();
         }

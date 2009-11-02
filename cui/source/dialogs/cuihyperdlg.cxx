@@ -103,7 +103,7 @@ void SvxHlinkCtrl::StateChanged( USHORT nSID, SfxItemState eState,
 |************************************************************************/
 
 SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
-:   IconChoiceDialog( pParent, SVX_RES ( RID_SVXDLG_NEWHYPERLINK ) ),
+:   IconChoiceDialog( pParent, CUI_RES ( RID_SVXDLG_NEWHYPERLINK ) ),
     maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this ),
     mpBindings      ( pBindings ),
     mbReadOnly      ( sal_False ),
@@ -116,26 +116,26 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     String aStrTitle;
     SvxIconChoiceCtrlEntry* pEntry = NULL;
 
-    aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
-    aImage = Image( SVX_RES ( RID_SVXBMP_HLINETTP ) );
-    aImageHC = Image( SVX_RES ( RID_SVXBMP_HLINETTP_H ) );
+    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
+    aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
+    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLINETTP_H ) );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, aImageHC, SvxHyperlinkInternetTp::Create );
-    pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
-    aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
-    aImage = Image( SVX_RES ( RID_SVXBMP_HLMAILTP ) );
-    aImageHC = Image( SVX_RES ( RID_SVXBMP_HLMAILTP_H ) );
+    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
+    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
+    aImage = Image( CUI_RES ( RID_SVXBMP_HLMAILTP ) );
+    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLMAILTP_H ) );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, aImageHC, SvxHyperlinkMailTp::Create );
-    pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
-    aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
-    aImage = Image( SVX_RES ( RID_SVXBMP_HLDOCTP ) );
-    aImageHC = Image( SVX_RES ( RID_SVXBMP_HLDOCTP_H ) );
+    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
+    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
+    aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCTP ) );
+    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCTP_H ) );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkDocTp::Create );
-    pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
-    aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
-    aImage = Image( SVX_RES ( RID_SVXBMP_HLDOCNTP ) );
-    aImageHC = Image( SVX_RES ( RID_SVXBMP_HLDOCNTP_H ) );
+    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
+    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
+    aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
+    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP_H ) );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkNewDocTp::Create );
-    pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
+    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // all tab pages set -> create mnemonics
     //  CreateIconTextAutoMnemonics();  #99671# not useful, because this is not what user expects when using mnemonics on the pages
@@ -155,8 +155,8 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     pBindings->Update( SID_READONLY_MODE );
 
     // set OK/Cancel - button
-    GetOKButton().SetText ( SVX_RESSTR(RID_SVXSTR_HYPDLG_APPLYBUT) );
-    GetCancelButton().SetText ( SVX_RESSTR(RID_SVXSTR_HYPDLG_CLOSEBUT) );
+    GetOKButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_APPLYBUT) );
+    GetCancelButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
     GetOKButton().SetClickHdl    ( LINK ( this, SvxHpLinkDlg, ClickApplyHdl_Impl ) );
     GetCancelButton().SetClickHdl( LINK ( this, SvxHpLinkDlg, ClickCloseHdl_Impl ) );

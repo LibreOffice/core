@@ -29,8 +29,9 @@
  ************************************************************************/
 
 #include "treeopt.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
+#include <svx/dialogs.hrc>
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
 

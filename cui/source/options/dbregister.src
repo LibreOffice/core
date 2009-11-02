@@ -29,13 +29,10 @@
  ************************************************************************/
 
 #include "dbregister.hrc"
-#include <svx/dialogs.hrc>
-#ifndef _SVX_SVXIDS_HRC //autogen
+#include <cuires.hrc>
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SVX_DIALOGS_HRC //autogen
+#include <cuires.hrc>
 #include <svx/dialogs.hrc>
-#endif
 
 // RID_SFXPAGE_PATH -----------------------------------------------------
 #define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }

@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 #include "optctl.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "optctl.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svl/ctloptions.hxx>
 
 // class SvxCTLOptionsPage -----------------------------------------------------
@@ -54,19 +54,19 @@ IMPL_LINK( SvxCTLOptionsPage, SequenceCheckingCB_Hdl, void*, EMPTYARG )
 
 SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_OPTIONS_CTL ), rSet ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_OPTIONS_CTL ), rSet ),
 
-    m_aSequenceCheckingFL   ( this, SVX_RES( FL_SEQUENCECHECKING ) ),
-    m_aSequenceCheckingCB   ( this, SVX_RES( CB_SEQUENCECHECKING ) ),
-    m_aRestrictedCB         ( this, SVX_RES( CB_RESTRICTED ) ),
-    m_aTypeReplaceCB        ( this, SVX_RES( CB_TYPE_REPLACE ) ),
-    m_aCursorControlFL      ( this, SVX_RES( FL_CURSORCONTROL ) ),
-    m_aMovementFT           ( this, SVX_RES( FT_MOVEMENT ) ),
-    m_aMovementLogicalRB    ( this, SVX_RES( RB_MOVEMENT_LOGICAL ) ),
-    m_aMovementVisualRB     ( this, SVX_RES( RB_MOVEMENT_VISUAL ) ),
-    m_aGeneralFL            ( this, SVX_RES( FL_GENERAL ) ),
-    m_aNumeralsFT           ( this, SVX_RES( FT_NUMERALS ) ),
-    m_aNumeralsLB           ( this, SVX_RES( LB_NUMERALS ) )
+    m_aSequenceCheckingFL   ( this, CUI_RES( FL_SEQUENCECHECKING ) ),
+    m_aSequenceCheckingCB   ( this, CUI_RES( CB_SEQUENCECHECKING ) ),
+    m_aRestrictedCB         ( this, CUI_RES( CB_RESTRICTED ) ),
+    m_aTypeReplaceCB        ( this, CUI_RES( CB_TYPE_REPLACE ) ),
+    m_aCursorControlFL      ( this, CUI_RES( FL_CURSORCONTROL ) ),
+    m_aMovementFT           ( this, CUI_RES( FT_MOVEMENT ) ),
+    m_aMovementLogicalRB    ( this, CUI_RES( RB_MOVEMENT_LOGICAL ) ),
+    m_aMovementVisualRB     ( this, CUI_RES( RB_MOVEMENT_VISUAL ) ),
+    m_aGeneralFL            ( this, CUI_RES( FL_GENERAL ) ),
+    m_aNumeralsFT           ( this, CUI_RES( FT_NUMERALS ) ),
+    m_aNumeralsLB           ( this, CUI_RES( LB_NUMERALS ) )
 
 {
     FreeResource();

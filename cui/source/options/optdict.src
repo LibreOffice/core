@@ -30,7 +30,7 @@
  // include ---------------------------------------------------------------
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optdict.hrc"
  // pragma ----------------------------------------------------------------
 

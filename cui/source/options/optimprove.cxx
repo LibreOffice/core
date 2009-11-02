@@ -36,12 +36,12 @@
 #define _SVX_OPTIMPROVE_CXX
 
 #include <optimprove.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <svx/dialogs.hrc>
 #include "optimprove.hrc"
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -61,21 +61,21 @@ using namespace com::sun::star::system;
 
 SvxImprovementPage::SvxImprovementPage( Window* pParent ) :
 
-    TabPage( pParent, SVX_RES( RID_SVXPAGE_IMPROVEMENT ) ),
+    TabPage( pParent, CUI_RES( RID_SVXPAGE_IMPROVEMENT ) ),
 
-    m_aImproveFL                ( this, SVX_RES( FL_IMPROVE ) ),
-    m_aInvitationFT             ( this, SVX_RES( FT_INVITATION ) ),
-    m_aYesRB                    ( this, SVX_RES( RB_YES ) ),
-    m_aNoRB                     ( this, SVX_RES( RB_NO ) ),
-    m_aDataFL                   ( this, SVX_RES( FL_DATA ) ),
-    m_aNumberOfReportsFT        ( this, SVX_RES( FT_NR_REPORTS ) ),
-    m_aNumberOfReportsValueFT   ( this, SVX_RES( FT_NR_REPORTS_VALUE ) ),
-    m_aNumberOfActionsFT        ( this, SVX_RES( FT_NR_ACTIONS ) ),
-    m_aNumberOfActionsValueFT   ( this, SVX_RES( FT_NR_ACTIONS_VALUE ) ),
-    m_aShowDataPB               ( this, SVX_RES( PB_SHOWDATA ) ),
+    m_aImproveFL                ( this, CUI_RES( FL_IMPROVE ) ),
+    m_aInvitationFT             ( this, CUI_RES( FT_INVITATION ) ),
+    m_aYesRB                    ( this, CUI_RES( RB_YES ) ),
+    m_aNoRB                     ( this, CUI_RES( RB_NO ) ),
+    m_aDataFL                   ( this, CUI_RES( FL_DATA ) ),
+    m_aNumberOfReportsFT        ( this, CUI_RES( FT_NR_REPORTS ) ),
+    m_aNumberOfReportsValueFT   ( this, CUI_RES( FT_NR_REPORTS_VALUE ) ),
+    m_aNumberOfActionsFT        ( this, CUI_RES( FT_NR_ACTIONS ) ),
+    m_aNumberOfActionsValueFT   ( this, CUI_RES( FT_NR_ACTIONS_VALUE ) ),
+    m_aShowDataPB               ( this, CUI_RES( PB_SHOWDATA ) ),
 
-    m_sInfo                     (       SVX_RES( STR_INFO ) ),
-    m_sMoreInfo                 (       SVX_RES( STR_MOREINFO ) )
+    m_sInfo                     (       CUI_RES( STR_INFO ) ),
+    m_sMoreInfo                 (       CUI_RES( STR_MOREINFO ) )
 
 {
     FreeResource();

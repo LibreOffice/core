@@ -34,10 +34,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/metric.hxx>
 #include "selector.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "selector.hrc"
 #include <svx/fmresids.hrc>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
@@ -266,7 +266,7 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
 
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
 
-    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+    ImageList aNavigatorImages( CUI_RES( RID_SVXIMGLIST_FMEXPL ) );
 
     SetNodeBitmaps(
         aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
@@ -614,7 +614,7 @@ void SvxConfigGroupListBox_Impl::Init()
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
 
                 String aTitle =
-                    String( SVX_RES( STR_SELECTOR_MACROS ) );
+                    String( CUI_RES( STR_SELECTOR_MACROS ) );
 
                 SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
                 pNewEntry->SetUserData( pInfo );
@@ -1006,21 +1006,21 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
   Window* pParent, BOOL bShowSlots, const Reference< frame::XFrame >& xFrame )
     :
-    ModelessDialog( pParent, SVX_RES( RID_DLG_SCRIPTSELECTOR ) ),
-    aDialogDescription( this, SVX_RES( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
-    aGroupText( this, SVX_RES( TXT_SELECTOR_CATEGORIES ) ),
-    aCategories( this, SVX_RES( BOX_SELECTOR_CATEGORIES ), bShowSlots, xFrame ),
-    aFunctionText( this, SVX_RES( TXT_SELECTOR_COMMANDS ) ),
-    aCommands( this, SVX_RES( BOX_SELECTOR_COMMANDS ) ),
-    aOKButton( this, SVX_RES( BTN_SELECTOR_OK ) ),
-    aCancelButton( this, SVX_RES( BTN_SELECTOR_CANCEL ) ),
-    aHelpButton( this, SVX_RES( BTN_SELECTOR_HELP ) ),
-    aDescription( this, SVX_RES( GRP_SELECTOR_DESCRIPTION ) ),
-    aDescriptionText( this, SVX_RES( TXT_SELECTOR_DESCRIPTION ) ),
+    ModelessDialog( pParent, CUI_RES( RID_DLG_SCRIPTSELECTOR ) ),
+    aDialogDescription( this, CUI_RES( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
+    aGroupText( this, CUI_RES( TXT_SELECTOR_CATEGORIES ) ),
+    aCategories( this, CUI_RES( BOX_SELECTOR_CATEGORIES ), bShowSlots, xFrame ),
+    aFunctionText( this, CUI_RES( TXT_SELECTOR_COMMANDS ) ),
+    aCommands( this, CUI_RES( BOX_SELECTOR_COMMANDS ) ),
+    aOKButton( this, CUI_RES( BTN_SELECTOR_OK ) ),
+    aCancelButton( this, CUI_RES( BTN_SELECTOR_CANCEL ) ),
+    aHelpButton( this, CUI_RES( BTN_SELECTOR_HELP ) ),
+    aDescription( this, CUI_RES( GRP_SELECTOR_DESCRIPTION ) ),
+    aDescriptionText( this, CUI_RES( TXT_SELECTOR_DESCRIPTION ) ),
     m_bShowSlots( bShowSlots )
 {
 
-    ResMgr& rMgr = DIALOG_MGR();
+    ResMgr& rMgr = CUI_MGR();
 
     // If we are showing Slot API commands update labels in the UI, and
     // enable drag'n'drop
@@ -1207,7 +1207,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 void
 SvxScriptSelectorDialog::SetRunLabel()
 {
-    aOKButton.SetText( String( SVX_RES( STR_SELECTOR_RUN ) ) );
+    aOKButton.SetText( String( CUI_RES( STR_SELECTOR_RUN ) ) );
 }
 
 void

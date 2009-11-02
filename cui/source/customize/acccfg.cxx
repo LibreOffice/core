@@ -36,7 +36,7 @@
 
 #include "acccfg.hxx"
 #include "cfgutil.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #include <sfx2/msg.hxx>
 #include <sfx2/macrconf.hxx>
@@ -45,7 +45,7 @@
 #include <sfx2/minfitem.hxx>
 #include <svl/stritem.hxx>
 
-#include "svx/dialogs.hrc"
+#include "cuires.hrc"
 #include "acccfg.hrc"
 
 //-----------------------------------------------
@@ -699,31 +699,31 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 
 //-----------------------------------------------
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxItemSet& aSet )
-    : SfxTabPage              (pParent, SVX_RES(RID_SVXPAGE_KEYBOARD), aSet)
+    : SfxTabPage              (pParent, CUI_RES(RID_SVXPAGE_KEYBOARD), aSet)
     , m_pMacroInfoItem        ()
     , m_pStringItem        ()
     , m_pFontItem        ()
     , m_pFileDlg              (NULL)
-    , aEntriesBox             (this   , this, SVX_RES(BOX_ACC_ENTRIES   ))
-    , aKeyboardGroup          (this   , SVX_RES(GRP_ACC_KEYBOARD        ))
-    , aOfficeButton           (this   , SVX_RES(RB_OFFICE               ))
-    , aModuleButton           (this   , SVX_RES(RB_MODULE               ))
-    , aChangeButton           (this   , SVX_RES(BTN_ACC_CHANGE          ))
-    , aRemoveButton           (this   , SVX_RES(BTN_ACC_REMOVE          ))
-    , aGroupText              (this   , SVX_RES(TXT_ACC_GROUP           ))
-    , pGroupLBox(new SfxConfigGroupListBox_Impl( this, SVX_RES(BOX_ACC_GROUP), SFX_SLOT_ACCELCONFIG ))
-    , aFunctionText           (this   , SVX_RES(TXT_ACC_FUNCTION        ))
-    , pFunctionBox(new SfxConfigFunctionListBox_Impl( this, SVX_RES( BOX_ACC_FUNCTION )))
-    , aKeyText                (this   , SVX_RES(TXT_ACC_KEY             ))
-    , aKeyBox                 (this   , SVX_RES(BOX_ACC_KEY             ))
-    , aFunctionsGroup         (this   , SVX_RES(GRP_ACC_FUNCTIONS       ))
-    , aLoadButton             (this   , SVX_RES(BTN_LOAD                ))
-    , aSaveButton             (this   , SVX_RES(BTN_SAVE                ))
-    , aResetButton            (this   , SVX_RES(BTN_RESET               ))
-    , aLoadAccelConfigStr             ( SVX_RES( STR_LOADACCELCONFIG ) )
-    , aSaveAccelConfigStr             ( SVX_RES( STR_SAVEACCELCONFIG ) )
-    , aFilterAllStr                   ( SVX_RES( STR_SFX_FILTERNAME_ALL ) )
-    , aFilterCfgStr                   ( SVX_RES( STR_FILTERNAME_CFG ) )
+    , aEntriesBox             (this   , this, CUI_RES(BOX_ACC_ENTRIES   ))
+    , aKeyboardGroup          (this   , CUI_RES(GRP_ACC_KEYBOARD        ))
+    , aOfficeButton           (this   , CUI_RES(RB_OFFICE               ))
+    , aModuleButton           (this   , CUI_RES(RB_MODULE               ))
+    , aChangeButton           (this   , CUI_RES(BTN_ACC_CHANGE          ))
+    , aRemoveButton           (this   , CUI_RES(BTN_ACC_REMOVE          ))
+    , aGroupText              (this   , CUI_RES(TXT_ACC_GROUP           ))
+    , pGroupLBox(new SfxConfigGroupListBox_Impl( this, CUI_RES(BOX_ACC_GROUP), SFX_SLOT_ACCELCONFIG ))
+    , aFunctionText           (this   , CUI_RES(TXT_ACC_FUNCTION        ))
+    , pFunctionBox(new SfxConfigFunctionListBox_Impl( this, CUI_RES( BOX_ACC_FUNCTION )))
+    , aKeyText                (this   , CUI_RES(TXT_ACC_KEY             ))
+    , aKeyBox                 (this   , CUI_RES(BOX_ACC_KEY             ))
+    , aFunctionsGroup         (this   , CUI_RES(GRP_ACC_FUNCTIONS       ))
+    , aLoadButton             (this   , CUI_RES(BTN_LOAD                ))
+    , aSaveButton             (this   , CUI_RES(BTN_SAVE                ))
+    , aResetButton            (this   , CUI_RES(BTN_RESET               ))
+    , aLoadAccelConfigStr             ( CUI_RES( STR_LOADACCELCONFIG ) )
+    , aSaveAccelConfigStr             ( CUI_RES( STR_SAVEACCELCONFIG ) )
+    , aFilterAllStr                   ( CUI_RES( STR_SFX_FILTERNAME_ALL ) )
+    , aFilterCfgStr                   ( CUI_RES( STR_FILTERNAME_CFG ) )
     , m_bStylesInfoInitialized(sal_False)
     , m_xGlobal               ()
     , m_xModule               ()

@@ -43,7 +43,7 @@
 
 #define _SVX_TPHATCH_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "tabarea.hrc"
 //#include "dlgname.hrc"
 #include "helpid.hrc"
@@ -54,8 +54,10 @@
 #include "cuitabarea.hxx"
 #include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
 #include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -74,26 +76,26 @@ SvxHatchTabPage::SvxHatchTabPage
     const SfxItemSet& rInAttrs
 ) :
 
-    SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_HATCH ), rInAttrs ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_HATCH ), rInAttrs ),
 
-    aFtDistance         ( this, SVX_RES( FT_LINE_DISTANCE ) ),
-    aMtrDistance        ( this, SVX_RES( MTR_FLD_DISTANCE ) ),
-    aFtAngle            ( this, SVX_RES( FT_LINE_ANGLE ) ),
-    aMtrAngle           ( this, SVX_RES( MTR_FLD_ANGLE ) ),
-    aCtlAngle           ( this, SVX_RES( CTL_ANGLE ),
+    aFtDistance         ( this, CUI_RES( FT_LINE_DISTANCE ) ),
+    aMtrDistance        ( this, CUI_RES( MTR_FLD_DISTANCE ) ),
+    aFtAngle            ( this, CUI_RES( FT_LINE_ANGLE ) ),
+    aMtrAngle           ( this, CUI_RES( MTR_FLD_ANGLE ) ),
+    aCtlAngle           ( this, CUI_RES( CTL_ANGLE ),
                                     RP_RB, 200, 80, CS_ANGLE ),
-    aFlProp             ( this, SVX_RES( FL_PROP ) ),
-    aFtLineType         ( this, SVX_RES( FT_LINE_TYPE ) ),
-    aLbLineType         ( this, SVX_RES( LB_LINE_TYPE ) ),
-    aFtLineColor        ( this, SVX_RES( FT_LINE_COLOR ) ),
-    aLbLineColor        ( this, SVX_RES( LB_LINE_COLOR ) ),
-    aLbHatchings        ( this, SVX_RES( LB_HATCHINGS ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
-    aBtnAdd             ( this, SVX_RES( BTN_ADD ) ),
-    aBtnModify          ( this, SVX_RES( BTN_MODIFY ) ),
-    aBtnDelete          ( this, SVX_RES( BTN_DELETE ) ),
-    aBtnLoad            ( this, SVX_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, SVX_RES( BTN_SAVE ) ),
+    aFlProp             ( this, CUI_RES( FL_PROP ) ),
+    aFtLineType         ( this, CUI_RES( FT_LINE_TYPE ) ),
+    aLbLineType         ( this, CUI_RES( LB_LINE_TYPE ) ),
+    aFtLineColor        ( this, CUI_RES( FT_LINE_COLOR ) ),
+    aLbLineColor        ( this, CUI_RES( LB_LINE_COLOR ) ),
+    aLbHatchings        ( this, CUI_RES( LB_HATCHINGS ) ),
+    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
+    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
+    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
+    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
+    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
+    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
@@ -106,8 +108,8 @@ SvxHatchTabPage::SvxHatchTabPage
     rXFSet              ( aXFillAttr.GetItemSet() )
 
 {
-    aBtnLoad.SetModeImage( Image( SVX_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( SVX_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 
@@ -204,7 +206,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
             INetURLObject   aURL( pHatchingList->GetPath() );
 
             aURL.Append( pHatchingList->GetName() );
@@ -259,17 +261,13 @@ long SvxHatchTabPage::CheckChanges_Impl()
         aLbLineColor.GetSelectEntryPos() != aLbLineColor.GetSavedValue() ||
         aLbHatchings.GetSelectEntryPos() != aLbHatchings.GetSavedValue() )
     {
-        ResMgr& rMgr = DIALOG_MGR();
+        ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        //CHINA001 SvxMessDialog aMessDlg( DLGWIN,
-        //CHINA001  String( ResId( RID_SVXSTR_HATCH, rMgr ) ),
-        //CHINA001  String( ResId( RID_SVXSTR_ASK_CHANGE_HATCH, rMgr ) ),
-        //CHINA001  &aWarningBoxImage );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
         AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
-                                                        String( ResId( RID_SVXSTR_HATCH, rMgr ) ),
-                                                        String( ResId( RID_SVXSTR_ASK_CHANGE_HATCH, rMgr ) ),
+                                                        SVX_RESSTR( RID_SVXSTR_HATCH ),
+                                                        CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
                                                         &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
         aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
@@ -503,9 +501,9 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr& rMgr = DIALOG_MGR();
-    String aNewName( ResId( RID_SVXSTR_HATCH, rMgr ) );
-    String aDesc( ResId( RID_SVXSTR_DESC_HATCH, rMgr ) );
+    ResMgr& rMgr = CUI_MGR();
+    String aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
+    String aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
     String aName;
 
     long nCount = pHatchingList->Count();
@@ -524,10 +522,9 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                 bDifferent = FALSE;
     }
 
-    //CHINA001 SvxNameDialog* pDlg     = new SvxNameDialog( DLGWIN, aName, aDesc );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     WarningBox*    pWarnBox = NULL;
     USHORT         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
@@ -610,16 +607,15 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr& rMgr = DIALOG_MGR();
-        String aNewName( ResId( RID_SVXSTR_HATCH, rMgr ) );
-        String aDesc( ResId( RID_SVXSTR_DESC_HATCH, rMgr ) );
+        ResMgr& rMgr = CUI_MGR();
+        String aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
+        String aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
         String aName( pHatchingList->GetHatch( nPos )->GetName() );
         String aOldName = aName;
 
-        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         long nCount = pHatchingList->Count();
@@ -684,8 +680,7 @@ IMPL_LINK( SvxHatchTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
-//!         SVX_RES( RID_SVXSTR_DEL_HATCH ),
-            String( SVX_RES( RID_SVXSTR_ASK_DEL_HATCH ) ) );
+            String( CUI_RES( RID_SVXSTR_ASK_DEL_HATCH ) ) );
 
         if( aQueryBox.Execute() == RET_YES )
         {
@@ -715,7 +710,7 @@ IMPL_LINK( SvxHatchTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr& rMgr = DIALOG_MGR();
+    ResMgr& rMgr = CUI_MGR();
     USHORT nReturn = RET_YES;
 
     if ( *pnHatchingListState & CT_MODIFIED )
@@ -842,7 +837,7 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         {
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String aString( SVX_RES( RID_SVXSTR_TABLE ) );
+            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
             if ( aURL.getBase().getLength() > 18 )
@@ -861,7 +856,7 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         else
         {
             ErrorBox( DLGWIN, WinBits( WB_OK ),
-                String( SVX_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
+                String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }
 

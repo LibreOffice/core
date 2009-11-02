@@ -28,9 +28,10 @@
  *
  ************************************************************************/
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <helpid.hrc>
 #include <numpages.hrc>
+#include <svx/dialogs.hrc>
 
 /**************************************************************************/
 /*                                                                        */
@@ -772,6 +773,7 @@ String RID_STR_EDIT_GRAPHIC
 {
     Text [ en-US ] = "Link" ;
 };
+/*
 String RID_STR_FULLNUMS_1 { Text = "1.|1.1|a)|61589|61589" ; };
 String RID_STR_FULLNUMS_2 { Text = "1.|a)|61589|61589|61589" ; };
 String RID_STR_FULLNUMS_3 { Text = "1.|(a)|i.|A.|61589" ; };
@@ -781,105 +783,7 @@ String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
 String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
-
-String RID_SVXSTR_BULLET_DESCRIPTION_0
-{
-    Text [en-US] = "Solid small circular bullets";
-};
-String RID_SVXSTR_BULLET_DESCRIPTION_1
-{
-    Text [en-US] = "Solid large circular bullets";
-};
-String RID_SVXSTR_BULLET_DESCRIPTION_2
-{
-    Text [en-US] = "Solid diamond bullets";
-};
-String RID_SVXSTR_BULLET_DESCRIPTION_3
-{
-    Text [en-US] = "Solid large square bullets";
-};
-String RID_SVXSTR_BULLET_DESCRIPTION_4
-{
-    Text [en-US] = "Right pointing arrow bullets filled out";
-};
-String RID_SVXSTR_BULLET_DESCRIPTION_5
-{
-    Text [en-US] = "Right pointing arrow bullets";
-};
-String RID_SVXSTR_BULLET_DESCRIPTION_6
-{
-    Text [en-US] = "Check mark bullets";
-};
-String RID_SVXSTR_BULLET_DESCRIPTION_7
-{
-    Text [en-US] = "Tick mark bullets";
-};
-String RID_SVXSTR_SINGLENUM_DESCRIPTION_0
-{
-    Text [en-US] = "Number 1) 2) 3)";
-};
-String RID_SVXSTR_SINGLENUM_DESCRIPTION_1
-{
-    Text [en-US] = "Number 1. 2. 3.";
-};
-String RID_SVXSTR_SINGLENUM_DESCRIPTION_2
-{
-    Text [en-US] = "Number (1) (2) (3)";
-};
-String RID_SVXSTR_SINGLENUM_DESCRIPTION_3
-{
-    Text [en-US] = "Uppercase Roman number I. II. III.";
-};
-String RID_SVXSTR_SINGLENUM_DESCRIPTION_4
-{
-    Text [en-US] = "Uppercase letter A) B) C)";
-};
-String RID_SVXSTR_SINGLENUM_DESCRIPTION_5
-{
-    Text [en-US] = "Lowercase letter a) b) c)";
-};
-String RID_SVXSTR_SINGLENUM_DESCRIPTION_6
-{
-    Text [en-US] = "Lowercase letter (a) (b) (c)";
-};
-String RID_SVXSTR_SINGLENUM_DESCRIPTION_7
-{
-    Text [en-US] = "Lowercase Roman number i. ii. iii.";
-};
-
-String RID_SVXSTR_OUTLINENUM_DESCRIPTION_0
-{
-    Text [en-US] = "Numeric, numeric, lowercase letters, solid small circular bullet";
-};
-String RID_SVXSTR_OUTLINENUM_DESCRIPTION_1
-{
-    Text [en-US] = "Numeric, lowercase letters, solid small circular bullet";
-};
-String RID_SVXSTR_OUTLINENUM_DESCRIPTION_2
-{
-    Text [en-US] = "Numeric, lowercase letters, lowercase Roman, uppercase letters, solid small circular bullet";
-};
-String RID_SVXSTR_OUTLINENUM_DESCRIPTION_3
-{
-    Text [en-US] = "Numeric";
-};
-String RID_SVXSTR_OUTLINENUM_DESCRIPTION_4
-{
-    Text [en-US] = "Uppercase Roman, uppercase letters, lowercase Roman, lowercase letters, solid small circular bullet";
-};
-String RID_SVXSTR_OUTLINENUM_DESCRIPTION_5
-{
-    Text [en-US] = "Uppercase letters, uppercase Roman, lowercase letters, lowercase Roman, solid small circular bullet";
-};
-String RID_SVXSTR_OUTLINENUM_DESCRIPTION_6
-{
-    Text [en-US] = "Numeric with all sublevels";
-};
-String RID_SVXSTR_OUTLINENUM_DESCRIPTION_7
-{
-    Text [en-US] = "Right pointing bullet, right pointing arrow bullet, solid diamond bullet, solid small circular bullet";
-};
-
+*/
 
 
 

@@ -1,0 +1,431 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dialogs.hrc,v $
+ * $Revision: 1.15 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _CUI_RESID_HRC
+#define _CUI_REDID_HRC
+
+// include ------------------------------------------------------------------
+
+#include <sfx2/sfx.hrc>
+#include <svx/svxids.hrc>
+#include <sfx2/dialogs.hrc>
+
+// Resource-Id's ------------------------------------------------------------
+
+// Bitte FIRSTFREE pflegen!!! (gilt nicht f"ur Strings)
+#define RID_SVX_FIRSTFREE                   305
+
+// Gallery
+#define RID_CUI_GALLERY_START               (RID_SVX_START + 360)
+#define RID_CUI_GALLERY_END                 (RID_SVX_START + 410)
+
+// tab pages
+// used in "dialogs"
+#define RID_SVX_FORMAT_CELLS_DLG            ( RID_SVX_START + 42 )
+
+// used in "tabpages"
+#define RID_SVXDLG_TEXT                     (RID_SVX_START + 183)
+#define RID_SVXDLG_TRANSFORM                (RID_SVX_START +  45)
+#define RID_SVXDLG_LINE                     (RID_SVX_START +  50)
+#define RID_SVXDLG_BBDLG                    (RID_SVX_START +  40)
+#define RID_SVXDLG_CAPTION                  (RID_SVX_START + 151)
+#define RID_SVXDLG_AREA                     (RID_SVX_START +  55)
+#define RID_SVXSTRARY_PAPERSIZE_STD         (RID_SVX_START + 142)
+#define RID_SVXSTRARY_PAPERSIZE_DRAW        (RID_SVX_START + 143)
+#define RID_SVXSTR_TABLE_PRESET_NONE        (RID_SVX_START + 969)
+#define RID_SVXSTR_TABLE_PRESET_ONLYOUTER   (RID_SVX_START + 970)
+#define RID_SVXSTR_TABLE_PRESET_OUTERHORI   (RID_SVX_START + 971)
+#define RID_SVXSTR_TABLE_PRESET_OUTERALL    (RID_SVX_START + 972)
+#define RID_SVXSTR_TABLE_PRESET_OUTERINNER  (RID_SVX_START + 973)
+#define RID_SVXSTR_PARA_PRESET_DIAGONAL     (RID_SVX_START + 974)
+#define RID_SVXSTR_PARA_PRESET_ALL          (RID_SVX_START + 975)
+#define RID_SVXSTR_PARA_PRESET_LEFTRIGHT    (RID_SVX_START + 976)
+#define RID_SVXSTR_PARA_PRESET_TOPBOTTOM    (RID_SVX_START + 977)
+#define RID_SVXSTR_PARA_PRESET_ONLYLEFT     (RID_SVX_START + 978)
+#define RID_SVXSTR_SHADOW_STYLE_NONE        (RID_SVX_START + 979)
+#define RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT (RID_SVX_START + 980)
+#define RID_SVXSTR_SHADOW_STYLE_TOPRIGHT    (RID_SVX_START + 981)
+#define RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT  (RID_SVX_START + 982)
+#define RID_SVXSTR_SHADOW_STYLE_TOPLEFT     (RID_SVX_START + 983)
+#define RID_SVXSTR_HOR_PRESET_ONLYHOR           (RID_SVX_START + 1113)
+#define RID_SVXSTR_VER_PRESET_ONLYVER           (RID_SVX_START + 1114)
+#define RID_SVXSTR_FRAMEDIR_LTR             (RID_SVX_START + 960)
+#define RID_SVXSTR_FRAMEDIR_RTL             (RID_SVX_START + 961)
+#define RID_SVXSTR_FRAMEDIR_SUPER           (RID_SVX_START + 962)
+#define RID_SVXSTR_PAGEDIR_LTR_HORI         (RID_SVX_START + 965)
+#define RID_SVXSTR_PAGEDIR_RTL_HORI         (RID_SVX_START + 966)
+#define RID_SVXSTR_PAGEDIR_RTL_VERT         (RID_SVX_START + 967)
+#define RID_SVXSTR_PAGEDIR_LTR_VERT         (RID_SVX_START + 968)
+#define RID_STR_EDIT_GRAPHIC                (RID_SVX_START + 509)
+#define RID_SVXIMG_LOAD_H                   (RID_SVX_START + 283)
+#define RID_SVXIMG_SAVE_H                   (RID_SVX_START + 284)
+
+#define RID_SVXSTR_DESC_GRADIENT            (RID_SVX_START + 163)
+#define RID_SVXSTR_ASK_DEL_GRADIENT         (RID_SVX_START + 165)
+#define RID_SVXSTR_ASK_CHANGE_GRADIENT      (RID_SVX_START + 166)
+#define RID_SVXSTR_ASK_DEL_BITMAP           (RID_SVX_START + 171)
+#define RID_SVXSTR_ASK_CHANGE_BITMAP        (RID_SVX_START + 172)
+#define RID_SVXSTR_DESC_NEW_BITMAP          (RID_SVX_START + 168)
+#define RID_SVXSTR_DESC_EXT_BITMAP          (RID_SVX_START + 169)
+#define RID_SVXSTR_DESC_LINESTYLE           (RID_SVX_START + 174)
+#define RID_SVXSTR_ASK_DEL_LINESTYLE        (RID_SVX_START + 176)
+#define RID_SVXSTR_ASK_CHANGE_LINESTYLE     (RID_SVX_START + 177)
+#define RID_SVXSTR_DESC_HATCH               (RID_SVX_START + 232)
+#define RID_SVXSTR_ASK_DEL_HATCH            (RID_SVX_START + 234)
+#define RID_SVXSTR_ASK_CHANGE_HATCH         (RID_SVX_START + 235)
+#define RID_SVXSTR_CHANGE                   (RID_SVX_START + 181)
+#define RID_SVXSTR_ADD                      (RID_SVX_START + 182)
+#define RID_SVXSTR_DESC_COLOR               (RID_SVX_START + 215)
+#define RID_SVXSTR_ASK_DEL_COLOR            (RID_SVX_START + 217)
+#define RID_SVXSTR_ASK_CHANGE_COLOR         (RID_SVX_START + 218)
+#define RID_SVXSTR_TABLE                    (RID_SVX_START + 220)
+#define RID_SVXSTR_WRITE_DATA_ERROR         (RID_SVX_START + 229)
+#define RID_SVXSTR_READ_DATA_ERROR          (RID_SVX_START + 230)
+#define RID_SVXSTR_WARN_TABLE_OVERWRITE     (RID_SVX_START + 231)
+#define RID_SVXSTR_ASK_CHANGE_LINEEND       (RID_SVX_START + 184)
+#define RID_SVXSTR_ASK_DEL_LINEEND          (RID_SVX_START + 219)
+#define RID_SVXSTR_DESC_LINEEND             (RID_SVX_START + 238)
+#define RID_SVXSTR_WARN_NAME_DUPLICATE      (RID_SVX_START + 236)
+
+// autocor
+#define RID_OFAPAGE_AUTOCOMPLETE_OPTIONS (RID_OFA_START + 119)
+#define RID_OFAPAGE_AUTOCORR_OPTIONS    (RID_OFA_START + 102)
+#define RID_OFAPAGE_AUTOFMT_APPLY       (RID_OFA_START + 110)
+#define RID_OFAPAGE_AUTOCORR_REPLACE    (RID_OFA_START + 103)
+#define RID_OFAPAGE_AUTOCORR_EXCEPT     (RID_OFA_START + 104)
+#define RID_OFAPAGE_AUTOCORR_QUOTE      (RID_OFA_START + 109)
+#define RID_OFADLG_PRCNT_SET            (RID_OFA_START + 111)
+
+// options
+#define RID_SVXSTR_DIAGRAM_ROW                              (RID_SVX_START + 1162)
+#define RID_OFAPAGE_CONNPOOLOPTIONS     (RID_OFA_START + 122)
+#define QUERY_DELETE_CONFIRM                    (RID_SVX_START + 1110)
+#define RID_SVXPAGE_JSEARCH_OPTIONS         (RID_SVX_START +  840)
+#define DLG_DOCUMENTLINK                (RID_OFA_START + 124)
+#define STR_LINKEDDOC_DOESNOTEXIST              (RID_SVX_START + 1111)
+#define STR_LINKEDDOC_NO_SYSTEM_FILE                        (RID_SVX_START + 1169)
+#define STR_NAME_CONFLICT                       (RID_SVX_START + 1112)
+#define RID_SVX_FONT_SUBSTITUTION           (RID_SVX_START + 18)
+
+// treeopt
+#define RID_SVXPAGE_COLOR                   (RID_SVX_START +  60)
+#define RID_SVXPAGE_SSO                                 (RID_SVX_START + 251)
+#define OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE      ( RID_OFA_START + 256 )
+#define RID_OFADLG_OPTIONS_TREE_PAGES   (RID_OFA_START + 116)
+#define RID_OFADLG_OPTIONS_TREE         (RID_OFA_START + 115)
+#define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
+#define RID_IMGLIST_TREEOPT_HC          (RID_OFA_START + 175)
+#define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)//?
+#define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)//?
+#define RID_OFADLG_OPTIONS_TREE_HINT    (RID_OFA_START + 118)//?
+
+// options
+#define RID_SVXDLG_WEBCONNECTION_INFO       (RID_SVX_START + 301)
+#define RID_SVXDLG_SECURITY_OPTIONS         (RID_SVX_START + 300)
+#define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 298)
+#define OFA_TP_MEMORY                   (RID_OFA_START + 250)
+#define RID_SVXPAGE_INET_SECURITY           (RID_SVX_START + 200)
+#define RID_SVXPAGE_INET_SEARCH             (RID_SVX_START + 160)
+#define RID_SVXPAGE_INET_PROXY              (RID_SVX_START + 157)
+#define RID_SVXPAGE_INET_MAIL               (RID_SVX_START + 155)
+#define RID_SVXPAGE_INET_MOZPLUGIN          (RID_SVX_START + 2161)
+#define RID_OFAPAGE_HTMLOPT             (RID_OFA_START + 100)
+#define OFA_TP_LANGUAGES                (RID_OFA_START + 205)
+#define OFA_TP_MISC                     (RID_OFA_START + 200)
+#define OFA_TP_VIEW                     (RID_OFA_START + 202)
+#define RID_OFAPAGE_MSFILTEROPT         (RID_OFA_START + 120)
+#define RID_OFAPAGE_MSFILTEROPT2        (RID_OFA_START + 121)
+#define RID_OFAPAGE_SMARTTAG_OPTIONS    (RID_OFA_START + 125)
+#define RID_SVXPAGE_OPTIONS_CTL             (RID_SVX_START + 252)
+#define RID_SVXPAGE_OPTIONS_JAVA            (RID_SVX_START + 253)
+#define RID_SVXPAGE_ACCESSIBILITYCONFIG     (RID_SVX_START + 250)
+#define RID_SVXPAGE_ASIAN_LAYOUT            (RID_SVX_START + 246)
+#define RID_OPTPAGE_CHART_DEFCOLORS         (RID_SVX_START + 299)
+#define RID_SVXPAGE_COLORCONFIG             (RID_SVX_START + 249)
+#define RID_SVXQB_DELETE_COLOR_CONFIG       (RID_SVX_START + 324)
+#define RID_SVXSTR_COLOR_CONFIG_SAVE1       (RID_SVX_START + 853)
+#define RID_SVXSTR_COLOR_CONFIG_SAVE2       (RID_SVX_START + 854)
+#define RID_SVXSTR_COLOR_CONFIG_DELETE      (RID_SVX_START + 855)
+#define RID_SVXSTR_OPT_DOUBLE_DICTS         (RID_SVX_START + 320)
+#define RID_SVX_MSGBOX_LANGUAGE_RESTART     ( RID_SVX_START +  2 )
+#define RID_SVXERR_OPT_PROXYPORTS           (RID_SVX_START + 224)
+#define RID_SVXDLG_OPT_JAVASCRIPT_DISABLE   (RID_SVX_START + 225)
+#define RID_SVXDLG_JAVA_PARAMETER           (RID_SVX_START + 254)
+#define RID_SVXDLG_JAVA_CLASSPATH           (RID_SVX_START + 255)
+#define RID_SVXERR_JRE_NOT_RECOGNIZED       (RID_SVX_START + 256)
+#define RID_SVXERR_JRE_FAILED_VERSION       (RID_SVX_START + 257)
+#define RID_SVX_MSGBOX_JAVA_RESTART         ( RID_SVX_START +  0 )
+#define RID_SVX_MSGBOX_JAVA_RESTART2        ( RID_SVX_START +  1 )
+#define RID_SVXDLG_LNG_ED_NUM_PREBREAK      (RID_SVX_START +  830)
+#define RID_SVXDLG_EDIT_MODULES             (RID_SVX_START +  831)
+#define RID_SVXSTR_PATH_NAME_START          (RID_SVX_START + 1003)
+#define RID_SVXDLG_FILTER_WARNING           (RID_SVX_START + 248)
+#define RID_SVXBMP_LOCK                     (RID_SVX_START + 118)
+#define RID_SVXBMP_LOCK_HC                  (RID_SVX_START + 119)
+#define RID_SVXSTR_READONLY_CONFIG_TIP      (RID_SVX_START + 1026)
+#define RID_SVXQB_CHANGEDATA                (RID_SVX_START + 214)       //?
+#define RID_SVXERR_OPT_DOUBLEPATHS          (RID_SVX_START + 208)       //?
+#define RID_SVXSTR_KEY_AUTOCORRECT_DIR      (RID_SVX_START + 1004)  //?
+#define RID_SVXSTR_KEY_DICTIONARY_PATH      (RID_SVX_START + 1010)//?
+#define RID_SVXSTR_KEY_LINGUISTIC_DIR       (RID_SVX_START + 1016)//?
+#define RID_SVXSTR_KEY_USERCONFIG_PATH      (RID_SVX_START + 1023)//?
+#define RID_SVXSTR_KEY_FILTER_PATH          (RID_SVX_START + 1012)//?
+#define RID_SVXSTR_KEY_ADDINS_PATH          (RID_SVX_START + 1003)//?
+#define RID_SVXSTR_KEY_FAVORITES_DIR        (RID_SVX_START + 1011)//?
+#define RID_SVXSTR_KEY_PLUGINS_PATH         (RID_SVX_START + 1019)//?
+#define RID_SVXSTR_KEY_TEMP_PATH            (RID_SVX_START + 1021)//?
+#define RID_SVXSTR_KEY_STORAGE_DIR          (RID_SVX_START + 1020)//?
+#define RID_SVXSTR_KEY_GALLERY_DIR          (RID_SVX_START + 1013)//?
+#define RID_SVXSTR_KEY_HELP_DIR             (RID_SVX_START + 1015)//?
+#define RID_SVXSTR_KEY_GLOSSARY_PATH        (RID_SVX_START + 1005)//?
+#define RID_SVXSTR_KEY_TEMPLATE_PATH        (RID_SVX_START + 1022)//?
+#define RID_SVXSTR_KEY_MODULES_PATH         (RID_SVX_START + 1017)//?
+#define RID_SVXSTR_KEY_BACKUP_PATH          (RID_SVX_START + 1006)//?
+#define RID_SVXSTR_KEY_PALETTE_PATH         (RID_SVX_START + 1018)//?
+#define RID_SVXSTR_KEY_CONFIG_DIR           (RID_SVX_START + 1009)//?
+#define RID_SVXSTR_KEY_WORK_PATH            (RID_SVX_START + 1024)//?
+#define RID_SVXSTR_KEY_GRAPHICS_PATH        (RID_SVX_START + 1014)//?
+#define RID_SVXSTR_KEY_BASIC_PATH           (RID_SVX_START + 1007)//?
+#define RID_SVXSTR_KEY_BITMAP_PATH          (RID_SVX_START + 1008)//?
+#define RID_SVXSTR_KEY_USERDICTIONARY_DIR   (RID_SVX_START + 1025)//?
+
+// dialogs
+#define RID_SVX_WND_COMMON_LINGU            ( RID_SVX_START +  0 )
+#define RID_SVX_GRFFILTER_DLG_EMBOSS_TAB    (RID_SVX_START + 337)
+#define RID_SVXDLG_SEARCHATTR               (RID_SVX_START +  22)
+
+// hyperlink dialog
+#define RID_SVXDLG_NEWHYPERLINK             (RID_SVX_START + 227)
+#define RID_SVXBMP_HLINETTP_H               (RID_SVX_START + 272)
+#define RID_SVXBMP_HLMAILTP_H               (RID_SVX_START + 273)
+#define RID_SVXBMP_HLDOCTP_H                (RID_SVX_START + 274)
+#define RID_SVXBMP_HLDOCNTP_H               (RID_SVX_START + 275)
+#define RID_SVXBMP_HLINETTP                 (RID_SVX_START + 556)
+#define RID_SVXBMP_HLMAILTP                 (RID_SVX_START + 557)
+#define RID_SVXBMP_HLDOCTP                  (RID_SVX_START + 558)
+#define RID_SVXBMP_HLDOCNTP                 (RID_SVX_START + 559)
+#define RID_SVXPAGE_HYPERLINK_INTERNET      (RID_SVX_START + 228)
+#define RID_SVXPAGE_HYPERLINK_MAIL          (RID_SVX_START + 229)
+#define RID_SVXPAGE_HYPERLINK_DOCUMENT      (RID_SVX_START + 230)
+#define RID_SVXPAGE_HYPERLINK_NEWDOCUMENT   (RID_SVX_START + 231)
+#define RID_SVXSTR_HYPERDLG_HLINETTP        (RID_SVX_START + 581)
+#define RID_SVXSTR_HYPERDLG_HLINETTP_HELP   (RID_SVX_START + 582)
+#define RID_SVXSTR_HYPERDLG_HLMAILTP        (RID_SVX_START + 583)
+#define RID_SVXSTR_HYPERDLG_HLMAILTP_HELP   (RID_SVX_START + 584)
+#define RID_SVXSTR_HYPERDLG_HLDOCTP         (RID_SVX_START + 585)
+#define RID_SVXSTR_HYPERDLG_HLDOCTP_HELP    (RID_SVX_START + 586)
+#define RID_SVXSTR_HYPERDLG_HLDOCNTP        (RID_SVX_START + 587)
+#define RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP   (RID_SVX_START + 588)
+#define RID_SVXSTR_HYPDLG_APPLYBUT          (RID_SVX_START + 548)
+#define RID_SVXSTR_HYPDLG_CLOSEBUT          (RID_SVX_START + 549)
+#define RID_SVXSTR_HYPDLG_NOVALIDFILENAME   (RID_SVX_START + 553)
+#define RID_SVXSTR_HYPERDLG_QUERYOVERWRITE  (RID_SVX_START +  815)
+#define RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES  (RID_SVX_START + 800)
+#define RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN (RID_SVX_START + 801)
+#define RID_SVXFLOAT_HYPERLINK_MARKWND      (RID_SVX_START + 232)
+#define RID_SVXSTR_HYPDLG_MACROACT1         (RID_SVX_START + 550)
+#define RID_SVXSTR_HYPDLG_MACROACT2         (RID_SVX_START + 551)
+#define RID_SVXSTR_HYPDLG_MACROACT3         (RID_SVX_START + 552)
+#define RID_SVXSTR_HYPERDLG_FORM_BUTTON     (RID_SVX_START +  813)
+#define RID_SVXSTR_HYPERDLG_FROM_TEXT       (RID_SVX_START +  814)
+
+// imap dialog
+#define RID_SVX_IMAPDLG_START               (RID_SVX_START + 100)
+#define RID_SVXDLG_IMAPURL                  (RID_SVX_IMAPDLG_START + 2)
+
+// name dialog
+#define RID_SVXDLG_NAME                     (RID_SVX_START +  62)
+#define RID_SVXDLG_MESSBOX                  (RID_SVX_START +  63)
+#define RID_SVXDLG_OBJECT_NAME              (RID_SVX_START +  64)
+#define RID_SVXDLG_OBJECT_TITLE_DESC        (RID_SVX_START +  67)
+
+// hangulhanja
+#define RID_SVX_MDLG_HANGULHANJA            (RID_SVX_START +  1 )
+#define RID_SVX_MDLG_HANGULHANJA_OPT        ( RID_SVX_START +  4 )
+#define RID_SVX_MDLG_HANGULHANJA_EDIT       ( RID_SVX_START +  5 )
+#define RID_SVX_MDLG_HANGULHANJA_NEWDICT    ( RID_SVX_START +  6 )
+
+// icon choice
+#define RID_SVXSTR_ICONCHOICEDLG_RESETBUT   (RID_SVX_START + 580)
+
+// insert rows&cols
+#define DLG_INS_ROW_COL                     (RID_SVX_START + 156)
+
+// SvxMultiFileDialog
+#define RID_SVXSTR_FILE_TITLE               (RID_SVX_START + 482)
+#define RID_SVXSTR_FILE_HEADLINE            (RID_SVX_START + 483)
+#define RID_SVXSTR_ARCHIVE_TITLE            (RID_SVX_START + 484)
+#define RID_SVXSTR_ARCHIVE_HEADLINE         (RID_SVX_START + 485)
+#define RID_SVXSTR_MULTIFILE_DBL_ERR        (RID_SVX_START + 486)
+
+// multi path dialog
+#define RID_SVXDLG_MULTIPATH                (RID_SVX_START + 201)
+#define RID_MULTIPATH_DBL_ERR               (RID_SVX_START + 207)
+
+// new table dialog
+#define RID_SVX_NEWTABLE_DLG                ( RID_SVX_START + 44 )
+
+// script organizer
+#define RID_DLG_SCRIPTORGANIZER             (RID_SVX_START + 258)
+#define RID_DLG_NEWLIB                      (RID_SVX_START + 290)
+#define RID_SVXSTR_DELQUERY                 (RID_SVX_START + 1027)
+#define RID_SVXSTR_DELQUERY_TITLE           (RID_SVX_START + 1028)
+#define RID_SVXSTR_DELFAILED                (RID_SVX_START + 1029)
+#define RID_SVXSTR_DELFAILEDPERM            (RID_SVX_START + 1030)
+#define RID_SVXSTR_DELFAILED_TITLE          (RID_SVX_START + 1031)
+#define RID_SVXSTR_CREATEFAILED             (RID_SVX_START + 1032)
+#define RID_SVXSTR_CREATEFAILEDPERM         (RID_SVX_START + 1033)
+#define RID_SVXSTR_CREATEFAILEDDUP          (RID_SVX_START + 1034)
+#define RID_SVXSTR_CREATEFAILED_TITLE       (RID_SVX_START + 1035)
+#define RID_SVXSTR_RENAMEFAILED             (RID_SVX_START + 1036)
+#define RID_SVXSTR_RENAMEFAILEDPERM         (RID_SVX_START + 1037)
+#define RID_SVXSTR_RENAMEFAILED_TITLE       (RID_SVX_START + 1038)
+#define RID_SVXSTR_ERROR_TITLE                  (RID_SVX_START + 1100)
+#define RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED     (RID_SVX_START + 1101)
+#define RID_SVXSTR_ERROR_RUNNING                (RID_SVX_START + 1102)
+#define RID_SVXSTR_EXCEPTION_RUNNING            (RID_SVX_START + 1103)
+#define RID_SVXSTR_ERROR_AT_LINE                (RID_SVX_START + 1104)
+#define RID_SVXSTR_EXCEPTION_AT_LINE            (RID_SVX_START + 1105)
+#define RID_SVXSTR_FRAMEWORK_ERROR_RUNNING      (RID_SVX_START + 1106)
+#define RID_SVXSTR_FRAMEWORK_ERROR_AT_LINE      (RID_SVX_START + 1107)
+#define RID_SVXSTR_ERROR_TYPE_LABEL             (RID_SVX_START + 1108)
+#define RID_SVXSTR_ERROR_MESSAGE_LABEL          (RID_SVX_START + 1109)
+
+// spell check dialog
+#define RID_SVXDLG_SPELLCHECK               (RID_SVX_START +  32)
+
+// split cells
+#define RID_SVX_SPLITCELLDLG                ( RID_SVX_START + 43 )
+
+// searching
+#define RID_SVXDLG_SEARCHSIMILARITY         (RID_SVX_START +  23)
+
+// customize
+
+#define RID_SVXDLG_CUSTOMIZE                (RID_SVX_START + 291)
+#define RID_SVXPAGE_MENUS                   (RID_SVX_START + 292)
+#define RID_SVXPAGE_KEYBOARD                (RID_SVX_START + 293)
+#define RID_SVXPAGE_TOOLBARS                (RID_SVX_START + 294)
+#define RID_SVXPAGE_EVENTS                  (RID_SVX_START + 295)
+#define RID_SVXPAGE_CONFIGGROUPBOX          (RID_SVX_START + 304)
+#define RID_SVXDLG_ASSIGNCOMPONENT          (RID_SVX_START + 297)
+#define RID_DLG_SCRIPTSELECTOR              (RID_SVX_START + 259)
+#define RID_SVXSTR_NEW_MENU                 (RID_SVX_START + 1039)
+#define RID_SVXSTR_NEW_TOOLBAR              (RID_SVX_START + 1040)
+#define RID_SVXSTR_MOVE_MENU                (RID_SVX_START + 1041)
+#define RID_SVXSTR_ADD_SUBMENU                  (RID_SVX_START + 1048)
+#define RID_SVXSTR_SUBMENU_NAME                 (RID_SVX_START + 1049)
+#define RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION (RID_SVX_START + 1050)
+#define RID_SVXSTR_IMPORT_ICON_ERROR            (RID_SVX_START + 1117)
+#define RID_SVXSTR_DELETE_ICON_CONFIRM                      (RID_SVX_START + 1163) //added for issue73355
+#define RID_SVXSTR_REPLACE_ICON_WARNING                     (RID_SVX_START + 1164) //added for issue73355
+#define RID_SVXSTR_REPLACE_ICON_CONFIRM                     (RID_SVX_START + 1165) //added for issue73355
+#define RID_SVXSTR_YESTOALL                                 (RID_SVX_START + 1166) //added for issue73355
+#define RID_SVXSTR_PRODUCTNAME_TOOLBARS         (RID_SVX_START + 1042)
+#define RID_SVXSTR_TOOLBAR                      (RID_SVX_START + 1043)
+#define RID_SVXSTR_TOOLBAR_CONTENT              (RID_SVX_START + 1044)
+#define RID_SVXSTR_COMMANDS                     (RID_SVX_START + 1045)
+#define RID_SVXSTR_COMMAND                      (RID_SVX_START + 1046)
+#define RID_SVXSTR_TOOLBAR_NAME                 (RID_SVX_START + 1047)
+#define RID_SVXSTR_CONFIRM_MENU_RESET           (RID_SVX_START + 1115)
+#define RID_SVXSTR_CONFIRM_TOOLBAR_RESET        (RID_SVX_START + 1116)
+#define RID_SVXSTR_LABEL_NEW_NAME                           (RID_SVX_START + 1135)
+#define RID_SVXSTR_RENAME_MENU                              (RID_SVX_START + 1136)
+#define RID_SVXSTR_RENAME_TOOLBAR                           (RID_SVX_START + 1137)
+#define RID_SVXSTR_EVENT_STARTAPP               (RID_SVX_START + 1051)
+#define RID_SVXSTR_EVENT_CLOSEAPP               (RID_SVX_START + 1052)
+#define RID_SVXSTR_EVENT_NEWDOC                 (RID_SVX_START + 1053)
+#define RID_SVXSTR_EVENT_CLOSEDOC               (RID_SVX_START + 1054)
+#define RID_SVXSTR_EVENT_PREPARECLOSEDOC        (RID_SVX_START + 1055)
+#define RID_SVXSTR_EVENT_OPENDOC                (RID_SVX_START + 1056)
+#define RID_SVXSTR_EVENT_SAVEDOC                (RID_SVX_START + 1057)
+#define RID_SVXSTR_EVENT_SAVEASDOC              (RID_SVX_START + 1058)
+#define RID_SVXSTR_EVENT_SAVEDOCDONE            (RID_SVX_START + 1059)
+#define RID_SVXSTR_EVENT_SAVEASDOCDONE          (RID_SVX_START + 1060)
+#define RID_SVXSTR_EVENT_ACTIVATEDOC            (RID_SVX_START + 1061)
+#define RID_SVXSTR_EVENT_DEACTIVATEDOC          (RID_SVX_START + 1062)
+#define RID_SVXSTR_EVENT_PRINTDOC               (RID_SVX_START + 1063)
+#define RID_SVXSTR_EVENT_MODIFYCHANGED          (RID_SVX_START + 1064)
+#define RID_SVXSTR_EVENT_MAILMERGE              (RID_SVX_START + 1065)
+#define RID_SVXSTR_EVENT_PAGECOUNTCHANGE        (RID_SVX_START + 1066)
+#define RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED (RID_SVX_START + 1067)
+#define RID_SVXSTR_EVENT_ACTIONPERFORMED        (RID_SVX_START + 1068)
+#define RID_SVXSTR_EVENT_CHANGED                (RID_SVX_START + 1069)
+#define RID_SVXSTR_EVENT_TEXTCHANGED            (RID_SVX_START + 1070)
+#define RID_SVXSTR_EVENT_ITEMSTATECHANGED       (RID_SVX_START + 1071)
+#define RID_SVXSTR_EVENT_FOCUSGAINED            (RID_SVX_START + 1072)
+#define RID_SVXSTR_EVENT_FOCUSLOST              (RID_SVX_START + 1073)
+#define RID_SVXSTR_EVENT_KEYTYPED               (RID_SVX_START + 1074)
+#define RID_SVXSTR_EVENT_KEYUP                  (RID_SVX_START + 1075)
+#define RID_SVXSTR_EVENT_MOUSEENTERED           (RID_SVX_START + 1076)
+#define RID_SVXSTR_EVENT_MOUSEDRAGGED           (RID_SVX_START + 1077)
+#define RID_SVXSTR_EVENT_MOUSEMOVED             (RID_SVX_START + 1078)
+#define RID_SVXSTR_EVENT_MOUSEPRESSED           (RID_SVX_START + 1079)
+#define RID_SVXSTR_EVENT_MOUSERELEASED          (RID_SVX_START + 1080)
+#define RID_SVXSTR_EVENT_MOUSEEXITED            (RID_SVX_START + 1081)
+#define RID_SVXSTR_EVENT_APPROVERESETTED        (RID_SVX_START + 1082)
+#define RID_SVXSTR_EVENT_SUBMITTED              (RID_SVX_START + 1083)
+#define RID_SVXSTR_EVENT_BEFOREUPDATE           (RID_SVX_START + 1084)
+#define RID_SVXSTR_EVENT_AFTERUPDATE            (RID_SVX_START + 1085)
+#define RID_SVXSTR_EVENT_LOADED                 (RID_SVX_START + 1086)
+#define RID_SVXSTR_EVENT_RELOADING              (RID_SVX_START + 1087)
+#define RID_SVXSTR_EVENT_RELOADED               (RID_SVX_START + 1088)
+#define RID_SVXSTR_EVENT_UNLOADING              (RID_SVX_START + 1089)
+#define RID_SVXSTR_EVENT_UNLOADED               (RID_SVX_START + 1090)
+#define RID_SVXSTR_EVENT_CONFIRMDELETE          (RID_SVX_START + 1091)
+#define RID_SVXSTR_EVENT_APPROVEROWCHANGE       (RID_SVX_START + 1092)
+#define RID_SVXSTR_EVENT_ROWCHANGE              (RID_SVX_START + 1093)
+#define RID_SVXSTR_EVENT_POSITIONING            (RID_SVX_START + 1094)
+#define RID_SVXSTR_EVENT_POSITIONED             (RID_SVX_START + 1095)
+#define RID_SVXSTR_EVENT_APPROVEPARAMETER       (RID_SVX_START + 1096)
+#define RID_SVXSTR_EVENT_ERROROCCURED           (RID_SVX_START + 1097)
+#define RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED (RID_SVX_START + 1098)
+#define RID_SVXSTR_EVENT_RESETTED               (RID_SVX_START + 1099)
+#define RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED                (RID_SVX_START + 1170)
+#define RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED                (RID_SVX_START + 1171)
+#define RID_SVXSTR_EVENT_CREATEDOC                          (RID_SVX_START + 1172)
+#define RID_SVXSTR_EVENT_LOADDOCFINISHED                    (RID_SVX_START + 1173)
+#define RID_SVXSTR_EVENT_SAVEDOCFAILED                      (RID_SVX_START + 1174)
+#define RID_SVXSTR_EVENT_SAVEASDOCFAILED                    (RID_SVX_START + 1175)
+#define RID_SVXSTR_EVENT_COPYTODOC                          (RID_SVX_START + 1176)
+#define RID_SVXSTR_EVENT_COPYTODOCDONE                      (RID_SVX_START + 1177)
+#define RID_SVXSTR_EVENT_COPYTODOCFAILED                    (RID_SVX_START + 1178)
+#define RID_SVXSTR_EVENT_VIEWCREATED                        (RID_SVX_START + 1179)
+#define RID_SVXSTR_EVENT_PREPARECLOSEVIEW                   (RID_SVX_START + 1180)
+#define RID_SVXSTR_EVENT_CLOSEVIEW                          (RID_SVX_START + 1181)
+#define RID_SVXSTR_EVENT_TITLECHANGED                       (RID_SVX_START + 1182)
+#define RID_SVXSTR_EVENT_MODECHANGED                        (RID_SVX_START + 1183)
+#define RID_SVXSTR_EVENT_VISAREACHANGED                     (RID_SVX_START + 1184)
+#define RID_SVXSTR_EVENT_STORAGECHANGED                     (RID_SVX_START + 1185)
+#define RID_SVXSTR_EVENT_MAILMERGE_END                      (RID_SVX_START + 1186)
+#define RID_SVXSTR_EVENT_FIELDMERGE                         (RID_SVX_START + 1187)
+#define RID_SVXSTR_EVENT_FIELDMERGE_FINISHED                (RID_SVX_START + 1188)
+#define RID_SVXSTR_EVENT_LAYOUT_FINISHED                    (RID_SVX_START + 1189)
+
+#endif

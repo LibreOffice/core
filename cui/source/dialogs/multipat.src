@@ -30,7 +30,7 @@
 
 #include "multipat.hrc"
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 // RID_SVXDLG_MULTIPATH --------------------------------------------------
 

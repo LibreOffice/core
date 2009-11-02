@@ -35,7 +35,7 @@
 #include "fmsearch.hrc"
 
 #include <tools/shl.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/extract.hxx>
@@ -50,11 +50,11 @@
 DBG_NAME(FmShowColsDialog)
 //--------------------------------------------------------------------------
 FmShowColsDialog::FmShowColsDialog(Window* pParent)
-    :ModalDialog(pParent, SVX_RES(RID_SVX_DLG_SHOWGRIDCOLUMNS))
-    ,m_aList(this, SVX_RES(1))
-    ,m_aLabel(this, SVX_RES(1))
-    ,m_aOK(this, SVX_RES(1))
-    ,m_aCancel(this, SVX_RES(1))
+    :ModalDialog(pParent, CUI_RES(RID_SVX_DLG_SHOWGRIDCOLUMNS))
+    ,m_aList(this, CUI_RES(1))
+    ,m_aLabel(this, CUI_RES(1))
+    ,m_aOK(this, CUI_RES(1))
+    ,m_aCancel(this, CUI_RES(1))
 {
     DBG_CTOR(FmShowColsDialog,NULL);
     m_aList.EnableMultiSelection(sal_True);

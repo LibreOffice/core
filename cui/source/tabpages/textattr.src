@@ -29,10 +29,10 @@
  ************************************************************************/
  // include ---------------------------------------------------------------
 #include <svtools/controldims.hrc>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "textattr.hrc"
 #include "helpid.hrc"
- // pragma ----------------------------------------------------------------
+#include <svx/dialogs.hrc>
 
  // RID_SVXPAGE_TEXTATTR --------------------------------------------------
 TabPage RID_SVXPAGE_TEXTATTR

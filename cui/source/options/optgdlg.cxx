@@ -68,7 +68,7 @@
 #include <svx/xpool.hxx>
 #include <svx/dlgutil.hxx>
 #include "cuitabarea.hxx"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svx/unolingu.hxx>
 #include <svx/svxids.hrc>
 #include <svx/langitem.hxx>
@@ -76,7 +76,7 @@
 #include <rtl/ustrbuf.hxx>
 
 
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/saveopt.hxx>
 
@@ -195,26 +195,26 @@ namespace
 
 OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( OFA_TP_MISC ), rSet ),
+    SfxTabPage( pParent, CUI_RES( OFA_TP_MISC ), rSet ),
 
-    aHelpFL             ( this, SVX_RES( FL_HELP ) ),
-    aToolTipsCB         ( this, SVX_RES( CB_TOOLTIP ) ),
-    aExtHelpCB          ( this, SVX_RES( CB_EXTHELP ) ),
-    aHelpAgentCB        ( this, SVX_RES( CB_HELPAGENT ) ),
-    aHelpAgentResetBtn  ( this, SVX_RES( PB_HELPAGENT_RESET ) ),
-    aHelpFormatFT       ( this, SVX_RES( FT_HELPFORMAT ) ),
-    aHelpFormatLB       ( this, SVX_RES( LB_HELPFORMAT ) ),
-    aFileDlgFL          ( this, SVX_RES( FL_FILEDLG ) ),
-    aFileDlgROImage     ( this, SVX_RES( FI_FILEDLG_RO ) ),
-    aFileDlgCB          ( this, SVX_RES( CB_FILEDLG ) ),
-    aPrintDlgFL         ( this, SVX_RES( FL_PRINTDLG ) ),
-    aPrintDlgCB         ( this, SVX_RES( CB_PRINTDLG ) ),
-    aDocStatusFL        ( this, SVX_RES( FL_DOCSTATUS ) ),
-    aDocStatusCB        ( this, SVX_RES( CB_DOCSTATUS ) ),
-    aTwoFigureFL        ( this, SVX_RES( FL_TWOFIGURE ) ),
-    aInterpretFT        ( this, SVX_RES( FT_INTERPRET ) ),
-    aYearValueField     ( this, SVX_RES( NF_YEARVALUE ) ),
-    aToYearFT           ( this, SVX_RES( FT_TOYEAR ) )
+    aHelpFL             ( this, CUI_RES( FL_HELP ) ),
+    aToolTipsCB         ( this, CUI_RES( CB_TOOLTIP ) ),
+    aExtHelpCB          ( this, CUI_RES( CB_EXTHELP ) ),
+    aHelpAgentCB        ( this, CUI_RES( CB_HELPAGENT ) ),
+    aHelpAgentResetBtn  ( this, CUI_RES( PB_HELPAGENT_RESET ) ),
+    aHelpFormatFT       ( this, CUI_RES( FT_HELPFORMAT ) ),
+    aHelpFormatLB       ( this, CUI_RES( LB_HELPFORMAT ) ),
+    aFileDlgFL          ( this, CUI_RES( FL_FILEDLG ) ),
+    aFileDlgROImage     ( this, CUI_RES( FI_FILEDLG_RO ) ),
+    aFileDlgCB          ( this, CUI_RES( CB_FILEDLG ) ),
+    aPrintDlgFL         ( this, CUI_RES( FL_PRINTDLG ) ),
+    aPrintDlgCB         ( this, CUI_RES( CB_PRINTDLG ) ),
+    aDocStatusFL        ( this, CUI_RES( FL_DOCSTATUS ) ),
+    aDocStatusCB        ( this, CUI_RES( CB_DOCSTATUS ) ),
+    aTwoFigureFL        ( this, CUI_RES( FL_TWOFIGURE ) ),
+    aInterpretFT        ( this, CUI_RES( FT_INTERPRET ) ),
+    aYearValueField     ( this, CUI_RES( NF_YEARVALUE ) ),
+    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) )
 
 {
     FreeResource();
@@ -662,40 +662,40 @@ void CanvasSettings::EnabledHardwareAcceleration( BOOL _bEnabled ) const
 
 OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( OFA_TP_VIEW ), rSet ),
+    SfxTabPage( pParent, CUI_RES( OFA_TP_VIEW ), rSet ),
 
-    aUserInterfaceFL    ( this, SVX_RES( FL_USERINTERFACE ) ),
-    aWindowSizeFT       ( this, SVX_RES( FT_WINDOWSIZE ) ),
-    aWindowSizeMF       ( this, SVX_RES( MF_WINDOWSIZE ) ),
-    aIconSizeStyleFT    ( this, SVX_RES( FT_ICONSIZESTYLE ) ),
-    aIconSizeLB              ( this, SVX_RES( LB_ICONSIZE ) ),
-    aIconStyleLB        ( this, SVX_RES( LB_ICONSTYLE ) ),
-    m_aSystemFont               (this, SVX_RES( CB_SYSTEM_FONT ) ),
+    aUserInterfaceFL    ( this, CUI_RES( FL_USERINTERFACE ) ),
+    aWindowSizeFT       ( this, CUI_RES( FT_WINDOWSIZE ) ),
+    aWindowSizeMF       ( this, CUI_RES( MF_WINDOWSIZE ) ),
+    aIconSizeStyleFT    ( this, CUI_RES( FT_ICONSIZESTYLE ) ),
+    aIconSizeLB              ( this, CUI_RES( LB_ICONSIZE ) ),
+    aIconStyleLB        ( this, CUI_RES( LB_ICONSTYLE ) ),
+    m_aSystemFont               (this, CUI_RES( CB_SYSTEM_FONT ) ),
 #if defined( UNX )
-    aFontAntiAliasing   ( this, SVX_RES( CB_FONTANTIALIASING )),
-    aAAPointLimitLabel  ( this, SVX_RES( FT_POINTLIMIT_LABEL )),
-    aAAPointLimit       ( this, SVX_RES( NF_AA_POINTLIMIT )),
-    aAAPointLimitUnits  ( this, SVX_RES( FT_POINTLIMIT_UNIT )),
+    aFontAntiAliasing   ( this, CUI_RES( CB_FONTANTIALIASING )),
+    aAAPointLimitLabel  ( this, CUI_RES( FT_POINTLIMIT_LABEL )),
+    aAAPointLimit       ( this, CUI_RES( NF_AA_POINTLIMIT )),
+    aAAPointLimitUnits  ( this, CUI_RES( FT_POINTLIMIT_UNIT )),
 #endif
-    aMenuFL             ( this, SVX_RES( FL_MENU ) ),
-    aMenuIconsFT        ( this, SVX_RES( FT_MENU_ICONS )),
-    aMenuIconsLB        ( this, SVX_RES( LB_MENU_ICONS )),
-    aFontListsFL        ( this, SVX_RES( FL_FONTLISTS) ),
-    aFontShowCB         ( this, SVX_RES( CB_FONT_SHOW ) ),
-    aFontHistoryCB      ( this, SVX_RES( CB_FONT_HISTORY ) ),
-    aRenderingFL        ( this, SVX_RES( FL_RENDERING ) ),
-    aUseHardwareAccell  ( this, SVX_RES( CB_USE_HARDACCELL ) ),
-    aUseAntiAliase      ( this, SVX_RES( CB_USE_ANTIALIASE ) ),
-    aMouseFL            ( this, SVX_RES( FL_MOUSE ) ),
-    aMousePosFT         ( this, SVX_RES( FT_MOUSEPOS ) ),
-    aMousePosLB         ( this, SVX_RES( LB_MOUSEPOS ) ),
-    aMouseMiddleFT      ( this, SVX_RES( FT_MOUSEMIDDLE ) ),
-    aMouseMiddleLB      ( this, SVX_RES( LB_MOUSEMIDDLE ) ),
+    aMenuFL             ( this, CUI_RES( FL_MENU ) ),
+    aMenuIconsFT        ( this, CUI_RES( FT_MENU_ICONS )),
+    aMenuIconsLB        ( this, CUI_RES( LB_MENU_ICONS )),
+    aFontListsFL        ( this, CUI_RES( FL_FONTLISTS) ),
+    aFontShowCB         ( this, CUI_RES( CB_FONT_SHOW ) ),
+    aFontHistoryCB      ( this, CUI_RES( CB_FONT_HISTORY ) ),
+    aRenderingFL        ( this, CUI_RES( FL_RENDERING ) ),
+    aUseHardwareAccell  ( this, CUI_RES( CB_USE_HARDACCELL ) ),
+    aUseAntiAliase      ( this, CUI_RES( CB_USE_ANTIALIASE ) ),
+    aMouseFL            ( this, CUI_RES( FL_MOUSE ) ),
+    aMousePosFT         ( this, CUI_RES( FT_MOUSEPOS ) ),
+    aMousePosLB         ( this, CUI_RES( LB_MOUSEPOS ) ),
+    aMouseMiddleFT      ( this, CUI_RES( FT_MOUSEMIDDLE ) ),
+    aMouseMiddleLB      ( this, CUI_RES( LB_MOUSEMIDDLE ) ),
 
     // #i97672#
-    maSelectionFL(this, SVX_RES(FL_SELECTION)),
-    maSelectionCB(this, SVX_RES(CB_SELECTION)),
-    maSelectionMF(this, SVX_RES(MF_SELECTION)),
+    maSelectionFL(this, CUI_RES(FL_SELECTION)),
+    maSelectionCB(this, CUI_RES(CB_SELECTION)),
+    maSelectionMF(this, CUI_RES(MF_SELECTION)),
 
     nSizeLB_InitialSelection(0),
     nStyleLB_InitialSelection(0),
@@ -745,7 +745,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     };
 
     // temporaryly create the checkbox for the anti aliasing (we need to to determine it's pos)
-    CheckBox* pFontAntiAliasing = new CheckBox( this, SVX_RES( CB_FONTANTIALIASING ) );
+    CheckBox* pFontAntiAliasing = new CheckBox( this, CUI_RES( CB_FONTANTIALIASING ) );
     sal_Int32 nMoveUp = aMenuFL.GetPosPixel().Y() - pFontAntiAliasing->GetPosPixel().Y();
     DELETEZ( pFontAntiAliasing );
 
@@ -1232,34 +1232,34 @@ static const OUString sOfficeLocaleKey = OUString::createFromAscii("ooLocale");
 static Sequence< OUString > seqInstalledLanguages;
 
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage( pParent, SVX_RES( OFA_TP_LANGUAGES ), rSet ),
-    aUILanguageGB(this,         SVX_RES(FL_UI_LANG      )),
-    aLocaleSettingFI(this,      SVX_RES(FI_LOCALESETTING)),
-    aUserInterfaceFT(this,      SVX_RES(FT_USERINTERFACE)),
-    aUserInterfaceLB(this,      SVX_RES(LB_USERINTERFACE)),
-    aLocaleSettingFT(this,      SVX_RES(FT_LOCALESETTING)),
-    aLocaleSettingLB(this,      SVX_RES(LB_LOCALESETTING)),
-    aCurrencyFI( this,          SVX_RES(FI_CURRENCY       )),
-    aDecimalSeparatorFT(this,   SVX_RES(FT_DECIMALSEPARATOR)),
-    aDecimalSeparatorCB(this,   SVX_RES(CB_DECIMALSEPARATOR)),
-    aCurrencyFT( this,          SVX_RES(FT_CURRENCY       )),
-    aCurrencyLB( this,          SVX_RES(LB_CURRENCY       )),
-    aLinguLanguageGB(this,      SVX_RES(FL_LINGU_LANG       )),
-    aWesternLanguageFI(this,    SVX_RES(FI_WEST_LANG      )),
-    aWesternLanguageFT(this,    SVX_RES(FT_WEST_LANG      )),
-    aWesternLanguageLB(this,    SVX_RES(LB_WEST_LANG        )),
-    aAsianLanguageFI(this,      SVX_RES(FI_ASIAN_LANG     )),
-    aAsianLanguageFT(this,      SVX_RES(FT_ASIAN_LANG     )),
-    aAsianLanguageLB(this,      SVX_RES(LB_ASIAN_LANG       )),
-    aComplexLanguageFI(this,    SVX_RES(FI_COMPLEX_LANG   )),
-    aComplexLanguageFT(this,    SVX_RES(FT_COMPLEX_LANG   )),
-    aComplexLanguageLB(this,    SVX_RES(LB_COMPLEX_LANG )),
-    aCurrentDocCB(this,         SVX_RES(CB_CURRENT_DOC  )),
-    aEnhancedFL(this,           SVX_RES(FL_ENHANCED    )),
-    aAsianSupportFI(this,       SVX_RES(FI_ASIANSUPPORT   )),
-    aAsianSupportCB(this,       SVX_RES(CB_ASIANSUPPORT   )),
-    aCTLSupportFI(this,         SVX_RES(FI_CTLSUPPORT    )),
-    aCTLSupportCB(this,         SVX_RES(CB_CTLSUPPORT   )),
+    SfxTabPage( pParent, CUI_RES( OFA_TP_LANGUAGES ), rSet ),
+    aUILanguageGB(this,         CUI_RES(FL_UI_LANG      )),
+    aLocaleSettingFI(this,      CUI_RES(FI_LOCALESETTING)),
+    aUserInterfaceFT(this,      CUI_RES(FT_USERINTERFACE)),
+    aUserInterfaceLB(this,      CUI_RES(LB_USERINTERFACE)),
+    aLocaleSettingFT(this,      CUI_RES(FT_LOCALESETTING)),
+    aLocaleSettingLB(this,      CUI_RES(LB_LOCALESETTING)),
+    aCurrencyFI( this,          CUI_RES(FI_CURRENCY       )),
+    aDecimalSeparatorFT(this,   CUI_RES(FT_DECIMALSEPARATOR)),
+    aDecimalSeparatorCB(this,   CUI_RES(CB_DECIMALSEPARATOR)),
+    aCurrencyFT( this,          CUI_RES(FT_CURRENCY       )),
+    aCurrencyLB( this,          CUI_RES(LB_CURRENCY       )),
+    aLinguLanguageGB(this,      CUI_RES(FL_LINGU_LANG       )),
+    aWesternLanguageFI(this,    CUI_RES(FI_WEST_LANG      )),
+    aWesternLanguageFT(this,    CUI_RES(FT_WEST_LANG      )),
+    aWesternLanguageLB(this,    CUI_RES(LB_WEST_LANG        )),
+    aAsianLanguageFI(this,      CUI_RES(FI_ASIAN_LANG     )),
+    aAsianLanguageFT(this,      CUI_RES(FT_ASIAN_LANG     )),
+    aAsianLanguageLB(this,      CUI_RES(LB_ASIAN_LANG       )),
+    aComplexLanguageFI(this,    CUI_RES(FI_COMPLEX_LANG   )),
+    aComplexLanguageFT(this,    CUI_RES(FT_COMPLEX_LANG   )),
+    aComplexLanguageLB(this,    CUI_RES(LB_COMPLEX_LANG )),
+    aCurrentDocCB(this,         CUI_RES(CB_CURRENT_DOC  )),
+    aEnhancedFL(this,           CUI_RES(FL_ENHANCED    )),
+    aAsianSupportFI(this,       CUI_RES(FI_ASIANSUPPORT   )),
+    aAsianSupportCB(this,       CUI_RES(CB_ASIANSUPPORT   )),
+    aCTLSupportFI(this,         CUI_RES(FI_CTLSUPPORT    )),
+    aCTLSupportCB(this,         CUI_RES(CB_CTLSUPPORT   )),
     sDecimalSeparatorLabel(aDecimalSeparatorCB.GetText()),
     pLangConfig(new LanguageConfig_Impl)
 {
@@ -1492,7 +1492,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             xProp->setPropertyValue(sUserLocaleKey, makeAny(aLangString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             // display info
-            InfoBox aBox(this, SVX_RES(RID_SVX_MSGBOX_LANGUAGE_RESTART));
+            InfoBox aBox(this, CUI_RES(RID_SVX_MSGBOX_LANGUAGE_RESTART));
             aBox.Execute();
 
             // tell quickstarter to stop being a veto listener

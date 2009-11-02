@@ -37,9 +37,10 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "cuigrfflt.hxx"
 #include "grfflt.hrc"
+#include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
 // --------------------
@@ -370,11 +371,11 @@ GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, 
     mfScaleX        ( 0.0 ),
     mfScaleY        ( 0.0 ),
     maSizePixel     ( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
-    maPreview       ( this, SVX_RES( CTL_PREVIEW ) ),
-    maFlParameter   ( this, SVX_RES( FL_PARAMETER ) ),
-    maBtnOK         ( this, SVX_RES( BTN_OK ) ),
-    maBtnCancel     ( this, SVX_RES( BTN_CANCEL ) ),
-    maBtnHelp       ( this, SVX_RES( BTN_HELP ) )
+    maPreview       ( this, CUI_RES( CTL_PREVIEW ) ),
+    maFlParameter   ( this, CUI_RES( FL_PARAMETER ) ),
+    maBtnOK         ( this, CUI_RES( BTN_OK ) ),
+    maBtnCancel     ( this, CUI_RES( BTN_CANCEL ) ),
+    maBtnHelp       ( this, CUI_RES( BTN_HELP ) )
 {
     const Size  aPreviewSize( maPreview.GetOutputSizePixel() );
     Size        aGrfSize( maSizePixel );
@@ -449,12 +450,12 @@ IMPL_LINK( GraphicFilterDialog, ImplModifyHdl, void*, EMPTYARG )
 
 GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
                                           USHORT nTileWidth, USHORT nTileHeight, BOOL bEnhanceEdges ) :
-    GraphicFilterDialog( pParent, SVX_RES( RID_SVX_GRFFILTER_DLG_MOSAIC ), rGraphic ),
-    maFtWidth   ( this, SVX_RES( DLG_FILTERMOSAIC_FT_WIDTH ) ),
-    maMtrWidth  ( this, SVX_RES( DLG_FILTERMOSAIC_MTR_WIDTH ) ),
-    maFtHeight  ( this, SVX_RES( DLG_FILTERMOSAIC_FT_HEIGHT ) ),
-    maMtrHeight ( this, SVX_RES( DLG_FILTERMOSAIC_MTR_HEIGHT ) ),
-    maCbxEdges  ( this, SVX_RES( DLG_FILTERMOSAIC_CBX_EDGES ) )
+    GraphicFilterDialog( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_MOSAIC ), rGraphic ),
+    maFtWidth   ( this, CUI_RES( DLG_FILTERMOSAIC_FT_WIDTH ) ),
+    maMtrWidth  ( this, CUI_RES( DLG_FILTERMOSAIC_MTR_WIDTH ) ),
+    maFtHeight  ( this, CUI_RES( DLG_FILTERMOSAIC_FT_HEIGHT ) ),
+    maMtrHeight ( this, CUI_RES( DLG_FILTERMOSAIC_MTR_HEIGHT ) ),
+    maCbxEdges  ( this, CUI_RES( DLG_FILTERMOSAIC_CBX_EDGES ) )
 {
     FreeResource();
 
@@ -522,10 +523,10 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 
 GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
                                               BYTE cGreyThreshold, BOOL bInvert ) :
-    GraphicFilterDialog ( pParent, SVX_RES( RID_SVX_GRFFILTER_DLG_SOLARIZE ), rGraphic ),
-    maFtThreshold   ( this, SVX_RES( DLG_FILTERSOLARIZE_FT_THRESHOLD ) ),
-    maMtrThreshold  ( this, SVX_RES( DLG_FILTERSOLARIZE_MTR_THRESHOLD ) ),
-    maCbxInvert     ( this, SVX_RES( DLG_FILTERSOLARIZE_CBX_INVERT ) )
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SOLARIZE ), rGraphic ),
+    maFtThreshold   ( this, CUI_RES( DLG_FILTERSOLARIZE_FT_THRESHOLD ) ),
+    maMtrThreshold  ( this, CUI_RES( DLG_FILTERSOLARIZE_MTR_THRESHOLD ) ),
+    maCbxInvert     ( this, CUI_RES( DLG_FILTERSOLARIZE_CBX_INVERT ) )
 {
     FreeResource();
 
@@ -586,9 +587,9 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
 
 GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
                                         USHORT nSepiaPercent ) :
-    GraphicFilterDialog ( pParent, SVX_RES( RID_SVX_GRFFILTER_DLG_SEPIA ), rGraphic ),
-    maFtSepia       ( this, SVX_RES( DLG_FILTERSEPIA_FT_SEPIA ) ),
-    maMtrSepia      ( this, SVX_RES( DLG_FILTERSEPIA_MTR_SEPIA ) )
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SEPIA ), rGraphic ),
+    maFtSepia       ( this, CUI_RES( DLG_FILTERSEPIA_FT_SEPIA ) ),
+    maMtrSepia      ( this, CUI_RES( DLG_FILTERSEPIA_MTR_SEPIA ) )
 {
     FreeResource();
 
@@ -636,9 +637,9 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
 
 GraphicFilterPoster::GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
                                           USHORT nPosterCount ) :
-    GraphicFilterDialog ( pParent, SVX_RES( RID_SVX_GRFFILTER_DLG_POSTER ), rGraphic ),
-    maFtPoster      ( this, SVX_RES( DLG_FILTERPOSTER_FT_POSTER ) ),
-    maNumPoster     ( this, SVX_RES( DLG_FILTERPOSTER_NUM_POSTER ) )
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_POSTER ), rGraphic ),
+    maFtPoster      ( this, CUI_RES( DLG_FILTERPOSTER_FT_POSTER ) ),
+    maNumPoster     ( this, CUI_RES( DLG_FILTERPOSTER_NUM_POSTER ) )
 {
     FreeResource();
 
@@ -699,9 +700,9 @@ void GraphicFilterEmboss::EmbossControl::MouseButtonDown( const MouseEvent& rEvt
 
 GraphicFilterEmboss::GraphicFilterEmboss( Window* pParent, const Graphic& rGraphic,
                                           RECT_POINT eLightSource ) :
-    GraphicFilterDialog ( pParent, SVX_RES( RID_SVX_GRFFILTER_DLG_EMBOSS ), rGraphic ),
-    maFtLight       ( this, SVX_RES( DLG_FILTEREMBOSS_FT_LIGHT ) ),
-    maCtlLight      ( this, SVX_RES( DLG_FILTEREMBOSS_CTL_LIGHT ), eLightSource )
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_EMBOSS ), rGraphic ),
+    maFtLight       ( this, CUI_RES( DLG_FILTEREMBOSS_FT_LIGHT ) ),
+    maCtlLight      ( this, CUI_RES( DLG_FILTEREMBOSS_CTL_LIGHT ), eLightSource )
 {
     FreeResource();
 

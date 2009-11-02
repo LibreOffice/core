@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "scriptdlg.hrc"
 #include "helpid.hrc"
 

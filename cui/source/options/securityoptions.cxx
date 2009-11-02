@@ -35,8 +35,8 @@
 
 #include <unotools/securityoptions.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 #include "securityoptions.hxx"
 #include "securityoptions.hrc"
 
@@ -60,29 +60,29 @@ namespace svx
 //........................................................................
 
 SecurityOptionsDialog::SecurityOptionsDialog( Window* pParent, SvtSecurityOptions* pOptions ) :
-     ModalDialog( pParent, SVX_RES( RID_SVXDLG_SECURITY_OPTIONS ) )
-    ,m_aWarningsFL      ( this, SVX_RES( FL_WARNINGS ) )
-    ,m_aWarningsFI      ( this, SVX_RES( FI_WARNINGS ) )
-    ,m_aSaveOrSendDocsFI( this, SVX_RES( FI_SAVESENDDOCS ) )
-    ,m_aSaveOrSendDocsCB( this, SVX_RES( CB_SAVESENDDOCS ) )
-    ,m_aSignDocsFI      ( this, SVX_RES( FI_SIGNDOCS ) )
-    ,m_aSignDocsCB      ( this, SVX_RES( CB_SIGNDOCS ) )
-    ,m_aPrintDocsFI     ( this, SVX_RES( FI_PRINTDOCS ) )
-    ,m_aPrintDocsCB     ( this, SVX_RES( CB_PRINTDOCS ) )
-    ,m_aCreatePdfFI     ( this, SVX_RES( FI_CREATEPDF ) )
-    ,m_aCreatePdfCB     ( this, SVX_RES( CB_CREATEPDF ) )
-    ,m_aOptionsFL       ( this, SVX_RES( FL_OPTIONS ) )
-    ,m_aRemovePersInfoFI( this, SVX_RES( FI_REMOVEINFO ) )
-    ,m_aRemovePersInfoCB( this, SVX_RES( CB_REMOVEINFO ) )
-    ,m_aRecommPasswdFI  ( this, SVX_RES( FI_RECOMMENDPWD ) )
-    ,m_aRecommPasswdCB  ( this, SVX_RES( CB_RECOMMENDPWD ) )
-    ,m_aCtrlHyperlinkFI ( this, SVX_RES( FI_CTRLHYPERLINK ) )
-    ,m_aCtrlHyperlinkCB ( this, SVX_RES( CB_CTRLHYPERLINK ) )
+     ModalDialog( pParent, CUI_RES( RID_SVXDLG_SECURITY_OPTIONS ) )
+    ,m_aWarningsFL      ( this, CUI_RES( FL_WARNINGS ) )
+    ,m_aWarningsFI      ( this, CUI_RES( FI_WARNINGS ) )
+    ,m_aSaveOrSendDocsFI( this, CUI_RES( FI_SAVESENDDOCS ) )
+    ,m_aSaveOrSendDocsCB( this, CUI_RES( CB_SAVESENDDOCS ) )
+    ,m_aSignDocsFI      ( this, CUI_RES( FI_SIGNDOCS ) )
+    ,m_aSignDocsCB      ( this, CUI_RES( CB_SIGNDOCS ) )
+    ,m_aPrintDocsFI     ( this, CUI_RES( FI_PRINTDOCS ) )
+    ,m_aPrintDocsCB     ( this, CUI_RES( CB_PRINTDOCS ) )
+    ,m_aCreatePdfFI     ( this, CUI_RES( FI_CREATEPDF ) )
+    ,m_aCreatePdfCB     ( this, CUI_RES( CB_CREATEPDF ) )
+    ,m_aOptionsFL       ( this, CUI_RES( FL_OPTIONS ) )
+    ,m_aRemovePersInfoFI( this, CUI_RES( FI_REMOVEINFO ) )
+    ,m_aRemovePersInfoCB( this, CUI_RES( CB_REMOVEINFO ) )
+    ,m_aRecommPasswdFI  ( this, CUI_RES( FI_RECOMMENDPWD ) )
+    ,m_aRecommPasswdCB  ( this, CUI_RES( CB_RECOMMENDPWD ) )
+    ,m_aCtrlHyperlinkFI ( this, CUI_RES( FI_CTRLHYPERLINK ) )
+    ,m_aCtrlHyperlinkCB ( this, CUI_RES( CB_CTRLHYPERLINK ) )
 
-    ,m_aButtonsFL       ( this, SVX_RES( FL_BUTTONS ) )
-    ,m_aOKBtn           ( this, SVX_RES( PB_OK ) )
-    ,m_aCancelBtn       ( this, SVX_RES( PB_CANCEL ) )
-    ,m_aHelpBtn         ( this, SVX_RES( PB_HELP ) )
+    ,m_aButtonsFL       ( this, CUI_RES( FL_BUTTONS ) )
+    ,m_aOKBtn           ( this, CUI_RES( PB_OK ) )
+    ,m_aCancelBtn       ( this, CUI_RES( PB_CANCEL ) )
+    ,m_aHelpBtn         ( this, CUI_RES( PB_HELP ) )
 
 {
     FreeResource();

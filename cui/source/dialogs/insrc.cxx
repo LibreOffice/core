@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "insrc.hxx"
 #include "insrc.hrc"
 
@@ -48,18 +48,18 @@ sal_uInt16 SvxInsRowColDlg::getInsertCount() const
 }
 
 SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, ULONG nHelpId )
-    : ModalDialog( pParent, SVX_RES(DLG_INS_ROW_COL) ),
-    aCount( this, SVX_RES( FT_COUNT ) ),
-    aCountEdit( this, SVX_RES( ED_COUNT ) ),
-    aInsFL( this, SVX_RES( FL_INS ) ),
-    aBeforeBtn( this, SVX_RES( CB_POS_BEFORE ) ),
-    aAfterBtn( this, SVX_RES( CB_POS_AFTER ) ),
-    aPosFL( this, SVX_RES( FL_POS ) ),
-    aRow(SVX_RES(STR_ROW)),
-    aCol(SVX_RES(STR_COL)),
-    aOKBtn( this, SVX_RES( BT_OK ) ),
-    aCancelBtn( this, SVX_RES( BT_CANCEL ) ),
-    aHelpBtn( this, SVX_RES( BT_HELP ) ),
+    : ModalDialog( pParent, CUI_RES(DLG_INS_ROW_COL) ),
+    aCount( this, CUI_RES( FT_COUNT ) ),
+    aCountEdit( this, CUI_RES( ED_COUNT ) ),
+    aInsFL( this, CUI_RES( FL_INS ) ),
+    aBeforeBtn( this, CUI_RES( CB_POS_BEFORE ) ),
+    aAfterBtn( this, CUI_RES( CB_POS_AFTER ) ),
+    aPosFL( this, CUI_RES( FL_POS ) ),
+    aRow(CUI_RES(STR_ROW)),
+    aCol(CUI_RES(STR_COL)),
+    aOKBtn( this, CUI_RES( BT_OK ) ),
+    aCancelBtn( this, CUI_RES( BT_CANCEL ) ),
+    aHelpBtn( this, CUI_RES( BT_HELP ) ),
     bColumn( bCol )
 {
     FreeResource();

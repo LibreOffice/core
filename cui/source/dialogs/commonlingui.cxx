@@ -32,8 +32,8 @@
 #include "precompiled_cui.hxx"
 #include "commonlingui.hxx"
 
-#include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>
+#include <cuires.hrc>
+#include <dialmgr.hxx>
 #include <vcl/decoview.hxx>
 
 #include "hangulhanjadlg.hrc"
@@ -90,21 +90,21 @@ __EXPORT SvxClickInfoCtr::~SvxClickInfoCtr()
 //=============================================================================
 //-----------------------------------------------------------------------------
 SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
-    :Window( _pParent, SVX_RES( RID_SVX_WND_COMMON_LINGU ) )
-    ,aWordText      ( this, SVX_RES( FT_WORD ) )
-    ,aAktWord       ( this, SVX_RES( FT_AKTWORD ) )
-    ,aNewWord       ( this, SVX_RES( FT_NEWWORD ) )
-    ,aNewWordED     ( this, SVX_RES( ED_NEWWORD ) )
-    ,aSuggestionFT  ( this, SVX_RES( FT_SUGGESTION ) )
-    ,aIgnoreBtn     ( this, SVX_RES( BTN_IGNORE ) )
-    ,aIgnoreAllBtn  ( this, SVX_RES( BTN_IGNOREALL ) )
-    ,aChangeBtn     ( this, SVX_RES( BTN_CHANGE ) )
-    ,aChangeAllBtn  ( this, SVX_RES( BTN_CHANGEALL ) )
-    ,aOptionsBtn    ( this, SVX_RES( BTN_OPTIONS ) )
-    ,aStatusText    ( this, SVX_RES( FT_STATUS ) )
-    ,aHelpBtn       ( this, SVX_RES( BTN_SPL_HELP ) )
-    ,aCancelBtn     ( this, SVX_RES( BTN_SPL_CANCEL ) )
-    ,aAuditBox      ( this, SVX_RES( GB_AUDIT ) )
+    :Window( _pParent, CUI_RES( RID_SVX_WND_COMMON_LINGU ) )
+    ,aWordText      ( this, CUI_RES( FT_WORD ) )
+    ,aAktWord       ( this, CUI_RES( FT_AKTWORD ) )
+    ,aNewWord       ( this, CUI_RES( FT_NEWWORD ) )
+    ,aNewWordED     ( this, CUI_RES( ED_NEWWORD ) )
+    ,aSuggestionFT  ( this, CUI_RES( FT_SUGGESTION ) )
+    ,aIgnoreBtn     ( this, CUI_RES( BTN_IGNORE ) )
+    ,aIgnoreAllBtn  ( this, CUI_RES( BTN_IGNOREALL ) )
+    ,aChangeBtn     ( this, CUI_RES( BTN_CHANGE ) )
+    ,aChangeAllBtn  ( this, CUI_RES( BTN_CHANGEALL ) )
+    ,aOptionsBtn    ( this, CUI_RES( BTN_OPTIONS ) )
+    ,aStatusText    ( this, CUI_RES( FT_STATUS ) )
+    ,aHelpBtn       ( this, CUI_RES( BTN_SPL_HELP ) )
+    ,aCancelBtn     ( this, CUI_RES( BTN_SPL_CANCEL ) )
+    ,aAuditBox      ( this, CUI_RES( GB_AUDIT ) )
 {
     FreeResource();
 

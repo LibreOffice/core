@@ -32,7 +32,7 @@
 
 #include <svtools/controldims.hrc>
 #include "securityoptions.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 
 ModalDialog RID_SVXDLG_SECURITY_OPTIONS

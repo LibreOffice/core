@@ -45,9 +45,9 @@
 #include <svx/svxdlg.hxx>
 #include <helpid.hrc>
 #include <svx/svxids.hrc>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "optcolor.hxx"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optcolor.hrc"
 #include <svx/dlgutil.hxx>
 
@@ -1435,17 +1435,17 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
  ---------------------------------------------------------------------------*/
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     Window* pParent, const SfxItemSet& rCoreSet) :
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_COLORCONFIG ), rCoreSet ),
-       aColorSchemeFL(  this, SVX_RES( FL_COLORSCHEME ) ),
-       aColorSchemeFT(  this, SVX_RES( FT_COLORSCHEME ) ),
-       aColorSchemeLB(  this, SVX_RES( LB_COLORSCHEME ) ),
-       aSaveSchemePB(   this, SVX_RES( PB_SAVESCHEME) ),
-       aDeleteSchemePB( this, SVX_RES( PB_DELETESCHEME ) ),
-       aCustomColorsFL( this, SVX_RES( FL_CUSTOMCOLORS ) ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_COLORCONFIG ), rCoreSet ),
+       aColorSchemeFL(  this, CUI_RES( FL_COLORSCHEME ) ),
+       aColorSchemeFT(  this, CUI_RES( FT_COLORSCHEME ) ),
+       aColorSchemeLB(  this, CUI_RES( LB_COLORSCHEME ) ),
+       aSaveSchemePB(   this, CUI_RES( PB_SAVESCHEME) ),
+       aDeleteSchemePB( this, CUI_RES( PB_DELETESCHEME ) ),
+       aCustomColorsFL( this, CUI_RES( FL_CUSTOMCOLORS ) ),
        bFillItemSetCalled(FALSE),
        pColorConfig(0),
        pExtColorConfig(0),
-       pColorConfigCT(  new ColorConfigCtrl_Impl(this, SVX_RES( CT_COLORCONFIG ) ))
+       pColorConfigCT(  new ColorConfigCtrl_Impl(this, CUI_RES( CT_COLORCONFIG ) ))
 {
     FreeResource();
     aColorSchemeLB.SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
@@ -1574,14 +1574,14 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
         String sName;
         //CHINA001 SvxNameDialog aNameDlg(pButton,
         //CHINA001                     sName,
-        //CHINA001                     String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2)));
+        //CHINA001                     String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2)));
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
         AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pButton,
-                            sName, String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2)), RID_SVXDLG_NAME );
+                            sName, String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2)) );
         DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
-        aNameDlg->SetText(String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1)));
+        aNameDlg->SetText(String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1)));
         aNameDlg->SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);
         aNameDlg->SetEditHelpId(HID_OPTIONS_COLORCONFIG_NAME_SCHEME);
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
@@ -1599,8 +1599,8 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     else
     {
         DBG_ASSERT(aColorSchemeLB.GetEntryCount() > 1, "don't delete the last scheme");
-        QueryBox aQuery(pButton, SVX_RES(RID_SVXQB_DELETE_COLOR_CONFIG));
-        aQuery.SetText(String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_DELETE)));
+        QueryBox aQuery(pButton, CUI_RES(RID_SVXQB_DELETE_COLOR_CONFIG));
+        aQuery.SetText(String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE)));
         if(RET_YES == aQuery.Execute())
         {
             rtl::OUString sDeleteScheme(aColorSchemeLB.GetSelectEntry());

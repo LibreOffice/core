@@ -38,9 +38,9 @@
 #include <svx/htmlcfg.hxx>
 #include "opthtml.hxx"
 #include "opthtml.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 // Umwandlung der Modi zu den Positionen in der Listbox
 const USHORT aPosToExportArr[] =
@@ -63,34 +63,34 @@ const USHORT aExportToPosArr[] =
 // -----------------------------------------------------------------------
 
 OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
-        SfxTabPage( pParent, SVX_RES( RID_OFAPAGE_HTMLOPT ), rSet ),
-    aFontSizeGB     ( this, SVX_RES( GB_FONTSIZE       ) ),
-    aSize1FT        ( this, SVX_RES( FT_SIZE1          ) ),
-    aSize1NF        ( this, SVX_RES( NF_SIZE1          ) ),
-    aSize2FT        ( this, SVX_RES( FT_SIZE2          ) ),
-    aSize2NF        ( this, SVX_RES( NF_SIZE2          ) ),
-    aSize3FT        ( this, SVX_RES( FT_SIZE3          ) ),
-    aSize3NF        ( this, SVX_RES( NF_SIZE3          ) ),
-    aSize4FT        ( this, SVX_RES( FT_SIZE4          ) ),
-    aSize4NF        ( this, SVX_RES( NF_SIZE4          ) ),
-    aSize5FT        ( this, SVX_RES( FT_SIZE5          ) ),
-    aSize5NF        ( this, SVX_RES( NF_SIZE5          ) ),
-    aSize6FT        ( this, SVX_RES( FT_SIZE6          ) ),
-    aSize6NF        ( this, SVX_RES( NF_SIZE6          ) ),
-    aSize7FT        ( this, SVX_RES( FT_SIZE7          ) ),
-    aSize7NF        ( this, SVX_RES( NF_SIZE7          ) ),
-    aImportGB       ( this, SVX_RES( GB_IMPORT     ) ),
-    aNumbersEnglishUSCB ( this, SVX_RES( CB_NUMBERS_ENGLISH_US ) ),
-    aUnknownTagCB   ( this, SVX_RES( CB_UNKNOWN_TAGS ) ),
-    aIgnoreFontNamesCB( this, SVX_RES( CB_IGNORE_FONTNAMES ) ),
-    aExportGB       ( this, SVX_RES( GB_EXPORT       ) ),
-    aExportLB       ( this, SVX_RES( LB_EXPORT       ) ),
-    aStarBasicCB    ( this, SVX_RES( CB_STARBASIC    ) ),
-    aStarBasicWarningCB(this, SVX_RES( CB_STARBASIC_WARNING    ) ),
-    aPrintExtensionCB( this,SVX_RES(CB_PRINT_EXTENSION )),
-    aSaveGrfLocalCB ( this, SVX_RES( CB_LOCAL_GRF    ) ),
-    aCharSetFT      ( this, SVX_RES( FT_CHARSET      ) ),
-    aCharSetLB      ( this, SVX_RES( LB_CHARSET      ) )
+        SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_HTMLOPT ), rSet ),
+    aFontSizeGB     ( this, CUI_RES( GB_FONTSIZE       ) ),
+    aSize1FT        ( this, CUI_RES( FT_SIZE1          ) ),
+    aSize1NF        ( this, CUI_RES( NF_SIZE1          ) ),
+    aSize2FT        ( this, CUI_RES( FT_SIZE2          ) ),
+    aSize2NF        ( this, CUI_RES( NF_SIZE2          ) ),
+    aSize3FT        ( this, CUI_RES( FT_SIZE3          ) ),
+    aSize3NF        ( this, CUI_RES( NF_SIZE3          ) ),
+    aSize4FT        ( this, CUI_RES( FT_SIZE4          ) ),
+    aSize4NF        ( this, CUI_RES( NF_SIZE4          ) ),
+    aSize5FT        ( this, CUI_RES( FT_SIZE5          ) ),
+    aSize5NF        ( this, CUI_RES( NF_SIZE5          ) ),
+    aSize6FT        ( this, CUI_RES( FT_SIZE6          ) ),
+    aSize6NF        ( this, CUI_RES( NF_SIZE6          ) ),
+    aSize7FT        ( this, CUI_RES( FT_SIZE7          ) ),
+    aSize7NF        ( this, CUI_RES( NF_SIZE7          ) ),
+    aImportGB       ( this, CUI_RES( GB_IMPORT     ) ),
+    aNumbersEnglishUSCB ( this, CUI_RES( CB_NUMBERS_ENGLISH_US ) ),
+    aUnknownTagCB   ( this, CUI_RES( CB_UNKNOWN_TAGS ) ),
+    aIgnoreFontNamesCB( this, CUI_RES( CB_IGNORE_FONTNAMES ) ),
+    aExportGB       ( this, CUI_RES( GB_EXPORT       ) ),
+    aExportLB       ( this, CUI_RES( LB_EXPORT       ) ),
+    aStarBasicCB    ( this, CUI_RES( CB_STARBASIC    ) ),
+    aStarBasicWarningCB(this, CUI_RES( CB_STARBASIC_WARNING    ) ),
+    aPrintExtensionCB( this,CUI_RES(CB_PRINT_EXTENSION )),
+    aSaveGrfLocalCB ( this, CUI_RES( CB_LOCAL_GRF    ) ),
+    aCharSetFT      ( this, CUI_RES( FT_CHARSET      ) ),
+    aCharSetLB      ( this, CUI_RES( LB_CHARSET      ) )
 
 {
     FreeResource();

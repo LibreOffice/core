@@ -55,19 +55,20 @@ SRC1FILES =  \
         connect.src \
         dstribut.src \
         grfpage.src \
+        labdlg.src \
         macroass.src \
         measure.src \
         numfmt.src \
         numpages.src \
         page.src \
         paragrph.src \
+        strings.src \
         swpossizetabpage.src \
+        tabarea.src \
+        tabline.src \
         tabstpge.src \
         textanim.src \
         textattr.src \
-        labdlg.src \
-        tabarea.src \
-        tabline.src \
         transfrm.src
 
 

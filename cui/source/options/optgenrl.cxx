@@ -39,11 +39,11 @@
 
 #define _SVX_OPTGENRL_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optgenrl.hrc"
 #include <unotools/useroptions.hxx>
 #include "cuioptgenrl.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/strarray.hxx>
 
@@ -93,53 +93,53 @@ String ConvertToStore_Impl( const String& rText )
 
 SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
 
-    SfxTabPage( pParent, SVX_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
+    SfxTabPage( pParent, CUI_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
 
-    aCompanyLbl     ( this, SVX_RES( FT_COMPANY ), true ),
-    aCompanyEdit    ( this, SVX_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
-    aNameLbl        ( this, SVX_RES( FT_NAME ), true ),
-    aNameLblRuss    ( this, SVX_RES( FT_NAME_RUSS ), true ),
-    aNameLblEastern ( this, SVX_RES( FT_NAME_EASTERN ), true ),
-    aFirstName      ( this, SVX_RES( ED_FIRSTNAME ), 0, &aNameLbl ),
-    aFatherName     ( this, SVX_RES( ED_FATHERNAME ) ),
-    aName           ( this, SVX_RES( ED_NAME ), 1, &aNameLbl ),
-    aShortName      ( this, SVX_RES( ED_SHORTNAME ), 2, &aNameLbl ),
-    aStreetLbl      ( this, SVX_RES( FT_STREET ), true ),
-    aStreetLblRuss  ( this, SVX_RES( FT_STREET_RUSS ), true ),
-    aStreetEdit     ( this, SVX_RES( ED_STREET ), 0, &aStreetLbl ),
-    aApartmentNrEdit( this, SVX_RES( ED_APARTMENTNR ), 1, &aStreetLblRuss ),
-    aCityLbl        ( this, SVX_RES( FT_CITY ), true ),
-    aPLZEdit        ( this, SVX_RES( ED_PLZ ), 0, &aCityLbl ),
-    aCityEdit       ( this, SVX_RES( ED_CITY ), 1, &aCityLbl ),
-    aUsCityEdit     ( this, SVX_RES( ED_US_CITY ), 0, &aCityLbl ),
-    aUsStateEdit    ( this, SVX_RES( ED_US_STATE ), 1, &aCityLbl ),
-    aUsZipEdit      ( this, SVX_RES( ED_US_ZIPCODE ), 2, &aCityLbl ),
-    aCountryLbl     ( this, SVX_RES( FT_COUNTRY ), true ),
-    aCountryEdit    ( this, SVX_RES( ED_COUNTRY ), INDEX_NOTSET, &aCountryLbl ),
-    aTitlePosLbl    ( this, SVX_RES( FT_TITLEPOS ), true ),
-    aTitleEdit      ( this, SVX_RES( ED_TITLE ), 0, &aTitlePosLbl ),
-    aPositionEdit   ( this, SVX_RES( ED_POSITION ), 1, &aTitlePosLbl ),
-    aPhoneLbl       ( this, SVX_RES( FT_PHONE ), true ),
-    aTelPrivEdit    ( this, SVX_RES( ED_TELPRIVAT ), 0, &aPhoneLbl ),
-    aTelCompanyEdit ( this, SVX_RES( ED_TELCOMPANY ), 1, &aPhoneLbl ),
-    aFaxMailLbl     ( this, SVX_RES( FT_FAXMAIL ), true ),
-    aFaxEdit        ( this, SVX_RES( ED_FAX ), 0, &aFaxMailLbl ),
-    aEmailEdit      ( this, SVX_RES( ED_EMAIL ), 1, &aFaxMailLbl ),
-    aAddrFrm        ( this, SVX_RES( GB_ADDRESS ) ),
-    aUseDataCB      ( this, SVX_RES( CB_USEDATA ) ),
+    aCompanyLbl     ( this, CUI_RES( FT_COMPANY ), true ),
+    aCompanyEdit    ( this, CUI_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
+    aNameLbl        ( this, CUI_RES( FT_NAME ), true ),
+    aNameLblRuss    ( this, CUI_RES( FT_NAME_RUSS ), true ),
+    aNameLblEastern ( this, CUI_RES( FT_NAME_EASTERN ), true ),
+    aFirstName      ( this, CUI_RES( ED_FIRSTNAME ), 0, &aNameLbl ),
+    aFatherName     ( this, CUI_RES( ED_FATHERNAME ) ),
+    aName           ( this, CUI_RES( ED_NAME ), 1, &aNameLbl ),
+    aShortName      ( this, CUI_RES( ED_SHORTNAME ), 2, &aNameLbl ),
+    aStreetLbl      ( this, CUI_RES( FT_STREET ), true ),
+    aStreetLblRuss  ( this, CUI_RES( FT_STREET_RUSS ), true ),
+    aStreetEdit     ( this, CUI_RES( ED_STREET ), 0, &aStreetLbl ),
+    aApartmentNrEdit( this, CUI_RES( ED_APARTMENTNR ), 1, &aStreetLblRuss ),
+    aCityLbl        ( this, CUI_RES( FT_CITY ), true ),
+    aPLZEdit        ( this, CUI_RES( ED_PLZ ), 0, &aCityLbl ),
+    aCityEdit       ( this, CUI_RES( ED_CITY ), 1, &aCityLbl ),
+    aUsCityEdit     ( this, CUI_RES( ED_US_CITY ), 0, &aCityLbl ),
+    aUsStateEdit    ( this, CUI_RES( ED_US_STATE ), 1, &aCityLbl ),
+    aUsZipEdit      ( this, CUI_RES( ED_US_ZIPCODE ), 2, &aCityLbl ),
+    aCountryLbl     ( this, CUI_RES( FT_COUNTRY ), true ),
+    aCountryEdit    ( this, CUI_RES( ED_COUNTRY ), INDEX_NOTSET, &aCountryLbl ),
+    aTitlePosLbl    ( this, CUI_RES( FT_TITLEPOS ), true ),
+    aTitleEdit      ( this, CUI_RES( ED_TITLE ), 0, &aTitlePosLbl ),
+    aPositionEdit   ( this, CUI_RES( ED_POSITION ), 1, &aTitlePosLbl ),
+    aPhoneLbl       ( this, CUI_RES( FT_PHONE ), true ),
+    aTelPrivEdit    ( this, CUI_RES( ED_TELPRIVAT ), 0, &aPhoneLbl ),
+    aTelCompanyEdit ( this, CUI_RES( ED_TELCOMPANY ), 1, &aPhoneLbl ),
+    aFaxMailLbl     ( this, CUI_RES( FT_FAXMAIL ), true ),
+    aFaxEdit        ( this, CUI_RES( ED_FAX ), 0, &aFaxMailLbl ),
+    aEmailEdit      ( this, CUI_RES( ED_EMAIL ), 1, &aFaxMailLbl ),
+    aAddrFrm        ( this, CUI_RES( GB_ADDRESS ) ),
+    aUseDataCB      ( this, CUI_RES( CB_USEDATA ) ),
 
     pImpl           ( new GeneralTabPage_Impl )
 
 {
     LanguageType eLang = Application::GetSettings().GetUILanguage();
-    pImpl->maQueryStr = String( SVX_RES( STR_QUERY_REG ) );
+    pImpl->maQueryStr = String( CUI_RES( STR_QUERY_REG ) );
 
     if ( LANGUAGE_ENGLISH_US == eLang )
     {
         // amerikanische Postadresse aufbauen
         aPLZEdit.Hide();
         aCityEdit.Hide();
-        aCityLbl.SetText( SVX_RES( STR_US_STATE ) );
+        aCityLbl.SetText( CUI_RES( STR_US_STATE ) );
     }
     else if ( LANGUAGE_RUSSIAN == eLang )
     {

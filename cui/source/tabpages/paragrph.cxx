@@ -36,12 +36,13 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
 #include <vcl/mnemonic.hxx>
+#include <svx/dialogs.hrc>
 
 #define _SVX_PARAGRPH_CXX   0
 
 #include <svl/languageoptions.hxx>
 #include <svx/pgrditem.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "paragrph.hrc"
 #include "paragrph.hxx"
 #include <svx/frmdiritem.hxx>
@@ -58,7 +59,7 @@
 #include <svx/brkitem.hxx>
 #include <svx/keepitem.hxx>
 #include "svx/dlgutil.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/htmlmode.hxx"
 #include <svx/paravertalignitem.hxx>
 #include <svl/eitem.hxx> //add CHINA001
@@ -637,31 +638,31 @@ int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
                                                 const SfxItemSet& rAttr ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr ),
 
-    aLeftLabel              ( this, SVX_RES( FT_LEFTINDENT ) ),
-    aLeftIndent             ( this, SVX_RES( ED_LEFTINDENT ) ),
-    aRightLabel             ( this, SVX_RES( FT_RIGHTINDENT ) ),
-    aRightIndent            ( this, SVX_RES( ED_RIGHTINDENT ) ),
+    aLeftLabel              ( this, CUI_RES( FT_LEFTINDENT ) ),
+    aLeftIndent             ( this, CUI_RES( ED_LEFTINDENT ) ),
+    aRightLabel             ( this, CUI_RES( FT_RIGHTINDENT ) ),
+    aRightIndent            ( this, CUI_RES( ED_RIGHTINDENT ) ),
 
-    aFLineLabel             ( this, SVX_RES( FT_FLINEINDENT ) ),
-    aFLineIndent            ( this, SVX_RES( ED_FLINEINDENT ) ),
-    aAutoCB                 ( this, SVX_RES( CB_AUTO ) ),
-    aIndentFrm              ( this, SVX_RES( FL_INDENT ) ),
-    aTopLabel               ( this, SVX_RES( FT_TOPDIST ) ),
-    aTopDist                ( this, SVX_RES( ED_TOPDIST ) ),
-    aBottomLabel            ( this, SVX_RES( FT_BOTTOMDIST ) ),
-    aBottomDist             ( this, SVX_RES( ED_BOTTOMDIST ) ),
-    aDistFrm                ( this, SVX_RES( FL_DIST ) ),
-    aLineDist               ( this, SVX_RES( LB_LINEDIST ) ),
-    aLineDistAtLabel        ( this, SVX_RES( FT_LINEDIST ) ),
-    aLineDistAtPercentBox   ( this, SVX_RES( ED_LINEDISTPERCENT ) ),
-    aLineDistAtMetricBox    ( this, SVX_RES( ED_LINEDISTMETRIC ) ),
-    aLineDistFrm            ( this, SVX_RES( FL_LINEDIST ) ),
-    sAbsDist                ( SVX_RES(ST_LINEDIST_ABS) ),
-    aExampleWin             ( this, SVX_RES( WN_EXAMPLE ) ),
-    aRegisterCB             ( this, SVX_RES( CB_REGISTER ) ),
-    aRegisterFL             ( this, SVX_RES( FL_REGISTER ) ),
+    aFLineLabel             ( this, CUI_RES( FT_FLINEINDENT ) ),
+    aFLineIndent            ( this, CUI_RES( ED_FLINEINDENT ) ),
+    aAutoCB                 ( this, CUI_RES( CB_AUTO ) ),
+    aIndentFrm              ( this, CUI_RES( FL_INDENT ) ),
+    aTopLabel               ( this, CUI_RES( FT_TOPDIST ) ),
+    aTopDist                ( this, CUI_RES( ED_TOPDIST ) ),
+    aBottomLabel            ( this, CUI_RES( FT_BOTTOMDIST ) ),
+    aBottomDist             ( this, CUI_RES( ED_BOTTOMDIST ) ),
+    aDistFrm                ( this, CUI_RES( FL_DIST ) ),
+    aLineDist               ( this, CUI_RES( LB_LINEDIST ) ),
+    aLineDistAtLabel        ( this, CUI_RES( FT_LINEDIST ) ),
+    aLineDistAtPercentBox   ( this, CUI_RES( ED_LINEDISTPERCENT ) ),
+    aLineDistAtMetricBox    ( this, CUI_RES( ED_LINEDISTMETRIC ) ),
+    aLineDistFrm            ( this, CUI_RES( FL_LINEDIST ) ),
+    sAbsDist                ( CUI_RES(ST_LINEDIST_ABS) ),
+    aExampleWin             ( this, CUI_RES( WN_EXAMPLE ) ),
+    aRegisterCB             ( this, CUI_RES( CB_REGISTER ) ),
+    aRegisterFL             ( this, CUI_RES( FL_REGISTER ) ),
     pActLineDistFld ( &aLineDistAtPercentBox ),
     nAbst           ( MAX_DURCH ),
     nWidth          ( 11905 /*567 * 50*/ ),
@@ -1037,34 +1038,34 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 
 --------------------------------------------------*/
 SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_ALIGN_PARAGRAPH ),rSet),
-    aAlignFrm           ( this, SVX_RES( FL_ALIGN ) ),
-    aLeft               ( this, SVX_RES( BTN_LEFTALIGN ) ),
-    aRight              ( this, SVX_RES( BTN_RIGHTALIGN ) ),
-    aCenter             ( this, SVX_RES( BTN_CENTERALIGN ) ),
-    aJustify            ( this, SVX_RES( BTN_JUSTIFYALIGN ) ),
-    aLastLineFT         ( this, SVX_RES( FT_LASTLINE ) ),
-    aLastLineLB         ( this, SVX_RES( LB_LASTLINE ) ),
-    aExpandCB           ( this, SVX_RES( CB_EXPAND ) ),
-    aSnapToGridCB       ( this, SVX_RES( CB_SNAP ) ),
-    aExampleWin         ( this, SVX_RES( WN_EXAMPLE ) ),
+    : SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_ALIGN_PARAGRAPH ),rSet),
+    aAlignFrm           ( this, CUI_RES( FL_ALIGN ) ),
+    aLeft               ( this, CUI_RES( BTN_LEFTALIGN ) ),
+    aRight              ( this, CUI_RES( BTN_RIGHTALIGN ) ),
+    aCenter             ( this, CUI_RES( BTN_CENTERALIGN ) ),
+    aJustify            ( this, CUI_RES( BTN_JUSTIFYALIGN ) ),
+    aLastLineFT         ( this, CUI_RES( FT_LASTLINE ) ),
+    aLastLineLB         ( this, CUI_RES( LB_LASTLINE ) ),
+    aExpandCB           ( this, CUI_RES( CB_EXPAND ) ),
+    aSnapToGridCB       ( this, CUI_RES( CB_SNAP ) ),
+    aExampleWin         ( this, CUI_RES( WN_EXAMPLE ) ),
 
-    aVertAlignFL        ( this, SVX_RES( FL_VERTALIGN ) ),
-    aVertAlignFT        ( this, SVX_RES( FT_VERTALIGN ) ),
-    aVertAlignLB        ( this, SVX_RES( LB_VERTALIGN ) ),
+    aVertAlignFL        ( this, CUI_RES( FL_VERTALIGN ) ),
+    aVertAlignFT        ( this, CUI_RES( FT_VERTALIGN ) ),
+    aVertAlignLB        ( this, CUI_RES( LB_VERTALIGN ) ),
 
-    aPropertiesFL       ( this, SVX_RES( FL_PROPERTIES    )),
-    aTextDirectionFT    ( this, SVX_RES( FT_TEXTDIRECTION )),
-    aTextDirectionLB    ( this, SVX_RES( LB_TEXTDIRECTION ))
+    aPropertiesFL       ( this, CUI_RES( FL_PROPERTIES    )),
+    aTextDirectionFT    ( this, CUI_RES( FT_TEXTDIRECTION )),
+    aTextDirectionLB    ( this, CUI_RES( LB_TEXTDIRECTION ))
 {
     SvtLanguageOptions aLangOptions;
     USHORT nLastLinePos = LASTLINEPOS_DEFAULT;
 
     if ( aLangOptions.IsAsianTypographyEnabled() )
     {
-        String sLeft(SVX_RES(ST_LEFTALIGN_ASIAN));
+        String sLeft(CUI_RES(ST_LEFTALIGN_ASIAN));
         aLeft.SetText(sLeft);
-        aRight.SetText(String(SVX_RES(ST_RIGHTALIGN_ASIAN)));
+        aRight.SetText(String(CUI_RES(ST_RIGHTALIGN_ASIAN)));
         sLeft = MnemonicGenerator::EraseAllMnemonicChars( sLeft );
 
         if ( aLastLineLB.GetEntryCount() == LASTLINECOUNT_OLD )
@@ -1093,9 +1094,9 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     {
         if( aLangOptions.IsCTLFontEnabled() )
         {
-            aTextDirectionLB.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
-            aTextDirectionLB.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
-            aTextDirectionLB.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+            aTextDirectionLB.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+            aTextDirectionLB.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+            aTextDirectionLB.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
 
             aPropertiesFL.Show();
             aTextDirectionFT.Show();
@@ -1940,39 +1941,39 @@ void SvxExtParagraphTabPage::DisablePageBreak()
 
 SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rAttr ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_EXT_PARAGRAPH ), rAttr ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_EXT_PARAGRAPH ), rAttr ),
 
-    aHyphenBox          ( this, SVX_RES( BTN_HYPHEN ) ),
-    aBeforeText         ( this, SVX_RES( FT_HYPHENBEFORE ) ),
-    aExtHyphenBeforeBox ( this, SVX_RES( ED_HYPHENBEFORE ) ),
-    aAfterText          ( this, SVX_RES( FT_HYPHENAFTER ) ),
-    aExtHyphenAfterBox  ( this, SVX_RES( ED_HYPHENAFTER ) ),
-    aMaxHyphenLabel     ( this, SVX_RES( FT_MAXHYPH ) ),
-    aMaxHyphenEdit      ( this, SVX_RES( ED_MAXHYPH ) ),
-    aExtFL              ( this, SVX_RES( FL_HYPHEN ) ),
-    aBreaksFL           ( this, SVX_RES( FL_BREAKS ) ),
-    aPageBreakBox       ( this, SVX_RES( BTN_PAGEBREAK ) ),
-    aBreakTypeFT        ( this, SVX_RES( FT_BREAKTYPE     )),
-    aBreakTypeLB        ( this, SVX_RES( LB_BREAKTYPE     )),
-    aBreakPositionFT    ( this, SVX_RES( FT_BREAKPOSITION )),
-    aBreakPositionLB    ( this, SVX_RES( LB_BREAKPOSITION )),
-//    aPageBox            ( this, SVX_RES( BTN_BREAKPAGE ) ),
-//    aColumnBox          ( this, SVX_RES( BTN_BREAKCOLUMN ) ),
-//    aBeforeBox          ( this, SVX_RES( BTN_PAGEBREAKBEFORE ) ),
-//    aAfterBox           ( this, SVX_RES( BTN_PAGEBREAKAFTER ) ),
-    aApplyCollBtn       ( this, SVX_RES( BTN_PAGECOLL ) ),
-    aApplyCollBox       ( this, SVX_RES( LB_PAGECOLL ) ),
-    aPagenumText        ( this, SVX_RES( FT_PAGENUM ) ),
-    aPagenumEdit        ( this, SVX_RES( ED_PAGENUM ) ),
-    aExtendFL           ( this, SVX_RES( FL_OPTIONS ) ),
-    aKeepTogetherBox    ( this, SVX_RES( BTN_KEEPTOGETHER ) ),
-    aKeepParaBox        ( this, SVX_RES( CB_KEEPTOGETHER ) ),
-    aOrphanBox          ( this, SVX_RES( BTN_ORPHANS ) ),
-    aOrphanRowNo        ( this, SVX_RES( ED_ORPHANS ) ),
-    aOrphanRowLabel     ( this, SVX_RES( FT_ORPHANS ) ),
-    aWidowBox           ( this, SVX_RES( BTN_WIDOWS ) ),
-    aWidowRowNo         ( this, SVX_RES( ED_WIDOWS ) ),
-    aWidowRowLabel      ( this, SVX_RES( FT_WIDOWS ) ),
+    aHyphenBox          ( this, CUI_RES( BTN_HYPHEN ) ),
+    aBeforeText         ( this, CUI_RES( FT_HYPHENBEFORE ) ),
+    aExtHyphenBeforeBox ( this, CUI_RES( ED_HYPHENBEFORE ) ),
+    aAfterText          ( this, CUI_RES( FT_HYPHENAFTER ) ),
+    aExtHyphenAfterBox  ( this, CUI_RES( ED_HYPHENAFTER ) ),
+    aMaxHyphenLabel     ( this, CUI_RES( FT_MAXHYPH ) ),
+    aMaxHyphenEdit      ( this, CUI_RES( ED_MAXHYPH ) ),
+    aExtFL              ( this, CUI_RES( FL_HYPHEN ) ),
+    aBreaksFL           ( this, CUI_RES( FL_BREAKS ) ),
+    aPageBreakBox       ( this, CUI_RES( BTN_PAGEBREAK ) ),
+    aBreakTypeFT        ( this, CUI_RES( FT_BREAKTYPE     )),
+    aBreakTypeLB        ( this, CUI_RES( LB_BREAKTYPE     )),
+    aBreakPositionFT    ( this, CUI_RES( FT_BREAKPOSITION )),
+    aBreakPositionLB    ( this, CUI_RES( LB_BREAKPOSITION )),
+//    aPageBox            ( this, CUI_RES( BTN_BREAKPAGE ) ),
+//    aColumnBox          ( this, CUI_RES( BTN_BREAKCOLUMN ) ),
+//    aBeforeBox          ( this, CUI_RES( BTN_PAGEBREAKBEFORE ) ),
+//    aAfterBox           ( this, CUI_RES( BTN_PAGEBREAKAFTER ) ),
+    aApplyCollBtn       ( this, CUI_RES( BTN_PAGECOLL ) ),
+    aApplyCollBox       ( this, CUI_RES( LB_PAGECOLL ) ),
+    aPagenumText        ( this, CUI_RES( FT_PAGENUM ) ),
+    aPagenumEdit        ( this, CUI_RES( ED_PAGENUM ) ),
+    aExtendFL           ( this, CUI_RES( FL_OPTIONS ) ),
+    aKeepTogetherBox    ( this, CUI_RES( BTN_KEEPTOGETHER ) ),
+    aKeepParaBox        ( this, CUI_RES( CB_KEEPTOGETHER ) ),
+    aOrphanBox          ( this, CUI_RES( BTN_ORPHANS ) ),
+    aOrphanRowNo        ( this, CUI_RES( ED_ORPHANS ) ),
+    aOrphanRowLabel     ( this, CUI_RES( FT_ORPHANS ) ),
+    aWidowBox           ( this, CUI_RES( BTN_WIDOWS ) ),
+    aWidowRowNo         ( this, CUI_RES( ED_WIDOWS ) ),
+    aWidowRowLabel      ( this, CUI_RES( FT_WIDOWS ) ),
     bPageBreak  ( TRUE ),
     bHtmlMode   ( FALSE ),
     nStdPos     ( 0 )
@@ -2253,11 +2254,11 @@ void SvxExtParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 
   -----------------------------------------------------------------------*/
 SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_PARA_ASIAN ), rSet),
-    aOptionsFL(         this, SVX_RES(FL_AS_OPTIONS       )),
-    aForbiddenRulesCB(  this, SVX_RES(CB_AS_FORBIDDEN     )),
-    aHangingPunctCB(    this, SVX_RES(CB_AS_HANG_PUNC     )),
-    aScriptSpaceCB(     this, SVX_RES(CB_AS_SCRIPT_SPACE    ))//,
+    SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_PARA_ASIAN ), rSet),
+    aOptionsFL(         this, CUI_RES(FL_AS_OPTIONS       )),
+    aForbiddenRulesCB(  this, CUI_RES(CB_AS_FORBIDDEN     )),
+    aHangingPunctCB(    this, CUI_RES(CB_AS_HANG_PUNC     )),
+    aScriptSpaceCB(     this, CUI_RES(CB_AS_SCRIPT_SPACE    ))//,
 
 {
     FreeResource();

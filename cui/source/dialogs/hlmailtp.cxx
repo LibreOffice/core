@@ -54,19 +54,19 @@ using namespace ::com::sun::star;
 |************************************************************************/
 
 SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_MAIL ),
+:   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_MAIL ),
                               rItemSet ),
-    maGrpMailNews   ( this, SVX_RES (GRP_MAILNEWS) ),
-    maRbtMail       ( this, SVX_RES (RB_LINKTYP_MAIL) ),
-    maRbtNews       ( this, SVX_RES (RB_LINKTYP_NEWS) ),
-    maFtReceiver    ( this, SVX_RES (FT_RECEIVER) ),
+    maGrpMailNews   ( this, CUI_RES (GRP_MAILNEWS) ),
+    maRbtMail       ( this, CUI_RES (RB_LINKTYP_MAIL) ),
+    maRbtNews       ( this, CUI_RES (RB_LINKTYP_NEWS) ),
+    maFtReceiver    ( this, CUI_RES (FT_RECEIVER) ),
     maCbbReceiver   ( this, INET_PROT_MAILTO ),
-    maBtAdrBook     ( this, SVX_RES (BTN_ADRESSBOOK) ),
-    maFtSubject     ( this, SVX_RES (FT_SUBJECT) ),
-    maEdSubject     ( this, SVX_RES (ED_SUBJECT) )
+    maBtAdrBook     ( this, CUI_RES (BTN_ADRESSBOOK) ),
+    maFtSubject     ( this, CUI_RES (FT_SUBJECT) ),
+    maEdSubject     ( this, CUI_RES (ED_SUBJECT) )
 {
     // Set HC bitmaps and disable display of bitmap names.
-    maBtAdrBook.SetModeImage( Image( SVX_RES( IMG_ADRESSBOOK_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtAdrBook.SetModeImage( Image( CUI_RES( IMG_ADRESSBOOK_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtAdrBook.EnableTextDisplay (FALSE);
 
     InitStdControls();

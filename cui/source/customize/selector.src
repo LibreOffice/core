@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "selector.hrc"
 
 #define MASKCOLOR  MaskColor = \

@@ -30,7 +30,7 @@
 
 // include ------------------------------------------------------------------
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include "dlgname.hrc"
 

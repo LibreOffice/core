@@ -37,8 +37,8 @@
 // header for SAL_STATIC_CAST
 #include <sal/types.h>
 #include "cfgchart.hxx"
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 
 #define ROW_COLOR_COUNT 12
 
@@ -126,7 +126,7 @@ void SvxChartColorTable::useDefault()
 
     clear();
 
-    String aResName( SVX_RES( RID_SVXSTR_DIAGRAM_ROW ) );
+    String aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
     String aPrefix, aPostfix, aName;
     xub_StrLen nPos = aResName.SearchAscii( "$(ROW)" );
     if( nPos != STRING_NOTFOUND )
@@ -216,7 +216,7 @@ BOOL SvxChartOptions::RetrieveOptions()
         Color aCol;
 
         // create strings for entry names
-        String aResName( SVX_RES( RID_SVXSTR_DIAGRAM_ROW ) );
+        String aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
         String aPrefix, aPostfix, aName;
         xub_StrLen nPos = aResName.SearchAscii( "$(ROW)" );
         if( nPos != STRING_NOTFOUND )

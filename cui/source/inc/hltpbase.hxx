@@ -50,9 +50,9 @@
 #include <svtools/inettbc.hxx>
 #include <vcl/timer.hxx>
 
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <com/sun/star/frame/XFrame.hpp>
 #include "helpid.hrc"
 #include <svx/hlnkitem.hxx>

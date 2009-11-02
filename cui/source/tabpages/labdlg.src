@@ -30,7 +30,7 @@
  // include ---------------------------------------------------------------
 #include "helpid.hrc"
 #include "labdlg.hrc"
- // pragma ----------------------------------------------------------------
+#include <svx/dialogs.hrc>
 
  // RID_SVXPAGE_CAPTION ---------------------------------------------------
 TabPage RID_SVXPAGE_CAPTION

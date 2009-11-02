@@ -30,9 +30,10 @@
 
  // include ---------------------------------------------------------------
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "charmap.hrc"
 #include "helpid.hrc"
+#include <svx/dialogs.hrc>
 
  // RID_SVXDLG_CHARMAP ----------------------------------------------------
 ModalDialog RID_SVXDLG_CHARMAP

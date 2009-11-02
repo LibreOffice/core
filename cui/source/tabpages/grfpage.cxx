@@ -36,15 +36,16 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/brshitem.hxx>
 #include <grfpage.hxx>
 #include <svx/grfcrop.hxx>
 #include <grfpage.hrc>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
 
 #define CM_1_TO_TWIP        567
 
@@ -59,31 +60,31 @@ inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
  --------------------------------------------------------------------*/
 
 SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
-    : SfxTabPage( pParent,  SVX_RES( RID_SVXPAGE_GRFCROP ), rSet ),
-    aCropFL(        this, SVX_RES( FL_CROP    )),
-    aZoomConstRB(   this, SVX_RES( RB_ZOOMCONST)),
-    aSizeConstRB(   this, SVX_RES( RB_SIZECONST)),
-    aLeftFT(        this, SVX_RES( FT_LEFT    )),
-    aLeftMF(        this, SVX_RES( MF_LEFT    )),
-    aRightFT(       this, SVX_RES( FT_RIGHT   )),
-    aRightMF(       this, SVX_RES( MF_RIGHT   )),
-    aTopFT(         this, SVX_RES( FT_TOP     )),
-    aTopMF(         this, SVX_RES( MF_TOP     )),
-    aBottomFT(      this, SVX_RES( FT_BOTTOM  )),
-    aBottomMF(      this, SVX_RES( MF_BOTTOM  )),
-    aZoomFL(        this, SVX_RES( FL_ZOOM    )),
-    aWidthZoomFT(   this, SVX_RES( FT_WIDTHZOOM )),
-    aWidthZoomMF(   this, SVX_RES( MF_WIDTHZOOM )),
-    aHeightZoomFT(  this, SVX_RES( FT_HEIGHTZOOM)),
-    aHeightZoomMF(  this, SVX_RES( MF_HEIGHTZOOM)),
-    aSizeFL(        this, SVX_RES( FL_SIZE    )),
-    aWidthFT(       this, SVX_RES( FT_WIDTH   )),
-    aWidthMF(       this, SVX_RES( MF_WIDTH   )),
-    aHeightFT(      this, SVX_RES( FT_HEIGHT  )),
-    aHeightMF(      this, SVX_RES( MF_HEIGHT  )),
-    aOrigSizeFT(    this, SVX_RES(FT_ORIG_SIZE)),
-    aOrigSizePB(    this, SVX_RES( PB_ORGSIZE )),
-    aExampleWN(     this, SVX_RES( WN_BSP     )),
+    : SfxTabPage( pParent,  CUI_RES( RID_SVXPAGE_GRFCROP ), rSet ),
+    aCropFL(        this, CUI_RES( FL_CROP    )),
+    aZoomConstRB(   this, CUI_RES( RB_ZOOMCONST)),
+    aSizeConstRB(   this, CUI_RES( RB_SIZECONST)),
+    aLeftFT(        this, CUI_RES( FT_LEFT    )),
+    aLeftMF(        this, CUI_RES( MF_LEFT    )),
+    aRightFT(       this, CUI_RES( FT_RIGHT   )),
+    aRightMF(       this, CUI_RES( MF_RIGHT   )),
+    aTopFT(         this, CUI_RES( FT_TOP     )),
+    aTopMF(         this, CUI_RES( MF_TOP     )),
+    aBottomFT(      this, CUI_RES( FT_BOTTOM  )),
+    aBottomMF(      this, CUI_RES( MF_BOTTOM  )),
+    aZoomFL(        this, CUI_RES( FL_ZOOM    )),
+    aWidthZoomFT(   this, CUI_RES( FT_WIDTHZOOM )),
+    aWidthZoomMF(   this, CUI_RES( MF_WIDTHZOOM )),
+    aHeightZoomFT(  this, CUI_RES( FT_HEIGHTZOOM)),
+    aHeightZoomMF(  this, CUI_RES( MF_HEIGHTZOOM)),
+    aSizeFL(        this, CUI_RES( FL_SIZE    )),
+    aWidthFT(       this, CUI_RES( FT_WIDTH   )),
+    aWidthMF(       this, CUI_RES( MF_WIDTH   )),
+    aHeightFT(      this, CUI_RES( FT_HEIGHT  )),
+    aHeightMF(      this, CUI_RES( MF_HEIGHT  )),
+    aOrigSizeFT(    this, CUI_RES(FT_ORIG_SIZE)),
+    aOrigSizePB(    this, CUI_RES( PB_ORGSIZE )),
+    aExampleWN(     this, CUI_RES( WN_BSP     )),
     pLastCropField(0),
     bInitialized(FALSE),
     bSetOrigSize(FALSE)

@@ -36,9 +36,9 @@
 #include <unotools/fltrcfg.hxx>
 #include "optfltr.hxx"
 #include "optfltr.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 enum MSFltrPg2_CheckBoxEntries {
     Math,
@@ -54,17 +54,17 @@ enum MSFltrPg2_CheckBoxEntries {
 // -----------------------------------------------------------------------
 
 OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, SVX_RES( RID_OFAPAGE_MSFILTEROPT ), rSet ),
-    aMSWordGB       ( this, SVX_RES( GB_WORD        ) ),
-    aWBasicCodeCB   ( this, SVX_RES( CB_WBAS_CODE ) ),
-    aWBasicStgCB    ( this, SVX_RES( CB_WBAS_STG  ) ),
-    aMSExcelGB      ( this, SVX_RES( GB_EXCEL     ) ),
-    aEBasicCodeCB   ( this, SVX_RES( CB_EBAS_CODE ) ),
-    aEBasicExectblCB( this, SVX_RES( CB_EBAS_EXECTBL ) ),
-    aEBasicStgCB    ( this, SVX_RES( CB_EBAS_STG  ) ),
-    aMSPPointGB     ( this, SVX_RES( GB_PPOINT    ) ),
-    aPBasicCodeCB   ( this, SVX_RES( CB_PBAS_CODE ) ),
-    aPBasicStgCB    ( this, SVX_RES( CB_PBAS_STG  ) )
+    : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT ), rSet ),
+    aMSWordGB       ( this, CUI_RES( GB_WORD        ) ),
+    aWBasicCodeCB   ( this, CUI_RES( CB_WBAS_CODE ) ),
+    aWBasicStgCB    ( this, CUI_RES( CB_WBAS_STG  ) ),
+    aMSExcelGB      ( this, CUI_RES( GB_EXCEL     ) ),
+    aEBasicCodeCB   ( this, CUI_RES( CB_EBAS_CODE ) ),
+    aEBasicExectblCB( this, CUI_RES( CB_EBAS_EXECTBL ) ),
+    aEBasicStgCB    ( this, CUI_RES( CB_EBAS_STG  ) ),
+    aMSPPointGB     ( this, CUI_RES( GB_PPOINT    ) ),
+    aPBasicCodeCB   ( this, CUI_RES( CB_PBAS_CODE ) ),
+    aPBasicStgCB    ( this, CUI_RES( CB_PBAS_STG  ) )
 {
     FreeResource();
 
@@ -145,16 +145,16 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
  * --------------------------------------------------*/
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
                                         const SfxItemSet& rSet )
-    : SfxTabPage( pParent, SVX_RES( RID_OFAPAGE_MSFILTEROPT2 ), rSet ),
-    aCheckLB            ( this, SVX_RES( CLB_SETTINGS   )),
-    aHeader1FT          ( this, SVX_RES( FT_HEADER1_EXPLANATION )),
-    aHeader2FT          ( this, SVX_RES( FT_HEADER2_EXPLANATION )),
-    sHeader1            ( SVX_RES( ST_HEADER1 )),
-    sHeader2            ( SVX_RES( ST_HEADER2 )),
-    sChgToFromMath      ( SVX_RES( ST_CHG_MATH  )),
-    sChgToFromWriter    ( SVX_RES( ST_CHG_WRITER )),
-    sChgToFromCalc      ( SVX_RES( ST_CHG_CALC )),
-    sChgToFromImpress   ( SVX_RES( ST_CHG_IMPRESS )),
+    : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT2 ), rSet ),
+    aCheckLB            ( this, CUI_RES( CLB_SETTINGS   )),
+    aHeader1FT          ( this, CUI_RES( FT_HEADER1_EXPLANATION )),
+    aHeader2FT          ( this, CUI_RES( FT_HEADER2_EXPLANATION )),
+    sHeader1            ( CUI_RES( ST_HEADER1 )),
+    sHeader2            ( CUI_RES( ST_HEADER2 )),
+    sChgToFromMath      ( CUI_RES( ST_CHG_MATH  )),
+    sChgToFromWriter    ( CUI_RES( ST_CHG_WRITER )),
+    sChgToFromCalc      ( CUI_RES( ST_CHG_CALC )),
+    sChgToFromImpress   ( CUI_RES( ST_CHG_IMPRESS )),
     pCheckButtonData(0)
 {
     FreeResource();

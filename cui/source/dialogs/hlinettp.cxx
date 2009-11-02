@@ -56,27 +56,27 @@ sal_Char __READONLY_DATA sTelnetScheme[] = INET_TELNET_SCHEME;
 
 SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
                                                  const SfxItemSet& rItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_INTERNET ),
+:   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_INTERNET ),
                               rItemSet ) ,
-    maGrpLinkTyp           ( this, SVX_RES (GRP_LINKTYPE) ),
-    maRbtLinktypInternet    ( this, SVX_RES (RB_LINKTYP_INTERNET) ),
-    maRbtLinktypFTP         ( this, SVX_RES (RB_LINKTYP_FTP) ),
-    maRbtLinktypTelnet      ( this, SVX_RES (RB_LINKTYP_TELNET) ),
-    maFtTarget              ( this, SVX_RES (FT_TARGET_HTML) ),
+    maGrpLinkTyp           ( this, CUI_RES (GRP_LINKTYPE) ),
+    maRbtLinktypInternet    ( this, CUI_RES (RB_LINKTYP_INTERNET) ),
+    maRbtLinktypFTP         ( this, CUI_RES (RB_LINKTYP_FTP) ),
+    maRbtLinktypTelnet      ( this, CUI_RES (RB_LINKTYP_TELNET) ),
+    maFtTarget              ( this, CUI_RES (FT_TARGET_HTML) ),
     maCbbTarget             ( this, INET_PROT_HTTP ),
-    maFtLogin               ( this, SVX_RES (FT_LOGIN) ),
-    maEdLogin               ( this, SVX_RES (ED_LOGIN) ),
-    maFtPassword            ( this, SVX_RES (FT_PASSWD) ),
-    maEdPassword            ( this, SVX_RES (ED_PASSWD) ),
-    maCbAnonymous           ( this, SVX_RES (CBX_ANONYMOUS) ),
-    maBtBrowse              ( this, SVX_RES (BTN_BROWSE) ),
-    maBtTarget              ( this, SVX_RES (BTN_TARGET) ),
+    maFtLogin               ( this, CUI_RES (FT_LOGIN) ),
+    maEdLogin               ( this, CUI_RES (ED_LOGIN) ),
+    maFtPassword            ( this, CUI_RES (FT_PASSWD) ),
+    maEdPassword            ( this, CUI_RES (ED_PASSWD) ),
+    maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
+    maBtBrowse              ( this, CUI_RES (BTN_BROWSE) ),
+    maBtTarget              ( this, CUI_RES (BTN_TARGET) ),
     mbMarkWndOpen           ( FALSE )
 {
     // Set HC bitmaps and display display of bitmap names.
-    maBtBrowse.SetModeImage( Image( SVX_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtBrowse.EnableTextDisplay (FALSE);
-    maBtTarget.SetModeImage( Image( SVX_RES( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtTarget.SetModeImage( Image( CUI_RES( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtTarget.EnableTextDisplay (FALSE);
 
     InitStdControls();

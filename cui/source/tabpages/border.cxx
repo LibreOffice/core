@@ -35,10 +35,11 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
-
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 #define _SVX_BORDER_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svx/svxitems.hrc>
 #include "border.hrc"
 #include "helpid.hrc"
@@ -51,7 +52,7 @@
 #include <svx/shaditem.hxx>
 #include "border.hxx"
 #include <svx/dlgutil.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/htmlmode.hxx"
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc> //CHINA001
@@ -181,47 +182,47 @@ void lcl_SetDecimalDigitsTo1(MetricField& rField)
 SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
                                     const SfxItemSet& rCoreAttrs )
 
-    :   SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_BORDER ), rCoreAttrs ),
+    :   SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_BORDER ), rCoreAttrs ),
 
-        aFlBorder       ( this, SVX_RES( FL_BORDER ) ),
-        aDefaultFT      ( this, SVX_RES( FT_DEFAULT ) ),
-        aWndPresets     ( this, SVX_RES( WIN_PRESETS ) ),
-        aUserDefFT      ( this, SVX_RES( FT_USERDEF ) ),
-        aFrameSel       ( this, SVX_RES( WIN_FRAMESEL ) ),
+        aFlBorder       ( this, CUI_RES( FL_BORDER ) ),
+        aDefaultFT      ( this, CUI_RES( FT_DEFAULT ) ),
+        aWndPresets     ( this, CUI_RES( WIN_PRESETS ) ),
+        aUserDefFT      ( this, CUI_RES( FT_USERDEF ) ),
+        aFrameSel       ( this, CUI_RES( WIN_FRAMESEL ) ),
 
-        aFlSep1         ( this, SVX_RES( FL_SEPARATOR1 ) ),
-        aFlLine         ( this, SVX_RES( FL_LINE ) ),
-        aStyleFT        ( this, SVX_RES( FT_STYLE ) ),
-        aLbLineStyle    ( this, SVX_RES( LB_LINESTYLE ) ),
-        aColorFT        ( this, SVX_RES( FT_COLOR ) ),
-        aLbLineColor    ( this, SVX_RES( LB_LINECOLOR ) ),
+        aFlSep1         ( this, CUI_RES( FL_SEPARATOR1 ) ),
+        aFlLine         ( this, CUI_RES( FL_LINE ) ),
+        aStyleFT        ( this, CUI_RES( FT_STYLE ) ),
+        aLbLineStyle    ( this, CUI_RES( LB_LINESTYLE ) ),
+        aColorFT        ( this, CUI_RES( FT_COLOR ) ),
+        aLbLineColor    ( this, CUI_RES( LB_LINECOLOR ) ),
 
-        aFlSep2         ( this, SVX_RES( FL_SEPARATOR2 ) ),
-        aDistanceFL     ( this, SVX_RES( FL_DISTANCE ) ),
-        aLeftFT         ( this, SVX_RES( FT_LEFT ) ),
-        aLeftMF         ( this, SVX_RES( MF_LEFT ) ),
-        aRightFT        ( this, SVX_RES( FT_RIGHT ) ),
-        aRightMF        ( this, SVX_RES( MF_RIGHT ) ),
-        aTopFT          ( this, SVX_RES( FT_TOP ) ),
-        aTopMF          ( this, SVX_RES( MF_TOP ) ),
-        aBottomFT       ( this, SVX_RES( FT_BOTTOM ) ),
-        aBottomMF       ( this, SVX_RES( MF_BOTTOM ) ),
-        aSynchronizeCB  ( this, SVX_RES( CB_SYNC ) ),
+        aFlSep2         ( this, CUI_RES( FL_SEPARATOR2 ) ),
+        aDistanceFL     ( this, CUI_RES( FL_DISTANCE ) ),
+        aLeftFT         ( this, CUI_RES( FT_LEFT ) ),
+        aLeftMF         ( this, CUI_RES( MF_LEFT ) ),
+        aRightFT        ( this, CUI_RES( FT_RIGHT ) ),
+        aRightMF        ( this, CUI_RES( MF_RIGHT ) ),
+        aTopFT          ( this, CUI_RES( FT_TOP ) ),
+        aTopMF          ( this, CUI_RES( MF_TOP ) ),
+        aBottomFT       ( this, CUI_RES( FT_BOTTOM ) ),
+        aBottomMF       ( this, CUI_RES( MF_BOTTOM ) ),
+        aSynchronizeCB  ( this, CUI_RES( CB_SYNC ) ),
 
-        aFlShadow       ( this, SVX_RES( FL_SHADOW ) ),
-        aFtShadowPos    ( this, SVX_RES( FT_SHADOWPOS ) ),
-        aWndShadows     ( this, SVX_RES( WIN_SHADOWS ) ),
-        aFtShadowSize   ( this, SVX_RES( FT_SHADOWSIZE ) ),
-        aEdShadowSize   ( this, SVX_RES( ED_SHADOWSIZE ) ),
-        aFtShadowColor  ( this, SVX_RES( FT_SHADOWCOLOR ) ),
-        aLbShadowColor  ( this, SVX_RES( LB_SHADOWCOLOR ) ),
-        aPropertiesFL   ( this, SVX_RES( FL_PROPERTIES ) ),
-        aMergeWithNextCB( this, SVX_RES( CB_MERGEWITHNEXT ) ),
-        aMergeAdjacentBordersCB( this, SVX_RES( CB_MERGEADJACENTBORDERS ) ),
-        aShadowImgLstH( SVX_RES(ILH_SDW_BITMAPS)),
-        aShadowImgLst( SVX_RES(IL_SDW_BITMAPS)),
-        aBorderImgLstH( SVX_RES(ILH_PRE_BITMAPS)),
-        aBorderImgLst( SVX_RES(IL_PRE_BITMAPS)),
+        aFlShadow       ( this, CUI_RES( FL_SHADOW ) ),
+        aFtShadowPos    ( this, CUI_RES( FT_SHADOWPOS ) ),
+        aWndShadows     ( this, CUI_RES( WIN_SHADOWS ) ),
+        aFtShadowSize   ( this, CUI_RES( FT_SHADOWSIZE ) ),
+        aEdShadowSize   ( this, CUI_RES( ED_SHADOWSIZE ) ),
+        aFtShadowColor  ( this, CUI_RES( FT_SHADOWCOLOR ) ),
+        aLbShadowColor  ( this, CUI_RES( LB_SHADOWCOLOR ) ),
+        aPropertiesFL   ( this, CUI_RES( FL_PROPERTIES ) ),
+        aMergeWithNextCB( this, CUI_RES( CB_MERGEWITHNEXT ) ),
+        aMergeAdjacentBordersCB( this, CUI_RES( CB_MERGEADJACENTBORDERS ) ),
+        aShadowImgLstH( CUI_RES(ILH_SDW_BITMAPS)),
+        aShadowImgLst( CUI_RES(IL_SDW_BITMAPS)),
+        aBorderImgLstH( CUI_RES(ILH_PRE_BITMAPS)),
+        aBorderImgLst( CUI_RES(IL_PRE_BITMAPS)),
         nMinValue(0),
         nSWMode(0),
         mbHorEnabled( false ),
@@ -1044,7 +1045,7 @@ void SvxBorderTabPage::FillPresetVS()
     {
         aWndPresets.InsertItem( nVSIdx );
         aWndPresets.SetItemImage( nVSIdx, rImgList.GetImage( GetPresetImageId( nVSIdx ) ) );
-        aWndPresets.SetItemText( nVSIdx, SVX_RESSTR( GetPresetStringId( nVSIdx ) ) );
+        aWndPresets.SetItemText( nVSIdx, CUI_RESSTR( GetPresetStringId( nVSIdx ) ) );
     }
 
     // show the control
@@ -1078,7 +1079,7 @@ void SvxBorderTabPage::FillShadowVS()
     {
         aWndShadows.InsertItem( nVSIdx );
         aWndShadows.SetItemImage( nVSIdx, rImgList.GetImage( pnImgIds[ nVSIdx - 1 ] ) );
-        aWndShadows.SetItemText( nVSIdx, SVX_RESSTR( pnStrIds[ nVSIdx - 1 ] ) );
+        aWndShadows.SetItemText( nVSIdx, CUI_RESSTR( pnStrIds[ nVSIdx - 1 ] ) );
     }
 
     // show the control
@@ -1102,7 +1103,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     aLbLineStyle.SetSourceUnit( FUNIT_TWIP );
 
     // Writer 2.0 Defaults:
-    aLbLineStyle.InsertEntry( SVX_RESSTR( STR_NONE ) );
+    aLbLineStyle.InsertEntry( CUI_RESSTR( STR_NONE ) );
 
     aLbLineStyle.InsertEntry( LINE_WIDTH0 );
     aLbLineStyle.InsertEntry( LINE_WIDTH5 );

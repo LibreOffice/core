@@ -34,8 +34,8 @@
 #include <tools/shl.hxx>
 #include <unotools/searchopt.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>
+#include <cuires.hrc>
+#include <dialmgr.hxx>
 #include <optjsearch.hxx>
 #include "optjsearch.hrc"
 
@@ -44,29 +44,29 @@ using namespace com::sun::star::i18n;
 //////////////////////////////////////////////////////////////////////
 
 SvxJSearchOptionsPage::SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_JSEARCH_OPTIONS ), rSet ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_JSEARCH_OPTIONS ), rSet ),
 
-    aTreatAsEqual               ( this, SVX_RES( FL_TREAT_AS_EQUAL ) ),
-    aMatchCase                  ( this, SVX_RES( CB_MATCH_CASE ) ),
-    aMatchFullHalfWidth         ( this, SVX_RES( CB_MATCH_FULL_HALF_WIDTH ) ),
-    aMatchHiraganaKatakana      ( this, SVX_RES( CB_MATCH_HIRAGANA_KATAKANA ) ),
-    aMatchContractions          ( this, SVX_RES( CB_MATCH_CONTRACTIONS ) ),
-    aMatchMinusDashChoon        ( this, SVX_RES( CB_MATCH_MINUS_DASH_CHOON ) ),
-    aMatchRepeatCharMarks       ( this, SVX_RES( CB_MATCH_REPEAT_CHAR_MARKS ) ),
-    aMatchVariantFormKanji      ( this, SVX_RES( CB_MATCH_VARIANT_FORM_KANJI ) ),
-    aMatchOldKanaForms          ( this, SVX_RES( CB_MATCH_OLD_KANA_FORMS ) ),
-    aMatchDiziDuzu              ( this, SVX_RES( CB_MATCH_DIZI_DUZU ) ),
-    aMatchBavaHafa              ( this, SVX_RES( CB_MATCH_BAVA_HAFA ) ),
-    aMatchTsithichiDhizi        ( this, SVX_RES( CB_MATCH_TSITHICHI_DHIZI ) ),
-    aMatchHyuiyuByuvyu          ( this, SVX_RES( CB_MATCH_HYUFYU_BYUVYU ) ),
-    aMatchSesheZeje             ( this, SVX_RES( CB_MATCH_SESHE_ZEJE ) ),
-    aMatchIaiya                 ( this, SVX_RES( CB_MATCH_IAIYA ) ),
-    aMatchKiku                  ( this, SVX_RES( CB_MATCH_KIKU ) ),
-    aMatchProlongedSoundMark    ( this, SVX_RES( CB_MATCH_PROLONGED_SOUNDMARK ) ),
-    aIgnore                     ( this, SVX_RES( FL_IGNORE ) ),
-    aIgnorePunctuation          ( this, SVX_RES( CB_IGNORE_PUNCTUATION ) ),
-    aIgnoreWhitespace           ( this, SVX_RES( CB_IGNORE_WHITESPACES ) ),
-    aIgnoreMiddleDot            ( this, SVX_RES( CB_IGNORE_MIDDLE_DOT ) )
+    aTreatAsEqual               ( this, CUI_RES( FL_TREAT_AS_EQUAL ) ),
+    aMatchCase                  ( this, CUI_RES( CB_MATCH_CASE ) ),
+    aMatchFullHalfWidth         ( this, CUI_RES( CB_MATCH_FULL_HALF_WIDTH ) ),
+    aMatchHiraganaKatakana      ( this, CUI_RES( CB_MATCH_HIRAGANA_KATAKANA ) ),
+    aMatchContractions          ( this, CUI_RES( CB_MATCH_CONTRACTIONS ) ),
+    aMatchMinusDashChoon        ( this, CUI_RES( CB_MATCH_MINUS_DASH_CHOON ) ),
+    aMatchRepeatCharMarks       ( this, CUI_RES( CB_MATCH_REPEAT_CHAR_MARKS ) ),
+    aMatchVariantFormKanji      ( this, CUI_RES( CB_MATCH_VARIANT_FORM_KANJI ) ),
+    aMatchOldKanaForms          ( this, CUI_RES( CB_MATCH_OLD_KANA_FORMS ) ),
+    aMatchDiziDuzu              ( this, CUI_RES( CB_MATCH_DIZI_DUZU ) ),
+    aMatchBavaHafa              ( this, CUI_RES( CB_MATCH_BAVA_HAFA ) ),
+    aMatchTsithichiDhizi        ( this, CUI_RES( CB_MATCH_TSITHICHI_DHIZI ) ),
+    aMatchHyuiyuByuvyu          ( this, CUI_RES( CB_MATCH_HYUFYU_BYUVYU ) ),
+    aMatchSesheZeje             ( this, CUI_RES( CB_MATCH_SESHE_ZEJE ) ),
+    aMatchIaiya                 ( this, CUI_RES( CB_MATCH_IAIYA ) ),
+    aMatchKiku                  ( this, CUI_RES( CB_MATCH_KIKU ) ),
+    aMatchProlongedSoundMark    ( this, CUI_RES( CB_MATCH_PROLONGED_SOUNDMARK ) ),
+    aIgnore                     ( this, CUI_RES( FL_IGNORE ) ),
+    aIgnorePunctuation          ( this, CUI_RES( CB_IGNORE_PUNCTUATION ) ),
+    aIgnoreWhitespace           ( this, CUI_RES( CB_IGNORE_WHITESPACES ) ),
+    aIgnoreMiddleDot            ( this, CUI_RES( CB_IGNORE_MIDDLE_DOT ) )
 {
     FreeResource();
     bSaveOptions = TRUE;

@@ -42,7 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
-
+#include <svx/dialogs.hrc>
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
@@ -50,14 +50,14 @@
 
 #define _SVX_NUMFMT_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "numfmt.hrc"
 
 #include <svx/numinf.hxx>
 
 #include "numfmt.hxx"
 #include <svx/numfmtsh.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <sfx2/request.hxx> //CHINA001
 #include <sfx2/app.hxx> //CHINA001
 #include <sfx2/basedlgs.hxx>
@@ -239,56 +239,56 @@ void SvxNumberPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 #include <layout/layout-pre.hxx>
 
 #if ENABLE_LAYOUT
-#undef SVX_RES
-#define SVX_RES(x) #x
-#define SVX_RES_PLAIN(x) ResId (x, DIALOG_MGR ())
-#define THIS_SVX_RES(x) this, #x
+#undef CUI_RES
+#define CUI_RES(x) #x
+#define CUI_RES_PLAIN(x) ResId (x, CUI_MGR ())
+#define THIS_CUI_RES(x) this, #x
 #undef SfxTabPage
 #define SfxTabPage( parent, id, args ) SfxTabPage( parent, "number-format.xml", id, &args )
 #else /* !ENABLE_LAYOUT */
-#define SVX_RES_PLAIN SVX_RES
-#define THIS_SVX_RES SVX_RES
+#define CUI_RES_PLAIN CUI_RES
+#define THIS_CUI_RES CUI_RES
 #endif /* !ENABLE_LAYOUT */
 
 SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
                                                 const SfxItemSet&   rCoreAttrs )
 
-    :   SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_NUMBERFORMAT ), rCoreAttrs ),
+    :   SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_NUMBERFORMAT ), rCoreAttrs ),
 
-        aFtCategory     ( this, SVX_RES( FT_CATEGORY ) ),
-        aLbCategory     ( this, SVX_RES( LB_CATEGORY ) ),
-        aFtFormat       ( this, SVX_RES( FT_FORMAT ) ),
-        aLbCurrency     ( this, SVX_RES( LB_CURRENCY) ),
-        aLbFormat       ( this, SVX_RES( LB_FORMAT ) ),
-        aFtLanguage     ( this, SVX_RES( FT_LANGUAGE ) ),
-        aLbLanguage     ( this, SVX_RES( LB_LANGUAGE ), FALSE ),
-        aCbSourceFormat ( this, SVX_RES( CB_SOURCEFORMAT ) ),
-        aFtDecimals     ( this, SVX_RES( FT_DECIMALS ) ),
-        aEdDecimals     ( this, SVX_RES( ED_DECIMALS ) ),
-        aFtLeadZeroes   ( this, SVX_RES( FT_LEADZEROES ) ),
-        aEdLeadZeroes   ( this, SVX_RES( ED_LEADZEROES ) ),
-        aBtnNegRed      ( this, SVX_RES( BTN_NEGRED ) ),
-        aBtnThousand    ( this, SVX_RES( BTN_THOUSAND ) ),
-        aFlOptions      ( this, SVX_RES( FL_OPTIONS ) ),
+        aFtCategory     ( this, CUI_RES( FT_CATEGORY ) ),
+        aLbCategory     ( this, CUI_RES( LB_CATEGORY ) ),
+        aFtFormat       ( this, CUI_RES( FT_FORMAT ) ),
+        aLbCurrency     ( this, CUI_RES( LB_CURRENCY) ),
+        aLbFormat       ( this, CUI_RES( LB_FORMAT ) ),
+        aFtLanguage     ( this, CUI_RES( FT_LANGUAGE ) ),
+        aLbLanguage     ( this, CUI_RES( LB_LANGUAGE ), FALSE ),
+        aCbSourceFormat ( this, CUI_RES( CB_SOURCEFORMAT ) ),
+        aFtDecimals     ( this, CUI_RES( FT_DECIMALS ) ),
+        aEdDecimals     ( this, CUI_RES( ED_DECIMALS ) ),
+        aFtLeadZeroes   ( this, CUI_RES( FT_LEADZEROES ) ),
+        aEdLeadZeroes   ( this, CUI_RES( ED_LEADZEROES ) ),
+        aBtnNegRed      ( this, CUI_RES( BTN_NEGRED ) ),
+        aBtnThousand    ( this, CUI_RES( BTN_THOUSAND ) ),
+        aFlOptions      ( this, CUI_RES( FL_OPTIONS ) ),
 
-        aFtEdFormat     ( this, SVX_RES( FT_EDFORMAT ) ),
-        aEdFormat       ( this, SVX_RES( ED_FORMAT ) ),
-        aIbAdd          ( this, SVX_RES( IB_ADD       ) ),
-        aIbInfo         ( this, SVX_RES( IB_INFO      ) ),
-        aIbRemove       ( this, SVX_RES( IB_REMOVE    ) ),
-        aFtComment      ( this, SVX_RES( FT_COMMENT ) ),
-        aEdComment      ( this, SVX_RES( ED_COMMENT ) ),
+        aFtEdFormat     ( this, CUI_RES( FT_EDFORMAT ) ),
+        aEdFormat       ( this, CUI_RES( ED_FORMAT ) ),
+        aIbAdd          ( this, CUI_RES( IB_ADD       ) ),
+        aIbInfo         ( this, CUI_RES( IB_INFO      ) ),
+        aIbRemove       ( this, CUI_RES( IB_REMOVE    ) ),
+        aFtComment      ( this, CUI_RES( FT_COMMENT ) ),
+        aEdComment      ( this, CUI_RES( ED_COMMENT ) ),
 
 #if ENABLE_LAYOUT
-        aWndPreview     ( LAYOUT_THIS_WINDOW(this), SVX_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
+        aWndPreview     ( LAYOUT_THIS_WINDOW(this), CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
 #else
-        aWndPreview     ( this, SVX_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
+        aWndPreview     ( this, CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
 #endif
         pNumItem        ( NULL ),
         pNumFmtShell    ( NULL ),
         nInitFormat     ( ULONG_MAX ),
 
-        sAutomaticEntry ( THIS_SVX_RES( STR_AUTO_ENTRY)),
+        sAutomaticEntry ( THIS_CUI_RES( STR_AUTO_ENTRY)),
         pLastActivWindow( NULL )
 {
 #if ENABLE_LAYOUT
@@ -309,8 +309,8 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 
 void SvxNumberFormatTabPage::Init_Impl()
 {
-    ImageList               aIconList( SVX_RES_PLAIN ( IL_ICON ) );
-    ImageList               aIconListHC( SVX_RES_PLAIN ( IL_ICON_HC ) );
+    ImageList               aIconList( CUI_RES_PLAIN ( IL_ICON ) );
+    ImageList               aIconListHC( CUI_RES_PLAIN ( IL_ICON_HC ) );
 
     bNumItemFlag=TRUE;
     bOneAreaFlag=FALSE;

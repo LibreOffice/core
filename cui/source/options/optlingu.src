@@ -35,7 +35,7 @@
 
 #include <svtools/controldims.hrc>
 #include <sfx2/sfx.hrc>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 // RID_SVXDLG_EDIT_MODULES ---------------------------------------------------
 

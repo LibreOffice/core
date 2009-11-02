@@ -42,14 +42,15 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <svx/dialogs.hrc>
 
 #define _SVX_POSTDLG_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "postdlg.hrc"
 #include <svx/postattr.hxx>
 #include "postdlg.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #include "helpid.hrc"
 
@@ -69,20 +70,20 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
                                   BOOL bPrevNext,
                                   BOOL bRedline ) :
 
-    SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_POSTIT ) ),
+    SfxModalDialog( pParent, CUI_RES( RID_SVXDLG_POSTIT ) ),
 
-    aPostItFL       ( this, SVX_RES( FL_POSTIT ) ),
-    aLastEditLabelFT( this, SVX_RES( FT_LASTEDITLABEL ) ),
-    aLastEditFT     ( this, SVX_RES( FT_LASTEDIT ) ),
-    aEditFT         ( this, SVX_RES( FT_EDIT ) ),
-    aEditED         ( this, SVX_RES( ED_EDIT ) ),
-    aAuthorFT       ( this, SVX_RES( FT_AUTHOR) ),
-    aAuthorBtn      ( this, SVX_RES( BTN_AUTHOR ) ),
-    aOKBtn          ( this, SVX_RES( BTN_POST_OK ) ),
-    aCancelBtn      ( this, SVX_RES( BTN_POST_CANCEL ) ),
-    aHelpBtn        ( this, SVX_RES( BTN_POST_HELP ) ),
-    aPrevBtn        ( this, SVX_RES( BTN_PREV ) ),
-    aNextBtn        ( this, SVX_RES( BTN_NEXT ) ),
+    aPostItFL       ( this, CUI_RES( FL_POSTIT ) ),
+    aLastEditLabelFT( this, CUI_RES( FT_LASTEDITLABEL ) ),
+    aLastEditFT     ( this, CUI_RES( FT_LASTEDIT ) ),
+    aEditFT         ( this, CUI_RES( FT_EDIT ) ),
+    aEditED         ( this, CUI_RES( ED_EDIT ) ),
+    aAuthorFT       ( this, CUI_RES( FT_AUTHOR) ),
+    aAuthorBtn      ( this, CUI_RES( BTN_AUTHOR ) ),
+    aOKBtn          ( this, CUI_RES( BTN_POST_OK ) ),
+    aCancelBtn      ( this, CUI_RES( BTN_POST_CANCEL ) ),
+    aHelpBtn        ( this, CUI_RES( BTN_POST_HELP ) ),
+    aPrevBtn        ( this, CUI_RES( BTN_PREV ) ),
+    aNextBtn        ( this, CUI_RES( BTN_NEXT ) ),
 
     rSet        ( rCoreSet ),
     pOutSet     ( 0 )
@@ -154,10 +155,10 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     aEditED.SetText( aTextStr.ConvertLineEnd() );
 
     if ( !bNew )
-        SetText( SVX_RESSTR( STR_NOTIZ_EDIT ) );
+        SetText( CUI_RESSTR( STR_NOTIZ_EDIT ) );
     else
         // neu anlegen
-        SetText( SVX_RESSTR( STR_NOTIZ_INSERT ) );
+        SetText( CUI_RESSTR( STR_NOTIZ_INSERT ) );
 
     FreeResource();
 }

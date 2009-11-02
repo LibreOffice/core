@@ -38,9 +38,9 @@
 #include <unotools/sourceviewconfig.hxx>
 #include "fontsubs.hrc"
 #include "fontsubs.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 /*********************************************************************/
 /*                                                                   */
@@ -54,32 +54,32 @@
 
 SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SVX_RES(RID_SVX_FONT_SUBSTITUTION), rSet),
-    aUseTableCB         (this,  SVX_RES(CB_USETABLE)),
-    aFont1FT            (this,  SVX_RES(FT_FONT1)),
-    aFont1CB            (this,  SVX_RES(CB_FONT1)),
-    aFont2FT            (this,  SVX_RES(FT_FONT2)),
-    aFont2CB            (this,  SVX_RES(CB_FONT2)),
-    aNewDelTBX          (this,  SVX_RES(TBX_SUBSTNEWDEL)),
-    aCheckLB            (this,  SVX_RES(CLB_SUBSTITUTES)),
+    SfxTabPage(pParent, CUI_RES(RID_SVX_FONT_SUBSTITUTION), rSet),
+    aUseTableCB         (this,  CUI_RES(CB_USETABLE)),
+    aFont1FT            (this,  CUI_RES(FT_FONT1)),
+    aFont1CB            (this,  CUI_RES(CB_FONT1)),
+    aFont2FT            (this,  CUI_RES(FT_FONT2)),
+    aFont2CB            (this,  CUI_RES(CB_FONT2)),
+    aNewDelTBX          (this,  CUI_RES(TBX_SUBSTNEWDEL)),
+    aCheckLB            (this,  CUI_RES(CLB_SUBSTITUTES)),
 
-    aSourceViewFontsFL (this,  SVX_RES(FL_SOURCEVIEW  )),
-    aFontNameFT        (this,  SVX_RES(FT_FONTNAME    )),
-    aFontNameLB        (this,  SVX_RES(LB_FONTNAME    )),
-    aNonPropFontsOnlyCB(this,  SVX_RES(CB_NONPROP     )),
-    aFontHeightFT      (this,  SVX_RES(FT_FONTHEIGHT  )),
-    aFontHeightLB      (this,  SVX_RES(LB_FONTHEIGHT  )),
+    aSourceViewFontsFL (this,  CUI_RES(FL_SOURCEVIEW  )),
+    aFontNameFT        (this,  CUI_RES(FT_FONTNAME    )),
+    aFontNameLB        (this,  CUI_RES(LB_FONTNAME    )),
+    aNonPropFontsOnlyCB(this,  CUI_RES(CB_NONPROP     )),
+    aFontHeightFT      (this,  CUI_RES(FT_FONTHEIGHT  )),
+    aFontHeightLB      (this,  CUI_RES(LB_FONTHEIGHT  )),
 
-    aImageList          (SVX_RES(IL_ICON)),
+    aImageList          (CUI_RES(IL_ICON)),
 
-    sAutomatic          (SVX_RES( STR_AUTOMATIC  )),
+    sAutomatic          (CUI_RES( STR_AUTOMATIC  )),
     pConfig(new SvtFontSubstConfig),
     pSourceViewConfig(new utl::SourceViewConfig),
 
-    sHeader1            (SVX_RES( STR_HEADER1       )),
-    sHeader2            (SVX_RES( STR_HEADER2       )),
-    sHeader3            (SVX_RES( STR_HEADER3       )),
-    sHeader4            (SVX_RES( STR_HEADER4       )),
+    sHeader1            (CUI_RES( STR_HEADER1       )),
+    sHeader2            (CUI_RES( STR_HEADER2       )),
+    sHeader3            (CUI_RES( STR_HEADER3       )),
+    sHeader4            (CUI_RES( STR_HEADER4       )),
 
     sFontGroup          ("FontSubstitution"),
     pCheckButtonData(0)

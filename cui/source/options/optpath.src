@@ -29,7 +29,7 @@
  ************************************************************************/
  // include --------------------------------------------------------------
 #include "optpath.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
 #endif

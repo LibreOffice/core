@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: newtabledlg.cxx,v $
- * $Revision: 1.3 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -27,48 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
+#ifndef _CUI_DIALMGR_HXX
+#define _CUI_DIALMGR_HXX
 
 // include ---------------------------------------------------------------
 
-#include "cuires.hrc"
-#include "dialmgr.hxx"
-#include "newtabledlg.hxx"
-#include "newtabledlg.hrc"
+#include <tools/resid.hxx>
 
-SvxNewTableDialog::SvxNewTableDialog( Window* pParent )
-: ModalDialog( pParent, CUI_RES( RID_SVX_NEWTABLE_DLG ) )
-, maFtColumns( this, CUI_RES( FT_COLUMNS ) )
-, maNumColumns( this, CUI_RES( NF_COLUMNS ) )
-, maFtRows( this, CUI_RES( FT_ROWS ) )
-, maNumRows( this, CUI_RES( NF_ROWS ) )
-, maFlSep( this, CUI_RES( FL_SEP ) )
-, maHelpButton( this, CUI_RES( BTN_HELP ) )
-, maOkButton( this, CUI_RES( BTN_OK ) )
-, maCancelButton( this, CUI_RES( BTN_CANCEL ) )
-{
-    maNumRows.SetValue(2);
-    maNumColumns.SetValue(5);
-    FreeResource();
-}
+// forward ---------------------------------------------------------------
 
-short SvxNewTableDialog::Execute(void)
+class ResMgr;
+struct CuiResMgr
 {
-    return ModalDialog::Execute();
-}
+    static ResMgr*      GetResMgr();
+};
 
-void SvxNewTableDialog::Apply(void)
-{
-}
+#define CUI_MGR()   (*CuiResMgr::GetResMgr())
+#define CUI_RES(i)      ResId(i,CUI_MGR())
+#define CUI_RESSTR(i)   UniString(ResId(i,CUI_MGR()))
+#define CUI_RESSSTR(i)  String(ResId(i,CUI_MGR()))
 
-sal_Int32 SvxNewTableDialog::getRows() const
-{
-    return sal::static_int_cast< sal_Int32 >( maNumRows.GetValue() );
-}
+#endif
 
-sal_Int32 SvxNewTableDialog::getColumns() const
-{
-    return sal::static_int_cast< sal_Int32 >( maNumColumns.GetValue() );
-}

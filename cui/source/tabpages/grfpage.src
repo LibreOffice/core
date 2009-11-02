@@ -28,9 +28,10 @@
  *
  ************************************************************************/
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include "grfpage.hrc"
+#include <svx/dialogs.hrc>
 
 /************************************************************/
 /*                                                                                                                  */

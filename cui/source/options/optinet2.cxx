@@ -62,10 +62,10 @@
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #define _SVX_OPTINET2_CXX
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "optinet2.hxx"
 #include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optinet2.hrc"
 #include "helpid.hrc"
 #include <svx/ofaitem.hxx>
@@ -212,7 +212,7 @@ void SvxNoSpaceEdit::Modify()
 
         if ( !ByteString(::rtl::OUStringToOString(aValue,RTL_TEXTENCODING_UTF8)).IsNumericAscii() || (long)aValue.ToInt32() > USHRT_MAX )
             // der H�chstwert einer Portnummer ist USHRT_MAX
-            ErrorBox( this, SVX_RES( RID_SVXERR_OPT_PROXYPORTS ) ).Execute();
+            ErrorBox( this, CUI_RES( RID_SVXERR_OPT_PROXYPORTS ) ).Execute();
     }
 }
 
@@ -226,31 +226,31 @@ void SvxNoSpaceEdit::Modify()
 /********************************************************************/
 
 SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_INET_PROXY ), rSet ),
-    aOptionGB   (this, SVX_RES(GB_SETTINGS)),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_PROXY ), rSet ),
+    aOptionGB   (this, CUI_RES(GB_SETTINGS)),
 
-    aProxyModeFT  (this, SVX_RES(FT_PROXYMODE)),
-    aProxyModeLB  (this, SVX_RES(LB_PROXYMODE)),
+    aProxyModeFT  (this, CUI_RES(FT_PROXYMODE)),
+    aProxyModeLB  (this, CUI_RES(LB_PROXYMODE)),
 
-    aHttpProxyFT      (this, SVX_RES( FT_HTTP_PROXY   )),
-    aHttpProxyED      (this, SVX_RES( ED_HTTP_PROXY     )),
-    aHttpPortFT       (this, SVX_RES( FT_HTTP_PORT      )),
-    aHttpPortED       (this, SVX_RES( ED_HTTP_PORT      ), TRUE),
+    aHttpProxyFT      (this, CUI_RES( FT_HTTP_PROXY   )),
+    aHttpProxyED      (this, CUI_RES( ED_HTTP_PROXY     )),
+    aHttpPortFT       (this, CUI_RES( FT_HTTP_PORT      )),
+    aHttpPortED       (this, CUI_RES( ED_HTTP_PORT      ), TRUE),
 
-    aHttpsProxyFT      (this, SVX_RES( FT_HTTPS_PROXY     )),
-    aHttpsProxyED      (this, SVX_RES( ED_HTTPS_PROXY     )),
-    aHttpsPortFT       (this, SVX_RES( FT_HTTPS_PORT      )),
-    aHttpsPortED       (this, SVX_RES( ED_HTTPS_PORT      ), TRUE),
+    aHttpsProxyFT      (this, CUI_RES( FT_HTTPS_PROXY     )),
+    aHttpsProxyED      (this, CUI_RES( ED_HTTPS_PROXY     )),
+    aHttpsPortFT       (this, CUI_RES( FT_HTTPS_PORT      )),
+    aHttpsPortED       (this, CUI_RES( ED_HTTPS_PORT      ), TRUE),
 
-    aFtpProxyFT       (this, SVX_RES( FT_FTP_PROXY      )),
-    aFtpProxyED       (this, SVX_RES( ED_FTP_PROXY      )),
-    aFtpPortFT        (this, SVX_RES( FT_FTP_PORT       )),
-    aFtpPortED        (this, SVX_RES( ED_FTP_PORT       ), TRUE),
+    aFtpProxyFT       (this, CUI_RES( FT_FTP_PROXY      )),
+    aFtpProxyED       (this, CUI_RES( ED_FTP_PROXY      )),
+    aFtpPortFT        (this, CUI_RES( FT_FTP_PORT       )),
+    aFtpPortED        (this, CUI_RES( ED_FTP_PORT       ), TRUE),
 
-    aNoProxyForFT     (this, SVX_RES( FT_NOPROXYFOR     )),
-    aNoProxyForED     (this, SVX_RES( ED_NOPROXYFOR     )),
-    aNoProxyDescFT    (this, SVX_RES( ED_NOPROXYDESC    )),
-    sFromBrowser        (       SVX_RES( ST_PROXY_FROM_BROWSER ) ),
+    aNoProxyForFT     (this, CUI_RES( FT_NOPROXYFOR     )),
+    aNoProxyForED     (this, CUI_RES( ED_NOPROXYFOR     )),
+    aNoProxyDescFT    (this, CUI_RES( ED_NOPROXYDESC    )),
+    sFromBrowser        (       CUI_RES( ST_PROXY_FROM_BROWSER ) ),
     aProxyModePN(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType")),
     aHttpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName")),
     aHttpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort")),
@@ -726,33 +726,33 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 
 SvxSearchTabPage::SvxSearchTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_INET_SEARCH ), rSet ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_SEARCH ), rSet ),
 
-    aSearchGB       ( this, SVX_RES( GB_SEARCH ) ),
-    aSearchLB       ( this, SVX_RES( LB_SEARCH ) ),
-    aSearchNameFT   ( this, SVX_RES( FT_SEARCH_NAME ) ),
-    aSearchNameED   ( this, SVX_RES( ED_SEARCH_NAME ) ),
-    aSearchFT       ( this, SVX_RES( FT_SEARCH ) ),
-    aAndRB          ( this, SVX_RES( RB_AND ) ),
-    aOrRB           ( this, SVX_RES( RB_OR ) ),
-    aExactRB        ( this, SVX_RES( RB_EXACT ) ),
+    aSearchGB       ( this, CUI_RES( GB_SEARCH ) ),
+    aSearchLB       ( this, CUI_RES( LB_SEARCH ) ),
+    aSearchNameFT   ( this, CUI_RES( FT_SEARCH_NAME ) ),
+    aSearchNameED   ( this, CUI_RES( ED_SEARCH_NAME ) ),
+    aSearchFT       ( this, CUI_RES( FT_SEARCH ) ),
+    aAndRB          ( this, CUI_RES( RB_AND ) ),
+    aOrRB           ( this, CUI_RES( RB_OR ) ),
+    aExactRB        ( this, CUI_RES( RB_EXACT ) ),
 
-    aURLFT          ( this, SVX_RES( FT_URL ) ),
-    aURLED          ( this, SVX_RES( ED_URL ) ),
+    aURLFT          ( this, CUI_RES( FT_URL ) ),
+    aURLED          ( this, CUI_RES( ED_URL ) ),
 
-    aPostFixFT      ( this, SVX_RES( FT_POSTFIX ) ),
-    aPostFixED      ( this, SVX_RES( ED_POSTFIX ) ),
-    aSeparatorFT    ( this, SVX_RES( FT_SEPARATOR ) ),
-    aSeparatorED    ( this, SVX_RES( ED_SEPARATOR ) ),
-    aCaseFT         ( this, SVX_RES( FT_CASE ) ),
-    aCaseED         ( this, SVX_RES( ED_CASE ) ),
+    aPostFixFT      ( this, CUI_RES( FT_POSTFIX ) ),
+    aPostFixED      ( this, CUI_RES( ED_POSTFIX ) ),
+    aSeparatorFT    ( this, CUI_RES( FT_SEPARATOR ) ),
+    aSeparatorED    ( this, CUI_RES( ED_SEPARATOR ) ),
+    aCaseFT         ( this, CUI_RES( FT_CASE ) ),
+    aCaseED         ( this, CUI_RES( ED_CASE ) ),
 
-    aNewPB          ( this, SVX_RES( PB_NEW ) ),
-    aAddPB          ( this, SVX_RES( PB_ADD ) ),
-    aChangePB       ( this, SVX_RES( PB_CHANGE ) ),
-    aDeletePB       ( this, SVX_RES( PB_DELETE ) ),
+    aNewPB          ( this, CUI_RES( PB_NEW ) ),
+    aAddPB          ( this, CUI_RES( PB_ADD ) ),
+    aChangePB       ( this, CUI_RES( PB_CHANGE ) ),
+    aDeletePB       ( this, CUI_RES( PB_DELETE ) ),
 
-    sModifyMsg(SVX_RES(MSG_MODIFY))
+    sModifyMsg(CUI_RES(MSG_MODIFY))
 {
     FreeResource();
 
@@ -1256,13 +1256,13 @@ public:
 
 JavaScriptDisableQueryBox_Impl::JavaScriptDisableQueryBox_Impl( Window* pParent ) :
 
-    ModalDialog( pParent, SVX_RES( RID_SVXDLG_OPT_JAVASCRIPT_DISABLE ) ),
+    ModalDialog( pParent, CUI_RES( RID_SVXDLG_OPT_JAVASCRIPT_DISABLE ) ),
 
-    aImage      ( this, SVX_RES( IMG_JSCPT_WARNING ) ),
-    aWarningFT  ( this, SVX_RES( FT_JSCPT_WARNING ) ),
-    aDisableCB  ( this, SVX_RES( CB_JSCPT_DISABLE ) ),
-    aYesBtn     ( this, SVX_RES( BTN_JSCPT_YES ) ),
-    aNoBtn      ( this, SVX_RES( BTN_JSCPT_NO ) )
+    aImage      ( this, CUI_RES( IMG_JSCPT_WARNING ) ),
+    aWarningFT  ( this, CUI_RES( FT_JSCPT_WARNING ) ),
+    aDisableCB  ( this, CUI_RES( CB_JSCPT_DISABLE ) ),
+    aYesBtn     ( this, CUI_RES( BTN_JSCPT_YES ) ),
+    aNoBtn      ( this, CUI_RES( BTN_JSCPT_NO ) )
 
 {
     FreeResource();
@@ -1315,34 +1315,34 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 /********************************************************************/
 
 SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet )
-    :SfxTabPage         ( pParent, SVX_RES( RID_SVXPAGE_INET_SECURITY ), rSet )
+    :SfxTabPage         ( pParent, CUI_RES( RID_SVXPAGE_INET_SECURITY ), rSet )
 
-    ,maSecurityOptionsFL( this, SVX_RES( FL_SEC_SECURITYOPTIONS ) )
-    ,maSecurityOptionsFI( this, SVX_RES( FI_SEC_SECURITYOPTIONS ) )
-    ,maSecurityOptionsPB( this, SVX_RES( PB_SEC_SECURITYOPTIONS ) )
+    ,maSecurityOptionsFL( this, CUI_RES( FL_SEC_SECURITYOPTIONS ) )
+    ,maSecurityOptionsFI( this, CUI_RES( FI_SEC_SECURITYOPTIONS ) )
+    ,maSecurityOptionsPB( this, CUI_RES( PB_SEC_SECURITYOPTIONS ) )
 
-    ,maPasswordsFL      ( this, SVX_RES( FL_SEC_PASSWORDS ) )
-    ,maSavePasswordsCB  ( this, SVX_RES( CB_SEC_SAVEPASSWORDS ) )
-    ,maShowConnectionsPB( this, SVX_RES( PB_SEC_CONNECTIONS ) )
-    ,maMasterPasswordCB ( this, SVX_RES( CB_SEC_MASTERPASSWORD ) )
-    ,maMasterPasswordFI ( this, SVX_RES( FI_SEC_MASTERPASSWORD ) )
-    ,maMasterPasswordPB ( this, SVX_RES( PB_SEC_MASTERPASSWORD ) )
+    ,maPasswordsFL      ( this, CUI_RES( FL_SEC_PASSWORDS ) )
+    ,maSavePasswordsCB  ( this, CUI_RES( CB_SEC_SAVEPASSWORDS ) )
+    ,maShowConnectionsPB( this, CUI_RES( PB_SEC_CONNECTIONS ) )
+    ,maMasterPasswordCB ( this, CUI_RES( CB_SEC_MASTERPASSWORD ) )
+    ,maMasterPasswordFI ( this, CUI_RES( FI_SEC_MASTERPASSWORD ) )
+    ,maMasterPasswordPB ( this, CUI_RES( PB_SEC_MASTERPASSWORD ) )
 
-    ,maMacroSecFL       ( this, SVX_RES( FL_SEC_MACROSEC ) )
-    ,maMacroSecFI       ( this, SVX_RES( FI_SEC_MACROSEC ) )
-    ,maMacroSecPB       ( this, SVX_RES( PB_SEC_MACROSEC ) )
-    ,maFilesharingFL    ( this, SVX_RES( FL_SEC_FILESHARING ) )
-    ,maRecommReadOnlyCB ( this, SVX_RES( CB_SEC_RECOMMREADONLY ) )
-    ,maRecordChangesCB  ( this, SVX_RES( CB_SEC_RECORDCHANGES ) )
-    ,maProtectRecordsPB ( this, SVX_RES( PB_SEC_PROTRECORDS ) )
+    ,maMacroSecFL       ( this, CUI_RES( FL_SEC_MACROSEC ) )
+    ,maMacroSecFI       ( this, CUI_RES( FI_SEC_MACROSEC ) )
+    ,maMacroSecPB       ( this, CUI_RES( PB_SEC_MACROSEC ) )
+    ,maFilesharingFL    ( this, CUI_RES( FL_SEC_FILESHARING ) )
+    ,maRecommReadOnlyCB ( this, CUI_RES( CB_SEC_RECOMMREADONLY ) )
+    ,maRecordChangesCB  ( this, CUI_RES( CB_SEC_RECORDCHANGES ) )
+    ,maProtectRecordsPB ( this, CUI_RES( PB_SEC_PROTRECORDS ) )
 
     ,mpSecOptions       ( new SvtSecurityOptions )
     ,mpSecOptDlg        ( NULL )
     ,meRedlingMode      ( RL_NONE )
 
-    ,msProtectRecordsStr(               SVX_RES( STR_SEC_PROTRECORDS ) )
-    ,msUnprotectRecordsStr(             SVX_RES( STR_SEC_UNPROTRECORDS ) )
-    ,msPasswordStoringDeactivateStr(    SVX_RES( STR_SEC_NOPASSWDSAVE ) )
+    ,msProtectRecordsStr(               CUI_RES( STR_SEC_PROTRECORDS ) )
+    ,msUnprotectRecordsStr(             CUI_RES( STR_SEC_UNPROTRECORDS ) )
+    ,msPasswordStoringDeactivateStr(    CUI_RES( STR_SEC_NOPASSWDSAVE ) )
 
 {
     FreeResource();
@@ -1925,9 +1925,9 @@ void SvxSecurityTabPage::Reset( const SfxItemSet& )
 
 //added by jmeng begin
 MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_INET_MOZPLUGIN ), rSet ),
-    aMSWordGB       ( this, SVX_RES( GB_MOZPLUGIN       ) ),
-    aWBasicCodeCB   ( this, SVX_RES( CB_MOZPLUGIN_CODE ) )
+    : SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_MOZPLUGIN ), rSet ),
+    aMSWordGB       ( this, CUI_RES( GB_MOZPLUGIN       ) ),
+    aWBasicCodeCB   ( this, CUI_RES( CB_MOZPLUGIN_CODE ) )
 {
     FreeResource();
 }
@@ -2224,13 +2224,13 @@ struct SvxEMailTabPage_Impl
 };
 
 SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet) :
-    SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_INET_MAIL ), rSet),
-    aMailFL(this,           SVX_RES(FL_MAIL           )),
-    aMailerURLFI(this,      SVX_RES(FI_MAILERURL      )),
-    aMailerURLFT(this,      SVX_RES(FT_MAILERURL      )),
-    aMailerURLED(this,      SVX_RES(ED_MAILERURL      )),
-    aMailerURLPB(this,      SVX_RES(PB_MAILERURL      )),
-    m_sDefaultFilterName(   SVX_RES(STR_DEFAULT_FILENAME        )),
+    SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_INET_MAIL ), rSet),
+    aMailFL(this,           CUI_RES(FL_MAIL           )),
+    aMailerURLFI(this,      CUI_RES(FI_MAILERURL      )),
+    aMailerURLFT(this,      CUI_RES(FT_MAILERURL      )),
+    aMailerURLED(this,      CUI_RES(ED_MAILERURL      )),
+    aMailerURLPB(this,      CUI_RES(PB_MAILERURL      )),
+    m_sDefaultFilterName(   CUI_RES(STR_DEFAULT_FILENAME        )),
     pImpl(new SvxEMailTabPage_Impl)
 {
     FreeResource();

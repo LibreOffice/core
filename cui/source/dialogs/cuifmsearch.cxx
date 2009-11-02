@@ -36,11 +36,11 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/app.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svl/filerec.hxx>
 #include <svx/fmsrccfg.hxx>
 #include <svx/fmsrcimp.hxx>
@@ -99,39 +99,39 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 //------------------------------------------------------------------------
 FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
     const Link& lnkContextSupplier)
-    :ModalDialog(pParent, SVX_RES(RID_SVXDLG_SEARCHFORM))
-    ,m_flSearchFor              (this, SVX_RES(FL_SEARCHFOR))
-    ,m_rbSearchForText          (this, SVX_RES(RB_SEARCHFORTEXT))
-    ,m_rbSearchForNull          (this, SVX_RES(RB_SEARCHFORNULL))
-    ,m_rbSearchForNotNull       (this, SVX_RES(RB_SEARCHFORNOTNULL))
-    ,m_cmbSearchText            (this, SVX_RES(CMB_SEARCHTEXT))
-    ,m_flWhere                  (this, SVX_RES(FL_WHERE))
-    ,m_ftForm                   (this, SVX_RES(FT_FORM))
-    ,m_lbForm                   (this, SVX_RES(LB_FORM))
-    ,m_rbAllFields              (this, SVX_RES(RB_ALLFIELDS))
-    ,m_rbSingleField            (this, SVX_RES(RB_SINGLEFIELD))
-    ,m_lbField                  (this, SVX_RES(LB_FIELD))
-    ,m_flOptions                (this, SVX_RES(FL_OPTIONS))
-    ,m_ftPosition               (this, SVX_RES(FT_POSITION))
-    ,m_lbPosition               (this, SVX_RES(LB_POSITION))
-    ,m_cbUseFormat              (this, SVX_RES(CB_USEFORMATTER))
-    ,m_cbCase                   (this, SVX_RES(CB_CASE))
-    ,m_cbBackwards              (this, SVX_RES(CB_BACKWARD))
-    ,m_cbStartOver              (this, SVX_RES(CB_STARTOVER))
-    ,m_cbWildCard               (this, SVX_RES(CB_WILDCARD))
-    ,m_cbRegular                (this, SVX_RES(CB_REGULAR))
-    ,m_cbApprox                 (this, SVX_RES(CB_APPROX))
-    ,m_pbApproxSettings         (this, SVX_RES(PB_APPROXSETTINGS))
-    ,m_aHalfFullFormsCJK        (this, SVX_RES(CB_HALFFULLFORMS))
-    ,m_aSoundsLikeCJK           (this, SVX_RES(CB_SOUNDSLIKECJK))
-    ,m_aSoundsLikeCJKSettings   (this, SVX_RES(PB_SOUNDSLIKESETTINGS))
-    ,m_flState                  (this, SVX_RES(FL_STATE))
-    ,m_ftRecordLabel            (this, SVX_RES(FT_RECORDLABEL))
-    ,m_ftRecord                 (this, SVX_RES(FT_RECORD))
-    ,m_ftHint                   (this, SVX_RES(FT_HINT))
-    ,m_pbSearchAgain            (this, SVX_RES(PB_SEARCH))
-    ,m_pbClose                  (this, SVX_RES(1))
-    ,m_pbHelp                   (this, SVX_RES(1))
+    :ModalDialog(pParent, CUI_RES(RID_SVXDLG_SEARCHFORM))
+    ,m_flSearchFor              (this, CUI_RES(FL_SEARCHFOR))
+    ,m_rbSearchForText          (this, CUI_RES(RB_SEARCHFORTEXT))
+    ,m_rbSearchForNull          (this, CUI_RES(RB_SEARCHFORNULL))
+    ,m_rbSearchForNotNull       (this, CUI_RES(RB_SEARCHFORNOTNULL))
+    ,m_cmbSearchText            (this, CUI_RES(CMB_SEARCHTEXT))
+    ,m_flWhere                  (this, CUI_RES(FL_WHERE))
+    ,m_ftForm                   (this, CUI_RES(FT_FORM))
+    ,m_lbForm                   (this, CUI_RES(LB_FORM))
+    ,m_rbAllFields              (this, CUI_RES(RB_ALLFIELDS))
+    ,m_rbSingleField            (this, CUI_RES(RB_SINGLEFIELD))
+    ,m_lbField                  (this, CUI_RES(LB_FIELD))
+    ,m_flOptions                (this, CUI_RES(FL_OPTIONS))
+    ,m_ftPosition               (this, CUI_RES(FT_POSITION))
+    ,m_lbPosition               (this, CUI_RES(LB_POSITION))
+    ,m_cbUseFormat              (this, CUI_RES(CB_USEFORMATTER))
+    ,m_cbCase                   (this, CUI_RES(CB_CASE))
+    ,m_cbBackwards              (this, CUI_RES(CB_BACKWARD))
+    ,m_cbStartOver              (this, CUI_RES(CB_STARTOVER))
+    ,m_cbWildCard               (this, CUI_RES(CB_WILDCARD))
+    ,m_cbRegular                (this, CUI_RES(CB_REGULAR))
+    ,m_cbApprox                 (this, CUI_RES(CB_APPROX))
+    ,m_pbApproxSettings         (this, CUI_RES(PB_APPROXSETTINGS))
+    ,m_aHalfFullFormsCJK        (this, CUI_RES(CB_HALFFULLFORMS))
+    ,m_aSoundsLikeCJK           (this, CUI_RES(CB_SOUNDSLIKECJK))
+    ,m_aSoundsLikeCJKSettings   (this, CUI_RES(PB_SOUNDSLIKESETTINGS))
+    ,m_flState                  (this, CUI_RES(FL_STATE))
+    ,m_ftRecordLabel            (this, CUI_RES(FT_RECORDLABEL))
+    ,m_ftRecord                 (this, CUI_RES(FT_RECORD))
+    ,m_ftHint                   (this, CUI_RES(FT_HINT))
+    ,m_pbSearchAgain            (this, CUI_RES(PB_SEARCH))
+    ,m_pbClose                  (this, CUI_RES(1))
+    ,m_pbHelp                   (this, CUI_RES(1))
     ,m_sSearch                  ( m_pbSearchAgain.GetText() )
     ,m_sCancel                  ( Button::GetStandardText( BUTTON_CANCEL ) )
     ,m_pPreSearchFocus( NULL )
@@ -280,7 +280,7 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
         RID_STR_SEARCH_WHOLE
     };
     for ( size_t i=0; i<sizeof(nResIds)/sizeof(nResIds[0]); ++i )
-        m_lbPosition.InsertEntry( String( SVX_RES( nResIds[i] ) ) );
+        m_lbPosition.InsertEntry( String( CUI_RES( nResIds[i] ) ) );
     m_lbPosition.SelectEntryPos(MATCHING_ANYWHERE);
 
     // die Feld-Listbox
@@ -419,7 +419,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, m_pSearchEngine->GetTransliterationFlags(), RID_SVXPAGE_JSEARCH_OPTIONS );
+            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
             aDlg->Execute(); //CHINA001 aDlg.Execute();
 
@@ -488,7 +488,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
     // Richtung -> weiterreichen und Checkbox-Text fuer StartOver neu setzen
     else if (pBox == &m_cbBackwards)
     {
-        m_cbStartOver.SetText( String( SVX_RES( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
+        m_cbStartOver.SetText( String( CUI_RES( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
         m_pSearchEngine->SetDirection(!bChecked);
     }
     // Aehnlichkeitssuche oder regulaerer Ausdruck
@@ -782,7 +782,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
         case FmSearchProgress::STATE_PROGRESS:
             if (pProgress->bOverflow)
             {
-                String sHint( SVX_RES( m_cbBackwards.IsChecked() ? RID_STR_OVERFLOW_BACKWARD : RID_STR_OVERFLOW_FORWARD ) );
+                String sHint( CUI_RES( m_cbBackwards.IsChecked() ? RID_STR_OVERFLOW_BACKWARD : RID_STR_OVERFLOW_FORWARD ) );
                 m_ftHint.SetText( sHint );
                 m_ftHint.Invalidate();
             }
@@ -792,7 +792,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
             break;
 
         case FmSearchProgress::STATE_PROGRESS_COUNTING:
-            m_ftHint.SetText(SVX_RESSTR(RID_STR_SEARCH_COUNTING));
+            m_ftHint.SetText(CUI_RESSTR(RID_STR_SEARCH_COUNTING));
             m_ftHint.Invalidate();
 
             m_ftRecord.SetText(String::CreateFromInt32(pProgress->nCurrentRecord));
@@ -810,7 +810,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
             sal_uInt16 nErrorId = (FmSearchProgress::STATE_ERROR == pProgress->aSearchState)
                 ? RID_SVXERR_SEARCH_GENERAL_ERROR
                 : RID_SVXERR_SEARCH_NORECORD;
-            ErrorBox(this, SVX_RES(nErrorId)).Execute();
+            ErrorBox(this, CUI_RES(nErrorId)).Execute();
         }
             // KEIN break !
         case FmSearchProgress::STATE_CANCELED:

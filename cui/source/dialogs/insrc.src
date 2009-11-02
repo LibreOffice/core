@@ -29,7 +29,7 @@
  ************************************************************************/
 
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "insrc.hrc"
 
 ModalDialog DLG_INS_ROW_COL

@@ -29,9 +29,10 @@
  ************************************************************************/
 
 #include <svtools/controldims.hrc>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include "grfflt.hrc"
+#include <svx/dialogs.hrc>
 
 // --------------------
 // - DLG_FILTERMOSAIC -

@@ -65,7 +65,7 @@
 #include <svx/svxacorr.hxx>
 #include "cuicharmap.hxx"
 #include <svx/unolingu.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 
@@ -87,9 +87,9 @@ static ::com::sun::star::uno::Reference<
 --------------------------------------------------*/
 
 OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
-    SfxTabDialog(pParent, SVX_RES( RID_OFA_AUTOCORR_DLG ), _pSet),
-    aLanguageFT(    this, SVX_RES(FT_LANG         )),
-    aLanguageLB(    this, SVX_RES(LB_LANG             ))
+    SfxTabDialog(pParent, CUI_RES( RID_OFA_AUTOCORR_DLG ), _pSet),
+    aLanguageFT(    this, CUI_RES(FT_LANG         )),
+    aLanguageLB(    this, CUI_RES(LB_LANG             ))
 {
     BOOL bShowSWOptions = FALSE;
     BOOL bOpenSmartTagOptions = FALSE;
@@ -217,18 +217,18 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
 
 OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SVX_RES( RID_OFAPAGE_AUTOCORR_OPTIONS ), rSet),
-    aCheckLB            (this, SVX_RES(CLB_SETTINGS )),
+    SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_OPTIONS ), rSet),
+    aCheckLB            (this, CUI_RES(CLB_SETTINGS )),
 
-    sInput              (SVX_RES(ST_USE_REPLACE     )),
-    sDoubleCaps         (SVX_RES(ST_CPTL_STT_WORD     )),
-    sStartCap           (SVX_RES(ST_CPTL_STT_SENT     )),
-    sBoldUnderline      (SVX_RES(ST_BOLD_UNDER        )),
-    sURL                (SVX_RES(ST_DETECT_URL        )),
-    sNoDblSpaces        (SVX_RES(STR_NO_DBL_SPACES    )),
-    sHalf               (SVX_RES(ST_FRACTION          )),
-    sDash               (SVX_RES(ST_DASH                )),
-    sFirst              (SVX_RES(ST_ORDINAL           ))
+    sInput              (CUI_RES(ST_USE_REPLACE     )),
+    sDoubleCaps         (CUI_RES(ST_CPTL_STT_WORD     )),
+    sStartCap           (CUI_RES(ST_CPTL_STT_SENT     )),
+    sBoldUnderline      (CUI_RES(ST_BOLD_UNDER        )),
+    sURL                (CUI_RES(ST_DETECT_URL        )),
+    sNoDblSpaces        (CUI_RES(STR_NO_DBL_SPACES    )),
+    sHalf               (CUI_RES(ST_FRACTION          )),
+    sDash               (CUI_RES(ST_DASH                )),
+    sFirst              (CUI_RES(ST_ORDINAL           ))
 {
     FreeResource();
 
@@ -361,11 +361,11 @@ class OfaAutoFmtPrcntSet : public ModalDialog
 
     public:
         OfaAutoFmtPrcntSet(Window* pParent) :
-            ModalDialog(pParent, SVX_RES(RID_OFADLG_PRCNT_SET)),
-                aOKPB(this,         SVX_RES(BT_OK)),
-                aCancelPB(this,     SVX_RES(BT_CANCEL)),
-                aPrcntFL(this,      SVX_RES(FL_PRCNT)),
-                aPrcntMF(this,  SVX_RES(ED_RIGHT_MARGIN))
+            ModalDialog(pParent, CUI_RES(RID_OFADLG_PRCNT_SET)),
+                aOKPB(this,         CUI_RES(BT_OK)),
+                aCancelPB(this,     CUI_RES(BT_CANCEL)),
+                aPrcntFL(this,      CUI_RES(FL_PRCNT)),
+                aPrcntMF(this,  CUI_RES(ED_RIGHT_MARGIN))
             {
                 FreeResource();
             }
@@ -471,33 +471,33 @@ enum OfaAutoFmtOptions
 
 OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SVX_RES(RID_OFAPAGE_AUTOFMT_APPLY), rSet),
-    aCheckLB            (this,  SVX_RES(CLB_SETTINGS)),
-    aEditPB             (this,  SVX_RES(PB_EDIT)),
-    aHeader1Expl        (this,  SVX_RES(FT_HEADER1_EXPLANATION)),
-    aHeader2Expl        (this,  SVX_RES(FT_HEADER2_EXPLANATION)),
-    sHeader1            (SVX_RES( STR_HEADER1       )),
-    sHeader2            (SVX_RES( STR_HEADER2       )),
-    sDeleteEmptyPara    (SVX_RES( ST_DEL_EMPTY_PARA)),
-    sUseReplaceTbl      (SVX_RES(   ST_USE_REPLACE  )),
-    sCptlSttWord        (SVX_RES(   ST_CPTL_STT_WORD)),
-    sCptlSttSent        (SVX_RES(   ST_CPTL_STT_SENT)),
-    sTypo               (SVX_RES(   ST_TYPO         )),
-    sUserStyle          (SVX_RES(   ST_USER_STYLE   )),
-    sBullet             (SVX_RES(   ST_BULLET       )),
-    sBoldUnder          (SVX_RES(   ST_BOLD_UNDER   )),
-    sNoDblSpaces        (SVX_RES(   STR_NO_DBL_SPACES)),
-    sFraction           (SVX_RES(   ST_FRACTION     )),
-    sDetectURL          (SVX_RES(   ST_DETECT_URL   )),
-    sDash               (SVX_RES(   ST_DASH         )),
-    sOrdinal            (SVX_RES(   ST_ORDINAL      )),
-    sRightMargin        (SVX_RES(   ST_RIGHT_MARGIN )),
-    sNum                (SVX_RES(   STR_NUM         )),
-    sBorder             (SVX_RES(   STR_BORDER      )),
-    sTable              (SVX_RES(   STR_TABLE       )),
-    sReplaceTemplates   (SVX_RES(   STR_REPLACE_TEMPLATES)),
-    sDelSpaceAtSttEnd   (SVX_RES(   STR_DEL_SPACES_AT_STT_END)),
-    sDelSpaceBetweenLines(SVX_RES(STR_DEL_SPACES_BETWEEN_LINES)),
+    SfxTabPage(pParent, CUI_RES(RID_OFAPAGE_AUTOFMT_APPLY), rSet),
+    aCheckLB            (this,  CUI_RES(CLB_SETTINGS)),
+    aEditPB             (this,  CUI_RES(PB_EDIT)),
+    aHeader1Expl        (this,  CUI_RES(FT_HEADER1_EXPLANATION)),
+    aHeader2Expl        (this,  CUI_RES(FT_HEADER2_EXPLANATION)),
+    sHeader1            (CUI_RES( STR_HEADER1       )),
+    sHeader2            (CUI_RES( STR_HEADER2       )),
+    sDeleteEmptyPara    (CUI_RES( ST_DEL_EMPTY_PARA)),
+    sUseReplaceTbl      (CUI_RES(   ST_USE_REPLACE  )),
+    sCptlSttWord        (CUI_RES(   ST_CPTL_STT_WORD)),
+    sCptlSttSent        (CUI_RES(   ST_CPTL_STT_SENT)),
+    sTypo               (CUI_RES(   ST_TYPO         )),
+    sUserStyle          (CUI_RES(   ST_USER_STYLE   )),
+    sBullet             (CUI_RES(   ST_BULLET       )),
+    sBoldUnder          (CUI_RES(   ST_BOLD_UNDER   )),
+    sNoDblSpaces        (CUI_RES(   STR_NO_DBL_SPACES)),
+    sFraction           (CUI_RES(   ST_FRACTION     )),
+    sDetectURL          (CUI_RES(   ST_DETECT_URL   )),
+    sDash               (CUI_RES(   ST_DASH         )),
+    sOrdinal            (CUI_RES(   ST_ORDINAL      )),
+    sRightMargin        (CUI_RES(   ST_RIGHT_MARGIN )),
+    sNum                (CUI_RES(   STR_NUM         )),
+    sBorder             (CUI_RES(   STR_BORDER      )),
+    sTable              (CUI_RES(   STR_TABLE       )),
+    sReplaceTemplates   (CUI_RES(   STR_REPLACE_TEMPLATES)),
+    sDelSpaceAtSttEnd   (CUI_RES(   STR_DEL_SPACES_AT_STT_END)),
+    sDelSpaceBetweenLines(CUI_RES(STR_DEL_SPACES_BETWEEN_LINES)),
 
     nPercent        ( 50 ),
     pCheckButtonData( NULL )
@@ -1034,16 +1034,16 @@ void lcl_ClearTable(DoubleStringTable& rTable)
 
 OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SVX_RES( RID_OFAPAGE_AUTOCORR_REPLACE ), rSet),
-    aTextOnlyCB(    this, SVX_RES(CB_TEXT_ONLY      )),
-    aShortFT  (     this, SVX_RES(FT_SHORT          )),
-    aShortED  (     this, SVX_RES(ED_SHORT          )),
-    aReplaceFT(     this, SVX_RES(FT_REPLACE        )),
-    aReplaceED(     this, SVX_RES(ED_REPLACE        )),
-    aReplaceTLB(    this, SVX_RES(TLB_REPLACE       )),
-    aNewReplacePB(  this, SVX_RES(PB_NEW_REPLACE    )),
-    aDeleteReplacePB(this,SVX_RES(PB_DELETE_REPLACE )),
-    sModify(SVX_RES(STR_MODIFY)),
+    SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_REPLACE ), rSet),
+    aTextOnlyCB(    this, CUI_RES(CB_TEXT_ONLY      )),
+    aShortFT  (     this, CUI_RES(FT_SHORT          )),
+    aShortED  (     this, CUI_RES(ED_SHORT          )),
+    aReplaceFT(     this, CUI_RES(FT_REPLACE        )),
+    aReplaceED(     this, CUI_RES(ED_REPLACE        )),
+    aReplaceTLB(    this, CUI_RES(TLB_REPLACE       )),
+    aNewReplacePB(  this, CUI_RES(PB_NEW_REPLACE    )),
+    aDeleteReplacePB(this,CUI_RES(PB_DELETE_REPLACE )),
+    sModify(CUI_RES(STR_MODIFY)),
     sNew(aNewReplacePB.GetText()),
     pFormatText(0),
     eLang(eLastDialogLanguage),
@@ -1637,19 +1637,19 @@ void lcl_ClearTable(StringsTable& rTable)
 
 OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SVX_RES( RID_OFAPAGE_AUTOCORR_EXCEPT ), rSet),
-    aAbbrevFL       (this, SVX_RES(FL_ABBREV         )),
-    aAbbrevED       (this, SVX_RES(ED_ABBREV         )),
-    aAbbrevLB       (this, SVX_RES(LB_ABBREV         )),
-    aNewAbbrevPB    (this, SVX_RES(PB_NEWABBREV  )),
-    aDelAbbrevPB    (this, SVX_RES(PB_DELABBREV  )),
-    aAutoAbbrevCB   (this, SVX_RES(CB_AUTOABBREV     )),
-    aDoubleCapsFL   (this, SVX_RES(FL_DOUBLECAPS     )),
-    aDoubleCapsED   (this, SVX_RES(ED_DOUBLE_CAPS    )),
-    aDoubleCapsLB   (this, SVX_RES(LB_DOUBLE_CAPS    )),
-    aNewDoublePB    (this, SVX_RES(PB_NEWDOUBLECAPS)),
-    aDelDoublePB    (this, SVX_RES(PB_DELDOUBLECAPS)),
-    aAutoCapsCB     (this, SVX_RES(CB_AUTOCAPS   )),
+    SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_EXCEPT ), rSet),
+    aAbbrevFL       (this, CUI_RES(FL_ABBREV         )),
+    aAbbrevED       (this, CUI_RES(ED_ABBREV         )),
+    aAbbrevLB       (this, CUI_RES(LB_ABBREV         )),
+    aNewAbbrevPB    (this, CUI_RES(PB_NEWABBREV  )),
+    aDelAbbrevPB    (this, CUI_RES(PB_DELABBREV  )),
+    aAutoAbbrevCB   (this, CUI_RES(CB_AUTOABBREV     )),
+    aDoubleCapsFL   (this, CUI_RES(FL_DOUBLECAPS     )),
+    aDoubleCapsED   (this, CUI_RES(ED_DOUBLE_CAPS    )),
+    aDoubleCapsLB   (this, CUI_RES(LB_DOUBLE_CAPS    )),
+    aNewDoublePB    (this, CUI_RES(PB_NEWDOUBLECAPS)),
+    aDelDoublePB    (this, CUI_RES(PB_DELDOUBLECAPS)),
+    aAutoCapsCB     (this, CUI_RES(CB_AUTOCAPS   )),
     eLang(eLastDialogLanguage)
 {
     FreeResource();
@@ -2035,31 +2035,31 @@ void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
 --------------------------------------------------*/
 
 OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SVX_RES( RID_OFAPAGE_AUTOCORR_QUOTE ), rSet),
-    aSingleFL           (this, SVX_RES(FL_SINGLE         )),
-    aSingleTypoCB       (this, SVX_RES(CB_SGL_TYPO     )),
-    aSglStartQuoteFT    (this, SVX_RES(FT_SGL_STARTQUOTE )),
-    aSglStartQuotePB    (this, SVX_RES(PB_SGL_STARTQUOTE )),
-    aSglStartExFT       (this, SVX_RES(FT_SGSTEX       )),
-    aSglEndQuoteFT      (this, SVX_RES(FT_SGL_ENDQUOTE   )),
-    aSglEndQuotePB      (this, SVX_RES(PB_SGL_ENDQUOTE   )),
-    aSglEndExFT         (this, SVX_RES(FT_SGENEX       )),
-    aSglStandardPB      (this, SVX_RES(PB_SGL_STD      )),
+    SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_QUOTE ), rSet),
+    aSingleFL           (this, CUI_RES(FL_SINGLE         )),
+    aSingleTypoCB       (this, CUI_RES(CB_SGL_TYPO     )),
+    aSglStartQuoteFT    (this, CUI_RES(FT_SGL_STARTQUOTE )),
+    aSglStartQuotePB    (this, CUI_RES(PB_SGL_STARTQUOTE )),
+    aSglStartExFT       (this, CUI_RES(FT_SGSTEX       )),
+    aSglEndQuoteFT      (this, CUI_RES(FT_SGL_ENDQUOTE   )),
+    aSglEndQuotePB      (this, CUI_RES(PB_SGL_ENDQUOTE   )),
+    aSglEndExFT         (this, CUI_RES(FT_SGENEX       )),
+    aSglStandardPB      (this, CUI_RES(PB_SGL_STD      )),
 
-    aDoubleFL           (this, SVX_RES(FL_DOUBLE       )),
-    aTypoCB             (this, SVX_RES(CB_TYPO         )),
-    aStartQuoteFT       (this, SVX_RES(FT_STARTQUOTE   )),
-    aStartQuotePB       (this, SVX_RES(PB_STARTQUOTE   )),
-    aDblStartExFT       (this, SVX_RES(FT_DBSTEX       )),
-    aEndQuoteFT         (this, SVX_RES(FT_ENDQUOTE     )),
-    aEndQuotePB         (this, SVX_RES(PB_ENDQUOTE     )),
-    aDblEndExFT         (this, SVX_RES(FT_DBECEX       )),
-    aDblStandardPB      (this, SVX_RES(PB_DBL_STD      )),
+    aDoubleFL           (this, CUI_RES(FL_DOUBLE       )),
+    aTypoCB             (this, CUI_RES(CB_TYPO         )),
+    aStartQuoteFT       (this, CUI_RES(FT_STARTQUOTE   )),
+    aStartQuotePB       (this, CUI_RES(PB_STARTQUOTE   )),
+    aDblStartExFT       (this, CUI_RES(FT_DBSTEX       )),
+    aEndQuoteFT         (this, CUI_RES(FT_ENDQUOTE     )),
+    aEndQuotePB         (this, CUI_RES(PB_ENDQUOTE     )),
+    aDblEndExFT         (this, CUI_RES(FT_DBECEX       )),
+    aDblStandardPB      (this, CUI_RES(PB_DBL_STD      )),
 
-    sStartQuoteDlg  (SVX_RES(STR_CHANGE_START)),
-    sEndQuoteDlg    (SVX_RES(STR_CHANGE_END)),
+    sStartQuoteDlg  (CUI_RES(STR_CHANGE_START)),
+    sEndQuoteDlg    (CUI_RES(STR_CHANGE_END)),
 
-    sStandard(SVX_RES(ST_STANDARD))
+    sStandard(CUI_RES(ST_STANDARD))
 {
     FreeResource();
 
@@ -2298,20 +2298,20 @@ String OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 
 OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
                                                 const SfxItemSet& rSet )
-    : SfxTabPage(pParent, SVX_RES( RID_OFAPAGE_AUTOCOMPLETE_OPTIONS ), rSet),
-    aCBActiv        (this, SVX_RES(CB_ACTIV)),
-    aCBAppendSpace  (this, SVX_RES(CB_APPEND_SPACE)),
-    aCBAsTip        (this, SVX_RES(CB_AS_TIP)),
-    aCBCollect      (this, SVX_RES(CB_COLLECT)),
-    aCBRemoveList   (this, SVX_RES(CB_REMOVE_LIST)),
-    aFTExpandKey    (this, SVX_RES(FT_EXPAND_KEY)),
-    aDCBExpandKey   (this, SVX_RES(DCB_EXPAND_KEY)),
-    aFTMinWordlen   (this, SVX_RES(FT_MIN_WORDLEN)),
-    aNFMinWordlen   (this, SVX_RES(NF_MIN_WORDLEN)),
-    aFTMaxEntries   (this, SVX_RES(FT_MAX_ENTRIES)),
-    aNFMaxEntries   (this, SVX_RES(NF_MAX_ENTRIES)),
-    aLBEntries      (*this, SVX_RES(LB_ENTRIES)),
-    aPBEntries      (this, SVX_RES(PB_ENTRIES)),
+    : SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCOMPLETE_OPTIONS ), rSet),
+    aCBActiv        (this, CUI_RES(CB_ACTIV)),
+    aCBAppendSpace  (this, CUI_RES(CB_APPEND_SPACE)),
+    aCBAsTip        (this, CUI_RES(CB_AS_TIP)),
+    aCBCollect      (this, CUI_RES(CB_COLLECT)),
+    aCBRemoveList   (this, CUI_RES(CB_REMOVE_LIST)),
+    aFTExpandKey    (this, CUI_RES(FT_EXPAND_KEY)),
+    aDCBExpandKey   (this, CUI_RES(DCB_EXPAND_KEY)),
+    aFTMinWordlen   (this, CUI_RES(FT_MIN_WORDLEN)),
+    aNFMinWordlen   (this, CUI_RES(NF_MIN_WORDLEN)),
+    aFTMaxEntries   (this, CUI_RES(FT_MAX_ENTRIES)),
+    aNFMaxEntries   (this, CUI_RES(NF_MAX_ENTRIES)),
+    aLBEntries      (*this, CUI_RES(LB_ENTRIES)),
+    aPBEntries      (this, CUI_RES(PB_ENTRIES)),
     pAutoCmpltList( 0 ),
     nAutoCmpltListCnt( 0 )
 {
@@ -2546,11 +2546,11 @@ long OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
 
 OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( Window* pParent,
                                                       const SfxItemSet& rSet )
-    : SfxTabPage(pParent, SVX_RES( RID_OFAPAGE_SMARTTAG_OPTIONS ), rSet),
-    m_aMainCB( this, SVX_RES(CB_SMARTTAGS) ),
-    m_aSmartTagTypesLB( this, SVX_RES(LB_SMARTTAGS) ),
-    m_aPropertiesPB( this, SVX_RES(PB_SMARTTAGS) ),
-    m_aTitleFT( this, SVX_RES(FT_SMARTTAGS) )
+    : SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_SMARTTAG_OPTIONS ), rSet),
+    m_aMainCB( this, CUI_RES(CB_SMARTTAGS) ),
+    m_aSmartTagTypesLB( this, CUI_RES(LB_SMARTTAGS) ),
+    m_aPropertiesPB( this, CUI_RES(PB_SMARTTAGS) ),
+    m_aTitleFT( this, CUI_RES(FT_SMARTTAGS) )
 {
     FreeResource();
 

@@ -29,15 +29,10 @@
  ************************************************************************/
  // include ---------------------------------------------------------------
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "chardlg.hrc"
 #include "chardlg.h"
-
-// unbekannte Zeichenfarbe
-String RID_SVXSTR_COLOR_USER
-{
-    Text [ en-US ] = "User" ;
-};
+#include <svx/dialogs.hrc>
 
 // RID_SVXPAGE_CHAR_NAME ----------------------------------------------------
 

@@ -107,9 +107,9 @@
 #include "optgdlg.hxx"
 #include "optmemory.hxx"
 #include "optfltr.hxx"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "treeopt.hxx"
 #include "treeopt.hrc"
 #include "fontsubs.hxx"
@@ -119,6 +119,7 @@
 #include "dbregister.hxx"
 #include "dbregisterednamesconfig.hxx"
 #include "cfgchart.hxx"
+#include <svx/dialogs.hrc>
 
 #ifndef _SVX_LANGITEM_HXX
 #define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
@@ -548,19 +549,19 @@ sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
 // -----------------------------------------------------------------------
 
 #define INI_LIST() \
-    aOkPB               ( this, SVX_RES( PB_OK ) ),\
-    aCancelPB           ( this, SVX_RES( PB_CANCEL ) ),\
-    aHelpPB             ( this, SVX_RES( PB_HELP ) ),\
-    aBackPB             ( this, SVX_RES( PB_BACK ) ),\
-    aHiddenGB           ( this, SVX_RES( FB_BORDER ) ),\
-    aPageTitleFT        ( this, SVX_RES( FT_PAGE_TITLE ) ),\
-    aLine1FL            ( this, SVX_RES( FL_LINE_1 ) ),\
-    aHelpFT             ( this, SVX_RES( FT_HELPTEXT ) ),\
-    aHelpImg            ( this, SVX_RES( IMG_HELP ) ),\
-    aHelpTextsArr       (       SVX_RES( STR_HELPTEXTS ) ),\
-    aTreeLB             ( this, SVX_RES( TLB_PAGES ) ),\
+    aOkPB               ( this, CUI_RES( PB_OK ) ),\
+    aCancelPB           ( this, CUI_RES( PB_CANCEL ) ),\
+    aHelpPB             ( this, CUI_RES( PB_HELP ) ),\
+    aBackPB             ( this, CUI_RES( PB_BACK ) ),\
+    aHiddenGB           ( this, CUI_RES( FB_BORDER ) ),\
+    aPageTitleFT        ( this, CUI_RES( FT_PAGE_TITLE ) ),\
+    aLine1FL            ( this, CUI_RES( FL_LINE_1 ) ),\
+    aHelpFT             ( this, CUI_RES( FT_HELPTEXT ) ),\
+    aHelpImg            ( this, CUI_RES( IMG_HELP ) ),\
+    aHelpTextsArr       (       CUI_RES( STR_HELPTEXTS ) ),\
+    aTreeLB             ( this, CUI_RES( TLB_PAGES ) ),\
     sTitle              ( GetText() ),\
-    sNotLoadedError     (       SVX_RES( ST_LOAD_ERROR ) ),\
+    sNotLoadedError     (       CUI_RES( ST_LOAD_ERROR ) ),\
     pCurrentPageEntry   ( NULL ),\
     pColorPageItemSet   ( NULL ),\
     pColorTab           ( NULL ),\
@@ -581,7 +582,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
     const Reference< XFrame >& _xFrame,
     bool bActivateLastSelection ) :
 
-    SfxModalDialog( pParent, SVX_RES( RID_OFADLG_OPTIONS_TREE ) ),
+    SfxModalDialog( pParent, CUI_RES( RID_OFADLG_OPTIONS_TREE ) ),
     INI_LIST()
 {
     FreeResource();
@@ -598,7 +599,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
 
 OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const rtl::OUString& rExtensionId ) :
 
-    SfxModalDialog( pParent, SVX_RES( RID_OFADLG_OPTIONS_TREE ) ),
+    SfxModalDialog( pParent, CUI_RES( RID_OFADLG_OPTIONS_TREE ) ),
 
     INI_LIST()
 
@@ -1438,19 +1439,19 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
  * --------------------------------------------------*/
 
 OfaPageResource::OfaPageResource() :
-    Resource(SVX_RES(RID_OFADLG_OPTIONS_TREE_PAGES)),
-    aGeneralDlgAry(SVX_RES(SID_GENERAL_OPTIONS)),
-    aInetDlgAry(SVX_RES(SID_INET_DLG)),
-    aLangDlgAry(SVX_RES(SID_LANGUAGE_OPTIONS)),
-    aTextDlgAry(SVX_RES(SID_SW_EDITOPTIONS)),
-    aHTMLDlgAry(SVX_RES(SID_SW_ONLINEOPTIONS)),
-    aCalcDlgAry(SVX_RES(SID_SC_EDITOPTIONS)),
-    aStarMathDlgAry(SVX_RES(SID_SM_EDITOPTIONS)),
-    aImpressDlgAry(SVX_RES(SID_SD_EDITOPTIONS)),
-    aDrawDlgAry(SVX_RES(SID_SD_GRAPHIC_OPTIONS)),
-    aChartDlgAry(SVX_RES(SID_SCH_EDITOPTIONS)),
-    aFilterDlgAry(SVX_RES(SID_FILTER_DLG)),
-    aDatasourcesDlgAry(SVX_RES(SID_SB_STARBASEOPTIONS))
+    Resource(CUI_RES(RID_OFADLG_OPTIONS_TREE_PAGES)),
+    aGeneralDlgAry(CUI_RES(SID_GENERAL_OPTIONS)),
+    aInetDlgAry(CUI_RES(SID_INET_DLG)),
+    aLangDlgAry(CUI_RES(SID_LANGUAGE_OPTIONS)),
+    aTextDlgAry(CUI_RES(SID_SW_EDITOPTIONS)),
+    aHTMLDlgAry(CUI_RES(SID_SW_ONLINEOPTIONS)),
+    aCalcDlgAry(CUI_RES(SID_SC_EDITOPTIONS)),
+    aStarMathDlgAry(CUI_RES(SID_SM_EDITOPTIONS)),
+    aImpressDlgAry(CUI_RES(SID_SD_EDITOPTIONS)),
+    aDrawDlgAry(CUI_RES(SID_SD_GRAPHIC_OPTIONS)),
+    aChartDlgAry(CUI_RES(SID_SCH_EDITOPTIONS)),
+    aFilterDlgAry(CUI_RES(SID_FILTER_DLG)),
+    aDatasourcesDlgAry(CUI_RES(SID_SB_STARBASEOPTIONS))
 {
     FreeResource();
 }

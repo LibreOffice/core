@@ -29,10 +29,9 @@
  ************************************************************************/
  // include ------------------------------------------------------------------
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "swpossizetabpage.hrc"
- // pragma -------------------------------------------------------------------
-
+#include <svx/dialogs.hrc>
 
  // RID_SVXPAGE_POSITION_SIZE ------------------------------------------------
 TabPage RID_SVXPAGE_SWPOSSIZE

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: eventdlg.hrc,v $
- * $Revision: 1.5 $
+ * $RCSfile: frmdirlbox.src,v $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,19 +28,69 @@
  *
  ************************************************************************/
 
-/* StarView ressource header file */
+#include <svx/dialogs.hrc>
 
- ////DF temp to figure out what's needed from these
-//DF #include "sfx.hrc"
-#include <cuires.hrc>
-#include "macropg.hrc"
+// frame direction ------------------------------------------------------------
 
-#define TXT_SAVEIN      10
-#define LB_SAVEIN           11
+String RID_SVXSTR_FRAMEDIR_LTR
+{
+    Text [ en-US ] = "Left-to-right";
+};
 
-#define MB_CONFIG   17
-#define CB_WARNING      18
-#define CB_WARNING_ALWAYS 19
-#define GB_SAFETY       20
-#define ID_APP      21
-#define ID_DOC      22
+String RID_SVXSTR_FRAMEDIR_RTL
+{
+    Text [ en-US ] = "Right-to-left";
+};
+
+String RID_SVXSTR_FRAMEDIR_SUPER
+{
+    Text [ en-US ] = "Use superordinate object settings";
+};
+
+// page direction -------------------------------------------------------------
+
+String RID_SVXSTR_PAGEDIR_LTR_HORI
+{
+    Text [ en-US ] = "Left-to-right (horizontal)";
+};
+
+String RID_SVXSTR_PAGEDIR_RTL_HORI
+{
+    Text [ en-US ] = "Right-to-left (horizontal)";
+};
+
+String RID_SVXSTR_PAGEDIR_RTL_VERT
+{
+    Text [ en-US ] = "Right-to-left (vertical)";
+};
+
+String RID_SVXSTR_PAGEDIR_LTR_VERT
+{
+    Text [ en-US ] = "Left-to-right (vertical)";
+};
+
+// ----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

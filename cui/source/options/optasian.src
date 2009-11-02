@@ -31,7 +31,7 @@
 #include <optasian.hrc>
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 TabPage RID_SVXPAGE_ASIAN_LAYOUT
 {

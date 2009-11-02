@@ -33,14 +33,14 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-
 #include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "page.hrc"
 
 #include "bbdlg.hxx"
 #include "border.hxx"
 #include "backgrnd.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 // class SvxBorderBackgroundDlg ------------------------------------------
 
@@ -48,7 +48,7 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg( Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 BOOL bEnableSelector ) :
 
-    SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_BBDLG ), &rCoreSet ),
+    SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_BBDLG ), &rCoreSet ),
     bEnableBackgroundSelector( bEnableSelector )
 {
     FreeResource();

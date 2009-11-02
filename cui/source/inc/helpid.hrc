@@ -241,7 +241,7 @@
 #define HID_SEARCH_BTN_CLOSE                        (HID_CUI_START + 204)
 #define HID_GALLERY_BROWSER                         (HID_CUI_START + 205)
 #define HID_GALLERY_SEARCH                          (HID_CUI_START + 206)
-#define HID_GALLERY_APPLY                           (HID_CUI_START + 207
+#define HID_GALLERY_APPLY                           (HID_CUI_START + 207)
 #define HID_SPLDLG_BUTTON_IGNORERULE                (HID_CUI_START + 208)
 #define HID_CONFIG_ACCEL                            (HID_CUI_START + 209)
 #define HID_ACCELCONFIG_LISTBOX                     (HID_CUI_START + 210)

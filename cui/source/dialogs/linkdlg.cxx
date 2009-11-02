@@ -54,7 +54,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
@@ -78,37 +78,37 @@ static long nTabs[] =
 
 
 SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, SvLinkManager* pMgr, BOOL bHtml )
-    : ModalDialog( pParent, SVX_RES( MD_UPDATE_BASELINKS ) ),
-    aFtFiles( this, SVX_RES( FT_FILES ) ),
-    aFtLinks( this, SVX_RES( FT_LINKS ) ),
-    aFtType( this, SVX_RES( FT_TYPE ) ),
-    aFtStatus( this, SVX_RES( FT_STATUS ) ),
-    aCancelButton1( this, SVX_RES( 1 ) ),
-    aHelpButton1( this, SVX_RES( 1 ) ),
-    aPbUpdateNow( this, SVX_RES( PB_UPDATE_NOW ) ),
-    aPbOpenSource( this, SVX_RES( PB_OPEN_SOURCE ) ),
-    aPbChangeSource( this, SVX_RES( PB_CHANGE_SOURCE ) ),
-    aPbBreakLink( this, SVX_RES( PB_BREAK_LINK ) ),
-    aFtFiles2( this, SVX_RES( FT_FILES2 ) ),
-    aFtSource2( this, SVX_RES( FT_SOURCE2 ) ),
-    aFtType2( this, SVX_RES( FT_TYPE2 ) ),
-    aFtUpdate( this, SVX_RES( FT_UPDATE ) ),
-    aRbAutomatic( this, SVX_RES( RB_AUTOMATIC ) ),
-    aRbManual( this, SVX_RES( RB_MANUAL ) ),
-    aFtFullFileName( this, SVX_RES( FT_FULL_FILE_NAME ) ),
-    aFtFullSourceName( this, SVX_RES( FT_FULL_SOURCE_NAME ) ),
-    aFtFullTypeName( this, SVX_RES( FT_FULL_TYPE_NAME ) ),
-    aStrAutolink( SVX_RES( STR_AUTOLINK ) ),
-    aStrManuallink( SVX_RES( STR_MANUALLINK ) ),
-    aStrBrokenlink( SVX_RES( STR_BROKENLINK ) ),
-    aStrGraphiclink( SVX_RES( STR_GRAPHICLINK ) ),
-    aStrButtonclose( SVX_RES( STR_BUTTONCLOSE ) ),
-    aStrCloselinkmsg( SVX_RES( STR_CLOSELINKMSG ) ),
-    aStrCloselinkmsgMulti( SVX_RES( STR_CLOSELINKMSG_MULTI ) ),
-    aStrWaitinglink( SVX_RES( STR_WAITINGLINK ) ),
+    : ModalDialog( pParent, CUI_RES( MD_UPDATE_BASELINKS ) ),
+    aFtFiles( this, CUI_RES( FT_FILES ) ),
+    aFtLinks( this, CUI_RES( FT_LINKS ) ),
+    aFtType( this, CUI_RES( FT_TYPE ) ),
+    aFtStatus( this, CUI_RES( FT_STATUS ) ),
+    aCancelButton1( this, CUI_RES( 1 ) ),
+    aHelpButton1( this, CUI_RES( 1 ) ),
+    aPbUpdateNow( this, CUI_RES( PB_UPDATE_NOW ) ),
+    aPbOpenSource( this, CUI_RES( PB_OPEN_SOURCE ) ),
+    aPbChangeSource( this, CUI_RES( PB_CHANGE_SOURCE ) ),
+    aPbBreakLink( this, CUI_RES( PB_BREAK_LINK ) ),
+    aFtFiles2( this, CUI_RES( FT_FILES2 ) ),
+    aFtSource2( this, CUI_RES( FT_SOURCE2 ) ),
+    aFtType2( this, CUI_RES( FT_TYPE2 ) ),
+    aFtUpdate( this, CUI_RES( FT_UPDATE ) ),
+    aRbAutomatic( this, CUI_RES( RB_AUTOMATIC ) ),
+    aRbManual( this, CUI_RES( RB_MANUAL ) ),
+    aFtFullFileName( this, CUI_RES( FT_FULL_FILE_NAME ) ),
+    aFtFullSourceName( this, CUI_RES( FT_FULL_SOURCE_NAME ) ),
+    aFtFullTypeName( this, CUI_RES( FT_FULL_TYPE_NAME ) ),
+    aStrAutolink( CUI_RES( STR_AUTOLINK ) ),
+    aStrManuallink( CUI_RES( STR_MANUALLINK ) ),
+    aStrBrokenlink( CUI_RES( STR_BROKENLINK ) ),
+    aStrGraphiclink( CUI_RES( STR_GRAPHICLINK ) ),
+    aStrButtonclose( CUI_RES( STR_BUTTONCLOSE ) ),
+    aStrCloselinkmsg( CUI_RES( STR_CLOSELINKMSG ) ),
+    aStrCloselinkmsgMulti( CUI_RES( STR_CLOSELINKMSG_MULTI ) ),
+    aStrWaitinglink( CUI_RES( STR_WAITINGLINK ) ),
     pLinkMgr( NULL ),
     bHtmlMode(bHtml),
-    aTbLinks( this, SVX_RES(TB_LINKS ) )
+    aTbLinks( this, CUI_RES(TB_LINKS ) )
 {
     FreeResource();
 

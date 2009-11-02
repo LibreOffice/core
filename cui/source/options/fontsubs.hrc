@@ -30,7 +30,7 @@
 #ifndef _SVX_FONT_SUBSTITUTION
 #define _SVX_FONT_SUBSTITUTION
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 // defines ------------------------------------------------------------------
 

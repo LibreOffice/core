@@ -36,14 +36,16 @@
 #include <sfx2/app.hxx>
 #include <tools/shl.hxx>
 #include <svtools/ruler.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/dialogs.hrc>
 
 #define _SVX_TABSTPGE_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "tabstpge.hrc"
 #include <svx/lrspitem.hxx>
 #include "tabstpge.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <sfx2/module.hxx>
 #include <svl/cjkoptions.hxx>
@@ -106,32 +108,32 @@ void TabWin_Impl::Paint( const Rectangle& )
 SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
                                           const SfxItemSet& rAttr ):
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_TABULATOR ), rAttr ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_TABULATOR ), rAttr ),
 
-    aTabBox         ( this, SVX_RES( ED_TABPOS ) ),
-    aTabLabel       ( this, SVX_RES( FL_TABPOS ) ),
-    aTabLabelVert   ( this, SVX_RES( FL_TABPOS_VERT ) ),
-    aLeftTab        ( this, SVX_RES( BTN_TABTYPE_LEFT ) ),
-    aRightTab       ( this, SVX_RES( BTN_TABTYPE_RIGHT ) ),
-    aCenterTab      ( this, SVX_RES( BTN_TABTYPE_CENTER ) ),
-    aDezTab         ( this, SVX_RES( BTN_TABTYPE_DECIMAL ) ),
-    pLeftWin        ( new TabWin_Impl( this, SVX_RES( WIN_TABLEFT ), (USHORT)(RULER_TAB_LEFT|WB_HORZ) ) ),
-    pRightWin       ( new TabWin_Impl( this, SVX_RES( WIN_TABRIGHT ), (USHORT)(RULER_TAB_RIGHT|WB_HORZ) ) ),
-    pCenterWin      ( new TabWin_Impl( this, SVX_RES( WIN_TABCENTER ), (USHORT)(RULER_TAB_CENTER|WB_HORZ) ) ),
-    pDezWin         ( new TabWin_Impl( this, SVX_RES( WIN_TABDECIMAL ), (USHORT)(RULER_TAB_DECIMAL|WB_HORZ) ) ),
-    aDezCharLabel   ( this, SVX_RES( FT_TABTYPE_DECCHAR ) ),
-    aDezChar        ( this, SVX_RES( ED_TABTYPE_DECCHAR ) ),
-    aTabTypeLabel   ( this, SVX_RES( FL_TABTYPE ) ),
-    aNoFillChar     ( this, SVX_RES( BTN_FILLCHAR_NO ) ),
-    aFillPoints     ( this, SVX_RES( BTN_FILLCHAR_POINTS ) ),
-    aFillDashLine   ( this, SVX_RES( BTN_FILLCHAR_DASHLINE ) ),
-    aFillSolidLine  ( this, SVX_RES( BTN_FILLCHAR_UNDERSCORE ) ),
-    aFillSpecial    ( this, SVX_RES( BTN_FILLCHAR_OTHER ) ),
-    aFillChar       ( this, SVX_RES( ED_FILLCHAR_OTHER ) ),
-    aFillLabel      ( this, SVX_RES( FL_FILLCHAR ) ),
-    aNewBtn         ( this, SVX_RES( BTN_NEW ) ),
-    aDelAllBtn      ( this, SVX_RES( BTN_DELALL ) ),
-    aDelBtn         ( this, SVX_RES( BTN_DEL ) ),
+    aTabBox         ( this, CUI_RES( ED_TABPOS ) ),
+    aTabLabel       ( this, CUI_RES( FL_TABPOS ) ),
+    aTabLabelVert   ( this, CUI_RES( FL_TABPOS_VERT ) ),
+    aLeftTab        ( this, CUI_RES( BTN_TABTYPE_LEFT ) ),
+    aRightTab       ( this, CUI_RES( BTN_TABTYPE_RIGHT ) ),
+    aCenterTab      ( this, CUI_RES( BTN_TABTYPE_CENTER ) ),
+    aDezTab         ( this, CUI_RES( BTN_TABTYPE_DECIMAL ) ),
+    pLeftWin        ( new TabWin_Impl( this, CUI_RES( WIN_TABLEFT ), (USHORT)(RULER_TAB_LEFT|WB_HORZ) ) ),
+    pRightWin       ( new TabWin_Impl( this, CUI_RES( WIN_TABRIGHT ), (USHORT)(RULER_TAB_RIGHT|WB_HORZ) ) ),
+    pCenterWin      ( new TabWin_Impl( this, CUI_RES( WIN_TABCENTER ), (USHORT)(RULER_TAB_CENTER|WB_HORZ) ) ),
+    pDezWin         ( new TabWin_Impl( this, CUI_RES( WIN_TABDECIMAL ), (USHORT)(RULER_TAB_DECIMAL|WB_HORZ) ) ),
+    aDezCharLabel   ( this, CUI_RES( FT_TABTYPE_DECCHAR ) ),
+    aDezChar        ( this, CUI_RES( ED_TABTYPE_DECCHAR ) ),
+    aTabTypeLabel   ( this, CUI_RES( FL_TABTYPE ) ),
+    aNoFillChar     ( this, CUI_RES( BTN_FILLCHAR_NO ) ),
+    aFillPoints     ( this, CUI_RES( BTN_FILLCHAR_POINTS ) ),
+    aFillDashLine   ( this, CUI_RES( BTN_FILLCHAR_DASHLINE ) ),
+    aFillSolidLine  ( this, CUI_RES( BTN_FILLCHAR_UNDERSCORE ) ),
+    aFillSpecial    ( this, CUI_RES( BTN_FILLCHAR_OTHER ) ),
+    aFillChar       ( this, CUI_RES( ED_FILLCHAR_OTHER ) ),
+    aFillLabel      ( this, CUI_RES( FL_FILLCHAR ) ),
+    aNewBtn         ( this, CUI_RES( BTN_NEW ) ),
+    aDelAllBtn      ( this, CUI_RES( BTN_DELALL ) ),
+    aDelBtn         ( this, CUI_RES( BTN_DEL ) ),
 
     aAktTab     ( 0 ),
     aNewTabs    ( 0, 0, SVX_TAB_ADJUST_LEFT, GetWhich( SID_ATTR_TABSTOP ) ),
@@ -143,8 +145,8 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     SvtCJKOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled())
     {
-        aLeftTab  .SetText(String(SVX_RES(   ST_LEFTTAB_ASIAN )));
-        aRightTab .SetText(String(SVX_RES(   ST_RIGHTTAB_ASIAN )));
+        aLeftTab  .SetText(String(CUI_RES(   ST_LEFTTAB_ASIAN )));
+        aRightTab .SetText(String(CUI_RES(   ST_RIGHTTAB_ASIAN )));
     }
 
     // diese Page braucht ExchangeSupport

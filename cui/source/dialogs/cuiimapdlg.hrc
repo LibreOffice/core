@@ -27,12 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 // ImapDlg-Dialoge
-#define RID_SVX_IMAPDLG_START   RID_SVX_IMAP_START
-
-#define RID_SVXDLG_IMAPURL      (RID_SVX_IMAPDLG_START + 2)
 
 #define FT_URLDESCRIPTION       1
 #define FT_URL1                 2

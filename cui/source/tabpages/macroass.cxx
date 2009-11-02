@@ -38,8 +38,8 @@
 #include "macroass.hxx"
 
 #include <basic/basmgr.hxx>
-#include <svx/dialmgr.hxx>
-
+#include <dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
@@ -48,7 +48,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include "macroass.hrc"
-#include "svx/dialogs.hrc"
+#include "cuires.hrc"
 #include <sfx2/macrconf.hxx>
 #include "headertablistbox.hxx"
 
@@ -676,19 +676,19 @@ SvStringsDtor* __EXPORT _ImpGetMacrosOfRangeHdl(
 SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
     : _SfxMacroTabPage( pParent, rResId, rSet )
 {
-    mpImpl->pStrEvent           = new String(                   SVX_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro      = new String(                   SVX_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB            = new _HeaderTabListBox( this,  SVX_RES( LB_EVENT ) );
-    mpImpl->pAssignPB           = new PushButton( this,         SVX_RES( PB_ASSIGN ) );
-    mpImpl->pDeletePB           = new PushButton( this,         SVX_RES( PB_DELETE ) );
-    mpImpl->pScriptTypeLB       = new ListBox(this,             SVX_RES( LB_SCRIPTTYPE ) );
+    mpImpl->pStrEvent           = new String(                   CUI_RES( STR_EVENT ) );
+    mpImpl->pAssignedMacro      = new String(                   CUI_RES( STR_ASSMACRO ) );
+    mpImpl->pEventLB            = new _HeaderTabListBox( this,  CUI_RES( LB_EVENT ) );
+    mpImpl->pAssignPB           = new PushButton( this,         CUI_RES( PB_ASSIGN ) );
+    mpImpl->pDeletePB           = new PushButton( this,         CUI_RES( PB_DELETE ) );
+    mpImpl->pScriptTypeLB       = new ListBox(this,             CUI_RES( LB_SCRIPTTYPE ) );
     mpImpl->pScriptTypeLB->Hide();
-    mpImpl->pMacroFT            = new FixedText( this,          SVX_RES( FT_MACRO ) );
-    mpImpl->pGroupLB            = new SfxConfigGroupListBox_Impl( this,     SVX_RES( LB_GROUP ) );
-    mpImpl->pFT_MacroLBLabel    = new FixedText( this,          SVX_RES( FT_LABEL4LB_MACROS ) );
+    mpImpl->pMacroFT            = new FixedText( this,          CUI_RES( FT_MACRO ) );
+    mpImpl->pGroupLB            = new SfxConfigGroupListBox_Impl( this,     CUI_RES( LB_GROUP ) );
+    mpImpl->pFT_MacroLBLabel    = new FixedText( this,          CUI_RES( FT_LABEL4LB_MACROS ) );
     mpImpl->maStaticMacroLBLabel= mpImpl->pFT_MacroLBLabel->GetText();
-    mpImpl->pMacroLB            = new SfxConfigFunctionListBox_Impl( this,  SVX_RES( LB_MACROS ) );
-    mpImpl->pMacroStr           = new String(                   SVX_RES( STR_MACROS ) );
+    mpImpl->pMacroLB            = new SfxConfigFunctionListBox_Impl( this,  CUI_RES( LB_MACROS ) );
+    mpImpl->pMacroStr           = new String(                   CUI_RES( STR_MACROS ) );
 
     FreeResource();
 
@@ -701,7 +701,7 @@ SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Re
 
 SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
-    return new SfxMacroTabPage( pParent, SVX_RES( RID_SVXPAGE_EVENTASSIGN ), NULL, rAttrSet );
+    return new SfxMacroTabPage( pParent, CUI_RES( RID_SVXPAGE_EVENTASSIGN ), NULL, rAttrSet );
 }
 
 SfxMacroAssignDlg::SfxMacroAssignDlg( Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )

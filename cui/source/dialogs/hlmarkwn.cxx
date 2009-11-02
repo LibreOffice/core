@@ -32,7 +32,7 @@
 #include "precompiled_cui.hxx"
 
 #include <vcl/wrkwin.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -49,7 +49,7 @@
 
 #include <toolkit/unohlp.hxx>
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "hlmarkwn.hrc"
 #include "hlmarkwn.hxx"
 #include "hltpbase.hxx"
@@ -107,10 +107,10 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
         switch( mpParentWnd->mnError )
         {
         case LERR_NOENTRIES :
-            aStrMessage = SVX_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
+            aStrMessage = CUI_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
             break;
         case LERR_DOCNOTOPEN :
-            aStrMessage = SVX_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
+            aStrMessage = CUI_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
             break;
         }
 
@@ -132,10 +132,10 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 |************************************************************************/
 
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
-:   ModalDialog( (Window*)pParent, SVX_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
-    maBtApply( this, SVX_RES (BT_APPLY) ),
-    maBtClose( this, SVX_RES (BT_CLOSE) ),
-    maLbTree ( this, SVX_RES (TLB_MARK) ),
+:   ModalDialog( (Window*)pParent, CUI_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
+    maBtApply( this, CUI_RES (BT_APPLY) ),
+    maBtClose( this, CUI_RES (BT_CLOSE) ),
+    maLbTree ( this, CUI_RES (TLB_MARK) ),
     mbUserMoved ( FALSE ),
     mbFirst     ( TRUE ),
     mpParent    ( pParent ),

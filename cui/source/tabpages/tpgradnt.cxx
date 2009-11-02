@@ -43,7 +43,7 @@
 
 #define _SVX_TPGRADNT_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
@@ -54,7 +54,9 @@
 #include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
 //#include "dlgname.hrc"
 #include <svx/svxdlg.hxx> //CHINA001
+#include <dialmgr.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -72,32 +74,32 @@ SvxGradientTabPage::SvxGradientTabPage
     Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
-    SfxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_GRADIENT ), rInAttrs ),
+    SfxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_GRADIENT ), rInAttrs ),
 
-    aFlProp             ( this, SVX_RES( FL_PROP ) ),
-    aFtType             ( this, SVX_RES( FT_TYPE ) ),
-    aLbGradientType     ( this, SVX_RES( LB_GRADIENT_TYPES ) ),
-    aFtCenterX          ( this, SVX_RES( FT_CENTER_X ) ),
-    aMtrCenterX         ( this, SVX_RES( MTR_CENTER_X ) ),
-    aFtCenterY          ( this, SVX_RES( FT_CENTER_Y ) ),
-    aMtrCenterY         ( this, SVX_RES( MTR_CENTER_Y ) ),
-    aFtAngle            ( this, SVX_RES( FT_ANGLE ) ),
-    aMtrAngle           ( this, SVX_RES( MTR_ANGLE ) ),
-    aFtBorder           ( this, SVX_RES( FT_BORDER ) ),
-    aMtrBorder          ( this, SVX_RES( MTR_BORDER ) ),
-    aFtColorFrom        ( this, SVX_RES( FT_COLOR_FROM ) ),
-    aLbColorFrom        ( this, SVX_RES( LB_COLOR_FROM ) ),
-    aMtrColorFrom       ( this, SVX_RES( MTR_COLOR_FROM ) ),
-    aFtColorTo          ( this, SVX_RES( FT_COLOR_TO ) ),
-    aLbColorTo          ( this, SVX_RES( LB_COLOR_TO ) ),
-    aMtrColorTo         ( this, SVX_RES( MTR_COLOR_TO ) ),
-    aLbGradients        ( this, SVX_RES( LB_GRADIENTS ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
-    aBtnAdd             ( this, SVX_RES( BTN_ADD ) ),
-    aBtnModify          ( this, SVX_RES( BTN_MODIFY ) ),
-    aBtnDelete          ( this, SVX_RES( BTN_DELETE ) ),
-    aBtnLoad            ( this, SVX_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, SVX_RES( BTN_SAVE ) ),
+    aFlProp             ( this, CUI_RES( FL_PROP ) ),
+    aFtType             ( this, CUI_RES( FT_TYPE ) ),
+    aLbGradientType     ( this, CUI_RES( LB_GRADIENT_TYPES ) ),
+    aFtCenterX          ( this, CUI_RES( FT_CENTER_X ) ),
+    aMtrCenterX         ( this, CUI_RES( MTR_CENTER_X ) ),
+    aFtCenterY          ( this, CUI_RES( FT_CENTER_Y ) ),
+    aMtrCenterY         ( this, CUI_RES( MTR_CENTER_Y ) ),
+    aFtAngle            ( this, CUI_RES( FT_ANGLE ) ),
+    aMtrAngle           ( this, CUI_RES( MTR_ANGLE ) ),
+    aFtBorder           ( this, CUI_RES( FT_BORDER ) ),
+    aMtrBorder          ( this, CUI_RES( MTR_BORDER ) ),
+    aFtColorFrom        ( this, CUI_RES( FT_COLOR_FROM ) ),
+    aLbColorFrom        ( this, CUI_RES( LB_COLOR_FROM ) ),
+    aMtrColorFrom       ( this, CUI_RES( MTR_COLOR_FROM ) ),
+    aFtColorTo          ( this, CUI_RES( FT_COLOR_TO ) ),
+    aLbColorTo          ( this, CUI_RES( LB_COLOR_TO ) ),
+    aMtrColorTo         ( this, CUI_RES( MTR_COLOR_TO ) ),
+    aLbGradients        ( this, CUI_RES( LB_GRADIENTS ) ),
+    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
+    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
+    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
+    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
+    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
+    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
 
@@ -110,8 +112,8 @@ SvxGradientTabPage::SvxGradientTabPage
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
-    aBtnLoad.SetModeImage( Image( SVX_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( SVX_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 
@@ -220,7 +222,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
             INetURLObject   aURL( pGradientList->GetPath() );
 
             aURL.Append( pGradientList->GetName() );
@@ -283,17 +285,13 @@ long SvxGradientTabPage::CheckChanges_Impl()
 
         if( !( aTmpGradient == aGradient ) )
         {
-            ResMgr& rMgr = DIALOG_MGR();
+            ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            //CHINA001 SvxMessDialog aMessDlg( DLGWIN,
-            //CHINA001  String( ResId( RID_SVXSTR_GRADIENT, rMgr ) ),
-            //CHINA001  String( ResId( RID_SVXSTR_ASK_CHANGE_GRADIENT, rMgr ) ),
-            //CHINA001  &aWarningBoxImage );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
             AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
-                                                        String( ResId( RID_SVXSTR_GRADIENT, rMgr ) ),
-                                                        String( ResId( RID_SVXSTR_ASK_CHANGE_GRADIENT, rMgr ) ),
+                                                        SVX_RESSTR( RID_SVXSTR_GRADIENT ),
+                                                        CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
                                                         &aWarningBoxImage );
             DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
             aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
@@ -438,9 +436,9 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 
 IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr& rMgr = DIALOG_MGR();
-    String aNewName( ResId( RID_SVXSTR_GRADIENT, rMgr ) );
-    String aDesc( ResId( RID_SVXSTR_DESC_GRADIENT, rMgr ) );
+    ResMgr& rMgr = CUI_MGR();
+    String aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
+    String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
     String aName;
 
     long nCount = pGradientList->Count();
@@ -459,10 +457,9 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                 bDifferent = FALSE;
     }
 
-    //CHINA001 SvxNameDialog* pDlg     = new SvxNameDialog( DLGWIN, aName, aDesc );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     WarningBox*    pWarnBox = NULL;
     USHORT         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
@@ -551,16 +548,15 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr& rMgr = DIALOG_MGR();
-        String aNewName( ResId( RID_SVXSTR_GRADIENT, rMgr ) );
-        String aDesc( ResId( RID_SVXSTR_DESC_GRADIENT, rMgr ) );
+        ResMgr& rMgr = CUI_MGR();
+        String aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
+        String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
         String aName( pGradientList->GetGradient( nPos )->GetName() );
         String aOldName = aName;
 
-        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         long nCount = pGradientList->Count();
@@ -625,8 +621,7 @@ IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
-//!         SVX_RES( RID_SVXSTR_DEL_GRADIENT ),
-            String( SVX_RES( RID_SVXSTR_ASK_DEL_GRADIENT ) ) );
+            String( CUI_RES( RID_SVXSTR_ASK_DEL_GRADIENT ) ) );
 
         if ( aQueryBox.Execute() == RET_YES )
         {
@@ -656,7 +651,7 @@ IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr& rMgr = DIALOG_MGR();
+    ResMgr& rMgr = CUI_MGR();
     USHORT nReturn = RET_YES;
 
     if ( *pnGradientListState & CT_MODIFIED )
@@ -793,7 +788,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         {
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String aString( SVX_RES( RID_SVXSTR_TABLE ) );
+            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
             if ( aURL.getBase().getLength() > 18 )
@@ -812,7 +807,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         else
         {
             ErrorBox( DLGWIN, WinBits( WB_OK ),
-                String( SVX_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
+                String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }
 

@@ -76,7 +76,7 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
 
 public:
     SvxJSearchOptionsDialog( Window *pParent,
-                            const SfxItemSet& rOptionsSet, USHORT nUniqueId,
+                            const SfxItemSet& rOptionsSet,
                             INT32 nInitialFlags  );
     virtual ~SvxJSearchOptionsDialog();
 

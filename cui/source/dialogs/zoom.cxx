@@ -41,20 +41,20 @@
 
 #define _SVX_ZOOM_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "zoom.hrc"
 
 #include "zoom.hxx"
 #include <svx/zoomitem.hxx>
 #include <svx/viewlayoutitem.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/zoom_def.hxx>
-
+#include <svx/dialogs.hrc>
 #include <layout/layout-pre.hxx>
 
 #if ENABLE_LAYOUT
-#undef SVX_RES
-#define SVX_RES(x) #x
+#undef CUI_RES
+#define CUI_RES(x) #x
 #undef SfxModalDialog
 #define SfxModalDialog( parent, id ) Dialog( parent, "zoom.xml", id )
 #endif /* ENABLE_LAYOUT */
@@ -193,27 +193,27 @@ void SvxZoomDialog::SetSpinSize( USHORT nNewSpin )
 
 SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
 
-    SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_ZOOM ) ),
+    SfxModalDialog( pParent, CUI_RES( RID_SVXDLG_ZOOM ) ),
 
-    aZoomFl         ( this, SVX_RES( FL_ZOOM ) ),
-    aOptimalBtn     ( this, SVX_RES( BTN_OPTIMAL ) ),
-    aWholePageBtn   ( this, SVX_RES( BTN_WHOLE_PAGE ) ),
-    aPageWidthBtn   ( this, SVX_RES( BTN_PAGE_WIDTH ) ),
-    a100Btn         ( this, SVX_RES( BTN_100 ) ),
-    aUserBtn        ( this, SVX_RES( BTN_USER ) ),
-    aUserEdit       ( this, SVX_RES( ED_USER ) ),
+    aZoomFl         ( this, CUI_RES( FL_ZOOM ) ),
+    aOptimalBtn     ( this, CUI_RES( BTN_OPTIMAL ) ),
+    aWholePageBtn   ( this, CUI_RES( BTN_WHOLE_PAGE ) ),
+    aPageWidthBtn   ( this, CUI_RES( BTN_PAGE_WIDTH ) ),
+    a100Btn         ( this, CUI_RES( BTN_100 ) ),
+    aUserBtn        ( this, CUI_RES( BTN_USER ) ),
+    aUserEdit       ( this, CUI_RES( ED_USER ) ),
 
-    aViewLayoutFl   ( this, SVX_RES( FL_VIEWLAYOUT ) ),
-    aAutomaticBtn   ( this, SVX_RES( BTN_AUTOMATIC ) ),
-    aSingleBtn      ( this, SVX_RES( BTN_SINGLE ) ),
-    aColumnsBtn     ( this, SVX_RES( BTN_COLUMNS ) ),
-    aColumnsEdit    ( this, SVX_RES( ED_COLUMNS ) ),
-    aBookModeChk    ( this, SVX_RES( CHK_BOOK ) ),
+    aViewLayoutFl   ( this, CUI_RES( FL_VIEWLAYOUT ) ),
+    aAutomaticBtn   ( this, CUI_RES( BTN_AUTOMATIC ) ),
+    aSingleBtn      ( this, CUI_RES( BTN_SINGLE ) ),
+    aColumnsBtn     ( this, CUI_RES( BTN_COLUMNS ) ),
+    aColumnsEdit    ( this, CUI_RES( ED_COLUMNS ) ),
+    aBookModeChk    ( this, CUI_RES( CHK_BOOK ) ),
 
-    aBottomFl       ( this, SVX_RES( FL_BOTTOM ) ),
-    aOKBtn          ( this, SVX_RES( BTN_ZOOM_OK ) ),
-    aCancelBtn      ( this, SVX_RES( BTN_ZOOM_CANCEL ) ),
-    aHelpBtn        ( this, SVX_RES( BTN_ZOOM_HELP ) ),
+    aBottomFl       ( this, CUI_RES( FL_BOTTOM ) ),
+    aOKBtn          ( this, CUI_RES( BTN_ZOOM_OK ) ),
+    aCancelBtn      ( this, CUI_RES( BTN_ZOOM_CANCEL ) ),
+    aHelpBtn        ( this, CUI_RES( BTN_ZOOM_HELP ) ),
 
     rSet        ( rCoreSet ),
     pOutSet     ( NULL ),

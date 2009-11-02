@@ -38,10 +38,10 @@
 #include <vcl/msgbox.hxx>
 #include <vos/mutex.hxx>
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "scriptdlg.hrc"
 #include "scriptdlg.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "selector.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -487,26 +487,26 @@ void __EXPORT SFTreeListBox::ExpandedHdl()
 // InputDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 InputDialog::InputDialog(Window * pParent, USHORT nMode )
-    : ModalDialog( pParent, SVX_RES( RID_DLG_NEWLIB ) ),
-        aText( this, SVX_RES( FT_NEWLIB ) ),
-        aEdit( this, SVX_RES( ED_LIBNAME ) ),
-        aOKButton( this, SVX_RES( PB_OK ) ),
-        aCancelButton( this, SVX_RES( PB_CANCEL ) )
+    : ModalDialog( pParent, CUI_RES( RID_DLG_NEWLIB ) ),
+        aText( this, CUI_RES( FT_NEWLIB ) ),
+        aEdit( this, CUI_RES( ED_LIBNAME ) ),
+        aOKButton( this, CUI_RES( PB_OK ) ),
+        aCancelButton( this, CUI_RES( PB_CANCEL ) )
 {
     aEdit.GrabFocus();
     if ( nMode == INPUTMODE_NEWLIB )
     {
-        SetText( String( SVX_RES( STR_NEWLIB ) ) );
+        SetText( String( CUI_RES( STR_NEWLIB ) ) );
     }
     else if ( nMode == INPUTMODE_NEWMACRO )
     {
-        SetText( String( SVX_RES( STR_NEWMACRO ) ) );
-        aText.SetText( String( SVX_RES( STR_FT_NEWMACRO ) ) );
+        SetText( String( CUI_RES( STR_NEWMACRO ) ) );
+        aText.SetText( String( CUI_RES( STR_FT_NEWMACRO ) ) );
     }
     else if ( nMode == INPUTMODE_RENAME )
     {
-        SetText( String( SVX_RES( STR_RENAME ) ) );
-        aText.SetText( String( SVX_RES( STR_FT_RENAME ) ) );
+        SetText( String( CUI_RES( STR_RENAME ) ) );
+        aText.SetText( String( CUI_RES( STR_FT_RENAME ) ) );
     }
     FreeResource();
 
@@ -548,26 +548,26 @@ InputDialog::~InputDialog()
 // ScriptOrgDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString language )
-    :    SfxModalDialog( pParent, SVX_RES( RID_DLG_SCRIPTORGANIZER ) ),
-        aScriptsTxt( this, SVX_RES( SF_TXT_SCRIPTS ) ),
-        aScriptsBox( this, SVX_RES( SF_CTRL_SCRIPTSBOX ) ),
-        aRunButton(    this, SVX_RES( SF_PB_RUN ) ),
-        aCloseButton( this, SVX_RES( SF_PB_CLOSE ) ),
-        aCreateButton( this, SVX_RES( SF_PB_CREATE ) ),
-        aEditButton( this, SVX_RES( SF_PB_EDIT ) ),
-        aRenameButton(this, SVX_RES( SF_PB_RENAME ) ),
-        aDelButton(    this, SVX_RES( SF_PB_DEL ) ),
-        aHelpButton( this, SVX_RES( SF_PB_HELP ) ),
+    :    SfxModalDialog( pParent, CUI_RES( RID_DLG_SCRIPTORGANIZER ) ),
+        aScriptsTxt( this, CUI_RES( SF_TXT_SCRIPTS ) ),
+        aScriptsBox( this, CUI_RES( SF_CTRL_SCRIPTSBOX ) ),
+        aRunButton(    this, CUI_RES( SF_PB_RUN ) ),
+        aCloseButton( this, CUI_RES( SF_PB_CLOSE ) ),
+        aCreateButton( this, CUI_RES( SF_PB_CREATE ) ),
+        aEditButton( this, CUI_RES( SF_PB_EDIT ) ),
+        aRenameButton(this, CUI_RES( SF_PB_RENAME ) ),
+        aDelButton(    this, CUI_RES( SF_PB_DEL ) ),
+        aHelpButton( this, CUI_RES( SF_PB_HELP ) ),
         m_sLanguage( language ),
-        m_delErrStr( SVX_RES( RID_SVXSTR_DELFAILED ) ),
-        m_delErrTitleStr( SVX_RES( RID_SVXSTR_DELFAILED_TITLE ) ),
-        m_delQueryStr( SVX_RES( RID_SVXSTR_DELQUERY ) ),
-        m_delQueryTitleStr( SVX_RES( RID_SVXSTR_DELQUERY_TITLE ) ) ,
-        m_createErrStr( SVX_RES ( RID_SVXSTR_CREATEFAILED ) ),
-        m_createDupStr( SVX_RES ( RID_SVXSTR_CREATEFAILEDDUP ) ),
-        m_createErrTitleStr( SVX_RES( RID_SVXSTR_CREATEFAILED_TITLE ) ),
-        m_renameErrStr( SVX_RES ( RID_SVXSTR_RENAMEFAILED ) ),
-        m_renameErrTitleStr( SVX_RES( RID_SVXSTR_RENAMEFAILED_TITLE ) )
+        m_delErrStr( CUI_RES( RID_SVXSTR_DELFAILED ) ),
+        m_delErrTitleStr( CUI_RES( RID_SVXSTR_DELFAILED_TITLE ) ),
+        m_delQueryStr( CUI_RES( RID_SVXSTR_DELQUERY ) ),
+        m_delQueryTitleStr( CUI_RES( RID_SVXSTR_DELQUERY_TITLE ) ) ,
+        m_createErrStr( CUI_RES ( RID_SVXSTR_CREATEFAILED ) ),
+        m_createDupStr( CUI_RES ( RID_SVXSTR_CREATEFAILEDDUP ) ),
+        m_createErrTitleStr( CUI_RES( RID_SVXSTR_CREATEFAILED_TITLE ) ),
+        m_renameErrStr( CUI_RES ( RID_SVXSTR_RENAMEFAILED ) ),
+        m_renameErrTitleStr( CUI_RES( RID_SVXSTR_RENAMEFAILED_TITLE ) )
 {
 
     // must be a neater way to deal with the strings than as above
@@ -1433,7 +1433,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     if ( type.getLength() != 0 )
     {
         result += ::rtl::OUString::createFromAscii( "\n\n" );
-        result += ::rtl::OUString(String(SVX_RES(RID_SVXSTR_ERROR_TYPE_LABEL)));
+        result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)));
         result += ::rtl::OUString::createFromAscii( " " );
         result += type;
     }
@@ -1441,7 +1441,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     if ( message.getLength() != 0 )
     {
         result += ::rtl::OUString::createFromAscii( "\n\n" );
-        result += ::rtl::OUString(String(SVX_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)));
+        result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)));
         result += ::rtl::OUString::createFromAscii( " " );
         result += message;
     }
@@ -1452,7 +1452,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
 ::rtl::OUString GetErrorMessage(
     const provider::ScriptErrorRaisedException& eScriptError )
 {
-    ::rtl::OUString unformatted = String( SVX_RES( RID_SVXSTR_ERROR_AT_LINE ) );
+    ::rtl::OUString unformatted = String( CUI_RES( RID_SVXSTR_ERROR_AT_LINE ) );
 
     ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
     ::rtl::OUString language = unknown;
@@ -1479,12 +1479,12 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
         {
             line = ::rtl::OUString::valueOf( eScriptError.lineNum );
             unformatted = String(
-                SVX_RES( RID_SVXSTR_ERROR_AT_LINE ) );
+                CUI_RES( RID_SVXSTR_ERROR_AT_LINE ) );
         }
         else
         {
             unformatted = String(
-                SVX_RES( RID_SVXSTR_ERROR_RUNNING ) );
+                CUI_RES( RID_SVXSTR_ERROR_RUNNING ) );
         }
 
     return FormatErrorString(
@@ -1495,7 +1495,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     const provider::ScriptExceptionRaisedException& eScriptException )
 {
     ::rtl::OUString unformatted =
-          String( SVX_RES( RID_SVXSTR_EXCEPTION_AT_LINE ) );
+          String( CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE ) );
 
     ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
     ::rtl::OUString language = unknown;
@@ -1522,12 +1522,12 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     {
         line = ::rtl::OUString::valueOf( eScriptException.lineNum );
         unformatted = String(
-            SVX_RES( RID_SVXSTR_EXCEPTION_AT_LINE ) );
+            CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE ) );
     }
     else
     {
         unformatted = String(
-            SVX_RES( RID_SVXSTR_EXCEPTION_RUNNING ) );
+            CUI_RES( RID_SVXSTR_EXCEPTION_RUNNING ) );
     }
 
     if ( eScriptException.exceptionType.getLength() != 0 )
@@ -1543,7 +1543,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     const provider::ScriptFrameworkErrorException& sError )
 {
     ::rtl::OUString unformatted = String(
-        SVX_RES( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING ) );
+        CUI_RES( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING ) );
 
     ::rtl::OUString language =
         ::rtl::OUString::createFromAscii( "UNKNOWN" );
@@ -1564,7 +1564,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
     {
         message = String(
-            SVX_RES(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
+            CUI_RES(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
         message =  ReplaceString(
             message, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
 
@@ -1680,11 +1680,11 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, ::rtl::OUString*, pMessage )
     }
     else
     {
-        message = String( SVX_RES( RID_SVXSTR_ERROR_TITLE ) );
+        message = String( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     }
 
     MessBox* pBox = new WarningBox( NULL, WB_OK, message );
-    pBox->SetText( SVX_RES( RID_SVXSTR_ERROR_TITLE ) );
+    pBox->SetText( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     pBox->Execute();
 
     if ( pBox ) delete pBox;

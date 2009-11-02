@@ -47,23 +47,23 @@
 #include <svtools/sores.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
 
-    : ModalDialog( pParent, SVX_RES( MD_PASTE_OBJECT ) ),
-    aFtSource( this, SVX_RES( FT_SOURCE ) ),
-    aFtObjectSource( this, SVX_RES( FT_OBJECT_SOURCE ) ),
-    aRbPaste( this, SVX_RES( RB_PASTE ) ),
-    aRbPasteLink( this, SVX_RES( RB_PASTE_LINK ) ),
-    aLbInsertList( this, SVX_RES( LB_INSERT_LIST ) ),
-    aCbDisplayAsIcon( this, SVX_RES( CB_DISPLAY_AS_ICON ) ),
-    aPbChangeIcon( this, SVX_RES( PB_CHANGE_ICON ) ),
-    aFlChoice( this, SVX_RES( FL_CHOICE ) ),
-    aOKButton1( this, SVX_RES( 1 ) ),
-    aCancelButton1( this, SVX_RES( 1 ) ),
-    aHelpButton1( this, SVX_RES( 1 ) ),
-    aSObject( SVX_RES( S_OBJECT ) )
+    : ModalDialog( pParent, CUI_RES( MD_PASTE_OBJECT ) ),
+    aFtSource( this, CUI_RES( FT_SOURCE ) ),
+    aFtObjectSource( this, CUI_RES( FT_OBJECT_SOURCE ) ),
+    aRbPaste( this, CUI_RES( RB_PASTE ) ),
+    aRbPasteLink( this, CUI_RES( RB_PASTE_LINK ) ),
+    aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
+    aCbDisplayAsIcon( this, CUI_RES( CB_DISPLAY_AS_ICON ) ),
+    aPbChangeIcon( this, CUI_RES( PB_CHANGE_ICON ) ),
+    aFlChoice( this, CUI_RES( FL_CHOICE ) ),
+    aOKButton1( this, CUI_RES( 1 ) ),
+    aCancelButton1( this, CUI_RES( 1 ) ),
+    aHelpButton1( this, CUI_RES( 1 ) ),
+    aSObject( CUI_RES( S_OBJECT ) )
 {
     FreeResource();
     SetHelpId( HID_PASTE_DLG );

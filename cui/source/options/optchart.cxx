@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 #include <unotools/pathoptions.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optchart.hxx"
 #include "optchart.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 // ====================
 // class ChartColorLB
@@ -57,13 +57,13 @@ void ChartColorLB::FillBox( const SvxChartColorTable & rTab )
 // ====================
 SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_OPTPAGE_CHART_DEFCOLORS ), rInAttrs ),
+    SfxTabPage( pParent, CUI_RES( RID_OPTPAGE_CHART_DEFCOLORS ), rInAttrs ),
 
-    aGbChartColors  ( this, SVX_RES( FL_CHART_COLOR_LIST ) ),
-    aLbChartColors  ( this, SVX_RES( LB_CHART_COLOR_LIST ) ),
-    aGbColorBox     ( this, SVX_RES( FL_COLOR_BOX ) ),
-    aValSetColorBox ( this, SVX_RES( CT_COLOR_BOX ) ),
-    aPBDefault      ( this, SVX_RES( PB_RESET_TO_DEFAULT ) )
+    aGbChartColors  ( this, CUI_RES( FL_CHART_COLOR_LIST ) ),
+    aLbChartColors  ( this, CUI_RES( LB_CHART_COLOR_LIST ) ),
+    aGbColorBox     ( this, CUI_RES( FL_COLOR_BOX ) ),
+    aValSetColorBox ( this, CUI_RES( CT_COLOR_BOX ) ),
+    aPBDefault      ( this, CUI_RES( PB_RESET_TO_DEFAULT ) )
 {
     FreeResource();
 

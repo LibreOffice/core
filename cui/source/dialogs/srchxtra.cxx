@@ -39,20 +39,21 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "srchxtra.hrc"
 #include <svx/svxitems.hrc>
 #include <svx/flstitem.hxx>
 #include "chardlg.hxx"
 #include "paragrph.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "backgrnd.hxx"
+#include <svx/dialogs.hrc>
 
 // class SvxSearchFormatDialog -------------------------------------------
 
 SvxSearchFormatDialog::SvxSearchFormatDialog( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHFORMAT ), &rSet ),
+    SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHFORMAT ), &rSet ),
 
     pFontList( NULL )
 
@@ -138,13 +139,13 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
                                                     SearchAttrItemList& rLst,
                                                     const USHORT* pWhRanges ) :
 
-    ModalDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHATTR )  ),
+    ModalDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHATTR )  ),
 
-    aAttrFL ( this, SVX_RES( FL_ATTR ) ),
-    aAttrLB ( this, SVX_RES( LB_ATTR ) ),
-    aOKBtn  ( this, SVX_RES( BTN_ATTR_OK ) ),
-    aEscBtn ( this, SVX_RES( BTN_ATTR_CANCEL ) ),
-    aHelpBtn( this, SVX_RES( BTN_ATTR_HELP ) ),
+    aAttrFL ( this, CUI_RES( FL_ATTR ) ),
+    aAttrLB ( this, CUI_RES( LB_ATTR ) ),
+    aOKBtn  ( this, CUI_RES( BTN_ATTR_OK ) ),
+    aEscBtn ( this, CUI_RES( BTN_ATTR_CANCEL ) ),
+    aHelpBtn( this, CUI_RES( BTN_ATTR_HELP ) ),
 
     rList( rLst )
 
@@ -182,10 +183,10 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 
             USHORT nResId = nSlot - SID_SVX_START + RID_ATTR_BEGIN;
             SvLBoxEntry* pEntry = NULL;
-            ResId aId( nResId, DIALOG_MGR() );
+            ResId aId( nResId, CUI_MGR() );
             aId.SetRT( RSC_STRING );
-            if ( DIALOG_MGR().IsAvailable( aId ) )
-                pEntry = aAttrLB.SvTreeListBox::InsertEntry( SVX_RESSTR( nResId ) );
+            if ( CUI_MGR().IsAvailable( aId ) )
+                pEntry = aAttrLB.SvTreeListBox::InsertEntry( CUI_RESSTR( nResId ) );
             else
             {
                 ByteString sError( "no resource for slot id\nslot = " );
@@ -265,20 +266,20 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
     USHORT nShorter,
     USHORT nLonger
 ) :
-    ModalDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHSIMILARITY ) ),
+    ModalDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHSIMILARITY ) ),
 
-    aFixedLine  ( this, SVX_RES( FL_SIMILARITY ) ),
-    aOtherTxt   ( this, SVX_RES( FT_OTHER ) ),
-    aOtherFld   ( this, SVX_RES( NF_OTHER   ) ),
-    aLongerTxt  ( this, SVX_RES( FT_LONGER ) ),
-    aLongerFld  ( this, SVX_RES( NF_LONGER ) ),
-    aShorterTxt ( this, SVX_RES( FT_SHORTER ) ),
-    aShorterFld ( this, SVX_RES( NF_SHORTER ) ),
-    aRelaxBox   ( this, SVX_RES( CB_RELAX ) ),
+    aFixedLine  ( this, CUI_RES( FL_SIMILARITY ) ),
+    aOtherTxt   ( this, CUI_RES( FT_OTHER ) ),
+    aOtherFld   ( this, CUI_RES( NF_OTHER   ) ),
+    aLongerTxt  ( this, CUI_RES( FT_LONGER ) ),
+    aLongerFld  ( this, CUI_RES( NF_LONGER ) ),
+    aShorterTxt ( this, CUI_RES( FT_SHORTER ) ),
+    aShorterFld ( this, CUI_RES( NF_SHORTER ) ),
+    aRelaxBox   ( this, CUI_RES( CB_RELAX ) ),
 
-    aOKBtn      ( this, SVX_RES( BTN_ATTR_OK ) ),
-    aEscBtn     ( this, SVX_RES( BTN_ATTR_CANCEL ) ),
-    aHelpBtn    ( this, SVX_RES( BTN_ATTR_HELP ) )
+    aOKBtn      ( this, CUI_RES( BTN_ATTR_OK ) ),
+    aEscBtn     ( this, CUI_RES( BTN_ATTR_CANCEL ) ),
+    aHelpBtn    ( this, CUI_RES( BTN_ATTR_HELP ) )
 
 {
     FreeResource();

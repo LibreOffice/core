@@ -37,12 +37,12 @@
 
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #include "iconcdlg.hxx"
 
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <unotools/viewoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/mnemonic.hxx>
@@ -317,7 +317,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     aOKBtn.SetHelpId( HID_ICCDIALOG_OK_BTN );
     aCancelBtn.SetHelpId( HID_ICCDIALOG_CANCEL_BTN );
     aResetBtn.SetClickHdl( LINK( this, IconChoiceDialog, ResetHdl ) );
-    aResetBtn.SetText( SVX_RESSTR(RID_SVXSTR_ICONCHOICEDLG_RESETBUT) );
+    aResetBtn.SetText( CUI_RESSTR(RID_SVXSTR_ICONCHOICEDLG_RESETBUT) );
     aResetBtn.SetHelpId( HID_ICCDIALOG_RESET_BTN );
     aOKBtn.Show();
     aCancelBtn.Show();

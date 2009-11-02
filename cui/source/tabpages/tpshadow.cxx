@@ -35,17 +35,18 @@
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
+#include <svx/dialogs.hrc>
 
 #define _SVX_TPSHADOW_CXX
 
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "tabarea.hrc"
 #include <svx/svdattr.hxx>
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <cuitabline.hxx>
 
@@ -73,19 +74,19 @@ static USHORT pShadowRanges[] =
 
 SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
-    SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_SHADOW ), rInAttrs ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_SHADOW ), rInAttrs ),
 
-    aFlProp             ( this, SVX_RES( FL_PROP ) ),
-    aTsbShowShadow      ( this, SVX_RES( TSB_SHOW_SHADOW ) ),
-    aFtPosition         ( this, SVX_RES( FT_POSITION ) ),
-    aCtlPosition        ( this, SVX_RES( CTL_POSITION ) ),
-    aFtDistance         ( this, SVX_RES( FT_DISTANCE ) ),
-    aMtrDistance        ( this, SVX_RES( MTR_FLD_DISTANCE ) ),
-    aFtShadowColor      ( this, SVX_RES( FT_SHADOW_COLOR ) ),
-    aLbShadowColor      ( this, SVX_RES( LB_SHADOW_COLOR ) ),
-    aFtTransparent      ( this, SVX_RES( FT_TRANSPARENT ) ),
-    aMtrTransparent      ( this, SVX_RES( MTR_SHADOW_TRANSPARENT ) ),
-    aCtlXRectPreview    ( this, SVX_RES( CTL_COLOR_PREVIEW ) ),
+    aFlProp             ( this, CUI_RES( FL_PROP ) ),
+    aTsbShowShadow      ( this, CUI_RES( TSB_SHOW_SHADOW ) ),
+    aFtPosition         ( this, CUI_RES( FT_POSITION ) ),
+    aCtlPosition        ( this, CUI_RES( CTL_POSITION ) ),
+    aFtDistance         ( this, CUI_RES( FT_DISTANCE ) ),
+    aMtrDistance        ( this, CUI_RES( MTR_FLD_DISTANCE ) ),
+    aFtShadowColor      ( this, CUI_RES( FT_SHADOW_COLOR ) ),
+    aLbShadowColor      ( this, CUI_RES( LB_SHADOW_COLOR ) ),
+    aFtTransparent      ( this, CUI_RES( FT_TRANSPARENT ) ),
+    aMtrTransparent      ( this, CUI_RES( MTR_SHADOW_TRANSPARENT ) ),
+    aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
     bDisable            ( FALSE ),

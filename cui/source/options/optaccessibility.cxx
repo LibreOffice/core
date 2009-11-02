@@ -33,8 +33,8 @@
 
 #include <optaccessibility.hxx>
 #include <optaccessibility.hrc>
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 #include <svtools/accessibilityoptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -55,19 +55,19 @@ struct SvxAccessibilityOptionsTabPage_Impl
 };
 
 SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage( Window* pParent, const SfxItemSet& rSet )
-    :SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_ACCESSIBILITYCONFIG ), rSet)
-    ,m_aMiscellaneousLabel      (this, SVX_RES(FL_MISCELLANEOUS     ))
-    ,m_aAccessibilityTool       (this, SVX_RES(CB_ACCESSIBILITY_TOOL    ))
-    ,m_aTextSelectionInReadonly (this, SVX_RES(CB_TEXTSELECTION     ))
-    ,m_aAnimatedGraphics        (this, SVX_RES(CB_ANIMATED_GRAPHICS ))
-    ,m_aAnimatedTexts           (this, SVX_RES(CB_ANIMATED_TEXTS        ))
-    ,m_aTipHelpCB               (this, SVX_RES(CB_TIPHELP               ))
-    ,m_aTipHelpNF               (this, SVX_RES(NF_TIPHELP               ))
-    ,m_aTipHelpFT               (this, SVX_RES(FT_TIPHELP               ))
-    ,m_aHCOptionsLabel          (this, SVX_RES(FL_HC_OPTIONS            ))
-    ,m_aAutoDetectHC            (this, SVX_RES(CB_AUTO_DETECT_HC        ))
-    ,m_aAutomaticFontColor      (this, SVX_RES(CB_AUTOMATIC_FONT_COLOR))
-    ,m_aPagePreviews            (this, SVX_RES(CB_PAGE_PREVIEWS       ))
+    :SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_ACCESSIBILITYCONFIG ), rSet)
+    ,m_aMiscellaneousLabel      (this, CUI_RES(FL_MISCELLANEOUS     ))
+    ,m_aAccessibilityTool       (this, CUI_RES(CB_ACCESSIBILITY_TOOL    ))
+    ,m_aTextSelectionInReadonly (this, CUI_RES(CB_TEXTSELECTION     ))
+    ,m_aAnimatedGraphics        (this, CUI_RES(CB_ANIMATED_GRAPHICS ))
+    ,m_aAnimatedTexts           (this, CUI_RES(CB_ANIMATED_TEXTS        ))
+    ,m_aTipHelpCB               (this, CUI_RES(CB_TIPHELP               ))
+    ,m_aTipHelpNF               (this, CUI_RES(NF_TIPHELP               ))
+    ,m_aTipHelpFT               (this, CUI_RES(FT_TIPHELP               ))
+    ,m_aHCOptionsLabel          (this, CUI_RES(FL_HC_OPTIONS            ))
+    ,m_aAutoDetectHC            (this, CUI_RES(CB_AUTO_DETECT_HC        ))
+    ,m_aAutomaticFontColor      (this, CUI_RES(CB_AUTOMATIC_FONT_COLOR))
+    ,m_aPagePreviews            (this, CUI_RES(CB_PAGE_PREVIEWS       ))
     ,m_pImpl(new SvxAccessibilityOptionsTabPage_Impl)
 {
     FreeResource();

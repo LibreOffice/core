@@ -115,18 +115,18 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
 |************************************************************************/
 
 SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& rItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ), rItemSet ),
-    maGrpNewDoc     ( this, SVX_RES (GRP_NEWDOCUMENT) ),
-    maRbtEditNow    ( this, SVX_RES (RB_EDITNOW) ),
-    maRbtEditLater  ( this, SVX_RES (RB_EDITLATER) ),
-    maFtPath        ( this, SVX_RES (FT_PATH_NEWDOC) ),
+:   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ), rItemSet ),
+    maGrpNewDoc     ( this, CUI_RES (GRP_NEWDOCUMENT) ),
+    maRbtEditNow    ( this, CUI_RES (RB_EDITNOW) ),
+    maRbtEditLater  ( this, CUI_RES (RB_EDITLATER) ),
+    maFtPath        ( this, CUI_RES (FT_PATH_NEWDOC) ),
     maCbbPath       ( this, INET_PROT_FILE ),
-    maBtCreate      ( this, SVX_RES (BTN_CREATE) ),
-    maFtDocTypes    ( this, SVX_RES (FT_DOCUMENT_TYPES) ),
-    maLbDocTypes    ( this, SVX_RES (LB_DOCUMENT_TYPES) )
+    maBtCreate      ( this, CUI_RES (BTN_CREATE) ),
+    maFtDocTypes    ( this, CUI_RES (FT_DOCUMENT_TYPES) ),
+    maLbDocTypes    ( this, CUI_RES (LB_DOCUMENT_TYPES) )
 {
     // Set HC bitmaps and disable display of bitmap names.
-    maBtCreate.SetModeImage( Image( SVX_RES( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtCreate.SetModeImage( Image( CUI_RES( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtCreate.EnableTextDisplay (FALSE);
 
     InitStdControls();
@@ -319,7 +319,7 @@ BOOL SvxHyperlinkNewDocTp::AskApply()
     sal_Bool bRet = ImplGetURLObject( maCbbPath.GetText(), maCbbPath.GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
-        WarningBox aWarning( this, WB_OK, SVX_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
+        WarningBox aWarning( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
         aWarning.Execute();
     }
     return bRet;
@@ -369,7 +369,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
                 if( bOk )
                 {
-                    WarningBox aWarning( this, WB_YES_NO, SVX_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
+                    WarningBox aWarning( this, WB_YES_NO, CUI_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
                     bCreate = aWarning.Execute() == BUTTON_YES;
                 }
             }

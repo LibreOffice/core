@@ -34,28 +34,28 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include "svx/dialmgr.hxx"
+#include "dialmgr.hxx"
 #include "splitcelldlg.hxx"
-#include "svx/dialogs.hrc"
+#include "cuires.hrc"
 #include "splitcelldlg.hrc"
 
 SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
-: SvxStandardDialog(pParent, SVX_RES(RID_SVX_SPLITCELLDLG))
-, maCountLbl(this, SVX_RES(FT_COUNT))
-, maCountEdit(this, SVX_RES(ED_COUNT))
-, maCountFL(this, SVX_RES(FL_COUNT))
-, maHorzBox(this, SVX_RES(RB_HORZ))
-, maVertBox(this, SVX_RES(RB_VERT))
-, maPropCB(this, SVX_RES(CB_PROP))
-, maDirFL(this, SVX_RES(FL_DIR))
-, maOKBtn(this, SVX_RES(BT_OK))
-, maCancelBtn(this, SVX_RES(BT_CANCEL))
-, maHelpBtn( this, SVX_RES( BT_HELP ) )
+: SvxStandardDialog(pParent, CUI_RES(RID_SVX_SPLITCELLDLG))
+, maCountLbl(this, CUI_RES(FT_COUNT))
+, maCountEdit(this, CUI_RES(ED_COUNT))
+, maCountFL(this, CUI_RES(FL_COUNT))
+, maHorzBox(this, CUI_RES(RB_HORZ))
+, maVertBox(this, CUI_RES(RB_VERT))
+, maPropCB(this, CUI_RES(CB_PROP))
+, maDirFL(this, CUI_RES(FL_DIR))
+, maOKBtn(this, CUI_RES(BT_OK))
+, maCancelBtn(this, CUI_RES(BT_CANCEL))
+, maHelpBtn( this, CUI_RES( BT_HELP ) )
 , mnMaxVertical( nMaxVertical )
 , mnMaxHorizontal( nMaxHorizontal )
 {
-    maVertBox.SetModeRadioImage(Image(SVX_RES(BMP_SPLIT_VERT)), BMP_COLOR_HIGHCONTRAST);
-    maHorzBox.SetModeRadioImage(Image(SVX_RES(BMP_SPLIT_HORZ)), BMP_COLOR_HIGHCONTRAST);
+    maVertBox.SetModeRadioImage(Image(CUI_RES(BMP_SPLIT_VERT)), BMP_COLOR_HIGHCONTRAST);
+    maHorzBox.SetModeRadioImage(Image(CUI_RES(BMP_SPLIT_HORZ)), BMP_COLOR_HIGHCONTRAST);
     FreeResource();
     maHorzBox.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
     maPropCB.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));

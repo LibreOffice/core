@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: cuitbxform.cxx,v $
- * $Revision: 1.10 $
+ * $RCSfile: dialmgr.cxx,v $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,38 +31,23 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
-#include <tools/ref.hxx>
-#include <tools/shl.hxx>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/sound.hxx>
+// include ---------------------------------------------------------------
+
 #include <dialmgr.hxx>
-#include <cuires.hrc>
-#include "cuitbxform.hxx"
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include "fmsearch.hrc"
+#include <tools/rc.hxx>
+#include <svl/solar.hrc>
+#include <vcl/svapp.hxx>
 
-//========================================================================
-// class FmInputRecordNoDialog
-//========================================================================
+static ResMgr* pResMgr=0;
 
-FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
-    :ModalDialog( pParent, CUI_RES(RID_SVX_DLG_INPUTRECORDNO))
-    ,m_aLabel(this, CUI_RES(1))
-    ,m_aRecordNo(this, CUI_RES(1))
-    ,m_aOk(this, CUI_RES(1))
-    ,m_aCancel(this, CUI_RES(1))
+// struct DialogsResMgr --------------------------------------------------
+ResMgr* CuiResMgr::GetResMgr()
 {
-    m_aRecordNo.SetMin(1);
-    m_aRecordNo.SetMax(0x7FFFFFFF);
-    m_aRecordNo.SetStrictFormat(TRUE);
-    m_aRecordNo.SetDecimalDigits(0);
+    if ( !pResMgr )
+    {
+        ByteString aName( "cui" );
+        pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILocale() );
+    }
 
-    FreeResource();
+    return pResMgr;
 }

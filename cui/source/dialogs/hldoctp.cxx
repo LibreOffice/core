@@ -54,23 +54,23 @@ sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
 |************************************************************************/
 
 SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet)
-    : SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_DOCUMENT ), rItemSet ),
-    maGrpDocument   ( this, SVX_RES (GRP_DOCUMENT) ),
-    maFtPath        ( this, SVX_RES (FT_PATH_DOC) ),
+    : SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_DOCUMENT ), rItemSet ),
+    maGrpDocument   ( this, CUI_RES (GRP_DOCUMENT) ),
+    maFtPath        ( this, CUI_RES (FT_PATH_DOC) ),
     maCbbPath       ( this, INET_PROT_FILE ),
-    maBtFileopen    ( this, SVX_RES (BTN_FILEOPEN) ),
-    maGrpTarget     ( this, SVX_RES (GRP_TARGET) ),
-    maFtTarget      ( this, SVX_RES (FT_TARGET_DOC) ),
-    maEdTarget      ( this, SVX_RES (ED_TARGET_DOC) ),
-    maFtURL         ( this, SVX_RES (FT_URL) ),
-    maFtFullURL     ( this, SVX_RES (FT_FULL_URL) ),
-    maBtBrowse      ( this, SVX_RES (BTN_BROWSE) ),
+    maBtFileopen    ( this, CUI_RES (BTN_FILEOPEN) ),
+    maGrpTarget     ( this, CUI_RES (GRP_TARGET) ),
+    maFtTarget      ( this, CUI_RES (FT_TARGET_DOC) ),
+    maEdTarget      ( this, CUI_RES (ED_TARGET_DOC) ),
+    maFtURL         ( this, CUI_RES (FT_URL) ),
+    maFtFullURL     ( this, CUI_RES (FT_FULL_URL) ),
+    maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
     mbMarkWndOpen   ( FALSE )
 {
     // Set HC bitmaps and disable display of bitmap names.
-    maBtBrowse.SetModeImage( Image( SVX_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtBrowse.EnableTextDisplay (FALSE);
-    maBtFileopen.SetModeImage( Image( SVX_RES( IMG_FILEOPEN_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtFileopen.SetModeImage( Image( CUI_RES( IMG_FILEOPEN_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtFileopen.EnableTextDisplay (FALSE);
 
     InitStdControls();

@@ -28,9 +28,11 @@
  *
  ************************************************************************/
  // include ---------------------------------------------------------------
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "measure.hrc"
 #include "helpid.hrc"
+#include <svx/dialogs.hrc>
+
 #define DELTA 20
  // pragma ----------------------------------------------------------------
 

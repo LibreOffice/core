@@ -40,14 +40,14 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/sderitm.hxx>
-
-#include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <cuires.hrc>
 #include "transfrm.hrc"
 #include <svx/sizeitem.hxx>
 
 #include "transfrm.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/svxenum.hxx>
 #include "svx/anchorid.hxx"
@@ -126,7 +126,7 @@ void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
 
 SvxTransformTabDialog::SvxTransformTabDialog( Window* pParent, const SfxItemSet* pAttr,
                                 const SdrView* pSdrView, USHORT nAnchorTypes ) :
-    SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_TRANSFORM ), pAttr ),
+    SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_TRANSFORM ), pAttr ),
     pView       ( pSdrView ),
     nAnchorCtrls(nAnchorTypes)
 {
@@ -228,20 +228,20 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link& rLink)
 \************************************************************************/
 
 SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SvxTabPage              ( pParent, SVX_RES( RID_SVXPAGE_ANGLE ), rInAttrs ),
-    aFlPosition             ( this, SVX_RES( FL_POSITION ) ),
-    aFtPosX                 ( this, SVX_RES( FT_POS_X ) ),
-    aMtrPosX                ( this, SVX_RES( MTR_FLD_POS_X ) ),
-    aFtPosY                 ( this, SVX_RES( FT_POS_Y ) ),
-    aMtrPosY                ( this, SVX_RES( MTR_FLD_POS_Y ) ),
-    aFtPosPresets           ( this, SVX_RES(FT_POSPRESETS) ),
-    aCtlRect                ( this, SVX_RES( CTL_RECT ) ),
+    SvxTabPage              ( pParent, CUI_RES( RID_SVXPAGE_ANGLE ), rInAttrs ),
+    aFlPosition             ( this, CUI_RES( FL_POSITION ) ),
+    aFtPosX                 ( this, CUI_RES( FT_POS_X ) ),
+    aMtrPosX                ( this, CUI_RES( MTR_FLD_POS_X ) ),
+    aFtPosY                 ( this, CUI_RES( FT_POS_Y ) ),
+    aMtrPosY                ( this, CUI_RES( MTR_FLD_POS_Y ) ),
+    aFtPosPresets           ( this, CUI_RES(FT_POSPRESETS) ),
+    aCtlRect                ( this, CUI_RES( CTL_RECT ) ),
 
-    aFlAngle                ( this, SVX_RES( FL_ANGLE ) ),
-    aFtAngle                ( this, SVX_RES( FT_ANGLE ) ),
-    aMtrAngle               ( this, SVX_RES( MTR_FLD_ANGLE ) ),
-    aFtAnglePresets         ( this, SVX_RES(FT_ANGLEPRESETS) ),
-    aCtlAngle               ( this, SVX_RES( CTL_ANGLE ),
+    aFlAngle                ( this, CUI_RES( FL_ANGLE ) ),
+    aFtAngle                ( this, CUI_RES( FT_ANGLE ) ),
+    aMtrAngle               ( this, CUI_RES( MTR_FLD_ANGLE ) ),
+    aFtAnglePresets         ( this, CUI_RES(FT_ANGLEPRESETS) ),
+    aCtlAngle               ( this, CUI_RES( CTL_ANGLE ),
                                 RP_RB, 200, 80, CS_ANGLE ),
     rOutAttrs               ( rInAttrs )
 {
@@ -519,14 +519,14 @@ IMPL_LINK( SvxAngleTabPage, ModifiedHdl, void *, EMPTYARG )
 \************************************************************************/
 
 SvxSlantTabPage::SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SvxTabPage              ( pParent, SVX_RES( RID_SVXPAGE_SLANT ), rInAttrs ),
+    SvxTabPage              ( pParent, CUI_RES( RID_SVXPAGE_SLANT ), rInAttrs ),
 
-    aFlRadius               ( this, SVX_RES( FL_RADIUS ) ),
-    aFtRadius               ( this, SVX_RES( FT_RADIUS ) ),
-    aMtrRadius              ( this, SVX_RES( MTR_FLD_RADIUS ) ),
-    aFlAngle                ( this, SVX_RES( FL_SLANT ) ),
-    aFtAngle                ( this, SVX_RES( FT_ANGLE ) ),
-    aMtrAngle               ( this, SVX_RES( MTR_FLD_ANGLE ) ),
+    aFlRadius               ( this, CUI_RES( FL_RADIUS ) ),
+    aFtRadius               ( this, CUI_RES( FT_RADIUS ) ),
+    aMtrRadius              ( this, CUI_RES( MTR_FLD_RADIUS ) ),
+    aFlAngle                ( this, CUI_RES( FL_SLANT ) ),
+    aFtAngle                ( this, CUI_RES( FT_ANGLE ) ),
+    aMtrAngle               ( this, CUI_RES( MTR_FLD_ANGLE ) ),
     rOutAttrs               ( rInAttrs )
 {
     FreeResource();
@@ -709,34 +709,34 @@ void SvxSlantTabPage::PointChanged( Window* , RECT_POINT  )
 \************************************************************************/
 
 SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SvxTabPage      ( pParent, SVX_RES( RID_SVXPAGE_POSITION_SIZE ), rInAttrs ),
-    maFlPosition        ( this, SVX_RES( FL_POSITION ) ),
-    maFtPosX            ( this, SVX_RES( FT_POS_X ) ),
-    maMtrPosX           ( this, SVX_RES( MTR_FLD_POS_X ) ),
-    maFtPosY            ( this, SVX_RES( FT_POS_Y ) ),
-    maMtrPosY           ( this, SVX_RES( MTR_FLD_POS_Y ) ),
-    maFtPosReference    ( this, SVX_RES( FT_POSREFERENCE ) ),
-    maCtlPos            ( this, SVX_RES( CTL_POSRECT ), RP_LT ),
+    SvxTabPage      ( pParent, CUI_RES( RID_SVXPAGE_POSITION_SIZE ), rInAttrs ),
+    maFlPosition        ( this, CUI_RES( FL_POSITION ) ),
+    maFtPosX            ( this, CUI_RES( FT_POS_X ) ),
+    maMtrPosX           ( this, CUI_RES( MTR_FLD_POS_X ) ),
+    maFtPosY            ( this, CUI_RES( FT_POS_Y ) ),
+    maMtrPosY           ( this, CUI_RES( MTR_FLD_POS_Y ) ),
+    maFtPosReference    ( this, CUI_RES( FT_POSREFERENCE ) ),
+    maCtlPos            ( this, CUI_RES( CTL_POSRECT ), RP_LT ),
 
-    maFlSize                         ( this, SVX_RES( FL_SIZE ) ),
-    maFtWidth                        ( this, SVX_RES( FT_WIDTH ) ),
-    maMtrWidth                       ( this, SVX_RES( MTR_FLD_WIDTH ) ),
-    maFtHeight                       ( this, SVX_RES( FT_HEIGHT ) ),
-    maMtrHeight                      ( this, SVX_RES( MTR_FLD_HEIGHT ) ),
-    maCbxScale                       ( this, SVX_RES( CBX_SCALE ) ),
-    maFtSizeReference                ( this, SVX_RES( FT_SIZEREFERENCE) ),
-    maCtlSize                        ( this, SVX_RES( CTL_SIZERECT ), RP_LT ),
+    maFlSize                         ( this, CUI_RES( FL_SIZE ) ),
+    maFtWidth                        ( this, CUI_RES( FT_WIDTH ) ),
+    maMtrWidth                       ( this, CUI_RES( MTR_FLD_WIDTH ) ),
+    maFtHeight                       ( this, CUI_RES( FT_HEIGHT ) ),
+    maMtrHeight                      ( this, CUI_RES( MTR_FLD_HEIGHT ) ),
+    maCbxScale                       ( this, CUI_RES( CBX_SCALE ) ),
+    maFtSizeReference                ( this, CUI_RES( FT_SIZEREFERENCE) ),
+    maCtlSize                        ( this, CUI_RES( CTL_SIZERECT ), RP_LT ),
 
-    maFlProtect         ( this, SVX_RES( FL_PROTECT) ),
-    maTsbPosProtect     ( this, SVX_RES( TSB_POSPROTECT ) ),
-    maTsbSizeProtect                 ( this, SVX_RES( TSB_SIZEPROTECT ) ),
+    maFlProtect         ( this, CUI_RES( FL_PROTECT) ),
+    maTsbPosProtect     ( this, CUI_RES( TSB_POSPROTECT ) ),
+    maTsbSizeProtect                 ( this, CUI_RES( TSB_SIZEPROTECT ) ),
 
 
-    maFlAdjust                       ( this, SVX_RES( FL_ADJUST ) ),
-    maTsbAutoGrowWidth              ( this, SVX_RES( TSB_AUTOGROW_WIDTH ) ),
-    maTsbAutoGrowHeight             ( this, SVX_RES( TSB_AUTOGROW_HEIGHT ) ),
+    maFlAdjust                       ( this, CUI_RES( FL_ADJUST ) ),
+    maTsbAutoGrowWidth              ( this, CUI_RES( TSB_AUTOGROW_WIDTH ) ),
+    maTsbAutoGrowHeight             ( this, CUI_RES( TSB_AUTOGROW_HEIGHT ) ),
 
-    maFlDivider                     (this, SVX_RES( FL_DIVIDER ) ),
+    maFlDivider                     (this, CUI_RES( FL_DIVIDER ) ),
 
     mrOutAttrs       ( rInAttrs ),
     mnProtectSizeState( STATE_NOCHECK ),

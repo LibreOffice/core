@@ -30,7 +30,7 @@
 
  // include -----------------------------------------------------------------
 #include "opthtml.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
  // RID_OFAPAGE_HTMLOPT -----------------------------------------------------
 TabPage RID_OFAPAGE_HTMLOPT

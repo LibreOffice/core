@@ -36,11 +36,11 @@
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svx/svxids.hrc>
 #include "helpid.hrc"
 #include <svtools/editbrowsebox.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <vcl/field.hxx>
 #include <svl/eitem.hxx>
 #include <comphelper/processfactory.hxx>
@@ -57,8 +57,9 @@
 #include <unotools/localfilehelper.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <sfx2/docfilt.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "dbregisterednamesconfig.hxx"
+#include <svx/dialogs.hrc>
 
 #define TAB_WIDTH1      80
 #define TAB_WIDTH_MIN   10
@@ -119,15 +120,15 @@ short DatabaseRegistrationDialog::Execute()
 
 DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_DBREGISTER), rSet ),
+    SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_DBREGISTER), rSet ),
 
-    aTypeText       ( this, SVX_RES( FT_TYPE ) ),
-    aPathText       ( this, SVX_RES( FT_PATH ) ),
-    aPathCtrl       ( this, SVX_RES( LB_PATH ) ),
-    m_aNew          ( this, SVX_RES( BTN_NEW ) ),
-    m_aEdit         ( this, SVX_RES( BTN_EDIT ) ),
-    m_aDelete       ( this, SVX_RES( BTN_DELETE ) ),
-    aStdBox         ( this, SVX_RES( GB_STD ) ),
+    aTypeText       ( this, CUI_RES( FT_TYPE ) ),
+    aPathText       ( this, CUI_RES( FT_PATH ) ),
+    aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
+    m_aNew          ( this, CUI_RES( BTN_NEW ) ),
+    m_aEdit         ( this, CUI_RES( BTN_EDIT ) ),
+    m_aDelete       ( this, CUI_RES( BTN_DELETE ) ),
+    aStdBox         ( this, CUI_RES( GB_STD ) ),
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
     m_pCurEntry     ( NULL ),
@@ -297,7 +298,7 @@ IMPL_LINK( DbRegistrationOptionsPage, DeleteHdl, void *, EMPTYARG )
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
     if ( pEntry )
     {
-        QueryBox aQuery(this,SVX_RES(QUERY_DELETE_CONFIRM));
+        QueryBox aQuery(this,CUI_RES(QUERY_DELETE_CONFIRM));
         if ( aQuery.Execute() == RET_YES )
             pPathBox->GetModel()->Remove(pEntry);
     }

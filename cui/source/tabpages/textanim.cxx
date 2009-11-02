@@ -36,6 +36,7 @@
 #include <sfx2/module.hxx>
 #include <tools/shl.hxx>
 
+#include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
 #ifndef _SVX_TEXTANIM_CXX
@@ -44,7 +45,7 @@
 #include "textanim.hxx"
 #include "textanim.hrc"
 #include "textattr.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
 static USHORT pRanges[] =
@@ -63,7 +64,7 @@ static USHORT pRanges[] =
 __EXPORT SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
                                 const SfxItemSet* pAttr,
                                 const SdrView* pSdrView ) :
-        SfxTabDialog        ( pParent, SVX_RES( RID_SVXDLG_TEXT ), pAttr ),
+        SfxTabDialog        ( pParent, CUI_RES( RID_SVXDLG_TEXT ), pAttr ),
         rOutAttrs           ( *pAttr ),
         pView               ( pSdrView )
 {
@@ -106,33 +107,33 @@ void __EXPORT SvxTextTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 \************************************************************************/
 
 SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SfxTabPage      ( pWindow, SVX_RES( RID_SVXPAGE_TEXTANIMATION ),
+                SfxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_TEXTANIMATION ),
                                   rInAttrs ),
-                aFlEffect       ( this, SVX_RES(FL_EFFECT)),
-                aFtEffects      ( this, SVX_RES(FT_EFFECTS)),
-                aLbEffect       ( this, SVX_RES( LB_EFFECT ) ),
-                //aCtlEffect        ( this, SVX_RES( CTL_EFFECT ) ),
-                aFtDirection    ( this, SVX_RES(FT_DIRECTION) ),
-                aBtnUp          ( this, SVX_RES( BTN_UP ) ),
-                aBtnLeft        ( this, SVX_RES( BTN_LEFT ) ),
-                aBtnRight       ( this, SVX_RES( BTN_RIGHT ) ),
-                aBtnDown        ( this, SVX_RES( BTN_DOWN ) ),
+                aFlEffect       ( this, CUI_RES(FL_EFFECT)),
+                aFtEffects      ( this, CUI_RES(FT_EFFECTS)),
+                aLbEffect       ( this, CUI_RES( LB_EFFECT ) ),
+                //aCtlEffect        ( this, CUI_RES( CTL_EFFECT ) ),
+                aFtDirection    ( this, CUI_RES(FT_DIRECTION) ),
+                aBtnUp          ( this, CUI_RES( BTN_UP ) ),
+                aBtnLeft        ( this, CUI_RES( BTN_LEFT ) ),
+                aBtnRight       ( this, CUI_RES( BTN_RIGHT ) ),
+                aBtnDown        ( this, CUI_RES( BTN_DOWN ) ),
 
-                aFlProperties   ( this, SVX_RES(FL_PROPERTIES)),
-                aTsbStartInside ( this, SVX_RES( TSB_START_INSIDE ) ),
-                aTsbStopInside  ( this, SVX_RES( TSB_STOP_INSIDE ) ),
+                aFlProperties   ( this, CUI_RES(FL_PROPERTIES)),
+                aTsbStartInside ( this, CUI_RES( TSB_START_INSIDE ) ),
+                aTsbStopInside  ( this, CUI_RES( TSB_STOP_INSIDE ) ),
 
-                aFtCount        ( this, SVX_RES(FT_COUNT)),
-                aTsbEndless     ( this, SVX_RES( TSB_ENDLESS ) ),
-                aNumFldCount    ( this, SVX_RES( NUM_FLD_COUNT ) ),
+                aFtCount        ( this, CUI_RES(FT_COUNT)),
+                aTsbEndless     ( this, CUI_RES( TSB_ENDLESS ) ),
+                aNumFldCount    ( this, CUI_RES( NUM_FLD_COUNT ) ),
 
-                aFtAmount       ( this, SVX_RES(FT_AMOUNT)),
-                aTsbPixel       ( this, SVX_RES( TSB_PIXEL ) ),
-                aMtrFldAmount   ( this, SVX_RES( MTR_FLD_AMOUNT ) ),
+                aFtAmount       ( this, CUI_RES(FT_AMOUNT)),
+                aTsbPixel       ( this, CUI_RES( TSB_PIXEL ) ),
+                aMtrFldAmount   ( this, CUI_RES( MTR_FLD_AMOUNT ) ),
 
-                aFtDelay        ( this, SVX_RES(FT_DELAY)),
-                aTsbAuto        ( this, SVX_RES( TSB_AUTO ) ),
-                aMtrFldDelay    ( this, SVX_RES( MTR_FLD_DELAY ) ),
+                aFtDelay        ( this, CUI_RES(FT_DELAY)),
+                aTsbAuto        ( this, CUI_RES( TSB_AUTO ) ),
+                aMtrFldDelay    ( this, CUI_RES( MTR_FLD_DELAY ) ),
 
                 rOutAttrs       ( rInAttrs ),
                 eAniKind        ( SDRTEXTANI_NONE )

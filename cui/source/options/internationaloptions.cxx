@@ -34,9 +34,9 @@
 #include "internationaloptions.hxx"
 #include "internationaloptions.hrc"
 #include <svl/eitem.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 namespace offapp
 {
@@ -62,12 +62,12 @@ namespace offapp
     };
 
     inline InternationalOptionsPage::IMPL::IMPL( Window* _pParent ) :
-        m_aFL_DefaultTextDirection  ( _pParent, SVX_RES( FL_DEFTXTDIRECTION ) )
-        ,m_aRB_TxtDirLeft2Right     ( _pParent, SVX_RES( RB_TXTDIR_LEFT2RIGHT ) )
-        ,m_aRB_TxtDirRight2Left     ( _pParent, SVX_RES( RB_TXTDIR_RIGHT2LEFT ) )
-        ,m_aFL_SheetView            ( _pParent, SVX_RES( FL_SHEETVIEW ) )
-        ,m_aCB_ShtVwRight2Left      ( _pParent, SVX_RES( CB_SHTVW_RIGHT2LEFT ) )
-        ,m_aCB_ShtVwCurrentDocOnly  ( _pParent, SVX_RES( CB_SHTVW_CURRENTDOCONLY ) )
+        m_aFL_DefaultTextDirection  ( _pParent, CUI_RES( FL_DEFTXTDIRECTION ) )
+        ,m_aRB_TxtDirLeft2Right     ( _pParent, CUI_RES( RB_TXTDIR_LEFT2RIGHT ) )
+        ,m_aRB_TxtDirRight2Left     ( _pParent, CUI_RES( RB_TXTDIR_RIGHT2LEFT ) )
+        ,m_aFL_SheetView            ( _pParent, CUI_RES( FL_SHEETVIEW ) )
+        ,m_aCB_ShtVwRight2Left      ( _pParent, CUI_RES( CB_SHTVW_RIGHT2LEFT ) )
+        ,m_aCB_ShtVwCurrentDocOnly  ( _pParent, CUI_RES( CB_SHTVW_CURRENTDOCONLY ) )
 
         ,m_bEnable_SheetView_Opt    ( FALSE )
     {
@@ -128,7 +128,7 @@ namespace offapp
     }
 
     InternationalOptionsPage::InternationalOptionsPage( Window* _pParent, const SfxItemSet& _rAttrSet ) :
-        SfxTabPage  ( _pParent, SVX_RES( RID_OFA_TP_INTERNATIONAL ), _rAttrSet )
+        SfxTabPage  ( _pParent, CUI_RES( RID_OFA_TP_INTERNATIONAL ), _rAttrSet )
 
         ,m_pImpl    ( new IMPL( this ) )
     {

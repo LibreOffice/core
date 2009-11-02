@@ -54,11 +54,13 @@
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <svx/dialmgr.hxx>
 #include <vcl/bmpacc.hxx>
+#include <svx/dialogs.hrc>
 
 #define _SVX_TPBITMAP_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
@@ -70,7 +72,7 @@
 #include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
 //#include "dlgname.hrc"
 #include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/opengrf.hxx"
 
 #define DLGWIN this->GetParent()->GetParent()
@@ -87,26 +89,26 @@ SvxBitmapTabPage::SvxBitmapTabPage
     const SfxItemSet& rInAttrs
 ) :
 
-    SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_BITMAP ), rInAttrs ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_BITMAP ), rInAttrs ),
 
-    aCtlPixel           ( this, SVX_RES( CTL_PIXEL ) ),
-    aFtPixelEdit        ( this, SVX_RES( FT_PIXEL_EDIT ) ),
-    aFtColor            ( this, SVX_RES( FT_COLOR ) ),
-    aLbColor            ( this, SVX_RES( LB_COLOR ) ),
-    aFtBackgroundColor  ( this, SVX_RES( FT_BACKGROUND_COLOR ) ),
-    aLbBackgroundColor  ( this, SVX_RES( LB_BACKGROUND_COLOR ) ),
+    aCtlPixel           ( this, CUI_RES( CTL_PIXEL ) ),
+    aFtPixelEdit        ( this, CUI_RES( FT_PIXEL_EDIT ) ),
+    aFtColor            ( this, CUI_RES( FT_COLOR ) ),
+    aLbColor            ( this, CUI_RES( LB_COLOR ) ),
+    aFtBackgroundColor  ( this, CUI_RES( FT_BACKGROUND_COLOR ) ),
+    aLbBackgroundColor  ( this, CUI_RES( LB_BACKGROUND_COLOR ) ),
     // This fix text is used only to provide the name for the following
     // bitmap list box.  The fixed text is not displayed.
-    aLbBitmapsHidden    ( this, SVX_RES( FT_BITMAPS_HIDDEN ) ),
-    aLbBitmaps          ( this, SVX_RES( LB_BITMAPS ) ),
-    aFlProp             ( this, SVX_RES( FL_PROP ) ),
-    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
-    aBtnAdd             ( this, SVX_RES( BTN_ADD ) ),
-    aBtnModify          ( this, SVX_RES( BTN_MODIFY ) ),
-    aBtnImport          ( this, SVX_RES( BTN_IMPORT ) ),
-    aBtnDelete          ( this, SVX_RES( BTN_DELETE ) ),
-    aBtnLoad            ( this, SVX_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, SVX_RES( BTN_SAVE ) ),
+    aLbBitmapsHidden    ( this, CUI_RES( FT_BITMAPS_HIDDEN ) ),
+    aLbBitmaps          ( this, CUI_RES( LB_BITMAPS ) ),
+    aFlProp             ( this, CUI_RES( FL_PROP ) ),
+    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
+    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
+    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
+    aBtnImport          ( this, CUI_RES( BTN_IMPORT ) ),
+    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
+    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
+    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
 
     aBitmapCtl          ( this, aCtlPreview.GetSizePixel() ),
     rOutAttrs           ( rInAttrs ),
@@ -120,8 +122,8 @@ SvxBitmapTabPage::SvxBitmapTabPage
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
-    aBtnLoad.SetModeImage( Image( SVX_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( SVX_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
     FreeResource();
 
     // diese Page braucht ExchangeSupport
@@ -213,7 +215,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
             INetURLObject   aURL( pBitmapList->GetPath() );
 
             aURL.Append( pBitmapList->GetName() );
@@ -549,17 +551,13 @@ long SvxBitmapTabPage::CheckChanges_Impl()
 
         if( bBmpChanged )
         {
-            ResMgr& rMgr = DIALOG_MGR();
+            ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            //CHINA001 SvxMessDialog aMessDlg( DLGWIN,
-            //CHINA001  String( SVX_RES( RID_SVXSTR_BITMAP, rMgr ) ),
-            //CHINA001  String( SVX_RES( RID_SVXSTR_ASK_CHANGE_BITMAP, rMgr ) ),
-            //CHINA001  &aWarningBoxImage );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
             AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
-                                                        String( ResId( RID_SVXSTR_BITMAP, rMgr ) ),
-                                                        String( ResId( RID_SVXSTR_ASK_CHANGE_BITMAP, rMgr ) ),
+                                                        String( SVX_RES( RID_SVXSTR_BITMAP ) ),
+                                                        String( CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ) ),
                                                         &aWarningBoxImage  );
             DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
             aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
@@ -602,9 +600,9 @@ long SvxBitmapTabPage::CheckChanges_Impl()
 
 IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr& rMgr = DIALOG_MGR();
-    String aNewName( ResId( RID_SVXSTR_BITMAP, rMgr ) );
-    String aDesc( ResId( RID_SVXSTR_DESC_NEW_BITMAP, rMgr ) );
+    ResMgr& rMgr = CUI_MGR();
+    String aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
+    String aDesc( CUI_RES( RID_SVXSTR_DESC_NEW_BITMAP ) );
     String aName;
 
     long nCount = pBitmapList->Count();
@@ -623,10 +621,9 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                 bDifferent = FALSE;
     }
 
-    //CHINA001 SvxNameDialog* pDlg     = new SvxNameDialog( DLGWIN, aName, aDesc );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     WarningBox*    pWarnBox = NULL;
     USHORT         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
@@ -733,7 +730,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr& rMgr = DIALOG_MGR();
+    ResMgr& rMgr = CUI_MGR();
     SvxOpenGraphicDialog aDlg( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Import" ) ) );
     aDlg.EnableLink(sal_False);
 
@@ -754,10 +751,9 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
             // convert file URL to UI name
             String          aName;
             INetURLObject   aURL( aDlg.GetPath() );
-            //CHINA001 SvxNameDialog*  pDlg = new SvxNameDialog( DLGWIN, aURL.GetName().GetToken( 0, '.' ), aDesc );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, String(aURL.GetName()).GetToken( 0, '.' ), aDesc, RID_SVXDLG_NAME );
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, String(aURL.GetName()).GetToken( 0, '.' ), aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             nError = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
@@ -841,16 +837,15 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr& rMgr = DIALOG_MGR();
-        String aNewName( ResId( RID_SVXSTR_BITMAP, rMgr ) );
+        ResMgr& rMgr = CUI_MGR();
+        String aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
         String aDesc( ResId( RID_SVXSTR_DESC_NEW_BITMAP, rMgr ) );
         String aName( pBitmapList->GetBitmap( nPos )->GetName() );
         String aOldName = aName;
 
-        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         long nCount = pBitmapList->Count();
@@ -913,8 +908,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
-//!         SVX_RES( RID_SVXSTR_DEL_BITMAP ),
-            String( SVX_RES( RID_SVXSTR_ASK_DEL_BITMAP ) ) );
+            String( CUI_RES( RID_SVXSTR_ASK_DEL_BITMAP ) ) );
 
         if( aQueryBox.Execute() == RET_YES )
         {
@@ -946,7 +940,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
     USHORT nReturn = RET_YES;
-    ResMgr& rMgr = DIALOG_MGR();
+    ResMgr& rMgr = CUI_MGR();
 
     if ( *pnBitmapListState & CT_MODIFIED )
     {
@@ -1077,7 +1071,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         {
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String aString( SVX_RES( RID_SVXSTR_TABLE ) );
+            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
             if ( aURL.getBase().getLength() > 18 )
@@ -1096,7 +1090,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         else
         {
             ErrorBox( DLGWIN, WinBits( WB_OK ),
-                String( SVX_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
+                String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }
 

@@ -32,8 +32,10 @@
  // include ---------------------------------------------------------------
 #include <svtools/controldims.hrc>
 #include "connect.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
+#include <svx/dialogs.hrc>
+
  // RID_SVXPAGE_CONNECTION ------------------------------------------------
 TabPage RID_SVXPAGE_CONNECTION
 {

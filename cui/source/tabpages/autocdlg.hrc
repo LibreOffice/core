@@ -30,7 +30,7 @@
 #ifndef _SVX_AUTOCDLG_HRC
 #define _SVX_AUTOCDLG_HRC
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 // defines ------------------------------------------------------------------
 

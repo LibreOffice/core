@@ -30,7 +30,7 @@
 
 #include "optctl.hrc"
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 #include <sfx2/sfx.hrc>
 

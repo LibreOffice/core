@@ -29,8 +29,9 @@
  ************************************************************************/
  // include ---------------------------------------------------------------
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "tabarea.hrc"
+#include <svx/dialogs.hrc>
 
 #define MASKCOLOR       MaskColor = Color{ Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 

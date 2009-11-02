@@ -43,9 +43,9 @@
 #include "connpoolsettings.hxx"
 #include <svl/eitem.hxx>
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 //........................................................................
 namespace offapp
@@ -158,11 +158,11 @@ namespace offapp
         DriverListControl_Base::Init();
 
         Size aColWidth = LogicToPixel(Size(160, 0), MAP_APPFONT);
-        InsertDataColumn(1, String(SVX_RES(STR_DRIVER_NAME)), aColWidth.Width());
+        InsertDataColumn(1, String(CUI_RES(STR_DRIVER_NAME)), aColWidth.Width());
         aColWidth = LogicToPixel(Size(30, 0), MAP_APPFONT);
-        InsertDataColumn(2, String(SVX_RES(STR_POOLED_FLAG)), aColWidth.Width());
+        InsertDataColumn(2, String(CUI_RES(STR_POOLED_FLAG)), aColWidth.Width());
         aColWidth = LogicToPixel(Size(60, 0), MAP_APPFONT);
-        InsertDataColumn(3, String(SVX_RES(STR_POOL_TIMEOUT)), aColWidth.Width());
+        InsertDataColumn(3, String(CUI_RES(STR_POOL_TIMEOUT)), aColWidth.Width());
             // Attention: the resource of the string is local to the resource of the enclosing dialog!
     }
 
@@ -338,16 +338,16 @@ namespace offapp
     //====================================================================
     //--------------------------------------------------------------------
     ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet)
-        :SfxTabPage(_pParent, SVX_RES(RID_OFAPAGE_CONNPOOLOPTIONS ), _rAttrSet)
-        ,m_aFrame               (this,              SVX_RES(FL_POOLING))
-        ,m_aEnablePooling       (this,      SVX_RES(CB_POOL_CONNS))
-        ,m_aDriversLabel        (this,      SVX_RES(FT_DRIVERS))
-        ,m_pDriverList(new DriverListControl(this, SVX_RES(CTRL_DRIVER_LIST)))
-        ,m_aDriverLabel         (this,      SVX_RES(FT_DRIVERLABEL))
-        ,m_aDriver              (this,      SVX_RES(FT_DRIVER))
-        ,m_aDriverPoolingEnabled(this,      SVX_RES(CB_DRIVERPOOLING))
-        ,m_aTimeoutLabel        (this,      SVX_RES(FT_TIMEOUT))
-        ,m_aTimeout             (this,      SVX_RES(NF_TIMEOUT))
+        :SfxTabPage(_pParent, CUI_RES(RID_OFAPAGE_CONNPOOLOPTIONS ), _rAttrSet)
+        ,m_aFrame               (this,              CUI_RES(FL_POOLING))
+        ,m_aEnablePooling       (this,      CUI_RES(CB_POOL_CONNS))
+        ,m_aDriversLabel        (this,      CUI_RES(FT_DRIVERS))
+        ,m_pDriverList(new DriverListControl(this, CUI_RES(CTRL_DRIVER_LIST)))
+        ,m_aDriverLabel         (this,      CUI_RES(FT_DRIVERLABEL))
+        ,m_aDriver              (this,      CUI_RES(FT_DRIVER))
+        ,m_aDriverPoolingEnabled(this,      CUI_RES(CB_DRIVERPOOLING))
+        ,m_aTimeoutLabel        (this,      CUI_RES(FT_TIMEOUT))
+        ,m_aTimeout             (this,      CUI_RES(NF_TIMEOUT))
     {
         m_pDriverList->Init();
         m_pDriverList->Show();

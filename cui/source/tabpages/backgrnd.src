@@ -30,8 +30,10 @@
  // include ---------------------------------------------------------------
 #include <svtools/controldims.hrc>
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "backgrnd.hrc"
+#include <svx/dialogs.hrc>
+
  // define ----------------------------------------------------------------
 #define UNLINKED_IMAGE                      \
     Text [ en-US ] = "Unlinked graphic" ; \

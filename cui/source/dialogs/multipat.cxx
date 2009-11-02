@@ -38,10 +38,10 @@
 #include <sfx2/filedlghelper.hxx>
 
 #include "multipat.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 
 #include "multipat.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
@@ -119,7 +119,7 @@ IMPL_LINK( SvxMultiPathDialog, AddHdl_Impl, PushButton *, EMPTYARG )
             }
             else
             {
-                String sMsg( SVX_RES( RID_MULTIPATH_DBL_ERR ) );
+                String sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
                 sMsg.SearchAndReplaceAscii( "%1", sInsPath );
                 InfoBox( this, sMsg ).Execute();
             }
@@ -128,7 +128,7 @@ IMPL_LINK( SvxMultiPathDialog, AddHdl_Impl, PushButton *, EMPTYARG )
         {
             if ( LISTBOX_ENTRY_NOTFOUND != aPathLB.GetEntryPos( sInsPath ) )
             {
-                String sMsg( SVX_RES( RID_MULTIPATH_DBL_ERR ) );
+                String sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
                 sMsg.SearchAndReplaceAscii( "%1", sInsPath );
                 InfoBox( this, sMsg ).Execute();
             }
@@ -193,23 +193,23 @@ IMPL_LINK( SvxMultiPathDialog, DelHdl_Impl, PushButton *, EMPTYARG )
 
 SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, BOOL bEmptyAllowed ) :
 
-    ModalDialog( pParent, SVX_RES( RID_SVXDLG_MULTIPATH ) ),
+    ModalDialog( pParent, CUI_RES( RID_SVXDLG_MULTIPATH ) ),
 
-    aPathFL     ( this, SVX_RES( FL_MULTIPATH) ),
-    aPathLB     ( this, SVX_RES( LB_MULTIPATH ) ),
-    aRadioLB    ( this, SVX_RES( LB_RADIOBUTTON ) ),
-    aRadioFT    ( this, SVX_RES( FT_RADIOBUTTON ) ),
-    aAddBtn     ( this, SVX_RES( BTN_ADD_MULTIPATH ) ),
-    aDelBtn     ( this, SVX_RES( BTN_DEL_MULTIPATH ) ),
-    aOKBtn      ( this, SVX_RES( BTN_MULTIPATH_OK ) ),
-    aCancelBtn  ( this, SVX_RES( BTN_MULTIPATH_CANCEL ) ),
-    aHelpButton ( this, SVX_RES( BTN_MULTIPATH_HELP ) ),
+    aPathFL     ( this, CUI_RES( FL_MULTIPATH) ),
+    aPathLB     ( this, CUI_RES( LB_MULTIPATH ) ),
+    aRadioLB    ( this, CUI_RES( LB_RADIOBUTTON ) ),
+    aRadioFT    ( this, CUI_RES( FT_RADIOBUTTON ) ),
+    aAddBtn     ( this, CUI_RES( BTN_ADD_MULTIPATH ) ),
+    aDelBtn     ( this, CUI_RES( BTN_DEL_MULTIPATH ) ),
+    aOKBtn      ( this, CUI_RES( BTN_MULTIPATH_OK ) ),
+    aCancelBtn  ( this, CUI_RES( BTN_MULTIPATH_CANCEL ) ),
+    aHelpButton ( this, CUI_RES( BTN_MULTIPATH_HELP ) ),
     pImpl       ( new MultiPath_Impl( bEmptyAllowed ) )
 
 {
     static long aStaticTabs[]= { 2, 0, 12 };
     aRadioLB.SvxSimpleTable::SetTabs( aStaticTabs );
-    String sHeader( SVX_RES( STR_HEADER_PATHS ) );
+    String sHeader( CUI_RES( STR_HEADER_PATHS ) );
     aRadioLB.SetQuickHelpText( sHeader );
     sHeader.Insert( '\t', 0 );
     aRadioLB.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
@@ -329,8 +329,8 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
 void SvxMultiPathDialog::SetClassPathMode()
 {
     pImpl->bIsClassPathMode = TRUE;
-    SetText( SVX_RES( RID_SVXSTR_ARCHIVE_TITLE ));
-    aPathFL.SetText( SVX_RES( RID_SVXSTR_ARCHIVE_HEADLINE ) );
+    SetText( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ));
+    aPathFL.SetText( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ) );
 }
 
 // -----------------------------------------------------------------------

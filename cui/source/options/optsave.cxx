@@ -38,10 +38,10 @@
 #define _SVX_OPTSAVE_CXX
 
 #include "optsave.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 #include "optsave.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -96,11 +96,11 @@ class FilterWarningDialog_Impl : public ModalDialog
 };
 // ----------------------------------------------------------------------
 FilterWarningDialog_Impl::FilterWarningDialog_Impl(Window* pParent) :
-    ModalDialog(pParent, SVX_RES( RID_SVXDLG_FILTER_WARNING ) ),
-    aOk(                this, SVX_RES(PB_OK               )),
-    aCancel(            this, SVX_RES(PB_CANCEL           )),
-    aImage(             this, SVX_RES(IMG_WARNING         )),
-    aFilterWarningFT(   this, SVX_RES(FT_FILTER_WARNING   ))
+    ModalDialog(pParent, CUI_RES( RID_SVXDLG_FILTER_WARNING ) ),
+    aOk(                this, CUI_RES(PB_OK               )),
+    aCancel(            this, CUI_RES(PB_CANCEL           )),
+    aImage(             this, CUI_RES(IMG_WARNING         )),
+    aFilterWarningFT(   this, CUI_RES(FT_FILTER_WARNING   ))
 {
     FreeResource();
     aImage.SetImage(WarningBox::GetStandardImage());
@@ -197,41 +197,41 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 
 SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_SAVE ), rCoreSet ),
+    SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_SAVE ), rCoreSet ),
 
-    aLoadFL             ( this, SVX_RES( LB_LOAD ) ),
-    aLoadUserSettingsCB ( this, SVX_RES( CB_LOAD_SETTINGS ) ),
-    aLoadDocPrinterCB   ( this, SVX_RES( CB_LOAD_DOCPRINTER ) ),
+    aLoadFL             ( this, CUI_RES( LB_LOAD ) ),
+    aLoadUserSettingsCB ( this, CUI_RES( CB_LOAD_SETTINGS ) ),
+    aLoadDocPrinterCB   ( this, CUI_RES( CB_LOAD_DOCPRINTER ) ),
 
-    aSaveFL             ( this, SVX_RES( GB_SAVE ) ),
-    aDocInfoCB          ( this, SVX_RES( BTN_DOCINFO ) ),
-    aBackupFI           ( this, SVX_RES( FI_BACKUP ) ),
-    aBackupCB           ( this, SVX_RES( BTN_BACKUP ) ),
-    aAutoSaveCB         ( this, SVX_RES( BTN_AUTOSAVE ) ),
-    aAutoSaveEdit       ( this, SVX_RES( ED_AUTOSAVE ) ),
-    aMinuteFT           ( this, SVX_RES( FT_MINUTE ) ),
-    aRelativeFsysCB     ( this, SVX_RES( BTN_RELATIVE_FSYS ) ),
-    aRelativeInetCB     ( this, SVX_RES( BTN_RELATIVE_INET ) ),
+    aSaveFL             ( this, CUI_RES( GB_SAVE ) ),
+    aDocInfoCB          ( this, CUI_RES( BTN_DOCINFO ) ),
+    aBackupFI           ( this, CUI_RES( FI_BACKUP ) ),
+    aBackupCB           ( this, CUI_RES( BTN_BACKUP ) ),
+    aAutoSaveCB         ( this, CUI_RES( BTN_AUTOSAVE ) ),
+    aAutoSaveEdit       ( this, CUI_RES( ED_AUTOSAVE ) ),
+    aMinuteFT           ( this, CUI_RES( FT_MINUTE ) ),
+    aRelativeFsysCB     ( this, CUI_RES( BTN_RELATIVE_FSYS ) ),
+    aRelativeInetCB     ( this, CUI_RES( BTN_RELATIVE_INET ) ),
 
-    aDefaultFormatFL    ( this, SVX_RES( FL_FILTER ) ),
-    aODFVersionFT       ( this, SVX_RES( FT_ODF_VERSION ) ),
-    aODFVersionLB       ( this, SVX_RES( LB_ODF_VERSION ) ),
-    aSizeOptimizationCB ( this, SVX_RES( BTN_NOPRETTYPRINTING ) ),
-    aWarnAlienFormatCB  ( this, SVX_RES( BTN_WARNALIENFORMAT ) ),
-    aDocTypeFT          ( this, SVX_RES( FT_APP ) ),
-    aDocTypeLB          ( this, SVX_RES( LB_APP ) ),
-    aSaveAsFT           ( this, SVX_RES( FT_FILTER ) ),
-    aSaveAsFI           ( this, SVX_RES( FI_FILTER ) ),
-    aSaveAsLB           ( this, SVX_RES( LB_FILTER ) ),
-    aODFWarningFI       ( this, SVX_RES( FI_ODF_WARNING ) ),
-    aODFWarningFT       ( this, SVX_RES( FT_WARN ) ),
+    aDefaultFormatFL    ( this, CUI_RES( FL_FILTER ) ),
+    aODFVersionFT       ( this, CUI_RES( FT_ODF_VERSION ) ),
+    aODFVersionLB       ( this, CUI_RES( LB_ODF_VERSION ) ),
+    aSizeOptimizationCB ( this, CUI_RES( BTN_NOPRETTYPRINTING ) ),
+    aWarnAlienFormatCB  ( this, CUI_RES( BTN_WARNALIENFORMAT ) ),
+    aDocTypeFT          ( this, CUI_RES( FT_APP ) ),
+    aDocTypeLB          ( this, CUI_RES( LB_APP ) ),
+    aSaveAsFT           ( this, CUI_RES( FT_FILTER ) ),
+    aSaveAsFI           ( this, CUI_RES( FI_FILTER ) ),
+    aSaveAsLB           ( this, CUI_RES( LB_FILTER ) ),
+    aODFWarningFI       ( this, CUI_RES( FI_ODF_WARNING ) ),
+    aODFWarningFT       ( this, CUI_RES( FT_WARN ) ),
 
     pImpl               ( new SvxSaveTabPage_Impl )
 
 {
     sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
     aODFWarningFI.SetImage(
-        Image( SVX_RES( bHighContrast ? IMG_ODF_WARNING_HC : IMG_ODF_WARNING ) ) );
+        Image( CUI_RES( bHighContrast ? IMG_ODF_WARNING_HC : IMG_ODF_WARNING ) ) );
 
     FreeResource();
 

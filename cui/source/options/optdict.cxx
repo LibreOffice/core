@@ -42,14 +42,15 @@
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <svx/dialogs.hrc>
 
 #define _SVX_OPTDICT_CXX
 
 #include <linguistic/misc.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optdict.hrc"
 #include "optdict.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/svxerr.hxx>
 
 using namespace ::com::sun::star;
@@ -101,17 +102,17 @@ static CDE_RESULT cmpDicEntry_Impl( const String &rText1, const String &rText2 )
 SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
         Reference< XSpellChecker1 >  &xSpl ) :
 
-    ModalDialog( pParent, SVX_RES( RID_SFXDLG_NEWDICT ) ),
+    ModalDialog( pParent, CUI_RES( RID_SFXDLG_NEWDICT ) ),
 
-    aNameText       ( this, SVX_RES( FT_DICTNAME ) ),
-    aNameEdit       ( this, SVX_RES( ED_DICTNAME ) ),
-    aLanguageText   ( this, SVX_RES( FT_DICTLANG ) ),
-    aLanguageLB     ( this, SVX_RES( LB_DICTLANG ) ),
-    aExceptBtn      ( this, SVX_RES( BTN_EXCEPT ) ),
-    aNewDictBox     ( this, SVX_RES( GB_NEWDICT ) ),
-    aOKBtn          ( this, SVX_RES( BTN_NEWDICT_OK ) ),
-    aCancelBtn      ( this, SVX_RES( BTN_NEWDICT_ESC ) ),
-    aHelpBtn        ( this, SVX_RES( BTN_NEWDICT_HLP ) ),
+    aNameText       ( this, CUI_RES( FT_DICTNAME ) ),
+    aNameEdit       ( this, CUI_RES( ED_DICTNAME ) ),
+    aLanguageText   ( this, CUI_RES( FT_DICTLANG ) ),
+    aLanguageLB     ( this, CUI_RES( LB_DICTLANG ) ),
+    aExceptBtn      ( this, CUI_RES( BTN_EXCEPT ) ),
+    aNewDictBox     ( this, CUI_RES( GB_NEWDICT ) ),
+    aOKBtn          ( this, CUI_RES( BTN_NEWDICT_OK ) ),
+    aCancelBtn      ( this, CUI_RES( BTN_NEWDICT_ESC ) ),
+    aHelpBtn        ( this, CUI_RES( BTN_NEWDICT_HLP ) ),
     xSpell( xSpl )
 {
     // Handler installieren
@@ -152,7 +153,7 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
     if ( bFound )
     {
         // Doppelte Namen?
-        InfoBox( this, SVX_RESSTR( RID_SVXSTR_OPT_DOUBLE_DICTS ) ).Execute();
+        InfoBox( this, CUI_RESSTR( RID_SVXSTR_OPT_DOUBLE_DICTS ) ).Execute();
         aNameEdit.GrabFocus();
         return 0;
     }
@@ -179,7 +180,7 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
 
         // Fehler: konnte neues W"orterbuch nicht anlegen
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, String(),
-            this, RID_SVXERRCTX, &DIALOG_MGR() );
+            this, RID_SVXERRCTX, &CUI_MGR() );
         ErrorHandler::HandleError( *new StringErrorInfo(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
 
@@ -225,23 +226,23 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
             const String& rName,
             Reference< XSpellChecker1 >  &xSpl ) :
 
-    ModalDialog( pParent, SVX_RES( RID_SFXDLG_EDITDICT ) ),
+    ModalDialog( pParent, CUI_RES( RID_SFXDLG_EDITDICT ) ),
 
-    aBookFT         ( this, SVX_RES( FT_BOOK ) ),
-    aAllDictsLB     ( this, SVX_RES( LB_ALLDICTS ) ),
-    aLangFT         ( this, SVX_RES( FT_DICTLANG ) ),
-    aLangLB         ( this, SVX_RES( LB_DICTLANG ) ),
-    aWordFT         ( this, SVX_RES( FT_WORD ) ),
-    aWordED         ( this, SVX_RES( ED_WORD ) ),
-    aReplaceFT      ( this, SVX_RES( FT_REPLACE ) ),
-    aReplaceED      ( this, SVX_RES( ED_REPLACE ) ),
-    aWordsLB        ( this, SVX_RES( TLB_REPLACE ) ),
-    aNewReplacePB   ( this, SVX_RES( PB_NEW_REPLACE ) ),
-    aDeletePB       ( this, SVX_RES( PB_DELETE_REPLACE ) ),
-    aEditDictsBox   ( this, SVX_RES( GB_EDITDICTS ) ),
-    aCloseBtn       ( this, SVX_RES( BTN_EDITCLOSE ) ),
-    aHelpBtn        ( this, SVX_RES( BTN_EDITHELP ) ),
-    sModify         (SVX_RES(STR_MODIFY)),
+    aBookFT         ( this, CUI_RES( FT_BOOK ) ),
+    aAllDictsLB     ( this, CUI_RES( LB_ALLDICTS ) ),
+    aLangFT         ( this, CUI_RES( FT_DICTLANG ) ),
+    aLangLB         ( this, CUI_RES( LB_DICTLANG ) ),
+    aWordFT         ( this, CUI_RES( FT_WORD ) ),
+    aWordED         ( this, CUI_RES( ED_WORD ) ),
+    aReplaceFT      ( this, CUI_RES( FT_REPLACE ) ),
+    aReplaceED      ( this, CUI_RES( ED_REPLACE ) ),
+    aWordsLB        ( this, CUI_RES( TLB_REPLACE ) ),
+    aNewReplacePB   ( this, CUI_RES( PB_NEW_REPLACE ) ),
+    aDeletePB       ( this, CUI_RES( PB_DELETE_REPLACE ) ),
+    aEditDictsBox   ( this, CUI_RES( GB_EDITDICTS ) ),
+    aCloseBtn       ( this, CUI_RES( BTN_EDITCLOSE ) ),
+    aHelpBtn        ( this, CUI_RES( BTN_EDITHELP ) ),
+    sModify         (CUI_RES(STR_MODIFY)),
     sNew            (aNewReplacePB.GetText()),
     aDecoView       ( this),
     xSpell          ( xSpl ),
@@ -458,7 +459,7 @@ IMPL_LINK( SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox *, EMPTYARG )
 
     if ( nLang != nOldLang )
     {
-        QueryBox aBox( this, SVX_RES( RID_SFXQB_SET_LANGUAGE ) );
+        QueryBox aBox( this, CUI_RES( RID_SFXQB_SET_LANGUAGE ) );
         String sTxt( aBox.GetMessText() );
         sTxt.SearchAndReplaceAscii( "%1", aAllDictsLB.GetSelectEntry() );
         aBox.SetMessText( sTxt );

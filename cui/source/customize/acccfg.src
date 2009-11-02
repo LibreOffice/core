@@ -29,7 +29,7 @@
  ************************************************************************/
  // include ---------------------------------------------------------------
 #include "helpid.hrc"
-#include "svx/dialogs.hrc"
+#include "cuires.hrc"
 #include "acccfg.hrc"
 
 #define MASKCOLOR  MaskColor = \

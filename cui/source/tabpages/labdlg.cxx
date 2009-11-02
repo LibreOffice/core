@@ -36,12 +36,12 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <swpossizetabpage.hxx>
-
+#include <svx/dialogs.hrc>
 #define _SVX_LABDLG_CXX
 
 #include <svx/svdattrx.hxx>
-#include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>
+#include <cuires.hrc>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include "transfrm.hxx"
 
@@ -86,25 +86,25 @@ static USHORT pCaptionRanges[] =
 // -----------------------------------------------------------------------
 
 SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
- :  SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CAPTION ), rInAttrs ),
+ :  SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_CAPTION ), rInAttrs ),
 
-    aCT_CAPTTYPE(       this, SVX_RES( CT_CAPTTYPE ) ),
-    aFT_ABSTAND(        this, SVX_RES( FT_ABSTAND ) ),
-    aMF_ABSTAND(        this, SVX_RES( MF_ABSTAND ) ),
-    aFT_WINKEL(         this, SVX_RES( FT_WINKEL ) ),
-    aLB_WINKEL(         this, SVX_RES( LB_WINKEL ) ),
-    aFT_ANSATZ(         this, SVX_RES( FT_ANSATZ ) ),
-    aLB_ANSATZ(         this, SVX_RES( LB_ANSATZ ) ),
-    aFT_UM(             this, SVX_RES( FT_UM ) ),
-    aMF_ANSATZ(         this, SVX_RES( MF_ANSATZ ) ),
-    aFT_ANSATZ_REL(     this, SVX_RES( FT_ANSATZ_REL ) ),
-    aLB_ANSATZ_REL(     this, SVX_RES( LB_ANSATZ_REL ) ),
-    aFT_LAENGE(         this, SVX_RES( FT_LAENGE ) ),
-    aMF_LAENGE(         this, SVX_RES( MF_LAENGE ) ),
-    aCB_LAENGE(         this, SVX_RES( CB_LAENGE ) ),
+    aCT_CAPTTYPE(       this, CUI_RES( CT_CAPTTYPE ) ),
+    aFT_ABSTAND(        this, CUI_RES( FT_ABSTAND ) ),
+    aMF_ABSTAND(        this, CUI_RES( MF_ABSTAND ) ),
+    aFT_WINKEL(         this, CUI_RES( FT_WINKEL ) ),
+    aLB_WINKEL(         this, CUI_RES( LB_WINKEL ) ),
+    aFT_ANSATZ(         this, CUI_RES( FT_ANSATZ ) ),
+    aLB_ANSATZ(         this, CUI_RES( LB_ANSATZ ) ),
+    aFT_UM(             this, CUI_RES( FT_UM ) ),
+    aMF_ANSATZ(         this, CUI_RES( MF_ANSATZ ) ),
+    aFT_ANSATZ_REL(     this, CUI_RES( FT_ANSATZ_REL ) ),
+    aLB_ANSATZ_REL(     this, CUI_RES( LB_ANSATZ_REL ) ),
+    aFT_LAENGE(         this, CUI_RES( FT_LAENGE ) ),
+    aMF_LAENGE(         this, CUI_RES( MF_LAENGE ) ),
+    aCB_LAENGE(         this, CUI_RES( CB_LAENGE ) ),
 
-    aStrHorzList( SVX_RES(STR_HORZ_LIST) ),
-    aStrVertList( SVX_RES(STR_VERT_LIST) ),
+    aStrHorzList( CUI_RES(STR_HORZ_LIST) ),
+    aStrVertList( CUI_RES(STR_VERT_LIST) ),
 
     rOutAttrs       ( rInAttrs )
 {
@@ -129,8 +129,8 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     sal_uInt16 nBitmap;
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
     {
-        mpBmpCapTypes[nBitmap]  = new Image(Bitmap(SVX_RES(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
-        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(SVX_RES(BMP_CAPTTYPE_1_H + nBitmap)), COL_LIGHTMAGENTA );
+        mpBmpCapTypes[nBitmap]  = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
+        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1_H + nBitmap)), COL_LIGHTMAGENTA );
     }
 
     //------------ValueSet installieren--------------------------
@@ -140,9 +140,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     aCT_CAPTTYPE.SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
 
     Image aImage;
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, String(SVX_RES(STR_CAPTTYPE_1)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, String(SVX_RES(STR_CAPTTYPE_2)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, String(SVX_RES(STR_CAPTTYPE_3)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, String(CUI_RES(STR_CAPTTYPE_1)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, String(CUI_RES(STR_CAPTTYPE_2)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, String(CUI_RES(STR_CAPTTYPE_3)));
 
     FillValueSet();
 
@@ -582,7 +582,7 @@ void SvxCaptionTabPage::FillValueSet()
 
 
 SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView, USHORT nAnchorTypes)
- :  SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_CAPTION ) ),
+ :  SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_CAPTION ) ),
     pView       ( pSdrView ),
     nAnchorCtrls(nAnchorTypes)
 {

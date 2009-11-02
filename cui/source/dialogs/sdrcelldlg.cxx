@@ -33,15 +33,16 @@
 
 #include <svl/cjkoptions.hxx>
 #include <svx/flagsdef.hxx>
-#include "svx/dialogs.hrc"
+#include "cuires.hrc"
 #include "sdrcelldlg.hxx"
-#include "svx/dialmgr.hxx"
+#include "dialmgr.hxx"
 #include "cuitabarea.hxx"
 #include "svx/svdmodel.hxx"
 #include "border.hxx"
+#include <svx/dialogs.hrc>
 
 SvxFormatCellsDialog::SvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel )
-: SfxTabDialog        ( pParent, SVX_RES( RID_SVX_FORMAT_CELLS_DLG ), pAttr )
+: SfxTabDialog        ( pParent, CUI_RES( RID_SVX_FORMAT_CELLS_DLG ), pAttr )
 , mrOutAttrs            ( *pAttr )
 , mpColorTab           ( pModel->GetColorTable() )
 , mpGradientList       ( pModel->GetGradientList() )

@@ -60,7 +60,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/basmgr.hxx>
 #include <tools/urlobj.hxx>
-#include "svx/dialogs.hrc"
+#include "cuires.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/macrconf.hxx>
 #include <sfx2/minfitem.hxx>
@@ -70,7 +70,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
-#include "svx/dialmgr.hxx"
+#include "dialmgr.hxx"
 #include <svl/stritem.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
@@ -550,26 +550,26 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
 };
 
 SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
-    Resource(SVX_RES(RID_SVXPAGE_CONFIGGROUPBOX)),
-    m_hdImage(SVX_RES(IMG_HARDDISK)),
-    m_hdImage_hc(SVX_RES(IMG_HARDDISK_HC)),
-    m_libImage(SVX_RES(IMG_LIB)),
-    m_libImage_hc(SVX_RES(IMG_LIB_HC)),
-    m_macImage(SVX_RES(IMG_MACRO)),
-    m_macImage_hc(SVX_RES(IMG_MACRO_HC)),
-    m_docImage(SVX_RES(IMG_DOC)),
-    m_docImage_hc(SVX_RES(IMG_DOC_HC)),
-    m_sMyMacros(String(SVX_RES(STR_MYMACROS))),
-    m_sProdMacros(String(SVX_RES(STR_PRODMACROS))),
-    m_sMacros(String(SVX_RES(STR_BASICMACROS))),
-    m_sDlgMacros(String(SVX_RES(STR_DLG_MACROS))),
-    m_aHumanAppName(String(SVX_RES(STR_HUMAN_APPNAME))),
-    m_aStrGroupStyles(String(SVX_RES(STR_GROUP_STYLES))),
-    m_aScriptType(String(SVX_RES(STR_BASICNAME))),
-    m_collapsedImage(SVX_RES(BMP_COLLAPSED)),
-    m_collapsedImage_hc(SVX_RES(BMP_COLLAPSED_HC)),
-    m_expandedImage(SVX_RES(BMP_EXPANDED)),
-    m_expandedImage_hc(SVX_RES(BMP_EXPANDED_HC))
+    Resource(CUI_RES(RID_SVXPAGE_CONFIGGROUPBOX)),
+    m_hdImage(CUI_RES(IMG_HARDDISK)),
+    m_hdImage_hc(CUI_RES(IMG_HARDDISK_HC)),
+    m_libImage(CUI_RES(IMG_LIB)),
+    m_libImage_hc(CUI_RES(IMG_LIB_HC)),
+    m_macImage(CUI_RES(IMG_MACRO)),
+    m_macImage_hc(CUI_RES(IMG_MACRO_HC)),
+    m_docImage(CUI_RES(IMG_DOC)),
+    m_docImage_hc(CUI_RES(IMG_DOC_HC)),
+    m_sMyMacros(String(CUI_RES(STR_MYMACROS))),
+    m_sProdMacros(String(CUI_RES(STR_PRODMACROS))),
+    m_sMacros(String(CUI_RES(STR_BASICMACROS))),
+    m_sDlgMacros(String(CUI_RES(STR_DLG_MACROS))),
+    m_aHumanAppName(String(CUI_RES(STR_HUMAN_APPNAME))),
+    m_aStrGroupStyles(String(CUI_RES(STR_GROUP_STYLES))),
+    m_aScriptType(String(CUI_RES(STR_BASICNAME))),
+    m_collapsedImage(CUI_RES(BMP_COLLAPSED)),
+    m_collapsedImage_hc(CUI_RES(BMP_COLLAPSED_HC)),
+    m_expandedImage(CUI_RES(BMP_EXPANDED)),
+    m_expandedImage_hc(CUI_RES(BMP_EXPANDED_HC))
 {
     FreeResource();
 }

@@ -43,7 +43,7 @@
 #include "hltpbase.hxx"
 #include "macroass.hxx"
 #include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <cuires.hrc> //CHINA001
 
 using namespace ::ucbhelper;
 
@@ -440,8 +440,8 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( SvxHyperlinkItem* pHyperli
         mpCbbFrame->SetText ( pHyperlinkItem->GetTargetFrame() );
 
     // Form
-    String aStrFormText = SVX_RESSTR( RID_SVXSTR_HYPERDLG_FROM_TEXT );
-    String aStrFormButton = SVX_RESSTR( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
+    String aStrFormText = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FROM_TEXT );
+    String aStrFormButton = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
 
     if( pHyperlinkItem->GetInsertMode() & HLINK_HTMLMODE )
     {
@@ -589,13 +589,13 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
         SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();
 
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOVER_OBJECT )
-            pMacroPage->AddEvent( String( SVX_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
+            pMacroPage->AddEvent( String( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
                                   SFX_EVENT_MOUSEOVER_OBJECT );
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSECLICK_OBJECT )
-            pMacroPage->AddEvent( String( SVX_RESSTR(RID_SVXSTR_HYPDLG_MACROACT2) ),
+            pMacroPage->AddEvent( String( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT2) ),
                                   SFX_EVENT_MOUSECLICK_OBJECT);
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOUT_OBJECT )
-            pMacroPage->AddEvent( String( SVX_RESSTR(RID_SVXSTR_HYPDLG_MACROACT3) ),
+            pMacroPage->AddEvent( String( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT3) ),
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
         // --> PB 2006-01-13 #123474#

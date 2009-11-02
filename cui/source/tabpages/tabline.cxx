@@ -37,16 +37,17 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <svx/dialogs.hrc>
 
 #define _SVX_TABLINE_CXX
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "tabline.hrc"
 //#include "dlgname.hrc"
 
 #include "cuitabarea.hxx"
 #include "cuitabline.hxx"
 #include "dlgname.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xtable.hxx>
 #include "svx/drawitem.hxx"
@@ -72,7 +73,7 @@ SvxLineTabDialog::SvxLineTabDialog
     BOOL bHasObj
 ) :
 
-    SfxTabDialog    ( pParent, SVX_RES( RID_SVXDLG_LINE ), pAttr ),
+    SfxTabDialog    ( pParent, CUI_RES( RID_SVXDLG_LINE ), pAttr ),
     pDrawModel      ( pModel ),
     pObj            ( pSdrObj ),
     rOutAttrs       ( *pAttr ),
@@ -130,7 +131,7 @@ SvxLineTabDialog::SvxLineTabDialog
 
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
-//! rBtnCancel.SetText( SVX_RESSTR( RID_SVXSTR_CLOSE ) );
+//! rBtnCancel.SetText( CUI_RESSTR( RID_SVXSTR_CLOSE ) );
 }
 
 // -----------------------------------------------------------------------

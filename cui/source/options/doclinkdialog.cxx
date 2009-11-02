@@ -38,7 +38,7 @@
 #ifndef _SVX_DOCLINKDIALOG_HRC_
 #include "doclinkdialog.hrc"
 #endif
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>
 #ifndef SVTOOLS_FILENOTATION_HXX_
@@ -46,7 +46,7 @@
 #endif
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
@@ -64,19 +64,19 @@ namespace svx
     //==================================================================
     //------------------------------------------------------------------
     ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
-        :ModalDialog( _pParent, SVX_RES(DLG_DOCUMENTLINK) )
-        ,m_aURLLabel        (this, SVX_RES(FT_URL))
-        ,m_aURL             (this, SVX_RES(CMB_URL))
-        ,m_aBrowseFile      (this, SVX_RES(PB_BROWSEFILE))
-        ,m_aNameLabel       (this, SVX_RES(FT_NAME))
-        ,m_aName            (this, SVX_RES(ET_NAME))
-        ,m_aBottomLine      (this, SVX_RES(FL_BOTTOM))
-        ,m_aOK              (this, SVX_RES(BTN_OK))
-        ,m_aCancel          (this, SVX_RES(BTN_CANCEL))
-        ,m_aHelp            (this, SVX_RES(BTN_HELP))
+        :ModalDialog( _pParent, CUI_RES(DLG_DOCUMENTLINK) )
+        ,m_aURLLabel        (this, CUI_RES(FT_URL))
+        ,m_aURL             (this, CUI_RES(CMB_URL))
+        ,m_aBrowseFile      (this, CUI_RES(PB_BROWSEFILE))
+        ,m_aNameLabel       (this, CUI_RES(FT_NAME))
+        ,m_aName            (this, CUI_RES(ET_NAME))
+        ,m_aBottomLine      (this, CUI_RES(FL_BOTTOM))
+        ,m_aOK              (this, CUI_RES(BTN_OK))
+        ,m_aCancel          (this, CUI_RES(BTN_CANCEL))
+        ,m_aHelp            (this, CUI_RES(BTN_HELP))
         ,m_bCreatingNew(_bCreateNew)
     {
-        String sText = String( SVX_RES( m_bCreatingNew ? STR_NEW_LINK : STR_EDIT_LINK ) );
+        String sText = String( CUI_RES( m_bCreatingNew ? STR_NEW_LINK : STR_EDIT_LINK ) );
         SetText(sText);
 
         FreeResource();
@@ -141,7 +141,7 @@ namespace svx
 
         if (!bFileExists)
         {
-            String sMsg = String(SVX_RES(STR_LINKEDDOC_DOESNOTEXIST));
+            String sMsg = String(CUI_RES(STR_LINKEDDOC_DOESNOTEXIST));
             sMsg.SearchAndReplaceAscii("$file$", m_aURL.GetText());
             ErrorBox aError(this, WB_OK , sMsg);
             aError.Execute();
@@ -150,7 +150,7 @@ namespace svx
         INetURLObject aURL( sURL );
         if ( aURL.GetProtocol() != INET_PROT_FILE )
         {
-            String sMsg = String(SVX_RES(STR_LINKEDDOC_NO_SYSTEM_FILE));
+            String sMsg = String(CUI_RES(STR_LINKEDDOC_NO_SYSTEM_FILE));
             sMsg.SearchAndReplaceAscii("$file$", m_aURL.GetText());
             ErrorBox aError(this, WB_OK , sMsg);
             aError.Execute();
@@ -162,7 +162,7 @@ namespace svx
         {
             if ( !m_aNameValidator.Call( &sCurrentText ) )
             {
-                String sMsg = String(SVX_RES(STR_NAME_CONFLICT));
+                String sMsg = String(CUI_RES(STR_NAME_CONFLICT));
                 sMsg.SearchAndReplaceAscii("$file$", sCurrentText);
                 InfoBox aError(this, sMsg);
                 aError.Execute();

@@ -34,15 +34,15 @@
 // include ---------------------------------------------------------------
 
 #include <svx/svxenum.hxx>
-
 #include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "align.hrc"
 #include <svx/rotmodit.hxx>
 
 #include <svx/algitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include "align.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
@@ -123,32 +123,32 @@ static USHORT s_pRanges[] =
 
 AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_ALIGNMENT ), rCoreAttrs ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_ALIGNMENT ), rCoreAttrs ),
 
-    maFlAlignment   ( this, SVX_RES( FL_ALIGNMENT ) ),
-    maFtHorAlign    ( this, SVX_RES( FT_HORALIGN ) ),
-    maLbHorAlign    ( this, SVX_RES( LB_HORALIGN ) ),
-    maFtIndent      ( this, SVX_RES( FT_INDENT ) ),
-    maEdIndent      ( this, SVX_RES( ED_INDENT ) ),
-    maFtVerAlign    ( this, SVX_RES( FT_VERALIGN ) ),
-    maLbVerAlign    ( this, SVX_RES( LB_VERALIGN ) ),
+    maFlAlignment   ( this, CUI_RES( FL_ALIGNMENT ) ),
+    maFtHorAlign    ( this, CUI_RES( FT_HORALIGN ) ),
+    maLbHorAlign    ( this, CUI_RES( LB_HORALIGN ) ),
+    maFtIndent      ( this, CUI_RES( FT_INDENT ) ),
+    maEdIndent      ( this, CUI_RES( ED_INDENT ) ),
+    maFtVerAlign    ( this, CUI_RES( FT_VERALIGN ) ),
+    maLbVerAlign    ( this, CUI_RES( LB_VERALIGN ) ),
 
-    maFlOrient      ( this, SVX_RES( FL_ORIENTATION ) ),
-    maCtrlDial      ( this, SVX_RES( CTR_DIAL ) ),
-    maFtRotate      ( this, SVX_RES( FT_DEGREES ) ),
-    maNfRotate      ( this, SVX_RES( NF_DEGREES ) ),
-    maFtRefEdge     ( this, SVX_RES( FT_BORDER_LOCK ) ),
-    maVsRefEdge     ( this, SVX_RES( CTR_BORDER_LOCK ) ),
-    maCbStacked     ( this, SVX_RES( BTN_TXTSTACKED ) ),
-    maCbAsianMode   ( this, SVX_RES( BTN_ASIAN_VERTICAL ) ),
+    maFlOrient      ( this, CUI_RES( FL_ORIENTATION ) ),
+    maCtrlDial      ( this, CUI_RES( CTR_DIAL ) ),
+    maFtRotate      ( this, CUI_RES( FT_DEGREES ) ),
+    maNfRotate      ( this, CUI_RES( NF_DEGREES ) ),
+    maFtRefEdge     ( this, CUI_RES( FT_BORDER_LOCK ) ),
+    maVsRefEdge     ( this, CUI_RES( CTR_BORDER_LOCK ) ),
+    maCbStacked     ( this, CUI_RES( BTN_TXTSTACKED ) ),
+    maCbAsianMode   ( this, CUI_RES( BTN_ASIAN_VERTICAL ) ),
     maOrientHlp     ( maCtrlDial, maNfRotate, maCbStacked ),
 
-    maFlProperties  ( this, SVX_RES( FL_WRAP ) ),
-    maBtnWrap       ( this, SVX_RES( BTN_WRAP ) ),
-    maBtnHyphen     ( this, SVX_RES( BTN_HYPH ) ),
-    maBtnShrink     ( this, SVX_RES( BTN_SHRINK ) ),
-    maFtFrameDir    ( this, SVX_RES( FT_TEXTFLOW ) ),
-    maLbFrameDir    ( this, SVX_RES( LB_FRAMEDIR ) )
+    maFlProperties  ( this, CUI_RES( FL_WRAP ) ),
+    maBtnWrap       ( this, CUI_RES( BTN_WRAP ) ),
+    maBtnHyphen     ( this, CUI_RES( BTN_HYPH ) ),
+    maBtnShrink     ( this, CUI_RES( BTN_SHRINK ) ),
+    maFtFrameDir    ( this, CUI_RES( FT_TEXTFLOW ) ),
+    maLbFrameDir    ( this, CUI_RES( LB_FRAMEDIR ) )
 {
     InitVsRefEgde();
 
@@ -168,9 +168,9 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     maCbAsianMode.Show( SvtCJKOptions().IsVerticalTextEnabled() );
 
     // CTL frame direction
-    maLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
-    maLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
-    maLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+    maLbFrameDir.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+    maLbFrameDir.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+    maLbFrameDir.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
     if( !SvtLanguageOptions().IsCTLFontEnabled() )
     {
         maFtFrameDir.Hide();
@@ -234,7 +234,7 @@ void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     SfxTabPage::DataChanged( rDCEvt );
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        svt::OLocalResourceAccess aLocalResAcc( SVX_RES( RID_SVXPAGE_ALIGNMENT ), RSC_TABPAGE );
+        svt::OLocalResourceAccess aLocalResAcc( CUI_RES( RID_SVXPAGE_ALIGNMENT ), RSC_TABPAGE );
         InitVsRefEgde();
     }
 }
@@ -244,7 +244,7 @@ void AlignmentTabPage::InitVsRefEgde()
     // remember selection - is deleted in call to ValueSet::Clear()
     USHORT nSel = maVsRefEdge.GetSelectItemId();
 
-    ResId aResId( GetBackground().GetColor().IsDark() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS, DIALOG_MGR() );
+    ResId aResId( GetBackground().GetColor().IsDark() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS, CUI_MGR() );
     ImageList aImageList( aResId );
     Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
 
@@ -252,9 +252,9 @@ void AlignmentTabPage::InitVsRefEgde()
     maVsRefEdge.SetStyle( maVsRefEdge.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
 
     maVsRefEdge.SetColCount( 3 );
-    maVsRefEdge.InsertItem( IID_BOTTOMLOCK, aImageList.GetImage( IID_BOTTOMLOCK ),  String( SVX_RES( STR_BOTTOMLOCK ) ) );
-    maVsRefEdge.InsertItem( IID_TOPLOCK,    aImageList.GetImage( IID_TOPLOCK ),     String( SVX_RES( STR_TOPLOCK ) ) );
-    maVsRefEdge.InsertItem( IID_CELLLOCK,   aImageList.GetImage( IID_CELLLOCK ),    String( SVX_RES( STR_CELLLOCK ) ) );
+    maVsRefEdge.InsertItem( IID_BOTTOMLOCK, aImageList.GetImage( IID_BOTTOMLOCK ),  String( CUI_RES( STR_BOTTOMLOCK ) ) );
+    maVsRefEdge.InsertItem( IID_TOPLOCK,    aImageList.GetImage( IID_TOPLOCK ),     String( CUI_RES( STR_TOPLOCK ) ) );
+    maVsRefEdge.InsertItem( IID_CELLLOCK,   aImageList.GetImage( IID_CELLLOCK ),    String( CUI_RES( STR_CELLLOCK ) ) );
 
     maVsRefEdge.SetSizePixel( maVsRefEdge.CalcWindowSizePixel( aItemSize ) );
 

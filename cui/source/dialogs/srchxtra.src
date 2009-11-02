@@ -29,8 +29,9 @@
  ************************************************************************/
  // include ---------------------------------------------------------------
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "srchxtra.hrc"
+#include <svx/dialogs.hrc>
 
  // RID_SVXDLG_SEARCHFORMAT -----------------------------------------------
 TabDialog RID_SVXDLG_SEARCHFORMAT

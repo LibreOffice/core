@@ -54,9 +54,9 @@
 #define _SVX_OPTPATH_CXX
 
 #include "optpath.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "optpath.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -218,22 +218,22 @@ BOOL IsMultiPath_Impl( const USHORT nIndex )
 
 SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_PATH ), rSet ),
+    SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_PATH ), rSet ),
 
-    aTypeText       ( this, SVX_RES( FT_TYPE ) ),
-    aPathText       ( this, SVX_RES( FT_PATH ) ),
-    aPathCtrl       ( this, SVX_RES( LB_PATH ) ),
-    aStandardBtn    ( this, SVX_RES( BTN_STANDARD ) ),
-    aPathBtn        ( this, SVX_RES( BTN_PATH ) ),
-    aStdBox         ( this, SVX_RES( GB_STD ) ),
+    aTypeText       ( this, CUI_RES( FT_TYPE ) ),
+    aPathText       ( this, CUI_RES( FT_PATH ) ),
+    aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
+    aStandardBtn    ( this, CUI_RES( BTN_STANDARD ) ),
+    aPathBtn        ( this, CUI_RES( BTN_PATH ) ),
+    aStdBox         ( this, CUI_RES( GB_STD ) ),
 
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
-    pImpl           ( new OptPath_Impl( SVX_RES(IMG_LOCK), SVX_RES(IMG_LOCK_HC) ) ),
+    pImpl           ( new OptPath_Impl( CUI_RES(IMG_LOCK), CUI_RES(IMG_LOCK_HC) ) ),
     xDialogListener ( new ::svt::DialogClosedListener() )
 
 {
-    pImpl->m_sMultiPathDlg = String( SVX_RES( STR_MULTIPATHDLG ) );
+    pImpl->m_sMultiPathDlg = String( CUI_RES( STR_MULTIPATHDLG ) );
     aStandardBtn.SetClickHdl( LINK( this, SvxPathTabPage, StandardHdl_Impl ) );
     Link aLink = LINK( this, SvxPathTabPage, PathHdl_Impl );
     aPathBtn.SetClickHdl( aLink );
@@ -344,7 +344,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
 #endif
             case SvtPathOptions::PATH_WORK:
             {
-                String aStr( SVX_RES( RID_SVXSTR_PATH_NAME_START + i ) );
+                String aStr( CUI_RES( RID_SVXSTR_PATH_NAME_START + i ) );
                 String sInternal, sUser, sWritable;
                 sal_Bool bReadOnly = sal_False;
                 GetPathList( i, sInternal, sUser, sWritable, bReadOnly );

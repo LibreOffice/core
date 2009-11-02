@@ -29,9 +29,10 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "dstribut.hrc"
 #include "helpid.hrc"
+#include <svx/dialogs.hrc>
 
 // RID_SVXPAGE_DISTRIBUTE ---------------------------------------------------
 #define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }

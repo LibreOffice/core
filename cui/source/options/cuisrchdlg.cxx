@@ -50,14 +50,14 @@
 #define _CUI_SRCHDLG_CXX
 #include "cuisrchdlg.hxx"
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svx/svxitems.hrc>
 
 #define ITEMID_SETITEM      0
 
 #include <sfx2/srchitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <optjsearch.hxx>
 #include <svx/brshitem.hxx>
@@ -68,7 +68,7 @@
 
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
             Window *pParent,
-            const SfxItemSet& rOptionsSet, USHORT /*nUniqueId*/, INT32 nInitialFlags ) :
+            const SfxItemSet& rOptionsSet, INT32 nInitialFlags ) :
     SfxSingleTabDialog  ( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
     nInitialTlFlags( nInitialFlags )
 {

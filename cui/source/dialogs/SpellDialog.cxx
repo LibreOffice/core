@@ -61,7 +61,7 @@
 #include <vcl/graph.hxx>
 #include <osl/file.hxx>
 #include <svx/impgrf.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <helpid.hrc>
 #include "SpellDialog.hrc"
 #include <svx/optitems.hxx>
@@ -70,7 +70,7 @@
 #include "SpellDialog.hxx"
 #include <svx/dlgutil.hxx>
 #include "optlingu.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/svxerr.hxx>
 #include "treeopt.hxx"
 
@@ -204,43 +204,43 @@ SpellDialog::SpellDialog(
             : SfxModelessDialog (_pBindings,
                                     pChildWindow,
                                     pParent,
-                                    SVX_RES(RID_SVXDLG_SPELLCHECK)),
+                                    CUI_RES(RID_SVXDLG_SPELLCHECK)),
 
-    aVendorImageFI  ( this , SVX_RES( IMG_VENDOR ) ),
-    aLanguageFT     ( this, SVX_RES( FT_LANGUAGE ) ),
-    aLanguageLB     ( this, SVX_RES( LB_LANGUAGE ) ),
-    aNotInDictFT    ( this, SVX_RES( FT_NOTINDICT ) ),
-    aSentenceED      ( this, SVX_RES( ED_NEWWORD ) ),
-    aSuggestionFT   ( this, SVX_RES( FT_SUGGESTION ) ),
-    aSuggestionLB   ( this, SVX_RES( LB_SUGGESTION ) ),
+    aVendorImageFI  ( this , CUI_RES( IMG_VENDOR ) ),
+    aLanguageFT     ( this, CUI_RES( FT_LANGUAGE ) ),
+    aLanguageLB     ( this, CUI_RES( LB_LANGUAGE ) ),
+    aNotInDictFT    ( this, CUI_RES( FT_NOTINDICT ) ),
+    aSentenceED      ( this, CUI_RES( ED_NEWWORD ) ),
+    aSuggestionFT   ( this, CUI_RES( FT_SUGGESTION ) ),
+    aSuggestionLB   ( this, CUI_RES( LB_SUGGESTION ) ),
 
-    aIgnorePB       ( this, SVX_RES( PB_IGNORE ) ),
-    aIgnoreAllPB    ( this, SVX_RES( PB_IGNOREALL ) ),
-    aIgnoreRulePB   ( this, SVX_RES( PB_IGNORERULE ) ),
-    aAddToDictMB    ( this, SVX_RES( MB_ADDTODICT ) ),
+    aIgnorePB       ( this, CUI_RES( PB_IGNORE ) ),
+    aIgnoreAllPB    ( this, CUI_RES( PB_IGNOREALL ) ),
+    aIgnoreRulePB   ( this, CUI_RES( PB_IGNORERULE ) ),
+    aAddToDictMB    ( this, CUI_RES( MB_ADDTODICT ) ),
 
-    aChangePB       ( this, SVX_RES( PB_CHANGE ) ),
-    aChangeAllPB    ( this, SVX_RES( PB_CHANGEALL ) ),
-    aExplainPB      ( this, SVX_RES( PB_EXPLAIN) ),
-    aAutoCorrPB     ( this, SVX_RES( PB_AUTOCORR ) ),
+    aChangePB       ( this, CUI_RES( PB_CHANGE ) ),
+    aChangeAllPB    ( this, CUI_RES( PB_CHANGEALL ) ),
+    aExplainPB      ( this, CUI_RES( PB_EXPLAIN) ),
+    aAutoCorrPB     ( this, CUI_RES( PB_AUTOCORR ) ),
 
-    aCheckGrammarCB ( this, SVX_RES( CB_CHECK_GRAMMAR ) ),
+    aCheckGrammarCB ( this, CUI_RES( CB_CHECK_GRAMMAR ) ),
 
-    aHelpPB         ( this, SVX_RES( PB_HELP ) ),
-    aOptionsPB      ( this, SVX_RES( PB_OPTIONS ) ),
-    aUndoPB         ( this, SVX_RES( PB_UNDO ) ),
-    aClosePB        ( this, SVX_RES( PB_CLOSE ) ),
-    aBackgroundGB   ( this, SVX_RES( GB_BACKGROUND ) ),
+    aHelpPB         ( this, CUI_RES( PB_HELP ) ),
+    aOptionsPB      ( this, CUI_RES( PB_OPTIONS ) ),
+    aUndoPB         ( this, CUI_RES( PB_UNDO ) ),
+    aClosePB        ( this, CUI_RES( PB_CLOSE ) ),
+    aBackgroundGB   ( this, CUI_RES( GB_BACKGROUND ) ),
 
-    aVendorImage    ( SVX_RES( IMG_DEFAULT_VENDOR ) ),
-    aVendorImageHC  ( SVX_RES( IMG_DEFAULT_VENDOR_HC ) ),
+    aVendorImage    ( CUI_RES( IMG_DEFAULT_VENDOR ) ),
+    aVendorImageHC  ( CUI_RES( IMG_DEFAULT_VENDOR_HC ) ),
 
-    aResumeST       ( SVX_RES(ST_RESUME )),
+    aResumeST       ( CUI_RES(ST_RESUME )),
     aIgnoreOnceST   ( aIgnorePB.GetText()),
-    aNoSuggestionsST( SVX_RES(ST_NOSUGGESTIONS)),
-    m_sTitleSpelling              ( SVX_RES( ST_SPELLING                        ) ),
-    m_sTitleSpellingGrammar       ( SVX_RES( ST_SPELLING_AND_GRAMMAR            ) ),
-    m_sTitleSpellingGrammarVendor ( SVX_RES( ST_SPELLING_AND_GRAMMAR_VENDORNAME ) ),
+    aNoSuggestionsST( CUI_RES(ST_NOSUGGESTIONS)),
+    m_sTitleSpelling              ( CUI_RES( ST_SPELLING                        ) ),
+    m_sTitleSpellingGrammar       ( CUI_RES( ST_SPELLING_AND_GRAMMAR            ) ),
+    m_sTitleSpellingGrammarVendor ( CUI_RES( ST_SPELLING_AND_GRAMMAR_VENDORNAME ) ),
     aDialogUndoLink( LINK (this, SpellDialog, DialogUndoHdl)),
     bModified( false ),
     bFocusLocked( true ),

@@ -33,13 +33,13 @@
 
 #include <cstddef>
 #include <swpossizetabpage.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/anchorid.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/swframevalidation.hxx>
 #include <tools/debug.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <swpossizetabpage.hrc>
 #include <svx/htmlmode.hxx>
 #include <svx/svdview.hxx>
@@ -49,6 +49,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <svx/dialogs.hrc>
 
 using namespace ::com::sun::star::text;
 #define SwFPos SvxSwFramePosString
@@ -525,48 +526,48 @@ ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
 
   -----------------------------------------------------------------------*/
 SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_SWPOSSIZE ), rInAttrs ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_SWPOSSIZE ), rInAttrs ),
 #ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
-    m_aSizeFL(    this, SVX_RES( FL_SIZE   ) ),
-    m_aWidthFT(   this, SVX_RES( FT_WIDTH  ) ),
-    m_aWidthMF(   this, SVX_RES( MF_WIDTH  ) ),
-    m_aHeightFT(  this, SVX_RES( FT_HEIGHT ) ),
-    m_aHeightMF(  this, SVX_RES( MF_HEIGHT ) ),
-    m_aKeepRatioCB(this,SVX_RES( CB_KEEPRATIO) ),
-    m_aSeparatorFL(this,SVX_RES( FL_SEPARATOR) ),
+    m_aSizeFL(    this, CUI_RES( FL_SIZE   ) ),
+    m_aWidthFT(   this, CUI_RES( FT_WIDTH  ) ),
+    m_aWidthMF(   this, CUI_RES( MF_WIDTH  ) ),
+    m_aHeightFT(  this, CUI_RES( FT_HEIGHT ) ),
+    m_aHeightMF(  this, CUI_RES( MF_HEIGHT ) ),
+    m_aKeepRatioCB(this,CUI_RES( CB_KEEPRATIO) ),
+    m_aSeparatorFL(this,CUI_RES( FL_SEPARATOR) ),
 
-    m_aAnchorFL(  this, SVX_RES( FL_ANCHOR ) ),
-    m_aToPageRB(  this, SVX_RES( RB_TOPAGE ) ),
-    m_aToParaRB(  this, SVX_RES( RB_TOPARA ) ),
-    m_aToCharRB(  this, SVX_RES( RB_TOCHAR ) ),
-    m_aAsCharRB(  this, SVX_RES( RB_ASCHAR ) ),
-    m_aToFrameRB( this, SVX_RES( RB_TOFRAME) ),
+    m_aAnchorFL(  this, CUI_RES( FL_ANCHOR ) ),
+    m_aToPageRB(  this, CUI_RES( RB_TOPAGE ) ),
+    m_aToParaRB(  this, CUI_RES( RB_TOPARA ) ),
+    m_aToCharRB(  this, CUI_RES( RB_TOCHAR ) ),
+    m_aAsCharRB(  this, CUI_RES( RB_ASCHAR ) ),
+    m_aToFrameRB( this, CUI_RES( RB_TOFRAME) ),
 
-    m_aProtectionFL(  this, SVX_RES( FL_PROTECTION  ) ),
-    m_aPositionCB(    this, SVX_RES( CB_POSITION    ) ),
-    m_aSizeCB(        this, SVX_RES( CB_SIZE        ) ),
+    m_aProtectionFL(  this, CUI_RES( FL_PROTECTION  ) ),
+    m_aPositionCB(    this, CUI_RES( CB_POSITION    ) ),
+    m_aSizeCB(        this, CUI_RES( CB_SIZE        ) ),
 
-    m_aPositionFL(    this, SVX_RES( FL_POSITION    ) ),
-    m_aHoriFT(        this, SVX_RES( FT_HORI        ) ),
-    m_aHoriLB(        this, SVX_RES( LB_HORI        ) ),
-    m_aHoriByFT(      this, SVX_RES( FT_HORIBY      ) ),
-    m_aHoriByMF(      this, SVX_RES( MF_HORIBY      ) ),
-    m_aHoriToFT(      this, SVX_RES( FT_HORITO      ) ),
-    m_aHoriToLB(      this, SVX_RES( LB_HORITO      ) ),
+    m_aPositionFL(    this, CUI_RES( FL_POSITION    ) ),
+    m_aHoriFT(        this, CUI_RES( FT_HORI        ) ),
+    m_aHoriLB(        this, CUI_RES( LB_HORI        ) ),
+    m_aHoriByFT(      this, CUI_RES( FT_HORIBY      ) ),
+    m_aHoriByMF(      this, CUI_RES( MF_HORIBY      ) ),
+    m_aHoriToFT(      this, CUI_RES( FT_HORITO      ) ),
+    m_aHoriToLB(      this, CUI_RES( LB_HORITO      ) ),
 
-    m_aHoriMirrorCB(  this, SVX_RES( CB_HORIMIRROR  ) ),
+    m_aHoriMirrorCB(  this, CUI_RES( CB_HORIMIRROR  ) ),
 
-    m_aVertFT(        this, SVX_RES( FT_VERT        ) ),
-    m_aVertLB(        this, SVX_RES( LB_VERT        ) ),
-    m_aVertByFT(      this, SVX_RES( FT_VERTBY      ) ),
-    m_aVertByMF(      this, SVX_RES( MF_VERTBY      ) ),
-    m_aVertToFT(      this, SVX_RES( FT_VERTTO      ) ),
-    m_aVertToLB(      this, SVX_RES( LB_VERTTO      ) ),
+    m_aVertFT(        this, CUI_RES( FT_VERT        ) ),
+    m_aVertLB(        this, CUI_RES( LB_VERT        ) ),
+    m_aVertByFT(      this, CUI_RES( FT_VERTBY      ) ),
+    m_aVertByMF(      this, CUI_RES( MF_VERTBY      ) ),
+    m_aVertToFT(      this, CUI_RES( FT_VERTTO      ) ),
+    m_aVertToLB(      this, CUI_RES( LB_VERTTO      ) ),
 
-    m_aFollowCB(      this, SVX_RES( CB_FOLLOW      ) ),
-    m_aExampleWN( this,   SVX_RES( WN_EXAMPLE ) ),
+    m_aFollowCB(      this, CUI_RES( CB_FOLLOW      ) ),
+    m_aExampleWN( this,   CUI_RES( WN_EXAMPLE ) ),
 #ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif

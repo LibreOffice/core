@@ -32,8 +32,8 @@
 #include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 #include <com/sun/star/task/UrlRecord.hpp>
 #include <com/sun/star/task/XPasswordContainer.hpp>
 #include <com/sun/star/task/XMasterPasswordHandling.hpp>
@@ -99,22 +99,22 @@ void PasswordTable::Resort( bool bForced )
 
 // -----------------------------------------------------------------------
 WebConnectionInfoDialog::WebConnectionInfoDialog( Window* pParent ) :
-     ModalDialog( pParent, SVX_RES( RID_SVXDLG_WEBCONNECTION_INFO ) )
-    ,m_aNeverShownFI    ( this, SVX_RES( FI_NEVERSHOWN ) )
-    ,m_aPasswordsLB     ( this, SVX_RES( LB_PASSWORDS ) )
-    ,m_aRemoveBtn       ( this, SVX_RES( PB_REMOVE ) )
-    ,m_aRemoveAllBtn    ( this, SVX_RES( PB_REMOVEALL ) )
-    ,m_aChangeBtn       ( this, SVX_RES( PB_CHANGE ) )
-    ,m_aButtonsFL       ( this, SVX_RES( FL_BUTTONS ) )
-    ,m_aCloseBtn        ( this, SVX_RES( PB_CLOSE ) )
-    ,m_aHelpBtn         ( this, SVX_RES( PB_HELP ) )
+     ModalDialog( pParent, CUI_RES( RID_SVXDLG_WEBCONNECTION_INFO ) )
+    ,m_aNeverShownFI    ( this, CUI_RES( FI_NEVERSHOWN ) )
+    ,m_aPasswordsLB     ( this, CUI_RES( LB_PASSWORDS ) )
+    ,m_aRemoveBtn       ( this, CUI_RES( PB_REMOVE ) )
+    ,m_aRemoveAllBtn    ( this, CUI_RES( PB_REMOVEALL ) )
+    ,m_aChangeBtn       ( this, CUI_RES( PB_CHANGE ) )
+    ,m_aButtonsFL       ( this, CUI_RES( FL_BUTTONS ) )
+    ,m_aCloseBtn        ( this, CUI_RES( PB_CLOSE ) )
+    ,m_aHelpBtn         ( this, CUI_RES( PB_HELP ) )
     ,m_nPos             ( -1 )
 {
     static long aStaticTabs[]= { 3, 0, 150, 250 };
     m_aPasswordsLB.SetTabs( aStaticTabs );
-    m_aPasswordsLB.InsertHeaderItem( 1, SVX_RESSTR( STR_WEBSITE ),
+    m_aPasswordsLB.InsertHeaderItem( 1, CUI_RESSTR( STR_WEBSITE ),
         HIB_LEFT | HIB_VCENTER | HIB_FIXEDPOS | HIB_CLICKABLE | HIB_UPARROW );
-    m_aPasswordsLB.InsertHeaderItem( 2, SVX_RESSTR( STR_USERNAME ),
+    m_aPasswordsLB.InsertHeaderItem( 2, CUI_RESSTR( STR_USERNAME ),
         HIB_LEFT | HIB_VCENTER | HIB_FIXEDPOS );
     m_aPasswordsLB.ResetTabs();
 

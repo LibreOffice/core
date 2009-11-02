@@ -47,8 +47,8 @@
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
 
-#include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>
+#include <cuires.hrc>
+#include <dialmgr.hxx>
 #include "cuicharmap.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -60,7 +60,7 @@
 // class SvxCharacterMap =================================================
 
 SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne, const SfxItemSet* pSet ) :
-    SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_CHARMAP ) ),
+    SfxModalDialog( pParent, CUI_RES( RID_SVXDLG_CHARMAP ) ),
     mpCharMapData( 0 )
 {
     SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, FALSE );
@@ -71,7 +71,7 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne, const SfxItemSet* 
     if ( pCharItem )
         SetChar( pItem->GetValue() );
 
-    mpCharMapData =  new SvxCharMapData( this, bOne, &DIALOG_MGR() );
+    mpCharMapData =  new SvxCharMapData( this, bOne, &CUI_MGR() );
 
     SFX_ITEMSET_ARG( pSet, pDisableItem, SfxBoolItem, FN_PARAM_2, FALSE );
     if ( pDisableItem && pDisableItem->GetValue() )

@@ -28,7 +28,9 @@
  *
  ************************************************************************/
 
+#include <cuires.hrc>
 #include <svx/dialogs.hrc>
+
 TabDialog RID_SVX_FORMAT_CELLS_DLG
 {
     OutputSize = TRUE ;

@@ -36,7 +36,7 @@
 #include <sfx2/module.hxx>
 #include <tools/shl.hxx>
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 #define _SVX_MEASURE_CXX
 
@@ -44,11 +44,12 @@
 #include <svx/svdattr.hxx>
 #include <svx/svdattrx.hxx>
 #include <svx/svdview.hxx>
-
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 #include "svx/measctrl.hxx"
 #include "measure.hxx"
 #include "measure.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/strarray.hxx>
 #include <sfx2/request.hxx> //add CHINA001
@@ -97,35 +98,35 @@ SvxMeasureDialog::~SvxMeasureDialog()
 \************************************************************************/
 
 SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage      ( pWindow, SVX_RES( RID_SVXPAGE_MEASURE ),
+                SvxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_MEASURE ),
                                   rInAttrs ),
 
-        aFlLine                 ( this, SVX_RES( FL_LINE ) ),
-        aFtLineDist             ( this, SVX_RES( FT_LINE_DIST ) ),
-        aMtrFldLineDist         ( this, SVX_RES( MTR_LINE_DIST ) ),
-        aFtHelplineOverhang     ( this, SVX_RES( FT_HELPLINE_OVERHANG ) ),
-        aMtrFldHelplineOverhang ( this, SVX_RES( MTR_FLD_HELPLINE_OVERHANG ) ),
-        aFtHelplineDist         ( this, SVX_RES( FT_HELPLINE_DIST ) ),
-        aMtrFldHelplineDist     ( this, SVX_RES( MTR_FLD_HELPLINE_DIST ) ),
-        aFtHelpline1Len         ( this, SVX_RES( FT_HELPLINE1_LEN ) ),
-        aMtrFldHelpline1Len     ( this, SVX_RES( MTR_FLD_HELPLINE1_LEN ) ),
-        aFtHelpline2Len         ( this, SVX_RES( FT_HELPLINE2_LEN ) ),
-        aMtrFldHelpline2Len     ( this, SVX_RES( MTR_FLD_HELPLINE2_LEN ) ),
-        aTsbBelowRefEdge        ( this, SVX_RES( TSB_BELOW_REF_EDGE ) ),
-        aFtDecimalPlaces        ( this, SVX_RES( FT_DECIMALPLACES ) ),
-        aMtrFldDecimalPlaces    ( this, SVX_RES( MTR_FLD_DECIMALPLACES ) ),
+        aFlLine                 ( this, CUI_RES( FL_LINE ) ),
+        aFtLineDist             ( this, CUI_RES( FT_LINE_DIST ) ),
+        aMtrFldLineDist         ( this, CUI_RES( MTR_LINE_DIST ) ),
+        aFtHelplineOverhang     ( this, CUI_RES( FT_HELPLINE_OVERHANG ) ),
+        aMtrFldHelplineOverhang ( this, CUI_RES( MTR_FLD_HELPLINE_OVERHANG ) ),
+        aFtHelplineDist         ( this, CUI_RES( FT_HELPLINE_DIST ) ),
+        aMtrFldHelplineDist     ( this, CUI_RES( MTR_FLD_HELPLINE_DIST ) ),
+        aFtHelpline1Len         ( this, CUI_RES( FT_HELPLINE1_LEN ) ),
+        aMtrFldHelpline1Len     ( this, CUI_RES( MTR_FLD_HELPLINE1_LEN ) ),
+        aFtHelpline2Len         ( this, CUI_RES( FT_HELPLINE2_LEN ) ),
+        aMtrFldHelpline2Len     ( this, CUI_RES( MTR_FLD_HELPLINE2_LEN ) ),
+        aTsbBelowRefEdge        ( this, CUI_RES( TSB_BELOW_REF_EDGE ) ),
+        aFtDecimalPlaces        ( this, CUI_RES( FT_DECIMALPLACES ) ),
+        aMtrFldDecimalPlaces    ( this, CUI_RES( MTR_FLD_DECIMALPLACES ) ),
 
-        aFlLabel                ( this, SVX_RES( FL_LABEL ) ),
-        aFtPosition             ( this, SVX_RES( FT_POSITION ) ),
-        aCtlPosition            ( this, SVX_RES( CTL_POSITION ) ),
-        aTsbAutoPosV            ( this, SVX_RES( TSB_AUTOPOSV ) ),
-        aTsbAutoPosH            ( this, SVX_RES( TSB_AUTOPOSH ) ),
-        aTsbShowUnit            ( this, SVX_RES( TSB_SHOW_UNIT ) ),
-        aLbUnit                 ( this, SVX_RES( LB_UNIT ) ),
-        aTsbParallel            ( this, SVX_RES( TSB_PARALLEL ) ),
-        aCtlPreview             ( this, SVX_RES( CTL_PREVIEW ), rInAttrs ),
+        aFlLabel                ( this, CUI_RES( FL_LABEL ) ),
+        aFtPosition             ( this, CUI_RES( FT_POSITION ) ),
+        aCtlPosition            ( this, CUI_RES( CTL_POSITION ) ),
+        aTsbAutoPosV            ( this, CUI_RES( TSB_AUTOPOSV ) ),
+        aTsbAutoPosH            ( this, CUI_RES( TSB_AUTOPOSH ) ),
+        aTsbShowUnit            ( this, CUI_RES( TSB_SHOW_UNIT ) ),
+        aLbUnit                 ( this, CUI_RES( LB_UNIT ) ),
+        aTsbParallel            ( this, CUI_RES( TSB_PARALLEL ) ),
+        aCtlPreview             ( this, CUI_RES( CTL_PREVIEW ), rInAttrs ),
 
-        aFlVert                 ( this, SVX_RES( FL_VERT ) ),
+        aFlVert                 ( this, CUI_RES( FL_VERT ) ),
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() ),
         pView( 0 ),
@@ -849,10 +850,10 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 void SvxMeasurePage::FillUnitLB()
 {
     // fill ListBox with metrics
-    SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
+    SvxStringArray aMetricArr( SVX_RES( RID_SVXSTR_FIELDUNIT_TABLE ) );
 
     long nUnit = FUNIT_NONE;
-    String aStrMetric( SVX_RES( STR_MEASURE_AUTOMATIC ) );
+    String aStrMetric( CUI_RES( STR_MEASURE_AUTOMATIC ) );
     USHORT nPos = aLbUnit.InsertEntry( aStrMetric );
     aLbUnit.SetEntryData( nPos, (void*)nUnit );
 

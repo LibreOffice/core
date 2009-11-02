@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
+#include <svx/dialogs.hrc>
 
 #define _SVX_TPAREA_CXX
 
@@ -45,7 +46,7 @@
 
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "tabarea.hrc"
 //#include "dlgname.hrc"
 #include <svx/xflbckit.hxx>
@@ -55,7 +56,7 @@
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "dlgname.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svl/intitem.hxx> //add CHINA001
 #include <sfx2/request.hxx>//add CHINA001
@@ -254,35 +255,35 @@ void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
 }
 
 SvxTransparenceTabPage::SvxTransparenceTabPage(Window* pParent, const SfxItemSet& rInAttrs)
-:   SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_TRANSPARENCE ), rInAttrs),
+:   SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_TRANSPARENCE ), rInAttrs),
     rOutAttrs           ( rInAttrs ),
     nPageType(0),
     nDlgType(0),
 
-    aFlProp             ( this, SVX_RES( FL_PROP ) ),
-    aRbtTransOff        ( this, SVX_RES( RBT_TRANS_OFF ) ),
-    aRbtTransLinear     ( this, SVX_RES( RBT_TRANS_LINEAR ) ),
-    aRbtTransGradient   ( this, SVX_RES( RBT_TRANS_GRADIENT ) ),
+    aFlProp             ( this, CUI_RES( FL_PROP ) ),
+    aRbtTransOff        ( this, CUI_RES( RBT_TRANS_OFF ) ),
+    aRbtTransLinear     ( this, CUI_RES( RBT_TRANS_LINEAR ) ),
+    aRbtTransGradient   ( this, CUI_RES( RBT_TRANS_GRADIENT ) ),
 
-    aMtrTransparent     ( this, SVX_RES( MTR_TRANSPARENT ) ),
+    aMtrTransparent     ( this, CUI_RES( MTR_TRANSPARENT ) ),
 
-    aFtTrgrType         ( this, SVX_RES( FT_TRGR_TYPE ) ),
-    aLbTrgrGradientType ( this, SVX_RES( LB_TRGR_GRADIENT_TYPES ) ),
-    aFtTrgrCenterX      ( this, SVX_RES( FT_TRGR_CENTER_X ) ),
-    aMtrTrgrCenterX     ( this, SVX_RES( MTR_TRGR_CENTER_X ) ),
-    aFtTrgrCenterY      ( this, SVX_RES( FT_TRGR_CENTER_Y ) ),
-    aMtrTrgrCenterY     ( this, SVX_RES( MTR_TRGR_CENTER_Y ) ),
-    aFtTrgrAngle        ( this, SVX_RES( FT_TRGR_ANGLE ) ),
-    aMtrTrgrAngle       ( this, SVX_RES( MTR_TRGR_ANGLE ) ),
-    aFtTrgrBorder       ( this, SVX_RES( FT_TRGR_BORDER ) ),
-    aMtrTrgrBorder      ( this, SVX_RES( MTR_TRGR_BORDER ) ),
-    aFtTrgrStartValue   ( this, SVX_RES( FT_TRGR_START_VALUE ) ),
-    aMtrTrgrStartValue  ( this, SVX_RES( MTR_TRGR_START_VALUE ) ),
-    aFtTrgrEndValue     ( this, SVX_RES( FT_TRGR_END_VALUE ) ),
-    aMtrTrgrEndValue    ( this, SVX_RES( MTR_TRGR_END_VALUE ) ),
+    aFtTrgrType         ( this, CUI_RES( FT_TRGR_TYPE ) ),
+    aLbTrgrGradientType ( this, CUI_RES( LB_TRGR_GRADIENT_TYPES ) ),
+    aFtTrgrCenterX      ( this, CUI_RES( FT_TRGR_CENTER_X ) ),
+    aMtrTrgrCenterX     ( this, CUI_RES( MTR_TRGR_CENTER_X ) ),
+    aFtTrgrCenterY      ( this, CUI_RES( FT_TRGR_CENTER_Y ) ),
+    aMtrTrgrCenterY     ( this, CUI_RES( MTR_TRGR_CENTER_Y ) ),
+    aFtTrgrAngle        ( this, CUI_RES( FT_TRGR_ANGLE ) ),
+    aMtrTrgrAngle       ( this, CUI_RES( MTR_TRGR_ANGLE ) ),
+    aFtTrgrBorder       ( this, CUI_RES( FT_TRGR_BORDER ) ),
+    aMtrTrgrBorder      ( this, CUI_RES( MTR_TRGR_BORDER ) ),
+    aFtTrgrStartValue   ( this, CUI_RES( FT_TRGR_START_VALUE ) ),
+    aMtrTrgrStartValue  ( this, CUI_RES( MTR_TRGR_START_VALUE ) ),
+    aFtTrgrEndValue     ( this, CUI_RES( FT_TRGR_END_VALUE ) ),
+    aMtrTrgrEndValue    ( this, CUI_RES( MTR_TRGR_END_VALUE ) ),
 
-    aCtlBitmapPreview   ( this, SVX_RES( CTL_BITMAP_PREVIEW ) ),
-    aCtlXRectPreview    ( this, SVX_RES( CTL_TRANS_PREVIEW ) ),
+    aCtlBitmapPreview   ( this, CUI_RES( CTL_BITMAP_PREVIEW ) ),
+    aCtlXRectPreview    ( this, CUI_RES( CTL_TRANS_PREVIEW ) ),
     bBitmap             ( FALSE ),
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),
@@ -619,45 +620,45 @@ void SvxTransparenceTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 
 SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
-    SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_AREA ), rInAttrs ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_AREA ), rInAttrs ),
 
-    aFlProp             ( this, SVX_RES( FL_PROP ) ),
-    aTypeLB             ( this, SVX_RES( LB_AREA_TYPE ) ),
+    aFlProp             ( this, CUI_RES( FL_PROP ) ),
+    aTypeLB             ( this, CUI_RES( LB_AREA_TYPE ) ),
 
-    aLbColor            ( this, SVX_RES( LB_COLOR ) ),
-    aLbGradient         ( this, SVX_RES( LB_GRADIENT ) ),
-    aLbHatching         ( this, SVX_RES( LB_HATCHING ) ),
-    aLbBitmap           ( this, SVX_RES( LB_BITMAP ) ),
-    aCtlBitmapPreview   ( this, SVX_RES( CTL_BITMAP_PREVIEW ) ),
+    aLbColor            ( this, CUI_RES( LB_COLOR ) ),
+    aLbGradient         ( this, CUI_RES( LB_GRADIENT ) ),
+    aLbHatching         ( this, CUI_RES( LB_HATCHING ) ),
+    aLbBitmap           ( this, CUI_RES( LB_BITMAP ) ),
+    aCtlBitmapPreview   ( this, CUI_RES( CTL_BITMAP_PREVIEW ) ),
 
-    aTsbStepCount       ( this, SVX_RES( TSB_STEPCOUNT ) ),
-    aFlStepCount        ( this, SVX_RES( FL_STEPCOUNT ) ),
-    aNumFldStepCount    ( this, SVX_RES( NUM_FLD_STEPCOUNT ) ),
+    aTsbStepCount       ( this, CUI_RES( TSB_STEPCOUNT ) ),
+    aFlStepCount        ( this, CUI_RES( FL_STEPCOUNT ) ),
+    aNumFldStepCount    ( this, CUI_RES( NUM_FLD_STEPCOUNT ) ),
 
-    aCbxHatchBckgrd     ( this, SVX_RES( CB_HATCHBCKGRD ) ),
-    aLbHatchBckgrdColor ( this, SVX_RES( LB_HATCHBCKGRDCOLOR ) ),
+    aCbxHatchBckgrd     ( this, CUI_RES( CB_HATCHBCKGRD ) ),
+    aLbHatchBckgrdColor ( this, CUI_RES( LB_HATCHBCKGRDCOLOR ) ),
 
-    aFlSize             ( this, SVX_RES( FL_SIZE ) ),
-    aTsbOriginal        ( this, SVX_RES( TSB_ORIGINAL ) ),
-    aTsbScale           ( this, SVX_RES( TSB_SCALE ) ),
-    aFtXSize            ( this, SVX_RES( FT_X_SIZE ) ),
-    aMtrFldXSize        ( this, SVX_RES( MTR_FLD_X_SIZE ) ),
-    aFtYSize            ( this, SVX_RES( FT_Y_SIZE ) ),
-    aMtrFldYSize        ( this, SVX_RES( MTR_FLD_Y_SIZE ) ),
-    aFlPosition         ( this, SVX_RES( FL_POSITION ) ),
-    aCtlPosition        ( this, SVX_RES( CTL_POSITION ), RP_RM, 110, 80, CS_RECT ),
-    aFtXOffset          ( this, SVX_RES( FT_X_OFFSET ) ),
-    aMtrFldXOffset      ( this, SVX_RES( MTR_FLD_X_OFFSET ) ),
-    aFtYOffset          ( this, SVX_RES( FT_Y_OFFSET ) ),
-    aMtrFldYOffset      ( this, SVX_RES( MTR_FLD_Y_OFFSET ) ),
-    aTsbTile            ( this, SVX_RES( TSB_TILE ) ),
-    aTsbStretch         ( this, SVX_RES( TSB_STRETCH ) ),
-    aFlOffset           ( this, SVX_RES( FL_OFFSET ) ),
-    aRbtRow             ( this, SVX_RES( RBT_ROW ) ),
-    aRbtColumn          ( this, SVX_RES( RBT_COLUMN ) ),
-    aMtrFldOffset       ( this, SVX_RES( MTR_FLD_OFFSET ) ),
+    aFlSize             ( this, CUI_RES( FL_SIZE ) ),
+    aTsbOriginal        ( this, CUI_RES( TSB_ORIGINAL ) ),
+    aTsbScale           ( this, CUI_RES( TSB_SCALE ) ),
+    aFtXSize            ( this, CUI_RES( FT_X_SIZE ) ),
+    aMtrFldXSize        ( this, CUI_RES( MTR_FLD_X_SIZE ) ),
+    aFtYSize            ( this, CUI_RES( FT_Y_SIZE ) ),
+    aMtrFldYSize        ( this, CUI_RES( MTR_FLD_Y_SIZE ) ),
+    aFlPosition         ( this, CUI_RES( FL_POSITION ) ),
+    aCtlPosition        ( this, CUI_RES( CTL_POSITION ), RP_RM, 110, 80, CS_RECT ),
+    aFtXOffset          ( this, CUI_RES( FT_X_OFFSET ) ),
+    aMtrFldXOffset      ( this, CUI_RES( MTR_FLD_X_OFFSET ) ),
+    aFtYOffset          ( this, CUI_RES( FT_Y_OFFSET ) ),
+    aMtrFldYOffset      ( this, CUI_RES( MTR_FLD_Y_OFFSET ) ),
+    aTsbTile            ( this, CUI_RES( TSB_TILE ) ),
+    aTsbStretch         ( this, CUI_RES( TSB_STRETCH ) ),
+    aFlOffset           ( this, CUI_RES( FL_OFFSET ) ),
+    aRbtRow             ( this, CUI_RES( RBT_ROW ) ),
+    aRbtColumn          ( this, CUI_RES( RBT_COLUMN ) ),
+    aMtrFldOffset       ( this, CUI_RES( MTR_FLD_OFFSET ) ),
 
-    aCtlXRectPreview    ( this, SVX_RES( CTL_COLOR_PREVIEW ) ),
+    aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
 
     rOutAttrs           ( rInAttrs ),
 
@@ -1857,7 +1858,7 @@ IMPL_LINK( SvxAreaTabPage, ClickColorHdl_Impl, void *, EMPTYARG )
     aLbHatchBckgrdColor.Hide();
 
     // Text der Tabelle setzen
-    String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
     INetURLObject   aURL( pColorTab->GetPath() );
 
     aURL.Append( pColorTab->GetName() );
@@ -1947,7 +1948,7 @@ IMPL_LINK( SvxAreaTabPage, ClickGradientHdl_Impl, void *, EMPTYARG )
     aLbHatchBckgrdColor.Hide();
 
     // Text der Tabelle setzen
-    String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
     INetURLObject   aURL( pGradientList->GetPath() );
 
     aURL.Append( pGradientList->GetName() );
@@ -2042,7 +2043,7 @@ IMPL_LINK( SvxAreaTabPage, ClickHatchingHdl_Impl, void *, EMPTYARG )
     aLbHatchBckgrdColor.Enable();
 
     // Text der Tabelle setzen
-    String          aString( SVX_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    String          aString( CUI_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
     INetURLObject   aURL( pHatchingList->GetPath() );
 
     aURL.Append( pHatchingList->GetName() );
@@ -2210,7 +2211,7 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
     aFlOffset.Show();
 
     // Text der Tabelle setzen
-    String          aString( SVX_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    String          aString( CUI_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
     INetURLObject   aURL( pBitmapList->GetPath() );
 
     aURL.Append( pBitmapList->GetName() );

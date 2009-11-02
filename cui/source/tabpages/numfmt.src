@@ -28,10 +28,10 @@
  *
  ************************************************************************/
  // include ---------------------------------------------------------------
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include "numfmt.hrc"
- // pragma ----------------------------------------------------------------
+#include <svx/dialogs.hrc>
 
  // RID_SVXPAGE_NUMBERFORMAT ----------------------------------------------
 TabPage RID_SVXPAGE_NUMBERFORMAT

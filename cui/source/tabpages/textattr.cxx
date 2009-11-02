@@ -35,7 +35,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <tools/shl.hxx>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include <svx/svddef.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtagitm.hxx>
@@ -46,13 +46,14 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/dialogs.hrc>
 
 #ifndef _SVX_TEXTATTR_CXX
 #define _SVX_TEXTATTR_CXX
 #endif
 #include "textattr.hxx"
 #include "textattr.hrc"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <sfx2/request.hxx> //add CHINA001
 #include <svx/ofaitem.hxx> //add CHINA001
@@ -102,32 +103,32 @@ static USHORT pRanges[] =
 \************************************************************************/
 
 SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage      ( pWindow, SVX_RES( RID_SVXPAGE_TEXTATTR ),
+                SvxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_TEXTATTR ),
                                   rInAttrs ),
 
-                aFlText         ( this, SVX_RES( FL_TEXT ) ),
-                aTsbAutoGrowWidth  ( this, SVX_RES( TSB_AUTOGROW_WIDTH ) ),
-                aTsbAutoGrowHeight ( this, SVX_RES( TSB_AUTOGROW_HEIGHT ) ),
-                aTsbFitToSize   ( this, SVX_RES( TSB_FIT_TO_SIZE ) ),
-                aTsbContour     ( this, SVX_RES( TSB_CONTOUR ) ),
-                aTsbWordWrapText( this, SVX_RES( TSB_WORDWRAP_TEXT ) ),
-                aTsbAutoGrowSize( this, SVX_RES( TSB_AUTOGROW_SIZE ) ),
-                aFlDistance     ( this, SVX_RES( FL_DISTANCE ) ),
-                aFtLeft         ( this, SVX_RES( FT_LEFT ) ),
-                aMtrFldLeft     ( this, SVX_RES( MTR_FLD_LEFT ) ),
-                aFtRight        ( this, SVX_RES( FT_RIGHT ) ),
-                aMtrFldRight    ( this, SVX_RES( MTR_FLD_RIGHT ) ),
-                aFtTop          ( this, SVX_RES( FT_TOP ) ),
-                aMtrFldTop      ( this, SVX_RES( MTR_FLD_TOP ) ),
-                aFtBottom       ( this, SVX_RES( FT_BOTTOM ) ),
-                aMtrFldBottom   ( this, SVX_RES( MTR_FLD_BOTTOM ) ),
+                aFlText         ( this, CUI_RES( FL_TEXT ) ),
+                aTsbAutoGrowWidth  ( this, CUI_RES( TSB_AUTOGROW_WIDTH ) ),
+                aTsbAutoGrowHeight ( this, CUI_RES( TSB_AUTOGROW_HEIGHT ) ),
+                aTsbFitToSize   ( this, CUI_RES( TSB_FIT_TO_SIZE ) ),
+                aTsbContour     ( this, CUI_RES( TSB_CONTOUR ) ),
+                aTsbWordWrapText( this, CUI_RES( TSB_WORDWRAP_TEXT ) ),
+                aTsbAutoGrowSize( this, CUI_RES( TSB_AUTOGROW_SIZE ) ),
+                aFlDistance     ( this, CUI_RES( FL_DISTANCE ) ),
+                aFtLeft         ( this, CUI_RES( FT_LEFT ) ),
+                aMtrFldLeft     ( this, CUI_RES( MTR_FLD_LEFT ) ),
+                aFtRight        ( this, CUI_RES( FT_RIGHT ) ),
+                aMtrFldRight    ( this, CUI_RES( MTR_FLD_RIGHT ) ),
+                aFtTop          ( this, CUI_RES( FT_TOP ) ),
+                aMtrFldTop      ( this, CUI_RES( MTR_FLD_TOP ) ),
+                aFtBottom       ( this, CUI_RES( FT_BOTTOM ) ),
+                aMtrFldBottom   ( this, CUI_RES( MTR_FLD_BOTTOM ) ),
 
-                aFlSeparator    ( this, SVX_RES( FL_SEPARATOR ) ),
+                aFlSeparator    ( this, CUI_RES( FL_SEPARATOR ) ),
 
-                aFlPosition     ( this, SVX_RES( FL_POSITION ) ),
-                aCtlPosition    ( this, SVX_RES( CTL_POSITION ),
+                aFlPosition     ( this, CUI_RES( FL_POSITION ) ),
+                aCtlPosition    ( this, CUI_RES( CTL_POSITION ),
                                             RP_MM, 240, 100 ),
-                aTsbFullWidth   ( this, SVX_RES( TSB_FULL_WIDTH ) ),
+                aTsbFullWidth   ( this, CUI_RES( TSB_FULL_WIDTH ) ),
 
                 rOutAttrs       ( rInAttrs )
 {

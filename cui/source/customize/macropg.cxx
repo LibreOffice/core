@@ -45,15 +45,15 @@
 #include <sfx2/sfxdefs.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "selector.hxx"
 #include "cfg.hxx"
 #include "macropg.hrc"
 #include "helpid.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"
-
+#include <svx/dialogs.hrc>
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <algorithm>
@@ -569,7 +569,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         }
 
         ::rtl::OUString eventURL = h_it->second.second;
-        String displayName( SVX_RES( displayableEvent->nEventResourceID ) );
+        String displayName( CUI_RES( displayableEvent->nEventResourceID ) );
 
         displayName += '\t';
         SvLBoxEntry*    _pE = rListBox.InsertEntry( displayName );
@@ -841,19 +841,19 @@ Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, EventsHa
 }
 
 SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
-    : _SvxMacroTabPage( pParent, SVX_RES( RID_SVXPAGE_MACROASSIGN ), rSet )
+    : _SvxMacroTabPage( pParent, CUI_RES( RID_SVXPAGE_MACROASSIGN ), rSet )
 {
-    mpImpl->pStrEvent           = new String(                       SVX_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro      = new String(                       SVX_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB            = new _HeaderTabListBox( this,      SVX_RES( LB_EVENT ) );
-    mpImpl->pAssignFT           = new FixedText( this,              SVX_RES( FT_ASSIGN ) );
-    mpImpl->pAssignPB           = new PushButton( this,             SVX_RES( PB_ASSIGN ) );
-    mpImpl->pDeletePB           = new PushButton( this,             SVX_RES( PB_DELETE ) );
-    mpImpl->pAssignComponentPB  = new PushButton( this,         SVX_RES( PB_ASSIGN_COMPONENT ) );
-    mpImpl->pMacroImg           = new Image(                        SVX_RES(IMG_MACRO) );
-    mpImpl->pComponentImg       = new Image(                        SVX_RES(IMG_COMPONENT) );
-    mpImpl->pMacroImg_h         = new Image(                        SVX_RES(IMG_MACRO_H) );
-    mpImpl->pComponentImg_h     = new Image(                        SVX_RES(IMG_COMPONENT_H) );
+    mpImpl->pStrEvent           = new String(                       CUI_RES( STR_EVENT ) );
+    mpImpl->pAssignedMacro      = new String(                       CUI_RES( STR_ASSMACRO ) );
+    mpImpl->pEventLB            = new _HeaderTabListBox( this,      CUI_RES( LB_EVENT ) );
+    mpImpl->pAssignFT           = new FixedText( this,              CUI_RES( FT_ASSIGN ) );
+    mpImpl->pAssignPB           = new PushButton( this,             CUI_RES( PB_ASSIGN ) );
+    mpImpl->pDeletePB           = new PushButton( this,             CUI_RES( PB_DELETE ) );
+    mpImpl->pAssignComponentPB  = new PushButton( this,         CUI_RES( PB_ASSIGN_COMPONENT ) );
+    mpImpl->pMacroImg           = new Image(                        CUI_RES(IMG_MACRO) );
+    mpImpl->pComponentImg       = new Image(                        CUI_RES(IMG_COMPONENT) );
+    mpImpl->pMacroImg_h         = new Image(                        CUI_RES(IMG_MACRO_H) );
+    mpImpl->pComponentImg_h     = new Image(                        CUI_RES(IMG_COMPONENT_H) );
 
     FreeResource();
 
@@ -921,12 +921,12 @@ IMPL_LINK(AssignComponentDialog, ButtonHandler, Button *, EMPTYARG)
 }
 
 AssignComponentDialog::AssignComponentDialog( Window * pParent, const ::rtl::OUString& rURL )
-    : ModalDialog( pParent, SVX_RES( RID_SVXDLG_ASSIGNCOMPONENT ) )
-    , maMethodLabel( this, SVX_RES( FT_METHOD ) )
-    , maMethodEdit( this, SVX_RES( EDIT_METHOD ) )
-    , maOKButton( this, SVX_RES( RID_PB_OK ) )
-    , maCancelButton( this, SVX_RES( RID_PB_CANCEL ) )
-    , maHelpButton( this, SVX_RES( RID_PB_HELP ) )
+    : ModalDialog( pParent, CUI_RES( RID_SVXDLG_ASSIGNCOMPONENT ) )
+    , maMethodLabel( this, CUI_RES( FT_METHOD ) )
+    , maMethodEdit( this, CUI_RES( EDIT_METHOD ) )
+    , maOKButton( this, CUI_RES( RID_PB_OK ) )
+    , maCancelButton( this, CUI_RES( RID_PB_CANCEL ) )
+    , maHelpButton( this, CUI_RES( RID_PB_HELP ) )
     , maURL( rURL )
 {
     FreeResource();

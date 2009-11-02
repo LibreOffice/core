@@ -45,7 +45,7 @@
 
 #define _SVX_PAGE_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "page.hrc"
 #include "helpid.hrc"
 #include "page.hxx"
@@ -59,12 +59,14 @@
 #include <svx/sizeitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include "svx/dlgutil.hxx"
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <svx/paperinf.hxx>
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include <sfx2/module.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svxids.hrc> //CHINA001
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 // #i4219#
 #include <svtools/optionsdrawinglayer.hxx>
@@ -246,50 +248,50 @@ SfxTabPage* SvxPageDescPage::Create( Window* pParent, const SfxItemSet& rSet )
 
 SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PAGE ), rAttr ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_PAGE ), rAttr ),
 
-    aPaperSizeFl        ( this, SVX_RES( FL_PAPER_SIZE ) ),
-    aPaperFormatText    ( this, SVX_RES( FT_PAPER_FORMAT ) ),
-    aPaperSizeBox       ( this, SVX_RES( LB_PAPER_SIZE ) ),
-    aPaperWidthText     ( this, SVX_RES( FT_PAPER_WIDTH ) ),
-    aPaperWidthEdit     ( this, SVX_RES( ED_PAPER_WIDTH ) ),
-    aPaperHeightText    ( this, SVX_RES( FT_PAPER_HEIGHT ) ),
-    aPaperHeightEdit    ( this, SVX_RES( ED_PAPER_HEIGHT ) ),
-    aOrientationFT      ( this, SVX_RES( FT_ORIENTATION ) ),
-    aPortraitBtn        ( this, SVX_RES( RB_PORTRAIT ) ),
-    aLandscapeBtn       ( this, SVX_RES( RB_LANDSCAPE ) ),
-    aBspWin             ( this, SVX_RES( WN_BSP ) ),
-    aTextFlowLbl        ( this, SVX_RES( FT_TEXT_FLOW ) ),
-    aTextFlowBox        ( this, SVX_RES( LB_TEXT_FLOW ) ),
-    aPaperTrayLbl       ( this, SVX_RES( FT_PAPER_TRAY ) ),
-    aPaperTrayBox       ( this, SVX_RES( LB_PAPER_TRAY ) ),
-    aMarginFl           ( this, SVX_RES( FL_MARGIN ) ),
-    aLeftMarginLbl      ( this, SVX_RES( FT_LEFT_MARGIN ) ),
-    aLeftMarginEdit     ( this, SVX_RES( ED_LEFT_MARGIN ) ),
-    aRightMarginLbl     ( this, SVX_RES( FT_RIGHT_MARGIN ) ),
-    aRightMarginEdit    ( this, SVX_RES( ED_RIGHT_MARGIN ) ),
-    aTopMarginLbl       ( this, SVX_RES( FT_TOP_MARGIN ) ),
-    aTopMarginEdit      ( this, SVX_RES( ED_TOP_MARGIN ) ),
-    aBottomMarginLbl    ( this, SVX_RES( FT_BOTTOM_MARGIN ) ),
-    aBottomMarginEdit   ( this, SVX_RES( ED_BOTTOM_MARGIN ) ),
+    aPaperSizeFl        ( this, CUI_RES( FL_PAPER_SIZE ) ),
+    aPaperFormatText    ( this, CUI_RES( FT_PAPER_FORMAT ) ),
+    aPaperSizeBox       ( this, CUI_RES( LB_PAPER_SIZE ) ),
+    aPaperWidthText     ( this, CUI_RES( FT_PAPER_WIDTH ) ),
+    aPaperWidthEdit     ( this, CUI_RES( ED_PAPER_WIDTH ) ),
+    aPaperHeightText    ( this, CUI_RES( FT_PAPER_HEIGHT ) ),
+    aPaperHeightEdit    ( this, CUI_RES( ED_PAPER_HEIGHT ) ),
+    aOrientationFT      ( this, CUI_RES( FT_ORIENTATION ) ),
+    aPortraitBtn        ( this, CUI_RES( RB_PORTRAIT ) ),
+    aLandscapeBtn       ( this, CUI_RES( RB_LANDSCAPE ) ),
+    aBspWin             ( this, CUI_RES( WN_BSP ) ),
+    aTextFlowLbl        ( this, CUI_RES( FT_TEXT_FLOW ) ),
+    aTextFlowBox        ( this, CUI_RES( LB_TEXT_FLOW ) ),
+    aPaperTrayLbl       ( this, CUI_RES( FT_PAPER_TRAY ) ),
+    aPaperTrayBox       ( this, CUI_RES( LB_PAPER_TRAY ) ),
+    aMarginFl           ( this, CUI_RES( FL_MARGIN ) ),
+    aLeftMarginLbl      ( this, CUI_RES( FT_LEFT_MARGIN ) ),
+    aLeftMarginEdit     ( this, CUI_RES( ED_LEFT_MARGIN ) ),
+    aRightMarginLbl     ( this, CUI_RES( FT_RIGHT_MARGIN ) ),
+    aRightMarginEdit    ( this, CUI_RES( ED_RIGHT_MARGIN ) ),
+    aTopMarginLbl       ( this, CUI_RES( FT_TOP_MARGIN ) ),
+    aTopMarginEdit      ( this, CUI_RES( ED_TOP_MARGIN ) ),
+    aBottomMarginLbl    ( this, CUI_RES( FT_BOTTOM_MARGIN ) ),
+    aBottomMarginEdit   ( this, CUI_RES( ED_BOTTOM_MARGIN ) ),
 
-    aLayoutFL           ( this, SVX_RES( FL_LAYOUT ) ),
-    aPageText           ( this, SVX_RES( FT_PAGELAYOUT ) ),
-    aLayoutBox          ( this, SVX_RES( LB_LAYOUT ) ),
-    aNumberFormatText   ( this, SVX_RES( FT_NUMBER_FORMAT ) ),
-    aNumberFormatBox    ( this, SVX_RES( LB_NUMBER_FORMAT ) ),
-    aBottomSeparatorFl  ( this, SVX_RES( FL_BOTTOM_SEP ) ),
-    aTblAlignFT         ( this, SVX_RES( FT_TBL_ALIGN ) ),
-    aHorzBox            ( this, SVX_RES( CB_HORZ ) ),
-    aVertBox            ( this, SVX_RES( CB_VERT ) ),
-    aAdaptBox           ( this, SVX_RES( CB_ADAPT ) ),
-    aRegisterCB         ( this, SVX_RES( CB_REGISTER ) ),
-    aRegisterFT         ( this, SVX_RES( FT_REGISTER ) ),
-    aRegisterLB         ( this, SVX_RES( LB_REGISTER ) ),
+    aLayoutFL           ( this, CUI_RES( FL_LAYOUT ) ),
+    aPageText           ( this, CUI_RES( FT_PAGELAYOUT ) ),
+    aLayoutBox          ( this, CUI_RES( LB_LAYOUT ) ),
+    aNumberFormatText   ( this, CUI_RES( FT_NUMBER_FORMAT ) ),
+    aNumberFormatBox    ( this, CUI_RES( LB_NUMBER_FORMAT ) ),
+    aBottomSeparatorFl  ( this, CUI_RES( FL_BOTTOM_SEP ) ),
+    aTblAlignFT         ( this, CUI_RES( FT_TBL_ALIGN ) ),
+    aHorzBox            ( this, CUI_RES( CB_HORZ ) ),
+    aVertBox            ( this, CUI_RES( CB_VERT ) ),
+    aAdaptBox           ( this, CUI_RES( CB_ADAPT ) ),
+    aRegisterCB         ( this, CUI_RES( CB_REGISTER ) ),
+    aRegisterFT         ( this, CUI_RES( FT_REGISTER ) ),
+    aRegisterLB         ( this, CUI_RES( LB_REGISTER ) ),
 
-    aInsideText         (       SVX_RES( STR_INSIDE ) ),
-    aOutsideText        (       SVX_RES( STR_OUTSIDE ) ),
-    aPrintRangeQueryText(       SVX_RES( STR_QUERY_PRINTRANGE ) ),
+    aInsideText         (       CUI_RES( STR_INSIDE ) ),
+    aOutsideText        (       CUI_RES( STR_OUTSIDE ) ),
+    aPrintRangeQueryText(       CUI_RES( STR_QUERY_PRINTRANGE ) ),
 
     bLandscape          ( FALSE ),
     eMode               ( SVX_PAGE_MODE_STANDARD ),
@@ -322,16 +324,16 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     bool bHTML32 = SvxHtmlExportModeConfigItem_Impl().IsExportModeHTML32();
 
     //  fill text flow listbox with valid entries
-    aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), FRMDIR_HORI_LEFT_TOP );
+    aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), FRMDIR_HORI_LEFT_TOP );
     if( bCTL )
-        aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_RTL_HORI ), FRMDIR_HORI_RIGHT_TOP );
+        aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_HORI ), FRMDIR_HORI_RIGHT_TOP );
     // #109989# do not show vertical directions in Writer/Web
     if( !bWeb )
     {
         if( bCJK )
-            aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
+            aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
 //        if( ... )
-//            aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
+//            aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
     }
 
     // #109989# show the text direction box in Writer/Web too, but only, if HTML export mode is not HTML3.2.
@@ -602,7 +604,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     if ( ePaperStart != PAPER_A3 )
         nAryId = RID_SVXSTRARY_PAPERSIZE_DRAW;
-    ResStringArray aPaperAry( SVX_RES( nAryId ) );
+    ResStringArray aPaperAry( CUI_RES( nAryId ) );
     sal_uInt32 nCnt = aPaperAry.Count();
 
     for ( sal_uInt32 i = 0; i < nCnt; ++i )

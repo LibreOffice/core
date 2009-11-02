@@ -30,7 +30,7 @@
 
  // include ---------------------------------------------------------------
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 String RID_SVXSTR_READONLY_CONFIG_TIP
 {

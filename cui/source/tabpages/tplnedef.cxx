@@ -43,7 +43,7 @@
 
 #define _SVX_TPLNEDEF_CXX
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "tabline.hrc"
 //#include "dlgname.hrc"
 #include "helpid.hrc"
@@ -56,8 +56,10 @@
 #include "cuitabline.hxx"
 #include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
 #include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -77,29 +79,29 @@ SvxLineDefTabPage::SvxLineDefTabPage
     const SfxItemSet& rInAttrs
 ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_LINE_DEF ), rInAttrs ),
+    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_LINE_DEF ), rInAttrs ),
 
-    aFlDefinition   ( this, SVX_RES( FL_DEFINITION ) ),
-    aFTLinestyle    ( this, SVX_RES( FT_LINESTYLE ) ),
-    aLbLineStyles   ( this, SVX_RES( LB_LINESTYLES ) ),
-    aFtType         ( this, SVX_RES( FT_TYPE ) ),
-    aLbType1        ( this, SVX_RES( LB_TYPE_1 ) ),
-    aLbType2        ( this, SVX_RES( LB_TYPE_2 ) ),
-    aFtNumber       ( this, SVX_RES( FT_NUMBER ) ),
-    aNumFldNumber1  ( this, SVX_RES( NUM_FLD_1 ) ),
-    aNumFldNumber2  ( this, SVX_RES( NUM_FLD_2 ) ),
-    aFtLength       ( this, SVX_RES( FT_LENGTH ) ),
-    aMtrLength1     ( this, SVX_RES( MTR_FLD_LENGTH_1 ) ),
-    aMtrLength2     ( this, SVX_RES( MTR_FLD_LENGTH_2 ) ),
-    aFtDistance     ( this, SVX_RES( FT_DISTANCE ) ),
-    aMtrDistance    ( this, SVX_RES( MTR_FLD_DISTANCE ) ),
-    aCbxSynchronize ( this, SVX_RES( CBX_SYNCHRONIZE ) ),
-    aBtnAdd         ( this, SVX_RES( BTN_ADD ) ),
-    aBtnModify      ( this, SVX_RES( BTN_MODIFY ) ),
-    aBtnDelete      ( this, SVX_RES( BTN_DELETE ) ),
-    aBtnLoad        ( this, SVX_RES( BTN_LOAD ) ),
-    aBtnSave        ( this, SVX_RES( BTN_SAVE ) ),
-    aCtlPreview     ( this, SVX_RES( CTL_PREVIEW ) ),
+    aFlDefinition   ( this, CUI_RES( FL_DEFINITION ) ),
+    aFTLinestyle    ( this, CUI_RES( FT_LINESTYLE ) ),
+    aLbLineStyles   ( this, CUI_RES( LB_LINESTYLES ) ),
+    aFtType         ( this, CUI_RES( FT_TYPE ) ),
+    aLbType1        ( this, CUI_RES( LB_TYPE_1 ) ),
+    aLbType2        ( this, CUI_RES( LB_TYPE_2 ) ),
+    aFtNumber       ( this, CUI_RES( FT_NUMBER ) ),
+    aNumFldNumber1  ( this, CUI_RES( NUM_FLD_1 ) ),
+    aNumFldNumber2  ( this, CUI_RES( NUM_FLD_2 ) ),
+    aFtLength       ( this, CUI_RES( FT_LENGTH ) ),
+    aMtrLength1     ( this, CUI_RES( MTR_FLD_LENGTH_1 ) ),
+    aMtrLength2     ( this, CUI_RES( MTR_FLD_LENGTH_2 ) ),
+    aFtDistance     ( this, CUI_RES( FT_DISTANCE ) ),
+    aMtrDistance    ( this, CUI_RES( MTR_FLD_DISTANCE ) ),
+    aCbxSynchronize ( this, CUI_RES( CBX_SYNCHRONIZE ) ),
+    aBtnAdd         ( this, CUI_RES( BTN_ADD ) ),
+    aBtnModify      ( this, CUI_RES( BTN_MODIFY ) ),
+    aBtnDelete      ( this, CUI_RES( BTN_DELETE ) ),
+    aBtnLoad        ( this, CUI_RES( BTN_LOAD ) ),
+    aBtnSave        ( this, CUI_RES( BTN_SAVE ) ),
+    aCtlPreview     ( this, CUI_RES( CTL_PREVIEW ) ),
 
     rOutAttrs       ( rInAttrs ),
 
@@ -111,8 +113,8 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() )
 {
-    aBtnLoad.SetModeImage( Image( SVX_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( SVX_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 
@@ -206,7 +208,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
             INetURLObject   aURL( pDashList->GetPath() );
 
             aURL.Append( pDashList->GetName() );
@@ -255,16 +257,12 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         aLbType2.GetSelectEntryPos() != aLbType2.GetSavedValue() ||
         aMtrDistance.GetText()       != aMtrDistance.GetSavedValue() )
     {
-        ResMgr& rMgr = DIALOG_MGR();
+        ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        //CHINA001 SvxMessDialog aMessDlg( DLGWIN,
-        //CHINA001  String( ResId( RID_SVXSTR_LINESTYLE, rMgr ) ),
-        //CHINA001  String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
-        //CHINA001  &aWarningBoxImage );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
         AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
-                                                    String( ResId( RID_SVXSTR_LINESTYLE, rMgr ) ),
+                                                    SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
                                                     String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                     &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
@@ -574,8 +572,8 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
 
 IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr& rMgr = DIALOG_MGR();
-    String aNewName( ResId( RID_SVXSTR_LINESTYLE, rMgr ) );
+    ResMgr& rMgr = CUI_MGR();
+    String aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
     String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
     String aName;
     XDashEntry* pEntry;
@@ -596,10 +594,9 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                 bDifferent = FALSE;
     }
 
-    //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     BOOL bLoop = TRUE;
 
@@ -669,16 +666,15 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr& rMgr = DIALOG_MGR();
-        String aNewName( ResId( RID_SVXSTR_LINESTYLE, rMgr ) );
+        ResMgr& rMgr = CUI_MGR();
+        String aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
         String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
         String aName( pDashList->GetDash( nPos )->GetName() );
         String aOldName = aName;
 
-        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         long nCount = pDashList->Count();
@@ -745,8 +741,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
-//!         SVX_RES( RID_SVXSTR_DEL_LINESTYLE ),
-            String( SVX_RES( RID_SVXSTR_ASK_DEL_LINESTYLE ) ) );
+            String( CUI_RES( RID_SVXSTR_ASK_DEL_LINESTYLE ) ) );
 
         if ( aQueryBox.Execute() == RET_YES )
         {
@@ -778,7 +773,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr& rMgr = DIALOG_MGR();
+    ResMgr& rMgr = CUI_MGR();
     USHORT nReturn = RET_YES;
 
     if ( *pnDashListState & CT_MODIFIED )
@@ -909,7 +904,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         {
 /*          // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String aString( SVX_RES( RID_SVXSTR_TABLE ) );
+            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
             if ( aURL.getBase().Len() > 18 )
@@ -930,7 +925,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         else
         {
             ErrorBox( DLGWIN, WinBits( WB_OK ),
-                String( SVX_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
+                String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }
 

@@ -57,8 +57,8 @@
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"
 
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <dialmgr.hxx>
+#include <cuires.hrc>
 #include "eventdlg.hrc"
 #include "helpid.hrc"
 #include "selector.hxx"
@@ -71,21 +71,21 @@ using namespace ::com::sun::star;
 
 SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet, SvxEventConfigPage::EarlyInit ) :
 
-    _SvxMacroTabPage( pParent, SVX_RES(RID_SVXPAGE_EVENTS), rSet ),
-    aSaveInText( this, SVX_RES( TXT_SAVEIN ) ),
-    aSaveInListBox( this, SVX_RES( LB_SAVEIN ) ),
+    _SvxMacroTabPage( pParent, CUI_RES(RID_SVXPAGE_EVENTS), rSet ),
+    aSaveInText( this, CUI_RES( TXT_SAVEIN ) ),
+    aSaveInListBox( this, CUI_RES( LB_SAVEIN ) ),
     bAppConfig  ( TRUE )
 {
-    mpImpl->pStrEvent           = new String( SVX_RES( STR_EVENT ));
-    mpImpl->pAssignedMacro      = new String( SVX_RES( STR_ASSMACRO ));
-    mpImpl->pEventLB            = new _HeaderTabListBox( this, SVX_RES( LB_EVENT ));
-    mpImpl->pAssignFT           = new FixedText( this,  SVX_RES( FT_ASSIGN ));
-    mpImpl->pAssignPB           = new PushButton( this, SVX_RES( PB_ASSIGN ));
-    mpImpl->pDeletePB           = new PushButton( this, SVX_RES( PB_DELETE ));
-    mpImpl->pMacroImg           = new Image( SVX_RES( IMG_MACRO) );
-    mpImpl->pComponentImg       = new Image( SVX_RES( IMG_COMPONENT) );
-    mpImpl->pMacroImg_h         = new Image( SVX_RES( IMG_MACRO_H) );
-    mpImpl->pComponentImg_h     = new Image( SVX_RES( IMG_COMPONENT_H) );
+    mpImpl->pStrEvent           = new String( CUI_RES( STR_EVENT ));
+    mpImpl->pAssignedMacro      = new String( CUI_RES( STR_ASSMACRO ));
+    mpImpl->pEventLB            = new _HeaderTabListBox( this, CUI_RES( LB_EVENT ));
+    mpImpl->pAssignFT           = new FixedText( this,  CUI_RES( FT_ASSIGN ));
+    mpImpl->pAssignPB           = new PushButton( this, CUI_RES( PB_ASSIGN ));
+    mpImpl->pDeletePB           = new PushButton( this, CUI_RES( PB_DELETE ));
+    mpImpl->pMacroImg           = new Image( CUI_RES( IMG_MACRO) );
+    mpImpl->pComponentImg       = new Image( CUI_RES( IMG_COMPONENT) );
+    mpImpl->pMacroImg_h         = new Image( CUI_RES( IMG_MACRO_H) );
+    mpImpl->pComponentImg_h     = new Image( CUI_RES( IMG_COMPONENT_H) );
 
     FreeResource();
 

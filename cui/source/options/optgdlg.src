@@ -29,7 +29,7 @@
  ************************************************************************/
  // include ---------------------------------------------------------------
 
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "optgdlg.hrc"
 #include "helpid.hrc"
 

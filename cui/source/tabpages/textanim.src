@@ -30,8 +30,9 @@
  // pragma ----------------------------------------------------------------
 
 #include <svtools/controldims.hrc>
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 #include "textanim.hrc"
+#include <svx/dialogs.hrc>
 
 // direction image buttons
 #define MA_HALFBUTTON_WIDTH     7

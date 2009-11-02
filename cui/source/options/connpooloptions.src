@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #include "connpooloptions.hrc"
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 
 #define PAGE_SIZE_X     260
 #define PAGE_SIZE_Y     185

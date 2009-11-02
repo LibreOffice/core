@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svx/dialogs.hrc>
+#include <cuires.hrc>
 //#define RID_SVXPAGE_CAPTION       1000
 //#define RID_SVXDLG_CAPTION        1001
 
