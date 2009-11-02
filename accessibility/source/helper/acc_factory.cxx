@@ -420,7 +420,7 @@ inline bool hasFloatingChild(Window *pWindow)
         return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
     }
 
-        //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
     IAccessibleTableControl* AccessibleFactory::createAccessibleTableControl(
         const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable ) const
     {
@@ -453,30 +453,6 @@ inline bool hasFloatingChild(Window *pWindow)
     {
         return new AccessibleListBox( _rListBox, _xParent );
     }
-
-    ////--------------------------------------------------------------------
- //   Reference< XAccessible > AccessibleFactory::createAccessibleTableHeader(
- //       const Reference< XAccessible >& rxParent, IAccessibleTable& _rOwningTable, AccessibleTableControlObjType _eObjType) const
- //   {
- //       return new AccessibleGridControlHeader( rxParent, _rOwningTable, _eObjType);
- //   }
-
-    ////--------------------------------------------------------------------
- //   Reference< XAccessible > AccessibleFactory::createAccessibleTableCell(
- //       const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable,
- //       const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowId, sal_uInt16 _nColId ) const
- //   {
- //       return new AccessibleGridControlTableCell( _rxParent, _rTable, _xFocusWindow,
- //           _nRowId, _nColId);
- //   }
-    ////--------------------------------------------------------------------
- //   Reference< XAccessible > AccessibleFactory::createAccessibleTableHeaderCell(
- //       sal_Int32 _nRowId, const Reference< XAccessible >& rxParent, IAccessibleTable& _rTable,
- //       const Reference< XWindow >& _xFocusWindow, AccessibleTableControlObjType _eObjType) const
- //   {
- //       return new AccessibleGridControlHeaderCell( _nRowId, rxParent, _rTable,
- //           _xFocusWindow, _eObjType);
- //   }
 
     //--------------------------------------------------------------------
     Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
