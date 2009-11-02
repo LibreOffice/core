@@ -680,7 +680,9 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     {
         SvMemoryStream aDestStrm( 65535, 65535 );
         ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
-        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+        const uno::Sequence<sal_Int8> aSeq(
+            static_cast< const sal_Int8* >(aDestStrm.GetData()),
+            aDestStrm.GetEndOfData());
         aAny.setValue( &aSeq, ::getCppuType((const uno::Sequence< sal_Int8 >*)0) );
     }
     else
@@ -3127,7 +3129,9 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     }
                     SvMemoryStream aDestStrm( 65535, 65535 );
                     ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
-                    uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                    const uno::Sequence<sal_Int8> aSeq(
+                        static_cast< const sal_Int8* >(aDestStrm.GetData()),
+                        aDestStrm.GetEndOfData());
                     rValue <<= aSeq;
                 }
             }
