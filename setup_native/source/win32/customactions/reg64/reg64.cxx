@@ -439,7 +439,7 @@ bool Reg64(MSIHANDLE& rhMSI, OPERATION op)
 
     QueryReg64Table(hDatabase, hView);
     OutputDebugStringFormat(L"Do something\n" );
-    DoRegEntries( rhMSI, SET, hView);
+    DoRegEntries( rhMSI, op, hView);
     OutputDebugStringFormat(L"Something done\n" );
 
     MsiCloseHandle(hView);
