@@ -49,7 +49,7 @@ ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, RID_SVXDLG_POSTIT, bPrevNext, TRUE );
+        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, TRUE );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         pDocShell=pShell;
         pDlg->DontChangeAuthor();
