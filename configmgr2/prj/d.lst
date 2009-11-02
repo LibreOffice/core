@@ -1,8 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\configmgr
-mkdir: %_DEST%\inc%_EXT%\configmgr\detail
-..\%__SRC%\bin\configmgr.dll %_DEST%\bin%_EXT%\configmgr.dll
-..\%__SRC%\lib\iconfigmgr.lib %_DEST%\lib%_EXT%\iconfigmgr.lib
-..\%__SRC%\lib\libconfigmgr.dylib %_DEST%\lib%_EXT%\libconfigmgr.dylib
-..\%__SRC%\lib\libconfigmgr.so %_DEST%\lib%_EXT%\libconfigmgr.so
-..\inc\configmgr\detail\configmgrdllapi.hxx %_DEST%\inc%_EXT%\configmgr\detail\configmgrdllapi.hxx
-..\inc\configmgr\update.hxx %_DEST%\inc%_EXT%\configmgr\update.hxx
