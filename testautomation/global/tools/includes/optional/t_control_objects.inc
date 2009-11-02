@@ -102,106 +102,35 @@ function lb_test( oControl as object, items as integer, preset as integer, issue
     dim con_iterator as integer
     
     printlog( con_name & " (Listbox)" )
-    lb_test() = true
-    
-    if ( con_items <> items ) then
-        warnlog( issueid & " Incorrect itemcount in listbox: " & con_name )
-        printlog( "Expected: " & items )
-        printlog( "Found...: " & con_items )
-        lb_test() = false
-    endif
-    
-    if ( preset > 0 ) then
-        if ( con_preset <> preset ) then
-            warnlog( issueid & " Incorrect default setting (index): " & con_name )
-            printlog( "Expected: " & preset )
-            printlog( "Found...: " & con_preset )
+    if ( oControl.isEnabled() ) then
+        lb_test() = true
+        
+        if ( con_items <> items ) then
+            warnlog( issueid & " Incorrect itemcount in listbox: " & con_name )
+            printlog( "Expected: " & items )
+            printlog( "Found...: " & con_items )
             lb_test() = false
         endif
+        
+        if ( preset > 0 ) then
+            if ( con_preset <> preset ) then
+                warnlog( issueid & " Incorrect default setting (index): " & con_name )
+                printlog( "Expected: " & preset )
+                printlog( "Found...: " & con_preset )
+                lb_test() = false
+            endif
+        endif
+        
+        for con_iterator = 1 to items
+            oControl.select( con_iterator )
+        next con_iterator
+        
+        if ( preset > 0 ) then oControl.select( preset )
+    else
+        printlog( "The control is disabled" & con_name )
+        lb_test() = false
     endif
-    
-    for con_iterator = 1 to items
-        oControl.select( con_iterator )
-    next con_iterator
-    
-    oControl.select( preset )
 
-end function
-
-'*******************************************************************************
-
-function checkRadioButtons( _file as string  , sKey as string  , control1 as object  , control2 as object  , optional control3 as object  , optional control4 as object ) as integer
-    
-    '///<h3>EXPERIMENTAL: Get/Set function for some control types</h3>
-    '///<i>This is a function that allows to change the state/content of a
-    '///+ control via a configuration file. This function is experimental
-    '///+ and should not be used.<br>
-    '///+ This function checks if the correct radiobutton of a group is selected.
-    '///+ at least two radiobuttons must be provided, the third and fouth are optional.
-    '///+ The value for sKey in the reference file must be of type integer</i><br>
-    
-    dim _sItem as string
-    dim _iItem as integer
-    
-    ' lowercase sKey for comparision
-    sKey = lcase( sKey )
-    
-    ' get the reference value for sKey as string
-    _sItem = hGetFileData( _file , sKey )
-    
-    ' cast it to int
-    _iItem = val( _sItem )
-    
-    ' check which one of the up to four radiobuttons is selected.
-    select case _iItem
-        
-    case 1 :
-        if ( control1.isChecked() = true ) then
-            checkRadioButtons() = true
-            printlog( "   * Radiobutton 1 selected: ok" )
-        else
-            warnlog( "The wrong radiobutton is selected" )
-        endif
-        
-    case 2 :
-        if ( control2.isChecked() = true ) then
-            checkRadioButtons() = true
-            printlog( "   * Radiobutton 2 selected: ok" )
-        else
-            warnlog( "The wrong radiobutton is selected" )
-        endif
-        
-    case 3 :
-        if ( isMissing( control3 ) = false ) then
-            if ( control3.isChecked() = true ) then
-                checkRadioButtons() = true
-                printlog( "   * Radiobutton 3 selected: ok" )
-            else
-                warnlog( "The wrong radiobutton is selected" )
-            endif
-        else
-            warnlog( "referencing to non-existing control." )
-            checkRadioButtons() = false
-        endif
-        
-    case 4 :
-        if ( isMissing( control4 ) = false ) then
-            if ( control4.isChecked() = true ) then
-                checkRadioButtons() = true
-                printlog( "   * Radiobutton 4 selected: ok" )
-            else
-                warnlog( "The wrong radiobutton is selected" )
-            endif
-        else
-            warnlog( "referencing to non-existing control." )
-            checkRadioButtons() = false
-        endif
-        
-    case else
-        warnlog( "Maximum of four connected radiobuttons allowed." )
-        checkRadioButtons() = false
-    end select
-    
 end function
 
 '*******************************************************************************

@@ -65,6 +65,7 @@ sub main
    call id_009
    call id_007
    call id_011
+   call g_printing
 
   Call hStatusOut
 end sub
@@ -75,6 +76,10 @@ sub LoadIncludeFiles
    use "global\system\includes\gvariabl.inc"
    use "global\required\includes\g_001.inc"
    use "global\required\includes\g_009.inc"
+   use "global\required\includes\g_printing.inc"
+   use "global\tools\includes\optional\t_docfuncs.inc"
+   use "global\tools\includes\optional\t_control_objects.inc"
+
    gApplication   = "IMPRESS"
     Call GetUseFiles()
 end sub

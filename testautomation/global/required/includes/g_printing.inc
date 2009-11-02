@@ -81,12 +81,14 @@ testcase tPrintCommon()
         endif
         
         kontext "Printing"
+        printlog( "Close print dialog")
         Printing.cancel()
         
     else
         warnlog( "Printing dialog did not open" )
     endif
     
+    printlog( "Close document" )
     hDestroyDocument()        
     
 endcase
@@ -155,7 +157,7 @@ testcase tPrintGeneral()
                 warnlog( "Printer properties did not open." )
             endif
         else
-            printlog( "Skipping printer proerties on Windows (no SPAdmin)")
+            printlog( "Skipping printer properties on Windows (no SPAdmin)")
         endif
 
         kontext "TabPrintGeneral"
@@ -236,7 +238,7 @@ testcase tPrintGeneral()
                     warnlog( "<Arrange slides> should be enabled for Handouts" )
                 endif
 
-                lb_test( SlidesPerPage, 6, 1, "" )
+                lb_test( SlidesPerPage, 6, 0, "" )
                 lb_test( ArrangeSlides, 2, 1, "" )
                 
             endif
@@ -251,12 +253,14 @@ testcase tPrintGeneral()
         end select
 
         kontext "Printing"
+        printlog( "Close print dialog" )
         Printing.cancel()
 
     else
         warnlog( "Printing dialog did not open" )
     endif
     
+    printlog( "Close document" )
     hDestroyDocument()        
     
 endcase
@@ -345,12 +349,14 @@ testcase tPrintApplication()
         end select
         
         kontext "Printing"
+        printlog( "Close print dialog" )
         Printing.cancel()
 
     else
         warnlog( "Printing dialog did not open" )
     endif
     
+    printlog( "Close document" )
     hDestroyDocument()
     
 endcase
@@ -434,12 +440,14 @@ testcase tPrintLayout()
         end select
         
         kontext "Printing"
+        printlog( "Close print dialog" )
         Printing.cancel()
 
     else
         warnlog( "Printing dialog did not open" )
     endif
     
+    printlog( "Close document" )
     hDestroyDocument()
     
 endcase
@@ -486,12 +494,14 @@ testcase tPrintOptions()
         end select
         
         kontext "Printing"
+        printlog( "Close print dialog" )
         Printing.cancel()
 
     else
         warnlog( "Printing dialog did not open" )
     endif
     
+    printlog( "Close document" )
     hDestroyDocument()        
             
 endcase

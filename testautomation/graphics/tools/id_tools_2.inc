@@ -730,7 +730,6 @@ sub id_001
    call tiFileVersion
    printlog " File->Send not possible to test, because extrnal prg get's called!"
    call tiFileTemplates
-   call tiFilePrint
 '   Call tiFileNew instead i call:
    call tmFileNewFromTemplate
    call tmFileOpen
