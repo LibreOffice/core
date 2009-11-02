@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -80,6 +76,7 @@ APP1OBJS=		$(OBJ)$/t_file.obj
 APP1STDLIBS=	$(STOREDBGLIB)
 APP1STDLIBS+=	$(SALLIB)
 APP1DEPN=	$(STOREDBGLIB)
+APP1RPATH=	UREBIN
 
 APP2TARGET=		t_page
 APP2OBJS=		$(OBJ)$/t_page.obj
@@ -92,6 +89,7 @@ APP3OBJS=		$(OBJ)$/t_base.obj
 APP3STDLIBS=	$(STOREDBGLIB)
 APP3STDLIBS+=	$(SALLIB)
 APP3DEPN=	$(STOREDBGLIB)
+APP3RPATH=	UREBIN
 
 APP4TARGET=		t_store
 APP4OBJS=		$(OBJ)$/t_store.obj

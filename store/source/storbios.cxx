@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: storbios.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.1.2.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: mhu $ $Date: 2008/10/31 18:28:18 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -91,36 +83,36 @@ struct OStoreSuperBlock
           m_aUnused (0)
     {}
 
-    OStoreSuperBlock (const OStoreSuperBlock& rOther)
-        : m_aGuard  (rOther.m_aGuard),
-          m_aDescr  (rOther.m_aDescr),
-          m_nMarked (rOther.m_nMarked),
-          m_aMarked (rOther.m_aMarked),
-          m_nUnused (rOther.m_nUnused),
-          m_aUnused (rOther.m_aUnused)
+    OStoreSuperBlock (const OStoreSuperBlock & rhs)
+        : m_aGuard  (rhs.m_aGuard),
+          m_aDescr  (rhs.m_aDescr),
+          m_nMarked (rhs.m_nMarked),
+          m_aMarked (rhs.m_aMarked),
+          m_nUnused (rhs.m_nUnused),
+          m_aUnused (rhs.m_aUnused)
     {}
 
-    OStoreSuperBlock& operator= (const OStoreSuperBlock& rOther)
+    OStoreSuperBlock& operator= (const OStoreSuperBlock & rhs)
     {
-        m_aGuard  = rOther.m_aGuard;
-        m_aDescr  = rOther.m_aDescr;
-        m_nMarked = rOther.m_nMarked;
-        m_aMarked = rOther.m_aMarked;
-        m_nUnused = rOther.m_nUnused;
-        m_aUnused = rOther.m_aUnused;
+        m_aGuard  = rhs.m_aGuard;
+        m_aDescr  = rhs.m_aDescr;
+        m_nMarked = rhs.m_nMarked;
+        m_aMarked = rhs.m_aMarked;
+        m_nUnused = rhs.m_nUnused;
+        m_aUnused = rhs.m_aUnused;
         return *this;
     }
 
     /** Comparison.
      */
-    sal_Bool operator== (const OStoreSuperBlock& rOther) const
+    sal_Bool operator== (const OStoreSuperBlock & rhs) const
     {
-        return ((m_aGuard  == rOther.m_aGuard ) &&
-                (m_aDescr  == rOther.m_aDescr ) &&
-                (m_nMarked == rOther.m_nMarked) &&
-                (m_aMarked == rOther.m_aMarked) &&
-                (m_nUnused == rOther.m_nUnused) &&
-                (m_aUnused == rOther.m_aUnused)    );
+        return ((m_aGuard  == rhs.m_aGuard ) &&
+                (m_aDescr  == rhs.m_aDescr ) &&
+                (m_nMarked == rhs.m_nMarked) &&
+                (m_aMarked == rhs.m_aMarked) &&
+                (m_nUnused == rhs.m_nUnused) &&
+                (m_aUnused == rhs.m_aUnused)    );
     }
 
     /** unused(Count|Head|Insert|Remove|Reset).
@@ -181,74 +173,6 @@ struct OStoreSuperBlock
 
 /*========================================================================
  *
- * OStoreStateBlock.
- *
- *======================================================================*/
-struct OStoreStateBlock
-{
-    enum StateBits
-    {
-        STATE_CLEAN      = 0,
-        STATE_CLOSE_WAIT = 1,
-        STATE_FLUSH_WAIT = 2
-    };
-
-    /** Representation.
-     */
-    sal_uInt32 m_nState;
-
-    /** theSize.
-     */
-    static const size_t theSize = sizeof(sal_uInt32);
-
-    /** Construction.
-     */
-    OStoreStateBlock()
-        : m_nState (store::htonl(STATE_CLEAN))
-    {}
-
-    /** Operation.
-     */
-    bool closePending (void) const
-    {
-        sal_uInt32 nState = store::ntohl(m_nState);
-        return ((nState & STATE_CLOSE_WAIT) == STATE_CLOSE_WAIT);
-    }
-    void closed (void)
-    {
-        sal_uInt32 nState = store::ntohl(m_nState);
-        nState &= ~STATE_CLOSE_WAIT;
-        m_nState = store::htonl(nState);
-    }
-
-    bool flushPending (void) const
-    {
-        sal_uInt32 nState = store::ntohl(m_nState);
-        return ((nState & STATE_FLUSH_WAIT) == STATE_FLUSH_WAIT);
-    }
-    void flushed (void)
-    {
-        sal_uInt32 nState = store::ntohl(m_nState);
-        nState &= ~STATE_FLUSH_WAIT;
-        m_nState = store::htonl(nState);
-    }
-
-    void modified (void)
-    {
-        sal_uInt32 nState = store::ntohl(m_nState);
-        nState |= (STATE_CLOSE_WAIT | STATE_FLUSH_WAIT);
-        m_nState = store::htonl(nState);
-    }
-    void clean (void)
-    {
-        sal_uInt32 nState = store::ntohl(m_nState);
-        nState &= ~(STATE_CLOSE_WAIT | STATE_FLUSH_WAIT);
-        m_nState = store::htonl(nState);
-    }
-};
-
-/*========================================================================
- *
  * OStoreSuperBlockPage interface.
  *
  *======================================================================*/
@@ -258,17 +182,15 @@ namespace store
 struct OStoreSuperBlockPage
 {
     typedef OStoreSuperBlock SuperBlock;
-    typedef OStoreStateBlock StateBlock;
 
     /** Representation.
      */
     SuperBlock m_aSuperOne;
     SuperBlock m_aSuperTwo;
-    StateBlock m_aState;
 
     /** theSize.
      */
-    static const size_t     theSize     = 2 * SuperBlock::theSize + StateBlock::theSize;
+    static const size_t     theSize     = 2 * SuperBlock::theSize;
     static const sal_uInt16 thePageSize = theSize;
     STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
 
@@ -296,8 +218,7 @@ struct OStoreSuperBlockPage
      */
     explicit OStoreSuperBlockPage (sal_uInt16 nPageSize = thePageSize)
         : m_aSuperOne(nPageSize),
-          m_aSuperTwo(nPageSize),
-          m_aState()
+          m_aSuperTwo(nPageSize)
     {}
 
     /** guard (external representation).
@@ -319,21 +240,6 @@ struct OStoreSuperBlockPage
         return rBIOS.write (0, this, theSize);
     }
 
-    /** close.
-     */
-    storeError close (
-        OStorePageBIOS &rBIOS);
-
-    /** flush.
-     */
-    storeError flush (
-        OStorePageBIOS &rBIOS);
-
-    /** modified.
-     */
-    storeError modified (
-        OStorePageBIOS &rBIOS);
-
     /** verify (with repair).
      */
     storeError verify (
@@ -347,89 +253,44 @@ struct OStoreSuperBlockPage
  * OStoreSuperBlockPage implementation.
  *
  *======================================================================*/
-/*
- * close.
- */
-storeError OStoreSuperBlockPage::close (OStorePageBIOS &rBIOS)
+#if 0  /* NEW */
+SuperBlockPage::unusedHead(PageData & rPageHead) // alloc page, step 1
 {
-    storeError eErrCode = store_E_None;
-    if (m_aState.closePending())
-    {
-        // Mark as modified.
-        m_aState.modified();
+    L aListHead (m_aSuperTwo.unusedHead());
+    if (aListHead.location() == STORE_PAGE_NULL)
+        return store_E_NotExists;
 
-        // Check access mode.
-        if (rBIOS.isWriteable())
-        {
-            // Save StateBlock.
-            StateBlock aState (m_aState);
-
-            // Mark as clean.
-            aState.clean();
-
-            // Write behind SuperBlock.
-            sal_uInt32 nAddr = 2 * SuperBlock::theSize;
-            eErrCode = rBIOS.write (nAddr, &aState, StateBlock::theSize);
-        }
-
-        // Mark as clean.
-        m_aState.clean();
-    }
-    return eErrCode;
+    rBIOS.read (aListHead.location(), &rPageHead, PageData::theSize);
 }
-
-/*
- * flush.
- */
-storeError OStoreSuperBlockPage::flush (OStorePageBIOS &rBIOS)
+SuperBlockPage::unusedPop(sal_uInt32 nAddr) // alloc page, step 2
 {
-    storeError eErrCode = store_E_None;
-    if (m_aState.flushPending())
-    {
-        // Check access mode.
-        if (rBIOS.isWriteable())
-        {
-            // Save StateBlock.
-            StateBlock aState (m_aState);
-
-            // Mark as flushed.
-            aState.flushed();
-
-            // Write behind SuperBlock.
-            sal_uInt32 nAddr = 2 * SuperBlock::theSize;
-            eErrCode = rBIOS.write (nAddr, &aState, StateBlock::theSize);
-        }
-
-        // Mark as flushed.
-        m_aState.flushed();
-    }
-    return eErrCode;
 }
-
-/*
- * modified.
- */
-storeError OStoreSuperBlockPage::modified (OStorePageBIOS &rBIOS)
+storeError OStoreSuperBlockPage::unusedPush (OStorePageBIOS & rBIOS, sal_uInt32 nAddr)
 {
-    storeError eErrCode = store_E_None;
-    if (!m_aState.flushPending())
-    {
-        // Mark as modified.
-        m_aState.modified();
+    PageData aPageHead (PageData::theSize);
+    eErrCode = rBIOS.read (nAddr, &aPageHead, PageData::theSize);
+    if (eErrCode != store_E_None)
+        return eErrCode;
 
-        // Check access mode.
-        if (rBIOS.isWriteable())
-        {
-            // Save StateBlock.
-            StateBlock aState (m_aState);
+    eErrCode = aPageHead.verify (nAddr);
+    if (eErrCode != store_E_None)
+        return eErrCode;
 
-            // Write behind SuperBlock.
-            sal_uInt32 nAddr = 2 * SuperBlock::theSize;
-            eErrCode = rBIOS.write (nAddr, &aState, StateBlock::theSize);
-        }
-    }
-    return eErrCode;
+    aPageHead.m_aUnused = m_aSuperTwo.unusedHead();
+    aPageHead.guard (nAddr);
+
+    eErrCode = rBIOS.write (nAddr, &aPageHead, PageData::theSize);
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    OStorePageLink aListHead (nAddr);
+    m_aSuperTwo.unusedInsert(aListHead);
+    m_aSuperOne = m_aSuperTwo;
+    guard();
+
+    return rBIOS.write (0, this, theSize);
 }
+#endif /* NEW */
 
 /*
  * verify (with repair).
@@ -644,8 +505,7 @@ OStorePageBIOS::AceCache::destroy (OStorePageBIOS::Ace * ace)
 OStorePageBIOS::OStorePageBIOS (void)
     : m_xLockBytes (NULL),
       m_pSuper     (NULL),
-      m_bModified  (sal_False),
-      m_bWriteable (sal_False)
+      m_bWriteable (false)
 {
 }
 
@@ -678,27 +538,10 @@ storeError OStorePageBIOS::verify (SuperPage *&rpSuper)
             delete rpSuper, rpSuper = 0;
             return eErrCode;
         }
-
-        // Check SuperBlock state.
-        if (rpSuper->m_aState.closePending())
-            OSL_TRACE("OStorePageBIOS::verify(): close pending.\n");
-
-        if (rpSuper->m_aState.flushPending())
-            OSL_TRACE("OStorePageBIOS::verify(): flush pending.\n");
     }
 
     // Verify SuperBlock page (with repair).
     return rpSuper->verify (*this);
-}
-
-/*
- * repair (SuperBlock).
- * Internal: Precond: initialized, exclusive access.
- */
-storeError OStorePageBIOS::repair (SuperPage *&rpSuper)
-{
-    // Verify SuperBlock page (with repair).
-    return verify (rpSuper);
 }
 
 /*
@@ -722,21 +565,7 @@ storeError OStorePageBIOS::create (sal_uInt16 nPageSize)
     m_pSuper->guard();
 
     // Create initial page (w/ SuperBlock).
-    storeError eErrCode = m_xLockBytes->writeAt (0, m_pSuper, nPageSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
-#ifdef STORE_FEATURE_COMMIT
-    // Commit.
-    eErrCode = m_xLockBytes->flush();
-    OSL_POSTCOND(
-        eErrCode == store_E_None,
-        "OStorePageBIOS::create(): flush failed");
-#endif /* STORE_FEATURE_COMMIT */
-
-    // Adjust modified state.
-    m_bModified = (eErrCode != store_E_None);
-    return eErrCode;
+    return write (0, m_pSuper, nPageSize);
 }
 
 /*
@@ -764,19 +593,13 @@ storeError OStorePageBIOS::initialize (
 
     // Initialize.
     m_xLockBytes = pLockBytes;
-    m_bModified  = sal_False;
     m_bWriteable = (!(eAccessMode == store_AccessReadOnly));
 
     // Check access mode.
-    if (eAccessMode == store_AccessReadOnly)
-    {
-        // Verify SuperBlock page.
-        eErrCode = verify (m_pSuper);
-    }
-    else if (eAccessMode != store_AccessCreate)
+    if (eAccessMode != store_AccessCreate)
     {
         // Verify (w/ repair) SuperBlock page.
-        eErrCode = repair (m_pSuper);
+        eErrCode = verify (m_pSuper);
     }
     else
     {
@@ -784,13 +607,6 @@ storeError OStorePageBIOS::initialize (
         eErrCode = m_xLockBytes->setSize(0);
         if (eErrCode != store_E_None)
             return eErrCode;
-
-#ifdef STORE_FEATURE_COMMIT
-        // Commit.
-        eErrCode = m_xLockBytes->flush();
-        if (eErrCode != store_E_None)
-            return eErrCode;
-#endif /* STORE_FEATURE_COMMIT */
 
         // Mark as not existing.
         eErrCode = store_E_NotExists;
@@ -813,9 +629,6 @@ storeError OStorePageBIOS::initialize (
     }
     if (eErrCode == store_E_None)
     {
-        // Obtain modified state.
-        m_bModified = m_pSuper->m_aState.flushPending();
-
         // Obtain page size.
         rnPageSize = store::ntohs(m_pSuper->m_aSuperOne.m_aDescr.m_nSize);
 
@@ -841,7 +654,7 @@ storeError OStorePageBIOS::read (
     if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
-    // Read Page.
+    // Read Data.
     return m_xLockBytes->readAt (nAddr, pData, nSize);
 }
 
@@ -857,18 +670,6 @@ storeError OStorePageBIOS::write (
         return store_E_InvalidAccess;
     if (!m_bWriteable)
         return store_E_AccessViolation;
-
-    // Check modified state.
-    if (!m_bModified)
-    {
-        // Mark as modified.
-        m_bModified = sal_True;
-
-        // Mark SuperBlock modified.
-        storeError eErrCode = m_pSuper->modified (*this);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-    }
 
     // Write Data.
     return m_xLockBytes->writeAt (nAddr, pData, nSize);
@@ -989,10 +790,9 @@ storeError OStorePageBIOS::allocate (
         {
             // Allocate from FreeList.
             OStorePageData aPageHead (OStorePageData::theSize);
-            aPageHead.location (aListHead.location());
 
             // Load PageHead.
-            eErrCode = peek (aPageHead);
+            eErrCode = peek (aPageHead, aListHead.location());
             if (eErrCode != store_E_None)
                 return eErrCode;
 
@@ -1037,58 +837,14 @@ storeError OStorePageBIOS::allocate (
         }
     }
 
-    // Allocate from logical EOF. Determine physical EOF.
-    sal_uInt32 nPhysLen = STORE_PAGE_NULL;
-    eErrCode = m_xLockBytes->getSize (nPhysLen);
+    // Allocate from EOF. Determine current size.
+    sal_uInt32 nSize = STORE_PAGE_NULL;
+    eErrCode = m_xLockBytes->getSize (nSize);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Obtain logical EOF.
-    OStorePageDescriptor aDescr (m_pSuper->m_aSuperTwo.m_aDescr);
-    sal_uInt32 nLogLen = store::ntohl(aDescr.m_nAddr);
-    if (nLogLen == 0)
-        nLogLen = nPhysLen; /* backward compatibility */
-
-    if (!(nLogLen < nPhysLen))
-    {
-        // Check modified state.
-        if (!m_bModified)
-        {
-            // Mark modified.
-            m_bModified = sal_True;
-
-            // Mark SuperBlock modified.
-            eErrCode = m_pSuper->modified (*this);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
-
-        // Resize.
-        sal_uInt32 nAlign = SAL_MIN (nPhysLen, STORE_MAXIMUM_PAGESIZE);
-        nPhysLen = ((nPhysLen + nAlign) / nAlign) * nAlign;
-
-        eErrCode = m_xLockBytes->setSize (nPhysLen);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-    }
-
-    // Save page at logical EOF.
-    eErrCode = saveObjectAt_Impl (rPage, nLogLen);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
-    // Save SuperBlock page and finish.
-    nLogLen += store::ntohs(aDescr.m_nSize);
-    aDescr.m_nAddr = store::htonl(nLogLen);
-
-    m_pSuper->m_aSuperTwo.m_aDescr = aDescr;
-    m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
-
-    eErrCode = m_pSuper->save (*this);
-    OSL_POSTCOND(
-        eErrCode == store_E_None,
-        "OStorePageBIOS::allocate(): SuperBlock save failed");
-    return eErrCode;
+    // Save page at current EOF.
+    return saveObjectAt_Impl (rPage, nSize);
 }
 
 /*
@@ -1113,9 +869,7 @@ storeError OStorePageBIOS::free (OStorePageData & /* rData */, sal_uInt32 nAddr)
 
     // Load PageHead.
     OStorePageData aPageHead(OStorePageData::theSize);
-    aPageHead.location (nAddr);
-
-    eErrCode = peek (aPageHead);
+    eErrCode = peek (aPageHead, nAddr);
     if (eErrCode != store_E_None)
         return eErrCode;
 
@@ -1129,7 +883,7 @@ storeError OStorePageBIOS::free (OStorePageData & /* rData */, sal_uInt32 nAddr)
     aListHead.m_nAddr = aPageHead.m_aDescr.m_nAddr;
 
     // Save PageHead.
-    eErrCode = poke (aPageHead);
+    eErrCode = poke (aPageHead, nAddr);
     if (eErrCode != store_E_None)
         return eErrCode;
 
@@ -1253,37 +1007,17 @@ storeError OStorePageBIOS::close (void)
 #endif /* NEW */
     }
 
-    // Check SuperBlock page.
-    storeError eErrCode = store_E_None;
-    if (m_pSuper)
-    {
-        // Release SuperBlock page.
-        eErrCode = m_pSuper->close (*this);
-        delete m_pSuper, m_pSuper = 0;
-    }
+    // Release SuperBlock page.
+    delete m_pSuper, m_pSuper = 0;
 
     // Release PageCache.
     m_xCache.clear();
 
-    // Check LockBytes.
-    if (m_xLockBytes.is())
-    {
-#ifdef STORE_FEATURE_COMMIT
-        // Commit.
-        storeError result = m_xLockBytes->flush();
-        if (eErrCode == store_E_None)
-        {
-            // Previous result(s) okay. Propagate next result.
-            eErrCode = result;
-        }
-#endif /* STORE_FEATURE_COMMIT */
-
-        // Release LockBytes.
-        m_xLockBytes.clear();
-    }
+    // Release LockBytes.
+    m_xLockBytes.clear();
 
     // Done.
-    return eErrCode;
+    return store_E_None;
 }
 
 /*
@@ -1299,27 +1033,8 @@ storeError OStorePageBIOS::flush (void)
     if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
-    // Check mode and state.
-    storeError eErrCode = store_E_None;
-    if (!(m_bWriteable && m_bModified))
-        return eErrCode;
-
-    // Flush SuperBlock page.
-    eErrCode = m_pSuper->flush (*this);
-
-    // Flush LockBytes.
-    storeError result = m_xLockBytes->flush();
-    if (eErrCode == store_E_None)
-    {
-        // Previous result(s) okay. Propagate next result.
-        eErrCode = result;
-    }
-
-    // Adjust modified state.
-    m_bModified = (eErrCode != store_E_None);
-
-    // Done.
-    return eErrCode;
+    // Flush LockBytes and finish.
+    return m_xLockBytes->flush();
 }
 
 /*
@@ -1372,7 +1087,8 @@ storeError OStorePageBIOS::scanBegin (
 
     // Setup Context descriptor.
     rCtx.m_aDescr = m_pSuper->m_aSuperOne.m_aDescr;
-    rCtx.m_aDescr.m_nAddr = rCtx.m_aDescr.m_nSize; // @@@ ntoh @@@
+    rCtx.m_aDescr.m_nSize = store::ntohs(rCtx.m_aDescr.m_nSize);
+    rCtx.m_aDescr.m_nAddr = rCtx.m_aDescr.m_nSize;
 
     // Setup Context size.
     eErrCode = size (rCtx.m_nSize);
@@ -1404,11 +1120,11 @@ storeError OStorePageBIOS::scanNext (
     while (rCtx.isValid())
     {
         // Assign next location.
-        aPageHead.location (rCtx.m_aDescr.m_nAddr);
+        sal_uInt32 nAddr = rCtx.m_aDescr.m_nAddr;
         rCtx.m_aDescr.m_nAddr += rCtx.m_aDescr.m_nSize;
 
         // Load PageHead.
-        storeError eErrCode = peek (aPageHead);
+        storeError eErrCode = peek (aPageHead, nAddr);
         if (eErrCode != store_E_None)
             continue;
 
@@ -1421,7 +1137,7 @@ storeError OStorePageBIOS::scanNext (
             continue;
 
         // Load page.
-        eErrCode = loadObjectAt_Impl (rPage, aPageHead.location());
+        eErrCode = loadObjectAt_Impl (rPage, nAddr);
         if (eErrCode != store_E_None)
             continue;
 
@@ -1437,26 +1153,26 @@ storeError OStorePageBIOS::scanNext (
  * peek (PageHead).
  * Internal: Precond: initialized, readable, exclusive access.
  */
-storeError OStorePageBIOS::peek (OStorePageData &rData)
+storeError OStorePageBIOS::peek (OStorePageData &rData, sal_uInt32 nAddr)
 {
     // Read PageHead.
-    storeError eErrCode = read (rData.location(), &rData, OStorePageData::theSize);
+    storeError eErrCode = read (nAddr, &rData, OStorePageData::theSize);
     if (eErrCode != store_E_None)
         return eErrCode;
 
     // Verify PageHead.
-    return rData.verify();
+    return rData.verify (nAddr);
 }
 
 /*
  * poke (PageHead).
  * Internal: Precond: initialized, writeable, exclusive access.
  */
-storeError OStorePageBIOS::poke (OStorePageData &rData)
+storeError OStorePageBIOS::poke (OStorePageData &rData, sal_uInt32 nAddr)
 {
     // Guard PageHead.
-    rData.guard();
+    rData.guard (nAddr);
 
     // Write PageHead.
-    return write (rData.location(), &rData, OStorePageData::theSize);
+    return write (nAddr, &rData, OStorePageData::theSize);
 }
