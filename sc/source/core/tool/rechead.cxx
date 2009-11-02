@@ -81,7 +81,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
 
 ScMultipleReadHeader::~ScMultipleReadHeader()
 {
-    if ( pMemStream && pMemStream->Tell() != pMemStream->GetSize() )
+    if ( pMemStream && pMemStream->Tell() != pMemStream->GetEndOfData() )
     {
         DBG_ERRORFILE( "Sizes nicht vollstaendig gelesen" );
         if ( rStream.GetError() == SVSTREAM_OK )
