@@ -81,7 +81,7 @@ WindowsCustomAction gid_Customaction_Reg64dll1
 	Source = "reg64msi.dll";
 	Target = "InstallReg64";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed and VersionNT64", "end");
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" and VersionNT64", "end");
 End
 
 WindowsCustomAction gid_Customaction_Reg64dll2
@@ -90,7 +90,7 @@ WindowsCustomAction gid_Customaction_Reg64dll2
 	Source = "reg64msi.dll";
 	Target = "DeinstallReg64";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Installed and VersionNT64", "end");
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" and VersionNT64", "end");
 End
 
 WindowsCustomAction gid_Customaction_Jfregcadll1
