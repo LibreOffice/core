@@ -141,9 +141,18 @@ sub get_all_modules
 sub get_active_modules
 {
     my $self        = shift;
-    return sort keys %{$self->{ACTIVE_MODULES}};
+    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+    my @active_modules = sort keys %{$self->{ACTIVE_MODULES}};
+    @active_modules = $self->get_all_modules() if (!scalar @active_modules);
+    return @active_modules;
 }
 
+sub is_active
+{
+    my $self        = shift;
+    my $module      = shift;
+    return exists ($self->{ACTIVE_MODULES}{$module});
+}
 
 ##### private methods #####
 
@@ -165,10 +174,13 @@ sub get_module_paths {
         my $repository_path = ${$self->{REPOSITORIES}}{$repository};
         if (opendir DIRHANDLE, $repository_path) {
             foreach my $module (readdir(DIRHANDLE)) {
-                next if ($module =~ /^\.+/);
+                next if (($module =~ /^\.+/) || (!-d "$repository_path/$module"));
                 my $module_entry = $module;
-                $module =~ s/\.lnk$//;
-                $module =~ s/\.link$//;
+                if (!$self->{SOURCE_CONFIG_FILE}) {
+                    if (($module !~ s/\.lnk$//) && ($module !~ s/\.link$//)) {
+                        $self->{ACTIVE_MODULES}{$module}++ if (!exists($self->{ACTIVE_MODULES}{$module}));
+                    }
+                }
                 my $possible_path = "$repository_path/$module_entry";
                 if (-d $possible_path) {
                     if (defined ${$self->{MODULE_PATHS}}{$module}) {
@@ -310,6 +322,11 @@ SourceConfig::get_config_file_default_path()
 
 Returns default path for source configuration file
 
+SourceConfig::is_active()
+
+Returns >0 (TRUE) if a module is active
+Returns 0 (FALSE) if a module is not active
+
 =head2 EXPORT
 
 SourceConfig::new()
@@ -321,6 +338,7 @@ SourceConfig::get_module_build_list($module)
 SourceConfig::get_module_repository($module)
 SourceConfig::get_config_file_path()
 SourceConfig::get_config_file_default_path()
+SourceConfig::is_active($module)
 
 =head1 AUTHOR
 
