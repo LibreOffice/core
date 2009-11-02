@@ -30,17 +30,6 @@
 
 #include "macros.inc"
 
-Profile gid_Profile_Configmgr_Ini
-    ModuleID = gid_Module_Root;
-  #ifdef UNX
-    Name = "configmgrrc";
-  #else
-    Name = "configmgr.ini";
-  #endif
-    Dir = gid_Dir_Program;
-    Styles = (NETWORK);
-End
-
 Profile gid_Profile_Uno_Ini
     ModuleID = gid_Module_Root;
   #ifdef UNX
