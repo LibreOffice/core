@@ -96,6 +96,7 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Svt,
              gid_File_Res_Svp,
              gid_File_Res_Svx,
+             gid_File_Res_Cui,
              gid_File_Res_TextConversionDlgs,
              gid_File_Res_Sw,
              gid_File_Res_Tab,
