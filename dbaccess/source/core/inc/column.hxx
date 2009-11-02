@@ -31,92 +31,40 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #define _DBA_COREAPI_COLUMN_HXX_
 
-#include <hash_map>
+#include "columnsettings.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
-#include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
-#include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
-#include <com/sun/star/io/IOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
-#include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
-#include <com/sun/star/sdbcx/XDrop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
-#endif
-#ifndef _CPPUHELPER_PROPSHLP_HXX
-#include <cppuhelper/propshlp.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
-#ifndef CONNECTIVITY_COLUMNSHELPER_HXX
-#include <connectivity/TColumnsHelper.hxx>
-#endif
-#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include <connectivity/FValue.hxx>
-#endif
-#ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
-#include <connectivity/sdbcx/IRefreshable.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/XObjectInputStream.hpp>
+#include <com/sun/star/io/XObjectOutputStream.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbcx/XAppend.hpp>
+#include <com/sun/star/sdbcx/XDrop.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+
+#include <comphelper/broadcasthelper.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertycontainer.hxx>
+#include <comphelper/stl_types.hxx>
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/FValue.hxx>
+#include <connectivity/TColumnsHelper.hxx>
+#include <connectivity/sdbcx/IRefreshable.hxx>
+#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/propshlp.hxx>
+#include <osl/diagnose.h>
+
+#include <hash_map>
 
 namespace dbaccess
 {
@@ -131,8 +79,8 @@ namespace dbaccess
     //------------------------------------------------------------
     class OColumn   :public comphelper::OBaseMutex
                     ,public OColumnBase
-                    ,public ::cppu::OPropertySetHelper
-
+                    ,public ::comphelper::OPropertyContainer
+                    ,public IPropertyContainer  // convenience for the derived class which also derive from OColumnSettings
     {
         friend class OColumns;
 
@@ -142,7 +90,7 @@ namespace dbaccess
         // </properties>
 
     protected:
-        OColumn();
+        OColumn( const bool _bNameIsReadOnly );
 
     public:
         virtual ~OColumn();
@@ -158,23 +106,6 @@ namespace dbaccess
 
     // com::sun::star::beans::XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::cppu::OPropertySetHelper
-        virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle
-                                         ) const;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                ::com::sun::star::uno::Any & rConvertedValue,
-                                ::com::sun::star::uno::Any & rOldValue,
-                                sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue )
-                                    throw (::com::sun::star::lang::IllegalArgumentException);
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                    sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
-                                                     )
-                                                     throw (::com::sun::star::uno::Exception);
 
         // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
@@ -192,10 +123,13 @@ namespace dbaccess
         virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException);
 
-        virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
+        virtual void fireValueChange( const ::connectivity::ORowSetValue& _rOldValue );
 
     protected:
-        using ::cppu::OPropertySetHelper::getFastPropertyValue;
+        // IPropertyContainer
+        virtual void registerProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType );
+        virtual void registerMayBeVoidProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, ::com::sun::star::uno::Any* _pPointerToMember, const ::com::sun::star::uno::Type& _rExpectedType );
+        virtual void registerPropertyNoMember( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue );
     };
 
     //============================================================

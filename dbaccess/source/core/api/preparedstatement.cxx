@@ -30,39 +30,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
-#include <preparedstatement.hxx>
-#endif
-#ifndef _DBA_COREAPI_RESULTSET_HXX_
-#include <resultset.hxx>
-#endif
-#ifndef _DBA_COREAPI_RESULTCOLUMN_HXX_
-#include <resultcolumn.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+
 #include "dbastrings.hrc"
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
+
 #include <comphelper/property.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX //autogen
+#include <comphelper/sequence.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <preparedstatement.hxx>
+#include <resultcolumn.hxx>
+#include <resultset.hxx>
 #include <tools/debug.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -203,27 +185,23 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
     {
         try
         {
-            // get the metadata
-            Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xAggregateAsSet, UNO_QUERY)->getMetaData();
-            // do we have columns
-            if ( xMetaData.is() )
-            {
-                Reference< XDatabaseMetaData > xDBMeta;
-                Reference< XConnection > xConn( getConnection() );
-                if ( xConn.is() )
-                    xDBMeta = xConn->getMetaData();
+            Reference< XResultSetMetaDataSupplier > xSuppMeta( m_xAggregateAsSet, UNO_QUERY_THROW );
+            Reference< XResultSetMetaData > xMetaData( xSuppMeta->getMetaData(), UNO_SET_THROW );
 
-                for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
-                {
-                    // retrieve the name of the column
-                    rtl::OUString aName = xMetaData->getColumnName(i + 1);
-                    OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1, xDBMeta);
-                    m_pColumns->append(aName, pColumn);
-                }
+            Reference< XConnection > xConn( getConnection(), UNO_SET_THROW );
+            Reference< XDatabaseMetaData > xDBMeta( xConn->getMetaData(), UNO_SET_THROW );
+
+            for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
+            {
+                // retrieve the name of the column
+                rtl::OUString aName = xMetaData->getColumnName(i + 1);
+                OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1, xDBMeta);
+                m_pColumns->append(aName, pColumn);
             }
         }
-        catch (SQLException)
+        catch (const SQLException& )
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
         m_pColumns->setInitialized();
     }
@@ -236,7 +214,7 @@ Reference< XResultSetMetaData > OPreparedStatement::getMetaData(void) throw( SQL
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
-    return Reference< XResultSetMetaDataSupplier >(m_xAggregateAsSet, UNO_QUERY)->getMetaData();
+    return Reference< XResultSetMetaDataSupplier >( m_xAggregateAsSet, UNO_QUERY_THROW )->getMetaData();
 }
 
 // XPreparedStatement
@@ -249,7 +227,7 @@ Reference< XResultSet >  OPreparedStatement::executeQuery() throw( SQLException,
     disposeResultSet();
 
     Reference< XResultSet > xResultSet;
-    Reference< XResultSet > xDrvResultSet = Reference< XPreparedStatement >(m_xAggregateAsSet, UNO_QUERY)->executeQuery();
+    Reference< XResultSet > xDrvResultSet = Reference< XPreparedStatement >( m_xAggregateAsSet, UNO_QUERY_THROW )->executeQuery();
     if (xDrvResultSet.is())
     {
         xResultSet = new OResultSet(xDrvResultSet, *this, m_pColumns->isCaseSensitive());
@@ -268,7 +246,7 @@ sal_Int32 OPreparedStatement::executeUpdate() throw( SQLException, RuntimeExcept
 
     disposeResultSet();
 
-    return Reference< XPreparedStatement >(m_xAggregateAsSet, UNO_QUERY)->executeUpdate();
+    return Reference< XPreparedStatement >( m_xAggregateAsSet, UNO_QUERY_THROW )->executeUpdate();
 }
 
 //------------------------------------------------------------------------------
@@ -278,7 +256,8 @@ sal_Bool OPreparedStatement::execute() throw( SQLException, RuntimeException )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
-    return Reference< XPreparedStatement >(m_xAggregateAsSet, UNO_QUERY)->execute();
+
+    return Reference< XPreparedStatement >( m_xAggregateAsSet, UNO_QUERY_THROW )->execute();
 }
 
 //------------------------------------------------------------------------------

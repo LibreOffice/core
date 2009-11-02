@@ -30,6 +30,7 @@
 #include "dbastrings.hrc"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 /** === end UNO includes === **/
 
 #include <cppuhelper/typeprovider.hxx>
@@ -56,6 +57,7 @@ namespace dbaccess
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::XPropertySet;
     /** === end UNO using === **/
+    namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
     //==============================================================================
     //= OColumnSettings
@@ -65,7 +67,6 @@ namespace dbaccess
     OColumnSettings::OColumnSettings()
         :m_bHidden(sal_False)
     {
-        OSL_TRACE( "ColumnSettings: +%p", this );
         DBG_CTOR( OColumnSettings, NULL );
     }
 
@@ -73,7 +74,6 @@ namespace dbaccess
     OColumnSettings::~OColumnSettings()
     {
         DBG_DTOR( OColumnSettings, NULL );
-        OSL_TRACE( "ColumnSettings: -%p", this );
     }
 
     // XUnoTunnel
@@ -105,131 +105,35 @@ namespace dbaccess
     }
 
     //------------------------------------------------------------------------------
-    void OColumnSettings::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+    void OColumnSettings::registerProperties( IPropertyContainer& _rPropertyContainer )
     {
-        switch (nHandle)
-        {
-            case PROPERTY_ID_ALIGN:
-                rValue = m_aAlignment;
-                break;
-            case PROPERTY_ID_NUMBERFORMAT:
-                rValue = m_aFormatKey;
-                break;
-            case PROPERTY_ID_RELATIVEPOSITION:
-                rValue = m_aRelativePosition;
-                break;
-            case PROPERTY_ID_WIDTH:
-                rValue = m_aWidth;
-                break;
-            case PROPERTY_ID_HIDDEN:
-                rValue.setValue(&m_bHidden, getBooleanCppuType());
-                break;
-            case PROPERTY_ID_CONTROLMODEL:
-                rValue <<= m_xControlModel;
-                break;
-            case PROPERTY_ID_HELPTEXT:
-                rValue = m_aHelpText;
-                break;
-            case PROPERTY_ID_CONTROLDEFAULT:
-                rValue = m_aControlDefault;
-                break;
-        }
+        const sal_Int32 nBoundAttr = PropertyAttribute::BOUND;
+        const sal_Int32 nMayBeVoidAttr = PropertyAttribute::MAYBEVOID | nBoundAttr;
+
+        const Type& rSalInt32Type = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+        const Type& rStringType = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+
+        _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_ALIGN, PROPERTY_ID_ALIGN, nMayBeVoidAttr, &m_aAlignment, rSalInt32Type );
+        _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_NUMBERFORMAT, PROPERTY_ID_NUMBERFORMAT, nMayBeVoidAttr, &m_aFormatKey, rSalInt32Type );
+        _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_RELATIVEPOSITION, PROPERTY_ID_RELATIVEPOSITION, nMayBeVoidAttr, &m_aRelativePosition, rSalInt32Type );
+        _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_WIDTH, PROPERTY_ID_WIDTH, nMayBeVoidAttr, &m_aWidth, rSalInt32Type );
+        _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_HELPTEXT, PROPERTY_ID_HELPTEXT, nMayBeVoidAttr, &m_aHelpText, rStringType );
+        _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_CONTROLDEFAULT, PROPERTY_ID_CONTROLDEFAULT, nMayBeVoidAttr, &m_aControlDefault, rStringType );
+        _rPropertyContainer.registerProperty( PROPERTY_CONTROLMODEL, PROPERTY_ID_CONTROLMODEL, nBoundAttr, &m_xControlModel, ::getCppuType( &m_xControlModel ) );
+        _rPropertyContainer.registerProperty( PROPERTY_HIDDEN, PROPERTY_ID_HIDDEN, nBoundAttr, &m_bHidden, ::getCppuType( &m_bHidden ) );
     }
 
     //------------------------------------------------------------------------------
-    sal_Bool OColumnSettings::convertFastPropertyValue( Any& rConvertedValue, Any & rOldValue, sal_Int32 nHandle,
-                                                        const Any& rValue ) throw (IllegalArgumentException)
+    bool OColumnSettings::isMine( const sal_Int32 _nPropertyHandle ) const
     {
-        sal_Bool bModified = sal_False;
-        switch (nHandle)
-        {
-            case PROPERTY_ID_ALIGN:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAlignment,
-                    ::getCppuType(static_cast< sal_Int32* >(NULL)));
-                break;
-            case PROPERTY_ID_WIDTH:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth,
-                    ::getCppuType(static_cast< sal_Int32* >(NULL)));
-                break;
-            case PROPERTY_ID_HIDDEN:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bHidden);
-                break;
-            case PROPERTY_ID_RELATIVEPOSITION:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aRelativePosition,
-                    ::getCppuType(static_cast< sal_Int32* >(NULL)));
-                break;
-            case PROPERTY_ID_NUMBERFORMAT:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aFormatKey,
-                    ::getCppuType(static_cast< sal_Int32* >(NULL)));
-                break;
-            case PROPERTY_ID_CONTROLMODEL:
-            {
-                Reference< XPropertySet > xTest;
-                if (!::cppu::extractInterface(xTest, rValue))
-                    throw IllegalArgumentException();
-                if (xTest.get() != m_xControlModel.get())
-                {
-                    bModified = sal_True;
-                    rOldValue <<= m_xControlModel;
-                    rConvertedValue <<= rValue;
-                }
-            }
-            break;
-            case PROPERTY_ID_HELPTEXT:
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aHelpText,
-                    ::getCppuType(static_cast< ::rtl::OUString* >(NULL)));
-                break;
-            case PROPERTY_ID_CONTROLDEFAULT:
-                bModified = rValue != m_aControlDefault;
-                if ( bModified )
-                {
-                    rConvertedValue = rValue;
-                    rOldValue = m_aControlDefault;
-                }
-                break;
-        }
-        return bModified;
-    }
-
-    //------------------------------------------------------------------------------
-    void OColumnSettings::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
-    {
-        switch (nHandle)
-        {
-            case PROPERTY_ID_ALIGN:
-                OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                    "OColumnSettings::setFastPropertyValue_NoBroadcast(ALIGN) : invalid value !");
-                m_aAlignment = rValue;
-                break;
-            case PROPERTY_ID_WIDTH:
-                OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                    "OColumnSettings::setFastPropertyValue_NoBroadcast(WIDTH) : invalid value !");
-                m_aWidth = rValue;
-                break;
-            case PROPERTY_ID_NUMBERFORMAT:
-                OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                    "OColumnSettings::setFastPropertyValue_NoBroadcast(NUMBERFORMAT) : invalid value !");
-                m_aFormatKey = rValue;
-                break;
-            case PROPERTY_ID_RELATIVEPOSITION:
-                OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                    "OColumnSettings::setFastPropertyValue_NoBroadcast(ID_RELATIVEPOSITION) : invalid value !");
-                m_aRelativePosition = rValue;
-                break;
-            case PROPERTY_ID_HIDDEN:
-                OSL_ENSURE(rValue.getValueType().equals(::getBooleanCppuType()),
-                    "OColumnSettings::setFastPropertyValue_NoBroadcast(HIDDEN) : invalid value !");
-                OSL_VERIFY( rValue >>= m_bHidden );
-                break;
-            case PROPERTY_ID_HELPTEXT:
-                OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< ::rtl::OUString* >(NULL))),
-                    "OColumnSettings::setFastPropertyValue_NoBroadcast(ID_RELATIVEPOSITION) : invalid value !");
-                m_aHelpText = rValue;
-                break;
-            case PROPERTY_ID_CONTROLDEFAULT:
-                m_aControlDefault = rValue;
-                break;
-        }
+        return  ( _nPropertyHandle == PROPERTY_ID_ALIGN )
+            ||  ( _nPropertyHandle == PROPERTY_ID_NUMBERFORMAT )
+            ||  ( _nPropertyHandle == PROPERTY_ID_RELATIVEPOSITION )
+            ||  ( _nPropertyHandle == PROPERTY_ID_WIDTH )
+            ||  ( _nPropertyHandle == PROPERTY_ID_HELPTEXT )
+            ||  ( _nPropertyHandle == PROPERTY_ID_CONTROLDEFAULT )
+            ||  ( _nPropertyHandle == PROPERTY_ID_CONTROLMODEL )
+            ||  ( _nPropertyHandle == PROPERTY_ID_HIDDEN );
     }
 
     //------------------------------------------------------------------------------

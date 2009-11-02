@@ -46,11 +46,9 @@
 namespace dbaccess
 {
     class ORowSetColumn;
-    typedef ::comphelper::OPropertyArrayUsageHelper<ORowSetColumn> ORowSetColumn_PROP;
+    class ORowSetColumn :public ORowSetDataColumn
+                        ,public ::comphelper::OPropertyArrayUsageHelper< ORowSetColumn >
 
-    // -------------------------------------------------------------------------
-    class ORowSetColumn :   public ORowSetColumn_PROP,
-                            public ORowSetDataColumn
     {
     public:
         ORowSetColumn(  const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
@@ -58,34 +56,13 @@ namespace dbaccess
                         sal_Int32 _nPos,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                         const ::rtl::OUString& _rDescription,
-                        ORowSetCacheIterator& _rColumnValue)
-          : ORowSetDataColumn(_xMetaData,_xRow,NULL,_nPos,_rxDBMeta,_rDescription,_rColumnValue)
-        {
-        }
+                        ORowSetCacheIterator& _rColumnValue);
 
-    // com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-
-    // com::sun::star::uno::XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
-
-    // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-
-    // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any & rConvertedValue,
-                                                            ::com::sun::star::uno::Any & rOldValue,
-                                                            sal_Int32 nHandle,
-                                                            const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException);
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception);
-
-    protected:
-        using ORowSetDataColumn::getFastPropertyValue;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception );
     };
 
 }
-#endif // DBACCESS_CORE_API_CROWSETCOLUMN_HXX
 
+#endif // DBACCESS_CORE_API_CROWSETCOLUMN_HXX

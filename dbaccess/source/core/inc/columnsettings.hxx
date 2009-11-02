@@ -35,12 +35,41 @@ namespace dbaccess
 {
 //........................................................................
 
-    //************************************************************
-    //  OColumnSettings
-    //************************************************************
+    // TODO: move the following to comphelper/propertycontainerhelper.hxx
+    class IPropertyContainer
+    {
+    public:
+        virtual void registerProperty(
+                    const ::rtl::OUString& _rName,
+                    sal_Int32 _nHandle,
+                    sal_Int32 _nAttributes,
+                    void* _pPointerToMember,
+                    const ::com::sun::star::uno::Type& _rMemberType
+                ) = 0;
+
+        virtual void registerMayBeVoidProperty(
+                    const ::rtl::OUString& _rName,
+                    sal_Int32 _nHandle,
+                    sal_Int32 _nAttributes,
+                    ::com::sun::star::uno::Any* _pPointerToMember,
+                    const ::com::sun::star::uno::Type& _rExpectedType
+                ) = 0;
+
+        virtual void registerPropertyNoMember(
+                    const ::rtl::OUString& _rName,
+                    sal_Int32 _nHandle,
+                    sal_Int32 _nAttributes,
+                    const ::com::sun::star::uno::Type& _rType,
+                    const void* _pInitialValue
+                ) = 0;
+    };
+
+    //====================================================================
+    //= OColumnSettings
+    //====================================================================
     class OColumnSettings
     {
-    //  <properties>
+        //  <properties>
         ::com::sun::star::uno::Any  m_aWidth;               // sal_Int32 or void
         ::com::sun::star::uno::Any  m_aFormatKey;           // sal_Int32 or void
         ::com::sun::star::uno::Any  m_aRelativePosition;    // sal_Int32 or void
@@ -49,34 +78,26 @@ namespace dbaccess
         ::com::sun::star::uno::Any  m_aControlDefault;      // the default value which should be displayed as by a control when moving to a new row
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     m_xControlModel;
-
         sal_Bool                    m_bHidden;
-    //  </properties>
+        //  </properties>
 
-    // Setting of values
-    public:
-        OColumnSettings();
+    protected:
         virtual ~OColumnSettings();
 
-        sal_Bool SAL_CALL convertFastPropertyValue(
-                                ::com::sun::star::uno::Any & rConvertedValue,
-                                ::com::sun::star::uno::Any & rOldValue,
-                                sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue )
-                                    throw (::com::sun::star::lang::IllegalArgumentException);
-        void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                    sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
-                                                     )
-                                                     throw (::com::sun::star::uno::Exception);
-        void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
-
+    public:
+        OColumnSettings();
 
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-    public:
+    protected:
+        void registerProperties( IPropertyContainer& _rPropertyContainer );
 
+        /** determines whether the property with the given handle is handled by the class
+        */
+        bool isMine( const sal_Int32 _nPropertyHandle ) const;
+
+    public:
         /** check if the persistent settings have their default value
         */
         sal_Bool    isDefaulted() const;
