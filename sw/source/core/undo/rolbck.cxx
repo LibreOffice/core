@@ -833,7 +833,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
     , m_Array( (BYTE)rSet.Count() )
 {
     SfxItemIter aIter( rSet );
-    bool bAutoStyle = true;
+    bool bAutoStyle = false;
 
     while( TRUE )
     {
