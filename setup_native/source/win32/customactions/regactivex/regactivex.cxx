@@ -173,7 +173,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
     wchar_t* pProgPath = NULL;
-    if ( GetMsiProp( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
+    if ( GetMsiProp( hMSI, L"OFFICEINSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
 #ifdef OWN_DEBUG_PRINT
@@ -330,7 +330,7 @@ BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
     wchar_t* pVal = NULL;
     if ( GetMsiProp( hMSI, L"VersionNT64", &pVal ) && pVal )
     {
-        bResult = UnicodeEquals( pVal , L"1" );
+        bResult = TRUE;
         free( pVal );
     }
 
