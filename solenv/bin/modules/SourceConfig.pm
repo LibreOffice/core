@@ -44,6 +44,8 @@ use strict;
 use constant SOURCE_CONFIG_FILE_NAME => 'source_config';
 
 use Carp;
+use Cwd;
+use File::Basename;
 
 #####  profiling #####
 
