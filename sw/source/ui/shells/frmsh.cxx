@@ -618,8 +618,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 AbstractSvxObjectTitleDescDialog* pDlg =
                     pFact->CreateSvxObjectTitleDescDialog( NULL,
                                                            aTitle,
-                                                           aDescription,
-                                                           RID_SVXDLG_OBJECT_TITLE_DESC );
+                                                           aDescription );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if ( pDlg->Execute() == RET_OK )

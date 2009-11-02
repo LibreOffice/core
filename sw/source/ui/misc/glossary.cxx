@@ -1216,7 +1216,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn, RID_SVXDLG_MULTIPATH);
+        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );

@@ -1653,7 +1653,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet, RID_SVXDLG_ZOOM);
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );

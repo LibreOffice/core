@@ -577,7 +577,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 {
                     SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog(
                                 &(GetView().GetViewFrame()->GetWindow()),
-                                &aNewAttr, RID_SVXDLG_TEXT, pSdrView );
+                                &aNewAttr, pSdrView );
                     USHORT nResult = pDlg->Execute();
 
                     if (nResult == RET_OK)

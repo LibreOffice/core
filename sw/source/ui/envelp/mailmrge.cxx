@@ -872,7 +872,7 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this, RID_SVXDLG_MULTIPATH);
+        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this );
         DBG_ASSERT(pFileDlg, "Dialogdiet fail!");
         pFileDlg->SetFiles(aAttachED.GetText());
         pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE2);

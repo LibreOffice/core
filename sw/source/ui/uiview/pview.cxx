@@ -1376,7 +1376,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, RID_SVXDLG_ZOOM);
+                    pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 }
 

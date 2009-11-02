@@ -238,7 +238,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             if ( pFact )
                             {
                                 AbstractSvxCaptionDialog* pCaptionDlg =
-                                        pFact->CreateCaptionDialog( NULL, pSdrView, RID_SVXDLG_CAPTION, nAllowedAnchors );
+                                        pFact->CreateCaptionDialog( NULL, pSdrView, nAllowedAnchors );
                                 pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pCaptionDlg;
                                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
@@ -251,7 +251,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             {
 
                                 AbstractSvxTransformTabDialog* pTransform =
-                                            pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, RID_SVXDLG_TRANSFORM, nAllowedAnchors );
+                                            pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, nAllowedAnchors );
                                 pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pTransform;
                                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
@@ -567,7 +567,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName, RID_SVXDLG_OBJECT_NAME);
+                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
@@ -599,7 +599,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription, RID_SVXDLG_OBJECT_TITLE_DESC);
+                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if(RET_OK == pDlg->Execute())
