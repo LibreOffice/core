@@ -850,6 +850,10 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     {
         Size aJobPageSize( getJobPageSize() );
         Size aTabSize( maTabCtrl.GetSizePixel() );
+        if( aJobPageSize.Width() < 1 )
+            aJobPageSize.Width() = aTabSize.Width();
+        if( aJobPageSize.Height() < 1 )
+            aJobPageSize.Height() = aTabSize.Height();
         long nOptPreviewWidth = aTabSize.Height() * aJobPageSize.Width() / aJobPageSize.Height();
         // add space for borders
         nOptPreviewWidth += 15;
