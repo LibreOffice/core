@@ -121,6 +121,8 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
                 pProgramPath[ nLen - nRemoveLen ] = 0;
 
                 ( *pNativeProc )( nMode, InstallForAllUser, InstallFor64Bit, pProgramPath );
+
+                free( pProgramPath );
             }
         }
 
@@ -171,7 +173,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
     wchar_t* pProgPath = NULL;
-    if ( GetMsiProp( hMSI, L"BASISINSTALLLOCATION", &pProgPath ) && pProgPath )
+    if ( GetMsiProp( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
 #ifdef OWN_DEBUG_PRINT
