@@ -1436,7 +1436,7 @@ void WW8DocumentImpl::utext(Stream & rStream, const sal_uInt8 * data, size_t len
     debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
     debug_logger->endElement("utext");
 #endif
-    rStream.text(data, len);
+    rStream.utext(data, len);
 }
 
 
