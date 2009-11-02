@@ -1124,10 +1124,14 @@ struct HalfTrapezoid
     //    maLine.p1.y <= mnY < maLine.p2.y
     XLineFixed  maLine;
     XFixed      mnY;
+
+    XFixed  getXMin() const { return std::min( maLine.p1.x, maLine.p2.x); }
+    XFixed  getXMax() const { return std::max( maLine.p1.x, maLine.p2.x); }
 };
 
-struct HalfTrapCompare
+class HalfTrapCompare
 {
+public:
     bool operator()( const HalfTrapezoid& rA, const HalfTrapezoid& rB ) const
     {
         bool bIsTopLeft = false;
@@ -1140,14 +1144,15 @@ struct HalfTrapCompare
     }
 };
 
-typedef std::priority_queue< HalfTrapezoid, std::vector<HalfTrapezoid>, HalfTrapCompare > HTQueueBase;
+typedef std::vector< HalfTrapezoid > HTVector;
+typedef std::priority_queue< HalfTrapezoid, HTVector, HalfTrapCompare > HTQueueBase;
 // we need a priority queue with a reserve() to prevent countless reallocations
 class HTQueue
 :   public HTQueueBase
 {
 public:
     void    reserve( size_t n ) { c.reserve( n ); }
-    int     capacity() const { return c.capacity(); }
+    void    swapvec( HTVector& v) { c.swap( v); }
 };
 
 typedef std::vector<XTrapezoid> TrapezoidVector;
@@ -1175,6 +1180,10 @@ public:
 };
 
 typedef std::multiset< int, TrapezoidYCompare > VerticalTrapSet;
+
+#ifndef DISABLE_SOLVECROSSOVER_WORKAROUND
+void splitIntersectingSegments( HTVector&);
+#endif // DISABLE_SOLVECROSSOVER_WORKAROUND
 } // end of anonymous namespace
 
 // draw a poly-polygon
@@ -1270,8 +1279,8 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
     }
     // #i100922# try to prevent priority-queue reallocations by reservering enough
     nHTQueueReserve = ((4*nHTQueueReserve) | 0x1FFF) + 1;
-    HTQueue aHTQueue;
-    aHTQueue.reserve( nHTQueueReserve );
+    HTVector aHTVector;
+    aHTVector.reserve( nHTQueueReserve );
 
     // first convert the B2DPolyPolygon to HalfTrapezoids
     const int nGoodPolyCount = aGoodPolyPoly.count();
@@ -1311,9 +1320,11 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
                 // check if enough data is available for a new HalfTrapezoid
                 if( nPointIdx == 0 )
                     continue;
+#ifdef DISABLE_SOLVECROSSOVER_WORKAROUND // vertical segments can intersect too => don't ignore them
                 // ignore vertical segments
                 if( aNewXPF.y == aOldXPF.y )
                     continue;
+#endif // DISABLE_SOLVECROSSOVER_WORKAROUND
 
                 // construct HalfTrapezoid as topdown segment
                 HalfTrapezoid aHT;
@@ -1338,25 +1349,32 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
 #endif
 
                 // queue up the HalfTrapezoid
-                aHTQueue.push( aHT );
+                aHTVector.push_back( aHT );
             }
         }
     }
 
-    if( aHTQueue.empty() )
+    if( aHTVector.empty() )
         return TRUE;
 
 #ifndef DISABLE_SOLVECROSSOVER_WORKAROUND
+    // find intersecting halftraps and split them up
     // TODO: remove when solveCrossOvers gets fast enough so its use can be enabled above
-    // FAQ: why should intersecting-segment segments be handled before adaptiveSubdivide()?
+    // FAQ: why should segment intersection be handled before adaptiveSubdivide()?
     // Answer: because it is conceptually much faster
     // Example: consider two intersecting circles with a diameter of 1000 pixels
     //      before subdivision: eight bezier segments
-    //      after subdivision: a thousand line segments
-    //      since even the best generic intersection finders have a complexity of O((n+k)*log(n+k)) it becomes
-    //      obvious that testing while the segment count is still low is a much better approach.
-    // find intersecting halftraps and split them up
-#endif // WORKAROUND_SOLVECROSSOVER_PERF
+    //      after subdivision: more than a thousand line segments
+    //      since even the best generic intersection finders have a complexity of O((n+k)*log(n+k))
+    //      it shows that testing while the segment count is still low is a much better approach.
+    splitIntersectingSegments( aHTVector);
+#endif // DISABLE_SOLVECROSSOVER_WORKAROUND
+
+    // build queue from vector of intersection free half-trapezoids
+    // TODO: is replacing the priority-queue by a sorted vector worth it?
+    std::make_heap( aHTVector.begin(), aHTVector.end(), HalfTrapCompare());
+    HTQueue aHTQueue;
+    aHTQueue.swapvec( aHTVector);
 
     // then convert the HalfTrapezoids into full Trapezoids
     TrapezoidVector aTrapVector;
@@ -1551,13 +1569,20 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
         aPolygon.transform( aAnisoMatrix );
     }
 
-    // AW: reSegment no longer needed; new createAreaGeometry will remove exteme positions
-    // and create bezier polygons
-    //if( aPolygon.areControlPointsUsed() )
-    //    aPolygon = basegfx::tools::reSegmentPolygonEdges( aPolygon, 8, true, false );
-    //const basegfx::B2DPolyPolygon aAreaPolyPoly = basegfx::tools::createAreaGeometryForSimplePolygon(
-    //    aPolygon, 0.5*rLineWidth.getX(), eLineJoin );
-    const basegfx::B2DPolyPolygon aAreaPolyPoly(basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin));
+    // special handling for hairlines to improve the drawing performance
+    // TODO: revisit after basegfx performance related changes
+    const bool bIsHairline = (rLineWidth.getX() < 1.2) && (rLineWidth.getY() < 1.2);
+    if( bIsHairline )
+    {
+        // for hairlines the linejoin style becomes irrelevant
+        eLineJoin = basegfx::B2DLINEJOIN_NONE;
+        // createAreaGeometry is still too expensive when beziers are involved
+        if( aPolygon.areControlPointsUsed() )
+            aPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aPolygon, 0.125 );
+    }
+
+    // create the area-polygon for the line
+    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin) );
 
     if( (rLineWidth.getX() != rLineWidth.getY())
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
@@ -1593,36 +1618,31 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #ifndef DISABLE_SOLVECROSSOVER_WORKAROUND
+// TODO: move the intersection solver into basegfx
+//    and then support bezier-intersection finding too
 
-class LineSeg
+namespace { // anonymous namespace to prevent export
+
+typedef HalfTrapezoid LineSeg;
+typedef HTVector LSVector;
+
+inline bool operator==( const LineSeg& r1, const LineSeg& r2)
 {
-public:
-    double      mfX1, mfY1;
-    double      mfX2, mfY2;
-    int         mnUniqueId;
-
-    double      getXMin( void) const { return (mfX1<mfX2) ? mfX1 : mfX2;}
-    double      getXMax( void) const { return (mfX1<mfX2) ? mfX2 : mfX1;}
-    bool        operator==( const LineSeg& r2) const;
-};
-
-inline bool LineSeg::operator==( const LineSeg& r2) const
-{
-    if( mfY2 != r2.mfY2) return false;
-    if( mfX2 != r2.mfX2) return false;
-    if( mfY1 != r2.mfY1) return false;
-    if( mfX1 != r2.mfX1) return false;
+    if( r1.maLine.p2.y != r2.maLine.p2.y) return false;
+    if( r1.maLine.p2.x != r2.maLine.p2.x) return false;
+    if( r1.maLine.p1.y != r2.maLine.p1.y) return false;
+    if( r1.maLine.p1.x != r2.maLine.p1.x) return false;
     return true;
 }
 
 struct LSYMinCmp {
     bool operator()( const LineSeg& r1, const LineSeg& r2) const
-        { return r2.mfY1 < r1.mfY1; }
+        { return r2.maLine.p1.y < r1.maLine.p1.y; }
 };
 
 struct LSYMaxCmp {
     bool operator()( const LineSeg& r1, const LineSeg& r2) const
-        { return r2.mfY2 < r1.mfY2; }
+        { return r2.maLine.p2.y < r1.maLine.p2.y; }
 };
 
 struct LSXMinCmp {
@@ -1630,7 +1650,7 @@ struct LSXMinCmp {
         { return( r1.getXMin() < r2.getXMin()); }
 };
 
-bool findIntersection( const LineSeg& r1, const LineSeg& r2, double pCutParams[2])
+bool findIntersection( const LineSeg& rLS1, const LineSeg& rLS2, double pCutParams[2])
 {
     // segments intersect at r1.p1 + s*(r1.p2-r1.p1) == r2.p1 + t*(r2.p2-r2.p1)
     // when both segment-parameters are ((0 <s<1) && (0<t<1))
@@ -1639,32 +1659,30 @@ bool findIntersection( const LineSeg& r1, const LineSeg& r2, double pCutParams[2
     // (r1.p1x - r2.p1x) == s * (r1.p1x - r1.p2x) + t * (r2.p2x - r2.p1x)
     // (r1.p1y - r2.p1y) == s * (r1.p1y - r1.p2y) + t * (r2.p2y - r2.p1y)
     // check if lines are identical or parallel => not intersecting
-    const double fDet = (r1.mfX1-r1.mfX2)*(r2.mfY2-r2.mfY1) - (r2.mfX2-r2.mfX1)*(r1.mfY1-r1.mfY2);
+    const XLineFixed& r1 = rLS1.maLine;
+    const XLineFixed& r2 = rLS2.maLine;
+    const double fDet = (double)(r1.p1.x - r1.p2.x) * (r2.p2.y - r2.p1.y)
+            - (double)(r2.p2.x - r2.p1.x) * (r1.p1.y - r1.p2.y);
     static const double fEps = 1e-8;
     if( fabs(fDet) < fEps)
         return false;
     // check if intersection on first segment
-    const double fS1 = (r2.mfY2 - r2.mfY1) * (r1.mfX1 - r2.mfX1);
-    const double fS2 = (r2.mfX2 - r2.mfX1) * (r2.mfY1 - r1.mfY1);
+    const double fS1 = (double)(r2.p2.y - r2.p1.y) * (r1.p1.x - r2.p1.x);
+    const double fS2 = (double)(r2.p2.x - r2.p1.x) * (r2.p1.y - r1.p1.y);
     const double fS = (fS1 + fS2) / fDet;
     if( (fS <= +fEps) || (fS >= 1-fEps))
         return false;
     pCutParams[0] = fS;
     // check if intersection on second segment
-    const double fT1 = (r1.mfY2 - r1.mfY1) * (r1.mfX1 - r2.mfX1);
-    const double fT2 = (r1.mfX2 - r1.mfX1) * (r2.mfY1 - r1.mfY1);
+    const double fT1 = (double)(r1.p2.y - r1.p1.y) * (r1.p1.x - r2.p1.x);
+    const double fT2 = (double)(r1.p2.x - r1.p1.x) * (r2.p1.y - r1.p1.y);
     const double fT = (fT1 + fT2) / fDet;
     if( (fT <= +fEps) || (fT >= 1-fEps))
         return false;
     pCutParams[1] = fT;
-#if 0
-    rCutPt.mfX = r1.mfX1 + fS * (r1.mfX2 - r1.mfX1);
-    rCutPt.mfY = r1.mfY1 + fS * (r1.mfY2 - r1.mfY1);
-#endif
     return true;
 }
 
-typedef std::vector<LineSeg> LSVector;
 typedef std::priority_queue< LineSeg, LSVector, LSYMinCmp> LSYMinQueueBase;
 typedef std::priority_queue< LineSeg, LSVector, LSYMaxCmp> LSYMaxQueueBase;
 typedef std::multiset< LineSeg, LSXMinCmp> LSXMinSet;
@@ -1673,9 +1691,8 @@ typedef std::set<double> DoubleSet;
 class LSYMinQueue : public LSYMinQueueBase
 {
 public:
-    void    reserve( size_t n)              { c.reserve(n);}
-    void    swapvec( LSVector& v)           { c.swap(v);}
-    const LineSeg& operator[]( size_t i)    { return c[i];}
+    void    reserve( size_t n)      { c.reserve(n);}
+    void    swapvec( LSVector& v)       { c.swap(v);}
 };
 
 class LSYMaxQueue : public LSYMaxQueueBase
@@ -1694,7 +1711,7 @@ void addAndCutSegment( LSVector& rLSVector, const LineSeg& rLS, DoubleSet& rCutP
 
     // iterate through all cutparms of this segment
     LineSeg aCS = rLS;
-    const double fCutMin = rLS.mnUniqueId;
+    const double fCutMin = rLS.mnY;
     DoubleSet::iterator itFirst = rCutParmSet.lower_bound( fCutMin);
     DoubleSet::iterator it = itFirst;
     for(; it != rCutParmSet.end(); ++it) {
@@ -1702,30 +1719,33 @@ void addAndCutSegment( LSVector& rLSVector, const LineSeg& rLS, DoubleSet& rCutP
         if( fCutParm >= 1.0)
             break;
         // cut segment at parameter fCutParm
-        aCS.mfX2 = rLS.mfX1 + fCutParm * (rLS.mfX2 - rLS.mfX1);
-        aCS.mfY2 = rLS.mfY1 + fCutParm * (rLS.mfY2 - rLS.mfY1);
-//      if( aCS.mfY1 != aCS.mfY2)
+        aCS.maLine.p2.x = rLS.maLine.p1.x + (XFixed)(fCutParm * (rLS.maLine.p2.x - rLS.maLine.p1.x));
+        aCS.maLine.p2.y = rLS.maLine.p1.y + (XFixed)(fCutParm * (rLS.maLine.p2.y - rLS.maLine.p1.y));
+        if( aCS.maLine.p1.y != aCS.maLine.p2.y)
             rLSVector.push_back( aCS);
         // prepare for next segment cut
-        aCS.mfX1 = aCS.mfX2;
-        aCS.mfY1 = aCS.mfY2;
+        aCS.maLine.p1 = aCS.maLine.p2;
     }
     // remove cutparams that will no longer be needed
     // TODO: is it worth it or should we just keep the cutparams?
     rCutParmSet.erase( itFirst, it);
 
     // add segment part remaining after last cut
-    aCS.mfX2 = rLS.mfX2;
-    aCS.mfY2 = rLS.mfY2;
-    rLSVector.push_back( aCS);
+    aCS.maLine.p2 = rLS.maLine.p2;
+    if( aCS.maLine.p1.y != aCS.maLine.p2.y)
+        rLSVector.push_back( aCS);
 }
 
 void splitIntersectingSegments( LSVector& rLSVector)
 {
+    for( int i = rLSVector.size(); --i >= 0;) {
+        LineSeg& rLS = rLSVector[i];
+        // get a unique id for each lineseg, temporarily abuse the mnY member
+        rLS.mnY = i;
+    }
     // get an y-sorted queue from the input vector
     LSYMinQueue aYMinQueue;
-    LSYMinCmp aLSYMinCmp;
-    std::make_heap( rLSVector.begin(), rLSVector.end(), aLSYMinCmp);
+    std::make_heap( rLSVector.begin(), rLSVector.end(), LSYMinCmp());
     aYMinQueue.swapvec( rLSVector);
 
     // prepare the result vector
@@ -1742,11 +1762,11 @@ void splitIntersectingSegments( LSVector& rLSVector)
         // get next input-segment
         const LineSeg& rLS = aYMinQueue.top();
         // retire obsoleted segments
-        const double fYCur = rLS.mfY1;
+        const double fYCur = rLS.maLine.p1.y;
         while( !aYMaxQueue.empty()) {
             // check next segment to be retired
             const LineSeg& rOS = aYMaxQueue.top();
-            if( fYCur < rOS.mfY2)
+            if( fYCur < rOS.maLine.p2.y)
                 break;
             // emit resolved segment into result
             addAndCutSegment( rLSVector, rOS, aCutParmSet);
@@ -1779,9 +1799,11 @@ void splitIntersectingSegments( LSVector& rLSVector)
             if( !findIntersection( rLS, rOS, fCutParms))
                 continue;
             // remember cut parameters
-            // TODO: if many cutpoints are expected reserve some/use a different std::set allocator
-            aCutParmSet.insert( rLS.mnUniqueId + fCutParms[0]);
-            aCutParmSet.insert( rOS.mnUniqueId + fCutParms[1]);
+            // TODO: std::set seems to use individual allocations
+            //  which results in perf-problems for many entries
+            //  => pre-allocate nodes by using a non-default allocator
+            aCutParmSet.insert( rLS.mnY + fCutParms[0]);
+            aCutParmSet.insert( rOS.mnY + fCutParms[1]);
         }
         // add segment to xmin-compare-set
          // TODO: do we have a good insertion hint?
@@ -1799,7 +1821,31 @@ void splitIntersectingSegments( LSVector& rLSVector)
         addAndCutSegment( rLSVector, rLS, aCutParmSet);
         aYMaxQueue.pop();
     }
+
+    // get the segments ready to be consumed by the drawPolygon() caller
+    int nNewSize = 0;
+    const int nOldSize = rLSVector.size();
+    for( int i = 0; i < nOldSize; ++i) {
+        LineSeg& rLS = rLSVector[i];
+        // prevent integer rounding problems in LSBs
+        rLS.maLine.p1.x = (rLS.maLine.p1.x + 32) & ~63;
+        rLS.maLine.p1.y = (rLS.maLine.p1.y + 32) & ~63;
+        rLS.maLine.p2.x = (rLS.maLine.p2.x + 32) & ~63;
+        rLS.maLine.p2.y = (rLS.maLine.p2.y + 32) & ~63;
+        // reset each mnY to y-top of the segment
+        rLS.mnY = rLS.maLine.p1.y;
+        // ignore horizontal segments
+        if( rLS.mnY == rLS.maLine.p2.y)
+            continue;
+        if( i != nNewSize)
+            rLSVector[ nNewSize] = rLS;
+        ++nNewSize;
+    }
+    if( nNewSize != nOldSize)
+        rLSVector.resize( nNewSize);
 }
+
+} // end anonymous namespace
 
 #endif // DISABLE_SOLVECROSSOVER_WORKAROUND
 
