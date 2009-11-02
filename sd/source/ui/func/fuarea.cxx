@@ -85,7 +85,6 @@ void FuArea::DoExecute( SfxRequest& rReq )
         AbstractSvxAreaTabDialog * pDlg = pFact ? pFact->CreateSvxAreaTabDialog( NULL,
                                                                         &aNewAttr,
                                                                         mpDoc,
-                                                                        RID_SVXDLG_AREA,
                                                                         mpView) : 0;
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {

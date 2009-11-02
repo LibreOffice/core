@@ -467,7 +467,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");
-                AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr, RID_SVXDLG_NAME );
+                AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr );
                 DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
                 aNameDlg->SetText( aTitle );
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );

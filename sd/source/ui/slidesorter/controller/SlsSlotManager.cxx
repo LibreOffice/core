@@ -905,7 +905,7 @@ void SlotManager::RenameSlide (void)
             DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetActiveWindow(),
-                aPageName, aDescr, RID_SVXDLG_NAME);
+                aPageName, aDescr);
             DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
             aNameDlg->SetText( aTitle );
             aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );

@@ -98,7 +98,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( *pNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractTabDialog * pDlg = pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr,mpDoc,RID_SVXDLG_LINE,pObj,bHasMarked) : 0;
+        SfxAbstractTabDialog * pDlg = pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr,mpDoc,pObj,bHasMarked) : 0;
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
