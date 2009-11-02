@@ -552,6 +552,11 @@ void writeModFile(
     case osl::FileBase::E_None:
     case osl::FileBase::E_EXIST:
         break;
+    case osl::FileBase::E_ACCES:
+        OSL_TRACE(
+            "cannot create registrymodifications.xcu path (E_ACCES); changes"
+            " will be lost");
+        return;
     default:
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -560,9 +565,15 @@ void writeModFile(
             css::uno::Reference< css::uno::XInterface >());
     }
     TempFile tmp;
-    if (osl::FileBase::createTempFile(&dir, &tmp.handle, &tmp.url) !=
-        osl::FileBase::E_None)
-    {
+    switch (osl::FileBase::createTempFile(&dir, &tmp.handle, &tmp.url)) {
+    case osl::FileBase::E_None:
+        break;
+    case osl::FileBase::E_ACCES:
+        OSL_TRACE(
+            "cannot create temp registrymodifications.xcu (E_ACCES); changes"
+            " will be lost");
+        return;
+    default:
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
