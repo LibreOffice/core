@@ -147,7 +147,7 @@
 // --------------------------------------------------------------------------
 // Resource-Id's ? (obsolete??? at least the one beginning with SID???)
 // --------------------------------------------------------------------------
-
+/*
 #define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
 #define RID_SW_TP_CONTENT_OPT           (RID_OFA_START + 206)
 #define RID_SW_TP_LAYOUT_OPT            (RID_OFA_START + 207)
@@ -196,8 +196,9 @@
 #define RID_OFA_TP_INTERNATIONAL        (RID_OFA_START + 252)       // 4 SC & ID 4 resource
 #define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)       // 4 SD
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
+*/
+
 #define SID_ATTR_PARENTWINDOW           (RID_OFA_START + 255)
-#define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
 
 // --------------------------------------------------------------------------
 // Event-Id's Block 1

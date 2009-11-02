@@ -560,7 +560,7 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( this, *pBBSet, RID_SVXDLG_BBDLG,bEnableBackgroundSelector );
+        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( this, *pBBSet, bEnableBackgroundSelector );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {

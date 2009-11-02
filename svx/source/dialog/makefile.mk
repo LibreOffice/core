@@ -54,7 +54,6 @@ SRC1FILES =  \
         dlgctrl.src \
         docrecovery.src \
         fontwork.src \
-        frmdirlbox.src \
         frmsel.src \
         hdft.src \
         hyphen.src \
@@ -69,6 +68,7 @@ SRC1FILES =  \
         rubydialog.src\
         ruler.src \
         srchdlg.src \
+        svxbmpnumvalueset.src \
         swframeposstrings.src \
         thesdlg.src \
         txenctab.src \

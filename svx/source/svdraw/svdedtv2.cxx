@@ -816,7 +816,7 @@ void SdrEditView::DistributeMarkedObjects()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr, RID_SVXPAGE_DISTRIBUTE);
+            AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
             UINT16 nResult = pDlg->Execute();
