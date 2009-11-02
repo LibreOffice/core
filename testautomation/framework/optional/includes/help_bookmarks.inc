@@ -161,23 +161,27 @@ testcase tHelpBookmarks
 
     printlog( "Verify that the renamed bookmark still exists")
     Kontext "BookmarksPage"
-    Bookmarks.select( 1 )
-    cStringBookmark = Bookmarks.getSelText()
-    if ( cStringBookmark = MYBOOKMARK ) then
-        printlog( "The bookmark has the correct name")
-    else
-        warnlog( "Incorrect name displayed in bookmarks list")
-    endif
+    if ( Bookmarks.getItemCount() > 0 ) then
+        Bookmarks.select( 1 )
+        cStringBookmark = Bookmarks.getSelText()
+        if ( cStringBookmark = MYBOOKMARK ) then
+            printlog( "The bookmark has the correct name")
+        else
+            warnlog( "Incorrect name displayed in bookmarks list")
+        endif
 
-    printlog( "Delete the Bookmark (using context menu)")    
-    hUseBookmarksContextMenu( "delete")
+        printlog( "Delete the Bookmark (using context menu)")    
+        hUseBookmarksContextMenu( "delete")
 
-    printlog( "verify that the bookmark has been deleted (none left)")
-    kontext "Bookmarks"
-    if ( bookmarks.getItemCount = 0 ) then
-        printlog( "Bookmark has been deleted")
+        printlog( "verify that the bookmark has been deleted (none left)")
+        kontext "Bookmarks"
+        if ( bookmarks.getItemCount = 0 ) then
+            printlog( "Bookmark has been deleted")
+        else
+            warnlog( "There are bookmarks left over, please check")
+        endif
     else
-        warnlog( "There are bookmarks left over, please check")
+        warnlog( "Bookmarks are lost on program restart")
     endif
 
     printlog( "Close the help")
