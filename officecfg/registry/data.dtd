@@ -1,4 +1,5 @@
-/*************************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2009 by Sun Microsystems, Inc.
@@ -25,10 +26,17 @@
 * version 3 along with OpenOffice.org.  If not, see
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
-************************************************************************/
+**********************************************************************-->
 
-#if defined PRECOMPILED_HEADERS
+<!ELEMENT oor:data (dependency*, (oor:component-schema | oor:component-data)*)>
+<!ATTLIST oor:data>
 
-#include "sal/config.h"
+<!ELEMENT dependency EMPTY>
+<!ATTLIST dependency
+    file CDATA #REQUIRED>
 
-#endif
+<!ENTITY % component-schema.dtd SYSTEM "component-schema.dtd">
+%component-schema.dtd;
+
+<!ENTITY % component-update.dtd SYSTEM "component-update.dtd">
+%component-update.dtd;

@@ -111,8 +111,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         return xcs ? m_xcs_files : m_xcu_files;
     }
 
-    bool m_configmgrrc_inited;
-    bool m_configmgrrc_modified;
+    bool m_configmgrini_inited;
+    bool m_configmgrini_modified;
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
@@ -125,15 +125,15 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     const Reference<deployment::XPackageTypeInfo> m_xConfSchemaTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
 
-    void configmgrrc_verify_init(
+    void configmgrini_verify_init(
         Reference<XCommandEnvironment> const & xCmdEnv );
-    void configmgrrc_flush( Reference<XCommandEnvironment> const & xCmdEnv );
+    void configmgrini_flush( Reference<XCommandEnvironment> const & xCmdEnv );
 
-    bool addToConfigmgrRc( bool isSchema, OUString const & url,
+    bool addToConfigmgrIni( bool isSchema, OUString const & url,
                      Reference<XCommandEnvironment> const & xCmdEnv );
-    bool removeFromConfigmgrRc( bool isSchema, OUString const & url,
+    bool removeFromConfigmgrIni( bool isSchema, OUString const & url,
                           Reference<XCommandEnvironment> const & xCmdEnv );
-    bool hasInConfigmgrRc( bool isSchema, OUString const & url );
+    bool hasInConfigmgrIni( bool isSchema, OUString const & url );
 
 public:
     BackendImpl( Sequence<Any> const & args,
@@ -150,7 +150,7 @@ public:
 void BackendImpl::disposing()
 {
     try {
-        configmgrrc_flush( Reference<XCommandEnvironment>() );
+        configmgrini_flush( Reference<XCommandEnvironment>() );
 
         PackageRegistryBackend::disposing();
     }
@@ -170,8 +170,8 @@ BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
     : PackageRegistryBackend( args, xComponentContext ),
-      m_configmgrrc_inited( false ),
-      m_configmgrrc_modified( false ),
+      m_configmgrini_inited( false ),
+      m_configmgrini_modified( false ),
       m_xConfDataTypeInfo( new Package::TypeInfo(
                                OUSTR("application/"
                                      "vnd.sun.star.configuration-data"),
@@ -195,7 +195,7 @@ BackendImpl::BackendImpl(
         //TODO
     }
     else {
-        configmgrrc_verify_init( xCmdEnv );
+        configmgrini_verify_init( xCmdEnv );
     }
 }
 
@@ -271,19 +271,19 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 //##############################################################################
 
 //______________________________________________________________________________
-void BackendImpl::configmgrrc_verify_init(
+void BackendImpl::configmgrini_verify_init(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     if (transientMode())
         return;
     const ::osl::MutexGuard guard( getMutex() );
-    if (! m_configmgrrc_inited)
+    if (! m_configmgrini_inited)
     {
         // common rc:
         ::ucbhelper::Content ucb_content;
         if (create_ucb_content(
                 &ucb_content,
-                makeURL( getCachePath(), OUSTR("configmgrrc") ),
+                makeURL( getCachePath(), OUSTR("configmgr.ini") ),
                 xCmdEnv, false /* no throw */ ))
         {
             OUString line;
@@ -328,18 +328,18 @@ void BackendImpl::configmgrrc_verify_init(
                 while (index >= 0);
             }
         }
-        m_configmgrrc_modified = false;
-        m_configmgrrc_inited = true;
+        m_configmgrini_modified = false;
+        m_configmgrini_inited = true;
     }
 }
 
 //______________________________________________________________________________
-void BackendImpl::configmgrrc_flush(
+void BackendImpl::configmgrini_flush(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     if (transientMode())
         return;
-    if (!m_configmgrrc_inited || !m_configmgrrc_modified)
+    if (!m_configmgrini_inited || !m_configmgrini_modified)
         return;
 
     ::rtl::OStringBuffer buf;
@@ -390,17 +390,17 @@ void BackendImpl::configmgrrc_flush(
         buf.append(LF);
     }
 
-    // write configmgrrc:
+    // write configmgr.ini:
     const Reference<io::XInputStream> xData(
         ::xmlscript::createInputStream(
             ::rtl::ByteSequence(
                 reinterpret_cast<sal_Int8 const *>(buf.getStr()),
                 buf.getLength() ) ) );
     ::ucbhelper::Content ucb_content(
-        makeURL( getCachePath(), OUSTR("configmgrrc") ), xCmdEnv );
+        makeURL( getCachePath(), OUSTR("configmgr.ini") ), xCmdEnv );
     ucb_content.writeStream( xData, true /* replace existing */ );
 
-    m_configmgrrc_modified = false;
+    m_configmgrini_modified = false;
 }
 
 //------------------------------------------------------------------------------
@@ -421,18 +421,18 @@ inline OUString makeRcTerm( OUString const & url )
 }
 
 //______________________________________________________________________________
-bool BackendImpl::addToConfigmgrRc( bool isSchema, OUString const & url_,
+bool BackendImpl::addToConfigmgrIni( bool isSchema, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
-    configmgrrc_verify_init( xCmdEnv );
+    configmgrini_verify_init( xCmdEnv );
     t_stringlist & rSet = getFiles(isSchema);
     if (::std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
         rSet.push_front( rcterm ); // prepend to list, thus overriding
         // write immediately:
-        m_configmgrrc_modified = true;
-        configmgrrc_flush( xCmdEnv );
+        m_configmgrini_modified = true;
+        configmgrini_flush( xCmdEnv );
         return true;
     }
     else
@@ -440,26 +440,26 @@ bool BackendImpl::addToConfigmgrRc( bool isSchema, OUString const & url_,
 }
 
 //______________________________________________________________________________
-bool BackendImpl::removeFromConfigmgrRc(
+bool BackendImpl::removeFromConfigmgrIni(
     bool isSchema, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
-    configmgrrc_verify_init( xCmdEnv );
+    configmgrini_verify_init( xCmdEnv );
     getFiles(isSchema).remove( rcterm );
     if (!isSchema) { //TODO: see replaceOrigin()
         getFiles(isSchema).remove(
             rcterm + OUString(RTL_CONSTASCII_USTRINGPARAM(".mod")));
     }
     // write immediately:
-    m_configmgrrc_modified = true;
-    configmgrrc_flush( xCmdEnv );
+    m_configmgrini_modified = true;
+    configmgrini_flush( xCmdEnv );
     return true;
 }
 
 //______________________________________________________________________________
-bool BackendImpl::hasInConfigmgrRc(
+bool BackendImpl::hasInConfigmgrIni(
     bool isSchema, OUString const & url_ )
 {
     const OUString rcterm( makeRcTerm(url_) );
@@ -502,7 +502,7 @@ BackendImpl::PackageImpl::isRegistered_(
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>(
-            that->hasInConfigmgrRc( m_isSchema, getURL() ),
+            that->hasInConfigmgrIni( m_isSchema, getURL() ),
             false /* IsAmbiguous */ ) );
 }
 
@@ -644,11 +644,11 @@ void BackendImpl::PackageImpl::processPackage_(
                 expandUnoRcUrl(url));
         }
 
-        that->addToConfigmgrRc( m_isSchema, url, xCmdEnv );
+        that->addToConfigmgrIni( m_isSchema, url, xCmdEnv );
     }
     else // revoke
     {
-        that->removeFromConfigmgrRc( m_isSchema, url, xCmdEnv );
+        that->removeFromConfigmgrIni( m_isSchema, url, xCmdEnv );
 
         //TODO: revoking at runtime, possible, sensible?
     }
