@@ -76,7 +76,7 @@ WindowsCustomAction gid_Customaction_Regactivexdll2
 End
 
 WindowsCustomAction gid_Customaction_Reg64dll1
-	Name = "Reg64dll";
+	Name = "Reg64dll1";
 	Typ = "65";
 	Source = "reg64msi.dll";
 	Target = "InstallReg64";
@@ -85,7 +85,7 @@ WindowsCustomAction gid_Customaction_Reg64dll1
 End
 
 WindowsCustomAction gid_Customaction_Reg64dll2
-	Name = "Reg64dll";
+	Name = "Reg64dll2";
 	Typ = "65";
 	Source = "reg64msi.dll";
 	Target = "DeinstallReg64";
