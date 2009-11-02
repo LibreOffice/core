@@ -44,7 +44,7 @@ WindowsCustomAction gid_Customaction_InstallRuntime_X64
 	Name = "InstallRuntimeX64";
 	Typ = "98";
 	Source = "SystemFolder";
-	Target = "[SourceDir]redist\VCRedist_x64.exe /qb";
+	Target = "[SourceDir]redist\vcredist_x64.exe /qb";
 	Inbinarytable = 0;
     Styles = (NO_FILE);
 	Assignment1 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH And VersionNT64", "ExecuteAction");
@@ -61,8 +61,8 @@ ScpAction scp_Copy_vcredist_x86
 End
 
 ScpAction scp_Copy_vcredist_x64
-    Copy = "VCRedist_x64.exe";
-    Name = "VCRedist_x64.exe";
+    Copy = "vcredist_x64.exe";
+    Name = "vcredist_x64.exe";
     Subdir = "redist";
 End
 #endif
