@@ -2340,9 +2340,9 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_sprm::LN_PNest: // sprmPNest
         //not handled in the old WW8 filter
         break;
-    case 0x8460:    //first line indent Asian - undocumented
+    case NS_sprm::LN_PDxaLeft1:    // sprmPDxaLeft1
     case 19:
-    case NS_sprm::LN_PDxaLeft1:   // sprmPDxaLeft1
+    case NS_sprm::LN_PDxaLeft180:   // sprmPDxaLeft180
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 1 */
         rContext->Insert(
                          eSprmType == SPRM_DEFAULT ? PROP_PARA_FIRST_LINE_INDENT : PROP_FIRST_LINE_OFFSET,
@@ -3129,7 +3129,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         break;  // sprmCCpg
     case NS_sprm::LN_CLidBi:  // sprmCLidBi      language complex
         /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
-    case 0x4873: //sprmCRgLid
+    case NS_sprm::LN_CRgLid0_80: //sprmCRgLid0_80
         /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 1 */
         //undocumented but interpreted as western language
     case NS_sprm::LN_CRgLid0:   // sprmCRgLid0    language Western
