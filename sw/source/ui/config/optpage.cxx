@@ -1763,7 +1763,7 @@ void SwMarkPreview::InitColors( void )
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     m_aBgCol = Color( rSettings.GetWindowColor() );
 
-    BOOL bHC = m_aBgCol.IsDark();
+    BOOL bHC = rSettings.GetHighContrastMode();
     m_aLineCol = bHC? SwViewOption::GetFontColor() : Color( COL_BLACK );
     m_aShadowCol = bHC? m_aBgCol : rSettings.GetShadowColor();
     m_aTxtCol = bHC? SwViewOption::GetFontColor() : Color( COL_GRAY );
