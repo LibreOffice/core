@@ -91,23 +91,12 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
     {
         sal_Char    szMessage[512];
         written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
-<<<<<<< .working
-        if (written == -1)
-        {
-            written = sizeof(szMessage) - 2;
-        }
-        szMessage[written] = '\n';
-        szMessage[written + 1] = '\0';
-        OutputDebugString( szMessage );
-    }
-=======
         if ( written == -1 )
             written = sizeof(szMessage) - 2;
         szMessage[ written++ ] = '\n';
         szMessage[ written ] = 0;
         OutputDebugString( szMessage );
     }
->>>>>>> .merge-right.r277194
 
     vfprintf(stderr,lpszFormat, args);
 
