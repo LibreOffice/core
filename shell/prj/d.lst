@@ -18,3 +18,4 @@
 ..\%__SRC%\misc\*.xml %_DEST%\xml%_EXT%\*.xml
 
 ..\%__SRC%\misc\*-ucd.txt  %_DEST%\bin%_EXT%\*-ucd.txt
+..\inc\kde_headers.h %_DEST%\inc%_EXT%\shell\kde_headers.h

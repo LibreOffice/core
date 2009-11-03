@@ -32,7 +32,7 @@
 #define _CONNECTIVITY_KAB_ORDER_HXX_
 
 #include "rtl/ustring.hxx"
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 
 #include <vector>
 

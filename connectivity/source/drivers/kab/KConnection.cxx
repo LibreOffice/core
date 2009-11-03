@@ -39,7 +39,7 @@
 #include "KCatalog.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 
 using namespace connectivity::kab;
 using namespace com::sun::star::uno;
