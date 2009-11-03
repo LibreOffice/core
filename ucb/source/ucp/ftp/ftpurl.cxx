@@ -163,19 +163,18 @@ void FTPURL::parse(const rtl::OUString& url)
     rtl::OString aIdent(url.getStr(),
                         url.getLength(),
                         RTL_TEXTENCODING_UTF8);
-    char *buffer = new char[1+aIdent.getLength()];
-
-    const char* p2 = aIdent.getStr();
 
     rtl::OString lower = aIdent.toAsciiLowerCase();
     if(lower.getLength() < 6 ||
        strncmp("ftp://",lower.getStr(),6))
         throw malformed_exception();
 
+    char *buffer = new char[1+aIdent.getLength()];
+    const char* p2 = aIdent.getStr();
     p2 += 6;
 
     char ch;
-    char *p1 = buffer;  // determine "username:password@host:port"
+    char *p1 = buffer;      // determine "username:password@host:port"
     while((ch = *p2++) != '/' && ch)
         *p1++ = ch;
     *p1 = 0;
@@ -393,7 +392,7 @@ namespace ftp {
 
 
 #define SET_DATA_CONTAINER                                        \
-       curl_easy_setopt(curl,CURLOPT_NOBODY,false);                  \
+        curl_easy_setopt(curl,CURLOPT_NOBODY,false);              \
     MemoryContainer data;                                         \
     curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,memory_write);    \
     curl_easy_setopt(curl,CURLOPT_WRITEDATA,&data)
@@ -665,8 +664,8 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
     throw(curl_exception)
 {
     if(!replaceExisting) {
-//      FTPDirentry aDirentry(direntry());
-//      if(aDirentry.m_nMode == INETCOREFTP_FILEMODE_UNKNOWN)
+//          FTPDirentry aDirentry(direntry());
+//          if(aDirentry.m_nMode == INETCOREFTP_FILEMODE_UNKNOWN)
         // throw curl_exception(FILE_EXIST_DURING_INSERT);
         throw curl_exception(FILE_MIGHT_EXIST_DURING_INSERT);
     } // else
@@ -716,8 +715,8 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
     FTPDirentry aDirentry(direntry());
     if(!ReplaceExisting) {
-//      if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
-//          throw curl_exception(FOLDER_EXIST_DURING_INSERT);
+//          if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
+//              throw curl_exception(FOLDER_EXIST_DURING_INSERT);
         throw curl_exception(FOLDER_MIGHT_EXIST_DURING_INSERT);
     } else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
         slist = curl_slist_append(slist,aDel.getStr());
