@@ -330,6 +330,25 @@ STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, co
 
 /////////////////////////////////////////////////////////////////////////////
 // DllUnregisterServer - Removes entries from the system registry
+HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
+{
+    HKEY hkey1 = NULL;
+
+    char pSubKeyName[256];
+    // first delete the subkeys
+    while( ERROR_SUCCESS == RegOpenKeyExA( hkey, pPath, 0, nKeyAccess, &hkey1)
+        && ERROR_SUCCESS == RegEnumKeyA( hkey1, 0, pSubKeyName, 256 )
+        && ERROR_SUCCESS == DeleteKeyTree( hkey1, pSubKeyName, nKeyAccess ) )
+    {
+        RegCloseKey( hkey1 ),hkey1= NULL;
+    }
+
+    if ( hkey1 )
+        RegCloseKey( hkey1 ),hkey1= NULL;
+
+    // delete the key itself
+    return RegDeleteKeyExA( hkey, pPath, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 );
+}
 
 STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
@@ -338,20 +357,20 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
     char aSubKey[513];
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
-      for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
+    for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
     {
         if( nForModes[ind] & nMode )
         {
             DWORD nSubKeys = 0, nValues = 0;
-               wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
-               if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL ) )
+            wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
+            if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL ) )
                 fErr = TRUE;
             else
             {
-                   if ( ERROR_SUCCESS != RegDeleteValue( hkey, "CLSID" ) )
+                if ( ERROR_SUCCESS != RegDeleteValue( hkey, "CLSID" ) )
                     fErr = TRUE;
 
-                   if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, NULL, NULL, NULL,
+                if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, NULL, NULL, NULL,
                                                     &nSubKeys, NULL, NULL,
                                                     &nValues, NULL, NULL, NULL, NULL ) )
                 {
@@ -362,7 +381,7 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
                 {
                     RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
-                        RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 );
+                        DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
                 }
             }
 
@@ -382,38 +401,38 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
                 {
                     RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
-                        RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 );
+                        DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
                 }
             }
         }
     }
 
     wsprintfA( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
-    if( ERROR_SUCCESS != RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 ) )
+    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
            fErr = TRUE;
 
     wsprintfA( aSubKey, "%sso_activex.SOActiveX", aPrefix );
-    if( ERROR_SUCCESS != RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 ) )
+    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
            fErr = TRUE;
 
     wsprintfA( aSubKey, "%sso_activex.SOActiveX.1", aPrefix );
-    if( ERROR_SUCCESS != RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 ) )
+    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
            fErr = TRUE;
 
     wsprintfA( aSubKey, "%s\\TypeLib\\%s", aPrefix, aTypeLib );
-    if( ERROR_SUCCESS != RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 ) )
+    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
            fErr = TRUE;
 
     wsprintfA( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDWinPeer );
-    if( ERROR_SUCCESS != RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 ) )
+    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
            fErr = TRUE;
 
     wsprintfA( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDDispInt );
-    if( ERROR_SUCCESS != RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 ) )
+    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
            fErr = TRUE;
 
     wsprintfA( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDActApprove );
-    if( ERROR_SUCCESS != RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 ) )
+    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
            fErr = TRUE;
 
     return !fErr;
@@ -563,7 +582,7 @@ STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcc
                 {
                     RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
-                        RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 );
+                        DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
                 }
             }
 
@@ -586,7 +605,7 @@ STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcc
                 {
                     RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
-                        RegDeleteKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 );
+                        DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
                 }
             }
         }
