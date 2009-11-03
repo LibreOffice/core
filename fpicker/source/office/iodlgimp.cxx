@@ -231,7 +231,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     ::svtools::VolumeInfo aVolInfo( sal_True /* volume */, sal_False /* remote */,
                                     sal_False /* removable */, sal_False /* floppy */,
                                     sal_False /* compact disk */ );
-    sal_Bool bIsHighContrast = pBox->GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bIsHighContrast = pBox->GetSettings().GetStyleSettings().GetHighContrastMode();
     Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo, bIsHighContrast ) );
 
     while ( nCount >= 1 )
@@ -319,7 +319,7 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 
     _pMenu->Clear();
 
-    sal_Bool bIsHighContrast = GetDialogParent()->GetView()->GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bIsHighContrast = GetDialogParent()->GetView()->GetSettings().GetStyleSettings().GetHighContrastMode();
 
     USHORT nItemId = 1;
     String sDisplayName;

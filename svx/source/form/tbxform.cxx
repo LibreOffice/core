@@ -219,7 +219,7 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
                 Image aImage = GetImage( m_xFrame,
                                         aSlotURL,
                                         hasBigImages(),
-                                        GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                        GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
 
                 GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;

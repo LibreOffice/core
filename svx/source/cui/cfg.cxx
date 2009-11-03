@@ -403,7 +403,7 @@ void InitImageType()
 
     Window* topwin = Application::GetActiveTopWindow();
     if ( topwin != NULL &&
-         topwin->GetDisplayBackground().GetColor().IsDark() )
+         topwin->GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         theImageType |= css::ui::ImageType::COLOR_HIGHCONTRAST;
     }
@@ -5114,7 +5114,7 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(
     BuildCheckBoxButtonImages( m_pButtonData );
     EnableCheckButton( m_pButtonData );
 
-    m_bHiContrastMode = GetDisplayBackground().GetColor().IsDark();
+    m_bHiContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // --------------------------------------------------------
@@ -5189,11 +5189,8 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
     if (( rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
         ( rDCEvt.GetFlags() & SETTINGS_STYLE ))
     {
-        if ( m_bHiContrastMode != GetDisplayBackground().GetColor().IsDark() )
-        {
-            // We have to reset all images because we change to/from high contrast mode
-            m_bHiContrastMode = GetDisplayBackground().GetColor().IsDark();
-        }
+        // We have to reset all images because we change to/from high contrast mode
+        m_bHiContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         BuildCheckBoxButtonImages( m_pButtonData );
         Invalidate();

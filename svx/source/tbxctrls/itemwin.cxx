@@ -74,7 +74,7 @@ using namespace ::com::sun::star::beans;
 
 SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
-    meBmpMode   ( GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
+    meBmpMode   ( GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
     bRelease    ( TRUE ),
@@ -268,7 +268,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        BmpColorMode eMode = GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL;
+        BmpColorMode eMode = GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL;
         if( eMode != meBmpMode )
         {
             meBmpMode = eMode;

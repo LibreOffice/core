@@ -778,7 +778,7 @@ namespace svxform
     SvLBoxEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
     {
         SvLBoxEntry* pParent = m_aItemList.FirstSelected();
-        const ImageList& rImageList = GetBackground().GetColor().IsDark()
+        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
             ? m_pNaviWin->GetItemHCImageList()
             : m_pNaviWin->GetItemImageList();
         USHORT nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
@@ -988,7 +988,7 @@ namespace svxform
     SvLBoxEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvLBoxEntry* pEntry = NULL;
-        const ImageList& rImageList = GetBackground().GetColor().IsDark()
+        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
             ? m_pNaviWin->GetItemHCImageList()
             : m_pNaviWin->GetItemImageList();
         Image aImage = rImageList.GetImage( IID_ELEMENT );
@@ -1244,7 +1244,7 @@ namespace svxform
         m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( _xModel, UNO_QUERY );
         String sRet;
         m_bHasModel = true;
-        const ImageList& rImageList = GetBackground().GetColor().IsDark()
+        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
             ? m_pNaviWin->GetItemHCImageList()
             : m_pNaviWin->GetItemImageList();
 

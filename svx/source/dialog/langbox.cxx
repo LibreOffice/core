@@ -181,7 +181,7 @@ USHORT SvxLanguageBox::ImplInsertImgEntry( const String& rEntry, USHORT nPos, bo
     USHORT nRet = 0;
     if( !bChecked )
         nRet = InsertEntry( rEntry, m_aNotCheckedImage, nPos );
-    else if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    else if( GetSettings().GetStyleSettings().GetHighContrastMode() )
         nRet = InsertEntry( rEntry, m_aCheckedImageHC, nPos );
     else
         nRet = InsertEntry( rEntry, m_aCheckedImage, nPos );

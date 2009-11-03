@@ -248,7 +248,7 @@ void AlignmentTabPage::InitVsRefEgde()
     // remember selection - is deleted in call to ValueSet::Clear()
     USHORT nSel = maVsRefEdge.GetSelectItemId();
 
-    ResId aResId( GetBackground().GetColor().IsDark() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS, DIALOG_MGR() );
+    ResId aResId( GetSettings().GetStyleSettings().GetHighContrastMode() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS, DIALOG_MGR() );
     ImageList aImageList( aResId );
     Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
 

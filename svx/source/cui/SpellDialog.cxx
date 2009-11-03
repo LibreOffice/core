@@ -914,7 +914,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
         const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
         if( pSpellErrorDescription && pSpellErrorDescription->sServiceName.getLength() )
         {
-            bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
             ::rtl::OUString sSuggestionImageUrl =
                 SvtLinguConfig().GetSpellAndGrammarDialogImage( pSpellErrorDescription->sServiceName, bHighContrast );
             aVendorImageFI.SetImage( lcl_GetImageFromPngUrl( sSuggestionImageUrl ) );
@@ -924,7 +924,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
         }
         else
         {
-            bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
             aVendorImageFI.SetImage( bHighContrast ? aVendorImageHC : aVendorImage );
         }
 
@@ -935,7 +935,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
         }
         else
         {
-            //bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+            //bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
             sTitle = m_sTitleSpellingGrammar;
         }
     }

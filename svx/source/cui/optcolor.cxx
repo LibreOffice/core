@@ -762,9 +762,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     Wallpaper aTransparentWall(TempColor);
     sal_Int32 nWinWidth = GetSizePixel().Width();
     sal_Int32 nFTHeight = aChapters[0]->GetSizePixel().Height();
-    sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
     Color aBackColor;
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    sal_Bool bHighContrast = rStyleSettings.GetHighContrastMode();
     if ( bHighContrast )
         aBackColor = rStyleSettings.GetShadowColor();
     else

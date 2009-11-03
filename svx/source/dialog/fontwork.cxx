@@ -1228,9 +1228,7 @@ void SvxFontWorkDialog::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void SvxFontWorkDialog::ApplyImageList()
 {
-    bool bHighContrast =
-        (GetSettings().GetStyleSettings().GetHighContrastMode() != 0) &&
-        (GetDisplayBackground().GetColor().IsDark() != 0);
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     ResMgr* _pMgr = &DIALOG_MGR();
 
