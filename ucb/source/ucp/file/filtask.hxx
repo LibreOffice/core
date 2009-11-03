@@ -40,9 +40,7 @@
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#ifndef _FILERROR_HXX_
 #include "filerror.hxx"
-#endif
 
 
 namespace fileaccess
@@ -52,11 +50,8 @@ namespace fileaccess
     /*
      * This implementation is inherited by class fileaccess::shell.
      * The relevant methods in this class all have as first argument the CommandId,
-     * so if necessary, every method has acess to its relevant XInteractionHandler and
-     * XProgressHandler, simply by calling directly the method
-     * getInteractionHandler( CommandId )
-     * and
-     * getProgressHandler();
+     * so if necessary, every method has access to its relevant XInteractionHandler and
+     * XProgressHandler.
      */
 
 
@@ -93,11 +88,6 @@ namespace fileaccess
             void SAL_CALL abort()
             {
                 m_bAbort = true;
-            }
-
-            bool SAL_CALL isAborted()
-            {
-                return m_bAbort;
             }
 
             void setHandled()
@@ -233,16 +223,6 @@ namespace fileaccess
          */
 
         void SAL_CALL clearError( sal_Int32 );
-
-
-        com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
-        getInteractionHandler( sal_Int32 CommandId );
-
-        com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler > SAL_CALL
-        getProgressHandler( sal_Int32 CommandId );
-
-        com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > SAL_CALL
-        getCommandEnvironment( sal_Int32 CommandId );
 
     };
 
