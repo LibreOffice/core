@@ -335,6 +335,13 @@ end sub
 sub FirstOfficeStart
 '/// First start-routine.
     Dim i as integer
+    ' To nail down a possible culprint on test runs, the availability of existing user settings is checked.
+    ' In some environments the deleting of the settings might fail before the test is started - this will log it:
+    if (fileExists(gOfficePath)) then
+        qaErrorLog ("QA_DEBUG: User settings directory was not deleted before test start!: '" + gOfficePath + "'")
+    else
+        printlog ("QA_DEBUG: User settings directory is unavailable before soffice is started - this is good. '" + gOfficePath + "'")
+    endif
     caselog ""                   '///+<ul><li>Stop the first default-output into the resultfile</li>
     Call hStartTheOffice         '///+<li>Start the office</li>
     ResetApplication             '///+<li>Make the first recovering without an error output.</li></ul>
