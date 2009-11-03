@@ -1320,11 +1320,6 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
                 // check if enough data is available for a new HalfTrapezoid
                 if( nPointIdx == 0 )
                     continue;
-#ifdef DISABLE_SOLVECROSSOVER_WORKAROUND // vertical segments can intersect too => don't ignore them
-                // ignore vertical segments
-                if( aNewXPF.y == aOldXPF.y )
-                    continue;
-#endif // DISABLE_SOLVECROSSOVER_WORKAROUND
 
                 // construct HalfTrapezoid as topdown segment
                 HalfTrapezoid aHT;
@@ -1391,23 +1386,28 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
         XTrapezoid aTrapezoid;
 
         // convert a HalfTrapezoid pair
+        // get the left side of the trapezoid
         const HalfTrapezoid& rLeft = aHTQueue.top();
         aTrapezoid.top = rLeft.mnY;
         aTrapezoid.bottom = rLeft.maLine.p2.y;
         aTrapezoid.left = rLeft.maLine;
+        aHTQueue.pop();
 
-#if 0 // TODO: is it worth it to enable this?
         // ignore empty trapezoids
         if( aTrapezoid.bottom <= aTrapezoid.top )
             continue;
-#endif
 
-        aHTQueue.pop();
-        if( aHTQueue.empty() ) // TODO: assert
+        // get the right side of the trapezoid
+        while( !aHTQueue.empty() ) {
+            const HalfTrapezoid& rRight = aHTQueue.top();
+            aTrapezoid.right = rRight.maLine;
+            aHTQueue.pop();
+            // break when non-horizontal segment found
+        if( aTrapezoid.right.p2.y > aTrapezoid.right.p1.y )
+                break;
+        }
+        if( aTrapezoid.right.p2.y <= aTrapezoid.top ) // TODO: assert
             break;
-        const HalfTrapezoid& rRight = aHTQueue.top();
-        aTrapezoid.right = rRight.maLine;
-        aHTQueue.pop();
 
         aTrapezoid.bottom = aTrapezoid.left.p2.y;
         if( aTrapezoid.bottom > aTrapezoid.right.p2.y )
@@ -1823,10 +1823,9 @@ void splitIntersectingSegments( LSVector& rLSVector)
     }
 
     // get the segments ready to be consumed by the drawPolygon() caller
-    int nNewSize = 0;
-    const int nOldSize = rLSVector.size();
-    for( int i = 0; i < nOldSize; ++i) {
-        LineSeg& rLS = rLSVector[i];
+    LSVector::iterator aLSit = rLSVector.begin();
+    for(; aLSit != rLSVector.end(); ++aLSit) {
+        LineSeg& rLS = *aLSit;
         // prevent integer rounding problems in LSBs
         rLS.maLine.p1.x = (rLS.maLine.p1.x + 32) & ~63;
         rLS.maLine.p1.y = (rLS.maLine.p1.y + 32) & ~63;
@@ -1834,15 +1833,7 @@ void splitIntersectingSegments( LSVector& rLSVector)
         rLS.maLine.p2.y = (rLS.maLine.p2.y + 32) & ~63;
         // reset each mnY to y-top of the segment
         rLS.mnY = rLS.maLine.p1.y;
-        // ignore horizontal segments
-        if( rLS.mnY == rLS.maLine.p2.y)
-            continue;
-        if( i != nNewSize)
-            rLSVector[ nNewSize] = rLS;
-        ++nNewSize;
     }
-    if( nNewSize != nOldSize)
-        rLSVector.resize( nNewSize);
 }
 
 } // end anonymous namespace
