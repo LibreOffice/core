@@ -71,9 +71,9 @@ AccessibleGridControlBase::AccessibleGridControlBase(
     AccessibleGridControlImplHelper( m_aMutex ),
     m_xParent( rxParent ),
     m_aTable( rTable),
+    m_eObjType( eObjType ),
     m_aName( rTable.GetAccessibleObjectName( eObjType, 0, 0 ) ),
     m_aDescription( rTable.GetAccessibleObjectDescription( eObjType ) ),
-    m_eObjType( eObjType ),
     m_aClientId(0)
 {
     DBG_CTOR( AccessibleGridControlBase, NULL );

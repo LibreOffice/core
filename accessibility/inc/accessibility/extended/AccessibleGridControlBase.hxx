@@ -362,7 +362,6 @@ private:
     ::rtl::OUString m_aName;
     /** Localized description text. */
     ::rtl::OUString m_aDescription;
-
     ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
 
