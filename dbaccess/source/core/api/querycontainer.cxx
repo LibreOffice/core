@@ -163,6 +163,10 @@ OQueryContainer::~OQueryContainer()
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2( OQueryContainer,ODefinitionContainer,OQueryContainer_Base)
+
+//------------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( OQueryContainer,ODefinitionContainer,OQueryContainer_Base)
+
 //------------------------------------------------------------------------------
 void OQueryContainer::disposing()
 {

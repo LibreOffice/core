@@ -282,6 +282,8 @@ OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
         aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener.getRef());
         return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
+    OSL_ENSURE( false, "OComponentDefinition::createColumn: is this a valid case?" );
+        // This here is the last place creating a OTableColumn, and somehow /me thinks it is not needed ...
     return new OTableColumn( _rName );
 }
 // -----------------------------------------------------------------------------

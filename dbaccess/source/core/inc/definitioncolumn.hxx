@@ -47,6 +47,9 @@ namespace dbaccess
 {
 
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
+    // =========================================================================
+    //= OTableColumnDescriptor
+    // =========================================================================
     /**
      *  provides the properties for description. A descriptor could be used to create a new table column.
      */
@@ -55,7 +58,9 @@ namespace dbaccess
                                   ,public ::comphelper::OPropertyArrayUsageHelper < OTableColumnDescriptor >
                                   ,public TXChild
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >           m_xParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xParent;
+        const bool                                                              m_bActAsDescriptor;
+
     protected:
     //  <properties>
         rtl::OUString           m_aTypeName;
@@ -74,6 +79,7 @@ namespace dbaccess
     public:
         OTableColumnDescriptor( const bool _bActAsDescriptor )
             :OColumn( !_bActAsDescriptor )
+            ,m_bActAsDescriptor( _bActAsDescriptor )
             ,m_nType( ::com::sun::star::sdbc::DataType::SQLNULL )
             ,m_nPrecision( 0 )
             ,m_nScale( 0 )
@@ -82,7 +88,7 @@ namespace dbaccess
             ,m_bRowVersion( sal_False )
             ,m_bCurrency( sal_False )
         {
-            impl_registerProperties( _bActAsDescriptor );
+            impl_registerProperties();
         }
 
         DECLARE_XINTERFACE( )
@@ -110,37 +116,76 @@ namespace dbaccess
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     private:
-        void    impl_registerProperties( const bool _bActAsDescriptor );
+        void    impl_registerProperties();
 
     protected:
         using OColumn::getFastPropertyValue;
     };
 
-    /** describes a column of a table or query
+    // =========================================================================
+    // = OTableColumn
+    // =========================================================================
+    class OTableColumn;
+    typedef ::comphelper::OPropertyArrayUsageHelper < OTableColumn >    OTableColumn_PBase;
+    /** describes a column of a table
      */
     class OTableColumn  :public OTableColumnDescriptor
-                        ,public ::comphelper::OPropertyArrayUsageHelper < OTableColumn >
+                        ,public OTableColumn_PBase
     {
-        friend class ODBTable;
-
     protected:
         virtual ~OTableColumn();
+
     public:
         OTableColumn(const ::rtl::OUString& _rName);
-        OTableColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
 
-    // com::sun::star::lang::XTypeProvider
+        // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::lang::XServiceInfo
+        // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::comphelper::OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+        // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
     };
 
+    // =========================================================================
+    // = OQueryColumn
+    // =========================================================================
+    class OQueryColumn;
+    typedef ::comphelper::OPropertyArrayUsageHelper< OQueryColumn > OQueryColumn_PBase;
+    /** a column of a Query, with additional information obtained from parsing the query statement
+    */
+    class OQueryColumn  :public OTableColumnDescriptor
+                        ,public OQueryColumn_PBase
+    {
+        // <properties>
+        ::rtl::OUString m_sCatalogName;
+        ::rtl::OUString m_sSchemaName;
+        ::rtl::OUString m_sTableName;
+        ::rtl::OUString m_sRealName;
+        // </properties>
+
+    protected:
+        ~OQueryColumn();
+
+    public:
+        OQueryColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxParserColumn );
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
+
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+    };
+
+    // =========================================================================
+    // = OColumnWrapper
+    // =========================================================================
     /**
      *  describes all properties for a columns of a table. Only the view parts are provided
      *  directly, all the other parts are derived from a driver implementation
@@ -184,6 +229,9 @@ namespace dbaccess
         using OColumn::getFastPropertyValue;
     };
 
+    // =========================================================================
+    // = OTableColumnDescriptorWrapper
+    // =========================================================================
     /**
      *  provides the properties for description. A descriptor could be used to create a new table column.
      */
@@ -234,6 +282,9 @@ namespace dbaccess
         using OColumnWrapper::getFastPropertyValue;
     };
 
+    // =========================================================================
+    // = OTableColumnWrapper
+    // =========================================================================
     /**
      *  describes all properties for a columns of a table. Only the view parts are provided
      *  directly, all the other parts are derived from a driver implementation

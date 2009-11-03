@@ -228,7 +228,9 @@ Reference< XPropertySet > OContainerMediator::impl_getSettingsForInitialization_
     try
     {
         if ( m_xSettings.is() && m_xSettings->hasByName( _rName ) )
+        {
             OSL_VERIFY( m_xSettings->getByName( _rName ) >>= xSettings );
+        }
         else if ( m_eType == eColumns )
         {
             do  // artifial loop for easier flow control

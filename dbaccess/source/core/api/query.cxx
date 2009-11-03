@@ -241,13 +241,12 @@ void OQuery::rebuildColumns()
         for ( ;pBegin != pEnd; ++pBegin)
         {
             Reference<XPropertySet> xSource(xColumns->getByName( *pBegin ),UNO_QUERY);
-            OTableColumn* pColumn = new OTableColumn( xSource );
-            Reference<XChild> xChild(*pColumn,UNO_QUERY);
-            if ( xChild.is() )
-                xChild->setParent(*this);
+            OQueryColumn* pColumn = new OQueryColumn( xSource );
+            Reference< XChild > xChild( *pColumn, UNO_QUERY_THROW );
+            xChild->setParent( *this );
 
             implAppendColumn( *pBegin, pColumn );
-            Reference<XPropertySet> xDest(*pColumn,UNO_QUERY);
+            Reference< XPropertySet > xDest( *pColumn, UNO_QUERY_THROW );
             if ( m_pColumnMediator.is() )
                 m_pColumnMediator->notifyElementCreated( *pBegin, xDest );
         }
