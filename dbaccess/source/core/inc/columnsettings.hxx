@@ -87,9 +87,6 @@ namespace dbaccess
     public:
         OColumnSettings();
 
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-
     protected:
         void registerProperties( IPropertyContainer& _rPropertyContainer );
 
@@ -101,7 +98,7 @@ namespace dbaccess
     public:
         /** check if the persistent settings have their default value
         */
-        sal_Bool    isDefaulted() const;
+        static bool hasDefaultSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn );
     };
 
 //........................................................................

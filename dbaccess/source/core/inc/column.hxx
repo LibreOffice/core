@@ -58,7 +58,7 @@
 #include <connectivity/FValue.hxx>
 #include <connectivity/TColumnsHelper.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -72,9 +72,9 @@ namespace dbaccess
     //************************************************************
     //  OColumn
     //************************************************************
-    typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::lang::XServiceInfo,
-                                                ::com::sun::star::container::XNamed,
-                                                ::com::sun::star::lang::XUnoTunnel > OColumnBase;
+    typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::lang::XServiceInfo,
+                                                ::com::sun::star::container::XNamed
+                                            >   OColumnBase;
 
     //------------------------------------------------------------
     class OColumn   :public comphelper::OBaseMutex
@@ -106,10 +106,6 @@ namespace dbaccess
 
     // com::sun::star::beans::XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-        // com::sun::star::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     // cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);

@@ -135,15 +135,6 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
 }
 
 // -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL OTableColumnDescriptor::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
-{
-    sal_Int64 nReturn = OColumn::getSomething( aIdentifier );
-    if ( !nReturn )
-        nReturn = OColumnSettings::getSomething( aIdentifier );
-    return nReturn;
-}
-
-// -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -452,14 +443,10 @@ void OColumnWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
 {
-    sal_Int64 nRet = OColumn::getSomething(aIdentifier);
-    if(!nRet)
-    {
-        Reference<XUnoTunnel> xTunnel(m_xAggregate,UNO_QUERY);
-        if(xTunnel.is())
-            nRet = xTunnel->getSomething(aIdentifier);
-    }
-    return nRet;
+    Reference< XUnoTunnel > xTunnel( m_xAggregate, UNO_QUERY);
+    if ( xTunnel.is() )
+        return xTunnel->getSomething( aIdentifier );
+    return 0;
 }
 
 //============================================================
@@ -493,15 +480,6 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     aSNS[0] = SERVICE_SDBCX_COLUMNDESCRIPTOR;
     aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
     return aSNS;
-}
-
-// -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL OTableColumnDescriptorWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
-{
-    sal_Int64 nReturn = OColumnWrapper::getSomething( aIdentifier );
-    if ( !nReturn )
-        nReturn = OColumnSettings::getSomething( aIdentifier );
-    return nReturn;
 }
 
 // comphelper::OPropertyArrayUsageHelper

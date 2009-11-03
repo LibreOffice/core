@@ -36,6 +36,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 //........................................................................
 namespace dbaccess
@@ -56,6 +57,7 @@ namespace dbaccess
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::beans::XPropertySetInfo;
     /** === end UNO using === **/
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
@@ -74,34 +76,6 @@ namespace dbaccess
     OColumnSettings::~OColumnSettings()
     {
         DBG_DTOR( OColumnSettings, NULL );
-    }
-
-    // XUnoTunnel
-    //------------------------------------------------------------------
-    sal_Int64 OColumnSettings::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
-    {
-           if  (  ( rId.getLength() == 16 )
-            && ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-            )
-                   return reinterpret_cast< sal_Int64 >( this );
-
-           return 0;
-    }
-
-    //--------------------------------------------------------------------------
-    Sequence< sal_Int8 > OColumnSettings::getUnoTunnelImplementationId()
-    {
-           static ::cppu::OImplementationId * pId = 0;
-           if (! pId)
-           {
-                   ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-                   if (! pId)
-                   {
-                           static ::cppu::OImplementationId aId;
-                           pId = &aId;
-                   }
-           }
-           return pId->getImplementationId();
     }
 
     //------------------------------------------------------------------------------
@@ -164,15 +138,42 @@ namespace dbaccess
     }
 
     //------------------------------------------------------------------------------
-    sal_Bool OColumnSettings::isDefaulted() const
+    bool OColumnSettings::hasDefaultSettings( const Reference< XPropertySet >& _rxColumn )
     {
-        return  !m_aAlignment.hasValue()
-            &&  !m_aWidth.hasValue()
-            &&  !m_aFormatKey.hasValue()
-            &&  !m_aRelativePosition.hasValue()
-            &&  !m_aHelpText.hasValue()
-            &&  !m_aControlDefault.hasValue()
-            &&  !m_bHidden;
+        ENSURE_OR_THROW( _rxColumn.is(), "illegal column" );
+        try
+        {
+            Reference< XPropertySetInfo > xPSI( _rxColumn->getPropertySetInfo(), UNO_SET_THROW );
+
+            struct PropertyDescriptor
+            {
+                ::rtl::OUString sName;
+                sal_Int32       nHandle;
+            };
+            PropertyDescriptor aProps[] =
+            {
+                { PROPERTY_ALIGN,            PROPERTY_ID_ALIGN },
+                { PROPERTY_NUMBERFORMAT,     PROPERTY_ID_NUMBERFORMAT },
+                { PROPERTY_RELATIVEPOSITION, PROPERTY_ID_RELATIVEPOSITION },
+                { PROPERTY_WIDTH,            PROPERTY_ID_WIDTH },
+                { PROPERTY_HELPTEXT,         PROPERTY_ID_HELPTEXT },
+                { PROPERTY_CONTROLDEFAULT,   PROPERTY_ID_CONTROLDEFAULT },
+                { PROPERTY_CONTROLMODEL,     PROPERTY_ID_CONTROLMODEL },
+                { PROPERTY_HIDDEN,           PROPERTY_ID_HIDDEN }
+            };
+
+            for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
+            {
+                if ( xPSI->hasPropertyByName( aProps[i].sName ) )
+                    if ( !isDefaulted( aProps[i].nHandle, _rxColumn->getPropertyValue( aProps[i].sName ) ) )
+                        return false;
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return true;
     }
 
 //........................................................................

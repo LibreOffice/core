@@ -364,15 +364,11 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
                 if ( !xColumnDefinitions->hasByName(*pIter) )
                 {
                     Reference<XPropertySet> xColumn(xNames->getByName(*pIter),UNO_QUERY);
-                    OColumnSettings* pColumnSettings = NULL;
-                    if ( ::comphelper::getImplementation( pColumnSettings, xColumn ) )
+                    if ( !OColumnSettings::hasDefaultSettings( xColumn ) )
                     {
-                        if ( ( pColumnSettings && !pColumnSettings->isDefaulted() ) )
-                        {
-                            ::comphelper::copyProperties(xColumn,xProp);
-                            xAppend->appendByDescriptor(xProp);
-                            bModified = sal_True;
-                        }
+                        ::comphelper::copyProperties( xColumn, xProp );
+                        xAppend->appendByDescriptor( xProp );
+                        bModified = sal_True;
                     }
                 }
             }

@@ -111,10 +111,6 @@ namespace dbaccess
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
-    protected:
-        // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
     private:
         void    impl_registerProperties();
     };
@@ -282,10 +278,6 @@ namespace dbaccess
                                     const ::com::sun::star::uno::Any& rValue
                                                      )
                                                      throw (::com::sun::star::uno::Exception);
-
-    protected:
-        // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     protected:
         using OColumnWrapper::getFastPropertyValue;

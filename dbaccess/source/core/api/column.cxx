@@ -145,31 +145,6 @@ Reference< XPropertySetInfo > OColumn::getPropertySetInfo() throw (RuntimeExcept
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > OColumn::getUnoTunnelImplementationId()
-{
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
-sal_Int64 OColumn::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
-{
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
-}
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
