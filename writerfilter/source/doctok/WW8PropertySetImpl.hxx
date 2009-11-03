@@ -107,12 +107,13 @@ public:
     virtual void resolve(Properties & rHandler);
 
     /**
-       Get and distribute information from sprm that is used
-       internally by the document.
+     Get and distribute information from sprm that is used
+     internally by the document.
 
-       @param rSprm    sprm to process
+     @param rSprm       sprm to process
+     @param rHandler    property handler to resolve huge papx (sprm 0x6646) to
      */
-    virtual void resolveLocal(Sprm & rSprm);
+    virtual void resolveLocal(Sprm & rSprm, Properties & rHandler);
 };
 
 class WW8PropertySetIteratorImpl : public WW8PropertySetIterator
