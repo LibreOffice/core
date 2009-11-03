@@ -70,7 +70,7 @@ namespace utl {
         void NotifyListeners( sal_uInt32 nHint );
         ConfigurationBroadcaster();
         ~ConfigurationBroadcaster();
-        void BlockBroadcasts( bool bBlock );
+        virtual void BlockBroadcasts( bool bBlock );
     };
 
 namespace detail {

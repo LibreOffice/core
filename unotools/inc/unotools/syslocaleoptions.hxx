@@ -99,7 +99,7 @@ public:
         BlockBroadcasts(FALSE) or otherwise pending hints would never be
         broadcasted again.
      */
-            void                BlockBroadcasts( BOOL bBlock );
+       virtual void                BlockBroadcasts( bool bBlock );
 
     // config value access methods
 

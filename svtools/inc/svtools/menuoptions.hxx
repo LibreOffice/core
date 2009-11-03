@@ -98,8 +98,8 @@ class SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
          SvtMenuOptions();
         virtual ~SvtMenuOptions();
 
-        void AddListener( const Link& rLink );
-        void RemoveListener( const Link& rLink );
+        void AddListenerLink( const Link& rLink );
+        void RemoveListenerLink( const Link& rLink );
         //---------------------------------------------------------------------------------------------------------
         //  interface
         //---------------------------------------------------------------------------------------------------------

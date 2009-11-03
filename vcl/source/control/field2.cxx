@@ -1215,7 +1215,7 @@ static BOOL ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldF
 
 static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,
                               const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper,
-                              const AllSettings& rSettings )
+                              const AllSettings& )
 {
     USHORT nDay = 0;
     USHORT nMonth = 0;
@@ -1356,7 +1356,7 @@ BOOL DateFormatter::ImplDateReformat( const XubString& rStr, XubString& rOutStr,
 // -----------------------------------------------------------------------
 
 XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
-                                            const AllSettings& rSettings ) const
+                                            const AllSettings& ) const
 {
     BOOL bShowCentury = FALSE;
     switch ( GetExtDateFormat() )

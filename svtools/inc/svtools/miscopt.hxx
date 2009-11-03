@@ -102,8 +102,8 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
          SvtMiscOptions();
         virtual ~SvtMiscOptions();
 
-        void AddListener( const Link& rLink );
-        void RemoveListener( const Link& rLink );
+        void AddListenerLink( const Link& rLink );
+        void RemoveListenerLink( const Link& rLink );
 
         //---------------------------------------------------------------------------------------------------------
         //  interface

@@ -37,7 +37,7 @@
 
 namespace utl
 {
-    DECLARE_LIST( IMPL_ConfigurationListenerList, ConfigurationListener* );
+    DECLARE_LIST( IMPL_ConfigurationListenerList, ConfigurationListener* )
 }
 
 using utl::detail::Options;

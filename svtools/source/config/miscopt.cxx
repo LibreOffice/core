@@ -227,8 +227,8 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline sal_Bool IsUseSystemPrintDialogReadOnly() const
         { return m_bIsUseSystemPrintDialogRO; }
 
-        void AddListener( const Link& rLink );
-        void RemoveListener( const Link& rLink );
+        void AddListenerLink( const Link& rLink );
+        void RemoveListenerLink( const Link& rLink );
         void CallListeners();
 
     //-------------------------------------------------------------------------------------------------------------
@@ -499,12 +499,12 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
     }
 }
 
-void SvtMiscOptions_Impl::AddListener( const Link& rLink )
+void SvtMiscOptions_Impl::AddListenerLink( const Link& rLink )
 {
     aList.Insert( new Link( rLink ) );
 }
 
-void SvtMiscOptions_Impl::RemoveListener( const Link& rLink )
+void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
 {
     for ( USHORT n=0; n<aList.Count(); n++ )
     {
@@ -859,12 +859,12 @@ Mutex & SvtMiscOptions::GetInitMutex()
     return *pMutex;
 }
 
-void SvtMiscOptions::AddListener( const Link& rLink )
+void SvtMiscOptions::AddListenerLink( const Link& rLink )
 {
-    m_pDataContainer->AddListener( rLink );
+    m_pDataContainer->AddListenerLink( rLink );
 }
 
-void SvtMiscOptions::RemoveListener( const Link& rLink )
+void SvtMiscOptions::RemoveListenerLink( const Link& rLink )
 {
-    m_pDataContainer->RemoveListener( rLink );
+    m_pDataContainer->RemoveListenerLink( rLink );
 }

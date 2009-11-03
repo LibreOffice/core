@@ -111,8 +111,8 @@ class SvtMenuOptions_Impl : public ConfigItem
          SvtMenuOptions_Impl();
         ~SvtMenuOptions_Impl();
 
-        void AddListener( const Link& rLink );
-        void RemoveListener( const Link& rLink );
+        void AddListenerLink( const Link& rLink );
+        void RemoveListenerLink( const Link& rLink );
 
         //---------------------------------------------------------------------------------------------------------
         //  overloaded methods of baseclass
@@ -412,12 +412,12 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-void SvtMenuOptions_Impl::AddListener( const Link& rLink )
+void SvtMenuOptions_Impl::AddListenerLink( const Link& rLink )
 {
     aList.Insert( new Link( rLink ) );
 }
 
-void SvtMenuOptions_Impl::RemoveListener( const Link& rLink )
+void SvtMenuOptions_Impl::RemoveListenerLink( const Link& rLink )
 {
     for ( USHORT n=0; n<aList.Count(); n++ )
     {
@@ -553,12 +553,12 @@ Mutex& SvtMenuOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-void SvtMenuOptions::AddListener( const Link& rLink )
+void SvtMenuOptions::AddListenerLink( const Link& rLink )
 {
-    m_pDataContainer->AddListener( rLink );
+    m_pDataContainer->AddListenerLink( rLink );
 }
 
-void SvtMenuOptions::RemoveListener( const Link& rLink )
+void SvtMenuOptions::RemoveListenerLink( const Link& rLink )
 {
-    m_pDataContainer->RemoveListener( rLink );
+    m_pDataContainer->RemoveListenerLink( rLink );
 }

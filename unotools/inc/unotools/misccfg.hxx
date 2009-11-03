@@ -63,7 +63,7 @@ public:
     void        SetYear2000( sal_Int32 nSet );
 };
 
-};
+}
 
 #endif // _MISCCFG_HXX
 

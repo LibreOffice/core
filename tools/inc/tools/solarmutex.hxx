@@ -40,6 +40,6 @@ namespace tools
         static bool Acquire();
         static void Release();
     };
-};
+}
 
 #endif

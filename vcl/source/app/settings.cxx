@@ -1510,15 +1510,6 @@ BOOL HelpSettings::operator ==( const HelpSettings& rSet ) const
 
 // =======================================================================
 
-static BOOL ImplCompareLocales( const ::com::sun::star::lang::Locale& L1, const ::com::sun::star::lang::Locale& L2 )
-{
-    return ( ( L1.Language == L2.Language ) &&
-             ( L1.Country == L2.Country ) &&
-             ( L1.Variant == L2.Variant ) );
-}
-
-// =======================================================================
-
 ImplAllSettingsData::ImplAllSettingsData()
 {
     mnRefCount                  = 1;

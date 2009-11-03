@@ -536,7 +536,7 @@ void SvtSysLocaleOptions::Commit()
 }
 
 
-void SvtSysLocaleOptions::BlockBroadcasts( BOOL bBlock )
+void SvtSysLocaleOptions::BlockBroadcasts( bool bBlock )
 {
     MutexGuard aGuard( GetMutex() );
     pOptions->BlockBroadcasts( bBlock );
@@ -701,3 +701,5 @@ LanguageType SvtSysLocaleOptions::GetRealUILanguage() const
 {
     return pOptions->GetRealUILanguage();
 }
+
+
