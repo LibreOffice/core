@@ -68,18 +68,18 @@ APP1TARGET= $(TARGET)
 APP1OBJS= $(COMMON_OBJFILES) $(TESTSHL_OBJFILES)
 APP1RPATH=NONE
 
-APP1STDLIBS=$(SALLIB) \
-        $(CPPUNITLIB)
+APP1STDLIBS=$(SALLIB)
 
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "GCC"
 APP1STDLIBS+= \
-        $(LB)$/testshl2$(DLLPOSTFIX).a \
+        $(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a \
         $(LB)$/libc5t_testresult$(DLLPOSTFIX).a \
         $(LB)$/libc5t_no_regallfkt$(DLLPOSTFIX).a \
         $(LB)$/libc5t_winstuff$(DLLPOSTFIX).a
 .ELSE
 APP1LIBS= \
+        $(SOLARLIBDIR)$/cppunit.lib \
         $(LB)$/c5t_testresult.lib \
         $(LB)$/c5t_no_regallfkt.lib \
         $(LB)$/c5t_winstuff.lib
@@ -88,6 +88,7 @@ APP1LIBS= \
 
 .IF "$(GUI)" == "OS2"
 APP1LIBS= \
+        $(SOLARLIBDIR)$/cppunit.lib \
         $(LB)$/c5t_no_regallfkt.lib \
         $(LB)$/c5t_testresult.lib
 .ENDIF
@@ -95,7 +96,8 @@ APP1LIBS= \
 .IF "$(GUI)" == "UNX"
 APP1STDLIBS+= \
         $(LB)$/libc5t_testresult$(DLLPOSTFIX).a \
-        $(LB)$/libc5t_no_regallfkt$(DLLPOSTFIX).a
+        $(LB)$/libc5t_no_regallfkt$(DLLPOSTFIX).a \
+        $(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
 
 #
