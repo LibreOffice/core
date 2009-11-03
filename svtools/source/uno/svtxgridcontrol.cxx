@@ -200,7 +200,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 rowData = cellData[i];
                 std::vector<rtl::OUString> newRow(
                     comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowData));
-                if(newRow.size() < m_pTableModel->getColumnCount())
+                if(newRow.size() < (unsigned)m_pTableModel->getColumnCount())
                     newRow.resize( m_pTableModel->getColumnCount(),rtl::OUString::createFromAscii(""));
                 aCellContent.push_back(newRow);
             }
@@ -308,7 +308,7 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
 {
     std::vector<OUString> aNewRow(
         comphelper::sequenceToContainer< std::vector<rtl::OUString > >(Event.rowData));
-    if(aNewRow.size()< m_pTableModel->getColumnCount())
+    if(aNewRow.size()< (unsigned)m_pTableModel->getColumnCount())
         aNewRow.resize(m_pTableModel->getColumnCount(),rtl::OUString::createFromAscii(""));
     m_pTableModel->getCellContent().push_back(aNewRow);
     if(m_pTableModel->hasRowHeaders())
