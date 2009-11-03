@@ -294,7 +294,7 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     }
 
     wsprintfA( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
-    if ( aResult && ERROR_SUCCESS == RegOpenKey(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, &hkey) )
+    if ( aResult && ERROR_SUCCESS == RegOpenKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nKeyAccess, &hkey) )
     {
            for( ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
            {
