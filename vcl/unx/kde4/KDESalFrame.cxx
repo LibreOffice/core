@@ -348,11 +348,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // Scroll bar size
     style.SetScrollBarSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
 
-    // #i59364# high contrast mode
-    BOOL bHC = ( style.GetFaceColor().IsDark() ||
-                 style.GetWindowColor().IsDark() );
-    style.SetHighContrastMode( bHC );
-
     rSettings.SetStyleSettings( style );
 }
 
