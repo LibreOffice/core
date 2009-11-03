@@ -59,7 +59,7 @@ namespace ftp
 
     struct ContentProperties
     {
-        ::rtl::OUString aTitle;         // Title
+        ::rtl::OUString aTitle;             // Title
         ::rtl::OUString aContentType;   // ContentType
         sal_Bool        bIsDocument;    // IsDocument
         sal_Bool        bIsFolder;      // IsFolder
@@ -79,12 +79,6 @@ namespace ftp
           public com::sun::star::ucb::XContentCreator
     {
     public:
-
-        FTPContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                    FTPContentProvider* pProvider,
-                    const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& Identifier);
 
         FTPContent( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,

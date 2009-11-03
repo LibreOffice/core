@@ -106,19 +106,6 @@ using namespace com::sun::star::sdbc;
 
 FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
                         FTPContentProvider* pProvider,
-                        const Reference< XContentIdentifier >& Identifier)
-    : ContentImplHelper(rxSMgr,pProvider,Identifier),
-      m_pFCP(pProvider),
-      m_aFTPURL(Identifier->getContentIdentifier(),
-                pProvider),
-      m_bInserted(false),
-      m_bTitleSet(false)
-{
-}
-
-
-FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
-                        FTPContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier,
                         const FTPURL& aFTPURL)
     : ContentImplHelper(rxSMgr,pProvider,Identifier),
@@ -175,9 +162,9 @@ XINTERFACE_IMPL_6( FTPContent,
 //=========================================================================
 
 XTYPEPROVIDER_IMPL_6( FTPContent,
-                         XTypeProvider,
-                         XServiceInfo,
-                         XContent,
+                          XTypeProvider,
+                          XServiceInfo,
+                          XContent,
                       XCommandProcessor,
                       XContentCreator,
                       XChild);
@@ -697,7 +684,7 @@ sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
     sal_Int32 m = 0;
 
     if(m_xInputStream.is()) {
-           Sequence<sal_Int8> seq(nBytesRequested);
+            Sequence<sal_Int8> seq(nBytesRequested);
         m = m_xInputStream->readBytes(seq,nBytesRequested);
         rtl_copyMemory(dest,seq.getConstArray(),m);
     }
