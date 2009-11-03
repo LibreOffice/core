@@ -186,7 +186,7 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages(),
-                                         GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
                 ToolBox& rBox = GetToolBox();
                 rBox.SetItemImage(GetId(), aImage);
                 nLastSlot = nLastEnum;
