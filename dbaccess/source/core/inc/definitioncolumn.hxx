@@ -117,9 +117,6 @@ namespace dbaccess
 
     private:
         void    impl_registerProperties();
-
-    protected:
-        using OColumn::getFastPropertyValue;
     };
 
     // =========================================================================
@@ -166,11 +163,16 @@ namespace dbaccess
         ::rtl::OUString m_sRealName;
         // </properties>
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xOriginalTableColumn;
+
     protected:
         ~OQueryColumn();
 
     public:
-        OQueryColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxParserColumn );
+        OQueryColumn(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxParserColumn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+        );
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
@@ -178,9 +180,16 @@ namespace dbaccess
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
 
-        // OPropertyArrayUsageHelper
+        // *Property*
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                impl_determineOriginalTableColumn(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                );
     };
 
     // =========================================================================

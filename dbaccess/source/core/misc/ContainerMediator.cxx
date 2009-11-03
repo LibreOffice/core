@@ -128,7 +128,7 @@ void OContainerMediator::impl_cleanup_nothrow()
         xContainer = m_xContainer;
         if ( xContainer.is() )
             xContainer->removeContainerListener( this );
-        m_xContainer.clear();//WeakReference< XContainer >();
+        m_xContainer.clear();
 
         m_aForwardList.clear();
     }
@@ -214,117 +214,69 @@ void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ ) thr
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-//    Reference< XContainer > xContainer = m_xContainer;
-//  if ( Source.Source == xContainer || Source.Source == m_xSettings )
-    // this can only be one of them :-) So no check needed here
     impl_cleanup_nothrow();
 }
 
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OContainerMediator::impl_getSettingsForInitialization_nothrow( const ::rtl::OUString& _rName,
-    const Reference< XPropertySet >& _rxDestination ) const
+void OContainerMediator::impl_initSettings_nothrow( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDestination )
 {
-    Reference< XPropertySet > xSettings;
     try
     {
         if ( m_xSettings.is() && m_xSettings->hasByName( _rName ) )
         {
-            OSL_VERIFY( m_xSettings->getByName( _rName ) >>= xSettings );
-        }
-        else if ( m_eType == eColumns )
-        {
-            do  // artifial loop for easier flow control
-            {
-
-            Reference< XConnection > xConnection( m_aConnection );
-            if ( !xConnection.is() )
-                break;
-
-            Reference< XPropertySetInfo > xPSI( _rxDestination->getPropertySetInfo(), UNO_QUERY_THROW );
-            if  (   !xPSI->hasPropertyByName( PROPERTY_TABLENAME )
-                ||  !xPSI->hasPropertyByName( PROPERTY_REALNAME )
-                )
-                break;
-
-            // determine the composed table name, plus the column name, as indicated by the
-            // respective properties at the destination object
-            ::rtl::OUString sCatalog, sSchema, sTable, sColumn;
-            if ( xPSI->hasPropertyByName( PROPERTY_CATALOGNAME ) )
-            {
-                OSL_VERIFY( _rxDestination->getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog );
-            }
-            if ( xPSI->hasPropertyByName( PROPERTY_SCHEMANAME ) )
-            {
-                OSL_VERIFY( _rxDestination->getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
-            }
-            OSL_VERIFY( _rxDestination->getPropertyValue( PROPERTY_TABLENAME ) >>= sTable );
-            OSL_VERIFY( _rxDestination->getPropertyValue( PROPERTY_REALNAME ) >>= sColumn );
-
-            ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(
-                xConnection->getMetaData(), sCatalog, sSchema, sTable, sal_False, ::dbtools::eComplete );
-
-            // retrieve the table in question
-            Reference< XTablesSupplier > xSuppTables( xConnection, UNO_QUERY_THROW );
-            Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_QUERY_THROW );
-            if ( !xTables->hasByName( sComposedTableName ) )
-                break;
-
-            Reference< XColumnsSupplier > xSuppCols( xTables->getByName( sComposedTableName ), UNO_QUERY_THROW );
-            Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_QUERY_THROW );
-            if ( !xColumns->hasByName( sColumn ) )
-                break;
-
-            xSettings.set( xColumns->getByName( sColumn ), UNO_QUERY );
-
-            }
-            while ( false );
+            Reference< XPropertySet > xSettings( m_xSettings->getByName( _rName ), UNO_QUERY_THROW );
+            ::comphelper::copyProperties( xSettings, _rxDestination );
         }
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return xSettings;
 }
 
 // -----------------------------------------------------------------------------
-void OContainerMediator::notifyElementCreated(const ::rtl::OUString& _sName,const Reference<XPropertySet>& _xDest)
+void OContainerMediator::notifyElementCreated( const ::rtl::OUString& _sName, const Reference< XPropertySet >& _xDest )
 {
-    PropertyForwardList::iterator aFind = m_aForwardList.find(_sName);
-    if ( (aFind == m_aForwardList.end() || !aFind->second->getDefinition().is() )&& m_xSettings.is() )
+    if ( !m_xSettings.is() )
+        return;
+
+    PropertyForwardList::iterator aFind = m_aForwardList.find( _sName );
+    if  (   aFind != m_aForwardList.end()
+        &&  aFind->second->getDefinition().is()
+        )
     {
-        ::std::vector< ::rtl::OUString> aPropertyList;
+        OSL_ENSURE( false, "OContainerMediator::notifyElementCreated: is this really a valid case?" );
+        return;
+    }
 
-        try
+    ::std::vector< ::rtl::OUString > aPropertyList;
+    try
+    {
+        // initially copy from the settings object (if existent) to the newly created object
+        impl_initSettings_nothrow( _sName, _xDest );
+
+        // collect the to-be-monitored properties
+        Reference< XPropertySetInfo > xPSI( _xDest->getPropertySetInfo(), UNO_QUERY_THROW );
+        Sequence< Property > aProperties( xPSI->getProperties() );
+        const Property* property = aProperties.getConstArray();
+        const Property* propertyEnd = aProperties.getConstArray() + aProperties.getLength();
+        for ( ; property != propertyEnd; ++property )
         {
-            // initially copy from the settings object (if existent) to the newly created object
-            Reference< XPropertySet > xSetting( impl_getSettingsForInitialization_nothrow( _sName, _xDest ) );
-            if ( xSetting.is() )
-                ::comphelper::copyProperties( xSetting, _xDest );
+            if ( ( property->Attributes & PropertyAttribute::READONLY ) != 0 )
+                continue;
+            if ( ( property->Attributes & PropertyAttribute::BOUND ) == 0 )
+                continue;
 
-            // collect the to-be-monitored properties
-            Reference< XPropertySetInfo > xPSI( _xDest->getPropertySetInfo(), UNO_QUERY_THROW );
-            Sequence< Property > aProperties( xPSI->getProperties() );
-            const Property* property = aProperties.getConstArray();
-            const Property* propertyEnd = aProperties.getConstArray() + aProperties.getLength();
-            for ( ; property != propertyEnd; ++property )
-            {
-                if ( ( property->Attributes & PropertyAttribute::READONLY ) != 0 )
-                    continue;
-                if ( ( property->Attributes & PropertyAttribute::BOUND ) == 0 )
-                    continue;
-
-                aPropertyList.push_back( property->Name );
-            }
+            aPropertyList.push_back( property->Name );
         }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
-        ::rtl::Reference< OPropertyForward > pForward( new OPropertyForward( _xDest, m_xSettings, _sName, aPropertyList ) );
-        m_aForwardList[_sName] = pForward;
-    } // if ( aFind == m_aForwardList.end() && m_xSettings.is() )
+    ::rtl::Reference< OPropertyForward > pForward( new OPropertyForward( _xDest, m_xSettings, _sName, aPropertyList ) );
+    m_aForwardList[ _sName ] = pForward;
 }
 // -----------------------------------------------------------------------------
 //........................................................................

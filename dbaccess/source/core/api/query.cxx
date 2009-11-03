@@ -241,7 +241,7 @@ void OQuery::rebuildColumns()
         for ( ;pBegin != pEnd; ++pBegin)
         {
             Reference<XPropertySet> xSource(xColumns->getByName( *pBegin ),UNO_QUERY);
-            OQueryColumn* pColumn = new OQueryColumn( xSource );
+            OQueryColumn* pColumn = new OQueryColumn( xSource, m_xConnection );
             Reference< XChild > xChild( *pColumn, UNO_QUERY_THROW );
             xChild->setParent( *this );
 

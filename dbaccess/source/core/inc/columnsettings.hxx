@@ -95,7 +95,8 @@ namespace dbaccess
 
         /** determines whether the property with the given handle is handled by the class
         */
-        bool isMine( const sal_Int32 _nPropertyHandle ) const;
+        static bool isColumnSettingProperty( const sal_Int32 _nPropertyHandle );
+        static bool isDefaulted( const sal_Int32 _nPropertyHandle, const ::com::sun::star::uno::Any& _rPropertyValue );
 
     public:
         /** check if the persistent settings have their default value

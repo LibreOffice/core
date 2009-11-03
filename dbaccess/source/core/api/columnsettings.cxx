@@ -124,7 +124,7 @@ namespace dbaccess
     }
 
     //------------------------------------------------------------------------------
-    bool OColumnSettings::isMine( const sal_Int32 _nPropertyHandle ) const
+    bool OColumnSettings::isColumnSettingProperty( const sal_Int32 _nPropertyHandle )
     {
         return  ( _nPropertyHandle == PROPERTY_ID_ALIGN )
             ||  ( _nPropertyHandle == PROPERTY_ID_NUMBERFORMAT )
@@ -134,6 +134,33 @@ namespace dbaccess
             ||  ( _nPropertyHandle == PROPERTY_ID_CONTROLDEFAULT )
             ||  ( _nPropertyHandle == PROPERTY_ID_CONTROLMODEL )
             ||  ( _nPropertyHandle == PROPERTY_ID_HIDDEN );
+    }
+
+    //------------------------------------------------------------------------------
+    bool OColumnSettings::isDefaulted( const sal_Int32 _nPropertyHandle, const Any& _rPropertyValue )
+    {
+        switch ( _nPropertyHandle )
+        {
+        case PROPERTY_ID_ALIGN:
+        case PROPERTY_ID_NUMBERFORMAT:
+        case PROPERTY_ID_RELATIVEPOSITION:
+        case PROPERTY_ID_WIDTH:
+        case PROPERTY_ID_HELPTEXT:
+        case PROPERTY_ID_CONTROLDEFAULT:
+            return !_rPropertyValue.hasValue();
+
+        case PROPERTY_ID_CONTROLMODEL:
+            return !Reference< XPropertySet >( _rPropertyValue, UNO_QUERY ).is();
+
+        case PROPERTY_ID_HIDDEN:
+            {
+                sal_Bool bHidden = sal_False;
+                OSL_VERIFY( _rPropertyValue >>= bHidden );
+                return !bHidden;
+            }
+        }
+        OSL_ENSURE( false, "OColumnSettings::isDefaulted: illegal property handle!" );
+        return sal_False;
     }
 
     //------------------------------------------------------------------------------

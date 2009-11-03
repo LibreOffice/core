@@ -112,23 +112,12 @@ namespace dbaccess
         */
         void    impl_cleanup_nothrow();
 
-        /** retrieves the settings object to initialize a container element
-
-            Normally, this object will simply retrieve the object with the given name from our settings
-            container. Hiowever, for columns, there's a fallback in case this settings object does
-            not yet exist: Then, we check if the given destination object refers to a table column, via its
-            TableName and RealName property. If so, this table column is used as initialization object.
-
-            @param _rName
-                the name of the destination object in its container
-            @param _rxDestination
-                the destination object to initialize
+        /** initializes the properties of the given object from its counterpart in our settings container
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                impl_getSettingsForInitialization_nothrow(
+        void    impl_initSettings_nothrow(
                     const ::rtl::OUString& _rName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDestination
-                ) const;
+                );
     };
 //........................................................................
 }   // namespace dbaccess

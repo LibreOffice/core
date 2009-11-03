@@ -36,18 +36,24 @@
 #include "definitioncolumn.hxx"
 #include "sdbcoretools.hxx"
 
+/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+/** === end UNO includes === **/
 
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::comphelper;
 using namespace ::osl;
@@ -195,7 +201,7 @@ rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 DBG_NAME( OQueryColumn );
 
 // -------------------------------------------------------------------------
-OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn )
+OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
 {
     const sal_Int32 nPropAttr = PropertyAttribute::READONLY;
@@ -220,21 +226,14 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn )
     if ( xPSI->hasPropertyByName( PROPERTY_DEFAULTVALUE ) )
         OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_DEFAULTVALUE ) >>= m_aDefaultValue );
 
-    // if the source column also has column settings, copy those
-    struct ColumnSettingDescriptor
+    // copy some optional properties from the parser column
+    struct PropertyDescriptor
     {
         ::rtl::OUString sName;
         sal_Int32       nHandle;
     };
-    ColumnSettingDescriptor aProps[] =
+    PropertyDescriptor aProps[] =
     {
-        { PROPERTY_WIDTH,            PROPERTY_ID_WIDTH },
-        { PROPERTY_NUMBERFORMAT,     PROPERTY_ID_NUMBERFORMAT },
-        { PROPERTY_RELATIVEPOSITION, PROPERTY_ID_RELATIVEPOSITION },
-        { PROPERTY_ALIGN,            PROPERTY_ID_ALIGN },
-        { PROPERTY_HELPTEXT,         PROPERTY_ID_HELPTEXT },
-        { PROPERTY_CONTROLDEFAULT,   PROPERTY_ID_CONTROLDEFAULT },
-        { PROPERTY_HIDDEN,           PROPERTY_ID_HIDDEN },
         { PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME },
         { PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME },
         { PROPERTY_TABLENAME,        PROPERTY_ID_TABLENAME },
@@ -243,14 +242,66 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn )
     for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
     {
         if ( xPSI->hasPropertyByName( aProps[i].sName ) )
-            OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _rxParserColumn->getPropertyValue( aProps[i].sName ) );
+            setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _rxParserColumn->getPropertyValue( aProps[i].sName ) );
     }
+
+    // determine the table column we're based on
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        m_xOriginalTableColumn = impl_determineOriginalTableColumn( _rxConnection );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //--------------------------------------------------------------------------
 OQueryColumn::~OQueryColumn()
 {
     DBG_DTOR( OQueryColumn, NULL );
+}
+
+//--------------------------------------------------------------------------
+Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const Reference< XConnection >& _rxConnection )
+{
+    OSL_PRECOND( _rxConnection.is(), "OQueryColumn::impl_determineOriginalTableColumn: illegal connection!" );
+    if ( !_rxConnection.is() )
+        return NULL;
+
+    Reference< XPropertySet > xOriginalTableColumn;
+    try
+    {
+        // determine the composed table name, plus the column name, as indicated by the
+        // respective properties
+        ::rtl::OUString sCatalog, sSchema, sTable;
+        OSL_VERIFY( getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog );
+        OSL_VERIFY( getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
+        OSL_VERIFY( getPropertyValue( PROPERTY_TABLENAME ) >>= sTable );
+        if ( !sCatalog.getLength() && !sSchema.getLength() && !sTable.getLength() )
+            return NULL;
+
+        ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(
+            _rxConnection->getMetaData(), sCatalog, sSchema, sTable, sal_False, ::dbtools::eComplete );
+
+        // retrieve the table in question
+        Reference< XTablesSupplier > xSuppTables( _rxConnection, UNO_QUERY_THROW );
+        Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_QUERY_THROW );
+        if ( !xTables->hasByName( sComposedTableName ) )
+            return NULL;
+
+        Reference< XColumnsSupplier > xSuppCols( xTables->getByName( sComposedTableName ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_QUERY_THROW );
+
+        ::rtl::OUString sColumn;
+        OSL_VERIFY( getPropertyValue( PROPERTY_REALNAME ) >>= sColumn );
+        if ( !xColumns->hasByName( sColumn ) )
+            return NULL;
+
+        xOriginalTableColumn.set( xColumns->getByName( sColumn ), UNO_QUERY );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return xOriginalTableColumn;
 }
 
 //--------------------------------------------------------------------------
@@ -272,6 +323,39 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OQueryColumn )
 ::cppu::IPropertyArrayHelper* OQueryColumn::createArrayHelper() const
 {
     return OTableColumnDescriptor::createArrayHelper();
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+{
+    OTableColumnDescriptor::getFastPropertyValue( _rValue, _nHandle );
+
+    // special treatment for column settings:
+    if ( !OColumnSettings::isColumnSettingProperty( _nHandle ) )
+        return;
+
+    // If the setting has its default value, then try to obtain the value from the table column which
+    // this query column is based on
+    if ( !OColumnSettings::isDefaulted( _nHandle, _rValue ) )
+        return;
+
+    if ( !m_xOriginalTableColumn.is() )
+        return;
+
+    try
+    {
+        // determine original property name
+        ::rtl::OUString sPropName;
+        sal_Int16 nAttributes( 0 );
+        const_cast< OQueryColumn* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
+        OSL_ENSURE( sPropName.getLength(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
+
+        _rValue = m_xOriginalTableColumn->getPropertyValue( sPropName );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //==========================================================================
@@ -578,11 +662,9 @@ OTableColumnWrapper::~OTableColumnWrapper()
 {
 }
 
-// com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnWrapper )
 
-// ::com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
 rtl::OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException)
 {
