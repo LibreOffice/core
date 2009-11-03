@@ -32,7 +32,7 @@ package complex.dbaccess;
 import com.sun.star.awt.FontSlant;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.form.XFormController;
+import com.sun.star.form.runtime.XFormController;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
@@ -65,21 +65,21 @@ public class UISettings extends TestCase
 
         // load the document
         String docURL = database.getDatabase().getDocumentURL();
-        final XComponentLoader loader = (XComponentLoader)UnoRuntime.queryInterface( XComponentLoader.class,
+        final XComponentLoader loader = UnoRuntime.queryInterface( XComponentLoader.class,
             getORB().createInstance( "com.sun.star.frame.Desktop" ) );
-        XModel doc = (XModel)UnoRuntime.queryInterface( XModel.class,
+        XModel doc = UnoRuntime.queryInterface( XModel.class,
             loader.loadComponentFromURL( docURL, "_blank", 0, new PropertyValue[] {} ) );
 
         // establish the connection
-        XDatabaseDocumentUI docUI = (XDatabaseDocumentUI)UnoRuntime.queryInterface( XDatabaseDocumentUI.class,
+        XDatabaseDocumentUI docUI = UnoRuntime.queryInterface( XDatabaseDocumentUI.class,
             doc.getCurrentController() );
         docUI.connect();
 
         // display the table
         XComponent tableViewComp = docUI.loadComponent( com.sun.star.sdb.application.DatabaseObject.TABLE, "customers", false );
-        XFormController tableViewController = (XFormController)UnoRuntime.queryInterface( XFormController.class,
+        XFormController tableViewController = UnoRuntime.queryInterface( XFormController.class,
             tableViewComp );
-        XPropertySet tableControlModel = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+        XPropertySet tableControlModel = UnoRuntime.queryInterface( XPropertySet.class,
             tableViewController.getCurrentControl().getModel() );
 
         // change the table's formatting
@@ -102,18 +102,18 @@ public class UISettings extends TestCase
         // not cleaned up, the "database model impl" - the structure holding all document data - will
         // stay alive, and subsequent requests to load the doc will just reuse it, without really loading it.
         docURL = copyToTempFile( docURL );
-        doc = (XModel)UnoRuntime.queryInterface( XModel.class,
+        doc = UnoRuntime.queryInterface( XModel.class,
             loader.loadComponentFromURL( docURL, "_blank", 0, new PropertyValue[] {} ) );
 
-        docUI = (XDatabaseDocumentUI)UnoRuntime.queryInterface( XDatabaseDocumentUI.class,
+        docUI = UnoRuntime.queryInterface( XDatabaseDocumentUI.class,
             doc.getCurrentController() );
         docUI.connect();
 
         // display the table, again
         tableViewComp = docUI.loadComponent( com.sun.star.sdb.application.DatabaseObject.TABLE, "customers", false );
-        tableViewController = (XFormController)UnoRuntime.queryInterface( XFormController.class,
+        tableViewController = UnoRuntime.queryInterface( XFormController.class,
             tableViewComp );
-        tableControlModel = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+        tableControlModel = UnoRuntime.queryInterface( XPropertySet.class,
             tableViewController.getCurrentControl().getModel() );
 
         // verify the properties
@@ -123,7 +123,7 @@ public class UISettings extends TestCase
 
         // close the doc
         docUI.closeSubComponents();
-        final XCloseable closeDoc = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
+        final XCloseable closeDoc = UnoRuntime.queryInterface( XCloseable.class,
             doc );
         closeDoc.close( true );
     }
