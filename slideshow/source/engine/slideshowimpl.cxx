@@ -1216,8 +1216,8 @@ sal_Bool SlideShowImpl::previousEffect() throw (uno::RuntimeException)
     {
         return maEffectRewinder.rewind(
             maScreenUpdater.createLock(false),
-            ::boost::bind<void>(&SlideShowImpl::redisplayCurrentSlide, this),
-            ::boost::bind<void>(&SlideShowImpl::rewindEffectToPreviousSlide, this));
+            ::boost::bind<void>(::boost::mem_fn(&SlideShowImpl::redisplayCurrentSlide), this),
+            ::boost::bind<void>(::boost::mem_fn(&SlideShowImpl::rewindEffectToPreviousSlide), this));
     }
 }
 
@@ -2081,7 +2081,7 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
         boost::bind<void>(
-            &presentation::XSlideShowListener::slideEnded,
+            ::boost::mem_fn(&presentation::XSlideShowListener::slideEnded),
             _1,
             sal_Bool(bReverse)));
 }
