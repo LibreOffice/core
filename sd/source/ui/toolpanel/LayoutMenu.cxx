@@ -808,7 +808,7 @@ SfxRequest LayoutMenu::CreateRequest (
 
 void LayoutMenu::Fill (void)
 {
-    const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();

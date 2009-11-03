@@ -263,7 +263,7 @@ void PaneDockingWindow::InitializeTitleToolBox (void)
     Image aImage = Image (aBitmap, Color (COL_LIGHTMAGENTA));
     Image aImageHC = Image (aBitmapHC, Color (BMP_COLOR_HIGHCONTRAST));
     mpTitleToolBox->InsertItem (1,
-        GetSettings().GetStyleSettings().GetMenuBarColor().IsDark()
+        GetSettings().GetStyleSettings().GetHighContrastMode()
         ? aImageHC
         : aImage);
     mpTitleToolBox->ShowItem (1);
