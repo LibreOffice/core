@@ -61,7 +61,7 @@ DBG_NAMEEX( ModulWindow )
 namespace utl
 {
     class SourceViewConfig;
-};
+}
 
 // #108672 Helper functions to get/set text in TextEngine
 // using the stream interface (get/setText() only supports
