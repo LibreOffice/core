@@ -45,7 +45,7 @@ public abstract class CRMBasedTestCase extends TestCase
     {
         try
         {
-            m_database = new CRMDatabase( getORB() );
+            m_database = new CRMDatabase( getORB(), false );
         }
         catch ( Exception e )
         {

@@ -145,7 +145,7 @@ public class RowSet extends ComplexTestCase
         {
             try
             {
-                final CRMDatabase database = new CRMDatabase(getFactory());
+                final CRMDatabase database = new CRMDatabase( getFactory(), false );
                 m_database = database.getDatabase();
                 m_dataSource = m_database.getDataSource();
             }

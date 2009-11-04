@@ -60,29 +60,12 @@ public class UISettings extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private CRMDatabase impl_createConnectedDatabaseDocument() throws Exception
-    {
-        final CRMDatabase database = new CRMDatabase( getORB() );
-
-        // load the document
-        String docURL = database.getDatabase().getDocumentURL();
-        XModel doc = loadDocument( docURL );
-
-        // establish the connection
-        XDatabaseDocumentUI docUI = UnoRuntime.queryInterface( XDatabaseDocumentUI.class,
-            doc.getCurrentController() );
-        docUI.connect();
-
-        return database;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
     public void checkTableFormattingPersistence() throws java.lang.Exception
     {
         // create, load, and connect a DB doc
-        CRMDatabase database = impl_createConnectedDatabaseDocument();
+        CRMDatabase database = new CRMDatabase( getORB(), true );
 
         // display a table
         XFormController tableViewController = UnoRuntime.queryInterface( XFormController.class,
@@ -134,7 +117,7 @@ public class UISettings extends TestCase
     public void checkTransparentQueryColumnSettings() throws java.lang.Exception
     {
         // create, load, and connect a DB doc
-        CRMDatabase database = impl_createConnectedDatabaseDocument();
+        CRMDatabase database = new CRMDatabase( getORB(), true );
 
         // display a table
         XController tableView = database.loadSubComponent( DatabaseObject.TABLE, "customers" );

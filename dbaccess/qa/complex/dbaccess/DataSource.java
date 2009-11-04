@@ -67,7 +67,7 @@ public class DataSource extends ComplexTestCase
         {
             if (m_database == null)
             {
-                final CRMDatabase database = new CRMDatabase(getFactory());
+                final CRMDatabase database = new CRMDatabase( getFactory(), false );
                 m_database = database.getDatabase();
                 m_dataSource = m_database.getDataSource();
             }
