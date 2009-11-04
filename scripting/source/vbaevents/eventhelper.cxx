@@ -58,6 +58,10 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
+#include <com/sun/star/awt/XFixedText.hpp> //liuchen 2009-6-5
+#include <com/sun/star/awt/XTextComponent.hpp> //liuchen 2009-6-5
+#include <com/sun/star/awt/XComboBox.hpp> //liuchen 2009-6-18
+#include <com/sun/star/awt/XRadioButton.hpp> //liuchen 2009-7-30
 
 #include <msforms/ReturnInteger.hpp>
 
@@ -90,6 +94,8 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
+#define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))//liuchen 2009-6-8
+#define GET_TYPE(x) ::getCppuType((uno::Reference< x > *)0);
 
 // Some constants
 const static rtl::OUString DELIM = rtl::OUString::createFromAscii( "::" );
@@ -254,10 +260,14 @@ Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
 
 typedef Sequence< Any > (*Translator)(const Sequence< Any >&);
 
+//liuchen 2009-6-23
+//expand the "TranslateInfo" struct to support more kinds of events
 struct TranslateInfo
 {
-    rtl::OUString sVBAName;
-    Translator toVBA;
+    rtl::OUString sVBAName; //vba event name
+    Translator toVBA;       //the method to convert OO event parameters to VBA event parameters
+    bool (*ApproveRule)(const ScriptEvent& evt, void* pPara); //this method is used to determine which types of controls should execute the event
+    void *pPara;            //Parameters for the above approve method
 };
 
 
@@ -266,6 +276,82 @@ std::list< TranslateInfo >,
 ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > EventInfoHash;
 
+//liuchen 2009-6-23
+struct TranslatePropMap
+{
+    rtl::OUString sEventInfo;   //OO event name
+    TranslateInfo aTransInfo;
+};
+
+bool ApproveAll(const ScriptEvent& evt, void* pPara); //allow all types of controls to execute the event
+bool ApproveType(const ScriptEvent& evt, void* pPara); //certain types of controls should execute the event, those types are given by pPara
+bool DenyType(const ScriptEvent& evt, void* pPara);    //certain types of controls should not execute the event, those types are given by pPara
+bool DenyMouseDrag(const ScriptEvent& evt, void* pPara); //used for VBA MouseMove event when "Shift" key is pressed
+
+struct TypeList
+{
+    uno::Type* pTypeList;
+    int nListLength;
+};
+
+Type typeXFixedText = GET_TYPE(awt::XFixedText);
+Type typeXTextComponent = GET_TYPE(awt::XTextComponent);
+Type typeXComboBox = GET_TYPE(awt::XComboBox);
+Type typeXRadioButton = GET_TYPE(awt::XRadioButton);
+
+
+TypeList fixedTextList = {&typeXFixedText, 1};
+TypeList textCompList = {&typeXTextComponent, 1};
+TypeList radioButtonList = {&typeXRadioButton, 1};
+TypeList comboBoxList = {&typeXComboBox, 1};
+
+//this array stores the OO event to VBA event translation info
+static TranslatePropMap aTranslatePropMap_Impl[] =
+{
+    // actionPerformed ooo event
+    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Click"), NULL, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },  //liuchen 2009-7-30, OptionalButton_Change event is not the same as OptionalButton_Click event
+
+    // itemStateChanged ooo event
+    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },  //liuchen, add to support VBA ComboBox_Click event
+    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } }, //liuchen 2009-7-30, OptionalButton_Change event should be triggered when the button state is changed
+
+    // changed ooo event
+    { MAP_CHAR_LEN("changed"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },
+
+    // focusGained ooo event
+    { MAP_CHAR_LEN("focusGained"), { MAP_CHAR_LEN("_GotFocus"), NULL, ApproveAll, NULL } },
+
+    // focusLost ooo event
+    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_LostFocus"), NULL, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_Exit"), NULL, ApproveType, (void*)(&textCompList) } }, //liuchen, add to support VBA TextBox_Exit event
+
+    // adjustmentValueChanged ooo event
+    { MAP_CHAR_LEN("adjustmentValueChanged"), { MAP_CHAR_LEN("_Scroll"), NULL, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("adjustmentValueChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },
+
+    // textChanged ooo event
+    { MAP_CHAR_LEN("textChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },
+
+    // keyReleased ooo event
+    { MAP_CHAR_LEN("keyReleased"), { MAP_CHAR_LEN("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
+
+    // mouseReleased ooo event
+    { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, (void*)(&fixedTextList) } }, //liuchen, add to support VBA Label_Click event
+    { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
+
+    // mousePressed ooo event
+    { MAP_CHAR_LEN("mousePressed"), { MAP_CHAR_LEN("_MouseDown"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("mousePressed"), { MAP_CHAR_LEN("_DblClick"), ooMouseEvtToVBADblClick, ApproveAll, NULL } },
+
+    // mouseMoved ooo event
+    { MAP_CHAR_LEN("mouseMoved"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("mouseDragged"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } }, //liuchen, add to support VBA MouseMove event when the "Shift" key is pressed
+
+    // keyPressed ooo event
+    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyPress"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } }
+};
 
 EventInfoHash& getEventTransInfo()
 {
@@ -273,91 +359,28 @@ EventInfoHash& getEventTransInfo()
     static EventInfoHash eventTransInfo;
     if ( !initialised )
     {
-        TranslateInfo  info;
-        // actionPerformed ooo event
-        std::list< TranslateInfo > actionInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_Click");
-        info.toVBA = NULL;
-        actionInfos.push_back( info );
-        info.sVBAName = rtl::OUString::createFromAscii("_Change");
-        info.toVBA = NULL;
-        actionInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("actionPerformed") ] = actionInfos;
-        // changed ooo event
-        std::list< TranslateInfo > changeInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_Change");
-        info.toVBA = NULL;
-        changeInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("changed") ] = changeInfos;
-        // focusGained ooo event
-        std::list< TranslateInfo > focusGainedInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_GotFocus");
-        info.toVBA = NULL;
-        focusGainedInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("focusGained") ] = focusGainedInfos;
-        // focusLost ooo event
-        std::list< TranslateInfo > focusLostInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_LostFocus");
-        info.toVBA = NULL;
-        focusLostInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("focusGained") ] = focusLostInfos;
-        // adjustmentValueChanged ooo event
-        std::list< TranslateInfo > adjustInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_Scroll");
-        info.toVBA = NULL;
-        adjustInfos.push_back( info );
-        info.sVBAName = rtl::OUString::createFromAscii("_Change");
-        info.toVBA = NULL;
-        adjustInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("adjustmentValueChanged") ] = adjustInfos;
-        // textChanged ooo event
-        std::list< TranslateInfo > txtChangedInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_Change");
-        info.toVBA = NULL;
-        txtChangedInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("textChanged") ] = txtChangedInfos;
+        rtl::OUString sEventInfo = MAP_CHAR_LEN("");
+        TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
+        int nCount = sizeof(aTranslatePropMap_Impl) / sizeof(aTranslatePropMap_Impl[0]);
 
-        // keyReleased ooo event
-        std::list< TranslateInfo > keyReleasedInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_KeyUp");
-        info.toVBA = ooKeyPressedToVBAKeyUpDown;
-        keyReleasedInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("keyReleased") ] = keyReleasedInfos;
-        // mouseReleased ooo event
-        std::list< TranslateInfo > mouseReleasedInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_MouseUp");
-        info.toVBA = ooMouseEvtToVBAMouseEvt;
-        mouseReleasedInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("mouseReleased") ] = mouseReleasedInfos;
-        // mousePressed ooo event
-        std::list< TranslateInfo > mousePressedInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_MouseDown");
-        info.toVBA = ooMouseEvtToVBAMouseEvt;
-        mousePressedInfos.push_back( info );
-        info.sVBAName = rtl::OUString::createFromAscii("_DblClick");
-        // emulate double click event
-        info.toVBA = ooMouseEvtToVBADblClick;
-        mousePressedInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("mousePressed") ] = mousePressedInfos;
-        // mouseMoved ooo event
-        std::list< TranslateInfo > mouseMovedInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_MouseMove");
-        info.toVBA = ooMouseEvtToVBAMouseEvt;
-        mouseMovedInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("mouseMoved") ] = mouseMovedInfos;
-        // keyPressed ooo event
-        std::list< TranslateInfo > keyPressedInfos;
-        info.sVBAName = rtl::OUString::createFromAscii("_KeyDown");
-        info.toVBA = ooKeyPressedToVBAKeyUpDown;
-        keyPressedInfos.push_back( info );
-        info.sVBAName = rtl::OUString::createFromAscii("_KeyPress");
-        info.toVBA = ooKeyPressedToVBAKeyPressed;
-        keyPressedInfos.push_back( info );
-        eventTransInfo[ rtl::OUString::createFromAscii("keyPressed") ] = keyPressedInfos;
+        int i = 0;
+        while (i < nCount)
+        {
+            sEventInfo = pTransProp->sEventInfo;
+            std::list< TranslateInfo > infoList;
+            do
+            {
+                infoList.push_back( pTransProp->aTransInfo );
+                pTransProp++;
+                i++;
+            }while(i < nCount && sEventInfo == pTransProp->sEventInfo);
+            eventTransInfo[sEventInfo] = infoList;
+        }
         initialised = true;
     }
     return eventTransInfo;
 }
+//liuchen 2009-6-23 end
 
 // Helper class
 
@@ -752,7 +775,68 @@ EventListener::getPropertySetInfo(  ) throw (RuntimeException)
     return xInfo;
 }
 
+//liuchen 2009-6-23
+//decide if the control should execute the event
+bool ApproveAll(const ScriptEvent&, void* )
+{
+    return true;
+}
 
+//for the given control type in evt.Arguments[0], look for if it appears in the type list in pPara
+bool FindControl(const ScriptEvent& evt, void* pPara)
+{
+    lang::EventObject aEvent;
+    evt.Arguments[ 0 ] >>= aEvent;
+    uno::Reference< uno::XInterface > xInterface( aEvent.Source, uno::UNO_QUERY );
+
+    TypeList* pTypeListInfo = static_cast<TypeList*>(pPara);
+    Type* pType = pTypeListInfo->pTypeList;
+    int nLen = pTypeListInfo->nListLength;
+
+    for (int i = 0; i < nLen; i++)
+    {
+        if ( xInterface->queryInterface( *pType ).hasValue() )
+        {
+            return true;
+        }
+        pType++;
+    }
+
+    return false;
+}
+
+//if the the given control type in evt.Arguments[0] appears in the type list in pPara, then approve the execution
+bool ApproveType(const ScriptEvent& evt, void* pPara)
+{
+    return FindControl(evt, pPara);
+}
+
+//if the the given control type in evt.Arguments[0] appears in the type list in pPara, then deny the execution
+bool DenyType(const ScriptEvent& evt, void* pPara)
+{
+    return !FindControl(evt, pPara);
+}
+
+//when mouse is moving, either the mouse button is pressed or some key is pressed can trigger the OO mouseDragged event,
+//the former should be denyed, and the latter allowed, only by doing so can the VBA MouseMove event when the "Shift" key is
+//pressed can be correctly triggered
+bool DenyMouseDrag(const ScriptEvent& evt, void* )
+{
+    awt::MouseEvent aEvent;
+    evt.Arguments[ 0 ] >>= aEvent;
+    if (aEvent.Buttons == 0 )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+
+//liuchen 2009-6-23
 // EventListener
 
 void
@@ -815,6 +899,12 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
             SbMethod* pMeth = static_cast< SbMethod* >( pModule->Find( sTemp, SbxCLASS_METHOD ) );
             if ( pMeth )
             {
+                //liuchen 2009-6-8
+                if (! txInfo->ApproveRule(evt, txInfo->pPara) )
+                {
+                    continue;
+                }
+                //liuchen 2009-6-8
                 // !! translate arguments & emulate events where necessary
                 Sequence< Any > aArguments;
                 if  ( (*txInfo).toVBA )
