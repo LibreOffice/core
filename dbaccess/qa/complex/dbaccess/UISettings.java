@@ -30,23 +30,27 @@
 package complex.dbaccess;
 
 import com.sun.star.awt.FontSlant;
-import com.sun.star.beans.PropertyValue;
+import com.sun.star.awt.TextAlign;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.form.runtime.XFormController;
-import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
+import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 
 public class UISettings extends TestCase
 {
+    private CRMDatabase m_database;
+
     // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames()
     {
         return new String[] {
-            "checkTableFormattingPersistence"
+            //"checkTableFormattingPersistence",
+            "checkTransparentQueryColumnSettings"
         };
     }
 
@@ -57,28 +61,33 @@ public class UISettings extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    /** verifies that aliases for inner queries work as expected
-     */
-    public void checkTableFormattingPersistence() throws java.lang.Exception
+    private CRMDatabase impl_createConnectedDatabaseDocument() throws Exception
     {
         final CRMDatabase database = new CRMDatabase( getORB() );
 
         // load the document
         String docURL = database.getDatabase().getDocumentURL();
-        final XComponentLoader loader = UnoRuntime.queryInterface( XComponentLoader.class,
-            getORB().createInstance( "com.sun.star.frame.Desktop" ) );
-        XModel doc = UnoRuntime.queryInterface( XModel.class,
-            loader.loadComponentFromURL( docURL, "_blank", 0, new PropertyValue[] {} ) );
+        XModel doc = loadDocument( docURL );
 
         // establish the connection
         XDatabaseDocumentUI docUI = UnoRuntime.queryInterface( XDatabaseDocumentUI.class,
             doc.getCurrentController() );
         docUI.connect();
 
-        // display the table
-        XComponent tableViewComp = docUI.loadComponent( com.sun.star.sdb.application.DatabaseObject.TABLE, "customers", false );
+        return database;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** verifies that aliases for inner queries work as expected
+     */
+    public void checkTableFormattingPersistence() throws java.lang.Exception
+    {
+        // create, load, and connect a DB doc
+        CRMDatabase database = impl_createConnectedDatabaseDocument();
+
+        // display a table
         XFormController tableViewController = UnoRuntime.queryInterface( XFormController.class,
-            tableViewComp );
+            database.loadSubComponent( DatabaseObject.TABLE, "customers" ) );
         XPropertySet tableControlModel = UnoRuntime.queryInterface( XPropertySet.class,
             tableViewController.getCurrentControl().getModel() );
 
@@ -87,12 +96,10 @@ public class UISettings extends TestCase
         tableControlModel.setPropertyValue( "FontHeight", Float.valueOf( 20 ) );
         tableControlModel.setPropertyValue( "FontSlant", FontSlant.ITALIC );
 
-        // close the table
-        docUI.closeSubComponents();
+        String docURL = database.getDatabase().getModel().getURL();
 
-        // save and close the database document
-        database.getDatabase().store();
-        database.close();
+        // save close the database document
+        database.saveAndClose();
 
         // load a copy of the document
         // normally, it should be sufficient to load the same doc. However, there might be objects in the Java VM
@@ -102,17 +109,12 @@ public class UISettings extends TestCase
         // not cleaned up, the "database model impl" - the structure holding all document data - will
         // stay alive, and subsequent requests to load the doc will just reuse it, without really loading it.
         docURL = copyToTempFile( docURL );
-        doc = UnoRuntime.queryInterface( XModel.class,
-            loader.loadComponentFromURL( docURL, "_blank", 0, new PropertyValue[] {} ) );
-
-        docUI = UnoRuntime.queryInterface( XDatabaseDocumentUI.class,
-            doc.getCurrentController() );
-        docUI.connect();
+        loadDocument( docURL );
+        database = new CRMDatabase( getORB(), docURL );
 
         // display the table, again
-        tableViewComp = docUI.loadComponent( com.sun.star.sdb.application.DatabaseObject.TABLE, "customers", false );
         tableViewController = UnoRuntime.queryInterface( XFormController.class,
-            tableViewComp );
+            database.loadSubComponent( DatabaseObject.TABLE, "customers" ) );
         tableControlModel = UnoRuntime.queryInterface( XPropertySet.class,
             tableViewController.getCurrentControl().getModel() );
 
@@ -122,9 +124,50 @@ public class UISettings extends TestCase
         assureEquals( "wrong font slant", FontSlant.ITALIC, (FontSlant)tableControlModel.getPropertyValue( "FontSlant" ) );
 
         // close the doc
-        docUI.closeSubComponents();
-        final XCloseable closeDoc = UnoRuntime.queryInterface( XCloseable.class,
-            doc );
-        closeDoc.close( true );
+        database.saveAndClose();
+    }
+
+    /**
+     * checks whether query columns use the settings of the underlying table column, if they do not (yet) have own
+     * settings
+     * @throws java.lang.Exception
+     */
+    public void checkTransparentQueryColumnSettings() throws java.lang.Exception
+    {
+        // create, load, and connect a DB doc
+        CRMDatabase database = impl_createConnectedDatabaseDocument();
+
+        // display a table
+        XController tableView = database.loadSubComponent( DatabaseObject.TABLE, "customers" );
+        XFormController tableViewController = UnoRuntime.queryInterface( XFormController.class,
+             tableView );
+        XNameAccess tableControlModel = UnoRuntime.queryInterface( XNameAccess.class,
+            tableViewController.getCurrentControl().getModel() );
+
+        // change the formatting of a table column
+        XPropertySet idColumn = UnoRuntime.queryInterface( XPropertySet.class, tableControlModel.getByName( "ID" ) );
+        assure( "precondition not met: column already centered",
+            ((Short)idColumn.getPropertyValue( "Align" )).shortValue() != TextAlign.CENTER );
+        idColumn.setPropertyValue( "Align", TextAlign.CENTER );
+
+        // close the table data view
+        XCloseable closeSubComponent = UnoRuntime.queryInterface( XCloseable.class, tableView.getFrame() );
+        closeSubComponent.close( true );
+
+        // create a query based on that column
+        database.getDatabase().getDataSource().createQuery( "q_customers", "SELECT * FROM \"customers\"" );
+
+        // load this query, and verify the table column settings was propagated to the query column
+        XFormController queryViewController = UnoRuntime.queryInterface( XFormController.class,
+            database.loadSubComponent( DatabaseObject.QUERY, "q_customers" ) );
+        tableControlModel = UnoRuntime.queryInterface( XNameAccess.class,
+            queryViewController.getCurrentControl().getModel() );
+        idColumn = UnoRuntime.queryInterface( XPropertySet.class, tableControlModel.getByName( "ID" ) );
+
+        assure( "table column alignment was not propagated to the query column",
+            ((Short)idColumn.getPropertyValue( "Align" )).shortValue() == TextAlign.CENTER );
+
+        // save close the database document
+        database.saveAndClose();
     }
 }

@@ -30,10 +30,16 @@
 package complex.dbaccess;
 
 import com.sun.star.container.ElementExistException;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
 import com.sun.star.io.IOException;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
+import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbcx.XTablesSupplier;
@@ -71,6 +77,21 @@ public class CRMDatabase
         createQueries();
     }
 
+    /**
+     * creates a CRMDatabase from an existing document, given by URL
+     * @param _orb
+     * @param _existingDocumentURL
+     * @throws Exceptio
+     */
+    public CRMDatabase( XMultiServiceFactory _orb, final String _existingDocumentURL ) throws Exception
+    {
+        m_orb = _orb;
+
+        m_database = new HsqlDatabase( m_orb, _existingDocumentURL );
+        m_dataSource = m_database.getDataSource();
+        m_connection = m_database.defaultConnection();
+    }
+
     // --------------------------------------------------------------------------------------------------------
     /** returns the database document underlying the CRM database
      */
@@ -88,10 +109,33 @@ public class CRMDatabase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void close() throws SQLException, IOException
+    public void saveAndClose() throws SQLException, IOException
     {
+        getDocumentUI().closeSubComponents();
         m_database.store();
-        m_database.close();
+        m_database.closeAndDelete();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public XDatabaseDocumentUI getDocumentUI()
+    {
+        XModel docModel = UnoRuntime.queryInterface( XModel.class, m_database.getDatabaseDocument() );
+        return UnoRuntime.queryInterface( XDatabaseDocumentUI.class, docModel.getCurrentController() );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public XController loadSubComponent( final int _objectType, final String _name ) throws IllegalArgumentException, SQLException, NoSuchElementException
+    {
+        XDatabaseDocumentUI docUI = getDocumentUI();
+        if ( !docUI.isConnected() )
+            docUI.connect();
+
+        XComponent subComponent = docUI.loadComponent( _objectType, _name, false );
+        XController controller = UnoRuntime.queryInterface( XController.class, subComponent );
+        if ( controller != null )
+            return controller;
+        XModel document = UnoRuntime.queryInterface( XModel.class, subComponent );
+        return document.getCurrentController();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -161,10 +205,8 @@ public class CRMDatabase
 
         // since we created the tables by directly executing the SQL statements, we need to refresh
         // the tables container
-        final XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
-            XTablesSupplier.class, m_connection );
-        final XRefreshable refreshTables = (XRefreshable)UnoRuntime.queryInterface(
-            XRefreshable.class, suppTables.getTables() );
+        final XTablesSupplier suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, m_connection );
+        final XRefreshable refreshTables = UnoRuntime.queryInterface( XRefreshable.class, suppTables.getTables() );
         refreshTables.refresh();
     }
 
@@ -176,9 +218,9 @@ public class CRMDatabase
         QueryDefinition unparseableQuery;
         try
         {
-            final XMultiServiceFactory factory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+            final XMultiServiceFactory factory = UnoRuntime.queryInterface(
                     XMultiServiceFactory.class, m_database.defaultConnection() );
-            composer = (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
+            composer = UnoRuntime.queryInterface(
                     XSingleSelectQueryComposer.class, factory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
             unparseableQuery = m_dataSource.getQueryDefinition( "unparseable" );
         }

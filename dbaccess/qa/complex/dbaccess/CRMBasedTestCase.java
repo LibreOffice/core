@@ -67,7 +67,7 @@ public abstract class CRMBasedTestCase extends TestCase
         try
         {
             if ( m_database != null )
-                m_database.close();
+                m_database.saveAndClose();
         }
         catch ( Exception ex )
         {
