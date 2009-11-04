@@ -1152,7 +1152,7 @@ class HTQueue
 {
 public:
     void    reserve( size_t n ) { c.reserve( n ); }
-    void    swapvec( HTVector& v) { c.swap( v); }
+    void    swapvec( HTVector& v ) { c.swap( v ); }
 };
 
 typedef std::vector<XTrapezoid> TrapezoidVector;
@@ -1221,7 +1221,7 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
     // don't bother with polygons outside of visible area
     const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
     const basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rOrigPolyPoly );
-    const bool bNeedViewClip = !aPolyRange.isInside( aViewRange );
+    const bool bNeedViewClip = aPolyRange.isInside( aViewRange );
     if( !aPolyRange.overlaps( aViewRange ) )
         return true;
 
@@ -1249,11 +1249,11 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
             continue;
 
 #ifndef DISABLE_SOLVECROSSOVER_WORKAROUND
-        aGoodPolyPoly = aClippedPolygon;
           for( int nClippedPolyIdx = 0; nClippedPolyIdx < nClippedPolyCount; ++nClippedPolyIdx )
         {
             const ::basegfx::B2DPolygon aSolvedPolygon = aClippedPolygon.getB2DPolygon( nClippedPolyIdx );
             const int nPointCount = aSolvedPolygon.count();
+            aGoodPolyPoly.append( aSolvedPolygon );
             nHTQueueReserve += aSolvedPolygon.areControlPointsUsed() ? 8 * nPointCount : nPointCount;
         }
 #else // DISABLE_SOLVECROSSOVER_WORKAROUND
@@ -1365,7 +1365,7 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
     splitIntersectingSegments( aHTVector);
 #endif // DISABLE_SOLVECROSSOVER_WORKAROUND
 
-    // build queue from vector of intersection free half-trapezoids
+    // build queue from vector of intersection-free segments
     // TODO: is replacing the priority-queue by a sorted vector worth it?
     std::make_heap( aHTVector.begin(), aHTVector.end(), HalfTrapCompare());
     HTQueue aHTQueue;
@@ -1389,26 +1389,25 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
         // get the left side of the trapezoid
         const HalfTrapezoid& rLeft = aHTQueue.top();
         aTrapezoid.top = rLeft.mnY;
-        aTrapezoid.bottom = rLeft.maLine.p2.y;
         aTrapezoid.left = rLeft.maLine;
         aHTQueue.pop();
 
-        // ignore empty trapezoids
-        if( aTrapezoid.bottom <= aTrapezoid.top )
+        // ignore left segment that would result in an empty trapezoid
+        if( aTrapezoid.left.p2.y <= aTrapezoid.top )
             continue;
 
         // get the right side of the trapezoid
+        aTrapezoid.right.p2.y = aTrapezoid.bottom;
         while( !aHTQueue.empty() ) {
             const HalfTrapezoid& rRight = aHTQueue.top();
             aTrapezoid.right = rRight.maLine;
             aHTQueue.pop();
-            // break when non-horizontal segment found
-        if( aTrapezoid.right.p2.y > aTrapezoid.right.p1.y )
+            // ignore right segment that would result in an empty trapezoid
+        if( aTrapezoid.right.p2.y > aTrapezoid.top )
                 break;
         }
-        if( aTrapezoid.right.p2.y <= aTrapezoid.top ) // TODO: assert
-            break;
 
+        // the topmost endpoint determines the trapezoid bottom
         aTrapezoid.bottom = aTrapezoid.left.p2.y;
         if( aTrapezoid.bottom > aTrapezoid.right.p2.y )
             aTrapezoid.bottom = aTrapezoid.right.p2.y;
@@ -1416,44 +1415,49 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
         // keep the full Trapezoid candidate
         aTrapVector.push_back( aTrapezoid );
 
-        // unless it splits an older trapezoid
+        // unless it splits another trapezoid that is still active
         bool bSplit = false;
-        for(;;)
+        ActiveTrapSet::iterator aActiveTrapsIt = aActiveTraps.begin();
+        for(; aActiveTrapsIt != aActiveTraps.end(); ++aActiveTrapsIt )
         {
-            // check if the new trapezoid overlaps with another active trapezoid
-            ActiveTrapSet::iterator aActiveTrapsIt
-                = aActiveTraps.upper_bound( aTrapVector.size()-1 );
-            if( aActiveTrapsIt == aActiveTraps.begin() )
-                break;
-            --aActiveTrapsIt;
-
             XTrapezoid& rLeftTrap = aTrapVector[ *aActiveTrapsIt ];
+
+            // skip until first overlap candidate
+            // TODO: use stl::*er_bound() instead
+            if( IsLeftOf( aTrapezoid.left, rLeftTrap.left) )
+                continue;
 
             // in the ActiveTrapSet there are still trapezoids where
             // a vertical overlap with new trapezoids is no longer possible
             // they could have been removed in the verticaltraps loop below
-            // but this would have been expensive and is not needed as we can
-            // simply ignore them now and remove them from the ActiveTrapSet
-            // so they won't bother us in the future
+            // but this would be expensive and is not needed as we can
+            // simply ignore them until we stumble upon them here.
             if( rLeftTrap.bottom <= aTrapezoid.top )
             {
-                aActiveTraps.erase( aActiveTrapsIt );
+                ActiveTrapSet::iterator it = aActiveTrapsIt;
+                if( aActiveTrapsIt != aActiveTraps.begin() )
+                    --aActiveTrapsIt;
+                aActiveTraps.erase( it );
                 continue;
             }
 
             // check if there is horizontal overlap
             // aTrapezoid.left==rLeftTrap.right is allowed though
             if( !IsLeftOf( aTrapezoid.left, rLeftTrap.right ) )
-                break;
+                continue;
 
-            // split the old trapezoid and keep its upper part
+            // prepare to split the old trapezoid and keep its upper part
             // find the old trapezoids entry in the VerticalTrapSet and remove it
             typedef std::pair<VerticalTrapSet::iterator, VerticalTrapSet::iterator> VTSPair;
             VTSPair aVTSPair = aVerticalTraps.equal_range( *aActiveTrapsIt );
             VerticalTrapSet::iterator aVTSit = aVTSPair.first;
-            for(; (aVTSit != aVTSPair.second) && (*aVTSit != *aActiveTrapsIt); ++aVTSit ) ;
-            if( aVTSit != aVTSPair.second )
+            for(; aVTSit != aVTSPair.second; ++aVTSit )
+            {
+                if( *aVTSit != *aActiveTrapsIt )
+                    continue;
                 aVerticalTraps.erase( aVTSit );
+                break;
+            }
             // then update the old trapezoid's bottom
             rLeftTrap.bottom = aTrapezoid.top;
             // enter the updated old trapzoid in VerticalTrapSet
@@ -1486,24 +1490,26 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
         // mark trapezoids that can no longer be split as inactive
         // and recycle their sides which were not fully resolved
         static const XFixed nMaxTop = +0x7FFFFFFF;
-        XFixed nNewTop = aHTQueue.empty() ? nMaxTop : aHTQueue.top().mnY;
+        const XFixed nNewTop = aHTQueue.empty() ? nMaxTop : aHTQueue.top().mnY;
         while( !aVerticalTraps.empty() )
         {
+            // check the next trapezoid to be retired
             const XTrapezoid& rOldTrap = aTrapVector[ *aVerticalTraps.begin() ];
             if( nNewTop < rOldTrap.bottom )
                 break;
-            // the reference Trapezoid can no longer be split
+            // this trapezoid can no longer be split
             aVerticalTraps.erase( aVerticalTraps.begin() );
 
             // recycle its sides that were not fully resolved
             HalfTrapezoid aHT;
             aHT.mnY = rOldTrap.bottom;
-            if( rOldTrap.left.p2.y > rOldTrap.bottom )
+
+            if( rOldTrap.left.p2.y > aHT.mnY )
             {
                 aHT.maLine = rOldTrap.left;
                 aHTQueue.push( aHT );
             }
-            if( rOldTrap.right.p2.y > rOldTrap.bottom )
+            if( rOldTrap.right.p2.y > aHT.mnY )
             {
                 aHT.maLine = rOldTrap.right;
                 aHTQueue.push( aHT );
@@ -1852,11 +1858,19 @@ void splitIntersectingSegments( LSVector& rLSVector)
 
     // get the segments ready to be consumed by the drawPolygon() caller
     aLSit = rLSVector.begin();
+    LSVector::iterator aLSit2 = aLSit;
     for(; aLSit != rLSVector.end(); ++aLSit) {
         LineSeg& rLS = *aLSit;
         // restore the segment top member
         rLS.mnY = rLS.maLine.p1.y;
+        // remove horizontal segments for now
+        // TODO: until the trapezoid converter is adjusted to handle them
+        if( rLS.maLine.p1.y == rLS.maLine.p2.y )
+            continue;
+        *(aLSit2++) = rLS;
     }
+    if(aLSit2 != aLSit)
+        rLSVector.resize( aLSit2 - rLSVector.begin() );
 }
 
 } // end anonymous namespace
