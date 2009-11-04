@@ -33,6 +33,7 @@
 #ifdef PRECOMPILED_HEADERS
 
 //---MARKER---
+
 #include "sal/config.h"
 #include "sal/types.h"
 
@@ -729,7 +730,7 @@
 #include "svx/editstat.hxx"
 #include "svx/editview.hxx"
 #include "svx/eeitem.hxx"
-#include "svx/escherex.hxx"
+#include "filter/msfilter/escherex.hxx"
 #include "svx/extrusionbar.hxx"
 #include "svx/extrusioncontrols.hxx"
 #include "svx/fillctrl.hxx"
@@ -764,11 +765,11 @@
 #include "svx/lboxctrl.hxx"
 #include "svx/linectrl.hxx"
 #include "svx/linkmgr.hxx"
-#include "svx/mscodec.hxx"
-#include "svx/msdffimp.hxx"
-#include "svx/msfiltertracer.hxx"
-#include "svx/msocximex.hxx"
-#include "svx/msoleexp.hxx"
+#include "filter/msfilter/mscodec.hxx"
+#include "filter/msfilter/msdffimp.hxx"
+#include "filter/msfilter/msfiltertracer.hxx"
+#include "filter/msfilter/msocximex.hxx"
+#include "filter/msfilter/msoleexp.hxx"
 #include "svx/numitem.hxx"
 #include "svx/numvset.hxx"
 #include "svx/objfac3d.hxx"
