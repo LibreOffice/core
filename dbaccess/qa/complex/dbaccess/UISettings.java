@@ -40,16 +40,15 @@ import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
+import connectivity.tools.CRMDatabase;
 
 public class UISettings extends TestCase
 {
-    private CRMDatabase m_database;
-
     // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames()
     {
         return new String[] {
-            //"checkTableFormattingPersistence",
+            "checkTableFormattingPersistence",
             "checkTransparentQueryColumnSettings"
         };
     }

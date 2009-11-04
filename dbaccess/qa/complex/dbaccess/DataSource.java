@@ -34,6 +34,7 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
 import complexlib.ComplexTestCase;
+import connectivity.tools.CRMDatabase;
 import connectivity.tools.HsqlDatabase;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -32,6 +32,7 @@ package complex.dbaccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.uno.UnoRuntime;
+import connectivity.tools.CRMDatabase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
