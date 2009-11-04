@@ -583,7 +583,7 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
         if ( pFact )
         {
             AbstractSvxMultiPathDialog* pMultiDlg =
-                pFact->CreateSvxMultiPathDialog( this, RID_SVXDLG_MULTIPATH );
+                pFact->CreateSvxMultiPathDialog( this );
             DBG_ASSERT( pMultiDlg, "Dialogdiet fail!" );
             pMultiDlg->EnableRadioButtonMode();
 

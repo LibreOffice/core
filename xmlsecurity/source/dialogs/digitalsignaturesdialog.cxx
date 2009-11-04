@@ -99,7 +99,7 @@ namespace
     };
 
 void SaveODFItem::Commit() {}
-void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
     SaveODFItem::SaveODFItem(): utl::ConfigItem(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
         "Office.Common/Save"))), m_nODF(0)

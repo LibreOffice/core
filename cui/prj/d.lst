@@ -4,4 +4,5 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
+..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 

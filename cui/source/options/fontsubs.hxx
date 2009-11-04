@@ -39,7 +39,7 @@
 namespace utl
 {
     class SourceViewConfig;
-};
+}
 
 // class SvxFontSubstCheckListBox ------------------------------------------
 
