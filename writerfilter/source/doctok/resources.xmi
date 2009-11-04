@@ -39670,6 +39670,9 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8resource"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xF617</UML:TaggedValue.dataValue>
@@ -39824,6 +39827,9 @@
         <UML:Class xmi.id="sprmTWidthAfter" name="sprmTWidthAfter">
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8resource"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
@@ -40091,6 +40097,278 @@
       </UML:TaggedValue>
     </UML:ModelElement.taggedValue>
 </UML:Class>
+<UML:Class xmi.id="sprmTCellPaddingDefault" name="sprmTCellPaddingDefault">
+<UML:ModelElement.stereotype>
+  <UML:Stereotype xmi.idref="ww8sprm"/>
+</UML:ModelElement.stereotype>
+<UML:ModelElement.stereotype>
+  <UML:Stereotype xmi.idref="ww8resource"/>
+</UML:ModelElement.stereotype>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>0xD634</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="sprmcode"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:sprmTCellPaddingDefault</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="sprmid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="kind"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+<UML:Classifier.feature>
+  <UML:Attribute name="itc">
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="comment"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="offset"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>16</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="bits"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="mask"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="shift"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:itc</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="attrid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:StructuralFeature.type>
+      <UML:DataType xmi.idref="U16"/>
+    </UML:StructuralFeature.type>
+    <UML:ModelElement.stereotype>
+      <UML:Stereotype xmi.idref="attribute"/>
+    </UML:ModelElement.stereotype>
+  </UML:Attribute>
+</UML:Classifier.feature>
+<UML:Classifier.feature>
+  <UML:Attribute name="grfbrc">
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="comment"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>4</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="offset"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>8</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="bits"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="mask"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="shift"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:grfbrc</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="attrid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:StructuralFeature.type>
+      <UML:DataType xmi.idref="U8"/>
+    </UML:StructuralFeature.type>
+    <UML:ModelElement.stereotype>
+      <UML:Stereotype xmi.idref="attribute"/>
+    </UML:ModelElement.stereotype>
+  </UML:Attribute>
+</UML:Classifier.feature>
+<UML:Classifier.feature>
+  <UML:Attribute name="ftsWidth">
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="comment"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>5</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="offset"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>8</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="bits"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="mask"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="shift"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:ftsWidth</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="attrid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:StructuralFeature.type>
+      <UML:DataType xmi.idref="U8"/>
+    </UML:StructuralFeature.type>
+    <UML:ModelElement.stereotype>
+      <UML:Stereotype xmi.idref="attribute"/>
+    </UML:ModelElement.stereotype>
+  </UML:Attribute>
+</UML:Classifier.feature>
+<UML:Classifier.feature>
+  <UML:Attribute name="wWidth">
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="comment"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>6</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="offset"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>16</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="bits"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="mask"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="shift"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:wWidth</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="attrid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:StructuralFeature.type>
+      <UML:DataType xmi.idref="U16"/>
+    </UML:StructuralFeature.type>
+    <UML:ModelElement.stereotype>
+      <UML:Stereotype xmi.idref="attribute"/>
+    </UML:ModelElement.stereotype>
+  </UML:Attribute>
+</UML:Classifier.feature>
+</UML:Class>
+<UML:Generalization isSpecification="false" xmi.id="sprmTCellPaddingDefault-Properties" >
+  <UML:Generalization.child>
+    <UML:Class xmi.idref="sprmTCellPaddingDefault" />
+  </UML:Generalization.child>
+  <UML:Generalization.parent>
+    <UML:Class xmi.idref="Properties" />
+  </UML:Generalization.parent>
+</UML:Generalization>
         <!--SPRMS-->
         <!--DFFS-->
         <!--DFF UDefProp-->
