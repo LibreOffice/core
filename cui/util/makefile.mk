@@ -36,8 +36,6 @@ TARGET=cui
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 
-USE_DEFFILE=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -49,9 +47,9 @@ LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
 SHL1TARGET= cui$(DLLPOSTFIX)
 SHL1VERSIONMAP= cui.map
 SHL1IMPLIB=icui
-
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEFNAME=	$(SHL1TARGET)
+SHL1DEPN=
+SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+DEF1NAME=       $(SHL1TARGET)
 
 SHL1LIBS=	\
             $(SLB)$/options.lib  \

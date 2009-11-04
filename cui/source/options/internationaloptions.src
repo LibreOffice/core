@@ -31,6 +31,7 @@
 #include "internationaloptions.hrc"
 #include "helpid.hrc"
 #include <cuires.hrc>
+#include <svx/dialogs.hrc>
 
 TabPage RID_OFA_TP_INTERNATIONAL
 {

@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
+#include "align.hxx" //add for SvxAlignmentTabPage
 #include "dlgfact.hxx"
 
 #include <tools/rc.hxx>
@@ -88,7 +89,6 @@
 #include "paragrph.hxx" //add for
 #include "tabstpge.hxx" // add  for
 #include "textattr.hxx" // add for SvxTextAttrPage
-#include "align.hxx" //add for SvxAlignmentTabPage
 #include "backgrnd.hxx" //add for SvxBackgroundTabPage
 #include "border.hxx" //add for SvxBorderTabPage
 #include "chardlg.hxx" //add for SvxCharNamePage,SvxCharEffectsPage,SvxCharPositionPage,SvxCharTwoLinesPage

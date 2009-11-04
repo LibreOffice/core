@@ -37,6 +37,7 @@
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include <dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 namespace offapp
 {

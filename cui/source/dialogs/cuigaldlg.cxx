@@ -55,6 +55,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
+#include <sfx2/sfxuno.hxx>
 
 #include "gallery.hrc"
 
