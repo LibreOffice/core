@@ -1635,22 +1635,42 @@ inline bool operator==( const LineSeg& r1, const LineSeg& r2)
     return true;
 }
 
-struct LSYMinCmp {
+struct LSYMinCmp
+{
     bool operator()( const LineSeg& r1, const LineSeg& r2) const
         { return r2.maLine.p1.y < r1.maLine.p1.y; }
 };
 
-struct LSYMaxCmp {
+struct LSYMaxCmp
+{
     bool operator()( const LineSeg& r1, const LineSeg& r2) const
         { return r2.maLine.p2.y < r1.maLine.p2.y; }
 };
 
-struct LSXMinCmp {
+struct LSXMinCmp
+{
     bool operator()( const LineSeg& r1, const LineSeg& r2) const
         { return( r1.getXMin() < r2.getXMin()); }
 };
 
-bool findIntersection( const LineSeg& rLS1, const LineSeg& rLS2, double pCutParams[2])
+struct CutPoint
+{
+    XFixed      mnSegmentId;
+    float       mfCutParam;
+    XPointFixed maPoint;
+};
+
+struct CutPointCmp
+{
+    bool operator()( const CutPoint& r1, const CutPoint& r2) const
+    {
+            if( r1.mnSegmentId != r2.mnSegmentId)
+                return (r1.mnSegmentId < r2.mnSegmentId);
+        return (r1.mfCutParam < r2.mfCutParam);
+    }
+};
+
+bool findIntersection( const LineSeg& rLS1, const LineSeg& rLS2, CutPoint aCutPoints[2])
 {
     // segments intersect at r1.p1 + s*(r1.p2-r1.p1) == r2.p1 + t*(r2.p2-r2.p1)
     // when both segment-parameters are ((0 <s<1) && (0<t<1))
@@ -1666,27 +1686,34 @@ bool findIntersection( const LineSeg& rLS1, const LineSeg& rLS2, double pCutPara
     static const double fEps = 1e-8;
     if( fabs(fDet) < fEps)
         return false;
-    // check if intersection on first segment
+    // check if intersecting with first segment
     const double fS1 = (double)(r2.p2.y - r2.p1.y) * (r1.p1.x - r2.p1.x);
     const double fS2 = (double)(r2.p2.x - r2.p1.x) * (r2.p1.y - r1.p1.y);
     const double fS = (fS1 + fS2) / fDet;
     if( (fS <= +fEps) || (fS >= 1-fEps))
         return false;
-    pCutParams[0] = fS;
-    // check if intersection on second segment
+    // check if intersecting with second segment
     const double fT1 = (double)(r1.p2.y - r1.p1.y) * (r1.p1.x - r2.p1.x);
     const double fT2 = (double)(r1.p2.x - r1.p1.x) * (r2.p1.y - r1.p1.y);
     const double fT = (fT1 + fT2) / fDet;
     if( (fT <= +fEps) || (fT >= 1-fEps))
         return false;
-    pCutParams[1] = fT;
+    // force the intersection point to be exactly identical on both segments
+    aCutPoints[0].maPoint.x = (XFixed)(r1.p1.x + fS * (r1.p2.x - r1.p1.x));
+    aCutPoints[0].maPoint.y = (XFixed)(r1.p1.y + fS * (r1.p2.y - r1.p1.y));
+    aCutPoints[1].maPoint.x = aCutPoints[0].maPoint.x;
+    aCutPoints[1].maPoint.y = aCutPoints[0].maPoint.y;
+    aCutPoints[0].mnSegmentId = rLS1.mnY;
+    aCutPoints[0].mfCutParam = (float)fS;
+    aCutPoints[1].mnSegmentId = rLS2.mnY;
+    aCutPoints[1].mfCutParam = (float)fT;
     return true;
 }
 
 typedef std::priority_queue< LineSeg, LSVector, LSYMinCmp> LSYMinQueueBase;
 typedef std::priority_queue< LineSeg, LSVector, LSYMaxCmp> LSYMaxQueueBase;
 typedef std::multiset< LineSeg, LSXMinCmp> LSXMinSet;
-typedef std::set<double> DoubleSet;
+typedef std::set< CutPoint, CutPointCmp> CutPointSet;
 
 class LSYMinQueue : public LSYMinQueueBase
 {
@@ -1701,47 +1728,48 @@ public:
     void    reserve( size_t n)      { c.reserve(n);}
 };
 
-void addAndCutSegment( LSVector& rLSVector, const LineSeg& rLS, DoubleSet& rCutParmSet)
+void addAndCutSegment( LSVector& rLSVector, const LineSeg& rLS, CutPointSet& rCutPointSet)
 {
     // short circuit when no segment was cut
-    if( rCutParmSet.empty()) {
+    if( rCutPointSet.empty()) {
         rLSVector.push_back( rLS);
         return;
     }
 
-    // iterate through all cutparms of this segment
+    // find the first cut point for this segment
     LineSeg aCS = rLS;
-    const double fCutMin = rLS.mnY;
-    DoubleSet::iterator itFirst = rCutParmSet.lower_bound( fCutMin);
-    DoubleSet::iterator it = itFirst;
-    for(; it != rCutParmSet.end(); ++it) {
-        const double fCutParm = (*it) - fCutMin;
-        if( fCutParm >= 1.0)
+    CutPoint aMinCutPoint;
+    aMinCutPoint.mnSegmentId = rLS.mnY;
+    aMinCutPoint.mfCutParam = 0.0;
+    CutPointSet::iterator itFirst = rCutPointSet.lower_bound( aMinCutPoint);
+    CutPointSet::iterator it = itFirst;
+    // iterate through all cut points of this segment
+    for(; it != rCutPointSet.end(); ++it) {
+        const CutPoint rCutPoint = (*it);
+        if( rCutPoint.mnSegmentId != rLS.mnY)
             break;
-        // cut segment at parameter fCutParm
-        aCS.maLine.p2.x = rLS.maLine.p1.x + (XFixed)(fCutParm * (rLS.maLine.p2.x - rLS.maLine.p1.x));
-        aCS.maLine.p2.y = rLS.maLine.p1.y + (XFixed)(fCutParm * (rLS.maLine.p2.y - rLS.maLine.p1.y));
-        if( aCS.maLine.p1.y != aCS.maLine.p2.y)
-            rLSVector.push_back( aCS);
+        // cut segment at the cutpoint
+        aCS.maLine.p2 = rCutPoint.maPoint;
+        rLSVector.push_back( aCS);
         // prepare for next segment cut
         aCS.maLine.p1 = aCS.maLine.p2;
     }
     // remove cutparams that will no longer be needed
     // TODO: is it worth it or should we just keep the cutparams?
-    rCutParmSet.erase( itFirst, it);
+    rCutPointSet.erase( itFirst, it);
 
     // add segment part remaining after last cut
     aCS.maLine.p2 = rLS.maLine.p2;
-    if( aCS.maLine.p1.y != aCS.maLine.p2.y)
-        rLSVector.push_back( aCS);
+    rLSVector.push_back( aCS);
 }
 
 void splitIntersectingSegments( LSVector& rLSVector)
 {
-    for( int i = rLSVector.size(); --i >= 0;) {
-        LineSeg& rLS = rLSVector[i];
-        // get a unique id for each lineseg, temporarily abuse the mnY member
-        rLS.mnY = i;
+    // get a unique id for each lineseg, temporarily abuse the mnY member
+    LSVector::iterator aLSit = rLSVector.begin();
+    for( int i = 0; aLSit != rLSVector.end(); ++aLSit) {
+        LineSeg& rLS = *aLSit;
+        rLS.mnY = i++;
     }
     // get an y-sorted queue from the input vector
     LSYMinQueue aYMinQueue;
@@ -1752,24 +1780,24 @@ void splitIntersectingSegments( LSVector& rLSVector)
     // try to avoid reallocations by guessing a reasonable result size
     rLSVector.reserve( aYMinQueue.size() * 1.5);
 
-    // find the intersections and record their cut-parameters
-    DoubleSet aCutParmSet;
+    // find all intersections
+    CutPointSet aCutPointSet;
     LSXMinSet aXMinSet;
     LSYMaxQueue aYMaxQueue;
     aYMaxQueue.reserve( aYMinQueue.size());
-    // sweep-down and check all segment-pairs that might intersect
+    // sweep-down and check all segment-pairs that overlap
     while( !aYMinQueue.empty()) {
         // get next input-segment
         const LineSeg& rLS = aYMinQueue.top();
         // retire obsoleted segments
-        const double fYCur = rLS.maLine.p1.y;
+        const XFixed fYCur = rLS.maLine.p1.y;
         while( !aYMaxQueue.empty()) {
             // check next segment to be retired
             const LineSeg& rOS = aYMaxQueue.top();
             if( fYCur < rOS.maLine.p2.y)
                 break;
             // emit resolved segment into result
-            addAndCutSegment( rLSVector, rOS, aCutParmSet);
+            addAndCutSegment( rLSVector, rOS, aCutPointSet);
             // find segment to be retired in xmin-compare-set
             LSXMinSet::iterator itR = aXMinSet.lower_bound( rOS);
             while( !(*itR == rOS)) ++itR;
@@ -1781,29 +1809,29 @@ void splitIntersectingSegments( LSVector& rLSVector)
 
         // iterate over all segments that might overlap
         // skip over the leftmost segments that cannot overlap
-        const double fXMax = rLS.getXMax();
+        const XFixed fXMax = rLS.getXMax();
         LSXMinSet::const_iterator itC = aXMinSet.begin();
         for(; itC != aXMinSet.end(); ++itC)
             if( (*itC).getXMin() <= fXMax)
                 break;
         // TODO: if the linear search becomes too expensive
         // then use an XMaxQueue based approach to replace it
-        const double fXMin = rLS.getXMin();
+        const XFixed fXMin = rLS.getXMin();
         for(; itC != aXMinSet.end(); ++itC) {
             const LineSeg& rOS = *itC;
             if( fXMin >= rOS.getXMax())
                 continue;
             if( fXMax < rOS.getXMin())
                 break;
-            double fCutParms[2];
-            if( !findIntersection( rLS, rOS, fCutParms))
+            CutPoint aCutPoints[2];
+            if( !findIntersection( rLS, rOS, aCutPoints))
                 continue;
             // remember cut parameters
             // TODO: std::set seems to use individual allocations
             //  which results in perf-problems for many entries
             //  => pre-allocate nodes by using a non-default allocator
-            aCutParmSet.insert( rLS.mnY + fCutParms[0]);
-            aCutParmSet.insert( rOS.mnY + fCutParms[1]);
+            aCutPointSet.insert( aCutPoints[0]);
+            aCutPointSet.insert( aCutPoints[1]);
         }
         // add segment to xmin-compare-set
          // TODO: do we have a good insertion hint?
@@ -1818,20 +1846,15 @@ void splitIntersectingSegments( LSVector& rLSVector)
     while( !aYMaxQueue.empty()) {
         // emit segments and cut them up if needed
         const LineSeg& rLS = aYMaxQueue.top();
-        addAndCutSegment( rLSVector, rLS, aCutParmSet);
+        addAndCutSegment( rLSVector, rLS, aCutPointSet);
         aYMaxQueue.pop();
     }
 
     // get the segments ready to be consumed by the drawPolygon() caller
-    LSVector::iterator aLSit = rLSVector.begin();
+    aLSit = rLSVector.begin();
     for(; aLSit != rLSVector.end(); ++aLSit) {
         LineSeg& rLS = *aLSit;
-        // prevent integer rounding problems in LSBs
-        rLS.maLine.p1.x = (rLS.maLine.p1.x + 32) & ~63;
-        rLS.maLine.p1.y = (rLS.maLine.p1.y + 32) & ~63;
-        rLS.maLine.p2.x = (rLS.maLine.p2.x + 32) & ~63;
-        rLS.maLine.p2.y = (rLS.maLine.p2.y + 32) & ~63;
-        // reset each mnY to y-top of the segment
+        // restore the segment top member
         rLS.mnY = rLS.maLine.p1.y;
     }
 }
