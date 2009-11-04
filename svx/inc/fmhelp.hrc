@@ -38,81 +38,62 @@
 //#define HID_FORMS_END                 (HID_LIB_START+4999)
 
 // Help-Ids --------------------------------------------------------------
-
-// insgesamt 200
+/*
 #define HID_DLG_DBINFO                          (HID_FORMS_START +   0)
-#define HID_DLG_DBMSG                           (HID_FORMS_START +   1)
-
+#define HID_FM_DLG_PARAM                        (HID_FORM_DLG_START +  27)
+#define HID_SEARCH_SINGLEFIELD                  (HID_FORM_DLG_START +  12)
+#define HID_TP_XFORMS_BINDING                   (HID_FM_OTHER_START +  47)
+#define HID_TP_XFORMS_INSTANCE                  (HID_FM_OTHER_START +  45)
+#define HID_TP_XFORMS_SUBMISSION                (HID_FM_OTHER_START +  46)
+*/
+// insgesamt 200
 #define HID_FM_OTHER_START                      (HID_FORMS_START + 300)
-#define HID_FORM_NAVIGATOR                      (HID_FM_OTHER_START +  0)
-#define HID_FORM_NAVIGATOR_WIN                  (HID_FM_OTHER_START +  1)
+#define HID_CONTROLS_DATE_N_TIME                (HID_FORM_DLG_START +  26)
+#define HID_DATA_NAVIGATOR_WIN                  (HID_FM_OTHER_START +  39)
+#define HID_DLG_DBMSG                           (HID_FORMS_START +   1)
 #define HID_FIELD_SEL                           (HID_FM_OTHER_START +  2)
 #define HID_FIELD_SEL_WIN                       (HID_FM_OTHER_START +  3)
 #define HID_FILTER_NAVIGATOR                    (HID_FM_OTHER_START +  4)
 #define HID_FILTER_NAVIGATOR_WIN                (HID_FM_OTHER_START +  5)
-
 #define HID_FORM_DLG_START                      (HID_FORMS_START + 400)
-// FREE
-// FREE
-// FREE
-#define HID_FM_PROPDLG_WINDOW                   (HID_FORM_DLG_START +   3)
-#define HID_FM_PROPDLG_CONTAINER                (HID_FORM_DLG_START +   4)
-#define HID_FM_PROPDLG_TABCTR                   (HID_FORM_DLG_START +   5)
-#define HID_FM_PROPDLG_TAB_GENERAL              (HID_FORM_DLG_START +   6)
-#define HID_FM_PROPDLG_TAB_DATA                 (HID_FORM_DLG_START +   7)
-#define HID_FM_PROPDLG_TAB_EVT                  (HID_FORM_DLG_START +   8)
-
-#define HID_SEARCH_SINGLEFIELD                  (HID_FORM_DLG_START +  12)
-
-#define HID_TABORDER_CONTROLS                   (HID_FORM_DLG_START +  25)
-
-#define HID_CONTROLS_DATE_N_TIME                (HID_FORM_DLG_START +  26)
-#define HID_FM_DLG_PARAM                        (HID_FORM_DLG_START +  27)
-
+#define HID_FORM_NAVIGATOR                      (HID_FM_OTHER_START +  0)
+#define HID_FORM_NAVIGATOR_WIN                  (HID_FM_OTHER_START +  1)
+#define HID_GRID_NUMBEROFRECORDS                (HID_FORM_DLG_START +  34)
+#define HID_GRID_TRAVEL_ABSOLUTE                (HID_FORM_DLG_START +  33)
 #define HID_GRID_TRAVEL_FIRST                   (HID_FORM_DLG_START +  28)
-#define HID_GRID_TRAVEL_PREV                    (HID_FORM_DLG_START +  29)
-#define HID_GRID_TRAVEL_NEXT                    (HID_FORM_DLG_START +  30)
 #define HID_GRID_TRAVEL_LAST                    (HID_FORM_DLG_START +  31)
 #define HID_GRID_TRAVEL_NEW                     (HID_FORM_DLG_START +  32)
-#define HID_GRID_TRAVEL_ABSOLUTE                (HID_FORM_DLG_START +  33)
-#define HID_GRID_NUMBEROFRECORDS                (HID_FORM_DLG_START +  34)
-
-#define UID_FORMPROPBROWSER_FRAME               (HID_FORM_DLG_START +  37)
-#define UID_ABSOLUTE_RECORD_WINDOW              (HID_FORM_DLG_START +  38)
-
-#define HID_DATA_NAVIGATOR_WIN                  (HID_FM_OTHER_START +  39)
-#define HID_XFORMS_ADDDATAITEM_DLG              (HID_FM_OTHER_START +  40)
-#define HID_XFORMS_ADDCONDITION_DLG             (HID_FM_OTHER_START +  41)
-#define HID_XFORMS_NAMESPACEITEM_DLG            (HID_FM_OTHER_START +  42)
-#define HID_XFORMS_NAMESPACEITEM_LIST           (HID_FM_OTHER_START +  43)
-#define HID_XFORMS_MANAGENAMESPACE_DLG          (HID_FM_OTHER_START +  44)
-
-#define HID_TP_XFORMS_INSTANCE                  (HID_FM_OTHER_START +  45)
-#define HID_TP_XFORMS_SUBMISSION                (HID_FM_OTHER_START +  46)
-#define HID_TP_XFORMS_BINDING                   (HID_FM_OTHER_START +  47)
-
-#define HID_MN_XFORMS_MODELS_ADD                (HID_FM_OTHER_START +  48)
-#define HID_MN_XFORMS_MODELS_EDIT               (HID_FM_OTHER_START +  49)
-#define HID_MN_XFORMS_MODELS_REMOVE             (HID_FM_OTHER_START +  50)
+#define HID_GRID_TRAVEL_NEXT                    (HID_FORM_DLG_START +  30)
+#define HID_GRID_TRAVEL_PREV                    (HID_FORM_DLG_START +  29)
 #define HID_MN_XFORMS_INSTANCES_ADD             (HID_FM_OTHER_START +  51)
 #define HID_MN_XFORMS_INSTANCES_EDIT            (HID_FM_OTHER_START +  52)
 #define HID_MN_XFORMS_INSTANCES_REMOVE          (HID_FM_OTHER_START +  53)
+#define HID_MN_XFORMS_MODELS_ADD                (HID_FM_OTHER_START +  48)
+#define HID_MN_XFORMS_MODELS_EDIT               (HID_FM_OTHER_START +  49)
+#define HID_MN_XFORMS_MODELS_REMOVE             (HID_FM_OTHER_START +  50)
 #define HID_MN_XFORMS_SHOW_DETAILS              (HID_FM_OTHER_START +  54)
-#define HID_XFORMS_TOOLBOX                      (HID_FM_OTHER_START +  55)
-#define HID_XFORMS_TOOLBOX_ITEM_ADD             (HID_FM_OTHER_START +  56)
-#define HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT     (HID_FM_OTHER_START +  57)
-#define HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE   (HID_FM_OTHER_START +  58)
-#define HID_XFORMS_TOOLBOX_ITEM_EDIT            (HID_FM_OTHER_START +  59)
-#define HID_XFORMS_TOOLBOX_ITEM_REMOVE          (HID_FM_OTHER_START +  60)
+#define HID_XFORMS_ADDCONDITION_DLG             (HID_FM_OTHER_START +  41)
+#define HID_XFORMS_ADDDATAITEM_DLG              (HID_FM_OTHER_START +  40)
+#define HID_XFORMS_ADDINSTANCE_DLG              (HID_FM_OTHER_START +  67)
+#define HID_XFORMS_ADDMODEL_DLG                 (HID_FM_OTHER_START +  66)
+#define HID_XFORMS_ADDSUBMISSION_DLG            (HID_FM_OTHER_START +  65)
+#define HID_XFORMS_INSTANCES_MENUBTN            (HID_FM_OTHER_START +  64)
 #define HID_XFORMS_ITEMS_LIST                   (HID_FM_OTHER_START +  61)
+#define HID_XFORMS_MANAGENAMESPACE_DLG          (HID_FM_OTHER_START +  44)
+#define HID_XFORMS_MID_INSERT_CONTROL           (HID_FM_OTHER_START +  68)
 #define HID_XFORMS_MODELS_LIST                  (HID_FM_OTHER_START +  62)
 #define HID_XFORMS_MODELS_MENUBTN               (HID_FM_OTHER_START +  63)
-#define HID_XFORMS_INSTANCES_MENUBTN            (HID_FM_OTHER_START +  64)
-#define HID_XFORMS_ADDSUBMISSION_DLG            (HID_FM_OTHER_START +  65)
-#define HID_XFORMS_ADDMODEL_DLG                 (HID_FM_OTHER_START +  66)
-#define HID_XFORMS_ADDINSTANCE_DLG              (HID_FM_OTHER_START +  67)
-#define HID_XFORMS_MID_INSERT_CONTROL           (HID_FM_OTHER_START +  68)
+#define HID_XFORMS_NAMESPACEITEM_DLG            (HID_FM_OTHER_START +  42)
+#define HID_XFORMS_NAMESPACEITEM_LIST           (HID_FM_OTHER_START +  43)
 #define HID_XFORMS_TAB_CONTROL                  (HID_FM_OTHER_START +  69)
+#define HID_XFORMS_TOOLBOX                      (HID_FM_OTHER_START +  55)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD             (HID_FM_OTHER_START +  56)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE   (HID_FM_OTHER_START +  58)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT     (HID_FM_OTHER_START +  57)
+#define HID_XFORMS_TOOLBOX_ITEM_EDIT            (HID_FM_OTHER_START +  59)
+#define HID_XFORMS_TOOLBOX_ITEM_REMOVE          (HID_FM_OTHER_START +  60)
+#define UID_ABSOLUTE_RECORD_WINDOW              (HID_FORM_DLG_START +  38)
+#define UID_FORMPROPBROWSER_FRAME               (HID_FORM_DLG_START +  37)
 
 // if you add a new define here, please adjust the overflow check
 // at the end of the file!!
