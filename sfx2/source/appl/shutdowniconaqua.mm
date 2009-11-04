@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "svtools/moduleoptions.hxx"
-#include "svtools/dynamicmenuoptions.hxx"
-#include "svtools/historyoptions.hxx"
+#include "unotools/moduleoptions.hxx"
+#include "unotools/dynamicmenuoptions.hxx"
+#include "unotools/historyoptions.hxx"
 #include "tools/urlobj.hxx"
 #include "osl/file.h"
 #include "comphelper/sequenceashashmap.hxx"

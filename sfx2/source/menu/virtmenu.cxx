@@ -284,7 +284,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_DTOR(SfxVirtualMenu, 0);
 
     DELETEZ( pImageControl );
-    SvtMenuOptions().RemoveListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    SvtMenuOptions().RemoveListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     if ( bIsActive )
     {
@@ -400,7 +400,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     const int bOleServer = FALSE;
     const int bMac = FALSE;
     SvtMenuOptions aOptions;
-    aOptions.AddListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    aOptions.AddListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;

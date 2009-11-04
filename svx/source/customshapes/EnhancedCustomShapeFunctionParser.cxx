@@ -38,6 +38,7 @@
 // we're synchronized externally.
 // But watch out, the parser might have
 // state not visible to this code!
+
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
 #if defined(VERBOSE) && defined(DBG_UTIL)
 #include <typeinfo>
@@ -1000,6 +1001,7 @@ template< typename T > struct custom_real_parser_policies : public ::boost::spir
                                                    ( '-' multiplicative_expression )* )
 
     */
+
 class ExpressionGrammar : public ::boost::spirit::grammar< ExpressionGrammar >
 {
 public:
@@ -1161,6 +1163,8 @@ const ParserContextSharedPtr& getParserContext()
 
 namespace EnhancedCustomShape  {
 
+
+
 ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
 {
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
@@ -1191,6 +1195,8 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& rF
                                     ::boost::spirit::space_p ) );
     OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
 
+
+
     // input fully congested by the parser?
     if( !aParseInfo.full )
         throw ParseError( "EnhancedCustomShapeFunctionParser::parseFunction(): string not fully parseable" );
@@ -1200,7 +1206,10 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& rF
     if( pContext->maOperandStack.size() != 1 )
         throw ParseError( "EnhancedCustomShapeFunctionParser::parseFunction(): incomplete or empty expression" );
 
+
     return pContext->maOperandStack.top();
 }
 
+
 }
+
