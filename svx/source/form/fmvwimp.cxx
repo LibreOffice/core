@@ -39,7 +39,7 @@
 #include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmundo.hxx"
 #include "fmvwimp.hxx"
 #include "formcontrolfactory.hxx"

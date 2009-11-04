@@ -40,9 +40,9 @@
 #include <sfx2/docfile.hxx>
 #include "gallery.hxx"
 #include "gallery.hrc"
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "galtheme.hxx"
-#include "gallery1.hxx"
+#include "svx/gallery1.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 

@@ -48,7 +48,7 @@
 #include <svx/fmview.hxx>
 #include <svx/fmpage.hxx>
 #include "gallery.hrc"
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "galobj.hxx"
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>

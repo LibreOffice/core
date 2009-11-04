@@ -57,7 +57,7 @@
 #include <svx/fmview.hxx>
 
 #include "fmexch.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 
 class SdrObjListIter;
 class FmFormShell;

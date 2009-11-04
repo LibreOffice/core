@@ -30,7 +30,7 @@
 #ifndef _SVX_FMCTRLER_HXX
 #define _SVX_FMCTRLER_HXX
 
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "formcontrolling.hxx"
 #include "sqlparserclient.hxx"
 #include "delayedevent.hxx"

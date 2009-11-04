@@ -37,9 +37,9 @@
 #include <ucbhelper/content.hxx>
 #include <sfx2/app.hxx>
 #include "helpid.hrc"
-#include "gallery1.hxx"
+#include "svx/gallery1.hxx"
 #include "galtheme.hxx"
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "galbrws1.hxx"
 #include <com/sun/star/util/DateTime.hpp>
 #include "gallery.hrc"

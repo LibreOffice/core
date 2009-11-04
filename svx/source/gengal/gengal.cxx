@@ -71,7 +71,7 @@
 #include <rtl/bootstrap.hxx>
 
 #include <galtheme.hxx>
-#include <gallery1.hxx>
+#include <svx/gallery1.hxx>
 
 using namespace ::vos;
 using namespace ::com::sun::star::uno;

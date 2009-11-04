@@ -34,7 +34,7 @@
 
 #include "fmprop.hrc"
 #include "fmresids.hrc"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "gridcell.hxx"
 #include "gridcols.hxx"
 #include "sdbdatacolumn.hxx"

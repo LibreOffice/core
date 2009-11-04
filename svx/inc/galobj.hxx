@@ -33,7 +33,7 @@
 
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 
 // -----------
 // - Defines -

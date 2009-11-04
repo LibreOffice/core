@@ -49,7 +49,7 @@
 #include <vcl/metaact.hxx>
 #include <tools/zcodec.hxx>
 
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include "xmlgrhlp.hxx"
 
 #include <algorithm>

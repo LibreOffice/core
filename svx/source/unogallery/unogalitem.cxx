@@ -34,7 +34,7 @@
 #include "unogalitem.hxx"
 #include "unogaltheme.hxx"
 #include "galtheme.hxx"
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include <svx/fmmodel.hxx>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>

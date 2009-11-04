@@ -40,7 +40,7 @@
 #include <svtools/rtftoken.h>
 #include <svtools/filter.hxx>
 
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include "svxrtf.hxx"
 
 

@@ -38,7 +38,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <xlinjoit.hxx>
+#include <svx/xlinjoit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>

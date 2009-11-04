@@ -47,7 +47,7 @@
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include <svx/fmpage.hxx>
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"

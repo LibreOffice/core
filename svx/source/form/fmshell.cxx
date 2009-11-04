@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 #include "fmvwimp.hxx"
 #include <svx/fmshell.hxx>
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"

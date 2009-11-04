@@ -34,7 +34,7 @@
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmsrccfg.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

@@ -38,7 +38,7 @@
 #include <com/sun/star/form/XForm.hpp>
 
 //#ifndef _SVX_FMTOOLS_HXX
-//#include "fmtools.hxx"
+//#include "svx/fmtools.hxx"
 //#endif
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>

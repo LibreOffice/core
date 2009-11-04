@@ -58,7 +58,7 @@
 #include <svx/dialogs.hrc>
 #include "xoutbmp.hxx"
 #include "opengrf.hxx"
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 
 namespace css = ::com::sun::star;
 

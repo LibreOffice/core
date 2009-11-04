@@ -67,7 +67,7 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <sfx2/mnuitem.hxx>
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmsrccfg.hxx"
 #include <osl/mutex.hxx>
 #include <vos/thread.hxx>

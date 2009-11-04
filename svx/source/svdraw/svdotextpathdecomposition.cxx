@@ -63,7 +63,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <xlinjoit.hxx>
+#include <svx/xlinjoit.hxx>
 #include <svx/xlndsit.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>

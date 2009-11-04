@@ -35,7 +35,7 @@
 #include "fmurl.hxx"
 #include <svx/svxids.hrc>
 #include "fmprop.hrc"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/form/runtime/FormOperations.hpp>

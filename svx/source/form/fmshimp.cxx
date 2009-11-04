@@ -48,7 +48,7 @@
 #include "svditer.hxx"
 #include "fmservs.hxx"
 #include "fmpgeimp.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif

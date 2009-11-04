@@ -24,11 +24,11 @@ mkdir: %_DEST%\inc%_EXT%\svx
 
 ..\source\inc\fmsrccfg.hxx %_DEST%\inc%_EXT%\svx\fmsrccfg.hxx
 ..\source\inc\fmsrcimp.hxx %_DEST%\inc%_EXT%\svx\fmsrcimp.hxx
-..\source\inc\fmtools.hxx %_DEST%\inc%_EXT%\svx\fmtools.hxx
 ..\inc\galtheme.hxx %_DEST%\inc%_EXT%\svx\galtheme.hxx
-..\inc\galmisc.hxx %_DEST%\inc%_EXT%\svx\galmisc.hxx
 ..\inc\galctrl.hxx %_DEST%\inc%_EXT%\svx\galctrl.hxx
-..\inc\gallery1.hxx %_DEST%\inc%_EXT%\svx\gallery1.hxx
+..\inc\svx\galmisc.hxx %_DEST%\inc%_EXT%\svx\galmisc.hxx
+..\inc\svx\gallery1.hxx %_DEST%\inc%_EXT%\svx\gallery1.hxx
+..\inc\svx\fmtools.hxx %_DEST%\inc%_EXT%\svx\fmtools.hxx
 
 ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx
 ..\%__SRC%\inc\svxslots.hxx %_DEST%\inc%_EXT%\svx\svxslots.hxx
@@ -88,7 +88,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\htmlmode.hxx %_DEST%\inc%_EXT%\svx\htmlmode.hxx
 ..\inc\hyperdlg.hxx %_DEST%\inc%_EXT%\svx\hyperdlg.hxx
 ..\inc\imapdlg.hxx %_DEST%\inc%_EXT%\svx\imapdlg.hxx
-..\inc\impgrf.hxx %_DEST%\inc%_EXT%\svx\impgrf.hxx
 ..\inc\opengrf.hxx %_DEST%\inc%_EXT%\svx\opengrf.hxx
 ..\inc\insctrl.hxx %_DEST%\inc%_EXT%\svx\insctrl.hxx
 ..\inc\layctrl.hxx %_DEST%\inc%_EXT%\svx\layctrl.hxx
@@ -159,7 +158,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\verttexttbxctrl.hxx %_DEST%\inc%_EXT%\svx\verttexttbxctrl.hxx
 ..\inc\wrapfield.hxx %_DEST%\inc%_EXT%\svx\wrapfield.hxx
 ..\inc\xexch.hxx %_DEST%\inc%_EXT%\svx\xexch.hxx
-..\inc\xlinjoit.hxx %_DEST%\inc%_EXT%\svx\xlinjoit.hxx
 ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svx\xmlcnitm.hxx
 ..\inc\xmleohlp.hxx %_DEST%\inc%_EXT%\svx\xmleohlp.hxx
 ..\inc\xmlexchg.hxx %_DEST%\inc%_EXT%\svx\xmlexchg.hxx
@@ -170,6 +168,8 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\zoom_def.hxx %_DEST%\inc%_EXT%\svx\zoom_def.hxx
 ..\inc\zoomctrl.hxx %_DEST%\inc%_EXT%\svx\zoomctrl.hxx
 
+..\inc\svx\xlinjoit.hxx %_DEST%\inc%_EXT%\svx\xlinjoit.hxx
+..\inc\svx\impgrf.hxx %_DEST%\inc%_EXT%\svx\impgrf.hxx
 ..\inc\svx\dstribut_enum.hxx %_DEST%\inc%_EXT%\svx\dstribut_enum.hxx
 ..\inc\svx\svdfield.hxx %_DEST%\inc%_EXT%\svx\svdfield.hxx
 ..\inc\svx\svxitems.hrc %_DEST%\inc%_EXT%\svx\svxitems.hrc

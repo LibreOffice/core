@@ -85,7 +85,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include <svtools/chartprettypainter.hxx>
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>

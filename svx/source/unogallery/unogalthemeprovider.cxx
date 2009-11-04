@@ -33,7 +33,7 @@
 
 #include "unogalthemeprovider.hxx"
 #include "unogaltheme.hxx"
-#include "gallery1.hxx"
+#include "svx/gallery1.hxx"
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
 #ifndef _SV_SVAPP_HXX_

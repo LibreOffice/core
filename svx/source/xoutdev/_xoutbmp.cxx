@@ -41,7 +41,7 @@
 #include <svl/solar.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include "xoutbmp.hxx"
 #include <svtools/FilterConfigItem.hxx>
 

@@ -36,8 +36,8 @@
 #include "unogaltheme.hxx"
 #include "unogalitem.hxx"
 #include "galtheme.hxx"
-#include "gallery1.hxx"
-#include "galmisc.hxx"
+#include "svx/gallery1.hxx"
+#include "svx/galmisc.hxx"
 #include <svx/fmmodel.hxx>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>

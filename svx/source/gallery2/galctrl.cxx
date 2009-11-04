@@ -38,7 +38,7 @@
 #include "helpid.hrc"
 #include "galbrws2.hxx"
 #include "galtheme.hxx"
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "galctrl.hxx"
 #include "AccessibleStringWrap.hxx"
 #include <svx/svxfont.hxx>

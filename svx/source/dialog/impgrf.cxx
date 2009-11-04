@@ -55,7 +55,7 @@ using namespace com::sun::star::uno;
 #include "impgrf.hrc"
 
 #define _SVX_IMPGRF_CXX
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 
 #include <svx/dialmgr.hxx>
 #include "svxerr.hxx"

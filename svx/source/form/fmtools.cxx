@@ -36,7 +36,7 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "svx/dbtoolsclient.hxx"
 #include "fmservs.hxx"
 #include <svx/fmglob.hxx>

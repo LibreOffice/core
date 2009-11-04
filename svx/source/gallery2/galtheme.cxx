@@ -54,7 +54,7 @@
 #include <svx/unomodel.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "galtheme.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>

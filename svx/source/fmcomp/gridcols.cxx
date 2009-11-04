@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/types.hxx>
 #include "fmservs.hxx"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 
 //------------------------------------------------------------------------------
 const ::comphelper::StringSequence& getColumnTypes()

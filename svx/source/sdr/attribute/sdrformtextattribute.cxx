@@ -52,7 +52,7 @@
 #include <svx/sdshcitm.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <xlinjoit.hxx>
+#include <svx/xlinjoit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xlndsit.hxx>

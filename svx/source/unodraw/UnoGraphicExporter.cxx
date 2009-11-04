@@ -69,7 +69,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include "xoutbmp.hxx"
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include "unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>

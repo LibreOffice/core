@@ -58,7 +58,7 @@
 #include <svx/svdpagv.hxx>
 #include "svdviter.hxx"
 #include <svx/svdview.hxx>
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xbitmap.hxx>

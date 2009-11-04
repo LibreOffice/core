@@ -45,7 +45,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xflhtit.hxx>
 #include "unoapi.hxx"
-#include "impgrf.hxx"
+#include "svx/impgrf.hxx"
 #include <svx/unomid.hxx>
 #include <svx/unoprnms.hxx>
 #include "unofill.hxx"
