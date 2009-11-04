@@ -83,7 +83,7 @@ CalcConfigItem::~CalcConfigItem()
 }
 
 void CalcConfigItem::Commit() {}
-void CalcConfigItem::Notify( const uno::Sequence<rtl::OUString>& aPropertyNames) {}
+void CalcConfigItem::Notify( const uno::Sequence<rtl::OUString>& ) {}
 
 FieldUnit CalcConfigItem::getFieldUnit()
 {
