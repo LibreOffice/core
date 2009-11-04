@@ -341,6 +341,11 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnSaveToFailed",     XML_NAMESPACE_OFFICE, "save-to-failed" },
     { "OnSubComponentOpened",   XML_NAMESPACE_OFFICE, "subcomponent-opened" },
     { "OnSubComponentClosed",   XML_NAMESPACE_OFFICE, "subcomponent-closed" },
+    { "OnStorageChanged",       XML_NAMESPACE_OFFICE, "storage-changed" },
+    { "OnMailMergeFinished",    XML_NAMESPACE_OFFICE, "mail-merge-finished" },
+    { "OnFieldMerge",           XML_NAMESPACE_OFFICE, "field-merge" },
+    { "OnFieldMergeFinished",   XML_NAMESPACE_OFFICE, "field-merge-finished" },
+    { "OnLayoutFinished",       XML_NAMESPACE_OFFICE, "layout-finished" },
 
     { NULL, 0, 0 }
 };
