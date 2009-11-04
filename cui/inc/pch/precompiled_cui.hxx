@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): Generated on 2006-09-01 17:50:08.279739
-
+#if 0
 #ifdef PRECOMPILED_HEADERS
 //---MARKER---
 #include "sal/config.h"
@@ -965,4 +965,4 @@
 #include "xmlscript/xmldlg_imexp.hxx"
 //---MARKER---
 #endif
-
+#endif
