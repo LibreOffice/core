@@ -206,7 +206,6 @@ void SfxApplication::Deinitialize()
 #ifdef DBG_UTIL
     DELETEX(pAppData_Impl->pSlotPool);
     DELETEX(pAppData_Impl->pEventConfig);
-    DELETEX(pAppData_Impl->pMiscConfig);
     SfxMacroConfig::Release_Impl();
     DELETEX(pAppData_Impl->pFactArr);
     DELETEX(pAppData_Impl->pInitLinkList);
