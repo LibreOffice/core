@@ -2427,6 +2427,8 @@ void ChartView::createShapes()
     {
         // /--
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        // #i12587# support for shapes in chart
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( FALSE );
         m_pDrawModelWrapper->clearMainDrawPage();
         // \--
     }
@@ -2577,6 +2579,13 @@ void ChartView::createShapes()
 
         //cleanup: remove all empty group shapes to avoid grey border lines:
         lcl_removeEmptyGroupShapes( xPageShapes );
+    }
+
+    // #i12587# support for shapes in chart
+    if ( m_pDrawModelWrapper )
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( TRUE );
     }
 
 #if OSL_DEBUG_LEVEL > 0

@@ -63,6 +63,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 
 #include <map>
 #include <algorithm>
@@ -215,6 +216,43 @@ ChartModel::~ChartModel()
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
             (static_cast< util::XCloseListener*>(aIt.next()))->notifyClosing( aEvent );
+    }
+}
+
+void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aVisualAreaSize )
+{
+    uno::Reference< beans::XPropertySet > xProperties( static_cast< ::cppu::OWeakObject* >( this ), uno::UNO_QUERY );
+    if ( xProperties.is() )
+    {
+        uno::Reference< drawing::XShapes > xShapes;
+        xProperties->getPropertyValue( C2U( "AdditionalShapes" ) ) >>= xShapes;
+        if ( xShapes.is() )
+        {
+            sal_Int32 nCount = xShapes->getCount();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
+            {
+                Reference< drawing::XShape > xShape;
+                if ( xShapes->getByIndex( i ) >>= xShape )
+                {
+                    if ( xShape.is() )
+                    {
+                        awt::Point aPos( xShape->getPosition() );
+                        awt::Size aSize( xShape->getSize() );
+
+                        double fWidth = static_cast< double >( aVisualAreaSize.Width ) / m_aVisualAreaSize.Width;
+                        double fHeight = static_cast< double >( aVisualAreaSize.Height ) / m_aVisualAreaSize.Height;
+
+                        aPos.X = static_cast< long >( aPos.X * fWidth );
+                        aPos.Y = static_cast< long >( aPos.Y * fHeight );
+                        aSize.Width = static_cast< long >( aSize.Width * fWidth );
+                        aSize.Height = static_cast< long >( aSize.Height * fHeight );
+
+                        xShape->setPosition( aPos );
+                        xShape->setSize( aSize );
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -911,6 +949,13 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
         bool bChanged =
             (m_aVisualAreaSize.Width != aSize.Width ||
              m_aVisualAreaSize.Height != aSize.Height);
+
+        // #i12587# support for shapes in chart
+        if ( bChanged )
+        {
+            impl_adjustAdditionalShapesPositionAndSize( aSize );
+        }
+
         m_aVisualAreaSize = aSize;
         if( bChanged )
             setModified( sal_True );

@@ -196,6 +196,9 @@ private:
         impl_createFilter( const ::com::sun::star::uno::Sequence<
                       ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
 
+    void impl_adjustAdditionalShapesPositionAndSize(
+        const ::com::sun::star::awt::Size& aVisualAreaSize );
+
 public:
     //no default constructor
     ChartModel(::com::sun::star::uno::Reference<
