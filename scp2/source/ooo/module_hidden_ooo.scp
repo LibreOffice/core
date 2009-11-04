@@ -361,6 +361,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Ucbhelper,
 	gid_File_Lib_Ucpchelp1,
 	gid_File_Lib_Ucpdav1,
+	gid_File_Lib_Neon,
 	gid_File_Lib_Ucpfile1,
 	gid_File_Lib_Ucpftp1,
 	gid_File_Lib_Ucphier1,

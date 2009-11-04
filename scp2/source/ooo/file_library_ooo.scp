@@ -1410,20 +1410,6 @@ End
 
 #ifdef WNT
 
-File gid_File_Lib_OOoFilt
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "ooofilt.dll";
-End
-
-File gid_File_Lib_OOoFiltProxy
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "ooofiltproxy.dll";
-End
-
 File gid_File_Lib_Instooofiltmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
@@ -1560,7 +1546,8 @@ File gid_File_Lib_Ucpchelp1
 End
 
 #ifndef DISABLE_NEON
-SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpdav1,ucpdav1)
+SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
+SPECIAL_LIB_FILE(gid_File_Lib_Neon,neon)
 #endif
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpfile1,ucpfile1)

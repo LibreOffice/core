@@ -35,6 +35,20 @@ Directory gid_Dir_Shlxthdl
     DosName = "shlxthdl";
 End
 
+File gid_File_Lib_OOoFilt
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "ooofilt.dll";
+End
+
+File gid_File_Lib_OOoFiltProxy
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "ooofiltproxy.dll";
+End
+
 File gid_File_Lib_Shlxthdl
     TXT_FILE_BODY;
     Styles = (PACKED);
