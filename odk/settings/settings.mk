@@ -38,6 +38,7 @@ ifeq "$(PLATFORM)" "windows"
 
 OS=WIN
 PS=\\
+ICL=$$
 CC=cl
 LINK=link
 BUILDLIB=lib
@@ -152,6 +153,7 @@ endif
 
 OS=SOLARIS
 PS=/
+ICL=\$$
 CC=CC
 LINK=CC
 LIB=CC
@@ -280,6 +282,7 @@ endif
 
 OS=LINUX
 PS=/
+ICL=\$$
 CC=gcc
 LINK=g++
 LIB=g++
@@ -397,6 +400,7 @@ JAVABIN=Commands
 
 OS=MACOSX
 PS=/
+ICL=\$$
 CC=gcc
 LINK=g++
 LIB=g++
@@ -499,6 +503,7 @@ JAVA_PROC_TYPE=i386
 
 OS=FREEBSD
 PS=/
+ICL=\$$
 CC=gcc
 LINK=g++
 LIB=g++
