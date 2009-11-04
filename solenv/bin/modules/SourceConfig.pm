@@ -151,7 +151,13 @@ sub is_active
 {
     my $self        = shift;
     my $module      = shift;
-    return exists ($self->{ACTIVE_MODULES}{$module});
+    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+    if (!scalar keys %{$self->{ACTIVE_MODULES}}) {
+        return exists ($self->{MODULE_PATHS}{$module});
+    }
+    else {
+        return exists ($self->{ACTIVE_MODULES}{$module});
+    }
 }
 
 ##### private methods #####
