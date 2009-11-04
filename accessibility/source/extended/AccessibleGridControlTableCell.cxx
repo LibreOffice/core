@@ -80,7 +80,6 @@ namespace accessibility
         DBG_CTOR( svt_AccessibleGridControlCell, NULL );
         // set accessible name here, because for that we need the position of the cell
         // and so the base class isn't capable of doing this
-        sal_Int32 nPos = _nRowPos * _rTable.GetColumnCount() + _nColPos;
         ::rtl::OUString aAccName;
         if(_eType == TCTYPE_TABLECELL)
             aAccName = _rTable.GetAccessibleObjectName( TCTYPE_TABLECELL, _nRowPos, _nColPos );
