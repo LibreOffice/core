@@ -324,7 +324,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     const Link  aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
     Font        aInfoFont( maInfoBar.GetControlFont() );
 
-    maMiscOptions.AddListener( LINK( this, GalleryBrowser2, MiscHdl ) );
+    maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
     maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_ICON, TIB_RADIOCHECK | TIB_AUTOCHECK );
@@ -356,7 +356,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
 
 GalleryBrowser2::~GalleryBrowser2()
 {
-    maMiscOptions.RemoveListener( LINK( this, GalleryBrowser2, MiscHdl ) );
+    maMiscOptions.RemoveListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
     delete mpPreview;
     delete mpListView;

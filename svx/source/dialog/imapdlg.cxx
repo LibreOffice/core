@@ -230,7 +230,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     maCbbTarget.SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
 
        SvtMiscOptions aMiscOptions;
-    aMiscOptions.AddListener( LINK( this, SvxIMapDlg, MiscHdl ) );
+    aMiscOptions.AddListenerLink( LINK( this, SvxIMapDlg, MiscHdl ) );
 
     aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
     aTbxIMapDlg1.SetSizePixel( aTbxIMapDlg1.CalcWindowSizePixel() );

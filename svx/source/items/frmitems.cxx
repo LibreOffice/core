@@ -59,7 +59,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <impgrf.hxx>
+#include <svx/impgrf.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/dialogs.hrc>
