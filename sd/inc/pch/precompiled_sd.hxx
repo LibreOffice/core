@@ -1,4 +1,5 @@
-/*************************************************************************
+/************************************************************************cherex
+
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -596,7 +597,7 @@
 #include "svx/editund2.hxx"
 #include "svx/editview.hxx"
 #include "svx/eeitem.hxx"
-#include "svx/escherex.hxx"
+#include "filter/msfilter/escherex.hxx"
 #include "svx/escpitem.hxx"
 #include "svx/extrusionbar.hxx"
 #include "svx/f3dchild.hxx"
@@ -640,8 +641,8 @@
 #include "svx/lspcitem.hxx"
 #include "svx/modctrl.hxx"
 #include "svx/msdffdef.hxx"
-#include "svx/msocximex.hxx"
-#include "svx/msoleexp.hxx"
+#include "filter/msfilter/msocximex.hxx"
+#include "filter/msfilter/msoleexp.hxx"
 #include "svx/numitem.hxx"
 #include "svx/obj3d.hxx"
 #include "svx/objfac3d.hxx"
@@ -724,7 +725,7 @@
 #include "svx/svxfont.hxx"
 #include "svx/svxgrahicitem.hxx"
 #include "svx/svxids.hrc"
-#include "svx/svxmsbas.hxx"
+#include "filter/msfilter/svxmsbas.hxx"
 #include "svx/sxciaitm.hxx"
 #include "svx/sxekitm.hxx"
 #include "svx/sxelditm.hxx"
