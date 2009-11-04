@@ -1281,7 +1281,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                                     rRedline.GetRedlineData().GetTimeStamp() ),
                                     SID_ATTR_POSTIT_DATE ));
 
-                        AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, RID_SVXDLG_POSTIT, FALSE );
+                        AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, FALSE );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
                         pDlg->HideAuthor();

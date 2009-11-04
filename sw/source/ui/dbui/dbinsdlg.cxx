@@ -1651,7 +1651,7 @@ static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
 /* -----------------------------05.12.00 15:00--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >&  ) {}
 
 void SwInsertDBColAutoPilot::Commit()
 {

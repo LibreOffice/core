@@ -538,7 +538,7 @@ const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
 /*-- 15.04.2004 08:48:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwMailMergeConfigItem_Impl::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwMailMergeConfigItem_Impl::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void  SwMailMergeConfigItem_Impl::Commit()
 {

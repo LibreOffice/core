@@ -50,7 +50,7 @@ class DataChangedEvent;
 namespace utl
 {
     class SourceViewConfig;
-};
+}
 
 class TextViewOutWin : public Window
 {
