@@ -235,13 +235,27 @@ ULONG SwReader::Read( const Reader& rOptions )
                 const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
                 if( USHRT_MAX == aFlyFrmArr.GetPos( pFrmFmt) )
                 {
-                    if( FLY_PAGE == rAnchor.GetAnchorId() ||
-                        ( FLY_AT_CNTNT == rAnchor.GetAnchorId() &&
-                            rAnchor.GetCntntAnchor() &&
-                            ( pUndoPam->GetPoint()->nNode ==
-                            rAnchor.GetCntntAnchor()->nNode ||
-                            pUndoPam->GetMark()->nNode ==
-                            rAnchor.GetCntntAnchor()->nNode ) ) )
+                    SwPosition const*const pFrameAnchor(
+                            rAnchor.GetCntntAnchor());
+                    if  (   (FLY_PAGE == rAnchor.GetAnchorId())
+                        ||  (   pFrameAnchor
+                            &&  (   (   (FLY_AT_CNTNT == rAnchor.GetAnchorId())
+                                    &&  (   (pUndoPam->GetPoint()->nNode ==
+                                             pFrameAnchor->nNode)
+                                        ||  (pUndoPam->GetMark()->nNode ==
+                                             pFrameAnchor->nNode)
+                                        )
+                                    )
+                                // #i97570# also check frames anchored AT char
+                                ||  (   (FLY_AUTO_CNTNT == rAnchor.GetAnchorId())
+                                    &&  !IsDestroyFrameAnchoredAtChar(
+                                              *pFrameAnchor,
+                                              *pUndoPam->GetPoint(),
+                                              *pUndoPam->GetMark())
+                                    )
+                                )
+                            )
+                        )
                     {
                         if( bChkHeaderFooter &&
                             FLY_AT_CNTNT == rAnchor.GetAnchorId() &&

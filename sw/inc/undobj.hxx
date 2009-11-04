@@ -206,6 +206,11 @@ namespace nsDelCntntType
     const DelCntntType DELCNT_CHKNOCNTNT = 0x80;
 }
 
+/// will DelCntntIndex destroy a frame anchored at character at rAnchorPos?
+bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
+        SwPosition const & rStart, SwPosition const & rEnd,
+        DelCntntType const nDelCntntType = nsDelCntntType::DELCNT_ALL);
+
 // diese Klasse muss in ein Undo-Object vererbt werden, wenn dieses Inhalt
 // fuers Redo/Undo ... speichert
 class SwUndoSaveCntnt
