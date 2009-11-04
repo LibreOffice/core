@@ -29,8 +29,11 @@
  ************************************************************************/
 package connectivity.tools;
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyState;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.container.NoSuchElementException;
+import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.io.IOException;
@@ -45,11 +48,6 @@ import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XRefreshable;
-import connectivity.tools.DataSource;
-import connectivity.tools.HsqlColumnDescriptor;
-import connectivity.tools.HsqlDatabase;
-import connectivity.tools.HsqlTableDescriptor;
-import connectivity.tools.QueryDefinition;
 
 /** implements a small Customer Relationship Management database
  *
@@ -66,13 +64,29 @@ public class CRMDatabase
 
     /** constructs the CRM database
      */
-    public CRMDatabase( XMultiServiceFactory _orb ) throws Exception
+    public CRMDatabase( XMultiServiceFactory _orb, boolean _withUI ) throws Exception
     {
         m_orb = _orb;
 
         m_database = new HsqlDatabase( m_orb );
         m_dataSource = m_database.getDataSource();
-        m_connection = m_database.defaultConnection();
+
+        if ( _withUI )
+        {
+            final XComponentLoader loader = UnoRuntime.queryInterface( XComponentLoader.class,
+                m_orb.createInstance( "com.sun.star.frame.Desktop" ) );
+            PropertyValue[] loadArgs = new PropertyValue[] {
+                new PropertyValue( "PickListEntry", 0, false, PropertyState.DIRECT_VALUE )
+            };
+            loader.loadComponentFromURL( m_database.getDocumentURL(), "_blank", 0, loadArgs );
+            getDocumentUI().connect();
+            m_connection = getDocumentUI().getActiveConnection();
+        }
+        else
+        {
+            m_connection = m_database.defaultConnection();
+        }
+
         createTables();
         createQueries();
     }
