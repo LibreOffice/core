@@ -209,6 +209,7 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32
     //ensureIsAlive();
     //ensureIsValidRow( nRow );
     //return implIsRowSelected( nRow );
+    (void) nRow;
     return sal_False;
 }
 
@@ -307,7 +308,7 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChild
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-
+    (void)nSelectedChildIndex;
     // method may throw lang::IndexOutOfBoundsException
     //sal_Int32 nIndex = implGetChildIndexFromSelectedIndex( nSelectedChildIndex );
     //return implGetChild( nIndex, implToVCLColumnPos( nIndex ) );
@@ -374,6 +375,8 @@ Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 Reference< XAccessible > AccessibleGridControlTable::implGetChild(
         sal_Int32 nRow, sal_uInt16 nColumnPos )
 {
+    (void)nRow;
+    (void)nColumnPos;
     return NULL;
 }
 //To Do - not implemented yet
