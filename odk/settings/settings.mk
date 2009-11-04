@@ -97,7 +97,7 @@ SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/inclu
 # define for used compiler necessary for UNO
 # -DCPPU_ENV=msci -- windows msvc 4.x - 7.x
 
-CC_DEFINES=-DWIN32 -DWNT -DCPPU_ENV=msci
+CC_DEFINES=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_OUTPUT_SWITCH=-Fo
 
 LIBRARY_LINK_FLAGS=/NODEFAULTLIB /DLL /DEBUGTYPE:cv
