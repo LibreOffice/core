@@ -46,6 +46,9 @@
 #include "toolkit/controls/tkscrollbar.hxx"
 #endif
 #include <toolkit/controls/stdtabcontroller.hxx>
+#include <toolkit/controls/tksimpleanimation.hxx>
+#include <toolkit/controls/tkthrobber.hxx>
+
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
@@ -456,6 +459,10 @@ Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUSt
         pNewModel = new OGeometryControlModel< UnoTreeModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName_GridControlModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoGridModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoSimpleAnimationControlModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoSimpleAnimationControlModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoThrobberControlModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoThrobberControlModel >;
 
     if ( !pNewModel )
     {
@@ -495,7 +502,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
     static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 21 );
+        pNamesSeq = new Sequence< ::rtl::OUString >( 24 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -518,8 +525,9 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
         pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
         pNames[19] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
         pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_TreeControlModel );
-        pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
-
+        pNames[21] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
+        pNames[22] = ::rtl::OUString::createFromAscii( szServiceName2_UnoSimpleAnimationControlModel );
+        pNames[23] = ::rtl::OUString::createFromAscii( szServiceName2_UnoThrobberControlModel );
     }
     return *pNamesSeq;
 }
