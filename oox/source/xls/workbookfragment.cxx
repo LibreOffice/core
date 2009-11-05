@@ -371,7 +371,7 @@ bool BiffWorkbookFragment::importFragment()
                 // try to start a new sheet fragment
                 double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - nWorksheet);
                 ISegmentProgressBarRef xSheetProgress = getProgressBar().createSegment( fSegmentLength );
-                BiffFragmentType eSheetFragment = startFragment( getBiff() );
+                BiffFragmentType eSheetFragment = startFragment( getBiff(), rWorksheets.getBiffRecordHandle( nWorksheet ) );
                 sal_Int16 nCalcSheet = rWorksheets.getCalcSheetIndex( nWorksheet );
                 bNextSheet = importSheetFragment( *xSheetProgress, eSheetFragment, nCalcSheet );
             }
