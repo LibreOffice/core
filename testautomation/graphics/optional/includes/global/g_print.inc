@@ -56,108 +56,56 @@ testcase tFilePrint
         qaerrorlog "There is no printer available - please install one on your system!"
     endif
     sleep 2
-    Kontext "DruckenDlg"
-
-
-    ' Not yet active since this feature is not build into the master: i85355
-    '   printlog "Checking options for impress..."
-    '    if (gApplication = "IMPRESS") then
-    '        if PrintContent.GetSelIndex <> 1 then
-    '            warnlog "Not first entry selected!"
-    '       else
-    '            printlog " First entry selected."
-    '        endif
-    '
-    '        if PrintContent.GetItemCount <> 4 then
-    '            warnlog "Entry-number of PrintContent listbox is wrong!"
-    '        else
-    '            printlog "Entry-number of PrintContent listbox is 4."
-    '        endif
-    '
-    '        PrintContent.Select 2
-    '        if SlidesPerPage.IsEnabled then
-    '            printlog "SlidesPerPage active."
-    '        else
-    '            warnlog "SlidesPerPage did not get active!"
-    '        endif
-    '
-    '        VerticalOrder.Check
-    '        printlog "Vertical checked."
-    '        HorizontalOrder.Check
-    '        printlog "Horizontal checked again."
-    '
-    '    else
-    '        printlog "This is not impress, so no further print content testing."
-    '    endif
-
-    printlog "Opening Options dialog."
-    Zusaetze.Click
-    sleep 1
-    Kontext "DruckerZusaetzeDraw"
-
-    printlog "Checking brochure printing."
-    if Prospekt.IsChecked then
-        warnlog "Somebody forgot to uncheck the prospect printing!"
-        Standard.Check
-    else
-        printlog "Brochure printing is checked."
+    
+    printlog "Opening Draw Tabpage."
+    Kontext "Printing"
+    PrintingTabControl.setPage( TabApplication )
+	kontext "TabApplication"
+   
+    printlog "Checking Boxes and Buttons..."
+    SlideName.Check
+    DateAndTime.Check
+    if (gApplication = "IMPRESS") then
+    HiddenPages.Check
     endif
+    OriginalColors.Check
+    Grayscale.Check
+    BlackAndWhite.Check
+    OriginalSize.Check
+    FitToPage.Check
+    MultiplePages.Check
+    TilePaper.Check
 
-
-    Seitenname.Check
-    Datum.Check
-    Zeit.Check
-    AusgeblendeteSeiten.Check
-    SeitengroesseAnpassen.Check
-    AusDruckereinstellung.Check
-
-    DruckerZusaetzeDraw.OK
-    Kontext "DruckenDlg"
-    Zusaetze.Click
-    sleep 2
-    Kontext "DruckerZusaetzeDraw"
-    if NOT Seitenname.IsChecked Then
-        warnlog "  - Page name not checked"
-    else
-        printlog "Page name checked."
+    printlog "Changing Tabpage and back."
+    kontext "printing"
+    PrintingTabControl.SetPage ( TabPrintGeneral )
+    kontext "TabPrintGeneral"
+    
+    kontext "printing"
+    PrintingTabControl.SetPage ( TabApplication )
+	kontext "TabApplication"
+    
+    printlog "Checking state of buttons and boxes.."
+     if NOT ( SlideName.isChecked ) then
+        warnlog( "Slide Name is not checked." )
+        endif
+     if NOT ( DateAndTime.isChecked ) then
+        warnlog( "Date and Time is not checked." )
     endif
-
-    if NOT Datum.IsChecked Then
-        warnlog "  - Date not checked"
-    else
-        printlog "Date is checked."
+    if (gApplication = "IMPRESS") then
+        if NOT ( HiddenPages.isChecked ) then
+            warnlog( "Hidden Pages is not checked." )
+        endif
     endif
-
-    if NOT Zeit.IsChecked Then
-        warnlog "  - Time not checked"
-    else
-        printlog "Time is checked."
+    if NOT ( BlackAndWhite.isChecked ) then
+        warnlog( "Black And White is not checked." )
     endif
-
-    if NOT AusgeblendeteSeiten.IsChecked Then
-        warnlog "  - Hidden pages not checked"
-    else
-        printlog "Hidden pages checked."
+    if NOT ( TilePaper.isChecked ) then
+        warnlog( "Tile Paper is not checked." )
     endif
-
-    if NOT SeitengroesseAnpassen.IsChecked Then
-        warnlog "  - Fit to page not checked"
-    else
-        printlog "Fit to page checked."
-    endif
-
-    if NOT AusDruckereinstellung.IsChecked Then
-        warnlog "  - Paper tray from printer settings not checked"
-    else
-        printlog "Paper tray checked."
-    endif
-
-    AusDruckereinstellung.UnCheck
-    Standard.Check
-    DruckerZusaetzeDraw.OK
-    Kontext "DruckenDlg"
-    DruckenDlg.Cancel
-    Sleep 5
+    
+    kontext "printing"
+    Printing.Cancel()
 
     Call hCloseDocument
 endcase
