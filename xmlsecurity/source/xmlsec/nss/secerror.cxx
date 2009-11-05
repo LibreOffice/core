@@ -69,7 +69,8 @@ printChainFailure(FILE *outfile, CERTVerifyLog *log)
 {
     unsigned int       errorFlags  = 0;
     unsigned int       depth  = (unsigned int)-1;
-    const char *             specificError = NULL;
+    const char * specificError = NULL;
+    const char * issuer = NULL;
     CERTVerifyLogNode *node   = NULL;
 
     if (log->count > 0)
@@ -87,6 +88,7 @@ printChainFailure(FILE *outfile, CERTVerifyLog *log)
             fprintf(outfile,"  ERROR %ld: %s\n", node->error,
                     getCertError(node->error));
             specificError = NULL;
+            issuer = NULL;
             switch (node->error)
             {
             case SEC_ERROR_INADEQUATE_KEY_USAGE:
@@ -134,17 +136,24 @@ printChainFailure(FILE *outfile, CERTVerifyLog *log)
                     break;
                 }
             case SEC_ERROR_UNKNOWN_ISSUER:
+                specificError = "Unknown issuer:";
+                issuer = node->cert->issuerName;
+                break;
             case SEC_ERROR_UNTRUSTED_ISSUER:
+                specificError = "Untrusted issuer:";
+                issuer = node->cert->issuerName;
+                break;
             case SEC_ERROR_EXPIRED_ISSUER_CERTIFICATE:
-                specificError = node->cert->issuerName;
+                specificError = "Expired issuer certificate:";
+                issuer = node->cert->issuerName;
                 break;
             default:
                 break;
             }
             if (specificError)
-            {
-                fprintf(stderr,"%s\n",specificError);
-            }
+                fprintf(stderr,"%s\n", specificError);
+            if (issuer)
+                fprintf(stderr, "%s\n", issuer);
         }
     }
 }
