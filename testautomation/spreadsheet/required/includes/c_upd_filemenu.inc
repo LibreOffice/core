@@ -66,7 +66,7 @@ sub c_upd_filemenu
     Call tFileSaveAsDBF
     Call tFileVersions
     Call tFilePagePreview
-    Call PrintingResources()
+    Call g_printing()
 
 end sub
 

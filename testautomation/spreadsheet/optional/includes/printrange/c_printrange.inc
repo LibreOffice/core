@@ -866,7 +866,7 @@ testcase tEmptyRangeMessagebox
             endcatch
         end if
     else
-        warnlog "There is no messagebox"
+        warnlog "There is no messagebox (#i106423#)"
         kontext "DocumentCalc"
         call hCloseDocument
         goto endsub

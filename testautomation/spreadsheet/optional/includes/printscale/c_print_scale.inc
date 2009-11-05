@@ -236,9 +236,9 @@ dim sPagesToPrint as STRING
         if Printing.Exists(2) then
             Kontext "TabPrintGeneral"
             PrintPages.check
-            printlog "Check for string '1-12' in pages textbox"
+            printlog "Check for string '1-4' in pages textbox"
             sPagesToPrint = PageRange.getText
-            if sPagesToPrint = "1-12" then
+            if sPagesToPrint = "1-4" then
                 printlog "    OK, expected number of pages for output"
             else
                 warnlog "Unexpected number of pages for print output: " & sPagesToPrint & " -> Check this out!"
