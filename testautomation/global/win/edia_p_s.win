@@ -41,7 +41,7 @@ TransitionEffects filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTBOOKMARKS
 FormsFormat filter:ListBox:RID_PDF_TAB_GENER:LB_FORMSFORMAT
 ExportBlankPages filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTEMPTYPAGES
 
-*PDFOptionsInitialView PDF1TBO
+*PDFOptionsInitialView HID_FILTER_PDF_INITIAL_VIEW
 PageOnly filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_PAGEONLY
 BookmarksAndPage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_OUTLINE
 ThumbnailsAndPage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_THUMBS
@@ -54,7 +54,7 @@ SinglePage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_SINGPG
 Continuous filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_CONT
 ContinuousFacing filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_CONTFAC
 
-*PDFOptionsUserInterface PDF2TBO
+*PDFOptionsUserInterface HID_FILTER_PDF_USER_INTERFACE
 ResizeWindow filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_RESINIT
 CenterWindow filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_CNTRWIN
 OpenInFullscreen filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_OPNFULL
@@ -71,96 +71,90 @@ Currency HID_DLGDEPOT_LSTMARKETS
 OKButton HID_DLGDEPOT_0_CMDGOON_HISTORY
 CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
 
-*Printing                   .HelpId:vcl:PrintDialog:Dialog
+*Printing .HelpId:vcl:PrintDialog:Dialog
+PreviewWindow .HelpId:vcl:PrintDialog:Preview
+PreviewPageNumber .HelpId:vcl:PrintDialog:PageEdit
+ScrollBackward .HelpId:vcl:PrintDialog:BackwardBtn
+ScrollForward .HelpId:vcl:PrintDialog:ForwardBtn
+Print .HelpId:vcl:PrintDialog:OK
+Cancel .HelpId:vcl:PrintDialog:Cancel
+   
+PrintingTabControl .HelpId:vcl:PrintDialog:TabPages
+TabPrintGeneral .HelpId:vcl:PrintDialog:JobPage
+TabApplication .HelpId:vcl:PrintDialog:TabPage:10
+TabLayout .HelpId:vcl:PrintDialog:NUpPage
+TabOptions .HelpId:vcl:PrintDialog:OptPage
 
-    PreviewWindow           .HelpId:vcl:PrintDialog:Preview
-    PreviewPageNumber       .HelpId:vcl:PrintDialog:PageEdit
-    ScrollBackward          .HelpId:vcl:PrintDialog:BackwardBtn
-    ScrollForward           .HelpId:vcl:PrintDialog:ForwardBtn
-    Print                   .HelpId:vcl:PrintDialog:OK
-    Cancel                  .HelpId:vcl:PrintDialog:Cancel
-    
-    ' Note: The printing dialog is extremely application dependent. To improve readability
-    '       of the test scripts some controls are declared multiple times reflecting the
-    '       names found in the UI. Some of the controls have different functionality which
-    '       again depends on the calling application.
+*TabPrintGeneral .HelpId:vcl:PrintDialog:JobPage
+PrinterList .HelpId:vcl:PrintDialog:JobPage:PrinterList
+NumberOfCopies .HelpId:vcl:PrintDialog:JobPage:Copies
+Collate .HelpId:vcl:PrintDialog:JobPage:Collate
+PrintNotes .HelpId:vcl:PrintDialog:PrintAnnotationMode:ListBox
+AllPages .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+AllSlides .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+AllSheets .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+Pages .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+Slides .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+SelectedSheets .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+PrintAllPages .HelpId:vcl:PrintDialog:PrintRange:RadioButton:0
+PrintPages .HelpId:vcl:PrintDialog:PrintRange:RadioButton:1                        
+PageRange .HelpId:vcl:PrintDialog:PageRange:Edit
+Selection .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
+SelectedCells .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
+Details .HelpId:vcl:PrintDialog:JobPage:DetailsBtn
+Properties .HelpId:vcl:PrintDialog:JobPage:Properties
+PageCount .HelpId:vcl:PrintDialog:NumPagesText
+PartsToPrint .HelpId:vcl:PrintDialog:PageContentType:ListBox
+SlidesPerPage .HelpId:vcl:PrintDialog:SlidesPerPage:ListBox
+ArrangeSlides .HelpId:vcl:PrintDialog:SlidesPerPageOrder:ListBox            
 
-    PrintingTabControl      .HelpId:vcl:PrintDialog:TabPages
-        TabPrintGeneral     .HelpId:vcl:PrintDialog:JobPage
-        TabApplication      .HelpId:vcl:PrintDialog:TabPage:10
-        TabLayout           .HelpId:vcl:PrintDialog:NUpPage
-        TabOptions          .HelpId:vcl:PrintDialog:OptPage
+*TabApplication .HelpId:vcl:PrintDialog:TabPage:10
+PrintPageBackground .HelpId:vcl:PrintDialog:PrintPageBackground:CheckBox
+PrintGraphicsAndDiagrams .HelpId:vcl:PrintDialog:PrintTablesGraphicsAndDiagrams:CheckBox
+PrintHiddenText .HelpId:vcl:PrintDialog:PrintHiddenText:CheckBox
+PrintTextPlaceholder .HelpId:vcl:PrintDialog:PrintTextPlaceholder:CheckBox
+PrintFormControls .HelpId:vcl:PrintDialog:PrintControls:CheckBox
+PrintTextInBlack .HelpId:vcl:PrintDialog:PrintBlackFonts:CheckBox
+PrintBlankPages .HelpId:vcl:PrintDialog:PrintEmptyPages:CheckBox
+IncludeEmptyPages .HelpId:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox
+SlideName .HelpId:vcl:PrintDialog:IsPrintName:CheckBox
+DateAndTime .HelpId:vcl:PrintDialog:IsPrintDateTime:CheckBox
+HiddenPages .HelpId:vcl:PrintDialog:IsPrintHidden:CheckBox
+TilePaper .HelpId:vcl:PrintDialog:PageOptions:RadioButton:3
+OriginalColors .HelpId:vcl:PrintDialog:Quality:RadioButton:0
+Grayscale .HelpId:vcl:PrintDialog:Quality:RadioButton:1
+BlackAndWhite .HelpId:vcl:PrintDialog:Quality:RadioButton:2
+MultiplePages .HelpId:vcl:PrintDialog:PageOptions:RadioButton:2
+TitleRow .HelpId:vcl:PrintDialog:TitleRow:CheckBox
+FormulaText .HelpId:vcl:PrintDialog:FormulaText:CheckBox
+Borders .HelpId:vcl:PrintDialog:Border:CheckBox
+OriginalSize .HelpId:vcl:PrintDialog:PageOptions:RadioButton:0
+OriginalSizeMath .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:0
+FitToPage .HelpId:vcl:PrintDialog:PageOptions:RadioButton:1
+FitToPageMath .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:1            
+Scaling .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:2
+ScalingFactor .HelpId:vcl:PrintDialog:PrintScale:NumericField
 
-        *TabPrintGeneral                .HelpId:vcl:PrintDialog:JobPage
-            PrinterList                 .HelpId:vcl:PrintDialog:JobPage:PrinterList
-            NumberOfCopies              .HelpId:vcl:PrintDialog:JobPage:Copies
-            Collate                     .HelpId:vcl:PrintDialog:JobPage:Collate
-            PrintNotes                  .HelpId:vcl:PrintDialog:PrintAnnotationMode:ListBox
-            AllPages                    .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
-            AllSlides                   .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
-            AllSheets                   .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
-            Pages                       .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
-            Slides                      .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
-            SelectedSheets              .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
-            PrintAllPages               .HelpId:vcl:PrintDialog:PrintRange:RadioButton:0
-            PrintPages                  .HelpId:vcl:PrintDialog:PrintRange:RadioButton:1                        
-            PageRange                   .HelpId:vcl:PrintDialog:PageRange:Edit
-            Selection                   .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
-            SelectedCells               .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
-            Details                     .HelpId:vcl:PrintDialog:JobPage:DetailsBtn
-            Properties                  .HelpId:vcl:PrintDialog:JobPage:Properties
-            PageCount                   .HelpId:vcl:PrintDialog:NumPagesText
-            PartsToPrint                .HelpId:vcl:PrintDialog:PageContentType:ListBox
-            SlidesPerPage               .HelpId:vcl:PrintDialog:SlidesPerPage:ListBox
-            ArrangeSlides               .HelpId:vcl:PrintDialog:SlidesPerPageOrder:ListBox            
+*TabLayout .HelpId:vcl:PrintDialog:NUpPage
+PagesPerSheet .HelpId:vcl:PrintDialog:NUpPage:PagesPerSheet
+NumberOfPages .HelpId:vcl:PrintDialog:NUpPage:PagesPerSheetBox
+NumberOfColumns .HelpId:vcl:PrintDialog:NUpPage:ColumnsBox
+NumberOfRows .HelpId:vcl:PrintDialog:NUpPage:RowsBox
+BorderAroundPages .HelpId:vcl:PrintDialog:NUpPage:BorderBox
+Brochure .HelpId:vcl:PrintDialog:NUpPage:Brochure
+DistanceBetweenPages .HelpId:vcl:PrintDialog:NUpPage:PageMarginBox
+MarginToSheetBorder .HelpId:vcl:PrintDialog:NUpPage:SheetMarginBox
+PaperOrientation .HelpId:vcl:PrintDialog:NUpPage:OrientationBox
+PrintOrder .HelpId:vcl:PrintDialog:NUpPage:OrderBox
+IncludePages .HelpId:vcl:PrintDialog:PrintLeftRightPages:ListBox
+PrintBrochureRTL .HelpId:vcl:PrintDialog:PrintProspectRTL:ListBox
+BrochurePageSides .HelpId:vcl:PrintDialog:PrintProspectInclude:ListBox            
 
-        *TabApplication                 .HelpId:vcl:PrintDialog:TabPage:10
-            PrintPageBackground         .HelpId:vcl:PrintDialog:PrintPageBackground:CheckBox
-            PrintGraphicsAndDiagrams    .HelpId:vcl:PrintDialog:PrintTablesGraphicsAndDiagrams:CheckBox
-            PrintHiddenText             .HelpId:vcl:PrintDialog:PrintHiddenText:CheckBox
-            PrintTextPlaceholder        .HelpId:vcl:PrintDialog:PrintTextPlaceholder:CheckBox
-            PrintFormControls           .HelpId:vcl:PrintDialog:PrintControls:CheckBox
-            PrintTextInBlack            .HelpId:vcl:PrintDialog:PrintBlackFonts:CheckBox
-            PrintBlankPages             .HelpId:vcl:PrintDialog:PrintEmptyPages:CheckBox
-            IncludeEmptyPages           .HelpId:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox
-            SlideName                   .HelpId:vcl:PrintDialog:IsPrintName:CheckBox
-            DateAndTime                 .HelpId:vcl:PrintDialog:IsPrintDateTime:CheckBox
-            HiddenPages                 .HelpId:vcl:PrintDialog:IsPrintHidden:CheckBox
-            TilePaper                   .HelpId:vcl:PrintDialog:PageOptions:RadioButton:3
-            OriginalColors              .HelpId:vcl:PrintDialog:Quality:RadioButton:0
-            Grayscale                   .HelpId:vcl:PrintDialog:Quality:RadioButton:1
-            BlackAndWhite               .HelpId:vcl:PrintDialog:Quality:RadioButton:2
-            MultiplePages               .HelpId:vcl:PrintDialog:PageOptions:RadioButton:2
-            TitleRow                    .HelpId:vcl:PrintDialog:TitleRow:CheckBox
-            FormulaText                 .HelpId:vcl:PrintDialog:FormulaText:CheckBox
-            Borders                     .HelpId:vcl:PrintDialog:Border:CheckBox
-            OriginalSize                .HelpId:vcl:PrintDialog:PageOptions:RadioButton:0
-            OriginalSizeMath            .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:0
-            FitToPage                   .HelpId:vcl:PrintDialog:PageOptions:RadioButton:1
-            FitToPageMath               .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:1            
-            Scaling                     .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:2
-            ScalingFactor               .HelpId:vcl:PrintDialog:PrintScale:NumericField
-
-        *TabLayout                      .HelpId:vcl:PrintDialog:NUpPage
-            PagesPerSheet               .HelpId:vcl:PrintDialog:NUpPage:PagesPerSheet
-            NumberOfPages               .HelpId:vcl:PrintDialog:NUpPage:PagesPerSheetBox
-            NumberOfColumns             .HelpId:vcl:PrintDialog:NUpPage:ColumnsBox
-            NumberOfRows                .HelpId:vcl:PrintDialog:NUpPage:RowsBox
-            BorderAroundPages           .HelpId:vcl:PrintDialog:NUpPage:BorderBox
-            Brochure                    .HelpId:vcl:PrintDialog:NUpPage:Brochure
-            DistanceBetweenPages        .HelpId:vcl:PrintDialog:NUpPage:PageMarginBox
-            MarginToSheetBorder         .HelpId:vcl:PrintDialog:NUpPage:SheetMarginBox
-            PaperOrientation            .HelpId:vcl:PrintDialog:NUpPage:OrientationBox
-            PrintOrder                  .HelpId:vcl:PrintDialog:NUpPage:OrderBox
-            IncludePages                .HelpId:vcl:PrintDialog:PrintLeftRightPages:ListBox
-            PrintBrochureRTL            .HelpId:vcl:PrintDialog:PrintProspectRTL:ListBox
-            BrochurePageSides           .HelpId:vcl:PrintDialog:PrintProspectInclude:ListBox            
-
-        *TabOptions                     .HelpId:vcl:PrintDialog:OptPage
-            PrintToFile                 .HelpId:vcl:PrintDialog:OptPage:ToFile
-            PrintAsSingleJobs           .HelpId:vcl:PrintDialog:OptPage:SingleJobs
-            PrintReverse                .HelpId:vcl:PrintDialog:OptPage:Reverse
-            PaperTrayFromPrefs          .HelpId:vcl:PrintDialog:PrintPaperFromSetup:CheckBox        
+*TabOptions .HelpId:vcl:PrintDialog:OptPage
+PrintToFile .HelpId:vcl:PrintDialog:OptPage:ToFile
+PrintAsSingleJobs .HelpId:vcl:PrintDialog:OptPage:SingleJobs
+PrintReverse .HelpId:vcl:PrintDialog:OptPage:Reverse
+PaperTrayFromPrefs .HelpId:vcl:PrintDialog:PrintPaperFromSetup:CheckBox        
 
 *PurchaseStarOffice HID_LICENSING_DIALOG
 TabPurchase HID_TP_PURCHASE
