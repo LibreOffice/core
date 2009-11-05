@@ -39,6 +39,7 @@
  *************************************************************************/
 
 #include <stdio.h>
+#include <sal/main.h>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -51,7 +52,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 
-int SAL_CALL main( int, char ** )
+SAL_IMPLEMENT_MAIN(argc, argv)
 {
     try
     {

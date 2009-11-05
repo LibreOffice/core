@@ -48,6 +48,7 @@
 
 #include <stdio.h>
 
+#include <sal/main.h>
 #include <rtl/ustring.hxx>
 
 #include <osl/diagnose.h>
@@ -71,7 +72,7 @@ using namespace ::rtl;
 
 
 //=======================================================================
-int SAL_CALL main(int argc, char **argv)
+SAL_IMPLEMENT_MAIN(argc, argv)
 {
     Reference< XSimpleRegistry > xReg = createSimpleRegistry();
     OSL_ENSURE( xReg.is(), "### cannot get service instance of \"com.sun.star.regiystry.SimpleRegistry\"!" );
