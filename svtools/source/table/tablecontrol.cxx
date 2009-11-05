@@ -514,6 +514,7 @@ void TableControl::commitGridControlEvent( sal_Int16 _nEventId, const Any& _rNew
 // -----------------------------------------------------------------------------
 Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,BOOL _bOnScreen)
 {
+    (void)_bOnScreen;
     Rectangle aRectTable, aRectTableWithHeaders;
     m_pImpl->impl_getAllVisibleDataCellArea(aRectTable);
     m_pImpl->impl_getAllVisibleCellsArea(aRectTableWithHeaders);
@@ -527,6 +528,7 @@ Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,BOOL _bOnScreen)
 // -----------------------------------------------------------------------------
 Rectangle TableControl::calcTableRect(BOOL _bOnScreen)
 {
+    (void)_bOnScreen;
     Rectangle aRect;
     m_pImpl->impl_getAllVisibleDataCellArea(aRect);
     return aRect;
