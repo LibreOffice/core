@@ -1,4 +1,4 @@
-sc      sc      :       l10n oovbaapi svx stoc BOOST:boost formula oox NULL
+sc      sc      :       filter l10n oovbaapi svx stoc BOOST:boost formula oox NULL
 sc	sc							usr1	-	all	sc_mkout NULL
 sc	sc\inc							nmake	-	all	sc_inc NULL
 sc	sc\prj							get	-	all	sc_prj NULL
