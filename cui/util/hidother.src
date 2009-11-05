@@ -30,6 +30,7 @@
 
 #include "../source/inc/helpid.hrc"            // HID_XXX
 
+hidspecial HID_AUTOCORR_LANGUAGE                    { HelpId = HID_AUTOCORR_LANGUAGE; };
 hidspecial HID_CLB_EDIT_MODULES_DICS            { HelpID =  HID_CLB_EDIT_MODULES_DICS       ;};
 hidspecial HID_CLB_EDIT_MODULES_MODULES         { HelpID =  HID_CLB_EDIT_MODULES_MODULES    ;};
 hidspecial HID_CLB_LINGU_MODULES                { HelpID =  HID_CLB_LINGU_MODULES           ;};
