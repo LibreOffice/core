@@ -625,7 +625,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
              (RES_TXTATR_CHARFMT == nWhich) ||
              (RES_TXTATR_INETFMT == nWhich) ||
              (RES_TXTATR_AUTOFMT == nWhich) ||
-             isUNKNOWNATR(nWhich) )
+             (RES_TXTATR_UNKNOWN_CONTAINER == nWhich) )
         {
             pCharSet  = &rChgSet;
             bCharAttr = true;
@@ -636,7 +636,8 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
              || isPARATR_LIST(nWhich)
              // <--
              || isFRMATR(nWhich)
-             || isGRFATR(nWhich) )
+             || isGRFATR(nWhich)
+             || isUNKNOWNATR(nWhich) )
         {
             pOtherSet = &rChgSet;
             bOtherAttr = true;
@@ -653,7 +654,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                                    RES_TXTATR_AUTOFMT, RES_TXTATR_AUTOFMT,
                                    RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                                   RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+               RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                                    0 );
 
         SfxItemSet* pTmpOtherItemSet = new SfxItemSet( pDoc->GetAttrPool(),
@@ -663,6 +664,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                                     // <--
                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                                     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
+                                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                                     0 );
 
         pTmpCharItemSet->Put( rChgSet );
@@ -755,7 +757,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
                                 RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
                                 RES_TXTATR_META, RES_TXTATR_METAFIELD,
-                                RES_TXTATR_CJK_RUBY, RES_TXTATR_WITHEND_END-1,
+                                RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
                                 0 );
 
             aTxtSet.Put( rChgSet );
