@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -64,6 +64,15 @@ OBJFILES=  \
 APP1TARGET=makedepend
 APP1OBJS=$(OBJFILES)
 APP1RPATH=NONE
+
+.IF "$(COM)"=="MSC"
+APP1STDLIBS+=msvcprt.lib
+.ENDIF                        # "$(COM)"=="MSC"
+
+.IF "$(OS)"=="SOLARIS"
+APP1STDLIBS+=-lstlport
+.ENDIF
+
 
 .INCLUDE : target.mk
 

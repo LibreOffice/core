@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -34,3 +34,12 @@ MAKEDEPEND=$(AUGMENT_LIBRARY_PATH) $(BIN)$/makedepend
 
 # find 'adjustvisibility' in own output tree
 ADJUSTVISIBILITY=$(AUGMENT_LIBRARY_PATH) $(BIN)$/adjustvisibility
+
+# avoid STLPort
+NO_DEFAULT_STL=TRUE
+SOLARINC!:=$(subst,/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(SOLARINC))
+
+.IF "$(OS)"=="SOLARIS"
+SOLARINC+=-I$(COMPATH)/prod/include/CC/stlport4
+SOLARLIB+=-L$(COMPATH)/prod/lib/stlport4
+.ENDIF

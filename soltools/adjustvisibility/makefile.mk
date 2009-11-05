@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -52,6 +52,8 @@ APP1OBJS	=	$(OBJ)$/adjustvisibility.obj
 DEPOBJFILES	=	$(APP1OBJ)
 APP1STDLIBS =   -lelf
 APP1RPATH   =   NONE
+
+APP1STDLIBS+=-lstlport
 
 .ENDIF "$(OS)"=="SOLARIS"
 
