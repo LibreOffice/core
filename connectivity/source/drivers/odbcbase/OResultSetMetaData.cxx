@@ -126,13 +126,13 @@ SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
     SQLSMALLINT nType = 0;
     try
     {
-        nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE);
+        nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE);
         if(nType == SQL_UNKNOWN_TYPE)
-            nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column, SQL_DESC_TYPE);
+            nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column, SQL_DESC_TYPE);
     }
     catch(SQLException& ) // in this case we have an odbc 2.0 driver
     {
-        nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE );
+        nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE );
     }
 
     return nType;
