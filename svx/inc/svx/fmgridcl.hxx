@@ -31,13 +31,8 @@
 #define _SVX_FMGRIDCL_HXX
 
 #include <com/sun/star/container/XIndexContainer.hpp>
-
-#ifndef _COM_SUN_STAR_FORM_XINDEXCONTAINER_HPP_
-#include <com/sun/star/container/XIndexContainer.hpp>
-#endif
 #include <com/sun/star/container/XNameContainer.hpp>
 
-// alles nur fuer stl
 #include <svx/gridctrl.hxx>
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"

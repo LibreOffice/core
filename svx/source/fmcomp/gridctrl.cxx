@@ -868,7 +868,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
         }
         catch(SQLException&)
         {
-            OSL_ENSURE(0,"SQLException catched while getting the bookmark");
+            DBG_UNHANDLED_EXCEPTION();
             m_aBookmark = Any();
             m_eStatus = GRS_INVALID;
             m_bIsNew = sal_False;
@@ -1786,30 +1786,32 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
 sal_Bool DbGridControl::SeekRow(long nRow)
 {
     // in filter mode or in insert only mode we don't have any cursor!
-    if (SeekCursor(nRow))
+    if ( !SeekCursor( nRow ) )
+        return sal_False;
+
+    if ( IsFilterMode() )
     {
-        if (m_pSeekCursor)
-        {
-            // on the current position we have to take the current row for display as we want
-            // to have the most recent values for display
-            if ((nRow == m_nCurrentPos) && getDisplaySynchron())
-                m_xPaintRow = m_xCurrentRow;
-            // seek to the empty insert row
-            else if (IsInsertionRow(nRow))
-                m_xPaintRow = m_xEmptyRow;
-            else
-            {
-                m_xSeekRow->SetState(m_pSeekCursor, sal_True);
-                m_xPaintRow = m_xSeekRow;
-            }
-        }
-        else if (IsFilterMode())
-        {
-            DBG_ASSERT(IsFilterRow(nRow), "DbGridControl::SeekRow(): No filter row, wrong mode");
-            m_xPaintRow = m_xEmptyRow;
-        }
-        DbGridControl_Base::SeekRow(nRow);
+        DBG_ASSERT( IsFilterRow( nRow ), "DbGridControl::SeekRow(): No filter row, wrong mode" );
+        m_xPaintRow = m_xEmptyRow;
     }
+    else
+    {
+        // on the current position we have to take the current row for display as we want
+        // to have the most recent values for display
+        if ( ( nRow == m_nCurrentPos ) && getDisplaySynchron() )
+            m_xPaintRow = m_xCurrentRow;
+        // seek to the empty insert row
+        else if ( IsInsertionRow( nRow ) )
+            m_xPaintRow = m_xEmptyRow;
+        else
+        {
+            m_xSeekRow->SetState( m_pSeekCursor, sal_True );
+            m_xPaintRow = m_xSeekRow;
+        }
+    }
+
+    DbGridControl_Base::SeekRow(nRow);
+
     return m_nSeekPos >= 0;
 }
 //------------------------------------------------------------------------------
@@ -2381,7 +2383,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         // da der letzte Datensatz bereits erreicht wurde!
         if (nRow == m_nCurrentPos)
         {
-            // auf die aktuelle Zeile bewegt, dann mu� kein abgleich gemacht werden, wenn
+            // auf die aktuelle Zeile bewegt, dann muß kein abgleich gemacht werden, wenn
             // gerade ein Datensatz eingefuegt wird
             m_nSeekPos = nRow;
         }

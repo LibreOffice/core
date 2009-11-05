@@ -69,6 +69,7 @@
 
 using namespace ::svxform;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
@@ -1393,8 +1394,8 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
 
     // don't use GetCurrentRow as this isn't affected by the above SeekRow
     // FS - 30.09.99 - 68644
-    DbGridRowRef aRow = pGrid->GetSeekRow();
-    DBG_ASSERT(aRow.Is(), "FmXGridPeer::queryFieldData : invalid current Row !");
+    DbGridRowRef xPaintRow = pGrid->GetPaintRow();
+    ENSURE_OR_THROW( xPaintRow.Is(), "invalid paint row" );
 
     // die Columns des Controls brauche ich fuer GetFieldText
     DbGridColumns aColumns = pGrid->GetColumns();
@@ -1416,39 +1417,40 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
         // FS - 30.09.99 - 68644
         pCol = aColumns.GetObject(nModelPos);
-        const DbGridRowRef xRow = pGrid->GetSeekRow();
-        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< ::com::sun::star::sdb::XColumn > ();
+        xFieldContent = xPaintRow->HasField( pCol->GetFieldPos() )
+                    ?   xPaintRow->GetField( pCol->GetFieldPos() ).getColumn()
+                    :   Reference< XColumn > ();
 
-        if (xFieldContent.is())
+        if ( !xFieldContent.is() )
+            continue;
+
+        if (bRequestedAsAny)
         {
-            if (bRequestedAsAny)
+            Reference< XPropertySet >  xFieldSet(xFieldContent, UNO_QUERY);
+            pReturnArray[i] = xFieldSet->getPropertyValue(FM_PROP_VALUE);
+        }
+        else
+        {
+            switch (xType.getTypeClass())
             {
-                Reference< XPropertySet >  xFieldSet(xFieldContent, UNO_QUERY);
-                pReturnArray[i] = xFieldSet->getPropertyValue(FM_PROP_VALUE);
-            }
-            else
-            {
-                switch (xType.getTypeClass())
+                // Strings werden direkt ueber das GetFieldText abgehandelt
+                case TypeClass_STRING           :
                 {
-                    // Strings werden direkt ueber das GetFieldText abgehandelt
-                    case TypeClass_STRING           :
-                    {
-                        String sText = aColumns.GetObject(nModelPos)->GetCellText(aRow, pGrid->getNumberFormatter());
-                        pReturnArray[i] <<= ::rtl::OUString(sText);
-                    }
-                    break;
-                    // alles andere wird an der DatabaseVariant erfragt
-                    case TypeClass_FLOAT            : pReturnArray[i] <<= xFieldContent->getFloat(); break;
-                    case TypeClass_DOUBLE       : pReturnArray[i] <<= xFieldContent->getDouble(); break;
-                    case TypeClass_SHORT            : pReturnArray[i] <<= (sal_Int16)xFieldContent->getShort(); break;
-                    case TypeClass_LONG         : pReturnArray[i] <<= (sal_Int32)xFieldContent->getLong(); break;
-                    case TypeClass_UNSIGNED_SHORT: pReturnArray[i] <<= (sal_uInt16)xFieldContent->getShort(); break;
-                    case TypeClass_UNSIGNED_LONG    : pReturnArray[i] <<= (sal_uInt32)xFieldContent->getLong(); break;
-                    case TypeClass_BOOLEAN      : ::comphelper::setBOOL(pReturnArray[i],xFieldContent->getBoolean()); break;
-                    default:
-                    {
-                        throw IllegalArgumentException();
-                    }
+                    String sText = aColumns.GetObject(nModelPos)->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
+                    pReturnArray[i] <<= ::rtl::OUString(sText);
+                }
+                break;
+                // alles andere wird an der DatabaseVariant erfragt
+                case TypeClass_FLOAT            : pReturnArray[i] <<= xFieldContent->getFloat(); break;
+                case TypeClass_DOUBLE           : pReturnArray[i] <<= xFieldContent->getDouble(); break;
+                case TypeClass_SHORT            : pReturnArray[i] <<= (sal_Int16)xFieldContent->getShort(); break;
+                case TypeClass_LONG             : pReturnArray[i] <<= (sal_Int32)xFieldContent->getLong(); break;
+                case TypeClass_UNSIGNED_SHORT   : pReturnArray[i] <<= (sal_uInt16)xFieldContent->getShort(); break;
+                case TypeClass_UNSIGNED_LONG    : pReturnArray[i] <<= (sal_uInt32)xFieldContent->getLong(); break;
+                case TypeClass_BOOLEAN          : ::comphelper::setBOOL(pReturnArray[i],xFieldContent->getBoolean()); break;
+                default:
+                {
+                    throw IllegalArgumentException();
                 }
             }
         }
