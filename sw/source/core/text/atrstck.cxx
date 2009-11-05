@@ -523,13 +523,11 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
 sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 {
-    ASSERT( rItem.Which() < RES_TXTATR_WITHEND_END ||
-            RES_UNKNOWNATR_CONTAINER == rItem.Which() ,
+    ASSERT( rItem.Which() < RES_TXTATR_WITHEND_END,
             "I do not want this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
     // robust
-    if ( RES_TXTATR_WITHEND_END <= rItem.Which() ||
-         RES_UNKNOWNATR_CONTAINER == rItem.Which() )
+    if ( RES_TXTATR_WITHEND_END <= rItem.Which() )
         return sal_False;
 
     USHORT nStack = StackPos[ rItem.Which() ];
@@ -557,6 +555,9 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 
 void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 {
+    if ( RES_TXTATR_WITHEND_END <= rAttr.Which() )
+        return; // robust
+
     // these special attributes in fact represent a collection of attributes
     // they have to be removed from each stack they belong to
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
@@ -583,7 +584,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     }
     // this is the usual case, we have a basic attribute, remove it from the
     // stack and reset the font
-    else if ( RES_UNKNOWNATR_CONTAINER != rAttr.Which() )
+    else
     {
         aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
         // reset font according to attribute on top of stack
@@ -600,13 +601,13 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
 void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
 {
-    ASSERT( rAttr.Which() < RES_TXTATR_WITHEND_END ||
-            RES_UNKNOWNATR_CONTAINER == rAttr.Which() ,
+    ASSERT( rAttr.Which() < RES_TXTATR_WITHEND_END,
             "I do not have this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
-    if ( RES_UNKNOWNATR_CONTAINER != rAttr.Which() &&
-         rAttr.Which() < RES_TXTATR_WITHEND_END )
+    if ( rAttr.Which() < RES_TXTATR_WITHEND_END )
+    {
         aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
+    }
 }
 
 /*************************************************************************
