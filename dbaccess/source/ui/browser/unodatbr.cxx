@@ -109,6 +109,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <sfx2/app.hxx>
@@ -2274,8 +2275,6 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
             xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
             if ( m_bPreview )
             {
-                // this be undone by the grid control in DbGridControl::RecalcRows
-                // xProp->setPropertyValue(PROPERTY_FETCHSIZE, makeAny(sal_Int32(20)));
                 xProp->setPropertyValue(PROPERTY_FETCHDIRECTION, makeAny(FetchDirection::FORWARD));
             }
 
@@ -2310,21 +2309,24 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
             InvalidateAll();
             return bSuccess;
         }
-        catch(SQLException& e)
+        catch( const SQLException& e )
         {
-            showError(SQLExceptionInfo(e));
+            Any aException( ::cppu::getCaughtException() );
+            showError( SQLExceptionInfo( aException ) );
         }
-        catch(WrappedTargetException& e)
+        catch( const WrappedTargetException& e )
         {
             SQLException aSql;
-            if(e.TargetException >>= aSql)
-                showError(SQLExceptionInfo(aSql));
+            if  ( e.TargetException.isExtractableTo( ::cppu::UnoType< SQLException >::get() ) )
+                showError( SQLExceptionInfo( e.TargetException ) );
             else
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
