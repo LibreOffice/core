@@ -3391,22 +3391,22 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
 
-/* RES_TXTATR_DUMMY4    */          0,
-/* RES_TXTATR_INETFMT   */          OutHTML_SwFmtINetFmt,
-/* RES_TXTATR_REFMARK*/             0,
+/* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,
-/* RES_TXTATR_CHARFMT   */          OutHTML_SwTxtCharFmt,
-/* RES_TXTATR_TWO_LINES */          0,
+/* RES_TXTATR_META */               0,
+/* RES_TXTATR_METAFIELD */          0,
+/* RES_TXTATR_AUTOFMT */            0,
+/* RES_TXTATR_INETFMT */            OutHTML_SwFmtINetFmt,
+/* RES_TXTATR_CHARFMT */            OutHTML_SwTxtCharFmt,
 /* RES_TXTATR_CJK_RUBY */           0,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
-/* RES_TXTATR_DUMMY6 */             0,
 
 /* RES_TXTATR_FIELD */              OutHTML_SwFmtFld,
 /* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,
 /* RES_TXTATR_FTN */                OutHTML_SwFmtFtn,
-/* RES_TXTATR_SOFTHYPH */           0,
-/* RES_TXTATR_HARDBLANK*/           0,
+/* RES_TXTATR_DUMMY4 */             0,
+/* RES_TXTATR_DUMMY3 */             0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 
