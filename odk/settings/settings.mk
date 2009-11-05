@@ -80,12 +80,12 @@ PATH_SEPARATOR=;
 
 # use this for release version
 CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
-ifeq "$(CPP_VC8)" "true"
+ifeq "$(CPP_MANIFEST)" "true"
 #CC_FLAGS+=-EHa -Zc:wchar_t-
-LINK_MANIFEST_VC8_ONLY=mt -manifest $@.manifest "-outputresource:$@;2"
+LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
 else
 #CC_FLAGS+=
-LINK_MANIFEST_VC8_ONLY=
+LINK_MANIFEST=
 endif
 ifeq "$(DEBUG)" "yes"
 CC_FLAGS+=-Zi
