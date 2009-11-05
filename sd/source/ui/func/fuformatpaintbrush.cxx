@@ -67,6 +67,7 @@ TYPEINIT1( FuFormatPaintBrush, FuText );
 FuFormatPaintBrush::FuFormatPaintBrush( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 : FuText(pViewSh, pWin, pView, pDoc, rReq)
 , mbPermanent( false )
+, mbOldIsQuickTextEditMode( true )
 {
 }
 
@@ -230,10 +231,21 @@ BOOL FuFormatPaintBrush::KeyInput(const KeyEvent& rKEvt)
 
 void FuFormatPaintBrush::Activate()
 {
+    mbOldIsQuickTextEditMode = mpViewShell->GetFrameView()->IsQuickEdit();
+    if( !mbOldIsQuickTextEditMode  )
+    {
+        mpViewShell->GetFrameView()->SetQuickEdit(TRUE);
+        mpView->SetQuickTextEditMode(TRUE);
+    }
 }
 
 void FuFormatPaintBrush::Deactivate()
 {
+    if( !mbOldIsQuickTextEditMode  )
+    {
+        mpViewShell->GetFrameView()->SetQuickEdit(FALSE);
+        mpView->SetQuickTextEditMode(FALSE);
+    }
 }
 
 bool FuFormatPaintBrush::HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const

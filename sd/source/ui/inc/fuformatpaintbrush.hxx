@@ -73,6 +73,7 @@ private:
 
     ::boost::shared_ptr<SfxItemSet> mpItemSet;
     bool   mbPermanent;
+    bool   mbOldIsQuickTextEditMode;
 };
 
 } // end of namespace sd
