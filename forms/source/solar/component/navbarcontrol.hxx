@@ -144,12 +144,12 @@ namespace frm
 
         // OFormNavigationHelper overriables
         virtual void    interceptorsChanged( );
-        virtual void    featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled );
+        virtual void    featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled );
         virtual void    allFeatureStatesChanged( );
-        virtual void    getSupportedFeatures( ::std::vector< sal_Int32 >& /* [out] */ _rFeatureIds );
+        virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds );
 
         // IFeatureDispatcher overriables
-        virtual bool    isEnabled( sal_Int32 _nFeatureId ) const;
+        virtual bool    isEnabled( sal_Int16 _nFeatureId ) const;
     };
 
 //.........................................................................

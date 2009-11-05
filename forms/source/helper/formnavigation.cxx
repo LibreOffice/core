@@ -33,11 +33,12 @@
 #include "formnavigation.hxx"
 #include "urltransformer.hxx"
 #include "controlfeatureinterception.hxx"
-#include <tools/debug.hxx>
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
 #include "frm_strings.hxx"
+
+#include <com/sun/star/form/runtime/FormFeature.hpp>
+
+#include <tools/debug.hxx>
+
 
 //.........................................................................
 namespace frm
@@ -49,6 +50,7 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::frame;
+    namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
     //==================================================================
     //= OFormNavigationHelper
@@ -83,7 +85,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void OFormNavigationHelper::featureStateChanged( sal_Int32 /*_nFeatureId*/, sal_Bool /*_bEnabled*/ )
+    void OFormNavigationHelper::featureStateChanged( sal_Int16 /*_nFeatureId*/, sal_Bool /*_bEnabled*/ )
     {
         // not interested in
     }
@@ -270,12 +272,12 @@ namespace frm
         if ( m_aSupportedFeatures.empty() )
         {
             // ask the derivee which feature ids it wants us to support
-            ::std::vector< sal_Int32 > aFeatureIds;
+            ::std::vector< sal_Int16 > aFeatureIds;
             getSupportedFeatures( aFeatureIds );
 
             OFormNavigationMapper aUrlMapper( m_xORB );
 
-            for (   ::std::vector< sal_Int32 >::const_iterator aLoop = aFeatureIds.begin();
+            for (   ::std::vector< sal_Int16 >::const_iterator aLoop = aFeatureIds.begin();
                     aLoop != aFeatureIds.end();
                     ++aLoop
                 )
@@ -300,7 +302,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void OFormNavigationHelper::dispatchWithArgument( sal_Int32 _nFeatureId, const sal_Char* _pParamAsciiName,
+    void OFormNavigationHelper::dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamAsciiName,
         const Any& _rParamValue ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
@@ -318,7 +320,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void OFormNavigationHelper::dispatch( sal_Int32 _nFeatureId ) const
+    void OFormNavigationHelper::dispatch( sal_Int16 _nFeatureId ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
         if ( m_aSupportedFeatures.end() != aInfo )
@@ -332,7 +334,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    bool OFormNavigationHelper::isEnabled( sal_Int32 _nFeatureId ) const
+    bool OFormNavigationHelper::isEnabled( sal_Int16 _nFeatureId ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
         if ( m_aSupportedFeatures.end() != aInfo )
@@ -342,7 +344,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    bool OFormNavigationHelper::getBooleanState( sal_Int32 _nFeatureId ) const
+    bool OFormNavigationHelper::getBooleanState( sal_Int16 _nFeatureId ) const
     {
         sal_Bool bState = sal_False;
 
@@ -354,7 +356,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OFormNavigationHelper::getStringState( sal_Int32 _nFeatureId ) const
+    ::rtl::OUString OFormNavigationHelper::getStringState( sal_Int16 _nFeatureId ) const
     {
         ::rtl::OUString sState;
 
@@ -366,7 +368,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    sal_Int32 OFormNavigationHelper::getIntegerState( sal_Int32 _nFeatureId ) const
+    sal_Int32 OFormNavigationHelper::getIntegerState( sal_Int16 _nFeatureId ) const
     {
         sal_Int32 nState = 0;
 
@@ -382,7 +384,7 @@ namespace frm
     {
         disconnectDispatchers( );
         // no supported features anymore:
-    FeatureMap aEmpty;
+        FeatureMap aEmpty;
         m_aSupportedFeatures.swap( aEmpty );
     }
 
@@ -401,7 +403,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    bool OFormNavigationMapper::getFeatureURL( sal_Int32 _nFeatureId, URL& /* [out] */ _rURL )
+    bool OFormNavigationMapper::getFeatureURL( sal_Int16 _nFeatureId, URL& /* [out] */ _rURL )
     {
         // get the ascii version of the URL
         const char* pAsciiURL = getFeatureURLAscii( _nFeatureId );
@@ -412,84 +414,72 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    const char* OFormNavigationMapper::getFeatureURLAscii( sal_Int32 _nFeatureId )
+    namespace
     {
-        const char* pAsciiURL = NULL;
-
-        switch ( _nFeatureId )
+        struct FeatureURL
         {
-        case SID_FM_RECORD_ABSOLUTE     : pAsciiURL = URL_FORM_POSITION;     break;
-        case SID_FM_RECORD_TOTAL        : pAsciiURL = URL_FORM_RECORDCOUNT;  break;
-        case SID_FM_RECORD_FIRST        : pAsciiURL = URL_RECORD_FIRST;      break;
-        case SID_FM_RECORD_PREV         : pAsciiURL = URL_RECORD_PREV;       break;
-        case SID_FM_RECORD_NEXT         : pAsciiURL = URL_RECORD_NEXT;       break;
-        case SID_FM_RECORD_LAST         : pAsciiURL = URL_RECORD_LAST;       break;
-        case SID_FM_RECORD_SAVE         : pAsciiURL = URL_RECORD_SAVE;       break;
-        case SID_FM_RECORD_UNDO         : pAsciiURL = URL_RECORD_UNDO;       break;
-        case SID_FM_RECORD_NEW          : pAsciiURL = URL_RECORD_NEW;        break;
-        case SID_FM_RECORD_DELETE       : pAsciiURL = URL_RECORD_DELETE;     break;
-        case SID_FM_REFRESH             : pAsciiURL = URL_FORM_REFRESH;      break;
-        case SID_FM_REFRESH_FORM_CONTROL: pAsciiURL = URL_FORM_REFRESH_CURRENT_CONTROL; break;
+            const sal_Int16 nFormFeature;
+            const sal_Char* pAsciiURL;
 
-        case SID_FM_SORTUP             : pAsciiURL = URL_FORM_SORT_UP;       break;
-        case SID_FM_SORTDOWN           : pAsciiURL = URL_FORM_SORT_DOWN;     break;
-        case SID_FM_ORDERCRIT          : pAsciiURL = URL_FORM_SORT;          break;
-        case SID_FM_AUTOFILTER         : pAsciiURL = URL_FORM_AUTO_FILTER;   break;
-        case SID_FM_FILTERCRIT         : pAsciiURL = URL_FORM_FILTER;        break;
-        case SID_FM_FORM_FILTERED      : pAsciiURL = URL_FORM_APPLY_FILTER;  break;
-        case SID_FM_REMOVE_FILTER_SORT : pAsciiURL = URL_FORM_REMOVE_FILTER; break;
+            FeatureURL( const sal_Int16 _nFormFeature, const sal_Char* _pAsciiURL )
+                :nFormFeature( _nFormFeature )
+                ,pAsciiURL( _pAsciiURL )
+            {
+            }
         };
-        return pAsciiURL;
+        const FeatureURL* lcl_getFeatureTable()
+        {
+            static const FeatureURL s_aFeatureURLs[] =
+            {
+                FeatureURL( FormFeature::MoveAbsolute,            URL_FORM_POSITION ),
+                FeatureURL( FormFeature::TotalRecords,            URL_FORM_RECORDCOUNT ),
+                FeatureURL( FormFeature::MoveToFirst,             URL_RECORD_FIRST ),
+                FeatureURL( FormFeature::MoveToPrevious,          URL_RECORD_PREV ),
+                FeatureURL( FormFeature::MoveToNext,              URL_RECORD_NEXT ),
+                FeatureURL( FormFeature::MoveToLast,              URL_RECORD_LAST ),
+                FeatureURL( FormFeature::SaveRecordChanges,       URL_RECORD_SAVE ),
+                FeatureURL( FormFeature::UndoRecordChanges,       URL_RECORD_UNDO ),
+                FeatureURL( FormFeature::MoveToInsertRow,         URL_RECORD_NEW ),
+                FeatureURL( FormFeature::DeleteRecord,            URL_RECORD_DELETE ),
+                FeatureURL( FormFeature::ReloadForm,              URL_FORM_REFRESH ),
+                FeatureURL( FormFeature::RefreshCurrentControl,   URL_FORM_REFRESH_CURRENT_CONTROL ),
+                FeatureURL( FormFeature::SortAscending,           URL_FORM_SORT_UP ),
+                FeatureURL( FormFeature::SortDescending,          URL_FORM_SORT_DOWN ),
+                FeatureURL( FormFeature::InteractiveSort,         URL_FORM_SORT ),
+                FeatureURL( FormFeature::AutoFilter,              URL_FORM_AUTO_FILTER ),
+                FeatureURL( FormFeature::InteractiveFilter,       URL_FORM_FILTER ),
+                FeatureURL( FormFeature::ToggleApplyFilter,       URL_FORM_APPLY_FILTER ),
+                FeatureURL( FormFeature::RemoveFilterAndSort,     URL_FORM_REMOVE_FILTER ),
+                FeatureURL( 0, NULL )
+            };
+            return s_aFeatureURLs;
+        }
     }
 
     //------------------------------------------------------------------
-    sal_Int32 OFormNavigationMapper::getFeatureId( const ::rtl::OUString& _rCompleteURL )
+    const char* OFormNavigationMapper::getFeatureURLAscii( sal_Int16 _nFeatureId )
     {
-        sal_Int32 nFeatureId = -1;
+        const FeatureURL* pFeatures = lcl_getFeatureTable();
+        while ( pFeatures->pAsciiURL )
+        {
+            if ( pFeatures->nFormFeature == _nFeatureId )
+                return pFeatures->pAsciiURL;
+            ++pFeatures;
+        }
+        return NULL;
+    }
 
-        if ( _rCompleteURL == URL_FORM_POSITION )
-            nFeatureId = SID_FM_RECORD_ABSOLUTE;
-        else if ( _rCompleteURL == URL_FORM_RECORDCOUNT )
-            nFeatureId = SID_FM_RECORD_TOTAL;
-        else if ( _rCompleteURL == URL_RECORD_FIRST )
-            nFeatureId = SID_FM_RECORD_FIRST;
-        else if ( _rCompleteURL == URL_RECORD_PREV )
-            nFeatureId = SID_FM_RECORD_PREV;
-        else if ( _rCompleteURL == URL_RECORD_NEXT )
-            nFeatureId = SID_FM_RECORD_NEXT;
-        else if ( _rCompleteURL == URL_RECORD_LAST )
-            nFeatureId = SID_FM_RECORD_LAST;
-        else if ( _rCompleteURL == URL_RECORD_SAVE )
-            nFeatureId = SID_FM_RECORD_SAVE;
-        else if ( _rCompleteURL == URL_RECORD_UNDO )
-            nFeatureId = SID_FM_RECORD_UNDO;
-        else if ( _rCompleteURL == URL_RECORD_NEW )
-            nFeatureId = SID_FM_RECORD_NEW;
-        else if ( _rCompleteURL == URL_RECORD_DELETE )
-            nFeatureId = SID_FM_RECORD_DELETE;
-        else if ( _rCompleteURL == URL_FORM_REFRESH )
-            nFeatureId = SID_FM_REFRESH;
-        else if ( _rCompleteURL == URL_FORM_REFRESH_CURRENT_CONTROL )
-            nFeatureId = SID_FM_REFRESH_FORM_CONTROL;
-        else if ( _rCompleteURL == URL_FORM_SORT_UP )
-            nFeatureId = SID_FM_SORTUP;
-        else if ( _rCompleteURL == URL_FORM_SORT_DOWN )
-            nFeatureId = SID_FM_SORTDOWN;
-        else if ( _rCompleteURL == URL_FORM_SORT )
-            nFeatureId = SID_FM_ORDERCRIT;
-        else if ( _rCompleteURL == URL_FORM_AUTO_FILTER )
-            nFeatureId = SID_FM_AUTOFILTER;
-        else if ( _rCompleteURL == URL_FORM_FILTER )
-            nFeatureId = SID_FM_FILTERCRIT;
-        else if ( _rCompleteURL == URL_FORM_APPLY_FILTER )
-            nFeatureId = SID_FM_FORM_FILTERED;
-        else if ( _rCompleteURL == URL_FORM_REMOVE_FILTER )
-            nFeatureId = SID_FM_REMOVE_FILTER_SORT;
-
-        DBG_ASSERT( ( -1 == nFeatureId ) || _rCompleteURL.equalsAscii( getFeatureURLAscii( nFeatureId ) ),
-            "OFormNavigationMapper::getFeatureId: inconsistent maps!" );
-
-        return nFeatureId;
+    //------------------------------------------------------------------
+    sal_Int16 OFormNavigationMapper::getFeatureId( const ::rtl::OUString& _rCompleteURL )
+    {
+        const FeatureURL* pFeatures = lcl_getFeatureTable();
+        while ( pFeatures->pAsciiURL )
+        {
+            if ( _rCompleteURL.compareToAscii( pFeatures->pAsciiURL ) == 0 )
+                return pFeatures->nFormFeature;
+            ++pFeatures;
+        }
+        return -1;
     }
 
 //.........................................................................

@@ -509,7 +509,7 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt )
 {
     {
-        sal_Int32 nFeatureId = -1;
+        sal_Int16 nFeatureId = -1;
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             nFeatureId = m_nTargetUrlFeatureId;
@@ -636,7 +636,7 @@ sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _r
 //------------------------------------------------------------------------------
 void OButtonControl::modelFeatureUrlPotentiallyChanged( )
 {
-    sal_Int32 nOldUrlFeatureId = m_nTargetUrlFeatureId;
+    sal_Int16 nOldUrlFeatureId = m_nTargetUrlFeatureId;
 
     // doe we have another TargetURL now? If so, we need to update our dispatches
     m_nTargetUrlFeatureId = getModelUrlFeatureId( );
@@ -675,9 +675,9 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 OButtonControl::getModelUrlFeatureId( ) const
+sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
 {
-    sal_Int32 nFeatureId = -1;
+    sal_Int16 nFeatureId = -1;
 
     // some URL related properties of the model
     ::rtl::OUString sUrl;
@@ -717,14 +717,14 @@ void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeExcep
 }
 
 //------------------------------------------------------------------------------
-void OButtonControl::getSupportedFeatures( ::std::vector< sal_Int32 >& /* [out] */ _rFeatureIds )
+void OButtonControl::getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds )
 {
     if ( -1 != m_nTargetUrlFeatureId )
         _rFeatureIds.push_back( m_nTargetUrlFeatureId );
 }
 
 //------------------------------------------------------------------
-void OButtonControl::featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled )
+void OButtonControl::featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled )
 {
     if ( _nFeatureId == m_nTargetUrlFeatureId )
     {
@@ -754,7 +754,7 @@ void OButtonControl::allFeatureStatesChanged( )
 }
 
 //------------------------------------------------------------------
-bool OButtonControl::isEnabled( sal_Int32 _nFeatureId ) const
+bool OButtonControl::isEnabled( sal_Int16 _nFeatureId ) const
 {
     if ( const_cast< OButtonControl* >( this )->isDesignMode() )
         // TODO: the model property?

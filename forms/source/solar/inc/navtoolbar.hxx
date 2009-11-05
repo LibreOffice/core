@@ -86,15 +86,15 @@ namespace frm
 
         /** enables or disables a given feature
         */
-        void                        enableFeature( sal_Int32 _nFeatureId, bool _bEnabled );
+        void                        enableFeature( sal_Int16 _nFeatureId, bool _bEnabled );
 
         /** checks or unchecks a given feature
         */
-        void                        checkFeature( sal_Int32 _nFeatureId, bool _bEnabled );
+        void                        checkFeature( sal_Int16 _nFeatureId, bool _bEnabled );
 
         /** sets the text of a given feature
         */
-        void                        setFeatureText( sal_Int32 _nFeatureId, const ::rtl::OUString& _rText );
+        void                        setFeatureText( sal_Int16 _nFeatureId, const ::rtl::OUString& _rText );
 
         /** retrieves the current image size
         */

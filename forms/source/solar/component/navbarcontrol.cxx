@@ -40,6 +40,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/form/runtime/FormFeature.hpp>
 /** === end UNO includes === **/
 
 #include <tools/debug.hxx>
@@ -62,6 +63,7 @@ namespace frm
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
+    namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
 #define FORWARD_TO_PEER_1( unoInterface, method, param1 )   \
     Reference< unoInterface > xTypedPeer( getPeer(), UNO_QUERY );   \
@@ -456,7 +458,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void ONavigationBarPeer::featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled )
+    void ONavigationBarPeer::featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled )
     {
         // enable this button on the toolbox
         NavigationToolBar* pNavBar = static_cast< NavigationToolBar* >( GetWindow() );
@@ -465,15 +467,15 @@ namespace frm
             pNavBar->enableFeature( _nFeatureId, _bEnabled );
 
             // is it a feature with additional state information?
-            if ( _nFeatureId == SID_FM_FORM_FILTERED )
+            if ( _nFeatureId == FormFeature::ToggleApplyFilter )
             {   // additional boolean state
                 pNavBar->checkFeature( _nFeatureId, getBooleanState( _nFeatureId ) );
             }
-            else if ( _nFeatureId == SID_FM_RECORD_TOTAL )
+            else if ( _nFeatureId == FormFeature::TotalRecords )
             {
                 pNavBar->setFeatureText( _nFeatureId, getStringState( _nFeatureId ) );
             }
-            else if ( _nFeatureId == SID_FM_RECORD_ABSOLUTE )
+            else if ( _nFeatureId == FormFeature::MoveAbsolute )
             {
                 pNavBar->setFeatureText( _nFeatureId, String::CreateFromInt32( getIntegerState( _nFeatureId ) ) );
             }
@@ -496,7 +498,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    bool ONavigationBarPeer::isEnabled( sal_Int32 _nFeatureId ) const
+    bool ONavigationBarPeer::isEnabled( sal_Int16 _nFeatureId ) const
     {
         if ( const_cast< ONavigationBarPeer* >( this )->isDesignMode() )
            return false;
@@ -524,27 +526,27 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void ONavigationBarPeer::getSupportedFeatures( ::std::vector< sal_Int32 >& _rFeatureIds )
+    void ONavigationBarPeer::getSupportedFeatures( ::std::vector< sal_Int16 >& _rFeatureIds )
     {
-        _rFeatureIds.push_back( SID_FM_RECORD_ABSOLUTE );
-        _rFeatureIds.push_back( SID_FM_RECORD_TOTAL );
-        _rFeatureIds.push_back( SID_FM_RECORD_FIRST );
-        _rFeatureIds.push_back( SID_FM_RECORD_PREV );
-        _rFeatureIds.push_back( SID_FM_RECORD_NEXT );
-        _rFeatureIds.push_back( SID_FM_RECORD_LAST );
-        _rFeatureIds.push_back( SID_FM_RECORD_SAVE );
-        _rFeatureIds.push_back( SID_FM_RECORD_UNDO );
-        _rFeatureIds.push_back( SID_FM_RECORD_NEW );
-        _rFeatureIds.push_back( SID_FM_RECORD_DELETE );
-        _rFeatureIds.push_back( SID_FM_REFRESH );
-        _rFeatureIds.push_back( SID_FM_REFRESH_FORM_CONTROL );
-        _rFeatureIds.push_back( SID_FM_SORTUP );
-        _rFeatureIds.push_back( SID_FM_SORTDOWN );
-        _rFeatureIds.push_back( SID_FM_ORDERCRIT );
-        _rFeatureIds.push_back( SID_FM_AUTOFILTER );
-        _rFeatureIds.push_back( SID_FM_FILTERCRIT );
-        _rFeatureIds.push_back( SID_FM_FORM_FILTERED );
-        _rFeatureIds.push_back( SID_FM_REMOVE_FILTER_SORT );
+        _rFeatureIds.push_back( FormFeature::MoveAbsolute );
+        _rFeatureIds.push_back( FormFeature::TotalRecords );
+        _rFeatureIds.push_back( FormFeature::MoveToFirst );
+        _rFeatureIds.push_back( FormFeature::MoveToPrevious );
+        _rFeatureIds.push_back( FormFeature::MoveToNext );
+        _rFeatureIds.push_back( FormFeature::MoveToLast );
+        _rFeatureIds.push_back( FormFeature::SaveRecordChanges );
+        _rFeatureIds.push_back( FormFeature::UndoRecordChanges );
+        _rFeatureIds.push_back( FormFeature::MoveToInsertRow );
+        _rFeatureIds.push_back( FormFeature::DeleteRecord );
+        _rFeatureIds.push_back( FormFeature::ReloadForm );
+        _rFeatureIds.push_back( FormFeature::RefreshCurrentControl );
+        _rFeatureIds.push_back( FormFeature::SortAscending );
+        _rFeatureIds.push_back( FormFeature::SortDescending );
+        _rFeatureIds.push_back( FormFeature::InteractiveSort );
+        _rFeatureIds.push_back( FormFeature::AutoFilter );
+        _rFeatureIds.push_back( FormFeature::InteractiveFilter );
+        _rFeatureIds.push_back( FormFeature::ToggleApplyFilter );
+        _rFeatureIds.push_back( FormFeature::RemoveFilterAndSort );
     }
 
 //.........................................................................

@@ -131,7 +131,7 @@ class OButtonControl    :public OButtonControl_BASE
 {
 private:
     sal_uInt32  m_nClickEvent;
-    sal_Int32   m_nTargetUrlFeatureId;
+    sal_Int16   m_nTargetUrlFeatureId;
     /// caches the value of the "Enabled" property of our model
     sal_Bool    m_bEnabledByPropertyValue;
 
@@ -176,10 +176,10 @@ public:
 
 protected:
     // OFormNavigationHelper overriables
-    virtual void    getSupportedFeatures( ::std::vector< sal_Int32 >& /* [out] */ _rFeatureIds );
-    virtual void    featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled );
+    virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds );
+    virtual void    featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled );
     virtual void    allFeatureStatesChanged( );
-    virtual bool    isEnabled( sal_Int32 _nFeatureId ) const;
+    virtual bool    isEnabled( sal_Int16 _nFeatureId ) const;
 
     // XDispatchProviderInterception disambiguaiton
     virtual void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
@@ -198,7 +198,7 @@ private:
     /** retrieves the feature id (see OFormNavigationHelper) of the TargetURL of
         the model.
     */
-    sal_Int32   getModelUrlFeatureId( ) const;
+    sal_Int16   getModelUrlFeatureId( ) const;
 
     /** starts or stops listening for changes in model properties we're interested in
     */
