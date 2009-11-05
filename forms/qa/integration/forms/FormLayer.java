@@ -42,6 +42,7 @@ import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
+import com.sun.star.awt.VisualEffect;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.drawing.XDrawPage;
@@ -95,7 +96,7 @@ public class FormLayer
             the property access to the control's model
     */
     public XPropertySet createControlAndShape( String sFormComponentService, int nXPos,
-        int nYPos, int nWidth, int nHeight, XIndexContainer xParentForm ) throws java.lang.Exception
+        int nYPos, int nWidth, int nHeight, Object _parentForm ) throws java.lang.Exception
     {
         // let the document create a shape
         XMultiServiceFactory xDocAsFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
@@ -118,9 +119,14 @@ public class FormLayer
             m_document.getOrb().createInstance( sQualifiedComponentName ) );
 
         // insert the model into the form component hierarchy, if the caller gave us a location
-        if ( null != xParentForm )
+        if ( null != _parentForm )
         {
-            xParentForm.insertByIndex( xParentForm.getCount(), xModel );
+            XIndexContainer parentForm = null;
+            if ( _parentForm instanceof XIndexContainer )
+                parentForm = (XIndexContainer)_parentForm;
+            else
+                parentForm = (XIndexContainer)UnoRuntime.queryInterface( XIndexContainer.class, _parentForm );
+            parentForm.insertByIndex( parentForm.getCount(), xModel );
         }
 
         // knitt them
@@ -231,6 +237,12 @@ public class FormLayer
         // insert the text field control
         XPropertySet xFieldModel = createControlAndShape( sControlType, nXPos + 26, nYPos, 40, nHeight );
         xFieldModel.setPropertyValue( "DataField", sFieldName );
+        if ( xFieldModel.getPropertySetInfo().hasPropertyByName( "Border" ) )
+        {
+            xFieldModel.setPropertyValue( "Border", new Short( VisualEffect.FLAT ) );
+            if ( xFieldModel.getPropertySetInfo().hasPropertyByName( "BorderColor" ) )
+                xFieldModel.setPropertyValue( "BorderColor", new Integer( 0x00C0C0C0 ) );
+        }
         // knit it to it's label component
         xFieldModel.setPropertyValue( "LabelControl", xLabelModel );
 
@@ -256,7 +268,7 @@ public class FormLayer
     public XPropertySet insertControlLine( String sControlType, String sFieldName, String sControlNamePostfix, int nYPos )
         throws java.lang.Exception
     {
-        return insertControlLine( sControlType, sFieldName, sControlNamePostfix, 2, nYPos, 6 );
+        return insertControlLine( sControlType, sFieldName, sControlNamePostfix, 10, nYPos, 6 );
     }
 
     /* ------------------------------------------------------------------ */
