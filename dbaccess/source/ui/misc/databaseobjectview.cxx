@@ -31,66 +31,30 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_DATABASE_OBJECT_VIEW_HXX
 #include "databaseobjectview.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBACCESS_ASYNCMODALDIALOG_HXX
 #include "asyncmodaldialog.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMES_HPP_
 #include <com/sun/star/frame/XFrames.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_XTABLEUIPROVIDER_HPP_
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
 #include <comphelper/namedvaluecollection.hxx>
-#endif
-
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#endif
+#include <vcl/window.hxx>
 
 // .........................................................................
 namespace dbaui
@@ -183,6 +147,15 @@ namespace dbaui
                     lArgs[nArg++] <<= aProp;
 
                     m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
+
+                    // everything we load can be considered a "top level document", so set the respective bit at the window.
+                    // This, amongst other things, triggers that the component in this task participates in the
+                    // "ThisComponent"-game for the global application Basic.
+                    const Reference< XFrame > xFrame( m_xFrameLoader, UNO_QUERY_THROW );
+                    const Reference< XWindow > xFrameWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
+                    Window* pContainerWindow = VCLUnoHelper::GetWindow( xFrameWindow );
+                    ENSURE_OR_THROW( pContainerWindow, "no implementation access to the frame's container window!" );
+                    pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
                 }
 
                 Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_QUERY_THROW );
