@@ -49,6 +49,7 @@ PRJINC += ..$/..$/deployment ..$/..
 CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 .ENDIF
 
+.IF "$(LINK_SO)"!=""
 APP1TARGET = so$/unopkg
 APP1OBJS = $(OBJFILES)
 APP1STDLIBS = $(SALLIB) $(UNOPKGAPPLIB)
@@ -59,6 +60,7 @@ APP1RPATH = BRAND
 APP1ICON = $(SOLARRESDIR)$/icons/so9_main_app.ico
 APP1LINKRES = $(MISC)$/$(TARGET)1.res
 .ENDIF
+.ENDIF			# "$(LINK_SO)"!=""
 
 APP2TARGET = unopkg
 APP2OBJS = $(OBJFILES)

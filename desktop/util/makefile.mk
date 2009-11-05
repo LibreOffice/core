@@ -287,22 +287,25 @@ $(BIN)$/soffice_oo$(EXECPOST) : $(APP5TARGETN)
 $(BIN)$/so$/soffice_so$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
 
-ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
-.ELSE
-ALLTAR : $(BIN)$/soffice_oo$(EXECPOST)
+ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST)
 .ENDIF # "$(LINK_SO)"=="TRUE"
+ALLTAR : $(BIN)$/soffice_oo$(EXECPOST)
 .ENDIF
 
 .IF "$(OS)" == "MACOSX"
+.IF "$(LINK_SO)"=="TRUE"
 $(BIN)$/so$/soffice_mac$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
     
+ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST)
+.ENDIF # "$(LINK_SO)"=="TRUE"
+
 $(BIN)$/soffice_mac$(EXECPOST) : $(APP5TARGETN)
     $(COPY) $< $@
 
-ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST) $(BIN)$/soffice_mac$(EXECPOST)
+ALLTAR : $(BIN)$/soffice_mac$(EXECPOST)
 
-.ENDIF
+.ENDIF # "$(OS)" == "MACOSX"
 
 .IF "$(GUI)" == "WNT"
 
