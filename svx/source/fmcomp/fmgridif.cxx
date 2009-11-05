@@ -1727,6 +1727,8 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 //------------------------------------------------------------------------------
 void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     FmGridControl* pGrid = static_cast< FmGridControl* >( GetWindow() );
 
     if (m_xColumns.is())
