@@ -149,8 +149,8 @@ namespace frm
             if ( m_xModuleImageManager.is() )
                 aModImages = m_xModuleImageManager->getImages( nImageType, _rCommandURLs );
 
-            ENSURE_OR_THROW( aDocImages.getLength() == nCommandCount, "illegal array size returned by getImages (document image manager)" );
-            ENSURE_OR_THROW( aModImages.getLength() == nCommandCount, "illegal array size returned by getImages (module image manager)" );
+            ENSURE_OR_THROW( (size_t)aDocImages.getLength() == nCommandCount, "illegal array size returned by getImages (document image manager)" );
+            ENSURE_OR_THROW( (size_t)aModImages.getLength() == nCommandCount, "illegal array size returned by getImages (module image manager)" );
 
             for ( size_t i=0; i<nCommandCount; ++i )
             {
