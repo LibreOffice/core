@@ -141,7 +141,7 @@ sub get_all_modules
 sub get_active_modules
 {
     my $self        = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}} && !scalar keys %{$self->{ACTIVE_MODULES}});
     my @active_modules = sort keys %{$self->{ACTIVE_MODULES}};
     @active_modules = $self->get_all_modules() if (!scalar @active_modules);
     return @active_modules;
@@ -151,7 +151,7 @@ sub is_active
 {
     my $self        = shift;
     my $module      = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}} && !scalar keys %{$self->{ACTIVE_MODULES}});
     if (!scalar keys %{$self->{ACTIVE_MODULES}}) {
         return exists ($self->{MODULE_PATHS}{$module});
     }
@@ -202,6 +202,7 @@ sub get_module_paths {
             croak("Cannot read $_ repository content");
         };
     };
+    croak("No modules found!") if (!scalar keys %{$self->{MODULE_PATHS}});
 };
 
 sub get_config_file {
