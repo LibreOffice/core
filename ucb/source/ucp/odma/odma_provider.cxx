@@ -230,7 +230,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
             aProp->m_sContentType  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_TYPE));
             append(aProp);
         }
-        delete lpszDocName;
+        delete [] lpszDocName;
     }
     else // we got an already fetched name here so look for it
     {
@@ -298,11 +298,11 @@ void ContentProvider::saveDocument(const ::rtl::OString& _sDocumentId)
         OSL_ENSURE(odm == ODM_SUCCESS,"Could not save document!");
         if(odm != ODM_SUCCESS)
         {
-            delete lpszDocId;
+            delete [] lpszDocId;
             throw uno::Exception();
         }
         aIter->second->m_sDocumentId = rtl::OString(lpszDocId);
-        delete lpszDocId;
+        delete [] lpszDocId;
     }
 }
 // -----------------------------------------------------------------------------
@@ -414,7 +414,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
                                     lpszDocInfo,
                                     ODM_DOCID_MAX);
 */
-    delete lpszDocInfo;
+    delete [] lpszDocInfo;
 }
 // -----------------------------------------------------------------------------
 void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
@@ -482,16 +482,16 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
             }
             while(nCount > nMaxCount);
 
-            delete lpszDocInfo;
-            delete lpszDocId;
-            delete lpszDocName;
+            delete [] lpszDocInfo;
+            delete [] lpszDocId;
+            delete [] lpszDocName;
         }
 
         // now close the query
         odm = NODMQueryClose(ContentProvider::getHandle(), pQueryId);
-        delete pQueryId;
+        delete [] pQueryId;
     }
-    delete lpszDMSList;
+    delete [] lpszDMSList;
 
 
     return aReturn;
@@ -547,11 +547,11 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
                 _rProp->m_bIsOpen = sal_True;
                 break;
             default:
-                delete pFileName;
+                delete [] pFileName;
                 throw uno::Exception();  // TODO give a more precise error message here
         }
 
-        delete pFileName;
+        delete [] pFileName;
     }
     return _rProp->m_sFileURL;
 }

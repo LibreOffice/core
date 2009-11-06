@@ -2004,7 +2004,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         }
 
         // #105678# free mem again
-        delete pHdlAndIndex;
+        delete [] pHdlAndIndex;
     }
 }
 
