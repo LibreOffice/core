@@ -122,8 +122,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
     aModifyTimer.SetTimeoutHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
-    aModifyTimer.SetTimeout(2000);
-    aModifyTimer.Start();
+    aModifyTimer.SetTimeout(500);
 
     aCursorMoveTimer.SetTimeoutHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
     aCursorMoveTimer.SetTimeout(500);
@@ -256,7 +255,6 @@ IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
     SmModule *pp = SM_MOD();
     if (pp->GetConfig()->IsAutoRedraw())
         Flush();
-    aModifyTimer.Start();
     return 0;
 }
 
