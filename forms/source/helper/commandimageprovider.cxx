@@ -23,6 +23,9 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_forms.hxx"
+
 #include "commandimageprovider.hxx"
 
 /** === begin UNO includes === **/
@@ -33,7 +36,6 @@
 #include <com/sun/star/ui/ImageType.hpp>
 /** === end UNO includes === **/
 
-#include <comphelper/componentcontext.hxx>
 #include <tools/diagnose_ex.h>
 
 //........................................................................
@@ -166,10 +168,10 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ::boost::shared_ptr< ICommandImageProvider > createDocumentCommandImageProvider(
+    PCommandImageProvider createDocumentCommandImageProvider(
         const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
     {
-        ::boost::shared_ptr< ICommandImageProvider > pImageProvider( new DocumentCommandImageProvider( _rContext, _rxDocument ) );
+        PCommandImageProvider pImageProvider( new DocumentCommandImageProvider( _rContext, _rxDocument ) );
         return pImageProvider;
     }
 

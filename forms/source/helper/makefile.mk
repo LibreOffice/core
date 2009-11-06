@@ -54,6 +54,7 @@ SLOFILES=	$(SLO)$/formnavigation.obj \
             $(SLO)$/windowstateguard.obj \
             $(SLO)$/resettable.obj \
             $(SLO)$/commandimageprovider.obj \
+            $(SLO)$/commanddescriptionprovider.obj \
 
 # --- Targets ----------------------------------
 

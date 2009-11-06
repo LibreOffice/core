@@ -32,10 +32,11 @@
 #define FORMS_NAVBARCONTROL_HXX
 
 #include "formnavigation.hxx"
-#include "commandimageprovider.hxx"
 
+/** === begin UNO includes === **/
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
+/** === end UNO includes === **/
 
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

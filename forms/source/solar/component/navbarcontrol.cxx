@@ -37,6 +37,8 @@
 #include "FormComponent.hxx"
 #include "componenttools.hxx"
 #include "navtoolbar.hxx"
+#include "commandimageprovider.hxx"
+#include "commanddescriptionprovider.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XView.hpp>
@@ -283,10 +285,12 @@ namespace frm
         pPeer->acquire();   // by definition, the returned object is aquired once
 
         // the VCL control for the peer
+        Reference< XModel > xContextDocument( getXModel( _rxModel ) );
         NavigationToolBar* pNavBar = new NavigationToolBar(
             _pParentWindow,
             lcl_getWinBits_nothrow( _rxModel ),
-            createDocumentCommandImageProvider( _rxORB, getXModel( _rxModel ) )
+            createDocumentCommandImageProvider( _rxORB, xContextDocument ),
+            createDocumentCommandDescriptionProvider( _rxORB, xContextDocument )
         );
 
         // some knittings

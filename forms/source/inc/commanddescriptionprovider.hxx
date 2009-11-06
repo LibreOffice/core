@@ -23,15 +23,14 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef COMMANDIMAGEPROVIDER_HXX
-#define COMMANDIMAGEPROVIDER_HXX
+#ifndef COMMANDDESCRIPTIONPROVIDER_HXX
+#define COMMANDDESCRIPTIONPROVIDER_HXX
 
 /** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
-#include <vcl/image.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -40,32 +39,24 @@ namespace frm
 {
 //........................................................................
 
-    //=====================================================================
-    //= ICommandImageProvider
-    //=====================================================================
-    typedef ::rtl::OUString                                 CommandURL;
-    typedef ::com::sun::star::uno::Sequence< CommandURL >   CommandURLs;
-    typedef ::std::vector< Image >                          CommandImages;
-
-    class SAL_NO_VTABLE ICommandImageProvider
+    //====================================================================
+    //= ICommandDescriptionProvider
+    //====================================================================
+    class SAL_NO_VTABLE ICommandDescriptionProvider
     {
     public:
-        virtual CommandImages   getCommandImages(
-                                    const CommandURLs& _rCommandURLs,
-                                    const bool _bLarge,
-                                    const bool _bHiContrast
-                                ) const = 0;
+        virtual ::rtl::OUString getCommandDescription( const ::rtl::OUString& _rCommandURL ) const = 0;
 
-        virtual ~ICommandImageProvider() { }
+        virtual ~ICommandDescriptionProvider() { }
     };
 
-    typedef ::boost::shared_ptr< const ICommandImageProvider >  PCommandImageProvider;
+    typedef ::boost::shared_ptr< const ICommandDescriptionProvider >  PCommandDescriptionProvider;
 
     //=====================================================================
     //= factory
     //=====================================================================
-    PCommandImageProvider
-        createDocumentCommandImageProvider(
+    PCommandDescriptionProvider
+        createDocumentCommandDescriptionProvider(
             const ::comphelper::ComponentContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
         );
@@ -74,4 +65,4 @@ namespace frm
 } // namespace frm
 //........................................................................
 
-#endif // COMMANDIMAGEPROVIDER_HXX
+#endif // COMMANDDESCRIPTIONPROVIDER_HXX

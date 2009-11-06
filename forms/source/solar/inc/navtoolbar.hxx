@@ -43,6 +43,7 @@ namespace frm
 
     class IFeatureDispatcher;
     class ICommandImageProvider;
+    class ICommandDescriptionProvider;
 
     class ImplNavToolBar;
 
@@ -68,14 +69,21 @@ namespace frm
 
     private:
         const IFeatureDispatcher*       m_pDispatcher;
-        ::boost::shared_ptr< const ICommandImageProvider >
+        const ::boost::shared_ptr< const ICommandImageProvider >
                                         m_pImageProvider;
+        const ::boost::shared_ptr< const ICommandDescriptionProvider >
+                                        m_pDescriptionProvider;
         ImageSize                       m_eImageSize;
         ImplNavToolBar*                 m_pToolbar;
         ::std::vector< Window* >        m_aChildWins;
 
     public:
-        NavigationToolBar( Window* _pParent, WinBits _nStyle, const ::boost::shared_ptr< const ICommandImageProvider >& _pImageProvider );
+        NavigationToolBar(
+            Window* _pParent,
+            WinBits _nStyle,
+            const ::boost::shared_ptr< const ICommandImageProvider >& _pImageProvider,
+            const ::boost::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
+        );
         ~NavigationToolBar( );
 
         /** sets the dispatcher which is to be used for the features
