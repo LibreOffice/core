@@ -343,11 +343,6 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
     DWORD dwClassName            = _MAX_PATH;
     DWORD dwKeyName              = _MAX_PATH;
 
-    // Locations shouldn't be greater than _MAX_PATH
-    TCHAR*  szJavaHome = new TCHAR[_MAX_PATH + 1];
-    DWORD dwSize = _MAX_PATH + 1;
-
-
     /*
      * Java leaves registry keys at HKLM\SOFTWARE\JavaSoft.
      *
@@ -356,6 +351,10 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
     lRet = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\JavaSoft\\Java Runtime Environment"), 0, KEY_READ, &hKey);
     if (lRet != ERROR_SUCCESS)
         return NULL;
+
+    // Locations shouldn't be greater than _MAX_PATH
+    TCHAR*  szJavaHome = new TCHAR[_MAX_PATH + 1];
+    DWORD dwSize = _MAX_PATH + 1;
 
     /* use current version */
     lRet = ::RegQueryValueEx(hKey, _T("CurrentVersion"), 0, NULL, (LPBYTE)szCurrentJava, &dwSize);
@@ -376,6 +375,7 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
     if (lRet != ERROR_SUCCESS)
     {
         RegCloseKey(hKey);
+        delete [] szJavaHome;
         return NULL;
     }
 
@@ -387,7 +387,7 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
     {
         RegCloseKey(hDataKey);
         RegCloseKey(hKey);
-        delete szJavaHome;
+        delete [] szJavaHome;
         return NULL;
     }
 
@@ -400,7 +400,7 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
 
     if (((dwAttrs & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY) || dwAttrs == INVALID_FILE_SIZE)
     {
-        delete szJavaHome;
+        delete [] szJavaHome;
         return NULL;
     }
 
