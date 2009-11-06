@@ -58,26 +58,9 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_HLINKBAR_SEARCH; \
         SID_HLINKBAR_TARGET; \
         SID_HYPERLINK_DIALOG; \
-        SID_FM_RECORD_ABSOLUTE; \
-        SID_FM_RECORD_FIRST; \
-        SID_FM_RECORD_PREV; \
-        SID_FM_RECORD_NEXT; \
-        SID_FM_RECORD_LAST; \
-        SID_FM_RECORD_SAVE; \
-        SID_FM_RECORD_UNDO; \
-        SID_FM_RECORD_NEW; \
-        SID_FM_RECORD_DELETE; \
-        SID_FM_REFRESH; \
-        SID_FM_SORTUP; \
-        SID_FM_SORTDOWN; \
-        SID_FM_ORDERCRIT; \
-        SID_FM_AUTOFILTER; \
-        SID_FM_FILTERCRIT; \
-        SID_FM_FORM_FILTERED; \
-        SID_FM_REMOVE_FILTER_SORT; \
     };\
     IdCount = {\
-        21;\
+        4;\
     };
 
 ImageList RID_DEFAULTIMAGELIST_SC
