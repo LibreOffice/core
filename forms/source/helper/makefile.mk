@@ -53,6 +53,7 @@ SLOFILES=	$(SLO)$/formnavigation.obj \
             $(SLO)$/urltransformer.obj \
             $(SLO)$/windowstateguard.obj \
             $(SLO)$/resettable.obj \
+            $(SLO)$/commandimageprovider.obj \
 
 # --- Targets ----------------------------------
 

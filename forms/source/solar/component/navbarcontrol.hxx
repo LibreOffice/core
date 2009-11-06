@@ -31,14 +31,17 @@
 #ifndef FORMS_NAVBARCONTROL_HXX
 #define FORMS_NAVBARCONTROL_HXX
 
+#include "formnavigation.hxx"
+#include "commandimageprovider.hxx"
+
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/wintypes.hxx>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include "formnavigation.hxx"
 
 //.........................................................................
 namespace frm
@@ -111,11 +114,13 @@ namespace frm
         static ONavigationBarPeer* Create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             Window* _pParentWindow,
-            WinBits _nStyle
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel
         );
 
     protected:
-        ONavigationBarPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        ONavigationBarPeer(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+        );
         ~ONavigationBarPeer();
 
     public:

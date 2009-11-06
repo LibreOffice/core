@@ -35,12 +35,12 @@
 #include "frm_resource.hxx"
 #include "featuredispatcher.hxx"
 #include "frm_resource.hrc"
+#include "commandimageprovider.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 
 #include <sfx2/imgmgr.hxx>
-#include <svx/svxids.hrc>
 #include <vcl/fixed.hxx>
 
 #include <memory>
@@ -79,32 +79,36 @@ namespace frm
             return _rColor.IsDark();
         }
 
-        sal_Int32 lcl_getSlotId( const sal_Int16 _nFormFeature )
+        ::rtl::OUString lcl_getCommandURL( const sal_Int16 _nFormFeature )
         {
+            const sal_Char* pAsciiCommandName = NULL;
             switch ( _nFormFeature )
             {
-                case FormFeature::MoveAbsolute          : return SID_FM_RECORD_ABSOLUTE;
-                case FormFeature::TotalRecords          : return SID_FM_RECORD_TOTAL;
-                case FormFeature::MoveToFirst           : return SID_FM_RECORD_FIRST;
-                case FormFeature::MoveToPrevious        : return SID_FM_RECORD_PREV;
-                case FormFeature::MoveToNext            : return SID_FM_RECORD_NEXT;
-                case FormFeature::MoveToLast            : return SID_FM_RECORD_LAST;
-                case FormFeature::SaveRecordChanges     : return SID_FM_RECORD_SAVE;
-                case FormFeature::UndoRecordChanges     : return SID_FM_RECORD_UNDO;
-                case FormFeature::MoveToInsertRow       : return SID_FM_RECORD_NEW;
-                case FormFeature::DeleteRecord          : return SID_FM_RECORD_DELETE;
-                case FormFeature::ReloadForm            : return SID_FM_REFRESH;
-                case FormFeature::RefreshCurrentControl : return SID_FM_REFRESH_FORM_CONTROL;
-                case FormFeature::SortAscending         : return SID_FM_SORTUP;
-                case FormFeature::SortDescending        : return SID_FM_SORTDOWN;
-                case FormFeature::InteractiveSort       : return SID_FM_ORDERCRIT;
-                case FormFeature::AutoFilter            : return SID_FM_AUTOFILTER;
-                case FormFeature::InteractiveFilter     : return SID_FM_FILTERCRIT;
-                case FormFeature::ToggleApplyFilter     : return SID_FM_FORM_FILTERED;
-                case FormFeature::RemoveFilterAndSort   : return SID_FM_REMOVE_FILTER_SORT;
+                case FormFeature::MoveAbsolute          : pAsciiCommandName = "AbsoluteRecord";     break;
+                case FormFeature::TotalRecords          : pAsciiCommandName = "RecTotal";           break;
+                case FormFeature::MoveToFirst           : pAsciiCommandName = "FirstRecord";        break;
+                case FormFeature::MoveToPrevious        : pAsciiCommandName = "PrevRecord";         break;
+                case FormFeature::MoveToNext            : pAsciiCommandName = "NextRecord";         break;
+                case FormFeature::MoveToLast            : pAsciiCommandName = "LastRecord";         break;
+                case FormFeature::SaveRecordChanges     : pAsciiCommandName = "RecSave";            break;
+                case FormFeature::UndoRecordChanges     : pAsciiCommandName = "RecUndo";            break;
+                case FormFeature::MoveToInsertRow       : pAsciiCommandName = "NewRecord";          break;
+                case FormFeature::DeleteRecord          : pAsciiCommandName = "DeleteRecord";       break;
+                case FormFeature::ReloadForm            : pAsciiCommandName = "Refresh";            break;
+                case FormFeature::RefreshCurrentControl : pAsciiCommandName = "RefreshFormControl"; break;
+                case FormFeature::SortAscending         : pAsciiCommandName = "Sortup";             break;
+                case FormFeature::SortDescending        : pAsciiCommandName = "SortDown";           break;
+                case FormFeature::InteractiveSort       : pAsciiCommandName = "OrderCrit";          break;
+                case FormFeature::AutoFilter            : pAsciiCommandName = "AutoFilter";         break;
+                case FormFeature::InteractiveFilter     : pAsciiCommandName = "FilterCrit";         break;
+                case FormFeature::ToggleApplyFilter     : pAsciiCommandName = "FormFiltered";       break;
+                case FormFeature::RemoveFilterAndSort   : pAsciiCommandName = "RemoveFilterSort";   break;
             }
-            OSL_ENSURE( isArtificialItem( _nFormFeature ), "lcl_getSlotId: unknown FormFeature!" );
-            return 0;
+            if ( pAsciiCommandName != NULL )
+                return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) ) + ::rtl::OUString::createFromAscii( pAsciiCommandName );
+
+            OSL_ENSURE( false, "lcl_getCommandURL: unknown FormFeature!" );
+            return ::rtl::OUString();
         }
     }
 
@@ -153,9 +157,10 @@ namespace frm
     //=====================================================================
     DBG_NAME( NavigationToolBar )
     //---------------------------------------------------------------------
-    NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle )
+    NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle, const ::boost::shared_ptr< const ICommandImageProvider >& _pImageProvider )
         :Window( _pParent, _nStyle )
         ,m_pDispatcher( NULL )
+        ,m_pImageProvider( _pImageProvider )
         ,m_eImageSize( eSmall )
         ,m_pToolbar( NULL )
     {
@@ -302,20 +307,11 @@ namespace frm
             if ( pSupportedFeatures->nId )
             {   // it's _not_ a separator
 
-                // the text(s) of the item
-                String sItemText;
-                String sItemHelpText;
-
-                // TODO/CLEANUP: this code does nothing(!) nowadays
-                //SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
-                //sItemText = rSlotPool.GetSlotName( pSupportedFeatures->nId, &sItemHelpText );
-
                 // insert the entry
-                m_pToolbar->InsertItem( pSupportedFeatures->nId, sItemText, pSupportedFeatures->bRepeat ? TIB_REPEAT : 0 );
-                m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, sItemHelpText );
+                m_pToolbar->InsertItem( pSupportedFeatures->nId, String(), pSupportedFeatures->bRepeat ? TIB_REPEAT : 0 );
+                m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, String() );  // TODO
                 if ( !isArtificialItem( pSupportedFeatures->nId ) )
-                    m_pToolbar->SetHelpId( pSupportedFeatures->nId, lcl_getSlotId( pSupportedFeatures->nId ) );
-
+                    m_pToolbar->SetItemCommand( pSupportedFeatures->nId, lcl_getCommandURL( pSupportedFeatures->nId ) );
 
                 if ( pSupportedFeatures->bItemWindow )
                 {
@@ -360,39 +356,66 @@ namespace frm
 
         forEachItemWindow( &NavigationToolBar::adjustItemWindowWidth, NULL );
 
-        implSetImageSize( m_eImageSize, true );
+        implUpdateImages();
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::implSetImageSize( ImageSize _eSize, bool _bForce )
+    void NavigationToolBar::implUpdateImages()
     {
-        if ( ( _eSize != m_eImageSize ) || _bForce )
+        OSL_ENSURE( m_pImageProvider, "NavigationToolBar::implUpdateImages: no image provider => no images!" );
+        if ( !m_pImageProvider )
+            return;
+
+        const bool bIsHighContrast = lcl_isHighContrast( GetBackground().GetColor() );
+
+        const USHORT nItemCount = m_pToolbar->GetItemCount();
+
+        // collect the FormFeatures in the toolbar
+        typedef ::std::vector< sal_Int16 >  FormFeatures;
+        FormFeatures aFormFeatures;
+        aFormFeatures.reserve( nItemCount );
+
+        for ( USHORT i=0; i<nItemCount; ++i )
+        {
+            USHORT nId = m_pToolbar->GetItemId( i );
+            if ( ( TOOLBOXITEM_BUTTON == m_pToolbar->GetItemType( i ) ) && !isArtificialItem( nId ) )
+                aFormFeatures.push_back( nId );
+        }
+
+        // translate them into command URLs
+        CommandURLs aCommandURLs( aFormFeatures.size() );
+        for (   FormFeatures::const_iterator formFeature = aFormFeatures.begin();
+                formFeature != aFormFeatures.end();
+                ++formFeature
+            )
+        {
+            aCommandURLs[ formFeature - aFormFeatures.begin() ] = lcl_getCommandURL( *formFeature );
+        }
+
+        // retrieve the images for the command URLs
+        CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge, bIsHighContrast );
+
+        // and set them at the toolbar
+        CommandImages::const_iterator commandImage = aCommandImages.begin();
+        for (   FormFeatures::const_iterator formFeature = aFormFeatures.begin();
+                formFeature != aFormFeatures.end();
+                ++formFeature, ++commandImage
+            )
+        {
+            m_pToolbar->SetItemImage( *formFeature, *commandImage );
+        }
+
+        // parts of our layout is dependent on the size of our icons
+        Resize();
+    }
+
+    //---------------------------------------------------------------------
+    void NavigationToolBar::implSetImageSize( ImageSize _eSize )
+    {
+        if ( _eSize != m_eImageSize )
         {
             m_eImageSize = _eSize;
-
-            ::std::auto_ptr< SfxImageManager > pImageManager( new SfxImageManager( NULL ) );
-            const bool bIsHighContrast = lcl_isHighContrast( GetBackground().GetColor() );
-
-            const USHORT nCount = m_pToolbar->GetItemCount();
-            for ( USHORT i=0; i<nCount; ++i )
-            {
-                USHORT nId = m_pToolbar->GetItemId( i );
-                if ( TOOLBOXITEM_BUTTON == m_pToolbar->GetItemType( i ) )
-                {
-                    Image aItemImage;
-                    if ( !isArtificialItem( nId ) )
-                        aItemImage = pImageManager->GetImage( lcl_getSlotId( nId ), m_eImageSize == eLarge, bIsHighContrast );
-                    m_pToolbar->SetItemImage( nId, aItemImage );
-                }
-            }
-
-            // TODO: using the "official" command URLs belonging to a FormFeature, it should be possible to obtain
-            // the images from some global UNO service, instead of using the SfxImageManager, and SFX slot IDs.
-            // Also, those URLs allow (/me thinks) to obtain the command texts, which we could set at the toolbox,
-            // so they would appear as tooltip.
-
-            // parts of our layout is dependent on the size of our icons
-            Resize();
+            implUpdateImages();
         }
     }
 
@@ -524,7 +547,7 @@ namespace frm
         // the contrast of the background color may have changed, so force
         // the images to be rebuild (high contrast requires a possibly different
         // image set)
-        implSetImageSize( m_eImageSize, true );
+        implUpdateImages();
     }
 
     //---------------------------------------------------------------------
@@ -537,7 +560,7 @@ namespace frm
         // the contrast of the background color may have changed, so force
         // the images to be rebuild (high contrast requires a possibly different
         // image set)
-        implSetImageSize( m_eImageSize, true );
+        implUpdateImages();
     }
 
     //---------------------------------------------------------------------

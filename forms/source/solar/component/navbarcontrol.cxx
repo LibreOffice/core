@@ -34,18 +34,21 @@
 #include "navbarcontrol.hxx"
 #include "frm_strings.hxx"
 #include "frm_module.hxx"
-#include "navtoolbar.hxx"
 #include "FormComponent.hxx"
+#include "componenttools.hxx"
+#include "navtoolbar.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 /** === end UNO includes === **/
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <svx/svxids.hrc>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarControl()
@@ -63,6 +66,7 @@ namespace frm
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::graphic;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
 #define FORWARD_TO_PEER_1( unoInterface, method, param1 )   \
@@ -131,7 +135,8 @@ namespace frm
     //------------------------------------------------------------------
     namespace
     {
-        static WinBits getWinBits( const Reference< XControlModel >& _rxModel )
+        //..............................................................
+        static WinBits lcl_getWinBits_nothrow( const Reference< XControlModel >& _rxModel )
         {
             WinBits nBits = 0;
             try
@@ -151,7 +156,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "::getWinBits: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
             return nBits;
         }
@@ -177,7 +182,7 @@ namespace frm
             }
 
             // create the peer
-            ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( m_xORB, pParentWin, getWinBits( getModel() ) );
+            ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( m_xORB, pParentWin, getModel() );
             DBG_ASSERT( pPeer, "ONavigationBarControl::createPeer: invalid peer returned!" );
             if ( pPeer )
                 // by definition, the returned component is aquired once
@@ -269,7 +274,7 @@ namespace frm
     DBG_NAME( ONavigationBarPeer )
     //------------------------------------------------------------------
     ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XMultiServiceFactory >& _rxORB,
-        Window* _pParentWindow, WinBits _nStyle )
+        Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
     {
         DBG_TESTSOLARMUTEX();
 
@@ -278,7 +283,11 @@ namespace frm
         pPeer->acquire();   // by definition, the returned object is aquired once
 
         // the VCL control for the peer
-        NavigationToolBar* pNavBar = new NavigationToolBar( _pParentWindow, _nStyle );
+        NavigationToolBar* pNavBar = new NavigationToolBar(
+            _pParentWindow,
+            lcl_getWinBits_nothrow( _rxModel ),
+            createDocumentCommandImageProvider( _rxORB, getXModel( _rxModel ) )
+        );
 
         // some knittings
         pNavBar->setDispatcher( pPeer );
