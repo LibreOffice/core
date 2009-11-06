@@ -11,7 +11,7 @@ TARGET=odk
 ZIP1TARGET=odkexamples
 ZIP1FLAGS=-u -r
 ZIP1DIR=$(PRJ)
-ZIP1LIST=examples -x "*.svn*" -x "*CVS*" -x "*makefile.mk" -x "*Inspector*" -x "*Container1*" -x "*Storage*" -x "*register_component*" -x "*examples.html" -x "*ConverterServlet*" -x "*NotesAccess*"
+ZIP1LIST=examples -x "*.svn*" -x "*CVS*" -x "*makefile.mk" -x "*Inspector*" -x "*Container1*" -x "*Storage*" -x "*register_component*" -x "*examples.html" -x "*ConverterServlet*" -x "*NotesAccess*" -x "*delphi"
 
 .ENDIF
 
