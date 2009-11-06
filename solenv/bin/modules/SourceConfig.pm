@@ -322,7 +322,7 @@ SourceConfig::get_config_file_default_path()
 
 =head1 AUTHOR
 
-Vladimir Glazunov, vg@openoffice.com
+Vladimir Glazunov, vg@openoffice.org
 
 =head1 SEE ALSO
 

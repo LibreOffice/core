@@ -220,6 +220,13 @@ throw (uno::Exception, uno::RuntimeException)
         // module identifier, user interface element type and name
         // SAFE
         ResetableGuard aLock( m_aLock );
+
+        if ( !m_bConfigRead )
+        {
+            m_bConfigRead = sal_True;
+            m_pConfigAccess->readConfigurationData();
+        }
+
         aImplementationName = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
         if ( aImplementationName.getLength() > 0 )
         {

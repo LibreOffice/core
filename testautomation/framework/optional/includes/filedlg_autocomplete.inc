@@ -39,17 +39,18 @@
 
 testcase tAutocomplete
 
-
+    printlog( "Autocompletion in the OpenOffice.org file picker" )
     
     ' IMPORTANT NOTE: Autocompletion is asynchronous. This means that no rule 
     '                 exists when exactly it is going to strike. If you are
     '                 using a networked environment you have to make sure that
     '                 all network ressources deliver a decent performance as 
     '                 this seriously influences the speed of the autocompletion.
-        
-    dim cBasePath as string
-        
+
+    ' Assemble a work directory path        
     const WORKDIR = "autocomplete"
+    dim cBasePath as string : cBasePath = hGetWorkPath()
+    dim cWorkDir as string : cWorkDir = cBasePath & WORKDIR
         
     ' These are the files we create in the users homedirectory
     dim aWorkFile( 3 ) as string
@@ -65,7 +66,6 @@ testcase tAutocomplete
         aWildCard( 1 ) = "autocomplete_?.odt"
         aWildCard( 2 ) = "autocomplete_b?.odt"
         aWildCard( 3 ) = "autocomplete_*.odt"
-                
         
     dim cCurrentPath as string
     dim cAutocomplete as string
@@ -80,41 +80,46 @@ testcase tAutocomplete
     
     dim slot
         
-    do while( getDocumentCount > 0 )
-        call hCloseDocument()
-    loop
+    printlog( "Close all open documents" )
+    hFileCloseAll()
     
-    cBasePath = hGetWorkPath()
-    aFullPath( 1 ) = cBasePath & WORKDIR & gPathSigne & aWorkFile( 1 )
-    aFullPath( 2 ) = cBasePath & WORKDIR & gPathSigne & aWorkFile( 2 )
-    aFullPath( 3 ) = cBasePath & WORKDIR & gPathSigne & aWorkFile( 3 )
+    printlog( "Assemble 3 filenames for workfiles" )
+    aFullPath( 1 ) = cWorkDir & gPathSigne & aWorkFile( 1 )
+    aFullPath( 2 ) = cWorkDir & gPathSigne & aWorkFile( 2 )
+    aFullPath( 3 ) = cWorkDir & gPathSigne & aWorkFile( 3 )
+    
+    printlog( "Delete the 3 workfiles if they exist" )
     hDeleteFile( aFullPath( 1 ) )
     hDeleteFile( aFullPath( 2 ) )
     hDeleteFile( aFullPath( 3 ) )
+    
+    printlog( "Try to remove conflicting work directories" )
     if ( dir( cBasePath & WORKDIR ) <> "" ) then
-        rmdir( cBasePath & WORKDIR )
+        rmdir( cWorkDir )
     endif
         
-    mkdir( cBasePath & WORKDIR )
-    if ( dir( cBasePath & WORKDIR ) = "" ) then
+    printlog( "Create workdirectory: " & cWorkDir )
+    mkdir( cWorkDir )
+    if ( NOT FileExists( cWorkDir ) ) then
         warnlog( "Failed to create work directory, aborting" )
         goto endsub
     endif
     
     gApplication = "WRITER"
+    printlog( "Create the workfiles - 3 writer files with minimum content" )
     for iCurrentDocument = 1 to 3
-        call hNewDocument()
+        call hCreateDocument()
         kontext "DocumentWriter"
         DocumentWriter.typeKeys( aWorkFile( iCurrentDocument ) )
         hFileSaveAs( aFullPath( iCurrentDocument ) )
-        FileClose
+        hUseAsyncSlot( "FileClose" )
     next iCurrentDocument
     
-    
-    printlog( "open the File Open dialog" )
-    FileOpen
-    
+    printlog( "Open the File Open dialog" )
+    hUseAsyncSlot( "FileOpen" )
+
     kontext "OeffnenDlg"
+    printlog( "Click the <Standard> button to get to the default work directory" )
     Standard.click()
     
     cLeft     = left( WORKDIR, iLeft )
@@ -131,7 +136,7 @@ testcase tAutocomplete
         printlog( "Autocompletion succeeded for workdirectory" )
     else
         warnlog( "Autocompletion failed" )
-        printlog( "Expected: " & cRight )
+        printlog( "Expected: " & cEFString )
         printlog( "Found...: " & cAutocomplete )
     endif
     
@@ -149,7 +154,7 @@ testcase tAutocomplete
         printlog( "Autocompletion succeeded for first file" )
     else
         warnlog( "Autocompletion failed" )
-        printlog( "Expected: " & cRight )
+        printlog( "Expected: " & cEFString )
         printlog( "Found...: " & cAutocomplete )
     endif   
 
@@ -162,7 +167,7 @@ testcase tAutocomplete
         printlog( "Autocompletion succeeded for second file" )
     else
         warnlog( "Autocompletion failed" )
-        printlog( "Expected: " & cRight )
+        printlog( "Expected: " & cEFString )
         printlog( "Found...: " & cAutocomplete )
     endif
 
@@ -198,6 +203,7 @@ testcase tAutocomplete
     kontext "OeffnenDlg"
     OeffnenDlg.cancel()
     
+    printlog( "Delete workfiles and -directory" )
     hDeleteFile( aFullPath( 1 ) )
     hDeleteFile( aFullPath( 2 ) )
     hDeleteFile( aFullPath( 3 ) )

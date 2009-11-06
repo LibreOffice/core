@@ -56,6 +56,7 @@ end sub
 
 testcase tMacroSecurityLevels( cFileFormat )
 
+    printlog( "Check macro execution behavior for all macro security levels" )
 
     dim cWorkFile as string
         cWorkFile = gTesttoolPath & "framework\optional\input\BasicDocs\"
@@ -80,18 +81,23 @@ testcase tMacroSecurityLevels( cFileFormat )
     '         |---------------------------------------------------------|
     ' *) Covered by test "f_sec_trusted_path.bas"
     
+    printlog( "Load a document with macro for each of the four security levels" )
     for iSecLevel = 0 to 3
 
-        printlog( "" )
+        printlog( "Set macro security level to " & iSecLevel )
         hSetMacroSecurityAPI( iSecLevel )
-        FileOpen( "URL", cWorkFile, "FrameName", "_default" )
+        
+        printlog( "Load document..." )
+        hFileOpen( cWorkFile )
+        
+        printlog( "Check security level dependent behavior" )
         select case iSecLevel
         case 0 : brc = hIdentifyExecutedMacro()
                  if ( not brc ) then
                      if ( gApplication = "MATH" ) then
                          qaerrorlog( "#i68291# Math document forgets eventbinding" )
                      else
-                         qaerrorlog( "#i53711# Macro was not found/executed" )
+                         warnlog( "#i53711# Macro was not found/executed" )
                      endif
                  endif   
                  
@@ -104,8 +110,7 @@ testcase tMacroSecurityLevels( cFileFormat )
                      if ( gApplication = "MATH" ) then
                          qaerrorlog( "#i68291# Math document forgets eventbinding" )
                      else
-                         qaerrorlog( "#i53711# Macro was not found/executed" )
-                         'warnlog( "#i65885# - CWS Warnings01/Macro not executed on load" )
+                         warnlog( "#i53711# Macro was not found/executed" )
                      endif
                  endif
                  
@@ -125,10 +130,12 @@ testcase tMacroSecurityLevels( cFileFormat )
                  endif
         end select
 
+        printlog( "Close document" )
         brc = hDestroyDocument()
 
     next iSecLevel
 
+    printlog( "Reset security level to default" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
 
 endcase

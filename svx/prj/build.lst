@@ -22,7 +22,7 @@ sx	svx\source\svdraw						nmake	-	all	sx_draw sx_inc NULL
 sx	svx\source\sdr\attribute				nmake	-	all	sx_attribute sx_inc NULL
 sx	svx\source\sdr\primitive2d				nmake	-	all	sx_primitive2d sx_inc NULL
 sx	svx\source\sdr\primitive3d				nmake	-	all	sx_primitive3d sx_inc NULL
-sx  svx\source\table						nmake	-	all sx_table NULL
+sx  svx\source\table						nmake	-	all sx_table sx_inc NULL
 sx	svx\source\sdr\properties				nmake	-	all	sx_properties sx_inc NULL
 sx	svx\source\sdr\contact					nmake	-	all	sx_contact sx_inc NULL
 sx	svx\source\sdr\event					nmake	-	all	sx_event sx_inc NULL

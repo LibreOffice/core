@@ -39,27 +39,21 @@
 
 testcase tSaveLoadDelFilesCJK()
 
-    if ( not hTestLocale() ) then
-        warnlog( "Test requires UTF-8 locale" )
-        goto endsub
-    endif
+    printlog( "Save, load and delete files from the hight UTF-8 characters list" )
 
+    if ( not hTestLocale() ) then
+        qaerrorlog( "Could not verify UTF-8 locale. Make sure an UTF-8 locale is used!" )
+    endif
     
     dim cStrangeName as string
     dim iCounter as integer ' iterator
-    dim iRandom  as long    ' random number.(needs long for cjk chars)
+    dim iRandom  as long    ' random number
     dim brc as boolean
     
-    printlog( CHR$(13) )
-    printlog( "Check if CJK-filenames are loaded/saved/deleted" )
-    printlog( CHR$(13) )
-    
-    printlog( CHR$(13) + "Names with CJK-chars" )
-    printlog( "" )
-    
-    ' Invoke randomizer
+    printlog( "Invoke randomizer" )
     call randomize()
     
+    printlog( "Generate filenames, run tests" )
     for iCounter = 1 to 2
         
         iRandom = int( 19968 + ( 20911 * rnd ) )
@@ -67,10 +61,10 @@ testcase tSaveLoadDelFilesCJK()
         printlog( " * Using decimal char: " & iRandom )
         
         cStrangeName = hNameGen_append( iRandom )
-        brc = hSaveLoadDelSuccess( cStrangeName )
+        hSaveLoadDelSuccess( cStrangeName )
         
         cStrangeName = hNameGen_lead( iRandom )
-        brc = hSaveLoadDelSuccess( cStrangeName )
+        hSaveLoadDelSuccess( cStrangeName )
         
         kontext "active"
         if( active.exists() ) then
@@ -78,17 +72,17 @@ testcase tSaveLoadDelFilesCJK()
             printlog( active.gettext() )
             active.ok()
         endif
-        
+
+        printlog( "Delete the file" )        
         hDeleteFile( hGetWorkPath() & cStrangeName )        
         
+        printlog( "Close navigator, if it exists" )
         hCloseNavigator()
-        
         
     next iCounter
     
     printlog( "Close the document" )
-    brc = hDestroyDocument()
-    
+    hDestroyDocument()
     
 endcase
 

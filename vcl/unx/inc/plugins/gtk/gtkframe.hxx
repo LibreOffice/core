@@ -180,7 +180,7 @@ class GtkSalFrame : public SalFrame
     GdkVisibilityState              m_nVisibility;
     PointerStyle                    m_ePointerStyle;
     int                             m_nSavedScreenSaverTimeout;
-    guint                           m_nGSSCookie;
+    guint                           m_nGSMCookie;
     int                             m_nWorkArea;
     bool                            m_bFullscreen;
     bool                            m_bSingleAltPress;
