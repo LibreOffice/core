@@ -548,7 +548,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:DefaultColors")] = bIsWritable;
     m_aCommandAvailability[ C2U(".uno:BarWidth")] = bIsWritable;
     m_aCommandAvailability[ C2U(".uno:NumberOfLines")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:ArrangeRow")] = m_apControllerState->bMayMoveSeriesForward || m_apControllerState->bMayMoveSeriesBackward;
+    m_aCommandAvailability[ C2U(".uno:ArrangeRow")] =
+        bShapeContext || ( bIsWritable && bControllerStateIsValid && ( m_apControllerState->bMayMoveSeriesForward || m_apControllerState->bMayMoveSeriesBackward ) );
 
     // insert objects
     m_aCommandAvailability[ C2U(".uno:InsertTitles")] = m_aCommandAvailability[ C2U(".uno:InsertMenuTitles")] = bIsWritable;
