@@ -206,7 +206,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         MultiByteToWideChar(CP_ACP, 0, argv[i], -1, buff, nNeededWStrBuffSize);
         buff[nNeededWStrBuffSize] = 0;
         cp = encode(cp, buff);
-        delete buff;
+        delete [] buff;
 #else
         cp = encode(cp, argv[i]);
 #endif
@@ -235,9 +235,9 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         exit(EXIT_FAILURE);
     }
     if (n != 0) {
-        delete orig;
+        delete [] orig;
     }
-    delete value;
+    delete [] value;
     n = GetEnvironmentVariableW(L"PYTHONPATH", NULL, 0);
     if (n == 0) {
         if (GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
@@ -276,9 +276,9 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         exit(EXIT_FAILURE);
     }
     if (n != 0) {
-        delete orig;
+        delete [] orig;
     }
-    delete value;
+    delete [] value;
     if (!SetEnvironmentVariableW(L"PYTHONHOME", pythonhome)) {
         exit(EXIT_FAILURE);
     }
