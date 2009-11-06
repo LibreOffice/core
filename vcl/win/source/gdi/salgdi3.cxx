@@ -2723,7 +2723,8 @@ const void* WinSalGraphics::GetEmbedFontData( const ImplFontData* pFont,
     TEXTMETRICA aTm;
     if( !::GetTextMetricsA( mhDC, &aTm ) )
         *pDataLen = 0;
-    rInfo.m_nFontType = FontSubsetInfo::ANY_TYPE1;
+    const bool bPFA = (*RawFontData.get() < 0x80);
+    rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
     WCHAR aFaceName[64];
     int nFNLen = ::GetTextFaceW( mhDC, 64, aFaceName );
     // #i59854# strip eventual null byte
