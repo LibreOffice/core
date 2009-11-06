@@ -146,6 +146,14 @@ extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE hMSI)
     HKEY hKey;
 
 
+// 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
+// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
+// Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
+// extensions\source\activex\main\so_activex.cpp
+#ifndef KEY_WOW64_64KEY
+    #define KEY_WOW64_64KEY (0x0100)
+#endif
+
     if (IsVersionNT64(hMSI))
     {
         // Open Windows 64 Bit Registry
@@ -161,7 +169,7 @@ extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE hMSI)
 
         // Open Windows 32 Bit Registry on Win64 maschine
 
-        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"),0, KEY_WRITE | KEY_WOW64_32KEY, &hKey) == ERROR_SUCCESS)
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"),0, KEY_WRITE ) == ERROR_SUCCESS)
         {
             RegSetValueEx(hKey, ColumnHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ColumnHandler.Value), _tcslen(ColumnHandler.Value) + 1);
             RegSetValueEx(hKey, InfotipHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(InfotipHandler.Value), _tcslen(InfotipHandler.Value) + 1);
