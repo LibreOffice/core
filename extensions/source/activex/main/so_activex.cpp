@@ -28,8 +28,16 @@ END_OBJECT_MAP()
 #define X64_LIB_NAME "so_activex_x64.dll"
 #define X32_LIB_NAME "so_activex.dll"
 
+// 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
+// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
+// Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
+// extensions\source\activex\main\so_activex.cpp
+#ifndef KEY_WOW64_64KEY
+    #define KEY_WOW64_64KEY (0x0100)
+#endif
+
 const REGSAM n64KeyAccess = KEY_ALL_ACCESS | KEY_WOW64_64KEY;
-const REGSAM n32KeyAccess = KEY_ALL_ACCESS | KEY_WOW64_32KEY;
+const REGSAM n32KeyAccess = KEY_ALL_ACCESS;
 
 #ifdef _AMD64_
 const BOOL bX64 = TRUE;
