@@ -37,11 +37,26 @@ RegistryItem gid_Regitem_Bau
     Value = "soffice.StarConfigFile.6";
 End
 
+RegistryItem gid_Regitem_AppID__df595024_3257_41b3_bcf1_a51515ad205e_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "AppID\{82154420-0FBF-11d4-8313-005004526AB4}";
+    ModuleID = gid_Module_Root;
+    Value = "%PRODUCTNAME Service Manager (Ver 1.0)";
+End
+
 RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}";
     ModuleID = gid_Module_Root;
     Value = "%PRODUCTNAME Service Manager (Ver 1.0)";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af_AppID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}";
+    ModuleID = gid_Module_Root;
+    Name = "AppID"
+    Value = "{82154420-0FBF-11d4-8313-005004526AB4}";
 End
 
 RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af__Localserver32
