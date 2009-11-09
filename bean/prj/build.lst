@@ -1,4 +1,4 @@
-ob	bean	:	javaunohelper sandbox jurt ridljar unoil offapi udkapi NULL
+ob	bean	:	javaunohelper jurt ridljar unoil offapi udkapi NULL
 ob	bean\com\sun\star\comp\beans	nmake	-	all	ob_beanjava NULL
 ob	bean\com\sun\star\beans			nmake	-	all	ob_legacybeanjava ob_beanjava NULL
 ob	bean\native\win32				nmake	-	n	ob_beanwin32 NULL
