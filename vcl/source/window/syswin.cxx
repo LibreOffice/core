@@ -62,6 +62,7 @@ public:
 
     TaskPaneList*   mpTaskPaneList;
     Size            maMaxOutSize;
+    rtl::OUString   maRepresentedURL;
 };
 
 SystemWindow::ImplData::ImplData()
@@ -273,6 +274,29 @@ void SystemWindow::SetZLevel( BYTE nLevel )
             pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow;
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SystemWindow::SetRepresentedURL( const rtl::OUString& i_rURL )
+{
+    bool bChanged = (i_rURL != mpImplData->maRepresentedURL);
+    mpImplData->maRepresentedURL = i_rURL;
+    if ( !mbSysChild && bChanged )
+    {
+        const Window* pWindow = this;
+        while ( pWindow->mpWindowImpl->mpBorderWindow )
+            pWindow = pWindow->mpWindowImpl->mpBorderWindow;
+
+        if ( pWindow->mpWindowImpl->mbFrame )
+            pWindow->mpWindowImpl->mpFrame->SetRepresentedURL( i_rURL );
+    }
+}
+// -----------------------------------------------------------------------
+
+const rtl::OUString& SystemWindow::GetRepresentedURL() const
+{
+    return mpImplData->maRepresentedURL;
 }
 
 // -----------------------------------------------------------------------

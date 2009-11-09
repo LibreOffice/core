@@ -201,6 +201,10 @@ public:
 
     void            SetIcon( USHORT nIcon );
     USHORT          GetIcon() const { return mnIcon; }
+    // for systems like MacOSX which can display the URL a document is loaded from
+    // separately from the window title
+    void            SetRepresentedURL( const rtl::OUString& );
+    const rtl::OUString& GetRepresentedURL() const;
 
     void            SetZLevel( BYTE nLevel );
     BYTE            GetZLevel() const;

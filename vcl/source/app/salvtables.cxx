@@ -61,6 +61,13 @@ void SalFrame::Flush( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
+void SalFrame::SetRepresentedURL( const rtl::OUString& )
+{
+    // currently this is Mac only functionality
+}
+
+// -----------------------------------------------------------------------
+
 SalInstance::~SalInstance()
 {
 }
