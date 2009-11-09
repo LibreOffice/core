@@ -72,7 +72,7 @@ using namespace ::rtl;
 
 
 //=======================================================================
-SAL_IMPLEMENT_MAIN(argc, argv)
+SAL_IMPLEMENT_MAIN()
 {
     Reference< XSimpleRegistry > xReg = createSimpleRegistry();
     OSL_ENSURE( xReg.is(), "### cannot get service instance of \"com.sun.star.regiystry.SimpleRegistry\"!" );
