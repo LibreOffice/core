@@ -47,6 +47,8 @@ use Carp;
 use Cwd;
 use File::Basename;
 
+my $debug = 0;
+
 #####  profiling #####
 
 ##### ctor #####
@@ -112,7 +114,7 @@ sub get_module_path {
     if (defined ${$self->{MODULE_PATHS}}{$module}) {
         return ${$self->{MODULE_PATHS}}{$module};
     } else {
-        Carp::cluck("No path for module $module in active repositories!!\n");
+        Carp::cluck("No path for module $module in active repositories!!\n") if ($debug);
         return undef;
     };
 }
