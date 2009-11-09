@@ -355,19 +355,13 @@ testcase sTableMergeCell
 
     Call hNewDocument
 
-    ' set marks to find
-    Call wTypeKeys "NULL<return>"
-    Call wTypeKeys "Start<return>"
-    Call wTypeKeys "End<return>"
-    Call wTypeKeys "NULL<return><up><up>"
-
     temp (1) = "Table1"
-	'/// Insert a table with 10 columns and 7 rows
+	printlog "Insert a table with 10 columns and 7 rows"
     Call TBOhTabelleEinfuegen (temp (1) ,0,1,0,1,"10",tHeight:="7")  ' insert table
+    printlog "Point cursor out of the table"
     Call wTypeKeys "<MOD1 END>", 2
-    Call wTypeKeys "<up><up>"
 
-	'/// Insert a table with 10 columns and 10 rows
+	printlog "Insert a table with 10 columns and 10 rows"
     temp (1) = "Table2"
     Call TBOhTabelleEinfuegen (temp (1) ,0,0,1,1,"10",tHeight:="10")  ' insert table
 
@@ -383,49 +377,21 @@ testcase sTableMergeCell
     Call wTypeKeys "<down><shift down>"      ' 2 vertical (1,2) & (1,3)
     TableMergeCells : inc ac : dec fc
     Call wTypeKeys "<down><up><shift down><shift up>"      ' merge again
-    'Warnlog "Merge cells will crash when only one cell is selected (#i33394)"
     TableMergeCells
 
-    ' go to top of table, move to end & count
+    printlog "Go to top of table"
     Call wTypeKeys "<mod1 home>"
-    for i=1 to fc
-        Call wTypeKeys "<right>"
-    next i
-    Call wTypeKeys "<down>"
-    Call wTypeKeys "<shift end>" ' right after/outside the table ->
-	try
-	    EditCopy
-	catch
-		Warnlog "Test didn't find the end of the table, stops here!"
-		Call hCloseDocument
-		goto endsub
-	endcatch
-    if (GetClipboardText <> "End") then
-		Warnlog "Test didn't find the end of the table, stops here! Found:" & GetClipboardtext
-		Call hCloseDocument
-		goto endsub		
-    end if
-    ' undo & check where we are
+    printlog "Undo all cell mergers (3 times)"
     for i=1 to ac
-        EditUndo
+        try
+    		EditUndo
+    		wait 500
+    	catch
+    		Warnlog "Edit / Undo disabled on Undo step: " & i
+    	endcatch
     next i
-
-    sleep (3)
-    temp (2) = hGetTableName()
-    if (temp(2) <> temp(1)) then warnlog " --- wrong table? schould be : "+temp (1)+ ", is : "+temp(2)
-    EditUndo ' go one step further
-    EditUndo ' go one step further
-    Call wTypeKeys "<up><shift end>"
-    EditCopy
-    temp(2) = GetClipboardText
-    Call wTypeKeys "<down><shift home>"
-    EditCopy
-    temp(3) = GetClipboardText
-    if ((temp(2) <> "Start") AND (temp(3) <> "End")) then
-        warnlog "there is smth. wrong with the undo stuff !!! is:"+temp(3) +" and:"+temp(2)+" should:End Start"
-    end if
     
-    '/// Close document
+    printlog "Close document"
     Call hCloseDocument
 endcase
 
