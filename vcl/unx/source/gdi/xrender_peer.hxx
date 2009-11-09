@@ -66,6 +66,8 @@ public:
         const XRenderPictFormat& ) const;
     Picture     CreatePicture( Drawable, const XRenderPictFormat*,
                     unsigned long nDrawable, const XRenderPictureAttributes* ) const;
+    void        ChangePicture( Picture, unsigned long nValueMask,
+                    const XRenderPictureAttributes* ) const;
     void        SetPictureClipRegion( Picture, XLIB_Region ) const;
     void        CompositePicture( int nOp, Picture aSrc, Picture aMask, Picture aDst,
                     int nXSrc, int nYSrc, int nXMask, int nYMask,
@@ -102,6 +104,8 @@ private:
     void        (*mpXRenderQueryVersion)(Display*,int*,int*);
 
     Picture     (*mpXRenderCreatePicture)(Display*,Drawable, const XRenderPictFormat*,
+                    unsigned long,const XRenderPictureAttributes*);
+    void        (*mpXRenderChangePicture)(Display*,Picture,
                     unsigned long,const XRenderPictureAttributes*);
     void        (*mpXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
     void        (*mpXRenderFreePicture)(Display*,Picture);
@@ -191,6 +195,16 @@ inline Picture XRenderPeer::CreatePicture( Drawable aDrawable,
 #else
     return (*mpXRenderCreatePicture)( mpDisplay, aDrawable, pVisFormat,
         nValueMask, pRenderAttr );
+#endif
+}
+
+inline void XRenderPeer::ChangePicture( Picture aPicture,
+    unsigned long nValueMask, const XRenderPictureAttributes* pRenderAttr ) const
+{
+#ifdef XRENDER_LINK
+    XRenderChangePicture( mpDisplay, aPicture, nValueMask, pRenderAttr );
+#else
+    (*mpXRenderChangePicture)( mpDisplay, aPicture, nValueMask, pRenderAttr );
 #endif
 }
 

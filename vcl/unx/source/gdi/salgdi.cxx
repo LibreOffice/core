@@ -1028,11 +1028,12 @@ BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,ULONG )
 
 XID X11SalGraphics::GetXRenderPicture()
 {
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+
     if( !m_aRenderPicture )
     {
         // check xrender support for matching visual
         // find a XRenderPictFormat compatible with the Drawable
-        XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
         XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
         if( !pVisualFormat )
         {
@@ -1053,7 +1054,15 @@ XID X11SalGraphics::GetXRenderPicture()
     // TODO: avoid clipping if already set correctly
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
         rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    else
 #endif
+    {
+        // reset clip region
+        // TODO: avoid clip reset if already done
+        XRenderPictureAttributes aAttr;
+        aAttr.clip_mask = None;
+        rRenderPeer.ChangePicture( m_aRenderPicture, CPClipMask, &aAttr );
+    }
 
     return m_aRenderPicture;
 }

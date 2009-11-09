@@ -142,6 +142,10 @@ void XRenderPeer::InitRenderLib()
     mpXRenderCreatePicture = (Picture(*)(Display*,Drawable,const XRenderPictFormat*,
         unsigned long,const XRenderPictureAttributes*))pFunc;
 
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderChangePicture" );
+    if( !pFunc ) return;
+    mpXRenderChangePicture = (void(*)(Display*,Picture,unsigned long,const XRenderPictureAttributes*))pFunc;
+
     pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderSetPictureClipRegion" );
     if( !pFunc ) return;
     mpXRenderSetPictureClipRegion = (void(*)(Display*,Picture,XLIB_Region))pFunc;
