@@ -1170,6 +1170,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const BYTE* pS)
         pS++;
 
     short nLen = (INT16)SVBT16ToShort( pS - 2 ); // nicht schoen
+
     BYTE nCols = *pS;                       // Anzahl der Zellen
     short nOldCols = nWwCols;
 
@@ -1200,7 +1201,11 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const BYTE* pS)
         setcelldefaults(pTCs,nCols);
     }
 
-    if( nFileCols )
+    short nColsToRead = nFileCols;
+    if (nColsToRead > nCols)
+        nColsToRead = nCols;
+
+    if( nColsToRead )
     {
         // lies TCs ein
 
@@ -1216,9 +1221,9 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const BYTE* pS)
         if( bVer67 )
         {
             WW8_TCellVer6* pTc = (WW8_TCellVer6*)pT;
-            for(i=0; i<nFileCols; i++, ++pAktTC,++pTc)
+            for(i=0; i<nColsToRead; i++, ++pAktTC,++pTc)
             {
-                if( i < nFileCols )
+                if( i < nColsToRead )
                 {               // TC aus File ?
                     BYTE aBits1 = SVBT8ToByte( pTc->aBits1Ver6 );
                     pAktTC->bFirstMerged    = ( ( aBits1 & 0x01 ) != 0 );
@@ -1248,7 +1253,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const BYTE* pS)
         else
         {
             WW8_TCellVer8* pTc = (WW8_TCellVer8*)pT;
-            for (int k = 0; k < nFileCols; ++k, ++pAktTC, ++pTc )
+            for (int k = 0; k < nColsToRead; ++k, ++pAktTC, ++pTc )
             {
                 UINT16 aBits1 = SVBT16ToShort( pTc->aBits1Ver8 );
                 pAktTC->bFirstMerged    = ( ( aBits1 & 0x0001 ) != 0 );
