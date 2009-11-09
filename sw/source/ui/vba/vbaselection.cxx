@@ -452,7 +452,7 @@ SwVbaSelection::TypeBackspace() throw ( uno::RuntimeException )
 
 uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name ) throw (uno::RuntimeException)
 {
-    sal_Int32 nWhat;
+    sal_Int32 nWhat = 0;
     if( ( _what >>= nWhat ) != sal_True )
          DebugHelper::exception(SbERR_BAD_ARGUMENT, rtl::OUString());
     switch( nWhat )
