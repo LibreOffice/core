@@ -250,6 +250,7 @@ TabPage OFA_TP_VIEW
             < "Industrial" ; > ;
             < "Crystal" ; > ;
             < "Tango" ; > ;
+            < "Oxygen" ; > ;
             < "Classic" ; > ;
         };
     };
