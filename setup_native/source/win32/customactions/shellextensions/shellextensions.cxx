@@ -169,7 +169,7 @@ extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE hMSI)
 
         // Open Windows 32 Bit Registry on Win64 maschine
 
-        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"),0, KEY_WRITE ) == ERROR_SUCCESS)
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"),0, KEY_WRITE, &hKey ) == ERROR_SUCCESS)
         {
             RegSetValueEx(hKey, ColumnHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(ColumnHandler.Value), _tcslen(ColumnHandler.Value) + 1);
             RegSetValueEx(hKey, InfotipHandler.Key, 0, REG_SZ, reinterpret_cast<const BYTE*>(InfotipHandler.Value), _tcslen(InfotipHandler.Value) + 1);
