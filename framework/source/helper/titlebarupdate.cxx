@@ -371,6 +371,12 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     {
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
         pWorkWindow->SetIcon( (sal_uInt16)nIcon );
+
+        css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+        rtl::OUString aURL;
+        if( xModel.is() )
+            aURL = xModel->getURL();
+        pWorkWindow->SetRepresentedURL( aURL );
     }
 
     aSolarLock.clear();
