@@ -708,6 +708,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
         case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString::createFromAscii( "industrial" );
         case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString::createFromAscii( "crystal" );
         case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString::createFromAscii( "tango" );
+        case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString::createFromAscii( "oxygen" );
         case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString::createFromAscii( "classic" );
     }
 
@@ -728,6 +729,8 @@ ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) cons
         return STYLE_SYMBOLS_CRYSTAL;
     else if ( rName == ::rtl::OUString::createFromAscii( "tango" ) )
         return STYLE_SYMBOLS_TANGO;
+    else if ( rName == ::rtl::OUString::createFromAscii( "oxygen" ) )
+        return STYLE_SYMBOLS_OXYGEN;
     else if ( rName == ::rtl::OUString::createFromAscii( "classic" ) )
         return STYLE_SYMBOLS_CLASSIC;
 
@@ -819,6 +822,8 @@ ULONG StyleSettings::GetAutoSymbolsStyle() const
             nRet = STYLE_SYMBOLS_TANGO;
         else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
             nRet = STYLE_SYMBOLS_CRYSTAL;
+        else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde4" ) )
+            nRet = STYLE_SYMBOLS_OXYGEN;
     }
 
     // falback to any existing style
