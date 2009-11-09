@@ -1736,7 +1736,7 @@ ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
 
     if ( nFlags & SETTINGS_UILOCALE )
     {
-        DBG_ERROR("UILocale can't be changed!");
+        // UILocale can't be changed
     }
 
     return nChangeFlags;
