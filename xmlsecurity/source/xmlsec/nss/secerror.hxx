@@ -35,6 +35,6 @@ const char *
 getCertError(PRErrorCode errNum);
 
 void
-printChainFailure(FILE *outfile, CERTVerifyLog *log);
+printChainFailure(CERTVerifyLog *log);
 #endif  // _XSECERROR_HXX_
 

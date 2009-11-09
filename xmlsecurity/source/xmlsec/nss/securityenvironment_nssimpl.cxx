@@ -42,7 +42,7 @@
 #include "securityenvironment_nssimpl.hxx"
 #include "x509certificate_nssimpl.hxx"
 #include <rtl/uuid.h>
-
+#include "../diagnose.hxx"
 
 #include <sal/types.h>
 //For reasons that escape me, this is what xmlsec does when size_t is not 4
@@ -71,6 +71,7 @@
 // MM : added for password exception
 #include <com/sun/star/security/NoPasswordException.hpp>
 namespace csss = ::com::sun::star::security;
+using namespace xmlsecurity;
 using namespace ::com::sun::star::security;
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;
@@ -773,7 +774,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         throw RuntimeException() ;
     }
 
-    OSL_TRACE("[xmlsecurity] Start verification of certificate: \n %s \n",
+    xmlsec_trace("Start verification of certificate: \n %s \n",
               OUStringToOString(
                   aCert->getSubjectName(), osl_getThreadTextEncoding()).getStr());
 
@@ -807,14 +808,14 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                                            PR_TRUE  /* copyDER */);
              if (!certTmp)
              {
-                 OSL_TRACE("[xmlsecurity] Failed to add a temporary certificate: %s",
+                 xmlsec_trace("Failed to add a temporary certificate: %s",
                            OUStringToOString(intermediateCerts[i]->getIssuerName(),
                                              osl_getThreadTextEncoding()).getStr());
 
              }
              else
              {
-                 OSL_TRACE("[xmlsecurity] Added temporary certificate: %s",
+                 xmlsec_trace("Added temporary certificate: %s",
                            certTmp->subjectName ? certTmp->subjectName : "");
                  vecTmpNSSCertificates.push_back(certTmp);
              }
@@ -914,21 +915,20 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
            {certificateUsageSSLServer, "certificateUsageSSLServer" },
            {certificateUsageSSLCA, "certificateUsageSSLCA" },
            {certificateUsageEmailSigner, "certificateUsageEmailSigner"}, //only usable for end certs
-//             {certificateUsageEmailRecipient, "certificateUsageEmailRecipient"},
-//             {certificateUsageObjectSigner, "certificateUsageObjectSigner"}
+           {certificateUsageEmailRecipient, "certificateUsageEmailRecipient"}
         };
 
         int numUsages = sizeof(arUsages) / sizeof(UsageDescription);
         for (int i = 0; i < numUsages; i++)
         {
-            OSL_TRACE("[xmlsecurity] Testing usage %d of %d: %s (0x%x)", i + 1,
+            xmlsec_trace("Testing usage %d of %d: %s (0x%x)", i + 1,
                       numUsages, arUsages[i].description, (int) arUsages[i].usage);
 
             status = CERT_PKIXVerifyCert(const_cast<CERTCertificate *>(cert), arUsages[i].usage,
                                          cvin, cvout, NULL);
             if( status == SECSuccess )
             {
-                OSL_TRACE("[xmlsecurity] CERT_PKIXVerifyCert returned SECSuccess.");
+                xmlsec_trace("CERT_PKIXVerifyCert returned SECSuccess.");
                 //When an intermediate or root certificate is checked then we expect the usage
                 //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
                 //the button "This certificate can identify websites" is checked. If for example only
@@ -939,11 +939,11 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                 //will be displayed as invalid.
 
                 validity = csss::CertificateValidity::VALID;
-                OSL_TRACE("[xmlsecurity] Certificate is valid.\n");
+                xmlsec_trace("Certificate is valid.\n");
                 CERTCertificate * issuerCert = cvout[0].value.pointer.cert;
                 if (issuerCert)
                 {
-                    OSL_TRACE("[xmlsecurity] Root certificate: %s", issuerCert->subjectName);
+                    xmlsec_trace("Root certificate: %s", issuerCert->subjectName);
                     CERT_DestroyCertificate(issuerCert);
                 };
 
@@ -951,17 +951,15 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
             }
             else
             {
-#if OSL_DEBUG_LEVEL > 1
                 PRIntn err = PR_GetError();
-                fprintf(stderr, "Error: , %d = %s\n", err, getCertError(err));
-#endif
+                xmlsec_trace("Error: , %d = %s", err, getCertError(err));
+
                 /* Display validation results */
                 if ( log.count > 0)
                 {
                     CERTVerifyLogNode *node = NULL;
-#if OSL_DEBUG_LEVEL > 1
-                    printChainFailure(stderr, &log);
-#endif
+                    printChainFailure(&log);
+
                     for (node = log.head; node; node = node->next) {
                         if (node->cert)
                             CERT_DestroyCertificate(node->cert);
@@ -969,7 +967,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                     log.head = log.tail = NULL;
                     log.count = 0;
                 }
-                OSL_TRACE("[xmlsecurity] Certificate is invalid.");
+                xmlsec_trace("Certificate is invalid.\n");
             }
         }
 
@@ -983,7 +981,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     std::vector<CERTCertificate*>::const_iterator cert_i;
     for (cert_i = vecTmpNSSCertificates.begin(); cert_i != vecTmpNSSCertificates.end(); cert_i++)
     {
-        OSL_TRACE("[xmlsecurity] Destroying temporary certificate");
+        xmlsec_trace("Destroying temporary certificate");
         CERT_DestroyCertificate(*cert_i);
     }
     return validity ;

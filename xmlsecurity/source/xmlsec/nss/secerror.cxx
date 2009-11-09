@@ -27,10 +27,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+
 #include "secerr.h"
 #include "sslerr.h"
 #include "nspr.h"
 #include "certt.h"
+
+#include "../diagnose.hxx"
+
+using namespace xmlsecurity;
 
 struct ErrDesc {
     PRErrorCode  errNum;
@@ -65,7 +71,7 @@ getCertError(PRErrorCode errNum)
 }
 
 void
-printChainFailure(FILE *outfile, CERTVerifyLog *log)
+printChainFailure(CERTVerifyLog *log)
 {
     unsigned int       errorFlags  = 0;
     unsigned int       depth  = (unsigned int)-1;
@@ -75,17 +81,17 @@ printChainFailure(FILE *outfile, CERTVerifyLog *log)
 
     if (log->count > 0)
     {
-        fprintf(outfile,"Bad certifcation path:\n");
+        xmlsec_trace("Bad certifcation path:");
         for (node = log->head; node; node = node->next)
         {
             if (depth != node->depth)
             {
                 depth = node->depth;
-                fprintf(outfile,"Certificate:  %d. %s %s:\n", depth,
+                xmlsec_trace("Certificate:  %d. %s %s:", depth,
                         node->cert->subjectName,
                         depth ? "[Certificate Authority]": "");
             }
-            fprintf(outfile,"  ERROR %ld: %s\n", node->error,
+            xmlsec_trace("  ERROR %ld: %s", node->error,
                     getCertError(node->error));
             specificError = NULL;
             issuer = NULL;
@@ -151,9 +157,9 @@ printChainFailure(FILE *outfile, CERTVerifyLog *log)
                 break;
             }
             if (specificError)
-                fprintf(stderr,"%s\n", specificError);
+                xmlsec_trace("%s", specificError);
             if (issuer)
-                fprintf(stderr, "%s\n", issuer);
+                xmlsec_trace("%s", issuer);
         }
     }
 }

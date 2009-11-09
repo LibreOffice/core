@@ -66,7 +66,8 @@ SLOFILES = \
     $(SLO)$/certificateextension_xmlsecimpl.obj \
     $(SLO)$/xmlstreamio.obj \
     $(SLO)$/errorcallback.obj \
-    $(SLO)$/xsec_xmlsec.obj 
+    $(SLO)$/xsec_xmlsec.obj \
+        $(SLO)$/diagnose.obj
     
 # --- Targets ------------------------------------------------------
 
