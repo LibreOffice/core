@@ -173,7 +173,7 @@ _HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId ) :
     maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
 {
-//  maListBox.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
 }
 
 _HeaderTabListBox::~_HeaderTabListBox()

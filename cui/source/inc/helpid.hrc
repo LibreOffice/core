@@ -370,6 +370,7 @@
 #define HID_GRFFILTER_EMBOSS_LIGHT                  (HID_CUI_START + 331)
 #define HID_PASTE_DLG                               (HID_CUI_START + 333)
 #define HID_LINKDLG_TABLB                           (HID_CUI_START + 334)
+#define HID_MACRO_HEADERTABLISTBOX                  (HID_CUI_START + 335)
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
@@ -377,7 +378,7 @@
 // Overrun check ---------------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_CUI_HID_END     HID_LINKDLG_TABLB
+#define ACT_CUI_HID_END     HID_CUI_START + 335
 
 #if ACT_CUI_HID_END > HID_CUI_END
 #error Resource-Ueberlauf in #line, #file
