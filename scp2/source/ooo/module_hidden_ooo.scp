@@ -868,6 +868,7 @@ Module gid_Module_Root_Files_Images
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Images_Zip,
              gid_File_ImagesCrystal_Zip,
+             gid_File_ImagesOxygen_Zip,
              gid_File_ImagesHicontrast_Zip,
              gid_File_ImagesIndustrial_Zip,
              gid_File_ImagesTango_Zip,
