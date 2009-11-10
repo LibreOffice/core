@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,7 @@ PRJINC=$(PRJ)$/source
 
 OBJFILES= \
     $(OBJ)$/parsefct.obj    \
+    $(OBJ)$/x_docu.obj      \
     $(OBJ)$/x_parse.obj
 
 

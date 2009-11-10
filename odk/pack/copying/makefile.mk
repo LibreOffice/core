@@ -214,9 +214,14 @@ MYZIPLIST=com$/* win$/*
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
+
+.IF "$(L10N_framework)"==""
+
 all : CLEAN_DKVERSION_CHECK \
     $(DIR_FILE_LIST) \
     $(DIR_FILE_FLAG) \
+
+.ENDIF
 
 #--------------------------------------------------
 # use global rules
