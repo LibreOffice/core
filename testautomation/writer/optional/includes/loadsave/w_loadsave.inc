@@ -447,10 +447,10 @@ testcase tExportTop5FormatsIntoTop5
 							 sCurrentSaveFilter = "HTML (StarWriter)"
 				End select
 	
-				printlog " - to file: " & sCurrentSaveFile
+				printlog " - " & iCurrentSaveFileIndex ". to file: " & sCurrentSaveFile
 				if hFileSaveAsWithFilterKill(sCurrentSaveFile, sCurrentSaveFilter) = true then
 					printlog " - close all open documents"
-					Do Until GetDocumentCount = 1
+					Do Until GetDocumentCount = 0
 						Call hCloseDocument
 					Loop
 					printlog " - check if file exists"
@@ -462,27 +462,27 @@ testcase tExportTop5FormatsIntoTop5
 						else
 							Warnlog "error loading file: " & sCurrentSaveFile
 						end if
-						Do Until GetDocumentCount = 1
+						Do Until GetDocumentCount = 0
 							Call hCloseDocument
 						Loop
 					else
 						Warnlog "Saved file doesn't exist"
 						'Close the opened file
-						Do Until GetDocumentCount = 1
+						Do Until GetDocumentCount = 0
 							Call hCloseDocument
 						Loop														
 					end if
 				else
 					Warnlog "Error saving file: " & sCurrentLoadFile
 					'Close the opened file
-					Do Until GetDocumentCount = 1
+					Do Until GetDocumentCount = 0
 						Call hCloseDocument
 					Loop								
 				end if
 			else
 				Warnlog "Error loading file: " & sCurrentLoadFile
 				'Close the opened file
-				Do Until GetDocumentCount = 1
+				Do Until GetDocumentCount = 0
 					Call hCloseDocument
 				Loop				
 			end if
