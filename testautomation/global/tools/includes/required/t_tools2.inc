@@ -763,7 +763,7 @@ function fGetProductName as string
     'Using the bootstraprc/bootstrap.ini file in ../program dir
     'to get the value of 'ProductKey'
     
-    if gPlatform = lcase("osx") then
+    if ( lcase( gPlatform ) = "osx" ) then
     	sfile = convertPath(gNetzOfficePath + "MacOS/bootstrap")
     else
     	sfile = convertPath(gNetzOfficePath + "program/bootstrap")
@@ -826,7 +826,7 @@ function FindBuildID as String
    ' bootstrap.ini/rc part
    if (gSamePC = TRUE) then
         ' since CWS nativefixer18 the information from bootstrap file is spread across bootstrap and version
-        if gPlatform = lcase("osx") then
+        if ( lcase( gPlatform ) = "osx" ) then
             sPlatformProgramPath = "MacOS"
         else
             sPlatformProgramPath = "program"

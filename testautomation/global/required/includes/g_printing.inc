@@ -148,7 +148,7 @@ testcase tPrintGeneral()
         Details.click() ' open
         Details.click() ' close
         
-        if ( gPlatGroup = "unx" ) then
+        if ( gPlatGroup = "unx" and lcase( gPlatform ) <> "osx" ) then
             Properties.click()
             kontext "TabSPAPaper"
             if ( TabSPAPaper.exists( 2 ) ) then
@@ -157,7 +157,7 @@ testcase tPrintGeneral()
                 warnlog( "Printer properties did not open." )
             endif
         else
-            printlog( "Skipping printer properties on Windows (no SPAdmin)")
+            printlog( "Skipping printer properties on Windows and MacOS X (no SPAdmin)" )
         endif
 
         kontext "TabPrintGeneral"
