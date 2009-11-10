@@ -50,6 +50,8 @@
 //#include <map> 
 #include <strsafe.h>
 
+// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExW if WINVER < 0x0502.
+WINADVAPI LONG WINAPI RegDeleteKeyExW(HKEY,LPCWSTR,REGSAM,DWORD);
 
 // 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
 // in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
@@ -251,15 +253,8 @@ bool QueryReg64Table(MSIHANDLE& rhDatabase, MSIHANDLE& rhView)
 //---------------------------------------
 bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
 {
-
-// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyEx if WINVER < 0x0502.
-#if (WINVER >= 0x0502)
-    int rc = RegDeleteKeyEx(
+    int rc = RegDeleteKeyExW(
         RootKey, KeyName, KEY_WOW64_64KEY, 0);
-#else
-    int rc = RegDeleteKey(
-        RootKey, KeyName);
-#endif
 
     return (ERROR_SUCCESS == rc);
 }
