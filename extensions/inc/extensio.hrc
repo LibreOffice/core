@@ -55,7 +55,6 @@
 #define HID_BIB_TBX_TABLE               (HID_EXTENSIONS_START + 3)
 #define HID_BIB_TBX_SEARCH              (HID_EXTENSIONS_START + 4)
 #define HID_BIB_TBX_AUTOFILTER          (HID_EXTENSIONS_START + 5)
-
 #define HID_BIB_IDENTIFIER_POS                  (HID_EXTENSIONS_START + 6)
 #define HID_BIB_AUTHORITYTYPE_POS               (HID_EXTENSIONS_START + 7)
 #define HID_BIB_AUTHOR_POS                      (HID_EXTENSIONS_START + 8)
@@ -87,12 +86,10 @@
 #define HID_BIB_CUSTOM3_POS                     (HID_EXTENSIONS_START + 34)
 #define HID_BIB_CUSTOM4_POS                     (HID_EXTENSIONS_START + 35)
 #define HID_BIB_CUSTOM5_POS                     (HID_EXTENSIONS_START + 36)
-
 #define HID_BIB_DB_TBX                          (HID_EXTENSIONS_START + 37)
 #define HID_BIB_DB_GRIDCTRL                     (HID_EXTENSIONS_START + 38)
 #define HID_BIB_CONTROL_PAGE                    (HID_EXTENSIONS_START + 39)
 #define HID_BIB_CONTROL_PARENT                  (HID_EXTENSIONS_START + 40)
-
 #define HID_GRIDWIZARD_PREVIOUS                 (HID_EXTENSIONS_START + 41)
 #define HID_GRIDWIZARD_NEXT                     (HID_EXTENSIONS_START + 42)
 #define HID_GRIDWIZARD_CANCEL                   (HID_EXTENSIONS_START + 43)
@@ -114,27 +111,21 @@
 #define UID_DBIWIZARD_QUERIES                   (HID_EXTENSIONS_START + 59)
 #define UID_DBIWIZARD_FORMS                     (HID_EXTENSIONS_START + 60)
 #define UID_DBIWIZARD_FORMS_SAVETO              (HID_EXTENSIONS_START + 61)
-
 #define UID_BIB_FRAME_WINDOW                    (HID_EXTENSIONS_START + 62)
-
 #define HID_ABSPILOT_PREVIOUS                   (HID_EXTENSIONS_START + 63)
 #define HID_ABSPILOT_NEXT                       (HID_EXTENSIONS_START + 64)
 #define HID_ABSPILOT_CANCEL                     (HID_EXTENSIONS_START + 65)
 #define HID_ABSPILOT_FINISH                     (HID_EXTENSIONS_START + 66)
 #define UID_ABSPILOT_HELP                       (HID_EXTENSIONS_START + 67)
 #define HID_ABSPILOT                            (HID_EXTENSIONS_START + 68)
-
 #define HID_DBIWIZARD                           (HID_EXTENSIONS_START + 69)
 #define UID_DBIWIZARD_HELP                      (HID_EXTENSIONS_START + 70)
 #define HID_DBIWIZARD_FILESELECTION             (HID_EXTENSIONS_START + 71)
-
 #define HID_BIB_DELETE_RECORD                   (HID_EXTENSIONS_START + 72)
 #define HID_BIB_INSERT_RECORD                   (HID_EXTENSIONS_START + 73)
-
 #define HID_DLG_MAPPING                         (HID_EXTENSIONS_START + 74)
 #define HID_DLG_DBCHANGE                        (HID_EXTENSIONS_START + 75)
 #define HID_SELECTION_TLB                       (HID_EXTENSIONS_START + 76)
-
 #define HID_CHECK_FOR_UPD_DLG                   (HID_EXTENSIONS_START + 77)
 #define HID_CHECK_FOR_UPD_CLOSE                 (HID_EXTENSIONS_START + 78)
 #define HID_CHECK_FOR_UPD_PAUSE                 (HID_EXTENSIONS_START + 80)
@@ -149,7 +140,7 @@
 // please adjust HID_LAST_EXTENSIONS_ID if you add new ids here!
 // you probably have to insert your new helpid into util/hidother.hrc, too!
 
-#define HID_LAST_EXTENSIONS_ID  HID_CHECK_FOR_UPD_CANCEL
+#define HID_LAST_EXTENSIONS_ID  (HID_EXTENSIONS_START + 87)
 
 #if HID_LAST_EXTENSIONS_ID > HID_EXTENSIONS_END
     #error id overflow
@@ -330,10 +321,10 @@
 #define HID_PROP_XSD_MIN_EXCLUSIVE              (HID_FORMS_START +  172)
 #define HID_PROP_UNCHECKEDREFVALUE              (HID_FORMS_START +  173)
 #define HID_PROP_SUBMISSION_ID                  (HID_FORMS_START +  174)
-    // FREE
-    // FREE
-    // FREE
-    // FREE
+#define HID_FM_PROPDLG_TABCTR                   (HID_FORMS_START +  175)
+#define HID_FM_PROPDLG_TAB_GENERAL              (HID_FORMS_START +  176)
+#define HID_FM_PROPDLG_TAB_DATA                 (HID_FORMS_START +  177)
+#define HID_FM_PROPDLG_TAB_EVT                  (HID_FORMS_START +  178)
     // FREE
 #define UID_PROP_DLG_FONT_TYPE                  (HID_FORMS_START +  180)
 #define UID_PROP_DLG_IMAGE_URL                  (HID_FORMS_START +  181)

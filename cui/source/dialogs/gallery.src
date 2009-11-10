@@ -31,6 +31,7 @@
 #include <sfx2/sfxsids.hrc>
 #include "helpid.hrc"
 #include "gallery.hrc"
+#include <svx/exthelpid.hrc>
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
@@ -49,6 +50,33 @@ TabDialog RID_SVXTABDLG_GALLERY
             {
                 Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
                 Text [ en-US ] = "General" ;
+            };
+        };
+    };
+};
+
+/******************************************************************************/
+
+TabDialog RID_SVXTABDLG_GALLERYTHEME
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text [ en-US ] = "Properties of " ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
+                Text [ en-US ] = "General" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXTABPAGE_GALLERYTHEME_FILES ;
+                Text [ en-US ] = "Files" ;
             };
         };
     };
@@ -215,6 +243,53 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
 
 /******************************************************************************/
 
+ModalDialog RID_SVXDLG_GALLERY_TITLE
+{
+    HelpId = HID_GALLERY_TITLE;
+    OutputSize = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 168 , 63 ) ;
+    Text [ en-US ] = "Enter Title" ;
+    Moveable = TRUE ;
+
+    OkButton BTN_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 112 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 112 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 112 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    FixedLine FL_TITLE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ en-US ] = "Title" ;
+    };
+    Edit EDT_TITLE
+    {
+        HelpId = HID_GALLERY_TITLE_EDIT;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 18 ) ;
+        Size = MAP_APPFONT ( 88, 12 ) ;
+    };
+};
+
+/******************************************************************************/
+
 ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
 {
     HelpId = HID_GALLERY_SEARCH ;
@@ -288,7 +363,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
 
 ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
 {
-    HelpId = HID_GALLERY_ACTUALIZE_PROGRESS;
+    HelpId = HID_GALLERY_ACTUALIZE;
     OutputSize = TRUE ;
     Border = TRUE ;
     SVLook = TRUE ;
