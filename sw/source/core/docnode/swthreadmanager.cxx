@@ -50,14 +50,9 @@ SwThreadManager::SwThreadManager()
 
 SwThreadManager::~SwThreadManager()
 {
-    delete mpThreadManagerImpl;
 }
 
-struct InitInstance : public rtl::StaticWithInit<SwThreadManager, InitInstance> {
-    SwThreadManager operator () () {
-        return SwThreadManager();
-    }
-};
+struct InitInstance : public rtl::Static<SwThreadManager, InitInstance> {};
 
 SwThreadManager& SwThreadManager::GetThreadManager()
 {
