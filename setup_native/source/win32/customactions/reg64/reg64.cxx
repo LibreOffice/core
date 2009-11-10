@@ -348,7 +348,7 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
                 wcsncpy(newValue, szValue, nPrefixSize);
                 
                 // basis location
-                wcsncat(newValue, sBasisInstallLocation, _TRUNCATE);
+                wcsncat(newValue, sBasisInstallLocation, nPropSize * sizeof( wchar_t ));
 
                 //wcsncpy(postfix, nPos, _TRUNCATE);
 
