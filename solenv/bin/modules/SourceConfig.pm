@@ -143,23 +143,22 @@ sub get_all_modules
 sub get_active_modules
 {
     my $self        = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
     if (scalar keys %{$self->{ACTIVATED_MODULES}}) {
         return sort keys %{$self->{ACTIVATED_MODULES}};
-    };
-    return sort keys %{$self->{REAL_MODULES}};
+    }
+    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+       return sort keys %{$self->{REAL_MODULES}};
 }
 
 sub is_active
 {
     my $self        = shift;
     my $module      = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}} && !scalar keys %{$self->{ACTIVATED_MODULES}});
     if (scalar keys %{$self->{ACTIVATED_MODULES}}) {
         return exists ($self->{ACTIVATED_MODULES}{$module});
-    } else {
-        return exists ($self->{REAL_MODULES}{$module});
     }
+       $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+    return exists ($self->{REAL_MODULES}{$module});
 }
 
 ##### private methods #####
