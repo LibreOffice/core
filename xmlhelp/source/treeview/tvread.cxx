@@ -46,8 +46,6 @@
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -812,23 +810,13 @@ TVChildTarget::getConfiguration(const Reference< XMultiServiceFactory >& m_xSMgr
     Reference< XMultiServiceFactory > sProvider;
     if( m_xSMgr.is() )
     {
-        Any aAny;
-        aAny <<= rtl::OUString::createFromAscii( "plugin" );
-        PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
-                             -1,
-                             aAny,
-                             PropertyState_DIRECT_VALUE );
-
-        Sequence< Any > seq(1);
-        seq[0] <<= aProp;
-
         try
         {
             rtl::OUString sProviderService =
                 rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
             sProvider =
                 Reference< XMultiServiceFactory >(
-                    m_xSMgr->createInstanceWithArguments( sProviderService,seq ),
+                    m_xSMgr->createInstance( sProviderService ),
                     UNO_QUERY );
         }
         catch( const com::sun::star::uno::Exception& )
