@@ -50,7 +50,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace configmgr {
 
 class Node;
-class Span;
+struct Span;
 
 class ValueParser: private boost::noncopyable {
 public:
