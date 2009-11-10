@@ -37,6 +37,7 @@ LIBTARGET=NO
 # noadjust here to have dependencies over there
 noadjust=TRUE
 nodep=true
+ENABLE_EXCEPTIONS=TRUE
 
 # "mkdepend" is written in K&R style C. Modern compilers will generate
 # lots of warning. There is no point in cleaning this up, so we just
@@ -49,7 +50,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 LIBSALCPPRT=
 UWINAPILIB=
 
-CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS
+CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS  
 
 OBJFILES=  \
         $(OBJ)$/cppsetup.obj \
@@ -66,7 +67,12 @@ APP1OBJS=$(OBJFILES)
 APP1RPATH=NONE
 
 .IF "$(COM)"=="MSC"
+.IF "$(dbgutil)"==""
 APP1STDLIBS+=msvcprt.lib
+.ELSE
+APP1STDLIBS+=msvcprtd.lib
+CDEFS+=-D_DEBUG
+.ENDIF                        # "$(DBG_UTIL)"==""
 .ENDIF                        # "$(COM)"=="MSC"
 
 .IF "$(OS)"=="SOLARIS"
