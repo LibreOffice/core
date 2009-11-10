@@ -231,19 +231,16 @@ struct OStoreSuperBlockPage
 
     /** save.
      */
-    storeError save (OStorePageBIOS &rBIOS)
+    storeError save (OStorePageBIOS & rBIOS)
     {
-        // Guard.
-        guard();
-
-        // Write.
+        m_aSuperOne.guard();
+        m_aSuperTwo = m_aSuperOne;
         return rBIOS.write (0, this, theSize);
     }
 
     /** verify (with repair).
      */
-    storeError verify (
-        OStorePageBIOS &rBIOS);
+    storeError verify (OStorePageBIOS & rBIOS);
 };
 
 } // namespace store
@@ -254,17 +251,55 @@ struct OStoreSuperBlockPage
  *
  *======================================================================*/
 #if 0  /* NEW */
-SuperBlockPage::unusedHead(PageData & rPageHead) // alloc page, step 1
+/**
+ * alloc page, step 1: get freelist head.
+ */
+storeError SuperBlockPage::unusedHead(OStorePageBIOS & rBIOS, PageData & rPageHead)
 {
-    L aListHead (m_aSuperTwo.unusedHead());
-    if (aListHead.location() == STORE_PAGE_NULL)
-        return store_E_NotExists;
+    // Check FreeList.
+    OStorePageLink const aListHead (m_aSuperOne.unusedHead());
+    if (aListHead.location() == 0) // @see SuperBlock::ctor()
+    {
+        rPageHead.location (STORE_PAGE_NULL);
+        return store_E_None;
+    }
 
-    rBIOS.read (aListHead.location(), &rPageHead, PageData::theSize);
+    // Load PageHead.
+    eErrCode = rBIOS.read (aListHead.location(), &rPageHead, PageData::theSize);
+
+    eErrCode = rPageHead.verify (aListHead.location());
+
+    // Verify page is unused.
+    sal_uInt32 const nAddr = rPageHead.m_aUnused.location();
+    OSL_POSTCOND(nAddr != STORE_PAGE_NULL, "store::SuperBlock::unusedHead(): page not free");
+    if (nAddr == STORE_PAGE_NULL)
+    {
+        // Page in use.
+        rPageHead.location (STORE_PAGE_NULL);
+
+        // Recovery: Reset FreeList.
+        m_aSuperOne.unusedReset();
+        return save (rBIOS);
+    }
+    return store_E_None;
 }
-SuperBlockPage::unusedPop(sal_uInt32 nAddr) // alloc page, step 2
+
+/**
+ * alloc page, step 2: pop freelist head.
+ */
+SuperBlockPage::unusedPop (OStorePageBIOS & rBIOS, PageData const & rPageHead)
 {
+    sal_uInt32 const nAddr = rPageHead.m_aUnused.location();
+    OSL_PRECOND(nAddr != STORE_PAGE_NULL, "store::SuperBlock::unusedPop(): page not free");
+    if (nAddr == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
+    // Pop from FreeList.
+    OStorePageLink const aListHead (nAddr);
+    m_aSuperOne.unusedRemove (aListHead);
+    return save (rBIOS);
 }
+
 storeError OStoreSuperBlockPage::unusedPush (OStorePageBIOS & rBIOS, sal_uInt32 nAddr)
 {
     PageData aPageHead (PageData::theSize);
@@ -276,19 +311,16 @@ storeError OStoreSuperBlockPage::unusedPush (OStorePageBIOS & rBIOS, sal_uInt32 
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    aPageHead.m_aUnused = m_aSuperTwo.unusedHead();
+    aPageHead.m_aUnused = m_aSuperOne.unusedHead();
     aPageHead.guard (nAddr);
 
     eErrCode = rBIOS.write (nAddr, &aPageHead, PageData::theSize);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    OStorePageLink aListHead (nAddr);
-    m_aSuperTwo.unusedInsert(aListHead);
-    m_aSuperOne = m_aSuperTwo;
-    guard();
-
-    return rBIOS.write (0, this, theSize);
+    OStorePageLink const aListHead (nAddr);
+    m_aSuperOne.unusedInsert(aListHead);
+    return save (rBIOS);
 }
 #endif /* NEW */
 
@@ -785,7 +817,7 @@ storeError OStorePageBIOS::allocate (
     if (eAlloc != ALLOCATE_EOF)
     {
         // Check FreeList.
-        OStorePageLink aListHead (m_pSuper->m_aSuperTwo.unusedHead());
+        OStorePageLink aListHead (m_pSuper->m_aSuperOne.unusedHead());
         if (aListHead.location())
         {
             // Allocate from FreeList.
@@ -803,8 +835,7 @@ storeError OStorePageBIOS::allocate (
             if (aPageHead.m_aUnused.location() == STORE_PAGE_NULL)
             {
                 // Recovery: Reset FreeList.
-                m_pSuper->m_aSuperTwo.unusedReset();
-                m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
+                m_pSuper->m_aSuperOne.unusedReset();
 
                 // Save SuperBlock page.
                 eErrCode = m_pSuper->save (*this);
@@ -826,8 +857,7 @@ storeError OStorePageBIOS::allocate (
                 return eErrCode;
 
             // Save SuperBlock page and finish.
-            m_pSuper->m_aSuperTwo.unusedRemove (aListHead);
-            m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
+            m_pSuper->m_aSuperOne.unusedRemove (aListHead);
 
             eErrCode = m_pSuper->save (*this);
             OSL_POSTCOND(
@@ -877,7 +907,9 @@ storeError OStorePageBIOS::free (OStorePageData & /* rData */, sal_uInt32 nAddr)
     (void) m_xCache->removePageAt (nAddr);
 
     // Push onto FreeList.
-    OStorePageLink aListHead (m_pSuper->m_aSuperTwo.unusedHead());
+    // return m_pSuper->unusedPush (*this, nAddr); // @@@ NEW @@@
+
+    OStorePageLink aListHead (m_pSuper->m_aSuperOne.unusedHead());
 
     aPageHead.m_aUnused.m_nAddr = aListHead.m_nAddr;
     aListHead.m_nAddr = aPageHead.m_aDescr.m_nAddr;
@@ -888,8 +920,7 @@ storeError OStorePageBIOS::free (OStorePageData & /* rData */, sal_uInt32 nAddr)
         return eErrCode;
 
     // Save SuperBlock page and finish.
-    m_pSuper->m_aSuperTwo.unusedInsert (aListHead);
-    m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
+    m_pSuper->m_aSuperOne.unusedInsert (aListHead);
 
     eErrCode = m_pSuper->save (*this);
     OSL_POSTCOND(
