@@ -37,6 +37,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <vcl/lazydelete.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // helper methods
@@ -47,11 +48,11 @@ namespace drawinglayer
     {
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor)
         {
-            static BitmapEx* pRetVal = NULL;
+            static vcl::DeleteOnDeinit< BitmapEx > aRetVal(0);
             static basegfx::BColor aColor;
             ::osl::Mutex m_mutex;
 
-            if(pRetVal == NULL || rBColor != aColor)
+            if(!aRetVal.get() || rBColor != aColor)
             {
                 // copy values
                 aColor = rBColor;
@@ -81,23 +82,21 @@ namespace drawinglayer
                 aContent.ReleaseAccess(pWContent);
                 aMask.ReleaseAccess(pWMask);
 
-                if( pRetVal )
-                    delete pRetVal;
-
-                pRetVal = new BitmapEx(aContent, aMask);
+                // create and exchange at aRetVal
+                delete aRetVal.set(new BitmapEx(aContent, aMask));
             }
 
-            return *pRetVal;
+            return aRetVal.get() ? *aRetVal.get() : BitmapEx();
         }
 
         BitmapEx createDefaultGluepoint_7x7(const basegfx::BColor& rBColorA, const basegfx::BColor& rBColorB)
         {
-            static BitmapEx* pRetVal = NULL;
+            static vcl::DeleteOnDeinit< BitmapEx > aRetVal(0);
             static basegfx::BColor aColorA;
             static basegfx::BColor aColorB;
             ::osl::Mutex m_mutex;
 
-            if(pRetVal == NULL || rBColorA != aColorA || rBColorB != aColorB)
+            if(!aRetVal.get() || rBColorA != aColorA || rBColorB != aColorB)
             {
                 // copy values
                 aColorA = rBColorA;
@@ -171,13 +170,11 @@ namespace drawinglayer
                 aContent.ReleaseAccess(pWContent);
                 aMask.ReleaseAccess(pWMask);
 
-                if( pRetVal )
-                    delete pRetVal;
-
-                pRetVal = new BitmapEx(aContent, aMask);
+                // create and exchange at aRetVal
+                delete aRetVal.set(new BitmapEx(aContent, aMask));
             }
 
-            return *pRetVal;
+            return aRetVal.get() ? *aRetVal.get() : BitmapEx();
         }
 
         // #i99123#

@@ -44,50 +44,31 @@
 #ifdef IDL_COMPILER
 /************************************************************************/
 static BOOL ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
-                            long nMin, ULONG nMax, long * pValue )
+                            ULONG nMin, ULONG nMax, ULONG* pValue )
 {
     UINT32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
-
     if( pTok->Is( pName ) )
     {
-        BOOL bOk = TRUE;
-        BOOL bBraket = rInStm.Read( '(' );
-        if( bBraket || rInStm.Read( '=' ) )
+        BOOL bOk = FALSE;
+        if( rInStm.Read( '=' ) )
         {
-            short nSign = 1;
             pTok = rInStm.GetToken_Next();
-            if( pTok->IsChar() && pTok->GetChar() == '-' )
-            {
-                nSign = -1;
-                pTok = rInStm.GetToken_Next();
-            }
-            else if( pTok->IsChar() && pTok->GetChar() == '+' )
-                pTok = rInStm.GetToken_Next();
-
             if( pTok->IsInteger() )
             {
                 ULONG n = pTok->GetNumber();
-                if( nSign == -1 || n <= nMax )
-                { // nicht ueber dem Maximum
-                    if( (nSign == -1 && n < 0x8000000
-                         && -(long)n >= nMin)
-                      || ( (nSign == 1 && n >= 0x8000000) || (long)n > nMin) )
-                    {
-                        *pValue = (long)n;
-                    }
-                    else
-                        bOk = FALSE;
+                if ( n >= nMin && n <= nMax )
+                {
+                    *pValue = n;
+                    bOk = TRUE;
                 }
-                if( bOk && bBraket )
-                    bOk = rInStm.Read( ')' );
             }
-            else
-                bOk = pTok->IsChar() && pTok->GetChar() == ')';
         }
+
         if( bOk )
             return TRUE;
     }
+
     rInStm.Seek( nTokPos );
     return FALSE;
 }
@@ -590,7 +571,7 @@ BOOL SvUUId::WriteSvIdl( SvStream & rOutStm )
 *************************************************************************/
 BOOL SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 {
-    long n = 0;
+    ULONG n = 0;
 
     UINT32 nTokPos = rInStm.Tell();
     if( ReadRangeSvIdl( SvHash_Version(), rInStm, 0 , 0xFFFF, &n ) )

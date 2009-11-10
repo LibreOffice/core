@@ -93,7 +93,7 @@ char const * SyntaxStrings[] = {
 "\t\tAccelConfig, MenuConfig, StatusBarConfig, ToolbarConfig",
 "\t\tAutomation*",
 "\t\tAutoUpdate",
-"\t\tCachable*, Volatile",
+// "\t\tCachable*, Volatile",
 "\t\tContainer",
 "\t\tDefault        = Identifier",
 "\t\tExecMethod     = Identifier",
@@ -258,7 +258,7 @@ static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
 |*    Beschreibung
 *************************************************************************/
 SvCommand::SvCommand( int argc, char ** argv )
-    : nFlags( 0 )
+    : nVerbosity(1), nFlags( 0 )
 {
     StringList aList;
 
@@ -352,6 +352,14 @@ SvCommand::SvCommand( int argc, char ** argv )
             else if( aParam.EqualsIgnoreCaseAscii( "help" ) || aParam.EqualsIgnoreCaseAscii( "?" ) )
             { // Hilfe
                 printf( "%s", CommandLineSyntax );
+            }
+            else if( aParam.EqualsIgnoreCaseAscii( "quiet" ) )
+            {
+                nVerbosity = 0;
+            }
+            else if( aParam.EqualsIgnoreCaseAscii( "verbose" ) )
+            {
+                nVerbosity = 2;
             }
             else if( aParam.EqualsIgnoreCaseAscii( "syntax" ) )
             { // Hilfe

@@ -450,12 +450,14 @@ private:
     ImageButton                         m_aRemoveButton;
 
     sal_Int32                           m_nLineHeight;
+    sal_Int32                           m_nScrollPos;
     SvtSysLocale                        m_aSysLocale;
     std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
     Timer                               m_aEditLoseFocusTimer;
     Timer                               m_aBoxLoseFocusTimer;
+    Link                                m_aRemovedHdl;
 
     DECL_LINK(  TypeHdl, CustomPropertiesTypeBox* );
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
@@ -484,6 +486,7 @@ public:
     bool                DoesCustomPropertyExist( const String& rName ) const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         GetCustomProperties() const;
+    void                SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
 };
 
 // class CustomPropertiesControl -----------------------------------------
@@ -501,12 +504,13 @@ private:
     void                    Initialize();
 
     DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK( RemovedHdl, void* );
 
 public:
     CustomPropertiesControl( Window* pParent, const ResId& rResId );
     ~CustomPropertiesControl();
 
-    void            AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny );
+    void            AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
 
     inline bool     AreAllLinesValid() const { return m_aPropertiesWin.AreAllLinesValid(); }
     inline void     ClearAllLines() { m_aPropertiesWin.ClearAllLines(); }

@@ -49,6 +49,8 @@ ENVCFLAGS+=/FR$(SLO)$/
 NOOPTFILES= $(SLO)$/RowFunctionParser.obj
 .ENDIF
 
+ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
+
 # --- Files --------------------------------------------------------
 EXCEPTIONSFILES=\
         $(SLO)$/predicateinput.obj						\

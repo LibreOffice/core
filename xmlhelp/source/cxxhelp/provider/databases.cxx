@@ -52,6 +52,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -59,7 +60,8 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/locale.hxx>
 
-#include <xmlhelp/compilehelp.hxx>
+#include <transex3/compilehelp.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #include "databases.hxx"
 #include "urlparameter.hxx"
@@ -800,6 +802,10 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
 
     for( sal_uInt32 i = 0; i < id.size(); ++i )
     {
+        // the following object must live longer than the
+        // pointer returned by aDBData.getData()
+        DBData aDBData;
+
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
@@ -811,7 +817,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
             DBHelp* pDBHelp = pDb->getDBHelp();
             if( pDBHelp != NULL )
             {
-                DBData aDBData;
                 bool bSuccess = pDBHelp->getValueForKey( idi, aDBData );
                 if( bSuccess )
                 {
@@ -1085,7 +1090,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
                 zipFile = getInstallPathAsURL() + key;
             }
 
-            Sequence< Any > aArguments( 1 );
+            Sequence< Any > aArguments( 2 );
 
             XInputStream_impl* p = new XInputStream_impl( zipFile );
             if( p->CtorSuccess() )
@@ -1098,6 +1103,12 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
                 delete p;
                 aArguments[ 0 ] <<= zipFile;
             }
+
+            // let ZipPackage be used ( no manifest.xml is required )
+            beans::NamedValue aArg;
+            aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+            aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
+            aArguments[ 1 ] <<= aArg;
 
             Reference< XInterface > xIfc
                 = m_xSMgr->createInstanceWithArgumentsAndContext(
@@ -1867,8 +1878,14 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
 
     try
     {
-        Sequence< Any > aArguments( 1 );
+        Sequence< Any > aArguments( 2 );
         aArguments[ 0 ] <<= zipFile;
+
+        // let ZipPackage be used ( no manifest.xml is required )
+        beans::NamedValue aArg;
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+        aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
+        aArguments[ 1 ] <<= aArg;
 
         Reference< XMultiComponentFactory >xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
         Reference< XInterface > xIfc

@@ -48,10 +48,6 @@ CFLAGS+=-DSYSTEM_EXPAT
 
 .IF "$(OS)" != "MACOSX"
 
-LIB1OBJFILES=$(SLO)$/systemshell.obj
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1ARCHIV=$(SLB)$/lib$(TARGET).a
-
 SLOFILES=$(SLO)$/recently_used_file.obj \
          $(SLO)$/recently_used_file_handler.obj
 

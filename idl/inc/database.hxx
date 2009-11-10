@@ -39,6 +39,8 @@
 /*************************************************************************
 *************************************************************************/
 
+class SvCommand;
+
 #ifdef IDL_COMPILER
 /******************** class SvIdlError ***********************************/
 class SvIdlError
@@ -70,6 +72,7 @@ class SvIdlDataBase
     BOOL                        bExport;
     String                      aExportFile;
     sal_uInt32                  nUniqueId;
+    sal_uInt32                  nVerbosity;
     String                      aDataBaseFile;
     SvFileStream *              pStm;
     BOOL                        bIsModified;
@@ -96,7 +99,7 @@ protected:
                                 }
 #endif
 public:
-                SvIdlDataBase();
+                explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
     static BOOL IsBinaryFormat( SvStream & rInStm );
 
@@ -165,7 +168,7 @@ public:
 class SvIdlWorkingBase : public SvIdlDataBase
 {
 public:
-                SvIdlWorkingBase();
+                explicit SvIdlWorkingBase( const SvCommand& rCmd );
 
     BOOL        ReadSvIdl( SvTokenStream &, BOOL bImported, const String & rPath );
     BOOL        WriteSvIdl( SvStream & );

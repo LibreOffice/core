@@ -67,6 +67,7 @@
 // includes of other projects
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/configurationhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
@@ -361,6 +362,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 
     css::uno::Reference< css::frame::XFrame > xFrame      (m_xFrame.get()      , css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >  xPluggWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR( m_xSMGR.get(), css::uno::UNO_QUERY);
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -432,8 +434,21 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // is visible too.
     impl_showProgress();
 
-    if (xParentWindow.is())
-        xParentWindow->setVisible(sal_True);
+    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    Window* pWindow = VCLUnoHelper::GetWindow(xParentWindow);
+    if ( pWindow )
+    {
+        bool bForceFrontAndFocus(false);
+        ::comphelper::ConfigurationHelper::readDirectKey(
+            xSMGR,
+            ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/View"),
+            ::rtl::OUString::createFromAscii("NewDocumentHandling"),
+            ::rtl::OUString::createFromAscii("ForceFocusAndToFront"),
+            ::comphelper::ConfigurationHelper::E_READONLY) >>= bForceFrontAndFocus;
+
+        pWindow->Show(sal_True, bForceFrontAndFocus ? SHOW_FOREGROUNDTASK : 0 );
+    }
+
     /*
     #i75167# dont disturb window manager handling .-)
     css::uno::Reference< css::awt::XTopWindow > xParentWindowTop(xParentWindow, css::uno::UNO_QUERY);

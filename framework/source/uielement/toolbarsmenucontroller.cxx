@@ -211,7 +211,7 @@ void ToolbarsMenuController::addCommand(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = GetImageFromURL( m_xFrame, rCommandURL, FALSE, rSettings.GetMenuColor().IsDark() );
+        aImage = GetImageFromURL( m_xFrame, rCommandURL, FALSE, rSettings.GetHighContrastMode() );
 
     VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
     if ( pPopupMenu )

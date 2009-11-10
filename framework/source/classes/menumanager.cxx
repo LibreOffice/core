@@ -157,7 +157,7 @@ MenuManager::MenuManager(
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
@@ -371,7 +371,7 @@ MenuManager::MenuManager(
     m_bIsBookmarkMenu   = sal_True;
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+    m_bWasHiContrast    = rSettings.GetHighContrastMode();
 
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
@@ -919,7 +919,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                   UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
-        sal_Bool bIsHiContrast = rSettings.GetMenuColor().IsDark();
+        sal_Bool bIsHiContrast = rSettings.GetHighContrastMode();
 
         if ( m_bWasHiContrast != bIsHiContrast || bShowMenuImages != m_bShowMenuImages )
         {

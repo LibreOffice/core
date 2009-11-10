@@ -190,7 +190,7 @@ using namespace ::svxform;
         case FormComponentType::IMAGECONTROL:
             nClassNameResourceId = RID_STR_PROPTITLE_IMAGECONTROL; break;
         case FormComponentType::HIDDENCONTROL:
-            nClassNameResourceId = RID_STR_HIDDEN_CLASSNAME; break;
+            nClassNameResourceId = RID_STR_PROPTITLE_HIDDEN; break;
         case FormComponentType::SCROLLBAR:
             nClassNameResourceId = RID_STR_PROPTITLE_SCROLLBAR; break;
         case FormComponentType::SPINBUTTON:
@@ -199,7 +199,7 @@ using namespace ::svxform;
             nClassNameResourceId = RID_STR_PROPTITLE_NAVBAR; break;
         case FormComponentType::CONTROL:
         default:
-            nClassNameResourceId = RID_STR_CONTROL_CLASSNAME; break;
+            nClassNameResourceId = RID_STR_CONTROL; break;
     }
 
     if ( !nClassNameResourceId )
@@ -218,6 +218,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
     ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
     ,m_bInitialStateChange(sal_True)
+    ,m_bInStateChange( false )
     ,m_xORB(_xORB)
 {
     DBG_CTOR(FmPropBrw,NULL);
@@ -668,11 +669,12 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
 //-----------------------------------------------------------------------
 void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
+    if (!pState  || SID_FM_PROPERTY_CONTROL != nSID)
+        return;
+
+    m_bInStateChange = true;
     try
     {
-        if (!pState  || SID_FM_PROPERTY_CONTROL != nSID)
-            return;
-
         if (eState >= SFX_ITEM_AVAILABLE)
         {
             FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
@@ -719,5 +721,5 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     {
         DBG_ERROR("FmPropBrw::StateChanged: Exception occured!");
     }
-
+    m_bInStateChange = false;
 }

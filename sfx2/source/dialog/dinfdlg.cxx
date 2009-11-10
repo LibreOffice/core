@@ -901,7 +901,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
             {
                 String s;
                 Sequence< security::DocumentSignatureInformation > aInfos;
-                aInfos = xD->verifyDocumentContentSignatures( pMedium->GetLastCommitReadStorage_Impl(),
+                aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
                                                                 uno::Reference< io::XInputStream >() );
                 if( aInfos.getLength() > 1 )
                 {
@@ -1630,7 +1630,7 @@ CustomPropertiesWindow::CustomPropertiesWindow( Window* pParent, const ResId& rR
     m_aTimeField    ( this, SfxResId( SFX_FLD_TIME) ),
     m_aYesNoButton  ( this, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( this, SfxResId( SFX_PB_PROPERTY_REMOVE ) ),
-
+    m_nScrollPos (0),
     m_aNumberFormatter( ::comphelper::getProcessServiceFactory(),
                         Application::GetSettings().GetLanguage() )
 
@@ -1704,6 +1704,8 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, CustomPropertiesRemoveButton*, pBu
             }
         }
     }
+
+    m_aRemovedHdl.Call(0);
     return 0;
 }
 
@@ -1891,6 +1893,7 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
         Size aSize = (*pCurrent)->GetSizePixel();
         Point aPos = (*pCurrent)->GetPosPixel();
         aPos.Y() += nPos;
+        aPos.Y() += m_nScrollPos;
         (*pNewCurrent)->SetPosSizePixel( aPos, aSize );
         (*pNewCurrent)->Show();
         pCurrent++;
@@ -1995,10 +1998,12 @@ void CustomPropertiesWindow::ClearAllLines()
         delete pLine;
     }
     m_aCustomPropertiesLines.clear();
+    m_nScrollPos = 0;
 }
 
 void CustomPropertiesWindow::DoScroll( sal_Int32 nNewPos )
 {
+    m_nScrollPos += nNewPos;
     std::vector< CustomPropertyLine* >::iterator pIter;
     for ( pIter = m_aCustomPropertiesLines.begin();
             pIter != m_aCustomPropertiesLines.end(); ++pIter )
@@ -2136,6 +2141,7 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
     XubString sTEST = m_aHeaderBar.GetItemText( HI_NAME );
 
     m_aPropertiesWin.InitControls( &m_aHeaderBar, &m_aVertScroll );
+    m_aPropertiesWin.SetRemovedHdl( LINK( this, CustomPropertiesControl, RemovedHdl ) );
 
     m_aVertScroll.SetRangeMin( 0 );
     sal_Int32 nScrollOffset = m_aPropertiesWin.GetLineHeight();
@@ -2151,7 +2157,7 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
 
     Link aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
     m_aVertScroll.SetScrollHdl( aScrollLink );
-    m_aVertScroll.SetEndScrollHdl( aScrollLink );
+//    m_aVertScroll.SetEndScrollHdl( aScrollLink );
 }
 
 CustomPropertiesControl::~CustomPropertiesControl()
@@ -2171,10 +2177,20 @@ IMPL_LINK( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-void CustomPropertiesControl::AddLine( const ::rtl::OUString& sName, Any& rAny )
+IMPL_LINK( CustomPropertiesControl, RemovedHdl, void*, EMPTYARG )
+{
+    m_aVertScroll.SetRangeMax( m_aPropertiesWin.GetVisibleLineCount() + 1 );
+    if ( m_aPropertiesWin.GetOutputSizePixel().Height() < m_aPropertiesWin.GetVisibleLineCount() * m_aPropertiesWin.GetLineHeight() )
+        m_aVertScroll.DoScrollAction ( SCROLL_LINEUP );
+    return 0;
+}
+
+void CustomPropertiesControl::AddLine( const ::rtl::OUString& sName, Any& rAny, bool bInteractive )
 {
     m_aPropertiesWin.AddLine( sName, rAny );
     m_aVertScroll.SetRangeMax( m_aPropertiesWin.GetVisibleLineCount() + 1 );
+    if ( bInteractive && m_aPropertiesWin.GetOutputSizePixel().Height() < m_aPropertiesWin.GetVisibleLineCount() * m_aPropertiesWin.GetLineHeight() )
+        m_aVertScroll.DoScroll( m_aPropertiesWin.GetVisibleLineCount() + 1 );
 }
 
 // class SfxCustomPropertiesPage -----------------------------------------
@@ -2195,7 +2211,7 @@ SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItem
 IMPL_LINK( SfxCustomPropertiesPage, AddHdl, PushButton*, EMPTYARG )
 {
     Any aAny;
-    m_aPropertiesCtrl.AddLine( ::rtl::OUString(), aAny );
+    m_aPropertiesCtrl.AddLine( ::rtl::OUString(), aAny, true );
     return 0;
 }
 
@@ -2245,7 +2261,7 @@ void SfxCustomPropertiesPage::Reset( const SfxItemSet& rItemSet )
     std::vector< CustomProperty* > aCustomProps = pInfoItem->GetCustomProperties();
     for ( sal_uInt32 i = 0; i < aCustomProps.size(); i++ )
     {
-        m_aPropertiesCtrl.AddLine( aCustomProps[i]->m_sName, aCustomProps[i]->m_aValue );
+        m_aPropertiesCtrl.AddLine( aCustomProps[i]->m_sName, aCustomProps[i]->m_aValue, false );
     }
 }
 
