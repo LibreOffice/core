@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/languageoptions.hxx>
+#include <svtools/useroptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
@@ -95,6 +96,11 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mnScTab( 0 ),
     mbExport( bExport )
 {
+    // user name
+    maUserName = SvtUserOptions().GetLastName();
+    if( maUserName.Len() == 0 )
+        maUserName = CREATE_STRING( "Calc" );
+
     // default script type, e.g. for empty cells
     switch( ScGlobal::GetDefaultScriptType() )
     {

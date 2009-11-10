@@ -355,12 +355,12 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                 }
                 else
                     pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                pDoc->CopyToDocument( aOldRange, IDF_ALL, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
             }
             else        // ohne Einfuegen
             {
                 pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                pDoc->CopyToDocument( aMaxRange, IDF_ALL, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( aMaxRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
             }
         }
 
@@ -370,7 +370,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         if (bDoInsert)
             pDoc->FitBlock( aOldRange, aNewRange );         // incl. loeschen
         else
-            pDoc->DeleteAreaTab( aMaxRange, IDF_ALL );
+            pDoc->DeleteAreaTab( aMaxRange, IDF_ALL & ~IDF_NOTE );
 
         //  Daten kopieren
 
@@ -426,7 +426,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         {
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRedoDoc->InitUndo( pDoc, nDestTab, nDestTab );
-            pDoc->CopyToDocument( aNewRange, IDF_ALL, FALSE, pRedoDoc );
+            pDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, FALSE, pRedoDoc );
 
             pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoUpdateAreaLink( pImpl->m_pDocSh,

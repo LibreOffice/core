@@ -99,9 +99,28 @@ FltError ImportExcel::Read( void )
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
+    /*  #i104057# Need to track a base position for progress bar calculation,
+        because sheet substreams may not be in order of sheets. */
+    sal_Size nProgressBasePos = 0;
+    sal_Size nProgressBaseSize = 0;
+
     while( eAkt != Z_Ende )
     {
-        aIn.StartNextRecord();
+        if( eAkt == Z_Biff5E )
+        {
+            sal_uInt16 nScTab = GetCurrScTab();
+            if( nScTab < maSheetOffsets.size()  )
+            {
+                nProgressBaseSize += (aIn.GetSvStreamPos() - nProgressBasePos);
+                nProgressBasePos = maSheetOffsets[ nScTab ];
+                aIn.StartNextRecord( nProgressBasePos );
+            }
+            else
+                eAkt = Z_Ende;
+        }
+        else
+            aIn.StartNextRecord();
+
         nOpcode = aIn.GetRecId();
 
         if( !aIn.IsValid() )
@@ -124,8 +143,11 @@ FltError ImportExcel::Read( void )
             break;
         }
 
+        if( eAkt == Z_Ende )
+            break;
+
         if( eAkt != Z_Biff5TPre && eAkt != Z_Biff5WPre )
-            pProgress->ProgressAbs( aIn.GetSvStreamPos() );
+            pProgress->ProgressAbs( nProgressBaseSize + aIn.GetSvStreamPos() - nProgressBasePos );
 
         switch( eAkt )
         {
@@ -804,9 +826,28 @@ FltError ImportExcel8::Read( void )
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
+    /*  #i104057# Need to track a base position for progress bar calculation,
+        because sheet substreams may not be in order of sheets. */
+    sal_Size nProgressBasePos = 0;
+    sal_Size nProgressBaseSize = 0;
+
     while( eAkt != EXC_STATE_END )
     {
-        aIn.StartNextRecord();
+        if( eAkt == EXC_STATE_BEFORE_SHEET )
+        {
+            sal_uInt16 nScTab = GetCurrScTab();
+            if( nScTab < maSheetOffsets.size()  )
+            {
+                nProgressBaseSize += (aIn.GetSvStreamPos() - nProgressBasePos);
+                nProgressBasePos = maSheetOffsets[ nScTab ];
+                aIn.StartNextRecord( nProgressBasePos );
+            }
+            else
+                eAkt = EXC_STATE_END;
+        }
+        else
+            aIn.StartNextRecord();
+
         if( !aIn.IsValid() )
         {
             // #124240# #i63591# finalize table if EOF is missing
@@ -830,7 +871,7 @@ FltError ImportExcel8::Read( void )
             break;
 
         if( eAkt != EXC_STATE_SHEET_PRE && eAkt != EXC_STATE_GLOBALS_PRE )
-            pProgress->ProgressAbs( aIn.GetSvStreamPos() );
+            pProgress->ProgressAbs( nProgressBaseSize + aIn.GetSvStreamPos() - nProgressBasePos );
 
         sal_uInt16 nRecId = aIn.GetRecId();
 
