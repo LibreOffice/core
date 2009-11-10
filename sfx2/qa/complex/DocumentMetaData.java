@@ -485,6 +485,8 @@ public class DocumentMetaData extends ComplexTestCase
     }
 
     boolean eqDate(Date a, Date b) {
+log.println("a: " + a.Year +" "+ a.Month +" "+ a.Day);
+log.println("b: " + b.Year +" "+ b.Month +" "+ b.Day);
         return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day;
     }
 
