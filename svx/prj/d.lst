@@ -29,6 +29,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\galmisc.hxx %_DEST%\inc%_EXT%\svx\galmisc.hxx
 ..\inc\svx\gallery1.hxx %_DEST%\inc%_EXT%\svx\gallery1.hxx
 ..\inc\svx\fmtools.hxx %_DEST%\inc%_EXT%\svx\fmtools.hxx
+..\inc\svx\exthelpid.hrc %_DEST%\inc%_EXT%\svx\exthelpid.hrc
 
 ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx
 ..\%__SRC%\inc\svxslots.hxx %_DEST%\inc%_EXT%\svx\svxslots.hxx
