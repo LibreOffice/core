@@ -68,8 +68,9 @@ sub new {
     $self->{REPOSITORIES} = {};
     $self->{MODULE_PATHS} = {};
     $self->{MODULE_BUILD_LIST_PATHS} = {};
-    $self->{ACTIVE_MODULES} = {};
+    $self->{ACTIVATED_MODULES} = {};
     $self->{MODULE_REPOSITORY} = {};
+    $self->{REAL_MODULES} = {};
     $self->{SOURCE_CONFIG_FILE} = get_config_file($source_root);
     $self->{SOURCE_CONFIG_DEFAULT} = Cwd::realpath($source_root) .'/'.SOURCE_CONFIG_FILE_NAME;
     read_config_file($self);
@@ -139,26 +140,25 @@ sub get_all_modules
     return sort keys %{$self->{MODULE_PATHS}};
 };
 
-
 sub get_active_modules
 {
     my $self        = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}} && !scalar keys %{$self->{ACTIVE_MODULES}});
-    my @active_modules = sort keys %{$self->{ACTIVE_MODULES}};
-    @active_modules = $self->get_all_modules() if (!scalar @active_modules);
-    return @active_modules;
+    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+    if (scalar keys %{$self->{ACTIVATED_MODULES}}) {
+        return sort keys %{$self->{ACTIVATED_MODULES}};
+    };
+    return sort keys %{$self->{REAL_MODULES}};
 }
 
 sub is_active
 {
     my $self        = shift;
     my $module      = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}} && !scalar keys %{$self->{ACTIVE_MODULES}});
-    if (!scalar keys %{$self->{ACTIVE_MODULES}}) {
-        return exists ($self->{MODULE_PATHS}{$module});
-    }
-    else {
-        return exists ($self->{ACTIVE_MODULES}{$module});
+    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}} && !scalar keys %{$self->{ACTIVATED_MODULES}});
+    if (scalar keys %{$self->{ACTIVATED_MODULES}}) {
+        return exists ($self->{ACTIVATED_MODULES}{$module});
+    } else {
+        return exists ($self->{REAL_MODULES}{$module});
     }
 }
 
@@ -184,10 +184,8 @@ sub get_module_paths {
             foreach my $module (readdir(DIRHANDLE)) {
                 next if (($module =~ /^\.+/) || (!-d "$repository_path/$module"));
                 my $module_entry = $module;
-                if (!$self->{SOURCE_CONFIG_FILE}) {
-                    if (($module !~ s/\.lnk$//) && ($module !~ s/\.link$//)) {
-                        $self->{ACTIVE_MODULES}{$module}++ if (!exists($self->{ACTIVE_MODULES}{$module}));
-                    }
+                if (($module !~ s/\.lnk$//) && ($module !~ s/\.link$//)) {
+                    $self->{REAL_MODULES}{$module}++;
                 }
                 my $possible_path = "$repository_path/$module_entry";
                 if (-d $possible_path) {
@@ -250,7 +248,7 @@ sub read_config_file {
                     next;
                 }
                 if ($module_section) {
-                    ${$self->{ACTIVE_MODULES}}{$1}++;
+                    ${$self->{ACTIVATED_MODULES}}{$1}++;
                     next;
                 };
             };
@@ -333,7 +331,7 @@ Returns default path for source configuration file
 
 SourceConfig::is_active()
 
-Returns >0 (TRUE) if a module is active
+Returns 1 (TRUE) if a module is active
 Returns 0 (FALSE) if a module is not active
 
 =head2 EXPORT
