@@ -65,6 +65,8 @@ class EncryptionData;
 class ZipFile
 {
 protected:
+    ::osl::Mutex    m_aMutex;
+
     ::rtl::OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
