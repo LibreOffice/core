@@ -162,14 +162,14 @@ template< typename T > css::uno::Any parseSingleValue(Span const & text) {
 }
 
 template< typename T > css::uno::Any parseListValue(
-    Span const & separator, Span const & text)
+    rtl::OString const & separator, Span const & text)
 {
     comphelper::SequenceAsVector< T > seq;
     Span sep;
-    if (separator.is()) {
-        sep = separator;
-    } else {
+    if (separator.getLength() == 0) {
         sep = Span(RTL_CONSTASCII_STRINGPARAM(" "));
+    } else {
+        sep = Span(separator.getStr(), separator.getLength());
     }
     if (text.length != 0) {
         for (Span t(text);;) {
@@ -192,7 +192,9 @@ template< typename T > css::uno::Any parseListValue(
     return css::uno::makeAny(seq.getAsConstList());
 }
 
-css::uno::Any parseValue(Span const & separator, Span const & text, Type type) {
+css::uno::Any parseValue(
+    rtl::OString const & separator, Span const & text, Type type)
+{
     switch (type) {
     case TYPE_ANY:
         throw css::uno::RuntimeException(
@@ -249,7 +251,7 @@ XmlReader::Text ValueParser::getTextMode() const {
         case STATE_IT:
             return
                 (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
-                 separator_.is())
+                 separator_.getLength() != 0)
                 ? XmlReader::TEXT_RAW : XmlReader::TEXT_NORMALIZED;
         default:
             break;
@@ -268,7 +270,7 @@ bool ValueParser::startElement(
     case STATE_TEXT:
         if (ns == XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("it")) &&
-            isListType(type_) && !separator_.is())
+            isListType(type_) && separator_.getLength() == 0)
         {
             checkEmptyPad(reader);
             state_ = STATE_IT;
@@ -392,7 +394,7 @@ bool ValueParser::endElement(XmlReader const & reader) {
                 OSL_ASSERT(false); // this cannot happen
                 break;
             }
-            separator_.clear();
+            separator_ = rtl::OString();
             node_.clear();
         }
         break;
@@ -401,7 +403,8 @@ bool ValueParser::endElement(XmlReader const & reader) {
         state_ = State(state_ - 1);
         break;
     case STATE_IT:
-        items_.push_back(parseValue(Span(), pad_.get(), elementType(type_)));
+        items_.push_back(
+            parseValue(rtl::OString(), pad_.get(), elementType(type_)));
         pad_.clear();
         state_ = STATE_TEXT;
         break;

@@ -36,10 +36,10 @@
 
 #include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
+#include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 
 #include "pad.hxx"
-#include "span.hxx"
 #include "type.hxx"
 #include "xmlreader.hxx"
 
@@ -50,6 +50,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace configmgr {
 
 class Node;
+class Span;
 
 class ValueParser: private boost::noncopyable {
 public:
@@ -73,7 +74,7 @@ public:
     int getLayer() const;
 
     Type type_;
-    Span separator_;
+    rtl::OString separator_;
 
 private:
     void checkEmptyPad(XmlReader const & reader) const;

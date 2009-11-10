@@ -71,6 +71,8 @@ public:
 
     bool nextAttribute(Namespace * ns, Span * localName);
 
+    // the span returned by getAttributeValue is only valid until the next call
+    // to nextItem or getAttributeValue
     Span getAttributeValue(bool fullyNormalize);
 
     Namespace getNamespace(Span const & prefix) const;

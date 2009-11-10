@@ -40,6 +40,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
+#include "rtl/string.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
@@ -274,8 +275,10 @@ void XcsParser::characters(Span const & text) {
 
 void XcsParser::handleComponentSchema(XmlReader & reader) {
     //TODO: oor:version, xml:lang attributes
-    Span attrPackage;
-    Span attrName;
+    rtl::OStringBuffer buf;
+    buf.append('.');
+    bool hasPackage = false;
+    bool hasName = false;
     for (;;) {
         XmlReader::Namespace attrNs;
         Span attrLn;
@@ -285,14 +288,35 @@ void XcsParser::handleComponentSchema(XmlReader & reader) {
         if (attrNs == XmlReader::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("package")))
         {
-            attrPackage = reader.getAttributeValue(false);
+            if (hasPackage) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "multiple component-schema package attributes"
+                            " in ")) +
+                     reader.getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            hasPackage = true;
+            Span s(reader.getAttributeValue(false));
+            buf.insert(0, s.begin, s.length);
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
-            attrName = reader.getAttributeValue(false);
+            if (hasName) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "multiple component-schema name attributes in ")) +
+                     reader.getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            hasName = true;
+            Span s(reader.getAttributeValue(false));
+            buf.append(s.begin, s.length);
         }
     }
-    if (!attrPackage.is()) {
+    if (!hasPackage) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -300,7 +324,7 @@ void XcsParser::handleComponentSchema(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    if (!attrName.is()) {
+    if (!hasName) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -308,18 +332,16 @@ void XcsParser::handleComponentSchema(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OStringBuffer buf;
-    buf.append(attrPackage.begin, attrPackage.length);
-    buf.append('.');
-    buf.append(attrName.begin, attrName.length);
     componentName_ = xmldata::convertFromUtf8(
         Span(buf.getStr(), buf.getLength()));
 }
 
 void XcsParser::handleNodeRef(XmlReader & reader) {
-    Span attrName;
-    Span attrComponent;
-    Span attrNodeType;
+    bool hasName = false;
+    rtl::OUString name;
+    rtl::OUString component(componentName_);
+    bool hasNodeType = false;
+    rtl::OUString nodeType;
     for (;;) {
         XmlReader::Namespace attrNs;
         Span attrLn;
@@ -329,18 +351,22 @@ void XcsParser::handleNodeRef(XmlReader & reader) {
         if (attrNs == XmlReader::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
-            attrName = reader.getAttributeValue(false);
+            hasName = true;
+            name = xmldata::convertFromUtf8(reader.getAttributeValue(false));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("component")))
         {
-            attrComponent = reader.getAttributeValue(false);
+            component = xmldata::convertFromUtf8(
+                reader.getAttributeValue(false));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("node-type")))
         {
-            attrNodeType = reader.getAttributeValue(false);
+            hasNodeType = true;
+            nodeType = xmldata::convertFromUtf8(
+                reader.getAttributeValue(false));
         }
     }
-    if (!attrName.is()) {
+    if (!hasName) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no node-ref name attribute in ")) +
@@ -351,28 +377,27 @@ void XcsParser::handleNodeRef(XmlReader & reader) {
         data_->getTemplate(
             valueParser_.getLayer(),
             xmldata::parseTemplateReference(
-                attrComponent, attrNodeType, componentName_, 0)));
+                component, hasNodeType, nodeType, 0)));
     if (!tmpl.is()) {
         //TODO: this can erroneously happen as long as import/uses attributes
         // are not correctly processed
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("unknown node-ref ")) +
-             xmldata::convertFromUtf8(attrName) +
-             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown node-ref ")) +
+             name + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< Node > node(tmpl->clone());
     node->setLayer(valueParser_.getLayer());
-    elements_.push(Element(node, xmldata::convertFromUtf8(attrName)));
+    elements_.push(Element(node, name));
 }
 
 void XcsParser::handleProp(XmlReader & reader) {
-    Span attrName;
-    Span attrType;
-    Span attrLocalized;
-    Span attrNillable;
+    bool hasName = false;
+    rtl::OUString name;
+    valueParser_.type_ = TYPE_ERROR;
+    bool localized = false;
+    bool nillable = true;
     for (;;) {
         XmlReader::Namespace attrNs;
         Span attrLn;
@@ -382,29 +407,30 @@ void XcsParser::handleProp(XmlReader & reader) {
         if (attrNs == XmlReader::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
-            attrName = reader.getAttributeValue(false);
+            hasName = true;
+            name = xmldata::convertFromUtf8(reader.getAttributeValue(false));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
         {
-            attrType = reader.getAttributeValue(true);
+            valueParser_.type_ = xmldata::parseType(
+                reader, reader.getAttributeValue(true));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("localized")))
         {
-            attrLocalized = reader.getAttributeValue(true);
+            localized = xmldata::parseBoolean(reader.getAttributeValue(true));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("nillable")))
         {
-            attrNillable = reader.getAttributeValue(true);
+            nillable = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
-    if (!attrName.is()) {
+    if (!hasName) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no prop name attribute in ")) +
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    valueParser_.type_ = xmldata::parseType(reader, attrType);
     if (valueParser_.type_ == TYPE_ERROR) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -412,8 +438,6 @@ void XcsParser::handleProp(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    bool localized = xmldata::parseBoolean(attrLocalized, false);
-    bool nillable = xmldata::parseBoolean(attrNillable, true);
     elements_.push(
         Element(
             (localized
@@ -424,7 +448,7 @@ void XcsParser::handleProp(XmlReader & reader) {
                  new PropertyNode(
                      valueParser_.getLayer(), valueParser_.type_, nillable,
                      css::uno::Any(), false))),
-            xmldata::convertFromUtf8(attrName)));
+            name));
 }
 
 void XcsParser::handlePropValue(
@@ -441,15 +465,25 @@ void XcsParser::handlePropValue(
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
         {
             attrSeparator = reader.getAttributeValue(false);
+            if (attrSeparator.length == 0) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "bad oor:separator attribute in ")) +
+                     reader.getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
         }
     }
-    valueParser_.separator_ = attrSeparator;
+    valueParser_.separator_ = rtl::OString(
+        attrSeparator.begin, attrSeparator.length);
     valueParser_.start(property);
 }
 
 void XcsParser::handleGroup(XmlReader & reader, bool isTemplate) {
-    Span attrName;
-    Span attrExtensible;
+    bool hasName = false;
+    rtl::OUString name;
+    bool extensible = false;
     for (;;) {
         XmlReader::Namespace attrNs;
         Span attrLn;
@@ -459,37 +493,38 @@ void XcsParser::handleGroup(XmlReader & reader, bool isTemplate) {
         if (attrNs == XmlReader::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
-            attrName = reader.getAttributeValue(false);
+            hasName = true;
+            name = xmldata::convertFromUtf8(reader.getAttributeValue(false));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("extensible")))
         {
-            attrExtensible = reader.getAttributeValue(true);
+            extensible = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
-    if (!attrName.is()) {
+    if (!hasName) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no group name attribute in ")) +
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(xmldata::convertFromUtf8(attrName));
     if (isTemplate) {
         name = Data::fullTemplateName(componentName_, name);
     }
     elements_.push(
         Element(
             new GroupNode(
-                valueParser_.getLayer(),
-                xmldata::parseBoolean(attrExtensible, false),
+                valueParser_.getLayer(), extensible,
                 isTemplate ? name : rtl::OUString()),
             name));
 }
 
 void XcsParser::handleSet(XmlReader & reader, bool isTemplate) {
-    Span attrName;
-    Span attrComponent;
-    Span attrNodeType;
+    bool hasName = false;
+    rtl::OUString name;
+    rtl::OUString component(componentName_);
+    bool hasNodeType = false;
+    rtl::OUString nodeType;
     for (;;) {
         XmlReader::Namespace attrNs;
         Span attrLn;
@@ -499,25 +534,28 @@ void XcsParser::handleSet(XmlReader & reader, bool isTemplate) {
         if (attrNs == XmlReader::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
-            attrName = reader.getAttributeValue(false);
+            hasName = true;
+            name = xmldata::convertFromUtf8(reader.getAttributeValue(false));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("component")))
         {
-            attrComponent = reader.getAttributeValue(false);
+            component = xmldata::convertFromUtf8(
+                reader.getAttributeValue(false));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("node-type")))
         {
-            attrNodeType = reader.getAttributeValue(false);
+            hasNodeType = true;
+            nodeType = xmldata::convertFromUtf8(
+                reader.getAttributeValue(false));
         }
     }
-    if (!attrName.is()) {
+    if (!hasName) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no set name attribute in ")) +
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(xmldata::convertFromUtf8(attrName));
     if (isTemplate) {
         name = Data::fullTemplateName(componentName_, name);
     }
@@ -526,14 +564,15 @@ void XcsParser::handleSet(XmlReader & reader, bool isTemplate) {
             new SetNode(
                 valueParser_.getLayer(),
                 xmldata::parseTemplateReference(
-                    attrComponent, attrNodeType, componentName_, 0),
+                    component, hasNodeType, nodeType, 0),
                 isTemplate ? name : rtl::OUString()),
             name));
 }
 
 void XcsParser::handleSetItem(XmlReader & reader, SetNode * set) {
-    Span attrComponent;
-    Span attrNodeType;
+    rtl::OUString component(componentName_);
+    bool hasNodeType;
+    rtl::OUString nodeType;
     for (;;) {
         XmlReader::Namespace attrNs;
         Span attrLn;
@@ -543,16 +582,18 @@ void XcsParser::handleSetItem(XmlReader & reader, SetNode * set) {
         if (attrNs == XmlReader::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("component")))
         {
-            attrComponent = reader.getAttributeValue(false);
+            component = xmldata::convertFromUtf8(
+                reader.getAttributeValue(false));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("node-type")))
         {
-            attrNodeType = reader.getAttributeValue(false);
+            hasNodeType = true;
+            nodeType = xmldata::convertFromUtf8(
+                reader.getAttributeValue(false));
         }
     }
     set->getAdditionalTemplateNames().push_back(
-        xmldata::parseTemplateReference(
-            attrComponent, attrNodeType, componentName_, 0));
+        xmldata::parseTemplateReference(component, hasNodeType, nodeType, 0));
     elements_.push(Element(rtl::Reference< Node >(), rtl::OUString()));
 }
 

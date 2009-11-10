@@ -74,8 +74,7 @@ private:
     enum Operation {
         OPERATION_MODIFY, OPERATION_REPLACE, OPERATION_FUSE, OPERATION_REMOVE };
 
-    static Operation parseOperation(
-        Span const & text, Operation defaultOperation);
+    static Operation parseOperation(Span const & text);
 
     void handleComponentData(XmlReader & reader);
 

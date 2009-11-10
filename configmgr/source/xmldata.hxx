@@ -47,12 +47,11 @@ rtl::OUString convertFromUtf8(Span const & text);
 
 Type parseType(XmlReader const & reader, Span const & text);
 
-bool parseBoolean(Span const & text, bool deflt);
+bool parseBoolean(Span const & text);
 
 rtl::OUString parseTemplateReference(
-    Span const & component, Span const & nodeType,
-    rtl::OUString const & componentName,
-    rtl::OUString const * defaultTemplateName);
+    rtl::OUString const & component, bool hasNodeType,
+    rtl::OUString const & nodeType, rtl::OUString const * defaultTemplateName);
 
 }
 

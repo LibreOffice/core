@@ -64,8 +64,8 @@ SLOFILES = \
     $(SLO)/valueparser.obj \
     $(SLO)/writemodfile.obj \
     $(SLO)/xcdparser.obj \
-    $(SLO)/xcuparser.obj \
     $(SLO)/xcsparser.obj \
+    $(SLO)/xcuparser.obj \
     $(SLO)/xmldata.obj \
     $(SLO)/xmlreader.obj
 

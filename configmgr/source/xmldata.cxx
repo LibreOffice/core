@@ -91,9 +91,7 @@ rtl::OUString convertFromUtf8(Span const & text) {
 }
 
 Type parseType(XmlReader const & reader, Span const & text) {
-    if (!text.is()) {
-        return TYPE_ERROR;
-    }
+    OSL_ASSERT(text.is());
     sal_Int32 i = rtl_str_indexOfChar_WithLength(text.begin, text.length, ':');
     if (i >= 0) {
         switch (reader.getNamespace(Span(text.begin, i))) {
@@ -173,10 +171,8 @@ Type parseType(XmlReader const & reader, Span const & text) {
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool parseBoolean(Span const & text, bool deflt) {
-    if (!text.is()) {
-        return deflt;
-    }
+bool parseBoolean(Span const & text) {
+    OSL_ASSERT(text.is());
     if (text.equals(RTL_CONSTASCII_STRINGPARAM("true"))) {
         return true;
     }
@@ -190,11 +186,10 @@ bool parseBoolean(Span const & text, bool deflt) {
 }
 
 rtl::OUString parseTemplateReference(
-    Span const & component, Span const & nodeType,
-    rtl::OUString const & componentName,
-    rtl::OUString const * defaultTemplateName)
+    rtl::OUString const & component, bool hasNodeType,
+    rtl::OUString const & nodeType, rtl::OUString const * defaultTemplateName)
 {
-    if (!nodeType.is()) {
+    if (!hasNodeType) {
         if (defaultTemplateName != 0) {
             return *defaultTemplateName;
         }
@@ -203,9 +198,7 @@ rtl::OUString parseTemplateReference(
                 RTL_CONSTASCII_USTRINGPARAM("missing node-type attribute")),
             css::uno::Reference< css::uno::XInterface >());
     }
-    return Data::fullTemplateName(
-        component.is() ? convertFromUtf8(component) : componentName,
-        convertFromUtf8(nodeType));
+    return Data::fullTemplateName(component, nodeType);
 }
 
 }
