@@ -640,6 +640,48 @@ String RID_STR_TRANSLATION_DEFAULT
     Text [ en-US ] = "[Default Language]" ;
 };
 
+
+String RID_STR_DLGIMP_CLASH_RENAME
+{
+    Text [ en-US ] = "Rename" ;
+};
+
+String RID_STR_DLGIMP_CLASH_REPLACE
+{
+    Text [ en-US ] = "Replace" ;
+};
+
+String RID_STR_DLGIMP_CLASH_TITLE
+{
+    Text [ en-US ] = "Dialog Import - Name already used" ;
+};
+
+String RID_STR_DLGIMP_CLASH_TEXT
+{
+    Text [ en-US ] = "The library already contains a dialog with the name:\n\n$(ARG1)\n\nRename dialog to keep current dialog or replace existing dialog.\n " ;
+};
+
+String RID_STR_DLGIMP_MISMATCH_ADD
+{
+    Text [ en-US ] = "Add" ;
+};
+
+String RID_STR_DLGIMP_MISMATCH_OMIT
+{
+    Text [ en-US ] = "Omit" ;
+};
+
+String RID_STR_DLGIMP_MISMATCH_TITLE
+{
+    Text [ en-US ] = "Dialog Import - Language Mismatch" ;
+};
+
+String RID_STR_DLGIMP_MISMATCH_TEXT
+{
+    Text [ en-US ] = "The dialog to be imported supports other languages than the target library.\n\nAdd these languages to the library to keep additional language resources provided by the dialog or omit them to stay with the current library languages.\n\nNote: For languages not supported by the dialog the resources of the dialog's default language will be used.\n " ;
+};
+
+
 #define MN_EDIT       20
 #define MN_VIEW 21
 #define MN_EXTRA 22
