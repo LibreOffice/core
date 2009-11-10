@@ -223,8 +223,9 @@ wchar_t* GetBasisInstallLocation( MSIHANDLE hMSI )
 bool QueryReg64Table(MSIHANDLE& rhDatabase, MSIHANDLE& rhView)
 {
     OutputDebugStringFormat(L"QueryReg64Table - START\n" );
-    wchar_t szSelect[400];
-    wsprintf(szSelect, L"SELECT * FROM %s",TABLE_NAME);
+    int const arraysize = 400;
+    wchar_t szSelect[arraysize];
+    StringCbPrintfW(szSelect, arraysize * sizeof(wchar_t), L"SELECT * FROM %s",TABLE_NAME);
     OutputDebugStringFormat( szSelect );
 
     UINT ret = MsiDatabaseOpenView(rhDatabase,szSelect,&rhView);
@@ -250,8 +251,15 @@ bool QueryReg64Table(MSIHANDLE& rhDatabase, MSIHANDLE& rhView)
 //---------------------------------------
 bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
 {
+
+// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyEx.
+#if (WINVER >= 0x0502)
     int rc = RegDeleteKeyEx(
         RootKey, KeyName, KEY_WOW64_64KEY, 0);
+#else
+    int rc = RegDeleteKey(
+        RootKey, KeyName);
+#endif
 
     return (ERROR_SUCCESS == rc);
 }
