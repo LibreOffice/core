@@ -61,7 +61,6 @@
 #include <svx/fhgtitem.hxx>
 #include <svx/langitem.hxx>
 #include <fmtfld.hxx>
-#include <fmthbsh.hxx>
 #include <fmtanchr.hxx>
 #include <pam.hxx>              // fuer SwPam
 #include <doc.hxx>
@@ -1062,7 +1061,8 @@ void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
     if( SwFltGetFlag(nFieldFlags, SwFltControlStack::TAGS_IN_TEXT))
     {
         aName += rTagText;      // als Txt taggen
-        rDoc.Insert(*pPaM, aName, false);
+        rDoc.InsertString(*pPaM, aName,
+                IDocumentContentOperations::INS_NOHINTEXPAND);
     }
     else
     {                                                   // normal tagggen
@@ -1073,7 +1073,7 @@ void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
         USHORT nSubType = ( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : nsSwExtendedSubType::SUB_INVISIBLE;
         aFld.SetSubType(nSubType | nsSwGetSetExpType::GSE_STRING);
 
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+        rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     }
 }
 
@@ -1133,7 +1133,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, String& rStr )
 
     SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
                         aDef, aQ, INP_TXT, 0 ); // sichtbar ( geht z.Zt. nicht anders )
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
 
     return FLD_OK;
 }
@@ -1335,7 +1335,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
     aFld.SetInputFlag(true);
     aFld.SetPromptText( aQ );
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
 
     pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
     return FLD_OK;
@@ -1351,7 +1351,7 @@ eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, String& rStr )
     SwSetExpField aFld( (SwSetExpFieldType*)pNumFldType, aEmptyStr,
                         GetNumberPara( rStr ) );
     aFld.SetValue( ++nFldNum );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1427,7 +1427,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
     else if (!bCountOn)
         aFld.SetFormula(aSequenceName);
 
-    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     return FLD_OK;
 }
 
@@ -1552,7 +1552,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 */
             SwDocInfoField aFld( (SwDocInfoFieldType*)
                 rDoc.GetSysFldType( RES_DOCINFOFLD ), DI_CUSTOM|nReg, aDocProperty, GetFieldResult( pF ) );
-            rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+            rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
 
             return FLD_OK;
         }
@@ -1632,7 +1632,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
         rDoc.GetSysFldType( RES_DOCINFOFLD ), nSub|nReg, String(), nFormat );
     if (bDateTime)
         ForceFieldLanguage(aFld, nLang);
-    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
 
     return FLD_OK;
 }
@@ -1645,7 +1645,7 @@ eF_ResT SwWW8ImplReader::Read_F_Author( WW8FieldDesc*, String& )
     SwDocInfoField aFld( (SwDocInfoFieldType*)
                      rDoc.GetSysFldType( RES_DOCINFOFLD ),
                      DI_CREATE|DI_SUB_AUTHOR, String() );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1653,7 +1653,7 @@ eF_ResT SwWW8ImplReader::Read_F_TemplName( WW8FieldDesc*, String& )
 {
     SwTemplNameField aFld( (SwTemplNameFieldType*)
                      rDoc.GetSysFldType( RES_TEMPLNAMEFLD ), FF_NAME );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1708,14 +1708,14 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
         SwDateTimeField aFld((SwDateTimeFieldType*)
             rDoc.GetSysFldType(RES_DATETIMEFLD ), DATEFLD, nFormat);
         ForceFieldLanguage(aFld, nLang);
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+        rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     }
     else if (nDT == NUMBERFORMAT_TIME)
     {
         SwDateTimeField aFld((SwDateTimeFieldType*)
             rDoc.GetSysFldType(RES_DATETIMEFLD), TIMEFLD, nFormat);
         ForceFieldLanguage(aFld, nLang);
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+        rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     }
 
     return FLD_OK;
@@ -1745,7 +1745,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, String &rStr)
 
     SwFileNameField aFld(
         (SwFileNameFieldType*)rDoc.GetSysFldType(RES_FILENAMEFLD), eType);
-    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     return FLD_OK;
 }
 
@@ -1759,7 +1759,7 @@ eF_ResT SwWW8ImplReader::Read_F_Anz( WW8FieldDesc* pF, String& rStr )
     SwDocStatField aFld( (SwDocStatFieldType*)
                          rDoc.GetSysFldType( RES_DOCSTATFLD ), nSub,
                          GetNumberPara( rStr ) );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1771,7 +1771,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         SwChapterField aFld( (SwChapterFieldType*)
                     rDoc.GetSysFldType( RES_CHAPTERFLD ), CF_NUMBER );
         aFld.SetLevel( nPgChpLevel );
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+        rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
 
         static const sal_Char aDelim[] = "-.:\x97\x96";
         BYTE nDelim = nPgChpDelim;
@@ -1781,9 +1781,13 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         sal_Unicode c = ByteString::ConvertToUnicode( aDelim[ nDelim ],
                                         RTL_TEXTENCODING_MS_1252 );
         if( '-' == c )
-            rDoc.Insert( *pPaM, CHAR_HARDHYPHEN );
+        {
+            rDoc.InsertString( *pPaM, CHAR_HARDHYPHEN );
+        }
         else
-            rDoc.Insert( *pPaM, SwFmtHardBlank( c ), 0);
+        {
+            rDoc.InsertString( *pPaM, c ); // maybe insert ZWNBSP?
+        }
     }
 
     // Seitennummer
@@ -1791,7 +1795,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         rDoc.GetSysFldType( RES_PAGENUMBERFLD ), PG_RANDOM,
         GetNumberPara(rStr, true));
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -1850,7 +1854,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
             NewAttr(aSz);
         }
 
-        rDoc.Insert(*pPaM, cChar);
+        rDoc.InsertString(*pPaM, cChar);
 
         if (nSize > 0)
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_FONTSIZE);
@@ -1859,7 +1863,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
     }
     else
     {
-        rDoc.Insert(*pPaM, CREATE_CONST_ASC("###"), true);
+        rDoc.InsertString(*pPaM, CREATE_CONST_ASC("###"));
     }
 
     return FLD_OK;
@@ -1920,7 +1924,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
     SwSetExpField aFld( (SwSetExpFieldType*)pFT, sVal, ULONG_MAX );
     aFld.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE | nsSwGetSetExpType::GSE_STRING);
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
 
     pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
 
@@ -1970,7 +1974,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
             SwGetRefField aFld(
                 (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
                 sBkmName,REF_BOOKMARK,0,REF_CHAPTER);
-            rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+            rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
         }
         else
         {
@@ -1993,7 +1997,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
         SwGetRefField aFld( (SwGetRefFieldType*)
             rDoc.GetSysFldType( RES_GETREFFLD ), sBkmName, REF_BOOKMARK, 0,
             REF_UPDOWN );
-        rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+        rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     }
     return FLD_OK;
 }
@@ -2070,7 +2074,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
         (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), sName,
         REF_BOOKMARK, 0, REF_PAGE );
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -2119,7 +2123,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
 
     SwMacroField aFld( (SwMacroFieldType*)
                     rDoc.GetSysFldType( RES_MACROFLD ), aName, aVText );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
 
 
     WW8_CP nOldCp = pPlcxMan->Where();
@@ -2280,7 +2284,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, String& rStr 
     aSection.SetLinkFileName( aPara );
     aSection.SetProtect(true);
 
-    SwSection* pSection = rDoc.Insert(*pPaM, aSection, 0 ,false);
+    SwSection*const pSection = rDoc.InsertSwSection(*pPaM, aSection, 0, false);
     ASSERT(pSection, "no section inserted");
     if (!pSection)
         return FLD_TEXT;
@@ -2327,7 +2331,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, String& rStr )
 
     aFld.InitContent(aResult);
 
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0);
+    rDoc.InsertPoolItem(*pPaM, SwFmtFld( aFld ), 0);
 
     return FLD_OK;
 }
@@ -2339,7 +2343,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNext( WW8FieldDesc*, String& )
     SwFieldType* pFT = rDoc.InsertFldType( aN );
     SwDBNextSetField aFld( (SwDBNextSetFieldType*)pFT, aEmptyStr, aEmptyStr,
                             SwDBData() );       // Datenbank: Nichts
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -2350,7 +2354,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, String& )
     SwFieldType* pFT = rDoc.InsertFldType( aN );
     SwDBSetNumberField aFld( (SwDBSetNumberFieldType*)pFT,
                            SwDBData() );            // Datenbank: Nichts
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
 
@@ -2415,7 +2419,7 @@ void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
     {
         SwCombinedCharField aFld((SwCombinedCharFieldType*)
             rDoc.GetSysFldType(RES_COMBINED_CHARS),sCombinedCharacters);
-        rDoc.Insert(*pPaM,SwFmtFld(aFld), 0);
+        rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     }
 }
 
@@ -2573,7 +2577,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
         aRuby.SetAdjustment(nJustificationCode);
 
         NewAttr(aRuby);
-        rDoc.Insert( *pPaM, sText, true );
+        rDoc.InsertString( *pPaM, sText );
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_CJK_RUBY );
     }
 }
@@ -3423,7 +3427,7 @@ void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
     if (sFldTxt.Len())
     {
         aM.SetAlternativeText( sFldTxt );
-        rDoc.Insert( rPaM, aM, 0 );
+        rDoc.InsertPoolItem( rPaM, aM, 0 );
     }
 }
 

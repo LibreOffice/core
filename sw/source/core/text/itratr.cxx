@@ -45,7 +45,6 @@
 #include <fmtflcnt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
@@ -126,19 +125,7 @@ SwAttrIter::~SwAttrIter()
 
 SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
 {
-    if ( pHints )
-    {
-        for ( USHORT i = 0; i < pHints->Count(); ++i )
-        {
-            SwTxtAttr *pPos = pHints->GetTextHint(i);
-            xub_StrLen nStart = *pPos->GetStart();
-            if( nPosition < nStart )
-                return 0;
-            if( nPosition == nStart && !pPos->GetEnd() )
-                return pPos;
-        }
-    }
-    return 0;
+    return (m_pTxtNode) ? m_pTxtNode->GetTxtAttrForCharAt(nPosition) : 0;
 }
 
 /*************************************************************************

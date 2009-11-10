@@ -34,9 +34,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <svx/twolinesitem.hxx>
 #include <svx/charrotateitem.hxx>
 #include <vcl/outdev.hxx>
@@ -194,13 +192,11 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
     if( !pRot )
     {
         const SwTxtAttr& rAttr = *rCreate.pAttr;
-        if( RES_CHRATR_ROTATE == rAttr.Which() )
-            pRot = &rAttr.GetCharRotate();
-        else
+        const SfxPoolItem *const pItem =
+                CharFmt::GetItem(rAttr, RES_CHRATR_ROTATE);
+        if ( pItem )
         {
-            const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_ROTATE );
-            if ( pItem )
-                pRot = (SvxCharRotateItem*)pItem;
+            pRot = static_cast<const SvxCharRotateItem*>(pItem);
         }
     }
     if( pRot )
@@ -319,13 +315,11 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
         const SwTxtAttr& rAttr = *rCreate.pAttr;
         pBracket->nStart = *rAttr.GetStart();
 
-        if( RES_CHRATR_TWO_LINES == rAttr.Which() )
-            pTwo = &rAttr.Get2Lines();
-        else
+        const SfxPoolItem * const pItem =
+            CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
+        if ( pItem )
         {
-            const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
-            if ( pItem )
-                pTwo = (SvxTwoLinesItem*)pItem;
+            pTwo = static_cast<const SvxTwoLinesItem*>(pItem);
         }
     }
     if( pTwo )

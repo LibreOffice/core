@@ -70,7 +70,6 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <fmtpdsc.hxx>
 #ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
@@ -245,6 +244,7 @@ void SwWrtShell::Insert( const String &rStr )
 
     BOOL bStarted = FALSE, bHasSel = HasSelection(),
         bCallIns = bIns /*|| bHasSel*/;
+    bool bDeleted = false;
 
     if( bHasSel || ( !bIns && SelectHiddenRange() ) )
     {
@@ -268,7 +268,7 @@ void SwWrtShell::Insert( const String &rStr )
 
         StartUndo(UNDO_REPLACE, &aRewriter);
         bStarted = TRUE;
-        DelRight();
+        bDeleted = DelRight() != 0;
     }
 
     /*
@@ -283,7 +283,8 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
     }
     else
 */
-        bCallIns ? SwEditShell::Insert( rStr ) : SwEditShell::Overwrite( rStr );
+    bCallIns ?
+        SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
 
 
     if( bStarted )

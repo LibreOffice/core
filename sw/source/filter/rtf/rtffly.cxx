@@ -396,7 +396,8 @@ void SwRTFParser::SetFlysInDoc()
                 }
             }
             aTmpIdx = *pSttNd->EndOfSectionNode();
-            pDoc->Move( aRg, aTmpIdx, IDocumentContentOperations::DOC_MOVEDEFAULT );
+            pDoc->MoveNodeRange( aRg, aTmpIdx,
+                IDocumentContentOperations::DOC_MOVEDEFAULT );
         }
 
         // patch from cmc for #i52542#
@@ -1174,7 +1175,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         {
 
             SwTxtNode* pTxtNd = pFlySave->nSttNd.GetNode().GetTxtNode();
-            SwTxtFlyCnt* pFlyCnt;
+            SwTxtFlyCnt* pFlyCnt = 0;
             if( 1 == pTxtNd->GetTxt().Len() &&
                 0 != ( pFlyCnt = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr(
                                                 0, RES_TXTATR_FLYCNT )) &&
@@ -1232,7 +1233,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                                 (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
 
                     SwNodeIndex aTmp( pFlySave->nSttNd, +1 );
-                    pDoc->Move( aRg, aTmp, IDocumentContentOperations::DOC_MOVEDEFAULT );
+                    pDoc->MoveNodeRange( aRg, aTmp,
+                            IDocumentContentOperations::DOC_MOVEDEFAULT );
 
                     // now delete the redundant txtnode
                     pDoc->GetNodes().Delete( pFlySave->nSttNd, 1 );

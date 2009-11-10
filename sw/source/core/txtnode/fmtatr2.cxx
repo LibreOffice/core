@@ -31,14 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 #include "unomid.h"
 
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <svtools/macitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/stylepool.hxx>
@@ -51,15 +47,23 @@
 #include <hints.hxx>        // SwUpdateAttr
 #include <unostyle.hxx>
 #include <unoevent.hxx>     // SwHyperlinkEventDescriptor
-#ifndef _COM_SUN_STAR_TEXT_RUBYADJUST_HDL_
 #include <com/sun/star/text/RubyAdjust.hdl>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <com/sun/star/uno/Any.h>
 #include <SwStyleNameMapper.hxx>
+
+#include <fmtmeta.hxx>
+#include <ndtxt.hxx> // for meta
+#include <doc.hxx> // for meta
+#include <unometa.hxx>
+#include <unoobj.hxx> // SwXTextRange
+#include <docsh.hxx>
+#include <svtools/zforlist.hxx> // GetNumberFormat
+
+#include <boost/bind.hpp>
+#include <algorithm>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -577,4 +581,329 @@ BOOL SwFmtRuby::PutValue( const uno::Any& rVal,
     }
     return bRet;
 }
+
+
+/*************************************************************************
+ class SwFmtMeta
+ ************************************************************************/
+
+SwFmtMeta * SwFmtMeta::CreatePoolDefault(const USHORT i_nWhich)
+{
+    return new SwFmtMeta(i_nWhich);
+}
+
+SwFmtMeta::SwFmtMeta(const USHORT i_nWhich)
+    : SfxPoolItem( i_nWhich )
+    , m_pMeta()
+    , m_pTxtAttr( 0 )
+{
+    ASSERT((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
+            "ERROR: SwFmtMeta: invalid which id!");
+}
+
+SwFmtMeta::SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
+                        const USHORT i_nWhich )
+    : SfxPoolItem( i_nWhich )
+    , m_pMeta( i_pMeta )
+    , m_pTxtAttr( 0 )
+{
+    ASSERT((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
+            "ERROR: SwFmtMeta: invalid which id!");
+    ASSERT(m_pMeta, "SwFmtMeta: no Meta ?");
+    // DO NOT call m_pMeta->SetFmtMeta(this) here; only from SetTxtAttr!
+}
+
+SwFmtMeta::~SwFmtMeta()
+{
+    if (m_pMeta && (m_pMeta->GetFmtMeta() == this))
+    {
+        m_pMeta->SetFmtMeta(0);
+    }
+}
+
+int SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
+{
+    ASSERT( SfxPoolItem::operator==( i_rOther ), "i just copied this assert" );
+    return SfxPoolItem::operator==( i_rOther )
+        && (m_pMeta == static_cast<SwFmtMeta const &>( i_rOther ).m_pMeta);
+}
+
+SfxPoolItem * SwFmtMeta::Clone( SfxItemPool * /*pPool*/ ) const
+{
+    // if this is indeed a copy, then DoCopy must be called later!
+    return (m_pMeta) // #i105148# pool default may be cloned also!
+        ? new SwFmtMeta( m_pMeta, Which() ) : new SwFmtMeta( Which() );
+}
+
+void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
+{
+    ASSERT(!(m_pTxtAttr && i_pTxtAttr),
+        "SwFmtMeta::SetTxtAttr: already has text attribute?");
+    ASSERT(  m_pTxtAttr || i_pTxtAttr ,
+        "SwFmtMeta::SetTxtAttr: no attribute to remove?");
+    m_pTxtAttr = i_pTxtAttr;
+    ASSERT(m_pMeta, "inserted SwFmtMeta has no sw::Meta?");
+    // the sw::Meta must be able to find the current text attribute!
+    if (i_pTxtAttr && m_pMeta)
+    {
+        m_pMeta->SetFmtMeta(this);
+    }
+}
+
+void SwFmtMeta::NotifyRemoval()
+{
+    // N.B.: do not reset m_pTxtAttr here: see call in nodes.cxx,
+    // where the hint is not deleted!
+    ASSERT(m_pMeta, "NotifyRemoval: no meta ?");
+    if (m_pMeta)
+    {
+        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
+            &static_cast<SwModify&>(*m_pMeta) ); // cast to proper base class!
+        m_pMeta->Modify(&aMsgHint, &aMsgHint);
+    }
+}
+
+void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
+{
+    ASSERT(m_pMeta, "DoCopy called for SwFmtMeta with no sw::Meta?");
+    if (m_pMeta)
+    {
+        const ::boost::shared_ptr< ::sw::Meta> pOriginal( m_pMeta );
+        // UGLY: original sw::Meta now points at _this_ due to being already
+        // inserted via MakeTxtAttr! so fix it up to point at the original item
+        // (maybe would be better to tell MakeTxtAttr that it creates a copy?)
+        pOriginal->SetFmtMeta(&rOriginalMeta);
+        if (RES_TXTATR_META == Which())
+        {
+            m_pMeta.reset( new ::sw::Meta(this) );
+        }
+        else
+        {
+            ::sw::MetaField *const pMetaField(
+                static_cast< ::sw::MetaField* >(pOriginal.get()));
+            SwDoc * const pTargetDoc( GetTxtAttr()->GetTxtNode()->GetDoc() );
+            m_pMeta = pTargetDoc->GetMetaFieldManager().makeMetaField( this,
+                pMetaField->m_nNumberFormat, pMetaField->IsFixedLanguage() );
+        }
+        m_pMeta->RegisterAsCopyOf(*pOriginal);
+    }
+}
+
+
+namespace sw {
+
+/*************************************************************************
+ class sw::Meta
+ ************************************************************************/
+
+Meta::Meta(SwFmtMeta * const i_pFmt)
+    : ::sfx2::Metadatable()
+    , SwModify()
+    , m_pFmt( i_pFmt )
+{
+}
+
+Meta::~Meta()
+{
+}
+
+SwTxtMeta * Meta::GetTxtAttr() const
+{
+    return (m_pFmt) ? m_pFmt->GetTxtAttr() : 0;
+}
+
+SwTxtNode * Meta::GetTxtNode() const
+{
+    SwTxtMeta * const pTxtAttr( GetTxtAttr() );
+    return (pTxtAttr) ? pTxtAttr->GetTxtNode() : 0;
+}
+
+// SwClient
+void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+{
+    SwTxtNode * const pTxtNode( GetTxtNode() );
+    if (pTxtNode && (GetRegisteredIn() != pTxtNode))
+    {
+        pTxtNode->Add(this);
+    }
+    SwModify::Modify(pOld, pNew);
+}
+
+// sw::Metadatable
+::sfx2::IXmlIdRegistry& Meta::GetRegistry()
+{
+    SwTxtNode * const pTxtNode( GetTxtNode() );
+    // GetRegistry may only be called on a meta that is actually in the
+    // document, which means it has a pointer to its text node
+    OSL_ENSURE(pTxtNode, "ERROR: GetRegistry: no text node?");
+    if (!pTxtNode)
+        throw uno::RuntimeException();
+    return pTxtNode->GetRegistry();
+}
+
+bool Meta::IsInClipboard() const
+{
+    const SwTxtNode * const pTxtNode( GetTxtNode() );
+// no text node: in UNDO  OSL_ENSURE(pTxtNode, "IsInClipboard: no text node?");
+    return (pTxtNode) ? pTxtNode->IsInClipboard() : false;
+}
+
+bool Meta::IsInUndo() const
+{
+    const SwTxtNode * const pTxtNode( GetTxtNode() );
+// no text node: in UNDO  OSL_ENSURE(pTxtNode, "IsInUndo: no text node?");
+    return (pTxtNode) ? pTxtNode->IsInUndo() : true;
+}
+
+bool Meta::IsInContent() const
+{
+    const SwTxtNode * const pTxtNode( GetTxtNode() );
+    OSL_ENSURE(pTxtNode, "IsInContent: no text node?");
+    return (pTxtNode) ? pTxtNode->IsInContent() : true;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
+Meta::MakeUnoObject()
+{
+    // re-use existing SwXMeta
+    SwClientIter iter( *this );
+    SwClient * pClient( iter.First( TYPE( SwXMeta ) ) );
+    while (pClient) {
+        SwXMeta *const pMeta( dynamic_cast<SwXMeta*>(pClient) );
+        if (pMeta && pMeta->GetCoreObject() == this) {
+            return pMeta;
+        }
+        pClient = iter.Next();
+    }
+
+    // create new SwXMeta
+    SwTxtMeta * const pTxtAttr( GetTxtAttr() );
+    OSL_ENSURE(pTxtAttr, "MakeUnoObject: no text attr?");
+    if (!pTxtAttr) return 0;
+    SwTxtNode * const pTxtNode( pTxtAttr->GetTxtNode() );
+    OSL_ENSURE(pTxtNode, "MakeUnoObject: no text node?");
+    if (!pTxtNode) return 0;
+    const SwPosition aPos(*pTxtNode, *pTxtAttr->GetStart());
+    const uno::Reference<text::XText> xParentText(
+            SwXTextRange::CreateParentXText(pTxtNode->GetDoc(), aPos) );
+    if (!xParentText.is()) return 0;
+    return (RES_TXTATR_META == m_pFmt->Which())
+        ? new SwXMeta     (pTxtNode->GetDoc(), xParentText, 0, pTxtAttr)
+        : new SwXMetaField(pTxtNode->GetDoc(), xParentText, 0, pTxtAttr);
+}
+
+/*************************************************************************
+ class sw::MetaField
+ ************************************************************************/
+
+MetaField::MetaField(SwFmtMeta * const i_pFmt,
+            const sal_uInt32 nNumberFormat, const bool bIsFixedLanguage)
+    : Meta(i_pFmt)
+    , m_nNumberFormat( nNumberFormat )
+    , m_bIsFixedLanguage( bIsFixedLanguage )
+{
+}
+
+void MetaField::GetPrefixAndSuffix(
+        ::rtl::OUString *const o_pPrefix, ::rtl::OUString *const o_pSuffix)
+{
+    try
+    {
+        const uno::Reference<rdf::XMetadatable> xMetaField( MakeUnoObject() );
+        OSL_ENSURE(dynamic_cast<SwXMetaField*>(xMetaField.get()),
+                "GetPrefixAndSuffix: no SwXMetaField?");
+        if (xMetaField.is())
+        {
+            SwTxtNode * const pTxtNode( GetTxtNode() );
+            SwDocShell const * const pShell(pTxtNode->GetDoc()->GetDocShell());
+            const uno::Reference<frame::XModel> xModel(
+                (pShell) ? pShell->GetModel() : 0,  uno::UNO_SET_THROW);
+            getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
+        }
+    } catch (uno::Exception) {
+        OSL_ENSURE(false, "exception?");
+    }
+}
+
+sal_uInt32 MetaField::GetNumberFormat(::rtl::OUString const & rContent) const
+{
+    //TODO: this probably lacks treatment for some special cases
+    sal_uInt32 nNumberFormat( m_nNumberFormat );
+    SwTxtNode * const pTxtNode( GetTxtNode() );
+    if (pTxtNode)
+    {
+        SvNumberFormatter *const pNumberFormatter(
+                pTxtNode->GetDoc()->GetNumberFormatter() );
+        double number;
+        (void) pNumberFormatter->IsNumberFormat(
+                rContent, nNumberFormat, number );
+    }
+    return nNumberFormat;
+}
+
+void MetaField::SetNumberFormat(sal_uInt32 nNumberFormat)
+{
+    // effectively, the member is only a default:
+    // GetNumberFormat checks if the text actually conforms
+    m_nNumberFormat = nNumberFormat;
+}
+
+
+/*************************************************************************
+ class sw::MetaFieldManager
+ ************************************************************************/
+
+
+MetaFieldManager::MetaFieldManager()
+{
+}
+
+::boost::shared_ptr<MetaField>
+MetaFieldManager::makeMetaField(SwFmtMeta * const i_pFmt,
+        const sal_uInt32 nNumberFormat, const bool bIsFixedLanguage)
+{
+    const ::boost::shared_ptr<MetaField> pMetaField(
+        new MetaField(i_pFmt, nNumberFormat, bIsFixedLanguage) );
+    m_MetaFields.push_back(pMetaField);
+    return pMetaField;
+}
+
+struct IsInUndo
+{
+    bool operator()(::boost::weak_ptr<MetaField> const & pMetaField) {
+        return pMetaField.lock()->IsInUndo();
+    }
+};
+
+struct MakeUnoObject
+{
+    uno::Reference<text::XTextField>
+    operator()(::boost::weak_ptr<MetaField> const & pMetaField) {
+        return uno::Reference<text::XTextField>(
+                pMetaField.lock()->MakeUnoObject(), uno::UNO_QUERY);
+    }
+};
+
+::std::vector< uno::Reference<text::XTextField> >
+MetaFieldManager::getMetaFields()
+{
+    // erase deleted fields
+    const MetaFieldList_t::iterator iter(
+        ::std::remove_if(m_MetaFields.begin(), m_MetaFields.end(),
+            ::boost::bind(&::boost::weak_ptr<MetaField>::expired, _1)));
+    m_MetaFields.erase(iter, m_MetaFields.end());
+    // filter out fields in UNDO
+    MetaFieldList_t filtered(m_MetaFields.size());
+    const MetaFieldList_t::iterator iter2(
+    ::std::remove_copy_if(m_MetaFields.begin(), m_MetaFields.end(),
+        filtered.begin(), IsInUndo()));
+    filtered.erase(iter2, filtered.end());
+    // create uno objects
+    ::std::vector< uno::Reference<text::XTextField> > ret(filtered.size());
+    ::std::transform(filtered.begin(), filtered.end(), ret.begin(),
+            MakeUnoObject());
+    return ret;
+}
+
+} // namespace sw
 

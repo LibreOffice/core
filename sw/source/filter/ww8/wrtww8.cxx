@@ -117,6 +117,8 @@
 #include <svx/mscodec.hxx>
 #include <osl/time.h>
 #include <rtl/random.h>
+#include "WW8Sttbf.hxx"
+#include "WW8FibData.hxx"
 
 using namespace sw::util;
 using namespace sw::types;
@@ -2416,9 +2418,7 @@ void WW8Export::SectionBreaksAndFrames( const SwTxtNode& rNode )
 void MSWordExportBase::WriteText()
 {
 #ifdef DEBUG
-//!! does not compile with debug=t -> unresolved external (dbg_out),
-//!! sommeone who knows what he wants to get should fix this
-//    ::std::clog << "<WriteText>" << ::std::endl;
+    ::std::clog << "<WriteText>" << ::std::endl;
 //    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
 #endif
 
@@ -2536,6 +2536,8 @@ void WW8Export::WriteMainText()
     ::std::clog << "</WriteMainText>" << ::std::endl;
 #endif
 }
+
+typedef ww8::WW8Sttb< ww8::WW8Struct >  WW8SttbAssoc;
 
 void WW8Export::WriteFkpPlcUsw()
 {
@@ -2658,8 +2660,35 @@ void WW8Export::WriteFkpPlcUsw()
         ExportDopTypography(pDop->doptypography);
 
         WriteDop( *this );                      // Document-Properties
+
+        // Write SttbfAssoc
+        WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
+            (pDoc->getExternalData(::sw::STTBF_ASSOC).get());
+        ::std::vector<String> aStrings;
+
+        ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
+        ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
+        for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
+             aIt != aItEnd; aIt++)
+        {
+            String aStr(aIt->getStr());
+            aStrings.push_back(aStr);
+        }
+
+        WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
+                           pFib->lcbSttbfAssoc);
+
     }
     Strm().Seek( 0 );
+
+    // Reclaim stored FIB data from document.
+    ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
+          (pDoc->getExternalData(::sw::FIB).get());
+
+    pFib->fReadOnlyRecommended =
+        pFibData->getReadOnlyRecommended() ? 1 : 0;
+    pFib->fWriteReservation =
+        pFibData->getWriteReservation() ? 1 : 0;
 
     pFib->Write( Strm() );  // FIB
 }

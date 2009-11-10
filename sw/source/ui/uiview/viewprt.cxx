@@ -141,6 +141,10 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
 USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 {
     SwWrtShell &rSh = GetWrtShell();
+    SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
     {
         rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
@@ -434,9 +438,19 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
     }
 
     pProgress->Stop();
-    pProgress->DeleteOnEndPrint();
-    pPrinter->EndJob();
-    return pPrinter->GetError();
+    if ( pPrinter->IsJobActive() )
+    {
+        pProgress->DeleteOnEndPrint();
+        pPrinter->EndJob();
+        return pPrinter->GetError();
+    }
+    else
+    {
+        // the next call might destroy pPrinter (in case it is not the usual document printer); so get the error before
+        ULONG nError = pPrinter->GetError();
+        pProgress->DeleteOnEndPrint();
+        return nError;
+    }
 }
 
 

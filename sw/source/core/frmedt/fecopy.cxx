@@ -34,13 +34,7 @@
 
 #include <hintids.hxx>
 
-#ifdef WIN
-#define NEEDED_BY_FESHVIEW
-#endif
-
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <svtools/pathoptions.hxx>
@@ -58,9 +52,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/svdoole2.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 #include <svx/unomodel.hxx>
 // --> OD 2005-08-03 #i50824#
 #include <svx/svditer.hxx>
@@ -93,9 +85,7 @@
 #include <dview.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <pagedesc.hxx>
 #include <mvsave.hxx>
 #include <vcl/virdev.hxx>
@@ -145,7 +135,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     // benutzen.
     if( pNewClpTxt )
     {
-        pTxtNd->Insert( *pNewClpTxt, SwIndex( pTxtNd ) );
+        pTxtNd->InsertText( *pNewClpTxt, SwIndex( pTxtNd ) );
         return TRUE;                // das wars.
     }
 
@@ -198,7 +188,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
             if( pTxtFly )
             {
                 ((SwFmtFlyCnt&)pTxtFly->GetFlyCnt()).SetFlyFmt( 0 );
-                pTxtNd->Erase( rIdx, 1 );
+                pTxtNd->EraseText( rIdx, 1 );
             }
         }
         bRet = TRUE;
@@ -840,7 +830,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
             {
                 SwNodeIndex aIndexBefore(rInsPos.nNode);
                 aIndexBefore--;
-                pClpDoc->Copy( rCopy, rInsPos, false );
+                pClpDoc->CopyRange( rCopy, rInsPos, false );
                 {
                     aIndexBefore++;
                     SwPaM aPaM(SwPosition(aIndexBefore, 0),
@@ -1069,7 +1059,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
                 aIndexBefore--;
 
-                pClpDoc->Copy( aCpyPam, rInsPos, false );
+                pClpDoc->CopyRange( aCpyPam, rInsPos, false );
 
                 {
                     aIndexBefore++;

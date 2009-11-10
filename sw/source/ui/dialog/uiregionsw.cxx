@@ -34,29 +34,22 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-#include "hintids.hxx"
-#include "regionsw.hxx"
+#include <hintids.hxx>
+#include <regionsw.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
-#ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>
-#endif
 #include <sfx2/docfilt.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
-#ifndef _SVX_SIZEITEM_HXX //autogen
-
 #include <svx/sizeitem.hxx>
-#endif
 #include <svx/htmlcfg.hxx>
 
 #include <comphelper/storagehelper.hxx>
@@ -65,15 +58,9 @@
 #include <section.hxx>
 #include <docary.hxx>
 #include <doc.hxx>                      // fuers SwSectionFmt-Array
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
@@ -82,27 +69,15 @@
 #include <swunodef.hxx>
 #include <shellio.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _REGIONSW_HRC
 #include <regionsw.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <sfx2/bindings.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
 
@@ -115,7 +90,65 @@ SV_IMPL_PTRARR( SwSectionFmts, SwSectionFmtPtr )
 
 SV_IMPL_OP_PTRARR_SORT( SectReprArr, SectReprPtr )
 
-static void   lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox );
+static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
+
+void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames, const SwSectionFmt* pNewFmt )
+{
+    const SwSectionFmt* pFmt;
+    if( !pNewFmt )
+    {
+        USHORT nCount = rSh.GetSectionFmtCount();
+        for(USHORT i=0;i<nCount;i++)
+        {
+            SectionType eTmpType;
+            if( !(pFmt = &rSh.GetSectionFmt(i))->GetParent() &&
+                    pFmt->IsInNodesArr() &&
+                    (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                    && TOX_HEADER_SECTION != eTmpType )
+            {
+                    String* pString = new String(pFmt->GetSection()->GetName());
+                    if(pAvailNames)
+                        pAvailNames->InsertEntry(*pString);
+                    rSubRegions.InsertEntry(*pString);
+                    lcl_FillList( rSh, rSubRegions, pAvailNames, pFmt );
+            }
+        }
+    }
+    else
+    {
+        SwSections aTmpArr;
+        USHORT nCnt = pNewFmt->GetChildSections(aTmpArr,SORTSECT_POS);
+        if( nCnt )
+        {
+            SectionType eTmpType;
+            for( USHORT n = 0; n < nCnt; ++n )
+                if( (pFmt = aTmpArr[n]->GetFmt())->IsInNodesArr()&&
+                    (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                    && TOX_HEADER_SECTION != eTmpType )
+                {
+                    String* pString = new String(pFmt->GetSection()->GetName());
+                    if(pAvailNames)
+                        pAvailNames->InsertEntry(*pString);
+                    rSubRegions.InsertEntry(*pString);
+                    lcl_FillList( rSh, rSubRegions, pAvailNames, pFmt );
+                }
+        }
+    }
+}
+
+void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames )
+{
+    lcl_FillList( rSh, rSubRegions, pAvailNames, 0 );
+    IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+    for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+        ppMark != pMarkAccess->getMarksEnd();
+        ppMark++)
+    {
+        const ::sw::mark::IMark* pBkmk = ppMark->get();
+        if( pBkmk->IsExpanded() )
+            rSubRegions.InsertEntry( pBkmk->GetName() );
+    }
+}
 
 /* -----------------25.06.99 15:38-------------------
 
@@ -275,6 +308,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aFilePB             ( this, SW_RES( PB_FILE ) ),
     aSubRegionFT        ( this, SW_RES( FT_SUBREG ) ) ,
     aSubRegionED        ( this, SW_RES( LB_SUBREG ) ) ,
+    bSubRegionsFilled( false ),
 
     aProtectFL          ( this, SW_RES( FL_PROTECT ) ),
     aProtectCB          ( this, SW_RES( CB_PROTECT ) ),
@@ -330,6 +364,8 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aFilePB.SetClickHdl     ( LINK( this, SwEditRegionDlg, FileSearchHdl ));
     aFileNameED.SetModifyHdl( LINK( this, SwEditRegionDlg, FileNameHdl ));
     aSubRegionED.SetModifyHdl( LINK( this, SwEditRegionDlg, FileNameHdl ));
+    aSubRegionED.AddEventListener( LINK( this, SwEditRegionDlg, SubRegionEventHdl ));
+    aSubRegionED.EnableAutocomplete( sal_True, sal_True );
 
     aTree.SetHelpId(HID_REGION_TREE);
     aTree.SetSelectionMode( MULTIPLE_SELECTION );
@@ -667,6 +703,8 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         aDismiss.Enable();
         String aFile = pRepr->GetFile();
         String sSub = pRepr->GetSubRegion();
+        bSubRegionsFilled = false;
+        aSubRegionED.Clear();
         if(aFile.Len()||sSub.Len())
         {
             aFileCB.Check(TRUE);
@@ -1174,6 +1212,8 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
     if(pEdit == &aFileNameED)
     {
+        bSubRegionsFilled = false;
+        aSubRegionED.Clear();
         if( aDDECB.IsChecked() )
         {
             String sLink( pEdit->GetText() );
@@ -1371,7 +1411,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
             const SfxPoolItem* pItem;
             if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, FALSE, &pItem ) )
                 sPassword = ( (SfxStringItem*)pItem )->GetValue();
-            ::lcl_ReadSections( rSh, *pMedium, aSubRegionED );
+            ::lcl_ReadSections( *pMedium, aSubRegionED );
             delete pMedium;
         }
     }
@@ -1390,6 +1430,36 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
     Application::SetDefDialogParent( m_pOldDefDlgParent );
     return 0;
 }
+/*-- 03.09.2009 16:24:18---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
+{
+    if( !bSubRegionsFilled && pEvent && pEvent->GetId() == VCLEVENT_DROPDOWN_PRE_OPEN )
+    {
+        //if necessary fill the names bookmarks/sections/tables now
+
+        rtl::OUString sFileName = aFileNameED.GetText();
+        if(sFileName.getLength())
+        {
+            SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+            INetURLObject aAbs;
+            if( pMedium )
+                aAbs = pMedium->GetURLObject();
+            sFileName = URIHelper::SmartRel2Abs(
+                    aAbs, sFileName, URIHelper::GetMaybeFileHdl() );
+
+            //load file and set the shell
+            SfxMedium aMedium( sFileName, STREAM_STD_READ );
+            sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            ::lcl_ReadSections( aMedium, aSubRegionED );
+        }
+        else
+            lcl_FillSubRegionList( rSh, aSubRegionED, 0 );
+        bSubRegionsFilled = true;
+    }
+    return 0;
+}
 
 /* -----------------------------08.05.2002 15:00------------------------------
 
@@ -1404,7 +1474,7 @@ Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden, BOOL bHighContras
     Beschreibung:   Hilfsfunktion - Bereichsnamen aus dem Medium lesen
  --------------------------------------------------------------------*/
 
-static void lcl_ReadSections( SwWrtShell& /*rSh*/, SfxMedium& rMedium, ComboBox& rBox )
+static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
 {
     rBox.Clear();
     uno::Reference < embed::XStorage > xStg;
@@ -1606,16 +1676,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
         aDDECommandFT    .Hide();
     }
 
-    FillList();
-    IDocumentMarkAccess* const pMarkAccess = m_pWrtSh->getIDocumentMarkAccess();
-    for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
-        ppMark != pMarkAccess->getMarksEnd();
-        ppMark++)
-    {
-        const ::sw::mark::IMark* pBkmk = ppMark->get();
-        if( pBkmk->IsExpanded() )
-            aSubRegionED.InsertEntry( pBkmk->GetName() );
-    }
+    lcl_FillSubRegionList( *m_pWrtSh, aSubRegionED, &aCurName );
 
     SwSection* pSect = ((SwInsertSectionTabDialog*)GetTabDialog())->GetSection();
     if( pSect )     // etwas vorgegeben ?
@@ -1878,7 +1939,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
                 m_sFilePasswd = ( (SfxStringItem*)pItem )->GetValue();
             aFileNameED.SetText( INetURLObject::decode(
                 m_sFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
-            ::lcl_ReadSections( *m_pWrtSh, *pMedium, aSubRegionED );
+            ::lcl_ReadSections( *pMedium, aSubRegionED );
             delete pMedium;
         }
     }
@@ -1887,52 +1948,6 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 
     Application::SetDefDialogParent( m_pOldDefDlgParent );
     return 0;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Liste der verwendeten Namen fuellen
- --------------------------------------------------------------------*/
-
-void SwInsertSectionTabPage::FillList(  const SwSectionFmt* pNewFmt )
-{
-    const SwSectionFmt* pFmt;
-    if( !pNewFmt )
-    {
-        USHORT nCount = m_pWrtSh->GetSectionFmtCount();
-        for(USHORT i=0;i<nCount;i++)
-        {
-            SectionType eTmpType;
-            if( !(pFmt = &m_pWrtSh->GetSectionFmt(i))->GetParent() &&
-                    pFmt->IsInNodesArr() &&
-                    (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                    && TOX_HEADER_SECTION != eTmpType )
-            {
-                    String* pString = new String(pFmt->GetSection()->GetName());
-                    aCurName.InsertEntry(*pString);
-                    aSubRegionED.InsertEntry(*pString);
-                    FillList( pFmt );
-            }
-        }
-    }
-    else
-    {
-        SwSections aTmpArr;
-        USHORT nCnt = pNewFmt->GetChildSections(aTmpArr,SORTSECT_POS);
-        if( nCnt )
-        {
-            SectionType eTmpType;
-            for( USHORT n = 0; n < nCnt; ++n )
-                if( (pFmt = aTmpArr[n]->GetFmt())->IsInNodesArr()&&
-                    (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                    && TOX_HEADER_SECTION != eTmpType )
-                {
-                    String* pString = new String(pFmt->GetSection()->GetName());
-                    aCurName.InsertEntry(*pString);
-                    aSubRegionED.InsertEntry(*pString);
-                    FillList( pFmt );
-                }
-        }
-    }
 }
 
 // --------------------------------------------------------------

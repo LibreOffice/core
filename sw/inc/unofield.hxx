@@ -43,7 +43,6 @@ class SwDoc;
 class SwFmtFld;
 class SwField;
 class SwSetExpField;
-class String;
 class SwTextAPIObject;
 
 /* -----------------04.12.98 12:49-------------------
@@ -208,6 +207,11 @@ public:
 
     void Invalidate();
 };
+
+/// @return a SwXTextField, either an already existing one or a new one
+SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
+
+
 /* -----------------21.12.98 10:26-------------------
  *
  * --------------------------------------------------*/

@@ -1033,6 +1033,8 @@ public:
     UINT16 cQuickSaves :4; // 00F0 count of times file was quicksaved
     UINT16 fEncrypted :1; //0100 1 if file is encrypted, 0 if not
     UINT16 fWhichTblStm :1; //0200 When 0, this fib refers to the table stream
+    UINT16 fReadOnlyRecommended :1;
+    UINT16 fWriteReservation :1;
                                                     // named "0Table", when 1, this fib refers to the
                                                     // table stream named "1Table". Normally, a file
                                                     // will have only one table stream, but under unusual

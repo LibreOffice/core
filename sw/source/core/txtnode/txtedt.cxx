@@ -368,6 +368,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     return bRet;
 }
 
+<<<<<<< local
 /*
  * Ein Zeichen wurde eingefuegt.
  */
@@ -415,6 +416,8 @@ SwTxtNode& SwTxtNode::Insert( xub_Unicode c, const SwIndex &rIdx )
     }
     return *this;
 }
+=======
+>>>>>>> other
 
 inline BOOL InRange(xub_StrLen nIdx, xub_StrLen nStart, xub_StrLen nEnd) {
     return ((nIdx >=nStart) && (nIdx <= nEnd));
@@ -451,7 +454,6 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
     USHORT i = 0;
     xub_StrLen nStt = rIdx.GetIndex();
     xub_StrLen nEnd = nStt + nLen;
-    xub_StrLen *pAttrEnd;
     xub_StrLen nAttrStart;
     SwTxtAttr *pHt;
 
@@ -476,8 +478,8 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
         pHt = m_pSwpHints->GetTextHint(i);
 
         // attributes without end stay in!
-        pAttrEnd = pHt->GetEnd();
-        if ( !pAttrEnd )
+        xub_StrLen * const pAttrEnd = pHt->GetEnd();
+        if ( !pAttrEnd /*|| pHt->HasDummyChar()*/ ) // see bInclRefToxMark
         {
             i++;
             continue;
@@ -511,8 +513,12 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
         else if ( !bInclRefToxMark )
         {
             // 3. case: Reset all attributes except from ref/toxmarks:
-            bSkipAttr = RES_TXTATR_REFMARK == pHt->Which() ||
-                        RES_TXTATR_TOXMARK == pHt->Which();
+            // skip hints with CH_TXTATR here
+            // (deleting those is ONLY allowed for UNDO!)
+            bSkipAttr = RES_TXTATR_REFMARK   == pHt->Which()
+                     || RES_TXTATR_TOXMARK   == pHt->Which()
+                     || RES_TXTATR_META      == pHt->Which()
+                     || RES_TXTATR_METAFIELD == pHt->Which();
         }
 
         if ( bSkipAttr )
@@ -544,8 +550,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nAttrStart, nAttrEnd );
-                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                *pStyleHandle, nAttrStart, nAttrEnd );
+                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     // if the last attribute is a Field, the HintsArray is
@@ -571,8 +578,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() && nAttrStart < nEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nAttrStart, nEnd );
-                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                *pStyleHandle, nAttrStart, nEnd );
+                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     bChanged = TRUE;
@@ -598,8 +606,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStt, nAttrEnd );
-                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                *pStyleHandle, nStt, nAttrEnd );
+                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
                 }
                 else if( nLen )             // Fall: 4
@@ -617,20 +626,23 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() && nStt < nEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStt, nEnd );
-                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                *pStyleHandle, nStt, nEnd );
+                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     if( nEnd < nTmpEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( pHt->GetAttr(), nEnd, nTmpEnd );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                pHt->GetAttr(), nEnd, nTmpEnd );
                         if ( pNew )
                         {
                             SwTxtCharFmt* pCharFmt = dynamic_cast<SwTxtCharFmt*>(pHt);
                             if ( pCharFmt )
                                 static_cast<SwTxtCharFmt*>(pNew)->SetSortNumber( pCharFmt->GetSortNumber() );
 
-                            Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                            InsertHint( pNew,
+                                nsSetAttrMode::SETATTR_NOHINTADJUST );
                         }
 
 
@@ -1000,7 +1012,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
         aSet.Put( aFontItem );
     }
 
-    GetDoc()->Insert( rPaM, aSet, 0 );
+    GetDoc()->InsertItemSet( rPaM, aSet, 0 );
     // SetAttr( aSet );    <- Does not set language attribute of empty paragraphs correctly,
     //                     <- because since there is no selection the flag to garbage
     //                     <- collect all attributes is set, and therefore attributes spanned

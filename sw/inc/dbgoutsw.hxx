@@ -35,6 +35,11 @@
 #include <hash_map>
 #include <tox.hxx>
 class String;
+
+namespace rtl
+{
+class OUString;
+}
 class SwNode;
 class SwTxtAttr;
 class SwpHints;
@@ -54,6 +59,7 @@ class SwNumRuleTbl;
 class SwNumRule;
 class SwOutlineNodes;
 class SwTxtFmtColl;
+class SwNodeRange;
 
 #define DBG_OUT_HERE printf("%s(%d):", __FILE__, __LINE__)
 #define DBG_OUT_HERE_FN printf("%s(%d) %s:", __FILE__, __LINE__, __FUNCTION__)
@@ -68,6 +74,7 @@ extern bool bDbgOutPrintAttrSet;
 
 SW_DLLPUBLIC const char * dbg_out(const void * pVoid);
 SW_DLLPUBLIC const char * dbg_out(const String & aStr);
+SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr);
 SW_DLLPUBLIC const char * dbg_out(const SwRect & rRect);
 SW_DLLPUBLIC const char * dbg_out(const SwFrmFmt & rFrmFmt);
 SW_DLLPUBLIC const char * dbg_out(const SwNode & rNode);
@@ -88,6 +95,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule);
 SW_DLLPUBLIC const char * dbg_out(const SwTxtFmtColl & rFmt);
 SW_DLLPUBLIC const char * dbg_out(const SwFrmFmts & rFrmFmts);
 SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl);
+SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 
 template<typename tKey, typename tMember, typename fHashFunction>
 String lcl_dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)

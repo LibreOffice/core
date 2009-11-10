@@ -1649,6 +1649,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {SW_PROP_NMID(UNO_NAME_IS_START), FN_UNO_IS_START, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     //_REDLINE_PROPERTIES
                     {SW_PROP_NMID(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, CPPU_E2T(CPPUTYPE_OUSTRING),                        PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_META), FN_UNO_META, CPPU_E2T(CPPUTYPE_REFTEXTCNTNT), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aTextPortionExtensionMap_Impl;
@@ -2486,6 +2487,19 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aChart2DataSequenceMap;
             }
             break;
+            case PROPERTY_MAP_METAFIELD:
+            {
+                static SfxItemPropertyMapEntry aMetaFieldMap[] =
+                {
+                    { SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT), 0,
+                        CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, 0 },
+                    { SW_PROP_NMID(UNO_NAME_IS_FIXED_LANGUAGE), 0,
+                        CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
+                    {0,0,0,0,0,0}
+                };
+                aMapEntriesArr[nPropertyId] = aMetaFieldMap;
+            }
+            break;
 
             default:
                 DBG_ERROR( "unexpected property map ID" );
@@ -3091,6 +3105,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM(pEntries);
                 aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM;
+            }
+            break;
+            case PROPERTY_MAP_METAFIELD:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_METAFIELD(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_METAFIELD;
             }
             break;
         }

@@ -995,6 +995,14 @@ SaveBookmark::SaveBookmark(
     {
         m_aShortName = pBookmark->GetShortName();
         m_aCode = pBookmark->GetKeyCode();
+
+        ::sfx2::Metadatable * const pMetadatable(
+            const_cast< ::sfx2::Metadatable * >( // CreateUndo should be const?
+                dynamic_cast< ::sfx2::Metadatable const* >(pBookmark)));
+        if (pMetadatable)
+        {
+            m_pMetadataUndo = pMetadatable->CreateUndo();
+        }
     }
     m_nNode1 = rBkmk.GetMarkPos().nNode.GetIndex();
     m_nCntnt1 = rBkmk.GetMarkPos().nContent.GetIndex();
@@ -1073,6 +1081,16 @@ void SaveBookmark::SetInDoc(
         {
             pBookmark->SetKeyCode(m_aCode);
             pBookmark->SetShortName(m_aShortName);
+            if (m_pMetadataUndo)
+            {
+                ::sfx2::Metadatable * const pMeta(
+                    dynamic_cast< ::sfx2::Metadatable* >(pBookmark));
+                OSL_ENSURE(pMeta, "metadata undo, but not metadatable?");
+                if (pMeta)
+                {
+                    pMeta->RestoreMetadata(m_pMetadataUndo);
+                }
+            }
         }
     }
 }

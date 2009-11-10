@@ -344,9 +344,9 @@ xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
             }
-            else
+            if (pHt->HasDummyChar())
             {
-                // Attr ohne Ende Laenge 1 wegen CH_TXTATR im Text
+                // pos + 1 because of CH_TXTATR in Text
                 nPos = *pHt->GetStart() + 1;
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
@@ -545,13 +545,13 @@ void SwAttrIter::OutFlys(xub_StrLen nSwPos)
 
 bool SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
 {
-    // search for attrs without end position
+    // search for attrs with CH_TXTATR
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
         for (USHORT i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            if( !pHt->GetEnd() && *pHt->GetStart() == nSwPos )
+            if ( pHt->HasDummyChar() && (*pHt->GetStart() == nSwPos) )
                 return true;
         }
     }

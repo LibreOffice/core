@@ -181,7 +181,7 @@ class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
 public:
     // Editieren (immer auf allen selektierten Bereichen)
     void Insert( sal_Unicode, BOOL bOnlyCurrCrsr = FALSE );
-    void Insert( const String &);
+    void Insert2( const String &, const bool bForceExpandHints = false );
     void Overwrite( const String & );
 
     // Ersetz einen selektierten Bereich in einem TextNode mit dem
@@ -332,7 +332,7 @@ public:
         { return (SwCharFmt*)SwEditShell::GetFmtFromPool( nId ); }
 
     // Felder
-    void Insert(SwField&);
+    void Insert2(SwField&, const bool bForceExpandHints = false);
     SwField* GetCurFld() const;
 
     void UpdateFlds( SwField & );       // ein einzelnes Feld

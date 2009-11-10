@@ -37,6 +37,11 @@
 #include "ndhints.hxx"
 #include <txtatr.hxx>
 
+#ifndef PRODUCT
+#include <pam.hxx>
+#endif
+
+
 _SV_IMPL_SORTAR_ALG( SwpHtStart, SwTxtAttr* )
 _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 
@@ -99,15 +104,15 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     if ( *rHt1.GetStart() == *rHt2.GetStart() )
     {
-        xub_StrLen nHt1 = *rHt1.GetAnyEnd();
-        xub_StrLen nHt2 = *rHt2.GetAnyEnd();
+        const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
+        const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
         if ( nHt1 == nHt2 )
         {
-            nHt1 = rHt1.Which();
-            nHt2 = rHt2.Which();
-            if ( nHt1 == nHt2 )
+            const USHORT nWhich1 = rHt1.Which();
+            const USHORT nWhich2 = rHt2.Which();
+            if ( nWhich1 == nWhich2 )
             {
-                if ( RES_TXTATR_CHARFMT == nHt1 )
+                if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
                     const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
@@ -118,6 +123,8 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
                 return (long)&rHt1 < (long)&rHt2;
             }
+            // order is important! for requirements see hintids.hxx
+            return ( nWhich1 > nWhich2 );
         }
         return ( nHt1 > nHt2 );
     }
@@ -131,18 +138,17 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 // Zuerst nach Ende danach nach Ptr
 static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
-    xub_StrLen nHt1 = *rHt1.GetAnyEnd();
-    xub_StrLen nHt2 = *rHt2.GetAnyEnd();
+    const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
+    const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
     if ( nHt1 == nHt2 )
     {
         if ( *rHt1.GetStart() == *rHt2.GetStart() )
         {
-            nHt1 = rHt1.Which();
-            nHt2 = rHt2.Which();
-
-            if ( nHt1 == nHt2 )
+            const USHORT nWhich1 = rHt1.Which();
+            const USHORT nWhich2 = rHt2.Which();
+            if ( nWhich1 == nWhich2 )
             {
-                if ( RES_TXTATR_CHARFMT == nHt1 )
+                if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
                     const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
@@ -153,7 +159,8 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
                 return (long)&rHt1 > (long)&rHt2;
             }
-            // else return nHt1 < nHt2, see below
+            // order is important! for requirements see hintids.hxx
+            return ( nWhich1 < nWhich2 );
         }
         else
             return ( *rHt1.GetStart() > *rHt2.GetStart() );
@@ -375,6 +382,37 @@ bool SwpHintsArray::Check() const
                     ( *pHtThis->GetStart() == *pHtThis->GetEnd() ),
                    "HintsCheck: Portion inconsistency. "
                    "This can be temporarily ok during undo operations" );
+
+        if (pHtThis->IsNesting())
+        {
+            for ( USHORT j = 0; j < Count(); ++j )
+            {
+                SwTxtAttr const * const pOther( m_HintStarts[j] );
+                if ( pOther->IsNesting() &&  (i != j) )
+                {
+                    SwComparePosition cmp = ComparePosition(
+                        *pHtThis->GetStart(), *pHtThis->GetEnd(),
+                        *pOther->GetStart(), *pOther->GetEnd());
+                    CHECK_ERR( (POS_OVERLAP_BEFORE != cmp) &&
+                               (POS_OVERLAP_BEHIND != cmp),
+                        "HintsCheck: overlapping nesting hints!!!" );
+                }
+            }
+        }
+
+        // 9) dummy char check (unfortunately cannot check SwTxtNode::m_Text)
+        if (pHtThis->HasDummyChar())
+        {
+            for ( USHORT j = 0; j < i; ++j )
+            {
+                SwTxtAttr const * const pOther( m_HintStarts[j] );
+                if (pOther->HasDummyChar())
+                {
+                    CHECK_ERR( (*pOther->GetStart() != *pHtThis->GetStart()),
+                        "HintsCheck: multiple hints claim same CH_TXTATR!");
+                }
+            }
+        }
 #endif
     }
     return true;

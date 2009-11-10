@@ -64,8 +64,9 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
         if( !pTxtFrm->IsFollow() )
         {
             pTxtFrm = ((SwTxtFrm*)pTxtFrm)->GetFrmAtPos( rPos );
-            SwPageFrm *pPage = pTxtFrm ? pTxtFrm->FindPageFrm() : 0;
-            if( pPage )
+        SwPageFrm *pPage = pTxtFrm ? pTxtFrm->FindPageFrm() : 0;
+        // #i103490#
+            if ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
             {
                 SwLayoutInfo aInfo;
                 pTxtFrm->GetCharRect( aInfo.mPosition, rPos, 0 );

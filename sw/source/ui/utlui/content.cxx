@@ -906,16 +906,17 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         sRename(SW_RES(ST_RENAME)),
         sReadonlyIdx(SW_RES(ST_READONLY_IDX)),
         sInvisible(SW_RES(ST_INVISIBLE)),
-        sPostItShow(SW_RES(ST_POSTIT_SHOW)),
-        sPostItHide(SW_RES(ST_POSTIT_HIDE)),
-        sPostItDelete(SW_RES(ST_POSTIT_DELETE)),
+
+    sPostItShow(SW_RES(ST_POSTIT_SHOW)),
+    sPostItHide(SW_RES(ST_POSTIT_HIDE)),
+    sPostItDelete(SW_RES(ST_POSTIT_DELETE)),
 
         pHiddenShell(0),
-        pActiveShell(0),
-        pConfig(SW_MOD()->GetNavigationConfig()),
+    pActiveShell(0),
+    pConfig(SW_MOD()->GetNavigationConfig()),
 
         nActiveBlock(0),
-        nHiddenBlock(0),
+    nHiddenBlock(0),
 
         nRootType(USHRT_MAX),
         nLastSelType(USHRT_MAX),
@@ -2929,6 +2930,7 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         break;
 
         case CONTENT_TYPE_POSTIT:
+            pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             if(nMode == EDIT_MODE_DELETE)
             {
                 if (((SwPostItContent*)pCnt)->IsPostIt())
@@ -3097,6 +3099,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         }
         break;
         case CONTENT_TYPE_POSTIT:
+            pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             if (((SwPostItContent*)pCnt)->IsPostIt())
                 pActiveShell->GotoFld(*((SwPostItContent*)pCnt)->GetPostIt());
             else
