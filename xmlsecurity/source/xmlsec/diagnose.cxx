@@ -50,7 +50,7 @@ struct UseDiagnose : public rtl::StaticWithInit<
 
 /* the function will print the string when
    - build with debug
-   - the bootstrap variable XMLSECURITY_DIAGNOSE is set.
+   - the bootstrap variable XMLSECURITY_TRACE is set.
  */
 void xmlsec_trace(const char* pszFormat, ...)
 {
