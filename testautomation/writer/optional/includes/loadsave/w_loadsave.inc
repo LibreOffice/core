@@ -447,7 +447,7 @@ testcase tExportTop5FormatsIntoTop5
 							 sCurrentSaveFilter = "HTML (StarWriter)"
 				End select
 	
-				printlog " - " & iCurrentSaveFileIndex ". to file: " & sCurrentSaveFile
+				printlog " - " & iCurrentSaveFileIndex & ". to file: " & sCurrentSaveFile
 				if hFileSaveAsWithFilterKill(sCurrentSaveFile, sCurrentSaveFilter) = true then
 					printlog " - close all open documents"
 					Do Until GetDocumentCount = 0
