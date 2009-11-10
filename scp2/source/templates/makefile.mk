@@ -52,5 +52,5 @@ PHONYTEMPL=.PHONY
 .ENDIF			# "$(LAST_COMPLETELANGISO_VAR)"!="$(COMPLETELANGISO_VAR)"
 $(INCCOM)$/alllangmodules%.inc $(PHONYTEMPL) : module_langpack%.sct
     @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $< -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
+    $(COMMAND_ECHO)$(PERL) -w modules.pl -i $< -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
     @echo LAST_COMPLETELANGISO_VAR=$(COMPLETELANGISO_VAR) > $(MISC)$/$(TARGET)_lang_track.mk

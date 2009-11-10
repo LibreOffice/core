@@ -112,10 +112,10 @@ sleep 1
 
 # This tests that aa.x is not build as the dependency chain is intact with
 # the virtual target aa.y having the same time stamp as aa.z.
-output3=`eval ${DMAKEPROG} -rf $file1 2>&1`
+output3=`eval ${DMAKEPROG} -vm -rf $file1 2>&1`
 result3=$?
 
-if test $result3 = 0 -a "$output3" = "\`aa.x' is up to date" ; then
+if test $result3 = 0 && echo "$output3" | grep "aa.x' is up to date"  > /dev/null 2>&1 ; then
   echo "Subtest 3: OK"
   result3=0
 else

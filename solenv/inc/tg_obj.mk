@@ -33,13 +33,12 @@ MKFILENAME:=TG_OBJ.MK
 
 .IF "$(OBJTARGET)"!=""
 $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="OS2"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
 .ENDIF		# "$(GUI)"=="OS2"
 
 .IF "$(GUI)"=="WNT"
@@ -49,11 +48,11 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    echo $(foreach,i,$(OBJFILES:f) $(ROBJ)/$(i:s/.obj/.o/)) | xargs -n1 > $@
+    @echo $(foreach,i,$(OBJFILES:f) $(ROBJ)/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .IF "$(OS)"=="MACOSX"
     @-nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ELSE
@@ -66,13 +65,12 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)OBJTARGET)"!=""
 $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="OS2"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
 .ENDIF			# "$(GUI)"=="OS2"
 
 .IF "$(GUI)"=="WNT"
@@ -83,11 +81,11 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    @echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$($(SECOND_BUILD)OBJTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
@@ -96,5 +94,5 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
 .ENDIF			# "$(GUI)"=="OS2"
