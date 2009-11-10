@@ -64,7 +64,7 @@ public final class MethodIdTest extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTest t = (XTest) UnoRuntime.queryInterface(
+            XTest t = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));
             return t.f129() == 129;
         }

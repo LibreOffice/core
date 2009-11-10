@@ -45,6 +45,9 @@
 #include "rtl/ustring.hxx"
 
 #include <tchar.h>
+#ifdef __MINGW32__
+#include <ctype.h>
+#endif
 
 //#####################################################
 #define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
@@ -718,9 +721,9 @@ oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
             sal_Int32           nLen = rtl_uString_getLength( strSysPath );
 
             if (
-                ( pBuffer[0] >= 'A' && pBuffer[0] <= 'Z' ||
-                  pBuffer[0] >= 'a' && pBuffer[0] <= 'z' ) &&
-                pBuffer[1] == ':' && ( nLen ==2 || nLen == 3 && pBuffer[2] == '\\' )
+                ( ( pBuffer[0] >= 'A' && pBuffer[0] <= 'Z' ) ||
+                  ( pBuffer[0] >= 'a' && pBuffer[0] <= 'z' ) ) &&
+                pBuffer[1] == ':' && ( nLen ==2 || ( nLen == 3 && pBuffer[2] == '\\' ) )
                 )
                 SetLastError( ERROR_ALREADY_EXISTS );
 
@@ -1151,8 +1154,8 @@ bool is_floppy_volume_mount_point(const rtl::OUString& path)
 {
     // determines if a volume mount point shows to a floppy
     // disk by comparing the unique volume names
-    static const LPWSTR FLOPPY_A = L"A:\\";
-    static const LPWSTR FLOPPY_B = L"B:\\";
+    static const LPCWSTR FLOPPY_A = L"A:\\";
+    static const LPCWSTR FLOPPY_B = L"B:\\";
 
     rtl::OUString p(path);
     osl::systemPathEnsureSeparator(p);
@@ -1177,7 +1180,7 @@ bool is_floppy_volume_mount_point(const rtl::OUString& path)
 //################################################
 static bool is_floppy_drive(const rtl::OUString& path)
 {
-    static const LPWSTR FLOPPY_DRV_LETTERS = TEXT("AaBb");
+    static const LPCWSTR FLOPPY_DRV_LETTERS = TEXT("AaBb");
 
     // we must take into account that even a floppy
     // drive may be mounted to a directory so checking

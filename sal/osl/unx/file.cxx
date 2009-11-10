@@ -44,6 +44,7 @@
 #include <limits>
 
 #include <string.h>
+#include <pthread.h>
 #include <sys/mman.h>
 
 #if defined(MACOSX)
@@ -74,8 +75,9 @@
  ******************************************************************/
 struct FileHandle_Impl
 {
-    rtl_String * m_strFilePath; /* holds native file path */
-    int          m_fd;
+    pthread_mutex_t m_mutex;
+    rtl_String *    m_strFilePath; /* holds native file path */
+    int             m_fd;
 
     /** State
      */
@@ -110,6 +112,7 @@ struct FileHandle_Impl
     oslFileError setPos (sal_uInt64 uPos);
 
     sal_uInt64   getSize() const;
+    oslFileError setSize (sal_uInt64 uSize);
 
     oslFileError readAt (
         off_t        nOffset,
@@ -168,6 +171,17 @@ struct FileHandle_Impl
         Allocator();
         ~Allocator();
     };
+
+    /** Guard.
+     */
+    class Guard
+    {
+        pthread_mutex_t * m_mutex;
+
+    public:
+        explicit Guard(pthread_mutex_t * pMutex);
+        ~Guard();
+    };
 };
 
 /*******************************************************************
@@ -212,6 +226,18 @@ void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
         rtl_cache_free (m_cache, pBuffer);
 }
 
+FileHandle_Impl::Guard::Guard(pthread_mutex_t * pMutex)
+    : m_mutex (pMutex)
+{
+    OSL_PRECOND (m_mutex != 0, "FileHandle_Impl::Guard::Guard(): null pointer.");
+    (void) pthread_mutex_lock (m_mutex); // ignoring EINVAL ...
+}
+FileHandle_Impl::Guard::~Guard()
+{
+    OSL_PRECOND (m_mutex != 0, "FileHandle_Impl::Guard::~Guard(): null pointer.");
+    (void) pthread_mutex_unlock (m_mutex);
+}
+
 FileHandle_Impl::FileHandle_Impl (int fd, char const * path)
     : m_strFilePath (0),
       m_fd      (fd),
@@ -224,6 +250,7 @@ FileHandle_Impl::FileHandle_Impl (int fd, char const * path)
       m_bufsiz  (0),
       m_buffer  (0)
 {
+    (void) pthread_mutex_init(&m_mutex, 0);
     rtl_string_newFromStr (&m_strFilePath, path);
     Allocator::get().allocate (&m_buffer, &m_bufsiz);
     if (0 != m_buffer)
@@ -233,6 +260,7 @@ FileHandle_Impl::~FileHandle_Impl()
 {
     Allocator::get().deallocate (m_buffer), m_buffer = 0;
     rtl_string_release (m_strFilePath), m_strFilePath = 0;
+    (void) pthread_mutex_destroy(&m_mutex); // ignoring EBUSY ...
 }
 
 void* FileHandle_Impl::operator new (size_t n)
@@ -269,6 +297,47 @@ sal_uInt64 FileHandle_Impl::getSize() const
 {
     off_t const bufend = std::max((off_t)(0), m_bufptr) + m_buflen;
     return std::max(m_size, sal::static_int_cast< sal_uInt64 >(bufend));
+}
+
+oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
+{
+    off_t const nSize = sal::static_int_cast< off_t >(uSize);
+    if (-1 == ftruncate (m_fd, nSize))
+    {
+        /* Failure. Save original result. Try fallback algorithm */
+        oslFileError result = oslTranslateFileError (OSL_FET_ERROR, errno);
+
+        /* Check against current size. Fail upon 'shrink' */
+        if (uSize <= getSize())
+        {
+            /* Failure upon 'shrink'. Return original result */
+            return (result);
+        }
+
+        /* Save current position */
+        off_t const nCurPos = (off_t)lseek (m_fd, (off_t)0, SEEK_CUR);
+        if (nCurPos == (off_t)(-1))
+            return (result);
+
+        /* Try 'expand' via 'lseek()' and 'write()' */
+        if (-1 == lseek (m_fd, (off_t)(nSize - 1), SEEK_SET))
+            return (result);
+
+        if (-1 == write (m_fd, (char*)"", (size_t)1))
+        {
+            /* Failure. Restore saved position */
+            (void) lseek (m_fd, (off_t)(nCurPos), SEEK_SET);
+            return (result);
+        }
+
+        /* Success. Restore saved position */
+        if (-1 == lseek (m_fd, (off_t)nCurPos, SEEK_SET))
+            return (result);
+    }
+
+    OSL_FILE_TRACE("osl_setFileSize(%d, %lld) => %ld", m_fd, getSize(), nSize);
+    m_size = sal::static_int_cast< sal_uInt64 >(nSize);
+    return osl_File_E_None;
 }
 
 oslFileError FileHandle_Impl::readAt (
@@ -906,6 +975,8 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
     if ((pImpl == 0) || (pImpl->m_fd < 0))
         return osl_File_E_INVAL;
 
+    (void) pthread_mutex_lock (&(pImpl->m_mutex));
+
     /* close(2) implicitly (and unconditionally) unlocks */
     OSL_TRACE("osl_closeFile(%d) => %s", pImpl->m_fd, rtl_string_getStr(pImpl->m_strFilePath));
     oslFileError result = pImpl->syncFile();
@@ -920,6 +991,7 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
         result = oslTranslateFileError (OSL_FET_ERROR, errno);
     }
 
+    (void) pthread_mutex_unlock (&(pImpl->m_mutex));
     delete pImpl;
     return (result);
 }
@@ -934,6 +1006,8 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 
     if ((0 == pImpl) || (-1 == pImpl->m_fd))
         return osl_File_E_INVAL;
+
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
 
     OSL_FILE_TRACE("osl_syncFile(%d)", pImpl->m_fd);
     oslFileError result = pImpl->syncFile();
@@ -1044,6 +1118,7 @@ SAL_CALL osl_readLine (
     sal_uInt64 uBytesRead = 0;
 
     // read at current fileptr; fileptr += uBytesRead;
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->readLineAt (
         pImpl->m_fileptr, ppSequence, &uBytesRead);
     if (result == osl_File_E_None)
@@ -1072,6 +1147,7 @@ SAL_CALL osl_readFile (
     size_t const nBytesRequested = sal::static_int_cast< size_t >(uBytesRequested);
 
     // read at current fileptr; fileptr += *pBytesRead;
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->readFileAt (
         pImpl->m_fileptr, pBuffer, nBytesRequested, pBytesRead);
     if (result == osl_File_E_None)
@@ -1102,6 +1178,7 @@ SAL_CALL osl_writeFile (
     size_t const nBytesToWrite = sal::static_int_cast< size_t >(uBytesToWrite);
 
     // write at current fileptr; fileptr += *pBytesWritten;
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     oslFileError result = pImpl->writeFileAt (
         pImpl->m_fileptr, pBuffer, nBytesToWrite, pBytesWritten);
     if (result == osl_File_E_None)
@@ -1138,6 +1215,7 @@ SAL_CALL osl_readFileAt (
     size_t const nBytesRequested = sal::static_int_cast< size_t >(uBytesRequested);
 
     // read at specified fileptr
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     return pImpl->readFileAt (nOffset, pBuffer, nBytesRequested, pBytesRead);
 }
 
@@ -1172,6 +1250,7 @@ SAL_CALL osl_writeFileAt (
     size_t const nBytesToWrite = sal::static_int_cast< size_t >(uBytesToWrite);
 
     // write at specified fileptr
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     return pImpl->writeFileAt (nOffset, pBuffer, nBytesToWrite, pBytesWritten);
 }
 
@@ -1186,6 +1265,7 @@ SAL_CALL osl_isEndOfFile( oslFileHandle Handle, sal_Bool *pIsEOF )
     if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pIsEOF))
         return osl_File_E_INVAL;
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     *pIsEOF = (pImpl->getPos() == pImpl->getSize());
     return osl_File_E_None;
 }
@@ -1201,6 +1281,7 @@ SAL_CALL osl_getFilePos( oslFileHandle Handle, sal_uInt64* pPos )
     if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pPos))
         return osl_File_E_INVAL;
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     *pPos = pImpl->getPos();
     return osl_File_E_None;
 }
@@ -1221,6 +1302,7 @@ SAL_CALL osl_setFilePos (oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffse
         return osl_File_E_OVERFLOW;
     off_t nPos = 0, nOffset = sal::static_int_cast< off_t >(uOffset);
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     switch(uHow)
     {
         case osl_Pos_Absolut:
@@ -1262,6 +1344,7 @@ SAL_CALL osl_getFileSize( oslFileHandle Handle, sal_uInt64* pSize )
     if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pSize))
         return osl_File_E_INVAL;
 
+    FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
     *pSize = pImpl->getSize();
     return osl_File_E_None;
 }
@@ -1282,62 +1365,11 @@ SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize )
     static sal_uInt64 const g_limit_off_t = std::numeric_limits< off_t >::max();
     if (g_limit_off_t < uSize)
         return osl_File_E_OVERFLOW;
-    off_t const nSize = sal::static_int_cast< off_t >(uSize);
 
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return (result);
+    pImpl->m_bufptr = -1, pImpl->m_buflen = 0;
 
-    if (-1 == ftruncate (pImpl->m_fd, nSize))
-    {
-        /* Failure. Try fallback algorithm */
-        off_t nCurPos;
-
-        /* Save original result */
-        result = oslTranslateFileError (OSL_FET_ERROR, errno);
-        PERROR("ftruncate", "Try osl_setFileSize [fallback]\n");
-
-        /* Check against current size. Fail upon 'shrink' */
-        if (uSize <= pImpl->getSize())
-        {
-            /* Failure upon 'shrink'. Return original result */
-            return (result);
-        }
-
-        /* Save current position *//* @@@ pImpl->m_offset @@@ */
-        nCurPos = (off_t)lseek (pImpl->m_fd, (off_t)0, SEEK_CUR);
-        if (nCurPos == (off_t)(-1))
-        {
-            PERROR("ftruncate: lseek", "Out osl_setFileSize [error]\n");
-            return (result);
-        }
-
-        /* Try 'expand' via 'lseek()' and 'write()' */
-        if (lseek (pImpl->m_fd, (off_t)(nSize - 1), SEEK_SET) < 0)
-        {
-            PERROR("ftruncate: lseek", "Out osl_setFileSize [error]\n");
-            return (result);
-        }
-        if (write (pImpl->m_fd, (char*)"", (size_t)1) < 0)
-        {
-            /* Failure. Restore saved position */
-            PERROR("ftruncate: write", "Out osl_setFileSize [error]\n");
-            if (lseek (pImpl->m_fd, (off_t)nCurPos, SEEK_SET) < 0)
-            {
-                PERROR("ftruncate: lseek", "ignoring");
-            }
-            return (result);
-        }
-
-        /* Success. Restore saved position */
-        if (lseek (pImpl->m_fd, (off_t)nCurPos, SEEK_SET) < 0)
-        {
-            PERROR("ftruncate: lseek", "Out osl_setFileSize [error]");
-            return (result);
-        }
-    }
-
-    OSL_FILE_TRACE("osl_setFileSize(%d, %lld) => %ld", pImpl->m_fd, pImpl->getSize(), nSize);
-    pImpl->m_size = sal::static_int_cast< sal_uInt64 >(nSize);
-    return osl_File_E_None;
+    return pImpl->setSize (uSize);
 }
