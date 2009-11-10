@@ -252,7 +252,7 @@ bool QueryReg64Table(MSIHANDLE& rhDatabase, MSIHANDLE& rhView)
 bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
 {
 
-// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyEx.
+// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyEx if WINVER < 0x0502.
 #if (WINVER >= 0x0502)
     int rc = RegDeleteKeyEx(
         RootKey, KeyName, KEY_WOW64_64KEY, 0);
