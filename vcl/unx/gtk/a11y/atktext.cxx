@@ -33,12 +33,15 @@
 
 #include "atkwrapper.hxx"
 #include "atktextattributes.hxx"
+#include <algorithm>
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
 
 // #define ENABLE_TRACING
 
@@ -168,6 +171,27 @@ static accessibility::XAccessibleText*
         }
 
         return pWrap->mpText;
+    }
+
+    return NULL;
+}
+
+/*****************************************************************************/
+
+static accessibility::XAccessibleTextMarkup*
+    getTextMarkup( AtkText *pText ) throw (uno::RuntimeException)
+{
+    AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
+    if( pWrap )
+    {
+        if( !pWrap->mpTextMarkup && pWrap->mpContext )
+        {
+            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleTextMarkup::static_type(NULL) );
+            pWrap->mpTextMarkup = reinterpret_cast< accessibility::XAccessibleTextMarkup * > (any.pReserved);
+            pWrap->mpTextMarkup->acquire();
+        }
+
+        return pWrap->mpTextMarkup;
     }
 
     return NULL;
@@ -434,6 +458,8 @@ text_wrapper_get_run_attributes( AtkText        *text,
     AtkAttributeSet *pSet = NULL;
 
     try {
+        bool bOffsetsAreValid = false;
+
         accessibility::XAccessibleText* pText = getText( text );
         accessibility::XAccessibleTextAttributes* pTextAttributes = getTextAttributes( text );
         if( pText && pTextAttributes )
@@ -456,10 +482,47 @@ text_wrapper_get_run_attributes( AtkText        *text,
 //                *end_offset = aTextSegment.SegmentEnd + 1; // FIXME: TESTME
                 *end_offset = aTextSegment.SegmentEnd;
                 // <--
+                bOffsetsAreValid = true;
+            }
+        }
+
+        // Special handling for missspelled
+        accessibility::XAccessibleTextMarkup* pTextMarkup = getTextMarkup( text );
+        if( pTextMarkup )
+        {
+            uno::Sequence< accessibility::TextSegment > aTextSegmentSeq =
+                pTextMarkup->getTextMarkupAtIndex( offset, com::sun::star::text::TextMarkupType::SPELLCHECK );
+            if( aTextSegmentSeq.getLength() > 0 )
+            {
+                accessibility::TextSegment aTextSegment = aTextSegmentSeq[0];
+                gint nStartOffsetMisspelled = aTextSegment.SegmentStart;
+                gint nEndOffsetMisspelled = aTextSegment.SegmentEnd;
+
+                // Get attribute run here if it hasn't been done before
+                if( !bOffsetsAreValid )
+                {
+                    accessibility::TextSegment aAttributeTextSegment =
+                        pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+                    *start_offset = aAttributeTextSegment.SegmentStart;
+                    *end_offset = aAttributeTextSegment.SegmentEnd;
+                }
+
+                if( nEndOffsetMisspelled <= offset )
+                    *start_offset = ::std::max( *start_offset, nEndOffsetMisspelled );
+                else if( nStartOffsetMisspelled <= offset )
+                    *start_offset = ::std::max( *start_offset, nStartOffsetMisspelled );
+
+                if( nStartOffsetMisspelled > offset )
+                    *end_offset = ::std::min( *end_offset, nStartOffsetMisspelled );
+                else if( nEndOffsetMisspelled > offset )
+                    *end_offset = ::std::min( *end_offset, nEndOffsetMisspelled );
+
+                if( nStartOffsetMisspelled <= offset && nEndOffsetMisspelled > offset )
+                    pSet = attribute_set_prepend_misspelled( pSet );
             }
         }
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception& e){
 
         g_warning( "Exception in get_run_attributes()" );
 

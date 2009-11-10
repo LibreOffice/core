@@ -134,6 +134,16 @@ extern "C"
 
     VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
+
         #if OSL_DEBUG_LEVEL > 1
         int nFd = open( "/home/pl93762/log.txt", O_CREAT | O_TRUNC | O_WRONLY, 0755 );
         dup2( nFd, STDERR_FILENO );
@@ -204,6 +214,34 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
         return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
+}
+
+extern "C"
+{
+    typedef void*(* getDefaultFnc)();
+    typedef void(* addItemFnc)(void *, const char *);
+}
+
+void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
+{
+#if GTK_CHECK_VERSION(2,10,0)
+    GtkRecentManager *manager = gtk_recent_manager_get_default ();
+    gtk_recent_manager_add_item (manager, rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8).getStr());
+    (void)rMimeType;
+#else
+    static getDefaultFnc sym_gtk_recent_manager_get_default =
+        (getDefaultFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_get_default" );
+
+    static addItemFnc sym_gtk_recent_manager_add_item =
+        (addItemFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_add_item");
+    if (sym_gtk_recent_manager_get_default && sym_gtk_recent_manager_add_item)
+    {
+        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(),
+            rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    else
+        X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType);
+#endif
 }
 
 GtkYieldMutex::GtkYieldMutex()

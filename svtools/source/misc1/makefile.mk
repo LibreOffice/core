@@ -54,7 +54,6 @@ SLOFILES=\
     $(SLO)$/inettype.obj \
     $(SLO)$/iniadrtk.obj \
     $(SLO)$/lngmisc.obj \
-    $(SLO)$/loginerr.obj \
     $(SLO)$/PasswordHelper.obj
 
 SRS1NAME=$(TARGET)

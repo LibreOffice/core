@@ -45,6 +45,16 @@
 extern "C" {
     VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule )
     {
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
+
 #if QT_VERSION < 0x050000
         // Qt 4.x support needs >= 4.1.0
         rtl::OString aVersion( qVersion() );

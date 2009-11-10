@@ -79,8 +79,8 @@ namespace svt
     //= DialogController
     //=====================================================================
     //---------------------------------------------------------------------
-    DialogController::DialogController( Window& _rInstigator, const PWindowEventFilter _pEventFilter,
-            const PWindowOperator _pOperator )
+    DialogController::DialogController( Window& _rInstigator, const PWindowEventFilter& _pEventFilter,
+            const PWindowOperator& _pOperator )
         :m_pImpl( new DialogController_Data( _rInstigator, _pEventFilter, _pOperator ) )
     {
         DBG_ASSERT( m_pImpl->pEventFilter.get() && m_pImpl->pOperator.get(),
@@ -108,31 +108,33 @@ namespace svt
     void DialogController::addDependentWindow( Window& _rWindow )
     {
         m_pImpl->aConcernedWindows.push_back( &_rWindow );
-        impl_update( _rWindow );
+
+        VclWindowEvent aEvent( &_rWindow, 0, NULL );
+        impl_update( aEvent, _rWindow );
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( DialogController, OnWindowEvent, const VclSimpleEvent*, _pEvent )
+    IMPL_LINK( DialogController, OnWindowEvent, const VclWindowEvent*, _pEvent )
     {
         if ( m_pImpl->pEventFilter->payAttentionTo( *_pEvent ) )
-            impl_updateAll();
+            impl_updateAll( *_pEvent );
         return 0L;
     }
 
     //---------------------------------------------------------------------
-    void DialogController::impl_updateAll()
+    void DialogController::impl_updateAll( const VclWindowEvent& _rTriggerEvent )
     {
         for ( ::std::vector< Window* >::iterator loop = m_pImpl->aConcernedWindows.begin();
                 loop != m_pImpl->aConcernedWindows.end();
                 ++loop
             )
-            impl_update( *(*loop) );
+            impl_update( _rTriggerEvent, *(*loop) );
     }
 
     //---------------------------------------------------------------------
-    void DialogController::impl_update( Window& _rWindow )
+    void DialogController::impl_update( const VclWindowEvent& _rTriggerEvent, Window& _rWindow )
     {
-        m_pImpl->pOperator->operateOn( _rWindow );
+        m_pImpl->pOperator->operateOn( _rTriggerEvent, _rWindow );
     }
 
     //=====================================================================
@@ -174,6 +176,13 @@ namespace svt
     {
         ::std::for_each( m_pImpl->aControllers.begin(), m_pImpl->aControllers.end(), ResetDialogController() );
         m_pImpl->aControllers.clear();
+    }
+
+    //---------------------------------------------------------------------
+    void ControlDependencyManager::addController( const PDialogController& _pController )
+    {
+        OSL_ENSURE( _pController.get() != NULL, "ControlDependencyManager::addController: invalid controller, this will crash, sooner or later!" );
+        m_pImpl->aControllers.push_back( _pController );
     }
 
     //---------------------------------------------------------------------

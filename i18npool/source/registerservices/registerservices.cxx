@@ -207,6 +207,7 @@ IMPL_CREATEINSTANCE( NumToCharLower_zh_CN )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_CN )
 IMPL_CREATEINSTANCE( NumToCharLower_zh_TW )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_TW )
+IMPL_CREATEINSTANCE( NumToCharHalfwidth )
 IMPL_CREATEINSTANCE( NumToCharFullwidth )
 IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
 IMPL_CREATEINSTANCE( NumToCharKanjiTraditional_ja_JP )
@@ -469,6 +470,7 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_CN),
     IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_TW),
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToCharHalfwidth),
     IMPL_TRANSLITERATION_ITEM (NumToCharFullwidth),
     IMPL_TRANSLITERATION_ITEM (NumToCharKanjiShort_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToCharKanjiTraditional_ja_JP),

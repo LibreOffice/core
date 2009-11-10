@@ -70,9 +70,9 @@
 #ifdef ENABLE_DBUS
 #include <dbus/dbus-glib.h>
 
-#define GSS_DBUS_SERVICE        "org.gnome.ScreenSaver"
-#define GSS_DBUS_PATH           "/org/gnome/ScreenSaver"
-#define GSS_DBUS_INTERFACE      "org.gnome.ScreenSaver"
+#define GSM_DBUS_SERVICE        "org.gnome.SessionManager"
+#define GSM_DBUS_PATH           "/org/gnome/SessionManager"
+#define GSM_DBUS_INTERFACE      "org.gnome.SessionManager"
 #endif
 
 // make compile on gtk older than 2.10
@@ -565,7 +565,7 @@ void GtkSalFrame::InitCommon()
     m_pIMHandler        = NULL;
     m_hBackgroundPixmap = None;
     m_nSavedScreenSaverTimeout = 0;
-    m_nGSSCookie = 0;
+    m_nGSMCookie = 0;
     m_nExtStyle         = 0;
     m_pRegion           = NULL;
     m_ePointerStyle     = 0xffff;
@@ -1123,7 +1123,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     USHORT nIndex;
 
     // Use high contrast icons where appropriate
-    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         nOffsets[0] = SV_ICON_LARGE_HC_START;
         nOffsets[1] = SV_ICON_SMALL_HC_START;
@@ -1506,7 +1506,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 
         if( isChild( false, true ) )
             gtk_widget_set_size_request( m_pWindow, nWidth, nHeight );
-        else
+        else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
             gtk_window_resize( GTK_WINDOW(m_pWindow), nWidth, nHeight );
         setMinMaxSize();
     }
@@ -1608,6 +1608,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH | SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT;
 
     if( (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
+        ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) &&
         (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
         (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
     {
@@ -1903,8 +1904,9 @@ void GtkSalFrame::setAutoLock( bool bLock )
 #ifdef ENABLE_DBUS
 /** cookie is returned as an unsigned integer */
 static guint
-dbus_inhibit_gss (const gchar *appname,
-                  const gchar *reason)
+dbus_inhibit_gsm (const gchar *appname,
+                  const gchar *reason,
+                  guint xid)
 {
         gboolean         res;
         guint            cookie;
@@ -1920,20 +1922,22 @@ dbus_inhibit_gss (const gchar *appname,
                 return -1;
         }
 
-        /* get the proxy with gnome-screensaver */
+        /* get the proxy with gnome-session-manager */
         proxy = dbus_g_proxy_new_for_name (session_connection,
-                                           GSS_DBUS_SERVICE,
-                                           GSS_DBUS_PATH,
-                                           GSS_DBUS_INTERFACE);
+                                           GSM_DBUS_SERVICE,
+                                           GSM_DBUS_PATH,
+                                           GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSS_DBUS_SERVICE);
+                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return -1;
         }
 
         res = dbus_g_proxy_call (proxy,
                                  "Inhibit", &error,
                                  G_TYPE_STRING, appname,
+                                 G_TYPE_UINT, xid,
                                  G_TYPE_STRING, reason,
+                                 G_TYPE_UINT, 8, //Inhibit the session being marked as idle
                                  G_TYPE_INVALID,
                                  G_TYPE_UINT, &cookie,
                                  G_TYPE_INVALID);
@@ -1956,15 +1960,14 @@ dbus_inhibit_gss (const gchar *appname,
 }
 
 static void
-dbus_uninhibit_gss (guint cookie)
+dbus_uninhibit_gsm (guint cookie)
 {
         gboolean         res;
         GError          *error = NULL;
         DBusGProxy      *proxy = NULL;
         DBusGConnection *session_connection = NULL;
 
-        /* cookies have to be positive as unsigned */
-        if (cookie < 0) {
+        if (cookie == guint(-1)) {
                 g_warning ("Invalid cookie");
                 return;
         }
@@ -1977,18 +1980,18 @@ dbus_uninhibit_gss (guint cookie)
                 return;
         }
 
-        /* get the proxy with gnome-screensaver */
+        /* get the proxy with gnome-session-manager */
         proxy = dbus_g_proxy_new_for_name (session_connection,
-                                           GSS_DBUS_SERVICE,
-                                           GSS_DBUS_PATH,
-                                           GSS_DBUS_INTERFACE);
+                                           GSM_DBUS_SERVICE,
+                                           GSM_DBUS_PATH,
+                                           GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSS_DBUS_SERVICE);
+                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return;
         }
 
         res = dbus_g_proxy_call (proxy,
-                                 "UnInhibit",
+                                 "Uninhibit",
                                  &error,
                                  G_TYPE_UINT, cookie,
                                  G_TYPE_INVALID,
@@ -1996,12 +1999,12 @@ dbus_uninhibit_gss (guint cookie)
 
         /* check the return value */
         if (! res) {
-                g_warning ("UnInhibit method failed");
+                g_warning ("Uninhibit method failed");
         }
 
         /* check the error value */
         if (error != NULL) {
-                g_warning ("Inhibit problem : %s", error->message);
+                g_warning ("Uninhibit problem : %s", error->message);
                 g_error_free (error);
                 cookie = -1;
         }
@@ -2029,7 +2032,8 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
                              bPreferBlanking, bAllowExposures );
         }
 #ifdef ENABLE_DBUS
-        m_nGSSCookie = dbus_inhibit_gss(g_get_application_name(), "presentation");
+        m_nGSMCookie = dbus_inhibit_gsm(g_get_application_name(), "presentation",
+                    GDK_WINDOW_XID(m_pWindow->window));
 #endif
     }
     else
@@ -2040,7 +2044,7 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
                              bAllowExposures );
         m_nSavedScreenSaverTimeout = 0;
 #ifdef ENABLE_DBUS
-        dbus_uninhibit_gss(m_nGSSCookie);
+        dbus_uninhibit_gsm(m_nGSMCookie);
 #endif
     }
 }

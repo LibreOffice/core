@@ -6782,17 +6782,21 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
     {
         BOOL  bHighContrastBlack = FALSE;
         BOOL  bHighContrastWhite = FALSE;
-        Color aCol;
-        if( IsBackground() )
-            aCol = GetBackground().GetColor();
-        else
-            // best guess is the face color here
-            // but it may be totally wrong. the background color
-            // was typically already reset
-            aCol = GetSettings().GetStyleSettings().GetFaceColor();
+        const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
+        if( rStyleSettings.GetHighContrastMode() )
+        {
+            Color aCol;
+            if( IsBackground() )
+                aCol = GetBackground().GetColor();
+            else
+                // best guess is the face color here
+                // but it may be totally wrong. the background color
+                // was typically already reset
+                aCol = rStyleSettings.GetFaceColor();
 
-        bHighContrastBlack = aCol.IsDark();
-        bHighContrastWhite = aCol.IsBright() && GetSettings().GetStyleSettings().GetHighContrastMode();
+            bHighContrastBlack = aCol.IsDark();
+            bHighContrastWhite = aCol.IsBright();
+        }
 
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
@@ -6800,8 +6804,6 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
             bRestoreFillColor = TRUE;
             aOldTextFillColor = GetTextFillColor();
         }
-        else
-            bRestoreFillColor = FALSE;
         if( bHighContrastBlack )
             SetTextColor( COL_GREEN );
         else if( bHighContrastWhite )
@@ -6816,7 +6818,7 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
             aRect.Move( 1, 1 );
             DrawText( aRect, rOrigStr, nStyle & ~TEXT_DRAW_DISABLE );
             */
-            SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
+            SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
         }
     }
 
@@ -7450,13 +7452,18 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         BOOL  bRestoreFillColor;
         BOOL  bHighContrastBlack = FALSE;
         BOOL  bHighContrastWhite = FALSE;
-        if( IsBackground() )
+        const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
+        if( rStyleSettings.GetHighContrastMode() )
         {
-            Wallpaper aWall = GetBackground();
-            Color aCol = aWall.GetColor();
-            bHighContrastBlack = aCol.IsDark();
-            bHighContrastWhite = aCol.IsBright() && GetSettings().GetStyleSettings().GetHighContrastMode();
+            if( IsBackground() )
+            {
+                Wallpaper aWall = GetBackground();
+                Color aCol = aWall.GetColor();
+                bHighContrastBlack = aCol.IsDark();
+                bHighContrastWhite = aCol.IsBright();
+            }
         }
+
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
         {
@@ -7471,7 +7478,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         else if( bHighContrastWhite )
             SetTextColor( COL_LIGHTGREEN );
         else
-            SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
+            SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
 
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
         if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
