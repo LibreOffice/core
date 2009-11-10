@@ -120,11 +120,6 @@ storeError OStorePageManager::initialize (
 
         // Save RootNode.
         eErrCode = base::saveObjectAt (m_aRoot, rnPageSize);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        // Flush for robustness.
-        (void) base::flush();
     }
 
     // Done.

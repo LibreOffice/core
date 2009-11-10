@@ -410,13 +410,8 @@ storeError OStoreBTreeRootObject::change (
         tmp.swap (m_xPage);
     }
 
-    // Save this as new root.
+    // Save this as new root and finish.
     eErrCode = rBIOS.saveObjectAt (*this, nRootAddr);
-
-    // Flush for robustness.
-    (void) rBIOS.flush();
-
-    // Done.
     (void) testInvariant("OStoreBTreeRootObject::change(): leave");
     return eErrCode;
 }
