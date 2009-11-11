@@ -32,7 +32,7 @@
 PRJ=..
 PRJNAME=reportbuilder
 TARGET=rpt
-EXTENSION_VERSION_BASE=1.2.0
+EXTENSION_VERSION_BASE=1.2.1
 
 .IF "$(CWS_WORK_STAMP)" == ""
     EXTENSION_VERSION=$(EXTENSION_VERSION_BASE)
@@ -100,15 +100,15 @@ COMPONENT_EXTJARFILES = \
 
 .IF "$(SYSTEM_JFREEREPORT)" != "YES"
 COMPONENT_EXTJARFILES += \
-    $(EXTENSIONDIR)$/flute-1.3.0.jar				            \
-    $(EXTENSIONDIR)$/libserializer-1.0.0.jar				    \
-    $(EXTENSIONDIR)$/libbase-1.0.0.jar                          \
-    $(EXTENSIONDIR)$/libfonts-1.0.0.jar							\
-    $(EXTENSIONDIR)$/libformula-0.2.0.jar						\
+    $(EXTENSIONDIR)$/flute-1.1.2.jar				            \
+    $(EXTENSIONDIR)$/libserializer-1.1.2.jar				    \
+    $(EXTENSIONDIR)$/libbase-1.1.2.jar                          \
+    $(EXTENSIONDIR)$/libfonts-1.1.2.jar							\
+    $(EXTENSIONDIR)$/libformula-1.1.2.jar						\
     $(EXTENSIONDIR)$/liblayout-0.2.9.jar						\
-    $(EXTENSIONDIR)$/libloader-1.0.0.jar						\
-    $(EXTENSIONDIR)$/librepository-1.0.0.jar					\
-    $(EXTENSIONDIR)$/libxml-1.0.0.jar							\
+    $(EXTENSIONDIR)$/libloader-1.1.2.jar						\
+    $(EXTENSIONDIR)$/librepository-1.1.2.jar					\
+    $(EXTENSIONDIR)$/libxml-1.1.2.jar							\
     $(EXTENSIONDIR)$/flow-engine-0.9.2.jar 	                    \
     $(EXTENSIONDIR)$/sac.jar
 .ENDIF
