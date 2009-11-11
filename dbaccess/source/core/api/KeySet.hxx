@@ -83,7 +83,7 @@ namespace dbaccess
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns,
+                            const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aColumnNames,
                             const ::rtl::OUString& _rsUpdateTableName,
                             SelectColumnsMetaData& _rColumnNames /* out */);
 

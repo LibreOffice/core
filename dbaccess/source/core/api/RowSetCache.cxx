@@ -168,6 +168,16 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     Reference< XIndexAccess> xUpdateTableKeys;
     ::rtl::OUString aUpdateTableName = _rUpdateTableName;
     Reference< XConnection> xConnection;
+    // first we need a connection
+    Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
+    if(xStmt.is())
+        xConnection = xStmt->getConnection();
+    else
+    {
+        Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
+        xConnection = xPrepStmt->getConnection();
+    }
+    OSL_ENSURE(xConnection.is(),"No connection!");
     if(_xAnalyzer.is())
     {
         try
@@ -215,16 +225,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 
                         if(xColumnsSupplier.is())
                         {
-                            // first we need a connection
-                            Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
-                            if(xStmt.is())
-                                xConnection = xStmt->getConnection();
-                            else
-                            {
-                                Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
-                                xConnection = xPrepStmt->getConnection();
-                            }
-                            OSL_ENSURE(xConnection.is(),"No connection!");
+
 
                             Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
                             Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
@@ -233,7 +234,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                                 Reference<XNameAccess> xSelColumns = xColSup->getColumns();
                                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                                 SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() ? true : false);
-                                ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
+                                ::dbaccess::getColumnPositions(xSelColumns,xColumns->getElementNames(),aUpdateTableName,aColumnNames);
                                 bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                             }
                         }
@@ -303,7 +304,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
             Reference<XNameAccess> xSelColumns  = xColSup->getColumns();
             Reference<XNameAccess> xColumns     = m_aUpdateTable->getColumns();
-            ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
+            ::dbaccess::getColumnPositions(xSelColumns,xColumns->getElementNames(),aUpdateTableName,aColumnNames);
 
             // check privileges
             m_nPrivileges = Privilege::SELECT;
