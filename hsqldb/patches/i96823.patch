@@ -92,24 +92,3 @@
  
          return "";
      }
---- misc/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java	2008-03-17 17:05:41.000000000 +0100
-+++ misc/build/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java	2009-01-21 13:09:24.493470142 +0100
-@@ -429,6 +429,7 @@
-             setProperty(hsqldb_log_size, 10);
-             setProperty(sql_enforce_strict_size, true);
-             setProperty(hsqldb_nio_data_file, false);
-+			setProperty(hsqldb_lock_file, true);
-         }
- 
-         // OOo end
---- misc/hsqldb/src/org/hsqldb/Library.java
-+++ misc/build/hsqldb/src/org/hsqldb/Library.java
-@@ -1957,7 +1957,7 @@
-         functionMap.put("bitand", bitand);
-         functionMap.put("bitlength", bitLength);
-         functionMap.put("bitor", bitor);
--        functionMap.put("bitxor", bitor);
-+        functionMap.put("bitxor", bitxor);
-         functionMap.put("character", character);
-         functionMap.put("concat", concat);
-         functionMap.put("cot", cot);
