@@ -44,7 +44,6 @@
 #include <boost/shared_ptr.hpp>
 #include <svx/svxdlg.hxx>
 #include <helpid.hrc>
-#include <svx/svxids.hrc>
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
 #include <cuires.hrc>

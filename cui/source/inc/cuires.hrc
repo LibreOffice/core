@@ -33,7 +33,6 @@
 // include ------------------------------------------------------------------
 
 #include <sfx2/sfx.hrc>
-#include <svx/svxids.hrc>
 #include <sfx2/dialogs.hrc>
 
 // Resource-Id's ------------------------------------------------------------

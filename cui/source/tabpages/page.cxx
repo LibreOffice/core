@@ -64,9 +64,8 @@
 #include <dialmgr.hxx>
 #include <sfx2/module.hxx>
 #include <svl/stritem.hxx>
-#include <svx/svxids.hrc> //CHINA001
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>  // for RID_SVXSTR_PAPERBIN...
+#include <svx/dialogs.hrc>  // for RID_SVXSTR_PAPERBIN..., RID_SVXPAGE_PAGE
 
 // #i4219#
 #include <svtools/optionsdrawinglayer.hxx>

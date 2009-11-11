@@ -52,7 +52,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/localresaccess.hxx>
-#include <svx/svxids.hrc> //CHINA001
 #include <svx/flagsdef.hxx> //CHINA001
 #include <svl/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001

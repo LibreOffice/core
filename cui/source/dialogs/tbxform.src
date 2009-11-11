@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svx/svxids.hrc>
 #include "fmsearch.hrc"
 
 ModalDialog RID_SVX_DLG_INPUTRECORDNO

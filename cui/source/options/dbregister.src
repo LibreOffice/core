@@ -30,7 +30,6 @@
 
 #include "dbregister.hrc"
 #include <cuires.hrc>
-#include <svx/svxids.hrc>
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
 

@@ -44,7 +44,6 @@
 #include <svx/xoutbmp.hxx>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
-#include <svx/svxids.hrc>
 #include <cuiimapdlg.hrc>
 #include <cuiimapwnd.hxx>
 #include <svx/svdpage.hxx>

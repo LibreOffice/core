@@ -49,7 +49,7 @@
 #include <svx/viewlayoutitem.hxx>
 #include <dialmgr.hxx>
 #include <svx/zoom_def.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/dialogs.hrc>  // RID_SVXDLG_ZOOM
 #include <layout/layout-pre.hxx>
 
 #if ENABLE_LAYOUT

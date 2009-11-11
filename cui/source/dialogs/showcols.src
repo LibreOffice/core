@@ -28,7 +28,6 @@
  *
  ************************************************************************/
 
-#include <svx/svxids.hrc>
 #include "fmsearch.hrc"
 
 ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS

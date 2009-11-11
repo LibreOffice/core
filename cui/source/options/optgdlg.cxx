@@ -70,7 +70,6 @@
 #include "cuitabarea.hxx"
 #include <cuires.hrc>
 #include <svx/unolingu.hxx>
-#include <svx/svxids.hrc>
 #include <svx/langitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -40,6 +40,7 @@
 #include "hldoctp.hxx"
 #include "hldocntp.hxx"
 #include "hyperdlg.hrc"
+#include <svx/svxids.hrc> // SID_READONLY_MODE
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;

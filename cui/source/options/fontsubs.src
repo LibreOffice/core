@@ -30,7 +30,6 @@
 
  // include ------------------------------------------------------------------
 
-#include <svx/svxids.hrc>
 #include "fontsubs.hrc"
 #include "helpid.hrc"
 

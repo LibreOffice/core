@@ -42,7 +42,8 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>   // SID_ATTR_...
+#include <svx/dialogs.hrc>  // RID_SVXDLG_POSTIT
 
 #define _SVX_POSTDLG_CXX
 

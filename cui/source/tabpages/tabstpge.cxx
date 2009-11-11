@@ -52,7 +52,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx> //CHINA001
-#include <svx/svxids.hrc> //add CHINA001
 #include <svl/intitem.hxx> //add CHINA001
 
 // class TabWin_Impl -----------------------------------------------------

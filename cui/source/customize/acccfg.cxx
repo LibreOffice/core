@@ -48,6 +48,8 @@
 #include "cuires.hrc"
 #include "acccfg.hrc"
 
+#include <svx/svxids.hrc> // SID_CHARMAP, SID_ATTR_SPECIALCHAR
+
 //-----------------------------------------------
 // include interface declarations
 #include <com/sun/star/frame/XFramesSupplier.hpp>

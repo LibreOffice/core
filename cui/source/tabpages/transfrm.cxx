@@ -41,7 +41,6 @@
 #include <svx/svdotext.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/svxids.hrc>
 #include <cuires.hrc>
 #include "transfrm.hrc"
 #include <svx/sizeitem.hxx>

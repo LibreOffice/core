@@ -46,6 +46,7 @@
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/strarray.hxx>
+#include <svx/svxids.hrc> // SID_FIELD_GRABFOCUS
 
 #define TRIM(s) s.EraseLeadingChars().EraseTrailingChars()
 

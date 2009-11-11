@@ -31,19 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-#ifdef SVX_DLLIMPLEMENTATION
-#undef SVX_DLLIMPLEMENTATION
-#endif
 #include "doclinkdialog.hxx"
-#ifndef _SVX_DOCLINKDIALOG_HRC_
 #include "doclinkdialog.hrc"
-#endif
 #include <cuires.hrc>
-#include <svx/svxids.hrc>
 #include <tools/debug.hxx>
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svl/filenotation.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
 #include <dialmgr.hxx>

@@ -57,7 +57,6 @@
 #include "svx/dlgutil.hxx"
 #include <sfx2/request.hxx> //add CHINA001
 #include <svx/ofaitem.hxx> //add CHINA001
-#include <svx/svxids.hrc> //add CHINA001
 #include <svx/writingmodeitem.hxx>
 
 static USHORT pRanges[] =

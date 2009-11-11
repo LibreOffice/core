@@ -28,10 +28,9 @@
  *
  ************************************************************************/
  // include ---------------------------------------------------------------
-#include <svx/svxids.hrc>
 #include <cuires.hrc>
 #include "zoom.hrc"
-#include <svx/dialogs.hrc>
+#include <svx/dialogs.hrc> // for RID_SVXDLG_ZOOM
 
  // RID_SVXDLG_ZOOM -------------------------------------------------------
 ModalDialog RID_SVXDLG_ZOOM

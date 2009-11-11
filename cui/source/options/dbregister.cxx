@@ -37,7 +37,6 @@
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
 #include <cuires.hrc>
-#include <svx/svxids.hrc>
 #include "helpid.hrc"
 #include <svtools/editbrowsebox.hxx>
 #include <cuires.hrc>

@@ -42,8 +42,6 @@
 #include <comphelper/processfactory.hxx>
 #include "sdbcdriverenum.hxx"
 
-#include <svx/svxids.hrc>
-
 //........................................................................
 namespace offapp
 {

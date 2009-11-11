@@ -47,7 +47,7 @@
 #include "paragrph.hxx"
 #include <dialmgr.hxx>
 #include "backgrnd.hxx"
-#include <svx/dialogs.hrc>
+#include <svx/dialogs.hrc> // RID_SVXPAGE_...
 
 // class SvxSearchFormatDialog -------------------------------------------
 

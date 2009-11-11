@@ -44,8 +44,7 @@
 #include <svx/grfcrop.hxx>
 #include <grfpage.hrc>
 #include <cuires.hrc>
-#include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/dialogs.hrc> // for RID_SVXPAGE_GRFCROP
 
 #define CM_1_TO_TWIP        567
 

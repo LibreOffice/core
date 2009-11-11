@@ -70,6 +70,7 @@
 #include "helpid.hrc"
 #include <svx/ofaitem.hxx>
 #include <svx/htmlmode.hxx>
+#include <svx/svxids.hrc> // slot ids, mostly for changetracking
 
 // for security TP
 #include <comphelper/processfactory.hxx>

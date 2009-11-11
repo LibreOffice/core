@@ -55,7 +55,6 @@
 #include <dialmgr.hxx>
 #include "svx/htmlmode.hxx"
 #include <vcl/msgbox.hxx>
-#include <svx/svxids.hrc> //CHINA001
 #include "svx/flagsdef.hxx" //CHINA001
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx> //CHINA001

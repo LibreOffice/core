@@ -35,6 +35,7 @@
 #include "optchart.hxx"
 #include "optchart.hrc"
 #include <dialmgr.hxx>
+#include <svx/svxids.hrc> // for SID_SCH_EDITOPTIONS
 
 // ====================
 // class ChartColorLB

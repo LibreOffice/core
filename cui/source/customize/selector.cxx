@@ -36,7 +36,8 @@
 #include "selector.hxx"
 #include <dialmgr.hxx>
 #include "selector.hrc"
-#include <svx/fmresids.hrc>
+#include <svx/fmresids.hrc> // for RID_SVXIMG_...
+#include <svx/dialmgr.hxx>  // for RID_SVXIMG_...
 #include <cuires.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
@@ -266,7 +267,7 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
 
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
 
-    ImageList aNavigatorImages( CUI_RES( RID_SVXIMGLIST_FMEXPL ) );
+    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
 
     SetNodeBitmaps(
         aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),

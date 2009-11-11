@@ -33,7 +33,6 @@
 #include "dbregisterednamesconfig.hxx"
 #include <svl/itemset.hxx>
 #include <tools/diagnose_ex.h>
-#include <svx/svxids.hrc>
 #include <unotools/confignode.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
