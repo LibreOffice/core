@@ -118,8 +118,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP$(TNR)RES) \
     $(APP$(TNR)IMP_ORD) \
     $(APP$(TNR)ICON) $(APP$(TNR)DEPN) $(USE_APP$(TNR)DEF)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
@@ -133,7 +132,9 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd` \
         >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
@@ -143,7 +144,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP$(TNR)RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
-    @echo "Making: $@.app"
+    @echo "Making:   " $(@:f).app
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
@@ -153,9 +154,13 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP$(TNR)OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-    cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .IF "$(VERBOSE)" == "TRUE"
+    @cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .IF "$(VERBOSE)" == "TRUE"
     @ls -l $@
+  .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
@@ -169,7 +174,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP$(TNR)LINKRES:b).rc
     @-echo $(EMQ)#include  $(EMQ)"$(APP$(TNR)VERINFO)$(EMQ)" >> $(MISC)/$(APP$(TNR)LINKRES:b).rc
 .ENDIF		# "$(APP$(TNR)VERINFO)" != ""
-    $(RC) -DWIN32 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP$(TNR)LINKRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
@@ -184,12 +189,15 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) \
         -Wl,--start-group $(APP$(TNR)STDLIBS) -Wl,--end-group $(APP$(TNR)STDLIB) \
         $(STDLIB$(TNR)) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+  .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+  .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
-    $(APP$(TNR)LINKER) @$(mktmp \
+    $(COMMAND_ECHO)$(APP$(TNR)LINKER) @$(mktmp \
         $(APP$(TNR)LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
         $(APP$(TNR)STACKN) \
@@ -205,17 +213,17 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(MT) $(MTFLAGS) -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
 .ENDIF # "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(COMMAND_ECHO)$(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
-        -$(RM) $(MISC)\$(APP$(TNR)TARGET).lnk
-        -$(RM) $(MISC)\$(APP$(TNR)TARGET).lst
-        -$(RM) $(MISC)\linkobj.lst
+        $(COMMAND_ECHO)-$(RM) $(MISC)\$(APP$(TNR)TARGET).lnk
+        $(COMMAND_ECHO)-$(RM) $(MISC)\$(APP$(TNR)TARGET).lst
+        $(COMMAND_ECHO)-$(RM) $(MISC)\linkobj.lst
         for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP$(TNR)TARGET).lst
         $(APP$(TNR)LINKFLAGS) \
@@ -229,16 +237,16 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
         $(APP$(TNR)STDLIB) $(STDLIB$(TNR)))
-        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
-        $(IFEXIST) $(MISC)/$(APP$(TNR)TARGET).lst $(THEN) type $(MISC)/$(APP$(TNR)TARGET).lst  >> $(MISC)/$(APP$(TNR)TARGET).lnk $(FI)
-        $(APP$(TNR)LINKER) @$(MISC)\$(APP$(TNR)TARGET).lnk
+        $(COMMAND_ECHO)$(SED)$(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
+        $(COMMAND_ECHO)$(SED)$(IFEXIST) $(MISC)/$(APP$(TNR)TARGET).lst $(THEN) type $(MISC)/$(APP$(TNR)TARGET).lst  >> $(MISC)/$(APP$(TNR)TARGET).lnk $(FI)
+        $(COMMAND_ECHO)$(SED)$(APP$(TNR)LINKER) @$(MISC)\$(APP$(TNR)TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP$(TNR)TARGET)" == "loader"
-    $(PERL) loader.pl $@
-    $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-    $(RM) $@
-    $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+    $(COMMAND_ECHO)$(PERL) loader.pl $@
+    $(COMMAND_ECHO)$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+    $(COMMAND_ECHO)$(RM) $@
+    $(COMMAND_ECHO)$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
 .ENDIF			# "$(GUI)" == "WNT"
@@ -254,13 +262,14 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP$(TNR)LINKRES:b).rc
     @-+echo $(EMQ)#include  $(EMQ)"$(APP$(TNR)VERINFO)$(EMQ)" >> $(MISC)/$(APP$(TNR)LINKRES:b).rc
 .ENDIF		# "$(APP$(TNR)VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP$(TNR)LINKRES:b).rc
+    $(COMMAND_ECHO)$(RC) -r -DOS2 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
     @echo NAME $(APP$(TNR)TARGET) WINDOWAPI > $(MISC)/$(APP$(TNR)TARGET).def
 .ENDIF
 
+  .IF "$(VERBOSE)" == "TRUE"
     @+echo	$(APP$(TNR)LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
         $(APP$(TNR)STACKN) \
@@ -275,7 +284,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS:^"-l") \
         $(APP$(TNR)STDLIB:^"-l") $(STDLIB$(TNR):^"-l") 
-    $(APP$(TNR)LINKER) -v \
+  .ENDIF
+    $(COMMAND_ECHO)$(APP$(TNR)LINKER) -v \
         $(APP$(TNR)LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
         $(APP$(TNR)STACKN) \
@@ -293,10 +303,10 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 
 
 .IF "$(APP$(TNR)TARGET)" == "loader"
-    +$(PERL) loader.pl $@
-    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-    +$(RM) $@
-    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+    $(COMMAND_ECHO)+$(PERL) loader.pl $@
+    $(COMMAND_ECHO)+$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+    $(COMMAND_ECHO)+$(RM) $@
+    $(COMMAND_ECHO)+$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
 .ENDIF			# "$(GUI)" == "OS2"
