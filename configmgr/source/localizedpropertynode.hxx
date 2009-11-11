@@ -47,13 +47,13 @@ namespace configmgr {
 
 class LocalizedPropertyNode: public Node {
 public:
-    LocalizedPropertyNode(int layer, Type type, bool nillable);
+    LocalizedPropertyNode(int layer, Type staticType, bool nillable);
 
     virtual rtl::Reference< Node > clone() const;
 
     virtual NodeMap & getMembers();
 
-    Type getType() const;
+    Type getStaticType() const;
 
     bool isNillable() const;
 
@@ -66,7 +66,9 @@ private:
 
     virtual void clear();
 
-    Type type_;
+    Type staticType_;
+        // as specified in the component-schema (TYPE_ANY, ...,
+        // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
     NodeMap members_;
 };

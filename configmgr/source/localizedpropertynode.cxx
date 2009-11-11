@@ -49,8 +49,8 @@ namespace css = com::sun::star;
 }
 
 LocalizedPropertyNode::LocalizedPropertyNode(
-    int layer, Type type, bool nillable):
-    Node(layer), type_(type), nillable_(nillable)
+    int layer, Type staticType, bool nillable):
+    Node(layer), staticType_(staticType), nillable_(nillable)
 {}
 
 rtl::Reference< Node > LocalizedPropertyNode::clone() const {
@@ -61,8 +61,8 @@ NodeMap & LocalizedPropertyNode::getMembers() {
     return members_;
 }
 
-Type LocalizedPropertyNode::getType() const {
-    return type_;
+Type LocalizedPropertyNode::getStaticType() const {
+    return staticType_;
 }
 
 bool LocalizedPropertyNode::isNillable() const {
@@ -71,7 +71,7 @@ bool LocalizedPropertyNode::isNillable() const {
 
 LocalizedPropertyNode::LocalizedPropertyNode(
     LocalizedPropertyNode const & other):
-    Node(other), type_(other.type_), nillable_(other.nillable_)
+    Node(other), staticType_(other.staticType_), nillable_(other.nillable_)
 {
     cloneNodeMap(other.members_, &members_);
 }

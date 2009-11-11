@@ -291,9 +291,6 @@ template< typename T > void writeItemListValue(
 
 void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
     switch (type) {
-    case TYPE_NIL:
-        writeData(handle, RTL_CONSTASCII_STRINGPARAM(" xsi:nil=\"true\"/>"));
-        break;
     case TYPE_BOOLEAN:
         writeSingleValue< sal_Bool >(handle, value);
         break;
@@ -336,7 +333,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
     case TYPE_HEXBINARY_LIST:
         writeItemListValue< css::uno::Sequence< sal_Int8 > >(handle, value);
         break;
-    default: // TYPE_ERROR, TYPE_ANY
+    default: // TYPE_ERROR, TYPE_NIL, TYPE_ANY
         OSL_ASSERT(false); // this cannot happen
     }
 }
@@ -369,10 +366,12 @@ void writeNode(
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("<prop oor:name=\""));
             writeAttributeValue(handle, name);
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\""));
-            Type type = prop->getType();
+            Type type = prop->getStaticType();
+            Type dynType = getDynamicType(prop->getValue(components));
+            OSL_ASSERT(dynType != TYPE_ERROR);
             if (type == TYPE_ANY) {
-                type = mapType(prop->getValue(components));
-                if (type != TYPE_ERROR) { //TODO
+                type = dynType;
+                if (type != TYPE_NIL) {
                     writeData(
                         handle, RTL_CONSTASCII_STRINGPARAM(" oor:type=\""));
                     writeData(
@@ -381,7 +380,12 @@ void writeNode(
                 }
             }
             writeData(handle, "><value");
-            writeValue(handle, type, prop->getValue(components));
+            if (dynType == TYPE_NIL) {
+                writeData(
+                    handle, RTL_CONSTASCII_STRINGPARAM(" xsi:nil=\"true\"/>"));
+            } else {
+                writeValue(handle, type, prop->getValue(components));
+            }
             writeData(handle, "</prop>");
         }
         break;
@@ -405,12 +409,14 @@ void writeNode(
                 writeData(handle, RTL_CONSTASCII_STRINGPARAM("\""));
             }
             Type type = dynamic_cast< LocalizedPropertyNode * >(parent.get())->
-                getType();
+                getStaticType();
             css::uno::Any value(
                 dynamic_cast< LocalizedValueNode * >(node.get())->getValue());
+            Type dynType = getDynamicType(value);
+            OSL_ASSERT(dynType != TYPE_ERROR);
             if (type == TYPE_ANY) {
-                type = mapType(value);
-                if (type != TYPE_ERROR) { // TODO
+                type = dynType;
+                if (type != TYPE_NIL) {
                     writeData(
                         handle, RTL_CONSTASCII_STRINGPARAM(" oor:type=\""));
                     writeData(
@@ -418,7 +424,12 @@ void writeNode(
                     writeData(handle, RTL_CONSTASCII_STRINGPARAM("\""));
                 }
             }
-            writeValue(handle, type, value);
+            if (dynType == TYPE_NIL) {
+                writeData(
+                    handle, RTL_CONSTASCII_STRINGPARAM(" xsi:nil=\"true\"/>"));
+            } else {
+                writeValue(handle, type, value);
+            }
         }
         break;
     case Node::KIND_GROUP:

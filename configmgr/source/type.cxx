@@ -84,11 +84,7 @@ Type elementType(Type type) {
 
 css::uno::Type mapType(Type type) {
     switch (type) {
-    default: // TYPE_ERROR //TODO: can happen?
-        return cppu::UnoType< cppu::UnoVoidType >::get();
-    case TYPE_NIL: //TODO: can happen?
-        return cppu::UnoType< cppu::UnoVoidType >::get();
-    case TYPE_ANY: //TODO: can happen?
+    case TYPE_ANY:
         return cppu::UnoType< css::uno::Any >::get();
     case TYPE_BOOLEAN:
         return cppu::UnoType< sal_Bool >::get();
@@ -119,11 +115,18 @@ css::uno::Type mapType(Type type) {
     case TYPE_HEXBINARY_LIST:
         return cppu::UnoType<
             css::uno::Sequence< css::uno::Sequence< sal_Int8 > > >::get();
+    default:
+        OSL_ASSERT(false);
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            css::uno::Reference< css::uno::XInterface >());
     }
 }
 
-Type mapType(css::uno::Any const & value) {
+Type getDynamicType(css::uno::Any const & value) {
     switch (value.getValueType().getTypeClass()) {
+    case css::uno::TypeClass_VOID:
+        return TYPE_NIL;
     case css::uno::TypeClass_BOOLEAN:
         return TYPE_BOOLEAN;
     case css::uno::TypeClass_BYTE:

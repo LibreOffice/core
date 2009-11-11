@@ -51,7 +51,7 @@ Type elementType(Type type);
 
 com::sun::star::uno::Type mapType(Type type);
 
-Type mapType(com::sun::star::uno::Any const & value);
+Type getDynamicType(com::sun::star::uno::Any const & value);
 
 }
 

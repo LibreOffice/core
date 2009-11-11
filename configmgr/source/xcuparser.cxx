@@ -414,6 +414,19 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
         {
             nil = xmldata::parseBoolean(reader.getAttributeValue(true));
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+        {
+            Type type = xmldata::parseType(
+                reader, reader.getAttributeValue(true));
+            if (valueParser_.type_ != TYPE_ANY && type != valueParser_.type_) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("invalid value type in ")) +
+                     reader.getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            valueParser_.type_ = type;
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
         {
             Span s(reader.getAttributeValue(false));
@@ -489,6 +502,19 @@ void XcuParser::handleLocpropValue(
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("nil")))
         {
             nil = xmldata::parseBoolean(reader.getAttributeValue(true));
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+        {
+            Type type = xmldata::parseType(
+                reader, reader.getAttributeValue(true));
+            if (valueParser_.type_ != TYPE_ANY && type != valueParser_.type_) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("invalid value type in ")) +
+                     reader.getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            valueParser_.type_ = type;
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
         {
@@ -605,14 +631,6 @@ void XcuParser::handleGroupProp(XmlReader & reader, GroupNode * group) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    if (type == TYPE_ANY) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "invalid prop type attribute in ")) +
-             reader.getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
-    }
     NodeMap::iterator i(group->getMembers().find(name));
     if (i == group->getMembers().end()) {
         handleUnknownGroupProp(reader, group, name, type, op, finalized);
@@ -701,8 +719,8 @@ void XcuParser::handlePlainGroupProp(
         finalized ? valueParser_.getLayer() : Data::NO_LAYER,
         property->getFinalized());
     property->setFinalized(finalizedLayer);
-    if (type != TYPE_ERROR && property->getType() != TYPE_ANY &&
-        type != property->getType())
+    if (type != TYPE_ERROR && property->getStaticType() != TYPE_ANY &&
+        type != property->getStaticType())
     {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -711,7 +729,7 @@ void XcuParser::handlePlainGroupProp(
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    valueParser_.type_ = type == TYPE_ERROR ? property->getType() : type;
+    valueParser_.type_ = type == TYPE_ERROR ? property->getStaticType() : type;
     switch (operation) {
     case OPERATION_MODIFY:
     case OPERATION_REPLACE:
@@ -759,8 +777,8 @@ void XcuParser::handleLocalizedGroupProp(
         finalized ? valueParser_.getLayer() : Data::NO_LAYER,
         property->getFinalized());
     property->setFinalized(finalizedLayer);
-    if (type != TYPE_ERROR && property->getType() != TYPE_ANY &&
-        type != property->getType())
+    if (type != TYPE_ERROR && property->getStaticType() != TYPE_ANY &&
+        type != property->getStaticType())
     {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -769,7 +787,7 @@ void XcuParser::handleLocalizedGroupProp(
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    valueParser_.type_ = type == TYPE_ERROR ? property->getType() : type;
+    valueParser_.type_ = type == TYPE_ERROR ? property->getStaticType() : type;
     switch (operation) {
     case OPERATION_MODIFY:
     case OPERATION_FUSE:
@@ -786,7 +804,7 @@ void XcuParser::handleLocalizedGroupProp(
         {
             rtl::Reference< Node > replacement(
                 new LocalizedPropertyNode(
-                    valueParser_.getLayer(), property->getType(),
+                    valueParser_.getLayer(), property->getStaticType(),
                     property->isNillable()));
             replacement->setFinalized(property->getFinalized());
             state_.push(

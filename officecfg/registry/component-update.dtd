@@ -55,9 +55,10 @@
     oor:op (modify | replace | fuse | remove) #IMPLIED
     oor:finalized (true | false) #IMPLIED
     oor:type
-        (xs:boolean | xs:short | xs:int | xs:long | xs:double | xs:string |
-         xs:hexBinary | oor:boolean-list | oor:short-list | oor:int-list |
-         oor:long-list | oor:double-list | oor:string-list | oor:hexBinary-list)
+        (oor:any | xs:boolean | xs:short | xs:int | xs:long | xs:double |
+         xs:string | xs:hexBinary | oor:boolean-list | oor:short-list |
+         oor:int-list | oor:long-list | oor:double-list | oor:string-list |
+         oor:hexBinary-list)
         #IMPLIED
     install:module CDATA #IMPLIED>
 
@@ -73,6 +74,11 @@
     xml:lang CDATA #IMPLIED
     oor:op (fuse | remove) #IMPLIED
     xsi:nil (true | false) #IMPLIED
+    oor:type
+        (xs:boolean | xs:short | xs:int | xs:long | xs:double | xs:string |
+         xs:hexBinary | oor:boolean-list | oor:short-list | oor:int-list |
+         oor:long-list | oor:double-list | oor:string-list | oor:hexBinary-list)
+        #IMPLIED
     oor:separator CDATA #IMPLIED
     oor:external CDATA #IMPLIED
     install:module CDATA #IMPLIED>
@@ -82,6 +88,8 @@
              properties
          xsi:nil  defaults to "false"; "true" must only be used for nillable
              properties
+         oor:type  is relevant for localized properties of type oor:any with
+             different value types for different locales
          oor:separator  must only be used if the property type is a list type
              and the element content is #PCDATA or (#PCDATA | unicode)* (and not
              EMPTY or it*)

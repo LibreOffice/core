@@ -234,7 +234,7 @@ void ChildAccess::setProperty(
     case Node::KIND_PROPERTY:
         {
             PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get());
-            type = prop->getType();
+            type = prop->getStaticType();
             nillable = prop->isNillable();
         }
         break;
@@ -257,7 +257,7 @@ void ChildAccess::setProperty(
         {
             LocalizedPropertyNode * locprop =
                 dynamic_cast< LocalizedPropertyNode * >(getParentNode().get());
-            type = locprop->getType();
+            type = locprop->getStaticType();
             nillable = locprop->isNillable();
         }
         break;

@@ -361,7 +361,7 @@ void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
         ok = false;
         break;
     case TYPE_ANY:
-        switch (mapType(value)) {
+        switch (getDynamicType(value)) {
         case TYPE_ANY:
             OSL_ASSERT(false);
             // fall through (cannot happen)
@@ -396,7 +396,7 @@ void Access::insertLocalizedValueChild(
     OSL_ASSERT(localModifications != 0);
     LocalizedPropertyNode * locprop = dynamic_cast< LocalizedPropertyNode * >(
         getNode().get());
-    checkValue(value, locprop->getType(), locprop->isNillable());
+    checkValue(value, locprop->getStaticType(), locprop->isNillable());
     rtl::Reference< ChildAccess > child(
         new ChildAccess(
             components_, getRootAccess(), this, name,
@@ -1056,7 +1056,7 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
     switch (p->kind()) {
     case Node::KIND_LOCALIZED_PROPERTY:
         return mapType(
-            dynamic_cast< LocalizedPropertyNode * >(p.get())->getType());
+            dynamic_cast< LocalizedPropertyNode * >(p.get())->getStaticType());
     case Node::KIND_GROUP:
         //TODO: Should a specific type be returned for a non-extensible group
         // with homogeneous members or for an extensible group that currently
@@ -2041,7 +2041,7 @@ css::beans::Property Access::asProperty() {
     case Node::KIND_PROPERTY:
         {
             PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get());
-            type = mapType(prop->getType());
+            type = mapType(prop->getStaticType());
             nillable = prop->isNillable();
             removable = prop->isExtension();
         }
@@ -2055,7 +2055,7 @@ css::beans::Property Access::asProperty() {
                     //TODO: correct?
                 removable = false;
             } else {
-                type = mapType(locprop->getType());
+                type = mapType(locprop->getStaticType());
                 removable = false; //TODO ???
             }
             nillable = locprop->isNillable();
@@ -2065,7 +2065,7 @@ css::beans::Property Access::asProperty() {
         {
             LocalizedPropertyNode * locprop =
                 dynamic_cast< LocalizedPropertyNode * >(getParentNode().get());
-            type = mapType(locprop->getType());
+            type = mapType(locprop->getStaticType());
             nillable = locprop->isNillable();
             removable = false; //TODO ???
         }

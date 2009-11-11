@@ -47,12 +47,12 @@ class Components;
 class PropertyNode: public Node {
 public:
     PropertyNode(
-        int layer, Type type, bool nillable,
+        int layer, Type staticType, bool nillable,
         com::sun::star::uno::Any const & value, bool extension);
 
     virtual rtl::Reference< Node > clone() const;
 
-    Type getType() const;
+    Type getStaticType() const;
 
     bool isNillable() const;
 
@@ -71,7 +71,9 @@ private:
 
     virtual Kind kind() const;
 
-    Type type_;
+    Type staticType_;
+        // as specified in the component-schema (TYPE_ANY, ...,
+        // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
     com::sun::star::uno::Any value_;
     rtl::OUString externalDescriptor_;
