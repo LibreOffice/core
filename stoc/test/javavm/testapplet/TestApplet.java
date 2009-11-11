@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import com.sun.star.lib.sandbox.*;
 /*
  * TestApplet.java
  *
