@@ -1601,7 +1601,6 @@ void OSQLParseTreeIterator::impl_traverse( sal_uInt32 _nIncludeMask )
     case SQL_STATEMENT_INSERT:
         break;
     default:
-        OSL_ENSURE( false, "OSQLParseTreeIterator::traverseAll: not yet implemented for this statement type!" );
         break;
     }
 }

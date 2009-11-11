@@ -54,6 +54,7 @@ namespace connectivity
         java_sql_Date( const ::com::sun::star::util::Date& _rOut );
 
         operator ::com::sun::star::util::Date();
+        static jclass st_getMyClass();
     };
 
 
@@ -73,6 +74,7 @@ namespace connectivity
         java_sql_Time( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
         java_sql_Time( const ::com::sun::star::util::Time& _rOut );
         operator ::com::sun::star::util::Time();
+        static jclass st_getMyClass();
     };
 
     //**************************************************************
@@ -93,6 +95,7 @@ namespace connectivity
 
         sal_Int32 getNanos();
         void  setNanos(sal_Int32 n);
+        static jclass st_getMyClass();
     };
 }
 #endif // _CONNECTIVITY_JAVA_SQL_TIMESTAMP_HXX_

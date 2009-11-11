@@ -161,6 +161,7 @@ namespace connectivity
             double          getDate()       const;
             CY              getCurrency()   const;
             SAFEARRAY*      getUI1SAFEARRAYPtr() const;
+            ::com::sun::star::uno::Any makeAny() const;
 
             static VARIANT_BOOL VariantBool(sal_Bool bEinBoolean);
 

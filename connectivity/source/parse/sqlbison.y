@@ -2040,7 +2040,8 @@ join_spec:
 	  | named_columns_join
 	  ;
 join_type:
-		SQL_TOKEN_INNER
+		/* empty */ 	{$$ = SQL_NEW_RULE;}
+	  | SQL_TOKEN_INNER
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);

@@ -474,15 +474,17 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setClob", *this );
+    if ( x.is() )
+        setStream(parameterIndex, x->getCharacterStream(), (SQLLEN)x->length(), DataType::LONGVARCHAR);
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBlob", *this );
+    if ( x.is() )
+        setStream(parameterIndex, x->getBinaryStream(), (SQLLEN)x->length(), DataType::LONGVARCHAR);
 }
 // -------------------------------------------------------------------------
 
@@ -497,7 +499,12 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Re
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setRef", *this );
 }
 // -------------------------------------------------------------------------
-
+void OPreparedStatement::setDecimal( sal_Int32 parameterIndex, const ::rtl::OUString& x )
+{
+    ::rtl::OString aString(::rtl::OUStringToOString(x,getOwnConnection()->getTextEncoding()));
+    setParameter(parameterIndex,DataType::DECIMAL,aString.getLength(),(void*)&x);
+}
+// -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -522,6 +529,12 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
                 setNull(parameterIndex,sqlType);
             break;
         case DataType::DECIMAL:
+            {
+                ORowSetValue aValue;
+                aValue.fill(x);
+                setDecimal(parameterIndex,aValue);
+            }
+            break;
         case DataType::NUMERIC:
             {
                 ORowSetValue aValue;
@@ -569,13 +582,13 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    setStream (parameterIndex, x, length, DataType::LONGVARCHAR);
+    setStream(parameterIndex, x, length, DataType::LONGVARCHAR);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    setStream (parameterIndex, x, length, DataType::LONGVARBINARY);
+    setStream(parameterIndex, x, length, DataType::LONGVARBINARY);
 }
 // -------------------------------------------------------------------------
 
@@ -834,10 +847,10 @@ sal_Int32 OPreparedStatement::getPrecision ( sal_Int32 sqlType)
 // Sets an input stream as a parameter, using the given SQL type
 //--------------------------------------------------------------------
 
-void OPreparedStatement::setStream (
+void OPreparedStatement::setStream(
                                     sal_Int32 ParameterIndex,
                                     const Reference< XInputStream>& x,
-                                    sal_Int32 length,
+                                    SQLLEN length,
                                     sal_Int32 SQLtype)
                                     throw(SQLException)
 {

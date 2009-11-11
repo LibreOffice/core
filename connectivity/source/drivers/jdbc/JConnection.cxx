@@ -553,10 +553,9 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         // Parameter konvertieren
-        jstring str = convertwchar_tToJavaString(t.pEnv,sql);
+        jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,sql));
 
-        jobject out = t.pEnv->CallObjectMethod( object, mID, str );
-        t.pEnv->DeleteLocalRef(str);
+        jobject out = t.pEnv->CallObjectMethod( object, mID, str.get() );
         aStr = JavaString2String(t.pEnv, (jstring)out );
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
@@ -810,7 +809,7 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
         static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         static const char * cMethodName = "connect";
         // Java-Call absetzen
-        jmethodID mID = NULL;
+        static jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
         if ( mID )
