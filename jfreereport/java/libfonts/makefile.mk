@@ -33,7 +33,7 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=libfonts
-VERSION=-1.0.0
+VERSION=1.1.2
 
 # --- Settings -----------------------------------------------------
 
@@ -43,17 +43,18 @@ VERSION=-1.0.0
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
-TARFILE_NAME=$(TARGET)
-TARFILE_ROOTDIR=$(TARGET)
-PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
-CONVERTFILES=build.xml
+TARFILE_NAME=$(TARGET)-$(VERSION)
+#TARFILE_ROOTDIR=$(TARGET)
+TARFILE_IS_FLAT=true
+# PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
+# CONVERTFILES=build.xml
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(VERSION)" -f $(ANT_BUILDFILE) jar
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
@@ -66,9 +67,9 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
-$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(VERSION).jar 
+$(CLASSDIR)$/$(TARGET)-$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(VERSION).jar $(CLASSDIR)$/$(TARGET)-$(VERSION).jar
 
 .ENDIF
 .ENDIF

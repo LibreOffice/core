@@ -33,7 +33,7 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=flow-engine
-VERSION=-0.9.2
+VERSION=0.9.2
 
 # --- Settings -----------------------------------------------------
 
@@ -67,8 +67,8 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 .IF "$(L10N_framework)"==""
-ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
-$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(VERSION).jar 
+$(CLASSDIR)$/$(TARGET)-$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)-$(VERSION).jar
 .ENDIF
 .ENDIF

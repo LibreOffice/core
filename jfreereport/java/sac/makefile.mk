@@ -61,9 +61,9 @@ ADDITIONAL_FILES=build.xml
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) all
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) all
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) all
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(VERSION)" -f $(ANT_BUILDFILE) all
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
