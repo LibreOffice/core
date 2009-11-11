@@ -435,6 +435,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         // diese Datentypen koennen im Gridcontrol nicht verarbeitet werden
         switch (nDataType)
         {
+            case DataType::BLOB:
             case DataType::LONGVARBINARY:
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -1724,6 +1725,7 @@ void FmGridControl::InitColumnByField(
         sal_Bool bIllegalType = sal_False;
         switch ( nDataType )
         {
+            case DataType::BLOB:
             case DataType::LONGVARBINARY:
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -1768,14 +1770,18 @@ void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::conta
     Reference< XIndexContainer > xColumns( GetPeer()->getColumns() );
     Reference< XNameAccess > xFieldsAsNames( _rxFields, UNO_QUERY );
 
-    // Einfuegen mu� sich an den Column Positionen orientieren
+    // Einfuegen muss sich an den Column Positionen orientieren
     for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
     {
         DbGridColumn* pCol = GetColumns().GetObject(i);
-        Reference< XPropertySet > xColumnModel;
-        ::cppu::extractInterface( xColumnModel, xColumns->getByIndex( i ) );
+        OSL_ENSURE(pCol,"No grid column!");
+        if ( pCol )
+        {
+            Reference< XPropertySet > xColumnModel;
+            ::cppu::extractInterface( xColumnModel, xColumns->getByIndex( i ) );
 
-        InitColumnByField( pCol, xColumnModel, xFieldsAsNames, _rxFields );
+            InitColumnByField( pCol, xColumnModel, xFieldsAsNames, _rxFields );
+        }
     }
 }
 
