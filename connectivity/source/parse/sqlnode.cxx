@@ -813,8 +813,9 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
-            if ( !SQL_ISRULE(pReturn,char_value_exp) && !buildStringNodes(pReturn) )
-                pReturn = NULL;
+            case DataType::CLOB:
+                if ( !SQL_ISRULE(pReturn,char_value_exp) && !buildStringNodes(pReturn) )
+                    pReturn = NULL;
             default:
                 break;
         }
@@ -829,6 +830,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
+                case DataType::CLOB:
                     break;
                 case DataType::DATE:
                 case DataType::TIME:
@@ -872,12 +874,13 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
                 case DataType::REAL:
                 case DataType::DOUBLE:
                     // kill thousand seperators if any
-                killThousandSeparator(pReturn);
+                    killThousandSeparator(pReturn);
                     break;
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
-                pReturn = buildNode_STR_NUM(pReturn);
+                case DataType::CLOB:
+                    pReturn = buildNode_STR_NUM(pReturn);
                     break;
                 default:
                     m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_INT_COMPARE);
@@ -893,12 +896,13 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
                 case DataType::REAL:
                 case DataType::DOUBLE:
                         // kill thousand seperators if any
-                killThousandSeparator(pReturn);
+                    killThousandSeparator(pReturn);
                     break;
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
-                pReturn = buildNode_STR_NUM(pReturn);
+                case DataType::CLOB:
+                    pReturn = buildNode_STR_NUM(pReturn);
                     break;
                 case DataType::INTEGER:
                 default:
@@ -967,6 +971,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
         case DataType::CHAR:
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
+        case DataType::CLOB:
             if(pLiteral->isRule())
             {
                 pAppend->append(pLiteral);
@@ -1228,6 +1233,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
+            case DataType::CLOB:
                 s_pScanner->SetRule(s_pScanner->GetSTRINGRule());
                 break;
             default:
@@ -2074,18 +2080,18 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
         if ( SQL_ISRULE(p2ndSearch,boolean_primary) )
             p2ndSearch = p2ndSearch->getChild(1);
 
-        if ( *p2ndSearch->getChild(0) == *pSearchCondition->getChild(2-nPos) )
+        if ( *p2ndSearch->getChild(0) == *pSearchCondition->getChild(2-nPos) ) // a and ( a or b) -> a or b
         {
             pNewNode = pSearchCondition->removeAt((sal_uInt32)0);
             replaceAndReset(pSearchCondition,pNewNode);
 
         }
-        else if ( *p2ndSearch->getChild(2) == *pSearchCondition->getChild(2-nPos) )
+        else if ( *p2ndSearch->getChild(2) == *pSearchCondition->getChild(2-nPos) ) // a and ( b or a) -> a or b
         {
             pNewNode = pSearchCondition->removeAt((sal_uInt32)2);
             replaceAndReset(pSearchCondition,pNewNode);
         }
-        else if ( p2ndSearch->getByRule(OSQLParseNode::boolean_term) )
+        else if ( p2ndSearch->getByRule(OSQLParseNode::search_condition) )
         {
             // a and ( b or c ) -> ( a and b ) or ( a and c )
             // ( b or c ) and a -> ( a and b ) or ( a and c )
@@ -2096,7 +2102,13 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
             OSQLParseNode* p1stAnd = MakeANDNode(pA,pB);
             OSQLParseNode* p2ndAnd = MakeANDNode(new OSQLParseNode(*pA),pC);
             pNewNode = MakeORNode(p1stAnd,p2ndAnd);
-            replaceAndReset(pSearchCondition,pNewNode);
+            OSQLParseNode* pNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+            pNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNode->append(pNewNode);
+            pNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+            OSQLParseNode::eraseBraces(p1stAnd);
+            OSQLParseNode::eraseBraces(p2ndAnd);
+            replaceAndReset(pSearchCondition,pNode);
         }
     }
     // a or a and b || a or b and a
