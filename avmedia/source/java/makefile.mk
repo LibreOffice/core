@@ -51,7 +51,7 @@ JAVAFILES  = \
     FrameGrabber.java       \
     x11$/SystemWindowAdapter.java   
 
-JARFILES        = sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar jmf.jar
+JARFILES        = jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar jmf.jar
 JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java//).class)
 
 JARTARGET               = $(TARGET).jar
