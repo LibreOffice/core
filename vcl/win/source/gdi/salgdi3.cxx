@@ -557,7 +557,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE))
      || 0 != (rMetric.tmPitchAndFamily & TMPF_TRUETYPE))
         aDFA.mbSubsettable = true;
-    else if( 0 != (rMetric.tmPitchAndFamily & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
+    else if( 0 != (rMetric.ntmFlags & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
         aDFA.mbEmbeddable = true;
 
     // heuristics for font quality
@@ -636,7 +636,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE))
      || 0 != (rMetric.tmPitchAndFamily & TMPF_TRUETYPE))
         aDFA.mbSubsettable = true;
-    else if( 0 != (rMetric.tmPitchAndFamily & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
+    else if( 0 != (rMetric.ntmFlags & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
         aDFA.mbEmbeddable = true;
 
     // heuristics for font quality
