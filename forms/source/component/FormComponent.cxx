@@ -2217,7 +2217,7 @@ sal_Bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
         || (_nColumnType == DataType::LONGVARBINARY) || (_nColumnType == DataType::OTHER)
         || (_nColumnType == DataType::OBJECT) || (_nColumnType == DataType::DISTINCT)
         || (_nColumnType == DataType::STRUCT) || (_nColumnType == DataType::ARRAY)
-        || (_nColumnType == DataType::BLOB) || (_nColumnType == DataType::CLOB)
+        || (_nColumnType == DataType::BLOB) /*|| (_nColumnType == DataType::CLOB)*/
         || (_nColumnType == DataType::REF) || (_nColumnType == DataType::SQLNULL))
         return sal_False;
 
@@ -2553,7 +2553,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
                 || ( nFieldType == DataType::LONGVARBINARY )
                 || ( nFieldType == DataType::OBJECT        )
                 || ( nFieldType == DataType::BLOB          )
-                || ( nFieldType == DataType::CLOB          )
+                /*|| ( nFieldType == DataType::CLOB          )*/
                 )
                 m_xColumn->getBinaryStream();
             else
