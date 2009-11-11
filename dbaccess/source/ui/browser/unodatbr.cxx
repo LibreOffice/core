@@ -633,6 +633,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     break;
 
                     case DataType::LONGVARCHAR:
+                    case DataType::CLOB:
                         aInitialValues.push_back( NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ), makeAny( (sal_Bool)sal_True ) ) );
                         // NO break!
                     case DataType::BINARY:
