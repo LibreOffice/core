@@ -55,7 +55,7 @@ $main::zipVersion = "2.3";
 
 $main::OO_SDK_CPP_HOME = "";
 $main::cppName = "gcc";
-$main::cppVersion = "3.0.1";
+$main::cppVersion = "4.0.1";
 if ( $main::operatingSystem =~ m/solaris/ )
 {
     $main::cppName = "CC";
@@ -71,7 +71,7 @@ if ( $main::operatingSystem =~ m/darwin/ )
     $main::OO_SDK_JAVA_BIN_DIR="Commands";
 }
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
-$main::javaVersion = "1.4.1_01";
+$main::javaVersion = "1.5.0_01";
 
 $main::SDK_AUTO_DEPLOYMENT = "";
 $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
@@ -311,7 +311,7 @@ while ( (!$main::correctVersion) &&
 {
     print " C++ compilers where for example a language binding exist:\n";
     print "  - Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11 or higher\n";
-    print "  - Linux, GNU C++ compiler, gcc version 3.0.1 or higher\n";
+    print "  - Linux, GNU C++ compiler, gcc version 4.0.1 or higher\n";
     print "  - MacOS, GNU C++ compiler, gcc version 4.0.1 or higher\n";
     print " Enter the directory of the C++ compiler, the directory\n";
     print " where the compiler is located (optional) [$main::OO_SDK_CPP_HOME_SUGGESTION]: ";
@@ -417,7 +417,7 @@ while ( (!$main::correctVersion) &&
         ((! -d "$main::OO_SDK_JAVA_HOME" ) ||
          ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/$main::OO_SDK_JAVA_BIN_DIR/javac"))) )
 {
-    print " Enter Java SDK (1.4.1_01 or higher) installation directory  (optional) [$main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
+    print " Enter Java SDK (1.5, recommendation is 1.6 or higher) installation directory  (optional) [$main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
     $main::OO_SDK_JAVA_HOME = readStdIn();
     chop($main::OO_SDK_JAVA_HOME);
     if ( $main::OO_SDK_JAVA_HOME eq "" )
