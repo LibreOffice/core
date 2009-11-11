@@ -503,17 +503,6 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-#ifndef GCJ
-File gid_File_Jar_Sandbox
-    TXT_FILE_BODY;
-    Name = JARFILENAME(sandbox);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-#endif
-#endif
-
-#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
