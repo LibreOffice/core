@@ -1864,6 +1864,18 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( eBiff >= BIFF8 ) dumpHex< sal_uInt16 >( "flags", "CHPIE-FLAGS" );
         break;
 
+        case BIFF_ID_CHPIVOTFLAGS:
+            dumpRepeatedRecId();
+            dumpUnused( 2 );
+            dumpHex< sal_uInt16 >( "flags", "CHPIVOTFLAGS-FLAGS" );
+        break;
+
+        case BIFF8_ID_CHPIVOTREF:
+            dumpRepeatedRecId();
+            dumpUnused( 4 );
+            dumpUniString( "ref", BIFF_STR_8BITLENGTH );
+        break;
+
         case BIFF_ID_CHPLOTGROWTH:
             dumpFix< sal_Int32 >( "horizontal-growth" );
             dumpFix< sal_Int32 >( "vertical-growth" );
@@ -2786,6 +2798,10 @@ void WorkbookStreamObject::implDumpRecordBody()
                 dumpColorABGR( "grid-color" );
         break;
 
+        case BIFF_ID_WRITEACCESS:
+            dumpString( "user-name", BIFF_STR_8BITLENGTH );
+        break;
+
         case BIFF_ID_XCT:
             dumpDec< sal_uInt16 >( "crn-count" );
             if( eBiff == BIFF8 ) dumpDec< sal_Int16 >( "sheet-idx" );
@@ -2864,7 +2880,7 @@ OUString WorkbookStreamObject::dumpPivotString( const String& rName, sal_uInt16 
     if( nStrLen != BIFF_PT_NOSTRING )
     {
         aString = (getBiff() == BIFF8) ?
-            getBiffStream().readUniString( nStrLen ) :
+            getBiffStream().readUniStringBody( nStrLen ) :
             getBiffStream().readCharArrayUC( nStrLen, getBiffData().getTextEncoding() );
         writeStringItem( rName, aString );
     }
