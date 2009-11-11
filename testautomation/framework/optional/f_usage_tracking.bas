@@ -6,7 +6,7 @@
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: f_basic_dialog_i18n.bas,v $
+'* $RCSfile: f_usage_tracking.bas,v $
 '*
 '* $Revision: 1.3 $
 '*

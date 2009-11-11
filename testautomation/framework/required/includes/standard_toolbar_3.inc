@@ -33,17 +33,17 @@
 '*
 '* owner : joerg.skottke@sun.com
 '*
-'* short description : global update test (Standardbar)
+'* short description : Items on the standardbar
 '*
 '\***************************************************************************
 
 testcase tStandardBar_3
 
+    printlog( "Items on the standardbar" )
+
     dim sFileOut as String
     dim HyperlinkTabID as integer
     dim iTabPage as integer
-    
-    printlog( "Icons on the standardbar" )
 
     gApplication = "CALC"
 

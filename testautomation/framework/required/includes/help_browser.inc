@@ -39,13 +39,12 @@
 
 testcase tHelp_DialogTest
 
-    '///<h1>Update test for the main help window</h1>
-    '///<ul>
+    printlog( "Resource test for the Help Browser" )
+
     Dim i as Integer
     dim brc as boolean
     printlog "- open the help"
 
-    '///+<li>Open Help</li>
     brc = hOpenHelp()
     if ( not brc ) then
         warnlog( "Help not open, aborting test" )
@@ -58,26 +57,20 @@ testcase tHelp_DialogTest
     endif
 
 
-    '///+<li>activate 'Content'-page</li>
     brc = hSelectHelpTab( "content" )
     call DialogTest( ContentPage )
 
-    '///+<li>activate 'Index'-page</li>
     brc = hSelectHelpTab( "index" )
     call DialogTest( IndexPage )
 
-    '///+<li>activate 'Find'-page</li>
     brc = hSelectHelpTab( "find" )
     call DialogTest( FindPage )
 
-    '///+<li>activate 'Bookmark'-page</li>
     brc = hSelectHelpTab( "bookmarks" )
     call DialogTest( BookmarksPage )
 
-    '///+<li>close help ( does not work correctly with testtool )</li>
     Kontext "StarOfficeHelp"
     hCloseHelp()
-    '///</ul>
 
 endcase
 
@@ -85,12 +78,9 @@ endcase
 
 testcase tHelp_ToolBar
 
-    '///<h1>Update test for the toolbar on the main Help window</h1>
-    '///<ul>
     Dim i as Integer
     dim brc as boolean
 
-    '///+<li>Open Help</li>
     brc = hOpenHelp()
     if ( not brc ) then
         warnlog( "Help not open, aborting test" )
@@ -104,18 +94,14 @@ testcase tHelp_ToolBar
 
 
     kontext "starofficehelp"
-    '///+<li>Index-button</li>
     printlog "- Index -> on"
-    '///+<li>activate 'Index' ( => only the help-window must be shown )</li>
     Index.Click()
     waitslot
 
     printlog "- Index -> off"
-    '///+<li>activate 'Index' ( => the full help-window must be shown )</li>
     Index.Click()
 
     ' Backward- and Forward-button
-    '///+<li>open the 'Index'-page</li>
     printlog "- activate 'Index'-page"
     brc = hSelectHelpTab( "index" )
     sleep( 2 )
@@ -124,24 +110,19 @@ testcase tHelp_ToolBar
     DisplayIndex.Click()
     waitslot
 
-    '///+<li>backward</li>
     printlog "- backward"
     Backward.Click()
     waitslot
 
-    '///+<li>forward</li>
     printlog "- forward"
     Forward.Click()
     waitslot
 
-    '///+<li>first page</li>
     printlog "- first page"
     GoToStart.Click()
 
-    '///+<li>print</li>
     printlog "- print"
     ' the print-dialog must be shown ( if direct-printing is activated => BUG )
-    '///+<li>close the print-dialog</li>
     PrintButton.Click()
 
     kontext "active"
@@ -170,19 +151,15 @@ testcase tHelp_ToolBar
 
     endif
     
-    '///+<li>Set Bookmark</li>
     printlog "- Set Bookmark"
 
     kontext "tb_help"
     SetBookmarks.Click()
 
-    '///+<li>close the 'add bookmark'-dialog</li>
     kontext "addbookmark"
     call DialogTest ( AddBookmark )
     AddBookmark.Cancel()
 
-    '///+<li>close help ( does not work correctly with testtool )</li>
     brc = hCloseHelp()
-    '///</ul>
 
 endcase

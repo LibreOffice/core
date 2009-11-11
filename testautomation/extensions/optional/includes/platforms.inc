@@ -76,6 +76,7 @@ testcase tExtensionPlatforms
         case "all"           : bShouldInstall = TRUE
         case gtSysName       : bShouldInstall = TRUE
         case gPlatGroup      : bShouldInstall = TRUE
+        case gPlatform       : bShouldInstall = TRUE
         case else            : bShouldInstall = FALSE
         end select
 

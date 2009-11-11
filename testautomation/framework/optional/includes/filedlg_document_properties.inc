@@ -39,7 +39,6 @@
 
 testcase tFiledlgDocumentProperties()
 
-    '///<h3>Access document properties</h3>
 
     dim cFileName as string
         cFileName = "DigitalSignature" & hGetSuffix( "current" )
@@ -62,11 +61,9 @@ testcase tFiledlgDocumentProperties()
 
     dim brc as boolean
         
-    '///<ul>
     printlog( "Using filename: " & cFileName )
     printlog( "Using filepath: " & cFilePath )
     
-    '///+<li>Retrieve the size from the workfile using direct BASIC calls</li>
     if ( FileExists( cFileURL ) ) then
     	iFileSize = FileLen( cFileURL )
         printlog( "Testfile size is: " & iFileSize & " Bytes" )
@@ -75,13 +72,10 @@ testcase tFiledlgDocumentProperties()
     	goto endsub
     endif
     
-    '///+<li>Load the workfile (framework/security/input/DigitalSignature.???)</li>
     hFileOpen( cFileURL )
     
-    '///+<li>open the file properties dialog</li>
     FileProperties
     
-    '///+<li>Document-Tab: Verify that the filename is correct</li>
     brc = hDocumentInfoSelectTab( "General" )
     if ( not brc ) then
         warnlog( "Unable to switch to the requested tabpage, trying to recover" )
@@ -97,7 +91,6 @@ testcase tFiledlgDocumentProperties()
         warnlog( "The path string is incorrect: " & cTestExpression )
     endif
 
-    '///+<li>Verify the filesize info</li>
     kontext "TabDokument"
     cFileSize = hGetStringFromStaticTextField( FileSizeInfo )
     iFileSizeInfo =  hConvertStringToLong( cFileSize )
@@ -114,7 +107,6 @@ testcase tFiledlgDocumentProperties()
     
     hDestroyDocument()
     
-    '///</ul>
 
 endcase
 

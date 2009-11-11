@@ -39,6 +39,8 @@
 
 testcase tUpdtWizardWebpage
 
+    printlog( "Resource test for the webpage wizard" )
+
     dim i as integer
     dim a as integer
     a = getDocumentCount

@@ -44,7 +44,6 @@ testcase tSaveReservedNamesWin()
         goto endsub
     endif
 
-    '///<h1>Check reserved filenames on Windows using the File-Save dialog</h1>
     
     ' This sub creates invalid filenames on Windows and tries to save files
     ' with those names. This should fail.
@@ -68,8 +67,6 @@ testcase tSaveReservedNamesWin()
         printlog( "" )
         printlog( "Document Type is: " & hNumericDocType( iCurrentDocType ) )    
     
-        '///<ul>
-        '///+<li>Reserved filenames are e.g. LPT1, COM2, NUL etc.</li>
         
         printlog( CHR$(13) )
         printlog( "Check if reserved filenames on Windows are handled ok" )
@@ -77,7 +74,6 @@ testcase tSaveReservedNamesWin()
         
         
         ' serial ports with extension (COM1.xxx-COM9.xxx are not allowed)
-        '///+<li>Try to save files to names of serial ports with extension</li>
         printlog( CHR$(13) + "Serial ports with extensions" )
         for iCounter = 1 to MAX_NUMBER
             cStrangeName = "COM" & CHR$( iCounter + 48 )
@@ -88,7 +84,6 @@ testcase tSaveReservedNamesWin()
         
         
         ' parallel ports with extension (LPT1.xxx-LPT9.xxx are not allowed)
-        '///+<li>Try to save files to parallel ports with extension</li>
         printlog( CHR$(13) + "Parallel ports with extension" )
         for iCounter = 1 to MAX_NUMBER
             cStrangeName = "LPT" & CHR$( iCounter + 48 )
@@ -135,12 +130,10 @@ testcase tSaveReservedNamesWin()
         brc = hSaveFileExpectFailure( cStrangeName , 0 )
         if ( not brc ) then warnlog( "failed" )
         
-        '///+<li>Close the document</li>
         printlog( "Close the document" )
         brc = hDestroyDocument()
         
     next iCurrentDocType
-    '///</ul>
     
 endcase
 

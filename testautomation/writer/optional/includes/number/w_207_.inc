@@ -47,81 +47,86 @@ end sub
 '------------------------------------------------------------------------------------------------------------------------
 
 testcase tToolsNumbering12
-   QaErrorLog "Testcase outcommented due to incompability with new Filtername-behaviour."
-   goto endsub
 
     printlog "Import / Export Regression Test"
     '/// Import / Export Regression-Test
     Dim DocFileList( 30 ) as String, sCurrentFilter as string
     Dim sSourcePath as String, sCurrentFilterExt as string
-    Dim i as Integer
-    Dim k as Integer
-    Dim x as Integer
+    Dim iCurrentDocument as Integer
+    Dim iDocumentType as Integer
     Dim ExportFileName as string
 
     ReDim DocFileList( 30 ) as String
-    '/// load all documents from  "sun_writer\\optional\\input\\number\\"
-    sSourcePath = ConvertPath ( gTesttoolPath + "writer\optional\input\number\regression\" )
+    
+    '/// load all documents from  "sun_writer\optional\input\number\regression"
+    sSourcePath = convertpath( gTesttoolPath & "writer\optional\input\number\regression\" )
     GetFileList ( sSourcePath, "*.*", DocFileList() )
+    hListPrint( DocFileList(), "Files to be loaded" ) 
 
-        x = ListCount ( DocFileList() )
-        for i = 1 to x
-            printlog " - (" & i & "/" & x & "): " & DocFileList(i)
-			For k = 1 to 3
-				Select Case k
-					Case 1
-						sCurrentFilter = "writer8" 'gWriterFilter
-                        sCurrentFilterExt = "odt" 'WriterFilterExtension(0)
-					Case 2
-						sCurrentFilter = "StarOffice XML (Writer)" 'hGetUIFiltername("StarOffice XML (Writer)") & " (.sxw)"
-						sCurrentFilterExt = "sxw"
-                    Case 3
-						sCurrentFilter = "StarWriter 5.0/GlobalDocument" 'StarWriter 5.0 (.sdw)
-						sCurrentFilterExt = "sdw"
-                end select
+    printlog( "Start loading and exporting files" )
+    for iCurrentDocument = 1 to ListCount ( DocFileList() )
+        printlog( "File: " & DocFileList( iCurrentDocument ) )
+		For iDocumentType = 1 to 3
+			Select Case iDocumentType
+				Case 1
+					sCurrentFilter = "writer8" 'gWriterFilter
+                    sCurrentFilterExt = "odt" 'WriterFilterExtension(0)
+				Case 2
+					sCurrentFilter = "StarOffice XML (Writer)" 'hGetUIFiltername("StarOffice XML (Writer)") & " (.sxw)"
+					sCurrentFilterExt = "sxw"
+                Case 3
+					sCurrentFilter = "StarWriter 5.0" 'StarWriter 5.0 (.sdw)
+					sCurrentFilterExt = "sdw"
+            end select
 
-				'/// Open a new writer document
-				Call hNewDocument
-				'/// open file
-				sleep 2
-				Call hFileOpen ( DocFileList(i) )
-                Call sMakeReadOnlyDocumentEditable
+            printlog( "Open file: " & DocFileList( iCurrentDocument ) )
+			Call hFileOpen ( DocFileList( iCurrentDocument ) )
 
-				Kontext "Filterauswahl"
-				if Filterauswahl.Exists then
-					Warnlog "  - Filter Selection dialog is up !"
-					Filterauswahl.Cancel
-					Call hCloseDocument
-				end if
-				Sleep 5
-				Kontext "AsciiFilterOptionen"
-				if AsciiFilterOptionen.Exists then AsciiFilterOptionen.Ok
-				sleep (5)
-				' Check for macro alert
-				Kontext "SecurityWarning"
-				if SecurityWarning.Exists then
-					SecurityWarning.Cancel
-				end if
+            printlog( "Make a copy if the file is write protected" )
+            Call sMakeReadOnlyDocumentEditable
 
-				'/// check if loaded
-				if GetDocumentCount >= 1 then
-					ExportFileName = ConvertPath ( gOfficePath + "user\work\" + DateiOhneExt(DateiExtract ( DocFileList(i)  ) ) &  "." & sCurrentFilterExt )
-					printlog "  - export as: " & ExportFileName
-					Call hFileSaveAsWithFilterKill ( ExportFileName, sCurrentFilter )
-					Sleep (2)
-					Call hCloseDocument
-					printlog "  - load previous saved document"
-					Call hFileOpen ( ExportFileName )
-					Sleep (2)
-					printlog "  - close document"
-					Call hCloseDocument
-				else
-                	Warnlog "  - Doc probably didn't get loaded !!!"
-				end if
-			next k
-            Sleep 2
-        next i
+            printlog( "Test for unexpected dialog: Filter Selection" )
+			Kontext "Filterauswahl"
+			if ( Filterauswahl.Exists( 1 ) ) then
+				Warnlog "  - Filter Selection dialog is up !"
+				Filterauswahl.Cancel
+				hFileCloseAll()
+				goto endsub
+			endif
 
+            printlog( "Test for unexpected dialog: ASCII Filter Options" )
+			Kontext "AsciiFilterOptionen"
+			if ( AsciiFilterOptionen.Exists() ) then 
+				AsciiFilterOptionen.Ok
+				hFileCloseAll()
+				goto endsub
+		    endif
+			
+			printlog( "Allow macro execution (if general setting permit" )
+			hAllowMacroExecution()
+
+			'/// check if loaded
+			if ( GetDocumentCount <= 2 ) then
+				ExportFileName = ConvertPath ( gOfficePath & "user\work\" & _
+				                 DateiOhneExt(DateiExtract ( DocFileList( iCurrentDocument )  ) ) & _
+				                 "." & sCurrentFilterExt )
+				hDeleteFile( ExportFileName ) ' There should never be a reason to overwrite 
+
+				printlog "  - export as: " & ExportFileName
+				Call hFileSaveAsWithFilter( ExportFileName, sCurrentFilter )
+				Call hCloseDocument
+
+				printlog "  - load previous saved document"
+				Call hFileOpen ( ExportFileName )
+
+				printlog "  - close document"
+				hFileCloseAll()
+			else
+            	Warnlog "  - Doc probably didn't get loaded !!!"
+			end if
+		next iDocumentType
+    next iCurrentDocument
+    
 endcase
 
 '------------------------------------------------------------------------------------------------------------------------

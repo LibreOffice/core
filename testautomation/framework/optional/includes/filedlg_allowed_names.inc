@@ -39,7 +39,6 @@
 
 testcase tSaveLoadDelFiles()
 
-    '///<h1>Check allowed filenames on Windows using the File-Save dialog</h1>
     
     ' This test checks filenames that resemble Devices and files that contain
     ' the allowed ASCII chars between 32 and 255. The latter is tested by five
@@ -60,19 +59,13 @@ testcase tSaveLoadDelFiles()
         printlog( "Check if filenames that resemble devicenames are treated ok" )
         printlog( "" )
         
-        '///<ul>
-        '///+<li>Open a new document</li>
         printlog( "Open a new document" )
         
-        '///+<li>Save/Load/Delete names that resemble port-names (but are valid names)<br>
-        '///+ Please note that beginning with SRC680m238 we cannot save any file without suffix
-        '///+ anymore, whatever we do, a suffix will be present.</li>
         brc = hSaveLoadDelSuccess( "COM0"  , true )
         brc = hSaveLoadDelSuccess( "COM10" , true )
         brc = hSaveLoadDelSuccess( "LPT0"  , true )
         brc = hSaveLoadDelSuccess( "LPT10" , true )
         
-        '///+<li>Save/Load/Delete files containing  permitted ASCII-characters</li>
         ' This test randomizes through a number of characters, a full test of all
         ' possible ascii characters would simply take too long.
         printlog( "" )
@@ -118,12 +111,10 @@ testcase tSaveLoadDelFiles()
             
         next iCounter
         
-        '///+<li>close the document</li>
         brc = hDestroyDocument()
         
     next iCurrentDocType
 
-    '///</ul>
     
 endcase
 
