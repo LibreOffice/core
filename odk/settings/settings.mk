@@ -398,12 +398,17 @@ JAVA_PROC_TYPE=ppc
 endif
 JAVABIN=Commands
 
+GCC_VERSION =$(shell gcc -dumpversion| cut -d"." -f1,2)
+ifeq "$(GCC_VERSION)" "4.2"
+GCC_ARCH_OPTION=-arch i386
+endif
+
 OS=MACOSX
 PS=/
 ICL=\$$
-CC=gcc
-LINK=g++
-LIB=g++
+CC=gcc-$(GCC_VERSION)
+LINK=g++-$(GCC_VERSION)
+LIB=g++-$(GCC_VERSION)
 ECHO=@echo
 MKDIR=mkdir -p
 CAT=cat
@@ -411,8 +416,6 @@ OBJ_EXT=o
 SHAREDLIB_EXT=dylib
 SHAREDLIB_PRE=lib
 SHAREDLIB_OUT=$(OUT_LIB)
-
-GCC_VERSION=$(shell $(CC) -dumpversion)
 
 COMID=gcc3
 CPPU_ENV=gcc3
@@ -456,9 +459,9 @@ PATH_SEPARATOR=:
 
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS=-malign-natural -c -g -fPIC -fno-common
+CC_FLAGS=-malign-natural -c -g -fPIC -fno-common $(GCC_ARCH_OPTION)
 else
-CC_FLAGS=-malign-natural -c -O -fPIC -fno-common
+CC_FLAGS=-malign-natural -c -O -fPIC -fno-common $(GCC_ARCH_OPTION)
 endif
 
 SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
@@ -468,13 +471,13 @@ CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_
 
 CC_OUTPUT_SWITCH=-o
 
-LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress
+LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress $(GCC_ARCH_OPTION)
 #-fPIC -fno-common
 
 # install_name '@executable_path$/(@:f)'
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)  -Wl,-exported_symbols_list $(COMP_MAPFILE)
 
-#EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs
+EXE_LINK_FLAGS=$(GCC_ARCH_OPTION) -Wl,-multiply_defined,suppress
 LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-framework JavaVM
 #LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/Libraries"
