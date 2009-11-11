@@ -213,6 +213,7 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
         case DataType::CHAR:
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
+        case DataType::CLOB:
             nFormat = _xTypes->getStandardFormat(NumberFormat::TEXT, _rLocale);
             break;
         case DataType::DATE:
@@ -234,10 +235,10 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
         case DataType::STRUCT:
         case DataType::ARRAY:
         case DataType::BLOB:
-        case DataType::CLOB:
         case DataType::REF:
         default:
-            nFormat = NumberFormat::UNDEFINED;
+            nFormat = _xTypes->getStandardFormat(NumberFormat::UNDEFINED, _rLocale);
+            //nFormat = NumberFormat::UNDEFINED;
     }
     return nFormat;
 }
@@ -1850,9 +1851,20 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const Any& x,
                        sal_Int32 sqlType,
-                       sal_Int32 /*scale*/)  throw(SQLException, RuntimeException)
+                       sal_Int32 scale)  throw(SQLException, RuntimeException)
 {
-    if(!x.hasValue())
+    ORowSetValue aVal;
+    aVal.fill(x);
+    setObjectWithInfo(_xParams,parameterIndex,aVal,sqlType,scale);
+}
+// -----------------------------------------------------------------------------
+void setObjectWithInfo(const Reference<XParameters>& _xParams,
+                       sal_Int32 parameterIndex,
+                       const ::connectivity::ORowSetValue& _rValue,
+                       sal_Int32 sqlType,
+                       sal_Int32 scale)  throw(SQLException, RuntimeException)
+{
+    if ( _rValue.isNull() )
         _xParams->setNull(parameterIndex,sqlType);
     else
     {
@@ -1860,65 +1872,62 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
         {
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                _xParams->setObjectWithInfo(parameterIndex,x,sqlType,0);
+                _xParams->setObjectWithInfo(parameterIndex,_rValue.makeAny(),sqlType,scale);
                 break;
             case DataType::CHAR:
             case DataType::VARCHAR:
-            //case DataType::DECIMAL:
-            //case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                _xParams->setString(parameterIndex,::comphelper::getString(x));
+                _xParams->setString(parameterIndex,_rValue);
                 break;
-            case DataType::BIGINT:
+            case DataType::CLOB:
                 {
-                    sal_Int64 nValue = 0;
-                    if(x >>= nValue)
+                    Any x(_rValue.makeAny());
+                    ::rtl::OUString sValue;
+                    if ( x >>= sValue )
+                        _xParams->setString(parameterIndex,sValue);
+                    else
                     {
-                        _xParams->setLong(parameterIndex,nValue);
-                        break;
+                        Reference< XClob > xClob;
+                        if(x >>= xClob)
+                            _xParams->setClob(parameterIndex,xClob);
+                        else
+                        {
+                            Reference< ::com::sun::star::io::XInputStream > xStream;
+                            if(x >>= xStream)
+                                _xParams->setCharacterStream(parameterIndex,xStream,xStream->available());
+                        }
                     }
                 }
+                break;
+            case DataType::BIGINT:
+                if ( _rValue.isSigned() )
+                    _xParams->setLong(parameterIndex,_rValue);
+                else
+                    _xParams->setString(parameterIndex,_rValue);
                 break;
 
             case DataType::FLOAT:
+                _xParams->setFloat(parameterIndex,_rValue);
+                break;
             case DataType::REAL:
-                {
-                    float nValue = 0;
-                    if(x >>= nValue)
-                    {
-                        _xParams->setFloat(parameterIndex,nValue);
-                        break;
-                    }
-                }
-                // run through if we couldn't set a float value
             case DataType::DOUBLE:
-                _xParams->setDouble(parameterIndex,::comphelper::getDouble(x));
+                _xParams->setDouble(parameterIndex,_rValue);
                 break;
             case DataType::DATE:
-                {
-                    ::com::sun::star::util::Date aValue;
-                    if(x >>= aValue)
-                        _xParams->setDate(parameterIndex,aValue);
-                }
+                _xParams->setDate(parameterIndex,_rValue);
                 break;
             case DataType::TIME:
-                {
-                    ::com::sun::star::util::Time aValue;
-                    if(x >>= aValue)
-                        _xParams->setTime(parameterIndex,aValue);
-                }
+                _xParams->setTime(parameterIndex,_rValue);
                 break;
             case DataType::TIMESTAMP:
-                {
-                    ::com::sun::star::util::DateTime aValue;
-                    if(x >>= aValue)
-                        _xParams->setTimestamp(parameterIndex,aValue);
-                }
+                _xParams->setTimestamp(parameterIndex,_rValue);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
                 {
+                    Any x(_rValue.makeAny());
                     Sequence< sal_Int8> aBytes;
                     if(x >>= aBytes)
                         _xParams->setBytes(parameterIndex,aBytes);
@@ -1944,16 +1953,24 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                _xParams->setBoolean(parameterIndex,::cppu::any2bool(x));
+                _xParams->setBoolean(parameterIndex,_rValue);
                 break;
-            case DataType::TINYINT:
-                _xParams->setByte(parameterIndex,(sal_Int8)::comphelper::getINT32(x));
+            if ( _rValue.isSigned() )
+                    _xParams->setByte(parameterIndex,_rValue);
+                else
+                    _xParams->setShort(parameterIndex,_rValue);
                 break;
             case DataType::SMALLINT:
-                _xParams->setShort(parameterIndex,(sal_Int16)::comphelper::getINT32(x));
+                if ( _rValue.isSigned() )
+                    _xParams->setShort(parameterIndex,_rValue);
+                else
+                    _xParams->setInt(parameterIndex,_rValue);
                 break;
             case DataType::INTEGER:
-                _xParams->setInt(parameterIndex,::comphelper::getINT32(x));
+                if ( _rValue.isSigned() )
+                    _xParams->setInt(parameterIndex,_rValue);
+                else
+                    _xParams->setLong(parameterIndex,_rValue);
                 break;
             default:
                 {
