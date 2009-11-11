@@ -121,36 +121,18 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     ViewObjectContact& ViewContactOfUnoControl::CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact )
     {
+        // print or print preview requires special handling
+        const OutputDevice* pDevice = _rObjectContact.TryToGetOutputDevice();
+        bool bPrintOrPreview = ( pDevice != NULL ) && ( pDevice->GetOutDevType() == OUTDEV_PRINTER );
+
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &_rObjectContact  );
-        if ( pPageViewContact )
-        {
-            // special classes for special devices:
-            // - PDF export
-            ::vcl::PDFExtOutDevData* pPDFExport = PTR_CAST( ::vcl::PDFExtOutDevData, pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice().GetExtOutDevData() );
-            if ( pPDFExport != NULL )
-                return *new UnoControlPDFExportContact( *pPageViewContact, *this );
+        bPrintOrPreview |= ( pPageViewContact != NULL ) && pPageViewContact->GetPageWindow().GetPageView().GetView().IsPrintPreview();
 
-            // - print preview
-            if ( pPageViewContact->GetPageWindow().GetPageView().GetView().IsPrintPreview() )
-                return *new UnoControlPrintOrPreviewContact( *pPageViewContact, *this );
+        if ( bPrintOrPreview )
+            return *new UnoControlPrintOrPreviewContact( *pPageViewContact, *this );
 
-            OutDevType eDeviceType = pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice().GetOutDevType();
-            // - printing
-            if ( eDeviceType == OUTDEV_PRINTER )
-                return *new UnoControlPrintOrPreviewContact( *pPageViewContact, *this );
-
-            // - any other virtual device
-            if ( eDeviceType == OUTDEV_VIRDEV )
-                return *new UnoControlDefaultContact( *pPageViewContact, *this );
-
-            // - normal windows have special, design-mode dependent handling
-            if ( eDeviceType == OUTDEV_WINDOW )
-                return *new UnoControlWindowContact( *pPageViewContact, *this );
-        }
-
-        // if we're not working for a ObjectContactOfPageView, then we can't use a ViewObjectContactOfUnoControl, or any
-        // of its derivees. Fall back to a "normal" SdrObj's contact object.
-        return *new ViewObjectContactOfSdrObj( _rObjectContact, *this );
+        // all others are nowadays served by the same implementation
+        return *new ViewObjectContactOfUnoControl( _rObjectContact, *this );
     }
 
     //--------------------------------------------------------------------
@@ -173,7 +155,7 @@ namespace sdr { namespace contact {
             aTransform.set(0, 2, aRange.getMinX());
             aTransform.set(1, 2, aRange.getMinY());
 
-            // create control primitive WITHOUT evtl. existing XControl; this would be done in
+            // create control primitive WITHOUT possibly existing XControl; this would be done in
             // the VOC in createPrimitive2DSequence()
             const drawinglayer::primitive2d::Primitive2DReference xRetval(new drawinglayer::primitive2d::ControlPrimitive2D(
                 aTransform, xControlModel));

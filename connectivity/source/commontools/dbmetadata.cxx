@@ -407,6 +407,22 @@ namespace dbtools
 #endif
         return doDisplay;
     }
+    //--------------------------------------------------------------------
+    bool DatabaseMetaData::supportsThreads() const
+    {
+        bool bSupported( true );
+        try
+        {
+            Reference< XDatabaseMetaData > xMeta( m_pImpl->xConnectionMetaData, UNO_SET_THROW );
+            ::rtl::OUString sConnectionURL( xMeta->getURL() );
+            bSupported = sConnectionURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:mysqlc" ) ) != 0;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return bSupported;
+    }
 
 //........................................................................
 } // namespace dbtools
