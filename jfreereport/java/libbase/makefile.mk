@@ -33,7 +33,7 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=libbase
-VERSION=-1.0.0
+VERSION=1.1.2
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -42,8 +42,9 @@ VERSION=-1.0.0
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=$(TARGET)
-TARFILE_ROOTDIR=$(TARGET)
+TARFILE_NAME=$(TARGET)-$(VERSION)
+#TARFILE_ROOTDIR=$(TARGET)
+TARFILE_IS_FLAT=true
 
 # PATCH_FILES=$(PRJ)$/patches$/libbase.patch
 # CONVERTFILES=build.xml
@@ -51,9 +52,9 @@ TARFILE_ROOTDIR=$(TARGET)
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(VERSION)" -f $(ANT_BUILDFILE) jar
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
@@ -67,7 +68,7 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(L10N_framework)"==""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(VERSION).jar 
 
 # XCLASSPATH/CLASSPATH does not work and we only can give lib once. But
 # the build.xmls fortunately take *.jar out of lib so we can copy our
@@ -82,7 +83,7 @@ $(CLASSDIR)$/commons-logging.jar :
     $(COPY) $(COMMONS_LOGGING_JAR) $(CLASSDIR)$/commons-logging.jar
 .ENDIF
 
-$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(CLASSDIR)$/commons-logging.jar $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
+$(CLASSDIR)$/$(TARGET)-$(VERSION).jar : $(CLASSDIR)$/commons-logging.jar $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(VERSION).jar $(CLASSDIR)$/$(TARGET)-$(VERSION).jar
 .ENDIF
 .ENDIF
