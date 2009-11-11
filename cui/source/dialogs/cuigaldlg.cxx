@@ -224,12 +224,12 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 // ------------------
 
 SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL ) :
-    ModalDialog     ( pParent, GAL_RESID(RID_SVXDLG_GALLERY_SEARCH_PROGRESS ) ),
-    aFtSearchDir    ( this, GAL_RESID( FT_SEARCH_DIR ) ),
-    aFLSearchDir   ( this, GAL_RESID( FL_SEARCH_DIR ) ),
-    aFtSearchType   ( this, GAL_RESID( FT_SEARCH_TYPE ) ),
-    aFLSearchType  ( this, GAL_RESID( FL_SEARCH_TYPE ) ),
-    aBtnCancel      ( this, GAL_RESID( BTN_CANCEL ) ),
+    ModalDialog     ( pParent, CUI_RES(RID_SVXDLG_GALLERY_SEARCH_PROGRESS ) ),
+    aFtSearchDir    ( this, CUI_RES( FT_SEARCH_DIR ) ),
+    aFLSearchDir   ( this, CUI_RES( FL_SEARCH_DIR ) ),
+    aFtSearchType   ( this, CUI_RES( FT_SEARCH_TYPE ) ),
+    aFLSearchType  ( this, CUI_RES( FL_SEARCH_TYPE ) ),
+    aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
     maSearchThread  ( this, (TPGalleryThemeProperties*) pParent, rStartURL )
 {
     FreeResource();
@@ -354,10 +354,10 @@ void SAL_CALL TakeThread::onTerminated()
 // ----------------
 
 TakeProgress::TakeProgress( Window* pWindow ) :
-    ModalDialog     ( pWindow, GAL_RESID( RID_SVXDLG_GALLERY_TAKE_PROGRESS ) ),
-    aFtTakeFile     ( this, GAL_RESID( FT_TAKE_FILE ) ),
-    aFLTakeProgress( this, GAL_RESID( FL_TAKE_PROGRESS ) ),
-    aBtnCancel      ( this, GAL_RESID( BTN_CANCEL ) ),
+    ModalDialog     ( pWindow, CUI_RES( RID_SVXDLG_GALLERY_TAKE_PROGRESS ) ),
+    aFtTakeFile     ( this, CUI_RES( FT_TAKE_FILE ) ),
+    aFLTakeProgress( this, CUI_RES( FL_TAKE_PROGRESS ) ),
+    aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
     maTakeThread    ( this, (TPGalleryThemeProperties*) pWindow, maTakenList )
 
 {
@@ -459,10 +459,10 @@ void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 // ---------------------
 
 ActualizeProgress::ActualizeProgress( Window* pWindow, GalleryTheme* pThm ) :
-    ModalDialog             ( pWindow, GAL_RESID( RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS ) ),
-    aFtActualizeFile        ( this, GAL_RESID( FT_ACTUALIZE_FILE ) ),
-    aFLActualizeProgress   ( this, GAL_RESID( FL_ACTUALIZE_PROGRESS ) ),
-    aBtnCancel              ( this, GAL_RESID( BTN_CANCEL ) ),
+    ModalDialog             ( pWindow, CUI_RES( RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS ) ),
+    aFtActualizeFile        ( this, CUI_RES( FT_ACTUALIZE_FILE ) ),
+    aFLActualizeProgress   ( this, CUI_RES( FL_ACTUALIZE_PROGRESS ) ),
+    aBtnCancel              ( this, CUI_RES( BTN_CANCEL ) ),
     pTheme                  ( pThm )
 {
     FreeResource();
@@ -540,12 +540,12 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
 // ---------------
 
 TitleDialog::TitleDialog( Window* pParent, const String& rOldTitle ) :
-    ModalDialog ( pParent, GAL_RESID( RID_SVXDLG_GALLERY_TITLE ) ),
-    maOk        ( this, GAL_RESID( BTN_OK ) ),
-    maCancel    ( this, GAL_RESID( BTN_CANCEL ) ),
-    maHelp      ( this, GAL_RESID( BTN_HELP ) ),
-    maFL       ( this, GAL_RESID( FL_TITLE ) ),
-    maEdit      ( this, GAL_RESID( EDT_TITLE ) )
+    ModalDialog ( pParent, CUI_RES( RID_SVXDLG_GALLERY_TITLE ) ),
+    maOk        ( this, CUI_RES( BTN_OK ) ),
+    maCancel    ( this, CUI_RES( BTN_CANCEL ) ),
+    maHelp      ( this, CUI_RES( BTN_HELP ) ),
+    maFL       ( this, CUI_RES( FL_TITLE ) ),
+    maEdit      ( this, CUI_RES( EDT_TITLE ) )
 {
     FreeResource();
     maEdit.SetText( rOldTitle );
@@ -557,11 +557,11 @@ TitleDialog::TitleDialog( Window* pParent, const String& rOldTitle ) :
 // -------------------
 
 GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
-            ModalDialog ( pParent, GAL_RESID( RID_SVXDLG_GALLERY_THEMEID ) ),
-            aBtnOk      ( this, GAL_RESID( BTN_OK ) ),
-            aBtnCancel  ( this, GAL_RESID( BTN_CANCEL ) ),
-            aFLId      ( this, GAL_RESID( FL_ID ) ),
-            aLbResName  ( this, GAL_RESID( LB_RESNAME ) ),
+            ModalDialog ( pParent, CUI_RES( RID_SVXDLG_GALLERY_THEMEID ) ),
+            aBtnOk      ( this, CUI_RES( BTN_OK ) ),
+            aBtnCancel  ( this, CUI_RES( BTN_CANCEL ) ),
+            aFLId      ( this, CUI_RES( FL_ID ) ),
+            aLbResName  ( this, CUI_RES( LB_RESNAME ) ),
             pThm        ( _pThm )
 {
     FreeResource();
@@ -590,7 +590,7 @@ IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
 
         if( ( pInfo->GetId() == nId ) && ( pInfo->GetThemeName() != pThm->GetName() ) )
         {
-            String aStr( GAL_RESID( RID_SVXSTR_GALLERY_ID_EXISTS ) );
+            String aStr( CUI_RES( RID_SVXSTR_GALLERY_ID_EXISTS ) );
 
             aStr += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
             aStr += pInfo->GetThemeName();
@@ -615,7 +615,7 @@ IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
 // --------------------------
 
 GalleryThemeProperties::GalleryThemeProperties( Window* pParent, ExchangeData* _pData, SfxItemSet* pItemSet  ) :
-            SfxTabDialog    ( pParent, GAL_RESID( RID_SVXTABDLG_GALLERYTHEME ), pItemSet ),
+            SfxTabDialog    ( pParent, CUI_RES( RID_SVXTABDLG_GALLERYTHEME ), pItemSet ),
             pData           ( _pData )
 {
     FreeResource();
@@ -631,7 +631,7 @@ GalleryThemeProperties::GalleryThemeProperties( Window* pParent, ExchangeData* _
     aText += pData->pTheme->GetName();
 
     if( pData->pTheme->IsReadOnly() )
-        aText += String( GAL_RESID( RID_SVXSTR_GALLERY_READONLY ) );
+        aText += String( CUI_RES( RID_SVXSTR_GALLERY_READONLY ) );
 
     SetText( aText );
 }
@@ -651,19 +651,19 @@ void GalleryThemeProperties::PageCreated( USHORT nId, SfxTabPage &rPage )
 // -------------------------
 
 TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet& rSet ) :
-            SfxTabPage              ( pParent, GAL_RESID( RID_SVXTABPAGE_GALLERY_GENERAL ), rSet ),
-            aFiMSImage              ( this, GAL_RESID( FI_MS_IMAGE ) ),
-            aEdtMSName              ( this, GAL_RESID( EDT_MS_NAME ) ),
-            aFlMSGeneralFirst       ( this, GAL_RESID( FL_MS_GENERAL_FIRST ) ),
-            aFtMSType               ( this, GAL_RESID( FT_MS_TYPE ) ),
-            aFtMSShowType           ( this, GAL_RESID( FT_MS_SHOW_TYPE ) ),
-            aFtMSPath               ( this, GAL_RESID( FT_MS_PATH ) ),
-            aFtMSShowPath           ( this, GAL_RESID( FT_MS_SHOW_PATH ) ),
-            aFtMSContent            ( this, GAL_RESID( FT_MS_CONTENT ) ),
-            aFtMSShowContent        ( this, GAL_RESID( FT_MS_SHOW_CONTENT ) ),
-            aFlMSGeneralSecond      ( this, GAL_RESID( FL_MS_GENERAL_SECOND ) ),
-            aFtMSChangeDate         ( this, GAL_RESID( FT_MS_CHANGEDATE ) ),
-            aFtMSShowChangeDate     ( this, GAL_RESID( FT_MS_SHOW_CHANGEDATE ) )
+            SfxTabPage              ( pParent, CUI_RES( RID_SVXTABPAGE_GALLERY_GENERAL ), rSet ),
+            aFiMSImage              ( this, CUI_RES( FI_MS_IMAGE ) ),
+            aEdtMSName              ( this, CUI_RES( EDT_MS_NAME ) ),
+            aFlMSGeneralFirst       ( this, CUI_RES( FL_MS_GENERAL_FIRST ) ),
+            aFtMSType               ( this, CUI_RES( FT_MS_TYPE ) ),
+            aFtMSShowType           ( this, CUI_RES( FT_MS_SHOW_TYPE ) ),
+            aFtMSPath               ( this, CUI_RES( FT_MS_PATH ) ),
+            aFtMSShowPath           ( this, CUI_RES( FT_MS_SHOW_PATH ) ),
+            aFtMSContent            ( this, CUI_RES( FT_MS_CONTENT ) ),
+            aFtMSShowContent        ( this, CUI_RES( FT_MS_SHOW_CONTENT ) ),
+            aFlMSGeneralSecond      ( this, CUI_RES( FL_MS_GENERAL_SECOND ) ),
+            aFtMSChangeDate         ( this, CUI_RES( FT_MS_CHANGEDATE ) ),
+            aFtMSShowChangeDate     ( this, CUI_RES( FT_MS_SHOW_CHANGEDATE ) )
 {
     FreeResource();
 }
@@ -676,9 +676,9 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     GalleryTheme*       pThm = pData->pTheme;
     String              aOutStr( String::CreateFromInt32( pThm->GetObjectCount() ) );
-    String              aObjStr( GAL_RESID( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
+    String              aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     String              aAccess;
-    String              aType( GAL_RESID( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
+    String              aType( CUI_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     BOOL                bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
 
     aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
@@ -691,7 +691,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
         aEdtMSName.Enable();
 
     if( pThm->IsReadOnly() )
-        aType += String( GAL_RESID( RID_SVXSTR_GALLERY_READONLY ) );
+        aType += String( CUI_RES( RID_SVXSTR_GALLERY_READONLY ) );
 
     aFtMSShowType.SetText( aType );
     aFtMSShowPath.SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
@@ -728,7 +728,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     else
         nId = RID_SVXBMP_THEME_NORMAL_BIG;
 
-    aFiMSImage.SetImage( Image( Bitmap( GAL_RESID( nId ) ), COL_LIGHTMAGENTA ) );
+    aFiMSImage.SetImage( Image( Bitmap( CUI_RES( nId ) ), COL_LIGHTMAGENTA ) );
 }
 
 // ------------------------------------------------------------------------
@@ -751,15 +751,15 @@ SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rS
 // ----------------------------
 
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet ) :
-        SfxTabPage          ( pWindow, GAL_RESID( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
-        aBtnSearch          ( this, GAL_RESID(BTN_SEARCH ) ),
-        aBtnTake            ( this, GAL_RESID(BTN_TAKE ) ),
-        aBtnTakeAll         ( this, GAL_RESID(BTN_TAKEALL ) ),
-        aCbxPreview         ( this, GAL_RESID(CBX_PREVIEW ) ),
-        aCbbFileType        ( this, GAL_RESID(CBB_FILETYPE ) ),
-        aLbxFound           ( this, GAL_RESID(LBX_FOUND ) ),
-        aFtFileType         ( this, GAL_RESID(FT_FILETYPE ) ),
-        aWndPreview         ( this, GAL_RESID( WND_BRSPRV ) ),
+        SfxTabPage          ( pWindow, CUI_RES( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
+        aBtnSearch          ( this, CUI_RES(BTN_SEARCH ) ),
+        aBtnTake            ( this, CUI_RES(BTN_TAKE ) ),
+        aBtnTakeAll         ( this, CUI_RES(BTN_TAKEALL ) ),
+        aCbxPreview         ( this, CUI_RES(CBX_PREVIEW ) ),
+        aCbbFileType        ( this, CUI_RES(CBB_FILETYPE ) ),
+        aLbxFound           ( this, CUI_RES(LBX_FOUND ) ),
+        aFtFileType         ( this, CUI_RES(FT_FILETYPE ) ),
+        aWndPreview         ( this, CUI_RES( WND_BRSPRV ) ),
         nCurFilterPos       (0),
         nFirstExtFilterPos  (0),
         bEntriesFound       (FALSE),
@@ -788,7 +788,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     aCbbFileType.EnableDDAutoWidth( sal_False );
     aLbxFound.SetDoubleClickHdl(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
     aLbxFound.SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
-    aLbxFound.InsertEntry(String(GAL_RESID(RID_SVXSTR_GALLERY_NOFILES)));
+    aLbxFound.InsertEntry(String(CUI_RES(RID_SVXSTR_GALLERY_NOFILES)));
     aLbxFound.Show();
 
     FillFilterList();
@@ -968,7 +968,7 @@ void TPGalleryThemeProperties::FillFilterList()
 #endif
 
     pFilterEntry = new FilterEntry;
-    pFilterEntry->aFilterName = String( GAL_RESID( RID_SVXSTR_GALLERY_ALLFILES ) );
+    pFilterEntry->aFilterName = String( CUI_RES( RID_SVXSTR_GALLERY_ALLFILES ) );
     pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
     aFilterEntryList.Insert(pFilterEntry, aCbbFileType. InsertEntry( pFilterEntry->aFilterName, 0 ) );
 
@@ -985,7 +985,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFileTypeHdl, void *, EMPTYARG )
     {
         aLastFilterName = aText;
 
-        if( QueryBox( this, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_SEARCH ) ) ).Execute() == RET_YES )
+        if( QueryBox( this, WB_YES_NO, String( CUI_RES( RID_SVXSTR_GALLERY_SEARCH ) ) ).Execute() == RET_YES )
             SearchFiles();
     }
 
@@ -1250,7 +1250,7 @@ IMPL_LINK( TPGalleryThemeProperties, EndSearchProgressHdl, SearchProgress *, EMP
   }
   else
   {
-      aLbxFound.InsertEntry( String( GAL_RESID( RID_SVXSTR_GALLERY_NOFILES ) ) );
+      aLbxFound.InsertEntry( String( CUI_RES( RID_SVXSTR_GALLERY_NOFILES ) ) );
       aBtnTakeAll.Disable();
       aCbxPreview.Disable();
       bEntriesFound = FALSE;
