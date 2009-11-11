@@ -528,7 +528,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
 IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 {
     USHORT nPos;
-    SvBaseLink* pLink = GetSelEntry( &nPos );
+    GetSelEntry( &nPos );
 
     if( _pLink && _pLink->WasLastEditOK() )
     {
