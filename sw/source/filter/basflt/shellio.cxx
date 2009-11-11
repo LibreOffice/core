@@ -158,6 +158,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
     RedlineMode_t eOld = pDoc->GetRedlineMode();
+    RedlineMode_t ePostReadRedlineMode( nsRedlineMode_t::REDLINE_IGNORE );
 
     // Array von FlyFormaten
     SwSpzFrmFmts aFlyFrmArr;
@@ -194,6 +195,9 @@ ULONG SwReader::Read( const Reader& rOptions )
         pDoc->SetRedlineMode_intern( eOld );
 
         nError = po->Read( *pDoc, GetBaseURL(), *pPam, aFileName );
+
+        // an ODF document may contain redline mode in settings.xml; save it!
+        ePostReadRedlineMode = pDoc->GetRedlineMode();
 
         pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
@@ -370,7 +374,9 @@ ULONG SwReader::Read( const Reader& rOptions )
         pDoc->UpdateLinks( TRUE );
         // <--
 
-    eOld = (RedlineMode_t)(pDoc->GetRedlineMode() & ~nsRedlineMode_t::REDLINE_IGNORE);
+        // not insert: set the redline mode read from settings.xml
+        eOld = static_cast<RedlineMode_t>(
+                ePostReadRedlineMode & ~nsRedlineMode_t::REDLINE_IGNORE);
 
         pDoc->SetFieldsDirty(false, NULL, 0);
     }
