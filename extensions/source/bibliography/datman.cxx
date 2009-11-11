@@ -894,12 +894,14 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
+                case DataType::BLOB:
                     sCurrentModelType = C2U("TextField");
                     break;
 
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
                 case DataType::CHAR:
+                case DataType::CLOB:
                     bFormattedIsNumeric = sal_False;
                     // _NO_ break !
                 default:
