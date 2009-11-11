@@ -45,6 +45,9 @@ const BOOL bX64 = TRUE;
 const BOOL bX64 = FALSE;
 #endif
 
+// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExA if WINVER < 0x0502.
+WINADVAPI LONG WINAPI RegDeleteKeyExA(HKEY,LPCSTR,REGSAM,DWORD);
+
 /////////////////////////////////////////////////////////////////////////////
 // DLL Entry Point
 
