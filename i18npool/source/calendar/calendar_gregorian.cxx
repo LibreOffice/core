@@ -531,8 +531,8 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
 
         bool bNeedZone = !(fieldSet & (1 << CalendarFieldIndex::ZONE_OFFSET));
         bool bNeedDST  = !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET));
-        sal_Int32 nZone1, nDST1, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone, nDST;
-        nZone1 = nDST1 = nZone = nDST = 0;
+        sal_Int32 nZone1, nDST1, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone0, nDST0;
+        nZone1 = nDST1 = nZone0 = nDST0 = 0;
         nYear = nMonth = nDay = nHour = nMinute = nSecond = nMilliSecond = -1;
         if ( bNeedZone || bNeedDST )
         {
@@ -581,19 +581,19 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
             }
             if ( !(fieldSet & (1 << CalendarFieldIndex::ZONE_OFFSET)) )
             {
-                nZone = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR);
+                nZone0 = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR);
                 if ( !U_SUCCESS(status) )
-                    nZone = 0;
+                    nZone0 = 0;
             }
             if ( !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET)) )
             {
-                nDST = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
+                nDST0 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
                 if ( !U_SUCCESS(status) )
-                    nDST = 0;
+                    nDST0 = 0;
             }
 
             // Submit values to obtain a time zone and DST corresponding to the date/time.
-            submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone, nDST);
+            submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone0, nDST0);
 
             DUMP_ICU_CAL_MSG(("%s\n","setValue() in bNeedZone||bNeedDST after submitValues()"));
             DUMP_I18N_CAL_MSG(("%s\n","setValue() in bNeedZone||bNeedDST after submitValues()"));
@@ -605,7 +605,8 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                 nDST1 = 0;
         }
 
-        // The original submission, may lead to a different zone/DST.
+        // The original submission, may lead to a different zone/DST and
+        // different date.
         submitFields();
         DUMP_ICU_CAL_MSG(("%s\n","setValue() after original submission"));
         DUMP_I18N_CAL_MSG(("%s\n","setValue() after original submission"));
@@ -619,7 +620,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
             sal_Int32 nDST2 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
                 nDST2 = nDST1;
-            if ( nZone2 != nZone1 || nDST2 != nDST1 )
+            if ( nZone0 != nZone1 || nZone2 != nZone1 || nDST0 != nDST1 || nDST2 != nDST1 )
             {
                 // Due to different DSTs, resulting date values may differ if
                 // DST is onset at 00:00 and the very onsetRule date was
@@ -627,6 +628,12 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                 // is not what we want.
                 // Resubmit all values, this time including DST => date 01:00
                 // Similar for zone differences.
+                // If already the first full submission with nZone0 and nDST0
+                // lead to date-1 23:00, the original submission was based on
+                // that date if it wasn't a full date (nDST0 set, nDST1 not
+                // set, nDST2==nDST1). If it was January 1st without year we're
+                // even off by one year now. Resubmit all values including new
+                // DST => date 00:00.
 
                 // Set field values accordingly in case they were used.
                 if (!bNeedZone)
