@@ -40,7 +40,7 @@ PACKAGE = complex$/toolkit$/interface_tests
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = _XAccessibleComponent.java         \
                   _XAccessibleContext.java           \
                   _XAccessibleExtendedComponent.java \
