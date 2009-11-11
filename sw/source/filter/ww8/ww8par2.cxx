@@ -1301,6 +1301,12 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(bool bVer67, const BYTE* pParamsTSetBRC)
         BYTE nitcLim  = pParamsTSetBRC[1];// (last col to be changed)+1
         BYTE nFlag    = *(pParamsTSetBRC+2);
 
+        if (nitcFirst >= nWwCols)
+            return;
+
+        if (nitcLim > nWwCols)
+            nitcLim = nWwCols;
+
         bool bChangeRight  = (nFlag & 0x08) ? true : false;
         bool bChangeBottom = (nFlag & 0x04) ? true : false;
         bool bChangeLeft   = (nFlag & 0x02) ? true : false;
