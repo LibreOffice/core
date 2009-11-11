@@ -15,7 +15,6 @@ JAR_PATH = $(SOLARBINDIR)$/
 
 JAR_FILES =		\
     unoil.jar	\
-    sandbox.jar	\
     ridl.jar	\
     jurt.jar	\
     juh.jar		\

@@ -42,7 +42,6 @@ PACKAGE = com$/sun$/star$/wizards$/agenda
 JARFILES= unoil.jar \
     jurt.jar \
     ridl.jar \
-    sandbox.jar \
     juh.jar \
     java_uno.jar \
     java_uno_accessbridge \
