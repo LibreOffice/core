@@ -54,6 +54,8 @@ private:
     mutable SfxItemPool*        pEnginePool;                    // EditEnginePool
     ScDocument*         m_pSourceDoc;
 
+    void                UseDocOptions() const;
+
 public:
                 ScPoolHelper( ScDocument* pSourceDoc );
     virtual     ~ScPoolHelper();
@@ -68,7 +70,7 @@ public:
     SfxItemPool*        GetEditPool() const;
     SfxItemPool*        GetEnginePool() const;
 
-    void                SetFormTableOpt(const ScDocOptions& rOpt) { aOpt = rOpt; }
+    void                SetFormTableOpt(const ScDocOptions& rOpt);
 };
 
 #endif
