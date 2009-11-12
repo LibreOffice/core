@@ -2,9 +2,9 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: fillbitmapattribute.hxx,v $
+ *  $RCSfile: bitmapprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
  *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
@@ -33,55 +33,61 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DISCRETEBITMAPPRIMITIVE2D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DISCRETEBITMAPPRIMITIVE2D_HXX
 
+#include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// predefines
-
-namespace basegfx {
-    class B2DRange;
-    class BColor;
-}
-
-//////////////////////////////////////////////////////////////////////////////
+// DiscreteBitmapPrimitive2D class
 
 namespace drawinglayer
 {
-    namespace attribute
+    namespace primitive2d
     {
-        class FillBitmapAttribute
-        {
-            BitmapEx                                    maBitmapEx;
-            basegfx::B2DPoint                           maTopLeft;
-            basegfx::B2DVector                          maSize;
+        /** DiscreteBitmapPrimitive2D class
 
-            // bitfield
-            unsigned                                    mbTiling : 1;
+            This class defines a view-dependent BitmapPrimitive which has a
+            logic position for the top-left position and is always to be
+            painted in 1:1 pixel resolution. It will never be sheared, rotated
+            or scaled with the view.
+         */
+        class DiscreteBitmapPrimitive2D : public ObjectAndViewTransformationDependentPrimitive2D
+        {
+        private:
+            /// the RGBA Bitmap-data
+            BitmapEx                                    maBitmapEx;
+
+            /** the top-left object position */
+            basegfx::B2DPoint                           maTopLeft;
+
+        protected:
+            /// local decomposition.
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            FillBitmapAttribute(
+            /// constructor
+            DiscreteBitmapPrimitive2D(
                 const BitmapEx& rBitmapEx,
-                const basegfx::B2DPoint& rTopLeft,
-                const basegfx::B2DVector& rSize,
-                bool bTiling);
-            bool operator==(const FillBitmapAttribute& rCandidate) const;
+                const basegfx::B2DPoint& rTopLeft);
 
-            // data access
+            /// data read access
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
             const basegfx::B2DPoint& getTopLeft() const { return maTopLeft; }
-            const basegfx::B2DVector& getSize() const { return maSize; }
-            bool getTiling() const { return mbTiling; }
+
+            /// compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            /// provide unique ID
+            DeclPrimitrive2DIDBlock()
         };
-    } // end of namespace attribute
+    } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DISCRETEBITMAPPRIMITIVE2D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

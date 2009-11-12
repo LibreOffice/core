@@ -40,7 +40,12 @@
 #include <drawinglayer/attribute/fillattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// FillbitmapPrimitive2D class
+// predefines
+
+namespace basegfx { class B2DPolygon; }
+
+//////////////////////////////////////////////////////////////////////////////
+// FillGradientPrimitive2D class
 
 namespace drawinglayer
 {
@@ -53,6 +58,12 @@ namespace drawinglayer
 
             The decomposition will deliver the decomposed gradient, e.g. for an ellipse
             gradient the various ellipses in various color steps will be created.
+
+            I have added functionality to create both versions of filled decompositions:
+            Those who overlap and non-overlapping ones. The overlapping version is the
+            default one since it works with and without AntiAliasing. The non-overlapping
+            version is used in the MetafilePrimitive2D decomposition when the old XOR
+            paint was recorded.
          */
         class FillGradientPrimitive2D : public BufferedDecompositionPrimitive2D
         {
@@ -63,7 +74,23 @@ namespace drawinglayer
             /// the gradient definition
             attribute::FillGradientAttribute        maFillGradient;
 
+            /// local helpers
+            void generateMatricesAndColors(
+                std::vector< basegfx::B2DHomMatrix >& rMatrices,
+                std::vector< basegfx::BColor >& rColors) const;
+            Primitive2DSequence createOverlappingFill(
+                const std::vector< basegfx::B2DHomMatrix >& rMatrices,
+                const std::vector< basegfx::BColor >& rColors,
+                const basegfx::B2DPolygon& rUnitPolygon) const;
+            Primitive2DSequence createNonOverlappingFill(
+                const std::vector< basegfx::B2DHomMatrix >& rMatrices,
+                const std::vector< basegfx::BColor >& rColors,
+                const basegfx::B2DPolygon& rUnitPolygon) const;
+
         protected:
+            /// local helper
+            Primitive2DSequence createFill(bool bOverlapping) const;
+
             /// local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 

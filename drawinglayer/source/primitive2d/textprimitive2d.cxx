@@ -50,27 +50,6 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
-        bool FontAttributes::operator==(const FontAttributes& rCompare) const
-        {
-            return (getFamilyName() == rCompare.getFamilyName()
-                && getStyleName() == rCompare.getStyleName()
-                && getWeight() == rCompare.getWeight()
-                && getSymbol() == rCompare.getSymbol()
-                && getVertical() == rCompare.getVertical()
-                && getItalic() == rCompare.getItalic()
-                && getOutline() == rCompare.getOutline()
-                && getRTL() == rCompare.getRTL()
-                && getBiDiStrong() == rCompare.getBiDiStrong());
-        }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
 namespace
 {
     // adapts fontScale for usage with TextLayouter. Input is rScale which is the extracted
@@ -156,8 +135,8 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(
-                        getFontAttributes(),
+                    aTextLayouter.setFontAttribute(
+                        getFontAttribute(),
                         aFontScale.getX(),
                         aFontScale.getY(),
                         getLocale());
@@ -236,7 +215,7 @@ namespace drawinglayer
                         aRetval[a] = new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor());
                     }
 
-                    if(getFontAttributes().getOutline())
+                    if(getFontAttribute().getOutline())
                     {
                         // decompose polygon transformation to single values
                         basegfx::B2DVector aScale, aTranslate;
@@ -264,7 +243,7 @@ namespace drawinglayer
             xub_StrLen aTextPosition,
             xub_StrLen aTextLength,
             const ::std::vector< double >& rDXArray,
-            const FontAttributes& rFontAttributes,
+            const attribute::FontAttribute& rFontAttribute,
             const ::com::sun::star::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor)
         :   BufferedDecompositionPrimitive2D(),
@@ -273,7 +252,7 @@ namespace drawinglayer
             maTextPosition(aTextPosition),
             maTextLength(aTextLength),
             maDXArray(rDXArray),
-            maFontAttributes(rFontAttributes),
+            maFontAttribute(rFontAttribute),
             maLocale(rLocale),
             maFontColor(rFontColor),
             maB2DRange()
@@ -285,7 +264,7 @@ namespace drawinglayer
 #endif
         }
 
-        bool impLocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB)
+        bool LocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB)
         {
             return (rA.Language == rB.Language
                 && rA.Country == rB.Country
@@ -303,8 +282,8 @@ namespace drawinglayer
                     && getTextPosition() == rCompare.getTextPosition()
                     && getTextLength() == rCompare.getTextLength()
                     && getDXArray() == rCompare.getDXArray()
-                    && getFontAttributes() == rCompare.getFontAttributes()
-                    && impLocalesAreEqual(getLocale(), rCompare.getLocale())
+                    && getFontAttribute() == rCompare.getFontAttribute()
+                    && LocalesAreEqual(getLocale(), rCompare.getLocale())
                     && getFontColor() == rCompare.getFontColor());
             }
 
@@ -330,8 +309,8 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(
-                        getFontAttributes(),
+                    aTextLayouter.setFontAttribute(
+                        getFontAttribute(),
                         aFontScale.getX(),
                         aFontScale.getY(),
                         getLocale());

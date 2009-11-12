@@ -232,8 +232,16 @@ namespace drawinglayer
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
                     }
 
-                    // direct draw of MetaFile
-                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    static bool bTestMetaFilePrimitiveDecomposition(true);
+                    if(bTestMetaFilePrimitiveDecomposition)
+                    {
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // direct draw of MetaFile
+                        RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    }
 
                     if(bForceLineSnap)
                     {
@@ -535,23 +543,18 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_INVERTPRIMITIVE2D :
                 {
                     // invert primitive (currently only used for HighContrast fallback for selection in SW and SC).
-                    // Set OutDev to XOR
+                    // Set OutDev to XOR and switch AA off (XOR does not work with AA)
                     mpOutputDevice->Push();
                     mpOutputDevice->SetRasterOp( ROP_XOR );
-
-                    // force paint color to white by using ColorModifierStack
-                    const basegfx::BColor aColWhite(1.0, 1.0, 1.0);
-                    const basegfx::BColorModifier aColorModifier(aColWhite, 0.0, basegfx::BCOLORMODIFYMODE_REPLACE);
-                    maBColorModifierStack.push(aColorModifier);
+                    const sal_uInt16 nAntiAliasing(mpOutputDevice->GetAntialiasing());
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
 
                     // process content recursively
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
-                    // restore ColorModifierStack
-                    maBColorModifierStack.pop();
-
                     // restore OutDev
                     mpOutputDevice->Pop();
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing);
                     break;
                 }
                 default :

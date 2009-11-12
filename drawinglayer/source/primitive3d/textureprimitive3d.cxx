@@ -171,12 +171,12 @@ namespace drawinglayer
     namespace primitive3d
     {
         BitmapTexturePrimitive3D::BitmapTexturePrimitive3D(
-            const attribute::FillBitmapAttribute& rBitmap,
+            const attribute::FillBitmapAttribute& rFillBitmapAttribute,
             const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
-            maBitmap(rBitmap)
+            maFillBitmapAttribute(rFillBitmapAttribute)
         {
         }
 
@@ -186,7 +186,7 @@ namespace drawinglayer
             {
                 const BitmapTexturePrimitive3D& rCompare = (BitmapTexturePrimitive3D&)rPrimitive;
 
-                return (getBitmap() == rCompare.getBitmap());
+                return (getFillBitmapAttribute() == rCompare.getFillBitmapAttribute());
             }
 
             return false;

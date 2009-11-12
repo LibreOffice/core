@@ -234,19 +234,19 @@ namespace drawinglayer
                 texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
 
                 // create texture
-                const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getBitmap();
+                const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getFillBitmapAttribute();
 
                 if(rFillBitmapAttribute.getTiling())
                 {
                     mpGeoTexSvx = new texture::GeoTexSvxBitmapTiled(
-                        rFillBitmapAttribute.getBitmap(),
+                        rFillBitmapAttribute.getBitmapEx().GetBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
                         rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
                 }
                 else
                 {
                     mpGeoTexSvx = new texture::GeoTexSvxBitmap(
-                        rFillBitmapAttribute.getBitmap(),
+                        rFillBitmapAttribute.getBitmapEx().GetBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
                         rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
                 }

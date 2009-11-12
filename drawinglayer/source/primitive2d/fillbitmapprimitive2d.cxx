@@ -56,7 +56,7 @@ namespace drawinglayer
     {
         Primitive2DSequence FillBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            const Size aTileSizePixel(getFillBitmap().getBitmap().GetSizePixel());
+            const Size aTileSizePixel(getFillBitmap().getBitmapEx().GetSizePixel());
             Primitive2DSequence aRetval;
 
             // is there a tile with some size at all?
@@ -79,7 +79,7 @@ namespace drawinglayer
                         aNewMatrix *= getTransformation();
 
                         // create bitmap primitive and add to result
-                        const Primitive2DReference xRef(new BitmapPrimitive2D(BitmapEx(getFillBitmap().getBitmap()), aNewMatrix));
+                        const Primitive2DReference xRef(new BitmapPrimitive2D(getFillBitmap().getBitmapEx(), aNewMatrix));
                         aRetval[a] = xRef;
                     }
                 }
@@ -94,7 +94,7 @@ namespace drawinglayer
                     aObjectTransform *= getTransformation();
 
                     // create bitmap primitive and add exclusive to decomposition (hand over ownership)
-                    const Primitive2DReference xRef(new BitmapPrimitive2D(BitmapEx(getFillBitmap().getBitmap()), aObjectTransform));
+                    const Primitive2DReference xRef(new BitmapPrimitive2D(getFillBitmap().getBitmapEx(), aObjectTransform));
                     aRetval = Primitive2DSequence(&xRef, 1L);
                 }
             }

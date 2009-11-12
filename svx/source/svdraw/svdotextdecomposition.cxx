@@ -80,29 +80,29 @@ namespace
         return aRetval;
     }
 
-    static drawinglayer::primitive2d::FontUnderline mapTextLineStyle(FontUnderline eLineStyle)
+    static drawinglayer::primitive2d::TextLine mapTextLineStyle(FontUnderline eLineStyle)
     {
         switch(eLineStyle)
         {
-            case UNDERLINE_SINGLE:          return drawinglayer::primitive2d::FONT_UNDERLINE_SINGLE;
-            case UNDERLINE_DOUBLE:          return drawinglayer::primitive2d::FONT_UNDERLINE_DOUBLE;
-            case UNDERLINE_DOTTED:          return drawinglayer::primitive2d::FONT_UNDERLINE_DOTTED;
-            case UNDERLINE_DASH:            return drawinglayer::primitive2d::FONT_UNDERLINE_DASH;
-            case UNDERLINE_LONGDASH:        return drawinglayer::primitive2d::FONT_UNDERLINE_LONGDASH;
-            case UNDERLINE_DASHDOT:         return drawinglayer::primitive2d::FONT_UNDERLINE_DASHDOT;
-            case UNDERLINE_DASHDOTDOT:      return drawinglayer::primitive2d::FONT_UNDERLINE_DASHDOTDOT;
-            case UNDERLINE_SMALLWAVE:       return drawinglayer::primitive2d::FONT_UNDERLINE_SMALLWAVE;
-            case UNDERLINE_WAVE:            return drawinglayer::primitive2d::FONT_UNDERLINE_WAVE;
-            case UNDERLINE_DOUBLEWAVE:      return drawinglayer::primitive2d::FONT_UNDERLINE_DOUBLEWAVE;
-            case UNDERLINE_BOLD:            return drawinglayer::primitive2d::FONT_UNDERLINE_BOLD;
-            case UNDERLINE_BOLDDOTTED:      return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDOTTED;
-            case UNDERLINE_BOLDDASH:        return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASH;
-            case UNDERLINE_BOLDLONGDASH:    return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDLONGDASH;
-            case UNDERLINE_BOLDDASHDOT:     return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASHDOT;
-            case UNDERLINE_BOLDDASHDOTDOT:  return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT;
-            case UNDERLINE_BOLDWAVE:        return drawinglayer::primitive2d::FONT_UNDERLINE_BOLDWAVE;
+            case UNDERLINE_SINGLE:          return drawinglayer::primitive2d::TEXT_LINE_SINGLE;
+            case UNDERLINE_DOUBLE:          return drawinglayer::primitive2d::TEXT_LINE_DOUBLE;
+            case UNDERLINE_DOTTED:          return drawinglayer::primitive2d::TEXT_LINE_DOTTED;
+            case UNDERLINE_DASH:            return drawinglayer::primitive2d::TEXT_LINE_DASH;
+            case UNDERLINE_LONGDASH:        return drawinglayer::primitive2d::TEXT_LINE_LONGDASH;
+            case UNDERLINE_DASHDOT:         return drawinglayer::primitive2d::TEXT_LINE_DASHDOT;
+            case UNDERLINE_DASHDOTDOT:      return drawinglayer::primitive2d::TEXT_LINE_DASHDOTDOT;
+            case UNDERLINE_SMALLWAVE:       return drawinglayer::primitive2d::TEXT_LINE_SMALLWAVE;
+            case UNDERLINE_WAVE:            return drawinglayer::primitive2d::TEXT_LINE_WAVE;
+            case UNDERLINE_DOUBLEWAVE:      return drawinglayer::primitive2d::TEXT_LINE_DOUBLEWAVE;
+            case UNDERLINE_BOLD:            return drawinglayer::primitive2d::TEXT_LINE_BOLD;
+            case UNDERLINE_BOLDDOTTED:      return drawinglayer::primitive2d::TEXT_LINE_BOLDDOTTED;
+            case UNDERLINE_BOLDDASH:        return drawinglayer::primitive2d::TEXT_LINE_BOLDDASH;
+            case UNDERLINE_BOLDLONGDASH:    return drawinglayer::primitive2d::TEXT_LINE_BOLDLONGDASH;
+            case UNDERLINE_BOLDDASHDOT:     return drawinglayer::primitive2d::TEXT_LINE_BOLDDASHDOT;
+            case UNDERLINE_BOLDDASHDOTDOT:  return drawinglayer::primitive2d::TEXT_LINE_BOLDDASHDOTDOT;
+            case UNDERLINE_BOLDWAVE:        return drawinglayer::primitive2d::TEXT_LINE_BOLDWAVE;
             // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
-            default:                        return drawinglayer::primitive2d::FONT_UNDERLINE_NONE;
+            default:                        return drawinglayer::primitive2d::TEXT_LINE_NONE;
         }
     }
 
@@ -217,8 +217,8 @@ namespace
         if(rInfo.mrText.Len() && rInfo.mnTextLen)
         {
             basegfx::B2DVector aFontScaling;
-            drawinglayer::primitive2d::FontAttributes aFontAttributes(
-                drawinglayer::primitive2d::getFontAttributesFromVclFont(
+            drawinglayer::attribute::FontAttribute aFontAttribute(
+                drawinglayer::primitive2d::getFontAttributeFromVclFont(
                     aFontScaling,
                     rInfo.mrFont,
                     rInfo.IsRTL(),
@@ -296,6 +296,11 @@ namespace
             const Color aFontColor(rInfo.mrFont.GetColor());
             const basegfx::BColor aBFontColor(aFontColor.getBColor());
 
+            // prepare wordLineMode (for underline and strikeout)
+            // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
+            // to be splitted which would not look like the original
+            const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
+
             // prepare new primitive
             drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = 0;
             const bool bDecoratedIsNeeded(
@@ -304,7 +309,8 @@ namespace
                 || STRIKEOUT_NONE != rInfo.mrFont.GetStrikeout()
                 || EMPHASISMARK_NONE != (rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
                 || RELIEF_NONE != rInfo.mrFont.GetRelief()
-                || rInfo.mrFont.IsShadow());
+                || rInfo.mrFont.IsShadow()
+                || bWordLineMode);
 
             if(bDecoratedIsNeeded)
             {
@@ -316,11 +322,11 @@ namespace
                 const basegfx::BColor aBOverlineColor((0xffffffff == aOverlineColor.GetColor()) ? aBFontColor : aOverlineColor.getBColor());
 
                 // prepare overline and underline data
-                const drawinglayer::primitive2d::FontUnderline eFontOverline(mapTextLineStyle(rInfo.mrFont.GetOverline()));
-                const drawinglayer::primitive2d::FontUnderline eFontUnderline(mapTextLineStyle(rInfo.mrFont.GetUnderline()));
+                const drawinglayer::primitive2d::TextLine eFontOverline(mapTextLineStyle(rInfo.mrFont.GetOverline()));
+                const drawinglayer::primitive2d::TextLine eFontUnderline(mapTextLineStyle(rInfo.mrFont.GetUnderline()));
 
                 // check UndelineAbove
-                const bool bUnderlineAbove(drawinglayer::primitive2d::FONT_UNDERLINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
+                const bool bUnderlineAbove(drawinglayer::primitive2d::TEXT_LINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
 
                 // prepare strikeout data
                 drawinglayer::primitive2d::FontStrikeout eFontStrikeout(drawinglayer::primitive2d::FONT_STRIKEOUT_NONE);
@@ -334,11 +340,6 @@ namespace
                     case STRIKEOUT_X:       eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_X; break;
                     default : break; // FontStrikeout_FORCE_EQUAL_SIZE, STRIKEOUT_NONE, STRIKEOUT_DONTKNOW
                 }
-
-                // prepare wordLineMode (for underline and strikeout)
-                // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
-                // to be splitted which would not look like the original
-                const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
 
                 // prepare emphasis mark data
                 drawinglayer::primitive2d::FontEmphasisMark eFontEmphasisMark(drawinglayer::primitive2d::FONT_EMPHASISMARK_NONE);
@@ -376,7 +377,7 @@ namespace
                     rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
-                    aFontAttributes,
+                    aFontAttribute,
                     rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
                     aBFontColor,
 
@@ -403,7 +404,7 @@ namespace
                     rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
-                    aFontAttributes,
+                    aFontAttribute,
                     rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
                     aBFontColor);
             }

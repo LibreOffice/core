@@ -228,7 +228,7 @@ namespace drawinglayer
                 aBitmapSize.setY(aBitmapSize.getY() / fRangeHeight);
             }
 
-            return FillBitmapAttribute(aBitmap, aBitmapTopLeft, aBitmapSize, mbTiling);
+            return FillBitmapAttribute(BitmapEx(aBitmap), aBitmapTopLeft, aBitmapSize, mbTiling);
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

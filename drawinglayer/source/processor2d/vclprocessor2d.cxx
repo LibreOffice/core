@@ -63,6 +63,7 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/metric.hxx>
+#include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -99,31 +100,31 @@ namespace drawinglayer
         using ::com::sun::star::awt::XWindow;
         using ::com::sun::star::awt::PosSize::POSSIZE;
 
-        static FontUnderline mapTextLineStyle(primitive2d::FontUnderline eLineStyle)
+        static FontUnderline mapTextLineStyle(drawinglayer::primitive2d::TextLine eLineStyle)
         {
             switch(eLineStyle)
             {
                 default:
                     DBG_WARNING1( "DrawingLayer: Unknown text line style attribute (%d)!", eLineStyle );
                     // fall through
-                case primitive2d::FONT_UNDERLINE_NONE:          return UNDERLINE_NONE;
-                case primitive2d::FONT_UNDERLINE_SINGLE:        return UNDERLINE_SINGLE;
-                case primitive2d::FONT_UNDERLINE_DOUBLE:        return UNDERLINE_DOUBLE;
-                case primitive2d::FONT_UNDERLINE_DOTTED:        return UNDERLINE_DOTTED;
-                case primitive2d::FONT_UNDERLINE_DASH:          return UNDERLINE_DASH;
-                case primitive2d::FONT_UNDERLINE_LONGDASH:      return UNDERLINE_LONGDASH;
-                case primitive2d::FONT_UNDERLINE_DASHDOT:       return UNDERLINE_DASHDOT;
-                case primitive2d::FONT_UNDERLINE_DASHDOTDOT:    return UNDERLINE_DASHDOTDOT;
-                case primitive2d::FONT_UNDERLINE_SMALLWAVE:     return UNDERLINE_SMALLWAVE;
-                case primitive2d::FONT_UNDERLINE_WAVE:          return UNDERLINE_WAVE;
-                case primitive2d::FONT_UNDERLINE_DOUBLEWAVE:    return UNDERLINE_DOUBLEWAVE;
-                case primitive2d::FONT_UNDERLINE_BOLD:          return UNDERLINE_BOLD;
-                case primitive2d::FONT_UNDERLINE_BOLDDOTTED:    return UNDERLINE_BOLDDOTTED;
-                case primitive2d::FONT_UNDERLINE_BOLDDASH:      return UNDERLINE_BOLDDASH;
-                case primitive2d::FONT_UNDERLINE_BOLDLONGDASH:  return UNDERLINE_LONGDASH;
-                case primitive2d::FONT_UNDERLINE_BOLDDASHDOT:   return UNDERLINE_BOLDDASHDOT;
-                case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:return UNDERLINE_BOLDDASHDOT;
-                case primitive2d::FONT_UNDERLINE_BOLDWAVE:      return UNDERLINE_BOLDWAVE;
+                case primitive2d::TEXT_LINE_NONE:          return UNDERLINE_NONE;
+                case primitive2d::TEXT_LINE_SINGLE:        return UNDERLINE_SINGLE;
+                case primitive2d::TEXT_LINE_DOUBLE:        return UNDERLINE_DOUBLE;
+                case primitive2d::TEXT_LINE_DOTTED:        return UNDERLINE_DOTTED;
+                case primitive2d::TEXT_LINE_DASH:          return UNDERLINE_DASH;
+                case primitive2d::TEXT_LINE_LONGDASH:      return UNDERLINE_LONGDASH;
+                case primitive2d::TEXT_LINE_DASHDOT:       return UNDERLINE_DASHDOT;
+                case primitive2d::TEXT_LINE_DASHDOTDOT:    return UNDERLINE_DASHDOTDOT;
+                case primitive2d::TEXT_LINE_SMALLWAVE:     return UNDERLINE_SMALLWAVE;
+                case primitive2d::TEXT_LINE_WAVE:          return UNDERLINE_WAVE;
+                case primitive2d::TEXT_LINE_DOUBLEWAVE:    return UNDERLINE_DOUBLEWAVE;
+                case primitive2d::TEXT_LINE_BOLD:          return UNDERLINE_BOLD;
+                case primitive2d::TEXT_LINE_BOLDDOTTED:    return UNDERLINE_BOLDDOTTED;
+                case primitive2d::TEXT_LINE_BOLDDASH:      return UNDERLINE_BOLDDASH;
+                case primitive2d::TEXT_LINE_BOLDLONGDASH:  return UNDERLINE_LONGDASH;
+                case primitive2d::TEXT_LINE_BOLDDASHDOT:   return UNDERLINE_BOLDDASHDOT;
+                case primitive2d::TEXT_LINE_BOLDDASHDOTDOT:return UNDERLINE_BOLDDASHDOT;
+                case primitive2d::TEXT_LINE_BOLDWAVE:      return UNDERLINE_BOLDWAVE;
             }
         }
 
@@ -157,8 +158,8 @@ namespace drawinglayer
                 if(basegfx::fTools::more(aFontScaling.getX(), 0.0) && basegfx::fTools::more(aFontScaling.getY(), 0.0))
                 {
                     // Get the VCL font (use FontHeight as FontWidth)
-                    Font aFont(primitive2d::getVclFontFromFontAttributes(
-                        rTextCandidate.getFontAttributes(),
+                    Font aFont(primitive2d::getVclFontFromFontAttribute(
+                        rTextCandidate.getFontAttribute(),
                         aFontScaling.getX(),
                         aFontScaling.getY(),
                         fRotate,
@@ -176,7 +177,7 @@ namespace drawinglayer
                         mpOutputDevice->SetTextLineColor( Color(aTextlineColor) );
 
                         // set Overline attribute
-                        FontUnderline eFontOverline = mapTextLineStyle( pTCPP->getFontOverline() );
+                        const FontUnderline eFontOverline(mapTextLineStyle( pTCPP->getFontOverline() ));
                         if( eFontOverline != UNDERLINE_NONE )
                         {
                             aFont.SetOverline( eFontOverline );
@@ -187,7 +188,7 @@ namespace drawinglayer
                         }
 
                         // set Underline attribute
-                        FontUnderline eFontUnderline = mapTextLineStyle( pTCPP->getFontUnderline() );
+                        const FontUnderline eFontUnderline(mapTextLineStyle( pTCPP->getFontUnderline() ));
                         if( eFontUnderline != UNDERLINE_NONE )
                         {
                             aFont.SetUnderline( eFontUnderline );
@@ -282,7 +283,7 @@ namespace drawinglayer
                     const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
                     const sal_uInt32 nOldLayoutMode(mpOutputDevice->GetLayoutMode());
 
-                    if(rTextCandidate.getFontAttributes().getRTL())
+                    if(rTextCandidate.getFontAttribute().getRTL())
                     {
                         sal_uInt32 nRTLLayoutMode(nOldLayoutMode & ~(TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG));
                         nRTLLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
@@ -310,7 +311,7 @@ namespace drawinglayer
                             rTextCandidate.getTextLength());
                     }
 
-                    if(rTextCandidate.getFontAttributes().getRTL())
+                    if(rTextCandidate.getFontAttribute().getRTL())
                     {
                         mpOutputDevice->SetLayoutMode(nOldLayoutMode);
                     }
@@ -428,7 +429,7 @@ namespace drawinglayer
                 {
                     // no shear or rotate, draw direct in pixel coordinates
                     bPrimitiveAccepted = true;
-                    BitmapEx aBitmapEx(rFillBitmapAttribute.getBitmap());
+                    BitmapEx aBitmapEx(rFillBitmapAttribute.getBitmapEx());
                     bool bPainted(false);
 
                     if(maBColorModifierStack.count())
@@ -585,9 +586,9 @@ namespace drawinglayer
             if(rPolyPolygon.count())
             {
                 const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPolygonCandidate.getFillBitmap();
-                const Bitmap& rBitmap = rFillBitmapAttribute.getBitmap();
+                const BitmapEx& rBitmapEx = rFillBitmapAttribute.getBitmapEx();
 
-                if(rBitmap.IsEmpty())
+                if(rBitmapEx.IsEmpty())
                 {
                     // empty bitmap, done
                     bDone = true;
@@ -679,7 +680,9 @@ namespace drawinglayer
             aLocalPolyPolygon.transform(maCurrentTransformation);
             mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
 
-            if(mnPolygonStrokePrimitive2D && getOptionsDrawinglayer().IsAntiAliasing())
+            if(mnPolygonStrokePrimitive2D
+                && getOptionsDrawinglayer().IsAntiAliasing()
+                && (mpOutputDevice->GetAntialiasing() & ANTIALIASING_ENABLE_B2DDRAW))
             {
                 // when AA is on and this filled polygons are the result of stroked line geometry,
                 // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons

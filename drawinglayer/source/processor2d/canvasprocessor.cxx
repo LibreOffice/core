@@ -676,7 +676,7 @@ using namespace com::sun::star;
         // directdraw of text simple portion
         void canvasProcessor::impRender_STXP(const textSimplePortionPrimitive& rTextCandidate)
         {
-            const fontAttributes&  rFontAttrs( rTextCandidate.getFontAttributes() );
+            const fontAttributes&  rFontAttrs( rTextCandidate.getFontAttribute() );
             rendering::FontRequest aFontRequest;
 
             aFontRequest.FontDescription.FamilyName   = rFontAttrs.maFamilyName;
@@ -1517,16 +1517,16 @@ namespace drawinglayer
                 }
                 else
                 {
-                    const primitive2d::FontAttributes& rFontAttrs(rTextCandidate.getFontAttributes());
+                    const attribute::FontAttribute& rFontAttr(rTextCandidate.getFontAttribute());
                     rendering::FontRequest aFontRequest;
 
-                    aFontRequest.FontDescription.FamilyName = rFontAttrs.getFamilyName();
-                    aFontRequest.FontDescription.StyleName = rFontAttrs.getStyleName();
-                    aFontRequest.FontDescription.IsSymbolFont = rFontAttrs.getSymbol() ? util::TriState_YES : util::TriState_NO;
-                    aFontRequest.FontDescription.IsVertical = rFontAttrs.getVertical() ? util::TriState_YES : util::TriState_NO;
+                    aFontRequest.FontDescription.FamilyName = rFontAttr.getFamilyName();
+                    aFontRequest.FontDescription.StyleName = rFontAttr.getStyleName();
+                    aFontRequest.FontDescription.IsSymbolFont = rFontAttr.getSymbol() ? util::TriState_YES : util::TriState_NO;
+                    aFontRequest.FontDescription.IsVertical = rFontAttr.getVertical() ? util::TriState_YES : util::TriState_NO;
                     // TODO(F2): improve vclenum->panose conversion
-                    aFontRequest.FontDescription.FontDescription.Weight = static_cast< sal_uInt8 >(rFontAttrs.getWeight());
-                    aFontRequest.FontDescription.FontDescription.Letterform = rFontAttrs.getItalic() ? 9 : 0;
+                    aFontRequest.FontDescription.FontDescription.Weight = static_cast< sal_uInt8 >(rFontAttr.getWeight());
+                    aFontRequest.FontDescription.FontDescription.Letterform = rFontAttr.getItalic() ? 9 : 0;
 
                     // init CellSize to 1.0, else a default font height will be used
                     aFontRequest.CellSize = 1.0;
@@ -1795,7 +1795,7 @@ namespace drawinglayer
                 if(rFillBitmapAttribute.getTiling())
                 {
                     // apply possible color modification to Bitmap
-                    const BitmapEx aChangedBitmapEx(impModifyBitmapEx(maBColorModifierStack, BitmapEx(rFillBitmapAttribute.getBitmap())));
+                    const BitmapEx aChangedBitmapEx(impModifyBitmapEx(maBColorModifierStack, rFillBitmapAttribute.getBitmapEx()));
 
                     if(aChangedBitmapEx.IsEmpty())
                     {

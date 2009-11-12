@@ -65,8 +65,8 @@ namespace drawinglayer
             {
                 const BitmapPrimitive2D& rCompare = (BitmapPrimitive2D&)rPrimitive;
 
-                return (maBitmapEx == rCompare.maBitmapEx
-                    && maTransform == rCompare.maTransform);
+                return (getBitmapEx() == rCompare.getBitmapEx()
+                    && getTransform() == rCompare.getTransform());
             }
 
             return false;

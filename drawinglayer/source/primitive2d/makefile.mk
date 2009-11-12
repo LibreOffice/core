@@ -53,6 +53,7 @@ SLOFILES= \
         $(SLO)$/borderlineprimitive2d.obj		\
         $(SLO)$/chartprimitive2d.obj			\
         $(SLO)$/controlprimitive2d.obj			\
+        $(SLO)$/discretebitmapprimitive2d.obj	\
         $(SLO)$/embedded3dprimitive2d.obj		\
         $(SLO)$/fillbitmapprimitive2d.obj		\
         $(SLO)$/fillgradientprimitive2d.obj		\
@@ -78,11 +79,14 @@ SLOFILES= \
         $(SLO)$/structuretagprimitive2d.obj		\
         $(SLO)$/texteffectprimitive2d.obj		\
         $(SLO)$/textlayoutdevice.obj			\
+        $(SLO)$/textlineprimitive2d.obj			\
         $(SLO)$/textprimitive2d.obj				\
+        $(SLO)$/textstrikeoutprimitive2d.obj	\
         $(SLO)$/textdecoratedprimitive2d.obj	\
         $(SLO)$/texthierarchyprimitive2d.obj	\
         $(SLO)$/transformprimitive2d.obj		\
         $(SLO)$/unifiedalphaprimitive2d.obj		\
+        $(SLO)$/wallpaperprimitive2d.obj		\
         $(SLO)$/wrongspellprimitive2d.obj
 
 # --- Targets ----------------------------------

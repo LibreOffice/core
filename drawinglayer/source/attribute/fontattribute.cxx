@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: fillbitmapattribute.hxx,v $
+ *  $RCSfile: strokeattribute.cxx,v $
  *
  *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,20 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_drawinglayer.hxx"
 
-#include <vcl/bitmapex.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-// predefines
-
-namespace basegfx {
-    class B2DRange;
-    class BColor;
-}
+#include <drawinglayer/attribute/fontattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -54,34 +44,20 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class FillBitmapAttribute
+        bool FontAttribute::operator==(const FontAttribute& rCompare) const
         {
-            BitmapEx                                    maBitmapEx;
-            basegfx::B2DPoint                           maTopLeft;
-            basegfx::B2DVector                          maSize;
-
-            // bitfield
-            unsigned                                    mbTiling : 1;
-
-        public:
-            FillBitmapAttribute(
-                const BitmapEx& rBitmapEx,
-                const basegfx::B2DPoint& rTopLeft,
-                const basegfx::B2DVector& rSize,
-                bool bTiling);
-            bool operator==(const FillBitmapAttribute& rCandidate) const;
-
-            // data access
-            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
-            const basegfx::B2DPoint& getTopLeft() const { return maTopLeft; }
-            const basegfx::B2DVector& getSize() const { return maSize; }
-            bool getTiling() const { return mbTiling; }
-        };
+            return (getFamilyName() == rCompare.getFamilyName()
+                && getStyleName() == rCompare.getStyleName()
+                && getWeight() == rCompare.getWeight()
+                && getSymbol() == rCompare.getSymbol()
+                && getVertical() == rCompare.getVertical()
+                && getItalic() == rCompare.getItalic()
+                && getOutline() == rCompare.getOutline()
+                && getRTL() == rCompare.getRTL()
+                && getBiDiStrong() == rCompare.getBiDiStrong());
+        }
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
-
 // eof

@@ -44,7 +44,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** HitTestPrimitive2D class
+        /** InvertPrimitive2D class
 
             This is a helper class which encapsulates geometry that should be
             painted XOR, e.g. old cursor visualisations. It decomposes to

@@ -167,14 +167,14 @@ namespace drawinglayer
             mrDevice.SetFont( rFont );
         }
 
-        void TextLayouterDevice::setFontAttributes(
-            const FontAttributes& rFontAttributes,
+        void TextLayouterDevice::setFontAttribute(
+            const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
             const ::com::sun::star::lang::Locale& rLocale)
         {
-            setFont(getVclFontFromFontAttributes(
-                rFontAttributes,
+            setFont(getVclFontFromFontAttribute(
+                rFontAttribute,
                 fFontScaleX,
                 fFontScaleY,
                 0.0,
@@ -297,6 +297,18 @@ namespace drawinglayer
 
             return basegfx::B2DRange();
         }
+
+        double TextLayouterDevice::getFontAscent() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            return rMetric.GetAscent();
+        }
+
+        double TextLayouterDevice::getFontDescent() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            return rMetric.GetDescent();
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -307,8 +319,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Font getVclFontFromFontAttributes(
-            const FontAttributes& rFontAttributes,
+        Font getVclFontFromFontAttribute(
+            const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
@@ -324,8 +336,8 @@ namespace drawinglayer
             // is wanted, that width needs to be adapted using FontMetric again to get a
             // width of the unscaled font
             Font aRetval(
-                rFontAttributes.getFamilyName(),
-                rFontAttributes.getStyleName(),
+                rFontAttribute.getFamilyName(),
+                rFontAttribute.getStyleName(),
                 Size(0, nHeight));
 #else
             // for non-WIN32 systems things are easier since these accept a Font creation
@@ -334,17 +346,17 @@ namespace drawinglayer
             // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
             // set FontWidth; import that in a WIN32 system, and trouble is there)
             Font aRetval(
-                rFontAttributes.getFamilyName(),
-                rFontAttributes.getStyleName(),
+                rFontAttribute.getFamilyName(),
+                rFontAttribute.getStyleName(),
                 Size(bFontIsScaled ? nWidth : 0, nHeight));
 #endif
-            // define various other FontAttributes
+            // define various other FontAttribute
             aRetval.SetAlign(ALIGN_BASELINE);
-            aRetval.SetCharSet(rFontAttributes.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
-            aRetval.SetVertical(rFontAttributes.getVertical() ? TRUE : FALSE);
-            aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.getWeight()));
-            aRetval.SetItalic(rFontAttributes.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
-            aRetval.SetOutline(rFontAttributes.getOutline());
+            aRetval.SetCharSet(rFontAttribute.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
+            aRetval.SetVertical(rFontAttribute.getVertical() ? TRUE : FALSE);
+            aRetval.SetWeight(static_cast<FontWeight>(rFontAttribute.getWeight()));
+            aRetval.SetItalic(rFontAttribute.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
+            aRetval.SetOutline(rFontAttribute.getOutline());
             aRetval.SetLanguage(MsLangId::convertLocaleToLanguage(rLocale));
 
 #ifdef WIN32
@@ -371,13 +383,13 @@ namespace drawinglayer
             return aRetval;
         }
 
-        FontAttributes getFontAttributesFromVclFont(
+        attribute::FontAttribute getFontAttributeFromVclFont(
             basegfx::B2DVector& o_rSize,
             const Font& rFont,
             bool bRTL,
             bool bBiDiStrong)
         {
-            const FontAttributes aRetval(
+            const attribute::FontAttribute aRetval(
                 rFont.GetName(),
                 rFont.GetStyleName(),
                 static_cast<sal_uInt16>(rFont.GetWeight()),

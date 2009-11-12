@@ -920,9 +920,6 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
 
             if(aSource.count())
             {
-                const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
-                aSource.transform(aTransform);
-
                 if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
                 {
                     const Gradient& rGrad = pAct->GetGradient();
@@ -943,7 +940,20 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                     aXGradient.SetEndIntens(rGrad.GetEndIntensity());
                     aXGradient.SetSteps(rGrad.GetSteps());
 
-                    SetAttributes(pPath);
+                    if(aVD.IsLineColor())
+                    {
+                        // switch line off; when there was one there will be a
+                        // META_POLYLINE_ACTION following creating another object
+                        const Color aLineColor(aVD.GetLineColor());
+                        aVD.SetLineColor();
+                        SetAttributes(pPath);
+                        aVD.SetLineColor(aLineColor);
+                    }
+                    else
+                    {
+                        SetAttributes(pPath);
+                    }
+
                     aGradAttr.Put(XFillStyleItem(XFILL_GRADIENT));
                     aGradAttr.Put(XFillGradientItem(&pModel->GetItemPool(), aXGradient));
                     pPath->SetMergedItemSet(aGradAttr);

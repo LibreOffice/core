@@ -48,6 +48,8 @@
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textlineprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -55,217 +57,6 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        void TextDecoratedPortionPrimitive2D::impCreateTextLine(
-            std::vector< Primitive2DReference >& rTarget,
-            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
-            const basegfx::B2DHomMatrix &rUnscaledTransform,
-            FontUnderline eLineStyle,
-            double fLineOffset,
-            double fLineHeight,
-            double fLineWidth,
-            const basegfx::BColor& rLineColor) const
-        {
-            bool bDoubleLine(false);
-            bool bWaveLine(false);
-            bool bBoldLine(false);
-            const int* pDotDashArray(0);
-            basegfx::B2DLineJoin eLineJoin(basegfx::B2DLINEJOIN_NONE);
-
-            static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
-            static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
-            static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
-            static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
-            static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
-
-            switch(eLineStyle)
-            {
-                default: // case FONT_UNDERLINE_SINGLE:
-                {
-                    break;
-                }
-                case FONT_UNDERLINE_DOUBLE:
-                {
-                    bDoubleLine = true;
-                    break;
-                }
-                case FONT_UNDERLINE_DOTTED:
-                {
-                    pDotDashArray = aDottedArray;
-                    break;
-                }
-                case FONT_UNDERLINE_DASH:
-                {
-                    pDotDashArray = aDashedArray;
-                    break;
-                }
-                case FONT_UNDERLINE_LONGDASH:
-                {
-                    pDotDashArray = aLongDashArray;
-                    break;
-                }
-                case FONT_UNDERLINE_DASHDOT:
-                {
-                    pDotDashArray = aDotDashArray;
-                    break;
-                }
-                case FONT_UNDERLINE_DASHDOTDOT:
-                {
-                    pDotDashArray = aDashDotDotArray;
-                    break;
-                }
-                case FONT_UNDERLINE_SMALLWAVE:
-                {
-                    bWaveLine = true;
-                    break;
-                }
-                case FONT_UNDERLINE_WAVE:
-                {
-                    bWaveLine = true;
-                    break;
-                }
-                case FONT_UNDERLINE_DOUBLEWAVE:
-                {
-                    bDoubleLine = true;
-                    bWaveLine = true;
-                    break;
-                }
-                case FONT_UNDERLINE_BOLD:
-                {
-                    bBoldLine = true;
-                    break;
-                }
-                case FONT_UNDERLINE_BOLDDOTTED:
-                {
-                    bBoldLine = true;
-                    pDotDashArray = aDottedArray;
-                    break;
-                }
-                case FONT_UNDERLINE_BOLDDASH:
-                {
-                    bBoldLine = true;
-                    pDotDashArray = aDashedArray;
-                    break;
-                }
-                case FONT_UNDERLINE_BOLDLONGDASH:
-                {
-                    bBoldLine = true;
-                    pDotDashArray = aLongDashArray;
-                    break;
-                }
-                case FONT_UNDERLINE_BOLDDASHDOT:
-                {
-                    bBoldLine = true;
-                    pDotDashArray = aDotDashArray;
-                    break;
-                }
-                case FONT_UNDERLINE_BOLDDASHDOTDOT:
-                {
-                    bBoldLine = true;
-                    pDotDashArray = aDashDotDotArray;
-                    break;
-                }
-                case FONT_UNDERLINE_BOLDWAVE:
-                {
-                    bWaveLine = true;
-                    bBoldLine = true;
-                    break;
-                }
-            }
-
-            if(bBoldLine)
-            {
-                fLineHeight *= 2.0;
-            }
-
-            if(bDoubleLine)
-            {
-                fLineOffset -= 0.50 * fLineHeight;
-                fLineHeight *= 0.64;
-            }
-
-            if(bWaveLine)
-            {
-                eLineJoin = basegfx::B2DLINEJOIN_ROUND;
-                fLineHeight *= 0.25;
-            }
-
-            // prepare Line and Stroke Attributes
-            const attribute::LineAttribute aLineAttribute(rLineColor, fLineHeight, eLineJoin);
-            attribute::StrokeAttribute aStrokeAttribute;
-
-            if(pDotDashArray)
-            {
-                ::std::vector< double > aDoubleArray;
-
-                for(const int* p = pDotDashArray; *p; ++p)
-                {
-                    aDoubleArray.push_back((double)(*p) * fLineHeight);
-                }
-
-                aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);
-            }
-
-            // create base polygon and new primitive
-            basegfx::B2DPolygon aLine;
-            Primitive2DReference aNewPrimitive;
-
-            aLine.append(basegfx::B2DPoint(0.0, fLineOffset));
-            aLine.append(basegfx::B2DPoint(fLineWidth, fLineOffset));
-            aLine.transform(rUnscaledTransform);
-
-            if(bWaveLine)
-            {
-                double fWaveWidth(10.6 * fLineHeight);
-
-                if(FONT_UNDERLINE_SMALLWAVE == eLineStyle)
-                {
-                    fWaveWidth *= 0.7;
-                }
-                else if(FONT_UNDERLINE_WAVE == eLineStyle)
-                {
-                    // extra multiply to get the same WaveWidth as with the bold version
-                    fWaveWidth *= 2.0;
-                }
-
-                aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aLine, aLineAttribute, aStrokeAttribute, fWaveWidth, fWaveWidth * 0.5));
-            }
-            else
-            {
-                aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aLine, aLineAttribute, aStrokeAttribute));
-            }
-
-            // add primitive
-            rTarget.push_back(aNewPrimitive);
-
-            if(bDoubleLine)
-            {
-                // double line, create 2nd primitive with offset using TransformPrimitive based on
-                // already created NewPrimitive
-                double fLineDist(2.3 * fLineHeight);
-
-                if(bWaveLine)
-                {
-                    fLineDist = 6.3 * fLineHeight;
-                }
-
-                // move base point of text to 0.0 and de-rotate
-                basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
-                    -rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY()));
-                aTransform.rotate(-rDecTrans.getRotate());
-
-                // translate in Y by offset
-                aTransform.translate(0.0, fLineDist);
-
-                // move back and rotate
-                aTransform.rotate(rDecTrans.getRotate());
-                aTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
-
-                // add transform primitive
-                const Primitive2DSequence aContent(&aNewPrimitive, 1);
-                rTarget.push_back(Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
-            }
-        }
-
         void TextDecoratedPortionPrimitive2D::impCreateGeometryContent(
             std::vector< Primitive2DReference >& rTarget,
             basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
@@ -273,7 +64,7 @@ namespace drawinglayer
             xub_StrLen aTextPosition,
             xub_StrLen aTextLength,
             const ::std::vector< double >& rDXArray,
-            const FontAttributes& rFontAttributes) const
+            const attribute::FontAttribute& rFontAttribute) const
         {
             // create the SimpleTextPrimitive needed in any case
             rTarget.push_back(Primitive2DReference(
@@ -283,13 +74,13 @@ namespace drawinglayer
                     aTextPosition,
                     aTextLength,
                     rDXArray,
-                    rFontAttributes,
+                    rFontAttribute,
                     getLocale(),
                     getFontColor())));
 
             // see if something else needs to be done
-            const bool bOverlineUsed(FONT_UNDERLINE_NONE != getFontOverline());
-            const bool bUnderlineUsed(FONT_UNDERLINE_NONE != getFontUnderline());
+            const bool bOverlineUsed(TEXT_LINE_NONE != getFontOverline());
+            const bool bUnderlineUsed(TEXT_LINE_NONE != getFontUnderline());
             const bool bStrikeoutUsed(FONT_STRIKEOUT_NONE != getFontStrikeout());
 
             if(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed)
@@ -303,8 +94,8 @@ namespace drawinglayer
 
                 // TextLayouterDevice is needed to get metrics for text decorations like
                 // underline/strikeout/emphasis marks from it. For setup, the font size is needed
-                aTextLayouter.setFontAttributes(
-                    getFontAttributes(),
+                aTextLayouter.setFontAttribute(
+                    getFontAttribute(),
                     rDecTrans.getScale().getX(),
                     rDecTrans.getScale().getY(),
                     getLocale());
@@ -332,15 +123,27 @@ namespace drawinglayer
                 if(bOverlineUsed)
                 {
                     // create primitive geometry for overline
-                    impCreateTextLine(rTarget, rDecTrans, aUnscaledTransform, getFontOverline(), aTextLayouter.getOverlineOffset(),
-                                      aTextLayouter.getOverlineHeight(), fTextWidth, getOverlineColor());
+                    rTarget.push_back(Primitive2DReference(
+                        new TextLinePrimitive2D(
+                            rDecTrans.getB2DHomMatrix(),
+                            fTextWidth,
+                            aTextLayouter.getOverlineOffset(),
+                            aTextLayouter.getOverlineHeight(),
+                            getFontOverline(),
+                            getOverlineColor())));
                 }
 
                 if(bUnderlineUsed)
                 {
                     // create primitive geometry for underline
-                    impCreateTextLine(rTarget, rDecTrans, aUnscaledTransform, getFontUnderline(), aTextLayouter.getUnderlineOffset(),
-                                      aTextLayouter.getUnderlineHeight(), fTextWidth, getTextlineColor());
+                    rTarget.push_back(Primitive2DReference(
+                        new TextLinePrimitive2D(
+                            rDecTrans.getB2DHomMatrix(),
+                            fTextWidth,
+                            aTextLayouter.getUnderlineOffset(),
+                            aTextLayouter.getUnderlineHeight(),
+                            getFontUnderline(),
+                            getTextlineColor())));
                 }
 
                 if(bStrikeoutUsed)
@@ -350,97 +153,27 @@ namespace drawinglayer
                     {
                         // strikeout with character
                         const sal_Unicode aStrikeoutChar(FONT_STRIKEOUT_SLASH == getFontStrikeout() ? '/' : 'X');
-                        const String aSingleCharString(aStrikeoutChar);
-                        const double fStrikeCharWidth(aTextLayouter.getTextWidth(aSingleCharString, 0, 1));
-                        const double fStrikeCharCount(fabs(fTextWidth/fStrikeCharWidth));
-                        const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.5));
-                        std::vector<double> aDXArray(nStrikeCharCount);
-                        String aStrikeoutString;
-
-                        for(sal_uInt32 a(0); a < nStrikeCharCount; a++)
-                        {
-                            aStrikeoutString += aSingleCharString;
-                            aDXArray[a] = (a + 1) * fStrikeCharWidth;
-                        }
 
                         rTarget.push_back(Primitive2DReference(
-                            new TextSimplePortionPrimitive2D(
+                            new TextCharacterStrikeoutPrimitive2D(
                                 rDecTrans.getB2DHomMatrix(),
-                                aStrikeoutString,
-                                0,
-                                aStrikeoutString.Len(),
-                                aDXArray,
-                                rFontAttributes,
-                                getLocale(),
-                                getFontColor())));
+                                fTextWidth,
+                                getFontColor(),
+                                aStrikeoutChar,
+                                getFontAttribute(),
+                                getLocale())));
                     }
                     else
                     {
                         // strikeout with geometry
-                        double fStrikeoutHeight(aTextLayouter.getUnderlineHeight());
-                        double fStrikeoutOffset(aTextLayouter.getStrikeoutOffset());
-                        bool bDoubleLine(false);
-
-                        // set line attribute
-                        switch(getFontStrikeout())
-                        {
-                            default : // case primitive2d::FONT_STRIKEOUT_SINGLE:
-                            {
-                                break;
-                            }
-                            case primitive2d::FONT_STRIKEOUT_DOUBLE:
-                            {
-                                bDoubleLine = true;
-                                break;
-                            }
-                            case primitive2d::FONT_STRIKEOUT_BOLD:
-                            {
-                                fStrikeoutHeight *= 2.0;
-                                break;
-                            }
-                        }
-
-                        if(bDoubleLine)
-                        {
-                            fStrikeoutOffset -= 0.50 * fStrikeoutHeight;
-                            fStrikeoutHeight *= 0.64;
-                        }
-
-                        // create base polygon and new primitive
-                        basegfx::B2DPolygon aStrikeoutLine;
-
-                        aStrikeoutLine.append(basegfx::B2DPoint(0.0, -fStrikeoutOffset));
-                        aStrikeoutLine.append(basegfx::B2DPoint(fTextWidth, -fStrikeoutOffset));
-                        aStrikeoutLine.transform(aUnscaledTransform);
-
-                        const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLINEJOIN_NONE);
-                        Primitive2DReference aNewPrimitive(new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute));
-
-                        // add primitive
-                        rTarget.push_back(aNewPrimitive);
-
-                        if(bDoubleLine)
-                        {
-                            // double line, create 2nd primitive with offset using TransformPrimitive based on
-                            // already created NewPrimitive
-                            const double fLineDist(2.0 * fStrikeoutHeight);
-
-                            // move base point of text to 0.0 and de-rotate
-                            basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
-                                -rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY()));
-                            aTransform.rotate(-rDecTrans.getRotate());
-
-                            // translate in Y by offset
-                            aTransform.translate(0.0, -fLineDist);
-
-                            // move back and rotate
-                            aTransform.rotate(rDecTrans.getRotate());
-                            aTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
-
-                            // add transform primitive
-                            const Primitive2DSequence aContent(&aNewPrimitive, 1);
-                            rTarget.push_back(Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
-                        }
+                        rTarget.push_back(Primitive2DReference(
+                            new TextGeometryStrikeoutPrimitive2D(
+                                rDecTrans.getB2DHomMatrix(),
+                                fTextWidth,
+                                getFontColor(),
+                                aTextLayouter.getUnderlineHeight(),
+                                aTextLayouter.getStrikeoutOffset(),
+                                getFontStrikeout())));
                     }
                 }
             }
@@ -507,21 +240,21 @@ namespace drawinglayer
                 impCorrectTextBoundary(aNextWordBoundary);
 
                 // prepare new font attributes WITHOUT outline
-                const FontAttributes aNewFontAttributes(
-                    getFontAttributes().getFamilyName(),
-                    getFontAttributes().getStyleName(),
-                    getFontAttributes().getWeight(),
-                    getFontAttributes().getSymbol(),
-                    getFontAttributes().getVertical(),
-                    getFontAttributes().getItalic(),
+                const attribute::FontAttribute aNewFontAttribute(
+                    getFontAttribute().getFamilyName(),
+                    getFontAttribute().getStyleName(),
+                    getFontAttribute().getWeight(),
+                    getFontAttribute().getSymbol(),
+                    getFontAttribute().getVertical(),
+                    getFontAttribute().getItalic(),
                     false,             // no outline anymore, handled locally
-                    getFontAttributes().getRTL(),
-                    getFontAttributes().getBiDiStrong());
+                    getFontAttribute().getRTL(),
+                    getFontAttribute().getBiDiStrong());
 
                 if(aNextWordBoundary.startPos == getTextPosition() && aNextWordBoundary.endPos == getTextLength())
                 {
                     // it IS only a single word, handle as one word
-                    impCreateGeometryContent(rTarget, rDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttributes);
+                    impCreateGeometryContent(rTarget, rDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttribute);
                 }
                 else
                 {
@@ -532,8 +265,8 @@ namespace drawinglayer
                     if(bNoDXArray)
                     {
                         // ..but only completely when no DXArray
-                        aTextLayouter.setFontAttributes(
-                            getFontAttributes(),
+                        aTextLayouter.setFontAttribute(
+                            getFontAttribute(),
                             rDecTrans.getScale().getX(),
                             rDecTrans.getScale().getY(),
                             getLocale());
@@ -612,7 +345,7 @@ namespace drawinglayer
                         basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(aNewTransform);
 
                         impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
-                            nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttributes);
+                            nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttribute);
 
                         if(aNextWordBoundary.endPos >= getTextPosition() + getTextLength())
                         {
@@ -659,19 +392,19 @@ namespace drawinglayer
             else
             {
                 // prepare new font attributes WITHOUT outline
-                const FontAttributes aNewFontAttributes(
-                    getFontAttributes().getFamilyName(),
-                    getFontAttributes().getStyleName(),
-                    getFontAttributes().getWeight(),
-                    getFontAttributes().getSymbol(),
-                    getFontAttributes().getVertical(),
-                    getFontAttributes().getItalic(),
+                const attribute::FontAttribute aNewFontAttribute(
+                    getFontAttribute().getFamilyName(),
+                    getFontAttribute().getStyleName(),
+                    getFontAttribute().getWeight(),
+                    getFontAttribute().getSymbol(),
+                    getFontAttribute().getVertical(),
+                    getFontAttribute().getItalic(),
                     false,             // no outline anymore, handled locally
-                    getFontAttributes().getRTL(),
-                    getFontAttributes().getBiDiStrong());
+                    getFontAttribute().getRTL(),
+                    getFontAttribute().getBiDiStrong());
 
                 // handle as one word
-                impCreateGeometryContent(aNewPrimitives, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttributes);
+                impCreateGeometryContent(aNewPrimitives, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttribute);
             }
 
             // convert to Primitive2DSequence
@@ -693,7 +426,7 @@ namespace drawinglayer
                 // outline AND shadow depend on NO FontRelief (see dialog)
                 const bool bHasFontRelief(FONT_RELIEF_NONE != getFontRelief());
                 const bool bHasShadow(!bHasFontRelief && getShadow());
-                const bool bHasOutline(!bHasFontRelief && getFontAttributes().getOutline());
+                const bool bHasOutline(!bHasFontRelief && getFontAttribute().getOutline());
 
                 if(bHasShadow || bHasFontRelief || bHasOutline)
                 {
@@ -792,15 +525,15 @@ namespace drawinglayer
             xub_StrLen aTextPosition,
             xub_StrLen aTextLength,
             const ::std::vector< double >& rDXArray,
-            const FontAttributes& rFontAttributes,
+            const attribute::FontAttribute& rFontAttribute,
             const ::com::sun::star::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,
 
             // local parameters
             const basegfx::BColor& rOverlineColor,
             const basegfx::BColor& rTextlineColor,
-            FontUnderline eFontOverline,
-            FontUnderline eFontUnderline,
+            TextLine eFontOverline,
+            TextLine eFontUnderline,
             bool bUnderlineAbove,
             FontStrikeout eFontStrikeout,
             bool bWordLineMode,
@@ -809,7 +542,7 @@ namespace drawinglayer
             bool bEmphasisMarkBelow,
             FontRelief eFontRelief,
             bool bShadow)
-        :   TextSimplePortionPrimitive2D(rNewTransform, rText, aTextPosition, aTextLength, rDXArray, rFontAttributes, rLocale, rFontColor),
+        :   TextSimplePortionPrimitive2D(rNewTransform, rText, aTextPosition, aTextLength, rDXArray, rFontAttribute, rLocale, rFontColor),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),
@@ -854,8 +587,8 @@ namespace drawinglayer
         basegfx::B2DRange TextDecoratedPortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             const bool bDecoratedIsNeeded(
-                FONT_UNDERLINE_NONE != getFontOverline()
-             || FONT_UNDERLINE_NONE != getFontUnderline()
+                TEXT_LINE_NONE != getFontOverline()
+             || TEXT_LINE_NONE != getFontUnderline()
              || FONT_STRIKEOUT_NONE != getFontStrikeout()
              || FONT_EMPHASISMARK_NONE != getFontEmphasisMark()
              || FONT_RELIEF_NONE != getFontRelief()

@@ -37,6 +37,7 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTDECORATEDPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -55,61 +56,6 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** FontUnderline definition
-
-            This is used for both underline and overline
-         */
-        enum FontUnderline
-        {
-            FONT_UNDERLINE_NONE,
-            FONT_UNDERLINE_SINGLE,
-            FONT_UNDERLINE_DOUBLE,
-            FONT_UNDERLINE_DOTTED,
-            FONT_UNDERLINE_DASH,
-            FONT_UNDERLINE_LONGDASH,
-            FONT_UNDERLINE_DASHDOT,
-            FONT_UNDERLINE_DASHDOTDOT,
-            FONT_UNDERLINE_SMALLWAVE,
-            FONT_UNDERLINE_WAVE,
-            FONT_UNDERLINE_DOUBLEWAVE,
-            FONT_UNDERLINE_BOLD,
-            FONT_UNDERLINE_BOLDDOTTED,
-            FONT_UNDERLINE_BOLDDASH,
-            FONT_UNDERLINE_BOLDLONGDASH,
-            FONT_UNDERLINE_BOLDDASHDOT,
-            FONT_UNDERLINE_BOLDDASHDOTDOT,
-            FONT_UNDERLINE_BOLDWAVE
-        };
-
-        /** FontStrikeout definition */
-        enum FontStrikeout
-        {
-            FONT_STRIKEOUT_NONE,
-            FONT_STRIKEOUT_SINGLE,
-            FONT_STRIKEOUT_DOUBLE,
-            FONT_STRIKEOUT_BOLD,
-            FONT_STRIKEOUT_SLASH,
-            FONT_STRIKEOUT_X
-        };
-
-        /** FontEmphasisMark definition */
-        enum FontEmphasisMark
-        {
-            FONT_EMPHASISMARK_NONE,
-            FONT_EMPHASISMARK_DOT,
-            FONT_EMPHASISMARK_CIRCLE,
-            FONT_EMPHASISMARK_DISC,
-            FONT_EMPHASISMARK_ACCENT
-        };
-
-        /** FontRelief definition */
-        enum FontRelief
-        {
-            FONT_RELIEF_NONE,
-            FONT_RELIEF_EMBOSSED,
-            FONT_RELIEF_ENGRAVED
-        };
-
         /** TextDecoratedPortionPrimitive2D class
 
             This primitive expands the TextSimplePortionPrimitive2D by common
@@ -123,8 +69,8 @@ namespace drawinglayer
             /// decoration definitions
             basegfx::BColor                             maOverlineColor;
             basegfx::BColor                             maTextlineColor;
-            FontUnderline                               meFontOverline;
-            FontUnderline                               meFontUnderline;
+            TextLine                                    meFontOverline;
+            TextLine                                    meFontUnderline;
             FontStrikeout                               meFontStrikeout;
             FontEmphasisMark                            meFontEmphasisMark;
             FontRelief                                  meFontRelief;
@@ -137,16 +83,6 @@ namespace drawinglayer
             unsigned                                    mbShadow : 1;
 
             /// helper methods
-            void impCreateTextLine(
-                std::vector< Primitive2DReference >& rTarget,
-                basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
-                const basegfx::B2DHomMatrix &rUnscaledTransform,
-                FontUnderline eLineStyle,
-                double fLineOffset,
-                double fLineHeight,
-                double fLineWidth,
-                const basegfx::BColor& rLineColor) const;
-
             void impCreateGeometryContent(
                 std::vector< Primitive2DReference >& rTarget,
                 basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
@@ -154,7 +90,7 @@ namespace drawinglayer
                 xub_StrLen aTextPosition,
                 xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,
-                const FontAttributes& rFontAttributes) const;
+                const attribute::FontAttribute& rFontAttribute) const;
 
             void impCorrectTextBoundary(
                 ::com::sun::star::i18n::Boundary& rNextWordBoundary) const;
@@ -177,15 +113,15 @@ namespace drawinglayer
                 xub_StrLen aTextPosition,
                 xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,
-                const FontAttributes& rFontAttributes,
+                const attribute::FontAttribute& rFontAttribute,
                 const ::com::sun::star::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,
 
                 /// local parameters
                 const basegfx::BColor& rOverlineColor,
                 const basegfx::BColor& rTextlineColor,
-                FontUnderline eFontOverline = FONT_UNDERLINE_NONE,
-                FontUnderline eFontUnderline = FONT_UNDERLINE_NONE,
+                TextLine eFontOverline = TEXT_LINE_NONE,
+                TextLine eFontUnderline = TEXT_LINE_NONE,
                 bool bUnderlineAbove = false,
                 FontStrikeout eFontStrikeout = FONT_STRIKEOUT_NONE,
                 bool bWordLineMode = false,
@@ -196,8 +132,8 @@ namespace drawinglayer
                 bool bShadow = false);
 
             /// data read access
-            FontUnderline getFontOverline() const { return meFontOverline; }
-            FontUnderline getFontUnderline() const { return meFontUnderline; }
+            TextLine getFontOverline() const { return meFontOverline; }
+            TextLine getFontUnderline() const { return meFontUnderline; }
             FontStrikeout getFontStrikeout() const { return meFontStrikeout; }
             FontEmphasisMark getFontEmphasisMark() const { return meFontEmphasisMark; }
             FontRelief getFontRelief() const { return meFontRelief; }

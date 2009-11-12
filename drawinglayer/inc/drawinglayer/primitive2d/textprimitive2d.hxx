@@ -43,6 +43,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <vector>
 #include <com/sun/star/lang/Locale.hpp>
+#include <drawinglayer/attribute/fontattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -53,75 +54,6 @@ namespace basegfx {
 }
 
 class OutputDevice;
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
-        /** FontAttributes class
-
-            This attribute class is able to hold all parameters needed/used
-            to completely define the parametrisation of a text portion.
-         */
-        class FontAttributes
-        {
-        private:
-            /// core data
-            String                                      maFamilyName;       // Font Family Name
-            String                                      maStyleName;        // Font Style Name
-            sal_uInt16                                  mnWeight;           // Font weight
-
-            /// bitfield
-            unsigned                                    mbSymbol : 1;       // Symbol Font Flag
-            unsigned                                    mbVertical : 1;     // Vertical Text Flag
-            unsigned                                    mbItalic : 1;       // Italic Flag
-            unsigned                                    mbOutline : 1;      // Outline Flag
-            unsigned                                    mbRTL : 1;          // RTL Flag
-            unsigned                                    mbBiDiStrong : 1;   // BiDi Flag
-            // TODO: pair kerning and CJK kerning
-
-        public:
-            /// constructor
-            FontAttributes(
-                const String& rFamilyName,
-                const String& rStyleName,
-                sal_uInt16 nWeight,
-                bool bSymbol = false,
-                bool bVertical = false,
-                bool bItalic = false,
-                bool bOutline = false,
-                bool bRTL = false,
-                bool bBiDiStrong = false)
-            :   maFamilyName(rFamilyName),
-                maStyleName(rStyleName),
-                mnWeight(nWeight),
-                mbSymbol(bSymbol),
-                mbVertical(bVertical),
-                mbItalic(bItalic),
-                mbOutline(bOutline),
-                mbRTL(bRTL),
-                mbBiDiStrong(bBiDiStrong)
-            {
-            }
-
-            /// compare operator
-            bool operator==(const FontAttributes& rCompare) const;
-
-            /// data read access
-            const String& getFamilyName() const { return maFamilyName; }
-            const String& getStyleName() const { return maStyleName; }
-            sal_uInt16 getWeight() const { return mnWeight; }
-            bool getSymbol() const { return mbSymbol; }
-            bool getVertical() const { return mbVertical; }
-            bool getItalic() const { return mbItalic; }
-            bool getOutline() const { return mbOutline; }
-            bool getRTL() const { return mbRTL; }
-            bool getBiDiStrong() const { return mbBiDiStrong; }
-        };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -158,7 +90,7 @@ namespace drawinglayer
             ::std::vector< double >                 maDXArray;
 
             /// The font to use
-            FontAttributes                          maFontAttributes;
+            attribute::FontAttribute                maFontAttribute;
 
             /// The Locale for the text
             ::com::sun::star::lang::Locale          maLocale;
@@ -181,7 +113,7 @@ namespace drawinglayer
                 xub_StrLen aTextPosition,
                 xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,
-                const FontAttributes& rFontAttributes,
+                const attribute::FontAttribute& rFontAttribute,
                 const ::com::sun::star::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor);
 
@@ -197,7 +129,7 @@ namespace drawinglayer
             xub_StrLen getTextPosition() const { return maTextPosition; }
             xub_StrLen getTextLength() const { return maTextLength; }
             const ::std::vector< double >& getDXArray() const { return maDXArray; }
-            const FontAttributes& getFontAttributes() const { return maFontAttributes; }
+            const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
 
@@ -210,6 +142,10 @@ namespace drawinglayer
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
+
+        /// small helper to have a compare operator for Locale
+        bool LocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB);
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

@@ -179,19 +179,19 @@ namespace drawinglayer
         {
         private:
             /// bitmap fill attribute
-            attribute::FillBitmapAttribute      maBitmap;
+            attribute::FillBitmapAttribute      maFillBitmapAttribute;
 
         public:
             /// constructor
             BitmapTexturePrimitive3D(
-                const attribute::FillBitmapAttribute& rBitmap,
+                const attribute::FillBitmapAttribute& rFillBitmapAttribute,
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
 
             /// data read access
-            const attribute::FillBitmapAttribute& getBitmap() const { return maBitmap; }
+            const attribute::FillBitmapAttribute& getFillBitmapAttribute() const { return maFillBitmapAttribute; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
