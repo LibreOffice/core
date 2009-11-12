@@ -1963,37 +1963,68 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
         }
     }
 
-    if ( nScriptType != com::sun::star::i18n::ScriptType::COMPLEX )
+    rtl::OUString aCharHeightName, aCharWeightName, aCharLocaleName, aCharPostureName;
+    switch( nScriptType )
     {
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), bGetPropStateValue ) )
+        case com::sun::star::i18n::ScriptType::ASIAN :
         {
-        float fFloat;
-        mAny >>= fFloat;
-        if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
-            mnCharAttr |= 1;
+            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeightAsian" ) );
+            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightAsian" ) );
+            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocaleAsian" ) );
+            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureAsian" ) );
+            break;
         }
-    }
-    else
-    {
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightComplex" ) ), bGetPropStateValue ) )
+        case com::sun::star::i18n::ScriptType::COMPLEX :
         {
-        float fFloat;
-        mAny >>= fFloat;
-        if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
-            mnCharAttr |= 1;
+            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeightComplex" ) );
+            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightComplex" ) );
+            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocaleComplex" ) );
+            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureComplex" ) );
+            break;
+        }
+        default:
+        {
+            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) );
+            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) );
+            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) );
+            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) );
+            break;
         }
     }
 
-    if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        mnCharAttrHard |= 1;
-
-    if ( nScriptType != com::sun::star::i18n::ScriptType::COMPLEX )
+    mnCharHeight = 24;
+    if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, sal_False ) )
     {
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) ), bGetPropStateValue ) )
+        float fVal;
+        if ( mAny >>= fVal )
         {
-            ::com::sun::star::awt::FontSlant aFS;
-            mAny >>= aFS;
-            switch ( aFS )
+            mnCharHeight = (sal_uInt16)( fVal + 0.5 );
+            meCharHeight = GetPropertyState( mXPropSet, aCharHeightName );
+        }
+    }
+    if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, sal_False ) )
+    {
+        float fFloat;
+        if ( mAny >>= fFloat )
+        {
+            if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
+                mnCharAttr |= 1;
+            if ( GetPropertyState( mXPropSet, aCharWeightName ) == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+                mnCharAttrHard |= 1;
+        }
+    }
+    if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName, sal_False ) )
+    {
+        com::sun::star::lang::Locale eLocale;
+        if ( mAny >>= eLocale )
+            meCharLocale = eLocale;
+    }
+    if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName, sal_False ) )
+    {
+        ::com::sun::star::awt::FontSlant aFS;
+        if ( mAny >>= aFS )
+        {
+            switch( aFS )
             {
                 case ::com::sun::star::awt::FontSlant_OBLIQUE :
                 case ::com::sun::star::awt::FontSlant_ITALIC :
@@ -2002,28 +2033,10 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
                 default:
                     break;
             }
+            if ( GetPropertyState( mXPropSet, aCharPostureName ) == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+                mnCharAttrHard |= 2;
         }
     }
-    else
-    {
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureComplex" ) ), bGetPropStateValue ) )
-        {
-            ::com::sun::star::awt::FontSlant aFS;
-            mAny >>= aFS;
-            switch ( aFS )
-            {
-                case ::com::sun::star::awt::FontSlant_OBLIQUE :
-                case ::com::sun::star::awt::FontSlant_ITALIC :
-                    mnCharAttr |= 2;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        mnCharAttrHard |= 2;
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharUnderline" ) ), bGetPropStateValue ) )
     {
@@ -2050,13 +2063,6 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 16;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) ), bGetPropStateValue ) )
-    {
-        com::sun::star::lang::Locale eLocale;
-        if ( mAny >>= eLocale )
-            meCharLocale = eLocale;
-    }
-
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ), bGetPropStateValue ) )
     {
         sal_Int16 nVal;
@@ -2066,15 +2072,6 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     }
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 512;
-
-    mnCharHeight = 24;
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) ), bGetPropStateValue ) )
-    {
-        float fVal;
-        mAny >>= fVal;
-        mnCharHeight = (sal_uInt16)( fVal + 0.5 );
-    }
-    meCharHeight = ePropState;
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ), bGetPropStateValue ) )
     {
