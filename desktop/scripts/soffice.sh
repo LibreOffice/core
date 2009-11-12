@@ -129,11 +129,13 @@ export PATH
 "$sd_prog/$sd_binary" "$@" &
 trap 'kill -9 $!' TERM
 wait $!
+sd_ret=$?
 
-while [ $? -eq 79 ]
+while [ $sd_ret -eq 79 ]
 do
     "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS"" &
     wait $!
+    sd_ret=$?
 done
 
-exit
+exit $sd_ret
