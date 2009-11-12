@@ -30,14 +30,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-#include <osl/diagnose.h>
+
+#include "osl/diagnose.h"
+#include "rtl/strbuf.hxx"
 #include "NeonTypes.hxx"
 #include "DAVException.hxx"
 #include "DAVProperties.hxx"
 #include "NeonPropFindRequest.hxx"
-#ifndef _LINKSEQUENCE_HXX_
 #include "LinkSequence.hxx"
-#endif
 #include "LockSequence.hxx"
 #include "LockEntrySequence.hxx"
 #include "UCBDeadPropertyValue.hxx"
@@ -49,6 +49,40 @@ using namespace std;
 using namespace webdav_ucp;
 
 // -------------------------------------------------------------------
+namespace
+{
+    // strip "DAV:" namespace from XML snippets to avoid
+    // parser error (undeclared namespace) later on.
+    rtl::OString stripDavNamespace( const rtl::OString & in )
+    {
+        const rtl::OString inXML( in.toAsciiLowerCase() );
+
+        rtl::OStringBuffer buf;
+        sal_Int32 start = 0;
+        sal_Int32 end = inXML.indexOf( "dav:" );
+        while ( end != -1 )
+        {
+            if ( inXML[ end - 1 ] == '<' ||
+                 inXML[ end - 1 ] == '/' )
+            {
+                // copy from original buffer - preserve case.
+                buf.append( in.copy( start, end - start ) );
+            }
+            else
+            {
+                // copy from original buffer - preserve case.
+                buf.append( in.copy( start, end - start + 4 ) );
+            }
+            start = end + 4;
+            end = inXML.indexOf( "dav:", start );
+        }
+        buf.append( inXML.copy( start ) );
+
+        return rtl::OString( buf.makeStringAndClear() );
+    }
+}
+
+// -------------------------------------------------------------------
 extern "C" int NPFR_propfind_iter( void* userdata,
                                    const NeonPropName* pname,
                                    const char* value,
@@ -57,9 +91,9 @@ extern "C" int NPFR_propfind_iter( void* userdata,
     /*
         HTTP Response Status Classes:
 
-          - 1: Informational - Request received, continuing process
+        - 1: Informational - Request received, continuing process
 
-          - 2: Success - The action was successfully received,
+        - 2: Success - The action was successfully received,
           understood, and accepted
 
         - 3: Redirection - Further action must be taken in order to
@@ -79,18 +113,22 @@ extern "C" int NPFR_propfind_iter( void* userdata,
     DAVPropertyValue thePropertyValue;
     thePropertyValue.IsCaseSensitive = true;
 
+    OSL_ENSURE( pname->nspace, "NPFR_propfind_iter - No namespace!" );
+
     DAVProperties::createUCBPropName( pname->nspace,
-                                        pname->name,
-                                        thePropertyValue.Name );
+                                      pname->name,
+                                      thePropertyValue.Name );
     bool bHasValue = false;
     if ( DAVProperties::isUCBDeadProperty( *pname ) )
     {
         // DAV dead property added by WebDAV UCP?
         if ( UCBDeadPropertyValue::createFromXML(
-                                        value, thePropertyValue.Value ) )
+                 value, thePropertyValue.Value ) )
+        {
             OSL_ENSURE( thePropertyValue.Value.hasValue(),
-                        "NeonPropFindRequest::propfind_iter - No value!" );
+                        "NPFR_propfind_iter - No value!" );
             bHasValue = true;
+        }
     }
 
     if ( !bHasValue )
@@ -103,12 +141,11 @@ extern "C" int NPFR_propfind_iter( void* userdata,
             if ( aValue.getLength() )
             {
                 aValue = aValue.toAsciiLowerCase();
-                if (
-                    ( aValue.compareTo(
-                        RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 ) ||
-                    ( aValue.compareTo(
-                        RTL_CONSTASCII_STRINGPARAM( "<dav:collection" ) ) == 0 )
-                   )
+                if ( ( aValue.compareTo(
+                         RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 ) ||
+                     ( aValue.compareTo(
+                         RTL_CONSTASCII_STRINGPARAM( "<dav:collection" ) ) == 0 )
+                )
                 {
                     thePropertyValue.Value
                         <<= OUString::createFromAscii( "collection" );
@@ -125,20 +162,23 @@ extern "C" int NPFR_propfind_iter( void* userdata,
                                     pname->name, "supportedlock" ) == 0 )
         {
             Sequence< LockEntry > aEntries;
-            LockEntrySequence::createFromXML( value, aEntries );
+            LockEntrySequence::createFromXML(
+                stripDavNamespace( value ), aEntries );
             thePropertyValue.Value <<= aEntries;
         }
         else if ( rtl_str_compareIgnoreAsciiCase(
                                     pname->name, "lockdiscovery" ) == 0 )
         {
             Sequence< Lock > aLocks;
-            LockSequence::createFromXML( value, aLocks );
+            LockSequence::createFromXML(
+                stripDavNamespace( value ), aLocks );
             thePropertyValue.Value <<= aLocks;
         }
         else if ( rtl_str_compareIgnoreAsciiCase( pname->name, "source" ) == 0 )
         {
             Sequence< Link > aLinks;
-            LinkSequence::createFromXML( value, aLinks );
+            LinkSequence::createFromXML(
+                stripDavNamespace( value ), aLinks );
             thePropertyValue.Value <<= aLinks;
         }
         else
@@ -168,10 +208,10 @@ extern "C" void NPFR_propfind_results( void* userdata,
 
 #if NEON_VERSION >= 0x0260
     DAVResource theResource(
-                        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
+        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
 #else
     DAVResource theResource(
-                        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
+        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
 #endif
 
     ne_propset_iterate( set, NPFR_propfind_iter, &theResource );
@@ -210,10 +250,10 @@ extern "C" void NPFR_propnames_results( void* userdata,
     // Create entry for the resource.
 #if NEON_VERSION >= 0x0260
     DAVResourceInfo theResource(
-                        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
+        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
 #else
     DAVResourceInfo theResource(
-                        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
+        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
 #endif
 
     // Fill entry.
@@ -247,7 +287,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         {
             // Split fullname into namespace and name!
             DAVProperties::createNeonPropName(
-                             inPropNames[ theIndex ], thePropNames[ theIndex ] );
+                inPropNames[ theIndex ], thePropNames[ theIndex ] );
         }
         thePropNames[ theIndex ].nspace = NULL;
         thePropNames[ theIndex ].name   = NULL;
@@ -288,7 +328,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
 NeonPropFindRequest::NeonPropFindRequest(
                             HttpSession* inSession,
                             const char* inPath,
-                                const Depth inDepth,
+                            const Depth inDepth,
                             std::vector< DAVResourceInfo > & ioResInfo,
                             int & nError )
 {

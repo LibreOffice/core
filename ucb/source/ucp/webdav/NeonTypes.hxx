@@ -35,6 +35,7 @@
 #include <ne_utils.h>
 #include <ne_basic.h>
 #include <ne_props.h>
+#include <ne_locks.h>
 
 typedef ne_session                  HttpSession;
 typedef ne_status                   HttpStatus;
@@ -42,5 +43,7 @@ typedef ne_server_capabilities      HttpServerCapabilities;
 
 typedef ne_propname                 NeonPropName;
 typedef ne_prop_result_set          NeonPropFindResultSet;
+
+typedef struct ne_lock              NeonLock;
 
 #endif // _NEONTYPES_HXX_

@@ -86,6 +86,9 @@
 #include "com/sun/star/ucb/InteractiveAppException.hpp"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "com/sun/star/ucb/InteractiveCHAOSException.hpp"
+#include "com/sun/star/ucb/InteractiveLockingLockedException.hpp"
+#include "com/sun/star/ucb/InteractiveLockingNotLockedException.hpp"
+#include "com/sun/star/ucb/InteractiveLockingLockExpiredException.hpp"
 #include "com/sun/star/ucb/InteractiveNetworkConnectException.hpp"
 #include "com/sun/star/ucb/InteractiveNetworkException.hpp"
 #include "com/sun/star/ucb/InteractiveNetworkGeneralException.hpp"
@@ -1102,6 +1105,58 @@ bool UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
+        return true;
+    }
+
+    star::ucb::InteractiveLockingLockedException aLLException;
+    if (aAnyRequest >>= aLLException)
+    {
+        ErrCode nErrorCode = aLLException.SelfOwned
+            ? ERRCODE_UUI_LOCKING_LOCKED_SELF : ERRCODE_UUI_LOCKING_LOCKED;
+        std::vector< rtl::OUString > aArguments;
+        aArguments.push_back( aLLException.Url );
+
+        handleErrorRequest( aLLException.Classification,
+                            nErrorCode,
+                            aArguments,
+                            rRequest->getContinuations(),
+                            bObtainErrorStringOnly,
+                            bHasErrorString,
+                            rErrorString );
+        return true;
+    }
+
+    star::ucb::InteractiveLockingNotLockedException aLNLException;
+    if (aAnyRequest >>= aLNLException)
+    {
+        ErrCode nErrorCode = ERRCODE_UUI_LOCKING_NOT_LOCKED;
+        std::vector< rtl::OUString > aArguments;
+        aArguments.push_back( aLNLException.Url );
+
+        handleErrorRequest( aLNLException.Classification,
+                            nErrorCode,
+                            aArguments,
+                            rRequest->getContinuations(),
+                            bObtainErrorStringOnly,
+                            bHasErrorString,
+                            rErrorString );
+        return true;
+    }
+
+    star::ucb::InteractiveLockingLockExpiredException aLLEException;
+    if (aAnyRequest >>= aLLEException)
+    {
+        ErrCode nErrorCode = ERRCODE_UUI_LOCKING_LOCK_EXPIRED;
+        std::vector< rtl::OUString > aArguments;
+        aArguments.push_back( aLLEException.Url );
+
+        handleErrorRequest( aLLEException.Classification,
+                            nErrorCode,
+                            aArguments,
+                            rRequest->getContinuations(),
+                            bObtainErrorStringOnly,
+                            bHasErrorString,
+                            rErrorString );
         return true;
     }
 

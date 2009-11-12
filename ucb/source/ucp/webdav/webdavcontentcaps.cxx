@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 /**************************************************************************
-                                TODO
+                               TODO
  **************************************************************************
 
  *************************************************************************/
@@ -46,19 +46,13 @@
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HXX_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
 #include <com/sun/star/ucb/Link.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/LockEntry.hpp>
 #include "webdavcontent.hxx"
-#ifndef _WEBDAV_UCP_PROVIDFER_HXX
 #include "webdavprovider.hxx"
-#endif
-#ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
-#endif
 #include "ContentProperties.hxx"
 
 using namespace com::sun::star;
@@ -221,17 +215,16 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                     DAVProperties::LOCKDISCOVERY,
+                    DAVProperties::LOCKDISCOVERY,
                     -1,
                     getCppuType( static_cast<
-                                    const uno::Sequence<
-                                        com::sun::star::ucb::Lock > * >( 0 ) ),
+                                    const uno::Sequence< ucb::Lock > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
             m_pProps->insert(
                 beans::Property(
-                     DAVProperties::RESOURCETYPE,
+                    DAVProperties::RESOURCETYPE,
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
@@ -239,27 +232,25 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                     DAVProperties::SOURCE,
+                    DAVProperties::SOURCE,
                     -1,
                     getCppuType( static_cast<
-                                    const uno::Sequence<
-                                        com::sun::star::ucb::Link > * >( 0 ) ),
+                                    const uno::Sequence< ucb::Link > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND ) );
 
             m_pProps->insert(
                 beans::Property(
-                      DAVProperties::SUPPORTEDLOCK,
+                    DAVProperties::SUPPORTEDLOCK,
                     -1,
                     getCppuType( static_cast<
                                     const uno::Sequence<
-                                        com::sun::star::ucb::LockEntry > * >(
-                                            0 ) ),
+                                        ucb::LockEntry > * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
             m_pProps->insert(
                 beans::Property(
-                      DAVProperties::EXECUTABLE,
+                    DAVProperties::EXECUTABLE,
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND ) );
@@ -301,7 +292,7 @@ bool ContentProvider::getProperty(
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
-    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     sal_Bool bTransient;
     std::auto_ptr< DAVResourceAccess > xResAccess;
@@ -314,7 +305,8 @@ uno::Sequence< beans::Property > Content::getProperties(
         bTransient = m_bTransient;
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
         if ( m_xCachedProps.get() )
-            xCachedProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
+            xCachedProps.reset(
+                new ContentProperties( *m_xCachedProps.get() ) );
         xProvider.set( m_pProvider );
     }
 
@@ -525,10 +517,76 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 //=========================================================================
 // virtual
-uno::Sequence< com::sun::star::ucb::CommandInfo > Content::getCommands(
-    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+uno::Sequence< ucb::CommandInfo > Content::getCommands(
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    uno::Sequence< ucb::CommandInfo > aCmdInfo( 8 );
+
+    ///////////////////////////////////////////////////////////////
+    // Mandatory commands
+    ///////////////////////////////////////////////////////////////
+
+    aCmdInfo[ 0 ] =
+            ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                -1,
+                getCppuVoidType() );
+    aCmdInfo[ 1 ] =
+            ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                -1,
+                getCppuVoidType() );
+    aCmdInfo[ 2 ] =
+            ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                -1,
+                getCppuType( static_cast<
+                                uno::Sequence< beans::Property > * >( 0 ) ) );
+    aCmdInfo[ 3 ] =
+            ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                -1,
+                getCppuType( static_cast<
+                    uno::Sequence< beans::PropertyValue > * >( 0 ) ) );
+
+    ///////////////////////////////////////////////////////////////
+    // Optional standard commands
+    ///////////////////////////////////////////////////////////////
+
+    aCmdInfo[ 4 ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                -1,
+                getCppuBooleanType() );
+    aCmdInfo[ 5 ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+                -1,
+                getCppuType( static_cast<
+                    ucb::InsertCommandArgument * >( 0 ) ) );
+    aCmdInfo[ 6 ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                -1,
+                getCppuType( static_cast<
+                    ucb::OpenCommandArgument2 * >( 0 ) ) );
+
+    ///////////////////////////////////////////////////////////////
+    // New commands
+    ///////////////////////////////////////////////////////////////
+
+    aCmdInfo[ 7 ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "post" ) ),
+                -1,
+                getCppuType( static_cast<
+                    ucb::PostCommandArgument2 * >( 0 ) ) );
 
     sal_Bool bFolder = sal_False;
 
@@ -538,223 +596,50 @@ uno::Sequence< com::sun::star::ucb::CommandInfo > Content::getCommands(
     }
     catch ( uno::Exception const & )
     {
-        static com::sun::star::ucb::CommandInfo aDefaultCommandInfoTable[] =
-        {
-            ///////////////////////////////////////////////////////////////
-            // Just mandatory commands avail.
-            ///////////////////////////////////////////////////////////////
-
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
-                -1,
-                getCppuType( static_cast<
-                                uno::Sequence< beans::Property > * >( 0 ) )
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
-                -1,
-                getCppuType( static_cast<
-                                uno::Sequence< beans::PropertyValue > * >( 0 ) )
-            )
-        };
-        return uno::Sequence< com::sun::star::ucb::CommandInfo >(
-                                            aDefaultCommandInfoTable, 4 );
+        return aCmdInfo;
     }
+
+    sal_Bool bSupportsLocking = supportsExclusiveWriteLock( xEnv );
+
+    sal_Int32 nPos = aCmdInfo.getLength();
+    sal_Int32 nMoreCmds = ( bFolder ? 1 : 0 ) + ( bSupportsLocking ? 2 : 0 );
+    if ( nMoreCmds )
+        aCmdInfo.realloc( nPos + nMoreCmds );
+    else
+        return aCmdInfo;
 
     if ( bFolder )
     {
-        //=================================================================
-        //
-        // Folder: Supported commands
-        //
-        //=================================================================
+        ///////////////////////////////////////////////////////////////
+        // Optional standard commands
+        ///////////////////////////////////////////////////////////////
 
-        static com::sun::star::ucb::CommandInfo aFolderCommandInfoTable[] =
-        {
-            ///////////////////////////////////////////////////////////////
-            // Required commands
-            ///////////////////////////////////////////////////////////////
-
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
-                -1,
-                getCppuType( static_cast<
-                                uno::Sequence< beans::Property > * >( 0 ) )
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
-                -1,
-                getCppuType( static_cast<
-                                uno::Sequence< beans::PropertyValue > * >( 0 ) )
-            ),
-
-            ///////////////////////////////////////////////////////////////
-            // Optional standard commands
-            ///////////////////////////////////////////////////////////////
-
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
-                -1,
-                getCppuBooleanType()
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
-                -1,
-                getCppuType( static_cast<
-                        com::sun::star::ucb::InsertCommandArgument * >( 0 ) )
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
-                -1,
-                getCppuType( static_cast<
-                        com::sun::star::ucb::OpenCommandArgument2 * >( 0 ) )
-            ),
-            com::sun::star::ucb::CommandInfo(
+        aCmdInfo[ nPos ] =
+            ucb::CommandInfo(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                 -1,
-                getCppuType( static_cast<
-                                com::sun::star::ucb::TransferInfo * >( 0 ) )
-            )
-
-            ///////////////////////////////////////////////////////////////
-            // New commands
-            ///////////////////////////////////////////////////////////////
-
-            /*
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "COPY" ) ),
-                -1,
-                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MOVE" ) ),
-                -1,
-                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-            )
-            */
-        };
-
-        return uno::Sequence< com::sun::star::ucb::CommandInfo >(
-                                            aFolderCommandInfoTable, 8 );
+                getCppuType( static_cast< ucb::TransferInfo * >( 0 ) ) );
+        nPos++;
     }
     else
     {
-        //=================================================================
-        //
-        // Document: Supported commands
-        //
-        //=================================================================
-
-        static com::sun::star::ucb::CommandInfo aDocumentCommandInfoTable[] =
-        {
-            ///////////////////////////////////////////////////////////////
-            // Required commands
-            ///////////////////////////////////////////////////////////////
-
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
-                -1,
-                getCppuType( static_cast<
-                                uno::Sequence< beans::Property > * >( 0 ) )
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
-                -1,
-                getCppuType( static_cast<
-                        uno::Sequence< beans::PropertyValue > * >( 0 ) )
-            ),
-
-            ///////////////////////////////////////////////////////////////
-            // Optional standard commands
-            ///////////////////////////////////////////////////////////////
-
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
-                -1,
-                getCppuBooleanType()
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
-                -1,
-                getCppuType( static_cast<
-                    com::sun::star::ucb::InsertCommandArgument * >( 0 ) )
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
-                -1,
-                getCppuType( static_cast<
-                    com::sun::star::ucb::OpenCommandArgument2 * >( 0 ) )
-            ),
-
-            ///////////////////////////////////////////////////////////////
-            // New commands
-            ///////////////////////////////////////////////////////////////
-
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "post" ) ),
-                -1,
-                getCppuType( static_cast<
-                    com::sun::star::ucb::PostCommandArgument2 * >( 0 ) )
-            )
-
-            /*
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "COPY" ) ),
-                -1,
-                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-            ),
-            com::sun::star::ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MOVE" ) ),
-                -1,
-                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-            )
-            */
-        };
-
-        return uno::Sequence< com::sun::star::ucb::CommandInfo >(
-                                            aDocumentCommandInfoTable, 8 );
+        // no document-only commands at the moment.
     }
-}
 
+    if ( bSupportsLocking )
+    {
+        aCmdInfo[ nPos ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lock" ) ),
+                -1,
+                getCppuVoidType() );
+        nPos++;
+        aCmdInfo[ nPos ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unlock" ) ),
+                -1,
+                getCppuVoidType() );
+        nPos++;
+    }
+    return aCmdInfo;
+}
