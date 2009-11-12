@@ -728,8 +728,8 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
 
     // get font attributes
     basegfx::B2DVector aTextSizeAttribute;
-    const drawinglayer::primitive2d::FontAttributes aFontAttributes(
-        drawinglayer::primitive2d::getFontAttributesFromVclFont(
+    const drawinglayer::attribute::FontAttribute aFontAttribute(
+        drawinglayer::primitive2d::getFontAttributeFromVclFont(
             aTextSizeAttribute,
             getPageNameFont(),
             false,
@@ -835,7 +835,7 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
                 0,
                 aPageName.Len(),
                 aDXArray,
-                aFontAttributes,
+                aFontAttribute,
                 aLocale,
                 aFontColor));
     }
@@ -876,7 +876,7 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
                 0,
                 nNumberLen,
                 aDXArray,
-                aFontAttributes,
+                aFontAttribute,
                 aLocale,
                 aFontColor));
 

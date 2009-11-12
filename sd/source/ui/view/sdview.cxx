@@ -448,8 +448,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                             aVclFont.SetHeight( 500 );
 
-                            const drawinglayer::primitive2d::FontAttributes aFontAttributes(
-                                drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                            const drawinglayer::attribute::FontAttribute aFontAttribute(
+                                drawinglayer::primitive2d::getFontAttributeFromVclFont(
                                     aTextSizeAttribute,
                                     aVclFont,
                                     false,
@@ -476,7 +476,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                     0,
                                     nTextLength,
                                     aDXArray,
-                                    aFontAttributes,
+                                    aFontAttribute,
                                     aLocale,
                                     aFontColor));
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
