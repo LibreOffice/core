@@ -260,42 +260,6 @@ class SvtMiscOptions_Impl : public ConfigItem
         void ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const ::rtl::OUString &rName );
 };
 
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
-
-static sal_Int16 implSymbolsStyleFromVCL( ULONG nStyle )
-{
-    switch ( nStyle )
-    {
-        case STYLE_SYMBOLS_AUTO:       return SFX_SYMBOLS_STYLE_AUTO;
-        case STYLE_SYMBOLS_DEFAULT:    return SFX_SYMBOLS_STYLE_DEFAULT;
-        case STYLE_SYMBOLS_HICONTRAST: return SFX_SYMBOLS_STYLE_HICONTRAST;
-        case STYLE_SYMBOLS_INDUSTRIAL: return SFX_SYMBOLS_STYLE_INDUSTRIAL;
-        case STYLE_SYMBOLS_CRYSTAL:    return SFX_SYMBOLS_STYLE_CRYSTAL;
-        case STYLE_SYMBOLS_TANGO:      return SFX_SYMBOLS_STYLE_TANGO;
-        case STYLE_SYMBOLS_CLASSIC:    return SFX_SYMBOLS_STYLE_CLASSIC;
-    }
-
-    return SFX_SYMBOLS_STYLE_AUTO;
-}
-
-static ULONG implSymbolsStyleToVCL( sal_Int16 nStyle )
-{
-    switch ( nStyle )
-    {
-        case SFX_SYMBOLS_STYLE_AUTO:       return STYLE_SYMBOLS_AUTO;
-        case SFX_SYMBOLS_STYLE_DEFAULT:    return STYLE_SYMBOLS_DEFAULT;
-        case SFX_SYMBOLS_STYLE_HICONTRAST: return STYLE_SYMBOLS_HICONTRAST;
-        case SFX_SYMBOLS_STYLE_INDUSTRIAL: return STYLE_SYMBOLS_INDUSTRIAL;
-        case SFX_SYMBOLS_STYLE_CRYSTAL:    return STYLE_SYMBOLS_CRYSTAL;
-        case SFX_SYMBOLS_STYLE_TANGO:      return STYLE_SYMBOLS_TANGO;
-        case SFX_SYMBOLS_STYLE_CLASSIC:    return STYLE_SYMBOLS_CLASSIC;
-    }
-
-    return STYLE_SYMBOLS_AUTO;
-}
-
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
@@ -543,7 +507,7 @@ void SvtMiscOptions_Impl::SetSymbolsSize( sal_Int16 nSet )
 
 sal_Int16 SvtMiscOptions_Impl::GetSymbolsStyle() const
 {
-    return implSymbolsStyleFromVCL( Application::GetSettings().GetStyleSettings().GetSymbolsStyle() );
+    return (sal_Int16)Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 }
 
 ::rtl::OUString SvtMiscOptions_Impl::GetSymbolsStyleName() const
@@ -553,7 +517,7 @@ sal_Int16 SvtMiscOptions_Impl::GetSymbolsStyle() const
 
 sal_Int16 SvtMiscOptions_Impl::GetCurrentSymbolsStyle() const
 {
-    return implSymbolsStyleFromVCL( Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle() );
+    return (sal_Int16)Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle();
 }
 
 void SvtMiscOptions_Impl::ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const ::rtl::OUString &rName )
@@ -565,7 +529,7 @@ void SvtMiscOptions_Impl::ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, cons
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
 
         if ( bValue )
-            aStyleSettings.SetSymbolsStyle( implSymbolsStyleToVCL( nSet ) );
+            aStyleSettings.SetSymbolsStyle( nSet );
         else
             aStyleSettings.SetSymbolsStyleName( rName );
 
