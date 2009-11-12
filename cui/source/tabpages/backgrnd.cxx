@@ -47,7 +47,7 @@
 
 #include <cuires.hrc>
 #include "backgrnd.hrc"
-#include <svx/svxitems.hrc>
+#include <svx/svxitems.hrc> // RID_SVXITEM_COL_WHITE
 #include <svx/dialmgr.hxx>
 
 // Tabellenhintergrund
@@ -1209,7 +1209,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
         long nCount = pColorTable->Count();
         XColorEntry* pEntry = NULL;
         Color aColWhite( COL_WHITE );
-        String aStrWhite( CUI_RES( RID_SVXITEMS_COLOR_WHITE ) );
+        String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
         WinBits nBits = ( aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD );
         aBackgroundColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
         aBackgroundColorSet.SetStyle( nBits );

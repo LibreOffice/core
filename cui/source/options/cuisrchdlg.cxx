@@ -51,7 +51,6 @@
 #include "cuisrchdlg.hxx"
 
 #include <cuires.hrc>
-#include <svx/svxitems.hrc>
 
 #define ITEMID_SETITEM      0
 

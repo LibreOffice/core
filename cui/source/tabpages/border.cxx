@@ -40,7 +40,6 @@
 #define _SVX_BORDER_CXX
 
 #include <cuires.hrc>
-#include <svx/svxitems.hrc>
 #include "border.hrc"
 #include "helpid.hrc"
 

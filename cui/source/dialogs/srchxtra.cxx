@@ -41,7 +41,8 @@
 #include <sfx2/objsh.hxx>
 #include <cuires.hrc>
 #include "srchxtra.hrc"
-#include <svx/svxitems.hrc>
+#include <svx/svxitems.hrc> // RID_ATTR_BEGIN
+#include <svx/dialmgr.hxx>  // item resources
 #include <svx/flstitem.hxx>
 #include "chardlg.hxx"
 #include "paragrph.hxx"
@@ -181,11 +182,12 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
                 }
             }
 
+            // item resources are in svx
             USHORT nResId = nSlot - SID_SVX_START + RID_ATTR_BEGIN;
             SvLBoxEntry* pEntry = NULL;
-            ResId aId( nResId, CUI_MGR() );
+            ResId aId( nResId, DIALOG_MGR() );
             aId.SetRT( RSC_STRING );
-            if ( CUI_MGR().IsAvailable( aId ) )
+            if ( DIALOG_MGR().IsAvailable( aId ) )
                 pEntry = aAttrLB.SvTreeListBox::InsertEntry( CUI_RESSTR( nResId ) );
             else
             {

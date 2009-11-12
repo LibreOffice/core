@@ -50,7 +50,6 @@
 #include <svl/languageoptions.hxx>
 
 #include <cuires.hrc>
-#include <svx/svxitems.hrc>
 #include "chardlg.hrc"
 
 #include <svx/xtable.hxx>       // XColorTable
