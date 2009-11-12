@@ -75,7 +75,7 @@ $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(SHL_NAME).$(SHAREDLIB_EXT) : $(SLOFILES) $(SH
 	$(LINK) $(LIBRARY_LINK_FLAGS) /DEF:$(SHL_NAME).def /OUT:$@ \
 	/MAP:$(OUT_SHL_MISC)/$(SHL_NAME).map $(LINK_JAVA_LIBS) \
 	$(SLOFILES) jawt.lib msvcrt.lib kernel32.lib user32.lib
-	$(LINK_MANIFEST_VC8_ONLY)
+	$(LINK_MANIFEST)
 
 .PHONY: clean
 clean :
