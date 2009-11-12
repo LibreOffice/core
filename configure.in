@@ -3691,6 +3691,23 @@ fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
 
+dnl ===================================================================
+dnl Check whether freetype2 supports emboldening
+dnl ===================================================================
+if test  "$test_freetype" = "yes"; then
+    save_CPPFLAGS="$CPPFLAGS"
+    save_LDFLAGS="$LDFLAGS"
+    save_LIBS="$LIBS"
+    CPPFLAGS="$CPPFLAGS $FREETYPE_CFLAGS"
+    LDFLAGS="$LDFLAGS $FREETYPE_LIBS"
+    AC_CHECK_LIB(freetype, FT_GlyphSlot_Embolden,
+                 [USE_FT_EMBOLDEN="YES"], [USE_FT_EMBOLDEN="NO"], [])
+    LDFLAGS="$save_LDFLAGS"
+    CPPFLAGS="$save_CPPFLAGS"
+    LIBS="$save_LIBS"
+fi
+AC_SUBST(USE_FT_EMBOLDEN)
+
 if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
    test "$with_system_libxslt" != "no"; then
     if test -z "$with_system_libxml" -a -z "$with_system_libs" || \
