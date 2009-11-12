@@ -137,7 +137,7 @@ published service Content
                 [parameter type and name]
 
         -----------------------------------------------------------------------
-        Requiered commands:
+        Mandatory commands:
         -----------------------------------------------------------------------
 
         // This command obtains an interface which allows to query
@@ -218,7 +218,7 @@ published service Content
         //                sequence is the same as the order of result set
         //                columns. First element of sequence will be row
         //                number one, second will be row number two, ...
-        // SortingInfo  : contains sort criteria, if result set shall
+        // SortingInfo      : contains sort criteria, if result set shall
         //                be sorted, otherwise it can be left empty.
         //
         // The exceution must be aborted by the implementation of this command
@@ -236,12 +236,12 @@ published service Content
         //
         // Mode         : DOCUMENT or DOCUMENT_SHARE_DENY_NONE or
         //                DOCUMENT_SHARE_DENY_WRITE. Support for DOCUMENT
-         //                is mandatory, all others are optional.
+        //                is mandatory, all others are optional.
         // Priority     : can be set, but implementation may ignore the value
         // Sink         : a sink, where the implementation can put the
         //                document data into.
         // Properties   : empty ( ignored )
-        // SortingInfo  : empty ( ignored )
+        // SortingInfo      : empty ( ignored )
         //
         // The exceution must be aborted by the implementation of this command
         // (by throwing a <type>CommandAbortedException</type>), if an
@@ -365,6 +365,27 @@ published service Content
         void
             <B>transfer</B>
                 <type>TransferInfo</type> aTransferInfo
+
+        // This command obtains an exlusive write lock for the resource. The
+        // lock is active until command "unlock" is executed or the OOo
+        // session that obtained the lock ends or until the lock is released by
+        // a third party (e.g. a system administrator).
+        void
+            <B>lock</B>
+                void
+        Exceptions: <type>InteractiveLockingLockedException</type>
+                    <type>InteractiveLockingLockExpiredException</type>
+
+        // This command removes a lock obtained by executing the command "lock"
+        // from the resource.
+        void
+            <B>unlock</B>
+                void
+        Exceptions: <type>InteractiveLockingNotLockedException</type>
+                    <type>InteractiveLockingLockExpiredException</type>
+
+        // Note that <type>InteractiveLockingLockExpiredException</type> might
+        // be raised by any command that requires a previously obtained lock.
 
         =======================================================================
         Properties:

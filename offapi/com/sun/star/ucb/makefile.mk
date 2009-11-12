@@ -124,6 +124,10 @@ IDLFILES=\
     InteractiveCHAOSException.idl\
     InteractiveFileIOException.idl\
     InteractiveIOException.idl\
+    InteractiveLockingException.idl\
+    InteractiveLockingLockedException.idl\
+    InteractiveLockingLockExpiredException.idl\
+    InteractiveLockingNotLockedException.idl\
     InteractiveNetworkConnectException.idl\
     InteractiveNetworkException.idl\
     InteractiveNetworkGeneralException.idl\
