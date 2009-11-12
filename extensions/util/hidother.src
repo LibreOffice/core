@@ -435,3 +435,7 @@ hidspecial UID_PROP_DLG_XSD_READONLY            { HelpId = UID_PROP_DLG_XSD_READ
 hidspecial UID_PROP_DLG_XSD_RELEVANT            { HelpId = UID_PROP_DLG_XSD_RELEVANT; }
 hidspecial UID_PROP_DLG_XSD_REQUIRED            { HelpId = UID_PROP_DLG_XSD_REQUIRED; }
 hidspecial UID_PROP_REMOVE_DATA_TYPE            { HelpId = UID_PROP_REMOVE_DATA_TYPE; }
+hidspecial HID_FM_PROPDLG_TABCTR                { HelpId = HID_FM_PROPDLG_TABCTR; }
+hidspecial HID_FM_PROPDLG_TAB_GENERAL           { HelpId = HID_FM_PROPDLG_TAB_GENERAL; }
+hidspecial HID_FM_PROPDLG_TAB_DATA              { HelpId = HID_FM_PROPDLG_TAB_DATA; }
+hidspecial HID_FM_PROPDLG_TAB_EVT               { HelpId = HID_FM_PROPDLG_TAB_EVT; }
