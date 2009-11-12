@@ -4,7 +4,7 @@
 .IF "$(LIB1ARCHIV)" != ""
 
 $(LIB1ARCHIV) :	$(LIB1TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB1ARCHIV:b).cmd
@@ -19,16 +19,20 @@ $(LIB1ARCHIV) :	$(LIB1TARGET)
     @echo  ranlib $(LIB1ARCHIV) >> $(MISC)/$(LIB1ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB1ARCHIV) >> $(MISC)/$(LIB1ARCHIV:b).cmd
+    @echo  ranlib $(LIB1ARCHIV) >> $(MISC)/$(LIB1ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB1ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB1ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB1ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB1FLAGS) $(LIBFLAGS) $(LIB1ARCHIV) `cat $(LIB1TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB1ARCHIV:b).cmd
     @+echo  ranlib $(LIB1ARCHIV) >> $(MISC)/$(LIB1ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB1ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB1ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -40,10 +44,13 @@ $(LIB1ARCHIV) :	$(LIB1TARGET)
 $(LIB1TARGET) :	$(LIB1FILES) \
                         $(LIB1OBJFILES) \
                         $(LIB1DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB1FILES)
     @echo using: $(LIB1TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB1OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -56,7 +63,7 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB1FILES) $(LIB1OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB1FILES) $(LIB1OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB1OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB1OBJFILES)) > $(null,$(LIB1OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -72,7 +79,7 @@ $(LIB1TARGET) :	$(LIB1FILES) \
     +$(ECHONL) $(LIB1OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB1FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB1FILES) $(LIB1OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB1FILES) $(LIB1OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB1OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB1OBJFILES)) > $(null,$(LIB1OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -84,8 +91,10 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .ENDIF          # "$(LIB1FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB1OBJFILES)
-    $(LIBMGR) r $@ $(LIB1OBJFILES) $(LIB1FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB1OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB1OBJFILES) $(LIB1FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB1TARGET)" != ""
@@ -97,7 +106,7 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .IF "$(LIB2ARCHIV)" != ""
 
 $(LIB2ARCHIV) :	$(LIB2TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB2ARCHIV:b).cmd
@@ -112,16 +121,20 @@ $(LIB2ARCHIV) :	$(LIB2TARGET)
     @echo  ranlib $(LIB2ARCHIV) >> $(MISC)/$(LIB2ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB2ARCHIV) >> $(MISC)/$(LIB2ARCHIV:b).cmd
+    @echo  ranlib $(LIB2ARCHIV) >> $(MISC)/$(LIB2ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB2ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB2ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB2ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB2FLAGS) $(LIBFLAGS) $(LIB2ARCHIV) `cat $(LIB2TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB2ARCHIV:b).cmd
     @+echo  ranlib $(LIB2ARCHIV) >> $(MISC)/$(LIB2ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB2ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB2ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -133,10 +146,13 @@ $(LIB2ARCHIV) :	$(LIB2TARGET)
 $(LIB2TARGET) :	$(LIB2FILES) \
                         $(LIB2OBJFILES) \
                         $(LIB2DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB2FILES)
     @echo using: $(LIB2TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB2OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -149,7 +165,7 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB2FILES) $(LIB2OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB2FILES) $(LIB2OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB2OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB2OBJFILES)) > $(null,$(LIB2OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -165,7 +181,7 @@ $(LIB2TARGET) :	$(LIB2FILES) \
     +$(ECHONL) $(LIB2OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB2FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB2FILES) $(LIB2OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB2FILES) $(LIB2OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB2OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB2OBJFILES)) > $(null,$(LIB2OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -177,8 +193,10 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .ENDIF          # "$(LIB2FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB2OBJFILES)
-    $(LIBMGR) r $@ $(LIB2OBJFILES) $(LIB2FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB2OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB2OBJFILES) $(LIB2FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB2TARGET)" != ""
@@ -190,7 +208,7 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .IF "$(LIB3ARCHIV)" != ""
 
 $(LIB3ARCHIV) :	$(LIB3TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB3ARCHIV:b).cmd
@@ -205,16 +223,20 @@ $(LIB3ARCHIV) :	$(LIB3TARGET)
     @echo  ranlib $(LIB3ARCHIV) >> $(MISC)/$(LIB3ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB3ARCHIV) >> $(MISC)/$(LIB3ARCHIV:b).cmd
+    @echo  ranlib $(LIB3ARCHIV) >> $(MISC)/$(LIB3ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB3ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB3ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB3ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB3FLAGS) $(LIBFLAGS) $(LIB3ARCHIV) `cat $(LIB3TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB3ARCHIV:b).cmd
     @+echo  ranlib $(LIB3ARCHIV) >> $(MISC)/$(LIB3ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB3ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB3ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -226,10 +248,13 @@ $(LIB3ARCHIV) :	$(LIB3TARGET)
 $(LIB3TARGET) :	$(LIB3FILES) \
                         $(LIB3OBJFILES) \
                         $(LIB3DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB3FILES)
     @echo using: $(LIB3TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB3OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -242,7 +267,7 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB3FILES) $(LIB3OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB3FILES) $(LIB3OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB3OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB3OBJFILES)) > $(null,$(LIB3OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -258,7 +283,7 @@ $(LIB3TARGET) :	$(LIB3FILES) \
     +$(ECHONL) $(LIB3OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB3FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB3FILES) $(LIB3OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB3FILES) $(LIB3OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB3OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB3OBJFILES)) > $(null,$(LIB3OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -270,8 +295,10 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .ENDIF          # "$(LIB3FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB3OBJFILES)
-    $(LIBMGR) r $@ $(LIB3OBJFILES) $(LIB3FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB3OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB3OBJFILES) $(LIB3FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB3TARGET)" != ""
@@ -283,7 +310,7 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .IF "$(LIB4ARCHIV)" != ""
 
 $(LIB4ARCHIV) :	$(LIB4TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB4ARCHIV:b).cmd
@@ -298,16 +325,20 @@ $(LIB4ARCHIV) :	$(LIB4TARGET)
     @echo  ranlib $(LIB4ARCHIV) >> $(MISC)/$(LIB4ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB4ARCHIV) >> $(MISC)/$(LIB4ARCHIV:b).cmd
+    @echo  ranlib $(LIB4ARCHIV) >> $(MISC)/$(LIB4ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB4ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB4ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB4ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB4FLAGS) $(LIBFLAGS) $(LIB4ARCHIV) `cat $(LIB4TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB4ARCHIV:b).cmd
     @+echo  ranlib $(LIB4ARCHIV) >> $(MISC)/$(LIB4ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB4ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB4ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -319,10 +350,13 @@ $(LIB4ARCHIV) :	$(LIB4TARGET)
 $(LIB4TARGET) :	$(LIB4FILES) \
                         $(LIB4OBJFILES) \
                         $(LIB4DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB4FILES)
     @echo using: $(LIB4TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB4OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -335,7 +369,7 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB4FILES) $(LIB4OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB4FILES) $(LIB4OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB4OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB4OBJFILES)) > $(null,$(LIB4OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -351,7 +385,7 @@ $(LIB4TARGET) :	$(LIB4FILES) \
     +$(ECHONL) $(LIB4OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB4FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB4FILES) $(LIB4OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB4FILES) $(LIB4OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB4OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB4OBJFILES)) > $(null,$(LIB4OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -363,8 +397,10 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .ENDIF          # "$(LIB4FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB4OBJFILES)
-    $(LIBMGR) r $@ $(LIB4OBJFILES) $(LIB4FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB4OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB4OBJFILES) $(LIB4FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB4TARGET)" != ""
@@ -376,7 +412,7 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .IF "$(LIB5ARCHIV)" != ""
 
 $(LIB5ARCHIV) :	$(LIB5TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB5ARCHIV:b).cmd
@@ -391,16 +427,20 @@ $(LIB5ARCHIV) :	$(LIB5TARGET)
     @echo  ranlib $(LIB5ARCHIV) >> $(MISC)/$(LIB5ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB5ARCHIV) >> $(MISC)/$(LIB5ARCHIV:b).cmd
+    @echo  ranlib $(LIB5ARCHIV) >> $(MISC)/$(LIB5ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB5ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB5ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB5ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB5FLAGS) $(LIBFLAGS) $(LIB5ARCHIV) `cat $(LIB5TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB5ARCHIV:b).cmd
     @+echo  ranlib $(LIB5ARCHIV) >> $(MISC)/$(LIB5ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB5ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB5ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -412,10 +452,13 @@ $(LIB5ARCHIV) :	$(LIB5TARGET)
 $(LIB5TARGET) :	$(LIB5FILES) \
                         $(LIB5OBJFILES) \
                         $(LIB5DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB5FILES)
     @echo using: $(LIB5TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB5OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -428,7 +471,7 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB5FILES) $(LIB5OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB5FILES) $(LIB5OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB5OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB5OBJFILES)) > $(null,$(LIB5OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -444,7 +487,7 @@ $(LIB5TARGET) :	$(LIB5FILES) \
     +$(ECHONL) $(LIB5OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB5FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB5FILES) $(LIB5OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB5FILES) $(LIB5OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB5OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB5OBJFILES)) > $(null,$(LIB5OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -456,8 +499,10 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .ENDIF          # "$(LIB5FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB5OBJFILES)
-    $(LIBMGR) r $@ $(LIB5OBJFILES) $(LIB5FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB5OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB5OBJFILES) $(LIB5FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB5TARGET)" != ""
@@ -469,7 +514,7 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .IF "$(LIB6ARCHIV)" != ""
 
 $(LIB6ARCHIV) :	$(LIB6TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB6ARCHIV:b).cmd
@@ -484,16 +529,20 @@ $(LIB6ARCHIV) :	$(LIB6TARGET)
     @echo  ranlib $(LIB6ARCHIV) >> $(MISC)/$(LIB6ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB6ARCHIV) >> $(MISC)/$(LIB6ARCHIV:b).cmd
+    @echo  ranlib $(LIB6ARCHIV) >> $(MISC)/$(LIB6ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB6ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB6ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB6ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB6FLAGS) $(LIBFLAGS) $(LIB6ARCHIV) `cat $(LIB6TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB6ARCHIV:b).cmd
     @+echo  ranlib $(LIB6ARCHIV) >> $(MISC)/$(LIB6ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB6ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB6ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -505,10 +554,13 @@ $(LIB6ARCHIV) :	$(LIB6TARGET)
 $(LIB6TARGET) :	$(LIB6FILES) \
                         $(LIB6OBJFILES) \
                         $(LIB6DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB6FILES)
     @echo using: $(LIB6TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB6OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -521,7 +573,7 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB6FILES) $(LIB6OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB6FILES) $(LIB6OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB6OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB6OBJFILES)) > $(null,$(LIB6OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -537,7 +589,7 @@ $(LIB6TARGET) :	$(LIB6FILES) \
     +$(ECHONL) $(LIB6OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB6FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB6FILES) $(LIB6OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB6FILES) $(LIB6OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB6OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB6OBJFILES)) > $(null,$(LIB6OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -549,8 +601,10 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .ENDIF          # "$(LIB6FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB6OBJFILES)
-    $(LIBMGR) r $@ $(LIB6OBJFILES) $(LIB6FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB6OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB6OBJFILES) $(LIB6FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB6TARGET)" != ""
@@ -562,7 +616,7 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .IF "$(LIB7ARCHIV)" != ""
 
 $(LIB7ARCHIV) :	$(LIB7TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB7ARCHIV:b).cmd
@@ -577,16 +631,20 @@ $(LIB7ARCHIV) :	$(LIB7TARGET)
     @echo  ranlib $(LIB7ARCHIV) >> $(MISC)/$(LIB7ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB7ARCHIV) >> $(MISC)/$(LIB7ARCHIV:b).cmd
+    @echo  ranlib $(LIB7ARCHIV) >> $(MISC)/$(LIB7ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB7ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB7ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB7ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB7FLAGS) $(LIBFLAGS) $(LIB7ARCHIV) `cat $(LIB7TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB7ARCHIV:b).cmd
     @+echo  ranlib $(LIB7ARCHIV) >> $(MISC)/$(LIB7ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB7ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB7ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -598,10 +656,13 @@ $(LIB7ARCHIV) :	$(LIB7TARGET)
 $(LIB7TARGET) :	$(LIB7FILES) \
                         $(LIB7OBJFILES) \
                         $(LIB7DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB7FILES)
     @echo using: $(LIB7TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB7OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -614,7 +675,7 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB7FILES) $(LIB7OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB7FILES) $(LIB7OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB7OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB7OBJFILES)) > $(null,$(LIB7OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -630,7 +691,7 @@ $(LIB7TARGET) :	$(LIB7FILES) \
     +$(ECHONL) $(LIB7OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB7FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB7FILES) $(LIB7OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB7FILES) $(LIB7OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB7OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB7OBJFILES)) > $(null,$(LIB7OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -642,8 +703,10 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .ENDIF          # "$(LIB7FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB7OBJFILES)
-    $(LIBMGR) r $@ $(LIB7OBJFILES) $(LIB7FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB7OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB7OBJFILES) $(LIB7FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB7TARGET)" != ""
@@ -655,7 +718,7 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .IF "$(LIB8ARCHIV)" != ""
 
 $(LIB8ARCHIV) :	$(LIB8TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB8ARCHIV:b).cmd
@@ -670,16 +733,20 @@ $(LIB8ARCHIV) :	$(LIB8TARGET)
     @echo  ranlib $(LIB8ARCHIV) >> $(MISC)/$(LIB8ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB8ARCHIV) >> $(MISC)/$(LIB8ARCHIV:b).cmd
+    @echo  ranlib $(LIB8ARCHIV) >> $(MISC)/$(LIB8ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB8ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB8ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB8ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB8FLAGS) $(LIBFLAGS) $(LIB8ARCHIV) `cat $(LIB8TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB8ARCHIV:b).cmd
     @+echo  ranlib $(LIB8ARCHIV) >> $(MISC)/$(LIB8ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB8ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB8ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -691,10 +758,13 @@ $(LIB8ARCHIV) :	$(LIB8TARGET)
 $(LIB8TARGET) :	$(LIB8FILES) \
                         $(LIB8OBJFILES) \
                         $(LIB8DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB8FILES)
     @echo using: $(LIB8TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB8OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -707,7 +777,7 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB8FILES) $(LIB8OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB8FILES) $(LIB8OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB8OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB8OBJFILES)) > $(null,$(LIB8OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -723,7 +793,7 @@ $(LIB8TARGET) :	$(LIB8FILES) \
     +$(ECHONL) $(LIB8OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB8FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB8FILES) $(LIB8OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB8FILES) $(LIB8OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB8OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB8OBJFILES)) > $(null,$(LIB8OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -735,8 +805,10 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .ENDIF          # "$(LIB8FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB8OBJFILES)
-    $(LIBMGR) r $@ $(LIB8OBJFILES) $(LIB8FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB8OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB8OBJFILES) $(LIB8FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB8TARGET)" != ""
@@ -748,7 +820,7 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .IF "$(LIB9ARCHIV)" != ""
 
 $(LIB9ARCHIV) :	$(LIB9TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB9ARCHIV:b).cmd
@@ -763,16 +835,20 @@ $(LIB9ARCHIV) :	$(LIB9TARGET)
     @echo  ranlib $(LIB9ARCHIV) >> $(MISC)/$(LIB9ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB9ARCHIV) >> $(MISC)/$(LIB9ARCHIV:b).cmd
+    @echo  ranlib $(LIB9ARCHIV) >> $(MISC)/$(LIB9ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB9ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB9ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB9ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB9FLAGS) $(LIBFLAGS) $(LIB9ARCHIV) `cat $(LIB9TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB9ARCHIV:b).cmd
     @+echo  ranlib $(LIB9ARCHIV) >> $(MISC)/$(LIB9ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB9ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB9ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -784,10 +860,13 @@ $(LIB9ARCHIV) :	$(LIB9TARGET)
 $(LIB9TARGET) :	$(LIB9FILES) \
                         $(LIB9OBJFILES) \
                         $(LIB9DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB9FILES)
     @echo using: $(LIB9TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB9OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -800,7 +879,7 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB9FILES) $(LIB9OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB9FILES) $(LIB9OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB9OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB9OBJFILES)) > $(null,$(LIB9OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -816,7 +895,7 @@ $(LIB9TARGET) :	$(LIB9FILES) \
     +$(ECHONL) $(LIB9OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB9FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB9FILES) $(LIB9OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB9FILES) $(LIB9OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB9OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB9OBJFILES)) > $(null,$(LIB9OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -828,8 +907,10 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .ENDIF          # "$(LIB9FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB9OBJFILES)
-    $(LIBMGR) r $@ $(LIB9OBJFILES) $(LIB9FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB9OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB9OBJFILES) $(LIB9FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB9TARGET)" != ""
@@ -841,7 +922,7 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .IF "$(LIB10ARCHIV)" != ""
 
 $(LIB10ARCHIV) :	$(LIB10TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB10ARCHIV:b).cmd
@@ -856,16 +937,20 @@ $(LIB10ARCHIV) :	$(LIB10TARGET)
     @echo  ranlib $(LIB10ARCHIV) >> $(MISC)/$(LIB10ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB10ARCHIV) >> $(MISC)/$(LIB10ARCHIV:b).cmd
+    @echo  ranlib $(LIB10ARCHIV) >> $(MISC)/$(LIB10ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB10ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB10ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB10ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB10FLAGS) $(LIBFLAGS) $(LIB10ARCHIV) `cat $(LIB10TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB10ARCHIV:b).cmd
     @+echo  ranlib $(LIB10ARCHIV) >> $(MISC)/$(LIB10ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB10ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB10ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -877,10 +962,13 @@ $(LIB10ARCHIV) :	$(LIB10TARGET)
 $(LIB10TARGET) :	$(LIB10FILES) \
                         $(LIB10OBJFILES) \
                         $(LIB10DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB10FILES)
     @echo using: $(LIB10TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB10OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -893,7 +981,7 @@ $(LIB10TARGET) :	$(LIB10FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB10FILES) $(LIB10OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB10FILES) $(LIB10OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB10OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB10OBJFILES)) > $(null,$(LIB10OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -909,7 +997,7 @@ $(LIB10TARGET) :	$(LIB10FILES) \
     +$(ECHONL) $(LIB10OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB10FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB10FILES) $(LIB10OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB10FILES) $(LIB10OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB10OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB10OBJFILES)) > $(null,$(LIB10OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -921,8 +1009,10 @@ $(LIB10TARGET) :	$(LIB10FILES) \
 .ENDIF          # "$(LIB10FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB10OBJFILES)
-    $(LIBMGR) r $@ $(LIB10OBJFILES) $(LIB10FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB10OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB10OBJFILES) $(LIB10FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB10TARGET)" != ""

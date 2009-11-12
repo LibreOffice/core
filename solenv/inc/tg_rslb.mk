@@ -40,11 +40,10 @@ HIDRES$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB$(TNR)
 #HACK cut off the dirty srs files which are included from solver
 RESLIB$(TNR)HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB$(TNR)SRSFILES)))
 $(HIDRES$(TNR)PARTICLE): $(RESLIB$(TNR)HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB$(TNR)HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB$(TNR)HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES$(TNR)PARTICLE)
@@ -55,9 +54,9 @@ $(RSC_MULTI$(TNR)) : \
         $(RESLIB$(TNR)SRSFILES) \
         $(RESLIB$(TNR)TARGETN) \
         $(RESLIB$(TNR)BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -72,7 +71,7 @@ $(RSC_MULTI$(TNR)) : \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -91,7 +90,7 @@ $(RSC_MULTI$(TNR)) : \
 $(RESLIB$(TNR)TARGETN): \
         $(RESLIB$(TNR)SRSFILES) \
         $(RESLIB$(TNR)BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI$(TNR))

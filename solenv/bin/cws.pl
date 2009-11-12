@@ -60,7 +60,7 @@ use Cws;
 #### globals ####
 
 # TODO: replace dummy vales with actual SVN->hg migration milestones
-my $dev300_migration_milestone = 'm999';
+my $dev300_migration_milestone = 'm64';
 my $ooo320_migration_milestone = 'm999';
 
 # valid command with possible abbreviations
@@ -446,20 +446,37 @@ sub print_time_elapsed
     print_message("... finished in " . timestr($time_diff));
 }
 
-sub hgrc_append_default_push_path
+sub hgrc_append_push_path_and_hooks
 {
     my $target     = shift;
     my $cws_source = shift;
 
     $cws_source =~ s/http:\/\//ssh:\/\/hg@/;
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: default-push path: '$cws_source'\n";
+        print STDERR "CWS-DEBUG: hgrc_append_push_path_and_hooks(): default-push path: '$cws_source'\n";
     }
     if ( !open(HGRC, ">>$target/.hg/hgrc") ) {
-        print_error("Can't append default-push path to hgrc file of repository '$target'.\n", 88);
+        print_error("Can't append to hgrc file of repository '$target'.\n", 88);
     }
     print HGRC "default-push = " . "$cws_source\n";
+    print HGRC "[extensions]\n";
+    print HGRC "hgext.win32text=\n";
+    print HGRC "[hooks]\n";
+    print HGRC "# Reject commits which would introduce windows-style CR/LF files\n";
+    print HGRC "pretxncommit.crlf = python:hgext.win32text.forbidcrlf\n";
     close(HGRC);
+}
+
+sub is_hg_strip_available
+{
+    my $profile = hg_show();
+
+    foreach (@{$profile}) {
+        if ( $_ =~ /hgext.mq=/ ) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 sub hg_clone_repository
@@ -526,11 +543,11 @@ sub hg_clone_repository
         my $pattern = "<title>cws/". $cws->child();
         if ( $content =~ /$pattern/ ) {
             hg_remote_pull_repository($cws_remote_source, $target);
-            hgrc_append_default_push_path($target, $cws_remote_source);
         }
         else {
             print_message("The 'outgoing' repository '$cws_remote_source' is not accessible/available");
         }
+        hgrc_append_push_path_and_hooks($target, $cws_remote_source);
     }
 
     # update the result
@@ -1696,6 +1713,14 @@ sub do_create
         return;
     }
 
+    # Refuse to create Subversion hosted cildworkspaces after
+    # migration milestone
+    my $milestone_scm = get_scm_for_milestone($cws->master(), $cws->milestone());
+    if ( $milestone_scm eq 'HG' ) {
+        print_error("This code line has been migrated to Mercurial.", 0);
+        print_error("Please use the '--hg' option to create a Mercurial hosted CWS.", 8);
+    }
+
     my $config = CwsConfig->new();
     my $ooo_svn_server = $config->get_ooo_svn_server();
     my $so_svn_server = $config->get_so_svn_server();
@@ -1828,6 +1853,7 @@ sub do_rebase
     }
 
     my $cws = get_cws_from_environment();
+
     my $old_masterws = $cws->master();
     my $new_masterws;
     my $new_milestone;
@@ -1859,6 +1885,17 @@ sub do_rebase
     }
     else {
         do_help(['rebase']);
+    }
+
+    if ( $cws->get_scm() eq 'HG' ) {
+        my $child = $cws->child();
+        print_error("cws rebase is not supported for mercurial based childworkspaces", 0);
+        print_error("re-synchronize your CWS with:", 0);
+        print_error("hg pull <master>", 0);
+        print_error("hg merge", 0);
+        print_error("hg commit -m\"$child: merge with $new_masterws $new_milestone\"", 0);
+        print_error("and update EIS with:", 0);
+        print_error("cws setcurrent -m $new_milestone", 99);
     }
 
     my $so_setup = 0;
@@ -2076,13 +2113,23 @@ sub do_fetch
     }
 
     if ( $switch && $scm eq 'HG' ) {
-        print_error("Option '-s' is not supported on a hg based CWS.", 0);
+        print_error("Option '-s' is not supported with a hg based CWS.", 0);
         do_help(['fetch']);
     }
 
     if ( $debug ) {
         print STDERR "CWS-DEBUG: SCM: $scm\n";
     }
+
+    if ( $scm eq 'HG' ) {
+        if ( !is_hg_strip_available() ) {
+            print_error("The 'cws fetch' command requires that 'hg strip' is enabled", 0);
+            print_error("Please add the following lines to your hg profile (\$HOME/.hgrc)", 0);
+            print_error("[extensions]", 0);
+            print_error("hgext.mq=", 33);
+        }
+    }
+
     my $config = CwsConfig->new();
     my $ooo_svn_server = $config->get_ooo_svn_server();
     my $so_svn_server = $config->get_so_svn_server();
@@ -2892,7 +2939,13 @@ sub hg_clone
         print STDERR "CWS-DEBUG: ... hg clone: '$source -> $dest', options: '$options'\n";
     }
 
-    my @result = execute_hg_command(1, 'clone', $options, $source, $dest);
+    # The to be cloned revision might not yet be avaliable. In this case clone
+    # the available tip.
+    my @result = execute_hg_command(0, 'clone', $options, $source, $dest);
+    if ( defined($result[0]) && $result[0] =~ /abort: unknown revision/ ) {
+        $options =~ s/-r \w+//;
+        @result = execute_hg_command(1, 'clone', $options, $source, $dest);
+    }
     return @result;
 }
 
@@ -2964,6 +3017,15 @@ sub hg_update
     return @result;
 }
 
+sub hg_show
+{
+    if ( $debug ) {
+        print STDERR "CWS-DEBUG: ... hg show\n";
+    }
+    my $result = execute_hg_command(0, 'show', '');
+    return $result;
+}
+
 sub execute_hg_command
 {
     my $terminate_on_rc = shift;
@@ -2981,13 +3043,20 @@ sub execute_hg_command
         print STDERR "CWS-DEBUG: ... execute command line: '$command'\n";
     }
 
-    my $result = `$command`;
-    my $rc = $? >> 8;
-    if ($rc > 0 && $terminate_on_rc) {
-        print_error("The mercurial command line tool 'hg' failed with exit status '$rc'", 99);
+    my @result;
+    open(OUTPUT, "$command 2>&1 |") or print_error("Can't execute mercurial command line client", 98);
+    while (<OUTPUT>) {
+        push(@result, $_);
     }
+    close(OUTPUT);
 
-    return $result;
+    my $rc = $? >> 8;
+
+    if ( $rc > 0 && $terminate_on_rc) {
+        print STDERR @result;
+        print_error("The mercurial command line client failed with exit status '$rc'", 99);
+    }
+    return wantarray ? @result : \@result;
 }
 
 
