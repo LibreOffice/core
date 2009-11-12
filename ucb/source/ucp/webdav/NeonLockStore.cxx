@@ -93,20 +93,18 @@ NeonLockStore::NeonLockStore()
     : m_pNeonLockStore( ne_lockstore_create() ),
       m_pTickerThread( 0 )
 {
-    OSL_TRACE( "LockStore ctor." );
     OSL_ENSURE( m_pNeonLockStore, "Unable to create neon lock store!" );
 }
 
 // -------------------------------------------------------------------
 NeonLockStore::~NeonLockStore()
 {
-    OSL_TRACE( "LockStore dtor." );
-
     stopTicker();
 
-    // release active locks, if any (just for safety).
+    // release active locks, if any.
     OSL_ENSURE( m_aLockInfoMap.size() == 0,
                 "NeonLockStore::~NeonLockStore - Releasing active locks!" );
+
     LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );
     const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
     while ( it != end )
@@ -215,7 +213,6 @@ void NeonLockStore::removeLock( NeonLock * pLock )
 void NeonLockStore::refreshLocks()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    //OSL_TRACE( "NeonLockStore::refreshLocks" );
 
     LockInfoMap::iterator it( m_aLockInfoMap.begin() );
     const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
