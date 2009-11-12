@@ -126,7 +126,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Styles = (X64_ONLY); // Values: X64
+    Styles = (X64); // Values: X64 / X64_ONLY
     Value = "[BASISINSTALLLOCATION]program\shlxthdl\ooofiltproxy.dll";
     Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\ooofiltproxy_x64.dll";
 End
@@ -135,7 +135,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Styles = (X64_ONLY); // Values: X64
+    Styles = (X64); // Values: X64
     Name = "ThreadingModel";
     Value = "Apartment";
     Val64 = "Apartment";
@@ -147,7 +147,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
     Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 //? Better: "OpenOffice.org Persistent Handler"
 // old:    Value = "opendocument.org Persistent Handler";
-	Styles = (X64_ONLY); // Values: X64
+	Styles = (X64); // Values: X64
     Value = "OpenDocument Format Persistent Handler";
     Val64 = "OpenDocument Format Persistent Handler";
 End
@@ -155,7 +155,7 @@ End
 RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsRegistered
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
-    Styles = (X64_ONLY); // Values: X64
+    Styles = (X64); // Values: X64
     Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}";
     Value = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
     Val64 = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
