@@ -86,11 +86,13 @@ public:
     // DAV methods
     //
 
+#if 0 // currently not used, but please don't remove code
     void
     OPTIONS(  DAVCapabilities & rCapabilities,
               const com::sun::star::uno::Reference<
                   com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
+#endif
 
     // allprop & named
     void

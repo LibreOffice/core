@@ -176,6 +176,7 @@ DAVResourceAccess & DAVResourceAccess::operator=(
     return *this;
 }
 
+#if 0 // currently not used, but please don't remove code
 //=========================================================================
 void DAVResourceAccess::OPTIONS(
     DAVCapabilities & rCapabilities,
@@ -215,6 +216,7 @@ void DAVResourceAccess::OPTIONS(
     }
     while ( bRetry );
 }
+#endif
 
 //=========================================================================
 void DAVResourceAccess::PROPFIND(
