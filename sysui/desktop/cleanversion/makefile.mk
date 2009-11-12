@@ -43,7 +43,7 @@ ALLTAR: $(MISC)$/cleanup.flag
 
 # version changed - bin previous trees
 $(MISC)$/cleanup.flag : ..$/productversion.mk
-    rm -rf `ls $(MISC) | grep -v -x $(MISC)$/logs` && $(TOUCH) $@
+    rm -rf `ls -d ../../unxsols4.pro/misc/* | sed '/\/logs$/d'` && $(TOUCH) $@
     
 .ENDIF			# "$(MISC)"!=""
     
