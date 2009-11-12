@@ -1,6 +1,6 @@
---- misc/neon-0.28.2/src/config.h	2009-08-30 19:00:56.000000000 +0200
-+++ misc/build/neon-0.28.2/src/config.h	2009-08-11 09:48:54.000000000 +0200
-@@ -1 +1,484 @@
+--- misc/neon-0.28.2/src/config.h	2009-11-12 13:03:04.000000000 +0100
++++ misc/build/neon-0.28.2/src/config.h	2009-11-12 12:53:41.000000000 +0100
+@@ -1 +1,488 @@
 -dummy
 +
 +/* Define to specific EGD socket path */
@@ -455,6 +455,10 @@
 +/* Define to `unsigned' if <sys/types.h> does not define. */
 +/* #undef size_t */
 +
++/* MS IIS does not send Lock-Token response header after creation of a */
++/* new lock. This violates RFC, but... if we want to talk with this   */
++/* beast we need a workaround */
++#define IIS_LOCK_BUG_WORKAROUND 1
 +
 +/* Enable leak-tracking versions of ne_*alloc when NEON_MEMLEAK is enabled */
 +#ifdef NEON_MEMLEAK
@@ -486,8 +490,8 @@
 +#else
 +#define HAVE_NTLM 1
 +#endif
---- misc/neon-0.28.2/src/makefile.mk	2009-08-30 19:00:56.000000000 +0200
-+++ misc/build/neon-0.28.2/src/makefile.mk	2009-08-11 09:48:54.000000000 +0200
+--- misc/neon-0.28.2/src/makefile.mk	2009-11-12 13:03:04.000000000 +0100
++++ misc/build/neon-0.28.2/src/makefile.mk	2009-11-12 11:39:52.000000000 +0100
 @@ -1 +1,59 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
@@ -550,7 +554,7 @@
 +
 +.INCLUDE :  target.mk
 --- misc/neon-0.28.2/src/ne_auth.c	2008-02-29 17:30:12.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_auth.c	2009-08-24 15:41:32.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_auth.c	2009-11-12 11:39:52.000000000 +0100
 @@ -77,6 +77,10 @@
  #include "ne_sspi.h"
  #endif
@@ -714,7 +718,7 @@
      return ret;
  }
 --- misc/neon-0.28.2/src/ne_auth.h	2007-12-05 17:39:58.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_auth.h	2009-08-24 15:16:22.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_auth.h	2009-11-12 11:39:52.000000000 +0100
 @@ -47,8 +47,8 @@
   * Hint: if you just wish to attempt authentication just once (even if
   * the user gets the username/password wrong), have the callback
@@ -727,7 +731,7 @@
  /* Set callbacks to provide credentials for server and proxy
   * authentication, using the default set of authentication protocols.
 --- misc/neon-0.28.2/src/ne_defs.h	2006-10-24 21:40:09.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_defs.h	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_defs.h	2009-11-12 11:39:52.000000000 +0100
 @@ -41,7 +41,7 @@
  #endif
  
@@ -737,8 +741,76 @@
  #define ssize_t int
  #endif
  
+--- misc/neon-0.28.2/src/ne_locks.c	2007-02-05 11:09:27.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_locks.c	2009-11-12 12:57:15.000000000 +0100
+@@ -579,6 +579,23 @@
+         const char *token = ne_get_response_header(ctx->req, "Lock-Token");
+         /* at the root element; retrieve the Lock-Token header,
+          * and bail if it wasn't given. */
++#ifdef IIS_LOCK_BUG_WORKAROUND
++        /* MS IIS violates RFC 2518/4918. It does not send a Lock-Token response
++           header upon successful creation of a new lock. As a workaround, we
++           will try to pick the lock token from the response body (although
++           this is not 100% safe in case of multiple activelocks). */
++        if (token == NULL)
++	  NE_DEBUG(NE_DBG_LOCKS,
++		   "Ignoring missing LOCK response Lock-Token header\n");
++
++        if (token != NULL) {
++	  if (token[0] == '<') token++;
++	  ctx->token = ne_strdup(token);
++	  ne_shave(ctx->token, ">");
++	  NE_DEBUG(NE_DBG_LOCKS, "lk_startelm: Finding token %s\n",
++		   ctx->token);
++        }
++#else
+         if (token == NULL) {
+             ne_xml_set_error(ctx->parser, 
+                              _("LOCK response missing Lock-Token header"));
+@@ -590,12 +607,28 @@
+         ne_shave(ctx->token, ">");
+         NE_DEBUG(NE_DBG_LOCKS, "lk_startelm: Finding token %s\n",
+                  ctx->token);
++#endif
+     }
+ 
+     /* TODO: only accept 'prop' as root for LOCK response */
+     if (!can_accept(parent, id))
+         return NE_XML_DECLINE;
+ 
++#ifdef IIS_LOCK_BUG_WORKAROUND
++    if (id == ELM_activelock && ctx->found) {
++      /* Found another activelock... */
++      const char *token = ne_get_response_header(ctx->req, "Lock-Token");
++      if (token == NULL) {
++	/* Response contains more than one activelock and no Lock-Token
++	 * response header. We are doomed. No safe workaround for IIS
++	 * lock bug possible. */
++	ne_xml_set_error(ctx->parser,
++			 _("LOCK response missing Lock-Token header and more than one activelock"));
++	return NE_XML_ABORT;
++      }
++    }
++#endif
++
+     if (id == ELM_activelock && !ctx->found) {
+ 	/* a new activelock */
+ 	ne_lock_free(&ctx->active);
+@@ -621,7 +654,12 @@
+ 	return -1;
+ 
+     if (state == ELM_activelock) {
++#ifdef IIS_LOCK_BUG_WORKAROUND
++      if (ctx->active.token) {
++        ctx->token = ne_strdup(ctx->active.token);
++#else
+ 	if (ctx->active.token && strcmp(ctx->active.token, ctx->token) == 0) {
++#endif
+ 	    ctx->found = 1;
+ 	}
+     }
 --- misc/neon-0.28.2/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_locks.h	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_locks.h	2009-11-12 11:39:52.000000000 +0100
 @@ -22,6 +22,10 @@
  #ifndef NE_LOCKS_H
  #define NE_LOCKS_H
@@ -750,8 +822,8 @@
  #include "ne_request.h" /* for ne_session + ne_request */
  #include "ne_uri.h" /* for ne_uri */
  
---- misc/neon-0.28.2/src/ne_ntlm.c	2009-08-30 19:00:56.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_ntlm.c	2009-08-11 09:48:54.000000000 +0200
+--- misc/neon-0.28.2/src/ne_ntlm.c	2009-11-12 13:03:04.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_ntlm.c	2009-11-12 11:39:52.000000000 +0100
 @@ -1 +1,700 @@
 -dummy
 +/* 
@@ -1454,8 +1526,8 @@
 +
 +#endif /* HAVE_OPENSSL */
 +#endif /* HAVE_NTLM */
---- misc/neon-0.28.2/src/ne_ntlm.h	2009-08-30 19:00:56.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_ntlm.h	2009-08-11 09:48:54.000000000 +0200
+--- misc/neon-0.28.2/src/ne_ntlm.h	2009-11-12 13:03:04.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_ntlm.h	2009-11-12 11:39:51.000000000 +0100
 @@ -1 +1,44 @@
 -dummy
 +/* 
@@ -1503,7 +1575,7 @@
 +
 +#endif /* NE_NTLM_H */
 --- misc/neon-0.28.2/src/ne_socket.c	2008-02-28 14:19:19.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_socket.c	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_socket.c	2009-11-12 11:39:52.000000000 +0100
 @@ -60,6 +60,7 @@
  #include <stddef.h>
  #ifdef USE_GETADDRINFO
@@ -1513,7 +1585,7 @@
  #endif
  
 --- misc/neon-0.28.2/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_sspi.c	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_sspi.c	2009-11-12 11:39:52.000000000 +0100
 @@ -202,9 +202,48 @@
          return -1;
      }
@@ -1604,7 +1676,7 @@
          securityStatus =
              initializeSecurityContext(&sspiContext->credentials, NULL,
 --- misc/neon-0.28.2/src/ne_sspi.h	2006-02-12 13:05:14.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_sspi.h	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_sspi.h	2009-11-12 11:39:51.000000000 +0100
 @@ -41,7 +41,7 @@
  int ne_sspi_clear_context(void *context);
  
@@ -1615,7 +1687,7 @@
  #endif /* HAVE_SSPI */
  
 --- misc/neon-0.28.2/src/ne_uri.c	2007-12-05 12:04:47.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_uri.c	2009-08-11 09:48:54.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_uri.c	2009-11-12 11:39:52.000000000 +0100
 @@ -42,7 +42,7 @@
  #include "ne_alloc.h"
  #include "ne_uri.h"
@@ -1662,7 +1734,7 @@
  /*   4x */ AT, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL,
  /*   5x */ AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, GD, OT, GD, OT, US,
 --- misc/neon-0.28.2/src/ne_utils.c	2006-03-07 10:36:43.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_utils.c	2009-08-30 18:55:04.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_utils.c	2009-11-12 11:39:52.000000000 +0100
 @@ -118,6 +118,9 @@
  #ifdef HAVE_GNUTLS
      ", GNU TLS " LIBGNUTLS_VERSION
@@ -1693,7 +1765,7 @@
  #endif /* NE_HAVE_* */
      default:
 --- misc/neon-0.28.2/src/ne_utils.h	2007-07-16 08:54:57.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_utils.h	2009-08-24 15:47:03.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_utils.h	2009-11-12 11:39:51.000000000 +0100
 @@ -54,6 +54,7 @@
  #define NE_FEATURE_SOCKS (5) /* SOCKSv5 support */
  #define NE_FEATURE_TS_SSL (6) /* Thread-safe SSL/TLS support */
