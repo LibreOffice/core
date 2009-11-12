@@ -571,7 +571,7 @@ void XcsParser::handleSet(XmlReader & reader, bool isTemplate) {
 
 void XcsParser::handleSetItem(XmlReader & reader, SetNode * set) {
     rtl::OUString component(componentName_);
-    bool hasNodeType;
+    bool hasNodeType = false;
     rtl::OUString nodeType;
     for (;;) {
         XmlReader::Namespace attrNs;
