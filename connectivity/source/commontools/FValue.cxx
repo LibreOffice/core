@@ -1747,6 +1747,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
             case DataType::TIME:
                 aValue = *static_cast< ::com::sun::star::util::Time*>(m_aValue.m_pValue);
+                break;
             default:
                 OSL_ENSURE(0,"Illegal conversion!");
                 break;
