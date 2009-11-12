@@ -74,7 +74,7 @@ ModalDialog DLG_CHINESETRANSLATION
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_1 ) ;
         Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ en-US ] = "Translation direction";
+        Text [ en-US ] = "Conversion direction";
     };
 
     DIRECTION_RADIOBUTTONS( COL_2, ROW_2, (FULL_WIDTH - COL_2 - RSC_SP_DLG_INNERBORDER_RIGHT) )
