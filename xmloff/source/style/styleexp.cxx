@@ -42,7 +42,6 @@
 //#include "xmlitmap.hxx"
 #endif
 #include <xmloff/xmluconv.hxx>
-#include "xmlkywd.hxx"
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>

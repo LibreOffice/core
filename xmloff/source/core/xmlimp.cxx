@@ -41,7 +41,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -292,8 +291,7 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__math) ),
                             GetXMLToken(XML_N_MATH),
                             XML_NAMESPACE_MATH );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_namespace_form) ),
-                            GetXMLToken(XML_N_FORM),
+        mpNamespaceMap->Add(GetXMLToken(XML_N_FORM), GetXMLToken(XML_N_FORM),
                             XML_NAMESPACE_FORM );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__script) ),
                             GetXMLToken(XML_N_SCRIPT),
@@ -674,7 +672,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             }
         }
         else if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.compareToAscii( sXML_xmlns, 5 ) == 0 ) &&
+            ( rAttrName.compareTo( GetXMLToken(XML_XMLNS), 5 ) == 0 ) &&
             ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
         {
             if( !pRewindMap )

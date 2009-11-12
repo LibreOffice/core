@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "XMLSectionExport.hxx"
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -56,7 +55,6 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp> //i90246
-#include "xmlkywd.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/families.hxx>
@@ -309,7 +307,7 @@ void XMLSectionExport::ExportSectionEnd(
                         break;
 
                     default:
-                        DBG_ERROR("unknown index type");
+                        OSL_ENSURE(false, "unknown index type");
                         // default: skip index!
                         break;
                 }
@@ -335,7 +333,7 @@ void XMLSectionExport::ExportSectionEnd(
         }
         else
         {
-            DBG_ERROR("Need element name!");
+            OSL_ENSURE(false, "Need element name!");
         }
     }
     // else: autostyles -> ignore
@@ -379,7 +377,7 @@ void XMLSectionExport::ExportIndexStart(
 
         default:
             // skip index
-            DBG_ERROR("unknown index type");
+            OSL_ENSURE(false, "unknown index type");
             break;
     }
 }
@@ -812,15 +810,15 @@ void XMLSectionExport::ExportBaseIndexStart(
     GetExport().StartElement( XML_NAMESPACE_TEXT, eElement, sal_False );
 }
 
-static const sal_Char* aTypeSourceElementNameMap[] =
+static const XMLTokenEnum aTypeSourceElementNameMap[] =
 {
-    sXML_table_of_content_source,       // TOC
-    sXML_table_index_source,            // table index
-    sXML_illustration_index_source,     // illustration index
-    sXML_object_index_source,           // object index
-    sXML_user_index_source,             // user index
-    sXML_alphabetical_index_source,     // alphabetical index
-    sXML_bibliography_source            // bibliography
+    XML_TABLE_OF_CONTENT_SOURCE,        // TOC
+    XML_TABLE_INDEX_SOURCE,         // table index
+    XML_ILLUSTRATION_INDEX_SOURCE,      // illustration index
+    XML_OBJECT_INDEX_SOURCE,            // object index
+    XML_USER_INDEX_SOURCE,              // user index
+    XML_ALPHABETICAL_INDEX_SOURCE,      // alphabetical index
+    XML_BIBLIOGRAPHY_SOURCE         // bibliography
 };
 
 void XMLSectionExport::ExportBaseIndexSource(
@@ -828,8 +826,8 @@ void XMLSectionExport::ExportBaseIndexSource(
     const Reference<XPropertySet> & rPropertySet)
 {
     // check type
-    DBG_ASSERT(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
-    DBG_ASSERT(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
+    OSL_ENSURE(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
+    OSL_ENSURE(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
 
     Any aAny;
 
@@ -857,8 +855,9 @@ void XMLSectionExport::ExportBaseIndexSource(
     // the index source element (all indices)
     SvXMLElementExport aElem(GetExport(),
                              XML_NAMESPACE_TEXT,
-                             aTypeSourceElementNameMap[
-                                 eType - TEXT_SECTION_TYPE_TOC],
+                             GetXMLToken(
+                                 aTypeSourceElementNameMap[
+                                    eType - TEXT_SECTION_TYPE_TOC]),
                              sal_True, sal_True);
 
     // scope for title template (all indices)
@@ -928,8 +927,8 @@ void XMLSectionExport::ExportBaseIndexBody(
     const Reference<XPropertySet> &)
 {
     // type not used; checked anyway.
-    DBG_ASSERT(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
-    DBG_ASSERT(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
+    OSL_ENSURE(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
+    OSL_ENSURE(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
 
     // export start only
 
@@ -972,23 +971,23 @@ void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(
 
 // map index of LevelFormats to attribute value;
 // level 0 is always the header
-static const sal_Char* aLevelNameTOCMap[] =
-    { NULL, sXML_1, sXML_2, sXML_3, sXML_4, sXML_5, sXML_6, sXML_7,
-          sXML_8, sXML_9, sXML_10, NULL };
-static const sal_Char* aLevelNameTableMap[] =
-    { NULL, "", NULL };
-static const sal_Char* aLevelNameAlphaMap[] =
-    { NULL, sXML_separator, sXML_1, sXML_2, sXML_3, NULL };
-static const sal_Char* aLevelNameBibliographyMap[] =
-    { NULL, sXML_article, sXML_book, sXML_booklet, sXML_conference,
-          sXML_custom1, sXML_custom2, sXML_custom3, sXML_custom4,
-          sXML_custom5, sXML_email, sXML_inbook, sXML_incollection,
-          sXML_inproceedings, sXML_journal,
-          sXML_manual, sXML_mastersthesis, sXML_misc, sXML_phdthesis,
-          sXML_proceedings, sXML_techreport, sXML_unpublished, sXML_www,
-          NULL };
+static const XMLTokenEnum aLevelNameTOCMap[] =
+    { XML_TOKEN_INVALID, XML_1, XML_2, XML_3, XML_4, XML_5, XML_6, XML_7,
+          XML_8, XML_9, XML_10, XML_TOKEN_INVALID };
+static const XMLTokenEnum aLevelNameTableMap[] =
+    { XML_TOKEN_INVALID, XML__EMPTY, XML_TOKEN_INVALID };
+static const XMLTokenEnum aLevelNameAlphaMap[] =
+    { XML_TOKEN_INVALID, XML_SEPARATOR, XML_1, XML_2, XML_3, XML_TOKEN_INVALID };
+static const XMLTokenEnum aLevelNameBibliographyMap[] =
+    { XML_TOKEN_INVALID, XML_ARTICLE, XML_BOOK, XML_BOOKLET, XML_CONFERENCE,
+          XML_CUSTOM1, XML_CUSTOM2, XML_CUSTOM3, XML_CUSTOM4,
+          XML_CUSTOM5, XML_EMAIL, XML_INBOOK, XML_INCOLLECTION,
+          XML_INPROCEEDINGS, XML_JOURNAL,
+          XML_MANUAL, XML_MASTERSTHESIS, XML_MISC, XML_PHDTHESIS,
+          XML_PROCEEDINGS, XML_TECHREPORT, XML_UNPUBLISHED, XML_WWW,
+          XML_TOKEN_INVALID };
 
-static const sal_Char** aTypeLevelNameMap[] =
+static const XMLTokenEnum* aTypeLevelNameMap[] =
 {
     aLevelNameTOCMap,           // TOC
     aLevelNameTableMap,         // table index
@@ -1032,26 +1031,26 @@ static const sal_Char** aTypeLevelStylePropNameMap[] =
     aLevelStylePropNameBibliographyMap  // bibliography
 };
 
-static const sal_Char* aTypeLevelAttrMap[] =
+static const XMLTokenEnum aTypeLevelAttrMap[] =
 {
-    sXML_outline_level,     // TOC
-    NULL,                   // table index
-    NULL,                   // illustration index
-    NULL,                   // object index
-    sXML_outline_level,     // user index
-    sXML_outline_level,     // alphabetical index
-    sXML_bibliography_type  // bibliography
+    XML_OUTLINE_LEVEL,      // TOC
+    XML_TOKEN_INVALID,      // table index
+    XML_TOKEN_INVALID,      // illustration index
+    XML_TOKEN_INVALID,      // object index
+    XML_OUTLINE_LEVEL,      // user index
+    XML_OUTLINE_LEVEL,      // alphabetical index
+    XML_BIBLIOGRAPHY_TYPE   // bibliography
 };
 
-static const sal_Char* aTypeElementNameMap[] =
+static const XMLTokenEnum aTypeElementNameMap[] =
 {
-    sXML_table_of_content_entry_template,   // TOC
-    sXML_table_index_entry_template,        // table index
-    sXML_illustration_index_entry_template, // illustration index
-    sXML_object_index_entry_template,       // object index
-    sXML_user_index_entry_template,         // user index
-    sXML_alphabetical_index_entry_template, // alphabetical index
-    sXML_bibliography_entry_template        // bibliography
+    XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE,    // TOC
+    XML_TABLE_INDEX_ENTRY_TEMPLATE,     // table index
+    XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE,  // illustration index
+    XML_OBJECT_INDEX_ENTRY_TEMPLATE,        // object index
+    XML_USER_INDEX_ENTRY_TEMPLATE,          // user index
+    XML_ALPHABETICAL_INDEX_ENTRY_TEMPLATE,  // alphabetical index
+    XML_BIBLIOGRAPHY_ENTRY_TEMPLATE     // bibliography
 };
 
 
@@ -1061,44 +1060,44 @@ sal_Bool XMLSectionExport::ExportIndexTemplate(
     const Reference<XPropertySet> & rPropertySet,
     Sequence<Sequence<PropertyValue> > & rValues)
 {
-    DBG_ASSERT(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
-    DBG_ASSERT(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
-    DBG_ASSERT(nOutlineLevel >= 0, "illegal outline level");
+    OSL_ENSURE(eType >= TEXT_SECTION_TYPE_TOC, "illegal index type");
+    OSL_ENSURE(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
+    OSL_ENSURE(nOutlineLevel >= 0, "illegal outline level");
 
     if ( (eType >= TEXT_SECTION_TYPE_TOC) &&
          (eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY) &&
          (nOutlineLevel >= 0) )
     {
         // get level name and level attribute name from aLevelNameMap;
-        const sal_Char* pLevelAttrName =
-            aTypeLevelAttrMap[eType-TEXT_SECTION_TYPE_TOC];
-        const sal_Char* pLevelName =
-            aTypeLevelNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel];
+        const XMLTokenEnum eLevelAttrName(
+            aTypeLevelAttrMap[eType-TEXT_SECTION_TYPE_TOC]);
+        const XMLTokenEnum eLevelName(
+            aTypeLevelNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
 
         // #92124#: some old documents may be broken, then they have
         // too many template levels; we need to recognize this and
         // export only as many as is legal for the respective index
         // type. To do this, we simply return an error flag, which
         // will then abort further template level exports.
-        DBG_ASSERT(NULL != pLevelName, "can't find level name");
-        if ( NULL == pLevelName )
+        OSL_ENSURE(XML_TOKEN_INVALID != eLevelName, "can't find level name");
+        if ( XML_TOKEN_INVALID == eLevelName )
         {
             // output level not found? Then end of templates! #91214#
             return sal_False;
         }
 
         // output level name
-        if ((NULL != pLevelName) && (NULL != pLevelAttrName))
+        if ((XML_TOKEN_INVALID != eLevelName) && (XML_TOKEN_INVALID != eLevelAttrName))
         {
-            GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          pLevelAttrName,
-                                          pLevelName);
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                          GetXMLToken(eLevelAttrName),
+                                          GetXMLToken(eLevelName));
         }
 
         // paragraph level style name
-        const sal_Char* pPropName =
-            aTypeLevelStylePropNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel];
-        DBG_ASSERT(NULL != pPropName, "can't find property name");
+        const sal_Char* pPropName(
+            aTypeLevelStylePropNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
+        OSL_ENSURE(NULL != pPropName, "can't find property name");
         if (NULL != pPropName)
         {
             Any aAny = rPropertySet->getPropertyValue(
@@ -1111,11 +1110,11 @@ sal_Bool XMLSectionExport::ExportIndexTemplate(
         }
 
         // template element
-        const sal_Char* pElementName =
-            aTypeElementNameMap[eType - TEXT_SECTION_TYPE_TOC];
+        const XMLTokenEnum eElementName(
+            aTypeElementNameMap[eType - TEXT_SECTION_TYPE_TOC]);
         SvXMLElementExport aLevelTemplate(GetExport(),
                                           XML_NAMESPACE_TEXT,
-                                          pElementName,
+                                          GetXMLToken(eElementName),
                                           sal_True, sal_True);
 
         // export sequence
@@ -1356,39 +1355,46 @@ void XMLSectionExport::ExportIndexTemplateElement(
     }
 
     // convert type to token (and check validity) ...
-    sal_Char* pElement = NULL;
+    XMLTokenEnum eElement(XML_TOKEN_INVALID);
     switch(nTokenType)
     {
         case TOK_TTYPE_ENTRY_TEXT:
-            pElement = sXML_index_entry_text;
+            eElement = XML_INDEX_ENTRY_TEXT;
             break;
         case TOK_TTYPE_TAB_STOP:
             // test validity
-            pElement = ( bRightAligned || bTabPositionOK || bFillCharOK )
-                ? sXML_index_entry_tab_stop : NULL;
+            if ( bRightAligned || bTabPositionOK || bFillCharOK )
+            {
+                eElement = XML_INDEX_ENTRY_TAB_STOP;
+            }
             break;
         case TOK_TTYPE_TEXT:
             // test validity
-            pElement = bTextOK ? sXML_index_entry_span : NULL;
+            if (bTextOK)
+            {
+                eElement = XML_INDEX_ENTRY_SPAN;
+            }
             break;
         case TOK_TTYPE_PAGE_NUMBER:
-            pElement = sXML_index_entry_page_number;
+            eElement = XML_INDEX_ENTRY_PAGE_NUMBER;
             break;
         case TOK_TTYPE_CHAPTER_INFO:    // keyword index
-            pElement = sXML_index_entry_chapter;
+            eElement = XML_INDEX_ENTRY_CHAPTER;
             break;
         case TOK_TTYPE_ENTRY_NUMBER:    // table of content
-            pElement = sXML_index_entry_chapter;
+            eElement = XML_INDEX_ENTRY_CHAPTER;
             break;
         case TOK_TTYPE_HYPERLINK_START:
-            pElement = sXML_index_entry_link_start;
+            eElement = XML_INDEX_ENTRY_LINK_START;
             break;
         case TOK_TTYPE_HYPERLINK_END:
-            pElement = sXML_index_entry_link_end;
+            eElement = XML_INDEX_ENTRY_LINK_END;
             break;
         case TOK_TTYPE_BIBLIOGRAPHY:
-            pElement = bBibliographyDataOK
-                ? sXML_index_entry_bibliography : NULL;
+            if (bBibliographyDataOK)
+            {
+                eElement = XML_INDEX_ENTRY_BIBLIOGRAPHY;
+            }
             break;
         default:
             ; // unknown/unimplemented template
@@ -1407,7 +1413,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
             //it's not permitted in other indexes
             if (eType != TEXT_SECTION_TYPE_ALPHABETICAL)
             {
-                pElement = NULL; //not permitted, null the element
+                eElement = XML_TOKEN_INVALID; //not permitted, invalidate the element
             }
             else //maps format for 1.1 & 1.0
             {
@@ -1450,7 +1456,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 //<---
 
     // ... and write Element
-    if (pElement != NULL)
+    if (eElement != XML_TOKEN_INVALID)
     {
         // character style (for most templates)
         if (bCharStyleOK)
@@ -1513,7 +1519,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
         // bibliography data
         if (TOK_TTYPE_BIBLIOGRAPHY == nTokenType)
         {
-            DBG_ASSERT(bBibliographyDataOK, "need bibl data");
+            OSL_ENSURE(bBibliographyDataOK, "need bibl data");
             OUStringBuffer sBuf;
             if (SvXMLUnitConverter::convertEnum( sBuf, nBibliographyData,
                                                  aBibliographyDataFieldMap ) )
@@ -1527,7 +1533,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
         // chapter info
         if (TOK_TTYPE_CHAPTER_INFO == nTokenType)
         {
-            DBG_ASSERT(bChapterFormatOK, "need chapter info");
+            OSL_ENSURE(bChapterFormatOK, "need chapter info");
             GetExport().AddAttribute(
                 XML_NAMESPACE_TEXT, XML_DISPLAY,
                 XMLTextFieldExport::MapChapterDisplayFormat(nChapterFormat));
@@ -1553,7 +1559,9 @@ void XMLSectionExport::ExportIndexTemplateElement(
 //<---
         // export template
         SvXMLElementExport aTemplateElement(GetExport(), XML_NAMESPACE_TEXT,
-                                            pElement, sal_True, sal_False);
+                                            GetXMLToken(eElement),
+                                            sal_True, sal_False)
+            ;
 
         // entry text or span element: write text
         if (TOK_TTYPE_TEXT == nTokenType)
@@ -1617,7 +1625,7 @@ void XMLSectionExport::ExportBoolean(
     sal_Bool bDefault,
     sal_Bool bInvert)
 {
-    DBG_ASSERT(eAttributeName != XML_TOKEN_INVALID, "Need attribute name");
+    OSL_ENSURE(eAttributeName != XML_TOKEN_INVALID, "Need attribute name");
 
     Any aAny = rPropSet->getPropertyValue(sPropertyName);
     sal_Bool bTmp = *(sal_Bool*)aAny.getValue();
@@ -1659,7 +1667,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             Reference<XPropertySet> xPropSet;
             aAny >>= xPropSet;
 
-            DBG_ASSERT( xPropSet.is(), "field master must have XPropSet" );
+            OSL_ENSURE( xPropSet.is(), "field master must have XPropSet" );
 
             const OUString sBracketBefore(
                 RTL_CONSTASCII_USTRINGPARAM("BracketBefore"));
@@ -1846,7 +1854,7 @@ sal_Bool XMLSectionExport::IsInSection(
 {
     // default: like default argument
     sal_Bool bRet = bDefault;
-    DBG_ASSERT(rEnclosingSection.is(), "enclosing section expected");
+    OSL_ENSURE(rEnclosingSection.is(), "enclosing section expected");
 
     Reference<XPropertySet> xPropSet(rContent, UNO_QUERY);
     if (xPropSet.is())

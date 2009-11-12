@@ -93,7 +93,6 @@
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include "xmlkywd.hxx"
 #include "xmlnmspe.hxx"
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>

@@ -46,7 +46,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
@@ -1035,10 +1034,11 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 OUString sValue( rValue );
                 sValue.trim();
-                const sal_Int32 nRotateLen = sizeof(sXML_rotate)-1;
+                const OUString aRotate(GetXMLToken(XML_ROTATE));
+                const sal_Int32 nRotateLen(aRotate.getLength());
                 sal_Int32 nLen = sValue.getLength();
                 if( nLen >= nRotateLen+3 &&
-                    0 == sValue.compareToAscii( sXML_rotate, nRotateLen ) &&
+                    0 == sValue.compareTo( aRotate, nRotateLen ) &&
                     '(' == sValue[nRotateLen] &&
                     ')' == sValue[nLen-1] )
                 {
