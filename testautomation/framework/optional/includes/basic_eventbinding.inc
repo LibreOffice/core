@@ -231,7 +231,7 @@ testcase tAssignComponentFunction
         for i = 1 to x
             sTemp = LibraryTreeList.getItemText(i)
             'printlog "("+i+"/"+x+"): '" + sTemp + "'"
-            if (("DialogComponent.odt"=sTemp) OR ("DIALOGCOMPONENT.ODT"=sTemp)) then
+            if (instr(stemp,"DialogComponent.odt") OR instr(stemp,"DIALOGCOMPONENT.ODT")) then
                 a = i
                 printlog "Found library ("+i+"/"+x+"): '" + sTemp + "'"
             endif
