@@ -368,57 +368,6 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     return bRet;
 }
 
-<<<<<<< local
-/*
- * Ein Zeichen wurde eingefuegt.
- */
-
-SwTxtNode& SwTxtNode::Insert( xub_Unicode c, const SwIndex &rIdx )
-{
-    xub_StrLen nOrigLen = m_Text.Len();
-
-    ASSERT( rIdx <= nOrigLen, "SwTxtNode::Insert: invalid index." );
-    ASSERT( nOrigLen < STRING_LEN,
-            "SwTxtNode::Insert: node text with insertion > STRING_LEN." );
-
-    if ( nOrigLen == m_Text.Insert( c, rIdx.GetIndex() ).Len() )
-        return *this;
-
-    Update(rIdx,1);
-
-    // leere Hints und Feldattribute an rIdx.GetIndex suchen
-    if ( HasHints() )
-    {
-        USHORT* pEndIdx;
-        for ( USHORT i=0; i < m_pSwpHints->Count() &&
-                rIdx >= *(*m_pSwpHints)[i]->GetStart(); ++i)
-        {
-            SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
-            pEndIdx = pHt->GetEnd();
-            if ( pEndIdx )
-            {
-                // leere Hints an rIdx.GetIndex ?
-                BOOL bEmpty = *pEndIdx == *pHt->GetStart()
-                            && rIdx == *pHt->GetStart();
-
-                if( bEmpty )
-                {
-                    m_pSwpHints->DeleteAtPos(i);
-                    if( bEmpty )
-                        *pHt->GetStart() -= 1;
-                    else
-                        *pEndIdx -= 1;
-                    Insert(pHt);
-                }
-            }
-        }
-        TryDeleteSwpHints();
-    }
-    return *this;
-}
-=======
->>>>>>> other
-
 inline BOOL InRange(xub_StrLen nIdx, xub_StrLen nStart, xub_StrLen nEnd) {
     return ((nIdx >=nStart) && (nIdx <= nEnd));
 }
