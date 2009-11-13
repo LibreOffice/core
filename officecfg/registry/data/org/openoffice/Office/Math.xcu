@@ -629,7 +629,7 @@
     </node>
     <node oor:name="PHI" oor:op="replace">
       <prop oor:name="Char">
-        <value>5934</value>
+        <value>934</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
