@@ -122,28 +122,27 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
         _databaseDocument.executeSQL( "INSERT INTO \"detail\" VALUES ( 2, 1, 1, 'record 1.1 (2)')");
         _databaseDocument.executeSQL( "INSERT INTO \"detail\" VALUES ( 3, 1, 2, 'record 1.2 (1)')");
 
-        _databaseDocument.getDataSource().refreshTables( _databaseDocument.defaultConnection() );
+        _databaseDocument.defaultConnection().refreshTables();
     }
 
     /* ------------------------------------------------------------------ */
     private void impl_createForms( final HsqlDatabase _databaseDocument ) throws com.sun.star.uno.Exception
     {
         m_masterForm = dbfTools.queryPropertySet( m_orb.createInstance( "com.sun.star.form.component.DataForm" ) );
-        m_masterForm.setPropertyValue( "ActiveConnection", _databaseDocument.defaultConnection() );
+        m_masterForm.setPropertyValue( "ActiveConnection", _databaseDocument.defaultConnection().getXConnection() );
         m_masterForm.setPropertyValue( "CommandType", new Integer( com.sun.star.sdb.CommandType.TABLE ) );
         m_masterForm.setPropertyValue( "Command", "master" );
 
         m_masterResult = new ResultSet( m_masterForm );
 
         m_detailForm = dbfTools.queryPropertySet( m_orb.createInstance( "com.sun.star.form.component.DataForm" ) );
-        m_detailForm.setPropertyValue( "ActiveConnection", _databaseDocument.defaultConnection() );
+        m_detailForm.setPropertyValue( "ActiveConnection", _databaseDocument.defaultConnection().getXConnection() );
         m_detailForm.setPropertyValue( "CommandType", new Integer( com.sun.star.sdb.CommandType.TABLE ) );
         m_detailForm.setPropertyValue( "Command", "detail" );
 
         m_detailResult = new ResultSet( m_detailForm );
 
-        XNameContainer masterContainer = (XNameContainer)UnoRuntime.queryInterface( XNameContainer.class,
-            m_masterForm );
+        XNameContainer masterContainer = UnoRuntime.queryInterface( XNameContainer.class, m_masterForm );
         masterContainer.insertByName( "slave", m_detailForm );
     }
 
@@ -162,8 +161,8 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             m_detailForm.setPropertyValue( "MasterFields", new String[] { "ID1", "ID2" } );
             m_detailForm.setPropertyValue( "DetailFields", new String[] { "FK_ID1", "FK_ID2" } );
 
-            XLoadable loadMaster = (XLoadable)UnoRuntime.queryInterface( XLoadable.class, m_masterForm );
-            XLoadable loadDetail = (XLoadable)UnoRuntime.queryInterface( XLoadable.class, m_detailForm );
+            XLoadable loadMaster = UnoRuntime.queryInterface( XLoadable.class, m_masterForm );
+            XLoadable loadDetail = UnoRuntime.queryInterface( XLoadable.class, m_detailForm );
             loadDetail.addLoadListener( this );
 
             // wait until the detail form is loaded
@@ -227,16 +226,14 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             database = new CRMDatabase( m_orb, true );
 
             // create a form document therein
-            XFormDocumentsSupplier formDocSupp = (XFormDocumentsSupplier)UnoRuntime.queryInterface(
-                XFormDocumentsSupplier.class, database.getDatabase().getModel() );
-            XMultiServiceFactory formFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
-                XMultiServiceFactory.class, formDocSupp.getFormDocuments() );
+            XFormDocumentsSupplier formDocSupp = UnoRuntime.queryInterface( XFormDocumentsSupplier.class, database.getDatabase().getModel() );
+            XMultiServiceFactory formFactory = UnoRuntime.queryInterface( XMultiServiceFactory.class, formDocSupp.getFormDocuments() );
             NamedValue[] loadArgs = new NamedValue[] {
-                new NamedValue( "ActiveConnection", database.getConnection() ),
+                new NamedValue( "ActiveConnection", database.getConnection().getXConnection() ),
                 new NamedValue( "MediaType", "application/vnd.oasis.opendocument.text" )
             };
 
-            subComponentCommands = (XCommandProcessor)UnoRuntime.queryInterface(
+            subComponentCommands = UnoRuntime.queryInterface(
                 XCommandProcessor.class,
                 formFactory.createInstanceWithArguments( "com.sun.star.sdb.DocumentDefinition", loadArgs ) );
             Command command = new Command();
@@ -244,7 +241,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             command.Argument = new Short( OpenMode.DOCUMENT );
 
             DocumentHelper subDocument = new DocumentHelper( m_orb,
-                (XComponent)UnoRuntime.queryInterface( XComponent.class,
+                UnoRuntime.queryInterface( XComponent.class,
                     subComponentCommands.execute( command, subComponentCommands.createCommandIdentifier(), null )
                 )
             );
@@ -258,8 +255,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             m_masterForm.setPropertyValue( "CommandType", new Integer( CommandType.TABLE ) );
 
             // create a detail form
-            m_detailForm = (XPropertySet)UnoRuntime.queryInterface(
-                XPropertySet.class, subDocument.createSubForm( m_masterForm, "products" ) );
+            m_detailForm = UnoRuntime.queryInterface( XPropertySet.class, subDocument.createSubForm( m_masterForm, "products" ) );
             m_detailForm.setPropertyValue( "Command", "SELECT \"ID\", \"Name\", \"CategoryID\" FROM \"products\"" );
             m_detailForm.setPropertyValue( "CommandType", new Integer( CommandType.COMMAND ) );
             m_detailForm.setPropertyValue( "MasterFields", new String[] { "ID" } );
@@ -268,8 +264,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             // create a grid control in the detail form, with some columns
             XPropertySet gridControlModel = formLayer.createControlAndShape( "GridControl", 20, 40, 130, 50, m_detailForm );
             gridControlModel.setPropertyValue( "Name", "product list" );
-            XIndexContainer gridColumns = (XIndexContainer)UnoRuntime.queryInterface(
-                XIndexContainer.class, gridControlModel );
+            XIndexContainer gridColumns = UnoRuntime.queryInterface( XIndexContainer.class, gridControlModel );
                                       impl_createGridColumn( gridColumns, "TextField", "ID" );
             XPropertySet nameColumn = impl_createGridColumn( gridColumns, "TextField", "Name" );
             nameColumn.setPropertyValue( "Width", new Integer( 600 ) ); // 6 cm
@@ -279,7 +274,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             m_masterResult = new ResultSet( m_masterForm );
             m_detailResult = new ResultSet( m_detailForm );
 
-            XLoadable loadDetail = (XLoadable)UnoRuntime.queryInterface( XLoadable.class, m_detailForm );
+            XLoadable loadDetail = UnoRuntime.queryInterface( XLoadable.class, m_detailForm );
             loadDetail.addLoadListener( this );
 
             subDocument.getCurrentView().toggleFormDesignMode();
@@ -314,10 +309,8 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
         {
             if ( subComponentCommands != null )
             {
-                XComponentSupplier componentSupplier = (XComponentSupplier)UnoRuntime.queryInterface( XComponentSupplier.class,
-                    subComponentCommands );
-                XModifiable modifySubComponent = (XModifiable)UnoRuntime.queryInterface( XModifiable.class,
-                    componentSupplier.getComponent() );
+                XComponentSupplier componentSupplier = UnoRuntime.queryInterface( XComponentSupplier.class, subComponentCommands );
+                XModifiable modifySubComponent = UnoRuntime.queryInterface( XModifiable.class, componentSupplier.getComponent() );
                 modifySubComponent.setModified( false );
                 Command command = new Command();
                 command.Name = "close";
@@ -349,8 +342,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     /* ------------------------------------------------------------------ */
     private XPropertySet impl_createGridColumn( final XIndexContainer _gridModel, final String _columnType, final String _boundField ) throws Exception
     {
-        final XGridColumnFactory columnFactory = (XGridColumnFactory)UnoRuntime.queryInterface(
-            XGridColumnFactory.class, _gridModel );
+        final XGridColumnFactory columnFactory = UnoRuntime.queryInterface( XGridColumnFactory.class, _gridModel );
         XPropertySet column = columnFactory.createColumn( _columnType );
         column.setPropertyValue( "DataField", _boundField );
         column.setPropertyValue( "Name", _boundField );
@@ -399,8 +391,8 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
      */
     private void verifyColumnValueIdentity( final String masterColName, final String detailColName ) throws SQLException
     {
-        XColumnLocate locateMasterCols = (XColumnLocate)UnoRuntime.queryInterface( XColumnLocate.class, m_masterForm );
-        XColumnLocate locateDetailCols = (XColumnLocate)UnoRuntime.queryInterface( XColumnLocate.class, m_detailForm );
+        XColumnLocate locateMasterCols = UnoRuntime.queryInterface( XColumnLocate.class, m_masterForm );
+        XColumnLocate locateDetailCols = UnoRuntime.queryInterface( XColumnLocate.class, m_detailForm );
 
         int masterValue = m_masterResult.getInt( locateMasterCols.findColumn( masterColName ) );
         int detailValue = m_detailResult.getInt( locateDetailCols.findColumn( detailColName ) );

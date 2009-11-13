@@ -52,6 +52,7 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XURLTransformer;
 import connectivity.tools.HsqlDatabase;
+import connectivity.tools.sdb.Connection;
 import java.io.FileOutputStream;
 
 
@@ -609,8 +610,8 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /* ------------------------------------------------------------------ */
     private boolean ensureTables() throws com.sun.star.uno.Exception,  java.lang.Exception
     {
-        XConnection xConn = m_dataSource.getConnection( "", "" );
-        assure( "could not connect to the data source", xConn != null );
+        Connection connection = new Connection( m_dataSource.getConnection( "", "" ) );
+        assure( "could not connect to the data source", connection != null );
 
         // drop the table, if it already exists
         if  (  !implExecuteStatement( "DROP TABLE \"" + s_tableName + "\" IF EXISTS" )
@@ -630,10 +631,10 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
                 return false;
             }
 
-        m_databaseDocument.getDataSource().refreshTables( xConn );
+        connection.refreshTables();
 
         // do not need the connection anymore
-        dbfTools.disposeComponent( xConn );
+        connection.close();
 
         return true;
     }
