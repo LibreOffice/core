@@ -72,6 +72,9 @@ HWPFile::HWPFile(void)
  */
 HWPFile::~HWPFile(void)
 {
+    if (oledata)
+        delete oledata;
+
     if (hiodev)
         delete hiodev;
 
@@ -345,6 +348,8 @@ bool HWPFile::TagsRead(void)
             }
             break;
             case FILETAG_OLE_OBJECT:
+                if (oledata)
+                    delete oledata;
                 oledata = new OlePicture(size);
                 oledata->Read(*this);
                 break;
