@@ -2169,3 +2169,4 @@ sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNo
 
     return nType;
 }
+
