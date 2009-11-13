@@ -748,7 +748,7 @@ void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void SwWrapTabPage::ApplyImageList()
 {
-    ImageList& rImgLst = GetDisplayBackground().GetColor().IsDark() ?
+    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
         aWrapILH : aWrapIL;
 
     aWrapThroughRB.SetModeRadioImage(rImgLst.GetImage(IMG_THROUGH));
