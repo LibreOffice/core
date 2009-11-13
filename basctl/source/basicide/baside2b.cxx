@@ -944,6 +944,7 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
     pModulWindow = 0;
     nCurYOffset = 0;
     setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
+    m_bHighContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
     nMarkerPos = MARKER_NOMARKER;
 
     // nCurYOffset merken und nicht von EditEngine holen.
@@ -1161,6 +1162,7 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
             != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
         {
             setBackgroundColor(aColor);
+            m_bHighContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
             Invalidate();
         }
     }
@@ -1169,7 +1171,6 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
 void BreakPointWindow::setBackgroundColor(Color aColor)
 {
     SetBackground(Wallpaper(aColor));
-    m_bHighContrastMode = aColor.IsDark();
 }
 
 
