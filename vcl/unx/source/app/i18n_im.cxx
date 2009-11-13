@@ -59,7 +59,7 @@
 
 using namespace vcl;
 #include "i18n_cb.hxx"
-#if defined(SOLARIS) ||  defined(LINUX) || defined(IRIX)
+#if defined(SOLARIS) ||  defined(LINUX)
 extern "C" char * XSetIMValues(XIM im, ...);
 #endif
 

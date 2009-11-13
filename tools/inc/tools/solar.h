@@ -391,8 +391,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "fi.so"
 #elif defined FREEBSD && defined X86_64
   #define __DLLEXTENSION "fx.so"
-#elif defined IRIX
-  #define __DLLEXTENSION "im.so"
 #elif defined MACOSX && defined POWERPC
   #define __DLLEXTENSION "mxp.dylib"
 #elif defined MACOSX && defined X86

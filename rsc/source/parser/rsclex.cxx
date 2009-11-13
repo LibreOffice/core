@@ -317,7 +317,7 @@ int yylex()
 /****************** yyerror **********************************************/
 #ifdef RS6000
 extern "C" void yyerror( char* pMessage )
-#elif defined HP9000 || defined SCO || defined IRIX || defined SOLARIS
+#elif defined HP9000 || defined SCO || defined SOLARIS
 extern "C" void yyerror( const char* pMessage )
 #else
 void yyerror( char* pMessage )
