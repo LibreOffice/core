@@ -1572,15 +1572,7 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
     {
         if( !mpOutlineStylesCandidates )
         {
-#ifdef IRIX
-            /* GCC 2 bug when member function is called as part of an array
-             * initialiser
-             */
-            sal_Int8 count = xChapterNumbering->getCount();
-            mpOutlineStylesCandidates = new ::std::vector<OUString>[count];
-#else
             mpOutlineStylesCandidates = new ::std::vector<OUString>[xChapterNumbering->getCount()];
-#endif
         }
         mpOutlineStylesCandidates[nOutlineLevel-1].push_back( rStyleName );
     }

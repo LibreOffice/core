@@ -80,11 +80,6 @@ case $sd_platform in
     export SHLIB_PATH
     ;;
 
-  IRIX*)
-    LD_LIBRARYN32_PATH=${sd_prog}${LD_LIBRARYN32_PATH+:${LD_LIBRARYN32_PATH}}
-    export LD_LIBRARYN32_PATH
-    ;;
-
   *)
     LD_LIBRARY_PATH=${sd_prog}${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
     export LD_LIBRARY_PATH
