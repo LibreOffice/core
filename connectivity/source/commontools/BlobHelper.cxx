@@ -47,11 +47,11 @@ BlobHelper::BlobHelper(const ::com::sun::star::uno::Sequence< sal_Int8 >& _val) 
     return m_aValue.getLength();
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL BlobHelper::getBytes( ::sal_Int64 pos, ::sal_Int32 length ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL BlobHelper::getBytes( ::sal_Int64 pos, ::sal_Int32 _length ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    if ( sal_Int32(pos + length) > m_aValue.getLength() )
+    if ( sal_Int32(pos + _length) > m_aValue.getLength() )
         throw ::com::sun::star::sdbc::SQLException();
-    return ::com::sun::star::uno::Sequence< ::sal_Int8 >(m_aValue.getConstArray() + sal_Int32(pos),length);
+    return ::com::sun::star::uno::Sequence< ::sal_Int8 >(m_aValue.getConstArray() + sal_Int32(pos),_length);
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL BlobHelper::getBinaryStream(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
