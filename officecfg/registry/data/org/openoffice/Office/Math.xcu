@@ -51,7 +51,6 @@
         <value>0</value>
       </prop>
     </node>
-  </node>
     <node oor:name="Id2" oor:op="replace">
       <prop oor:name="Name">
         <value>OpenSymbol</value>
