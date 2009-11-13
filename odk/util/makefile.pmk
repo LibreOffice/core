@@ -162,12 +162,6 @@ DESTPLATFROM=netbsd
 ###########
 DESTPLATFROM=freebsd
 
-.ELIF "$(OS)"=="IRIX"
-###########
-# IRIX
-###########
-DESTPLATFROM=irix
-
 .ELIF "$(OS)"=="MACOSX"
 ###########
 # MACOSX
