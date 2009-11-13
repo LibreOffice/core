@@ -43,11 +43,8 @@ export SAL_ENABLE_FILE_LOCKING
 # working on your system.
 # SAL_NOOPENGL=true; export SAL_NOOPENGL
 
-# the following test is needed on Linux PPC with IBM j2sdk142
-if [ "`uname -s`" = "Linux" -a "`uname -m`" = "ppc" ] ; then
-    JITC_PROCESSOR_TYPE=6
-    export JITC_PROCESSOR_TYPE
-fi
+# The following is needed on Linux PPC with IBM j2sdk142:
+#@# export JITC_PROCESSOR_TYPE=6
 
 # resolve installation directory
 sd_cwd="`pwd`"
