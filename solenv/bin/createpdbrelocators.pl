@@ -75,8 +75,8 @@ if ( !$inpath || !$milestone ) {
     print STDERR "$script_name: INAPTH or UPDMINOR not set!\n";
     exit(1);
 }
-
-my $rc = CreatePDBRelocators::create_pdb_relocators($inpath, $milestoneext, "");
+my $relocators = CreatePDBRelocators->new();
+my $rc = $relocators->create_pdb_relocators($inpath, $milestoneext, "");
 
 if ( !$rc ) {
     print STDERR "$script_name: creating PDB relocators failed!\n";
