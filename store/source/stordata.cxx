@@ -98,8 +98,7 @@ static storeError store_truncate_Impl (
         if (nSingle == 0)
         {
             // Free single indirect page.
-            OStorePageData aPageHead;
-            eErrCode = rBIOS.free (aPageHead, nAddr);
+            eErrCode = rBIOS.free (nAddr);
             if (eErrCode != store_E_None)
                 return eErrCode;
         }
@@ -138,8 +137,7 @@ static storeError store_truncate_Impl (
         if ((nDouble + nSingle) == 0)
         {
             // Free double indirect page.
-            OStorePageData aPageHead;
-            eErrCode = rBIOS.free (aPageHead, nAddr);
+            eErrCode = rBIOS.free (nAddr);
             if (eErrCode != store_E_None)
                 return eErrCode;
         }
@@ -174,8 +172,7 @@ static storeError store_truncate_Impl (
         if ((nTriple + nDouble + nSingle) == 0)
         {
             // Free triple indirect page.
-            OStorePageData aPageHead;
-            eErrCode = rBIOS.free (aPageHead, nAddr);
+            eErrCode = rBIOS.free (nAddr);
             if (eErrCode != store_E_None)
                 return eErrCode;
         }
@@ -445,8 +442,7 @@ storeError OStoreIndirectionPageObject::truncate (
         if (nAddr != STORE_PAGE_NULL)
         {
             // Free data page.
-            OStorePageData aPageHead;
-            eErrCode = rBIOS.free (aPageHead, nAddr);
+            eErrCode = rBIOS.free (nAddr);
             if (eErrCode != store_E_None)
                 return eErrCode;
 
@@ -1063,8 +1059,7 @@ storeError OStoreDirectoryPageObject::truncate (
             if (nAddr == STORE_PAGE_NULL) continue;
 
             // Free data page.
-            OStorePageData aPageHead;
-            eErrCode = rBIOS.free (aPageHead, nAddr);
+            eErrCode = rBIOS.free (nAddr);
             if (eErrCode != store_E_None)
                 break;
 

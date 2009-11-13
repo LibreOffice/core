@@ -855,8 +855,7 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
         eErrCode = base::releasePage (aDescr, store_AccessReadWrite);
 
         // Release and free directory page.
-        OStorePageData aPageHead;
-        eErrCode = base::free (aPageHead, aPage.location());
+        eErrCode = base::free (aPage.location());
     }
 
     // Remove entry.
