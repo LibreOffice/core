@@ -35,7 +35,7 @@
 #                       PDB relocator files are used to find debug infos
 #                       for analysis of creash reports
 #
-# usage: create_pdb_relocators($inpath, $milestone, $pre);
+# usage: create_pdb_relocators($inpath, $milestoneext, $pre);
 #
 #*************************************************************************
 
@@ -47,7 +47,7 @@ use File::Basename;
 sub create_pdb_relocators
 {
     my $inpath   = shift;
-    my $milestone    = shift;
+    my $milestoneext    = shift;
     my $pre      = shift;
 
     my $solarversion = $ENV{SOLARVERSION};
@@ -67,8 +67,13 @@ sub create_pdb_relocators
     # sanitize path
     $root_dir =~ s/\\/\//g;
     $o =~ s/\\/\//g;
-    my $pdb_dir = $root_dir . "/pdb.$pre$milestone";
-    my $pdb_so_dir = $root_dir . "/pdb.$pre$milestone/so";
+    my $premilestoneext = $milestoneext;
+    if ( $pre ne "" ) {
+        $premilestoneext = ~ s/^\.//;
+        $premilestoneext = ".pre$premilestoneext";
+    }
+    my $pdb_dir = $root_dir . "/pdb$premilestoneext";
+    my $pdb_so_dir = $root_dir . "/pdb$premilestoneext/so";
 
     # create pdb directories if necessary
     if ( ! -d $pdb_dir ) {
@@ -98,12 +103,12 @@ sub create_pdb_relocators
         my $target = "";
         if ( $src_location =~ /\/so\// )
         {
-            $location = "../../../src.$milestone/" . $src_location;
+            $location = "../../../src$milestoneext/" . $src_location;
             $target = "$pdb_dir/so/$relocator";
         }
         else
         {
-            $location = "../../src.$milestone/" . $src_location;
+            $location = "../../src$milestoneext/" . $src_location;
             $target = "$pdb_dir/$relocator";
         }
 
