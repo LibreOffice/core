@@ -58,6 +58,7 @@
 #include <IDocumentListsAccess.hxx>
 class SwList;
 // <--
+#include <IDocumentExternalData.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -278,8 +279,9 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentOutlineNodes,
     // <--
     // --> OD 2008-03-12 #refactorlists#
-    public IDocumentListsAccess
+    public IDocumentListsAccess,
     // <--
+    public IDocumentExternalData
 {
 
     friend void _InitCore();
@@ -1052,6 +1054,12 @@ public:
     virtual void trackChangeOfListStyleName( const String sListStyleName,
                                              const String sNewListStyleName );
     // <--
+
+    /** IDocumentExternalData */
+    virtual void setExternalData(::sw::tExternalDataType eType,
+                                 ::sw::tExternalDataPointer pPayload);
+    virtual ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType);
+
 
     /** INextInterface here
     */
