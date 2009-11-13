@@ -1016,7 +1016,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
         }
     }
-    delete pBuf;
+    delete [] pBuf;
     return bRet;
 }
 

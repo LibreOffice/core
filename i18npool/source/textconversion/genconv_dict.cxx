@@ -39,6 +39,8 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
+#include <vector>
+
 using namespace ::rtl;
 
 void make_hhc_char(FILE *sfp, FILE *cfp);
@@ -357,8 +359,8 @@ void make_stc_word(FILE *sfp, FILE *cfp)
 {
     sal_Int32 count, i, length;
     sal_Unicode STC_WordData[0x10000];
-    Index *STC_WordEntry_S2T = (Index*) malloc(0x10000 * sizeof(Index));
-    Index *STC_WordEntry_T2S = (Index*) malloc(0x10000 * sizeof(Index));
+    std::vector<Index> STC_WordEntry_S2T(0x10000);
+    std::vector<Index> STC_WordEntry_T2S(0x10000);
     sal_Int32 count_S2T = 0, count_T2S = 0;
     sal_Int32 line = 0, char_total = 0;
     sal_Char Cstr[1024];
@@ -416,7 +418,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
     sal_uInt16 STC_WordIndex[0x100];
 
     if (count_S2T > 0) {
-        qsort(STC_WordEntry_S2T, count_S2T, sizeof(Index), Index_comp);
+        qsort(&STC_WordEntry_S2T[0], count_S2T, sizeof(Index), Index_comp);
 
         fprintf(cfp, "\nstatic const sal_uInt16 STC_WordEntry_S2T[] = {");
         count = 0;
@@ -449,7 +451,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
     }
 
     if (count_T2S > 0) {
-        qsort(STC_WordEntry_T2S, count_T2S, sizeof(Index), Index_comp);
+        qsort(&STC_WordEntry_T2S[0], count_T2S, sizeof(Index), Index_comp);
 
         fprintf(cfp, "\nstatic const sal_uInt16 STC_WordEntry_T2S[] = {");
         count = 0;
@@ -480,7 +482,5 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_T2S() { return NULL; }\n");
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_T2S(sal_Int32& count) { count = 0; return NULL; }\n");
     }
-    free(STC_WordEntry_S2T);
-    free(STC_WordEntry_T2S);
 }
 
