@@ -369,7 +369,8 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     pDocShell( pDocSh ),
     pPrintFuncCache( NULL ),
     pPrinterOptions( NULL ),
-    maChangesListeners( m_aMutex )
+    maChangesListeners( m_aMutex ),
+    mnXlsWriteProtPass( 0 )
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( pDocShell )
@@ -1736,6 +1737,14 @@ void SAL_CALL ScModelObj::setPropertyValue(
             if ( aObjName.getLength() )
                 pDoc->RestoreChartListener( aObjName );
         }
+        else if ( aString.EqualsAscii( "WriteProtectionPassword" ) )
+        {
+            /*  This is a hack for #160550# to preserve the write-protection
+                password in an XLS roundtrip. This property MUST NOT be used
+                for any other purpose. This property will be deleted when the
+                feature "Write Protection With Password" will be implemented. */
+            aValue >>= mnXlsWriteProtPass;
+        }
 
         if ( aNewOpt != rOldOpt )
         {
@@ -1897,6 +1906,14 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( "InternalDocument" ) )
         {
             ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL) );
+        }
+        else if ( aString.EqualsAscii( "WriteProtectionPassword" ) )
+        {
+            /*  This is a hack for #160550# to preserve the write-protection
+                password in an XLS roundtrip. This property MUST NOT be used
+                for any other purpose. This property will be deleted when the
+                feature "Write Protection With Password" will be implemented. */
+            aRet <<= mnXlsWriteProtPass;
         }
     }
 

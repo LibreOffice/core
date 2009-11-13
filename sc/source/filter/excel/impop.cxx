@@ -136,7 +136,6 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pExcRoot->pIR = this;   // ExcRoot -> XclImpRoot
     pExcRoot->eDateiTyp = BiffX;
     pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
-    pExcRoot->pTabNameBuff = new NameBuffer( pExcRoot );        //&aTabNameBuff;
     pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff = new ExtNameBuff ( *this );
 
@@ -180,9 +179,19 @@ void ImportExcel::ReadFileSharing()
 {
     sal_uInt16 nRecommendReadOnly, nPasswordHash;
     maStrm >> nRecommendReadOnly >> nPasswordHash;
+
     if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
         if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
             pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
+
+    if( nPasswordHash != 0 )
+    {
+        if( SfxObjectShell* pDocShell = GetDocShell() )
+        {
+            ScfPropertySet aPropSet( pDocShell->GetModel() );
+            aPropSet.SetProperty( CREATE_OUSTRING( "WriteProtectionPassword" ), static_cast< sal_Int32 >( nPasswordHash ) );
+        }
+    }
 }
 
 sal_uInt16 ImportExcel::ReadXFIndex( bool bBiff2 )
@@ -688,13 +697,13 @@ void ImportExcel::Boundsheet( void )
 
     if( GetBiff() == EXC_BIFF5 )
     {
-        aIn.Ignore( 4 );
+        aIn.DisableDecryption();
+        maSheetOffsets.push_back( aIn.ReaduInt32() );
+        aIn.EnableDecryption();
         aIn >> nGrbit;
     }
 
     String aName( aIn.ReadByteString( FALSE ) );
-
-    *pExcRoot->pTabNameBuff << aName;
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )

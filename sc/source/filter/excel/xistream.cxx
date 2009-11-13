@@ -414,6 +414,12 @@ bool XclImpStream::StartNextRecord()
     return mbValidRec;
 }
 
+bool XclImpStream::StartNextRecord( sal_Size nNextRecPos )
+{
+    mnNextRecPos = nNextRecPos;
+    return StartNextRecord();
+}
+
 void XclImpStream::ResetRecord( bool bContLookup, sal_uInt16 nAltContId )
 {
     if( mbValidRec )
