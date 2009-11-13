@@ -5136,15 +5136,23 @@ IMPL_LINK( MenuBarWindow, CloserHdl, PushButton*, EMPTYARG )
         return 0;
 
     if( aCloser.GetCurItemId() == IID_DOCUMENTCLOSE )
-        return ((MenuBar*)pMenu)->GetCloserHdl().Call( pMenu );
-    std::map<USHORT,AddButtonEntry>::iterator it = m_aAddButtons.find( aCloser.GetCurItemId() );
-    if( it != m_aAddButtons.end() )
     {
-        MenuBar::MenuBarButtonCallbackArg aArg;
-        aArg.nId = it->first;
-        aArg.bHighlight = (aCloser.GetHighlightItemId() == it->first);
-        aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
-        return it->second.m_aSelectLink.Call( &aArg );
+        // #i106052# call close hdl asynchronously to ease handler implementation
+        // this avoids still being in the handler while the DecoToolBox already
+        // gets destroyed
+        Application::PostUserEvent( ((MenuBar*)pMenu)->GetCloserHdl(), pMenu );
+    }
+    else
+    {
+        std::map<USHORT,AddButtonEntry>::iterator it = m_aAddButtons.find( aCloser.GetCurItemId() );
+        if( it != m_aAddButtons.end() )
+        {
+            MenuBar::MenuBarButtonCallbackArg aArg;
+            aArg.nId = it->first;
+            aArg.bHighlight = (aCloser.GetHighlightItemId() == it->first);
+            aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
+            return it->second.m_aSelectLink.Call( &aArg );
+        }
     }
     return 0;
 }

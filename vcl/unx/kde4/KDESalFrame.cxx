@@ -181,7 +181,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     StyleSettings style( rSettings.GetStyleSettings() );
     BOOL bSetTitleFont = false;
 
-
     // General settings
     QPalette pal = kapp->palette();
 
@@ -214,6 +213,14 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "Theme";
         if ( aGroup.hasKey( pKey ) )
             style.SetPreferredSymbolsStyleName( readEntryUntranslated( &aGroup, pKey ) );
+
+        //toolbar
+        pKey = "toolbarFont";
+        if ( aGroup.hasKey( pKey ) )
+        {
+            Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILocale() );
+            style.SetToolFont( aFont );
+        }
     }
 
     Color aFore = toColor( pal.color( QPalette::Active, QPalette::WindowText ) );
@@ -288,7 +295,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     style.SetFloatTitleFont( aFont );
     style.SetMenuFont( aFont ); // will be changed according to pMenuBar
-    style.SetToolFont( aFont ); // will be changed according to pToolBar
+    //style.SetToolFont( aFont ); //already set above
     style.SetLabelFont( aFont );
     style.SetInfoFont( aFont );
     style.SetRadioCheckFont( aFont );
@@ -300,11 +307,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     int flash_time = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
 
-    KMainWindow qMainWindow;
-
     // Menu
     style.SetSkipDisabledInMenus( TRUE );
-    KMenuBar *pMenuBar = qMainWindow.menuBar();
+    KMenuBar* pMenuBar = new KMenuBar();
     if ( pMenuBar )
     {
         // Color
@@ -337,13 +342,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         style.SetMenuFont( aFont );
     }
 
-    // Tool bar
-    KToolBar *pToolBar = qMainWindow.toolBar();
-    if ( pToolBar )
-    {
-        aFont = toFont( pToolBar->font(), rSettings.GetUILocale() );
-        style.SetToolFont( aFont );
-    }
+    delete pMenuBar;
 
     // Scroll bar size
     style.SetScrollBarSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
