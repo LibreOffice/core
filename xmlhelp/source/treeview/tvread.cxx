@@ -38,11 +38,7 @@
 #include <vos/diagnose.hxx>
 #endif
 #include "tvread.hxx"
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include <expat/xmlparse.h>
-#endif
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>

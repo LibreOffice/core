@@ -31,11 +31,7 @@
 #ifndef _XML_PARSER_HXX_
 #define _XML_PARSER_HXX_
 
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include <external/expat/xmlparse.h>
-#endif
 #include <stdexcept>
 
 //-----------------------------------------------------
