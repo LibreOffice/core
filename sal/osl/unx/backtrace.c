@@ -207,54 +207,6 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 }
 #endif /* defined FREEBSD */
 
-#if defined(IRIX)
-#include <stdio.h>
-#include <rld_interface.h>
-#include <exception.h>
-#include <sys/signal.h>
-#include <unistd.h>
-
-/* Need extra libs -lexc -ldwarf -lelf */
-
-int backtrace( void **buffer, int max_frames )
-{
-    struct sigcontext context;
-    int i = 0;
-
-    memset(&context, 0, sizeof(struct sigcontext));
-
-    exc_setjmp(&context);
-    while(context.sc_pc != 1 && i < max_frames) {
-        exc_unwind(&context, 0);
-        if(context.sc_pc != 1) {
-            *(buffer++) = (void *)context.sc_pc;
-            i++;
-        }
-    }
-    return(i);
-}
-
-void backtrace_symbols_fd( void **buffer, int size, int fd )
-{
-    FILE    *fp = fdopen( fd, "w" );
-    struct sigcontext context;
-    char *name;
-
-    if ( fp ) {
-        while(context.sc_pc!=1) {
-            if(context.sc_pc != 1) {
-                exc_unwind_name(&context, 0, &name);
-                fprintf(fp, " 0x%012lx %.100s\n", context.sc_pc, name ? name : "<unknown function>");
-                free(name);
-            }
-        }
-
-        fflush( fp );
-        fclose( fp );
-    }
-}
-#endif /* defined IRIX */
-
 #ifdef LINUX
 
 #ifndef _GNU_SOURCE

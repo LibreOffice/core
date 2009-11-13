@@ -49,7 +49,7 @@
 #endif
 
 #include "system.h"
-#if defined(SOLARIS) || defined(IRIX)
+#if defined(SOLARIS)
 # include <sys/procfs.h>
 #endif
 #include <osl/diagnose.h>
@@ -1366,48 +1366,6 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
             }
 
             return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-        }
-
-#elif defined(IRIX)
-
-        int  fd;
-        sal_Char name[PATH_MAX + 1];
-
-        snprintf(name, sizeof(name), "/proc/%u", pid);
-
-        if ((fd = open(name, O_RDONLY)) >= 0)
-        {
-            prstatus_t prstatus;
-            prpsinfo_t prpsinfo;
-
-            if (ioctl(fd, PIOCSTATUS, &prstatus) >= 0 &&
-                ioctl(fd, PIOCPSINFO, &prpsinfo) >= 0)
-            {
-                if (Fields & osl_Process_CPUTIMES)
-                {
-                    pInfo->UserTime.Seconds   = prstatus.pr_utime.tv_sec;
-                    pInfo->UserTime.Nanosec   = prstatus.pr_utime.tv_nsec;
-                    pInfo->SystemTime.Seconds = prstatus.pr_stime.tv_sec;
-                    pInfo->SystemTime.Nanosec = prstatus.pr_stime.tv_nsec;
-
-                    pInfo->Fields |= osl_Process_CPUTIMES;
-                }
-
-                if (Fields & osl_Process_HEAPUSAGE)
-                {
-                    int pagesize = getpagesize();
-
-                    pInfo->HeapUsage = prpsinfo.pr_size*pagesize;
-
-                    pInfo->Fields |= osl_Process_HEAPUSAGE;
-                }
-
-                close(fd);
-
-                return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-            }
-            else
-                close(fd);
         }
 
 #elif defined(LINUX)

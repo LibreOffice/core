@@ -306,36 +306,6 @@ extern unsigned int nanosleep(unsigned int);
 #   define  PTHREAD_SIGACTION           cma_sigaction
 #endif
 
-#ifdef IRIX
-#   define  AF_IPX -1
-#   include <pthread.h>
-#   include <semaphore.h>
-#   include <sched.h>
-#   include <sys/socket.h>
-#   include <sys/un.h>
-#   include <sys/stropts.h>
-#   include <netinet/tcp.h>
-#   include <procfs/procfs.h>
-#   include <sys/endian.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#   undef _BIG_ENDIAN
-#   undef _PDP_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#   undef _LITTLE_ENDIAN
-#   undef _PDP_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#   undef _LITTLE_ENDIAN
-#   undef _BIG_ENDIAN
-#   endif
-#   define  SA_FAMILY_DECL \
-        union { struct { short sa_family2; } sa_generic; } sa_union
-#   define  PTR_SIZE_T(s)               ((int *)&(s))
-#   define  NO_PTHREAD_PRIORITY
-#   include <dlfcn.h>
-#   define  IOCHANNEL_TRANSFER_BSD
-extern char *strdup(const char *);
-#endif
-
 #ifdef SOLARIS
 #   include <shadow.h>
 #   include <sys/procfs.h>
@@ -389,7 +359,7 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
     !defined(AIX)     && !defined(HPUX)   && \
-    !defined(SOLARIS) && !defined(IRIX)   && !defined(MAC) && \
+    !defined(SOLARIS) && !defined(MAC) && \
     !defined(MACOSX)
 #   error "Target plattform not specified !"
 #endif
