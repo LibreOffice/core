@@ -87,7 +87,6 @@ testcase tRecommendPassword( filetypeID as string )
     if ( rc = 0 ) then
 
         if AutomatischeDateinamenserweiterung.Exists then
-            QAErrorLog "OBSOLETE: Check-box Automatic file extension in file dialog will be removed soon!"
             AutomatischeDateinamenserweiterung.Uncheck
         endif
 
