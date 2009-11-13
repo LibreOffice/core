@@ -1262,21 +1262,13 @@ sal_uInt16 SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< 
     bool bCompleteSignature = true;
     if( nInfos )
     {
-        //These errors of certificates are allowed
-        sal_Int32 nNonErrors = security::CertificateValidity::VALID |
-                               security::CertificateValidity::UNKNOWN_REVOKATION;
-        //Build a  mask to filter out the allowed errors
-        sal_Int32 nMask = ~nNonErrors;
-
         nResult = SIGNATURESTATE_SIGNATURES_OK;
         for ( int n = 0; n < nInfos; n++ )
         {
             if ( bCertValid )
             {
                 sal_Int32 nCertStat = aInfos[n].CertificateStatus;
-                // "subtract" the allowed error flags from the result
-                sal_Int32 nErrors = ( nCertStat & nMask );
-                bCertValid = nErrors > 0 ? sal_False : sal_True;
+                bCertValid = nCertStat == security::CertificateValidity::VALID ? sal_True : sal_False;
             }
 
             if ( !aInfos[n].SignatureIsValid )
