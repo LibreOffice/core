@@ -98,10 +98,10 @@ SLOFILES= \
 
 $(INCCOM)$/cuilib.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
-    $(RM) $@
-    echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    @$(RM) $@
+    @echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-    echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
+    @echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
 .ENDIF
 
 $(SLO)$/abstdlg.obj : $(INCCOM)$/cuilib.hxx

@@ -6518,7 +6518,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             // nach vorne, wenn es gewuenscht ist
             if ( ImplIsOverlapWindow() && !(nFlags & SHOW_NOACTIVATE) )
             {
-                ImplStartToTop( 0 );
+                ImplStartToTop(( nFlags & SHOW_FOREGROUNDTASK ) ? TOTOP_FOREGROUNDTASK : 0 );
                 ImplFocusToTop( 0, FALSE );
             }
 
