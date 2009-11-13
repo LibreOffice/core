@@ -495,8 +495,6 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "04" );
 #elif defined SOLARIS && defined INTEL
     abGP.Append( "05" );  // Solaris x86
-#elif defined IRIX
-    abGP.Append( "06" );
 #elif defined HPUX
     abGP.Append( "07" );
 #elif defined FREEBSD
