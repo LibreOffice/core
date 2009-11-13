@@ -173,7 +173,8 @@ namespace drawinglayer
             const attribute::SdrTextAttribute& rText,
             const attribute::SdrLineAttribute* pStroke,
             bool bCellText,
-            bool bWordWrap)
+            bool bWordWrap,
+            bool bClipOnBounds)
         {
             basegfx::B2DHomMatrix aAnchorTransform(rObjectTransform);
             SdrTextPrimitive2D* pNew = 0;
@@ -297,7 +298,8 @@ namespace drawinglayer
                         rText.isFixedCellHeight(),
                         rText.isScroll(),
                         bCellText,
-                        bWordWrap);
+                        bWordWrap,
+                        bClipOnBounds);
                 }
             }
 

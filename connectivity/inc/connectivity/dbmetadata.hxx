@@ -177,6 +177,12 @@ namespace dbtools
         /** determines whether in the application UI, empty table folders (aka catalogs/schemas) should be displayed
         */
         bool displayEmptyTableFolders() const;
+
+        /** determines that threads are supported.
+        *
+        * \return <TRUE/> when threads are supported, otherwise <FALSE/>
+        */
+        bool supportsThreads() const;
     };
 
 //........................................................................

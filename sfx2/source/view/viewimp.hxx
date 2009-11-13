@@ -45,6 +45,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svtools/acceleratorexecute.hxx>
 
+#include <rtl/ref.hxx>
+
 #include <queue>
 
 // forward ---------------------------------------------------------------
@@ -73,6 +75,8 @@ public:
 };
 #endif
 
+class SfxClipboardChangeListener;
+
 struct SfxViewShell_Impl
 {
     ::osl::Mutex                aMutex;
@@ -98,11 +102,9 @@ struct SfxViewShell_Impl
     ::svt::AcceleratorExecute*  pAccExec;
 //  SfxAsyncPrintExec_Impl*     pPrinterCommandQueue;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
+    ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
 
-                                SfxViewShell_Impl()
-                                  : aInterceptorContainer( aMutex )
-                                  , pAccExec(0)
-                                {}
+    SfxViewShell_Impl();
 };
 
 #endif
