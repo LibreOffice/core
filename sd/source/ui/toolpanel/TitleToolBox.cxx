@@ -77,7 +77,7 @@ void TitleToolBox::AddItem (ToolBoxId aId)
 
         case TBID_DOCUMENT_CLOSE:
             InsertItem (TBID_DOCUMENT_CLOSE,
-                GetSettings().GetStyleSettings().GetMenuBarColor().IsDark()
+                GetSettings().GetStyleSettings().GetHighContrastMode()
                 ? maImageHC : maImage, 0 );
             break;
 
