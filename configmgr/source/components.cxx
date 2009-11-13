@@ -375,11 +375,6 @@ Components::Components(
                     ":UNO_USER_PACKAGES_CACHE}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))));
-    // reading the old user xcs/xcu layer ("${$BRAND_BASE_DIR/program/" +
-    // SAL_CONFIGFILE("bootstrap") + ":UserInstallation}/user/registry") would
-    // potentially fail, anyway, as xcu files in that layer used the xsi
-    // namespace prefix without declaring a corresponding namespace binding (see
-    // issue 77174)
     try {
         parseModificationLayer();
     } catch (css::uno::Exception & e) { //TODO: more specific exception catching
