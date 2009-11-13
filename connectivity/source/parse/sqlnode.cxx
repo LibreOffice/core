@@ -1421,7 +1421,11 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::table_node, "table_node" },
             { OSQLParseNode::as, "as" },
             { OSQLParseNode::op_column_commalist, "op_column_commalist" },
-            { OSQLParseNode::table_primary_as_range_column, "table_primary_as_range_column" }
+            { OSQLParseNode::table_primary_as_range_column, "table_primary_as_range_column" },
+            { OSQLParseNode::datetime_primary, "datetime_primary" },
+            { OSQLParseNode::concatenation, "concatenation" },
+            { OSQLParseNode::char_factor, "char_factor" },
+            { OSQLParseNode::bit_value_fct, "bit_value_fct" }
         };
         size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
         OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );

@@ -56,6 +56,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <jni.h>
 #include "resource/common_res.hrc"
+#include <unotools/confignode.hxx>
 
 #include <list>
 #include <memory>
@@ -766,7 +767,20 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
     enableAutoRetrievingEnabled( bAutoRetrievingEnabled );
     setAutoRetrievingStatement( sGeneratedValueStatement );
 }
-
+// -----------------------------------------------------------------------------
+::rtl::OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const ::rtl::OUString& _sDriverClass)
+{
+    static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths"));
+    ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+        m_pDriver->getContext().getLegacyServiceFactory(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+    ::rtl::OUString sURL;
+    if ( aNamesRoot.isValid() && aNamesRoot.hasByName( _sDriverClass ) )
+    {
+        ::utl::OConfigurationNode aRegisterObj = aNamesRoot.openNode( _sDriverClass );
+        OSL_VERIFY( aRegisterObj.getNodeValue( "Path" ) >>= sURL );
+    }
+    return sURL;
+}
 // -----------------------------------------------------------------------------
 sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
                                     const Sequence< PropertyValue >& info)
@@ -789,6 +803,8 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     ::comphelper::NamedValueCollection aSettings( info );
     sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
     sDriverClassPath = aSettings.getOrDefault( "JavaDriverClassPath", sDriverClassPath);
+    if ( !sDriverClassPath.getLength() )
+        sDriverClassPath = impl_getJavaDriverClassPath_nothrow(sDriverClass);
     bAutoRetrievingEnabled = aSettings.getOrDefault( "IsAutoRetrievingEnabled", bAutoRetrievingEnabled );
     sGeneratedValueStatement = aSettings.getOrDefault( "AutoRetrievingStatement", sGeneratedValueStatement );
     m_bParameterSubstitution = aSettings.getOrDefault( "ParameterNameSubstitution", m_bParameterSubstitution );

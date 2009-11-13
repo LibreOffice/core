@@ -784,14 +784,24 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateBinaryStream", *this );
+    if(!x.is())
+        ::dbtools::throwFunctionSequenceException(*this);
+
+    Sequence<sal_Int8> aSeq;
+    x->readBytes(aSeq,length);
+    updateBytes(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
+    if(!x.is())
+        ::dbtools::throwFunctionSequenceException(*this);
+
+    Sequence<sal_Int8> aSeq;
+    x->readBytes(aSeq,length);
+    updateBytes(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
