@@ -5356,6 +5356,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						</constraints>
 						<value>0</value>
 					</prop>
+                    <prop oor:name="AllowDuplicateFieldNames" oor:type="xs:boolean">
+						<info>
+							<author>pl</author>
+							<desc>Specifies whether multiple form fields exported are allowed to have the same field name.</desc>
+						</info>
+						<value>false</value>
+                    </prop>
                     <prop oor:name="IsSkipEmptyPages" oor:type="xs:boolean">
                             <info>
                                     <author>FME</author>

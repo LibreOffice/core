@@ -84,12 +84,12 @@ static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiS
 // the three uno functions that will be exported
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+    sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
     {
         sal_Bool bRetVal = sal_True;
 
@@ -110,7 +110,7 @@ extern "C"
         return bRetVal;
     }
 
-    void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )
+    void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* )
     {
         void* pRet = 0;
 
