@@ -505,7 +505,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
         case COMMAND_CONTEXTMENU:
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-            BOOL bHiContrast = rSettings.GetMenuColor().IsDark();
+            BOOL bHiContrast = rSettings.GetHighContrastMode();
             OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
             uno::Reference<frame::XFrame> xFrame = rController.getFrame();
             PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );

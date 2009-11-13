@@ -3608,7 +3608,7 @@ sal_Bool SbaTableQueryBrowser::isHiContrast() const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaTableQueryBrowser::isHiContrast" );
     sal_Bool bRet = sal_False;
     if ( m_pTreeView )
-        bRet = m_pTreeView->getListBox().GetBackground().GetColor().IsDark();
+        bRet = m_pTreeView->getListBox().GetSettings().GetStyleSettings().GetHighContrastMode();
     return bRet;
 }
 // -----------------------------------------------------------------------------

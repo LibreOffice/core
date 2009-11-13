@@ -1326,7 +1326,7 @@ sal_Bool isHiContrast(Window* _pWindow)
         else
             break;
     }
-    return pIter && pIter->GetBackground().GetColor().IsDark();
+    return pIter && pIter->GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // -----------------------------------------------------------------------------

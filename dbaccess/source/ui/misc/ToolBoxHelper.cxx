@@ -79,10 +79,10 @@ namespace dbaui
         {
             sal_Int16 nCurSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
             if ( nCurSymbolsSize != m_nSymbolsSize ||
-                m_bIsHiContrast != m_pToolBox->GetBackground().GetColor().IsDark() )
+                m_bIsHiContrast != m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode() )
             {
                 m_nSymbolsSize  = nCurSymbolsSize;
-                m_bIsHiContrast = m_pToolBox->GetBackground().GetColor().IsDark();
+                m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
 
 
                 m_pToolBox->SetImageList( getImageList(m_nSymbolsSize,m_bIsHiContrast) );
@@ -131,7 +131,7 @@ namespace dbaui
         m_pToolBox = _pTB;
         if ( m_pToolBox )
         {
-            //  m_bIsHiContrast = m_pToolBox->GetBackground().GetColor().IsDark();
+            //  m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
             ConfigOptionsChanged(NULL);
             if ( bFirstTime )
                 adjustToolBoxSize(m_pToolBox);
