@@ -29,8 +29,8 @@
 #
 #*************************************************************************
 
-.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
-CDEFS+= -DVERBOSE
+.IF "$(VERBOSE)"=="TRUE"
+CDEFS+=-DVERBOSE
 .ENDIF
 
 .IF "$(debug)"!="" || "$(DEBUG)"!=""
