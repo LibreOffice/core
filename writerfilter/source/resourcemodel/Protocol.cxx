@@ -171,6 +171,7 @@ void PropertiesProtocol::sprm(Sprm & _sprm)
     snprintf(sBuffer, sizeof(sBuffer), "%04" SAL_PRIxUINT32, _sprm.getId());
     m_pTagLogger->attribute("id", sBuffer);
     m_pTagLogger->attribute("name", _sprm.getName());
+    m_pTagLogger->chars(_sprm.toString());
     m_pProperties->sprm(_sprm);
     m_pTagLogger->endElement("protocol-sprm");
 }
