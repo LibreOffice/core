@@ -88,8 +88,8 @@ public class Query extends complexlib.ComplexTestCase {
 
         try
         {
-            final XQueriesSupplier suppQueries = (XQueriesSupplier)UnoRuntime.queryInterface(
-                XQueriesSupplier.class, m_database.defaultConnection());
+            final XQueriesSupplier suppQueries = UnoRuntime.queryInterface(
+                XQueriesSupplier.class, m_database.defaultConnection().getXConnection() );
             final XNameAccess queries = suppQueries.getQueries();
 
             final String[] queryNames = new String[] { "parseable", "parseable native", "unparseable" };
@@ -101,12 +101,12 @@ public class Query extends complexlib.ComplexTestCase {
 
             for ( int i = 0; i < queryNames.length; ++i )
             {
-                final XPropertySet query = (XPropertySet)UnoRuntime.queryInterface(
+                final XPropertySet query = UnoRuntime.queryInterface(
                     XPropertySet.class, queries.getByName( queryNames[i] ) );
 
-                final XColumnsSupplier suppCols = (XColumnsSupplier)UnoRuntime.queryInterface(
+                final XColumnsSupplier suppCols = UnoRuntime.queryInterface(
                     XColumnsSupplier.class, query);
-                final XIndexAccess columns = (XIndexAccess)UnoRuntime.queryInterface(
+                final XIndexAccess columns = UnoRuntime.queryInterface(
                     XIndexAccess.class, suppCols.getColumns());
 
                 // check whether the columns supplied by the query match what we expected
@@ -114,7 +114,7 @@ public class Query extends complexlib.ComplexTestCase {
                     columns.getCount() == expectedColumnNames[i].length );
                 for ( int col = 0; col < columns.getCount(); ++col )
                 {
-                    final XNamed columnName = (XNamed)UnoRuntime.queryInterface(
+                    final XNamed columnName = UnoRuntime.queryInterface(
                         XNamed.class, columns.getByIndex(col) );
                     assure( "column no. " + col + " of query \"" + queryNames[i] + "\" not matching",
                         columnName.getName().equals( expectedColumnNames[i][col] ) );

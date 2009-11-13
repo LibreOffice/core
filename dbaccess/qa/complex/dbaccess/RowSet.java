@@ -41,7 +41,6 @@ import com.sun.star.sdb.XParametersSupplier;
 import com.sun.star.sdb.XResultSetAccess;
 import com.sun.star.sdb.XRowSetApproveBroadcaster;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XParameters;
 import com.sun.star.sdbc.XPreparedStatement;
 import com.sun.star.sdbc.XResultSet;
@@ -52,13 +51,12 @@ import com.sun.star.sdbc.XRowUpdate;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XDeleteRows;
 import com.sun.star.sdbcx.XRowLocate;
-import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XRefreshable;
 import complexlib.ComplexTestCase;
 import connectivity.tools.CRMDatabase;
 import connectivity.tools.DataSource;
 import connectivity.tools.HsqlDatabase;
+import connectivity.tools.sdb.Connection;
 import java.lang.reflect.Method;
 import java.util.Random;
 
@@ -90,7 +88,7 @@ public class RowSet extends ComplexTestCase
         public ResultSetMovementStress(XResultSet _resultSet, int _id) throws java.lang.Exception
         {
             m_resultSet = _resultSet;
-            m_row = (XRow) UnoRuntime.queryInterface(XRow.class, m_resultSet);
+            m_row = UnoRuntime.queryInterface( XRow.class, m_resultSet );
             m_id = _id;
         }
 
@@ -205,23 +203,22 @@ public class RowSet extends ComplexTestCase
     {
         try
         {
-            m_rowSet = (XRowSet) UnoRuntime.queryInterface(XRowSet.class,
-                    getFactory().createInstance("com.sun.star.sdb.RowSet"));
-            final XPropertySet rowSetProperties = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, m_rowSet);
+            m_rowSet = UnoRuntime.queryInterface( XRowSet.class, getFactory().createInstance( "com.sun.star.sdb.RowSet" ) );
+            final XPropertySet rowSetProperties = UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
             rowSetProperties.setPropertyValue("Command", command);
             rowSetProperties.setPropertyValue("CommandType", Integer.valueOf(commandType));
-            rowSetProperties.setPropertyValue("ActiveConnection", m_database.defaultConnection());
+            rowSetProperties.setPropertyValue("ActiveConnection", m_database.defaultConnection().getXConnection());
             if (limitFetchSize)
             {
                 rowSetProperties.setPropertyValue("FetchSize", Integer.valueOf(MAX_FETCH_ROWS));
             }
 
-            m_resultSet = (XResultSet) UnoRuntime.queryInterface(XResultSet.class, m_rowSet);
-            m_resultSetUpdate = (XResultSetUpdate) UnoRuntime.queryInterface(XResultSetUpdate.class, m_rowSet);
-            m_row = (XRow) UnoRuntime.queryInterface(XRow.class, m_rowSet);
-            m_rowLocate = (XRowLocate) UnoRuntime.queryInterface(XRowLocate.class, m_resultSet);
-            m_rowSetProperties = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, m_rowSet);
-            m_paramsSupplier = (XParametersSupplier) UnoRuntime.queryInterface(XParametersSupplier.class, m_rowSet);
+            m_resultSet = UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
+            m_resultSetUpdate = UnoRuntime.queryInterface( XResultSetUpdate.class, m_rowSet );
+            m_row = UnoRuntime.queryInterface( XRow.class, m_rowSet );
+            m_rowLocate = UnoRuntime.queryInterface( XRowLocate.class, m_resultSet );
+            m_rowSetProperties = UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
+            m_paramsSupplier = UnoRuntime.queryInterface( XParametersSupplier.class, m_rowSet );
 
             if (execute)
             {
@@ -260,7 +257,7 @@ public class RowSet extends ComplexTestCase
     // --------------------------------------------------------------------------------------------------------
     XResultSet createClone() throws SQLException
     {
-        final XResultSetAccess rowAcc = (XResultSetAccess) UnoRuntime.queryInterface(XResultSetAccess.class, m_rowSet);
+        final XResultSetAccess rowAcc = UnoRuntime.queryInterface( XResultSetAccess.class, m_rowSet );
         return rowAcc.createResultSet();
     }
 
@@ -270,9 +267,9 @@ public class RowSet extends ComplexTestCase
         m_database.executeSQL("DROP TABLE \"TEST1\" IF EXISTS");
         m_database.executeSQL("CREATE TABLE \"TEST1\" (\"ID\" integer not null primary key, \"col2\" varchar(50) )");
 
-        final XConnection connection = m_database.defaultConnection();
+        final Connection connection = m_database.defaultConnection();
         final XPreparedStatement prep = connection.prepareStatement("INSERT INTO \"TEST1\" values (?,?)");
-        final XParameters para = (XParameters) UnoRuntime.queryInterface(XParameters.class, prep);
+        final XParameters para = UnoRuntime.queryInterface( XParameters.class, prep );
         for (int i = 1; i <= MAX_TABLE_ROWS; ++i)
         {
             para.setInt(1, i);
@@ -280,9 +277,7 @@ public class RowSet extends ComplexTestCase
             prep.executeUpdate();
         }
 
-        final XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, connection);
-        final XRefreshable refresh = (XRefreshable) UnoRuntime.queryInterface(XRefreshable.class, suppTables.getTables());
-        refresh.refresh();
+        connection.refreshTables();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -336,8 +331,8 @@ public class RowSet extends ComplexTestCase
     {
         try
         {
-            final XRow _row = (XRow) UnoRuntime.queryInterface(XRow.class, _resultSet);
-            final XRow cloneRow = (XRow) UnoRuntime.queryInterface(XRow.class, clone);
+            final XRow _row = UnoRuntime.queryInterface( XRow.class, _resultSet );
+            final XRow cloneRow = UnoRuntime.queryInterface( XRow.class, clone );
             for (int i = 1; i <= MAX_FETCH_ROWS; ++i)
             {
                 final int calcPos = (MAX_TABLE_ROWS % i) + 1;
@@ -360,14 +355,14 @@ public class RowSet extends ComplexTestCase
     {
         try
         {
-            final XRow _row = (XRow) UnoRuntime.queryInterface(XRow.class, _resultSet);
+            final XRow _row = UnoRuntime.queryInterface( XRow.class, _resultSet );
             _resultSet.beforeFirst();
 
             for (int i = 1; i <= MAX_TABLE_ROWS; ++i)
             {
                 _resultSet.next();
                 final XResultSet clone = createClone();
-                final XRow cloneRow = (XRow) UnoRuntime.queryInterface(XRow.class, clone);
+                final XRow cloneRow = UnoRuntime.queryInterface( XRow.class, clone );
                 final int calcPos = MAX_TABLE_ROWS - 1;
                 if (calcPos != 0 && clone.absolute(calcPos))
                 {
@@ -421,15 +416,15 @@ public class RowSet extends ComplexTestCase
         // first we create our RowSet object
         final RowSetEventListener pRow = new RowSetEventListener();
 
-        final XColumnsSupplier colSup = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, m_rowSet);
-        final XPropertySet col = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, colSup.getColumns().getByName("ID"));
+        final XColumnsSupplier colSup = UnoRuntime.queryInterface( XColumnsSupplier.class, m_rowSet );
+        final XPropertySet col = UnoRuntime.queryInterface( XPropertySet.class, colSup.getColumns().getByName( "ID" ) );
         col.addPropertyChangeListener("Value", pRow);
         m_rowSetProperties.addPropertyChangeListener("IsModified", pRow);
         m_rowSetProperties.addPropertyChangeListener("IsNew", pRow);
         m_rowSetProperties.addPropertyChangeListener("IsRowCountFinal", pRow);
         m_rowSetProperties.addPropertyChangeListener("RowCount", pRow);
 
-        final XRowSetApproveBroadcaster xApBroad = (XRowSetApproveBroadcaster) UnoRuntime.queryInterface(XRowSetApproveBroadcaster.class, m_resultSet);
+        final XRowSetApproveBroadcaster xApBroad = UnoRuntime.queryInterface( XRowSetApproveBroadcaster.class, m_resultSet );
         xApBroad.addRowSetApproveListener(pRow);
         m_rowSet.addRowSetListener(pRow);
 
@@ -459,13 +454,13 @@ public class RowSet extends ComplexTestCase
         testCursorMove(m_resultSet, cResSet.getMethod("previous", (Class[]) null), pRow, moves, null);
         testCursorMove(m_resultSet, cResSet.getMethod(NEXT, (Class[]) null), pRow, moves, null);
         moves[RowSetEventListener.IS_MODIFIED] = true;
-        final XRowUpdate updRow = (XRowUpdate) UnoRuntime.queryInterface(XRowUpdate.class, m_resultSet);
+        final XRowUpdate updRow = UnoRuntime.queryInterface( XRowUpdate.class, m_resultSet );
         updRow.updateString(2, TEST21);
         testCursorMove(m_resultSet, cResSet.getMethod(NEXT, (Class[]) null), pRow, moves, null);
 
         moves[RowSetEventListener.IS_MODIFIED] = false;
         final Class cupd = Class.forName("com.sun.star.sdbc.XResultSetUpdate");
-        final XResultSetUpdate upd = (XResultSetUpdate) UnoRuntime.queryInterface(XResultSetUpdate.class, m_resultSet);
+        final XResultSetUpdate upd = UnoRuntime.queryInterface( XResultSetUpdate.class, m_resultSet );
         testCursorMove(upd, cupd.getMethod("moveToInsertRow", (Class[]) null), pRow, moves, null);
 
         updRow.updateInt(1, MAX_TABLE_ROWS + 2);
@@ -537,7 +532,7 @@ public class RowSet extends ComplexTestCase
         moves[RowSetEventListener.ROW_COUNT] = true;
         final Class cdelRows = Class.forName("com.sun.star.sdbcx.XDeleteRows");
         ctemp[0] = Object[].class;
-        final XDeleteRows delRows = (XDeleteRows) UnoRuntime.queryInterface(XDeleteRows.class, m_resultSet);
+        final XDeleteRows delRows = UnoRuntime.queryInterface( XDeleteRows.class, m_resultSet );
         final Object bookmarks[] = new Object[5];
         m_resultSet.first();
         for (int i = 0; i < bookmarks.length; ++i)
@@ -550,7 +545,7 @@ public class RowSet extends ComplexTestCase
         testCursorMove(delRows, cdelRows.getMethod("deleteRows", ctemp), pRow, moves, temp);
 
         // now destroy the RowSet
-        final XComponent xComp = (XComponent) UnoRuntime.queryInterface(XComponent.class, m_resultSet);
+        final XComponent xComp = UnoRuntime.queryInterface( XComponent.class, m_resultSet );
         xComp.dispose();
     }
 
@@ -716,7 +711,7 @@ public class RowSet extends ComplexTestCase
         positionRandom();
         final Object deleteBookmark = m_rowLocate.getBookmark();
         m_resultSetUpdate.deleteRow();
-        final XDeleteRows multiDelete = (XDeleteRows) UnoRuntime.queryInterface(XDeleteRows.class, m_resultSet);
+        final XDeleteRows multiDelete = UnoRuntime.queryInterface( XDeleteRows.class, m_resultSet );
         final int[] deleteSuccess = multiDelete.deleteRows(new Object[]
                 {
                     firstBookmark, deleteBookmark
@@ -746,7 +741,7 @@ public class RowSet extends ComplexTestCase
         // .....................................................................................................
         // updating values in a deleted row should fail
         deleteRandom();
-        final XRowUpdate rowUpdated = (XRowUpdate) UnoRuntime.queryInterface(XRowUpdate.class, m_resultSet);
+        final XRowUpdate rowUpdated = UnoRuntime.queryInterface( XRowUpdate.class, m_resultSet );
         caughtException = false;
         try
         {
@@ -763,6 +758,7 @@ public class RowSet extends ComplexTestCase
     /** checks whether deletions on the main RowSet properly interfere (or don't interfere) with the movement
      *  on a clone of the RowSet
      */
+    @SuppressWarnings("empty-statement")
     public void testCloneMovesPlusDeletions() throws SQLException, UnknownPropertyException, WrappedTargetException
     {
         createTestCase(true);
@@ -770,7 +766,7 @@ public class RowSet extends ComplexTestCase
         m_resultSet.last();
 
         final XResultSet clone = createClone();
-        final XRowLocate cloneRowLocate = (XRowLocate) UnoRuntime.queryInterface(XRowLocate.class, clone);
+        final XRowLocate cloneRowLocate = UnoRuntime.queryInterface( XRowLocate.class, clone );
 
         positionRandom();
 
@@ -838,7 +834,7 @@ public class RowSet extends ComplexTestCase
         m_rowSetProperties.setPropertyValue("FetchSize", Integer.valueOf(10));
 
         final XResultSet clone = createClone();
-        final XRow cloneRow = (XRow) UnoRuntime.queryInterface(XRow.class, clone);
+        final XRow cloneRow = UnoRuntime.queryInterface( XRow.class, clone );
 
         // .....................................................................................................
         // first check the basic scenario without the |moveToInsertRow| |moveToCurrentRow|, to ensure that
@@ -894,8 +890,7 @@ public class RowSet extends ComplexTestCase
         {
             createRowSet("SELECT * FROM \"customers\"", CommandType.COMMAND, true);
             m_rowSetProperties.setPropertyValue("Command", "SELECT * FROM \"customers\" WHERE \"City\" = :city");
-            final XParameters rowsetParams = (XParameters) UnoRuntime.queryInterface(XParameters.class,
-                    m_rowSet);
+            final XParameters rowsetParams = UnoRuntime.queryInterface( XParameters.class, m_rowSet );
             rowsetParams.setString(1, "London");
             m_rowSet.execute();
         }
@@ -922,8 +917,7 @@ public class RowSet extends ComplexTestCase
 
         for (int i = 0; i < expected; ++i)
         {
-            final XPropertySet parameter = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,
-                    params.getByIndex(i));
+            final XPropertySet parameter = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( i ) );
 
             final String expectedName = _paramNames[i];
             final String foundName = (String) parameter.getPropertyValue("Name");
@@ -960,12 +954,11 @@ public class RowSet extends ComplexTestCase
             createRowSet("products like", CommandType.QUERY, false);
 
             // let's fill in a parameter value via XParameters, and see whether it is respected by the parameters container
-            final XParameters rowsetParams = (XParameters) UnoRuntime.queryInterface(XParameters.class,
-                    m_rowSet);
+            final XParameters rowsetParams = UnoRuntime.queryInterface(XParameters.class, m_rowSet);
             rowsetParams.setString(1, "Apples");
 
             XIndexAccess params = m_paramsSupplier.getParameters();
-            XPropertySet firstParam = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(0));
+            XPropertySet firstParam = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( 0 ) );
             Object firstParamValue = firstParam.getPropertyValue("Value");
 
             assure("XParameters and the parameters container do not properly interact",
@@ -979,7 +972,7 @@ public class RowSet extends ComplexTestCase
                 // the execution of the row set. It currently doesn't (though the values it represents do).
                 // It would be nice, but not strictly necessary, if it would.
                 params = m_paramsSupplier.getParameters();
-                firstParam = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(0));
+                firstParam = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( 0 ) );
             }
             firstParamValue = firstParam.getPropertyValue("Value");
             assure("XParameters and the parameters container do not properly interact, after the row set has been executed",

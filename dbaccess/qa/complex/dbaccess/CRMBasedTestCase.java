@@ -81,9 +81,6 @@ public abstract class CRMBasedTestCase extends TestCase
      */
     protected final XSingleSelectQueryComposer createQueryComposer() throws com.sun.star.uno.Exception
     {
-        final XMultiServiceFactory connectionFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
-            XMultiServiceFactory.class, m_database.getConnection() );
-        return (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
-            XSingleSelectQueryComposer.class, connectionFactory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
+        return m_database.getConnection().createSingleSelectQueryComposer();
     }
 }
