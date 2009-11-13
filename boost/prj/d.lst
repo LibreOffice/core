@@ -107,6 +107,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\actor
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\actor\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\debug
+mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\debug\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\meta
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\meta\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\home\classic\core
@@ -257,6 +258,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\spirit\home\classic\actor\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\actor
 ..\%__SRC%\inc\boost\spirit\home\classic\actor\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\actor\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\debug\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\debug
+..\%__SRC%\inc\boost\spirit\home\classic\debug\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\debug\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\meta\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\meta
 ..\%__SRC%\inc\boost\spirit\home\classic\meta\impl\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\meta\impl
 ..\%__SRC%\inc\boost\spirit\home\classic\core\* %_DEST%\inc%_EXT%\boost\spirit\home\classic\core
