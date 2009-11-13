@@ -88,6 +88,8 @@ sub setcompiler
         $outobj_flag = "-Fo";
         $objext = ".obj";
         $preprocess_flag = "-EP"; # preprocess to stdout
+        $solarincludes =~ s/\/stl/\/xstlx/g;
+        $defs =~ s/\/stl/\/xstlx/g;
     } elsif ( "$whichcom" eq "C52" ) {
         $appext = ""; # windows for now
         $compiler = "cc";
@@ -154,7 +156,10 @@ $filename =~ s/\\/\//g;
 $filebase = $filename;
 $filebase =~ s/.*[\\\/]//;
 $filebase =~ s/\..*?$//;
-$workfile = "$tmpdir/${filebase}_".$$;
+# now stript it to something that doesn't togger vista execution prevention :(
+$flbs = $filebase;
+$flbs =~ s/[aeiou]//g;
+$workfile = "$tmpdir/${flbs}_".$$;
 #$workfile =~ s/setup/set_up/;
 
 # now get $workfile ready for shell usage...
