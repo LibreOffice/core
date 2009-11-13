@@ -638,15 +638,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     sal_Int32 certResult = xSecEnv->verifyCertificate(xCert,
                         Sequence<css::uno::Reference<css::security::XCertificate> >());
 
-                    //These errors are alloweds
-                    sal_Int32 validErrors = css::security::CertificateValidity::VALID
-                        | css::security::CertificateValidity::UNKNOWN_REVOKATION;
-
-                    //Build a  mask to filter out the allowed errors
-                    sal_Int32 mask = ~validErrors;
-                    // "subtract" the allowed error flags from the result
-                    sal_Int32 errors = certResult & mask;
-                    bCertValid = errors > 0 ? false : true;
+                    bCertValid = certResult == css::security::CertificateValidity::VALID ? true : false;
                     if ( bCertValid )
                         nValidCerts++;
 

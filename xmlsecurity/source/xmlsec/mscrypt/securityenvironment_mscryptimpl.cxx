@@ -40,6 +40,7 @@
 #pragma warning(pop)
 #endif
 #include <sal/config.h>
+#include <osl/thread.h>
 #include "securityenvironment_mscryptimpl.hxx"
 
 #ifndef _X509CERTIFICATE_NSSIMPL_HXX_
@@ -63,7 +64,9 @@
 #include <osl/process.h>
 
 //CP : end
+#include "../diagnose.hxx"
 
+using namespace xmlsecurity;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
@@ -72,8 +75,57 @@ using ::rtl::OUString ;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
+namespace css = ::com::sun::star;
 
 extern X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
+
+struct CertErrorToString{
+    DWORD error;
+    char * name;
+};
+
+CertErrorToString arErrStrings[] =
+{
+    { 0x00000000, "CERT_TRUST_NO_ERROR"},
+    { 0x00000001, "CERT_TRUST_IS_NOT_TIME_VALID"},
+    { 0x00000002, "CERT_TRUST_IS_NOT_TIME_NESTED"},
+    { 0x00000004, "CERT_TRUST_IS_REVOKED" },
+    { 0x00000008, "CERT_TRUST_IS_NOT_SIGNATURE_VALID" },
+    { 0x00000010, "CERT_TRUST_IS_NOT_SIGNATURE_VALID"},
+    { 0x00000020, "CERT_TRUST_IS_UNTRUSTED_ROOT"},
+    { 0x00000040, "CERT_TRUST_REVOCATION_STATUS_UNKNOWN"},
+    { 0x00000080, "CERT_TRUST_IS_CYCLIC"},
+    { 0x00000100, "CERT_TRUST_INVALID_EXTENSION"},
+    { 0x00000200, "CERT_TRUST_INVALID_POLICY_CONSTRAINTS"},
+    { 0x00000400, "CERT_TRUST_INVALID_BASIC_CONSTRAINTS"},
+    { 0x00000800, "CERT_TRUST_INVALID_NAME_CONSTRAINTS"},
+    { 0x00001000, "CERT_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT"},
+    { 0x00002000, "CERT_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT"},
+    { 0x00004000, "CERT_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT"},
+    { 0x00008000, "CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT"},
+    { 0x01000000, "CERT_TRUST_IS_OFFLINE_REVOCATION"},
+    { 0x02000000, "CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY"},
+    { 0x04000000, "CERT_TRUST_IS_EXPLICIT_DISTRUST"},
+    { 0x08000000, "CERT_TRUST_HAS_NOT_SUPPORTED_CRITICAL_EXT"},
+    //Chain errors
+    { 0x00010000, "CERT_TRUST_IS_PARTIAL_CHAIN"},
+    { 0x00020000, "CERT_TRUST_CTL_IS_NOT_TIME_VALID"},
+    { 0x00040000, "CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID"},
+    { 0x00080000, "CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE"}
+};
+
+void traceTrustStatus(DWORD err)
+{
+    int numErrors = sizeof(arErrStrings) / sizeof(CertErrorToString);
+    xmlsec_trace("The certificate error status is: ");
+    if (err == 0)
+        xmlsec_trace("%s", arErrStrings[0].name);
+    for (int i = 1; i < numErrors; i++)
+    {
+        if (arErrStrings[i].error & err)
+            xmlsec_trace("%s", arErrStrings[i].name);
+    }
+}
 
 SecurityEnvironment_MSCryptImpl :: SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( NULL ) , m_hKeyStore( NULL ), m_hCertStore( NULL ), m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList(), m_xServiceManager( aFactory ), m_bEnableDefault( sal_False ) {
 
@@ -894,6 +946,11 @@ HCERTSTORE getCertStoreForIntermediatCerts(
 
     for (int i = 0; i < seqCerts.getLength(); i++)
     {
+        xmlsec_trace("Added temporary certificate: \n%s",
+                     OUStringToOString(seqCerts[i]->getSubjectName(),
+                                       osl_getThreadTextEncoding()).getStr());
+
+
         Sequence<sal_Int8> data = seqCerts[i]->getEncoded();
         PCCERT_CONTEXT cert = CertCreateCertificateContext(
             X509_ASN_ENCODING, ( const BYTE* )&data[0], data.getLength());
@@ -904,6 +961,11 @@ HCERTSTORE getCertStoreForIntermediatCerts(
     }
     return store;
 }
+
+//We return only valid or invalid, as long as the API documentation expresses
+//explicitly that all validation steps are carried out even if one or several
+//errors occur. See also
+//http://wiki.services.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
 sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     const Reference< ::com::sun::star::security::XCertificate >& aCert,
     const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)
@@ -913,16 +975,15 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     PCCERT_CHAIN_CONTEXT pChainContext = NULL;
     PCCERT_CONTEXT pCertContext = NULL;
     const X509Certificate_MSCryptImpl* xcert = NULL;
-    DWORD chainStatus ;
-
-    CERT_ENHKEY_USAGE   enhKeyUsage ;
-    CERT_USAGE_MATCH    certUsage ;
-    CERT_CHAIN_PARA     chainPara ;
 
     Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
     if( !xCertTunnel.is() ) {
         throw RuntimeException() ;
     }
+
+    xmlsec_trace("Start verification of certificate: \n %s",
+                 OUStringToOString(
+                     aCert->getSubjectName(), osl_getThreadTextEncoding()).getStr());
 
     xcert = ( X509Certificate_MSCryptImpl* )xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ) ;
     if( xcert == NULL ) {
@@ -930,6 +991,11 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     }
 
     pCertContext = xcert->getMswcryCert() ;
+
+    CERT_ENHKEY_USAGE   enhKeyUsage ;
+    CERT_USAGE_MATCH    certUsage ;
+    CERT_CHAIN_PARA     chainPara ;
+    SecureZeroMemory(&chainPara, sizeof(CERT_CHAIN_PARA));
 
     //Prepare parameter for CertGetCertificateChain
     enhKeyUsage.cUsageIdentifier = 0 ;
@@ -978,130 +1044,92 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
         }
 
         //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
+        //We do not check revocation of the root. In most cases there are none.
+        //Then we would get CERT_TRUST_REVOCATION_STATUS_UNKNOWN
+        xmlsec_trace("Verifying cert using revocation information.");
         bChain = CertGetCertificateChain(
             NULL ,
             pCertContext ,
             NULL , //use current system time
             hCollectionStore,
             &chainPara ,
-            CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
+            CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,
             NULL ,
             &pChainContext);
 
-        if (!bChain)
-            pChainContext = NULL;
-
-    }
-
-    if(bChain && pChainContext != NULL )
-    {
-        chainStatus = pChainContext->TrustStatus.dwErrorStatus ;
-
-        // JL & TKR: Until we have a test suite to test all error types we just say that the cert is
-        // valid or invalid with no further separation.
-        // Error CERT_TRUST_IS_OFFLINE_REVOCATION and CERT_TRUST_REVOCATION_STATUS_UNKNOWN are treated separate
-        // because they are ignored ( Bad! ) in the currently situation
-
-        if( chainStatus == CERT_TRUST_NO_ERROR )
+        if (bChain && pChainContext->cChain > 0)
         {
-            validity = ::com::sun::star::security::CertificateValidity::VALID ;
-        }
+            xmlsec_trace("Overall error status (all chains):");
+            traceTrustStatus(pChainContext->TrustStatus.dwErrorStatus);
+            //highest quality chains come first
+            PCERT_SIMPLE_CHAIN pSimpleChain = pChainContext->rgpChain[0];
+            xmlsec_trace("Error status of first chain: ");
+            traceTrustStatus(pSimpleChain->TrustStatus.dwErrorStatus);
 
-        if ( ( chainStatus & CERT_TRUST_IS_OFFLINE_REVOCATION ) == CERT_TRUST_IS_OFFLINE_REVOCATION ) {
-            validity |= ::com::sun::star::security::CertificateValidity::UNKNOWN_REVOKATION ;
-        }
+            //CERT_TRUST_REVOCATION_STATUS_UNKNOWN is also set if a certificate
+            //has no AIA(OCSP) or CRLDP extension and there is no CRL locally installed.
+            DWORD revocationFlags = CERT_TRUST_REVOCATION_STATUS_UNKNOWN |
+                CERT_TRUST_IS_OFFLINE_REVOCATION;
+            DWORD otherErrorsMask = ~revocationFlags;
+            if( !(pSimpleChain->TrustStatus.dwErrorStatus & otherErrorsMask))
 
-        if ( ( chainStatus & CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) == CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) {
-            validity |= ::com::sun::star::security::CertificateValidity::UNKNOWN_REVOKATION ;
+            {
+                //No errors except maybe those caused by missing revocation information
+                //Check if there are errors
+                if ( pSimpleChain->TrustStatus.dwErrorStatus & revocationFlags)
+                {
+                    //No revocation information. Because MSDN documentation is not
+                    //clear about if all other tests are performed if an error occurrs,
+                    //we test again, without requiring revocation checking.
+                    CertFreeCertificateChain(pChainContext);
+                    pChainContext = NULL;
+                    xmlsec_trace("Checking again but without requiring revocation information.");
+                    bChain = CertGetCertificateChain(
+                        NULL ,
+                        pCertContext ,
+                        NULL , //use current system time
+                        hCollectionStore,
+                        &chainPara ,
+                        0,
+                        NULL ,
+                        &pChainContext);
+                    if (bChain
+                        && pChainContext->cChain > 0
+                        && pChainContext->rgpChain[0]->TrustStatus.dwErrorStatus == CERT_TRUST_NO_ERROR)
+                    {
+                        xmlsec_trace("Certificate is valid.\n");
+                        validity = ::com::sun::star::security::CertificateValidity::VALID;
+                    }
+                    else
+                    {
+                        xmlsec_trace("Certificate is invalid.\n");
+                    }
+                }
+                else
+                {
+                    //valid and revocation information available
+                    xmlsec_trace("Certificate is valid.\n");
+                    validity = ::com::sun::star::security::CertificateValidity::VALID;
+                }
+            }
+            else
+            {
+                //invalid
+                xmlsec_trace("Certificate is invalid.\n");
+                validity = ::com::sun::star::security::CertificateValidity::INVALID ;
+            }
         }
-
-        if (chainStatus & CERT_TRUST_IS_NOT_VALID_FOR_USAGE
-            || chainStatus & CERT_TRUST_IS_CYCLIC
-            || chainStatus & CERT_TRUST_INVALID_POLICY_CONSTRAINTS
-            || chainStatus & CERT_TRUST_INVALID_BASIC_CONSTRAINTS
-            || chainStatus & CERT_TRUST_INVALID_NAME_CONSTRAINTS
-            || chainStatus & CERT_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT
-            || chainStatus & CERT_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT
-            || chainStatus & CERT_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT
-            || chainStatus & CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT
-            || chainStatus & CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY
-            || chainStatus & CERT_TRUST_CTL_IS_NOT_TIME_VALID
-            || chainStatus & CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID
-            || chainStatus & CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE
-            || chainStatus & CERT_TRUST_IS_NOT_TIME_VALID
-            || chainStatus & CERT_TRUST_IS_NOT_TIME_NESTED
-            || chainStatus & CERT_TRUST_IS_REVOKED
-            || chainStatus & CERT_TRUST_IS_NOT_SIGNATURE_VALID
-            || chainStatus & CERT_TRUST_IS_UNTRUSTED_ROOT
-            || chainStatus & CERT_TRUST_INVALID_EXTENSION
-            || chainStatus & CERT_TRUST_IS_PARTIAL_CHAIN )
+        else
         {
-            validity = ::com::sun::star::security::CertificateValidity::INVALID;
+            xmlsec_trace("CertGetCertificateChaine failed.\n");
         }
-/*
-
-        if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_VALID ) == CERT_TRUST_IS_NOT_TIME_VALID ) {
-            validity |= ::com::sun::star::security::CertificateValidity::TIME_INVALID ;
-        }
-
-        if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_NESTED ) == CERT_TRUST_IS_NOT_TIME_NESTED ) {
-            validity |= ::com::sun::star::security::CertificateValidity::NOT_TIME_NESTED;
-        }
-
-        if( ( chainStatus & CERT_TRUST_IS_REVOKED ) == CERT_TRUST_IS_REVOKED ) {
-            validity |= ::com::sun::star::security::CertificateValidity::REVOKED ;
-        }
-
-        //JL My interpretation is that CERT_TRUST_IS_OFFLINE_REVOCATION  does not mean that the certificate was revoked.
-        //Instead the CRL cannot be retrieved from the net, or an available CRL is stale (too old).
-        //This error may also occurs if the certificate does not contain the CDP (Certificate Distribution Point)extension
-        if( ( chainStatus & CERT_TRUST_IS_OFFLINE_REVOCATION ) == CERT_TRUST_IS_OFFLINE_REVOCATION ) {
-            validity |= ::com::sun::star::security::CertificateValidity::UNKNOWN_REVOKATION ;
-        }
-
-        if( ( chainStatus & CERT_TRUST_IS_NOT_SIGNATURE_VALID ) == CERT_TRUST_IS_NOT_SIGNATURE_VALID ) {
-            validity |= ::com::sun::star::security::CertificateValidity::SIGNATURE_INVALID ;
-        }
-
-        if( ( chainStatus & CERT_TRUST_IS_UNTRUSTED_ROOT ) == CERT_TRUST_IS_UNTRUSTED_ROOT ) {
-            validity |= ::com::sun::star::security::CertificateValidity::ROOT_UNTRUSTED ;
-        }
-
-        if( ( chainStatus & CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) == CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) {
-            validity |= ::com::sun::star::security::CertificateValidity::UNKNOWN_REVOKATION ;
-        }
-
-        if( ( chainStatus & CERT_TRUST_INVALID_EXTENSION ) == CERT_TRUST_INVALID_EXTENSION ) {
-            validity |= ::com::sun::star::security::CertificateValidity::EXTENSION_INVALID ;
-        }
-
-        if( ( chainStatus & CERT_TRUST_IS_PARTIAL_CHAIN ) == CERT_TRUST_IS_PARTIAL_CHAIN ) {
-            validity |= ::com::sun::star::security::CertificateValidity::CHAIN_INCOMPLETE ;
-        }
-        //todo
-        if (chainStatus & CERT_TRUST_IS_NOT_VALID_FOR_USAGE
-            || chainStatus & CERT_TRUST_IS_CYCLIC
-            || chainStatus & CERT_TRUST_INVALID_POLICY_CONSTRAINTS
-            || chainStatus & CERT_TRUST_INVALID_BASIC_CONSTRAINTS
-            || chainStatus & CERT_TRUST_INVALID_NAME_CONSTRAINTS
-            || chainStatus & CERT_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT
-            || chainStatus & CERT_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT
-            || chainStatus & CERT_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT
-            || chainStatus & CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT
-            || chainStatus & CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY
-            || chainStatus & CERT_TRUST_CTL_IS_NOT_TIME_VALID
-            || chainStatus & CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID
-            || chainStatus & CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE)
-        {
-            validity = ::com::sun::star::security::CertificateValidity::INVALID;
-        }
-*/
-    } else {
-        validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
 
     if (pChainContext)
+    {
         CertFreeCertificateChain(pChainContext);
+        pChainContext = NULL;
+    }
 
     //Close the additional store, do not destroy the contained certs
     CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
