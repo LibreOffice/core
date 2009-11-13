@@ -346,23 +346,6 @@ void PolyPolygon::Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData 
 
 // -----------------------------------------------------------------------
 
-void PolyPolygon::GetSimple( PolyPolygon& rResult ) const
-{
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
-    rResult.Clear();
-
-    Polygon aPolygon;
-
-    for( USHORT i = 0; i < mpImplPolyPolygon->mnCount; i++ )
-    {
-        mpImplPolyPolygon->mpPolyAry[ i ]->GetSimple( aPolygon );
-        rResult.Insert( aPolygon );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void PolyPolygon::AdaptiveSubdivide( PolyPolygon& rResult, const double d ) const
 {
     DBG_CHKTHIS( PolyPolygon, NULL );

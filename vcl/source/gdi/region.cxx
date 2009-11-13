@@ -2537,7 +2537,13 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
         rOStrm << bHasPolyPolygon;
 
         if( bHasPolyPolygon )
-            rOStrm << rRegion.GetPolyPolygon();
+        {
+            // #i105373#
+            PolyPolygon aNoCurvePolyPolygon;
+            rRegion.GetPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+            rOStrm << aNoCurvePolyPolygon;
+        }
     }
 
     return rOStrm;
