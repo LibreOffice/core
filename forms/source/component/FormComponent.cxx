@@ -2804,7 +2804,14 @@ void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw (
 //--------------------------------------------------------------------
 void OBoundControlModel::transferDbValueToControl( )
 {
-    setControlValue( translateDbColumnToControlValue(), eDbColumnBinding );
+    try
+    {
+        setControlValue( translateDbColumnToControlValue(), eDbColumnBinding );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //------------------------------------------------------------------------------
