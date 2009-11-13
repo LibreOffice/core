@@ -30,21 +30,13 @@
 package complex.connectivity;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XCloseable;
 import com.sun.star.sdbc.*;
-import com.sun.star.sdb.*;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 
 import com.sun.star.lang.XMultiServiceFactory;
 
 import complexlib.ComplexTestCase;
 
-import java.io.PrintWriter;
 
-import util.utils;
-import java.util.*;
-import java.io.*;
 //import complex.connectivity.DBaseStringFunctions;
 
 public class GeneralTest  extends ComplexTestCase {
@@ -63,7 +55,7 @@ public class GeneralTest  extends ComplexTestCase {
     public void test() throws com.sun.star.uno.Exception,com.sun.star.beans.UnknownPropertyException {
         try
         {
-            XDriverManager driverManager = (XDriverManager)UnoRuntime.queryInterface(XDriverManager.class,((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdbc.DriverManager"));
+            XDriverManager driverManager = UnoRuntime.queryInterface( XDriverManager.class, ((XMultiServiceFactory)param.getMSF()).createInstance( "com.sun.star.sdbc.DriverManager" ) );
             String databaseURL = "sdbc:calc:singin' in the rain" ;
             XConnection catalogConnection = driverManager.getConnection(databaseURL);
             failed();

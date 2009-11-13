@@ -208,10 +208,8 @@ public class HsqlDatabase extends AbstractDatabase
     public void createTableInSDBCX(final HsqlTableDescriptor _tableDesc) throws SQLException, ElementExistException
     {
         final XPropertySet sdbcxDescriptor = _tableDesc.createSdbcxDescriptor(defaultConnection());
-        final XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(
-                XTablesSupplier.class, defaultConnection());
-        final XAppend appendTable = (XAppend) UnoRuntime.queryInterface(
-                XAppend.class, suppTables.getTables());
+        final XTablesSupplier suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, defaultConnection().getXConnection() );
+        final XAppend appendTable = UnoRuntime.queryInterface( XAppend.class, suppTables.getTables() );
         appendTable.appendByDescriptor(sdbcxDescriptor);
     }
 }

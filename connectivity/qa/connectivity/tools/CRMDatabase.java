@@ -44,10 +44,10 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XRefreshable;
+import connectivity.tools.sdb.Connection;
 
 /** implements a small Customer Relationship Management database
  *
@@ -60,7 +60,7 @@ public class CRMDatabase
     private final XMultiServiceFactory        m_orb;
     private final HsqlDatabase                m_database;
     private final DataSource                  m_dataSource;
-    private final XConnection                 m_connection;
+    private final Connection                  m_connection;
 
     /** constructs the CRM database
      */
@@ -80,7 +80,7 @@ public class CRMDatabase
             };
             loader.loadComponentFromURL( m_database.getDocumentURL(), "_blank", 0, loadArgs );
             getDocumentUI().connect();
-            m_connection = getDocumentUI().getActiveConnection();
+            m_connection = new Connection( getDocumentUI().getActiveConnection() );
         }
         else
         {
@@ -117,7 +117,7 @@ public class CRMDatabase
     // --------------------------------------------------------------------------------------------------------
     /** returns the default connection to the database
      */
-    public final XConnection getConnection()
+    public final Connection getConnection()
     {
         return m_connection;
     }
@@ -125,7 +125,9 @@ public class CRMDatabase
     // --------------------------------------------------------------------------------------------------------
     public void saveAndClose() throws SQLException, IOException
     {
-        getDocumentUI().closeSubComponents();
+        XDatabaseDocumentUI ui = getDocumentUI();
+        if ( ui != null )
+            ui.closeSubComponents();
         m_database.store();
         m_database.closeAndDelete();
     }
@@ -219,9 +221,7 @@ public class CRMDatabase
 
         // since we created the tables by directly executing the SQL statements, we need to refresh
         // the tables container
-        final XTablesSupplier suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, m_connection );
-        final XRefreshable refreshTables = UnoRuntime.queryInterface( XRefreshable.class, suppTables.getTables() );
-        refreshTables.refresh();
+        m_connection.refreshTables();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -233,7 +233,7 @@ public class CRMDatabase
         try
         {
             final XMultiServiceFactory factory = UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, m_database.defaultConnection() );
+                    XMultiServiceFactory.class, m_database.defaultConnection().getXConnection() );
             composer = UnoRuntime.queryInterface(
                     XSingleSelectQueryComposer.class, factory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
             unparseableQuery = m_dataSource.getQueryDefinition( "unparseable" );
