@@ -519,15 +519,25 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         return;
     }
 
-    if ( !bCreateNew && !xModel->getURL().getLength() )
+    if ( !bCreateNew )
     {
+        // We need to XLoadable::load the document if it does not yet have an URL.
+        // If it already *does* have an URL, then it was either passed in the arguments, or a previous incarnation
+        // of that model existed before (which can happen if a model is closed, but an associated DataSource is kept
+        // alive 'til loading the document again).
+        bool bNeedLoad = ( xModel->getURL().getLength() == 0 );
         try
         {
             aMediaDesc.put( "FileName", _rURL );
-            Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
-
             Sequence< PropertyValue > aResource( aMediaDesc.getPropertyValues() );
-            xLoad->load( aResource );
+
+            if ( bNeedLoad )
+            {
+                Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
+                xLoad->load( aResource );
+            }
+
+            // always attach the resource, even if the document has not been freshly loaded
             xModel->attachResource( _rURL, aResource );
         }
         catch(const Exception&)
