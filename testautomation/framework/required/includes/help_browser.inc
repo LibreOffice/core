@@ -39,7 +39,7 @@
 
 testcase tHelp_DialogTest
 
-    printlog( "Resource test for the help viewer" )
+    printlog( "Resource test for the Help Browser" )
 
     dim brc as boolean
 
@@ -59,6 +59,18 @@ testcase tHelp_DialogTest
     hSelectHelpTab( "find" )
     hSelectHelpTab( "bookmarks" )
     
+
+    brc = hSelectHelpTab( "content" )
+    call DialogTest( ContentPage )
+
+    brc = hSelectHelpTab( "index" )
+    call DialogTest( IndexPage )
+
+    brc = hSelectHelpTab( "find" )
+    call DialogTest( FindPage )
+
+    brc = hSelectHelpTab( "bookmarks" )
+    call DialogTest( BookmarksPage )
 
     Kontext "StarOfficeHelp"
     hCloseHelp()
@@ -94,6 +106,7 @@ testcase tHelp_ToolBar
     printlog "- Index -> off"
     Index.Click()
 
+    ' Backward- and Forward-button
     printlog "- activate 'Index'-page"
     brc = hSelectHelpTab( "index" )
     
@@ -118,6 +131,7 @@ testcase tHelp_ToolBar
     GoToStart.Click()
 
     printlog "- print"
+    ' the print-dialog must be shown ( if direct-printing is activated => BUG )
     PrintButton.Click()
 
     kontext "active"

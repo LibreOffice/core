@@ -56,6 +56,7 @@ testcase tBasicLibraryExport
     
     dim iCurrentLib as integer
 
+    printlog( "Delete potential leftovers from prior test run" )
     if ( dir( cFile ) <> "" ) then
         QAErrorLog( "Files from prior test run exist: " & cFile )
         hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "dialog.xlb"  )
@@ -64,24 +65,30 @@ testcase tBasicLibraryExport
         rmdir( hGetWorkPath() & LIBRARY_NAME ) : printlog( "Remove directory" )
     endif
     
+    printlog( "Open a new text document" )
     hInitSingleDoc()
     hChangeDoc()
     
+    printlog( "Open another text document" )
     gApplication = "WRITER"
     hCreateDocument()
     
+    printlog( "Open the BASIC organizer (Tools/Macros/BASIC)" )
     ToolsMacro_uno
     
     kontext "Makro"
+    printlog( "Select the document" )
     iNodeCount = hGetNodeCount( MakroAus )
     cDocumentName = hSelectNode( MakroAus, iNodeCount )
-    
+
+    printlog( "Click <Manage...>" )    
     Verwalten.click()
     
+    printlog( "Open the Libraries tabpage" )
     hSelectBasicObjectOrganizerTab( 3 )
     
-    printlog( "Select document Untitled2" )
     kontext "TabBibliotheken"
+    printlog( "Select document Untitled2" )
     Bibliothek.select( DOCUMENT_POSITION )
     
     ' verify that the correct document is selected
@@ -90,35 +97,46 @@ testcase tBasicLibraryExport
         goto endsub
     endif
     
+    printlog( "Click <New>" )
     Neu.click()
     
     kontext "NeueBibliothek"
+    printlog( "Name the library: " & LIBRARY_NAME )
     BibliotheksName.setText( LIBRARY_NAME )
     NeueBibliothek.ok()
     
     kontext "TabBibliotheken"
+    printlog( "Verify that the new library is selected in the libraries list" )
     cLibraryName = BibliotheksListe.getSelText()
     
+    printlog( "Click <Edit>" )
     Bearbeiten.click()
 
+    printlog( "Insert a macro" )
     hInsertMacroFromFile( LIBRARY_NAME )
     
+    printlog( "Close the BASIC IDE" )
     hCloseBasicIDE()
     
+    printlog( "Open the BASIC macro organizer" )
     ToolsMacro_uno
     
     kontext "Makro"
+    printlog( "Select the work document" )
     iNodeCount = hGetNodeCount( MakroAus )
     hSelectNode( MakroAus, iNodeCount )    
     
+    printlog( "Click <Manage...>" )
     Verwalten.click()
     
+    printlog( "Go to the libraries-tab" )
     hSelectBasicObjectOrganizerTab( 3 )
     
     kontext "TabBibliotheken"
+    printlog( "Select the document at pos. " & DOCUMENT_POSITION )
     Bibliothek.select( DOCUMENT_POSITION )
     
-    ' verify that the correct document is selected
+    printlog( "Verify that the correct document is selected" )
     if ( Bibliothek.getSelText() <> cDocumentName ) then
         warnlog( "Incorrect document selected on libraries tab, aborting" )
         goto endsub
@@ -136,43 +154,49 @@ testcase tBasicLibraryExport
     printlog( "Click export" )
     Export.click()
     
-    printlog( "Export as library" )
     kontext "ExportBasicLibraryDlg"
     if ( ExportBasicLibraryDlg.exists( 2 ) ) then
-    
+
+        printlog( "Export as library" )    
         ExportAsLibrary.check()
         ExportBasicLibraryDlg.ok()
+        
+        kontext "Active"
+        printlog( "Check for non existing directory warning" )
+        ' Note: Querying for an Active will also find the Libraries tabpage.
+        '       So we need to check which active we've got. RT = 373 is the tabcontrol.
+        if ( Active.exists( 1 ) ) then
+            if ( Active.getRT() <> 373 ) then
+                warnlog( "Unexpected messagebox: " & Active.getText() )
+                active.ok()
+            else
+                printlog( "Back on tab-control, good." )
+            endif
+        else
+            printlog( "No warning for non-existing directory, good." )
+        endif
 
-        printlog( "Use default path (=workdir)" )
         Kontext "OeffnenDlg"
-        if ( Oeffnendlg.exists( 2 ) ) then
+        if ( Oeffnendlg.exists( 1 ) ) then
             Oeffnen.click()
         else
-            kontext "active"
-            if ( active.exists() ) then
-                cMsg = active.getText()
-                cMsg = hRemoveLineBreaks( cMsg )
-                warnlog( "Unexpected messagebox: " & cMsg )
-                active.ok()
-            endif
+            warnlog( "File Open dialog not displayed" )
         endif
         
     else
         warnlog( "The ""Export Library"" dialog was not displayed" )
     endif
         
-    printlog( "Close the macro/libraries organizer" )
     kontext "TabBibliotheken"
+    printlog( "Close the macro/libraries organizer" )
     if ( TabBibliotheken.exists( 1 ) ) then
         TabBibliotheken.cancel()
         
-        printlog( "Cancel macro organizer" )
         kontext "Makro"
+        printlog( "Cancel macro organizer" )
         Makro.cancel()
         
-        while( getDocumentCount > 0 ) 
-            hDestroyDocument()
-        wend
+        hFileCloseAll()
     else
         warnlog( "Dialog <TabBibliotheken> could not be accessed" )
         call exitRestartTheOffice()

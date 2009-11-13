@@ -324,6 +324,7 @@ function hCreateDocument() as boolean
         endif
     endif
     if ( VERBOSE ) then printlog( CFN & "New document created. Open: " & iDocCountAfter )
+    '///</ul>
     
 end function
 

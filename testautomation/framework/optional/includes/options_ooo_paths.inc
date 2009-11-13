@@ -54,14 +54,12 @@ testcase tOOoPaths
     dim i68646 as boolean
 
     i68646 = FALSE
-    '///check if all settings are saved in configuration ( StarOffice / Paths )
     sTTInputPath = ConvertPath ( gOfficePath + "user\work" )
     '                  Name;         which open dialog; Count of Paths
 '    call GetPathList ( lsPathOptions (), lsDialtype (), lsEntry () )
     ' which open dialog: 1: File Open; Else (2): Paths dialog
     'call DumpPathList( lsPathOptions (), lsDialtype (), lsEntry () )
 
-    '///open tools/options/staroffice/paths
     ToolsOptions
     hToolsOptions("StarOffice", "Paths")
 
@@ -82,7 +80,6 @@ testcase tOOoPaths
         Typ.TypeKeys( "<DOWN>" )
     next i
 
-    '///save all settings - not needed, since it was resetted to standard....
     printlog("save settings")
     for i = 1 to iTyp
         if i <> 1 then
@@ -205,17 +202,13 @@ testcase tOOoPaths
         printlog "Count of File Open Dialogs: " + iCountOfDialogs(2)
     endif
     
-    '///close the options dialog with OK
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     Sleep (4)
-    '///exit and restart StarOffice
     printlog("Exit/restart StarOffice")
     ExitRestartTheOffice
-    '///check if all changes are saved
     printlog( "Check changes")
     ToolsOptions
-    '///open tools/options/staroffice/paths and compare all entries
     hToolsOptions ( "StarOffice", "Paths" )
 
     for i = 1 to iTyp
@@ -294,22 +287,17 @@ testcase tOOoPaths
         kontext "tabpfade"
     next i
     
-    '///set all changes to default
     printlog("Reset to default ( with default-button )")
-    '///select each entry and press 'Default'
     if gPlatgroup = "unx" then
         hToolsOptions ( "StarOffice", "General" )
     endif
     Sleep (4)
-    '///close the options dialog with OK
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK()
     Sleep (4)
-    '///check the reset
     printlog("Check the reset")
     ToolsOptions
     hToolsOptions ( "StarOffice", "Paths" )
-    '///open tools/options/staroffice/paths and compare all entries with the saved default settings
     for i = 1 to iTyp
         if i <> 1 then
             Typ.TypeKeys "<Down>"
@@ -359,10 +347,8 @@ testcase tOOoPaths
         hToolsOptions ( "StarOffice", "General" )
     endif
     Sleep (4)
-    '///close the options dialog with OK
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    '///exit and restart StarOffice IMPORTANT! to get the path's activated that have been changed!
     printlog("Exit/restart StarOffice")
     ExitRestartTheOffice
 endcase

@@ -437,7 +437,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tRubyText_1
-
     '/// If Ruby Text is applied and longer than its Base Text it will stretch over more grid cells than the base text itself.
     Dim testFile , sRubyText as String
 
@@ -481,7 +480,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tIndentsTest_1
-
     '/// Indents should work and always indenting as close as possible to their measurements by snapping to the appropriate grid cell. Tabs therefore will be ignored.
     Dim testFile , sCorrectPage1 , sCorrectPage2 as String
 

@@ -346,7 +346,6 @@ testcase tRubyDialog_5
         endif
 
         if (NOT bError) then
-            '/// delete the new entry and recover to the default.
             Kontext "Stylist"
             iCount = Vorlagenliste.getItemCount
             i=0
