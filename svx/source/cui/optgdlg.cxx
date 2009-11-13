@@ -1078,7 +1078,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     aIconSizeLB.SelectEntryPos( nSizeLB_InitialSelection );
     aIconSizeLB.SaveValue();
 
-    if( aMiscOptions.GetSymbolsStyle() != SFX_SYMBOLS_STYLE_AUTO )
+    if( aMiscOptions.GetSymbolsStyle() != STYLE_SYMBOLS_AUTO )
         nStyleLB_InitialSelection = aIconStyleItemId[aMiscOptions.GetCurrentSymbolsStyle()];
 
     aIconStyleLB.SelectEntryPos( nStyleLB_InitialSelection );
