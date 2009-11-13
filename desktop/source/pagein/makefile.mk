@@ -81,21 +81,25 @@ $(MISC)$/$(TARGET)-calc : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sc$(DFTDLLPOST)  >  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
+    @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-draw : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sd$(DFTDLLPOST)  >  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
+    @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-impress : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sd$(DFTDLLPOST)  >  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
+    @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-writer : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sw$(DFTDLLPOST)  >  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
+    @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 # sorted in approx. reverse load order (ld.so.1)
 $(MISC)$/$(TARGET)-common : makefile.mk
@@ -121,7 +125,7 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)ucb1$(DLLPOST)     >> $@
     @-echo configmgr2$(UNODLLPOST)     >> $@
 #
-    @-echo $(DLLPRE)dtransX11$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)dtrans$(DLLPOST)   >> $@
     @-echo $(DLLPRE)vclplug_gen$(DFTDLLPOST) >> $@
 .IF "$(ENABLE_GTK)" != ""
     @-echo $(DLLPRE)vclplug_gtk$(DFTDLLPOST) >> $@
@@ -130,7 +134,6 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)vclplug_kde$(DFTDLLPOST) >> $@
 .ENDIF # ENABLE_KDE
 #
-    @-echo $(DLLPRE)psp$(DFTDLLPOST)     >> $@
     @-echo $(DLLPRE)basegfx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)sot$(DFTDLLPOST)     >> $@
     @-echo $(DLLPRE)xcr$(DFTDLLPOST)     >> $@
