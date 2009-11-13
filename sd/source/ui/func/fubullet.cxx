@@ -52,9 +52,6 @@
 #include <svtools/ctloptions.hxx>
 #include <svtools/itempool.hxx>
 
-#ifdef IRIX
-#include <basic/sbx.hxx>
-#endif
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "drawview.hxx"
