@@ -282,7 +282,7 @@ public:
 
 inline BOOL SvxFrameWindow_Impl::IsHighContrast( void ) const
 {
-    return GetDisplayBackground().GetColor().IsDark();
+    return GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 //========================================================================

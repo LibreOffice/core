@@ -1141,7 +1141,7 @@ void ExtensionBox_Impl::checkEntries()
 //------------------------------------------------------------------------------
 bool ExtensionBox_Impl::isHCMode()
 {
-    return (bool)GetDisplayBackground().GetColor().IsDark();
+    return (bool)GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 //------------------------------------------------------------------------------

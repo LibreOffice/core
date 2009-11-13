@@ -137,7 +137,7 @@ void ExtrusionDirectionWindow::implInit()
     mpDirectionSet->SetColCount( 3 );
     mpDirectionSet->EnableFullItemMode( FALSE );
 
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
     {
@@ -174,7 +174,7 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         USHORT i;
         for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
@@ -514,7 +514,7 @@ void ExtrusionDepthWindow::implInit()
 
     mpMenu->SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     String aEmpty;
     mpMenu->appendEntry( 0, aEmpty, bHighContrast ? maImgDepth0h : maImgDepth0 );
@@ -635,7 +635,7 @@ void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         mpMenu->setEntryImage( 0, bHighContrast ? maImgDepth0h : maImgDepth0 );
         mpMenu->setEntryImage( 1, bHighContrast ? maImgDepth1h : maImgDepth1 );
@@ -882,7 +882,7 @@ void ExtrusionLightingWindow::implInit()
     mpLightingSet->SetColCount( 3 );
     mpLightingSet->EnableFullItemMode( FALSE );
 
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
     {
@@ -949,7 +949,7 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
     mnDirection = nDirection;
     mbDirectionEnabled = bEnabled;
 
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     if( !bEnabled )
         nDirection = FROM_FRONT;
@@ -1022,7 +1022,7 @@ void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         implSetDirection( mnDirection, mbDirectionEnabled );
         mpMenu->setEntryImage( 0, bHighContrast ? maImgBrighth : maImgBright );
@@ -1231,7 +1231,7 @@ void ExtrusionSurfaceWindow::implInit()
 {
     SetHelpId( HID_POPUP_EXTRUSION_SURFACE );
 
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
 //  mpSurfaceForewarder = new SfxStatusForwarder( SID_EXTRUSION_SURFACE, *this );
 
@@ -1316,7 +1316,7 @@ void ExtrusionSurfaceWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         mpMenu->appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
         mpMenu->appendEntry( 1, String( SVX_RES( STR_MATTE ) ), bHighContrast ? maImgSurface2h : maImgSurface2 );

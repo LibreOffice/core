@@ -76,7 +76,7 @@ void SvxSwFrameExample::InitColors_Impl( void )
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     m_aBgCol = Color( rSettings.GetWindowColor() );                             // old: COL_WHITE
 
-    BOOL bHC = m_aBgCol.IsDark();
+    BOOL bHC = rSettings.GetHighContrastMode();
 
     m_aFrameColor = Color( COL_LIGHTGREEN );
     m_aAlignColor = Color( COL_LIGHTRED );
