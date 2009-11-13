@@ -46,7 +46,7 @@
 namespace store
 {
 
-struct OStoreSuperBlockPage;
+struct SuperBlockPage;
 
 class OStorePageBIOS : public store::OStoreObject
 {
@@ -115,8 +115,7 @@ public:
     storeError allocate (
         OStorePageObject& rPage, Allocation eAllocation = ALLOCATE_FIRST);
 
-    storeError free (
-        OStorePageData & /* rData */, sal_uInt32 nAddr);
+    storeError free (sal_uInt32 nAddr);
 
     /** Page I/O.
      */
@@ -182,8 +181,7 @@ private:
     rtl::Reference<ILockBytes>    m_xLockBytes;
     osl::Mutex                    m_aMutex;
 
-    typedef OStoreSuperBlockPage  SuperPage;
-    SuperPage                    *m_pSuper;
+    SuperBlockPage *              m_pSuper;
 
     bool                          m_bWriteable;
 
@@ -215,21 +213,16 @@ private:
 
     class AceCache;
 
-    /** create (SuperBlock).
+    /** Initialization.
      */
-    storeError create (sal_uInt16 nPageSize);
-
-    /** SuperBlock verification and repair.
-     */
-    storeError verify (SuperPage *&rpSuper);
+    storeError initialize_Impl (
+        ILockBytes *    pLockBytes,
+        storeAccessMode eAccessMode,
+        sal_uInt16 &    rnPageSize);
+    void cleanup_Impl();
 
     /** Page Maintenance.
      */
-    storeError peek (
-        OStorePageData &rData, sal_uInt32 nAddr);
-    storeError poke (
-        OStorePageData &rData, sal_uInt32 nAddr);
-
     storeError loadObjectAt_Impl (
         OStorePageObject & rPage, sal_uInt32 nAddr);
     storeError saveObjectAt_Impl (

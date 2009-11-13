@@ -273,8 +273,7 @@ storeError OStoreBTreeNodeObject::remove (
         if (xPageL->usageCount() == 0)
         {
             // Free empty link node.
-            OStorePageData aPageHead;
-            eErrCode = rBIOS.free (aPageHead, xPageL->location());
+            eErrCode = rBIOS.free (xPageL->location());
             if (eErrCode != store_E_None)
                 return eErrCode;
 
@@ -298,7 +297,7 @@ storeError OStoreBTreeNodeObject::remove (
                     {
                         rPageL.merge (rPageR);
 
-                        eErrCode = rBIOS.free (aPageHead, rPageR.location());
+                        eErrCode = rBIOS.free (rPageR.location());
                     }
                 }
             }
