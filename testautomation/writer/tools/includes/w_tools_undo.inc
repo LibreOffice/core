@@ -414,17 +414,17 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
-				Case "InsertNote"
+				Case "InsertComment"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Insert note" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Insert comment" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar nota" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 86: if UndoStringFromUndoList <> "插入 批注" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
-				Case "DeleteNote"
+				Case "DeleteComment"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Delete note" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Delete comment" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Eliminar nota" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 86: if UndoStringFromUndoList <> "删除 批注" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList

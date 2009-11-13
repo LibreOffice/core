@@ -190,7 +190,7 @@ testcase tiToolsSpellcheckError
     ToolsOptions
     Kontext "ExtrasOptionenDlg"
     hToolsOptions("LANGUAGESETTINGS","Languages")
-    Westlich.Select 32
+    Westlich.Select 34
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     printlog "Create 1 textbox with 1 spelling error (test replace always)"
@@ -489,16 +489,6 @@ testcase tiToolsSpellcheckCheck
         goto endsub
     end if
     Kontext "Spellcheck"
-    printlog "Save the current Dictionary Language."
-    s = DictionaryLanguage.GetSelIndex
-    for i= 1 to DictionaryLanguage.GetItemCount
-        DictionaryLanguage.Select i
-        sleep 1
-        printlog "Dictionary language is: # "+i+": "+DictionaryLanguage.GetSelText
-    next i
-    iWord(1) = 1
-    iWord(2) = 2
-    DictionaryLanguage.Select s
     printlog "Close dialog 'Spellcheck'."
     Spellcheck.Close
     Kontext "Active"

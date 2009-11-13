@@ -55,7 +55,7 @@ sub w_004_
     Call tInsertCaption
     Call tInsertBookmark
     Call tInsertCrossReference
-    Call tInsertNote
+    Call tInsertComment
     Call tInsertScript
     Call tInsertIndexesEntry
     Call tInsertIndexesIndex
@@ -479,22 +479,22 @@ endcase
 
 '-----------------------------------------------------------
 
-testcase tInsertNote
+testcase tInsertComment
     dim sNoteText as String
-    PrintLog "- Insert / Note"
+    PrintLog "- Insert / Comment"
 
     Call hNewDocument
 
-    printlog " Insert / Note"
+    printlog " Insert / Comment"
     InsertNoteWriter
     Kontext "DocumentWriter"
-    sNoteText = "Testnote inserted by testtool !"
+    sNoteText = "Comment inserted by testtool !"
     Call wTypeKeys (sNoteText)
 
     Call wNavigatorAuswahl( 11, 1 )
     Kontext "NavigatorWriter"
     if Auswahlliste.Gettext <> sNoteText then
-        warnlog ("Note was not inserted correctly (Focus problem?")
+        warnlog ("Comment was not inserted correctly (Focus problem?")
     end if
 
     printlog " Close active document"

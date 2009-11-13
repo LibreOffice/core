@@ -172,7 +172,7 @@ testcase tXML_OLE_Conversion ( sCurrentTestDocument as STRING )
             select case sCurrentOLE
                    case "mat"
                         SAXSeekElement( 1 )
-                        if SAXGetElementName() <> "math:math" then
+                        if SAXGetElementName() <> "math" then
                             warnlog "A Math object was expected here -> Check this out!"
                         endif
                    case else
