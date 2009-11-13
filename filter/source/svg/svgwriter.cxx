@@ -620,7 +620,15 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
         {
             const Polygon&  rPoly = rPolyPoly[ i ];
             const USHORT    nSize = rPoly.GetSize();
-            Polygon         aMappedPoly( nSize );
+
+            // #i102224# congratulations, this throws away the curve flags
+            // and makes ANY curved polygon look bad. The Flags HAVE to be
+            // copied, too. It's NOT enough to copy the mapped points. Just
+            // copy the original polygon completely and REPLACE the points
+
+            // old: Polygon         aMappedPoly( nSize );
+            // new:
+            Polygon aMappedPoly(rPoly);
 
             for( USHORT n = 0; n < nSize; n++ )
                 aMappedPoly[ n ] = ImplMap( rPoly[ n ] );
