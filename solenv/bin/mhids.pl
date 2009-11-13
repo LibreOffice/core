@@ -37,6 +37,7 @@ my $srs;
 my $prjname;
 my $defs;
 my $solarincludes;
+my $verbose = 0;
 
 my $debug = 0;
 my $filebase;
@@ -82,7 +83,7 @@ sub setcompiler
         $preprocess_flag = "-E"; # preprocess to stdout
     } elsif ( "$whichcom" eq "MSC" ) {
         $appext = ".exe"; # windows for now
-        $compiler = "cl";
+        $compiler = "cl -nologo";
         $outbin_flag = "-Fe";
         $outobj_flag = "-Fo";
         $objext = ".obj";
@@ -109,9 +110,24 @@ sub setcompiler
 }
 
 #---------------------------------------------------
-$filename = shift @ARGV;
-$srs = shift @ARGV;
-$prjname = shift @ARGV;
+$filename = undef;
+$srs = undef;
+$prjname = undef;
+
+my @expectedArgs = ( \$filename, \$srs, \$prjname );
+my $expectedArgsIndex = 0;
+while ( ( $#ARGV >= 0 ) && ( $expectedArgsIndex < 3 ) )
+{
+    $_ = shift @ARGV;
+    if ( /^-verbose$/ )
+    {
+        $verbose = 1;
+        next;
+    }
+    ${$expectedArgs[ $expectedArgsIndex ]} = $_;
+    ++$expectedArgsIndex;
+}
+
 $defs = join " ",@ARGV if ($#ARGV);
 
 if ( !defined $prjname ) { die "ERROR - check usage\n"; }
@@ -144,7 +160,7 @@ $workfile = "$tmpdir/${filebase}_".$$;
 # now get $workfile ready for shell usage...
 $shell_workfile = $workfile;
 
-print "workfile: $workfile\n";
+print "workfile: $workfile\n" if $verbose;
 
 #remove old objects which remained in place by a former bug
 unlink "$workfile.obj";
@@ -175,15 +191,16 @@ if ( defined $ENV{"NO_HID_FILES"} ) {
 #echo "perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0"
 #call  perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0
 
-print  "$ENV{SOLARBINDIR}/hidc $filename ${shell_workfile}.c1 $prjname \n";
-$ret = system "$ENV{SOLARBINDIR}/hidc $filename ${shell_workfile}.c1 $prjname";
+my $verboseSwitch = $verbose ? "-verbose" : "";
+print         "$ENV{SOLARBINDIR}/hidc $verboseSwitch $filename ${shell_workfile}.c1 $prjname\n" if $verbose;
+$ret = system "$ENV{SOLARBINDIR}/hidc $verboseSwitch $filename ${shell_workfile}.c1 $prjname";
 if ( $ret ) {
     push @cleanuplist, ".c1";
     cleandie("ERROR - calling \"hidc\" failed");
 }
 push @cleanuplist, ".c1";
 
-print         "$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2\n";
+print         "$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2\n" if $verbose;
 $ret = system "$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2";
 if ( $ret ) {
     push @cleanuplist, ".c2";
@@ -226,7 +243,7 @@ if ( $outobj_flag ne "" )
 {
     $outobj_param = "$outobj_flag${shell_workfile}$objext";
 }
-print         "$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext \n";
+print         "$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext \n" if $verbose;
 $ret = system "$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext";
 if ( $ret ) {
     push @cleanuplist, "$appext";

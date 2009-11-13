@@ -8,11 +8,10 @@ HIDRES1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB1NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB1HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB1SRSFILES)))
 $(HIDRES1PARTICLE): $(RESLIB1HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB1HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB1HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES1PARTICLE)
@@ -23,9 +22,9 @@ $(RSC_MULTI1) : \
         $(RESLIB1SRSFILES) \
         $(RESLIB1TARGETN) \
         $(RESLIB1BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -40,7 +39,7 @@ $(RSC_MULTI1) : \
     $(RSC1HEADER) $(RESLIB1SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -59,7 +58,7 @@ $(RSC_MULTI1) : \
 $(RESLIB1TARGETN): \
         $(RESLIB1SRSFILES) \
         $(RESLIB1BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI1)
@@ -86,11 +85,10 @@ HIDRES2PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB2NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB2HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB2SRSFILES)))
 $(HIDRES2PARTICLE): $(RESLIB2HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB2HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB2HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES2PARTICLE)
@@ -101,9 +99,9 @@ $(RSC_MULTI2) : \
         $(RESLIB2SRSFILES) \
         $(RESLIB2TARGETN) \
         $(RESLIB2BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -118,7 +116,7 @@ $(RSC_MULTI2) : \
     $(RSC2HEADER) $(RESLIB2SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -137,7 +135,7 @@ $(RSC_MULTI2) : \
 $(RESLIB2TARGETN): \
         $(RESLIB2SRSFILES) \
         $(RESLIB2BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI2)
@@ -164,11 +162,10 @@ HIDRES3PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB3NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB3HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB3SRSFILES)))
 $(HIDRES3PARTICLE): $(RESLIB3HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB3HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB3HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES3PARTICLE)
@@ -179,9 +176,9 @@ $(RSC_MULTI3) : \
         $(RESLIB3SRSFILES) \
         $(RESLIB3TARGETN) \
         $(RESLIB3BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -196,7 +193,7 @@ $(RSC_MULTI3) : \
     $(RSC3HEADER) $(RESLIB3SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -215,7 +212,7 @@ $(RSC_MULTI3) : \
 $(RESLIB3TARGETN): \
         $(RESLIB3SRSFILES) \
         $(RESLIB3BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI3)
@@ -242,11 +239,10 @@ HIDRES4PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB4NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB4HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB4SRSFILES)))
 $(HIDRES4PARTICLE): $(RESLIB4HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB4HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB4HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES4PARTICLE)
@@ -257,9 +253,9 @@ $(RSC_MULTI4) : \
         $(RESLIB4SRSFILES) \
         $(RESLIB4TARGETN) \
         $(RESLIB4BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -274,7 +270,7 @@ $(RSC_MULTI4) : \
     $(RSC4HEADER) $(RESLIB4SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -293,7 +289,7 @@ $(RSC_MULTI4) : \
 $(RESLIB4TARGETN): \
         $(RESLIB4SRSFILES) \
         $(RESLIB4BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI4)
@@ -320,11 +316,10 @@ HIDRES5PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB5NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB5HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB5SRSFILES)))
 $(HIDRES5PARTICLE): $(RESLIB5HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB5HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB5HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES5PARTICLE)
@@ -335,9 +330,9 @@ $(RSC_MULTI5) : \
         $(RESLIB5SRSFILES) \
         $(RESLIB5TARGETN) \
         $(RESLIB5BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -352,7 +347,7 @@ $(RSC_MULTI5) : \
     $(RSC5HEADER) $(RESLIB5SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -371,7 +366,7 @@ $(RSC_MULTI5) : \
 $(RESLIB5TARGETN): \
         $(RESLIB5SRSFILES) \
         $(RESLIB5BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI5)
@@ -398,11 +393,10 @@ HIDRES6PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB6NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB6HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB6SRSFILES)))
 $(HIDRES6PARTICLE): $(RESLIB6HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB6HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB6HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES6PARTICLE)
@@ -413,9 +407,9 @@ $(RSC_MULTI6) : \
         $(RESLIB6SRSFILES) \
         $(RESLIB6TARGETN) \
         $(RESLIB6BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -430,7 +424,7 @@ $(RSC_MULTI6) : \
     $(RSC6HEADER) $(RESLIB6SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -449,7 +443,7 @@ $(RSC_MULTI6) : \
 $(RESLIB6TARGETN): \
         $(RESLIB6SRSFILES) \
         $(RESLIB6BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI6)
@@ -476,11 +470,10 @@ HIDRES7PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB7NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB7HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB7SRSFILES)))
 $(HIDRES7PARTICLE): $(RESLIB7HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB7HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB7HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES7PARTICLE)
@@ -491,9 +484,9 @@ $(RSC_MULTI7) : \
         $(RESLIB7SRSFILES) \
         $(RESLIB7TARGETN) \
         $(RESLIB7BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -508,7 +501,7 @@ $(RSC_MULTI7) : \
     $(RSC7HEADER) $(RESLIB7SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -527,7 +520,7 @@ $(RSC_MULTI7) : \
 $(RESLIB7TARGETN): \
         $(RESLIB7SRSFILES) \
         $(RESLIB7BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI7)
@@ -554,11 +547,10 @@ HIDRES8PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB8NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB8HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB8SRSFILES)))
 $(HIDRES8PARTICLE): $(RESLIB8HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB8HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB8HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES8PARTICLE)
@@ -569,9 +561,9 @@ $(RSC_MULTI8) : \
         $(RESLIB8SRSFILES) \
         $(RESLIB8TARGETN) \
         $(RESLIB8BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -586,7 +578,7 @@ $(RSC_MULTI8) : \
     $(RSC8HEADER) $(RESLIB8SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -605,7 +597,7 @@ $(RSC_MULTI8) : \
 $(RESLIB8TARGETN): \
         $(RESLIB8SRSFILES) \
         $(RESLIB8BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI8)
@@ -632,11 +624,10 @@ HIDRES9PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB9NAME)_res.
 #HACK cut off the dirty srs files which are included from solver
 RESLIB9HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB9SRSFILES)))
 $(HIDRES9PARTICLE): $(RESLIB9HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB9HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB9HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES9PARTICLE)
@@ -647,9 +638,9 @@ $(RSC_MULTI9) : \
         $(RESLIB9SRSFILES) \
         $(RESLIB9TARGETN) \
         $(RESLIB9BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -664,7 +655,7 @@ $(RSC_MULTI9) : \
     $(RSC9HEADER) $(RESLIB9SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -683,7 +674,7 @@ $(RSC_MULTI9) : \
 $(RESLIB9TARGETN): \
         $(RESLIB9SRSFILES) \
         $(RESLIB9BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI9)
@@ -710,11 +701,10 @@ HIDRES10PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB10NAME)_re
 #HACK cut off the dirty srs files which are included from solver
 RESLIB10HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB10SRSFILES)))
 $(HIDRES10PARTICLE): $(RESLIB10HIDFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    $(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB10HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB10HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES10PARTICLE)
@@ -725,9 +715,9 @@ $(RSC_MULTI10) : \
         $(RESLIB10SRSFILES) \
         $(RESLIB10TARGETN) \
         $(RESLIB10BMPS)
-    @echo using rsc multi-res feature
+    @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -742,7 +732,7 @@ $(RSC_MULTI10) : \
     $(RSC10HEADER) $(RESLIB10SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    $(RSC) -presponse @$(mktmp \
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
@@ -761,7 +751,7 @@ $(RSC_MULTI10) : \
 $(RESLIB10TARGETN): \
         $(RESLIB10SRSFILES) \
         $(RESLIB10BMPS)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI10)

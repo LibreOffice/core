@@ -30,8 +30,6 @@ __cdecl
     time_t t;
     char ebuf[BUFSIZ];
 
-    fprintf(stderr,"%s","cpp version 17.8.1999\n");
-
     setbuf(stderr, ebuf);
     t = time(NULL);
     curtime = ctime(&t);

@@ -31,24 +31,22 @@
 
 
 $(MISC)/%.cxx : %.y
-    @echo ------------------------------
-    @echo Making: $@
-    tr -d "\015" < $< > $(MISC)/stripped_$<
+    @echo "Making:   " $(@:f)
+    $(COMMAND_ECHO)tr -d "\015" < $< > $(MISC)/stripped_$<
     $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
     @@-$(COPY:s/-f//) $@.h $(INCCOM)/$(@:b).hxx
     @@-$(COPY:s/-f//) $(@:d)/$(@:b).hxx $(INCCOM)/$(@:b).hxx
 # fail on not existing .hxx
-    $(TYPE) $(INCCOM)/$(@:b).hxx >& $(NULLDEV)
+    $(COMMAND_ECHO)$(TYPE) $(INCCOM)/$(@:b).hxx >& $(NULLDEV)
 
 $(INCCOM)/yy%.cxx : %.y
-    @echo ------------------------------
-    @echo Making: $@
-    tr -d "\015" < $< > $(MISC)/stripped_$<
-    $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)/stripped_$<
+    @echo "Making:   " $(@:f)
+    $(COMMAND_ECHO)tr -d "\015" < $< > $(MISC)/stripped_$<
+    $(COMMAND_ECHO)$(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
     @@-$(COPY:s/-f//) $@.h $(INCCOM)/$(@:b).hxx
     @@-$(COPY:s/-f//) $(@:d)/$(@:b).hxx $(INCCOM)/$(@:b).hxx
 # fail on not existing .hxx
-    $(TYPE) $(INCCOM)/$(@:b).hxx >& $(NULLDEV)
+    $(COMMAND_ECHO)$(TYPE) $(INCCOM)/$(@:b).hxx >& $(NULLDEV)
 
