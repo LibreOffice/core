@@ -165,6 +165,7 @@ namespace vcl { struct ControlLayoutData; }
 #define SHOW_NOPARENTUPDATE             ((USHORT)0x0001)
 #define SHOW_NOFOCUSCHANGE              ((USHORT)0x0002)
 #define SHOW_NOACTIVATE                 ((USHORT)0x0004)
+#define SHOW_FOREGROUNDTASK             ((USHORT)0x0008)
 
 // Flags for SetZOrder()
 #define WINDOW_ZORDER_BEFOR             ((USHORT)0x0001)
