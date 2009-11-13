@@ -605,7 +605,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     substitute the final size and loose on retaining the scaling factor but
     still keep the correct display size anyway.
     */
-    if ( (aGrTwipSz.Width() > USHRT_MAX) || (aGrTwipSz.Height() > USHRT_MAX)
+    if ( (aGrTwipSz.Width() > SHRT_MAX) || (aGrTwipSz.Height() > SHRT_MAX)
         || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
     {
         aGrTwipSz.Width() = nWidth;
