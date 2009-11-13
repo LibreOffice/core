@@ -46,11 +46,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include "expat/xmlparse.h"
-#endif
 
 using namespace ::rtl;
 using namespace ::std;

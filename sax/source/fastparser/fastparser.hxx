@@ -42,11 +42,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include "expat/xmlparse.h"
-#endif
 #include "xml2utf.hxx"
 
 #include <sax/fastattribs.hxx>

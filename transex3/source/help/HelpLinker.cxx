@@ -45,11 +45,7 @@
 #include <osl/time.h>
 #include <rtl/bootstrap.hxx>
 
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include <expat/xmlparse.h>
-#endif
 
 #define DBHELP_ONLY
 
