@@ -52,27 +52,29 @@ namespace drawinglayer
     namespace primitive2d
     {
         Primitive2DReference SdrMeasurePrimitive2D::impCreatePart(
+            const attribute::SdrLineAttribute& rLineAttribute,
             const basegfx::B2DHomMatrix& rObjectMatrix,
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
             bool bLeftActive,
             bool bRightActive) const
         {
+            const attribute::SdrLineStartEndAttribute* pLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
             basegfx::B2DPolygon aPolygon;
+
             aPolygon.append(rStart);
             aPolygon.append(rEnd);
 
-            if(!getSdrLSTAttribute().getLineStartEnd() || (!bLeftActive && !bRightActive))
+            if(!pLineStartEnd || (!bLeftActive && !bRightActive))
             {
-                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *getSdrLSTAttribute().getLine(), 0L);
+                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, 0);
             }
 
             if(bLeftActive && bRightActive)
             {
-                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *getSdrLSTAttribute().getLine(), getSdrLSTAttribute().getLineStartEnd());
+                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, pLineStartEnd);
             }
 
-            const attribute::SdrLineStartEndAttribute* pLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
             const basegfx::B2DPolyPolygon aEmpty;
             const attribute::SdrLineStartEndAttribute aLineStartEnd(
                 bLeftActive ? pLineStartEnd->getStartPolyPolygon() : aEmpty, bRightActive ? pLineStartEnd->getEndPolyPolygon() : aEmpty,
@@ -80,7 +82,7 @@ namespace drawinglayer
                 bLeftActive ? pLineStartEnd->isStartActive() : false, bRightActive ? pLineStartEnd->isEndActive() : false,
                 bLeftActive ? pLineStartEnd->isStartCentered() : false, bRightActive? pLineStartEnd->isEndCentered() : false);
 
-            return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *getSdrLSTAttribute().getLine(), &aLineStartEnd);
+            return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, &aLineStartEnd);
         }
 
         Primitive2DSequence SdrMeasurePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
@@ -278,12 +280,12 @@ namespace drawinglayer
                     const basegfx::B2DPoint aMainLeftLeft(aMainLeft.getX() - fLenLeft, aMainLeft.getY());
                     const basegfx::B2DPoint aMainRightRight(aMainRight.getX() + fLenRight, aMainRight.getY());
 
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainRight, aMainRightRight, true, false));
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainRight, aMainRightRight, true, false));
 
                     if(!bMainLineSplitted || MEASURETEXTPOSITION_CENTERED != eHorizontal)
                     {
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainLeft, aMainRight, false, false));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(* pLineAttribute, aObjectMatrix, aMainLeft, aMainRight, false, false));
                     }
                 }
                 else
@@ -294,12 +296,12 @@ namespace drawinglayer
                         const basegfx::B2DPoint aMainInnerLeft(aMainLeft.getX() + fHalfLength, aMainLeft.getY());
                         const basegfx::B2DPoint aMainInnerRight(aMainRight.getX() - fHalfLength, aMainRight.getY());
 
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainInnerRight, aMainRight, false, true));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainInnerRight, aMainRight, false, true));
                     }
                     else
                     {
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainLeft, aMainRight, true, true));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aMainLeft, aMainRight, true, true));
                     }
                 }
 
@@ -312,13 +314,13 @@ namespace drawinglayer
                 const basegfx::B2DPoint aLeftUp(0.0, fTopEdge);
                 const basegfx::B2DPoint aLeftDown(0.0, fBottomLeft);
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aLeftDown, aLeftUp, false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aLeftDown, aLeftUp, false, false));
 
                 // right help line
                 const basegfx::B2DPoint aRightUp(fDistance, fTopEdge);
                 const basegfx::B2DPoint aRightDown(fDistance, fBottomRight);
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aRightDown, aRightUp, false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(*pLineAttribute, aObjectMatrix, aRightDown, aRightUp, false, false));
 
                 // text horizontal position
                 if(MEASURETEXTPOSITION_NEGATIVE == eHorizontal)
