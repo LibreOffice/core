@@ -644,8 +644,7 @@ void FontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void FontNameBox::InitBitmaps( void )
 {
-    Color   aCol = GetSettings().GetStyleSettings().GetWindowColor();
-    BOOL    bHC = aCol.IsDark();
+    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     maImagePrinterFont = Image( SvtResId( bHC? RID_IMG_PRINTERFONT_HC : RID_IMG_PRINTERFONT ) );
     maImageBitmapFont = Image( SvtResId( bHC? RID_IMG_BITMAPFONT_HC : RID_IMG_BITMAPFONT ) );
