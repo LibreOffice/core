@@ -854,7 +854,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     m_aSubTypeList.SetColCount(4);
     m_aSubTypeList.SetLineCount(1);
 
-    bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     m_aChartTypeDialogControllerList.push_back(new ColumnChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new BarChartDialogController() );
@@ -1070,7 +1070,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     m_nChangingCalls++;
     if( m_pCurrentMainType && bAlsoResetSubTypeList )
     {
-        bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+        bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
         m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
     }
     m_aSubTypeList.SelectItem( static_cast<USHORT>( rParameter.nSubTypeIndex) );

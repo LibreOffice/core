@@ -94,7 +94,7 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eSt
             Image aImage = GetImage( m_xFrame,
                                      aSlotURL,
                                      hasBigImages(),
-                                     GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                     GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
             GetToolBox().SetItemImage(GetId(), aImage);
         }
     }

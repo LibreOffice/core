@@ -171,9 +171,9 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
 void ScTablePage::ShowImage()
 {
-    bool bDark = GetDisplayBackground().GetColor().IsDark();
+    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     bool bLeftRight = aBtnLeftRight.IsChecked();
-    aBmpPageDir.SetImage( bDark ?
+    aBmpPageDir.SetImage( bHC ?
         (bLeftRight ? aImgLeftRightHC : aImgTopDownHC) :
         (bLeftRight ? aImgLeftRight : aImgTopDown) );
 }
