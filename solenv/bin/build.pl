@@ -59,6 +59,10 @@
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
     };
+    my $verbose_mode = 0;
+    if (defined $ENV{verbose} || defined $ENV{VERBOSE}) {
+        $verbose_mode = ($ENV{verbose} =~ /^t\S*$/i);
+    }
     my $enable_multiprocessing = 1;
     my $cygwin = 0;
     $cygwin++ if ($^O eq 'cygwin');
@@ -856,7 +860,8 @@ sub dmake_dir {
             print "$dmake\n";
             print $check_error_string;
         } else {
-            print "$BuildDir\n";
+            print "\n" if ( ! $show );
+            print "Entering $BuildDir\n";
         };
         RemoveFromDependencies($BuildDir, \%LocalDepsHash) if (!$child);
         return if ($cmd_file || $show);
@@ -1686,6 +1691,9 @@ sub get_options {
     # Default build modes(for OpenOffice.org)
     $ENV{BUILD_TYPE} = 'OOo EXT' if (!defined $ENV{BUILD_TYPE});
     @ARGV = @dmake_args;
+    foreach $arg (@dmake_args) {
+        $arg =~ /^verbose=(\S+)$/i and $verbose_mode = ($1 =~ /^t\S*$/i);
+    }
 };
 
 sub get_module_and_buildlist_paths {
@@ -1867,7 +1875,7 @@ sub clear_from_child {
     html_store_job_info($folders_hashes{$child_nick}, $child_nick, $error_code);
     $running_children{$folders_hashes{$child_nick}}--;
     delete $processes_hash{$pid};
-    print 'Running processes: ' . children_number() . "\n";
+    $verbose_mode && print 'Running processes: ' . children_number() . "\n";
 };
 
 #
@@ -1890,7 +1898,7 @@ sub BuildDependent {
                 start_child($child_nick, $dependencies_hash) if ($child_nick);
                 return 1 if ($BuildAllParents);
                 $child_nick = pick_prj_to_build($dependencies_hash);
-            } while (scalar keys %$dependencies_hash);
+            } while (scalar keys %$dependencies_hash || $child_nick);
             while (children_number()) {
 #                print "#### 1902: Starting waiting for dead child\n";
                 handle_dead_children(1);
@@ -1935,7 +1943,7 @@ sub start_child {
         select $oldfh;
         $processes_hash{$pid} = $job_dir;
         $children_running = children_number();
-        print 'Running processes: ', $children_running, "\n";
+        $verbose_mode && print 'Running processes: ', $children_running, "\n";
         $maximal_processes = $children_running if ($children_running > $maximal_processes);
         $folders_hashes{$job_dir} = $dependencies_hash;
         store_pid($dependencies_hash, $pid);
@@ -3458,7 +3466,7 @@ sub run_server {
             delete $clients_times{$pid};
             clear_from_child($pid);
             delete $clients_jobs{$pid};
-            print 'Running processes: ', children_number(), "\n";
+            $verbose_mode && print 'Running processes: ', children_number(), "\n";
             # Actually, next 3 strings are only for even distribution
             # of clients if there are more than one build server running
             print $new_socket_obj 'No job';
@@ -3483,7 +3491,7 @@ sub run_server {
             $clients_jobs{$pid} = $job_string;
             $clients_times{$pid} = time;
             $children_running = children_number();
-            print 'Running processes: ', $children_running, "\n";
+            $verbose_mode && print 'Running processes: ', $children_running, "\n";
             $maximal_processes = $children_running if ($children_running > $maximal_processes);
         } else {
             print $new_socket_obj 'No job';

@@ -64,22 +64,25 @@ $(XCS_TRIM) :   $(DTDDIR)/registry/component-schema.dtd \
 .ENDIF
 
 $(PROCESSOUT)/registry/schema/$(PACKAGEDIR)/%.xcs : %.xcs
-    @echo -------------+ validating and stripping schema files
-    -$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $(@:d))$*.val) \
+    @echo "Making:   " $(@:f)
+.IF "$(VERBOSE)" != "FALSE"
+    @echo --- validating and stripping schema files
+.ENDIF
+    @-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $(@:d))$*.val) \
                 --stringparam componentName $(PACKAGE).$* \
                 $(SYSXSLDIR)schema_val.xsl $<
-    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $(@:d))$*.san) \
+    $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $(@:d))$*.san) \
                 $(SYSXSLDIR)sanity.xsl $<
-    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
+    $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
                 $(SYSXSLDIR)schema_trim.xsl $<
-    +-$(RM) $(@:d)$*.val > $(NULLDEV)
-    +-$(RM) $(@:d)$*.san > $(NULLDEV)
+    @+-$(RM) $(@:d)$*.val > $(NULLDEV)
+    @+-$(RM) $(@:d)$*.san > $(NULLDEV)
 
 $(PROCESSOUT)/merge/$(PACKAGEDIR)/%.xcs : %.xcs
 # just a copy for now - insert "cfgex" commandline when required
-    -$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+    $(COMMAND_ECHO)-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(COPY) $< $@
 
 # Create properties files for localized <info> contents (Currently not built)
 .IF "$(XCS_RESOURCES)" != ""
@@ -87,9 +90,12 @@ $(XCS_RESOURCES) :   $(XSLDIR)/resource.xsl
 .ENDIF
 
 $(PROCESSOUT)/registry/res/{$(alllangiso)}/$(PACKAGEDIR)/%.properties :| $(PROCESSOUT)/merge/$(PACKAGEDIR)/%.xcs
-    @echo -------------+ creating locale dependent resource bundles
-    -$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
+    @echo "Making:   " $(@:f)
+.IF "$(VERBOSE)" != "FALSE"
+    @echo --- creating locale dependent resource bundles
+.ENDIF
+    @-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
                 --stringparam locale {$(subst,/$(PACKAGEDIR)/$(@:f), $(subst,$(PROCESSOUT)/registry/res/, $@))} \
                 $(SYSXSLDIR)resource.xsl $<
 
@@ -110,17 +116,20 @@ $(XCU_DEFAULT) : $(DTDDIR)/registry/component-update.dtd \
 .ENDIF
 
 $(PROCESSOUT)/registry/data/$(PACKAGEDIR)/%.xcu : %.xcu
-    @echo -------------+ validating and creating a locale independent file
-    -$(MKDIRHIER) $(@:d) 
-    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $(@:d))$*.val) \
+    @echo "Making:   " $(@:f)
+.IF "$(VERBOSE)" != "FALSE"
+    @echo --- validating and creating a locale independent file
+.ENDIF
+    @-$(MKDIRHIER) $(@:d) 
+    $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $(@:d))$*.val) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 $(SYSXSLDIR)data_val.xsl $<
-    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
+    $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 $(SYSXSLDIR)alllang.xsl $<
-    +-$(RM) $(@:d)$*.val > $(NULLDEV)
+    @+-$(RM) $(@:d)$*.val > $(NULLDEV)
 
 # --- localizations ---
 .IF "$(WITH_LANG)"!=""
@@ -129,8 +138,8 @@ $(XCU_LANG) : $(LOCALIZESDF)
 .ENDIF			# "$(XCU_LANG)"!=""
 
 $(PROCESSOUT)/merge/$(PACKAGEDIR)/%.xcu : %.xcu
-    -$(MKDIRHIER) $(@:d)
-    $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m $(LOCALIZESDF) -l all
+    @-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(CFGEX) $(CFGEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $@ -m $(LOCALIZESDF) -l all
 
 .IF "$(XCU_LANG)" != ""
 $(XCU_LANG) : $(XSLDIR)/alllang.xsl
@@ -140,9 +149,12 @@ $(PROCESSOUT)/registry/res/{$(alllangiso)}/$(PACKAGEDIR)/%.xcu :| $(PROCESSOUT)/
 .ELSE			# "$(WITH_LANG)"!=""
 $(PROCESSOUT)/registry/res/{$(alllangiso)}/$(PACKAGEDIR)/%.xcu :| %.xcu
 .ENDIF			# "$(WITH_LANG)"!=""
-    @echo ------------- creating locale dependent entries
-    -$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
+    @echo "Making:   " $(@:f)
+.IF "$(VERBOSE)" != "FALSE"
+    @echo --- creating locale dependent entries
+.ENDIF
+    @-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 --stringparam locale {$(subst,/$(PACKAGEDIR)/$(@:f), $(subst,$(PROCESSOUT)/registry/res/, $@))} \
@@ -155,9 +167,11 @@ $(LANGUAGEPACKS) : $(XSLDIR)/delcomment.sed
 
 
 $(PROCESSOUT)/registry/spool/Langpack-%.xcu : Langpack.xcu.tmpl
-    @echo -------------+ creating a Langpack module for locale $*
+.IF "$(VERBOSE)" != "FALSE"
+    @echo --- creating a Langpack module for locale $*
+.ENDIF
     -$(MKDIRHIER) $(@:d) 
-    $(SED) -e "s/__LANGUAGE__/$*/" -f $(XSLDIR)/delcomment.sed $< > $@
+    $(COMMAND_ECHO)$(SED) -e "s/__LANGUAGE__/$*/" -f $(XSLDIR)/delcomment.sed $< > $@
 
 
 # --- modules ---
@@ -167,9 +181,12 @@ $(XCU_MODULES) : $(XSLDIR)/alllang.xsl
 
 
 $(PROCESSOUT)/registry/spool/$(PACKAGEDIR)/%.xcu :| $$(@:b:s/-/./:b).xcu
-    @echo -------------+ creating a module file
-    -$(MKDIRHIER) $(@:d) 
-    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
+    @echo "Making:   " $(@:f)
+.IF "$(VERBOSE)" != "FALSE"
+    @echo --- creating a module file
+.ENDIF
+    @-$(MKDIRHIER) $(@:d) 
+    $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$(<:b).xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 --stringparam module $(subst,$(<:b)-, $(*)) \
