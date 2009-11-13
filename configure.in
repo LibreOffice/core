@@ -784,12 +784,6 @@ AC_ARG_WITH(build-version,
 
                           Usage: --with-build-version="Built by Jim"
 ],with_build_version=$withval)
-AC_ARG_ENABLE(sgistl,
-[  --enable-sgistl         for IRIX users, use this option option to build
-                          OpenOffice.org using SGI's STL.
-
-                          Usage: --enable-sgistl=yes
-],,)
 AC_ARG_WITH(alloc,
 [  --with-alloc            Define which allocator to build with
 			                 (choices are oo, system, tcmalloc)
@@ -1015,12 +1009,6 @@ case "$build_os" in
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		_os=NetBSD
-		;;
-	irix*)
-		test_cups=no
-        test_randr=no
-		test_freetype=yes
-		_os=IRIX
 		;;
 	aix*)
 		test_cups=no
@@ -1627,31 +1615,6 @@ if test "$GCC" = "yes"; then
    LDFLAGS=$hash_style_ldflags_save
 fi
 AC_SUBST(HAVE_LD_HASH_STYLE)
-
-dnl ===================================================================
-dnl  Test the IRIX SGI Mips pro compiler
-dnl ===================================================================
-if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-   if test "$CC" = "cc"; then
-      AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
-      AC_MSG_CHECKING([the SGI MIPSpro C compiler version])
-      dnl cc -version outputs to standard error!!!!
-      _mipspro_version=`$CC -version 2>&1 | $AWK '{ print $4 }'`
-      _mipspro_major=`echo $_mipspro_version | $AWK -F. '{ print $1 }'`
-      if test "$_mipspro_major" != "7"; then
-         AC_MSG_ERROR([found version "$_mipspro_version", use version 7.2+ of the SGI MIPSpro C compiler])
-      else
-         _mipspro_minor=`echo $_mipspro_version | $AWK -F. '{ if ($2 <= 1) print "false"; else print "true" }'`
-         if test "$_mipspro_minor" = "false"; then
-            AC_MSG_ERROR([found version "$_mipspro_version", use version 7.2+ of the SGI MIPSpro C compiler])
-         else
-            dnl compiler will do
-            AC_MSG_RESULT([checked])
-         fi
-      fi
-   fi
-fi
 
 dnl ===================================================================
 dnl  Test the Compaq compiler for OSF1
@@ -2282,21 +2245,6 @@ if test "$_os" = "Darwin"; then
    fi 
 fi 
 dnl ===================================================================
-dnl Extra checking for the IRIX compiler
-dnl ===================================================================
-if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-   dnl MIPSpro C++ compiler packaged with MIPSpro C compiler
-   if test "$CC" = "cc"; then
-      AC_MSG_CHECKING([SGI MIPSpro C++ Compiler])
-      if test "$CXX" != "CC"; then
-         AC_MSG_WARN([SGI MIPSpro C++ was not found])
-         echo "SGI MIPSpro C++ was not found" >> warn
-      else
-         AC_MSG_RESULT([checked])
-      fi
-   fi
-fi
-dnl ===================================================================
 dnl Extra checking for the OSF compiler
 dnl ===================================================================
 if test "$_os" = "OSF1"; then
@@ -2438,23 +2386,6 @@ if test "$_os" = "SunOS"; then
 fi
 
 dnl ===================================================================
-dnl Checks for SGI STL
-dnl ===================================================================
-if test -n "$enable_sgistl" && "$enable_sgistl" != "no"; then
-	if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-		AC_MSG_CHECKING([for SGI STL])
-		if test -d /usr/include/CC ; then
-			AC_MSG_RESULT([yes.])
-
-		else
-			AC_MSG_RESULT([not found.])
-		fi
-	else
-		AC_MSG_ERROR([Option --enable-sgistl is only valid for IRIX])
-	fi
-else
-
-dnl ===================================================================
 dnl Checks for what the default STL should be
 dnl ===================================================================
    AC_MSG_CHECKING([what the default STL should be])
@@ -2537,19 +2468,6 @@ dnl ===================================================================
 		      else
 			      AC_MSG_ERROR([STLport libraries not found])
 		      fi
-	      elif test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-		      if test -f "$STLPORT4/lib/libstlport_mipspro_41.so"; then
-			      AC_MSG_RESULT([checked])
-			   else
-				   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
-					   AC_MSG_RESULT([checked])
-				   elif test -f "$STLPORT4/lib/libstlport.so"; then
-					   AC_MSG_RESULT([checked])
-					   STLPORT_VER=500
-				   else
-					   AC_MSG_ERROR([STLport libraries not found])
-				   fi
-			   fi
 		   else
 			   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
 				   AC_MSG_RESULT([checked])
@@ -3344,9 +3262,6 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
 		;;
 	OSF1)
 		PKGFORMAT=setld
-		;;
-	IRIX)
-		PKGFORMAT=tardist
 		;;
 	# we never should get here since we check the arciecture/os at the beginning,
 	# but go sure...
