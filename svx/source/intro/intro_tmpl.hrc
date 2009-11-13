@@ -464,7 +464,6 @@ ItemList = \
     < "masahisa kamataki" ; > ; \
     < "Tim Kampa" ; > ; \
     < "Petr Kania" ; > ; \
-    < "Tim Kampa" ; > ; \
     < "Mick Kappenburg" ; > ; \
     < "Etsushi Kato" ; > ; \
     < "Yosuke Kato" ; > ; \
@@ -1211,7 +1210,6 @@ ItemList = \
     < "" ; > ; \
     < "USER EXPERIENCE" ; 8 ; > ; \
     < "" ; > ; \
-    < "" ; > ; \
     < "Andreas Bartel" ; > ; \
     < "Bettina Haberer" ; > ; \
     < "Christian Jansen" ; > ; \
@@ -1227,8 +1225,6 @@ ItemList = \
     < "RELEASE ENGINEERING " ; 8 ; > ; \
     < "" ; > ; \
     < "Ruediger Timm" ; > ; \
-    < "" ; > ; \
-    < "RELEASE ENGINEERING" ; 8 ; > ; \
     < "" ; > ; \
     < "Oliver Bolte" ; > ; \
     < "Vladimir Glazounov" ; > ; \
@@ -1299,9 +1295,7 @@ ItemList = \
     < "Martina Waller" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
-    < "GLOBALIZATION" ; 8 ; > ; \
-    < "" ; > ; \
-    < "PROGRAM MANAGEMENT" ; 8 ; > ; \
+    < "GLOBALIZATION PROGRAM MANAGEMENT" ; 8 ; > ; \
     < "" ; > ; \
     < "Rafaella Braconi" ; > ; \
     < "" ; > ; \
@@ -1318,13 +1312,13 @@ ItemList = \
     < "Kay Koll" ; > ; \
     < "Iyer Venkatesan" ; > ; \
     < "" ; > ; \
-    < "SUN SIGMA BLACK BELT" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Stefan Zimmermann" ; > ; \
-    < "" ; > ; \
     < "OPERATIONS" ; 8 ; > ; \
     < "" ; > ; \
     < "Parker Proffitt" ; > ; \
+    < "" ; > ; \
+    < "SUN SIGMA BLACK BELT" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Stefan Zimmermann" ; > ; \
     < "" ; > ; \
 };\
 
