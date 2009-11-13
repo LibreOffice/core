@@ -257,6 +257,9 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
             // When there is no program folder, there could be no running office
             if ( dwError == ERROR_FILE_NOT_FOUND )
                 return ERROR_SUCCESS;
+            if ( dwError == ERROR_PATH_NOT_FOUND )
+                return ERROR_SUCCESS;
+
             // The destination folder should never exist, don't know what to do here
             if ( dwError == ERROR_ALREADY_EXISTS )
                 return ERROR_SUCCESS;

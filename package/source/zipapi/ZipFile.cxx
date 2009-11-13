@@ -122,6 +122,8 @@ ZipFile::~ZipFile()
 
 void ZipFile::setInputStream ( Reference < XInputStream > xNewStream )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     xStream = xNewStream;
     xSeek = Reference < XSeekable > ( xStream, UNO_QUERY );
     aGrabber.setInputStream ( xStream );
@@ -381,6 +383,8 @@ sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffe
 
 sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ORef < EncryptionData > &rData )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     sal_Bool bRet = sal_False;
     if ( rData->aKey.getLength() )
     {
@@ -499,6 +503,8 @@ Reference < XInputStream > ZipFile::createUnbufferedStream(
             sal_Bool bIsEncrypted,
             ::rtl::OUString aMediaType )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     return new XUnbufferedStream ( aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
 }
 
@@ -514,6 +520,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
         SotMutexHolderRef aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
@@ -543,6 +551,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
             ZipException,
             RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
@@ -579,6 +589,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
         SotMutexHolderRef aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
@@ -595,6 +607,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
             ZipException,
             RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     if ( rData.isEmpty() )
         throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
@@ -607,6 +621,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
 sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     throw(IOException, ZipException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     sal_Int32 nTestSig, nTime, nCRC, nSize, nCompressedSize;
     sal_Int16 nVersion, nFlag, nHow, nPathLen, nExtraLen;
     sal_Int32 nPos = -rEntry.nOffset;
@@ -660,6 +676,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
 sal_Int32 ZipFile::findEND( )
     throw(IOException, ZipException, RuntimeException)
 {
+    // this method is called in constructor only, no need for mutex
     sal_Int32 nLength, nPos, nEnd;
     Sequence < sal_Int8 > aBuffer;
     try
@@ -701,6 +718,7 @@ sal_Int32 ZipFile::findEND( )
 sal_Int32 ZipFile::readCEN()
     throw(IOException, ZipException, RuntimeException)
 {
+    // this method is called in constructor only, no need for mutex
     sal_Int32 nCenLen, nCenPos = -1, nCenOff, nEndPos, nLocPos;
     sal_uInt16 nCount, nTotal;
 
@@ -807,6 +825,8 @@ sal_Int32 ZipFile::readCEN()
 sal_Int32 ZipFile::recover()
     throw(IOException, ZipException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     sal_Int32 nLength;
     Sequence < sal_Int8 > aBuffer;
     Sequence < sal_Int32 > aHeaderOffsets;
@@ -974,6 +994,8 @@ sal_Int32 ZipFile::recover()
 
 sal_Bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     sal_Int32 nSize = 0, nCRC = 0;
 
     if( aEntry.nMethod == STORED )
@@ -985,6 +1007,8 @@ sal_Bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
 
 sal_Int32 ZipFile::getCRC( sal_Int32 nOffset, sal_Int32 nSize )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
     sal_Int32 nBlockSize = ::std::min( nSize, static_cast< sal_Int32 >( 32000 ) );
@@ -1002,6 +1026,8 @@ sal_Int32 ZipFile::getCRC( sal_Int32 nOffset, sal_Int32 nSize )
 
 void ZipFile::getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_Int32 *nSize, sal_Int32 *nCRC )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
     sal_Int32 nRealSize = 0;

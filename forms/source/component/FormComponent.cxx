@@ -1977,7 +1977,6 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setFastPropertyValue_NoBroadcast" );
     // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
     {
@@ -2266,6 +2265,14 @@ void OBoundControlModel::impl_connectDatabaseColumn_noNotify( bool _bFromReload 
     // let derived classes react on this new connection
     m_bLoaded = sal_True;
     onConnectedDbColumn( xRowSet );
+
+    // Some derived classes decide to cache the "current" (resp. "last known") control value, so operations like
+    // commitControlValueToDbColumn can be made a no-op when nothing actually changed.
+    // Normally, this cache is kept in sync with the column value, but during a reload, this synchronization is
+    // temporarily disable. To allow the derived classes to update their cache from the current column value,
+    // we call translateDbColumnToControlValue.
+    if ( _bFromReload && hasField() )
+        translateDbColumnToControlValue();
 
     // initially transfer the db column value to the control, if we successfully connected to a database column
     if ( hasField() )
