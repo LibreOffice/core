@@ -356,7 +356,7 @@ Components::Components(
                     "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
                     ":UNO_SHARED_PACKAGES_CACHE}/registry/"
                     "com.sun.star.comp.deployment.configuration."
-                    "PackageRegistryBackend/configmgrrc"))));
+                    "PackageRegistryBackend/configmgr.ini"))));
     parseXcsXcuLayer( //TODO: migrate
         11,
         expand(
@@ -374,7 +374,7 @@ Components::Components(
                     "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
                     ":UNO_USER_PACKAGES_CACHE}/registry/"
                     "com.sun.star.comp.deployment.configuration."
-                    "PackageRegistryBackend/configmgrrc"))));
+                    "PackageRegistryBackend/configmgr.ini"))));
     // reading the old user xcs/xcu layer ("${$BRAND_BASE_DIR/program/" +
     // SAL_CONFIGFILE("bootstrap") + ":UserInstallation}/user/registry") would
     // potentially fail, anyway, as xcu files in that layer used the xsi
