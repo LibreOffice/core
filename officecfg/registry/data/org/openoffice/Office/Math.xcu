@@ -52,6 +52,27 @@
       </prop>
     </node>
   </node>
+    <node oor:name="Id2" oor:op="replace">
+      <prop oor:name="Name">
+        <value>OpenSymbol</value>
+      </prop>
+      <prop oor:name="CharSet">
+        <value>-1</value>
+      </prop>
+      <prop oor:name="Family">
+        <value>0</value>
+      </prop>
+      <prop oor:name="Pitch">
+        <value>0</value>
+      </prop>
+      <prop oor:name="Weight">
+        <value>0</value>
+      </prop>
+      <prop oor:name="Italic">
+        <value>2</value>
+      </prop>
+    </node>
+  </node>
   <node oor:name="SymbolList">
     <node oor:name="alpha" oor:op="replace">
       <prop oor:name="Char">
@@ -64,7 +85,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="ALPHA" oor:op="replace">
@@ -78,7 +99,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="beta" oor:op="replace">
@@ -92,7 +113,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="BETA" oor:op="replace">
@@ -106,7 +127,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="gamma" oor:op="replace">
@@ -120,7 +141,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="GAMMA" oor:op="replace">
@@ -134,7 +155,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="delta" oor:op="replace">
@@ -148,7 +169,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="DELTA" oor:op="replace">
@@ -162,7 +183,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="epsilon" oor:op="replace">
@@ -176,7 +197,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="EPSILON" oor:op="replace">
@@ -190,7 +211,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="zeta" oor:op="replace">
@@ -204,7 +225,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="ZETA" oor:op="replace">
@@ -218,7 +239,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="eta" oor:op="replace">
@@ -232,7 +253,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="ETA" oor:op="replace">
@@ -246,7 +267,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="theta" oor:op="replace">
@@ -260,7 +281,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="THETA" oor:op="replace">
@@ -274,7 +295,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="iota" oor:op="replace">
@@ -288,7 +309,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="IOTA" oor:op="replace">
@@ -302,7 +323,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="kappa" oor:op="replace">
@@ -316,7 +337,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="KAPPA" oor:op="replace">
@@ -330,7 +351,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="lambda" oor:op="replace">
@@ -344,7 +365,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="LAMBDA" oor:op="replace">
@@ -358,7 +379,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="mu" oor:op="replace">
@@ -372,7 +393,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="MU" oor:op="replace">
@@ -386,7 +407,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="nu" oor:op="replace">
@@ -400,7 +421,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="NU" oor:op="replace">
@@ -414,7 +435,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="xi" oor:op="replace">
@@ -428,7 +449,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="XI" oor:op="replace">
@@ -442,7 +463,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="omicron" oor:op="replace">
@@ -456,7 +477,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="OMICRON" oor:op="replace">
@@ -470,7 +491,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="pi" oor:op="replace">
@@ -484,7 +505,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="PI" oor:op="replace">
@@ -498,7 +519,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="rho" oor:op="replace">
@@ -512,7 +533,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="RHO" oor:op="replace">
@@ -526,7 +547,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="sigma" oor:op="replace">
@@ -540,7 +561,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="SIGMA" oor:op="replace">
@@ -554,7 +575,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="tau" oor:op="replace">
@@ -568,7 +589,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="TAU" oor:op="replace">
@@ -582,7 +603,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="upsilon" oor:op="replace">
@@ -596,7 +617,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="UPSILON" oor:op="replace">
@@ -610,7 +631,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="phi" oor:op="replace">
@@ -624,7 +645,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="PHI" oor:op="replace">
@@ -638,7 +659,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="chi" oor:op="replace">
@@ -652,7 +673,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="CHI" oor:op="replace">
@@ -666,7 +687,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="psi" oor:op="replace">
@@ -680,7 +701,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="PSI" oor:op="replace">
@@ -694,7 +715,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="omega" oor:op="replace">
@@ -708,7 +729,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="OMEGA" oor:op="replace">
@@ -722,7 +743,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varepsilon" oor:op="replace">
@@ -736,7 +757,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="vartheta" oor:op="replace">
@@ -750,7 +771,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varpi" oor:op="replace">
@@ -764,7 +785,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varrho" oor:op="replace">
@@ -778,7 +799,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varsigma" oor:op="replace">
@@ -792,7 +813,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="varphi" oor:op="replace">
@@ -806,7 +827,7 @@
         <value>true</value>
       </prop>
       <prop oor:name="FontFormatId">
-        <value>Id1</value>
+        <value>Id2</value>
       </prop>
     </node>
     <node oor:name="element" oor:op="replace">
