@@ -74,11 +74,7 @@ CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --disable-static CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
-.IF "$(OS)"=="IRIX"
-BUILD_ACTION=gmake
-.ELSE
 BUILD_ACTION=$(GNUMAKE)
-.ENDIF
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).3
