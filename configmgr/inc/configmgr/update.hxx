@@ -40,11 +40,11 @@ namespace configmgr {
 
 namespace update {
 
-OOO_DLLPUBLIC_CONFIGMGR void insertXcsFile(
-    int layer, rtl::OUString const & fileUri);
+OOO_DLLPUBLIC_CONFIGMGR void insertExtensionXcsFile(
+    bool shared, rtl::OUString const & fileUri);
 
-OOO_DLLPUBLIC_CONFIGMGR void insertXcuFile(
-    int layer, rtl::OUString const & fileUri);
+OOO_DLLPUBLIC_CONFIGMGR void insertExtensionXcuFile(
+    bool shared, rtl::OUString const & fileUri);
 
 }
 

@@ -92,9 +92,9 @@ public:
 
     void writeModifications();
 
-    void insertXcsFile(int layer, rtl::OUString const & fileUri);
+    void insertExtensionXcsFile(bool shared, rtl::OUString const & fileUri);
 
-    void insertXcuFile(int layer, rtl::OUString const & fileUri);
+    void insertExtensionXcuFile(bool shared, rtl::OUString const & fileUri);
 
     com::sun::star::beans::Optional< com::sun::star::uno::Any >
     getExternalValue(rtl::OUString const & descriptor);

@@ -204,25 +204,31 @@ void Components::writeModifications() {
     writeModFile(*this, getModificationFileUrl(), data_);
 }
 
-void Components::insertXcsFile(int layer, rtl::OUString const & fileUri) {
+void Components::insertExtensionXcsFile(
+    bool shared, rtl::OUString const & fileUri)
+{
     try {
-        parseXcsFile(fileUri, layer, &data_);
+        parseXcsFile(fileUri, shared ? 9 : 13, &data_);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("insertXcsFile does not exist: ")) +
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "insertExtensionXcsFile does not exist: ")) +
              e.Message),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
 
-void Components::insertXcuFile(int layer, rtl::OUString const & fileUri) {
+void Components::insertExtensionXcuFile(
+    bool shared, rtl::OUString const & fileUri)
+{
     try {
-        parseXcuFile(fileUri, layer + 1, &data_);
+        parseXcuFile(fileUri, shared ? 10 : 14, &data_);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("insertXcuFile does not exist: ")) +
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "insertExtensionXcuFile does not exist: ")) +
              e.Message),
             css::uno::Reference< css::uno::XInterface >());
     }

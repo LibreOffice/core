@@ -41,14 +41,14 @@ namespace configmgr {
 
 namespace update {
 
-void insertXcsFile(int layer, rtl::OUString const & fileUri) {
+void insertExtensionXcsFile(bool shared, rtl::OUString const & fileUri) {
     osl::MutexGuard g(lock);
-    Components::getSingleton().insertXcsFile(layer, fileUri);
+    Components::getSingleton().insertExtensionXcsFile(shared, fileUri);
 }
 
-void insertXcuFile(int layer, rtl::OUString const & fileUri) {
+void insertExtensionXcuFile(bool shared, rtl::OUString const & fileUri) {
     osl::MutexGuard g(lock);
-    Components::getSingleton().insertXcuFile(layer, fileUri);
+    Components::getSingleton().insertExtensionXcuFile(shared, fileUri);
 }
 
 }

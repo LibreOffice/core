@@ -632,16 +632,14 @@ void BackendImpl::PackageImpl::processPackage_(
     {
         if (m_isSchema)
         {
-            configmgr::update::insertXcsFile(
-                that->m_eContext == CONTEXT_SHARED ? 9 : 13, //TODO
-                expandUnoRcUrl(url));
+            configmgr::update::insertExtensionXcsFile(
+                that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
         }
         else
         {
             url = replaceOrigin(url, xCmdEnv);
-            configmgr::update::insertXcuFile(
-                that->m_eContext == CONTEXT_SHARED ? 9 : 13, //TODO
-                expandUnoRcUrl(url));
+            configmgr::update::insertExtensionXcuFile(
+                that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
         }
 
         that->addToConfigmgrIni( m_isSchema, url, xCmdEnv );
