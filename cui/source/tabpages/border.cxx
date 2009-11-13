@@ -1101,7 +1101,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     aLbLineStyle.SetSourceUnit( FUNIT_TWIP );
 
     // Writer 2.0 Defaults:
-    aLbLineStyle.InsertEntry( CUI_RESSTR( STR_NONE ) );
+    aLbLineStyle.InsertEntry( SVX_RESSTR( RID_SVXSTR_NONE ) );
 
     aLbLineStyle.InsertEntry( LINE_WIDTH0 );
     aLbLineStyle.InsertEntry( LINE_WIDTH5 );

@@ -54,6 +54,7 @@ SRC1FILES =  \
         chardlg.src \
         connect.src \
         dstribut.src \
+        frmdirlbox.src \
         grfpage.src \
         labdlg.src \
         macroass.src \
