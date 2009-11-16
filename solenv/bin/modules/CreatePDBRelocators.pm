@@ -86,7 +86,7 @@ sub create_pdb_relocators
 
     # sanitize path
     $root_dir =~ s/\\/\//g;
-    $o =~ s/\\/\//g;
+    my $o =~ s/\\/\//g;
     my $premilestoneext = $milestoneext;
     if ( $pre ne "" ) {
         $premilestoneext = ~ s/^\.//;
