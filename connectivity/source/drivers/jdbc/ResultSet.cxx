@@ -786,16 +786,68 @@ void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const 
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 /*columnIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateBinaryStream" );
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::updateBinaryStream", *this );
+    try
+    {
+        SDBThreadAttach t;
+        {
+
+            // temporaere Variable initialisieren
+            // Java-Call absetzen
+            static jmethodID mID(NULL);
+            if ( !mID  )
+            {
+                static const char * cSignature = "(ILjava/io/InputStream;I)V";
+                static const char * cMethodName = "updateBinaryStream";
+                obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+            }
+
+            {
+                // Parameter konvertieren
+                jobject obj = createByteInputStream(x,length);
+                t.pEnv->CallVoidMethod( object, mID, columnIndex,obj,length);
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            }
+        }
+    }
+    catch(Exception)
+    {
+        ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateBinaryStream", *this );
+    }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 /*columnIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateCharacterStream" );
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
+    try
+    {
+        SDBThreadAttach t;
+        {
+
+            // temporaere Variable initialisieren
+            // Java-Call absetzen
+            static jmethodID mID(NULL);
+            if ( !mID  )
+            {
+                static const char * cSignature = "(ILjava/io/Reader;I)V";
+                static const char * cMethodName = "updateCharacterStream";
+                obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+            }
+
+            {
+                // Parameter konvertieren
+                jobject obj = createCharArrayReader(x,length);
+                t.pEnv->CallVoidMethod( object, mID, columnIndex,obj,length);
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            }
+        }
+    }
+    catch(Exception)
+    {
+        ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)

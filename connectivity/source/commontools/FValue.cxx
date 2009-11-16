@@ -1643,12 +1643,39 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::BLOB:
             {
                 Reference<XInputStream> xStream;
-                Any aValue = getAny();
+                const Any aValue = makeAny();
                 if(aValue.hasValue())
                 {
-                    aValue >>= xStream;
+                    Reference<XBlob> xBlob(aValue,UNO_QUERY);
+                    if ( xBlob.is() )
+                        xStream = xBlob->getBinaryStream();
+                    else
+                    {
+                        Reference<XClob> xClob(aValue,UNO_QUERY);
+                        if ( xClob.is() )
+                            xStream = xClob->getCharacterStream();
+                    }
                     if(xStream.is())
-                        xStream->readBytes(aSeq,xStream->available());
+                    {
+                        const sal_uInt32    nBytesToRead = 65535;
+                        sal_uInt32          nRead;
+
+                        do
+                        {
+                            ::com::sun::star::uno::Sequence< sal_Int8 > aReadSeq;
+
+                            nRead = xStream->readSomeBytes( aReadSeq, nBytesToRead );
+
+                            if( nRead )
+                            {
+                                const sal_uInt32 nOldLength = aSeq.getLength();
+                                aSeq.realloc( nOldLength + nRead );
+                                rtl_copyMemory( aSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
+                            }
+                        }
+                        while( nBytesToRead == nRead );
+                        xStream->closeInput();
+                    }
                 }
             }
             break;
@@ -2117,6 +2144,10 @@ void ORowSetValue::fill(const Any& _rValue)
                     {
                         (*this) = _rValue;
                         setTypeKind(DataType::BLOB);
+                    }
+                    else
+                    {
+                        (*this) = _rValue;
                     }
                 }
             }
