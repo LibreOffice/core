@@ -440,10 +440,11 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     return TRUE;
 }
 
-ScExternalRefManager* ScDocument::GetExternalRefManager()
+ScExternalRefManager* ScDocument::GetExternalRefManager() const
 {
+    ScDocument* pThis = const_cast<ScDocument*>(this);
     if (!pExternalRefMgr.get())
-        pExternalRefMgr.reset(new ScExternalRefManager(this));
+        pThis->pExternalRefMgr.reset( new ScExternalRefManager( pThis));
 
     return pExternalRefMgr.get();
 }

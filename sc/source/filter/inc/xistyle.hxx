@@ -397,15 +397,13 @@ public:
     /** Reads an XF record. */
     void                ReadXF( XclImpStream& rStrm );
 
-    /** Sets the style name of this XF, if it is a style XF.
-        @descr  Additionally creates this user-defined style in the Calc document. */
-    void                SetStyleName( const String& rStyleName );
-    /** Sets the style name of this XF from a built-in Excel style, if it is a style XF.
-        @descr  Does not create the style in the Calc document. This is done on demand
-        in CreatePattern(), if the style is really used. */
-    void                SetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel );
-
+    /** Sets the style name of this XF, if it is a style XF. */
+    void                SetStyleName( const String& rStyleName, bool bBuiltIn, bool bForceCreate );
+    /** Changes the style name of this XF, if it is a style XF. */
+    void                ChangeStyleName( const String& rStyleName );
+    /** Returns the style name of this XF, if it is a style XF. */
     inline const String& GetStyleName() const { return maStyleName; }
+
     inline sal_uInt8    GetHorAlign() const { return maAlignment.mnHorAlign; }
     inline sal_uInt8    GetVerAlign() const { return maAlignment.mnVerAlign; }
     inline sal_uInt16   GetFontIndex() const { return mnXclFont; }
@@ -501,7 +499,15 @@ public:
                             SCTAB nScTab, const XclImpXFIndex& rXFIndex );
 
 private:
+    void                CalcStyleName( XclImpXF& rXF, const String& rStyleName, bool bBuiltIn );
+    void                CalcStyleName( XclImpXF& rXF, sal_uInt8 nStyleId, sal_uInt8 nLevel );
+    void                SetStyleName( XclImpXF& rXF, const String& rStyleName, bool bBuiltIn, bool bForceCreate );
+
+private:
+    typedef ::std::map< String, XclImpXF* > XclImpStyleXFMap;
+
     ScfDelList< XclImpXF > maXFList;        /// List of contents of all XF record.
+    XclImpStyleXFMap    maStyleXFs;         /// Maps style names to style XF records.
 };
 
 // Buffer for XF indexes in cells =============================================

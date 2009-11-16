@@ -134,8 +134,8 @@ void ScEditCell::GetString( String& rString ) const
         EditEngine& rEngine = pDoc->GetEditEngine();
         rEngine.SetText( *pData );
         rString = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
-        // kurze Strings fuer Formeln merken
-        if ( rString.Len() < MAXSTRLEN )
+        // cache short strings for formulas
+        if ( rString.Len() < 256 )
             ((ScEditCell*)this)->pString = new String( rString );   //! non-const
     }
     else

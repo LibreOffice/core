@@ -32,17 +32,65 @@
 #include "precompiled_chart2.hxx"
 #include "LegendHelper.hxx"
 #include "macros.hxx"
+#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart2/LegendPosition.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
+
+
+//static
+Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::XModel >& xModel
+                                                    , const uno::Reference< uno::XComponentContext >& xContext )
+{
+    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( xModel, xContext, true );
+    uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
+    if( xProp.is())
+    {
+        xProp->setPropertyValue( C2U("Show"), uno::makeAny(sal_True) );
+
+        chart2::RelativePosition aRelativePosition;
+        if( !(xProp->getPropertyValue( C2U( "RelativePosition" )) >>=  aRelativePosition) )
+        {
+            chart2::LegendPosition ePos = chart2::LegendPosition_LINE_END;
+            if( !(xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos ) )
+                xProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( ePos ));
+
+            chart2::LegendExpansion eExpansion =
+                    ( ePos == chart2::LegendPosition_LINE_END ||
+                      ePos == chart2::LegendPosition_LINE_START )
+                    ? chart2::LegendExpansion_HIGH
+                    : chart2::LegendExpansion_WIDE;
+            if( !(xProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion ) )
+                xProp->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExpansion ));
+
+            xProp->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
+        }
+
+    }
+    return xLegend;
+}
+
+//static
+void LegendHelper::hideLegend( const Reference< frame::XModel >& xModel )
+{
+    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( xModel, 0, false );
+    uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
+    if( xProp.is())
+    {
+        xProp->setPropertyValue( C2U("Show"), uno::makeAny(sal_False) );
+    }
+}
 
 // static
 uno::Reference< chart2::XLegend > LegendHelper::getLegend(

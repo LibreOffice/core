@@ -72,11 +72,23 @@
 #include "compiler.hxx"
 
 
-BOOL ScTabViewShell::GetFunction( String& rFuncStr )
+BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 {
     String aStr;
 
     ScSubTotalFunc eFunc = (ScSubTotalFunc) SC_MOD()->GetAppOptions().GetStatusFunc();
+    ScViewData* pViewData   = GetViewData();
+    ScMarkData& rMark       = pViewData->GetMarkData();
+    bool bIgnoreError = (rMark.IsMarked() || rMark.IsMultiMarked());
+
+    if (bIgnoreError && (eFunc == SUBTOTAL_FUNC_CNT || eFunc == SUBTOTAL_FUNC_CNT2))
+        nErrCode = 0;
+
+    if (nErrCode)
+    {
+        rFuncStr = ScGlobal::GetLongErrorString(nErrCode);
+        return true;
+    }
 
     USHORT nGlobStrId = 0;
     switch (eFunc)
@@ -94,9 +106,7 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr )
     }
     if (nGlobStrId)
     {
-        ScViewData* pViewData   = GetViewData();
         ScDocument* pDoc        = pViewData->GetDocument();
-        ScMarkData& rMark       = pViewData->GetMarkData();
         SCCOL       nPosX       = pViewData->GetCurX();
         SCROW       nPosY       = pViewData->GetCurY();
         SCTAB       nTab        = pViewData->GetTabNo();
