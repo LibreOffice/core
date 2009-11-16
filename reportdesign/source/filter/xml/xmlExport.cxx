@@ -172,40 +172,6 @@ namespace rptxml
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString lcl_implGetPropertyXMLType(const Type& _rType)
-    {
-        // possible types we can write (either because we recognize them directly or because we convert _rValue
-        // into one of these types)
-        static const ::rtl::OUString s_sTypeBoolean (RTL_CONSTASCII_USTRINGPARAM("boolean"));
-        static const ::rtl::OUString s_sTypeShort   (RTL_CONSTASCII_USTRINGPARAM("short"));
-        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("int"));
-        static const ::rtl::OUString s_sTypeLong    (RTL_CONSTASCII_USTRINGPARAM("long"));
-        static const ::rtl::OUString s_sTypeDouble  (RTL_CONSTASCII_USTRINGPARAM("double"));
-        static const ::rtl::OUString s_sTypeString  (RTL_CONSTASCII_USTRINGPARAM("string"));
-
-        // handle the type description
-        switch (_rType.getTypeClass())
-        {
-            case TypeClass_STRING:
-                return s_sTypeString;
-            case TypeClass_DOUBLE:
-                return s_sTypeDouble;
-            case TypeClass_BOOLEAN:
-                return s_sTypeBoolean;
-            case TypeClass_BYTE:
-            case TypeClass_SHORT:
-                return s_sTypeShort;
-            case TypeClass_LONG:
-                return s_sTypeInteger;
-            case TypeClass_HYPER:
-                return s_sTypeLong;
-            case TypeClass_ENUM:
-                return s_sTypeInteger;
-
-            default:
-                return s_sTypeDouble;
-        }
-    }
 
     class OSpecialHanldeXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
@@ -1483,45 +1449,6 @@ sal_uInt32 ORptExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
 {
     ::rtl::OUStringBuffer aBuffer;
     GetMM100UnitConverter().convertNumber(aBuffer, _nValue);
-    return aBuffer.makeStringAndClear();
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::implConvertMeasure(sal_Int32 _nValue)
-{
-    ::rtl::OUStringBuffer aBuffer;
-    GetMM100UnitConverter().convertMeasure(aBuffer, _nValue);
-    return aBuffer.makeStringAndClear();
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::implConvertAny(const Any& _rValue)
-{
-    ::rtl::OUStringBuffer aBuffer;
-    switch (_rValue.getValueTypeClass())
-    {
-        case TypeClass_STRING:
-        {   // extract the string
-            ::rtl::OUString sCurrentValue;
-            _rValue >>= sCurrentValue;
-            aBuffer.append(sCurrentValue);
-        }
-        break;
-        case TypeClass_DOUBLE:
-            // let the unit converter format is as string
-            GetMM100UnitConverter().convertDouble(aBuffer, getDouble(_rValue));
-            break;
-        case TypeClass_BOOLEAN:
-            aBuffer = getBOOL(_rValue) ? ::xmloff::token::GetXMLToken(XML_TRUE) : ::xmloff::token::GetXMLToken(XML_FALSE);
-            break;
-        case TypeClass_BYTE:
-        case TypeClass_SHORT:
-        case TypeClass_LONG:
-            // let the unit converter format is as string
-            GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
-            break;
-        default:
-            OSL_ENSURE(0,"ORptExport::implConvertAny: Invalid type");
-    }
-
     return aBuffer.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
