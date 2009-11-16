@@ -44,9 +44,9 @@
 class BibDataManager;
 class BibFrameCtrl_Impl;
 namespace com{namespace sun{namespace star{
-    namespace form{
+    namespace form { namespace runtime {
         class XFormController;
-    }
+    } }
 }}}
 class BibStatusDispatch
 {
@@ -83,7 +83,7 @@ friend class BibFrameCtrl_Impl;
 
     DECL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void* );
 
-    sal_Bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
+    sal_Bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& xController);
 public:
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent,
                                                         BibDataManager* pDatMan);
