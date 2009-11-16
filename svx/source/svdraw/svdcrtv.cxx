@@ -831,7 +831,11 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
 
                 if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
                 {
-                    bUseSolidDragging = false;
+                    // #i103058# Allow SolidDragging with four points
+                    if(aDragStat.GetPointAnz() < 4)
+                    {
+                        bUseSolidDragging = false;
+                    }
                 }
             }
 

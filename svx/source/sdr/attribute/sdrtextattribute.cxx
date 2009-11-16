@@ -57,12 +57,15 @@ namespace drawinglayer
             sal_Int32 aTextUpperDistance,
             sal_Int32 aTextRightDistance,
             sal_Int32 aTextLowerDistance,
+            SdrTextHorzAdjust aSdrTextHorzAdjust,
+            SdrTextVertAdjust aSdrTextVertAdjust,
             bool bContour,
             bool bFitToSize,
             bool bHideContour,
             bool bBlink,
             bool bScroll,
-            bool bInEditMode)
+            bool bInEditMode,
+            bool bFixedCellHeight)
         :   mpSdrText(&rSdrText),
             maOutlinerParaObject(rOutlinerParaObject),
             mpSdrFormTextAttribute(0),
@@ -71,12 +74,15 @@ namespace drawinglayer
             maTextRightDistance(aTextRightDistance),
             maTextLowerDistance(aTextLowerDistance),
             maPropertiesVersion(0),
+            maSdrTextHorzAdjust(aSdrTextHorzAdjust),
+            maSdrTextVertAdjust(aSdrTextVertAdjust),
             mbContour(bContour),
             mbFitToSize(bFitToSize),
             mbHideContour(bHideContour),
             mbBlink(bBlink),
             mbScroll(bScroll),
-            mbInEditMode(bInEditMode)
+            mbInEditMode(bInEditMode),
+            mbFixedCellHeight(bFixedCellHeight)
         {
             if(XFT_NONE != eFormTextStyle)
             {
@@ -108,12 +114,16 @@ namespace drawinglayer
             maTextUpperDistance(rCandidate.getTextUpperDistance()),
             maTextRightDistance(rCandidate.getTextRightDistance()),
             maTextLowerDistance(rCandidate.getTextLowerDistance()),
+            maPropertiesVersion(rCandidate.getPropertiesVersion()),
+            maSdrTextHorzAdjust(rCandidate.getSdrTextHorzAdjust()),
+            maSdrTextVertAdjust(rCandidate.getSdrTextVertAdjust()),
             mbContour(rCandidate.isContour()),
             mbFitToSize(rCandidate.isFitToSize()),
             mbHideContour(rCandidate.isHideContour()),
             mbBlink(rCandidate.isBlink()),
             mbScroll(rCandidate.isScroll()),
-            mbInEditMode(rCandidate.isInEditMode())
+            mbInEditMode(rCandidate.isInEditMode()),
+            mbFixedCellHeight(rCandidate.isFixedCellHeight())
         {
             if(rCandidate.getSdrFormTextAttribute())
             {
@@ -142,36 +152,52 @@ namespace drawinglayer
             maTextUpperDistance = rCandidate.getTextUpperDistance();
             maTextRightDistance = rCandidate.getTextRightDistance();
             maTextLowerDistance = rCandidate.getTextLowerDistance();
+            maPropertiesVersion = rCandidate.getPropertiesVersion();
+
+            maSdrTextHorzAdjust = rCandidate.getSdrTextHorzAdjust();
+            maSdrTextVertAdjust = rCandidate.getSdrTextVertAdjust();
+
             mbContour = rCandidate.isContour();
             mbFitToSize = rCandidate.isFitToSize();
             mbHideContour = rCandidate.isHideContour();
             mbBlink = rCandidate.isBlink();
             mbScroll = rCandidate.isScroll();
             mbInEditMode = rCandidate.isInEditMode();
+            mbFixedCellHeight = rCandidate.isFixedCellHeight();
 
             return *this;
         }
 
         bool SdrTextAttribute::operator==(const SdrTextAttribute& rCandidate) const
         {
-            return (getOutlinerParaObject() == rCandidate.getOutlinerParaObject()
+            return (
+                // compares OPO and it's contents, but traditionally not the RedLining
+                // which is not seen as model, but as temporary information
+                getOutlinerParaObject() == rCandidate.getOutlinerParaObject()
+
                 // #i102062# for primitive visualisation, the WrongList (SpellChecking)
                 // is important, too, so use isWrongListEqual since there is no WrongList
                 // comparison in the regular OutlinerParaObject compare (since it's
                 // not-persistent data)
                 && getOutlinerParaObject().isWrongListEqual(rCandidate.getOutlinerParaObject())
+
                 && pointerOrContentEqual(getSdrFormTextAttribute(), rCandidate.getSdrFormTextAttribute())
                 && getTextLeftDistance() == rCandidate.getTextLeftDistance()
                 && getTextUpperDistance() == rCandidate.getTextUpperDistance()
                 && getTextRightDistance() == rCandidate.getTextRightDistance()
                 && getTextLowerDistance() == rCandidate.getTextLowerDistance()
                 && getPropertiesVersion() == rCandidate.getPropertiesVersion()
+
+                && getSdrTextHorzAdjust() == rCandidate.getSdrTextHorzAdjust()
+                && getSdrTextVertAdjust() == rCandidate.getSdrTextVertAdjust()
+
                 && isContour() == rCandidate.isContour()
                 && isFitToSize() == rCandidate.isFitToSize()
                 && isHideContour() == rCandidate.isHideContour()
                 && isBlink() == rCandidate.isBlink()
                 && isScroll() == rCandidate.isScroll()
-                && isInEditMode() == rCandidate.isInEditMode());
+                && isInEditMode() == rCandidate.isInEditMode()
+                && isFixedCellHeight() == rCandidate.isFixedCellHeight());
         }
 
         void SdrTextAttribute::getBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const

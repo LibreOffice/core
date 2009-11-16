@@ -175,7 +175,7 @@ void BmkMenu::Initialize()
     ::rtl::OUString aTargetFrame;
     ::rtl::OUString aImageId;
 
-    BOOL bIsHiContrastMode = rSettings.GetMenuColor().IsDark();
+    BOOL bIsHiContrastMode = rSettings.GetHighContrastMode();
 
     UINT32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )

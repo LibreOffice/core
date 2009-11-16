@@ -662,12 +662,15 @@ RTLFUNC(Array)
     }
 
     // Parameter ins Array uebernehmen
-    for( short i = 0 ; i < nArraySize ; i++ )
+    // ATTENTION: Using type USHORT for loop variable is
+    // mandatory to workaround a problem with the
+    // Solaris Intel compiler optimizer! See i104354
+    for( USHORT i = 0 ; i < nArraySize ; i++ )
     {
         SbxVariable* pVar = rPar.Get(i+1);
         SbxVariable* pNew = new SbxVariable( *pVar );
         pNew->SetFlag( SBX_WRITE );
-        short index = i;
+        short index = static_cast< short >(i);
         if ( bIncIndex )
             ++index;
         pArray->Put( pNew, &index );

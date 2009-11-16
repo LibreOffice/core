@@ -374,32 +374,7 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
         if ( aBmp.GetBitCount() != 24 )
             aBmp.Convert( BMP_CONVERSION_24BIT );
 
-        // create resulting mask bitmap with metafile output set to black
-        GDIMetaFile aMonchromeMtf( rMtf.GetMonochromeMtf( COL_BLACK ) );
-        aVDev.DrawWallpaper( Rectangle( aNullPt, aSizePix ), Wallpaper( Color( COL_WHITE ) ) );
-        aMonchromeMtf.WindStart();
-        aMonchromeMtf.Play( &aVDev, aBackPosPix, aDrawSize );
-
-        // watch for overlay mask
-        if ( pOverlay  )
-        {
-            Bitmap aOverlayMergeBmp( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ) );
-
-            // create ANDed resulting mask at overlay area
-            if ( pOverlay->IsTransparent() )
-                aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), pOverlay->GetMask() );
-            else
-            {
-                aVDev.SetLineColor( COL_BLACK );
-                aVDev.SetFillColor( COL_BLACK );
-                aVDev.DrawRect( aOverlayRect);
-            }
-
-            aOverlayMergeBmp.CombineSimple( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ), BMP_COMBINE_AND );
-            aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), aOverlayMergeBmp );
-        }
-
-        rBmpEx = BitmapEx( aBmp, aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
+        rBmpEx = BitmapEx( aBmp );
     }
 
     return !rBmpEx.IsEmpty();

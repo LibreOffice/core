@@ -32,6 +32,9 @@
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include "XMLNumberStylesImport.hxx"
 #include <xmloff/xmlstyle.hxx>
@@ -41,6 +44,7 @@
 #include "ximppage.hxx"
 #include "ximpshap.hxx"
 #include "animimp.hxx"
+#include "XMLStringBufferImportContext.hxx"
 #include <xmloff/formsimp.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include "ximpstyl.hxx"
@@ -57,9 +61,155 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::office;
+using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::geometry;
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+class DrawAnnotationContext : public SvXMLImportContext
+{
+
+public:
+    DrawAnnotationContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
+
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual void EndElement();
+
+private:
+    Reference< XAnnotation > mxAnnotation;
+    Reference< XTextCursor > mxCursor;
+
+    OUStringBuffer maAuthorBuffer;
+    OUStringBuffer maDateBuffer;
+};
+
+DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess )
+: SvXMLImportContext( rImport, nPrfx, rLocalName )
+, mxAnnotation( xAnnotationAccess->createAndInsertAnnotation() )
+{
+    if( mxAnnotation.is() )
+    {
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+
+        RealPoint2D aPosition;
+        RealSize2D aSize;
+
+        for(sal_Int16 i=0; i < nAttrCount; i++)
+        {
+            OUString sValue( xAttrList->getValueByIndex( i ) );
+            OUString sAttrName( xAttrList->getNameByIndex( i ) );
+            OUString aLocalName;
+            switch( GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ) )
+            {
+            case XML_NAMESPACE_SVG:
+                if( IsXMLToken( aLocalName, XML_X ) )
+                {
+                    sal_Int32 x;
+                    GetImport().GetMM100UnitConverter().convertMeasure(x, sValue);
+                    aPosition.X = static_cast<double>(x) / 100.0;
+                }
+                else if( IsXMLToken( aLocalName, XML_Y ) )
+                {
+                    sal_Int32 y;
+                    GetImport().GetMM100UnitConverter().convertMeasure(y, sValue);
+                    aPosition.Y = static_cast<double>(y) / 100.0;
+                }
+                else if( IsXMLToken( aLocalName, XML_WIDTH ) )
+                {
+                    sal_Int32 w;
+                    GetImport().GetMM100UnitConverter().convertMeasure(w, sValue);
+                    aSize.Width = static_cast<double>(w) / 100.0;
+                }
+                else if( IsXMLToken( aLocalName, XML_HEIGHT ) )
+                {
+                    sal_Int32 h;
+                    GetImport().GetMM100UnitConverter().convertMeasure(h, sValue);
+                    aSize.Height = static_cast<double>(h) / 100.0;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+
+        mxAnnotation->setPosition( aPosition );
+        mxAnnotation->setSize( aSize );
+    }
+}
+
+SvXMLImportContext * DrawAnnotationContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+{
+    SvXMLImportContext * pContext = NULL;
+
+    if( mxAnnotation.is() )
+    {
+        if( XML_NAMESPACE_DC == nPrefix )
+        {
+            if( IsXMLToken( rLocalName, XML_CREATOR ) )
+                pContext = new XMLStringBufferImportContext(GetImport(), nPrefix, rLocalName, maAuthorBuffer);
+            else if( IsXMLToken( rLocalName, XML_DATE ) )
+                pContext = new XMLStringBufferImportContext(GetImport(), nPrefix, rLocalName, maDateBuffer);
+        }
+        else
+        {
+            // create text cursor on demand
+            if( !mxCursor.is() )
+            {
+                uno::Reference< text::XText > xText( mxAnnotation->getTextRange() );
+                if( xText.is() )
+                {
+                    UniReference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
+                    mxCursor = xText->createTextCursor();
+                    if( mxCursor.is() )
+                        xTxtImport->SetCursor( mxCursor );
+                }
+            }
+
+            // if we have a text cursor, lets  try to import some text
+            if( mxCursor.is() )
+            {
+                pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
+            }
+        }
+    }
+
+    // call parent for content
+    if(!pContext)
+        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+
+    return pContext;
+}
+
+void DrawAnnotationContext::EndElement()
+{
+    if(mxCursor.is())
+    {
+        // delete addition newline
+        const OUString aEmpty;
+        mxCursor->gotoEnd( sal_False );
+        mxCursor->goLeft( 1, sal_True );
+        mxCursor->setString( aEmpty );
+
+        // reset cursor
+        GetImport().GetTextImport()->ResetCursor();
+    }
+
+    if( mxAnnotation.is() )
+    {
+        mxAnnotation->setAuthor( maAuthorBuffer.makeStringAndClear() );
+
+        DateTime aDateTime;
+        if(SvXMLUnitConverter::convertDateTime(aDateTime,  maDateBuffer.makeStringAndClear()))
+            mxAnnotation->setDateTime(aDateTime);
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -70,8 +220,9 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
     USHORT nPrfx, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList>& xAttrList,
     Reference< drawing::XShapes >& rShapes)
-:   SvXMLImportContext( rImport, nPrfx, rLocalName ),
-    mxShapes( rShapes )
+: SvXMLImportContext( rImport, nPrfx, rLocalName )
+, mxShapes( rShapes )
+, mxAnnotationAccess( rShapes, UNO_QUERY )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
@@ -100,10 +251,8 @@ void SdXMLGenericPageContext::StartElement( const Reference< ::com::sun::star::x
 {
     GetImport().GetShapeImport()->pushGroupForSorting( mxShapes );
 
-#ifndef SVX_LIGHT
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->startPage( Reference< drawing::XDrawPage >::query( mxShapes ) );
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -120,10 +269,13 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
     }
     else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_FORMS ) )
     {
-#ifndef SVX_LIGHT
         if( GetImport().IsFormsSupported() )
             pContext = GetImport().GetFormImport()->createOfficeFormsContext( GetImport(), nPrefix, rLocalName );
-#endif
+    }
+    else if( ((nPrefix == XML_NAMESPACE_OFFICE) || (nPrefix == XML_NAMESPACE_OFFICE_EXT)) && IsXMLToken( rLocalName, XML_ANNOTATION ) )
+    {
+        if( mxAnnotationAccess.is() )
+            pContext = new DrawAnnotationContext( GetImport(), nPrefix, rLocalName, xAttrList, mxAnnotationAccess );
     }
     else
     {

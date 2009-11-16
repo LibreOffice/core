@@ -440,13 +440,8 @@ class Desktop   :   // interfaces
     private:
 
         static sal_Bool implcp_ctor                     ( const css::uno::Reference< css::lang::XMultiServiceFactory >&     xFactory         );
-        static sal_Bool implcp_addTerminateListener     ( const css::uno::Reference< css::frame::XTerminateListener >&      xListener        );
-        static sal_Bool implcp_removeTerminateListener  ( const css::uno::Reference< css::frame::XTerminateListener >&      xListener        );
-        static sal_Bool implcp_findFrame                ( const ::rtl::OUString&                                            sTargetFrameName ,
-                                                                sal_Int32                                                   nSearchFlags     );
         static sal_Bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
         static sal_Bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
-        static sal_Bool implcp_statusChanged            ( const css::frame::FeatureStateEvent&                              aEvent           );
 
         sal_Bool m_bIsTerminated ;  /// check flag to protect us against dispose before terminate!
                                     /// see dispose() for further informations!

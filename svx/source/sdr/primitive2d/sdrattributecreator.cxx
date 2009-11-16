@@ -76,6 +76,7 @@
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #include <svx/rectenum.hxx>
+#include <svx/sdtfchim.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -519,7 +520,7 @@ namespace drawinglayer
                     }
                 }
 
-                const SdrFitToSizeType eFit = rTextObj.GetFitToSize();
+                const SdrFitToSizeType eFit(rTextObj.GetFitToSize());
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
                 pRetval = new attribute::SdrTextAttribute(
@@ -530,12 +531,15 @@ namespace drawinglayer
                     pUpper ? *pUpper : rTextObj.GetTextUpperDistance(),
                     pRight ? *pRight : rTextObj.GetTextRightDistance(),
                     pLower ? *pLower : rTextObj.GetTextLowerDistance(),
+                    rTextObj.GetTextHorizontalAdjust(rSet),
+                    rTextObj.GetTextVerticalAdjust(rSet),
                     ((const SdrTextContourFrameItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
                     (SDRTEXTFIT_PROPORTIONAL == eFit || SDRTEXTFIT_ALLLINES == eFit),
                     ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
                     SDRTEXTANI_BLINK == eAniKind,
                     SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind,
-                    bInEditMode);
+                    bInEditMode,
+                    ((const SdrTextFixedCellHeightItem&)rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
             }
 
             return pRetval;

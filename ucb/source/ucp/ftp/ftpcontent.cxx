@@ -322,6 +322,7 @@ Any SAL_CALL FTPContent::execute(
                                 aAccount);
                 rtl::Reference<ucbhelper::SimpleAuthenticationRequest>
                     p( new ucbhelper::SimpleAuthenticationRequest(
+                        m_aFTPURL.ident(false, false),
                         m_aFTPURL.host(),      // ServerName
                         ucbhelper::SimpleAuthenticationRequest::ENTITY_NA,
                         aRealm,

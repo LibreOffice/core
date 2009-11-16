@@ -87,6 +87,8 @@
 #include <sfxtypes.hxx>
 #include "alienwarn.hxx"
 
+#include "../appl/app.hrc"
+
 #define DOCPROPSNUM 17
 
 // flags that specify requested operation
@@ -1227,7 +1229,8 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                             const ::rtl::OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             sal_Bool bPreselectPassword,
-                                            ::rtl::OUString aSuggestedName )
+                                            ::rtl::OUString aSuggestedName,
+                                            sal_uInt16 nDocumentSignatureState )
 {
     ModelData_Impl aModelData( *this, xModel, aArgsSequence );
 
@@ -1305,6 +1308,24 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             nStoreMode = SAVEAS_REQUESTED;
             if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
                 bSetStandardName = sal_True;
+        }
+    }
+
+    if ( !( nStoreMode & EXPORT_REQUESTED ) )
+    {
+        // if it is no export, warn user that the signature will be removed
+        if (  SIGNATURESTATE_SIGNATURES_OK == nDocumentSignatureState
+           || SIGNATURESTATE_SIGNATURES_INVALID == nDocumentSignatureState
+           || SIGNATURESTATE_SIGNATURES_NOTVALIDATED == nDocumentSignatureState
+           || SIGNATURESTATE_SIGNATURES_PARTIAL_OK == nDocumentSignatureState)
+        {
+            if ( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
+            {
+                // the user has decided not to store the document
+                throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                                  uno::Reference< uno::XInterface >(),
+                                                  ERRCODE_IO_ABORT );
+            }
         }
     }
 

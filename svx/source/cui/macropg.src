@@ -165,19 +165,19 @@ String RID_SVXSTR_EVENT_CLOSEAPP
     Text [ en-US ] = "Close Application" ;
 };
 
-String RID_SVXSTR_EVENT_CREATEDOC
+String RID_SVXSTR_EVENT_NEWDOC
 {
-    Text [ en-US ] = "Create Document" ;
+    Text [ en-US ] = "New Document" ;
 };
 
 String RID_SVXSTR_EVENT_CLOSEDOC
 {
-    Text [ en-US ] = "Document is closing" ;
+    Text [ en-US ] = "Document closed" ;
 };
 
 String RID_SVXSTR_EVENT_PREPARECLOSEDOC
 {
-    Text [ en-US ] = "Close Document" ;
+    Text [ en-US ] = "Document is going to be closed" ;
 };
 
 String RID_SVXSTR_EVENT_OPENDOC
@@ -226,7 +226,19 @@ String RID_SVXSTR_EVENT_MODIFYCHANGED
 };
 String RID_SVXSTR_EVENT_MAILMERGE
 {
-    Text [ en-US ] = "Print form letters" ;
+    Text [ en-US ] = "Printing of form letters started" ;
+};
+String RID_SVXSTR_EVENT_MAILMERGE_END
+{
+    Text [ en-US ] = "Printing of form letters finished" ;
+};
+String RID_SVXSTR_EVENT_FIELDMERGE
+{
+    Text [ en-US ] = "Merging of form fields started" ;
+};
+String RID_SVXSTR_EVENT_FIELDMERGE_FINISHED
+{
+    Text [ en-US ] = "Merging of form fields finished" ;
 };
 String RID_SVXSTR_EVENT_PAGECOUNTCHANGE
 {
@@ -371,4 +383,79 @@ String RID_SVXSTR_EVENT_UNLOADED
 String RID_SVXSTR_EVENT_CHANGED
 {
     Text [ en-US ] = "Changed" ;
+};
+
+String RID_SVXSTR_EVENT_CREATEDOC
+{
+    Text [ en-US ] = "Document created" ;
+};
+
+String RID_SVXSTR_EVENT_LOADDOCFINISHED
+{
+    Text [ en-US ] = "Document loading finished" ;
+};
+
+String RID_SVXSTR_EVENT_SAVEDOCFAILED
+{
+    Text [ en-US ] = "Saving of document failed" ;
+};
+
+String RID_SVXSTR_EVENT_SAVEASDOCFAILED
+{
+    Text [ en-US ] = "'Save as' has failed" ;
+};
+
+String RID_SVXSTR_EVENT_COPYTODOC
+{
+    Text [ en-US ] = "Storing or exporting copy of document" ;
+};
+
+String RID_SVXSTR_EVENT_COPYTODOCDONE
+{
+    Text [ en-US ] = "Document copy has been created" ;
+};
+
+String RID_SVXSTR_EVENT_COPYTODOCFAILED
+{
+    Text [ en-US ] = "Creating of document copy failed" ;
+};
+
+String RID_SVXSTR_EVENT_VIEWCREATED
+{
+    Text [ en-US ] = "View created" ;
+};
+
+String RID_SVXSTR_EVENT_PREPARECLOSEVIEW
+{
+    Text [ en-US ] = "View is going to be closed" ;
+};
+
+String RID_SVXSTR_EVENT_CLOSEVIEW
+{
+    Text [ en-US ] = "View closed" ;
+};
+
+String RID_SVXSTR_EVENT_TITLECHANGED
+{
+    Text [ en-US ] = "Document title changed" ;
+};
+
+String RID_SVXSTR_EVENT_MODECHANGED
+{
+    Text [ en-US ] = "Document mode changed" ;
+};
+
+String RID_SVXSTR_EVENT_VISAREACHANGED
+{
+    Text [ en-US ] = "Visible area changed" ;
+};
+
+String RID_SVXSTR_EVENT_STORAGECHANGED
+{
+    Text [ en-US ] = "Document has got a new storage" ;
+};
+
+String RID_SVXSTR_EVENT_LAYOUT_FINISHED
+{
+    Text [ en-US ] = "Document layout finished" ;
 };

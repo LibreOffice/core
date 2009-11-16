@@ -79,6 +79,7 @@
 namespace css = ::com::sun::star;
 #endif
 
+#include <sfx2/doctempl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -396,76 +397,88 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             return bLoadState;
         }
 
-            String sStandardTemplate   = SfxObjectFactory::GetStandardTemplate( aServiceName );
-            BOOL   bUseDefaultTemplate = (sStandardTemplate.Len()>0);
-            if( bUseDefaultTemplate )
-            {
-                // #i21583#
-                // Forget the filter, which was detected for the corresponding "private:factory/xxx" URL.
-                // We must use the right filter, matching to this document ... not to the private URL!
-                const SfxFilter* pTemplateFilter = impl_detectFilterForURL(sStandardTemplate, rArgs, rMatcher);
-                if (pTemplateFilter)
-                {
-                    pFilter     = pTemplateFilter;
-                    aFilterName = pTemplateFilter->GetName();
-                    // standard template set -> load it "AsTemplate"
-                    aSet.Put( SfxStringItem ( SID_FILE_NAME, sStandardTemplate ) );
-                    aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                }
+        String sTemplateURL;
+        SFX_ITEMSET_ARG( &aSet, pTemplateRegionItem, SfxStringItem, SID_TEMPLATE_REGIONNAME, FALSE );
+        SFX_ITEMSET_ARG( &aSet, pTemplateNameItem, SfxStringItem, SID_TEMPLATE_NAME, FALSE );
+        if ( pTemplateRegionItem && pTemplateNameItem )
+        {
+            SfxDocumentTemplates aTmpFac;
+            aTmpFac.GetFull( pTemplateRegionItem->GetValue(), pTemplateNameItem->GetValue(), sTemplateURL );
+        }
+        else
+        {
+            sTemplateURL = SfxObjectFactory::GetStandardTemplate( aServiceName );
+        }
 
-                // #119268#
-                // something is wrong with the set default template (e.g. unknown format, missing file etcpp)
-                // The we have to jump into the following special code, where "private:factory/ URL's are handled.
-                // We cant "load" such private/factory URL's!
-                else
-                    bUseDefaultTemplate = FALSE;
+        BOOL bUseTemplate = (sTemplateURL.Len()>0);
+        if( bUseTemplate )
+        {
+            // #i21583#
+            // Forget the filter, which was detected for the corresponding "private:factory/xxx" URL.
+            // We must use the right filter, matching to this document ... not to the private URL!
+            const SfxFilter* pTemplateFilter = impl_detectFilterForURL(sTemplateURL, rArgs, rMatcher);
+            if (pTemplateFilter)
+            {
+                pFilter     = pTemplateFilter;
+                aFilterName = pTemplateFilter->GetName();
+                // standard template set -> load it "AsTemplate"
+                aSet.Put( SfxStringItem ( SID_FILE_NAME, sTemplateURL ) );
+                aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
             }
 
-            if ( !bUseDefaultTemplate )
+            // #119268#
+            // something is wrong with the set default template (e.g. unknown format, missing file etcpp)
+            // The we have to jump into the following special code, where "private:factory/ URL's are handled.
+            // We cant "load" such private/factory URL's!
+            else
+                bUseTemplate = FALSE;
+        }
+
+        if ( !bUseTemplate )
+        {
+            // execute "NewDocument" request
+            /* Attention!
+                #107913#
+                Pointers can't be used to check if two objects are equals!
+                E.g. the memory manager can reuse freed memory ...
+                and then the holded copy of a pointer will point to another
+                (and different!) object - may using the same type then before.
+                In such case we compare one object with itself ...
+             */
+            SfxRequest aReq( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
+            aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, pFrame ) );
+            aReq.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, aFact ) );
+
+            if ( pDocumentTitleItem )
+                aReq.AppendItem( *pDocumentTitleItem );
+
+            const SfxPoolItem* pRet = pApp->NewDocDirectExec_ImplOld(aReq);
+            if (pRet)
             {
-                // execute "NewDocument" request
-                /* Attention!
-                    #107913#
-                    Pointers can't be used to check if two objects are equals!
-                    E.g. the memory manager can reuse freed memory ...
-                    and then the holded copy of a pointer will point to another
-                    (and different!) object - may using the same type then before.
-                    In such case we compare one object with itself ...
-                 */
-                SfxRequest aReq( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
-                aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, pFrame ) );
-                aReq.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, aFact ) );
+                // default must be set to true, because some return values
+                // cant be checked ... but indicates "success"!
+                bLoadState = sal_True;
 
-                if ( pDocumentTitleItem )
-                    aReq.AppendItem( *pDocumentTitleItem );
-
-                const SfxPoolItem* pRet = pApp->NewDocDirectExec_ImplOld(aReq);
-                if (pRet)
-                {
-                    // default must be set to true, because some return values
-                    // cant be checked ... but indicates "success"!
-                    bLoadState = sal_True;
-
-                    // On the other side some special slots return a boolean state,
-                    // which can be set to FALSE.
-                    SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, pRet );
-                    if (pItem)
-                        bLoadState = pItem->GetValue();
-                }
-                else
-                    bLoadState = sal_False;
-
-                if ( !bLoadState && bFrameCreated && wFrame && !wFrame->GetCurrentDocument() )
-                {
-                    css::uno::Reference< css::frame::XFrame > axFrame;
-                    wFrame->SetFrameInterface_Impl( axFrame );
-                    wFrame->DoClose();
-                }
-
-                xFrame.clear();
-                xListener.clear();
-                return bLoadState;
+                // On the other side some special slots return a boolean state,
+                // which can be set to FALSE.
+                SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, pRet );
+                if (pItem)
+                    bLoadState = pItem->GetValue();
             }
+            else
+                bLoadState = sal_False;
+
+            if ( !bLoadState && bFrameCreated && wFrame && !wFrame->GetCurrentDocument() )
+            {
+                css::uno::Reference< css::frame::XFrame > axFrame;
+                wFrame->SetFrameInterface_Impl( axFrame );
+                wFrame->DoClose();
+            }
+
+            xFrame.clear();
+            xListener.clear();
+            return bLoadState;
+        }
     }
     else
     {

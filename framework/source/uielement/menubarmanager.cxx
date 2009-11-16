@@ -870,7 +870,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
              MenuManager::UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
-        sal_Bool bIsHiContrast = rSettings.GetMenuColor().IsDark();
+        sal_Bool bIsHiContrast = rSettings.GetHighContrastMode();
         sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
 
         if ( m_bRetrieveImages ||
@@ -1267,7 +1267,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     m_xDispatchProvider = rDispatchProvider;
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
     m_bRetrieveImages   = sal_False;
 
@@ -2049,7 +2049,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
         UNO_QUERY );
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+    m_bWasHiContrast    = rSettings.GetHighContrastMode();
 
     Reference< XStatusListener > xStatusListener;
     Reference< XDispatch > xDispatch;
