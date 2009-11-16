@@ -329,7 +329,7 @@ namespace dbaccess
 
         // revoke
         if  (   aNodeForName.isReadonly()
-            ||  !m_aConfigurationRoot.removeNode( _Name )
+            ||  !m_aConfigurationRoot.removeNode( aNodeForName.getLocalName() )
             )
             throw IllegalAccessException( ::rtl::OUString(), *this );
 
