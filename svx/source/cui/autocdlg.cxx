@@ -233,6 +233,7 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
     sNoDblSpaces        (SVX_RES(STR_NO_DBL_SPACES    )),
     sHalf               (SVX_RES(ST_FRACTION          )),
     sDash               (SVX_RES(ST_DASH                )),
+    sNonBrkSpace        (SVX_RES(ST_NON_BREAK_SPACE   )),
     sFirst              (SVX_RES(ST_ORDINAL           ))
 {
     FreeResource();
@@ -278,6 +279,7 @@ BOOL OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,     aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgFractionSymbol,    aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,       aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(IngnoreDoubleSpace,   aCheckLB.IsChecked(nPos++));
 
     BOOL bReturn = nFlags != pAutoCorrect->GetFlags();
@@ -319,6 +321,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.InsertEntry(sFirst);
     aCheckLB.InsertEntry(sHalf);
     aCheckLB.InsertEntry(sDash);
+    aCheckLB.InsertEntry(sNonBrkSpace);
     aCheckLB.InsertEntry(sNoDblSpaces);
 
     USHORT nPos = 0;
@@ -330,6 +333,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgOrdinalNumber) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgFractionSymbol) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgToEnEmDash) );
+    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & AddNonBrkSpace) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IngnoreDoubleSpace) );
 
     aCheckLB.SetUpdateMode(TRUE);
@@ -460,6 +464,7 @@ enum OfaAutoFmtOptions
     REPLACE_1ST,
     REPLACE_HALF,
     REPLACE_DASHES,
+    ADD_NON_BRK_SPACE,
     DEL_SPACES_AT_STT_END,
     DEL_SPACES_BETWEEN_LINES,
     IGNORE_DBLSPACE,
@@ -495,6 +500,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     sFraction           (SVX_RES(   ST_FRACTION     )),
     sDetectURL          (SVX_RES(   ST_DETECT_URL   )),
     sDash               (SVX_RES(   ST_DASH         )),
+    sNonBrkSpace        (SVX_RES(   ST_NON_BREAK_SPACE )),
     sOrdinal            (SVX_RES(   ST_ORDINAL      )),
     sRightMargin        (SVX_RES(   ST_RIGHT_MARGIN )),
     sNum                (SVX_RES(   STR_NUM         )),
@@ -703,6 +709,12 @@ BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,
                         aCheckLB.IsChecked(REPLACE_DASHES, CBCOL_SECOND));
 
+    bCheck = aCheckLB.IsChecked(ADD_NON_BRK_SPACE, CBCOL_FIRST);
+    bModified |= pOpt->bAddNonBrkSpace != bCheck;
+    pOpt->bAddNonBrkSpace = bCheck;
+    pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,
+                        aCheckLB.IsChecked(ADD_NON_BRK_SPACE, CBCOL_SECOND));
+
     bCheck = aCheckLB.IsChecked(DEL_SPACES_AT_STT_END, CBCOL_FIRST);
     bModified |= pOpt->bAFmtDelSpacesAtSttEnd != bCheck;
     pOpt->bAFmtDelSpacesAtSttEnd = bCheck;
@@ -759,6 +771,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.GetModel()->Insert(CreateEntry(sOrdinal,           CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sFraction,          CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sDash,              CBCOL_BOTH  ));
+    aCheckLB.GetModel()->Insert(CreateEntry(sNonBrkSpace,       CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceAtSttEnd,  CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceBetweenLines, CBCOL_BOTH  ));
 
@@ -790,6 +803,8 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( REPLACE_HALF,       CBCOL_SECOND,   0 != (nFlags & ChgFractionSymbol) );
     aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_FIRST,    pOpt->bChgToEnEmDash );
     aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_SECOND,   0 != (nFlags & ChgToEnEmDash) );
+    aCheckLB.CheckEntryPos( ADD_NON_BRK_SPACE,  CBCOL_FIRST,    0 != (nFlags & AddNonBrkSpace) );
+    aCheckLB.CheckEntryPos( ADD_NON_BRK_SPACE,  CBCOL_SECOND,   0 != (nFlags & AddNonBrkSpace) );
     aCheckLB.CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_FIRST,    pOpt->bAFmtDelSpacesAtSttEnd );
     aCheckLB.CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_SECOND,   pOpt->bAFmtByInpDelSpacesAtSttEnd );
     aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_FIRST,    pOpt->bAFmtDelSpacesBetweenLines );

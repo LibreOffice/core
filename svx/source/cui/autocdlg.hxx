@@ -118,6 +118,7 @@ private:
     String      sNoDblSpaces;
     String      sHalf;
     String      sDash;
+    String      sNonBrkSpace;
     String      sFirst;
 
 public:
@@ -160,6 +161,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     String          sFraction;
     String          sDetectURL;
     String          sDash;
+    String          sNonBrkSpace;
     String          sOrdinal;
     String          sRightMargin;
     String          sNum;

@@ -4414,6 +4414,17 @@
 						</info>
 						<value>true</value>
 					</prop>
+					<prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean">
+						<!-- OldPath: Writer/AutoFormat/Options -->
+						<!-- OldLocation: Soffice.cfg -->
+						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking space -->
+						<info>
+							<author>cedricbosdo</author>
+							<desc>Adds a non-breaking space before the characters :!;? in french.</desc>
+							<label>Add non-breaking space</label>
+						</info>
+						<value>true</value>
+					</prop>
 					<prop oor:name="DelEmptyParagraphs" oor:type="xs:boolean">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
@@ -4587,6 +4598,17 @@
 							<author>OS</author>
 							<desc>Specifies if dashes are replaced automatically.</desc>
 							<label>Replace dashes</label>
+						</info>
+						<value>true</value>
+					</prop>
+					<prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean">
+						<!-- OldPath: Writer/AutoFormat/Options -->
+						<!-- OldLocation: Soffice.cfg -->
+						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking space -->
+						<info>
+							<author>cedricbosdo</author>
+							<desc>Adds a non-breaking space before the characters :!;? in french.</desc>
+							<label>Add non-breaking space</label>
 						</info>
 						<value>true</value>
 					</prop>

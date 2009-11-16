@@ -140,6 +140,10 @@ TabDialog RID_OFA_AUTOCORR_DLG
     String ST_DASH \
     { \
         Text [ en-US ] = "Replace dashes" ; \
+    }; \
+    String ST_NON_BREAK_SPACE \
+    { \
+       Text [ en-US ] = "Add non breaking space before : ; ? ! in french text" ; \
     };
 
 /**************************************************************************/
