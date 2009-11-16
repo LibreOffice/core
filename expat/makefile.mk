@@ -48,7 +48,8 @@ all:
 
 TARFILE_NAME=expat-2.0.1
 ADDITIONAL_FILES=lib$/makefile.mk
-PATCH_FILES=expat-2.0.1.patch
+PATCH_FILES=expat-2.0.1.patch \
+            expat-winapi.patch
 
 CONFIGURE_DIR=
 .IF "$(OS)"=="WNT"
