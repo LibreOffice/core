@@ -574,7 +574,7 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxCaptionTabPage::FillValueSet()
 {
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     Image** ppBitmaps = bHighContrast ? mpBmpCapTypesH : mpBmpCapTypes;
     aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_1, *(ppBitmaps[0]) );

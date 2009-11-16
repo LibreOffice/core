@@ -79,20 +79,22 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
         pPipe = popen( "which gs 2>/dev/null", "r" );
         if( pPipe )
         {
-            fgets( pBuffer, sizeof( pBuffer ), pPipe );
-            int nLen = strlen( pBuffer );
-            if( pBuffer[nLen-1] == '\n' ) // strip newline
-                pBuffer[--nLen] = 0;
-            aCommand = String( ByteString( pBuffer ), aEncoding );
-            if( ( ( aCommand.GetChar( 0 ) == '/' )
-                  || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
-                  || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
-                && nLen > 2
-                && aCommand.GetChar( nLen-2 ) == 'g'
-                && aCommand.GetChar( nLen-1 ) == 's' )
+            if (fgets( pBuffer, sizeof( pBuffer ), pPipe ) != NULL)
             {
-                aCommand.AppendAscii( " -q -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"(OUTFILE)\" -" );
-                aSysCommands.push_back( aCommand );
+                int nLen = strlen( pBuffer );
+                if( pBuffer[nLen-1] == '\n' ) // strip newline
+                    pBuffer[--nLen] = 0;
+                aCommand = String( ByteString( pBuffer ), aEncoding );
+                if( ( ( aCommand.GetChar( 0 ) == '/' )
+                      || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
+                      || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
+                    && nLen > 2
+                    && aCommand.GetChar( nLen-2 ) == 'g'
+                    && aCommand.GetChar( nLen-1 ) == 's' )
+                {
+                    aCommand.AppendAscii( " -q -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"(OUTFILE)\" -" );
+                    aSysCommands.push_back( aCommand );
+                }
             }
             pclose( pPipe );
         }
@@ -100,19 +102,21 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
         pPipe = popen( "which distill 2>/dev/null", "r" );
         if( pPipe )
         {
-            fgets( pBuffer, sizeof( pBuffer ), pPipe );
-            int nLen = strlen( pBuffer );
-            if( pBuffer[nLen-1] == '\n' ) // strip newline
-                pBuffer[--nLen] = 0;
-            aCommand = String( ByteString( pBuffer ), aEncoding );
-            if( ( ( aCommand.GetChar( 0 ) == '/' )
-                  || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
-                  || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
-                && nLen > 7
-                && aCommand.Copy( nLen - 8 ).EqualsAscii( "/distill" ) )
+            if (fgets( pBuffer, sizeof( pBuffer ), pPipe ) != NULL)
             {
-                aCommand.AppendAscii( " (TMP) ; mv `echo (TMP) | sed s/\\.ps\\$/.pdf/` \"(OUTFILE)\"" );
-                aSysCommands.push_back( aCommand );
+                int nLen = strlen( pBuffer );
+                if( pBuffer[nLen-1] == '\n' ) // strip newline
+                    pBuffer[--nLen] = 0;
+                aCommand = String( ByteString( pBuffer ), aEncoding );
+                if( ( ( aCommand.GetChar( 0 ) == '/' )
+                      || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
+                      || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
+                    && nLen > 7
+                    && aCommand.Copy( nLen - 8 ).EqualsAscii( "/distill" ) )
+                {
+                    aCommand.AppendAscii( " (TMP) ; mv `echo (TMP) | sed s/\\.ps\\$/.pdf/` \"(OUTFILE)\"" );
+                    aSysCommands.push_back( aCommand );
+                }
             }
             pclose( pPipe );
         }

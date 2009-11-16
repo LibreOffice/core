@@ -138,7 +138,7 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
     {
         const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
         SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
-        SetDrawMode( GetDisplayBackground().GetColor().IsDark()
+        SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode()
             ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ViewShell::OUTPUT_DRAWMODE_COLOR );
     }
@@ -601,7 +601,7 @@ void AnimationWindow::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
             aVD.SetOutputSize( aObjSize );
             const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
             aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
-            aVD.SetDrawMode( GetDisplayBackground().GetColor().IsDark()
+            aVD.SetDrawMode( rStyles.GetHighContrastMode()
                 ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                 : ViewShell::OUTPUT_DRAWMODE_COLOR );
             aVD.Erase();

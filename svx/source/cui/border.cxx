@@ -1033,8 +1033,8 @@ USHORT SvxBorderTabPage::GetPresetStringId( USHORT nValueSetIdx ) const
 void SvxBorderTabPage::FillPresetVS()
 {
     // find correct image list
-    bool bDark = aWndPresets.GetDisplayBackground().GetColor().IsDark();
-    ImageList& rImgList = bDark ? aBorderImgLstH : aBorderImgLst;
+    bool bHC = aWndPresets.GetSettings().GetStyleSettings().GetHighContrastMode();
+    ImageList& rImgList = bHC ? aBorderImgLstH : aBorderImgLst;
     Size aImgSize( rImgList.GetImage( IID_PRE_CELL_NONE ).GetSizePixel() );
 
     // basic initialization of the ValueSet
@@ -1060,8 +1060,8 @@ void SvxBorderTabPage::FillPresetVS()
 void SvxBorderTabPage::FillShadowVS()
 {
     // find correct image list
-    bool bDark = aWndShadows.GetDisplayBackground().GetColor().IsDark();
-    ImageList& rImgList = bDark ? aShadowImgLstH : aShadowImgLst;
+    bool bHC = aWndPresets.GetSettings().GetStyleSettings().GetHighContrastMode();
+    ImageList& rImgList = bHC ? aShadowImgLstH : aShadowImgLst;
     Size aImgSize( rImgList.GetImage( IID_SHADOWNONE ).GetSizePixel() );
 
     // basic initialization of the ValueSet

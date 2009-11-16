@@ -2685,7 +2685,7 @@ const BitmapEx& ViewShell::GetReplacementBitmap( bool bIsErrorState )
     if( !*ppRet )
     {
         USHORT nBmpResId =
-            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark()
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode()
                 ? nHCResId : nResId;
         *ppRet = new BitmapEx( SW_RES( nBmpResId ) );
     }

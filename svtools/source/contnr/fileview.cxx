@@ -167,7 +167,7 @@ namespace
 
 static sal_Bool isHighContrast( const Window* _pView )
 {
-    return _pView->GetDisplayBackground().GetColor().IsDark();
+    return _pView->GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // -----------------------------------------------------------------------

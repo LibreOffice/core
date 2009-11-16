@@ -38,8 +38,8 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment,
-     $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
+my ( $outfile, $outfile_sh, $bootfile, $newline, $comment,
+     $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
      $USE_MINGW, $platform,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include, 
@@ -197,7 +197,6 @@ $ENABLEUNICODE        = "TRUE";
 $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
 $comment              = "#";           # UNIX script comment character
-$comment4nt           = "rem";         # Windows 4nt script comment character
 
 # Setting platform dependent constant values.
 if ( $platform =~ m/solaris/ ) 
@@ -676,17 +675,10 @@ elsif ( $platform =~ m/cygwin/ )
               $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
           }
       }
-      if ( "@USE_SHELL@" ne "4nt" ) {
 	  print "Setting W32 build with bash shell specific values... ";
 	  # No speacial treatment for CC an CXX anymore.
 	  $FLIPCMD        = "slfl.pl";
 	  $PATH_SEPERATOR = ';';
-      } else			# "@USE_SHELL@" ne "4nt"
-      {   print "Setting W32 build with 4NT shell specific values... ";
-	  # Change path to lower case.
-	  $COMPATH        = lc $COMPATH;
-	  $PATH_SEPERATOR = ';';
-      }
   }
 }
 elsif ( $platform =~ m/os2/ ) 
@@ -831,10 +823,6 @@ elsif ("@USE_SHELL@" eq "bash")
    $SHELL_PATH = '@SHELLPATH@';
    $SHELL = '@SHELLPATH@'."\/bash";
 }
-elsif ("@USE_SHELL@" eq "4nt")
-{  # @SHELLPATH@ is NO_SHELLPATH_NEEDED for 4nt - 
-   $SHELL_PATH = '';
-}
 else {
    die "Not a recognized shell: @USE_SHELL@ !";
 }
@@ -918,20 +906,6 @@ $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
 
 # Generate alternate output file for sh?
 $outfile_sh = $outfile.".sh";
-if ($GUI eq "OS2")
-{
-   # Generate output file for 4os2?
-   $outfile_bat = $outfile;
-   $outfile_bat =~ s/set$/cmd/i;
-}
-elsif ("@USE_SHELL@" eq "4nt")
-{
-    # Generate output file for 4nt?
-    $outfile_bat = $outfile;
-    $outfile_bat =~ s/set$/bat/i;
-} else {
-    undef $outfile_bat;
-}
 
 if ($STLPORT4 ne $no_stl) {
 	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB64;
@@ -1220,7 +1194,7 @@ elsif ($platform =~ m/cygwin/)
    }
    # Check if $SHELL_PATH is already set in PATH
    $tmppath = CygFormat($SHELL_PATH);
-   if ( ( "@USE_SHELL@" ne "4nt" ) && ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
+   if ( ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
    {   $PATH          .= $ps.$tmppath;
    }
    # Check if $CYGWIN_PATH is already set in PATH
@@ -1522,7 +1496,6 @@ print "done\n";
 #
 print "Setting the aliases... ";
 # 1. alias for a full product make. 
-# ToFile will take care for the right 4nt format
 	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
 	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
 	$build           = '"perl $SOLARENV/bin/build.pl"';
@@ -1543,12 +1516,6 @@ open( OUT, ">$outfile" ) ||
 open( OUT_SH, ">$outfile_sh" ) ||
   die "Cannot open $outfile_sh: $!\n";
 
-if(defined($outfile_bat))
-{  # Create bat environment file
-   open( OUT_BAT, ">$outfile_bat" ) ||
-   die "Cannot open $outfile_bat: $!\n";
-}
-
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
@@ -1557,7 +1524,6 @@ if(defined($outfile_bat))
 # Write file header.
 CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
-CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_bat);
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "SHELL",             $SHELL,             "e" );
@@ -1986,12 +1952,8 @@ if ( $platform =~ m/os2/ )
 }
 
 # $perlpre is only used for the following three variables
-# and only set for 4nt.
+# and only set for OS2.
 my $perlpre = "";
-if (( $platform =~ m/cygwin/ ) and ( '@USE_SHELL@' eq "4nt" )) {
-   ToFile( "HOME",              "   ",          "e" );
-   $perlpre = "perl ".${SOLARENV}.${BIN}.${ds};
-}
 if (( $platform =~ m/os2/ )) {
    $perlpre = "perl ".${SOLARENV}.${BIN}.${ds};
 }
@@ -2026,23 +1988,8 @@ if ( $platform =~ m/os2/ )
 ToFile( "endif",             $empty, "y");
 ToFile( "fi",                $empty, "z");
 
-# write make command for dmake for W32-4nt
-if ( $platform =~ m/cygwin/ and '@USE_SHELL@' eq "4nt" )
-{
-  ToFile( "build the dmake executable.", $empty, "c");
-  ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe (cd \%SRC_ROOT\\dmake \^ set INCLUDE=\%COMPATH\\include;\%PSDK_HOME\\include \^ set LIB=\%COMPATH\\lib;\%PSDK_HOME\\lib \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
-  ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe ( mkdir /S \%SOLARENV\\\%OUTPATH\\bin \^ copy dmake\\dmake.exe \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe )", $empty, "x");
-  ToFile( "\@echo Warning! LIB and INCLUDE will be cleared!", $empty, "x");
-  ToFile( "\@unset INCLUDE LIB", $empty, "x");
-  ToFile( "check for correct dmake.", $empty, "c");
-  ToFile( '@if "%@SEARCH[dmake]" == "" ( @echo dmake not build or missing! Invalid build environment! ^ unset SOLARENV ^ cancel )', $empty, "x");
-  ToFile( '@dmake -V > dmakecheck.out', $empty, "x");
-  ToFile( '@ffind /Tcygwin /C /B dmakecheck.out && ( @echo Found cygwin build dmake! Invalid! ^ unset SOLARENV ^ cancel )', $empty, "x");
-  ToFile( "  ", $empty, "x");
-}
-
-# Check if the right dmake version is used. (W32-tcsh only)
-if ( $platform =~ m/cygwin/ and '@USE_SHELL@' ne "4nt" ) {
+# Check if the right dmake version is used. (W32 only)
+if ( $platform =~ m/cygwin/ ) {
     ToFile( "Check if the right dmake version is used.", $empty, "c" );
     # Invalidate build environment.
     ToFile( "WORK_STAMP", "_invalid_", "e" );
@@ -2075,9 +2022,6 @@ print OUT $unsetvars;
 print OUT_SH "export $exportvars$newline";
 print OUT_SH "unset $unsetvarssh$newline";
 
-if(defined($outfile_bat))
-{  print OUT_BAT $unsetvarsbat;
-}
 
 #
 #---------------------------
@@ -2087,10 +2031,6 @@ if(defined($outfile_bat))
 close( OUT ) || print "Can't close $outfile: $!";
 
 close( OUT_SH ) || print "Can't close $outfile_sh: $!";
-
-if( defined($outfile_bat))
-{  close( OUT_BAT ) || print "Can't close $outfile_bat: $!";
-}
 
 #
 #------------------------------
@@ -2113,14 +2053,6 @@ if (rename( $outfile, $tmp ) ne 1)
 $tmp = $SRC_ROOT.$ds.$outfile_sh;
 if (rename( $outfile_sh, $tmp ) ne 1)
 {  `mv -f $outfile_sh $tmp`;
-}
-
-if(defined($outfile_bat))
-{
-    $tmp = $SRC_ROOT.$ds.$outfile_bat;
-    if (rename( $outfile_bat, $tmp ) ne 1)
-    {  `mv -f $outfile_bat $tmp`;
-    }
 }
 
 #
@@ -2178,9 +2110,7 @@ if (rename( $bootfile, $tmp ) ne 1)
 }
 
 print "Configure completed\n";
-if ( "@USE_SHELL@" ne "4nt" ) {
-	print "You may now run ./bootstrap in $SRC_ROOT\n";
-}
+print "You may now run ./bootstrap in $SRC_ROOT\n";
 if ( $Warning ne "" ) {
 	print "***** WARNINGS ISSUED *****\n";
 }
@@ -2201,7 +2131,7 @@ if ( $Warning ne "" ) {
 #-------------------------------------------------------------
 sub CheckPathName 
 {  my $retrn = $_[ 0 ];
-   if (($platform =~ m/cygwin/) or ( '@USE_SHELL@' ne "4nt" ))
+   if ($platform =~ m/cygwin/)
    {  # Check if the first character is not a '/'.
       if ( !( $_[ 0 ] =~ /^\// ) ) 
       {  $retrn = $ds.$_[ 0 ];
@@ -2277,21 +2207,6 @@ sub ToFile {
       if (defined $_[ 1 ] && $_[ 1 ] ne "" ) {
          my $envvar = $_[ 1 ];
          my $envvarbash = $envvar;
-         if ("@USE_SHELL@" eq "4nt" ) {
-             # expand the variables
-             $envvar =~ s/(\$\{?\w+\}?)/$1/eeg ;
-             # Some variables need to be translated
-             if ( ($_[ 0 ] =~ /^PATH$/) and ($platform !~ m/os2/) ) {
-                 # PATH is in cygwin format, but for 4nt it needs to be DOS.
-                 $win_format_var = WinPath( $envvar, ":" );
-             } else {
-                 $win_format_var = WinFormat( $envvar );
-             }
-             # The excluded variables are translated by cygwin
-             if ( $_[ 0 ] !~ /^PATH$|^TMP$|^TEMP$|^TMPDIR$|^HOME$/i ) {
-                 $envvar = $win_format_var;
-             }
-         }
 
          # Tcsh/bash needs backslashes quoted
          $envvar =~ s/\\/\\\\/g;
@@ -2302,17 +2217,10 @@ sub ToFile {
          print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
-         if(defined($outfile_bat)) {
-             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
-             print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
-         }
       } else {
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
          $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
          $unsetvarssh .= " $_[ 0 ]";                             # for sh file
-         if(defined($outfile_bat)) {
-             $unsetvarsbat .= "$unset $_[ 0 ] >& NUL$newline";
-         }
       }
    }
    elsif ( $_[ 2 ] eq "a" ) 
@@ -2320,13 +2228,6 @@ sub ToFile {
       print "The $_[ 0 ] is set to: $_[ 1 ]\n";    # to stdout
       print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
       print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
-      if(defined($outfile_bat)) # create the correct 4nt alias format
-      {  my $aliastmp = $_[ 1 ];
-         $aliastmp =~ s/\$/\%/g;
-         $aliastmp =~ s!/!\\!g;
-         $aliastmp =~ s!"!!g;
-         print OUT_BAT "$_[ 0 ]=".'`'.$aliastmp.'`'.$newline;
-      }
    }
    elsif ( $_[ 2 ] eq "c" ) 
    {  # Write a comment to file.
@@ -2342,23 +2243,11 @@ sub ToFile {
       print OUT_SH "$comment$newline";
       print OUT_SH "$comment $_[ 0 ]$newline";
       print OUT_SH "$comment$newline";
-      if(defined($outfile_bat)) {
-          print OUT_BAT "$newline";
-          print OUT_BAT "$comment4nt$newline";
-          print OUT_BAT "$comment4nt $_[ 0 ]$newline";
-          print OUT_BAT "$comment4nt$newline";
-      }
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
       print OUT "$newline";
       print OUT_SH "$newline";
-      print OUT_BAT "$newline" if defined($outfile_bat);
-   }
-   elsif ( $_[ 2 ] eq "x" )
-   {
-      #Write first argument as is, and nothing else
-      print OUT_BAT "$_[ 0 ]$newline" if defined($outfile_bat);
    }
    elsif ( $_[ 2 ] eq "y" )
    {

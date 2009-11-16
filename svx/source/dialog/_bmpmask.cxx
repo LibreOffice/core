@@ -1212,7 +1212,7 @@ void SvxBmpMask::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxBmpMask::ApplyStyle()
 {
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     aTbxPipette.SetItemImage( TBI_PIPETTE, bHighContrast ? maImgPipetteH : maImgPipette );
 }

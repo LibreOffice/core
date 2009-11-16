@@ -755,7 +755,7 @@ void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
 
     Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
-        rPoly.GetSimple( aSimplePoly );
+        rPoly.AdaptiveSubdivide( aSimplePoly );
     else
         aSimplePoly = rPoly;
     nSize = aSimplePoly.GetSize();
@@ -770,7 +770,7 @@ void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
     USHORT nSize,i;
     Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
-        rPoly.GetSimple( aSimplePoly );
+        rPoly.AdaptiveSubdivide( aSimplePoly );
     else
         aSimplePoly = rPoly;
     nSize=aSimplePoly.GetSize();
@@ -792,7 +792,7 @@ void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
         if ( aSimplePolyPoly[ i ].HasFlags() )
         {
             Polygon aSimplePoly;
-            aSimplePolyPoly[ i ].GetSimple( aSimplePoly );
+            aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
             aSimplePolyPoly[ i ] = aSimplePoly;
         }
     }

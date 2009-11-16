@@ -494,9 +494,7 @@ void IconLBoxString::Paint( const Point& aPos, SvLBox& aDevice,
         sal_Int32 nIndex = aURL.indexOf( aVndSunStarUNO );
         bool bUNO = nIndex == 0;
 
-        Wallpaper aBackground = aDevice.GetBackground();
-        Color     aColor      = aBackground.GetColor();
-        BOOL      bHC         = aColor.IsDark();
+        BOOL bHC = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
         const Image* pImg;
         if( bHC )
             pImg = bUNO ? m_pComponentImg_h : m_pMacroImg_h;

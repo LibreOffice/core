@@ -336,11 +336,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
 BOOL SfxVirtualMenu::IsHiContrastMode() const
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    Color aMenuColor = rSettings.GetMenuColor();
-    if ( aMenuColor.IsDark() )
-        return TRUE;
-    else
-        return FALSE;
+    return rSettings.GetHighContrastMode();
 }
 
 //--------------------------------------------------------------------

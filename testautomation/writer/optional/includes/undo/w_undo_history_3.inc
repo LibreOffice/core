@@ -45,7 +45,7 @@ sub w_undo_history_3
 	Call tUndoCaption			' Insert Caption
 	Call tUndoAutoText			' Insert Autotext	
 	Call tUndoBookmark			' Bookmark (Insert/Rename/Delete)
-	Call tUndoNote			' Note (Insert/Delete)
+	Call tUndoComment			' Comment (Insert/Delete)
 	Call tUndoScript			' Script (Insert/Delete)
 	Call tUndoIndexes			' Index/Bibliography entrys (Insert/Delete)
 	Call tUndoFrames			' Frames (Insert/Rename/Delete)
@@ -293,26 +293,23 @@ goto endsub
 endcase
 
 
-testcase tUndoNote
+testcase tUndoComment
 
-	'/// <B>Note (Insert/Delete)</B>
-	printlog "- Insert Note"
-	'/// new document
+	printlog "New document"
 	Call hNewDocument
-	'/// Insert / Note
+	printlog "Insert / Comment"
 	InsertNoteWriter
-	'///  string in Undo-list has to be: "Insert note") 
-	Call CheckUndoStringInUndoList ( 10, "InsertNote" )
-    printlog "- Delete Note"
-    '/// Bring up the Navigator, find the entry "Notes", expand it, and select the expanded section.
+	printlog "String in Undo-list has to be: 'Insert Comment'" 
+	Call CheckUndoStringInUndoList ( 10, "InsertComment" )
+    printlog "- Delete Comment"
+    printlog "Bring up the Navigator, find the entry 'Comments', expand it, and select the expanded section."
     Call wNavigatorAuswahl( 11, 1 )
-	'/// Enter 'Delete'      'Backspace'
     kontext "Navigator"
     Navigator.TypeKeys "<DELETE>"
     '/// Close the Navigator
     ViewNavigator
-    '///  string in Undo-list has to be: "Delete: 'This is a note'") 
-	Call CheckUndoStringInUndoList ( 10, "DeleteNote" )
+    '///  string in Undo-list has to be: "Delete comment") 
+	Call CheckUndoStringInUndoList ( 10, "DeleteComment" )
 
 	'/// Close document
 	Call hCloseDocument

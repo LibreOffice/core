@@ -173,6 +173,7 @@ namespace framework
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
         virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
         virtual Window*     GetParentLabeledBy( const Window* pLabeled ) const;
+    virtual void        GetFocus();
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };

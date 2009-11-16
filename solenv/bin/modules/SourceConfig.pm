@@ -44,6 +44,10 @@ use strict;
 use constant SOURCE_CONFIG_FILE_NAME => 'source_config';
 
 use Carp;
+use Cwd;
+use File::Basename;
+
+my $debug = 0;
 
 #####  profiling #####
 
@@ -64,8 +68,9 @@ sub new {
     $self->{REPOSITORIES} = {};
     $self->{MODULE_PATHS} = {};
     $self->{MODULE_BUILD_LIST_PATHS} = {};
-    $self->{ACTIVE_MODULES} = {};
+    $self->{ACTIVATED_MODULES} = {};
     $self->{MODULE_REPOSITORY} = {};
+    $self->{REAL_MODULES} = {};
     $self->{SOURCE_CONFIG_FILE} = get_config_file($source_root);
     $self->{SOURCE_CONFIG_DEFAULT} = Cwd::realpath($source_root) .'/'.SOURCE_CONFIG_FILE_NAME;
     read_config_file($self);
@@ -110,7 +115,7 @@ sub get_module_path {
     if (defined ${$self->{MODULE_PATHS}}{$module}) {
         return ${$self->{MODULE_PATHS}}{$module};
     } else {
-        Carp::cluck("No path for module $module in active repositories!!\n");
+        Carp::cluck("No path for module $module in active repositories!!\n") if ($debug);
         return undef;
     };
 }
@@ -135,13 +140,26 @@ sub get_all_modules
     return sort keys %{$self->{MODULE_PATHS}};
 };
 
-
 sub get_active_modules
 {
     my $self        = shift;
-    return sort keys %{$self->{ACTIVE_MODULES}};
+    if (scalar keys %{$self->{ACTIVATED_MODULES}}) {
+        return sort keys %{$self->{ACTIVATED_MODULES}};
+    }
+    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+       return sort keys %{$self->{REAL_MODULES}};
 }
 
+sub is_active
+{
+    my $self        = shift;
+    my $module      = shift;
+    if (scalar keys %{$self->{ACTIVATED_MODULES}}) {
+        return exists ($self->{ACTIVATED_MODULES}{$module});
+    }
+       $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
+    return exists ($self->{REAL_MODULES}{$module});
+}
 
 ##### private methods #####
 
@@ -163,10 +181,11 @@ sub get_module_paths {
         my $repository_path = ${$self->{REPOSITORIES}}{$repository};
         if (opendir DIRHANDLE, $repository_path) {
             foreach my $module (readdir(DIRHANDLE)) {
-                next if ($module =~ /^\.+/);
+                next if (($module =~ /^\.+/) || (!-d "$repository_path/$module"));
                 my $module_entry = $module;
-                $module =~ s/\.lnk$//;
-                $module =~ s/\.link$//;
+                if (($module !~ s/\.lnk$//) && ($module !~ s/\.link$//)) {
+                    $self->{REAL_MODULES}{$module}++;
+                }
                 my $possible_path = "$repository_path/$module_entry";
                 if (-d $possible_path) {
                     if (defined ${$self->{MODULE_PATHS}}{$module}) {
@@ -182,6 +201,7 @@ sub get_module_paths {
             croak("Cannot read $_ repository content");
         };
     };
+    croak("No modules found!") if (!scalar keys %{$self->{MODULE_PATHS}});
 };
 
 sub get_config_file {
@@ -227,7 +247,7 @@ sub read_config_file {
                     next;
                 }
                 if ($module_section) {
-                    ${$self->{ACTIVE_MODULES}}{$1}++;
+                    ${$self->{ACTIVATED_MODULES}}{$1}++;
                     next;
                 };
             };
@@ -308,6 +328,11 @@ SourceConfig::get_config_file_default_path()
 
 Returns default path for source configuration file
 
+SourceConfig::is_active()
+
+Returns 1 (TRUE) if a module is active
+Returns 0 (FALSE) if a module is not active
+
 =head2 EXPORT
 
 SourceConfig::new()
@@ -319,6 +344,7 @@ SourceConfig::get_module_build_list($module)
 SourceConfig::get_module_repository($module)
 SourceConfig::get_config_file_path()
 SourceConfig::get_config_file_default_path()
+SourceConfig::is_active($module)
 
 =head1 AUTHOR
 

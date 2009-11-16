@@ -107,8 +107,8 @@ CFLAGS=-m64
 .ENDIF
 
 # NB: SOLARDIR before SYSBASE, because linux SYSBASE contains obsolete libcrypto
-CPPFLAGS+:=-I$(SOLARINCDIR)$/external
-LDFLAGS+:=-L$(SOLARLIBDIR)
+CPPFLAGS+:=-I$(PWD)$/$(INCCOM) -I$(SOLARINCDIR)$/external
+LDFLAGS+:=-L$(PWD)$/$(LB) -L$(SOLARLIBDIR)
 
 .IF "$(SYSBASE)"!=""
 CPPFLAGS+:=-I$(SYSBASE)$/usr$/include

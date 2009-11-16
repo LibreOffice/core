@@ -59,11 +59,11 @@ testcase tiInsertTableUsingMenu
     if (UCase(gApplication)) = "IMPRESS" then
         DocumentImpress.UseMenu
         hMenuSelectNr(4)
-        hMenuSelectNr(13)
+        hMenuSelectNr(14)
     else
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
-        hMenuSelectNr(10)
+        hMenuSelectNr(11)
     endif
 
 
@@ -222,11 +222,11 @@ testcase tiTableObjectBar
     if (UCase(gApplication)) = "IMPRESS" then
         DocumentImpress.UseMenu
         hMenuSelectNr(4)
-        hMenuSelectNr(13)
+        hMenuSelectNr(14)
     else
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
-        hMenuSelectNr(10)
+        hMenuSelectNr(11)
     endif
 
     Kontext "InsertTableImpress"

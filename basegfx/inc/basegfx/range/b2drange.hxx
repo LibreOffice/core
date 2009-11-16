@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2drange.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -219,6 +218,14 @@ namespace basegfx
             return (
                 maRangeX.overlaps(rRange.maRangeX)
                 && maRangeY.overlaps(rRange.maRangeY)
+                );
+        }
+
+        bool overlapsMore(const B2DRange& rRange) const
+        {
+            return (
+                maRangeX.overlapsMore(rRange.maRangeX)
+                && maRangeY.overlapsMore(rRange.maRangeY)
                 );
         }
 

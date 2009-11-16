@@ -828,10 +828,7 @@ void SvxHyperlinkDlg::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxHyperlinkDlg::SetImages()
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode() != 0;
-
-    if( bHighContrast )
-        bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     SetItemImage( BTN_LINK, mpManager->GetImage( BTN_LINK, bHighContrast ) );
     SetItemImage( BTN_INSERT_BOOKMARK, mpManager->GetImage( BTN_INSERT_BOOKMARK, bHighContrast ) );

@@ -3510,7 +3510,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
     const sal_uInt8 aFldData[] =
     {
-        0,0,0,0,        // len of struct
         0x44,0,         // the start of "next" data
         0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!  /10
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
@@ -3518,7 +3517,8 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |              /16
         0,0,0,0,                            // /               /4
     };
-    int slen = sizeof( aFldData )
+    sal_uInt32 slen=sizeof(sal_uInt32)
+        + sizeof(aFldData)
         + sizeof( aFldHeader )
         + 2*ffname.getLength() + 4
         + 2*ffdeftext.getLength() + 4
@@ -3527,12 +3527,11 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         + 2*ffstattext.getLength() + 4
         + 2*ffentrymcr.getLength() + 4
         + 2*ffexitmcr.getLength() + 4;
-#ifdef OSL_BIGENDIAN
-    slen = SWAPLONG( slen );
-#endif // OSL_BIGENDIAN
-    *( (sal_uInt32 *)aFldData ) = slen;
+
+    *pDataStrm << slen;
+
     int len = sizeof( aFldData );
-    OSL_ENSURE( len == 0x44, "SwWW8Writer::WriteFormData(..) - wrong aFldData length" );
+    OSL_ENSURE( len == 0x44-sizeof(sal_uInt32), "SwWW8Writer::WriteFormData(..) - wrong aFldData length" );
     pDataStrm->Write( aFldData, len );
 
     len = sizeof( aFldHeader );

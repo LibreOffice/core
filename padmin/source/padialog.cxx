@@ -106,7 +106,7 @@ PADialog::PADialog( Window* pParent, BOOL /*bAdmin*/ ) :
 
 void PADialog::updateSettings()
 {
-    if( ! GetDisplayBackground().GetColor().IsDark() )
+    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER ) ) );
         m_aFaxImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX ) ) );

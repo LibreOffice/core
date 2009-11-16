@@ -917,9 +917,7 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
     const String*       pTxt  = 0;
           RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
 
-    Wallpaper aBackground = aDevice.GetBackground();
-    Color     aColor      = aBackground.GetColor();
-    BOOL      bHC         = aColor.IsDark();
+    BOOL      bHC         = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
 
     TURLInfo* pInfo  = (TURLInfo*)pEntry->GetUserData();
     switch(pInfo->RecoveryState)

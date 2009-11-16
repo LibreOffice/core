@@ -565,7 +565,7 @@ uno::Any SAL_CALL Content::execute(
                                  ODM_DELETE,
                                  lpszNewDocId);
 
-                delete lpszNewDocId;
+                delete [] lpszNewDocId;
             }
             if(bError)
                 ucbhelper::cancelCommandExecution(

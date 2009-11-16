@@ -2407,7 +2407,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
         return;
 
     // let the families collection update the images
-    sal_Bool bIsHighContrast = m_pFloat->GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bIsHighContrast = m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode();
     pStyleFamilies->updateImages( *m_pStyleFamiliesId, bIsHighContrast ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL );
 
     // and set the new images on our toolbox
@@ -2424,7 +2424,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
 void SfxTemplateDialog_Impl::updateNonFamilyImages()
 {
     m_aActionTbR.SetImageList( ImageList( SfxResId(
-        m_pFloat->GetDisplayBackground().GetColor().IsDark() ? IMG_LST_STYLE_DESIGNER_HC
+        m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_LST_STYLE_DESIGNER_HC
                                                              : DLG_STYLE_DESIGNER ) ) );
 }
 

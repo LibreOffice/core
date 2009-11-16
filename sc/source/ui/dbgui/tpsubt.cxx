@@ -276,8 +276,8 @@ BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
 
     rArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, &theSubTotalData ) );
 
-    if ( pSubTotals ) delete pSubTotals;
-    if ( pFunctions ) delete pFunctions;
+    if ( pSubTotals ) delete [] pSubTotals;
+    if ( pFunctions ) delete [] pFunctions;
 
     return TRUE;
 }

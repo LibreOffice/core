@@ -756,7 +756,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          mnShapeMasterTitle;
         sal_uInt32          mnShapeMasterBody;
 
-        List                maTextRuleList;     // TextRuleEntry's
         List                maHyperlink;
 
         FontCollection          maFontCollection;

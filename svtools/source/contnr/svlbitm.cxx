@@ -590,8 +590,7 @@ void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
     BmpColorMode eMode( BMP_COLOR_NORMAL );
     if ( !!m_pImpl->m_aImage1_hc )
     {   // we really have HC images
-        const Wallpaper& rDeviceBackground = _rDev.GetDisplayBackground();
-        if ( rDeviceBackground.GetColor().IsDark() )
+        if ( _rDev.GetSettings().GetStyleSettings().GetHighContrastMode() )
             eMode = BMP_COLOR_HIGHCONTRAST;
     }
 

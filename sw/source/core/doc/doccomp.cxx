@@ -428,7 +428,7 @@ Compare::Compare( ULONG nDiff, CompareData& rData1, CompareData& rData2 )
         SetDiscard( rData2, pDiscard2, pCount1 );
 
         // die Arrays koennen wir wieder vergessen
-        delete pCount1; delete pCount2;
+        delete [] pCount1; delete [] pCount2;
 
         CheckDiscard( rData1.GetLineCount(), pDiscard1 );
         CheckDiscard( rData2.GetLineCount(), pDiscard2 );
@@ -437,7 +437,7 @@ Compare::Compare( ULONG nDiff, CompareData& rData1, CompareData& rData2 )
         pMD2 = new MovedData( rData2, pDiscard2 );
 
         // die Arrays koennen wir wieder vergessen
-        delete pDiscard1; delete pDiscard2;
+        delete [] pDiscard1; delete [] pDiscard2;
     }
 
     {

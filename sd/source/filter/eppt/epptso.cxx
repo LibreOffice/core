@@ -4239,6 +4239,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
     sal_Bool bAdditionalText = FALSE;
 
+    sal_Bool bSecOutl = FALSE;
+    sal_uInt32 nPObjects = 0;
+
     SvMemoryStream* pClientTextBox = NULL;
     SvMemoryStream* pClientData = NULL;
 
@@ -5341,32 +5344,32 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( !pClientTextBox )
                     pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
 
-                *pClientTextBox << (sal_uInt32)( EPP_OutlineTextRefAtom << 16 ) << (sal_uInt32)4
-                                << nPlacementID;
-
                 if ( mbEmptyPresObj == FALSE )
                 {
                     if ( ( ePageType == NORMAL ) && ( bMasterPage == FALSE ) )
-                    {   // try to allocate the textruleratom
-                        TextRuleEntry*  pTextRule = (TextRuleEntry*)maTextRuleList.GetCurObject();
-                        while ( pTextRule )
+                    {
+                        sal_uInt32 nTextType = EPP_TEXTTYPE_Body;
+                        if ( mnTextStyle == EPP_TEXTSTYLE_BODY )
                         {
-                            int nRulePage = pTextRule->nPageNumber;
-                            if ( nRulePage > nPageNumber )
-                                break;
-                            else if ( nRulePage < nPageNumber )
-                                pTextRule = (TextRuleEntry*)maTextRuleList.Next();
-                            else
-                            {
-                                SvMemoryStream* pOut = pTextRule->pOut;
-                                if ( pOut )
-                                {
-                                    pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
-                                    delete pOut, pTextRule->pOut = NULL;
-                                }
-                                maTextRuleList.Next();
-                                break;
-                            }
+                            if ( bSecOutl )
+                                nTextType = EPP_TEXTTYPE_HalfBody;
+                            else if ( mType == "presentation.Subtitle" )
+                                nTextType = EPP_TEXTTYPE_CenterBody;
+                            bSecOutl = sal_True;
+                        }
+                        else
+                            nTextType = EPP_TEXTTYPE_Title;
+
+                        TextRuleEntry aTextRule( nPageNumber );
+                        SvMemoryStream aExtBu( 0x200, 0x200 );
+                        ImplGetText();
+                        ImplWriteTextStyleAtom( *pClientTextBox, nTextType, nPObjects, &aTextRule, aExtBu, NULL );
+                        ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, nPageNumber + 0x100 );
+                        SvMemoryStream* pOut = aTextRule.pOut;
+                        if ( pOut )
+                        {
+                            pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
+                            delete pOut, aTextRule.pOut = NULL;
                         }
                     }
                 }

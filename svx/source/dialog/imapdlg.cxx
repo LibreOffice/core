@@ -1042,7 +1042,7 @@ IMPL_LINK( SvxIMapDlg, MiscHdl, void*, EMPTYARG )
 
 void SvxIMapDlg::ApplyImageList()
 {
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
 

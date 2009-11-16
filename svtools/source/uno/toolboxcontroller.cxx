@@ -646,7 +646,7 @@ sal_Bool ToolboxController::isHighContrast() const
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
-            bHighContrast = ( ((ToolBox *)pWindow)->GetBackground().GetColor().IsDark() );
+            bHighContrast = ( ((ToolBox *)pWindow)->GetSettings().GetStyleSettings().GetHighContrastMode() );
     }
 
     return bHighContrast;

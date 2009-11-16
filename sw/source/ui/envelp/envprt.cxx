@@ -107,7 +107,7 @@ SwEnvPrtPage::~SwEnvPrtPage()
 
 IMPL_LINK( SwEnvPrtPage, ClickHdl, Button *, EMPTYARG )
 {
-    sal_Bool bHC = GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     if (aBottomButton.IsChecked())
     {
         // Briefumschlaege von unten

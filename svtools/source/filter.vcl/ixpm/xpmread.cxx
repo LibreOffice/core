@@ -109,6 +109,10 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 mnColors = ImplGetULONG( 2 );
                 mnCpp = ImplGetULONG( 3 );
             }
+            if ( mnColors > ( SAL_MAX_UINT32 / ( 4 + mnCpp ) ) )
+                mbStatus = sal_False;
+            if ( ( mnWidth * mnCpp ) >= XPMSTRINGBUF )
+                mbStatus = sal_False;
             if ( mbStatus && mnWidth && mnHeight && mnColors && mnCpp )
             {
                 mnIdentifier = XPMCOLORS;
@@ -118,15 +122,20 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 //              1    Byte   -> 0xff wenn Farbe transparent ist
                 //              3    Bytes  -> RGB Wert der Farbe
                 mpColMap = new BYTE[ mnColors * ( 4 + mnCpp ) ];
-
-                for ( ULONG i = 0; i < mnColors; i++ )
+                if ( mpColMap )
                 {
-                    if ( ImplGetColor( i ) == FALSE )
+                    for ( ULONG i = 0; i < mnColors; i++ )
                     {
-                        mbStatus = FALSE;
-                        break;
+                        if ( ImplGetColor( i ) == FALSE )
+                        {
+                            mbStatus = FALSE;
+                            break;
+                        }
                     }
                 }
+                else
+                    mbStatus = sal_False;
+
                 if ( mbStatus )
                 {
                     // bei mehr als 256 Farben wird eine 24 Bit Grafik erstellt
@@ -630,7 +639,7 @@ BOOL XPMReader::ImplGetString( void )
                 mnStatus &=~XPMSTRING;          // end of parameter by eol
                 break;
             }
-            if ( mnStringSize >= XPMSTRINGBUF )
+            if ( mnStringSize >= ( XPMSTRINGBUF - 1 ) )
             {
                 mbStatus = FALSE;
                 break;

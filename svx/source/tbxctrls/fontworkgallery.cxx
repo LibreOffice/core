@@ -397,7 +397,7 @@ void FontWorkAlignmentWindow::implInit()
 {
     SetHelpId( HID_POPUP_FONTWORK_ALIGN );
 
-    bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
     mpMenu->SetHelpId( HID_POPUP_FONTWORK_ALIGN );
@@ -477,7 +477,7 @@ void FontWorkAlignmentWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         mpMenu->appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
         mpMenu->appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER ) ), bHighContrast ? maImgAlgin2h : maImgAlgin2 );
@@ -637,7 +637,7 @@ void FontWorkCharacterSpacingWindow::implInit()
 {
     SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
 
-//  bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+//  bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
     mpMenu->SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
@@ -754,7 +754,7 @@ void FontWorkCharacterSpacingWindow::DataChanged( const DataChangedEvent& rDCEvt
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-//      bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+//      bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         mpMenu->appendEntry( 0, String( SVX_RES( STR_CHARS_SPACING_VERY_TIGHT ) ), MIB_CHECKABLE );
         mpMenu->appendEntry( 1, String( SVX_RES( STR_CHARS_SPACING_TIGHT ) ), MIB_CHECKABLE );

@@ -300,7 +300,7 @@ void ObjectCatalogToolBox_Impl::DataChanged(DataChangedEvent const & rDCEvt)
 
 void ObjectCatalogToolBox_Impl::setImages()
 {
-    bool bHC = GetDisplayBackground().GetColor().IsDark();
+    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     if (bHC != m_bHighContrast)
     {
         SetImageList(bHC ? m_aImagesHighContrast : m_aImagesNormal);

@@ -428,7 +428,7 @@ bGrammarResults(false)
     sal_Int16 nStringCount = static_cast< sal_Int16 >( aSuggestions.getLength() );
 
     SvtLinguConfig aCfg;
-    const bool bIsDark = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+    const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
@@ -440,7 +440,7 @@ bGrammarResults(false)
         uno::Reference< container::XNamed > xNamed( xSpellAlt, uno::UNO_QUERY );
         if (xNamed.is())
         {
-            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName(), bIsDark );
+            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName(), bHC );
             aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
         }
 
@@ -529,7 +529,7 @@ bGrammarResults(false)
                 if (xSvcInfo.is())
                 {
                     OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                            xSvcInfo->getImplementationName(), bIsDark) );
+                            xSvcInfo->getImplementationName(), bHC) );
                     if (aDictionaryImageUrl.getLength() > 0)
                     {
                         Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
@@ -583,7 +583,7 @@ bGrammarResults(false)
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
-            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark() );
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING, rImg );
     //////////////////////////////////////////////////////////////////////////////////
 
@@ -717,7 +717,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
-            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark() );
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////

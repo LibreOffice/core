@@ -63,7 +63,7 @@ namespace svx
         if (mnSlotId == SID_BACKGROUND_COLOR)
             mnDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
         DBG_ASSERT( ptrTbx, "ToolBox not found :-(" );
-        mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetBackground().GetColor().IsDark() ) : FALSE;
+        mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : FALSE;
         Update(mnSlotId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
     }
 
@@ -79,7 +79,7 @@ namespace svx
     {
         Image       aImage( mpTbx->GetItemImage( mnBtnId ) );
         const bool  bSizeChanged = ( maBmpSize != aImage.GetSizePixel() );
-        const bool  bDisplayModeChanged = ( mbWasHiContrastMode != mpTbx->GetBackground().GetColor().IsDark() );
+        const bool  bDisplayModeChanged = ( mbWasHiContrastMode != mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode() );
         Color       aColor( rColor );
 
         // !!! #109290# Workaround for SetFillColor with COL_AUTO
@@ -107,7 +107,7 @@ namespace svx
                 else
                     pMskAcc = NULL;
 
-                mbWasHiContrastMode = mpTbx->GetBackground().GetColor().IsDark();
+                mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();
 
                 if( mnDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW && ( COL_TRANSPARENT != aColor.GetColor() ) )
                     pBmpAcc->SetLineColor( aColor );

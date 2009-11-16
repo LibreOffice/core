@@ -43,10 +43,35 @@
 #include "dialog.hrc"
 #include "passwd.hrc"
 
+#include "vcl/sound.hxx"
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
 {
+    if( mbAsciiOnly )
+    {
+        rtl::OUString aTest( maPasswordED.GetText() );
+        const sal_Unicode* pTest = aTest.getStr();
+        sal_Int32 nLen = aTest.getLength();
+        rtl::OUStringBuffer aFilter( nLen );
+        bool bReset = false;
+        for( sal_Int32 i = 0; i < nLen; i++ )
+        {
+            if( *pTest > 0x007f )
+                bReset = true;
+            else
+                aFilter.append( *pTest );
+            pTest++;
+        }
+        if( bReset )
+        {
+            Sound::Beep( SOUND_ERROR );
+            maPasswordED.SetSelection( Selection( 0, nLen ) );
+            maPasswordED.ReplaceSelected( aFilter.makeStringAndClear() );
+        }
+
+    }
     maOKBtn.Enable( maPasswordED.GetText().Len() >= mnMinLen );
     return 0;
 }
@@ -88,7 +113,8 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     maConfirmStr    (       SfxResId( STR_PASSWD_CONFIRM ) ),
 
     mnMinLen        ( 5 ),
-    mnExtras        ( 0 )
+    mnExtras        ( 0 ),
+    mbAsciiOnly     ( false )
 
 {
     FreeResource();

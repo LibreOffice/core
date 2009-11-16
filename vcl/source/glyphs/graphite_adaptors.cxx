@@ -71,6 +71,8 @@ namespace
     typedef std::hash_map<long,bool> SilfMap;
     SilfMap sSilfMap;
 }
+extern FT_Error (*pFTEmbolden)(FT_GlyphSlot);
+extern FT_Error (*pFTOblique)(FT_GlyphSlot);
 
 // class CharacterRenderProperties implentation.
 //
@@ -303,11 +305,11 @@ void GraphiteFontAdaptor::getGlyphMetrics(gr::gid16 nGlyphId, gr::Rect & aBoundi
             return;
         }
         // check whether we need synthetic bold/italic otherwise metric is wrong
-        if (mrFont.NeedsArtificialBold())
-            FT_GlyphSlot_Embolden(aFace->glyph);
+        if (mrFont.NeedsArtificialBold() && pFTEmbolden)
+            (*pFTEmbolden)(aFace->glyph);
 
-        if (mrFont.NeedsArtificialItalic())
-            FT_GlyphSlot_Oblique(aFace->glyph);
+        if (mrFont.NeedsArtificialItalic() && pFTOblique)
+            (*pFTOblique)(aFace->glyph);
 
         const FT_Glyph_Metrics &gm = aFace->glyph->metrics;
 

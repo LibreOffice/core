@@ -1899,11 +1899,11 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
                 nSize -= sizeof(BYTE);
             }
             if(rOut.Write(pBuf, padx) != padx){
-                delete pBuf;
+                delete [] pBuf;
                 goto error;
             }
         }
-        delete pBuf;
+        delete [] pBuf;
     }
 #else
     for (j=0;nSize>0&&j<maxy;j++)

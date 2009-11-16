@@ -1089,7 +1089,7 @@ ImpService* ImpDdeMgr::PutService( HSZ hszService )
     String aStr( (ULONG)hWndServer );
     aStr += pBuf;
     HSZ hszInstServ = DdeCreateStringHandle( (PSZ)(const char*)pBuf, 850 );
-    delete pBuf;
+    delete [] pBuf;
 
     pPtr->hBaseServName = hszService;
     pPtr->hInstServName = hszInstServ;

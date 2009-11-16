@@ -90,12 +90,17 @@ void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
 
 void ImplWritePoly( SvStream& rOStm, const Polygon& rPoly )
 {
-    INT32 nSize = rPoly.GetSize();
+    // #i102224# Here the evtl. curved nature of Polygon was
+    // ignored (for all those Years). Adapted to at least write
+    // a polygon representing the curve as good as possible
+    Polygon aSimplePoly;
+    rPoly.AdaptiveSubdivide(aSimplePoly);
+    INT32 nSize = aSimplePoly.GetSize();
 
     rOStm << nSize;
 
     for( INT32 i = 0; i < nSize; i++ )
-        rOStm << rPoly[ (USHORT) i ];
+        rOStm << aSimplePoly[ (USHORT) i ];
 }
 
 // ------------------------------------------------------------------------
@@ -131,13 +136,18 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
 
     for( n = 0; n < nPoly; n++ )
     {
+        // #i102224# Here the evtl. curved nature of Polygon was
+        // ignored (for all those Years). Adapted to at least write
+        // a polygon representing the curve as good as possible
         const Polygon&  rPoly = rPolyPoly[ n ];
-        const USHORT    nSize = rPoly.GetSize();
+        Polygon aSimplePoly;
+        rPoly.AdaptiveSubdivide(aSimplePoly);
+        const USHORT    nSize = aSimplePoly.GetSize();
 
         rOStm << (INT32) nSize;
 
         for( USHORT j = 0; j < nSize; j++ )
-            rOStm << rPoly[ j ];
+            rOStm << aSimplePoly[ j ];
     }
 }
 
@@ -1354,8 +1364,15 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaPolyLineAction* pAct = (MetaPolyLineAction*) pAction;
                 const Polygon&      rPoly = pAct->GetPolygon();
+
+                // #i102224# Here the evtl. curved nature of Polygon was
+                // ignored (for all those Years). Adapted to at least write
+                // a polygon representing the curve as good as possible
+                Polygon aSimplePoly;
+                rPoly.AdaptiveSubdivide(aSimplePoly);
+
                 const LineInfo&     rInfo = pAct->GetLineInfo();
-                const USHORT        nPoints = rPoly.GetSize();
+                const USHORT        nPoints = aSimplePoly.GetSize();
                 const BOOL          bFatLine = ( !rInfo.IsDefault() && ( LINE_NONE != rInfo.GetStyle() ) );
 
                 if( bFatLine )
@@ -1369,7 +1386,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (INT32) nPoints;
 
                 for( USHORT n = 0; n < nPoints; n++ )
-                    rOStm << rPoly[ n ];
+                    rOStm << aSimplePoly[ n ];
 
                 nCount++;
 
@@ -1385,14 +1402,21 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaPolygonAction*  pAct = (MetaPolygonAction*) pAction;
                 const Polygon&      rPoly = pAct->GetPolygon();
-                const USHORT        nPoints = rPoly.GetSize();
+
+                // #i102224# Here the evtl. curved nature of Polygon was
+                // ignored (for all those Years). Adapted to at least write
+                // a polygon representing the curve as good as possible
+                Polygon aSimplePoly;
+                rPoly.AdaptiveSubdivide(aSimplePoly);
+
+                const USHORT        nPoints = aSimplePoly.GetSize();
 
                 rOStm << (INT16) GDI_POLYGON_ACTION;
                 rOStm << (INT32) ( 8 + ( nPoints << 3 ) );
                 rOStm << (INT32) nPoints;
 
                 for( USHORT n = 0; n < nPoints; n++ )
-                    rOStm << rPoly[ n ];
+                    rOStm << aSimplePoly[ n ];
 
                 nCount++;
             }

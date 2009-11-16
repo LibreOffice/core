@@ -91,7 +91,7 @@ struct dirent *readdir( DIR *pDir )
             pDir->h = FindFirstFile( pBuf, &pDir->aDirEnt );
             bOk = pDir->h != INVALID_HANDLE_VALUE;
             pDir->p = NULL;
-            delete pBuf;
+            delete [] pBuf;
         }
         else
             pDir->h = INVALID_HANDLE_VALUE;

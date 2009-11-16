@@ -283,8 +283,6 @@ struct PageSyncData
     std::deque< Graphic >                           mGraphics;
     std::deque< ::boost::shared_ptr< PDFWriter::AnyWidget > >
                                                     mControls;
-    std::set< ::rtl::OUString >                     mControlNames;
-
     GlobalSyncData*                                 mpGlobalData;
 
     sal_Bool                                        mbGroupIgnoreGDIMtfActions;
@@ -375,7 +373,6 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                 if ( pControl.get() )
                     rWriter.CreateControl( *pControl );
                 mControls.pop_front();
-                mControlNames.erase( pControl->Name );
             }
             break;
             case PDFExtOutDevDataSync::BeginGroup :
@@ -772,16 +769,6 @@ void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType, 
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::CreateControl );
 
     ::boost::shared_ptr< PDFWriter::AnyWidget > pClone( rControlType.Clone() );
-    // ensure a unique name
-    ::rtl::OUString sUniqueName( pClone->Name );
-    sal_Int32 nUniqueNumber( 0 );
-    while ( mpPageSyncData->mControlNames.find( sUniqueName ) != mpPageSyncData->mControlNames.end() )
-    {
-        sUniqueName = pClone->Name + ::rtl::OUString::valueOf( ++nUniqueNumber );
-    }
-    pClone->Name = sUniqueName;
-    mpPageSyncData->mControlNames.insert( pClone->Name );
-
     mpPageSyncData->mControls.push_back( pClone );
 }
 

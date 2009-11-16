@@ -1233,8 +1233,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
             }
         }
 
-        delete pDelRows;
-        delete ppDelCells;
+        delete [] pDelRows;
+        delete [] ppDelCells;
     }
 
     pDocument->SetAutoCalc( bOldAutoCalc );

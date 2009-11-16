@@ -232,10 +232,11 @@ testcase i_us_presentation2
     SlidesControl.FadeIn
 
     printlog "   Did the 'mistake' to FadeIn/Out the Slidepane"
-
-    '/// Make a Mouse Double-Click on the left part of the Layout, to input a picture ///'
+    
+    printlog "activating the input picture area"
     kontext "DocumentImpress"
-    DocumentImpress.MouseDoubleClick 30,50
+    DocumentImpress.TypeKeys "<TAB>",2
+    DocumentImpress.TypeKeys "<RETURN>"
     sleep (1)
 
     '/// Graphics-Import-dialogue. Select "i_us_large.jpg" ///'

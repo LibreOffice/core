@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dcubicbezier.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1045,6 +1044,65 @@ namespace basegfx
             impCheckExtremumResult(fCY / (2 * fBY), rResults);
         }
     }
+
+    int B2DCubicBezier::getMaxDistancePositions( double pResult[2]) const
+    {
+        // the distance from the bezier to a line through start and end
+        // is proportional to (ENDx-STARTx,ENDy-STARTy)*(+BEZIERy(t),-BEZIERx(t))
+        // this distance becomes zero for at least t==0 and t==1
+        // its extrema that are between 0..1 are interesting as split candidates
+        // its derived function has the form dD/dt = fA*t^2 + 2*fB*t + fC
+        const B2DPoint aRelativeEndPoint(maEndPoint-maStartPoint);
+        const double fA = 3 * (maEndPoint.getX() - maControlPointB.getX()) * aRelativeEndPoint.getY()
+                - 3 * (maEndPoint.getY() - maControlPointB.getY()) * aRelativeEndPoint.getX();
+        const double fB = (maControlPointB.getX() - maControlPointA.getX()) * aRelativeEndPoint.getY()
+                - (maControlPointB.getY() - maControlPointA.getY()) * aRelativeEndPoint.getX();
+        const double fC = (maControlPointA.getX() - maStartPoint.getX()) * aRelativeEndPoint.getY()
+                - (maControlPointA.getY() - maStartPoint.getY()) * aRelativeEndPoint.getX();
+
+        // test for degenerated case: non-cubic curve
+        if( fTools::equalZero(fA) )
+        {
+            // test for degenerated case: straight line
+            if( fTools::equalZero(fB) )
+                return 0;
+
+            // degenerated case: quadratic bezier
+            pResult[0] = -fC / (2*fB);
+
+            // test root: ignore it when it is outside the curve
+            int nCount = ((pResult[0] > 0) && (pResult[0] < 1));
+            return nCount;
+        }
+
+        // derivative is polynomial of order 2
+        // check if the polynomial has non-imaginary roots
+        const double fD = fB*fB - fA*fC;
+        if( fD >= 0.0 ) // TODO: is this test needed? geometrically not IMHO
+        {
+            // calculate the first root
+            const double fS = sqrt(fD);
+            const double fQ = fB + ((fB >= 0) ? +fS : -fS);
+            pResult[0] = fQ / fA;
+            // test root: ignore it when it is outside the curve
+            int nCount = ((pResult[0] > 0) && (pResult[0] < 1));
+
+            // ignore multiplicit roots
+            if( !fTools::equalZero(fD) )
+            {
+                 // calculate the second root
+                const double fRoot = fC / fQ;
+                pResult[ nCount ] = fC / fQ;
+                // test root: ignore it when it is outside the curve
+                nCount += ((fRoot > 0) && (fRoot < 1));
+            }
+
+            return nCount;
+        }
+
+        return 0;
+    }
+
 } // end of namespace basegfx
 
 // eof

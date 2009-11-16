@@ -1701,19 +1701,6 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
     if(aNewB2DPolyPolygon.count())
     {
-        if( !bLineGeometryNeededOnly )
-        {
-            // hack aNewB2DPolyPolygon to fill logic rect - this is
-            // needed to produce gradient fills that look like mso
-            aNewB2DPolygon.clear();
-            aNewB2DPolygon.append(basegfx::B2DPoint(0,0));
-            aNewB2DPolyPolygon.append(aNewB2DPolygon);
-
-            aNewB2DPolygon.clear();
-            aNewB2DPolygon.append(basegfx::B2DPoint(aLogicRect.GetWidth(),
-                                                    aLogicRect.GetHeight()));
-            aNewB2DPolyPolygon.append(aNewB2DPolygon);
-        }
         // #i37011#
         bool bForceCreateTwoObjects(false);
 

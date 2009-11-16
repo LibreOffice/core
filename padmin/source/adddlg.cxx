@@ -807,7 +807,7 @@ AddPrinterDialog::~AddPrinterDialog()
 
 void AddPrinterDialog::updateSettings()
 {
-    if( ! GetDisplayBackground().GetColor().IsDark() )
+    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
         m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
     else
         m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER_HC ) ) ) );

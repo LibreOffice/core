@@ -376,7 +376,7 @@ namespace dbp
         {
             ::svt::OLocalResourceAccess aLocalResAccess( ModuleRes( RID_PAGE_TABLESELECTION ), RSC_TABPAGE );
 
-            bool bIsHiContrast = m_aTable.GetBackground().GetColor().IsDark();
+            bool bIsHiContrast = m_aTable.GetSettings().GetStyleSettings().GetHighContrastMode();
             aTableImage = Image( ModuleRes( bIsHiContrast ? IMG_TABLE_HC : IMG_TABLE ) );
             aQueryImage = Image( ModuleRes( bIsHiContrast ? IMG_QUERY_HC : IMG_QUERY ) );
         }

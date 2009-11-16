@@ -989,7 +989,7 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 3, pData );
 
     Polygon aSimplePoly;
-    maPoly.GetSimple( aSimplePoly );
+    maPoly.AdaptiveSubdivide( aSimplePoly );
 
     rOStm << aSimplePoly;                               // Version 1
     rOStm << maLineInfo;                                // Version 2
@@ -1077,7 +1077,7 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 2, pData );
 
     Polygon aSimplePoly;                            // Version 1
-    maPoly.GetSimple( aSimplePoly );
+    maPoly.AdaptiveSubdivide( aSimplePoly );
     rOStm << aSimplePoly;
 
     sal_uInt8 bHasPolyFlags = maPoly.HasFlags();    // Version 2
@@ -1169,7 +1169,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
         const Polygon& rPoly = maPolyPoly.GetObject( i );
         if ( rPoly.HasFlags() )
             nNumberOfComplexPolygons++;
-        rPoly.GetSimple( aSimplePoly );
+        rPoly.AdaptiveSubdivide( aSimplePoly );
         rOStm << aSimplePoly;
     }
 
@@ -2581,7 +2581,13 @@ sal_Bool MetaGradientExAction::Compare( const MetaAction& rMetaAction ) const
 void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maPolyPoly << maGradient;
+
+    // #i105373# see comment at MetaTransparentAction::Write
+    PolyPolygon aNoCurvePolyPolygon;
+    maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+    rOStm << aNoCurvePolyPolygon;
+    rOStm << maGradient;
 }
 
 // ------------------------------------------------------------------------
@@ -2649,7 +2655,13 @@ sal_Bool MetaHatchAction::Compare( const MetaAction& rMetaAction ) const
 void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maPolyPoly << maHatch;
+
+    // #i105373# see comment at MetaTransparentAction::Write
+    PolyPolygon aNoCurvePolyPolygon;
+    maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+    rOStm << aNoCurvePolyPolygon;
+    rOStm << maHatch;
 }
 
 // ------------------------------------------------------------------------
@@ -3716,7 +3728,20 @@ sal_Bool MetaTransparentAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maPolyPoly;
+
+    // #i105373# The PolyPolygon in this action may be a curve; this
+    // was ignored until now what is an error. To make older office
+    // versions work with MetaFiles, i opt for applying AdaptiveSubdivide
+    // to the PolyPoylgon.
+    // The alternative would be to really write the curve information
+    // like in MetaPolyPolygonAction::Write (where someone extended it
+    // correctly, but not here :-( ).
+    // The golden solution would be to combine both, but i think it's
+    // not necessary; a good subdivision will be sufficient.
+    PolyPolygon aNoCurvePolyPolygon;
+    maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+    rOStm << aNoCurvePolyPolygon;
     rOStm << mnTransPercent;
 }
 

@@ -171,5 +171,6 @@ void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
     d[i] = oneThird*(c[i+1]-c[i])/h[i];
   }
 
+  delete[] h;
   sys.DeleteMatrix(N+1,mat);
 }

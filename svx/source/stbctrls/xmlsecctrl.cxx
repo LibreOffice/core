@@ -97,12 +97,12 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nSlotId,  USHORT _nId, S
 {
     mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
 
-    sal_Bool bIsDark = GetStatusBar().GetBackground().GetColor().IsDark();
-    mpImpl->maImage = Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
+    sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
+    mpImpl->maImage = Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
     mpImpl->maImageBroken =
-        Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_BROKEN_H : RID_SVXBMP_SIGNET_BROKEN ) );
+        Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_BROKEN_H : RID_SVXBMP_SIGNET_BROKEN ) );
     mpImpl->maImageNotValidated =
-        Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_NOTVALIDATED_H : RID_SVXBMP_SIGNET_NOTVALIDATED ) );
+        Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_NOTVALIDATED_H : RID_SVXBMP_SIGNET_NOTVALIDATED ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()

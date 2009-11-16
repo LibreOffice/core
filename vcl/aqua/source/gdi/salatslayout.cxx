@@ -302,16 +302,14 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
 
         // workaround for ATSUI not using trailing spaces for justification
-        mnTrailingSpaceWidth = 0;
         int i = mnCharCount;
-        while( (--i > 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) )
-            mnTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
-        if( i <= 0 )
+        while( (--i >= 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) ) {}
+        if( i < 0 ) // nothing to do if the text is all spaces
             return;
         // #i91685# trailing letters are left aligned (right aligned for RTL)
-        mnTrailingSpaceWidth += rArgs.mpDXArray[i];
+        mnTrailingSpaceWidth = rArgs.mpDXArray[ mnCharCount-1 ];
         if( i > 0 )
-            mnTrailingSpaceWidth -= rArgs.mpDXArray[i-1];
+            mnTrailingSpaceWidth -= rArgs.mpDXArray[ i-1 ];
         InitGIA(); // ensure valid mpCharWidths[]
         mnTrailingSpaceWidth -= Fixed2Vcl( mpCharWidths[i] );
         // ignore trailing space for calculating the available width

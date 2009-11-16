@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b1drange.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,6 +128,11 @@ namespace basegfx
         bool overlaps(const B1DRange& rRange) const
         {
             return maRange.overlaps(rRange.maRange);
+        }
+
+        bool overlapsMore(const B1DRange& rRange) const
+        {
+            return maRange.overlapsMore(rRange.maRange);
         }
 
         void expand(double fValue)

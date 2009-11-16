@@ -369,7 +369,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     // insert the categories
     // "New Document"
-    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
+    sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     Image aImage( SvtResId( bHiContrast ? IMG_SVT_NEWDOC_HC : IMG_SVT_NEWDOC ) );
     nMaxTextLength = aImage.GetSizePixel().Width();
     String aEntryStr = String( SvtResId( STR_SVT_NEWDOC ) );
@@ -1348,7 +1348,7 @@ void SvtTemplateWindow::InitToolBoxImages()
 {
     SvtMiscOptions aMiscOpt;
     BOOL bLarge = aMiscOpt.AreCurrentSymbolsLarge();
-    sal_Bool bHiContrast = aFileViewTB.GetBackground().GetColor().IsDark();
+    sal_Bool bHiContrast = aFileViewTB.GetSettings().GetStyleSettings().GetHighContrastMode();
 
     aFileViewTB.SetItemImage( TI_DOCTEMPLATE_BACK, Image( SvtResId(
         bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_BACK_LARGE : IMG_SVT_DOCTEMPLATE_BACK_LARGE
@@ -1372,7 +1372,7 @@ void SvtTemplateWindow::InitToolBoxImages()
 
 void SvtTemplateWindow::UpdateIcons()
 {
-    pIconWin->UpdateIcons( aFileViewTB.GetBackground().GetColor().IsDark() );
+    pIconWin->UpdateIcons( aFileViewTB.GetSettings().GetStyleSettings().GetHighContrastMode() );
 }
 
 // ------------------------------------------------------------------------

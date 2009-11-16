@@ -1813,7 +1813,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
 
                 const Image* pImg = 0;
                 BmpColorMode eBitmapMode = BMP_COLOR_NORMAL;
-                if ( GetDisplayBackground().GetColor().IsDark() )
+                if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
                     eBitmapMode = BMP_COLOR_HIGHCONTRAST;
 
                 if( IsExpanded(pEntry) )

@@ -54,7 +54,7 @@ CONVERTFILES= \
     Contrib$/ICC_utils$/Stubs.h \
     Contrib$/ICC_utils$/Vetters.cpp
 
-CONFIGURE_ACTION= $(GNUCOPY) -r $(BACK_PATH)..$/source$/create_sRGB_profile Contrib$/CmdLine && unzip $(BACK_PATH)..$/makefiles.zip
+CONFIGURE_ACTION= $(GNUCOPY) -r $(BACK_PATH)..$/source$/create_sRGB_profile Contrib$/CmdLine && unzip -o $(BACK_PATH)..$/makefiles.zip
 BUILD_ACTION=dmake &&  cd Contrib$/CmdLine$/create_sRGB_profile && $(AUGMENT_LIBRARY_PATH) .$/create_sRGB_profile
 
 # --- Targets ------------------------------------------------------

@@ -110,9 +110,9 @@ namespace toolkit
     {
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
         if ( pImage )
-            return pImage->GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+            return pImage->GetSettings().GetStyleSettings().GetHighContrastMode();
         else
-            return Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+            return Application::GetSettings().GetStyleSettings().GetHighContrastMode();
     }
 
     // -----------------------------------------------------------------------

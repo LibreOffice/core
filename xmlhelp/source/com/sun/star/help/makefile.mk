@@ -58,8 +58,6 @@ CFLAGS+=-DSYSTEM_EXPAT
 
 
 JAVACLASSFILES = \
-    $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpIndexerTool.class			\
-    $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpFileDocument.class		\
     $(CLASSDIR)$/$(PACKAGE)$/HelpSearch.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpComponent.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        
@@ -75,9 +73,7 @@ TRANSEX3FILES = \
 
 ADDFILES = $(subst,$(SOLARBINDIR)$/help,$(CLASSDIR) $(TRANSEX3FILES))
 
-#JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
-
-JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar HelpIndexerTool.jar
+JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar 
 .IF "$(SYSTEM_LUCENE)" == "YES"
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
 COMP=fix_system_lucene
@@ -96,6 +92,7 @@ CUSTOMMANIFESTFILE = MANIFEST.MF
 ALLTAR : $(ADDFILES)
 
 .IF "$(JARTARGETN)"!=""
+$(JAVATARGET) : $(ADDFILES)
 $(JARTARGETN) : $(ADDFILES)
 $(JARTARGETN) : $(COMP)
 .ENDIF

@@ -1673,6 +1673,12 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     }
 }
 
+void SdrObjCustomShape::SetModel(SdrModel* pNewModel)
+{
+    SdrTextObj::SetModel(pNewModel);
+    mXRenderedCustomShape.clear();
+}
+
 UINT16 SdrObjCustomShape::GetObjIdentifier() const
 {
     return UINT16(OBJ_CUSTOMSHAPE);

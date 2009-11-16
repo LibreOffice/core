@@ -190,7 +190,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                             pInst->hDdeInstSvr, (LPBYTE) pPairs,
                             sizeof(HSZPAIR) * (nTopics+1),
                             0, NULL, nCbType, 0);
-            delete pPairs;
+            delete [] pPairs;
             return h;
         }
 

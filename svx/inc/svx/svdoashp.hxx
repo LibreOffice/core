@@ -179,6 +179,8 @@ public:
     virtual UINT16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
+    virtual void SetModel(SdrModel* pNewModel);
+
     virtual void RecalcSnapRect();
 
     virtual const Rectangle& GetSnapRect()  const;

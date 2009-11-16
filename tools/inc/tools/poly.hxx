@@ -182,7 +182,6 @@ public:
     void                Clip( const Rectangle& rRect, BOOL bPolygon = TRUE );
     void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
-    void                GetSimple( Polygon& rResult ) const;
     /** Adaptive subdivision of polygons with curves
 
         This method adaptively subdivides bezier arcs within the
@@ -288,7 +287,6 @@ public:
     void                Clip( const Rectangle& rRect );
     void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
-    void                GetSimple( PolyPolygon& rResult ) const;
     /** Adaptive subdivision of polygons with curves
 
         This method adaptively subdivides bezier arcs within the
