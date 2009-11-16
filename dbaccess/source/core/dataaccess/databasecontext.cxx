@@ -36,6 +36,7 @@
 #include "core_resource.hxx"
 #include "databasecontext.hxx"
 #include "databasedocument.hxx"
+#include "databaseregistrations.hxx"
 #include "datasource.hxx"
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
@@ -70,7 +71,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svtools/filenotation.hxx>
-#include <svtools/pathoptions.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fsys.hxx>
@@ -114,30 +114,6 @@ namespace dbaccess
 {
 //........................................................................
 
-    namespace
-    {
-        //--------------------------------------------------------------------
-        const ::rtl::OUString& getDbRegisteredNamesNodeName()
-        {
-            static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/RegisteredNames");
-            return s_sNodeName;
-        }
-
-        //--------------------------------------------------------------------
-        const ::rtl::OUString& getDbNameNodeName()
-        {
-            static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Name");
-            return s_sNodeName;
-        }
-
-        //--------------------------------------------------------------------
-        const ::rtl::OUString& getDbLocationNodeName()
-        {
-            static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Location");
-            return s_sNodeName;
-        }
-        // -----------------------------------------------------------------------------
-    }
     // .............................................................................
         typedef ::cppu::WeakImplHelper1 <   XTerminateListener
                                         >   DatabaseDocumentLoader_Base;
@@ -224,6 +200,15 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
 {
     m_pDatabaseDocumentLoader = new DatabaseDocumentLoader( m_aContext );
     ::basic::BasicManagerRepository::registerCreationListener( *this );
+
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        m_xDBRegistrationAggregate.set( createDataSourceRegistrations( m_aContext ), UNO_SET_THROW );
+        m_xDatabaseRegistrations.set( m_xDBRegistrationAggregate, UNO_QUERY_THROW );
+
+        m_xDBRegistrationAggregate->setDelegator( *this );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //--------------------------------------------------------------------------
@@ -232,6 +217,10 @@ ODatabaseContext::~ODatabaseContext()
     ::basic::BasicManagerRepository::revokeCreationListener( *this );
     if ( m_pDatabaseDocumentLoader )
         m_pDatabaseDocumentLoader->release();
+
+    m_xDBRegistrationAggregate->setDelegator( NULL );
+    m_xDBRegistrationAggregate.clear();
+    m_xDatabaseRegistrations.clear();
 }
 
 // Helper
@@ -327,25 +316,6 @@ void ODatabaseContext::disposing()
     m_aDatabaseObjects.clear();
 }
 
-//------------------------------------------------------------------------------
-bool ODatabaseContext::getURLForRegisteredObject( const ::rtl::OUString& _rRegisteredName, ::rtl::OUString& _rURL )
-{
-    if ( !_rRegisteredName.getLength() )
-        throw IllegalArgumentException();
-
-    // the config node where all pooling relevant info are stored under
-    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
-    if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName( _rRegisteredName ) )
-    {
-        OConfigurationNode aRegisterObj = aDbRegisteredNamesRoot.openNode( _rRegisteredName );
-        aRegisterObj.getNodeValue(getDbLocationNodeName()) >>= _rURL;
-        _rURL = SvtPathOptions().SubstituteVariable( _rURL );
-        return true;
-    }
-    return false;
-}
-
 // XNamingService
 //------------------------------------------------------------------------------
 Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUString& _rName) throw( Exception, RuntimeException )
@@ -353,9 +323,7 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    ::rtl::OUString sURL;
-    if ( !getURLForRegisteredObject( _rName, sURL ) )
-        throw NoSuchElementException(_rName, *this);
+    ::rtl::OUString sURL( getDatabaseLocation( _rName ) );
 
     if ( !sURL.getLength() )
         // there is a registration for this name, but no URL
@@ -500,23 +468,7 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
     if ( !sURL.getLength() )
         throw IllegalArgumentException( DBACORE_RESSTRING( RID_STR_DATASOURCE_NOT_STORED ), *this, 2 );
 
-    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-            ::comphelper::getProcessServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
-
-    if ( aDbRegisteredNamesRoot.isValid() )
-    {
-        OConfigurationNode oDataSourceRegistration;
-        // the sub-node for the concrete registration
-        if (aDbRegisteredNamesRoot.hasByName(_rName))
-            oDataSourceRegistration = aDbRegisteredNamesRoot.openNode(_rName);
-        else
-            oDataSourceRegistration = aDbRegisteredNamesRoot.createNode(_rName);
-
-        // set the values
-        oDataSourceRegistration.setNodeValue(getDbNameNodeName(), makeAny(_rName));
-        oDataSourceRegistration.setNodeValue(getDbLocationNodeName(), makeAny(sURL));
-        aDbRegisteredNamesRoot.commit();
-    }
+    registerDatabaseLocation( _rName, sURL );
 
     ODatabaseSource::setName( xDocDataSource, _rName, ODatabaseSource::DBContextAccess() );
 
@@ -601,30 +553,20 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
 
     Reference< XInterface > xExistent;
 
-    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
-    if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName) )
+    ::rtl::OUString sURL = getDatabaseLocation( _rName );
+
+    revokeDatabaseLocation( _rName );
+        // will throw if something goes wrong
+
+    if ( m_aDatabaseObjects.find( _rName ) != m_aDatabaseObjects.end() )
     {
-        OConfigurationNode aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_rName);
-        ::rtl::OUString sURL;
-        aThisDriverSettings.getNodeValue(getDbLocationNodeName()) >>= sURL;
-        sURL = SvtPathOptions().SubstituteVariable(sURL);
-
-        if ( m_aDatabaseObjects.find( _rName ) != m_aDatabaseObjects.end() )
-        {
-            m_aDatasourceProperties[ sURL ] = m_aDatasourceProperties[ _rName ];
-        }
-
-        // check if URL is already loaded
-        ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
-        if ( aExistent != m_aDatabaseObjects.end() )
-            m_aDatabaseObjects.erase(aExistent);
-        if (!aDbRegisteredNamesRoot.removeNode(_rName))
-            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
-        aDbRegisteredNamesRoot.commit();
+        m_aDatasourceProperties[ sURL ] = m_aDatasourceProperties[ _rName ];
     }
-    else
-        throw NoSuchElementException(_rName,*this);
+
+    // check if URL is already loaded
+    ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
+    if ( aExistent != m_aDatabaseObjects.end() )
+        m_aDatabaseObjects.erase(aExistent);
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), Any(), makeAny(xExistent));
@@ -632,6 +574,60 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
         static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
+}
+
+//------------------------------------------------------------------------------
+::sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
+{
+    return m_xDatabaseRegistrations->hasRegisteredDatabase( _Name );
+}
+
+//------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL ODatabaseContext::getRegistrationNames() throw (RuntimeException)
+{
+    return m_xDatabaseRegistrations->getRegistrationNames();
+}
+
+//------------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODatabaseContext::getDatabaseLocation( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+{
+    return m_xDatabaseRegistrations->getDatabaseLocation( _Name );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseContext::registerDatabaseLocation( const ::rtl::OUString& _Name, const ::rtl::OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
+{
+    m_xDatabaseRegistrations->registerDatabaseLocation( _Name, _Location );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseContext::revokeDatabaseLocation( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
+{
+    m_xDatabaseRegistrations->revokeDatabaseLocation( _Name );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseContext::changeDatabaseLocation( const ::rtl::OUString& _Name, const ::rtl::OUString& _NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
+{
+    m_xDatabaseRegistrations->changeDatabaseLocation( _Name, _NewLocation );
+}
+
+//------------------------------------------------------------------------------
+::sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+{
+    return m_xDatabaseRegistrations->isDatabaseRegistrationReadOnly( _Name );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseContext::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException)
+{
+    m_xDatabaseRegistrations->addDatabaseRegistrationsListener( _Listener );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException)
+{
+    m_xDatabaseRegistrations->removeDatabaseRegistrationsListener( _Listener );
 }
 
 // ::com::sun::star::container::XElementAccess
@@ -676,8 +672,9 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
 
         // see whether this is an registered name
         ::rtl::OUString sURL;
-        if ( getURLForRegisteredObject( _rName, sURL ) )
+        if ( hasRegisteredDatabase( _rName ) )
         {
+            sURL = getDatabaseLocation( _rName );
             // is the object cached under its URL?
             xExistent = getObject( sURL );
         }
@@ -704,7 +701,8 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
     }
     catch (Exception& e)
     {   // exceptions other than the speciafied ones -> wrap
-        throw WrappedTargetException(_rName, *this, makeAny( e ) );
+        Any aError = ::cppu::getCaughtException();
+        throw WrappedTargetException(_rName, *this, aError );
     }
 }
 
@@ -714,19 +712,7 @@ Sequence< rtl::OUString > ODatabaseContext::getElementNames(void) throw( Runtime
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    DECLARE_STL_USTRINGACCESS_MAP( bool , TNameMap);
-    TNameMap aRet;
-
-    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
-
-    Sequence< ::rtl::OUString> aSeq;
-    if ( aDbRegisteredNamesRoot.isValid() )
-    {
-        aSeq = aDbRegisteredNamesRoot.getNodeNames();
-    } // if ( aDbRegisteredNamesRoot.isValid() )
-
-    return aSeq;
+    return getRegistrationNames();
 }
 
 //------------------------------------------------------------------------------
@@ -735,11 +721,9 @@ sal_Bool ODatabaseContext::hasByName(const rtl::OUString& _rName) throw( Runtime
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
-
-    return aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName);
+    return hasRegisteredDatabase( _rName );
 }
+
 // -----------------------------------------------------------------------------
 Reference< XInterface > ODatabaseContext::getObject(const ::rtl::OUString& _rName)
 {
