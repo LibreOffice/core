@@ -1013,7 +1013,7 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTarnsformationOrNULL )
+    bool ViewObjectContactOfUnoControl_Impl::ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL )
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
         if ( impl_isDisposed_nofail() )
@@ -1023,16 +1023,20 @@ namespace sdr { namespace contact {
         if ( pPageViewContact )
         {
             SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
+            const OutputDevice& rDevice( impl_getPageViewOutputDevice_nothrow( *pPageViewContact ) );
             return impl_ensureControl_nothrow(
                 aPVAccess,
-                impl_getPageViewOutputDevice_nothrow( *pPageViewContact )
+                rDevice,
+                _pInitialViewTransformationOrNULL ? *_pInitialViewTransformationOrNULL : rDevice.GetViewTransformation()
             );
         }
 
         DummyPageViewAccess aNoPageView;
+        const OutputDevice& rDevice( impl_getOutputDevice_throw() );
         return impl_ensureControl_nothrow(
             aNoPageView,
-            impl_getOutputDevice_throw()
+            rDevice,
+            _pInitialViewTransformationOrNULL ? *_pInitialViewTransformationOrNULL : rDevice.GetViewTransformation()
         );
     }
 
@@ -1624,12 +1628,8 @@ namespace sdr { namespace contact {
     #endif
         // force control here to make it a VCL ChildWindow. Will be fetched
         // and used below by getExistentControl()
-<<<<<<< local
         m_pVOCImpl->ensureControl( &_rViewInformation.getObjectToViewTransformation() );
-=======
-        m_pVOCImpl->ensureControl();
         impl_positionAndZoomControl( _rViewInformation );
->>>>>>> other
 
         // get needed data
         const ViewContactOfUnoControl& rViewContactOfUnoControl( m_pVOCImpl->getViewContact() );
