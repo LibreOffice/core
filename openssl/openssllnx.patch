@@ -1,5 +1,5 @@
---- misc/openssl-0.9.8k/test/Makefile	2009-03-25 11:59:22.000000000 +0100
-+++ misc/build/openssl-0.9.8k/test/Makefile	2009-03-30 12:51:00.210108929 +0200
+--- misc/openssl-0.9.8l/test/Makefile	2009-03-25 11:59:22.000000000 +0100
++++ misc/build/openssl-0.9.8l/test/Makefile	2009-03-30 12:51:00.210108929 +0200
 @@ -408,7 +408,7 @@
  		LIBRARIES="$(LIBCRYPTO)"; \
  	fi; \
@@ -18,8 +18,8 @@
  		LIBDEPS="$(PEX_LIBS) $$LIBRARIES $(EX_LIBS)" \
  		link_app.$${shlib_target}
   
---- misc/openssl-0.9.8k/apps/Makefile	2008-11-19 17:03:48.000000000 +0100
-+++ misc/build/openssl-0.9.8k/apps/Makefile	2009-03-30 12:50:56.332719825 +0200
+--- misc/openssl-0.9.8l/apps/Makefile	2008-11-19 17:03:48.000000000 +0100
++++ misc/build/openssl-0.9.8l/apps/Makefile	2009-03-30 12:50:56.332719825 +0200
 @@ -158,7 +158,7 @@
  	LIBRARIES="$(LIBSSL) $(LIBKRB5) $(LIBCRYPTO)" ; \
  	[ "x$(FIPSCANLIB)" = "xlibfips" ] && LIBRARIES="$$LIBRARIES -lfips"; \
@@ -29,8 +29,8 @@
  		LIBDEPS="$(PEX_LIBS) $$LIBRARIES $(EX_LIBS)" \
  		link_app.$${shlib_target}
  	-(cd ..; \
---- misc/openssl-0.9.8k/config	2009-02-16 09:43:41.000000000 +0100
-+++ misc/build/openssl-0.9.8k/config	2009-03-30 08:59:09.588448000 +0200
+--- misc/openssl-0.9.8l/config	2009-02-16 09:43:41.000000000 +0100
++++ misc/build/openssl-0.9.8l/config	2009-03-30 08:59:09.588448000 +0200
 @@ -399,27 +399,21 @@
  # this is where the translation occurs into SSLeay terms
  # ---------------------------------------------------------------------------
@@ -74,11 +74,11 @@
  fi
  GCCVER=${GCCVER:-0}
  if [ "$SYSTEM" = "HP-UX" ];then 
---- misc/openssl-0.9.8k/libcrypto_OOo_0_9_8k.map	Tue Jan 27 19:52:14 2009
-+++ misc/build/openssl-0.9.8k/libcrypto_OOo_0_9_8k.map	Tue Jan 27 19:51:04 2009
+--- misc/openssl-0.9.8l/libcrypto_OOo_0_9_8l.map	Tue Jan 27 19:52:14 2009
++++ misc/build/openssl-0.9.8l/libcrypto_OOo_0_9_8l.map	Tue Jan 27 19:51:04 2009
 @@ -1,1 +1,3295 @@
 -dummy
-+LIBCRYPTO_OOO_0_9_8e {
++LIBCRYPTO_OOO_0_9_8l {
 +	global:
 +ACCESS_DESCRIPTION_free;
 +ACCESS_DESCRIPTION_it;
@@ -1397,7 +1397,7 @@
 +KRB5_TKTBODY_free;
 +KRB5_TKTBODY_it;
 +KRB5_TKTBODY_new;
-+LIBCRYPTO_OOO_0_9_8e;
++LIBCRYPTO_OOO_0_9_8k;
 +LONG_it;
 +MD2;
 +MD2_Final;
@@ -3373,11 +3373,11 @@
 +	local:
 +		*;
 +};
---- misc/openssl-0.9.8k/libssl_OOo_0_9_8k.map	Tue Jan 27 19:52:14 2009
-+++ misc/build/openssl-0.9.8k/libssl_OOo_0_9_8k.map	Tue Jan 27 19:51:04 2009
+--- misc/openssl-0.9.8l/libssl_OOo_0_9_8l.map	Tue Jan 27 19:52:14 2009
++++ misc/build/openssl-0.9.8l/libssl_OOo_0_9_8l.map	Tue Jan 27 19:51:04 2009
 @@ -1,1 +1,445 @@
 -dummy
-+LIBSSL_OOO_0_9_8e {
++LIBSSL_OOO_0_9_8l {
 +	global:
 +BIO_f_ssl;
 +BIO_new_buffer_ssl_connect;
@@ -3390,7 +3390,7 @@
 +DTLSv1_method;
 +DTLSv1_server_method;
 +ERR_load_SSL_strings;
-+LIBSSL_OOO_0_9_8e;
++LIBSSL_OOO_0_9_8l;
 +SSL_CIPHER_description;
 +SSL_CIPHER_get_bits;
 +SSL_CIPHER_get_name;

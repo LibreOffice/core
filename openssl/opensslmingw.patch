@@ -1,5 +1,5 @@
---- misc/openssl-0.9.8k/Makefile.shared	2008-09-17 17:56:40.000000000 +0200
-+++ misc/build/openssl-0.9.8k/Makefile.shared	2009-03-30 11:52:53.684538000 +0200
+--- misc/openssl-0.9.8l/Makefile.shared	2008-09-17 17:56:40.000000000 +0200
++++ misc/build/openssl-0.9.8l/Makefile.shared	2009-03-30 11:52:53.684538000 +0200
 @@ -254,13 +254,17 @@
  	base=-Wl,--enable-auto-image-base; \
  	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
@@ -21,8 +21,8 @@
  	[ -f apps/$$SHLIB$$SHLIB_SUFFIX ] && rm apps/$$SHLIB$$SHLIB_SUFFIX; \
  	[ -f test/$$SHLIB$$SHLIB_SUFFIX ] && rm test/$$SHLIB$$SHLIB_SUFFIX; \
  	$(LINK_SO_A) || exit 1; \
---- misc/openssl-0.9.8k/apps/Makefile	2008-11-20 01:03:48.000000000 +0900
-+++ misc/build/openssl-0.9.8k/apps/Makefile	2009-04-10 19:49:37.006875000 +0900
+--- misc/openssl-0.9.8l/apps/Makefile	2008-11-20 01:03:48.000000000 +0900
++++ misc/build/openssl-0.9.8l/apps/Makefile	2009-04-10 19:49:37.006875000 +0900
 @@ -153,12 +153,12 @@
  	shlib_target=; if [ -n "$(SHARED_LIBS)" ]; then \
  		shlib_target="$(SHLIB_TARGET)"; \
@@ -38,8 +38,8 @@
  		LIBDEPS="$(PEX_LIBS) $$LIBRARIES $(EX_LIBS)" \
  		link_app.$${shlib_target}
  	-(cd ..; \
---- misc/openssl-0.9.8k/e_os2.h	2005-12-19 03:57:07.000000000 +0900
-+++ misc/build/openssl-0.9.8k/e_os2.h	2009-04-04 23:07:15.324250000 +0900
+--- misc/openssl-0.9.8l/e_os2.h	2005-12-19 03:57:07.000000000 +0900
++++ misc/build/openssl-0.9.8l/e_os2.h	2009-04-04 23:07:15.324250000 +0900
 @@ -264,7 +264,7 @@
  # define OPENSSL_IMPLEMENT_GLOBAL(type,name)			     \
  	extern type _hide_##name;				     \
@@ -49,8 +49,8 @@
  # define OPENSSL_DECLARE_GLOBAL(type,name) type *_shadow_##name(void)
  # define OPENSSL_GLOBAL_REF(name) (*(_shadow_##name()))
  #else
---- misc/openssl-0.9.8k/ms/mingw32.bat	2006-05-05 15:19:32.000000000 +0200
-+++ misc/build/openssl-0.9.8k/ms/mingw32.bat	2009-03-30 11:54:10.000000000 +0200
+--- misc/openssl-0.9.8l/ms/mingw32.bat	2006-05-05 15:19:32.000000000 +0200
++++ misc/build/openssl-0.9.8l/ms/mingw32.bat	2009-03-30 11:54:10.000000000 +0200
 @@ -79,15 +79,41 @@
  rem copy ms\tlhelp32.h outinc
  
@@ -96,8 +96,8 @@
  echo Done compiling OpenSSL
  
  :end
---- misc/openssl-0.9.8k/test/Makefile	2009-03-25 19:59:22.000000000 +0900
-+++ misc/build/openssl-0.9.8k/test/Makefile	2009-04-10 20:07:21.522500000 +0900
+--- misc/openssl-0.9.8l/test/Makefile	2009-03-25 19:59:22.000000000 +0900
++++ misc/build/openssl-0.9.8l/test/Makefile	2009-04-10 20:07:21.522500000 +0900
 @@ -402,13 +402,13 @@
  	if [ "$(FIPSCANLIB)" = "libfips" ]; then \
  		LIBRARIES="-L$(TOP) -lfips"; \
@@ -128,8 +128,8 @@
  		LIBDEPS="$(PEX_LIBS) $$LIBRARIES $(EX_LIBS)" \
  		link_app.$${shlib_target}
  
---- misc/openssl-0.9.8k/util/pl/Mingw32.pl	2006-05-05 15:19:34.000000000 +0200
-+++ misc/build/openssl-0.9.8k/util/pl/Mingw32.pl	2009-03-30 11:55:04.000000000 +0200
+--- misc/openssl-0.9.8l/util/pl/Mingw32.pl	2006-05-05 15:19:34.000000000 +0200
++++ misc/build/openssl-0.9.8l/util/pl/Mingw32.pl	2009-03-30 11:55:04.000000000 +0200
 @@ -6,11 +6,11 @@
  $o='/';
  $cp='cp';

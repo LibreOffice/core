@@ -1,5 +1,5 @@
---- misc/openssl-0.9.8k/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
-+++ misc/build/openssl-0.9.8k/crypto/x509v3/v3_pci.c	2008-03-20 13:30:16.000000000 +0100
+--- misc/openssl-0.9.8l/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
++++ misc/build/openssl-0.9.8l/crypto/x509v3/v3_pci.c	2008-03-20 13:30:16.000000000 +0100
 @@ -2,7 +2,7 @@
  /* Contributed to the OpenSSL Project 2004
   * by Richard Levitte (richard@levitte.org)
@@ -9,8 +9,8 @@
   * (Royal Institute of Technology, Stockholm, Sweden).
   * All rights reserved.
   *
---- misc/openssl-0.9.8k/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
-+++ misc/build/openssl-0.9.8k/crypto/x509v3/v3_pcia.c	2008-03-20 13:30:47.000000000 +0100
+--- misc/openssl-0.9.8l/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
++++ misc/build/openssl-0.9.8l/crypto/x509v3/v3_pcia.c	2008-03-20 13:30:47.000000000 +0100
 @@ -2,7 +2,7 @@
  /* Contributed to the OpenSSL Project 2004
   * by Richard Levitte (richard@levitte.org)
@@ -20,8 +20,8 @@
   * (Royal Institute of Technology, Stockholm, Sweden).
   * All rights reserved.
   *
---- misc/openssl-0.9.8k/ms/do_ms.bat	2005-05-17 02:07:13.000000000 +0200
-+++ misc/build/openssl-0.9.8k/ms/do_ms.bat	2008-03-20 13:27:06.000000000 +0100
+--- misc/openssl-0.9.8l/ms/do_ms.bat	2005-05-17 02:07:13.000000000 +0200
++++ misc/build/openssl-0.9.8l/ms/do_ms.bat	2008-03-20 13:27:06.000000000 +0100
 @@ -1,9 +1,8 @@
 +%1 util\mkfiles.pl >MINFO
 +%1 util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
@@ -39,8 +39,8 @@
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
 +%1 util\mkdef.pl 32 libeay > ms\libeay32.def
 +%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
---- misc/openssl-0.9.8k/util/mk1mf.pl	2007-08-13 00:31:14.000000000 +0200
-+++ misc/build/openssl-0.9.8k/util/mk1mf.pl	2008-03-20 13:27:06.000000000 +0100
+--- misc/openssl-0.9.8l/util/mk1mf.pl	2007-08-13 00:31:14.000000000 +0200
++++ misc/build/openssl-0.9.8l/util/mk1mf.pl	2008-03-20 13:27:06.000000000 +0100
 @@ -115,7 +115,7 @@
  $inc_def="outinc";
  $tmp_def="tmp";
@@ -71,8 +71,8 @@
    #define PLATFORM "$platform"
  EOF
  printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
---- misc/openssl-0.9.8k/util/pl/VC-32.pl	2007-07-19 19:39:07.000000000 +0200
-+++ misc/build/openssl-0.9.8k/util/pl/VC-32.pl	2008-03-20 13:27:06.000000000 +0100
+--- misc/openssl-0.9.8l/util/pl/VC-32.pl	2007-07-19 19:39:07.000000000 +0200
++++ misc/build/openssl-0.9.8l/util/pl/VC-32.pl	2008-03-20 13:27:06.000000000 +0100
 @@ -28,7 +28,7 @@
  $zlib_lib="zlib1.lib";
  
