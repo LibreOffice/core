@@ -306,6 +306,9 @@ public:
     sal_Bool                    IsReadOnlyUI() const;
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    virtual sal_Bool            AcceptStateUpdate() const;
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     sal_Bool                    HasModalViews() const;
     sal_Bool                    IsHelpDocument() const;
 

@@ -493,6 +493,13 @@ sal_Bool SfxObjectShell::IsInModalMode() const
     return pImp->bModalMode || pImp->bRunningMacro;
 }
 
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+sal_Bool SfxObjectShell::AcceptStateUpdate() const
+{
+    return !IsInModalMode();
+}
+//-->Added by PengYunQuan for Validity Cell Range Picker
+
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::HasModalViews() const
