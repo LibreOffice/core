@@ -492,6 +492,17 @@ void Edit::ImplInvalidateOrRepaint( xub_StrLen nStart, xub_StrLen nEnd )
 
 // -----------------------------------------------------------------------
 
+long Edit::ImplGetTextYPosition() const
+{
+    if ( GetStyle() & WB_TOP )
+        return ImplGetExtraOffset();
+    else if ( GetStyle() & WB_BOTTOM )
+        return GetOutputSizePixel().Height() - GetTextHeight() - ImplGetExtraOffset();
+    return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
+}
+
+// -----------------------------------------------------------------------
+
 void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 {
     if ( !IsReallyVisible() )
@@ -516,10 +527,8 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         GetCaretPositions( aText, pDX, nStart, nEnd );
     }
 
-    // center vertically
-    long    nH = GetOutputSize().Height();
     long    nTH = GetTextHeight();
-    Point   aPos( mnXOffset, (nH-nTH)/2 );
+    Point   aPos( mnXOffset, ImplGetTextYPosition() );
 
     if( bLayout )
     {
@@ -1193,7 +1202,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
     long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraOffset();
 
     // Cursor muss im sichtbaren Bereich landen:
-    Size aOutSize = GetOutputSizePixel();
+    const Size aOutSize = GetOutputSizePixel();
     if ( (nCursorPosX < 0) || (nCursorPosX >= aOutSize.Width()) )
     {
         long nOldXOffset = mnXOffset;
@@ -1227,8 +1236,8 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
             ImplInvalidateOrRepaint();
     }
 
-    long nTextHeight = GetTextHeight();
-    long nCursorPosY = (aOutSize.Height()-nTextHeight) / 2;
+    const long nTextHeight = GetTextHeight();
+    const long nCursorPosY = ImplGetTextYPosition();
     pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
     pCursor->SetSize( Size( nCursorWidth, nTextHeight ) );
     pCursor->Show();
