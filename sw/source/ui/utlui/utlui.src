@@ -122,6 +122,10 @@ Resource RID_SHELLRES_AUTOFMTSTRS
     {
         Text [ en-US ] = "Combine paragraphs";
     };
+    String STR_AUTOFMTREDL_NON_BREAK_SPACE +1
+    {
+        Text [ en-US ] = "Add non breaking space";
+    };
 
 };
 

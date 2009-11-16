@@ -319,6 +319,7 @@ void SwAutoFormat::_SetRedlineTxt( USHORT nActionId )
         case STR_AUTOFMTREDL_FRACTION:
         case STR_AUTOFMTREDL_DASH:
         case STR_AUTOFMTREDL_ORDINAL:
+        case STR_AUTOFMTREDL_NON_BREAK_SPACE:
             nSeqNo = ++nRedlAutoFmtSeqId;
             break;
         }
@@ -1885,7 +1886,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
         !aFlags.bCptlSttSntnc && !aFlags.bCptlSttWrd &&
         !aFlags.bChgFracionSymbol && !aFlags.bChgOrdinalNumber &&
         !aFlags.bChgToEnEmDash && !aFlags.bSetINetAttr &&
-        !aFlags.bChgWeightUnderl) )
+        !aFlags.bChgWeightUnderl && !aFlags.bAddNonBrkSpace) )
         return;
 
     const String* pTxt = &pAktTxtNd->GetTxt();
@@ -1894,7 +1895,8 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 
     BOOL bGetLanguage = aFlags.bChgOrdinalNumber ||
                         aFlags.bChgToEnEmDash || aFlags.bSetINetAttr ||
-                        aFlags.bCptlSttWrd || aFlags.bCptlSttSntnc;
+                        aFlags.bCptlSttWrd || aFlags.bCptlSttSntnc ||
+                        aFlags.bAddNonBrkSpace;
 
 
     aDelPam.DeleteMark();
@@ -2123,6 +2125,9 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                 ( aFlags.bChgToEnEmDash &&
                     SetRedlineTxt( STR_AUTOFMTREDL_DASH ) &&
                     pATst->FnChgToEnEmDash( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
+                ( aFlags.bAddNonBrkSpace &&
+                    SetRedlineTxt( STR_AUTOFMTREDL_NON_BREAK_SPACE ) &&
+                    pATst->FnAddNonBrkSpace( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
                 ( aFlags.bSetINetAttr &&
                     ( nPos == pTxt->Len() || IsSpace( pTxt->GetChar( nPos )) ) &&
                     SetRedlineTxt( STR_AUTOFMTREDL_DETECT_URL ) &&

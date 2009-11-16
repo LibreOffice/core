@@ -115,8 +115,9 @@
 #define STR_AUTOFMTREDL_SET_TMPL_HEADLINE       18
 #define STR_AUTOFMTREDL_SET_NUMBULET            19
 #define STR_AUTOFMTREDL_DEL_MORELINES           20
+#define STR_AUTOFMTREDL_NON_BREAK_SPACE         21
 // !!!!!!!!!!!!!!!!!!!!!!!!!!  das Ende immer richtig setzen !!!!!!!!!!!!
-#define STR_AUTOFMTREDL_END                     21
+#define STR_AUTOFMTREDL_END                     22
 
 
 #endif
