@@ -47,6 +47,9 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 #include <osl/file.hxx>
 #include <vos/mutex.hxx>
@@ -112,6 +115,70 @@ DBG_NAME(SfxViewShell)
 
 //=========================================================================
 
+class SfxClipboardChangeListener : public ::cppu::WeakImplHelper1<
+    datatransfer::clipboard::XClipboardListener >
+{
+    SfxViewShell* pViewShell;
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const lang::EventObject& rEventObject )
+        throw ( uno::RuntimeException );
+
+    // XClipboardListener
+    virtual void SAL_CALL changedContents( const datatransfer::clipboard::ClipboardEvent& rEventObject )
+        throw ( uno::RuntimeException );
+
+public:
+    SfxClipboardChangeListener( SfxViewShell* pView );
+    virtual ~SfxClipboardChangeListener();
+
+    void DisconnectViewShell() { pViewShell = NULL; }
+};
+
+SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView )
+: pViewShell( 0 )
+{
+    uno::Reference < lang::XComponent > xCtrl( pView->GetController(), uno::UNO_QUERY );
+    if ( xCtrl.is() )
+    {
+        xCtrl->addEventListener( uno::Reference < lang::XEventListener > ( static_cast < lang::XEventListener* >( this ) ) );
+        pViewShell = pView;
+    }
+}
+
+SfxClipboardChangeListener::~SfxClipboardChangeListener()
+{
+}
+
+void SAL_CALL SfxClipboardChangeListener::disposing( const lang::EventObject& /*rEventObject*/ )
+throw ( uno::RuntimeException )
+{
+    // either clipboard or ViewShell is going to be destroyed -> no interest in listening anymore
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( pViewShell )
+    {
+        uno::Reference < lang::XComponent > xCtrl( pViewShell->GetController(), uno::UNO_QUERY );
+        if ( xCtrl.is() )
+            xCtrl->removeEventListener( uno::Reference < lang::XEventListener > ( static_cast < lang::XEventListener* >( this ) ) );
+        pViewShell->AddRemoveClipboardListener( uno::Reference < datatransfer::clipboard::XClipboardListener > (this), FALSE );
+        pViewShell = 0;
+    }
+}
+
+void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::clipboard::ClipboardEvent& )
+    throw ( RuntimeException )
+{
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if( pViewShell )
+    {
+        SfxBindings& rBind = pViewShell->GetViewFrame()->GetBindings();
+        rBind.Invalidate( SID_PASTE );
+        rBind.Invalidate( SID_PASTE_SPECIAL );
+        rBind.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+    }
+}
+
+
 static ::rtl::OUString RetrieveLabelFromCommand(
     const ::rtl::OUString& rCommandURL,
     const css::uno::Reference< css::frame::XFrame >& rFrame )
@@ -176,7 +243,12 @@ static ::rtl::OUString RetrieveLabelFromCommand(
 }
 
 //=========================================================================
+SfxViewShell_Impl::SfxViewShell_Impl()
+: aInterceptorContainer( aMutex )
+, pAccExec(0)
+{}
 
+//=========================================================================
 SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_MAIL_CHILDWIN );
@@ -687,6 +759,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             case SID_PRINTDOC:
             case SID_PRINTDOCDIRECT:
             case SID_SETUPPRINTER:
+            case SID_PRINTER_NAME:
             {
                 BOOL bEnabled = pImp->bCanPrint && !pImp->nPrinterLocks;
                 bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
@@ -720,9 +793,10 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 }
                 if ( !bEnabled )
                 {
-                    rSet.DisableItem( SID_PRINTDOC );
+                    // will now be handled by requeing the request
+                /*  rSet.DisableItem( SID_PRINTDOC );
                     rSet.DisableItem( SID_PRINTDOCDIRECT );
-                    rSet.DisableItem( SID_SETUPPRINTER );
+                    rSet.DisableItem( SID_SETUPPRINTER ); */
                 }
                 break;
             }
@@ -1187,6 +1261,7 @@ SfxViewShell::SfxViewShell
 {
     DBG_CTOR(SfxViewShell, 0);
 
+    pImp->pPrinterCommandQueue = new SfxAsyncPrintExec_Impl( this );
     pImp->pController = 0;
     pImp->bIsShowView =
         !(SFX_VIEW_NO_SHOW == (nFlags & SFX_VIEW_NO_SHOW));
@@ -1229,19 +1304,27 @@ SfxViewShell::~SfxViewShell()
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
     rViewArr.Remove( rViewArr.GetPos(pThis) );
 
+    if ( pImp->xClipboardListener.is() )
+    {
+        pImp->xClipboardListener->DisconnectViewShell();
+        pImp->xClipboardListener = NULL;
+    }
+
     if ( pImp->pController )
     {
         pImp->pController->ReleaseShell_Impl();
         pImp->pController->release();
+        pImp->pController = NULL;
     }
 
     if (pImp->pAccExec)
     {
-        delete pImp->pAccExec;
-        pImp->pAccExec = 0;
+        DELETEZ( pImp->pAccExec );
     }
-    delete pImp;
-    delete pIPClientList;
+
+    DELETEZ( pImp->pPrinterCommandQueue );
+    DELETEZ( pImp );
+    DELETEZ( pIPClientList );
 }
 
 //--------------------------------------------------------------------
@@ -1926,6 +2009,13 @@ void SfxViewShell::SetController( SfxBaseController* pController )
     pImp->pController = pController;
     pImp->pController->acquire();
     pImp->bControllerSet = TRUE;
+
+    // there should be no old listener, but if there is one, it should be disconnected
+    if (  pImp->xClipboardListener.is() )
+        pImp->xClipboardListener->DisconnectViewShell();
+
+    pImp->xClipboardListener = new SfxClipboardChangeListener( this );
+    AddRemoveClipboardListener( pImp->xClipboardListener.get(), TRUE );
 }
 
 Reference < XController > SfxViewShell::GetController()
@@ -2127,4 +2217,29 @@ void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequenc
 BOOL SfxViewShell::Escape()
 {
     return GetViewFrame()->GetBindings().Execute( SID_TERMINATE_INPLACEACTIVATION );
+}
+
+void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransfer::clipboard::XClipboardListener >& rClp, BOOL bAdd )
+{
+    try
+    {
+        if ( GetViewFrame() )
+        {
+            uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( GetViewFrame()->GetWindow().GetClipboard() );
+            if( xClipboard.is() )
+            {
+                uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClpbrdNtfr( xClipboard, uno::UNO_QUERY );
+                if( xClpbrdNtfr.is() )
+                {
+                    if( bAdd )
+                        xClpbrdNtfr->addClipboardListener( rClp );
+                    else
+                        xClpbrdNtfr->removeClipboardListener( rClp );
+                }
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+    }
 }

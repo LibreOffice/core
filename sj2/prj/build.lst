@@ -1,8 +1,0 @@
-j2	sj2	:	jvmaccess sandbox svtools NULL
-j2	sj2										usr1	-	all	j2_mkout NULL
-j2	sj2\stardiv\applet						nmake	-	all	j2_starappl j2_contr NULL
-j2	sj2\stardiv\applet\resources			nmake	-	all	j2_appres j2_starappl NULL
-j2	sj2\stardiv\controller					nmake	-	all	j2_contr  NULL
-j2	sj2\stardiv\app							nmake	-	all	j2_starapp j2_starappl j2_contr NULL
-j2	sj2\source\jscpp						nmake	-	all	j2_jscpp j2_starapp NULL
-j2	sj2\util								nmake	-	all	j2_util j2_jscpp NULL

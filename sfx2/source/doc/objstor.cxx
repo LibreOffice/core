@@ -36,6 +36,7 @@
 #endif
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/intitem.hxx>
 #include <tools/zcodec.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -99,7 +100,6 @@
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <shell/systemshell.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -370,7 +370,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
 
                 // older versions can not have this property set, it exists only starting from ODF1.2
-                if ( nDefVersion == SvtSaveOptions::ODFVER_012 )
+                if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
                     aVersion = ODFVER_012_TEXT;
 
                 if ( aVersion.getLength() )
@@ -521,7 +521,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 
         pImp->bInitialized = sal_True;
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, this ) );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(STR_EVENT_DOCCREATED), this ) );
         return sal_True;
     }
 
@@ -665,11 +665,14 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaTypeFallbackUsed" ) ) )
                                                                     >>= bWarnMediaTypeFallback;
 
-                if ( bWarnMediaTypeFallback && pRepairPackageItem && pRepairPackageItem->GetValue() )
+                if ( pRepairPackageItem && pRepairPackageItem->GetValue() )
                 {
+                    // the macros in repaired documents should be disabled
+                    pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::NEVER_EXECUTE ) );
+
                     // the mediatype was retrieved by using fallback solution but this is a repairing mode
                     // so it is acceptable to open the document if there is no contents that required manifest.xml
-                    bWarnMediaTypeFallback = sal_False; //!NoDependencyFromManifest_Impl( xStorage );
+                    bWarnMediaTypeFallback = sal_False;
                 }
 
                 if ( bWarnMediaTypeFallback || !xStorage->getElementNames().getLength() )
@@ -827,7 +830,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( aUrl.GetProtocol() == INET_PROT_FILE )
                 {
                     const SfxFilter* pOrgFilter = pMedium->GetOrigFilter();
-                    SystemShell::AddToRecentDocumentList(
+                    Application::AddToRecentDocumentList(
                         aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
                         (pOrgFilter) ? pOrgFilter->GetMimeType() : String() );
                 }
@@ -1175,7 +1178,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     sal_Bool bStoreToSameLocation = sal_False;
 
     // the detection whether the script is changed should be done before saving
-    sal_Bool bTryToPreservScriptSignature = sal_False;
+    sal_Bool bTryToPreserveScriptSignature = sal_False;
     // no way to detect whether a filter is oasis format, have to wait for saving process
     sal_Bool bNoPreserveForOasis = sal_False;
     if ( bOwnSource && bOwnTarget
@@ -1186,8 +1189,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "MacroSignaturePreserving" ) ) );
 
         // the checking of the library modified state iterates over the libraries, should be done only when required
-        bTryToPreservScriptSignature = !pImp->pBasicManager->isAnyContainerModified();
-        if ( bTryToPreservScriptSignature )
+        // currently the check is commented out since it is broken, we have to check the signature every time we save
+        // TODO/LATER: let isAnyContainerModified() work!
+        bTryToPreserveScriptSignature = sal_True; // !pImp->pBasicManager->isAnyContainerModified();
+        if ( bTryToPreserveScriptSignature )
         {
             // check that the storage format stays the same
             SvtSaveOptions aSaveOpt;
@@ -1203,11 +1208,11 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             {}
 
             // preserve only if the same filter has been used
-            bTryToPreservScriptSignature = pMedium->GetFilter() && pFilter && pMedium->GetFilter()->GetFilterName() == pFilter->GetFilterName();
+            bTryToPreserveScriptSignature = pMedium->GetFilter() && pFilter && pMedium->GetFilter()->GetFilterName() == pFilter->GetFilterName();
 
             bNoPreserveForOasis = (
                                    (aODFVersion.equals( ODFVER_012_TEXT ) && nVersion == SvtSaveOptions::ODFVER_011) ||
-                                   (!aODFVersion.getLength() && nVersion == SvtSaveOptions::ODFVER_012)
+                                   (!aODFVersion.getLength() && nVersion >= SvtSaveOptions::ODFVER_012)
                                   );
         }
     }
@@ -1473,9 +1478,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         }
 
 
-        if ( bOk && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+        if ( bOk && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bPasswdProvided )
         {
             // store the thumbnail representation image
+            // the thumbnail is not stored in case of encrypted document
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Thumbnail creation." ) ) );
             if ( !GenerateAndStoreThumbnail( bPasswdProvided,
                                             sal_False,
@@ -1594,119 +1600,114 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             bOk = SaveChildren( TRUE );
     }
 
-    // if ODF version of oasis format changes on saving the signature should not be preserved
-    if ( bOk && bTryToPreservScriptSignature && bNoPreserveForOasis )
-        bTryToPreservScriptSignature = ( SotStorage::GetVersion( rMedium.GetStorage() ) == SOFFICE_FILEFORMAT_60 );
-
-    uno::Reference< security::XDocumentDigitalSignatures > xDDSigns;
-    sal_Bool bScriptSignatureIsCopied = sal_False;
-    if ( bOk && bTryToPreservScriptSignature )
-    {
-        // if the scripting code was not changed and it is signed the signature should be preserved
-        // unfortunately at this point we have only information whether the basic code has changed or not
-        // so the only way is to check the signature if the basic was not changed
-        try
-        {
-            xDDSigns = uno::Reference< security::XDocumentDigitalSignatures >(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ),
-                    uno::UNO_QUERY_THROW );
-
-            ::rtl::OUString aScriptSignName = xDDSigns->getScriptingContentSignatureDefaultStreamName();
-
-            if ( aScriptSignName.getLength() )
-            {
-                uno::Reference< embed::XStorage > xMetaInf = GetStorage()->openStorageElement(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
-                            embed::ElementModes::READ );
-                uno::Reference< embed::XStorage > xTargetMetaInf = rMedium.GetStorage()->openStorageElement(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
-                            embed::ElementModes::WRITE );
-
-                if ( xMetaInf.is() && xTargetMetaInf.is() )
-                {
-                    xMetaInf->copyElementTo( aScriptSignName, xTargetMetaInf, aScriptSignName );
-
-                    // after loading the UseCommonStoragePassword property might be set to true
-                    // set it to false here, since this is a rare case when it must be so
-                    // TODO/LATER: in future it should be done on loading probably
-                    uno::Reference< beans::XPropertySet > xTargetSignPropSet(
-                        xTargetMetaInf->openStreamElement( aScriptSignName, embed::ElementModes::WRITE ),
-                        uno::UNO_QUERY_THROW );
-                    xTargetSignPropSet->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
-                        uno::makeAny( (sal_Bool)sal_False ) );
-
-                    uno::Reference< embed::XTransactedObject > xTransact( xTargetMetaInf, uno::UNO_QUERY );
-                    if ( xTransact.is() )
-                        xTransact->commit();
-                    bScriptSignatureIsCopied = sal_True;
-                }
-            }
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
-
     if ( bOk )
     {
+        // if ODF version of oasis format changes on saving the signature should not be preserved
+        if ( bOk && bTryToPreserveScriptSignature && bNoPreserveForOasis )
+            bTryToPreserveScriptSignature = ( SotStorage::GetVersion( rMedium.GetStorage() ) == SOFFICE_FILEFORMAT_60 );
+
+        uno::Reference< security::XDocumentDigitalSignatures > xDDSigns;
+        if ( bOk && bTryToPreserveScriptSignature )
+        {
+            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Copying scripting signature." ) ) );
+
+            // if the scripting code was not changed and it is signed the signature should be preserved
+            // unfortunately at this point we have only information whether the basic code has changed or not
+            // so the only way is to check the signature if the basic was not changed
+            try
+            {
+                // get the ODF version of the new medium
+                uno::Sequence< uno::Any > aArgs( 1 );
+                aArgs[0] <<= ::rtl::OUString();
+                try
+                {
+                    uno::Reference < beans::XPropertySet > xPropSet( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
+                    aArgs[0] = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) );
+                }
+                catch( uno::Exception& )
+                {
+                }
+
+                xDDSigns = uno::Reference< security::XDocumentDigitalSignatures >(
+                    comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ),
+                        aArgs ),
+                    uno::UNO_QUERY_THROW );
+
+                ::rtl::OUString aScriptSignName = xDDSigns->getScriptingContentSignatureDefaultStreamName();
+
+                if ( aScriptSignName.getLength() )
+                {
+                    pMedium->Close();
+
+                    // target medium is still not commited, it should not be closed
+                    // commit the package storage and close it, but leave the streams open
+                    rMedium.StorageCommit_Impl();
+                    rMedium.CloseStorage();
+
+                    uno::Reference< embed::XStorage > xReadOrig = pMedium->GetZipStorageToSign_Impl();
+                    if ( !xReadOrig.is() )
+                        throw uno::RuntimeException();
+                    uno::Reference< embed::XStorage > xMetaInf = xReadOrig->openStorageElement(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
+                                embed::ElementModes::READ );
+
+                    uno::Reference< embed::XStorage > xTarget = rMedium.GetZipStorageToSign_Impl( sal_False );
+                    if ( !xTarget.is() )
+                        throw uno::RuntimeException();
+                    uno::Reference< embed::XStorage > xTargetMetaInf = xTarget->openStorageElement(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
+                                embed::ElementModes::READWRITE );
+
+                    if ( xMetaInf.is() && xTargetMetaInf.is() )
+                    {
+                        xMetaInf->copyElementTo( aScriptSignName, xTargetMetaInf, aScriptSignName );
+
+                        uno::Reference< embed::XTransactedObject > xTransact( xTargetMetaInf, uno::UNO_QUERY );
+                        if ( xTransact.is() )
+                            xTransact->commit();
+
+                        xTargetMetaInf->dispose();
+
+                        // now check the copied signature
+                        uno::Sequence< security::DocumentSignatureInformation > aInfos =
+                            xDDSigns->verifyScriptingContentSignatures( xTarget,
+                                                                        uno::Reference< io::XInputStream >() );
+                        sal_uInt16 nState = ImplCheckSignaturesInformation( aInfos );
+                        if ( nState == SIGNATURESTATE_SIGNATURES_OK || nState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
+                            || nState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
+                        {
+                            rMedium.SetCachedSignatureState_Impl( nState );
+
+                            // commit the ZipStorage from target medium
+                            xTransact.set( xTarget, uno::UNO_QUERY );
+                            if ( xTransact.is() )
+                                xTransact->commit();
+                        }
+                        else
+                        {
+                            // it should not happen, the copies signature is invalid!
+                            // throw the changes away
+                            OSL_ASSERT( "An invalid signature was copied!" );
+                        }
+                    }
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+
+            pMedium->Close();
+            rMedium.CloseZipStorage_Impl();
+        }
+
         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Medium commit." ) ) );
 
         // transfer data to its destinated location
         // the medium commits the storage or the stream it is based on
         RegisterTransfer( rMedium );
         bOk = rMedium.Commit();
-
-        if ( bOk && bScriptSignatureIsCopied )
-        {
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Script signature check." ) ) );
-
-            // if the script signature was copied it should be checked now
-            // usually it should be ok, so no additional actions will be done
-            // but if for any reasong ( f.e. binshell change ) it is broken it should be removed here
-            // in result the behaviour will work in optimized way in most cases, means in case of signed basic scripts
-            OSL_ENSURE( !bScriptSignatureIsCopied || xDDSigns.is(), "The signing could not be done without the service!\n" );
-            if ( xDDSigns.is() )
-            {
-                try
-                {
-                    bOk = sal_False;
-                    ::com::sun::star::uno::Sequence< security::DocumentSignatureInformation > aInfos =
-                        xDDSigns->verifyScriptingContentSignatures( rMedium.GetLastCommitReadStorage_Impl(),
-                                                                    uno::Reference< io::XInputStream >() );
-                    sal_uInt16 nState = ImplCheckSignaturesInformation( aInfos );
-                    if ( nState == SIGNATURESTATE_SIGNATURES_OK || nState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
-                    {
-                        rMedium.SetCachedSignatureState_Impl( nState );
-                        bOk = sal_True;
-                    }
-                    else
-                    {
-                        // the signature is broken, remove it
-                        rMedium.SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES );
-                        uno::Reference< embed::XStorage > xTargetMetaInf = rMedium.GetStorage()->openStorageElement(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
-                            embed::ElementModes::WRITE );
-
-                        if ( xTargetMetaInf.is() )
-                        {
-                            xTargetMetaInf->removeElement( xDDSigns->getScriptingContentSignatureDefaultStreamName() );
-                            uno::Reference< embed::XTransactedObject > xTransact( xTargetMetaInf, uno::UNO_QUERY );
-                            if ( xTransact.is() )
-                                xTransact->commit();
-
-                            bOk = rMedium.Commit();
-                        }
-                    }
-                }
-                catch( uno::Exception )
-                {
-                    OSL_ENSURE( sal_False, "This exception must not happen!" );
-                }
-            }
-        }
 
         if ( bOk )
         {
@@ -3255,7 +3256,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
             SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False );
             pImp->m_bCreateTempStor = sal_False;
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, this ) );
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
         }
         catch( uno::Exception& )
         {
@@ -3415,7 +3416,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
 
     if ( bSendNotification )
     {
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, this ) );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
     }
 
     return bResult;

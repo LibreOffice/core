@@ -39,6 +39,7 @@ USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
 
 .INCLUDE: settings.mk
+.IF "$(L10N_framework)"==""
 
 UNIXTEXT=$(MISC)/$(TARGET)-ucd.txt
 
@@ -79,5 +80,6 @@ SHL1STDLIBS+=$(PKGCONFIG_LIBS)
 SHL1VERSIONMAP= exports.map
 
 .ENDIF          # "$(ENABLE_GIO)"!=""
+.ENDIF # L10N_framework
 
 .INCLUDE: target.mk

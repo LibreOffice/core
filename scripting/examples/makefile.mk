@@ -34,7 +34,7 @@ TARGET=scriptinginstaller
 no_common_build_zip=true
 
 .INCLUDE : settings.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(SOLAR_JAVA)"!=""
 ZIP1FLAGS=-r
 ZIP1TARGET=ScriptsJava
@@ -58,5 +58,5 @@ ZIP5FLAGS=-r
 ZIP5TARGET=scriptbindinglib
 ZIP5DIR=$(PRJ)$/workben$/bindings
 ZIP5LIST=*.xlb Highlight.xdl
-
+.ENDIF
 .INCLUDE : target.mk

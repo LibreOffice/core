@@ -49,6 +49,8 @@ ENABLE_EXCEPTIONS=TRUE
 NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
 .ENDIF
 
+ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
+
 # --- Files -------------------------------------
 
 LIB1TARGET= $(SLB)$/$(TARGET)-core.lib

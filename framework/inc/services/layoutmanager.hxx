@@ -397,7 +397,6 @@ namespace framework
                                                                      SingleRowColumnWindowData& rRowColumnWindowData );
             ::Point implts_findNextCascadeFloatingPos();
             void    implts_findNextDockingPos( ::com::sun::star::ui::DockingArea DockingArea, const ::Size& aUIElementSize, ::Point& rVirtualPos, ::Point& rPixelPos );
-            void    implts_sortActiveElement( const UIElement& aElementData );
             ::com::sun::star::awt::Rectangle implts_calcDockingAreaSizes();
             void    implts_setDockingAreaWindowSizes( const com::sun::star::awt::Rectangle& rBorderSpace );
             sal_Bool implts_doLayout( sal_Bool bForceRequestBorderSpace );
@@ -428,8 +427,9 @@ namespace framework
             sal_Bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
 
             void    implts_notifyListeners( short nEvent, ::com::sun::star::uno::Any aInfoParam );
-
+#ifdef DBG_UTIL
             void    implts_checkElementContainer();
+#endif
 
             DECL_LINK( OptionsChanged, void* );
             DECL_LINK( SettingsChanged, void* );

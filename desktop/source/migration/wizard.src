@@ -79,24 +79,6 @@ String STR_WELCOME_MIGRATION
     Text [ en-US ] = "This wizard will guide you through the license agreement, the transfer of user data from %OLD_VERSION and the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
 
 };
-String STR_WELCOME_OEM
-{
-    Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nImportant information is contained in the readme file which is located in the %PRODUCTNAME product directory. Please read this file carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nClick 'Next' to continue.";
-};
-String STR_WELCOME_OEM_EXT
-{
-    Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\n"
-    "Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. "
-    "Please read these files carefully. You can also find detailed information on the Sun website \n\n"
-    "http://www.sun.com/%PRODUCTNAME.\n\nSupport:\n\nGet FREE software support valid for 60 days from "
-    "date of purchase. To take advantage of this offer, visit the website below.\n\n"
-    "http://www.sun.com/star/service\n\nClick 'Next' to continue.";
-};
-
-String STR_WELCOME_EVAL
-{
-    Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nThis version lets you evaluate the full functionality. However, since it is an evaluation version, you will be able to start it within %EVALDAYS days after installation. To find out more about the %PRODUCTNAME product, visit www.sun.com/%PRODUCTNAME\n\nClick 'Next' to continue.";
-};
 
 String STR_WELCOME_WITHOUT_LICENSE
 {

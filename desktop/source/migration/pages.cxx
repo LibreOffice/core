@@ -100,9 +100,10 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid, sal_B
     // we need to choose the welcome text that is diplayed
     // choices are the default text, default text+migradtion,
     // OEM and extended OEM
-    switch (checkOEM())
-    {
-    case OEM_NONE:
+    // No OEM is built, remove the check
+//     switch (checkOEM())
+//     {
+//     case OEM_NONE:
         // check for migration
         if (Migration::checkMigration())
         {
@@ -112,27 +113,11 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid, sal_B
             m_ftBody.SetText( aText );
         }
         else
-        if (bIsEvalVersion && (! bNoEvalText))
-        {
-            String aText(WizardResId(STR_WELCOME_EVAL));
-            aText.SearchAndReplaceAll( UniString::CreateFromAscii("%EVALDAYS"), UniString::CreateFromAscii("90"));
-            m_ftBody.SetText( aText );
-        }
-        else
         if ( ! m_bLicenseNeedsAcceptance )
         {
             String aText(WizardResId(STR_WELCOME_WITHOUT_LICENSE));
             m_ftBody.SetText( aText );
         }
-        break;
-    case OEM_NORMAL:
-        m_ftBody.SetText(String(WizardResId(STR_WELCOME_OEM)));
-        break;
-    case OEM_EXTENDED:
-        m_ftBody.SetText(String(WizardResId(STR_WELCOME_OEM_EXT)));
-        break;
-    }
-
 }
 
 

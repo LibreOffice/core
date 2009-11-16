@@ -37,6 +37,7 @@ PACKAGE = com$/sun$/star$/lib$/sandbox
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 
 .IF "$(JDK)" == "gcj"
 all:
@@ -81,7 +82,8 @@ JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 RC_SUBDIRSDEPS=$(JAVATARGET)
 
 # --- Targets ------------------------------------------------------
+.ENDIF
+.ENDIF
 
 .INCLUDE :  target.mk
 
-.ENDIF

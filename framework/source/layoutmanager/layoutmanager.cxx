@@ -3068,11 +3068,6 @@ void LayoutManager::implts_renumberRowColumnData(
     return aSize;
 }
 
-void LayoutManager::implts_sortActiveElement( const UIElement&  )
-{
-    implts_sortUIElements();
-}
-
 Reference< XUIElement > LayoutManager::implts_createElement( const rtl::OUString& aName )
 {
     Reference< ::com::sun::star::ui::XUIElement > xUIElement;
@@ -7038,6 +7033,7 @@ IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, EMPTYARG )
     return 0;
 }
 
+#ifdef DBG_UTIL
 void LayoutManager::implts_checkElementContainer()
 {
 #ifdef DBG_UTIL
@@ -7062,6 +7058,7 @@ void LayoutManager::implts_checkElementContainer()
     } // for ( ; pCheckIter != aUIElementHash.end(); pCheckIter++ )
 #endif
 }
+#endif
 
 //---------------------------------------------------------------------------------------------------------
 //  XFrameActionListener

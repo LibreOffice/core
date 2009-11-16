@@ -903,6 +903,12 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<desc>Contains a list of passwords encoded with the master password.</desc>
 				</info>
 			</set>
+			<prop oor:name="AuthenticateUsingSystemCredentials" oor:type="oor:string-list">
+				<info>
+					<author>KSO</author>
+					<desc>Contains a list of URLs that should be accessed using system credentials of the user.</desc>
+				</info>
+			</prop>
 		</group>
 		<group oor:name="_3D_Engine">
 			<info>
@@ -1657,10 +1663,11 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</prop>
 				<prop oor:name="Temp" oor:type="xs:string">
 					<info>
+						<deprecated>Replaced by org.openoffice.Office.Paths/Temp</deprecated>
 						<author>MBA</author>
 						<desc>Specifies the base directory used by the Office to store temp files.</desc>
 					</info>
-					<value>$(temp)</value>
+					<value/>
 				</prop>
 				<prop oor:name="Template" oor:type="oor:string-list">
 					<info>
@@ -2098,7 +2105,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 			</set>
 		</group>
-        <group oor:name="Save">
+    <group oor:name="Save">
 			<info>
 				<author>MBA</author>
 				<desc>Contains general settings about the saving process.</desc>
@@ -2358,14 +2365,19 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
                                 <desc>ODFVER_011</desc>
                             </info>
                         </enumeration>
-                        <enumeration oor:value="3">
+                        <enumeration oor:value="4">
                             <info>
                                 <desc>ODFVER_012</desc>
                             </info>
                         </enumeration>
-                    </constraints>
-                    <value>3</value>
-                </prop>
+                        <enumeration oor:value="3">
+                          <info>
+                            <desc>ODFVER_LATEST</desc>
+                          </info>
+                        </enumeration>
+                      </constraints>
+                      <value>3</value>
+                  </prop>
             </group>
 		</group>
 		<group oor:name="Load">
@@ -2604,6 +2616,19 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</constraints>
 				<value>0</value>
 			</prop>
+			<group oor:name="NewDocumentHandling">
+				<info>
+					<author>CD</author>
+					<desc>Contains settings to change new document window behavior.</desc>
+				</info>
+				<prop oor:name="ForceFocusAndToFront" oor:type="xs:boolean">
+					<info>
+						<author>CD</author>
+						<desc>Every new document window will be forced to front and grabs the focus.</desc>
+					</info>
+					<value>true</value>
+				</prop>
+			</group>
 			<group oor:name="AppWindow">
 				<info>
 					<author>MBA</author>
@@ -6003,7 +6028,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
    	        <!-- UIHints: Edit Search/Replace  -->
 		<info>
                		<author>mod</author>
-                	<desc>Specifies if search includes notes(SwPostItFields)</desc>
+                	<desc>Specifies if search includes comments(SwPostItFields)</desc>
                 </info>
 		<value>false</value>
             </prop>

@@ -41,6 +41,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <sfx2/signaturestate.hxx>
 
 
 namespace com { namespace sun { namespace star {
@@ -78,7 +79,8 @@ public:
                     const ::rtl::OUString& aSlotName,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence,
                     sal_Bool bPreselectPassword,
-                    ::rtl::OUString aUserSelectedName );
+                    ::rtl::OUString aUserSelectedName,
+                    sal_uInt16 nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES );
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,

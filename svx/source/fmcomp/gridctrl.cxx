@@ -763,12 +763,18 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
             Fraction aZoom = GetZoom();
 
             // not all of these controls need to know the new zoom, but to be sure ...
-            Font aFont( IsControlFont() ? GetControlFont() : GetPointFont());
+            Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
+            if ( IsControlFont() )
+                aFont.Merge( GetControlFont() );
+
             for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
             {
                 pWindows[i]->SetZoom(aZoom);
                 pWindows[i]->SetZoomedPointFont(aFont);
             }
+
+            SetZoomedPointFont( aFont );
+
             // rearrange the controls
             m_nDefaultWidth = ArrangeControls();
         }
@@ -1075,18 +1081,13 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         if ( m_bNavigationBar )
         {
-            m_aBar.SetZoom( GetZoom() );
-
             Font aFont = m_aBar.GetSettings().GetStyleSettings().GetFieldFont();
             if ( IsControlFont() )
-            {
                 m_aBar.SetControlFont( GetControlFont() );
-                aFont.Merge( GetControlFont() );
-            }
             else
                 m_aBar.SetControlFont();
 
-            m_aBar.SetZoomedPointFont( aFont );
+            m_aBar.SetZoom( GetZoom() );
         }
     }
 

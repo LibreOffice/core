@@ -167,7 +167,7 @@ DEFINE_INIT_SERVICE                 (   License,
                                     )
 
 
-
+#if 0
 IMPL_STATIC_LINK_NOINSTANCE( License, Terminate, void*, EMPTYARG )
 {
     /*
@@ -182,6 +182,7 @@ IMPL_STATIC_LINK_NOINSTANCE( License, Terminate, void*, EMPTYARG )
     */
     return 0;
 }
+#endif
 
 static DateTime _oslDateTimeToDateTime(const oslDateTime& aDateTime)
 {

@@ -215,30 +215,23 @@ namespace
     {
         if(rInfo.mrText.Len() && rInfo.mnTextLen)
         {
-            basegfx::B2DVector aSize;
-            drawinglayer::primitive2d::FontAttributes aFontAttributes(drawinglayer::primitive2d::getFontAttributesFromVclFont(
-                aSize,
-                rInfo.mrFont,
-                rInfo.IsRTL(),
-                false));
+            basegfx::B2DVector aFontScaling;
+            drawinglayer::primitive2d::FontAttributes aFontAttributes(
+                drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                    aFontScaling,
+                    rInfo.mrFont,
+                    rInfo.IsRTL(),
+                    false));
             basegfx::B2DHomMatrix aNewTransform;
 
-            // #i100489# need extra scale factor for DXArray which collects all scalings
-            // which are needed to get the DXArray to unit coordinates
-            double fDXArrayScaleFactor(aSize.getX());
-
             // add font scale to new transform
-            aNewTransform.scale(aSize.getX(), aSize.getY());
+            aNewTransform.scale(aFontScaling.getX(), aFontScaling.getY());
 
             // look for proportional font scaling, evtl scale accordingly
             if(100 != rInfo.mrFont.GetPropr())
             {
                 const double fFactor(rInfo.mrFont.GetPropr() / 100.0);
                 aNewTransform.scale(fFactor, fFactor);
-
-                // #i100489# proportional font scaling influences the DXArray,
-                // add to factor
-                fDXArrayScaleFactor *= fFactor;
             }
 
             // apply font rotate
@@ -271,7 +264,7 @@ namespace
                 }
 
                 const double fEscapement(nEsc / -100.0);
-                aNewTransform.translate(0.0, fEscapement * aSize.getY());
+                aNewTransform.translate(0.0, fEscapement * aFontScaling.getY());
             }
 
             // apply transformA
@@ -290,13 +283,11 @@ namespace
 
             if(!bDisableTextArray && rInfo.mpDXArray && rInfo.mnTextLen)
             {
-                // #i100489# use fDXArrayScaleFactor here
-                const double fScaleFactor(basegfx::fTools::equalZero(fDXArrayScaleFactor) ? 1.0 : 1.0 / fDXArrayScaleFactor);
                 aDXArray.reserve(rInfo.mnTextLen);
 
                 for(xub_StrLen a(0); a < rInfo.mnTextLen; a++)
                 {
-                    aDXArray.push_back((double)rInfo.mpDXArray[a] * fScaleFactor);
+                    aDXArray.push_back((double)rInfo.mpDXArray[a]);
                 }
             }
 
@@ -470,6 +461,17 @@ namespace
 
                                 fStart = fTextWidth - fStart;
                                 fEnd = fTextWidth - fEnd;
+                            }
+
+                            // need to take FontScaling out of values; it's already part of
+                            // aNewTransform and would be double applied
+                            const double fFontScaleX(aFontScaling.getX());
+
+                            if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                                && !basegfx::fTools::equalZero(fFontScaleX))
+                            {
+                                fStart /= fFontScaleX;
+                                fEnd /= fFontScaleX;
                             }
 
                             maTextPortionPrimitives.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
@@ -709,16 +711,7 @@ namespace
 //////////////////////////////////////////////////////////////////////////////
 // primitive decompositions
 
-bool SdrTextObj::impCheckSpellCheckForDecomposeTextPrimitive() const
-{
-    // #i102062# asked TL who killed this feature (CWS tl56). Obviously, there
-    // is no more support for EE_CNTRL_NOREDLINES anymore; redlining is always
-    // on nowadays. Unfortunately, not false, but true should be returned then.
-    // Trying if this is all...
-    return true;
-}
-
-bool SdrTextObj::impDecomposeContourTextPrimitive(
+void SdrTextObj::impDecomposeContourTextPrimitive(
     drawinglayer::primitive2d::Primitive2DSequence& rTarget,
     const drawinglayer::primitive2d::SdrContourTextPrimitive2D& rSdrContourTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
@@ -770,10 +763,9 @@ bool SdrTextObj::impDecomposeContourTextPrimitive(
     rOutliner.setVisualizedPage(0);
 
     rTarget = aConverter.getPrimitive2DSequence();
-    return false;
 }
 
-bool SdrTextObj::impDecomposeBlockTextPrimitive(
+void SdrTextObj::impDecomposeBlockTextPrimitive(
     drawinglayer::primitive2d::Primitive2DSequence& rTarget,
     const drawinglayer::primitive2d::SdrBlockTextPrimitive2D& rSdrBlockTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
@@ -789,19 +781,15 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // prepare outliner
     const bool bIsCell(rSdrBlockTextPrimitive.getCellText());
-    const SfxItemSet& rTextItemSet = rSdrBlockTextPrimitive.getSdrText()
-        ? rSdrBlockTextPrimitive.getSdrText()->GetItemSet()
-        : GetObjectItemSet();
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
-    SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);
-    SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust(rTextItemSet);
+    SdrTextHorzAdjust eHAdj = rSdrBlockTextPrimitive.getSdrTextHorzAdjust();
+    SdrTextVertAdjust eVAdj = rSdrBlockTextPrimitive.getSdrTextVertAdjust();
     const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
     const Size aNullSize;
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
-
-    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)rTextItemSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+    rOutliner.SetFixedCellHeight(rSdrBlockTextPrimitive.isFixedCellHeight());
     rOutliner.SetControlWord(nOriginalControlWord|EE_CNTRL_AUTOPAGESIZE);
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
@@ -812,24 +800,32 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     const bool bVerticalWritintg(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
+    // check if block text is used (only one of them can be true)
+    const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
+    const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
+
+    // set minimal paper size hor/ver if needed
+    if(bHorizontalIsBlock)
+    {
+        rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
+    }
+    else if(bVerticalIsBlock)
+    {
+        rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
+    }
+
     if(bIsCell)
     {
         // cell text is formated neither like a text object nor like a object
         // text, so use a special setup here
-        rOutliner.SetMinAutoPaperSize(aNullSize);
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
         rOutliner.SetPaperSize(aAnchorTextSize);
-        rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
-        rOutliner.SetUpdateMode(TRUE);
+        rOutliner.SetUpdateMode(true);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
-        rOutliner.SetUpdateMode(TRUE);
         rOutliner.SetControlWord(nOriginalControlWord);
     }
     else
     {
-        // check if block text is used (only one of them can be true)
-        const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
-        const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
 
         if((rSdrBlockTextPrimitive.getWordWrap() || IsTextFrame()) && !rSdrBlockTextPrimitive.getUnlimitedPage())
         {
@@ -853,16 +849,6 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
             }
 
             rOutliner.SetMaxAutoPaperSize(aMaxAutoPaperSize);
-        }
-
-        // set minimal paper size hor/ver if needed
-        if(bHorizontalIsBlock)
-        {
-            rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
-        }
-        else if(bVerticalIsBlock)
-        {
-            rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
         }
 
         rOutliner.SetPaperSize(aNullSize);
@@ -943,7 +929,8 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     // as the master shape we are working on. For vertical, use the top-right
     // corner
     const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
-    aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
+    const basegfx::B2DTuple aAdjOffset(fStartInX, aAdjustTranslate.getY());
+    aNewTransformA.translate(aAdjOffset.getX(), aAdjOffset.getY());
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
@@ -960,10 +947,10 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     // #SJ# create ClipRange (if needed)
     basegfx::B2DRange aClipRange;
 
-    if(bIsCell)
+    if(rSdrBlockTextPrimitive.getClipOnBounds())
     {
-        aClipRange.expand(basegfx::B2DTuple(0.0, 0.0));
-        aClipRange.expand(basegfx::B2DTuple(aAnchorTextSize.Width(), aAnchorTextSize.Height()));
+        aClipRange.expand(-aAdjOffset);
+        aClipRange.expand(basegfx::B2DTuple(aAnchorTextSize.Width(), aAnchorTextSize.Height()) - aAdjOffset);
     }
 
     // now break up text primitives.
@@ -975,10 +962,9 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     rOutliner.setVisualizedPage(0);
 
     rTarget = aConverter.getPrimitive2DSequence();
-    return false;
 }
 
-bool SdrTextObj::impDecomposeStretchTextPrimitive(
+void SdrTextObj::impDecomposeStretchTextPrimitive(
     drawinglayer::primitive2d::Primitive2DSequence& rTarget,
     const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
@@ -995,13 +981,10 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     // prepare outliner
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
-    const SfxItemSet& rTextItemSet = rSdrStretchTextPrimitive.getSdrText()
-        ? rSdrStretchTextPrimitive.getSdrText()->GetItemSet()
-        : GetObjectItemSet();
     const Size aNullSize;
 
     rOutliner.SetControlWord(nOriginalControlWord|EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE);
-    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)rTextItemSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+    rOutliner.SetFixedCellHeight(rSdrStretchTextPrimitive.isFixedCellHeight());
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
     rOutliner.SetPaperSize(aNullSize);
@@ -1059,7 +1042,6 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     rOutliner.setVisualizedPage(0);
 
     rTarget = aConverter.getPrimitive2DSequence();
-    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////

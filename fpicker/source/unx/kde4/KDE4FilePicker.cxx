@@ -1,11 +1,4 @@
 /*************************************************************************
- *
- *
- *
- *
- *
- *
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -136,7 +129,8 @@ namespace
 
 rtl::OUString toOUString(const QString& s)
 {
-    return rtl::OUString(s.toUtf8().data(), s.length(), RTL_TEXTENCODING_UTF8);
+    // QString stores UTF16, just like OUString
+    return rtl::OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
 }
 
 QString toQString(const rtl::OUString& s)

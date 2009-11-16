@@ -3243,50 +3243,6 @@ sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XF
 }
 
 //*****************************************************************************************************************
-// We don't accept null pointer ... but NULL-References are allowed!
-sal_Bool Frame::implcp_initialize( const css::uno::Reference< css::awt::XWindow >& xWindow )
-{
-    return( &xWindow == NULL );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer or references!
-sal_Bool Frame::implcp_setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator )
-{
-    return  (
-                ( &xCreator     ==  NULL        )   ||
-                ( xCreator.is() ==  sal_False   )
-            );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer or references!
-sal_Bool Frame::implcp_setName( const ::rtl::OUString& sName )
-{
-    return( &sName == NULL );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer or references!
-// An empty target name is allowed => is the same like "_self"
-sal_Bool Frame::implcp_findFrame(  const   ::rtl::OUString& sTargetFrameName,
-                                            sal_Int32        /*nSearchFlags*/    )
-{
-    return( &sTargetFrameName == NULL );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer!
-sal_Bool Frame::implcp_setComponent(   const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow    ,
-                                        const   css::uno::Reference< css::frame::XController >& xController         )
-{
-    return  (
-                ( &xComponentWindow ==  NULL    )   ||
-                ( &xController      ==  NULL    )
-            );
-}
-
-//*****************************************************************************************************************
 sal_Bool Frame::implcp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
     return  (

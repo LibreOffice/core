@@ -41,10 +41,10 @@ PACKAGE=ooo$/vba
 .IF "$(ENABLE_VBA)"!="YES"
 dummy:
         @echo "not building vba..."
-.ENDIF
+.ELSE
 
 # ------------------------------------------------------------------------
-
+.IF "$(L10N_framework)"=""
 IDLFILES=\
     XErrObject.idl \
     XGlobals.idl \
@@ -60,5 +60,6 @@ IDLFILES=\
     Globals.idl\
 
 # ------------------------------------------------------------------
-
+.ENDIF
 .INCLUDE :  target.mk
+.ENDIF

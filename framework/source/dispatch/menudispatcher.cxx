@@ -445,26 +445,6 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_MenuDispatcher(   const   uno::R
 }
 
 //*****************************************************************************************************************
-// We don't know anything about right values of aURL and seqArguments!
-// Check valid references only.
-sal_Bool MenuDispatcher::impldbg_checkParameter_dispatch(  const   URL&                        aURL        ,
-                                                                const   Sequence< PropertyValue >&  seqArguments)
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aURL         ==  NULL    )   ||
-            ( &seqArguments ==  NULL    )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
 // We need a valid URL. What is meaning with "register for nothing"?!
 // xControl must correct to - nobody can advised otherwise!
 sal_Bool MenuDispatcher::impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,

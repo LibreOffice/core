@@ -144,6 +144,10 @@ namespace xmloff { namespace token {
         XML_NP_GRDDL,
         XML_N_GRDDL,
 
+        // ODF Enhanced namespaces
+        XML_NP_OFFICE_EXT,
+        XML_N_OFFICE_EXT,
+
         // units
         XML_UNIT_MM,
         XML_UNIT_M,

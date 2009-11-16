@@ -853,7 +853,7 @@ SfxBoolItem BrowseView SID_BROWSER_MODE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -1041,7 +1041,7 @@ SfxVoidItem ClearHistory SID_CLEARHISTORY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -1447,60 +1447,6 @@ SfxVoidItem CreateMacro SID_BASICIDE_CREATEMACRO
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem CurrentDate SID_CURRENTDATE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem CurrentTime SID_CURRENTTIME
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxStringItem CurrentURL SID_CURRENT_URL
 
 [
@@ -1842,7 +1788,7 @@ SfxBoolItem EditDoc SID_EDITDOC
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -4287,7 +4233,7 @@ SfxBoolItem Modified SID_MODIFIED
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -5015,7 +4961,7 @@ SfxVoidItem Paste SID_PASTE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -5025,6 +4971,59 @@ SfxVoidItem Paste SID_PASTE
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
+(SfxUInt32Item SelectedFormat SID_CLIPBOARD_FORMAT_ITEMS)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SvxClipboardFmtItem
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxInt16Item PasteSpecial SID_PASTE_SPECIAL
+(SfxUInt32Item Format SID_PASTE_SPECIAL)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5486,7 +5485,7 @@ SfxVoidItem Redo SID_REDO
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -5539,7 +5538,7 @@ SfxBoolItem Reload SID_RELOAD
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -5643,7 +5642,7 @@ SfxStringItem RepeatAction SID_REPEAT
 
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -5747,7 +5746,7 @@ SfxBoolItem Save SID_SAVEDOC
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -7179,7 +7178,7 @@ SfxVoidItem Undo SID_UNDO
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -8809,7 +8808,7 @@ SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,

@@ -467,6 +467,31 @@ sal_Bool FileDialogHelper_Impl::isInOpenMode() const
 
 // ------------------------------------------------------------------------
 
+namespace {
+
+bool lclCheckODFPasswordCapability( const SfxFilter* pFilter )
+{
+    return pFilter && pFilter->IsOwnFormat() && pFilter->UsesStorage() && (pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60);
+}
+
+bool lclCheckMSPasswordCapability( const SfxFilter* pFilter )
+{
+    // TODO #i105076# this should be in the filter configuration!!!
+    return pFilter && CheckMSPasswordCapabilityForExport( pFilter->GetFilterName() );
+}
+
+bool lclCheckPasswordCapability( const SfxFilter* pFilter )
+{
+    return
+        lclCheckODFPasswordCapability( pFilter ) ||
+        // TODO #i105076# this should be in the filter configuration!!!
+        lclCheckMSPasswordCapability( pFilter );
+}
+
+}
+
+// ------------------------------------------------------------------------
+
 void FileDialogHelper_Impl::updateFilterOptionsBox()
 {
     if ( !m_bHaveFilterOptions )
@@ -550,40 +575,6 @@ void FileDialogHelper_Impl::updateSelectionBox()
 }
 
 // ------------------------------------------------------------------------
-
-namespace {
-
-bool lclCheckMSPasswordCapability( const String rFilterName )
-{
-    return rFilterName.EqualsAscii("MS Word 97");
-}
-
-} // namespace
-
-// ------------------------------------------------------------------------
-struct CheckPasswordCapability
-{
-    sal_Bool operator() ( const SfxFilter* _pFilter )
-    {
-        if (!_pFilter)
-            return false;
-
-#if 0 // to be enabled in the future
-        if (_pFilter->GetFilterName().EqualsAscii("MS Excel 97"))
-            // For now, we eanble password protection for Excel 97 as a
-            // special case.  If we start having more filters supporting
-            // export encryption with password, we should probably switch to
-            // using a filter flag instead.
-            return true;
-#endif
-
-        return  ( _pFilter->IsOwnFormat() && _pFilter->UsesStorage()
-            &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() ) )
-            || lclCheckMSPasswordCapability( _pFilter->GetFilterName() );
-    }
-};
-
-// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 {
     if ( ! mbHasPassword )
@@ -593,7 +584,7 @@ void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
-        CheckPasswordCapability()( getCurentSfxFilter() )
+        lclCheckPasswordCapability( getCurentSfxFilter() )
     );
 
     if( bInit )
@@ -1665,9 +1656,8 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
                     if( xInteractionHandler.is() )
                     {
-                        // TODO: find out a way to set the 1-15 char limits on MS Excel 97 filter.
-
-                        bool bMSType = lclCheckMSPasswordCapability( rFilter );
+                        // TODO: need a save way to distinguish MS filters from other filters
+                        bool bMSType = CheckMSPasswordCapabilityForExport( rFilter );
                         ::comphelper::DocPasswordRequestType eType = bMSType ?
                             ::comphelper::DocPasswordRequestType_MS :
                             ::comphelper::DocPasswordRequestType_STANDARD;

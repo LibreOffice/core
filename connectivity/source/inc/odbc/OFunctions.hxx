@@ -187,7 +187,7 @@ namespace connectivity
                                                     SQLSMALLINT *       StringLengthPtr,
                                                     SQLSMALLINT *       TypePtr,
                                                     SQLSMALLINT *       SubTypePtr,
-                                                    SQLINTEGER *        LengthPtr,
+                                                    SQLLEN *            LengthPtr,
                                                     SQLSMALLINT *       PrecisionPtr,
                                                     SQLSMALLINT *       ScalePtr,
                                                     SQLSMALLINT *       NullablePtr);
@@ -203,8 +203,8 @@ namespace connectivity
                                                     SQLSMALLINT         Precision,
                                                     SQLSMALLINT         Scale,
                                                     SQLPOINTER          DataPtr,
-                                                    SQLINTEGER *        StringLengthPtr,
-                                                    SQLINTEGER *        IndicatorPtr);
+                                                    SQLLEN *            StringLengthPtr,
+                                                    SQLLEN *            IndicatorPtr);
 
     #define N3SQLSetDescRec(a,b,c,d,e,f,g,h,i,j) (*(T3SQLSetDescRec)getOdbcFunction(ODBC3SQLSetDescRec))(a,b,c,d,e,f,g,h,i,j)
     */
@@ -221,11 +221,11 @@ namespace connectivity
                                                     SQLSMALLINT         InputOutputType,
                                                     SQLSMALLINT         ValueType,
                                                     SQLSMALLINT         ParameterType,
-                                                    SQLUINTEGER         ColumnSize,
+                                                    SQLULEN             ColumnSize,
                                                     SQLSMALLINT         DecimalDigits,
                                                     SQLPOINTER          ParameterValuePtr,
-                                                    SQLINTEGER          BufferLength,
-                                                    SQLINTEGER *        StrLen_or_IndPtr);
+                                                    SQLLEN              BufferLength,
+                                                    SQLLEN *            StrLen_or_IndPtr);
 
     #define N3SQLBindParameter(a,b,c,d,e,f,g,h,i,j) (*(T3SQLBindParameter)getOdbcFunction(ODBC3SQLBindParameter))(a,b,c,d,e,f,g,h,i,j)
 
@@ -266,7 +266,7 @@ namespace connectivity
     typedef SQLRETURN (SQL_API  *T3SQLDescribeParam) (SQLHSTMT          StatementHandle,
                                                     SQLUSMALLINT        ParameterNumber,
                                                     SQLSMALLINT *       DataTypePtr,
-                                                    SQLUINTEGER *       ParameterSizePtr,
+                                                    SQLULEN *           ParameterSizePtr,
                                                     SQLSMALLINT *       DecimalDigitsPtr,
                                                     SQLSMALLINT *       NullablePtr);
 
@@ -284,13 +284,13 @@ namespace connectivity
 
     typedef SQLRETURN  (SQL_API  *T3SQLPutData) (       SQLHSTMT            StatementHandle,
                                                     SQLPOINTER          DataPtr,
-                                                    SQLINTEGER          StrLen_or_Ind);
+                                                    SQLLEN              StrLen_or_Ind);
 
     #define N3SQLPutData(a,b,c) (*(T3SQLPutData)getOdbcFunction(ODBC3SQLPutData))(a,b,c)
 
     // Retrieving results and information about results
     typedef SQLRETURN  (SQL_API  *T3SQLRowCount) (  SQLHSTMT            StatementHandle,
-                                                    SQLINTEGER *        RowCountPtr);
+                                                    SQLLEN *            RowCountPtr);
 
     #define N3SQLRowCount(a,b) (*(T3SQLRowCount)getOdbcFunction(ODBC3SQLRowCount))(a,b)
 
@@ -300,12 +300,12 @@ namespace connectivity
     #define N3SQLNumResultCols(a,b) (*(T3SQLNumResultCols)getOdbcFunction(ODBC3SQLNumResultCols))(a,b)
 
     typedef SQLRETURN  (SQL_API  *T3SQLDescribeCol) (   SQLHSTMT            StatementHandle,
-                                                    SQLSMALLINT         ColumnNumber,
+                                                    SQLUSMALLINT        ColumnNumber,
                                                     SQLCHAR *           ColumnName,
                                                     SQLSMALLINT         BufferLength,
                                                     SQLSMALLINT *       NameLengthPtr,
                                                     SQLSMALLINT *       DataTypePtr,
-                                                    SQLUINTEGER *       ColumnSizePtr,
+                                                    SQLULEN *           ColumnSizePtr,
                                                     SQLSMALLINT *       DecimalDigitsPtr,
                                                     SQLSMALLINT *       NullablePtr);
 
@@ -317,7 +317,7 @@ namespace connectivity
                                                     SQLPOINTER          CharacterAttributePtr,
                                                     SQLSMALLINT         BufferLength,
                                                     SQLSMALLINT *       StringLengthPtr,
-                                                    SQLPOINTER          NumericAttributePtr);
+                                                    SQLLEN *            NumericAttributePtr);
 
     #define N3SQLColAttribute(a,b,c,d,e,f,g) (*(T3SQLColAttribute)getOdbcFunction(ODBC3SQLColAttribute))(a,b,c,d,e,f,g)
 
@@ -325,8 +325,8 @@ namespace connectivity
                                                     SQLUSMALLINT        ColumnNumber,
                                                     SQLSMALLINT         TargetType,
                                                     SQLPOINTER          TargetValuePtr,
-                                                    SQLINTEGER          BufferLength,
-                                                    SQLINTEGER *        StrLen_or_IndPtr);
+                                                    SQLLEN              BufferLength,
+                                                    SQLLEN *            StrLen_or_IndPtr);
 
     #define N3SQLBindCol(a,b,c,d,e,f) (*(T3SQLBindCol)getOdbcFunction(ODBC3SQLBindCol))(a,b,c,d,e,f)
 
@@ -336,7 +336,7 @@ namespace connectivity
 
     typedef SQLRETURN  (SQL_API  *T3SQLFetchScroll) (   SQLHSTMT            StatementHandle,
                                                     SQLSMALLINT         FetchOrientation,
-                                                    SQLINTEGER          FetchOffset);
+                                                    SQLLEN              FetchOffset);
 
     #define N3SQLFetchScroll(a,b,c) (*(T3SQLFetchScroll)getOdbcFunction(ODBC3SQLFetchScroll))(a,b,c)
 
@@ -344,20 +344,20 @@ namespace connectivity
                                                     SQLUSMALLINT        ColumnNumber,
                                                     SQLSMALLINT         TargetType,
                                                     SQLPOINTER          TargetValuePtr,
-                                                    SQLINTEGER          BufferLength,
-                                                    SQLINTEGER *        StrLen_or_IndPtr);
+                                                    SQLLEN              BufferLength,
+                                                    SQLLEN *            StrLen_or_IndPtr);
 
     #define N3SQLGetData(a,b,c,d,e,f) (*(T3SQLGetData)getOdbcFunction(ODBC3SQLGetData))(a,b,c,d,e,f)
 
     typedef SQLRETURN  (SQL_API  *T3SQLSetPos) (        SQLHSTMT            StatementHandle,
-                                                    SQLUSMALLINT        RowNumber,
+                                                    SQLSETPOSIROW       RowNumber,
                                                     SQLUSMALLINT        Operation,
                                                     SQLUSMALLINT        LockType);
 
     #define N3SQLSetPos(a,b,c,d) (*(T3SQLSetPos)getOdbcFunction(ODBC3SQLSetPos))(a,b,c,d)
 
     typedef SQLRETURN  (SQL_API  *T3SQLBulkOperations) (    SQLHSTMT        StatementHandle,
-                                                        SQLUSMALLINT    Operation);
+                                                        SQLSMALLINT Operation);
 
     #define N3SQLBulkOperations(a,b) (*(T3SQLBulkOperations)getOdbcFunction(ODBC3SQLBulkOperations))(a,b)
 
@@ -461,15 +461,15 @@ namespace connectivity
     #define N3SQLProcedures(a,b,c,d,e,f,g) (*(T3SQLProcedures)getOdbcFunction(ODBC3SQLProcedures))(a,b,c,d,e,f,g)
 
     typedef SQLRETURN  (SQL_API  *T3SQLSpecialColumns) (SQLHSTMT            StatementHandle,
-                                                    SQLSMALLINT         IdentifierType,
+                                                    SQLUSMALLINT        IdentifierType,
                                                     SQLCHAR *           CatalogName,
                                                     SQLSMALLINT         NameLength1,
                                                     SQLCHAR *           SchemaName,
                                                     SQLSMALLINT         NameLength2,
                                                     SQLCHAR *           TableName,
                                                     SQLSMALLINT         NameLength3,
-                                                    SQLSMALLINT         Scope,
-                                                    SQLSMALLINT         Nullable);
+                                                    SQLUSMALLINT        Scope,
+                                                    SQLUSMALLINT        Nullable);
 
     #define N3SQLSpecialColumns(a,b,c,d,e,f,g,h,i,j) (*(T3SQLSpecialColumns)getOdbcFunction(ODBC3SQLSpecialColumns))(a,b,c,d,e,f,g,h,i,j)
 

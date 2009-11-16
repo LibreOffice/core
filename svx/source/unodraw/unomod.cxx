@@ -252,7 +252,10 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField(
         {
             nId = ID_EXT_FILEFIELD;
         }
-        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DocInfo.Title") ) )
+        else if (aFieldType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("docinfo.Title") ) ||
+                 aFieldType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("DocInfo.Title") ) )
         {
             nId = ID_FILEFIELD;
         }

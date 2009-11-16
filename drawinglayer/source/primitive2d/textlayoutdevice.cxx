@@ -43,6 +43,7 @@
 #include <vcl/metric.hxx>
 #include <i18npool/mslangid.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // VDev RevDevice provider
@@ -166,14 +167,18 @@ namespace drawinglayer
             mrDevice.SetFont( rFont );
         }
 
-        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform, const ::com::sun::star::lang::Locale & rLocale)
+        void TextLayouterDevice::setFontAttributes(
+            const FontAttributes& rFontAttributes,
+            double fFontScaleX,
+            double fFontScaleY,
+            const ::com::sun::star::lang::Locale& rLocale)
         {
-            setFont(getVclFontFromFontAttributes(rFontAttributes, rTransform, rLocale, mrDevice));
-        }
-
-        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY, const ::com::sun::star::lang::Locale & rLocale)
-        {
-            setFont(getVclFontFromFontAttributes(rFontAttributes, fFontScaleX, fFontScaleY, 0.0, rLocale, mrDevice));
+            setFont(getVclFontFromFontAttributes(
+                rFontAttributes,
+                fFontScaleX,
+                fFontScaleY,
+                0.0,
+                rLocale));
         }
 
         double TextLayouterDevice::getOverlineOffset() const
@@ -196,18 +201,6 @@ namespace drawinglayer
             double fRet = (rMetric.GetAscent() - rMetric.GetIntLeading()) / 3.0;
             return fRet;
         }
-
-#ifdef WIN32
-        double TextLayouterDevice::getCurrentFontRelation() const
-        {
-            const Font aFont(mrDevice.GetFont());
-            const FontMetric aFontMetric(mrDevice.GetFontMetric(aFont));
-            const double fWidth(aFontMetric.GetWidth());
-            const double fHeight(aFont.GetHeight());
-
-            return basegfx::fTools::equalZero(fWidth) ? 1.0 : fHeight / fWidth;
-        }
-#endif
 
         double TextLayouterDevice::getOverlineHeight() const
         {
@@ -241,33 +234,42 @@ namespace drawinglayer
             const String& rText,
             xub_StrLen nIndex,
             xub_StrLen nLength,
-            // #i89784# added suppirt for DXArray for justified text
-            const ::std::vector< double >& rDXArray,
-            double fFontScaleWidth)
+            const ::std::vector< double >& rDXArray)
         {
-            std::vector< sal_Int32 > aTransformedDXArray;
-            const sal_uInt32 nDXArraySize(rDXArray.size());
+            const sal_uInt32 nDXArrayCount(rDXArray.size());
 
-            if(nDXArraySize && basegfx::fTools::more(fFontScaleWidth, 0.0))
+            if(nDXArrayCount)
             {
-                OSL_ENSURE(nDXArraySize == nLength, "DXArray size does not correspond to text portion size (!)");
-                aTransformedDXArray.reserve(nDXArraySize);
+                OSL_ENSURE(nDXArrayCount == nLength, "DXArray size does not correspond to text portion size (!)");
+                std::vector< sal_Int32 > aIntegerDXArray(nDXArrayCount);
 
-                for(std::vector< double >::const_iterator aStart(rDXArray.begin()); aStart != rDXArray.end(); aStart++)
+                for(sal_uInt32 a(0); a < nDXArrayCount; a++)
                 {
-                    aTransformedDXArray.push_back(basegfx::fround((*aStart) * fFontScaleWidth));
+                    aIntegerDXArray[a] = basegfx::fround(rDXArray[a]);
                 }
-            }
 
-            return mrDevice.GetTextOutlines(
-                rB2DPolyPolyVector,
-                rText,
-                nIndex,
-                nIndex,
-                nLength,
-                true,
-                0,
-                nDXArraySize ? &(aTransformedDXArray[0]) : 0);
+                return mrDevice.GetTextOutlines(
+                    rB2DPolyPolyVector,
+                    rText,
+                    nIndex,
+                    nIndex,
+                    nLength,
+                    true,
+                    0,
+                    &(aIntegerDXArray[0]));
+            }
+            else
+            {
+                return mrDevice.GetTextOutlines(
+                    rB2DPolyPolyVector,
+                    rText,
+                    nIndex,
+                    nIndex,
+                    nLength,
+                    true,
+                    0,
+                    0);
+            }
         }
 
         basegfx::B2DRange TextLayouterDevice::getTextBoundRect(
@@ -286,7 +288,7 @@ namespace drawinglayer
                     nIndex,
                     nLength);
 
-                // #i102556# take empty results into account
+                // #i104432#, #i102556# take empty results into account
                 if(!aRect.IsEmpty())
                 {
                     return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
@@ -307,38 +309,36 @@ namespace drawinglayer
     {
         Font getVclFontFromFontAttributes(
             const FontAttributes& rFontAttributes,
-            const basegfx::B2DHomMatrix& rTransform,
-            const ::com::sun::star::lang::Locale & rLocale,
-            const OutputDevice& rOutDev)
-        {
-            // decompose matrix to have position and size of text
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-
-            rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-            return getVclFontFromFontAttributes(rFontAttributes, aScale.getX(), aScale.getY(), fRotate, rLocale, rOutDev);
-        }
-
-        Font getVclFontFromFontAttributes(
-            const FontAttributes& rFontAttributes,
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
-            const ::com::sun::star::lang::Locale & rLocale,
-            const OutputDevice& /*rOutDev*/)
+            const ::com::sun::star::lang::Locale& rLocale)
         {
-            sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
-            sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
+            // detect FontScaling
+            const sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
+            const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
+            const bool bFontIsScaled(nHeight != nWidth);
+
+#ifdef WIN32
+            // for WIN32 systems, start with creating an unscaled font. If FontScaling
+            // is wanted, that width needs to be adapted using FontMetric again to get a
+            // width of the unscaled font
             Font aRetval(
                 rFontAttributes.getFamilyName(),
                 rFontAttributes.getStyleName(),
-#ifdef WIN32
                 Size(0, nHeight));
 #else
-                Size(nWidth, nHeight));
+            // for non-WIN32 systems things are easier since these accept a Font creation
+            // with initially nWidth != nHeight for FontScaling. Despite that, use zero for
+            // FontWidth when no scaling is used to explicitely have that zero when e.g. the
+            // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
+            // set FontWidth; import that in a WIN32 system, and trouble is there)
+            Font aRetval(
+                rFontAttributes.getFamilyName(),
+                rFontAttributes.getStyleName(),
+                Size(bFontIsScaled ? nWidth : 0, nHeight));
 #endif
-
+            // define various other FontAttributes
             aRetval.SetAlign(ALIGN_BASELINE);
             aRetval.SetCharSet(rFontAttributes.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
             aRetval.SetVertical(rFontAttributes.getVertical() ? TRUE : FALSE);
@@ -348,32 +348,20 @@ namespace drawinglayer
             aRetval.SetLanguage(MsLangId::convertLocaleToLanguage(rLocale));
 
 #ifdef WIN32
-            // #100424# use higher precision
-            if(!basegfx::fTools::equal(fFontScaleX, fFontScaleY))
+            // for WIN32 systems, correct the FontWidth if FontScaling is used
+            if(bFontIsScaled && nHeight > 0)
             {
-                // #i92757#
-                // Removed the relative calculation with GetFontMetric() usage again. On
-                // the one hand it was wrong (integer division always created zero), OTOH
-                // calculating a scale factor from current to target width and then using
-                // it to actually scale the current width does nothing but set the target
-                // value directly. Maybe more is needed here with WIN version of font
-                // width/height handling, but currently, this works the simple way.
-                //
-                // As can be seen, when this can stay the simple way, the OutputDevice
-                // can be removed from the whole getVclFontFromFontAttributes implementations
-                // again and make it more VCL-independent.
-                //
-                // Adapted nWidth usage to nWidth-1 to be completely compatible with
-                // non-primitive version.
-                //
-                // previous stuff:
-                //  const FontMetric aFontMetric(rOutDev.GetFontMetric(aRetval));
-                //  const double fCurrentWidth(aFontMetric.GetWidth());
-                //  aRetval.SetWidth(basegfx::fround(fCurrentWidth * ((double)nWidth/(double)nHeight)));
-                aRetval.SetWidth(nWidth ? nWidth - 1 : 0);
+                const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aRetval));
+
+                if(aUnscaledFontMetric.GetWidth() > 0)
+                {
+                    const double fScaleFactor((double)nWidth / (double)nHeight);
+                    const sal_uInt32 nScaledWidth(basegfx::fround((double)aUnscaledFontMetric.GetWidth() * fScaleFactor));
+                    aRetval.SetWidth(nScaledWidth);
+                }
             }
 #endif
-
+            // handle FontRotation (if defined)
             if(!basegfx::fTools::equalZero(fFontRotation))
             {
                 sal_Int16 aRotate10th((sal_Int16)(fFontRotation * (-1800.0/F_PI)));
@@ -383,9 +371,13 @@ namespace drawinglayer
             return aRetval;
         }
 
-        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong)
+        FontAttributes getFontAttributesFromVclFont(
+            basegfx::B2DVector& o_rSize,
+            const Font& rFont,
+            bool bRTL,
+            bool bBiDiStrong)
         {
-            FontAttributes aRetval(
+            const FontAttributes aRetval(
                 rFont.GetName(),
                 rFont.GetStyleName(),
                 static_cast<sal_uInt16>(rFont.GetWeight()),
@@ -397,12 +389,38 @@ namespace drawinglayer
                 bBiDiStrong);
             // TODO: eKerning
 
-            const sal_Int32 nWidth(rFont.GetSize().getWidth());
-            const sal_Int32 nHeight(rFont.GetSize().getHeight());
+            // set FontHeight and init to no FontScaling
+            o_rSize.setY(rFont.GetSize().getHeight() > 0 ? rFont.GetSize().getHeight() : 0);
+            o_rSize.setX(o_rSize.getY());
 
-            rSize.setX(nWidth ? nWidth : nHeight);
-            rSize.setY(nHeight);
+#ifdef WIN32
+            // for WIN32 systems, the FontScaling at the Font is detected by
+            // checking that FontWidth != 0. When FontScaling is used, WIN32
+            // needs to do extra stuff to detect the correct width (since it's
+            // zero and not equal the font height) and it's relationship to
+            // the height
+            if(rFont.GetSize().getWidth() > 0)
+            {
+                Font aUnscaledFont(rFont);
+                aUnscaledFont.SetWidth(0);
+                const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
 
+                if(aUnscaledFontMetric.GetWidth() > 0)
+                {
+                    const double fScaleFactor((double)rFont.GetSize().getWidth() / (double)aUnscaledFontMetric.GetWidth());
+                    o_rSize.setX(fScaleFactor * o_rSize.getY());
+                }
+            }
+#else
+            // For non-WIN32 systems the detection is the same, but the value
+            // is easier achieved since width == height is interpreted as no
+            // scaling. Ergo, Width == 0 means width == height, and width != 0
+            // means the scaling is in the direct relation of width to height
+            if(rFont.GetSize().getWidth() > 0)
+            {
+                o_rSize.setX((double)rFont.GetSize().getWidth());
+            }
+#endif
             return aRetval;
         }
     } // end of namespace primitive2d

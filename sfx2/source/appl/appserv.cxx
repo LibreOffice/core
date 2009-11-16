@@ -668,17 +668,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                     break;
 
-                case SID_CURRENTTIME:
-                {
-                    rSet.Put( SfxStringItem( nWhich, aLocaleWrapper.getTime( Time(), FALSE ) ) );
-                    break;
-                }
-                case SID_CURRENTDATE:
-                {
-                    rSet.Put( SfxStringItem( nWhich, aLocaleWrapper.getDate( Date() ) ) );
-                    break;
-                }
-
                 case SID_HELPTIPS:
                 {
                     rSet.Put( SfxBoolItem( SID_HELPTIPS, Help::IsQuickHelpEnabled() ) );
@@ -859,6 +848,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     pFact->CreateFrameDialog( NULL, xFrame, rReq.GetSlot(), sPageURL );
                   pDlg->Execute();
                   delete pDlg;
+                SfxViewFrame* pView = SfxViewFrame::GetFirst();
+                while ( pView )
+                {
+                    pView->GetBindings().InvalidateAll(FALSE);
+                    pView = SfxViewFrame::GetNext( *pView );
+                }
             }
             break;
         }
