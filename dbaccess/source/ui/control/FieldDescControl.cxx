@@ -1667,8 +1667,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     ::rtl::OUString sDefault;
     if (pDefault)
     {
-        if ( pDefault->GetSavedValue() != pDefault->GetText() )
-            sDefault = pDefault->GetText();
+        sDefault = pDefault->GetText();
     }
     else if (pBoolDefault)
     {

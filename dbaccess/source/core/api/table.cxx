@@ -182,7 +182,7 @@ OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
     Reference<XPropertySet> xColumnDefintion;
     if ( m_xColumnDefinitions.is() && m_xColumnDefinitions->hasByName(_rName) )
         xColumnDefintion.set(m_xColumnDefinitions->getByName(_rName),UNO_QUERY);
-    pReturn = new OTableColumnWrapper(xProp,xColumnDefintion);
+    pReturn = new OTableColumnWrapper( xProp, xColumnDefintion, false );
 
     return pReturn;
 }
@@ -468,7 +468,7 @@ Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
 Reference< XPropertySet > ODBTable::createColumnDescriptor()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumnDescriptor" );
-    return new OTableColumnDescriptor();
+    return new OTableColumnDescriptor( true );
 }
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)

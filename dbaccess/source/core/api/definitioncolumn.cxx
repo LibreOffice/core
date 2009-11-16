@@ -31,34 +31,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_COREAPI_DEFINITIONSETTINGS_HXX_
-#include "definitioncolumn.hxx"
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
-#include "dbastrings.hrc"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef DBACORE_SDBCORETOOLS_HXX
+#include "dbastrings.hrc"
+#include "definitioncolumn.hxx"
 #include "sdbcoretools.hxx"
-#endif
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
+#include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -79,7 +63,29 @@ using namespace dbaccess;
 //============================================================
 IMPLEMENT_FORWARD_XINTERFACE2(OTableColumnDescriptor,OColumn,TXChild)
 
-// com::sun::star::lang::XTypeProvider
+//------------------------------------------------------------------------------
+void OTableColumnDescriptor::impl_registerProperties( const bool _bActAsDescriptor )
+{
+    sal_Int32 nDefaultAttr = _bActAsDescriptor ? 0 : PropertyAttribute::READONLY;
+
+    registerProperty( PROPERTY_TYPENAME, PROPERTY_ID_TYPENAME, nDefaultAttr, &m_aTypeName, ::getCppuType( &m_aTypeName ) );
+    registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, nDefaultAttr, &m_aDescription, ::getCppuType( &m_aDescription ) );
+    registerProperty( PROPERTY_DEFAULTVALUE, PROPERTY_ID_DEFAULTVALUE, nDefaultAttr, &m_aDefaultValue, ::getCppuType( &m_aDefaultValue ) );
+
+    if ( _bActAsDescriptor )
+        registerProperty( PROPERTY_AUTOINCREMENTCREATION, PROPERTY_ID_AUTOINCREMENTCREATION, nDefaultAttr, &m_aAutoIncrementValue, ::getCppuType( &m_aAutoIncrementValue ) );
+
+    registerProperty( PROPERTY_TYPE, PROPERTY_ID_TYPE, nDefaultAttr, &m_nType, ::getCppuType( &m_nType ) );
+    registerProperty( PROPERTY_PRECISION, PROPERTY_ID_PRECISION, nDefaultAttr, &m_nPrecision, ::getCppuType( &m_nPrecision ) );
+    registerProperty( PROPERTY_SCALE, PROPERTY_ID_SCALE, nDefaultAttr, &m_nScale, ::getCppuType( &m_nScale ) );
+    registerProperty( PROPERTY_ISNULLABLE, PROPERTY_ID_ISNULLABLE, nDefaultAttr, &m_nIsNullable, ::getCppuType( &m_nIsNullable ) );
+    registerProperty( PROPERTY_ISAUTOINCREMENT, PROPERTY_ID_ISAUTOINCREMENT, nDefaultAttr, &m_bAutoIncrement, ::getCppuType( &m_bAutoIncrement ) );
+    registerProperty( PROPERTY_ISROWVERSION, PROPERTY_ID_ISROWVERSION, nDefaultAttr, &m_bRowVersion, ::getCppuType( &m_bRowVersion ) );
+    registerProperty( PROPERTY_ISCURRENCY, PROPERTY_ID_ISCURRENCY, nDefaultAttr, &m_bCurrency, ::getCppuType( &m_bCurrency ) );
+
+    OColumnSettings::registerProperties( *this );
+}
+
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTableColumnDescriptor::getImplementationId() throw (RuntimeException)
 {
@@ -116,28 +122,9 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptor::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(20)
-        DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
-        DECL_PROP1(AUTOINCREMENTCREATION,::rtl::OUString,   MAYBEVOID);
-        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_IFACE(CONTROLMODEL,      XPropertySet,       BOUND       );
-        DECL_PROP0(DEFAULTVALUE,        ::rtl::OUString     );
-        DECL_PROP0(DESCRIPTION,         ::rtl::OUString     );
-        DECL_PROP2(NUMBERFORMAT,            sal_Int32,          BOUND,MAYBEVOID);
-        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
-        DECL_PROP0_BOOL(ISAUTOINCREMENT                     );
-        DECL_PROP0_BOOL(ISCURRENCY                      );
-        DECL_PROP0(ISNULLABLE,          sal_Int32           );
-        DECL_PROP0_BOOL(ISROWVERSION                        );
-        DECL_PROP0(NAME,                ::rtl::OUString     );
-        DECL_PROP0(PRECISION,           sal_Int32           );
-        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP0(SCALE,               sal_Int32           );
-        DECL_PROP0(TYPE,                sal_Int32           );
-        DECL_PROP0(TYPENAME,            ::rtl::OUString     );
-        DECL_PROP2(WIDTH,               sal_Int32,          BOUND, MAYBEVOID);
-    END_PROPERTY_HELPER();
+    Sequence< Property > aProps;
+    describeProperties( aProps );
+    return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
 // cppu::OPropertySetHelper
@@ -148,181 +135,10 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 }
 
 //------------------------------------------------------------------------------
-void OTableColumnDescriptor::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
-    switch (nHandle)
-    {
-        case PROPERTY_ID_TYPE:
-            rValue <<= m_nType;
-            break;
-        case PROPERTY_ID_PRECISION:
-            rValue <<= m_nPrecision;
-            break;
-        case PROPERTY_ID_SCALE:
-            rValue <<= m_nScale;
-            break;
-        case PROPERTY_ID_ISNULLABLE:
-            rValue <<= m_nIsNullable;
-            break;
-        case PROPERTY_ID_TYPENAME:
-            rValue <<= m_aTypeName;
-            break;
-        case PROPERTY_ID_DESCRIPTION:
-            rValue <<= m_aDescription;
-            break;
-        case PROPERTY_ID_DEFAULTVALUE:
-            rValue <<= m_aDefaultValue;
-            break;
-        case PROPERTY_ID_AUTOINCREMENTCREATION:
-            rValue <<= m_aAutoIncrementValue;
-            break;
-        case PROPERTY_ID_ISAUTOINCREMENT:
-        {
-            sal_Bool bVal = m_bAutoIncrement;
-            rValue.setValue(&bVal, getBooleanCppuType());
-        }   break;
-        case PROPERTY_ID_ISCURRENCY:
-        {
-            sal_Bool bVal = m_bCurrency;
-            rValue.setValue(&bVal, getBooleanCppuType());
-        }   break;
-        case PROPERTY_ID_ISROWVERSION:
-        {
-            sal_Bool bVal = m_bRowVersion;
-            rValue.setValue(&bVal, getBooleanCppuType());
-        }   break;
-        case PROPERTY_ID_NAME:
-            OColumn::getFastPropertyValue( rValue, nHandle );
-            break;
-        default:
-            OColumnSettings::getFastPropertyValue( rValue, nHandle );
-    }
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OTableColumnDescriptor::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const Any& rValue )
-                                throw (IllegalArgumentException)
-{
-    sal_Bool bModified = sal_False;
-    switch (nHandle)
-    {
-        case PROPERTY_ID_TYPE:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nType);
-            break;
-        case PROPERTY_ID_PRECISION:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nPrecision);
-            break;
-        case PROPERTY_ID_SCALE:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nScale);
-            break;
-        case PROPERTY_ID_ISNULLABLE:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nIsNullable);
-            break;
-        case PROPERTY_ID_TYPENAME:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTypeName);
-            break;
-        case PROPERTY_ID_DESCRIPTION:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDescription);
-            break;
-        case PROPERTY_ID_DEFAULTVALUE:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefaultValue);
-            break;
-        case PROPERTY_ID_AUTOINCREMENTCREATION:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAutoIncrementValue);
-            break;
-        case PROPERTY_ID_ISAUTOINCREMENT:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAutoIncrement);
-            break;
-        case PROPERTY_ID_ISCURRENCY:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bCurrency);
-            break;
-        case PROPERTY_ID_ISROWVERSION:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bRowVersion);
-            break;
-        case PROPERTY_ID_NAME:
-            bModified = OColumn::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
-            break;
-        default:
-            bModified = OColumnSettings::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
-    }
-    return bModified;
-}
-
-//------------------------------------------------------------------------------
-void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(
-                                            sal_Int32 nHandle,
-                                            const Any& rValue
-                                                 )
-                                                 throw (Exception)
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_TYPE:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(TYPE) : invalid value !");
-            rValue >>= m_nType;
-            break;
-        case PROPERTY_ID_PRECISION:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(PRECISION) : invalid value !");
-            rValue >>= m_nPrecision;
-            break;
-        case PROPERTY_ID_SCALE:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(SCALE) : invalid value !");
-            rValue >>= m_nScale;
-            break;
-        case PROPERTY_ID_ISNULLABLE:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISNULLABLE) : invalid value !");
-            rValue >>= m_nIsNullable;
-            break;
-        case PROPERTY_ID_TYPENAME:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(TYPENAME) : invalid value !");
-            rValue >>= m_aTypeName;
-            break;
-        case PROPERTY_ID_DESCRIPTION:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DESCRIPTION) : invalid value !");
-            rValue >>= m_aDescription;
-            break;
-        case PROPERTY_ID_DEFAULTVALUE:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
-            rValue >>= m_aDefaultValue;
-            break;
-        case PROPERTY_ID_AUTOINCREMENTCREATION:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(AUTOINCREMENTVALUE) : invalid value !");
-            rValue >>= m_aAutoIncrementValue;
-            break;
-        case PROPERTY_ID_ISAUTOINCREMENT:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISAUTOINCREMENT) : invalid value !");
-            m_bAutoIncrement = ::comphelper::getBOOL(rValue);
-            break;
-        case PROPERTY_ID_ISCURRENCY:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISCURRENCY) : invalid value !");
-            m_bCurrency = ::comphelper::getBOOL(rValue);
-            break;
-        case PROPERTY_ID_ISROWVERSION:
-            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISROWVERSION) : invalid value !");
-            m_bRowVersion = ::comphelper::getBOOL(rValue);
-            break;
-        case PROPERTY_ID_NAME:
-            OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-            break;
-        default:
-            OColumnSettings::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-    }
-    ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
+    OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    ::dbaccess::notifyDataSourceModified( m_xParent, sal_True );
 }
 
 // -----------------------------------------------------------------------------
@@ -350,33 +166,64 @@ void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& 
 //= OTableColumn
 //============================================================
 DBG_NAME(OTableColumn);
-OTableColumn::OTableColumn(const ::rtl::OUString& _rName)
+
+// -------------------------------------------------------------------------
+OTableColumn::OTableColumn( const ::rtl::OUString& _rName )
+    :OTableColumnDescriptor( false )
 {
     DBG_CTOR(OTableColumn,NULL);
     m_sName = _rName;
 }
+
 // -------------------------------------------------------------------------
 OTableColumn::OTableColumn(const Reference<XPropertySet>& _xColumn)
+    :OTableColumnDescriptor( false )
 {
     DBG_CTOR(OTableColumn,NULL);
 
-    m_aTypeName = (::comphelper::getString(_xColumn->getPropertyValue(PROPERTY_TYPENAME)));
-    if(_xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-        m_aDefaultValue = (::comphelper::getString(_xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)));
-    m_nIsNullable = (::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_ISNULLABLE)));
-    m_nPrecision = (::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_PRECISION)));
-    m_nScale = (::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_SCALE)));
-    m_nType = (::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE)));
-    m_bAutoIncrement = (::comphelper::getBOOL(_xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
-    m_bRowVersion = (sal_False);
-    m_bCurrency = (::comphelper::getBOOL(_xColumn->getPropertyValue(PROPERTY_ISCURRENCY)));
-    _xColumn->getPropertyValue(PROPERTY_NAME) >>= m_sName;
+    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_TYPENAME ) >>= m_aTypeName );
+    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= m_nIsNullable );
+    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_PRECISION ) >>= m_nPrecision );
+    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_SCALE ) >>= m_nScale );
+    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_TYPE ) >>= m_nType );
+    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_ISAUTOINCREMENT ) >>= m_bAutoIncrement );
+    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_ISCURRENCY ) >>= m_bCurrency );
+    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName );
+    m_bRowVersion = sal_False;
+
+    Reference< XPropertySetInfo > xPSI( _xColumn->getPropertySetInfo(), UNO_SET_THROW );
+    if ( xPSI->hasPropertyByName( PROPERTY_DEFAULTVALUE ) )
+        OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_DEFAULTVALUE ) >>= m_aDefaultValue );
+
+    // if the source column also has column settings, copy those
+    struct ColumnSettingDescriptor
+    {
+        ::rtl::OUString sName;
+        sal_Int32       nHandle;
+    };
+    ColumnSettingDescriptor aProps[] =
+    {
+        { PROPERTY_WIDTH,            PROPERTY_ID_WIDTH },
+        { PROPERTY_NUMBERFORMAT,     PROPERTY_ID_NUMBERFORMAT },
+        { PROPERTY_RELATIVEPOSITION, PROPERTY_ID_RELATIVEPOSITION },
+        { PROPERTY_ALIGN,            PROPERTY_ID_ALIGN },
+        { PROPERTY_HELPTEXT,         PROPERTY_ID_HELPTEXT },
+        { PROPERTY_CONTROLDEFAULT,   PROPERTY_ID_CONTROLDEFAULT },
+        { PROPERTY_HIDDEN,   PROPERTY_ID_HIDDEN }
+    };
+    for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
+    {
+        if ( xPSI->hasPropertyByName( aProps[i].sName ) )
+            OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _xColumn->getPropertyValue( aProps[i].sName ) );
+    }
 }
+
 // -----------------------------------------------------------------------------
 OTableColumn::~OTableColumn()
 {
     DBG_DTOR(OTableColumn,NULL);
 }
+
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTableColumn::getImplementationId() throw (RuntimeException)
@@ -420,27 +267,7 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(19)
-        DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
-        DECL_PROP1(DEFAULTVALUE,        ::rtl::OUString,    READONLY);
-        DECL_PROP1(DESCRIPTION,         ::rtl::OUString,    READONLY);
-        DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
-        DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
-        DECL_PROP1_BOOL(ISCURRENCY,                 READONLY);
-        DECL_PROP1(ISNULLABLE,          sal_Int32,          READONLY);
-        DECL_PROP1_BOOL(ISROWVERSION,                       READONLY);
-        DECL_PROP1(NAME,                ::rtl::OUString,    READONLY);
-        DECL_PROP1(PRECISION,           sal_Int32,          READONLY);
-        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1(SCALE,               sal_Int32,          READONLY);
-        DECL_PROP1(TYPE,                sal_Int32,          READONLY);
-        DECL_PROP1(TYPENAME,            ::rtl::OUString,    READONLY);
-        DECL_PROP2(WIDTH,               sal_Int32,          BOUND, MAYBEVOID);
-    END_PROPERTY_HELPER();
+    return OTableColumnDescriptor::createArrayHelper();
 }
 
 //============================================================
@@ -448,29 +275,24 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
 //============================================================
 DBG_NAME(OColumnWrapper);
 //--------------------------------------------------------------------------
-OColumnWrapper::OColumnWrapper(const Reference< XPropertySet > & rCol)
-               :m_xAggregate(rCol)
-               ,m_nColTypeID(-1)
+OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bool _bNameIsReadOnly )
+    :OColumn( _bNameIsReadOnly )
+    ,m_xAggregate(rCol)
+    ,m_nColTypeID(-1)
 {
     DBG_CTOR(OColumnWrapper,NULL);
-    // which type of aggregate property do we have
-    if (m_nColTypeID == -1)
+    // which type of aggregate property do we have?
+    // we distingish the properties by the containment of optional properties
+    m_nColTypeID = 0;
+    if ( m_xAggregate.is() )
     {
-        // we distingish the properties by the containment of optional properties, these are:
-        // Description  0x0001
-        // Hidden       0x0002
-        // IsRowVersion 0x0004
-        m_nColTypeID = 0;
-        if ( m_xAggregate.is() )
-        {
-            Reference <XPropertySetInfo > xInfo(m_xAggregate->getPropertySetInfo());
-            m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DESCRIPTION) ? HAS_DESCRIPTION : 0;
-            m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) ? HAS_DEFAULTVALUE : 0;
-            m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_ISROWVERSION) ? HAS_ROWVERSION : 0;
-            m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) ? HAS_AUTOINCREMENT_CREATION : 0;
+        Reference <XPropertySetInfo > xInfo(m_xAggregate->getPropertySetInfo());
+        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DESCRIPTION) ? HAS_DESCRIPTION : 0;
+        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) ? HAS_DEFAULTVALUE : 0;
+        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_ISROWVERSION) ? HAS_ROWVERSION : 0;
+        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) ? HAS_AUTOINCREMENT_CREATION : 0;
 
-            m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
-        }
+        m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
     }
 }
 // -----------------------------------------------------------------------------
@@ -480,59 +302,65 @@ OColumnWrapper::~OColumnWrapper()
 }
 
 //------------------------------------------------------------------------------
+::rtl::OUString OColumnWrapper::impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const
+{
+    ::rtl::OUString sPropName;
+    sal_Int16 nAttributes( 0 );
+    const_cast< OColumnWrapper* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
+    OSL_ENSURE( sPropName.getLength(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
+    return sPropName;
+}
+
+//------------------------------------------------------------------------------
 void OColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
-    switch (nHandle)
+    // derived classes are free to either use the OPropertyContainer(Helper) mechanisms for properties,
+    // or to declare additional properties which are to be forwarded to the wrapped object. So we need
+    // to distinguish those cases.
+    if ( OColumn::isRegisteredProperty( nHandle ) )
     {
-        case PROPERTY_ID_NAME:
-            rValue <<= m_sName;
-            break;
-        default:
-        {
-            // get the property name
-            ::rtl::OUString aPropName;
-            sal_Int16 nAttributes;
-            const_cast<OColumnWrapper*>(this)->getInfoHelper().
-                        fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-            OSL_ENSURE(aPropName.getLength(), "property not found?");
-
-            // now read the value
-            rValue = m_xAggregate->getPropertyValue(aPropName);
-        }
+        OColumn::getFastPropertyValue( rValue, nHandle );
+    }
+    else
+    {
+        rValue = m_xAggregate->getPropertyValue( impl_getPropertyNameFromHandle( nHandle ) );
     }
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OColumnWrapper::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const Any& rValue )
-                                throw (IllegalArgumentException)
+sal_Bool OColumnWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle,
+            const Any& rValue ) throw (IllegalArgumentException)
 {
-    // used for the name
-    sal_Bool bModified = OColumn::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
-
-    // get the property name
-    ::rtl::OUString aPropName;
-    sal_Int16 nAttributes;
-    getInfoHelper().fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-    OSL_ENSURE(aPropName.getLength(), "property not found?");
-
-    // now read the value
-    m_xAggregate->setPropertyValue(aPropName, rValue);
+    sal_Bool bModified( sal_False );
+    if ( OColumn::isRegisteredProperty( nHandle ) )
+    {
+        bModified = OColumn::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+    }
+    else
+    {
+        getFastPropertyValue( rOldValue, nHandle );
+        if ( rOldValue != rValue )
+        {
+            rConvertedValue = rValue;
+            bModified = sal_True;
+        }
+    }
     return bModified;
 }
 
 //------------------------------------------------------------------------------
-void OColumnWrapper::setFastPropertyValue_NoBroadcast(
-                                                sal_Int32 nHandle,
-                                                const Any& rValue
-                                                 )
-                                                 throw (Exception)
+void OColumnWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
-    OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    if ( OColumn::isRegisteredProperty( nHandle ) )
+    {
+        OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    }
+    else
+    {
+        m_xAggregate->setPropertyValue( impl_getPropertyNameFromHandle( nHandle ), rValue );
+    }
 }
+
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
 {
@@ -545,9 +373,20 @@ sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aId
     }
     return nRet;
 }
+
 //============================================================
 //= OTableColumnDescriptorWrapper
 //============================================================
+//--------------------------------------------------------------------------
+OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< XPropertySet >& _rCol, const bool _bPureWrap, const bool _bIsDescriptor )
+    :OColumnWrapper( _rCol, !_bIsDescriptor )
+    ,m_bPureWrap( _bPureWrap )
+    ,m_bIsDescriptor( _bIsDescriptor )
+{
+    // let the ColumnSettings register its properties
+    OColumnSettings::registerProperties( *this );
+}
+
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTableColumnDescriptorWrapper::getImplementationId() throw (RuntimeException)
@@ -594,61 +433,68 @@ sal_Int64 SAL_CALL OTableColumnDescriptorWrapper::getSomething( const Sequence< 
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptorWrapper::createArrayHelper( sal_Int32 nId ) const
 {
-    // BEGIN_PROPERTY_HELPER(17)
-    sal_Int32 nPropertyCount = 16;
-    // How many properties do we have?
-    // Which optional properties are contained?
-    if (nId & HAS_DESCRIPTION)
-        ++nPropertyCount;
-    if (nId & HAS_DEFAULTVALUE)
-        ++nPropertyCount;
-    if (nId & HAS_ROWVERSION)
-        ++nPropertyCount;
-    if ( nId & HAS_AUTOINCREMENT_CREATION )
-        ++nPropertyCount;
+    const sal_Int32 nHaveAlways = 7;
 
-    Sequence< Property> aDescriptor(nPropertyCount);
-    Property* pDesc = aDescriptor.getArray();
+    // Which optional properties are contained?
+    sal_Int32 nHaveOptionally = 0;
+    if (nId & HAS_DESCRIPTION)
+        ++nHaveOptionally;
+    if (nId & HAS_DEFAULTVALUE)
+        ++nHaveOptionally;
+    if (nId & HAS_ROWVERSION)
+        ++nHaveOptionally;
+    if ( nId & HAS_AUTOINCREMENT_CREATION )
+        ++nHaveOptionally;
+
+    const sal_Int32 nPropertyCount( nHaveAlways + nHaveOptionally );
+    Sequence< Property > aTableDescProperties( nPropertyCount );
+    Property* pDesc = aTableDescProperties.getArray();
     sal_Int32 nPos = 0;
 
-    //      Description, Defaultvalue, IsRowVersion
-        DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
-        if ( nId & HAS_AUTOINCREMENT_CREATION )
-        {
-            DECL_PROP1(AUTOINCREMENTCREATION,::rtl::OUString,   MAYBEVOID);
-        }
-        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_IFACE(CONTROLMODEL,      XPropertySet,       BOUND       );
-        if (nId & HAS_DEFAULTVALUE)
-        {
-            DECL_PROP0(DEFAULTVALUE,    ::rtl::OUString );
-        }
+    DECL_PROP0_BOOL( ISAUTOINCREMENT                );
+    DECL_PROP0_BOOL( ISCURRENCY                     );
+    DECL_PROP0( ISNULLABLE,         sal_Int32       );
+    DECL_PROP0( PRECISION,          sal_Int32       );
+    DECL_PROP0( SCALE,              sal_Int32       );
+    DECL_PROP0( TYPE,               sal_Int32       );
+    DECL_PROP0( TYPENAME,           ::rtl::OUString );
 
-        if (nId & HAS_DESCRIPTION)
+    if ( nId & HAS_AUTOINCREMENT_CREATION )
+    {
+        DECL_PROP1( AUTOINCREMENTCREATION, ::rtl::OUString, MAYBEVOID );
+    }
+    if ( nId & HAS_DEFAULTVALUE )
+    {
+        DECL_PROP0( DEFAULTVALUE, ::rtl::OUString );
+    }
+    if ( nId & HAS_DESCRIPTION )
+    {
+        DECL_PROP0( DESCRIPTION, ::rtl::OUString );
+    }
+    if ( nId & HAS_ROWVERSION )
+    {
+        DECL_PROP0_BOOL( ISROWVERSION );
+    }
+
+    OSL_ENSURE( nPos == nPropertyCount, "OTableColumnDescriptorWrapper::createArrayHelper: something went wrong!" );
+
+    if ( !m_bIsDescriptor )
+    {
+        for (   Property* prop = aTableDescProperties.getArray();
+                prop != aTableDescProperties.getArray() + aTableDescProperties.getLength();
+                ++prop
+            )
         {
-            DECL_PROP0(DESCRIPTION,     ::rtl::OUString );
+            prop->Attributes |= PropertyAttribute::READONLY;
         }
+    }
 
-        DECL_PROP2(NUMBERFORMAT,            sal_Int32,          BOUND,MAYBEVOID);
-        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
-        DECL_PROP0_BOOL(ISAUTOINCREMENT                     );
-        DECL_PROP0_BOOL(ISCURRENCY                          );
-        DECL_PROP0(ISNULLABLE,          sal_Int32           );
+    // finally also describe the properties which are maintained by our base class, in particular the OPropertyContainerHelper
+    Sequence< Property > aBaseProperties;
+    describeProperties( aBaseProperties );
 
-        if (nId & HAS_ROWVERSION)
-        {
-            DECL_PROP0_BOOL(ISROWVERSION                    );
-        }
-
-        DECL_PROP0(NAME,                ::rtl::OUString     );
-        DECL_PROP0(PRECISION,           sal_Int32           );
-        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP0(SCALE,               sal_Int32           );
-        DECL_PROP0(TYPE,                sal_Int32           );
-        DECL_PROP0(TYPENAME,            ::rtl::OUString     );
-        DECL_PROP1(WIDTH,               sal_Int32,          MAYBEVOID);
-    END_PROPERTY_HELPER();
+    Sequence< Property > aAllProperties( ::comphelper::concatSequences( aTableDescProperties, aBaseProperties ) );
+    return new ::cppu::OPropertyArrayHelper( aAllProperties, sal_False );
 }
 
 // cppu::OPropertySetHelper
@@ -663,74 +509,35 @@ void OTableColumnDescriptorWrapper::getFastPropertyValue( Any& rValue, sal_Int32
 {
     if ( m_bPureWrap )
     {
-        // get the property name
-        ::rtl::OUString aPropName;
-        sal_Int16 nAttributes;
-        const_cast<OTableColumnDescriptorWrapper*>(this)->getInfoHelper().
-            fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-        OSL_ENSURE(aPropName.getLength(), "property not found?");
-
-        // now read the value
-        rValue = m_xAggregate->getPropertyValue(aPropName);
+        rValue = m_xAggregate->getPropertyValue( impl_getPropertyNameFromHandle( nHandle ) );
     }
     else
     {
-        switch (nHandle)
-        {
-            case PROPERTY_ID_ALIGN:
-            case PROPERTY_ID_NUMBERFORMAT:
-            case PROPERTY_ID_RELATIVEPOSITION:
-            case PROPERTY_ID_WIDTH:
-            case PROPERTY_ID_HIDDEN:
-            case PROPERTY_ID_CONTROLMODEL:
-            case PROPERTY_ID_HELPTEXT:
-            case PROPERTY_ID_CONTROLDEFAULT:
-                OColumnSettings::getFastPropertyValue( rValue, nHandle );
-                break;
-            default:
-            {
-                // get the property name
-                ::rtl::OUString aPropName;
-                sal_Int16 nAttributes;
-                const_cast<OTableColumnDescriptorWrapper*>(this)->getInfoHelper().
-                    fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-                OSL_ENSURE(aPropName.getLength(), "property not found?");
-
-                // now read the value
-                rValue = m_xAggregate->getPropertyValue(aPropName);
-            }
-        }
+        OColumnWrapper::getFastPropertyValue( rValue, nHandle );
     }
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const Any& rValue )
-                                throw (IllegalArgumentException)
+sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw (IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
     if ( m_bPureWrap )
-        bModified = OColumnWrapper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+    {
+        // do not delegate to OColumnWrapper: It would, for the properties which were registered with registerProperty,
+        // ask the OPropertyContainer base class, which is not what we want here.
+        // TODO: the whole "m_bPureWrap"-thingie is strange. We should have a dedicated class doing this wrapping,
+        // not a class which normally serves other purposes, and only sometimes does a "pure wrap". It makes the
+        // code unnecessarily hard to maintain, and error prone.
+        rOldValue = m_xAggregate->getPropertyValue( impl_getPropertyNameFromHandle( nHandle ) );
+        if ( rOldValue != rValue )
+        {
+            rConvertedValue = rValue;
+            bModified = sal_True;
+        }
+    }
     else
     {
-        switch (nHandle)
-        {
-            case PROPERTY_ID_ALIGN:
-            case PROPERTY_ID_NUMBERFORMAT:
-            case PROPERTY_ID_RELATIVEPOSITION:
-            case PROPERTY_ID_WIDTH:
-            case PROPERTY_ID_HIDDEN:
-            case PROPERTY_ID_CONTROLMODEL:
-            case PROPERTY_ID_HELPTEXT:
-            case PROPERTY_ID_CONTROLDEFAULT:
-                bModified = OColumnSettings::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
-                break;
-            default:
-                bModified = OColumnWrapper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
-        }
+        bModified = OColumnWrapper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
     }
     return bModified;
 }
@@ -743,24 +550,12 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
                                                  throw (Exception)
 {
     if ( m_bPureWrap )
-        OColumnWrapper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    {
+        m_xAggregate->setPropertyValue( impl_getPropertyNameFromHandle( nHandle ), rValue );
+    }
     else
     {
-        switch (nHandle)
-        {
-            case PROPERTY_ID_ALIGN:
-            case PROPERTY_ID_NUMBERFORMAT:
-            case PROPERTY_ID_RELATIVEPOSITION:
-            case PROPERTY_ID_WIDTH:
-            case PROPERTY_ID_HIDDEN:
-            case PROPERTY_ID_CONTROLMODEL:
-            case PROPERTY_ID_HELPTEXT:
-            case PROPERTY_ID_CONTROLDEFAULT:
-                OColumnSettings::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-                break;
-            default:
-                OColumnWrapper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-        }
+        OColumnWrapper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
     }
 }
 
@@ -768,24 +563,23 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
 //= OTableColumnWrapper
 //============================================================
 //--------------------------------------------------------------------------
-OTableColumnWrapper::OTableColumnWrapper(const Reference< XPropertySet >& rCol
-                                        ,const Reference< XPropertySet >& _xColDefintion
-                                        ,sal_Bool _bPureWrap)
-    :OTableColumnDescriptorWrapper(rCol,_bPureWrap)
+OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol, const Reference< XPropertySet >& _xColDefintion,
+            bool _bPureWrap )
+    :OTableColumnDescriptorWrapper( rCol, _bPureWrap, false )
 {
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_incrementInterlockedCount( &m_refCount );
     if ( _xColDefintion.is() )
     {
         try
         {
-            ::comphelper::copyProperties(_xColDefintion,this);
+            ::comphelper::copyProperties( _xColDefintion, this );
         }
-        catch(Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OTableColumnWrapper::OTableColumnWrapper: caught an exception!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //--------------------------------------------------------------------------
@@ -809,11 +603,12 @@ Sequence< sal_Int8 > OTableColumnWrapper::getImplementationId() throw (RuntimeEx
     }
     return pId->getImplementationId();
 }
+
 // ::com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
 rtl::OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OTableColumnWrapper");
+    return rtl::OUString::createFromAscii( "com.sun.star.sdb.OTableColumnWrapper" );
 }
 
 //------------------------------------------------------------------------------
@@ -835,206 +630,6 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnWrapper::createArrayHelper( sal_Int32 nId ) const
 {
-    // BEGIN_PROPERTY_HELPER(17)
-    sal_Int32 nPropertyCount = 16;
-    // How many properties do we have?
-    // Which optional properties are contained?
-    if (nId & HAS_DESCRIPTION)
-        nPropertyCount++;
-    if (nId & HAS_DEFAULTVALUE)
-        nPropertyCount++;
-    if (nId & HAS_ROWVERSION)
-        nPropertyCount++;
-    if ( nId & HAS_AUTOINCREMENT_CREATION )
-        ++nPropertyCount;
-
-    Sequence< Property> aDescriptor(nPropertyCount);
-    Property* pDesc = aDescriptor.getArray();
-    sal_Int32 nPos = 0;
-
-    //      Description, Defaultvalue, IsRowVersion
-        DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        if ( nId & HAS_AUTOINCREMENT_CREATION )
-        {
-            DECL_PROP1(AUTOINCREMENTCREATION,::rtl::OUString,   MAYBEVOID);
-        }
-        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
-        if (nId & HAS_DEFAULTVALUE)
-        {
-            DECL_PROP1(DEFAULTVALUE,        ::rtl::OUString,    READONLY);
-        }
-
-        if (nId & HAS_DESCRIPTION)
-        {
-            DECL_PROP1(DESCRIPTION,         ::rtl::OUString,    READONLY);
-        }
-
-        DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
-        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
-        DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
-        DECL_PROP1_BOOL(ISCURRENCY,                         READONLY);
-
-        DECL_PROP1(ISNULLABLE,          sal_Int32,          READONLY);
-
-        if (nId & HAS_ROWVERSION)
-        {
-            DECL_PROP1_BOOL(ISROWVERSION,                       READONLY);
-        }
-
-        DECL_PROP1(NAME,                ::rtl::OUString,    READONLY);
-        DECL_PROP1(PRECISION,           sal_Int32,          READONLY);
-        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1(SCALE,               sal_Int32,          READONLY);
-        DECL_PROP1(TYPE,                sal_Int32,          READONLY);
-        DECL_PROP1(TYPENAME,            ::rtl::OUString,    READONLY);
-        DECL_PROP2(WIDTH,               sal_Int32,          BOUND, MAYBEVOID);
-    END_PROPERTY_HELPER();
+    return OTableColumnDescriptorWrapper::createArrayHelper( nId );
 }
-
-//============================================================
-//= OIndexColumnWrapper
-//============================================================
-// com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > OIndexColumnWrapper::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-// ::com::sun::star::lang::XServiceInfo
-//------------------------------------------------------------------------------
-rtl::OUString OIndexColumnWrapper::getImplementationName(  ) throw (RuntimeException)
-{
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OIndexColumnWrapper");
-}
-
-//------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OIndexColumnWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBCX_COLUMN;
-    aSNS[1] = SERVICE_SDBCX_INDEXCOLUMN;
-    return aSNS;
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OIndexColumnWrapper::getInfoHelper()
-{
-    return *static_cast< OPropertyArrayUsageHelper< OIndexColumnWrapper >* >(this)->getArrayHelper();
-}
-
-// comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OIndexColumnWrapper::createArrayHelper() const
-{
-    BEGIN_PROPERTY_HELPER(9)
-        DECL_PROP1_BOOL(ISASCENDING,                    READONLY);
-        DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
-        DECL_PROP1_BOOL(ISCURRENCY,                 READONLY);
-        DECL_PROP1(ISNULLABLE,          sal_Int32,          READONLY);
-        DECL_PROP1(NAME,                ::rtl::OUString,    READONLY);
-        DECL_PROP1(PRECISION,           sal_Int32,          READONLY);
-        DECL_PROP1(SCALE,               sal_Int32,          READONLY);
-        DECL_PROP1(TYPE,                sal_Int32,          READONLY);
-        DECL_PROP1(TYPENAME,            ::rtl::OUString,    READONLY);
-    END_PROPERTY_HELPER();
-}
-
-//------------------------------------------------------------------------------
-void OIndexColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_ISASCENDING:
-        {
-            sal_Bool bVal = m_bAscending;
-            rValue.setValue(&bVal, getBooleanCppuType());
-        }   break;
-        default:
-            OColumnWrapper::getFastPropertyValue( rValue, nHandle );
-    }
-}
-
-//============================================================
-//= OKeyColumnWrapper
-//============================================================
-// com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > OKeyColumnWrapper::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-// ::com::sun::star::lang::XServiceInfo
-//------------------------------------------------------------------------------
-rtl::OUString OKeyColumnWrapper::getImplementationName(  ) throw (RuntimeException)
-{
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OIndexColumnWrapper");
-}
-
-//------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OKeyColumnWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBCX_COLUMN;
-    aSNS[1] = SERVICE_SDBCX_KEYCOLUMN;
-    return aSNS;
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OKeyColumnWrapper::getInfoHelper()
-{
-    return *static_cast< OPropertyArrayUsageHelper< OKeyColumnWrapper >* >(this)->getArrayHelper();
-}
-
-// comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OKeyColumnWrapper::createArrayHelper() const
-{
-    BEGIN_PROPERTY_HELPER(9)
-        DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
-        DECL_PROP1_BOOL(ISCURRENCY,                 READONLY);
-        DECL_PROP1(ISNULLABLE,          sal_Int32,          READONLY);
-        DECL_PROP1(NAME,                ::rtl::OUString,    READONLY);
-        DECL_PROP1(PRECISION,           sal_Int32,          READONLY);
-        DECL_PROP1(RELATEDCOLUMN,       ::rtl::OUString,    READONLY);
-        DECL_PROP1(SCALE,               sal_Int32,          READONLY);
-        DECL_PROP1(TYPE,                sal_Int32,          READONLY);
-        DECL_PROP1(TYPENAME,            ::rtl::OUString,    READONLY);
-    END_PROPERTY_HELPER();
-}
-
-//------------------------------------------------------------------------------
-void OKeyColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_RELATEDCOLUMN:
-            rValue <<= m_aRelatedColumn;
-            break;
-        default:
-            OColumnWrapper::getFastPropertyValue( rValue, nHandle );
-    }
-}
-
 

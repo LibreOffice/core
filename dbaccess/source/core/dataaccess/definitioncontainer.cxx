@@ -727,23 +727,16 @@ void ODefinitionContainer::addObjectListener(const Reference< XContent >& _xNewO
     {
         xProp->addPropertyChangeListener(PROPERTY_NAME, this);
         xProp->addVetoableChangeListener(PROPERTY_NAME, this);
-        //::rtl::OUString sTitle(RTL_CONSTASCII_USTRINGPARAM( "Title" ));
-        //xProp->addPropertyChangeListener(sTitle, this);
-        //xProp->addVetoableChangeListener(sTitle, this);
-    } // if ( xProp.is() )
+    }
 }
 // -----------------------------------------------------------------------------
 void ODefinitionContainer::removeObjectListener(const Reference< XContent >& _xNewObject)
 {
-    OSL_ENSURE(_xNewObject.is(),"ODefinitionContainer::addObjectListener: Object is null!");
     Reference<XPropertySet> xProp(_xNewObject,UNO_QUERY);
     if ( xProp.is() )
     {
         xProp->removePropertyChangeListener(PROPERTY_NAME, this);
         xProp->removeVetoableChangeListener(PROPERTY_NAME, this);
-        //::rtl::OUString sTitle(RTL_CONSTASCII_USTRINGPARAM( "Title" ));
-        //xProp->removePropertyChangeListener(sTitle, this);
-        //xProp->removeVetoableChangeListener(sTitle, this);
     }
 }
 // -----------------------------------------------------------------------------

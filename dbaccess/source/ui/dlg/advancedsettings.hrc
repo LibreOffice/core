@@ -64,6 +64,7 @@
 #define CB_CHECK_REQUIRED       13
 #define CB_IGNORECURRENCY       14
 #define CB_ESCAPE_DATETIME      15
+#define CB_PRIMARY_KEY_SUPPORT  16
 
 #define ET_AUTOINCREMENTVALUE   1
 #define ET_RETRIEVE_AUTO        2
