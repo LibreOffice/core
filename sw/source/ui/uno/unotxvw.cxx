@@ -721,7 +721,7 @@ uno::Reference< awt::XControl >  SwXTextView::getControl(const uno::Reference< a
 /*-- 08.03.07 13:55------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< form::XFormController > SAL_CALL SwXTextView::getFormController( const uno::Reference< form::XForm >& _Form ) throw (RuntimeException)
+uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormController( const uno::Reference< form::XForm >& _Form ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -731,7 +731,7 @@ uno::Reference< form::XFormController > SAL_CALL SwXTextView::getFormController(
     Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
     DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
 
-    uno::Reference< form::XFormController > xController;
+    uno::Reference< form::runtime::XFormController > xController;
     if ( pFormShell && pDrawView && pWindow )
         xController = pFormShell->GetFormController( _Form, *pDrawView, *pWindow );
     return xController;
