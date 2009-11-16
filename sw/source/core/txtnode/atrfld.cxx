@@ -166,6 +166,8 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     {
         switch( pNew->Which() )
         {
+        case RES_OBJECTDYING:
+                return; // don't do anything, especially not expand!
         case RES_TXTATR_FLDCHG:
                 // "Farbe hat sich geaendert !"
                 // this, this fuer "nur Painten"
@@ -261,6 +263,7 @@ SwTxtFld::SwTxtFld( SwFmtFld& rAttr, xub_StrLen nStartPos )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr = this;
+    SetHasDummyChar(true);
 }
 
 SwTxtFld::~SwTxtFld( )

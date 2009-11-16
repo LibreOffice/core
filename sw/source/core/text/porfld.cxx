@@ -85,6 +85,7 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
         pNewFnt = new SwFont( *pFnt );
     SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt );
     pClone->SetNextOffset( nNextOffset );
+    pClone->m_bNoLength = this->m_bNoLength;
     return pClone;
 }
 
@@ -99,6 +100,7 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
 SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont, sal_Bool bPlaceHold )
     : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(STRING_LEN), nViewWidth(0),
       bFollow( sal_False ), bHasFollow( sal_False ), bPlaceHolder( bPlaceHold )
+    , m_bNoLength( sal_False )
 {
     SetWhichPor( POR_FLD );
 }
@@ -114,6 +116,7 @@ SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
       bCenter( rFld.IsCenter() ),
       bHasFollow( rFld.HasFollow() ),
       bPlaceHolder( rFld.bPlaceHolder )
+    , m_bNoLength( rFld.m_bNoLength )
 {
     if ( rFld.HasFont() )
         pFnt = new SwFont( *rFld.GetFont() );
@@ -378,7 +381,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
 
         // Das Zeichen wird in der ersten Portion gehalten.
         // Unbedingt nach Format!
-        SetLen( nFollow );
+        SetLen( (m_bNoLength) ? 0 : nFollow );
 
         if( nRest )
         {

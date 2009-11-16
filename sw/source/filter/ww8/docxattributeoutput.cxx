@@ -2776,13 +2776,6 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
 }
 
-void DocxAttributeOutput::TextHardBlank( const SwFmtHardBlank& )
-{
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "TODO DocxAttributeOutput::TextHardBlank()\n" );
-#endif
-}
-
 void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short /*nMulti*/ )
 {
     if ( !m_pSpacingAttrList )

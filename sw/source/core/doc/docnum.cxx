@@ -1031,12 +1031,14 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                         "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
                 sListId = pNewList->GetListId();
             }
-            Insert( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
+            InsertPoolItem( rPam,
+                SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
         }
         else if ( sContinuedListId.Len() > 0 )
         {
             // apply given list id
-            Insert( rPam, SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
+            InsertPoolItem( rPam,
+                SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
         }
     }
     // <--
@@ -1084,7 +1086,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     if ( bSetItem )
     // <--
     {
-        Insert( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
+        InsertPoolItem( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
     }
 
     // --> OD 2008-02-08 #newlistlevelattrs#
@@ -1124,7 +1126,8 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     }
     else
     {
-        Insert( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, FALSE ), 0 );
+        InsertPoolItem( rPam,
+            SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, FALSE ), 0 );
     }
 }
 
@@ -1144,7 +1147,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
 //        {
 //            SwPaM aPam(*pCNd);
 
-//            Insert(aPam, SwNumRuleItem(rNumRule.GetName()), 0);
+//            InsertPoolItem(aPam, SwNumRuleItem(rNumRule.GetName()), 0);
 //        }
 //    }
 
@@ -2275,7 +2278,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
                 }
             }
 
-            Copy( aPam, aInsPos, false );
+            CopyRange( aPam, aInsPos, false );
             if( bDelLastPara )
             {
                 // dann muss der letzte leere Node wieder entfernt werden
@@ -2361,7 +2364,7 @@ SetRedlineMode( eOld );
     }
 
 
-    Move( aMvRg, aIdx, DOC_MOVEREDLINES );
+    MoveNodeRange( aMvRg, aIdx, DOC_MOVEREDLINES );
 
     if( pUndo )
     {

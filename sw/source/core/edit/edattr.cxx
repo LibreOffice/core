@@ -452,17 +452,21 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     }
 
     // and fields
-    const SwTxtAttr* pTFld;
-    if( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) &&
-        0 != ( pTFld = rTNd.GetTxtAttr( nPos ) ) )
+    if ( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) )
     {
-        bRet = TRUE;                    // all other then fields can be
-                                        // defined as weak-script ?
-        const SwField* pFld;
-        if( RES_TXTATR_FIELD == pTFld->Which() &&
-            0 != (pFld = pTFld->GetFld().GetFld() ) )
+        const SwTxtAttr* const pAttr = rTNd.GetTxtAttrForCharAt( nPos );
+        if (pAttr)
         {
-            sExp += pFld->Expand();
+            bRet = TRUE; // all other than fields can be
+                         // defined as weak-script ?
+            if ( RES_TXTATR_FIELD == pAttr->Which() )
+            {
+                const SwField* const pFld = pAttr->GetFld().GetFld();
+                if (pFld)
+                {
+                    sExp += pFld->Expand();
+                }
+            }
         }
     }
 

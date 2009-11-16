@@ -218,6 +218,9 @@ class IGrammarContact;
 namespace sw { namespace mark {
     class MarkManager;
 }}
+namespace sw {
+    class MetaFieldManager;
+}
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -298,6 +301,7 @@ class SW_DLLPUBLIC SwDoc :
     mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
 
     const ::boost::scoped_ptr< ::sw::mark::MarkManager> pMarkManager;
+    const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
 
     // -------------------------------------------------------------------
     // die Pointer
@@ -614,8 +618,8 @@ private:
         // nur fuer den internen Gebrauch deshalb privat.
         // Kopieren eines Bereiches im oder in ein anderes Dokument !
         // Die Position darf nicht im Bereich liegen !!
-    sal_Bool _Copy( SwPaM&, SwPosition&,
-                sal_Bool MakeNewFrms /*= sal_True*/, bool bCopyAll, SwPaM* pCpyRng /*= 0*/ ) const; // in ndcopy.cxx
+    bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrms /*= true */,
+            const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
 
     SwFlyFrmFmt* _MakeFlySection( const SwPosition& rAnchPos,
                                 const SwCntntNode& rNode, RndStdIds eRequestId,
@@ -627,9 +631,10 @@ private:
                                 const SfxItemSet* pGrfAttrSet,
                                 SwFrmFmt* = 0 );
 
-    void _CopyFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex,
-                        const SwNodeIndex& rSttIdx,
-                        sal_Bool bCopyFlyAtFly = sal_False ) const; // steht im ndcopy.cxx
+    void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
+                            const xub_StrLen nEndContentIndex,
+                            const SwNodeIndex& rStartIdx,
+                            const bool bCopyFlyAtFly = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
     // --> OD 2005-01-13 #i40550#
@@ -639,7 +644,7 @@ private:
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
     void CopyFmtArr( const SvPtrarr& rSourceArr, SvPtrarr& rDestArr,
                         FNCopyFmt fnCopyFmt, SwFmt& rDfltFmt );
-    void _CopyPageDescHeaderFooter( sal_Bool bCpyHeader,
+    void CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt );
     SwFmt* FindFmtByName( const SvPtrarr& rFmtArr,
                                     const String& rName ) const;
@@ -702,6 +707,11 @@ private:
 
      void InitTOXTypes();
      void   Paste( const SwDoc& );
+     bool DeleteAndJoinImpl(SwPaM&, const bool);
+     bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
+     bool DeleteRangeImpl(SwPaM&, const bool unused = false);
+     bool ReplaceRangeImpl(SwPaM&, String const&, const bool);
+
 public:
 
     /** Life cycle
@@ -878,9 +888,9 @@ public:
 
     /** IDocumentContentOperations
     */
-    virtual bool Copy(SwPaM&, SwPosition&, bool bCopyAll) const;
+    virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll) const;
     virtual void DeleteSection(SwNode* pNode);
-    virtual bool Delete(SwPaM&);
+    virtual bool DeleteRange(SwPaM&);
     virtual bool DelFullPara(SwPaM&);
     // --> OD 2009-08-20 #i100466#
     // Add optional parameter <bForceJoinNext>, default value <false>
@@ -888,13 +898,12 @@ public:
     virtual bool DeleteAndJoin( SwPaM&,
                                 const bool bForceJoinNext = false );
     // <--
-    virtual bool Move(SwPaM&, SwPosition&, SwMoveFlags);
-    virtual bool Move(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
+    virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags);
+    virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);
-    virtual bool Overwrite(const SwPaM &rRg, sal_Unicode c);
     virtual bool Overwrite(const SwPaM &rRg, const String& rStr);
-    virtual bool Insert(const SwPaM &rRg, sal_Unicode c);
-    virtual bool Insert(const SwPaM &rRg, const String&, bool bHintExpand);
+    virtual bool InsertString(const SwPaM &rRg, const String&,
+              const enum InsertFlags nInsertMode = INS_EMPTYEXPAND );
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
@@ -902,8 +911,10 @@ public:
     virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
-    virtual bool Insert(const SwPaM &rRg, const SfxPoolItem&, sal_uInt16 nFlags);
-    virtual bool Insert(const SwPaM &rRg, const SfxItemSet&, sal_uInt16 nFlags);
+    virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
+                                const SetAttrMode nFlags);
+    virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
+                                const SetAttrMode nFlags);
     virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);
     virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&);
     virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
@@ -911,7 +922,8 @@ public:
     virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart);
     virtual bool AppendTxtNode(SwPosition& rPos);
         virtual void SetModified(SwPaM &rPaM);
-    virtual bool Replace(SwPaM& rPam, const String& rNewStr, bool bRegExpRplc);
+    virtual bool ReplaceRange(SwPaM& rPam, const String& rNewStr,
+                              const bool bRegExReplace);
     virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos );
 
     /** IDocumentStylePoolAccess
@@ -1358,11 +1370,11 @@ public:
         // kopiere die Kopzeile (mit dem Inhalt!) aus dem SrcFmt
         // ins DestFmt ( auch ueber Doc grenzen hinaus!)
     void CopyHeader( const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt )
-        { _CopyPageDescHeaderFooter( sal_True, rSrcFmt, rDestFmt ); }
+        { CopyPageDescHeaderFooterImpl( true, rSrcFmt, rDestFmt ); }
         // kopiere die Fusszeile (mit dem Inhalt!) aus dem SrcFmt
         // ins DestFmt ( auch ueber Doc grenzen hinaus!)
     void CopyFooter( const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt )
-        { _CopyPageDescHeaderFooter( sal_False, rSrcFmt, rDestFmt ); }
+        { CopyPageDescHeaderFooterImpl( false, rSrcFmt, rDestFmt ); }
 
         //fuer Reader
 
@@ -1394,7 +1406,7 @@ public:
         // Methoden fuer die Verzeichnisse:
         // - Verzeichnismarke einfuegen loeschen travel
     sal_uInt16 GetCurTOXMark( const SwPosition& rPos, SwTOXMarks& ) const;
-    void Delete( const SwTOXMark* pTOXMark );
+    void DeleteTOXMark( const SwTOXMark* pTOXMark );
     const SwTOXMark& GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                 SwTOXSearch eDir, sal_Bool bInReadOnly );
 
@@ -1770,9 +1782,9 @@ public:
     inline       void  SetOle2Link(const Link& rLink) {aOle2Link = rLink;}
     inline const Link& GetOle2Link() const {return aOle2Link;}
 
-    // SS fuer Bereiche
-    SwSection* Insert( const SwPaM& rRange, const SwSection& rNew,
-                        const SfxItemSet* pAttr = 0, sal_Bool bUpdate = sal_True );
+    // insert section (the ODF kind of section, not the nodesarray kind)
+    SwSection* InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
+                    const SfxItemSet* pAttr = 0, bool bUpdate = true);
     sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = 0 ) const;
     SwSection* GetCurrSection( const SwPosition& rPos ) const;
@@ -2094,6 +2106,7 @@ public:
     }
 
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
+    ::sw::MetaFieldManager & GetMetaFieldManager();
     SwDoc* CreateCopy() const;
 };
 

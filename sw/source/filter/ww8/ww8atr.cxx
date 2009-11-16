@@ -109,7 +109,6 @@
 #include <pagedesc.hxx>     // for SwPageDesc
 #include <flddat.hxx>       // for Date fields
 #include <ndtxt.hxx>        // for Numrules
-#include <fmthbsh.hxx>
 #include <swrect.hxx>
 #include <reffld.hxx>
 #include <ftninfo.hxx>
@@ -3140,10 +3139,6 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
 
 // NoHyphen: ich habe keine Entsprechung in der SW-UI und WW-UI gefunden
 
-void WW8AttributeOutput::TextHardBlank( const SwFmtHardBlank& rHardBlank )
-{
-    m_rWW8Export.WriteChar( rHardBlank.GetChar() );
-}
 
 // RefMark, NoLineBreakHere  fehlen noch
 
@@ -3757,8 +3752,17 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         UINT16 nHeight = rGrid.GetBaseHeight() + rGrid.GetRubyHeight();
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDyaLinePitch );
         m_rWW8Export.InsUInt16( nHeight );
-        sal_uInt32 nPageCharSize = ItemGet<SvxFontHeightItem>(*(m_rWW8Export.pStyles->GetSwFmt()),
-                RES_CHRATR_CJK_FONTSIZE).GetHeight();
+
+        MSWordStyles * pStyles = m_rWW8Export.pStyles;
+        SwFmt * pSwFmt = pStyles->GetSwFmt();
+
+        sal_uInt32 nPageCharSize = 0;
+
+        if (pSwFmt != NULL)
+        {
+            nPageCharSize = ItemGet<SvxFontHeightItem>
+            (*pSwFmt, RES_CHRATR_CJK_FONTSIZE).GetHeight();
+        }
 
         INT32 nCharWidth = rGrid.GetBaseWidth() - nPageCharSize;
         INT32 nFraction = 0;
@@ -5145,9 +5149,6 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_TXTATR_FTN:
             TextFootnote( static_cast< const SwFmtFtn& >( rHt ) );
-            break;
-        case RES_TXTATR_HARDBLANK:
-            TextHardBlank( static_cast< const SwFmtHardBlank& >( rHt ) );
             break;
 
         case RES_PARATR_LINESPACING:

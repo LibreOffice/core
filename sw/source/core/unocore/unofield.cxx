@@ -94,6 +94,7 @@
 #include <textapi.hxx>
 #include <svx/outliner.hxx>
 #include <docsh.hxx>
+#include <fmtmeta.hxx> // MetaFieldManager
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -371,7 +372,7 @@ USHORT lcl_GetPropertyMapOfService( USHORT nServiceId )
     case SW_SERVICE_FIELDTYPE_DUMMY_5:
     case SW_SERVICE_FIELDTYPE_DUMMY_6:
     case SW_SERVICE_FIELDTYPE_DUMMY_7:
-    case SW_SERVICE_FIELDTYPE_DUMMY_8: nRet = PROPERTY_MAP_FLDTYP_DUMMY_0; break;
+                nRet = PROPERTY_MAP_FLDTYP_DUMMY_0; break;
     case SW_SERVICE_FIELDMASTER_USER: nRet = PROPERTY_MAP_FLDMSTR_USER; break;
     case SW_SERVICE_FIELDMASTER_DDE: nRet = PROPERTY_MAP_FLDMSTR_DDE; break;
     case SW_SERVICE_FIELDMASTER_SET_EXP: nRet = PROPERTY_MAP_FLDMSTR_SET_EXP; break;
@@ -784,24 +785,12 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             }
             uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(aFldArr.Count());
             uno::Reference<text::XDependentTextField>* pRetSeq = aRetSeq.getArray();
-            SwXTextField* pInsert = 0;
             for(USHORT i = 0; i < aFldArr.Count(); i++)
             {
                 pFld = aFldArr.GetObject(i);
-                SwXTextField* pTemp = (SwXTextField*)aIter.First(TYPE(SwXTextField));
-                while(pTemp)
-                {
-                    if(pTemp->GetFldFmt() == pFld)
-                    {
-                        pInsert = pTemp;
-                        break;
-                    }
-                    pTemp = (SwXTextField*)aIter.Next();
-                }
-                if(!pInsert)
-                    pInsert = new SwXTextField( *pFld, GetDoc());
+                SwXTextField * pInsert = CreateSwXTextField(*GetDoc(), *pFld);
+
                 pRetSeq[i] = uno::Reference<text::XDependentTextField>(pInsert);
-                pInsert = 0;
             }
             aRet <<= aRetSeq;
         }
@@ -1079,6 +1068,26 @@ OUString SwXFieldMaster::LocalizeFormula(
     }
     return rFormula;
 }
+
+
+SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
+{
+    SwClientIter aIter(*rFmt.GetFld()->GetTyp());
+    SwXTextField * pField = 0;
+    SwXTextField * pTemp =
+        static_cast<SwXTextField*>(aIter.First( TYPE(SwXTextField) ));
+    while (pTemp)
+    {
+        if (pTemp->GetFldFmt() == &rFmt)
+        {
+            pField = pTemp;
+            break;
+        }
+        pTemp = static_cast<SwXTextField*>(aIter.Next());
+    }
+    return pField ? pField : new SwXTextField( rFmt, &rDoc );
+}
+
 /******************************************************************
  *
  ******************************************************************/
@@ -1809,8 +1818,18 @@ void SwXTextField::attachToRange(
             SwTxtAttr* pTxtAttr = 0;
             if(aPam.HasMark())
                 pDoc->DeleteAndJoin(aPam);
-            pDoc->Insert(aPam, aFmt, 10000);
-            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+
+            SwXTextCursor const*const pTextCursor(
+                    dynamic_cast<SwXTextCursor*>(pCursor));
+            const bool bForceExpandHints( (pTextCursor)
+                    ? pTextCursor->IsAtEndOfMeta() : false );
+            const SetAttrMode nInsertFlags = (bForceExpandHints)
+                ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
+                : nsSetAttrMode::SETATTR_DEFAULT;
+
+            pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
+
+            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                     aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FIELD);
 
             // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
@@ -2913,6 +2932,22 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
                 aItems.realloc( 2 * aItems.getLength() );
                 pItems = aItems.getArray();
             }
+        }
+    }
+    // now handle meta-fields, which are not SwFields
+    const ::std::vector< uno::Reference<text::XTextField> > MetaFields(
+           pDc->GetMetaFieldManager().getMetaFields() );
+    for (size_t i = 0; i < MetaFields.size(); ++i)
+    {
+        pItems[ nFillPos ] = MetaFields[i];
+        nFillPos++;
+
+        //FIXME UGLY
+        // enlarge sequence if necessary
+        if (aItems.getLength() == nFillPos)
+        {
+            aItems.realloc( 2 * aItems.getLength() );
+            pItems = aItems.getArray();
         }
     }
     // resize sequence to actual used size

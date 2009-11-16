@@ -56,8 +56,8 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
         GetDoc()->StartUndo( UNDO_INSSECTION, NULL );
 
         FOREACHPAM_START(this)
-            const SwSection* pNew = GetDoc()->Insert( *PCURCRSR,
-                                                        rNew, pAttr );
+            const SwSection* const pNew =
+                GetDoc()->InsertSwSection( *PCURCRSR, rNew, pAttr );
             if( !pRet )
                 pRet = pNew;
         FOREACHPAM_END()

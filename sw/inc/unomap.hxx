@@ -131,8 +131,9 @@
 #define PROPERTY_MAP_RUBY_AUTO_STYLE                    95
 #define PROPERTY_MAP_PARA_AUTO_STYLE                    96
 #define PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM              97
+#define PROPERTY_MAP_METAFIELD                          98
 
-#define PROPERTY_MAP_END                                98
+#define PROPERTY_MAP_END                                99
 
 //S&E
 #define WID_WORDS                0

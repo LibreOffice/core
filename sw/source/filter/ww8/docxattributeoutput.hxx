@@ -434,9 +434,6 @@ protected:
     /// Output the footnote/endnote reference (if there's one to output).
     void FootnoteEndnoteReference();
 
-    /// Sfx item RES_TXTATR_HARDBLANK
-    virtual void TextHardBlank( const SwFmtHardBlank& );
-
     /// Sfx item RES_PARATR_LINESPACING
     virtual void ParaLineSpacing_Impl( short nSpace, short nMulti );
 

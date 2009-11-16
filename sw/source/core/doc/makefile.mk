@@ -49,6 +49,7 @@ EXCEPTIONSFILES = \
     $(SLO)$/docbm.obj \
     $(SLO)$/doccomp.obj \
     $(SLO)$/docdraw.obj \
+    $(SLO)$/docedt.obj \
     $(SLO)$/docfmt.obj \
     $(SLO)$/docglbl.obj \
     $(SLO)$/docglos.obj \
@@ -70,7 +71,6 @@ SLOFILES =	$(EXCEPTIONSFILES) \
     $(SLO)$/doccorr.obj \
     $(SLO)$/docdde.obj \
     $(SLO)$/docdesc.obj \
-    $(SLO)$/docedt.obj \
     $(SLO)$/docfld.obj \
     $(SLO)$/docfly.obj \
     $(SLO)$/docftn.obj \

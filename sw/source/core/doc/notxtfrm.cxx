@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/urihelper.hxx>
@@ -1027,8 +1028,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         //TODO/LATER: is it a problem that the JopSetup isn't used?
         //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
 
+        // get hi-contrast image, but never for printing
         Graphic* pGraphic = NULL;
-           if ( pOut && ( pOut->GetDrawMode() & DRAWMODE_SETTINGSFILL ) )
+        if (pOut && !bPrn && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             pGraphic = pOLENd->GetHCGraphic();
 
         // when it is not possible to get HC-representation, the original image should be used

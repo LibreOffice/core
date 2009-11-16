@@ -62,7 +62,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-    static ::sw::mark::DdeBookmark* const lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName, bool bCaseSensitive)
+    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName, bool bCaseSensitive)
     {
         //Iterating over all bookmarks, checking DdeBookmarks
         const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lower(rName);
@@ -70,11 +70,16 @@ namespace
             ppMark != rMarkAccess.getMarksEnd();
             ppMark++)
         {
-            ::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get());
-            if(pBkmk &&
-                (bCaseSensitive && (pBkmk->GetName() == sNameLc)) ||
-                (!bCaseSensitive && GetAppCharClass().lower(pBkmk->GetName()) == String( sNameLc )))
-                return pBkmk;
+            if (::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get()))
+            {
+                if (
+                    (bCaseSensitive && (pBkmk->GetName() == sNameLc)) ||
+                    (!bCaseSensitive && GetAppCharClass().lower(pBkmk->GetName()) == String(sNameLc))
+                   )
+                {
+                    return pBkmk;
+                }
+            }
         }
         return NULL;
     }
@@ -82,22 +87,25 @@ namespace
 
 struct _FindItem
 {
-    const String& rItem;
+    const String m_Item;
     SwTableNode* pTblNd;
     SwSectionNode* pSectNd;
 
     _FindItem(const String& rS)
-        : rItem(rS), pTblNd(0), pSectNd(0)
+        : m_Item(rS), pTblNd(0), pSectNd(0)
     {}
 };
 
 BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseSensitive )
 {
+    _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
     SwSection* pSect = rpSectFmt->GetSection();
     if( pSect )
     {
         String sNm( bCaseSensitive ? pSect->GetName() : GetAppCharClass().lower( pSect->GetName() ));
-        String sCompare( bCaseSensitive ? ((_FindItem*)pArgs)->rItem  : GetAppCharClass().lower( ((_FindItem*)pArgs)->rItem ));
+        String sCompare( (bCaseSensitive)
+                ? pItem->m_Item
+                : GetAppCharClass().lower( pItem->m_Item ) );
         if( sNm == sCompare )
         {
             // gefunden, als erfrage die Daten
@@ -106,7 +114,7 @@ BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseS
                 &rpSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
             {
                 // eine Tabelle im normalen NodesArr
-                ((_FindItem*)pArgs)->pSectNd = pIdx->GetNode().GetSectionNode();
+                pItem->pSectNd = pIdx->GetNode().GetSectionNode();
                 return FALSE;
             }
 //nein!!            // sollte der Namen schon passen, der Rest aber nicht, dann haben wir
@@ -128,8 +136,9 @@ BOOL lcl_FindSectionCaseInsensitive( const SwSectionFmtPtr& rpSectFmt, void* pAr
 
 BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 {
+    _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
     String sNm( GetAppCharClass().lower( rpTableFmt->GetName() ));
-    if( sNm.Equals( ((_FindItem*)pArgs)->rItem ))
+    if (sNm.Equals( pItem->m_Item ))
     {
         SwTable* pTmpTbl;
         SwTableBox* pFBox;
@@ -139,7 +148,7 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
             &rpTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
         {
             // eine Tabelle im normalen NodesArr
-            ((_FindItem*)pArgs)->pTblNd = (SwTableNode*)
+            pItem->pTblNd = (SwTableNode*)
                                         pFBox->GetSttNd()->FindTableNode();
             return FALSE;
         }

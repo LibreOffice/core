@@ -34,11 +34,30 @@
 #include <svtools/svarray.hxx>
 #include <tools/mempool.hxx>
 
+#include "swtypes.hxx"
+
 //#include "numrule.hxx"
 
 class SwTxtNode;
 class SwRegHistory;                 // steht im RolBck.hxx
 class SwTxtAttr;
+class SwTxtAttrNesting;
+
+class SfxPoolItem;
+class SfxItemSet;
+class SwDoc;
+
+SW_DLLPRIVATE SwTxtAttr *
+MakeTxtAttr( SwDoc & rDoc, SfxPoolItem & rNew,
+        xub_StrLen nStt, xub_StrLen nEnd );
+SW_DLLPRIVATE SwTxtAttr *
+MakeTxtAttr( SwDoc & rDoc, const SfxItemSet & rSet,
+        xub_StrLen nStt, xub_StrLen nEnd );
+
+// create redline dummy text hint that must not be inserted into hints array
+SW_DLLPRIVATE SwTxtAttr*
+MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr );
+
 
 /*
  * Ableitung der Klasse SwpHints ueber den Umweg ueber SwpHts, da
@@ -148,7 +167,10 @@ private:
         return m_bHasHiddenParaField;
     }
 
-    void BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMode );
+    void InsertNesting(SwTxtAttrNesting & rNewHint);
+    bool TryInsertNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNewHint);
+    void BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
+            const SetAttrMode nMode );
     bool MergePortions( SwTxtNode& rNode );
 
 public:
@@ -162,7 +184,10 @@ public:
     void DeRegister() { Register(0); }
     SwRegHistory* GetHistory() const    { return m_pHistory; }
 
-    void Insert( SwTxtAttr*  pHt, SwTxtNode &rNode, USHORT nMode = 0 );
+    /// try to insert the hint
+    /// @return true iff hint successfully inserted
+    bool TryInsertHint( SwTxtAttr * const pHint, SwTxtNode & rNode,
+            const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
 
     inline bool HasFtn() const          { return m_bFootnote; }
     inline bool IsInSplitNode() const   { return m_bInSplitNode; }

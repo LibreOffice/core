@@ -450,7 +450,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 // steht jetzt geanu auf dem Format-Namen
                 aFld.ChangeFormat( CheckNumberFmtStr( aSaveStr ));
             }
-            pDoc->Insert( *pPam, SwFmtFld( aFld ), 0 );
+            pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0 );
             SkipGroup();
         }
         break;
@@ -469,7 +469,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 // steht jetzt geanu auf dem Format-Namen
                 aPF.ChangeFormat( CheckNumberFmtStr( aSaveStr ));
             }
-            pDoc->Insert( *pPam, SwFmtFld( aPF ), 0 );
+            pDoc->InsertPoolItem( *pPam, SwFmtFld( aPF ), 0 );
             SkipGroup();        // ueberlese den Rest
         }
         break;
@@ -480,8 +480,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             {
                 // es fehlt die Format - Angabe: defaulten auf Datum
                 pFldType = pDoc->GetSysFldType( RES_DATETIMEFLD );
-                pDoc->Insert( *pPam, SwFmtFld( SwDateTimeField(
-                                (SwDateTimeFieldType*)pFldType, DATEFLD )), 0);
+                pDoc->InsertPoolItem( *pPam, SwFmtFld( SwDateTimeField(
+                    static_cast<SwDateTimeFieldType*>(pFldType), DATEFLD)), 0);
             }
             else
             {
@@ -524,7 +524,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
                 if( pFld )
                 {
-                    pDoc->Insert( *pPam, SwFmtFld( *pFld ), 0);
+                    pDoc->InsertPoolItem( *pPam, SwFmtFld( *pFld ), 0);
                     delete pFld;
                 }
             }
@@ -553,8 +553,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             if( bField )
             {
                 pFldType = pDoc->GetSysFldType( RES_DBNAMEFLD );
-                pDoc->Insert( *pPam, SwFmtFld( SwDBNameField(
-                                (SwDBNameFieldType*)pFldType, SwDBData() ) ), 0);
+                pDoc->InsertPoolItem( *pPam, SwFmtFld( SwDBNameField(
+                    static_cast<SwDBNameFieldType*>(pFldType), SwDBData())), 0);
             }
             else
                 pDoc->ChgDBData( aData );       // MS: Keine DBInfo verwenden
@@ -569,7 +569,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             SwDBField aDBFld( (SwDBFieldType*)pDoc->InsertFldType( aTmp ));
 
             aDBFld.ChangeFormat( UF_STRING );
-            pDoc->Insert( *pPam, SwFmtFld( aDBFld ), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtFld( aDBFld ), 0);
             SkipGroup();        // ueberlese den Rest
         }
         break;
@@ -598,7 +598,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                             sal_Unicode nChar = (sal_Unicode)sParam.ToInt32();
                             if( nChar )
                             {
-                                pDoc->Insert( *pPam, nChar );
+                                pDoc->InsertString( *pPam, nChar );
                                 bCharIns = TRUE;
                             }
                         }
@@ -763,10 +763,11 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 aRuby.SetAdjustment( (USHORT)aData.nJustificationCode );
 
                 // im FieldStr steht der anzuzeigenden Text, im
-                pDoc->Insert( *pPam, aData.sText, true );
+                pDoc->InsertString( *pPam, aData.sText );
                 pPam->SetMark();
                 pPam->GetMark()->nContent -= aData.sText.Len();
-                pDoc->Insert( *pPam, aRuby, nsSetAttrMode::SETATTR_DONTEXPAND );
+                pDoc->InsertPoolItem( *pPam, aRuby,
+                    nsSetAttrMode::SETATTR_DONTEXPAND );
                 pPam->DeleteMark();
             }
             // or a combined character field?
@@ -778,7 +779,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 sFld += aData.sDown;
                 SwCombinedCharField aFld((SwCombinedCharFieldType*)pDoc->
                                 GetSysFldType( RES_COMBINED_CHARS ), sFld );
-                pDoc->Insert( *pPam, SwFmtFld( aFld ), 0);
+                pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0);
 
             }
             SkipGroup();        // ueberlese den Rest
@@ -808,7 +809,9 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     sOrigBkmName,REF_BOOKMARK,0,REF_PAGE);
 
             if(!bNestedField)
-                pDoc->Insert( *pPam, SwFmtFld( aFld ), 0 );
+            {
+                pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0 );
+            }
             else
                 bNestedField = false;
         }
@@ -850,14 +853,14 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     SwGetRefField aFld(
                         (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
                         sOrigBkmName,REF_BOOKMARK,0,REF_CHAPTER);
-                    pDoc->Insert( *pPam, SwFmtFld( aFld ), 0 );
+                    pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0 );
                 }
                 else
                 {
                     SwGetRefField aFld(
                         (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
                         sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
-                    pDoc->Insert( *pPam, SwFmtFld( aFld ), 0 );
+                    pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0 );
                 }
             }
 
@@ -866,7 +869,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 SwGetRefField aFld( (SwGetRefFieldType*)
                     pDoc->GetSysFldType( RES_GETREFFLD ), sOrigBkmName, REF_BOOKMARK, 0,
                     REF_UPDOWN );
-                pDoc->Insert(*pPam, SwFmtFld(aFld), 0);
+                pDoc->InsertPoolItem(*pPam, SwFmtFld(aFld), 0);
             }
         }
         break;
@@ -882,7 +885,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             SwUserFieldType aTmp( pDoc, aSaveStr );
             SwUserField aUFld( (SwUserFieldType*)pDoc->InsertFldType( aTmp ));
             aUFld.ChangeFormat( UF_STRING );
-            pDoc->Insert( *pPam, SwFmtFld( aUFld ), 0);
+            pDoc->InsertPoolItem( *pPam, SwFmtFld( aUFld ), 0);
             nRet = RTFFLD_UNKNOWN;
         }
         break;
@@ -1045,7 +1048,8 @@ void SwRTFParser::ReadField()
                     // FieldResult wurde eingelesen
                     if (SwTxtNode* pTxtNd = pPam->GetPoint()->nNode.GetNode().GetTxtNode())
                     {
-                        SwTxtAttr* pFldAttr = pTxtNd->GetTxtAttr(
+                        SwTxtAttr* const pFldAttr =
+                            pTxtNd->GetTxtAttrForCharAt(
                                 pPam->GetPoint()->nContent.GetIndex()-1 );
 
                         if (pFldAttr)
@@ -1078,7 +1082,7 @@ void SwRTFParser::ReadField()
 
                             sNestedFieldStr.Erase();
                             // im FieldStr steht der anzuzeigenden Text, im
-                             pDoc->Insert( *pPam, sFieldStr, true );
+                            pDoc->InsertString( *pPam, sFieldStr );
 
                             String sTarget( sFieldNm.GetToken( 1, '\1' ));
                             if( sTarget.Len() )
@@ -1087,7 +1091,7 @@ void SwRTFParser::ReadField()
                             // oder ueber den Stack setzen??
                             pPam->SetMark();
                             pPam->GetMark()->nContent -= sFieldStr.Len();
-                            pDoc->Insert( *pPam,
+                            pDoc->InsertPoolItem( *pPam,
                                             SwFmtINetFmt( sFieldNm, sTarget ),
                                             nsSetAttrMode::SETATTR_DONTEXPAND );
                             pPam->DeleteMark();

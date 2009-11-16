@@ -381,7 +381,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         sChar.Append(pTxt->GetTxt().GetChar(--nPos));
         pPaM->SetMark();
         pPaM->GetMark()->nContent--;
-        rDoc.Delete( *pPaM );
+        rDoc.DeleteRange( *pPaM );
         pPaM->DeleteMark();
         SwFmtFtn aFtn(rDesc.meType == MAN_EDN);
         pFN = pTxt->InsertItem(aFtn, nPos, nPos);
@@ -435,7 +435,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
                     pPaM->GetMark()->nContent++;
                 pPaM->GetMark()->nContent++;
                 pReffingStck->Delete(*pPaM);
-                rDoc.Delete( *pPaM );
+                rDoc.DeleteRange( *pPaM );
                 pPaM->DeleteMark();
             }
         }
@@ -4723,6 +4723,13 @@ CharSet SwWW8StyInf::GetCharSet() const
     if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return eRTLFontSrcCharSet;
     return eLTRFontSrcCharSet;
+}
+
+CharSet SwWW8StyInf::GetCJKCharSet() const
+{
+    if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+        return eRTLFontSrcCharSet;
+    return eCJKFontSrcCharSet;
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
