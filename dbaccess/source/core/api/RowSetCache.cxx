@@ -561,10 +561,18 @@ sal_Int32 ORowSetCache::hashBookmark( const Any& bookmark )
 // -------------------------------------------------------------------------
 // XRowUpdate
 // -----------------------------------------------------------------------------
-void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
+void ORowSetCache::updateNull(sal_Int32 columnIndex)
 {
     checkUpdateConditions(columnIndex);
 
+    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
+    ((*m_aInsertRow)->get())[columnIndex].setNull();
+    ((*m_aInsertRow)->get())[columnIndex].setModified();
+}
+// -----------------------------------------------------------------------------
+void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
+{
+    checkUpdateConditions(columnIndex);
 
     ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
     ((*m_aInsertRow)->get())[columnIndex] = x;
@@ -1343,11 +1351,12 @@ void ORowSetCache::moveToInsertRow(  )
     // we don't unbound the bookmark column
     ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin()+1;
     ORowSetValueVector::Vector::iterator aEnd = (*m_aInsertRow)->get().end();
-    for(;aIter != aEnd;++aIter)
+    for(sal_Int32 i = 1;aIter != aEnd;++aIter,++i)
     {
         aIter->setBound(sal_False);
         aIter->setModified(sal_False);
         aIter->setNull();
+        aIter->setTypeKind(m_xMetaData->getColumnType(i));
     }
 }
 // -------------------------------------------------------------------------
