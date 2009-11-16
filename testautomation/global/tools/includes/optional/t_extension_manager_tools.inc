@@ -339,6 +339,7 @@ function hExtensionRemoveGUI( cExtensionName as string ) as integer
                     if ( Active.exists( 3 ) ) then
                         printlog( Active.getText() )
                         Active.OK()
+                        WaitSlot()
                     else
                         warnlog( CFN & "Expected confirmation dialog is missing" )
                     endif

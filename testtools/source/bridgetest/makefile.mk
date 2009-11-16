@@ -38,7 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 .INCLUDE: settings.mk
-
+.IF "$(L10N_framework)"==""
 DLLPRE = # no leading "lib" on .so files
 
 .IF "$(GUI)"=="WNT"
@@ -129,9 +129,10 @@ JAVATARGETS=\
 .ENDIF
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :	target.mk
-
+.IF "$(L10N_framework)"==""
 ALLTAR: \
         test \
         $(DLLDEST)$/uno_types.rdb \
@@ -242,3 +243,5 @@ $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
         -c javavm.uno$(DLLPOST) -c stocservices.uno$(DLLPOST)
 .ENDIF
+.ENDIF # L10N_framework
+

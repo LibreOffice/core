@@ -151,9 +151,6 @@ testcase tSortDescending
 endcase
 '-------------------------------------------------------------------------
 testcase tAutoFilter
-
-    warnlog "#102712# AutoFilter does not work"
-    goto endsub
     
     '/// open a new table
     printlog "open a new table"
@@ -228,9 +225,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tRemoveFilter
 
-    warnlog "#102712# AutoFilter does not work"
-    goto endsub
-
     '/// open a new table
     printlog "open a new table"
     initTable
@@ -253,9 +247,6 @@ testcase tRemoveFilter
 endcase
 '-------------------------------------------------------------------------
 testcase tApplyFilter
-
-    warnlog "#102712# AutoFilter does not work"
-    goto endsub
 
     '/// open a new table
     printlog "open a new table"

@@ -46,6 +46,7 @@ sub main
 
     use "framework\required\includes\first.inc"
     use "framework\required\includes\graphics_import.inc"
+    use "global\required\includes\g_option_application.inc"
     
     call hStatusIn ("framework", "f_first.bas")
     call tAllNew
@@ -56,7 +57,8 @@ sub main
     call tJava
     
     gApplication = "WRITER"
-    call tToolsOptionsTest
+    call tToolsOptionsTestFirst
+    call tToolsOptionsImprovementProgram
     call tDatabaseCheck
     call tHelpRegistration
     call hStatusOut   

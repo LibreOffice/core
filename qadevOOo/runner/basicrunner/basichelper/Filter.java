@@ -35,6 +35,7 @@ import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.NoSuchElementException;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.document.XFilter;
@@ -226,7 +227,7 @@ class FilterImpl implements XInitialization, XTypeProvider, XNameAccess {
     public void initialize(Object[] parm1) throws com.sun.star.uno.Exception {
         XFilter oFilter = (XFilter)UnoRuntime.queryInterface(
                                         XFilter.class, parm1[0]);
-        PropertyValue[] FilterDesc = (PropertyValue[])UnoRuntime.queryInterface(PropertyValue[].class, parm1[1]);
+        PropertyValue[] FilterDesc = (PropertyValue[])AnyConverter.toArray(parm1[1]);
         aState = "just initialized";
         FilterThread aThread = new FilterThread(oFilter, FilterDesc);
         aThread.start();

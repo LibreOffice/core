@@ -43,7 +43,6 @@ testcase tLanguageTest_1
   Dim sKeyTypeEnglishUSA    ,sKeyTypeSChinese   , sKeyTypeTChinese    , sKeyTypeJapanese    , sKeyTypeKoren    as String
   Dim i as Integer
 
-  '/// Check if the default setting for &quot;key type&quot; is right for CJK when alphanumeric is chosen in English
 
   select case iSprache
       case 01   :' English (USA)
@@ -105,11 +104,9 @@ testcase tLanguageTest_1
   DocumentWriter.TypeKeys "<Shift Home>"
   Sleep 1
 
-'/// Open Tools/Sort
   ToolsSort
    Kontext "Sortieren"
 
-'/// Choose language: English and key type: alphanumeric
    try
        Sprache.Select (sLanguageIDEnglishUSA)
    catch
@@ -131,7 +128,6 @@ testcase tLanguageTest_1
        next i
    endcatch
 
-'/// Check to simplified Chinese
    try
        Sprache.Select (sLanguageIDSChinese)
    catch
@@ -162,7 +158,6 @@ testcase tLanguageTest_1
        qaErrorLog "Can't select: '" + sKeyTypeEnglishUSA + "'"
    endcatch
 
-'/// Check to traditional Chinese
    try
        Sprache.Select (sLanguageIDTChinese)
    catch
@@ -196,7 +191,6 @@ testcase tLanguageTest_1
        qaErrorLog "Can't select: '" + sKeyTypeEnglishUSA + "'"
    endcatch
 
-'/// Check to Japanese
    try
        Sprache.Select (sLanguageIDJapanese)
    catch
@@ -230,7 +224,6 @@ testcase tLanguageTest_1
        qaErrorLog "Can't select: '" + sKeyTypeEnglishUSA + "'"
    endcatch
 
-'/// Check to Korean
    try
        Sprache.Select (sLanguageIDKoren)
    catch
@@ -264,7 +257,6 @@ testcase tLanguageTest_2
   Dim sKeyTypeEnglishUSA    ,sKeyTypeSChinese   , sKeyTypeTChinese    , sKeyTypeJapanese    , sKeyTypeKoren    as String
   Dim i                                                                                                        as Integer
 
-  '/// Check if the default setting for &quot;key type&quot; is right for CJK when numeric is chosen in English
 
   select case iSprache
       case 01   :' English (USA)
@@ -326,11 +318,9 @@ testcase tLanguageTest_2
   DocumentWriter.TypeKeys "<Shift Home>"
   Sleep 1
 
-'/// Open Tools/Sort
   ToolsSort
    Kontext "Sortieren"
 
-'/// Choose language: English and key type: Numeric
    try
        Sprache.Select (sLanguageIDEnglishUSA)
    catch
@@ -355,7 +345,6 @@ testcase tLanguageTest_2
        next i
    endcatch
 
-'/// Check to simplified Chinese
    try
        Sprache.Select (sLanguageIDSChinese)
    catch
@@ -389,7 +378,6 @@ testcase tLanguageTest_2
        qaErrorLog "Can't select: '" + sKeyTypeEnglishUSA + "'"
    endcatch
 
-'/// Check to traditional Chinese
    try
        Sprache.Select (sLanguageIDTChinese)
    catch
@@ -423,7 +411,6 @@ testcase tLanguageTest_2
        qaErrorLog "Can't select: '" + sKeyTypeEnglishUSA + "'"
    endcatch
 
-'/// Check to Japanese
    try
        Sprache.Select (sLanguageIDJapanese)
    catch
@@ -457,7 +444,6 @@ testcase tLanguageTest_2
        qaErrorLog "Can't select: '" + sKeyTypeEnglishUSA + "'"
    endcatch
 
-'/// Check to Korean
    try
        Sprache.Select (sLanguageIDKoren)
    catch
@@ -515,19 +501,15 @@ testcase tStrokeSort
 
    sLanguageIDSChinese =  fGetCountryName(86)
 
- '/// Check Stroke sort for Simplified Chinese
 
   Call hNewDocument
- '/// Open a test file and check <i>No Grid</i> checkbox
   Call hFileOpen ( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
   sMakeReadOnlyDocumentEditable
   EditSelectAll
 
- '/// Open <i>Tools/Sort</i>
   ToolsSort
    Kontext "Sortieren"
 
- '/// Choose language: Simplified Chinese and key type <i>Stroke</i>
    try
        Sprache.Select (sLanguageIDSChinese)
    catch
@@ -603,19 +585,15 @@ testcase tPinyinSort
 
    sLanguageIDSChinese =  fGetCountryName(86)
 
- '/// Check <i>Pinyin</i> sort for Simplified Chinese
 
   Call hNewDocument
- '/// Open a test file and check <i>No Grid</i> checkbox
   Call hFileOpen ( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
   sMakeReadOnlyDocumentEditable
   EditSelectAll
 
- '/// Open <i>Tools/Sort</i>
   ToolsSort
    Kontext "Sortieren"
 
- '/// Choose language: Simplified Chinese and key type <i>Pin yin</i>
    try
        Sprache.Select (sLanguageIDSChinese)
    catch
@@ -706,11 +684,9 @@ NOTest:
                    Goto endsub
 end select
 
-'/// Check if the entries in custom sort order is right in CJK version
 
   call hNewDocument
 
-'/// Open <i>Data/Sort</i> -&gt; tabpage <i>option</i>
 
    DataSort
 

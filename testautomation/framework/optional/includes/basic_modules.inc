@@ -40,8 +40,6 @@
 
 testcase tMore_Modules_Dialogs
 
-    '///<h1>Work with macros - create multiple modules</h1>
-    '///<ul>
 
     dim brc as boolean
     
@@ -58,18 +56,14 @@ testcase tMore_Modules_Dialogs
     const iTABCOUNT as Integer = 10
     const CMODULE = "TTMODULE"
     
-    '///+<li>Delete workfile just in case it was left over by prior testrun</li>
     hDeleteFile( cFile )
     
-    '///+<li>Create a new Writer document.</li>
     printlog "open a new writer-doc"
     gApplication = "WRITER"
     hCreateDocument()
     
-    '///+<li>Create a new module for the new document (named TTModule)</li>
     brc = hInitBasicIDE( CMODULE )
     
-    '///+<li>Insert 10 modules.</li>
     printlog "insert 10 modules"
 
     for iCurrentTab = 1 to iTABCOUNT
@@ -85,7 +79,6 @@ testcase tMore_Modules_Dialogs
         endif
     next iCurrentTab
 
-    '///+<li>Insert 10 dialogs</li>
     printlog "insert 10 dialogs"
 
     for iCurrentTab = 1 to iTABCOUNT
@@ -100,31 +93,24 @@ testcase tMore_Modules_Dialogs
 
     next iCurrentTab
 
-    '///+<li>Close the BasicIDE.</li>
     printlog Chr(13) + "- close the BasicIDE"
     hCloseBasicIDE()
     
-    '///+<li>Save the document.</li>
     printlog Chr(13) + "- save the document"
     Call hFileSaveAsWithFilterKill( cFile , FILTER )
     
-    '///+<li>Close the document</li>
     printlog Chr(13) + "- close the document"
     hDestroyDocument()
     
-    '///+<li>Open the saved document</li>
     printlog Chr(13) + "- open the saved document"
     hFileOpen( cFile )
 
-    '///+<li>Open the BASIC Organizer, select the module for the current document</li>
     ToolsMacro_uno
     kontext "Makro"
     hSelectNodeByName( MakroAus , CMODULE )
 
-    '///+<li>Select the last module and open the BASIC IDE.</li>
     Bearbeiten.Click()
     
-    '///+<li>Delete all modules and dialogs.</li>
     printlog "delete all modules and dialogs"
 
     for iCurrentTab = 1 to ( 2 * iTABCOUNT + 1 )
@@ -155,7 +141,6 @@ testcase tMore_Modules_Dialogs
     hDestroyDocument()
     hDestroyDocument()
 
-    '///</ul>
 
 endcase
 

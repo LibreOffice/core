@@ -50,9 +50,6 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     const TEMPLATE_COUNT = 236 ' For en-US/StarOffice, numbers may differ for Languages/Brands
     const SAMPLE_COUNT = 60    ' For en-US/StarOffice, numbers may differ for Languages/Brands
 
-    '///<h1>Open all Objects, save, close, reload, save and close them</h1>
-    '///<i>The test should be able to handle any OOo 1.x and 2.x files</i><br>
-    '///<ul>
 
     dim iObjectFolder as integer
     dim iObjectFolders as integer
@@ -65,10 +62,7 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     dim sFile as string
     dim sPath as string
         sPath = hGetWorkPath()  
-    dim brc as boolean
-    dim crc as string
-    dim irc as integer
-    
+
     dim iReset as integer : iReset = 0
 
     printlog( "" )
@@ -78,30 +72,21 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     case "samples"   : iObjectCountExpected = SAMPLE_COUNT
     end select
    
-    '///+<li>Open File->New->Templates and documents</li>
+    printlog( "Open Templates and Samples dialog" )
     FileNewFromTemplate
-   
-    '///+<li>select the category in the template dialog (left pane)</li>
+    WaitSlot( 2000 )
     hSelectCategory( cCategory )
-   
-    '///+<li>Get the number of folders in the root of cCategory</li>
     iObjectFolders = FileList.getItemCount()
    
-    '///+<li>get the number of all objects below cCategory and its subfolders</li>
+    printlog( "Count the items in the templates and samples dialog" )
     for iObject = 1 to iObjectFolders
-   
-        '///+<li>select and open a folder</li>
         hSelectFileFolder( iObject , true )
-      
-        '///+<li>count the items in the list</li>
         iObjectCount( iObject ) = FileList.getItemCount()
         iObjectSum = iObjectSum + iObjectCount( iObject )
-      
-        '///+<li>move back up to the root of cCategory</li>
         UpOneLevel.click()
-      
     next iObject
     
+    printlog( "Verify object count (en_US only)" )
     if ( gProductName = "StarOffice" and gISOLang = "en-US" ) then
         if ( iObjectSum <> iObjectCountExpected ) then
             warnlog( "Number of objects has changed. OLD: " & iObjectCountExpected &_
@@ -114,122 +99,75 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     endif
    
     Kontext "TemplateAndDocuments"
-    
-    '///+<li>Click the document-info button, do not load the preview</li>
+    printlog( "Switch from preview to document info" )
     docinfo.click()
-
-    '///+<li>close the templates and samples dialog</li>
     TemplateAndDocuments.cancel()
    
     printlog( "" )
     printlog( "Starting to load/save/close/reload/close all Objects" )
     printlog( "" )
    
-    '///+<li>Step through all folders and Objects</li>
     for iObjectFolder = 1 to iObjectFolders
    
         for iObject = 1 to iObjectCount( iObjectFolder ) 
       
-            ' to skip a document add the rule here and jump to SkipThisObject: 
-          
             gApplication = "WRITER"    
             
             printlog( "" )
             printlog( "Folder index = " & iObjectFolder & ", Object index = " & iObject )
             
-            do while ( getDocumentCount > 0 ) 
-                hDestroyDocument()
-            loop
+            hFileCloseAll()
             
             if ( iReset = 10 ) then
-                iReset = 0
                 call exitRestartTheOffice()
-            else
-                iReset = iReset + 1
+                iReset = 0
             endif
           
-            '///<ol>
+            printlog( "Select the item we want to load" )
             FileNewFromTemplate
-      
-            '///+<li>Select the desired-category: Templates/Samples ...</li>
+            WaitSlot( 2000 )
             hSelectCategory( cCategory )
-      
-            '///+<li>Select the current folder</li>
             hSelectFileFolder( iObjectFolder , false )
-          
-            '///+<li>Select the desired Object, open or edit it</li>
-            crc = hSelectDocumentObject( iObject , iMode )
+            hSelectDocumentObject( iObject , iMode )
             
-            '///+<li>If the object can be edited we open it. Skip otherwise</li>
-            ' treat it like a folder
+            ' treat it like a folder. If it is, skip it. Otherwise perform the test
             kontext "TemplateAndDocuments"
             if ( TemplateAndDocuments.exists() ) then
                 if ( not edit.isEnabled() ) then
-                    crc = "Folder"
+                    printlog( CFN & "Object is folder or #edit# is disabled, skipping" )
+                    UpOneLevel.click()
+                    TemplateAndDocuments.cancel()
                 endif
             else
-                printlog( "Templates And Documents dialog is closed" )
+                printlog( "Loading file..." )
+                printlog( "Check for Filter Options dialog" )
+                if ( hFileWait( false ) = -6 ) then 
+                    warnlog( "Load failure: ASCII filter dialog displayed, recovering" )
+                    kontext "FilterAuswahl"
+                    FilterAuswahl.cancel()
+                    hDestroyDocument()
+                else
+                    printlog( "Build filename; save, reload and delete" )
+                    sFile = sPath & cCategory & iObjectFolder & "_" & iObject
+                    hCloseNavigator()
+                    hFileSaveAsKill( sFile )
+                    hDestroyDocument()
+                    hFileOpen( sFile )
+                    hHandleActivesOnLoad( 1 , 2 )
+                    hCloseNavigator()
+                    hDestroyDocument()
+                    hDeleteFile( sFile )
+                    printlog( "Test cycle done, going for next object." )
+                endif
             endif
             
-            '///+<li>If object is a folder, we skip the entire test</li>
-            if ( crc = "Folder" ) then
-                printlog( CFN & "Object is folder or #edit# is disabled, skipping" )
-                UpOneLevel.click()
-                TemplateAndDocuments.cancel()
-                goto SkipThisObject
-            endif
-            
-            '///+<li>Cancel the filterdialog if present -> bug</li>
-            irc = hFileWait( false )
-            
-            if ( irc = -6 ) then 
-                warnlog( "Load failure: ASCII filter dialog displayed" )
-                kontext "FilterAuswahl"
-                FilterAuswahl.cancel()
-            endif
-            
-            if ( brc ) then
-                printlog( CFN & "Skipping document" )
-            else
-               
-                '///+<li>Close the navigator if present</li>
-                brc = hCloseNavigator()
-          
-                '///+<li>Build the filename</li>
-                sFile = sPath & cCategory & iObjectFolder & "_" & iObject
-
-                '///+<li>Save the file without suffix, use default filter, overwrite</li>
-                brc = hFileSaveAsKill( sFile )
-                
-                '///+<li>Close the document</li>
-                brc = hDestroyDocument()
-                
-                '///+<li>Load the file again</li>
-                brc = hFileOpen( sFile )
-                brc = hHandleActivesOnLoad( 1 , 2 )
-               
-                '///+<li>Close the navigator if present</li>
-                brc = hCloseNavigator()
-            
-                '///+<li>Close the document</li>
-                brc = hDestroyDocument()
-
-                '///+<li>Delete the file after completion</li>
-                brc = hDeleteFile( sFile )
-
-                '///</ol>
-                
-            endif
-            
-            SkipThisObject:
+            iReset = iReset + 1
       
         next iObject
       
     next iObjectFolder
     
     hDestroyDocument()
-   
-   '///</ul>
    
 endcase   
    

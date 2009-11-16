@@ -48,13 +48,8 @@ testcase tRubyDialog_1
  sBaseText1 = "BaseText1"
  sRubyText1 = "RubyText1"
 
-'/// Check Apply and Close button in Ruby dialogue
   Call hNewDocument
 
-'/// Check close button.
-'/// open ruby dialogue , input base text and ruby text , then press close button
-'/// 1) check if the ruby dialogue is closed
-'/// 2) check if the base text and ruby text is recorded
    FormatRuby
     Kontext "RubyDialog"
     Sleep 3
@@ -76,10 +71,6 @@ testcase tRubyDialog_1
     if Len(BasisText1.GetText) <> 0 then Warnlog "The base text should not been inputed"
     if Len(RubyText1.SetText)  <> 0 then Warnlog "The ruby text should not been inputed"
 
-'/// Check Apply button -- Normally , we think it is RubyDialog.OK
-'/// open ruby dialogue , input base text and ruby text , then press close button
-'/// Press Apply button , then press close button
-'/// check if the base text and ruby text is recorded
 
     BasisText1.SetText  sBaseText1
     Sleep 1
@@ -115,18 +106,15 @@ testcase tRubyDialog_2
   Dim sBaseText as String
 
   sBaseText = "test1 test2 test3 test4 test5 test6 test7 test8 test9"
-'/// Test scrollbar in Ruby dialog
 
   Call hNewDocument
 
-'/// when there is less basetext,  the scrollbar should appear
    FormatRuby
     Kontext "RubyDialog"
     if RubyDialog.HasScrollbar <> TRUE  then warnlog "The Scrollbar should appear when less basetext!"
    DialogClose.Click
    Sleep 1
 
-'/// when there is more basetext(here is >4),  the scrollbar should appear
    Kontext "DocumentWriter"
    DocumentWriter.TypeKeys sBaseText
    DocumentWriter.TypeKeys "<Shift Home>"
@@ -151,24 +139,17 @@ testcase tRubyDialog_3
   sBaseText1 = "Test1"
   sBaseText2 = "Test2"
 
-'/// The list in ruby dialogure will be updated as soon as the uses
-'/// selects new or further words of his text.
-'/// The update will be done once the user changes his focus
-'/// back to the Ruby-Dialogue from the text
 
   Call hNewDocument
 
-'/// input 2 test words, and mark the second
    DocumentWriter.TypeKeys sTestText
    DocumentWriter.TypeKeys "<Shift Left>" , 5
 
-'/// There should be only the second test word in basetext1 in ruby dialogue
    FormatRuby
     Kontext "RubyDialog"
     Sleep 2
     if BasisText1.GetText <> sBaseText2  then warnlog "The BaseText1 should be:" +sBaseText2 + " but get "+BasisText1.GetText
 
-'/// Mark 2 test words
    Kontext "DocumentWriter"
    try
     DocumentWriter.TypeKeys "<Shift Home>"
@@ -177,7 +158,6 @@ testcase tRubyDialog_3
     warnlog "The ruby dialogue is MODE less dialogue , the document can be edited!"
    endcatch
 
-'/// Check if the 2 test words are all in the ruby dialogue when set forcus back to the dialogue
     Kontext "RubyDialog"
     Sleep 1
     'this step is meaningless, just let the focus back to ruby dialogue
@@ -201,7 +181,6 @@ testcase tRubyDialog_4
   Dim sCharacterStyle  as String
   dim i as integer
 
-'/// Check default setting for Character Style of Ruby Text
 
   select case iSprache
       case 01   :  sCharacterStyle = "Rubies"
@@ -248,7 +227,6 @@ testcase tRubyDialog_5
   dim bError as boolean
   dim bWileExit as boolean
 
-'/// Check stylist
 
   select case iSprache
       case 01   :  sCharacterStyle = "Rubies"
@@ -270,11 +248,9 @@ testcase tRubyDialog_5
 
   Call hNewDocument
 
-  '/// Open ruby dialogue
    FormatRuby
     Kontext "RubyDialog"
 
-  '/// Click stylist button
     CallStylist.Click
     Sleep 2
 
@@ -283,7 +259,6 @@ testcase tRubyDialog_5
       Warnlog "No Stylist with clicking Stylist button!"
     end if
 
-   '/// click Character Style
     Zeichenvorlagen.Click
 
     ' needed to update the listbox count :-(
@@ -307,7 +282,6 @@ testcase tRubyDialog_5
     endif
 
     if (NOT bError) then
-       '/// find entry ruby and add a new entry
         AusSelektion.OpenMenu
         Sleep 1
         printlog "hMenuSelect 1"
@@ -322,7 +296,6 @@ testcase tRubyDialog_5
         VorlageErzeugen.OK
         Sleep 2
     
-       '/// check if the new entry is in the  Character Style list box in ruby dialogue
         Kontext "RubyDialog"
         
         ' needed to update the listbox count :-(
@@ -346,7 +319,6 @@ testcase tRubyDialog_5
         endif
     
         if (NOT bError) then
-            '/// delete the new entry and recover to the default.
             Kontext "Stylist"
             iCount = Vorlagenliste.getItemCount
             i=0
