@@ -2552,10 +2552,11 @@ void OBoundControlModel::reset() throw (RuntimeException)
                 || ( nFieldType == DataType::VARBINARY     )
                 || ( nFieldType == DataType::LONGVARBINARY )
                 || ( nFieldType == DataType::OBJECT        )
-                || ( nFieldType == DataType::BLOB          )
                 /*|| ( nFieldType == DataType::CLOB          )*/
                 )
                 m_xColumn->getBinaryStream();
+            else if ( nFieldType == DataType::BLOB          )
+                m_xColumn->getBlob();
             else
                 m_xColumn->getString();
 
