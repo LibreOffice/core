@@ -336,6 +336,11 @@ class SvNumberFormatterRegistry_Impl;
 class SVT_DLLPUBLIC SvNumberFormatter
 {
 public:
+    /**
+     * We can't technically have an "infinite" value, so we use an arbitrary
+     * upper precision threshold to represent the "unlimited" precision.
+     */
+    static const sal_uInt16 UNLIMITED_PRECISION;
 
     /// Preferred ctor with service manager and language/country enum
     SvNumberFormatter(
@@ -586,7 +591,7 @@ public:
     /// Return the reference date
     Date* GetNullDate();
     /// Return the standard decimal precision
-    short GetStandardPrec();
+    sal_uInt16 GetStandardPrec();
     /// Return whether zero suppression is switched on
     BOOL GetNoZero() { return bNoZero; }
     /** Get the type of a format (or NUMBERFORMAT_UNDEFINED if no entry),

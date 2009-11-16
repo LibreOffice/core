@@ -70,6 +70,7 @@
 #include <rtl/instance.hxx>
 
 #include <math.h>
+#include <limits>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -191,6 +192,8 @@ SV_IMPL_PTRARR( NfWSStringsDtor, String* );
 
 
 /***********************Funktionen SvNumberFormatter**************************/
+
+const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION = ::std::numeric_limits<sal_uInt16>::max();
 
 SvNumberFormatter::SvNumberFormatter(
             const Reference< XMultiServiceFactory >& xSMgr,
@@ -352,7 +355,7 @@ void SvNumberFormatter::ChangeStandardPrec(short nPrec)
     pFormatScanner->ChangeStandardPrec(nPrec);
 }
 
-short SvNumberFormatter::GetStandardPrec()
+sal_uInt16 SvNumberFormatter::GetStandardPrec()
 {
     return pFormatScanner->GetStandardPrec();
 }
@@ -1508,7 +1511,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         if (eType != NUMBERFORMAT_PERCENT)  // spaeter Sonderbehandlung %
             eType = NUMBERFORMAT_NUMBER;
         nOldPrec = pFormatScanner->GetStandardPrec();
-        ChangeStandardPrec(300);                        // Merkwert
+        ChangeStandardPrec(UNLIMITED_PRECISION);                        // Merkwert
     }
     sal_uInt32 nKey = nFIndex;
     switch ( eType )
@@ -1529,7 +1532,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         if ( eType == NUMBERFORMAT_TIME && pFormat->GetFormatPrecision() )
         {
             nOldPrec = pFormatScanner->GetStandardPrec();
-            ChangeStandardPrec(300);                        // Merkwert
+            ChangeStandardPrec(UNLIMITED_PRECISION);                        // Merkwert
         }
         pFormat->GetOutputString(fOutNumber, sOutString, &pColor);
     }

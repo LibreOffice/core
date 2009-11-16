@@ -468,7 +468,7 @@ void ImpSvNumberformatScan::ChangeNullDate(USHORT nDay, USHORT nMonth, USHORT nY
         pNullDate = new Date(nDay, nMonth, nYear);
 }
 
-void ImpSvNumberformatScan::ChangeStandardPrec(short nPrec)
+void ImpSvNumberformatScan::ChangeStandardPrec(sal_uInt16 nPrec)
 {
     nStandardPrec = nPrec;
 }

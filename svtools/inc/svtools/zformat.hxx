@@ -239,6 +239,12 @@ public:
     // in fact that could be any string used in number formats.
     static void LoadString( SvStream& rStream, String& rStr );
 
+    /**
+     * Get output string from a numeric value that fits the number of
+     * characters specified.
+     */
+    bool GetOutputString( double fNumber, sal_uInt16 nCharCount, String& rOutString ) const;
+
     BOOL GetOutputString( double fNumber, String& OutString, Color** ppColor );
     BOOL GetOutputString( String& sString, String& OutString, Color** ppColor );
 
@@ -490,6 +496,7 @@ private:
 
     // standard number output
     SVT_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );
+    SVT_DLLPRIVATE void ImpGetOutputStdToPrecision( double& rNumber, String& rOutString, sal_uInt16 nPrecision ) const;
     // numbers in input line
     SVT_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, String& OutString );
 
