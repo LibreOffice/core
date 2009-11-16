@@ -778,13 +778,10 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, ULONG /* nDrawFlags */,
     USHORT nStyle = 0;
     Bitmap* pBitmap = &maBitmap;
     Color aCol;
-    if( !!maBitmapHC && ImplGetCurrentBackgroundColor( aCol ) )
+    if( !!maBitmapHC )
     {
-        if( aCol.IsDark() )
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
             pBitmap = &maBitmapHC;
-        // #99902 no col transform required
-        //if( aCol.IsBright() )
-        //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
@@ -1032,13 +1029,10 @@ void FixedImage::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
     Image *pImage = &maImage;
     Color aCol;
-    if( !!maImageHC && ImplGetCurrentBackgroundColor( aCol ) )
+    if( !!maImageHC )
     {
-        if( aCol.IsDark() )
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
             pImage = &maImageHC;
-        // #99902 no col transform required
-        //if( aCol.IsBright() )
-        //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
     // Haben wir ueberhaupt ein Image

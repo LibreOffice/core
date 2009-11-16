@@ -538,7 +538,7 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
                 aScrollArea = Rectangle(Point(aNextRect.Left(),0),
                                         Point(aToRect.Right(),aDataWinSize.Height()));
 
-            pDataWin->Scroll( nScroll, 0, aScrollArea, SCROLL_FLAGS );
+            pDataWin->Scroll( nScroll, 0, aScrollArea );
             aToRect.Top() = 0;
             aToRect.Bottom() = aScrollArea.Bottom();
             Invalidate( aToRect );

@@ -40,7 +40,7 @@ FontSubsetInfo::FontSubsetInfo()
 ,   m_nCapHeight( 0)
 ,   m_nFontType( FontSubsetInfo::NO_FONT)
 ,   mpInFontBytes( NULL)
-,   mnInByteLength( NULL)
+,   mnInByteLength( 0)
 ,   meInFontType( FontSubsetInfo::NO_FONT)
 ,   mpSftTTFont( NULL)
 {}

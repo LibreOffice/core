@@ -556,48 +556,6 @@ void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pW
     pWindow->GetBorder( rEvent.LeftInset, rEvent.TopInset, rEvent.RightInset, rEvent.BottomInset );
 }
 
-void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& rEvt )
-{
-    rEvent.Modifiers = 0;
-    if ( rEvt.GetKeyCode().IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
-    if ( rEvt.GetKeyCode().IsMod1() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
-    if ( rEvt.GetKeyCode().IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-        if ( rEvt.GetKeyCode().IsMod3() )
-                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
-
-    rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
-    rEvent.KeyChar = rEvt.GetCharCode();
-    rEvent.KeyFunc = sal::static_int_cast< sal_Int16 >(
-        rEvt.GetKeyCode().GetFunction());
-}
-
-void ImplInitMouseEvent( awt::MouseEvent& rEvent, const MouseEvent& rEvt )
-{
-    rEvent.Modifiers = 0;
-    if ( rEvt.IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
-    if ( rEvt.IsMod1() )
-    rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
-    if ( rEvt.IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-
-    rEvent.Buttons = 0;
-    if ( rEvt.IsLeft() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
-    if ( rEvt.IsRight() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
-    if ( rEvt.IsMiddle() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
-
-    rEvent.X = rEvt.GetPosPixel().X();
-    rEvent.Y = rEvt.GetPosPixel().Y();
-    rEvent.ClickCount = rEvt.GetClicks();
-    rEvent.PopupTrigger = sal_False;
-}
-
 //  ----------------------------------------------------
 //  class VCLXWindow
 //  ----------------------------------------------------
@@ -892,9 +850,9 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getKeyListeners().getLength() )
             {
-                ::com::sun::star::awt::KeyEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitKeyEvent( aEvent, *(KeyEvent*)rVclWindowEvent.GetData() );
+                ::com::sun::star::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                    *(KeyEvent*)rVclWindowEvent.GetData(), *this
+                ) );
                 mpImpl->getKeyListeners().keyPressed( aEvent );
             }
         }
@@ -903,9 +861,9 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getKeyListeners().getLength() )
             {
-                ::com::sun::star::awt::KeyEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitKeyEvent( aEvent, *(KeyEvent*)rVclWindowEvent.GetData() );
+                ::com::sun::star::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                    *(KeyEvent*)rVclWindowEvent.GetData(), *this
+                ) );
                 mpImpl->getKeyListeners().keyReleased( aEvent );
             }
         }
@@ -927,9 +885,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 }
 
                 MouseEvent aMEvt( aWhere, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, 0 );
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, aMEvt );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( aMEvt, *this ) );
                 aEvent.PopupTrigger = sal_True;
                 mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_PRESSED );
             }
@@ -940,10 +896,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             MouseEvent* pMouseEvt = (MouseEvent*)rVclWindowEvent.GetData();
             if ( mpImpl->getMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
             {
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, *pMouseEvt );
-
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
                 mpImpl->notifyMouseEvent(
                     aEvent,
                     pMouseEvt->IsEnterWindow() ? EVENT_MOUSE_ENTERED : EVENT_MOUSE_EXITED
@@ -952,11 +905,8 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
             if ( mpImpl->getMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
             {
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, *pMouseEvt );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
                 aEvent.ClickCount = 0;  // #92138#
-
                 if ( pMouseEvt->GetMode() & MOUSE_SIMPLEMOVE )
                     mpImpl->getMouseMotionListeners().mouseMoved( aEvent );
                 else
@@ -968,9 +918,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getMouseListeners().getLength() )
             {
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *(MouseEvent*)rVclWindowEvent.GetData(), *this ) );
                 mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_PRESSED );
             }
         }
@@ -979,9 +927,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getMouseListeners().getLength() )
             {
-                awt::MouseEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
+                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *(MouseEvent*)rVclWindowEvent.GetData(), *this ) );
                 mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_RELEASED );
             }
         }
