@@ -1118,7 +1118,7 @@
 						<desc>Specifies the number of decimals to be displayed for the Standard number format.</desc>
 						<label>Decimal places</label>
 					</info>
-					<value>2</value>
+					<value>-1</value>
 				</prop>
 				<prop oor:name="RegularExpressions" oor:type="xs:boolean">
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable regular expressions in formulas -->
