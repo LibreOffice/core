@@ -63,8 +63,8 @@ __EXPORT ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
     aBtnOk                  ( this, ScResId( BTN_OK ) ),
     aBtnCancel              ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp                ( this, ScResId( BTN_HELP ) ),
-    aTabBgColorNoColorText  ( rTabBgColorNoColorText ),
     aTabBgColor             ( rDefaultColor ),
+    aTabBgColorNoColorText  ( rTabBgColorNoColorText ),
     aHelpId                 ( nHelpId )
 
 {
