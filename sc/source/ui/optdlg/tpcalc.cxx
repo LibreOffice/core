@@ -91,6 +91,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aBtnMatch       ( this, ScResId( BTN_MATCH ) ),
         aBtnRegex       ( this, ScResId( BTN_REGEX ) ),
         aBtnLookUp      ( this, ScResId( BTN_LOOKUP ) ),
+        aBtnGeneralPrec ( this, ScResId( BTN_GENERAL_PREC ) ),
         aFtPrec         ( this, ScResId( FT_PREC ) ),
         aEdPrec         ( this, ScResId( ED_PREC ) ),
         pOldOptions     ( new ScDocOptions(
@@ -119,6 +120,7 @@ __EXPORT ScTpCalcOptions::~ScTpCalcOptions()
 void ScTpCalcOptions::Init()
 {
     aBtnIterate .SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
+    aBtnGeneralPrec.SetClickHdl( LINK(this, ScTpCalcOptions, CheckClickHdl) );
     aBtnDateStd .SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     aBtnDateSc10.SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     aBtnDate1904.SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
@@ -153,7 +155,6 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
     aBtnLookUp .Check( pLocalOptions->IsLookUpColRowNames() );
     aBtnIterate.Check( pLocalOptions->IsIter() );
     aEdSteps   .SetValue( pLocalOptions->GetIterCount() );
-    aEdPrec    .SetValue( pLocalOptions->GetStdPrecision() );
     aEdEps     .SetValue( pLocalOptions->GetIterEps(), 6 );
 
     pLocalOptions->GetDate( d, m, y );
@@ -171,6 +172,21 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
             break;
     }
 
+    sal_uInt16 nPrec = pLocalOptions->GetStdPrecision();
+    if (nPrec == SvNumberFormatter::UNLIMITED_PRECISION)
+    {
+        aFtPrec.Disable();
+        aEdPrec.Disable();
+        aBtnGeneralPrec.Check(false);
+    }
+    else
+    {
+        aBtnGeneralPrec.Check();
+        aFtPrec.Enable();
+        aEdPrec.Enable();
+        aEdPrec.SetValue(nPrec);
+    }
+
     CheckClickHdl( &aBtnIterate );
 }
 
@@ -181,12 +197,17 @@ BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
     pLocalOptions->SetIterCount( (USHORT)aEdSteps.GetValue() );
-    pLocalOptions->SetStdPrecision( (USHORT)aEdPrec.GetValue() );
     pLocalOptions->SetIgnoreCase( !aBtnCase.IsChecked() );
     pLocalOptions->SetCalcAsShown( aBtnCalc.IsChecked() );
     pLocalOptions->SetMatchWholeCell( aBtnMatch.IsChecked() );
     pLocalOptions->SetFormulaRegexEnabled( aBtnRegex.IsChecked() );
     pLocalOptions->SetLookUpColRowNames( aBtnLookUp.IsChecked() );
+
+    if (aBtnGeneralPrec.IsChecked())
+        pLocalOptions->SetStdPrecision(
+            static_cast<sal_uInt16>(aEdPrec.GetValue()) );
+    else
+        pLocalOptions->SetStdPrecision( SvNumberFormatter::UNLIMITED_PRECISION );
 
     if ( *pLocalOptions != *pOldOptions )
     {
@@ -248,19 +269,35 @@ IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
 
 //-----------------------------------------------------------------------
 
-IMPL_LINK(  ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
+IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
 {
-    if ( pBtn->IsChecked() )
+    if (pBtn == &aBtnGeneralPrec)
     {
-        pLocalOptions->SetIter( TRUE );
-        aFtSteps.Enable();  aEdSteps.Enable();
-        aFtEps  .Enable();  aEdEps  .Enable();
+        if (pBtn->IsChecked())
+        {
+            aEdPrec.Enable();
+            aFtPrec.Enable();
+        }
+        else
+        {
+            aEdPrec.Disable();
+            aFtPrec.Disable();
+        }
     }
-    else
+    else if (pBtn == &aBtnIterate)
     {
-        pLocalOptions->SetIter( FALSE );
-        aFtSteps.Disable(); aEdSteps.Disable();
-        aFtEps  .Disable(); aEdEps  .Disable();
+        if ( pBtn->IsChecked() )
+        {
+            pLocalOptions->SetIter( TRUE );
+            aFtSteps.Enable();  aEdSteps.Enable();
+            aFtEps  .Enable();  aEdEps  .Enable();
+        }
+        else
+        {
+            pLocalOptions->SetIter( FALSE );
+            aFtSteps.Disable(); aEdSteps.Disable();
+            aFtEps  .Disable(); aEdEps  .Disable();
+        }
     }
 
     return 0;

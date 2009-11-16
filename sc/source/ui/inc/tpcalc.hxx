@@ -79,6 +79,7 @@ private:
     CheckBox        aBtnMatch;
     CheckBox        aBtnRegex;
     CheckBox        aBtnLookUp;
+    CheckBox        aBtnGeneralPrec;
 
     FixedText       aFtPrec;
     NumericField    aEdPrec;

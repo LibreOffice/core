@@ -76,6 +76,15 @@ class ScOutputData
 {
 friend class ScDrawStringsVars;
 private:
+    struct OutputAreaParam
+    {
+        Rectangle   maAlignRect;
+        Rectangle   maClipRect;
+        long        mnColWidth;
+        bool        mbLeftClip;
+        bool        mbRightClip;
+    };
+
     OutputDevice* pDev;         // Device
     OutputDevice* pRefDevice;   // printer if used for preview
     OutputDevice* pFmtDevice;   // reference for text formatting
@@ -155,19 +164,19 @@ private:
     void            GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell );
 
     BOOL            IsAvailable( SCCOL nX, SCROW nY );
+
     void            GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
-                                    SCCOL nCellX, SCROW nCellY, long nNeeded,
-                                    const ScPatternAttr& rPattern,
-                                    USHORT nHorJustify, BOOL bCellIsValue,
-                                    BOOL bBreak, BOOL bOverwrite,
-                                    Rectangle& rAlignRect, Rectangle& rClipRect,
-                                    BOOL& rLeftClip, BOOL& rRightClip );
+                                   SCCOL nCellX, SCROW nCellY, long nNeeded,
+                                   const ScPatternAttr& rPattern,
+                                   USHORT nHorJustify, bool bCellIsValue,
+                                   bool bBreak, bool bOverwrite,
+                                   OutputAreaParam& rParam );
 
     void            ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlignRect,
                                     long nLeftM, long nTopM, long nRightM, long nBottomM,
                                     BOOL bWidth, USHORT nOrient, long nAttrRotate, BOOL bPixelToLogic,
                                     long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
-                                    BOOL& rLeftClip, BOOL& rRightClip );
+                                    bool& rLeftClip, bool& rRightClip );
 
     void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
     void            SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );

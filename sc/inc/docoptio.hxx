@@ -41,7 +41,7 @@ class SC_DLLPUBLIC ScDocOptions
 {
     double fIterEps;                // Epsilon-Wert dazu
     USHORT nIterCount;              // Anzahl
-    USHORT nPrecStandardFormat;     // Nachkommastellen Standard
+    sal_uInt16 nPrecStandardFormat; // precision for standard format
     USHORT nDay;                    // Nulldatum:
     USHORT nMonth;
     USHORT nYear;
@@ -89,8 +89,8 @@ public:
     inline int                  operator==( const ScDocOptions& rOpt ) const;
     inline int                  operator!=( const ScDocOptions& rOpt ) const;
 
-    USHORT  GetStdPrecision() const     { return nPrecStandardFormat; }
-    void    SetStdPrecision( USHORT n ) { nPrecStandardFormat = n; }
+    sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
+    void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
 
     BOOL    IsCalcAsShown() const       { return bCalcAsShown; }
     void    SetCalcAsShown( BOOL bVal ) { bCalcAsShown = bVal; }

@@ -73,6 +73,7 @@
 #define BTN_MATCH           18
 #define BTN_LOOKUP          19
 #define BTN_REGEX           20
+#define BTN_GENERAL_PREC    21
 
 // TP_VIEW:
 #define BTN_VSCROLL         1

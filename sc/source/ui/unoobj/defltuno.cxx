@@ -160,7 +160,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
                 sal_Int16 nValue = 0;
                 if (aValue >>= nValue)
                 {
-                    aDocOpt.SetStdPrecision(static_cast<sal_uInt8> (nValue));
+                    aDocOpt.SetStdPrecision(static_cast<sal_uInt16> (nValue));
                     pDoc->SetDocOptions(aDocOpt);
                 }
             }
