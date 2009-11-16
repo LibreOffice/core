@@ -320,7 +320,7 @@ String SCSTR_CONTENT_OLEOBJECT
 };
 String SCSTR_CONTENT_NOTE
 {
-    Text [ en-US ] = "Notes" ;
+    Text [ en-US ] = "Comments" ;
 };
 String SCSTR_CONTENT_AREALINK
 {

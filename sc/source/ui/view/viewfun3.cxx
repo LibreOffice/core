@@ -465,7 +465,7 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
             if (!bValidRanges)
                 break;
 
-            pDoc->CopyToClip(aClipParam, pDocClip.get(), false, &rMark, false, bIncludeObjects);
+            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, false, bIncludeObjects);
 
             ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
             if ( pChangeTrack )

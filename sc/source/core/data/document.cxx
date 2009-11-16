@@ -2880,6 +2880,26 @@ void ScDocument::SetTableOpDirty( const ScRange& rRange )
 }
 
 
+void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
+{
+    ULONG nRangeCount = rRanges.Count();
+    for (ULONG nPos=0; nPos<nRangeCount; nPos++)
+    {
+        ScCellIterator aIter( this, *rRanges.GetObject(nPos) );
+        ScBaseCell* pCell = aIter.GetFirst();
+        while (pCell)
+        {
+            if (pCell->GetCellType() == CELLTYPE_FORMULA)
+            {
+                if ( static_cast<ScFormulaCell*>(pCell)->GetDirty() && GetAutoCalc() )
+                    static_cast<ScFormulaCell*>(pCell)->Interpret();
+            }
+            pCell = aIter.GetNext();
+        }
+    }
+}
+
+
 void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 {
     ScInterpreterTableOpParams* p = aTableOpList.Last();

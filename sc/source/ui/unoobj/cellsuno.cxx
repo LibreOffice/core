@@ -1093,7 +1093,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nTab, nTab );
-        pDoc->CopyToDocument( rRange, IDF_CONTENTS, FALSE, pUndoDoc );
+        pDoc->CopyToDocument( rRange, IDF_CONTENTS|IDF_NOCAPTIONS, FALSE, pUndoDoc );
     }
 
     pDoc->DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, IDF_CONTENTS );

@@ -985,11 +985,6 @@ bool XclExpXmlStream::importDocument() throw()
     return false;
 }
 
-sal_Int32 XclExpXmlStream::getSchemeClr( sal_Int32 /*nColorSchemeToken*/ ) const
-{
-    return -1;
-}
-
 oox::vml::Drawing* XclExpXmlStream::getVmlDrawing()
 {
     return 0;

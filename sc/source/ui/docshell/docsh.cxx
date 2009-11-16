@@ -1856,38 +1856,28 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
 
-#if ENABLE_SHEET_PROTECTION
-            bool bNeedRetypePassDlg = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_XL);
-            if (bNeedRetypePassDlg && !pViewShell->ExecuteRetypePassDlg(PASSHASH_XL))
+            /*  #115980# #i104990# If the imported document contains a medium
+                password, determine if we can save it, otherwise ask the users
+                whether they want to save without it. */
+            if( !::sfx2::CheckMSPasswordCapabilityForExport( aFltName ) )
             {
-                SetError( ERRCODE_ABORT );
-                return false;
-            }
-#else
-
-            do
-            {
-                SfxItemSet* pSet = rMed.GetItemSet();
-                if (!pSet)
-                    break;
-
-                const SfxPoolItem* pItem = NULL;
-                if (SFX_ITEM_SET != pSet->GetItemState(SID_PASSWORD, sal_True, &pItem))
-                    // password is not set.
-                    break;
-
-                /*  #115980 #If the imported document contained an encrypted password -
-                    determine if we should save without it. */
-                bDoSave = ScWarnPassword::WarningOnPassword( rMed );
-
-                if (bDoSave)
+                SfxItemSet* pItemSet = rMed.GetItemSet();
+                const SfxPoolItem* pItem = 0;
+                if( pItemSet && pItemSet->GetItemState( SID_PASSWORD, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
-                    // #i42858# warn only one time
-                    pSet->ClearItem(SID_PASSWORD);
+                    bDoSave = ScWarnPassword::WarningOnPassword( rMed );
+                    // #i42858# remove password from medium (warn only one time)
+                    if( bDoSave )
+                        pItemSet->ClearItem( SID_PASSWORD );
                 }
             }
-            while (false);
 
+#if ENABLE_SHEET_PROTECTION
+            if( bDoSave )
+            {
+                bool bNeedRetypePassDlg = ScPassHashHelper::needsPassHashRegen( aDocument, PASSHASH_XL );
+                bDoSave = !bNeedRetypePassDlg || pViewShell->ExecuteRetypePassDlg( PASSHASH_XL );
+            }
 #endif
         }
 

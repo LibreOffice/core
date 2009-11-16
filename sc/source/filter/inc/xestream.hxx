@@ -333,7 +333,6 @@ public:
 
     // only needed for import; ignore
     virtual bool importDocument() throw();
-    virtual sal_Int32 getSchemeClr( sal_Int32 nColorSchemeToken ) const;
     virtual oox::vml::Drawing* getVmlDrawing();
     virtual const oox::drawingml::Theme* getCurrentTheme() const;
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();

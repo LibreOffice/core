@@ -610,8 +610,8 @@ public:
                                     const String& aFileName,
                                     const String& aTabName );
 
-    bool            HasExternalRefManager() { return pExternalRefMgr.get(); }
-    SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager();
+    bool            HasExternalRefManager() const { return pExternalRefMgr.get(); }
+    SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
     bool            IsInExternalReferenceMarking() const;
     void            MarkUsedExternalReferences();
     bool            MarkUsedExternalReferences( ScTokenArray & rArr );
@@ -832,6 +832,7 @@ public:
     void            SetDirty();
     void            SetDirty( const ScRange& );
     void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
+    void            InterpretDirtyCells( const ScRangeList& rRanges );
     void            CalcAll();
     SC_DLLPUBLIC void           CalcAfterLoad();
     void            CompileAll();

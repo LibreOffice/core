@@ -210,18 +210,6 @@ public:
 };
 
 
-//----------------------------------------------------- class ExcFngroupcount -
-
-class ExcFngroupcount : public ExcRecord
-{
-private:
-    virtual void            SaveCont( XclExpStream& rStrm );
-public:
-    virtual UINT16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
-};
-
-
 //--------------------------------------------------------- class ExcDummy_00 -
 // INTERFACEHDR to FNGROUPCOUNT (see excrecds.cxx)
 
