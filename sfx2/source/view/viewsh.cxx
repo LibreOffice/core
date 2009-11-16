@@ -1324,7 +1324,7 @@ SfxViewShell::~SfxViewShell()
 
     //DELETEZ( pImp->pPrinterCommandQueue );
     DELETEZ( pImp );
-    DELETZ( pIPClientList );
+    DELETEZ( pIPClientList );
 }
 
 //--------------------------------------------------------------------
