@@ -1,0 +1,180 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __offapi_com_sun_star_form_runtime_XFilterController_idl__
+#define __offapi_com_sun_star_form_runtime_XFilterController_idl__
+
+#include <com/sun/star/awt/XControl.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module form { module runtime {
+
+//=============================================================================
+
+interface XFilterControllerListener;
+
+/** provides access to a form based filter for a database form
+
+    <p>In a form based filter, form controls bound to a searchable database field are replaced with a control
+    which allows entering a search expression. This so-called <em>predicate expression</em> is basically a part of an
+    SQL <code>WHERE</code> clause, but without the the part denoting the database column. For instance, if you
+    have a form control bound to a table column named <code>Name</code>, then entering the string
+    <q>LIKE '%Smith%'</q> effectively consitutes a SQL <code>WHERE</code> clause <code>"Name" LIKE '%Smith%'</code>.</p>
+
+    <p>In the actual document view, there are usually some relaxations to this. For instance, keywords such as
+    <code>LIKE</code> might be localized, according to OpenOffice.org's UI locale. Also, for an equality criterion,
+    the equality sign <code>=</code> is usually omitted. However, this interface here provides programmatic access
+    to the form based filter, so those relaxations are not considered here.</p>
+
+    <p>The filter maintained by a filter controller is, logically, a disjunctive normal form of an SQL <code>WHERE</code>
+    class. That is, it is a disjunction of <em>m</em> terms, where each term is a conjunction of <em>n</em> clauses
+    of the form <code>&lt;column&gt; &lt;predicate&gt; &lt;literal&gt;</code> or of the form <code><em>&lt;column&gt;
+    IS [NOT] NULL</em></code>.</p>
+
+    <p><em>n</em> equals the number of filter controls which the filter controller is responsible for. This number
+    doesn't change during one session of the form based filter. On the other hand, <em>m</em>, the number of disjunctive
+    terms, is dynamic.</p>
+
+    <a name="active_term"></a>
+    <p>With the above, there are potentially <em>m * n</em> <em>predicate expressions</em> (though usually only a fraction
+    of those will actually exist). Since in a form based filter, there are only <em>n</em> filter controls, and each
+    filter control displays exactly one <em>predicate expression</em>, this means that only a part of the complete
+    filter can be displayed, in particular, only one <em>disjunctive term</em> can be displayed at a time. Thus,
+    the filter controller knows the concept of an <em>active term</em>, denoted by the <member>ActiveTerm</member>
+    attribute, controls which of the terms is currently displayed in the form controls.</p>
+
+    @see XFormController
+    @see com::sun::star::sdbc::XResultSetMetaData::isSearchable
+    @see com::sun::star::sdb::XSingleSelectQueryAnalyzer::getStructuredFilter
+    @see com::sun::star::sdb::SQLFilterOperator
+
+    @since OpenOffice.org 3.3
+ */
+interface XFilterController
+{
+    /** registers a listener to be notified of certain changes in the form based filter.
+
+        <p>Registering the same listener multiple times results in multiple notifications of the same event,
+        and also requires multiple revocations of the listener.
+    */
+    void    addFilterControllerListener( [in] XFilterControllerListener _Listener );
+
+    /** revokes a listener which was previously registered to be notified of certain changes in the form based filter.
+    */
+    void    removeFilterControllerListener( [in] XFilterControllerListener _Listener );
+
+    /** is the number of <em>filter components</em>, or filter controls, which the filter controller is responsible
+        for.
+
+        <p>This number is constant during one session of the form based filter.</p>
+    */
+    [attribute, readonly]   long    FilterComponents;
+
+    /** is the number of <em>disjunctive terms</em> of the filter expression represented by the form based filter.
+    */
+    [attribute, readonly]   long    DisjunctiveTerms;
+
+    /** denotes the <a href="#active_term"><em>active term</em></a> of the filter controller.
+    */
+    [attribute] long    ActiveTerm
+    {
+        set raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+    };
+
+    /** sets a given <em>predicate expression</em>
+
+        @param _Component
+            denotes the filter component whose expression is to be set. Must be greater than or equal to 0, and smaller than
+            <member>FilterComponents</member>.
+
+        @param _Term
+            denotes the <em>disjunctive term</em> in which the expression is to be set. Must be greater than or equal to 0,
+            and smaller than <member>DisjunctiveTerms</member>.
+
+        @param _PredicateExpression
+            denotes the <em>predicate expression</em> to set for the given filter component in the given term.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if one of the indexes is out of the allowed range
+    */
+    void
+        setPredicateExpression( [in] long _Component, [in] long _Term, [in] string _PredicateExpression )
+            raises( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the filter component with the given index.
+
+        <p>The filter control has the same control model as the control which it stands in for. Consequently, you can use this method
+        to obtain the database column which the filter control works on, by examining the control model's <code>BoundField</code>
+        property.</p>
+
+        @param _Component
+            denotes the index of the filter component whose control should be obtained. Must be greater than or equal to 0,
+            and smaller than <member>FilterComponents</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <arg>_Component</arg> is out of the allowed range.
+
+        @see ::com::sun::star::form::component::DataAwareControlModel::BoundField
+    */
+    ::com::sun::star::awt::XControl
+        getFilterComponent( [in] long _Component )
+            raises( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the entirety of the <em>predicate expressions</em> represented by the filter controller.
+
+        <p>Each element of the returned sequence is a <em>disjunctive term</em>, having exactly <member>FilterComponents</member>
+        elements, which denote the single <em>predicate expressions</em> of this term.</p>
+    */
+    sequence< sequence< string > >
+        getPredicateExpressions();
+
+    /** removes a given <em>disjunctive term</em>
+
+        @param _Term
+            the index of the term to remove. Must be greater than or equal to 0, and smaller than
+            <member>DisjunctiveTerms</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <arg>_Term</arg> is out of the allowed range.
+    */
+    void
+        removeDisjunctiveTerm( [in] long _Term )
+            raises( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** appends an empty disjunctive term to the list of terms.
+    */
+    void
+        appendEmptyDisjunctiveTerm();
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

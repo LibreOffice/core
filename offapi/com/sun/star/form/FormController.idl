@@ -84,127 +84,26 @@ module runtime {
 
 //=============================================================================
 
-/** specifies a component controlling the interaction between the user and form functionality.
-
-    <p>As soon as a form (containing controls) is to be presented to the user,
-    there is a need for an instance controlling the user interaction.<br/>
-    Such a <type>FormController</type> is responsible for dialog processing,
-    like controlling the tab order and the grouping of controls.</p>
-
-    <p>As a form may contain one or many subforms, a <type>FormController</type> may
-    contain one or more other <type>FormController</type>s, so the form model structure or hierarchy
-    is reflected in the structure of <type>FormController</type>s.</p>
-
-    <h3>Responsibilities</h3>
-    <p>A <type>FormController</type> is responsible for a <type scope="com::sun::star::awt">UnoControlContainer</type>,
-    and all controls therein.</p>
-
-    <p>Furthermore, a form controller is responsible for preventing invalid user input. That is, if the form
-    contains controls bound to a database, or to an external validator, then the form controller will
-    check their current value when the current record is to be saved to the database.</p>
-
-    <p>First, it will check whether any controls with an external validator exist. If so, those validators
-    will be asked to validate the current control content. If this fails, the message provided by the validator
-    is displayed to the user, the control is focused, and the update of the record is vetoed.</p>
-
-    <p>Second, the controls are examined for NULL values. If a control is bound to a database field which
-    is declared to be <code>NOT NULL</code>, no auto-increment field, but still <NULL/>, then an error
-    message is shown to the user saying that input is required, the respective control is focused, and
-    the update of the record is vetoed.</p>
-
-    <p>Note that you can precent the second check - for database fields containing <NULL/> values - on
-    a per-form and a per-database basis.<br/>
-    For the former, you need to add a boolean property <code>FormsCheckRequiredFields</code> to the form
-    (aka the <code>FormController</code>'s model), using its
-    <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member> method, with a value
-    of <FALSE/>.<br/>
-    For the latter, you need to set the respective property of the data source's <code>Settings</code>
-    (also named <code>FormsCheckRequiredFields</code>) to <FALSE/>.</p>
-
-    <p>Alternatively, you can prevent the check on a per-control basis, using the
-    <member>DataAwareControlModel::InputRequired</member> property of a single control model.</p>
-
-    @see com::sun::star::form::component:Form
-    @see com::sun::star::awt::XTabController
-    @see com::sun::star::form::binding::BindableControlModel
-    @see com::sun::star::sdb::DataSource::Settings
+/** is superseded by <type scope="com::sun::star::form::runtime">FormController</type>.
+    @deprecated
 */
 published service FormController
 {
-    /** allows delegating form controller functionality to the component
-
-        <p>If a control which the controller is responsible for supports the <type scope="com::sun::star::frame">XDispatchProviderInterception</type>
-        interface, the controller registers a dispatch interceptor. Then, the control can try to delegate part of its
-        functionality to the controller by querying the dispatch interceptor for it.</p>
-    */
     [optional] service FormControllerDispatcher;
-
-    /** denotes the instance which is used to implement operations on the form which the controller
-        works for.
-
-        <p>This instance can be used, for instance, to determine the current state of certain form features.</p>
-    */
     [optional, property] ::com::sun::star::form::runtime::XFormOperations FormOperations;
 
     /** is used for notifying the (de)activation of the controller.
      */
     interface com::sun::star::form::XFormController;
 
-
-    /** is used for tab controlling and grouping of the controls.
-     */
     interface com::sun::star::awt::XTabController;
-
-
-    /** A FormController may have a parent controller, such as when the related form is a subform.
-     */
     interface com::sun::star::container::XChild;
-
-
-    /** A FormController must be disposable.
-     */
     interface com::sun::star::lang::XComponent;
-
-
-    /** A FormController must provide access to its sub controllers.
-     */
     interface com::sun::star::container::XEnumerationAccess;
-
-
-    /** A FormController must communicate if any of its children (means sub controllers) or contained
-        controls have been modified.
-     */
     interface com::sun::star::util::XModifyBroadcaster;
-
-    /** used to notify deletions of data in the form before they happen.
-
-        <p>A form controller listens for deletion events at the form it is responsible for.<br/>
-        If and only if no <type>XConfirmDeleteListener</type> is registered at
-        the controller, it uses an own dialog to ask the user for confirmation.</p>
-
-        <p>You may use this interface to integrate your own confirmation dialogs.</p>
-    */
     interface com::sun::star::form::XConfirmDeleteBroadcaster;
-
-    /** used to notify errors which happen in the form the controller is responsible for.
-
-        <p>A form controller listens for error events at the form it is responsible for.<br/>
-        If and only if no <type scope="com::sun::star::sdb">XSQLErrorListener</type> is registered at the controller, it
-        uses an own dialog to notify the user of the error.</p>
-
-    */
     interface com::sun::star::sdb::XSQLErrorBroadcaster;
-
-    /** is used for multiplexing row set events happening on the form which the controller is responsible for.
-    */
     interface com::sun::star::sdb::XRowSetApproveBroadcaster;
-
-    /** is used broadcasting parameter events in the form.
-
-        <p>A form controller listens for parameter events at the form it is responsible for.<br/>
-        If and only if no <type>XDatabaseParameterListener</type> is registered at the controller, it
-        uses an own dialog to ask the user for parameter values.</p>
-    */
     interface com::sun::star::form::XDatabaseParameterBroadcaster;
 };
 
