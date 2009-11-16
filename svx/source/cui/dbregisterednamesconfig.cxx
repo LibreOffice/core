@@ -66,9 +66,9 @@ namespace svx
     //= DbRegisteredNamesConfig
     //====================================================================
     //--------------------------------------------------------------------
-    void DbRegisteredNamesConfig::GetOptions(SfxItemSet& _rFillItems)
+    void DbRegisteredNamesConfig::GetOptions( SfxItemSet& _rFillItems )
     {
-        TNameLocationMap aSettings;
+        DatabaseRegistrations aSettings;
 
         try
         {
@@ -82,7 +82,8 @@ namespace svx
             for ( ; pRegistrationName != pRegistrationNamesEnd; ++pRegistrationName )
             {
                 ::rtl::OUString sLocation( xRegistrations->getDatabaseLocation( *pRegistrationName ) );
-                aSettings[ *pRegistrationName ] = sLocation;
+                aSettings[ *pRegistrationName ] =
+                    DatabaseRegistration( sLocation, xRegistrations->isDatabaseRegistrationReadOnly( *pRegistrationName ) );
             }
         }
         catch( const Exception& )
@@ -107,17 +108,25 @@ namespace svx
             Reference< XDatabaseRegistrations > xRegistrations(
                 aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
 
-            const TNameLocationMap& rNewRegistrations = pRegistrations->getSettings();
-            for (   TNameLocationMap::const_iterator reg = rNewRegistrations.begin();
+            const DatabaseRegistrations& rNewRegistrations = pRegistrations->getRegistrations();
+            for (   DatabaseRegistrations::const_iterator reg = rNewRegistrations.begin();
                     reg != rNewRegistrations.end();
                     ++reg
                 )
             {
                 const ::rtl::OUString sName = reg->first;
-                const ::rtl::OUString sLocation = reg->second;
+                const ::rtl::OUString sLocation = reg->second.sLocation;
 
                 if ( xRegistrations->hasRegisteredDatabase( sName ) )
-                    xRegistrations->changeDatabaseLocation( sName, sLocation );
+                {
+                    if ( !xRegistrations->isDatabaseRegistrationReadOnly( sName ) )
+                        xRegistrations->changeDatabaseLocation( sName, sLocation );
+                    else
+                    {
+                        OSL_ENSURE( xRegistrations->getDatabaseLocation( sName ) == sLocation,
+                            "DbRegisteredNamesConfig::SetOptions: somebody changed a read-only registration. How unrespectful." );
+                    }
+                }
                 else
                     xRegistrations->registerDatabaseLocation( sName, sLocation );
             }

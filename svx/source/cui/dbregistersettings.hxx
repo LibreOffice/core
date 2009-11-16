@@ -39,24 +39,56 @@ namespace svx
 {
 //........................................................................
 
+    struct DatabaseRegistration
+    {
+        ::rtl::OUString sLocation;
+        bool            bReadOnly;
+
+        DatabaseRegistration()
+            :sLocation()
+            ,bReadOnly( true )
+        {
+        }
+
+        DatabaseRegistration( const ::rtl::OUString& _rLocation, const sal_Bool _bReadOnly )
+            :sLocation( _rLocation )
+            ,bReadOnly( _bReadOnly )
+        {
+        }
+
+        bool operator==( const DatabaseRegistration& _rhs ) const
+        {
+            return  ( sLocation == _rhs.sLocation );
+                // do not take the read-only-ness into account, this is not maintained everywhere, but only
+                // properly set when filling the struct from the XDatabaseRegistrations data
+        }
+
+        bool operator!=( const DatabaseRegistration& _rhs ) const
+        {
+            return !( this->operator==( _rhs ) );
+        }
+    };
+
+    typedef ::std::map< ::rtl::OUString, DatabaseRegistration, ::comphelper::UStringLess >   DatabaseRegistrations;
+
     //====================================================================
     //= DatabaseMapItem
     //====================================================================
-    DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString,TNameLocationMap);
     class DatabaseMapItem : public SfxPoolItem
     {
     protected:
-        TNameLocationMap    m_aSettings;
+        DatabaseRegistrations   m_aRegistrations;
 
     public:
         TYPEINFO();
 
-        DatabaseMapItem( sal_uInt16 _nId, const TNameLocationMap& _rSettings );
+        DatabaseMapItem( sal_uInt16 _nId, const DatabaseRegistrations& _rRegistrations );
 
         virtual int              operator==( const SfxPoolItem& ) const;
         virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
-        const TNameLocationMap& getSettings() const { return m_aSettings; }
+        const DatabaseRegistrations&
+                                getRegistrations() const { return m_aRegistrations; }
     };
 
 //........................................................................
