@@ -121,6 +121,17 @@ namespace dbtools
         */
         bool supportsSubqueriesInFrom() const;
 
+        /** checks whether the database supports primary keys
+
+            Since there's no dedicated API to ask a database for this, a heuristics needs to be applied.
+            First, the <code>PrimaryKeySupport<code> settings of the data source is examined. If it is <TRUE/>
+            or <FALSE/>, then value is returned. If it is <NULL/>, then the database meta data are examined
+            for support of core SQL grammar, and the result is returned. The assumption is that a database/driver
+            which supports core SQL grammar usually also supports primary keys, and vice versa. At least, experience
+            shows this is true most of the time.
+        */
+        bool supportsPrimaryKeys() const;
+
         /** determines whether names in the database should be restricted to SQL-92 identifiers
 
             Effectively, this method checks the EnableSQL92Check property of the data source settings,

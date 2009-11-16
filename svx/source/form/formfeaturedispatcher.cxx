@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fmdispatch.cxx,v $
- * $Revision: 1.7 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -30,8 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "fmdispatch.hxx"
-#include "formcontrolling.hxx"
+
+#include "formfeaturedispatcher.hxx"
+
+#include <comphelper/namedvaluecollection.hxx>
+#include <tools/diagnose_ex.h>
 
 //........................................................................
 namespace svx
@@ -49,13 +49,13 @@ namespace svx
     //= OSingleFeatureDispatcher
     //====================================================================
     //--------------------------------------------------------------------
-    OSingleFeatureDispatcher::OSingleFeatureDispatcher( const URL& _rFeatureURL, sal_Int32 _nFeatureId,
-            const FormControllerHelper& _rController, ::osl::Mutex& _rMutex )
+    OSingleFeatureDispatcher::OSingleFeatureDispatcher( const URL& _rFeatureURL, const sal_Int16 _nFormFeature,
+            const Reference< XFormOperations >& _rxFormOperations, ::osl::Mutex& _rMutex )
         :m_rMutex( _rMutex )
         ,m_aStatusListeners( _rMutex )
-        ,m_rController( _rController )
+        ,m_xFormOperations( _rxFormOperations )
         ,m_aFeatureURL( _rFeatureURL )
-        ,m_nFeatureId( _nFeatureId )
+        ,m_nFormFeature( _nFormFeature )
         ,m_bLastKnownEnabled( sal_False )
         ,m_bDisposed( sal_False )
     {
@@ -82,10 +82,9 @@ namespace svx
     //--------------------------------------------------------------------
     void OSingleFeatureDispatcher::getUnoState( FeatureStateEvent& /* [out] */ _rState ) const
     {
-        FeatureState aState;
         _rState.Source = *const_cast< OSingleFeatureDispatcher* >( this );
 
-        m_rController.getState( m_nFeatureId, aState );
+        FeatureState aState( m_xFormOperations->getState( m_nFormFeature ) );
 
         _rState.FeatureURL = m_aFeatureURL;
         _rState.IsEnabled = aState.Enabled;
@@ -161,20 +160,33 @@ namespace svx
         OSL_ENSURE( _rURL.Complete == m_aFeatureURL.Complete, "OSingleFeatureDispatcher::dispatch: not responsible for this URL!" );
         (void)_rURL;
 
-        if ( m_rController.isEnabled( m_nFeatureId ) )
-        {
-            // release our mutex before executing the slot?
-            sal_Int32 nFeatureId( m_nFeatureId );
-            aGuard.clear();
+        if ( !m_xFormOperations->isEnabled( m_nFormFeature ) )
+            return;
 
+        // release our mutex before executing the command
+        sal_Int16 nFormFeature( m_nFormFeature );
+        Reference< XFormOperations > xFormOperations( m_xFormOperations );
+        aGuard.clear();
+
+        try
+        {
             if ( !_rArguments.getLength() )
             {
-                m_rController.execute( nFeatureId );
+                xFormOperations->execute( nFormFeature );
             }
             else
             {   // at the moment we only support one parameter
-                m_rController.execute( nFeatureId, _rArguments[0].Name, _rArguments[0].Value );
+                ::comphelper::NamedValueCollection aArgs( _rArguments );
+                xFormOperations->executeWithArguments( nFormFeature, aArgs.getNamedValues() );
             }
+        }
+        catch( const RuntimeException& )
+        {
+            throw;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

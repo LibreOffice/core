@@ -35,6 +35,7 @@
 #include "fmgridif.hxx"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
+#include "fmtools.hxx"
 #include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmurl.hxx"

@@ -679,7 +679,15 @@ sal_Bool DbCellControl::Commit()
     // lock the listening for value property changes
     lockValueProperty();
     // commit the content of the control into the model's value property
-    sal_Bool bReturn = commitControl();
+    sal_Bool bReturn = sal_False;
+    try
+    {
+        bReturn = commitControl();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
     // unlock the listening for value property changes
     unlockValueProperty();
     // outta here

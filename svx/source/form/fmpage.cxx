@@ -78,7 +78,6 @@
 #include "fmprop.hrc"
 #endif
 #include "fmundo.hxx"
-#include "fmtools.hxx"
 using namespace ::svxform;
 #endif
 #include <comphelper/property.hxx>

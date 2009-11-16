@@ -210,12 +210,9 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
 
                 if(pSeq)
                 {
-                    //  memcpy(_pData,pSeq->getConstArray(),pSeq->getLength());
-                    _pData = (sal_Int8*)((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getConstArray();
+                    _pData = (sal_Int8*)pSeq->getConstArray();
                     *pLen = pSeq->getLength();
                 }
-                //  _pData = (sal_Int8*)((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getConstArray();
-                //  *pLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 >  *)_pValue)->getLength();
             }
             break;
         case SQL_LONGVARBINARY:

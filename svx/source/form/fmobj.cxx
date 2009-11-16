@@ -30,35 +30,35 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <tools/resmgr.hxx>
-#include <tools/diagnose_ex.h>
 #include "fmobj.hxx"
 #include "fmprop.hrc"
 #include "fmvwimp.hxx"
-#include <svx/editeng.hxx>
-#include <svx/svdovirt.hxx>
+#include "fmtools.hxx"
+#include "fmpgeimp.hxx"
+#include "fmresids.hrc"
+#include "svx/fmview.hxx"
+#include "svx/fmglob.hxx"
+#include "svx/fmpage.hxx"
+#include "svx/editeng.hxx"
+#include "svx/svdovirt.hxx"
+#include "svx/fmmodel.hxx"
+#include "svx/dialmgr.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 /** === end UNO includes === **/
-#include <svx/fmmodel.hxx>
-#include "fmtools.hxx"
+
 #include <tools/shl.hxx>
-#include <svx/dialmgr.hxx>
-
-#include "fmresids.hrc"
-#include <svx/fmview.hxx>
-#include <svx/fmglob.hxx>
-
-#include "fmpgeimp.hxx"
-#include <svx/fmpage.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/resmgr.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -422,10 +422,48 @@ void FmFormObj::operator= (const SdrObject& rObj)
 }
 
 //------------------------------------------------------------------
+namespace
+{
+    String lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
+    {
+        Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexAccess> xParent;
+        if (xChild.is())
+            xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
+
+        // while the current content is a form
+        String sReturn;
+        String sCurrentIndex;
+        while (xChild.is())
+        {
+            // get the content's relative pos within it's parent container
+            sal_Int32 nPos = getElementPos(xParent, xChild);
+
+            // prepend this current relaive pos
+            sCurrentIndex = String::CreateFromInt32(nPos);
+            if (sReturn.Len() != 0)
+            {
+                sCurrentIndex += '\\';
+                sCurrentIndex += sReturn;
+            }
+
+            sReturn = sCurrentIndex;
+
+            // travel up
+            if (::comphelper::query_interface((Reference< XInterface >)xParent,xChild))
+                xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
+        }
+
+        _rTopLevelElement = xParent;
+        return sReturn;
+    }
+}
+
+//------------------------------------------------------------------
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
 {
     Reference< XInterface >  xTopLevelSouce;
-    String sAccessPath = getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
+    String sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
     if (!xTopLevelSouce.is())
         // somthing went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
         return Reference< XInterface > ();
@@ -532,8 +570,8 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     DBG_ASSERT(xSourcePersist.is(), "FmFormObj::ensureModelEnv : invalid form (no persist object) !");
 
                     // create and insert (into the destination) a clone of the form
-                    xCurrentDestForm = Reference< XPropertySet > (cloneUsingProperties(xSourcePersist), UNO_QUERY);
-                    DBG_ASSERT(xCurrentDestForm.is(), "FmFormObj::ensureModelEnv : invalid cloned form !");
+                    Reference< XCloneable > xCloneable( xSourcePersist, UNO_QUERY_THROW );
+                    xCurrentDestForm.set( xCloneable->createClone(), UNO_QUERY_THROW );
 
                     DBG_ASSERT(nCurrentDestIndex == xDestContainer->getCount(), "FmFormObj::ensureModelEnv : something went wrong with the numbers !");
                     xDestContainer->insertByIndex(nCurrentDestIndex, makeAny(xCurrentDestForm));

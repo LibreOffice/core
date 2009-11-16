@@ -30,8 +30,10 @@
 #ifndef _SVX_FILTNAV_HXX
 #define _SVX_FILTNAV_HXX
 
-#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFilterController.hpp>
+
 #include <svtools/lstner.hxx>
 #include <svtools/brdcst.hxx>
 #include <vcl/window.hxx>
@@ -46,7 +48,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>
 #include <vcl/dockwin.hxx>
-#include "fmtools.hxx"
 #include "fmexch.hxx"
 #include <connectivity/sqlparse.hxx>
 #include "fmexch.hxx"
@@ -93,8 +94,7 @@ public:
 class FmParentData : public FmFilterData
 {
 protected:
-    ::std::vector<FmFilterData*> m_aChilds;
-
+    ::std::vector< FmFilterData* >  m_aChildren;
 
 public:
     TYPEINFO();
@@ -103,28 +103,34 @@ public:
     {}
     virtual ~FmParentData();
 
-    ::std::vector<FmFilterData*>& GetChilds() {return m_aChilds;}
+    ::std::vector< FmFilterData* >& GetChildren() { return m_aChildren; }
 };
 
 //========================================================================
 // Item representing the forms and subforms
 class FmFormItem : public FmParentData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >     m_xController;
-    sal_Int32           m_nCurrent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterController >  m_xFilterController;
 
 public:
     TYPEINFO();
-    FmFormItem(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, ::rtl::OUString()){}
-    FmFormItem(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* _pParent,
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & _xController,
-                 const ::rtl::OUString& _rText):FmParentData(_rxFactory,_pParent, _rText)
-                                     ,m_xController(_xController)
-                                     ,m_nCurrent(0){}
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & GetController(){return m_xController;}
-    void SetCurrentPosition(sal_Int32 nCurrent){m_nCurrent = nCurrent;}
-    sal_Int32 GetCurrentPosition() const {return m_nCurrent;}
+    FmFormItem(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* _pParent,
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & _xController,
+                 const ::rtl::OUString& _rText)
+        :FmParentData( _rxFactory, _pParent, _rText )
+        ,m_xController( _xController )
+        ,m_xFilterController( _xController, ::com::sun::star::uno::UNO_QUERY_THROW )
+    {
+    }
+
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >&
+        GetController() { return m_xController; }
+
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterController >&
+        GetFilterController() { return m_xFilterController; }
+
     virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 };
 
@@ -136,26 +142,28 @@ public:
     FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, ::rtl::OUString()){}
     FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const ::rtl::OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
 
-    FmFilterItem* Find(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > & xText) const;
+    FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;
     virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 };
 
 //========================================================================
 class FmFilterItem : public FmFilterData
 {
-    ::rtl::OUString m_aFieldName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > m_xText;
+    ::rtl::OUString     m_aFieldName;
+    const sal_Int32     m_nComponentIndex;
 
 public:
     TYPEINFO();
-    FmFilterItem(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
-                FmFilterItems* pParent,
-              const ::rtl::OUString& aFieldName,
-              const ::rtl::OUString& aCondition,
-              const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > & xText);
+    FmFilterItem(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+        FmFilterItems* pParent,
+        const ::rtl::OUString& aFieldName,
+        const ::rtl::OUString& aCondition,
+        const sal_Int32 _nComponentIndex
+    );
 
     const ::rtl::OUString& GetFieldName() const {return m_aFieldName;}
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > & GetTextComponent() const {return m_xText;}
+    sal_Int32 GetComponentIndex() const { return m_nComponentIndex; }
 
     virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 };
@@ -167,9 +175,9 @@ class FmFilterModel : public FmParentData
 {
     friend class FmFilterAdapter;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >       m_xControllers;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >         m_xController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >           m_xControllers;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        m_xORB;
     FmFilterAdapter*        m_pAdapter;
     FmFilterItems*          m_pCurrentItems;
 
@@ -178,7 +186,7 @@ public:
     FmFilterModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
     virtual ~FmFilterModel();
 
-    void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xCurrent);
+    void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xCurrent);
     void Clear();
     sal_Bool ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const;
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
@@ -190,17 +198,17 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & GetControllers() const {return m_xControllers;}
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & GetCurrentController() const {return m_xController;}
-    void SetCurrentController(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xController);
+    const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & GetCurrentController() const {return m_xController;}
+    void SetCurrentController(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xController);
 
     void Remove(FmFilterData* pFilterItem);
-    void AppendFilterItems(FmFormItem* pItem);
-    void CheckIntegrity(FmParentData* pItem);
+    void AppendFilterItems( FmFormItem& _rItem );
+    void EnsureEmptyFilterRows( FmParentData& _rItem );
 
 protected:
     void Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
-    void Remove(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
-    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xController) const;
+    void Remove( const ::std::vector<FmFilterData*>::iterator& rPos );
+    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xController) const;
     FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm) const;
     void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, FmParentData* pParent);
 };
@@ -267,7 +275,10 @@ public:
     FmFilterNavigator( Window* pParent );
     virtual ~FmFilterNavigator();
 
-    void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xCurrent);
+    void UpdateContent(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xCurrent
+        );
     const FmFilterModel* GetFilterModel() const {return m_pModel;}
 
 protected:

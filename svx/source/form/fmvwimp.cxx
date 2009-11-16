@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "fmctrler.hxx"
 #include "fmdocumentclassification.hxx"
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
@@ -39,7 +38,6 @@
 #include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
-#include "fmtools.hxx"
 #include "fmundo.hxx"
 #include "fmvwimp.hxx"
 #include "formcontrolfactory.hxx"
@@ -84,68 +82,88 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/container/XContainer.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
+#include <vos/mutex.hxx>
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
-using namespace ::svxform;
 using namespace ::svx;
-using com::sun::star::style::VerticalAlignment_MIDDLE;
-using ::com::sun::star::form::binding::XValueBinding;
-using ::com::sun::star::form::binding::XBindableValue;
+using namespace ::svxform;
 
-namespace svxform
-{
-    //========================================================================
-    class OAutoDispose
-    {
-    protected:
-        Reference< XComponent > m_xComp;
-
-    public:
-        OAutoDispose( const Reference< XInterface > _rxObject );
-        ~OAutoDispose();
-    };
-
-    //------------------------------------------------------------------------
-    OAutoDispose::OAutoDispose( const Reference< XInterface > _rxObject )
-        :m_xComp(_rxObject, UNO_QUERY)
-    {
-    }
-
-    //------------------------------------------------------------------------
-    OAutoDispose::~OAutoDispose()
-    {
-        if (m_xComp.is())
-            m_xComp->dispose();
-    }
-}
+    using namespace ::com::sun::star;
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::style::VerticalAlignment_MIDDLE;
+    using ::com::sun::star::form::FormButtonType_SUBMIT;
+    using ::com::sun::star::form::binding::XValueBinding;
+    using ::com::sun::star::form::binding::XBindableValue;
+    using ::com::sun::star::lang::XComponent;
+    using ::com::sun::star::container::XIndexAccess;
+    using ::com::sun::star::form::XForm;
+    using ::com::sun::star::form::runtime::XFormController;
+    using ::com::sun::star::script::XEventAttacherManager;
+    using ::com::sun::star::awt::XTabControllerModel;
+    using ::com::sun::star::container::XChild;
+    using ::com::sun::star::container::XEnumeration;
+    using ::com::sun::star::task::XInteractionHandler;
+    using ::com::sun::star::lang::XInitialization;
+    using ::com::sun::star::awt::XTabController;
+    using ::com::sun::star::lang::XUnoTunnel;
+    using ::com::sun::star::awt::XControlContainer;
+    using ::com::sun::star::awt::XControl;
+    using ::com::sun::star::form::XFormComponent;
+    using ::com::sun::star::form::XForm;
+    using ::com::sun::star::lang::IndexOutOfBoundsException;
+    using ::com::sun::star::lang::WrappedTargetException;
+    using ::com::sun::star::container::XContainer;
+    using ::com::sun::star::container::ContainerEvent;
+    using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::beans::NamedValue;
+    using ::com::sun::star::sdb::SQLErrorEvent;
+    using ::com::sun::star::sdbc::XRowSet;
+    using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::container::XElementAccess;
+    using ::com::sun::star::awt::XWindow;
+    using ::com::sun::star::awt::FocusEvent;
+    using ::com::sun::star::ui::dialogs::XExecutableDialog;
+    using ::com::sun::star::sdbc::XDataSource;
+    using ::com::sun::star::container::XIndexContainer;
+    using ::com::sun::star::sdbc::XConnection;
+    using ::com::sun::star::container::XNameAccess;
+    using ::com::sun::star::sdb::SQLContext;
+    using ::com::sun::star::sdbc::SQLWarning;
+    using ::com::sun::star::sdbc::SQLException;
+    using ::com::sun::star::util::XNumberFormatsSupplier;
+    using ::com::sun::star::util::XNumberFormats;
+    using ::com::sun::star::beans::XPropertySetInfo;
+    /** === end UNO using === **/
+    namespace FormComponentType = ::com::sun::star::form::FormComponentType;
+    namespace CommandType = ::com::sun::star::sdb::CommandType;
+    namespace DataType = ::com::sun::star::sdbc::DataType;
 
 //------------------------------------------------------------------------------
 class FmXFormView::ObjectRemoveListener : public SfxListener
@@ -181,7 +199,7 @@ FmXPageViewWinRec::FmXPageViewWinRec( const ::comphelper::ComponentContext& _rCo
             {
                 Reference< XForm > xForm( xForms->getByIndex(i), UNO_QUERY );
                 if ( xForm.is() )
-                    setController( xForm );
+                    setController( xForm, NULL );
             }
         }
         catch( const Exception& )
@@ -207,7 +225,7 @@ void FmXPageViewWinRec::dispose()
     {
         try
         {
-            Reference< XFormController > xController( *i, UNO_SET_THROW );
+            Reference< XFormController > xController( *i, UNO_QUERY_THROW );
 
             // detaching the events
             Reference< XChild > xControllerModel( xController->getModel(), UNO_QUERY );
@@ -276,6 +294,21 @@ Any SAL_CALL FmXPageViewWinRec::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBo
 }
 
 //------------------------------------------------------------------------
+void SAL_CALL FmXPageViewWinRec::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+
+    Reference< XWindow >  xWindow( _Control, UNO_QUERY );
+    if ( xWindow.is() && m_pViewImpl->getView() && m_pWindow )
+    {
+        awt::Rectangle aRect = xWindow->getPosSize();
+        ::Rectangle aNewRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
+        aNewRect = m_pWindow->PixelToLogic( aNewRect );
+        m_pViewImpl->getView()->MakeVisible( aNewRect, *m_pWindow );
+    }
+}
+
+//------------------------------------------------------------------------
 Reference< XFormController >  getControllerSearchChilds( const Reference< XIndexAccess > & xIndex, const Reference< XTabControllerModel > & xModel)
 {
     if (xIndex.is() && xIndex->getCount())
@@ -319,9 +352,8 @@ Reference< XFormController >  FmXPageViewWinRec::getController( const Reference<
 }
 
 //------------------------------------------------------------------------
-void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXFormController* _pParent )
+void FmXPageViewWinRec::setController(const Reference< XForm > & xForm, const Reference< XFormController >& _rxParentController )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::setController" );
     DBG_ASSERT( xForm.is(), "FmXPageViewWinRec::setController: there should be a form!" );
     Reference< XIndexAccess >  xFormCps(xForm, UNO_QUERY);
     if (!xFormCps.is())
@@ -330,50 +362,44 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
     Reference< XTabControllerModel >  xTabOrder(xForm, UNO_QUERY);
 
     // create a form controller
-    FmXFormController* pController = new FmXFormController( m_aContext.getLegacyServiceFactory(), m_pViewImpl->getView(), m_pWindow );
-    Reference< XFormController > xController( pController );
+    Reference< XFormController > xController( m_aContext.createComponent( FM_FORM_CONTROLLER ), UNO_QUERY );
+    if ( !xController.is() )
+    {
+        ShowServiceNotAvailableError( m_pWindow, FM_FORM_CONTROLLER, sal_True );
+        return;
+    }
 
     Reference< XInteractionHandler > xHandler;
-    if ( _pParent )
-        xHandler = _pParent->getInteractionHandler();
+    if ( _rxParentController.is() )
+        xHandler = _rxParentController->getInteractionHandler();
     else
     {
         // TODO: should we create a default handler? Not really necessary, since the
         // FormController itself has a default fallback
     }
     if ( xHandler.is() )
-    {
-        Reference< XInitialization > xInitController( xController, UNO_QUERY );
-        DBG_ASSERT( xInitController.is(), "FmXPageViewWinRec::setController: can't initialize the controller!" );
-        if ( xInitController.is() )
-        {
-            Sequence< Any > aInitArgs( 1 );
-            aInitArgs[ 0 ] <<= NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) ), makeAny( xHandler ) );
-            xInitController->initialize( aInitArgs );
-        }
-    }
+        xController->setInteractionHandler( xHandler );
 
-    pController->setModel(xTabOrder);
-    pController->setContainer( m_xControlContainer );
-    pController->activateTabOrder();
-    pController->addActivateListener(m_pViewImpl);
+    xController->setContext( this );
 
-    if ( _pParent )
-        _pParent->addChild(pController);
+    xController->setModel( xTabOrder );
+    xController->setContainer( m_xControlContainer );
+    xController->activateTabOrder();
+    xController->addActivateListener( m_pViewImpl );
+
+    if ( _rxParentController.is() )
+        _rxParentController->addChildController( xController );
     else
     {
-        //  Reference< XFormController >  xController(pController);
         m_aControllerList.push_back(xController);
 
-        pController->setParent(*this);
+        xController->setParent( *this );
 
         // attaching the events
-        Reference< XEventAttacherManager >  xEventManager(xForm->getParent(), UNO_QUERY);
+        Reference< XEventAttacherManager > xEventManager( xForm->getParent(), UNO_QUERY );
         Reference< XInterface >  xIfc(xController, UNO_QUERY);
         xEventManager->attach(m_aControllerList.size() - 1, xIfc, makeAny(xController) );
     }
-
-
 
     // jetzt die Subforms durchgehen
     sal_uInt32 nLength = xFormCps->getCount();
@@ -381,7 +407,7 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
     for (sal_uInt32 i = 0; i < nLength; i++)
     {
         if ( xFormCps->getByIndex(i) >>= xSubForm )
-            setController(xSubForm, pController);
+            setController( xSubForm, xController );
     }
 }
 
@@ -406,18 +432,12 @@ void FmXPageViewWinRec::updateTabOrder( const Reference< XForm >& _rxForm )
             // if it's a sub form, then we must ensure there exist TabControllers
             // for all its ancestors, too
             Reference< XForm > xParentForm( _rxForm->getParent(), UNO_QUERY );
-            FmXFormController* pFormController = NULL;
             // there is a parent form -> look for the respective controller
+            Reference< XFormController > xParentController;
             if ( xParentForm.is() )
-                xTabCtrl = Reference< XTabController >( getController( xParentForm ), UNO_QUERY );
+                xParentController.set( getController( xParentForm ), UNO_QUERY );
 
-            if ( xTabCtrl.is() )
-            {
-                Reference< XUnoTunnel > xTunnel( xTabCtrl, UNO_QUERY_THROW );
-                pFormController = reinterpret_cast< FmXFormController* >( xTunnel->getSomething( FmXFormController::getUnoTunnelImplementationId() ) );
-            }
-
-            setController( _rxForm, pFormController );
+            setController( _rxForm, xParentController );
         }
     }
     catch( const Exception& )
@@ -1068,20 +1088,14 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
     if ( pWizardAsciiName )
     {
         // build the argument list
-        Sequence< Any > aWizardArgs(1);
-        // the object affected
-        aWizardArgs[0] = makeAny( PropertyValue(
-            ::rtl::OUString::createFromAscii("ObjectModel"),
-            0,
-            makeAny( m_xLastCreatedControlModel ),
-            PropertyState_DIRECT_VALUE
-        ) );
+        ::comphelper::NamedValueCollection aWizardArgs;
+        aWizardArgs.put( "ObjectModel", m_xLastCreatedControlModel );
 
         // create the wizard object
         Reference< XExecutableDialog > xWizard;
         try
         {
-            m_aContext.createComponentWithArguments( pWizardAsciiName, aWizardArgs, xWizard );
+            m_aContext.createComponentWithArguments( pWizardAsciiName, aWizardArgs.getWrappedPropertyValues(), xWizard );
         }
         catch( const Exception& )
         {
@@ -1187,9 +1201,10 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                 m_aContext.getLegacyServiceFactory()
             ) );
     }
-    catch(const SQLContext& e) { aError.Reason <<= e; }
-    catch(const SQLWarning& e) { aError.Reason <<= e; }
-    catch(const SQLException& e) { aError.Reason <<= e; }
+    catch ( const SQLException& )
+    {
+        aError.Reason = ::cppu::getCaughtException();
+    }
     catch( const Exception& ) { /* will be asserted below */ }
     if (aError.Reason.hasValue())
     {
@@ -1217,14 +1232,11 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         if (xFields.is() && xFields->hasByName(sFieldName))
             xFields->getByName(sFieldName) >>= xField;
-
-        Reference< XNumberFormatsSupplier >  xSupplier = aDBATools.getNumberFormats(xConnection, sal_False);
-        if (!xSupplier.is() || !xField.is())
+        if ( !xField.is() )
             return NULL;
 
-        Reference< XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
-        if (!xNumberFormats.is())
-            return NULL;
+        Reference< XNumberFormatsSupplier > xSupplier( aDBATools.getNumberFormats( xConnection, sal_False ), UNO_SET_THROW );
+        Reference< XNumberFormats >  xNumberFormats( xSupplier->getNumberFormats(), UNO_SET_THROW );
 
         ::rtl::OUString sLabelPostfix;
 
