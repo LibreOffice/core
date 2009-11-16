@@ -1146,6 +1146,16 @@ SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule, USHORT _nWhich ) :
 {
 }
 
+SfxPoolItem* SvxNumBulletItem::Create(SvStream &s, USHORT n) const
+{
+    return SfxPoolItem::Create(s, n );
+}
+
+SvStream& SvxNumBulletItem::Store(SvStream & s, USHORT v ) const
+{
+    return SfxPoolItem::Store( s, v );
+}
+
 /* -----------------27.10.98 10:41-------------------
  *
  * --------------------------------------------------*/

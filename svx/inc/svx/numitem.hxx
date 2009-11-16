@@ -192,12 +192,12 @@ public:
     // <--
     SvxNumberFormat(const SvxNumberFormat& rFormat);
     // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//    SvxNumberFormat(SvStream &rStream);
+    //SvxNumberFormat(SvStream &rStream);
     // <--
     virtual ~SvxNumberFormat();
 
     // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//    SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
+    //SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
     // <--
 
     SvxNumberFormat& operator=( const SvxNumberFormat&  );
@@ -355,8 +355,8 @@ public:
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
-//    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-//    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
+    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
 //    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
     // <--
     virtual int              operator==( const SfxPoolItem& ) const;
