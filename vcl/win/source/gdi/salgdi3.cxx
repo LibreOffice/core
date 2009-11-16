@@ -2162,7 +2162,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         ::rtl::OUString aExecutableFile( aPath );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
         String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
-        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype") );
+        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/Basis/share/fonts/truetype") );
 
         // collect fonts in font path that could not be registered
         osl::Directory aFontDir( aFontDirUrl );
