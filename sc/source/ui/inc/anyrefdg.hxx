@@ -42,19 +42,28 @@
 #endif
 #include <sfx2/basedlgs.hxx>
 #include "address.hxx"
+#include "cell.hxx"
+#include "compiler.hxx"
 #include "formula/funcutl.hxx"
 #include "IAnyRefDialog.hxx"
+#include "scresid.hxx"
 #include <memory>
 
 class SfxObjectShell;
 class ScRange;
 class ScDocument;
 class ScTabViewShell;
-class ScAnyRefDlg;
-class ScFormulaCell;
-class ScCompiler;
+//The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
+//class ScAnyRefDlg;
+class ScRefHandler;
 class ScRangeList;
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+class SfxShell;
+#include "scmod.hxx"
 
+typedef    formula::RefButton   ScRefButton;
+typedef        formula::RefEdit ScRefEdit;
+//-->Added by PengYunQuan for Validity Cell Range Picker
 class ScFormulaReferenceHelper
 {
     IAnyRefDialog*      m_pDlg;
@@ -104,12 +113,28 @@ public:
     void                ViewShellChanged( ScTabViewShell* pScViewShell );
 
     static              void enableInput(BOOL _bInput);
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+protected:
+    Window      *       GetWindow(){ return m_pWindow; }
+public:
+    bool                CanInputStart( const ScRefEdit *pEdit ){ return !!pEdit; }
+    bool                CanInputDone( BOOL bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
+//<!--Added by PengYunQuan for Validity Cell Range Picker
 };
 //============================================================================
 
-class ScAnyRefDlg : public SfxModelessDialog,
+//The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
+class SC_DLLPUBLIC ScRefHandler : //public SfxModelessDialog,
                     public IAnyRefDialog
 {
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+    Window &    m_rWindow;
+    bool        m_bInRefMode;
+public:
+    operator Window *(){ return &m_rWindow; }
+    Window  * operator ->() { return static_cast<Window *>(*this); }
+    template<class,bool> friend class ScRefHdlrImplBase;
+//-->Added by PengYunQuan for Validity Cell Range Picker
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
 
@@ -130,7 +155,8 @@ protected:
 
     void                SetDispatcherLock( BOOL bLock );
 
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    //Overwrite TWindow will implemented by ScRefHdlrImplBase
+    //virtual long        PreNotify( NotifyEvent& rNEvt );
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void        RefInputDone( BOOL bForced = FALSE );
@@ -140,9 +166,9 @@ protected:
     bool                ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc );
 
 public:
-                        ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                                     Window* pParent, USHORT nResId);
-    virtual             ~ScAnyRefDlg();
+                        ScRefHandler( Window &rWindow, SfxBindings* pB/*, SfxChildWindow* pCW,
+                                     Window* pParent, USHORT nResId*/, bool bBindRef );
+    virtual             ~ScRefHandler();
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
     virtual void        AddRefEntry();
@@ -159,15 +185,100 @@ public:
 
     virtual void        ViewShellChanged( ScTabViewShell* pScViewShell );
     void                SwitchToDocument();
-    SfxBindings&        GetBindings();
+    //SfxBindings&        GetBindings();
 
     virtual void        SetActive() = 0;
 //  virtual BOOL        Close();
-    virtual void        StateChanged( StateChangedType nStateChange );
+    //Overwrite TWindow will implemented by ScRefHdlrImplBase
+    //virtual void        StateChanged( StateChangedType nStateChange );
+
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+public:
+    bool                EnterRefMode();
+    bool                LeaveRefMode();
+    inline  bool        CanInputStart( const ScRefEdit *pEdit );
+    inline  bool        CanInputDone( BOOL bForced );
+//-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
 
 //============================================================================
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+template<  class TWindow, bool bBindRef = true >
+class ScRefHdlrImplBase:public TWindow, public ScRefHandler
+{
+public:
+    //Overwrite TWindow
+    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual void        StateChanged( StateChangedType nStateChange );
 
+private:
+    template<class TBindings, class TChildWindow, class TParentWindow, class TResId>
+    ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
+        TParentWindow* pParent, TResId nResId);
+
+    template<class TParentWindow, class TResId, class TArg>
+    ScRefHdlrImplBase( TParentWindow* pParent, TResId nResId, const TArg &rArg, SfxBindings *pB = NULL );
+
+    ~ScRefHdlrImplBase();
+
+    template<class, class, bool> friend struct ScRefHdlrImpl;
+};
+
+template<class TWindow, bool bBindRef>
+template<class TBindings, class TChildWindow, class TParentWindow, class TResId>
+ScRefHdlrImplBase<TWindow, bBindRef>::ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
+                 TParentWindow* pParent, TResId nResId):TWindow(pB, pCW, pParent, ScResId(static_cast<USHORT>( nResId ) ) ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
+
+template<class TWindow, bool bBindRef >
+template<class TParentWindow, class TResId, class TArg>
+ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, TResId nResIdP, const TArg &rArg, SfxBindings *pB /*= NULL*/ )
+:TWindow( pParent, ScResId(static_cast<USHORT>( nResIdP )), rArg ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
+
+template<class TWindow, bool bBindRef >
+ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
+
+//============================================================================
+template<class TDerived, class TBase, bool bBindRef = true>
+struct ScRefHdlrImpl: ScRefHdlrImplBase<TBase, bBindRef >
+{
+    enum { UNKNOWN_SLOTID = 0U, SLOTID = UNKNOWN_SLOTID };
+
+    template<class T1, class T2, class T3, class T4>
+    ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3 & rt3, const T4 & rt4 ):ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4 )
+    {
+        SC_MOD()->RegisterRefWindow( static_cast<USHORT>( static_cast<TDerived*>(this)->SLOTID ), this );
+    }
+
+    ~ScRefHdlrImpl()
+    {
+        SC_MOD()->UnregisterRefWindow( static_cast<USHORT>( static_cast<TDerived*>(this)->SLOTID ), this );
+    }
+};
+//============================================================================
+struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
+{
+    template<class T1, class T2, class T3, class T4>
+    ScAnyRefDlg( const T1 & rt1, const T2 & rt2, const T3 & rt3, const T4 & rt4 ):ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>(rt1, rt2, rt3, rt4){}
+};
+//============================================================================
+
+inline bool ScRefHandler::CanInputStart( const ScRefEdit *pEdit )
+{
+    return m_aHelper.CanInputStart( pEdit );
+}
+
+inline  bool ScRefHandler::CanInputDone( BOOL bForced )
+{
+    return m_aHelper.CanInputDone( bForced );
+}
+
+template <> SC_DLLPUBLIC void ScRefHdlrImplBase<SfxModelessDialog,true>::StateChanged( StateChangedType nStateChange );
+template <> SC_DLLPUBLIC long ScRefHdlrImplBase<SfxModelessDialog,true>::PreNotify( NotifyEvent& rNEvt );
+#include <sfx2/tabdlg.hxx>
+template <> SC_DLLPUBLIC void ScRefHdlrImplBase<SfxTabDialog,false>::StateChanged( StateChangedType nStateChange );
+template <> SC_DLLPUBLIC long ScRefHdlrImplBase<SfxTabDialog,false>::PreNotify( NotifyEvent& rNEvt );
+
+//<!--Added by PengYunQuan for Validity Cell Range Picker
 #endif // SC_ANYREFDG_HXX
 

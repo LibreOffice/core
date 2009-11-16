@@ -161,7 +161,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/tabvwshb.obj \
     $(SLO)$/viewdata.obj \
     $(SLO)$/viewfun5.obj \
-    $(SLO)$/viewfun7.obj
+    $(SLO)$/viewfun7.obj \
+    $(SLO)$/reffact.obj
 
 # goal seek -O2
 

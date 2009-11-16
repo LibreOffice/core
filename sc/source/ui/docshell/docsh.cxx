@@ -2559,3 +2559,16 @@ void ScDocShellModificator::SetDocumentModified()
         pDoc->BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
     }
 }
+
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+sal_Bool ScDocShell::AcceptStateUpdate() const
+{
+    if( SfxObjectShell::AcceptStateUpdate() )
+        return sal_True;
+
+    if( SC_MOD()->Find1RefWindow( SFX_APP()->GetTopWindow() ) )
+        return sal_True;
+
+    return sal_False;
+}
+//-->Added by PengYunQuan for Validity Cell Range Picker

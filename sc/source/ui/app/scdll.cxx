@@ -328,6 +328,10 @@ void ScDLL::Init()
     ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
     ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
 
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    ScValidityRefChildWin::RegisterChildWindow(FALSE, pMod);
+    //-->Added by PengYunQuan for Validity Cell Range Picker
+
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();

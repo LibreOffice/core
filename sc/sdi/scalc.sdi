@@ -2855,6 +2855,33 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 ]
 
 //--------------------------------------------------------------------------
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+SfxVoidItem ValidityReference SID_VALIDITY_REFERENCE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+//-->Added by PengYunQuan for Validity Cell Range Picker
+
+//--------------------------------------------------------------------------
 SfxVoidItem GoDownToEndOfData SID_CURSORBLKDOWN
 (SfxInt16Item By FN_PARAM_1,SfxBoolItem Sel FN_PARAM_2)
 [

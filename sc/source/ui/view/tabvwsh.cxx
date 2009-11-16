@@ -96,6 +96,10 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSpellDialogChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
+
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    SFX_CHILDWINDOW_REGISTRATION(ScValidityRefChildWin::GetChildWindowId());
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 }
 
 SFX_IMPL_VIEWFACTORY( ScTabViewShell, ScResId(STR_NONAME) )

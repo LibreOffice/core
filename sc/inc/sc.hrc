@@ -662,7 +662,9 @@
 //#define SID_OPENDLG_MODCHART      (SC_MESSAGE_START + 58)
 #define SID_OPENDLG_CONDFRMT        (SC_MESSAGE_START + 59)
 #define SID_OPENDLG_OPTSOLVER       (SC_MESSAGE_START + 60)
-
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+#define SID_VALIDITY_REFERENCE      (SC_MESSAGE_START + 61)
+//-->Added by PengYunQuan for Validity Cell Range Picker
 #define SC_HINT_NAVIGATOR_UPDATEALL  (SC_MESSAGE_START + 65)
 
 // Funktionen ------------------------------------------------------------

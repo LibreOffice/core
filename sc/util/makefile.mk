@@ -229,8 +229,9 @@ SHL8STDLIBS= \
             $(I18NISOLANGLIB) \
             $(COMPHELPERLIB) \
             $(CPPULIB) \
-            $(SALLIB)
-
+            $(SALLIB) \
+            $(FORLIB) \
+            $(FORUILIB)
 .IF "$(ENABLE_LAYOUT)" == "TRUE"
 SHL8STDLIBS+=$(TKLIB)
 .ENDIF # ENABLE_LAYOUT == TRUE
