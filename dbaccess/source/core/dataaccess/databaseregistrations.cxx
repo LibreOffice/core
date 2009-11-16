@@ -277,9 +277,8 @@ namespace dbaccess
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_checkValidName_throw( _Name, true );
 
-        // TODO: place your code here
-        (void)_Name;
-        return sal_False;
+        ::utl::OConfigurationNode aDataSourceRegistration = m_aConfigurationRoot.openNode( _Name );
+        return aDataSourceRegistration.isReadonly();
     }
 
     //--------------------------------------------------------------------
