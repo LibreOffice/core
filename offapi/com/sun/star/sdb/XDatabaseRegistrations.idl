@@ -1,0 +1,158 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __com_sun_star_sdb_XDatabaseRegistrations_idl__
+#define __com_sun_star_sdb_XDatabaseRegistrations_idl__
+
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/IllegalAccessException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module sdb {
+
+interface XDatabaseRegistrationsListener;
+
+//=============================================================================
+
+/** provides access to the application-wide registered databases.
+
+    <p>This interface provides a mere wrapper around the respective configuration data,
+    this way hiding the concrete configuration structure from its clients. You should,
+    if possible at all, use this interface, instead of modifying or querying the configuration
+    data directly.</p>
+
+    @since OpenOffice.org 3.3
+ */
+interface XDatabaseRegistrations
+{
+    /** determines whether a database is registered under the given name.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given name is empty
+    */
+    boolean hasRegisteredDatabase( [in] string Name )
+        raises  (   ::com::sun::star::lang::IllegalArgumentException
+                );
+
+    /** returns the names of all registered databases
+    */
+    sequence< string >
+            getRegistrationNames();
+
+    /** returns the location of the database registered under the given name
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given name is empty
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            if there is no database registered under this name
+    */
+    string  getDatabaseLocation( [in] string Name )
+        raises  (   ::com::sun::star::lang::IllegalArgumentException
+                ,   ::com::sun::star::container::NoSuchElementException
+                );
+
+    /** registers a database, given by location, under a given name
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given name is empty, or the given location is invalid.
+
+        @throws ::com::sun::star::container::ElementExistException
+            if there already is a databases registered under the given name.
+    */
+    void    registerDatabaseLocation( [in] string Name, [in] string Location )
+        raises  (   ::com::sun::star::lang::IllegalArgumentException
+                ,   ::com::sun::star::container::ElementExistException
+                );
+
+    /** revokes the registration of a database, given by name
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given name is empty
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            if there is no database registered under this name
+
+        @throws ::com::sun::star::lang::IllegalAccessException
+            if the registration data for this database is read-only
+    */
+    void    revokeDatabaseLocation( [in] string Name )
+        raises  (   ::com::sun::star::lang::IllegalArgumentException
+                ,   ::com::sun::star::container::NoSuchElementException
+                ,   ::com::sun::star::lang::IllegalAccessException
+                );
+
+    /** changes the location of a given database registration
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given name is empty, or the given location is invalid.
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            if there is no database registered under this name
+
+        @throws ::com::sun::star::lang::IllegalAccessException
+            if the registration data for this database is read-only
+    */
+    void    changeDatabaseLocation( [in] string Name, [in] string NewLocation )
+        raises  (   ::com::sun::star::lang::IllegalArgumentException
+                ,   ::com::sun::star::container::NoSuchElementException
+                ,   ::com::sun::star::lang::IllegalAccessException
+                );
+
+    /** determines whether the registration data for a database given by name is
+        read-only.
+
+        <p>In this case, attempts to revoke this registration will fail.</p>
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given name is empty
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            if there is no database registered under this name
+    */
+    boolean isDatabaseRegistrationReadOnly( [in] string Name )
+        raises  (   ::com::sun::star::lang::IllegalArgumentException
+                ,   ::com::sun::star::container::NoSuchElementException
+                );
+
+    /** registers a listener which is notified of changes in the registered databases
+    */
+    void    addDatabaseRegistrationsListener( [in] XDatabaseRegistrationsListener Listener );
+
+    /** revokes a previously registered listener
+    */
+    void    removeDatabaseRegistrationsListener( [in] XDatabaseRegistrationsListener Listener );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

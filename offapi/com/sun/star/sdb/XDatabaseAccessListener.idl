@@ -37,44 +37,13 @@
  module com {  module sun {  module star {  module sdb {
 
 
-/** is used for receiving "connectionChanged", "approveConnectionClose", and
-    "connectionClosing" events posted by a database access bean.
-
-
-    <p>
-    A database access bean setting may be changed to connect to a different database.
-    In that case, the connection of the bean must be closed and a new connection must
-    be established. The could affect the current data processing on the bean, as it
-    could be shared by a number of components. To prevent the bean from closing it's
-    connection, a DatabaseAccessListener could abort the closing.
-    </p>
+/** is not to be used anymore
+    @deprecated
  */
 published interface XDatabaseAccessListener: com::sun::star::lang::XEventListener
 {
-
-    /** indicates that a new connection for the bean has been established.
-        @param evenet
-            the event happend
-     */
     [oneway] void connectionChanged([in]com::sun::star::lang::EventObject event);
-    //-------------------------------------------------------------------------
-
-    /** indicates that the connection of the bean will be closed. If there are pending
-        actions on the connection of the bean, "approveConnectionClosing" should return
-        <FALSE/>.
-
-        @param evenet
-            the event happend
-        @returns
-            <TRUE/> when approved, otherwise <FALSE/>
-     */
     boolean approveConnectionClosing([in]com::sun::star::lang::EventObject event);
-    //-------------------------------------------------------------------------
-
-    /** indicates that the connection will definitely be closed.
-        @param evenet
-            the event happend
-     */
     [oneway] void connectionClosing([in]com::sun::star::lang::EventObject event);
 };
 
