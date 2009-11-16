@@ -74,6 +74,8 @@ protected:
 
     sal_Bool m_bCompressedIsSetFromOutside;
 
+    sal_Bool m_bFromManifest;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& GetOwnSeekStream();
 
 public:
@@ -82,6 +84,10 @@ public:
     sal_Bool IsToBeEncrypted () const { return bToBeEncrypted;}
     sal_Bool IsEncrypted () const    { return bIsEncrypted;}
     sal_Bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
+
+    sal_Bool IsFromManifest() const { return m_bFromManifest; }
+    void SetFromManifest( sal_Bool bValue ) { m_bFromManifest = bValue; }
+
     vos::ORef < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
     const com::sun::star::uno::Sequence < sal_Int8 >& getKey () const

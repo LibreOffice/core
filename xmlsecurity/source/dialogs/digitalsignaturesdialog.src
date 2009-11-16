@@ -30,6 +30,7 @@
 
 #include "dialogs.hrc"
 #include "helpids.hrc"
+#include "digitalsignaturesdialog.hrc"
 
 ModalDialog RID_XMLSECDLG_DIGSIG
 {
@@ -87,6 +88,7 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     {
         Text [ en-US ] = "The signatures in this document are invalid";
     };
+
     FixedImage IMG_STATE_VALID
     {
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
@@ -103,6 +105,13 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
         Text [ en-US ] = "The signatures in this document are valid";
+    };
+    FixedText FI_STATE_OLDSIGNATURE
+    {
+        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
+        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Hide = TRUE;
+        Text [ en-US ] = "Not all parts of the document are signed";
     };
     FixedImage IMG_STATE_BROKEN
     {
@@ -204,4 +213,14 @@ ErrorBox RID_XMLSECDLG_OLD_ODF_FORMAT
         "Thus no signatures can be added or removed to this document.\n\n"
         "Save document in ODF 1.2 format and add all desired signatures again.";
 };
+
+
+QueryBox MSG_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Adding or removing a macro signature will remove all document signatures.\n"
+        "Do you really want to continue?";
+};
+
 

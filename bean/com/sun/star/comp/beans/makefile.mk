@@ -36,7 +36,7 @@ PACKAGE = com$/sun$/star$/comp$/beans
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(OS)"=="MACOSX"
 
 dummy:
@@ -74,5 +74,6 @@ JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 .ENDIF
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :  target.mk
