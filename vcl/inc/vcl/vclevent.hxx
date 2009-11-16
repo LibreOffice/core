@@ -150,6 +150,7 @@ class Menu;
 #define VCLEVENT_LISTBOX_ENTRY_EXPANDED     1174
 #define VCLEVENT_LISTBOX_ENTRY_COLLAPSED    1175
 // <--
+#define VCLEVENT_DROPDOWN_PRE_OPEN          1176
 
 // VclMenuEvent
 #define VCLEVENT_MENU_ACTIVATE              1200

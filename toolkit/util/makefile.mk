@@ -80,22 +80,6 @@ DEF1DEPN	=$(LIB1TARGET)
 DEF1DES		=TK
 DEFLIB1NAME	=tk
 
-.IF "$(OS)"=="MACOSX" 
-
-# [ed] 6/16/02 Add in X libraries if we're building X
-
-.IF "$(GUIBASE)"=="unx"
-SHL1STDLIBS +=\
-    -lX11 -lXt -lXmu
-.ENDIF
-
-.ELSE
-.IF "$(GUI)"=="UNX"
-SHL1STDLIBS +=\
-    -lX11
-.ENDIF
-.ENDIF
-
 RESLIB1IMAGES=$(PRJ)$/source$/awt
 RES1FILELIST=$(SRS)$/awt.srs
 RESLIB1NAME=$(TARGET)

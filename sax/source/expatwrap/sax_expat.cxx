@@ -136,6 +136,11 @@ OUString XmlChar2OUString( const XML_Char *p )
                                             pThis->rDocumentLocator->getColumnNumber()\
                                      ) );\
         }\
+        catch( com::sun::star::uno::RuntimeException &e ) {\
+            pThis->bExceptionWasThrown = sal_True; \
+            pThis->bRTExceptionWasThrown = sal_True; \
+            pImpl->rtexception = e; \
+        }\
     }\
     ((void)0)
 
@@ -256,7 +261,9 @@ public: // module scope
     // Exception cannot be thrown through the C-XmlParser (possible resource leaks),
     // therefor the exception must be saved somewhere.
     SAXParseException   exception;
-    sal_Bool                bExceptionWasThrown;
+    RuntimeException    rtexception;
+    sal_Bool            bExceptionWasThrown;
+    sal_Bool            bRTExceptionWasThrown;
 
     Locale              locale;
 
@@ -437,6 +444,7 @@ SaxExpatParser::SaxExpatParser(  )
     m_pImpl->rAttrList = Reference< XAttributeList > ( m_pImpl->pAttrList );
 
     m_pImpl->bExceptionWasThrown = sal_False;
+    m_pImpl->bRTExceptionWasThrown = sal_False;
 }
 
 SaxExpatParser::~SaxExpatParser()
@@ -736,6 +744,9 @@ void SaxExpatParser_Impl::parse( )
                                                 0 ) != 0 );
 
         if( ! bContinue || this->bExceptionWasThrown ) {
+
+            if ( this->bRTExceptionWasThrown )
+                throw rtexception;
 
             // Error during parsing !
             XML_Error xmlE = XML_GetErrorCode( getEntity().pParser );

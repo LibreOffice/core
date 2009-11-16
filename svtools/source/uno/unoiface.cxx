@@ -133,7 +133,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     }
     else if (aServiceName.EqualsIgnoreCaseAscii("roadmap") )
     {
-        pWindow = new ::svt::ORoadmap( pParent, WB_DIALOGCONTROL);
+        pWindow = new ::svt::ORoadmap( pParent, WB_TABSTOP );
         *ppNewComp = new SVTXRoadmap;
     }
     else if ( aServiceName.EqualsIgnoreCaseAscii( "ProgressBar" ) )

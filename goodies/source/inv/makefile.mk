@@ -42,6 +42,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 .IF "$(TEST)" != ""
 CDEFS+=-DTEST
@@ -62,6 +63,7 @@ SLOFILES= \
         $(SLO)$/score.obj \
         $(SLO)$/monst.obj
 .ENDIF
+.ENDIF
 
 SRS1NAME=$(TARGET)
 SRC1FILES=gegner.src strings.src
@@ -69,6 +71,9 @@ SRC1FILES=gegner.src strings.src
 RESLIB1IMAGES= $(PRJ)$/res
 RESLIB1NAME=tfu
 RESLIB1SRSFILES=$(SRS)$/invader.srs
+
+
+.IF "$(L10N_framework)"==""
 
 .IF "$(TEST)"!=""
 APP1TARGET= $(TARGET)
@@ -85,7 +90,7 @@ APP1STDLIBS=	$(CPPULIB)			\
 .ELSE
 
 SHL1TARGET= tfu$(DLLPOSTFIX)
-SHL1IMPLIB= itfu
+SHL1IMPLIB= i
 SHL1STDLIBS=\
             $(VCLLIB)     \
             $(TOOLSLIB)  \
@@ -103,10 +108,11 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 .ENDIF
 # --- Targets -------------------------------------------------------
-
+.ENDIF
 
 .INCLUDE :	target.mk
 
+.IF "$(L10N_framework)"==""
 ALLTAR: \
     $(BIN)$/applicat.rdb
 
@@ -147,3 +153,7 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
 
 .ENDIF
 
+.ELSE
+pseudo:
+
+.ENDIF

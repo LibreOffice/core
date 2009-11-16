@@ -287,6 +287,7 @@ BOOL ComboBox::IsAutocompleteEnabled() const
 
 IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
 {
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     mpSubEdit->GrabFocus();
     if ( !mpImplLB->GetEntryList()->GetMRUCount() )
         ImplUpdateFloatSelection();
@@ -523,6 +524,7 @@ void ComboBox::ToggleDropDown()
                 ImplUpdateFloatSelection();
             else
                 mpImplLB->SelectEntry( 0 , TRUE );
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
             mpBtn->SetPressed( TRUE );
             SetSelection( Selection( 0, SELECTION_MAX ) );
             mpFloatWin->StartFloat( TRUE );
@@ -824,6 +826,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                 ImplUpdateFloatSelection();
                 if( ( nKeyCode == KEY_DOWN ) && mpFloatWin && !mpFloatWin->IsInPopupMode() && aKeyEvt.GetKeyCode().IsMod2() )
                 {
+                    ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
                     mpBtn->SetPressed( TRUE );
                     if ( mpImplLB->GetEntryList()->GetMRUCount() )
                         mpImplLB->SelectEntry( 0 , TRUE );

@@ -44,7 +44,7 @@ DEPTARGET=vidxf
 .IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
 CDEFS+= -DEDITDEBUG
 .ENDIF
-
+.IF "$(L10N_framework)"==""
 EXCEPTIONSFILES=\
             $(SLO)$/dxfentrd.obj \
             $(SLO)$/dxf2mtf.obj
@@ -76,6 +76,7 @@ SHL1VERSIONMAP=exports.map
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
+.ENDIF
 
 # ==========================================================================
 

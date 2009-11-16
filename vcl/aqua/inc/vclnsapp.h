@@ -35,6 +35,8 @@
 #include "Cocoa/Cocoa.h"
 #include "postmac.h"
 
+class AquaSalFrame;
+
 @interface CocoaThreadEnabler : NSObject
 {
 }
@@ -64,6 +66,8 @@
 -(void)applicationWillResignActive: (NSNotification *)pNotification;
 -(MacOSBOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (MacOSBOOL)bWinVisible;
 -(void)setDockIconClickHandler: (NSObject*)pHandler;
+-(void)cycleFrameForward: (AquaSalFrame*)pCurFrame;
+-(void)cycleFrameBackward: (AquaSalFrame*)pCurFrame;
 @end
 
 #endif

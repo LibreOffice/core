@@ -158,6 +158,9 @@ LIB1FILES+= \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
             $(SLB)$/salapp.lib
+.IF "$(GUIBASE)" == "aqua"
+LIB1FILES+= $(SLB)$/dtransaqua.lib
+.ENDIF
 .ENDIF
 
 SHL1TARGET= vcl$(DLLPOSTFIX)
@@ -195,7 +198,8 @@ SHL1USE_EXPORTS=name
 .IF "$(GUIBASE)"=="aqua"
 SHL1STDLIBS+= \
     $(BASEBMPLIB) \
-    -lAppleRemote$(DLLPOSTFIX)
+    -lAppleRemote$(DLLPOSTFIX) \
+    -framework QuickTime
 
 LIB1FILES+= \
             $(SLB)$/sala11y.lib
@@ -268,9 +272,20 @@ STDSHL1 += ft2lib.lib
 # UNX sal plugins
 .IF "$(GUI)" == "UNX" && "$(GUIBASE)" != "aqua"
 
+# desktop detector
+LIB7TARGET=$(SLB)$/idet
+LIB7FILES=$(SLB)$/dtdetect.lib
+SHL7TARGET=desktop_detector$(DLLPOSTFIX)
+SHL7STDLIBS=\
+            $(SALLIB) \
+            $(X11LINK_DYNAMIC)
+SHL7IMPLIB=idet
+SHL7LIBS=$(LIB7TARGET)
+
 # basic pure X11 plugin
 LIB2TARGET=$(SLB)$/ipure_x
 LIB2FILES= \
+            $(SLB)$/dtransX11.lib  \
             $(SLB)$/printergfx.lib  \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
@@ -287,6 +302,9 @@ SHL2STDLIBS=\
             $(TOOLSLIB)         \
             $(VOSLIB)           \
             $(BASEGFXLIB)	\
+            $(UNOTOOLSLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
             $(SALLIB)
 
 # prepare linking of Xinerama
@@ -362,7 +380,8 @@ SHL4STDLIBS+=\
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
             $(VOSLIB)           \
-            $(SALLIB)
+            $(SALLIB)           \
+            $(X11LINK_DYNAMIC)
 
 .IF "$(ENABLE_RANDR)" != ""
 .IF "$(XRANDR_DLOPEN)" == "FALSE"
@@ -390,7 +409,8 @@ SHL5STDLIBS+=\
         $(VCLLIB)       \
         $(TOOLSLIB)     \
         $(VOSLIB)       \
-        $(SALLIB)
+        $(SALLIB)       \
+        $(X11LINK_DYNAMIC)
 
 .IF "$(ENABLE_RANDR)" != ""
 .IF "$(XRANDR_DLOPEN)" == "FALSE"
@@ -419,7 +439,8 @@ SHL6STDLIBS+=\
         $(PSPLIB)	\
         $(TOOLSLIB)     \
         $(VOSLIB)       \
-        $(SALLIB)
+        $(SALLIB)   \
+        $(X11LINK_DYNAMIC)
 
 .IF "$(ENABLE_RANDR)" != ""
 .IF "$(XRANDR_DLOPEN)" == "FALSE"

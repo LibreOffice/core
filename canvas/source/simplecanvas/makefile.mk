@@ -45,7 +45,7 @@ DLLPRE =
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
 .ENDIF
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/simplecanvasimpl.obj
 
 SHL1TARGET=$(TARGET).uno
@@ -60,6 +60,7 @@ SHL1VERSIONMAP=exports.map
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
+.ENDIF
 
 # ==========================================================================
 

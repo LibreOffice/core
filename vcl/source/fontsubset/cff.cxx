@@ -42,8 +42,10 @@ typedef long long S64;
 
 typedef sal_Int32 GlyphWidth;
 
+typedef float RealType;
+typedef RealType ValType;
 #include <vector>
-typedef std::vector<int> IntVector;
+typedef std::vector<ValType> ValVector;
 
 // ====================================================================
 
@@ -310,8 +312,8 @@ struct CffGlobal
     int     mnFontDictBase;
     int     mnFDAryCount;
 
-    IntVector   maFontBBox;
-    //FloatVector   maFontMatrix;
+    ValVector   maFontBBox;
+    ValVector   maFontMatrix;
 
     int     mnFontNameSID;
     int     mnFullNameSID;
@@ -336,16 +338,16 @@ struct CffLocal
     // ATM hinting related values
     int         mnStemStdHW;
     int         mnStemStdVW;
-    IntVector   maStemSnapH;
-    IntVector   maStemSnapV;
-    IntVector   maBlueValues;
-    IntVector   maOtherBlues;
-    IntVector   maFamilyBlues;
-    IntVector   maFamilyOtherBlues;
-    double      mfBlueScale;
-    double      mfBlueShift;
-    double      mfBlueFuzz;
-    double      mfExpFactor;
+    ValVector   maStemSnapH;
+    ValVector   maStemSnapV;
+    ValVector   maBlueValues;
+    ValVector   maOtherBlues;
+    ValVector   maFamilyBlues;
+    ValVector   maFamilyOtherBlues;
+    RealType    mfBlueScale;
+    RealType    mfBlueShift;
+    RealType    mfBlueFuzz;
+    RealType    mfExpFactor;
     int         mnLangGroup;
     bool        mbForceBold;
 };
@@ -422,7 +424,7 @@ private:
     CffLocal*   mpCffLocal;
 
     void        readDictOp( void);
-    double      readRealVal( void);
+    RealType    readRealVal( void);
     const char* getString( int nStringID);
     int         getFDSelect( int nGlyphIndex) const;
     int         getGlyphSID( int nGlyphIndex) const;
@@ -431,7 +433,7 @@ private:
     void    readTypeOp( void);
     void    read2push( void);
     void    pop2write( void);
-    void    writeType1Val( int/*TODO: double*/ nVal);
+    void    writeType1Val( ValType);
     void    writeTypeOp( int nTypeOp);
     void    writeTypeEsc( int nTypeOp);
     void    writeCurveTo( int nStackPos, int nIX1, int nIY1, int nIX2, int nIY2, int nIX3, int nIY3);
@@ -441,10 +443,13 @@ private:
 public: // TODO: is public really needed?
     // accessing the value stack
     // TODO: add more checks
-    void    push( int nVal) { mnValStack[ mnStackIdx++] = nVal;}
-    int     pop( void) { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
-    int     peek( void) { return ((mnStackIdx>0) ? mnValStack[ mnStackIdx-1] : 0);}
-    int     get( int nIndex) { return mnValStack[ nIndex];}
+    void    push( ValType nVal) { mnValStack[ mnStackIdx++] = nVal;}
+    ValType popVal( void) { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
+    ValType peekVal( void) const { return ((mnStackIdx>0) ? mnValStack[ mnStackIdx-1] : 0);}
+    ValType getVal( int nIndex) const { return mnValStack[ nIndex];}
+    int     popInt( void);
+    int     peekInt( void) const;
+    int     getInt( int nIndex) const;
     int     size( void) const { return mnStackIdx;}
     bool    empty( void) const { return !mnStackIdx;}
     void    clear( void) { mnStackIdx = 0;}
@@ -453,7 +458,7 @@ public: // TODO: is public really needed?
     void    addHints( bool bVerticalHints);
     int     getHorzHintCount( void) const { return (mnHorzHintSize/2);}
     int     getVertHintCount( void) const { return (mnHintSize-mnHorzHintSize)/2;}
-    void    getHintPair( int nIndex, int* nMin, int* nEnd) const;
+    void    getHintPair( int nIndex, ValType* nMin, ValType* nEnd) const;
 
     // accessing other charstring specifics
     bool    hasCharWidth( void) const { return (mnCharWidth != -1);}
@@ -465,12 +470,12 @@ public: // TODO: is public really needed?
 private:
     // typeop exceution context
     int mnStackIdx;
-    int mnValStack[ NMAXSTACK];
-    int mnTransVals[ NMAXTRANS];
+    ValType mnValStack[ NMAXSTACK];
+    ValType mnTransVals[ NMAXTRANS];
 
     int mnHintSize;
     int mnHorzHintSize;
-    int mnHintStack[ NMAXHINTS];
+    ValType mnHintStack[ NMAXHINTS];
 
     int mnCharWidth;
 };
@@ -499,6 +504,36 @@ CffSubsetterContext::~CffSubsetterContext( void)
 
 // --------------------------------------------------------------------
 
+inline int CffSubsetterContext::popInt( void)
+{
+    const ValType aVal = popVal();
+    const int nInt = static_cast<int>(aVal);
+    assert( nInt == aVal);
+    return nInt;
+}
+
+// --------------------------------------------------------------------
+
+inline int CffSubsetterContext::peekInt( void) const
+{
+    const ValType aVal = peekVal();
+    const int nInt = static_cast<int>(aVal);
+    assert( nInt == aVal);
+    return nInt;
+}
+
+// --------------------------------------------------------------------
+
+inline int CffSubsetterContext::getInt( int nIndex) const
+{
+    const ValType aVal = getVal( nIndex);
+    const int nInt = static_cast<int>(aVal);
+    assert( nInt == aVal);
+    return nInt;
+}
+
+// --------------------------------------------------------------------
+
 inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
 {
 #if 1 // TODO: is this still needed?
@@ -507,7 +542,7 @@ inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
         return;
 #endif
     if( bUseFirstVal) {
-        mnCharWidth = mpCffLocal->mnNominalWidth + mnValStack[0];
+        mnCharWidth = static_cast<int>(mpCffLocal->mnNominalWidth + mnValStack[0]);
         // remove bottom stack entry
         --mnStackIdx;
         for( int i = 0; i < mnStackIdx; ++i)
@@ -535,16 +570,16 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
     assert( (mnHintSize + mnStackIdx) <= 2*NMAXHINTS);
 
 #ifdef IGNORE_HINTS
-    mnHorzHintSize += mnStackIdx;
+    mnHintSize += mnStackIdx;
 #else
-    int nHintOfs = 0;
+    ValType nHintOfs = 0;
     for( int i = 0; i < mnStackIdx; ++i) {
-        nHintOfs += mnValStack[ i];
+        nHintOfs += mnValStack[ i ];
         mnHintStack[ mnHintSize++] = nHintOfs;
     }
+#endif // IGNORE_HINTS
     if( !bVerticalHints)
         mnHorzHintSize = mnHintSize;
-#endif // IGNORE_HINTS
 
     // clear all values from the stack
     mnStackIdx = 0;
@@ -552,12 +587,12 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
 
 // --------------------------------------------------------------------
 
-void CffSubsetterContext::getHintPair( int nIndex, int* pMin, int* pEnd) const
+void CffSubsetterContext::getHintPair( int nIndex, ValType* pMin, ValType* pEnd) const
 {
     nIndex *= 2;
     assert( nIndex < mnHintSize);
     assert( nIndex >= 0);
-    const int* pHint = &mnHintStack[ nIndex];
+    const ValType* pHint = &mnHintStack[ nIndex ];
     *pMin = pHint[0];
     *pEnd = pHint[1];
 }
@@ -596,7 +631,8 @@ void CffSubsetterContext::readCharString( const U8* pTypeOps, int nTypeLen)
 
 void CffSubsetterContext::readDictOp( void)
 {
-    int nVal = 0;
+    ValType nVal = 0;
+    int nInt = 0;
     const U8 c = *mpReadPtr;
     if( c <= 21 ) {
         int nOpId = *(mpReadPtr++);
@@ -613,41 +649,45 @@ void CffSubsetterContext::readDictOp( void)
         switch( *pCmdName) {
         default: fprintf( stderr, "unsupported DictOp.type=\'%c\'\n", *pCmdName); break;
         case 'b':   // bool
-            nVal = pop();
+            nInt = popInt();
             switch( nOpId) {
-            case 915: mpCffLocal->mbForceBold = nVal; break;    // "ForceBold"
+            case 915: mpCffLocal->mbForceBold = nInt; break;    // "ForceBold"
             default: break; // TODO: handle more boolean dictops?
             }
             break;
         case 'n':   // dict-op number
-            nVal = pop();
+            nVal = popVal();
+            nInt = static_cast<int>(nVal);
             switch( nOpId) {
-            case  10: mpCffLocal->mnStemStdHW = nVal;  break;   // "StdHW"
-            case  11: mpCffLocal->mnStemStdVW = nVal; break;    // "StdVW"
-            case  15: mnCharsetBase = nVal; break;              // "charset"
-            case  16: mnEncodingBase = nVal; break;             // "nEncoding"
-            case  17: mnCharStrBase = nVal; break;              // "nCharStrings"
-            case  19: mpCffLocal->mnLocalSubrOffs = nVal; break;// "nSubrs"
-            case  20: setDefaultWidth( nVal); break;            // "defaultWidthX"
-            case  21: setNominalWidth( nVal); break;            // "nominalWidthX"
+            case  10: mpCffLocal->mnStemStdHW = nInt;  break;   // "StdHW"
+            case  11: mpCffLocal->mnStemStdVW = nInt; break;    // "StdVW"
+            case  15: mnCharsetBase = nInt; break;              // "charset"
+            case  16: mnEncodingBase = nInt; break;             // "nEncoding"
+            case  17: mnCharStrBase = nInt; break;              // "nCharStrings"
+            case  19: mpCffLocal->mnLocalSubrOffs = nInt; break;// "nSubrs"
+            case  20: setDefaultWidth( nInt ); break;           // "defaultWidthX"
+            case  21: setNominalWidth( nInt ); break;           // "nominalWidthX"
             case 909: mpCffLocal->mfBlueScale = nVal; break;    // "BlueScale"
             case 910: mpCffLocal->mfBlueShift = nVal; break;    // "BlueShift"
             case 911: mpCffLocal->mfBlueFuzz = nVal; break;     // "BlueFuzz"
             case 912: mpCffLocal->mfExpFactor = nVal; break;    // "ExpansionFactor"
-            case 917: mpCffLocal->mnLangGroup = nVal; break;    // "LanguageGroup"
-            case 936: mnFontDictBase = nVal; break;             // "nFDArray"
-            case 937: mnFDSelectBase = nVal; break;             // "nFDSelect"
+            case 917: mpCffLocal->mnLangGroup = nInt; break;    // "LanguageGroup"
+            case 936: mnFontDictBase = nInt; break;             // "nFDArray"
+            case 937: mnFDSelectBase = nInt; break;             // "nFDSelect"
             default: break; // TODO: handle more numeric dictops?
             }
             break;
         case 'a': { // array
+            switch( nOpId) {
+            case   5: maFontBBox.clear(); break;     // "FontBBox"
+            case 907: maFontMatrix.clear(); break; // "FontMatrix"
+            default: break; // TODO: reset other arrays?
+            }
             for( int i = 0; i < size(); ++i ) {
-                nVal = get(i);
+                nVal = getVal(i);
                 switch( nOpId) {
                 case   5: maFontBBox.push_back( nVal); break;     // "FontBBox"
-#if 0 // TODO
                 case 907: maFontMatrix.push_back( nVal); break; // "FontMatrix"
-#endif
                 default: break; // TODO: handle more array dictops?
                 }
             }
@@ -656,7 +696,7 @@ void CffSubsetterContext::readDictOp( void)
         case 'd': { // delta array
             nVal = 0;
             for( int i = 0; i < size(); ++i ) {
-                nVal += get(i);
+                nVal += getVal(i);
                 switch( nOpId) {
                 case   6: mpCffLocal->maBlueValues.push_back( nVal); break;     // "BlueValues"
                 case   7: mpCffLocal->maOtherBlues.push_back( nVal); break;     // "OtherBlues"
@@ -670,39 +710,39 @@ void CffSubsetterContext::readDictOp( void)
             clear();
             } break;
         case 's':   // stringid (SID)
-            nVal = pop();
-            switch( nOpId) {
-            case   2: mnFullNameSID = nVal; break;      // "FullName"
-            case   3: mnFamilyNameSID = nVal; break;    // "FamilyName"
-            case 938: mnFontNameSID = nVal; break;      // "FontName"
+            nInt = popInt();
+            switch( nOpId ) {
+            case   2: mnFullNameSID = nInt; break;      // "FullName"
+            case   3: mnFamilyNameSID = nInt; break;    // "FamilyName"
+            case 938: mnFontNameSID = nInt; break;      // "FontName"
             default: break; // TODO: handle more string dictops?
             }
             break;
         case 'P':   // private dict
-            mpCffLocal->mnPrivDictBase = pop();
-            mpCffLocal->mnPrivDictSize = pop();
+            mpCffLocal->mnPrivDictBase = popInt();
+            mpCffLocal->mnPrivDictSize = popInt();
             break;
         case 'r': { // ROS operands
-            int nSid1 = pop();
-            int nSid2 = pop();
+            int nSid1 = popInt();
+            int nSid2 = popInt();
             (void)nSid1; // TODO: use
             (void)nSid2; // TODO: use
-            nVal = pop();
+            nVal = popVal();
             mbCIDFont = true;
             } break;
         case 't':   // CharstringType
-            nVal = pop();
-            setCharStringType( nVal);
+            nInt = popInt();
+            setCharStringType( nInt );
             break;
         }
 
         return;
     }
 
-    if( (c >= 32) || (c == 28)) {
+    if( (c >= 32) || (c == 28) ) {
 //      --mpReadPtr;
         read2push();
-    } else if( c == 29) {       // longint
+    } else if( c == 29 ) {      // longint
         ++mpReadPtr;            // skip 29
         int nS32 = mpReadPtr[0] << 24;
         nS32 += mpReadPtr[1] << 16;
@@ -711,13 +751,13 @@ void CffSubsetterContext::readDictOp( void)
         if( (sizeof(nS32) != 4) && (nS32 & (1<<31)))
             nS32 |= (~0U) << 31;    // assuming 2s complement
         mpReadPtr += 4;
-        nVal = nS32;
-        push( nVal);
+        nVal = static_cast<ValType>(nS32);
+        push( nVal );
     } else if( c == 30) {       // real number
         ++mpReadPtr; // skip 30
-        const double fReal = readRealVal();
+        const RealType fReal = readRealVal();
         // push value onto stack
-        nVal = static_cast<int>(fReal+0.5); //TODO!!! allow float on operand stack!
+        nVal = fReal;
         push( nVal);
     }
 }
@@ -759,12 +799,12 @@ void CffSubsetterContext::readTypeOp( void)
         case 'C': nMinStack = 6; nMaxStack = 999; break;
         case 'E': nMinStack = 1; nMaxStack = 999; break;
         case 'G': nMinStack = 1; nMaxStack = 999; // global subr
-            nVal = peek();
+            nVal = peekInt();
             // TODO global subr
             break;
         case 'L':   // local subr
             nMinStack = 1; nMaxStack = 999;
-            nVal = peek();
+            nVal = peekInt();
             // TODO local subr
             break;
         case 'I':   // operands for "index"
@@ -830,57 +870,70 @@ void CffSubsetterContext::readTypeOp( void)
 
 // --------------------------------------------------------------------
 
-void CffSubsetterContext::read2push( void)
+void CffSubsetterContext::read2push()
 {
-    int nVal = 0;
+    ValType aVal = 0;
 
     const U8*& p = mpReadPtr;
     const U8 c = *p;
-    if( c == 28) {
+    if( c == 28 ) {
         short nS16 = (p[1] << 8) + p[2];
         if( (sizeof(nS16) != 2) && (nS16 & (1<<15)))
             nS16 |= (~0U) << 15;    // assuming 2s complement
-        nVal = nS16;
+        aVal = nS16;
         p += 3;
-    } else if( c <= 246) {      // -107..+107
-        nVal = p[0] - 139;
+    } else if( c <= 246 ) {     // -107..+107
+        aVal = static_cast<ValType>(p[0] - 139);
         p += 1;
-    } else if( c <= 250) {      // +108..+1131
-        nVal = ((p[0] << 8) + p[1]) - 63124;
+    } else if( c <= 250 ) {     // +108..+1131
+        aVal = static_cast<ValType>(((p[0] << 8) + p[1]) - 63124);
         p += 2;
-    } else if( c <= 254) {      // -108..-1131
-        nVal = 64148 - ((p[0] << 8) + p[1]);
+    } else if( c <= 254 ) {     // -108..-1131
+        aVal = static_cast<ValType>(64148 - ((p[0] << 8) + p[1]));
         p += 2;
     } else /*if( c == 255)*/ {  // Fixed16.16
-        nVal = (p[1] << 8) + p[2];
-        // TODO: read non-integer part
+        int nS32 = (p[1] << 24) + (p[2] << 16) + (p[3] << 8) + p[4];
+        if( (sizeof(nS32) != 2) && (nS32 & (1<<31)))
+            nS32 |= (~0U) << 31;    // assuming 2s complement
+        aVal = static_cast<ValType>(nS32 * (1.0 / 0x10000));
         p += 5;
     }
 
-    push( nVal);
+    push( aVal);
 }
 
 // --------------------------------------------------------------------
 
-void CffSubsetterContext::writeType1Val( int/*TODO: double*/ nVal)
+void CffSubsetterContext::writeType1Val( ValType aVal)
 {
     U8* pOut = mpWritePtr;
-    if( (nVal >= -107) && (nVal <= +107)) {
-        *(pOut++) = static_cast<U8>(nVal + 139);    // -107..+107
-    } else if( (nVal >= -1131) && (nVal <= +1131)) {
-        if( nVal >= 0)
-            nVal += 63124;                          // +108..+1131
+
+    int nInt = static_cast<int>(aVal);
+    static const int nOutCharstrType = 1;
+    if( (nInt != aVal) && (nOutCharstrType == 2)) {
+        // numtype==255 means int32 for Type1, but 16.16 for Type2 charstrings!!!
+        *(pOut++) = 255;                            // Fixed 16.16
+        *(pOut++) = static_cast<U8>(nInt >> 8);
+        *(pOut++) = static_cast<U8>(nInt);
+        nInt = static_cast<int>(aVal * 0x10000) & 0xFFFF;
+        *(pOut++) = static_cast<U8>(nInt >> 8);
+        *(pOut++) = static_cast<U8>(nInt);
+    } else if( (nInt >= -107) && (nInt <= +107)) {
+        *(pOut++) = static_cast<U8>(nInt + 139);    // -107..+107
+    } else if( (nInt >= -1131) && (nInt <= +1131)) {
+        if( nInt >= 0)
+            nInt += 63124;                          // +108..+1131
         else
-            nVal = 64148 - nVal;                    // -108..-1131
-        *(pOut++) = static_cast<U8>(nVal >> 8);
-        *(pOut++) = static_cast<U8>(nVal);
-    } else {
+            nInt = 64148 - nInt;                    // -108..-1131
+        *(pOut++) = static_cast<U8>(nInt >> 8);
+        *(pOut++) = static_cast<U8>(nInt);
+    } else if( nOutCharstrType == 1) {
         // numtype==255 means int32 for Type1, but 16.16 for Type2 charstrings!!!
         *(pOut++) = 255;
-        *(pOut++) = static_cast<U8>(nVal >> 24);
-        *(pOut++) = static_cast<U8>(nVal >> 16);
-        *(pOut++) = static_cast<U8>(nVal >> 8);
-        *(pOut++) = static_cast<U8>(nVal);
+        *(pOut++) = static_cast<U8>(nInt >> 24);
+        *(pOut++) = static_cast<U8>(nInt >> 16);
+        *(pOut++) = static_cast<U8>(nInt >> 8);
+        *(pOut++) = static_cast<U8>(nInt);
     }
 
     mpWritePtr = pOut;
@@ -890,8 +943,8 @@ void CffSubsetterContext::writeType1Val( int/*TODO: double*/ nVal)
 
 inline void CffSubsetterContext::pop2write( void)
 {
-    int nVal = pop();
-    writeType1Val( nVal);
+    const ValType aVal = popVal();
+    writeType1Val( aVal);
 }
 
 // --------------------------------------------------------------------
@@ -915,8 +968,8 @@ void CffSubsetterContext::pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTy
 {
     for( int i = 0; i < mnStackIdx;) {
         for( int j = 0; j < nArgsPerTypo; ++j) {
-            int nVal = mnValStack[i+j];
-            writeType1Val( nVal);
+            const ValType aVal = mnValStack[i+j];
+            writeType1Val( aVal);
         }
         i += nArgsPerTypo;
         writeTypeOp( nTypeOp);
@@ -931,8 +984,8 @@ void CffSubsetterContext::popAll2Write( int nTypeOp)
 {
     // pop in reverse order, then write
     for( int i = 0; i < mnStackIdx; ++i) {
-        int nVal = mnValStack[i];
-        writeType1Val( nVal);
+        const ValType aVal = mnValStack[i];
+        writeType1Val( aVal);
     }
     clear();
     writeTypeOp( nTypeOp);
@@ -944,23 +997,23 @@ void CffSubsetterContext::writeCurveTo( int nStackPos,
     int nIX1, int nIY1, int nIX2, int nIY2, int nIX3, int nIY3)
 {
     // get the values from the stack
-    const int nDX1 = nIX1 ? mnValStack[ nStackPos+nIX1] : 0;
-    const int nDY1 = nIY1 ? mnValStack[ nStackPos+nIY1] : 0;
-    const int nDX2 = nIX2 ? mnValStack[ nStackPos+nIX2] : 0;
-    const int nDY2 = nIY2 ? mnValStack[ nStackPos+nIY2] : 0;
-    const int nDX3 = nIX3 ? mnValStack[ nStackPos+nIX3] : 0;
-    const int nDY3 = nIY3 ? mnValStack[ nStackPos+nIY3] : 0;
+    const ValType nDX1 = nIX1 ? mnValStack[ nStackPos+nIX1 ] : 0;
+    const ValType nDY1 = nIY1 ? mnValStack[ nStackPos+nIY1 ] : 0;
+    const ValType nDX2 = nIX2 ? mnValStack[ nStackPos+nIX2 ] : 0;
+    const ValType nDY2 = nIY2 ? mnValStack[ nStackPos+nIY2 ] : 0;
+    const ValType nDX3 = nIX3 ? mnValStack[ nStackPos+nIX3 ] : 0;
+    const ValType nDY3 = nIY3 ? mnValStack[ nStackPos+nIY3 ] : 0;
 
     // emit the curveto operator and operands
     // TODO: determine the most efficient curveto operator
     // TODO: depending on type1op or type2op target
-    writeType1Val( nDX1);
-    writeType1Val( nDY1);
-    writeType1Val( nDX2);
-    writeType1Val( nDY2);
-    writeType1Val( nDX3);
-    writeType1Val( nDY3);
-    writeTypeOp( TYPE1OP::RCURVETO);
+    writeType1Val( nDX1 );
+    writeType1Val( nDY1 );
+    writeType1Val( nDX2 );
+    writeType1Val( nDY2 );
+    writeType1Val( nDX3 );
+    writeType1Val( nDY3 );
+    writeTypeOp( TYPE1OP::RCURVETO );
 }
 
 // --------------------------------------------------------------------
@@ -969,7 +1022,7 @@ void CffSubsetterContext::convertOneTypeOp( void)
 {
     const int nType2Op = *(mpReadPtr++);
 
-    int i, nVal; // prevent WAE for declarations inside switch cases
+    int i, nInt; // prevent WAE for declarations inside switch cases
     // convert each T2op
     switch( nType2Op) {
     case TYPE2OP::T2ESC:
@@ -977,12 +1030,12 @@ void CffSubsetterContext::convertOneTypeOp( void)
         break;
     case TYPE2OP::HSTEM:
     case TYPE2OP::VSTEM:
-        addHints( nType2Op == TYPE2OP::VSTEM);
+        addHints( nType2Op == TYPE2OP::VSTEM );
 #ifndef IGNORE_HINTS
-        for( i = 0; i < mnHintSize; i+=2) {
+        for( i = 0; i < mnHintSize; i+=2 ) {
             writeType1Val( mnHintStack[i]);
             writeType1Val( mnHintStack[i+1] - mnHintStack[i]);
-            writeTypeOp( nType2Op);
+            writeTypeOp( nType2Op );
         }
 #endif // IGNORE_HINTS
         break;
@@ -1063,9 +1116,9 @@ void CffSubsetterContext::convertOneTypeOp( void)
     case TYPE2OP::CALLSUBR:
     case TYPE2OP::CALLGSUBR:
         {
-        nVal = pop();
+        nInt = popInt();
         const bool bGlobal = (nType2Op == TYPE2OP::CALLGSUBR);
-        callType2Subr( bGlobal, nVal);
+        callType2Subr( bGlobal, nInt);
         }
         break;
     case TYPE2OP::RETURN:
@@ -1131,19 +1184,19 @@ void CffSubsetterContext::convertOneTypeOp( void)
         {
         bool bVert = (nType2Op == TYPE2OP::VHCURVETO);
         i = 0;
-        nVal = 0;
-        if( mnStackIdx & 1)
-            nVal = mnValStack[ --mnStackIdx];
+        nInt = 0;
+        if( mnStackIdx & 1 )
+            nInt = static_cast<int>(mnValStack[ --mnStackIdx ]);
         while( (i += 4) <= mnStackIdx) {
             // TODO: use writeCurveTo()
-            if( bVert) writeType1Val( 0);
-            writeType1Val( mnValStack[i-4]);
-            if( !bVert) writeType1Val( 0);
-            writeType1Val( mnValStack[i-3]);
-            writeType1Val( mnValStack[i-2]);
-            if( !bVert) writeType1Val( (i==mnStackIdx) ? nVal : 0);
-            writeType1Val( mnValStack[i-1]);
-            if( bVert) writeType1Val( (i==mnStackIdx) ? nVal : 0 );
+            if( bVert ) writeType1Val( 0 );
+            writeType1Val( mnValStack[i-4] );
+            if( !bVert ) writeType1Val( 0);
+            writeType1Val( mnValStack[i-3] );
+            writeType1Val( mnValStack[i-2] );
+            if( !bVert ) writeType1Val( static_cast<ValType>((i==mnStackIdx) ? nInt : 0) );
+            writeType1Val( mnValStack[i-1] );
+            if( bVert ) writeType1Val( static_cast<ValType>((i==mnStackIdx) ? nInt : 0) );
             bVert = !bVert;
             writeTypeOp( TYPE2OP::RCURVETO);
         }
@@ -1195,83 +1248,83 @@ void CffSubsetterContext::convertOneTypeOp( void)
 void CffSubsetterContext::convertOneTypeEsc( void)
 {
     const int nType2Esc = *(mpReadPtr++);
-    int* pTop = &mnValStack[ mnStackIdx-1];
+    ValType* pTop = &mnValStack[ mnStackIdx-1];
     // convert each T2op
     switch( nType2Esc) {
     case TYPE2OP::AND:
-        assert( mnStackIdx >= 2);
-        pTop[0] &= pTop[-1];
+        assert( mnStackIdx >= 2 );
+        pTop[0] = static_cast<ValType>(static_cast<int>(pTop[0]) & static_cast<int>(pTop[-1]));
         --mnStackIdx;
         break;
     case TYPE2OP::OR:
-        assert( mnStackIdx >= 2);
-        pTop[0] |= pTop[-1];
+        assert( mnStackIdx >= 2 );
+        pTop[0] = static_cast<ValType>(static_cast<int>(pTop[0]) | static_cast<int>(pTop[-1]));
         --mnStackIdx;
         break;
     case TYPE2OP::NOT:
-        assert( mnStackIdx >= 1);
-        pTop[0] = !pTop[0];
+        assert( mnStackIdx >= 1 );
+        pTop[0] = (pTop[0] == 0);
         break;
     case TYPE2OP::ABS:
-        assert( mnStackIdx >= 1);
+        assert( mnStackIdx >= 1 );
         if( pTop[0] >= 0)
             break;
         // fall through
     case TYPE2OP::NEG:
-        assert( mnStackIdx >= 1);
+        assert( mnStackIdx >= 1 );
         pTop[0] = -pTop[0];
         break;
     case TYPE2OP::ADD:
-        assert( mnStackIdx >= 2);
+        assert( mnStackIdx >= 2 );
         pTop[0] += pTop[-1];
         --mnStackIdx;
         break;
     case TYPE2OP::SUB:
-        assert( mnStackIdx >= 2);
+        assert( mnStackIdx >= 2 );
         pTop[0] -= pTop[-1];
         --mnStackIdx;
         break;
     case TYPE2OP::MUL:
-        assert( mnStackIdx >= 2);
+        assert( mnStackIdx >= 2 );
         if( pTop[-1])
             pTop[0] *= pTop[-1];
         --mnStackIdx;
         break;
     case TYPE2OP::DIV:
-        assert( mnStackIdx >= 2);
+        assert( mnStackIdx >= 2 );
         if( pTop[-1])
             pTop[0] /= pTop[-1];
         --mnStackIdx;
         break;
     case TYPE2OP::EQ:
-        assert( mnStackIdx >= 2);
+        assert( mnStackIdx >= 2 );
         pTop[0] = (pTop[0] == pTop[-1]);
         --mnStackIdx;
         break;
     case TYPE2OP::DROP:
-        assert( mnStackIdx >= 1);
+        assert( mnStackIdx >= 1 );
         --mnStackIdx;
         break;
     case TYPE2OP::PUT: {
-        assert( mnStackIdx >= 2);
-        const int nIdx = pTop[0];
-        assert( nIdx >= 0);
-        assert( nIdx < NMAXTRANS);
+        assert( mnStackIdx >= 2 );
+        const int nIdx = static_cast<int>(pTop[0]);
+        assert( nIdx >= 0 );
+        assert( nIdx < NMAXTRANS );
         mnTransVals[ nIdx] = pTop[-1];
         mnStackIdx -= 2;
         break;
         }
     case TYPE2OP::GET: {
-        assert( mnStackIdx >= 1);
-        const int nIdx = pTop[0];
-        assert( nIdx >= 0);
-        assert( nIdx < NMAXTRANS);
-        pTop[0] = mnTransVals[ nIdx];
+        assert( mnStackIdx >= 1 );
+        const int nIdx = static_cast<int>(pTop[0]);
+        assert( nIdx >= 0 );
+        assert( nIdx < NMAXTRANS );
+        pTop[0] = mnTransVals[ nIdx ];
         break;
         }
     case TYPE2OP::IFELSE: {
-        assert( mnStackIdx >= 4);
-        if( pTop[-1] > pTop[0])
+        assert( mnStackIdx >= 4 );
+        if( pTop[-1] > pTop[0] )
             pTop[-3] = pTop[-2];
         mnStackIdx -= 3;
         break;
@@ -1284,69 +1337,69 @@ void CffSubsetterContext::convertOneTypeEsc( void)
         // TODO: implement
         break;
     case TYPE2OP::DUP:
-        assert( mnStackIdx >= 1);
+        assert( mnStackIdx >= 1 );
         pTop[+1] = pTop[0];
         ++mnStackIdx;
         break;
     case TYPE2OP::EXCH: {
-        assert( mnStackIdx >= 2);
-        const int nVal = pTop[0];
+        assert( mnStackIdx >= 2 );
+        const ValType nVal = pTop[0];
         pTop[0] = pTop[-1];
         pTop[-1] = nVal;
         break;
         }
     case TYPE2OP::INDEX: {
-        assert( mnStackIdx >= 1);
-        const int nVal = pTop[0];
-        assert( nVal >= 0);
-        assert( nVal < mnStackIdx-1);
+        assert( mnStackIdx >= 1 );
+        const int nVal = static_cast<int>(pTop[0]);
+        assert( nVal >= 0 );
+        assert( nVal < mnStackIdx-1 );
         pTop[0] = pTop[-1-nVal];
         break;
         }
     case TYPE2OP::ROLL: {
-        assert( mnStackIdx >= 1);
-        const int nNum = pTop[0];
+        assert( mnStackIdx >= 1 );
+        const int nNum = static_cast<int>(pTop[0]);
         assert( nNum >= 0);
-        assert( nNum < mnStackIdx-2);
+        assert( nNum < mnStackIdx-2 );
         (void)nNum; // TODO: implement
-        const int nOfs = pTop[-1];
+        const int nOfs = static_cast<int>(pTop[-1]);
         mnStackIdx -= 2;
         (void)nOfs;// TODO: implement
         break;
         }
     case TYPE2OP::HFLEX1: {
-            assert( mnStackIdx == 9);
-            writeCurveTo( mnStackIdx, -9, -8, -7, -6, -5, -6);
-            writeCurveTo( mnStackIdx, -4, -6, -3, -2, -1, -8);
+            assert( mnStackIdx == 9 );
+            writeCurveTo( mnStackIdx, -9, -8, -7, -6, -5, -6 );
+            writeCurveTo( mnStackIdx, -4, -6, -3, -2, -1, -8 );
             mnStackIdx -= 9;
         }
         break;
     case TYPE2OP::HFLEX: {
-            assert( mnStackIdx == 7);
-            writeCurveTo( mnStackIdx, -7,  0, -6, -5, -4, -5);
-            writeCurveTo( mnStackIdx, -3, -5, -2,  0, -1,  0);
+            assert( mnStackIdx == 7 );
+            writeCurveTo( mnStackIdx, -7,  0, -6, -5, -4, -5 );
+            writeCurveTo( mnStackIdx, -3, -5, -2,  0, -1,  0 );
             mnStackIdx -= 7;
         }
         break;
     case TYPE2OP::FLEX: {
-            assert( mnStackIdx == 13);
-            writeCurveTo( mnStackIdx, -13, -12, -11, -10, -9, -8);
-            writeCurveTo( mnStackIdx,  -7,  -6,  -5,  -4, -3, -2);
-            const int nFlexDepth =  mnValStack[ mnStackIdx-1];
+            assert( mnStackIdx == 13 );
+            writeCurveTo( mnStackIdx, -13, -12, -11, -10, -9, -8 );
+            writeCurveTo( mnStackIdx,  -7,  -6,  -5,  -4, -3, -2 );
+            const ValType nFlexDepth =  mnValStack[ mnStackIdx-1 ];
             (void)nFlexDepth; // ignoring nFlexDepth
             mnStackIdx -= 13;
         }
         break;
     case TYPE2OP::FLEX1: {
-            assert( mnStackIdx == 11);
+            assert( mnStackIdx == 11 );
             // write the first part of the flex1-hinted curve
-            writeCurveTo( mnStackIdx, -11, -10, -9, -8, -7, -6);
+            writeCurveTo( mnStackIdx, -11, -10, -9, -8, -7, -6 );
 
             // determine if nD6 is horizontal or vertical
             const int i = mnStackIdx;
-            int nDeltaX = mnValStack[i-11] + mnValStack[i-9] + mnValStack[i-7] + mnValStack[i-5] + mnValStack[i-3];
+            ValType nDeltaX = mnValStack[i-11] + mnValStack[i-9] + mnValStack[i-7] + mnValStack[i-5] + mnValStack[i-3];
             if( nDeltaX < 0 ) nDeltaX = -nDeltaX;
-            int nDeltaY = mnValStack[i-10] + mnValStack[i-8] + mnValStack[i-6] + mnValStack[i-4] + mnValStack[i-2];
+            ValType nDeltaY = mnValStack[i-10] + mnValStack[i-8] + mnValStack[i-6] + mnValStack[i-4] + mnValStack[i-2];
             if( nDeltaY < 0 ) nDeltaY = -nDeltaY;
             const bool bVertD6 = (nDeltaY > nDeltaX);
 
@@ -1473,14 +1526,14 @@ if( mbSawError) {
 
 // --------------------------------------------------------------------
 
-double CffSubsetterContext::readRealVal()
+RealType CffSubsetterContext::readRealVal()
 {
     // TODO: more thorough number validity test
     bool bComma = false;
     int nExpVal = 0;
     int nExpSign = 0;
     S64 nNumber = 0;
-    double fReal = +1.0;
+    RealType fReal = +1.0;
     for(;;){
         const U8 c = *(mpReadPtr++); // read nibbles
         // parse high nibble
@@ -1548,6 +1601,7 @@ double CffSubsetterContext::readRealVal()
 // prepare to access an element inside a CFF/CID index table
 int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
 {
+    assert( (nIndexBase > 0) && (mpBasePtr + nIndexBase + 3 <= mpBaseEnd));
     if( nDataIndex < 0)
         return -1;
     mpReadPtr = mpBasePtr + nIndexBase;
@@ -1578,6 +1632,7 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
     mpReadEnd = mpReadPtr + (nOfs2 - nOfs1);
     assert( nOfs1 >= 0);
     assert( nOfs2 >= nOfs1);
+    assert( mpReadPtr <= mpBaseEnd);
     assert( mpReadEnd <= mpBaseEnd);
     return (nOfs2 - nOfs1);
 }
@@ -1587,10 +1642,12 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
 // skip over a CFF/CID index table
 void CffSubsetterContext::seekIndexEnd( int nIndexBase)
 {
+    assert( (nIndexBase > 0) && (mpBasePtr + nIndexBase + 3 <= mpBaseEnd));
     mpReadPtr = mpBasePtr + nIndexBase;
     const int nDataCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
     const int nDataOfsSz = mpReadPtr[2];
     mpReadPtr += 3 + nDataOfsSz * nDataCount;
+    assert( mpReadPtr <= mpBaseEnd);
     int nEndOfs = 0;
     switch( nDataOfsSz) {
         default: fprintf( stderr, "\tINVALID nDataOfsSz=%d\n\n", nDataOfsSz); return;
@@ -1602,6 +1659,8 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
     mpReadPtr += nDataOfsSz;
     mpReadPtr += nEndOfs - 1;
     mpReadEnd = mpBaseEnd;
+    assert( nEndOfs >= 0);
+    assert( mpReadEnd <= mpBaseEnd);
 }
 
 // ====================================================================
@@ -1944,7 +2003,7 @@ public:
     void        emitAllCrypted( void);
     int         tellPos( void) const;
     void        updateLen( int nTellPos, int nLength);
-    void        emitIntVector( const char* pLineHead, const char* pLineTail, const IntVector&);
+    void        emitValVector( const char* pLineHead, const char* pLineTail, const ValVector&);
 private:
     FILE*       mpFileOut;
     bool        mbCloseOutfile;
@@ -2095,8 +2154,8 @@ void Type1Emitter::emitAllCrypted( void)
 
 // --------------------------------------------------------------------
 
-void Type1Emitter::emitIntVector( const char* pLineHead, const char* pLineTail,
-    const IntVector& rVector)
+void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
+    const ValVector& rVector)
 {
     // ignore empty vectors
     if( rVector.empty())
@@ -2105,15 +2164,15 @@ void Type1Emitter::emitIntVector( const char* pLineHead, const char* pLineTail,
     // emit the line head
     mpPtr += sprintf( mpPtr, pLineHead);
     // emit the vector values
-    IntVector::value_type nVal = 0;
-    for( IntVector::const_iterator it = rVector.begin();;) {
-        nVal = *it;
+    ValVector::value_type aVal = 0;
+    for( ValVector::const_iterator it = rVector.begin();;) {
+        aVal = *it;
         if( ++it == rVector.end() )
             break;
-        mpPtr += sprintf( mpPtr, "%d ", nVal);
+        mpPtr += sprintf( mpPtr, "%g ", aVal);
     }
     // emit the last value
-    mpPtr += sprintf( mpPtr, "%d", nVal);
+    mpPtr += sprintf( mpPtr, "%g", aVal);
     // emit the line tail
     mpPtr += sprintf( mpPtr, pLineTail);
 }
@@ -2178,12 +2237,16 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "/PaintType 0 def\n");
     pOut += sprintf( pOut, "/FontName /%s def\n", rEmitter.maSubsetName);
     pOut += sprintf( pOut, "/UniqueID %d def\n", nUniqueId);
-    pOut += sprintf( pOut, "/FontMatrix [0.001 0 0 0.001 0 0 ]readonly def\n");
+    // emit FontMatrix
+    if( maFontMatrix.size() == 6)
+        rEmitter.emitValVector( "/FontMatrix [", "]readonly def\n", maFontMatrix);
+    else // emit default FontMatrix if needed
+        pOut += sprintf( pOut, "/FontMatrix [0.001 0 0 0.001 0 0]readonly def\n");
+    // emit FontBBox
     if( maFontBBox.size() == 4)
-        pOut += sprintf( pOut, "/FontBBox [%d %d %d %d ]readonly def\n",
-            maFontBBox[0], maFontBBox[1], maFontBBox[2], maFontBBox[3]);
-    else
-        pOut += sprintf( pOut, "/FontBBox [0 0 999 999]readonly def\n");
+        rEmitter.emitValVector( "/FontBBox {", "}readonly def\n", maFontBBox);
+    else // emit default FontBBox if needed
+        pOut += sprintf( pOut, "/FontBBox {0 0 999 999}readonly def\n");
     // emit FONTINFO into TOPDICT
     pOut += sprintf( pOut,
         "/FontInfo 2 dict dup begin\n"  // TODO: check fontinfo entry count
@@ -2259,12 +2322,12 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 #else
     // emit blue hint related privdict entries
     if( !mpCffLocal->maBlueValues.empty())
-        rEmitter.emitIntVector( "/BlueValues [", "]ND\n", mpCffLocal->maBlueValues);
+        rEmitter.emitValVector( "/BlueValues [", "]ND\n", mpCffLocal->maBlueValues);
     else
         pOut += sprintf( pOut, "/BlueValues []ND\n"); // default to empty BlueValues
-    rEmitter.emitIntVector( "/OtherBlues [", "]ND\n", mpCffLocal->maOtherBlues);
-    rEmitter.emitIntVector( "/FamilyBlues [", "]ND\n", mpCffLocal->maFamilyBlues);
-    rEmitter.emitIntVector( "/FamilyOtherBlues [", "]ND\n", mpCffLocal->maFamilyOtherBlues);
+    rEmitter.emitValVector( "/OtherBlues [", "]ND\n", mpCffLocal->maOtherBlues);
+    rEmitter.emitValVector( "/FamilyBlues [", "]ND\n", mpCffLocal->maFamilyBlues);
+    rEmitter.emitValVector( "/FamilyOtherBlues [", "]ND\n", mpCffLocal->maFamilyOtherBlues);
 
     if( mpCffLocal->mfBlueScale)
         pOut += sprintf( pOut, "/BlueScale %.6f def\n", mpCffLocal->mfBlueScale);
@@ -2278,8 +2341,8 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += sprintf( pOut, "/StdHW [%d] def\n", mpCffLocal->mnStemStdHW);
     if( mpCffLocal->mnStemStdVW)
         pOut += sprintf( pOut, "/StdVW [%d] def\n", mpCffLocal->mnStemStdVW);
-    rEmitter.emitIntVector( "/StemSnapH [", "]ND\n", mpCffLocal->maStemSnapH);
-    rEmitter.emitIntVector( "/StemSnapV [", "]ND\n", mpCffLocal->maStemSnapV);
+    rEmitter.emitValVector( "/StemSnapH [", "]ND\n", mpCffLocal->maStemSnapH);
+    rEmitter.emitValVector( "/StemSnapV [", "]ND\n", mpCffLocal->maStemSnapV);
 
     // emit other hints
     if( mpCffLocal->mbForceBold)
@@ -2383,7 +2446,8 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 
     // provide details to the subset requesters, TODO: move into own method?
     // note: Top and Bottom are flipped between Type1 and VCL
-    rFSInfo.m_aFontBBox = Rectangle( Point( maFontBBox[0], maFontBBox[1] ), Point( maFontBBox[2], maFontBBox[3] ) );
+    rFSInfo.m_aFontBBox = Rectangle( Point( static_cast<long>(maFontBBox[0]), static_cast<long>(maFontBBox[1]) ),
+                                     Point( static_cast<long>(maFontBBox[2]), static_cast<long>(maFontBBox[3]) ) );
     // PDF-Spec says the values below mean the ink bounds!
     // TODO: use better approximations for these ink bounds
     rFSInfo.m_nAscent  = +rFSInfo.m_aFontBBox.Bottom(); // for capital letters

@@ -152,10 +152,17 @@ static vector< ::rtl::OUString > getInfoFromInd( ::rtl::OUString aInd )
 static sal_Bool shorterUrl( ::rtl::OUString& aURL )
 {
     sal_Int32 aInd = aURL.lastIndexOf( sal_Unicode( '/' ) );
-    if( aInd > 0  && aURL.indexOf( ::rtl::OUString::createFromAscii( "://" ) ) != aInd-2 )
+
+    if( aInd > 0  )
     {
-        aURL = aURL.copy( 0, aInd );
-        return sal_True;
+        sal_Int32 aPrevInd = aURL.lastIndexOf( sal_Unicode( '/' ), aInd );
+        if ( aURL.indexOf( ::rtl::OUString::createFromAscii( "://" ) )
+                != aPrevInd - 2 ||
+             aInd != aURL.getLength() - 1 )
+        {
+            aURL = aURL.copy( 0, aInd );
+            return sal_True;
+        }
     }
 
     return sal_False;
@@ -753,37 +760,14 @@ void PasswordContainer::PrivateAdd( const ::rtl::OUString& Url, const ::rtl::OUS
 
 UrlRecord SAL_CALL PasswordContainer::find( const ::rtl::OUString& aURL, const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( mMutex );
+    return find( aURL, rtl::OUString(), false, aHandler );
+}
 
-    if( !m_aContainer.empty() )
-    {
-        ::rtl::OUString aUrl( aURL );
-        PassMap::iterator aIter = m_aContainer.find( aUrl );
+//-------------------------------------------------------------------------
 
-        if( aIter != m_aContainer.end() )
-            return UrlRecord( aIter->first, CopyToUserRecordSequence( aIter->second, aHandler ) );
-
-        // each iteration remove last '/...' section from the aUrl
-        // while it's possible, up to the most left '://'
-        while( shorterUrl( aUrl ) )
-        {
-            // first look for <url>/somename and then look for <url>/somename/...
-            aIter = m_aContainer.find( aUrl );
-            if( aIter != m_aContainer.end() )
-                return UrlRecord( aIter->first, CopyToUserRecordSequence( aIter->second, aHandler ) );
-            else
-            {
-                ::rtl::OUString tmpUrl( aUrl );
-                tmpUrl += ::rtl::OUString::createFromAscii( "/" );
-
-                aIter = m_aContainer.lower_bound( aUrl );
-                if( aIter != m_aContainer.end() )
-                    return UrlRecord( aIter->first, CopyToUserRecordSequence( aIter->second, aHandler ) );
-            }
-        }
-    }
-
-    return UrlRecord();
+UrlRecord SAL_CALL PasswordContainer::findForName( const ::rtl::OUString& aURL, const ::rtl::OUString& aName, const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
+{
+    return find( aURL, aName, true, aHandler );
 }
 
 //-------------------------------------------------------------------------
@@ -810,48 +794,76 @@ Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >&
 
 //-------------------------------------------------------------------------
 
-UrlRecord SAL_CALL PasswordContainer::findForName( const ::rtl::OUString& aURL, const ::rtl::OUString& aName, const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
+bool PasswordContainer::createUrlRecord(
+    const PassMap::iterator & rIter,
+    bool bName,
+    const ::rtl::OUString & aName,
+    const Reference< XInteractionHandler >& aHandler,
+    UrlRecord & rRec )
+        throw( RuntimeException )
 {
+    if ( bName )
+    {
+        Sequence< UserRecord > aUsrRec
+            = FindUsr( rIter->second, aName, aHandler );
+        if( aUsrRec.getLength() )
+        {
+            rRec = UrlRecord( rIter->first, aUsrRec );
+            return true;
+        }
+    }
+    else
+    {
+        rRec = UrlRecord(
+            rIter->first,
+            CopyToUserRecordSequence( rIter->second, aHandler ) );
+        return true;
+    }
+    return false;
+}
 
+//-------------------------------------------------------------------------
+
+UrlRecord PasswordContainer::find(
+    const ::rtl::OUString& aURL,
+    const ::rtl::OUString& aName,
+    bool bName, // only needed to support empty user names
+    const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
+{
     ::osl::MutexGuard aGuard( mMutex );
-    if( !m_aContainer.empty() )
+
+    if( !m_aContainer.empty() && aURL.getLength() )
     {
         ::rtl::OUString aUrl( aURL );
-        PassMap::iterator aIter = m_aContainer.find( aUrl );
-
-        if( aIter != m_aContainer.end() )
-        {
-            Sequence< UserRecord > aUsrRec = FindUsr( aIter->second, aName, aHandler );
-            if( aUsrRec.getLength() )
-                return UrlRecord( aIter->first, aUsrRec );
-        }
 
         // each iteration remove last '/...' section from the aUrl
         // while it's possible, up to the most left '://'
-        while( shorterUrl( aUrl ) )
+        do
         {
             // first look for <url>/somename and then look for <url>/somename/...
-            aIter = m_aContainer.find( aUrl );
+            PassMap::iterator aIter = m_aContainer.find( aUrl );
             if( aIter != m_aContainer.end() )
             {
-                Sequence< UserRecord > aUsrRec = FindUsr( aIter->second, aName, aHandler );
-                if( aUsrRec.getLength() )
-                    return UrlRecord( aIter->first, aUsrRec );
+                UrlRecord aRec;
+                if ( createUrlRecord( aIter, bName, aName, aHandler, aRec ) )
+                  return aRec;
             }
             else
             {
                 ::rtl::OUString tmpUrl( aUrl );
-                tmpUrl += ::rtl::OUString::createFromAscii( "/" );
+                if ( tmpUrl.getStr()[tmpUrl.getLength() - 1] != (sal_Unicode)'/' )
+                    tmpUrl += ::rtl::OUString::createFromAscii( "/" );
 
-                aIter = m_aContainer.lower_bound( aUrl );
-                if( aIter != m_aContainer.end() )
+                aIter = m_aContainer.lower_bound( tmpUrl );
+                if( aIter != m_aContainer.end() && aIter->first.match( tmpUrl ) )
                 {
-                    Sequence< UserRecord > aUsrRec = FindUsr( aIter->second, aName, aHandler );
-                    if( aUsrRec.getLength() )
-                        return UrlRecord( aIter->first, aUsrRec );
+                    UrlRecord aRec;
+                    if ( createUrlRecord( aIter, bName, aName, aHandler, aRec ) )
+                      return aRec;
                 }
             }
         }
+        while( shorterUrl( aUrl ) && aUrl.getLength() );
     }
 
     return UrlRecord();
@@ -1355,6 +1367,35 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     return ( m_pStorageFile->useStorage() && m_pStorageFile->getEncodedMP( aEncodedMP ) && !aEncodedMP.getLength() );
 }
 
+
+//-------------------------------------------------------------------------
+void SAL_CALL PasswordContainer::addUrl( const ::rtl::OUString& Url, ::sal_Bool MakePersistent )
+    throw (uno::RuntimeException)
+{
+    mUrlContainer.add( Url, MakePersistent );
+}
+
+//-------------------------------------------------------------------------
+::rtl::OUString SAL_CALL PasswordContainer::findUrl( const ::rtl::OUString& Url )
+    throw (uno::RuntimeException)
+{
+    return mUrlContainer.find( Url );
+}
+
+//-------------------------------------------------------------------------
+void SAL_CALL PasswordContainer::removeUrl( const ::rtl::OUString& Url )
+    throw (uno::RuntimeException)
+{
+    mUrlContainer.remove( Url );
+}
+
+//-------------------------------------------------------------------------
+uno::Sequence< ::rtl::OUString > SAL_CALL PasswordContainer::getUrls( ::sal_Bool OnlyPersistent )
+    throw (uno::RuntimeException)
+{
+    return mUrlContainer.list( OnlyPersistent );
+}
+
 //-------------------------------------------------------------------------
 
 void PasswordContainer::Notify()
@@ -1487,7 +1528,9 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
                 aRememberModes, // rRememberPasswordModes
                 RememberAuthentication_NO, // eDefaultRememberPasswordMode
                 aRememberModes, // rRememberAccountModes
-                RememberAuthentication_NO // eDefaultRememberAccountMode
+                RememberAuthentication_NO, // eDefaultRememberAccountMode
+                sal_False, // bCanUseSystemCredentials
+                sal_False  // bDefaultUseSystemCredentials
             );
 
     Sequence<

@@ -1989,6 +1989,12 @@ const ::rtl::OUString& Application::GetDesktopEnvironment()
     return SalGetDesktopEnvironment();
 }
 
+void Application::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType);
+}
+
 BOOL Application::IsAccessibilityEnabled()
 {
     return FALSE;

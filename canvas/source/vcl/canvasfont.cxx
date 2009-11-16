@@ -127,8 +127,19 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        // TODO(F1)
-        return rendering::FontMetrics();
+        OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
+        VirtualDevice aVDev( rOutDev );
+        aVDev.SetFont(getVCLFont());
+        const ::FontMetric& aMetric( aVDev.GetFontMetric() );
+
+        return rendering::FontMetrics(
+            aMetric.GetAscent(),
+            aMetric.GetDescent(),
+            aMetric.GetIntLeading(),
+            aMetric.GetExtLeading(),
+            0,
+            aMetric.GetDescent() / 2.0,
+            aMetric.GetAscent() / 2.0);
     }
 
     uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  ) throw (uno::RuntimeException)

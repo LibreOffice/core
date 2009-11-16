@@ -62,24 +62,70 @@ using namespace ::com::sun::star;
 #define SETNODE_BINDINGS OUString(RTL_CONSTASCII_USTRINGPARAM("Bindings" ))
 #define PROPERTYNAME_BINDINGURL OUString(RTL_CONSTASCII_USTRINGPARAM("BindingURL"))
 
+const char* pEventAsciiNames[] =
+{
+"OnStartApp",
+"OnCloseApp",
+"OnCreate",
+"OnNew",
+"OnLoadFinished",
+"OnLoad",
+"OnPrepareUnload",
+"OnUnload",
+"OnSave",
+"OnSaveDone",
+"OnSaveFailed",
+"OnSaveAs",
+"OnSaveAsDone",
+"OnSaveAsFailed",
+"OnCopyTo",
+"OnCopyToDone",
+"OnCopyToFailed",
+"OnFocus",
+"OnUnfocus",
+"OnPrint",
+"OnViewCreated",
+"OnPrepareViewClosing",
+"OnViewClosed",
+"OnModifyChanged",
+"OnTitleChanged",
+"OnVisAreaChanged",
+"OnModeChanged",
+"OnStorageChanged"
+};
+
 GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     :   ConfigItem( ROOTNODE_EVENTS, CONFIG_MODE_IMMEDIATE_UPDATE )
 {
     // the supported event names
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnStartApp"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnCloseApp"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnNew"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnUnload"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnPrepareUnload"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnLoad"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnSave"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnSaveAs"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnSaveDone"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnSaveAsDone"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnFocus"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnUnfocus"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnPrint"));
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii("OnModifyChanged"));
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STARTAPP] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEAPP] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DOCCREATED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CREATEDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_LOADFINISHED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_OPENDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PREPARECLOSEDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOCDONE] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOCFAILED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOCDONE] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOCFAILED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOCDONE] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOCFAILED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_ACTIVATEDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DEACTIVATEDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PRINTDOC] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_VIEWCREATED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PREPARECLOSEVIEW] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEVIEW] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_MODIFYCHANGED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_TITLECHANGED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_VISAREACHANGED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_MODECHANGED] ) );
+    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STORAGECHANGED] ) );
 
     initBindingInfo();
 
@@ -101,6 +147,14 @@ GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
     {
         Commit();
     }
+}
+
+::rtl::OUString GlobalEventConfig_Impl::GetEventName( sal_Int32 nIndex )
+{
+    if ( nIndex < (sal_Int32) m_supportedEvents.size() )
+        return m_supportedEvents[nIndex];
+    else
+        return rtl::OUString();
 }
 
 //*****************************************************************************************************************
@@ -396,3 +450,9 @@ Mutex& GlobalEventConfig::GetOwnStaticMutex()
     // Return new created or already existing mutex object.
     return *pMutex;
 }
+
+::rtl::OUString GlobalEventConfig::GetEventName( sal_Int32 nIndex )
+{
+    return GlobalEventConfig().m_pImpl->GetEventName( nIndex );
+}
+
