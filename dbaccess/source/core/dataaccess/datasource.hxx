@@ -299,8 +299,6 @@ private:
 
     void clearConnections();
 
-    void impl_insertJavaDriverClassPath_nothrow(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverInfo);
-
 protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };

@@ -211,8 +211,33 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     Reference<XColumnsSupplier> xSup(m_xComposer,UNO_QUERY);
     Reference<XNameAccess> xSourceColumns = m_xTable->getColumns();
 
-    ::dbaccess::getColumnPositions(xSup->getColumns(),xKeyColumns,m_sUpdateTableName,(*m_pKeyColumnNames));
-    ::dbaccess::getColumnPositions(xSup->getColumns(),xSourceColumns,m_sUpdateTableName,(*m_pColumnNames));
+    ::rtl::OUString sCatalog,sSchema,sTable;
+
+    Reference<XPropertySet> xTableProp(m_xTable,UNO_QUERY);
+    Any aCatalog = xTableProp->getPropertyValue(PROPERTY_CATALOGNAME);
+    aCatalog >>= sCatalog;
+    xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+    xTableProp->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+
+    ::std::vector< ::rtl::OUString> aBestRowColumnNames;
+    Reference<XResultSet> xBestRes(xMeta->getBestRowIdentifier(aCatalog,sSchema,sTable,0,sal_False));
+    Reference<XRow> xBestRow(xBestRes,uno::UNO_QUERY);
+    while ( xBestRes->next() )
+    {
+        aBestRowColumnNames.push_back(xBestRow->getString(2));
+    }
+
+    Sequence< ::rtl::OUString> aBestColumnNames;
+    if ( aBestRowColumnNames.empty() )
+    {
+        if ( xKeyColumns.is() )
+            aBestColumnNames = xKeyColumns->getElementNames();
+    }
+    else
+        aBestColumnNames = Sequence< ::rtl::OUString>(&aBestRowColumnNames[0],aBestRowColumnNames.size());
+
+    ::dbaccess::getColumnPositions(xSup->getColumns(),aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames));
+    ::dbaccess::getColumnPositions(xSup->getColumns(),xSourceColumns->getElementNames(),m_sUpdateTableName,(*m_pColumnNames));
 
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
@@ -235,16 +260,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
 
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
-
-    ::rtl::OUStringBuffer aFilter;
-    ::rtl::OUString sCatalog,sSchema,sTable;
-
-    Reference<XPropertySet> xTableProp(m_xTable,UNO_QUERY);
-    xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-    xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-    xTableProp->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-
+    const ::rtl::OUString aQuote    = getIdentifierQuoteString();
     m_aSelectComposedTableName = getComposedTableName(sCatalog,sSchema,sTable);
 
     ::rtl::OUString sComposedName;
@@ -252,6 +268,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
     sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation );
 
+    ::rtl::OUStringBuffer aFilter;
     static ::rtl::OUString s_sDot(RTL_CONSTASCII_USTRINGPARAM("."));
     static ::rtl::OUString s_sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     // create the where clause
@@ -286,21 +303,20 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
                 ::rtl::OUString sSelectTableName = ::dbtools::composeTableName( xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
                 Reference<XNameAccess > xSelectColumns = xSup->getColumns();
 
-                ::dbaccess::getColumnPositions(xSelectColumns,xSelColSup->getColumns(),sSelectTableName,(*m_pForeignColumnNames));
+                ::dbaccess::getColumnPositions(xSelectColumns,xSelColSup->getColumns()->getElementNames(),sSelectTableName,(*m_pForeignColumnNames));
 
-                uno::Sequence< ::rtl::OUString> aSelectColumnNames = xSelectColumns->getElementNames();
-                const ::rtl::OUString* pSelectColumnName = aSelectColumnNames.getConstArray();
-                const ::rtl::OUString* pSelectColumnEnd   = pSelectColumnName + aSelectColumnNames.getLength();
-                for( ; pSelectColumnName != pSelectColumnEnd ; ++pSelectColumnName)
+                aPosEnd = (*m_pForeignColumnNames).end();
+                for(aPosIter = (*m_pForeignColumnNames).begin();aPosIter != aPosEnd;++aPosIter)
                 {
                     // look for columns not in the source columns to use them as filter as well
-                    if ( !xSourceColumns->hasByName(*pSelectColumnName) )
+                    // if ( !xSourceColumns->hasByName(aPosIter->first) )
                     {
-                        aFilter.append(s_sDot);
-                        aFilter.append(::dbtools::quoteName( aQuote,*pSelectColumnName));
-                        aFilter.append(s_sParam);
-                        if ( (pSelectColumnName+1) != pSelectColumnEnd )
+                        if ( aFilter.getLength() )
                             aFilter.append(aAnd);
+                        aFilter.append(::dbtools::quoteName( aQuote,sSelectTableName));
+                        aFilter.append(s_sDot);
+                        aFilter.append(::dbtools::quoteName( aQuote,aPosIter->first));
+                        aFilter.append(s_sParam);
                     }
                 }
                 break;
@@ -499,7 +515,8 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     for(;aIter != aEnd;++aIter,++i)
     {
-        if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
+        //if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
+        if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
             sKeyCondition.append(::dbtools::quoteName( aQuote,aIter->first));
             if((_rOrginalRow->get())[aIter->second.nPosition].isNull())
@@ -594,7 +611,8 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     ::std::vector<sal_Int32>::iterator aIdxColIter = aIndexColumnPositions.begin();
     ::std::vector<sal_Int32>::iterator aIdxColEnd = aIndexColumnPositions.end();
     j = 0;
-    for(;aIdxColIter != aIdxColEnd;++aIdxColIter,++i,++j)
+    aIter = m_pColumnNames->begin();
+    for(;aIdxColIter != aIdxColEnd;++aIdxColIter,++i,++j,++aIter)
     {
         setParameter(i,xParameter,(_rOrginalRow->get())[*aIdxColIter],(_rOrginalRow->get())[*aIdxColIter].getTypeKind(),aIter->second.nScale);
     }
@@ -826,7 +844,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     sal_Int32 i = 1;
     for(i = 1;aIter != aEnd;++aIter,++i)
     {
-        if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
+        if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
             aSql.append(::dbtools::quoteName( aQuote,aIter->first));
             if((_rDeleteRow->get())[aIter->second.nPosition].isNull())
@@ -879,7 +897,8 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     // now we have to set the index values
     ::std::vector<sal_Int32>::iterator aIdxColIter = aIndexColumnPositions.begin();
     ::std::vector<sal_Int32>::iterator aIdxColEnd = aIndexColumnPositions.end();
-    for(;aIdxColIter != aIdxColEnd;++aIdxColIter,++i)
+    aIter = m_pColumnNames->begin();
+    for(;aIdxColIter != aIdxColEnd;++aIdxColIter,++i,++aIter)
     {
         setParameter(i,xParameter,(_rDeleteRow->get())[*aIdxColIter],(_rDeleteRow->get())[*aIdxColIter].getTypeKind(),aIter->second.nScale);
     }
@@ -1394,7 +1413,7 @@ sal_Bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
 namespace dbaccess
 {
     void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
-                            const Reference<XNameAccess>& _rxColumns,
+                            const Sequence< ::rtl::OUString>& _aColumnNames,
                             const ::rtl::OUString& _rsUpdateTableName,
                             SelectColumnsMetaData& _rColumnNames)
     {
@@ -1403,9 +1422,8 @@ namespace dbaccess
         const ::rtl::OUString* pSelBegin    = aSelNames.getConstArray();
         const ::rtl::OUString* pSelEnd      = pSelBegin + aSelNames.getLength();
 
-        Sequence< ::rtl::OUString> aColumnNames(_rxColumns->getElementNames());
-        const ::rtl::OUString* pColumnIter  = aColumnNames.getConstArray();
-        const ::rtl::OUString* pColumnEnd   = pColumnIter + aColumnNames.getLength();
+        const ::rtl::OUString* pColumnIter  = _aColumnNames.getConstArray();
+        const ::rtl::OUString* pColumnEnd   = pColumnIter + _aColumnNames.getLength();
 
         ::comphelper::UStringMixLess aTmp(_rColumnNames.key_comp());
         ::comphelper::UStringMixEqual bCase(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
@@ -1439,7 +1457,7 @@ namespace dbaccess
                     break;
                 }
             }
-            pColumnIter = aColumnNames.getConstArray();
+            pColumnIter = _aColumnNames.getConstArray();
         }
     }
 }

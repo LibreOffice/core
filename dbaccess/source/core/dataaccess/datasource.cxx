@@ -799,8 +799,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
                 m_pImpl->getDefaultDataSourceSettings()
             );
 
-            impl_insertJavaDriverClassPath_nothrow(aDriverInfo);
-
             if ( m_pImpl->isEmbeddedDatabase() )
             {
                 sal_Int32 nCount = aDriverInfo.getLength();
@@ -1502,29 +1500,6 @@ Reference< XInterface > ODatabaseSource::getThis() const
     return *const_cast< ODatabaseSource* >( this );
 }
 // -----------------------------------------------------------------------------
-void ODatabaseSource::impl_insertJavaDriverClassPath_nothrow(Sequence< PropertyValue >& _rDriverInfo)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::impl_insertJavaDriverClassPath_nothrow" );
-    Reference< XPropertySet > xPropertySet( m_pImpl->m_xSettings, UNO_QUERY_THROW );
-    ::rtl::OUString sJavaDriverClass;
-    xPropertySet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))) >>= sJavaDriverClass;
-    if ( sJavaDriverClass.getLength() )
-    {
-        static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths"));
-        ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-            m_pImpl->m_aContext.getLegacyServiceFactory(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
-        if ( aNamesRoot.isValid() && aNamesRoot.hasByName( sJavaDriverClass ) )
-        {
-            ::utl::OConfigurationNode aRegisterObj = aNamesRoot.openNode( sJavaDriverClass );
-            ::rtl::OUString sURL;
-            OSL_VERIFY( aRegisterObj.getNodeValue( "Path" ) >>= sURL );
-
-            ::comphelper::NamedValueCollection aDriverSettings( _rDriverInfo );
-            aDriverSettings.put( "JavaDriverClassPath", sURL );
-            aDriverSettings >>= _rDriverInfo;
-        }
-    }
-}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

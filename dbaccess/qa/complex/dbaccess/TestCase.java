@@ -29,15 +29,17 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import helper.FileTools;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -55,8 +57,8 @@ public abstract class TestCase extends complexlib.ComplexTestCase
         XComponentContext context = null;
         try
         {
-            final XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, getORB() );
-            context = (XComponentContext)UnoRuntime.queryInterface( XComponentContext.class,
+            final XPropertySet orbProps = UnoRuntime.queryInterface( XPropertySet.class, getORB() );
+            context = UnoRuntime.queryInterface( XComponentContext.class,
                 orbProps.getPropertyValue( "DefaultContext" ) );
         }
         catch ( Exception ex )
@@ -106,6 +108,15 @@ public abstract class TestCase extends complexlib.ComplexTestCase
         catch ( URISyntaxException e ) { }
 
         return FileHelper.getOOoCompatibleFileURL( targetURL );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    protected final XModel loadDocument( final String _docURL ) throws Exception
+    {
+        final XComponentLoader loader = UnoRuntime.queryInterface( XComponentLoader.class,
+            getORB().createInstance( "com.sun.star.frame.Desktop" ) );
+        return UnoRuntime.queryInterface( XModel.class,
+            loader.loadComponentFromURL( _docURL, "_blank", 0, new PropertyValue[] {} ) );
     }
 
     // --------------------------------------------------------------------------------------------------------

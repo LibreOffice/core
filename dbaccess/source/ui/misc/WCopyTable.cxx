@@ -633,6 +633,22 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     if ( !lcl_sameConnection_throw( _xSourceConnection, m_xDestConnection ) )
         bAllowViews = false;
 
+    if ( m_bInterConnectionCopy )
+    {
+        Reference< XDatabaseMetaData > xSrcMeta = _xSourceConnection->getMetaData();
+        ::rtl::OUString sCatalog;
+        ::rtl::OUString sSchema;
+        ::rtl::OUString sTable;
+        ::dbtools::qualifiedNameComponents( xSrcMeta,
+                                            m_sName,
+                                            sCatalog,
+                                            sSchema,
+                                            sTable,
+                                            ::dbtools::eInDataManipulation);
+
+        m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,sal_False,::dbtools::eInTableDefinitions);
+    }
+
     OCopyTable* pPage1( new OCopyTable( this ) );
     pPage1->disallowUseHeaderLine();
     if ( !bAllowViews )
@@ -1579,6 +1595,10 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
                 break;
             case DataType::VARCHAR:
                 if ( supportsType(DataType::LONGVARCHAR,nDefaultType) )
+                    break;
+                break;
+            case DataType::LONGVARCHAR:
+                if ( supportsType(DataType::CLOB,nDefaultType) )
                     break;
                 break;
             default:

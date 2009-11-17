@@ -236,6 +236,8 @@ namespace dbaccess
             getPropertyValues( const ::com::sun::star::uno::Sequence<
                             ::com::sun::star::beans::Property >& rProperties );
 
+        const ::comphelper::ComponentContext& getContext() const { return m_aContext; }
+
         inline TContentPtr getImpl() const { return m_pImpl; }
 
     protected:

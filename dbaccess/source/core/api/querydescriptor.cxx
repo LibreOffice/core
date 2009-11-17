@@ -265,7 +265,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
         {
             rebuildColumns();
         }
-        catch(...)
+        catch ( const Exception& )
         {
             setColumnsOutOfDate( sal_True );
             throw;
@@ -336,9 +336,10 @@ void OQueryDescriptor_Base::refreshColumns()
 }
 
 //------------------------------------------------------------------------------
-OColumn* OQueryDescriptor_Base::createColumn(const ::rtl::OUString& _rName) const
+OColumn* OQueryDescriptor_Base::createColumn( const ::rtl::OUString& /*_rName*/ ) const
 {
-    return new OTableColumn(_rName);
+    // creating a column/descriptor for a query/descriptor does not make sense at all
+    return NULL;
 }
 // -----------------------------------------------------------------------------
 //........................................................................

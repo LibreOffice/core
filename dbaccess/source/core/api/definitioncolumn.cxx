@@ -36,18 +36,24 @@
 #include "definitioncolumn.hxx"
 #include "sdbcoretools.hxx"
 
+/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+/** === end UNO includes === **/
 
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::comphelper;
 using namespace ::osl;
@@ -64,15 +70,15 @@ using namespace dbaccess;
 IMPLEMENT_FORWARD_XINTERFACE2(OTableColumnDescriptor,OColumn,TXChild)
 
 //------------------------------------------------------------------------------
-void OTableColumnDescriptor::impl_registerProperties( const bool _bActAsDescriptor )
+void OTableColumnDescriptor::impl_registerProperties()
 {
-    sal_Int32 nDefaultAttr = _bActAsDescriptor ? 0 : PropertyAttribute::READONLY;
+    sal_Int32 nDefaultAttr = m_bActAsDescriptor ? 0 : PropertyAttribute::READONLY;
 
     registerProperty( PROPERTY_TYPENAME, PROPERTY_ID_TYPENAME, nDefaultAttr, &m_aTypeName, ::getCppuType( &m_aTypeName ) );
     registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, nDefaultAttr, &m_aDescription, ::getCppuType( &m_aDescription ) );
     registerProperty( PROPERTY_DEFAULTVALUE, PROPERTY_ID_DEFAULTVALUE, nDefaultAttr, &m_aDefaultValue, ::getCppuType( &m_aDefaultValue ) );
 
-    if ( _bActAsDescriptor )
+    if ( m_bActAsDescriptor )
         registerProperty( PROPERTY_AUTOINCREMENTCREATION, PROPERTY_ID_AUTOINCREMENTCREATION, nDefaultAttr, &m_aAutoIncrementValue, ::getCppuType( &m_aAutoIncrementValue ) );
 
     registerProperty( PROPERTY_TYPE, PROPERTY_ID_TYPE, nDefaultAttr, &m_nType, ::getCppuType( &m_nType ) );
@@ -87,20 +93,7 @@ void OTableColumnDescriptor::impl_registerProperties( const bool _bActAsDescript
 }
 
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > OTableColumnDescriptor::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
+IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptor )
 
 // ::com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
@@ -113,7 +106,7 @@ rtl::OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeEx
 Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBCX_COLUMNDESCRIPTOR;
+    aSNS[0] = m_bActAsDescriptor ? SERVICE_SDBCX_COLUMNDESCRIPTOR : SERVICE_SDBCX_COLUMN;
     aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
     return aSNS;
 }
@@ -142,15 +135,6 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
 }
 
 // -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL OTableColumnDescriptor::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
-{
-    sal_Int64 nReturn = OColumn::getSomething( aIdentifier );
-    if ( !nReturn )
-        nReturn = OColumnSettings::getSomething( aIdentifier );
-    return nReturn;
-}
-
-// -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -169,53 +153,10 @@ DBG_NAME(OTableColumn);
 
 // -------------------------------------------------------------------------
 OTableColumn::OTableColumn( const ::rtl::OUString& _rName )
-    :OTableColumnDescriptor( false )
+    :OTableColumnDescriptor( false /* do not act as descriptor */ )
 {
     DBG_CTOR(OTableColumn,NULL);
     m_sName = _rName;
-}
-
-// -------------------------------------------------------------------------
-OTableColumn::OTableColumn(const Reference<XPropertySet>& _xColumn)
-    :OTableColumnDescriptor( false )
-{
-    DBG_CTOR(OTableColumn,NULL);
-
-    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_TYPENAME ) >>= m_aTypeName );
-    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= m_nIsNullable );
-    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_PRECISION ) >>= m_nPrecision );
-    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_SCALE ) >>= m_nScale );
-    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_TYPE ) >>= m_nType );
-    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_ISAUTOINCREMENT ) >>= m_bAutoIncrement );
-    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_ISCURRENCY ) >>= m_bCurrency );
-    OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName );
-    m_bRowVersion = sal_False;
-
-    Reference< XPropertySetInfo > xPSI( _xColumn->getPropertySetInfo(), UNO_SET_THROW );
-    if ( xPSI->hasPropertyByName( PROPERTY_DEFAULTVALUE ) )
-        OSL_VERIFY( _xColumn->getPropertyValue( PROPERTY_DEFAULTVALUE ) >>= m_aDefaultValue );
-
-    // if the source column also has column settings, copy those
-    struct ColumnSettingDescriptor
-    {
-        ::rtl::OUString sName;
-        sal_Int32       nHandle;
-    };
-    ColumnSettingDescriptor aProps[] =
-    {
-        { PROPERTY_WIDTH,            PROPERTY_ID_WIDTH },
-        { PROPERTY_NUMBERFORMAT,     PROPERTY_ID_NUMBERFORMAT },
-        { PROPERTY_RELATIVEPOSITION, PROPERTY_ID_RELATIVEPOSITION },
-        { PROPERTY_ALIGN,            PROPERTY_ID_ALIGN },
-        { PROPERTY_HELPTEXT,         PROPERTY_ID_HELPTEXT },
-        { PROPERTY_CONTROLDEFAULT,   PROPERTY_ID_CONTROLDEFAULT },
-        { PROPERTY_HIDDEN,   PROPERTY_ID_HIDDEN }
-    };
-    for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
-    {
-        if ( xPSI->hasPropertyByName( aProps[i].sName ) )
-            OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _xColumn->getPropertyValue( aProps[i].sName ) );
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -224,24 +165,9 @@ OTableColumn::~OTableColumn()
     DBG_DTOR(OTableColumn,NULL);
 }
 
-// com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > OTableColumn::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
+IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumn )
 
-// ::com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
 rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 {
@@ -249,30 +175,183 @@ rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (RuntimeException)
+::cppu::IPropertyArrayHelper& SAL_CALL OTableColumn::getInfoHelper()
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBCX_COLUMN;
-    aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
-    return aSNS;
+    return *OTableColumn_PBase::getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OTableColumn::getInfoHelper()
-{
-    return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OTableColumn >* >(this)->getArrayHelper();
-}
-
-// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumn::createArrayHelper( ) const
 {
     return OTableColumnDescriptor::createArrayHelper();
 }
 
-//============================================================
+// =========================================================================
+//= OQueryColumn
+// =========================================================================
+DBG_NAME( OQueryColumn );
+
+// -------------------------------------------------------------------------
+OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection )
+    :OTableColumnDescriptor( false /* do not act as descriptor */ )
+{
+    const sal_Int32 nPropAttr = PropertyAttribute::READONLY;
+    registerProperty( PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, nPropAttr, &m_sCatalogName, ::getCppuType( &m_sCatalogName ) );
+    registerProperty( PROPERTY_SCHEMANAME, PROPERTY_ID_SCHEMANAME, nPropAttr, &m_sSchemaName, ::getCppuType( &m_sSchemaName ) );
+    registerProperty( PROPERTY_TABLENAME, PROPERTY_ID_TABLENAME, nPropAttr, &m_sTableName, ::getCppuType( &m_sTableName ) );
+    registerProperty( PROPERTY_REALNAME, PROPERTY_ID_REALNAME, nPropAttr, &m_sRealName, ::getCppuType( &m_sRealName ) );
+
+    DBG_CTOR( OQueryColumn, NULL );
+
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_TYPENAME ) >>= m_aTypeName );
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= m_nIsNullable );
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_PRECISION ) >>= m_nPrecision );
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_SCALE ) >>= m_nScale );
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_TYPE ) >>= m_nType );
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISAUTOINCREMENT ) >>= m_bAutoIncrement );
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISCURRENCY ) >>= m_bCurrency );
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName );
+    m_bRowVersion = sal_False;
+
+    Reference< XPropertySetInfo > xPSI( _rxParserColumn->getPropertySetInfo(), UNO_SET_THROW );
+    if ( xPSI->hasPropertyByName( PROPERTY_DEFAULTVALUE ) )
+        OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_DEFAULTVALUE ) >>= m_aDefaultValue );
+
+    // copy some optional properties from the parser column
+    struct PropertyDescriptor
+    {
+        ::rtl::OUString sName;
+        sal_Int32       nHandle;
+    };
+    PropertyDescriptor aProps[] =
+    {
+        { PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME },
+        { PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME },
+        { PROPERTY_TABLENAME,        PROPERTY_ID_TABLENAME },
+        { PROPERTY_REALNAME,         PROPERTY_ID_REALNAME }
+    };
+    for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
+    {
+        if ( xPSI->hasPropertyByName( aProps[i].sName ) )
+            setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _rxParserColumn->getPropertyValue( aProps[i].sName ) );
+    }
+
+    // determine the table column we're based on
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        m_xOriginalTableColumn = impl_determineOriginalTableColumn( _rxConnection );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
+}
+
+//--------------------------------------------------------------------------
+OQueryColumn::~OQueryColumn()
+{
+    DBG_DTOR( OQueryColumn, NULL );
+}
+
+//--------------------------------------------------------------------------
+Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const Reference< XConnection >& _rxConnection )
+{
+    OSL_PRECOND( _rxConnection.is(), "OQueryColumn::impl_determineOriginalTableColumn: illegal connection!" );
+    if ( !_rxConnection.is() )
+        return NULL;
+
+    Reference< XPropertySet > xOriginalTableColumn;
+    try
+    {
+        // determine the composed table name, plus the column name, as indicated by the
+        // respective properties
+        ::rtl::OUString sCatalog, sSchema, sTable;
+        OSL_VERIFY( getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog );
+        OSL_VERIFY( getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
+        OSL_VERIFY( getPropertyValue( PROPERTY_TABLENAME ) >>= sTable );
+        if ( !sCatalog.getLength() && !sSchema.getLength() && !sTable.getLength() )
+            return NULL;
+
+        ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(
+            _rxConnection->getMetaData(), sCatalog, sSchema, sTable, sal_False, ::dbtools::eComplete );
+
+        // retrieve the table in question
+        Reference< XTablesSupplier > xSuppTables( _rxConnection, UNO_QUERY_THROW );
+        Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_QUERY_THROW );
+        if ( !xTables->hasByName( sComposedTableName ) )
+            return NULL;
+
+        Reference< XColumnsSupplier > xSuppCols( xTables->getByName( sComposedTableName ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_QUERY_THROW );
+
+        ::rtl::OUString sColumn;
+        OSL_VERIFY( getPropertyValue( PROPERTY_REALNAME ) >>= sColumn );
+        if ( !xColumns->hasByName( sColumn ) )
+            return NULL;
+
+        xOriginalTableColumn.set( xColumns->getByName( sColumn ), UNO_QUERY );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return xOriginalTableColumn;
+}
+
+//--------------------------------------------------------------------------
+IMPLEMENT_GET_IMPLEMENTATION_ID( OQueryColumn )
+
+//--------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OQueryColumn::getImplementationName(  ) throw(RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.dbaccess.OQueryColumn" ) );
+}
+
+//------------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& SAL_CALL OQueryColumn::getInfoHelper()
+{
+    return *OQueryColumn_PBase::getArrayHelper();
+}
+
+//--------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* OQueryColumn::createArrayHelper() const
+{
+    return OTableColumnDescriptor::createArrayHelper();
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+{
+    OTableColumnDescriptor::getFastPropertyValue( _rValue, _nHandle );
+
+    // special treatment for column settings:
+    if ( !OColumnSettings::isColumnSettingProperty( _nHandle ) )
+        return;
+
+    // If the setting has its default value, then try to obtain the value from the table column which
+    // this query column is based on
+    if ( !OColumnSettings::isDefaulted( _nHandle, _rValue ) )
+        return;
+
+    if ( !m_xOriginalTableColumn.is() )
+        return;
+
+    try
+    {
+        // determine original property name
+        ::rtl::OUString sPropName;
+        sal_Int16 nAttributes( 0 );
+        const_cast< OQueryColumn* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
+        OSL_ENSURE( sPropName.getLength(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
+
+        _rValue = m_xOriginalTableColumn->getPropertyValue( sPropName );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//==========================================================================
 //= OColumnWrapper
-//============================================================
+//==========================================================================
 DBG_NAME(OColumnWrapper);
 //--------------------------------------------------------------------------
 OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bool _bNameIsReadOnly )
@@ -364,14 +443,10 @@ void OColumnWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
 {
-    sal_Int64 nRet = OColumn::getSomething(aIdentifier);
-    if(!nRet)
-    {
-        Reference<XUnoTunnel> xTunnel(m_xAggregate,UNO_QUERY);
-        if(xTunnel.is())
-            nRet = xTunnel->getSomething(aIdentifier);
-    }
-    return nRet;
+    Reference< XUnoTunnel > xTunnel( m_xAggregate, UNO_QUERY);
+    if ( xTunnel.is() )
+        return xTunnel->getSomething( aIdentifier );
+    return 0;
 }
 
 //============================================================
@@ -389,20 +464,7 @@ OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< X
 
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > OTableColumnDescriptorWrapper::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
+IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptorWrapper )
 
 // ::com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
@@ -418,15 +480,6 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     aSNS[0] = SERVICE_SDBCX_COLUMNDESCRIPTOR;
     aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
     return aSNS;
-}
-
-// -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL OTableColumnDescriptorWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
-{
-    sal_Int64 nReturn = OColumnWrapper::getSomething( aIdentifier );
-    if ( !nReturn )
-        nReturn = OColumnSettings::getSomething( aIdentifier );
-    return nReturn;
 }
 
 // comphelper::OPropertyArrayUsageHelper
@@ -587,24 +640,9 @@ OTableColumnWrapper::~OTableColumnWrapper()
 {
 }
 
-// com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > OTableColumnWrapper::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
+IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnWrapper )
 
-// ::com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
 rtl::OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException)
 {

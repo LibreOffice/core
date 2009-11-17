@@ -58,6 +58,8 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/XBlob.hpp>
+#include <com/sun/star/sdbc/XClob.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -127,6 +129,8 @@ namespace dbaui
     using ::com::sun::star::sdbc::XParameters;
     using ::com::sun::star::sdbc::XResultSet;
     using ::com::sun::star::sdbc::XRow;
+    using ::com::sun::star::sdbc::XBlob;
+    using ::com::sun::star::sdbc::XClob;
     using ::com::sun::star::sdbcx::XRowLocate;
     using ::com::sun::star::sdbc::XResultSetMetaDataSupplier;
     using ::com::sun::star::sdbc::XResultSetMetaData;
@@ -1281,6 +1285,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     case DataType::LONGVARBINARY:
                     case DataType::BINARY:
                     case DataType::VARBINARY:
+                    case DataType::BIT:
                         aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
                         break;
 
@@ -1296,7 +1301,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                         aTransfer.transferComplexValue( &XRow::getTimestamp, &XParameters::setTimestamp );
                         break;
 
-                    case DataType::BIT:
                     case DataType::BOOLEAN:
                         aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
                         break;
@@ -1311,6 +1315,14 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
                     case DataType::INTEGER:
                         aTransfer.transferValue( &XRow::getInt, &XParameters::setInt );
+                        break;
+
+                    case DataType::BLOB:
+                        aTransfer.transferComplexValue( &XRow::getBlob, &XParameters::setBlob );
+                        break;
+
+                    case DataType::CLOB:
+                        aTransfer.transferComplexValue( &XRow::getClob, &XParameters::setClob );
                         break;
 
                     default:

@@ -270,7 +270,10 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
                 case DataType::LONGVARBINARY:
                     _xParameter->updateBytes(nPos,_rValue);
                     break;
-
+                case DataType::BLOB:
+                case DataType::CLOB:
+                    _xParameter->updateObject(nPos,_rValue.getAny());
+                    break;
             }
         }
     }

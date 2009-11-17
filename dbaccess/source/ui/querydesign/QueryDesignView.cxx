@@ -369,6 +369,7 @@ namespace
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
+                case DataType::CLOB:
                     rNewValue = ::dbtools::quoteName(aQuote,rValue);
                     break;
                 case DataType::DECIMAL:
@@ -382,6 +383,7 @@ namespace
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
+                case DataType::BLOB:
                     rNewValue = rValue;
                     break;
                 case DataType::BIT:
@@ -1385,6 +1387,9 @@ namespace
 
             // first extract the inner joins conditions
             GetInnerJoinCriteria(_pView,pNodeTmp);
+            // now simplify again, join are checked in ComparisonPredicate
+            ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
+            pNodeTmp = pNode->getChild(1);
 
             // it could happen that pCondition is not more valid
             eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pNodeTmp, rLevel);
@@ -1395,7 +1400,7 @@ namespace
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
-                                    const sal_uInt16 nLevel,
+                                    sal_uInt16& nLevel,
                                     sal_Bool bHaving,
                                     bool bAddOrOnOneLine);
     //------------------------------------------------------------------------------
@@ -1432,7 +1437,11 @@ namespace
                 if ( SQL_ISRULE(pChild,search_condition) )
                     eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pChild,nLevel,bHaving,bAddOrOnOneLine);
                 else
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                {
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, nLevel,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                    if ( !bAddOrOnOneLine)
+                        nLevel++;
+                }
             }
         }
         else
@@ -1466,7 +1475,7 @@ namespace
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
-                                    const sal_uInt16 nLevel,
+                                    sal_uInt16& nLevel,
                                     sal_Bool bHaving,
                                     bool bAddOrOnOneLine)
     {
@@ -1480,10 +1489,18 @@ namespace
         // Runde Klammern
         if (SQL_ISRULE(pCondition,boolean_primary))
         {
-            sal_uInt16 nLevel2 = nLevel;
             // check if we have to put the or criteria on one line.
-            bool bMustAddOrOnOneLine = CheckOrCriteria(pCondition->getChild(1),NULL);
-            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,bMustAddOrOnOneLine );
+            const  ::connectivity::OSQLParseNode* pSearchCondition = pCondition->getChild(1);
+            bool bMustAddOrOnOneLine = CheckOrCriteria(pSearchCondition,NULL);
+            if ( SQL_ISRULE( pSearchCondition, search_condition) ) // we have a or
+            {
+                _pSelectionBrw->DuplicateConditionLevel( nLevel);
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(0), nLevel,bHaving,bMustAddOrOnOneLine );
+                ++nLevel;
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(2), nLevel,bHaving,bMustAddOrOnOneLine );
+            }
+            else
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition, nLevel,bHaving,bMustAddOrOnOneLine );
         }
         // Das erste Element ist (wieder) eine AND-Verknuepfung
         else if ( SQL_ISRULE(pCondition,boolean_term) )
@@ -1579,10 +1596,32 @@ namespace
                     _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
                 }
             }
+            else
+            {
+                // Funktions-Bedingung parsen
+                ::rtl::OUString sCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,1);
+                Reference< XConnection> xConnection = rController.getConnection();
+                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                    // the international doesn't matter I have a string
+                ::rtl::OUString sName;
+                pCondition->getChild(0)->parseNodeToPredicateStr(sName,
+                                                    xConnection,
+                                                    rController.getNumberFormatter(),
+                                                    aLocale,
+                                                    static_cast<sal_Char>(sDecimal.toChar()),
+                                                    &rController.getParser().getContext());
+
+                OTableFieldDescRef aDragLeft = new OTableFieldDesc();
+                aDragLeft->SetField(sName);
+                aDragLeft->SetFunctionType(FKT_OTHER);
+
+                if ( bHaving )
+                    aDragLeft->SetGroupBy(sal_True);
+                _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
+            }
         }
         else if( SQL_ISRULEOR2(pCondition,existence_test,unique_test) )
         {
-
             // Funktions-Bedingung parsen
             ::rtl::OUString aCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,0);
 
