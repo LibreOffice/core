@@ -11,14 +11,13 @@
  */
  interface XFormField: com::sun::star::uno::XInterface
  {
-     short getType();
-     short getRes();
-     string getDescription( );
+     string getFieldType();
+     void setFieldType([in] string fieldType);
 
-     void setType([in] short fieldType );
-     void setRes([in] short res );
-     void setDescription([in] string description );
-
+     short getParamCount();
+     string getParamName([in] short i);
+     string getParamValue([in] short i);
+     void addParam([in] string name, [in] string value, [in] boolean replaceExisting);
  };
 
  }; }; }; };
