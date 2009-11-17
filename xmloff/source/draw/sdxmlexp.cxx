@@ -650,6 +650,11 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
             GetXMLToken(XML_NP_OFFICE_EXT),
             GetXMLToken(XML_N_OFFICE_EXT),
             XML_NAMESPACE_OFFICE_EXT);
+
+        _GetNamespaceMap().Add(
+            GetXMLToken(XML_NP_TABLE_EXT),
+            GetXMLToken(XML_N_TABLE_EXT),
+            XML_NAMESPACE_TABLE_EXT);
     }
 
     GetShapeExport()->enableLayerExport();
