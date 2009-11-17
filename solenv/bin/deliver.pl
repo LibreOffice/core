@@ -400,8 +400,6 @@ sub parse_options
 {
     my $arg;
     my $dontdeletecommon = 0;
-    $opt_silent = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE');
-    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE');
     while ( $arg = shift @ARGV ) {
         $arg =~ /^-force$/      and $opt_force  = 1  and next;
         $arg =~ /^-minor$/      and $opt_minor  = 1  and next;
@@ -422,13 +420,15 @@ sub parse_options
         }
         $dest = $arg;
     }
+    $opt_silent = 1 if ( !defined $ENV{VERBOSE} || (defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE')) && ( ! $opt_verbose );
+    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE') && ( ! $opt_silent );
     # $dest and $opt_zip or $opt_delete are mutually exclusive
     if ( $dest and ($opt_zip || $opt_delete) ) {
         usage(1);
     }
     # $opt_silent and $opt_check or $opt_verbose are mutually exclusive
     if ( ($opt_check or $opt_verbose) and $opt_silent ) {
-        print STDERR "Error on command line: options '-check' and '-quiet' are mutually exclusive.\n";
+        print STDERR "Error on command line: options '-check'/'-verbose' and '-quiet' are mutually exclusive.\n";
         usage(1);
     }
     if ($dontdeletecommon) {

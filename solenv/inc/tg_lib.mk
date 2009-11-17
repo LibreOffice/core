@@ -37,7 +37,7 @@
 .IF "$(LIB$(TNR)ARCHIV)" != ""
 
 $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
@@ -52,16 +52,20 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+    @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
     @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+.IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+.ENDIF
     @+source $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
@@ -73,10 +77,13 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
 $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
                         $(LIB$(TNR)OBJFILES) \
                         $(LIB$(TNR)DEPN)
+.IF "$(VERBOSE)" == "TRUE"
+    @echo ------------------------------
     @echo using: $(LIB$(TNR)FILES)
     @echo using: $(LIB$(TNR)TARGET)
     @echo ------------------------------
-    @echo Making: $@
+.ENDIF
+    @echo "Making:   " $(@:f)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
@@ -89,7 +96,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-    $(LIBMGR) $(LIBFLAGS) $@ $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES)
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB$(TNR)OBJFILES)"!=""    
     @+$(TYPE) $(mktmp $(LIB$(TNR)OBJFILES)) > $(null,$(LIB$(TNR)OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -105,7 +112,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     +$(ECHONL) $(LIB$(TNR)OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES) | xargs -n1 >> $@
 .ELSE
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB$(TNR)OBJFILES)"!=""    
     @$(TYPE) $(mktmp $(LIB$(TNR)OBJFILES)) > $(null,$(LIB$(TNR)OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
@@ -117,8 +124,10 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ENDIF          # "$(LIB$(TNR)FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
-    echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
-    $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES) $(LIB$(TNR)FILES) bla.lib
+  .IF "$(VERBOSE)" == "TRUE"
+    @echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
+  .ENDIF
+    $(COMMAND_ECHO)$(LIBMGR) r $@ $(LIB$(TNR)OBJFILES) $(LIB$(TNR)FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB$(TNR)TARGET)" != ""

@@ -53,18 +53,18 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL$(TNR)OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL$(TNR)OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -96,8 +96,7 @@ $(DEF$(TNR)TARGETN) : \
 $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL$(TNR)TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -110,16 +109,16 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
-    dlltool --output-def $(MISC)/$(SHL$(TNR)TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
-    tail --lines +3 $(MISC)/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL$(TNR)TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
 .ELSE
 .IF "$(SHL$(TNR)USE_EXPORTS)"==""
     @-$(RMHACK$(TNR)) $(MISC)/$(SHL$(TNR)TARGET).exp
     @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL$(TNR)TARGET).exp $(SLB)/$(DEFLIB$(TNR)NAME).lib
     @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL$(TNR)TARGET).flt $(MISC)/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
-    $(RMHACK$(TNR)) $(MISC)/$(SHL$(TNR)TARGET).exp
+    $(COMMAND_ECHO)$(RMHACK$(TNR)) $(MISC)/$(SHL$(TNR)TARGET).exp
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"==""
     @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL$(TNR)TARGET).direct
     @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF$(TNR)FILTER) $(MISC)/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
@@ -188,9 +187,9 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF$(TNR)EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF$(TNR)EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF$(TNR)EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -214,8 +213,7 @@ $(DEF$(TNR)TARGETN) : \
 $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL$(TNR)TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF$(TNR)DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -296,11 +294,11 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL$(TNR)IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL$(TNR)IMPLIBN) $(SHL$(TNR)IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL$(TNR)IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL$(TNR)IMPLIBN) $(SHL$(TNR)IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
