@@ -1740,14 +1740,28 @@ void LoadEnv::impl_reactForLoadingState()
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                 sal_Bool bForceToFront)
 {
-    css::uno::Reference< css::awt::XTopWindow > xTopWindow(xWindow, css::uno::UNO_QUERY);
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR( m_xSMGR.get(), css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    // <- SAFE ----------------------------------
 
-    if (xWindow.is())
-        xWindow->setVisible(sal_True);
+    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    if ( pWindow )
+    {
+        bool bForceFrontAndFocus(false);
+        css::uno::Any a = ::comphelper::ConfigurationHelper::readDirectKey(
+            xSMGR,
+            ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/View"),
+            ::rtl::OUString::createFromAscii("NewDocumentHandling"),
+            ::rtl::OUString::createFromAscii("ForceFocusAndToFront"),
+            ::comphelper::ConfigurationHelper::E_READONLY);
+        a >>= bForceFrontAndFocus;
 
-    if (xTopWindow.is() && bForceToFront)
-        xTopWindow->toFront();
-
+        pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
+    }
+    
 /* #i19976#
     We tried to prevent a toFront() call in case the user putted the
     loading document into the background ..

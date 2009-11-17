@@ -2105,7 +2105,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 			</set>
 		</group>
-        <group oor:name="Save">
+    <group oor:name="Save">
 			<info>
 				<author>MBA</author>
 				<desc>Contains general settings about the saving process.</desc>
@@ -2616,6 +2616,19 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</constraints>
 				<value>0</value>
 			</prop>
+			<group oor:name="NewDocumentHandling">
+				<info>
+					<author>CD</author>
+					<desc>Contains settings to change new document window behavior.</desc>
+				</info>
+				<prop oor:name="ForceFocusAndToFront" oor:type="xs:boolean">
+					<info>
+						<author>CD</author>
+						<desc>Every new document window will be forced to front and grabs the focus.</desc>
+					</info>
+					<value>true</value>
+				</prop>
+			</group>
 			<group oor:name="AppWindow">
 				<info>
 					<author>MBA</author>
