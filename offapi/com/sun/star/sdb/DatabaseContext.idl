@@ -52,7 +52,7 @@
 
  module com {  module sun {  module star {  module sdb {
 
-published interface XDataSourceRegistrations;
+published interface XDatabaseRegistrations;
 
 /** is the context for accessing datasource.
 
@@ -101,7 +101,7 @@ published service DatabaseContext
 
         @since OpenOffice.org 3.3
     */
-    [optional] interface XDataSourceRegistrations;
+    [optional] interface XDatabaseRegistrations;
 };
 
 //=============================================================================
