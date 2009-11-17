@@ -38,9 +38,9 @@
 		<info>
 			<author>OJ</author>
 		</info>
-		<group oor:name="DatabaseNameSetting">
+		<group oor:name="DatabaseDocumentRegistration">
 			<info>
-				<desc>Describes how to establish a database connection and how to filter and layout the database data.</desc>
+				<desc>describes a single database document registration.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<info>
@@ -310,9 +310,9 @@
           </set>
         </group>
 
-		<set oor:name="RegisteredNames" oor:node-type="DatabaseNameSetting">
+		<set oor:name="RegisteredNames" oor:node-type="DatabaseDocumentRegistration">
 			<info>
-				<desc>Specifies all names which are registered.</desc>
+				<desc>Specifies the database documents registered within OpenOffice.org, for quick access by a programmatic name.</desc>
 			</info>
 		</set>
 

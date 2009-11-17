@@ -135,6 +135,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
     {
         case SQL_CHAR:
         case SQL_VARCHAR:
+        case SQL_DECIMAL:
             if(_bUseWChar)
             {
                 *pLen = SQL_NTS;
@@ -160,7 +161,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
             *pLen = sizeof(sal_Int64);
             _nColumnSize = *pLen;
             break;
-        case SQL_DECIMAL:
+
         case SQL_NUMERIC:
             if(_bUseWChar)
             {

@@ -197,7 +197,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 
     pHeaderBar->Hide();
     for ( USHORT i = 0; i < pPathBox->GetEntryCount(); ++i )
-        delete static_cast<String*>(pPathBox->GetEntry(i)->GetUserData());
+        delete static_cast< DatabaseRegistration* >( pPathBox->GetEntry(i)->GetUserData() );
     delete pPathBox;
     delete pHeaderBar;
 }
@@ -216,21 +216,22 @@ BOOL DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     // the settings for the single drivers
     sal_Bool bModified = sal_False;
-    TNameLocationMap aMap;
+    DatabaseRegistrations aRegistrations;
     ULONG nCount = pPathBox->GetEntryCount();
     for ( ULONG i = 0; i < nCount; ++i )
     {
         SvLBoxEntry* pEntry = pPathBox->GetEntry(i);
-        String* pPath = static_cast<String*>(pEntry->GetUserData());
-        if ( pPath && pPath->Len() )
+        DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
+        if ( pRegistration && pRegistration->sLocation.getLength() )
         {
-            OFileNotation aTransformer(*pPath);
-            aMap.insert(TNameLocationMap::value_type(::rtl::OUString(pPathBox->GetEntryText(pEntry,0)),aTransformer.get(OFileNotation::N_URL)));
+            ::rtl::OUString sName( pPathBox->GetEntryText( pEntry, 0 ) );
+            OFileNotation aTransformer( pRegistration->sLocation );
+            aRegistrations[ sName ] = DatabaseRegistration( aTransformer.get( OFileNotation::N_URL ), pRegistration->bReadOnly );
         }
     }
-    if ( m_nOldCount != aMap.size() || m_bModified )
+    if ( m_nOldCount != aRegistrations.size() || m_bModified )
     {
-        rCoreSet.Put(DatabaseMapItem(SID_SB_DB_REGISTER, aMap), SID_SB_DB_REGISTER);
+        rCoreSet.Put(DatabaseMapItem( SID_SB_DB_REGISTER, aRegistrations ), SID_SB_DB_REGISTER);
         bModified = sal_True;
     }
 
@@ -242,47 +243,44 @@ BOOL DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
 {
     // the settings for the single drivers
-    SFX_ITEMSET_GET( rSet, pSettings, DatabaseMapItem, SID_SB_DB_REGISTER, sal_True );
+    SFX_ITEMSET_GET( rSet, pRegistrations, DatabaseMapItem, SID_SB_DB_REGISTER, sal_True );
+    if ( !pRegistrations )
+        return;
 
-    if ( pSettings )
+    pPathBox->Clear();
+
+    const DatabaseRegistrations& rRegistrations = pRegistrations->getRegistrations();
+    m_nOldCount = rRegistrations.size();
+    DatabaseRegistrations::const_iterator aIter = rRegistrations.begin();
+    DatabaseRegistrations::const_iterator aEnd = rRegistrations.end();
+    for ( ; aIter != aEnd; ++aIter )
     {
-        // TabListBox f"ullen
-        pPathBox->Clear();
+        OFileNotation aTransformer( aIter->second.sLocation );
+        insertNewEntry( aIter->first, aTransformer.get( OFileNotation::N_SYSTEM ), aIter->second.bReadOnly );
+    }
 
-        const TNameLocationMap& rMap = pSettings->getSettings();
-        m_nOldCount = rMap.size();
-        TNameLocationMap::const_iterator aIter = rMap.begin();
-        TNameLocationMap::const_iterator aEnd = rMap.end();
-        for (; aIter != aEnd; ++aIter)
+    String aUserData = GetUserData();
+    if ( aUserData.Len() )
+    {
+        // Spaltenbreite restaurieren
+        pHeaderBar->SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
+        HeaderEndDrag_Impl( NULL );
+        // Sortierrichtung restaurieren
+        BOOL bUp = (BOOL)(USHORT)aUserData.GetToken(1).ToInt32();
+        HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
+
+        if ( bUp )
         {
-            OFileNotation aTransformer(aIter->second);
-            insertNewEntry(aIter->first,aTransformer.get(OFileNotation::N_SYSTEM));
+            nBits &= ~HIB_UPARROW;
+            nBits |= HIB_DOWNARROW;
         }
-
-        String aUserData = GetUserData();
-
-        if ( aUserData.Len() )
+        else
         {
-            // Spaltenbreite restaurieren
-            pHeaderBar->SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
-            HeaderEndDrag_Impl( NULL );
-            // Sortierrichtung restaurieren
-            BOOL bUp = (BOOL)(USHORT)aUserData.GetToken(1).ToInt32();
-            HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
-
-            if ( bUp )
-            {
-                nBits &= ~HIB_UPARROW;
-                nBits |= HIB_DOWNARROW;
-            }
-            else
-            {
-                nBits &= ~HIB_DOWNARROW;
-                nBits |= HIB_UPARROW;
-            }
-            pHeaderBar->SetItemBits( ITEMID_TYPE, nBits );
-            HeaderSelect_Impl( NULL );
+            nBits &= ~HIB_DOWNARROW;
+            nBits |= HIB_UPARROW;
         }
+        pHeaderBar->SetItemBits( ITEMID_TYPE, nBits );
+        HeaderSelect_Impl( NULL );
     }
 }
 
@@ -323,16 +321,19 @@ IMPL_LINK( DbRegistrationOptionsPage, NewHdl, void *, EMPTYARG )
 IMPL_LINK( DbRegistrationOptionsPage, EditHdl, void *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
-    if ( pEntry )
-    {
-        String* pOldLocation = static_cast<String*>(pEntry->GetUserData());
-        String sOldName = pPathBox->GetEntryText(pEntry,0);
-        m_pCurEntry = pEntry;
-        openLinkDialog(sOldName,*pOldLocation,pEntry);
-        m_pCurEntry = NULL;
-    }
+    if ( !pEntry )
+        return 0L;
 
-    return 0;
+    DatabaseRegistration* pOldRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
+    if ( !pOldRegistration || pOldRegistration->bReadOnly )
+        return 0L;
+
+    String sOldName = pPathBox->GetEntryText(pEntry,0);
+    m_pCurEntry = pEntry;
+    openLinkDialog( sOldName, pOldRegistration->sLocation, pEntry );
+    m_pCurEntry = NULL;
+
+    return 1L;
 }
 
 // -----------------------------------------------------------------------
@@ -397,28 +398,42 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 // -----------------------------------------------------------------------
 
 IMPL_LINK( DbRegistrationOptionsPage, PathSelect_Impl, SvTabListBox *, EMPTYARG )
-
-/*  [Beschreibung]
-
-*/
-
 {
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
 
-    m_aEdit.Enable( pEntry != NULL);
-    m_aDelete.Enable( pEntry != NULL);
+    bool bReadOnly = true;
+    if ( pEntry )
+    {
+        DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
+        bReadOnly = pRegistration->bReadOnly;
+    }
+
+    m_aEdit.Enable( !bReadOnly );
+    m_aDelete.Enable( !bReadOnly );
     return 0;
 }
 // -----------------------------------------------------------------------------
-void DbRegistrationOptionsPage::insertNewEntry(const ::rtl::OUString& _sName,const ::rtl::OUString& _sLocation)
+void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,const ::rtl::OUString& _sLocation, const bool _bReadOnly )
 {
     String aStr( _sName );
     aStr += '\t';
     aStr += String(_sLocation);
-    SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
-    String* pLocation = new String( _sLocation );
-    pEntry->SetUserData( pLocation );
+
+    SvLBoxEntry* pEntry = NULL;
+    if ( _bReadOnly )
+    {
+        sal_Bool bHighContrast = pPathBox->GetDisplayBackground().GetColor().IsDark();
+        Image aLocked( SVX_RES( bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK ) );
+        pEntry = pPathBox->InsertEntry( aStr, aLocked, aLocked );
+    }
+    else
+    {
+        pEntry = pPathBox->InsertEntry( aStr );
+    }
+
+    pEntry->SetUserData( new DatabaseRegistration( _sLocation, _bReadOnly ) );
 }
+
 // -----------------------------------------------------------------------------
 String DbRegistrationOptionsPage::getFileLocation(const String& _sLocation)
 {
@@ -489,10 +504,10 @@ void DbRegistrationOptionsPage::openLinkDialog(const String& _sOldName,const Str
         {
             if ( _pEntry )
             {
-                delete static_cast<String*>(_pEntry->GetUserData());
-                pPathBox->GetModel()->Remove(_pEntry);
+                delete static_cast< DatabaseRegistration* >( _pEntry->GetUserData() );
+                pPathBox->GetModel()->Remove( _pEntry );
             }
-            insertNewEntry(sNewName,sNewLocation);
+            insertNewEntry( sNewName, sNewLocation, false );
             m_bModified = sal_True;
         }
     }

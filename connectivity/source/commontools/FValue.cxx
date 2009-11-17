@@ -254,6 +254,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
             case DataType::BLOB:
             case DataType::CLOB:
             case DataType::OBJECT:
+            case DataType::OTHER:
                 (*this) = getAny();
                 break;
             default:
@@ -844,6 +845,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
         case DataType::BLOB:
         case DataType::CLOB:
         case DataType::OBJECT:
+        case DataType::OTHER:
             bRet = false;
             break;
         default:
@@ -910,6 +912,7 @@ Any ORowSetValue::makeAny() const
             case DataType::BLOB:
             case DataType::CLOB:
             case DataType::OBJECT:
+            case DataType::OTHER:
                 rValue = getAny();
                 break;
             case DataType::BIT:
@@ -1016,6 +1019,19 @@ Any ORowSetValue::makeAny() const
                 else
                     aRet = ::rtl::OUString::valueOf((sal_Int64)*this);
                 break;
+            case DataType::CLOB:
+                {
+                    Any aValue( getAny() );
+                    Reference< XClob > xClob;
+                    if ( aValue >>= xClob )
+                    {
+                        if ( xClob.is() )
+                        {
+                            aRet = xClob->getSubString(1,(sal_Int32)xClob->length() );
+                        }
+                    }
+                }
+                break;
         }
     }
     return aRet;
@@ -1087,6 +1103,9 @@ sal_Bool ORowSetValue::getBool()    const
             case DataType::INTEGER:
                 bRet = m_bSigned ? (m_aValue.m_nInt32 != 0) : (*static_cast<sal_Int64*>(m_aValue.m_pValue) != sal_Int64(0));
                 break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
+                break;
         }
     }
     return bRet;
@@ -1128,6 +1147,8 @@ sal_Int8 ORowSetValue::getInt8()    const
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
+            case DataType::CLOB:
                 OSL_ASSERT(!"getInt8() for this type is not allowed!");
                 break;
             case DataType::BIT:
@@ -1151,6 +1172,9 @@ sal_Int8 ORowSetValue::getInt8()    const
                     nRet = static_cast<sal_Int8>(m_aValue.m_nInt32);
                 else
                     nRet = static_cast<sal_Int8>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
+                break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
                 break;
         }
     }
@@ -1193,6 +1217,8 @@ sal_Int16 ORowSetValue::getInt16()  const
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
+            case DataType::CLOB:
                 OSL_ASSERT(!"getInt16() for this type is not allowed!");
                 break;
             case DataType::BIT:
@@ -1216,6 +1242,9 @@ sal_Int16 ORowSetValue::getInt16()  const
                     nRet = static_cast<sal_Int16>(m_aValue.m_nInt32);
                 else
                     nRet = static_cast<sal_Int16>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
+                break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
                 break;
         }
     }
@@ -1258,6 +1287,8 @@ sal_Int32 ORowSetValue::getInt32()  const
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
+            case DataType::CLOB:
                 OSL_ASSERT(!"getInt32() for this type is not allowed!");
                 break;
             case DataType::BIT:
@@ -1281,6 +1312,9 @@ sal_Int32 ORowSetValue::getInt32()  const
                     nRet = m_aValue.m_nInt32;
                 else
                     nRet = static_cast<sal_Int32>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
+                break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
                 break;
         }
     }
@@ -1323,6 +1357,8 @@ sal_Int64 ORowSetValue::getLong()   const
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
+            case DataType::CLOB:
                 OSL_ASSERT(!"getInt32() for this type is not allowed!");
                 break;
             case DataType::BIT:
@@ -1346,6 +1382,9 @@ sal_Int64 ORowSetValue::getLong()   const
                     nRet = m_aValue.m_nInt32;
                 else
                     nRet = *(sal_Int64*)m_aValue.m_pValue;
+                break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
                 break;
         }
     }
@@ -1392,6 +1431,8 @@ float ORowSetValue::getFloat()  const
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
+            case DataType::CLOB:
                 OSL_ASSERT(!"getDouble() for this type is not allowed!");
                 break;
             case DataType::BIT:
@@ -1415,6 +1456,9 @@ float ORowSetValue::getFloat()  const
                     nRet = (float)m_aValue.m_nInt32;
                 else
                     nRet = float(*(sal_Int64*)m_aValue.m_pValue);
+                break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
                 break;
         }
     }
@@ -1463,6 +1507,8 @@ double ORowSetValue::getDouble()    const
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
+            case DataType::CLOB:
                 OSL_ASSERT(!"getDouble() for this type is not allowed!");
                 break;
             case DataType::BIT:
@@ -1486,6 +1532,9 @@ double ORowSetValue::getDouble()    const
                     nRet = m_aValue.m_nInt32;
                 else
                     nRet = double(*(sal_Int64*)m_aValue.m_pValue);
+                break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
                 break;
         }
     }
@@ -1548,6 +1597,8 @@ void ORowSetValue::setFromDouble(const double& _rVal,sal_Int32 _nDatatype)
         case DataType::BINARY:
         case DataType::VARBINARY:
         case DataType::LONGVARBINARY:
+        case DataType::BLOB:
+        case DataType::CLOB:
             OSL_ASSERT(!"setFromDouble() for this type is not allowed!");
             break;
         case DataType::BIT:
@@ -1592,12 +1643,39 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::BLOB:
             {
                 Reference<XInputStream> xStream;
-                Any aValue = getAny();
+                const Any aValue = makeAny();
                 if(aValue.hasValue())
                 {
-                    aValue >>= xStream;
+                    Reference<XBlob> xBlob(aValue,UNO_QUERY);
+                    if ( xBlob.is() )
+                        xStream = xBlob->getBinaryStream();
+                    else
+                    {
+                        Reference<XClob> xClob(aValue,UNO_QUERY);
+                        if ( xClob.is() )
+                            xStream = xClob->getCharacterStream();
+                    }
                     if(xStream.is())
-                        xStream->readBytes(aSeq,xStream->available());
+                    {
+                        const sal_uInt32    nBytesToRead = 65535;
+                        sal_uInt32          nRead;
+
+                        do
+                        {
+                            ::com::sun::star::uno::Sequence< sal_Int8 > aReadSeq;
+
+                            nRead = xStream->readSomeBytes( aReadSeq, nBytesToRead );
+
+                            if( nRead )
+                            {
+                                const sal_uInt32 nOldLength = aSeq.getLength();
+                                aSeq.realloc( nOldLength + nRead );
+                                rtl_copyMemory( aSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
+                            }
+                        }
+                        while( nBytesToRead == nRead );
+                        xStream->closeInput();
+                    }
                 }
             }
             break;
@@ -1655,6 +1733,9 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                     aValue.Year     = pDateTime->Year;
                 }
                 break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
+                break;
         }
     }
     return aValue;
@@ -1693,6 +1774,10 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
             case DataType::TIME:
                 aValue = *static_cast< ::com::sun::star::util::Time*>(m_aValue.m_pValue);
+                break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
+                break;
         }
     }
     return aValue;
@@ -1739,6 +1824,9 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
             case DataType::TIMESTAMP:
                 aValue = *static_cast< ::com::sun::star::util::DateTime*>(m_aValue.m_pValue);
+                break;
+            default:
+                OSL_ENSURE(0,"Illegal conversion!");
                 break;
         }
     }
@@ -1885,12 +1973,16 @@ void ORowSetValue::fill(sal_Int32 _nPos,
             (*this) = _xRow->getLong(_nPos);
         break;
     case DataType::CLOB:
-        (*this) = ::com::sun::star::uno::makeAny(_xRow->getCharacterStream(_nPos));
+        (*this) = ::com::sun::star::uno::makeAny(_xRow->getClob(_nPos));
         setTypeKind(DataType::CLOB);
         break;
     case DataType::BLOB:
-        (*this) = ::com::sun::star::uno::makeAny(_xRow->getBinaryStream(_nPos));
+        (*this) = ::com::sun::star::uno::makeAny(_xRow->getBlob(_nPos));
         setTypeKind(DataType::BLOB);
+        break;
+    case DataType::OTHER:
+        (*this) = _xRow->getObject(_nPos,NULL);
+        setTypeKind(DataType::OTHER);
         break;
     default:
         OSL_ENSURE( false, "ORowSetValue::fill: unsupported type!" );
@@ -2037,6 +2129,29 @@ void ORowSetValue::fill(const Any& _rValue)
 
             break;
         }
+        case TypeClass_INTERFACE:
+            {
+                Reference< XClob > xClob;
+                if ( _rValue >>= xClob )
+                {
+                    (*this) = _rValue;
+                    setTypeKind(DataType::CLOB);
+                }
+                else
+                {
+                    Reference< XBlob > xBlob;
+                    if ( _rValue >>= xBlob )
+                    {
+                        (*this) = _rValue;
+                        setTypeKind(DataType::BLOB);
+                    }
+                    else
+                    {
+                        (*this) = _rValue;
+                    }
+                }
+            }
+            break;
 
         default:
             OSL_ENSURE(0,"Unknown type");
