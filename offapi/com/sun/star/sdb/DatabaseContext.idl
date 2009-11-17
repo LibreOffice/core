@@ -52,6 +52,8 @@
 
  module com {  module sun {  module star {  module sdb {
 
+published interface XDataSourceRegistrations;
+
 /** is the context for accessing datasource.
 
     <p>
@@ -65,11 +67,9 @@
  */
 published service DatabaseContext
 {
-
     /** Enumeration on all registered data sources.
      */
     interface com::sun::star::container::XEnumerationAccess;
-
 
     /** NameAccess on all registered data sources.
         <p>One exception is the <method "com.sun.star.container.XNameAccess">getByName</method>, this method also allows to ask
@@ -89,6 +89,19 @@ published service DatabaseContext
     /** Interface for creation of new datasources.
     */
     interface com::sun::star::lang::XSingleServiceFactory;
+
+    /** allows to access and modify the configuration data for registered data source.
+
+        <p>The main purpose of this interface is to allow you to register data sources which you know
+        by URL only, and have not yet loaded.</p>
+
+        <p>Also, it hides the details of the configuration data where the data source registrations
+        are maintained, so if possible at all, you should use this interface, instead of modifying or
+        querying the configuration data directly.</p>
+
+        @since OpenOffice.org 3.3
+    */
+    [optional] interface XDataSourceRegistrations;
 };
 
 //=============================================================================
