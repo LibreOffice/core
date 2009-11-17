@@ -2291,14 +2291,10 @@ void XMLTextImportHelper::setCurrentFieldParamsTo(::com::sun::star::uno::Referen
     if (!aFieldStack.empty() && xFormField.is()) {
         field_params_t &params=aFieldStack.top().second;
         for (field_params_t::iterator i=params.begin();i!=params.end();i++) {
-            rtl::OUString name=i->first;
-            rtl::OUString value=i->second;
-            if (name.compareToAscii("Description")==0){
-                xFormField->setDescription(value);
-            } else if (name.compareToAscii("Result")==0){
-                xFormField->setRes((sal_Int16)value.toInt32());
-            }
-
+            rtl::OString aOString1 = ::rtl::OUStringToOString (i->first, RTL_TEXTENCODING_UTF8);
+            rtl::OString aOString2 = ::rtl::OUStringToOString (i->second, RTL_TEXTENCODING_UTF8);
+            /* printf("param[\"%s\"]=\"%s\"\n", aOString1.getStr(), aOString2.getStr()); */
+            xFormField->addParam(i->first, i->second, false);
         }
     }
 }

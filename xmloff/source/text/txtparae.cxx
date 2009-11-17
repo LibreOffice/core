@@ -2236,14 +2236,16 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 }
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                 if (xFormField.is()) {
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, ::rtl::OUString::createFromAscii("msoffice.field.FORMTEXT"));
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                 }
                 GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
                 if (xFormField.is()) {
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Description"));
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, xFormField->getDescription());
+                    for(sal_Int16 i=0;i<xFormField->getParamCount();i++) {
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, xFormField->getParamName(i));
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, xFormField->getParamValue(i));
                     GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
                     GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                    }
                 }
                 GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
             }
@@ -2260,27 +2262,16 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 }
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                 if (xFormField.is()) {
-                    sal_Int16 fftype=xFormField->getType();
-                    switch (fftype) {
-                        case 1:
-                            GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, ::rtl::OUString::createFromAscii("msoffice.field.FORMCHECKBOX"));
-                        break;
-                        default:
-                            DBG_ASSERT(false, "hey ---- add your export stuff here!!");
-                        break;
-                    }
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                 }
                 GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
                 if (xFormField.is()) {
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Description"));
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, xFormField->getDescription());
+                    for(sal_Int16 i=0;i<xFormField->getParamCount();i++) {
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, xFormField->getParamName(i));
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, xFormField->getParamValue(i));
                     GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
                     GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
-
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, ::rtl::OUString::createFromAscii("Result"));
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, ::rtl::OUString::valueOf((sal_Int32 )xFormField->getRes()));
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+                    }
                 }
                 GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
             }
