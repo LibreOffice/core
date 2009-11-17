@@ -110,7 +110,47 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace sw::util;
 using namespace sw::types;
+using namespace sw::mark;
 using namespace nsFieldFlags;
+
+
+static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
+    ASSERT(pFieldmark!=NULL, "where is my fieldmark???");
+    if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMTEXT ) ) {
+        return String::CreateFromAscii(" FORMTEXT ");
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMDROPDOWN ) ) {
+        return String::CreateFromAscii(" FORMDROPDOWN ");
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) ) {
+        return String::CreateFromAscii(" FORMCHECKBOX ");
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_TOC ) ) {
+        return String::CreateFromAscii(" TOC ");
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_HYPERLINK ) ) {
+        return String::CreateFromAscii(" HYPERLINK ");
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_PAGEREF ) ) {
+        return String::CreateFromAscii(" PAGEREF ");
+    } else {
+        return pFieldmark->GetFieldname();
+    }
+}
+
+ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
+    ASSERT(pFieldmark!=NULL, "where is my fieldmark???");
+    if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMTEXT ) ) {
+        return ww::eFORMTEXT;
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMDROPDOWN ) ) {
+        return ww::eFORMDROPDOWN;
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) ) {
+        return ww::eFORMCHECKBOX;
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_TOC ) ) {
+        return ww::eTOC;
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_HYPERLINK ) ) {
+        return ww::eHYPERLINK;
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_PAGEREF ) ) {
+        return ww::ePAGEREF;
+    } else {
+        return ww::eUNKNOWN;
+    }
+}
 
 /*  */
 
@@ -262,22 +302,40 @@ SwAttrIter::SwAttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
     nAktSwPos = SearchNext(1);
 }
 
+xub_StrLen lcl_getMinPos( xub_StrLen pos1, xub_StrLen pos2 )
+{
+    xub_StrLen min = STRING_NOTFOUND;
+    if ( pos1 == STRING_NOTFOUND && pos2 != STRING_NOTFOUND )
+        min = pos2;
+    else if ( pos2 == STRING_NOTFOUND && pos1 != STRING_NOTFOUND )
+        min = pos1;
+    else if ( pos2 != STRING_NOTFOUND && pos2 != STRING_NOTFOUND )
+    {
+        if ( pos1 < pos2 )
+            min = pos1;
+        else
+            min = pos2;
+    }
+
+    return min;
+}
+
 xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
 {
     xub_StrLen nPos;
     xub_StrLen nMinPos = STRING_MAXLEN;
-    const String aTxt = rNd.GetTxt();
-    xub_StrLen pos = aTxt.Search(CH_TXT_ATR_FIELDSTART, nStartPos);
-    if( pos==STRING_NOTFOUND )
-    {
-        pos = aTxt.Search(CH_TXT_ATR_FIELDEND, nStartPos);
-        if( pos==STRING_NOTFOUND )
-            pos = aTxt.Search(CH_TXT_ATR_FORMELEMENT, nStartPos);
-    }
-    if( pos!=STRING_NOTFOUND )
-        nMinPos=pos;
-
     xub_StrLen i=0;
+
+    const String aTxt = rNd.GetTxt();
+    xub_StrLen fieldEndPos = aTxt.Search(CH_TXT_ATR_FIELDEND, nStartPos);
+    xub_StrLen fieldStartPos = aTxt.Search(CH_TXT_ATR_FIELDSTART, nStartPos);
+    xub_StrLen formElementPos = aTxt.Search(CH_TXT_ATR_FORMELEMENT, nStartPos);
+
+    xub_StrLen pos = lcl_getMinPos( fieldEndPos, fieldStartPos );
+    pos = lcl_getMinPos( pos, formElementPos );
+
+    if (pos!=STRING_NOTFOUND)
+        nMinPos=pos;
 
     // first the redline, then the attributes
     if( pCurRedline )
@@ -1695,12 +1753,14 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                if ( pFieldmark )
-                    AppendBookmark( pFieldmark->GetName(), true );
-                OutputField( NULL, ww::eFORMTEXT, String::CreateFromAscii( " FORMTEXT " ), WRITEFIELD_START | WRITEFIELD_CMD_START );
-                if ( pFieldmark )
+                if ( pFieldmark->GetFieldname().equalsAscii( ECMA_FORMTEXT ) )
+                    AppendBookmark( pFieldmark->GetName(), false );
+                OutputField( NULL, lcl_getFieldId( pFieldmark ), lcl_getFieldCode( pFieldmark ), WRITEFIELD_START | WRITEFIELD_CMD_START );
+                if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMTEXT ) )
                     WriteFormData( *pFieldmark );
-                OutputField( NULL, ww::eFORMTEXT, String(), WRITEFIELD_CMD_END );
+                else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_HYPERLINK ) )
+                    WriteHyperlinkData( *pFieldmark );
+                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
             }
             else if ( ch == CH_TXT_ATR_FIELDEND )
             {
@@ -1708,8 +1768,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                OutputField( NULL, ww::eFORMTEXT, String(), WRITEFIELD_CLOSE );
-                if ( pFieldmark )
+                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
+                if ( pFieldmark->GetFieldname().equalsAscii( ECMA_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
             else if ( ch == CH_TXT_ATR_FORMELEMENT )
@@ -1718,13 +1778,18 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                if ( pFieldmark )
-                    AppendBookmark( pFieldmark->GetName(), true );
-                OutputField( NULL, ww::eFORMCHECKBOX, String::CreateFromAscii( " FORMCHECKBOX " ), WRITEFIELD_START | WRITEFIELD_CMD_START );
-                if ( pFieldmark )
+                bool isEcma = pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMDROPDOWN ) ||
+                    pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX );
+
+                if ( isEcma )
+                    AppendBookmark( pFieldmark->GetName(), 0 );
+                OutputField( NULL, lcl_getFieldId( pFieldmark ),
+                        lcl_getFieldCode( pFieldmark ),
+                        WRITEFIELD_START | WRITEFIELD_CMD_START );
+                if ( isEcma )
                     WriteFormData( *pFieldmark );
-                OutputField( NULL, ww::eFORMCHECKBOX, String(), WRITEFIELD_CMD_END | WRITEFIELD_CLOSE );
-                if ( pFieldmark )
+                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
+                if ( isEcma )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
             nLen -= static_cast< USHORT >( ofs );

@@ -88,15 +88,18 @@
 #include <fmtclds.hxx>
 #include <pagedesc.hxx>
 #include <SwStyleNameMapper.hxx>
-
+#include <IMark.hxx>
 
 #include "ww8scan.hxx"          // WW8FieldDesc
 #include "ww8par.hxx"
 #include "ww8par2.hxx"
 #include "writerhelper.hxx"
 #include "fields.hxx"
+#include <svtools/fltrcfg.hxx>
 
 #include <algorithm> // #i24377#
+
+//#define WW_NATIVE_TOC 0
 
 #define MAX_FIELDLEN 64000
 
@@ -104,6 +107,7 @@
 
 using namespace ::com::sun::star;
 using namespace sw::util;
+using namespace sw::mark;
 using namespace std; // #i24377#
 using namespace nsSwDocInfoSubType;
 
@@ -328,9 +332,11 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 
     //"_Toc*" and "_Hlt*" are unnecessary
     const String* pName = pB->GetName();
+#if !defined(WW_NATIVE_TOC)
     if(    !pName || pName->EqualsIgnoreCaseAscii( "_Toc", 0, 4 )
         || pName->EqualsIgnoreCaseAscii( "_Hlt", 0, 4 ) )
         return 0;
+#endif
 
     //JP 16.11.98: ToUpper darf auf keinen Fall gemacht werden, weil der
     //Bookmark- name ein Hyperlink-Ziel sein kann!
@@ -672,6 +678,9 @@ sal_uInt16 SwWW8ImplReader::End_Field()
     if (!pF || !pF->EndPosIsFieldEnd())
         return nRet;
 
+    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+
     ASSERT(!maFieldStack.empty(), "Empty field stack\n");
     if (!maFieldStack.empty())
     {
@@ -683,9 +692,40 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         nRet = maFieldStack.back().mnFieldId;
         switch (nRet)
         {
+        case 70:
+        if (bUseEnhFields && pPaM!=NULL && pPaM->GetPoint()!=NULL) {
+            SwPosition aEndPos = *pPaM->GetPoint();
+            SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
+            IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+            IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeFieldBookmark(
+                        aFldPam, maFieldStack.back().GetBookmarkName(), ::rtl::OUString::createFromAscii(ECMA_FORMTEXT ) ) );
+            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+            if (pFieldmark!=NULL) {
+            pFieldmark->addParams(maFieldStack.back().getParams());
+            }
+        }
+        break;
+#if defined(WW_NATIVE_TOC)
+        case 8: // TOX_INDEX
+        case 13: // TOX_CONTENT
+        case 88: // HYPERLINK
+        case 37: // REF
+        if (pPaM!=NULL && pPaM->GetPoint()!=NULL) {
+
+            SwPosition aEndPos = *pPaM->GetPoint();
+            SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
+            SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeFieldBookmark(aFldPam, maFieldStack.back().GetBookmarkName(), maFieldStack.back().GetBookmarkType());
+            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+            if (pFieldmark!=NULL) {
+            pFieldmark->addParams(maFieldStack.back().getParams());
+            }
+        }
+        break;
+#else
             case 88:
                 pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
             break;
+#endif
             case 36:
             case 68:
                 //Move outside the section associated with this type of field
@@ -703,6 +743,10 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
 {
     switch (nFieldCode)
     {
+#if defined(WW_NATIVE_TOC)
+    case 8:  // allow recursive field in TOC...
+    case 13: // allow recursive field in TOC...
+#endif
         case 36:
         case 68:
         case 79:
@@ -740,6 +784,36 @@ FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
     Swap(aTemp);
     return *this;
 }
+
+::rtl::OUString FieldEntry::GetBookmarkName()
+{
+    return msBookmarkName;
+}
+
+::rtl::OUString FieldEntry::GetBookmarkType()
+{
+    return msMarkType;
+}
+
+void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
+{
+    msBookmarkName=bookmarkName;
+}
+
+void FieldEntry::SetBookmarkType(::rtl::OUString bookmarkType)
+{
+    msMarkType=bookmarkType;
+}
+
+void FieldEntry::AddParam(::rtl::OUString name, ::rtl::OUString value)
+{
+    maParams.push_back( IFieldmark::ParamPair_t( name, value ) );
+}
+
+FieldEntry::Params_t &FieldEntry::getParams() {
+    return maParams;
+}
+
 
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
 // wird 0 zurueckgegeben, so dass das Feld vom Aufrufer textuell gelesen wird.
@@ -2070,6 +2144,17 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 
     String sName(GetMappedBookmark(sOrigName));
 
+#if defined(WW_NATIVE_TOC)
+    if (1) {
+    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_REF");
+    maFieldStack.back().SetBookmarkName(aBookmarkName);
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ECMA_PAGEREF));
+    maFieldStack.back().AddParam(rtl::OUString(), sName);
+    return FLD_TEXT;
+    }
+#endif
+
+
     SwGetRefField aFld(
         (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), sName,
         REF_BOOKMARK, 0, REF_PAGE );
@@ -2768,6 +2853,16 @@ USHORT lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
+#if defined(WW_NATIVE_TOC)
+    if (1) {
+    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_TOC");
+    maFieldStack.back().SetBookmarkName(aBookmarkName);
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ECMA_TOC));
+//     maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+    return FLD_TEXT;
+    }
+#endif
+
     if (pF->nLRes < 3)
         return FLD_TEXT;      // ignore (#i25440#)
 
@@ -3286,6 +3381,16 @@ eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* /*pF*/, String& /*rStr*/)
 
 eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
 {
+#if defined(WW_NATIVE_TOC)
+    if (1) {
+    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_HYPERLINK");
+    maFieldStack.back().SetBookmarkName(aBookmarkName);
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ECMA_HYPERLINK));
+//     maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+    return FLD_TEXT;
+    }
+#endif
+
     String sURL, sTarget, sMark;
     bool bDataImport = false;
     //HYPERLINk "filename" [switches]

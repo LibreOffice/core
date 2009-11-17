@@ -105,6 +105,7 @@
 #include "ww8attributeoutput.hxx"
 
 #include <IDocumentMarkAccess.hxx>
+#include <xmloff/ecmaflds.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -3466,11 +3467,20 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
+
+    ASSERT(rFieldmark.GetFieldname().equalsAscii( ECMA_FORMTEXT ) || rFieldmark.GetFieldname().equalsAscii( ECMA_FORMDROPDOWN ) || rFieldmark.GetFieldname().equalsAscii( ECMA_FORMCHECKBOX ), "Unknown field type!!!");
+    if ( ! ( rFieldmark.GetFieldname().equalsAscii( ECMA_FORMTEXT ) ||
+                rFieldmark.GetFieldname().equalsAscii( ECMA_FORMDROPDOWN ) ||
+                rFieldmark.GetFieldname().equalsAscii( ECMA_FORMCHECKBOX ) ) )
+        return;
+
     int type = 0; // TextFieldmark
     if ( pAsCheckbox )
         type = 1;
+    if ( rFieldmark.GetFieldname().equalsAscii( ECMA_FORMDROPDOWN ) )
+        type=2;
 
-    const ::rtl::OUString ffname = rFieldmark.GetFieldname();
+    const String ffname = rFieldmark.getParam("name").second;
 
     ULONG nDataStt = pDataStrm->Tell();
     pChpPlc->AppendFkpEntry(Strm().Tell());
@@ -3492,14 +3502,27 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     sal_uInt8 aFldHeader[] =
     {
         0xFF, 0xFF, 0xFF, 0xFF, // Unicode Marker...
-        0, 0, 0, 0//, 0, 0, 0, 0
+        0, 0, 0, 0, 0, 0 //, 0, 0
     };
 
     aFldHeader[4] |= (type & 0x03);
     int ffres = 0; // rFieldmark.GetFFRes();
     if ( pAsCheckbox && pAsCheckbox->IsChecked() )
         ffres = 1;
+    else if ( type == 2 )
+        ffres = rFieldmark.getParam( ECMA_FORMDROPDOWN_RESULT, "0" ).second.toInt32();
     aFldHeader[4] |= ( (ffres<<2) & 0x7C );
+
+    std::vector< ::rtl::OUString > aListItems;
+    if (type==2)
+    {
+        aFldHeader[5] |= 0x80; // ffhaslistbox
+        for ( int i = 0; i < rFieldmark.getNumOfParams() ; i++ )
+        {
+            if (rFieldmark.getParam(i).first.compareToAscii(ECMA_FORMDROPDOWN_LISTENTRY)==0)
+                aListItems.push_back(rFieldmark.getParam(i).second);
+        }
+    }
 
     const ::rtl::OUString ffdeftext;
     const ::rtl::OUString ffformat;
@@ -3507,6 +3530,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::rtl::OUString ffstattext;
     const ::rtl::OUString ffentrymcr;
     const ::rtl::OUString ffexitmcr;
+
 
     const sal_uInt8 aFldData[] =
     {
@@ -3520,13 +3544,22 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     };
     int slen = sizeof( aFldData )
         + sizeof( aFldHeader )
-        + 2*ffname.getLength() + 4
+        + 2*ffname.Len() + 4
         + 2*ffdeftext.getLength() + 4
         + 2*ffformat.getLength() + 4
         + 2*ffhelptext.getLength() + 4
         + 2*ffstattext.getLength() + 4
         + 2*ffentrymcr.getLength() + 4
         + 2*ffexitmcr.getLength() + 4;
+    if ( type==2 ) {
+        slen += 2; // for 0xFF, 0xFF
+        slen += 4; // for num of list items
+        const int items = aListItems.size();
+        for( int i = 0; i < items; i++ ) {
+            rtl::OUString item = aListItems[i];
+            slen += 2 * item.getLength() + 2;
+        }
+    }
 #ifdef OSL_BIGENDIAN
     slen = SWAPLONG( slen );
 #endif // OSL_BIGENDIAN
@@ -3537,6 +3570,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
     len = sizeof( aFldHeader );
     OSL_ENSURE( len == 8, "SwWW8Writer::WriteFormData(..) - wrong aFldHeader length" );
+
     pDataStrm->Write( aFldHeader, len );
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, ffname, true ); // Form field name
@@ -3551,11 +3585,20 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffstattext ), true );
     SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffentrymcr ), true );
     SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffexitmcr ), true );
-//    if (type==2) {
-//        // 0xFF, 0xFF
-//        // sal_uInt32 number of strings
-//        // (sal_uInt16 len; sal_uInt16 unicode char[len])*num of strings
-//    }
+    if (type==2) {
+        *pDataStrm<<(sal_uInt16)0xFFFF;
+        const int items=aListItems.size();
+        *pDataStrm<<(sal_uInt32)items;
+        for(int i=0;i<items;i++) {
+            rtl::OUString item=aListItems[i];
+            SwWW8Writer::WriteString_xstz( *pDataStrm, item, false );
+        }
+    }
+}
+
+void WW8Export::WriteHyperlinkData( const sw::mark::IFieldmark& rFieldmark )
+{
+    //@TODO implement me !!!
 }
 
 void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner )

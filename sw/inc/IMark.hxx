@@ -51,12 +51,12 @@ namespace sw { namespace mark
     {
         public:
             //getters
-            virtual const SwPosition& GetMarkPos() const =0;
+            virtual SwPosition& GetMarkPos() const =0;
             // GetOtherMarkPos() is only guaranteed to return a valid
             // reference if IsExpanded() returned true
-            virtual const SwPosition& GetOtherMarkPos() const =0;
-            virtual const SwPosition& GetMarkStart() const =0;
-            virtual const SwPosition& GetMarkEnd() const =0;
+            virtual SwPosition& GetOtherMarkPos() const =0;
+            virtual SwPosition& GetMarkStart() const =0;
+            virtual SwPosition& GetMarkEnd() const =0;
             virtual const ::rtl::OUString& GetName() const =0;
             virtual bool IsExpanded() const =0;
             virtual bool IsCoveringPosition(const SwPosition& rPos) const =0;
@@ -79,6 +79,9 @@ namespace sw { namespace mark
                 { return GetMarkEnd() < rPos; }
             bool EndsAfter(const SwPosition& rPos) const
                 { return GetMarkEnd() > rPos; }
+
+            // Use for debugging purpose
+            virtual rtl::OUString toString( ) const = 0;
     };
 
     class IBookmark
@@ -95,13 +98,25 @@ namespace sw { namespace mark
         : virtual public IMark
     {
         public:
+            typedef  std::pair< ::rtl::OUString, ::rtl::OUString > ParamPair_t;
+
             //getters
             virtual ::rtl::OUString GetFieldname() const =0;
             virtual ::rtl::OUString GetFieldHelptext() const =0;
 
+            virtual void addParam( rtl::OUString rParamName,
+                    rtl::OUString rParamValue,
+                    bool bReplaceExisting = true ) = 0;
+            virtual void addParam( const char* paramName, int value ) = 0;
+            virtual void addParams( std::vector<ParamPair_t>& params ) = 0;
+            virtual int  getNumOfParams() const = 0;
+            virtual ParamPair_t getParam( int pos ) const = 0;
+            virtual ParamPair_t getParam( const char *name, const char *defaultValue = NULL ) const = 0;
+
             //setters
             virtual void SetFieldname(const ::rtl::OUString& rFieldname) =0;
             virtual void SetFieldHelptext(const ::rtl::OUString& rFieldHelptext) =0;
+            virtual void invalidate( ) = 0;
     };
 
     class ICheckboxFieldmark

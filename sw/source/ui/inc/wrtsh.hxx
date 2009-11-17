@@ -35,6 +35,7 @@
 #include <fesh.hxx>
 #include <sortopt.hxx>
 #include <swurl.hxx>
+#include <IMark.hxx>
 
 class Window;
 class OutputDevice;
@@ -321,6 +322,9 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     // Verzeichnisse
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
     BOOL    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
+
+        //  new fields
+    BOOL    UpdateField( sw::mark::IFieldmark &fieldBM);
 
     // Numerierung und Bullets
     /**

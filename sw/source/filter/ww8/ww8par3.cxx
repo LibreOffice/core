@@ -96,66 +96,14 @@
 
 #include <IMark.hxx>
 #include <svtools/fltrcfg.hxx>
+#include <xmloff/ecmaflds.hxx>
 
 #include <stdio.h>
 
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
-
-WW8NewFieldCtx::WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType)
-    : maPtNode(aStartPos.nNode)
-    , mnPtCntnt(aStartPos.nContent.GetIndex())
-    , msBookmarkName(sBookmarkName)
-    , msMarkType(sMarkType)
-    , mpPaM(NULL)
-{
-}
-
-
-WW8NewFieldCtx::~WW8NewFieldCtx()
-{
-    if (mpPaM) delete mpPaM;
-}
-
-::rtl::OUString WW8NewFieldCtx::GetBookmarkName()
-{
-    return msBookmarkName;
-}
-
-::rtl::OUString WW8NewFieldCtx::GetMarkType()
-{
-    return msMarkType;
-}
-
-void WW8NewFieldCtx::AddParam(::rtl::OUString name, ::rtl::OUString value)
-{
-    maParams.push_back( Param_t(name, value) );
-}
-
-void WW8NewFieldCtx::SetCurrentFieldParamsTo(::sw::mark::IFieldmark* pFieldmark)
-{
-    for(Params_t::iterator i=maParams.begin();i!=maParams.end();i++)
-    {
-        ::rtl::OUString aName=i->first;
-        ::rtl::OUString aValue=i->second;
-        if(aName.compareToAscii("Description")==0)
-        {
-            pFieldmark->SetFieldHelptext(aValue);
-        }
-        else if(aName.compareToAscii("Name")==0)
-        {
-            pFieldmark->SetFieldname(aValue);
-        }
-        else if(aName.compareToAscii("Result")==0)
-        {
-            ::sw::mark::ICheckboxFieldmark* pAsCheckbox =
-                dynamic_cast< ::sw::mark::ICheckboxFieldmark* >(pFieldmark);
-            if(pAsCheckbox)
-                pAsCheckbox->SetChecked(aValue.toInt32()==0);
-        }
-    }
-}
+using namespace sw::mark;
 
 //-----------------------------------------
 //            UNO-Controls
@@ -233,10 +181,10 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
 
     if (aBookmarkName.Len()>0) {
-        WW8NewFieldCtx *pFieldCtx=new WW8NewFieldCtx(*pPaM->GetPoint(), aBookmarkName, ::rtl::OUString::createFromAscii("ecma.office-open-xml.field.FORMTEXT"));
-        maNewFieldCtxStack.push_back(pFieldCtx);
-        pFieldCtx->AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
-        pFieldCtx->AddParam(::rtl::OUString::createFromAscii("Name"), aFormula.sTitle);
+        maFieldStack.back().SetBookmarkName(aBookmarkName);
+        maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ECMA_FORMTEXT));
+        maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+        maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Name"), aFormula.sTitle);
     }
     return FLD_TEXT;
     }
@@ -279,19 +227,22 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
         aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
     }
 
-    if (aBookmarkName.Len()>0) {
-        ::sw::mark::ICheckboxFieldmark* pFieldmark =
-            dynamic_cast< ::sw::mark::ICheckboxFieldmark*>(rDoc.getIDocumentMarkAccess()->makeMark(
-                *pPaM,
-                aBookmarkName,
-                IDocumentMarkAccess::CHECKBOX_FIELDMARK));
-        OSL_ENSURE(pFieldmark,
-            "hmmm; why was the bookmark not created?");
-        if(pFieldmark)
-        {
-            pFieldmark->SetFieldname(aFormula.sTitle);
-            pFieldmark->SetFieldHelptext(aFormula.sToolTip);
-            pFieldmark->SetChecked(aFormula.nChecked!=0);
+    if (aBookmarkName.Len()>0)
+    {
+        IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+        IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
+                *pPaM, aBookmarkName,
+                rtl::OUString::createFromAscii( ECMA_FORMCHECKBOX ) ) );
+        ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+        if (pFieldmark!=NULL) {
+            pFieldmark->addParam(
+                    rtl::OUString::createFromAscii(ECMA_FORMCHECKBOX_NAME),
+                    rtl::OUString( aFormula.sTitle ) );
+            pFieldmark->addParam(
+                    rtl::OUString::createFromAscii(ECMA_FORMCHECKBOX_HELPTEXT),                     aFormula.sToolTip);
+            pFieldmark->addParam(
+                    rtl::OUString::createFromAscii(ECMA_FORMCHECKBOX_CHECKED),
+                    ::rtl::OUString::createFromAscii(aFormula.nChecked!=0?"on":"off"));
             // set field data here...
         }
     }
@@ -306,24 +257,75 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
     if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
-    SwDropDownField aFld(
-        (SwDropDownFieldType*)rDoc.GetSysFldType(RES_DROPDOWN));
+    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
 
-    aFld.SetName(aFormula.sTitle);
-    aFld.SetHelp(aFormula.sHelp);
-    aFld.SetToolTip(aFormula.sToolTip);
-
-    if (!aFormula.maListEntries.empty())
+    if (!bUseEnhFields)
     {
-        aFld.SetItems(aFormula.maListEntries);
-        int nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size()
-            ? aFormula.fDropdownIndex : 0;
-        aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
+        SwDropDownField aFld((SwDropDownFieldType*)rDoc.GetSysFldType(RES_DROPDOWN));
+
+        aFld.SetName(aFormula.sTitle);
+        aFld.SetHelp(aFormula.sHelp);
+        aFld.SetToolTip(aFormula.sToolTip);
+
+        if (!aFormula.maListEntries.empty())
+        {
+            aFld.SetItems(aFormula.maListEntries);
+            int nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
+            aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
+        }
+
+        rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+        return FLD_OK;
     }
+    else
+    {
+        //@TODO fix: copy pasting here!!!!!!!!!!!!!!
+        //REVIEW: don't let this throught.... sometime I forget to get rid of my proof of concept stuff. Please kindly remind me!!!!!
 
-    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+        String aBookmarkName;
+        WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+        if (pB!=NULL)
+        {
+            WW8_CP currentCP=pF->nSCode;
+            WW8_CP currentLen=pF->nLen;
 
-    return FLD_OK;
+            USHORT bkmFindIdx;
+            String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+
+            if (aBookmarkFind.Len()>0)
+            {
+                pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark as consumed by field
+                if (aBookmarkFind.Len()>0)
+                    aBookmarkName=aBookmarkFind;
+            }
+        }
+
+        if (pB!=NULL && aBookmarkName.Len()==0)
+            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+
+        if (aBookmarkName.Len()>0)
+        {
+            IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+            IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
+                    pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName,
+                           ::rtl::OUString::createFromAscii( ECMA_FORMDROPDOWN ) ) );
+            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+            if ( pFieldmark != NULL )
+            {
+                rtl::OUString sListEntry=rtl::OUString::createFromAscii( ECMA_FORMDROPDOWN_LISTENTRY );
+                std::vector<String>::iterator it = aFormula.maListEntries.begin();
+                for( ; it != aFormula.maListEntries.end(); it++ )
+                    pFieldmark->addParam(sListEntry, *it, false);
+
+                int nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
+                pFieldmark->addParam(ECMA_FORMDROPDOWN_RESULT, nIndex);
+                // set field data here...
+            }
+        }
+
+        return FLD_OK;
+    }
 }
 
 void SwWW8ImplReader::DeleteFormImpl()
@@ -2140,11 +2142,18 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
 
     if((aPic.lcb > 0x3A) && !pDataStream->GetError() )
     {
-        pDataStream->Seek( nPicLocFc + aPic.cbHeader );
+#if 0 // some debug fun; remove this later...
         int len=aPic.lcb-aPic.cbHeader;
         char *pBuf=(char*)malloc(len);
         pDataStream->Read( pBuf, len);
+    static int _h=0;
+    char fname[255];
+    sprintf(fname, "data%03i.data", _h++);
+    FILE *out=fopen(fname, "wb");
+    fwrite(pBuf, len, 1, out);
+    fclose(out);
         pDataStream->Seek( nPicLocFc + aPic.cbHeader );
+#endif
         aFormula.FormulaRead(nWhich,pDataStream);
         bRet = true;
     }

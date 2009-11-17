@@ -55,11 +55,13 @@
 #include <IMark.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <xmloff/ecmaflds.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
 #endif
 
+using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
@@ -769,9 +771,10 @@ void SwHolePortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
-void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & rInf) const
+void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & /*rInf*/) const
 {
-    SwTxtPortion::Paint(rInf);
+    // These shouldn't be painted!
+    // SwTxtPortion::Paint(rInf);
 }
 
 sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
@@ -781,38 +784,95 @@ sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
     return ret;
 }
 
+namespace ecma {
+    static int getCurrentListIndex( IFieldmark* pBM,
+            ::rtl::OUString *currentText = NULL )
+    {
+        int currentIndex = pBM->getParam( ECMA_FORMDROPDOWN_RESULT, "0" ).second.toInt32();
+        int idx = 0;
+        for( int i = 0; i < pBM->getNumOfParams(); i++ )
+        {
+            IFieldmark::ParamPair_t p = pBM->getParam( i );
+            if ( p.first.compareToAscii( ECMA_FORMDROPDOWN_LISTENTRY ) == 0 )
+            {
+                 if ( idx == currentIndex )
+                {
+                     if ( currentText!=NULL ) *currentText=p.second;
+                         break;
+                 }
+                else
+                     idx++;
+            }
+        }
+        return idx;
+    }
+} /* ecma */
 
 //FIXME Fieldbk
-//void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
-void SwFieldFormPortion::Paint( const SwTxtPaintInfo& ) const
+void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
 {
-//    SwTxtNode *pNd=const_cast<SwTxtNode*>(rInf.GetTxtFrm()->GetTxtNode());
-//    const SwDoc *doc=pNd->GetDoc();
-//    SwIndex aIndex( pNd, rInf.GetIdx() );
-//    SwPosition aPosition(*pNd, aIndex);
-//    pMark = dynamic_cast< doc->getFieldmarkFor(aPosition);
-//    OSL_ENSURE(pMark,
-//        "SwFieldFormPortion::Paint(..)"
-//        " - Where is my form field bookmark???");
+    SwTxtNode* pNd = const_cast<SwTxtNode*>(rInf.GetTxtFrm()->GetTxtNode());
+    const SwDoc *doc=pNd->GetDoc();
+    SwIndex aIndex( pNd, rInf.GetIdx() );
+    SwPosition aPosition(*pNd, aIndex);
 
-//    bool checked=(pBM!=NULL?pBM->IsChecked():false);
-//    rInf.DrawCheckBox(*this , checked);
+    IFieldmark* pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
+
+    OSL_ENSURE( pBM,
+        "SwFieldFormPortion::Paint(..)"
+        " - Where is my form field bookmark???");
+
+    if ( pBM != NULL )
+    {
+        if ( pBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
+        { // a checkbox...
+            bool checked = pBM->getParam( ECMA_FORMCHECKBOX_CHECKED ).second.compareToAscii("on") == 0;
+            rInf.DrawCheckBox( *this , checked);
+        }
+        else if ( pBM->GetFieldname( ).equalsAscii(  ECMA_FORMDROPDOWN ) )
+        { // a list...
+             rtl::OUString aTxt;
+             rInf.DrawViewOpt( *this, POR_FLD );
+             rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
+        }
+        else
+        {
+             assert(0); // unknown type...
+        }
+    }
 }
 
-sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo &rInf )
+sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
 {
-    sal_Bool ret=0;
-//  ret=SwTxtPortion::Format(rInf);
-
-    Width(rInf.GetTxtHeight());
-    Height(rInf.GetTxtHeight());
-    SetAscent(rInf.GetAscent());
-    //int h=rInf.GetTxtHeight();
-
-/*
-    Height(100);
-    SetAscent(100);
-*/
+    sal_Bool ret = 0;
+    SwTxtNode *pNd = const_cast < SwTxtNode * >( rInf.GetTxtFrm(  )->GetTxtNode(  ) );
+    const SwDoc *doc = pNd->GetDoc(  );
+    SwIndex aIndex( pNd, rInf.GetIdx(  ) );
+    SwPosition aPosition( *pNd, aIndex );
+    IFieldmark *pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
+    ASSERT( pBM != NULL, "Where is my form field bookmark???" );
+    if ( pBM != NULL )
+    {
+        if ( pBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
+        {
+            Width( rInf.GetTxtHeight(  ) );
+            Height( rInf.GetTxtHeight(  ) );
+            SetAscent( rInf.GetAscent(  ) );
+        }
+        else if ( pBM->GetFieldname( ).equalsAscii( ECMA_FORMDROPDOWN ) )
+        {
+            ::rtl::OUString aTxt;
+            ecma::getCurrentListIndex( pBM, &aTxt );
+            SwPosSize aPosSize = rInf.GetTxtSize( aTxt );
+            Width( aPosSize.Width(  ) );
+            Height( aPosSize.Height(  ) );
+            SetAscent( rInf.GetAscent(  ) );
+        }
+        else
+        {
+            assert( 0 );        // unknown type...
+        }
+    }
     return ret;
 }
 

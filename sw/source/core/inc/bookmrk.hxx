@@ -48,26 +48,31 @@ namespace sw { namespace mark
     {
         public:
             //getters
-            virtual const SwPosition& GetMarkPos() const
+            virtual SwPosition& GetMarkPos() const
                 { return *m_pPos1; }
             virtual const ::rtl::OUString& GetName() const
                 { return m_aName; }
-            virtual bool IsCoveringPosition(const SwPosition& rPos) const
-                { return GetMarkStart() <= rPos && rPos <= GetMarkEnd(); };
-            virtual const SwPosition& GetOtherMarkPos() const
+            virtual bool IsCoveringPosition(const SwPosition& rPos) const;
+            virtual SwPosition& GetOtherMarkPos() const
             {
                 OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
                 return *m_pPos2;
             }
-            virtual const SwPosition& GetMarkStart() const
+            virtual SwPosition& GetMarkStart() const
             {
-                if(!m_pPos2 /* !IsExpanded()*/) return *m_pPos1;
-                return *m_pPos1 < *m_pPos2 ? *m_pPos1 : *m_pPos2;
+                if( !IsExpanded() ) return GetMarkPos( );
+                if ( GetMarkPos( ) < GetOtherMarkPos( ) )
+                    return GetMarkPos();
+                else
+                    return GetOtherMarkPos( );
             }
-            virtual const SwPosition& GetMarkEnd() const
+            virtual SwPosition& GetMarkEnd() const
             {
-                if(!m_pPos2 /* !IsExpanded()*/ ) return *m_pPos1;
-                return *m_pPos1 > *m_pPos2 ? *m_pPos1 : *m_pPos2;
+                if( !IsExpanded() ) return GetMarkPos();
+                if ( GetMarkPos( ) > GetOtherMarkPos( ) )
+                    return GetMarkPos( );
+                else
+                    return GetOtherMarkPos( );
             }
             virtual bool IsExpanded() const
                 { return m_pPos2; }
@@ -79,6 +84,8 @@ namespace sw { namespace mark
             virtual void SetOtherMarkPos(const SwPosition& rNewPos);
             virtual void ClearOtherMarkPos()
                 { m_pPos2.reset(); }
+
+            virtual rtl::OUString toString( ) const;
 
             virtual void Swap()
             {
@@ -190,11 +197,23 @@ namespace sw { namespace mark
             ::rtl::OUString GetFieldHelptext() const
                 { return m_aFieldHelptext; }
 
+            void addParam( rtl::OUString rParamName,
+                           rtl::OUString rParamValue,
+                           bool bReplaceExisting = true );
+            void addParam( const char* paramName, int value );
+            void addParams(std::vector<ParamPair_t>& params);
+            int  getNumOfParams() const;
+            ParamPair_t getParam(int pos) const;
+            ParamPair_t getParam(const char *name, const char *defaultValue) const;
+
             // setters
             void SetFieldname(const ::rtl::OUString& aFieldname)
                 { m_aFieldname = aFieldname; }
             void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
                 { m_aFieldHelptext = aFieldHelptext; }
+            void invalidate( );
+
+            virtual rtl::OUString toString( ) const;
         private:
             //int fftype; // Type: 0 = Text, 1 = Check Box, 2 = List
             //bool ffprot;
@@ -202,7 +221,7 @@ namespace sw { namespace mark
             ::rtl::OUString m_aFieldname;
             ::rtl::OUString m_aFieldHelptext;
             static const ::rtl::OUString our_sNamePrefix;
-
+            std::vector<ParamPair_t> m_params;
     };
 
     class TextFieldmark

@@ -242,6 +242,13 @@ BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     return bResult;
 }
 
+BOOL SwWrtShell::UpdateField( sw::mark::IFieldmark &fieldBM )
+{
+    return SwEditShell::UpdateField(fieldBM);
+}
+
+
+
     // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
     // Fuehre die vor definierten Aktionen aus.
 

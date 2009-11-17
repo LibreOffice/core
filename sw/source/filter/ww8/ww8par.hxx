@@ -60,6 +60,8 @@
 #include "ww8glsy.hxx"
 #include "wrtww8.hxx"
 #include "../inc/msfilter.hxx"
+#include <xmloff/ecmaflds.hxx>
+#include <IMark.hxx>
 
 class SwDoc;
 class SwPaM;
@@ -362,6 +364,8 @@ namespace sw
             Position(const SwPosition &rPos);
             Position(const Position &rPos);
             operator SwPosition() const;
+        SwNodeIndex GetPtNode() { return maPtNode; };
+        xub_StrLen GetPtCntnt() { return mnPtCntnt; };
         };
     }
 }
@@ -369,36 +373,30 @@ namespace sw
 class FieldEntry
 {
 public:
+     typedef ::std::vector<sw::mark::IFieldmark::ParamPair_t> Params_t;
+
+private:
+    ::rtl::OUString msBookmarkName;
+    ::rtl::OUString msMarkType;
+    Params_t maParams;
+
+public:
     sw::hack::Position maStartPos;
     sal_uInt16 mnFieldId;
     FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
     FieldEntry(const FieldEntry &rOther) throw();
     FieldEntry &operator=(const FieldEntry &rOther) throw();
     void Swap(FieldEntry &rOther) throw();
-};
 
-class WW8NewFieldCtx
-{
-private:
-    SwNodeIndex maPtNode;
-    xub_StrLen mnPtCntnt;
-    ::rtl::OUString msBookmarkName;
-    ::rtl::OUString msMarkType;
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> Param_t;
-    typedef ::std::vector< Param_t > Params_t;
-    Params_t maParams;
-  SwPaM * mpPaM;
+    SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
+    xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
-public:
-    WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType);
-    ~WW8NewFieldCtx();
-
-    SwNodeIndex GetPtNode() { return maPtNode; };
-    xub_StrLen GetPtCntnt() { return mnPtCntnt; };
     ::rtl::OUString GetBookmarkName();
-    ::rtl::OUString GetMarkType();
+    ::rtl::OUString GetBookmarkType();
+    void SetBookmarkName(::rtl::OUString bookmarkName);
+    void SetBookmarkType(::rtl::OUString bookmarkType);
     void AddParam(::rtl::OUString name, ::rtl::OUString value);
-    void SetCurrentFieldParamsTo(::sw::mark::IFieldmark* pFieldmark);
+    Params_t &getParams();
 };
 
 
@@ -434,7 +432,6 @@ private:
     bool mbWasParaEnd;
     bool mbHasBorder;
     bool mbFirstPara;
-    std::deque<WW8NewFieldCtx *> maFieldCtxStack;
 public:
     WW8ReaderSave(SwWW8ImplReader* pRdr, WW8_CP nStart=-1);
     void Restore(SwWW8ImplReader* pRdr);
@@ -888,9 +885,6 @@ private:
     */
     std::deque<FieldEntry> maFieldStack;
     typedef std::deque<FieldEntry>::const_iterator mycFieldIter;
-
-    typedef std::deque<WW8NewFieldCtx *> WW8NewFieldCtxStack_t;
-    WW8NewFieldCtxStack_t maNewFieldCtxStack;
 
     /*
     A stack of open footnotes. Should only be one in it at any time.

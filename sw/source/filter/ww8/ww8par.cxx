@@ -1512,7 +1512,6 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     maOldApos.push_back(false);
     maOldApos.swap(pRdr->maApos);
     maOldFieldStack.swap(pRdr->maFieldStack);
-    maFieldCtxStack.swap(pRdr->maNewFieldCtxStack);
 }
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
@@ -1559,7 +1558,6 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
         pRdr->pPlcxMan->RestoreAllPLCFx(maPLCFxSave);
     pRdr->maApos.swap(maOldApos);
     pRdr->maFieldStack.swap(maOldFieldStack);
-    pRdr->maNewFieldCtxStack.swap(maFieldCtxStack);
 }
 
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
@@ -2672,29 +2670,6 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x15:
             if( !bSpec )        // Juristenparagraph
                 cInsert = '\xa7';
-            else
-            {
-                // 0x15 is special --> so it's our field end mark...;
-                // hmmm what about field marks not handled by us??, maybe a problem with nested fields;
-                // probably an area of bugs... [well release quick and release often....]
-                if (!maNewFieldCtxStack.empty() && pPaM!=NULL && pPaM->GetPoint()!=NULL)
-                {
-                    ::boost::scoped_ptr<WW8NewFieldCtx> pFieldCtx(maNewFieldCtxStack.back());
-                    maNewFieldCtxStack.pop_back();
-                    SwPosition aEndPos = *pPaM->GetPoint();
-                    SwPaM aFldPam(pFieldCtx->GetPtNode(), pFieldCtx->GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
-                    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
-                    ::sw::mark::IFieldmark* pFieldmark =
-                        dynamic_cast< ::sw::mark::IFieldmark*>(pMarkAccess->makeMark(
-                            aFldPam,
-                            pFieldCtx->GetBookmarkName(),
-                            IDocumentMarkAccess::TEXT_FIELDMARK));
-                    OSL_ENSURE(pFieldmark!=NULL,
-                        "hmmm; why was the bookmark not created?");
-                    if (pFieldmark)
-                        pFieldCtx->SetCurrentFieldParamsTo(pFieldmark);
-                }
-            }
             break;
         case 0x9:
             cInsert = '\x9';    // Tab
@@ -3506,7 +3481,14 @@ void wwSectionManager::InsertSegments()
 
         bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
-        bool bProtected = !bUseEnhFields && SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
+        bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
+    if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected()) {
+        // here we have the special case that the whole document is protected, with the execption of this section.
+        // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
+        mrReader.rDoc.set(IDocumentSettingAccess::PROTECT_FORM, false );
+    }
+
+
         if (bInsertPageDesc)
         {
             /*

@@ -1175,6 +1175,17 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                     }
                 }
 
+        if( !bRet && SwContentAtPos::SW_FORMCTRL & rCntntAtPos.eCntntAtPos )
+        {
+            IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
+            sw::mark::IFieldmark* pFldBookmark = pMarksAccess->getFieldmarkFor( aPos );
+            if( bCrsrFoundExact && pTxtNd && pFldBookmark) {
+                rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_FORMCTRL;
+                rCntntAtPos.aFnd.pFldmark = pFldBookmark;
+                bRet=TRUE;
+            }
+        }
+
                 if( !bRet && SwContentAtPos::SW_FTN & rCntntAtPos.eCntntAtPos )
                 {
                     if( aTmpState.bFtnNoInfo )

@@ -56,6 +56,7 @@
 #include <ndtxt.hxx> // #111827#
 
 #include <IMark.hxx>
+#include <hints.hxx>
 
 // fuer den dummen ?MSC-? Compiler
 inline xub_StrLen GetSttOrEnd( BOOL bCondition, const SwCntntNode& rNd )
@@ -827,16 +828,21 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
     }
     //FIXME FieldBk
     // TODO: Form Protection when Enhanced Fields are enabled
-//  if( !bRet )
-//    {
-//      const SwDoc *pDoc=GetDoc();
-//      SwBookmark *pA = ( pDoc && pPoint ? pDoc->getFieldmarkFor( *pPoint ) : NULL );
-//      SwBookmark *pB = ( pDoc && pMark ? pDoc->getFieldmarkFor( *pMark ) : pA );
-//      bRet = ( pA != pB );
-//      bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
-//      if( bProtectForm )
-//            bRet |= ( pA==NULL || pB==NULL );
-//  }
+     if (!bRet) {
+         const SwDoc *pDoc = GetDoc();
+        sw::mark::IMark* pA = NULL;
+        sw::mark::IMark* pB = NULL;
+        if ( pDoc )
+        {
+            const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess( );
+             pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
+             pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
+             bRet = ( pA != pB );
+        }
+         bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
+         if ( bProtectForm )
+             bRet |= ( pA == NULL || pB == NULL );
+     }
     return bRet;
 }
 
@@ -1221,6 +1227,18 @@ String SwPaM::GetTxt() const
 BOOL SwPaM::Overlap(const SwPaM & a, const SwPaM & b)
 {
     return !(*b.End() <= *a.Start() || *a.End() <= *b.End());
+}
+
+void SwPaM::Invalidate()
+{
+    const SwNode *_pNd=this->GetNode();
+    const SwTxtNode *_pTxtNd=(_pNd!=NULL?_pNd->GetTxtNode():NULL);
+    if (_pTxtNd!=NULL) {
+    //pretent we've added a char to force layout to recalc the portion...
+    SwInsChr aHint(_pTxtNd->GetIndex());
+    SwModify *_pModify=(SwModify*)_pTxtNd;
+    _pModify->Modify( 0, &aHint);
+    }
 }
 
 BOOL SwPaM::LessThan(const SwPaM & a, const SwPaM & b)

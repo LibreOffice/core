@@ -42,6 +42,7 @@
 #include <swtypes.hxx>
 #include <shellid.hxx>
 #include <layout/layout.hxx>
+#include <IMark.hxx>
 
 class SwBaseShell;
 class Button;
@@ -94,6 +95,7 @@ struct SwConversionArgs;
 class Graphic;
 class GraphicFilter;
 class SwPostItMgr;
+class SwFieldBookmark;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -465,7 +467,7 @@ public:
 
     DECL_LINK( SpellError, LanguageType * );
     BOOL            ExecSpellPopup( const Point& rPt );
-
+    BOOL            ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
     // SMARTTAGS
     BOOL            ExecSmartTagPopup( const Point& rPt );
 

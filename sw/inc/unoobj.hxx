@@ -671,13 +671,13 @@ class SwXFieldmark : public SwXFieldmark_BASE
         SwXFieldmark(bool isReplacementObject, ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0);
 
         virtual void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
-        virtual ::rtl::OUString SAL_CALL getDescription(void) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::sal_Int16 SAL_CALL getType(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int16 SAL_CALL getRes(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getFieldType(void)  throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL setFieldType( const ::rtl::OUString& description ) throw (::com::sun::star::uno::RuntimeException);
 
-        virtual void SAL_CALL setType( ::sal_Int16 fieldType ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setRes( ::sal_Int16 res ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setDescription( const ::rtl::OUString& description ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int16 SAL_CALL getParamCount(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getParamName(::sal_Int16 i)  throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::rtl::OUString SAL_CALL getParamValue(::sal_Int16 i)  throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL addParam( const ::rtl::OUString& name, const ::rtl::OUString& value, ::sal_Bool replaceExisting ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 /*-----------------23.02.98 10:45-------------------

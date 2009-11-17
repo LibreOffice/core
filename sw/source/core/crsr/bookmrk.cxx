@@ -77,20 +77,20 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        const SwPosition& rStart = pField->GetMarkStart();
-        const SwPosition& rEnd = pField->GetMarkEnd();
+        SwPosition& rStart = pField->GetMarkStart();
+        SwPosition& rEnd = pField->GetMarkEnd();
         SwTxtNode const * const pStartTxtNode = io_pDoc->GetNodes()[rStart.nNode]->GetTxtNode();
         SwTxtNode const * const pEndTxtNode = io_pDoc->GetNodes()[rEnd.nNode]->GetTxtNode();
         const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
         const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(rEnd.nContent.GetIndex()-1);
-        const SwPaM aStartPaM(rStart);
-        const SwPaM aEndPaM(rEnd);
+        SwPaM aStartPaM(rStart);
+        SwPaM aEndPaM(rEnd);
         io_pDoc->StartUndo(UNDO_UI_REPLACE, NULL);
         if(ch_start != aStartMark)
         {
             io_pDoc->InsertString(aStartPaM, aStartMark);
         }
-        if(aEndMark && ch_end != aEndMark)
+        if ( aEndMark && ( ch_end != aEndMark ) && ( rStart != rEnd ) )
         {
             io_pDoc->InsertString(aEndPaM, aEndMark);
         }
@@ -114,6 +114,11 @@ namespace sw { namespace mark
         }
     }
 
+    bool MarkBase::IsCoveringPosition(const SwPosition& rPos) const
+    {
+        return GetMarkStart() <= rPos && rPos <= GetMarkEnd();
+    }
+
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
@@ -124,6 +129,17 @@ namespace sw { namespace mark
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
         //lcl_FixPosition(*m_pPos2);
+    }
+
+    rtl::OUString MarkBase::toString( ) const
+    {
+        rtl::OUStringBuffer buf;
+        buf.appendAscii( "Mark: ( Name, [ Node1, Index1 ] ): ( " );
+        buf.append( m_aName ).appendAscii( ", [ " );
+        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
+        buf.append( sal_Int32( GetMarkPos().nContent.GetIndex( ) ) ).appendAscii( " ] )" );
+
+        return buf.makeStringAndClear( );
     }
 
     MarkBase::~MarkBase()
@@ -268,6 +284,96 @@ namespace sw { namespace mark
             SetOtherMarkPos(GetMarkPos());
     }
 
+    rtl::OUString Fieldmark::toString( ) const
+    {
+        rtl::OUStringBuffer buf;
+        buf.appendAscii( "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " );
+        buf.append( m_aName ).appendAscii( ", " );
+        buf.append( m_aFieldname ).appendAscii( ", [ " );
+        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
+        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ], [" );
+        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
+        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ] ) " );
+
+        return buf.makeStringAndClear( );
+    }
+
+    void Fieldmark::addParam( ::rtl::OUString paramName,
+                              ::rtl::OUString paramValue,
+                              bool replaceExisting )
+    {
+        if ( replaceExisting )
+        {
+            bool replaced = false;
+            const int len = m_params.size(  );
+            for ( int i = 0; i < len; i++ )
+            {
+                if ( m_params[i].first.compareTo( paramName ) == 0 )
+                {
+                    m_params[i] = ParamPair_t( paramName, paramValue );
+                    replaced = true;
+                }
+            }
+            if ( !replaced )
+            {
+                m_params.push_back( ParamPair_t( paramName, paramValue ) );
+            }
+        }
+        else
+        {
+            m_params.push_back( ParamPair_t( paramName, paramValue ) );
+        }
+    }
+
+    void Fieldmark::addParam( const char *paramName, int value )
+    {
+        rtl::OUString sName = rtl::OUString::createFromAscii( paramName );
+        rtl::OUString sValue =::rtl::OUString::valueOf( ( sal_Int32 ) value );
+        addParam( sName, sValue );
+    }
+
+    void Fieldmark::addParams( std::vector < ParamPair_t > &params )
+    {
+        for ( std::vector < ParamPair_t >::iterator i = params.begin(  );
+              i != params.end(  ); i++ )
+        {
+            m_params.push_back( *i );
+        }
+    }
+
+    int Fieldmark::getNumOfParams(  ) const
+    {
+        return m_params.size(  );
+    }
+
+    Fieldmark::ParamPair_t Fieldmark::getParam( int pos ) const
+    {
+        return m_params[pos];
+    }
+
+    Fieldmark::ParamPair_t Fieldmark::getParam( const char *name,
+                                                const char *defaultValue ) const
+    {
+        for ( std::vector < ParamPair_t >::iterator i = const_cast< Fieldmark* >( this )->m_params.begin(  );
+              i != m_params.end(  ); i++ )
+        {
+            if ( i->first.compareToAscii( name ) == 0 )
+            {
+                return *i;
+            }
+        }
+        return ParamPair_t( rtl::OUString(  ),
+                            ( defaultValue ?
+                                rtl::OUString::createFromAscii( defaultValue ) :
+                                rtl::OUString(  ) ) );
+    }
+
+    void Fieldmark::invalidate( )
+    {
+        SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
+        aPaM.Invalidate();
+    }
+
     const ::rtl::OUString Fieldmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__Fieldmark__");
 
     TextFieldmark::TextFieldmark(const SwPaM& rPaM)
@@ -285,7 +391,11 @@ namespace sw { namespace mark
 
     void CheckboxFieldmark::InitDoc(SwDoc* const io_pDoc)
     {
-        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FORMELEMENT, CH_TXT_ATR_FIELDEND);
+
+        // For some reason the end mark is moved from 1 by the Insert: we don't
+        // want this for checkboxes
+        this->GetMarkEnd( ).nContent--;
     }
 
     void CheckboxFieldmark::SetChecked(bool checked)

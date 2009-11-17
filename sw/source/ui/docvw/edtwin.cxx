@@ -151,6 +151,7 @@
 
 #include <IMark.hxx>
 #include <doc.hxx>
+#include <xmloff/ecmaflds.hxx>
 
 #include "PostItMgr.hxx"
 #include "postit.hxx"
@@ -160,6 +161,7 @@
 //#define TEST_FOR_BUG91313
 #endif
 
+using namespace sw::mark;
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -4187,7 +4189,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                     SwContentAtPos::SW_INETATTR |
-                                                    SwContentAtPos::SW_SMARTTAG );
+                                                    SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
                         if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, TRUE ) )
                         {
@@ -4208,7 +4210,33 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     if ( bExecSmarttags && SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                                         rView.ExecSmartTagPopup( aDocPt );
                             }
-                            else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
+                            else if ( SwContentAtPos::SW_FORMCTRL == aCntntAtPos.eCntntAtPos )
+                            {
+                                ASSERT( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
+                                if ( aCntntAtPos.aFnd.pFldmark != NULL)
+                                {
+                                    IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
+                                    SwDocShell* pDocSh = rView.GetDocShell();
+                                    SwDoc *pDoc=pDocSh->GetDoc();
+                                    if (fieldBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
+                                    {
+                                        bool isChecked = fieldBM->getParam( ECMA_FORMCHECKBOX_CHECKED ).second.compareToAscii("on") == 0;
+                                        isChecked = !isChecked; // swap it...
+                                        fieldBM->addParam(
+                                                rtl::OUString::createFromAscii( ECMA_FORMCHECKBOX_CHECKED ),
+                                                rtl::OUString::createFromAscii( isChecked?"on":"off" ) );
+                                        fieldBM->invalidate();
+                                        rSh.InvalidateWindows( rView.GetVisArea() );
+                                    } else if (fieldBM->GetFieldname().equalsAscii( ECMA_FORMDROPDOWN) ) {
+                                        rView.ExecFieldPopup( aDocPt, fieldBM );
+                                        fieldBM->invalidate();
+                                        rSh.InvalidateWindows( rView.GetVisArea() );
+                                    } else {
+                                        // unknown type..
+                                    }
+                                }
+                            }
+                else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
                             {
                                 if ( bExecHyperlinks )
                                     rSh.ClickToINetAttr( *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr, nFilter );
