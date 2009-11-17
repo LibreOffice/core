@@ -464,7 +464,7 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
             ScXMLConverter::GetStringFromFunction( sFunction, nFunc);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sFunction);
             if (pLayoutName && nFunc == sheet::GeneralFunction_AUTO)
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_NAME, *pLayoutName);
+                rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
             SvXMLElementExport aElemST(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTAL, sal_True, sal_True);
         }
     }
@@ -482,7 +482,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rtl::OUString((*i)->GetName()));
             const OUString* pLayoutName = (*i)->GetLayoutName();
             if (pLayoutName)
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_NAME, *pLayoutName);
+                rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
             rtl::OUStringBuffer sBuffer;
             SvXMLUnitConverter::convertBool(sBuffer, (*i)->GetIsVisible());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
@@ -682,7 +682,7 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, rtl::OUString(pDim->GetName()));
     const OUString* pLayoutName = pDim->GetLayoutName();
     if (pLayoutName)
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_NAME, *pLayoutName);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
 
     if (pDim->IsDataLayout())
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD, XML_TRUE);
@@ -726,7 +726,7 @@ void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, bVisible ? XML_TRUE : XML_FALSE);
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, eOrient);
     if (pGrandTotal)
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_NAME, *pGrandTotal);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pGrandTotal);
     SvXMLElementExport aElemGrandTotal(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GRAND_TOTAL, sal_True, sal_True);
 }
 

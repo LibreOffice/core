@@ -771,6 +771,7 @@ ScXMLDataPilotGrandTotalContext::ScXMLDataPilotGrandTotalContext(
                     meOrientation = COLUMN;
             break;
             case XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME:
+            case XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME_EXT:
                 maDisplayName = rAttrValue;
             break;
             default:
@@ -914,6 +915,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME:
+            case XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME_EXT:
             {
                 aDisplayName = sValue;
             }
@@ -1448,6 +1450,7 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
                                 ScXMLConverter::GetFunctionFromString( sValue ) ) );
             }
             case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME:
+            case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME_EXT:
                 pDataPilotSubTotals->SetDisplayName(sValue);
             break;
         }
@@ -1547,6 +1550,7 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
             }
             break;
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME:
+            case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME_EXT:
             {
                 maDisplayName = sValue;
             }
