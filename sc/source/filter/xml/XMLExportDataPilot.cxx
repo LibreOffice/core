@@ -452,7 +452,11 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
     using sheet::GeneralFunction;
 
     sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
-    const OUString* pLayoutName = pDim->GetSubtotalName();
+    const OUString* pLayoutName = NULL;
+    if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+        // Export display names only for 1.2 extended or later.
+        pLayoutName = pDim->GetSubtotalName();
+
     if (nSubTotalCount > 0)
     {
         SvXMLElementExport aElemSTs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTALS, sal_True, sal_True);
@@ -480,9 +484,15 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
         for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; i++)
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rtl::OUString((*i)->GetName()));
-            const OUString* pLayoutName = (*i)->GetLayoutName();
-            if (pLayoutName)
-                rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
+
+            if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+            {
+                // Export display names only for ODF 1.2 extended or later.
+                const OUString* pLayoutName = (*i)->GetLayoutName();
+                if (pLayoutName)
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
+            }
+
             rtl::OUStringBuffer sBuffer;
             SvXMLUnitConverter::convertBool(sBuffer, (*i)->GetIsVisible());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
@@ -680,9 +690,13 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
 void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
 {
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, rtl::OUString(pDim->GetName()));
-    const OUString* pLayoutName = pDim->GetLayoutName();
-    if (pLayoutName)
-        rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
+    if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+    {
+        // Export display names only for ODF 1.2 extended or later.
+        const OUString* pLayoutName = pDim->GetLayoutName();
+        if (pLayoutName)
+            rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
+    }
 
     if (pDim->IsDataLayout())
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD, XML_TRUE);
@@ -725,8 +739,12 @@ void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient
 {
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, bVisible ? XML_TRUE : XML_FALSE);
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, eOrient);
-    if (pGrandTotal)
-        rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pGrandTotal);
+    if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+    {
+        // Export display names only for ODF 1.2 extended or later.
+        if (pGrandTotal)
+            rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pGrandTotal);
+    }
     SvXMLElementExport aElemGrandTotal(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GRAND_TOTAL, sal_True, sal_True);
 }
 
