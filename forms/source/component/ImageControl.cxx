@@ -115,6 +115,7 @@ namespace
             ||  ( _nFieldType == DataType::OBJECT )
             ||  ( _nFieldType == DataType::BLOB )
             ||  ( _nFieldType == DataType::LONGVARCHAR )
+            ||  ( _nFieldType == DataType::CLOB )
             )
             return ImageStoreBinary;
 
