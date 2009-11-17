@@ -92,6 +92,19 @@ namespace drawinglayer
             {
             }
 
+            FontAttribute()
+            :   maFamilyName(),
+                maStyleName(),
+                mnWeight(0),
+                mbSymbol(false),
+                mbVertical(false),
+                mbItalic(false),
+                mbOutline(false),
+                mbRTL(false),
+                mbBiDiStrong(false)
+            {
+            }
+
             /// compare operator
             bool operator==(const FontAttribute& rCompare) const;
 

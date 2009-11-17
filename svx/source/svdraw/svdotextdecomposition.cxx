@@ -80,32 +80,6 @@ namespace
         return aRetval;
     }
 
-    static drawinglayer::primitive2d::TextLine mapTextLineStyle(FontUnderline eLineStyle)
-    {
-        switch(eLineStyle)
-        {
-            case UNDERLINE_SINGLE:          return drawinglayer::primitive2d::TEXT_LINE_SINGLE;
-            case UNDERLINE_DOUBLE:          return drawinglayer::primitive2d::TEXT_LINE_DOUBLE;
-            case UNDERLINE_DOTTED:          return drawinglayer::primitive2d::TEXT_LINE_DOTTED;
-            case UNDERLINE_DASH:            return drawinglayer::primitive2d::TEXT_LINE_DASH;
-            case UNDERLINE_LONGDASH:        return drawinglayer::primitive2d::TEXT_LINE_LONGDASH;
-            case UNDERLINE_DASHDOT:         return drawinglayer::primitive2d::TEXT_LINE_DASHDOT;
-            case UNDERLINE_DASHDOTDOT:      return drawinglayer::primitive2d::TEXT_LINE_DASHDOTDOT;
-            case UNDERLINE_SMALLWAVE:       return drawinglayer::primitive2d::TEXT_LINE_SMALLWAVE;
-            case UNDERLINE_WAVE:            return drawinglayer::primitive2d::TEXT_LINE_WAVE;
-            case UNDERLINE_DOUBLEWAVE:      return drawinglayer::primitive2d::TEXT_LINE_DOUBLEWAVE;
-            case UNDERLINE_BOLD:            return drawinglayer::primitive2d::TEXT_LINE_BOLD;
-            case UNDERLINE_BOLDDOTTED:      return drawinglayer::primitive2d::TEXT_LINE_BOLDDOTTED;
-            case UNDERLINE_BOLDDASH:        return drawinglayer::primitive2d::TEXT_LINE_BOLDDASH;
-            case UNDERLINE_BOLDLONGDASH:    return drawinglayer::primitive2d::TEXT_LINE_BOLDLONGDASH;
-            case UNDERLINE_BOLDDASHDOT:     return drawinglayer::primitive2d::TEXT_LINE_BOLDDASHDOT;
-            case UNDERLINE_BOLDDASHDOTDOT:  return drawinglayer::primitive2d::TEXT_LINE_BOLDDASHDOTDOT;
-            case UNDERLINE_BOLDWAVE:        return drawinglayer::primitive2d::TEXT_LINE_BOLDWAVE;
-            // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
-            default:                        return drawinglayer::primitive2d::TEXT_LINE_NONE;
-        }
-    }
-
     class impTextBreakupHandler
     {
     private:
@@ -322,46 +296,40 @@ namespace
                 const basegfx::BColor aBOverlineColor((0xffffffff == aOverlineColor.GetColor()) ? aBFontColor : aOverlineColor.getBColor());
 
                 // prepare overline and underline data
-                const drawinglayer::primitive2d::TextLine eFontOverline(mapTextLineStyle(rInfo.mrFont.GetOverline()));
-                const drawinglayer::primitive2d::TextLine eFontUnderline(mapTextLineStyle(rInfo.mrFont.GetUnderline()));
+                const drawinglayer::primitive2d::TextLine eFontOverline(
+                    drawinglayer::primitive2d::mapFontUnderlineToTextLine(rInfo.mrFont.GetOverline()));
+                const drawinglayer::primitive2d::TextLine eFontUnderline(
+                    drawinglayer::primitive2d::mapFontUnderlineToTextLine(rInfo.mrFont.GetUnderline()));
 
                 // check UndelineAbove
-                const bool bUnderlineAbove(drawinglayer::primitive2d::TEXT_LINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
+                const bool bUnderlineAbove(
+                    drawinglayer::primitive2d::TEXT_LINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
 
                 // prepare strikeout data
-                drawinglayer::primitive2d::FontStrikeout eFontStrikeout(drawinglayer::primitive2d::FONT_STRIKEOUT_NONE);
-
-                switch(rInfo.mrFont.GetStrikeout())
-                {
-                    case STRIKEOUT_SINGLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SINGLE; break;
-                    case STRIKEOUT_DOUBLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_DOUBLE; break;
-                    case STRIKEOUT_BOLD:    eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_BOLD; break;
-                    case STRIKEOUT_SLASH:   eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SLASH; break;
-                    case STRIKEOUT_X:       eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_X; break;
-                    default : break; // FontStrikeout_FORCE_EQUAL_SIZE, STRIKEOUT_NONE, STRIKEOUT_DONTKNOW
-                }
+                const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(
+                    drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rInfo.mrFont.GetStrikeout()));
 
                 // prepare emphasis mark data
-                drawinglayer::primitive2d::FontEmphasisMark eFontEmphasisMark(drawinglayer::primitive2d::FONT_EMPHASISMARK_NONE);
+                drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_EMPHASISMARK_NONE);
 
                 switch(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
                 {
-                    case EMPHASISMARK_DOT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DOT; break;
-                    case EMPHASISMARK_CIRCLE : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_CIRCLE; break;
-                    case EMPHASISMARK_DISC : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DISC; break;
-                    case EMPHASISMARK_ACCENT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_ACCENT; break;
+                    case EMPHASISMARK_DOT : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_DOT; break;
+                    case EMPHASISMARK_CIRCLE : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_CIRCLE; break;
+                    case EMPHASISMARK_DISC : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_DISC; break;
+                    case EMPHASISMARK_ACCENT : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_ACCENT; break;
                 }
 
                 const bool bEmphasisMarkAbove(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_POS_ABOVE);
                 const bool bEmphasisMarkBelow(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_POS_BELOW);
 
                 // prepare font relief data
-                drawinglayer::primitive2d::FontRelief eFontRelief(drawinglayer::primitive2d::FONT_RELIEF_NONE);
+                drawinglayer::primitive2d::TextRelief eTextRelief(drawinglayer::primitive2d::TEXT_RELIEF_NONE);
 
                 switch(rInfo.mrFont.GetRelief())
                 {
-                    case RELIEF_EMBOSSED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_EMBOSSED; break;
-                    case RELIEF_ENGRAVED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_ENGRAVED; break;
+                    case RELIEF_EMBOSSED : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
+                    case RELIEF_ENGRAVED : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
                     default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
                 }
 
@@ -387,12 +355,12 @@ namespace
                     eFontOverline,
                     eFontUnderline,
                     bUnderlineAbove,
-                    eFontStrikeout,
+                    eTextStrikeout,
                     bWordLineMode,
-                    eFontEmphasisMark,
+                    eTextEmphasisMark,
                     bEmphasisMarkAbove,
                     bEmphasisMarkBelow,
-                    eFontRelief,
+                    eTextRelief,
                     bShadow);
             }
             else

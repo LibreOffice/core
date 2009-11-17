@@ -68,6 +68,9 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <i18npool/mslangid.hxx>
+#include <drawinglayer/primitive2d/textlineprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -78,12 +81,20 @@ using namespace com::sun::star;
 
 namespace
 {
+    /** helper class for graphic context
+
+        This class allows to hold a complete status of classic
+        VCL OutputDevice stati. This data is needed for correct
+        interpretation of the MetaFile action flow.
+    */
     class PropertyHolder
     {
     private:
+        /// current transformation (aka MapMode)
         basegfx::B2DHomMatrix   maTransformation;
         MapUnit                 maMapUnit;
 
+        /// current colors
         basegfx::BColor         maLineColor;
         basegfx::BColor         maFillColor;
         basegfx::BColor         maTextColor;
@@ -91,13 +102,16 @@ namespace
         basegfx::BColor         maTextLineColor;
         basegfx::BColor         maOverlineColor;
 
+        /// clipping, font, etc.
         Region                  maRegion;
         Font                    maFont;
         RasterOp                maRasterOp;
         sal_uInt32              mnLayoutMode;
         LanguageType            maLanguageType;
+        sal_uInt16              mnPushFlags;
 
         /// bitfield
+        /// contains all active markers
         bool                    mbLineColor : 1;
         bool                    mbFillColor : 1;
         bool                    mbTextColor : 1;
@@ -121,6 +135,7 @@ namespace
             maRasterOp(ROP_OVERPAINT),
             mnLayoutMode(0),
             maLanguageType(0),
+            mnPushFlags(0),
             mbLineColor(false),
             mbFillColor(false),
             mbTextColor(true),
@@ -135,6 +150,7 @@ namespace
         {
         }
 
+        /// read/write accesses
         const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
         void setTransformation(const basegfx::B2DHomMatrix& rNew) { if(rNew != maTransformation) maTransformation = rNew; }
 
@@ -191,6 +207,9 @@ namespace
         LanguageType getLanguageType() const { return maLanguageType; }
         void setLanguageType(LanguageType aNew) { if(aNew != maLanguageType) maLanguageType = aNew; }
 
+        sal_uInt16 getPushFlags() const { return mnPushFlags; }
+        void setPushFlags(sal_uInt16 nNew) { if(nNew != mnPushFlags) mnPushFlags = nNew; }
+
         bool getLineOrFillActive() const { return (mbLineColor || mbFillColor); }
     };
 } // end of anonymous namespace
@@ -199,6 +218,15 @@ namespace
 
 namespace
 {
+    /** stack for properites
+
+        This class builds a stack based on the PropertyHolder
+        class. It encapsulates the pointer/new/delete usage to
+        make it safe and implements the push/pop as needed by a
+        VCL Metafile interpreter. The critical part here are the
+        flag values VCL OutputDevice uses here; not all stuff is
+        pushed and thus needs to be copied at pop.
+    */
     class PropertyHolders
     {
     private:
@@ -215,33 +243,127 @@ namespace
             return maPropertyHolders.size();
         }
 
-        void Push()
+        void Push(sal_uInt16 nPushFlags)
         {
-            OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: PUSH with no property holders (!)");
-            maPropertyHolders.push_back(new PropertyHolder(*maPropertyHolders[maPropertyHolders.size() - 1]));
+            if(nPushFlags)
+            {
+                OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: PUSH with no property holders (!)");
+                PropertyHolder* pNew = new PropertyHolder(*maPropertyHolders.back());
+                pNew->setPushFlags(nPushFlags);
+                maPropertyHolders.push_back(pNew);
+            }
         }
 
         void Pop()
         {
             OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: POP with no property holders (!)");
-            if(maPropertyHolders.size())
+            const sal_uInt32 nSize(maPropertyHolders.size());
+
+            if(nSize)
             {
-                delete maPropertyHolders[maPropertyHolders.size() - 1];
-                maPropertyHolders.pop_back();
+                const PropertyHolder* pTip = maPropertyHolders.back();
+                const sal_uInt16 nPushFlags(pTip->getPushFlags());
+
+                if(nPushFlags)
+                {
+                    if(nSize > 1)
+                    {
+                        // copy back content for all non-set flags
+                        PropertyHolder* pLast = maPropertyHolders[nSize - 2];
+
+                        if(PUSH_ALL != nPushFlags)
+                        {
+                            if(!(nPushFlags & PUSH_LINECOLOR      ))
+                            {
+                                pLast->setLineColor(pTip->getLineColor());
+                                pLast->setLineColorActive(pTip->getLineColorActive());
+                            }
+                            if(!(nPushFlags & PUSH_FILLCOLOR      ))
+                            {
+                                pLast->setFillColor(pTip->getFillColor());
+                                pLast->setFillColorActive(pTip->getFillColorActive());
+                            }
+                            if(!(nPushFlags & PUSH_FONT           ))
+                            {
+                                pLast->setFont(pTip->getFont());
+                            }
+                            if(!(nPushFlags & PUSH_TEXTCOLOR      ))
+                            {
+                                pLast->setTextColor(pTip->getTextColor());
+                                pLast->setTextColorActive(pTip->getTextColorActive());
+                            }
+                            if(!(nPushFlags & PUSH_MAPMODE        ))
+                            {
+                                pLast->setTransformation(pTip->getTransformation());
+                                pLast->setMapUnit(pTip->getMapUnit());
+                            }
+                            if(!(nPushFlags & PUSH_CLIPREGION     ))
+                            {
+                                pLast->setRegion(pTip->getRegion());
+                                pLast->setRegionActive(pTip->getRegionActive());
+                            }
+                            if(!(nPushFlags & PUSH_RASTEROP       ))
+                            {
+                                pLast->setRasterOp(pTip->getRasterOp());
+                            }
+                            if(!(nPushFlags & PUSH_TEXTFILLCOLOR  ))
+                            {
+                                pLast->setTextFillColor(pTip->getTextFillColor());
+                                pLast->setTextFillColorActive(pTip->getTextFillColorActive());
+                            }
+                            if(!(nPushFlags & PUSH_TEXTALIGN      ))
+                            {
+                                if(pLast->getFont().GetAlign() != pTip->getFont().GetAlign())
+                                {
+                                    Font aFont(pLast->getFont());
+                                    aFont.SetAlign(pTip->getFont().GetAlign());
+                                    pLast->setFont(aFont);
+                                }
+                            }
+                            if(!(nPushFlags & PUSH_REFPOINT       ))
+                            {
+                                // not supported
+                            }
+                            if(!(nPushFlags & PUSH_TEXTLINECOLOR  ))
+                            {
+                                pLast->setTextLineColor(pTip->getTextLineColor());
+                                pLast->setTextLineColorActive(pTip->getTextLineColorActive());
+                            }
+                            if(!(nPushFlags & PUSH_TEXTLAYOUTMODE ))
+                            {
+                                pLast->setLayoutMode(pTip->getLayoutMode());
+                            }
+                            if(!(nPushFlags & PUSH_TEXTLANGUAGE   ))
+                            {
+                                pLast->setLanguageType(pTip->getLanguageType());
+                            }
+                            if(!(nPushFlags & PUSH_OVERLINECOLOR  ))
+                            {
+                                pLast->setOverlineColor(pTip->getOverlineColor());
+                                pLast->setOverlineColorActive(pTip->getOverlineColorActive());
+                            }
+                        }
+                    }
+
+                    // execute the pop
+                    delete maPropertyHolders.back();
+                    maPropertyHolders.pop_back();
+                }
             }
         }
 
         PropertyHolder& Current()
         {
             OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: CURRENT with no property holders (!)");
-            return *maPropertyHolders[maPropertyHolders.size() - 1];
+            return *maPropertyHolders.back();
         }
 
         ~PropertyHolders()
         {
             while(maPropertyHolders.size())
             {
-                Pop();
+                delete maPropertyHolders.back();
+                maPropertyHolders.pop_back();
             }
         }
     };
@@ -251,6 +373,13 @@ namespace
 
 namespace
 {
+    /** helper to convert a Region to a B2DPolyPolygon
+        when it does not yet contain one. In the future
+        this may be expanded to merge the polygons created
+        from rectangles or use a special algo to directly turn
+        the spans of regions to a single, already merged
+        PolyPolygon.
+     */
     basegfx::B2DPolyPolygon getB2DPolyPolygonFromRegion(const Region& rRegion)
     {
         basegfx::B2DPolyPolygon aRetval;
@@ -288,6 +417,12 @@ namespace
 
 namespace
 {
+    /** Helper class to buffer and hold a Primive target vector. It
+        encapsulates the new/delete functionality and aloows to work
+        on pointers of the implementation classes. All data will
+        be converted to uno sequences of uno references when accessing the
+        data.
+    */
     class TargetHolder
     {
     private:
@@ -369,6 +504,7 @@ namespace
 
 namespace
 {
+    /** Helper class which builds a stack on the TargetHolder class */
     class TargetHolders
     {
     private:
@@ -395,7 +531,7 @@ namespace
             OSL_ENSURE(maTargetHolders.size(), "TargetHolders: POP with no property holders (!)");
             if(maTargetHolders.size())
             {
-                delete maTargetHolders[maTargetHolders.size() - 1];
+                delete maTargetHolders.back();
                 maTargetHolders.pop_back();
             }
         }
@@ -403,14 +539,15 @@ namespace
         TargetHolder& Current()
         {
             OSL_ENSURE(maTargetHolders.size(), "TargetHolders: CURRENT with no property holders (!)");
-            return *maTargetHolders[maTargetHolders.size() - 1];
+            return *maTargetHolders.back();
         }
 
         ~TargetHolders()
         {
             while(maTargetHolders.size())
             {
-                Pop();
+                delete maTargetHolders.back();
+                maTargetHolders.pop_back();
             }
         }
     };
@@ -461,6 +598,7 @@ namespace drawinglayer
 
 namespace
 {
+    /** helper to convert a MapMode to a transformation */
     basegfx::B2DHomMatrix getTransformFromMapMode(const MapMode& rMapMode)
     {
         basegfx::B2DHomMatrix aMapping;
@@ -482,6 +620,7 @@ namespace
         return aMapping;
     }
 
+    /** helper to create a PointArrayPrimitive2D based on current context */
     void createPointArrayPrimitive(
         const std::vector< basegfx::B2DPoint >& rPositions,
         TargetHolder& rTarget,
@@ -514,6 +653,7 @@ namespace
         }
     }
 
+    /** helper to create a PolygonHairlinePrimitive2D based on current context */
     void createHairlinePrimitive(
         const basegfx::B2DPolygon& rLinePolygon,
         TargetHolder& rTarget,
@@ -530,6 +670,7 @@ namespace
         }
     }
 
+    /** helper to create a PolyPolygonColorPrimitive2D based on current context */
     void createFillPrimitive(
         const basegfx::B2DPolyPolygon& rFillPolyPolygon,
         TargetHolder& rTarget,
@@ -546,6 +687,7 @@ namespace
         }
     }
 
+    /** helper to create a PolygonStrokePrimitive2D based on current context */
     void createLinePrimitive(
         const basegfx::B2DPolygon& rLinePolygon,
         const LineInfo& rLineInfo,
@@ -611,6 +753,7 @@ namespace
         }
     }
 
+    /** helper to create needed line and fill primitives based on current context */
     void createHairlineAndFillPrimitive(
         const basegfx::B2DPolygon& rPolygon,
         TargetHolder& rTarget,
@@ -627,6 +770,7 @@ namespace
         }
     }
 
+    /** helper to create needed line and fill primitives based on current context */
     void createHairlineAndFillPrimitive(
         const basegfx::B2DPolyPolygon& rPolyPolygon,
         TargetHolder& rTarget,
@@ -646,6 +790,12 @@ namespace
         }
     }
 
+    /** helper to create DiscreteBitmapPrimitive2D based on current context.
+        The DiscreteBitmapPrimitive2D is especially created for this usage
+        since no other usage defines a bitmap visualisation based on top-left
+        position and size in pixels. At the end it will create a view-dependent
+        transformed embedding of a BitmapPrimitive2D.
+    */
     void createBitmapExPrimitive(
         const BitmapEx& rBitmapEx,
         const Point& rPoint,
@@ -664,6 +814,7 @@ namespace
         }
     }
 
+    /** helper to create BitmapPrimitive2D based on current context */
     void createBitmapExPrimitive(
         const BitmapEx& rBitmapEx,
         const Point& rPoint,
@@ -689,6 +840,10 @@ namespace
         }
     }
 
+    /** helper to create a regular BotmapEx from a MaskAction (definitions
+        which use a bitmap without alpha but define one of the colors as
+        transparent)
+     */
     BitmapEx createMaskBmpEx(const Bitmap& rBitmap, const Color& rMaskColor)
     {
         const Color aWhite(COL_WHITE);
@@ -705,6 +860,9 @@ namespace
         return BitmapEx(aSolid, aMask);
     }
 
+    /** helper to convert from a VCL Gradient definition to the corresponding
+        data for primitive representation
+     */
     drawinglayer::attribute::FillGradientAttribute createFillGradientAttribute(const Gradient& rGradient)
     {
         const Color aStartColor(rGradient.GetStartColor());
@@ -774,6 +932,9 @@ namespace
             rGradient.GetSteps());
     }
 
+    /** helper to convert from a VCL Hatch definition to the corresponding
+        data for primitive representation
+     */
     drawinglayer::attribute::FillHatchAttribute createFillHatchAttribute(const Hatch& rHatch)
     {
         drawinglayer::attribute::HatchStyle aHatchStyle(drawinglayer::attribute::HATCHSTYLE_SINGLE);
@@ -802,6 +963,12 @@ namespace
             false);
     }
 
+    /** helper to take needed action on ClipRegion change. This method needs to be called
+        on any Region change, e.g. at the obvious actions doing this, but also at pop-calls
+        whcih change the Region of the current context. It takes care of creating the
+        current embeddec context, set the new Region at the context and eventually prepare
+        a new target for embracing new geometry to the current region
+     */
     void HandleNewClipRegion(
         const Region* pRegion,
         TargetHolders& rTargetHolders,
@@ -828,7 +995,7 @@ namespace
         }
 
         // apply new settings
-        const bool bNewActive(pRegion);
+        const bool bNewActive(pRegion && !pRegion->IsEmpty());
         rPropertyHolders.Current().setRegionActive(bNewActive);
 
         if(bNewActive)
@@ -840,6 +1007,12 @@ namespace
         }
     }
 
+    /** helper to handle the change of RasterOp. It takes care of encapsulating all current
+        geometry to the current RasterOp (if changed) and needs to be called on any RasterOp
+        change. It will also start a new geometry target to embrace to the new RasterOp if
+        a changuing RasterOp is used. Currently, ROP_XOR and ROP_INVERT are supported using
+        InvertPrimitive2D, and ROP_0 by using a ModifiedColorPrimitive2D to force to black paint
+     */
     void HandleNewRasterOp(
         RasterOp aRasterOp,
         TargetHolders& rTargetHolders,
@@ -888,6 +1061,9 @@ namespace
         }
     }
 
+    /** helper to create needed data to emulate the VCL Wallpaper Metafile action.
+        It is a quite mighty action. This helper is for simple color filled background.
+     */
     drawinglayer::primitive2d::BasePrimitive2D* CreateColorWallpaper(
         const basegfx::B2DRange& rRange,
         const basegfx::BColor& rColor,
@@ -901,6 +1077,9 @@ namespace
             rColor);
     }
 
+    /** helper to create needed data to emulate the VCL Wallpaper Metafile action.
+        It is a quite mighty action. This helper is for gradient filled background.
+     */
     drawinglayer::primitive2d::BasePrimitive2D* CreateGradientWallpaper(
         const basegfx::B2DRange& rRange,
         const Gradient& rGradient,
@@ -935,6 +1114,12 @@ namespace
         }
     }
 
+    /** helper to create needed data to emulate the VCL Wallpaper Metafile action.
+        It is a quite mighty action. This helper decides if color and/or gradient
+        background is needed for the wnated bitmap fill and then creates the needed
+        WallpaperBitmapPrimitive2D. This primitive was created for this purpose and
+        takes over all needed logic of orientations and tiling.
+     */
     void CreateAndAppendBitmapWallpaper(
         basegfx::B2DRange aWallpaperRange,
         const Wallpaper& rWallpaper,
@@ -998,32 +1183,7 @@ namespace
         }
     }
 
-    drawinglayer::primitive2d::TextLine mapTextLineStyle(FontUnderline eLineStyle)
-    {
-        switch(eLineStyle)
-        {
-            case UNDERLINE_SINGLE:          return drawinglayer::primitive2d::TEXT_LINE_SINGLE;
-            case UNDERLINE_DOUBLE:          return drawinglayer::primitive2d::TEXT_LINE_DOUBLE;
-            case UNDERLINE_DOTTED:          return drawinglayer::primitive2d::TEXT_LINE_DOTTED;
-            case UNDERLINE_DASH:            return drawinglayer::primitive2d::TEXT_LINE_DASH;
-            case UNDERLINE_LONGDASH:        return drawinglayer::primitive2d::TEXT_LINE_LONGDASH;
-            case UNDERLINE_DASHDOT:         return drawinglayer::primitive2d::TEXT_LINE_DASHDOT;
-            case UNDERLINE_DASHDOTDOT:      return drawinglayer::primitive2d::TEXT_LINE_DASHDOTDOT;
-            case UNDERLINE_SMALLWAVE:       return drawinglayer::primitive2d::TEXT_LINE_SMALLWAVE;
-            case UNDERLINE_WAVE:            return drawinglayer::primitive2d::TEXT_LINE_WAVE;
-            case UNDERLINE_DOUBLEWAVE:      return drawinglayer::primitive2d::TEXT_LINE_DOUBLEWAVE;
-            case UNDERLINE_BOLD:            return drawinglayer::primitive2d::TEXT_LINE_BOLD;
-            case UNDERLINE_BOLDDOTTED:      return drawinglayer::primitive2d::TEXT_LINE_BOLDDOTTED;
-            case UNDERLINE_BOLDDASH:        return drawinglayer::primitive2d::TEXT_LINE_BOLDDASH;
-            case UNDERLINE_BOLDLONGDASH:    return drawinglayer::primitive2d::TEXT_LINE_BOLDLONGDASH;
-            case UNDERLINE_BOLDDASHDOT:     return drawinglayer::primitive2d::TEXT_LINE_BOLDDASHDOT;
-            case UNDERLINE_BOLDDASHDOTDOT:  return drawinglayer::primitive2d::TEXT_LINE_BOLDDASHDOTDOT;
-            case UNDERLINE_BOLDWAVE:        return drawinglayer::primitive2d::TEXT_LINE_BOLDWAVE;
-            // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
-            default:                        return drawinglayer::primitive2d::TEXT_LINE_NONE;
-        }
-    }
-
+    /** helper to decide UnderlineAbove for text primitives */
     bool isUnderlineAbove(const Font& rFont)
     {
         if(!rFont.IsVertical())
@@ -1040,6 +1200,53 @@ namespace
         return false;
     }
 
+    void createFontAttributeTransformAndAlignment(
+        drawinglayer::attribute::FontAttribute& rFontAttribute,
+        basegfx::B2DHomMatrix& rTextTransform,
+        basegfx::B2DVector& rAlignmentOffset,
+        PropertyHolder& rProperty)
+    {
+        const Font& rFont = rProperty.getFont();
+        basegfx::B2DVector aFontScaling;
+
+        rFontAttribute = drawinglayer::attribute::FontAttribute(
+            drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                aFontScaling,
+                rFont,
+                0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_RTL),
+                0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_STRONG)));
+
+        // add FontScaling
+        rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
+
+        // take text align into account
+        if(ALIGN_BASELINE != rFont.GetAlign())
+        {
+            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+            aTextLayouterDevice.setFont(rFont);
+
+            if(ALIGN_TOP == rFont.GetAlign())
+            {
+                rAlignmentOffset.setY(aTextLayouterDevice.getFontAscent());
+            }
+            else // ALIGN_BOTTOM
+            {
+                rAlignmentOffset.setY(-aTextLayouterDevice.getFontDescent());
+            }
+
+            rTextTransform.translate(rAlignmentOffset.getX(), rAlignmentOffset.getY());
+        }
+
+        // add FontRotation (if used)
+        if(rFont.GetOrientation())
+        {
+            rTextTransform.rotate(-rFont.GetOrientation() * F_PI1800);
+        }
+    }
+
+    /** helper which takes complete care for creating the needed text primitives. It
+        takes care of decorated stuff and all the geometry adaptions needed
+     */
     void proccessMetaTextAction(
         const Point& rTextStartPosition,
         const XubString& rText,
@@ -1052,49 +1259,19 @@ namespace
         drawinglayer::primitive2d::BasePrimitive2D* pResult = 0;
         const Font& rFont = rProperty.getFont();
         std::vector< double > aDXArray;
+        basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
 
         if(nTextLength)
         {
-            // get current font and create FontScaling and FontAttribute
-            basegfx::B2DVector aFontScaling;
-            const drawinglayer::attribute::FontAttribute aFontAttribute(
-                drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                    aFontScaling,
-                    rFont,
-                    0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_RTL),
-                    0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_STRONG)));
-
-            // create TextTransform
+            drawinglayer::attribute::FontAttribute aFontAttribute;
             basegfx::B2DHomMatrix aTextTransform;
 
-            // add FontScaling
-            aTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
-
-            // take text align into account
-            if(ALIGN_BASELINE != rFont.GetAlign())
-            {
-                drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
-                aTextLayouterDevice.setFont(rFont);
-
-                if(ALIGN_TOP == rFont.GetAlign())
-                {
-                    aTextTransform.translate(
-                        0.0,
-                        aTextLayouterDevice.getFontAscent());
-                }
-                else // ALIGN_BOTTOM
-                {
-                    aTextTransform.translate(
-                        0.0,
-                        -aTextLayouterDevice.getFontDescent());
-                }
-            }
-
-            // add FontRotation (if used)
-            if(rFont.GetOrientation())
-            {
-                aTextTransform.rotate(-rFont.GetOrientation() * F_PI1800);
-            }
+            // fill parameters derived from current font
+            createFontAttributeTransformAndAlignment(
+                aFontAttribute,
+                aTextTransform,
+                aAlignmentOffset,
+                rProperty);
 
             // add TextStartPosition
             aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
@@ -1126,47 +1303,35 @@ namespace
 
             if(bDecoratedIsNeeded)
             {
-                // prepare overline and underline data
-                const drawinglayer::primitive2d::TextLine eFontOverline(mapTextLineStyle(rFont.GetOverline()));
-                const drawinglayer::primitive2d::TextLine eFontUnderline(mapTextLineStyle(rFont.GetUnderline()));
+                // prepare overline, underline and srikeout data
+                const drawinglayer::primitive2d::TextLine eFontOverline(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rFont.GetOverline()));
+                const drawinglayer::primitive2d::TextLine eFontUnderline(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rFont.GetUnderline()));
+                const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rFont.GetStrikeout()));
 
                 // check UndelineAbove
                 const bool bUnderlineAbove(drawinglayer::primitive2d::TEXT_LINE_NONE != eFontUnderline && isUnderlineAbove(rFont));
 
-                // prepare strikeout data
-                drawinglayer::primitive2d::FontStrikeout eFontStrikeout(drawinglayer::primitive2d::FONT_STRIKEOUT_NONE);
-
-                switch(rFont.GetStrikeout())
-                {
-                    case STRIKEOUT_SINGLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SINGLE; break;
-                    case STRIKEOUT_DOUBLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_DOUBLE; break;
-                    case STRIKEOUT_BOLD:    eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_BOLD; break;
-                    case STRIKEOUT_SLASH:   eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SLASH; break;
-                    case STRIKEOUT_X:       eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_X; break;
-                    default : break; // FontStrikeout_FORCE_EQUAL_SIZE, STRIKEOUT_NONE, STRIKEOUT_DONTKNOW
-                }
-
                 // prepare emphasis mark data
-                drawinglayer::primitive2d::FontEmphasisMark eFontEmphasisMark(drawinglayer::primitive2d::FONT_EMPHASISMARK_NONE);
+                drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_EMPHASISMARK_NONE);
 
                 switch(rFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
                 {
-                    case EMPHASISMARK_DOT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DOT; break;
-                    case EMPHASISMARK_CIRCLE : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_CIRCLE; break;
-                    case EMPHASISMARK_DISC : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DISC; break;
-                    case EMPHASISMARK_ACCENT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_ACCENT; break;
+                    case EMPHASISMARK_DOT : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_DOT; break;
+                    case EMPHASISMARK_CIRCLE : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_CIRCLE; break;
+                    case EMPHASISMARK_DISC : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_DISC; break;
+                    case EMPHASISMARK_ACCENT : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_EMPHASISMARK_ACCENT; break;
                 }
 
                 const bool bEmphasisMarkAbove(rFont.GetEmphasisMark() & EMPHASISMARK_POS_ABOVE);
                 const bool bEmphasisMarkBelow(rFont.GetEmphasisMark() & EMPHASISMARK_POS_BELOW);
 
                 // prepare font relief data
-                drawinglayer::primitive2d::FontRelief eFontRelief(drawinglayer::primitive2d::FONT_RELIEF_NONE);
+                drawinglayer::primitive2d::TextRelief eTextRelief(drawinglayer::primitive2d::TEXT_RELIEF_NONE);
 
                 switch(rFont.GetRelief())
                 {
-                    case RELIEF_EMBOSSED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_EMBOSSED; break;
-                    case RELIEF_ENGRAVED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_ENGRAVED; break;
+                    case RELIEF_EMBOSSED : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
+                    case RELIEF_ENGRAVED : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
                     default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
                 }
 
@@ -1192,12 +1357,12 @@ namespace
                     eFontOverline,
                     eFontUnderline,
                     bUnderlineAbove,
-                    eFontStrikeout,
+                    eTextStrikeout,
                     bWordLineMode,
-                    eFontEmphasisMark,
+                    eTextEmphasisMark,
                     bEmphasisMarkAbove,
                     bEmphasisMarkBelow,
-                    eFontRelief,
+                    eTextRelief,
                     bShadow);
             }
             else
@@ -1217,61 +1382,57 @@ namespace
 
         if(pResult && rProperty.getTextFillColorActive())
         {
+            // text background is requested, add and encapsulate both to new primitive
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
-            const bool bRotated(rFont.GetOrientation());
+            aTextLayouterDevice.setFont(rFont);
 
-            if(bRotated)
+            // get text width
+            double fTextWidth(0.0);
+
+            if(aDXArray.empty())
             {
-                // use unrotated font
-                Font aUnrotatedFont(rFont);
-                aUnrotatedFont.SetOrientation(0);
-                aTextLayouterDevice.setFont(aUnrotatedFont);
+                fTextWidth = aTextLayouterDevice.getTextWidth(rText, nTextStart, nTextLength);
             }
             else
             {
-                aTextLayouterDevice.setFont(rFont);
+                fTextWidth = aDXArray.back();
             }
 
-            // get base range
-            basegfx::B2DRange aTextRange(
-                aTextLayouterDevice.getTextBoundRect(
-                    rText, nTextStart, nTextLength));
-
-            if(aDXArray.size())
+            if(basegfx::fTools::more(fTextWidth, 0.0))
             {
-                // use the last entry in DXArray to correct the width
-                aTextRange = basegfx::B2DRange(
-                    aTextRange.getMinX(),
-                    aTextRange.getMinY(),
-                    aTextRange.getMinX() + aDXArray[aDXArray.size() - 1],
-                    aTextRange.getMaxY());
+                // build text range
+                const basegfx::B2DRange aTextRange(
+                    0.0, -aTextLayouterDevice.getFontAscent(),
+                    fTextWidth, aTextLayouterDevice.getFontDescent());
+
+                // create Transform
+                basegfx::B2DHomMatrix aTextTransform;
+
+                aTextTransform.translate(aAlignmentOffset.getX(), aAlignmentOffset.getY());
+
+                if(rFont.GetOrientation())
+                {
+                    aTextTransform.rotate(-rFont.GetOrientation() * F_PI1800);
+                }
+
+                aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
+
+                // prepare Primitive2DSequence, put text in foreground
+                drawinglayer::primitive2d::Primitive2DSequence aSequence(2);
+                aSequence[1] = drawinglayer::primitive2d::Primitive2DReference(pResult);
+
+                // prepare filled polygon
+                basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aTextRange));
+                aOutline.transform(aTextTransform);
+
+                aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(aOutline),
+                        rProperty.getTextFillColor()));
+
+                // set as group at pResult
+                pResult = new drawinglayer::primitive2d::GroupPrimitive2D(aSequence);
             }
-
-            // create Transform. Scale and Alignment are already applied.
-            basegfx::B2DHomMatrix aTextTransform;
-
-            if(bRotated)
-            {
-                aTextTransform.rotate(-rFont.GetOrientation() * F_PI1800);
-            }
-
-            aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
-
-            // prepare Primitive2DSequence, put text in foreground
-            drawinglayer::primitive2d::Primitive2DSequence aSequence(2);
-            aSequence[1] = drawinglayer::primitive2d::Primitive2DReference(pResult);
-
-            // prepare filled polygon
-            basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aTextRange));
-            aOutline.transform(aTextTransform);
-
-            aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(
-                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                    basegfx::B2DPolyPolygon(aOutline),
-                    rProperty.getTextFillColor()));
-
-            // set as group at pResult
-            pResult = new drawinglayer::primitive2d::GroupPrimitive2D(aSequence);
         }
 
         if(pResult)
@@ -1294,6 +1455,173 @@ namespace
         }
     }
 
+    /** helper which takes complete care for creating the needed textLine primitives */
+    void proccessMetaTextLineAction(
+        const MetaTextLineAction& rAction,
+        TargetHolder& rTarget,
+        PropertyHolder& rProperty)
+    {
+        const double fLineWidth(fabs((double)rAction.GetWidth()));
+
+        if(fLineWidth > 0.0)
+        {
+            const drawinglayer::primitive2d::TextLine aOverlineMode(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rAction.GetOverline()));
+            const drawinglayer::primitive2d::TextLine aUnderlineMode(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rAction.GetUnderline()));
+            const drawinglayer::primitive2d::TextStrikeout aTextStrikeout(drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rAction.GetStrikeout()));
+
+            const bool bOverlineUsed(drawinglayer::primitive2d::TEXT_LINE_NONE != aOverlineMode);
+            const bool bUnderlineUsed(drawinglayer::primitive2d::TEXT_LINE_NONE != aUnderlineMode);
+            const bool bStrikeoutUsed(drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE != aTextStrikeout);
+
+            if(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed)
+            {
+                std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aTargetVector;
+                basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
+                drawinglayer::attribute::FontAttribute aFontAttribute;
+                basegfx::B2DHomMatrix aTextTransform;
+
+                // fill parameters derived from current font
+                createFontAttributeTransformAndAlignment(
+                    aFontAttribute,
+                    aTextTransform,
+                    aAlignmentOffset,
+                    rProperty);
+
+                // add TextStartPosition
+                aTextTransform.translate(rAction.GetStartPoint().X(), rAction.GetStartPoint().Y());
+
+                // prepare TextLayouter (used in most cases)
+                drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+                aTextLayouter.setFont(rProperty.getFont());
+
+                if(bOverlineUsed)
+                {
+                    // create primitive geometry for overline
+                    aTargetVector.push_back(
+                        new drawinglayer::primitive2d::TextLinePrimitive2D(
+                            aTextTransform,
+                            fLineWidth,
+                            aTextLayouter.getOverlineOffset(),
+                            aTextLayouter.getOverlineHeight(),
+                            aOverlineMode,
+                            rProperty.getOverlineColor()));
+                }
+
+                if(bUnderlineUsed)
+                {
+                    // create primitive geometry for underline
+                    aTargetVector.push_back(
+                        new drawinglayer::primitive2d::TextLinePrimitive2D(
+                            aTextTransform,
+                            fLineWidth,
+                            aTextLayouter.getUnderlineOffset(),
+                            aTextLayouter.getUnderlineHeight(),
+                            aUnderlineMode,
+                            rProperty.getTextLineColor()));
+                }
+
+                if(bStrikeoutUsed)
+                {
+                    // create primitive geometry for strikeout
+                    if(drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout
+                        || drawinglayer::primitive2d::TEXT_STRIKEOUT_X == aTextStrikeout)
+                    {
+                        // strikeout with character
+                        const sal_Unicode aStrikeoutChar(
+                            drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout ? '/' : 'X');
+                        const com::sun::star::lang::Locale aLocale(MsLangId::convertLanguageToLocale(
+                            rProperty.getLanguageType()));
+
+                        aTargetVector.push_back(
+                            new drawinglayer::primitive2d::TextCharacterStrikeoutPrimitive2D(
+                                aTextTransform,
+                                fLineWidth,
+                                rProperty.getTextColor(),
+                                aStrikeoutChar,
+                                aFontAttribute,
+                                aLocale));
+                    }
+                    else
+                    {
+                        // strikeout with geometry
+                        aTargetVector.push_back(
+                            new drawinglayer::primitive2d::TextGeometryStrikeoutPrimitive2D(
+                                aTextTransform,
+                                fLineWidth,
+                                rProperty.getTextColor(),
+                                aTextLayouter.getUnderlineHeight(),
+                                aTextLayouter.getStrikeoutOffset(),
+                                aTextStrikeout));
+                    }
+                }
+
+                if(aTargetVector.size())
+                {
+                    // add created text primitive to target
+                    if(rProperty.getTransformation().isIdentity())
+                    {
+                        for(sal_uInt32 a(0); a < aTargetVector.size(); a++)
+                        {
+                            rTarget.append(aTargetVector[a]);
+                        }
+                    }
+                    else
+                    {
+                        // when a transformation is set, embed to it
+                        drawinglayer::primitive2d::Primitive2DSequence xTargets(aTargetVector.size());
+
+                        for(sal_uInt32 a(0); a < aTargetVector.size(); a++)
+                        {
+                            xTargets[a] = drawinglayer::primitive2d::Primitive2DReference(aTargetVector[a]);
+                        }
+
+                        rTarget.append(
+                            new drawinglayer::primitive2d::TransformPrimitive2D(
+                                rProperty.getTransformation(),
+                                xTargets));
+                    }
+                }
+            }
+        }
+
+    }
+
+    /** This is the main interpreter method. It is designed to handle the given Metafile
+        completely inside the given context and target. It may use and modify the context and
+        target. This design allows to call itself recursively wich adapted contexts and
+        targets as e.g. needed for the META_FLOATTRANSPARENT_ACTION where the content is expressed
+        as a metafile as sub-content.
+
+        This interpreter is as free of VCL functionality as possible. It uses VCL data classes
+        (else reading the data would not be possible), but e.g. does NOT use a local OutputDevice
+        as most other MetaFile interpreters/exporters do to hold and work with the current context.
+        This is necessary to be able to get away from the strong internal VCL-binding.
+
+        It tries to combine e.g. pixel and/or point actions and to stitch together single line primitives
+        where possible (which is not trivial with the possible line geometry definitions).
+
+        It tries to handle clipping no longer as Regions and spans of Rectangles, but as PolyPolygon
+        ClipRegions with (where possible) high precision by using the best possible data quality
+        from the Region. The Region is unavoidable as data container, but nowadays allows the transport
+        of Polygon-based clip regions. Where this is not used, a Polygon is constructed from the
+        Region ranges. All primitive clipping uses the MaskPrimitive2D with Polygon-based clipping.
+
+        I have marked the single MetaActions with:
+
+        SIMPLE, DONE:
+        Simple, e.g nothing to do or value setting in the context
+
+        CHECKED, WORKS WELL:
+        Thoroughly tested with extra written test code which created a replacement
+        Metafile just to test this action in various combinations
+
+        NEEDS IMPLEMENTATION:
+        Not implemented and asserted, but also no usage found, neither in own Metafile
+        creations, nor in EMF/WMF imports (checked with a whole bunch of critical EMF/WMF
+        bugdocs)
+
+        For more commens, see the single action implementations.
+    */
     void interpretMetafile(
         const GDIMetaFile& rMetaFile,
         TargetHolders& rTargetHolders,
@@ -1891,7 +2219,9 @@ namespace
                         {
                             if(rWallpaper.IsBitmap())
                             {
-                                // create bitmap background
+                                // create bitmap background. Caution: This
+                                // also will create gradient/color background(s)
+                                // when the bitmap is transparent or not tiled
                                 CreateAndAppendBitmapWallpaper(
                                     aWallpaperRange,
                                     rWallpaper,
@@ -2160,6 +2490,9 @@ namespace
                 case META_MAPMODE_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
+                    // the most necessary MapMode to be interpreted is MAP_RELATIVE,
+                    // but also the others may occur. Even not yet supported ones
+                    // may need to be added here later
                     const MetaMapModeAction* pA = (const MetaMapModeAction*)pAction;
                     const MapMode& rMapMode = pA->GetMapMode();
                     basegfx::B2DHomMatrix aMapping;
@@ -2216,6 +2549,34 @@ namespace
                     /** SIMPLE, DONE */
                     const MetaFontAction* pA = (const MetaFontAction*)pAction;
                     rPropertyHolders.Current().setFont(pA->GetFont());
+                    Size aFontSize(pA->GetFont().GetSize());
+
+                    if(0 == aFontSize.Height())
+                    {
+                        // this should not happen but i got Metafiles where this was the
+                        // case. A height needs to be guessed (similar to OutputDevice::ImplNewFont())
+                        Font aCorrectedFont(pA->GetFont());
+
+                        if(aFontSize.Width())
+                        {
+                            // guess width
+                            aFontSize = Size(0, aFontSize.Width() * 3);
+                        }
+                        else
+                        {
+                            // guess 21 pixel
+                            aFontSize = Size(0, 21);
+                        }
+
+                        if(aFontSize.Height() < 75)
+                        {
+                            // assume size is in pixels and convert
+                            aFontSize = Application::GetDefaultDevice()->PixelToLogic(aFontSize, MAP_100TH_MM);
+                        }
+
+                        aCorrectedFont.SetSize(aFontSize);
+                        rPropertyHolders.Current().setFont(aCorrectedFont);
+                    }
 
                     // older Metafiles have no META_TEXTCOLOR_ACTION which defines
                     // the FontColor now, so use the Font's color when not transparent
@@ -2249,36 +2610,40 @@ namespace
                 case META_PUSH_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    rPropertyHolders.Push();
+                    const MetaPushAction* pA = (const MetaPushAction*)pAction;
+                    rPropertyHolders.Push(pA->GetFlags());
 
                     break;
                 }
                 case META_POP_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    if(rPropertyHolders.Current().getRegionActive())
+                    const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_CLIPREGION);
+                    const bool bRasterOpMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_RASTEROP);
+
+                    if(bRegionMayChange && rPropertyHolders.Current().getRegionActive())
                     {
-                        // end clipping
+                        // end evtl. clipping
                         HandleNewClipRegion(0, rTargetHolders, rPropertyHolders);
                     }
 
-                    if(rPropertyHolders.Current().isRasterOpActive())
+                    if(bRasterOpMayChange && rPropertyHolders.Current().isRasterOpActive())
                     {
-                        // end RasterOp
+                        // end evtl. RasterOp
                         HandleNewRasterOp(ROP_OVERPAINT, rTargetHolders, rPropertyHolders);
                     }
 
                     rPropertyHolders.Pop();
 
-                    if(rPropertyHolders.Current().isRasterOpActive())
+                    if(bRasterOpMayChange && rPropertyHolders.Current().isRasterOpActive())
                     {
-                        // start RasterOp
+                        // start evtl. RasterOp
                         HandleNewRasterOp(rPropertyHolders.Current().getRasterOp(), rTargetHolders, rPropertyHolders);
                     }
 
-                    if(rPropertyHolders.Current().getRegionActive())
+                    if(bRegionMayChange && rPropertyHolders.Current().getRegionActive())
                     {
-                        // start clipping
+                        // start evtl. clipping
                         HandleNewClipRegion(&rPropertyHolders.Current().getRegion(), rTargetHolders, rPropertyHolders);
                     }
 
@@ -2340,15 +2705,42 @@ namespace
                 }
                 case META_EPS_ACTION :
                 {
-                    /** NEEDS IMPLEMENTATION */
-                    OSL_ENSURE(false, "META_EPS_ACTION requested (!)");
+                    /** CHECKED, WORKS WELL */
+                    // To support this action, i have added a EpsPrimitive2D which will
+                    // by default decompose to the Metafile replacement data. To support
+                    // this EPS on screen, the renderer visualizing this has to support
+                    // that primitive and visualize the Eps file (e.g. printing)
                     const MetaEPSAction* pA = (const MetaEPSAction*)pAction;
+                    const Rectangle aRectangle(pA->GetPoint(), pA->GetSize());
+
+                    if(!aRectangle.IsEmpty())
+                    {
+                        // create object transform
+                        basegfx::B2DHomMatrix aObjectTransform;
+
+                        aObjectTransform.set(0, 0, aRectangle.GetWidth());
+                        aObjectTransform.set(1, 1, aRectangle.GetHeight());
+                        aObjectTransform.set(0, 2, aRectangle.Left());
+                        aObjectTransform.set(1, 2, aRectangle.Top());
+
+                        // add current transformation
+                        aObjectTransform = rPropertyHolders.Current().getTransformation() * aObjectTransform;
+
+                        // embed using EpsPrimitive
+                        rTargetHolders.Current().append(
+                            new drawinglayer::primitive2d::EpsPrimitive2D(
+                                aObjectTransform,
+                                pA->GetLink(),
+                                pA->GetSubstitute()));
+                    }
+
                     break;
                 }
                 case META_REFPOINT_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    // only used for hatch and line pattern offsets
+                    // only used for hatch and line pattern offsets, pretty much no longer
+                    // supported today
                     // const MetaRefPointAction* pA = (const MetaRefPointAction*)pAction;
                     break;
                 }
@@ -2366,12 +2758,21 @@ namespace
                 }
                 case META_TEXTLINE_ACTION :
                 {
-                    /** NEEDS IMPLEMENTATION */
-                    OSL_ENSURE(false, "META_TEXTLINE_ACTION requested (!)");
+                    /** CHECKED, WORKS WELL */
                     // actually creates overline, underline and strikeouts, so
                     // these should be isolated from TextDecoratedPortionPrimitive2D
-                    // to own primitives...
+                    // to own primitives. Done, available now.
+                    //
+                    // This Metaaction seems not to be used (was not used in any
+                    // checked files). It's used in combination with the current
+                    // Font.
                     const MetaTextLineAction* pA = (const MetaTextLineAction*)pAction;
+
+                    proccessMetaTextLineAction(
+                        *pA,
+                        rTargetHolders.Current(),
+                        rPropertyHolders.Current());
+
                     break;
                 }
                 case META_FLOATTRANSPARENT_ACTION :
@@ -2386,7 +2787,8 @@ namespace
 
                         if(rContent.GetActionCount())
                         {
-                            // create the sub-content
+                            // create the sub-content with no embedding specific to the
+                            // sub-metafile, this seems not to be used.
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
                             {
                                 rTargetHolders.Push();
@@ -2438,7 +2840,8 @@ namespace
                 case META_GRADIENTEX_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    // This is only a data holder which is interpreted inside comment actions
+                    // This is only a data holder which is interpreted inside comment actions,
+                    // see META_COMMENT_ACTION for more info
                     // const MetaGradientExAction* pA = (const MetaGradientExAction*)pAction;
                     break;
                 }
@@ -2470,9 +2873,78 @@ namespace
                 }
                 case META_COMMENT_ACTION :
                 {
-                    /** NEEDS IMPLEMENTATION */
-                    OSL_ENSURE(false, "META_COMMENT_ACTION requested (!)");
+                    /** CHECKED, WORKS WELL */
+                    // I already implemented
+                    //     XPATHFILL_SEQ_BEGIN, XPATHFILL_SEQ_END
+                    //     XPATHSTROKE_SEQ_BEGIN, XPATHSTROKE_SEQ_END,
+                    // but opted to remove these again; it works well without them
+                    // and makes the code less dependent from those Metafile Add-Ons
                     const MetaCommentAction* pA = (const MetaCommentAction*)pAction;
+
+                    if(COMPARE_EQUAL == pA->GetComment().CompareIgnoreCaseToAscii("XGRAD_SEQ_BEGIN"))
+                    {
+                        // XGRAD_SEQ_BEGIN, XGRAD_SEQ_END should be supported since the
+                        // pure recorded paint of the gradients uses the XOR paint functionality
+                        // ('trick'). This is (and will be) broblematic with AntAliasing, so it's
+                        // better to use this info
+                        const MetaGradientExAction* pMetaGradientExAction = 0;
+                        bool bDone(false);
+                        sal_uInt32 b(a + 1);
+
+                        for(; !bDone && b < nCount; b++)
+                        {
+                            pAction = rMetaFile.GetAction(b);
+
+                            if(META_GRADIENTEX_ACTION == pAction->GetType())
+                            {
+                                pMetaGradientExAction = (const MetaGradientExAction*)pAction;
+                            }
+                            else if(META_COMMENT_ACTION == pAction->GetType())
+                            {
+                                if(COMPARE_EQUAL == ((const MetaCommentAction*)pAction)->GetComment().CompareIgnoreCaseToAscii("XGRAD_SEQ_END"))
+                                {
+                                    bDone = true;
+                                }
+                            }
+                        }
+
+                        if(bDone && pMetaGradientExAction)
+                        {
+                            // consume actions and skip forward
+                            a = b - 1;
+
+                            // get geometry data
+                            basegfx::B2DPolyPolygon aPolyPolygon(pMetaGradientExAction->GetPolyPolygon().getB2DPolyPolygon());
+
+                            if(aPolyPolygon.count())
+                            {
+                                // transform geometry
+                                aPolyPolygon.transform(rPropertyHolders.Current().getTransformation());
+
+                                // get and check if gradient is a real gradient
+                                const Gradient& rGradient = pMetaGradientExAction->GetGradient();
+                                const drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
+
+                                if(aAttribute.getStartColor() == aAttribute.getEndColor())
+                                {
+                                    // not really a gradient
+                                    rTargetHolders.Current().append(
+                                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                            aPolyPolygon,
+                                            aAttribute.getStartColor()));
+                                }
+                                else
+                                {
+                                    // really a gradient
+                                    rTargetHolders.Current().append(
+                                        new drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D(
+                                            aPolyPolygon,
+                                            aAttribute));
+                                }
+                            }
+                        }
+                    }
+
                     break;
                 }
                 default:
@@ -2493,25 +2965,33 @@ namespace drawinglayer
     {
         Primitive2DSequence MetafilePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
+            // prepare target and porperties; each will have one default entry
             TargetHolders aTargetHolders;
             PropertyHolders aPropertyHolders;
 
+            // interpret the Metafile
             interpretMetafile(getMetaFile(), aTargetHolders, aPropertyHolders, rViewInformation);
-            Primitive2DSequence xRetval = aTargetHolders.Current().getPrimitive2DSequence(aPropertyHolders.Current());
+
+            // get the content. There should be ony one target, as in the start condition,
+            // but iterating will be the right thing to do when some push/pop is not closed
+            Primitive2DSequence xRetval;
+
+            while(aTargetHolders.size() > 1)
+            {
+                appendPrimitive2DSequenceToPrimitive2DSequence(xRetval,
+                    aTargetHolders.Current().getPrimitive2DSequence(aPropertyHolders.Current()));
+                aTargetHolders.Pop();
+            }
+
+            appendPrimitive2DSequenceToPrimitive2DSequence(xRetval,
+                aTargetHolders.Current().getPrimitive2DSequence(aPropertyHolders.Current()));
 
             if(xRetval.hasElements())
             {
-                Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
+                // get target size
+                const Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
 
-                if(MAP_PIXEL == getMetaFile().GetPrefMapMode().GetMapUnit())
-                {
-                    aMtfTarget = Application::GetDefaultDevice()->PixelToLogic(aMtfTarget, MAP_100TH_MM);
-                }
-                else
-                {
-                    aMtfTarget = Application::GetDefaultDevice()->LogicToLogic(aMtfTarget, getMetaFile().GetPrefMapMode(), MAP_100TH_MM);
-                }
-
+                // create transformation
                 basegfx::B2DHomMatrix aAdaptedTransform;
 
                 aAdaptedTransform.translate(-aMtfTarget.Left(), -aMtfTarget.Top());
@@ -2520,6 +3000,7 @@ namespace drawinglayer
                     aMtfTarget.getHeight() ? 1.0 / aMtfTarget.getHeight() : 1.0);
                 aAdaptedTransform = getTransform() * aAdaptedTransform;
 
+                // embed to target transformation
                 const Primitive2DReference aEmbeddedTransform(
                     new TransformPrimitive2D(
                         aAdaptedTransform,
@@ -2555,8 +3036,13 @@ namespace drawinglayer
 
         basegfx::B2DRange MetafilePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
+            // use own implementation to quickly answer the getB2DRange question. The
+            // MetafilePrimitive2D assumes that all geometry is inside of the shape. If
+            // this is not the case (i have already seen some wrong Metafiles) it should
+            // be embedded to a MaskPrimitive2D
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
             aRetval.transform(getTransform());
+
             return aRetval;
         }
 

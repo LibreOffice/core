@@ -71,9 +71,9 @@ namespace drawinglayer
             basegfx::BColor                             maTextlineColor;
             TextLine                                    meFontOverline;
             TextLine                                    meFontUnderline;
-            FontStrikeout                               meFontStrikeout;
-            FontEmphasisMark                            meFontEmphasisMark;
-            FontRelief                                  meFontRelief;
+            TextStrikeout                               meTextStrikeout;
+            TextEmphasisMark                            meTextEmphasisMark;
+            TextRelief                                  meTextRelief;
 
             /// bitfield
             unsigned                                    mbUnderlineAbove : 1;
@@ -123,20 +123,20 @@ namespace drawinglayer
                 TextLine eFontOverline = TEXT_LINE_NONE,
                 TextLine eFontUnderline = TEXT_LINE_NONE,
                 bool bUnderlineAbove = false,
-                FontStrikeout eFontStrikeout = FONT_STRIKEOUT_NONE,
+                TextStrikeout eTextStrikeout = TEXT_STRIKEOUT_NONE,
                 bool bWordLineMode = false,
-                FontEmphasisMark eFontEmphasisMark = FONT_EMPHASISMARK_NONE,
+                TextEmphasisMark eTextEmphasisMark = TEXT_EMPHASISMARK_NONE,
                 bool bEmphasisMarkAbove = true,
                 bool bEmphasisMarkBelow = false,
-                FontRelief eFontRelief = FONT_RELIEF_NONE,
+                TextRelief eTextRelief = TEXT_RELIEF_NONE,
                 bool bShadow = false);
 
             /// data read access
             TextLine getFontOverline() const { return meFontOverline; }
             TextLine getFontUnderline() const { return meFontUnderline; }
-            FontStrikeout getFontStrikeout() const { return meFontStrikeout; }
-            FontEmphasisMark getFontEmphasisMark() const { return meFontEmphasisMark; }
-            FontRelief getFontRelief() const { return meFontRelief; }
+            TextStrikeout getTextStrikeout() const { return meTextStrikeout; }
+            TextEmphasisMark getTextEmphasisMark() const { return meTextEmphasisMark; }
+            TextRelief getTextRelief() const { return meTextRelief; }
             basegfx::BColor getOverlineColor() const { return maOverlineColor; }
             basegfx::BColor getTextlineColor() const { return maTextlineColor; }
             bool getUnderlineAbove() const { return mbUnderlineAbove; }

@@ -689,6 +689,34 @@ namespace drawinglayer
                                 //delete pDXArray;
                             }
 
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+                                const Point aPointA(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.3));
+                                const Point aPointB(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.5));
+                                const Point aPointC(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.7));
+                                const String aText(ByteString("Hello, World!"), RTL_TEXTENCODING_UTF8);
+
+                                const String aFontName(ByteString("Comic Sans MS"), RTL_TEXTENCODING_UTF8);
+                                Font aFont(aFontName, Size(0, 1000));
+                                aFont.SetAlign(ALIGN_BASELINE);
+                                aFont.SetColor(COL_RED);
+
+                                aOut.SetFont(aFont);
+                                const sal_Int32 nWidth(aOut.GetTextWidth(aText, 0, aText.Len()));
+                                aOut.DrawText(aPointA, aText, 0, aText.Len());
+                                aOut.DrawTextLine(aPointA, nWidth, STRIKEOUT_SINGLE, UNDERLINE_SINGLE, UNDERLINE_SMALLWAVE);
+                                aOut.DrawTextLine(aPointB, nWidth, STRIKEOUT_SINGLE, UNDERLINE_SINGLE, UNDERLINE_SMALLWAVE);
+                                aOut.DrawTextLine(aPointC, nWidth, STRIKEOUT_SINGLE, UNDERLINE_SINGLE, UNDERLINE_SMALLWAVE);
+                            }
+
                             aMtf.Stop();
                             aMtf.WindStart();
                             aMtf.SetPrefMapMode(MapMode(MAP_100TH_MM));

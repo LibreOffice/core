@@ -172,8 +172,8 @@ namespace drawinglayer
     {
         Primitive2DSequence TextGeometryStrikeoutPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            OSL_ENSURE(FONT_STRIKEOUT_SLASH != getFontStrikeout() && FONT_STRIKEOUT_X != getFontStrikeout(),
-                "Wrong FONT_STRIKEOUT type; a TextCharacterStrikeoutPrimitive2D should be used (!)");
+            OSL_ENSURE(TEXT_STRIKEOUT_SLASH != getTextStrikeout() && TEXT_STRIKEOUT_X != getTextStrikeout(),
+                "Wrong TEXT_STRIKEOUT type; a TextCharacterStrikeoutPrimitive2D should be used (!)");
 
             // strikeout with geometry
             double fStrikeoutHeight(getHeight());
@@ -186,18 +186,18 @@ namespace drawinglayer
             getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
             // set line attribute
-            switch(getFontStrikeout())
+            switch(getTextStrikeout())
             {
-                default : // case primitive2d::FONT_STRIKEOUT_SINGLE:
+                default : // case primitive2d::TEXT_STRIKEOUT_SINGLE:
                 {
                     break;
                 }
-                case primitive2d::FONT_STRIKEOUT_DOUBLE:
+                case primitive2d::TEXT_STRIKEOUT_DOUBLE:
                 {
                     bDoubleLine = true;
                     break;
                 }
-                case primitive2d::FONT_STRIKEOUT_BOLD:
+                case primitive2d::TEXT_STRIKEOUT_BOLD:
                 {
                     fStrikeoutHeight *= 2.0;
                     break;
@@ -262,11 +262,11 @@ namespace drawinglayer
             const basegfx::BColor& rFontColor,
             double fHeight,
             double fOffset,
-            FontStrikeout eFontStrikeout)
+            TextStrikeout eTextStrikeout)
         :   BaseTextStrikeoutPrimitive2D(rObjectTransformation, fWidth, rFontColor),
             mfHeight(fHeight),
             mfOffset(fOffset),
-            meFontStrikeout(eFontStrikeout)
+            meTextStrikeout(eTextStrikeout)
         {
         }
 
@@ -278,7 +278,7 @@ namespace drawinglayer
 
                 return (getHeight() == rCompare.getHeight()
                     && getOffset() == rCompare.getOffset()
-                    && getFontStrikeout() == rCompare.getFontStrikeout());
+                    && getTextStrikeout() == rCompare.getTextStrikeout());
             }
 
             return false;

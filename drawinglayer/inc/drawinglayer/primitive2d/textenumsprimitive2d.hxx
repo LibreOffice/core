@@ -37,6 +37,7 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTENUMSPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/vclenum.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -70,33 +71,41 @@ namespace drawinglayer
             TEXT_LINE_BOLDWAVE
         };
 
+        /** helper to convert LineStyle */
+        TextLine mapFontUnderlineToTextLine(FontUnderline eLineStyle);
+        FontUnderline mapTextLineToFontUnderline(TextLine eLineStyle);
+
         /** FontStrikeout definition */
-        enum FontStrikeout
+        enum TextStrikeout
         {
-            FONT_STRIKEOUT_NONE,
-            FONT_STRIKEOUT_SINGLE,
-            FONT_STRIKEOUT_DOUBLE,
-            FONT_STRIKEOUT_BOLD,
-            FONT_STRIKEOUT_SLASH,
-            FONT_STRIKEOUT_X
+            TEXT_STRIKEOUT_NONE,
+            TEXT_STRIKEOUT_SINGLE,
+            TEXT_STRIKEOUT_DOUBLE,
+            TEXT_STRIKEOUT_BOLD,
+            TEXT_STRIKEOUT_SLASH,
+            TEXT_STRIKEOUT_X
         };
 
-        /** FontEmphasisMark definition */
-        enum FontEmphasisMark
+        /** helper to convert FontStrikeout */
+        TextStrikeout mapFontStrikeoutToTextStrikeout(::FontStrikeout eFontStrikeout);
+        ::FontStrikeout mapTextStrikeoutToFontStrikeout(TextStrikeout eFontStrikeout);
+
+        /** TextEmphasisMark definition */
+        enum TextEmphasisMark
         {
-            FONT_EMPHASISMARK_NONE,
-            FONT_EMPHASISMARK_DOT,
-            FONT_EMPHASISMARK_CIRCLE,
-            FONT_EMPHASISMARK_DISC,
-            FONT_EMPHASISMARK_ACCENT
+            TEXT_EMPHASISMARK_NONE,
+            TEXT_EMPHASISMARK_DOT,
+            TEXT_EMPHASISMARK_CIRCLE,
+            TEXT_EMPHASISMARK_DISC,
+            TEXT_EMPHASISMARK_ACCENT
         };
 
-        /** FontRelief definition */
-        enum FontRelief
+        /** TextRelief definition */
+        enum TextRelief
         {
-            FONT_RELIEF_NONE,
-            FONT_RELIEF_EMBOSSED,
-            FONT_RELIEF_ENGRAVED
+            TEXT_RELIEF_NONE,
+            TEXT_RELIEF_EMBOSSED,
+            TEXT_RELIEF_ENGRAVED
         };
 
     } // end of namespace primitive2d

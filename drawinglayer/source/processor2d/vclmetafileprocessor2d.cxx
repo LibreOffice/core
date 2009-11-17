@@ -74,6 +74,7 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <helperchartrenderer.hxx>
 #include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // for PDFExtOutDevData Graphic support
@@ -1803,6 +1804,11 @@ namespace drawinglayer
                         mpOutputDevice->DrawRect(aRectLogic);
                     }
 
+                    break;
+                }
+                case PRIMITIVE2D_ID_EPSPRIMITIVE2D :
+                {
+                    RenderEpsPrimitive2D(static_cast< const primitive2d::EpsPrimitive2D& >(rCandidate));
                     break;
                 }
                 default :

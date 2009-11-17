@@ -129,7 +129,7 @@ namespace drawinglayer
         private:
             double                                  mfHeight;
             double                                  mfOffset;
-            FontStrikeout                           meFontStrikeout;
+            TextStrikeout                           meTextStrikeout;
 
         protected:
             /// local decomposition.
@@ -143,12 +143,12 @@ namespace drawinglayer
                 const basegfx::BColor& rFontColor,
                 double fHeight,
                 double fOffset,
-                FontStrikeout eFontStrikeout);
+                TextStrikeout eTextStrikeout);
 
             /// data read access
             double getHeight() const { return mfHeight; }
             double getOffset() const { return mfOffset; }
-            FontStrikeout getFontStrikeout() const { return meFontStrikeout; }
+            TextStrikeout getTextStrikeout() const { return meTextStrikeout; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;

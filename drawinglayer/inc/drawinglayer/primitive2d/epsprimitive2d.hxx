@@ -33,38 +33,32 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BACKGROUNDCOLORPRIMITIVE2D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BACKGROUNDCOLORPRIMITIVE2D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_EPSPRIMITIVE2D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_EPSPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <basegfx/color/bcolor.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/gdimtf.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// BackgroundColorPrimitive2D class
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** BackgroundColorPrimitive2D class
-
-            This primitive is defined to fill the whole visible Viewport with
-            the given color (and thus decomposes to a filled polygon). This
-            makes it a view-depnendent primitive by definition. It only has
-            a valid decomposition if a valid Viewport is given in the
-            ViewInformation2D at decomposition time.
-
-            It will try to buffer it's last decomposition using maLastViewport
-            to detect changes in the get2DDecomposition call.
-         */
-        class BackgroundColorPrimitive2D : public BufferedDecompositionPrimitive2D
+        /** EpsPrimitive2D class */
+        class EpsPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            /// the fill color to use
-            basegfx::BColor                             maBColor;
+            /// the geometry definition
+            basegfx::B2DHomMatrix                       maEpsTransform;
 
-            /// the last used viewInformation, used from getDecomposition for buffering
-            basegfx::B2DRange                           maLastViewport;
+            /// the Eps content definition
+            GfxLink                                     maGfxLink;
+
+            /// the replacement content definition
+            GDIMetaFile                                 maMetaFile;
 
         protected:
             /// create local decomposition
@@ -72,11 +66,15 @@ namespace drawinglayer
 
         public:
             /// constructor
-            BackgroundColorPrimitive2D(
-                const basegfx::BColor& rBColor);
+            EpsPrimitive2D(
+                const basegfx::B2DHomMatrix& rEpsTransform,
+                const GfxLink& rGfxLink,
+                const GDIMetaFile& rMetaFile);
 
             /// data read access
-            const basegfx::BColor& getBColor() const { return maBColor; }
+            const basegfx::B2DHomMatrix& getEpsTransform() const { return maEpsTransform; }
+            const GfxLink& getGfxLink() const { return maGfxLink; }
+            const GDIMetaFile& getMetaFile() const { return maMetaFile; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -86,16 +84,13 @@ namespace drawinglayer
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
-
-            /// Overload standard getDecomposition call to be view-dependent here
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BACKGROUNDCOLORPRIMITIVE2D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_EPSPRIMITIVE2D_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

@@ -55,6 +55,7 @@ SLOFILES= \
         $(SLO)$/controlprimitive2d.obj			\
         $(SLO)$/discretebitmapprimitive2d.obj	\
         $(SLO)$/embedded3dprimitive2d.obj		\
+        $(SLO)$/epsprimitive2d.obj				\
         $(SLO)$/fillbitmapprimitive2d.obj		\
         $(SLO)$/fillgradientprimitive2d.obj		\
         $(SLO)$/fillhatchprimitive2d.obj		\
@@ -78,6 +79,7 @@ SLOFILES= \
         $(SLO)$/shadowprimitive2d.obj			\
         $(SLO)$/structuretagprimitive2d.obj		\
         $(SLO)$/texteffectprimitive2d.obj		\
+        $(SLO)$/textenumsprimitive2d.obj		\
         $(SLO)$/textlayoutdevice.obj			\
         $(SLO)$/textlineprimitive2d.obj			\
         $(SLO)$/textprimitive2d.obj				\

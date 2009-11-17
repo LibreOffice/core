@@ -81,16 +81,12 @@ namespace drawinglayer
             // see if something else needs to be done
             const bool bOverlineUsed(TEXT_LINE_NONE != getFontOverline());
             const bool bUnderlineUsed(TEXT_LINE_NONE != getFontUnderline());
-            const bool bStrikeoutUsed(FONT_STRIKEOUT_NONE != getFontStrikeout());
+            const bool bStrikeoutUsed(TEXT_STRIKEOUT_NONE != getTextStrikeout());
 
             if(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed)
             {
                 // common preparations
                 TextLayouterDevice aTextLayouter;
-
-                // unscaled is needed since scale contains already the font size
-                const basegfx::B2DHomMatrix aUnscaledTransform(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
-                    rDecTrans.getShearX(), rDecTrans.getRotate(), rDecTrans.getTranslate()));
 
                 // TextLayouterDevice is needed to get metrics for text decorations like
                 // underline/strikeout/emphasis marks from it. For setup, the font size is needed
@@ -149,10 +145,10 @@ namespace drawinglayer
                 if(bStrikeoutUsed)
                 {
                     // create primitive geometry for strikeout
-                    if(FONT_STRIKEOUT_SLASH == getFontStrikeout() || FONT_STRIKEOUT_X == getFontStrikeout())
+                    if(TEXT_STRIKEOUT_SLASH == getTextStrikeout() || TEXT_STRIKEOUT_X == getTextStrikeout())
                     {
                         // strikeout with character
-                        const sal_Unicode aStrikeoutChar(FONT_STRIKEOUT_SLASH == getFontStrikeout() ? '/' : 'X');
+                        const sal_Unicode aStrikeoutChar(TEXT_STRIKEOUT_SLASH == getTextStrikeout() ? '/' : 'X');
 
                         rTarget.push_back(Primitive2DReference(
                             new TextCharacterStrikeoutPrimitive2D(
@@ -173,7 +169,7 @@ namespace drawinglayer
                                 getFontColor(),
                                 aTextLayouter.getUnderlineHeight(),
                                 aTextLayouter.getStrikeoutOffset(),
-                                getFontStrikeout())));
+                                getTextStrikeout())));
                     }
                 }
             }
@@ -420,15 +416,15 @@ namespace drawinglayer
                 }
             }
 
-            // Handle Shadow, Outline and FontRelief
+            // Handle Shadow, Outline and TextRelief
             if(aRetval.hasElements())
             {
-                // outline AND shadow depend on NO FontRelief (see dialog)
-                const bool bHasFontRelief(FONT_RELIEF_NONE != getFontRelief());
-                const bool bHasShadow(!bHasFontRelief && getShadow());
-                const bool bHasOutline(!bHasFontRelief && getFontAttribute().getOutline());
+                // outline AND shadow depend on NO TextRelief (see dialog)
+                const bool bHasTextRelief(TEXT_RELIEF_NONE != getTextRelief());
+                const bool bHasShadow(!bHasTextRelief && getShadow());
+                const bool bHasOutline(!bHasTextRelief && getFontAttribute().getOutline());
 
-                if(bHasShadow || bHasFontRelief || bHasOutline)
+                if(bHasShadow || bHasTextRelief || bHasOutline)
                 {
                     Primitive2DReference aShadow;
 
@@ -453,7 +449,7 @@ namespace drawinglayer
                             aRetval));
                     }
 
-                    if(bHasFontRelief)
+                    if(bHasTextRelief)
                     {
                         // create emboss using an own helper primitive since this will
                         // be view-dependent
@@ -463,7 +459,7 @@ namespace drawinglayer
 
                         if(bDefaultTextColor)
                         {
-                            if(FONT_RELIEF_ENGRAVED == getFontRelief())
+                            if(TEXT_RELIEF_ENGRAVED == getTextRelief())
                             {
                                 aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT;
                             }
@@ -474,7 +470,7 @@ namespace drawinglayer
                         }
                         else
                         {
-                            if(FONT_RELIEF_ENGRAVED == getFontRelief())
+                            if(TEXT_RELIEF_ENGRAVED == getTextRelief())
                             {
                                 aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED;
                             }
@@ -535,21 +531,21 @@ namespace drawinglayer
             TextLine eFontOverline,
             TextLine eFontUnderline,
             bool bUnderlineAbove,
-            FontStrikeout eFontStrikeout,
+            TextStrikeout eTextStrikeout,
             bool bWordLineMode,
-            FontEmphasisMark eFontEmphasisMark,
+            TextEmphasisMark eTextEmphasisMark,
             bool bEmphasisMarkAbove,
             bool bEmphasisMarkBelow,
-            FontRelief eFontRelief,
+            TextRelief eTextRelief,
             bool bShadow)
         :   TextSimplePortionPrimitive2D(rNewTransform, rText, aTextPosition, aTextLength, rDXArray, rFontAttribute, rLocale, rFontColor),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),
             meFontUnderline(eFontUnderline),
-            meFontStrikeout(eFontStrikeout),
-            meFontEmphasisMark(eFontEmphasisMark),
-            meFontRelief(eFontRelief),
+            meTextStrikeout(eTextStrikeout),
+            meTextEmphasisMark(eTextEmphasisMark),
+            meTextRelief(eTextRelief),
             mbUnderlineAbove(bUnderlineAbove),
             mbWordLineMode(bWordLineMode),
             mbEmphasisMarkAbove(bEmphasisMarkAbove),
@@ -568,9 +564,9 @@ namespace drawinglayer
                     && getTextlineColor() == rCompare.getTextlineColor()
                     && getFontOverline() == rCompare.getFontOverline()
                     && getFontUnderline() == rCompare.getFontUnderline()
-                    && getFontStrikeout() == rCompare.getFontStrikeout()
-                    && getFontEmphasisMark() == rCompare.getFontEmphasisMark()
-                    && getFontRelief() == rCompare.getFontRelief()
+                    && getTextStrikeout() == rCompare.getTextStrikeout()
+                    && getTextEmphasisMark() == rCompare.getTextEmphasisMark()
+                    && getTextRelief() == rCompare.getTextRelief()
                     && getUnderlineAbove() == rCompare.getUnderlineAbove()
                     && getWordLineMode() == rCompare.getWordLineMode()
                     && getEmphasisMarkAbove() == rCompare.getEmphasisMarkAbove()
@@ -589,9 +585,9 @@ namespace drawinglayer
             const bool bDecoratedIsNeeded(
                 TEXT_LINE_NONE != getFontOverline()
              || TEXT_LINE_NONE != getFontUnderline()
-             || FONT_STRIKEOUT_NONE != getFontStrikeout()
-             || FONT_EMPHASISMARK_NONE != getFontEmphasisMark()
-             || FONT_RELIEF_NONE != getFontRelief()
+             || TEXT_STRIKEOUT_NONE != getTextStrikeout()
+             || TEXT_EMPHASISMARK_NONE != getTextEmphasisMark()
+             || TEXT_RELIEF_NONE != getTextRelief()
              || getShadow());
 
             if(bDecoratedIsNeeded)

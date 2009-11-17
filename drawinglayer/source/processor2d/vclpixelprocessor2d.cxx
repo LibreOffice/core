@@ -68,6 +68,7 @@
 #include <cstdio>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -235,6 +236,7 @@ namespace drawinglayer
                     static bool bTestMetaFilePrimitiveDecomposition(true);
                     if(bTestMetaFilePrimitiveDecomposition)
                     {
+                        // use new Metafile decomposition
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
                     else
@@ -555,6 +557,11 @@ namespace drawinglayer
                     // restore OutDev
                     mpOutputDevice->Pop();
                     mpOutputDevice->SetAntialiasing(nAntiAliasing);
+                    break;
+                }
+                case PRIMITIVE2D_ID_EPSPRIMITIVE2D :
+                {
+                    RenderEpsPrimitive2D(static_cast< const primitive2d::EpsPrimitive2D& >(rCandidate));
                     break;
                 }
                 default :
