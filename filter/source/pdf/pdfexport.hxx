@@ -77,6 +77,7 @@ private:
     sal_Int32               mnQuality;
     sal_Int32               mnFormsFormat;
     sal_Bool                mbExportFormFields;
+    sal_Bool                mbAllowDuplicateFieldNames;
     sal_Int32               mnProgressValue;
     sal_Bool                mbRemoveTransparencies;
 

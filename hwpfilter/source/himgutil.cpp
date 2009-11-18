@@ -106,7 +106,8 @@ const char *GetEmbImgname(const EmPicture * empic)
     char *ptr;
     const char *ext;
 
-    tmpnam(fname);
+    if (tmpnam(fname) == NULL)
+        return NULL;
     if (!empic || !empic->name[0] || (0 == (ptr = strrchr(fname, DIRSEP))))
         return NULL;
     switch (ImageMagicType((uchar *) empic->data))
