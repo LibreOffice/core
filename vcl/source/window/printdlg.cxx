@@ -725,6 +725,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     , mnCachedPages( 0 )
     , maPrintToFileText( String( VclResId( SV_PRINT_TOFILE_TXT ) ) )
     , maDefPrtText( String( VclResId( SV_PRINT_DEFPRT_TXT ) ) )
+    , mbShowLayoutPage( sal_True )
 {
     FreeResource();
 
@@ -888,8 +889,11 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maTabCtrl.SMHID1( "TabPages" );
 
     // append further tab pages
-    maTabCtrl.InsertPage( SV_PRINT_TAB_NUP, maNUpPage.GetText() );
-    maTabCtrl.SetTabPage( SV_PRINT_TAB_NUP, &maNUpPage );
+    if( mbShowLayoutPage )
+    {
+        maTabCtrl.InsertPage( SV_PRINT_TAB_NUP, maNUpPage.GetText() );
+        maTabCtrl.SetTabPage( SV_PRINT_TAB_NUP, &maNUpPage );
+    }
     maTabCtrl.InsertPage( SV_PRINT_TAB_OPT, maOptionsPage.GetText() );
     maTabCtrl.SetTabPage( SV_PRINT_TAB_OPT, &maOptionsPage );
 }
@@ -1140,6 +1144,12 @@ void PrintDialog::setupOptionalUI()
                         *aHelpTexts.getArray() = aHelpText;
                     }
                 }
+            }
+            else if( rEntry.Name.equalsAscii( "HintNoLayoutPage" ) )
+            {
+                sal_Bool bNoLayoutPage = sal_False;
+                rEntry.Value >>= bNoLayoutPage;
+                mbShowLayoutPage = ! bNoLayoutPage;
             }
         }
 

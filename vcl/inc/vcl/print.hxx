@@ -460,6 +460,10 @@ public:
     const com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& i_rPropertyName ) const;
     // get a sequence of properties
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getValues( const com::sun::star::uno::Sequence< rtl::OUString >& ) const;
+    /* get a bool property
+       in case the property is unknown or not convertible to bool, i_bFallback is returned
+    */
+    sal_Bool getBoolProperty( const rtl::OUString& i_rPropertyName, sal_Bool i_bFallback ) const;
 
     /* set a property value - can also be used to add another UI property
     */

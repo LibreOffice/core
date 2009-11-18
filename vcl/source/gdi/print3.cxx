@@ -1413,20 +1413,23 @@ void PrinterController::pushPropertiesToPrinter()
 
 bool PrinterController::isShowDialogs() const
 {
-    sal_Bool bApi = sal_False;
-    const com::sun::star::beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ) );
-    if( pVal )
-        pVal->Value >>= bApi;
+    sal_Bool bApi = getBoolProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ), sal_False );
     return ! bApi && ! Application::IsHeadlessModeEnabled();
 }
 
 bool PrinterController::isDirectPrint() const
 {
-    sal_Bool bDirect = sal_False;
-    const com::sun::star::beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ) );
-    if( pVal )
-        pVal->Value >>= bDirect;
+    sal_Bool bDirect = getBoolProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ), sal_False );
     return bDirect == sal_True;
+}
+
+sal_Bool PrinterController::getBoolProperty( const rtl::OUString& i_rProperty, sal_Bool i_bFallback ) const
+{
+    sal_Bool bRet = i_bFallback;
+    const com::sun::star::beans::PropertyValue* pVal = getValue( i_rProperty );
+    if( pVal )
+        pVal->Value >>= bRet;
+    return bRet;
 }
 
 /*
