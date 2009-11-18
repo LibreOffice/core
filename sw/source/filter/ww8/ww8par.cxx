@@ -4379,7 +4379,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
                         pStrm->Read(pIn, nUnencryptedHdr);
                         aDecryptMain.Write(pIn, nUnencryptedHdr);
-                        delete pIn;
+                        delete [] pIn;
 
                         DecryptXOR(aCtx, *pStrm, aDecryptMain);
 

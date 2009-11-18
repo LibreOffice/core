@@ -115,7 +115,7 @@ void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
     Image aImage = GetImage( m_xFrame,
                              aSlotURL,
                              hasBigImages(),
-                             rTbx.GetDisplayBackground().GetColor().IsDark() );
+                             rTbx.GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     rTbx.SetItemImage(GetId(), aImage);
     rTbx.Invalidate();
@@ -146,11 +146,11 @@ void SwTbxInsertCtrl::StateChanged( USHORT /*nSID*/,
 
             rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
             aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
+            ToolBox& rBox = GetToolBox();
             Image aImage = GetImage( m_xFrame,
                                      aSlotURL,
                                      hasBigImages(),
-                                     GetToolBox().GetDisplayBackground().GetColor().IsDark() );
-            ToolBox& rBox = GetToolBox();
+                                     rBox.GetSettings().GetStyleSettings().GetHighContrastMode() );
             rBox.SetItemImage(GetId(), aImage);
             rBox.SetItemImageMirrorMode( GetId(), FALSE );
             rBox.SetItemImageAngle( GetId(), pItem->GetRotation() );
@@ -572,7 +572,7 @@ void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void SwScrollNaviPopup::ApplyImageList()
 {
-    ImageList& rImgLst = aToolBox.GetDisplayBackground().GetColor().IsDark() ?
+    ImageList& rImgLst = aToolBox.GetSettings().GetStyleSettings().GetHighContrastMode() ?
         aIListH : aIList;
     for(USHORT i = 0; i < NID_COUNT; i++)
     {
@@ -746,7 +746,7 @@ SwNaviImageButton::SwNaviImageButton(
     FreeResource();
     SetStyle(GetStyle()|WB_NOPOINTERFOCUS);
     SetQuickHelpText(sQuickText);
-    SetModeImage( GetDisplayBackground().GetColor().IsDark() ? aImageH : aImage);
+    SetModeImage( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImageH : aImage);
 }
 /* -----------------------------2002/07/05 9:41-------------------------------
 
@@ -755,7 +755,7 @@ void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            SetModeImage( GetDisplayBackground().GetColor().IsDark() ? aImageH : aImage);
+            SetModeImage( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImageH : aImage);
 
     Window::DataChanged( rDCEvt );
 }
