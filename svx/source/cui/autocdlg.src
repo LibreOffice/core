@@ -73,7 +73,7 @@ TabDialog RID_OFA_AUTOCORR_DLG
             PageItem
             {
                 Identifier = RID_OFAPAGE_AUTOCORR_QUOTE ;
-                Text [ en-US ] = "Custom Quotes" ;
+                Text [ en-US ] = "Localized Options" ;
             };
             PageItem
             {
