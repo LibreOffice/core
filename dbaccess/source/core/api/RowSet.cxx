@@ -1986,15 +1986,17 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             for(sal_Int32 i=1; i <= nCount ;++i)
             {
                 ::rtl::OUString sName = xMeta->getColumnName(i);
+                ::rtl::OUString sColumnLabel = xMeta->getColumnLabel(i);
 
                 // retrieve the column number |i|
                 Reference<XPropertySet> xColumn;
                 {
                     sal_Bool bReFetchName = sal_False;
-                    if (m_xColumns->hasByName(sName))
+                    if (m_xColumns->hasByName(sColumnLabel))
+                        m_xColumns->getByName(sColumnLabel) >>= xColumn;
+                    if (!xColumn.is() && m_xColumns->hasByName(sName))
                         m_xColumns->getByName(sName) >>= xColumn;
-                    if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
-                        m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
+
                     // check if column already in the list we need another
                     if ( aAllColumns.find( xColumn ) != aAllColumns.end() )
                     {
@@ -2035,16 +2037,16 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                         aDescription,
                                                                         m_aCurrentRow);
                     aColumns->get().push_back(pColumn);
-                    if(!sName.getLength())
+                    if(!sColumnLabel.getLength())
                     {
                         if(xColumn.is())
-                            xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                            xColumn->getPropertyValue(PROPERTY_NAME) >>= sColumnLabel;
                         else
-                            sName = ::rtl::OUString::createFromAscii("Expression1");
+                            sColumnLabel = ::rtl::OUString::createFromAscii("Expression1");
                         // TODO: resource
                     }
-                    pColumn->setName(sName);
-                    aNames.push_back(sName);
+                    pColumn->setName(sColumnLabel);
+                    aNames.push_back(sColumnLabel);
                     m_aDataColumns.push_back(pColumn);
 
                     if ( xColumn.is() )
