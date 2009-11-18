@@ -87,20 +87,18 @@ namespace dbaccess
     public:
         OColumnSettings();
 
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-
     protected:
         void registerProperties( IPropertyContainer& _rPropertyContainer );
 
         /** determines whether the property with the given handle is handled by the class
         */
-        bool isMine( const sal_Int32 _nPropertyHandle ) const;
+        static bool isColumnSettingProperty( const sal_Int32 _nPropertyHandle );
+        static bool isDefaulted( const sal_Int32 _nPropertyHandle, const ::com::sun::star::uno::Any& _rPropertyValue );
 
     public:
         /** check if the persistent settings have their default value
         */
-        sal_Bool    isDefaulted() const;
+        static bool hasDefaultSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn );
     };
 
 //........................................................................

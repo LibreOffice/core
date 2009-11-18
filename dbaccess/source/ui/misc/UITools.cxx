@@ -803,6 +803,12 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                     aName = _rsTypeNames.GetToken(TYPE_DATETIME);
                     break;
                 case DataType::BIT:
+                    if ( pInfo->aCreateParams.getLength() )
+                    {
+                        aName = _rsTypeNames.GetToken(TYPE_BIT);
+                        break;
+                    }
+                    // run through
                 case DataType::BOOLEAN:
                     aName = _rsTypeNames.GetToken(TYPE_BOOL);
                     break;
@@ -1155,7 +1161,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     if (_bHasFormat)
     {
         // if the col is bound to a text field we have to disallow all non-text formats
-        if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType))
+        if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType) || (DataType::CLOB == _nDataType))
         {
             bText = sal_True;
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
@@ -1620,6 +1626,10 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
             break;
         case DataType::VARCHAR:
             if (  pTypeInfo = queryTypeInfoByType(DataType::LONGVARCHAR,_rTypeInfo) )
+                break;
+            break;
+        case DataType::LONGVARCHAR:
+            if (  pTypeInfo = queryTypeInfoByType(DataType::CLOB,_rTypeInfo) )
                 break;
             break;
         default:

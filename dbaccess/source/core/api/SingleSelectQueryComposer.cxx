@@ -1530,6 +1530,27 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                 aSQL.append( STR_LIKE );
                 aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
                 break;
+            case DataType::CLOB:
+                {
+                    Reference< XClob > xClob(aValue,UNO_QUERY);
+                    if ( xClob.is() )
+                    {
+                        const ::sal_Int64 nLength = xClob->length();
+                        if ( sal_Int64(nLength + aSQL.getLength() + STR_LIKE.getLength() ) < sal_Int64(SAL_MAX_INT32) )
+                        {
+                            aSQL.append( STR_LIKE );
+                            aSQL.appendAscii("'");
+                            aSQL.append( xClob->getSubString(1,(sal_Int32)nLength) );
+                            aSQL.appendAscii("'");
+                        }
+                    }
+                    else
+                    {
+                        aSQL.append( STR_LIKE );
+                        aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                    }
+                }
+                break;
             case DataType::VARBINARY:
             case DataType::BINARY:
             case DataType::LONGVARBINARY:

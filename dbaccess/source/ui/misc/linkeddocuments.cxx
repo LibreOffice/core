@@ -349,7 +349,7 @@ namespace dbaui
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 _nNewFormId, Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _sObjectName )
     {
-        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
+        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::newDocument: invalid document container!");
         // determine the URL to use for the new document
         Sequence<sal_Int8> aClassId;
         switch (_nNewFormId)
@@ -372,7 +372,7 @@ namespace dbaui
 
             case SID_DB_FORM_NEW_PILOT:
             default:
-                OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: pleas use newFormWithPilot!");
+                OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!");
                 return Reference< XComponent >();
 
         }
