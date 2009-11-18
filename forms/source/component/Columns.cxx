@@ -416,14 +416,14 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth, ::getCppuType((const sal_Int32*)NULL));
             break;
         case PROPERTY_ID_ALIGN:
-            try
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aAlign, ::getCppuType( (const sal_Int32*)NULL ) );
+            // strange enough, css.awt.TextAlign is a 32-bit integer, while the Align property (both here for grid controls
+            // and for ordinary toolkit controls) is a 16-bit integer. So, allow for 32 bit, but normalize it to 16 bit
+            if ( bModified )
             {
-                bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAlign, ::getCppuType((const sal_Int16*)NULL));
-            }
-            catch(starlang::IllegalArgumentException&)
-            {
-                OSL_ENSURE(0,"OGridColumn::convertFastPropertyValue: TextAlign must be casted to sal_Int16!");
-                throw;
+                sal_Int32 nAlign( 0 );
+                if ( rConvertedValue >>= nAlign )
+                    rConvertedValue <<= (sal_Int16)nAlign;
             }
             break;
         case PROPERTY_ID_HIDDEN:

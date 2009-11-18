@@ -71,7 +71,7 @@ namespace frm
 
             FeatureInfo() : bCachedState( sal_False ) { }
         };
-        typedef ::std::map< sal_Int32, FeatureInfo >    FeatureMap;
+        typedef ::std::map< sal_Int16, FeatureInfo >    FeatureMap;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
@@ -106,12 +106,12 @@ namespace frm
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
         // IFeatureDispatcher
-        virtual void            dispatch( sal_Int32 _nFeatureId ) const;
-        virtual void            dispatchWithArgument( sal_Int32 _nFeatureId, const sal_Char* _pParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
-        virtual bool            isEnabled( sal_Int32 _nFeatureId ) const;
-        virtual bool            getBooleanState( sal_Int32 _nFeatureId ) const;
-        virtual ::rtl::OUString getStringState( sal_Int32 _nFeatureId ) const;
-        virtual sal_Int32       getIntegerState( sal_Int32 _nFeatureId ) const;
+        virtual void            dispatch( sal_Int16 _nFeatureId ) const;
+        virtual void            dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
+        virtual bool            isEnabled( sal_Int16 _nFeatureId ) const;
+        virtual bool            getBooleanState( sal_Int16 _nFeatureId ) const;
+        virtual ::rtl::OUString getStringState( sal_Int16 _nFeatureId ) const;
+        virtual sal_Int32       getIntegerState( sal_Int16 _nFeatureId ) const;
 
         // own overridables
         /** is called when the interceptors have.
@@ -134,7 +134,7 @@ namespace frm
                 determines if the features is enabled or disabled
             @see getBooleanState
         */
-        virtual void    featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled );
+        virtual void    featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled );
 
         /** notification for (potential) changes in the state of all features
             <p>The base class implementation does nothing. Derived classes could force
@@ -149,7 +149,7 @@ namespace frm
                 the array of features to support. Out parameter to fill by the derivee's implementation
             @pure
         */
-        virtual void    getSupportedFeatures( ::std::vector< sal_Int32 >& /* [out] */ _rFeatureIds ) = 0;
+        virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) = 0;
 
     protected:
         /** update all our dispatches which are controlled by our dispatch interceptors
@@ -205,7 +205,7 @@ namespace frm
             @complexity O(log n)
             @return NULL if the given id is not a known feature id (which is a valid usage)
         */
-        const char* getFeatureURLAscii( sal_Int32 _nFeatureId );
+        const char* getFeatureURLAscii( sal_Int16 _nFeatureId );
 
         /** retrieves the feature URL belonging to an feature id
 
@@ -214,7 +214,7 @@ namespace frm
                 <TRUE/> if and only if the given id is a known feature id
                 (which is a valid usage)
         */
-        bool        getFeatureURL( sal_Int32 _nFeatureId, ::com::sun::star::util::URL& /* [out] */ _rURL );
+        bool        getFeatureURL( sal_Int16 _nFeatureId, ::com::sun::star::util::URL& /* [out] */ _rURL );
 
         /** retrieves the feature id belonging to an feature URL
 
@@ -223,7 +223,7 @@ namespace frm
                 the id of the feature URL, or -1 if the URl is not known
                 (which is a valid usage)
         */
-        sal_Int32   getFeatureId( const ::rtl::OUString& _rCompleteURL );
+        sal_Int16   getFeatureId( const ::rtl::OUString& _rCompleteURL );
 
     private:
         OFormNavigationMapper( );                                           // never implemented

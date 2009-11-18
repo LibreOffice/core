@@ -31,7 +31,6 @@ package integration.forms;
 
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleEditableText;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.beans.XPropertySet;
@@ -42,7 +41,9 @@ import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
+import com.sun.star.awt.VisualEffect;
 import com.sun.star.awt.XControlModel;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.drawing.XDrawPage;
 
@@ -95,12 +96,12 @@ public class FormLayer
             the property access to the control's model
     */
     public XPropertySet createControlAndShape( String sFormComponentService, int nXPos,
-        int nYPos, int nWidth, int nHeight, XIndexContainer xParentForm ) throws java.lang.Exception
+        int nYPos, int nWidth, int nHeight, Object _parentForm ) throws java.lang.Exception
     {
         // let the document create a shape
-        XMultiServiceFactory xDocAsFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+        XMultiServiceFactory xDocAsFactory = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, m_document.getDocument() );
-        XControlShape xShape = (XControlShape)UnoRuntime.queryInterface( XControlShape.class,
+        XControlShape xShape = UnoRuntime.queryInterface( XControlShape.class,
             xDocAsFactory.createInstance( "com.sun.star.drawing.ControlShape" ) );
 
         // position and size of the shape
@@ -114,13 +115,18 @@ public class FormLayer
 
         // create the form component (the model of a form control)
         String sQualifiedComponentName = "com.sun.star.form.component." + sFormComponentService;
-        XControlModel xModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class,
+        XControlModel xModel = UnoRuntime.queryInterface( XControlModel.class,
             m_document.getOrb().createInstance( sQualifiedComponentName ) );
 
         // insert the model into the form component hierarchy, if the caller gave us a location
-        if ( null != xParentForm )
+        if ( null != _parentForm )
         {
-            xParentForm.insertByIndex( xParentForm.getCount(), xModel );
+            XIndexContainer parentForm = null;
+            if ( _parentForm instanceof XIndexContainer )
+                parentForm = (XIndexContainer)_parentForm;
+            else
+                parentForm = UnoRuntime.queryInterface( XIndexContainer.class, _parentForm );
+            parentForm.insertByIndex( parentForm.getCount(), xModel );
         }
 
         // knitt them
@@ -129,7 +135,7 @@ public class FormLayer
         // add the shape to the shapes collection of the document
         XDrawPage pageWhereToInsert = ( m_page != null ) ? m_page : m_document.getMainDrawPage();
 
-        XShapes xDocShapes = (XShapes)UnoRuntime.queryInterface( XShapes.class, pageWhereToInsert );
+        XShapes xDocShapes = UnoRuntime.queryInterface( XShapes.class, pageWhereToInsert );
         xDocShapes.add( xShape );
 
         // and outta here with the XPropertySet interface of the model
@@ -220,7 +226,7 @@ public class FormLayer
         @return
             the control model of the created data input field
     */
-    public XPropertySet insertControlLine( String sControlType, String sFieldName, String sControlNamePostfix,
+    public XPropertySet insertControlLine( String sControlType, String sFieldName, String _controlNamePostfix,
             int nXPos, int nYPos, int nHeight )
         throws java.lang.Exception
     {
@@ -231,12 +237,20 @@ public class FormLayer
         // insert the text field control
         XPropertySet xFieldModel = createControlAndShape( sControlType, nXPos + 26, nYPos, 40, nHeight );
         xFieldModel.setPropertyValue( "DataField", sFieldName );
+        if ( xFieldModel.getPropertySetInfo().hasPropertyByName( "Border" ) )
+        {
+            xFieldModel.setPropertyValue( "Border", new Short( VisualEffect.FLAT ) );
+            if ( xFieldModel.getPropertySetInfo().hasPropertyByName( "BorderColor" ) )
+                xFieldModel.setPropertyValue( "BorderColor", new Integer( 0x00C0C0C0 ) );
+        }
         // knit it to it's label component
         xFieldModel.setPropertyValue( "LabelControl", xLabelModel );
 
         // some names, so later on we can find them
-        xLabelModel.setPropertyValue( "Name", sFieldName + sControlNamePostfix + "_Label" );
-        xFieldModel.setPropertyValue( "Name", sFieldName + sControlNamePostfix );
+        if ( _controlNamePostfix == null )
+            _controlNamePostfix = "";
+        xLabelModel.setPropertyValue( "Name", sFieldName + _controlNamePostfix + "_Label" );
+        xFieldModel.setPropertyValue( "Name", sFieldName + _controlNamePostfix );
 
         return xFieldModel;
     }
@@ -256,7 +270,7 @@ public class FormLayer
     public XPropertySet insertControlLine( String sControlType, String sFieldName, String sControlNamePostfix, int nYPos )
         throws java.lang.Exception
     {
-        return insertControlLine( sControlType, sFieldName, sControlNamePostfix, 2, nYPos, 6 );
+        return insertControlLine( sControlType, sFieldName, sControlNamePostfix, 10, nYPos, 6 );
     }
 
     /* ------------------------------------------------------------------ */
@@ -270,8 +284,7 @@ public class FormLayer
     */
     public XPropertySet getRadioModelByRefValue( XPropertySet form, String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XIndexAccess indexAccess = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
-            form );
+        XIndexAccess indexAccess = UnoRuntime.queryInterface( XIndexAccess.class, form );
 
         for ( int i=0; i<indexAccess.getCount(); ++i )
         {
@@ -295,8 +308,7 @@ public class FormLayer
     */
     public XPropertySet getRadioModelByTag( XPropertySet form, String name, String tag ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XIndexAccess indexAccess = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
-            form );
+        XIndexAccess indexAccess = UnoRuntime.queryInterface( XIndexAccess.class, form );
 
         for ( int i=0; i<indexAccess.getCount(); ++i )
         {
@@ -357,10 +369,10 @@ public class FormLayer
         // doing a user input, as the latter will trigger a lot of notifications, which the forms runtime environment
         // (namely the FormController) relies on to notice that the control changed.
         // Instead, we use the Accessibility interfaces of the control to simulate text input
-        XAccessible formattedAccessible = (XAccessible)UnoRuntime.queryInterface( XAccessible.class,
+        XAccessible formattedAccessible = UnoRuntime.queryInterface( XAccessible.class,
             m_document.getCurrentView().getControl( controlModel )
         );
-        XAccessibleEditableText textAccess = (XAccessibleEditableText)UnoRuntime.queryInterface( XAccessibleEditableText.class,
+        XAccessibleEditableText textAccess = UnoRuntime.queryInterface( XAccessibleEditableText.class,
             formattedAccessible.getAccessibleContext() );
         textAccess.setText( text );
     }
