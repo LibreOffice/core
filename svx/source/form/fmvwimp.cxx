@@ -1287,10 +1287,12 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         else
             switch (nDataType)
             {
+                case DataType::BLOB:
                 case DataType::LONGVARBINARY:
                     nOBJID = OBJ_FM_IMAGECONTROL;
                     break;
                 case DataType::LONGVARCHAR:
+                case DataType::CLOB:
                     nOBJID = OBJ_FM_EDIT;
                     break;
                 case DataType::BINARY:
@@ -1622,7 +1624,9 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         aControlSize = aDefSize;
         break;
     case DataType::LONGVARCHAR:
+    case DataType::CLOB:
     case DataType::LONGVARBINARY:
+    case DataType::BLOB:
         aControlSize = aDefImageSize;
         break;
     }
@@ -1655,7 +1659,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         }
     }
 
-    if ( nDataType == DataType::LONGVARCHAR && xControlPropInfo->hasPropertyByName( FM_PROP_MULTILINE ) )
+    if ( (nDataType == DataType::LONGVARCHAR || nDataType == DataType::CLOB) && xControlPropInfo->hasPropertyByName( FM_PROP_MULTILINE ) )
     {
         xControlSet->setPropertyValue( FM_PROP_MULTILINE, makeAny( sal_Bool( sal_True ) ) );
     }
