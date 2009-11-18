@@ -163,9 +163,9 @@ extern char *GetOutputFile( int argc, char* argv[])
                     Export::sLanguages = ByteString( argv[ i ]);
                 }
                 break;
-                case STATE_ISOCODE99: {
-                    Export::sIsoCode99 = ByteString( argv[ i ]);
-                }
+//              case STATE_ISOCODE99: {
+//                  Export::sIsoCode99 = ByteString( argv[ i ]);
+//              }
                 break;
             }
         }
