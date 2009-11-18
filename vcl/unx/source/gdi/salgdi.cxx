@@ -50,6 +50,7 @@
 #include "basegfx/polygon/b2dpolygonclipper.hxx"
 #include "basegfx/polygon/b2dlinegeometry.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "basegfx/polygon/b2dpolypolygoncutter.hxx"
 
 #include <vector>

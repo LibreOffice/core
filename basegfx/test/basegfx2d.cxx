@@ -484,8 +484,10 @@ public:
         }
         while ( nIndex >= 0 );
 
+        // Adapted number of spaces from 50 to 67 because of the new circle construction
+        // methods which produce more points and thus more spaces, too.
         CPPUNIT_ASSERT_MESSAGE("exporting to circle does not produce the expected number of coordinates",
-                               nCount==50);
+                               nCount==67);
 
         const B2DPolygon aRect(
             tools::createPolygonFromRect( B2DRange(0.0,0.0,4000.0,4000.0) ));

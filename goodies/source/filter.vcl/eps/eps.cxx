@@ -388,7 +388,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     bTextFillColor = TRUE;
     aTextFillColor = Color( COL_BLACK );
     fLineWidth = 1;
-    fMiterLimit = 10;
+    fMiterLimit = 15; // use same limit as most graphic systems and basegfx
     eLineCap = SvtGraphicStroke::capButt;
     eJoinType = SvtGraphicStroke::joinMiter;
     aBackgroundColor = Color( COL_WHITE );
@@ -2377,7 +2377,6 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
     if ( rLineInfo.GetStyle() == LINE_DASH )
         l_aDashArray.push_back( 2 );
     const double fLWidth(( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5);
-    const double fMiterLimit(15.0);
     SvtGraphicStroke::JoinType aJoinType(SvtGraphicStroke::joinMiter);
 
     switch(rLineInfo.GetLineJoin())
