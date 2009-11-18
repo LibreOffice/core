@@ -55,6 +55,7 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include <svtools/moduleoptions.hxx>
+#include <svtools/languageoptions.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/view/XRenderable.hpp>
@@ -373,17 +374,22 @@ SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
         return;
     }
 
+    // check if CTL is enabled
+    SvtLanguageOptions aLangOpt;
+    bool bCTL = aLangOpt.IsCTLFontEnabled();
+
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
-    const int nNumProps = bWeb? 17 : 21;
+    const int nCTLOpts = bCTL ? 1 : 0;
+    const int nNumProps = nCTLOpts + (bWeb ? 16 : 20);
     m_aUIProperties.realloc( nNumProps );
     int nIdx = 0;
 
     // create "writer" section (new tab page in dialog)
-    SvtModuleOptions aOpt;
+    SvtModuleOptions aModOpt;
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
-                                    aOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
+                                    aModOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
     m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
 
     // create sub section for Contents
@@ -540,18 +546,21 @@ SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
                                                    aPageSetOpt
                                                    );
 
-    // create a bool option for brochure RTL dependent on brochure
-    uno::Sequence< rtl::OUString > aBRTLChoices( 2 );
-    aBRTLChoices[0] = aLocalizedStrings.GetString( 35 );
-    aBRTLChoices[1] = aLocalizedStrings.GetString( 36 );
-    vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
-    aBrochureRTLOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
-    m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( rtl::OUString(),
-                                                           uno::Sequence< rtl::OUString >(),
-                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspectRTL" ) ),
-                                                           aBRTLChoices, 0, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
-                                                           aBrochureRTLOpt
-                                                           );
+    if( bCTL )
+    {
+        // create a bool option for brochure RTL dependent on brochure
+        uno::Sequence< rtl::OUString > aBRTLChoices( 2 );
+        aBRTLChoices[0] = aLocalizedStrings.GetString( 35 );
+        aBRTLChoices[1] = aLocalizedStrings.GetString( 36 );
+        vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
+        aBrochureRTLOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+        m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( rtl::OUString(),
+                                                               uno::Sequence< rtl::OUString >(),
+                                                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspectRTL" ) ),
+                                                               aBRTLChoices, 0, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                               aBrochureRTLOpt
+                                                               );
+    }
 
 
     DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
