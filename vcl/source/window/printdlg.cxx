@@ -285,6 +285,7 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     , maNupLine( this, VclResId( SV_PRINT_PRT_NUP_LAYOUT_FL ) )
     , maPagesBtn( this, VclResId( SV_PRINT_PRT_NUP_PAGES_BTN ) )
     , maBrochureBtn( this, VclResId( SV_PRINT_PRT_NUP_BROCHURE_BTN ) )
+    , maPagesBoxTitleTxt( this, 0 )
     , maNupPagesBox( this, VclResId( SV_PRINT_PRT_NUP_PAGES_BOX ) )
     , maNupNumPagesTxt( this, VclResId( SV_PRINT_PRT_NUP_NUM_PAGES_TXT ) )
     , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLS_EDT ) )
@@ -330,6 +331,7 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     maNupLine.SMHID2("NUpPage", "Layout");
     maBrochureBtn.SMHID2("NUpPage", "Brochure" );
     maPagesBtn.SMHID2( "NUpPage", "PagesPerSheet" );
+    maPagesBoxTitleTxt.SMHID2( "NUpPage", "PagesPerSheetLabel" );
     maNupPagesBox.SMHID2( "NUpPage", "PagesPerSheetBox" );
     maNupNumPagesTxt.SMHID2( "NUpPage", "Columns" );
     maNupColEdt.SMHID2( "NUpPage", "ColumnsBox" );
@@ -415,7 +417,8 @@ void PrintDialog::NUpTabPage::setupLayout()
     boost::shared_ptr< vcl::LabelColumn > xMainCol( new vcl::LabelColumn( xIndent.get() ) );
     xIndent->setChild( xMainCol );
 
-    xMainCol->addRow( &maPagesBtn, &maNupPagesBox );
+    size_t nPagesIndex = xMainCol->addRow( &maPagesBtn, &maNupPagesBox );
+    mxPagesBtnLabel = boost::dynamic_pointer_cast<vcl::LabeledElement>( xMainCol->getChild( nPagesIndex ) );
 
     xRow.reset( new vcl::RowOrColumn( xMainCol.get(), false ) );
     xMainCol->addRow( &maNupNumPagesTxt, xRow, nIndent );
@@ -1507,6 +1510,19 @@ void PrintDialog::setupOptionalUI()
             }
 
             pCurColumn = pSaveCurColumn;
+        }
+    }
+
+    // #i106506# if no brochure button, then the singular Pages radio button
+    // makes no sense, so replace it by a FixedText label
+    if( ! maNUpPage.maBrochureBtn.IsVisible() )
+    {
+        if( maNUpPage.mxPagesBtnLabel.get() )
+        {
+            maNUpPage.maPagesBoxTitleTxt.SetText( maNUpPage.maPagesBtn.GetText() );
+            maNUpPage.maPagesBoxTitleTxt.Show( TRUE );
+            maNUpPage.mxPagesBtnLabel->setLabel( &maNUpPage.maPagesBoxTitleTxt );
+            maNUpPage.maPagesBtn.Show( FALSE );
         }
     }
 
