@@ -471,6 +471,12 @@ ErrorBox SV_PRINT_NOPRINTERWARNING
     Message [en-US] = "No default printer found.\nPlease choose a printer and try again.";
 };
 
+ErrorBox SV_PRINT_NOCONTENT
+{
+    Title = "%PRODUCTNAME";
+    Message [en-US] = "There are no pages to be printed. Please check your document for ranges relevant to printing.";
+};
+
 StringArray SV_PRINT_NATIVE_STRINGS
 {
     ItemList [en-US] =

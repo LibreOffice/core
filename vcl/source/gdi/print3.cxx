@@ -403,6 +403,18 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         pController->setReversePrint( bReverse );
     }
 
+    // in direct print case check whether there is anything to print.
+    // if not, show an errorbox (if appropriate)
+    if( pController->isShowDialogs() && pController->isDirectPrint() )
+    {
+        if( pController->getFilteredPageCount() == 0 )
+        {
+            ErrorBox aBox( NULL, VclResId( SV_PRINT_NOCONTENT ) );
+            aBox.Execute();
+            return;
+        }
+    }
+
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
     if( ! pController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) &&
