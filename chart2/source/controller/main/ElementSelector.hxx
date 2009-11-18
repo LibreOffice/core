@@ -31,6 +31,7 @@
 #define _CHART_ELEMENTSELECTOR_HXX
 
 #include "ServiceMacros.hxx"
+#include "ObjectHierarchy.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -48,7 +49,7 @@ namespace chart
 struct ListBoxEntryData
 {
     rtl::OUString UIName;
-    rtl::OUString CID;
+    ObjectHierarchy::tOID OID;
     sal_Int32 nHierarchyDepth;
 
     ListBoxEntryData() : nHierarchyDepth(0)

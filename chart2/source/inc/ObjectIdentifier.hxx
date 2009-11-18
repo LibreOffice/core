@@ -263,6 +263,7 @@ public:
     bool isAdditionalShape() const;
     ::rtl::OUString getObjectCID() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getAdditionalShape() const;
+    ::com::sun::star::uno::Any getAny() const;
 
 private:
     // #i12587# support for shapes in chart
