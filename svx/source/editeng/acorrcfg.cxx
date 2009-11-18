@@ -127,7 +127,7 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         "SingleQuoteAtEnd",                     // 13
         "ReplaceDoubleQuote",                   // 14
         "DoubleQuoteAtStart",                   // 15
-        "DoubleQuoteAtEnd"                      // 16
+        "DoubleQuoteAtEnd",                     // 16
         "AddNonBreakingSpace"                   // 17
     };
     const int nCount = 18;
@@ -338,6 +338,10 @@ void SvxBaseAutoCorrCfg::Commit()
             case 16:
                 pValues[nProp] <<= (sal_Int32) rParent.pAutoCorrect->GetEndDoubleQuote();
             break;//"DoubleQuoteAtEnd"
+            case 17:
+                bVal = 0 != (nFlags & AddNonBrkSpace);
+                pValues[nProp].setValue(&bVal, rType);
+            break;//"AddNonBreakingSpace"
         }
     }
     PutProperties(aNames, aValues);
@@ -404,10 +408,9 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",    //45
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //46
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //47
-        "Format/Option/AddNonBreakingSpace",                            //48
-        "Format/ByInput/AddNonBreakingSpace",                           //49
+        "Format/Option/AddNonBreakingSpace"                             //48
     };
-    const int nCount = 50;
+    const int nCount = 49;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -560,7 +563,6 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
                     case 48 : rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break;// "Format/Output/AddNonBreakingSpace",
-                    case 49 : rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break;// "Format/ByInput/AddNonBreakingSpace",
                 }
             }
         }
@@ -679,9 +681,6 @@ void SvxSwAutoCorrCfg::Commit()
             case  48:
                 bVal = rSwFlags.bAddNonBrkSpace;  pValues[nProp].setValue(&bVal, rType);
             break; // "Format/Option/AddNonBreakingSpace",
-            case  49:
-                bVal = rSwFlags.bAddNonBrkSpace;  pValues[nProp].setValue(&bVal, rType);
-            break; // "Format/ByInput/AddNonBreakingSpace",
         }
     }
     PutProperties(aNames, aValues);
