@@ -117,7 +117,7 @@ void ScXMLDataPilotTablesContext::EndElement()
 }
 
 ScXMLDataPilotTableContext::GrandTotalItem::GrandTotalItem() :
-    mbVisible(false) {}
+    mbVisible(true) {}
 
 ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
@@ -177,10 +177,17 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                 else if (IsXMLToken(sValue, XML_ROW))
                 {
                     maRowGrandTotal.mbVisible = true;
+                    maColGrandTotal.mbVisible = false;
                 }
                 else if (IsXMLToken(sValue, XML_COLUMN))
                 {
+                    maRowGrandTotal.mbVisible = false;
                     maColGrandTotal.mbVisible = true;
+                }
+                else
+                {
+                    maRowGrandTotal.mbVisible = false;
+                    maColGrandTotal.mbVisible = false;
                 }
             }
             break;
