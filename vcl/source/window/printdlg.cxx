@@ -870,12 +870,6 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
         }
     }
 
-    // restore settings from last run
-    readFromSettings();
-
-    // setup dependencies
-    checkControlDependencies();
-
     // set HelpIDs
     SMHID1( "Dialog" );
     maOKButton.SMHID1( "OK" );
@@ -896,6 +890,13 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     }
     maTabCtrl.InsertPage( SV_PRINT_TAB_OPT, maOptionsPage.GetText() );
     maTabCtrl.SetTabPage( SV_PRINT_TAB_OPT, &maOptionsPage );
+
+    // restore settings from last run
+    readFromSettings();
+
+    // setup dependencies
+    checkControlDependencies();
+
 }
 
 PrintDialog::~PrintDialog()
