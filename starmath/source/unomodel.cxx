@@ -96,7 +96,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     
     // create sequence of print UI options
     // (Actually IsIgnoreSpacesRight is a parser option. Without it we need only 8 properties here.)
-    m_aUIProperties.realloc( 8 );
+    m_aUIProperties.realloc( 9 );
     
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
@@ -152,6 +152,11 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                      10,     // min value
                                                      1000,   // max value
                                                      aRangeOpt );
+    
+    Sequence< PropertyValue > aHintNoLayoutPage( 1 );
+    aHintNoLayoutPage[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HintNoLayoutPage" ) );
+    aHintNoLayoutPage[0].Value = makeAny( sal_True );
+    m_aUIProperties[8].Value <<= aHintNoLayoutPage;
 
 // IsIgnoreSpacesRight is a parser option! Thus we don't add it to the printer UI.
 //
