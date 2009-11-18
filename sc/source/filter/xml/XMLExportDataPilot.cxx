@@ -737,10 +737,6 @@ void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
 
 void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal)
 {
-    if (rExport.getDefaultVersion() != SvtSaveOptions::ODFVER_LATEST)
-        // Export grand total only for ODF 1.2 extended or later.
-        return;
-
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, bVisible ? XML_TRUE : XML_FALSE);
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, eOrient);
     if (pGrandTotal)
@@ -821,14 +817,33 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                         // grand total elements.
 
                         const OUString* pGrandTotalName = pDPSave->GetGrandTotalName();
-                        if (bRowGrand && bColumnGrand)
+                        if (pGrandTotalName && rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
                         {
-                            WriteGrandTotal(XML_BOTH, true, pGrandTotalName);
+                            // Use the new data-pilot-grand-total element.
+                            if (bRowGrand && bColumnGrand)
+                            {
+                                WriteGrandTotal(XML_BOTH, true, pGrandTotalName);
+                            }
+                            else
+                            {
+                                WriteGrandTotal(XML_ROW, bRowGrand, pGrandTotalName);
+                                WriteGrandTotal(XML_COLUMN, bColumnGrand, pGrandTotalName);
+                            }
                         }
                         else
                         {
-                            WriteGrandTotal(XML_ROW, bRowGrand, pGrandTotalName);
-                            WriteGrandTotal(XML_COLUMN, bColumnGrand, pGrandTotalName);
+                            // custom grand total not present, or it's not ODF 1.2 extended.
+                            // Write it the old way.
+                            if (bRowGrand && bColumnGrand)
+                            {
+                                // Don't write anything.  Grand totals are displayed for both row and column fields by default.
+                            }
+                            else if (bRowGrand)
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GRAND_TOTAL, XML_ROW);
+                            else if (bColumnGrand)
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GRAND_TOTAL, XML_COLUMN);
+                            else
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GRAND_TOTAL, XML_NONE);
                         }
 
                         rExport.CheckAttrList();
