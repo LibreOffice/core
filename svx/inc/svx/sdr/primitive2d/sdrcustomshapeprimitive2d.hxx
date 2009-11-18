@@ -56,12 +56,13 @@ namespace drawinglayer
             // defines if SdrTextWordWrapItem was set at SdrObjCustomShape which means
             // that the text needs to be block formatted
             unsigned                                    mbWordWrap : 1;
-            // #SJ# Allow text clipping against TextBox in special cases (used for SC)
-            unsigned                                    mbForceTextClipToTextRange : 1;
 
             // defines that the object contains/is a 3D AutoShape. Needed for
             // making exceptions with shadow generation
             unsigned                                    mb3DShape : 1;
+
+            // #SJ# Allow text clipping against TextBox in special cases (used for SC)
+            unsigned                                    mbForceTextClipToTextRange : 1;
 
         protected:
             // local decomposition.

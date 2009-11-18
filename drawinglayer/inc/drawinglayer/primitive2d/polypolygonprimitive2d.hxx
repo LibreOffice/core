@@ -368,11 +368,11 @@ namespace drawinglayer
             /// the PolyPolygon geometry
             basegfx::B2DPolyPolygon                     maPolyPolygon;
 
-            /// the hatch definition
-            attribute::FillHatchAttribute               maFillHatch;
-
             /// the hatch background color (if used)
             basegfx::BColor                             maBackgroundColor;
+
+            /// the hatch definition
+            attribute::FillHatchAttribute               maFillHatch;
 
         protected:
             /// local decomposition.

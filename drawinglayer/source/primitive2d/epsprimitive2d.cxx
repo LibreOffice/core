@@ -92,7 +92,7 @@ namespace drawinglayer
             return false;
         }
 
-        basegfx::B2DRange EpsPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange EpsPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use own implementation to quickly answer the getB2DRange question.
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);

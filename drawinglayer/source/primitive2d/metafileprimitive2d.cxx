@@ -1930,9 +1930,9 @@ namespace
                         // the metafile play interprets the single polygons from MetaPolyPolygonAction
                         // always as closed and always paints an edge from last to first point,
                         // so force to closed here to emulate that
-                        for(sal_uInt32 a(0); a < aPolyPolygonOutline.count(); a++)
+                        for(sal_uInt32 b(0); b < aPolyPolygonOutline.count(); b++)
                         {
-                            basegfx::B2DPolygon aPolygonOutline(aPolyPolygonOutline.getB2DPolygon(a));
+                            basegfx::B2DPolygon aPolygonOutline(aPolyPolygonOutline.getB2DPolygon(b));
 
                             if(aPolygonOutline.count() > 1 && !aPolygonOutline.isClosed())
                             {
@@ -1989,14 +1989,14 @@ namespace
                     /** NEEDS IMPLEMENTATION */
                     OSL_ENSURE(false, "META_STRETCHTEXT_ACTION requested (!)");
                     // use OutputDevice::GetTextArray() to map the...
-                    const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
+                    // const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
                     break;
                 }
                 case META_TEXTRECT_ACTION :
                 {
                     /** NEEDS IMPLEMENTATION */
                     OSL_ENSURE(false, "META_TEXTRECT_ACTION requested (!)");
-                    const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
+                    // const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
                     break;
                 }
                 case META_BMP_ACTION :
@@ -2655,7 +2655,7 @@ namespace
                     const MetaRasterOpAction* pA = (const MetaRasterOpAction*)pAction;
                     const RasterOp aRasterOp = pA->GetRasterOp();
 
-                    HandleNewRasterOp(pA->GetRasterOp(), rTargetHolders, rPropertyHolders);
+                    HandleNewRasterOp(aRasterOp, rTargetHolders, rPropertyHolders);
 
                     break;
                 }
