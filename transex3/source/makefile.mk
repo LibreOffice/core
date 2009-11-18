@@ -189,6 +189,7 @@ APP9STDLIBS+= \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(ICUINLIB) \
+            $(ICUUCLIB) \
             $(STLPORTLIB) \
             $(SALLIB)
 
