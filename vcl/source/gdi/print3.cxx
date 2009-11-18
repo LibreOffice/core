@@ -38,6 +38,7 @@
 #include "vcl/salprn.hxx"
 #include "vcl/svids.hrc"
 #include "vcl/metaact.hxx"
+#include "vcl/msgbox.hxx"
 
 #include "tools/urlobj.hxx"
 
@@ -310,8 +311,24 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                             const JobSetup& i_rInitSetup
                             )
 {
-    // setup printer
     boost::shared_ptr<PrinterController> pController( i_pController );
+
+    // check if there is a default printer; if not, show an error box (if appropriate)
+    if( GetDefaultPrinterName().Len() == 0  )
+    {
+        if(  pController->isShowDialogs()
+             // && ! pController->isDirectPrint()
+           )
+        {
+            ErrorBox aBox( NULL, VclResId( SV_PRINT_NOPRINTERWARNING ) );
+            aBox.Execute();
+        }
+        pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ),
+                               makeAny( sal_False ) );
+    }
+
+    // setup printer
+
     // if no specific printer is already set, create one
     if( ! pController->getPrinter() )
     {

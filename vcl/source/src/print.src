@@ -465,6 +465,12 @@ ModelessDialog SV_DLG_PRINT_PROGRESS
     };
 };
 
+ErrorBox SV_PRINT_NOPRINTERWARNING
+{
+    Title = "%PRODUCTNAME";
+    Message [en-US] = "No default printer found.\nPlease choose a printer and try again.";
+};
+
 StringArray SV_PRINT_NATIVE_STRINGS
 {
     ItemList [en-US] =

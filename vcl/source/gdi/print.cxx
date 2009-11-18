@@ -277,7 +277,9 @@ static void ImplInitPrnQueueList()
 
     pSVData->maGDIData.mpPrinterQueueList = new ImplPrnQueueList;
 
-    pSVData->mpDefInst->GetPrinterQueueInfo( pSVData->maGDIData.mpPrinterQueueList );
+    static const char* pEnv = getenv( "SAL_DISABLE_PRINTERLIST" );
+    if( !pEnv || !*pEnv )
+        pSVData->mpDefInst->GetPrinterQueueInfo( pSVData->maGDIData.mpPrinterQueueList );
 }
 
 // -----------------------------------------------------------------------
@@ -336,9 +338,14 @@ const QueueInfo* Printer::GetQueueInfo( const String& rPrinterName, bool bStatus
 
 XubString Printer::GetDefaultPrinterName()
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    static const char* pEnv = getenv( "SAL_DISABLE_DEFAULTPRINTER" );
+    if( !pEnv || !*pEnv )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
 
-    return pSVData->mpDefInst->GetDefaultPrinter();
+        return pSVData->mpDefInst->GetDefaultPrinter();
+    }
+    return XubString();
 }
 
 // =======================================================================
