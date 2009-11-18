@@ -737,14 +737,15 @@ void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
 
 void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal)
 {
+    if (rExport.getDefaultVersion() != SvtSaveOptions::ODFVER_LATEST)
+        // Export grand total only for ODF 1.2 extended or later.
+        return;
+
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, bVisible ? XML_TRUE : XML_FALSE);
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, eOrient);
-    if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
-    {
-        // Export display names only for ODF 1.2 extended or later.
-        if (pGrandTotal)
-            rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pGrandTotal);
-    }
+    if (pGrandTotal)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pGrandTotal);
+
     SvXMLElementExport aElemGrandTotal(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_GRAND_TOTAL, sal_True, sal_True);
 }
 
