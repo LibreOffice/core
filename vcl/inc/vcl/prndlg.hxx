@@ -249,6 +249,7 @@ namespace vcl
         rtl::OUString                           maDefPrtText;
 
         vcl::RowOrColumn                        maLayout;
+        boost::shared_ptr<vcl::RowOrColumn>     mxPreviewCtrls;
 
         Size                                    maDetailsCollapsedSize;
         Size                                    maDetailsExpandedSize;

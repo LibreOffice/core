@@ -915,18 +915,18 @@ void PrintDialog::setupLayout()
     xPreviewAndTab->addChild( xPreview, 5 );
     xPreview->addWindow( &maPreviewWindow, 5 );
     // get a row for the preview controls
-    boost::shared_ptr< vcl::RowOrColumn > xPreviewCtrls( new vcl::RowOrColumn( xPreview.get(), false ) );
-    nIndex = xPreview->addChild( xPreviewCtrls );
-    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
-    xPreviewCtrls->addChild( xSpacer );
-    xPreviewCtrls->addWindow( &maPageEdit );
-    xPreviewCtrls->addWindow( &maNumPagesText );
-    xSpacer.reset( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
-    xPreviewCtrls->addChild( xSpacer );
-    xPreviewCtrls->addWindow( &maBackwardBtn );
-    xPreviewCtrls->addWindow( &maForwardBtn );
-    xSpacer.reset( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
-    xPreviewCtrls->addChild( xSpacer );
+    mxPreviewCtrls.reset( new vcl::RowOrColumn( xPreview.get(), false ) );
+    nIndex = xPreview->addChild( mxPreviewCtrls );
+    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( mxPreviewCtrls.get(), 2 ) );
+    mxPreviewCtrls->addChild( xSpacer );
+    mxPreviewCtrls->addWindow( &maPageEdit );
+    mxPreviewCtrls->addWindow( &maNumPagesText );
+    xSpacer.reset( new vcl::Spacer( mxPreviewCtrls.get(), 2 ) );
+    mxPreviewCtrls->addChild( xSpacer );
+    mxPreviewCtrls->addWindow( &maBackwardBtn );
+    mxPreviewCtrls->addWindow( &maForwardBtn );
+    xSpacer.reset( new vcl::Spacer( mxPreviewCtrls.get(), 2 ) );
+    mxPreviewCtrls->addChild( xSpacer );
 
     // continue with the tab ctrl
     xPreviewAndTab->addWindow( &maTabCtrl );
@@ -1718,6 +1718,11 @@ void PrintDialog::setPreviewText( sal_Int32 )
 {
     rtl::OUString aNewText( searchAndReplace( maPageStr, "%n", 2, rtl::OUString::valueOf( mnCachedPages )  ) );
     maNumPagesText.SetText( aNewText );
+
+    // if layout is already established the refresh layout of
+    // preview controls since text length may have changes
+    if( mxPreviewCtrls.get() )
+        mxPreviewCtrls->setManagedArea( mxPreviewCtrls->getManagedArea() );
 }
 
 void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
