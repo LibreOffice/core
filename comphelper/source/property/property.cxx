@@ -67,7 +67,9 @@ namespace comphelper
     using ::com::sun::star::uno::cpp_queryInterface;
     using ::com::sun::star::uno::cpp_acquire;
     using ::com::sun::star::uno::cpp_release;
+#if OSL_DEBUG_LEVEL > 0
     using ::com::sun::star::lang::XServiceInfo;
+#endif
     using ::com::sun::star::uno::UNO_QUERY;
     /** === end UNO using === **/
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
