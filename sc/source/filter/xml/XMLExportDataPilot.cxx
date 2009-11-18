@@ -830,21 +830,6 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                                 WriteGrandTotal(XML_COLUMN, bColumnGrand, pGrandTotalName);
                             }
                         }
-                        else
-                        {
-                            // custom grand total not present, or it's not ODF 1.2 extended.
-                            // Write it the old way.
-                            if (bRowGrand && bColumnGrand)
-                            {
-                                // Don't write anything.  Grand totals are displayed for both row and column fields by default.
-                            }
-                            else if (bRowGrand)
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GRAND_TOTAL, XML_ROW);
-                            else if (bColumnGrand)
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GRAND_TOTAL, XML_COLUMN);
-                            else
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GRAND_TOTAL, XML_NONE);
-                        }
 
                         rExport.CheckAttrList();
                         if ((*pDPs)[i]->IsSheetData())
