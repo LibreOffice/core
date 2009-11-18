@@ -594,7 +594,14 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         // now for the current run
         mnStartPageOffsetX = mnStartPageOffsetY = 0;
         // setup the paper size and orientation
-        setPaperSize( aCurSize.Width(), aCurSize.Height(), ORIENTATION_PORTRAIT );
+        // do this on our associated Printer object, since that is
+        // out interface to the applications which occasionally rely on the paper
+        // information (e.g. brochure printing scales to the found paper size)
+        // also SetPaperSizeUser has the advantage that we can share a
+        // platform independent paper matching algorithm
+        boost::shared_ptr<Printer> pPrinter( i_rController.getPrinter() );
+        pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+        pPrinter->SetPaperSizeUser( aCurSize, true );
 
         // create view
         NSView* pPrintView = [[AquaPrintView alloc] initWithController: &i_rController withInfoPrinter: this];
