@@ -41,10 +41,13 @@ use Getopt::Long;
 use File::stat;
 use IO::Handle;
 
+use lib ("$ENV{SOLARENV}/bin/modules");
+use SourceConfig;
+
 #### globals #####
 
 my $err       = 0;
-my $srcdir    = '';
+my $srcrootdir    = '';
 my $solverdir = '';
 my $platform  = '';
 my $milestoneext = '';
@@ -72,7 +75,7 @@ sub get_globals
 
     # set global variables according to environnment
     $platform      = $ENV{INPATH};
-    $srcdir        = $ENV{SOLARSRC};
+    $srcrootdir    = $ENV{SOURCE_ROOT_DIR};
     $solverdir     = $ENV{SOLARVERSION};
     $milestoneext  = $ENV{UPDMINOREXT};
 
@@ -86,11 +89,11 @@ sub get_globals
     }
 
     #do some sanity checks
-    if ( ! ( $platform && $srcdir && $solverdir ) ) {
+    if ( ! ( $platform && $srcrootdir && $solverdir ) ) {
         die "Error: please set environment\n";
     }
-    if ( ! -d $srcdir ) {
-        die "Error: cannot find source directory '$srcdir'\n";
+    if ( ! -d $srcrootdir ) {
+        die "Error: cannot find source directory '$srcrootdir'\n";
     }
     if ( ! -d $solverdir ) {
         die "Error: cannot find solver directory '$solverdir'\n";
@@ -153,8 +156,12 @@ sub check
         print "Error: cannot determine module name from \'$listname\'\n";
         return 1;
     }
+    # where do we have to loog for modules?
+    my $source_config = SourceConfig -> new();
+    my $repository = $source_config->get_module_repository($module);
+    my $path = $source_config->get_module_path($module);
     # is module physically accessible?
-    my $canread = is_moduledirectory( $srcdir . '/' . $module );
+    my $canread = is_moduledirectory( $path );
     if ( ! $canread ) {
         # do not bother about non existing modules in local environment
         if ( $local_env ) {
@@ -197,11 +204,11 @@ sub check
     # compare all delivered files with their origin
     # no strict 'diff' allowed here, as deliver may alter files (hedabu, strip, ...)
     foreach my $file ( sort keys %delivered ) {
-        my $ofile = "$srcdir/$file";
+        my $ofile = "$srcrootdir/$repository/$file";
         my $sfile = "$solverdir/$delivered{$file}";
-        # on CWS modules may exist as link only, named <module>.lnk
+        # on CWS modules may exist as link only, named <module>.link
         if ( $islinked ) {
-            $ofile =~ s/\/$module\//\/$module.lnk\//;
+            $ofile =~ s/\/$module\//\/$module.link\//;
         }
         if ( $milestoneext ) {
             # deliver log files do not contain milestone extension on solver
@@ -263,13 +270,13 @@ sub check
 sub is_moduledirectory
 # Test whether we find a module having a d.lst file at a given path.
 # Return value: 1: path is valid directory
-#               2: path.lnk is a valid link
+#               2: path.link is a valid link
 #               0: module not found
 {
     my $dirname = shift;
     if ( -e "$dirname/prj/d.lst" ) {
         return 1;
-    } elsif ( -e "$dirname.lnk/prj/d.lst" ) {
+    } elsif ( -e "$dirname.link/prj/d.lst" ) {
         return 2
     } else {
         return 0;
