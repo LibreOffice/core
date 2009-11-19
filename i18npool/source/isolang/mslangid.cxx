@@ -160,7 +160,7 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
                 if (nConfiguredComplexFallback == LANGUAGE_SYSTEM)
                     nLang = LANGUAGE_HINDI;
                 else
-                    nLang = nConfiguredComplexFallback;
+                    nLang = nConfiguredAsianFallback;
                 break;
             default:
                 if (nConfiguredWesternFallback == LANGUAGE_SYSTEM)
