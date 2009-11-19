@@ -590,11 +590,14 @@ sal_Bool SfxMedium::DocNeedsFileDateCheck()
 //------------------------------------------------------------------
 util::DateTime SfxMedium::GetInitFileDate( sal_Bool bIgnoreOldValue )
 {
-    if ( ( bIgnoreOldValue || !pImp->m_bGotDateTime ) && GetContent().is() )
+    if ( ( bIgnoreOldValue || !pImp->m_bGotDateTime ) && aLogicName.Len() )
     {
         try
         {
-            pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= pImp->m_aDateTime;
+            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+            ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+
+            aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= pImp->m_aDateTime;
             pImp->m_bGotDateTime = sal_True;
         }
         catch ( ::com::sun::star::uno::Exception& )
