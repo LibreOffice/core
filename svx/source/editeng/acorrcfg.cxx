@@ -127,9 +127,10 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         "SingleQuoteAtEnd",                     // 13
         "ReplaceDoubleQuote",                   // 14
         "DoubleQuoteAtStart",                   // 15
-        "DoubleQuoteAtEnd"                      // 16
+        "DoubleQuoteAtEnd",                     // 16
+        "AddNonBreakingSpace"                   // 17
     };
-    const int nCount = 17;
+    const int nCount = 18;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -229,6 +230,10 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
                         rParent.pAutoCorrect->SetEndDoubleQuote(
                             sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"DoubleQuoteAtEnd"
+                    case 17:
+                        if(*(sal_Bool*)pValues[nProp].getValue())
+                             nFlags |= AddNonBrkSpace;
+                     break;//"AddNonBreakingSpace"
                 }
             }
         }
@@ -333,6 +338,10 @@ void SvxBaseAutoCorrCfg::Commit()
             case 16:
                 pValues[nProp] <<= (sal_Int32) rParent.pAutoCorrect->GetEndDoubleQuote();
             break;//"DoubleQuoteAtEnd"
+            case 17:
+                bVal = 0 != (nFlags & AddNonBrkSpace);
+                pValues[nProp].setValue(&bVal, rType);
+            break;//"AddNonBreakingSpace"
         }
     }
     PutProperties(aNames, aValues);
@@ -399,8 +408,9 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",    //45
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //46
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //47
+        "Format/Option/AddNonBreakingSpace"                             //48
     };
-    const int nCount = 48;
+    const int nCount = 49;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -552,6 +562,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                         rSwFlags.aByInputBulletFont.SetPitch(FontPitch(nVal));
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
+                    case 48 : rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break;// "Format/Output/AddNonBreakingSpace",
                 }
             }
         }
@@ -667,6 +678,9 @@ void SvxSwAutoCorrCfg::Commit()
             case 47 :
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetPitch();
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
+            case  48:
+                bVal = rSwFlags.bAddNonBrkSpace;  pValues[nProp].setValue(&bVal, rType);
+            break; // "Format/Option/AddNonBreakingSpace",
         }
     }
     PutProperties(aNames, aValues);

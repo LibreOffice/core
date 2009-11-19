@@ -33,6 +33,7 @@
 
 
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/table.hxx>
 #include <i18npool/mslangid.hxx>
@@ -96,6 +97,8 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <xmloff/xmltoken.hxx>
+
+#define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -347,6 +350,7 @@ long SvxAutoCorrect::GetDefaultFlags()
                     | ChgFractionSymbol
                     | ChgOrdinalNumber
                     | ChgToEnEmDash
+                    | AddNonBrkSpace
                     | ChgWeightUnderl
                     | SetINetAttr
                     | ChgQuotes
@@ -692,6 +696,54 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
     return bRet;
 }
 
+BOOL SvxAutoCorrect::FnAddNonBrkSpace(
+                                SvxAutoCorrDoc& rDoc, const String& rTxt,
+                                xub_StrLen , xub_StrLen nEndPos,
+                                LanguageType eLang )
+{
+    bool bRet = false;
+
+    CharClass& rCC = GetCharClass( eLang );
+    const lang::Locale rLocale = rCC.getLocale( );
+
+    if ( rLocale.Language == OUString::createFromAscii( "fr" ) )
+    {
+        OUString chars = OUString::createFromAscii( ":;!?" );
+        if ( rLocale.Country == OUString::createFromAscii( "CA" ) )
+            chars = OUString::createFromAscii( ":" );
+
+        sal_Unicode cChar = rTxt.GetChar( nEndPos );
+        if ( chars.indexOf( sal_Unicode( cChar ) ) != -1 )
+        {
+            // Check the previous char
+            sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
+            if ( ( chars.indexOf( sal_Unicode( cPrevChar ) ) == -1 ) && cPrevChar != '\t' )
+            {
+                // Remove any previous normal space
+                xub_StrLen nPos = nEndPos - 1;
+                while ( cPrevChar == ' ' || cPrevChar == CHAR_HARDBLANK )
+                {
+                    if ( nPos == 0 ) break;
+                    nPos--;
+                    cPrevChar = rTxt.GetChar( nPos );
+                }
+
+                if ( nPos != 0 )
+                {
+                    nPos++;
+                    if ( nEndPos - nPos > 0 )
+                        rDoc.Delete( nPos, nEndPos );
+
+                    // Add the non-breaking space at the end pos
+                    rDoc.Insert( nPos, CHAR_HARDBLANK );
+                    bRet = true;
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
 
 BOOL SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const String& rTxt,
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,
@@ -1302,6 +1354,8 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 FnChgFractionSymbol( rDoc, rTxt, nCapLttrPos, nInsPos ) ) ||
             ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
+            ( IsAutoCorrFlag( nRet = AddNonBrkSpace ) &&
+                FnAddNonBrkSpace( rDoc, rTxt, nCapLttrPos, nInsPos - 1, eLang ) ) ||
             ( IsAutoCorrFlag( nRet = SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
                 FnSetINetAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) )

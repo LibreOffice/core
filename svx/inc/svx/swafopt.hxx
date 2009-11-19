@@ -68,6 +68,7 @@ struct SVX_DLLPUBLIC SvxSwAutoFmtFlags
     BOOL bChgFracionSymbol : 1;
     BOOL bChgOrdinalNumber : 1;
     BOOL bChgToEnEmDash : 1;
+    BOOL bAddNonBrkSpace : 1;
     BOOL bChgWeightUnderl : 1;
     BOOL bSetINetAttr : 1;
 
