@@ -53,7 +53,7 @@ using namespace ucb_cmdenv;
 //=========================================================================
 
 UcbCommandEnvironment::UcbCommandEnvironment(
-            const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
+    const uno::Reference< lang::XMultiServiceFactory >& /*xSMgr*/ )
 //: m_xSMgr( xSMgr )
 {
 }
