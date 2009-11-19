@@ -718,8 +718,9 @@ void redirect(line, makefile)
 #if defined(USGISH) || defined(_SEQUENT_) || defined(USE_CHMOD)
     chmod(makefile, st.st_mode);
 #else
-        fchmod(fileno(fdout), st.st_mode);
+    fchmod(fileno(fdout), st.st_mode);
 #endif /* USGISH */
+    fclose(fdin);
 }
 
 #if NeedVarargsPrototypes

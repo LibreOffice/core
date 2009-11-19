@@ -2401,9 +2401,8 @@ Optional Packages:
                           Supported options:
                             tcsh (default)
                             bash
-                            4nt (windows only)
 
-                          Usage: --with-use-shell=tcsh|bash|4nt
+                          Usage: --with-use-shell=tcsh|bash
 
   --with-build-version    Allows the builder to add a custom version tag
                           that will appear in the Help/About box for QA
@@ -4916,9 +4915,9 @@ fi
 { $as_echo "$as_me:$LINENO: checking which shell to use" >&5
 $as_echo_n "checking which shell to use... " >&6; }
 if test $_os = "WINNT"; then
-      if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
-      { { $as_echo "$as_me:$LINENO: error: only \"tcsh\",\"bash\" or \"4nt\" are supported options" >&5
-$as_echo "$as_me: error: only \"tcsh\",\"bash\" or \"4nt\" are supported options" >&2;}
+      if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
+      { { $as_echo "$as_me:$LINENO: error: only \"tcsh\" or \"bash\" are supported options" >&5
+$as_echo "$as_me: error: only \"tcsh\" or \"bash\" are supported options" >&2;}
    { (exit 1); exit 1; }; }
    fi
                      if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
@@ -4938,7 +4937,7 @@ link, and copy the program to the name of the link." >&2;}
          fi
       fi
             if test "$WITH_MINGWIN" = "yes" ; then
-      if test "$with_use_shell" = "4nt" -o "x$with_use_shell" = "x"; then
+      if test "x$with_use_shell" = "x"; then
          with_use_shell="tcsh"
       fi
       if test -z "$CC"; then
@@ -4947,9 +4946,9 @@ link, and copy the program to the name of the link." >&2;}
       fi
    fi
 elif test $_os = "OS2"; then
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "4nt"; then
-      { { $as_echo "$as_me:$LINENO: error: only \"tcsh\" or \"4nt\" are supported options" >&5
-$as_echo "$as_me: error: only \"tcsh\" or \"4nt\" are supported options" >&2;}
+   if test "$with_use_shell" != "tcsh"; then
+      { { $as_echo "$as_me:$LINENO: error: only \"tcsh\" is supported options" >&5
+$as_echo "$as_me: error: only \"tcsh\" is supported options" >&2;}
    { (exit 1); exit 1; }; }
    fi
 else
@@ -4965,7 +4964,7 @@ $as_echo "$USE_SHELL" >&6; }
 
 
 
-if test "$_os" = "WINNT" -a "$with_use_shell" != "4nt" ; then
+if test "$_os" = "WINNT" ; then
    { $as_echo "$as_me:$LINENO: checking for cygwin gcc/g++" >&5
 $as_echo_n "checking for cygwin gcc/g++... " >&6; }
    if which gcc > /dev/null && which g++ > /dev/null ; then
@@ -25526,20 +25525,10 @@ $as_echo "$as_me: error: Zip/Unzip are required to build, please install or use 
 fi
 
 if test "$_os" = "WINNT"; then
-    if test "$with_use_shell" = "4nt" ; then
-         if test -z "`$ZIP -h | grep -i WinNT`" ; then
-{ { $as_echo "$as_me:$LINENO: error: $ZIP found in the path is not the required native Windows Version 2.3 of Info-ZIPs zip.exe.
-Probably there is a cygwin version in the path." >&5
-$as_echo "$as_me: error: $ZIP found in the path is not the required native Windows Version 2.3 of Info-ZIPs zip.exe.
-Probably there is a cygwin version in the path." >&2;}
-   { (exit 1); exit 1; }; }
-         fi
-    else
-         if test -n "`$ZIP -h | grep -i WinNT`" ; then
+    if test -n "`$ZIP -h | grep -i WinNT`" ; then
 { { $as_echo "$as_me:$LINENO: error: $ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe." >&5
 $as_echo "$as_me: error: $ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe." >&2;}
    { (exit 1); exit 1; }; }
-         fi
     fi
 fi
 

@@ -773,9 +773,8 @@ AC_ARG_WITH(use-shell,
                           Supported options:
                             tcsh (default)
                             bash
-                            4nt (windows only)
 
-                          Usage: --with-use-shell=tcsh|bash|4nt
+                          Usage: --with-use-shell=tcsh|bash
 ],with_use_shell=$withval,with_use_shell="tcsh")
 AC_ARG_WITH(build-version,
 [  --with-build-version    Allows the builder to add a custom version tag
@@ -1317,14 +1316,14 @@ AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
 dnl ===================================================================
-dnl WINNT uses tcsh, bash or 4nt all other O/S use tcsh or bash.
+dnl all O/S use tcsh or bash.
 dnl The following sets the with_use_shell variable.
 dnl ===================================================================
 AC_MSG_CHECKING([which shell to use])
 if test $_os = "WINNT"; then
    dnl ===================================================================
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
-      AC_MSG_ERROR([only "tcsh","bash" or "4nt" are supported options])
+   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
+      AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
    fi
    dnl ===================================================================
    dnl Sanity check! Native windows programs cannot use cygwin symlinks!
@@ -1356,7 +1355,7 @@ link, and copy the program to the name of the link.])
    dnl If using Mingwin32 then don't use 4NT
    dnl ===================================================================
    if test "$WITH_MINGWIN" = "yes" ; then
-      if test "$with_use_shell" = "4nt" -o "x$with_use_shell" = "x"; then
+      if test "x$with_use_shell" = "x"; then
          with_use_shell="tcsh"
       fi
       if test -z "$CC"; then
@@ -1365,8 +1364,8 @@ link, and copy the program to the name of the link.])
       fi
    fi
 elif test $_os = "OS2"; then
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "4nt"; then
-      AC_MSG_ERROR([only "tcsh" or "4nt" are supported options])
+   if test "$with_use_shell" != "tcsh"; then
+      AC_MSG_ERROR([only "tcsh" is supported options])
    fi
 else 
    dnl ===================================================================
@@ -1382,11 +1381,11 @@ AC_SUBST(USE_SHELL)
 AC_SUBST(WITH_MINGWIN)
 
 dnl ===================================================================
-dnl Extra check for Windows. Non 4nt-builds need gcc to build dmake
+dnl Extra check for Windows. cygwin builds need gcc to build dmake
 dnl and g++ to build guw.exe although MS cl (or MinGW) is used to
 dnl build OOo.
 dnl ===================================================================
-if test "$_os" = "WINNT" -a "$with_use_shell" != "4nt" ; then
+if test "$_os" = "WINNT" ; then
    AC_MSG_CHECKING([for cygwin gcc/g++])
    if which gcc > /dev/null && which g++ > /dev/null ; then
       AC_MSG_RESULT([found])
@@ -5328,15 +5327,8 @@ dnl ===================================================================
 dnl Zip must be a specific type for different build types.
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-    if test "$with_use_shell" = "4nt" ; then
-         if test -z "`$ZIP -h | grep -i WinNT`" ; then
-AC_MSG_ERROR([$ZIP found in the path is not the required native Windows Version 2.3 of Info-ZIPs zip.exe.
-Probably there is a cygwin version in the path.])
-         fi
-    else
-         if test -n "`$ZIP -h | grep -i WinNT`" ; then
+    if test -n "`$ZIP -h | grep -i WinNT`" ; then
 AC_MSG_ERROR([$ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe.])
-         fi
     fi
 fi
 AC_SUBST(ZIP_HOME)
