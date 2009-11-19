@@ -45,7 +45,7 @@ module com { module sun { module star { module ucb {
 
     @since OOo 3.3
  */
- service CommandEnvironment : ::com::sun::star::ucb::XCommandEnvironment
+ published service CommandEnvironment : ::com::sun::star::ucb::XCommandEnvironment
  {
     //-------------------------------------------------------------------------
     /** Constructor.
