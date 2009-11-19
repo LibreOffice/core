@@ -495,6 +495,17 @@ elsif ( $platform =~ m/linux/ )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."native_threads";
    }
+   elsif ($platform =~ m/^hppa/)
+   {  print "Setting Linux hppa specific values... ";
+      $outfile        = "LinuxHPPAEnv.Set";
+      $CPU            = "H";
+      $CPUNAME        = "HPPA";
+      $OUTPATH        = "unxlnghppa";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa".$ds."native_threads";
+      $EPM_FLAGS      = "-a hppa";
+   }
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
       $outfile        = "LinuxAlphaEnv.Set"; 
