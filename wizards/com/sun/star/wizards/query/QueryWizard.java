@@ -299,6 +299,10 @@ public class QueryWizard extends WizardDialog
         if ((switchToStep(ncurStep, SOSUMMARY_PAGE)) || (ncurStep == SOSUMMARY_PAGE))
         {
             components = CurFinalizer.finish();
+            if ( components == null )
+            {
+                setControlProperty("btnWizardFinish", "Enabled", false);
+            }
         }
     }
 
