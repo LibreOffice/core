@@ -2097,6 +2097,9 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     BOOL bShowSWOptions = FALSE;
 
+    aCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_CLB );
+    aSwCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_SW_CLB );
+
     SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, FALSE );
     if ( pItem && pItem->GetValue() )
         bShowSWOptions = TRUE;
