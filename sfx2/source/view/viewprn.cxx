@@ -647,7 +647,8 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                         makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
 
     // FIXME: job setup
-    JobSetup aJobSetup = GetJobSetup();
+    SfxPrinter* pDocPrt = GetPrinter(FALSE);
+    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
     if( bIsDirect )
         aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
                             String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
