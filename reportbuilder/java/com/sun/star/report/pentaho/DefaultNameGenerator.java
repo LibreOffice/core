@@ -65,7 +65,9 @@ public class DefaultNameGenerator
      *
      * @param namePrefix a user defined name for that resource.
      * @param mimeType   the mime type of the resource to be stored in the repository.
+     * @param isStream
      * @return the generated, fully qualified name.
+     * @throws java.io.IOException
      */
     private String generateName(final String namePrefix, final String mimeType, final boolean isStream)
             throws IOException
@@ -112,7 +114,7 @@ public class DefaultNameGenerator
                 {
                     throw new IOException();
                 }
-                firstFileName.delete(0,firstFileName.length() );
+                firstFileName.delete(0, firstFileName.length());
                 firstFileName.append(name);
                 firstFileName.append(counter);
                 if (suffix != null)

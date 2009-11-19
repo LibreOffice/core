@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.fo;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
@@ -37,15 +35,15 @@ import org.jfree.layouting.input.style.keys.text.TextStyleKeys;
 
 public class TextAlignMapper extends OneOfConstantsMapper
 {
-  public TextAlignMapper ()
-  {
-    super(TextStyleKeys.TEXT_ALIGN);
-    addMapping("start", TextAlign.START);
-    addMapping("end", TextAlign.END);
-    addMapping("left", TextAlign.LEFT);
-    addMapping("center", TextAlign.CENTER);
-    addMapping("right", TextAlign.RIGHT);
-    addMapping("justify", TextAlign.JUSTIFY);
-  }
 
+    public TextAlignMapper()
+    {
+        super(TextStyleKeys.TEXT_ALIGN);
+        addMapping("start", TextAlign.START);
+        addMapping("end", TextAlign.END);
+        addMapping("left", TextAlign.LEFT);
+        addMapping("center", TextAlign.CENTER);
+        addMapping("right", TextAlign.RIGHT);
+        addMapping("justify", TextAlign.JUSTIFY);
+    }
 }

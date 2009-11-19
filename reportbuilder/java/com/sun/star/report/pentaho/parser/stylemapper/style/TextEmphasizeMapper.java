@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
@@ -36,14 +34,14 @@ import org.jfree.layouting.input.style.CSSDeclarationRule;
 
 public class TextEmphasizeMapper implements StyleMapper
 {
-  public TextEmphasizeMapper ()
-  {
 
-  }
+    public TextEmphasizeMapper()
+    {
+    }
 
-  public void updateStyle (final String uri, final String attrName, final String attrValue,
-                           final CSSDeclarationRule targetRule)
-  {
-    targetRule.setPropertyValueAsString("font-emphasize", attrValue);
-  }
+    public void updateStyle(final String uri, final String attrName, final String attrValue,
+            final CSSDeclarationRule targetRule)
+    {
+        targetRule.setPropertyValueAsString("font-emphasize", attrValue);
+    }
 }

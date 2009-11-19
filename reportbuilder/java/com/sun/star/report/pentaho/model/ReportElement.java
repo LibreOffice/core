@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import java.util.ArrayList;
@@ -47,69 +45,67 @@ import java.util.List;
  */
 public abstract class ReportElement extends Element
 {
-  private final List formatConditions;
 
-  protected ReportElement()
-  {
-    formatConditions = new ArrayList();
-  }
+    private final List formatConditions;
 
-  /**
-   * Checks the current group and prints this element only if the current row is
-   * the first row for that particular group.
-   *
-   * @return true, if the element should only be printed in the first row of the
-   *         current group, false otherwise.
-   */
-  public boolean isPrintWhenGroupChanges()
-  {
-    return OfficeToken.TRUE.equals(getAttribute
-        (OfficeNamespaces.OOREPORT_NS, "print-when-group-changes"));
-  }
-
-  public void setPrintWhenGroupChanges(final boolean printWhenGroupChanges)
-  {
-    setAttribute(OfficeNamespaces.OOREPORT_NS, "print-when-group-changes",
-        String.valueOf(printWhenGroupChanges));
-  }
-
-  /**
-   * Checks, whether the printed value has been changed since the last run. The
-   * element will only be printed, if there was at least one change.
-   *
-   * @return true, if repeated values should be printed, false if repeated
-   *         values should be surpressed.
-   */
-  public boolean isPrintRepeatedValues()
-  {
-    return OfficeToken.TRUE.equals(getAttribute
-        (OfficeNamespaces.OOREPORT_NS, "print-repeated-values"));
-  }
-
-  public void setPrintRepeatedValues(final boolean printRepeatedValues)
-  {
-    setAttribute(OfficeNamespaces.OOREPORT_NS, "print-repeated-values",
-        String.valueOf(printRepeatedValues));
-  }
-
-  public void addFormatCondition(final FormatCondition formatCondition)
-  {
-    if (formatCondition == null)
+    protected ReportElement()
     {
-      throw new NullPointerException();
+        formatConditions = new ArrayList();
     }
 
-    this.formatConditions.add(formatCondition);
-  }
+    /**
+     * Checks the current group and prints this element only if the current row is
+     * the first row for that particular group.
+     *
+     * @return true, if the element should only be printed in the first row of the
+     *         current group, false otherwise.
+     */
+    public boolean isPrintWhenGroupChanges()
+    {
+        return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "print-when-group-changes"));
+    }
 
-  public FormatCondition[] getFormatConditions ()
-  {
-    return (FormatCondition[]) this.formatConditions.toArray
-        (new FormatCondition[this.formatConditions.size()]);
-  }
+    public void setPrintWhenGroupChanges(final boolean printWhenGroupChanges)
+    {
+        setAttribute(OfficeNamespaces.OOREPORT_NS, "print-when-group-changes",
+                String.valueOf(printWhenGroupChanges));
+    }
 
-  public int getFormatConditionCount ()
-  {
-    return formatConditions.size();
-  }
+    /**
+     * Checks, whether the printed value has been changed since the last run. The
+     * element will only be printed, if there was at least one change.
+     *
+     * @return true, if repeated values should be printed, false if repeated
+     *         values should be surpressed.
+     */
+    public boolean isPrintRepeatedValues()
+    {
+        return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "print-repeated-values"));
+    }
+
+    public void setPrintRepeatedValues(final boolean printRepeatedValues)
+    {
+        setAttribute(OfficeNamespaces.OOREPORT_NS, "print-repeated-values",
+                String.valueOf(printRepeatedValues));
+    }
+
+    public void addFormatCondition(final FormatCondition formatCondition)
+    {
+        if (formatCondition == null)
+        {
+            throw new NullPointerException();
+        }
+
+        this.formatConditions.add(formatCondition);
+    }
+
+    public FormatCondition[] getFormatConditions()
+    {
+        return (FormatCondition[]) this.formatConditions.toArray(new FormatCondition[this.formatConditions.size()]);
+    }
+
+    public int getFormatConditionCount()
+    {
+        return formatConditions.size();
+    }
 }

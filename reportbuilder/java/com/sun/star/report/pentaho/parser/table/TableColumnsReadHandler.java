@@ -71,7 +71,7 @@ public class TableColumnsReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.TABLE_NS.equals(uri) && OfficeToken.TABLE_COLUMN.equals(tagName) )
+        if (OfficeNamespaces.TABLE_NS.equals(uri) && OfficeToken.TABLE_COLUMN.equals(tagName))
         {
             final TableColumnReadHandler readHandler = new TableColumnReadHandler();
             columns.add(readHandler);

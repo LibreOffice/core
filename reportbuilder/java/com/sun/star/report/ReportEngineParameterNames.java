@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report;
 
 /**
@@ -37,23 +35,24 @@ package com.sun.star.report;
  */
 public class ReportEngineParameterNames
 {
-  public static final String CONTENT_TYPE = "content-type";
-  public static final String INPUT_NAME= "input.name";
-  public static final String INPUT_REPOSITORY = "input.repository";
-  public static final String OUTPUT_NAME= "output.name";
-  public static final String OUTPUT_REPOSITORY = "output.repository";
-  public static final String INPUT_DATASOURCE_FACTORY = "input.datasource-factory";
-  public static final String IMAGE_SERVICE = "ImageService";
-  public static final String INPUT_REPORTJOB_FACTORY = "input.reportjob-factory";
-  public static final String INPUT_MASTER_COLUMNS = "input.master-columns";
-  public static final String INPUT_MASTER_VALUES = "input.master-values";
-  public static final String INPUT_DETAIL_COLUMNS = "input.detail-columns";
-  public static final String MIMETYPE = "output.mimetype";
-  public static final String AUTHOR = "Author";
-  public static final String TITLE = "Title";
-  public static final String MAXROWS = "MaxRows";
 
-  private ReportEngineParameterNames ()
-  {
-  }
+    public static final String CONTENT_TYPE = "content-type";
+    public static final String INPUT_NAME = "input.name";
+    public static final String INPUT_REPOSITORY = "input.repository";
+    public static final String OUTPUT_NAME = "output.name";
+    public static final String OUTPUT_REPOSITORY = "output.repository";
+    public static final String INPUT_DATASOURCE_FACTORY = "input.datasource-factory";
+    public static final String IMAGE_SERVICE = "ImageService";
+    public static final String INPUT_REPORTJOB_FACTORY = "input.reportjob-factory";
+    public static final String INPUT_MASTER_COLUMNS = "input.master-columns";
+    public static final String INPUT_MASTER_VALUES = "input.master-values";
+    public static final String INPUT_DETAIL_COLUMNS = "input.detail-columns";
+    public static final String MIMETYPE = "output.mimetype";
+    public static final String AUTHOR = "Author";
+    public static final String TITLE = "Title";
+    public static final String MAXROWS = "MaxRows";
+
+    private ReportEngineParameterNames()
+    {
+    }
 }

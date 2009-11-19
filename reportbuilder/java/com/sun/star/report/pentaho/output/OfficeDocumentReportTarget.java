@@ -104,6 +104,7 @@ import org.w3c.css.sac.LexicalUnit;
  */
 public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 {
+
     protected static final Log LOGGER = LogFactory.getLog(OfficeDocumentReportTarget.class);
     public static final String HORIZONTAL_POS = "horizontal-pos";
     public static final String TAG_DEF_PREFIX = "com.sun.star.report.pentaho.output.";
@@ -228,11 +229,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
         public String toString()
         {
-            return "GroupContext{" +
-                    "parent=" + parent +
-                    ", iterationCount=" + iterationCount +
-                    ", groupWithRepeatingSection=" + groupWithRepeatingSection +
-                    '}';
+            return "GroupContext{" + "parent=" + parent + ", iterationCount=" + iterationCount + ", groupWithRepeatingSection=" + groupWithRepeatingSection + '}';
         }
     }
     private final FastStack states;
@@ -301,7 +298,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         this.imageNames = new AttributeNameGenerator();
 
         this.imageProducer = new ImageProducer(inputRepository, outputRepository, imageService);
-        this.oleProducer = new OleProducer(inputRepository, outputRepository, imageService, datasourcefactory,(Integer)reportJob.getParameters().get(ReportEngineParameterNames.MAXROWS));
+        this.oleProducer = new OleProducer(inputRepository, outputRepository, imageService, datasourcefactory, (Integer) reportJob.getParameters().get(ReportEngineParameterNames.MAXROWS));
 
         try
         {
@@ -489,7 +486,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             throw new IllegalStateException();
         }
         final Integer o = (Integer) states.peek();
-        return o.intValue();
+        return o;
     }
 
     /**
@@ -507,9 +504,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         // todo
         if (DEBUG_ELEMENTS)
         {
-            LOGGER.debug("Starting " + getCurrentState() + '/' + states.size() + ' ' +
-                    ReportTargetUtil.getNamespaceFromAttribute(attrs) + " -> " +
-                    ReportTargetUtil.getElemenTypeFromAttribute(attrs));
+            LOGGER.debug("Starting " + getCurrentState() + '/' + states.size() + ' ' + ReportTargetUtil.getNamespaceFromAttribute(attrs) + " -> " + ReportTargetUtil.getElemenTypeFromAttribute(attrs));
         }
         try
         {
@@ -599,8 +594,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         else
                         {
-                            throw new IllegalStateException("Expected either 'template', 'report-body', " +
-                                    "'report-header', 'report-footer', 'variables-section', 'page-header' or 'page-footer'");
+                            throw new IllegalStateException("Expected either 'template', 'report-body', " + "'report-header', 'report-footer', 'variables-section', 'page-header' or 'page-footer'");
                         }
                         startReportSection(attrs, currentRole);
                     }
@@ -648,20 +642,17 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     {
                         // repeating group header/footer, but *no* variables section
                         states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_SECTION));
-                        if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-header", attrs) &&
-                                OfficeToken.TRUE.equals(attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, "repeated-section")))
+                        if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-header", attrs) && OfficeToken.TRUE.equals(attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, "repeated-section")))
                         {
                             currentRole = OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER;
                         }
-                        else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-footer", attrs) &&
-                                OfficeToken.TRUE.equals(attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, "repeated-section")))
+                        else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-footer", attrs) && OfficeToken.TRUE.equals(attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, "repeated-section")))
                         {
                             currentRole = OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER;
                         }
                         else
                         {
-                            throw new IllegalStateException("Expected either 'group-instance', " +
-                                    "'repeating group-header' or 'repeating group-footer'");
+                            throw new IllegalStateException("Expected either 'group-instance', " + "'repeating group-header' or 'repeating group-footer'");
                         }
                         startReportSection(attrs, currentRole);
                     }
@@ -788,9 +779,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
     private final boolean allowBuffering(final int role)
     {
-        return (role == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER ||
-                role == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER ||
-                role == OfficeDocumentReportTarget.ROLE_TEMPLATE);
+        return (role == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER || role == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER || role == OfficeDocumentReportTarget.ROLE_TEMPLATE);
     }
 
     protected void startReportSection(final AttributeMap attrs, final int role)
@@ -845,12 +834,12 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             String line = br.readLine();
             while (line != null)
             {
-              xmlWriter.writeTextNormalized(line, false);
-              line = br.readLine();
-              if (line != null)
-              {
-                  xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, "line-break", XmlWriterSupport.CLOSE);
-              }
+                xmlWriter.writeTextNormalized(line, false);
+                line = br.readLine();
+                if (line != null)
+                {
+                    xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, "line-break", XmlWriterSupport.CLOSE);
+                }
             }
         }
         catch (IOException e)
@@ -989,9 +978,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
             if (DEBUG_ELEMENTS)
             {
-                LOGGER.debug("Finished " + getCurrentState() + "/" + states.size() + " " +
-                        ReportTargetUtil.getNamespaceFromAttribute(attrs) + ":" +
-                        ReportTargetUtil.getElemenTypeFromAttribute(attrs));
+                LOGGER.debug("Finished " + getCurrentState() + "/" + states.size() + " " + ReportTargetUtil.getNamespaceFromAttribute(attrs) + ":" + ReportTargetUtil.getElemenTypeFromAttribute(attrs));
             }
 
         }
@@ -1122,7 +1109,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException ioe)
         {
-            throw new ReportProcessingException("Unable to create the buffer",ioe);
+            throw new ReportProcessingException("Unable to create the buffer", ioe);
         }
     }
 
@@ -1172,17 +1159,14 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             {
                 final Map.Entry entry = (Map.Entry) entries.next();
                 final String key = String.valueOf(entry.getKey());
-                if (OfficeNamespaces.TABLE_NS.equals(attrNamespace) &&
-                        "name".equals(key))
+                if (OfficeNamespaces.TABLE_NS.equals(attrNamespace) && "name".equals(key))
                 {
                     final String tableName = String.valueOf(entry.getValue());
                     final String saneName = sanitizeName(tableName);
                     attrList.setAttribute(attrNamespace, key,
                             tableNameGenerator.generateName(saneName));
                 }
-                else if (OfficeNamespaces.DRAWING_NS.equals(attrNamespace) &&
-                        "name".equals(key) &&
-                        !"equation".equals(elementType) )
+                else if (OfficeNamespaces.DRAWING_NS.equals(attrNamespace) && "name".equals(key) && !"equation".equals(elementType))
                 {
                     final String objectName = String.valueOf(entry.getValue());
                     attrList.setAttribute(attrNamespace, key,
@@ -1243,11 +1227,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
     protected boolean isRepeatingSection()
     {
-        return (currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER ||
-                currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER ||
-                currentRole == OfficeDocumentReportTarget.ROLE_PAGE_FOOTER ||
-                currentRole == OfficeDocumentReportTarget.ROLE_PAGE_HEADER ||
-                currentRole == OfficeDocumentReportTarget.ROLE_VARIABLES);
+        return (currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER || currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER || currentRole == OfficeDocumentReportTarget.ROLE_PAGE_FOOTER || currentRole == OfficeDocumentReportTarget.ROLE_PAGE_HEADER || currentRole == OfficeDocumentReportTarget.ROLE_VARIABLES);
 
     }
 
@@ -1309,8 +1289,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     final CSSNumericValue normalizedImageHeight =
                             CSSValueResolverUtility.convertLength(height, imageAreaHeightVal.getType());
 
-                    final String scale = (String)attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.SCALE);
-                    if ( OfficeToken.NONE.equals(scale) && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
+                    final String scale = (String) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.SCALE);
+                    if (OfficeToken.NONE.equals(scale) && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
                     {
                         final double clipWidth = normalizedImageWidth.getValue() - imageAreaWidthVal.getValue();
                         final double clipHeight = normalizedImageHeight.getValue() - imageAreaHeightVal.getValue();
@@ -1379,24 +1359,23 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                             imageAreaHeightVal = normalizedImageHeight;
                         }
                     }
-                    else if ( OfficeToken.ISOTROPIC.equals(scale) )
+                    else if (OfficeToken.ISOTROPIC.equals(scale))
                     {
-                        final double[] ret = calcPaintSize(imageAreaWidthVal,imageAreaHeightVal,normalizedImageWidth,normalizedImageHeight);
+                        final double[] ret = calcPaintSize(imageAreaWidthVal, imageAreaHeightVal, normalizedImageWidth, normalizedImageHeight);
 
-                        posX = CSSNumericValue.createValue(imageAreaWidthVal.getType(),( imageAreaWidthVal.getValue() - ret[0]) * 0.5);
-                        posY = CSSNumericValue.createValue(imageAreaHeightVal.getType(),( imageAreaHeightVal.getValue() - ret[1]) * 0.5);
+                        posX = CSSNumericValue.createValue(imageAreaWidthVal.getType(), (imageAreaWidthVal.getValue() - ret[0]) * 0.5);
+                        posY = CSSNumericValue.createValue(imageAreaHeightVal.getType(), (imageAreaHeightVal.getValue() - ret[1]) * 0.5);
 
-                        imageAreaWidthVal = CSSNumericValue.createValue(imageAreaWidthVal.getType(),ret[0]);
-                        imageAreaHeightVal = CSSNumericValue.createValue(imageAreaHeightVal.getType(),ret[1]);
+                        imageAreaWidthVal = CSSNumericValue.createValue(imageAreaWidthVal.getType(), ret[0]);
+                        imageAreaHeightVal = CSSNumericValue.createValue(imageAreaHeightVal.getType(), ret[1]);
                     }
                 }
-            // If we do scale, then we simply use the given image-area-size as valid image size and dont
-            // care about the image itself ..
+                // If we do scale, then we simply use the given image-area-size as valid image size and dont
+                // care about the image itself ..
             }
             else
             {
-                LOGGER.debug("There is no image-context, so we have to rely on the image's natural bounds. " +
-                        "This may go awfully wrong.");
+                LOGGER.debug("There is no image-context, so we have to rely on the image's natural bounds. " + "This may go awfully wrong.");
                 imageAreaWidthVal = image.getWidth();
                 imageAreaHeightVal = image.getHeight();
             }
@@ -1653,19 +1632,21 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             throw new ReportProcessingException(FAILED, ioe);
         }
     }
-    static private double[] calcPaintSize(  final CSSNumericValue areaWidth, final CSSNumericValue areaHeight,
-                                final CSSNumericValue imageWidth, final CSSNumericValue imageHeight)
+
+    static private double[] calcPaintSize(final CSSNumericValue areaWidth, final CSSNumericValue areaHeight,
+            final CSSNumericValue imageWidth, final CSSNumericValue imageHeight)
     {
 
         final double ratioX = areaWidth.getValue() / imageWidth.getValue();
         final double ratioY = areaHeight.getValue() / imageHeight.getValue();
-        final double ratioMin = Math.min( ratioX, ratioY );
+        final double ratioMin = Math.min(ratioX, ratioY);
 
         double[] ret = new double[2];
         ret[0] = imageWidth.getValue() * ratioMin;
         ret[1] = imageHeight.getValue() * ratioMin;
         return ret;
     }
+
     protected void writeNullDate() throws IOException
     {
         // write NULL DATE

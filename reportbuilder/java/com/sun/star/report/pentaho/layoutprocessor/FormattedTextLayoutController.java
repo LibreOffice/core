@@ -59,7 +59,9 @@ import org.jfree.layouting.util.AttributeMap;
 public class FormattedTextLayoutController
         extends AbstractReportElementLayoutController
 {
+
     private static final Log LOGGER = LogFactory.getLog(FormattedTextLayoutController.class);
+
     public FormattedTextLayoutController()
     {
     }

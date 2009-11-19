@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.expressions.FormulaExpression;
@@ -43,45 +41,49 @@ import com.sun.star.report.OfficeToken;
  */
 public class ImageElement extends ReportElement
 {
-  private FormulaExpression formula;
 
-  public ImageElement()
-  {
-  }
+    private FormulaExpression formula;
 
-  public FormulaExpression getFormula()
-  {
-    return formula;
-  }
+    public ImageElement()
+    {
+    }
 
-  public void setFormula(final FormulaExpression formula)
-  {
-    this.formula = formula;
-  }
+    public FormulaExpression getFormula()
+    {
+        return formula;
+    }
 
+    public void setFormula(final FormulaExpression formula)
+    {
+        this.formula = formula;
+    }
 
     public String getScaleMode()
     {
-        String val = (String)getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.SCALE);
-        if ( OfficeToken.TRUE.equals(val) )
+        String val = (String) getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.SCALE);
+        if (OfficeToken.TRUE.equals(val))
+        {
             val = OfficeToken.ANISOTROPIC;
-        else if ( OfficeToken.FALSE.equals(val) || val == null )
+        }
+        else if (OfficeToken.FALSE.equals(val) || val == null)
+        {
             val = OfficeToken.NONE;
+        }
         return val;
     }
 
-  public boolean isPreserveIRI()
-  {
-    return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI));
-  }
+    public boolean isPreserveIRI()
+    {
+        return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI));
+    }
 
-  public void setPreserveIRI(final boolean preserveIRI)
-  {
-    setAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI, String.valueOf(preserveIRI));
-  }
+    public void setPreserveIRI(final boolean preserveIRI)
+    {
+        setAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI, String.valueOf(preserveIRI));
+    }
 
-  public String getImageData()
-  {
-    return (String) getAttribute(OfficeNamespaces.FORM_NS, OfficeToken.IMAGE_DATA);
-  }
+    public String getImageData()
+    {
+        return (String) getAttribute(OfficeNamespaces.FORM_NS, OfficeToken.IMAGE_DATA);
+    }
 }
