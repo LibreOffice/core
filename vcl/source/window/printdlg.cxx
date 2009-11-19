@@ -68,7 +68,10 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
 {
     SetPaintTransparent( TRUE );
     SetBackground();
-    maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+        maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+    else
+        maPageVDev.SetBackground( Color( COL_WHITE ) );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
@@ -80,7 +83,10 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
     // react on settings changed
     if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
     {
-        maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+            maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+        else
+            maPageVDev.SetBackground( Color( COL_WHITE ) );
     }
     Window::DataChanged( i_rDCEvt );
 }
@@ -206,6 +212,13 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     SetQuickHelpText( aBuf.makeStringAndClear() );
     #endif
     maMtf = i_rNewPreview;
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
+        GetSettings().GetStyleSettings().GetWindowColor().IsDark()
+        )
+    {
+        maMtf.ReplaceColors( Color( COL_BLACK ), Color( COL_WHITE ), 30 );
+    }
+
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
     maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
