@@ -1085,6 +1085,14 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
         rSelector.SelectPage (nInsertionIndex);
     }
 
+    // Is there a stored insertion position?
+    else if (mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() >= 0)
+    {
+        nInsertionIndex
+            = mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() - 1;
+        rSelector.SelectPage(nInsertionIndex);
+    }
+
     // Select the last page when there is at least one page.
     else if (rSelector.GetPageCount() > 0)
     {
