@@ -3843,25 +3843,14 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
         ], []
     )
     AC_MSG_CHECKING([whether db is at least 4.1])
-    for v in `seq 1 7`; do
-       AC_TRY_RUN([
+    AC_TRY_RUN([
 #include <db.h>
 
 int main(int argc, char **argv) {
-       if(DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR == $v) return 0;
+       if(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1)) return 0;
        else return 1;
 }
-       ], [DB_VERSION_MINOR=$v], [])
-    done
-    if test "$DB_VERSION_MINOR" -gt "1"; then
-       AC_MSG_RESULT([OK])
-       DB_VERSION=4.$DB_VERSION_MINOR
-    else
-       AC_MSG_ERROR([no. you need at least db 4.1])
-    fi
-    # does not work :/
-    #AC_CHECK_LIB(db, db_create, [],
-    #  [AC_MSG_ERROR([db library not installed or functional])], [])
+    ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no. you need at least db 4.1])])
     AC_HAVE_LIBRARY(db, [],
       [AC_MSG_ERROR([db not installed or functional])], [])
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
