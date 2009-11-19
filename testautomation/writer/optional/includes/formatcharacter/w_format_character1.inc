@@ -138,17 +138,18 @@ testcase tFormatCharacter3
     Dim Vergleich3 as string
     Dim Vergleich4 as string
     Dim vLink as integer
-    '/// Format / Character ///
-    PrintLog "- Format / Character"
-    
-    '/// New document ///
+
+    printlog "New document"
     Call hNewDocument
-    printlog "  - adjust character"
-    '/// Select Format / Character ///
+	printlog "add some text to document => 	'formatted text with hyperlink'"
+	Call wTypeKeys ("formatted text with hyperlink")
+	printlog "select text"
+	Call wTypeKeys ("<Shift Home>")
+
     FormatCharacter
     WaitSlot (5)
     Kontext
-    '/// On Tabpage 'Font' adjust settings ///
+    printlog "On Tabpage 'Font' adjust settings"
     active.SetPage TabFont
     kontext "TabFont"
     try
@@ -168,20 +169,20 @@ testcase tFormatCharacter3
     endcatch
     wait 100
     Kontext
-    '/// On Tabpage 'Font Effects' adjust settings ///
+    printlog "On Tabpage 'Font Effects' adjust settings"
     active.SetPage TabFontEffects
     kontext "TabFontEffects"
     Blinking.Check
     Kontext
     Active.Setpage TabFontPosition
-    '/// On Tabpage 'Font Position ' adjust settings ///
+    printlog "On Tabpage 'Font Position ' adjust settings"
     Kontext "TabFontPosition"
     Spacing.Select 2
     SpacingBy.More 3
     Vergleich4 = SpacingBy.GetText
     if Right ( Vergleich4, 2 ) <> "pt" then Warnlog "Wrong Unit at Spacing by"
     Kontext
-    '/// On Tabpage 'Hyperlink' adjust settings ///
+    printlog "On Tabpage 'Hyperlink' adjust settings"
     active.SetPage TabHyperlinkZeichen
     kontext "TabHyperlinkZeichen"
     URLName.SetText "www.mikeportnoy.com"
@@ -200,13 +201,9 @@ testcase tFormatCharacter3
     Sleep 1
     Hintergrundfarbe.Typekeys "<Down><Left>", 4
     TabHintergrund.OK
-    '/// Close dialog and reopen with Format / Character ///
+    printlog "Close dialog"
 
-    Call wTypeKeys "This is formatted text <Home><Right>"
-
-    printlog "  - check character"
-
-    '/// Check settings made ///
+    printlog "Reopen with Format / Character and check settings made"
     Call wTypeKeys "<Home><Right>"
     FormatCharacter
     Kontext
@@ -234,38 +231,30 @@ testcase tFormatCharacter3
     Kontext
     active.SetPage TabHyperlinkZeichen
     kontext "TabHyperlinkZeichen"
-    if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#Wrong URL : " + URLName.GetText
+    if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "##i105855##Wrong URL : " + URLName.GetText
     SetClipboard UrlName.Gettext
-    if NameText.GetText <> "A hyperlink with testtool" then Warnlog "Wrong Linkname : " + NameText.GetText
-    if TargetFrame.GetSelIndex <> 2 then Warnlog "Wrong Target selected : " + TargetFrame.GetSelText
-    if UnbesuchterLink.GetSelIndex <> vLink then Warnlog "Wrong Style for unused Link :" + UnbesuchterLink.GetSelIndex
+    if NameText.GetText <> "A hyperlink with testtool" then Warnlog "#i105855#Wrong Linkname : " + NameText.GetText
+    if TargetFrame.GetSelIndex <> 2 then Warnlog "#i105855#Wrong Target selected : " + TargetFrame.GetSelText
+    if UnbesuchterLink.GetSelIndex <> vLink then Warnlog "#i105855#Wrong Style for unused Link :" + UnbesuchterLink.GetSelIndex
     TabHyperlinkZeichen.OK
 
+    printlog "Save document as '../user/work/format1.sxw' and close it"
     if gApplication = "WRITER" then
         Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\format1.odt", "writer8")
     else
         Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\format1.odm", "writer8")  'gMasterDocFilter
-    end if
-    '/// Save document as '../user/work/format1.sxw' and close it ///
+    end if    
 
-    if getclipboardtext="http://www.mikeportnoy.com/" then
-        printlog "  - activate Link"
-    end if
-    Sleep 20
-
-    printlog "  - check saved character format"
-    Sleep 1
+    printlog "Close document"
     Call hCloseDocument
-    Sleep 2
+    printlog "reopen previous saved document and check saved character format"    
     if gApplication = "WRITER" then
         Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
     else
         Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
     end if
-    Call wTypeKeys "<Home><Right>"
+    Call wTypeKeys "<Mod1 Home><Right>"
     Wait 500
-    '/// Reopen previous saved documentand check settings made under Format / Character ///
-
     FormatCharacter
     WaitSlot (3)
     Kontext
@@ -292,9 +281,9 @@ testcase tFormatCharacter3
     Kontext
     active.SetPage TabHyperlinkZeichen
     kontext "TabHyperlinkZeichen"
-    if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#Wrong URL : " + URLName.GetText
-    if NameText.GetText <> "A hyperlink with testtool" then Warnlog "Wrong Linkname : " + NameText.GetText
-    if TargetFrame.GetSelIndex <> 2 then Warnlog "Wrong Target selected : " + TargetFrame.GetSelText
+    if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i105855#Wrong URL : " + URLName.GetText
+    if NameText.GetText <> "A hyperlink with testtool" then Warnlog "#i105855#Wrong Linkname : " + NameText.GetText
+    if TargetFrame.GetSelIndex <> 2 then Warnlog "#i105855#Wrong Target selected : " + TargetFrame.GetSelText
     TabHyperlinkZeichen.OK
     '/// Close document ///
     Call hCloseDocument
@@ -487,18 +476,21 @@ endcase
 
 testcase tFormatCharacter
   	Dim Vergleich1%, Vergleich2$, Vergleich3$, Vergleich4$
-    
-	'/// Format / Character ///
+    	
 	PrintLog "- Format / Character"
-
-	'/// New document ///
 	Call hNewDocument
+	
+	printlog "add some text to document => 	'formatted text with hyperlink'"
+	Call wTypeKeys ("formatted text with hyperlink")
+	printlog "select text"
+	Call wTypeKeys ("<Shift Home>")
+	
 	printlog "  - adjust character"
-	'/// Select Format / Character ///
+	printlog "Format->Character"
 	FormatCharacter
 	Sleep 5
 	Kontext
-	'/// On Tabpage 'Font' adjust settings ///
+	printlog "On Tabpage 'Font' adjust settings"
 	active.SetPage TabFont
 	kontext "TabFont"
 	try
@@ -518,24 +510,24 @@ testcase tFormatCharacter
 	endcatch
 	wait 100
 	Kontext
-	'/// On Tabpage 'Font Effects' adjust settings ///
+	printlog "On Tabpage 'Font Effects' adjust settings"
 	active.SetPage TabFontEffects
 	kontext "TabFontEffects"
 	Blinking.Check
 	Kontext
 	Active.Setpage TabFontPosition
-	'/// On Tabpage 'Font Position ' adjust settings ///
+	printlog "On Tabpage 'Font Position ' adjust settings"
 	Kontext "TabFontPosition"
 	Spacing.Select 2
 	SpacingBy.More 3
 	Vergleich4$ = SpacingBy.GetText
 	if Right ( Vergleich4$, 2 ) <> "pt" then Warnlog "Wrong Unit at Spacing by"
 	Kontext
-	'/// On Tabpage 'Hyperlink' adjust settings ///
+	printlog "On Tabpage 'Hyperlink' adjust settings"
 	active.SetPage TabHyperlinkZeichen
 	kontext "TabHyperlinkZeichen"
 	URLName.SetText "www.mikeportnoy.com"
-	NameText.SetText "Ein Link mit dem Testtool"
+	NameText.SetText "Link created by testtool"
 	TargetFrame.Select 2
 
 	UnbesuchterLink.Select 6
@@ -545,14 +537,12 @@ testcase tFormatCharacter
 	Sleep 1
 	Hintergrundfarbe.Typekeys "<Down><Left>", 4
 	TabHintergrund.OK
-	'/// Close dialog and reopen with Format / Character ///
+	printlog "Close dialog"
 
-	Call wTypeKeys "Dies ist ein formatierter Text <Home><Right>"
-
-	printlog "  - check character"
-
-	'/// Check settings made ///
-	Call wTypeKeys "<Home><Right>"
+	printlog " Type Home- and Right-Key"
+	Call wTypeKeys "<Home><Right>"	
+	
+	printlog "recheck settings made with opening Format->Character"
 	FormatCharacter
 	Kontext
 	active.SetPage TabFont
@@ -579,38 +569,30 @@ testcase tFormatCharacter
 	Kontext
 	active.SetPage TabHyperlinkZeichen
 	kontext "TabHyperlinkZeichen"
-	if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "Wrong URL : " + URLName.GetText + " (#BugID:90982)"
+	if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i105855#Wrong URL : " + URLName.GetText + " (#BugID:90982)"
 	SetClipboard UrlName.Gettext
-	if NameText.GetText <> "Ein Link mit dem Testtool" then Warnlog "Wrong Linkname : " + NameText.GetText
-	if TargetFrame.GetSelIndex <> 2 then Warnlog "Wrong Target selected : " + TargetFrame.GetSelText
-	if UnbesuchterLink.GetSelIndex <> 6 then Warnlog "Wrong Style for unused Link :" + UnbesuchterLink.GetSelIndex
+	if NameText.GetText <> "Link created by testtool" then Warnlog "#i105855#Wrong Linkname : " + NameText.GetText
+	if TargetFrame.GetSelIndex <> 2 then Warnlog "#i105855#Wrong Target selected : " + TargetFrame.GetSelText
+	if UnbesuchterLink.GetSelIndex <> 6 then Warnlog "#i105855#Wrong Style for unused Link :" + UnbesuchterLink.GetSelIndex
 	TabHyperlinkZeichen.OK
 
+	printlog "Save document as '../user/work/format1.sxw' and close it"
 	if gApplication = "WRITER" then
     	Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\format1.odt", "writer8" )
 	else
     	Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\format1.odm", "writer8" ) 'gMasterDocFilter
-	end if
-	'/// Save document as '../user/work/format1.sxw' and close it ///
-
-	if getclipboardtext="http://www.mikeportnoy.com/" then
-    	printlog "  - activate Link"
-	end if
-	Sleep 20
-
-	printlog "  - check saved character format"
-	Sleep 1
+	end if	
 	Call hCloseDocument
-	Sleep 2
+	printlog "re-open previous saved document"
 	if gApplication = "WRITER" then
-    	    Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
+    	Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
 	else
-    	    Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
+  	    Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
 	end if
-   	Call wTypeKeys "<Home><Right>"
+   	Call wTypeKeys "<Mod1 Home><Right>"
 	Wait 500
-	'/// Reopen previous saved documentand check settings made under Format / Character ///
 
+	printlog "Execute Format->Character and re-check settings made"
 	FormatCharacter
 
 	Sleep 3
@@ -618,13 +600,13 @@ testcase tFormatCharacter
 	active.SetPage TabFont
 	kontext "TabFont"
 	try
-            if FontWest.GetSelText <> Vergleich2$ then Warnlog "Font should "+ Vergleich2$ +" is "+ FontWest.GetSelText
-            if StyleWest.GetSelIndex <> Vergleich1% then Warnlog "FontStyle should " +Vergleich3$+" is "+ StyleWest.GetSelText
-            if SizeWest.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + SizeWest.GetSelText
+		if FontWest.GetSelText <> Vergleich2$ then Warnlog "Font should "+ Vergleich2$ +" is "+ FontWest.GetSelText
+		if StyleWest.GetSelIndex <> Vergleich1% then Warnlog "FontStyle should " +Vergleich3$+" is "+ StyleWest.GetSelText
+		if SizeWest.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + SizeWest.GetSelText
 	catch
-            if Font.GetSelText <> Vergleich2$ then Warnlog "Font should "+ Vergleich2$ +" is "+ Font.GetSelText
-            if Style.GetSelIndex <> Vergleich1% then Warnlog "FontStyle should " +Vergleich3$+" is "+ Style.GetSelText
-            if Size.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + Size.GetSelText
+		if Font.GetSelText <> Vergleich2$ then Warnlog "Font should "+ Vergleich2$ +" is "+ Font.GetSelText
+		if Style.GetSelIndex <> Vergleich1% then Warnlog "FontStyle should " +Vergleich3$+" is "+ Style.GetSelText
+		if Size.GetSelIndex <> 24 then Warnlog "Wrong Font Size : " + Size.GetSelText
 	endcatch
 	Kontext
 	active.SetPage TabFontEffects
@@ -638,11 +620,11 @@ testcase tFormatCharacter
 	Kontext
 	active.SetPage TabHyperlinkZeichen
 	kontext "TabHyperlinkZeichen"
-	if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "Wrong URL : " + URLName.GetText
-	if NameText.GetText <> "Ein Link mit dem Testtool" then Warnlog "Wrong Linkname : " + NameText.GetText
-	if TargetFrame.GetSelIndex <> 2 then Warnlog "Wrong Target selected : " + TargetFrame.GetSelText
+	if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i105855#Wrong URL : " + URLName.GetText
+	if NameText.GetText <> "Link created by testtool" then Warnlog "#i105855#Wrong Linkname : " + NameText.GetText
+	if TargetFrame.GetSelIndex <> 2 then Warnlog "#i105855#Wrong Target selected : " + TargetFrame.GetSelText
 	TabHyperlinkZeichen.OK
-	'/// Close document ///
+	printlog "Close document"
 	Call hCloseDocument
 endcase
 

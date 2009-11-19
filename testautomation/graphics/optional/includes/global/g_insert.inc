@@ -36,19 +36,6 @@
 '* short description :
 '*
 '**************************************************************************************
-' #1 tInsertFloatingFrame
-' #1 tInsertFields
-' #1 tdInsertObjectOleObjects
-' #1 tdInsertSnapPoint_Line
-' #1 tInsertSpecialCharacter
-' #1 tInsertSpreadsheet
-' #1 tInsertGraphics
-' #1 tInsertObjectPlugIn
-' #1 tInsertObjectApplet
-' #1 tInsertObjectFormula
-' #1 tInsertChart
-' #1 tdInsertFile
-'\*************************************************************************************
 
 testcase tdInsertObjectOleObjects
 
@@ -743,48 +730,7 @@ testcase tInsertGraphics
 endcase 'tInsertGraphics
 
 '-------------------------------------------------------------------------------
-testcase tInsertObjectApplet
 
-    printlog " open application "
-    Call hNewDocument
-    printlog " Insert->Object->Applet "
-    sleep 1
-    InsertObjectApplet
-    Kontext "AppletEinfuegen"
-    printlog " press button 'Search' "
-    sleep 2
-    Suchen.Click
-    Kontext "OeffnenDlg"
-    printlog " set filename to 'global\\input\\java\\rocket.class' "
-    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\java\Clock.class")
-    printlog " close dialog 'Open' by pressing 'Open' "
-    sleep 2
-    Oeffnen.Click
-    Kontext "AppletEinfuegen"
-    printlog " close dialog 'Insert Applet' by pressing OK "
-    sleep 2
-    AppletEinfuegen.OK
-    sleep 3
-    printlog " deselect object by typing key [Escape] "
-    hTypeKeys ("<Escape>")
-    sleep 3
-    try
-        printlog " Edit->Select All "
-        EditSelectAll
-        printlog " delete object by typing key [Delete] "
-        sleep 3
-        hTypeKeys "<DELETE>"
-    catch
-        Warnlog "Delete did not work, maybe some error while creating the object before"
-    endcatch
-    sleep 1
-    '   gMouseclick 70,70
-    printlog " close application "
-    Call hCloseDocument
-
-endcase 'tInsertObjectApplet
-
-'-------------------------------------------------------------------------------
 testcase tInsertObjectFormula
 
     printlog " open application "

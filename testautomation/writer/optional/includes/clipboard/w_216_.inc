@@ -59,6 +59,9 @@ testcase HTMLToWRITERText
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
     sleep (3)
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif        
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Shift Down><Shift End>"
@@ -112,7 +115,9 @@ testcase HTMLToWRITERText
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -125,6 +130,9 @@ testcase HTMLToWRITERField
     printlog "  Copy selected text "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",2
@@ -177,7 +185,9 @@ testcase HTMLToWRITERField
             goto endsub
         end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -190,6 +200,9 @@ testcase HTMLToWRITERTable
     printlog "  Copy selected table "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",5
@@ -242,7 +255,9 @@ testcase HTMLToWRITERTable
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -255,6 +270,9 @@ testcase HTMLToWRITERGraphicLinked
     printlog "  Copy selected Linked Graphic "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -296,7 +314,9 @@ testcase HTMLToWRITERGraphicLinked
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -309,6 +329,9 @@ testcase HTMLToWRITERControl
     printlog "  Copy selected Control "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -351,7 +374,9 @@ testcase HTMLToWRITERControl
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -364,6 +389,9 @@ testcase HTMLToWRITERFloatingFrame
     printlog "  Copy selected Floating Frame "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -412,5 +440,7 @@ testcase HTMLToWRITERFloatingFrame
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop    
 endcase
