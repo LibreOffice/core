@@ -41,9 +41,10 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.EventObject;
-import com.sun.star.util.Time;
 import com.sun.star.util.Date;
 import com.sun.star.util.DateTime;
+import com.sun.star.util.Time;
+import com.sun.star.util.Duration;
 import com.sun.star.util.XModifyListener;
 import com.sun.star.util.XModifyBroadcaster;
 import com.sun.star.beans.XPropertyContainer;
@@ -352,6 +353,7 @@ public class DocumentMetaData extends ComplexTestCase
             // differently some day...
             boolean b = true;
             double d = 3.1415;
+            // note that Time is only supported for backward compatibilty!
             Time t = new Time();
             t.Hours = 1;
             t.Minutes = 16;
@@ -360,10 +362,20 @@ public class DocumentMetaData extends ComplexTestCase
             date.Month = 2;
             date.Day = 3;
             dt.Year = 2065;
+            Duration dur = new Duration();
+            dur.Negative = true;
+            dur.Years = 1001;
+            dur.Months = 999;
+            dur.Days = 888;
+            dur.Hours = 777;
+            dur.Minutes = 666;
+            dur.Seconds = 555;
+            dur.HundredthSeconds = 444;
 
             udpc.addProperty("Frobnicate", PropertyAttribute.REMOVEABLE,
                 new Boolean(b));
-            udpc.addProperty("FrobDuration", PropertyAttribute.REMOVEABLE, t);
+            udpc.addProperty("FrobDuration", PropertyAttribute.REMOVEABLE, dur);
+            udpc.addProperty("FrobDuration2", PropertyAttribute.REMOVEABLE, t);
             udpc.addProperty("FrobEndDate", PropertyAttribute.REMOVEABLE, date);
             udpc.addProperty("FrobStartTime", PropertyAttribute.REMOVEABLE, dt);
             udpc.addProperty("Pi", PropertyAttribute.REMOVEABLE, new Double(d));
@@ -389,8 +401,10 @@ public class DocumentMetaData extends ComplexTestCase
 
             assure ("UserDefined bool", new Boolean(b).equals(
                     udps.getPropertyValue("Frobnicate")));
-            assure ("UserDefined time", eqTime(t, (Time)
+            assure ("UserDefined duration", eqDuration(dur, (Duration)
                     udps.getPropertyValue("FrobDuration")));
+            assure ("UserDefined time", eqTime(t, (Time)
+                    udps.getPropertyValue("FrobDuration2")));
             assure ("UserDefined date", eqDate(date, (Date)
                     udps.getPropertyValue("FrobEndDate")));
             assure ("UserDefined datetime", eqDateTime(dt, (DateTime)
@@ -431,8 +445,10 @@ public class DocumentMetaData extends ComplexTestCase
 
             assure ("UserDefined bool", new Boolean(b).equals(
                     udps.getPropertyValue("Frobnicate")));
-            assure ("UserDefined time", eqTime(t, (Time)
+            assure ("UserDefined duration", eqDuration(dur, (Duration)
                     udps.getPropertyValue("FrobDuration")));
+            assure ("UserDefined time", eqTime(t, (Time)
+                    udps.getPropertyValue("FrobDuration2")));
             assure ("UserDefined date", eqDate(date, (Date)
                     udps.getPropertyValue("FrobEndDate")));
             assure ("UserDefined datetime", eqDateTime(dt, (DateTime)
@@ -485,8 +501,6 @@ public class DocumentMetaData extends ComplexTestCase
     }
 
     boolean eqDate(Date a, Date b) {
-log.println("a: " + a.Year +" "+ a.Month +" "+ a.Day);
-log.println("b: " + b.Year +" "+ b.Month +" "+ b.Day);
         return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day;
     }
 
@@ -494,6 +508,14 @@ log.println("b: " + b.Year +" "+ b.Month +" "+ b.Day);
         return a.Hours == b.Hours && a.Minutes == b.Minutes
             && a.Seconds == b.Seconds
             && a.HundredthSeconds == b.HundredthSeconds;
+    }
+
+    boolean eqDuration(Duration a, Duration b) {
+        return a.Years == b.Years && a.Months == b.Months && a.Days == b.Days
+            && a.Hours == b.Hours && a.Minutes == b.Minutes
+            && a.Seconds == b.Seconds
+            && a.HundredthSeconds == b.HundredthSeconds
+            && a.Negative == b.Negative;
     }
 
     java.util.Collection fromArray(Object[] os) {
