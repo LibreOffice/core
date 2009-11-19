@@ -245,5 +245,8 @@ String RID_STR_ERROR_WHILE_SAVING
 {
     Text [ en-US ] = "Could not save the document:\n\n$except$:\n$message$";
 };
-
+String RID_STR_NO_SUB_FOLDER
+{
+    Text [ en-US ] = "There exists no folder named \"$folder$\".";
+};
 //-------------------------------------------------------------------------
