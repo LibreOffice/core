@@ -48,6 +48,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 
+#include "selfterminatefilestream.hxx"
 #include "owriteablestream.hxx"
 #include "oseekinstream.hxx"
 #include "mutexholder.hxx"
@@ -866,18 +867,10 @@ void OWriteStream_Impl::Commit()
     }
     else if ( m_aTempURL.getLength() )
     {
-        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                        GetServiceFactory()->createInstance (
-                                ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                        uno::UNO_QUERY );
-
-        if ( !xTempAccess.is() )
-            throw uno::RuntimeException(); // TODO:
-
         uno::Reference< io::XInputStream > xInStream;
         try
         {
-            xInStream = xTempAccess->openFileRead( m_aTempURL );
+            xInStream.set( static_cast< io::XInputStream* >( new OSelfTerminateFileStream( GetServiceFactory(), m_aTempURL ) ), uno::UNO_QUERY );
         }
         catch( uno::Exception& )
         {
@@ -2626,6 +2619,8 @@ void SAL_CALL OWriteStream::dispose()
             m_xInStream->closeInput();
             m_xInStream = uno::Reference< io::XInputStream >();
         }
+
+        m_xSeekable = uno::Reference< io::XSeekable >();
 
         m_pImpl->m_pAntiImpl = NULL;
 
