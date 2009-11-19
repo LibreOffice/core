@@ -345,7 +345,8 @@ void SourceTreeLocalizer::WorkOnFile(
                 sCommand +=" -QQ ";
             }
             //printf("DBG: %s\n",sCommand.GetBuffer());
-            system( sCommand.GetBuffer());
+            if (system(sCommand.GetBuffer()) == -1)
+                fprintf(stderr, "%s failed\n", sCommand.GetBuffer());
             nFileCnt++;
             printf(".");
             fflush( stdout );
@@ -621,7 +622,8 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         DirEntry aOldCWD;
         aPath.SetCWD();
 
-        system( sCommand.GetBuffer());
+        if (system(sCommand.GetBuffer()) == -1)
+            fprintf(stderr, "%s failed\n", sCommand.GetBuffer());
         nFileCnt++;
         printf(".");
         //if( bQuiet2 ){ printf("."); }
