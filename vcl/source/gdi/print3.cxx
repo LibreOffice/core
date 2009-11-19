@@ -588,11 +588,12 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         }
         else
         {
-            i_pController->setJobState( view::PrintableState_JOB_FAILED );
-
             mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
             if ( !mnError )
                 mnError = PRINTER_GENERALERROR;
+            i_pController->setJobState( mnError == PRINTER_ABORT
+                                        ? view::PrintableState_JOB_ABORTED
+                                        : view::PrintableState_JOB_FAILED );
             pSVData->mpDefInst->DestroyPrinter( mpPrinter );
             mnCurPage           = 0;
             mnCurPrintPage      = 0;
