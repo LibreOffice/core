@@ -47,9 +47,9 @@ CFLAGS+=-Od
 .ENDIF
 .ENDIF
 
-+.IF "$(COM)"=="GCC"
-+CFLAGS+=-O0
-+.ENDIF
+.IF "$(COM)"=="GCC"
+CFLAGS+=-O0
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
