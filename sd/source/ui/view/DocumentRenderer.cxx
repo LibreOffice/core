@@ -579,6 +579,11 @@ namespace {
 
             vcl::PrinterOptionsHelper::UIControlOptions aBrochureOpt;
             aBrochureOpt.maGroupHint = OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
+                               String( SdResId(_STR_IMPRESS_PRINT_UI_PAGE_SIDES) ), rtl::OUString(),
+                               aBrochureOpt ) );
+
+            // brochure printing
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE) ),
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_HELP) ),
@@ -587,10 +592,6 @@ namespace {
                                 aBrochureOpt
                                 )
                             );
-
-            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
-                               String( SdResId(_STR_IMPRESS_PRINT_UI_PAGE_SIDES) ), rtl::OUString(),
-                               aBrochureOpt ) );
 
             vcl::PrinterOptionsHelper::UIControlOptions
                 aIncludeOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), -1, sal_False );
