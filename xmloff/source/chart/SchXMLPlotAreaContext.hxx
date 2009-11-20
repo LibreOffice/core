@@ -69,6 +69,42 @@ private:
     SchXML3DSceneAttributesHelper();
 };
 
+// ----------------------------------------
+
+class SchXMLPositonAttributesHelper
+{
+public:
+    SchXMLPositonAttributesHelper( SvXMLImport& rImporter );
+    ~SchXMLPositonAttributesHelper();
+
+    bool readPositioningAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    void readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
+
+    bool hasPosSize() const;
+    ::com::sun::star::awt::Rectangle getRectangle() const;
+
+
+private:
+    bool hasSize() const;
+    bool hasPosition() const;
+    ::com::sun::star::awt::Size getSize() const;
+    ::com::sun::star::awt::Point getPosition() const;
+
+    SvXMLImport& m_rImport;
+
+    ::com::sun::star::awt::Point m_aPosition;
+    ::com::sun::star::awt::Size m_aSize;
+
+    bool m_bHasSizeWidth;
+    bool m_bHasSizeHeight;
+    bool m_bHasPositionX;
+    bool m_bHasPositionY;
+    sal_Bool m_bAutoSize;
+    sal_Bool m_bAutoPosition;
+};
+
+// ----------------------------------------
+
 class SchXMLPlotAreaContext : public SvXMLImportContext
 {
 public:
@@ -113,10 +149,8 @@ private:
     GlobalSeriesImportInfo m_aGlobalSeriesImportInfo;
 
     SchXML3DSceneAttributesHelper maSceneImportHelper;
-    ::com::sun::star::awt::Size maSize;
-    ::com::sun::star::awt::Point maPosition;
-    bool mbHasSize;
-    bool mbHasPosition;
+    SchXMLPositonAttributesHelper m_aOuterPositioning;//including axes and axes titles
+    SchXMLPositonAttributesHelper m_aInnerPositioning;//excluding axes and axes titles
     bool mbPercentStacked;
     bool m_bAxisPositionAttributeImported;
     ::rtl::OUString msAutoStyleName;
@@ -215,6 +249,23 @@ public:
                                    rtl::OUString& rAddress );
     virtual ~SchXMLCategoriesContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+};
+
+// ----------------------------------------
+
+class SchXMLExcludingPositionContext : public SvXMLImportContext
+{
+public:
+    SchXMLExcludingPositionContext(
+            SvXMLImport& rImport
+            , sal_uInt16 nPrefix
+            , const rtl::OUString& rLocalName
+            , SchXMLPositonAttributesHelper& rPositioning );
+    virtual ~SchXMLExcludingPositionContext();
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+private:
+    SchXMLPositonAttributesHelper& m_rPositioning;
 };
 
 // ----------------------------------------

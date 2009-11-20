@@ -85,7 +85,7 @@ public:
 
     void SetProgress( sal_Int32 nPercentage );
 
-    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const { return maExportHelper.GetPropertySetMapper(); }
+    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const;
 
     // XServiceInfo ( : SvXMLExport )
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );

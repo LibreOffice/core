@@ -34,7 +34,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -1250,27 +1249,6 @@ void XMLShapeExport::ImpExportChartShape(
     SvXMLAttributeList* pAttrList )
 {
     ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint, pAttrList );
-/*
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        uno::Reference< chart::XChartDocument > xChartDoc;
-        if( !bIsEmptyPresObj )
-            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) >>= xChartDoc;
-
-        if( xChartDoc.is() )
-        {
-            // export chart data if the flag is not set (default)
-            sal_Bool bExportOwnData = ( nFeatures & SEF_EXPORT_NO_CHART_DATA ) == 0;
-            mrExport.GetChartExport()->exportChart( xChartDoc, bExportOwnData );
-        }
-        else
-        {
-            // write chart object (fake for now, replace later)
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_CHART, XML_CHART, sal_True, sal_True);
-        }
-    }
-*/
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -285,6 +285,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 {
+    { XML_NAMESPACE_CHART,  XML_EXCLUDING_POSITION,     XML_TOK_PA_EXCLUDING_POSITION },
     { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
     { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES           },
     { XML_NAMESPACE_CHART,  XML_WALL,                   XML_TOK_PA_WALL             },

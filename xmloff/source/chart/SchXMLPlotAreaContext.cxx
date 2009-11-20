@@ -64,6 +64,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -202,8 +203,8 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         mnSeries( 0 ),
         m_aGlobalSeriesImportInfo( rAllRangeAddressesAvailable ),
         maSceneImportHelper( rImport ),
-        mbHasSize(false),
-        mbHasPosition(false),
+        m_aOuterPositioning( rImport ),
+        m_aInnerPositioning( rImport ),
         mbPercentStacked(false),
         m_bAxisPositionAttributeImported(false),
         m_rXLinkHRefAttributeToIndicateDataProvider(rXLinkHRefAttributeToIndicateDataProvider),
@@ -299,15 +300,6 @@ SchXMLPlotAreaContext::~SchXMLPlotAreaContext()
 
 void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    uno::Any aTransMatrixAny;
-
-    // initialize size and position
-    uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
-    bool bHasSizeWidth = false;
-    bool bHasSizeHeight = false;
-    bool bHasPositionX = false;
-    bool bHasPositionY = false;
-
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPlotAreaAttrTokenMap();
@@ -323,20 +315,10 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
             case XML_TOK_PA_X:
-                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.X, aValue );
-                bHasPositionX = true;
-                break;
             case XML_TOK_PA_Y:
-                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.Y, aValue );
-                bHasPositionY = true;
-                break;
             case XML_TOK_PA_WIDTH:
-                GetImport().GetMM100UnitConverter().convertMeasure( maSize.Width, aValue );
-                bHasSizeWidth = true;
-                break;
             case XML_TOK_PA_HEIGHT:
-                GetImport().GetMM100UnitConverter().convertMeasure( maSize.Height, aValue );
-                bHasSizeHeight = true;
+                m_aOuterPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
                 break;
             case XML_TOK_PA_STYLE_NAME:
                 msAutoStyleName = aValue;
@@ -371,9 +353,6 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 break;
         }
     }
-
-    mbHasSize = bHasSizeWidth && bHasSizeHeight;
-    mbHasPosition = bHasPositionX && bHasPositionY;
 
     if( ! mxNewDoc.is())
     {
@@ -429,14 +408,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")), pPropStyleContext, pStylesCtxt );
 
                     //handle automatic position and size
-                    bool bAutoSize = false;
-                    bool bAutoPosition = false;
-                    SchXMLTools::getPropertyFromContext(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticSize")), pPropStyleContext, pStylesCtxt ) >>= bAutoSize;
-                    SchXMLTools::getPropertyFromContext(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticPosition")), pPropStyleContext, pStylesCtxt ) >>= bAutoPosition;
-                    mbHasSize = mbHasSize && !bAutoSize;
-                    mbHasPosition = mbHasPosition && !bAutoPosition;
+                    m_aOuterPositioning.readAutomaticPositioningProperties( pPropStyleContext, pStylesCtxt );
 
                     //correct default starting angle for old 3D pies
                     if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_0( GetImport().GetModel() ) )
@@ -551,6 +523,12 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
+        case XML_TOK_PA_EXCLUDING_POSITION:
+        {
+            pContext = new SchXMLExcludingPositionContext( GetImport(), nPrefix, rLocalName, m_aInnerPositioning );
+        }
+        break;
+
         case XML_TOK_PA_AXIS:
         {
             bool bAddMissingXAxisForNetCharts = false;
@@ -714,13 +692,14 @@ void SchXMLPlotAreaContext::EndElement()
     }
 
     // set changed size and position after properties (esp. 3d)
-    uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
-    if( xDiaShape.is())
+
+    uno::Reference< chart::XDiagramPositioning > xDiaPos( mxDiagram, uno::UNO_QUERY );
+    if( xDiaPos.is())
     {
-        if( mbHasSize )
-            xDiaShape->setSize( maSize );
-        if( mbHasPosition )
-            xDiaShape->setPosition( maPosition );
+        if( m_aInnerPositioning.hasPosSize() )
+            xDiaPos->setDiagramPositionExcludingAxes( m_aInnerPositioning.getRectangle() );
+        else if( m_aOuterPositioning.hasPosSize() )
+            xDiaPos->setDiagramPositionIncludingAxesAndAxesTitles( m_aOuterPositioning.getRectangle() );
     }
 
     CorrectAxisPositions();
@@ -1675,6 +1654,143 @@ void SchXMLCategoriesContext::StartElement( const uno::Reference< xml::sax::XAtt
             mrAddress = xAttrList->getValueByIndex( i );
             // lcl_ConvertRange( xAttrList->getValueByIndex( i ), xNewDoc );
         }
+    }
+}
+
+// ========================================
+
+SchXMLPositonAttributesHelper::SchXMLPositonAttributesHelper( SvXMLImport& rImporter )
+    : m_rImport( rImporter )
+    , m_aPosition(0,0)
+    , m_aSize(0,0)
+    , m_bHasSizeWidth( false )
+    , m_bHasSizeHeight( false )
+    , m_bHasPositionX( false )
+    , m_bHasPositionY( false )
+    , m_bAutoSize( false )
+    , m_bAutoPosition( false )
+{
+}
+
+SchXMLPositonAttributesHelper::~SchXMLPositonAttributesHelper()
+{
+}
+
+bool SchXMLPositonAttributesHelper::hasSize() const
+{
+    return m_bHasSizeWidth && m_bHasSizeHeight && !m_bAutoSize;
+}
+bool SchXMLPositonAttributesHelper::hasPosition() const
+{
+    return m_bHasPositionX && m_bHasPositionY && !m_bAutoPosition;
+}
+bool SchXMLPositonAttributesHelper::hasPosSize() const
+{
+    return hasPosition() && hasSize();
+}
+awt::Point SchXMLPositonAttributesHelper::getPosition() const
+{
+    return m_aPosition;
+}
+awt::Size SchXMLPositonAttributesHelper::getSize() const
+{
+    return m_aSize;
+}
+awt::Rectangle SchXMLPositonAttributesHelper::getRectangle() const
+{
+    return awt::Rectangle( m_aPosition.X, m_aPosition.Y, m_aSize.Width, m_aSize.Height );
+}
+
+bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    //returns true if the attribute was proccessed
+    bool bReturn = true;
+
+    if( XML_NAMESPACE_SVG == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_X ) )
+        {
+            m_rImport.GetMM100UnitConverter().convertMeasure( m_aPosition.X, rValue );
+            m_bHasPositionX = true;
+        }
+        else if( IsXMLToken( rLocalName, XML_Y ) )
+        {
+            m_rImport.GetMM100UnitConverter().convertMeasure( m_aPosition.Y, rValue );
+            m_bHasPositionY = true;
+        }
+        else if( IsXMLToken( rLocalName, XML_WIDTH ) )
+        {
+            m_rImport.GetMM100UnitConverter().convertMeasure( m_aSize.Width, rValue );
+            m_bHasSizeWidth = true;
+        }
+        else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
+        {
+            m_rImport.GetMM100UnitConverter().convertMeasure( m_aSize.Height, rValue );
+            m_bHasSizeHeight = true;
+        }
+        else
+            bReturn = false;
+    }
+    else if( XML_NAMESPACE_CHART == nPrefix )
+    {
+        //Attribute( XML_NAMESPACE_CHART, XML_PREFER_EXCLUDING_POSITION
+
+        sal_Bool bPreferExcludingPosition = false;
+        if( IsXMLToken( rLocalName, XML_PREFER_EXCLUDING_POSITION ) )
+        {
+            m_rImport.GetMM100UnitConverter().convertBool( bPreferExcludingPosition, rValue );
+            m_bAutoPosition = m_bAutoSize = !bPreferExcludingPosition;
+        }
+        else
+            bReturn = false;
+    }
+    else
+        bReturn = false;
+
+    return bReturn;
+}
+
+
+void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+{
+    if( pPropStyleContext && pStylesCtxt )
+    {
+        //handle automatic position and size
+        SchXMLTools::getPropertyFromContext(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticSize")), pPropStyleContext, pStylesCtxt ) >>= m_bAutoSize;
+        SchXMLTools::getPropertyFromContext(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticPosition")), pPropStyleContext, pStylesCtxt ) >>= m_bAutoPosition;
+    }
+}
+
+// ========================================
+
+SchXMLExcludingPositionContext::SchXMLExcludingPositionContext(
+          SvXMLImport& rImport
+        , sal_uInt16 nPrefix
+        , const rtl::OUString& rLocalName
+        , SchXMLPositonAttributesHelper& rPositioning )
+        : SvXMLImportContext( rImport, nPrefix, rLocalName )
+        , m_rPositioning( rPositioning )
+{
+}
+
+SchXMLExcludingPositionContext::~SchXMLExcludingPositionContext()
+{
+}
+
+void SchXMLExcludingPositionContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    // parse attributes
+    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        rtl::OUString aValue = xAttrList->getValueByIndex( i );
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        m_rPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
     }
 }
 

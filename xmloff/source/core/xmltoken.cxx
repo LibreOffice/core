@@ -3095,6 +3095,9 @@ namespace xmloff { namespace token {
         TOKEN( "ends-with",             XML_ENDS_WITH ),
         TOKEN( "does-not-end-with",     XML_DOES_NOT_END_WITH ),
 
+        TOKEN( "excluding-position",    XML_EXCLUDING_POSITION ),
+        TOKEN( "prefer-excluding-position",    XML_PREFER_EXCLUDING_POSITION ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
