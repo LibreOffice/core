@@ -800,34 +800,48 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const bool bVerticalWritintg(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
-    // check if block text is used (only one of them can be true)
-    const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
-    const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
-
-    // set minimal paper size hor/ver if needed
-    if(bHorizontalIsBlock)
-    {
-        rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
-    }
-    else if(bVerticalIsBlock)
-    {
-        rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
-    }
-
     if(bIsCell)
     {
         // cell text is formated neither like a text object nor like a object
         // text, so use a special setup here
-        // #i106214# To work with an unchangeable PaperSize (CellSize in
-        // this case) Set(Min|Max)AutoPaperSize and SetPaperSize have to be used
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
-        rOutliner.SetMinAutoPaperSize(aAnchorTextSize);
+
+        // #i106214# To work with an unchangeable PaperSize (CellSize in
+        // this case) Set(Min|Max)AutoPaperSize and SetPaperSize have to be used.
+        // #i106214# This was not completely correct; to still measure the real
+        // text height to allow vertical adjust (and vice versa for VerticalWritintg)
+        // only one aspect has to be set, but the other one to zero
+        if(bVerticalWritintg)
+        {
+            // measure the horizontal text size
+            rOutliner.SetMinAutoPaperSize(Size(0, aAnchorTextSize.Height()));
+        }
+        else
+        {
+            // measure the vertical text size
+            rOutliner.SetMinAutoPaperSize(Size(aAnchorTextSize.Width(), 0));
+        }
+
         rOutliner.SetPaperSize(aAnchorTextSize);
         rOutliner.SetUpdateMode(true);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
     }
     else
     {
+        // check if block text is used (only one of them can be true)
+        const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
+        const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
+
+        // set minimal paper size hor/ver if needed
+        if(bHorizontalIsBlock)
+        {
+            rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
+        }
+        else if(bVerticalIsBlock)
+        {
+            rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
+        }
+
         if((rSdrBlockTextPrimitive.getWordWrap() || IsTextFrame()) && !rSdrBlockTextPrimitive.getUnlimitedPage())
         {
             // #i103454# maximal paper size hor/ver needs to be limited to text
