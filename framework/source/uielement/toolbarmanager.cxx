@@ -341,9 +341,11 @@ void ToolBarManager::Destroy()
             delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
     }
 
+    // Hide toolbar as lazy delete can destroy the toolbar much later.
+    m_pToolBar->Hide();
     /* #i99167# removed change for i93173 since there is some weird crash */
         // #i93173# delete toolbar lazily as we can still be in one of its handlers
-        m_pToolBar->doLazyDelete();
+    m_pToolBar->doLazyDelete();
 
     Link aEmpty;
     m_pToolBar->SetSelectHdl( aEmpty );
