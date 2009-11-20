@@ -568,7 +568,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
     {
         if ( nViewId )
             pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-        pFrame->InsertDocument( pDoc );
+        pFrame->InsertDocument_Impl( *pDoc );
         if ( pWindow && !bHidden )
             pWindow->Show();
     }
@@ -599,7 +599,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, Window* pWindow, USHORT 
     {
         if ( nViewId )
             pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-        pFrame->InsertDocument( pDoc );
+        pFrame->InsertDocument_Impl( *pDoc );
     }
 
     return pFrame;
@@ -781,14 +781,10 @@ String SfxTopFrame::GetWindowData()
     return aWinData;
 }
 
-sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
+sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 /* [Beschreibung]
  */
 {
-    // Spezielle Bedingungen testen: nicht im ModalMode!
-    if ( !SfxFrame::InsertDocument( pDoc ) )
-        return sal_False;
-
     SfxObjectShell *pOld = GetCurrentDocument();
 
     // Position und Groesse testen
@@ -797,7 +793,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     // an einer Task aufgerufen hat! )
     const SfxItemSet* pSet = GetItemSet_Impl();
     if ( !pSet )
-        pSet = pDoc->GetMedium()->GetItemSet();
+        pSet = rDoc.GetMedium()->GetItemSet();
     SetItemSet_Impl(0);
 
     SFX_ITEMSET_ARG( pSet, pAreaItem,   SfxRectangleItem,   SID_VIEW_POS_SIZE,  sal_False );    // position and size
@@ -816,30 +812,25 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         pImp->bHidden = pHidItem->GetValue();
 
     if( !pImp->bHidden )
-        pDoc->OwnerLock( sal_True );
+        rDoc.OwnerLock( sal_True );
 
-    if ( pDoc )
+    // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
+    // aus den Dokument geladen werden, z.B. weil InsertDocument_Impl seinerseits
+    // aus LoadWindows_Impl aufgerufen wurde!
+    if ( !pJumpItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
     {
-        // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
-        // aus den Dokument geladen werden, z.B. weil InsertDocument seinerseits
-        // aus LoadWindows_Impl aufgerufen wurde!
-        if ( !pJumpItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
+        if ( rDoc.LoadWindows_Impl( *this ) )
         {
-            if ( pDoc->LoadWindows_Impl( *this ) )
-            {
-                if ( GetCurrentDocument() != pDoc )
-                    // something went wrong during insertion
-                    return sal_False;
-                pDoc->OwnerLock( sal_False );
-                return sal_True;
-            }
+            if ( GetCurrentDocument() != &rDoc )
+                // something went wrong during insertion
+                return sal_False;
+            rDoc.OwnerLock( sal_False );
+            return sal_True;
         }
-
-        UpdateHistory( pDoc );
-        UpdateDescriptor( pDoc );
     }
 
-    SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
+    UpdateDescriptor( &rDoc );
+
     SfxViewFrame *pFrame = GetCurrentViewFrame();
     if ( pFrame )
     {
@@ -858,8 +849,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
         if ( pViewIdItem )
             pFrame->SetViewData_Impl( pViewIdItem->GetValue(), String() );
-        if ( pDoc )
-            pFrame->SetObjectShell_Impl( *pDoc );
+        pFrame->SetObjectShell_Impl( rDoc );
     }
     else
     {
@@ -869,7 +859,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         if ( pPluginMode && pPluginMode->GetValue() != 2 )
             SetInPlace_Impl( TRUE );
 
-        pFrame = new SfxTopViewFrame( this, pDoc, pViewIdItem ? pViewIdItem->GetValue() : 0 );
+        pFrame = new SfxTopViewFrame( this, &rDoc, pViewIdItem ? pViewIdItem->GetValue() : 0 );
         if ( !pFrame->GetViewShell() )
             return sal_False;
 
@@ -892,7 +882,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     if ( pJumpItem )
         aMark = pJumpItem->GetValue();
 
-    if ( pDoc->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
+    if ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
     {
         if ( pViewDataItem )
             pFrame->GetViewShell()->ReadUserData( pViewDataItem->GetValue(), sal_True );
@@ -902,7 +892,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     else
     {
         // Daten setzen, die in FinishedLoading ausgewertet werden
-        MarkData_Impl*& rpMark = pDoc->Get_Impl()->pMarkData;
+        MarkData_Impl*& rpMark = rDoc.Get_Impl()->pMarkData;
         if (!rpMark)
             rpMark = new MarkData_Impl;
         rpMark->pFrame = GetCurrentViewFrame();
@@ -942,7 +932,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     if ( !pImp->bHidden )
     {
-        if ( pDoc->IsHelpDocument() || (pPluginMode && pPluginMode->GetValue() == 2) )
+        if ( rDoc.IsHelpDocument() || (pPluginMode && pPluginMode->GetValue() == 2) )
             pFrame->GetDispatcher()->HideUI( TRUE );
         else
             pFrame->GetDispatcher()->HideUI( FALSE );
@@ -959,7 +949,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         GetWindow().Show();
         if ( !IsInPlace() || (pPluginMode && pPluginMode->GetValue() == 3) )
             pFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
-        pDoc->OwnerLock( sal_False );
+        rDoc.OwnerLock( sal_False );
 
         // Dont show container window! Its done by framework or directly
         // by SfxTopFrame::Create() or SfxViewFrame::ExecView_Impl() ...
@@ -995,7 +985,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
             GetCurrentViewFrame()->Resize(TRUE);
     }
 
-    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), pDoc ) );
+    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), &rDoc ) );
     return sal_True;
 }
 
@@ -1539,11 +1529,8 @@ void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
 
 void SfxTopViewFrame::INetState_Impl( SfxItemSet &rItemSet )
 {
-    if ( !GetFrame()->CanBrowseForward() )
-        rItemSet.DisableItem( SID_BROWSE_FORWARD );
-
-    if ( !GetFrame()->CanBrowseBackward() )
-        rItemSet.DisableItem( SID_BROWSE_BACKWARD );
+    rItemSet.DisableItem( SID_BROWSE_FORWARD );
+    rItemSet.DisableItem( SID_BROWSE_BACKWARD );
 
     // Add/SaveToBookmark bei BASIC-IDE, QUERY-EDITOR etc. disablen
     SfxObjectShell *pDocSh = GetObjectShell();

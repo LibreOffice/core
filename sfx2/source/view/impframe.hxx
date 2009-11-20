@@ -73,7 +73,6 @@ friend class SfxFrame;
     sal_Bool                  bInCancelTransfers : 1;
     sal_Bool                  bOwnsBindings : 1;
     sal_Bool                  bReleasingComponent : 1;
-    sal_Bool                  bFocusLocked : 1;
     sal_Bool                  bInPlace : 1;
     SfxCancelManager*         pCancelMgr;
     SfxCancellable*           pLoadCancellable;
@@ -97,7 +96,6 @@ friend class SfxFrame;
                               bInCancelTransfers( sal_False ),
                               bOwnsBindings( sal_False ),
                               bReleasingComponent( sal_False ),
-                              bFocusLocked( sal_False ),
                               bInPlace( sal_False ),
                               pCancelMgr( 0 ),
                               pLoadCancellable( 0 ),

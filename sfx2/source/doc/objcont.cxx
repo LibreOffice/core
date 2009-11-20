@@ -192,67 +192,6 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
     return pFile;
 }
 
-//REMOVE    FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
-//REMOVE    {
-//REMOVE        SvStorageStreamRef xStream = rStor.OpenStream( DEFINE_CONST_UNICODE( SFX_WINDOWS_STREAM ),
-//REMOVE                                        STREAM_TRUNC | STREAM_STD_READWRITE);
-//REMOVE        if ( !xStream )
-//REMOVE            return FALSE;
-//REMOVE
-//REMOVE        xStream->SetBufferSize(1024);
-//REMOVE        xStream->SetVersion( rStor.GetVersion() );
-//REMOVE
-//REMOVE        // "uber alle Fenster iterieren (aber aktives Window zuletzt)
-//REMOVE        SfxViewFrame *pActFrame = SfxViewFrame::Current();
-//REMOVE        if ( !pActFrame || pActFrame->GetObjectShell() != this )
-//REMOVE            pActFrame = SfxViewFrame::GetFirst(this);
-//REMOVE
-//REMOVE        String aActWinData;
-//REMOVE        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this, TYPE(SfxTopViewFrame) ); pFrame;
-//REMOVE                pFrame = SfxViewFrame::GetNext(*pFrame, this, TYPE(SfxTopViewFrame) ) )
-//REMOVE        {
-//REMOVE            // Bei Dokumenten, die Outplace aktiv sind, kann beim Speichern auch schon die View weg sein!
-//REMOVE            if ( pFrame->GetViewShell() )
-//REMOVE            {
-//REMOVE                SfxTopFrame* pTop = (SfxTopFrame*) pFrame->GetFrame();
-//REMOVE                pTop->GetTopWindow_Impl();
-//REMOVE
-//REMOVE                char cToken = ',';
-//REMOVE                const BOOL bActWin = pActFrame == pFrame;
-//REMOVE                String aUserData;
-//REMOVE                pFrame->GetViewShell()->WriteUserData(aUserData);
-//REMOVE
-//REMOVE                // assemble ini-data
-//REMOVE                String aWinData;
-//REMOVE                aWinData += String::CreateFromInt32( pFrame->GetCurViewId() );
-//REMOVE                aWinData += cToken;
-//REMOVE    /*
-//REMOVE                if ( !pWin || pWin->IsMaximized() )
-//REMOVE                    aWinData += SFX_WINSIZE_MAX;
-//REMOVE                else if ( pWin->IsMinimized() )
-//REMOVE                    aWinData += SFX_WINSIZE_MIN;
-//REMOVE                else
-//REMOVE    */
-//REMOVE                aWinData += cToken;
-//REMOVE                aWinData += aUserData;
-//REMOVE
-//REMOVE                // aktives kennzeichnen
-//REMOVE                aWinData += cToken;
-//REMOVE                aWinData += bActWin ? '1' : '0';
-//REMOVE
-//REMOVE                // je nachdem merken oder abspeichern
-//REMOVE                if ( bActWin  )
-//REMOVE                    aActWinData = aWinData;
-//REMOVE                else
-//REMOVE                    xStream->WriteByteString( aWinData );
-//REMOVE            }
-//REMOVE        }
-//REMOVE
-//REMOVE        // aktives Window hinterher
-//REMOVE        xStream->WriteByteString( aActWinData );
-//REMOVE        return !xStream->GetError();
-//REMOVE    }
-
 //====================================================================
 
 SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame& rPreferedFrame )
@@ -343,7 +282,7 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame& rPreferedFrame )
                 rBind.ENTERREGISTRATIONS();
 
                 // set document into frame
-                pCurrentTargetFrame->InsertDocument( this );
+                pCurrentTargetFrame->InsertDocument_Impl( *this );
 
                 // restart controller updating
                 rBind.LEAVEREGISTRATIONS();
@@ -368,7 +307,7 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame& rPreferedFrame )
             if ( pCurrentTargetFrame )
             {
                 // Frame "ubergeben, allerdings ist der noch leer
-                pCurrentTargetFrame->InsertDocument( this );
+                pCurrentTargetFrame->InsertDocument_Impl( *this );
                 pFrame = pCurrentTargetFrame->GetCurrentViewFrame();
             }
             else

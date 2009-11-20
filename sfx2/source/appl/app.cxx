@@ -495,12 +495,6 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 //      BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
 //                  pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
         BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
-        if ( pAppData_Impl->pViewFrame )
-        {
-            if ( bTaskActivate )
-                // prepare UI for deacivation
-                pAppData_Impl->pViewFrame->GetFrame()->Deactivate_Impl();
-        }
 
         if ( pOldContainerFrame )
         {

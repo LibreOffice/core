@@ -788,7 +788,6 @@ public:
     SAL_DLLPRIVATE sal_uInt16& GetAktViewNo() { return nViewNo; }
     SAL_DLLPRIVATE void PostActivateEvent_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE void SetActivateEvent_Impl(sal_uInt16 );
-//REMOVE        FASTBOOL                    SaveWindows_Impl( SvStorage &rStor ) const;
     SAL_DLLPRIVATE SfxViewFrame* LoadWindows_Impl( SfxTopFrame& rPrefered );
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 

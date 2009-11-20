@@ -855,8 +855,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pCurrView->SetRestoreView_Impl( bRestoreView );
                         //if( pView != this || !xNewObj.Is() )
                         {
-                            SfxFrame *pFrame = pCurrView->GetFrame();
-                            pFrame->InsertDocument(xNewObj.Is() ? xNewObj : xOldObj );
+                            SfxTopFrame* pFrame = dynamic_cast< SfxTopFrame* >( pCurrView->GetFrame() );
+                            OSL_ENSURE( pFrame, "An SfxFrame which is no SfxTopFrame?!" );
+                            if ( pFrame )
+                                pFrame->InsertDocument_Impl( *xNewObj );
                         }
                     }
 
@@ -1109,8 +1111,6 @@ void SfxViewFrame::SetObjectShell_Impl
     xObjSh = &rObjSh;
     if ( xObjSh.Is() && xObjSh->IsPreview() )
         SetQuietMode_Impl( sal_True );
-
-    GetFrame()->SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
 
     // Modulshell einf"ugen
     SfxModule* pModule = xObjSh->GetModule();
@@ -1623,7 +1623,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 //------------------------------------------------------------------------
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 {
-    pImp->pFrame->DocumentInserted( pObjSh );
     pImp->bInCtor = sal_True;
     pImp->pParentViewFrame = 0;
     pImp->bResizeInToOut = sal_True;
@@ -1654,7 +1653,6 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     if ( xObjSh.Is() && xObjSh->IsPreview() )
         SetQuietMode_Impl( sal_True );
 
-    GetFrame()->SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
     if ( pObjSh )
     {
         pDispatcher->Push( *SFX_APP() );
@@ -2282,27 +2280,6 @@ SfxViewShell* SfxViewFrame::CreateView_Impl( sal_uInt16 nViewId )
 }
 
 //-------------------------------------------------------------------------
-SfxViewFrame* SfxViewFrame::SearchViewFrame( SfxViewFrame *pViewFrame,
-    const String& rName )
-{
-    if ( !pViewFrame )
-        pViewFrame = SfxViewFrame::Current();
-    if ( !pViewFrame )
-        return NULL;
-    SfxFrame *pFrame = pViewFrame->GetFrame()->SearchFrame( rName );
-    if ( !pFrame )
-        return NULL;
-
-    // Der Frame ist selbst ein ViewFrame oder enth"alt einen
-/*
-    pViewFrame = PTR_CAST( SfxViewFrame, pFrame );
-    if ( !pViewFrame && pFrame->GetChildFrameCount() )
-        pViewFrame = PTR_CAST( SfxViewFrame, pFrame->GetChildFrame(0) );
-*/
-    return pFrame->GetCurrentViewFrame();
-}
-
-//-------------------------------------------------------------------------
 
 void SfxViewFrame::SetQuietMode_Impl( sal_Bool bOn )
 {
@@ -2736,9 +2713,9 @@ void SfxViewFrame::ExecView_Impl
                 {
                     Reference < XFrame > xFrame;
                     pFrameItem->GetValue() >>= xFrame;
-                    SfxFrame* pFrame = SfxTopFrame::Create( xFrame );
+                    SfxTopFrame* pFrame = SfxTopFrame::Create( xFrame );
                     pMed->GetItemSet()->ClearItem( SID_HIDDEN );
-                    pFrame->InsertDocument( GetObjectShell() );
+                    pFrame->InsertDocument_Impl( *GetObjectShell() );
                     if ( !bHidden )
                         xFrame->getContainerWindow()->setVisible( sal_True );
                 }

@@ -165,7 +165,6 @@ public:
                             SfxViewFrame(
                                 const SfxViewFrame &, SfxBindings &, SfxFrame *pFrame);
 
-    static SfxViewFrame*    SearchViewFrame( SfxViewFrame*, const String& );
     static void             SetViewFrame( SfxViewFrame* );
     static SfxViewFrame*    CreateViewFrame( SfxObjectShell& rDoc,
                                                  USHORT nViewId=0,
@@ -247,8 +246,6 @@ public:
                             { return GetFrame()->GetFrameType(); }
     SfxFrame*               GetTopFrame() const
                             { return GetFrame()->GetTopFrame(); }
-    SfxFrame*               SearchFrame( const String& rName, SfxMedium* pMedium = 0)
-                            { return GetFrame()->SearchFrame( rName, pMedium ); }
     void                    GetTargetList( TargetList& rList ) const
                             { GetFrame()->GetTargetList( rList ); }
     void                    CancelTransfers()

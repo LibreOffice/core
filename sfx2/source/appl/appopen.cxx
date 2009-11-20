@@ -711,7 +711,9 @@ const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
 
                 if ( pFrame->GetCurrentDocument() != xDoc )
                 {
-                    if ( pFrame->InsertDocument( xDoc ) )
+                    SfxTopFrame* pTopFrame = dynamic_cast< SfxTopFrame* >( pFrame );
+                    OSL_ENSURE( pTopFrame, "An SfxFrame which is no SfxTopFrame?!" );
+                    if ( pTopFrame && pTopFrame->InsertDocument_Impl( *xDoc ) )
                         rReq.SetReturnValue( SfxFrameItem( 0, pFrame ) );
                     else
                         xDoc->DoClose();

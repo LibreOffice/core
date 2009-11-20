@@ -386,13 +386,19 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         {
             if ( xModel == pDoc->GetModel() )
             {
+                SfxTopFrame* pTopFrame = dynamic_cast< SfxTopFrame* >( pTargetFrame );
+                OSL_ENSURE( pTopFrame, "SfxFrameLoader_Impl::load: An SfxFrame which is no SfxTopFrame?!" );
+                if ( !pTopFrame )
+                    return sal_False;
+
                 pTargetFrame->SetItemSet_Impl( &aSet );
 
                 aDescriptor.remove( "Model" );
                 aDescriptor.remove( "URL" );
 
                 xModel->attachResource( sURL, aDescriptor.getPropertyValues() );
-                return pTargetFrame->InsertDocument( pDoc );
+
+                return pTopFrame->InsertDocument_Impl( *pDoc );
             }
         }
 
@@ -538,7 +544,10 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         wFrame = pTargetFrame;
         aSet.Put( SfxFrameItem( SID_DOCFRAME, pTargetFrame ) );
         pTargetFrame->SetItemSet_Impl( &aSet );
-        if ( pTargetFrame->InsertDocument( pDoc ) )
+
+        SfxTopFrame* pTopFrame = dynamic_cast< SfxTopFrame* >( pTargetFrame );
+        OSL_ENSURE( pTopFrame, "SfxFrameLoader_Impl::load: An SfxFrame which is no SfxTopFrame?!" );
+        if ( pTopFrame && pTopFrame->InsertDocument_Impl( *pDoc ) )
         {
             pTargetFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
             String aURL = pDoc->GetMedium()->GetName();

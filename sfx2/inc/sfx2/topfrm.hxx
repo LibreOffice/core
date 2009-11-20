@@ -66,17 +66,16 @@ public:
 
     virtual Window&     GetWindow() const;
     virtual BOOL        Close();
-    virtual BOOL        InsertDocument( SfxObjectShell *pDoc );
     String              GetWindowData();
 
     void                SetPresentationMode( BOOL bSet );
     SystemWindow* GetSystemWindow() const;
 
 //#if 0 // _SOLAR__PRIVATE
+    SAL_DLLPRIVATE BOOL InsertDocument_Impl( SfxObjectShell& rDoc );
     SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
     SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
     SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;
-    SAL_DLLPRIVATE BOOL InsertDocument_Impl( SfxObjectShell *pDoc, USHORT nViewId=0 );
     SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
     SAL_DLLPRIVATE void CheckMenuCloser_Impl( MenuBar* pMenubar );
 //#endif
