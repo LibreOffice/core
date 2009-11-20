@@ -134,7 +134,8 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const ::rtl::OUSt
         if ( aOrgArgs.has( "StatusIndicator" ) )
             aNewArgs.put( "StatusIndicator", aOrgArgs.get( "StatusIndicator" ) );
 
-        ::rtl::OUString sType = xDetect->queryTypeByDescriptor( aNewArgs.getPropertyValues(), sal_True );
+        Sequence< PropertyValue > aQueryArgs( aNewArgs.getPropertyValues() );
+        ::rtl::OUString sType = xDetect->queryTypeByDescriptor( aQueryArgs, sal_True );
         if ( sType.getLength() )
         {
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( sType );
@@ -161,7 +162,6 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const ::rtl::OUSt
 // --------------------------------------------------------------------------------------------------------------------
 const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( const ::rtl::OUString& _rServiceName ) const
 {
-    const SfxFilter* pFilter = NULL;
     try
     {
         ::comphelper::NamedValueCollection aQuery;
