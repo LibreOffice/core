@@ -231,6 +231,11 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
         break;
     }
 
+    if (mpFib->get_nFib() >= 0xD9)
+    {
+        mpFibRgFcLcb2000.reset(new WW8FibRgFcLcb2000(*mpFib));
+    }
+
     if (mpTableStream.get() == NULL)
         throw ExceptionNotFound("Table stream not found.");
 
@@ -969,6 +974,25 @@ WW8SED * WW8DocumentImpl::getSED(const CpAndFc & rCpAndFc) const
     return pResult;
 }
 
+writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTplcs() const
+{
+    writerfilter::Reference<Table>::Pointer_t pResult;
+
+    if (mpFibRgFcLcb2000.get() != NULL &&
+        mpFibRgFcLcb2000->get_fcSttbRgtplc() != 0 &&
+        mpFibRgFcLcb2000->get_lcbSttbRgtplc() != 0)
+    {
+        WW8SttbRgtplc * pSttbRgtplc =
+        new WW8SttbRgtplc(*mpTableStream,
+                          mpFibRgFcLcb2000->get_fcSttbRgtplc(),
+                          mpFibRgFcLcb2000->get_lcbSttbRgtplc());
+
+        pResult = writerfilter::Reference<Table>::Pointer_t(pSttbRgtplc);
+    }
+
+    return pResult;
+}
+
 writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
 {
     writerfilter::Reference<Table>::Pointer_t pResult;
@@ -1621,6 +1645,13 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             (new WW8Fib(*mpFib));
         rStream.props(pFib);
 
+        if (mpFibRgFcLcb2000.get() != NULL)
+        {
+            writerfilter::Reference<Properties>::Pointer_t pFibRgFcLcb2000
+            (new WW8FibRgFcLcb2000(*mpFibRgFcLcb2000));
+            rStream.props(pFibRgFcLcb2000);
+        }
+
 #if 0
         if (mpTextBoxStories.get() != NULL)
         {
@@ -1688,6 +1719,10 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         }
 #endif
 
+        writerfilter::Reference<Table>::Pointer_t pSttbRgtplc = getListTplcs();
+
+        if (pSttbRgtplc.get() != NULL)
+            rStream.table(NS_rtf::LN_SttbRgtplc, pSttbRgtplc);
 
         writerfilter::Reference<Table>::Pointer_t pListTable = getListTable();
 

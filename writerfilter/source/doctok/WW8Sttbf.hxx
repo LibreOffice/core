@@ -32,6 +32,7 @@
 #define INCLUDED_WW8_STTBF_HXX
 
 #include <WW8StructBase.hxx>
+#include <WW8ResourceModelImpl.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
@@ -102,5 +103,33 @@ public:
     */
     WW8StructBase::Pointer_t getExtraData(sal_uInt32 nPos);
 };
+
+class WW8SttbTableResource : public ::writerfilter::Reference<Table>
+{
+    WW8Sttbf::Pointer_t mpSttbf;
+
+public:
+    WW8SttbTableResource(WW8Sttbf::Pointer_t pSttbf);
+    virtual ~WW8SttbTableResource();
+
+    void resolve(Table & rTable);
+
+    string getType() const;
+};
+
+class WW8StringProperty : public ::writerfilter::Reference<Properties>
+{
+    sal_uInt32 mnId;
+    WW8StringValue::Pointer_t mpValue;
+
+public:
+    WW8StringProperty(sal_uInt32 nId, WW8StringValue::Pointer_t pValue);
+    virtual ~WW8StringProperty();
+
+    void resolve(Properties & rProperties);
+
+    string getType() const;
+};
+
 }}
 #endif // INCLUDED_WW8_STTBF

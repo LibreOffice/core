@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include <resources.hxx>
+#include <WW8ResourceModelImpl.hxx>
 
 namespace writerfilter {
 namespace doctok {
