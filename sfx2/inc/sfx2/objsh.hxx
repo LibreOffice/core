@@ -789,7 +789,7 @@ public:
     SAL_DLLPRIVATE void PostActivateEvent_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE void SetActivateEvent_Impl(sal_uInt16 );
 //REMOVE        FASTBOOL                    SaveWindows_Impl( SvStorage &rStor ) const;
-    SAL_DLLPRIVATE SfxViewFrame* LoadWindows_Impl( SfxTopFrame *pPrefered = 0 );
+    SAL_DLLPRIVATE SfxViewFrame* LoadWindows_Impl( SfxTopFrame& rPrefered );
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items

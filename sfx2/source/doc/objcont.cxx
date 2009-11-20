@@ -50,8 +50,9 @@
 #include <svtools/eitem.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/ctloptions.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <svtools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
@@ -254,10 +255,10 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
 
 //====================================================================
 
-SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
+SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame& rPreferedFrame )
 {
-    DBG_ASSERT( pPreferedFrame, "Call without preferred Frame is not supported anymore!" );
-    if ( pImp->bLoadingWindows || !pPreferedFrame )
+
+    if ( pImp->bLoadingWindows )
         return NULL;
 
     DBG_ASSERT( GetMedium(), "A Medium should exist here!");
@@ -266,9 +267,9 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
 
     // get correct mode
     SFX_APP();
-    SfxViewFrame *pPrefered = pPreferedFrame ? pPreferedFrame->GetCurrentViewFrame() : 0;
+    SfxViewFrame* pPreferedViewFrame = rPreferedFrame.GetCurrentViewFrame();
     SvtSaveOptions aOpt;
-    BOOL bLoadDocWins = aOpt.IsSaveDocWins() && !pPrefered;
+    BOOL bLoadDocWins = aOpt.IsSaveDocWins() && !pPreferedViewFrame;
 
     // try to get viewdata information for XML format
     REFERENCE < XVIEWDATASUPPLIER > xViewDataSupplier( GetModel(), ::com::sun::star::uno::UNO_QUERY );
@@ -292,11 +293,10 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     sal_Int32 nView = 0;
 
     // get saved information for all views
+    SfxTopFrame* pCurrentTargetFrame = &rPreferedFrame;
     while ( TRUE )
     {
         USHORT nViewId = 0;
-        FASTBOOL bMaximized=FALSE;
-        String aPosSize;
         String aUserData;                   // used in the binary format
         SEQUENCE < PROPERTYVALUE > aSeq;    // used in the XML format
 
@@ -312,18 +312,12 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
         ::com::sun::star::uno::Any aAny = xViewData->getByIndex( nView++ );
         if ( aAny >>= aSeq )
         {
-            for ( sal_Int32 n=0; n<aSeq.getLength(); n++ )
+            ::comphelper::NamedValueCollection aNamedUserData( aSeq );
+            ::rtl::OUString sViewId = aNamedUserData.getOrDefault( "ViewId", ::rtl::OUString() );
+            if ( sViewId.getLength() )
             {
-                const PROPERTYVALUE& rProp = aSeq[n];
-                if ( rProp.Name.compareToAscii("ViewId") == COMPARE_EQUAL )
-                {
-                    ::rtl::OUString aId;
-                    rProp.Value >>= aId;
-                    String aTmp( aId );
-                    aTmp.Erase( 0, 4 );  // format is like in "view3"
-                    nViewId = (USHORT) aTmp.ToInt32();
-                    break;
-                }
+                sViewId = sViewId.copy( 4 );    // format is like in "view3"
+                nViewId = USHORT( sViewId.toInt32() );
             }
         }
 
@@ -332,26 +326,12 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
         if ( !bLoadDocWins && !bActive )
             break;
 
-        // check for minimized/maximized/size
-        if ( aPosSize.EqualsAscii( "max" ) )
-            bMaximized = TRUE;
-        else if ( aPosSize.EqualsAscii( "min" ) )
-        {
-            bMaximized = TRUE;
-            bActive = FALSE;
-        }
-        else
-            bMaximized = FALSE;
-
-        Point aPt;
-        Size aSz;
-
         pSet->ClearItem( SID_USER_DATA );
         SfxViewFrame *pFrame = 0;
-        if ( pPrefered )
+        if ( pPreferedViewFrame )
         {
             // use the frame from the arguments, but don't set a window size
-            pFrame = pPrefered;
+            pFrame = pPreferedViewFrame;
             if ( pFrame->GetViewShell() || !pFrame->GetObjectShell() )
             {
                 pSet->ClearItem( SID_VIEW_POS_SIZE );
@@ -363,7 +343,7 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
                 rBind.ENTERREGISTRATIONS();
 
                 // set document into frame
-                pPreferedFrame->InsertDocument( this );
+                pCurrentTargetFrame->InsertDocument( this );
 
                 // restart controller updating
                 rBind.LEAVEREGISTRATIONS();
@@ -380,17 +360,16 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
             {
                 // open in the background
                 pSet->Put( SfxUInt16Item( SID_VIEW_ZOOM_MODE, 0 ) );
-                if ( !bMaximized )
-                    pSet->Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle( aPt, aSz ) ) );
+                pSet->Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle() ) );
             }
 
             pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
 
-            if ( pPreferedFrame )
+            if ( pCurrentTargetFrame )
             {
                 // Frame "ubergeben, allerdings ist der noch leer
-                pPreferedFrame->InsertDocument( this );
-                pFrame = pPreferedFrame->GetCurrentViewFrame();
+                pCurrentTargetFrame->InsertDocument( this );
+                pFrame = pCurrentTargetFrame->GetCurrentViewFrame();
             }
             else
             {
@@ -416,25 +395,25 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
         }
 
         // perhaps there are more windows to load
-        pPreferedFrame = NULL;
+        pCurrentTargetFrame = NULL;
 
         if ( bActive )
             pActiveFrame = pFrame;
 
-        if( pPrefered || !bLoadDocWins )
+        if( pPreferedViewFrame || !bLoadDocWins )
             // load only active window
             break;
     }
 
     if ( pActiveFrame )
     {
-        if ( !pPrefered )
+        if ( !pPreferedViewFrame )
             // activate frame
             pActiveFrame->MakeActive_Impl( TRUE );
     }
 
     pImp->bLoadingWindows = FALSE;
-    return pPrefered && bLoaded ? pPrefered : pActiveFrame;
+    return pPreferedViewFrame && bLoaded ? pPreferedViewFrame : pActiveFrame;
 }
 
 //====================================================================

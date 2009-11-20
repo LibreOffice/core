@@ -1012,7 +1012,7 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
     }
     else if ( GetViewShell() )
     {
-        // der SW hat eigenes Undo an der ::com::sun::star::sdbcx::View
+        // der SW hat eigenes Undo an der View
         const SfxPoolItem *pRet = GetViewShell()->ExecuteSlot( rReq );
         if ( pRet )
             bOK = ((SfxBoolItem*)pRet)->GetValue();
@@ -1034,7 +1034,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
     if ( !pShUndoMgr )
     {
-        // der SW hat eigenes Undo an der ::com::sun::star::sdbcx::View
+        // der SW hat eigenes Undo an der View
         SfxWhichIter aIter( rSet );
         SfxViewShell *pViewSh = GetViewShell();
         if( !pViewSh ) return;
@@ -1133,7 +1133,7 @@ void SfxViewFrame::SetObjectShell_Impl
         GetDocNumber_Impl();
     }
 
-    // ::com::sun::star::sdbcx::View erzeugen
+    // View erzeugen
     if ( bDefaultView )
         SetRestoreView_Impl( sal_False );
 
@@ -2235,7 +2235,7 @@ SfxViewShell* SfxViewFrame::CreateView_Impl( sal_uInt16 nViewId )
 
     LockAdjustPosSizePixel();
 
-    // passende ::com::sun::star::sdbcx::View-Factory suchen
+    // passende View-Factory suchen
     SfxObjectFactory &rDocFact = GetObjectShell()->GetFactory();
     sal_uInt16 nNewNo = nViewId ? USHRT_MAX : 0;
     for ( sal_uInt16 nNo = 0;
@@ -2371,16 +2371,16 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 (
     sal_uInt16  nViewId,        /*  > 0
-                                Registrierungs-Id der ::com::sun::star::sdbcx::View, auf die umge-
+                                Registrierungs-Id der View, auf die umge-
                                 schaltet werden soll, bzw. die erstmalig
                                 erzeugt werden soll.
 
                                 == 0
-                                Es soll die Default-::com::sun::star::sdbcx::View verwendet werden. */
+                                Es soll die Default-View verwendet werden. */
 
     sal_Bool    bIsIndex        /*  sal_True
                                 'nViewId' ist keine Registrations-Id sondern
-                                ein ::com::sun::star::sdbcx::Index in die f"ur die in diesem
+                                ein Index in die f"ur die in diesem
                                 <SfxViewFrame> dargestellte <SfxObjectShell>.
                                 */
 )

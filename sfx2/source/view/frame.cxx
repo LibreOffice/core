@@ -683,7 +683,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 {
     // Beim InsertDocument wird der Descriptor des Frames aktualisiert
     // und sein ItemSet neu initialisiert. Alle Daten, die f"ur ein sp"ateres
-    // Restaurieren der ::com::sun::star::sdbcx::View n"otig sind, sind damit festgehalten.
+    // Restaurieren der View n"otig sind, sind damit festgehalten.
     // Soll das Dokument ersetzt werden, wird durch GetViewData_Impl (s.o.)
     // die neueste Information hinzugef"ugt. Alles zusammen wird dann in der
     // Browse-History gesichert. Beim Aktivieren eines solchen FramePickEntry
@@ -1265,7 +1265,7 @@ sal_Bool SfxFrame::HasComponent() const
     return pImp->xFrame;
 }
 
-void SfxFrame::SetFrameInterface_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
+void SfxFrame::SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
 {
     pImp->xFrame = rFrame;
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;

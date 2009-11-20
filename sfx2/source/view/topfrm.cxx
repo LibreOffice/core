@@ -800,34 +800,14 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         pSet = pDoc->GetMedium()->GetItemSet();
     SetItemSet_Impl(0);
 
-    // Position und Gr"o\se
-    SFX_ITEMSET_ARG(
-        pSet, pAreaItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
-    // View-Id
-    SFX_ITEMSET_ARG(
-        pSet, pViewIdItem, SfxUInt16Item, SID_VIEW_ID, sal_False );
-    // Zoom
-    SFX_ITEMSET_ARG(
-        pSet, pModeItem, SfxUInt16Item, SID_VIEW_ZOOM_MODE, sal_False );
-    // Hidden
-    SFX_ITEMSET_ARG(
-        pSet, pHidItem, SfxBoolItem,    SID_HIDDEN, sal_False);
-    // ViewDaten
-    SFX_ITEMSET_ARG(
-        pSet, pViewDataItem, SfxStringItem, SID_USER_DATA, sal_False );
-    // ViewOnly
-    SFX_ITEMSET_ARG(
-        pSet, pEditItem, SfxBoolItem, SID_VIEWONLY, sal_False);
-    // InPlace (Hack)
-    SFX_ITEMSET_ARG(
-        pSet, pPluginItem, SfxUInt16Item, SID_PLUGIN_MODE, sal_False );
-
-    // Plugin (external InPlace)
-    SFX_ITEMSET_ARG(
-        pSet, pPluginMode, SfxUInt16Item, SID_PLUGIN_MODE, sal_False);
-    // Jump (GotoBookmark)
-    SFX_ITEMSET_ARG(
-        pSet, pJumpItem, SfxStringItem, SID_JUMPMARK, sal_False);
+    SFX_ITEMSET_ARG( pSet, pAreaItem,   SfxRectangleItem,   SID_VIEW_POS_SIZE,  sal_False );    // position and size
+    SFX_ITEMSET_ARG( pSet, pViewIdItem, SfxUInt16Item,      SID_VIEW_ID,        sal_False );    // view ID
+    SFX_ITEMSET_ARG( pSet, pModeItem,   SfxUInt16Item,      SID_VIEW_ZOOM_MODE, sal_False );    // zoom
+    SFX_ITEMSET_ARG( pSet, pHidItem,    SfxBoolItem,        SID_HIDDEN,         sal_False );    // hidden
+    SFX_ITEMSET_ARG( pSet, pViewDataItem, SfxStringItem,    SID_USER_DATA,      sal_False );    // view data
+    SFX_ITEMSET_ARG( pSet, pEditItem,   SfxBoolItem,        SID_VIEWONLY,       sal_False );    // view only
+    SFX_ITEMSET_ARG( pSet, pPluginMode, SfxUInt16Item,      SID_PLUGIN_MODE,    sal_False );    // plugin (external inplace)
+    SFX_ITEMSET_ARG( pSet, pJumpItem,   SfxStringItem,      SID_JUMPMARK,       sal_False );    // jump (GotoBookmark)
 
     if ( pEditItem  && pEditItem->GetValue() )
         SetMenuBarOn_Impl( FALSE );
@@ -838,36 +818,34 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     if( !pImp->bHidden )
         pDoc->OwnerLock( sal_True );
 
-    // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
-    // aus den Dokument geladen werden, z.B. weil InsertDocument seinerseits
-    // aus LoadWindows_Impl aufgerufen wurde!
-    if ( !pJumpItem && !pPluginMode && pDoc && !pAreaItem && !pViewIdItem && !pModeItem &&
-            pDoc->LoadWindows_Impl( this ) )
-    {
-        if ( GetCurrentDocument() != pDoc )
-            // something went wrong during insertion
-            return sal_False;
-        pDoc->OwnerLock( sal_False );
-        return sal_True;
-    }
-
     if ( pDoc )
     {
+        // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
+        // aus den Dokument geladen werden, z.B. weil InsertDocument seinerseits
+        // aus LoadWindows_Impl aufgerufen wurde!
+        if ( !pJumpItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
+        {
+            if ( pDoc->LoadWindows_Impl( *this ) )
+            {
+                if ( GetCurrentDocument() != pDoc )
+                    // something went wrong during insertion
+                    return sal_False;
+                pDoc->OwnerLock( sal_False );
+                return sal_True;
+            }
+        }
+
         UpdateHistory( pDoc );
         UpdateDescriptor( pDoc );
     }
 
     SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
-    sal_Bool bBrowsing = sal_True;
     SfxViewFrame *pFrame = GetCurrentViewFrame();
     if ( pFrame )
     {
         sal_Bool bChildActivated = sal_False;
         if ( pFrame->GetActiveChildFrame_Impl() && pFrame->GetActiveChildFrame_Impl() == SfxViewFrame::Current() )
         {
-//            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >  xFrames( GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
-//            if ( xFrames.is() )
-//                xFrames->setActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
             pFrame->SetActiveChildFrame_Impl(0);
             SfxViewFrame::SetViewFrame( pFrame );
             bChildActivated = sal_True;
@@ -888,15 +866,14 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         // 1: internal embedded object
         // 2: external embedded object
         // 3: OLE server
-        if ( pPluginItem && pPluginItem->GetValue() != 2 )
+        if ( pPluginMode && pPluginMode->GetValue() != 2 )
             SetInPlace_Impl( TRUE );
 
-        bBrowsing = sal_False;
         pFrame = new SfxTopViewFrame( this, pDoc, pViewIdItem ? pViewIdItem->GetValue() : 0 );
         if ( !pFrame->GetViewShell() )
             return sal_False;
 
-        if ( pPluginItem && pPluginItem->GetValue() == 1 )
+        if ( pPluginMode && pPluginMode->GetValue() == 1 )
         {
             pFrame->ForceOuterResize_Impl( FALSE );
             pFrame->GetBindings().HidePopups(TRUE);
@@ -912,9 +889,8 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     }
 
     String aMark;
-    SFX_ITEMSET_ARG( pSet, pMarkItem, SfxStringItem, SID_JUMPMARK, FALSE );
-    if ( pMarkItem )
-        aMark = pMarkItem->GetValue();
+    if ( pJumpItem )
+        aMark = pJumpItem->GetValue();
 
     if ( pDoc->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
     {
@@ -966,7 +942,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     if ( !pImp->bHidden )
     {
-        if ( pDoc->IsHelpDocument() || (pPluginItem && pPluginItem->GetValue() == 2) )
+        if ( pDoc->IsHelpDocument() || (pPluginMode && pPluginMode->GetValue() == 2) )
             pFrame->GetDispatcher()->HideUI( TRUE );
         else
             pFrame->GetDispatcher()->HideUI( FALSE );
@@ -981,7 +957,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
             pFrame->GetDispatcher()->Update_Impl();
         pFrame->Show();
         GetWindow().Show();
-        if ( !IsInPlace() || (pPluginItem && pPluginItem->GetValue() == 3) )
+        if ( !IsInPlace() || (pPluginMode && pPluginMode->GetValue() == 3) )
             pFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
         pDoc->OwnerLock( sal_False );
 
@@ -993,13 +969,13 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
             pFrame->UnlockAdjustPosSizePixel();
             // force resize for OLE server to fix layout problems of writer and math
             // see i53651
-            if ( pPluginItem && pPluginItem->GetValue() == 3 )
+            if ( pPluginMode && pPluginMode->GetValue() == 3 )
                 pFrame->Resize(TRUE);
         }
     }
     else
     {
-        DBG_ASSERT( !IsInPlace() && !pPluginMode && !pPluginItem, "Special modes not compatible with hidden mode!" );
+        DBG_ASSERT( !IsInPlace() && !pPluginMode, "Special modes not compatible with hidden mode!" );
         GetWindow().Show();
     }
 

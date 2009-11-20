@@ -31,71 +31,40 @@
 #ifndef _SFX_FRMLOAD_HXX
 #define _SFX_FRMLOAD_HXX
 
+/** === begin UNO includes === **/
 #include <com/sun/star/frame/XLoadEventListener.hpp>
-#include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+/** === end UNO includes === **/
+
+#include <rtl/ustring.hxx>
+#include <tools/debug.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
+#include <comphelper/componentcontext.hxx>
 
-class SfxObjectFactory;
+class SfxFilter;
 class SfxFilterMatcher;
-class LoadEnvironment_Impl;
-class SfxMedium;
-
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace uno
-            {
-                class Any;
-            }
-            namespace lang
-            {
-                class XMultiServiceFactory;
-            }
-            namespace frame
-            {
-                class XFrame;
-            }
-            namespace beans
-            {
-                struct PropertyValue;
-            }
-        }
-    }
-}
+class SfxFrame;
 
 #include <sfx2/sfxuno.hxx>
 
-#define REFERENCE ::com::sun::star::uno::Reference
-#define SEQUENCE ::com::sun::star::uno::Sequence
-#define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
-
 class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::lang::XServiceInfo >
 {
-    REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
-    REFERENCE < ::com::sun::star::frame::XLoadEventListener > xListener;
-    String                  aFilterName;
-    SfxMedium*              pMedium;
-
-    DECL_LINK( LoadDone_Impl, void* );
+    ::comphelper::ComponentContext  m_aContext;
 
 public:
-                            SfxFrameLoader_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+                            SfxFrameLoader_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
     virtual                 ~SfxFrameLoader_Impl();
 
     SFX_DECL_XSERVICEINFO
@@ -103,8 +72,34 @@ public:
     //----------------------------------------------------------------------------------
     // XSynchronousFrameLoader
     //----------------------------------------------------------------------------------
-    virtual sal_Bool SAL_CALL load( const SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor, const REFERENCE< ::com::sun::star::frame::XFrame >& xFrame ) throw( RUNTIME_EXCEPTION );
-    virtual void SAL_CALL cancel() throw( RUNTIME_EXCEPTION );
+    virtual sal_Bool SAL_CALL load( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL cancel() throw( ::com::sun::star::uno::RuntimeException );
+
+private:
+    const SfxFilter*    impl_getFilterFromServiceName_nothrow( const ::rtl::OUString& _rServiceName ) const;
+    ::rtl::OUString     impl_askForFilter_nothrow(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler,
+                            const ::rtl::OUString& _rDocumentURL
+                        ) const;
+
+    const SfxFilter*    impl_detectFilterForURL(
+                            const ::rtl::OUString& _rURL,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs,
+                            const SfxFilterMatcher& rMatcher
+                        ) const;
+
+    sal_Bool            impl_createNewDocWithSlotParam(
+                            const sal_uInt16 _nSlotID,
+                            SfxFrame* _pFrame
+                        );
+
+    sal_Bool            impl_createNewDoc(
+                            const SfxItemSet& _rSet,
+                            SfxFrame* _pFrame,
+                            const ::rtl::OUString& _rFactoryURL
+                        );
+
+    void                impl_ensureValidFrame_throw( const SfxFrame* _pFrame );
 };
 
 #endif

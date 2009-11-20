@@ -224,7 +224,7 @@ public:
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE sal_Bool DoClose_Impl();
-    SAL_DLLPRIVATE void SetFrameInterface_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    SAL_DLLPRIVATE void SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl( sal_Bool bSet );
     SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
                             GetInterceptor_Impl();
