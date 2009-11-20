@@ -40,6 +40,8 @@
 #include "ChartTypeHelper.hxx"
 #include "CommonConverters.hxx"
 #include "servicenames_charttypes.hxx"
+#include "ChartModelHelper.hxx"
+#include "RelativePositionHelper.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -50,6 +52,8 @@
 #include <com/sun/star/chart2/InterpretedData.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 
 #include <rtl/math.hxx>
@@ -1430,6 +1434,162 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
     }
 
     return nResult;
+}
+
+//static
+DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Reference<
+                chart2::XDiagram > & xDiagram )
+{
+    DiagramPositioningMode eMode = DiagramPositioningMode_AUTO;
+    uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY );
+    if( xDiaProps.is() )
+    {
+        RelativePosition aRelPos;
+        RelativeSize aRelSize;
+        if( (xDiaProps->getPropertyValue(C2U("RelativePosition")) >>= aRelPos ) &&
+            (xDiaProps->getPropertyValue(C2U("RelativeSize")) >>= aRelSize ) )
+        {
+            bool bPosSizeExcludeAxes=false;
+            xDiaProps->getPropertyValue(C2U("PosSizeExcludeAxes")) >>= bPosSizeExcludeAxes;
+            if( bPosSizeExcludeAxes )
+                eMode = DiagramPositioningMode_EXCLUDING;
+            else
+                eMode = DiagramPositioningMode_INCLUDING;
+        }
+    }
+    return eMode;
+}
+
+//static
+bool DiagramHelper::setDiagramPositioningMode( const uno::Reference<
+                chart2::XDiagram > & xDiagram, DiagramPositioningMode eMode )
+{
+    bool bChanged = false;
+    uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY );
+    if( !xDiaProps.is() )
+        return bChanged;
+
+    bool bOld = false;
+    xDiaProps->getPropertyValue(C2U("PosSizeExcludeAxes")) >>= bOld;
+    bool bNew = bOld;
+
+    if( eMode == DiagramPositioningMode_AUTO )
+    {
+
+        RelativePosition aPos;
+        if( (xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aPos) )
+            bChanged = true;
+        if( !bChanged )
+        {
+            RelativeSize aSize;
+            if( (xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aSize) )
+                bChanged = true;
+        }
+
+        if( bChanged )
+        {
+            xDiaProps->setPropertyValue(C2U("RelativePosition"), uno::Any() );
+            xDiaProps->setPropertyValue(C2U("RelativeSize"), uno::Any() );
+        }
+    }
+    else if( eMode == DiagramPositioningMode_EXCLUDING )
+    {
+        bNew = true;
+        bChanged = (bNew!=bOld);
+        if(bChanged)
+            xDiaProps->setPropertyValue(C2U("PosSizeExcludeAxes"), uno::makeAny(bNew) );
+    }
+    else if( eMode == DiagramPositioningMode_INCLUDING)
+    {
+        bNew = false;
+        bChanged = (bNew!=bOld);
+        if(bChanged)
+            xDiaProps->setPropertyValue(C2U("PosSizeExcludeAxes"), uno::makeAny(bNew) );
+    }
+    return bChanged;
+}
+
+void lcl_ensureRange0to1( double& rValue )
+{
+    if(rValue<0.0)
+        rValue=0.0;
+    if(rValue>1.0)
+        rValue=1.0;
+}
+
+//static
+bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
+        const awt::Rectangle& rPosRect /*100th mm*/ )
+{
+    bool bChanged = false;
+    awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
+    uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
+    if( !xDiaProps.is() )
+        return bChanged;
+
+    RelativePosition aOldPos;
+    RelativeSize aOldSize;
+    xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aOldPos;
+    xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aOldSize;
+
+    RelativePosition aNewPos;
+    aNewPos.Anchor = drawing::Alignment_TOP_LEFT;
+    aNewPos.Primary = double(rPosRect.X)/double(aPageSize.Width);
+    aNewPos.Secondary = double(rPosRect.Y)/double(aPageSize.Height);
+
+    chart2::RelativeSize aNewSize;
+    aNewSize.Primary = double(rPosRect.Width)/double(aPageSize.Width);
+    aNewSize.Secondary = double(rPosRect.Height)/double(aPageSize.Height);
+
+    lcl_ensureRange0to1( aNewPos.Primary );
+    lcl_ensureRange0to1( aNewPos.Secondary );
+    lcl_ensureRange0to1( aNewSize.Primary );
+    lcl_ensureRange0to1( aNewSize.Secondary );
+    if( (aNewPos.Primary + aNewSize.Primary) > 1.0 )
+        aNewPos.Primary = 1.0 - aNewSize.Primary;
+    if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
+        aNewPos.Secondary = 1.0 - aNewSize.Secondary;
+
+    xDiaProps->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aNewPos) );
+    xDiaProps->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aNewSize) );
+
+    bChanged = (aOldPos.Anchor!=aNewPos.Anchor) ||
+        (aOldPos.Primary!=aNewPos.Primary) ||
+        (aOldPos.Secondary!=aNewPos.Secondary) ||
+        (aOldSize.Primary!=aNewSize.Primary) ||
+        (aOldSize.Secondary!=aNewSize.Secondary);
+    return bChanged;
+}
+
+//static
+awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference< frame::XModel >& xChartModel )
+{
+    awt::Rectangle aRet(-1,-1,-1,-1);
+
+    uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
+    if( !xDiaProps.is() )
+        return aRet;
+
+    awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
+
+    RelativePosition aRelPos;
+    RelativeSize aRelSize;
+    xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aRelPos;
+    xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aRelSize;
+
+    awt::Size aAbsSize(
+        aRelSize.Primary * aPageSize.Width,
+        aRelSize.Secondary * aPageSize.Height );
+
+    awt::Point aAbsPos(
+        static_cast< sal_Int32 >( aRelPos.Primary * aPageSize.Width ),
+        static_cast< sal_Int32 >( aRelPos.Secondary * aPageSize.Height ));
+
+    awt::Point aAbsPosLeftTop = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject( aAbsPos, aAbsSize, aRelPos.Anchor );
+
+    aRet = awt::Rectangle(aAbsPosLeftTop.X, aAbsPosLeftTop.Y, aAbsSize.Width, aAbsSize.Height );
+
+    return aRet;
 }
 
 } //  namespace chart

@@ -52,6 +52,8 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 // header for class SvxShape
 #include <svx/unoshape.hxx>
+// header for GetSdrObjectFromXShape
+#include <svx/unoapi.hxx>
 // header for class E3dScene
 #include <svx/scene3d.hxx>
 #include <rtl/math.hxx>
@@ -182,6 +184,8 @@ void VDiagram::createShapes_2d()
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes = m_pShapeFactory->createGroup2D(m_xLogicTarget);
     m_xOuterGroupShape = uno::Reference<drawing::XShape>( xOuterGroup_Shapes, uno::UNO_QUERY );
 
+    uno::Reference< drawing::XShapes > xGroupForWall( m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,C2U("PlotAreaExcludingAxes")) );
+
     //create independent group shape as container for datapoints and such things
     {
         uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,C2U("testonly;CooContainer=XXX_CID"));
@@ -198,8 +202,7 @@ void VDiagram::createShapes_2d()
             "com.sun.star.drawing.RectangleShape" ) ), uno::UNO_QUERY );
         //m_xWall2D->setPosition(m_aAvailablePosIncludingAxes);
         //m_xWall2D->setSize(m_aAvailableSizeIncludingAxes);
-        uno::Reference< drawing::XShapes > xShapes( m_xCoordinateRegionShape, uno::UNO_QUERY );
-        xShapes->add(m_xWall2D);
+        xGroupForWall->add(m_xWall2D);
         uno::Reference< beans::XPropertySet > xProp( m_xWall2D, uno::UNO_QUERY );
         if( xProp.is())
         {
@@ -521,6 +524,7 @@ void VDiagram::createShapes_3d()
     m_xOuterGroupShape = uno::Reference< drawing::XShape >(
             m_xShapeFactory->createInstance( C2U(
             "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
+    ShapeFactory::setShapeName( m_xOuterGroupShape, C2U("PlotAreaExcludingAxes") );
     m_xLogicTarget->add(m_xOuterGroupShape);
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =

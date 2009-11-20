@@ -124,6 +124,11 @@ String STR_PAGE_POSITIONING
     Text [ en-US ] = "Positioning" ;
 };
 
+String STR_PAGE_POSITIONANDSIZE
+{
+    Text [ en-US ] = "Position and Size" ;
+};
+
 // String STR_PAGE_STATISTICS
 // {
 //  Text [ en-US ] = "Statistics" ;

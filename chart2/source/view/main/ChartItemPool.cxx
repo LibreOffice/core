@@ -41,6 +41,7 @@
 #include <svx/sizeitem.hxx>
 // header for class SfxStringItem
 #include <svtools/stritem.hxx>
+#include <svtools/rectitem.hxx>
 //SfxIntegerListItem
 #include <svtools/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
@@ -69,6 +70,13 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_DATADESCR_NO_PERCENTVALUE    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_NO_PERCENTVALUE);
 
     ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SvxChartLegendPosItem( CHLEGEND_RIGHT, SCHATTR_LEGEND_POS );
+    ppPoolDefaults[SCHATTR_DIAGRAM_POS_MODE         - SCHATTR_START] = new SfxInt32Item( SCHATTR_DIAGRAM_POS_MODE,0 );
+    ppPoolDefaults[SCHATTR_DIAGRAM_RECT_TO_USE      - SCHATTR_START] = new SfxRectangleItem( SCHATTR_DIAGRAM_RECT_TO_USE, Rectangle(0,0,100,100) );
+    ppPoolDefaults[SCHATTR_DIAGRAM_RECT_INCLUDING   - SCHATTR_START] = new SfxRectangleItem( SCHATTR_DIAGRAM_RECT_INCLUDING, Rectangle(0,0,100,100) );
+    ppPoolDefaults[SCHATTR_DIAGRAM_RECT_EXCLUDING   - SCHATTR_START] = new SfxRectangleItem( SCHATTR_DIAGRAM_RECT_EXCLUDING, Rectangle(0,0,100,100) );
+    ppPoolDefaults[SCHATTR_DIAGRAM_RECT_MAX         - SCHATTR_START] = new SfxRectangleItem( SCHATTR_DIAGRAM_RECT_MAX, Rectangle(0,0,100,100) );
+    ppPoolDefaults[SCHATTR_DIAGRAM_UI_SCALE         - SCHATTR_START] = new SvxDoubleItem(1.0, SCHATTR_DIAGRAM_UI_SCALE);
+
 //  ppPoolDefaults[SCHATTR_TEXT_ORIENT              - SCHATTR_START] = new SvxChartTextOrientItem;
     ppPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,FALSE);
     ppPoolDefaults[SCHATTR_TEXT_ORDER               - SCHATTR_START] = new SvxChartTextOrderItem(CHTXTORDER_SIDEBYSIDE, SCHATTR_TEXT_ORDER);

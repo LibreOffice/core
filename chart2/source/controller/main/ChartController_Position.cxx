@@ -133,16 +133,27 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
     if( !aCID.getLength() )
         return;
 
-    awt::Size aSelectedSize;
-    ExplicitValueProvider* pProvider( ExplicitValueProvider::getExplicitValueProvider( m_xChartView ) );
-    if( pProvider )
-        aSelectedSize = ToSize( ( pProvider->getRectangleOfObject( aCID ) ) );
+    ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
 
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
-            ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
+            ObjectNameProvider::getName( eObjectType )),
         m_xUndoManager, m_aModel->getModel() );
+
+    if( OBJECTTYPE_DIAGRAM == eObjectType || OBJECTTYPE_DIAGRAM_WALL == eObjectType )
+    {
+        rtl::OUString aDiaCID = ObjectIdentifier::createClassifiedIdentifierForParticle( ObjectIdentifier::createParticleForDiagram( ChartModelHelper::findDiagram( m_aModel->getModel() ), m_aModel->getModel() ) );
+        bool bSuccess = executeDlg_ObjectProperties_withoutUndoGuard( aDiaCID, false );
+        if( bSuccess )
+            aUndoGuard.commitAction();
+        return;
+    }
+
+    awt::Size aSelectedSize;
+    ExplicitValueProvider* pProvider( ExplicitValueProvider::getExplicitValueProvider( m_xChartView ) );
+    if( pProvider )
+        aSelectedSize = ToSize( ( pProvider->getRectangleOfObject( aCID ) ) );
 
     SfxAbstractTabDialog * pDlg = NULL;
     try

@@ -267,7 +267,8 @@ public:
 
     static VSeriesPlotter* createSeriesPlotter( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XChartType >& xChartTypeModel
-                                , sal_Int32 nDimensionCount );
+                                , sal_Int32 nDimensionCount
+                                , bool bExcludingPositioning = false /*for pie and donut charts labels and exploded segments are excluded from the given size*/);
 
     sal_Int32 getPointCount() const;
 
@@ -297,6 +298,7 @@ public:
     virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
 
     bool WantToPlotInFrontOfAxisLine();
+    virtual bool shouldSnapRectToUsedArea();
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

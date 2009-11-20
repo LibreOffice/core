@@ -71,6 +71,7 @@ SLOFILES=   	\
                 $(SLO)$/tp_RangeChooser.obj \
                 $(SLO)$/tp_Wizard_TitlesAndObjects.obj \
                 $(SLO)$/tp_Location.obj \
+                $(SLO)$/tp_DiagramPosition.obj \
                 $(SLO)$/tp_AxisLabel.obj \
                 $(SLO)$/tp_AxisPositions.obj \
                 $(SLO)$/tp_DataLabel.obj \
@@ -121,6 +122,7 @@ SRC1FILES=		\
                 tp_RangeChooser.src \
                 tp_Wizard_TitlesAndObjects.src \
                 tp_Location.src \
+                tp_DiagramPosition.src \
                 tp_AxisLabel.src \
                 tp_AxisPositions.src \
                 tp_DataLabel.src \

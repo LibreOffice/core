@@ -71,6 +71,8 @@ public:
     virtual ::com::sun::star::awt::Rectangle
         getRectangleOfObject( const rtl::OUString& rObjectCID, bool bSnapRect=false )=0;
 
+    virtual ::com::sun::star::awt::Rectangle getDiagramRectangleExcludingAxes()=0;
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         getShapeForCID( const rtl::OUString& rObjectCID )=0;
 
@@ -80,12 +82,12 @@ public:
     static ExplicitValueProvider* getExplicitValueProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xChartView );
 
     static ::com::sun::star::awt::Rectangle
-        calculateDiagramPositionAndSizeInclusiveTitle(
+        calculateDiagramPositionAndSizeIncludingTitle(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel >& xChartModel
             , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface >& xChartView
-            , const ::com::sun::star::awt::Rectangle& rExclusivePositionAndSize );
+            , const ::com::sun::star::awt::Rectangle& rExcludingPositionAndSize );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
               const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis

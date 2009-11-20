@@ -90,27 +90,6 @@ const USHORT nGridWhichPairs[] =
     0
 };
 
-const USHORT nChartWhichPairs[] =
-{
-    SCHATTR_STYLE_START,SCHATTR_STYLE_END,          //    59 -    68  sch/schattr.hxx
-    0
-};
-
-const USHORT nDiagramAreaWhichPairs[] =
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
-    0
-};
-
-const USHORT nAreaAndChartWhichPairs[] =   // pairs for chart AND area
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
-    SCHATTR_STYLE_START,SCHATTR_STYLE_END,          //    59 -    68  sch/schattr.hxx
-    0
-};
-
 const USHORT nLegendWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
@@ -118,6 +97,16 @@ const USHORT nLegendWhichPairs[] =
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     CHARACTER_WHICHPAIRS,
     SCHATTR_LEGEND_START, SCHATTR_LEGEND_END,       //     3 -     3  sch/schattr.hxx
+    0
+};
+
+const USHORT nDiagramWhichPairs[] =
+{
+    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
+    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
+    SCHATTR_DIAGRAM_START, SCHATTR_DIAGRAM_END,
+    SID_ATTR_TRANSFORM_POS_Y, SID_ATTR_TRANSFORM_POS_Y,
+    SID_ATTR_TRANSFORM_WIDTH, SID_ATTR_TRANSFORM_HEIGHT,
     0
 };
 

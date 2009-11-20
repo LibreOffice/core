@@ -188,8 +188,11 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
             return false;
 
         //add axis title sizes to the diagram size
-        aNewPositionAndSize = ExplicitValueProvider::calculateDiagramPositionAndSizeInclusiveTitle(
-            xChartModel, xChartView, rNewPositionAndSize );
+        bool bPosSizeExcludeAxes = false;
+        xObjectProp->getPropertyValue( C2U( "PosSizeExcludeAxes" ) ) >>= bPosSizeExcludeAxes;
+        if( !bPosSizeExcludeAxes )
+            aNewPositionAndSize = ExplicitValueProvider::calculateDiagramPositionAndSizeIncludingTitle(
+                xChartModel, xChartView, rNewPositionAndSize );
     }
     return moveObject( eObjectType, xObjectProp, aNewPositionAndSize, rPageRectangle );
 }

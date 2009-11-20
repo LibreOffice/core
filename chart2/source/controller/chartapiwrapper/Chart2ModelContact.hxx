@@ -96,15 +96,30 @@ public:
      */
     ::com::sun::star::awt::Size GetPageSize() const;
 
-    /** Returns the size of the diagram object in logic coordinates inclusive
+    /** Returns the size of the diagram object in logic coordinates including
         the space reserved for axis titles.
      */
-    ::com::sun::star::awt::Size GetDiagramSizeInclusive() const;
+    ::com::sun::star::awt::Size GetDiagramSizeIncludingTitle() const;
 
-    /** Returns the position of the diagram in logic coordinates inclusive
+    /** Returns the position of the diagram in logic coordinates including
         the space reserved for axis titles.
      */
-    ::com::sun::star::awt::Point GetDiagramPositionInclusive() const;
+    ::com::sun::star::awt::Point GetDiagramPositionIncludingTitle() const;
+
+    /** Returns the position and size of the diagram in logic coordinates (100th mm) including
+        the space used for axes including axes titles.
+     */
+    ::com::sun::star::awt::Rectangle GetDiagramRectangleIncludingTitle() const;
+
+    /** Returns the position and size of the diagram in logic coordinates (100th mm) including
+        the space used for axes excluding axes titles.
+     */
+    ::com::sun::star::awt::Rectangle GetDiagramRectangleIncludingAxes() const;
+
+    /** Returns the position and size of the diagram in logic coordinates (100th mm) excluding
+        the space used for axes (inner plot area).
+     */
+    ::com::sun::star::awt::Rectangle GetDiagramRectangleExcludingAxes() const;
 
     /** Returns the size of the object in logic coordinates.
      */
@@ -137,7 +152,6 @@ public:
 
 private: //methods
     ExplicitValueProvider* getExplicitValueProvider() const;
-    ::com::sun::star::awt::Rectangle GetDiagramRectangleInclusive() const;
 
 public: //member
     ::com::sun::star::uno::Reference<

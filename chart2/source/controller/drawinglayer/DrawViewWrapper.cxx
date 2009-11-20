@@ -33,6 +33,7 @@
 #include "DrawViewWrapper.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "ConfigurationAccess.hxx"
+#include "macros.hxx"
 
 // header for class SdrPage
 #include <svx/svdpage.hxx>
@@ -223,6 +224,14 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 
     if( pRet )
     {
+        //ignore some special shapes
+        rtl::OUString aShapeName = pRet->GetName();
+        if( aShapeName.match(C2U("PlotAreaIncludingAxes")) || aShapeName.match(C2U("PlotAreaExcludingAxes")) )
+        {
+            pRet->SetMarkProtect( true );
+            return getHitObject( rPnt );
+        }
+
         //3d objects need a special treatment
         //because the simple PickObj method is not accurate in this case for performance reasons
         E3dObject* pE3d = dynamic_cast< E3dObject* >(pRet);

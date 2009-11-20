@@ -124,7 +124,7 @@ public:
                     ::com::sun::star::frame::XModel >& xChartModel
         , sal_Int32 nSubIndex = -1 );//-1: main grid, 0: first subgrid etc
 
-    SAL_DLLPRIVATE static rtl::OUString createParticleForDiagram(
+    static rtl::OUString createParticleForDiagram(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XDiagram >& xDiagram
         , const ::com::sun::star::uno::Reference<

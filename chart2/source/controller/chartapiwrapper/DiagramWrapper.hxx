@@ -33,12 +33,13 @@
 #include "WrappedPropertySet.hxx"
 #include "ServiceMacros.hxx"
 #include "DiagramHelper.hxx"
-#include <cppuhelper/implbase11.hxx>
+#include <cppuhelper/implbase12.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XDiagramProvider.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XChartTypeManager.hpp>
@@ -64,7 +65,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class DiagramWrapper : public ::cppu::ImplInheritanceHelper11<
+class DiagramWrapper : public ::cppu::ImplInheritanceHelper12<
                       WrappedPropertySet
                      , ::com::sun::star::chart::XDiagram
                      , ::com::sun::star::chart::XAxisZSupplier
@@ -76,6 +77,7 @@ class DiagramWrapper : public ::cppu::ImplInheritanceHelper11<
                      , ::com::sun::star::lang::XServiceInfo
                         , ::com::sun::star::lang::XComponent
 //                      , ::com::sun::star::lang::XEventListener
+                     , ::com::sun::star::chart::XDiagramPositioning
                      , ::com::sun::star::chart2::XDiagramProvider
                      , ::com::sun::star::chart::XSecondAxisTitleSupplier
                     >
@@ -211,6 +213,18 @@ public:
 //     // ____ XEventListener ____
 //     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
 //         throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XDiagramPositioning ____
+
+    virtual void SAL_CALL setAutomaticDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isAutomaticDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDiagramPositionExcludingAxes( const ::com::sun::star::awt::Rectangle& PositionRect ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isExcludingDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL calculateDiagramPositionExcludingAxes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDiagramPositionIncludingAxes( const ::com::sun::star::awt::Rectangle& PositionRect ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL calculateDiagramPositionIncludingAxes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDiagramPositionIncludingAxesAndAxesTitles( const ::com::sun::star::awt::Rectangle& PositionRect ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL calculateDiagramPositionIncludingAxesAndAxesTitles(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDiagramProvider ____
     virtual ::com::sun::star::uno::Reference<

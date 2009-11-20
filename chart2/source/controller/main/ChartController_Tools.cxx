@@ -273,6 +273,7 @@ void ChartController::executeDispatch_NewArrangement()
             Reference< beans::XPropertyState > xState( xDiagram, uno::UNO_QUERY_THROW );
             xState->setPropertyToDefault( C2U("RelativeSize"));
             xState->setPropertyToDefault( C2U("RelativePosition"));
+            xState->setPropertyToDefault( C2U("PosSizeExcludeAxes"));
 
             // 3d rotation
             ThreeDHelper::set3DSettingsToDefault( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ) );

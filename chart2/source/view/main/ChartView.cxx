@@ -170,6 +170,7 @@ ChartView::ChartView(
     , m_nScaleYNumerator(1)
     , m_nScaleYDenominator(1)
     , m_bSdrViewIsInEditMode(sal_False)
+    , m_aResultingDiagramRectangleExcludingAxes(0,0,0,0)
 {
 }
 
@@ -678,7 +679,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             if(nT==0)
                 m_bShiftXAxisTicks = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
 
-            VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount );
+            bool bExcludingPositioning = DiagramPositioningMode_EXCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram );
+            VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount, bExcludingPositioning );
             if( !pPlotter )
                 continue;
             m_aSeriesPlotterList.push_back( pPlotter );
@@ -1161,7 +1163,7 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
 namespace
 {
 
-bool lcl_resizeAfterCompleteCreation( const uno::Reference< XDiagram >& xDiagram )
+bool lcl_IsPieOrDonut( const uno::Reference< XDiagram >& xDiagram )
 {
     //special treatment for pie charts
     //the size is checked after complete creation to get the datalabels into the given space
@@ -1319,16 +1321,23 @@ sal_Int16 lcl_getDefaultWritingModeFromPool( ::boost::shared_ptr< DrawModelWrapp
 } //end anonymous namespace
 
 //------------ create complete diagram shape (inclusive axis and series)
-void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
+
+awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
             , const uno::Reference< drawing::XShapes>& xDiagramPlusAxes_Shapes
             , const awt::Point& rAvailablePos
             , const awt::Size& rAvailableSize
-            , const awt::Size& rPageSize )
+            , const awt::Size& rPageSize
+            , bool bUseFixedInnerSize
+            , const uno::Reference< drawing::XShape>& xDiagram_MarkHandles /*needs to be resized to fit the result*/
+            )
 {
+    //return the used rectangle
+    awt::Rectangle aUsedOuterRect( rAvailablePos.X, rAvailablePos.Y, 0, 0 );
+
 //     sal_Int32 nDiagramIndex = 0;//todo if more than one diagam is supported
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
     if( !xDiagram.is())
-        return;
+        return aUsedOuterRect;
 
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
     if(!nDimensionCount)
@@ -1384,7 +1393,8 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
         aVDiagram.init(xDiagramPlusAxes_Shapes,xDiagramPlusAxes_Shapes,m_xShapeFactory);
         aVDiagram.createShapes(rAvailablePos,rAvailableSize);
         xSeriesTargetInFrontOfAxis = aVDiagram.getCoordinateRegion();
-        aVDiagram.reduceToMimimumSize();
+        if( !bUseFixedInnerSize )
+            aVDiagram.reduceToMimimumSize();
     }
 
     uno::Reference< drawing::XShapes > xTextTargetShapes( ShapeFactory(m_xShapeFactory).createGroup2D(xDiagramPlusAxes_Shapes) );
@@ -1405,19 +1415,21 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
 
     //calculate resulting size respecting axis label layout and fontscaling
 
+    uno::Reference< drawing::XShape > xBoundingShape( xDiagramPlusAxes_Shapes, uno::UNO_QUERY );
+    ::basegfx::B2IRectangle aConsumedOuterRect;
+
     //use first coosys only so far; todo: calculate for more than one coosys if we have more in future
     //todo: this is just a workaround at the moment for pie and donut labels
-    if( !lcl_resizeAfterCompleteCreation(xDiagram) && rVCooSysList.size() > 0 )
+    bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
+    if( !bIsPieOrDonut && rVCooSysList.size() > 0 )
     {
-        uno::Reference< drawing::XShape > xBoundingShape( xDiagramPlusAxes_Shapes, uno::UNO_QUERY );
-
-        ::basegfx::B2IRectangle aFirstConsumedOuterRect( ShapeFactory::getRectangleOfShape(xBoundingShape) );
-
         VCoordinateSystem* pVCooSys = rVCooSysList[0];
         pVCooSys->createMaximumAxesLabels();
 
-        ::basegfx::B2IRectangle aConsumedOuterRect( ShapeFactory::getRectangleOfShape(xBoundingShape) );
-        ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.adjustInnerSize( aConsumedOuterRect ) );
+        aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
+        ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
+        if( !bUseFixedInnerSize )
+            aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
 
         pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
             createTransformationSceneToScreen( aNewInnerRect ) ));
@@ -1440,13 +1452,13 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
                 bLessSpaceConsumedThanExpected = true;
         }
 
-        if( bLessSpaceConsumedThanExpected )
+        if( bLessSpaceConsumedThanExpected && !bUseFixedInnerSize )
         {
             aVDiagram.adjustInnerSize( aConsumedOuterRect );
             pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
                 createTransformationSceneToScreen( aVDiagram.getCurrentRectangle() ) ));
-            pVCooSys->updatePositions();
         }
+        pVCooSys->updatePositions();//todo: logically this belongs to the condition above, but it seems also to be neccessary to give the axes group shapes the right bounding rects for hit test -  probably caused by bug i106183 -> check again if fixed
     }
 
     //create axes and grids for the final size
@@ -1476,7 +1488,7 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
         else
         {
             xSeriesTarget = xSeriesTargetBehindAxis;
-            DBG_ASSERT( !lcl_resizeAfterCompleteCreation(xDiagram), "not implemented yet! - during a complete recreation this shape is destroyed so no series can be created anymore" );
+            DBG_ASSERT( !bIsPieOrDonut, "not implemented yet! - during a complete recreation this shape is destroyed so no series can be created anymore" );
         }
         pSeriesPlotter->initPlotter( xSeriesTarget,xTextTargetShapes,m_xShapeFactory,aCID );
         pSeriesPlotter->setPageReferenceSize( rPageSize );
@@ -1495,15 +1507,15 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
         m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
     }
 
-    //recreate with corrected sizes if requested
-    if( lcl_resizeAfterCompleteCreation(xDiagram) )
+    //recreate all with corrected sizes if requested
+    if( bIsPieOrDonut )
     {
         m_bPointsWereSkipped = false;
 
-        uno::Reference< drawing::XShape > xBoundingShape( xDiagramPlusAxes_Shapes, uno::UNO_QUERY );
-        ::basegfx::B2IRectangle aConsumedOuterRect( ShapeFactory::getRectangleOfShape(xBoundingShape) );
-
-        ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.adjustInnerSize( aConsumedOuterRect ) );
+        aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
+        ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
+        if( !bUseFixedInnerSize )
+            aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
 
         for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
         {
@@ -1560,6 +1572,53 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
             pSeriesPlotter->rearrangeLabelToAvoidOverlapIfRequested( rPageSize );
         }
     }
+
+    if( bUseFixedInnerSize )
+    {
+        //if( !bIsPieOrDonut )
+        //    aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
+        aUsedOuterRect = awt::Rectangle( aConsumedOuterRect.getMinX(), aConsumedOuterRect.getMinY(), aConsumedOuterRect.getWidth(), aConsumedOuterRect.getHeight() );
+    }
+    else
+        aUsedOuterRect = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
+
+    bool bSnapRectToUsedArea = false;
+    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    {
+        VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
+        bSnapRectToUsedArea = pSeriesPlotter->shouldSnapRectToUsedArea();
+        if(bSnapRectToUsedArea)
+            break;
+    }
+    if(bSnapRectToUsedArea)
+    {
+        if( bUseFixedInnerSize )
+            m_aResultingDiagramRectangleExcludingAxes = getRectangleOfObject( C2U("PlotAreaExcludingAxes") );
+        else
+        {
+            ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
+            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( aConsumedInnerRect.getMinX(), aConsumedInnerRect.getMinY(), aConsumedInnerRect.getWidth(), aConsumedInnerRect.getHeight() );
+        }
+    }
+    else
+    {
+        m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
+    }
+
+    if( xDiagram_MarkHandles.is() )
+    {
+        awt::Point aPos(rAvailablePos);
+        awt::Size  aSize(rAvailableSize);
+        if( bUseFixedInnerSize )
+        {
+            aPos = awt::Point( m_aResultingDiagramRectangleExcludingAxes.X, m_aResultingDiagramRectangleExcludingAxes.Y );
+            aSize = awt::Size( m_aResultingDiagramRectangleExcludingAxes.Width, m_aResultingDiagramRectangleExcludingAxes.Height );
+        }
+        xDiagram_MarkHandles->setPosition( aPos );
+        xDiagram_MarkHandles->setSize( aSize );
+    }
+
+    return aUsedOuterRect;
 }
 
 //-------------------------------------------------------------
@@ -1617,6 +1676,12 @@ uno::Reference< drawing::XShape > ChartView::getShapeForCID( const rtl::OUString
     return 0;
 }
 
+awt::Rectangle ChartView::getDiagramRectangleExcludingAxes()
+{
+    impl_updateView();
+    return m_aResultingDiagramRectangleExcludingAxes;
+}
+
 awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID, bool bSnapRect )
 {
     impl_updateView();
@@ -1640,7 +1705,10 @@ awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID,
                     SdrObjList* pRootList = pRootSdrObject->GetSubList();
                     if( pRootList )
                     {
-                        SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( C2U("MarkHandles"), pRootList );
+                        OUString aShapeName = C2U("MarkHandles");
+                        if( eObjectType == OBJECTTYPE_DIAGRAM )
+                            aShapeName = C2U("PlotAreaIncludingAxes");
+                        SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( aShapeName, pRootList );
                         if( pShape )
                             xShape = uno::Reference< drawing::XShape >( pShape->getUnoShape(), uno::UNO_QUERY);
                     }
@@ -1927,12 +1995,12 @@ sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabe
 }
 
 //static
-awt::Rectangle ExplicitValueProvider::calculateDiagramPositionAndSizeInclusiveTitle(
+awt::Rectangle ExplicitValueProvider::calculateDiagramPositionAndSizeIncludingTitle(
             const Reference< frame::XModel >& xChartModel
             , const Reference< uno::XInterface >& xChartView
-            , const awt::Rectangle& rExclusivePositionAndSize )
+            , const awt::Rectangle& rExcludingPositionAndSize )
 {
-    awt::Rectangle aRet(rExclusivePositionAndSize);
+    awt::Rectangle aRet(rExcludingPositionAndSize);
 
     //add axis title sizes to the diagram size
     uno::Reference< chart2::XTitle > xTitle_Height( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, xChartModel ) );
@@ -2005,8 +2073,11 @@ bool getAvailablePosAndSizeForDiagram(
     , const awt::Size & rPageSize
     , const uno::Reference< XDiagram > & xDiagram
     , VTitle* pXTitle, VTitle* pYTitle
-    , VTitle* pSecondXTitle, VTitle* pSecondYTitle )
+    , VTitle* pSecondXTitle, VTitle* pSecondYTitle
+    , bool& bUseFixedInnerSize )
 {
+    bUseFixedInnerSize = false;
+
     //@todo: we need a size dependent on the axis labels
     awt::Rectangle aRemainingSpace(rSpaceLeft);
     {
@@ -2023,6 +2094,9 @@ bool getAvailablePosAndSizeForDiagram(
     uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
 
     bool bMakeRoomForTitle = false;
+    bool bPosSizeExcludeAxes = false;
+    if( xProp.is() )
+        xProp->getPropertyValue( C2U( "PosSizeExcludeAxes" ) ) >>= bPosSizeExcludeAxes;
 
     //size:
     ::com::sun::star::chart2::RelativeSize aRelativeSize;
@@ -2030,7 +2104,8 @@ bool getAvailablePosAndSizeForDiagram(
     {
         rOutAvailableDiagramSize.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);
         rOutAvailableDiagramSize.Width = static_cast<sal_Int32>(aRelativeSize.Primary*rPageSize.Width);
-        bMakeRoomForTitle = true;
+        bMakeRoomForTitle = !bPosSizeExcludeAxes;
+        bUseFixedInnerSize = bPosSizeExcludeAxes;
     }
     else
         rOutAvailableDiagramSize = awt::Size(aRemainingSpace.Width,aRemainingSpace.Height);
@@ -2048,7 +2123,8 @@ bool getAvailablePosAndSizeForDiagram(
         rOutPos = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
                     awt::Point(static_cast<sal_Int32>(fX),static_cast<sal_Int32>(fY))
                     , rOutAvailableDiagramSize, aRelativePosition.Anchor );
-        bMakeRoomForTitle = true;
+        bMakeRoomForTitle = !bPosSizeExcludeAxes;
+        bUseFixedInnerSize = bPosSizeExcludeAxes;
     }
     else
         rOutPos = awt::Point(aRemainingSpace.X,aRemainingSpace.Y);
@@ -2147,6 +2223,19 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
     default:
         break;
     }
+
+    sal_Int32 nMaxY = rPageSize.Height - aTitleSize.Height/2;
+    sal_Int32 nMaxX = rPageSize.Width - aTitleSize.Width/2;
+    sal_Int32 nMinX = aTitleSize.Width/2;
+    sal_Int32 nMinY = aTitleSize.Height/2;
+    if( aNewPosition.Y > nMaxY )
+        aNewPosition.Y = nMaxY;
+    if( aNewPosition.X > nMaxX )
+        aNewPosition.X = nMaxX;
+    if( aNewPosition.Y < nMinY )
+        aNewPosition.Y = nMinY;
+    if( aNewPosition.X < nMinX )
+        aNewPosition.X = nMinX;
 
     pVTitle->changePosition( aNewPosition );
 }
@@ -2421,6 +2510,7 @@ void ChartView::createShapes()
     if( impl_AddInDrawsAllByItself() )
         return;
 
+    m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle(0,0,0,0);
     impl_deleteCoordinateSystems();
     if( m_pDrawModelWrapper )
     {
@@ -2460,9 +2550,15 @@ void ChartView::createShapes()
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
         rtl::OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, rtl::OUString::valueOf( sal_Int32(0) ) ) );//todo: other index if more than one diagram is possible
         uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xPageShapes,aDiagramCID) );
-        uno::Reference< drawing::XShape > xDiagramPlusAxes_MarkHandles( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(
+
+        uno::Reference< drawing::XShape > xDiagram_MarkHandles( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(
                     xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-        ShapeFactory::setShapeName( xDiagramPlusAxes_MarkHandles, C2U("MarkHandles") );
+        ShapeFactory::setShapeName( xDiagram_MarkHandles, C2U("MarkHandles") );
+
+        uno::Reference< drawing::XShape > xDiagram_OuterRect( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(
+                    xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
+        ShapeFactory::setShapeName( xDiagram_OuterRect, C2U("PlotAreaIncludingAxes") );
+
         uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
 
         //------------ create some titles
@@ -2547,21 +2643,22 @@ void ChartView::createShapes()
         //------------ create complete diagram shape (inclusive axis and series)
         awt::Point aAvailablePosDia;
         awt::Size  aAvailableSizeForDiagram;
+        bool bUseFixedInnerSize = false;
         if( getAvailablePosAndSizeForDiagram( aAvailablePosDia, aAvailableSizeForDiagram, aRemainingSpace, aPageSize, ChartModelHelper::findDiagram( m_xChartModel )
-                , apVTitle_X.get(), apVTitle_Y.get(), apVTitle_SecondX.get(), apVTitle_SecondY.get() ) )
+                , apVTitle_X.get(), apVTitle_Y.get(), apVTitle_SecondX.get(), apVTitle_SecondY.get(), bUseFixedInnerSize ) )
         {
-            impl_createDiagramAndContent( aSeriesPlotterContainer
+            awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent( aSeriesPlotterContainer
                         , xDiagramPlusAxes_Shapes
-                        , aAvailablePosDia ,aAvailableSizeForDiagram, aPageSize );
+                        , aAvailablePosDia ,aAvailableSizeForDiagram, aPageSize, bUseFixedInnerSize, xDiagram_MarkHandles );
 
-            if(xDiagramPlusAxes_MarkHandles.is())
+            if( xDiagram_OuterRect.is() )
             {
-                xDiagramPlusAxes_MarkHandles->setPosition( aAvailablePosDia );
-                xDiagramPlusAxes_MarkHandles->setSize( aAvailableSizeForDiagram );
+                xDiagram_OuterRect->setPosition( awt::Point( aUsedOuterRect.X, aUsedOuterRect.Y ) );
+                xDiagram_OuterRect->setSize( awt::Size( aUsedOuterRect.Width, aUsedOuterRect.Height ) );
             }
 
             //correct axis title position
-            awt::Rectangle aDiagramPlusAxesRect(aAvailablePosDia.X,aAvailablePosDia.Y,aAvailableSizeForDiagram.Width,aAvailableSizeForDiagram.Height);
+            awt::Rectangle aDiagramPlusAxesRect( aUsedOuterRect );
             if(bAutoPosition_XTitle)
                 changePositionOfAxisTitle( apVTitle_X.get(), ALIGN_BOTTOM, aDiagramPlusAxesRect, aPageSize );
             if(bAutoPosition_YTitle)

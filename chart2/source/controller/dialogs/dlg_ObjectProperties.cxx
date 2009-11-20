@@ -52,6 +52,7 @@
 #include "tp_SeriesToAxis.hxx"
 #include "tp_TitleRotation.hxx"
 #include "tp_PolarOptions.hxx"
+#include "tp_DiagramPosition.hxx"
 #include "ResId.hxx"
 #include "ViewElementListProvider.hxx"
 #include "macros.hxx"
@@ -248,6 +249,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                         m_aLocalizedName = ObjectNameProvider::getName_ObjectForAllSeries( m_eObjectType );
                     else
                         m_aLocalizedName = ObjectNameProvider::getName_ObjectForSeries( m_eObjectType, m_aObjectCID, m_xChartDocument );
+                    break;
+                case OBJECTTYPE_DIAGRAM:
+                        m_aLocalizedName = String(SchResId(STR_PAGE_POSITIONANDSIZE));
                     break;
                 default:
                     m_aLocalizedName = ObjectNameProvider::getName(m_eObjectType,m_bAffectsMultipleObjects);
@@ -462,12 +466,14 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
             break;
 
+        case OBJECTTYPE_DIAGRAM:
+            AddTabPage(TP_DIAGRAM_POSITION, String(SchResId(STR_PAGE_POSITIONANDSIZE)), DiagramPositionTabPage::Create, NULL);
+            break;
+        case OBJECTTYPE_DIAGRAM_WALL:
         case OBJECTTYPE_DATA_STOCK_LOSS:
         case OBJECTTYPE_DATA_STOCK_GAIN:
         case OBJECTTYPE_PAGE:
         case OBJECTTYPE_DIAGRAM_FLOOR:
-        case OBJECTTYPE_DIAGRAM_WALL:
-        case OBJECTTYPE_DIAGRAM:
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_BORDER)));
             AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));

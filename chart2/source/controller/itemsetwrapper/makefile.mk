@@ -56,7 +56,8 @@ SLOFILES=   	$(SLO)$/ItemConverter.obj \
                 $(SLO)$/TitleItemConverter.obj \
                 $(SLO)$/RegressionCurveItemConverter.obj \
                 $(SLO)$/RegressionEquationItemConverter.obj \
-                $(SLO)$/ErrorBarItemConverter.obj
+                $(SLO)$/ErrorBarItemConverter.obj \
+                $(SLO)$/DiagramItemConverter.obj
 
 # --- Targets -----------------------------------------------------------------
 

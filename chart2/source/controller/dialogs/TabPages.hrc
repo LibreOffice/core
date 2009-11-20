@@ -49,7 +49,6 @@
 ////#define RBT_DOWNUP 3
 ////#define RBT_AUTOORDER 4
 
-//#define TP_STAT                   905
 #define FL_TEXTBREAK                3
 #define CBX_TEXTBREAK               2
 #define CBX_TEXTOVERLAP             4

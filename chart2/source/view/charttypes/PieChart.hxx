@@ -49,7 +49,7 @@ class PieChart : public VSeriesPlotter
 public:
     PieChart( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >& xChartTypeModel
-            , sal_Int32 nDimensionCount );
+            , sal_Int32 nDimensionCount, bool bExcludingPositioning );
     virtual ~PieChart();
 
     //-------------------------------------------------------------------------
@@ -75,6 +75,7 @@ public:
     //-------------------
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
     virtual bool keepAspectRatio() const;
+    virtual bool shouldSnapRectToUsedArea();
 
     //MinimumAndMaximumSupplier
     virtual double getMinimumX();
@@ -116,6 +117,7 @@ struct PieLabelInfo;
 private: //member
     PiePositionHelper*    m_pPosHelper;
     bool                  m_bUseRings;
+    bool                  m_bSizeExcludesLabelsAndExplodedSegments;
 
     struct PieLabelInfo
     {

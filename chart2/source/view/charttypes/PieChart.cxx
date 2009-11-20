@@ -124,10 +124,12 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
 //-----------------------------------------------------------------------------
 
 PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
-                   , sal_Int32 nDimensionCount )
+                   , sal_Int32 nDimensionCount
+                   , bool bExcludingPositioning )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
         , m_pPosHelper( new PiePositionHelper( NormalAxis_Z, (m_nDimension==3)?0.0:90.0 ) )
         , m_bUseRings(false)
+        , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pPosHelper;
@@ -179,6 +181,11 @@ bool PieChart::keepAspectRatio() const
 {
     if( m_nDimension == 3 )
         return false;
+    return true;
+}
+
+bool PieChart::shouldSnapRectToUsedArea()
+{
     return true;
 }
 
@@ -289,7 +296,7 @@ double PieChart::getMaxOffset() const
 }
 double PieChart::getMaximumX()
 {
-    double fMaxOffset = getMaxOffset();
+    double fMaxOffset = m_bSizeExcludesLabelsAndExplodedSegments ? 0.0 : getMaxOffset();
     if( m_aZSlots.size()>0 && m_bUseRings)
         return m_aZSlots[0].size()+0.5+fMaxOffset;
     return 1.5+fMaxOffset;
@@ -392,7 +399,8 @@ void PieChart::createShapes()
         for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
             double fLogicInnerRadius, fLogicOuterRadius;
-            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, getMaxOffset() );
+            double fOffset = m_bSizeExcludesLabelsAndExplodedSegments ? 0.0 : getMaxOffset();
+            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
             if( !bIsVisible )
                 continue;
 

@@ -1731,6 +1731,13 @@ bool VSeriesPlotter::WantToPlotInFrontOfAxisLine()
     return ChartTypeHelper::isSeriesInFrontOfAxisLine( m_xChartTypeModel );
 }
 
+bool VSeriesPlotter::shouldSnapRectToUsedArea()
+{
+    if( m_nDimension == 3 )
+        return false;
+    return true;
+}
+
 Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
               LegendExpansion eLegendExpansion
             , const Reference< beans::XPropertySet >& xTextProperties
@@ -2053,7 +2060,8 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForCh
 //static
 VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     const uno::Reference<XChartType>& xChartTypeModel
-    , sal_Int32 nDimensionCount )
+    , sal_Int32 nDimensionCount
+    , bool bExcludingPositioning )
 {
     rtl::OUString aChartType = xChartTypeModel->getChartType();
 
@@ -2072,7 +2080,7 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
         pRet = new BubbleChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
-        pRet = new PieChart(xChartTypeModel,nDimensionCount);
+        pRet = new PieChart(xChartTypeModel,nDimensionCount, bExcludingPositioning );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true,new PolarPlottingPositionHelper(),true,true,false,1,drawing::Direction3D(1,1,1) );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
