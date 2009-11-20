@@ -714,9 +714,14 @@ void NeonSession::Init()
             // for more debug flags see ne_utils.h; NE_DEBUGGING must be defined
             // while compiling neon in order to actually activate neon debug
             // output.
-            ne_debug_init( stderr,
-                           /*NE_DBG_HTTP | NE_DBG_XML | NE_DBG_XMLPARSE |*/
-                           NE_DBG_LOCKS | NE_DBG_FLUSH );
+            ne_debug_init( stderr, NE_DBG_FLUSH
+                           | NE_DBG_HTTP
+                           // | NE_DBG_HTTPBODY
+                           // | NE_DBG_HTTPAUTH
+                           // | NE_DBG_XML
+                           // | NE_DBG_XMLPARSE
+                           // | NE_DBG_LOCKS
+                         );
 #endif
             m_bGlobalsInited = true;
         }
@@ -1540,7 +1545,7 @@ sal_Int64 NeonSession::LOCK( const ::rtl::OUString & inPath,
     Init( rEnv );
 
     // refresh existing lock.
-    theLock->timeout = nTimeout;
+    theLock->timeout = static_cast< long >( nTimeout );
 
     TimeValue startCall;
     osl_getSystemTime( &startCall );
