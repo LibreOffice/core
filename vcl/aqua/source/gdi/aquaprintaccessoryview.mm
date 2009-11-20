@@ -567,7 +567,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     
     // resize the view itself
     aUnion.size.height += 10;
-    aUnion.size.width += 10;
+    aUnion.size.width += 20;
     [pView setFrameSize: aUnion.size];
     
     if( aUnion.size.width > rMaxSize.width )
@@ -601,10 +601,32 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
                 NSView* pCurSubView = [pSubViews objectAtIndex: n];
                 NSRect aFrame = [pCurSubView frame];
                 aFrame.origin.y += nDiff;
+                // give separators the correct width
+                // separators are currently the only NSBoxes we use
+                if( [pCurSubView isMemberOfClass: [NSBox class]] )
+                {
+                    aFrame.size.width = aTabSize.width - aFrame.origin.x - 10;
+                }
                 [pCurSubView setFrame: aFrame];
             }
         }
     }
+}
+
+static NSControl* createLabel( const rtl::OUString& i_rText )
+{
+    NSString* pText = CreateNSString( i_rText );
+    NSRect aTextRect = { { 0, 0 }, {20, 15} };
+    NSTextField* pTextView = [[NSTextField alloc] initWithFrame: aTextRect];
+    [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
+    [pTextView setEditable: NO];
+    [pTextView setSelectable: NO];
+    [pTextView setDrawsBackground: NO];
+    [pTextView setBordered: NO];
+    [pTextView setStringValue: pText];
+    [pTextView sizeToFit];
+    [pText release];
+    return pTextView;
 }
 
 
@@ -703,7 +725,7 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
             // so we have a single accessory view that is tabbed for grouping
             if( aCtrlType.equalsAscii( "Group" )
                 || ! pCurParent
-                || ( aCtrlType.equalsAscii( "Subgroup" ) && nCurY < -200 && ! bIgnore ) 
+                || ( aCtrlType.equalsAscii( "Subgroup" ) && nCurY < -250 && ! bIgnore ) 
                )
             {
                 rtl::OUString aGroupTitle( aText );
@@ -736,40 +758,20 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
                 if( bIgnore )
                     continue;
                 
-                // if this is not the first view on the page
-                // insert a separator
-                NSArray* pArray = [pCurParent subviews];
-                if( pArray && [pArray count] > 0 )
-                {
-                    NSRect aSepRect = { { 0, nCurY - 15 }, { 300, 15 } };
-                    NSBox* pBox = [[NSBox alloc] initWithFrame: aSepRect];
-                    [pBox setBoxType: NSBoxSeparator];
-                    [pCurParent addSubview: pBox];
-                    
-                    nCurY -= 15;
-                }
-
-                NSString* pText = CreateNSString( aText );
-                NSRect aTextRect = { { 0, 0 }, { 300, 15 } };
-                NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
-                [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
-                [pTextView setEditable: NO];
-                [pTextView setSelectable: NO];
-                [pTextView setDrawsBackground: NO];
-                [pTextView setString: pText];
-                [pTextView sizeToFit]; // FIXME: this does nothing
-                [pCurParent addSubview: [pTextView autorelease]];
-
-                aTextRect = [pTextView frame];
+                NSControl* pTextView = createLabel( aText );
+                [pCurParent addSubview: [pTextView autorelease]];                
+                NSRect aTextRect = [pTextView frame];
                 // move to nCurY
                 aTextRect.origin.y = nCurY - aTextRect.size.height;
                 [pTextView setFrame: aTextRect];
+
+                NSRect aSepRect = { { aTextRect.size.width + 1, aTextRect.origin.y }, { 100, 6 } };
+                NSBox* pBox = [[NSBox alloc] initWithFrame: aSepRect];
+                [pBox setBoxType: NSBoxSeparator];
+                [pCurParent addSubview: [pBox autorelease]];
                 
                 // update nCurY
                 nCurY = aTextRect.origin.y - 5;
-                
-                // cleanup
-                [pText release];
             }
             else if( bIgnoreSubgroup || bIgnore )
                 continue;
@@ -813,15 +815,9 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
                 if( aText.getLength() )
                 {
                     // add a label
-                    NSString* pText = CreateNSString( aText );
-                    NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, { 300, 15 } };
-                    NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
-                    [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
-                    [pTextView setEditable: NO];
-                    [pTextView setSelectable: NO];
-                    [pTextView setDrawsBackground: NO];
-                    [pTextView setString: pText];
-                    [pTextView sizeToFit]; // FIXME: this does nothing
+                    NSControl* pTextView = createLabel( aText );
+                    NSRect aTextRect = [pTextView frame];
+                    aTextRect.origin.x = nCurX + nAttachOffset;
                     [pCurParent addSubview: [pTextView autorelease]];
     
                     // move to nCurY
@@ -833,9 +829,6 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
                     
                     // indent the radio group relative to the text
                     // nOff = 20;
-                    
-                    // cleanup
-                    [pText release];
                 }
                 
                 // setup radio matrix
@@ -888,32 +881,11 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
             }
             else if( aCtrlType.equalsAscii( "List" ) && pCurParent )
             {
-                NSString* pText = CreateNSString( aText );
-                
-                // measure the text
-                NSFont* pFont = [NSFont controlContentFontOfSize: 0];
-                NSDictionary* pDict = [NSDictionary dictionaryWithObject: pFont
-                                                    forKey: NSFontAttributeName];
-                             
-                NSSize aTextSize = [pText sizeWithAttributes: pDict];
-                // leave a little space
-                aTextSize.width += 10;
-                aTextSize.height += 3;
-                
                 // don't indent attached lists, looks bad in the existing cases
-                NSRect aTextRect = { { nCurX /* + nAttachOffset*/, 0 }, aTextSize };
-                NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
-                [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
-                [pTextView setEditable: NO];
-                [pTextView setSelectable: NO];
-                [pTextView setDrawsBackground: NO];
-                [pTextView setString: pText];
-                [pTextView setVerticallyResizable: NO];
-                [pTextView setHorizontallyResizable: YES];
-                [pTextView sizeToFit]; // FIXME: this actually does nothing
+                NSControl* pTextView = createLabel( aText );
                 [pCurParent addSubview: [pTextView autorelease]];
-                aTextRect = [pTextView frame];
-
+                NSRect aTextRect = [pTextView frame];
+                aTextRect.origin.x = nCurX /* + nAttachOffset*/;
 
                 // don't indent attached lists, looks bad in the existing cases
                 NSRect aBtnRect = { { nCurX /*+ nAttachOffset*/ + aTextRect.size.width, 0 }, { 0, 15 } };
@@ -959,9 +931,6 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
 
                 // update nCurY
                 nCurY = aBtnRect.origin.y - 5;
-                
-                // cleanup
-                [pText release];
             }
             else if( (aCtrlType.equalsAscii( "Edit" ) || aCtrlType.equalsAscii( "Range" )) && pCurParent )
             {
@@ -969,27 +938,12 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
                 if( aText.getLength() )
                 {
                     // add a label
-                    NSString* pText = CreateNSString( aText );
-                    NSFont* pFont = [NSFont controlContentFontOfSize: 0];
-                    NSDictionary* pDict = [NSDictionary dictionaryWithObject: pFont
-                                                        forKey: NSFontAttributeName];
-                                 
-                    NSSize aTextSize = [pText sizeWithAttributes: pDict];
-                    // leave a little space
-                    aTextSize.width += 10;
-                    aTextSize.height += 3;
-                    
-                    NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, aTextSize };
-                    NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
-                    [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
-                    [pTextView setEditable: NO];
-                    [pTextView setSelectable: NO];
-                    [pTextView setDrawsBackground: NO];
-                    [pTextView setString: pText];
-                    [pTextView sizeToFit]; // FIXME: this does nothing
+                    NSControl* pTextView = createLabel( aText );
                     [pCurParent addSubview: [pTextView autorelease]];
                     
                     // move to nCurY
+                    NSRect aTextRect = [pTextView frame];
+                    aTextRect.origin.x = nCurX + nAttachOffset;
                     aTextRect.origin.y = nCurY - aTextRect.size.height;
                     [pTextView setFrame: aTextRect];
                     
@@ -997,10 +951,7 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
                     nCurY = aTextRect.origin.y - 5;
                     
                     // and set the offset for the real edit field
-                    nOff = aTextSize.width + 5;
-                    
-                    // cleanup
-                    [pText release];
+                    nOff = aTextRect.size.width + 5;
                 }
                 
                 NSRect aFieldRect = { { nCurX + nOff +  nAttachOffset, 0 }, { 100, 25 } };
@@ -1097,8 +1048,13 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
             DBG_ERROR( "Unsupported UI option" );
         }
     }
+    
     pControllerProperties->updateEnableState();
     adjustViewAndChildren( pCurParent, aMaxTabSize );
+    
+    // leave some space for the preview
+    if( aMaxTabSize.height < 200 )
+        aMaxTabSize.height = 200;
     
     // now reposition everything again so it is upper bound
     adjustTabViews( pTabView, aMaxTabSize );
