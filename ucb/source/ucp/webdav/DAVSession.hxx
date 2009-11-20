@@ -43,7 +43,7 @@
 #include "DAVRequestEnvironment.hxx"
 
 namespace com { namespace sun { namespace star { namespace ucb {
-    class Lock;
+    struct Lock;
 } } } }
 
 namespace webdav_ucp
