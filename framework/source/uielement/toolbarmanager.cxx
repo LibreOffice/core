@@ -1227,7 +1227,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                     }
                                 }
                             }
-                            catch( Exception& e )
+                            catch( Exception& )
                             {
                             }
                         }
