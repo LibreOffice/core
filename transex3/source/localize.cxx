@@ -500,8 +500,8 @@ BOOL SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
 /*****************************************************************************/
 {
     nMode = LOCALIZE_EXTRACT;
-    aSDF.Open( String( rDestinationFile, RTL_TEXTENCODING_ASCII_US ),
-        STREAM_STD_WRITE );
+
+    aSDF.Open( String( rDestinationFile , RTL_TEXTENCODING_ASCII_US ) , STREAM_STD_WRITE );
     aSDF.SetLineDelimiter( LINEEND_CRLF );
 
     BOOL bReturn = aSDF.IsOpen();
@@ -514,6 +514,7 @@ BOOL SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
         printf("ERROR: Can't create file %s\n", rDestinationFile.GetBuffer() );
     }
     nMode = LOCALIZE_NONE;
+    aSDF.Close();
     return bReturn;
 }
 
@@ -767,9 +768,9 @@ BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile , const ByteStrin
     BOOL bReturn = aSDF.IsOpen();
     if ( bReturn ) {
         bReturn = ExecuteMerge();
-        aSDF.Close();
+//      aSDF.Close();
     }
-
+    aSDF.Close();
     nMode = LOCALIZE_NONE;
     return bReturn;
 }
@@ -924,6 +925,13 @@ int _cdecl main( int argc, char *argv[] )
         fprintf( stderr, "ERROR: No filename given\n" );
         return 3;
     }
+
+    DirEntry aEntry( String( sFileName , RTL_TEXTENCODING_ASCII_US ));
+    aEntry.ToAbs();
+    String sFullEntry = aEntry.GetFull();
+    ByteString sFileABS( aEntry.GetFull(), gsl_getSystemTextEncoding());
+    //printf("B %s\nA %s\n",rDestinationFile.GetBuffer(), sFile.GetBuffer());
+    sFileName = sFileABS;
 
     Treeconfig treeconfig;
     vector<string> repos;

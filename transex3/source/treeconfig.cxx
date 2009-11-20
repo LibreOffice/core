@@ -3,7 +3,12 @@
 #include <iostream>
 #include "treeconfig.hxx"
 #include "export.hxx"
+#ifdef WNT
+#include <direct.h>
+#include <io.h>
+#else
 #include <dirent.h>
+#endif
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -111,7 +116,11 @@ bool Treeconfig::isConfigFilePresent()
     {
         return false;
     }
+#ifdef WNT
+    return ( status.st_mode & _S_IFREG ) && ( _access( config_file.c_str() , 4 ) >= 0 ) ;
+#else
     return ( status.st_mode & S_IFREG ) && ( access( config_file.c_str() , R_OK ) >= 0 ) ;
+#endif
 }
 
 

@@ -53,6 +53,11 @@
 #include <queue>
 #include <string>
 
+#include <unistd.h>
+#ifdef WNT
+#include <direct.h>
+#endif
+
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
 #define JAPANESE_ISO "ja"
