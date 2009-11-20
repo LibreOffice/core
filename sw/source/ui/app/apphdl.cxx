@@ -965,13 +965,8 @@ void NewXForms( SfxRequest& rReq )
     {
         const SfxPoolItem* pFrameItem = NULL;
         pArgs->GetItemState( SID_DOCFRAME, FALSE, &pFrameItem );
-        if( pFrameItem != NULL )
-        {
-            SfxFrame* pFrame =
-                static_cast<const SfxFrameItem*>( pFrameItem )->GetFrame();
-            DBG_ASSERT( pFrame != NULL, "no frame?" );
-            pFrame->InsertDocument( xDocSh );
-        }
+        SfxFrame* pFrame = pFrameItem ? dynamic_cast< const SfxFrameItem& >( *pFrameItem ).GetFrame() : NULL;
+        SfxFrame::InsertDocument( *xDocSh, pFrame );
     }
 
     // set return value

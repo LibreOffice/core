@@ -243,19 +243,10 @@ static sal_uInt16 nBCTitleNo = 0;
         if(pArgs)
             pArgs->GetItemState(SID_DOCFRAME, FALSE, &pFrameItem);
 
-        SfxViewFrame* pFrame = 0;
-        if( pFrameItem )
-        {
-            SfxFrame* pFr = ((const SfxFrameItem*)pFrameItem)->GetFrame();
-            xDocSh->PutItem(SfxBoolItem(SID_HIDDEN, TRUE));
-            pFr->InsertDocument(xDocSh);
-            pFrame = pFr->GetCurrentViewFrame();
-        }
-        else
-        {
-            pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
-        }
-        SwView      *pNewView = (SwView*) pFrame->GetViewShell();
+        SfxFrame* pFrame = pFrameItem ? dynamic_cast< const SfxFrameItem& >( *pFrameItem ).GetFrame() : NULL;
+        SfxViewFrame* pViewFrame = SfxFrame::InsertDocument( *xDocSh, pFrame, 0, true );
+
+        SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
         // Dokumenttitel setzen
@@ -272,7 +263,7 @@ static sal_uInt16 nBCTitleNo = 0;
         }
         xDocSh->SetTitle( aTmp );
 
-        pFrame->GetFrame()->Appear();
+        pViewFrame->GetFrame()->Appear();
 
         // Shell ermitteln
         SwWrtShell *pSh = pNewView->GetWrtShellPtr();
@@ -474,7 +465,7 @@ static sal_uInt16 nBCTitleNo = 0;
 
         if( rItem.bSynchron )
         {
-            SfxDispatcher* pDisp = pFrame->GetDispatcher();
+            SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
             ASSERT(pDisp, "Heute kein Dispatcher am Frame?");
             pDisp->Execute(FN_SYNC_LABELS, SFX_CALLMODE_ASYNCHRON);
         }
