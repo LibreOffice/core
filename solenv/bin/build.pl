@@ -418,7 +418,6 @@ sub generate_config_file {
     print_warnings();
     print $addition_message if ($addition_message);
     print "Module(s):\n$removal_message\nremoved from $source_config_file\n" if ($removal_message);
-    exit(0);
 };
 
 #
@@ -2376,6 +2375,8 @@ sub prepare_incompatible_build {
         delete $$deps_hash{$build_all_cont};
     };
     @modules_built = keys %$deps_hash;
+    %add_to_config = %$deps_hash;
+    generate_config_file();
     clear_delivered() if ($prepare);
     my $old_output_tree = '';
     foreach $prj (sort keys %$deps_hash) {
