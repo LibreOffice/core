@@ -789,7 +789,7 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 
     // Position und Groesse testen
     // Wenn diese schon gesetzt sind, soll offensichtlich nicht noch
-    // LoadWindows_Impl aufgerufen werden ( z.B. weil dieses ein CreateFrame()
+    // LoadView_Impl aufgerufen werden ( z.B. weil dieses ein CreateFrame()
     // an einer Task aufgerufen hat! )
     const SfxItemSet* pSet = GetItemSet_Impl();
     if ( !pSet )
@@ -816,10 +816,10 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 
     // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
     // aus den Dokument geladen werden, z.B. weil InsertDocument_Impl seinerseits
-    // aus LoadWindows_Impl aufgerufen wurde!
+    // aus LoadView_Impl aufgerufen wurde!
     if ( !pJumpItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
     {
-        if ( rDoc.LoadWindows_Impl( *this ) )
+        if ( rDoc.LoadView_Impl( *this ) )
         {
             if ( GetCurrentDocument() != &rDoc )
                 // something went wrong during insertion

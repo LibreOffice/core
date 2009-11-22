@@ -2223,17 +2223,6 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="DocumentWindows" oor:type="xs:boolean">
-					<!-- OldPath: General/Restore -->
-					<!-- OldLocation: soffice.cfg -->
-					<!-- UIHints: Tools  Options - General  Save - [Section] Restore editing view - Open windows-->
-					<info>
-						<author>MBA</author>
-						<desc>Specifies whether all currently open windows of a document should be saved. If true the view properties for all open document views of that document are saved.</desc>
-						<label>Open windows</label>
-					</info>
-					<value>false</value>
-				</prop>
 				<prop oor:name="PrettyPrinting" oor:type="xs:boolean">
 					<!-- UIHints: Tools  Options - General  Save - optimize XML file size-->
 					<!--the UI setting is inverse to this setting-->

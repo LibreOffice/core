@@ -2224,7 +2224,7 @@ SfxViewShell* SfxViewFrame::CreateView_Impl( sal_uInt16 nViewId )
 /*  [Beschreibung]
 
     Erzeugt eine SfxViewShell f"ur diesen SfxViewFrame. Wird auch aus
-    <SfxObjectShell::LoadWindows_Impl()>
+    <SfxObjectShell::LoadView_Impl()>
     gerufen.
 */
 

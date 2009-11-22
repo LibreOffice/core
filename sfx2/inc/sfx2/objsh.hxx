@@ -788,7 +788,7 @@ public:
     SAL_DLLPRIVATE sal_uInt16& GetAktViewNo() { return nViewNo; }
     SAL_DLLPRIVATE void PostActivateEvent_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE void SetActivateEvent_Impl(sal_uInt16 );
-    SAL_DLLPRIVATE SfxViewFrame* LoadWindows_Impl( SfxTopFrame& rPrefered );
+    SAL_DLLPRIVATE bool LoadView_Impl( SfxTopFrame& rPrefered );
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
