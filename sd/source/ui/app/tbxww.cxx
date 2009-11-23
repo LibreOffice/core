@@ -311,7 +311,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages(),
-                                         GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
 
                 // !-Operator prueft, ob Image nicht vorhanden ist
                 if( !!aImage )

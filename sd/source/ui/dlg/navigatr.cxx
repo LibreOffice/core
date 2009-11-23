@@ -863,7 +863,7 @@ void SdNavigatorWin::SetDragImage()
 
 void SdNavigatorWin::ApplyImageList()
 {
-    const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     maToolbox.SetImageList( bHighContrast ? maImageListH : maImageList );
 
