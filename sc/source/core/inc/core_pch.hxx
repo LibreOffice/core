@@ -161,7 +161,6 @@
 #include <svtools/compat.hxx>
 #include <svtools/inetdef.hxx>
 #include <svtools/inethist.hxx>
-#include <svtools/cancel.hxx>
 #include <vcl/accel.hxx>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/module.hxx>
