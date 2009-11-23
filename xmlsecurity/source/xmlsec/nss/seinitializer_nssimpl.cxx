@@ -203,14 +203,32 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
 
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
-    if( NSS_InitReadWrite( token ) != SECSuccess )
+    //token may be an empty string
+    if (token != NULL && strlen(token) > 0)
     {
-        char * error = NULL;
+        if( NSS_InitReadWrite( token ) != SECSuccess )
+        {
+            xmlsec_trace("Initializing NSS with profile failed.");
+            char * error = NULL;
 
-        PR_GetErrorText(error);
-        if (error)
-            printf("%s",error);
-        return false ;
+            PR_GetErrorText(error);
+            if (error)
+                xmlsec_trace("%s",error);
+            return false ;
+        }
+    }
+    else
+    {
+        xmlsec_trace("Initializing NSS without profile.");
+        if ( NSS_NoDB_Init(NULL) != SECSuccess )
+        {
+            xmlsec_trace("Initializing NSS without profile failed.");
+            char * error = NULL;
+            PR_GetErrorText(error);
+            if (error)
+                xmlsec_trace("%s",error);
+            return false ;
+        }
     }
     out_nss_init = true;
 
@@ -317,17 +335,16 @@ bool getMozillaCurrentProfile(
     /*
      * first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
      */
-        char * env = getenv("MOZILLA_CERTIFICATE_FOLDER");
-        if (env)
-        {
-            profilePath = rtl::OUString::createFromAscii( env );
-            RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using env MOZILLA_CERTIFICATE_FOLDER: %s", rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            return true;
-        }
-        else
-        {
-            RTL_LOGFILE_TRACE( "getMozillaCurrentProfile: Using MozillaBootstrap..." );
-            mozilla::MozillaProductType productTypes[4] = {
+    char * env = getenv("MOZILLA_CERTIFICATE_FOLDER");
+    if (env)
+    {
+        profilePath = rtl::OUString::createFromAscii( env );
+        RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using env MOZILLA_CERTIFICATE_FOLDER: %s", rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        return true;
+    }
+    else
+    {
+        mozilla::MozillaProductType productTypes[4] = {
             mozilla::MozillaProductType_Thunderbird,
             mozilla::MozillaProductType_Mozilla,
             mozilla::MozillaProductType_Firefox,
@@ -347,8 +364,6 @@ bool getMozillaCurrentProfile(
             for (int i=0; i<nProduct; i++)
             {
                 ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
-
-                RTL_LOGFILE_TRACE2( "getMozillaCurrentProfile: getDefaultProfile [%i] returns %s", i, rtl::OUStringToOString( profile, RTL_TEXTENCODING_ASCII_US ).getStr() );
 
                 if (profile != NULL && profile.getLength()>0)
                 {
@@ -406,36 +421,9 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
     }
 
-    if( !sCertDir.getLength() )
-    {
-        RTL_LOGFILE_TRACE( "XMLSEC: Error - No certificate directory!" );
-        // return NULL;
-    }
-
-
-    /* Initialize NSPR and NSS */
-    /* Replaced with new methods by AF. ----
-    //PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
-    PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
-
-    if (NSS_Init(sCertDir.getStr()) != SECSuccess )
-    {
-        PK11_LogoutAll();
-        return NULL;
-    }
-    ----*/
     if( ! *initNSS( sCertDir.getStr() ) )
     {
-        RTL_LOGFILE_TRACE( "XMLSEC: Error - nsscrypto_initialize() failed." );
-        if ( NSS_NoDB_Init(NULL) != SECSuccess )
-        {
-            RTL_LOGFILE_TRACE( "XMLSEC: NSS_NoDB_Init also failed, NSS Security not available!" );
-            return NULL;
-        }
-        else
-        {
-            RTL_LOGFILE_TRACE( "XMLSEC: NSS_NoDB_Init works, enough for verifying signatures..." );
-        }
+        return NULL;
     }
 
     pCertHandle = CERT_GetDefaultCertDB() ;
