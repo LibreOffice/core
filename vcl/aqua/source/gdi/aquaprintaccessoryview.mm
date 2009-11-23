@@ -37,10 +37,15 @@
 #include "vcl/image.hxx"
 #include "vcl/virdev.hxx"
 #include "vcl/svdata.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/unohelp.hxx"
 
 #include "vcl/svids.hrc"
 
 #include "tools/resary.hxx"
+
+#include "com/sun/star/i18n/XBreakIterator.hpp"
+#include "com/sun/star/i18n/WordType.hpp"
 
 #include <map>
 
@@ -718,6 +723,21 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
     return pTextView;
 }
 
+static sal_Int32 findBreak( const rtl::OUString& i_rText, sal_Int32 i_nPos )
+{
+    sal_Int32 nRet = i_rText.getLength();
+    Reference< i18n::XBreakIterator > xBI( vcl::unohelper::CreateBreakIterator() );
+    if( xBI.is() )
+    {
+        i18n::Boundary aBoundary = xBI->getWordBoundary( i_rText, i_nPos,
+                                                         Application::GetSettings().GetLocale(),
+                                                         i18n::WordType::ANYWORD_IGNOREWHITESPACES,
+                                                         sal_True );
+        nRet = aBoundary.endPos;
+    }
+    return nRet;
+}
+
 static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
 {
     NSString* pText = CreateNSString( i_rText );
@@ -727,12 +747,9 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
     if( aSize.width > 280 )
     {
         // need two lines
-        // FIXME: dummy code, should really use linebreaking service instead
-        const sal_Unicode* pStr = i_rText.getStr();
         sal_Int32 nLen = i_rText.getLength();
         sal_Int32 nIndex = nLen / 2;
-        while( nIndex < nLen && pStr[nIndex] != ' ' )
-            nIndex++;
+        nIndex = findBreak( i_rText, nIndex );
         if( nIndex < nLen )
         {
             rtl::OUStringBuffer aBuf( i_rText );
