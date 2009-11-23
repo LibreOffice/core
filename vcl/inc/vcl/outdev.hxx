@@ -1104,7 +1104,12 @@ public:
      */
     BOOL                HasAlpha();
 
-    void                DrawEPS( const Point& rPt, const Size& rSz,
+    /** Added return value to see if EPS could be painted directly.
+        Theoreticaly, handing over a matrix would be needed to handle
+        painting rotated EPS files (e.g. contained mín Metafiles). This
+        would then need to be supported for Mac and PS printers, but
+        that's too much for now, wrote #i107046# for this */
+    bool                DrawEPS( const Point& rPt, const Size& rSz,
                                  const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
 
     /// request XCanvas render interface for this OutputDevice
