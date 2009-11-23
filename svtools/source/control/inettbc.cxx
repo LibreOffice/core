@@ -69,7 +69,6 @@
 #include <svtools/historyoptions.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
-#include <svtools/cancel.hxx>
 #include <svtools/itemset.hxx>
 #include "urihelper.hxx"
 #include <svtools/pathoptions.hxx>
