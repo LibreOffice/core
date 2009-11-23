@@ -1807,25 +1807,23 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
             pEntry->GetFunctionType() == rInfo->GetFunctionType() &&
             pEntry->GetFunction() == rInfo->GetFunction())
         {
-            /*sal_uInt32 nPos = aIter - rFields.begin();
-            bAppend = _nCurrentPos > nPos && (rInfo->IsGroupBy() != pEntry->IsGroupBy());
-            if ( bAppend )
-                aIter = rFields.end();
-            else*/
+            if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
             {
-                if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
-                {
-                    pEntry->SetGroupBy(sal_False);
-                    aIter = rFields.end();
-                }
-                else
+                pEntry->SetGroupBy(sal_False);
+                aIter = rFields.end();
+                break;
+            }
+            else
+            {
+                if ( !pEntry->IsGroupBy() && !pEntry->HasCriteria() ) // here we have a where condition which is no having clause
                 {
                     pEntry->SetGroupBy(rInfo->IsGroupBy());
                     if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                         pEntry->SetVisible(sal_True);
+                    break;
                 }
             }
-            break;
+
         }
     }
 
@@ -1887,13 +1885,14 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
         if (bCase(aField,rInfo->GetField()) &&
             bCase(aAlias,rInfo->GetAlias()) &&
             pEntry->GetFunctionType() == rInfo->GetFunctionType() &&
-            pEntry->GetFunction() == rInfo->GetFunction())
+            pEntry->GetFunction() == rInfo->GetFunction() &&
+            pEntry->IsGroupBy() == rInfo->IsGroupBy() )
         {
             if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
                 pEntry->SetGroupBy(sal_False);
             else
             {
-                pEntry->SetGroupBy(rInfo->IsGroupBy());
+//              pEntry->SetGroupBy(rInfo->IsGroupBy());
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
