@@ -252,7 +252,7 @@ Service::createInstanceWithArguments(
         //TODO: should the Access use the dynamically changing locale_ instead?
         locale = locale_;
         if (locale.getLength() == 0) {
-            locale = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));//TODO
+            locale = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
         }
     }
     bool update;

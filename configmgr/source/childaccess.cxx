@@ -282,25 +282,35 @@ css::uno::Any ChildAccess::asValue() {
         {
             rtl::OUString locale(getRootAccess()->getLocale());
             if (!Components::allLocales(locale)) {
-                rtl::Reference< ChildAccess > child(getChild(locale));
+                // Find best match using an adaption of RFC 4647 lookup matching
+                // rules, removing "-" or "_" delimited segments from the end;
+                // defaults are the empty string locale, the "en-US" locale, the
+                // first child (if any), or a nil value (even though it may be
+                // illegal for the given property), in that order:
+                rtl::Reference< ChildAccess > child;
+                for (;;) {
+                    child = getChild(locale);
+                    if (child.is() || locale.getLength() == 0) {
+                        break;
+                    }
+                    sal_Int32 i = locale.getLength() - 1;
+                    while (i > 0 && locale[i] != '-' && locale[i] != '_') {
+                        --i;
+                    }
+                    locale = locale.copy(0, i);
+                }
                 if (!child.is()) {
-                    //TODO: find best match
-                    child = getChild(rtl::OUString());
+                    child = getChild(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
                     if (!child.is()) {
-                        child = getChild(
-                            rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM("en-US")));
-                        if (!child.is()) {
-                            std::vector< rtl::Reference< ChildAccess > > all(
-                                getAllChildren());
-                            if (all.empty()) {
-                                return css::uno::Any();
-                            }
+                        std::vector< rtl::Reference< ChildAccess > > all(
+                            getAllChildren());
+                        if (!all.empty()) {
                             child = all.front();
                         }
                     }
                 }
-                return child->asValue();
+                return child.is() ? child->asValue() : css::uno::Any();
             }
         }
         break;
