@@ -5284,7 +5284,7 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
         bool result = storePictureInFileSystem( sImageUrl, pImage, nImageLen );
         OUString pictName = sImageUrl.copy( sImageUrl.lastIndexOf('/') + 1 );
         result = storePictureInDoc( pDocSh, pictName, pImage, nImageLen );
-        delete pImage;
+        delete [] pImage;
     }
     return sal_True;
 }

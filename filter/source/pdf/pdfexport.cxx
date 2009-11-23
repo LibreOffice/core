@@ -131,6 +131,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mnQuality                   ( 90 ),
     mnFormsFormat               ( 0 ),
     mbExportFormFields          ( sal_True ),
+    mbAllowDuplicateFieldNames  ( sal_False ),
     mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( sal_False ),
     mbWatermark                 ( sal_False ),
@@ -462,6 +463,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbExportFormFields;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ) )
                     rFilterData[ nData ].Value >>= mnFormsFormat;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ) )
+                    rFilterData[ nData ].Value >>= mbAllowDuplicateFieldNames;
 //viewer properties
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ) )
                     rFilterData[ nData ].Value >>= mbHideViewerToolbar;
@@ -707,6 +710,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aContext.SubmitFormat = PDFWriter::FDF;
                     break;
             }
+            aContext.AllowDuplicateFieldNames = mbAllowDuplicateFieldNames;
 
             //get model
             Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
@@ -1209,71 +1213,83 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                     const Size&     rSize= pA->GetSize();
                     const Gradient& rTransparenceGradient = pA->GetGradient();
 
-                    const Size  aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
-                    sal_Int32   nMaxBmpDPI = mbUseLosslessCompression ? 300 : 72;
-                    if ( mbReduceImageResolution )
+                    // special case constant alpha value
+                    if( rTransparenceGradient.GetStartColor() == rTransparenceGradient.GetEndColor() )
                     {
-                        if ( nMaxBmpDPI > mnMaxImageResolution )
-                            nMaxBmpDPI = mnMaxImageResolution;
+                        const Color aTransCol( rTransparenceGradient.GetStartColor() );
+                        const USHORT nTransPercent = aTransCol.GetLuminance() * 100 / 255;
+                        rWriter.BeginTransparencyGroup();
+                        ImplWriteActions( rWriter, NULL, aTmpMtf, rDummyVDev );
+                        rWriter.EndTransparencyGroup( Rectangle( rPos, rSize ), nTransPercent );
                     }
-                    const sal_Int32 nPixelX = (sal_Int32)((double)aDstSizeTwip.Width() * (double)nMaxBmpDPI / 1440.0);
-                    const sal_Int32 nPixelY = (sal_Int32)((double)aDstSizeTwip.Height() * (double)nMaxBmpDPI / 1440.0);
-                    if ( nPixelX && nPixelY )
+                    else
                     {
-                        Size aDstSizePixel( nPixelX, nPixelY );
-                        VirtualDevice* pVDev = new VirtualDevice;
-                        if( pVDev->SetOutputSizePixel( aDstSizePixel ) )
+                        const Size  aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
+                        sal_Int32   nMaxBmpDPI = mbUseLosslessCompression ? 300 : 72;
+                        if ( mbReduceImageResolution )
                         {
-                            Bitmap          aPaint, aMask;
-                            AlphaMask       aAlpha;
-                            Point           aPoint;
-
-                            MapMode aMapMode( rDummyVDev.GetMapMode() );
-                            aMapMode.SetOrigin( aPoint );
-                            pVDev->SetMapMode( aMapMode );
-                            Size aDstSize( pVDev->PixelToLogic( aDstSizePixel ) );
-
-                            Point   aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
-                            if ( aMtfOrigin.X() || aMtfOrigin.Y() )
-                                aTmpMtf.Move( -aMtfOrigin.X(), -aMtfOrigin.Y() );
-                            double  fScaleX = (double)aDstSize.Width() / (double)aTmpMtf.GetPrefSize().Width();
-                            double  fScaleY = (double)aDstSize.Height() / (double)aTmpMtf.GetPrefSize().Height();
-                            if( fScaleX != 1.0 || fScaleY != 1.0 )
-                                aTmpMtf.Scale( fScaleX, fScaleY );
-                            aTmpMtf.SetPrefMapMode( aMapMode );
-
-                            // create paint bitmap
-                            aTmpMtf.WindStart();
-                            aTmpMtf.Play( pVDev, aPoint, aDstSize );
-                            aTmpMtf.WindStart();
-
-                            pVDev->EnableMapMode( FALSE );
-                            aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                            pVDev->EnableMapMode( TRUE );
-
-                            // create mask bitmap
-                            pVDev->SetLineColor( COL_BLACK );
-                            pVDev->SetFillColor( COL_BLACK );
-                            pVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
-                            pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
-                                                DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
-                            aTmpMtf.WindStart();
-                            aTmpMtf.Play( pVDev, aPoint, aDstSize );
-                            aTmpMtf.WindStart();
-                            pVDev->EnableMapMode( FALSE );
-                            aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                            pVDev->EnableMapMode( TRUE );
-
-                            // create alpha mask from gradient
-                            pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
-                            pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
-                            pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                            pVDev->EnableMapMode( FALSE );
-                            pVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
-                            aAlpha = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                            ImplWriteBitmapEx( rWriter, rDummyVDev, rPos, rSize, BitmapEx( aPaint, aAlpha ) );
+                            if ( nMaxBmpDPI > mnMaxImageResolution )
+                                nMaxBmpDPI = mnMaxImageResolution;
                         }
-                        delete pVDev;
+                        const sal_Int32 nPixelX = (sal_Int32)((double)aDstSizeTwip.Width() * (double)nMaxBmpDPI / 1440.0);
+                        const sal_Int32 nPixelY = (sal_Int32)((double)aDstSizeTwip.Height() * (double)nMaxBmpDPI / 1440.0);
+                        if ( nPixelX && nPixelY )
+                        {
+                            Size aDstSizePixel( nPixelX, nPixelY );
+                            VirtualDevice* pVDev = new VirtualDevice;
+                            if( pVDev->SetOutputSizePixel( aDstSizePixel ) )
+                            {
+                                Bitmap          aPaint, aMask;
+                                AlphaMask       aAlpha;
+                                Point           aPoint;
+
+                                MapMode aMapMode( rDummyVDev.GetMapMode() );
+                                aMapMode.SetOrigin( aPoint );
+                                pVDev->SetMapMode( aMapMode );
+                                Size aDstSize( pVDev->PixelToLogic( aDstSizePixel ) );
+
+                                Point   aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
+                                if ( aMtfOrigin.X() || aMtfOrigin.Y() )
+                                    aTmpMtf.Move( -aMtfOrigin.X(), -aMtfOrigin.Y() );
+                                double  fScaleX = (double)aDstSize.Width() / (double)aTmpMtf.GetPrefSize().Width();
+                                double  fScaleY = (double)aDstSize.Height() / (double)aTmpMtf.GetPrefSize().Height();
+                                if( fScaleX != 1.0 || fScaleY != 1.0 )
+                                    aTmpMtf.Scale( fScaleX, fScaleY );
+                                aTmpMtf.SetPrefMapMode( aMapMode );
+
+                                // create paint bitmap
+                                aTmpMtf.WindStart();
+                                aTmpMtf.Play( pVDev, aPoint, aDstSize );
+                                aTmpMtf.WindStart();
+
+                                pVDev->EnableMapMode( FALSE );
+                                aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
+                                pVDev->EnableMapMode( TRUE );
+
+                                // create mask bitmap
+                                pVDev->SetLineColor( COL_BLACK );
+                                pVDev->SetFillColor( COL_BLACK );
+                                pVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
+                                pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
+                                                    DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
+                                aTmpMtf.WindStart();
+                                aTmpMtf.Play( pVDev, aPoint, aDstSize );
+                                aTmpMtf.WindStart();
+                                pVDev->EnableMapMode( FALSE );
+                                aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
+                                pVDev->EnableMapMode( TRUE );
+
+                                // create alpha mask from gradient
+                                pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
+                                pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
+                                pVDev->SetDrawMode( DRAWMODE_DEFAULT );
+                                pVDev->EnableMapMode( FALSE );
+                                pVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
+                                aAlpha = pVDev->GetBitmap( aPoint, aDstSizePixel );
+                                ImplWriteBitmapEx( rWriter, rDummyVDev, rPos, rSize, BitmapEx( aPaint, aAlpha ) );
+                            }
+                            delete pVDev;
+                        }
                     }
                 }
                 break;

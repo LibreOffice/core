@@ -265,7 +265,7 @@ BOOL Impl_OlePres::Read( SvStream & rStm )
     {
         BYTE * p = new BYTE[ nSize ];
         rStm.Read( p, nSize );
-        delete p;
+        delete [] p;
         return FALSE;
     }
     return TRUE;
