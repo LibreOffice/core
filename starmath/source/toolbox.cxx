@@ -222,7 +222,7 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContra
 
 void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
 {
-    BOOL bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    BOOL bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // set image list for toolbox 'catalog'
     const ImageList *pImageList = GetImageList( bHighContrast ? RID_ILH_CATALOG : RID_IL_CATALOG, bHighContrast );

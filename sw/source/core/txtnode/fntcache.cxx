@@ -2424,8 +2424,12 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     const xub_StrLen nEnd = rInf.GetIdx() + rInf.GetLen();
 
     // skip character cells for complex scripts
-    if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
+    // --> OD 2009-10-14 #i105571# - skip also character cells for CJK
+    if ( rInf.GetFont() &&
+         ( SW_CTL == rInf.GetFont()->GetActual() ||
+           SW_CJK == rInf.GetFont()->GetActual() ) &&
          pBreakIt->GetBreakIter().is() )
+    // <--
     {
         aLang = rInf.GetFont()->GetLanguage();
         bSkipCell = sal_True;
