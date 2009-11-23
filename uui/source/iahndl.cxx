@@ -2630,6 +2630,8 @@ UUIInteractionHelper::handleCertificateValidationRequest(
     */
 }
 
+// @@@ Todo #i29340#: activate!
+#if 0
 namespace {
 
 enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
@@ -2729,6 +2731,7 @@ UUIInteractionHelper::handleNameClashResolveRequest(
         break;
     }
 }
+#endif
 
 void
 UUIInteractionHelper::handleMasterPasswordRequest(
