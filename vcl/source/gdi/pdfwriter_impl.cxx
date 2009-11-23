@@ -2973,24 +2973,18 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
         }
         nEndBinaryIndex = nIndex;
 
-        // and count forward again to the point where we have nFound '0'
-        // to get the corect value for nLength3
-        sal_Int32 nLength3 = 0;
-        sal_Int32 nL3Index = nIndex;
-        while( nFound && nL3Index < nFontLen )
+        // nLength3 is the rest of the file - excluding any section headers
+        sal_Int32 nLength3 = nFontLen - nIndex;
+        for( it = aSections.begin(); it != aSections.end(); ++it )
         {
-            for( it = aSections.begin(); it != aSections.end() && (nL3Index < *it || nL3Index > ((*it) + 5) ); ++it )
-                ;
-            if( it == aSections.end() )
+            if( *it >= nIndex  )
             {
-                // inside the 512 '0' block there may only be whitespace
-                // according to T1 spec; probably it would be to simple
-                // if all fonts complied
-                if( pFontData[nL3Index] == '0' )
-                    nFound--;
-                nLength3++;
+                // special case: nIndex inside a section marker
+                if( nIndex >= *it )
+                    nLength3 -= (*it)+5 - nIndex;
+                else
+                    nLength3 -= 5;
             }
-            nL3Index++;
         }
 
         // search for beginning of binary section
@@ -3612,6 +3606,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const ImplFontData* pFont, FontSubs
             break;
         case FontSubsetInfo::TYPE1_PFA:
         case FontSubsetInfo::TYPE1_PFB:
+        case FontSubsetInfo::ANY_TYPE1:
             break;
         default:
             DBG_ERROR( "unknown fonttype in PDF font descriptor" );
