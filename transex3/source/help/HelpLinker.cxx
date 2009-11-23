@@ -174,15 +174,23 @@ void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::s
     if( pFile == NULL )
         return;
     char cLF = 10;
-    int nKeyLen = aKeyStr.length();
-    int nValueLen = aValueStr.length();
+    unsigned int nKeyLen = aKeyStr.length();
+    unsigned int nValueLen = aValueStr.length();
     fprintf( pFile, "%x ", nKeyLen );
     if( nKeyLen > 0 )
-        fwrite( aKeyStr.c_str(), 1, nKeyLen, pFile );
-    fprintf( pFile, " %x ", nValueLen );
+    {
+        if (fwrite( aKeyStr.c_str(), 1, nKeyLen, pFile ) != nKeyLen)
+            fprintf(stderr, "fwrite to db failed\n");
+    }
+    if (fprintf( pFile, " %x ", nValueLen ) < 0)
+        fprintf(stderr, "fwrite to db failed\n");
     if( nValueLen > 0 )
-        fwrite( aValueStr.c_str(), 1, nValueLen, pFile );
-    fprintf( pFile, "%c", cLF );
+    {
+        if (fwrite( aValueStr.c_str(), 1, nValueLen, pFile ) != nValueLen)
+            fprintf(stderr, "fwrite to db failed\n");
+    }
+    if (fprintf( pFile, "%c", cLF ) < 0)
+        fprintf(stderr, "fwrite to db failed\n");
 }
 
 class HelpKeyword

@@ -1753,7 +1753,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     Polygon aSimplePoly;
                     const Polygon& rPoly = pA->GetPolygon();
                     if ( rPoly.HasFlags() )
-                        rPoly.GetSimple( aSimplePoly );
+                        rPoly.AdaptiveSubdivide( aSimplePoly );
                     else
                         aSimplePoly = rPoly;
                     METLine( aSimplePoly );
@@ -1772,7 +1772,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 Polygon aSimplePoly;
                 const Polygon& rPoly = pA->GetPolygon();
                 if ( rPoly.HasFlags() )
-                    rPoly.GetSimple( aSimplePoly );
+                    rPoly.AdaptiveSubdivide( aSimplePoly );
                 else
                     aSimplePoly = rPoly;
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
@@ -1809,7 +1809,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     if ( aSimplePolyPoly[ i ].HasFlags() )
                     {
                         Polygon aSimplePoly;
-                        aSimplePolyPoly[ i ].GetSimple( aSimplePoly );
+                        aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
                         aSimplePolyPoly[ i ] = aSimplePoly;
                     }
                 }

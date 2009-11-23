@@ -5437,7 +5437,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
             aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
-            delete pTextBuf;
+            delete [] pTextBuf;
         }
 
         aEvt.mnCursorPos = aEvt.maText.Len();
@@ -5463,7 +5463,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
             aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
-            delete pTextBuf;
+            delete [] pTextBuf;
 
             WIN_BYTE*   pAttrBuf = NULL;
             LONG        nAttrLen = ImmGetCompositionStringW( hIMC, GCS_COMPATTR, 0, 0 );
@@ -5499,7 +5499,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                 }
 
                 aEvt.mpTextAttr = pSalAttrAry;
-                delete pAttrBuf;
+                delete [] pAttrBuf;
             }
         }
 
@@ -5536,7 +5536,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         }
 
         if ( pSalAttrAry )
-            delete pSalAttrAry;
+            delete [] pSalAttrAry;
     }
 
     return !bDef;
