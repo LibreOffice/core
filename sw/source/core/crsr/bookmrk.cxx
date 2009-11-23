@@ -370,6 +370,8 @@ namespace sw { namespace mark
 
     void Fieldmark::invalidate( )
     {
+        // @TODO: Does exist a better solution to trigger a format of the
+        //        fieldmark portion? If yes, please use it.
         SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
         aPaM.InvalidatePaM();
     }
