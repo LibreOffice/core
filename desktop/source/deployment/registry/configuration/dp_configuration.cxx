@@ -119,6 +119,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & url, OUString const & mediaType,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
+    ::std::auto_ptr<PersistentMap> m_registeredPackages;
+        // for backwards compatibility
+
     virtual void SAL_CALL disposing();
 
     const Reference<deployment::XPackageTypeInfo> m_xConfDataTypeInfo;
@@ -196,6 +199,10 @@ BackendImpl::BackendImpl(
     }
     else {
         configmgrini_verify_init( xCmdEnv );
+        m_registeredPackages.reset(
+            new PersistentMap(
+                makeURL( getCachePath(), OUSTR("registered_packages.db") ),
+                m_readOnly ) );
     }
 }
 
@@ -447,11 +454,17 @@ bool BackendImpl::removeFromConfigmgrIni(
     const OUString rcterm( makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     configmgrini_verify_init( xCmdEnv );
-    getFiles(isSchema).remove( rcterm );
-    if (!isSchema) { //TODO: see replaceOrigin()
-        getFiles(isSchema).remove(
+    t_stringlist & rSet = getFiles(isSchema);
+    t_stringlist::iterator i(std::find(rSet.begin(), rSet.end(), rcterm));
+    if (i == rSet.end() && !isSchema) { //TODO: see replaceOrigin()
+        i = std::find(
+            rSet.begin(), rSet.end(),
             rcterm + OUString(RTL_CONSTASCII_USTRINGPARAM(".mod")));
     }
+    if (i == rSet.end()) {
+        return false;
+    }
+    rSet.erase(i);
     // write immediately:
     m_configmgrini_modified = true;
     configmgrini_flush( xCmdEnv );
@@ -499,10 +512,13 @@ BackendImpl::PackageImpl::isRegistered_(
     Reference<XCommandEnvironment> const & )
 {
     BackendImpl * that = getMyBackend();
+    rtl::OUString url(getURL());
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>(
-            that->hasInConfigmgrIni( m_isSchema, getURL() ),
+            that->hasInConfigmgrIni( m_isSchema, url ) ||
+            that->m_registeredPackages->has(
+                rtl::OUStringToOString( url, RTL_TEXTENCODING_UTF8 ) ),
             false /* IsAmbiguous */ ) );
 }
 
@@ -646,7 +662,29 @@ void BackendImpl::PackageImpl::processPackage_(
     }
     else // revoke
     {
-        that->removeFromConfigmgrIni( m_isSchema, url, xCmdEnv );
+        if (!that->removeFromConfigmgrIni(m_isSchema, url, xCmdEnv)) {
+            t_string2string_map entries(
+                that->m_registeredPackages->getEntries());
+            for (t_string2string_map::iterator i(entries.begin());
+                 i != entries.end(); ++i)
+            {
+                rtl::OUString url2(
+                    rtl::OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
+                if (url2 != url) {
+                    bool schema = i->second.equalsIgnoreAsciiCase(
+                        "vnd.sun.star.configuration-schema");
+                    if (!schema) {
+                        url2 = replaceOrigin(url2, xCmdEnv);
+                    }
+                    that->addToConfigmgrIni(schema, url2, xCmdEnv);
+                }
+                that->m_registeredPackages->erase(i->first);
+            }
+            ::ucbhelper::Content(
+                makeURL( that->getCachePath(), OUSTR("registry") ),
+                xCmdEnv ).executeCommand(
+                    OUSTR("delete"), Any( true /* delete physically */ ) );
+        }
 
         //TODO: revoking at runtime, possible, sensible?
     }
