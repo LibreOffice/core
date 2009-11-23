@@ -358,7 +358,7 @@ bool DataEditor::ApplyChangesToModel()
 // sets the correct toolbar icons depending on the current mode (e.g. high contrast)
 void DataEditor::ApplyImageList()
 {
-    bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     ImageList& rImgLst = bIsHighContrast
         ? m_aToolboxImageListHighContrast
