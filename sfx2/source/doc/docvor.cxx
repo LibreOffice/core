@@ -1188,7 +1188,7 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
     // einfuegen
     BmpColorMode eColorMode = BMP_COLOR_NORMAL;
 
-    if ( GetDisplayBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
         eColorMode = BMP_COLOR_HIGHCONTRAST;
 
 
@@ -1480,7 +1480,7 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL            bHC = GetBackground().GetColor().IsDark();
+    BOOL            bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image*    pRet = NULL;
 
     switch( nLevel )
@@ -1514,7 +1514,7 @@ const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL         bHC = GetBackground().GetColor().IsDark();
+    BOOL         bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image* pRet = NULL;
 
     switch( nLevel )

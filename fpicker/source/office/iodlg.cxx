@@ -560,7 +560,7 @@ void SvtFileDialog::Init_Impl
     WinBits nStyle
 )
 {
-    sal_Bool bIsHighContrast = GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     m_aImages = ImageList( SvtResId( bIsHighContrast ? RID_FILEPICKER_IMAGES_HC : RID_FILEPICKER_IMAGES ) );
 
     _pImp->_nStyle = nStyle;
@@ -2683,7 +2683,7 @@ void SvtFileDialog::implUpdateImages( )
 {
     // determine high contrast mode
     {
-        sal_Bool bIsHighContrast = GetDisplayBackground().GetColor().IsDark();
+        sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
         m_aImages = ImageList( SvtResId( bIsHighContrast ? RID_FILEPICKER_IMAGES_HC : RID_FILEPICKER_IMAGES ) );
     }
 

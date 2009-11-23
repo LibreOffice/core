@@ -1203,7 +1203,7 @@ void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
             OutputDevice* pDevice = rUDEvt.GetDevice();
 
             ULONG nOldDrawMode = pDevice->GetDrawMode();
-            pDevice->SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+            pDevice->SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
             XHatch& rXHatch = mpList->GetHatch( rUDEvt.GetItemId() )->GetHatch();
             MapMode aMode( MAP_100TH_MM );
@@ -1968,7 +1968,7 @@ SvxPreviewBase::SvxPreviewBase( Window* pParent, const ResId& rResId )
 {
     //  Draw the control's border as a flat thin black line.
     SetBorderStyle(WINDOW_BORDER_MONO);
-    SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
     SetMapMode(MAP_100TH_MM);
 
     // init model
@@ -2031,7 +2031,7 @@ void SvxPreviewBase::StateChanged(StateChangedType nType)
 
 void SvxPreviewBase::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    SetDrawMode(GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
+    SetDrawMode(GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
 
     if((DATACHANGED_SETTINGS == rDCEvt.GetType()) && (rDCEvt.GetFlags() & SETTINGS_STYLE))
     {

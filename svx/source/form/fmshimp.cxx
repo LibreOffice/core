@@ -987,7 +987,7 @@ PopupMenu* FmXFormShell::GetConversionMenu()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::GetConversionMenu" );
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
+    BOOL bIsHiContrastMode  = rSettings.GetHighContrastMode();
 
     PopupMenu* pNewMenu = new PopupMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
 
@@ -2001,7 +2001,7 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
 
     m_aCurrentSelection = _rSelection;
 
-    // determine the form which all the selected objécts belong to, if any
+    // determine the form which all the selected objï¿½cts belong to, if any
     Reference< XForm > xNewCurrentForm;
     for ( InterfaceBag::const_iterator loop = m_aCurrentSelection.begin();
           loop != m_aCurrentSelection.end();
