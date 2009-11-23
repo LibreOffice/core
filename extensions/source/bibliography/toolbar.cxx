@@ -620,8 +620,8 @@ void BibToolBar::RebuildToolbar()
 void BibToolBar::ApplyImageList()
 {
     ImageList& rList = ( nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ) ?
-                       ( GetDisplayBackground().GetColor().IsDark() ? aImgLstHC : aImgLst ) :
-                       ( GetDisplayBackground().GetColor().IsDark() ? aBigImgLstHC : aBigImgLst );
+                       ( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImgLstHC : aImgLst ) :
+                       ( GetSettings().GetStyleSettings().GetHighContrastMode() ? aBigImgLstHC : aBigImgLst );
 
     SetItemImage(TBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
     SetItemImage(TBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));

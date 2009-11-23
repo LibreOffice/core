@@ -239,7 +239,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             ) ;
 
             if( cbIssuer <= 0 ) {
-                delete issuer ;
+                delete [] issuer ;
                 throw RuntimeException() ;
             }
 
@@ -252,7 +252,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
             if(issuer[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
             OUString xIssuer(issuer , cbIssuer ,encoding ) ; //By CP
-            delete issuer ;
+            delete [] issuer ;
 
             return replaceTagSWithTagST(xIssuer);
         } else {
@@ -288,7 +288,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             ) ;
 
             if( cbSubject <= 0 ) {
-                delete subject ;
+                delete [] subject ;
                 throw RuntimeException() ;
             }
 
@@ -301,7 +301,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
             if(subject[cbSubject-1] == 0) cbSubject--; //delimit the last 0x00;
             OUString xSubject(subject , cbSubject ,encoding ) ; //By CP
-            delete subject ;
+            delete [] subject ;
 
             return replaceTagSWithTagST(xSubject);
         } else {

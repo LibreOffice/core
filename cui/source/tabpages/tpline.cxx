@@ -288,6 +288,7 @@ void SvxLineTabPage::Construct()
 
 void SvxLineTabPage::FillListboxes()
 {
+    // Linienstile
     USHORT nOldSelect = aLbLineStyle.GetSelectEntryPos();
     aLbLineStyle.FillStyles();
     aLbLineStyle.Fill( pDashList );
