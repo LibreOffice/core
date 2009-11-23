@@ -89,11 +89,10 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using ::com::sun::star::document::XViewDataSupplier;
+using ::com::sun::star::container::XIndexAccess;
 
 //====================================================================
-
-#define SFX_WINDOWS_STREAM "SfxWindows"
-#define SFX_PREVIEW_STREAM "SfxPreview"
 
 //====================================================================
 
@@ -194,165 +193,91 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
 
 //====================================================================
 
-SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame& rPreferedFrame )
+bool SfxObjectShell::LoadView_Impl( SfxTopFrame& rTargetFrame )
 {
-
-    if ( pImp->bLoadingWindows )
-        return NULL;
-
     DBG_ASSERT( GetMedium(), "A Medium should exist here!");
-    if( !GetMedium() )
-        return 0;
+    if ( !GetMedium() )
+        return false;
 
-    // get correct mode
-    SFX_APP();
-    SfxViewFrame* pPreferedViewFrame = rPreferedFrame.GetCurrentViewFrame();
-    SvtSaveOptions aOpt;
-    BOOL bLoadDocWins = aOpt.IsSaveDocWins() && !pPreferedViewFrame;
-
-    // try to get viewdata information for XML format
-    REFERENCE < XVIEWDATASUPPLIER > xViewDataSupplier( GetModel(), ::com::sun::star::uno::UNO_QUERY );
-    REFERENCE < XINDEXACCESS > xViewData;
-
+    // obtain view data
+    Reference< XViewDataSupplier > xViewDataSupplier( GetModel(), UNO_QUERY );
+    Reference< XIndexAccess > xViewData;
     if ( xViewDataSupplier.is() )
-    {
         xViewData = xViewDataSupplier->getViewData();
-        if ( !xViewData.is() )
-            return NULL;
-    }
-    else
-        return NULL;
 
-    SfxViewFrame *pActiveFrame = 0;
-    String aWinData;
-    SfxItemSet *pSet = GetMedium()->GetItemSet();
+    if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
+        return false;
 
-    pImp->bLoadingWindows = TRUE;
-    BOOL bLoaded = FALSE;
-    sal_Int32 nView = 0;
-
-    // get saved information for all views
-    SfxTopFrame* pCurrentTargetFrame = &rPreferedFrame;
-    while ( TRUE )
+    // obtain the ViewID from the view data
+    USHORT nViewId = 0;
+    SEQUENCE < PROPERTYVALUE > aUserData;
+    if ( xViewData->getByIndex( 0 ) >>= aUserData )
     {
-        USHORT nViewId = 0;
-        String aUserData;                   // used in the binary format
-        SEQUENCE < PROPERTYVALUE > aSeq;    // used in the XML format
-
-        // XML format
-        // active view is the first view in the container
-        FASTBOOL bActive = ( nView == 0 );
-
-        if ( nView == xViewData->getCount() )
-            // finished
-            break;
-
-        // get viewdata and look for the stored ViewId
-        ::com::sun::star::uno::Any aAny = xViewData->getByIndex( nView++ );
-        if ( aAny >>= aSeq )
+        ::comphelper::NamedValueCollection aNamedUserData( aUserData );
+        ::rtl::OUString sViewId = aNamedUserData.getOrDefault( "ViewId", ::rtl::OUString() );
+        if ( sViewId.getLength() )
         {
-            ::comphelper::NamedValueCollection aNamedUserData( aSeq );
-            ::rtl::OUString sViewId = aNamedUserData.getOrDefault( "ViewId", ::rtl::OUString() );
-            if ( sViewId.getLength() )
-            {
-                sViewId = sViewId.copy( 4 );    // format is like in "view3"
-                nViewId = USHORT( sViewId.toInt32() );
-            }
+            sViewId = sViewId.copy( 4 );    // format is like in "view3"
+            nViewId = USHORT( sViewId.toInt32() );
         }
+    }
 
-        // load only active view, but current item is not the active one ?
-        // in XML format the active view is the first one
-        if ( !bLoadDocWins && !bActive )
-            break;
+    SfxItemSet* pSet = GetMedium()->GetItemSet();
+    pSet->ClearItem( SID_USER_DATA );
+    pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
 
-        pSet->ClearItem( SID_USER_DATA );
-        SfxViewFrame *pFrame = 0;
-        if ( pPreferedViewFrame )
+    if ( rTargetFrame.GetCurrentViewFrame() )
+    {
+        // TODO: the only client of this case is the Reload-implementation for SFX-based documents. This should be
+        // migrated to use UNO mechanisms, too. In this case, we can simplify the code here.
+
+        // use the frame from the arguments, but don't set a window size
+        SfxViewFrame* pViewFrame = rTargetFrame.GetCurrentViewFrame();
+        if ( pViewFrame->GetViewShell() || !pViewFrame->GetObjectShell() )
         {
-            // use the frame from the arguments, but don't set a window size
-            pFrame = pPreferedViewFrame;
-            if ( pFrame->GetViewShell() || !pFrame->GetObjectShell() )
-            {
-                pSet->ClearItem( SID_VIEW_POS_SIZE );
-                pSet->ClearItem( SID_WIN_POSSIZE );
-                pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-
-                // avoid flickering controllers
-                SfxBindings &rBind = pFrame->GetBindings();
-                rBind.ENTERREGISTRATIONS();
-
-                // set document into frame
-                pCurrentTargetFrame->InsertDocument_Impl( *this );
-
-                // restart controller updating
-                rBind.LEAVEREGISTRATIONS();
-            }
-            else
-            {
-                // create new view
-                pFrame->CreateView_Impl( nViewId );
-            }
-        }
-        else
-        {
-            if ( bLoadDocWins )
-            {
-                // open in the background
-                pSet->Put( SfxUInt16Item( SID_VIEW_ZOOM_MODE, 0 ) );
-                pSet->Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle() ) );
-            }
-
-            pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-
-            if ( pCurrentTargetFrame )
-            {
-                // Frame "ubergeben, allerdings ist der noch leer
-                pCurrentTargetFrame->InsertDocument_Impl( *this );
-                pFrame = pCurrentTargetFrame->GetCurrentViewFrame();
-            }
-            else
-            {
-                pFrame = SfxTopFrame::Create( this, nViewId, FALSE, pSet )->GetCurrentViewFrame();
-            }
-
-            // only temporary data, don't hold it in the itemset
             pSet->ClearItem( SID_VIEW_POS_SIZE );
             pSet->ClearItem( SID_WIN_POSSIZE );
             pSet->ClearItem( SID_VIEW_ZOOM_MODE );
+
+            // avoid flickering controllers
+            SfxBindings &rBind = pViewFrame->GetBindings();
+            rBind.ENTERREGISTRATIONS();
+
+            // set document into frame
+            rTargetFrame.InsertDocument_Impl( *this );
+
+            // restart controller updating
+            rBind.LEAVEREGISTRATIONS();
         }
-
-        bLoaded = TRUE;
-
-        // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
-        // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
-        if ( pFrame && pFrame->GetViewShell() )
+        else
         {
-            if ( aUserData.Len() )
-                pFrame->GetViewShell()->ReadUserData( aUserData, !bLoadDocWins );
-            else if ( aSeq.getLength() )
-                pFrame->GetViewShell()->ReadUserDataSequence( aSeq, !bLoadDocWins );
+            // create new view
+            pViewFrame->CreateView_Impl( nViewId );
         }
-
-        // perhaps there are more windows to load
-        pCurrentTargetFrame = NULL;
-
-        if ( bActive )
-            pActiveFrame = pFrame;
-
-        if( pPreferedViewFrame || !bLoadDocWins )
-            // load only active window
-            break;
     }
-
-    if ( pActiveFrame )
+    else
     {
-        if ( !pPreferedViewFrame )
-            // activate frame
-            pActiveFrame->MakeActive_Impl( TRUE );
+        rTargetFrame.InsertDocument_Impl( *this );
+    }
+    SfxViewFrame* pViewFrame = rTargetFrame.GetCurrentViewFrame();
+
+    // only temporary data, don't hold it in the itemset
+    pSet->ClearItem( SID_VIEW_POS_SIZE );
+    pSet->ClearItem( SID_WIN_POSSIZE );
+    pSet->ClearItem( SID_VIEW_ZOOM_MODE );
+
+    // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
+    // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
+    if ( pViewFrame && pViewFrame->GetViewShell() && aUserData.getLength() )
+    {
+        pViewFrame->GetViewShell()->ReadUserDataSequence( aUserData, TRUE );
     }
 
-    pImp->bLoadingWindows = FALSE;
-    return pPreferedViewFrame && bLoaded ? pPreferedViewFrame : pActiveFrame;
+    if ( pViewFrame )
+        // activate frame
+        pViewFrame->MakeActive_Impl( TRUE );
+
+    return true;
 }
 
 //====================================================================

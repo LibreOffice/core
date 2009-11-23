@@ -2221,7 +2221,7 @@ SfxViewShell* SfxViewFrame::CreateView_Impl( sal_uInt16 nViewId )
 /*  [Beschreibung]
 
     Erzeugt eine SfxViewShell f"ur diesen SfxViewFrame. Wird auch aus
-    <SfxObjectShell::LoadWindows_Impl()>
+    <SfxObjectShell::LoadView_Impl()>
     gerufen.
 */
 
@@ -2265,10 +2265,6 @@ SfxViewShell* SfxViewFrame::CreateView_Impl( sal_uInt16 nViewId )
     if ( pViewShell->GetSubShell() )
         GetDispatcher()->Push( *pViewShell->GetSubShell() );
     pViewShell->PushSubShells_Impl();
-
-#if defined SFX_HINT_VIEWCREATED
-    GetObjectShell()->Broadcast( SfxSimpleHint( SFX_HINT_VIEWCREATED ) );
-#endif
 
     GetBindings().LEAVEREGISTRATIONS();
 

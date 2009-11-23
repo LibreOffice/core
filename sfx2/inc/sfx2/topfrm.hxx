@@ -78,6 +78,7 @@ public:
     SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;
     SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
     SAL_DLLPRIVATE void CheckMenuCloser_Impl( MenuBar* pMenubar );
+    SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
 //#endif
 };
 
