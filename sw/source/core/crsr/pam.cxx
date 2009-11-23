@@ -1233,11 +1233,13 @@ void SwPaM::InvalidatePaM()
 {
     const SwNode *_pNd=this->GetNode();
     const SwTxtNode *_pTxtNd=(_pNd!=NULL?_pNd->GetTxtNode():NULL);
-    if (_pTxtNd!=NULL) {
-    //pretent we've added a char to force layout to recalc the portion...
-    SwInsChr aHint(_pTxtNd->GetIndex());
-    SwModify *_pModify=(SwModify*)_pTxtNd;
-    _pModify->Modify( 0, &aHint);
+    if (_pTxtNd!=NULL)
+    {
+        // pretent that the PaM marks inserted text to recalc the portion...
+        SwInsTxt aHint( Start()->nContent.GetIndex(),
+                        End()->nContent.GetIndex() - Start()->nContent.GetIndex() + 1 );
+        SwModify *_pModify=(SwModify*)_pTxtNd;
+        _pModify->Modify( 0, &aHint);
     }
 }
 
