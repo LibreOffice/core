@@ -1659,10 +1659,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
         if (isValid() && !isValidCursor() && nId != ID_BROWSER_CLOSE)
             return aReturn;
 
-        // no chance while loading the form
-        if (PendingLoad())
-            return aReturn;
-
         switch (nId)
         {
             case ID_BROWSER_INSERTCOLUMNS:
