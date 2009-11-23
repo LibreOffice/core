@@ -2135,7 +2135,7 @@ sub print_announce {
     $prj_type = $modules_types{$Prj} if (defined $modules_types{$Prj});
     my $text;
     if ($prj_type eq 'lnk') {
-        if (scalar keys %active_modules && (!defined $active_modules{$Prj})) {
+        if (!defined $active_modules{$Prj}) {
             $text = "Skipping module $Prj\n";
         } else {
             $text = "Skipping link to $Prj\n";
@@ -2186,7 +2186,7 @@ sub modules_classify {
             next;
         };
         if (( $module_paths{$module} =~ /\.lnk$/) || ($module_paths{$module} =~ /\.link$/)
-                || (scalar keys %active_modules && (!defined $active_modules{$module}))) {
+                || (!defined $active_modules{$module})) {
             $modules_types{$module} = 'lnk';
             next;
         };
@@ -2376,8 +2376,10 @@ sub prepare_incompatible_build {
     };
     @modules_built = keys %$deps_hash;
     %add_to_config = %$deps_hash;
-    generate_config_file();
-    clear_delivered() if ($prepare);
+    if ($prepare) {
+        generate_config_file();
+        clear_delivered();
+    }
     my $old_output_tree = '';
     foreach $prj (sort keys %$deps_hash) {
         if ($prepare) {
@@ -2866,7 +2868,7 @@ sub generate_html_file {
 
     foreach (@modules_order) {
         next if ($modules_types{$_} eq 'lnk');
-        next if (scalar keys %active_modules && (!defined $active_modules{$_}));
+        next if (!defined $active_modules{$_});
         my ($errors_info_line, $dirs_info_line, $errors_number, $successes_percent, $errors_percent, $time) = get_html_info($_);
 #<one module>
         print HTML 'document.write("    <tr>");' . "\n";
