@@ -342,7 +342,7 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     void DbaIndexDialog::fillIndexList()
     {
-        sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
+        sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
         Image aPKeyIcon(ModuleRes( bHiContrast ? IMG_PKEYICON_SCH : IMG_PKEYICON));
         // fill the list with the index names
         m_aIndexes.Clear();
