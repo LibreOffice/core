@@ -354,43 +354,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
     if ( !pRefererItem )
         aSet.Put( SfxStringItem( SID_REFERER, String() ) );
 
-    SfxFrame* pTargetFrame = NULL;
-    for ( pTargetFrame = SfxFrame::GetFirst(); pTargetFrame; pTargetFrame = SfxFrame::GetNext( *pTargetFrame ) )
-    {
-        if ( pTargetFrame->GetFrameInterface() == _rTargetFrame )
-            break;
-    }
-
-    BOOL bFrameCreated = FALSE;
-    if ( !pTargetFrame )
-    {
-        pTargetFrame = SfxTopFrame::Create( _rTargetFrame );
-        bFrameCreated = TRUE;
-    }
-
+    SfxTopFrame* pTargetFrame = SfxTopFrame::Create( _rTargetFrame );
     if ( xModel.is() )
     {
-        // !TODO: replace by ViewFactory
-        if ( _rTargetFrame->getController().is() )
-        {
-            // remove old component
-            // if a frame was created already, it can't be an SfxComponent!
-            _rTargetFrame->setComponent( NULL, NULL );
-            if ( !bFrameCreated )
-                pTargetFrame = SfxTopFrame::Create( _rTargetFrame );
-        }
-
         aSet.Put( SfxFrameItem( SID_DOCFRAME, pTargetFrame ) );
 
         for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
         {
             if ( xModel == pDoc->GetModel() )
             {
-                SfxTopFrame* pTopFrame = dynamic_cast< SfxTopFrame* >( pTargetFrame );
-                OSL_ENSURE( pTopFrame, "SfxFrameLoader_Impl::load: An SfxFrame which is no SfxTopFrame?!" );
-                if ( !pTopFrame )
-                    return sal_False;
-
                 pTargetFrame->SetItemSet_Impl( &aSet );
 
                 aDescriptor.remove( "Model" );
@@ -398,7 +370,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
 
                 xModel->attachResource( sURL, aDescriptor.getPropertyValues() );
 
-                return pTopFrame->InsertDocument_Impl( *pDoc );
+                // TODO: replace by ViewFactory
+                return pTargetFrame->InsertDocument_Impl( *pDoc );
             }
         }
 
@@ -430,7 +403,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         if ( aParam.Len() )
         {
             sal_Bool bSuccess = impl_createNewDocWithSlotParam( (sal_uInt16)aParam.ToInt32(), pTargetFrame );
-            if ( !bSuccess && bFrameCreated && wFrame && !wFrame->GetCurrentDocument() )
+            if ( !bSuccess && wFrame && !wFrame->GetCurrentDocument() )
             {
                 wFrame->SetFrameInterface_Impl( NULL );
                 wFrame->DoClose();
@@ -482,8 +455,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         if ( !bUseTemplate )
         {
             // execute "NewDocument" request
-            sal_Bool bSuccess = impl_createNewDoc( aSet, pTargetFrame, aFact );;
-            if ( !bSuccess && bFrameCreated && wFrame && !wFrame->GetCurrentDocument() )
+            sal_Bool bSuccess = impl_createNewDoc( aSet, pTargetFrame, aFact );
+            if ( !bSuccess && wFrame && !wFrame->GetCurrentDocument() )
             {
                 wFrame->SetFrameInterface_Impl( NULL );
                 wFrame->DoClose();
@@ -529,25 +502,20 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         // !TODO: will be done by Framework!
         pDocMedium->SetUpdatePickList( !bHidden );
 
+        /*
+            #121119#
+            We dont know why _pFrame can be corrupt here.
+            But if it was deleted it shouldnt exists inside our global list.
+            May be we can use the damaged pointer to detect if it was removed from
+            this global list.
+        */
         impl_ensureValidFrame_throw( pTargetFrame );
 
-        // !TODO: replace by ViewFactory
-        if ( pTargetFrame->GetFrameInterface()->getController().is() )
-        {
-            // remove old component
-            // if a frame was created already, it can't be an SfxComponent!
-            //pTargetFrame->GetFrameInterface()->setComponent( 0, 0 );
-            if ( !bFrameCreated )
-                pTargetFrame = SfxTopFrame::Create( _rTargetFrame );
-        }
-
-        wFrame = pTargetFrame;
         aSet.Put( SfxFrameItem( SID_DOCFRAME, pTargetFrame ) );
-        pTargetFrame->SetItemSet_Impl( &aSet );
 
-        SfxTopFrame* pTopFrame = dynamic_cast< SfxTopFrame* >( pTargetFrame );
-        OSL_ENSURE( pTopFrame, "SfxFrameLoader_Impl::load: An SfxFrame which is no SfxTopFrame?!" );
-        if ( pTopFrame && pTopFrame->InsertDocument_Impl( *pDoc ) )
+        // !TODO: replace by ViewFactory
+        pTargetFrame->SetItemSet_Impl( &aSet );
+        if ( pTargetFrame->InsertDocument_Impl( *pDoc ) )
         {
             pTargetFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
             String aURL = pDoc->GetMedium()->GetName();
@@ -590,13 +558,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
 
 void SfxFrameLoader_Impl::impl_ensureValidFrame_throw( const SfxFrame* _pFrame )
 {
-    /*
-        #121119#
-        We dont know why pTargetFrame can be corrupt here.
-        But if it was deleted it shouldnt exists inside our global list.
-        May be we can use the damaged pointer to detect if it was removed from
-        this global list.
-    */
     SfxFrame* pTmp = NULL;
     for ( pTmp = SfxFrame::GetFirst(); pTmp; pTmp = SfxFrame::GetNext( *pTmp ) )
     {

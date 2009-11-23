@@ -103,9 +103,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bForbidCaching : 1,
                         bForbidReload : 1,
                         bSupportsEventMacros: 1,
-                        bLoadingWindows: 1,
                         bBasicInitialized :1,
-                        //bHidden :1, // indicates a hidden view shell
                         bIsPrintJobCancelable :1, // Stampit disable/enable cancel button for print jobs ... default = true = enable!
                         bOwnsStorage:1,
                         bNoBaseURL:1,

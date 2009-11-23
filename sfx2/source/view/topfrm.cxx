@@ -781,21 +781,48 @@ String SfxTopFrame::GetWindowData()
     return aWinData;
 }
 
+void SfxTopFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
+{
+    Window *pWin = pImp->pWindow;
+
+    // Groesse setzen
+    const Size aAppWindow( pImp->pWindow->GetDesktopRectPixel().GetSize() );
+    Point aPos( rWinArea.TopLeft() );
+    Size aSz( rWinArea.GetSize() );
+    if ( aSz.Width() && aSz.Height() )
+    {
+        aPos.X() = Min(aPos.X(),
+                        long(aAppWindow.Width() - aSz.Width() + aSz.Width() / 2) );
+        aPos.Y() = Min(aPos.Y(),
+                        long( aAppWindow.Height() - aSz.Height() + aSz.Height() / 2) );
+        if ( aPos.X() + aSz.Width() <
+                aAppWindow.Width() + aSz.Width() / 2 &&
+                aPos.Y() + aSz.Height() <
+                aAppWindow.Height() + aSz.Height() / 2 )
+        {
+            pWin->SetPosPixel( aPos );
+            pWin->SetOutputSizePixel( aSz );
+        }
+    }
+}
+
 sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 /* [Beschreibung]
  */
 {
-    SfxObjectShell *pOld = GetCurrentDocument();
+    const SfxObjectShell* pOldDocument = GetCurrentDocument();
+    OSL_PRECOND( pOldDocument == NULL,
+        "SfxTopFrame::InsertDocument_Impl: re-using an Sfx(Top)Frame is not supported anymore!" );
 
-    // Position und Groesse testen
-    // Wenn diese schon gesetzt sind, soll offensichtlich nicht noch
-    // LoadView_Impl aufgerufen werden ( z.B. weil dieses ein CreateFrame()
-    // an einer Task aufgerufen hat! )
     const SfxItemSet* pSet = GetItemSet_Impl();
     if ( !pSet )
         pSet = rDoc.GetMedium()->GetItemSet();
     SetItemSet_Impl(0);
 
+    // Position und Groesse testen
+    // Wenn diese schon gesetzt sind, soll offensichtlich nicht noch
+    // LoadView_Impl aufgerufen werden ( z.B. weil dieses ein CreateFrame()
+    // an einer Task aufgerufen hat! )
     SFX_ITEMSET_ARG( pSet, pAreaItem,   SfxRectangleItem,   SID_VIEW_POS_SIZE,  sal_False );    // position and size
     SFX_ITEMSET_ARG( pSet, pViewIdItem, SfxUInt16Item,      SID_VIEW_ID,        sal_False );    // view ID
     SFX_ITEMSET_ARG( pSet, pModeItem,   SfxUInt16Item,      SID_VIEW_ZOOM_MODE, sal_False );    // zoom
@@ -814,6 +841,8 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     if( !pImp->bHidden )
         rDoc.OwnerLock( sal_True );
 
+    const USHORT nViewId = pViewIdItem ? pViewIdItem->GetValue() : 0;
+
     // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
     // aus den Dokument geladen werden, z.B. weil InsertDocument_Impl seinerseits
     // aus LoadView_Impl aufgerufen wurde!
@@ -831,42 +860,39 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 
     UpdateDescriptor( &rDoc );
 
-    SfxViewFrame *pFrame = GetCurrentViewFrame();
-    if ( pFrame )
+    SfxViewFrame* pViewFrame = GetCurrentViewFrame();
+    if ( pViewFrame )
     {
-        sal_Bool bChildActivated = sal_False;
-        if ( pFrame->GetActiveChildFrame_Impl() && pFrame->GetActiveChildFrame_Impl() == SfxViewFrame::Current() )
+        // TODO: the only client of this case is the Reload-implementation for SFX-based documents. This should be
+        // migrated to use UNO mechanisms, too. In this case, we can simplify the code here.
+        if ( pViewFrame->GetActiveChildFrame_Impl() && pViewFrame->GetActiveChildFrame_Impl() == SfxViewFrame::Current() )
         {
-            pFrame->SetActiveChildFrame_Impl(0);
-            SfxViewFrame::SetViewFrame( pFrame );
-            bChildActivated = sal_True;
+            pViewFrame->SetActiveChildFrame_Impl(0);
+            SfxViewFrame::SetViewFrame( pViewFrame );
         }
 
-        if ( pFrame->GetObjectShell() )
+        if ( pViewFrame->GetObjectShell() )
         {
-            pFrame->ReleaseObjectShell_Impl( sal_False );
+            pViewFrame->ReleaseObjectShell_Impl( sal_False );
         }
 
         if ( pViewIdItem )
-            pFrame->SetViewData_Impl( pViewIdItem->GetValue(), String() );
-        pFrame->SetObjectShell_Impl( rDoc );
+            pViewFrame->SetViewData_Impl( pViewIdItem->GetValue(), String() );
+        pViewFrame->SetObjectShell_Impl( rDoc );
     }
     else
     {
-        // 1: internal embedded object
-        // 2: external embedded object
-        // 3: OLE server
         if ( pPluginMode && pPluginMode->GetValue() != 2 )
             SetInPlace_Impl( TRUE );
 
-        pFrame = new SfxTopViewFrame( this, &rDoc, pViewIdItem ? pViewIdItem->GetValue() : 0 );
-        if ( !pFrame->GetViewShell() )
+        pViewFrame = new SfxTopViewFrame( this, &rDoc, nViewId );
+        if ( !pViewFrame->GetViewShell() )
             return sal_False;
 
         if ( pPluginMode && pPluginMode->GetValue() == 1 )
         {
-            pFrame->ForceOuterResize_Impl( FALSE );
-            pFrame->GetBindings().HidePopups(TRUE);
+            pViewFrame->ForceOuterResize_Impl( FALSE );
+            pViewFrame->GetBindings().HidePopups(TRUE);
 
             // MBA: layoutmanager of inplace frame starts locked and invisible
             GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
@@ -878,77 +904,39 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
         }
     }
 
-    String aMark;
-    if ( pJumpItem )
-        aMark = pJumpItem->GetValue();
-
-    if ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
-    {
-        if ( pViewDataItem )
-            pFrame->GetViewShell()->ReadUserData( pViewDataItem->GetValue(), sal_True );
-        else if( aMark.Len() )
-            GetCurrentViewFrame()->GetViewShell()->JumpToMark( aMark );
-    }
-    else
-    {
-        // Daten setzen, die in FinishedLoading ausgewertet werden
-        MarkData_Impl*& rpMark = rDoc.Get_Impl()->pMarkData;
-        if (!rpMark)
-            rpMark = new MarkData_Impl;
-        rpMark->pFrame = GetCurrentViewFrame();
-        if ( pViewDataItem )
-            rpMark->aUserData = pViewDataItem->GetValue();
-        else
-            rpMark->aMark = aMark;
-    }
+    OSL_ENSURE( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT,
+        "SfxTopFrame::InsertDocument_Impl: so this code wasn't dead?" );
+        // Before CWS autorecovery, there was code which postponed setting the ViewData/Mark to a later time
+        // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since loads this method
+        // here is never called before the load process finished.
+    if ( pViewDataItem )
+        pViewFrame->GetViewShell()->ReadUserData( pViewDataItem->GetValue(), sal_True );
+    else if( pJumpItem )
+        pViewFrame->GetViewShell()->JumpToMark( pJumpItem->GetValue() );
 
     // Position und Groesse setzen
-    //sal_uInt16 nWinMode = pModeItem ? pModeItem->GetValue() : 1;
-    if ( pAreaItem && !pOld )
-    {
-        Window *pWin = pImp->pWindow;
-
-        // Groesse setzen
-        const Rectangle aWinRect( pAreaItem->GetValue() );
-        const Size aAppWindow( pImp->pWindow->GetDesktopRectPixel().GetSize() );
-        Point aPos( aWinRect.TopLeft() );
-        Size aSz(aWinRect.GetSize());
-        if ( aSz.Width() && aSz.Height() )
-        {
-            aPos.X() = Min(aPos.X(),
-                            long(aAppWindow.Width() - aSz.Width() + aSz.Width() / 2) );
-            aPos.Y() = Min(aPos.Y(),
-                            long( aAppWindow.Height() - aSz.Height() + aSz.Height() / 2) );
-            if ( aPos.X() + aSz.Width() <
-                    aAppWindow.Width() + aSz.Width() / 2 &&
-                    aPos.Y() + aSz.Height() <
-                    aAppWindow.Height() + aSz.Height() / 2 )
-            {
-                pWin->SetPosPixel( aPos );
-                pWin->SetOutputSizePixel( aSz );
-            }
-        }
-    }
+    if ( pAreaItem && !pOldDocument )
+        PositionWindow_Impl( pAreaItem->GetValue() );
 
     if ( !pImp->bHidden )
     {
         if ( rDoc.IsHelpDocument() || (pPluginMode && pPluginMode->GetValue() == 2) )
-            pFrame->GetDispatcher()->HideUI( TRUE );
+            pViewFrame->GetDispatcher()->HideUI( TRUE );
         else
-            pFrame->GetDispatcher()->HideUI( FALSE );
+            pViewFrame->GetDispatcher()->HideUI( FALSE );
 
         if ( IsInPlace() )
-            pFrame->LockAdjustPosSizePixel();
+            pViewFrame->LockAdjustPosSizePixel();
 
         if ( pPluginMode && pPluginMode->GetValue() == 3)
             GetWorkWindow_Impl()->SetInternalDockingAllowed(FALSE);
 
         if ( !IsInPlace() )
-            pFrame->GetDispatcher()->Update_Impl();
-        pFrame->Show();
+            pViewFrame->GetDispatcher()->Update_Impl();
+        pViewFrame->Show();
         GetWindow().Show();
         if ( !IsInPlace() || (pPluginMode && pPluginMode->GetValue() == 3) )
-            pFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
+            pViewFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
         rDoc.OwnerLock( sal_False );
 
         // Dont show container window! Its done by framework or directly
@@ -956,11 +944,11 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 
         if ( IsInPlace() )
         {
-            pFrame->UnlockAdjustPosSizePixel();
+            pViewFrame->UnlockAdjustPosSizePixel();
             // force resize for OLE server to fix layout problems of writer and math
             // see i53651
             if ( pPluginMode && pPluginMode->GetValue() == 3 )
-                pFrame->Resize(TRUE);
+                pViewFrame->Resize(TRUE);
         }
     }
     else
@@ -970,19 +958,19 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     }
 
     // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
-    pFrame->UpdateTitle();
+    pViewFrame->UpdateTitle();
 
     if ( !IsInPlace() )
     {
-        if ( pFrame->GetViewShell()->UseObjectSize() )
+        if ( pViewFrame->GetViewShell()->UseObjectSize() )
         {
-            GetCurrentViewFrame()->UnlockAdjustPosSizePixel();
-            GetCurrentViewFrame()->Resize(TRUE);
-            GetCurrentViewFrame()->ForceInnerResize_Impl( FALSE );
-            GetCurrentViewFrame()->Resize(TRUE);
+            pViewFrame->UnlockAdjustPosSizePixel();
+            pViewFrame->Resize(TRUE);
+            pViewFrame->ForceInnerResize_Impl( FALSE );
+            pViewFrame->Resize(TRUE);
         }
         else
-            GetCurrentViewFrame()->Resize(TRUE);
+            pViewFrame->Resize(TRUE);
     }
 
     SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), &rDoc ) );

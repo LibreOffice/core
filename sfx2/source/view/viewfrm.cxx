@@ -2269,10 +2269,6 @@ SfxViewShell* SfxViewFrame::CreateView_Impl( sal_uInt16 nViewId )
         GetDispatcher()->Push( *pViewShell->GetSubShell() );
     pViewShell->PushSubShells_Impl();
 
-#if defined SFX_HINT_VIEWCREATED
-    GetObjectShell()->Broadcast( SfxSimpleHint( SFX_HINT_VIEWCREATED ) );
-#endif
-
     GetBindings().LEAVEREGISTRATIONS();
 
     DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );
