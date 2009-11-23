@@ -217,10 +217,6 @@ String RID_STR_PROPTITLE_FORMATTED
 {
     Text [ en-US ] = "Formatted Field";
 };
-String RID_STR_MOVING_CURSOR
-{
-    Text [ en-US ] = "align data source";
-};
 String RID_STR_PROPTITLE_LISTBOX
 {
     Text [ en-US ] = "List Box";
