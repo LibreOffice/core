@@ -404,13 +404,14 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
             DBG_ERROR( "no screen found" );
         }
 
-        // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
-        mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
-
         // #i107076# maintaining size-WYSIWYG-ness causes many problems for low resolution devices
         //           or for mis-reporting devices => it is better to use a default resolution then
-        if( mnRealDPIY < 72 )
-            mnRealDPIY = 72;
+        static const int nMinDPI = 72;
+        if( (mnRealDPIX < nMinDPI) || (mnRealDPIY < nMinDPI) )
+            mnRealDPIX = mnRealDPIY = nMinDPI;
+
+        // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
+        mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
 
         pSalData->mnDPIX = mnRealDPIX;
         pSalData->mnDPIY = mnRealDPIY;
