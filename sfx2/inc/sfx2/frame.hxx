@@ -215,7 +215,6 @@ public:
     SAL_DLLPRIVATE void SetCurrentViewFrame_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE sal_Bool IsClosing_Impl() const;
     SAL_DLLPRIVATE void SetIsClosing_Impl();
-    SAL_DLLPRIVATE sal_Bool Browse( sal_Bool bForward, sal_uInt16 nDelta = 1, sal_Bool bNewFrame=sal_False );
 
                         // Methoden f"ur den Zugriff auf das aktuelle Set
     SAL_DLLPRIVATE void SetDescriptor( SfxFrameDescriptor* );

@@ -408,11 +408,6 @@ void SfxFrame::SetFrameType_Impl( sal_uInt32 n )
     pImp->nType = n;
 }
 
-sal_Bool SfxFrame::Browse( sal_Bool /*bForward*/, sal_uInt16 /*nSteps*/, sal_Bool /*bNewFrame*/ )
-{
-    return FALSE;
-}
-
 void SfxFrame::GetViewData_Impl()
 {
     // Alle zwischen Laden und Entfernen "anderbaren Daten aktualisieren; die

@@ -1467,13 +1467,8 @@ void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
     {
         case SID_BROWSE_FORWARD:
         case SID_BROWSE_BACKWARD:
-        {
-            // Anzeige der n"achsten oder vorherigen Seite aus der History
-            SFX_REQUEST_ARG( rRequest, pSteps, SfxUInt16Item, nSlotId, sal_False );
-            GetFrame()->Browse( nSlotId == SID_BROWSE_FORWARD, pSteps ? pSteps->GetValue() : 1,
-                (rRequest.GetModifier() & KEY_MOD1) != 0 );
+            OSL_ENSURE( false, "SfxTopViewFrame::INetExecute_Impl: SID_BROWSE_FORWARD/BACKWARD are dead!" );
             break;
-        }
         case SID_CREATELINK:
         {
 /*! (pb) we need new implementation to create a link
