@@ -901,7 +901,7 @@ bool StringRangeEnumerator::checkValue( sal_Int32 i_nValue, const std::set< sal_
     return true;
 }
 
-bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, bool bSequence )
+bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, bool bSequence, bool bMayAdjust )
 {
     bool bSuccess = true;
     if( bSequence )
@@ -910,6 +910,17 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
             i_nFirst = mnMin;
         if( i_nLast == -1 )
             i_nLast = mnMax;
+        if( bMayAdjust )
+        {
+            if( i_nFirst < mnMin )
+                i_nFirst = mnMin;
+            if( i_nFirst > mnMax )
+                i_nFirst = mnMax;
+            if( i_nLast < mnMin )
+                i_nLast = mnMin;
+            if( i_nLast > mnMax )
+                i_nLast = mnMax;
+        }
         if( checkValue( i_nFirst ) && checkValue( i_nLast ) )
         {
             maSequence.push_back( Range( i_nFirst, i_nLast ) );
@@ -947,7 +958,7 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
     return bSuccess;
 }
 
-bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange )
+bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_bStrict )
 {
     mnCount = 0;
     maSequence.clear();
@@ -957,7 +968,7 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange )
     {
         if( mnMin >= 0 && mnMax >= 0 )
         {
-            insertRange( mnMin, mnMax, mnMin != mnMax );
+            insertRange( mnMin, mnMax, mnMin != mnMax, ! i_bStrict );
         }
         return true;
     }
@@ -977,7 +988,7 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange )
             {
                 if( bSequence )
                 {
-                    if( ! insertRange( nLastNumber, nNumber, true ) )
+                    if( ! insertRange( nLastNumber, nNumber, true, ! i_bStrict ) && i_bStrict )
                     {
                         bSuccess = false;
                         break;
@@ -986,7 +997,7 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange )
                 }
                 else
                 {
-                    if( ! insertRange( nNumber, nNumber, false ) )
+                    if( ! insertRange( nNumber, nNumber, false, ! i_bStrict ) && i_bStrict )
                     {
                         bSuccess = false;
                         break;
@@ -1017,7 +1028,7 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange )
 
         if( bInsertRange )
         {
-            if( ! insertRange( nLastNumber, nNumber, bSequence ) )
+            if( ! insertRange( nLastNumber, nNumber, bSequence, ! i_bStrict ) && i_bStrict )
             {
                 bSuccess = false;
                 break;
@@ -1029,7 +1040,7 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange )
             pInput++;
     }
     // insert last entries
-    insertRange( nLastNumber, nNumber, bSequence );
+    insertRange( nLastNumber, nNumber, bSequence, ! i_bStrict );
 
     return bSuccess;
 }

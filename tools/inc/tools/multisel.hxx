@@ -131,7 +131,7 @@ class TOOLS_DLLPUBLIC StringRangeEnumerator
     sal_Int32                                              mnMax;
     sal_Int32                                              mnOffset;
 
-    bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence );
+    bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence, bool bMayAdjust );
     bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
 public:
     class TOOLS_DLLPUBLIC Iterator
@@ -177,7 +177,7 @@ public:
     sal_Int32 getLogicalOffset() const { return mnOffset; }
     void setLogicalOffset( sal_Int32 i_nOffset ) { mnOffset = i_nOffset; }
 
-    bool setRange( const rtl::OUString& i_rNewRange );
+    bool setRange( const rtl::OUString& i_rNewRange, bool i_bStrict = false );
     bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
 
 
