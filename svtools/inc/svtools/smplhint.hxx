@@ -42,7 +42,7 @@
 #define SFX_HINT_UPDATEDONE         0x00000020
 #define SFX_HINT_DEINITIALIZING     0x00000040
 #define SFX_HINT_MODECHANGED        0x00000080
-#define SFX_HINT_CANCELLABLE        0x00000100
+    // unused, formerly SFX_HINT_CANCELLABLE
     // unused, formerly SFX_HINT_DATAAVAILABLE
     // unused, formerly SFX_HINT_SAVECOMPLETED
     // unused, formerly SFX_HINT_RELEASEREF
