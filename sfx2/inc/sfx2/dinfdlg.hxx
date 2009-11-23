@@ -53,6 +53,9 @@ namespace com { namespace sun { namespace star {
     namespace document {
         class XDocumentProperties;
     }
+    namespace util {
+        class Duration;
+    }
 } } }
 
 struct CustomProperty;
@@ -382,6 +385,30 @@ public:
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
+class CustomPropertiesDurationField : public Edit
+{
+    CustomPropertyLine*             m_pLine;
+    com::sun::star::util::Duration  m_aDuration;
+protected:
+    virtual void    RequestHelp(const HelpEvent& rEvt);
+public:
+    CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
+    ~CustomPropertiesDurationField();
+
+    void SetDuration( const com::sun::star::util::Duration& rDuration );
+    const com::sun::star::util::Duration& GetDuration() const { return m_aDuration; }
+};
+
+class CustomPropertiesEditButton : public PushButton
+{
+    CustomPropertyLine*             m_pLine;
+
+public:
+    CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
+    ~CustomPropertiesEditButton();
+
+    DECL_LINK(ClickHdl, PushButton*);
+};
 
 class CustomPropertiesRemoveButton : public ImageButton
 {
@@ -421,6 +448,9 @@ struct CustomPropertyLine
     CustomPropertiesEdit            m_aValueEdit;
     CustomPropertiesDateField       m_aDateField;
     CustomPropertiesTimeField       m_aTimeField;
+    const String                    m_sDurationFormat;
+    CustomPropertiesDurationField   m_aDurationField;
+    CustomPropertiesEditButton     m_aEditButton;
     CustomPropertiesYesNoButton     m_aYesNoButton;
     CustomPropertiesRemoveButton    m_aRemoveButton;
 
@@ -446,6 +476,8 @@ private:
     Edit                                m_aValueEdit;
     DateField                           m_aDateField;
     TimeField                           m_aTimeField;
+    Edit                                m_aDurationField;
+    PushButton                          m_aEditButton;
     CustomPropertiesYesNoButton         m_aYesNoButton;
     ImageButton                         m_aRemoveButton;
 

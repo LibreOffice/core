@@ -57,6 +57,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <vcl/timer.hxx>
@@ -75,6 +76,8 @@
 #include <sfx2/sfx.hrc>
 #include "dinfdlg.hrc"
 #include "sfxlocal.hrc"
+#include <dialog.hrc>
+#include <vcl/help.hxx>
 
 #include <algorithm>
 
@@ -1569,7 +1572,168 @@ CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( Window* pParent, const
     m_aYesButton.SetBackground( aWall );
     m_aNoButton.SetBackground( aWall );
 }
+class DurationDialog_Impl : public ModalDialog
+{
+    FixedLine       aDurationFL;
 
+    OKButton        aOKPB;
+    CancelButton    aCancelPB;
+    HelpButton      aHelpPB;
+
+    CheckBox        aNegativeCB;
+    FixedText       aYearFT;
+    NumericField    aYearNF;
+    FixedText       aMonthFT;
+    NumericField    aMonthNF;
+    FixedText       aDayFT;
+    NumericField    aDayNF;
+    FixedText       aHourFT;
+    NumericField    aHourNF;
+    FixedText       aMinuteFT;
+    NumericField    aMinuteNF;
+    FixedText       aSecondFT;
+    NumericField    aSecondNF;
+    FixedText       aHSecondFT;
+    NumericField    aHSecondNF;
+
+public:
+
+    DurationDialog_Impl( Window* pParent, const util::Duration& rDuration );
+    ~DurationDialog_Impl();
+
+    util::Duration  GetDuration() const;
+};
+/*-- 20.11.2009 15:40:46---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+DurationDialog_Impl::DurationDialog_Impl( Window* pParent, const util::Duration& rDuration ) :
+            ModalDialog( pParent, SfxResId( RID_EDIT_DURATIONS ) ),
+            aDurationFL(this, SfxResId( FL_DURATION       )),
+            aOKPB(      this, SfxResId( PB_OK       )),
+            aCancelPB(  this, SfxResId( PB_CANCEL   )),
+            aHelpPB(    this, SfxResId( PB_HELP     )),
+            aNegativeCB(this, SfxResId( CB_NEGATIVE     )),
+            aYearFT(    this, SfxResId( FT_YEAR         )),
+            aYearNF(    this, SfxResId( ED_YEAR         )),
+            aMonthFT(   this, SfxResId( FT_MONTH        )),
+            aMonthNF(   this, SfxResId( ED_MONTH        )),
+            aDayFT(     this, SfxResId( FT_DAY          )),
+            aDayNF(     this, SfxResId( ED_DAY          )),
+            aHourFT(    this, SfxResId( FT_HOUR         )),
+            aHourNF(    this, SfxResId( ED_HOUR         )),
+            aMinuteFT(  this, SfxResId( FT_MINUTE       )),
+            aMinuteNF(  this, SfxResId( ED_MINUTE       )),
+            aSecondFT(  this, SfxResId( FT_SECOND       )),
+            aSecondNF(  this, SfxResId( ED_SECOND       )),
+            aHSecondFT( this, SfxResId( FT_HSECOND      )),
+            aHSecondNF( this, SfxResId( ED_HSECOND      ))
+{
+    FreeResource();
+    aNegativeCB.Check(rDuration.Negative);
+    aYearNF.SetValue(rDuration.Years);
+    aMonthNF.SetValue(rDuration.Months );
+    aDayNF.SetValue(rDuration.Days   );
+    aHourNF.SetValue(rDuration.Hours  );
+    aMinuteNF.SetValue(rDuration.Minutes);
+    aSecondNF.SetValue(rDuration.Seconds);
+    aHSecondNF.SetValue(rDuration.HundredthSeconds);
+}
+/*-- 20.11.2009 16:08:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+DurationDialog_Impl::~DurationDialog_Impl()
+{
+}
+/*-- 20.11.2009 15:41:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+util::Duration  DurationDialog_Impl::GetDuration() const
+{
+    util::Duration  aRet;
+    aRet.Negative = aNegativeCB.IsChecked();
+    aRet.Years = aYearNF.GetValue();
+    aRet.Months = aMonthNF.GetValue( );
+    aRet.Days = aDayNF.GetValue(   );
+    aRet.Hours  = aHourNF.GetValue( );
+    aRet.Minutes = aMinuteNF.GetValue();
+    aRet.Seconds = aSecondNF.GetValue();
+    aRet.HundredthSeconds = aHSecondNF.GetValue();
+    return aRet;
+}
+
+/*-- 20.11.2009 15:30:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+CustomPropertiesDurationField::CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+        Edit( pParent, rResId ), m_pLine( pLine )
+
+{
+    SetDuration( util::Duration(false, 0, 0, 0, 0, 0, 0, 0) );
+}
+/*-- 23.11.2009 08:46:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+CustomPropertiesDurationField::~CustomPropertiesDurationField()
+{
+}
+/*-- 23.11.2009 09:23:35---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
+{
+    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    {
+        Size aSize( GetSizePixel() );
+        Rectangle aItemRect( rHEvt.GetMousePosPixel(), aSize );
+        if(Help::IsBalloonHelpEnabled())
+            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), GetText() );
+        else
+            Help::ShowQuickHelp( this, aItemRect, GetText(),
+                QUICKHELP_LEFT|QUICKHELP_VCENTER );
+    }
+}
+/*-- 20.11.2009 15:30:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration )
+{
+    m_aDuration = rDuration;
+    String sText(rDuration.Negative ? '-' : '+');
+    sText += m_pLine->m_sDurationFormat;
+    sText.SearchAndReplace(String::CreateFromAscii( "%1"), String::CreateFromInt32( rDuration.Years ) );
+    sText.SearchAndReplace(String::CreateFromAscii( "%2"), String::CreateFromInt32( rDuration.Months ) );
+    sText.SearchAndReplace(String::CreateFromAscii( "%3"), String::CreateFromInt32( rDuration.Days   ) );
+    sText.SearchAndReplace(String::CreateFromAscii( "%4"), String::CreateFromInt32( rDuration.Hours  ) );
+    sText.SearchAndReplace(String::CreateFromAscii( "%5"), String::CreateFromInt32( rDuration.Minutes) );
+    sText.SearchAndReplace(String::CreateFromAscii( "%6"), String::CreateFromInt32( rDuration.Seconds) );
+    SetText( sText );
+}
+/*-- 23.11.2009 08:51:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+CustomPropertiesEditButton::CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+        PushButton( pParent, rResId ), m_pLine( pLine )
+{
+    SetClickHdl( LINK( this, CustomPropertiesEditButton, ClickHdl ));
+}
+/*-- 23.11.2009 08:51:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+CustomPropertiesEditButton::~CustomPropertiesEditButton()
+{
+}
+/*-- 23.11.2009 08:47:37---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_LINK( CustomPropertiesEditButton, ClickHdl, PushButton*, EMPTY_ARG )
+{
+    DurationDialog_Impl* pDurationDlg = new DurationDialog_Impl( this, m_pLine->m_aDurationField.GetDuration() );
+    if( RET_OK == pDurationDlg->Execute() )
+        m_pLine->m_aDurationField.SetDuration( pDurationDlg->GetDuration() );
+    delete pDurationDlg;
+    return 1;
+}
+//--------------------------------------------------------------------------
 void CustomPropertiesYesNoButton::Resize()
 {
     const long nWidth = GetSizePixel().Width();
@@ -1592,6 +1756,9 @@ CustomPropertyLine::CustomPropertyLine( Window* pParent ) :
     m_aValueEdit    ( pParent, SfxResId( SFX_ED_PROPERTY_VALUE ), this ),
     m_aDateField    ( pParent, SfxResId( SFX_FLD_DATE), this),
     m_aTimeField    ( pParent, SfxResId( SFX_FLD_TIME), this),
+    m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT )),
+    m_aDurationField( pParent, SfxResId( SFX_FLD_DURATION), this),
+    m_aEditButton(    pParent, SfxResId( SFX_PB_EDIT ), this),
     m_aYesNoButton  ( pParent, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( pParent, SfxResId( SFX_PB_PROPERTY_REMOVE ), this ),
     m_bIsRemoved    ( false ),
@@ -1614,6 +1781,8 @@ void CustomPropertyLine::SetRemoved()
     m_aValueEdit.Hide();
     m_aDateField.Hide();
     m_aTimeField.Hide();
+    m_aDurationField.Hide();
+    m_aEditButton.Hide();
     m_aYesNoButton.Hide();
     m_aRemoveButton.Hide();
 }
@@ -1628,6 +1797,8 @@ CustomPropertiesWindow::CustomPropertiesWindow( Window* pParent, const ResId& rR
     m_aValueEdit    ( this, SfxResId( SFX_ED_PROPERTY_VALUE ) ),
     m_aDateField    ( this, SfxResId( SFX_FLD_DATE) ),
     m_aTimeField    ( this, SfxResId( SFX_FLD_TIME) ),
+    m_aDurationField( this, SfxResId( SFX_FLD_DURATION) ),
+    m_aEditButton(    this, SfxResId( SFX_PB_EDIT )),
     m_aYesNoButton  ( this, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( this, SfxResId( SFX_PB_PROPERTY_REMOVE ) ),
     m_nScrollPos (0),
@@ -1654,7 +1825,9 @@ IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
     CustomPropertyLine* pLine = pBox->GetLine();
     pLine->m_aValueEdit.Show( (CUSTOM_TYPE_TEXT == nType) || (CUSTOM_TYPE_NUMBER  == nType) );
     pLine->m_aDateField.Show( (CUSTOM_TYPE_DATE == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
-    pLine->m_aTimeField.Show( (CUSTOM_TYPE_TIME == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
+    pLine->m_aTimeField.Show( CUSTOM_TYPE_DATETIME  == nType );
+    pLine->m_aDurationField.Show( CUSTOM_TYPE_DURATION == nType );
+    pLine->m_aEditButton.Show( CUSTOM_TYPE_DURATION == nType );
     pLine->m_aYesNoButton.Show( CUSTOM_TYPE_BOOLEAN == nType );
     //adjust positions of date and time controls
     if( nType == CUSTOM_TYPE_DATE )
@@ -1665,10 +1838,6 @@ IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
     {
         pLine->m_aDateField.SetPosSizePixel( pLine->m_aDatePos, pLine->m_aDateTimeSize );
         pLine->m_aTimeField.SetPosSizePixel(pLine->m_aTimePos, pLine->m_aDateTimeSize );
-    }
-    else if( nType == CUSTOM_TYPE_TIME)
-    {
-        pLine->m_aTimeField.SetPosSizePixel(pLine->m_aValueEdit.GetPosPixel(), pLine->m_aValueEdit.GetSizePixel());
     }
 
     return 0;
@@ -1693,6 +1862,7 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, CustomPropertiesRemoveButton*, pBu
 
             Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit,
                                     &pLine->m_aDateField, &pLine->m_aTimeField,
+                                    &pLine->m_aDurationField, &pLine->m_aEditButton,
                                     &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
             Window** pCurrent = pWindows;
             while ( *pCurrent )
@@ -1804,6 +1974,8 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
     m_aValueEdit.Hide();
     m_aDateField.Hide();
     m_aTimeField.Hide();
+    m_aDurationField.Hide();
+    m_aEditButton.Hide();
     m_aYesNoButton.Hide();
     m_aRemoveButton.Hide();
 
@@ -1835,6 +2007,13 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
 
         if ( *pCurrent == &m_aValueEdit )
         {
+            Point aDurationPos( aPos );
+            m_aDurationField.SetPosPixel( aDurationPos );
+            Size aDurationSize(aSize);
+            aDurationSize.Width() -= (m_aEditButton.GetSizePixel().Width() + 3 );
+            m_aDurationField.SetSizePixel(aDurationSize);
+            aDurationPos.X() = aPos.X() - m_aEditButton.GetSizePixel().Width() + aSize.Width();
+            m_aEditButton.SetPosPixel(aDurationPos);
             aSize = m_aYesNoButton.GetSizePixel();
             aPos = m_aYesNoButton.GetPosPixel();
             aSize.Width() = nWidth;
@@ -1881,10 +2060,12 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     m_aCustomPropertiesLines.push_back( pNewLine );
     Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
                             &m_aDateField, &m_aTimeField,
+                            &m_aDurationField, &m_aEditButton,
                             &m_aYesNoButton, &m_aRemoveButton, NULL };
     Window* pNewWindows[] =
         {   &pNewLine->m_aNameBox, &pNewLine->m_aTypeBox, &pNewLine->m_aValueEdit,
             &pNewLine->m_aDateField, &pNewLine->m_aTimeField,
+            &pNewLine->m_aDurationField, &pNewLine->m_aEditButton,
             &pNewLine->m_aYesNoButton, &pNewLine->m_aRemoveButton, NULL };
     Window** pCurrent = pWindows;
     Window** pNewCurrent = pNewWindows;
@@ -1909,7 +2090,7 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     ::rtl::OUString sTmpValue;
     util::DateTime aTmpDateTime;
     util::Date aTmpDate;
-    util::Time aTmpTime;
+    util::Duration aTmpDuration;
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     pNewLine->m_aNameBox.SetText( sName );
@@ -1931,7 +2112,6 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     else if ( rAny >>= sTmpValue )
     {
         pNewLine->m_aValueEdit.SetText( sTmpValue );
-//        sValue = String( sTmpValue );
         nType = CUSTOM_TYPE_TEXT;
     }
     else if ( rAny >>= aTmpDate )
@@ -1940,10 +2120,10 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
         pNewLine->m_aDateField.SetDate( Date( aTmpDate.Day, aTmpDate.Month, aTmpDate.Year ) );
 
     }
-    else if ( rAny >>= aTmpTime )
+    else if ( rAny >>= aTmpDuration )
     {
-        nType = CUSTOM_TYPE_TIME;
-        pNewLine->m_aTimeField.SetTime( Time( aTmpTime.Hours, aTmpTime.Minutes, aTmpTime.Seconds, aTmpTime.HundredthSeconds ) );
+        nType = CUSTOM_TYPE_DURATION;
+        pNewLine->m_aDurationField.SetDuration( aTmpDuration );
     }
     else if ( rAny >>= aTmpDateTime )
     {
@@ -2012,7 +2192,7 @@ void CustomPropertiesWindow::DoScroll( sal_Int32 nNewPos )
         if ( pLine->m_bIsRemoved )
             continue;
 
-        Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit,
+        Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit, &pLine->m_aDurationField,
                                 &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
         Window** pCurrent = pWindows;
         while ( *pCurrent )
@@ -2084,11 +2264,9 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
                         aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear() );
                 aPropertiesSeq[i].Value <<= aDateTime;
             }
-            else if ( CUSTOM_TYPE_TIME == nType )
+            else if ( CUSTOM_TYPE_DURATION == nType )
             {
-                Time aTmpTime = pLine->m_aTimeField.GetTime();
-                util::Time aTime( aTmpTime.Get100Sec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour() );
-                aPropertiesSeq[i].Value <<= aTime;
+                aPropertiesSeq[i].Value <<= pLine->m_aDurationField.GetDuration();
             }
             else if ( CUSTOM_TYPE_DATE == nType )
             {

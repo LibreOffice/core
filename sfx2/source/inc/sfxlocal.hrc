@@ -62,6 +62,8 @@
 #define SFX_IMG_PROPERTY_REMOVE_HC          (RID_SFX_SFXLOCAL_START +  9)
 #define SFX_FLD_DATE                        (RID_SFX_SFXLOCAL_START +  10)
 #define SFX_FLD_TIME                        (RID_SFX_SFXLOCAL_START +  11)
+#define SFX_FLD_DURATION                    (RID_SFX_SFXLOCAL_START +  12)
+#define SFX_ST_DURATION_FORMAT              (RID_SFX_SFXLOCAL_START +  13)
 
 
 #endif

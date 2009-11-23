@@ -34,6 +34,7 @@
 #include "helpid.hrc"
 #include "sfxlocal.hrc"
 #include "dinfdlg.hrc"
+#include <dialog.hrc>
 
  // TP_DOCINFODESC --------------------------------------------------------
 String STR_SFX_NEWOFFICEDOC
@@ -588,7 +589,7 @@ ListBox SFX_LB_PROPERTY_TYPE
         < "Text"        ; CUSTOM_TYPE_TEXT ; > ;
         < "DateTime"    ; CUSTOM_TYPE_DATETIME ; > ;
         < "Date"        ; CUSTOM_TYPE_DATE ; > ;
-        < "Time"        ; CUSTOM_TYPE_TIME ; > ;
+        < "Duration"    ; CUSTOM_TYPE_DURATION ; > ;
         < "Number"      ; CUSTOM_TYPE_NUMBER ; > ;
         < "Yes or no"   ; CUSTOM_TYPE_BOOLEAN ; > ;
     };
@@ -618,6 +619,25 @@ TimeField SFX_FLD_TIME
     TabStop = TRUE ;
     Left = TRUE ;
     Spin = TRUE;
+};
+
+Edit SFX_FLD_DURATION
+{
+    Readonly = TRUE;
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 159 , 2 ) ;
+    Size = MAP_APPFONT ( 61 - RSC_CD_TEXTBOX_HEIGHT - 2, RSC_CD_TEXTBOX_HEIGHT ) ;
+    TabStop = TRUE ;
+};
+PushButton SFX_PB_EDIT
+{
+    Pos = MAP_APPFONT ( 159 , 2 ) ;
+    Size = MAP_APPFONT ( RSC_CD_TEXTBOX_HEIGHT , RSC_CD_TEXTBOX_HEIGHT ) ;
+    Text = "...";
+};
+String SFX_ST_DURATION_FORMAT
+{
+    Text [en-US] = " Y: %1 M: %2 D: %3 H: %4 M: %5 S: %6";
 };
 
 Control SFX_WIN_PROPERTY_YESNO
@@ -705,3 +725,181 @@ TabDialog SID_DOCINFO
     };
 };
 
+ModalDialog RID_EDIT_DURATIONS
+{
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 176 , 140 ) ;
+    Text [ en-US ] = "Edit Duration" ;
+    Moveable = TRUE ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 120 , 7 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 120 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 120 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    FixedLine FL_DURATION
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
+        Text [ en-US ] = "Duration" ;
+    };
+    CheckBox CB_NEGATIVE
+    {
+        Pos = MAP_APPFONT ( 6 , 21 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Negative" ;
+    };
+    FixedText FT_YEAR
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Years" ;
+    };
+    NumericField ED_YEAR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 36 ) ;
+        Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        Value = 0 ;
+    };
+    FixedText FT_MONTH
+    {
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Months" ;
+    };
+    NumericField ED_MONTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 50 ) ;
+        Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        Value = 0 ;
+    };
+    FixedText FT_DAY
+    {
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Days" ;
+    };
+    NumericField ED_DAY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 64 ) ;
+        Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        Value = 0 ;
+    };
+    FixedText FT_HOUR
+    {
+        Pos = MAP_APPFONT ( 6 , 80 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "H~ours" ;
+    };
+    NumericField ED_HOUR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 78 ) ;
+        Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        Value = 0 ;
+    };
+    FixedText FT_MINUTE
+    {
+        Pos = MAP_APPFONT ( 6 , 94 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Min~utes" ;
+    };
+    NumericField ED_MINUTE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70, 92) ;
+        Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        Value = 0 ;
+    };
+    FixedText FT_SECOND
+    {
+        Pos = MAP_APPFONT ( 6, 108 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Seconds" ;
+    };
+    NumericField ED_SECOND
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 106 ) ;
+        Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        Value = 0 ;
+    };
+    FixedText FT_HSECOND
+    {
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "1/100 se~conds" ;
+    };
+    NumericField ED_HSECOND
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 120 ) ;
+        Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        Value = 0 ;
+    };
+
+
+
+};
