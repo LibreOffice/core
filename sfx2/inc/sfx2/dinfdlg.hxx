@@ -46,15 +46,12 @@
 #include <svtools/headbar.hxx>
 #include <svtools/syslocale.hxx>
 #include <svtools/zforlist.hxx>
-
+#include <com/sun/star/util/Duration.hpp>
 #include "tabdlg.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace document {
         class XDocumentProperties;
-    }
-    namespace util {
-        class Duration;
     }
 } } }
 
