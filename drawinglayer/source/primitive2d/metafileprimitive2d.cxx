@@ -1994,9 +1994,53 @@ namespace
                 }
                 case META_TEXTRECT_ACTION :
                 {
-                    /** NEEDS IMPLEMENTATION */
-                    OSL_ENSURE(false, "META_TEXTRECT_ACTION requested (!)");
-                    // const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
+                    /** CHECKED, WORKS WELL */
+                    // OSL_ENSURE(false, "META_TEXTRECT_ACTION requested (!)");
+                    const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
+                    const Rectangle& rRectangle = pA->GetRect();
+
+                    if(!rRectangle.IsEmpty() && 0 != pA->GetText().Len())
+                    {
+                        // The problem with this action is that it describes unlayouted text
+                        // and the layout capabilities are in EditEngine/Outliner in SVX. The
+                        // same problem is true for VCL which internally has implementations
+                        // to layout text in this case. There exists even a call
+                        // OutputDevice::AddTextRectActions(...) to create the needed actions
+                        // as 'sub-content' of a Metafile. Unfortunately i do not have an
+                        // OutputDevice here since this interpreter tries to work without
+                        // VCL AFAP.
+                        // Since AddTextRectActions is the only way as long as we do not have
+                        // a simple text layouter available, i will try to add it to the
+                        // TextLayouterDevice isloation.
+                        drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                        aTextLayouterDevice.setFont(rPropertyHolders.Current().getFont());
+                        GDIMetaFile aGDIMetaFile;
+
+                        aTextLayouterDevice.addTextRectActions(
+                            rRectangle, pA->GetText(), pA->GetStyle(), aGDIMetaFile);
+
+                        if(aGDIMetaFile.GetActionCount())
+                        {
+                            // cerate sub-content
+                            drawinglayer::primitive2d::Primitive2DSequence xSubContent;
+                            {
+                                rTargetHolders.Push();
+                                interpretMetafile(aGDIMetaFile, rTargetHolders, rPropertyHolders, rViewInformation);
+                                xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                                rTargetHolders.Pop();
+                            }
+
+                            if(xSubContent.hasElements())
+                            {
+                                // add with transformation
+                                rTargetHolders.Current().append(
+                                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                                        rPropertyHolders.Current().getTransformation(),
+                                        xSubContent));
+                            }
+                        }
+                    }
+
                     break;
                 }
                 case META_BMP_ACTION :
@@ -2557,22 +2601,12 @@ namespace
                         // case. A height needs to be guessed (similar to OutputDevice::ImplNewFont())
                         Font aCorrectedFont(pA->GetFont());
 
-                        if(aFontSize.Width())
-                        {
-                            // guess width
-                            aFontSize = Size(0, aFontSize.Width() * 3);
-                        }
-                        else
-                        {
-                            // guess 21 pixel
-                            aFontSize = Size(0, 21);
-                        }
+                        // guess 16 pixel (as in VCL)
+                        aFontSize = Size(0, 16);
 
-                        if(aFontSize.Height() < 75)
-                        {
-                            // assume size is in pixels and convert
-                            aFontSize = Application::GetDefaultDevice()->PixelToLogic(aFontSize, MAP_100TH_MM);
-                        }
+                        // convert to target MapUnit if not pixels
+                        aFontSize = Application::GetDefaultDevice()->LogicToLogic(
+                            aFontSize, MAP_PIXEL, rPropertyHolders.Current().getMapUnit());
 
                         aCorrectedFont.SetSize(aFontSize);
                         rPropertyHolders.Current().setFont(aCorrectedFont);
@@ -2968,6 +3002,9 @@ namespace drawinglayer
             // prepare target and porperties; each will have one default entry
             TargetHolders aTargetHolders;
             PropertyHolders aPropertyHolders;
+
+            // set target MapUnit at Properties
+            aPropertyHolders.Current().setMapUnit(getMetaFile().GetPrefMapMode().GetMapUnit());
 
             // interpret the Metafile
             interpretMetafile(getMetaFile(), aTargetHolders, aPropertyHolders, rViewInformation);

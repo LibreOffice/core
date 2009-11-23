@@ -309,6 +309,16 @@ namespace drawinglayer
             const ::FontMetric& rMetric = mrDevice.GetFontMetric();
             return rMetric.GetDescent();
         }
+
+        void TextLayouterDevice::addTextRectActions(
+            const Rectangle& rRectangle,
+            const String& rText,
+            sal_uInt16 nStyle,
+            GDIMetaFile& rGDIMetaFile)
+        {
+            mrDevice.AddTextRectActions(
+                rRectangle, rText, nStyle, rGDIMetaFile);
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

@@ -49,6 +49,7 @@ class VirtualDevice;
 class Font;
 class String;
 class OutputDevice;
+class GDIMetaFile;
 
 namespace drawinglayer { namespace attribute {
     class FontAttribute;
@@ -117,6 +118,12 @@ namespace drawinglayer
 
             double getFontAscent() const;
             double getFontDescent() const;
+
+            void addTextRectActions(
+                const Rectangle& rRectangle,
+                const String& rText,
+                sal_uInt16 nStyle,
+                GDIMetaFile& rGDIMetaFile);
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

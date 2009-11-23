@@ -1235,13 +1235,13 @@ namespace drawinglayer
         {
             // The new decomposition of Metafiles made it necessary to add an Eps
             // primitive to handle embedded Eps data. On some devices, this can be
-            // painted directly (mac, printer). Printer is handled in the
-            // VclMetafileProcessor2D by not decomposing the Metafiles at all.
-            // For Mac, the Eps should be painted directly, but unfortunately cannot
-            // be tested (only in the salgdi layer where true/false is returned).
-            // To risk nothing currently, always render it using VCL
+            // painted directly (mac, printer).
+            // To be able to handle the replacement correctly, i need to handle it myself
+            // since DrawEPS will not be able e.g. to rotate the replacement. To be able
+            // to do that, i added a boolean return to OutputDevice::DrawEPS(..)
+            // to know when EPS was handled directly already.
             basegfx::B2DRange aRange(0.0, 0.0, 1.0, 1.0);
-            aRange.transform(rEpsPrimitive2D.getEpsTransform());
+            aRange.transform(maCurrentTransformation * rEpsPrimitive2D.getEpsTransform());
 
             if(!aRange.isEmpty())
             {
@@ -1251,12 +1251,19 @@ namespace drawinglayer
 
                 if(!aRectangle.IsEmpty())
                 {
-                    const GDIMetaFile& rMetafile = rEpsPrimitive2D.getMetaFile();
-                    mpOutputDevice->DrawEPS(
+                    // try to paint EPS directly without fallback visualisation
+                    const bool bEPSPaintedDirectly(mpOutputDevice->DrawEPS(
                         aRectangle.TopLeft(),
                         aRectangle.GetSize(),
                         rEpsPrimitive2D.getGfxLink(),
-                        rMetafile.GetActionCount() ? const_cast<GDIMetaFile*>(&rMetafile) : 0);
+                        0));
+
+                    if(!bEPSPaintedDirectly)
+                    {
+                        // use the decomposition which will correctly handle the
+                        // fallback visualisation using full transformation (e.g. rotation)
+                        process(rEpsPrimitive2D.get2DDecomposition(getViewInformation2D()));
+                    }
                 }
             }
         }

@@ -56,6 +56,15 @@
 #include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
+// includes for testing MetafilePrimitive2D::create2DDecomposition
+
+#ifdef DBG_UTIL
+#include <vcl/gradient.hxx>
+#include <vcl/pngread.hxx>
+#include <vcl/lineinfo.hxx>
+#endif // DBG_UTIL
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace
 {
@@ -207,10 +216,6 @@ namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
-#include <vcl/gradient.hxx>
-#include <vcl/pngread.hxx>
-#include <vcl/lineinfo.hxx>
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -297,11 +302,17 @@ namespace drawinglayer
 
                     case GRAPHIC_GDIMETAFILE :
                     {
-                        // create MetafilePrimitive2D
+#ifdef DBG_UTIL
                         static bool bDoTest(false);
 
                         if(bDoTest)
                         {
+                            // All this is/was test code for testing MetafilePrimitive2D::create2DDecomposition
+                            // extensively. It may be needed again when diverse actions need debugging, so i leave
+                            // it in here, but take it out using DBG_UTIL.
+                            // Use it by compiling with the code, insert any DrawObject, convert to Metafile. The
+                            // debugger will then stop here (when breakpoint set, of course). You may enter single
+                            // parts of actions and/or change to true what You want to check.
                             GDIMetaFile aMtf;
                             VirtualDevice aOut;
                             const basegfx::B2DRange aRange(getB2DRange(rViewInformation));
@@ -729,6 +740,8 @@ namespace drawinglayer
                         }
                         else
                         {
+#endif // DBG_UTIL
+                            // create MetafilePrimitive2D
                             const Graphic aGraphic(getGraphicObject().GetGraphic());
                             const GDIMetaFile& rMetafile = aTransformedGraphic.GetGDIMetaFile();
 
@@ -760,7 +773,9 @@ namespace drawinglayer
                                         basegfx::B2DPolyPolygon(aMaskPolygon),
                                         aChildContent));
                             }
+#ifdef DBG_UTIL
                         }
+#endif // DBG_UTIL
 
                         break;
                     }
