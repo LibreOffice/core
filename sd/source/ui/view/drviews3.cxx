@@ -101,9 +101,12 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+using ::com::sun::star::frame::XFrame;
+using ::com::sun::star::frame::XController;
 
 namespace sd {
 
@@ -378,17 +381,15 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             try
             {
+                Reference< XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface(), UNO_SET_THROW );
+
                 // Save the current configuration of panes and views.
                 Reference<XControllerManager> xControllerManager (
                     GetViewShellBase().GetController(), UNO_QUERY_THROW);
                 Reference<XConfigurationController> xConfigurationController (
-                    xControllerManager->getConfigurationController());
-                if ( ! xConfigurationController.is())
-                    throw RuntimeException();
+                    xControllerManager->getConfigurationController(), UNO_QUERY_THROW );
                 Reference<XConfiguration> xConfiguration (
-                    xConfigurationController->getRequestedConfiguration());
-                if ( ! xConfiguration.is())
-                    throw RuntimeException();
+                    xConfigurationController->getRequestedConfiguration(), UNO_SET_THROW );
 
                 SfxChildWindow* pWindow = pFrame->GetChildWindow(nId);
                 if(pWindow)
@@ -401,14 +402,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 // Normale Weiterleitung an ViewFrame zur Ausfuehrung
                 GetViewFrame()->ExecuteSlot(rReq);
 
-                // From here on we must cope with this object already being
+                // From here on we must cope with this object and the frame already being
                 // deleted.  Do not call any methods or use data members.
-                ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pFrame);
-                OSL_ASSERT(pBase!=NULL);
+                Reference<XController> xController( xFrame->getController(), UNO_SET_THROW );
 
                 // Restore the configuration.
-                xControllerManager = Reference<XControllerManager>(
-                    pBase->GetController(), UNO_QUERY_THROW);
+                xControllerManager = Reference<XControllerManager>( xController, UNO_QUERY_THROW);
                 xConfigurationController = Reference<XConfigurationController>(
                     xControllerManager->getConfigurationController());
                 if ( ! xConfigurationController.is())
