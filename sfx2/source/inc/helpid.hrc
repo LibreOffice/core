@@ -346,8 +346,9 @@
 #define HID_TP_CUSTOMPROPERTIES                     (HID_SFX_START + 324)
 #define HID_CTRL_CUSTOMPROPERTIES                   (HID_SFX_START + 325)
 #define HID_CTRL_CUSTOMPROPS_YES_NO                 (HID_SFX_START + 326)
+#define HID_DLG_CUSTOMPROPS_DURATION                (HID_SFX_START + 327)
 
-#define ACT_SFX_HID_END HID_CTRL_CUSTOMPROPS_YES_NO
+#define ACT_SFX_HID_END HID_DLG_CUSTOMPROPS_DURATION
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 

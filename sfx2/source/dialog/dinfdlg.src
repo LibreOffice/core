@@ -727,6 +727,7 @@ TabDialog SID_DOCINFO
 
 ModalDialog RID_EDIT_DURATIONS
 {
+    HelpId = HID_DLG_CUSTOMPROPS_DURATION;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 176 , 140 ) ;
     Text [ en-US ] = "Edit Duration" ;
