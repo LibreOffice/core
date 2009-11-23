@@ -81,12 +81,6 @@ Menu MN_READONLY_POPUP
         SEPARATOR
         MenuItem
         {
-            Identifier = MN_READONLY_BROWSE_STOP ;
-            HelpID = SID_BROWSE_STOP ;
-            Text [ en-US ] = "~Stop" ;
-        };
-        MenuItem
-        {
             Identifier = MN_READONLY_BROWSE_BACKWARD ;
             HelpID = SID_BROWSE_BACKWARD ;
             Text [ en-US ] = "Backwards" ;
