@@ -638,7 +638,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // bestehende SfxMDIFrames f"ur dieses Doc leeren
                 // eigenes Format oder R/O jetzt editierbar "offnen?
                 SfxObjectShellLock xNewObj;
-                TypeId aOldType = xOldObj->Type();
 
                 // collect the views of the document
                 // TODO: when UNO ViewFactories are available for SFX-based documents, the below code should
