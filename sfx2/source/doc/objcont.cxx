@@ -226,39 +226,12 @@ bool SfxObjectShell::LoadView_Impl( SfxTopFrame& rTargetFrame )
     pSet->ClearItem( SID_USER_DATA );
     pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
 
-    if ( rTargetFrame.GetCurrentViewFrame() )
-    {
-        // TODO: the only client of this case is the Reload-implementation for SFX-based documents. This should be
-        // migrated to use UNO mechanisms, too. In this case, we can simplify the code here.
+    OSL_ENSURE( rTargetFrame.GetCurrentViewFrame() == NULL,
+        "SfxObjectShell::LoadView_Impl: no support (anymore) for loading into a non-empty frame!" );
+        // Since some refactoring in CWS autorecovery, this shouldn't happen anymore. Frame re-usage is nowadays
+        // done in higher layers, namely in the framework.
 
-        // use the frame from the arguments, but don't set a window size
-        SfxViewFrame* pViewFrame = rTargetFrame.GetCurrentViewFrame();
-        if ( pViewFrame->GetViewShell() || !pViewFrame->GetObjectShell() )
-        {
-            pSet->ClearItem( SID_VIEW_POS_SIZE );
-            pSet->ClearItem( SID_WIN_POSSIZE );
-            pSet->ClearItem( SID_VIEW_ZOOM_MODE );
-
-            // avoid flickering controllers
-            SfxBindings &rBind = pViewFrame->GetBindings();
-            rBind.ENTERREGISTRATIONS();
-
-            // set document into frame
-            rTargetFrame.InsertDocument_Impl( *this );
-
-            // restart controller updating
-            rBind.LEAVEREGISTRATIONS();
-        }
-        else
-        {
-            // create new view
-            pViewFrame->CreateView_Impl( nViewId );
-        }
-    }
-    else
-    {
-        rTargetFrame.InsertDocument_Impl( *this );
-    }
+    rTargetFrame.InsertDocument_Impl( *this );
     SfxViewFrame* pViewFrame = rTargetFrame.GetCurrentViewFrame();
 
     // only temporary data, don't hold it in the itemset

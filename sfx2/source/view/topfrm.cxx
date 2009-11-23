@@ -822,48 +822,30 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 
     UpdateDescriptor( &rDoc );
 
-    SfxViewFrame* pViewFrame = GetCurrentViewFrame();
-    if ( pViewFrame )
+    if ( pPluginMode && pPluginMode->GetValue() != 2 )
+        SetInPlace_Impl( TRUE );
+
+    OSL_ENSURE( GetCurrentViewFrame() == NULL,
+        "SfxTopFrame::InsertDocument_Impl: no support (anymore) for loading a document into a non-empty frame!" );
+        // Since some refactoring in CWS autorecovery, this shouldn't happen anymore. Frame re-usage is nowadays
+        // done in higher layers, namely in the framework.
+
+    SfxViewFrame* pViewFrame = new SfxTopViewFrame( this, &rDoc, nViewId );
+    if ( !pViewFrame->GetViewShell() )
+        return sal_False;
+
+    if ( pPluginMode && pPluginMode->GetValue() == 1 )
     {
-        // TODO: the only client of this case is the Reload-implementation for SFX-based documents. This should be
-        // migrated to use UNO mechanisms, too. In this case, we can simplify the code here.
-        if ( pViewFrame->GetActiveChildFrame_Impl() && pViewFrame->GetActiveChildFrame_Impl() == SfxViewFrame::Current() )
-        {
-            pViewFrame->SetActiveChildFrame_Impl(0);
-            SfxViewFrame::SetViewFrame( pViewFrame );
-        }
+        pViewFrame->ForceOuterResize_Impl( FALSE );
+        pViewFrame->GetBindings().HidePopups(TRUE);
 
-        if ( pViewFrame->GetObjectShell() )
-        {
-            pViewFrame->ReleaseObjectShell_Impl( sal_False );
-        }
+        // MBA: layoutmanager of inplace frame starts locked and invisible
+        GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
+        GetWorkWindow_Impl()->Lock_Impl( TRUE );
 
-        if ( pViewIdItem )
-            pViewFrame->SetViewData_Impl( pViewIdItem->GetValue(), String() );
-        pViewFrame->SetObjectShell_Impl( rDoc );
-    }
-    else
-    {
-        if ( pPluginMode && pPluginMode->GetValue() != 2 )
-            SetInPlace_Impl( TRUE );
-
-        pViewFrame = new SfxTopViewFrame( this, &rDoc, nViewId );
-        if ( !pViewFrame->GetViewShell() )
-            return sal_False;
-
-        if ( pPluginMode && pPluginMode->GetValue() == 1 )
-        {
-            pViewFrame->ForceOuterResize_Impl( FALSE );
-            pViewFrame->GetBindings().HidePopups(TRUE);
-
-            // MBA: layoutmanager of inplace frame starts locked and invisible
-            GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
-            GetWorkWindow_Impl()->Lock_Impl( TRUE );
-
-            GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
-            if ( GetCurrentViewFrame() )
-                GetCurrentViewFrame()->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
-        }
+        GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
+        if ( GetCurrentViewFrame() )
+            GetCurrentViewFrame()->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
     }
 
     OSL_ENSURE( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT,

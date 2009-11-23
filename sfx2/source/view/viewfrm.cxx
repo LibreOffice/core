@@ -37,6 +37,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -56,6 +57,7 @@
 #endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -66,6 +68,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -79,6 +82,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/configurationhelper.hxx>
 
 #include <com/sun/star/uno/Reference.h>
@@ -245,6 +249,7 @@ SfxObjectShell* SfxViewFrame::GetImportingObjectShell_Impl() const
 }
 
 
+//--------------------------------------------------------------------
 class SfxViewNotificatedFrameList_Impl :
     public SfxListener, public SfxViewFrameArr_Impl
 {
@@ -632,25 +637,22 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 // bestehende SfxMDIFrames f"ur dieses Doc leeren
                 // eigenes Format oder R/O jetzt editierbar "offnen?
-                SfxViewNotificatedFrameList_Impl aFrames;
                 SfxObjectShellLock xNewObj;
-                sal_Bool bRestoreView = ( pURLItem == NULL );
                 TypeId aOldType = xOldObj->Type();
 
-                SfxViewFrame *pView = GetFirst(xOldObj);
-                while(pView)
+                // collect the views of the document
+                // TODO: when UNO ViewFactories are available for SFX-based documents, the below code should
+                // be UNOized, too
+                typedef ::std::pair< Reference< XFrame >, USHORT >  ViewDescriptor;
+                ::std::list< ViewDescriptor > aViewFrames;
+                SfxViewFrame *pView = GetFirst( xOldObj );
+                while ( pView )
                 {
-                    if( bHandsOff )
-                        pView->GetDispatcher()->LockUI_Impl(sal_True);
-                    aFrames.InsertViewFrame( pView );
-                    pView->GetBindings().ENTERREGISTRATIONS();
+                    Reference< XFrame > xFrame( pView->GetFrame()->GetFrameInterface() );
+                    OSL_ENSURE( xFrame.is(), "SfxViewFrame::ExecReload_Impl: no XFrame?!" );
+                    aViewFrames.push_back( ViewDescriptor( xFrame, pView->GetCurViewId() ) );
 
-                    // RestoreView nur wenn keine neue Datei geladen
-                    // (Client-Pull-Reloading)
-                    pView = /*bHandsOff ? (SfxTopViewFrame*) GetFirst(
-                        xOldObj, TYPE(SfxTopViewFrame) ) :*/
-                        (SfxTopViewFrame*)GetNext( *pView, xOldObj,
-                                               TYPE( SfxTopViewFrame ) );
+                    pView = (SfxTopViewFrame*)GetNext( *pView, xOldObj, TYPE( SfxTopViewFrame ) );
                 }
 
                 DELETEZ( xOldObj->Get_Impl()->pReloadTimer );
@@ -759,12 +761,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
 
                 xNewObj = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_STANDARD );
+                uno::Sequence < beans::PropertyValue > aLoadArgs;
+                TransformItems( SID_OPENDOC, *pNewSet, aLoadArgs );
                 try
                 {
-                    uno::Sequence < beans::PropertyValue > aProps;
-                    TransformItems( SID_OPENDOC, *pNewSet, aProps );
                     uno::Reference < frame::XLoadable > xLoad( xNewObj->GetModel(), uno::UNO_QUERY );
-                    xLoad->load( aProps );
+                    xLoad->load( aLoadArgs );
                 }
                 catch ( uno::Exception& )
                 {
@@ -816,56 +818,48 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     if ( xNewObj->IsDocShared() )
                     {
-                        // the file is shared but the closing can chang the sharing control file
+                        // the file is shared but the closing can change the sharing control file
                         xOldObj->DoNotCleanShareControlFile();
                     }
 
+                    // the Reload and Silent items were only temporary, remove them
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_SILENT );
+                    TransformItems( SID_OPENDOC, *xNewObj->GetMedium()->GetItemSet(), aLoadArgs );
+
                     UpdateDocument_Impl();
-                }
-
-                SfxViewFrame* pThis = (SfxViewFrame*)this;
-                sal_Bool bDeleted = aFrames.C40_GETPOS( SfxViewFrame, pThis ) == USHRT_MAX;
-
-                if( !bDeleted )
-                {
-                    GetBindings().Invalidate( SID_RELOAD );
-                    pImp->bReloading = sal_False;
-                }
-
-                // neues Doc in die bestehenden SfxMDIFrames einsetzen; wenn
-                // das Reload geklappt hat, mu\s in diesem Frame kein Dokument
-                // eingesetzt werden, weil das schon vom LoadEnvironment
-                // gemacht wurde
-                if ( xNewObj.Is() && xNewObj->Type() != aOldType )
-                    // RestoreView nur, wenn gleicher Dokumenttyp
-                    bRestoreView = sal_False;
-
-                const sal_uInt16 nCount = aFrames.Count();
-                for(sal_uInt16 i = 0; i < nCount; ++i)
-                {
-                    SfxViewFrame *pCurrView = aFrames.GetObject( i );
-                    if ( xNewObj.Is() )
-                    {
-                        //if( /*!bHandsOff &&*/ this != pView   )
-                        pCurrView->ReleaseObjectShell_Impl( bRestoreView );
-                        pCurrView->SetRestoreView_Impl( bRestoreView );
-                        //if( pView != this || !xNewObj.Is() )
-                        {
-                            SfxTopFrame* pFrame = dynamic_cast< SfxTopFrame* >( pCurrView->GetFrame() );
-                            OSL_ENSURE( pFrame, "An SfxFrame which is no SfxTopFrame?!" );
-                            if ( pFrame )
-                                pFrame->InsertDocument_Impl( *xNewObj );
-                        }
-                    }
-
-                    pCurrView->GetBindings().LEAVEREGISTRATIONS();
-                    pCurrView->GetDispatcher()->LockUI_Impl( sal_False );
                 }
 
                 if ( xNewObj.Is() )
                 {
+                    try
+                    {
+                        ::comphelper::NamedValueCollection aTransformLoadArgs( aLoadArgs );
+                        Reference< XModel > xDocument( xNewObj->GetModel(), UNO_SET_THROW );
+                        aTransformLoadArgs.put( "Model", xDocument );
+
+                        while ( !aViewFrames.empty() )
+                        {
+                            aTransformLoadArgs.put( "ViewId", aViewFrames.front().second );
+                            Reference< XComponentLoader > xLoader( aViewFrames.front().first, UNO_QUERY_THROW );
+                            xLoader->loadComponentFromURL( xDocument->getURL(), ::rtl::OUString::createFromAscii( "_self" ), 0,
+                                aTransformLoadArgs.getPropertyValues() );
+                            aViewFrames.pop_front();
+                        }
+                    }
+                    catch( const Exception& )
+                    {
+                        // close the remaining frames
+                        // Don't catch exceptions herein, if this fails, then we're left in an indetermined state, and
+                        // crashing is better than trying to proceed
+                        while ( !aViewFrames.empty() )
+                        {
+                            Reference< util::XCloseable > xClose( aViewFrames.front().first, UNO_QUERY_THROW );
+                            xClose->close( sal_True );
+                            aViewFrames.pop_front();
+                        }
+                    }
+
                     // Propagate document closure.
                     SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), xOldObj ) );
                 }
@@ -873,11 +867,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // als erledigt recorden
                 rReq.Done( sal_True );
                 rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), sal_True));
-                if( !bDeleted )
-                {
-                    Notify( *GetObjectShell(), SfxSimpleHint(
-                        SFX_HINT_TITLECHANGED ));
-                }
                 return;
             }
             else
