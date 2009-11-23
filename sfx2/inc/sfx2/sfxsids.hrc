@@ -305,7 +305,7 @@
 // browse-ids
 #define SID_BROWSE_FORWARD                  (SID_SFX_START + 1300)
 #define SID_BROWSE_BACKWARD                 (SID_SFX_START + 1301)
-#define SID_BROWSE_STOP                     (SID_SFX_START + 1302)
+    // FREE, formerly SID_BROWSE_STOP
 #define SID_BROWSE_HOME                     (SID_SFX_START + 1303)
 #define SID_AUTOBROWSE                      (SID_SFX_START + 1304)
 #define SID_AUTOMAIL                        (SID_SFX_START + 1305)

@@ -902,34 +902,6 @@ SfxUInt32Item BuildVersion SID_BUILD_VERSION
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Stop SID_BROWSE_STOP
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = SfxBoolItem
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_NAVIGATOR;
-]
-
-//--------------------------------------------------------------------------
 SfxStringItem Caption SID_CAPTION
 
 [

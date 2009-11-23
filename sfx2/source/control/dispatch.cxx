@@ -2324,7 +2324,7 @@ sal_Bool SfxDispatcher::_FindServer
 {
     SFX_STACK(SfxDispatcher::_FindServer);
 
-    // Dispatcher gelockt? (SID_BROWSE_STOP und SID_HELP_PI trotzdem durchlassen)
+    // Dispatcher gelockt? (SID_HELP_PI trotzdem durchlassen)
     SfxApplication *pSfxApp = SFX_APP();
     if ( IsLocked(nSlot) )
     {

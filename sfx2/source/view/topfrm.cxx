@@ -307,42 +307,6 @@ void SfxTopWindow_Impl::DoResize()
         pFrame->Resize();
 }
 
-class StopButtonTimer_Impl : public Timer
-{
-    BOOL bState;
-    SfxViewFrame* pFrame;
-protected:
-    virtual void Timeout();
-public:
-    StopButtonTimer_Impl( SfxViewFrame*);
-    void SetButtonState( BOOL bStateP );
-    BOOL GetButtonState() const { return bState; }
-};
-
-StopButtonTimer_Impl::StopButtonTimer_Impl( SfxViewFrame*p)
-    : bState( FALSE )
-    , pFrame( p )
-{
-    SetTimeout( 200 );
-}
-
-void StopButtonTimer_Impl::SetButtonState( BOOL bStateP )
-{
-    if( bStateP )
-    {
-        bState = TRUE;
-        Stop();
-    }
-    else if( bState )
-        Start();
-}
-
-void StopButtonTimer_Impl::Timeout()
-{
-    bState = FALSE;
-    pFrame->GetBindings().Invalidate( SID_BROWSE_STOP );
-}
-
 class SfxTopViewWin_Impl : public Window
 {
 friend class SfxInternalFrame;
@@ -391,12 +355,10 @@ public:
     sal_Bool            bActive;
     Window*             pWindow;
     String              aFactoryName;
-    StopButtonTimer_Impl* pStopButtonTimer;
 
                         SfxTopViewFrame_Impl()
                             : bActive( sal_False )
                             , pWindow( 0 )
-                            , pStopButtonTimer( 0 )
                         {}
 };
 
@@ -1148,7 +1110,6 @@ SfxTopViewFrame::SfxTopViewFrame
 
     pCloser = 0;
     pImp = new SfxTopViewFrame_Impl;
-    pImp->pStopButtonTimer = new StopButtonTimer_Impl(this);
 
 //(mba)/task    if ( !pFrame->GetTask() )
     {
@@ -1230,7 +1191,6 @@ SfxTopViewFrame::~SfxTopViewFrame()
         KillDispatcher_Impl();
 
     delete pImp->pWindow;
-    delete pImp->pStopButtonTimer;
     delete pImp;
 }
 
@@ -1480,10 +1440,6 @@ void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
 */
             break;
         }
-        case SID_BROWSE_STOP:
-            OSL_ENSURE( false, "SID_BROWSE_STOP is dead!" );
-            break;
-
         case SID_FOCUSURLBOX:
         {
             SfxStateCache *pCache = GetBindings().GetAnyStateCache_Impl( SID_OPENURL );
@@ -1514,10 +1470,6 @@ void SfxTopViewFrame::INetState_Impl( SfxItemSet &rItemSet )
     sal_Bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
     if ( !pDocSh || bPseudo || bEmbedded || !pDocSh->HasName() )
         rItemSet.DisableItem( SID_CREATELINK );
-
-    pImp->pStopButtonTimer->SetButtonState( FALSE );
-    if ( !pImp->pStopButtonTimer->GetButtonState() )
-        rItemSet.DisableItem( SID_BROWSE_STOP );
 }
 
 void SfxTopViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
