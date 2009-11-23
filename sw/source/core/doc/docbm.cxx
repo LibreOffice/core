@@ -67,23 +67,6 @@
 #include <viscrs.hxx>
 #include <stdio.h>
 
-static void lcl_docbm_FixPosition( SwPosition& rPos )
-{
-    // make sure the position has 1) the proper node, and 2) a proper index
-    SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-
-    if( rPos.nContent.GetIndex() > ( pTxtNode == NULL ? 0 : pTxtNode->Len() ) )
-    {
-        DBG_ERROR( "illegal position" );
-        xub_StrLen nLen = rPos.nContent.GetIndex();
-        if( pTxtNode == NULL )
-            nLen = 0;
-        else if( nLen >= pTxtNode->Len() )
-            nLen = pTxtNode->Len();
-        rPos.nContent.Assign( pTxtNode, nLen );
-    }
-}
-
 
 using namespace ::std;
 using namespace ::boost;

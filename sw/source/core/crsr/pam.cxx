@@ -1229,7 +1229,7 @@ BOOL SwPaM::Overlap(const SwPaM & a, const SwPaM & b)
     return !(*b.End() <= *a.Start() || *a.End() <= *b.End());
 }
 
-void SwPaM::Invalidate()
+void SwPaM::InvalidatePaM()
 {
     const SwNode *_pNd=this->GetNode();
     const SwTxtNode *_pTxtNd=(_pNd!=NULL?_pNd->GetTxtNode():NULL);

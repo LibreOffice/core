@@ -371,7 +371,7 @@ namespace sw { namespace mark
     void Fieldmark::invalidate( )
     {
         SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
-        aPaM.Invalidate();
+        aPaM.InvalidatePaM();
     }
 
     const ::rtl::OUString Fieldmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__Fieldmark__");

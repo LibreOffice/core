@@ -4216,8 +4216,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 if ( aCntntAtPos.aFnd.pFldmark != NULL)
                                 {
                                     IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
-                                    SwDocShell* pDocSh = rView.GetDocShell();
-                                    SwDoc *pDoc=pDocSh->GetDoc();
+                                    //SwDocShell* pDocSh = rView.GetDocShell();
+                                    //SwDoc *pDoc=pDocSh->GetDoc();
                                     if (fieldBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
                                     {
                                         bool isChecked = fieldBM->getParam( ECMA_FORMCHECKBOX_CHECKED ).second.compareToAscii("on") == 0;

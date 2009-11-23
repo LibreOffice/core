@@ -1055,7 +1055,7 @@ BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
     SwFieldDialog aFldDlg(pEditWin, fieldBM);
     aFldDlg.SetPosPixel(pEditWin->OutputToScreenPixel(aPixPos));
 
-    short ret=aFldDlg.Execute();
+    /*short ret=*/aFldDlg.Execute();
     int selection=aFldDlg.getSelection();
     if (selection>=0) {
         fieldBM->addParam(ECMA_FORMDROPDOWN_RESULT, selection);

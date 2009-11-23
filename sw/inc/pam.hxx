@@ -272,7 +272,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
     String GetTxt() const;
-    void Invalidate();
+    void InvalidatePaM();
 };
 
 
