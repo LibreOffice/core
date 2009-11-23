@@ -543,8 +543,97 @@ static void filterAccelerator( rtl::OUString& io_rText )
 }
 @end
 
-static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
+struct ColumnItem
 {
+    NSControl*      pControl;
+    long            nOffset;
+    NSControl*      pSubControl;
+    
+    ColumnItem( NSControl* i_pControl = nil, long i_nOffset = 0, NSControl* i_pSub = nil )
+    : pControl( i_pControl )
+    , nOffset( i_nOffset )
+    , pSubControl( i_pSub )
+    {}
+    
+    long getWidth() const
+    {
+        long nWidth = 0;
+        if( pControl )
+        {
+            NSRect aCtrlRect = [pControl frame];
+            nWidth = aCtrlRect.size.width;
+            nWidth += nOffset;
+            if( pSubControl )
+            {
+                NSRect aSubRect = [pSubControl frame];
+                nWidth += aSubRect.size.width;
+                nWidth += aSubRect.origin.x - (aCtrlRect.origin.x + aCtrlRect.size.width);
+            }
+        }
+        return nWidth;
+    }
+};
+
+static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize,
+                                   std::vector< ColumnItem >& rLeftColumn,
+                                   std::vector< ColumnItem >& rRightColumn
+                                  )
+{
+    // balance columns
+    
+    // first get overall column widths
+    long nLeftWidth = 0;
+    long nRightWidth = 0;
+    for( size_t i = 0; i < rLeftColumn.size(); i++ )
+    {
+        long nW = rLeftColumn[i].getWidth();
+        if( nW > nLeftWidth )
+            nLeftWidth = nW;
+    }
+    for( size_t i = 0; i < rRightColumn.size(); i++ )
+    {
+        long nW = rRightColumn[i].getWidth();
+        if( nW > nRightWidth )
+            nRightWidth = nW;
+    }
+    
+    // right align left column
+    for( size_t i = 0; i < rLeftColumn.size(); i++ )
+    {
+        if( rLeftColumn[i].pControl )
+        {
+            NSRect aCtrlRect = [rLeftColumn[i].pControl frame];
+            long nX = nLeftWidth - aCtrlRect.size.width;
+            if( rLeftColumn[i].pSubControl )
+            {
+                NSRect aSubRect = [rLeftColumn[i].pSubControl frame];
+                nX -= aSubRect.size.width + (aSubRect.origin.x - (aCtrlRect.origin.x + aCtrlRect.size.width));
+                aSubRect.origin.x = nLeftWidth - aSubRect.size.width;
+                [rLeftColumn[i].pSubControl setFrame: aSubRect];
+            }
+            aCtrlRect.origin.x = nX;
+            [rLeftColumn[i].pControl setFrame: aCtrlRect];
+        }
+    }
+
+    // left align right column
+    for( size_t i = 0; i < rRightColumn.size(); i++ )
+    {
+        if( rRightColumn[i].pControl )
+        {
+            NSRect aCtrlRect = [rRightColumn[i].pControl frame];
+            long nX = nLeftWidth + 3;
+            if( rRightColumn[i].pSubControl )
+            {
+                NSRect aSubRect = [rRightColumn[i].pSubControl frame];
+                aSubRect.origin.x = nX + aSubRect.origin.x - aCtrlRect.origin.x; 
+                [rRightColumn[i].pSubControl setFrame: aSubRect];
+            }
+            aCtrlRect.origin.x = nX;
+            [rRightColumn[i].pControl setFrame: aCtrlRect];
+        }
+    }
+    
     NSArray* pSubViews = [pView subviews];
     unsigned int nViews = [pSubViews count];
     NSRect aUnion = { { 0, 0 }, { 0, 0 } };
@@ -629,6 +718,32 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
     return pTextView;
 }
 
+static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
+{
+    NSString* pText = CreateNSString( i_rText );
+    [pBtn setTitle: pText];
+    [pText release];
+    NSSize aSize = [pBtn cellSize];
+    if( aSize.width > 280 )
+    {
+        // need two lines
+        // FIXME: dummy code, should really use linebreaking service instead
+        const sal_Unicode* pStr = i_rText.getStr();
+        sal_Int32 nLen = i_rText.getLength();
+        sal_Int32 nIndex = nLen / 2;
+        while( nIndex < nLen && pStr[nIndex] != ' ' )
+            nIndex++;
+        if( nIndex < nLen )
+        {
+            rtl::OUStringBuffer aBuf( i_rText );
+            aBuf.setCharAt( nIndex, '\n' );
+            pText = CreateNSString( aBuf.makeStringAndClear() );
+            [pBtn setTitle: pText];
+            [pText release];
+        }
+    }
+}
+
 
 @implementation AquaPrintAccessoryView
 +(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState;
@@ -641,7 +756,7 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
     long nCurY = 0;
     long nCurX = 0;
     NSRect aViewFrame = { { 0, 0 }, {600, 400 } };
-    NSRect aTabViewFrame = { { 200, 0 }, {400, 400 } };
+    NSRect aTabViewFrame = { { 190, 0 }, {410, 400 } };
     NSSize aMaxTabSize = { 0, 0 };
     NSView* pAccessoryView = [[NSView alloc] initWithFrame: aViewFrame];
     NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aTabViewFrame];
@@ -651,6 +766,8 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
     
     ControllerProperties* pControllerProperties = new ControllerProperties( pController, pOp, pAccessoryView, pTabView, pState );
     ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithControllerMap: pControllerProperties];
+    
+    std::vector< ColumnItem > aLeftColumn, aRightColumn;
 
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
@@ -733,7 +850,7 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                     aGroupTitle = pControllerProperties->getMoreString();
                 // set size of current parent
                 if( pCurParent )
-                    adjustViewAndChildren( pCurParent, aMaxTabSize );
+                    adjustViewAndChildren( pCurParent, aMaxTabSize, aLeftColumn, aRightColumn );
                 
                 // new tab item
                 if( ! aText.getLength() )
@@ -750,6 +867,9 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                 nCurX = 20;
                 // reset Y
                 nCurY = 0;
+                // clear columns
+                aLeftColumn.clear();
+                aRightColumn.clear();
             }
             
             if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
@@ -777,18 +897,19 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                 continue;
             else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
-                NSString* pText = CreateNSString( aText );
                 NSRect aCheckRect = { { nCurX + nAttachOffset, 0 }, { 0, 15 } };
                 NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
-                [pBtn setButtonType: NSSwitchButton];
-                [pBtn setTitle: pText];
+                [pBtn setButtonType: NSSwitchButton];                
                 sal_Bool bVal = sal_False;                
                 PropertyValue* pVal = pController->getValue( aPropertyName );
                 if( pVal )
                     pVal->Value >>= bVal;
                 [pBtn setState: bVal ? NSOnState : NSOffState];
+                linebreakCell( [pBtn cell], aText );
                 [pBtn sizeToFit];
                 [pCurParent addSubview: [pBtn autorelease]];
+                
+                aRightColumn.push_back( ColumnItem( pBtn ) );
                 
                 // connect target
                 [pBtn setTarget: pCtrlTarget];
@@ -805,9 +926,6 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
 
                 // update nCurY
                 nCurY = aCheckRect.origin.y - 5;
-                
-                // cleanup
-                [pText release];
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
@@ -819,6 +937,8 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                     NSRect aTextRect = [pTextView frame];
                     aTextRect.origin.x = nCurX + nAttachOffset;
                     [pCurParent addSubview: [pTextView autorelease]];
+                    
+                    aLeftColumn.push_back( ColumnItem( pTextView ) );
     
                     // move to nCurY
                     aTextRect.origin.y = nCurY - aTextRect.size.height;
@@ -853,15 +973,16 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                 {
                     NSCell* pCell = [pCells objectAtIndex: m];
                     filterAccelerator( aChoices[m] );
-                    NSString* pTitle = CreateNSString( aChoices[m] );
-                    [pCell setTitle: pTitle];
+                    linebreakCell( pCell, aChoices[m] );
+                    //NSString* pTitle = CreateNSString( aChoices[m] );
+                    //[pCell setTitle: pTitle];
                     // connect target and action
                     [pCell setTarget: pCtrlTarget];
                     [pCell setAction: @selector(triggered:)];
                     int nTag = pControllerProperties->addNameAndValueTag( aPropertyName, m );
                     pControllerProperties->addObservedControl( pCell );
                     [pCell setTag: nTag];
-                    [pTitle release];
+                    //[pTitle release];
                     // set current selection
                     if( nSelectVal == m )
                         [pMatrix selectCellAtRow: m column: 0];
@@ -874,6 +995,8 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                 [pMatrix setFrame: aRadioRect];
                 [pCurParent addSubview: [pMatrix autorelease]];
 
+                aRightColumn.push_back( ColumnItem( pMatrix ) );
+
                 // update nCurY
                 nCurY = aRadioRect.origin.y - 5;
                 
@@ -884,6 +1007,7 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                 // don't indent attached lists, looks bad in the existing cases
                 NSControl* pTextView = createLabel( aText );
                 [pCurParent addSubview: [pTextView autorelease]];
+                aLeftColumn.push_back( ColumnItem( pTextView ) );
                 NSRect aTextRect = [pTextView frame];
                 aTextRect.origin.x = nCurX /* + nAttachOffset*/;
 
@@ -915,6 +1039,8 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
 
                 [pBtn sizeToFit];
                 [pCurParent addSubview: [pBtn autorelease]];
+                
+                aRightColumn.push_back( ColumnItem( pBtn ) );
 
                 // connect target and action
                 [pBtn setTarget: pCtrlTarget];
@@ -941,6 +1067,8 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                     NSControl* pTextView = createLabel( aText );
                     [pCurParent addSubview: [pTextView autorelease]];
                     
+                    aLeftColumn.push_back( ColumnItem( pTextView ) );
+                    
                     // move to nCurY
                     NSRect aTextRect = [pTextView frame];
                     aTextRect.origin.x = nCurX + nAttachOffset;
@@ -961,6 +1089,8 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                 [pFieldView setDrawsBackground: YES];
                 [pFieldView sizeToFit]; // FIXME: this does nothing
                 [pCurParent addSubview: [pFieldView autorelease]];
+                
+                aRightColumn.push_back( ColumnItem( pFieldView ) );
                 
                 // add the field to observed controls for enabled state changes
                 // also add a tag just for this purpose
@@ -986,6 +1116,9 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
                     [pStep setValueWraps: NO];
                     [pStep setTag: nTag];
                     [pCurParent addSubview: [pStep autorelease]];
+                    
+                    aRightColumn.back().pSubControl = pStep;
+                    
                     pControllerProperties->addObservedControl( pStep );
                     [pStep setTarget: pCtrlTarget];
                     [pStep setAction: @selector(triggered:)];
@@ -1050,7 +1183,7 @@ static NSControl* createLabel( const rtl::OUString& i_rText )
     }
     
     pControllerProperties->updateEnableState();
-    adjustViewAndChildren( pCurParent, aMaxTabSize );
+    adjustViewAndChildren( pCurParent, aMaxTabSize, aLeftColumn, aRightColumn );
     
     // leave some space for the preview
     if( aMaxTabSize.height < 200 )
