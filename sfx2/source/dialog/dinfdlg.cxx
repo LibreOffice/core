@@ -1725,7 +1725,7 @@ CustomPropertiesEditButton::~CustomPropertiesEditButton()
 /*-- 23.11.2009 08:47:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK( CustomPropertiesEditButton, ClickHdl, PushButton*, EMPTY_ARG )
+IMPL_LINK( CustomPropertiesEditButton, ClickHdl, PushButton*, EMPTYARG )
 {
     DurationDialog_Impl* pDurationDlg = new DurationDialog_Impl( this, m_pLine->m_aDurationField.GetDuration() );
     if( RET_OK == pDurationDlg->Execute() )
