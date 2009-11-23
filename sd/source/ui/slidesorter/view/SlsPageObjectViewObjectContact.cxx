@@ -1191,12 +1191,16 @@ void PageObjectViewObjectContact::ActionChanged (void)
     // Even when we are called from destructor we still have to invalide
     // the preview bitmap in the cache.
     const SdrPage* pPage = GetPage();
-    SdDrawDocument* pDocument = dynamic_cast<SdDrawDocument*>(pPage->GetModel());
-    if (mpCache!=NULL && pPage!=NULL && pDocument!=NULL)
+
+    if(pPage)
     {
-        cache::PageCacheManager::Instance()->InvalidatePreviewBitmap(
-            pDocument->getUnoModel(),
-            GetPage());
+        SdDrawDocument* pDocument = dynamic_cast<SdDrawDocument*>(pPage->GetModel());
+        if (mpCache!=NULL && pPage!=NULL && pDocument!=NULL)
+        {
+            cache::PageCacheManager::Instance()->InvalidatePreviewBitmap(
+                pDocument->getUnoModel(),
+                pPage);
+        }
     }
 
     // call parent
