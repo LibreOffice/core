@@ -563,6 +563,9 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
 
+    /** Check if page is the HandoutMasterPage (in SVX, no PK_HANDOUT available) */
+    bool isHandoutMasterPage() const;
+
 //////////////////////////////////////////////////////////////////////////////
 // sdr::Comment interface
 private:

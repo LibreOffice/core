@@ -1825,6 +1825,12 @@ GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /
     return GDIMetaFile();
 }
 
+bool SdrPage::isHandoutMasterPage() const
+{
+    return mbMaster && GetModel() && GetModel()->GetMasterPageCount()
+        && GetModel()->GetMasterPage(0) == this;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // sdr::Comment interface
 
