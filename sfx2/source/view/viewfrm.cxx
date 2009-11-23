@@ -172,7 +172,6 @@ struct SfxViewFrame_Impl
     String              aActualURL;
     String              aActualPresentationURL;
     SfxFrame*           pFrame;
-    SfxCancelManager*   pCancelMgr;
     svtools::AsynchronLink* pReloader;
     //SfxInPlaceFrame*  pIPFrame;
     Window*             pWindow;
@@ -205,7 +204,6 @@ struct SfxViewFrame_Impl
                         ~SfxViewFrame_Impl()
                         {
                             delete pReloader;
-                            delete pCancelMgr;
                         }
 };
 
@@ -1641,7 +1639,6 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     pImp->bEnabled = sal_True;
     pImp->nDocViewNo = 0;
     pImp->aMargin = Size( -1, -1 );
-    pImp->pCancelMgr = 0;
     pImp->pWindow = 0;
 
     SetPool( &SFX_APP()->GetPool() );
@@ -2959,18 +2956,6 @@ SfxViewFrame* SfxViewFrame::GetTopViewFrame() const
 }
 
 //-------------------------------------------------------------------------
-
-SfxCancelManager *SfxViewFrame::GetCancelManager() const
-
-/*  <H3>Description</H3>
-
-    Returns a pointer to the <SfxCancelManager> of the top-view-frame of
-    this view-frame.
-*/
-
-{
-    return GetTopViewFrame()->GetFrame()->GetCancelManager();
-}
 
 void SfxViewFrame::SetWindow_Impl( Window *pWin )
 {

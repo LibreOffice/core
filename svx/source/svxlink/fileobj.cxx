@@ -692,9 +692,6 @@ BOOL SvFileObject::IsDataComplete() const
 
 void SvFileObject::CancelTransfers()
 {
-    if( xMed.Is() )
-        xMed->CancelTransfers();
-
     // und aus dem Cache austragen, wenn man mitten im Laden ist
     if( !bDataReady )
     {
@@ -703,11 +700,6 @@ void SvFileObject::CancelTransfers()
         bDataReady = bLoadError = bWaitForData = TRUE;
         SendStateChg_Impl( STATE_LOAD_ABORT );
     }
-}
-
-
-void SvFileObject::SetTransferPriority( USHORT )
-{
 }
 
 

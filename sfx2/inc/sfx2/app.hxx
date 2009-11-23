@@ -61,7 +61,6 @@ class AppSettings;
 struct SfxChildWinContextFactory;
 class SfxAppData_Impl;
 class SfxBindings;
-class SfxCancelManager;
 class SfxChildWinFactArr_Impl;
 class SfxChildWindow;
 class SfxDispatcher;
@@ -222,7 +221,6 @@ public:
 
     // members
     SfxFilterMatcher&           GetFilterMatcher();
-    SfxCancelManager*           GetCancelManager() const;
     SfxMacroConfig*             GetMacroConfig() const;
     SfxProgress*                GetProgress() const;
     const String&               GetLastSaveDirectory() const;

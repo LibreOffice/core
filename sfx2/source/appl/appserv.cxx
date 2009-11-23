@@ -71,7 +71,6 @@
 #include <tools/config.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/cancel.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>

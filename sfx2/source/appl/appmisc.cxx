@@ -329,13 +329,6 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
     return 0;
 }
 
-SfxCancelManager* SfxApplication::GetCancelManager() const
-{
-    if ( !pAppData_Impl->pCancelMgr )
-        pAppData_Impl->pCancelMgr = new SfxCancelManager;
-    return pAppData_Impl->pCancelMgr;
-}
-
 SfxResourceManager& SfxApplication::GetResourceManager() const { return *pAppData_Impl->pResMgr; }
 BOOL  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }

@@ -1161,7 +1161,6 @@ void SfxObjectShell::RegisterTransfer( SfxMedium& rMedium )
     laden, muessen an der zugehoerigen SfxObjectShell angemeldet
     werden. So kann dokumentweise abgebrochen werden.  */
 {
-    rMedium.SetCancelManager_Impl( GetMedium()->GetCancelManager_Impl() );
     rMedium.SetReferer( GetMedium()->GetName() );
 }
 
@@ -1565,7 +1564,6 @@ void SfxObjectShell::CancelTransfers()
     Hier koennen Transfers gecanceled werden, die nicht mit
     RegisterTransfer registiert wurden */
 {
-    GetMedium()->CancelTransfers();
     if( ( pImp->nLoadedFlags & SFX_LOADED_ALL ) != SFX_LOADED_ALL )
     {
         AbortImport();

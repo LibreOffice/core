@@ -122,18 +122,6 @@ SvCompatWeakHdl* SfxFrame::GetHdl()
     return pImp->GetHdl();
 }
 
-SfxCancelManager* SfxFrame::GetCancelManager() const
-{
-    SfxFrame *pFrame = GetTopFrame();
-    SfxCancelManager*& rpMgr = pFrame->pImp->pCancelMgr;
-    if ( !rpMgr )
-    {
-        rpMgr = new SfxCancelManager( SFX_APP()->GetCancelManager() );
-        pFrame->pImp->StartListening( *rpMgr );
-    }
-    return rpMgr;
-}
-
 //--------------------------------------------------------------------
 
 SfxFrame::~SfxFrame()

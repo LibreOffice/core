@@ -59,7 +59,6 @@ SLOFILES =	\
         $(SLO)$/viewfac.obj \
         $(SLO)$/orgmgr.obj \
         $(SLO)$/viewfrm.obj \
-        $(SLO)$/impframe.obj \
         $(SLO)$/topfrm.obj \
         $(SLO)$/sfxbasecontroller.obj \
         $(SLO)$/userinputinterception.obj

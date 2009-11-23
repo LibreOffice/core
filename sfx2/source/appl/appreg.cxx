@@ -76,7 +76,6 @@ void SfxApplication::Registrations_Impl()
     // Controller
     SfxToolBoxControl::RegisterControl(SID_REPEAT);
     SfxURLToolBoxControl_Impl::RegisterControl(SID_OPENURL);
-    SfxCancelToolBoxControl_Impl::RegisterControl(SID_BROWSE_STOP);
     SfxAppToolBoxControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
     SfxAppToolBoxControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
 };

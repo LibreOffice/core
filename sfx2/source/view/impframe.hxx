@@ -31,8 +31,6 @@
 #ifndef _SFX_IMPFRAME_HXX
 #define _SFX_IMPFRAME_HXX
 
-#include <svtools/cancel.hxx>
-
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>                  // SvBorder
 
@@ -54,7 +52,7 @@ class SfxObjectShell;
 #define FRAME_SEARCH_CREATE     0x00000008
 #endif
 
-class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase, public SfxListener
+class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase
 {
 friend class SfxFrame;
 
@@ -74,8 +72,6 @@ friend class SfxFrame;
     sal_Bool                  bOwnsBindings : 1;
     sal_Bool                  bReleasingComponent : 1;
     sal_Bool                  bInPlace : 1;
-    SfxCancelManager*         pCancelMgr;
-    SfxCancellable*           pLoadCancellable;
     SfxFrame*                 pFrame;
     const SfxItemSet*         pSet;
     SfxWorkWindow*            pWorkWin;
@@ -97,15 +93,12 @@ friend class SfxFrame;
                               bOwnsBindings( sal_False ),
                               bReleasingComponent( sal_False ),
                               bInPlace( sal_False ),
-                              pCancelMgr( 0 ),
-                              pLoadCancellable( 0 ),
                               pFrame( pAntiImplP ),
                               pSet( 0 ),
                               pWorkWin( 0 )
                               {}
 
-    virtual ~SfxFrame_Impl() { delete pCancelMgr; delete pLoadCancellable; }
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual ~SfxFrame_Impl() { }
 };
 
 #endif

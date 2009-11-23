@@ -181,16 +181,6 @@ void SvxLinkManager::CancelTransfers()
             pFileObj->CancelTransfers();
 }
 
-void SvxLinkManager::SetTransferPriority( sfx2::SvBaseLink& /*rLink*/, USHORT /*nPrio*/ )
-{
-//  SvFileObject* pFileObj =
-//      (SvFileObject*)SvFileObject::ClassFactory()->
-//                                  CastAndAddRef( rLink.GetObj() );
-//          OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & rLink.GetObjType()) ?
-//              (SvFileObject*)rLink.GetObj() : 0;
-}
-
-
     // um Status Informationen aus dem FileObject an den BaseLink zu
     // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
     // dann die entsprechenden Informationen als String.

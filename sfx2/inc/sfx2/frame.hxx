@@ -86,7 +86,6 @@ class SfxMedium;
 class SfxFrameHistory_Impl;
 class SfxDispatcher;
 class SfxMedium;
-class SfxCancellable;
 class Rectangle;
 class SfxRequest;
 class SfxUnoControllerItem;
@@ -125,7 +124,6 @@ DECLARE_LIST( TargetList, String* )
 //==========================================================================
 
 class SfxFrameArr_Impl;
-class SfxCancelManager;
 struct SfxFramePickEntry_Impl;
 class SfxUnoFrame;
 class SFX2_DLLPUBLIC SfxFrame
@@ -209,7 +207,6 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader > & rLoader,
                             SfxItemSet* pSet=0, sal_Bool bDontClose=sal_False );
     DECL_DLLPRIVATE_STATIC_LINK(   SfxFrame, BindingHasNewPart_Impl, void* );
-    SAL_DLLPRIVATE SfxCancelManager* GetCancelManager() const;
     SAL_DLLPRIVATE void GetViewData_Impl();
     SAL_DLLPRIVATE void ActivatePickEntry_Impl( SfxFramePickEntry_Impl*, sal_uInt16 nMode, SfxFrameDescriptor *pD = NULL );
     SAL_DLLPRIVATE void SetFrameType_Impl( sal_uInt32 );

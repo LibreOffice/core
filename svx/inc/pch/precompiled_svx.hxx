@@ -757,7 +757,6 @@
 #include "svtools/apearcfg.hxx"
 #include "svtools/brdcst.hxx"
 #include "svtools/cacheoptions.hxx"
-#include "svtools/cancel.hxx"
 #include "svtools/cjkoptions.hxx"
 #include "svtools/cmdoptions.hxx"
 #include "svtools/cntwall.hxx"

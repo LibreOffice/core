@@ -51,7 +51,6 @@ class SfxProgress;
 class SvData;
 class SfxViewShell;
 class SvPseudoObject;
-class SfxCancelManager;
 class SystemWindow;
 class Fraction;
 class Point;
@@ -250,7 +249,6 @@ public:
                             { GetFrame()->GetTargetList( rList ); }
     void                    CancelTransfers()
                             { GetFrame()->CancelTransfers(); }
-    SfxCancelManager*       GetCancelManager() const;
 
     void                    SetModalMode( BOOL );
     BOOL                    IsInModalMode() const;

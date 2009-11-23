@@ -1493,21 +1493,9 @@ void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
             break;
         }
         case SID_BROWSE_STOP:
-        {
-            if ( GetCancelManager() )
-                GetCancelManager()->Cancel( TRUE );
-
-            // cancel jobs in hidden tasks
-            SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
-            for( USHORT nPos = rArr.Count(); nPos--; )
-            {
-                SfxFrame *pFrame = rArr[ nPos ];
-                if ( !pFrame->GetCurrentViewFrame() )
-                    pFrame->GetCancelManager()->Cancel( TRUE );
-            }
-
+            OSL_ENSURE( false, "SID_BROWSE_STOP is dead!" );
             break;
-        }
+
         case SID_FOCUSURLBOX:
         {
             SfxStateCache *pCache = GetBindings().GetAnyStateCache_Impl( SID_OPENURL );
@@ -1539,7 +1527,7 @@ void SfxTopViewFrame::INetState_Impl( SfxItemSet &rItemSet )
     if ( !pDocSh || bPseudo || bEmbedded || !pDocSh->HasName() )
         rItemSet.DisableItem( SID_CREATELINK );
 
-    pImp->pStopButtonTimer->SetButtonState( GetCancelManager()->CanCancel() );
+    pImp->pStopButtonTimer->SetButtonState( FALSE );
     if ( !pImp->pStopButtonTimer->GetButtonState() )
         rItemSet.DisableItem( SID_BROWSE_STOP );
 }

@@ -55,7 +55,6 @@ class SfxFilterMatcher;
 class SvUShorts;
 class ISfxTemplateCommon;
 class SfxFilterMatcher;
-class SfxCancelManager;
 class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
 class SfxMiscCfg;
@@ -112,7 +111,6 @@ public:
 
     // application members
     SfxFilterMatcher*                   pMatcher;
-    SfxCancelManager*                   pCancelMgr;
     ResMgr*                             pLabelResMgr;
     SfxStatusDispatcher*                pAppDispatch;
     SfxDocumentTemplates*               pTemplates;
