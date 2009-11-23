@@ -224,9 +224,6 @@ SfxProgress::~SfxProgress()
 
     if( pImp->bIsStatusText == TRUE )
         GetpApp()->HideStatusText( );
-    SfxObjectShell* pDoc = pImp->xObjSh;
-    if ( !pDoc )
-        SFX_APP()->Invalidate( SID_BROWSE_STOP );
     delete pImp;
 }
 

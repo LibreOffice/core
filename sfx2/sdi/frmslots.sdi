@@ -435,12 +435,6 @@ interface TopWindow : BrowseWindow
         ExecMethod = INetExecute_Impl ;
         StateMethod = INetState_Impl ;
     ]
-    SID_BROWSE_STOP // ole(no) api()
-    [
-        ExecMethod = INetExecute_Impl ;
-        StateMethod = INetState_Impl ;
-    ]
-
 }
 
  //=========================================================================

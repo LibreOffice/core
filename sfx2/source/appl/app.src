@@ -655,11 +655,6 @@ ToolBox RID_ENVTOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = SID_BROWSE_STOP ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
         ToolBoxItem
