@@ -131,17 +131,12 @@ void LFOTable::attribute(Id Name, Value & val)
         /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->nListId = nIntValue;
         break;
-        case NS_rtf::LN_UNUSED4:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
-        case NS_rtf::LN_UNUSED8:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
-            // as the names state they are unused
-        break;
-        case NS_rtf::LN_CLFOLVL:
+        case NS_rtf::LN_clfolvl:
         /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->nCLFOLevel = nIntValue;
         break;
-        case NS_rtf::LN_LFO:
+#if 0
+        case NS_rtf::LN_LFOLevel:
             /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties;
@@ -152,6 +147,7 @@ void LFOTable::attribute(Id Name, Value & val)
             }
         }
         break;
+#endif
         default:
         {
             OSL_ENSURE( false, "LFOTable::attribute: default statement");

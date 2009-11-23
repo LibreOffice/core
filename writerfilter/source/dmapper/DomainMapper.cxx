@@ -213,12 +213,6 @@ void DomainMapper::attribute(Id nName, Value & val)
         switch( nName )
         {
             /* attributes to be ignored */
-        case NS_rtf::LN_UNUSED4:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-
-        case NS_rtf::LN_UNUSED8:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-
         case NS_rtf::LN_UNUSED1_3:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 
@@ -640,7 +634,7 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_rtf::LN_UNSIGNED4_6:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
-        case NS_rtf::LN_CLFOLVL:
+        case NS_rtf::LN_clfolvl:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
         case NS_rtf::LN_CBFFNM1:
@@ -1445,7 +1439,7 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_rtf::LN_LISTLEVEL:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
-        case NS_rtf::LN_LFO:
+        case NS_rtf::LN_LFOData:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
         case NS_rtf::LN_F:

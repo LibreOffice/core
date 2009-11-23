@@ -2613,7 +2613,7 @@
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>16</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>15</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="size"/>
               </UML:TaggedValue.type>
@@ -2631,7 +2631,7 @@
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>0x0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="offset"/>
                   </UML:TaggedValue.type>
@@ -2639,9 +2639,9 @@
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>32</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue/>
                   <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="bits"/>
+                    <UML:TagDefinition xmi.idref="shift"/>
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
@@ -2657,7 +2657,7 @@
                 <UML:TaggedValue>
                   <UML:TaggedValue.dataValue/>
                   <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="shift"/>
+                    <UML:TagDefinition xmi.idref="bits"/>
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
@@ -2689,7 +2689,7 @@
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>0xc</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue>12</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="offset"/>
                   </UML:TaggedValue.type>
@@ -2697,9 +2697,9 @@
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>8</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue/>
                   <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="bits"/>
+                    <UML:TagDefinition xmi.idref="shift"/>
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
@@ -2715,7 +2715,7 @@
                 <UML:TaggedValue>
                   <UML:TaggedValue.dataValue/>
                   <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="shift"/>
+                    <UML:TagDefinition xmi.idref="bits"/>
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
@@ -2736,7 +2736,7 @@
             </UML:Attribute>
           </UML:Classifier.feature>
           <UML:Classifier.feature>
-            <UML:Attribute name="ibstFirAutoNum">
+            <UML:Attribute name="ibstFltAutoNum">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
                   <UML:TaggedValue.dataValue/>
@@ -2747,7 +2747,7 @@
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>0xd</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue>13</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="offset"/>
                   </UML:TaggedValue.type>
@@ -2755,9 +2755,9 @@
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>8</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue/>
                   <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="bits"/>
+                    <UML:TagDefinition xmi.idref="shift"/>
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
@@ -2773,13 +2773,13 @@
                 <UML:TaggedValue>
                   <UML:TaggedValue.dataValue/>
                   <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="shift"/>
+                    <UML:TagDefinition xmi.idref="bits"/>
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:ibstFitAutoNum</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue>rtf:ibstFltAutoNum</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="attrid"/>
                   </UML:TaggedValue.type>
@@ -2805,7 +2805,7 @@
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>0xe</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue>14</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="offset"/>
                   </UML:TaggedValue.type>
@@ -2813,9 +2813,9 @@
               </UML:ModelElement.taggedValue>
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>8</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue/>
                   <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="bits"/>
+                    <UML:TagDefinition xmi.idref="shift"/>
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
@@ -2831,7 +2831,7 @@
                 <UML:TaggedValue>
                   <UML:TaggedValue.dataValue/>
                   <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="shift"/>
+                    <UML:TagDefinition xmi.idref="bits"/>
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
@@ -2852,10 +2852,10 @@
             </UML:Attribute>
           </UML:Classifier.feature>
           <UML:Classifier.feature>
-            <UML:Operation name="lfolevel">
+            <UML:Operation name="LFOData">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:LFOLevel</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue>rtf:LFOData</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="opid"/>
                   </UML:TaggedValue.type>
@@ -2864,12 +2864,12 @@
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter kind="return" name="return">
                   <UML:Parameter.type>
-                    <UML:Class xmi.idref="LFOLevel"/>
+                    <UML:Class xmi.idref="LFOData"/>
                   </UML:Parameter.type>
                 </UML:Parameter>
               </UML:BehavioralFeature.parameter>
               <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
+                <UML:Stereotype xmi.idref="attribute"/>
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
@@ -2906,6 +2906,87 @@
           </UML:Generalization.parent>
         </UML:Generalization>
         <!--Class SttbRgtplc-->
+        <!--Class LFOData-->
+        <UML:Class xmi.id="LFOData" name="LFOData">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8resource"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>4</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="size"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Classifier.feature>
+            <UML:Attribute name="cp">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:cp</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="U32"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Generalization isSpecification="false" xmi.id="LFOData-Properties">
+          <UML:Generalization.child>
+            <UML:Class xmi.idref="LFOData"/>
+          </UML:Generalization.child>
+          <UML:Generalization.parent>
+            <UML:Class xmi.idref="Properties"/>
+          </UML:Generalization.parent>
+        </UML:Generalization>
+        <!--Class LFOData-->
         <!--Class LFOTable-->
         <UML:Class xmi.id="LFOTable" name="LFOTable">
           <UML:ModelElement.stereotype>

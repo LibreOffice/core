@@ -39,38 +39,36 @@ void WW8LFOTable::initPayload()
     sal_uInt32 nCount = getEntryCount();
 
     sal_uInt32 nOffset = 4;
-    sal_uInt32 nOffsetLevel = mnPlcfPayloadOffset;
+    sal_uInt32 nOffsetLFOData = mnPlcfPayloadOffset;
 
     for (sal_uInt32 n = 0; n < nCount; ++n)
     {
         WW8LFO aLFO(this, nOffset);
 
         entryOffsets.push_back(nOffset);
-        payloadIndices.push_back(payloadOffsets.size());
         nOffset += WW8LFO::getSize();
 
-        sal_uInt32 nLvlCount = aLFO.get_lfolevel_count();
+        payloadOffsets.push_back(nOffsetLFOData);
+        payloadIndices.push_back(n);
 
-        for (sal_uInt32 i = 0; i < nLvlCount; ++i)
+        nOffsetLFOData += 4;
+
+        sal_uInt32 nLvls = aLFO.get_clfolvl();
+
+        for (sal_uInt32 k = 0; k < nLvls; ++k)
         {
-            WW8LFOLevel aLevel(this, nOffsetLevel);
-
-            payloadOffsets.push_back(nOffsetLevel);
-
-            nOffsetLevel += aLevel.calcSize();
+            WW8LFOLevel aLevel(this, nOffsetLFOData);
+            nOffsetLFOData += aLevel.calcSize();
         }
     }
 
     entryOffsets.push_back(nOffset);
-    payloadOffsets.push_back(nOffsetLevel);
+    payloadOffsets.push_back(nOffsetLFOData);
 }
 
 sal_uInt32 WW8LFOTable::calcPayloadOffset()
 {
     sal_uInt32 nResult = 4 + getEntryCount() * WW8LFO::getSize();
-
-    while (getU32(nResult) == 0xffffffff)
-        nResult += 4;
 
     return nResult;
 }
@@ -90,11 +88,18 @@ WW8LFOTable::getEntry(sal_uInt32 nIndex)
     return writerfilter::Reference<Properties>::Pointer_t(pLFO);
 }
 
-sal_uInt32 WW8LFO::get_lfolevel_count()
+writerfilter::Reference<Properties>::Pointer_t
+WW8LFO::get_LFOData()
 {
-    return get_clfolvl();
+    WW8LFOTable * pLFOTable = dynamic_cast<WW8LFOTable *>(mpParent);
+    sal_uInt32 nPayloadOffset = pLFOTable->getPayloadOffset(mnIndex);
+    sal_uInt32 nPayloadSize = pLFOTable->getPayloadSize(mnIndex);
+
+    return writerfilter::Reference<Properties>::Pointer_t
+    (new WW8LFOData(mpParent, nPayloadOffset, nPayloadSize));
 }
 
+/*
 writerfilter::Reference<Properties>::Pointer_t
 WW8LFO::get_lfolevel(sal_uInt32 nIndex)
 {
@@ -106,6 +111,7 @@ WW8LFO::get_lfolevel(sal_uInt32 nIndex)
     return writerfilter::Reference<Properties>::Pointer_t
         (new WW8LFOLevel(mpParent, nPayloadOffset, nPayloadSize));
 }
+*/
 
 void WW8LFOLevel::resolveNoAuto(Properties & /*rHandler*/)
 {
