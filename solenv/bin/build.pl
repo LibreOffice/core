@@ -1882,20 +1882,16 @@ sub build_dependent {
                     start_child($child_nick, $dependencies_hash);
                     return 1 if ($build_all_parents);
                 } else {
-                    if (!$build_all_parents && (scalar keys %$dependencies_hash)) {
+                    return 0 if ($build_all_parents);
+                    if (scalar keys %$dependencies_hash) {
                         handle_dead_children(1);
                     };
-                    return 0 if ($build_all_parents);
                 };
                 $child_nick = pick_prj_to_build($dependencies_hash);
             } while (scalar keys %$dependencies_hash || $child_nick);
             while (children_number()) {
-#                print "#### 1902: Starting waiting for dead child\n";
                 handle_dead_children(1);
             };
-#            if (defined $last_module) {
-#                $build_is_finished{$last_module}++ if (!defined $modules_with_errors{$last_module});
-#            };
 
             if (defined $modules_with_errors{$dependencies_hash}) {
                 cancel_build();
