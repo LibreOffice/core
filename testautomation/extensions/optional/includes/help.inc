@@ -39,9 +39,6 @@
 
 testcase tExtensibleHelp
 
-    warnlog( "#i105760# - Extensible help not displayed" )
-    goto endsub
-
     '///<h1>Extensible help</h1>
 
     '///<u><pre>Synopsis</pre></u>Beginning with CWS ab38 extensions can extend the help application with index entries and content<br>
