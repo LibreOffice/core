@@ -77,21 +77,12 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
 
     /** Re-interprets the data given in <code>aInterpretedData</code>
         while keeping the number of data series and the categories.
-
-        <p>the data passed in
-        <member>InterpretedData::UnusedData</member> may be used to be
-        added to existing <type>DataSeries</type>.</p>
      */
     InterpretedData reinterpretDataSeries( [in] InterpretedData aInterpretedData );
 
     /** parses the given data and states, if a
         <member>reinterpretDataSeries</member> call can be done
         without data loss.
-
-        <p>if this method returns <TRUE/>, a call to
-        <member>reinterpretDataSeries</member> should leave the
-        <member>InterpretedData::UnusedData</member> list
-        untouched.</p>
 
         @return
             <TRUE/>, if the data given in
