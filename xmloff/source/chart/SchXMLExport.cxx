@@ -212,24 +212,6 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 
-    /*
-    //unused ranges are very problematic as they bear the risk to damage the rectangular structure completly
-    if(!xResult.is())
-    {
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aUnusedSequences( xDiagram->getUnusedData() );
-
-        lcl_MatchesRole aHasCategories( OUString::createFromAscii("categories" ) );
-        for( sal_Int32 nN=0; nN<aUnusedSequences.getLength(); nN++ )
-        {
-            if( aHasCategories( aUnusedSequences[nN] ) )
-            {
-                xResult.set( aUnusedSequences[nN] );
-                break;
-            }
-        }
-    }
-    */
-
     return xResult;
 }
 
