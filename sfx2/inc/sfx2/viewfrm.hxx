@@ -265,18 +265,11 @@ public:
     void                        ChildWindowState(SfxItemSet&);
 
 //#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE SfxMacro* GetRecordingMacro_Impl();
     SAL_DLLPRIVATE void SetFrame_Impl( SfxFrame* );
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE BOOL IsDowning_Impl() const;
-    SAL_DLLPRIVATE void SetSetViewFrameAllowed_Impl( BOOL bSet );
-    SAL_DLLPRIVATE BOOL IsSetViewFrameAllowed_Impl() const;
-    SAL_DLLPRIVATE void SetImportingObjectShell_Impl( SfxObjectShell* pSH );
-    SAL_DLLPRIVATE SfxObjectShell* GetImportingObjectShell_Impl( ) const;
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );
-    SAL_DLLPRIVATE void SetObjectShell_Impl( SfxObjectShell& rObjSh ,
-                                                 FASTBOOL bDefaultView = FALSE );
     SAL_DLLPRIVATE void ReleaseObjectShell_Impl( BOOL bStoreView = FALSE );
 
     SAL_DLLPRIVATE void GetState_Impl( SfxItemSet &rSet );
@@ -285,10 +278,8 @@ public:
     SAL_DLLPRIVATE void StateReload_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecView_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateView_Impl( SfxItemSet &rSet );
-    SAL_DLLPRIVATE void PropState_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecHistory_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateHistory_Impl( SfxItemSet &rSet );
-    SAL_DLLPRIVATE void SetParentViewFrame_Impl(SfxViewFrame *pParentFrame);
     SAL_DLLPRIVATE SfxViewFrame* GetParentViewFrame_Impl() const;
     SAL_DLLPRIVATE void ForceOuterResize_Impl(BOOL bOn=TRUE);
     SAL_DLLPRIVATE BOOL IsResizeInToOut_Impl() const;
@@ -299,16 +290,13 @@ public:
 
     SAL_DLLPRIVATE void LockObjectShell_Impl(BOOL bLock=TRUE);
 
-    SAL_DLLPRIVATE SfxViewShell* CreateView_Impl( USHORT nViewId );
     SAL_DLLPRIVATE void MakeActive_Impl( BOOL bActivate );
     SAL_DLLPRIVATE void SetQuietMode_Impl( BOOL );
     SAL_DLLPRIVATE const Size& GetMargin_Impl() const;
-    SAL_DLLPRIVATE void SetMargin_Impl( const Size& );
     SAL_DLLPRIVATE void SetActiveChildFrame_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE SfxViewFrame* GetActiveChildFrame_Impl() const;
     SAL_DLLPRIVATE BOOL IsRestoreView_Impl() const;
     SAL_DLLPRIVATE void SetRestoreView_Impl( BOOL );
-    SAL_DLLPRIVATE void SetViewData_Impl( USHORT, const String& );
     SAL_DLLPRIVATE String& GetViewData_Impl();
     SAL_DLLPRIVATE String GetActualPresentationURL_Impl() const;
     SAL_DLLPRIVATE static void CloseHiddenFrames_Impl();
@@ -316,7 +304,6 @@ public:
     SAL_DLLPRIVATE void MiscState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl( USHORT nId );
     SAL_DLLPRIVATE void AddDispatchMacroToBasic_Impl(const ::rtl::OUString& sMacro);
-    SAL_DLLPRIVATE BOOL ClearEventFlag_Impl();
 //#endif
 };
 

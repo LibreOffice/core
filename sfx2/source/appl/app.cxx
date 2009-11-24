@@ -476,9 +476,6 @@ SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 //--------------------------------------------------------------------
 void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 {
-    if( pFrame && !pFrame->IsSetViewFrameAllowed_Impl() )
-        return;
-
     if ( pFrame != pAppData_Impl->pViewFrame )
     {
         // get the containerframes ( if one of the frames is an InPlaceFrame )

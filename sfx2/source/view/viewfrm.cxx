@@ -180,28 +180,22 @@ struct SfxViewFrame_Impl
     //SfxInPlaceFrame*  pIPFrame;
     Window*             pWindow;
     SfxViewFrame*       pActiveChild;
-    SfxViewFrame*       pParentViewFrame;
-    SfxObjectShell*     pImportShell;
     Window*             pFocusWin;
-    SfxMacro*           pMacro;
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
     sal_Bool            bResizeInToOut:1;
     sal_Bool            bDontOverwriteResizeInToOut:1;
     sal_Bool            bObjLocked:1;
     sal_Bool            bRestoreView:1;
-    sal_Bool            bSetViewFrameLocked:1;
     sal_Bool            bReloading:1;
     sal_Bool            bIsDowning:1;
     sal_Bool            bInCtor:1;
     sal_Bool            bModal:1;
     sal_Bool            bEnabled:1;
-    sal_Bool            bEventFlag:1;
     sal_Bool            bWindowWasEnabled:1;
 
                         SfxViewFrame_Impl()
                         : pReloader(0 )
-                        , pMacro( 0 )
                         , bWindowWasEnabled(sal_True)
                         {}
 
@@ -221,31 +215,6 @@ void SfxViewFrame::SetDowning_Impl()
 sal_Bool SfxViewFrame::IsDowning_Impl() const
 {
     return pImp->bIsDowning;
-}
-
-
-//-------------------------------------------------------------------------
-void SfxViewFrame::SetSetViewFrameAllowed_Impl( sal_Bool bSet )
-{
-    pImp->bSetViewFrameLocked = !bSet;
-};
-
-//-------------------------------------------------------------------------
-sal_Bool SfxViewFrame::IsSetViewFrameAllowed_Impl() const
-{
-    return !pImp->bSetViewFrameLocked;
-}
-
-//-------------------------------------------------------------------------
-void SfxViewFrame::SetImportingObjectShell_Impl( SfxObjectShell* pSh )
-{
-    pImp->pImportShell = pSh;
-}
-
-//--------------------------------------------------------------------
-SfxObjectShell* SfxViewFrame::GetImportingObjectShell_Impl() const
-{
-    return pImp->pImportShell;
 }
 
 
@@ -1067,83 +1036,6 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 }
 
 //--------------------------------------------------------------------
-void SfxViewFrame::SetObjectShell_Impl
-(
-    SfxObjectShell& rObjSh, // eine initialisierte SfxObjectShell,
-    FASTBOOL        bDefaultView    // sal_True: nicht restaurieren
-)
-
-/*  [Beschreibung]
-
-    Diese Methode setzt eine <SfxObjectShell> in den SfxViewFrame ein.
-
-    Zuvor mu\s die vorherige SfxObjectShell, insofern schein eine gesetzt
-    wurde, mit der Methode ReleaseObjectShell() entfernt worden sein. Somit
-    kann durch Aufruf von ReleaseObjectShell() und SetObjectShell() die
-    SfxObjectShell ausgetauscht werden.
-
-
-    [Querverweise]
-
-    <SfxViewFrame::ReleaseObjectShell()>
-*/
-
-{
-    DBG_CHKTHIS(SfxViewFrame, 0);
-    DBG_ASSERT( !xObjSh.Is(), "old feature used: only one Object per View!" );
-
-    GetFrame()->ReleasingComponent_Impl( sal_False );
-
-    // Doc einsetzen
-    xObjSh = &rObjSh;
-    if ( xObjSh.Is() && xObjSh->IsPreview() )
-        SetQuietMode_Impl( sal_True );
-
-    // Modulshell einf"ugen
-    SfxModule* pModule = xObjSh->GetModule();
-    if( pModule )
-        pDispatcher->InsertShell_Impl( *pModule, 1 );
-
-    pDispatcher->Push( rObjSh );
-    pDispatcher->Flush();
-    StartListening( rObjSh );
-
-    rObjSh.ViewAssigned();
-    pDispatcher->SetReadOnly_Impl( rObjSh.IsReadOnly() );
-
-    const SfxMedium *pMedium = GetObjectShell()->GetMedium();
-    SFX_ITEMSET_ARG(
-        pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
-    if ( !pHiddenItem || !pHiddenItem->GetValue() )
-    {
-        LockObjectShell_Impl(sal_True);
-        GetDocNumber_Impl();
-    }
-
-    // View erzeugen
-    if ( bDefaultView )
-        SetRestoreView_Impl( sal_False );
-
-// So darf man es nicht machen, da LaodWindows hierueber laeuft. Kann meiner Meinung nach
-// auch nur beim Reload mit Dokumenttypwechsel passieren.
-/*    if ( xObjSh->Type() != pImp->aLastType )
-        SetRestoreView_Impl( sal_False ); */
-
-    SwitchToViewShell_Impl( !IsRestoreView_Impl() ? (sal_uInt16) 0 : GetCurViewId() );
-    rObjSh.PostActivateEvent_Impl( this );
-    if ( Current() == this )
-        SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC ), &rObjSh ) );
-
-    Notify( rObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
-    Notify( rObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
-
-    // Zur Sicherheit, aber eigentlich sollte jetzt nichts mehr passieren
-    // ( kein erzwungenes Update )
-    if ( SfxViewFrame::Current() == this )
-        GetDispatcher()->Update_Impl();
-}
-
-//--------------------------------------------------------------------
 void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
 
 /*  [Beschreibung]
@@ -1611,17 +1503,13 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 {
     pImp->bInCtor = sal_True;
-    pImp->pParentViewFrame = 0;
     pImp->bResizeInToOut = sal_True;
     pImp->bDontOverwriteResizeInToOut = sal_False;
-    pImp->pImportShell = 0;
     pImp->bObjLocked = sal_False;
-    pImp->bEventFlag = sal_True;
     pImp->pFocusWin = 0;
     pImp->pActiveChild = NULL;
     pImp->bRestoreView = sal_False;
     pImp->nCurViewId = 0;
-    pImp->bSetViewFrameLocked = sal_False;
     pImp->bReloading = sal_False;
     pImp->bIsDowning = sal_False;
     pImp->bModal = sal_False;
@@ -1723,10 +1611,6 @@ SfxViewFrame::~SfxViewFrame()
 
     if ( GetFrame() && GetFrame()->GetCurrentViewFrame() == this )
         GetFrame()->SetCurrentViewFrame_Impl( NULL );
-
-    SfxObjectShell* pSh = pImp->pImportShell;
-    if( pSh )
-        pSh->AbortImport();
 
     // von Frame-Liste abmelden
     SfxApplication *pSfxApp = SFX_APP();
@@ -1975,21 +1859,10 @@ void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
     Der ParentViewFrame ist der ViewFrame des Containers bei internem InPlace
 */
 
-void SfxViewFrame::SetParentViewFrame_Impl(SfxViewFrame *pFrame)
-{
-    pImp->pParentViewFrame = pFrame;
-}
-
-//--------------------------------------------------------------------
-/*
-    Beschreibung:
-    Der ParentViewFrame ist der ViewFrame des Containers bei internem InPlace
-*/
-
 //TODO/LATER: is it still necessary? is there a replacement for GetParentViewFrame_Impl?
 SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl() const
 {
-    return pImp->pParentViewFrame;
+    return NULL;
 }
 
 //--------------------------------------------------------------------
@@ -2203,64 +2076,6 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
     }
 }
 
-//--------------------------------------------------------------------
-
-SfxViewShell* SfxViewFrame::CreateView_Impl( sal_uInt16 nViewId )
-
-/*  [Beschreibung]
-
-    Erzeugt eine SfxViewShell f"ur diesen SfxViewFrame. Wird auch aus
-    <SfxObjectShell::LoadView_Impl()>
-    gerufen.
-*/
-
-{
-    DBG_ASSERT( GetObjectShell(), "Kein Dokument!" );
-
-    LockAdjustPosSizePixel();
-
-    // passende View-Factory suchen
-    SfxObjectFactory &rDocFact = GetObjectShell()->GetFactory();
-    sal_uInt16 nNewNo = nViewId ? USHRT_MAX : 0;
-    for ( sal_uInt16 nNo = 0;
-          nNo < rDocFact.GetViewFactoryCount();
-          ++nNo )
-    {
-        sal_uInt16 nFoundId = rDocFact.GetViewFactory(nNo).GetOrdinal();
-        if ( nNewNo == USHRT_MAX )
-        {
-            if ( nViewId == nFoundId )
-                nNewNo = nNo;
-        }
-    }
-
-    // per Factory erzeugen
-    GetBindings().ENTERREGISTRATIONS();
-    SfxViewFactory &rViewFactory = rDocFact.GetViewFactory( nNewNo );
-    SfxViewShell *pViewShell = rViewFactory.CreateInstance(this, 0);
-    SetViewShell_Impl(pViewShell);
-    UnlockAdjustPosSizePixel();
-
-    if ( GetWindow().IsReallyVisible() )
-        DoAdjustPosSizePixel(pViewShell, Point(), GetWindow().GetOutputSizePixel());
-
-    // erste jetzt anzeigen (ausser wenn MTs BASIC-IDE mal wieder keins hat)
-    Window *pViewWin = pViewShell->GetWindow();
-    if ( pViewWin && pViewShell->IsShowView_Impl() )
-        pViewWin->Show();
-
-    // Dispatcher
-    GetDispatcher()->Push( *pViewShell );
-    if ( pViewShell->GetSubShell() )
-        GetDispatcher()->Push( *pViewShell->GetSubShell() );
-    pViewShell->PushSubShells_Impl();
-
-    GetBindings().LEAVEREGISTRATIONS();
-
-    DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );
-    return pViewShell;
-}
-
 //-------------------------------------------------------------------------
 
 void SfxViewFrame::SetQuietMode_Impl( sal_Bool bOn )
@@ -2273,11 +2088,6 @@ void SfxViewFrame::SetQuietMode_Impl( sal_Bool bOn )
 SfxObjectShell* SfxViewFrame::GetObjectShell()
 {
     return xObjSh;
-}
-
-void SfxViewFrame::SetMargin_Impl( const Size& rMargin )
-{
-    pImp->aMargin = rMargin;
 }
 
 const Size& SfxViewFrame::GetMargin_Impl() const
@@ -2507,14 +2317,6 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
     DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );
     return sal_True;
-}
-//--------------------------------------------------------------------
-
-void SfxViewFrame::SetViewData_Impl( sal_uInt16 nViewId, const String &rViewData )
-{
-    pImp->bRestoreView = sal_True;
-    pImp->nCurViewId = nViewId;
-    pImp->aViewData = rViewData;
 }
 
 //-------------------------------------------------------------------------
@@ -3770,11 +3572,6 @@ SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
     return pWork ? pWork->GetChildWindow_Impl(nId) : NULL;
 }
 
-SfxMacro* SfxViewFrame::GetRecordingMacro_Impl()
-{
-    return pImp->pMacro;
-}
-
 void SfxViewFrame::UpdateDocument_Impl()
 {
     SfxObjectShell* pDoc = GetObjectShell();
@@ -3783,17 +3580,6 @@ void SfxViewFrame::UpdateDocument_Impl()
 
     // check if document depends on a template
     pDoc->UpdateFromTemplate_Impl();
-}
-
-BOOL SfxViewFrame::ClearEventFlag_Impl()
-{
-    if ( pImp->bEventFlag )
-    {
-        pImp->bEventFlag = FALSE;
-        return TRUE;
-    }
-    else
-        return FALSE;
 }
 
 SfxViewFrame* SfxViewFrame::CreateViewFrame( SfxObjectShell& rDoc, sal_uInt16 nViewId, sal_Bool bHidden )
