@@ -177,56 +177,6 @@ Directory gid_Dir_User
     DosName = "presets";
 End
 
-Directory gid_Dir_User_Registry
-    ParentID = gid_Dir_User;
-    DosName = "registry";
-End
-
-Directory gid_Dir_User_Registry_Data
-    ParentID = gid_Dir_User_Registry;
-    DosName = "data";
-End
-
-Directory gid_Dir_User_Registry_Data_Org
-    ParentID = gid_Dir_User_Registry_Data;
-    DosName = "org";
-End
-
-Directory gid_Dir_User_Registry_Data_Org_Openoffice
-    ParentID = gid_Dir_User_Registry_Data_Org;
-    DosName = "openoffice";
-End
-
-Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office
-    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice;
-    DosName = "Office";
-End
-
-Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_Ui
-    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
-    DosName = "UI";
-End
-
-Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_Dataaccess
-    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
-    HostName = "DataAccess";
-End
-
-Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_OOoImprovement
-    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
-    DosName = "OOoImprovement";
-End
-
-Directory gid_Dir_User_Registry_Data_Org_Openoffice_Ucb
-    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice;
-    DosName = "ucb";
-End
-
-Directory gid_Dir_User_Registry_Cache
-    ParentID = gid_Dir_User_Registry;
-    DosName = "cache";
-End
-
 Directory gid_Dir_User_Xslt
     ParentID = gid_Dir_User;
     DosName = "xslt";
@@ -730,51 +680,6 @@ End
 Directory gid_Dir_Share_Registry_Res
     ParentID = gid_Dir_Share_Registry;
     HostName = "res";
-End
-
-Directory gid_Dir_Share_Registry_Modules
-    ParentID = gid_Dir_Share_Registry;
-    HostName = "modules";
-End
-
-Directory gid_Dir_Share_Registry_Modules_Org
-    ParentID = gid_Dir_Share_Registry_Modules;
-    HostName = "org";
-End
-
-Directory gid_Dir_Share_Registry_Modules_Oo
-    ParentID = gid_Dir_Share_Registry_Modules_Org;
-    HostName = "openoffice";
-End
-
-Directory gid_Dir_Share_Registry_Modules_Oo_Office
-    ParentID = gid_Dir_Share_Registry_Modules_Oo;
-    HostName = "Office";
-End
-
-Directory gid_Dir_Share_Registry_Modules_Oo_TypeDetection
-    ParentID = gid_Dir_Share_Registry_Modules_Oo;
-    HostName = "TypeDetection";
-End
-
-Directory gid_Dir_Share_Registry_Modules_Oo_Office_Common
-    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
-    HostName = "Common";
-End
-
-Directory gid_Dir_Share_Registry_Modules_Oo_Office_Linguistic
-    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
-    HostName = "Linguistic";
-End
-
-Directory gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter
-    ParentID = gid_Dir_Share_Registry_Modules_Oo_TypeDetection;
-    HostName = "Filter";
-End
-
-Directory gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types
-    ParentID = gid_Dir_Share_Registry_Modules_Oo_TypeDetection;
-    HostName = "Types";
 End
 
 Directory gid_Dir_Autotext
