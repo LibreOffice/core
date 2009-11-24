@@ -256,6 +256,7 @@ Textobjekt .uno:DrawText
 Toolbox SID_DRAW_SELECT
 VerticalCallout .uno:VerticalCaption
 VerticalText .uno:VerticalText
+LineArrowEnd .uno:LineArrowEnd
 BasicShapes .uno:BasicShapes
 SymbolShapes .uno:SymbolShapes
 BlockArrows .uno:ArrowShapes
@@ -360,7 +361,7 @@ ExtrusionLightingFloater .uno:ExtrusionLightingFloater
 ExtrusionSurfaceFloater .uno:ExtrusionSurfaceFloater
 Extrusion3DColor .uno:Extrusion3DColor
 '-------------------------------------------------------------------------
-Flowchart .HelpId:flowchartshapes
+*Flowchart .HelpId:flowchartshapes
 '-------------------------------------------------------------------------
 Process .uno:FlowChartShapes.flowchart-process
 AlternateProcess .uno:FlowChartShapes.flowchart-alternate-process

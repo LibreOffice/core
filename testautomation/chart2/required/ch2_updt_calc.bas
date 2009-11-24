@@ -134,7 +134,7 @@ sub main
     printlog Chr(13) + "---------  Chart2 Window Menu  ---------"
     Call tWindowNewWindowAndClose
     printLog Chr(13) + "----------  Chart2 Toolbars  -----------"      
-    Call tdummyToolbar
+    Call tDrawBar
     printLog Chr(13) + "--------- Chart2 as OLE object ---------"
     Call tChartOLE("WRITER")
     Call tChartOLE("CALC")

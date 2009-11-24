@@ -39,7 +39,8 @@
 
 sub ch2_lvl1a
 
-	Call tPlotOptions
+    Call tPlotOptions
+    Call tChartShapes
 
 end sub
 
@@ -148,4 +149,118 @@ testcase tPlotOptions
 	DocumentCalc.TypeKeys "<Escape>"
 
 	Call hCloseDocument
+endcase
+
+'
+'-------------------------------------------------------------------------
+'
+testcase tChartShapes
+
+	Dim sLocalFile as string
+	Dim sLocalFileXLS as string
+	Dim sFormatXLS as string
+	sLocalFile = convertpath(gOfficepath & "user\work\chartshapes.ods")
+	sLocalFileXLS = convertpath(gOfficepath & "user\work\chartshapes.xls")
+	sFormatXLS = "MS Excel 97"
+	
+	printlog " Load simple chart document"
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    printlog " Select chart using navigator"
+    call fSelectFirstOLE
+    printlog " Invoke Edit::Object::Edit to enter Inplace Mode"
+    EditObjectEdit
+    printlog " Verify that the drawbar is visible"
+    Kontext "DrawBar"
+    
+    qaerrorlog "#i107003# disabled because of bug in toolbars"
+'    if Not DrawBar.Exists then 
+'    	Call hToolbarSelect("Drawing", true)
+'    endif
+
+	    printlog " Insert a shape to the chart by <STRG-RETURN>"
+    Kontext "DrawBar"
+    sleep (1)
+    DrawBar.typekeys "<TAB>",TRUE
+    DrawBar.typekeys "<TAB>",TRUE
+    DrawBar.typekeys "<TAB>",TRUE
+    DrawBar.typekeys "<TAB>",TRUE
+    DrawBar.typekeys "<MOD1 RETURN>",TRUE
+    printlog " Rename inserted shape"
+    Kontext "DocumentChart"
+    sleep (1)
+    DocumentChart.OpenContextMenu
+    sleep (1)
+    hMenuSelectNr (6)
+    Kontext "NameDlgObject"
+    NameField.SetText "ChartShape1"
+    NameDlgObject.OK
+    printlog " Leave Chart"
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
+    printlog "Select chart using navigator"
+    call fSelectFirstOLE   
+    printlog "Invoke Edit::Object::Edit to enter Inplace Mode"
+    EditObjectEdit
+    printlog " Check if shape is still there"
+    Kontext "DocumentChart"
+    DocumentChart.typekeys "<SHIFT TAB>"
+    Sleep (1)
+    Kontext "Toolbar"
+    if ChartElementSelector.GetSelText <> "ChartShape1" then
+    	warnlog "Something is wrong with the shape"
+    endif
+    printlog " Leave Chart"
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
+    printlog " Save document with the default calc filter"
+    call hFileSaveAsKill ( sLocalFile )
+    printlog " Save document to xls"
+    if NOT hFileSaveAsWithFilterKill ( sLocalFileXLS , sFormatXLS ) then
+        warnlog "Saving test document localy failed -> Aborting"
+        call hCloseDocument
+        goto endsub
+    end if
+	printlog " Close document"
+    call hCloseDocument
+    printlog " Open document"
+    call hFileOpen ( sLocalFile )
+	printlog "Select chart using navigator"
+    call fSelectFirstOLE   
+    printlog "Invoke Edit::Object::Edit to enter Inplace Mode"
+    EditObjectEdit
+    printlog " Check if shape is still there"
+    Kontext "DocumentChart"
+    DocumentChart.typekeys "<SHIFT TAB>"
+    Sleep (1)
+    Kontext "Toolbar"
+    if ChartElementSelector.GetSelText <> "ChartShape1" then
+    	warnlog "Something is wrong with the shape"
+    endif
+    printlog " Leave Chart"
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
+    printlog " Close document"
+    Call hCloseDocument
+	call hFileOpen ( sLocalFileXLS )
+	printlog "Select chart using navigator"
+    call fSelectFirstOLE   
+    printlog "Invoke Edit::Object::Edit to enter Inplace Mode"
+    EditObjectEdit
+    printlog " Check if shape is still there"
+    Kontext "DocumentChart"
+    DocumentChart.typekeys "<SHIFT TAB>"
+    Sleep (1)
+    Kontext "Toolbar"
+    if ChartElementSelector.GetSelText <> "ChartShape1" then
+    	warnlog "Something is wrong with the shape"
+    endif
+    printlog " Leave Chart"
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
+    printlog " Close document"
+    Call hCloseDocument
+    
 endcase
