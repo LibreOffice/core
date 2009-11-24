@@ -201,7 +201,7 @@ BOOL SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* )
 }
 void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, OutputDevice& rDev )
 {
-    rDev.DrawImage ( rPos, GetDisplayBackground().GetColor().IsDark() ? pEntry->GetImageHC() : pEntry->GetImage() );
+    rDev.DrawImage( rPos, GetSettings().GetStyleSettings().GetHighContrastMode() ? pEntry->GetImageHC() : pEntry->GetImage() );
 }
 String SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, BOOL )
 {
