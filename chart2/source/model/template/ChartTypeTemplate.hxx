@@ -103,7 +103,8 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableCreationParameterNames()
+    /// denotes if the chart needs categories at the first scale
+    virtual sal_Bool SAL_CALL supportsCategories()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL changeDiagram(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
@@ -160,9 +161,6 @@ protected:
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex ) = 0;
 
     virtual bool isSwapXAndY() const;
-
-    /// denotes if the chart needs categories at the first scale
-    virtual bool supportsCategories() const;
 
     // Methods for creating the diagram piecewise
     // ------------------------------------------

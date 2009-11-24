@@ -139,10 +139,6 @@ public:
         ::com::sun::star::chart2::XChartTypeManager >
         GetChartTypeManager();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartTypeTemplate >
-        GetChartTypeTemplate();
-
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
         GetTitle();
 
@@ -184,16 +180,8 @@ public:
             ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier );
 
 private:
-    void CreateDefaultChartTypeTemplate();
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSource > CreateDefaultData();
-    void SetNewData( const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::chart2::data::XDataSource > & xDataSource,
-                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & rArgs );
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSource > SAL_CALL SetRangeRepresentation(
-                const ::rtl::OUString & rRangeRepresentation, bool bSetData )
-        throw (::com::sun::star::lang::IllegalArgumentException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeTemplate > CreateDefaultChartTypeTemplate();
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > CreateDefaultData();
 
 //     void CreateDefaultLayout();
 
@@ -202,13 +190,6 @@ private:
 
     ::boost::shared_ptr< ChartData >                                              m_spChartData;
 
-    // Data Access (deprecated, temporary solution)
-//     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > m_xChartData;
-//     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
-
-//     ::std::vector< ::com::sun::star::uno::Reference<
-//         ::com::sun::star::chart2::XDataSeries > >                               m_aInterpretedData;
-
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
                                 m_xOwnNumberFormatsSupplier;
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
@@ -216,8 +197,6 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >
         m_xChartTypeManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeTemplate >
-        m_xChartTypeTemplate;
 
     // Diagram Access
     typedef ::std::vector< ::com::sun::star::uno::Reference<

@@ -738,8 +738,7 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
     setModified( sal_True );
 }
 
-        void SAL_CALL ChartModel
-::setArguments( const Sequence< beans::PropertyValue >& aArguments )
+void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& aArguments )
             throw (lang::IllegalArgumentException,
                    uno::RuntimeException)
 {

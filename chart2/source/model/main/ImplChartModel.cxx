@@ -134,7 +134,6 @@ ImplChartModel::ImplChartModel(
             xContext ), uno::UNO_QUERY );
 
     GetStyleFamilies();
-    CreateDefaultChartTypeTemplate();
 }
 
 ImplChartModel::ImplChartModel( const ImplChartModel & rOther, const Reference< util::XModifyListener > & xListener ) :
@@ -145,7 +144,6 @@ ImplChartModel::ImplChartModel( const ImplChartModel & rOther, const Reference< 
 {
     m_xFamilies.set( CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xFamilies ));
     m_xChartTypeManager.set( CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager ));
-    m_xChartTypeTemplate.set( CreateRefClone< Reference< chart2::XChartTypeTemplate > >()( rOther.m_xChartTypeTemplate ));
     m_xTitle.set( CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
     ModifyListenerHelper::addListener( m_xTitle, m_xModifyListener );
     m_xPageBackground.set( CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground ));
@@ -238,7 +236,7 @@ Reference< chart2::data::XDataSource > SAL_CALL ImplChartModel::SetArguments(
     bool bSetData )
     throw (lang::IllegalArgumentException)
 {
-    Reference< chart2::data::XDataSource > xResult;
+    Reference< chart2::data::XDataSource > xDataSource;
     try
     {
         OSL_ASSERT( m_spChartData.get() );
@@ -247,10 +245,39 @@ Reference< chart2::data::XDataSource > SAL_CALL ImplChartModel::SetArguments(
             m_spChartData->getDataProvider());
         if( xDataProvider.is() )
         {
-            xResult.set( xDataProvider->createDataSource( aArguments ));
+            xDataSource.set( xDataProvider->createDataSource( aArguments ));
 
-            if( bSetData && xResult.is())
-                SetNewData( xResult, aArguments );
+            if( bSetData && xDataSource.is())
+            {
+                // set new data
+                Reference< chart2::XDiagram > xDia;
+                if( m_aDiagrams.size() > 0 )
+                    xDia.set( GetDiagram(0));
+                Reference< chart2::XChartTypeTemplate > xTemplate;
+
+                if( xDia.is())
+                {
+                    // apply new data
+                    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
+                        DiagramHelper::getTemplateForDiagram(
+                            xDia, Reference< lang::XMultiServiceFactory >( m_xChartTypeManager, uno::UNO_QUERY ));
+                    xTemplate.set( aTemplateAndService.first );
+                }
+
+                if( !xTemplate.is())
+                    xTemplate.set( CreateDefaultChartTypeTemplate() );
+
+                if( xTemplate.is())
+                {
+                    if( xDia.is())
+                        xTemplate->changeDiagramData( xDia, xDataSource, aArguments );
+                    else
+                    {
+                        RemoveAllDiagrams();
+                        AppendDiagram( xTemplate->createDiagramByDataSource( xDataSource, aArguments ));
+                    }
+                }
+            }
         }
     }
     catch( lang::IllegalArgumentException & )
@@ -262,27 +289,7 @@ Reference< chart2::data::XDataSource > SAL_CALL ImplChartModel::SetArguments(
         ASSERT_EXCEPTION( ex );
     }
 
-    return xResult;
-}
-
-Reference< chart2::data::XDataSource > SAL_CALL ImplChartModel::SetRangeRepresentation(
-    const OUString & rRangeRepresentation, bool bSetData )
-    throw (::com::sun::star::lang::IllegalArgumentException)
-{
-    uno::Sequence< beans::PropertyValue > aArgs( 4 );
-    aArgs[0] = beans::PropertyValue(
-        ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
-        uno::makeAny( rRangeRepresentation ), beans::PropertyState_DIRECT_VALUE );
-    aArgs[1] = beans::PropertyValue(
-        ::rtl::OUString::createFromAscii("HasCategories"), -1,
-        uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
-    aArgs[2] = beans::PropertyValue(
-        ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-        uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
-    aArgs[3] = beans::PropertyValue(
-        ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-        uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
-    return SetArguments( aArgs, bSetData );
+    return xDataSource;
 }
 
 void ImplChartModel::SetChartTypeManager(
@@ -296,19 +303,12 @@ Reference< chart2::XChartTypeManager > ImplChartModel::GetChartTypeManager()
     return m_xChartTypeManager;
 }
 
-Reference< chart2::XChartTypeTemplate > ImplChartModel::GetChartTypeTemplate()
-{
-    return m_xChartTypeTemplate;
-}
-
 void ImplChartModel::CreateDefaultChart()
 {
-    CreateDefaultChartTypeTemplate();
-
     // clean up
     RemoveAllDiagrams();
 
-    Reference< chart2::XChartTypeTemplate > xTemplate( GetChartTypeTemplate());
+    Reference< chart2::XChartTypeTemplate > xTemplate( CreateDefaultChartTypeTemplate() );
     if( xTemplate.is())
     {
         try
@@ -316,11 +316,8 @@ void ImplChartModel::CreateDefaultChart()
             Reference< chart2::data::XDataSource > xDataSource( CreateDefaultData());
             Sequence< beans::PropertyValue > aParam;
 
-            Sequence< OUString > aParamNames( xTemplate->getAvailableCreationParameterNames());
-            const OUString * pBeg = aParamNames.getConstArray();
-            const OUString * pEnd = pBeg + aParamNames.getLength();
-            const OUString * pFound( ::std::find( pBeg, pEnd, C2U("HasCategories")));
-            if( pFound != pEnd )
+            bool bSupportsCategories = xTemplate->supportsCategories();
+            if( bSupportsCategories )
             {
                 aParam.realloc( 1 );
                 aParam[0] = beans::PropertyValue( C2U("HasCategories"), -1, uno::makeAny( true ),
@@ -417,7 +414,6 @@ void ImplChartModel::dispose()
     DisposeHelper::DisposeAndClear( m_xFamilies );
     DisposeHelper::DisposeAndClear( m_xOwnNumberFormatsSupplier );
     DisposeHelper::DisposeAndClear( m_xChartTypeManager );
-    DisposeHelper::DisposeAndClear( m_xChartTypeTemplate );
     DisposeHelper::DisposeAllElements( m_aDiagrams );
     m_aDiagrams.clear();
     DisposeHelper::DisposeAndClear( m_xTitle );
@@ -446,55 +442,36 @@ Reference< chart2::XUndoManager > ImplChartModel::GetUndoManager()
     return m_xUndoManager;
 }
 
-void ImplChartModel::SetNewData( const Reference< chart2::data::XDataSource > & xDataSource,
-                                 const Sequence< beans::PropertyValue > & rArgs )
-{
-    Reference< chart2::XDiagram > xDia;
-    if( m_aDiagrams.size() > 0 )
-        xDia.set( GetDiagram(0));
-    Reference< chart2::XChartTypeTemplate > xTemplate;
-
-    if( xDia.is())
-    {
-        // apply new data
-        DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-            DiagramHelper::getTemplateForDiagram(
-                xDia, Reference< lang::XMultiServiceFactory >( m_xChartTypeManager, uno::UNO_QUERY ));
-        xTemplate.set( aTemplateAndService.first );
-    }
-
-    if( !xTemplate.is())
-        xTemplate.set( GetChartTypeTemplate());
-
-    if( xTemplate.is())
-    {
-        if( xDia.is())
-            xTemplate->changeDiagramData( xDia, xDataSource, rArgs );
-        else
-        {
-            RemoveAllDiagrams();
-            AppendDiagram( xTemplate->createDiagramByDataSource( xDataSource, rArgs ));
-        }
-    }
-}
-
 Reference< chart2::data::XDataSource > ImplChartModel::CreateDefaultData()
 {
-    Reference< chart2::data::XDataSource > xResult;
+    Reference< chart2::data::XDataSource > xDataSource;
     if( m_spChartData->createDefaultData())
-        xResult.set( SetRangeRepresentation( C2U("all"), false /* bSetData */ ));
-    return xResult;
+    {
+        uno::Sequence< beans::PropertyValue > aArgs( 4 );
+        aArgs[0] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+            uno::makeAny( C2U("all") ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[1] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[2] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[3] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+        xDataSource = SetArguments( aArgs, false /*bSetData*/ );
+    }
+    return xDataSource;
 }
 
-void ImplChartModel::CreateDefaultChartTypeTemplate()
+Reference< chart2::XChartTypeTemplate > ImplChartModel::CreateDefaultChartTypeTemplate()
 {
-    // set default chart type
+    Reference< chart2::XChartTypeTemplate > xTemplate;
     Reference< lang::XMultiServiceFactory > xFact( m_xChartTypeManager, uno::UNO_QUERY );
     if( xFact.is() )
-    {
-        m_xChartTypeTemplate.set(
-            xFact->createInstance( C2U( "com.sun.star.chart2.template.Column" ) ), uno::UNO_QUERY );
-    }
+        xTemplate.set( xFact->createInstance( C2U( "com.sun.star.chart2.template.Column" ) ), uno::UNO_QUERY );
+    return xTemplate;
 }
 
 Reference< uno::XInterface > ImplChartModel::GetDashTable() const

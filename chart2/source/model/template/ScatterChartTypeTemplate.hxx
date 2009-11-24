@@ -74,7 +74,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableCreationParameterNames()
+    virtual sal_Bool SAL_CALL supportsCategories()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
@@ -100,8 +100,6 @@ protected:
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex );
     virtual sal_Int32 getDimension() const;
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
-
-    virtual bool supportsCategories() const;
 
 private:
     bool               m_bHasSymbols;

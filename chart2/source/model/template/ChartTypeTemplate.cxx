@@ -195,11 +195,10 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
     return xDia;
 }
 
-Sequence< OUString > SAL_CALL ChartTypeTemplate::getAvailableCreationParameterNames()
+sal_Bool SAL_CALL ChartTypeTemplate::supportsCategories()
     throw (uno::RuntimeException)
 {
-    OUString aHasCat( C2U("HasCategories"));
-    return Sequence< OUString >( & aHasCat, 1 );
+    return sal_True;
 }
 
 void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagram )
@@ -561,11 +560,6 @@ bool ChartTypeTemplate::isSwapXAndY() const
     return false;
 }
 
-bool ChartTypeTemplate::supportsCategories() const
-{
-    return true;
-}
-
 // ________________________________________
 
 void ChartTypeTemplate::createCoordinateSystems(
@@ -639,7 +633,7 @@ void ChartTypeTemplate::adaptScales(
     const Reference< data::XLabeledDataSequence > & xCategories //@todo: in future there may be more than one sequence of categories (e.g. charttype with categories at x and y axis )
     )
 {
-    bool bSupportsCategories( supportsCategories());
+    bool bSupportsCategories( supportsCategories() );
     for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
     {
         try
