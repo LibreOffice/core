@@ -82,6 +82,44 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="calcoffsetinner">
+    <xsl:variable name="arraycount">
+      <xsl:choose>
+	<xsl:when test="@array-count">
+	  <xsl:value-of select="@array-count"/>
+	</xsl:when>
+	<xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="mysize">
+      <xsl:choose>
+	<xsl:when test="@size">
+	  <xsl:value-of select="number($arraycount) * number(@size)"/>
+	</xsl:when>
+	<xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="preceding-sibling::*">
+	<xsl:variable name="precedingoffset">
+	  <xsl:for-each select="preceding-sibling::*[1]">
+	    <xsl:call-template name="calcoffsetinner"/>
+	  </xsl:for-each>
+	</xsl:variable>
+	<xsl:value-of select="number($precedingoffset) + number($mysize)"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:value-of select="$mysize"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="calcoffset">
+    <xsl:for-each select="preceding-sibling::*[1]">
+      <xsl:call-template name="calcoffsetinner"/>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template match="ww8resource">
     <UML:Class>
       <xsl:attribute name="xmi.id">
@@ -171,7 +209,7 @@
 	<xsl:call-template name="taggedvalue">
 	  <xsl:with-param name="type">offset</xsl:with-param>
 	  <xsl:with-param name="value">
-	    <xsl:value-of select="sum(preceding-sibling::*/@size)"/>
+	    <xsl:call-template name="calcoffset"/>
 	  </xsl:with-param>
 	</xsl:call-template>
 	<xsl:call-template name="taggedvalue">
@@ -365,8 +403,15 @@
 	<UML:ModelElement.taggedValue>
 	  <UML:TaggedValue>
 	    <UML:TaggedValue.dataValue>
-	      <xsl:text>rtf:</xsl:text>
-	      <xsl:value-of select="@name"/>
+	      <xsl:choose>
+		<xsl:when test="@token">
+		  <xsl:value-of select="@token"/>
+		</xsl:when>
+		<xsl:otherwise>
+		  <xsl:text>rtf:</xsl:text>
+		  <xsl:value-of select="@name"/>
+		</xsl:otherwise>
+	      </xsl:choose>
 	    </UML:TaggedValue.dataValue>
 	    <UML:TaggedValue.type>
 	      <UML:TagDefinition xmi.idref="attrid"/>
