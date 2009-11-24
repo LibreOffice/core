@@ -943,9 +943,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
             bool bNoExp = false;
             bool bResort = false;
             const USHORT coArrSz = static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                                   static_cast<USHORT>(RES_CHRATR_BEGIN) +
-                                   static_cast<USHORT>(RES_UNKNOWNATR_END) -
-                                   static_cast<USHORT>(RES_UNKNOWNATR_BEGIN);
+                                   static_cast<USHORT>(RES_CHRATR_BEGIN);
 
             BOOL aDontExp[ coArrSz ];
             memset( &aDontExp, 0, coArrSz * sizeof(BOOL) );
@@ -979,14 +977,6 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                         {
                             nWhPos = static_cast<USHORT>(nWhich -
                                         RES_CHRATR_BEGIN);
-                        }
-                        else if (isUNKNOWNATR(nWhich))
-                        {
-                            nWhPos = static_cast<USHORT>(
-                                nWhich -
-                                static_cast<USHORT>(RES_UNKNOWNATR_BEGIN) +
-                                static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                                static_cast<USHORT>(RES_CHRATR_BEGIN) );
                         }
                         else
                             continue;

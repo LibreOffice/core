@@ -106,6 +106,8 @@
 #include <SwUndoFmt.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>
+#include <docufld.hxx>
+
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -1066,6 +1068,24 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
             }
         }
 
+        // #i93174#: notes contain paragraphs that are not nodes
+        {
+            SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
+            SwClientIter aIter(*pPostits);
+            SwFmtFld const * pFmtFld =
+                static_cast<SwFmtFld const*>(aIter.First( TYPE(SwFmtFld) ));
+            while (pFmtFld)
+            {
+                if (pFmtFld->IsFldInDoc())
+                {
+                    SwPostItField const * const pField(
+                        static_cast<SwPostItField const*>(pFmtFld->GetFld()));
+                    rStat.nAllPara += pField->GetNumberOfParagraphs();
+                }
+                pFmtFld = static_cast<SwFmtFld const*>(aIter.Next());
+            }
+        }
+
         rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
         rStat.bModified = FALSE;
         SetDocStat( rStat );
@@ -1091,12 +1111,21 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
 
         // For e.g. autotext documents there is no pSwgInfo (#i79945)
-        if (GetDocShell()) {
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps(
+        SfxObjectShell * const pObjShell( GetDocShell() );
+        if (pObjShell)
+        {
+            const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                pObjShell->GetModel(), uno::UNO_QUERY_THROW);
+            const uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
+            // #i96786#: do not set modified flag when updating statistics
+            const bool bDocWasModified( IsModified() );
+            const ModifyBlocker_Impl b(pObjShell);
             xDocProps->setDocumentStatistics(aStat);
+            if (!bDocWasModified)
+            {
+                ResetModified();
+            }
         }
 
         // event. Stat. Felder Updaten

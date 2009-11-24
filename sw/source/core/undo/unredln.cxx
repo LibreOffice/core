@@ -247,6 +247,12 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
     // im aSaveRange steht der kopierte, sprich der originale.
     SwDoc& rDoc = rIter.GetDoc();
 
+    SwPosition* pStart = rIter.pAktPam->Start();
+    SwPosition* pEnd   = rIter.pAktPam->End();
+
+    SwNodeIndex aPrevIdx( pStart->nNode, -1 );
+    ULONG nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+
     if( 0 == ( nsRedlineMode_t::REDLINE_SHOW_DELETE & rDoc.GetRedlineMode()) )
     {
         // die beiden Redline Objecte suchen und diese dann anzeigen lassen,
@@ -254,17 +260,17 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
         // das Geloeschte ist versteckt, also suche das INSERT
         // Redline Object. Dahinter steht das Geloeschte
         USHORT nFnd = rDoc.GetRedlinePos(
-                            *rDoc.GetNodes()[ nSttNode + nOffset + 1 ],
+                            *rDoc.GetNodes()[ nSttNode + 1 ],
                             nsRedlineType_t::REDLINE_INSERT );
         ASSERT( USHRT_MAX != nFnd && nFnd+1 < rDoc.GetRedlineTbl().Count(),
                     "kein Insert Object gefunden" );
         ++nFnd;
-        rDoc.GetRedlineTbl()[nFnd]->Show();
-        SetPaM( *rIter.pAktPam );
+        rDoc.GetRedlineTbl()[nFnd]->Show( 1 );
     }
 
     {
         SwPaM aTmp( *rIter.pAktPam->GetMark() );
+        aTmp.GetMark()->nContent = 0;
         aTmp.SetMark();
         aTmp.GetPoint()->nNode = nSaveEndNode;
         aTmp.GetPoint()->nContent.Assign( aTmp.GetCntntNode(), nSaveEndCntnt );
@@ -272,13 +278,52 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
     }
 
     rDoc.DelFullPara( *rIter.pAktPam );
+
+    SwPaM*  pPam = rIter.pAktPam;
+    pPam->DeleteMark();
+    pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
+    SwCntntNode* pCNd = pPam->GetCntntNode();
+    pPam->GetPoint()->nContent.Assign(pCNd, 0 );
+    pPam->SetMark();
+
+    pPam->GetPoint()->nNode += nOffsetTemp;
+    pCNd = pPam->GetCntntNode();
+    pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+
+    SetValues( *pPam );
+
     SetPaM( *rIter.pAktPam );
 }
 
 void SwUndoRedlineSort::_Redo( SwUndoIter& rIter )
 {
     SwPaM& rPam = *rIter.pAktPam;
+
+    SwPaM* pPam = &rPam;
+    SwPosition* pStart = pPam->Start();
+    SwPosition* pEnd   = pPam->End();
+
+    SwNodeIndex aPrevIdx( pStart->nNode, -1 );
+    ULONG nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+    xub_StrLen nCntStt  = pStart->nContent.GetIndex();
+
     rIter.GetDoc().SortText( rPam, *pOpt );
+
+    pPam->DeleteMark();
+    pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
+    SwCntntNode* pCNd = pPam->GetCntntNode();
+    xub_StrLen nLen = pCNd->Len();
+    if( nLen > nCntStt )
+        nLen = nCntStt;
+    pPam->GetPoint()->nContent.Assign(pCNd, nLen );
+    pPam->SetMark();
+
+    pPam->GetPoint()->nNode += nOffsetTemp;
+    pCNd = pPam->GetCntntNode();
+    pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+
+    SetValues( rPam );
+
     SetPaM( rPam );
     rPam.GetPoint()->nNode = nSaveEndNode;
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), nSaveEndCntnt );
