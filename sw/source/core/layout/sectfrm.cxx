@@ -1160,6 +1160,10 @@ void SwSectionFrm::SimpleFormat()
     SWRECTFN( this )
     if( GetPrev() || GetUpper() )
     {
+        // --> OD 2009-09-28 #b6882166#
+        // assure notifications on position changes.
+        const SwLayNotify aNotify( this );
+        // <--
         (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), FALSE );
         bValidPos = TRUE;
     }

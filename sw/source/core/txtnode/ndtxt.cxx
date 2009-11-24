@@ -2842,6 +2842,9 @@ long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
 BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 {
     BOOL bRet( FALSE );
+    // --> OD 2009-09-08 #i95907#, #b6879723#
+    rFLOffset = 0;
+    // <--
 
     // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
@@ -2875,8 +2878,6 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             }
             // <--
         }
-        else
-            rFLOffset = 0;
 
         bRet = TRUE;
     }
