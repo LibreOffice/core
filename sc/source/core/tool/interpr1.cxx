@@ -780,6 +780,7 @@ double ScInterpreter::Compare()
         switch ( GetRawStackType() )
         {
             case svEmptyCell:
+                Pop();
                 aComp.bEmpty[ i ] = TRUE;
                 break;
             case svMissing:
@@ -836,6 +837,7 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
         switch (GetRawStackType())
         {
             case svEmptyCell:
+                Pop();
                 aComp.bEmpty[ i ] = TRUE;
                 break;
             case svMissing:
