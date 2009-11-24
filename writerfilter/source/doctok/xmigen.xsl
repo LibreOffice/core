@@ -43,6 +43,45 @@
     </out>
   </xsl:template>
 
+  <xsl:template name="calcsizeinner">
+    <xsl:param name="size">0</xsl:param>
+    <xsl:variable name="arraycount">
+      <xsl:choose>
+	<xsl:when test="@array-count">
+	  <xsl:value-of select="@array-count"/>
+	</xsl:when>
+	<xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="mysize">
+      <xsl:choose>
+	<xsl:when test="@size">
+	  <xsl:value-of select="number($arraycount) * number(@size)"/>
+	</xsl:when>
+	<xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="following-sibling::*">
+	<xsl:for-each select="following-sibling::*[1]">
+	  <xsl:call-template name="calcsizeinner">
+	    <xsl:with-param name="size" 
+			    select="number($size) + number($mysize)"/>
+	  </xsl:call-template>
+	</xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:value-of select="number($size) + number($mysize)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="calcsize">
+    <xsl:for-each select="*[1]">
+      <xsl:call-template name="calcsizeinner"/>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template match="ww8resource">
     <UML:Class>
       <xsl:attribute name="xmi.id">
@@ -54,10 +93,17 @@
       <UML:ModelElement.stereotype>
 	<UML:Stereotype xmi.idref="ww8resource"/>
       </UML:ModelElement.stereotype>
+      <xsl:for-each select="stereotype">
+	<UML:ModelElement.stereotype>
+	  <UML:Stereotype>
+	    <xsl:value-of select="@name"/>
+	  </UML:Stereotype>
+	</UML:ModelElement.stereotype>
+      </xsl:for-each>
       <UML:ModelElement.taggedValue>
 	<UML:TaggedValue>
 	  <UML:TaggedValue.dataValue>
-	    <xsl:value-of select="sum(//*/@size)"/>
+	    <xsl:call-template name="calcsize"/>
 	  </UML:TaggedValue.dataValue>
 	  <UML:TaggedValue.type>
 	    <UML:TagDefinition xmi.idref="size"/>
@@ -91,68 +137,68 @@
     </UML:Generalization>
   </xsl:template>
 
+  <xsl:template name="taggedvalue">
+    <xsl:param name="type"/>
+    <xsl:param name="value"/>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+	<UML:TaggedValue.dataValue>
+	  <xsl:value-of select="$value"/>
+	</UML:TaggedValue.dataValue>
+	<UML:TaggedValue.type>
+	  <UML:TagDefinition>
+	    <xsl:attribute name="xmi.idref">
+	      <xsl:value-of select="$type"/>
+	    </xsl:attribute>
+	  </UML:TagDefinition>
+	</UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>    
+  </xsl:template>
+
   <xsl:template match="attribute">
     <UML:Classifier.feature>
       <UML:Attribute>
 	<xsl:attribute name="name">
 	  <xsl:value-of select="@name"/>
 	</xsl:attribute>
-	<UML:ModelElement.taggedValue>
-	  <UML:TaggedValue>
-	    <UML:TaggedValue.dataValue>
-	    </UML:TaggedValue.dataValue>
-	    <UML:TaggedValue.type>
-	      <UML:TagDefinition xmi.idref="comment"/>
-	    </UML:TaggedValue.type>
-	  </UML:TaggedValue>
-	</UML:ModelElement.taggedValue>
-	<UML:ModelElement.taggedValue>
-	  <UML:TaggedValue>
-	    <UML:TaggedValue.dataValue>
-	      <xsl:value-of select="sum(preceding-sibling::*/@size)"/>
-	    </UML:TaggedValue.dataValue>
-	    <UML:TaggedValue.type>
-	      <UML:TagDefinition xmi.idref="offset"/>
-	    </UML:TaggedValue.type>
-	  </UML:TaggedValue>
-	</UML:ModelElement.taggedValue>
-	<UML:ModelElement.taggedValue>
-	  <UML:TaggedValue>
-	    <UML:TaggedValue.dataValue>
-	    </UML:TaggedValue.dataValue>
-	    <UML:TaggedValue.type>
-	      <UML:TagDefinition xmi.idref="shift"/>
-	    </UML:TaggedValue.type>
-	  </UML:TaggedValue>
-	</UML:ModelElement.taggedValue>
-	<UML:ModelElement.taggedValue>
-	  <UML:TaggedValue>
-	    <UML:TaggedValue.dataValue/>
-	    <UML:TaggedValue.type>
-	      <UML:TagDefinition xmi.idref="mask"/>
-	    </UML:TaggedValue.type>
-	  </UML:TaggedValue>
-	</UML:ModelElement.taggedValue>
-	<UML:ModelElement.taggedValue>
-	  <UML:TaggedValue>
-	    <UML:TaggedValue.dataValue>
-	    </UML:TaggedValue.dataValue>
-	    <UML:TaggedValue.type>
-	      <UML:TagDefinition xmi.idref="bits"/>
-	    </UML:TaggedValue.type>
-	  </UML:TaggedValue>
-	</UML:ModelElement.taggedValue>
-	<UML:ModelElement.taggedValue>
-	  <UML:TaggedValue>
-	    <UML:TaggedValue.dataValue>
-	      <xsl:text>rtf:</xsl:text>
-	      <xsl:value-of select="@name"/>
-	    </UML:TaggedValue.dataValue>
-	    <UML:TaggedValue.type>
-	      <UML:TagDefinition xmi.idref="attrid"/>
-	    </UML:TaggedValue.type>
-	  </UML:TaggedValue>
-	</UML:ModelElement.taggedValue>
+	<xsl:call-template name="taggedvalue">
+	  <xsl:with-param name="type">comment</xsl:with-param>
+	  <xsl:with-param name="value"/>
+	</xsl:call-template>
+	<xsl:call-template name="taggedvalue">
+	  <xsl:with-param name="type">offset</xsl:with-param>
+	  <xsl:with-param name="value">
+	    <xsl:value-of select="sum(preceding-sibling::*/@size)"/>
+	  </xsl:with-param>
+	</xsl:call-template>
+	<xsl:call-template name="taggedvalue">
+	  <xsl:with-param name="type">shift</xsl:with-param>
+	  <xsl:with-param name="value"></xsl:with-param>
+	</xsl:call-template>
+	<xsl:call-template name="taggedvalue">
+	  <xsl:with-param name="type">mask</xsl:with-param>
+	  <xsl:with-param name="value"></xsl:with-param>
+	</xsl:call-template>
+	<xsl:call-template name="taggedvalue">
+	  <xsl:with-param name="type">bits</xsl:with-param>
+	  <xsl:with-param name="value"></xsl:with-param>
+	</xsl:call-template>
+	<xsl:call-template name="taggedvalue">
+	  <xsl:with-param name="type">attrid</xsl:with-param>
+	  <xsl:with-param name="value">
+	    <xsl:text>rtf:</xsl:text>
+	    <xsl:value-of select="@name"/>
+	  </xsl:with-param>
+	</xsl:call-template>
+	<xsl:if test="@array-count">
+	  <xsl:call-template name="taggedvalue">
+	    <xsl:with-param name="type">arraycount</xsl:with-param>
+	    <xsl:with-param name="value">
+	      <xsl:value-of select="@array-count"/>
+	    </xsl:with-param>
+	  </xsl:call-template>
+	</xsl:if>
 	<UML:StructuralFeature.type>
 	  <UML:DataType>
 	    <xsl:attribute name="xmi.idref">
@@ -160,9 +206,18 @@
 	    </xsl:attribute>
 	  </UML:DataType>
 	</UML:StructuralFeature.type>
-	<UML:ModelElement.stereotype>
-	  <UML:Stereotype xmi.idref="attribute"/>
-	</UML:ModelElement.stereotype>
+	<xsl:choose>
+	  <xsl:when test="@array-count">
+	    <UML:ModelElement.stereotype>
+	      <UML:Stereotype xmi.idref="array"/>
+	    </UML:ModelElement.stereotype>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <UML:ModelElement.stereotype>
+	      <UML:Stereotype xmi.idref="attribute"/>
+	    </UML:ModelElement.stereotype>
+	  </xsl:otherwise>
+	</xsl:choose>
       </UML:Attribute>
     </UML:Classifier.feature>
   </xsl:template>
@@ -329,17 +384,28 @@
 	<xsl:attribute name="name">
 	  <xsl:value-of select="@name"/>
 	</xsl:attribute>
-	<UML:ModelElement.taggedValue>
-	  <UML:TaggedValue>
-	    <UML:TaggedValue.dataValue>
-	    <xsl:text>rtf:</xsl:text>
-	    <xsl:value-of select="@name"/>
-	    </UML:TaggedValue.dataValue>
-	    <UML:TaggedValue.type>
-	      <UML:TagDefinition xmi.idref="opid"/>
-	    </UML:TaggedValue.type>
-	  </UML:TaggedValue>
-	</UML:ModelElement.taggedValue>
+	<xsl:call-template name="taggedvalue">
+	  <xsl:with-param name="type">opid</xsl:with-param>
+	  <xsl:with-param name="value">
+	    <xsl:choose>
+	      <xsl:when test="@token">
+		<xsl:value-of select="@token"/>
+	      </xsl:when>
+	      <xsl:otherwise>
+		<xsl:text>rtf:</xsl:text>
+		<xsl:value-of select="@name"/>		
+	      </xsl:otherwise>
+	    </xsl:choose>
+	  </xsl:with-param>
+	</xsl:call-template>
+	<xsl:if test="@array-count">
+	  <xsl:call-template name="taggedvalue">
+	    <xsl:with-param name="type">arraycount</xsl:with-param>
+	    <xsl:with-param name="value">
+	      <xsl:value-of select="@array-count"/>
+	    </xsl:with-param>
+	  </xsl:call-template>	  
+	</xsl:if>
 	<UML:BehavioralFeature.parameter>
 	  <UML:Parameter kind="return" name="return">
 	    <UML:Parameter.type>
@@ -351,13 +417,18 @@
 	    </UML:Parameter.type>
 	  </UML:Parameter>
 	</UML:BehavioralFeature.parameter>
-	<UML:ModelElement.stereotype>
-	  <UML:Stereotype xmi.idref="array">
-	    <xsl:attribute name="xmi.idref">
-	      <xsl:value-of select="@stereotype"/>
-	    </xsl:attribute>
-	  </UML:Stereotype>
-	</UML:ModelElement.stereotype>
+	<xsl:choose>
+	  <xsl:when test="@array-count">
+	    <UML:ModelElement.stereotype>
+	      <UML:Stereotype xmi.idref="array"/>
+	    </UML:ModelElement.stereotype>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <UML:ModelElement.stereotype>
+	      <UML:Stereotype xmi.idref="attribute"/>
+	    </UML:ModelElement.stereotype>
+	  </xsl:otherwise>
+	</xsl:choose>
       </UML:Operation>
     </UML:Classifier.feature>
   </xsl:template>
