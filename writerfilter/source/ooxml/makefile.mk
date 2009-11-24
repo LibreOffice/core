@@ -151,6 +151,8 @@ OOXMLGPERFFASTTOKENXSL=gperffasttokenhandler.xsl
 
 OOXMLRESOURCEIDSHXX=$(OOXMLHXXOUTDIR)$/resourceids.hxx
 
+NSPROCESS=namespace_preprocess.pl
+
 TOKENXML=$(OOXMLCXXOUTDIR)$/token.xml
 TOKENXMLTMP=$(OOXMLCXXOUTDIR)$/token.tmp
 
@@ -162,6 +164,7 @@ OOXMLVALUESHXX=$(OOXMLCXXOUTDIR)$/OOXMLvalues.hxx
 OOXMLVALUESCXX=$(OOXMLCXXOUTDIR)$/OOXMLvalues.cxx
 GPERFFASTTOKENHXX=$(OOXMLHXXOUTDIR)$/gperffasttoken.hxx
 MODELPROCESSED=$(MISC)$/model_preprocessed.xml
+NSXSL=$(MISC)$/namespacesmap.xsl
 
 OOXMLGENHEADERS= \
     $(OOXMLFASTRESOURCESHXX) \
@@ -185,6 +188,12 @@ $(TOKENXMLTMP): $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token.txt
 
 $(TOKENXML): tokenxmlheader $(TOKENXMLTMP) tokenxmlfooter
     @$(TYPE) tokenxmlheader $(TOKENXMLTMP) tokenxmlfooter > $@
+
+$(MISC)$/$(OOXMLPREPROCESSXSL): $(OOXMLPREPROCESSXSL)
+    @$(COPY) $(PWD)$/$(OOXMLPREPROCESSXSL) $(MISC)
+
+$(NSXSL) : $(OOXMLMODEL) $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/namespaces.txt $(NSPROCESS)
+    @$(PERL) $(NSPROCESS) $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/namespaces.txt > $@
 
 $(MODELPROCESSED): $(OOXMLPREPROCESSXSL) $(OOXMLMODEL)
     @echo "Making:   " $(@:f)
