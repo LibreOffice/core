@@ -82,8 +82,15 @@ BEGIN
         "dgo",
         "kok",
         "mni",
-        "sat"
-
+        "sat",
+        "ug",
+        "om",
+        "si",
+        "or",
+        "oc",
+        "ml",
+        "as",
+        "ast"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
