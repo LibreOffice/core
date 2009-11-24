@@ -97,11 +97,6 @@
       "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPSProxyPort"/>
     </prop>
   </node>
-  <node oor:name="DefaultSearchEngine" install:module="defaultsearchengine">
-    <prop oor:name="Name">
-     <value>Google</value>
-    </prop>
-  </node>
   <node oor:name="SearchEngines">
     <node oor:name="Euroseek" oor:op="replace">
       <node oor:name="And">

@@ -48,7 +48,6 @@ XCUFILES= \
     UserProfile.xcu
 
 MODULEFILES= \
-    Inet-defaultsearchengine.xcu \
     Inet-macosx.xcu \
     Inet-unixdesktop.xcu \
     Inet-wnt.xcu \
