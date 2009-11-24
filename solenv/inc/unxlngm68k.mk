@@ -37,5 +37,5 @@ PICSWITCH:=-fPIC
 CDEFS+=-DM68K
 CFLAGS+=-fsigned-char -fno-omit-frame-pointer
 CFLAGSCC+=-fsigned-char
-CFLAGSCXX+=-fsigned-char -fno-use-cxa-atexit
+CFLAGSCXX+=-fsigned-char
 DLLPOSTFIX=lm
