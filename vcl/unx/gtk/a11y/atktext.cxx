@@ -188,7 +188,8 @@ static accessibility::XAccessibleTextMarkup*
         {
             uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleTextMarkup::static_type(NULL) );
             pWrap->mpTextMarkup = reinterpret_cast< accessibility::XAccessibleTextMarkup * > (any.pReserved);
-            pWrap->mpTextMarkup->acquire();
+            if( pWrap->mpTextMarkup )
+                pWrap->mpTextMarkup->acquire();
         }
 
         return pWrap->mpTextMarkup;
