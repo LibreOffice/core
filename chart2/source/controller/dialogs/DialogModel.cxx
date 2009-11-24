@@ -830,8 +830,6 @@ void DialogModel::applyInterpretedData(
 
         DialogModel::setCategories(rNewData.Categories);
     }
-
-    OSL_ASSERT( ! rNewData.UnusedData.hasElements());
 }
 
 sal_Int32 DialogModel::countSeries() const

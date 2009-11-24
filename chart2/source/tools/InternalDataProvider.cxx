@@ -833,11 +833,6 @@ InternalDataProvider::InternalDataProvider(
             ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartDoc ));
             ::std::for_each( aSeriesVector.begin(), aSeriesVector.end(),
                              lcl_internalizeSeries( rData, *this ));
-
-            // unused data
-            Sequence< Reference< chart2::data::XLabeledDataSequence > > aUnusedData( xDiagram->getUnusedData());
-            aUnusedData = lcl_internalizeData( aUnusedData, rData, *this );
-            xDiagram->setUnusedData( aUnusedData );
         }
     }
     catch( const uno::Exception & ex )

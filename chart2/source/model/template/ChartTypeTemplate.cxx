@@ -220,10 +220,8 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
         chart2::InterpretedData aData;
         aData.Series = aSeriesSeq;
         aData.Categories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
-        aData.UnusedData = xDiagram->getUnusedData();
 
-        if( (aData.UnusedData.getLength() == 0) &&
-            xInterpreter->isDataCompatible( aData ))
+        if( xInterpreter->isDataCompatible( aData ) )
         {
             aData = xInterpreter->reinterpretDataSeries( aData );
         }
@@ -241,32 +239,9 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
                 aParam[0] = beans::PropertyValue( C2U("HasCategories"), -1, uno::makeAny( true ),
                                                   beans::PropertyState_DIRECT_VALUE );
             }
-            else if( aData.UnusedData.getLength())
-            {
-                for( sal_Int32 i=0; i<aData.UnusedData.getLength(); ++i )
-                    try
-                    {
-                        Reference< beans::XPropertySet > xProp( aData.UnusedData[i]->getValues(), uno::UNO_QUERY_THROW );
-                        OUString aRole;
-                        if( (xProp->getPropertyValue(C2U("Role")) >>= aRole) &
-                            aRole.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("categories")) )
-                        {
-                            aData.Categories = aData.UnusedData[i];
-                            for( ++i; i<aData.UnusedData.getLength(); ++i  )
-                                aData.UnusedData[i-1] = aData.UnusedData[i];
-                            aData.UnusedData.realloc( aData.UnusedData.getLength() - 1 );
-                            break;
-                        }
-                    }
-                    catch( const uno::Exception & ex )
-                    {
-                        ASSERT_EXCEPTION( ex );
-                    }
-            }
             aData = xInterpreter->interpretDataSource( xSource, aParam, aFlatSeriesSeq );
         }
         aSeriesSeq = aData.Series;
-        xDiagram->setUnusedData( aData.UnusedData );
 
         sal_Int32 i, j, nIndex = 0;
         for( i=0; i<aSeriesSeq.getLength(); ++i )

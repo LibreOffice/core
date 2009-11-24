@@ -283,27 +283,6 @@ Reference< chart2::data::XDataSource > SAL_CALL ImplChartModel::SetRangeRepresen
         ::rtl::OUString::createFromAscii("DataRowSource"), -1,
         uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
     return SetArguments( aArgs, bSetData );
-    /*
-    uno::Sequence< beans::PropertyValue > aArgs();
-
-    Reference< chart2::data::XDataProvider > xDataProvider( this->GetDataProvider() );
-    if( xDataProvider.is() )
-        aArgs = xDataProvider->detectArguments( DataSourceHelper::getUsedData( xChartModel ) ),
-
-    ::rtl::OUString aRangeString;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
-    bool bUseColumns = true;
-    bool bFirstCellAsLabel = true;
-    bool bHasCategories = true;
-
-    DataSourceHelper::detectRangeSegmentation(
-        uno::Reference< frame::XModel >( m_xChartDoc, uno::UNO_QUERY ),
-        aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
-
-    aArgs = createArguments( rRangeRepresentation, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
-
-    return SetArguments( aArgs, bSetData );
-    */
 }
 
 void ImplChartModel::SetChartTypeManager(

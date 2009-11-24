@@ -301,18 +301,13 @@ uno::Sequence< ::rtl::OUString > DataSourceHelper::getUsedDataRanges( const uno:
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
-    const uno::Reference< chart2::XChartDocument >& xChartDoc,
-    bool bIncludeUnusedData /* = false */ )
+    const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
-    if( bIncludeUnusedData )
-        return getUsedData( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ), bIncludeUnusedData );
-    else
-         return pressUsedDataIntoRectangularFormat( xChartDoc );
+    return pressUsedDataIntoRectangularFormat( xChartDoc );
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
-    const uno::Reference< frame::XModel >& xChartModel,
-    bool bIncludeUnusedData /* = false */ )
+    const uno::Reference< frame::XModel >& xChartModel )
 {
     ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
 
@@ -333,14 +328,6 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
                      ::std::back_inserter( aResult ));
     }
 
-    if( bIncludeUnusedData && xDiagram.is())
-    {
-        uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aUnusedData( xDiagram->getUnusedData());
-        ::std::copy( aUnusedData.getConstArray(),
-                     aUnusedData.getConstArray() + aUnusedData.getLength(),
-                     ::std::back_inserter( aResult ));
-    }
-
     return uno::Reference< chart2::data::XDataSource >(
         new DataSource( ContainerHelper::ContainerToSequence( aResult )));
 }
@@ -352,8 +339,7 @@ bool DataSourceHelper::detectRangeSegmentation(
     , ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
     , bool& rOutUseColumns
     , bool& rOutFirstCellAsLabel
-    , bool& rOutHasCategories
-    , bool bIncludeUnusedData /* = false */)
+    , bool& rOutHasCategories )
 {
     bool bSomethingDetected = false;
 
@@ -363,9 +349,6 @@ bool DataSourceHelper::detectRangeSegmentation(
     uno::Reference< data::XDataProvider >  xDataProvider( xChartDocument->getDataProvider() );
     if( !xDataProvider.is() )
         return bSomethingDetected;
-
-    OSL_ASSERT( !bIncludeUnusedData ); //bIncludeUnusedData is not supported currently
-    (void)(bIncludeUnusedData); // avoid warning in non-debug build
 
     try
     {

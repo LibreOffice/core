@@ -152,7 +152,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
 
     Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);
     aSeries[0] = ContainerToSequence( aSeriesVec );
-    return InterpretedData( aSeries, xCategories, Sequence< Reference< data::XLabeledDataSequence > >() );
+    return InterpretedData( aSeries, xCategories );
 }
 
 InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
@@ -160,8 +160,6 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
     throw (uno::RuntimeException)
 {
     InterpretedData aResult( aInterpretedData );
-    vector< Reference< data::XLabeledDataSequence > > aUnused(
-        SequenceToVector( aInterpretedData.UnusedData ));
 
     sal_Int32 i=0;
     Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
@@ -193,14 +191,14 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
             Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());
             if( aSeqs.getLength() != aNewSequences.getLength() )
             {
+#if OSL_DEBUG_LEVEL > 1
                 sal_Int32 j=0;
                 for( ; j<aSeqs.getLength(); ++j )
                 {
-                    if( aSeqs[j] != xValuesY )
-                        aUnused.push_back( aSeqs[j] );
+                    OSL_ENSURE( aSeqs[j] == xValuesY, "All sequences should be used" );
                 }
+#endif
                 Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );
-
                 xSink->setData( aNewSequences );
             }
         }
@@ -209,8 +207,6 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
             ASSERT_EXCEPTION( ex );
         }
     }
-
-    aResult.UnusedData = ContainerToSequence( aUnused );
 
     return aResult;
 }
@@ -297,33 +293,12 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
     throw (uno::RuntimeException)
 {
     vector< Reference< data::XLabeledDataSequence > > aResultVec;
-    vector< Reference< data::XLabeledDataSequence > > aUnusedDataVec;
     aResultVec.reserve( aInterpretedData.Series.getLength() +
-                        aInterpretedData.UnusedData.getLength() +
                         1 // categories
         );
 
     if( aInterpretedData.Categories.is())
         aResultVec.push_back( aInterpretedData.Categories );
-
-    // add unused data that has the Role categories at front
-    if( aInterpretedData.UnusedData.getLength())
-    {
-        sal_Int32 nSize = aInterpretedData.UnusedData.getLength();
-        for( sal_Int32 i=0; i<nSize; ++i )
-        {
-            Reference< data::XLabeledDataSequence > xPotentialCategories( aInterpretedData.UnusedData[i]  );
-            if( xPotentialCategories.is() )
-            {
-                if( GetRole( xPotentialCategories->getValues()).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("categories")))
-                    aResultVec.push_back( xPotentialCategories );
-                else
-                    aUnusedDataVec.push_back( xPotentialCategories );
-            }
-        }
-    }
-    else
-        aUnusedDataVec = SequenceToVector( aInterpretedData.UnusedData );
 
     Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeries.getLength(); ++nSeriesIdx )
@@ -351,9 +326,6 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
             ASSERT_EXCEPTION( ex );
         }
     }
-
-    // add unused data at end
-    copy( aUnusedDataVec.begin(), aUnusedDataVec.end(), back_inserter( aResultVec ));
 
     return Reference< data::XDataSource >( DataSourceHelper::createDataSource( ContainerToSequence( aResultVec ) ) );
 }

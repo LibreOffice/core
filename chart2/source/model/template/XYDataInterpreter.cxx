@@ -82,8 +82,6 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     bool bHasCategories = HasCategories( aArguments, aData );
 
     // parse data
-    Sequence< Reference< data::XLabeledDataSequence > > aUnusedData;
-
     bool bCategoriesUsed = false;
     for( sal_Int32 nDataIdx= 0; nDataIdx < aData.getLength(); ++nDataIdx )
     {
@@ -160,7 +158,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
 
     Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);
     aSeries[0] = ContainerHelper::ContainerToSequence( aSeriesVec );
-    return InterpretedData( aSeries, xCategories, aUnusedData );
+    return InterpretedData( aSeries, xCategories );
 }
 
 chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
@@ -168,8 +166,6 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
     throw (uno::RuntimeException)
 {
     InterpretedData aResult( aInterpretedData );
-    vector< Reference< data::XLabeledDataSequence > > aUnused(
-        ContainerHelper::SequenceToVector( aInterpretedData.UnusedData ));
 
     sal_Int32 i=0;
     Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
@@ -233,16 +229,15 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
             Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());
             if( aSeqs.getLength() != aNewSequences.getLength() )
             {
+#if OSL_DEBUG_LEVEL > 1
                 sal_Int32 j=0;
                 for( ; j<aSeqs.getLength(); ++j )
                 {
-                    if( aSeqs[j] != xValuesY &&
-                        aSeqs[j] != xValuesX )
-                        aUnused.push_back( aSeqs[j] );
+                    OSL_ENSURE( aSeqs[j] == xValuesY || aSeqs[j] == xValuesX, "All sequences should be used" );
                 }
+#endif
                 Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );
                 xSink->setData( aNewSequences );
-                aResult.UnusedData = ContainerHelper::ContainerToSequence( aUnused );
             }
         }
         catch( uno::Exception & ex )

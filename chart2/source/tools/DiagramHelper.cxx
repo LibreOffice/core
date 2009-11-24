@@ -1004,17 +1004,6 @@ Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
                 aRet = DataSequenceToStringSequence(xCategories->getValues());
             if( !aRet.getLength() )
             {
-                /*
-                //unused ranges are very problematic as they bear the risk to damage the rectangular structure completly
-                if( bUseUnusedDataAlso )
-                {
-                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aUnusedSequences( xDia->getUnusedData() );
-                    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aUnusedCategoryVector(
-                        DataSeriesHelper::getAllDataSequencesByRole( aUnusedSequences, C2U("categories") ) );
-                    if( aUnusedCategoryVector.size() && aUnusedCategoryVector[0].is() )
-                        aRet = DataSequenceToStringSequence(aUnusedCategoryVector[0]->getValues());
-                }
-                */
                 if( !aRet.getLength() )
                 {
                     Reference< XCoordinateSystemContainer > xCooSysCnt( xDia, uno::UNO_QUERY );

@@ -373,18 +373,6 @@ void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorSch
     fireModifyEvent();
 }
 
-void SAL_CALL Diagram::setUnusedData( const Sequence< Reference< chart2::data::XLabeledDataSequence > >& aUnusedData )
-    throw (uno::RuntimeException)
-{
-    m_aUnusedData = aUnusedData;
-}
-
-Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL Diagram::getUnusedData()
-    throw (uno::RuntimeException)
-{
-    return m_aUnusedData;
-}
-
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitleObject()
     throw (uno::RuntimeException)

@@ -271,8 +271,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         }
     }
 
-    const Sequence< Reference< data::XLabeledDataSequence > > aUnusedData;//@todo remove the unused data concept completely
-    return InterpretedData( aResultSeries, xCategories, aUnusedData );
+    return InterpretedData( aResultSeries, xCategories );
 }
 
 // criterion: there must be two groups for stock-charts with volume and all
@@ -305,7 +304,7 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
         if( ! DataInterpreter::isDataCompatible(
                 InterpretedData( Sequence< Sequence< Reference< XDataSeries > > >(
                                      aInterpretedData.Series.getConstArray(), 1 ),
-                                 aInterpretedData.Categories, aInterpretedData.UnusedData )))
+                                 aInterpretedData.Categories )))
             return sal_False;
     }
 
