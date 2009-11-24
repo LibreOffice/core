@@ -574,16 +574,13 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_rtf::LN_FNORESTART:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
-        case NS_rtf::LN_FPREV:
+        case NS_rtf::LN_FIDENTSAV:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
-        case NS_rtf::LN_FPREVSPACE:
+        case NS_rtf::LN_FCONVERTED:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
-        case NS_rtf::LN_FWORD6:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
-        case NS_rtf::LN_UNUSED5_7:
+        case NS_rtf::LN_FTENTATIVE:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
         case NS_rtf::LN_RGBXCHNUMS:

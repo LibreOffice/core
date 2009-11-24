@@ -362,16 +362,12 @@ void ListTable::attribute(Id nName, Value & rVal)
         case NS_rtf::LN_JC:
         case NS_rtf::LN_FLEGAL:
         case NS_rtf::LN_FNORESTART:
-        case NS_rtf::LN_FPREV:
-        case NS_rtf::LN_FPREVSPACE:
-        case NS_rtf::LN_FWORD6:
+        case NS_rtf::LN_FIDENTSAV:
+        case NS_rtf::LN_FCONVERTED:
+        case NS_rtf::LN_FTENTATIVE:
         case NS_rtf::LN_IXCHFOLLOW:
             /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             ApplyLevelValues( nName, nIntValue);
-        break;
-        case NS_rtf::LN_UNUSED5_7:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            //unused
         break;
         case NS_rtf::LN_LSID:
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
@@ -523,9 +519,9 @@ void ListTable::sprm(Sprm & rSprm)
             case NS_rtf::LN_JC:
             case NS_rtf::LN_FLEGAL:
             case NS_rtf::LN_FNORESTART:
-            case NS_rtf::LN_FPREV:
-            case NS_rtf::LN_FPREVSPACE:
-            case NS_rtf::LN_FWORD6:
+            case NS_rtf::LN_FIDENTSAV:
+            case NS_rtf::LN_FCONVERTED:
+            case NS_rtf::LN_FTENTATIVE:
             case NS_rtf::LN_IXCHFOLLOW:
             /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
                 ApplyLevelValues( nSprmId, nIntValue );
@@ -617,18 +613,20 @@ void    ListTable::ApplyLevelValues( sal_Int32 nId, sal_Int32 nIntValue)
             /* WRITERFILTERSTATUS: */
             m_pImpl->m_pCurrentEntry->pCurrentProperties->nFNoRestart = nIntValue;
         break;
-        case NS_rtf::LN_FPREV:
+        case NS_rtf::LN_FIDENTSAV:
             /* WRITERFILTERSTATUS: */
             m_pImpl->m_pCurrentEntry->pCurrentProperties->nFPrev = nIntValue;
         break;
-        case NS_rtf::LN_FPREVSPACE:
+        case NS_rtf::LN_FCONVERTED:
             /* WRITERFILTERSTATUS: */
             m_pImpl->m_pCurrentEntry->pCurrentProperties->nFPrevSpace = nIntValue;
         break;
+#if 0
         case NS_rtf::LN_FWORD6:
             /* WRITERFILTERSTATUS: */
             m_pImpl->m_pCurrentEntry->pCurrentProperties->nFWord6 = nIntValue;
         break;
+#endif
         case NS_rtf::LN_IXCHFOLLOW:
             /* WRITERFILTERSTATUS: */
             m_pImpl->m_pCurrentEntry->pCurrentProperties->nXChFollow = nIntValue;

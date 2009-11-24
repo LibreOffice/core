@@ -22824,7 +22824,7 @@
       <element name="suff" tokenid="ooxml:CT_Lvl_suff"/>
       <element name="lvlText" tokenid="ooxml:CT_Lvl_lvlText"/>
       <element name="lvlPicBulletId" tokenid="ooxml:CT_Lvl_lvlPicBulletId"/>
-      <element name="legacy" tokenid="rtf:FWORD6"/>
+      <element name="legacy" tokenid="rtf:FCONVERTED"/>
       <element name="lvlJc" tokenid="ooxml:CT_Lvl_lvlJc"/>
       <element name="pPr" tokenid="ooxml:CT_Lvl_pPr"/>
       <element name="rPr" tokenid="ooxml:CT_Lvl_rPr"/>
