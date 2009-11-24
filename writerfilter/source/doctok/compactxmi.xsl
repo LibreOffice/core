@@ -133,6 +133,11 @@
     <xsl:variable name="size">
       <xsl:call-template name="sizefortype">
 	<xsl:with-param name="type" select="$type"/>
+      </xsl:call-template>      
+    </xsl:variable>
+    <xsl:variable name="arraycount">
+      <xsl:call-template name="gettaggedvalue">
+	<xsl:with-param name="name">arraycount</xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
@@ -147,6 +152,11 @@
 	  <xsl:attribute name="size">
 	    <xsl:value-of select="$size"/>
 	  </xsl:attribute>
+	  <xsl:for-each select="UML:ModelElement.stereotype/UML:Stereotype[@xmi.idref='array']">
+	    <xsl:attribute name="array-count">
+	      <xsl:value-of select="$arraycount"/>
+	    </xsl:attribute>
+	  </xsl:for-each>
 	  <xsl:attribute name="token">
 	    <xsl:call-template name="gettaggedvalue">
 	      <xsl:with-param name="name">attrid</xsl:with-param>
