@@ -96,7 +96,9 @@
       <xsl:for-each select="stereotype">
 	<UML:ModelElement.stereotype>
 	  <UML:Stereotype>
-	    <xsl:value-of select="@name"/>
+	    <xsl:attribute name="xmi.idref">
+	      <xsl:value-of select="@name"/>
+	    </xsl:attribute>
 	  </UML:Stereotype>
 	</UML:ModelElement.stereotype>
       </xsl:for-each>
@@ -185,10 +187,17 @@
 	  <xsl:with-param name="value"></xsl:with-param>
 	</xsl:call-template>
 	<xsl:call-template name="taggedvalue">
-	  <xsl:with-param name="type">attrid</xsl:with-param>
+	  <xsl:with-param name="type">attrid</xsl:with-param>	  
 	  <xsl:with-param name="value">
-	    <xsl:text>rtf:</xsl:text>
-	    <xsl:value-of select="@name"/>
+	    <xsl:choose>
+	      <xsl:when test="@token">
+		<xsl:value-of select="@token"/>
+	      </xsl:when>
+	      <xsl:otherwise>
+		<xsl:text>rtf:</xsl:text>
+		<xsl:value-of select="@name"/>
+	      </xsl:otherwise>
+	    </xsl:choose>
 	  </xsl:with-param>
 	</xsl:call-template>
 	<xsl:if test="@array-count">
