@@ -50,6 +50,8 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
+#include <fldbas.hxx>
+#include <fmtfld.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
 #include <docary.hxx>   // fuer RedlineTbl()
@@ -101,6 +103,8 @@ SV_IMPL_REF( SwServerObject )
 
 #define COLFUZZY 20
 
+void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+                    BOOL bChgAlign,ULONG nNdPos );
 //----------------------------------
 
 class SwTableBox_Impl
@@ -2087,11 +2091,16 @@ void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
     pHTMLLayout = p;
 }
 
-
 void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
                     BOOL bChgAlign )
 {
     ULONG nNdPos = rBox.IsValidNumTxtNd( TRUE );
+    ChgTextToNum( rBox,rTxt,pCol,bChgAlign,nNdPos);
+}
+void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+                    BOOL bChgAlign,ULONG nNdPos )
+{
+
     if( ULONG_MAX != nNdPos )
     {
         SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
@@ -2158,6 +2167,8 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
             xub_StrLen n;
 
             for( n = 0; n < rOrig.Len() && '\x9' == rOrig.GetChar( n ); ++n )
+                ;
+            for( ; n < rOrig.Len() && '\x01' == rOrig.GetChar( n ); ++n )
                 ;
             SwIndex aIdx( pTNd, n );
             for( n = rOrig.Len(); n && '\x9' == rOrig.GetChar( --n ); )
@@ -2637,6 +2648,14 @@ ULONG SwTableBox::IsValidNumTxtNd( BOOL bCheckAttr ) const
                             *pAttr->GetStart() ||
                             *pAttr->GetAnyEnd() < rTxt.Len() )
                         {
+                            if ( pAttr->Which() == RES_TXTATR_FIELD )
+                            {
+                                const SwField* pField = pAttr->GetFld().GetFld();
+                                if ( pField && pField->GetTypeId() == TYP_SETFLD )
+                                {
+                                    continue;
+                                }
+                            }
                             nPos = ULONG_MAX;
                             break;
                         }
@@ -2691,7 +2710,7 @@ void SwTableBox::ActualiseValueBox()
 
             const String& rTxt = pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->GetTxt();
             if( rTxt != sNewTxt )
-                ChgTextToNum( *this, sNewTxt, pCol, FALSE );
+                ChgTextToNum( *this, sNewTxt, pCol, FALSE ,nNdPos);
         }
     }
 }
