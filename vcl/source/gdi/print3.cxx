@@ -776,7 +776,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     io_rSubPage.Clip( i_rClipRect );
 
     // save gstate
-    o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION | PUSH_MAPMODE ) );
+    o_rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
 
     // clip to page rect
     o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
@@ -785,17 +785,24 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     io_rSubPage.WindStart();
     io_rSubPage.Play( o_rMtf );
 
+    // restore gstate
+    o_rMtf.AddAction( new MetaPopAction() );
+
     // draw a border
     if( i_bDrawBorder )
     {
+        // save gstate
+        o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION | PUSH_MAPMODE ) );
+        o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
+
         Rectangle aBorderRect( i_rClipRect );
         o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
         o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
         o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
-    }
 
-    // restore gstate
-    o_rMtf.AddAction( new MetaPopAction() );
+        // restore gstate
+        o_rMtf.AddAction( new MetaPopAction() );
+    }
 }
 
 PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
