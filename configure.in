@@ -2974,7 +2974,7 @@ if test "$SOLAR_JAVA" != ""; then
         AC_MSG_RESULT([checked (ecj)])
         #TODO: what's to do here? some switch to do 1.5 compiling?
         JAVAFLAGS="-source 1.5 -target 1.5"
-        _gij_longver="50000"
+        _gij_longver="40200"
     fi
 fi
 
@@ -3029,7 +3029,7 @@ fi
 if test "$SOLAR_JAVA" != ""; then
     dnl first check if we have been asked to autodetect JAVA_HOME with a recent gij
     if test "$JDK" == "gcj" -a -z "$JAVA_HOME"; then
-      if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "50000"; then
+      if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "40200"; then
         cat > findhome.java <<_ACEOF
 [import java.io.File;
 
@@ -3069,7 +3069,7 @@ _ACEOF
     fi
 
     dnl second sanity check JAVA_HOME if possible
-    if test "$JDK" != "gcj" -o "$_gij_longver" -ge "50000"; then
+    if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
       if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
 
