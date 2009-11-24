@@ -58,7 +58,7 @@ BUILD_OPT=1
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
-.IF "$(CPU)"=="X"
+.IF "$(BUILD64)"=="1"
 # force 64-bit buildmode
 USE_64:=1
 .EXPORT : USE_64
