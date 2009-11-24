@@ -38,7 +38,6 @@ MY_MOD = $(SOLARXMLDIR)/registry/spool
 MY_XCDS = \
     $(MISC)/base.xcd \
     $(MISC)/brand.xcd \
-    $(MISC)/c01.xcd \
     $(MISC)/calc.xcd \
     $(MISC)/cjk.xcd \
     $(MISC)/ctl.xcd \
@@ -76,11 +75,6 @@ MY_FILES_brand = \
 MY_FILES_brand += \
     $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
 .END
-
-MY_FILES_c01 = \
-    $(MY_MOD)/org/openoffice/Inet-defaultsearchengine.xcu \
-    $(MY_MOD)/org/openoffice/Office/Writer-defaultfontarial.xcu \
-    $(MY_MOD)/org/openoffice/Office/Writer-directcursor.xcu
 
 MY_DEPS_calc = main
 MY_FILES_calc = \
