@@ -42,6 +42,7 @@ use File::Basename;
 use File::Path;
 use File::Copy;
 use Getopt::Long;
+use SourceConfig;
 
 ########################
 #                       #
@@ -57,6 +58,7 @@ $is_do_deinstall = 0;
 $is_without_msiexec = 1;
 $is_oo = 1;
 
+$sourceconfig_obj;
 $gui = $ENV{GUI};
 $temp_path = $ENV{TEMP};
 $vcsid = $ENV{VCSID};
@@ -860,12 +862,22 @@ sub getInstset {
         foreach $project (@install_list) {
             @DirArray=();
             $TestDir1 = "$RootDir$project$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator" . "install$PathSeparator";
-            $TestDir2 = "$StandDir$project$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator" . "install$PathSeparator";
             if (-e "$TestDir1") {
                 $InstDir= $TestDir1;
             }
-            elsif (-e "$TestDir2") {
-                $InstDir="$TestDir2";
+            else {
+                $sourceconfig_obj = SourceConfig->new() if (!defined ($sourceconfig_obj));
+                my $module_path = $sourceconfig_obj->get_module_path($project);
+                # only if module exists
+                if (defined ($module_path)) {
+                    $TestDir2 = "$module_path$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator" . "install$PathSeparator";
+                }
+                else {
+                    $TestDir2 = $module_path;
+                }
+                if (defined ($TestDir2) && -e "$TestDir2") {
+                    $InstDir="$TestDir2";
+                }
             }
             if ($InstDir eq "") {
                 next;
