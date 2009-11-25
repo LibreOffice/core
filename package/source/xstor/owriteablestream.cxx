@@ -851,6 +851,9 @@ void OWriteStream_Impl::Commit()
 
     if ( m_xCacheStream.is() )
     {
+        if ( m_pAntiImpl )
+            m_pAntiImpl->DeInit();
+
         uno::Reference< io::XInputStream > xInStream( m_xCacheStream->getInputStream(), uno::UNO_SET_THROW );
 
         xNewPackageStream = uno::Reference< packages::XDataSinkEncrSupport >(
@@ -862,11 +865,12 @@ void OWriteStream_Impl::Commit()
         m_xCacheStream = uno::Reference< io::XStream >();
         m_xCacheSeek = uno::Reference< io::XSeekable >();
 
-        if ( m_pAntiImpl )
-            m_pAntiImpl->DeInit();
     }
     else if ( m_aTempURL.getLength() )
     {
+        if ( m_pAntiImpl )
+            m_pAntiImpl->DeInit();
+
         uno::Reference< io::XInputStream > xInStream;
         try
         {
@@ -886,9 +890,6 @@ void OWriteStream_Impl::Commit()
         // TODO/NEW: Let the temporary file be removed after commit
         xNewPackageStream->setDataStream( xInStream );
         m_aTempURL = ::rtl::OUString();
-
-        if ( m_pAntiImpl )
-            m_pAntiImpl->DeInit();
     }
     else // if ( m_bHasInsertedStreamOptimization )
     {
