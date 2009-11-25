@@ -385,11 +385,11 @@ void ListTable::attribute(Id nName, Value & rVal)
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->nSimpleList = nIntValue;
         break;
-        case NS_rtf::LN_FRESTARTHDN:
+        case NS_rtf::LN_fAutoNum:
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->nRestart = nIntValue;
         break;
-        case NS_rtf::LN_UNSIGNED26_2:
+        case NS_rtf::LN_fHybrid:
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->nUnsigned = nIntValue;
         break;

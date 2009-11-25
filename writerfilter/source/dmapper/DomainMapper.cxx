@@ -613,10 +613,10 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_rtf::LN_FSIMPLELIST:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
-        case NS_rtf::LN_FRESTARTHDN:
+        case NS_rtf::LN_fAutoNum:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
-        case NS_rtf::LN_UNSIGNED26_2:
+        case NS_rtf::LN_fHybrid:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
         case NS_rtf::LN_ILVL:
