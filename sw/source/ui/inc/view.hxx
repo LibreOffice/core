@@ -437,6 +437,12 @@ public:
     virtual USHORT          PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
     virtual void            MarginChanged();
 
+    // replace word/selection with text from the thesaurus
+    // (this code has special handling for "in word" character)
+    void                    InsertThesaurusSynonym( const String &rSynonmText, const String &rLookUpText, bool bValidSelection );
+    bool                    IsValidSelectionForThesaurus() const;
+    String                  GetThesaurusLookUpText( bool bSelection ) const;
+
     // Shell sofort wechseln ->  fuer GetSelectionObject
     void        StopShellTimer();
 

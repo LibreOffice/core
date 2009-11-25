@@ -721,7 +721,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
  --------------------------------------------------------------------*/
 
 #define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* Zeilennumerierung */
-#define FN_THESAURUS_DLG            (FN_EXTRA + 3 )   /* Thesaurus */
 #define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* Silbentrennung */
 #define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* Woerter lernen */
 #define FN_DICTIONARY_DLG           (FN_EXTRA + 8 )   /* Woerterbuecher */

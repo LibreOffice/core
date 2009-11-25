@@ -133,7 +133,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
 {
     switch(rReq.GetSlot())
     {
-        case FN_THESAURUS_DLG:
+        case SID_THESAURUS:
             StartThesaurus();
             rReq.Ignore();
             break;
@@ -282,47 +282,26 @@ void SwView::StartTextConversion(
 */
     SpellKontext(sal_True);
 
-    SwViewOption* pVOpt = (SwViewOption*)pWrtShell->GetViewOptions();
-    sal_Bool bOldIdle = pVOpt->IsIdle();
+    const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+    const sal_Bool bOldIdle = pVOpt->IsIdle();
     pVOpt->SetIdle( sal_False );
 
     sal_Bool bOldIns = pWrtShell->IsInsMode();
     pWrtShell->SetInsMode( sal_True );
 
+    sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
+        pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
+
+    sal_Bool    bStart = bSelection || pWrtShell->IsStartOfDoc();
+    sal_Bool    bOther = !bSelection && !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
 
     {
-        sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
-            pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
-
-//        sal_Bool bIsSpellSpecial = sal_True;
-
-        sal_Bool    bStart = bSelection || pWrtShell->IsStartOfDoc();
-        sal_Bool    bOther = !bSelection && !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
-
-/*
-        if( bOther && !bIsSpellSpecial )
-        // kein Sonderbereich eingeschaltet
-        {
-            // Ich will auch in Sonderbereichen trennen
-            QueryBox aBox( &GetEditWin(), SW_RES( DLG_SPECIAL_FORCED ) );
-            if( aBox.Execute() == RET_YES  &&  xProp.is())
-            {
-                sal_Bool bTrue = sal_True;
-                Any aTmp(&bTrue, ::getBooleanCppuType());
-                xProp->setPropertyValue( C2U(UPN_IS_SPELL_SPECIAL), aTmp );
-            }
-            else
-                return; // Nein Es wird nicht gespellt
-        }
-*/
-        {
-            const uno::Reference< lang::XMultiServiceFactory > xMgr(
-                        comphelper::getProcessServiceFactory() );
-            SwHHCWrapper aWrap( this, xMgr, nSourceLang, nTargetLang, pTargetFont,
-                                nOptions, bIsInteractive,
-                                bStart, bOther, bSelection );
-            aWrap.Convert();
-        }
+        const uno::Reference< lang::XMultiServiceFactory > xMgr(
+                    comphelper::getProcessServiceFactory() );
+        SwHHCWrapper aWrap( this, xMgr, nSourceLang, nTargetLang, pTargetFont,
+                            nOptions, bIsInteractive,
+                            bStart, bOther, bSelection );
+        aWrap.Convert();
     }
 
     pWrtShell->SetInsMode( bOldIns );
@@ -570,16 +549,77 @@ void SwView::HyphenateDocument()
 }
 
 /*--------------------------------------------------------------------
+ --------------------------------------------------------------------*/
+
+bool SwView::IsValidSelectionForThesaurus() const
+{
+    // must not be a multi-selection, and if it is a selection it needs
+    // to be within a single paragraph
+
+    const bool bMultiSel = pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
+    const sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection();
+    return !bMultiSel && (!bSelection || pWrtShell->IsSelOnePara() );
+}
+
+
+String SwView::GetThesaurusLookUpText( bool bSelection ) const
+{
+    return bSelection ? pWrtShell->GetSelTxt() : pWrtShell->GetCurWord();
+}
+
+
+void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rLookUpText, bool bSelection )
+{
+    sal_Bool bOldIns = pWrtShell->IsInsMode();
+    pWrtShell->SetInsMode( sal_True );
+
+    pWrtShell->StartAllAction();
+    pWrtShell->StartUndo(UNDO_DELETE);
+
+    if( !bSelection )
+    {
+        if(pWrtShell->IsEndWrd())
+            pWrtShell->Left(CRSR_SKIP_CELLS, FALSE, 1, FALSE );
+
+        pWrtShell->SelWrd();
+
+        // make sure the selection build later from the
+        // data below does not include footnotes and other
+        // "in word" character to the left and right in order
+        // to preserve those. Therefore count those "in words"
+        // in order to modify the selection accordingly.
+        const sal_Unicode* pChar = rLookUpText.GetBuffer();
+        xub_StrLen nLeft = 0;
+        while (pChar && *pChar++ == CH_TXTATR_INWORD)
+            ++nLeft;
+        pChar = rLookUpText.Len() ? rLookUpText.GetBuffer() + rLookUpText.Len() - 1 : 0;
+        xub_StrLen nRight = 0;
+        while (pChar && *pChar-- == CH_TXTATR_INWORD)
+            ++nRight;
+
+        // adjust existing selection
+        SwPaM *pCrsr = pWrtShell->GetCrsr();
+        pCrsr->GetPoint()->nContent/*.nIndex*/ -= nRight;
+        pCrsr->GetMark()->nContent/*.nIndex*/ += nLeft;
+    }
+
+    pWrtShell->Insert( rSynonmText );
+
+    pWrtShell->EndUndo(UNDO_DELETE);
+    pWrtShell->EndAllAction();
+
+    pWrtShell->SetInsMode( bOldIns );
+}
+
+
+/*--------------------------------------------------------------------
     Beschreibung:   Thesaurus starten
  --------------------------------------------------------------------*/
 
 
 void SwView::StartThesaurus()
 {
-    if( pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext() )
-        return;
-    sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection();
-    if( bSelection && !pWrtShell->IsSelOnePara() )
+    if (!IsValidSelectionForThesaurus())
         return;
 
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_THESAURUS, aEmptyStr, pEditWin,
@@ -608,10 +648,9 @@ void SwView::StartThesaurus()
     Link aOldLnk = pSpell->ChgErrorLink(LINK(this, SwView, SpellError));
 #endif
 
-
     // get initial LookUp text
-    String aTmp = bSelection ?
-        pWrtShell->GetSelTxt() : pWrtShell->GetCurWord();
+    const sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection();
+    String aTmp = GetThesaurusLookUpText( bSelection );
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
     SvxThesaurusDialog *pDlg = NULL;
@@ -661,54 +700,12 @@ void SwView::StartThesaurus()
         }
 
         if ( pDlg->Execute()== RET_OK )
-        {
-            sal_Bool bOldIns = pWrtShell->IsInsMode();
-            pWrtShell->SetInsMode( sal_True );
-
-            pWrtShell->StartAllAction();
-            pWrtShell->StartUndo(UNDO_DELETE);
-
-            if( !bSelection )
-            {
-                if(pWrtShell->IsEndWrd())
-                    pWrtShell->Left(CRSR_SKIP_CELLS, FALSE, 1, FALSE );
-
-                pWrtShell->SelWrd();
-
-                // make sure the selection build later from the
-                // data below does not include footnotes and other
-                // "in word" character to the left and right in order
-                // to preserve those. Therefore count those "in words"
-                // in order to modify the selection accordingly.
-                const sal_Unicode* pChar = aTmp.GetBuffer();
-                xub_StrLen nLeft = 0;
-                while (pChar && *pChar++ == CH_TXTATR_INWORD)
-                    ++nLeft;
-                pChar = aTmp.Len() ? aTmp.GetBuffer() + aTmp.Len() - 1 : 0;
-                xub_StrLen nRight = 0;
-                while (pChar && *pChar-- == CH_TXTATR_INWORD)
-                    ++nRight;
-
-                // adjust existing selection
-                SwPaM *pCrsr = pWrtShell->GetCrsr();
-                pCrsr->GetPoint()->nContent/*.nIndex*/ -= nRight;
-                pCrsr->GetMark()->nContent/*.nIndex*/ += nLeft;
-            }
-
-            pWrtShell->Insert( pDlg->GetWord() );
-
-            pWrtShell->EndUndo(UNDO_DELETE);
-            pWrtShell->EndAllAction();
-
-            pWrtShell->SetInsMode( bOldIns );
-
-        }
+            InsertThesaurusSynonym( pDlg->GetWord(), aTmp, bSelection );
     }
 
     delete pDlg;
 
     pVOpt->SetIdle( bOldIdle );
-
 }
 
 /*--------------------------------------------------------------------

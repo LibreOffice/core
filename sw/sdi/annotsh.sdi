@@ -34,7 +34,7 @@ interface Annotation : _Annotation
 ]
 {
 
-    FN_THESAURUS_DLG // api:
+    SID_THESAURUS // api:
     [
         ExecMethod = ExecLingu ;
         StateMethod = GetLinguState ;
@@ -366,6 +366,13 @@ interface Annotation : _Annotation
         ExecMethod = ExecLingu ;
         StateMethod = GetLinguState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_THES
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetLinguState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
     ]
 
 }

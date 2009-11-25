@@ -30,90 +30,84 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#include <hintids.hxx>
 
-#include <tools/shl.hxx>
-#include <svx/svdview.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/escpitem.hxx>
-#ifndef _SVX_PARAITEM_HXX //autogen
-#include <svx/lspcitem.hxx>
-#endif
-#include <svx/adjitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/wghtitem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
-#include <svx/cntritem.hxx>
-#endif
-#include <svx/postitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/svdoutl.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
-#include <sfx2/bindings.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
-#include <svx/flditem.hxx>
-#include <svx/editstat.hxx>
-#include <svx/hlnkitem.hxx>
-#include <svx/htmlmode.hxx>
-#include <svx/langitem.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/writingmodeitem.hxx>
-#include <doc.hxx>
-#include <wview.hxx>
-#include <viewopt.hxx>
-#include <wrtsh.hxx>
-#include <uitool.hxx>
-#include <pardlg.hxx>
-#include <swdtflvr.hxx>
-#include <drwtxtsh.hxx>
-#include <swmodule.hxx>
-#include <initui.hxx>               // fuer SpellPointer
-#include <edtwin.hxx>
-#include <swwait.hxx>
-#include <docstat.hxx>
-
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
+#include <comphelper/processfactory.hxx>
+#include <i18npool/mslangid.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svtools/cjkoptions.hxx>
+#include <svtools/ctloptions.hxx>
+#include <svtools/langtab.hxx>
+#include <svtools/languageoptions.hxx>
+#include <svtools/slstitm.hxx>
+#include <svtools/whiter.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/brkitem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/editdata.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editstat.hxx>
+#include <svx/editview.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/fhgtitem.hxx>
+#include <svx/flditem.hxx>
+#include <svx/fontitem.hxx>
+#include <svx/frmdiritem.hxx>
+#include <svx/hlnkitem.hxx>
+#include <svx/htmlmode.hxx>
+#include <svx/hyznitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/langitem.hxx>
+#include <svx/lspcitem.hxx>
+#include <svx/orphitem.hxx>
+#include <svx/outliner.hxx>
+#include <svx/postitem.hxx>
+#include <svx/scripttypeitem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/spltitem.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/svdview.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/unolingu.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/widwitem.hxx>
+#include <svx/writingmodeitem.hxx>
+#include <tools/shl.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
+
 #include <cmdid.h>
+#include <doc.hxx>
+#include <docstat.hxx>
+#include <drwtxtsh.hxx>
+#include <edtwin.hxx>
 #include <globals.hrc>
+#include <hintids.hxx>
+#include <initui.hxx>               // fuer SpellPointer
+#include <langhelper.hxx>
+#include <pardlg.hxx>
 #include <shells.hrc>
+#include <string.h>
+#include <swdtflvr.hxx>
+#include <swmodule.hxx>
+#include <swwait.hxx>
+#include <uitool.hxx>
+#include <viewopt.hxx>
+#include <wrtsh.hxx>
+#include <wview.hxx>
+
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
 #include "misc.hrc"
 
-//modified on Jul. 30th
-#include <svtools/languageoptions.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
-#include <string.h>
-
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editdata.hxx>
-#include <svx/outliner.hxx>
-#include <vcl/window.hxx>
-#include <svx/editview.hxx>
-#include <vcl/outdev.hxx>
-
-#include <langhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -151,6 +145,18 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,GetView(),rSh);
             break;
         }
+
+        case SID_THES:
+        {
+            String aReplaceText;
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            if (pItem2)
+                aReplaceText = pItem2->GetValue();
+            if (aReplaceText.Len() > 0)
+                ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
+            break;
+        }
+
         case SID_ATTR_CHAR_FONT:
         case SID_ATTR_CHAR_FONTHEIGHT:
         case SID_ATTR_CHAR_WEIGHT:
@@ -572,7 +578,27 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                 nSlotId = SwLangHelper::GetLanguageStatus(pOLV,rSet);;
                 break;
             }
-         case SID_ATTR_PARA_ADJUST_LEFT:    eAdjust = SVX_ADJUST_LEFT; goto ASK_ADJUST;
+
+            case SID_THES:
+            {
+                String          aStatusVal;
+                LanguageType    nLang = LANGUAGE_NONE;
+                bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, pOLV->GetEditView() );
+                rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+                // disable "Thesaurus" context menu entry if there is nothing to look up
+                uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
+                lang::Locale aLocale( SvxCreateLocale( nLang ) );
+                if (!bIsLookUpWord ||
+                    !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                    rSet.DisableItem( SID_THES );
+
+                //! avoid puting the same item as SfxBoolItem at the end of this function
+                nSlotId = 0;
+                break;
+            }
+
+        case SID_ATTR_PARA_ADJUST_LEFT:     eAdjust = SVX_ADJUST_LEFT; goto ASK_ADJUST;
         case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjust = SVX_ADJUST_RIGHT; goto ASK_ADJUST;
         case SID_ATTR_PARA_ADJUST_CENTER:   eAdjust = SVX_ADJUST_CENTER; goto ASK_ADJUST;
         case SID_ATTR_PARA_ADJUST_BLOCK:    eAdjust = SVX_ADJUST_BLOCK; goto ASK_ADJUST;
@@ -623,19 +649,17 @@ ASK_ESCAPE:
             }
             break;
 
-        case FN_THESAURUS_DLG:
+        case SID_THESAURUS:
         {
             // disable "Thesaurus" if the language is not supported
             const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
                             GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage())) );
-            LanguageType nLang = ((const SvxLanguageItem &)
-                                                    rItem).GetLanguage();
-            //
+            LanguageType nLang = ((const SvxLanguageItem &) rItem).GetLanguage();
+
             uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
-            if (!xThes.is() || nLang == LANGUAGE_NONE ||
-                !xThes->hasLocale( SvxCreateLocale( nLang ) ))
-                rSet.DisableItem( FN_THESAURUS_DLG );
+            if (!xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( SvxCreateLocale( nLang ) ))
+                rSet.DisableItem( SID_THESAURUS );
             nSlotId = 0;
         }
         break;

@@ -1144,19 +1144,19 @@ short SwCursor::MaxReplaceArived()
 }
 
 
-BOOL SwCursor::IsStartWord() const
+BOOL SwCursor::IsStartWord( sal_Int16 nWordType ) const
 {
-    return IsStartWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+    return IsStartWordWT( nWordType );
 }
 
-BOOL SwCursor::IsEndWord() const
+BOOL SwCursor::IsEndWord( sal_Int16 nWordType ) const
 {
-    return IsEndWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+    return IsEndWordWT( nWordType );
 }
 
-BOOL SwCursor::IsInWord() const
+BOOL SwCursor::IsInWord( sal_Int16 nWordType ) const
 {
-    return IsInWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+    return IsInWordWT( nWordType );
 }
 
 BOOL SwCursor::GoStartWord()

@@ -400,7 +400,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
     {
         switch(rReq.GetSlot())
         {
-        case FN_THESAURUS_DLG:
+        case SID_THESAURUS:
             pOLV->StartThesaurus();
             break;
 

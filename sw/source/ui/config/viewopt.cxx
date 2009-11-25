@@ -115,6 +115,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && bFormView == rOpt.IsFormView()
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
+            && bIdle == rOpt.bIdle
 #ifndef PRODUCT
             // korrespondieren zu den Angaben in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
@@ -229,7 +230,7 @@ SwViewOption::SwViewOption() :
 {
     // Initialisierung ist jetzt etwas einfacher
     // alle Bits auf 0
-    nCoreOptions =  VIEWOPT_1_IDLE | VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
+    nCoreOptions =  VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
                     VIEWOPT_1_REF |
                     VIEWOPT_1_GRAPHIC |
                     VIEWOPT_1_TABLE    | VIEWOPT_1_DRAW | VIEWOPT_1_CONTROL |
@@ -245,6 +246,8 @@ SwViewOption::SwViewOption() :
     nDivisionX = nDivisionY = 1;
 
     bSelectionInReadonly = SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
+
+    bIdle = true;
 
 #ifndef PRODUCT
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
@@ -280,6 +283,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     bBookview       = rVOpt.bBookview;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
+    bIdle           = rVOpt.bIdle;
 
 #ifndef PRODUCT
     bTest1          = rVOpt.bTest1      ;
@@ -320,6 +324,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     bBookview       = rVOpt.bBookview;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
+    bIdle           = rVOpt.bIdle;
 
 #ifndef PRODUCT
     bTest1          = rVOpt.bTest1      ;

@@ -401,7 +401,7 @@ interface BaseTextEditView : View
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    FN_THESAURUS_DLG // status(final|play)
+    SID_THESAURUS // status(final|play)
     [
         ExecMethod = ExecLingu ;
         StateMethod = GetState ;
