@@ -47,10 +47,11 @@ SRS1NAME=$(TARGET)
 SRC1FILES = menu.src
 
 SLOFILES =	\
+        $(SLO)$/mnuitem.obj \
         $(SLO)$/mnumgr.obj \
-        $(SLO)$/virtmenu.obj \
         $(SLO)$/objmnctl.obj \
-        $(SLO)$/mnuitem.obj
+        $(SLO)$/thessubmenu.obj \
+        $(SLO)$/virtmenu.obj
 
 # --- Tagets -------------------------------------------------------
 

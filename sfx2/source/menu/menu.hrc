@@ -67,6 +67,10 @@
 #define STR_MENU_ADDONS                     RID_SFX_MENU_START+2
 #define STR_MENU_ADDONHELP                  RID_SFX_MENU_START+3
 
+#define STR_MENU_SYNONYMS                   (RID_SFX_MENU_START+11)
+#define STR_MENU_NO_SYNONYM_FOUND           (RID_SFX_MENU_START+12)
+#define STR_MENU_THESAURUS                  (RID_SFX_MENU_START+13)
+
 #define MN_CLIPBOARDFUNCS                   RID_SFX_MENU_START+1
 #endif
 

@@ -75,6 +75,21 @@ String STR_MENU_ADDONHELP
     Text [ en-US ] = "Add-~On Help" ;
 };
 
+String STR_MENU_SYNONYMS
+{
+    Text [ en-US ] = "Synonyms" ;
+};
+
+String STR_MENU_NO_SYNONYM_FOUND
+{
+    Text [ en-US ] = "(none)" ;
+};
+
+String STR_MENU_THESAURUS
+{
+    Text [ en-US ] = "~Thesaurus..." ;
+};
+
 // ******************************************************************* EOF
 
 

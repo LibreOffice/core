@@ -746,6 +746,9 @@
 #define SID_CAPTION                         (SID_SFX_START + 641)
 #define SID_STATUSBARTEXT                   (SID_SFX_START + 642)
 
+// id for thesaurs entry in context menu
+#define SID_THES                            (SID_SFX_START + 698)
+
 // default-ids for editing, cursor travellung and selection
 #define SID_REDO                            (SID_SFX_START + 700)
 #define SID_UNDO                            (SID_SFX_START + 701)

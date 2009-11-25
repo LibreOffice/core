@@ -105,6 +105,11 @@ private:
     DECL_LINK( SelectHdl, void * );
     Menu*               pSVMenu;
 
+    // when #i107205 gets fixed this one should be superfluous.
+    // But right now we want to avoid the memory leak that would otherwise occur,
+    // if we don't delete the pointer that got created in SfxPopupMenuManager::Popup
+    static PopupMenu *  pStaticThesSubMenu;
+
 private:
                         // only declared, but not defined: don't allow copying
                         SfxPopupMenuManager( const SfxPopupMenuManager& );

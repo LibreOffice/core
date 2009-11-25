@@ -8827,3 +8827,29 @@ SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
     GroupId = GID_EDIT;
 ]
 
+//--------------------------------------------------------------------------
+// call thesaurus dialog from context menu
+SfxInt16Item ThesaurusFromContext SID_THES
+(SfxStringItem WordReplace SID_THES)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_TEXT;
+]
+
