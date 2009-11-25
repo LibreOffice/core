@@ -348,10 +348,6 @@ SfxAllItemSet SfxFrameLoader_Impl::impl_getInitialItemSet( const ::comphelper::N
     SfxAllItemSet aSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, i_rDescriptor.getPropertyValues(), aSet );
 
-    SFX_ITEMSET_ARG( &aSet, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
-    if ( !pRefererItem )
-        aSet.Put( SfxStringItem( SID_REFERER, String() ) );
-
     aSet.Put( SfxFrameItem( SID_DOCFRAME, &i_rTargetFrame ) );
 
     return aSet;
@@ -469,9 +465,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::load" );
 
     ::comphelper::NamedValueCollection aDescriptor( rArgs );
-    const Reference< XModel > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel >() );
+    if ( !aDescriptor.has( "Referer" ) )
+        aDescriptor.put( "Referer", ::rtl::OUString() );
 
     // if a model is given, just load this into a newly created frame
+    const Reference< XModel > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel >() );
     if ( xModel.is() )
         return impl_loadExistingDocument( xModel, _rTargetFrame, aDescriptor );
 

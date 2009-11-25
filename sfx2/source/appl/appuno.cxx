@@ -197,6 +197,7 @@ static const String sStandardDir                = String::CreateFromAscii( "Stan
 static const String sBlackList                  = String::CreateFromAscii( "BlackList"                  );
 static const String sSuggestedSaveAsDir         = String::CreateFromAscii( "SuggestedSaveAsDir"         );
 static const String sSuggestedSaveAsName        = String::CreateFromAscii( "SuggestedSaveAsName"        );
+static const String sReferer                    = String::CreateFromAscii( "Referer"                    );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -712,6 +713,12 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName == sSuggestedSaveAsName )
                 {
                     SfxStringItem aItem( SID_DEFAULTFILENAME, String() );
+                    if ( aItem.PutValue( rProp.Value ) )
+                        rSet.Put( aItem );
+                }
+                else if ( aName == sReferer )
+                {
+                    SfxStringItem aItem( SID_REFERER, String() );
                     if ( aItem.PutValue( rProp.Value ) )
                         rSet.Put( aItem );
                 }
@@ -1497,12 +1504,17 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_DEFAULTFILEPATH, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sSuggestedSaveAsDir;
-                pValue[nActProp++].Value = pItem->QueryValue;
+                pItem->QueryValue( pValue[nActProp++].Value );
             }
             if ( rSet.GetItemState( SID_DEFAULTFILENAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sSuggestedSaveAsName;
-                pValue[nActProp++].Value = pItem->QueryValue;
+                pItem->QueryValue( pValue[nActProp++].Value );
+            }
+            if ( rSet.GetItemState( SID_REFERER, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sReferer;
+                pItem->QueryValue( pValue[nActProp++].Value );
             }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
