@@ -265,18 +265,22 @@ public class PentahoReportJob implements ReportJob
 
                                 if (reportExp.getName().equals(name))
                                 {
-                                    final LValue val = parser.parse(reportExp.getFormulaExpression());
-                                    if (val instanceof FormulaFunction)
+                                    LValue val = parser.parse(reportExp.getFormulaExpression());
+                                    while( !(val instanceof ContextLookup))
                                     {
-                                        final FormulaFunction reportFunction = (FormulaFunction) val;
-
-                                        final ContextLookup context = (ContextLookup) reportFunction.getChildValues()[0];
-                                        name = context.getName();
+                                        if (val instanceof Term)
+                                        {
+                                            val = ((Term)val).getHeadValue();
+                                        }
+                                        else if (val instanceof FormulaFunction)
+                                        {
+                                            final FormulaFunction reportFunction = (FormulaFunction) val;
+                                            val = reportFunction.getChildValues()[0];
+                                        }
                                     }
-                                    else if (val instanceof Term)
+                                    if (val instanceof ContextLookup)
                                     {
-                                        final Term term = (Term) val;
-                                        final ContextLookup context = (ContextLookup) term.getHeadValue().getChildValues()[0];
+                                        final ContextLookup context = (ContextLookup) val;
                                         name = context.getName();
                                     }
                                     break;
