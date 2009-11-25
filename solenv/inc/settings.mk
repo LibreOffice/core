@@ -1220,26 +1220,9 @@ STDLIB+=$(FILLUPARC)
 STDSHL+=$(FILLUPARC)
 .ENDIF			# "$(FILUPARC)"!=""
 
-.IF "$(DISABLE_JAVA)"==""
 .IF "$(SOLAR_JAVA)"!=""
 CDEFS+=$(JAVADEF)
 .ENDIF          # "$(SOLAR_JAVA)"!=""
-.ELSE           # "$(DISABLE_JAVA)"==""
-SOLAR_JAVA!:=
-.EXPORT : SOLAR_JAVA
-.IF "$(JDKPATH)"!=""
-environment_confusion:
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - Error!
-    @echo -
-    @echo - $$JDKPATH and $$DISABLE_JAVA are set. this will lead
-    @echo - to impropper results.
-    @echo -
-    @echo ----------------------------------------------------------
-    force_dmake_to_error
-.ENDIF          # "$(JDKPATH)"!=""
-.ENDIF          # "$(DISABLE_JAVA)"==""
 
 .INCLUDE .IGNORE: $(UPD)$(LAST_MINOR).mk
 
