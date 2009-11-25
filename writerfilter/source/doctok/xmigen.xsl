@@ -55,7 +55,7 @@
     </xsl:variable>
     <xsl:variable name="mysize">
       <xsl:choose>
-	<xsl:when test="@size">
+	<xsl:when test="@size and not(@offset)">
 	  <xsl:value-of select="number($arraycount) * number(@size)"/>
 	</xsl:when>
 	<xsl:otherwise>0</xsl:otherwise>
@@ -93,7 +93,7 @@
     </xsl:variable>
     <xsl:variable name="mysize">
       <xsl:choose>
-	<xsl:when test="@size">
+	<xsl:when test="@size and not(@offset)">
 	  <xsl:value-of select="number($arraycount) * number(@size)"/>
 	</xsl:when>
 	<xsl:otherwise>0</xsl:otherwise>
@@ -115,9 +115,16 @@
   </xsl:template>
 
   <xsl:template name="calcoffset">
-    <xsl:for-each select="preceding-sibling::*[1]">
-      <xsl:call-template name="calcoffsetinner"/>
-    </xsl:for-each>
+    <xsl:choose>
+      <xsl:when test="@offset">
+	<xsl:value-of select="@offset"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:for-each select="preceding-sibling::*[1]">
+	  <xsl:call-template name="calcoffsetinner"/>
+	</xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="ww8resource">
@@ -324,10 +331,21 @@
     <xsl:value-of select="substring('0123456789abcdef', $number mod 16 + 1, 1)"/>
   </xsl:template>
 
+  <xsl:template name="calcshift">
+    <xsl:choose>
+      <xsl:when test="@shift">
+	<xsl:value-of select="@shift"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:value-of select="sum(following-sibling::*[not (@shift)]/@bits)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="bits">
     <xsl:param name="offset"/>
     <xsl:variable name="shift">
-      <xsl:value-of select="sum(following-sibling::*/@bits)"/>
+      <xsl:call-template name="calcshift"/>
     </xsl:variable>
     <xsl:variable name="mask">
       <xsl:call-template name="mask">
@@ -472,7 +490,7 @@
 	  </UML:Parameter>
 	</UML:BehavioralFeature.parameter>
 	<xsl:choose>
-	  <xsl:when test="@array-count">
+	  <xsl:when test="@array-count or stereotype[text()='array']">
 	    <UML:ModelElement.stereotype>
 	      <UML:Stereotype xmi.idref="array"/>
 	    </UML:ModelElement.stereotype>
