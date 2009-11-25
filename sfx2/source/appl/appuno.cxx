@@ -1494,6 +1494,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 ((SfxStringListItem*)pItem)->GetStringList( aList );
                 pValue[nActProp++].Value <<= aList ;
             }
+            if ( rSet.GetItemState( SID_DEFAULTFILEPATH, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sSuggestedSaveAsDir;
+                pValue[nActProp++].Value = pItem->QueryValue;
+            }
+            if ( rSet.GetItemState( SID_DEFAULTFILENAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sSuggestedSaveAsName;
+                pValue[nActProp++].Value = pItem->QueryValue;
+            }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sFrameName;
