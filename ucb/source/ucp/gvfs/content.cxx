@@ -633,20 +633,24 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
 
         else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) ) {
-            if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_PERMISSIONS) {
+
+            GnomeVFSFileInfo* fileInfo = gnome_vfs_file_info_new ();
+
+            ::rtl::OString aURI = getOURI();
+            gnome_vfs_get_file_info
+                ( (const sal_Char *)aURI, fileInfo,
+                        GNOME_VFS_FILE_INFO_GET_ACCESS_RIGHTS );
+
+            if (fileInfo->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_ACCESS) {
                 bool read_only = true;
 
-                if (m_info.uid == getuid () &&
-                    m_info.permissions & GNOME_VFS_PERM_USER_WRITE)
-                    read_only = false;
-                else if (m_info.gid == getgid () &&
-                    m_info.permissions & GNOME_VFS_PERM_GROUP_WRITE)
-                    read_only = false;
-                else if (m_info.permissions & GNOME_VFS_PERM_OTHER_WRITE)
-                    read_only = false;
+                if (fileInfo->permissions & GNOME_VFS_PERM_ACCESS_WRITABLE)
+                                        read_only = false;
+
                 xRow->appendBoolean( rProp, read_only );
             } else
                 xRow->appendVoid( rProp );
+            gnome_vfs_file_info_unref (fileInfo);
         }
 
         else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsHidden" ) ) )
@@ -1125,7 +1129,8 @@ Content::getInfo( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
         ::rtl::OString aURI = getOURI();
         Authentication aAuth( xEnv );
         result = gnome_vfs_get_file_info
-            ( (const sal_Char *)aURI, &m_info, GNOME_VFS_FILE_INFO_DEFAULT );
+            ( (const sal_Char *)aURI, &m_info,
+                    GNOME_VFS_FILE_INFO_DEFAULT );
         if (result != GNOME_VFS_OK)
             gnome_vfs_file_info_clear( &m_info );
     } else
