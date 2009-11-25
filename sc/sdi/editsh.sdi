@@ -49,6 +49,7 @@ interface TableText
     SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     FID_INSERT_NAME     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_THES            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
     SID_UNDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
     SID_REDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]

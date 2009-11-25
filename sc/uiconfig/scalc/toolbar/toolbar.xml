@@ -8,7 +8,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoFormat" toolbar:helpid="helpid:10242"  />
  <toolbar:toolbaritem xlink:href=".uno:ChooseDesign" toolbar:helpid="helpid:26082"  />
- <toolbar:toolbaritem xlink:href=".uno:Thesaurus" toolbar:helpid="helpid:10245"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="helpid:10245"  toolbar:visible="false" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DataFilterAutoFilter" toolbar:helpid="helpid:26325"  />
  <toolbar:toolbaritem xlink:href=".uno:DataFilterStandardFilter" toolbar:helpid="helpid:26323"  toolbar:visible="false" />

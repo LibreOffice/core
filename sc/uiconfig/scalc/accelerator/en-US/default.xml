@@ -29,7 +29,7 @@
     <accel:item accel:code="KEY_5" accel:mod1="true" xlink:href=".uno:SpacePara15"/>
     <accel:item accel:code="KEY_2" accel:mod1="true" xlink:href=".uno:SpacePara2"/>
     <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellDialog"/>
-    <accel:item accel:code="KEY_F7" accel:mod1="true" xlink:href=".uno:Thesaurus"/>
+    <accel:item accel:code="KEY_F7" accel:mod1="true" xlink:href=".uno:ThesaurusDialog"/>
     <accel:item accel:code="KEY_P" accel:shift="true" accel:mod1="true" xlink:href=".uno:SuperScript"/>
     <accel:item accel:code="KEY_B" accel:shift="true" accel:mod1="true" xlink:href=".uno:SubScript"/>
     <accel:item accel:code="KEY_F5" xlink:href=".uno:Navigator"/>
