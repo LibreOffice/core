@@ -52,6 +52,7 @@
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 class SfxFilter;
 class SfxFilterMatcher;
@@ -59,13 +60,14 @@ class SfxFrame;
 
 #include <sfx2/sfxuno.hxx>
 
+class SfxFrameWeak;
+
 class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::lang::XServiceInfo >
 {
     ::comphelper::ComponentContext  m_aContext;
 
 public:
                             SfxFrameLoader_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
-    virtual                 ~SfxFrameLoader_Impl();
 
     SFX_DECL_XSERVICEINFO
 
@@ -74,6 +76,9 @@ public:
     //----------------------------------------------------------------------------------
     virtual sal_Bool SAL_CALL load( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL cancel() throw( ::com::sun::star::uno::RuntimeException );
+
+protected:
+    virtual                 ~SfxFrameLoader_Impl();
 
 private:
     const SfxFilter*    impl_getFilterFromServiceName_nothrow( const ::rtl::OUString& _rServiceName ) const;
@@ -84,22 +89,50 @@ private:
 
     const SfxFilter*    impl_detectFilterForURL(
                             const ::rtl::OUString& _rURL,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs,
+                            const ::comphelper::NamedValueCollection& i_rDescriptor,
                             const SfxFilterMatcher& rMatcher
                         ) const;
 
     sal_Bool            impl_createNewDocWithSlotParam(
-                            const sal_uInt16 _nSlotID,
-                            SfxFrame* _pFrame
+                            const USHORT _nSlotID,
+                            SfxFrame& i_rFrame
                         );
 
     sal_Bool            impl_createNewDoc(
-                            const SfxItemSet& _rSet,
-                            SfxFrame* _pFrame,
+                            const ::comphelper::NamedValueCollection& i_rDescriptor,
+                            SfxFrame& i_rFrame,
                             const ::rtl::OUString& _rFactoryURL
                         );
 
     void                impl_ensureValidFrame_throw( const SfxFrame* _pFrame );
+
+    const SfxFilter*    impl_determineFilter(
+                            ::comphelper::NamedValueCollection& io_rDescriptor,
+                            const SfxFilterMatcher& rMatcher
+                        );
+
+    SfxAllItemSet       impl_getInitialItemSet(
+                            const ::comphelper::NamedValueCollection& i_rDescriptor
+                        ) const;
+
+    sal_Bool            impl_loadExistingDocument(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_rxDocument,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxTargetFrame,
+                            const ::comphelper::NamedValueCollection& i_rDescriptor
+                        );
+
+    sal_Bool            impl_cleanUp(
+                            const sal_Bool i_bSuccess,
+                            const SfxFrameWeak& i_wFrame
+                        );
+
+    const SfxFilter*    impl_determineTemplateDocument(
+                            ::comphelper::NamedValueCollection& io_rDescriptor
+                        ) const;
+
+    USHORT              impl_findSlotParam(
+                            ::rtl::OUString& io_rFactoryURL
+                        );
 };
 
 #endif
