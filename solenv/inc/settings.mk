@@ -752,9 +752,6 @@ INCLOCPRJ=$(foreach,i,$(PRJINC) $i/inc)
 INCDEPN+=$(INCLOCPRJ)
 .ENDIF
 .IF "$(INCPRE)"!=""
-INCDEPN+=$(INCPRE)
-.ENDIF
-
 # Resource-Pfad fuer .SRS
 
 .IF "$(common_build_srs)"!=""
@@ -849,12 +846,7 @@ LOCALIZESDF:=$(COMMONMISC)$/$(PRJNAME)$/dummy$/localize.sdf
 .ENDIF			# "$(LOCALIZESDF)"==""
 .ENDIF			# "$(WITH_LANG)"!=""
 
-.IF "$(PRE)"==""
-#JARDIR=$(CLASSDIR)
 JARDIR=$(OUT)/class
-.ELSE
-JARDIR=$(PRE)/class
-.ENDIF
 
 # needs to be expanded!!!
 
@@ -897,9 +889,6 @@ UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
 UNOIDLDEPFLAGS=-Mdepend=$(SOLARVER)
 
-.IF "$(PRE)"!=""
-UNOIDLINC!:=-I$(PRE)/idl $(UNOIDLINC)
-.ENDIF
 UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)/inc -I$(PRJ)/$(INPATH)/idl -I$(OUT)/inc -I$(SOLARIDLDIR) -I$(SOLARINCDIR)
 
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
