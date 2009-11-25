@@ -33,6 +33,12 @@
 
 #include "TextObjectBar.hxx"
 
+#include <com/sun/star/i18n/WordType.hpp>
+
+//#include <i18npool/mslangid.hxx>
+#include <svx/editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/unolingu.hxx>
 
 #include <svx/outliner.hxx>
 #ifndef _ULSPITEM_HXX
@@ -341,6 +347,16 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         }
         break;
 
+        case SID_THES:
+        {
+            String aReplaceText;
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            if (pItem2)
+                aReplaceText = pItem2->GetValue();
+            if (aReplaceText.Len() > 0)
+                ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
+        }
+        break;
 
         default:
         {

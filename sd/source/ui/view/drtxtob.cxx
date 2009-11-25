@@ -33,14 +33,21 @@
 
 #include "TextObjectBar.hxx"
 
+#include <com/sun/star/i18n/WordType.hpp>
 
+#include <i18npool/mslangid.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/lspcitem.hxx>
 #include <svx/adjitem.hxx>
+#include <svx/editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/outliner.hxx>
+#include <svx/unolingu.hxx>
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/itempool.hxx>
+#include <svtools/stritem.hxx>
 #include <svtools/style.hxx>
 #include <svtools/languageoptions.hxx>
 #include <sfx2/tplpitem.hxx>
@@ -73,6 +80,8 @@
 
 
 using namespace sd;
+using namespace ::com::sun::star;
+
 #define TextObjectBar
 #include "sdslots.hxx"
 
@@ -370,6 +379,26 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_SHRINK_FONT_SIZE:
             {
                 // todo
+            }
+            break;
+
+            case SID_THES:
+            {
+                EditView & rEditView = mpView->GetTextEditOutlinerView()->GetEditView();;
+                String          aStatusVal;
+                LanguageType    nLang = LANGUAGE_NONE;
+                bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+                rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+                // disable "Thesaurus" context menu entry if there is nothing to look up
+                lang::Locale aLocale( SvxCreateLocale( nLang ) );
+                uno::Reference< linguistic2::XThesaurus > xThes( LinguMgr::GetThesaurus() );
+                if (!bIsLookUpWord ||
+                    !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                    rSet.DisableItem( SID_THES );
+
+                //! avoid puting the same item as SfxBoolItem at the end of this function
+                nSlotId = 0;
             }
             break;
 
