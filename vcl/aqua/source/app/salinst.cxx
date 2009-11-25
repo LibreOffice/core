@@ -675,21 +675,8 @@ class ReleasePoolHolder
 {
     NSAutoreleasePool* mpPool;
     public:
-    ReleasePoolHolder() : mpPool( nil )
-    {
-        // NSAutoreleasePool documentation suggests we should have
-        // an own pool for each yield level
-        // #i107080# however shows us that doing that can easily crash
-        // while VoiceOver is active. So for now let's create an
-        // autorelease pool only for the top of the yield stack
-        if( ImplGetSVData()->maAppData.mnDispatchLevel == 1 )
-            mpPool = [[NSAutoreleasePool alloc] init];
-    }
-    ~ReleasePoolHolder()
-    {
-        if( mpPool )
-            [mpPool release];
-    }
+    ReleasePoolHolder() : mpPool( [[NSAutoreleasePool alloc] init] ) {}
+    ~ReleasePoolHolder() { [mpPool release]; }
 };
 
 void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
@@ -698,6 +685,8 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     // will therefore not be destroyed by cocoa implicitly
     SalData::ensureThreadAutoreleasePool();
 
+    // NSAutoreleasePool documentation suggests we should have
+    // an own pool for each yield level
     ReleasePoolHolder aReleasePool;
 
     // Release all locks so that we don't deadlock when we pull pending
