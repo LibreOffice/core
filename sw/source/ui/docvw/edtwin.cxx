@@ -2285,7 +2285,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 else if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
                         pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                            ChgFractionSymbol | ChgOrdinalNumber |
+                                            ChgOrdinalNumber |
                                             ChgToEnEmDash | SetINetAttr |
                                             Autocorrect ) &&
                     '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh &&
@@ -2317,7 +2317,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         {
             if( pACorr && pACfg->IsAutoFmtByInput() &&
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                        ChgFractionSymbol | ChgOrdinalNumber |
+                                        ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )

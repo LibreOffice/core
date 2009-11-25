@@ -160,7 +160,7 @@ SvxAutoCorrect* lcl_IsAutoCorr()
 {
        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     if( pACorr && !pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                            ChgFractionSymbol | ChgOrdinalNumber |
+                            AddNonBrkSpace | ChgOrdinalNumber |
                             ChgToEnEmDash | SetINetAttr | Autocorrect ))
         pACorr = 0;
     return pACorr;

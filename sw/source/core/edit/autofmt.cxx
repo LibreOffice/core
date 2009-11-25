@@ -1895,7 +1895,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     if( aFlags.bAFmtByInput ||
         (!aFlags.bAutoCorrect && !aFlags.bReplaceQuote &&
         !aFlags.bCptlSttSntnc && !aFlags.bCptlSttWrd &&
-        !aFlags.bChgFracionSymbol && !aFlags.bChgOrdinalNumber &&
+        !aFlags.bChgOrdinalNumber &&
         !aFlags.bChgToEnEmDash && !aFlags.bSetINetAttr &&
         !aFlags.bChgWeightUnderl && !aFlags.bAddNonBrkSpace) )
         return;
@@ -2127,10 +2127,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                                            ? pAktTxtNd->GetLang( nSttPos )
                                            : LANGUAGE_SYSTEM;
 
-            if( ( aFlags.bChgFracionSymbol &&
-                    SetRedlineTxt( STR_AUTOFMTREDL_FRACTION ) &&
-                    pATst->FnChgFractionSymbol( aACorrDoc, *pTxt, nSttPos, nPos ) ) ||
-                ( aFlags.bChgOrdinalNumber &&
+            if( ( aFlags.bChgOrdinalNumber &&
                     SetRedlineTxt( STR_AUTOFMTREDL_ORDINAL ) &&
                     pATst->FnChgOrdinalNumber( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
                 ( aFlags.bChgToEnEmDash &&
