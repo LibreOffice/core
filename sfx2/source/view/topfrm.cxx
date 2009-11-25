@@ -769,85 +769,60 @@ void SfxTopFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
     }
 }
 
-bool SfxTopFrame::LoadView_Impl( SfxObjectShell& rDoc )
+namespace
 {
-    OSL_PRECOND( rDoc.GetMedium(), "SfxTopFrame::LoadView_Impl: no medium -> no view!");
-    if ( !rDoc.GetMedium() )
-        return false;
-
-    OSL_PRECOND( GetCurrentViewFrame() == NULL,
-        "SfxObjectShell::LoadView_Impl: no support (anymore) for loading into a non-empty frame!" );
-        // Since some refactoring in CWS autorecovery, this shouldn't happen anymore. Frame re-usage is nowadays
-        // done in higher layers, namely in the framework.
-    if ( GetCurrentViewFrame() != NULL )
-        return false;
-
-    // obtain view data
-    Reference< XViewDataSupplier > xViewDataSupplier( rDoc.GetModel(), UNO_QUERY );
-    Reference< XIndexAccess > xViewData;
-    if ( xViewDataSupplier.is() )
-        xViewData = xViewDataSupplier->getViewData();
-
-    if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
-        return false;
-
-    // obtain the ViewID from the view data
-    USHORT nViewId = 0;
-    Sequence< PropertyValue > aUserData;
-    if ( xViewData->getByIndex( 0 ) >>= aUserData )
+    bool lcl_getViewDataAndID( const Reference< XModel >& _rxDocument, Sequence< PropertyValue >& _o_viewData, USHORT& _o_viewId )
     {
-        ::comphelper::NamedValueCollection aNamedUserData( aUserData );
-        ::rtl::OUString sViewId = aNamedUserData.getOrDefault( "ViewId", ::rtl::OUString() );
-        if ( sViewId.getLength() )
+        _o_viewData.realloc(0);
+        _o_viewId = -1;
+
+        Reference< XViewDataSupplier > xViewDataSupplier( _rxDocument, UNO_QUERY );
+        Reference< XIndexAccess > xViewData;
+        if ( xViewDataSupplier.is() )
+            xViewData = xViewDataSupplier->getViewData();
+
+        if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
+            return false;
+
+        // obtain the ViewID from the view data
+        _o_viewId = 0;
+        if ( xViewData->getByIndex( 0 ) >>= _o_viewData )
         {
-            sViewId = sViewId.copy( 4 );    // format is like in "view3"
-            nViewId = USHORT( sViewId.toInt32() );
+            ::comphelper::NamedValueCollection aNamedUserData( _o_viewData );
+            ::rtl::OUString sViewId = aNamedUserData.getOrDefault( "ViewId", ::rtl::OUString() );
+            if ( sViewId.getLength() )
+            {
+                sViewId = sViewId.copy( 4 );    // format is like in "view3"
+                _o_viewId = USHORT( sViewId.toInt32() );
+            }
         }
+        return true;
     }
-
-    SfxItemSet* pSet = rDoc.GetMedium()->GetItemSet();
-    pSet->ClearItem( SID_USER_DATA );
-    pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-
-    InsertDocument_Impl( rDoc );
-    SfxViewFrame* pViewFrame = GetCurrentViewFrame();
-
-    // only temporary data, don't hold it in the itemset
-    pSet->ClearItem( SID_VIEW_POS_SIZE );
-    pSet->ClearItem( SID_WIN_POSSIZE );
-    pSet->ClearItem( SID_VIEW_ZOOM_MODE );
-
-    // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
-    // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
-    if ( pViewFrame && pViewFrame->GetViewShell() && aUserData.getLength() )
-    {
-        pViewFrame->GetViewShell()->ReadUserDataSequence( aUserData, TRUE );
-    }
-
-    if ( pViewFrame )
-        // activate frame
-        pViewFrame->MakeActive_Impl( TRUE );
-
-    return true;
 }
 
 sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 /* [Beschreibung]
  */
 {
-    const SfxObjectShell* pOldDocument = GetCurrentDocument();
-    OSL_PRECOND( pOldDocument == NULL,
+    OSL_PRECOND( rDoc.GetMedium(), "SfxTopFrame::InsertDocument_Impl: no medium -> no view!");
+    if ( !rDoc.GetMedium() )
+        return sal_False;
+
+    OSL_PRECOND( GetCurrentViewFrame() == NULL,
+        "SfxObjectShell::InsertDocument_Impl: no support (anymore) for loading into a non-empty frame!" );
+        // Since some refactoring in CWS autorecovery, this shouldn't happen anymore. Frame re-usage is nowadays
+        // done in higher layers, namely in the framework.
+    if ( GetCurrentViewFrame() != NULL )
+        return sal_False;
+
+    OSL_PRECOND( GetCurrentDocument() == NULL,
         "SfxTopFrame::InsertDocument_Impl: re-using an Sfx(Top)Frame is not supported anymore!" );
 
     const SfxItemSet* pSet = GetItemSet_Impl();
     if ( !pSet )
         pSet = rDoc.GetMedium()->GetItemSet();
-    SetItemSet_Impl(0);
+    SetItemSet_Impl( NULL );
 
-    // Position und Groesse testen
-    // Wenn diese schon gesetzt sind, soll offensichtlich nicht noch
-    // LoadView_Impl aufgerufen werden ( z.B. weil dieses ein CreateFrame()
-    // an einer Task aufgerufen hat! )
     SFX_ITEMSET_ARG( pSet, pAreaItem,   SfxRectangleItem,   SID_VIEW_POS_SIZE,  sal_False );    // position and size
     SFX_ITEMSET_ARG( pSet, pViewIdItem, SfxUInt16Item,      SID_VIEW_ID,        sal_False );    // view ID
     SFX_ITEMSET_ARG( pSet, pModeItem,   SfxUInt16Item,      SID_VIEW_ZOOM_MODE, sal_False );    // zoom
@@ -857,47 +832,58 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     SFX_ITEMSET_ARG( pSet, pPluginMode, SfxUInt16Item,      SID_PLUGIN_MODE,    sal_False );    // plugin (external inplace)
     SFX_ITEMSET_ARG( pSet, pJumpItem,   SfxStringItem,      SID_JUMPMARK,       sal_False );    // jump (GotoBookmark)
 
-    if ( pEditItem  && pEditItem->GetValue() )
+    // hidden?
+    OSL_PRECOND( !pImp->bHidden,
+        "SfxTopFrame::InsertDocument_Impl: quite unexpected ... the below logic might not work in all cases here ..." );
+    pImp->bHidden = pHidItem ? pHidItem->GetValue() : false;
+
+    // plugin mode
+    const USHORT nPluginMode = pPluginMode ? pPluginMode->GetValue() : 0;
+
+    // view only?
+    if ( pEditItem && pEditItem->GetValue() )
         SetMenuBarOn_Impl( FALSE );
 
-    if ( pHidItem )
-        pImp->bHidden = pHidItem->GetValue();
+    // view ID
+    USHORT nViewId = pViewIdItem ? pViewIdItem->GetValue() : 0;
 
     if( !pImp->bHidden )
         rDoc.OwnerLock( sal_True );
 
-    const USHORT nViewId = pViewIdItem ? pViewIdItem->GetValue() : 0;
+    Sequence< PropertyValue > aUserData;
+    bool bClearPosSizeZoom = false;
+    bool bReadUserData = false;
 
-    // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
-    // aus den Dokument geladen werden, z.B. weil InsertDocument_Impl seinerseits
-    // aus LoadView_Impl aufgerufen wurde!
-    if ( !pJumpItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
+    // if no view-related data exists in the set, then obtain the view data from the model
+    if ( !pJumpItem && !pViewDataItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
     {
-        if ( LoadView_Impl( rDoc ) )
+        nViewId = 0;
+        if ( lcl_getViewDataAndID( rDoc.GetModel(), aUserData, nViewId ) )
         {
-            if ( GetCurrentDocument() != &rDoc )
-                // something went wrong during insertion
-                return sal_False;
-            rDoc.OwnerLock( sal_False );
-            return sal_True;
+            SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
+
+            // clear the user data item in the medium - we'll use aUserData below
+            pMediumSet->ClearItem( SID_USER_DATA );
+            pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
+
+            bClearPosSizeZoom = bReadUserData = true;
         }
     }
 
     UpdateDescriptor( &rDoc );
 
-    if ( pPluginMode && pPluginMode->GetValue() != 2 )
+    if ( nPluginMode && ( nPluginMode != 2 ) )
         SetInPlace_Impl( TRUE );
-
-    OSL_ENSURE( GetCurrentViewFrame() == NULL,
-        "SfxTopFrame::InsertDocument_Impl: no support (anymore) for loading a document into a non-empty frame!" );
-        // Since some refactoring in CWS autorecovery, this shouldn't happen anymore. Frame re-usage is nowadays
-        // done in higher layers, namely in the framework.
 
     SfxViewFrame* pViewFrame = new SfxTopViewFrame( this, &rDoc, nViewId );
     if ( !pViewFrame->GetViewShell() )
+    {
+        OSL_ENSURE( false, "SfxTopFrame::InsertDocument_Impl: something went wrong while creating the SfxTopViewFrame!" );
+        pViewFrame->DoClose();
         return sal_False;
+    }
 
-    if ( pPluginMode && pPluginMode->GetValue() == 1 )
+    if ( nPluginMode == 1 )
     {
         pViewFrame->ForceOuterResize_Impl( FALSE );
         pViewFrame->GetBindings().HidePopups(TRUE);
@@ -907,8 +893,7 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
         GetWorkWindow_Impl()->Lock_Impl( TRUE );
 
         GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
-        if ( GetCurrentViewFrame() )
-            GetCurrentViewFrame()->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
+        pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
     }
 
     OSL_ENSURE( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT,
@@ -917,17 +902,21 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
         // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since loads this method
         // here is never called before the load process finished.
     if ( pViewDataItem )
+    {
         pViewFrame->GetViewShell()->ReadUserData( pViewDataItem->GetValue(), sal_True );
+    }
     else if( pJumpItem )
+    {
         pViewFrame->GetViewShell()->JumpToMark( pJumpItem->GetValue() );
+    }
 
     // Position und Groesse setzen
-    if ( pAreaItem && !pOldDocument )
+    if ( pAreaItem )
         PositionWindow_Impl( pAreaItem->GetValue() );
 
     if ( !pImp->bHidden )
     {
-        if ( rDoc.IsHelpDocument() || (pPluginMode && pPluginMode->GetValue() == 2) )
+        if ( rDoc.IsHelpDocument() || ( nPluginMode == 2 ) )
             pViewFrame->GetDispatcher()->HideUI( TRUE );
         else
             pViewFrame->GetDispatcher()->HideUI( FALSE );
@@ -935,26 +924,23 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
         if ( IsInPlace() )
             pViewFrame->LockAdjustPosSizePixel();
 
-        if ( pPluginMode && pPluginMode->GetValue() == 3)
+        if ( ( nPluginMode == 3 ) )
             GetWorkWindow_Impl()->SetInternalDockingAllowed(FALSE);
 
         if ( !IsInPlace() )
             pViewFrame->GetDispatcher()->Update_Impl();
         pViewFrame->Show();
         GetWindow().Show();
-        if ( !IsInPlace() || (pPluginMode && pPluginMode->GetValue() == 3) )
+        if ( !IsInPlace() || ( nPluginMode == 3 ) )
             pViewFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
         rDoc.OwnerLock( sal_False );
-
-        // Dont show container window! Its done by framework or directly
-        // by SfxTopFrame::Create() or SfxViewFrame::ExecView_Impl() ...
 
         if ( IsInPlace() )
         {
             pViewFrame->UnlockAdjustPosSizePixel();
             // force resize for OLE server to fix layout problems of writer and math
             // see i53651
-            if ( pPluginMode && pPluginMode->GetValue() == 3 )
+            if ( nPluginMode == 3 )
                 pViewFrame->Resize(TRUE);
         }
     }
@@ -981,7 +967,26 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     }
 
     SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), &rDoc ) );
-    return sal_True;
+
+    if ( bClearPosSizeZoom )
+    {
+        SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
+        pMediumSet->ClearItem( SID_VIEW_POS_SIZE );
+        pMediumSet->ClearItem( SID_WIN_POSSIZE );
+        pMediumSet->ClearItem( SID_VIEW_ZOOM_MODE );
+    }
+
+    if ( bReadUserData )
+    {
+        // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
+        // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
+        if ( pViewFrame && pViewFrame->GetViewShell() && aUserData.getLength() )
+        {
+            pViewFrame->GetViewShell()->ReadUserDataSequence( aUserData, TRUE );
+        }
+    }
+
+    return GetCurrentDocument() == &rDoc;
 }
 
 
