@@ -116,7 +116,6 @@ private:
     String      sBoldUnderline;
     String      sURL;
     String      sNoDblSpaces;
-    String      sHalf;
     String      sDash;
     String      sNonBrkSpace;
     String      sFirst;
@@ -158,7 +157,6 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     String          sByInputBullet;
     String          sBoldUnder;
     String          sNoDblSpaces;
-    String          sFraction;
     String          sDetectURL;
     String          sDash;
     String          sNonBrkSpace;

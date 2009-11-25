@@ -148,11 +148,10 @@
 #define STR_NO_DBL_SPACES               204
 #define ST_DETECT_URL                   205
 #define ST_ORDINAL                      206
-#define ST_FRACTION                     207
+#define ST_NON_BREAK_SPACE              207
 #define ST_DASH                         208
 #define FT_LANG                         209
 #define LB_LANG                         210
-#define ST_NON_BREAK_SPACE              211
 
 #define CB_SMARTTAGS                    220
 #define FT_SMARTTAGS                    221

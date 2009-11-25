@@ -129,10 +129,6 @@ TabDialog RID_OFA_AUTOCORR_DLG
     { \
         Text [ en-US ] = "URL Recognition" ; \
     }; \
-    String ST_FRACTION \
-    { \
-        Text [ en-US ] = "Replace 1/2 ... with ½ ..." ; \
-    }; \
     String ST_DASH \
     { \
         Text [ en-US ] = "Replace dashes" ; \

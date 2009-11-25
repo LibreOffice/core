@@ -51,7 +51,6 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bChkFontAttr =
     bChgUserColl =
     bChgEnumNum =
-    bChgFracionSymbol =
     bChgOrdinalNumber =
     bChgToEnEmDash =
     bChgWeightUnderl =
@@ -115,7 +114,6 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
     bSetNumRule = rAFFlags.bSetNumRule;
     bAFmtByInput = rAFFlags.bAFmtByInput;
 
-    bChgFracionSymbol = rAFFlags.bChgFracionSymbol;
     bChgOrdinalNumber = rAFFlags.bChgOrdinalNumber;
     bChgToEnEmDash = rAFFlags.bChgToEnEmDash;
     bChgWeightUnderl = rAFFlags.bChgWeightUnderl;

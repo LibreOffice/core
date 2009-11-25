@@ -347,7 +347,6 @@ long SvxAutoCorrect::GetDefaultFlags()
     long nRet = Autocorrect
                     | CptlSttSntnc
                     | CptlSttWrd
-                    | ChgFractionSymbol
                     | ChgOrdinalNumber
                     | ChgToEnEmDash
                     | AddNonBrkSpace
@@ -488,40 +487,6 @@ BOOL SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
         }
     }
     return bRet;
-}
-
-
-BOOL SvxAutoCorrect::FnChgFractionSymbol(
-                                SvxAutoCorrDoc& rDoc, const String& rTxt,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos )
-{
-    sal_Unicode cChar = 0;
-
-    for( ; nSttPos < nEndPos; ++nSttPos )
-        if( !lcl_IsInAsciiArr( sImplSttSkipChars, rTxt.GetChar( nSttPos ) ))
-            break;
-    for( ; nSttPos < nEndPos; --nEndPos )
-        if( !lcl_IsInAsciiArr( sImplEndSkipChars, rTxt.GetChar( nEndPos - 1 ) ))
-            break;
-
-    // 1/2, 1/4, ... ersetzen durch das entsprechende Zeichen vom Font
-    if( 3 == nEndPos - nSttPos && '/' == rTxt.GetChar( nSttPos+1 ))
-    {
-        switch( ( rTxt.GetChar( nSttPos )) * 256 + rTxt.GetChar( nEndPos-1 ))
-        {
-        case '1' * 256 + '2':       cChar = c1Div2;     break;
-        case '1' * 256 + '4':       cChar = c1Div4;     break;
-        case '3' * 256 + '4':       cChar = c3Div4;     break;
-        }
-
-        if( cChar )
-        {
-            // also austauschen:
-            rDoc.Delete( nSttPos+1, nEndPos );
-            rDoc.Replace( nSttPos, cChar );
-        }
-    }
-    return 0 != cChar;
 }
 
 
@@ -1350,9 +1315,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             }
         }
 
-        if( ( IsAutoCorrFlag( nRet = ChgFractionSymbol ) &&
-                FnChgFractionSymbol( rDoc, rTxt, nCapLttrPos, nInsPos ) ) ||
-            ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
+        if( ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
             ( IsAutoCorrFlag( nRet = AddNonBrkSpace ) &&
                 FnAddNonBrkSpace( rDoc, rTxt, nCapLttrPos, nInsPos - 1, eLang ) ) ||
@@ -1404,7 +1367,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             else if( nRet & SetINetAttr)        nHelpId = 18;
             else if( nRet & IngnoreDoubleSpace) nHelpId = 19;
             else if( nRet & ChgWeightUnderl)    nHelpId = 20;
-            else if( nRet & ChgFractionSymbol ) nHelpId = 21;
+            else if( nRet & AddNonBrkSpace)     nHelpId = 21;
             else if( nRet & ChgOrdinalNumber)   nHelpId = 22;
         }
 

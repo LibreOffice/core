@@ -119,6 +119,7 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         "ChangeUnderlineWeight",                //  5
         "SetInetAttribute",                     //  6
         "ChangeOrdinalNumber",                  //  7
+        "AddNonBreakingSpace",                  //  8
         "ChangeFraction",                       //  8
         "ChangeDash",                           //  9
         "RemoveDoubleSpaces",                   // 10
@@ -127,10 +128,9 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         "SingleQuoteAtEnd",                     // 13
         "ReplaceDoubleQuote",                   // 14
         "DoubleQuoteAtStart",                   // 15
-        "DoubleQuoteAtEnd",                     // 16
-        "AddNonBreakingSpace"                   // 17
+        "DoubleQuoteAtEnd"                      // 16
     };
-    const int nCount = 18;
+    const int nCount = 17;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -190,10 +190,10 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
                         if(*(sal_Bool*)pValues[nProp].getValue())
                             nFlags |= ChgOrdinalNumber;
                     break;//"ChangeOrdinalNumber",
-                    case  8:
+                    case 8:
                         if(*(sal_Bool*)pValues[nProp].getValue())
-                            nFlags |= ChgFractionSymbol;
-                    break;//"ChangeFraction",
+                             nFlags |= AddNonBrkSpace;
+                    break;//"AddNonBreakingSpace"
                     case  9:
                         if(*(sal_Bool*)pValues[nProp].getValue())
                             nFlags |= ChgToEnEmDash;
@@ -230,10 +230,6 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
                         rParent.pAutoCorrect->SetEndDoubleQuote(
                             sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"DoubleQuoteAtEnd"
-                    case 17:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
-                             nFlags |= AddNonBrkSpace;
-                     break;//"AddNonBreakingSpace"
                 }
             }
         }
@@ -306,10 +302,10 @@ void SvxBaseAutoCorrCfg::Commit()
                 bVal = 0 != (nFlags & ChgOrdinalNumber);
                 pValues[nProp].setValue(&bVal, rType);
             break;//"ChangeOrdinalNumber",
-            case  8:
-                bVal = 0 != (nFlags & ChgFractionSymbol);
+            case 8:
+                bVal = 0 != (nFlags & AddNonBrkSpace);
                 pValues[nProp].setValue(&bVal, rType);
-            break;//"ChangeFraction",
+            break;//"AddNonBreakingSpace"
             case  9:
                 bVal = 0 != (nFlags & ChgToEnEmDash);
                 pValues[nProp].setValue(&bVal, rType);
@@ -338,10 +334,6 @@ void SvxBaseAutoCorrCfg::Commit()
             case 16:
                 pValues[nProp] <<= (sal_Int32) rParent.pAutoCorrect->GetEndDoubleQuote();
             break;//"DoubleQuoteAtEnd"
-            case 17:
-                bVal = 0 != (nFlags & AddNonBrkSpace);
-                pValues[nProp].setValue(&bVal, rType);
-            break;//"AddNonBreakingSpace"
         }
     }
     PutProperties(aNames, aValues);
@@ -371,7 +363,7 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/Option/ChangeUnderlineWeight",                          // 8
         "Format/Option/SetInetAttribute",                               // 9
         "Format/Option/ChangeOrdinalNumber",                            //10
-        "Format/Option/ChangeFraction",                                 //11
+        "Format/Option/AddNonBreakingSpace",                            //11
         "Format/Option/ChangeDash",                                     //12
         "Format/Option/DelEmptyParagraphs",                             //13
         "Format/Option/ReplaceUserStyle",                               //14
@@ -407,10 +399,9 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",          //44
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",    //45
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //46
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //47
-        "Format/Option/AddNonBreakingSpace"                             //48
+        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"      //47
     };
-    const int nCount = 49;
+    const int nCount = 48;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -448,7 +439,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case   8: rSwFlags.bChgWeightUnderl = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeUnderlineWeight",
                     case   9: rSwFlags.bSetINetAttr = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/SetInetAttribute",
                     case  10: rSwFlags.bChgOrdinalNumber = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeOrdinalNumber",
-                    case  11: rSwFlags.bChgFracionSymbol = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeFraction",
+                    case  11 : rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break;// "Format/Output/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
 //                  case  12: rSwFlags.bChgToEnEmDash = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeDash",
                     case  13: rSwFlags.bDelEmptyNode = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelEmptyParagraphs",
@@ -562,7 +553,6 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                         rSwFlags.aByInputBulletFont.SetPitch(FontPitch(nVal));
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
-                    case 48 : rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break;// "Format/Output/AddNonBreakingSpace",
                 }
             }
         }
@@ -610,7 +600,7 @@ void SvxSwAutoCorrCfg::Commit()
             case   8: bVal = rSwFlags.bChgWeightUnderl; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeUnderlineWeight",
             case   9: bVal = rSwFlags.bSetINetAttr; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/SetInetAttribute",
             case  10: bVal = rSwFlags.bChgOrdinalNumber; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeOrdinalNumber",
-            case  11: bVal = rSwFlags.bChgFracionSymbol; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeFraction",
+            case  11: bVal = rSwFlags.bAddNonBrkSpace;  pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
             case  12:
                 bVal = sal_True;  pValues[nProp].setValue(&bVal, rType);
@@ -678,9 +668,6 @@ void SvxSwAutoCorrCfg::Commit()
             case 47 :
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetPitch();
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
-            case  48:
-                bVal = rSwFlags.bAddNonBrkSpace;  pValues[nProp].setValue(&bVal, rType);
-            break; // "Format/Option/AddNonBreakingSpace",
         }
     }
     PutProperties(aNames, aValues);

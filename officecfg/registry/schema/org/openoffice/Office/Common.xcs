@@ -1298,17 +1298,6 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="ChangeFraction" oor:type="xs:boolean">
-				<!-- OldPath: AutoCorrect/Options/All -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace 1/2... -->
-				<info>
-					<author>OS</author>
-					<desc>Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
-					<label>Replace fractions</label>
-				</info>
-				<value>true</value>
-			</prop>
 			<prop oor:name="ChangeDash" oor:type="xs:boolean">
 				<!-- OldPath: AutoCorrect/Options/All -->
 				<!-- OldLocation: Soffice.cfg -->

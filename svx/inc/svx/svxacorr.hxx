@@ -54,7 +54,7 @@ class SotStorage;
 // Flags fuer die AutoKorrekt-Flags
 const long CptlSttSntnc     = 0x00000001;   // Gross-Buchstaben am SatzAnfang
 const long CptlSttWrd       = 0x00000002;   // keine 2 Gr.-Buchst. am WordAnfang
-const long ChgFractionSymbol= 0x00000004;   // 1/2, 1/4, .. ersetzen
+const long AddNonBrkSpace   = 0x00000004;   // Add non breaking space before :;?!
 const long ChgOrdinalNumber = 0x00000008;   // Ordinal-Number 1st, 2nd,..
 const long ChgToEnEmDash    = 0x00000010;   // - -> Endash/Emdash
 const long ChgWeightUnderl  = 0x00000020;   // * -> Fett, _ -> unterstreichen
@@ -65,7 +65,6 @@ const long SaveWordCplSttLst= 0x00000200;   // GrB. am SatzAnf. auto. aufnehmen
 const long SaveWordWrdSttLst= 0x00000400;   // 2 GrB. am WortAnf. auto. aufnehmen
 const long IngnoreDoubleSpace= 0x00000800;  // 2 Spaces ignorieren
 const long ChgSglQuotes     = 0x00001000;   // einfache Quotes ersetzen
-const long AddNonBrkSpace   = 0x00002000;   // Add non breaking space before :;?!
 
 const long ChgWordLstLoad   = 0x20000000;   // Ersetzungsliste geladen
 const long CplSttLstLoad    = 0x40000000;   // Exceptionlist fuer CplStart geladen
@@ -360,8 +359,6 @@ public:
     BOOL FnCptlSttWrd( SvxAutoCorrDoc&, const String&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    BOOL FnChgFractionSymbol( SvxAutoCorrDoc&, const String&,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos );
     BOOL FnChgOrdinalNumber( SvxAutoCorrDoc&, const String&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
