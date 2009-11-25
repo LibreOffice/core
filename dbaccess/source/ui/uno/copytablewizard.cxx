@@ -1578,7 +1578,8 @@ Dialog* CopyTableWizard::createDialog( Window* _pParent )
         *m_pSourceObject,
         m_xSourceConnection.getTyped(),
         m_xDestConnection.getTyped(),
-        m_aContext.getLegacyServiceFactory()
+        m_aContext.getLegacyServiceFactory(),
+        m_xInteractionHandler
     );
 
     impl_attributesToDialog_nothrow( *pWizard );
