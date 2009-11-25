@@ -31,7 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <outl_pch.hxx>
+
+#include <com/sun/star/i18n/WordType.hpp>
+
 #include <svtools/style.hxx>
+#include <i18npool/mslangid.hxx>
 
 #define _OUTLINER_CXX
 #include <svx/outliner.hxx>
@@ -55,6 +59,8 @@
 // Wert, um den Fensterinhalt beim D&D gescrollt wird
 #define OL_SCROLL_HOROFFSET         20  /* in % von VisibleSize.Width */
 #define OL_SCROLL_VEROFFSET         20  /* in % von VisibleSize.Height */
+
+using namespace ::com::sun::star;
 
 DBG_NAME(OutlinerView)
 
@@ -1272,7 +1278,7 @@ void OutlinerView::RemoveAttribs( BOOL bRemoveParaAttribs, USHORT nWhich, BOOL b
 
 
 
-// =====================================================================
+// =====================================================================
 // ======================   Einfache Durchreicher =======================
 // ======================================================================
 
@@ -1647,3 +1653,56 @@ Selection OutlinerView::GetSurroundingTextSelection() const
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSurroundingTextSelection();
 }
+
+
+// ======================================================================
+// ===== some code for thesaurus sub menu within context menu
+// ======================================================================
+
+// returns: true if a word for thesaurus look-up was found at the current cursor position.
+// The status string will be word + iso language string (e.g. "light#en-US")
+bool SVX_DLLPUBLIC GetStatusValueForThesaurusFromContext(
+    String &rStatusVal,
+    LanguageType &rLang,
+    const EditView &rEditView )
+{
+    // get text and locale for thesaurus look up
+    String aText;
+    EditEngine *pEditEngine = rEditView.GetEditEngine();
+    ESelection aTextSel( rEditView.GetSelection() );
+    if (!aTextSel.HasRange())
+        aTextSel = pEditEngine->GetWord( aTextSel, i18n::WordType::DICTIONARY_WORD );
+    aText = pEditEngine->GetText( aTextSel );
+    aTextSel.Adjust();
+    LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos );
+    String aLangText( MsLangId::convertLanguageToIsoString( nLang ) );
+
+    // set word and locale to look up as status value
+    String aStatusVal( aText );
+    aStatusVal.AppendAscii( "#" );
+    aStatusVal += aLangText;
+
+    rStatusVal  = aStatusVal;
+    rLang       = nLang;
+
+    return aText.Len() > 0;
+}
+
+
+void SVX_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText )
+{
+    // get selection to use
+    ESelection aCurSel( rEditView.GetSelection() );
+    if (!rEditView.HasSelection())
+    {
+        // select the same word that was used in GetStatusValueForThesaurusFromContext by calling GetWord.
+        // (In the end both functions will call ImpEditEngine::SelectWord)
+        rEditView.SelectCurrentWord( i18n::WordType::DICTIONARY_WORD );
+        aCurSel = rEditView.GetSelection();
+    }
+
+    // replace word ...
+    rEditView.InsertText( rSynonmText );
+    rEditView.ShowCursor( sal_True, sal_False );
+}
+

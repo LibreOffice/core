@@ -1260,13 +1260,13 @@ void EditView::SpellIgnoreWord()
     pImpEditView->SpellIgnoreOrAddWord( sal_False );
 }
 
-sal_Bool EditView::SelectCurrentWord()
+sal_Bool EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     EditSelection aCurSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
-    aCurSel = PIMPEE->SelectWord( aCurSel.Max() );
+    aCurSel = PIMPEE->SelectWord( aCurSel.Max(), nWordType );
     pImpEditView->SetEditSelection( aCurSel );
     pImpEditView->DrawSelection();
     ShowCursor( sal_True, sal_False );

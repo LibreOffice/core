@@ -31,6 +31,8 @@
 #ifndef _MyEDITVIEW_HXX
 #define _MyEDITVIEW_HXX
 
+#include <com/sun/star/i18n/WordType.hpp>
+
 #include <rsc/rscsfx.hxx>
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
@@ -114,7 +116,7 @@ public:
     BOOL            HasSelection() const;
     ESelection      GetSelection() const;
     void            SetSelection( const ESelection& rNewSel );
-    BOOL            SelectCurrentWord();
+    BOOL            SelectCurrentWord( sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
 
     void            IndentBlock();
     void            UnindentBlock();
