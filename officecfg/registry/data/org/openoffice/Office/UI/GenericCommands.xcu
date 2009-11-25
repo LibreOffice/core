@@ -3016,7 +3016,7 @@
                     <value xml:lang="en-US">New FrameSet</value>
                 </prop>
             </node>
-            <node oor:name=".uno:Thesaurus" oor:op="replace">
+            <node oor:name=".uno:ThesaurusDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Thesaurus...</value>
                 </prop>

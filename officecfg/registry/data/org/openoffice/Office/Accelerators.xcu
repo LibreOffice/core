@@ -536,7 +536,7 @@
     </node>
     <node oor:name="F7_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:Thesaurus</value>
+      <value xml:lang="en-US">.uno:ThesaurusDialog</value>
      </prop>
     </node>
     <node oor:name="F7_SHIFT" oor:op="replace">
@@ -1075,7 +1075,7 @@
     </node>
     <node oor:name="F7_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:Thesaurus</value>
+      <value xml:lang="en-US">.uno:ThesaurusDialog</value>
      </prop>
     </node>
     <node oor:name="F8" oor:op="replace">
@@ -2027,7 +2027,7 @@
     </node>
     <node oor:name="F7_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:Thesaurus</value>
+      <value xml:lang="en-US">.uno:ThesaurusDialog</value>
      </prop>
     </node>
     <node oor:name="F8" oor:op="replace">
