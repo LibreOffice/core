@@ -296,7 +296,7 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
     aDocumentImage      ( SfxResId( IMG_HELP_CONTENT_DOC ) )
 
 {
-    if ( GetSettings().GetStyleSettings().GetWindowColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         aOpenBookImage = Image( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN_HC ) );
         aClosedBookImage = Image( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED_HC ) );
@@ -2178,7 +2178,7 @@ sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
 void SfxHelpTextWindow_Impl::InitToolBoxImages()
 {
     sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
-    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
+    sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     aIndexOnImage = Image( SfxResId(
         bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_INDEX_ON : IMG_HELP_TOOLBOX_L_INDEX_ON
@@ -2584,7 +2584,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
         if ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
         {
-            sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetMenuColor().IsDark();
+            sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
             Point aPos;
             if ( pCmdEvt->IsMouseEvent() )
                 aPos = pCmdEvt->GetMousePosPixel();

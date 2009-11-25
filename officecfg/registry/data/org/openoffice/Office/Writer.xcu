@@ -702,33 +702,6 @@
     <node oor:name="Topics"/>
   </node>
  </node>
- <node oor:name="Cursor" >
-  <node oor:name="DirectCursor" >
-    <prop oor:name="UseDirectCursor" install:module="directcursor">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Insert" install:module="directcursor">
-      <value>3</value>
-    </prop>
-  </node>
- </node>
- <node oor:name="DefaultFont" install:module="defaultfontarial">
-     <prop oor:name="Standard">
-       <value >Arial</value>
-     </prop>
-     <prop oor:name="Heading">
-       <value >Arial</value>
-     </prop>
-     <prop oor:name="List">
-       <value >Arial</value>
-     </prop>
-     <prop oor:name="Caption">
-       <value >Arial</value>
-     </prop>
-     <prop oor:name="Index">
-       <value >Arial</value>
-     </prop>
- </node>
  <node oor:name="Layout" >
   <node oor:name="Other" >
     <prop oor:name="TabStop">

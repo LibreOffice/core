@@ -47,7 +47,6 @@ XCUFILES= \
     UserProfile.xcu
 
 MODULEFILES= \
-    Inet-defaultsearchengine.xcu \
     Setup-brand.xcu \
     Setup-writer.xcu   \
     Setup-calc.xcu   \
