@@ -669,6 +669,7 @@ sub glob_line
         my @file_list = glob($from);
 
         foreach $file ( @file_list ) {
+            next if ( -d $file); # we only copy files, not directories
             my ($fname, $dir) = fileparse($file);
             my $copy = ($replace) ? $to_dir . $fname : $to . '/' . $fname;
             push(@globbed_files, [$file, $copy]);
