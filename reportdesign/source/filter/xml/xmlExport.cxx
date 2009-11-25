@@ -1587,6 +1587,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 uno::Reference< XFunction> xFunction = xFunctions->createFunction();
                 ::rtl::OUString sFunction,sPrefix,sPostfix;
                 ::rtl::OUString sExpression = xGroup->getExpression();
+                ::rtl::OUString sFunctionName;
                 switch(nGroupOn)
                 {
                     case report::GroupOn::PREFIX_CHARACTERS:
@@ -1597,8 +1598,9 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YEAR"));
                         break;
                     case report::GroupOn::QUARTAL:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
-                        sPostfix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/4"));
+                        sFunction   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT((MONTH"));
+                        sPostfix    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-1)/3)+1"));
+                        sFunctionName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QUARTAL_")) + sExpression;
                         break;
                     case report::GroupOn::MONTH:
                         sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
@@ -1626,15 +1628,21 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
                             sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                            sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
                         }
                         break;
                     default:
                         ;
                 }
+                if ( !sFunctionName.getLength() )
+                    sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
                 if ( sFunction.getLength() )
                 {
+                    sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
+                    for(sal_Int32 i= 0; i < sizeof(pReplaceChars)/sizeof(pReplaceChars[0]);++i)
+                        sFunctionName = sFunctionName.replace(pReplaceChars[i],'_');
 
-                    xFunction->setName(sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression);
+                    xFunction->setName(sFunctionName);
                     sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFunction;
                     sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(["));
                     sFunction += sExpression;
