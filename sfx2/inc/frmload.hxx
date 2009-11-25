@@ -56,7 +56,7 @@
 
 class SfxFilter;
 class SfxFilterMatcher;
-class SfxFrame;
+class SfxTopFrame;
 
 #include <sfx2/sfxuno.hxx>
 
@@ -95,24 +95,25 @@ private:
 
     sal_Bool            impl_createNewDocWithSlotParam(
                             const USHORT _nSlotID,
-                            SfxFrame& i_rFrame
+                                  SfxTopFrame& i_rFrame
                         );
 
     sal_Bool            impl_createNewDoc(
                             const ::comphelper::NamedValueCollection& i_rDescriptor,
-                            SfxFrame& i_rFrame,
-                            const ::rtl::OUString& _rFactoryURL
+                                  SfxTopFrame& i_rFrame,
+                            const ::rtl::OUString& _rFactoryName
                         );
 
-    void                impl_ensureValidFrame_throw( const SfxFrame* _pFrame );
+    void                impl_ensureValidFrame_throw( const SfxTopFrame* _pFrame );
 
     const SfxFilter*    impl_determineFilter(
-                            ::comphelper::NamedValueCollection& io_rDescriptor,
+                                  ::comphelper::NamedValueCollection& io_rDescriptor,
                             const SfxFilterMatcher& rMatcher
                         );
 
     SfxAllItemSet       impl_getInitialItemSet(
-                            const ::comphelper::NamedValueCollection& i_rDescriptor
+                            const ::comphelper::NamedValueCollection& i_rDescriptor,
+                            SfxTopFrame& i_rTargetFrame
                         ) const;
 
     sal_Bool            impl_loadExistingDocument(

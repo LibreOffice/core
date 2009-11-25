@@ -504,7 +504,6 @@ public:
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetLastMark_Impl( const String & );
     SAL_DLLPRIVATE const String& GetLastMark_Impl() const;
-    SAL_DLLPRIVATE sal_Bool DoInitNew_Impl( const ::rtl::OUString& rName );
 //#endif
 
     // DDE-Interface

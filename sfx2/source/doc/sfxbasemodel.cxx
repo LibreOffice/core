@@ -73,6 +73,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>  // can be removed when this is a "real" service
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
@@ -967,53 +968,50 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_sURL = rURL;
-        uno::Sequence< beans::PropertyValue > aNewSeqArgs( rArgs.getLength() );
-        sal_Int32 nNewLen = 0;
 
-        for ( sal_Int32 nInd = 0; nInd < rArgs.getLength(); nInd++ )
+        SfxObjectShell* pObjectShell = m_pData->m_pObjectShell;
+
+        ::comphelper::NamedValueCollection aArgs( rArgs );
+
+        Sequence< sal_Int32 > aWinExtent;
+        if ( ( aArgs.get( "WinExtent" ) >>= aWinExtent )&& ( aWinExtent.getLength() == 4 ) )
         {
-            if ( rArgs[nInd].Name.equalsAscii( "WinExtent" ) )
-            {
-                Sequence< sal_Int32 > aSize;
-                if ( ( rArgs[nInd].Value >>= aSize ) && aSize.getLength() == 4 )
-                {
-                    Rectangle aTmpRect( aSize[0], aSize[1], aSize[2], aSize[3] );
-                    aTmpRect = OutputDevice::LogicToLogic( aTmpRect, MAP_100TH_MM, m_pData->m_pObjectShell->GetMapUnit() );
-                    m_pData->m_pObjectShell->SetVisArea( aTmpRect );
-                }
-            }
-            else if ( rArgs[nInd].Name.equalsAscii( "BreakMacroSignature" ) )
-            {
-                sal_Bool bBreakMacroSign = sal_False;
-                rArgs[nInd].Value >>= bBreakMacroSign;
-                m_pData->m_pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
-            }
-            else if ( !rArgs[nInd].Name.equalsAscii( "Stream" ) && !rArgs[nInd].Name.equalsAscii( "InputStream" ) )
-            {
-                // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be ignored here
-                aNewSeqArgs[nNewLen++] = rArgs[nInd];
-            }
+            Rectangle aVisArea( aWinExtent[0], aWinExtent[1], aWinExtent[2], aWinExtent[3] );
+            aVisArea = OutputDevice::LogicToLogic( aVisArea, MAP_100TH_MM, pObjectShell->GetMapUnit() );
+            pObjectShell->SetVisArea( aVisArea );
         }
 
-        aNewSeqArgs.realloc( nNewLen );
-
-        m_pData->m_seqArguments = aNewSeqArgs;
-
-        if( m_pData->m_pObjectShell->GetMedium() )
+        sal_Bool bBreakMacroSign = sal_False;
+        if ( aArgs.get( "BreakMacroSignature" ) >>= bBreakMacroSign )
         {
-            SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
+            pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
+        }
+
+        aArgs.remove( "WinExtent" );
+        aArgs.remove( "BreakMacroSignature" );
+        aArgs.remove( "Stream" );
+        aArgs.remove( "InputStream" );
+
+        // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
+
+        m_pData->m_seqArguments = aArgs.getPropertyValues();
+
+        SfxMedium* pMedium = pObjectShell->GetMedium();
+        if ( pMedium )
+        {
+            SfxAllItemSet aSet( pObjectShell->GetPool() );
             TransformParameters( SID_OPENDOC, rArgs, aSet );
 
-            m_pData->m_pObjectShell->GetMedium()->GetItemSet()->Put( aSet );
+            pMedium->GetItemSet()->Put( aSet );
             SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME, sal_False );
             if ( pItem )
-                m_pData->m_pObjectShell->GetMedium()->SetFilter(
-                    m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( pItem->GetValue() ) );
+                pMedium->SetFilter(
+                    pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( pItem->GetValue() ) );
 
             SFX_ITEMSET_ARG( &aSet, pTitleItem, SfxStringItem, SID_DOCINFO_TITLE, sal_False );
             if ( pTitleItem )
             {
-                SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell );
+                SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjectShell );
                 if ( pFrame )
                     pFrame->UpdateTitle();
             }

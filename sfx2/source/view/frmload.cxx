@@ -48,6 +48,8 @@
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
 #include <svtools/itemset.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/ehdl.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
@@ -75,6 +77,7 @@ namespace css = ::com::sun::star;
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/sfx.hrc>
 #include "brokenpackageint.hxx"
 #include "objshimp.hxx"
 
@@ -249,7 +252,7 @@ namespace
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, SfxFrame& i_rFrame )
+sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, SfxTopFrame& i_rFrame )
 {
     SfxApplication* pApp = SFX_APP();
 
@@ -260,20 +263,44 @@ sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlo
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_createNewDoc( const ::comphelper::NamedValueCollection& i_rDescriptor, SfxFrame& i_rFrame,
-                                                 const ::rtl::OUString& _rFactoryURL )
+sal_Bool SfxFrameLoader_Impl::impl_createNewDoc( const ::comphelper::NamedValueCollection& i_rDescriptor, SfxTopFrame& i_rFrame,
+                                                 const ::rtl::OUString& _rFactoryName )
 {
-    SfxAllItemSet aSet( impl_getInitialItemSet( i_rDescriptor ) );
+    OSL_PRECOND( i_rFrame.GetCurrentDocument() == NULL,
+        "SfxFrameLoader_Impl::impl_createNewDoc: inserting into an already-occupied frame is not supported anymore!" );
+    if ( i_rFrame.GetCurrentDocument() != NULL )
+        return sal_False;
 
-    SfxRequest aRequest( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
-    aRequest.AppendItem( SfxFrameItem( SID_DOCFRAME, &i_rFrame ) );
-    aRequest.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, _rFactoryURL ) );
+    SfxErrorContext aEc( ERRCTX_SFX_NEWDOCDIRECT );
 
-    SFX_ITEMSET_ARG( &aSet, pDocumentTitleItem, SfxStringItem, SID_DOCINFO_TITLE, FALSE );
-    if ( pDocumentTitleItem )
-        aRequest.AppendItem( *pDocumentTitleItem );
+    // create new document
+    SfxObjectShellLock xDoc = SfxObjectShell::CreateObjectByFactoryName( _rFactoryName );
+    if ( !xDoc.Is() || !xDoc->DoInitNew( NULL ) )
+        return sal_False;
 
-    return lcl_getDispatchResult( SFX_APP()->NewDocDirectExec_ImplOld( aRequest ) );
+    Reference< XModel >  xModel( xDoc->GetModel(), UNO_QUERY );
+    OSL_ENSURE( xModel.is(), "SfxFrameLoader_Impl::impl_createNewDoc: not sure this is really allowed ..." );
+    if ( xModel.is() )
+    {
+        ::comphelper::NamedValueCollection aArgs( i_rDescriptor );
+        aArgs.remove( "StatusIndicator" );  // TODO: why this?
+
+        xModel->attachResource( ::rtl::OUString(), aArgs.getPropertyValues() );
+    }
+
+    const sal_Bool bHidden = i_rDescriptor.getOrDefault( "Hidden", sal_False );
+    if ( bHidden )
+    {
+        xDoc->RestoreNoDelete();
+        xDoc->OwnerLock( TRUE );
+        xDoc->Get_Impl()->bHiddenLockedByAPI = TRUE;
+    }
+
+    if ( i_rFrame.InsertDocument_Impl( *xDoc ) )
+        return sal_True;
+
+    xDoc->DoClose();
+    return sal_False;
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -315,7 +342,8 @@ const SfxFilter* SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedV
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-SfxAllItemSet SfxFrameLoader_Impl::impl_getInitialItemSet( const ::comphelper::NamedValueCollection& i_rDescriptor ) const
+SfxAllItemSet SfxFrameLoader_Impl::impl_getInitialItemSet( const ::comphelper::NamedValueCollection& i_rDescriptor,
+                                                           SfxTopFrame& i_rTargetFrame ) const
 {
     SfxAllItemSet aSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, i_rDescriptor.getPropertyValues(), aSet );
@@ -323,6 +351,8 @@ SfxAllItemSet SfxFrameLoader_Impl::impl_getInitialItemSet( const ::comphelper::N
     SFX_ITEMSET_ARG( &aSet, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
     if ( !pRefererItem )
         aSet.Put( SfxStringItem( SID_REFERER, String() ) );
+
+    aSet.Put( SfxFrameItem( SID_DOCFRAME, &i_rTargetFrame ) );
 
     return aSet;
 }
@@ -334,10 +364,8 @@ sal_Bool SfxFrameLoader_Impl::impl_loadExistingDocument( const Reference< XModel
 {
     ENSURE_OR_THROW( i_rxDocument.is() && i_rxTargetFrame.is(), "invallid model/frame" );
 
-    SfxAllItemSet aSet( impl_getInitialItemSet( i_rDescriptor ) );
-
     SfxTopFrame* pTargetFrame = SfxTopFrame::Create( i_rxTargetFrame );
-    aSet.Put( SfxFrameItem( SID_DOCFRAME, pTargetFrame ) );
+    ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
 
     for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
     {
@@ -345,6 +373,7 @@ sal_Bool SfxFrameLoader_Impl::impl_loadExistingDocument( const Reference< XModel
         {
             i_rxDocument->attachResource( i_rDescriptor.getOrDefault( "URL", ::rtl::OUString() ), i_rDescriptor.getPropertyValues() );
 
+            SfxAllItemSet aSet( impl_getInitialItemSet( i_rDescriptor, *pTargetFrame ) );
             pTargetFrame->SetItemSet_Impl( &aSet );
             return pTargetFrame->InsertDocument_Impl( *pDoc );
         }
@@ -440,16 +469,16 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::load" );
 
     ::comphelper::NamedValueCollection aDescriptor( rArgs );
-    const Reference< XModel > xModel = aDescriptor.getOrDefault( "Model",              Reference< XModel >() );
-
-    const SfxFilter* pDocumentFilter = NULL;
-    const SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+    const Reference< XModel > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel >() );
 
     // if a model is given, just load this into a newly created frame
     if ( xModel.is() )
         return impl_loadExistingDocument( xModel, _rTargetFrame, aDescriptor );
 
     // determine the filter to use
+    const SfxFilter* pDocumentFilter = NULL;
+    const SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+
     pDocumentFilter = impl_determineFilter( aDescriptor, rMatcher );
     if ( !pDocumentFilter )
         return sal_False;
@@ -506,9 +535,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         return sal_False;
 
     aDescriptor.put( "Frame", _rTargetFrame );
-    SfxAllItemSet aSet( impl_getInitialItemSet( aDescriptor ) );
 
-    aSet.Put( SfxFrameItem( SID_DOCFRAME, pTargetFrame ) );
+    SfxAllItemSet aSet( impl_getInitialItemSet( aDescriptor, *pTargetFrame ) );
     aSet.Put( SfxStringItem( SID_FILTER_NAME, sFilterName ) );
 
     sal_Bool bLoadSuccess = sal_False;
@@ -579,7 +607,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
     return bLoadSuccess;
 }
 
-void SfxFrameLoader_Impl::impl_ensureValidFrame_throw( const SfxFrame* _pFrame )
+void SfxFrameLoader_Impl::impl_ensureValidFrame_throw( const SfxTopFrame* _pFrame )
 {
     SfxFrame* pTmp = NULL;
     for ( pTmp = SfxFrame::GetFirst(); pTmp; pTmp = SfxFrame::GetNext( *pTmp ) )

@@ -448,23 +448,6 @@ sal_Bool SfxObjectShell::Load( SfxMedium& rMedium )
     return GeneralInit_Impl( rMedium.GetStorage(), sal_True );
 }
 
-//-------------------------------------------------------------------------
-sal_Bool SfxObjectShell::DoInitNew_Impl( const ::rtl::OUString& rName )
-
-/*  [Beschreibung]
-*/
-
-{
-    if ( rName.getLength() )
-    {
-        DBG_ERROR( "This code is intended to be removed, the caller part must be checked!\n" );
-        return DoInitNew(0);
-    }
-    else
-        return DoInitNew(0);
-}
-
-
 sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 /*  [Beschreibung]
 
