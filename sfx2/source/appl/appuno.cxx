@@ -195,9 +195,6 @@ static const String sFolderName                 = String::CreateFromAscii( "Fold
 static const String sUseSystemDialog            = String::CreateFromAscii( "UseSystemDialog"            );
 static const String sStandardDir                = String::CreateFromAscii( "StandardDir"                );
 static const String sBlackList                  = String::CreateFromAscii( "BlackList"                  );
-static const String sSuggestedSaveAsDir         = String::CreateFromAscii( "SuggestedSaveAsDir"         );
-static const String sSuggestedSaveAsName        = String::CreateFromAscii( "SuggestedSaveAsName"        );
-static const String sReferer                    = String::CreateFromAscii( "Referer"                    );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -703,24 +700,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         stringList.SetStringList( xVal );
                         rSet.Put( stringList );
                     }
-                }
-                else if ( aName == sSuggestedSaveAsDir )
-                {
-                    SfxStringItem aItem( SID_DEFAULTFILEPATH, String() );
-                    if ( aItem.PutValue( rProp.Value ) )
-                        rSet.Put( aItem );
-                }
-                else if ( aName == sSuggestedSaveAsName )
-                {
-                    SfxStringItem aItem( SID_DEFAULTFILENAME, String() );
-                    if ( aItem.PutValue( rProp.Value ) )
-                        rSet.Put( aItem );
-                }
-                else if ( aName == sReferer )
-                {
-                    SfxStringItem aItem( SID_REFERER, String() );
-                    if ( aItem.PutValue( rProp.Value ) )
-                        rSet.Put( aItem );
                 }
                 else if ( aName == sFileName )
                 {
@@ -1500,21 +1479,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 com::sun::star::uno::Sequence< rtl::OUString > aList;
                 ((SfxStringListItem*)pItem)->GetStringList( aList );
                 pValue[nActProp++].Value <<= aList ;
-            }
-            if ( rSet.GetItemState( SID_DEFAULTFILEPATH, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = sSuggestedSaveAsDir;
-                pItem->QueryValue( pValue[nActProp++].Value );
-            }
-            if ( rSet.GetItemState( SID_DEFAULTFILENAME, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = sSuggestedSaveAsName;
-                pItem->QueryValue( pValue[nActProp++].Value );
-            }
-            if ( rSet.GetItemState( SID_REFERER, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = sReferer;
-                pItem->QueryValue( pValue[nActProp++].Value );
             }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
