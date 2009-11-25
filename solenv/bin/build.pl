@@ -753,9 +753,6 @@ sub BuildAll {
         };
         modules_classify(keys %global_deps_hash);
         store_weights(\%global_deps_hash);
-        if (keys %active_modules && ($build_from || $incompatible)) {
-            print_error("There are active module in $source_config_file. Please remove these modules to proceed.\n");
-        };
         prepare_build_from(\%global_deps_hash) if ($build_from);
         prepare_incompatible_build(\%global_deps_hash) if ($incompatible);
         if ($build_all_cont || $build_since) {
