@@ -467,6 +467,9 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
         if ( bDeleteOld )
             delete pPrt;
         pPrt = pP;
+
+        if ( pDrawModel && !get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+            pDrawModel->SetRefDevice( pPrt );
     }
 
     if ( bCallPrtDataChanged &&
@@ -495,6 +498,9 @@ void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOl
         if ( bDeleteOld )
             delete pVirDev;
         pVirDev = pVd;
+
+        if ( pDrawModel && get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+            pDrawModel->SetRefDevice( pVirDev );
     }
 }
 
@@ -530,6 +536,9 @@ void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewH
                 pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
             else
                 pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+
+            if( pDrawModel )
+                pDrawModel->SetRefDevice( pMyVirDev );
         }
         else
         {
@@ -539,8 +548,10 @@ void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewH
             // triggers this funny situation:
             // getReferenceDevice()->getPrinter()->CreatePrinter_()
             // ->setPrinter()-> PrtDataChanged()
-            getPrinter( true );
+            SfxPrinter* pPrinter = getPrinter( true );
             // <--
+            if( pDrawModel )
+                pDrawModel->SetRefDevice( pPrinter );
         }
 
         set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, bNewVirtual );
