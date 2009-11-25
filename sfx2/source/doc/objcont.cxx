@@ -52,7 +52,6 @@
 #include <svtools/ctloptions.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 #include <svtools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
@@ -89,8 +88,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::com::sun::star::document::XViewDataSupplier;
-using ::com::sun::star::container::XIndexAccess;
 
 //====================================================================
 
@@ -189,68 +186,6 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
     pFile->Stop();
 
     return pFile;
-}
-
-//====================================================================
-
-bool SfxObjectShell::LoadView_Impl( SfxTopFrame& rTargetFrame )
-{
-    DBG_ASSERT( GetMedium(), "A Medium should exist here!");
-    if ( !GetMedium() )
-        return false;
-
-    // obtain view data
-    Reference< XViewDataSupplier > xViewDataSupplier( GetModel(), UNO_QUERY );
-    Reference< XIndexAccess > xViewData;
-    if ( xViewDataSupplier.is() )
-        xViewData = xViewDataSupplier->getViewData();
-
-    if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
-        return false;
-
-    // obtain the ViewID from the view data
-    USHORT nViewId = 0;
-    SEQUENCE < PROPERTYVALUE > aUserData;
-    if ( xViewData->getByIndex( 0 ) >>= aUserData )
-    {
-        ::comphelper::NamedValueCollection aNamedUserData( aUserData );
-        ::rtl::OUString sViewId = aNamedUserData.getOrDefault( "ViewId", ::rtl::OUString() );
-        if ( sViewId.getLength() )
-        {
-            sViewId = sViewId.copy( 4 );    // format is like in "view3"
-            nViewId = USHORT( sViewId.toInt32() );
-        }
-    }
-
-    SfxItemSet* pSet = GetMedium()->GetItemSet();
-    pSet->ClearItem( SID_USER_DATA );
-    pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-
-    OSL_ENSURE( rTargetFrame.GetCurrentViewFrame() == NULL,
-        "SfxObjectShell::LoadView_Impl: no support (anymore) for loading into a non-empty frame!" );
-        // Since some refactoring in CWS autorecovery, this shouldn't happen anymore. Frame re-usage is nowadays
-        // done in higher layers, namely in the framework.
-
-    rTargetFrame.InsertDocument_Impl( *this );
-    SfxViewFrame* pViewFrame = rTargetFrame.GetCurrentViewFrame();
-
-    // only temporary data, don't hold it in the itemset
-    pSet->ClearItem( SID_VIEW_POS_SIZE );
-    pSet->ClearItem( SID_WIN_POSSIZE );
-    pSet->ClearItem( SID_VIEW_ZOOM_MODE );
-
-    // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
-    // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
-    if ( pViewFrame && pViewFrame->GetViewShell() && aUserData.getLength() )
-    {
-        pViewFrame->GetViewShell()->ReadUserDataSequence( aUserData, TRUE );
-    }
-
-    if ( pViewFrame )
-        // activate frame
-        pViewFrame->MakeActive_Impl( TRUE );
-
-    return true;
 }
 
 //====================================================================

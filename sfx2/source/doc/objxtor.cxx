@@ -315,7 +315,6 @@ SfxObjectShell::SfxObjectShell
     DBG_CTOR(SfxObjectShell, 0);
 
     bHasName = sal_False;
-    nViewNo = 0;
 
     pImp->bWaitingForPicklist = sal_True;
 

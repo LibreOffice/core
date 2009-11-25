@@ -39,9 +39,8 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
+#include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
@@ -59,6 +58,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <vcl/menu.hxx>
 #include <svtools/rectitem.hxx>
 #include <svtools/intitem.hxx>
@@ -104,6 +104,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
+using ::com::sun::star::document::XViewDataSupplier;
 
 //------------------------------------------------------------------------
 
@@ -768,6 +769,68 @@ void SfxTopFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
     }
 }
 
+bool SfxTopFrame::LoadView_Impl( SfxObjectShell& rDoc )
+{
+    OSL_PRECOND( rDoc.GetMedium(), "SfxTopFrame::LoadView_Impl: no medium -> no view!");
+    if ( !rDoc.GetMedium() )
+        return false;
+
+    OSL_PRECOND( GetCurrentViewFrame() == NULL,
+        "SfxObjectShell::LoadView_Impl: no support (anymore) for loading into a non-empty frame!" );
+        // Since some refactoring in CWS autorecovery, this shouldn't happen anymore. Frame re-usage is nowadays
+        // done in higher layers, namely in the framework.
+    if ( GetCurrentViewFrame() != NULL )
+        return false;
+
+    // obtain view data
+    Reference< XViewDataSupplier > xViewDataSupplier( rDoc.GetModel(), UNO_QUERY );
+    Reference< XIndexAccess > xViewData;
+    if ( xViewDataSupplier.is() )
+        xViewData = xViewDataSupplier->getViewData();
+
+    if ( !xViewData.is() || ( xViewData->getCount() == 0 ) )
+        return false;
+
+    // obtain the ViewID from the view data
+    USHORT nViewId = 0;
+    Sequence< PropertyValue > aUserData;
+    if ( xViewData->getByIndex( 0 ) >>= aUserData )
+    {
+        ::comphelper::NamedValueCollection aNamedUserData( aUserData );
+        ::rtl::OUString sViewId = aNamedUserData.getOrDefault( "ViewId", ::rtl::OUString() );
+        if ( sViewId.getLength() )
+        {
+            sViewId = sViewId.copy( 4 );    // format is like in "view3"
+            nViewId = USHORT( sViewId.toInt32() );
+        }
+    }
+
+    SfxItemSet* pSet = rDoc.GetMedium()->GetItemSet();
+    pSet->ClearItem( SID_USER_DATA );
+    pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
+
+    InsertDocument_Impl( rDoc );
+    SfxViewFrame* pViewFrame = GetCurrentViewFrame();
+
+    // only temporary data, don't hold it in the itemset
+    pSet->ClearItem( SID_VIEW_POS_SIZE );
+    pSet->ClearItem( SID_WIN_POSSIZE );
+    pSet->ClearItem( SID_VIEW_ZOOM_MODE );
+
+    // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
+    // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
+    if ( pViewFrame && pViewFrame->GetViewShell() && aUserData.getLength() )
+    {
+        pViewFrame->GetViewShell()->ReadUserDataSequence( aUserData, TRUE );
+    }
+
+    if ( pViewFrame )
+        // activate frame
+        pViewFrame->MakeActive_Impl( TRUE );
+
+    return true;
+}
+
 sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 /* [Beschreibung]
  */
@@ -810,7 +873,7 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     // aus LoadView_Impl aufgerufen wurde!
     if ( !pJumpItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
     {
-        if ( rDoc.LoadView_Impl( *this ) )
+        if ( LoadView_Impl( rDoc ) )
         {
             if ( GetCurrentDocument() != &rDoc )
                 // something went wrong during insertion

@@ -221,7 +221,7 @@ private:
     SfxMedium *                 pMedium;            // Beschreibung der Datei bzw. des Storage, in dem sich das Objekt befindet
     SfxStyleSheetBasePool*      pStyleSheetPool;    // StyleSheets
     SfxObjectCreateMode         eCreateMode;        // Zweck des Objekts
-    sal_uInt16                  nViewNo;            // Numerierung der MDIWins
+    sal_uInt16                  nUnused;
     sal_Bool                    bHasName :1,        // sal_True := bestehendes Objekt, sal_False := es ist ein neues Objekt
                                 bIsTmp :1;          // temp. Storage
 
@@ -785,10 +785,8 @@ public:
     // public-internals
     SAL_DLLPRIVATE IndexBitSet& GetNoSet_Impl();
     SAL_DLLPRIVATE void SetProgress_Impl( SfxProgress *pProgress );
-    SAL_DLLPRIVATE sal_uInt16& GetAktViewNo() { return nViewNo; }
     SAL_DLLPRIVATE void PostActivateEvent_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE void SetActivateEvent_Impl(sal_uInt16 );
-    SAL_DLLPRIVATE bool LoadView_Impl( SfxTopFrame& rPrefered );
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
