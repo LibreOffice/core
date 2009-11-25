@@ -4835,7 +4835,7 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
                 double dScale = ((double)nDotSize)/1000.0;
                 aPoly.Scale( dScale, dScale );
                 Polygon aTemp;
-                aPoly.GetSimple( aTemp );
+                aPoly.AdaptiveSubdivide( aTemp );
                 Rectangle aBoundRect = aTemp.GetBoundRect();
                 rWidth = aBoundRect.GetWidth();
                 nDotSize = aBoundRect.GetHeight();
