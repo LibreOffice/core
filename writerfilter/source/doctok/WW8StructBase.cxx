@@ -118,16 +118,25 @@ rtl::OUString WW8StructBase::getString(sal_uInt32 nOffset, sal_uInt32 nCount)
 {
     rtl::OUString aResult;
 
-    Sequence aSeq(mSequence, nOffset, nCount * 2);
-
-    if (nCount > 0)
+    if (nOffset < getCount())
     {
-        rtl_uString * pNew = 0;
-        rtl_uString_newFromStr_WithLength
-            (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]),
-             nCount);
+        sal_uInt32 nCount1 = nCount;
+        if (nOffset + nCount * 2 > getCount())
+        {
+            nCount1 = (getCount() - nOffset) / 2;
+        }
 
-        aResult = rtl::OUString(pNew);
+        if (nCount1 > 0)
+        {
+            Sequence aSeq(mSequence, nOffset, nCount1 * 2);
+
+            rtl_uString * pNew = 0;
+            rtl_uString_newFromStr_WithLength
+            (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]),
+             nCount1);
+
+            aResult = rtl::OUString(pNew);
+        }
     }
 
     return aResult;
