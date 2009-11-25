@@ -1,0 +1,22 @@
+--- misc/rhino1_5R5/toolsrc/build.xml	2009-10-29 18:29:46.605524507 +0100
++++ misc/build/rhino1_5R5/toolsrc/build.xml	2009-10-29 18:29:26.536908810 +0100
+@@ -12,6 +12,10 @@
+       <os family="unix"/>
+     </and>
+   </condition>
++  <property environment="solenv"/>
++  <condition property="swing_zip" value="${solenv.TARFILE_LOCATION}/swingExSrc.zip" else="../../../../../download/swingExSrc.zip">
++	<isset property="solenv.TARFILE_LOCATION" />
++  </condition>
+   <path id="macPath" location="${java.home}/../Classes/classes.jar"/>
+   <!-- rhino.jar from OpenJDK breaks build -->
+   <path id="nonMacPath">
+@@ -38,7 +42,7 @@
+     <!-- Download source from Sun's site, unzip it, remove
+          the files we don't need, and change the package
+     -->
+-    <unzip src="../../../../../download/swingExSrc.zip" dest="${src.debugger}"/>
++    <unzip src="${swing_zip}" dest="${src.debugger}"/>
+     <delete file="${src.debugger}/FileSystemModel2.java" />
+     <delete file="${src.debugger}/MergeSort.java" />
+     <delete file="${src.debugger}/TreeTableExample2.java" />
