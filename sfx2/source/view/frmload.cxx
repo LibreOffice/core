@@ -32,80 +32,76 @@
 #include "precompiled_sfx2.hxx"
 
 #include "frmload.hxx"
-
-#include <framework/interaction.hxx>
-
-#include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/document/XTypeDetection.hpp>
-
-#include <toolkit/helper/vclunohelper.hxx>
-#include <ucbhelper/simpleinteractionrequest.hxx>
-
-#include <rtl/ustring.h>
-#include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
-#include <vos/mutex.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <tools/diagnose_ex.h>
-#include <sot/storinfo.hxx>
-#include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/mediadescriptor.hxx>
-#include <svtools/moduleoptions.hxx>
-
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
-#include <sfx2/doctempl.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/topfrm.hxx>
-#include <sfx2/frame.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/sfx.hrc>
-#include "brokenpackageint.hxx"
 #include "objshimp.hxx"
+#include "sfx2/app.hxx"
+#include "sfx2/dispatch.hxx"
+#include "sfx2/docfac.hxx"
+#include "sfx2/docfile.hxx"
+#include "sfx2/docfilt.hxx"
+#include "sfx2/doctempl.hxx"
+#include "sfx2/fcontnr.hxx"
+#include "sfx2/frame.hxx"
+#include "sfx2/request.hxx"
+#include "sfx2/sfx.hrc"
+#include "sfx2/sfxsids.hrc"
+#include "sfx2/sfxuno.hxx"
+#include "sfx2/topfrm.hxx"
+#include "sfx2/viewfrm.hxx"
 
-// do not remove the markers below
+/** === begin UNO includes === **/
+#include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/task/XInteractionHandler2.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/interaction.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <framework/interaction.hxx>
+#include <rtl/logfile.hxx>
+#include <rtl/ustring.h>
+#include <sot/storinfo.hxx>
+#include <svtools/ehdl.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/itemset.hxx>
+#include <svtools/moduleoptions.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/stritem.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
+#include <ucbhelper/simpleinteractionrequest.hxx>
+#include <vos/mutex.hxx>
+
 /** === begin UNO using === **/
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::task::XInteractionHandler;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::container::XContainerQuery;
 using ::com::sun::star::container::XEnumeration;
-using ::com::sun::star::uno::makeAny;
-using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::task::XInteractionRequest;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::document::XTypeDetection;
-using ::com::sun::star::util::XCloseable;
+using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XLoadable;
+using ::com::sun::star::frame::XModel;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::task::XInteractionHandler;
+using ::com::sun::star::task::XInteractionHandler2;
+using ::com::sun::star::task::XInteractionRequest;
+using ::com::sun::star::task::XStatusIndicator;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::util::XCloseable;
 /** === end UNO using === **/
 
-SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< css::lang::XMultiServiceFactory >& _rxFactory )
+SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< XMultiServiceFactory >& _rxFactory )
     :m_aContext( _rxFactory )
 {
 }
@@ -149,7 +145,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const ::rtl::OUSt
     {
         throw;
     }
-    catch( const css::uno::Exception& )
+    catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
         sFilter = ::rtl::OUString();
@@ -162,12 +158,12 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const ::rtl::OUSt
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( const ::rtl::OUString& _rServiceName ) const
+const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( const ::rtl::OUString& i_rServiceName ) const
 {
     try
     {
         ::comphelper::NamedValueCollection aQuery;
-        aQuery.put( "DocumentService", _rServiceName );
+        aQuery.put( "DocumentService", i_rServiceName );
 
         const Reference< XContainerQuery > xQuery(
             m_aContext.createComponent( "com.sun.star.document.FilterFactory" ),
@@ -207,17 +203,17 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-::rtl::OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInteractionHandler >& _rxHandler,
-                                                                 const ::rtl::OUString& _rDocumentURL ) const
+::rtl::OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInteractionHandler >& i_rxHandler,
+                                                                 const ::rtl::OUString& i_rDocumentURL ) const
 {
-    ENSURE_OR_THROW( _rxHandler.is(), "invalid interaction handler" );
+    ENSURE_OR_THROW( i_rxHandler.is(), "invalid interaction handler" );
 
     ::rtl::OUString sFilterName;
     try
     {
-        ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect( _rDocumentURL );
+        ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect( i_rDocumentURL );
         Reference< XInteractionRequest > xRequest ( pRequest );
-        _rxHandler->handle( xRequest );
+        i_rxHandler->handle( xRequest );
         if( !pRequest->isAbort() )
             sFilterName = pRequest->getFilter();
     }
@@ -266,7 +262,7 @@ sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlo
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-void SfxFrameLoader_Impl::impl_lockHiddenDocument( SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor )
+void SfxFrameLoader_Impl::impl_lockHiddenDocument( SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor ) const
 {
     const sal_Bool bHidden = i_rDescriptor.getOrDefault( "Hidden", sal_False );
     if ( bHidden )
@@ -278,47 +274,7 @@ void SfxFrameLoader_Impl::impl_lockHiddenDocument( SfxObjectShell& i_rDocument, 
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_createNewDoc( const ::comphelper::NamedValueCollection& i_rDescriptor, const Reference< XFrame >& i_rxFrame,
-                                                 const ::rtl::OUString& i_rFactoryName )
-{
-    SfxTopFrame* pTargetFrame = SfxTopFrame::Create( i_rxFrame );
-    ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
-    SfxFrameWeak wFrame = pTargetFrame;
-
-    // create new document
-    SfxObjectShellLock xDoc;
-    try
-    {
-        const ::rtl::OUString sServiceName = SfxObjectShell::GetServiceNameFromFactory( i_rFactoryName );
-        Reference< XModel > xModel( m_aContext.createComponent( sServiceName ), UNO_QUERY_THROW );
-
-        Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
-        xLoadable->initNew();
-
-        xDoc = impl_findObjectShell( xModel );
-        ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the newly created model" );
-
-        ::comphelper::NamedValueCollection aArgs( i_rDescriptor );
-        aArgs.remove( "StatusIndicator" );  // TODO: why this?
-
-        xModel->attachResource( ::rtl::OUString(), aArgs.getPropertyValues() );
-    }
-    catch( const Exception& )
-    {
-        // TODO: catch (and handle?) ErrorCodeIOException, and perhaps others ...
-        DBG_UNHANDLED_EXCEPTION();
-        return sal_False;
-    }
-
-    // if the document is created hidden, prevent it being deleted until it is shown or disposed
-    impl_lockHiddenDocument( *xDoc, i_rDescriptor );
-
-    const sal_Bool bSuccess = pTargetFrame->InsertDocument_Impl( *xDoc );
-    return impl_cleanUp( bSuccess, wFrame );
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollection& io_rDescriptor )
+void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollection& io_rDescriptor ) const
 {
     const ::rtl::OUString     sURL         = io_rDescriptor.getOrDefault( "URL",                ::rtl::OUString() );
     const ::rtl::OUString     sTypeName    = io_rDescriptor.getOrDefault( "TypeName",           ::rtl::OUString() );
@@ -368,7 +324,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 
 // --------------------------------------------------------------------------------------------------------------------
 sal_Bool SfxFrameLoader_Impl::impl_plugDocIntoFrame( const ::comphelper::NamedValueCollection& i_rDescriptor,
-                                                     SfxTopFrame& i_rTargetFrame, SfxObjectShell& i_rDocument )
+                                                     SfxTopFrame& i_rTargetFrame, SfxObjectShell& i_rDocument ) const
 {
     SfxAllItemSet aSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, i_rDescriptor.getPropertyValues(), aSet );
@@ -377,7 +333,7 @@ sal_Bool SfxFrameLoader_Impl::impl_plugDocIntoFrame( const ::comphelper::NamedVa
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel >& i_rxDocument )
+SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel >& i_rxDocument ) const
 {
     for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
     {
@@ -392,7 +348,7 @@ SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< X
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_cleanUp( const sal_Bool i_bSuccess, const SfxFrameWeak& i_wFrame )
+sal_Bool SfxFrameLoader_Impl::impl_cleanUp( const sal_Bool i_bSuccess, const SfxFrameWeak& i_wFrame ) const
 {
     if ( !i_bSuccess && i_wFrame && !i_wFrame->GetCurrentDocument() )
     {
@@ -449,7 +405,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-USHORT SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFactoryURL )
+USHORT SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFactoryURL ) const
 {
     ::rtl::OUString sSlotParam;
     const sal_Int32 nParamPos = i_rFactoryURL.indexOf( '?' );
@@ -468,9 +424,41 @@ USHORT SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFactor
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyValue >& rArgs,
-                                             const Reference< css::frame::XFrame >& _rTargetFrame )
-    throw( css::uno::RuntimeException )
+void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtError, const ::comphelper::NamedValueCollection& i_rDescriptor ) const
+{
+    try
+    {
+        const Reference< XInteractionHandler > xInteraction =
+            i_rDescriptor.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() );
+        if ( !xInteraction.is() )
+            return;
+        ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( i_rCaughtError ) );
+        ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
+        pRequest->addContinuation( pApprove.get() );
+
+        const Reference< XInteractionHandler2 > xHandler( xInteraction, UNO_QUERY_THROW );
+    #if OSL_DEBUG_LEVEL > 0
+        const sal_Bool bHandled =
+    #endif
+        xHandler->handleInteractionRequest( pRequest.get() );
+
+    #if OSL_DEBUG_LEVEL > 0
+        if ( !bHandled )
+            // the interaction handler couldn't deal with this error
+            // => report it as assertion, at least (done in the DBG_UNHANDLED_EXCEPTION below)
+            ::cppu::throwException( i_rCaughtError );
+    #endif
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
+                                             const Reference< XFrame >& _rTargetFrame )
+    throw( RuntimeException )
 {
     ENSURE_OR_THROW( _rTargetFrame.is(), "illegal NULL frame" );
 
@@ -493,6 +481,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
     // check for factory URLs to create a new doc, instead of loading one
     const ::rtl::OUString sURL = aDescriptor.getOrDefault( "URL", ::rtl::OUString() );
     const bool bIsFactoryURL = ( sURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "private:factory/" ) ) == 0 );
+    bool bInitNewModel = bIsFactoryURL;
     if ( bIsFactoryURL )
     {
         OSL_ENSURE( !aDescriptor.has( "Model" ), "SfxFrameLoader_Impl::load: sure you know what you're doing?" );
@@ -510,10 +499,17 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         }
 
         bool bDescribesValidTemplate = impl_determineTemplateDocument( aDescriptor );
-        if ( !bDescribesValidTemplate )
+        if ( bDescribesValidTemplate )
         {
-            // no or no valid template found => just create a default doc of the desired type, without any template
-            return impl_createNewDoc( aDescriptor, _rTargetFrame, sFactory );
+            // if the media descriptor allowed us to determine a template document to create the new document
+            // from, then do not init a new document model from scratch (below), but instead load the
+            // template document
+            bInitNewModel = false;
+        }
+        else
+        {
+            const ::rtl::OUString sServiceName = SfxObjectShell::GetServiceNameFromFactory( sFactory );
+            aDescriptor.put( "DocumentService", sServiceName );
         }
     }
     else
@@ -534,15 +530,30 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         if ( !xModel.is() )
         {
             // beforehand, determine the filter to use, and update the descriptor with its information
-            impl_determineFilter( aDescriptor );
+            if ( !bInitNewModel )
+            {
+                impl_determineFilter( aDescriptor );
+            }
 
             // create the new doc
             ::rtl::OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", ::rtl::OUString() );
             xModel.set( m_aContext.createComponent( sServiceName ), UNO_QUERY_THROW );
 
-            // load it
+            // load resp. init it
             Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
-            xLoadable->load( aDescriptor.getPropertyValues() );
+            if ( bInitNewModel )
+            {
+                xLoadable->initNew();
+
+                ::comphelper::NamedValueCollection aArgs( aDescriptor );
+                aArgs.remove( "StatusIndicator" );  // TODO: why this?
+
+                xModel->attachResource( ::rtl::OUString(), aArgs.getPropertyValues() );
+            }
+            else
+            {
+                xLoadable->load( aDescriptor.getPropertyValues() );
+            }
         }
         else
         {
@@ -567,6 +578,13 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
 
         // if the document is created hidden, prevent it being deleted until it is shown or disposed
         impl_lockHiddenDocument( *xDoc, aDescriptor );
+            // TODO; if we wouldn't use a SfxObjectShellLock instance for xDoc, but a simple SfxObjectShellRef,
+            // then this would not be necessary, /me thinks. That is, the *Lock classes inc/dec a "Lock" counter
+            // (additional to the ref counter) in their ctor/dtor, and if the lock counter goes to 0, the
+            // object is closed (DoClose). The impl_lockHiddenDocument is to prevent exactly that premature
+            // closing. However, a *Ref object wouldn't close, anyway. And in case of unsuccessfull loading, the
+            // code at the very end of this method cares for closing the XModel, which should also close the
+            // ObjectShell.
 
         // insert the document into the frame
         if ( !impl_plugDocIntoFrame( aDescriptor, *pTargetFrame, *xDoc ) )
@@ -574,37 +592,35 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
 
         if ( !bExternalModel )
         {
-            // TODO: which of those statements are allowed in the ExternalModel-case, too?
-            // I think the broadcast isn't, but the UpdateDocument_Impl might.
             pTargetFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
-            String aURL = xDoc->GetMedium()->GetName();
-            SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, aURL ) );
-                // TODO: grokking suggests nobody might be interested in this SID_OPENURL broadcast, anyway?
+            String sURL = xDoc->GetMedium()->GetName();
+            if ( sURL.Len() )
+                SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sURL ) );
         }
 
         bLoadSuccess = sal_True;
     }
     catch ( Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        Any aError( ::cppu::getCaughtException() );
+        if ( !aDescriptor.getOrDefault( "Silent", sal_False ) )
+            impl_handleCaughtError_nothrow( aError, aDescriptor );
     }
 
-    if ( !bLoadSuccess )
-    {
-        // document loading was not successful; close SfxFrame (but not XFrame!) and document
-        impl_cleanUp( false, wFrame );
+    // clean up, if necessary
+    impl_cleanUp( bLoadSuccess, wFrame );
 
-        if ( !bExternalModel )
+    // if loading was not successful, also close the document (the SfxFrame was already closed by impl_cleanUp)
+    if ( !bLoadSuccess && !bExternalModel )
+    {
+        try
         {
-            try
-            {
-                Reference< XCloseable > xCloseable( xModel, UNO_QUERY_THROW );
-                xCloseable->close( sal_True );
-            }
-            catch ( Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
+            Reference< XCloseable > xCloseable( xModel, UNO_QUERY_THROW );
+            xCloseable->close( sal_True );
+        }
+        catch ( Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

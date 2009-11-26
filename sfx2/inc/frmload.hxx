@@ -82,10 +82,13 @@ protected:
     virtual                 ~SfxFrameLoader_Impl();
 
 private:
-    const SfxFilter*    impl_getFilterFromServiceName_nothrow( const ::rtl::OUString& _rServiceName ) const;
+    const SfxFilter*    impl_getFilterFromServiceName_nothrow(
+                            const ::rtl::OUString& i_rServiceName
+                        ) const;
+
     ::rtl::OUString     impl_askForFilter_nothrow(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler,
-                            const ::rtl::OUString& _rDocumentURL
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& i_rxHandler,
+                            const ::rtl::OUString& i_rDocumentURL
                         ) const;
 
     const SfxFilter*    impl_detectFilterForURL(
@@ -99,20 +102,14 @@ private:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxFrame
                         );
 
-    sal_Bool            impl_createNewDoc(
-                            const ::comphelper::NamedValueCollection& i_rDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxFrame,
-                            const ::rtl::OUString& i_rFactoryName
-                        );
-
     void                impl_determineFilter(
                                   ::comphelper::NamedValueCollection& io_rDescriptor
-                        );
+                        ) const;
 
     sal_Bool            impl_cleanUp(
                             const sal_Bool i_bSuccess,
                             const SfxFrameWeak& i_wFrame
-                        );
+                        ) const;
 
     bool                impl_determineTemplateDocument(
                             ::comphelper::NamedValueCollection& io_rDescriptor
@@ -120,22 +117,27 @@ private:
 
     USHORT              impl_findSlotParam(
                             const ::rtl::OUString& i_rFactoryURL
-                        );
+                        ) const;
 
     SfxObjectShellLock  impl_findObjectShell(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_rxDocument
-                        );
+                        ) const;
 
     sal_Bool            impl_plugDocIntoFrame(
                             const ::comphelper::NamedValueCollection& i_rDescriptor,
                                   SfxTopFrame& i_rTargetFrame,
                                   SfxObjectShell& i_rDocument
-                        );
+                        ) const;
 
     void                impl_lockHiddenDocument(
                                   SfxObjectShell& i_rDocument,
                             const ::comphelper::NamedValueCollection& i_rDescriptor
-                        );
+                        ) const;
+
+    void                impl_handleCaughtError_nothrow(
+                            const ::com::sun::star::uno::Any& i_rCaughtError,
+                            const ::comphelper::NamedValueCollection& i_rDescriptor
+                        ) const;
 };
 
 #endif
