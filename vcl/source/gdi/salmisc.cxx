@@ -426,10 +426,10 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
         // memory exception, clean up
         // remark: the buffer ptr causing the exception
         // is still NULL here
-        delete pSrcScan;
-        delete pDstScan;
-        delete pMapX;
-        delete pMapY;
+        delete[] pSrcScan;
+        delete[] pDstScan;
+        delete[] pMapX;
+        delete[] pMapY;
         delete pDstBuffer;
         return NULL;
     }

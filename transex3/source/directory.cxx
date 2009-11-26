@@ -174,6 +174,16 @@ void Directory::readDirectory ( const rtl::OUString& sFullpath )
 
 #else
 
+class dirholder
+{
+private:
+    DIR *mpDir;
+public:
+    dirholder(DIR *pDir) : mpDir(pDir) {}
+    int close() { int nRet = mpDir ? closedir(mpDir) : 0; mpDir = NULL; return nRet; }
+    ~dirholder() { close(); }
+};
+
 void Directory::readDirectory( const rtl::OUString& sFullpath )
 {
     struct stat     statbuf;
@@ -195,13 +205,14 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
     if( S_ISDIR(statbuf.st_mode ) == 0 ) {  return; }// error }   return; // not dir
 
     if( (dir = opendir( path ) ) == NULL  ) {printf("readerror 2 in %s \n",path); return; } // error } return; // error
+    dirholder aHolder(dir);
 
     sFullpathext += rtl::OString( "/" );
 
     const rtl::OString sDot ( "." ) ;
     const rtl::OString sDDot( ".." );
 
-    chdir( path );
+    if ( chdir( path ) == -1 ) { printf("chdir error in %s \n",path); return; } // error
 
     while(  ( dirp = readdir( dir ) ) != NULL )
     {
@@ -253,8 +264,8 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
                          }
         }
     }
-    chdir( ".." );
-    if( closedir( dir ) < 0 )   return ; // error
+    if ( chdir( ".." ) == -1 ) { printf("chdir error in .. \n"); return; } // error
+    if( aHolder.close() < 0 )   return ; // error
 
     std::sort( aFileVec.begin() , aFileVec.end() , File::lessFile );
     std::sort( aDirVec.begin()  , aDirVec.end()  , Directory::lessDir  );
