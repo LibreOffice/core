@@ -82,4 +82,13 @@ Module gid_Module_Langpack_Impress_Template
     Files = (gid_File_Help_Simpress_Zip);
 End
 
+Module gid_Module_Prg_Impress_MSO_Reg
+    ParentID = gid_Module_Prg_Impress;
+    Name = "gid_Module_Prg_Impress_MSO_Reg";
+    Description = "gid_Module_Prg_Impress_MSO_Reg";
+    Styles = (HIDDEN_ROOT);
+    Minimal = YES;
+    Default = YES;
+End
+
 #include "alllangmodules_impress.inc"

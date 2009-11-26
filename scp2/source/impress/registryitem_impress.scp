@@ -944,11 +944,11 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Simp
     Value = "<progpath>";
 End
 
-CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_Bin, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 7, simpress.exe, open, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_Bin, pps,  PPS,  MS_POWERPOINT_SHOW, 7, simpress.exe, open, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pptx, gid_Module_Prg_Impress_Bin, pptx, PPTX, MS_POWERPOINT_PRESENTATION, 7, simpress.exe, open, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_Bin, pptm, PPTM, MS_POWERPOINT_PRESENTATION, 7, simpress.exe, open, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pot,  gid_Module_Prg_Impress_Bin, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 8, simpress.exe, new, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Potx, gid_Module_Prg_Impress_Bin, potx, POTX, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Potm, gid_Module_Prg_Impress_Bin, potm, POTM, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_MSO_Reg, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_MSO_Reg, pps,  PPS,  MS_POWERPOINT_SHOW, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pptx, gid_Module_Prg_Impress_MSO_Reg, pptx, PPTX, MS_POWERPOINT_PRESENTATION, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_MSO_Reg, pptm, PPTM, MS_POWERPOINT_PRESENTATION, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pot,  gid_Module_Prg_Impress_MSO_Reg, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 8, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Potx, gid_Module_Prg_Impress_MSO_Reg, potx, POTX, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Potm, gid_Module_Prg_Impress_MSO_Reg, potm, POTM, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
 

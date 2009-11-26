@@ -94,4 +94,13 @@ Module gid_Module_Langpack_Calc_Template
              gid_File_Res_Solver);
 End
 
+Module gid_Module_Prg_Calc_MSO_Reg
+    ParentID = gid_Module_Prg_Calc;
+    Name = "gid_Module_Prg_Calc_MSO_Reg";
+    Description = "gid_Module_Prg_Calc_MSO_Reg";
+    Styles = (HIDDEN_ROOT);
+    Minimal = YES;
+    Default = YES;
+End
+
 #include "alllangmodules_calc.inc"

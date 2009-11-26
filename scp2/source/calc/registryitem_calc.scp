@@ -1076,11 +1076,11 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Scal
     Value = "<progpath>";
 End
 
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_Bin, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 3, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_Bin, xlsx, XLSX, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_Bin, xlsm, XLSM, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_Bin, xlsb, XLSB, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xlt,  gid_Module_Prg_Calc_Bin, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 4, scalc.exe, new, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xltx, gid_Module_Prg_Calc_Bin, xltx, XLTX, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Xltm, gid_Module_Prg_Calc_Bin, xltm, XLTM, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_MSO_Reg, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_MSO_Reg, xlsx, XLSX, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_MSO_Reg, xlsm, XLSM, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_MSO_Reg, xlsb, XLSB, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 4, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
 

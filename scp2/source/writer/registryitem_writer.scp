@@ -1430,11 +1430,11 @@ End
 
 // CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,                 key,  cond, disp_name,        icon_id, app, default, dox_type)
 
-CONDITIONAL_REGISTER_DOC_EXTENSION( Doc,  gid_Module_Prg_Wrt_Bin, doc,  DOC,  MS_WORD_DOCUMENT_OLD, 1, swriter.exe, open, Writer )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Docx, gid_Module_Prg_Wrt_Bin, docx, DOCX, MS_WORD_DOCUMENT, 1, swriter.exe, open, Writer )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Docm, gid_Module_Prg_Wrt_Bin, docm, DOCM, MS_WORD_DOCUMENT, 1, swriter.exe, open, Writer )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Dot,  gid_Module_Prg_Wrt_Bin, dot,  DOT,  MS_WORD_TEMPLATE_OLD, 2, swriter.exe, new, Writer )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Dotx, gid_Module_Prg_Wrt_Bin, dotx, DOTX, MS_WORD_TEMPLATE, 2, swriter.exe, new, Writer )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Dotm, gid_Module_Prg_Wrt_Bin, dotm, DOTM, MS_WORD_TEMPLATE, 2, swriter.exe, new, Writer )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Rtf,  gid_Module_Prg_Wrt_Bin, rtf,  RTF,  MS_RTF_DOCUMENT, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Doc,  gid_Module_Prg_Wrt_MSO_Reg, doc,  DOC,  MS_WORD_DOCUMENT_OLD, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Docx, gid_Module_Prg_Wrt_MSO_Reg, docx, DOCX, MS_WORD_DOCUMENT, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Docm, gid_Module_Prg_Wrt_MSO_Reg, docm, DOCM, MS_WORD_DOCUMENT, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Dot,  gid_Module_Prg_Wrt_MSO_Reg, dot,  DOT,  MS_WORD_TEMPLATE_OLD, 2, swriter.exe, new, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Dotx, gid_Module_Prg_Wrt_MSO_Reg, dotx, DOTX, MS_WORD_TEMPLATE, 2, swriter.exe, new, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Dotm, gid_Module_Prg_Wrt_MSO_Reg, dotm, DOTM, MS_WORD_TEMPLATE, 2, swriter.exe, new, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Rtf,  gid_Module_Prg_Wrt_MSO_Reg, rtf,  RTF,  MS_RTF_DOCUMENT, 1, swriter.exe, open, Writer )
 
