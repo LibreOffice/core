@@ -320,42 +320,42 @@ void test_merge()
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey1/MK1SubKey2/KeyWithStringValue"), (RegValue)Value), "testMerge error 76.a)");
     REG_ENSURE(strcmp((const sal_Char*)Value, sValue) == 0, "testMerge error 76.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey1/MK1SubKey3/KeyWithUnicodeValue"), &valueType, &valueSize), "testMerge error 77");
     REG_ENSURE(valueType == RG_VALUETYPE_UNICODE && valueSize == (wValue.getLength()+1)*sizeof(sal_Unicode), "testMerge error 78");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey1/MK1SubKey3/KeyWithUnicodeValue"), (RegValue)Value), "testMerge error 78.a)");
     REG_ENSURE(wValue.equals( (const sal_Unicode*)Value ), "testMerge error 78.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey1/MK1SubKey4/KeyWithBinaryValue"), &valueType, &valueSize), "testMerge error 79");
     REG_ENSURE(valueType == RG_VALUETYPE_BINARY && valueSize == 27, "testMerge error 80");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey1/MK1SubKey4/KeyWithBinaryValue"), (RegValue)Value), "testMerge error 80.a)");
     REG_ENSURE(strcmp((const sal_Char*)Value, "abcdefghijklmnopqrstuvwxyz") == 0, "testMerge error 80.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey2/MK2SubKey1/KeyWithBinaryValue"), &valueType, &valueSize), "testMerge error 81");
     REG_ENSURE(valueType == RG_VALUETYPE_BINARY && valueSize == 11, "testMerge error 82");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey2/MK2SubKey1/KeyWithBinaryValue"), (RegValue)Value), "testMerge error 82.a)");
     REG_ENSURE(strcmp((const sal_Char*)Value, "1234567890") == 0, "testMerge error 82.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey2/MK2SubKey2/KeyWithUnicodeValue"), &valueType, &valueSize), "testMerge error 83");
     REG_ENSURE(valueType == RG_VALUETYPE_UNICODE&& valueSize == (wValue.getLength()+1)*sizeof(sal_Unicode), "testMerge error 84");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey2/MK2SubKey2/KeyWithUnicodeValue"), (RegValue)Value), "testMerge error 84.a)");
     REG_ENSURE(wValue.equals( (const sal_Unicode*)Value ), "testMerge error 84.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey2/MK2SubKey3/KeyWithStringValue"), &valueType, &valueSize), "testMerge error 85");
     REG_ENSURE(valueType == RG_VALUETYPE_STRING && valueSize == strlen(sValue)+1, "testMerge error 86");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey2/MK2SubKey3/KeyWithStringValue"), (RegValue)Value), "testMerge error 86.a)");
     REG_ENSURE(strcmp((const sal_Char*)Value, sValue) == 0, "testMerge error 86.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey2/MK2SubKey4/KeyWithLongValue"), &valueType, &valueSize), "testMerge error 87");
     REG_ENSURE(valueType == RG_VALUETYPE_LONG && valueSize == sizeof(sal_Int32), "testMerge error 88");
@@ -372,21 +372,21 @@ void test_merge()
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey1u2/MK1SubKey12/KeyWithStringValue"), (RegValue)Value), "testMerge error 92.a)");
     REG_ENSURE(strcmp((const sal_Char*)Value, sValue) == 0, "testMerge error 92.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey1u2/MK1SubKey13/KeyWithUnicodeValue"), &valueType, &valueSize), "testMerge error 93");
     REG_ENSURE(valueType == RG_VALUETYPE_UNICODE && valueSize == (wValue.getLength()+1)*sizeof(sal_Unicode), "testMerge error 94");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey1u2/MK1SubKey13/KeyWithUnicodeValue"), (RegValue)Value), "testMerge error 94.a)");
     REG_ENSURE(wValue.equals( (const sal_Unicode*)Value ), "testMerge error 94.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey1u2/MK2SubKey21/KeyWithBinaryValue"), &valueType, &valueSize), "testMerge error 95");
     REG_ENSURE(valueType == RG_VALUETYPE_BINARY && valueSize == 19, "testMerge error 96");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey1u2/MK2SubKey21/KeyWithBinaryValue"), (RegValue)Value), "testMerge error 96.a)");
     REG_ENSURE(strcmp((const sal_Char*)Value, "a1b2c3d4e5f6g7h8i9") == 0, "testMerge error 96.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey1u2/MK2SubKey22/KeyWithLongValue"), &valueType, &valueSize), "testMerge error 97");
     REG_ENSURE(valueType == RG_VALUETYPE_LONG && valueSize == sizeof(sal_Int32), "testMerge error 98");
@@ -398,7 +398,7 @@ void test_merge()
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString::createFromAscii("/MergeKey1u2/MK2SubKey23/KeyWithStringValue"), (RegValue)Value), "testMerge error 100.a)");
     REG_ENSURE(strcmp((const sal_Char*)Value, sValue) == 0, "testMerge error 100.b)");
-    delete(Value);
+    delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString::createFromAscii("/MergeKey1u2/MK12SubKey1u2/KeyWithLongValue"), &valueType, &valueSize), "testMerge error 101");
     REG_ENSURE(valueType == RG_VALUETYPE_LONG && valueSize == sizeof(sal_Int32), "testMerge error 102");
@@ -416,7 +416,7 @@ void test_merge()
     REG_ENSURE(!myRegistry->destroy( OUString::createFromAscii("merge2.rdb") ), "test_registry_CppApi error 12");
     REG_ENSURE(!myRegistry->destroy( OUString() ), "test_registry_CppApi error 13");
 
-    delete(myRegistry);
+    delete myRegistry;
 
     cout << "test_merge() Ok!\n";
     return;
