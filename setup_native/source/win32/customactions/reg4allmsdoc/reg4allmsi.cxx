@@ -72,6 +72,11 @@ static const CHAR* g_Extensions[] =
     0
 };
 
+static const int WORD_START = 0;
+static const int EXCEL_START = 7;
+static const int POWERPOINT_START = 15;
+static const int POWERPOINT_END = 23;
+
 //    ".xlam",    // Office Excel 2007 XML macro-enabled add-in
 //    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in
 //    ".ppsm",    // Office PowerPoint 2007 macro-enabled XML show
@@ -92,15 +97,6 @@ static inline void OutputDebugStringFormat( LPCSTR, ... )
 {
 }
 #endif
-
-//----------------------------------------------------------
-static bool IsModuleSelectedForInstallation( MSIHANDLE handle, LPCTSTR name )
-{
-    INSTALLSTATE current_state;
-    INSTALLSTATE future_state;
-    MsiGetFeatureState(handle, name, &current_state, &future_state);
-    return (future_state == INSTALLSTATE_LOCAL);
-}
 
 //----------------------------------------------------------
 static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
@@ -268,6 +264,23 @@ bool IsSetMsiProp( MSIHANDLE handle, LPCSTR name )
 }
 
 //----------------------------------------------------------
+static void registerForExtension( MSIHANDLE handle, const int nIndex, bool bRegister )
+{
+    CHAR sPropName[256];
+    StringCchCopyA( sPropName, 256, "REGISTER_" );
+    StringCchCatA( sPropName, 256, (g_Extensions[nIndex])+1 );
+    CharUpperBuffA( sPropName+9, 4 );
+
+    if ( bRegister ) {
+        MsiSetPropertyA( handle, sPropName, "1" );
+        OutputDebugStringFormat( "Set MSI property %s.\n", sPropName );
+    } else {
+        MsiSetPropertyA( handle, sPropName, "0" );
+        OutputDebugStringFormat( "Unset MSI property %s.\n", sPropName );
+    }
+}
+
+//----------------------------------------------------------
 static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
 { // Check all file extensions
     int nIndex = 0;
@@ -275,23 +288,183 @@ static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
     {
         BOOL bRegister = bRegisterAll || CheckExtensionInRegistry( g_Extensions[nIndex] );
         if ( bRegister )
-        {
-            CHAR sPropName[256];
-            StringCchCopyA( sPropName, 256, "REGISTER_" );
-            StringCchCatA( sPropName, 256, (g_Extensions[nIndex])+1 );
-            CharUpperBuffA( sPropName+9, 4 );
-            MsiSetPropertyA( handle, sPropName, "1" );
-            OutputDebugStringFormat( "Set MSI property %s.\n", sPropName );
-        }
+            registerForExtension( handle, nIndex, true );
         ++nIndex;
+    }
+}
+
+//----------------------------------------------------------
+static bool checkSomeExtensionInRegistry( const int nStart, const int nEnd )
+{ // Check all file extensions
+    int nIndex = nStart;
+    bool bFound = false;
+
+    while ( !bFound && ( g_Extensions[nIndex] != 0 ) && ( nIndex < nEnd ) )
+    {
+        bFound = ! CheckExtensionInRegistry( g_Extensions[nIndex] );
+
+        if ( bFound )
+            OutputDebugStringFormat( "Found registration for [%s].\n", g_Extensions[nIndex] );
+
+        ++nIndex;
+    }
+    return bFound;
+}
+
+//----------------------------------------------------------
+static void registerSomeExtensions( MSIHANDLE handle, const int nStart, const int nEnd, bool bRegister )
+{ // Check all file extensions
+    int nIndex = nStart;
+
+    while ( ( g_Extensions[nIndex] != 0 ) && ( nIndex < nEnd ) )
+    {
+        registerForExtension( handle, nIndex++, bRegister );
     }
 }
 
 //----------------------------------------------------------
 //----------------------------------------------------------
 //----------------------------------------------------------
+extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
+{
+    OutputDebugStringFormat( "LookForRegisteredExtensions: " );
+
+    INSTALLSTATE current_state;
+    INSTALLSTATE future_state;
+
+    bool bWriterEnabled = false;
+    bool bCalcEnabled = false;
+    bool bImpressEnabled = false;
+    bool bRegisterNone = IsSetMsiProp( handle, "REGISTER_NO_MSO_TYPES" );
+
+    if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Wrt", &current_state, &future_state ) ) &&
+         ( (future_state == INSTALLSTATE_LOCAL) || (future_state == INSTALLSTATE_UNKNOWN) ) )
+        bWriterEnabled = true;
+
+    OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Writer is [%d], will be [%d]", current_state, future_state );
+    if ( bWriterEnabled )
+        OutputDebugStringFormat( "LookForRegisteredExtensions: Writer is enabled" );
+    else
+        OutputDebugStringFormat( "LookForRegisteredExtensions: Writer is NOT enabled" );
+
+    if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Calc", &current_state, &future_state ) ) &&
+         ( (future_state == INSTALLSTATE_LOCAL) || (future_state == INSTALLSTATE_UNKNOWN) ) )
+        bCalcEnabled = true;
+
+    OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Calc is [%d], will be [%d]", current_state, future_state );
+    if ( bCalcEnabled )
+        OutputDebugStringFormat( "LookForRegisteredExtensions: Calc is enabled" );
+    else
+        OutputDebugStringFormat( "LookForRegisteredExtensions: Calc is NOT enabled" );
+
+    if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Impress", &current_state, &future_state ) ) &&
+         ( (future_state == INSTALLSTATE_LOCAL) || (future_state == INSTALLSTATE_UNKNOWN) ) )
+        bImpressEnabled = true;
+
+    OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Impress is [%d], will be [%d]", current_state, future_state );
+    if ( bImpressEnabled )
+        OutputDebugStringFormat( "LookForRegisteredExtensions: Impress is enabled" );
+    else
+        OutputDebugStringFormat( "LookForRegisteredExtensions: Impress is NOT enabled" );
+
+    if ( !bWriterEnabled || bRegisterNone )
+        MsiSetPropertyA( handle, "SELECT_WORD", "" );
+    if ( !bCalcEnabled || bRegisterNone )
+        MsiSetPropertyA( handle, "SELECT_EXCEL", "" );
+    if ( !bImpressEnabled || bRegisterNone )
+        MsiSetPropertyA( handle, "SELECT_POWERPOINT", "" );
+
+    if ( ! bRegisterNone )
+    {
+        if ( IsSetMsiProp( handle, "REGISTER_ALL_MSO_TYPES" ) )
+        {
+            if ( bWriterEnabled )
+                MsiSetPropertyA( handle, "SELECT_WORD", "1" );
+            if ( bCalcEnabled )
+                MsiSetPropertyA( handle, "SELECT_EXCEL", "1" );
+            if ( bImpressEnabled )
+                MsiSetPropertyA( handle, "SELECT_POWERPOINT", "1" );
+        }
+        else
+        {
+            if ( bWriterEnabled && ! checkSomeExtensionInRegistry( WORD_START, EXCEL_START ) )
+            {
+                MsiSetPropertyA( handle, "SELECT_WORD", "1" );
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for MicroSoft Word" );
+            }
+            if ( bCalcEnabled && ! checkSomeExtensionInRegistry( EXCEL_START, POWERPOINT_START ) )
+            {
+                MsiSetPropertyA( handle, "SELECT_EXCEL", "1" );
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for MicroSoft Excel" );
+            }
+            if ( bImpressEnabled && ! checkSomeExtensionInRegistry( POWERPOINT_START, POWERPOINT_END ) )
+            {
+                MsiSetPropertyA( handle, "SELECT_POWERPOINT", "1" );
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for MicroSoft PowerPoint" );
+            }
+        }
+    }
+
+    MsiSetPropertyA( handle, "FILETYPEDIALOGUSED", "1" );
+
+    return ERROR_SUCCESS;
+}
+
+//----------------------------------------------------------
+extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
+{
+    OutputDebugStringFormat( "RegisterSomeExtensions: " );
+
+    if ( IsSetMsiProp( handle, "SELECT_WORD" ) )
+    {
+        registerSomeExtensions( handle, WORD_START, EXCEL_START, true );
+        MsiSetFeatureState( handle, L"gm_p_Wrt_MSO_Reg", INSTALLSTATE_LOCAL );
+        OutputDebugStringFormat( "RegisterSomeExtensions: Register for MicroSoft Word" );
+    }
+    else
+    {
+        registerSomeExtensions( handle, WORD_START, EXCEL_START, false );
+        MsiSetFeatureState( handle, L"gm_p_Wrt_MSO_Reg", INSTALLSTATE_ABSENT );
+    }
+
+    if ( IsSetMsiProp( handle, "SELECT_EXCEL" ) )
+    {
+        registerSomeExtensions( handle, EXCEL_START, POWERPOINT_START, true );
+        MsiSetFeatureState( handle, L"gm_p_Calc_MSO_Reg", INSTALLSTATE_LOCAL );
+        OutputDebugStringFormat( "RegisterSomeExtensions: Register for MicroSoft Excel" );
+    }
+    else
+    {
+        registerSomeExtensions( handle, EXCEL_START, POWERPOINT_START, false );
+        MsiSetFeatureState( handle, L"gm_p_Calc_MSO_Reg", INSTALLSTATE_ABSENT );
+    }
+
+    if ( IsSetMsiProp( handle, "SELECT_POWERPOINT" ) )
+    {
+        registerSomeExtensions( handle, POWERPOINT_START, POWERPOINT_END, true );
+        MsiSetFeatureState( handle, L"gm_p_Impress_MSO_Reg", INSTALLSTATE_LOCAL );
+        OutputDebugStringFormat( "RegisterSomeExtensions: Register for MicroSoft PowerPoint" );
+    }
+    else
+    {
+        registerSomeExtensions( handle, POWERPOINT_START, POWERPOINT_END, false );
+        MsiSetFeatureState( handle, L"gm_p_Impress_MSO_Reg", INSTALLSTATE_ABSENT );
+    }
+
+    return ERROR_SUCCESS;
+}
+
+//----------------------------------------------------------
 extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 {
+    if ( IsSetMsiProp( handle, "FILETYPEDIALOGUSED" ) )
+    {
+        OutputDebugStringFormat( "FindRegisteredExtensions: FILETYPEDIALOGUSED!" );
+        return ERROR_SUCCESS;
+    }
+
+    OutputDebugStringFormat( "FindRegisteredExtensions:" );
+
     bool bRegisterAll = IsSetMsiProp( handle, "REGISTER_ALL_MSO_TYPES" );
 
     if ( IsSetMsiProp( handle, "REGISTER_NO_MSO_TYPES" ) )
@@ -303,6 +476,15 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
         OutputDebugStringFormat( "FindRegisteredExtensions: Force all on" );
     else
         OutputDebugStringFormat( "FindRegisteredExtensions: " );
+
+    // setting the msi properties SELECT_* will force registering for all corresponding
+    // file types
+    if ( IsSetMsiProp( handle, "SELECT_WORD" ) )
+        registerSomeExtensions( handle, WORD_START, EXCEL_START, true );
+    if ( IsSetMsiProp( handle, "SELECT_EXCEL" ) )
+        registerSomeExtensions( handle, EXCEL_START, POWERPOINT_START, true );
+    if ( IsSetMsiProp( handle, "SELECT_POWERPOINT" ) )
+        registerSomeExtensions( handle, POWERPOINT_START, POWERPOINT_END, true );
 
     registerForExtensions( handle, bRegisterAll );
 
