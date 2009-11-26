@@ -457,6 +457,10 @@ void TableDesignPane::updateLayout()
 
             Point aPos( pValueSet->GetPosPixel() );
 
+            // The following line may look like a no-op but without it the
+            // control is placed off-screen when RTL is active.
+            pValueSet->SetPosPixel(pValueSet->GetPosPixel());
+
             // shift show options section down
             const long nOptionsPos = aPos.Y() + aValueSetSize.Height();
             for( sal_Int32 nId = FL_STYLE_OPTIONS; nId <= CB_BANDED_COLUMNS; ++nId )
