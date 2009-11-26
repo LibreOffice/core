@@ -1262,6 +1262,10 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatpagewriter"               : FormatPageWriter
             
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
+            case "insertobjectchart"              : InsertObjectChart
+            case "inserttablewriter"              : InsertTableWriter
+            case "insertobjectformulawriter"      : InsertObjectFormulaWriter
+            case "insertfloatingframe"            : InsertFloatingFrame
             
             case "contextpositionandsize"         : ContextPositionAndSize
             
