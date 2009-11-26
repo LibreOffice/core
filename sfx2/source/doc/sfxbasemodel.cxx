@@ -1911,6 +1911,13 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
                                                     nError ? nError : ERRCODE_IO_CANTREAD );
             }
         }
+
+        BOOL bHidden = FALSE;
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
+        if ( pHidItem )
+            bHidden = pHidItem->GetValue();
+        // !TODO: will be done by Framework!
+        pMedium->SetUpdatePickList( !bHidden );
     }
 }
 

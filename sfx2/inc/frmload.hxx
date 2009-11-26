@@ -95,25 +95,21 @@ private:
 
     sal_Bool            impl_createNewDocWithSlotParam(
                             const USHORT _nSlotID,
-                                  SfxTopFrame& i_rFrame
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxFrame
                         );
 
     sal_Bool            impl_createNewDoc(
                             const ::comphelper::NamedValueCollection& i_rDescriptor,
-                                  SfxTopFrame& i_rFrame,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxFrame,
                             const ::rtl::OUString& _rFactoryName
                         );
 
-    void                impl_ensureValidFrame_throw( const SfxTopFrame* _pFrame );
-
-    const SfxFilter*    impl_determineFilter(
-                                  ::comphelper::NamedValueCollection& io_rDescriptor,
-                            const SfxFilterMatcher& rMatcher
+    void                impl_determineFilter(
+                                  ::comphelper::NamedValueCollection& io_rDescriptor
                         );
 
     SfxAllItemSet       impl_getInitialItemSet(
-                            const ::comphelper::NamedValueCollection& i_rDescriptor,
-                            SfxTopFrame& i_rTargetFrame
+                            const ::comphelper::NamedValueCollection& i_rDescriptor
                         ) const;
 
     sal_Bool            impl_loadExistingDocument(
@@ -127,12 +123,12 @@ private:
                             const SfxFrameWeak& i_wFrame
                         );
 
-    const SfxFilter*    impl_determineTemplateDocument(
+    bool                impl_determineTemplateDocument(
                             ::comphelper::NamedValueCollection& io_rDescriptor
                         ) const;
 
     USHORT              impl_findSlotParam(
-                            ::rtl::OUString& io_rFactoryURL
+                            const ::rtl::OUString& i_rFactoryURL
                         );
 };
 
