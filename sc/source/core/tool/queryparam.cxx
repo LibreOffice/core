@@ -87,10 +87,14 @@ void ScQueryParamBase::DeleteQuery( SCSIZE nPos )
 
     size_t n = maEntries.size();
     vector<ScQueryEntry> aNewEntries;
-    aNewEntries.reserve(n-1);
+    aNewEntries.reserve(n);
     for (size_t i = 0; i < n; ++i)
         if (i != nPos)
             aNewEntries.push_back(maEntries[i]);
+
+    // Don't forget to append an empty entry to make up for the removed one.
+    // The size of the entries is not supposed to change.
+    aNewEntries.push_back(ScQueryEntry());
 
     maEntries.swap(aNewEntries);
 }
