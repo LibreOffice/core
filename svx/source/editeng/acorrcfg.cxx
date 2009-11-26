@@ -439,7 +439,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case   8: rSwFlags.bChgWeightUnderl = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeUnderlineWeight",
                     case   9: rSwFlags.bSetINetAttr = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/SetInetAttribute",
                     case  10: rSwFlags.bChgOrdinalNumber = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeOrdinalNumber",
-                    case  11 : rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break;// "Format/Output/AddNonBreakingSpace",
+                    case  11: rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break; // "Format/Option/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
 //                  case  12: rSwFlags.bChgToEnEmDash = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeDash",
                     case  13: rSwFlags.bDelEmptyNode = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelEmptyParagraphs",

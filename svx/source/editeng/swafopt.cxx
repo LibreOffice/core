@@ -51,6 +51,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bChkFontAttr =
     bChgUserColl =
     bChgEnumNum =
+    bAddNonBrkSpace =
     bChgOrdinalNumber =
     bChgToEnEmDash =
     bChgWeightUnderl =
@@ -114,6 +115,7 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
     bSetNumRule = rAFFlags.bSetNumRule;
     bAFmtByInput = rAFFlags.bAFmtByInput;
 
+    bAddNonBrkSpace = rAFFlags.bAddNonBrkSpace;
     bChgOrdinalNumber = rAFFlags.bChgOrdinalNumber;
     bChgToEnEmDash = rAFFlags.bChgToEnEmDash;
     bChgWeightUnderl = rAFFlags.bChgWeightUnderl;
