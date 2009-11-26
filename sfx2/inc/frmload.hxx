@@ -31,6 +31,9 @@
 #ifndef _SFX_FRMLOAD_HXX
 #define _SFX_FRMLOAD_HXX
 
+#include "sfx2/sfxuno.hxx"
+#include "sfx2/objsh.hxx"
+
 /** === begin UNO includes === **/
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
@@ -57,8 +60,6 @@
 class SfxFilter;
 class SfxFilterMatcher;
 class SfxTopFrame;
-
-#include <sfx2/sfxuno.hxx>
 
 class SfxFrameWeak;
 
@@ -101,21 +102,11 @@ private:
     sal_Bool            impl_createNewDoc(
                             const ::comphelper::NamedValueCollection& i_rDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxFrame,
-                            const ::rtl::OUString& _rFactoryName
+                            const ::rtl::OUString& i_rFactoryName
                         );
 
     void                impl_determineFilter(
                                   ::comphelper::NamedValueCollection& io_rDescriptor
-                        );
-
-    SfxAllItemSet       impl_getInitialItemSet(
-                            const ::comphelper::NamedValueCollection& i_rDescriptor
-                        ) const;
-
-    sal_Bool            impl_loadExistingDocument(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_rxDocument,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxTargetFrame,
-                            const ::comphelper::NamedValueCollection& i_rDescriptor
                         );
 
     sal_Bool            impl_cleanUp(
@@ -129,6 +120,21 @@ private:
 
     USHORT              impl_findSlotParam(
                             const ::rtl::OUString& i_rFactoryURL
+                        );
+
+    SfxObjectShellLock  impl_findObjectShell(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_rxDocument
+                        );
+
+    sal_Bool            impl_plugDocIntoFrame(
+                            const ::comphelper::NamedValueCollection& i_rDescriptor,
+                                  SfxTopFrame& i_rTargetFrame,
+                                  SfxObjectShell& i_rDocument
+                        );
+
+    void                impl_lockHiddenDocument(
+                                  SfxObjectShell& i_rDocument,
+                            const ::comphelper::NamedValueCollection& i_rDescriptor
                         );
 };
 

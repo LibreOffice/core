@@ -266,39 +266,54 @@ sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlo
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+void SfxFrameLoader_Impl::impl_lockHiddenDocument( SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor )
+{
+    const sal_Bool bHidden = i_rDescriptor.getOrDefault( "Hidden", sal_False );
+    if ( bHidden )
+    {
+        i_rDocument.RestoreNoDelete();
+        i_rDocument.OwnerLock( TRUE );
+        i_rDocument.Get_Impl()->bHiddenLockedByAPI = TRUE;
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 sal_Bool SfxFrameLoader_Impl::impl_createNewDoc( const ::comphelper::NamedValueCollection& i_rDescriptor, const Reference< XFrame >& i_rxFrame,
-                                                 const ::rtl::OUString& _rFactoryName )
+                                                 const ::rtl::OUString& i_rFactoryName )
 {
     SfxTopFrame* pTargetFrame = SfxTopFrame::Create( i_rxFrame );
     ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
     SfxFrameWeak wFrame = pTargetFrame;
 
-    SfxErrorContext aEc( ERRCTX_SFX_NEWDOCDIRECT );
-
     // create new document
-    SfxObjectShellLock xDoc = SfxObjectShell::CreateObjectByFactoryName( _rFactoryName );
-    if ( !xDoc.Is() || !xDoc->DoInitNew( NULL ) )
-        return sal_False;
-
-    Reference< XModel >  xModel( xDoc->GetModel(), UNO_QUERY );
-    OSL_ENSURE( xModel.is(), "SfxFrameLoader_Impl::impl_createNewDoc: not sure this is really allowed ..." );
-    if ( xModel.is() )
+    SfxObjectShellLock xDoc;
+    try
     {
+        const ::rtl::OUString sServiceName = SfxObjectShell::GetServiceNameFromFactory( i_rFactoryName );
+        Reference< XModel > xModel( m_aContext.createComponent( sServiceName ), UNO_QUERY_THROW );
+
+        Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
+        xLoadable->initNew();
+
+        xDoc = impl_findObjectShell( xModel );
+        ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the newly created model" );
+
         ::comphelper::NamedValueCollection aArgs( i_rDescriptor );
         aArgs.remove( "StatusIndicator" );  // TODO: why this?
 
         xModel->attachResource( ::rtl::OUString(), aArgs.getPropertyValues() );
     }
-
-    const sal_Bool bHidden = i_rDescriptor.getOrDefault( "Hidden", sal_False );
-    if ( bHidden )
+    catch( const Exception& )
     {
-        xDoc->RestoreNoDelete();
-        xDoc->OwnerLock( TRUE );
-        xDoc->Get_Impl()->bHiddenLockedByAPI = TRUE;
+        // TODO: catch (and handle?) ErrorCodeIOException, and perhaps others ...
+        DBG_UNHANDLED_EXCEPTION();
+        return sal_False;
     }
 
-    sal_Bool bSuccess = pTargetFrame->InsertDocument_Impl( *xDoc );
+    // if the document is created hidden, prevent it being deleted until it is shown or disposed
+    impl_lockHiddenDocument( *xDoc, i_rDescriptor );
+
+    const sal_Bool bSuccess = pTargetFrame->InsertDocument_Impl( *xDoc );
     return impl_cleanUp( bSuccess, wFrame );
 }
 
@@ -352,37 +367,28 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-SfxAllItemSet SfxFrameLoader_Impl::impl_getInitialItemSet( const ::comphelper::NamedValueCollection& i_rDescriptor ) const
+sal_Bool SfxFrameLoader_Impl::impl_plugDocIntoFrame( const ::comphelper::NamedValueCollection& i_rDescriptor,
+                                                     SfxTopFrame& i_rTargetFrame, SfxObjectShell& i_rDocument )
 {
     SfxAllItemSet aSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, i_rDescriptor.getPropertyValues(), aSet );
-    return aSet;
+    i_rTargetFrame.SetItemSet_Impl( &aSet );
+    return i_rTargetFrame.InsertDocument_Impl( i_rDocument );
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_loadExistingDocument( const Reference< XModel >& i_rxDocument,
-                                                         const Reference< XFrame >& i_rxTargetFrame,
-                                                         const ::comphelper::NamedValueCollection& i_rDescriptor )
+SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel >& i_rxDocument )
 {
-    ENSURE_OR_THROW( i_rxDocument.is() && i_rxTargetFrame.is(), "invallid model/frame" );
-
-    SfxTopFrame* pTargetFrame = SfxTopFrame::Create( i_rxTargetFrame );
-    ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
-
     for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
     {
         if ( i_rxDocument == pDoc->GetModel() )
         {
-            i_rxDocument->attachResource( i_rDescriptor.getOrDefault( "URL", ::rtl::OUString() ), i_rDescriptor.getPropertyValues() );
-
-            SfxAllItemSet aSet( impl_getInitialItemSet( i_rDescriptor ) );
-            pTargetFrame->SetItemSet_Impl( &aSet );
-            return pTargetFrame->InsertDocument_Impl( *pDoc );
+            return pDoc;
         }
     }
 
-    DBG_ERROR("Model is not based on SfxObjectShell - wrong frame loader use!");
-    return sal_False;
+    DBG_ERROR( "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
+    return NULL;
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -468,7 +474,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
 {
     ENSURE_OR_THROW( _rTargetFrame.is(), "illegal NULL frame" );
 
-    // this methods assumes that the filter is detected before, usually by calling the detect() method below
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::load" );
@@ -479,34 +484,36 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
     if ( !aDescriptor.has( "Referer" ) )
         aDescriptor.put( "Referer", ::rtl::OUString() );
 
-    // if a model is given, just plug this into a newly created frame
-    const Reference< XModel > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel >() );
-    if ( xModel.is() )
-        return impl_loadExistingDocument( xModel, _rTargetFrame, aDescriptor );
+    // TODO: is this needed? finally, when loading is successfull, then ther should be no need for this item,
+    // as the document can always obtain its frame. In particular, there might be situations where this frame
+    // is access, but already disposed: Imagine the user loading a document, opening a second view on it, and
+    // then closing the first view/frame.
+    aDescriptor.put( "Frame", _rTargetFrame );
 
-    // special handling for some weird factory URLs a la private:factory/swriter?slot=21053
+    // check for factory URLs to create a new doc, instead of loading one
     const ::rtl::OUString sURL = aDescriptor.getOrDefault( "URL", ::rtl::OUString() );
     const bool bIsFactoryURL = ( sURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "private:factory/" ) ) == 0 );
     if ( bIsFactoryURL )
     {
-        USHORT nSlotParam = impl_findSlotParam( sURL.copy( sizeof( "private:factory/" ) -1 ) );
+        OSL_ENSURE( !aDescriptor.has( "Model" ), "SfxFrameLoader_Impl::load: sure you know what you're doing?" );
+        // Before the loader refactoring, the model would have won over the URL, that is, the model would have been
+        // loaded into a newly created frame. /me thinks this doesn't make sense at all, also, it made the code
+        // in this method more complex. So, the order was changed, now the factory URL wins over the Model.
+        // If somebody *rightfully* passes both of them, we might need to re-consider the behavior.
+
+        const ::rtl::OUString sFactory = sURL.copy( sizeof( "private:factory/" ) -1 );
+        // special handling for some weird factory URLs a la private:factory/swriter?slot=21053
+        USHORT nSlotParam = impl_findSlotParam( sFactory );
         if ( nSlotParam != 0 )
         {
             return impl_createNewDocWithSlotParam( nSlotParam, _rTargetFrame );
         }
-    }
 
-    // determine the filter to use, and update the descriptor with its information
-    impl_determineFilter( aDescriptor );
-
-    // check for factory URLs to create a new doc, instead of loading one
-    if ( bIsFactoryURL )
-    {
         bool bDescribesValidTemplate = impl_determineTemplateDocument( aDescriptor );
         if ( !bDescribesValidTemplate )
         {
             // no or no valid template found => just create a default doc of the desired type, without any template
-            return impl_createNewDoc( aDescriptor, _rTargetFrame, sURL.copy( sizeof( "private:factory/" ) -1 ) );
+            return impl_createNewDoc( aDescriptor, _rTargetFrame, sFactory );
         }
     }
     else
@@ -515,40 +522,65 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         aDescriptor.put( "FileName", aDescriptor.get( "URL" ) );
     }
 
-    // TODO: is this needed? finally, when loading is successfull, then ther should be no need for this item,
-    // as the document can always obtain its frame. In particular, there might be situations where this frame
-    // is access, but already disposed: Imagine the user loading a document, opening a second view on it, and
-    // then closing the first view/frame.
-    aDescriptor.put( "Frame", _rTargetFrame );
-
-    // create a new doc
-    ::rtl::OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", ::rtl::OUString() );
-    SfxObjectShell* pDoc = SfxObjectShell::CreateObject( sServiceName );
-    if ( !pDoc )
-        return sal_False;
+    // did the caller already pass a model?
+    Reference< XModel > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel >() );
+    const bool bExternalModel = xModel.is();
 
     sal_Bool bLoadSuccess = sal_False;
     SfxFrameWeak wFrame;
     try
     {
-        // load the document
-        Reference< XLoadable > xLoadable( pDoc->GetModel(), UNO_QUERY_THROW );
-        xLoadable->load( aDescriptor.getPropertyValues() );
+        // no model passed from outside? => create one from scratch
+        if ( !xModel.is() )
+        {
+            // beforehand, determine the filter to use, and update the descriptor with its information
+            impl_determineFilter( aDescriptor );
+
+            // create the new doc
+            ::rtl::OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", ::rtl::OUString() );
+            xModel.set( m_aContext.createComponent( sServiceName ), UNO_QUERY_THROW );
+
+            // load it
+            Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
+            xLoadable->load( aDescriptor.getPropertyValues() );
+        }
+        else
+        {
+            // tell the doc its load args.
+            xModel->attachResource( aDescriptor.getOrDefault( "URL", ::rtl::OUString() ), aDescriptor.getPropertyValues() );
+
+            // TODO: not sure this is correct. The original, pre-refactoring code did it this way. However, I could
+            // imagine scenarios where it is *not* correct to overrule the *existing* model args (XModel::getArgs)
+            // with the ones passed to the loader here. For instance, what about the MacroExecutionMode? The document
+            // might have a mode other than the one passed to the loader, and we always overwrite the former with
+            // the latter.
+        }
 
         // create a frame
         SfxTopFrame* pTargetFrame = SfxTopFrame::Create( _rTargetFrame );
         ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
         wFrame = pTargetFrame;
 
+        // get the SfxObjectShell (still needed at the moment)
+        SfxObjectShellLock xDoc = impl_findObjectShell( xModel );
+        ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the given model" );
+
+        // if the document is created hidden, prevent it being deleted until it is shown or disposed
+        impl_lockHiddenDocument( *xDoc, aDescriptor );
+
         // insert the document into the frame
-        SfxAllItemSet aSet( impl_getInitialItemSet( aDescriptor ) );
-        pTargetFrame->SetItemSet_Impl( &aSet );
-        if ( !pTargetFrame->InsertDocument_Impl( *pDoc ) )
+        if ( !impl_plugDocIntoFrame( aDescriptor, *pTargetFrame, *xDoc ) )
             throw RuntimeException();
 
-        pTargetFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
-        String aURL = pDoc->GetMedium()->GetName();
-        SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, aURL ) );
+        if ( !bExternalModel )
+        {
+            // TODO: which of those statements are allowed in the ExternalModel-case, too?
+            // I think the broadcast isn't, but the UpdateDocument_Impl might.
+            pTargetFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
+            String aURL = xDoc->GetMedium()->GetName();
+            SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, aURL ) );
+                // TODO: grokking suggests nobody might be interested in this SID_OPENURL broadcast, anyway?
+        }
 
         bLoadSuccess = sal_True;
     }
@@ -562,11 +594,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< PropertyV
         // document loading was not successful; close SfxFrame (but not XFrame!) and document
         impl_cleanUp( false, wFrame );
 
-        Reference< XCloseable > xCloseable( pDoc->GetModel(), UNO_QUERY );
-        if ( xCloseable.is() )
+        if ( !bExternalModel )
         {
             try
             {
+                Reference< XCloseable > xCloseable( xModel, UNO_QUERY_THROW );
                 xCloseable->close( sal_True );
             }
             catch ( Exception& )
