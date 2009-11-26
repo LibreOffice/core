@@ -72,6 +72,8 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aStrNone;
     // fuer Felder, die Fixiert sind
     String          aFixedStr;
+    // custom fields of type css::util::Duration
+    String          sDurationFormat;
 
     //names of TOXs
     String          aTOXIndexName;

@@ -53,6 +53,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1154,7 +1155,7 @@ String SwDocInfoField::Expand() const
                         ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
                     util::Date aDate;
                     util::DateTime aDateTime;
-                    util::Time aTime;
+                    util::Duration aDuration;
                     if( aAny >>= aDate)
                     {
                         SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
@@ -1169,9 +1170,17 @@ String SwDocInfoField::Expand() const
                         fDateTime += lcl_DateToDouble<util::DateTime>( aDateTime, *pNullDate );
                         sVal = ExpandValue( fDateTime, GetFormat(), GetLanguage());
                     }
-                    else if( aAny >>= aTime )
+                    else if( aAny >>= aDuration )
                     {
-                        sVal = ExpandValue( lcl_TimeToDouble<util::Time>( aTime ), GetFormat(), GetLanguage());
+                        String sText(aDuration.Negative ? '-' : '+');
+                        sText += ViewShell::GetShellRes()->sDurationFormat;
+                        sText.SearchAndReplace(String::CreateFromAscii( "%1"), String::CreateFromInt32( aDuration.Years ) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%2"), String::CreateFromInt32( aDuration.Months ) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%3"), String::CreateFromInt32( aDuration.Days   ) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%4"), String::CreateFromInt32( aDuration.Hours  ) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%5"), String::CreateFromInt32( aDuration.Minutes) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%6"), String::CreateFromInt32( aDuration.Seconds) );
+                        sVal = sText;
                     }
                     else
                     {
