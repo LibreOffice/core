@@ -504,11 +504,11 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     String ST_NON_BREAK_SPACE
     {
-       Text [ en-US ] = "Add non breaking space before : ; ? ! in french text" ;
+       Text [ en-US ] = "Add non breaking space before specific punctuation marks in french text" ;
     };
     String ST_ORDINAL
     {
-        Text [ en-US ] = "Replace 1st... with 1^st..." ;
+        Text [ en-US ] = "Format ordinal numbers suffixes" ;
     };
     FixedLine FL_SINGLE
     {
