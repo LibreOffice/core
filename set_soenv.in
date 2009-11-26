@@ -1811,11 +1811,9 @@ ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
 ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
-ToFile( "WITH_FONTOOO",      "@WITH_FONTOOO@",     "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
 ToFile( "GOBJECT_CFLAGS",    "@GOBJECT_CFLAGS@",   "e" );
 ToFile( "GOBJECT_LIBS",      "@GOBJECT_LIBS@",     "e" );
-ToFile( "SYSTEM_MSPACK",     "@SYSTEM_MSPACK@",    "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
