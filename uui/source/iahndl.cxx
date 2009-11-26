@@ -67,7 +67,6 @@
 #include "com/sun/star/task/ErrorCodeIOException.hpp"
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
 #include "com/sun/star/task/MasterPasswordRequest.hpp"
-#include "com/sun/star/task/NoMasterException.hpp"
 #include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
 #include "com/sun/star/task/DocumentMacroConfirmationRequest2.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
@@ -76,8 +75,6 @@
 #include "com/sun/star/task/XInteractionPassword.hpp"
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/task/XInteractionRetry.hpp"
-#include "com/sun/star/task/XPasswordContainer.hpp"
-#include "com/sun/star/task/XUrlContainer.hpp"
 #include "com/sun/star/task/XInteractionAskLater.hpp"
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
 #include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
@@ -141,6 +138,7 @@
 #include "trylater.hxx"
 #include "lockfailed.hxx"
 #include "loginerr.hxx"
+#include "passwordcontainer.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <svtools/zforlist.hxx>
@@ -1619,38 +1617,6 @@ rtl::OUString UUIInteractionHelper::getContextProperty() SAL_THROW(())
     return rtl::OUString();
 }
 
-bool
-UUIInteractionHelper::initPasswordContainer(
-    star::uno::Reference< star::task::XPasswordContainer > * pContainer,
-    star::uno::Reference< star::task::XUrlContainer > * pUrlContainer)
-    const SAL_THROW(())
-{
-    OSL_ENSURE(pContainer, "specification violation");
-    if (!pContainer->is() && m_xServiceFactory.is())
-        try
-        {
-            *pContainer
-                = star::uno::Reference< star::task::XPasswordContainer >(
-                      m_xServiceFactory->
-                          createInstance(
-                              rtl::OUString(
-                                  RTL_CONSTASCII_USTRINGPARAM(
-                                     "com.sun.star.task.PasswordContainer"))),
-                      star::uno::UNO_QUERY);
-
-            if ( pContainer->is() )
-            {
-                *pUrlContainer = star::uno::Reference< star::task::XUrlContainer >( *pContainer, UNO_QUERY );
-                OSL_ENSURE( pUrlContainer->is(), "Got no XUrlContainer!" );
-            }
-        }
-        catch (star::uno::Exception const &)
-        {}
-    OSL_ENSURE(pContainer->is(), "unexpected situation");
-    return pContainer->is() && pUrlContainer->is();
-}
-
-
 String GetContentPart( const String& _rRawString )
 {
         // search over some parts to find a string
@@ -2218,6 +2184,7 @@ UUIInteractionHelper::executeMessageBox(
 
     return aResult;
 }
+
 star::uno::Reference< star::task::XInteractionHandler >
 UUIInteractionHelper::getInteractionHandler() const
     SAL_THROW((star::uno::RuntimeException))
@@ -2245,80 +2212,6 @@ UUIInteractionHelper::getInteractionHandler() const
     return xIH;
 }
 
-namespace
-{
-bool fillContinuation(
-    bool bUseSystemCredentials,
-    const star::ucb::AuthenticationRequest & rRequest,
-    const star::task::UrlRecord & aRec,
-    const star::uno::Reference< star::ucb::XInteractionSupplyAuthentication > &
-        xSupplyAuthentication,
-    const star::uno::Reference< star::ucb::XInteractionSupplyAuthentication2 > &
-        xSupplyAuthentication2,
-    bool bCanUseSystemCredentials,
-    bool bCheckForEqualPasswords )
-{
-    if ( bUseSystemCredentials )
-    {
-        // "use system creds" record found.
-        // Wants client that we use it?
-        if ( xSupplyAuthentication2.is() &&
-             bCanUseSystemCredentials )
-        {
-            xSupplyAuthentication2->setUseSystemCredentials( sal_True );
-            return true;
-        }
-        return false;
-    }
-    else if (aRec.UserList.getLength() != 0)
-    {
-        if (aRec.UserList[0].Passwords.getLength() == 0)
-        {
-            // Password sequence can be empty, for instance if master
-            // password was not given (e.g. master pw dialog canceled)
-            // pw container does not throw NoMasterException in this case.
-            // bug???
-            return false;
-        }
-
-        // "user/pass" record found.
-        if (!bCheckForEqualPasswords || !rRequest.HasPassword
-            || rRequest.Password != aRec.UserList[0].Passwords[0]) // failed login attempt?
-        {
-            if (xSupplyAuthentication->canSetUserName())
-                xSupplyAuthentication->
-                    setUserName(aRec.UserList[0].UserName.getStr());
-
-            if (xSupplyAuthentication->canSetPassword())
-                xSupplyAuthentication->
-                    setPassword(aRec.UserList[0].Passwords[0].getStr());
-            if (aRec.UserList[0].Passwords.getLength() > 1)
-            {
-                if (rRequest.HasRealm)
-                {
-                    if (xSupplyAuthentication->canSetRealm())
-                        xSupplyAuthentication->
-                            setRealm(aRec.UserList[0].Passwords[1].
-                                getStr());
-                }
-                else if (xSupplyAuthentication->canSetAccount())
-                    xSupplyAuthentication->
-                        setAccount(aRec.UserList[0].Passwords[1].
-                            getStr());
-            }
-
-            if ( xSupplyAuthentication2.is() &&
-                bCanUseSystemCredentials )
-                xSupplyAuthentication2->setUseSystemCredentials( sal_False );
-
-            return true;
-        }
-    }
-    return false;
-}
-
-}
-
 void
 UUIInteractionHelper::handleAuthenticationRequest(
     star::ucb::AuthenticationRequest const & rRequest,
@@ -2328,8 +2221,6 @@ UUIInteractionHelper::handleAuthenticationRequest(
     const rtl::OUString & rURL)
     SAL_THROW((star::uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionHandler > xIH;
-
     star::uno::Reference< star::task::XInteractionRetry > xRetry;
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
@@ -2339,7 +2230,25 @@ UUIInteractionHelper::handleAuthenticationRequest(
     getContinuations(
         rContinuations,
         0, 0, &xRetry, &xAbort,
-        &xSupplyAuthentication, &xSupplyAuthentication2, 0, 0, 0 );
+        &xSupplyAuthentication, &xSupplyAuthentication2, 0, 0, 0);
+
+    star::uno::Reference< star::task::XInteractionHandler > xIH(
+        getInteractionHandler());
+
+    //////////////////////////
+    // First, try to obatin credentials from password container service.
+    uui::PasswordContainerHelper aPwContainerHelper(m_xServiceFactory);
+    if (aPwContainerHelper.handleAuthenticationRequest(rRequest,
+                                                       xSupplyAuthentication,
+                                                       rURL,
+                                                       xIH))
+    {
+        xSupplyAuthentication->select();
+        return;
+    }
+
+    //////////////////////////
+    // Second, try to obtain credentials from user via password dialog.
     bool bRemember;
     bool bRememberPersistent;
     if (xSupplyAuthentication.is())
@@ -2367,103 +2276,13 @@ UUIInteractionHelper::handleAuthenticationRequest(
     if (xSupplyAuthentication2.is())
     {
         bCanUseSystemCredentials
-          =  xSupplyAuthentication2->canUseSystemCredentials(
-            bDefaultUseSystemCredentials );
+            = xSupplyAuthentication2->canUseSystemCredentials(
+                bDefaultUseSystemCredentials);
     }
     else
     {
         bCanUseSystemCredentials = sal_False;
         bDefaultUseSystemCredentials = sal_False;
-    }
-
-    com::sun::star::uno::Reference< com::sun::star::task::XPasswordContainer >
-        xContainer;
-    com::sun::star::uno::Reference< com::sun::star::task::XUrlContainer >
-        xUrlContainer;
-
-    if ( bCanUseSystemCredentials && initPasswordContainer( &xContainer, &xUrlContainer ) )
-    {
-        // Runtime / Persistent info avail for current auth request?
-
-        rtl::OUString aResult = xUrlContainer->findUrl(
-            rURL.getLength() ? rURL : rRequest.ServerName );
-        if ( aResult.getLength() > 0 )
-        {
-            if ( fillContinuation( true,
-                                   rRequest,
-                                   star::task::UrlRecord(),
-                                   xSupplyAuthentication,
-                                   xSupplyAuthentication2,
-                                   bCanUseSystemCredentials,
-                                   false ) )
-            {
-                xSupplyAuthentication->select();
-                return;
-            }
-        }
-    }
-
-    // xContainer works with userName passwdSequences pairs:
-    if (rRequest.HasUserName
-        && rRequest.HasPassword
-        && initPasswordContainer(&xContainer, &xUrlContainer))
-    {
-        xIH = getInteractionHandler();
-        try
-        {
-            if (rRequest.UserName.getLength() == 0)
-            {
-                star::task::UrlRecord aRec;
-                if ( rURL.getLength() )
-                    aRec = xContainer->find(rURL, xIH);
-
-                if ( aRec.UserList.getLength() == 0 )
-                {
-                    // compat: try server name.
-                    aRec = xContainer->find(rRequest.ServerName, xIH);
-                }
-
-                if ( fillContinuation( false,
-                                       rRequest,
-                                       aRec,
-                                       xSupplyAuthentication,
-                                       xSupplyAuthentication2,
-                                       bCanUseSystemCredentials,
-                                       false ) )
-                {
-                    xSupplyAuthentication->select();
-                    return;
-                }
-            }
-            else
-            {
-                star::task::UrlRecord aRec;
-                if ( rURL.getLength() )
-                    aRec = xContainer->findForName(
-                        rURL, rRequest.UserName, xIH);
-
-                if ( aRec.UserList.getLength() == 0 )
-                {
-                    // compat: try server name.
-                    aRec = xContainer->findForName(
-                        rRequest.ServerName, rRequest.UserName, xIH);
-                }
-
-                if ( fillContinuation( false,
-                                       rRequest,
-                                       aRec,
-                                       xSupplyAuthentication,
-                                       xSupplyAuthentication2,
-                                       bCanUseSystemCredentials,
-                                       true ) )
-                {
-                    xSupplyAuthentication->select();
-                    return;
-                }
-            }
-        }
-        catch (star::task::NoMasterException const &)
-        {} // user did not enter master password
     }
 
     LoginErrorInfo aInfo;
@@ -2478,7 +2297,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
     aInfo.SetErrorText(rRequest.Diagnostic);
     aInfo.SetPersistentPassword(bRememberPersistent);
     aInfo.SetSavePassword(bRemember);
-    aInfo.SetCanUseSystemCredentials( bCanUseSystemCredentials );
+    aInfo.SetCanUseSystemCredentials(bCanUseSystemCredentials);
     aInfo.SetIsUseSystemCredentials( bDefaultUseSystemCredentials );
     aInfo.SetModifyAccount(rRequest.HasAccount
                            && xSupplyAuthentication.is()
@@ -2519,48 +2338,39 @@ UUIInteractionHelper::handleAuthenticationRequest(
             xSupplyAuthentication->select();
         }
 
+        //////////////////////////
+        // Third, store credentials in password container.
+
         if ( aInfo.GetIsUseSystemCredentials() )
         {
             if (aInfo.GetIsSavePassword())
             {
-                if ( initPasswordContainer(&xContainer, &xUrlContainer) )
-                    xUrlContainer->addUrl(
-                      rURL.getLength() ? rURL : rRequest.ServerName,
-                      bRememberPersistent );
+                aPwContainerHelper.addRecord(
+                    rURL.getLength() ? rURL : rRequest.ServerName,
+                    rtl::OUString(), // empty u/p -> sys creds
+                    uno::Sequence< rtl::OUString >(),
+                    xIH,
+                    bRememberPersistent);
             }
         }
-        else if (aInfo.GetUserName().Len() != 0 // Empty user name can not be valid:
-            && initPasswordContainer(&xContainer, &xUrlContainer))
+        // Empty user name can not be valid:
+        else if (aInfo.GetUserName().Len() != 0)
         {
-            try
+            if (aInfo.GetIsSavePassword())
             {
-                if (aInfo.GetIsSavePassword())
-                {
-                    star::uno::Sequence< rtl::OUString >
-                        aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
-                    aPassList[0] = aInfo.GetPassword();
-                    if (aInfo.GetAccount().Len() != 0)
-                        aPassList[1] = aInfo.GetAccount();
+                star::uno::Sequence< rtl::OUString >
+                    aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
+                aPassList[0] = aInfo.GetPassword();
+                if (aInfo.GetAccount().Len() != 0)
+                    aPassList[1] = aInfo.GetAccount();
 
-                    if (!xIH.is())
-                        xIH = getInteractionHandler();
-
-                    if (bRememberPersistent)
-                        xContainer->addPersistent(
-                            rURL.getLength() ? rURL : rRequest.ServerName,
-                            aInfo.GetUserName(),
-                            aPassList,
-                            xIH);
-                    else
-                        xContainer->add(
-                            rURL.getLength() ? rURL : rRequest.ServerName,
-                            aInfo.GetUserName(),
-                            aPassList,
-                            xIH);
-                }
+                aPwContainerHelper.addRecord(
+                    rURL.getLength() ? rURL : rRequest.ServerName,
+                    aInfo.GetUserName(),
+                    aPassList,
+                    xIH,
+                    bRememberPersistent);
             }
-            catch (star::task::NoMasterException const &)
-            {} // user did not enter master password
         }
         break;
 

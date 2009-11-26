@@ -56,7 +56,8 @@ SLOFILES = \
     $(SLO)$/alreadyopen.obj\
     $(SLO)$/lockfailed.obj\
     $(SLO)$/trylater.obj\
-    $(SLO)$/newerverwarn.obj
+    $(SLO)$/newerverwarn.obj\
+    $(SLO)$/passwordcontainer.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \

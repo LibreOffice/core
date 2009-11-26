@@ -36,13 +36,16 @@
  **************************************************************************
 
  *************************************************************************/
-#include <osl/diagnose.h>
 
+#include <osl/diagnose.h>
 #include "osl/doublecheckedlocking.h"
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "com/sun/star/task/XPasswordContainer.hpp"
-#include "com/sun/star/task/NoMasterException.hpp"
+#include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/propertyvalueset.hxx>
+#include <ucbhelper/simpleinteractionrequest.hxx>
+#include <ucbhelper/cancelcommandexecution.hxx>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
@@ -50,7 +53,8 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
-#include "com/sun/star/ucb/AuthenticationRequest.hpp"
+#include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
+#include <com/sun/star/ucb/CommandEnvironment.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -64,24 +68,22 @@
 #include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
+#include <com/sun/star/ucb/MissingInputStreamException.hpp>
+#include <com/sun/star/ucb/MissingPropertiesException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#include <com/sun/star/ucb/XCommandInfo.hpp>
-#include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#include <com/sun/star/ucb/MissingInputStreamException.hpp>
-#include <com/sun/star/ucb/MissingPropertiesException.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
-#include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/propertyvalueset.hxx>
-#include <ucbhelper/simpleinteractionrequest.hxx>
-#include <ucbhelper/cancelcommandexecution.hxx>
+#include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/ucb/XPersistentPropertySet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include "webdavcontent.hxx"
 #include "webdavprovider.hxx"
 #include "webdavresultset.hxx"
@@ -91,230 +93,6 @@
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
-
-//=========================================================================
-//=========================================================================
-//
-// CommandEnvironment_Impl Implementation.
-//
-//=========================================================================
-//=========================================================================
-
-class CommandEnvironment_Impl : public cppu::OWeakObject,
-                                public ucb::XCommandEnvironment,
-                                public task::XInteractionHandler
-{
-public:
-
-    CommandEnvironment_Impl(
-        const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
-    : m_xSMgr( xSMgr )
-    {
-    }
-
-    // XInterface
-    XINTERFACE_DECL()
-
-    // XCommandEnvironment
-    virtual uno::Reference< task::XInteractionHandler > SAL_CALL
-    getInteractionHandler(  )
-        throw (uno::RuntimeException)
-    {
-        return this;
-    }
-
-    virtual uno::Reference< ucb::XProgressHandler > SAL_CALL
-    getProgressHandler(  )
-        throw (uno::RuntimeException)
-    {
-        return 0;
-    }
-
-    // XInteractionHandler
-    virtual void SAL_CALL
-    handle( const uno::Reference< task::XInteractionRequest >& Request )
-        throw (uno::RuntimeException);
-
-private:
-    void
-    handleAuthenticationRequest(
-        ucb::AuthenticationRequest const&,
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > const&)
-        SAL_THROW((uno::RuntimeException))
-    {
-    }
-
-    uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
-};
-
-//=========================================================================
-void SAL_CALL CommandEnvironment_Impl::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-//=========================================================================
-void SAL_CALL CommandEnvironment_Impl::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-//=========================================================================
-uno::Any SAL_CALL CommandEnvironment_Impl::queryInterface(
-        const uno::Type & rType )
-    throw( uno::RuntimeException )
-{
-    uno::Any aRet = cppu::queryInterface(
-        rType,
-        static_cast< ucb::XCommandEnvironment * >( this ),
-        static_cast< task::XInteractionHandler * >( this ) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-//=========================================================================
-void SAL_CALL CommandEnvironment_Impl::handle(
-        const uno::Reference< task::XInteractionRequest >& rIRequest )
-    throw (uno::RuntimeException)
-{
-    if (!rIRequest.is())
-        return;
-
-    uno::Any aAnyRequest(rIRequest->getRequest());
-
-    ucb::AuthenticationRequest rRequest;
-    if (!(aAnyRequest >>= rRequest))
-        return;
-
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-        rContinuations = rIRequest->getContinuations();
-
-    uno::Reference< ucb::XInteractionSupplyAuthentication >
-        xSupplyAuthentication;
-
-    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
-    {
-        xSupplyAuthentication
-            = uno::Reference< ucb::XInteractionSupplyAuthentication >(
-                rContinuations[i], uno::UNO_QUERY );
-        if( xSupplyAuthentication.is() )
-            break;
-    }
-
-    if (!xSupplyAuthentication.is())
-        return;
-
-    ucb::RememberAuthentication eDefault;
-    uno::Sequence< ucb::RememberAuthentication > aModes(
-        xSupplyAuthentication->getRememberPasswordModes(eDefault));
-    bool bRememberPersistent = false;
-    for (sal_Int32 i = 0; i < aModes.getLength(); ++i)
-    {
-        if (aModes[i] == ucb::RememberAuthentication_PERSISTENT)
-        {
-            bRememberPersistent = true;
-            break;
-        }
-    }
-
-    uno::Reference< task::XPasswordContainer > xContainer;
-    try
-    {
-        xContainer
-            = uno::Reference< task::XPasswordContainer >(
-                m_xSMgr->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                       "com.sun.star.task.PasswordContainer"))),
-                uno::UNO_QUERY);
-    }
-    catch (uno::Exception const &)
-    {
-    }
-
-    // xContainer works with userName passwdSequences pairs:
-    if (xContainer.is() && rRequest.HasUserName && rRequest.HasPassword )
-    {
-        try
-        {
-            if (rRequest.UserName.getLength() == 0)
-            {
-                task::UrlRecord
-                    aRec(xContainer->find(rRequest.ServerName, this));
-                if (aRec.UserList.getLength() != 0)
-                {
-                    if (xSupplyAuthentication->canSetUserName())
-                        xSupplyAuthentication->
-                            setUserName(aRec.UserList[0].UserName.getStr());
-                    if (xSupplyAuthentication->canSetPassword())
-                    {
-                        OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
-                                   "empty password list");
-                        xSupplyAuthentication->
-                            setPassword(aRec.UserList[0].Passwords[0].getStr());
-                    }
-                    if (aRec.UserList[0].Passwords.getLength() > 1)
-                    {
-                        if (rRequest.HasRealm)
-                        {
-                            if (xSupplyAuthentication->canSetRealm())
-                                xSupplyAuthentication->
-                                    setRealm(aRec.UserList[0].Passwords[1].
-                                             getStr());
-                        }
-                        else if (xSupplyAuthentication->canSetAccount())
-                            xSupplyAuthentication->
-                                setAccount(aRec.UserList[0].Passwords[1].
-                                           getStr());
-                    }
-                    xSupplyAuthentication->select();
-                    return;
-                }
-            }
-            else
-            {
-                task::UrlRecord
-                    aRec(xContainer->findForName(rRequest.ServerName,
-                                                 rRequest.UserName,
-                                                 this));
-                if (aRec.UserList.getLength() != 0)
-                {
-                    OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
-                               "empty password list");
-                    if (!rRequest.HasPassword
-                        || rRequest.Password != aRec.UserList[0].Passwords[0])
-                    {
-                        if (xSupplyAuthentication->canSetUserName())
-                            xSupplyAuthentication->
-                                setUserName(aRec.UserList[0].UserName.getStr());
-                        if (xSupplyAuthentication->canSetPassword())
-                            xSupplyAuthentication->
-                                setPassword(aRec.UserList[0].Passwords[0].
-                                            getStr());
-                        if (aRec.UserList[0].Passwords.getLength() > 1)
-                        {
-                            if (rRequest.HasRealm)
-                            {
-                                if (xSupplyAuthentication->canSetRealm())
-                                    xSupplyAuthentication->
-                                        setRealm(aRec.UserList[0].Passwords[1].
-                                                 getStr());
-                            }
-                            else if (xSupplyAuthentication->canSetAccount())
-                                xSupplyAuthentication->
-                                    setAccount(aRec.UserList[0].Passwords[1].
-                                               getStr());
-                        }
-                        xSupplyAuthentication->select();
-                        return;
-                    }
-                }
-            }
-        }
-        catch (task::NoMasterException const &)
-        {} // user did not enter master password
-    }
-}
 
 //=========================================================================
 //=========================================================================
@@ -425,9 +203,28 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     {
         try
         {
-            return isFolder( new CommandEnvironment_Impl(m_xSMgr) )
-                ? aRet
-                : uno::Any();
+            uno::Reference< beans::XPropertySet > const xProps(
+                m_xSMgr, uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xCtx;
+            xCtx.set( xProps->getPropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+                uno::UNO_QUERY_THROW );
+
+            uno::Reference< task::XInteractionHandler > xIH(
+                task::PasswordContainerInteractionHandler::create( xCtx ) );
+
+            // Supply a command env to isFolder() that contains an interaction
+            // handler that uses the password container service to obtain
+            // credentials without displaying a password gui.
+
+            uno::Reference< ucb::XCommandEnvironment > xCmdEnv(
+                ucb::CommandEnvironment::create(
+                   xCtx,
+                   xIH,
+                   uno::Reference< ucb::XProgressHandler >() ) );
+
+            return isFolder( xCmdEnv ) ? aRet : uno::Any();
         }
         catch ( uno::RuntimeException const & )
         {
@@ -609,9 +406,11 @@ uno::Any SAL_CALL Content::execute(
            ucb::CommandAbortedException,
            uno::RuntimeException )
 {
-    OSL_TRACE( "Content::execute: start %s",
+    OSL_TRACE( ">>>>> Content::execute: start: command: %s, env: %s",
                rtl::OUStringToOString( aCommand.Name,
-                                       RTL_TEXTENCODING_UTF8 ).getStr() );
+                                       RTL_TEXTENCODING_UTF8 ).getStr(),
+               Environment.is() ? "present" : "missing" );
+
     uno::Any aRet;
 
     if ( aCommand.Name.equalsAsciiL(
@@ -856,7 +655,7 @@ uno::Any SAL_CALL Content::execute(
         // Unreachable
     }
 
-    OSL_TRACE( "Content::execute: end  %s",
+    OSL_TRACE( "<<<<< Content::execute: end: command: %s",
                rtl::OUStringToOString( aCommand.Name,
                                        RTL_TEXTENCODING_UTF8 ).getStr() );
 
