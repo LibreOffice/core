@@ -60,6 +60,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -235,6 +236,46 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
 {
     if (bShutdown)
     {
+        if ( m_rSessionManager.is() )
+            m_rSessionManager->queryInteraction( static_cast< css::frame::XSessionManagerListener* >( this ) );
+
+    }
+    // we don't have anything to do so tell the session manager we're done
+    else if( m_rSessionManager.is() )
+        m_rSessionManager->saveDone( this );
+}
+
+
+
+void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted )
+    throw (RuntimeException)
+{
+    sal_Bool bClosed = sal_False;
+    if ( bInteractionGranted )
+    {
+        ResetableGuard aGuard(m_aLock);
+
+        // close the office documents in normal way
+        try
+        {
+            css::uno::Reference< css::frame::XDesktop > xDesktop( m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+            bClosed = xDesktop->terminate();
+
+            if ( m_rSessionManager.is() )
+            {
+                // false means that the application closing has been cancelled
+                if ( !bClosed )
+                    m_rSessionManager->cancelShutdown();
+                else
+                    m_rSessionManager->interactionDone( this );
+            }
+        }
+        catch( css::uno::Exception& )
+        {}
+    }
+
+    if ( !bClosed )
+    {
         sal_Bool bDispatched = sal_False;
         ResetableGuard aGuard(m_aLock);
         try
@@ -262,16 +303,7 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
                 m_rSessionManager->saveDone(this);
         }
     }
-    // we don't have anything to do so tell the session manager we're done
-    else if( m_rSessionManager.is() )
-        m_rSessionManager->saveDone( this );
 }
-
-
-
-void SAL_CALL SessionListener::approveInteraction( sal_Bool /*bInteractionGranted*/ )
-    throw (RuntimeException)
-{}
 
 void SessionListener::shutdownCanceled()
     throw (RuntimeException)
