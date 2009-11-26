@@ -114,7 +114,7 @@ void IceSalSession::queryInteraction()
 
 void IceSalSession::interactionDone()
 {
-    SessionManagerClient::interactionDone();
+    SessionManagerClient::interactionDone( false );
 }
 
 void IceSalSession::saveDone()
@@ -129,6 +129,7 @@ void IceSalSession::saveDone()
 
 bool IceSalSession::cancelShutdown()
 {
+    SessionManagerClient::interactionDone( true );
     return false;
 }
 
@@ -526,12 +527,12 @@ bool SessionManagerClient::queryInteraction()
     return bRet;
 }
 
-void SessionManagerClient::interactionDone()
+void SessionManagerClient::interactionDone( bool bCancelShutdown )
 {
     if( aSmcConnection )
     {
         ICEConnectionObserver::lock();
-        SmcInteractDone( aSmcConnection, False );
+        SmcInteractDone( aSmcConnection, bCancelShutdown ? True : False );
         ICEConnectionObserver::unlock();
     }
 }
