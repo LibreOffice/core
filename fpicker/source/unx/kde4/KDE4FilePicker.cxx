@@ -111,6 +111,8 @@ using namespace ::com::sun::star::uno;
 // helper functions
 //////////////////////////////////////////////////////////////////////////
 
+#include <QDebug>
+
 namespace
 {
     // controling event notifications
@@ -157,14 +159,15 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<lang::XMultiServiceFactory>
           _resMgr( CREATEVERSIONRESMGR( fps_office ) )
 {
     _extraControls = new QWidget();
-
     _layout = new QGridLayout(_extraControls);
 
-    _dialog = new KFileDialog(KUrl(""), QString(""), 0, _extraControls);
+    _dialog = new KFileDialog(KUrl("~"), QString(""), 0, _extraControls);
     _dialog->setMode(KFile::File | KFile::LocalOnly);
 
     //default mode
     _dialog->setOperationMode(KFileDialog::Opening);
+
+    _dialog->setStyleSheet("color: black;");
 }
 
 KDE4FilePicker::~KDE4FilePicker()
@@ -207,21 +210,12 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
         }
     }
 
+    _dialog->clearFilter();
     _dialog->setFilter(_filter);
-    _dialog->exec();
-
-    //nasty hack to get a local qt event loop going to process the dialog
-    //otherwise the dialog returns immediately
-    while (_dialog->isVisible())
-    {
-        kapp->processEvents(QEventLoop::WaitForMoreEvents);
-    }
 
     //block and wait for user input
-    if (_dialog->result() == KFileDialog::Accepted)
-    {
+    if (_dialog->exec() == KFileDialog::Accepted)
         return ExecutableDialogResults::OK;
-    }
 
     return ExecutableDialogResults::CANCEL;
 }
@@ -230,13 +224,9 @@ void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
     throw( uno::RuntimeException )
 {
     if (multiSelect)
-    {
         _dialog->setMode(KFile::Files | KFile::LocalOnly);
-    }
     else
-    {
         _dialog->setMode(KFile::File | KFile::LocalOnly);
-    }
 }
 
 void SAL_CALL KDE4FilePicker::setDefaultName( const ::rtl::OUString &name )
@@ -250,7 +240,7 @@ void SAL_CALL KDE4FilePicker::setDisplayDirectory( const rtl::OUString &dir )
     throw( uno::RuntimeException )
 {
     const QString url = toQString(dir);
-    _dialog->setStartDir(KUrl(url));
+    _dialog->setUrl(KUrl(url));
 }
 
 rtl::OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
@@ -263,15 +253,62 @@ rtl::OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
 uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     throw( uno::RuntimeException )
 {
-    QStringList files = _dialog->selectedFiles();
+    QStringList rawFiles = _dialog->selectedFiles();
+    QStringList files;
 
-    uno::Sequence< ::rtl::OUString > seq(files.size());
-
-    for (int i=0 ; i<files.size() ; ++i)
+    // check if we need to add an extension
+    QString extension = "";
+    if ( _dialog->operationMode() == KFileDialog::Saving )
     {
-        const QString fileName = "file:" + files[i];
-        seq[i] = toOUString(fileName);
+        QCheckBox *cb = dynamic_cast<QCheckBox*> (
+            _customWidgets[ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION ]);
+
+        if (cb->isChecked())
+        {
+            extension = _dialog->currentFilter(); // assuming filter value is like this *.ext
+            extension.replace("*","");
+        }
     }
+
+    // Workaround for the double click selection KDE4 bug
+    // kde file picker returns the file and directories for selectedFiles()
+    // when a file is double clicked
+    // make a true list of files
+    const QString dir = "file://" + KUrl(rawFiles[0]).directory();
+
+    bool singleFile = true;
+    if (rawFiles.size() > 1)
+    {
+        singleFile = false;
+        //for multi file sequences, oo expects the first param to be the directory
+        //can't treat all cases like multi file because in some instances (inserting image)
+        //oo WANTS only one entry in the final list
+        files.append(dir);
+    }
+
+    for (USHORT i = 0; i < rawFiles.size(); ++i)
+    {
+        // if the raw file is not the base directory (see above kde bug)
+        // we add the file to list of avail files
+        if ((dir + "/") != ("file://" + rawFiles[i]))
+        {
+            QString filename = KUrl(rawFiles[i]).fileName();
+
+            if (singleFile)
+                filename.prepend(dir + "/");
+
+            //prevent extension append if we already have one
+            if (filename.endsWith(extension))
+                files.append(filename);
+            else
+                files.append(filename + extension);
+        }
+    }
+
+    // add all files and leading directory to outgoing OO sequence
+    uno::Sequence< ::rtl::OUString > seq(files.size());
+    for (int i = 0; i < files.size(); ++i)
+        seq[i] = toOUString(files[i]);
 
     return seq;
 }
@@ -283,9 +320,7 @@ void SAL_CALL KDE4FilePicker::appendFilter( const ::rtl::OUString &title, const 
     QString f = toQString(filter);
 
     if (!_filter.isNull())
-    {
         _filter.append("\n");
-    }
 
     //add to hash map for reverse lookup in getCurrentFilter
     _filters.insert(f, t);
@@ -294,15 +329,18 @@ void SAL_CALL KDE4FilePicker::appendFilter( const ::rtl::OUString &title, const 
     //see the docs
     t.replace("/", "\\/");
 
+    // openoffice gives us filters separated by ';' qt dialogs just want space separated
+    f.replace(";", " ");
+
     _filter.append(QString("%1|%2").arg(f).arg(t));
 }
 
 void SAL_CALL KDE4FilePicker::setCurrentFilter( const rtl::OUString &title )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    QString filter = toQString(title);
-    filter.replace("/", "\\/");
-    _dialog->filterWidget()->setCurrentFilter(filter);
+    QString t = toQString(title);
+    t.replace("/", "\\/");
+    _dialog->filterWidget()->setCurrentFilter(t);
 }
 
 rtl::OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
@@ -312,17 +350,29 @@ rtl::OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
 
     //default if not found
     if (filter.isNull())
-    {
         filter = "ODF Text Document (.odt)";
-    }
 
     return toOUString(filter);
 }
 
-void SAL_CALL KDE4FilePicker::appendFilterGroup( const rtl::OUString&, const uno::Sequence<beans::StringPair>& )
+void SAL_CALL KDE4FilePicker::appendFilterGroup( const rtl::OUString& , const uno::Sequence<beans::StringPair>& filters)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    //TODO
+    if (!_filter.isNull())
+        _filter.append(QString("\n"));
+
+    const USHORT length = filters.getLength();
+    for (USHORT i = 0; i < length; ++i)
+    {
+        beans::StringPair aPair = filters[i];
+
+        _filter.append(QString("%1|%2").arg(
+            toQString(aPair.Second).replace(";", " ")).arg(
+            toQString(aPair.First).replace("/","\\/")));
+
+        if (i != length - 1)
+            _filter.append('\n');
+    }
 }
 
 void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16, const uno::Any &value )

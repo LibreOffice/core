@@ -1228,7 +1228,7 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 
 IMPL_LINK( GalleryBrowser2, MiscHdl, void*, EMPTYARG )
 {
-    const sal_Bool  bHC = GALLERY_DLG_COLOR.IsDark();
+    const sal_Bool  bHC = maViewBox.GetSettings().GetStyleSettings().GetHighContrastMode();
 
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
 

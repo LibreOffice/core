@@ -215,7 +215,7 @@ LicenseDialogImpl::LicenseDialogImpl(
 
 {
 
-    if (GetBackground().GetColor().IsDark())
+    if (GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         // high contrast mode needs other images
         m_fiArrow1.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));

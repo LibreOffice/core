@@ -46,7 +46,7 @@
 ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
-    sal_Bool bHighContrast = pParent->GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
     SetImage( Image(SVX_RES(bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK )));
 }
 
