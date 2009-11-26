@@ -144,6 +144,11 @@ TabWindowService::TabWindowService( const css::uno::Reference< css::lang::XMulti
 //*****************************************************************************************************************
 TabWindowService::~TabWindowService()
 {
+    // SAFE->
+    ResetableGuard aGuard(m_aLock);
+
+    if (m_pTabWin)
+        m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
 }
 
 //*****************************************************************************************************************
