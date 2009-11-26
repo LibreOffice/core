@@ -170,11 +170,9 @@ struct SfxViewFrame_Impl
     SvBorder            aBorder;
     Size                aMargin;
     Size                aSize;
-    String              aViewData;
     String              aFrameTitle;
     TypeId              aLastType;
     String              aActualURL;
-    String              aActualPresentationURL;
     SfxFrame*           pFrame;
     svtools::AsynchronLink* pReloader;
     //SfxInPlaceFrame*  pIPFrame;
@@ -186,7 +184,6 @@ struct SfxViewFrame_Impl
     sal_Bool            bResizeInToOut:1;
     sal_Bool            bDontOverwriteResizeInToOut:1;
     sal_Bool            bObjLocked:1;
-    sal_Bool            bRestoreView:1;
     sal_Bool            bReloading:1;
     sal_Bool            bIsDowning:1;
     sal_Bool            bInCtor:1;
@@ -1035,7 +1032,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 }
 
 //--------------------------------------------------------------------
-void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
+void SfxViewFrame::ReleaseObjectShell_Impl()
 
 /*  [Beschreibung]
 
@@ -1068,10 +1065,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
     SfxViewShell *pDyingViewSh = GetViewShell();
     if ( pDyingViewSh )
     {
-        SetRestoreView_Impl( bStoreView );
-        if ( bStoreView )
-            pDyingViewSh->WriteUserData( GetViewData_Impl(), sal_True );
-
         // Jetzt alle SubShells wechhauen
         pDyingViewSh->PushSubShells_Impl( sal_False );
         sal_uInt16 nLevel = pDispatcher->GetShellLevel( *pDyingViewSh );
@@ -1507,7 +1500,6 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     pImp->bObjLocked = sal_False;
     pImp->pFocusWin = 0;
     pImp->pActiveChild = NULL;
-    pImp->bRestoreView = sal_False;
     pImp->nCurViewId = 0;
     pImp->bReloading = sal_False;
     pImp->bIsDowning = sal_False;
@@ -2280,13 +2272,6 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     pSh->PushSubShells_Impl();
     GetDispatcher()->Flush();
 
-    if ( pImp->bRestoreView && pImp->aViewData.Len() )
-    {
-        // restore view data if required
-        pSh->ReadUserData( pImp->aViewData, sal_True );
-        pImp->bRestoreView = sal_False;
-    }
-
     // create UI elements before size is set
     if ( SfxViewFrame::Current() == this )
         GetDispatcher()->Update_Impl( sal_True );
@@ -2316,24 +2301,6 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
     DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );
     return sal_True;
-}
-
-//-------------------------------------------------------------------------
-String& SfxViewFrame::GetViewData_Impl()
-{
-    return pImp->aViewData;
-}
-
-//-------------------------------------------------------------------------
-sal_Bool SfxViewFrame::IsRestoreView_Impl() const
-{
-    return pImp->bRestoreView;
-}
-
-//-------------------------------------------------------------------------
-void SfxViewFrame::SetRestoreView_Impl( sal_Bool bOn )
-{
-    pImp->bRestoreView = bOn;
 }
 
 //-------------------------------------------------------------------------
@@ -2762,7 +2729,7 @@ String SfxViewFrame::GetActualPresentationURL_Impl() const
 {
     if ( xObjSh.Is() )
         return xObjSh->GetMedium()->GetName();
-    return pImp->aActualPresentationURL;
+    return String();
 }
 
 void SfxViewFrame::SetModalMode( sal_Bool bModal )

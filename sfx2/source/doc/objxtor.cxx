@@ -862,20 +862,6 @@ sal_Bool SfxObjectShell::DoClose()
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::SetLastMark_Impl( const String &rMark )
-{
-    pImp->aMark = rMark;
-}
-
-//--------------------------------------------------------------------
-
-const String& SfxObjectShell::GetLastMark_Impl() const
-{
-    return pImp->aMark;
-}
-
-//--------------------------------------------------------------------
-
 SfxObjectShell* SfxObjectShell::GetObjectShell()
 {
     return this;
@@ -898,13 +884,6 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
     }
 
     return *pEventNameContainer;
-}
-
-SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
-{
-    if (!pImp->xEventNames.getLength())
-        pImp->xEventNames = GetEventNames();
-    return pImp->xEventNames;
 }
 
 //--------------------------------------------------------------------

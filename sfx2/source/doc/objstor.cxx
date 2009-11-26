@@ -212,31 +212,6 @@ sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd )
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxObjectShell::NoDependencyFromManifest_Impl( const uno::Reference< embed::XStorage >& xStorage )
-{
-    uno::Sequence< ::rtl::OUString > aElements = xStorage->getElementNames();
-    for ( sal_Int32 nInd = 0; nInd < aElements.getLength(); nInd++ )
-    {
-        if ( xStorage->isStorageElement( aElements[nInd] ) )
-        {
-            // if there are other standard elements that do not need manifest.xml the following
-            // list can be extended
-            if ( !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) )
-              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Configurations" ) ) )
-              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ) ) )
-              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Thumbnails" ) ) )
-              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ) ) )
-            {
-                // the substorage is not know as one that does not need manifest.xml
-                return sal_False;
-            }
-        }
-    }
-
-    return sal_True;
-}
-
-//-------------------------------------------------------------------------
 sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
                                             ::rtl::OUString aURL,
                                             const uno::Reference< embed::XStorage >& xDocStorage,

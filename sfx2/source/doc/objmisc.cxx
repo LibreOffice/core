@@ -2022,12 +2022,6 @@ void SfxObjectShell::SetHeaderAttributesForSourceViewHack()
         ->SetAttributes();
 }
 
-void SfxObjectShell::StartLoading_Impl()
-{
-    pImp->nLoadedFlags = 0;
-    pImp->bModelInitialized = sal_False;
-}
-
 sal_Bool SfxObjectShell::IsPreview() const
 {
     if ( !pMedium )

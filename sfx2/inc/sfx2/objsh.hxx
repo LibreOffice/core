@@ -227,11 +227,8 @@ private:
 
 private:
 //#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE void Construct_Impl();
     SAL_DLLPRIVATE void UpdateTime_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties> & i_xDocProps);
-    SAL_DLLPRIVATE sal_Bool MakeBackup_Impl(const String &rName,
-                                                sal_Bool bCopyAllways = sal_False);
 
     SAL_DLLPRIVATE sal_Bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
 
@@ -249,10 +246,6 @@ protected:
     /** declares the document to have capabilities to contain basic/dialog libraries
     */
     void                        SetHasNoBasic();
-
-//#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE void StartLoading_Impl();
-//#endif
 
     /// template method, called by FlushDocInfo; this implementation is empty
     virtual void                DoFlushDocInfo();
@@ -501,10 +494,6 @@ public:
     void                        SetTitle( const String& rTitle );
     String                      GetTitle( sal_uInt16 nMaxLen = 0 ) const;
     void                        InvalidateName();   // Zuruecksetzen auf unbenannt
-//#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE void SetLastMark_Impl( const String & );
-    SAL_DLLPRIVATE const String& GetLastMark_Impl() const;
-//#endif
 
     // DDE-Interface
     virtual long                DdeExecute( const String& rCmd );
@@ -618,9 +607,6 @@ public:
 
     virtual SEQUENCE< OUSTRING >    GetEventNames();
 
-//REMOVE        SotStorageStreamRef         GetConfigurationStream( const String& rName, BOOL bCreate=FALSE );
-//REMOVE        SvStorageRef                GetConfigurationStorage( SotStorage* pStor=NULL );
-
     Window*                     GetDialogParent( SfxMedium* pMedium=0 );
     String                      UpdateTitle( SfxMedium* pMed=NULL, USHORT nDocViewNo=0 );
     static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
@@ -673,12 +659,10 @@ public:
     virtual Printer *       GetDocumentPrinter();
     virtual OutputDevice*    GetDocumentRefDev();
     virtual void            OnDocumentPrinterChanged( Printer * pNewPrinter );
-    //virtual UINT32          GetViewAspect() const;
     virtual Rectangle GetVisArea( USHORT nAspect ) const;
     virtual void    SetVisArea( const Rectangle & rVisArea );
     const Rectangle & GetVisArea() const;
     void            SetVisAreaSize( const Size & rVisSize );
-//REMOVE        virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CreateTransferableSnapshot();
     virtual ULONG   GetMiscStatus() const;
 
     MapUnit         GetMapUnit() const;
@@ -722,9 +706,6 @@ public:
     SAL_DLLPRIVATE ::rtl::OUString CreateTempCopyOfStorage_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
-    SAL_DLLPRIVATE static sal_Bool NoDependencyFromManifest_Impl(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-
     SAL_DLLPRIVATE void InitOwnModel_Impl();
     SAL_DLLPRIVATE void BreakMacroSign_Impl( sal_Bool bBreakMacroSing );
     SAL_DLLPRIVATE void CheckSecurityOnLoading_Impl();
@@ -733,7 +714,6 @@ public:
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
     SAL_DLLPRIVATE void CheckEncryption_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
-    SAL_DLLPRIVATE SEQUENCE< OUSTRING > GetEventNames_Impl();
     SAL_DLLPRIVATE void InitBasicManager_Impl();
     SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }
 
@@ -767,12 +747,10 @@ public:
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
     SAL_DLLPRIVATE void PositionView_Impl();
     SAL_DLLPRIVATE void UpdateFromTemplate_Impl();
-    SAL_DLLPRIVATE void Reload_Impl();
     SAL_DLLPRIVATE sal_Bool CanReload_Impl();
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
     SAL_DLLPRIVATE sal_Bool DoSave_Impl( const SfxItemSet* pSet=0 );
     SAL_DLLPRIVATE sal_Bool Save_Impl( const SfxItemSet* pSet=0 );
-    SAL_DLLPRIVATE void UpdatePickList_Impl();
     SAL_DLLPRIVATE sal_Bool PreDoSaveAs_Impl(const String &rFileName, const String &rFiltName, SfxItemSet *);
     SAL_DLLPRIVATE sal_Bool APISaveAs_Impl ( const String& aFileName, SfxItemSet* aParams );
     SAL_DLLPRIVATE sal_Bool CommonSaveAs_Impl ( const INetURLObject& aURL, const String& aFilterName, SfxItemSet* aParams );
@@ -789,9 +767,6 @@ public:
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
-    SAL_DLLPRIVATE SfxEventConfigItem_Impl* GetEventConfig_Impl( sal_Bool bForce=sal_False );
-    SAL_DLLPRIVATE SfxAcceleratorManager* GetAccMgr_Impl();
-    SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >

@@ -270,7 +270,7 @@ public:
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE BOOL IsDowning_Impl() const;
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );
-    SAL_DLLPRIVATE void ReleaseObjectShell_Impl( BOOL bStoreView = FALSE );
+    SAL_DLLPRIVATE void ReleaseObjectShell_Impl();
 
     SAL_DLLPRIVATE void GetState_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecReload_Impl( SfxRequest &rReq );
@@ -295,9 +295,6 @@ public:
     SAL_DLLPRIVATE const Size& GetMargin_Impl() const;
     SAL_DLLPRIVATE void SetActiveChildFrame_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE SfxViewFrame* GetActiveChildFrame_Impl() const;
-    SAL_DLLPRIVATE BOOL IsRestoreView_Impl() const;
-    SAL_DLLPRIVATE void SetRestoreView_Impl( BOOL );
-    SAL_DLLPRIVATE String& GetViewData_Impl();
     SAL_DLLPRIVATE String GetActualPresentationURL_Impl() const;
     SAL_DLLPRIVATE static void CloseHiddenFrames_Impl();
     SAL_DLLPRIVATE void MiscExec_Impl(SfxRequest &);
