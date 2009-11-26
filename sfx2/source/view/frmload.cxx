@@ -593,9 +593,9 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         if ( !bExternalModel )
         {
             pTargetFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
-            String sURL = xDoc->GetMedium()->GetName();
-            if ( sURL.Len() )
-                SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sURL ) );
+            String sDocumentURL = xDoc->GetMedium()->GetName();
+            if ( sDocumentURL.Len() )
+                SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
         }
 
         bLoadSuccess = sal_True;
