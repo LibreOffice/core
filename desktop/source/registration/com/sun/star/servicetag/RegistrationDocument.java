@@ -140,7 +140,25 @@ class RegistrationDocument {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             // XML schema for validation
-            SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+            // Some Java versions (e.g., 1.5.0_06-b05) fail with a
+            // NullPointerException if SchemaFactory.newInstance is called with
+            // a null context class loader, so work around that here (and the
+            // class loader of this class hopefully is not the null bootstrap
+            // class loader):
+            SchemaFactory sf;
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            if (cl == null) {
+                Thread.currentThread().setContextClassLoader(
+                    RegistrationDocument.class.getClassLoader());
+            }
+            try {
+                sf = SchemaFactory.newInstance(
+                    XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            } finally {
+                Thread.currentThread().setContextClassLoader(cl);
+            }
+
             URL xsdUrl = RegistrationDocument.class.getResource(REGISTRATION_DATA_SCHEMA);
             Schema schema = sf.newSchema(xsdUrl);
             Validator validator = schema.newValidator();
