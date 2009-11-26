@@ -32,7 +32,7 @@
 #include "precompiled_extensions.hxx"
 
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -44,26 +44,16 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/task/XPasswordContainer.hpp>
-#include "com/sun/star/task/NoMasterException.hpp"
-#include "com/sun/star/ucb/AuthenticationRequest.hpp"
-#ifndef _COM_SUN_STAR_UCB_XCOMMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XWEBDAVCOMMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMMANDPROCESSOR2_HPP_
 #include <com/sun/star/ucb/XCommandProcessor2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTIDNETIFIERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#endif
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 
@@ -302,11 +292,10 @@ void InflateInputStream::readIntoMemory()
 //------------------------------------------------------------------------------
 
 class UpdateInformationProvider :
-    public ::cppu::WeakImplHelper5< deployment::XUpdateInformationProvider,
+    public ::cppu::WeakImplHelper4< deployment::XUpdateInformationProvider,
                                     ucb::XCommandEnvironment,
                                     ucb::XWebDAVCommandEnvironment,
-                                    lang::XServiceInfo,
-                                    task::XInteractionHandler >
+                                    lang::XServiceInfo >
 {
 public:
     static uno::Reference< uno::XInterface > createInstance(const uno::Reference<uno::XComponentContext>& xContext);
@@ -358,10 +347,6 @@ public:
     virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
 
-    // XInteractionHandler
-    virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& rRequest )
-        throw( uno::RuntimeException );
-
 protected:
 
     virtual ~UpdateInformationProvider();
@@ -372,8 +357,6 @@ private:
 
     void storeCommandInfo( sal_Int32 nCommandId,
         uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
-
-    bool initPasswordContainer( uno::Reference< task::XPasswordContainer > * pContainer );
 
     UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
                               const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
@@ -392,6 +375,7 @@ private:
 
     uno::Reference< ucb::XCommandProcessor > m_xCommandProcessor;
     uno::Reference< task::XInteractionHandler > m_xInteractionHandler;
+    uno::Reference< task::XInteractionHandler > m_xPwContainerInteractionHandler;
 
     osl::Mutex m_aMutex;
     osl::Condition m_bCancelled;
@@ -657,33 +641,6 @@ UpdateInformationProvider::storeCommandInfo(
 
     m_nCommandId = nCommandId;
     m_xCommandProcessor = rxCommandProcessor;
-}
-
-//------------------------------------------------------------------------------
-
-bool UpdateInformationProvider::initPasswordContainer( uno::Reference< task::XPasswordContainer > * pContainer )
-{
-    OSL_ENSURE( pContainer, "specification violation" );
-
-    if ( !pContainer->is() )
-    {
-        uno::Reference<uno::XComponentContext> xContext(m_xContext);
-
-        if( !xContext.is() )
-            throw uno::RuntimeException( UNISTRING( "UpdateInformationProvider: empty component context" ), *this );
-
-        uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-        if( !xServiceManager.is() )
-            throw uno::RuntimeException( UNISTRING( "UpdateInformationProvider: unable to obtain service manager from component context" ), *this );
-
-        *pContainer = uno::Reference< task::XPasswordContainer >(
-            xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.task.PasswordContainer" ), xContext ),
-            uno::UNO_QUERY);
-    }
-
-    OSL_ENSURE(pContainer->is(), "unexpected situation");
-    return pContainer->is();
 }
 
 //------------------------------------------------------------------------------
@@ -974,7 +931,26 @@ UpdateInformationProvider::getInteractionHandler()
     if ( m_xInteractionHandler.is() )
         return m_xInteractionHandler;
     else
-        return this;
+    {
+        try
+        {
+            // Supply an interaction handler that uses the password container
+            // service to obtain credentials without displaying a password gui.
+
+            if ( !m_xPwContainerInteractionHandler.is() )
+                m_xPwContainerInteractionHandler
+                    = task::PasswordContainerInteractionHandler::create(
+                        m_xContext );
+        }
+        catch ( uno::RuntimeException const & )
+        {
+            throw;
+        }
+        catch ( uno::Exception const & )
+        {
+        }
+        return m_xPwContainerInteractionHandler;
+    }
 }
 //------------------------------------------------------------------------------
 
@@ -1022,101 +998,6 @@ UpdateInformationProvider::supportsService( rtl::OUString const & serviceName ) 
             return sal_True;
 
     return sal_False;
-}
-
-//------------------------------------------------------------------------------
-
-void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteractionRequest > const & rRequest)
-    throw (uno::RuntimeException)
-{
-    uno::Any aAnyRequest( rRequest->getRequest() );
-    ucb::AuthenticationRequest aAuthenticationRequest;
-
-    if ( aAnyRequest >>= aAuthenticationRequest )
-    {
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > xContinuations = rRequest->getContinuations();
-        uno::Reference< task::XInteractionHandler > xIH;
-        uno::Reference< ucb::XInteractionSupplyAuthentication > xSupplyAuthentication;
-        uno::Reference< task::XPasswordContainer > xContainer;
-
-        for ( sal_Int32 i = 0; i < xContinuations.getLength(); ++i )
-        {
-            xSupplyAuthentication = uno::Reference< ucb::XInteractionSupplyAuthentication >(
-                                                            xContinuations[i], uno::UNO_QUERY );
-            if ( xSupplyAuthentication.is() )
-                break;
-        }
-
-        // xContainer works with userName passwdSequences pairs:
-        if ( xSupplyAuthentication.is() &&
-             aAuthenticationRequest.HasUserName &&
-             aAuthenticationRequest.HasPassword &&
-             initPasswordContainer( &xContainer ) )
-        {
-            xIH = getInteractionHandler();
-            try
-            {
-                if ( aAuthenticationRequest.UserName.getLength() == 0 )
-                {
-                    task::UrlRecord aRec( xContainer->find( aAuthenticationRequest.ServerName, xIH ) );
-                    if ( aRec.UserList.getLength() != 0 )
-                    {
-                        if ( xSupplyAuthentication->canSetUserName() )
-                            xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
-                        if ( xSupplyAuthentication->canSetPassword() )
-                        {
-                            OSL_ENSURE( aRec.UserList[0].Passwords.getLength() != 0, "empty password list" );
-                            xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
-                        }
-                        if ( aRec.UserList[0].Passwords.getLength() > 1 )
-                        {
-                            if ( aAuthenticationRequest.HasRealm )
-                            {
-                                if ( xSupplyAuthentication->canSetRealm() )
-                                    xSupplyAuthentication->setRealm( aRec.UserList[0].Passwords[1].getStr() );
-                            }
-                            else if ( xSupplyAuthentication->canSetAccount() )
-                                xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
-                        }
-                        xSupplyAuthentication->select();
-                        return;
-                    }
-                }
-                else
-                {
-                    task::UrlRecord aRec(xContainer->findForName( aAuthenticationRequest.ServerName,
-                                                                  aAuthenticationRequest.UserName,
-                                                                  xIH));
-                    if ( aRec.UserList.getLength() != 0 )
-                    {
-                        OSL_ENSURE( aRec.UserList[0].Passwords.getLength() != 0, "empty password list" );
-                        if ( !aAuthenticationRequest.HasPassword ||
-                             ( aAuthenticationRequest.Password != aRec.UserList[0].Passwords[0] ) )
-                        {
-                            if ( xSupplyAuthentication->canSetUserName() )
-                                xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
-                            if ( xSupplyAuthentication->canSetPassword() )
-                                xSupplyAuthentication->setPassword(aRec.UserList[0].Passwords[0].getStr());
-                            if ( aRec.UserList[0].Passwords.getLength() > 1 )
-                            {
-                                if ( aAuthenticationRequest.HasRealm )
-                                {
-                                    if ( xSupplyAuthentication->canSetRealm() )
-                                        xSupplyAuthentication->setRealm(aRec.UserList[0].Passwords[1].getStr());
-                                }
-                                else if ( xSupplyAuthentication->canSetAccount() )
-                                    xSupplyAuthentication->setAccount(aRec.UserList[0].Passwords[1].getStr());
-                            }
-                            xSupplyAuthentication->select();
-                            return;
-                        }
-                    }
-                }
-            }
-            catch (task::NoMasterException const &)
-            {} // user did not enter master password
-        }
-    }
 }
 
 } // anonymous namespace
