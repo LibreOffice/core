@@ -1375,7 +1375,7 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
     else if(nRegionMode == REGION_MODE_EMBEDDED)
         nDropId = FN_DROP_REGION_COPY;
 
-    ImageList& rImgLst = aContentToolBox.GetDisplayBackground().GetColor().IsDark()
+    ImageList& rImgLst = aContentToolBox.GetSettings().GetStyleSettings().GetHighContrastMode()
                 ? aContentImageListH : aContentImageList;
 
     aContentToolBox.SetItemImage( FN_DROP_REGION,
@@ -1531,7 +1531,7 @@ void SwNavigationPI::InitImageList()
 {
     USHORT k;
 
-    ImageList& rImgLst = aContentToolBox.GetDisplayBackground().GetColor().IsDark() ?
+    ImageList& rImgLst = aContentToolBox.GetSettings().GetStyleSettings().GetHighContrastMode() ?
                 aContentImageListH : aContentImageList;
     for( k = 0; k < aContentToolBox.GetItemCount(); k++)
             aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),
