@@ -12,6 +12,12 @@ CustomerInformation	SerialNumber	Show	SERIALNUMSHOW
 CustomSetup	ChangeFolder	Hide	Installed
 CustomSetup	Details	Hide	Installed
 CustomSetup	InstallLabel	Hide	Installed
+FileTypeDialog	CheckBox1	Enable	&gm_p_Wrt=3
+FileTypeDialog	CheckBox1	Disable	&gm_p_Wrt<>3
+FileTypeDialog	CheckBox2	Enable	&gm_p_Calc=3
+FileTypeDialog	CheckBox2	Disable	&gm_p_Calc<>3
+FileTypeDialog	CheckBox3	Enable	&gm_p_Impress=3
+FileTypeDialog	CheckBox3	Disable	&gm_p_Impress<>3
 InstallWelcome	Copyright	Hide	SHOWCOPYRIGHT="No"
 InstallWelcome	Copyright	Show	SHOWCOPYRIGHT="Yes"
 LicenseAgreement	Next	Disable	AgreeToLicense <> "Yes"
