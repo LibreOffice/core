@@ -420,9 +420,6 @@ VCLXButton::VCLXButton()
 
 VCLXButton::~VCLXButton()
 {
-#ifndef __SUNPRO_CC
-    OSL_TRACE ("%s", __FUNCTION__);
-#endif
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
