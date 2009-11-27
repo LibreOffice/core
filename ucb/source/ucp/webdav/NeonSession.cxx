@@ -40,6 +40,7 @@
 #include <ne_auth.h>
 #include <ne_redirect.h>
 #include <ne_ssl.h>
+#include <ne_compress.h>
 #include "libxml/parser.h"
 #include "rtl/ustrbuf.hxx"
 #include "comphelper/sequence.hxx"
@@ -1949,7 +1950,8 @@ int NeonSession::GET( ne_session * sess,
         ne_add_response_header_catcher(
             req, runResponseHeaderHandler, userdata );
 #endif
-    ne_add_response_body_reader( req, ne_accept_2xx, reader, userdata );
+    ne_decompress * dc
+        = ne_decompress_reader( req, ne_accept_2xx, reader, userdata );
 
     ret = ne_request_dispatch( req );
 
@@ -1968,6 +1970,9 @@ int NeonSession::GET( ne_session * sess,
 #endif
     if ( ret == NE_OK && ne_get_status( req )->klass != 2 )
         ret = NE_ERROR;
+
+    if ( dc != 0 )
+        ne_decompress_destroy(dc);
 
     ne_request_destroy( req );
     return ret;

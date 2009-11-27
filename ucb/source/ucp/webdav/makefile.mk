@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -127,9 +127,8 @@ SHL1STDLIBS=\
         $(UCBHELPERLIB)  \
         $(COMPHELPERLIB) \
         $(NEON3RDLIB)    \
-        $(LIBXML2LIB)
-
-
+        $(LIBXML2LIB)    \
+        $(ZLIB3RDLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(WSOCK32LIB)
@@ -150,8 +149,6 @@ SHL1STDLIBS+= $(OPENSSLLIB)
 SHL1STDLIBS+= $(OPENSSLLIBST)
 .ENDIF
 .ENDIF # WNT
-
-
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(LIB1TARGET)
