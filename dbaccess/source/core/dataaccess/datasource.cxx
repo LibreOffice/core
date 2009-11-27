@@ -68,9 +68,9 @@
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/digest.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
@@ -78,6 +78,7 @@
 #include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/digest.h>
 #include <algorithm>
 
 using namespace ::com::sun::star::sdbc;
@@ -832,9 +833,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         ::rtl::OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
 
         SQLContext aContext;
-        aContext.Message = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "A connection for the following URL was requested: " ) );
-            // TODO: resource
-        aContext.Message += m_pImpl->m_sConnectURL;
+        aContext.Message = DBACORE_RESSTRING( RID_STR_CONNECTION_REQUEST );
+        ::comphelper::string::searchAndReplaceAsciiI( aContext.Message, "$name$", m_pImpl->m_sConnectURL );
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }

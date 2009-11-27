@@ -79,160 +79,68 @@
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 /** === end UNO includes === **/
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef SVTOOLS_URIHELPER_HXX
-#include <svtools/urihelper.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_INTERACTION_HXX_
-#include <comphelper/interaction.hxx>
-#endif
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
-#include <comphelper/componentcontext.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
-#include <vcl/stdtext.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
-#include <sfx2/filedlghelper.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
-#include <cppuhelper/exc_hlp.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBAUI_APPVIEW_HXX
-#include "AppView.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
-#include "browserids.hxx"
-#endif
-#ifndef _DBAU_REGHELPER_HXX_
-#include "dbu_reghelper.hxx"
-#endif
-#ifndef _DBU_APP_HRC_
-#include "dbu_app.hrc"
-#endif
-#ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
-#include "defaultobjectnamecheck.hxx"
-#endif
-#ifndef _SV_MENU_HXX
-#include <vcl/menu.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
-#include <svtools/internaloptions.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
-#include <comphelper/uno3.hxx>
-#endif
-#ifndef DBACCESS_DATABASE_OBJECT_VIEW_HXX
-#include "databaseobjectview.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SVLBOXITM_HXX
-#include <svtools/svlbitm.hxx>
-#endif
-#ifndef _DBAUI_LISTVIEWITEMS_HXX_
-#include "listviewitems.hxx"
-#endif
-
-#ifndef DBAUI_APPDETAILVIEW_HXX
-#include "AppDetailView.hxx"
-#endif
-#ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
-#include "linkeddocuments.hxx"
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
-#include "sqlmessage.hxx"
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef INCLUDED_SFX_MAILMODELAPI_HXX
-#include <sfx2/mailmodelapi.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+
+#include <svtools/urihelper.hxx>
+#include <svtools/pathoptions.hxx>
+#include <svtools/internaloptions.hxx>
 #include <svtools/moduleoptions.hxx>
-#endif
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
-#ifndef _CLIPLISTENER_HXX
 #include <svtools/cliplistener.hxx>
-#endif
-#ifndef _SVX_DBAEXCHANGE_HXX_
-#include <svx/dbaexchange.hxx>
-#endif
-#ifndef SVX_DBAOBJECTEX_HXX
-#include <svx/dbaobjectex.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
-#include "dsntypes.hxx"
-#endif
-#include <svx/svxdlg.hxx>
-#include <svtools/insdlg.hxx>
-#ifndef _UNOTOOLS_TEMPFILE_HXX
-#include <unotools/tempfile.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
-#include "dbaccess_helpid.hrc"
-#endif
-#ifndef DBAUI_DLGSAVE_HXX
-#include "dlgsave.hxx"
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX
-#include <sfx2/docfilt.hxx>
-#endif
-#ifndef SFX_QUERYSAVEDOCUMENT_HXX
-#include <sfx2/QuerySaveDocument.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
+#include <svtools/svlbitm.hxx>
 #include <svtools/historyoptions.hxx>
-#endif
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <svtools/insdlg.hxx>
+
+#include <unotools/tempfile.hxx>
+
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
+#include <comphelper/uno3.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
+#include <comphelper/interaction.hxx>
+#include <comphelper/componentcontext.hxx>
+
+#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/lstbox.hxx>
+
+#include <sfx2/mailmodelapi.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/QuerySaveDocument.hxx>
+
+#include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
+
+#include <svx/dbaexchange.hxx>
+#include <svx/dbaobjectex.hxx>
+#include <svx/svxdlg.hxx>
+
+#include "AppView.hxx"
+#include "browserids.hxx"
+#include "dbu_reghelper.hxx"
+#include "dbu_app.hrc"
+#include "defaultobjectnamecheck.hxx"
+#include "databaseobjectview.hxx"
+#include "listviewitems.hxx"
+#include "AppDetailView.hxx"
+#include "linkeddocuments.hxx"
+#include "sqlmessage.hxx"
+#include "UITools.hxx"
+#include "dsntypes.hxx"
+#include "dbaccess_helpid.hrc"
+#include "dlgsave.hxx"
 #include <vos/mutex.hxx>
-#endif
-#ifndef _DBACCESS_SLOTID_HRC_
 #include "dbaccess_slotid.hrc"
-#endif
 
 #include <algorithm>
 #include <functional>
@@ -2955,8 +2863,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
             case DatabaseObjectContainer::REPORTS:
                 if ( eSelectedCategory != E_NONE )
                     throw IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "You cannot select different categories." ) ),
-                            // TODO: resource
+                        String(ModuleRes(RID_STR_NO_DIFF_CAT)),
                         *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ) );
                 eSelectedCategory =
                         ( pObject->Type == DatabaseObjectContainer::TABLES )  ? E_TABLE
@@ -2969,13 +2876,9 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
             default:
             case DatabaseObjectContainer::DATA_SOURCE:
             {
-                ::rtl::OUStringBuffer aMessage;
-                aMessage.appendAscii( "Unsupported object type found (" );
-                aMessage.append     ( sal_Int32( pObject->Type ) );
-                aMessage.appendAscii( ")." );
-                    // TODO: resource
-                throw IllegalArgumentException(
-                    aMessage.makeStringAndClear(), *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ) );
+                ::rtl::OUString sMessage = String(ModuleRes( RID_STR_UNSUPPORTED_OBJECT_TYPE ));
+                ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$type$", ::rtl::OUString::valueOf(sal_Int32( pObject->Type )) );
+                throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
             }
         }
     }
