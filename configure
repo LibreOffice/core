@@ -6083,7 +6083,8 @@ done
 
         COMPATH=`echo $COMPATH | $SED "s@/[^/:]*\\\$@@"`;
 fi
-
+COMPATH=`echo $COMPATH | $SED "s@/[Bb][Ii][Nn]\\\$@@"`;
+echo $COMPATH
 GCCVER=20995
 if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; then
     { $as_echo "$as_me:$LINENO: checking the GNU gcc compiler version" >&5
@@ -6334,7 +6335,7 @@ fi
   test -n "$_cc" && break
 done
 
-      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
       { $as_echo "$as_me:$LINENO: checking the SunStudio C/C++ compiler version" >&5
 $as_echo_n "checking the SunStudio C/C++ compiler version... " >&6; }
             _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
@@ -6472,7 +6473,7 @@ fi
   test -n "$_cc" && break
 done
 
-      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
       { $as_echo "$as_me:$LINENO: checking the SGI MIPSpro C compiler version" >&5
 $as_echo_n "checking the SGI MIPSpro C compiler version... " >&6; }
             _mipspro_version=`$CC -version 2>&1 | $AWK '{ print $4 }'`
@@ -6542,7 +6543,7 @@ fi
   test -n "$_cc" && break
 done
 
-      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
       { $as_echo "$as_me:$LINENO: WARNING: ******* $_cc , $COMPATH" >&5
 $as_echo "$as_me: WARNING: ******* $_cc , $COMPATH" >&2;}
       { $as_echo "$as_me:$LINENO: checking the Compaq C compiler version" >&5
@@ -6823,8 +6824,8 @@ fi
 			# Remove /cl.exe from CC case insensitive
 			{ $as_echo "$as_me:$LINENO: result: found ($CC)" >&5
 $as_echo "found ($CC)" >&6; }
-			COMPATH=`echo $CC | $SED 's@/[cC][lL]\.[eE][xX][eE]@@'`
-			export INCLUDE=`cygpath -d "$COMPATH/../Include"`
+			COMPATH=`echo $CC | $SED 's@/\/BbIiNn\/[cC][lL]\.[eE][xX][eE]@@'`
+			export INCLUDE=`cygpath -d "$COMPATH/Include"`
 						{ $as_echo "$as_me:$LINENO: checking the Version of Microsoft C/C++ Compiler" >&5
 $as_echo_n "checking the Version of Microsoft C/C++ Compiler... " >&6; }
 			CCNUMVER=`$CC 2>&1 | $AWK "/Microsoft/ && /..\\...\\...../ {
@@ -10863,7 +10864,7 @@ $as_echo_n "checking whether to use dynamic libgcc... " >&6; }
     { $as_echo "$as_me:$LINENO: checking dynamic libgcc name" >&5
 $as_echo_n "checking dynamic libgcc name... " >&6; }
     MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | sed -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | sed -e 's@_@?@g'`
-    MINGW_GCCDLL=`cd $COMPATH && ls $MINGW_GCCDLL_pattern 2>/dev/null`
+    MINGW_GCCDLL=`cd $COMPATH/bin && ls $MINGW_GCCDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GCCDLL"; then
         MINGW_SHARED_GCCLIB=YES
         { $as_echo "$as_me:$LINENO: result: use $MINGW_GCCDLL" >&5
@@ -10885,7 +10886,7 @@ $as_echo_n "checking whether to use dynamic libstdc++... " >&6; }
     { $as_echo "$as_me:$LINENO: checking dynamic libstdc++ name" >&5
 $as_echo_n "checking dynamic libstdc++ name... " >&6; }
     MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
-    MINGW_GXXDLL=`cd $COMPATH && ls $MINGW_GXXDLL_pattern 2>/dev/null`
+    MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GXXDLL"; then
         MINGW_SHARED_GXXLIB=YES
         { $as_echo "$as_me:$LINENO: result: use $MINGW_GXXDLL" >&5
@@ -25616,8 +25617,8 @@ $as_echo_n "checking for instmsia.exe/instmsiw.exe... " >&6; }
       { $as_echo "$as_me:$LINENO: result: found" >&5
 $as_echo "found" >&6; }
    else
-      MSIAPATH=`/bin/find "$COMPATH/../.." -iname instmsia.exe | head -n 1`
-      MSIWPATH=`/bin/find "$COMPATH/../.." -iname instmsiw.exe | head -n 1`
+      MSIAPATH=`/bin/find "$COMPATH/.." -iname instmsia.exe | head -n 1`
+      MSIWPATH=`/bin/find "$COMPATH/.." -iname instmsiw.exe | head -n 1`
       if test -n "$MSIAPATH" -a -n "$MSIWPATH"; then
          cp "$MSIAPATH" ./external/msi/ && chmod +x ./external/msi/instmsia.exe && MSIACOPY="OK"
          cp "$MSIWPATH" ./external/msi/ && chmod +x ./external/msi/instmsiw.exe && MSIWCOPY="OK"

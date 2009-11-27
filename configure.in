@@ -1448,7 +1448,8 @@ if test "$COMPATH" = "." ; then
     dnl double square bracket to get single because of M4 quote...
     COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`;
 fi
-
+COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
+echo $COMPATH
 dnl ===================================================================
 dnl  Test the gcc version,  3 is OK
 dnl ===================================================================
@@ -1592,7 +1593,7 @@ dnl ===================================================================
 if test "$_os" = "SunOS"; then
    if test "$CC" = "cc"; then
       AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
       AC_MSG_CHECKING([the SunStudio C/C++ compiler version])
       dnl cc -V outputs to standard error!!!!
       _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
@@ -1636,7 +1637,7 @@ dnl ===================================================================
 if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
    if test "$CC" = "cc"; then
       AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
       AC_MSG_CHECKING([the SGI MIPSpro C compiler version])
       dnl cc -version outputs to standard error!!!!
       _mipspro_version=`$CC -version 2>&1 | $AWK '{ print $4 }'`
@@ -1661,7 +1662,7 @@ dnl ===================================================================
 if test "$_os" = "OSF1"; then
    if test "$CC" = "cc"; then
       AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
       AC_MSG_WARN([******* $_cc , $COMPATH])
       AC_MSG_CHECKING([the Compaq C compiler version])
       dnl cc -V outputs to standard error!!!!
@@ -1787,8 +1788,8 @@ if test "$_os" = "WINNT"; then
 			CC=`cygpath -u "$CC"`
 			# Remove /cl.exe from CC case insensitive
 			AC_MSG_RESULT([found ($CC)])
-			COMPATH=`echo $CC | $SED 's@/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
-			export INCLUDE=`cygpath -d "$COMPATH/../Include"`
+			COMPATH=`echo $CC | $SED 's@/\/[Bb][Ii][Nn]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
+			export INCLUDE=`cygpath -d "$COMPATH/Include"`
 			dnl  Check which Microsoft C/C++ compiler is found
 			AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
 dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out.         
@@ -2217,7 +2218,7 @@ _ACEOF
   if test -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
     AC_MSG_CHECKING([dynamic libgcc name])
     MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | sed -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | sed -e 's@_@?@g'`
-    MINGW_GCCDLL=`cd $COMPATH && ls $MINGW_GCCDLL_pattern 2>/dev/null`
+    MINGW_GCCDLL=`cd $COMPATH/bin && ls $MINGW_GCCDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GCCDLL"; then
         MINGW_SHARED_GCCLIB=YES
         AC_MSG_RESULT([use $MINGW_GCCDLL])
@@ -2234,7 +2235,7 @@ _ACEOF
   if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
     AC_MSG_CHECKING([dynamic libstdc++ name])
     MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
-    MINGW_GXXDLL=`cd $COMPATH && ls $MINGW_GXXDLL_pattern 2>/dev/null`
+    MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GXXDLL"; then
         MINGW_SHARED_GXXLIB=YES
         AC_MSG_RESULT([use $MINGW_GXXDLL])
@@ -5407,8 +5408,8 @@ if test "$_os" = "WINNT"; then
    if test -x ./external/msi/instmsia.exe -a -x ./external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
    else
-      MSIAPATH=`/bin/find "$COMPATH/../.." -iname instmsia.exe | head -n 1`
-      MSIWPATH=`/bin/find "$COMPATH/../.." -iname instmsiw.exe | head -n 1`
+      MSIAPATH=`/bin/find "$COMPATH/.." -iname instmsia.exe | head -n 1`
+      MSIWPATH=`/bin/find "$COMPATH/.." -iname instmsiw.exe | head -n 1`
       if test -n "$MSIAPATH" -a -n "$MSIWPATH"; then
          cp "$MSIAPATH" ./external/msi/ && chmod +x ./external/msi/instmsia.exe && MSIACOPY="OK"
          cp "$MSIWPATH" ./external/msi/ && chmod +x ./external/msi/instmsiw.exe && MSIWCOPY="OK"

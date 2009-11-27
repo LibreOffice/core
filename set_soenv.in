@@ -79,7 +79,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $UPD, $WORK_STAMP, 
-     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
+     $SOLARSRC, $SOURCE_ROOT_DIR, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
@@ -635,7 +635,6 @@ elsif ( $platform =~ m/cygwin/ )
       $PATH_SEPERATOR = ';';
       $outfile        = "winmingw.set"; 
       $COM            = "GCC";
-      $COMPATH        =~ s/\/bin$//i;
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -644,8 +643,6 @@ elsif ( $platform =~ m/cygwin/ )
   else # The MSVC section starts here
   {   $outfile        = "winenv.set";
       $COM            = "MSC";
-      # COMPATH for MSC is differently used
-      $COMPATH        =~ s/\/bin$//i;
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
@@ -967,6 +964,10 @@ if ( $platform =~ m/darwin/ )
 $WORK_STAMP            = "@SOURCEVERSION@";
 # Location of the source.
 $SOLARSRC             = '$SRC_ROOT';
+# Location of the repository.
+my @splitlist = split( /\//, $SRC_ROOT );
+pop @splitlist;
+$SOURCE_ROOT_DIR      = join("/", @splitlist);
 #
 $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
@@ -1305,9 +1306,7 @@ if ($platform =~ m/solaris/)
                         $L.$LIB.
                         $L.$USR_LIB;
    if ( $CC =~ "gcc" ) {
-      my $temp = $COMPATH;
-      $temp =~ s:/bin$::;
-      $SOLARLIB      .= $L.$temp.$LIB;
+      $SOLARLIB      .= $L.$COMPATH.$LIB;
    }
    $SOLARLIB         .= $L.$USR_LOCAL.$LIB.
                         $L.$USR_DT.$LIB.
@@ -1376,9 +1375,8 @@ $SOLARINC            .= '/SC5 ';
 }
 # Platform dependent include path at the top of this list of include paths
 if ($platform =~ m/solaris/)
-{   my $temp;
-    $temp =~ s:$COMPATH:/bin\$:;
-    $SOLARINC         .= $I.$temp.$ds."include";
+{   
+    $SOLARINC         .= $I.$COMPATH.$ds."include";
 }
 if ($platform =~ m/linux/)
 {
@@ -1919,6 +1917,7 @@ if ($platform !~ m/cygwin|os2/) {
    }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
+ToFile( "SOURCE_ROOT_DIR",           $SOURCE_ROOT_DIR,           "e" );
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
