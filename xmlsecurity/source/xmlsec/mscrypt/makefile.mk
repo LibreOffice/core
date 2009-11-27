@@ -47,9 +47,11 @@ LIBTARGET=NO
 
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 
-.IF "$(WITH_MOZILLA)" == "NO"
+.IF "$(WITH_MOZILLA)" == "NO" || "$(ENABLE_NSS_MODULE)"!="YES"
+.IF "$(SYSTEM_MOZILLA)" != "YES"
 @all:
     @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity/nss"
+.ENDIF
 .ENDIF
 
 CDEFS += -DXMLSEC_CRYPTO_MSCRYPTO -DXMLSEC_NO_XSLT

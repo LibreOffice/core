@@ -45,9 +45,11 @@ ENABLE_EXCEPTIONS = TRUE
 CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 .ENDIF
 
-.IF "$(WITH_MOZILLA)" == "NO"
+.IF "$(WITH_MOZILLA)" == "NO" || "$(ENABLE_NSS_MODULE)"!="YES"
+.IF "$(SYSTEM_MOZILLA)" != "YES"
 @all:
     @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity.."
+.ENDIF
 .ENDIF
 
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
