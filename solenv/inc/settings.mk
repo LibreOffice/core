@@ -752,6 +752,9 @@ INCLOCPRJ=$(foreach,i,$(PRJINC) $i/inc)
 INCDEPN+=$(INCLOCPRJ)
 .ENDIF
 .IF "$(INCPRE)"!=""
+INCDEPN+=$(INCPRE)
+.ENDIF
+
 # Resource-Pfad fuer .SRS
 
 .IF "$(common_build_srs)"!=""
