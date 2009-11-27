@@ -64,14 +64,6 @@
 #include <osl/process.h>
 #include <osl/conditn.hxx>
 
-#ifndef _ZLIB_H
-#ifdef SYSTEM_ZLIB
-#include "zlib.h"
-#else
-#include "zlib/zlib.h"
-#endif
-#endif
-
 namespace beans = com::sun::star::beans ;
 namespace container = com::sun::star::container ;
 namespace deployment = com::sun::star::deployment ;
@@ -104,14 +96,14 @@ public:
         throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
         {
             sal_Int32 n = m_xStream->readBytes(aData, nBytesToRead);
-            OSL_TRACE( aData.get()->elements );
+            OSL_TRACE( "\n %s", aData.get()->elements );
             return n;
         };
     virtual sal_Int32 SAL_CALL readSomeBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
         throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
         {
             sal_Int32 n = m_xStream->readSomeBytes(aData, nMaxBytesToRead);
-            OSL_TRACE( aData.get()->elements );
+            OSL_TRACE( "\n %s", aData.get()->elements );
             return n;
         };
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
@@ -146,148 +138,6 @@ public:
     virtual void SAL_CALL setInputStream( uno::Reference< io::XInputStream > const & rStream )
         throw (uno::RuntimeException) { m_xStream = rStream; };
 };
-
-//------------------------------------------------------------------------------
-
-class InflateInputStream : public ::cppu::WeakImplHelper1< io::XInputStream >
-{
-    uno::Reference< io::XInputStream > m_xStream;
-
-    uno::Sequence < sal_Int8 > m_aBuffer;
-    sal_Int32 m_nOffset;
-    bool m_bRead;
-
-    rtl::OUString m_aContentEncoding;
-
-    void readIntoMemory();
-
-public:
-    InflateInputStream(const uno::Reference< io::XInputStream >& rxStream,const rtl::OUString& rContentEncoding) :
-        m_xStream(rxStream), m_nOffset(0), m_bRead(false), m_aContentEncoding(rContentEncoding) {};
-
-    virtual sal_Int32 SAL_CALL readBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL readSomeBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
-        { readIntoMemory(); return readBytes(aData, nMaxBytesToRead ); };
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
-        {
-            readIntoMemory();
-            if( m_nOffset + nBytesToSkip < m_aBuffer.getLength() )
-                m_nOffset += nBytesToSkip;
-            else
-                m_nOffset = m_aBuffer.getLength();
-        };
-    virtual sal_Int32 SAL_CALL available()
-        throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
-        {   readIntoMemory(); return m_aBuffer.getLength() - m_nOffset; };
-    virtual void SAL_CALL closeInput( )
-        throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
-        { m_xStream->closeInput(); };
-};
-
-
-sal_Int32 SAL_CALL
-InflateInputStream::readBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
-{
-    readIntoMemory();
-    sal_Int32 nAvailable = available();
-    sal_Int32 nBytesToCopy =  nAvailable < nBytesToRead ? nAvailable : nBytesToRead;
-    if( nBytesToCopy > 0 )
-    {
-        aData.realloc(nBytesToCopy);
-        rtl_copyMemory(aData.getArray(), m_aBuffer.getConstArray() + m_nOffset, nBytesToCopy);
-        m_nOffset += nBytesToCopy;
-    }
-
-    return nBytesToCopy;
-};
-
-void InflateInputStream::readIntoMemory()
-{
-    if( !m_bRead && m_xStream.is() )
-    {
-        const sal_Int32 nBytesRequested = 4096;
-
-        uno::Sequence < sal_Int8 > aTempBuffer(nBytesRequested);
-        uno::Sequence < sal_Int8 > aCompressedBuffer;
-        sal_Int32 nBytesRead;
-
-        m_bRead = true;
-
-        do
-        {
-            nBytesRead = m_xStream->readBytes(aTempBuffer, nBytesRequested);
-
-            if( nBytesRead > 0 )
-            {
-                sal_Int32 nOffset = aCompressedBuffer.getLength();
-                aCompressedBuffer.realloc( nOffset + nBytesRead );
-
-                rtl_copyMemory(aCompressedBuffer.getArray() + nOffset, aTempBuffer.getConstArray(), nBytesRead);
-            }
-        }
-        while( nBytesRead == nBytesRequested );
-
-        z_stream *pStream = new z_stream;
-        /* memset to 0 to set zalloc/opaque etc */
-        rtl_zeroMemory (pStream, sizeof(*pStream));
-
-        int windowSize = 15;
-        int headerOffset = 0;
-
-        if( m_aContentEncoding.equalsAscii("gzip") )
-        {
-            sal_uInt8 magic[2];
-            magic[0] = *((sal_uInt8 *) aCompressedBuffer.getConstArray());
-            magic[1] = *((sal_uInt8 *) aCompressedBuffer.getConstArray() + 1);
-
-            if( (magic[0] == 0x1f) && (magic[1] == 0x8b) )
-            {
-                windowSize = -14;
-                headerOffset = 10;
-            }
-        }
-
-        pStream->next_in = (unsigned char *) aCompressedBuffer.getConstArray();
-        pStream->avail_in = aCompressedBuffer.getLength();
-
-        pStream->next_in += headerOffset;
-        pStream->avail_in -= headerOffset;
-
-        if( Z_OK == inflateInit2(pStream, windowSize) )
-        {
-            int result;
-
-            do
-            {
-                sal_Int32 nOffset = m_aBuffer.getLength();
-                m_aBuffer.realloc(nOffset + 4096);
-
-                pStream->next_out  = reinterpret_cast < unsigned char* > ( m_aBuffer.getArray() + nOffset );
-                pStream->avail_out = 4096;
-
-                result = ::inflate(pStream, Z_FINISH);
-
-                if( result ==  Z_STREAM_END )
-                    break;
-
-            } while( result ==  Z_BUF_ERROR );
-
-            inflateEnd(pStream);
-            m_aBuffer.realloc(pStream->total_out);
-
-        }
-
-        if (pStream != NULL)
-        {
-            delete pStream;
-            pStream = NULL;
-        }
-    }
-}
 
 //------------------------------------------------------------------------------
 
@@ -486,7 +336,7 @@ UpdateInformationProvider::UpdateInformationProvider(
     const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI
 ) : m_xContext(xContext), m_xContentIdFactory(xContentIdFactory),
     m_xContentProvider(xContentProvider), m_xDocumentBuilder(xDocumentBuilder),
-    m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(2)
+    m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(1)
 {
     uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
     if( !xServiceManager.is() )
@@ -563,14 +413,11 @@ UpdateInformationProvider::UpdateInformationProvider(
 
     m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
     m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
-    m_aRequestHeaderList[1].Name = UNISTRING("Accept-Encoding");
-    m_aRequestHeaderList[1].Value = uno::makeAny( UNISTRING("gzip,deflate") );
-
     if( aUserAgent.getLength() > 0 )
     {
-        m_aRequestHeaderList.realloc(3);
-        m_aRequestHeaderList[2].Name = UNISTRING("User-Agent");
-        m_aRequestHeaderList[2].Value = uno::makeAny(aUserAgent);
+        m_aRequestHeaderList.realloc(2);
+        m_aRequestHeaderList[1].Name = UNISTRING("User-Agent");
+        m_aRequestHeaderList[1].Value = uno::makeAny(aUserAgent);
     }
 }
 
@@ -684,43 +531,13 @@ UpdateInformationProvider::load(const rtl::OUString& rURL)
 
         throw;
     }
-
-    uno::Sequence< beans::Property > aProps( 1 );
-    aProps[0].Name = UNISTRING( "Content-Encoding" );
-
-    aCommand.Name = UNISTRING("getPropertyValues");
-    aCommand.Argument = uno::makeAny( aProps );
-
-    sal_Bool bCompressed = sal_False;
-    rtl::OUString aContentEncoding;
-
-    try
-    {
-        uno::Any aResult = xCommandProcessor->execute(aCommand, 0,
-            static_cast < XCommandEnvironment *> (this));
-        uno::Reference< sdbc::XRow > xPropList( aResult, uno::UNO_QUERY );
-        if ( xPropList.is() ) {
-            aContentEncoding = xPropList->getString(1);
-            if( aContentEncoding.equalsAscii("gzip") ||  aContentEncoding.equalsAscii("deflate"))
-                bCompressed = sal_True;
-        }
-    }
-    catch( const uno::Exception &e )
-    {
-        OSL_TRACE( "Caught exception: %s\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
-    }
-
     storeCommandInfo(0, uno::Reference< ucb::XCommandProcessor > ());
 
     uno::Reference< ucb::XCommandProcessor2 > xCommandProcessor2(xCommandProcessor, uno::UNO_QUERY);
     if( xCommandProcessor2.is() )
         xCommandProcessor2->releaseCommandIdentifier(nCommandId);
 
-    if ( bCompressed )
-        return INPUT_STREAM( new InflateInputStream( aSink->getInputStream(), aContentEncoding ) );
-    else
-        return INPUT_STREAM(aSink->getInputStream());
+    return INPUT_STREAM(aSink->getInputStream());
 }
 
 //------------------------------------------------------------------------------
