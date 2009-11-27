@@ -221,7 +221,6 @@ private:
     SfxMedium *                 pMedium;            // Beschreibung der Datei bzw. des Storage, in dem sich das Objekt befindet
     SfxStyleSheetBasePool*      pStyleSheetPool;    // StyleSheets
     SfxObjectCreateMode         eCreateMode;        // Zweck des Objekts
-    sal_uInt16                  nUnused;
     sal_Bool                    bHasName :1,        // sal_True := bestehendes Objekt, sal_False := es ist ein neues Objekt
                                 bIsTmp :1;          // temp. Storage
 
