@@ -324,7 +324,16 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            // Does this need to be shown to the user?
+            bSuccess = false;
+            try
+            {
+                ::comphelper::disposeComponent( xController );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
     }
 
@@ -342,7 +351,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     }
     else
         if ( rListener.is() )
-        rListener->loadCancelled( this );
+            rListener->loadCancelled( this );
 }
 
 // -----------------------------------------------------------------------

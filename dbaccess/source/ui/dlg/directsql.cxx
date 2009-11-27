@@ -171,13 +171,6 @@ DBG_NAME(DirectSQLDialog)
     }
 
     //--------------------------------------------------------------------
-    void DirectSQLDialog::addHistoryEntry(const String& _rStatement)
-    {
-        CHECK_INVARIANTS("DirectSQLDialog::addHistoryEntry");
-        implAddToStatementHistory(_rStatement);
-    }
-
-    //--------------------------------------------------------------------
     sal_Int32 DirectSQLDialog::getHistorySize() const
     {
         CHECK_INVARIANTS("DirectSQLDialog::getHistorySize");

@@ -101,11 +101,14 @@ void OSubComponent::release() throw ( )
     Reference< XInterface > x( xDelegator );
     if (! x.is())
     {
-        if (osl_decrementInterlockedCount( &m_refCount ) == 0 && m_refCount == 0 )
+        if (osl_decrementInterlockedCount( &m_refCount ) == 0 )
         {
-            OSL_ENSURE( m_refCount == 0, "OSubComponent::release: why the hell is this false!" );
             if (! rBHelper.bDisposed)
             {
+                // *before* again incrementing our ref count, ensure that our weak connection point
+                // will not create references to us anymore (via XAdapter::queryAdapted)
+                disposeWeakConnectionPoint();
+
                 Reference< XInterface > xHoldAlive( *this );
                 // remember the parent
                 Reference< XInterface > xParent;
@@ -115,13 +118,13 @@ void OSubComponent::release() throw ( )
                     m_xParent = NULL;
                 }
 
-                OSL_ENSURE( m_refCount == 1, "OSubComponent::release: invalid ref count!" );
+                OSL_ENSURE( m_refCount == 1, "OSubComponent::release: invalid ref count (before dispose)!" );
 
                 // First dispose
                 dispose();
 
                 // only the alive ref holds the object
-                OSL_ENSURE( m_refCount == 1, "OSubComponent::release: invalid ref count!" );
+                OSL_ENSURE( m_refCount == 1, "OSubComponent::release: invalid ref count (after dispose)!" );
 
                 // release the parent in the ~
                 if (xParent.is())

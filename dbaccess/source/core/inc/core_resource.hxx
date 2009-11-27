@@ -110,8 +110,6 @@ namespace dbaccess
                 const sal_Char*         _pPlaceholderAscii2,
                 const ::rtl::OUString&  _rReplace2
         );
-
-        static ResMgr*  getResManager();
     };
 
     //=========================================================================
