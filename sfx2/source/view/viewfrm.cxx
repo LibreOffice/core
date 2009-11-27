@@ -101,6 +101,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+using ::com::sun::star::awt::XWindow;
 namespace css = ::com::sun::star;
 
 #ifndef GCC
@@ -1032,6 +1033,29 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 }
 
 //--------------------------------------------------------------------
+void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
+{
+    i_rViewShell.PopSubShells_Impl();
+    sal_uInt16 nLevel = pDispatcher->GetShellLevel( i_rViewShell );
+    if ( nLevel != USHRT_MAX )
+    {
+        if ( nLevel )
+        {
+            // more sub shells on the stack, which were not affected by PopSubShells_Impl
+            SfxShell *pSubShell = pDispatcher->GetShell( nLevel-1 );
+            if ( pSubShell == i_rViewShell.GetSubShell() )
+                // "real" sub shells will be deleted elsewhere
+                pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL );
+            else
+                pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE );
+        }
+        pDispatcher->Pop( i_rViewShell );
+        pDispatcher->Flush();
+    }
+
+}
+
+//--------------------------------------------------------------------
 void SfxViewFrame::ReleaseObjectShell_Impl()
 
 /*  [Beschreibung]
@@ -1044,7 +1068,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     die SfxObjectShell ausgetauscht werden.
 
     Zwischen RealeaseObjectShell() und SetObjectShell() darf die Kontrolle
-    nicht an das ::com::sun::star::chaos::System abgegeben werden.
+    nicht an das System abgegeben werden.
 
 
     [Querverweise]
@@ -1065,21 +1089,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     SfxViewShell *pDyingViewSh = GetViewShell();
     if ( pDyingViewSh )
     {
-        // Jetzt alle SubShells wechhauen
-        pDyingViewSh->PushSubShells_Impl( sal_False );
-        sal_uInt16 nLevel = pDispatcher->GetShellLevel( *pDyingViewSh );
-        if ( nLevel && nLevel != USHRT_MAX )
-        {
-            // Es gibt immer nocht SubShells
-            SfxShell *pSubShell = pDispatcher->GetShell( nLevel-1 );
-            if ( pSubShell == pDyingViewSh->GetSubShell() )
-                //"Echte" Subshells nicht deleten
-                pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL );
-            else
-                pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE );
-        }
-        pDispatcher->Pop( *pDyingViewSh );
-        pDispatcher->Flush();
+        PopShellAndSubShells_Impl( *pDyingViewSh );
         pDyingViewSh->DisconnectAllClients();
         SetViewShell_Impl(0);
         delete pDyingViewSh;
@@ -2127,10 +2137,57 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 }
 
 //--------------------------------------------------------------------
+SfxViewShell* SfxViewFrame::LoadNewView_Impl( const USHORT i_nNewViewNo, SfxViewShell* i_pOldShell )
+{
+    OSL_PRECOND( GetViewShell() == NULL, "SfxViewFrame::LoadNewView_Impl: not allowed to be called with an exsiting view shell!" );
+    OSL_PRECOND( GetObjectShell() != NULL, "SfxViewFrame::LoadNewView_Impl: no document -> no loading!" );
+
+    // our UNO doc
+    const Reference < XModel > xModel( GetObjectShell()->GetModel(), UNO_QUERY_THROW );
+
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // >>> to be moved into a UNO view factory implementation
+    SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
+
+    // remember ViewID
+    pImp->nCurViewId = rDocumentFactory.GetViewFactory( i_nNewViewNo ).GetOrdinal();
+        // TODO: shouldn't this be done in success case only?
+
+    SfxViewFactory& rViewFactory = rDocumentFactory.GetViewFactory( i_nNewViewNo );
+
+    SfxViewShell* pViewShell = rViewFactory.CreateInstance( this, i_pOldShell );
+    ENSURE_OR_THROW( pViewShell, "invalid view shell provided by factory" );
+
+    // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
+    GetDispatcher()->SetDisableFlags( 0 );
+    SetViewShell_Impl( pViewShell );
+
+    // ensure a default controller, if the view shell did not provide an own implementation
+    if ( !pViewShell->GetController().is() )
+        pViewShell->SetController( new SfxBaseController( pViewShell ) );
+
+    // <<< to be moved into a UNO view factory implementation
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    // introduce model/view/controller to each other
+    Reference < XWindow > xWindow( GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY );
+    Reference < XFrame > xFrame( GetFrame()->GetFrameInterface() );
+    Reference < XController > xController( pViewShell->GetController() );
+
+    xController->attachModel( xModel );
+    xModel->connectController( xController );
+    xFrame->setComponent( xWindow, xController );
+    xController->attachFrame( xFrame );
+    xModel->setCurrentController( xController );
+
+    return pViewShell;
+}
+
+//--------------------------------------------------------------------
 
 sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 (
-    sal_uInt16  nViewId,        /*  > 0
+    sal_uInt16  nViewIdOrNo,    /*  > 0
                                 Registrierungs-Id der View, auf die umge-
                                 schaltet werden soll, bzw. die erstmalig
                                 erzeugt werden soll.
@@ -2139,7 +2196,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
                                 Es soll die Default-View verwendet werden. */
 
     sal_Bool    bIsIndex        /*  sal_True
-                                'nViewId' ist keine Registrations-Id sondern
+                                'nViewIdOrNo' ist keine Registrations-Id sondern
                                 ein Index in die f"ur die in diesem
                                 <SfxViewFrame> dargestellte <SfxObjectShell>.
                                 */
@@ -2166,133 +2223,44 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 */
 
 {
-    try{
-    DBG_ASSERT( GetObjectShell(), "Kein Dokument!" );
-
-    SfxObjectFactory &rDocFact = GetObjectShell()->GetFactory();
-
-    // find index of old and new ViewShell
-    sal_uInt16 nOldNo = USHRT_MAX, nNewNo = USHRT_MAX;
-    bIsIndex |= 0 == nViewId;
-    for ( sal_uInt16 nNo = 0; nNo < rDocFact.GetViewFactoryCount(); ++nNo )
+    try
     {
-        sal_uInt16 nFoundId = rDocFact.GetViewFactory(nNo).GetOrdinal();
-        if ( nNewNo == USHRT_MAX )
+        ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
+
+        GetBindings().ENTERREGISTRATIONS();
+        LockAdjustPosSizePixel();
+
+        // if we already have a view shell, remove it
+        SfxViewShell* pOldSh = GetViewShell();
+        if ( pOldSh )
         {
-            if ( bIsIndex && nViewId == nNo )
-            {
-                nNewNo = nNo;
-                nViewId = nFoundId; // for nViewId == 0
-            }
-            else if ( !bIsIndex && nViewId == nFoundId )
-               nNewNo = nNo;
-        }
-        if ( pImp->nCurViewId == nFoundId )
-            nOldNo = nNo;
-    }
+            // ask wether it can be closed
+            Reference< XController > xController( pOldSh->GetController(), UNO_SET_THROW );
+            if ( !xController->suspend( sal_True ) )
+                return sal_False;
 
-    if ( nNewNo == USHRT_MAX )
-    {
-        // unknown ID -> fall back to default
-        sal_uInt16 nFoundId = rDocFact.GetViewFactory(0).GetOrdinal();
-        nNewNo = 0;
-        nViewId = nFoundId;
-        if ( pImp->nCurViewId == nFoundId )
-            nOldNo = 0;
-    }
+            // remove sub shells from Dispatcher before switching to new ViewShell
+            PopShellAndSubShells_Impl( *pOldSh );
 
-    SfxViewShell *pSh = GetViewShell();
-
-    DBG_ASSERT( !pSh || nOldNo != USHRT_MAX, "old shell id not found" );
-
-    // does a ViewShell exist already?
-    SfxViewShell *pOldSh = pSh;
-    if ( pOldSh )
-    {
-        // ask wether it can be closed
-        if ( !pOldSh->PrepareClose() )
-            return sal_False;
-
-        // remove SubShells from Dispatcher before switching to new ViewShell
-        pOldSh->PushSubShells_Impl( sal_False );
-        sal_uInt16 nLevel = pDispatcher->GetShellLevel( *pOldSh );
-        if ( nLevel )
-        {
-            SfxShell *pSubShell = pDispatcher->GetShell( nLevel-1 );
-            if ( pSubShell == pOldSh->GetSubShell() )
-                //"real" SubShells are not deleted
-                pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL );
-            else
-                // SubShells only known to Dispatcher must be deleted
-                pDispatcher->Pop( *pSubShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE );
+            // reset view shell, that's a precondition for the LoadNewView_Impl below
+            SetViewShell_Impl( NULL );
         }
 
-        pDispatcher->Pop( *pOldSh );
-        GetBindings().Invalidate( nOldNo + SID_VIEWSHELL0 );
+        // create and load new ViewShell
+        SfxObjectFactory& rDocFact = GetObjectShell()->GetFactory();
+        const sal_uInt16 nNewNo = ( bIsIndex || !nViewIdOrNo ) ? nViewIdOrNo : rDocFact.GetViewNo_Impl( nViewIdOrNo, 0 );
+        SfxViewShell* pNewSh = LoadNewView_Impl( nNewNo, pOldSh );
+
+        // allow resize events to be processed
+        UnlockAdjustPosSizePixel();
+
+        if ( GetWindow().IsReallyVisible() )
+            DoAdjustPosSizePixel( pNewSh, Point(), GetWindow().GetOutputSizePixel() );
+
+        GetBindings().LEAVEREGISTRATIONS();
+        delete pOldSh;
     }
-
-    // remember ViewID
-    pImp->nCurViewId = nViewId;
-    GetBindings().Invalidate( nNewNo + SID_VIEWSHELL0 );
-
-    // create new ViewShell
-    SfxViewFactory &rViewFactory = rDocFact.GetViewFactory( nNewNo );
-    LockAdjustPosSizePixel();
-
-    GetBindings().ENTERREGISTRATIONS();
-    pSh = rViewFactory.CreateInstance(this, pOldSh);
-
-    Window *pEditWin = pSh->GetWindow();
-    DBG_ASSERT( !pEditWin || !pEditWin->IsReallyVisible(), "don`t show your ViewShell`s Window by yourself!" );
-
-    // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
-    GetDispatcher()->SetDisableFlags( 0 );
-    SetViewShell_Impl(pSh);
-
-    Reference < ::com::sun::star::awt::XWindow > xWindow(
-        GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY );
-    Reference < XFrame > xFrame( GetFrame()->GetFrameInterface() );
-    if ( !pSh->GetController().is() )
-        pSh->SetController( new SfxBaseController( pSh ) );
-    Reference < XController > xController( pSh->GetController() );
-    xFrame->setComponent( xWindow, xController );
-
-    xController->attachFrame( xFrame );
-    Reference < XModel > xModel( GetObjectShell()->GetModel() );
-    if ( xModel.is() )
-    {
-        xController->attachModel( xModel );
-        xModel->connectController( xController );
-        xModel->setCurrentController( xController );
-    }
-
-    GetDispatcher()->Push( *pSh );
-    if ( pSh->GetSubShell() )
-        GetDispatcher()->Push( *pSh->GetSubShell() );
-    pSh->PushSubShells_Impl();
-    GetDispatcher()->Flush();
-
-    // create UI elements before size is set
-    if ( SfxViewFrame::Current() == this )
-        GetDispatcher()->Update_Impl( sal_True );
-
-    // allow resize events to be processed
-    UnlockAdjustPosSizePixel();
-
-    Window* pFrameWin = &GetWindow();
-    if ( pFrameWin != &GetFrame()->GetWindow() )
-        pFrameWin->Show();
-
-    if ( GetWindow().IsReallyVisible() )
-        DoAdjustPosSizePixel( pSh, Point(), GetWindow().GetOutputSizePixel() );
-
-    if ( pEditWin && pSh->IsShowView_Impl() )
-        pEditWin->Show();
-
-    GetBindings().LEAVEREGISTRATIONS();
-    delete pOldSh;
-    }
-    catch ( com::sun::star::uno::Exception& )
+    catch ( const com::sun::star::uno::Exception& )
     {
         // the SfxCode is not able to cope with exceptions thrown while creating views
         // the code will crash in the stack unwinding procedure, so we shouldn't let exceptions go through here

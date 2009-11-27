@@ -301,7 +301,11 @@ public:
     SAL_DLLPRIVATE void MiscState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl( USHORT nId );
     SAL_DLLPRIVATE void AddDispatchMacroToBasic_Impl(const ::rtl::OUString& sMacro);
+
 //#endif
+private:
+    SAL_DLLPRIVATE SfxViewShell* LoadNewView_Impl( const USHORT i_nNewViewNo, SfxViewShell* i_pOldShell );
+    SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
 };
 
 //--------------------------------------------------------------------

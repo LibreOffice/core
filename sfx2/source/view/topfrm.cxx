@@ -1180,15 +1180,9 @@ SfxTopViewFrame::SfxTopViewFrame
         LockAdjustPosSizePixel();
     }
 
-    try
+    if ( pObjShell && !SwitchToViewShell_Impl( nViewId ) )
     {
-        if ( pObjShell )
-            SwitchToViewShell_Impl( nViewId );
-    }
-    catch (com::sun::star::uno::Exception& )
-    {
-        // make sure that the ctor is left regularly
-        ReleaseObjectShell_Impl();
+        // TODO: better error handling? Under which conditions can this fail?
         return;
     }
 

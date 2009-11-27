@@ -63,7 +63,7 @@ class SfxTopFrame;
 
 class SfxFrameWeak;
 
-class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::lang::XServiceInfo >
+class SAL_DLLPRIVATE SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::lang::XServiceInfo >
 {
     ::comphelper::ComponentContext  m_aContext;
 

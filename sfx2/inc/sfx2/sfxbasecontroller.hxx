@@ -499,20 +499,12 @@ public:
     SAL_DLLPRIVATE BOOL HasMouseClickListeners_Impl();
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper ();
 //#endif
+private:
+    SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const bool i_bConnect );
 
 //________________________________________________________________________________________________________
 //  private variables
 //________________________________________________________________________________________________________
-
-    /** With this method you can set the flag that controlls whether the
-        frame is released together with a controller when the later one is
-        disposed.
-        @param bFlag
-            When passing <true/>, the default value of this flag, then
-            disposing the controller results in releasing the frame.
-            Passing <false/> leaves the frame unaffected.
-    */
-    void FrameIsReleasedWithController (sal_Bool bFlag);
 
 private:
 

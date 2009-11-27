@@ -1517,16 +1517,12 @@ void SfxViewShell::PushSubShells_Impl( BOOL bPush )
     {
         for ( USHORT n=0; n<nCount; n++ )
             pDisp->Push( *pImp->aArr[n] );
-
-//      HACK(evtl. PushSubShells fuer SW virtuell machen oder im SW umbauen)
-//      Notify( *this, SfxSimpleHint( SFX_HINT_RESERVED4 ) );
     }
     else if ( nCount )
     {
-        pDisp->Pop( *pImp->aArr[0], SFX_SHELL_POP_UNTIL );
-
-//      HACK(evtl. PushSubShells fuer SW virtuell machen oder im SW umbauen)
-//      Notify( *this, SfxSimpleHint( SFX_HINT_RESERVED3 ) );
+        SfxShell& rPopUntil = *pImp->aArr[0];
+        if ( pDisp->GetShellLevel( rPopUntil ) != USHRT_MAX )
+            pDisp->Pop( rPopUntil, SFX_SHELL_POP_UNTIL );
     }
 
     pDisp->Flush();
@@ -2243,3 +2239,4 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
     {
     }
 }
+

@@ -305,10 +305,22 @@ String SfxObjectFactory::GetModuleName() const
         ::rtl::OUString sModuleName = aPropSet.getUnpackedValueOrDefault(PROP_MODULEUINAME, ::rtl::OUString());
         return String(sModuleName);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 
     return String();
+}
+
+
+sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback )
+{
+    for ( sal_uInt16 curViewNo = 0; curViewNo < GetViewFactoryCount(); ++curViewNo )
+    {
+        const sal_uInt16 curViewId = GetViewFactory( curViewNo ).GetOrdinal();
+        if ( i_nViewId == curViewId )
+           return curViewNo;
+    }
+    return i_nFallback;
 }

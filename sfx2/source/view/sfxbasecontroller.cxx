@@ -65,6 +65,7 @@
 #include <basic/sbstar.hxx>
 #include <uno/mapping.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/docfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
@@ -86,6 +87,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <hash_map>
 
@@ -440,17 +442,6 @@ struct IMPL_SfxBaseController_DataContainer
     SfxBaseController*                      m_pController           ;
     sal_Bool                                m_bDisposing            ;
     sal_Bool                                m_bSuspendState;
-    /** When this flag is <true/> (the default) then in dispose() the frame
-        and with it the view shell are released together with the
-        controller.
-        A derived class can set the flag to <false/> when it wants to
-        exchange controllers that work on the same view shell.  One
-        application is the Impress Multi Pane GUI that changes shells that
-        are stacked on one view shell.  Controllers are associated with the
-        stacked shells and thus must not destroy the view shell which is not
-        affected by the switching.
-    */
-    sal_Bool                                m_bIsFrameReleasedWithController;
     css::uno::Reference< css::frame::XTitle > m_xTitleHelper;
 
     IMPL_SfxBaseController_DataContainer(   MUTEX&              aMutex      ,
@@ -465,7 +456,6 @@ struct IMPL_SfxBaseController_DataContainer
             ,   m_pController           ( pController                                           )
             ,   m_bDisposing            ( sal_False                                             )
             ,   m_bSuspendState                 ( sal_False                                              )
-            ,   m_bIsFrameReleasedWithController( sal_True                                              )
     {
     }
 
@@ -703,9 +693,7 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
 
         if ( m_pData->m_pViewShell )
         {
-            SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
-            pActFrame->Enable( TRUE );
-            pActFrame->GetDispatcher()->Lock( FALSE );
+            ConnectSfxFrame_Impl( true );
         }
     }
 }
@@ -766,9 +754,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
         BOOL bRet = bOther || pDocShell->PrepareClose();
         if ( bRet )
         {
-            // disable window and dispatcher until suspend call is withdrawn
-            pActFrame->Enable( FALSE );
-            pActFrame->GetDispatcher()->Lock( TRUE );
+            ConnectSfxFrame_Impl( false );
             m_pData->m_bSuspendState = sal_True;
         }
 
@@ -781,9 +767,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
 
         if ( m_pData->m_pViewShell )
         {
-            SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
-            pActFrame->Enable( TRUE );
-            pActFrame->GetDispatcher()->Lock( FALSE );
+            ConnectSfxFrame_Impl( true );
         }
 
         m_pData->m_bSuspendState = sal_False;
@@ -1102,11 +1086,6 @@ void SfxBaseController::BorderWidthsChanged_Impl()
 //  SfxBaseController -> XComponent
 //________________________________________________________________________________________________________
 
-void SfxBaseController::FrameIsReleasedWithController (sal_Bool bFlag)
-{
-    m_pData->m_bIsFrameReleasedWithController = bFlag;
-}
-
 void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -1123,13 +1102,10 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
     if ( m_pData->m_pViewShell )
     {
         SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
-        if (m_pData->m_bIsFrameReleasedWithController)
-        {
-            if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
-                pFrame->GetFrame()->SetIsClosing_Impl();
-            m_pData->m_pViewShell->DiscardClients_Impl();
-            m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
-        }
+        if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
+            pFrame->GetFrame()->SetIsClosing_Impl();
+        m_pData->m_pViewShell->DiscardClients_Impl();
+        m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
 
         if ( pFrame )
         {
@@ -1146,12 +1122,9 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
                 pView = SfxViewFrame::GetNext( *pView, pDoc );
             }
 
-            if ( m_pData->m_bIsFrameReleasedWithController )
-            {
-                SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEVIEW ), pDoc ) );
-                if ( !pView )
-                    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), pDoc) );
-            }
+            SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEVIEW ), pDoc ) );
+            if ( !pView )
+                SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), pDoc) );
 
             REFERENCE< XMODEL > xModel = pDoc->GetModel();
             REFERENCE < ::com::sun::star::util::XCloseable > xCloseable( xModel, com::sun::star::uno::UNO_QUERY );
@@ -1168,8 +1141,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             m_pData->m_xListener->disposing( aObject );
             SfxViewShell *pShell = m_pData->m_pViewShell;
             m_pData->m_pViewShell = NULL;
-            if ( pFrame->GetViewShell() == pShell
-                && m_pData->m_bIsFrameReleasedWithController)
+            if ( pFrame->GetViewShell() == pShell )
             {
                 // Enter registrations only allowed if we are the owner!
                 if ( pFrame->GetFrame()->OwnsBindings_Impl() )
@@ -1372,6 +1344,39 @@ BOOL SfxBaseController::HasKeyListeners_Impl()
 BOOL SfxBaseController::HasMouseClickListeners_Impl()
 {
     return m_pData->m_aUserInputInterception.hasMouseClickListeners();
+}
+
+void SfxBaseController::ConnectSfxFrame_Impl( const bool i_bConnect )
+{
+    ENSURE_OR_THROW( m_pData->m_pViewShell, "not to be called without a view shell" );
+    SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame();
+    ENSURE_OR_THROW( pActFrame, "a view shell without a view frame is pretty pathological" );
+
+    // disable window and dispatcher
+    pActFrame->Enable( i_bConnect );
+    pActFrame->GetDispatcher()->Lock( !i_bConnect );
+
+    if ( i_bConnect )
+    {
+        pActFrame->GetDispatcher()->Push( *m_pData->m_pViewShell );
+        if ( m_pData->m_pViewShell->GetSubShell() )
+            pActFrame->GetDispatcher()->Push( *m_pData->m_pViewShell->GetSubShell() );
+        m_pData->m_pViewShell->PushSubShells_Impl();
+        pActFrame->GetDispatcher()->Flush();
+
+        Window* pEditWin = m_pData->m_pViewShell->GetWindow();
+        if ( pEditWin && m_pData->m_pViewShell->IsShowView_Impl() )
+            pEditWin->Show();
+
+        if ( SfxViewFrame::Current() == pActFrame )
+            pActFrame->GetDispatcher()->Update_Impl( sal_True );
+    }
+
+    // invalidate slot corresponding to the view shell
+    const sal_uInt16 nViewNo = m_pData->m_pViewShell->GetObjectShell()->GetFactory().GetViewNo_Impl( pActFrame->GetCurViewId(), USHRT_MAX );
+    DBG_ASSERT( nViewNo != USHRT_MAX, "view shell id not found" );
+    if ( nViewNo != USHRT_MAX )
+        pActFrame->GetBindings().Invalidate( nViewNo + SID_VIEWSHELL0 );
 }
 
 //=============================================================================

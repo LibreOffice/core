@@ -339,11 +339,11 @@ public:
     SAL_DLLPRIVATE void SetFrameSet_Impl(SfxFrameSetDescriptor*);
     SAL_DLLPRIVATE void CheckIPClient_Impl( SfxInPlaceClient*, const Rectangle& );
     SAL_DLLPRIVATE void PushSubShells_Impl( BOOL bPush=TRUE );
+    SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( FALSE ); }
     SAL_DLLPRIVATE void TakeOwnerShip_Impl();
     SAL_DLLPRIVATE void CheckOwnerShip_Impl();
     SAL_DLLPRIVATE void TakeFrameOwnerShip_Impl();
     SAL_DLLPRIVATE BOOL ExecKey_Impl(const KeyEvent& aKey);
-
 #endif
 };
 

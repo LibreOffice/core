@@ -522,7 +522,7 @@ void SfxDispatcher::Pop
     SfxApplication *pSfxApp = SFX_APP();
 
 #ifdef DBG_UTIL
-    ByteString aMsg( "SfxDispatcher(" );
+    ByteString aMsg( "-SfxDispatcher(" );
     aMsg += ByteString::CreateFromInt64( (sal_uIntPtr) this );
     aMsg += bPush ? ")::Push(" : ")::Pop(";
     if ( rShell.GetInterface() )
