@@ -40,6 +40,13 @@ NO_DEFAULT_STL=TRUE
 SOLARINC!:=$(subst,/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(SOLARINC))
 
 .IF "$(OS)"=="SOLARIS"
-SOLARINC+=-I$(COMPATH)/prod/include/CC/stlport4
-SOLARLIB+=-L$(COMPATH)/prod/lib/stlport4
+# hack due to #i53089#
+.IF "$(COMPATH:+"x")" != "$(COMPATH:+"x":s/binx//)"
+HELP_COMPATH:=$(subst,/binx, $(COMPATH:+"x"))
+.ELSE			# "$(COMPATH:+"x")" == "$(COMPATH:s/binx//)/binx"
+HELP_COMPATH:=$(COMPATH)
+.ENDIF			# "$(COMPATH:+"x")" == "$(COMPATH:s/binx//)/binx"
+#SOLARINC+=-I$(HELP_COMPATH)/prod/include/CC/stlport4
+#SOLARLIB+=-L$(HELP_COMPATH)/prod/lib/stlport4
+SOLARINC+=-I$(HELP_COMPATH)/prod/include/CC/Cstd
 .ENDIF

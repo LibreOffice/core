@@ -76,7 +76,8 @@ CDEFS+=-D_DEBUG
 .ENDIF                        # "$(COM)"=="MSC"
 
 .IF "$(OS)"=="SOLARIS"
-APP1STDLIBS+=-lstlport
+#APP1STDLIBS+=-lstlport
+APP1STDLIBS+=-lCstd
 .ENDIF
 
 
