@@ -212,7 +212,7 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual void                updateGraphics();
+    virtual void                updateGraphics( Drawable drawable );
 
     virtual BOOL                PostEvent( void* pData );
 
