@@ -65,6 +65,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
     : Window( i_pParent, i_rId )
     , maOrigSize( 10, 10 )
     , maPageVDev( *this )
+    , maToolTipString( String( VclResId( SV_PRINT_PRINTPREVIEW_TXT ) ) )
 {
     SetPaintTransparent( TRUE );
     SetBackground();
@@ -202,15 +203,16 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
                                                   sal_Int32 i_nDPIY
                                                  )
 {
-    #if OSL_DEBUG_LEVEL > 0
     rtl::OUStringBuffer aBuf( 256 );
-    aBuf.appendAscii( "PageSize: " );
+    aBuf.append( maToolTipString );
+    #if OSL_DEBUG_LEVEL > 0
+    aBuf.appendAscii( "\n---\nPageSize: " );
     aBuf.append( sal_Int32( i_rOrigSize.Width()/100) );
     aBuf.appendAscii( "mm x " );
     aBuf.append( sal_Int32( i_rOrigSize.Height()/100) );
     aBuf.appendAscii( "mm" );
-    SetQuickHelpText( aBuf.makeStringAndClear() );
     #endif
+    SetQuickHelpText( aBuf.makeStringAndClear() );
     maMtf = i_rNewPreview;
     if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
         GetSettings().GetStyleSettings().GetWindowColor().IsDark()
