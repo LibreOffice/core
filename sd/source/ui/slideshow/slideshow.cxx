@@ -1202,7 +1202,7 @@ void SlideShow::StartFullscreenPresentation( )
         // The new frame is created hidden.  To make it visible and activate the
         // new view shell--a prerequisite to process slot calls and initialize
         // its panes--a GrabFocus() has to be called later on.
-        SfxTopFrame* pNewFrame = SfxTopFrame::Create( mpDoc->GetDocSh(), pWorkWindow, PRESENTATION_FACTORY_ID, TRUE);
+        SfxFrame* pNewFrame = SfxFrame::Create( mpDoc->GetDocSh(), *pWorkWindow, PRESENTATION_FACTORY_ID, true );
         pNewFrame->SetPresentationMode(TRUE);
 
         mpFullScreenViewShellBase = static_cast<ViewShellBase*>(pNewFrame->GetCurrentViewFrame()->GetViewShell());
