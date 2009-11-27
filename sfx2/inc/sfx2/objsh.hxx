@@ -95,7 +95,6 @@ class GDIMetaFile;
 class Bitmap;
 class INetURLObject;
 class IndexBitSet;
-class SfxTopFrame;
 class SfxAcceleratorManager;
 class JobSetup;
 class Size;

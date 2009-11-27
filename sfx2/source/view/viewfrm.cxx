@@ -2391,10 +2391,10 @@ void SfxViewFrame::ExecView_Impl
                 if ( pFrameItem )
                 {
                     pFrameItem->GetValue() >>= xFrame;
-                    pFrame = SfxTopFrame::Create( xFrame );
+                    pFrame = SfxFrame::Create( xFrame );
                 }
                 else
-                    pFrame = SfxTopFrame::Create();
+                    pFrame = SfxFrame::Create();
 
                 SfxAllItemSet aSet( SFX_APP()->GetPool() );
                 SFX_REQUEST_ARG( rReq, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
@@ -2431,7 +2431,7 @@ void SfxViewFrame::ExecView_Impl
                 {
                     Reference < XFrame > xFrame;
                     pFrameItem->GetValue() >>= xFrame;
-                    SfxTopFrame* pFrame = SfxTopFrame::Create( xFrame );
+                    SfxFrame* pFrame = SfxFrame::Create( xFrame );
                     pMed->GetItemSet()->ClearItem( SID_HIDDEN );
                     pFrame->InsertDocument_Impl( *GetObjectShell() );
                     if ( !bHidden )
@@ -2441,7 +2441,7 @@ void SfxViewFrame::ExecView_Impl
                 {
                     SfxAllItemSet aSet( GetPool() );
                     aSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, TRUE ) );
-                    SfxFrame* pFrame = SfxTopFrame::Create( GetObjectShell(), GetCurViewId(), bHidden, &aSet );
+                    SfxFrame* pFrame = SfxFrame::Create( GetObjectShell(), GetCurViewId(), bHidden, &aSet );
                     if ( bHidden )
                         pFrame->GetCurrentViewFrame()->LockObjectShell_Impl( TRUE );
                 }
@@ -3125,7 +3125,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             SfxTopViewFrame *pTop= PTR_CAST( SfxTopViewFrame, GetTopViewFrame() );
             if ( pTop )
             {
-                WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
+                WorkWindow* pWork = (WorkWindow*) pTop->GetFrame()->GetTopWindow_Impl();
                 if ( pWork )
                 {
                     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
@@ -3276,7 +3276,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     SfxTopViewFrame *pTop= PTR_CAST( SfxTopViewFrame, GetTopViewFrame() );
                     if ( pTop )
                     {
-                        WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
+                        WorkWindow* pWork = (WorkWindow*) pTop->GetFrame()->GetTopWindow_Impl();
                         if ( pWork )
                         {
                             rSet.Put( SfxBoolItem( nWhich, pWork->IsFullScreenMode() ) );
@@ -3524,7 +3524,7 @@ SfxViewFrame* SfxViewFrame::CreateViewFrame( SfxObjectShell& rDoc, sal_uInt16 nV
     if ( bHidden )
         pSet->Put( SfxBoolItem( SID_HIDDEN, sal_True ) );
 
-    SfxFrame *pFrame = SfxTopFrame::Create( &rDoc, 0, bHidden );
+    SfxFrame *pFrame = SfxFrame::Create( &rDoc, 0, bHidden );
     return pFrame->GetCurrentViewFrame();
 }
 

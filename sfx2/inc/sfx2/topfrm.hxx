@@ -41,45 +41,7 @@
 #include <sfx2/viewfrm.hxx>
 
 class SfxViewShell;
-class SfxTopFrame;
-class SfxTopFrame_Impl;
 namespace svtools { class AsynchronLink; }
-
-// class SfxTopFrame -----------------------------------------------------
-
-class SFX2_DLLPUBLIC SfxTopFrame : public SfxFrame
-{
-friend class SfxTopWindow_Impl;
-friend class SfxTopFrameWindow_Impl;
-friend class SfxTopFrame_Impl;
-
-    SfxTopFrame_Impl*   pImp;
-    Window*             pWindow;
-    SAL_DLLPRIVATE SfxTopFrame( Window* pWindow=NULL, sal_Bool bHidden = sal_False );
-    SAL_DLLPRIVATE virtual ~SfxTopFrame();
-public:
-                        TYPEINFO();
-
-    static SfxTopFrame* Create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
-    static SfxTopFrame* Create( SfxObjectShell* pDoc=0, USHORT nViewId=0, BOOL bHidden=sal_False, const SfxItemSet* pSet=NULL );
-    static SfxTopFrame* Create( SfxObjectShell* pDoc, Window* pWindow, USHORT nViewId=0, BOOL bHidden=sal_False, const SfxItemSet* pSet=NULL );
-
-    virtual Window&     GetWindow() const;
-    virtual BOOL        Close();
-    String              GetWindowData();
-
-    void                SetPresentationMode( BOOL bSet );
-    SystemWindow* GetSystemWindow() const;
-
-//#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE BOOL InsertDocument_Impl( SfxObjectShell& rDoc );
-    SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
-    SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
-    SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;
-    SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
-    SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
-//#endif
-};
 
 // class SfxTopViewFrame -------------------------------------------------
 
@@ -115,8 +77,6 @@ public:
     SAL_DLLPRIVATE void GetState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void INetExecute_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
-    SAL_DLLPRIVATE SfxTopFrame* GetTopFrame_Impl()
-                            { return (SfxTopFrame*) GetFrame(); }
 //#endif
 };
 

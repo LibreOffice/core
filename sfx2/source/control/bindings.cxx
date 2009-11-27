@@ -2350,7 +2350,7 @@ SystemWindow* SfxBindings::GetSystemWindow() const
     while ( pFrame->GetParentViewFrame_Impl() )
         pFrame = pFrame->GetParentViewFrame_Impl();
     SfxTopViewFrame* pTop = PTR_CAST( SfxTopViewFrame, pFrame->GetTopViewFrame() );
-    return pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
+    return pTop->GetFrame()->GetTopWindow_Impl();
 }
 
 BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )

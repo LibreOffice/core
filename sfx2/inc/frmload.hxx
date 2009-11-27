@@ -59,7 +59,6 @@
 
 class SfxFilter;
 class SfxFilterMatcher;
-class SfxTopFrame;
 
 class SfxFrameWeak;
 
@@ -125,7 +124,7 @@ private:
 
     sal_Bool            impl_plugDocIntoFrame(
                             const ::comphelper::NamedValueCollection& i_rDescriptor,
-                                  SfxTopFrame& i_rTargetFrame,
+                                  SfxFrame& i_rTargetFrame,
                                   SfxObjectShell& i_rDocument
                         ) const;
 

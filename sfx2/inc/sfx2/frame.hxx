@@ -90,6 +90,7 @@ class Rectangle;
 class SfxRequest;
 class SfxUnoControllerItem;
 class SvCompatWeakHdl;
+class SystemWindow;
 
 typedef SfxFrame* SfxFramePtr;
 class SfxFrameArr_Impl;
@@ -129,42 +130,46 @@ class SfxUnoFrame;
 class SFX2_DLLPUBLIC SfxFrame
 {
     friend class SfxFrameIterator;
-    friend struct SfxFramePickEntry_Impl;
-    friend class SfxUnoFrame;
-    friend class SfxViewFrame; /*HACK!*/
+    friend class SfxTopWindow_Impl;
+//  friend struct SfxFramePickEntry_Impl;
+//  friend class SfxUnoFrame;
+//  friend class SfxViewFrame; /*HACK!*/
 
 private:
-    String              aName;
     SfxFrame*           pParentFrame;
     SfxFrameArr_Impl*   pChildArr;
     SfxFrame_Impl*      pImp;
-    SfxUnoFrame*        pUnoImp;
+    Window*             pWindow;
 
 protected:
-    virtual sal_Bool    Close() = 0;
+    sal_Bool            Close();
     virtual             ~SfxFrame();
 
 //#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE void SetCurrentDocument_Impl( SfxObjectShell* );
-    SAL_DLLPRIVATE void InsertChildFrame_Impl( SfxFrame*, sal_uInt16 nPos = 0 );
     SAL_DLLPRIVATE void RemoveChildFrame_Impl( SfxFrame* );
-    SAL_DLLPRIVATE void SetIsTop_Impl( sal_Bool bIsTop = sal_True );
 //#endif
+
+                        SfxFrame( );    // not implemented
+    SAL_DLLPRIVATE      SfxFrame( Window& i_rExternalWindow, bool bHidden );
 
 public:
                         TYPEINFO();
-                        SfxFrame(SfxFrame* pParent = 0);
+
+    static SfxFrame*    Create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
+    static SfxFrame*    Create( SfxObjectShell* pDoc = NULL, USHORT nViewId = NULL, bool bHidden = false, const SfxItemSet* pSet = NULL);
+    static SfxFrame*    Create( SfxObjectShell* pDoc, Window& rWindow, USHORT nViewId = 0, bool bHidden = false, const SfxItemSet* pSet = NULL );
 
     SvCompatWeakHdl*    GetHdl();
-    virtual Window&     GetWindow() const = 0;
+    Window&             GetWindow() const;
     void                CancelTransfers( sal_Bool bCancelLoadEnv = sal_True );
     sal_Bool            DoClose();
     sal_uInt16          GetChildFrameCount() const;
     SfxFrame*           GetChildFrame( sal_uInt16 nPos ) const;
-    const String&       GetFrameName() const
-                        { return aName; }
     SfxFrame*           GetParentFrame() const
                         { return pParentFrame; }
+
+    void                SetPresentationMode( BOOL bSet );
+    SystemWindow*       GetSystemWindow() const;
 
     static SfxFrame*    GetFirst();
     static SfxFrame*    GetNext( SfxFrame& );
@@ -202,13 +207,7 @@ public:
     SAL_DLLPRIVATE sal_Bool DoClose_Impl();
     SAL_DLLPRIVATE void SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl( sal_Bool bSet );
-    SAL_DLLPRIVATE sal_uInt16 LoadComponent_Impl( const ::rtl::OUString& rURL,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader > & rLoader,
-                            SfxItemSet* pSet=0, sal_Bool bDontClose=sal_False );
-    DECL_DLLPRIVATE_STATIC_LINK(   SfxFrame, BindingHasNewPart_Impl, void* );
     SAL_DLLPRIVATE void GetViewData_Impl();
-    SAL_DLLPRIVATE void ActivatePickEntry_Impl( SfxFramePickEntry_Impl*, sal_uInt16 nMode, SfxFrameDescriptor *pD = NULL );
     SAL_DLLPRIVATE void SetFrameType_Impl( sal_uInt32 );
     SAL_DLLPRIVATE sal_uInt16 PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing=sal_False );
     SAL_DLLPRIVATE sal_Bool DocIsModified_Impl();
@@ -221,11 +220,6 @@ public:
     SAL_DLLPRIVATE SfxFrameDescriptor* GetDescriptor() const;
 
     SAL_DLLPRIVATE void Lock_Impl( sal_Bool bLock );
-    SAL_DLLPRIVATE sal_uInt16 GetLockCount_Impl() const;
-    //sal_Bool            IsLocked_Impl() const
-    //                  { return GetLockCount_Impl() > 0; }
-    SAL_DLLPRIVATE void CloseOnUnlock_Impl();
-    SAL_DLLPRIVATE SfxViewFrame* ActivateChildFrame_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl() const;
     SAL_DLLPRIVATE sal_Bool IsAutoLoadLocked_Impl() const;
 
@@ -243,13 +237,18 @@ public:
     SAL_DLLPRIVATE Rectangle GetTopOuterRectPixel_Impl() const;
     SAL_DLLPRIVATE void CreateWorkWindow_Impl();
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* pWorkwin );
-    SAL_DLLPRIVATE const SvBorder& GetBorder_Impl() const;
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
-    SAL_DLLPRIVATE void ReFill_Impl( const SfxFrameSetDescriptor* pSet );
-    SAL_DLLPRIVATE void CloseDocument_Impl();
     SAL_DLLPRIVATE void SetInPlace_Impl( sal_Bool );
-//  sal_Bool            IsPlugin_Impl() const;
+
+    SAL_DLLPRIVATE BOOL InsertDocument_Impl( SfxObjectShell& rDoc );
+    SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
+    SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
+    SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;
+    SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
+    SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
 //#endif
+private:
+    SAL_DLLPRIVATE void Construct_Impl();
 };
 
 SV_DECL_COMPAT_WEAK( SfxFrame )

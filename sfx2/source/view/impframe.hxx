@@ -54,14 +54,12 @@ class SfxObjectShell;
 
 class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase
 {
-friend class SfxFrame;
-
+public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
     String                    aFrameIdName;
     sal_uInt32                nType;
     sal_uInt32                nHistoryPos;
     SfxViewFrame*             pCurrentViewFrame;
-    SfxObjectShell*           pCurrentObjectShell;
     SfxFrameDescriptor*       pDescr;
     sal_uInt16                nFrameId;
     sal_uInt16                nLocks;
@@ -76,27 +74,36 @@ friend class SfxFrame;
     const SfxItemSet*         pSet;
     SfxWorkWindow*            pWorkWin;
     SvBorder                  aBorder;
+    // formerly SfxTopFrame
+    Window*                   pExternalWindow;
+    bool                      bHidden;
+    bool                      bLockResize;
+    bool                      bMenuBarOn;
 
-    SfxFrame_Impl( SfxFrame* pAntiImplP ) :
-                              SvCompatWeakBase( pAntiImplP ),
-                              nType( 0L ),
-                              nHistoryPos( 0 ),
-                              pCurrentViewFrame( NULL ),
-                              pCurrentObjectShell( NULL ),
-                              pDescr( NULL ),
-                              nFrameId( 0 ),
-                              nLocks( 0 ),
-                              bCloseOnUnlock( sal_False ),
-                              bClosing(sal_False),
-                              bPrepClosing(sal_False),
-                              bInCancelTransfers( sal_False ),
-                              bOwnsBindings( sal_False ),
-                              bReleasingComponent( sal_False ),
-                              bInPlace( sal_False ),
-                              pFrame( pAntiImplP ),
-                              pSet( 0 ),
-                              pWorkWin( 0 )
-                              {}
+    SfxFrame_Impl( SfxFrame* pAntiImplP )
+        :SvCompatWeakBase( pAntiImplP )
+        ,nType( 0L )
+        ,nHistoryPos( 0 )
+        ,pCurrentViewFrame( NULL )
+        ,pDescr( NULL )
+        ,nFrameId( 0 )
+        ,nLocks( 0 )
+        ,bCloseOnUnlock( sal_False )
+        ,bClosing(sal_False)
+        ,bPrepClosing(sal_False)
+        ,bInCancelTransfers( sal_False )
+        ,bOwnsBindings( sal_False )
+        ,bReleasingComponent( sal_False )
+        ,bInPlace( sal_False )
+        ,pFrame( pAntiImplP )
+        ,pSet( 0 )
+        ,pWorkWin( 0 )
+        ,pExternalWindow( NULL )
+        ,bHidden( false )
+        ,bLockResize( false )
+        ,bMenuBarOn( true )
+    {
+    }
 
     virtual ~SfxFrame_Impl() { }
 };

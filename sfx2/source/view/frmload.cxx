@@ -250,7 +250,7 @@ namespace
 // --------------------------------------------------------------------------------------------------------------------
 sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, const Reference< XFrame >& i_rxFrame )
 {
-    SfxTopFrame* pTargetFrame = SfxTopFrame::Create( i_rxFrame );
+    SfxFrame* pTargetFrame = SfxFrame::Create( i_rxFrame );
     ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
     SfxFrameWeak wFrame = pTargetFrame;
 
@@ -324,7 +324,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 
 // --------------------------------------------------------------------------------------------------------------------
 sal_Bool SfxFrameLoader_Impl::impl_plugDocIntoFrame( const ::comphelper::NamedValueCollection& i_rDescriptor,
-                                                     SfxTopFrame& i_rTargetFrame, SfxObjectShell& i_rDocument ) const
+                                                     SfxFrame& i_rTargetFrame, SfxObjectShell& i_rDocument ) const
 {
     SfxAllItemSet aSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, i_rDescriptor.getPropertyValues(), aSet );
@@ -568,7 +568,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         }
 
         // create a frame
-        SfxTopFrame* pTargetFrame = SfxTopFrame::Create( _rTargetFrame );
+        SfxFrame* pTargetFrame = SfxFrame::Create( _rTargetFrame );
         ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
         wFrame = pTargetFrame;
 

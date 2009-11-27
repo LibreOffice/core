@@ -104,28 +104,27 @@ TYPEINIT1(SfxFrame, SfxListener);
 TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
 TYPEINIT1(SfxUsrAnyItem, SfxPoolItem);
 
-SfxFrame::SfxFrame(SfxFrame* pParent):
-    pParentFrame( pParent ),
-    pChildArr(0),
-    pUnoImp(0)
-{
-    pImp = new SfxFrame_Impl( this );
-    if ( pParent )
-        pParent->InsertChildFrame_Impl( this );
-    if ( !pFramesArr_Impl )
-        pFramesArr_Impl = new SfxFrameArr_Impl;
-    pFramesArr_Impl->Insert( this, pFramesArr_Impl->Count() );
-}
-
 SvCompatWeakHdl* SfxFrame::GetHdl()
 {
     return pImp->GetHdl();
 }
 
 //--------------------------------------------------------------------
+void SfxFrame::Construct_Impl()
+{
+    pImp = new SfxFrame_Impl( this );
+    if ( !pFramesArr_Impl )
+        pFramesArr_Impl = new SfxFrameArr_Impl;
+    pFramesArr_Impl->Insert( this, pFramesArr_Impl->Count() );
+}
+
+//--------------------------------------------------------------------
 
 SfxFrame::~SfxFrame()
 {
+    RemoveTopFrame_Impl( this );
+    DELETEZ( pWindow );
+
     pFramesArr_Impl->Remove( pFramesArr_Impl->GetPos( this ) );
 
     if ( pParentFrame )
@@ -277,14 +276,6 @@ SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
     return 0L;
 }
 
-void SfxFrame::InsertChildFrame_Impl( SfxFrame* pFrame, sal_uInt16 nPos )
-{
-    if ( !pChildArr )
-        pChildArr = new SfxFrameArr_Impl;
-    pChildArr->Insert( pFrame, nPos );
-    pFrame->pParentFrame = this;
-}
-
 void SfxFrame::RemoveChildFrame_Impl( SfxFrame* pFrame )
 {
     DBG_ASSERT( pChildArr, "Unbekannter Frame!");
@@ -294,10 +285,10 @@ void SfxFrame::RemoveChildFrame_Impl( SfxFrame* pFrame )
 
 SfxFrame* SfxFrame::GetTopFrame() const
 {
-    SfxFrame *pParent = (SfxFrame*) this;
+    const SfxFrame* pParent = this;
     while ( pParent->pParentFrame )
         pParent = pParent->pParentFrame;
-    return pParent;
+    return const_cast< SfxFrame* >( pParent );
 }
 
 sal_Bool SfxFrame::IsClosing_Impl() const
@@ -321,11 +312,9 @@ SfxViewFrame* SfxFrame::InsertDocument( SfxObjectShell& rDoc, SfxFrame*& rpTarge
 
     if ( rpTargetFrame )
     {
-        SfxTopFrame* pTopFrame = dynamic_cast< SfxTopFrame* >( rpTargetFrame );
-        OSL_ENSURE( pTopFrame, "SfxFrame::InsertDocument: an SfxFrame which is no SfxTopFrame?!" );
         if ( bHidden )
             rDoc.PutItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
-        pTopFrame->InsertDocument_Impl( rDoc );
+        rpTargetFrame->InsertDocument_Impl( rDoc );
         pViewFrame = rpTargetFrame->GetCurrentViewFrame();
     }
     else
@@ -385,12 +374,7 @@ SfxObjectShell* SfxFrame::GetCurrentDocument() const
 {
     return pImp->pCurrentViewFrame ?
             pImp->pCurrentViewFrame->GetObjectShell() :
-            pImp->pCurrentObjectShell;
-}
-
-void SfxFrame::SetCurrentDocument_Impl( SfxObjectShell *pDoc )
-{
-    pImp->pCurrentObjectShell = pDoc;
+            NULL;
 }
 
 void SfxFrame::SetCurrentViewFrame_Impl( SfxViewFrame *pFrame )
@@ -558,8 +542,6 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
         for ( sal_uInt16 n=0; n<nCount; n++)
         {
             SfxFrame* pFrame = (*pChildArr)[n];
-            if ( pFrame->GetFrameName().Len() )
-                rList.Insert( new String (pFrame->GetFrameName()) );
             pFrame->GetTargetList( rList );
         }
     }
@@ -913,11 +895,6 @@ void SfxFrame::CreateWorkWindow_Impl()
     }
 
     pImp->pWorkWin = new SfxFrameWorkWin_Impl( &pFrame->GetWindow(), this, pFrame );
-}
-
-const SvBorder& SfxFrame::GetBorder_Impl() const
-{
-    return pImp->aBorder;
 }
 
 void SfxFrame::GrabFocusOnComponent_Impl()

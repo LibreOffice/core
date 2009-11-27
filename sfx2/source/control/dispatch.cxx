@@ -1679,7 +1679,7 @@ void SfxDispatcher::SetMenu_Impl()
         SfxTopViewFrame* pTop= PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() );
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
-            SfxTopFrame* pFrm = pTop->GetTopFrame_Impl();
+            SfxFrame* pFrm = pTop->GetFrame();
             if ( pFrm->IsMenuBarOn_Impl() )
             {
                 com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( pFrm->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
@@ -2914,7 +2914,7 @@ void SfxDispatcher::HideUI( sal_Bool bHide )
         SfxTopViewFrame* pTop= PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() );
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
-            SfxTopFrame* pFrm = pTop->GetTopFrame_Impl();
+            SfxFrame* pFrm = pTop->GetFrame();
             if ( pFrm->IsMenuBarOn_Impl() )
             {
                 com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( pFrm->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );

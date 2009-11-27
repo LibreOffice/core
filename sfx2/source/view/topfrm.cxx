@@ -71,6 +71,7 @@
 #include <svtools/moduleoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <sfxresid.hxx>
 
@@ -97,6 +98,7 @@
 #include <sfx2/docfac.hxx>
 #include "statcach.hxx"
 #include <sfx2/event.hxx>
+#include "impframe.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -134,24 +136,12 @@ static ::rtl::OUString GetModuleName_Impl( const ::rtl::OUString& sDocService )
     return sVar;
 }
 
-class SfxTopFrame_Impl
-{
-public:
-    Window*             pWindow;        // maybe external
-    BOOL                bHidden;
-    BOOL                bLockResize;
-    BOOL                bMenuBarOn;
-};
-
 class SfxTopWindow_Impl : public Window
 {
 public:
-    SfxTopFrame*        pFrame;
+    SfxFrame*           pFrame;
 
-    SfxTopWindow_Impl( SfxTopFrame* pF );
-//        : Window( pF->pImp->pWindow, WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
-//        , pFrame( pF )
-//    { SetBackground(); }
+    SfxTopWindow_Impl( SfxFrame* pF, Window& i_rExternalWindow );
     ~SfxTopWindow_Impl( );
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
@@ -164,8 +154,8 @@ public:
     DECL_LINK(          CloserHdl, void* );
 };
 
-SfxTopWindow_Impl::SfxTopWindow_Impl( SfxTopFrame* pF )
-        : Window( pF->pImp->pWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
+SfxTopWindow_Impl::SfxTopWindow_Impl( SfxFrame* pF, Window& i_rExternalWindow )
+        : Window( &i_rExternalWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
         , pFrame( pF )
 {
 }
@@ -195,7 +185,7 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
     {
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
-            DBG_TRACE("SfxTopFrame: GotFocus");
+            DBG_TRACE("SfxFrame: GotFocus");
             pView->MakeActive_Impl( FALSE );
         }
 
@@ -390,10 +380,10 @@ static String _getTabString()
     return result;
 }
 
-SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHidden, const SfxItemSet* pSet )
+SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, bool bHidden, const SfxItemSet* pSet )
 {
     Reference < XFrame > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    SfxTopFrame *pFrame = NULL;
+    SfxFrame *pFrame = NULL;
     BOOL bNewView = FALSE;
     if ( pSet )
     {
@@ -470,7 +460,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
             SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
             for( USHORT nPos = rArr.Count(); nPos--; )
             {
-                SfxTopFrame *pF = (SfxTopFrame*) rArr[ nPos ];
+                SfxFrame *pF = rArr[ nPos ];
                 if ( pF->GetCurrentDocument() == pDoc )
                 {
                     pFrame = pF;
@@ -539,21 +529,21 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
     return pFrame;
 }
 
-SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, Window* pWindow, USHORT nViewId, BOOL bHidden, const SfxItemSet* pSet )
+SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, Window& rWindow, USHORT nViewId, bool bHidden, const SfxItemSet* pSet )
 {
     Reference < ::com::sun::star::lang::XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
     Reference < XFramesSupplier > xDesktop ( xFact->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     Reference < XFrame > xFrame( xFact->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
 
-    xFrame->initialize( VCLUnoHelper::GetInterface ( pWindow ) );
+    uno::Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY );
+    xFrame->initialize( xWin.get() );
     if ( xDesktop.is() )
         xDesktop->getFrames()->append( xFrame );
 
-    uno::Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( pWindow ), uno::UNO_QUERY );
     if ( xWin.is() && xWin->isActive() )
         xFrame->activate();
 
-    SfxTopFrame* pFrame = new SfxTopFrame( pWindow );
+    SfxFrame* pFrame = new SfxFrame( rWindow, false );
     pFrame->SetFrameInterface_Impl( xFrame );
     pFrame->pImp->bHidden = bHidden;
 
@@ -568,59 +558,34 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, Window* pWindow, USHORT 
     return pFrame;
 }
 
-SfxTopFrame* SfxTopFrame::Create( Reference < XFrame > xFrame )
+SfxFrame* SfxFrame::Create( Reference < XFrame > xFrame )
 {
     // create a new TopFrame to an external XFrame object ( wrap controller )
-    DBG_ASSERT( xFrame.is(), "Wrong parameter!" );
-
+    ENSURE_OR_THROW( xFrame.is(), "NULL frame not allowed" );
     Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-    SfxTopFrame* pFrame = new SfxTopFrame( pWindow );
+    ENSURE_OR_THROW( pWindow, "frame without container window not allowed" );
+
+    SfxFrame* pFrame = new SfxFrame( *pWindow, false );
     pFrame->SetFrameInterface_Impl( xFrame );
     return pFrame;
 }
 
-SfxTopFrame::SfxTopFrame( Window* pExternal, sal_Bool bHidden )
-    : SfxFrame( NULL )
-    , pWindow( NULL )
+SfxFrame::SfxFrame( Window& i_rExternalWindow, bool i_bHidden )
+    :pParentFrame( NULL )
+    ,pChildArr( NULL )
+    ,pImp( NULL )
+    ,pWindow( NULL )
 {
-    pImp = new SfxTopFrame_Impl;
-    pImp->bHidden = bHidden;
-    pImp->bLockResize = FALSE;
-    pImp->bMenuBarOn = TRUE;
+    Construct_Impl();
+
+    pImp->bHidden = i_bHidden;
     InsertTopFrame_Impl( this );
-    if ( pExternal )
-    {
-        pImp->pWindow = pExternal;
-    }
-    else
-    {
-        DBG_ERROR( "TopFrame without window created!" );
-/*
-        pImp->pWindow = new SfxTopFrameWindow_Impl( this );
-        pImp->pWindow->SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
-        pImp->pWindow->SetPosSizePixel( Point( 20,20 ), Size( 800,600 ) );
-        if ( GetFrameInterface().is() )
-            GetFrameInterface()->initialize( VCLUnoHelper::GetInterface( pImp->pWindow ) );
-        pImp->pWindow->Show();
- */
-    }
+    pImp->pExternalWindow = &i_rExternalWindow;
 
-    pWindow = new SfxTopWindow_Impl( this );
-/** AS:
-    Hide this window till the component was realy loaded. Otherwhise it overpaint e.g. the old component hardly
-    and produce repaint errors.
-    pWindow->Show();
-  */
+    pWindow = new SfxTopWindow_Impl( this, i_rExternalWindow );
 }
 
-SfxTopFrame::~SfxTopFrame()
-{
-    RemoveTopFrame_Impl( this );
-    DELETEZ( pWindow );
-    delete pImp;
-}
-
-void SfxTopFrame::SetPresentationMode( BOOL bSet )
+void SfxFrame::SetPresentationMode( BOOL bSet )
 {
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
@@ -644,32 +609,31 @@ void SfxTopFrame::SetPresentationMode( BOOL bSet )
         GetCurrentViewFrame()->GetDispatcher()->Update_Impl( TRUE );
 }
 
-SystemWindow*
-SfxTopFrame::GetSystemWindow() const
+SystemWindow* SfxFrame::GetSystemWindow() const
 {
     return GetTopWindow_Impl();
 }
 
-SystemWindow* SfxTopFrame::GetTopWindow_Impl() const
+SystemWindow* SfxFrame::GetTopWindow_Impl() const
 {
-    if ( pImp->pWindow->IsSystemWindow() )
-        return (SystemWindow*) pImp->pWindow;
+    if ( pImp->pExternalWindow->IsSystemWindow() )
+        return (SystemWindow*) pImp->pExternalWindow;
     else
         return NULL;
 }
 
-Window& SfxTopFrame::GetWindow() const
+Window& SfxFrame::GetWindow() const
 {
     return *pWindow;
 }
 
-sal_Bool SfxTopFrame::Close()
+sal_Bool SfxFrame::Close()
 {
     delete this;
     return sal_True;
 }
 
-void SfxTopFrame::LockResize_Impl( BOOL bLock )
+void SfxFrame::LockResize_Impl( BOOL bLock )
 {
     pImp->bLockResize = bLock;
 }
@@ -684,7 +648,7 @@ IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, EMPTYARG )
     return 0L;
 }
 
-void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
+void SfxFrame::SetMenuBarOn_Impl( BOOL bOn )
 {
     pImp->bMenuBarOn = bOn;
 
@@ -708,48 +672,17 @@ void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
     }
 }
 
-BOOL SfxTopFrame::IsMenuBarOn_Impl() const
+BOOL SfxFrame::IsMenuBarOn_Impl() const
 {
     return pImp->bMenuBarOn;
 }
 
-String SfxTopFrame::GetWindowData()
+void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
 {
-    String aActWinData;
-    char cToken = ',';
-
-    SfxViewFrame *pActFrame = SfxViewFrame::Current();
-    SfxViewFrame *pFrame = GetCurrentViewFrame();
-    const sal_Bool bActWin = ( pActFrame->GetTopViewFrame() == pFrame );
-
-    // ::com::sun::star::sdbcx::User-Daten der ViewShell
-    String aUserData;
-    pFrame->GetViewShell()->WriteUserData(aUserData);
-
-    // assemble ini-data
-    String aWinData;
-    aWinData += String::CreateFromInt32( pFrame->GetCurViewId() );
-    aWinData += cToken;
-
-    aWinData += '1';                    // former attribute "isfloating"
-    aWinData += cToken;
-
-    // aktives kennzeichnen
-    aWinData += cToken;
-    aWinData += bActWin ? '1' : '0';
-
-    aWinData += cToken;
-    aWinData += aUserData;
-
-    return aWinData;
-}
-
-void SfxTopFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
-{
-    Window *pWin = pImp->pWindow;
+    Window *pWin = pImp->pExternalWindow;
 
     // Groesse setzen
-    const Size aAppWindow( pImp->pWindow->GetDesktopRectPixel().GetSize() );
+    const Size aAppWindow( pImp->pExternalWindow->GetDesktopRectPixel().GetSize() );
     Point aPos( rWinArea.TopLeft() );
     Size aSz( rWinArea.GetSize() );
     if ( aSz.Width() && aSz.Height() )
@@ -800,11 +733,11 @@ namespace
     }
 }
 
-sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
+sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 /* [Beschreibung]
  */
 {
-    OSL_PRECOND( rDoc.GetMedium(), "SfxTopFrame::InsertDocument_Impl: no medium -> no view!");
+    OSL_PRECOND( rDoc.GetMedium(), "SfxFrame::InsertDocument_Impl: no medium -> no view!");
     if ( !rDoc.GetMedium() )
         return sal_False;
 
@@ -816,7 +749,7 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
         return sal_False;
 
     OSL_PRECOND( GetCurrentDocument() == NULL,
-        "SfxTopFrame::InsertDocument_Impl: re-using an Sfx(Top)Frame is not supported anymore!" );
+        "SfxFrame::InsertDocument_Impl: re-using an Sfx(Top)Frame is not supported anymore!" );
 
     const SfxItemSet* pSet = GetItemSet_Impl();
     if ( !pSet )
@@ -834,7 +767,7 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 
     // hidden?
     OSL_PRECOND( !pImp->bHidden,
-        "SfxTopFrame::InsertDocument_Impl: quite unexpected ... the below logic might not work in all cases here ..." );
+        "SfxFrame::InsertDocument_Impl: quite unexpected ... the below logic might not work in all cases here ..." );
     pImp->bHidden = pHidItem ? pHidItem->GetValue() : false;
 
     // plugin mode
@@ -878,7 +811,7 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     SfxViewFrame* pViewFrame = new SfxTopViewFrame( this, &rDoc, nViewId );
     if ( !pViewFrame->GetViewShell() )
     {
-        OSL_ENSURE( false, "SfxTopFrame::InsertDocument_Impl: something went wrong while creating the SfxTopViewFrame!" );
+        OSL_ENSURE( false, "SfxFrame::InsertDocument_Impl: something went wrong while creating the SfxTopViewFrame!" );
         pViewFrame->DoClose();
         return sal_False;
     }
@@ -897,7 +830,7 @@ sal_Bool SfxTopFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     }
 
     OSL_ENSURE( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT,
-        "SfxTopFrame::InsertDocument_Impl: so this code wasn't dead?" );
+        "SfxFrame::InsertDocument_Impl: so this code wasn't dead?" );
         // Before CWS autorecovery, there was code which postponed setting the ViewData/Mark to a later time
         // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since loads this method
         // here is never called before the load process finished.
@@ -998,7 +931,6 @@ long SfxViewFrameClose_Impl( void* /*pObj*/, void* pArg )
     return 0;
 }
 
-TYPEINIT1(SfxTopFrame, SfxFrame);
 TYPEINIT1(SfxTopViewFrame, SfxViewFrame);
 
 //--------------------------------------------------------------------
@@ -1078,7 +1010,7 @@ String SfxTopViewFrame::UpdateTitle()
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
     /* AS_TITLE
-    Window* pWindow = GetTopFrame_Impl()->GetTopWindow_Impl();
+    Window* pWindow = GetFrame()->GetTopWindow_Impl();
     if ( pWindow && pWindow->GetText() != aTitle )
         pWindow->SetText( aTitle );
     */
