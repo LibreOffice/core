@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: RegistrationData.java,v $
- *
- * $Revision: 1.2 $
+ * $RCSfile: Registration.java,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *

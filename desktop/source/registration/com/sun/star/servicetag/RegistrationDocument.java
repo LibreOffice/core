@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: RegistrationDocument.java,v $
- *
- * $Revision: 1.2 $
+ * $RCSfile: Registration.java,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +67,7 @@ import javax.xml.transform.stream.StreamResult;
 class RegistrationDocument {
 
     private static final String REGISTRATION_DATA_SCHEMA =
-            "/com/sun/star/servicetag/resources/product_registration.xsd";
+            "/com/sun/servicetag/resources/product_registration.xsd";
     private static final String REGISTRATION_DATA_VERSION = "1.0";
     private static final String SERVICE_TAG_VERSION = "1.0";
     final static String ST_NODE_REGISTRATION_DATA = "registration_data";

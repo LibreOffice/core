@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: SystemEnvironment.java,v $
- *
- * $Revision: 1.2 $
+ * $RCSfile: Registration.java,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +56,12 @@ public class SystemEnvironment {
     private String systemManufacturer;
     private String cpuManufacturer;
     private String serialNumber;
+    private String physmem;
+    private String sockets;
+    private String cores;
+    private String virtcpus;
+    private String cpuname;
+    private String clockrate;
     private static SystemEnvironment sysEnv = null;
 
     public static synchronized SystemEnvironment getSystemEnvironment() {
@@ -90,6 +95,12 @@ public class SystemEnvironment {
         this.systemManufacturer = "";
         this.cpuManufacturer = "";
         this.serialNumber = "";
+        this.physmem = "";
+        this.sockets = "";
+        this.cores = "";
+        this.virtcpus = "";
+        this.cpuname = "";
+        this.clockrate = "";
     }
 
 
@@ -155,6 +166,54 @@ public class SystemEnvironment {
      */
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    /**
+     * Sets the physmem
+     * @param physmem The physmem to set.
+     */
+    public void setPhysMem(String physmem) {
+        this.physmem = physmem;
+    }
+
+    /**
+     * Sets the sockets
+     * @param sockets The sockets to set.
+     */
+    public void setSockets(String sockets) {
+        this.sockets = sockets;
+    }
+
+    /**
+     * Sets the cores
+     * @param cores The cores to set.
+     */
+    public void setCores(String cores) {
+        this.cores = cores;
+    }
+
+    /**
+     * Sets the virtcpus
+     * @param virtcpus The virtcpus to set.
+     */
+    public void setVirtCpus(String virtcpus) {
+        this.virtcpus = virtcpus;
+    }
+
+    /**
+     * Sets the cpuname
+     * @param cpuname The cpuname to set.
+     */
+    public void setCpuName(String cpuname) {
+        this.cpuname = cpuname;
+    }
+
+    /**
+     * Sets the clockrate
+     * @param clockrate The clockrate to set.
+     */
+    public void setClockRate(String clockrate) {
+        this.clockrate = clockrate;
     }
 
     /**
@@ -225,6 +284,30 @@ public class SystemEnvironment {
      */
     public String getSerialNumber() {
         return serialNumber;
+    }
+
+    public String getPhysMem() {
+        return physmem;
+    }
+
+    public String getSockets() {
+        return sockets;
+    }
+
+    public String getCores() {
+        return cores;
+    }
+
+    public String getVirtCpus() {
+        return virtcpus;
+    }
+
+    public String getCpuName() {
+        return cpuname;
+    }
+
+    public String getClockRate() {
+        return clockrate;
     }
 
     /**
