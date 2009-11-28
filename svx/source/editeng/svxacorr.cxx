@@ -1354,10 +1354,6 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             else if( nRet & ChgOrdinalNumber)   nHelpId = 22;
         }
 
-        DBG_ASSERT( nHelpId && nHelpId < (HID_AUTOCORR_HELP_END -
-                                          HID_AUTOCORR_HELP_START + 1),
-                    "wrong HelpId Range" );
-
         if( nHelpId )
         {
             nHelpId += HID_AUTOCORR_HELP_START - 1;
