@@ -905,12 +905,12 @@ void SfxFrame::GrabFocusOnComponent_Impl()
         return;
     }
 
-    Window* pWindow = &GetWindow();
+    Window* pFocusWindow = &GetWindow();
     if ( GetCurrentViewFrame() && GetCurrentViewFrame()->GetViewShell() && GetCurrentViewFrame()->GetViewShell()->GetWindow() )
-        pWindow = GetCurrentViewFrame()->GetViewShell()->GetWindow();
+        pFocusWindow = GetCurrentViewFrame()->GetViewShell()->GetWindow();
 
-    if( !pWindow->HasChildPathFocus() )
-        pWindow->GrabFocus();
+    if( !pFocusWindow->HasChildPathFocus() )
+        pFocusWindow->GrabFocus();
 }
 
 void SfxFrame::ReleasingComponent_Impl( sal_Bool bSet )
