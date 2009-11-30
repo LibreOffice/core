@@ -160,7 +160,6 @@ class Parser
     void           readInt32( sal_Int32& o_Value );
     sal_Int32      readInt32();
     void           readInt64( sal_Int64& o_Value );
-    sal_Int64      readInt64();
     void           readDouble( double& o_Value );
     double         readDouble();
     void           readBinaryData( uno::Sequence<sal_Int8>& rBuf );
@@ -218,11 +217,6 @@ sal_Int32 Parser::readInt32()
 void Parser::readInt64( sal_Int64& o_Value )
 {
     o_Value = readNextToken().toInt64();
-}
-
-sal_Int64 Parser::readInt64()
-{
-    return readNextToken().toInt64();
 }
 
 void Parser::readDouble( double& o_Value )

@@ -108,7 +108,6 @@ namespace pdfi
 
         void sortElements( Element* pElement, bool bDeep = false );
         void sortDocument( bool bDeep = false );
-        void setWordSpace( double fWordSpace);
 
     private:
         void processGlyphLine();

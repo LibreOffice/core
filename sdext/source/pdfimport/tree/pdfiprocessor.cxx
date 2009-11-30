@@ -215,10 +215,6 @@ sal_Int32 PDFIProcessor::getFontId( const FontAttributes& rAttr ) const
 
     return nFont;
 }
-void PDFIProcessor::setWordSpace( double fWordSpace)
-{
-    m_fWordSpace=fWordSpace;
-}
 
 // line diagnose block - start
 void PDFIProcessor::processGlyphLine()
@@ -351,7 +347,6 @@ void PDFIProcessor::processGlyphLine()
          {
                preSpaceNull=false;
               if( fNullSpaceBreakerAvaregeSpaceValue > m_GlyphsList[i].getPrevGlyphsSpace() )
-
               {
                 processGlyph( 0,
                                       m_GlyphsList[i],

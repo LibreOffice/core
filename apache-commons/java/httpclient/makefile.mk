@@ -43,6 +43,8 @@ ANT_BUILDFILE=build.xml
 
 .INCLUDE : antsettings.mk
 
+TAR!:=$(GNUTAR)
+
 .IF "$(SOLAR_JAVA)" != "" && "$(ENABLE_MEDIAWIKI)" == "YES"
 # --- Files --------------------------------------------------------
 

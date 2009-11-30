@@ -1,0 +1,224 @@
+'/*************************************************************************
+' *
+' * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' * 
+' * Copyright 2008 by Sun Microsystems, Inc.
+' *
+' * OpenOffice.org - a multi-platform office productivity suite
+' *
+' * $RCSfile: CreateDriverDocs.wsf,v $
+' * $Revision: 1.2.140.3 $
+' *
+' * This file is part of OpenOffice.org.
+' *
+' * OpenOffice.org is free software: you can redistribute it and/or modify
+' * it under the terms of the GNU Lesser General Public License version 3
+' * only, as published by the Free Software Foundation.
+' *
+' * OpenOffice.org is distributed in the hope that it will be useful,
+' * but WITHOUT ANY WARRANTY; without even the implied warranty of
+' * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' * GNU Lesser General Public License version 3 for more details
+' * (a copy is included in the LICENSE file that accompanied this code).
+' *
+' * You should have received a copy of the GNU Lesser General Public License
+' * version 3 along with OpenOffice.org.  If not, see
+' * http://www.openoffice.org/license.html
+' * for a copy of the LGPLv3 License.
+' *
+' ************************************************************************/
+'### Build Support Module for running commands to export and import
+'### modules from Word, Excel and PowerPoint Document Analysis driver documents
+
+
+<job id="DocAnalysisBuildCmd" error="true" debug="true">
+   <script language="VBScript" src="DocAnalysisRunMacro.vbs"/>
+   <script language="VBScript">
+
+Const CTITLE = "Document Analysis Command"
+
+Const CWORD_DRIVER = "_OOoDocAnalysisWordDriver.doc"
+Const CEXCEL_DRIVER = "_OOoDocAnalysisExcelDriver.xls"
+Const CPP_DRIVER = "_OOoDocAnalysisPPTDriver.ppt"
+Const CStub = "Stripped"
+
+Const CUTIL_APPNAME_WORD = "Word"
+Const CUTIL_APPNAME_EXCEL = "Excel"
+Const CUTIL_APPNAME_POWERPOINT = "Powerpoint"
+
+Const CDIAG_STD_DELAY = 2
+
+Const CDEFAULT_SOURCE_DIR = ".\sources\"
+Const CDEFAULT_TARGET_DIR = "."
+
+Const CSOURCE_DIR_ARG = "X"
+Const CTARGET_DIR_ARG = "T"
+Const CUSAGE_ARG = "?"
+
+Const CSTR_PAW = "\PAW\"
+
+'######### Doc Analysis Build - Main Script Body ############# 
+Dim mArgsNamed, mArgsUnnamed
+Dim mSourceDir
+Dim mTargetDir
+
+On Error Resume Next
+
+'### Process Arguments ###
+Set mArgsNamed = WScript.Arguments.Named
+Set mArgsUnnamed = WScript.Arguments.Unnamed
+
+If mArgsNamed.Exists(CUSAGE_ARG) Then
+	Usage
+	FinalExit
+End If
+
+'# Source Dir
+if mArgsNamed.Exists(CSOURCE_DIR_ARG) Then
+	mSourceDir = mArgsNamed.Item(CSOURCE_DIR_ARG)
+Else
+	mSourceDir = CDEFAULT_SOURCE_DIR
+End If
+
+'# Target Dir
+if mArgsNamed.Exists(CTARGET_DIR_ARG ) Then
+	mTargetDir = mArgsNamed.Item(CTARGET_DIR_ARG )
+Else
+	mTargetDir = CDEFAULT_TARGET_DIR
+End If
+
+mSourceDir = daFso.GetAbsolutePathName(mSourceDir )
+mTargetDir = daFso.GetAbsolutePathName(mTargetDir ) 
+
+'# Check source and target dirs exist
+If Not daFso.FolderExists(mSourceDir) Then
+	DAErrMsg "Source directory does not exist: " & mSourceDir, CDA_ERR_STD_DELAY 
+    FinalExit
+End If
+If Not daFso.FolderExists(mTargetDir) Then
+	DAErrMsg "Target directory does not exist: " & mTargetDir, CDA_ERR_STD_DELAY 
+    FinalExit
+End If
+
+Set mArgsNamed = Nothing
+Set mArgsUnnamed = Nothing
+
+'#### then continue with PAW
+ImportAll mTargetDir & CSTR_PAW
+
+'# Cleanup
+FinalExit
+
+
+'######### End - Main Script Body ############# 
+
+
+'#### Doc Analysis Build - Support Functions ####
+
+Sub Usage()
+	DAdiagMsg "Build command line tool to create Document Analysis driver documents" & vbLf & vbLf &_
+	"DocAnalysisBuildCmd [/X:<sourceDir>] [/T:<targetDir>]" & vbLf & vbLf &_
+	"/X:<sourceDir> base <source> directory " & vbLf & _
+	"            The <sourceDir> is the base dir under which all the " & vbLf & _
+	"            _res.bas files are located to import from" & vbLf & vbLf & _
+	"/T:<targetDir> target directory " & vbLf & _
+	"            <targetDir> is where the new Driver docs" & vbLf & _
+	"            will be created", 30
+End Sub
+
+'######################
+Sub FinalExit()
+    DACleanUp
+	wscript.quit
+End Sub
+
+'######################
+Sub ImportAll( aTargetDir )
+
+    '#### Create automation servers ####
+    DAsetupWrdServer
+    DAsetupExcelServer
+    DAsetupPPServer
+    
+    If Not daFso.FolderExists( aTargetDir ) Then
+        daFso.CreateFolder( aTargetDir )
+    End If
+    
+    BackupDrivers aTargetDir
+    
+    DAOpenWrdDriver mSourceDir & "\" & CSTUB & CWORD_DRIVER 
+    DAOpenExcelDriver mSourceDir & "\" & CSTUB & CEXCEL_DRIVER
+    DAOpenPPDriver mSourceDir & "\" & CSTUB & CPP_DRIVER
+    
+    DASetTitle CTITLE & " - Import"
+    
+    ImportSelectedProjectFiles mSourceDir, CUTIL_APPNAME_WORD
+    ImportSelectedProjectFiles mSourceDir, CUTIL_APPNAME_EXCEL
+    ImportSelectedProjectFiles mSourceDir, CUTIL_APPNAME_POWERPOINT
+        
+    DAsaveWrdDriver aTargetDir & "\" & CWORD_DRIVER
+    DAsaveExcelDriver aTargetDir & "\" & CEXCEL_DRIVER
+    DAsavePPDriver aTargetDir & "\" & CPP_DRIVER
+    
+    DACloseApps
+End Sub
+
+'######################
+Sub BackupDrivers(importdir)
+    On Error Resume Next
+
+	Dim wrdPath
+	Dim xlsPath
+	Dim ppPath
+	
+	wrdPath = daFso.GetAbsolutePathName(importdir & "\" & CWORD_DRIVER)
+	xlsPath= daFso.GetAbsolutePathName(importdir & "\" & CEXCEL_DRIVER) 
+	ppPath= daFso.GetAbsolutePathName(importdir & "\" & CPP_DRIVER) 
+
+    If daFso.FileExists( wrdPath ) Then daFso.CopyFile wrdPath, wrdPath & ".bak"
+	If daFso.FileExists( xlsPath ) Then daFso.CopyFile xlsPath, xlsPath & ".bak"
+	If daFso.FileExists( ppPath ) Then daFso.CopyFile ppPath, ppPath & ".bak"
+End Sub
+
+'######################
+Sub ImportSelectedProjectFiles(dir, app_name)
+    On Error Resume Next
+    
+    Dim base
+    Dim lcApp_name
+    lcApp_name = LCase(app_name)
+    
+    'Driver Specific
+    base = dir & "\" & lcApp_name & "\"
+        
+    DAImportFile base & "ApplicationSpecific.bas", "ApplicationSpecific", app_name
+    DAImportFile base & "MigrationAnalyser.cls", "MigrationAnalyser", app_name
+
+    DAImportFile base & "Preparation.bas", "Preparation", app_name
+
+    'app resource
+    DAImportFile base & lcApp_name & "_res.bas", lcApp_name & "_res", app_name
+    
+    'Common
+    base = dir & "\"
+    DAImportFile base & "AnalysisDriver.bas", "AnalysisDriver", app_name
+    DAImportFile base & "CommonMigrationAnalyser.bas", "CommonMigrationAnalyser", app_name
+    DAImportFile base & "CollectedFiles.cls", "CollectedFiles", app_name
+    DAImportFile base & "DocumentAnalysis.cls", "DocumentAnalysis", app_name
+    DAImportFile base & "FileTypeAssociation.cls", "FileTypeAssociation", app_name
+    DAImportFile base & "IssueInfo.cls", "IssueInfo", app_name
+    DAImportFile base & "PrepareInfo.cls", "PrepareInfo", app_name
+    DAImportFile base & "StringDataManager.cls", "StringDataManager", app_name
+    DAImportFile base & "LocalizeResults.bas", "LocalizeResults", app_name
+ 
+    DAImportFile base & "CommonPreparation.bas", "CommonPreparation", app_name
+
+    'common resource
+    DAImportFile base & "common_res.bas", "common_res", app_name
+    DAImportFile base & "results_res.bas", "results_res", app_name
+
+End Sub
+
+</script>
+</job>
+

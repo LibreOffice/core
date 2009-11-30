@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,6 +117,14 @@
                                 <value>0x00FF3366</value>
                             </prop>
                         </node>
+                        <node oor:name="TextBoxBoundContent" oor:op="replace">
+                            <prop oor:name="Color">
+                                <value>0x00808080</value>
+                            </prop>
+                            <prop oor:name="DefaultColor">
+                                <value>0x00808080</value>
+                            </prop>
+                        </node>
                     </node>
                 </node>
             </node>
@@ -187,6 +195,11 @@
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Überlappende Steuerelemente</value>
                         <value xml:lang="en-US">Overlapped Control</value>
+                    </prop>
+                </node>
+                <node oor:name="TextBoxBoundContent" oor:op="replace">
+                    <prop oor:name="DisplayName">
+                        <value xml:lang="en-US">Text Box Bound Content</value>
                     </prop>
                 </node>
             </node>

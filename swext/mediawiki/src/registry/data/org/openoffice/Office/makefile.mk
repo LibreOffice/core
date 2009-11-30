@@ -43,7 +43,7 @@ LOCALIZEDFILES= Addons.xcu OptionsDialog.xcu
 
 MODULEFILES=
 
-XCUFILES = Addons.xcu OptionsDialog.xcu ProtocolHandler.xcu
+XCUFILES = Addons.xcu OptionsDialog.xcu ProtocolHandler.xcu Paths.xcu
 .ENDIF
 
 .INCLUDE : target.mk

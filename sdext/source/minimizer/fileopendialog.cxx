@@ -87,37 +87,43 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
     Sequence< OUString > aFilterList( xFilters->getElementNames() );
     for ( int i = 0; i < aFilterList.getLength(); i++ )
     {
-        Sequence< PropertyValue > aFilterProperties;
-        if ( xFilters->getByName( aFilterList[ i ] ) >>= aFilterProperties )
+        try
         {
-            FilterEntry aFilterEntry;
-            sal_Bool bImpressFilter = sal_False;
-            for ( int j = 0; j < aFilterProperties.getLength(); j++ )
+            Sequence< PropertyValue > aFilterProperties;
+            if ( xFilters->getByName( aFilterList[ i ] ) >>= aFilterProperties )
             {
-                PropertyValue& rProperty( aFilterProperties[ j ] );
-                switch( TKGet( rProperty.Name ) )
+                FilterEntry aFilterEntry;
+                sal_Bool bImpressFilter = sal_False;
+                for ( int j = 0; j < aFilterProperties.getLength(); j++ )
                 {
-                    case TK_DocumentService :
+                    PropertyValue& rProperty( aFilterProperties[ j ] );
+                    switch( TKGet( rProperty.Name ) )
                     {
-                        rtl::OUString sDocumentService;
-                        rProperty.Value >>= sDocumentService;
-                        if ( sDocumentService == OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
-                            bImpressFilter = sal_True;
-                        else
-                            j = aFilterProperties.getLength();
+                        case TK_DocumentService :
+                        {
+                            rtl::OUString sDocumentService;
+                            rProperty.Value >>= sDocumentService;
+                            if ( sDocumentService == OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
+                                bImpressFilter = sal_True;
+                            else
+                                j = aFilterProperties.getLength();
+                        }
+                        break;
+                        case TK_Name :      rProperty.Value >>= aFilterEntry.maName; break;
+                        case TK_UIName :    rProperty.Value >>= aFilterEntry.maUIName; break;
+                        case TK_Type :      rProperty.Value >>= aFilterEntry.maType; break;
+                        case TK_Flags :     rProperty.Value >>= aFilterEntry.maFlags; break;
+                        default : break;
                     }
-                    break;
-                    case TK_Name :      rProperty.Value >>= aFilterEntry.maName; break;
-                    case TK_UIName :    rProperty.Value >>= aFilterEntry.maUIName; break;
-                    case TK_Type :      rProperty.Value >>= aFilterEntry.maType; break;
-                    case TK_Flags :     rProperty.Value >>= aFilterEntry.maFlags; break;
-                    default : break;
+                }
+                if ( bImpressFilter && ( ( aFilterEntry.maFlags & 3 ) == 3 ) )
+                {
+                    aFilterEntryList.push_back( aFilterEntry );
                 }
             }
-            if ( bImpressFilter && ( ( aFilterEntry.maFlags & 3 ) == 3 ) )
-            {
-                aFilterEntryList.push_back( aFilterEntry );
-            }
+        }
+        catch( Exception& )
+        {
         }
     }
 

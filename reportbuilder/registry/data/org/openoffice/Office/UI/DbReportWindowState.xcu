@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,6 +116,20 @@
     <node oor:name="private:resource/toolbar/sectionalignmentbar" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
             <value xml:lang="en-US">Align at Section</value>
+        </prop>
+        <prop oor:name="DockPos" oor:type="xs:string">
+            <value>0,2</value>
+        </prop>
+        <prop oor:name="Docked" oor:type="xs:boolean">
+            <value>true</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+            <value>true</value>
+        </prop>
+    </node>
+    <node oor:name="private:resource/toolbar/sectionshrinkbar" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+            <value xml:lang="en-US">Shrink at Section</value>
         </prop>
         <prop oor:name="DockPos" oor:type="xs:string">
             <value>0,2</value>

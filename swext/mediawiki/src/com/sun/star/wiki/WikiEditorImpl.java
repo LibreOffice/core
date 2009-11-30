@@ -370,7 +370,7 @@ public final class WikiEditorImpl extends WeakBase
                 WikiArticle aArticle = new WikiArticle( m_xContext, aSendDialog.GetWikiTitle(), aWikiSetting, true, aSendDialog );
 
                 boolean bAllowSending = true;
-                if ( aArticle.NotExist() )
+                if ( !aArticle.NotExist() )
                 {
                     // ask whether creation of a new page is allowed
                     aSendDialog.SetThrobberActive( false );
@@ -378,7 +378,7 @@ public final class WikiEditorImpl extends WeakBase
                                       m_xContext,
                                       (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
                                       Helper.DLG_SENDTITLE,
-                                      Helper.DLG_NEWWIKIPAGE_LABEL1,
+                                      Helper.DLG_WIKIPAGEEXISTS_LABEL1,
                                       aSendDialog.GetWikiTitle(),
                                       true );
                     aSendDialog.SetThrobberActive( true );

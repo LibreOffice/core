@@ -113,9 +113,13 @@
         <copy todir="${out}/misc/${target}/package_tmp" overwrite="true" encoding="UTF-8">
             <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu,Paths.xcu" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
+        <!-- FIXME: currently the build xcu files can not be used since the tag containing x-default attribute is thrown away, issue 99378
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
+         -->
+            <fileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}" includes="help/component.txt" casesensitive="yes"/>
             <filterset>
                 <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
@@ -139,11 +143,13 @@
         <zip  destfile="${dist}/${name}.${ext}">
             <fileset dir="${out}/misc/${target}/package_tmp" casesensitive="yes"/>
             <fileset dir="${dist}" includes="${target}.jar" casesensitive="yes"/>
-            <fileset dir="." includes="images/**,templates/**" casesensitive="yes"/>
             <file file="${commons-codec-jar}"/>
             <file file="${commons-httpclient-jar}"/>
             <file file="${commons-lang-jar}"/>
             <file file="${commons-logging-jar}"/>
+            <zipfileset file="${solar.bin}/xslt/export/wiki/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl"/>
+            <zipfileset file="${solar.bin}/xslt/export/wiki/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott"/>
+            <zipfileset dir="${solar.bin}/xslt/export/xsltml" casesensitive="yes" prefix="filter/math"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
@@ -155,12 +161,15 @@
         <delete file="${dist}/${target}_develop.zip"/>
         <zip  destfile="${dist}/${target}_develop.zip">
             <fileset dir="${dist}" includes="${target}.jar" casesensitive="yes"/>
-            <fileset dir="." includes="images/**,templates/**" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu,Paths.xcu" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
+        <!-- FIXME: currently the build xcu files can not be used since the tag containing x-default attribute is thrown away, issue 99378
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
+         -->
+            <fileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
             <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp,component.txt" casesensitive="yes" prefix="help"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>

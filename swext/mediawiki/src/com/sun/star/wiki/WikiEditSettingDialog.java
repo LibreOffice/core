@@ -264,8 +264,10 @@ public class WikiEditSettingDialog extends WikiDialog
                         }
                         else
                         {
+                            URI aMainURI = new URI( sMainURL, true ); // it must be an escaped URL, otherwise an exception should be thrown
+
                             if ( ( sUserName.length() > 0 || sPassword.length() > 0 )
-                              && Helper.Login( new URI( sMainURL ), sUserName, sPassword, m_xContext ) == null )
+                              && Helper.Login( aMainURI, sUserName, sPassword, m_xContext ) == null )
                             {
                                 // a wrong login information is provided
                                 // show error
@@ -278,7 +280,7 @@ public class WikiEditSettingDialog extends WikiDialog
                             }
                             else
                             {
-                                setting.put( "Url",sMainURL );
+                                setting.put( "Url", aMainURI.getEscapedURI() );
                                 setting.put( "Username", sUserName );
                                 setting.put( "Password", sPassword );
                                 if ( addMode )
