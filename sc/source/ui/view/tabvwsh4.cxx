@@ -35,7 +35,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <sfx2/topfrm.hxx>
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 
@@ -1646,8 +1645,6 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 //------------------------------------------------------------------
 
-//  SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_DISABLE_ACCELS ),
-
 #define __INIT_ScTabViewShell \
     eCurOST(OST_NONE),          \
     nDrawSfxId(0),              \
@@ -1915,7 +1912,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
+    SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     ScDBFunc( &pViewFrame->GetWindow(), (ScDocShell&)*pViewFrame->GetObjectShell(), this ),
     __INIT_ScTabViewShell
 {

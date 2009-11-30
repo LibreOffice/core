@@ -56,7 +56,6 @@ using namespace ::com::sun::star;
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/sfxecode.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svx/ofaitem.hxx>
 #include <sot/formats.hxx>
 #include <svtools/printdlg.hxx>

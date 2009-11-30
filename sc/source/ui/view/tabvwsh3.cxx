@@ -44,7 +44,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svtools/ptitem.hxx>
 #include <svtools/stritem.hxx>
 #include <tools/urlobj.hxx>

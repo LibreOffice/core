@@ -43,7 +43,6 @@
 #include <svtools/stritem.hxx>
 #include <svtools/svtreebx.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/topfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <unotools/charclass.hxx>

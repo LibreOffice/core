@@ -60,7 +60,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/sfx.hrc>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/svxmsbas.hxx>

@@ -43,7 +43,7 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
