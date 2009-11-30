@@ -56,6 +56,7 @@
 #include "sdiocmpt.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <comphelper/processfactory.hxx>
+#include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
