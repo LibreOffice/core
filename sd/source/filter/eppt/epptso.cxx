@@ -4605,11 +4605,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
                     if ( aControlName.Len() )
-                        ImplWriteCString( *mpExEmbed, aControlName, 1 );
+                        PPTWriter::WriteCString( *mpExEmbed, aControlName, 1 );
                     if ( aOleIdentifier.Len() )
-                        ImplWriteCString( *mpExEmbed, aOleIdentifier, 2 );
+                        PPTWriter::WriteCString( *mpExEmbed, aOleIdentifier, 2 );
                     if ( aUserName.Len() )
-                        ImplWriteCString( *mpExEmbed, aUserName, 3 );
+                        PPTWriter::WriteCString( *mpExEmbed, aUserName, 3 );
                 }
                 nSize = mpExEmbed->Tell() - nOldPos;
                 mpExEmbed->Seek( nOldPos - 4 );
@@ -5094,9 +5094,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 << (sal_uInt32)0
                                 << (sal_uInt32)0x0012b600;
 
-//                  ImplWriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
-//                  ImplWriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
-//                  ImplWriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
 
                     nSize = mpExEmbed->Tell() - nOldPos;
                     mpExEmbed->Seek( nOldPos - 4 );
@@ -5570,6 +5570,18 @@ void PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
                     << nX2
                     << nY2;
         mpPptEscherEx->CloseContainer();
+    }
+}
+
+void PPTWriter::WriteCString( SvStream& rSt, const String& rString, sal_uInt32 nInstance )
+{
+    sal_uInt32 i, nLen = rString.Len();
+    if ( nLen )
+    {
+        rSt << (sal_uInt32)( ( nInstance << 4 ) | ( EPP_CString << 16 ) )
+            << (sal_uInt32)( nLen << 1 );
+        for ( i = 0; i < nLen; i++ )
+            rSt << rString.GetChar( (sal_uInt16)i );
     }
 }
 

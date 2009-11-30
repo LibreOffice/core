@@ -34,11 +34,11 @@
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
+#include "delayevent.hxx"
 #include "eventqueue.hxx"
 #include "usereventqueue.hxx"
 #include "sequentialtimecontainer.hxx"
 #include "tools.hxx"
-#include "delayevent.hxx"
 
 #include <boost/bind.hpp>
 #include <algorithm>
@@ -63,8 +63,9 @@ void SequentialTimeContainer::activate_st()
     {
         // deactivate ASAP:
         scheduleDeactivationEvent(
-            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
-                       "SequentialTimeContainer::deactivate") );
+            makeEvent(
+                 boost::bind< void >( boost::mem_fn( &AnimationNode::deactivate ), getSelf() ),
+                 "SequentialTimeContainer::deactivate") );
     }
     else // use default
         scheduleDeactivationEvent();
@@ -90,8 +91,9 @@ void SequentialTimeContainer::skipEffect(
         // empty all events ignoring timings => until next effect
         getContext().mrEventQueue.forceEmpty();
         getContext().mrEventQueue.addEvent(
-            makeEvent( boost::bind(&AnimationNode::deactivate, pChildNode),
-                       "SequentialTimeContainer::deactivate, skipEffect with delay") );
+            makeEvent(
+                boost::bind<void>( boost::mem_fn( &AnimationNode::deactivate ), pChildNode ),
+                "SequentialTimeContainer::deactivate, skipEffect with delay") );
     }
     else
         OSL_ENSURE( false, "unknown notifier!" );

@@ -1269,5 +1269,7 @@ String STR_SET_BACKGROUND_PICTURE
 {
     Text [ en-US ] = "Set Background Picture for Slide ..." ;
 };
-
-
+String RID_ANNOTATIONS_START
+{
+     Text [ en-US ] = "Comments";
+};

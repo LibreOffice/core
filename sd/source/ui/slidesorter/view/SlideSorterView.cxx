@@ -108,8 +108,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     maModelBorder(),
     meOrientation(VERTICAL)
 {
-    maPageModel.GetItemPool().FreezeIdRanges();
-
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
 

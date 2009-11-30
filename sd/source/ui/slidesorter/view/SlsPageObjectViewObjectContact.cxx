@@ -520,6 +520,7 @@ class SdPageObjectFocusPrimitive : public SdPageObjectBasePrimitive
 private:
     /// Gap between border of page object and inside of focus rectangle.
     static const sal_Int32 mnFocusIndicatorOffset;
+    const bool mbContrastToSelected;
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
@@ -527,7 +528,7 @@ protected:
 
 public:
     // constructor and destructor
-    SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange);
+    SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange, const bool bContrast);
     ~SdPageObjectFocusPrimitive();
 
     // provide unique ID
@@ -556,19 +557,26 @@ Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const d
     // create polygon
     const basegfx::B2DPolygon aIndicatorPolygon(basegfx::tools::createPolygonFromRect(aFocusIndicatorRange));
 
-    // white rectangle
+    const StyleSettings& rStyleSettings(Application::GetSettings().GetStyleSettings());
+
+    // "background" rectangle
+    const Color aBackgroundColor(mbContrastToSelected ? rStyleSettings.GetMenuHighlightColor() : rStyleSettings.GetWindowColor());
     xRetval[0] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aIndicatorPolygon, Color(COL_WHITE).getBColor()));
 
     // dotted black rectangle with same geometry
     ::std::vector< double > aDotDashArray;
 
-    aDotDashArray.push_back(aDiscretePixel.getX());
-    aDotDashArray.push_back(aDiscretePixel.getX());
+    const sal_Int32 nFocusIndicatorWidth (3);
+    aDotDashArray.push_back(nFocusIndicatorWidth *aDiscretePixel.getX());
+    aDotDashArray.push_back(nFocusIndicatorWidth * aDiscretePixel.getX());
 
     // prepare line and stroke attributes
-    const drawinglayer::attribute::LineAttribute aLineAttribute(Color(COL_BLACK).getBColor());
-    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDotDashArray, 2.0 * aDiscretePixel.getX());
+    const Color aLineColor(mbContrastToSelected ? rStyleSettings.GetMenuHighlightTextColor() : rStyleSettings.GetWindowTextColor());
+    const drawinglayer::attribute::LineAttribute aLineAttribute(aLineColor.getBColor());
+    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
+        aDotDashArray, 2.0 * nFocusIndicatorWidth * aDiscretePixel.getX());
+
 
     xRetval[1] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(aIndicatorPolygon, aLineAttribute, aStrokeAttribute));
@@ -576,8 +584,9 @@ Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const d
     return xRetval;
 }
 
-SdPageObjectFocusPrimitive::SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange)
-:   SdPageObjectBasePrimitive(rRange)
+SdPageObjectFocusPrimitive::SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange, const bool bContrast)
+    :   SdPageObjectBasePrimitive(rRange),
+        mbContrastToSelected(bContrast)
 {
 }
 
@@ -596,12 +605,16 @@ private:
     /// Size of width and height of the fade effect indicator in pixels.
     static const sal_Int32              mnFadeEffectIndicatorOffset;
 
+    /// Size of width and height of the comments indicator in pixels.
+    static const sal_Int32              mnCommentsIndicatorOffset;
+
     /// Gap between border of page object and number rectangle.
     static const sal_Int32              mnPageNumberOffset;
 
-    /// the FadeEffect bitmap. Static since it is usable outside this primitive
+    /// the indicator bitmaps. Static since it is usable outside this primitive
     /// for size comparisons
     static BitmapEx*                    mpFadeEffectIconBitmap;
+    static BitmapEx*                    mpCommentsIconBitmap;
 
     /// page name, number and needed infos
     String                              maPageName;
@@ -611,10 +624,12 @@ private:
 
     // bitfield
     bool mbShowFadeEffectIcon : 1;
+    bool mbShowCommentsIcon : 1;
     bool mbExcluded : 1;
 
     // private helpers
     const BitmapEx& getFadeEffectIconBitmap() const;
+    const BitmapEx& getCommentsIconBitmap() const;
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
@@ -629,6 +644,7 @@ public:
         const Font& rPageNameFont,
         const Size& rPageNumberAreaModelSize,
         bool bShowFadeEffectIcon,
+        bool bShowCommentsIcon,
         bool bExcluded);
     ~SdPageObjectFadeNameNumberPrimitive();
 
@@ -638,6 +654,7 @@ public:
     const Font& getPageNameFont() const { return maPageNameFont; }
     const Size& getPageNumberAreaModelSize() const { return maPageNumberAreaModelSize; }
     bool getShowFadeEffectIcon() const { return mbShowFadeEffectIcon; }
+    bool getShowCommentsIcon() const { return mbShowCommentsIcon; }
     bool getExcluded() const { return mbExcluded; }
 
     // compare operator
@@ -666,6 +683,24 @@ const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getFadeEffectIconBitmap() c
     return *mpFadeEffectIconBitmap;
 }
 
+const sal_Int32 SdPageObjectFadeNameNumberPrimitive::mnCommentsIndicatorOffset(9);
+BitmapEx* SdPageObjectFadeNameNumberPrimitive::mpCommentsIconBitmap = 0;
+
+const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getCommentsIconBitmap() const
+{
+    if(mpCommentsIconBitmap == NULL)
+    {
+        // prepare CommentsIconBitmap on demand
+        const sal_uInt16 nIconId(Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+            ? BMP_COMMENTS_INDICATOR_H
+            : BMP_COMMENTS_INDICATOR);
+        const BitmapEx aCommentsIconBitmap(IconCache::Instance().GetIcon(nIconId).GetBitmapEx());
+        const_cast< SdPageObjectFadeNameNumberPrimitive* >(this)->mpCommentsIconBitmap = new BitmapEx(aCommentsIconBitmap);
+    }
+
+    return *mpCommentsIconBitmap;
+}
+
 Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     const xub_StrLen nTextLength(getPageName().Len());
@@ -691,15 +726,13 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
     aTextLayouter.setFont(getPageNameFont());
 
     // get font attributes
-    ::basegfx::B2DVector aTextSizeAttribute;
-    const drawinglayer::primitive2d::FontAttributes aFontAttributes(drawinglayer::primitive2d::getFontAttributesFromVclFont(
-        aTextSizeAttribute,
-        getPageNameFont(),
-        false,
-        false));
-
-    // prepare DXTextArray (can be empty one)
-    const ::std::vector< double > aDXArray;
+    basegfx::B2DVector aTextSizeAttribute;
+    const drawinglayer::primitive2d::FontAttributes aFontAttributes(
+        drawinglayer::primitive2d::getFontAttributesFromVclFont(
+            aTextSizeAttribute,
+            getPageNameFont(),
+            false,
+            false));
 
     // prepare locale; this may need some more information in the future
     const ::com::sun::star::lang::Locale aLocale;
@@ -783,16 +816,27 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
         }
 
         // fill text matrix
-        ::basegfx::B2DHomMatrix aTextMatrix;
+        basegfx::B2DHomMatrix aTextMatrix;
 
-        aTextMatrix.set(0L, 0L, aTextSizeAttribute.getX());
-        aTextMatrix.set(1L, 1L, aTextSizeAttribute.getY());
-        aTextMatrix.set(0L, 2L, fStartX);
-        aTextMatrix.set(1L, 2L, fStartY);
+        aTextMatrix.set(0, 0, aTextSizeAttribute.getX());
+        aTextMatrix.set(1, 1, aTextSizeAttribute.getY());
+        aTextMatrix.set(0, 2, fStartX);
+        aTextMatrix.set(1, 2, fStartY);
+
+        // prepare DXTextArray (can be empty one)
+        const ::std::vector< double > aDXArray;
 
         // create Text primitive and add to target
-        xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-            aTextMatrix, aPageName, 0, aPageName.Len(), aDXArray, aFontAttributes, aLocale, aFontColor));
+        xRetval[nInsert++] = Primitive2DReference(
+            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aTextMatrix,
+                aPageName,
+                0,
+                aPageName.Len(),
+                aDXArray,
+                aFontAttributes,
+                aLocale,
+                aFontColor));
     }
 
     {
@@ -813,16 +857,27 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
         const double fStartY(aNumberRange.getMinY() + fTextHeight + aDiscretePixel.getX());
 
         // fill text matrix
-        ::basegfx::B2DHomMatrix aTextMatrix;
+        basegfx::B2DHomMatrix aTextMatrix;
 
-        aTextMatrix.set(0L, 0L, aTextSizeAttribute.getX());
-        aTextMatrix.set(1L, 1L, aTextSizeAttribute.getY());
-        aTextMatrix.set(0L, 2L, fStartX);
-        aTextMatrix.set(1L, 2L, fStartY);
+        aTextMatrix.set(0, 0, aTextSizeAttribute.getX());
+        aTextMatrix.set(1, 1, aTextSizeAttribute.getY());
+        aTextMatrix.set(0, 2, fStartX);
+        aTextMatrix.set(1, 2, fStartY);
+
+        // prepare DXTextArray (can be empty one)
+        const ::std::vector< double > aDXArray;
 
         // create Text primitive
-        xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-            aTextMatrix, aPageNumber, 0, nNumberLen, aDXArray, aFontAttributes, aLocale, aFontColor));
+        xRetval[nInsert++] = Primitive2DReference(
+            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aTextMatrix,
+                aPageNumber,
+                0,
+                nNumberLen,
+                aDXArray,
+                aFontAttributes,
+                aLocale,
+                aFontColor));
 
         if(getExcluded())
         {
@@ -851,6 +906,7 @@ SdPageObjectFadeNameNumberPrimitive::SdPageObjectFadeNameNumberPrimitive(
     const Font& rPageNameFont,
     const Size& rPageNumberAreaModelSize,
     bool bShowFadeEffectIcon,
+    bool bShowCommentsIcon,
     bool bExcluded)
 :   SdPageObjectBasePrimitive(rRange),
     maPageName(rPageName),
@@ -858,6 +914,7 @@ SdPageObjectFadeNameNumberPrimitive::SdPageObjectFadeNameNumberPrimitive(
     maPageNameFont(rPageNameFont),
     maPageNumberAreaModelSize(rPageNumberAreaModelSize),
     mbShowFadeEffectIcon(bShowFadeEffectIcon),
+    mbShowCommentsIcon(bShowCommentsIcon),
     mbExcluded(bExcluded)
 {
 }
@@ -965,6 +1022,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
         sal_uInt32 nPageNumber(0);
         Size aPageNumberAreaModelSize;
         bool bShowFadeEffectIcon(false);
+        bool bShowCommentsIcon(false);
         bool bExcluded(false);
 
         if(GetPage())
@@ -976,6 +1034,8 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
             {
                 bShowFadeEffectIcon = true;
             }
+
+            bShowCommentsIcon = !pPage->getAnnotations().empty();
 
             // prepare PageName, PageNumber, font and AreaModelSize
             aPageName = pPage->GetName();
@@ -1030,6 +1090,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
                 aPageNameFont,
                 aPageNumberAreaModelSize,
                 bShowFadeEffectIcon,
+                bShowCommentsIcon,
                 bExcluded));
         }
 
@@ -1042,7 +1103,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
         if(bCreateFocused)
         {
             // add focus indicator if used
-            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectFocusPrimitive(aInnerRange));
+            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectFocusPrimitive(aInnerRange, bCreateSelected));
         }
 
         return xRetval;

@@ -94,6 +94,30 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
             };
             PageItem
             {
+                Identifier = RID_SVXPAGE_PICK_BULLET ;
+                PageResID = RID_SVXPAGE_PICK_BULLET ;
+                Text [ en-US ] = "Bullets" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_SINGLE_NUM ;
+                PageResID = RID_SVXPAGE_PICK_SINGLE_NUM ;
+                Text [ en-US ] = "Numbering type" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_BMP ;
+                PageResID = RID_SVXPAGE_PICK_BMP ;
+                Text [ en-US ] = "Graphics" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_NUM_OPTIONS ;
+                PageResID = RID_SVXPAGE_NUM_OPTIONS ;
+                Text [ en-US ] = "Customize" ;
+            };
+            PageItem
+            {
                 Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
                 PageResID = RID_SVXPAGE_ALIGN_PARAGRAPH ;
                 Text [ en-US ] = "Alignment" ;

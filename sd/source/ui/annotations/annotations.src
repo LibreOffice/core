@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile:  $
+ * $Revision:  $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "annotations.hrc"
+#include "glob.hrc"
+#include <svx/svxids.hrc>
+
+Menu RID_ANNOTATION_CONTEXTMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_REPLYTO_POSTIT;
+            HelpID = SID_REPLYTO_POSTIT ;
+            Text [ en-US ] = "~Reply";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT;
+            HelpID = SID_ATTR_CHAR_WEIGHT ;
+            Text [ en-US ] = "~Bold";
+        };
+        MenuItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE;
+            HelpID = SID_ATTR_CHAR_POSTURE;
+            Text [ en-US ] = "~Italic";
+        };
+        MenuItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE;
+            HelpID = SID_ATTR_CHAR_UNDERLINE;
+            Text [ en-US ] = "~Underline";
+        };
+        MenuItem
+        {
+            Identifier = SID_ATTR_CHAR_STRIKEOUT;
+            HelpID = SID_ATTR_CHAR_STRIKEOUT;
+            Text [ en-US ] = "~Strikethrough";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_COPY ;
+            HelpID = SID_COPY ;
+            Text [ en-US ] = "~Copy" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_PASTE ;
+            HelpID = SID_PASTE ;
+            Text [ en-US ] = "~Paste" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE_POSTIT ;
+            HelpID = SID_DELETE_POSTIT;
+            Text [ en-US ] = "~Delete Comment" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETEALLBYAUTHOR_POSTIT ;
+            HelpID = SID_DELETEALLBYAUTHOR_POSTIT;
+            Text [ en-US ] = "Delete All Comments b~y %1" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETEALL_POSTIT;
+            HelpID = SID_DELETEALL_POSTIT;
+            Text [ en-US ] = "Delete ~All Comments" ;
+        };
+    };
+};
+
+Menu RID_ANNOTATION_TAG_CONTEXTMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_REPLYTO_POSTIT;
+            HelpID = SID_REPLYTO_POSTIT;
+            Text [ en-US ] = "~Reply";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE_POSTIT ;
+            HelpID = SID_DELETE_POSTIT ;
+            Text [ en-US ] = "~Delete Comment" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETEALLBYAUTHOR_POSTIT ;
+            HelpID = SID_DELETEALLBYAUTHOR_POSTIT ;
+            Text [ en-US ] = "Delete All Comments ~by %1" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETEALL_POSTIT;
+            HelpID = SID_DELETEALL_POSTIT;
+            Text [ en-US ] = "Delete ~All Comments" ;
+        };
+    };
+};
+
+String STR_ANNOTATION_TODAY
+{
+    Text [ en-US ] = "Today," ;
+};
+
+String STR_ANNOTATION_YESTERDAY
+{
+    Text [ en-US ] = "Yesterday," ;
+};
+
+String STR_ANNOTATION_NOAUTHOR
+{
+    Text [ en-US ] = "(no author)" ;
+};
+
+String STR_ANNOTATION_WRAP_FORWARD
+{
+    Text [ en-US ] = "%PRODUCTNAME Impress reached the end of the presentation. Do you want to continue at the beginning?";
+};
+
+String STR_ANNOTATION_WRAP_BACKWARD
+{
+    Text [ en-US ] = "%PRODUCTNAME Impress reached the beginning of the presentation. Do you want to continue at the end?";
+};
+
+String STR_ANNOTATION_WRAP_FORWARD_DRAW
+{
+    Text [ en-US ] = "%PRODUCTNAME Draw reached the end of the document. Do you want to continue at the beginning?";
+};
+
+String STR_ANNOTATION_WRAP_BACKWARD_DRAW
+{
+    Text [ en-US ] = "%PRODUCTNAME Draw reached the beginning of the document. Do you want to continue at the end?";
+};
+
+String STR_ANNOTATION_UNDO_INSERT
+{
+    Text [ en-US ] = "Insert Comment";
+};
+
+String STR_ANNOTATION_UNDO_DELETE
+{
+    Text [ en-US ] = "Delete Comment(s)";
+};
+
+String STR_ANNOTATION_UNDO_MOVE
+{
+    Text [ en-US ] = "Move Comment";
+};
+
+String STR_ANNOTATION_UNDO_EDIT
+{
+    Text [ en-US ] = "Edit Comment";
+};
+
+String STR_ANNOTATION_UNDO_REPLY
+{
+    Text [ en-US ] = "Reply to Comment";
+};
+
+String STR_ANNOTATION_REPLY
+{
+    Text [ en-US ] = "Reply to %1" ;
+};

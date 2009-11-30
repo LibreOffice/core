@@ -106,6 +106,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::office;
+
+namespace sd {
+extern Reference< XAnnotation > createAnnotation( const Reference< XComponentContext >& xContext, SdPage* );
+extern Reference< XAnnotationEnumeration > createAnnotationEnumeration( const sd::AnnotationVector& );
+}
 
 /* this are the ids for page properties */
 enum WID_PAGE
@@ -519,6 +525,10 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
     else QUERYINT( drawing::XShapeCombiner );
     else QUERYINT( drawing::XShapeBinder );
     else QUERYINT( beans::XMultiPropertySet );
+    else if( rType == ITYPE( office::XAnnotationAccess ) )
+    {
+        return Any( Reference< office::XAnnotationAccess >( this ) );
+    }
     else if( rType == ITYPE( XAnimationNodeSupplier ) )
     {
         if( mbIsImpressDocument )
@@ -2036,7 +2046,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
 
         // Collect the types of this class.
         ::std::vector<uno::Type> aTypes;
-        aTypes.reserve(11);
+        aTypes.reserve(13);
         aTypes.push_back(ITYPE(drawing::XDrawPage));
         aTypes.push_back(ITYPE(beans::XPropertySet));
         aTypes.push_back(ITYPE(container::XNamed));
@@ -2046,6 +2056,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
         aTypes.push_back(ITYPE(document::XLinkTargetSupplier));
         aTypes.push_back(ITYPE( drawing::XShapeCombiner ));
         aTypes.push_back(ITYPE( drawing::XShapeBinder ));
+        aTypes.push_back(ITYPE( office::XAnnotationAccess ));
         aTypes.push_back(ITYPE( beans::XMultiPropertySet ));
         if( bPresPage )
             aTypes.push_back(ITYPE(presentation::XPresentationPage));
@@ -2526,6 +2537,27 @@ void SdDrawPage::setBackground( const Any& rValue )
     // pPage->SendRepaintBroadcast();
 }
 
+// XAnnotationAccess:
+Reference< XAnnotation > SAL_CALL SdGenericDrawPage::createAndInsertAnnotation() throw (RuntimeException)
+{
+    if( !GetPage() )
+        throw DisposedException();
+
+    Reference< XAnnotation > xRet;
+    GetPage()->createAnnotation(xRet);
+    return xRet;
+}
+
+void SAL_CALL SdGenericDrawPage::removeAnnotation(const Reference< XAnnotation > & annotation) throw (RuntimeException, IllegalArgumentException)
+{
+    GetPage()->removeAnnotation(annotation);
+}
+
+Reference< XAnnotationEnumeration > SAL_CALL SdGenericDrawPage::createAnnotationEnumeration() throw (RuntimeException)
+{
+    return ::sd::createAnnotationEnumeration( GetPage()->getAnnotations() );
+}
+
 void SdDrawPage::getBackground( Any& rValue ) throw()
 {
     SdrObject* pObj = GetPage()->GetBackgroundObj();
@@ -2698,7 +2730,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
 
         // Collect the types of this class.
         ::std::vector<uno::Type> aTypes;
-        aTypes.reserve(10);
+        aTypes.reserve(12);
         aTypes.push_back(ITYPE(drawing::XDrawPage));
         aTypes.push_back(ITYPE(beans::XPropertySet));
         aTypes.push_back(ITYPE(container::XNamed));
@@ -2707,6 +2739,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
         aTypes.push_back(ITYPE(document::XLinkTargetSupplier));
         aTypes.push_back(ITYPE( drawing::XShapeCombiner ));
         aTypes.push_back(ITYPE( drawing::XShapeBinder ));
+        aTypes.push_back(ITYPE( office::XAnnotationAccess ));
         aTypes.push_back(ITYPE( beans::XMultiPropertySet ));
         if( bPresPage )
             aTypes.push_back(ITYPE(presentation::XPresentationPage));

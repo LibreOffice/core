@@ -214,6 +214,9 @@
 #define EPP_GscalingAtom               10001
 #define EPP_GrColorAtom                10002
 #define EPP_GLPointAtom                10003
+#define EPP_Comment10                   12000
+#define EPP_CommentAtom10               12001
+
 
 #define EPP_PLACEHOLDER_NONE                    0   //  0 None
 #define EPP_PLACEHOLDER_MASTERTITLE             1   //  1 Master title

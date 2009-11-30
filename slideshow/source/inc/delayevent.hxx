@@ -30,13 +30,11 @@
 #ifndef INCLUDED_SLIDESHOW_DELAYEVENT_HXX
 #define INCLUDED_SLIDESHOW_DELAYEVENT_HXX
 
+#include <boost/function.hpp>
+
 #include "event.hxx"
 #include "debug.hxx"
 #include <boost/noncopyable.hpp>
-#include <boost/function.hpp>
-#if defined(VERBOSE) && defined(DBG_UTIL)
-#include "boost/current_function.hpp"
-#endif
 
 namespace slideshow {
 namespace internal {
