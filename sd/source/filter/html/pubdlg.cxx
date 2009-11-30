@@ -867,8 +867,13 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     // Page 3
 
     aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
-    aValue.Value <<= (sal_Int32)( pPage3_Resolution_1->IsChecked()?PUB_LOWRES_WIDTH:
-                                 pPage3_Resolution_2->IsChecked()?PUB_MEDRES_WIDTH:PUB_HIGHRES_WIDTH);
+    sal_Int32 nTmpWidth = 512;
+    if( pPage3_Resolution_2->IsChecked() )
+        nTmpWidth = 640;
+    else if( pPage3_Resolution_3->IsChecked() )
+        nTmpWidth = 800;
+
+    aValue.Value <<= nTmpWidth;
     aProps.push_back( aValue );
 
     aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) );

@@ -112,8 +112,8 @@ bool SlideSorterModel::SetEditMode (EditMode eEditMode)
     if (meEditMode != eEditMode)
     {
         meEditMode = eEditMode;
-        ClearDescriptorList();
         UpdatePageList();
+        ClearDescriptorList();
         bEditModeChanged = true;
     }
     return bEditModeChanged;

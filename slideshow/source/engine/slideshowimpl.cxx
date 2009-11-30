@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,7 @@
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 
 #include "unoviewcontainer.hxx"
 #include "transitionfactory.hxx"
@@ -93,6 +94,7 @@
 #include "rehearsetimingsactivity.hxx"
 #include "waitsymbol.hxx"
 #include "effectrewinder.hxx"
+#include "framerate.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
@@ -101,6 +103,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <stdio.h>
 
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
@@ -514,12 +517,18 @@ SlideShowImpl::SlideShowImpl(
 
     if( xFactory.is() )
     {
-        // #i82460# try to retrieve special transition factory
-        mxOptionalTransitionFactory.set(
-            xFactory->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii( "com.sun.star.presentation.TransitionFactory" ),
-                mxComponentContext ),
-            uno::UNO_QUERY );
+        try
+    {
+            // #i82460# try to retrieve special transition factory
+            mxOptionalTransitionFactory.set(
+                xFactory->createInstanceWithContext(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.presentation.TransitionFactory" ),
+                    mxComponentContext ),
+                uno::UNO_QUERY );
+        }
+        catch (loader::CannotActivateFactoryException const&)
+    {
+    }
     }
 
     mpListener.reset( new SeparateListenerImpl(
@@ -1720,8 +1729,9 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             // calc nNextTimeout value:
             if (bActivitiesLeft)
             {
-                // activities left: requires immediate updates
-                nNextTimeout = 0.0; // come back ASAP
+                // Activity queue is not empty.  Tell caller that we would
+                // like to render another frame.
+                nNextTimeout = 1.0 / FrameRate::PreferredFramesPerSecond;
             }
             else
             {

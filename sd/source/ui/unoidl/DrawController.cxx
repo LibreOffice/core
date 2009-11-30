@@ -411,7 +411,7 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
 
     // When there is not yet a sub controller (during initialization) then fall back
     // to the current page in mpCurrentPage.
-    if ( ! xPage.is() && mpCurrentPage != NULL)
+    if ( ! xPage.is() && mpCurrentPage.is())
         xPage = Reference<drawing::XDrawPage>(mpCurrentPage->getUnoPage(), UNO_QUERY);
 
     return xPage;

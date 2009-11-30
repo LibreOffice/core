@@ -76,7 +76,7 @@ public:
             css::drawing::framework::XControllerManager>& rxControllerManager);
 
     /** Request an update of the current configuration so that it looks like
-        the given requested configuration.  It check whether an update of
+        the given requested configuration.  It checks whether an update of
         the current configuration can be done.  Calls UpdateConfiguration()
         if that is the case.  Otherwise it schedules a later call to
         UpdateConfiguration().

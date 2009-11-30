@@ -336,7 +336,7 @@ PresenterTextView::Implementation::Implementation (void)
 PresenterTextView::Implementation::~Implementation (void)
 {
     delete mpEditEngine;
-    delete mpEditEngineItemPool;
+    SfxItemPool::Free(mpEditEngineItemPool);
     delete mpOutputDevice;
 }
 

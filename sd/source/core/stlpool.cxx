@@ -1466,7 +1466,7 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
     {
         for (USHORT n = 0; n < nListenerCount; n++)
         {
-            SdStyleSheet* pChild = static_cast< SdStyleSheet* >( pSheet->GetListener(n) );
+            SdStyleSheet* pChild = dynamic_cast< SdStyleSheet* >( pSheet->GetListener(n) );
             if(pChild && pChild->GetParent() == pSheet->GetName())
             {
                 aResult.push_back( SdStyleSheetRef( pChild ) );

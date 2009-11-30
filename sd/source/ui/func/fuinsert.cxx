@@ -503,162 +503,170 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             }
         }
 
-        if (xObj.is())
+        try
         {
-            //TODO/LATER: needs status for RESIZEONPRINTERCHANGE
-            //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->getStatus( nAspect ) )
-            //    aIPObj->OnDocumentPrinterChanged( mpDocSh->GetPrinter(FALSE) );
-
-            BOOL bInsertNewObject = TRUE;
-
-            Size aSize;
-            MapUnit aMapUnit = MAP_100TH_MM;
-            if ( nAspect != embed::Aspects::MSOLE_ICON )
+            if (xObj.is())
             {
-                awt::Size aSz;
-                try
-                {
-                    aSz = xObj->getVisualAreaSize( nAspect );
-                }
-                catch( embed::NoVisualAreaSizeException& )
-                {
-                    // the default size will be set later
-                }
+                //TODO/LATER: needs status for RESIZEONPRINTERCHANGE
+                //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->getStatus( nAspect ) )
+                //    aIPObj->OnDocumentPrinterChanged( mpDocSh->GetPrinter(FALSE) );
 
-                aSize =Size( aSz.Width, aSz.Height );
+                BOOL bInsertNewObject = TRUE;
 
-                aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                if (aSize.Height() == 0 || aSize.Width() == 0)
+                Size aSize;
+                MapUnit aMapUnit = MAP_100TH_MM;
+                if ( nAspect != embed::Aspects::MSOLE_ICON )
                 {
-                    // Rechteck mit ausgewogenem Kantenverhaeltnis
-                    aSize.Width()  = 14100;
-                    aSize.Height() = 10000;
-                    Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
-                    aSz.Width = aTmp.Width();
-                    aSz.Height = aTmp.Height();
-                    xObj->setVisualAreaSize( nAspect, aSz );
-                }
-                else
-                {
-                    aSize = OutputDevice::LogicToLogic(aSize, aMapUnit, MAP_100TH_MM);
-                }
-            }
-
-            if ( mpView->AreObjectsMarked() )
-            {
-                /**********************************************************
-                * Ist ein leeres OLE-Objekt vorhanden?
-                **********************************************************/
-                const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
-                if (rMarkList.GetMarkCount() == 1)
-                {
-                    SdrMark* pMark = rMarkList.GetMark(0);
-                    SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                    if (pObj->GetObjInventor() == SdrInventor &&
-                        pObj->GetObjIdentifier() == OBJ_OLE2)
+                    awt::Size aSz;
+                    try
                     {
-                        if ( !( (SdrOle2Obj*) pObj)->GetObjRef().is() )
+                        aSz = xObj->getVisualAreaSize( nAspect );
+                    }
+                    catch( embed::NoVisualAreaSizeException& )
+                    {
+                        // the default size will be set later
+                    }
+
+                    aSize =Size( aSz.Width, aSz.Height );
+
+                    aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                    if (aSize.Height() == 0 || aSize.Width() == 0)
+                    {
+                        // Rechteck mit ausgewogenem Kantenverhaeltnis
+                        aSize.Width()  = 14100;
+                        aSize.Height() = 10000;
+                        Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
+                        aSz.Width = aTmp.Width();
+                        aSz.Height = aTmp.Height();
+                        xObj->setVisualAreaSize( nAspect, aSz );
+                    }
+                    else
+                    {
+                        aSize = OutputDevice::LogicToLogic(aSize, aMapUnit, MAP_100TH_MM);
+                    }
+                }
+
+                if ( mpView->AreObjectsMarked() )
+                {
+                    /**********************************************************
+                        * Ist ein leeres OLE-Objekt vorhanden?
+                        **********************************************************/
+                    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+
+                    if (rMarkList.GetMarkCount() == 1)
+                    {
+                        SdrMark* pMark = rMarkList.GetMark(0);
+                        SdrObject* pObj = pMark->GetMarkedSdrObj();
+
+                        if (pObj->GetObjInventor() == SdrInventor &&
+                        pObj->GetObjIdentifier() == OBJ_OLE2)
                         {
-                            /**************************************************
-                            * Das leere OLE-Objekt bekommt ein neues IPObj
-                            **************************************************/
-                            bInsertNewObject = FALSE;
-                            pObj->SetEmptyPresObj(FALSE);
-                            ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
-                            ( (SdrOle2Obj*) pObj)->SetObjRef(xObj);
-                            ( (SdrOle2Obj*) pObj)->SetPersistName(aName);
-                            ( (SdrOle2Obj*) pObj)->SetName(aName);
-                            ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
-                            Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
-
-                            //HMHmpView->HideMarkHdl();
-
-                            if ( nAspect == embed::Aspects::MSOLE_ICON )
+                            if ( !( (SdrOle2Obj*) pObj)->GetObjRef().is() )
                             {
-                                if( xIconMetaFile.is() )
-                                    ( (SdrOle2Obj*) pObj)->SetGraphicToObj( xIconMetaFile, aIconMediaType );
+                                /**************************************************
+                                    * Das leere OLE-Objekt bekommt ein neues IPObj
+                                    **************************************************/
+                                bInsertNewObject = FALSE;
+                                pObj->SetEmptyPresObj(FALSE);
+                                ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
+                                ( (SdrOle2Obj*) pObj)->SetObjRef(xObj);
+                                ( (SdrOle2Obj*) pObj)->SetPersistName(aName);
+                                ( (SdrOle2Obj*) pObj)->SetName(aName);
+                                ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
+                                Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
+
+                                //HMHmpView->HideMarkHdl();
+
+                                if ( nAspect == embed::Aspects::MSOLE_ICON )
+                                {
+                                    if( xIconMetaFile.is() )
+                                        ( (SdrOle2Obj*) pObj)->SetGraphicToObj( xIconMetaFile, aIconMediaType );
+                                }
+                                else
+                                {
+                                    Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aMapUnit );
+                                    awt::Size aSz( aTmp.Width(), aTmp.Height() );
+                                    xObj->setVisualAreaSize( nAspect, aSz );
+                                }
                             }
-                            else
+                        }
+                    }
+                }
+
+                if (bInsertNewObject)
+                {
+                    /**************************************************************
+                        * Ein neues OLE-Objekt wird erzeugt
+                        **************************************************************/
+                    SdrPageView* pPV = mpView->GetSdrPageView();
+                    Size aPageSize = pPV->GetPage()->GetSize();
+
+                    // get the size from the iconified object
+                    ::svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+                    if ( nAspect == embed::Aspects::MSOLE_ICON )
+                    {
+                        aObjRef.SetGraphicStream( xIconMetaFile, aIconMediaType );
+                        MapMode aMapMode( MAP_100TH_MM );
+                        aSize = aObjRef.GetSize( &aMapMode );
+                    }
+
+                    Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
+                        (aPageSize.Height() - aSize.Height()) / 2);
+                    Rectangle aRect (aPnt, aSize);
+
+                    SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
+
+                    if( mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
+                    {
+                        //  #73279# Math objects change their object size during InsertObject.
+                        //  New size must be set in SdrObject, or a wrong scale will be set at
+                        //  ActivateObject.
+
+                        if ( nAspect != embed::Aspects::MSOLE_ICON )
+                        {
+                            try
+                            {
+                                awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+
+                                Size aNewSize = Window::LogicToLogic( Size( aSz.Width, aSz.Height ),
+                                    MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
+                                if ( aNewSize != aSize )
+                                {
+                                    aRect.SetSize( aNewSize );
+                                    pObj->SetLogicRect( aRect );
+                                }
+                            }
+                            catch( embed::NoVisualAreaSizeException& )
+                            {}
+                        }
+
+                        if (bCreateNew)
+                        {
+                            //HMHmpView->HideMarkHdl();
+                            pObj->SetLogicRect(aRect);
+
+                            if ( nAspect != embed::Aspects::MSOLE_ICON )
                             {
                                 Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aMapUnit );
                                 awt::Size aSz( aTmp.Width(), aTmp.Height() );
                                 xObj->setVisualAreaSize( nAspect, aSz );
                             }
+
+                            mpViewShell->ActivateObject(pObj, SVVERB_SHOW);
                         }
+
+                        Size aVisSizePixel = mpWindow->GetOutputSizePixel();
+                        Rectangle aVisAreaWin = mpWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+                        mpViewShell->VisAreaChanged(aVisAreaWin);
+                        mpDocSh->SetVisArea(aVisAreaWin);
                     }
                 }
             }
-
-            if (bInsertNewObject)
-            {
-                /**************************************************************
-                * Ein neues OLE-Objekt wird erzeugt
-                **************************************************************/
-                SdrPageView* pPV = mpView->GetSdrPageView();
-                Size aPageSize = pPV->GetPage()->GetSize();
-
-                // get the size from the iconified object
-                ::svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
-                if ( nAspect == embed::Aspects::MSOLE_ICON )
-                {
-                    aObjRef.SetGraphicStream( xIconMetaFile, aIconMediaType );
-                    MapMode aMapMode( MAP_100TH_MM );
-                    aSize = aObjRef.GetSize( &aMapMode );
-                }
-
-                Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
-                            (aPageSize.Height() - aSize.Height()) / 2);
-                Rectangle aRect (aPnt, aSize);
-
-                SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
-
-                if( mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
-                {
-                    //  #73279# Math objects change their object size during InsertObject.
-                    //  New size must be set in SdrObject, or a wrong scale will be set at
-                    //  ActivateObject.
-
-                    if ( nAspect != embed::Aspects::MSOLE_ICON )
-                    {
-                        try
-                        {
-                            awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-
-                            Size aNewSize = Window::LogicToLogic( Size( aSz.Width, aSz.Height ),
-                                            MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
-                            if ( aNewSize != aSize )
-                            {
-                                aRect.SetSize( aNewSize );
-                                pObj->SetLogicRect( aRect );
-                            }
-                        }
-                        catch( embed::NoVisualAreaSizeException& )
-                        {}
-                    }
-
-                    if (bCreateNew)
-                    {
-                        //HMHmpView->HideMarkHdl();
-                        pObj->SetLogicRect(aRect);
-
-                        if ( nAspect != embed::Aspects::MSOLE_ICON )
-                        {
-                            Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aMapUnit );
-                            awt::Size aSz( aTmp.Width(), aTmp.Height() );
-                            xObj->setVisualAreaSize( nAspect, aSz );
-                        }
-
-                        mpViewShell->ActivateObject(pObj, SVVERB_SHOW);
-                    }
-
-                    Size aVisSizePixel = mpWindow->GetOutputSizePixel();
-                    Rectangle aVisAreaWin = mpWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-                    mpViewShell->VisAreaChanged(aVisAreaWin);
-                    mpDocSh->SetVisArea(aVisAreaWin);
-                }
-            }
+        }
+        catch (uno::Exception&)
+        {
+            // For some reason the object can not be inserted.  For example
+            // because it is password protected and is not properly unlocked.
         }
     }
 }

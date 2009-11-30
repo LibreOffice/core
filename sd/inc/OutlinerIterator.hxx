@@ -36,12 +36,13 @@
 #include "pres.hxx"
 #include "sal/types.h"
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 class SdDrawDocument;
 
 namespace sd {
 
-class DrawViewShell;
+class ViewShell;
 class Outliner;
 class View;
 
@@ -267,7 +268,7 @@ private:
     Iterator CreateSelectionIterator (
         const ::std::vector<SdrObjectWeakRef>& rObjectList,
         SdDrawDocument* pDocument,
-        DrawViewShell* pViewShell,
+        const ::boost::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward=true,
         IteratorLocation aLocation=BEGIN);
 
@@ -285,7 +286,7 @@ private:
     */
     Iterator CreateViewIterator (
         SdDrawDocument* pDocument,
-        DrawViewShell* pViewShell,
+        const boost::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward=true,
         IteratorLocation aLocation=BEGIN);
 
@@ -302,7 +303,7 @@ private:
     */
     Iterator CreateDocumentIterator (
         SdDrawDocument* pDocument,
-        DrawViewShell* pViewShell,
+        const ::boost::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward=true,
         IteratorLocation aLocation=BEGIN);
 
@@ -323,8 +324,9 @@ private:
         @param aLocation
             This specifies at which object the iterator points initially.
     */
-    sal_Int32 GetPageIndex (SdDrawDocument* pDocument,
-        DrawViewShell* pViewShell,
+    sal_Int32 GetPageIndex (
+        SdDrawDocument* pDocument,
+        const ::boost::shared_ptr<ViewShell>& rpViewShell,
         PageKind ePageKind,
         EditMode eEditMode,
         bool bDirectionIsForward,

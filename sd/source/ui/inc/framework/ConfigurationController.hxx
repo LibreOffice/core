@@ -92,6 +92,16 @@ public:
 
     void ProcessEvent (void);
 
+    /** Normally the requested changes of the configuration are executed
+        asynchronously.  However, there is at least one situation (searching
+        with the Outliner) where the surrounding code does not cope with
+        this.  So, instead of calling Reschedule until the global event loop
+        executes the configuration update, this method does (almost) the
+        same without the reschedules.
+
+        Do not use this method until there is absolutely no other way.
+    */
+    void RequestSynchronousUpdate (void);
 
     // XConfigurationController
 

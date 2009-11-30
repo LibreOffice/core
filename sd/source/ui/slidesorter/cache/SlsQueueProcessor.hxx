@@ -39,7 +39,6 @@
 #include "view/SlsPageObjectViewObjectContact.hxx"
 #include "tools/IdleDetection.hxx"
 #include "SlsBitmapCache.hxx"
-#include "taskpane/SlideSorterCacheDisplay.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"
 
@@ -48,11 +47,6 @@
 #include <vcl/timer.hxx>
 #include <boost/function.hpp>
 
-
-// Uncomment the define below to have some more OSL_TRACE messages.
-#ifdef DEBUG
-//#define VERBOSE
-#endif
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;

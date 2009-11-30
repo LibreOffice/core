@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapeattributelayer.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -471,6 +471,7 @@ namespace slideshow
             State::StateId getAlphaState() const;
             State::StateId getPositionState() const;
             State::StateId getContentState() const;
+            State::StateId getVisibilityState() const;
 
         private:
             // default copy/assignment operator is okay
@@ -516,6 +517,7 @@ namespace slideshow
             State::StateId                              mnAlphaState;
             State::StateId                              mnPositionState;
             State::StateId                              mnContentState;
+            State::StateId                              mnVisibilityState;
 
             sal_Int16                                   mnAdditiveMode;
 

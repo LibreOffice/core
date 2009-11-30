@@ -215,8 +215,12 @@ public:
             The resource URL of the view to show.
         @param rsAnchorURL
             The URL of the pane in which to show the view.
+        @return
+            The resource id of the requested view is returned.  With that
+            the caller can, for example, call RunOnResourceActivation() to
+            do some initialization after the requested view becomes active.
     */
-    void RequestView (
+    css::uno::Reference<css::drawing::framework::XResourceId> RequestView (
         const ::rtl::OUString& rsResourceURL,
         const ::rtl::OUString& rsAnchorURL);
 
@@ -256,6 +260,17 @@ public:
     void RunOnResourceActivation(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const Callback& rCallback);
+
+    /** Normally the requested changes of the configuration are executed
+        asynchronously.  However, there is at least one situation (searching
+        with the Outliner) where the surrounding code does not cope with
+        this.  So, instead of calling Reschedule until the global event loop
+        executes the configuration update, this method does (almost) the
+        same without the reschedules.
+
+        Do not use this method until there is absolutely no other way.
+    */
+    void RequestSynchronousUpdate (void);
 
     /** Block until the specified event is notified by the configuration
         controller.  When the configuration controller is not processing any

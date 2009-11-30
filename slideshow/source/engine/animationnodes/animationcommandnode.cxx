@@ -101,10 +101,12 @@ void AnimationCommandNode::activate_st()
     case EffectCommands::TOGGLEPAUSE:
     {
         if( mpShape )
+        {
             if( mpShape->isPlaying() )
                 mpShape->pause();
             else
                 mpShape->play();
+        }
         break;
     }
         // the command stops the animation on a media object

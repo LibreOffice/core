@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationbasenode.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@
 #include "doctreenode.hxx"
 #include "animationbasenode.hxx"
 #include "delayevent.hxx"
+#include "framerate.hxx"
 
 #include <boost/bind.hpp>
 #include <boost/optional.hpp>
@@ -458,18 +459,23 @@ AnimationBaseNode::fillCommonParameters() const
             boost::bind( &AnimationNode::deactivate, pSelf ) );
     }
 
+    // Calculate the minimum frame count that depends on the duration and
+    // the minimum frame count.
+    const sal_Int32 nMinFrameCount (basegfx::clamp<sal_Int32>(
+        basegfx::fround(nDuration * FrameRate::MinimumFramesPerSecond), 1, 10));
+
     return ActivitiesFactory::CommonParameters(
         pEndEvent,
         getContext().mrEventQueue,
         getContext().mrActivitiesQueue,
         nDuration,
-        10, // always display at least 10 frames
+        nMinFrameCount,
         bAutoReverse,
         aRepeats,
         nAcceleration,
         nDeceleration,
         getShape(),
-        getSlideSize() );
+        getSlideSize());
 }
 
 AttributableShapeSharedPtr AnimationBaseNode::getShape() const
