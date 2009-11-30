@@ -1773,13 +1773,13 @@ bool HtmlExport::CreateHtmlForPresPages()
                         case presentation::ClickAction_BOOKMARK:
                         {
                             BOOL        bIsMasterPage;
-                            USHORT      nPgNum = mpDoc->GetPageByName( pInfo->maBookmark, bIsMasterPage );
+                            USHORT      nPgNum = mpDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage );
                             SdrObject*  pObj = NULL;
 
                             if( nPgNum == SDRPAGE_NOTFOUND )
                             {
                                 // Ist das Bookmark ein Objekt?
-                                pObj = mpDoc->GetObj(pInfo->maBookmark);
+                                pObj = mpDoc->GetObj(pInfo->GetBookmark());
                                 if (pObj)
                                     nPgNum = pObj->GetPage()->GetPageNum();
                             }
@@ -1790,7 +1790,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                         break;
 
                         case presentation::ClickAction_DOCUMENT:
-                            aHRef = pInfo->maBookmark;
+                            aHRef = pInfo->GetBookmark();
                         break;
 
                         case presentation::ClickAction_PREVPAGE:

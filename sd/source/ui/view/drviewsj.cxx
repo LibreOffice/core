@@ -415,7 +415,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem( SID_CHAR_DLG );
                 rSet.DisableItem( SID_PARA_DLG );
-                rSet.DisableItem( SID_BULLET );
+                rSet.DisableItem( SID_CHARMAP );
             }
             */
             if( bLine && !bText && !bDrawObj &&!b3dObj)

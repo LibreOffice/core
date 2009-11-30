@@ -540,8 +540,8 @@
 #define MN_BULLET \
     MenuItem\
     {\
-        Identifier = SID_BULLET ; \
-        HelpID = SID_BULLET ; \
+        Identifier = SID_CHARMAP ; \
+        HelpID = SID_CHARMAP ; \
         Text [ en-US ] = "S~pecial Character..." ; \
     };
 

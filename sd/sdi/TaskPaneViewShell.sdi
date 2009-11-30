@@ -154,6 +154,31 @@ SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
     GroupId = GID_VIEW;
 ]
 
+SfxVoidItem TaskPaneEditMaster SID_TP_EDIT_MASTER
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
 SfxVoidItem TaskPaneInsertPage SID_INSERTPAGE_LAYOUT_MENU
 [
     /* flags: */
@@ -203,6 +228,12 @@ interface MasterPagesSelectorInterface
         StateMethod = GetState ;
     ]
     SID_TP_SHOW_LARGE_PREVIEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_TP_EDIT_MASTER
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

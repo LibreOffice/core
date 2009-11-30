@@ -251,19 +251,7 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
     }
     else
     {
-        model::PageEnumeration aSelectedPages
-            (model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
-                mrSlideSorter.GetModel()));
-        // Initialize (for the case of an empty selection) with the position
-        // at the end of the document.
-        nInsertPosition = mrSlideSorter.GetModel().GetPageCount();
-        while (aSelectedPages.HasMoreElements())
-        {
-            nInsertPosition = aSelectedPages.GetNextElement()->GetPage()->GetPageNum();
-            // Convert *2+1 index to straight index ((n-1)/2) after the page
-            // (+1).
-            nInsertPosition = (nInsertPosition-1)/2 + 1;
-        }
+        nInsertPosition = mrController.GetSelectionManager()->GetInsertionPosition();
     }
 
     return nInsertPosition;

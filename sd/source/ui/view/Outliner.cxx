@@ -1475,7 +1475,9 @@ bool Outliner::HandleFailedSearch (void)
 }
 
 
-
+#if ENABLE_LAYOUT
+#define SvxSearchDialog Window
+#endif
 
 /** See task #95227# for discussion about correct parent for dialogs/info boxes.
 */
@@ -1498,7 +1500,9 @@ bool Outliner::HandleFailedSearch (void)
     return pParent;
 }
 
-
+#if ENABLE_LAYOUT
+#undef SvxSearchDialog
+#endif
 
 
 SdrObject* Outliner::SetObject (

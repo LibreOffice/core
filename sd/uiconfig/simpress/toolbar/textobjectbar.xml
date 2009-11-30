@@ -39,7 +39,7 @@
  <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:helpid="10296"/>
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:helpid="10297"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineBullet" toolbar:helpid="10156"/>
- <toolbar:toolbaritem xlink:href=".uno:Bullet" toolbar:visible="false" toolbar:helpid="27019"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false" toolbar:helpid="27019"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:helpid="10017"/>
 </toolbar:toolbar>

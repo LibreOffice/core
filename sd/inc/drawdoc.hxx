@@ -205,6 +205,7 @@ private:
     ::std::auto_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
 
     void                UpdatePageObjectsInNotes(USHORT nStartPos);
+    void                UpdatePageRelativeURLs(SdPage* pPage, USHORT nPos, sal_Int32 nIncrement);
     void                FillOnlineSpellingList(SdPage* pPage);
     void                SpellObject(SdrTextObj* pObj);
 
@@ -587,6 +588,8 @@ public:
 
     /* converts the given western font height to a corresponding ctl font height, deppending on the system language */
     static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );
+
+       void UpdatePageRelativeURLs(const String& rOldName, const String& rNewName);
 
 private:
     /** This member stores the printer independent layout mode.  Please

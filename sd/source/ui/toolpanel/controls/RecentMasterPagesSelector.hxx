@@ -51,6 +51,8 @@ public:
 
     virtual void LateInit (void);
 
+    virtual void GetState (SfxItemSet& rItemSet);
+
 protected:
     DECL_LINK(MasterPageListListener, void*);
     virtual void Fill (ItemList& rItemList);

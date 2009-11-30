@@ -114,6 +114,8 @@
 #define BMP_COLLAPSE            RID_APP_START+52
 #define BMP_GRAPHIC             RID_APP_START+53
 
+#define BMP_FOIL_26             RID_APP_START+54
+
 // Bimaps fuer ValueSet im EffekteWindow
 #define BMP_EFFECT_NONE                     RID_APP_START+105
 #define BMP_TEXTEFFECT_DISCARD_FROM_T       RID_APP_START+106
@@ -231,6 +233,9 @@
 
 #define BMP_FOILH_09_H                      RID_SD_START+333
 #define BMP_FOIL_25_H                       RID_SD_START+334
+#define BMP_FOIL_26_H                       RID_SD_START+335
+#define BMP_FOIL_27                         RID_SD_START+336
+#define BMP_FOIL_27_H                       RID_SD_START+337
 
 // -----------------------------------------------------------------------------
 

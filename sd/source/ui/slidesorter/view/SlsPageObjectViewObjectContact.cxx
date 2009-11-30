@@ -68,6 +68,8 @@
 using namespace ::sdr::contact;
 using namespace ::sd::slidesorter::model;
 
+using drawinglayer::primitive2d::Primitive2DReference;
+using drawinglayer::primitive2d::Primitive2DSequence;
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -306,7 +308,7 @@ private:
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -325,7 +327,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence SdPageObjectPageBitmapPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectPageBitmapPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     // add bitmap primitive
     // to avoid scaling, use the Bitmap pixel size as primitive size
@@ -341,9 +343,9 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectPageBitmapPrimitive::
     aBitmapTransform.set(1L, 2L, getPageObjectRange().getMinY());
 
     // add a BitmapPrimitive2D to the result
-    const drawinglayer::primitive2d::Primitive2DReference xReference(
+    const Primitive2DReference xReference(
         new drawinglayer::primitive2d::BitmapPrimitive2D(getBitmapEx(), aBitmapTransform));
-    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+    return Primitive2DSequence(&xReference, 1);
 }
 
 SdPageObjectPageBitmapPrimitive::SdPageObjectPageBitmapPrimitive(
@@ -385,7 +387,7 @@ private:
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -399,9 +401,9 @@ public:
 const sal_Int32 SdPageObjectSelectPrimitive::mnSelectionIndicatorOffset(1);
 const sal_Int32 SdPageObjectSelectPrimitive::mnSelectionIndicatorThickness(3);
 
-drawinglayer::primitive2d::Primitive2DSequence SdPageObjectSelectPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectSelectPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval(2);
+    Primitive2DSequence xRetval(2);
 
     // since old Width/Height calculations always added a single pixel value,
     // it is necessary to create a inner range which is one display unit less
@@ -415,11 +417,12 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectSelectPrimitive::crea
     basegfx::B2DRange aDiscreteOuterRange(aAdaptedInnerRange);
     aDiscreteOuterRange.grow(mnSelectionIndicatorOffset * aDiscretePixel.getX());
 
-    // remeber inner border. Make it one bigger in top left since polygons
+    // Remember inner border. Make it one bigger in top left since polygons
     // do not paint their lower-right corners. Since this is the inner polygon,
     // the top-left corders are the ones to grow here
     const basegfx::B2DRange aDiscreteInnerRange(
-        aDiscreteOuterRange.getMinimum() + aDiscretePixel, aDiscreteOuterRange.getMaximum());
+        aDiscreteOuterRange.getMinimum() + aDiscretePixel,
+        aDiscreteOuterRange.getMaximum() - aDiscretePixel);
 
     // grow by line width
     aDiscreteOuterRange.grow((mnSelectionIndicatorThickness - 1) * aDiscretePixel.getX());
@@ -440,12 +443,12 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectSelectPrimitive::crea
     static bool bTestWithBrightColors(false);
     const basegfx::BColor aFrameColor(bTestWithBrightColors ? basegfx::BColor(0,1,0) : Application::GetSettings().GetStyleSettings().GetMenuHighlightColor().getBColor());
 
-    xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(
+    xRetval[0] = Primitive2DReference(
         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(aFramePolyPolygon, aFrameColor));
 
     // add aRoundedOuterPolygon again as non-filled line polygon to get the roundungs
     // painted correctly
-    xRetval[1] = drawinglayer::primitive2d::Primitive2DReference(
+    xRetval[1] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aRoundedOuterPolygon, aFrameColor));
 
     return xRetval;
@@ -469,7 +472,7 @@ class SdPageObjectBorderPrimitive : public SdPageObjectBasePrimitive
 {
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -480,7 +483,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence SdPageObjectBorderPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectBorderPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     // since old Width/Height calculations always added a single pixel value,
     // it is necessary to create a inner range which is one display unit less
@@ -495,9 +498,9 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectBorderPrimitive::crea
     const svtools::ColorConfig aColorConfig;
     const basegfx::BColor aBorderColor(bTestWithBrightColors ? basegfx::BColor(1,0,0) : Color(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor).getBColor());
 
-    const drawinglayer::primitive2d::Primitive2DReference xReference(
+    const Primitive2DReference xReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(basegfx::tools::createPolygonFromRect(aAdaptedInnerRange), aBorderColor));
-    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+    return Primitive2DSequence(&xReference, 1);
 }
 
 SdPageObjectBorderPrimitive::SdPageObjectBorderPrimitive(const basegfx::B2DRange& rRange)
@@ -522,7 +525,7 @@ private:
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -535,9 +538,9 @@ public:
 
 const sal_Int32 SdPageObjectFocusPrimitive::mnFocusIndicatorOffset(2);
 
-drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval(2);
+    Primitive2DSequence xRetval(2);
 
     // since old Width/Height calculations always added a single pixel value,
     // it is necessary to create a inner range which is one display unit less
@@ -556,7 +559,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFocusPrimitive::creat
     const basegfx::B2DPolygon aIndicatorPolygon(basegfx::tools::createPolygonFromRect(aFocusIndicatorRange));
 
     // white rectangle
-    xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(
+    xRetval[0] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aIndicatorPolygon, Color(COL_WHITE).getBColor()));
 
     // dotted black rectangle with same geometry
@@ -569,7 +572,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFocusPrimitive::creat
     const drawinglayer::attribute::LineAttribute aLineAttribute(Color(COL_BLACK).getBColor());
     const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDotDashArray, 2.0 * aDiscretePixel.getX());
 
-    xRetval[1] = drawinglayer::primitive2d::Primitive2DReference(
+    xRetval[1] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(aIndicatorPolygon, aLineAttribute, aStrokeAttribute));
 
     return xRetval;
@@ -609,15 +612,15 @@ private:
     Size                                maPageNumberAreaModelSize;
 
     // bitfield
-    unsigned                            mbShowFadeEffectIcon : 1;
-    unsigned                            mbExcluded : 1;
+    bool mbShowFadeEffectIcon : 1;
+    bool mbExcluded : 1;
 
     // private helpers
     const BitmapEx& getFadeEffectIconBitmap() const;
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+    virtual Primitive2DSequence createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
     // constructor and destructor
@@ -665,7 +668,7 @@ const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getFadeEffectIconBitmap() c
     return *mpFadeEffectIconBitmap;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
     const xub_StrLen nTextLength(getPageName().Len());
     const sal_uInt32 nCount(
@@ -675,7 +678,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFadeNameNumberPrimiti
         (getExcluded() ? 2 : 0)                 // PageNumber crossed out
         );
     sal_uInt32 nInsert(0);
-    drawinglayer::primitive2d::Primitive2DSequence xRetval(nCount);
+    Primitive2DSequence xRetval(nCount);
 
     // since old Width/Height calculations always added a single pixel value,
     // it is necessary to create a inner range which is one display unit less
@@ -724,7 +727,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFadeNameNumberPrimiti
         aBitmapTransform.set(0L, 2L, aAdaptedInnerRange.getMinX());
         aBitmapTransform.set(1L, 2L, aAdaptedInnerRange.getMaxY() + ((mnFadeEffectIndicatorOffset + 1) * aDiscretePixel.getX()));
 
-        xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(
+        xRetval[nInsert++] = Primitive2DReference(
             new drawinglayer::primitive2d::BitmapPrimitive2D(getFadeEffectIconBitmap(), aBitmapTransform));
     }
 
@@ -790,7 +793,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFadeNameNumberPrimiti
         aTextMatrix.set(1L, 2L, fStartY);
 
         // create Text primitive and add to target
-        xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+        xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
             aTextMatrix, aPageName, 0, aPageName.Len(), aDXArray, aFontAttributes, aLocale, aFontColor));
     }
 
@@ -820,7 +823,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFadeNameNumberPrimiti
         aTextMatrix.set(1L, 2L, fStartY);
 
         // create Text primitive
-        xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+        xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
             aTextMatrix, aPageNumber, 0, nNumberLen, aDXArray, aFontAttributes, aLocale, aFontColor));
 
         if(getExcluded())
@@ -832,10 +835,10 @@ drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFadeNameNumberPrimiti
             aStrikethrough.append(aNumberRange.getMinimum());
             aStrikethrough.append(aNumberRange.getMaximum());
 
-            xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+            xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                 basegfx::tools::createPolygonFromRect(aNumberRange), aActiveColor));
 
-            xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+            xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                 aStrikethrough, aActiveColor));
         }
     }
@@ -890,7 +893,7 @@ ImplPrimitrive2DIDBlock(SdPageObjectFadeNameNumberPrimitive, PRIMITIVE2D_ID_SDPA
 // This method will replace the whole painting mechanism. Task is no longer to paint stuff to an OutDev,
 // but to provide the necessary geometrical information using primitives.
 
-drawinglayer::primitive2d::Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const sdr::contact::DisplayInfo& rDisplayInfo) const
+Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const sdr::contact::DisplayInfo& rDisplayInfo) const
 {
     // OutputDevice* pDevice = rDisplayInfo.GetDIOutputDevice();
     OutputDevice* pDevice = GetObjectContact().TryToGetOutputDevice();
@@ -1005,24 +1008,24 @@ drawinglayer::primitive2d::Primitive2DSequence PageObjectViewObjectContact::crea
             (bCreateSelected ? 1 : 0)       // create selected
             );
         sal_uInt32 nInsert(0);
-        drawinglayer::primitive2d::Primitive2DSequence xRetval(nCount);
+        Primitive2DSequence xRetval(nCount);
 
         if(bCreateBitmap)
         {
             // add selection indicator if used
-            xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new SdPageObjectPageBitmapPrimitive(aInnerRange, aBitmapEx));
+            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectPageBitmapPrimitive(aInnerRange, aBitmapEx));
         }
 
         if(true)
         {
             // add border (always)
-            xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new SdPageObjectBorderPrimitive(aInnerRange));
+            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectBorderPrimitive(aInnerRange));
         }
 
         if(true)
         {
             // add fade effext, page name and number if used
-            xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new SdPageObjectFadeNameNumberPrimitive(
+            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectFadeNameNumberPrimitive(
                 aInnerRange,
                 aPageName,
                 nPageNumber,
@@ -1035,13 +1038,13 @@ drawinglayer::primitive2d::Primitive2DSequence PageObjectViewObjectContact::crea
         if(bCreateSelected)
         {
             // add selection indicator if used
-            xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new SdPageObjectSelectPrimitive(aInnerRange));
+            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectSelectPrimitive(aInnerRange));
         }
 
         if(bCreateFocused)
         {
             // add focus indicator if used
-            xRetval[nInsert++] = drawinglayer::primitive2d::Primitive2DReference(new SdPageObjectFocusPrimitive(aInnerRange));
+            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectFocusPrimitive(aInnerRange));
         }
 
         return xRetval;

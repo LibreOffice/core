@@ -46,6 +46,7 @@
 #include "strings.hrc"
 #include "showview.hxx"
 #include "DrawViewShell.hxx"
+#include "DrawController.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "PreviewValueSet.hxx"
 #include "ViewShellBase.hxx"
@@ -567,6 +568,26 @@ void MasterPagesSelector::Execute (SfxRequest& rRequest)
                 ? MasterPageContainer::SMALL
                 : MasterPageContainer::LARGE);
             mrBase.SetBusyState (false);
+            break;
+        }
+
+        case SID_TP_EDIT_MASTER:
+        {
+            using namespace ::com::sun::star;
+            uno::Reference<drawing::XDrawPage> xSelectedMaster (
+                GetSelectedMasterPage()->getUnoPage(), uno::UNO_QUERY);
+            SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
+            if (pViewFrame != NULL && xSelectedMaster.is())
+            {
+                SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+                if (pDispatcher != NULL)
+                {
+                    USHORT nIndex = mpPageSet->GetSelectItemId();
+                    pDispatcher->Execute(SID_MASTERPAGE, SFX_CALLMODE_SYNCHRON);
+                    mpPageSet->SelectItem (nIndex);
+                    mrBase.GetDrawController().setCurrentPage(xSelectedMaster);
+                }
+            }
             break;
         }
 

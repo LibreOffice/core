@@ -107,18 +107,20 @@ sal_Bool SdPPTFilter::Import()
             aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentURL" ) );
             aConfigData[ 0 ] = aPropValue;
 
-            MSFilterTracer aTracer( aTraceConfigPath, &aConfigData );
-            aTracer.StartTracing();
-            SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium, &aTracer );
-            if ( ( bRet = pImport->Import() ) == sal_False )
+            if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
+                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT );
+            else
             {
-                if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
-                    mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT );
-                else
+                MSFilterTracer aTracer( aTraceConfigPath, &aConfigData );
+                aTracer.StartTracing();
+
+                SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium, &aTracer );
+                if ( ( bRet = pImport->Import() ) == sal_False )
                     mrMedium.SetError( SVSTREAM_WRONGVERSION );
+
+                aTracer.EndTracing();
+                delete pImport;
             }
-            aTracer.EndTracing();
-            delete pImport;
             delete pDocStream;
         }
     }

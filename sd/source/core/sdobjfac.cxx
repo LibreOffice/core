@@ -58,7 +58,7 @@ IMPL_LINK( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory )
         switch( pObjFactory->nIdentifier )
         {
             case( SD_ANIMATIONINFO_ID ):
-                pObjFactory->pNewData = new SdAnimationInfo;
+                pObjFactory->pNewData = new SdAnimationInfo( *pObjFactory->pObj );
             break;
 
             case( SD_IMAPINFO_ID ):

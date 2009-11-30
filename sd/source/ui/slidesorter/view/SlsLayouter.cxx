@@ -235,7 +235,7 @@ bool Layouter::RearrangeHorizontal (
 
         // Adapt the layout of the given output device to the new layout of
         // page objects.  The zoom factor is set so that the page objects in
-        // one row fill the screen.
+        // one column fill the screen.
         Fraction aScaleFactor (nTargetHeight, nPagePixelHeight);
         SetZoom (aMapMode.GetScaleX() * aScaleFactor, pDevice);
 

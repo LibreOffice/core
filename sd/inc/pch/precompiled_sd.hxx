@@ -576,7 +576,6 @@
 #include "svx/brshitem.hxx"
 #include "svx/bulitem.hxx"
 #include "svx/camera3d.hxx"
-#include "svx/charmap.hxx"
 #include "svx/charreliefitem.hxx"
 #include "svx/clipboardctl.hxx"
 #include "svx/clipfmtitem.hxx"

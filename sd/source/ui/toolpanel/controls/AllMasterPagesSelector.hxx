@@ -58,6 +58,8 @@ public:
     */
     virtual void Fill (ItemList& rItemList);
 
+    virtual void GetState (SfxItemSet& rItemSet);
+
 protected:
     virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent);
 

@@ -126,10 +126,11 @@
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:InsertAuthorField"/>
                     <menu:menuitem menu:id=".uno:InsertPageField"/>
-                    <menu:menuitem menu:id=".uno:InsertFileField"/>
+          <menu:menuitem menu:id=".uno:InsertPagesField"/>
+          <menu:menuitem menu:id=".uno:InsertFileField"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:Bullet"/>
+                        <menu:menuitem menu:id=".uno:InsertSymbol"/>
             <menu:menu menu:id=".uno:FormattingMarkMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertNonBreakingSpace"/>

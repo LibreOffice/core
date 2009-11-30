@@ -1128,6 +1128,8 @@ void PrintManager::PrintHandout( PrintInfo& rInfo, USHORT nPage )
         if( aPageObjVector.empty() )
             return;
 
+        rInfo.mrViewShell.SetPrintedHandoutPageCount( (USHORT)((aPagesVector.size() + aPageObjVector.size() - 1)  / aPageObjVector.size()) );
+
 /*
         sal_Int32 nHandoutPageCount = aPagesVector.size() / aPageObjVector.size();
         sal_Int32 nHandoutPage = 0;
@@ -1212,6 +1214,7 @@ void PrintManager::PrintHandout( PrintInfo& rInfo, USHORT nPage )
         }
 
         rInfo.mrViewShell.SetPrintedHandoutPageNum(1);
+        rInfo.mrViewShell.SetPrintedHandoutPageCount(0);
         delete pPrintView;
         rInfo.mrPrinter.SetMapMode(aOldMap);
     }
