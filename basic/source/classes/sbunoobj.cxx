@@ -3377,9 +3377,10 @@ SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
                     // Create and insert SbUnoServiceCtor
                     SbxVariableRef xSbCtorRef = new SbUnoServiceCtor( aName, xCtor );
                     QuickInsert( (SbxVariable*)xSbCtorRef );
-                    pRes = xSbCtorRef;
                 }
             }
+
+            pRes = SbxObject::Find( rName, SbxCLASS_METHOD );
         }
     }
 
