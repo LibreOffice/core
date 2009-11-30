@@ -185,7 +185,6 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
 {
     // check if the view frame still exists
     SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell,
-                                0,
                                 FALSE );
     while(pFound)
     {
@@ -196,7 +195,6 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
         }
         pFound = SfxViewFrame::GetNext( *pFound,
                                 pDocShell,
-                                0,
                                 FALSE );
     }
 }
@@ -2691,7 +2689,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
     SfxViewShell    *pView = 0;
     SwView          *pSwView = 0;
     SwPagePreView   *pSwPagePreView = 0;
-    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, 0, sal_False );
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, sal_False );
     while (pFrame)
     {
         pView = pFrame->GetViewShell();
@@ -2700,7 +2698,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
             break;
         if (!pSwPagePreView)
             pSwPagePreView = dynamic_cast< SwPagePreView * >(pView);
-        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, sal_False );
     }
 
     return pSwView ? pSwView : dynamic_cast< SwView * >(pSwPagePreView);

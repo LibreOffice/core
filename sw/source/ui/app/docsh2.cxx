@@ -1800,15 +1800,15 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
 
         // Currently there can be only one view (layout) if the document is viewed in Web layout
         // So if there are more views we are in print layout and for toggling to Web layout all other views must be closed
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
+        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
         do {
             if( pTmpFrm != pTempView->GetViewFrame() )
             {
                 pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
+                pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
             }
             else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, 0, FALSE);
+                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, FALSE);
 
         } while ( pTmpFrm );
 

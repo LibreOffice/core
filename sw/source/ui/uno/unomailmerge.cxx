@@ -627,7 +627,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aCurSelection = aTranslated;
     }
 
-    SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, 0, FALSE);
+    SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, FALSE);
     SwView *pView = PTR_CAST( SwView, pFrame->GetViewShell() );
     if (!pView)
         throw RuntimeException();

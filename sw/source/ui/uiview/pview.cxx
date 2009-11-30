@@ -1909,10 +1909,8 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     delete pPageDownBtn;
 
 /*    SfxObjectShell* pDocSh = GetDocShell();
-    TypeId aType = TYPE( SfxTopViewFrame );
-
-    for( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDocSh, aType );
-        pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh, aType ) )
+    for( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDocSh );
+        pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh ) )
         if( pFrame != GetViewFrame() )
         {
             // es gibt noch eine weitere Sicht auf unser Dokument, also
