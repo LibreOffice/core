@@ -3972,7 +3972,7 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
         aFont.SetFamily( pAtom->eFamily );
         aFont.SetPitch( pAtom->ePitch );
     }
-    Color aCol( rManager.MSO_CLR_ToColor( nBulletColor ) );
+    Color aCol( rManager.MSO_TEXT_CLR_ToColor( nBulletColor ) );
     aFont.SetColor( aCol );
 
     sal_uInt16 nBuChar = (sal_uInt16)nBulletChar;
@@ -5886,14 +5886,14 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     {
         if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nDestinationInstance ) )  // Textfarbe (4Byte-Arg)
         {
-            Color aCol( rManager.MSO_CLR_ToColor( nVal ) );
+            Color aCol( rManager.MSO_TEXT_CLR_ToColor( nVal ) );
             rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
             if ( nDestinationInstance == 0xffffffff )
                 mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet = aCol;
         }
         else if ( nVal & 0x0f000000 )   // this is not a hard attribute, but maybe the page has a different colerscheme,
         {                               // so that in this case we must use a hard color attribute
-            Color   aCol( rManager.MSO_CLR_ToColor( nVal ) );
+            Color   aCol( rManager.MSO_TEXT_CLR_ToColor( nVal ) );
             Color&  aColorInSheet = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet;
             if ( aColorInSheet != aCol )
                 rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
@@ -6315,7 +6315,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
                                 nColor = rParaLevel.mnBulletColor;
                             else
                                 nColor = rCharLevel.mnFontColor;
-                            aNumberFormat2.SetBulletColor( rManager.MSO_CLR_ToColor( nColor ) );
+                            aNumberFormat2.SetBulletColor( rManager.MSO_TEXT_CLR_ToColor( nColor ) );
                             pRule->SetLevel( i, aNumberFormat2 );
                         }
                     }
@@ -7611,8 +7611,8 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
                 {
                     Color aLineColor( ((XLineColorItem&)pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
                     aBorderLine.Color = aLineColor.GetColor();
-                    aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() );
-                    aBorderLine.InnerLineWidth = 0;
+                    aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
+                    aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
                     aBorderLine.LineDistance = 0;
                 }
                 break;

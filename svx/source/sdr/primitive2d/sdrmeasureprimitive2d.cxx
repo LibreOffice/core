@@ -134,6 +134,7 @@ namespace drawinglayer
                     pTextAttribute->isScroll(),
                     false,
                     false,
+                    false,
                     false);
                 aTextRange = pBlockText->getB2DRange(aViewInformation);
             }
