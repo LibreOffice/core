@@ -85,7 +85,7 @@ enum GalSoundType
 // - SgaObject -
 // -------------
 
-class SgaObject
+class SVX_DLLPUBLIC SgaObject
 {
     friend class GalleryTheme;
 
@@ -122,8 +122,8 @@ public:
     BOOL                    IsValid() const { return bIsValid; }
     BOOL                    IsThumbBitmap() const { return bIsThumbBmp; }
 
-    SVX_DLLPUBLIC const String          GetTitle() const;
-    SVX_DLLPUBLIC void                  SetTitle( const String& rTitle );
+    const String            GetTitle() const;
+    void                    SetTitle( const String& rTitle );
 
     friend SvStream&        operator<<( SvStream& rOut, const SgaObject& rObj );
     friend SvStream&        operator>>( SvStream& rIn, SgaObject& rObj );

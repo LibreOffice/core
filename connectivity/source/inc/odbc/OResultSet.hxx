@@ -128,7 +128,7 @@ namespace connectivity
             typedef ::std::vector<ORowSetValue>         TDataRow;
 
             TVoidVector                                 m_aBindVector;
-            ::std::vector<sal_Int32>                    m_aLengthVector;
+            ::std::vector<SQLLEN>                       m_aLengthVector;
             ::std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
             ::com::sun::star::uno::Sequence<sal_Int8>   m_aBookmark;
 
