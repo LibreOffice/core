@@ -2589,6 +2589,16 @@ bool SwWW8ImplReader::HandlePageBreakChar()
     //itself ignores them in this case.
     if (!nInTable)
     {
+        //xushanchuan add for issue106569
+        BOOL IsTemp=TRUE;
+        SwTxtNode* pTemp = pPaM->GetNode()->GetTxtNode();
+        if ( pTemp && !( pTemp->GetTxt().Len() ) && ( bFirstPara || bFirstParaOfPage ) )
+        {
+            IsTemp = FALSE;
+            AppendTxtNode(*pPaM->GetPoint());
+            pTemp->SetAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
+        }
+        //xushanchuan end
         bPgSecBreak = true;
         pCtrlStck->KillUnlockedAttrs(*pPaM->GetPoint());
         /*
@@ -2597,7 +2607,9 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         paragraph end, but nevertheless, numbering (and perhaps other
         similiar constructs) do not exist on the para.
         */
-        if (!bWasParaEnd)
+        //xushanchuan add for issue106569
+        if (!bWasParaEnd && IsTemp)
+        //xushanchuan end
         {
             bParaEndAdded = true;
             if (0 >= pPaM->GetPoint()->nContent.GetIndex())
@@ -2633,6 +2645,10 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
 
     sal_Char cInsert = '\x0';
     bool bRet = false;
+    //xushanchuan add for issue106569
+    if ( 0xc != nWCharVal )
+        bFirstParaOfPage = false;
+    //xushanchuan end
     switch (nWCharVal)
     {
         case 0:
@@ -3172,6 +3188,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                 // <--
                 rDoc.InsertPoolItem(*pPaM,
                     SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+                bFirstParaOfPage = true;//xushanchuan add for issue106569
                 bPgSecBreak = false;
             }
         }
@@ -3263,6 +3280,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     bWasParaEnd = false;
     bDropCap = false;
     bFirstPara = true;
+      bFirstParaOfPage = false;//xushanchuan add for issue106569
     bParaAutoBefore = false;
     bParaAutoAfter = false;
     nProgress = 0;
