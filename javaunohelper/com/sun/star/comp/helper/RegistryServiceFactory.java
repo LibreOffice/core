@@ -124,7 +124,7 @@ public class RegistryServiceFactory {
         Object obj = createRegistryServiceFactory(
             writeRegistryFile, readRegistryFile, readOnly,
             RegistryServiceFactory.class.getClassLoader() );
-        return (XMultiServiceFactory) UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
             XMultiServiceFactory.class, obj );
     }
 

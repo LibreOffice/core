@@ -39,6 +39,7 @@ LINKFLAGSDEFS = # do not fail with missing symbols
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 #-------------------------------------------------------------------
 
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
@@ -56,6 +57,9 @@ EXTRA_FRAMEWORK_FLAG=-framework Python
 # pyuno.so even on Mac OS X, because it is a python module
 PYUNO_MODULE=$(DLLDEST)$/pyuno.so
 PYUNORC=pyunorc
+.ELIF "$(GUI)" == "OS2"
+.INCLUDE :  pyversion.mk
+PYUNORC=pyuno.ini
 .ELSE
 .INCLUDE :  pyversion.mk
 PYUNORC=pyuno.ini
@@ -125,10 +129,11 @@ ALLTAR : \
     $(DLLDEST)$/unohelper.py	\
     $(PYUNO_MODULE)			\
     $(MISC)$/$(PYUNORC)		
+.ENDIF 
 .ENDIF
 
 .INCLUDE :  target.mk
-
+.IF "$(L10N_framework)"==""
 $(DLLDEST)$/%.py: %.py
     cp $? $@
 
@@ -160,4 +165,5 @@ $(MISC)$/$(PYUNORC) : pyuno
 $(MISC)$/pyuno.flt : pyuno.flt
     -rm -f $@
     cat $? > $@
+.ENDIF # L10N_framework
 

@@ -1,7 +1,6 @@
     .text
 
 .globl _privateSnippetExecutorGeneral
-    .type   _privateSnippetExecutorGeneral,@function
 _privateSnippetExecutorGeneral:
 .LFBg:
     movl    %esp,%ecx
@@ -19,10 +18,9 @@ _privateSnippetExecutorGeneral:
     leave
     ret
 .LFEg:
-    .size   _privateSnippetExecutorGeneral,.-_privateSnippetExecutorGeneral
+    .long   .-_privateSnippetExecutorGeneral
 
 .globl _privateSnippetExecutorVoid
-    .type   _privateSnippetExecutorVoid,@function
 _privateSnippetExecutorVoid:
 .LFBv:
     movl    %esp,%ecx
@@ -38,10 +36,9 @@ _privateSnippetExecutorVoid:
     leave
     ret
 .LFEv:
-    .size   _privateSnippetExecutorVoid,.-_privateSnippetExecutorVoid
+    .long   .-_privateSnippetExecutorVoid
 
 .globl _privateSnippetExecutorHyper
-    .type   _privateSnippetExecutorHyper,@function
 _privateSnippetExecutorHyper:
 .LFBh:
     movl    %esp,%ecx
@@ -60,10 +57,9 @@ _privateSnippetExecutorHyper:
     leave
     ret
 .LFEh:
-    .size   _privateSnippetExecutorHyper,.-_privateSnippetExecutorHyper
+    .long   .-_privateSnippetExecutorHyper
 
 .globl _privateSnippetExecutorFloat
-    .type   _privateSnippetExecutorFloat,@function
 _privateSnippetExecutorFloat:
 .LFBf:
     movl    %esp,%ecx
@@ -81,10 +77,9 @@ _privateSnippetExecutorFloat:
     leave
     ret
 .LFEf:
-    .size   _privateSnippetExecutorFloat,.-_privateSnippetExecutorFloat
+    .long   .-_privateSnippetExecutorFloat
 
 .globl _privateSnippetExecutorDouble
-    .type   _privateSnippetExecutorDouble,@function
 _privateSnippetExecutorDouble:
 .LFBd:
     movl    %esp,%ecx
@@ -102,10 +97,9 @@ _privateSnippetExecutorDouble:
     leave
     ret
 .LFEd:
-    .size   _privateSnippetExecutorDouble,.-_privateSnippetExecutorDouble
+    .long   .-_privateSnippetExecutorDouble
 
 .globl _privateSnippetExecutorClass
-    .type   _privateSnippetExecutorClass,@function
 _privateSnippetExecutorClass:
 .LFBc:
     movl    %esp,%ecx
@@ -123,9 +117,9 @@ _privateSnippetExecutorClass:
     leave
     ret     $4
 .LFEc:
-    .size   _privateSnippetExecutorClass,.-_privateSnippetExecutorClass
+    .long   .-_privateSnippetExecutorClass
 
-    .section .eh_frame,"a",@progbits
+    .section .eh_frame,"dr"
 .Lframe1:
     .long   .LECIE1-.LSCIE1   # length
 .LSCIE1:
@@ -265,4 +259,3 @@ _privateSnippetExecutorClass:
     .uleb128 5
     .align 4
 .LEFDEc:
-    .section .note.GNU-stack,"",@progbits

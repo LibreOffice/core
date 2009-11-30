@@ -31,39 +31,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#ifndef _TYPES_H
+#include "osl/file.h"
+
+#include "system.h"
 #include <sys/types.h>
-#endif
-
-#ifndef _LIMITS_H
-#include <limits.h>
-#endif
-
-#ifndef _UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifndef _DIRENT_H
 #include <dirent.h>
-#endif
-
-#include <osl/file.h>
-
-#ifndef _ERRNO_H
 #include <errno.h>
-#endif
+#include <limits.h>
+#include <unistd.h>
 
-#include <rtl/string.hxx>
-
-#ifndef _OSL_UUNXAPI_H_
-#include "uunxapi.hxx"
-#endif
-#include "file_path_helper.hxx"
-#include "file_error_transl.h"
-
-#ifdef _DIRENT_HAVE_D_TYPE
 #include "file_impl.hxx"
-#endif
+#include "file_error_transl.h"
+#include "file_path_helper.hxx"
+#include "file_url.h"
+#include "uunxapi.hxx"
 
 namespace /* private */
 {
@@ -231,19 +212,10 @@ namespace /* private */
 
     /* we only need to call stat or lstat if one of the
        following flags is set */
-#ifdef _DIRENT_HAVE_D_TYPE
-    inline bool is_stat_call_necessary(sal_uInt32 field_mask, oslDirectoryItemImpl *pImpl)
-#else
-    inline bool is_stat_call_necessary(sal_uInt32 field_mask)
-#endif
+    inline bool is_stat_call_necessary(sal_uInt32 field_mask, oslFileType file_type = osl_File_Type_Unknown)
     {
         return (
-/* on linux the dirent might have d_type */
-#ifdef _DIRENT_HAVE_D_TYPE
-                ((field_mask & osl_FileStatus_Mask_Type) && (!pImpl->bHasType || pImpl->DType == DT_UNKNOWN)) ||
-#else
-                (field_mask & osl_FileStatus_Mask_Type) ||
-#endif
+                ((field_mask & osl_FileStatus_Mask_Type) && (file_type == osl_File_Type_Unknown)) ||
                 (field_mask & osl_FileStatus_Mask_Attributes) ||
                 (field_mask & osl_FileStatus_Mask_CreationTime) ||
                 (field_mask & osl_FileStatus_Mask_AccessTime) ||
@@ -267,24 +239,18 @@ namespace /* private */
         return osl_File_E_None;
     }
 
-    inline oslFileError setup_osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pStat, rtl::OUString& file_path)
+    inline oslFileError setup_osl_getFileStatus(
+        DirectoryItem_Impl * pImpl, oslFileStatus* pStat, rtl::OUString& file_path)
     {
-        if ((NULL == Item) || (NULL == pStat))
+        if ((NULL == pImpl) || (NULL == pStat))
             return osl_File_E_INVAL;
 
-#ifdef _DIRENT_HAVE_D_TYPE
-        file_path = rtl::OUString(reinterpret_cast<rtl_uString*>(((oslDirectoryItemImpl* ) Item)->ustrFilePath));
-#else
-        file_path = rtl::OUString(reinterpret_cast<rtl_uString*>(Item));
-#endif
-
+        file_path = rtl::OUString(pImpl->m_ustrFilePath);
         OSL_ASSERT(file_path.getLength() > 0);
-
         if (file_path.getLength() <= 0)
             return osl_File_E_INVAL;
 
         pStat->uValidFields = 0;
-
         return osl_File_E_None;
     }
 
@@ -297,8 +263,10 @@ namespace /* private */
 
 oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pStat, sal_uInt32 uFieldMask)
 {
+    DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
+
     rtl::OUString file_path;
-    oslFileError  osl_error = setup_osl_getFileStatus(Item, pStat, file_path);
+    oslFileError  osl_error = setup_osl_getFileStatus(pImpl, pStat, file_path);
     if (osl_File_E_None != osl_error)
         return osl_error;
 
@@ -308,13 +276,7 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
     struct stat file_stat;
 #endif
 
-#ifdef _DIRENT_HAVE_D_TYPE
-    oslDirectoryItemImpl* pImpl = (oslDirectoryItemImpl*) Item;
-    bool bStatNeeded = is_stat_call_necessary(uFieldMask, pImpl);
-#else
-    bool bStatNeeded = is_stat_call_necessary(uFieldMask);
-#endif
-
+    bool bStatNeeded = is_stat_call_necessary(uFieldMask, pImpl->getFileType());
     if (bStatNeeded && (0 != osl::lstat(file_path, file_stat)))
         return oslTranslateFileError(OSL_FET_ERROR, errno);
 
@@ -338,37 +300,10 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
 #ifdef _DIRENT_HAVE_D_TYPE
     else if (uFieldMask & osl_FileStatus_Mask_Type)
     {
-        OSL_ASSERT(pImpl->bHasType);
-
-        switch(pImpl->DType)
-        {
-        case DT_LNK:
-            pStat->eType = osl_File_Type_Link;
-            break;
-        case DT_DIR:
-            pStat->eType = osl_File_Type_Directory;
-            break;
-        case DT_REG:
-            pStat->eType = osl_File_Type_Regular;
-            break;
-        case DT_FIFO:
-            pStat->eType = osl_File_Type_Fifo;
-            break;
-        case DT_SOCK:
-            pStat->eType = osl_File_Type_Socket;
-            break;
-        case DT_CHR:
-        case DT_BLK:
-            pStat->eType = osl_File_Type_Special;
-            break;
-        default:
-            OSL_ASSERT(0);
-            pStat->eType = osl_File_Type_Unknown;
-        }
-
-       pStat->uValidFields |= osl_FileStatus_Mask_Type;
+        pStat->eType = pImpl->getFileType();
+        pStat->uValidFields |= osl_FileStatus_Mask_Type;
     }
-#endif
+#endif /* _DIRENT_HAVE_D_TYPE */
 
     if (uFieldMask & osl_FileStatus_Mask_FileURL)
     {
@@ -386,3 +321,175 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
     return osl_File_E_None;
 }
 
+/****************************************************************************/
+/*  osl_setFileAttributes */
+/****************************************************************************/
+
+static oslFileError osl_psz_setFileAttributes( const sal_Char* pszFilePath, sal_uInt64 uAttributes )
+{
+    oslFileError osl_error = osl_File_E_None;
+    mode_t       nNewMode  = 0;
+
+     OSL_ENSURE(!(osl_File_Attribute_Hidden & uAttributes), "osl_File_Attribute_Hidden doesn't work under Unix");
+
+    if (uAttributes & osl_File_Attribute_OwnRead)
+        nNewMode |= S_IRUSR;
+
+    if (uAttributes & osl_File_Attribute_OwnWrite)
+        nNewMode|=S_IWUSR;
+
+    if  (uAttributes & osl_File_Attribute_OwnExe)
+        nNewMode|=S_IXUSR;
+
+    if (uAttributes & osl_File_Attribute_GrpRead)
+        nNewMode|=S_IRGRP;
+
+    if (uAttributes & osl_File_Attribute_GrpWrite)
+        nNewMode|=S_IWGRP;
+
+    if (uAttributes & osl_File_Attribute_GrpExe)
+        nNewMode|=S_IXGRP;
+
+    if (uAttributes & osl_File_Attribute_OthRead)
+        nNewMode|=S_IROTH;
+
+    if (uAttributes & osl_File_Attribute_OthWrite)
+        nNewMode|=S_IWOTH;
+
+    if (uAttributes & osl_File_Attribute_OthExe)
+        nNewMode|=S_IXOTH;
+
+    if (chmod(pszFilePath, nNewMode) < 0)
+        osl_error = oslTranslateFileError(OSL_FET_ERROR, errno);
+
+    return osl_error;
+}
+
+oslFileError SAL_CALL osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt64 uAttributes )
+{
+    char path[PATH_MAX];
+    oslFileError eRet;
+
+    OSL_ASSERT( ustrFileURL );
+
+    /* convert file url to system path */
+    eRet = FileURLToPath( path, PATH_MAX, ustrFileURL );
+    if( eRet != osl_File_E_None )
+        return eRet;
+
+#ifdef MACOSX
+    if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
+      return oslTranslateFileError( OSL_FET_ERROR, errno );
+#endif/* MACOSX */
+
+    return osl_psz_setFileAttributes( path, uAttributes );
+}
+
+/****************************************************************************/
+/*  osl_setFileTime */
+/****************************************************************************/
+
+static oslFileError osl_psz_setFileTime (
+    const sal_Char* pszFilePath,
+    const TimeValue* /*pCreationTime*/,
+    const TimeValue* pLastAccessTime,
+    const TimeValue* pLastWriteTime )
+{
+    int nRet=0;
+    struct utimbuf aTimeBuffer;
+    struct stat aFileStat;
+#ifdef DEBUG_OSL_FILE
+    struct tm* pTM=0;
+#endif
+
+    nRet = lstat(pszFilePath,&aFileStat);
+
+    if ( nRet < 0 )
+    {
+        nRet=errno;
+        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+    }
+
+#ifdef DEBUG_OSL_FILE
+    fprintf(stderr,"File Times are (in localtime):\n");
+    pTM=localtime(&aFileStat.st_ctime);
+    fprintf(stderr,"CreationTime is '%s'\n",asctime(pTM));
+    pTM=localtime(&aFileStat.st_atime);
+    fprintf(stderr,"AccessTime   is '%s'\n",asctime(pTM));
+    pTM=localtime(&aFileStat.st_mtime);
+    fprintf(stderr,"Modification is '%s'\n",asctime(pTM));
+
+    fprintf(stderr,"File Times are (in UTC):\n");
+    fprintf(stderr,"CreationTime is '%s'\n",ctime(&aFileStat.st_ctime));
+    fprintf(stderr,"AccessTime   is '%s'\n",ctime(&aTimeBuffer.actime));
+    fprintf(stderr,"Modification is '%s'\n",ctime(&aTimeBuffer.modtime));
+#endif
+
+    if ( pLastAccessTime != 0 )
+    {
+        aTimeBuffer.actime=pLastAccessTime->Seconds;
+    }
+    else
+    {
+        aTimeBuffer.actime=aFileStat.st_atime;
+    }
+
+    if ( pLastWriteTime != 0 )
+    {
+        aTimeBuffer.modtime=pLastWriteTime->Seconds;
+    }
+    else
+    {
+        aTimeBuffer.modtime=aFileStat.st_mtime;
+    }
+
+    /* mfe: Creation time not used here! */
+
+#ifdef DEBUG_OSL_FILE
+    fprintf(stderr,"File Times are (in localtime):\n");
+    pTM=localtime(&aFileStat.st_ctime);
+    fprintf(stderr,"CreationTime now '%s'\n",asctime(pTM));
+    pTM=localtime(&aTimeBuffer.actime);
+    fprintf(stderr,"AccessTime   now '%s'\n",asctime(pTM));
+    pTM=localtime(&aTimeBuffer.modtime);
+    fprintf(stderr,"Modification now '%s'\n",asctime(pTM));
+
+    fprintf(stderr,"File Times are (in UTC):\n");
+    fprintf(stderr,"CreationTime now '%s'\n",ctime(&aFileStat.st_ctime));
+    fprintf(stderr,"AccessTime   now '%s'\n",ctime(&aTimeBuffer.actime));
+    fprintf(stderr,"Modification now '%s'\n",ctime(&aTimeBuffer.modtime));
+#endif
+
+    nRet=utime(pszFilePath,&aTimeBuffer);
+    if ( nRet < 0 )
+    {
+        nRet=errno;
+        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+    }
+
+    return osl_File_E_None;
+}
+
+oslFileError SAL_CALL osl_setFileTime (
+    rtl_uString* ustrFileURL,
+    const TimeValue* pCreationTime,
+    const TimeValue* pLastAccessTime,
+    const TimeValue* pLastWriteTime )
+{
+    char path[PATH_MAX];
+    oslFileError eRet;
+
+    OSL_ASSERT( ustrFileURL );
+
+    /* convert file url to system path */
+    eRet = FileURLToPath( path, PATH_MAX, ustrFileURL );
+    if( eRet != osl_File_E_None )
+        return eRet;
+
+#ifdef MACOSX
+    if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
+      return oslTranslateFileError( OSL_FET_ERROR, errno );
+#endif/* MACOSX */
+
+    return osl_psz_setFileTime( path, pCreationTime, pLastAccessTime, pLastWriteTime );
+}

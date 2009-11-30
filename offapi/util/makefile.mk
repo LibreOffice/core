@@ -45,6 +45,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
     $(UCR)$/cssawttree.db \
+    $(UCR)$/cssawtgrid.db \
     $(UCR)$/csschart.db \
     $(UCR)$/csschart2.db \
     $(UCR)$/csschart2data.db \
@@ -143,6 +144,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssreport.db \
     $(UCR)$/cssrptins.db \
     $(UCR)$/cssrptmeta.db \
+    $(UCR)$/cssoffice.db \
     $(UCR)$/cssrdf.db
 
 

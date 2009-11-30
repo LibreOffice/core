@@ -50,7 +50,7 @@ public final class JavaClient {
         if (manager == null) {
             throw new NullPointerException("no service manager");
         }
-        XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+        XBridgeFactory factory = UnoRuntime.queryInterface(
             XBridgeFactory.class,
             manager.createInstanceWithContext(
                 "com.sun.star.bridge.BridgeFactory", context));
@@ -63,11 +63,9 @@ public final class JavaClient {
             Connector.create(context).connect(
                 url.getConnectionAndParametersAsString()),
             null);
-        Data d =
-            ((XServer) UnoRuntime.queryInterface(
-                XServer.class, bridge.getInstance(url.getRootOid()))).getData();
-        ((XComponent) UnoRuntime.queryInterface(XComponent.class, bridge)).
-            dispose();
+        Data d = UnoRuntime.queryInterface(
+            XServer.class, bridge.getInstance(url.getRootOid())).getData();
+        UnoRuntime.queryInterface(XComponent.class, bridge).dispose();
         if (!d.m1.equals("Hello") || d.m2 != 42) {
             throw new RuntimeException("Data object contains bad values");
         }

@@ -41,10 +41,6 @@
 #include <algorithm>
 
 
-#ifdef __MINGW32__
-#define BROKEN_ALLOCA
-#endif
-
 using namespace ::rtl;
 
 namespace jni_uno

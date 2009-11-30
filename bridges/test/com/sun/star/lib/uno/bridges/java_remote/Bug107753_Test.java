@@ -68,22 +68,19 @@ public final class Bug107753_Test extends ComplexTestCase {
 
         protected boolean run(XComponentContext context) throws Throwable {
             boolean success = true;
-            XTransport transport = (XTransport) UnoRuntime.queryInterface(
+            XTransport transport = UnoRuntime.queryInterface(
                 XTransport.class, getBridge(context).getInstance("Transport"));
 
             Object obj1a = new XType1() {};
-            XType1 obj1b = (XType1) UnoRuntime.queryInterface(XType1.class,
-                                                              obj1a);
+            XType1 obj1b = UnoRuntime.queryInterface(XType1.class, obj1a);
             success &= test("obj1a == obj1b", obj1a == obj1b);
 
             Object obj2a = new XType2() {};
-            XType2 obj2b = (XType2) UnoRuntime.queryInterface(XType2.class,
-                                                              obj2a);
+            XType2 obj2b = UnoRuntime.queryInterface(XType2.class, obj2a);
             success &= test("obj2a == obj2b", obj2a == obj2b);
 
             Object obj3a = transport.getType1();
-            XType1 obj3b = (XType1) UnoRuntime.queryInterface(XType1.class,
-                                                              obj3a);
+            XType1 obj3b = UnoRuntime.queryInterface(XType1.class, obj3a);
             success &= test(
                 "obj3a != obj3b; only meaningful as long as different proxy"
                 + " instances are used for different UNO interfaces of one UNO"
@@ -91,8 +88,7 @@ public final class Bug107753_Test extends ComplexTestCase {
                 obj3a != obj3b);
 
             Object obj4a = transport.getType2();
-            XType2 obj4b = (XType2) UnoRuntime.queryInterface(XType2.class,
-                                                              obj4a);
+            XType2 obj4b = UnoRuntime.queryInterface(XType2.class, obj4a);
             success &= test(
                 "obj4a != obj4b; only meaningful as long as different proxy"
                 + " instances are used for different UNO interfaces of one UNO"
