@@ -185,14 +185,20 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsFillColor())
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
-        aB2DPP.transform( aTransform );
+        basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
 
-        if( mpGraphics->DrawPolyPolygon( aB2DPP, fTransparency, this ) )
+        // transform the polygon and ensure closed
+        aB2DPolyPolygon.transform(aTransform);
+        aB2DPolyPolygon.setClosed(true);
+
+        if(mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, fTransparency, this))
         {
 #if 0
             // MetaB2DPolyPolygonAction is not implemented yet:

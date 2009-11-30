@@ -1782,7 +1782,7 @@ void DbgDialogTest( Window* pWindow )
         i++;
     }
 
-    delete pRectAry;
+    delete [] pRectAry;
 }
 
 // =======================================================================

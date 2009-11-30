@@ -888,7 +888,7 @@ namespace cairocanvas
             nY = aP.getY();
             cairo_matrix_transform_point( &aOrigMatrix, &nX, &nY );
 
-             if( ! bIsBezier && bIsRectangle ) {
+             if( ! bIsBezier && (bIsRectangle || aOperation == Clip) ) {
                 nX = basegfx::fround( nX );
                 nY = basegfx::fround( nY );
             }

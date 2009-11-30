@@ -82,6 +82,11 @@
 
 #include <hash_set>
 
+#ifdef ENABLE_GRAPHITE
+#include <vcl/graphite_layout.hxx>
+#include <vcl/graphite_serverfont.hxx>
+#endif
+
 struct cairo_surface_t;
 struct cairo_t;
 struct cairo_font_face_t;
@@ -1023,29 +1028,22 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
 void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 {
-    Display* pDisplay = GetXDisplay();
-    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-
-    // find a XRenderPictFormat compatible with the Drawable
-    XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
-    if( !pVisualFormat )
-    {
-        Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
-        pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
-        // cache the XRenderPictFormat
-        SetXRenderFormat( static_cast<void*>(pVisualFormat) );
-    }
-
-    DBG_ASSERT( pVisualFormat!=NULL, "no matching XRenderPictFormat for text" );
-    if( !pVisualFormat )
+    // get xrender target for this drawable
+    Picture aDstPic = GetXRenderPicture();
+    if( !aDstPic )
         return;
 
     // get a XRenderPicture for the font foreground
+    // TODO: move into own method
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+    XRenderPictFormat* pVisualFormat = (XRenderPictFormat*)GetXRenderFormat();
+    DBG_ASSERT( pVisualFormat, "we already have a render picture, but XRenderPictFormat==NULL???");
     const int nVisualDepth = pVisualFormat->depth;
     SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ nVisualDepth ];
     if( !rEntry.m_aPicture )
     {
         // create and cache XRenderPicture for the font foreground
+        Display* pDisplay = GetXDisplay();
 #ifdef DEBUG
         int iDummy;
         unsigned uDummy;
@@ -1067,12 +1065,10 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     XRenderColor aRenderColor = GetXRenderColor( nTextPixel_ );
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
-    // notify xrender of target drawable
-    Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
-
     // set clipping
+    // TODO: move into GetXRenderPicture()?
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDst, pClipRegion_ );
+        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
 
     ServerFont& rFont = rLayout.GetServerFont();
     X11GlyphPeer& rGlyphPeer = X11GlyphCache::GetInstance().GetPeer();
@@ -1096,12 +1092,9 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
         unsigned int aRenderAry[ MAXGLYPHS ];
         for( int i = 0; i < nGlyphs; ++i )
              aRenderAry[ i ] = rGlyphPeer.GetGlyphId( rFont, aGlyphAry[i] );
-        rRenderPeer.CompositeString32( rEntry.m_aPicture, aDst,
+        rRenderPeer.CompositeString32( rEntry.m_aPicture, aDstPic,
            aGlyphSet, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
     }
-
-    // cleanup
-    rRenderPeer.FreePicture( aDst );
 }
 
 //--------------------------------------------------------------------------
@@ -1693,11 +1686,29 @@ BOOL X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
 
 SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    GenericSalLayout* pLayout = NULL;
+    SalLayout* pLayout = NULL;
 
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-        pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+    {
+#ifdef ENABLE_GRAPHITE
+        // Is this a Graphite font?
+        if (!bDisableGraphite_ &&
+            GraphiteFontAdaptor::IsGraphiteEnabledFont(*mpServerFont[nFallbackLevel]))
+        {
+            sal_Int32 xdpi, ydpi;
+
+            xdpi = GetDisplay()->GetResolution().A();
+            ydpi = GetDisplay()->GetResolution().B();
+
+            GraphiteFontAdaptor * pGrfont = new GraphiteFontAdaptor( *mpServerFont[nFallbackLevel], xdpi, ydpi);
+            if (!pGrfont) return NULL;
+            pLayout = new GraphiteServerFontLayout(pGrfont);
+        }
+        else
+#endif
+            pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+    }
     else if( mXFont[ nFallbackLevel ] )
         pLayout = new X11FontLayout( *mXFont[ nFallbackLevel ] );
     else

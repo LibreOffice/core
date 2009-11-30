@@ -165,7 +165,7 @@ namespace rtl {
 #define BASEPROPERTY_IMAGEPOSITION                  113  // sal_Int16
 #define BASEPROPERTY_NATIVE_WIDGET_LOOK             114  // sal_Bool
 #define BASEPROPERTY_VERTICALALIGN                  115  // VerticalAlignment
-#define BASEPROPERTY_WHEELWITHOUTFOCUS              116  // sal_Bool
+#define BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR          116  // sal_Int16
 #define BASEPROPERTY_GRAPHIC                        117  // css.graphic.XGraphic
 #define BASEPROPERTY_STEP_TIME                      118  // sal_Int32
 #define BASEPROPERTY_DECORATION                     119  // sal_Bool
@@ -191,6 +191,7 @@ namespace rtl {
 #define BASEPROPERTY_IMAGE_SCALE_MODE               137
 #define BASEPROPERTY_WRITING_MODE                   138
 #define BASEPROPERTY_CONTEXT_WRITING_MODE           139
+#define BASEPROPERTY_ENABLEVISIBLE                  140  // sal_Bool
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000

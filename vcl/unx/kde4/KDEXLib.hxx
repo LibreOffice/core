@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2009 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SequenceOutputStreamTest.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.sequenceoutputstream;
 
-public interface SequenceOutputStreamTest {
-    boolean test();
-}
+#pragma once
+
+#include <saldisp.hxx>
+
+class KDEXLib : public SalXLib
+{
+    private:
+        bool m_bStartupDone;
+        void* m_pApplication;
+        char** m_pFreeCmdLineArgs;
+        char** m_pAppCmdLineArgs;
+        int m_nFakeCmdLineArgs;
+
+    public:
+        KDEXLib();
+
+        virtual ~KDEXLib();
+        virtual void Init();
+
+        void doStartup();
+};

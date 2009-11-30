@@ -1058,7 +1058,7 @@ static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyph
 // -----------------------------------------------------------------------
 
 int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
-    FT_GlyphRec_* pGlyphFT, bool bForBitmapProcessing ) const
+    FT_Glyph pGlyphFT, bool bForBitmapProcessing ) const
 {
     int nAngle = GetFontSelData().mnOrientation;
     // shortcut most common case
@@ -1130,9 +1130,9 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
     else
     {
         // FT<=2005 ignores transforms for bitmaps, so do it manually
-        FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<FT_BitmapGlyph&>(pGlyphFT);
-        rBmpGlyphFT->left += (aVector.x + 32) >> 6;
-        rBmpGlyphFT->top  += (aVector.y + 32) >> 6;
+        FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<FT_BitmapGlyph>(pGlyphFT);
+        pBmpGlyphFT->left += (aVector.x + 32) >> 6;
+        pBmpGlyphFT->top  += (aVector.y + 32) >> 6;
     }
 
     return nAngle;
@@ -1425,6 +1425,20 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
+    // Check for zero area bounding boxes as this crashes some versions of FT.
+    // This also provides a handy short cut as much of the code following
+    //  becomes an expensive nop when a glyph covers no pixels.
+    FT_BBox cbox;
+    FT_Glyph_Get_CBox(pGlyphFT, ft_glyph_bbox_unscaled, &cbox);
+
+    if( (cbox.xMax - cbox.xMin) == 0 || (cbox.yMax - cbox.yMin == 0) )
+    {
+        nAngle = 0;
+        memset(&rRawBitmap, 0, sizeof rRawBitmap);
+        FT_Done_Glyph( pGlyphFT );
+        return true;
+    }
+
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
         if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
@@ -1440,12 +1454,12 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         }
     }
 
-    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
+    const FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph>(pGlyphFT);
     // NOTE: autohinting in FT<=2.0.2 miscalculates the offsets below by +-1
-    rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
-    rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+    rRawBitmap.mnXOffset        = +pBmpGlyphFT->left;
+    rRawBitmap.mnYOffset        = -pBmpGlyphFT->top;
 
-    const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
+    const FT_Bitmap& rBitmapFT  = pBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnBitCount       = 1;
     if( mbArtBold && !pFTEmbolden )
@@ -1595,11 +1609,11 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         }
     }
 
-    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
-    rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
-    rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+    const FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph>(pGlyphFT);
+    rRawBitmap.mnXOffset        = +pBmpGlyphFT->left;
+    rRawBitmap.mnYOffset        = -pBmpGlyphFT->top;
 
-    const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
+    const FT_Bitmap& rBitmapFT  = pBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnWidth          = rBitmapFT.width;
     rRawBitmap.mnBitCount       = 8;

@@ -1523,8 +1523,15 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
             else if (pEnd - q >= 2 && q[0] == '\\' && q[1] == '\\')
             {
                 q += 2;
-                if (scanDomain(q, pEnd) > 0 && (q == pEnd || *q == '\\'))
+                sal_Int32 n = rtl_ustr_indexOfChar_WithLength(
+                    q, pEnd - q, '\\');
+                sal_Unicode const * qe = n == -1 ? pEnd : q + n;
+                if (parseHostOrNetBiosName(
+                        q, qe, bOctets, ENCODE_ALL, RTL_TEXTENCODING_DONTKNOW,
+                        true, NULL))
+                {
                     bFSys = true; // 1st
+                }
             }
             if (bFSys)
             {

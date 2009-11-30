@@ -481,18 +481,6 @@ ULONG SotExchange::GetFormat( const DataFlavor& rFlavor )
 
 /*************************************************************************
 |*
-|*    SotExchange::GetStaticNameFormat()
-|*
-|*    Beschreibung      CLIP.SDW
-*************************************************************************/
-ULONG SotExchange::GetStaticNameFormat( const String& rName )
-{
-    // has to be changed to return the format for the static name (KA 27.09.2001)
-    return SotExchange::RegisterFormatName( rName );
-}
-
-/*************************************************************************
-|*
 |*    SotExchange::GetFormatName()
 |*
 |*    Beschreibung      CLIP.SDW
@@ -506,28 +494,6 @@ String SotExchange::GetFormatName( ULONG nFormat )
         aRet = aFlavor.HumanPresentableName;
 
     return aRet;
-}
-
-/*************************************************************************
-|*
-|*    SotExchange::GetFormatStaticName()
-|*
-|*    Beschreibung      CLIP.SDW
-*************************************************************************/
-String SotExchange::GetFormatStaticName( ULONG nFormat )
-{
-    // has to be changed to return the static format name (KA 27.09.2001)
-    return SotExchange::GetFormatName( nFormat );
-}
-
-/*************************************************************************
-|*
-|*    SotExchange::GetMaxFormat()
-|*
-*************************************************************************/
-ULONG SotExchange::GetMaxFormat( void )
-{
-    return( SOT_FORMATSTR_ID_USER_END + InitFormats_Impl().Count() );
 }
 
 BOOL SotExchange::IsInternal( const SvGlobalName& rName )

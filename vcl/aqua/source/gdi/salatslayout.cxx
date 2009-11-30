@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salatslayout.cxx,v $
- * $Revision: 1.12 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -301,7 +298,7 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nPixelWidth = rArgs.mnLayoutWidth;
     if( !nPixelWidth && rArgs.mpDXArray ) {
         // for now we are only interested in the layout width
-        // TODO: account for individual logical widths
+        // TODO: use all mpDXArray elements for layouting
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
 
         // workaround for ATSUI not using trailing spaces for justification
@@ -309,14 +306,21 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         int i = mnCharCount;
         while( (--i > 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) )
             mnTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
+        if( i <= 0 )
+            return;
+        // #i91685# trailing letters are left aligned (right aligned for RTL)
+        mnTrailingSpaceWidth += rArgs.mpDXArray[i];
+        if( i > 0 )
+            mnTrailingSpaceWidth -= rArgs.mpDXArray[i-1];
+        InitGIA(); // ensure valid mpCharWidths[]
+        mnTrailingSpaceWidth -= Fixed2Vcl( mpCharWidths[i] );
+        // ignore trailing space for calculating the available width
         nOrigWidth -= mnTrailingSpaceWidth;
         nPixelWidth -= mnTrailingSpaceWidth;
-        // trailing spaces can be leftmost spaces in RTL-layouts
+        // in RTL-layouts trailing spaces are leftmost
         // TODO: use BiDi-algorithm to thoroughly check this assumption
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
             mnBaseAdv = mnTrailingSpaceWidth;
-
-        // TODO: use all mpDXArray elements for layouting
     }
     // return early if there is nothing to do
     if( !nPixelWidth )
@@ -424,8 +428,8 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
             if( rAquaGraphics.mnATSUIRotation != 0 )
             {
                 const double fRadians = rAquaGraphics.mnATSUIRotation * (M_PI/0xB40000);
-                nXOfsFixed = +rSubPortion.mnXOffset * cos( fRadians );
-                nYOfsFixed = +rSubPortion.mnXOffset * sin( fRadians );
+                nXOfsFixed = static_cast<Fixed>(static_cast<double>(+rSubPortion.mnXOffset) * cos( fRadians ));
+                nYOfsFixed = static_cast<Fixed>(static_cast<double>(+rSubPortion.mnXOffset) * sin( fRadians ));
             }
 
             // draw sub-portions
@@ -738,6 +742,8 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 
     // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
+    if( nPixelWidth <= 0 )
+        return mnMinCharPos;
 
     // check assumptions
     DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::GetTextBreak() with nTSW!=0" );

@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
+#include "comphelper_module.hxx"
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>
@@ -47,11 +48,6 @@
 using namespace com::sun::star;
 
 DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence<beans::PropertyValue>, NamedPropertyValues );
-
-uno::Sequence< rtl::OUString > SAL_CALL NamedPropertyValuesContainer_getSupportedServiceNames() throw();
-rtl::OUString SAL_CALL NamedPropertyValuesContainer_getImplementationName() throw();
-uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer_createInstance(
-                const uno::Reference< uno::XComponentContext > & rxContext ) throw( uno::Exception );
 
 class NamedPropertyValuesContainer : public cppu::WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
@@ -91,6 +87,11 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo - static versions (used for component registration)
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
+    static uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
 private:
     NamedPropertyValues maProperties;
@@ -202,7 +203,12 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
 //XServiceInfo
 ::rtl::OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return NamedPropertyValuesContainer_getImplementationName();
+    return getImplementationName_static();
+}
+
+::rtl::OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName_static(  )
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPropertyValuesContainer" ) );
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
@@ -213,25 +219,24 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const ::rtl::OU
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return NamedPropertyValuesContainer_getSupportedServiceNames();
+    return getSupportedServiceNames_static();
 }
 
 
-uno::Sequence< rtl::OUString > SAL_CALL NamedPropertyValuesContainer_getSupportedServiceNames() throw()
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames_static(  )
 {
     const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.NamedPropertyValues" ) );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-rtl::OUString SAL_CALL NamedPropertyValuesContainer_getImplementationName() throw()
-{
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPropertyValuesContainer" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer_createInstance(
-                const uno::Reference< uno::XComponentContext >&) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer::Create(
+                const uno::Reference< uno::XComponentContext >&)
 {
     return (cppu::OWeakObject*)new NamedPropertyValuesContainer();
 }
 
+void createRegistryInfo_NamedPropertyValuesContainer()
+{
+    static ::comphelper::module::OAutoRegistration< NamedPropertyValuesContainer > aAutoRegistration;
+}

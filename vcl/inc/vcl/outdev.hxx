@@ -563,6 +563,20 @@ public:
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool ImplIsAntiparallel() const ;
 
+    // #i101491#
+    // Helper which holds the old line geometry creation and is extended to use AA when
+    // switched on. Advantage is that line geometry is only temporarily used for paint
+    SAL_DLLPRIVATE void ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
+
+    // #i101491#
+    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
+    // without MetaFile processing
+    SAL_DLLPRIVATE void ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
+
+    // #i101491#
+    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
+    SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(const basegfx::B2DPolygon& rB2DPolygon, double fLineWidth, basegfx::B2DLineJoin eLineJoin);
+
 protected:
                         OutputDevice();
 
@@ -655,20 +669,20 @@ public:
     void                GetKerningPairs( ULONG nPairs, KerningPair* pKernPairs ) const;
 
     BOOL                GetTextBoundRect( Rectangle& rRect,
-                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
-                            xub_StrLen nLen = STRING_LEN ) const;
+                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutline( PolyPolygon&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutlines( PolyPolyVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutlines( ::basegfx::B2DPolyPolygonVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex,
                             int nLen, int nBase, MetricVector& rVector );
 

@@ -54,7 +54,21 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
-xdictionary::xdictionary(const sal_Char *lang)
+xdictionary::xdictionary(const sal_Char *lang) :
+    existMark( NULL ),
+    index1( NULL ),
+    index2( NULL ),
+    lenArray( NULL ),
+    dataArea( NULL ),
+    hModule( NULL ),
+    boundary(),
+    japaneseWordBreak( sal_False )
+#if USE_CELL_BOUNDARY_CODE
+    // For CTL breakiterator, where the word boundary should not be inside cell.
+    ,
+    useCellBoundary( sal_False ),
+    cellBoundary( NULL )
+#endif
 {
     index1 = 0;
 #ifdef SAL_DLLPREFIX
@@ -92,6 +106,7 @@ xdictionary::xdictionary(const sal_Char *lang)
 
 #if USE_CELL_BOUNDARY_CODE
         useCellBoundary = sal_False;
+        cellBoundary = NULL;
 #endif
         japaneseWordBreak = sal_False;
 }
@@ -147,6 +162,19 @@ sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen) {
             }
         }
         return 0;
+}
+
+
+/*
+ * c-tor
+ */
+
+WordBreakCache::WordBreakCache() :
+    length( 0 ),
+    contents( NULL ),
+    wordboundary( NULL ),
+    size( 0 )
+{
 }
 
 /*

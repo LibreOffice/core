@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.240.14.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +65,9 @@
 #include <vcl/sysdata.hxx>
 #ifndef _OSL_FILE_H
 #include <osl/file.h>
+#endif
+#ifdef ENABLE_GRAPHITE
+#include <vcl/graphite_features.hxx>
 #endif
 
 #include <vcl/unohelp.hxx>
@@ -2750,6 +2752,14 @@ size_t ImplFontCache::IFSD_Hash::operator()( const ImplFontSelectData& rFSD ) co
     // TODO: does it pay off to improve this hash function?
     static FontNameHash aFontNameHash;
     size_t nHash = aFontNameHash( rFSD.maSearchName );
+#ifdef ENABLE_GRAPHITE
+    // check for features and generate a unique hash if necessary
+    if (rFSD.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+        != STRING_NOTFOUND)
+    {
+        nHash = aFontNameHash( rFSD.maTargetName );
+    }
+#endif
     nHash += 11 * rFSD.mnHeight;
     nHash += 19 * rFSD.meWeight;
     nHash += 29 * rFSD.meItalic;
@@ -2801,6 +2811,15 @@ bool ImplFontCache::IFSD_Equal::operator()(const ImplFontSelectData& rA, const I
             return false;
     }
 
+#ifdef ENABLE_GRAPHITE
+    // check for features
+    if ((rA.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+         != STRING_NOTFOUND ||
+         rB.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+         != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
+        return false;
+#endif
+
     return true;
 }
 
@@ -2838,7 +2857,12 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         // if it is already known get its normalized search name
         FontNameList::const_iterator it_name = maFontNameList.find( aSearchName );
         if( it_name != maFontNameList.end() )
-            if( !(*it_name).second.EqualsAscii( "hg", 0, 2) )
+            if( !(*it_name).second.EqualsAscii( "hg", 0, 2)
+#ifdef ENABLE_GRAPHITE
+                && (aSearchName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+                    == STRING_NOTFOUND)
+#endif
+            )
                 aSearchName = (*it_name).second;
     }
 
@@ -2943,6 +2967,22 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.maName, nTokenPos );
         aSearchName = rFSD.maTargetName;
+
+#ifdef ENABLE_GRAPHITE
+        // Until features are properly supported, they are appended to the
+        // font name, so we need to strip them off so the font is found.
+        xub_StrLen nFeat = aSearchName.Search(grutils::GrFeatureParser::FEAT_PREFIX);
+        String aOrigName = rFSD.maTargetName;
+        String aBaseFontName(aSearchName, 0, (nFeat != STRING_NOTFOUND)?nFeat:aSearchName.Len());
+        if (nFeat != STRING_NOTFOUND && STRING_NOTFOUND !=
+            aSearchName.Search(grutils::GrFeatureParser::FEAT_ID_VALUE_SEPARATOR, nFeat))
+        {
+            aSearchName = aBaseFontName;
+            rFSD.maTargetName = aBaseFontName;
+        }
+
+#endif
+
         ImplGetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName, nSubstFlags, pDevSpecific );
         // #114999# special emboldening for Ricoh fonts
@@ -2973,6 +3013,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
             }
         }
 
+#ifdef ENABLE_GRAPHITE
+        // restore the features to make the font selection data unique
+        rFSD.maTargetName = aOrigName;
+#endif
         // check if the current font name token or its substitute is valid
         ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
@@ -2981,16 +3025,21 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         // some systems provide special customization
         // e.g. they suggest "serif" as UI-font, but this name cannot be used directly
         //      because the system wants to map it to another font first, e.g. "Helvetica"
+#ifdef ENABLE_GRAPHITE
+        // use the target name to search in the prematch hook
+        rFSD.maTargetName = aBaseFontName;
+#endif
         if( mpPreMatchHook )
-        {
             if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
-            {
                 ImplGetEnglishSearchFontName( aSearchName );
-                pFoundData = ImplFindBySearchName( aSearchName );
-                if( pFoundData )
-                    return pFoundData;
-            }
-        }
+#ifdef ENABLE_GRAPHITE
+        // the prematch hook uses the target name to search, but we now need
+        // to restore the features to make the font selection data unique
+        rFSD.maTargetName = aOrigName;
+#endif
+        pFoundData = ImplFindBySearchName( aSearchName );
+        if( pFoundData )
+            return pFoundData;
 
         // break after last font name token was checked unsuccessfully
         if( nTokenPos == STRING_NOTFOUND)
@@ -5441,6 +5490,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
     DBG_CHKOBJ( &rNewFont, Font, NULL );
 
     Font aFont( rNewFont );
+    aFont.SetLanguage(rNewFont.GetLanguage());
     if ( mnDrawMode & (DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT | DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT | DRAWMODE_SETTINGSTEXT |
                        DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
                        DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )
@@ -6484,7 +6534,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             nRTLOffset = nPixelWidth;
         else
             nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
-        pSalLayout->DrawOffset().X() = -nRTLOffset;
+        pSalLayout->DrawOffset().X() = 1 - nRTLOffset;
     }
 
     return pSalLayout;
@@ -6919,13 +6969,13 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
                 nStyle &= ~TEXT_DRAW_CLIP;
         }
 
-        // Vertikales Alignment
+        // horizontal text alignment
         if ( nStyle & TEXT_DRAW_RIGHT )
             aPos.X() += nWidth-nTextWidth;
         else if ( nStyle & TEXT_DRAW_CENTER )
             aPos.X() += (nWidth-nTextWidth)/2;
 
-        // Font Alignment
+        // vertical font alignment
         if ( eAlign == ALIGN_BOTTOM )
             aPos.Y() += nTextHeight;
         else if ( eAlign == ALIGN_BASELINE )
@@ -7919,8 +7969,8 @@ BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
 // -----------------------------------------------------------------------
 
 BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
-    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen ) const
+    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
+    ULONG nLayoutWidth, const sal_Int32* pDXAry ) const
 {
     DBG_TRACE( "OutputDevice::GetTextBoundRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -7929,13 +7979,14 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     rRect.SetEmpty();
 
     SalLayout* pSalLayout = NULL;
+    const Point aPoint;
     // calculate offset when nBase!=nIndex
     long nXOffset = 0;
     if( nBase != nIndex )
     {
         xub_StrLen nStart = Min( nBase, nIndex );
         xub_StrLen nOfsLen = Max( nBase, nIndex ) - nStart;
-        pSalLayout = ImplLayout( rStr, nStart, nOfsLen );
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, aPoint, nLayoutWidth, pDXAry );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7947,7 +7998,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
         }
     }
 
-    pSalLayout = ImplLayout( rStr, nIndex, nLen );
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
     Rectangle aPixelRect;
     if( pSalLayout )
     {
@@ -7997,7 +8048,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     aVDev.SetTextAlign( ALIGN_TOP );
 
     // layout the text on the virtual device
-    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen );
+    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
     if( !pSalLayout )
         return false;
 
@@ -8097,7 +8148,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
 BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
+    BOOL bOptimize, ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     // the fonts need to be initialized
     if( mbNewFont )
@@ -8326,7 +8377,7 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
 
 BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen, BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
+    xub_StrLen nLen, BOOL bOptimize, ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     rResultVector.clear();
 
@@ -8349,7 +8400,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
 
 BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
+    BOOL bOptimize, ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     rPolyPoly.Clear();
 

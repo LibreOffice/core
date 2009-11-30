@@ -82,7 +82,7 @@ void XRenderPeer::InitRenderLib()
     // we don't know if we are running on a system with xrender library
     // we don't want to install system libraries ourselves
     // => load them dynamically when they are there
-    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.so.1" ));
+    const OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.so.1" ));
     mpRenderLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
     if( !mpRenderLib ) {
 #ifdef DEBUG
@@ -93,98 +93,81 @@ void XRenderPeer::InitRenderLib()
         return;
     }
 
-    OUString aQueryExtensionFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderQueryExtension"));
     oslGenericFunction pFunc;
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aQueryExtensionFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderQueryExtension" );
     if( !pFunc ) return;
     mpXRenderQueryExtension = (Bool(*)(Display*,int*,int*))pFunc;
 
-    OUString aQueryVersionFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderQueryVersion"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aQueryVersionFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderQueryVersion" );
     if( !pFunc ) return;
     mpXRenderQueryVersion = (void(*)(Display*,int*,int*))pFunc;
 
-    OUString aVisFormatFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindVisualFormat"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aVisFormatFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFindVisualFormat" );
     if( !pFunc ) return;
     mpXRenderFindVisualFormat = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
 
-    OUString aStdFormatFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindStandardFormat"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aStdFormatFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFindStandardFormat" );
     if( !pFunc ) return;
     mpXRenderFindStandardFormat = (XRenderPictFormat*(*)(Display*,int))pFunc;
 
-    OUString aFmtFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindFormat"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aFmtFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFindFormat" );
     if( !pFunc ) return;
     mpXRenderFindFormat = (XRenderPictFormat*(*)(Display*,unsigned long,
         const XRenderPictFormat*,int))pFunc;
 
-    OUString aCreatGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreateGlyphSet"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aCreatGlyphFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCreateGlyphSet" );
     if( !pFunc ) return;
     mpXRenderCreateGlyphSet = (GlyphSet(*)(Display*,const XRenderPictFormat*))pFunc;
 
-    OUString aFreeGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphSet"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aFreeGlyphFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFreeGlyphSet" );
     if( !pFunc ) return;
     mpXRenderFreeGlyphSet = (void(*)(Display*,GlyphSet))pFunc;
 
-    OUString aAddGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderAddGlyphs"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aAddGlyphFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderAddGlyphs" );
     if( !pFunc ) return;
     mpXRenderAddGlyphs = (void(*)(Display*,GlyphSet,Glyph*,const XGlyphInfo*,
         int,const char*,int))pFunc;
 
-    OUString aFreeGlyphsFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphs"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aFreeGlyphsFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFreeGlyphs" );
     if( !pFunc ) return;
     mpXRenderFreeGlyphs = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
 
-    OUString aCompStringFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeString32"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aCompStringFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCompositeString32" );
     if( !pFunc ) return;
     mpXRenderCompositeString32 = (void(*)(Display*,int,Picture,Picture,
         const XRenderPictFormat*,GlyphSet,int,int,int,int,const unsigned*,int))pFunc;
 
-    OUString aCreatPicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreatePicture"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aCreatPicFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCreatePicture" );
     if( !pFunc ) return;
     mpXRenderCreatePicture = (Picture(*)(Display*,Drawable,const XRenderPictFormat*,
         unsigned long,const XRenderPictureAttributes*))pFunc;
 
-    OUString aSetClipFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderSetPictureClipRegion"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aSetClipFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderSetPictureClipRegion" );
     if( !pFunc ) return;
     mpXRenderSetPictureClipRegion = (void(*)(Display*,Picture,XLIB_Region))pFunc;
 
-    OUString aFreePicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreePicture"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aFreePicFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFreePicture" );
     if( !pFunc ) return;
     mpXRenderFreePicture = (void(*)(Display*,Picture))pFunc;
 
-    OUString aRenderCompositeFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderComposite"));
-    pFunc = osl_getFunctionSymbol( mpRenderLib, aRenderCompositeFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderComposite" );
     if( !pFunc ) return;
     mpXRenderComposite = (void(*)(Display*,int,Picture,Picture,Picture,
         int,int,int,int,int,int,unsigned,unsigned))pFunc;
 
-    OUString aFillRectangleFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFillRectangle"));
-    pFunc=osl_getFunctionSymbol( mpRenderLib, aFillRectangleFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFillRectangle" );
     if( !pFunc ) return;
     mpXRenderFillRectangle = (void(*)(Display*,int,Picture,const XRenderColor*,
         int,int,unsigned int,unsigned int))pFunc;
 
-    OUString aCompositeTrapsFuncName( RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeTrapezoids"));
-    pFunc=osl_getFunctionSymbol( mpRenderLib, aCompositeTrapsFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCompositeTrapezoids" );
 #if 0 // not having trapezoid support is supported
     if( !pFunc ) return;
 #endif
     mpXRenderCompositeTrapezoids = (void(*)(Display*,int,Picture,Picture,
         const XRenderPictFormat*,int,int,const XTrapezoid*,int))pFunc;
 
-    OUString aAddTrapsFuncName( RTL_CONSTASCII_USTRINGPARAM("XRenderAddTraps"));
-    pFunc=osl_getFunctionSymbol( mpRenderLib, aAddTrapsFuncName.pData);
+    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderAddTraps" );
 #if 0 // not having trapezoid support is supported
     if( !pFunc ) return;
 #endif

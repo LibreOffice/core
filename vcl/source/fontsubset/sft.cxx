@@ -329,7 +329,7 @@ _inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, size_t offset, int bigendia
 
 }
 
-#if defined(OSL_BIG_ENDIAN)
+#if defined(OSL_BIGENDIAN)
 #define Int16FromMOTA(a) (a)
 #define Int32FromMOTA(a) (a)
 #else

@@ -61,7 +61,7 @@ struct ImplJobSetup
     String          maDriver;           // Driver-Name
     Orientation     meOrientation;      // Orientation
     USHORT          mnPaperBin;         // Papierschacht
-    Paper           mePaperFormat;      // Papierformat
+    Paper       mePaperFormat;      // Papierformat
     long            mnPaperWidth;       // Papierbreite in 100tel mm
     long            mnPaperHeight;      // Papierhoehe in 100tel mm
     ULONG           mnDriverDataLen;    // Laenge der systemabhaengigen Daten

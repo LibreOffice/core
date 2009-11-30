@@ -121,16 +121,14 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     if (m_pDeleteColormap != pOrigDeleteColormap)
         delete pOrigDeleteColormap;
 
-    hDrawable_   = pDevice->GetDrawable();
+    const Drawable aVdevDrawable = pDevice->GetDrawable();
+    SetDrawable( aVdevDrawable, m_nScreen );
+
     m_pVDev      = pDevice;
     m_pFrame     = NULL;
 
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = TRUE;
-
-    nPenPixel_   = GetPixel( nPenColor_ );
-    nTextPixel_  = GetPixel( nTextColor_ );
-    nBrushPixel_ = GetPixel( nBrushColor_ );
 }
 
 // -=-= SalVirDevData / SalVirtualDevice -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -274,3 +272,4 @@ void X11SalVirtualDevice::GetSize( long& rWidth, long& rHeight )
     rWidth  = GetWidth();
     rHeight = GetHeight();
 }
+

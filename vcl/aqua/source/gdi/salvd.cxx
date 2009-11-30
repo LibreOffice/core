@@ -87,7 +87,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
             if( pFrame && AquaSalFrame::isAlive( pFrame ) )
             {
                 mpGraphics->setGraphicsFrame( pFrame );
-                mpGraphics->initResolution( pFrame->mpWindow );
+                mpGraphics->copyResolution( *pGraphic );
             }
         }
 
@@ -228,8 +228,8 @@ void AquaSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
     if( mxLayer )
     {
         const CGSize aSize = CGLayerGetSize( mxLayer );
-        rWidth = aSize.width;
-        rHeight = aSize.height;
+        rWidth = static_cast<long>(aSize.width);
+        rHeight = static_cast<long>(aSize.height);
     }
     else
     {

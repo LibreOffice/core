@@ -726,8 +726,13 @@ class StillReadWriteInteraction : public ::ucbhelper::InterceptedInteraction
                     css::ucb::InteractiveIOException exIO;
                     xRequest->getRequest() >>= exIO;
                     bAbort = (
-                                (exIO.Code == css::ucb::IOErrorCode_ACCESS_DENIED     ) ||
-                                (exIO.Code == css::ucb::IOErrorCode_LOCKING_VIOLATION )
+                                (exIO.Code == css::ucb::IOErrorCode_ACCESS_DENIED     )
+                             || (exIO.Code == css::ucb::IOErrorCode_LOCKING_VIOLATION )
+#ifdef MACOSX
+                             // this is a workaround for MAC, on this platform if the file is locked
+                             // the returned error code looks to be wrong
+                             || (exIO.Code == css::ucb::IOErrorCode_GENERAL )
+#endif
                             );
                 }
                 break;

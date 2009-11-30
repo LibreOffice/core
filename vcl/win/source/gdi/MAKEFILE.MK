@@ -44,7 +44,6 @@ TARGET=salgdi
 
 # --- #105371#
 .IF "$(COM)"=="GCC"
-CDEFS += -UWINVER -DWINVER=0x0400
 .ELSE
 CFLAGS += -DWINVER=0x0400
 .ENDIF
@@ -64,6 +63,10 @@ SLOFILES=   $(SLO)$/salgdi.obj   \
             
 
 EXCEPTIONSFILES=	$(SLO)$/salprn.obj
+
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+CFLAGS+=-DENABLE_GRAPHITE
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

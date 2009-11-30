@@ -140,10 +140,6 @@ bool AquaSalInstance::isOnCommandLine( const rtl::OUString& rArg )
 // returns an NSAutoreleasePool that must be released when the event loop begins
 static void initNSApp()
 {
-    SInt32 major  = NULL;
-    SInt32 minor  = NULL;
-    SInt32 bugFix = NULL;
-
     // create our cocoa NSApplication
     [VCL_NSApplication sharedApplication];
 
@@ -176,7 +172,17 @@ static void initNSApp()
                                           object: nil ];
 
     // get System Version and store the value in GetSalData()->mnSystemVersion
-    [NSApp getSystemVersionMajor: (unsigned int *)major minor:(unsigned int *)minor bugFix:(unsigned int *)bugFix ];
+    OSErr err = noErr;
+    SInt32 systemVersion = VER_TIGER; // Initialize with minimal requirement
+    if( (err = Gestalt(gestaltSystemVersion, &systemVersion)) == noErr )
+    {
+        GetSalData()->mnSystemVersion = systemVersion;
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "System Version %x\n", (unsigned int)systemVersion);
+#endif
+    }
+    else
+        NSLog(@"Unable to obtain system version: %ld", (long)err);
 
      // Initialize Apple Remote
     GetSalData()->mpMainController = [[MainController alloc] init];

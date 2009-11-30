@@ -312,7 +312,8 @@ namespace comphelper { namespace stlunosequence {
     template<typename S, typename V>
     inline typename StlSequence<S,V>::iterator StlSequence<S,V>::begin()
     {
-        return typename StlSequence<S,V>::iterator(m_UnoSequence, begin_of_sequence);
+        return typename StlSequence<S,V>::iterator(m_UnoSequence,
+            size() ? begin_of_sequence : end_of_sequence);
     }
 
     template<typename S, typename V>
@@ -324,7 +325,8 @@ namespace comphelper { namespace stlunosequence {
     template<typename S, typename V>
     inline typename StlSequence<S,V>::const_iterator StlSequence<S,V>::begin() const
     {
-        return typename StlSequence<S,V>::const_iterator(m_UnoSequence, begin_of_sequence);
+        return typename StlSequence<S,V>::const_iterator(m_UnoSequence,
+            size() ? begin_of_sequence : end_of_sequence);
     }
 
     template<typename S, typename V>

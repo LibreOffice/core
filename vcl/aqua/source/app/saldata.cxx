@@ -93,7 +93,7 @@ SalData::~SalData()
         }
 
         osl_destroyThreadKey( s_aAutoReleaseKey );
-        s_aAutoReleaseKey = NULL;
+        s_aAutoReleaseKey = 0;
     }
     if ( mpMainController )
         [mpMainController release];

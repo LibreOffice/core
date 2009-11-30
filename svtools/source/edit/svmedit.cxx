@@ -452,46 +452,62 @@ String ImpSvMEdit::GetSelected( LineEnd aSeparator ) const
 
 void ImpSvMEdit::Resize()
 {
-    WinBits nWinStyle( pSvMultiLineEdit->GetStyle() );
-    if ( ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL )
-        ImpUpdateSrollBarVis( nWinStyle );
-
-    Size aSz = pSvMultiLineEdit->GetOutputSizePixel();
-    Size aEditSize = aSz;
-    long nSBWidth = pSvMultiLineEdit->GetSettings().GetStyleSettings().GetScrollBarSize();
-    nSBWidth = pSvMultiLineEdit->CalcZoom( nSBWidth );
-
-    if ( mpHScrollBar )
-        aSz.Height() -= nSBWidth+1;
-    if ( mpVScrollBar )
-        aSz.Width() -= nSBWidth+1;
-
-    Size aTextWindowSz( aSz );
-    aTextWindowSz.Width() -= maTextWindowOffset.X();
-    aTextWindowSz.Height() -= maTextWindowOffset.Y();
-    Point aTextWindowPos( maTextWindowOffset );
-
-    if ( !mpHScrollBar )
-        mpTextWindow->GetTextEngine()->SetMaxTextWidth( aSz.Width() );
-
-    if ( mpHScrollBar )
-        mpHScrollBar->SetPosSizePixel( 0, aEditSize.Height()-nSBWidth, aSz.Width(), nSBWidth );
-
-    if ( mpVScrollBar )
+    size_t nIteration = 1;
+    do
     {
-        if( Application::GetSettings().GetLayoutRTL() )
-        {
-            mpVScrollBar->SetPosSizePixel( 0, 0, nSBWidth, aSz.Height() );
-            aTextWindowPos.X() += nSBWidth;
-        }
+        WinBits nWinStyle( pSvMultiLineEdit->GetStyle() );
+        if ( ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL )
+            ImpUpdateSrollBarVis( nWinStyle );
+
+        Size aSz = pSvMultiLineEdit->GetOutputSizePixel();
+        Size aEditSize = aSz;
+        long nSBWidth = pSvMultiLineEdit->GetSettings().GetStyleSettings().GetScrollBarSize();
+        nSBWidth = pSvMultiLineEdit->CalcZoom( nSBWidth );
+
+        if ( mpHScrollBar )
+            aSz.Height() -= nSBWidth+1;
+        if ( mpVScrollBar )
+            aSz.Width() -= nSBWidth+1;
+
+        if ( !mpHScrollBar )
+            mpTextWindow->GetTextEngine()->SetMaxTextWidth( aSz.Width() );
         else
-            mpVScrollBar->SetPosSizePixel( aEditSize.Width()-nSBWidth, 0, nSBWidth, aSz.Height() );
-    }
+            mpHScrollBar->SetPosSizePixel( 0, aEditSize.Height()-nSBWidth, aSz.Width(), nSBWidth );
 
-    mpTextWindow->SetPosSizePixel( aTextWindowPos, aTextWindowSz );
+        Point aTextWindowPos( maTextWindowOffset );
+        if ( mpVScrollBar )
+        {
+            if( Application::GetSettings().GetLayoutRTL() )
+            {
+                mpVScrollBar->SetPosSizePixel( 0, 0, nSBWidth, aSz.Height() );
+                aTextWindowPos.X() += nSBWidth;
+            }
+            else
+                mpVScrollBar->SetPosSizePixel( aEditSize.Width()-nSBWidth, 0, nSBWidth, aSz.Height() );
+        }
 
-    if ( mpScrollBox )
-        mpScrollBox->SetPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
+        if ( mpScrollBox )
+            mpScrollBox->SetPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
+
+        Size aTextWindowSize( aSz );
+        aTextWindowSize.Width() -= maTextWindowOffset.X();
+        aTextWindowSize.Height() -= maTextWindowOffset.Y();
+        if ( aTextWindowSize.Width() < 0 )
+            aTextWindowSize.Width() = 0;
+        if ( aTextWindowSize.Height() < 0 )
+            aTextWindowSize.Height() = 0;
+
+        Size aOldTextWindowSize( mpTextWindow->GetSizePixel() );
+        mpTextWindow->SetPosSizePixel( aTextWindowPos, aTextWindowSize );
+        if ( aOldTextWindowSize == aTextWindowSize )
+            break;
+
+        // Changing the text window size might effectively have changed the need for
+        // scrollbars, so do another iteration.
+        ++nIteration;
+        OSL_ENSURE( nIteration < 3, "ImpSvMEdit::Resize: isn't this expected to terminate with the second iteration?" );
+
+    } while ( nIteration <= 3 );    // artificial break after four iterations
 
     ImpInitScrollBars();
 }

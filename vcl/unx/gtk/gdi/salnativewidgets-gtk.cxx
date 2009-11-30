@@ -454,6 +454,10 @@ void GtkData::deInitNWF( void )
             gtk_widget_destroy( gWidgetData[i].gMenuWidget );
         if( gWidgetData[i].gTooltipPopup )
             gtk_widget_destroy( gWidgetData[i].gTooltipPopup );
+        delete gWidgetData[i].gCacheTabPages;
+        gWidgetData[i].gCacheTabPages = NULL;
+        delete gWidgetData[i].gCacheTabItems;
+        gWidgetData[i].gCacheTabItems = NULL;
         delete gWidgetData[i].gNWPixmapCacheList;
         gWidgetData[i].gNWPixmapCacheList = NULL;
     }
@@ -3435,10 +3439,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     //  FIXME: need some way of fetching toolbar icon size.
 //  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
 
+    /* #i35482# do not override HC mode per force
     // #i59364# high contrast mode
     bool bHC = ( aStyleSet.GetFaceColor().IsDark() ||
                  aStyleSet.GetWindowColor().IsDark() );
     aStyleSet.SetHighContrastMode( bHC );
+    */
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );

@@ -65,6 +65,7 @@ UnoTreeModel::UnoTreeModel()
     ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
     ImplRegisterProperty( BASEPROPERTY_FILLCOLOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );

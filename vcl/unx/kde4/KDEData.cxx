@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2009 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestHelper.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,26 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.sequenceoutputstream;
 
-import share.LogWriter;
+#include "KDEData.hxx"
 
-public class TestHelper {
-    LogWriter m_aLogWriter;
-    String m_sTestPrefix;
+#include "KDEXLib.hxx"
 
-    /** Creates a new instance of TestHelper */
-    public TestHelper ( LogWriter aLogWriter, String sTestPrefix ) {
-        m_aLogWriter = aLogWriter;
-        m_sTestPrefix = sTestPrefix;
-    }
-
-    public void Error ( String sError ) {
-        m_aLogWriter.println ( m_sTestPrefix + "Error: " + sError );
-    }
-
-    public void Message ( String sMessage ) {
-        m_aLogWriter.println ( m_sTestPrefix + sMessage );
-    }
+KDEData::~KDEData()
+{
 }
 
+void KDEData::Init()
+{
+    pXLib_ = new KDEXLib();
+    pXLib_->Init();
+}
+
+void KDEData::initNWF()
+{
+    ImplSVData *pSVData = ImplGetSVData();
+
+    // draw toolbars on separate lines
+    pSVData->maNWFData.mbDockingAreaSeparateTB = true;
+}
+
+void KDEData::deInitNWF()
+{
+}
