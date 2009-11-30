@@ -46,7 +46,6 @@
 #include <svtools/eitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

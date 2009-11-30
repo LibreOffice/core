@@ -90,7 +90,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <svx/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/ptitem.hxx>
 #include <svx/linkmgr.hxx>
