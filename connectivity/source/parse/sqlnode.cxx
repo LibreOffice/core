@@ -911,6 +911,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
             }
             break;
         default:
+            ;
         }
     }
     return pReturn;
