@@ -59,11 +59,23 @@ namespace vcl
 {
 extern Sequence< OUString > SAL_CALL DisplayAccess_getSupportedServiceNames();
 extern OUString SAL_CALL DisplayAccess_getImplementationName();
-extern Reference< XInterface > SAL_CALL DisplayAccess_createInstance( const Reference< XMultiServiceFactory > &  );
+extern Reference< XInterface > SAL_CALL DisplayAccess_createInstance( const Reference< XMultiServiceFactory > & );
 
 extern Sequence< OUString > SAL_CALL FontIdentificator_getSupportedServiceNames();
 extern OUString SAL_CALL FontIdentificator_getImplementationName();
-extern Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory > &  );
+extern Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory > & );
+
+extern Sequence< OUString > SAL_CALL Clipboard_getSupportedServiceNames();
+extern OUString SAL_CALL Clipboard_getImplementationName();
+extern Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory( const Reference< XMultiServiceFactory > & );
+
+extern Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames();
+extern OUString SAL_CALL DragSource_getImplementationName();
+extern Reference< XInterface > SAL_CALL DragSource_createInstance( const Reference< XMultiServiceFactory > & );
+
+extern Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames();
+extern OUString SAL_CALL DropTarget_getImplementationName();
+extern Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMultiServiceFactory > & );
 }
 
 extern "C" {
@@ -101,6 +113,26 @@ extern "C" {
                 aImplName.appendAscii( "/UNO/SERVICES/" );
                 aImplName.append( vcl::FontIdentificator_getSupportedServiceNames()[0] );
                 xKey->createKey( aImplName.makeStringAndClear() );
+
+                #if defined UNX
+                aImplName.appendAscii( "/" );
+                aImplName.append( vcl::Clipboard_getImplementationName() );
+                aImplName.appendAscii( "/UNO/SERVICES/" );
+                aImplName.append( vcl::Clipboard_getSupportedServiceNames()[0] );
+                xKey->createKey( aImplName.makeStringAndClear() );
+
+                aImplName.appendAscii( "/" );
+                aImplName.append( vcl::DragSource_getImplementationName() );
+                aImplName.appendAscii( "/UNO/SERVICES/" );
+                aImplName.append( vcl::DragSource_getSupportedServiceNames()[0] );
+                xKey->createKey( aImplName.makeStringAndClear() );
+
+                aImplName.appendAscii( "/" );
+                aImplName.append( vcl::DropTarget_getImplementationName() );
+                aImplName.appendAscii( "/UNO/SERVICES/" );
+                aImplName.append( vcl::DropTarget_getSupportedServiceNames()[0] );
+                xKey->createKey( aImplName.makeStringAndClear() );
+                #endif
 
                 return sal_True;
             }
@@ -142,6 +174,22 @@ extern "C" {
                 xFactory = ::cppu::createSingleFactory(
                     xMgr, vcl::FontIdentificator_getImplementationName(), vcl::FontIdentificator_createInstance,
                     vcl::FontIdentificator_getSupportedServiceNames() );
+            }
+            else if( vcl::Clipboard_getImplementationName().equalsAscii( pImplementationName ) )
+            {
+                xFactory = vcl::Clipboard_createFactory( xMgr );
+            }
+            else if( vcl::DragSource_getImplementationName().equalsAscii( pImplementationName ) )
+            {
+                xFactory = ::cppu::createSingleFactory(
+                    xMgr, vcl::DragSource_getImplementationName(), vcl::DragSource_createInstance,
+                    vcl::DragSource_getSupportedServiceNames() );
+            }
+            else if( vcl::DropTarget_getImplementationName().equalsAscii( pImplementationName ) )
+            {
+                xFactory = ::cppu::createSingleFactory(
+                    xMgr, vcl::DropTarget_getImplementationName(), vcl::DropTarget_createInstance,
+                    vcl::DropTarget_getSupportedServiceNames() );
             }
             if( xFactory.is() )
             {

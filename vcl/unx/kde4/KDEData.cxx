@@ -45,6 +45,8 @@ void KDEData::initNWF()
 
     // draw toolbars on separate lines
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
+    // no borders for menu, theming does that
+    pSVData->maNWFData.mbFlatMenu = true;
 }
 
 void KDEData::deInitNWF()

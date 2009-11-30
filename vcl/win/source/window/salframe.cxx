@@ -440,11 +440,11 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->mbFloatWin = TRUE;
 
-        if ( pEnvTransparentFloats && bLayeredAPI == 1 /*&& !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) */)
+        if ( (bLayeredAPI == 1) && (pEnvTransparentFloats /* does not work remote! || (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) */ )  )
             nExSysStyle |= WS_EX_LAYERED;
 
     }
-    if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLTIP )
+    if( (nSalFrameStyle & SAL_FRAME_STYLE_TOOLTIP) || (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
         nExSysStyle |= WS_EX_TOPMOST;
 
     // init frame data
@@ -2930,6 +2930,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetUseFlatBorders( FALSE );
         aStyleSettings.SetUseFlatMenues( FALSE );
         aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
+        aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
         aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
         aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
         aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );

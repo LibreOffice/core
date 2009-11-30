@@ -1920,7 +1920,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
     // calculate the absolute position of the first result glyph in pixel units
     const GOFFSET aGOffset = mpGlyphOffsets[ nStart ];
-    Point aRelativePos( nXOffset + aGOffset.du, aGOffset.dv );
+    Point aRelativePos( nXOffset + aGOffset.du, -aGOffset.dv );
     rPos = GetDrawPosition( aRelativePos );
 
     // fill the result arrays

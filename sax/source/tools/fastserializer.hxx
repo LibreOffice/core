@@ -45,6 +45,7 @@
 #include <stack>
 
 #include "sax/dllapi.h"
+#include "sax/fshelper.hxx"
 
 #define SERIALIZER_IMPLEMENTATION_NAME  "com.sun.star.comp.extensions.xml.sax.FastSerializer"
 #define SERIALIZER_SERVICE_NAME     "com.sun.star.xml.sax.FastSerializer"
@@ -112,23 +113,45 @@ public:
 
     /** Merge 2 topmost marks.
 
-        There are 2 possibilities - prepend the top before the second top-most
-        mark, or append it; prepending brings the possibility to switch parts
-        of the output.
+        There are 3 possibilities - prepend the top before the second top-most
+        mark, append it, or append it later; prepending brings the possibility
+        to switch parts of the output, appending later allows to write some
+        output in advance.
 
         Writes the result to the output stream if the mark stack becomes empty
         by the operation.
 
+        When the MERGE_MARKS_POSTPONE is specified, the merge happens just
+        before the next merge.
+
         @see mark()
      */
-    void mergeTopMarks( bool bPrepend = false );
+    void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > mxOutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
     typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
-    ::std::stack< Int8Sequence > maMarkStack;
+    class ForMerge
+    {
+        Int8Sequence maData;
+        Int8Sequence maPostponed;
+
+    public:
+        ForMerge() : maData(), maPostponed() {}
+
+        Int8Sequence& getData();
+
+        void prepend( const Int8Sequence &rWhat );
+        void append( const Int8Sequence &rWhat );
+        void postpone( const Int8Sequence &rWhat );
+
+    private:
+        static void merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend );
+    };
+
+    ::std::stack< ForMerge > maMarkStack;
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
     void write( const ::rtl::OUString& s );
@@ -144,4 +167,3 @@ protected:
 } // namespace sax_fastparser
 
 #endif
-

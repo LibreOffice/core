@@ -3291,11 +3291,37 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aBackColor = getColor( pMenubarStyle->bg[GTK_STATE_NORMAL] );
     aStyleSet.SetMenuBarColor( aBackColor );
     aBackColor = getColor( pMenuStyle->bg[GTK_STATE_NORMAL] );
-    aTextColor = getColor( pMenuTextStyle->fg[GTK_STATE_NORMAL] );
-    if( aBackColor == aTextColor )
-        aTextColor = (aBackColor.GetLuminance() < 128) ? Color( COL_WHITE ) : Color( COL_BLACK );
+    aTextColor = getColor( pMenuTextStyle->text[GTK_STATE_NORMAL] );
     aStyleSet.SetMenuColor( aBackColor );
     aStyleSet.SetMenuTextColor( aTextColor );
+
+    aTextColor = getColor( pMenubarStyle->text[GTK_STATE_NORMAL] );
+    aStyleSet.SetMenuBarTextColor( aTextColor );
+
+#if OSL_DEBUG_LEVEL > 1
+    std::fprintf( stderr, "==\n" );
+    std::fprintf( stderr, "MenuColor = %x (%d)\n", (int)aStyleSet.GetMenuColor().GetColor(), aStyleSet.GetMenuColor().GetLuminance() );
+    std::fprintf( stderr, "MenuTextColor = %x (%d)\n", (int)aStyleSet.GetMenuTextColor().GetColor(), aStyleSet.GetMenuTextColor().GetLuminance() );
+    std::fprintf( stderr, "MenuBarColor = %x (%d)\n", (int)aStyleSet.GetMenuBarColor().GetColor(), aStyleSet.GetMenuBarColor().GetLuminance() );
+    std::fprintf( stderr, "MenuBarTextColor = %x (%d)\n", (int)aStyleSet.GetMenuBarTextColor().GetColor(), aStyleSet.GetMenuBarTextColor().GetLuminance() );
+    std::fprintf( stderr, "LightColor = %x (%d)\n", (int)aStyleSet.GetLightColor().GetColor(), aStyleSet.GetLightColor().GetLuminance() );
+    std::fprintf( stderr, "ShadowColor = %x (%d)\n", (int)aStyleSet.GetShadowColor().GetColor(), aStyleSet.GetShadowColor().GetLuminance() );
+#endif
+
+    // Awful hack for menu separators in the Sonar and similar themes.
+    // If the menu color is not too dark, and the menu text color is lighter,
+    // make the "light" color lighter than the menu color and the "shadow"
+    // color darker than it.
+    if ( aStyleSet.GetMenuColor().GetLuminance() >= 32 &&
+     aStyleSet.GetMenuColor().GetLuminance() <= aStyleSet.GetMenuTextColor().GetLuminance() )
+    {
+      Color temp = aStyleSet.GetMenuColor();
+      temp.IncreaseLuminance( 8 );
+      aStyleSet.SetLightColor( temp );
+      temp = aStyleSet.GetMenuColor();
+      temp.DecreaseLuminance( 16 );
+      aStyleSet.SetShadowColor( temp );
+    }
 
     aHighlightColor = getColor( pMenuItemStyle->bg[ GTK_STATE_SELECTED ] );
     aHighlightTextColor = getColor( pMenuTextStyle->fg[ GTK_STATE_PRELIGHT ] );
@@ -3438,13 +3464,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     //  FIXME: need some way of fetching toolbar icon size.
 //  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
-
-    /* #i35482# do not override HC mode per force
-    // #i59364# high contrast mode
-    bool bHC = ( aStyleSet.GetFaceColor().IsDark() ||
-                 aStyleSet.GetWindowColor().IsDark() );
-    aStyleSet.SetHighContrastMode( bHC );
-    */
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: sft.h,v $
- * $Revision: 1.21 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,11 +25,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.21 2008-06-25 14:20:49 kz Exp $ */
-
 /**
-
- *
  * @file sft.h
  * @brief Sun Font Tools
  * @author Alexander Gelfenbain
@@ -245,8 +238,12 @@ namespace vcl
         sal_uInt32 ur3;               /**< bits 64 - 95 of Unicode Range flags                     */
         sal_uInt32 ur4;               /**< bits 96 - 127 of Unicode Range flags                    */
         sal_uInt8   panose[10];        /**< PANOSE classification number                            */
-        sal_uInt16 typeFlags;         /**< type flags (copyright information)                      */
+        sal_uInt32 typeFlags;         /**< type flags (copyright bits + PS-OpenType flag)       */
     } TTGlobalFontInfo;
+
+#define TYPEFLAG_INVALID        0x8000000
+#define TYPEFLAG_COPYRIGHT_MASK 0x000000E
+#define TYPEFLAG_PS_OPENTYPE    0x0010000
 
 /** Structure used by KernGlyphs()      */
     typedef struct {
@@ -569,6 +566,12 @@ namespace vcl
  */
  int GetTTGlyphCount( TrueTypeFont* ttf );
 
+/**
+ * provide access to the raw data of a SFNT-container's subtable
+ */
+ bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
+     const sal_uInt8** ppRawBytes, int* pRawLength );
+
 /*- private definitions */ /*FOLD00*/
 
     struct _TrueTypeFont {
@@ -590,14 +593,14 @@ namespace vcl
         sal_uInt32  unitsPerEm;
         sal_uInt32  numberOfHMetrics;
         sal_uInt32  numOfLongVerMetrics;                   /* if this number is not 0, font has vertical metrics information */
-        sal_uInt8   *cmap;
+        const sal_uInt8* cmap;
         int         cmapType;
         sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32); /* character to glyphID translation function                          */
-        sal_uInt8   **tables;                              /* array of pointers to raw subtables in SFNT file                    */
+        const sal_uInt8   **tables;                        /* array of pointers to raw subtables in SFNT file                    */
         sal_uInt32  *tlens;                                /* array of table lengths                                             */
         int         kerntype;                              /* Defined in the KernType enum                                       */
         sal_uInt32  nkern;                                 /* number of kern subtables                                           */
-        sal_uInt8   **kerntables;                          /* array of pointers to kern subtables                                */
+        const sal_uInt8** kerntables;                      /* array of pointers to kern subtables                                */
         void        *pGSubstitution;                       /* info provided by GSUB for UseGSUB()                                */
     };
 
@@ -619,7 +622,8 @@ namespace vcl
 #define O_prep 14    /* 'prep' - only used in TT->TT generation */
 #define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
 #define O_gsub 16    /* 'GSUB' */
-#define NUM_TAGS 17
+#define O_CFF  17    /* 'CFF' */
+#define NUM_TAGS 18
 
 } // namespace vcl
 

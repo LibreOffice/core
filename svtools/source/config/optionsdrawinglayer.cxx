@@ -92,6 +92,11 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_QUADRATIC3DRENDERLIMIT              1000000
 #define DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT     45000
 
+// #i97672# selection settings
+#define DEFAULT_TRANSPARENTSELECTION                sal_True
+#define DEFAULT_TRANSPARENTSELECTIONPERCENT         75
+#define DEFAULT_SELECTIONMAXIMUMLUMINANCEPERCENT    70
+
 #define PROPERTYNAME_OVERLAYBUFFER      OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer"    ))
 #define PROPERTYNAME_PAINTBUFFER        OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer"      ))
 #define PROPERTYNAME_STRIPE_COLOR_A     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorA"     ))
@@ -124,6 +129,11 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_RENDERSIMPLETEXTDIRECT OUString(RTL_CONSTASCII_USTRINGPARAM("RenderSimpleTextDirect"))
 #define PROPERTYNAME_QUADRATIC3DRENDERLIMIT OUString(RTL_CONSTASCII_USTRINGPARAM("Quadratic3DRenderLimit"))
 #define PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT OUString(RTL_CONSTASCII_USTRINGPARAM("QuadraticFormControlRenderLimit"))
+
+// #i97672# selection settings
+#define PROPERTYNAME_TRANSPARENTSELECTION OUString(RTL_CONSTASCII_USTRINGPARAM("TransparentSelection"))
+#define PROPERTYNAME_TRANSPARENTSELECTIONPERCENT OUString(RTL_CONSTASCII_USTRINGPARAM("TransparentSelectionPercent"))
+#define PROPERTYNAME_SELECTIONMAXIMUMLUMINANCEPERCENT OUString(RTL_CONSTASCII_USTRINGPARAM("SelectionMaximumLuminancePercent"))
 
 #define PROPERTYHANDLE_OVERLAYBUFFER                0
 #define PROPERTYHANDLE_PAINTBUFFER                  1
@@ -158,7 +168,12 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT           22
 #define PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT  23
 
-#define PROPERTYCOUNT                               24
+// #i97672# selection settings
+#define PROPERTYHANDLE_TRANSPARENTSELECTION             24
+#define PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT      25
+#define PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT 26
+
+#define PROPERTYCOUNT                               27
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -248,6 +263,15 @@ public:
     void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
     void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
 
+    // #i97672# selection settings
+    sal_Bool    IsTransparentSelection() const;
+    sal_uInt16  GetTransparentSelectionPercent() const;
+    sal_uInt16  GetSelectionMaximumLuminancePercent() const;
+
+    void        SetTransparentSelection( sal_Bool bState );
+    void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
+    void        SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent );
+
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
 //-------------------------------------------------------------------------------------------------------------
@@ -295,6 +319,11 @@ private:
         sal_uInt32  m_nQuadratic3DRenderLimit;
         sal_uInt32  m_nQuadraticFormControlRenderLimit;
 
+        // #i97672# selection settings
+        sal_uInt16  m_nTransparentSelectionPercent;
+        sal_uInt16  m_nSelectionMaximumLuminancePercent;
+        sal_Bool    m_bTransparentSelection;
+
         // local values
         bool        m_bAllowAA : 1;
         bool        m_bAllowAAChecked : 1;
@@ -341,6 +370,11 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     m_bRenderSimpleTextDirect(DEFAULT_RENDERSIMPLETEXTDIRECT),
     m_nQuadratic3DRenderLimit(DEFAULT_QUADRATIC3DRENDERLIMIT),
     m_nQuadraticFormControlRenderLimit(DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT),
+
+    // #i97672# selection settings
+    m_nTransparentSelectionPercent(DEFAULT_TRANSPARENTSELECTIONPERCENT),
+    m_nSelectionMaximumLuminancePercent(DEFAULT_SELECTIONMAXIMUMLUMINANCEPERCENT),
+    m_bTransparentSelection(DEFAULT_TRANSPARENTSELECTION),
 
     // local values
     m_bAllowAA(true),
@@ -537,6 +571,27 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
                 seqValues[nProperty] >>= m_nQuadraticFormControlRenderLimit;
             }
             break;
+
+            // #i97672# selection settings
+            case PROPERTYHANDLE_TRANSPARENTSELECTION:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\TransparentSelection\"?" );
+                seqValues[nProperty] >>= m_bTransparentSelection;
+            }
+            break;
+
+            case PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\TransparentSelectionPercent\"?" );
+                seqValues[nProperty] >>= m_nTransparentSelectionPercent;
+            }
+
+            case PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\SelectionMaximumLuminancePercent\"?" );
+                seqValues[nProperty] >>= m_nSelectionMaximumLuminancePercent;
+            }
+            break;
         }
     }
 }
@@ -660,6 +715,19 @@ void SvtOptionsDrawinglayer_Impl::Commit()
 
             case PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT:
                 aSeqValues[nProperty] <<= m_nQuadraticFormControlRenderLimit;
+            break;
+
+            // #i97672# selection settings
+            case PROPERTYHANDLE_TRANSPARENTSELECTION:
+                aSeqValues[nProperty] <<= m_bTransparentSelection;
+            break;
+
+            case PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT:
+                aSeqValues[nProperty] <<= m_nTransparentSelectionPercent;
+            break;
+
+            case PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT:
+                aSeqValues[nProperty] <<= m_nSelectionMaximumLuminancePercent;
             break;
         }
     }
@@ -1065,6 +1133,49 @@ void SvtOptionsDrawinglayer_Impl::SetQuadraticFormControlRenderLimit(sal_uInt32 
     }
 }
 
+// #i97672# selection settings
+sal_Bool SvtOptionsDrawinglayer_Impl::IsTransparentSelection() const
+{
+    return m_bTransparentSelection;
+}
+
+void SvtOptionsDrawinglayer_Impl::SetTransparentSelection( sal_Bool bState )
+{
+    if(m_bTransparentSelection != bState)
+    {
+        m_bTransparentSelection = bState;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetTransparentSelectionPercent( sal_uInt16 nPercent )
+{
+    if(m_nTransparentSelectionPercent != nPercent)
+    {
+        m_nTransparentSelectionPercent = nPercent;
+        SetModified();
+    }
+}
+
+sal_uInt16 SvtOptionsDrawinglayer_Impl::GetTransparentSelectionPercent() const
+{
+    return m_nTransparentSelectionPercent;
+}
+
+void SvtOptionsDrawinglayer_Impl::SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent )
+{
+    if(m_nSelectionMaximumLuminancePercent != nPercent)
+    {
+        m_nSelectionMaximumLuminancePercent = nPercent;
+        SetModified();
+    }
+}
+
+sal_uInt16 SvtOptionsDrawinglayer_Impl::GetSelectionMaximumLuminancePercent() const
+{
+    return m_nSelectionMaximumLuminancePercent;
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
@@ -1104,7 +1215,12 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
         PROPERTYNAME_RENDERDECORATEDTEXTDIRECT,
         PROPERTYNAME_RENDERSIMPLETEXTDIRECT,
         PROPERTYNAME_QUADRATIC3DRENDERLIMIT,
-        PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT
+        PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT,
+
+        // #i97672# selection settings
+        PROPERTYNAME_TRANSPARENTSELECTION,
+        PROPERTYNAME_TRANSPARENTSELECTIONPERCENT,
+        PROPERTYNAME_SELECTIONMAXIMUMLUMINANCEPERCENT
     };
 
     // Initialize return sequence with these list ...
@@ -1484,6 +1600,83 @@ void SvtOptionsDrawinglayer::SetQuadraticFormControlRenderLimit(sal_uInt32 nNew)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetQuadraticFormControlRenderLimit( nNew );
+}
+
+// #i97672# selection settings
+sal_Bool SvtOptionsDrawinglayer::IsTransparentSelection() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsTransparentSelection();
+}
+
+void SvtOptionsDrawinglayer::SetTransparentSelection( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetTransparentSelection( bState );
+}
+
+sal_uInt16 SvtOptionsDrawinglayer::GetTransparentSelectionPercent() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    sal_uInt16 aRetval(m_pDataContainer->GetTransparentSelectionPercent());
+
+    // crop to range [10% .. 90%]
+    if(aRetval < 10)
+    {
+        aRetval = 10;
+    }
+
+    if(aRetval > 90)
+    {
+        aRetval = 90;
+    }
+
+    return aRetval;
+}
+
+void SvtOptionsDrawinglayer::SetTransparentSelectionPercent( sal_uInt16 nPercent )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+
+    // crop to range [10% .. 90%]
+    if(nPercent < 10)
+    {
+        nPercent = 10;
+    }
+
+    if(nPercent > 90)
+    {
+        nPercent = 90;
+    }
+
+    m_pDataContainer->SetTransparentSelectionPercent( nPercent );
+}
+
+sal_uInt16 SvtOptionsDrawinglayer::GetSelectionMaximumLuminancePercent() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    sal_uInt16 aRetval(m_pDataContainer->GetSelectionMaximumLuminancePercent());
+
+    // crop to range [0% .. 100%]
+    if(aRetval > 90)
+    {
+        aRetval = 90;
+    }
+
+    return aRetval;
+}
+
+void SvtOptionsDrawinglayer::SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+
+    // crop to range [0% .. 100%]
+    if(nPercent > 90)
+    {
+        nPercent = 90;
+    }
+
+    m_pDataContainer->SetSelectionMaximumLuminancePercent( nPercent );
 }
 
 //*****************************************************************************************************************

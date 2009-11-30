@@ -214,16 +214,26 @@ bool AquaSalBitmap::CreateContext()
     {
         // convert user data to 32 bit
         nContextBytesPerRow = mnWidth << 2;
-        maContextBuffer.reset( new sal_uInt8[ mnHeight * nContextBytesPerRow ] );
+        try
+        {
+            maContextBuffer.reset( new sal_uInt8[ mnHeight * nContextBytesPerRow ] );
 
-        if( !bSkipConversion )
-            ConvertBitmapData( mnWidth, mnHeight,
-                           32, nContextBytesPerRow, maPalette, maContextBuffer.get(),
-                           mnBits, mnBytesPerRow, maPalette, maUserBuffer.get() );
+            if( !bSkipConversion )
+                ConvertBitmapData( mnWidth, mnHeight,
+                               32, nContextBytesPerRow, maPalette, maContextBuffer.get(),
+                               mnBits, mnBytesPerRow, maPalette, maUserBuffer.get() );
+        }
+        catch( std::bad_alloc )
+        {
+            mxGraphicContext = 0;
+        }
     }
 
-    mxGraphicContext = ::CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight,
-        bitsPerComponent, nContextBytesPerRow, aCGColorSpace, aCGBmpInfo );
+    if( maContextBuffer.get() )
+    {
+        mxGraphicContext = ::CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight,
+            bitsPerComponent, nContextBytesPerRow, aCGColorSpace, aCGBmpInfo );
+    }
 
     if( !mxGraphicContext )
         maContextBuffer.reset();

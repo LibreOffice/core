@@ -206,7 +206,7 @@ public:
     BOOL                IsSwapOut() const;
 
     void                SetLink( const GfxLink& );
-    GfxLink             GetLink();
+    GfxLink             GetLink() const;
     BOOL                IsLink() const;
 
     BOOL                ExportNative( SvStream& rOStream ) const;

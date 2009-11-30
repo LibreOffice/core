@@ -114,6 +114,12 @@ namespace css = ::com::sun::star;
 /*-----------------------------------------------
     10.03.2004 07:35
 -----------------------------------------------*/
+const ::rtl::OUString& MediaDescriptor::PROP_ABORTED()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Aborted"));
+    return sProp;
+}
+
 const ::rtl::OUString& MediaDescriptor::PROP_ASTEMPLATE()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
@@ -123,6 +129,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_ASTEMPLATE()
 const ::rtl::OUString& MediaDescriptor::PROP_CHARACTERSET()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("CharacterSet"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_COMPONENTDATA()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("ComponentData"));
     return sProp;
 }
 

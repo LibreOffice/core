@@ -48,6 +48,9 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
+#include <com/sun/star/awt/grid/XGridDataModel.hpp>
+#include <com/sun/star/awt/grid/XGridColumnModel.hpp>
+#include <com/sun/star/awt/grid/ScrollBarMode.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -252,7 +255,6 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "ValueStep",              VALUESTEP_DOUBLE,       double,         BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "VerticalAlign",          VERTICALALIGN,          VerticalAlignment, BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_DEP_PROP_3 ( "VisibleSize",            VISIBLESIZE,            sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
-
             DECL_PROP_2     ( "Activated",              ACTIVATED,              sal_Bool,       BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Complete",               COMPLETE,               sal_Bool,       BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "CurrentItemID",          CURRENTITEMID,          sal_Int16,      BOUND, MAYBEDEFAULT ),
@@ -273,6 +275,11 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "URL",                    URL,                    ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "WritingMode",            WRITING_MODE,           sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ContextWritingMode",     CONTEXT_WRITING_MODE,   sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT ),
+            DECL_PROP_2     ( "ShowRowHeader",          GRID_SHOWROWHEADER,   sal_Bool,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ShowColumnHeader",       GRID_SHOWCOLUMNHEADER,   sal_Bool,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "GridDataModel",      GRID_DATAMODEL,   Reference< ::com::sun::star::awt::grid::XGridDataModel >,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "ColumnModel",        GRID_COLUMNMODEL,   Reference< ::com::sun::star::awt::grid::XGridColumnModel >,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "SelectionModel",     GRID_SELECTIONMODE,   ::com::sun::star::view::SelectionType,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "EnableVisible",          ENABLEVISIBLE,          sal_Bool,           BOUND, MAYBEDEFAULT )
             };
             pPropertyInfos = aImplPropertyInfos;

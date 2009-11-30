@@ -43,7 +43,8 @@ DLLPRE=
 # --- Files -------------------------------------
 
 SLOFILES=	\
-    $(SLO)$/passwordcontainer.obj
+    $(SLO)$/passwordcontainer.obj\
+    $(SLO)$/syscreds.obj
 
 SHL1TARGET=	$(TARGET)
 SHL1IMPLIB=	i$(TARGET)

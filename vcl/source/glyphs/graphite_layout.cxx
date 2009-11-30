@@ -54,7 +54,7 @@
 #include <deque>
 
 // Platform
-#ifdef MSC
+#ifdef WNT
 #include <tools/svwin.h>
 #include <svsys.h>
 #endif
@@ -86,7 +86,7 @@
 FILE * grLogFile = NULL;
 FILE * grLog()
 {
-#ifdef MSC
+#ifdef WNT
     std::string logFileName(getenv("TEMP"));
     logFileName.append("\\graphitelayout.log");
     if (grLogFile == NULL) grLogFile = fopen(logFileName.c_str(),"w");
@@ -135,7 +135,7 @@ namespace
         UErrorCode status = U_ZERO_ERROR;
         UBiDi *ubidi = ubidi_openSized(charCount, 0, &status);
         int limit = 0;
-        ubidi_setPara(ubidi, buffer, charCount,
+        ubidi_setPara(ubidi, reinterpret_cast<const UChar *>(buffer), charCount,
             (rtl)?UBIDI_DEFAULT_RTL:UBIDI_DEFAULT_LTR, NULL, &status);
         UBiDiLevel level = 0;
         ubidi_getLogicalRun(ubidi, 0, &limit, &level);

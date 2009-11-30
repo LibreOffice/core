@@ -199,7 +199,7 @@ void PrinterGfx::drawGlyphs(
 
 void PrinterGfx::DrawGlyphs(
                             const Point& rPoint,
-                            sal_uInt32* pGlyphIds,
+                            sal_GlyphId* pGlyphIds,
                             sal_Unicode* pUnicodes,
                             sal_Int16 nLen,
                             sal_Int32* pDeltaArray
@@ -256,8 +256,8 @@ void PrinterGfx::DrawGlyphs(
 
         for( sal_Int16 i = 0; i < nLen; i++ )
         {
-            sal_Int32 nRot = ((pGlyphIds[i] >> 24) & 3);
-            if( nRot == 0 )
+            const sal_GlyphId nRot = pGlyphIds[i] & GF_ROTMASK;
+            if( nRot == GF_NONE )
             {
                 pTempUnicodes[nTempLen] = pUnicodes[i];
                 pTempGlyphIds[nTempLen] = pGlyphIds[i];
@@ -282,20 +282,20 @@ void PrinterGfx::DrawGlyphs(
                 sal_Int32 nRotAngle = 0;
                 switch( nRot )
                 {
-                    case 3:
+                    case GF_ROTR:
                         nRotAngle = 2700;
                         aRotPoint = Point( -nAscend*nTextWidth/nTextHeight, -nDescend*nTextWidth/nTextHeight - nOffset );
                         break;
-                    case 2:
+                    case GF_VERT:
                         nRotAngle = 1800;
                         aRotPoint = Point( -nOffset, (nAscend+nDescend) );
                         break;
-                    case 1:
+                    case GF_ROTL:
                         nRotAngle = 900;
                         aRotPoint = Point( -nDescend*nTextWidth/nTextHeight, nOffset + nAscend*nTextWidth/nTextHeight );
                         break;
                 }
-                sal_uInt32 nRotGlyphId      = pGlyphIds[i];
+                sal_GlyphId nRotGlyphId     = pGlyphIds[i];
                 sal_Unicode nRotUnicode     = pUnicodes[i];
                 sal_Int32 nRotDelta         = 0;
 

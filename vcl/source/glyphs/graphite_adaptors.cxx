@@ -47,7 +47,7 @@
 #include <rtl/ustring.hxx>
 #include <i18npool/mslangid.hxx>
 // Platform
-#ifndef MSC
+#ifndef WNT
 #include <saldisp.hxx>
 
 #include <vcl/salgdi.hxx>

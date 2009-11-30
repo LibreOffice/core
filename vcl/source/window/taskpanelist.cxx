@@ -197,18 +197,21 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 {
 
     // F6 cycles through everything and works always
-    // Ctrl-TAB cycles through Menubar, Toolbars and Floatingwindows only and is
-    // only active if one of those items has the focus
-    BOOL bF6 = FALSE;
+
+    // MAV, #i104204#
+    // The old design was the following one:
+    // < Ctrl-TAB cycles through Menubar, Toolbars and Floatingwindows only and is
+    // < only active if one of those items has the focus
+    //
+    // Since the design of Ctrl-Tab looks to be inconsistent ( non-modal dialogs are not reachable
+    // and the shortcut conflicts with tab-control shortcut ), it is no more supported
     BOOL bSplitterOnly = FALSE;
     BOOL bFocusInList = FALSE;
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     BOOL bForward = !aKeyCode.IsShift();
-    if( ( (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && aKeyCode.GetCode() == KEY_TAB )  // Ctrl-TAB or Alt-TAB
-        || ( bF6 = ( aKeyCode.GetCode()) == KEY_F6 ) != FALSE    // F6
-        )
+    if( aKeyCode.GetCode() == KEY_F6 ) // F6
     {
-        bSplitterOnly = bF6 && aKeyCode.IsMod1() && aKeyCode.IsShift();
+        bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 
         // is the focus in the list ?
         ::std::vector< Window* >::iterator p = mTaskPanes.begin();
@@ -219,12 +222,8 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
             {
                 bFocusInList = TRUE;
 
-                // Ctrl-TAB does not work in Dialogs
-                if( !bF6 && pWin->IsDialog() )
-                    return FALSE;
-
                 // Ctrl-F6 goes directly to the document
-                if( !pWin->IsDialog() && bF6 && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
+                if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
                 {
                     pWin->GrabFocusToDocument();
                     return TRUE;
@@ -236,7 +235,8 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 if( bSplitterOnly )
                     pNextWin = FindNextSplitter( *p, TRUE );
                 else
-                    pNextWin = bF6 ?  FindNextFloat( *p, bForward ) : FindNextPane( *p, bForward );
+                    pNextWin = FindNextFloat( *p, bForward );
+
                 if( pNextWin != pWin )
                 {
                     ImplGetSVData()->maWinData.mbNoSaveFocus = TRUE;
@@ -261,7 +261,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         }
 
         // the focus is not in the list: activate first float if F6 was pressed
-        if( !bFocusInList && bF6 )
+        if( !bFocusInList )
         {
             Window *pWin;
             if( bSplitterOnly )

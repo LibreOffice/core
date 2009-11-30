@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontcache.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +49,7 @@
 #endif
 
 #define FONTCACHEFILE "/user/psprint/pspfontcache"
-#define CACHE_MAGIC "PspFontCacheFile format 3"
+#define CACHE_MAGIC "PspFontCacheFile format 4"
 
 using namespace std;
 using namespace rtl;

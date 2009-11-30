@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: gcach_ftyp.hxx,v $
- * $Revision: 1.41 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -208,7 +205,7 @@ protected:
 
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
-    virtual ULONG               GetFontCodeRanges( sal_uInt32* pCodes ) const;
+    virtual bool                GetFontCodeRanges( CmapResult& ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
     virtual ServerFontLayoutEngine* GetLayoutEngine();
 

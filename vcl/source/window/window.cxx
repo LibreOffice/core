@@ -292,6 +292,13 @@ bool Window::ImplCheckUIFont( const Font& rFont )
 
 void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 {
+    // reset high contrast to false, so the system can either update it
+    // or AutoDetectSystemHC can kick in (see below)
+    StyleSettings aTmpSt( rSettings.GetStyleSettings() );
+    aTmpSt.SetHighContrastMode( FALSE );
+    rSettings.SetStyleSettings( aTmpSt );
+    ImplGetFrame()->UpdateSettings( rSettings );
+
     // Verify availability of the configured UI font, otherwise choose "Andale Sans UI"
     String aUserInterfaceFont;
     bool bUseSystemFont = rSettings.GetStyleSettings().GetUseSystemUIFonts();
@@ -472,7 +479,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     rSettings.SetStyleSettings( aStyleSettings );
 
 
-    // #104427# auto detect HC mode ?
+    // auto detect HC mode; if the system already set it to "yes"
+    // (see above) then accept that
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
     {
         sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
@@ -728,7 +736,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nBorderTypeStyle |= BORDERWINDOW_STYLE_FRAME;
             nStyle |= WB_BORDER;
         }
-        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL), nBorderTypeStyle );
+        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
         ((Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -783,6 +791,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nFrameStyle = SAL_FRAME_STYLE_FLOAT;
             if( nStyle & WB_OWNERDRAWDECORATION )
                 nFrameStyle |= (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_NOSHADOW);
+            if( nStyle & WB_NEEDSFOCUS )
+                nFrameStyle |= SAL_FRAME_STYLE_FLOAT_FOCUSABLE;
         }
         else if( mpWindowImpl->mbFloatWin )
             nFrameStyle |= SAL_FRAME_STYLE_TOOLWINDOW;
@@ -923,7 +933,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
              ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN))
              )
         {
-            mpWindowImpl->mpFrame->UpdateSettings( *pSVData->maAppData.mpSettings );
+            // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
             ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
             OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
             pSVData->maAppData.mbSettingsInit = TRUE;

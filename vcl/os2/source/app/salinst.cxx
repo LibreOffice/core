@@ -811,6 +811,10 @@ void* Os2SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     return (void*) "";
 }
 
+void Os2SalInstance::AddToRecentDocumentList(const rtl::OUString& /*rFileUrl*/, const rtl::OUString& /*rMimeType*/)
+{
+}
+
 // -----------------------------------------------------------------------
 
 SalTimer* Os2SalInstance::CreateSalTimer()

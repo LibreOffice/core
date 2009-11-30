@@ -48,6 +48,7 @@
 #include <saldisp.hxx>
 #include <salframe.h>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <salinst.h>
 
 #include <osl/conditn.h>
@@ -187,6 +188,7 @@ bool SessionManagerClient::bDocSaveDone = false;
 static SmProp*  pSmProps = NULL;
 static SmProp** ppSmProps = NULL;
 static int      nSmProps = 0;
+static unsigned char   *pSmRestartHint = NULL;
 
 
 static void BuildSmPropertyList()
@@ -195,7 +197,7 @@ static void BuildSmPropertyList()
     {
         ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
 
-        nSmProps = 4;
+        nSmProps = 5;
         pSmProps = new SmProp[ nSmProps ];
 
         pSmProps[ 0 ].name      = const_cast<char*>(SmCloneCommand);
@@ -243,6 +245,15 @@ static void BuildSmPropertyList()
         pSmProps[ 3 ].vals->value   = strdup( aUser.getStr() );
         pSmProps[ 3 ].vals->length  = strlen( (char *)pSmProps[ 3 ].vals->value )+1;
 
+        pSmProps[ 4 ].name      = const_cast<char*>(SmRestartStyleHint);
+        pSmProps[ 4 ].type      = const_cast<char*>(SmCARD8);
+        pSmProps[ 4 ].num_vals  = 1;
+        pSmProps[ 4 ].vals      = new SmPropValue;
+        pSmProps[ 4 ].vals->value   = malloc(1);
+        pSmRestartHint = (unsigned char *)pSmProps[ 4 ].vals->value;
+        *pSmRestartHint = SmRestartIfRunning;
+        pSmProps[ 4 ].vals->length  = 1;
+
         ppSmProps = new SmProp*[ nSmProps ];
         for( int i = 0; i < nSmProps; i++ )
             ppSmProps[ i ] = &pSmProps[i];
@@ -257,6 +268,31 @@ bool SessionManagerClient::checkDocumentsSaved()
 IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, EMPTYARG )
 {
     SMprintf( "posting save documents event shutdown = %s\n", (pThis!=0) ? "true" : "false" );
+
+    static bool bFirstShutdown=true;
+    if (pThis != 0 && bFirstShutdown) //first shutdown request
+    {
+        bFirstShutdown = false;
+        /*
+          If we have no actual frames open, e.g. we launched a quickstarter,
+          and then shutdown all our frames leaving just a quickstarter running,
+          then we don't want to launch an empty toplevel frame on the next
+          start. (The job of scheduling the restart of the quick-starter is a
+          task of the quick-starter)
+        */
+        *pSmRestartHint = SmRestartNever;
+        const std::list< SalFrame* >& rFrames = GetX11SalData()->GetDisplay()->getFrames();
+        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+        {
+            Window *pWindow = (*it)->GetWindow();
+            if (pWindow && pWindow->IsVisible())
+            {
+                *pSmRestartHint = SmRestartIfRunning;
+                break;
+            }
+        }
+    }
+
     if( pOneInstance )
     {
         SalSessionSaveRequestEvent aEvent( pThis != 0, false );
@@ -385,7 +421,7 @@ void SessionManagerClient::saveDone()
         ICEConnectionObserver::lock();
         SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
         SmcSaveYourselfDone( aSmcConnection, True );
-        SMprintf( "sent SaveYourselfDone\n" );
+        SMprintf( "sent SaveYourselfDone SmRestartHint of %d\n", *pSmRestartHint );
         bDocSaveDone = true;
         ICEConnectionObserver::unlock();
     }

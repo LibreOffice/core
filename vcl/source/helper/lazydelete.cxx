@@ -84,6 +84,9 @@ template<> bool LazyDeletor<Menu>::is_less( Menu* left, Menu* right )
 
 DeleteOnDeinitBase::~DeleteOnDeinitBase()
 {
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData && pSVData->mpDeinitDeleteList != NULL )
+        pSVData->mpDeinitDeleteList->remove( this );
 }
 
 void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )

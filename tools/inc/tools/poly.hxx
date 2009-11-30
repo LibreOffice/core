@@ -260,7 +260,6 @@ private:
     ImplPolyPolygon*    mpImplPolyPolygon;
 
 //#if 0 // _SOLAR__PRIVATE
-    TOOLS_DLLPRIVATE void *ImplCreateGPCPolygon() const;
     TOOLS_DLLPRIVATE void  ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const;
     TOOLS_DLLPRIVATE void *ImplCreateArtVpath() const;
     TOOLS_DLLPRIVATE void  ImplSetFromArtVpath( void *pVpath );

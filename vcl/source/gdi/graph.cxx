@@ -775,7 +775,7 @@ void Graphic::SetLink( const GfxLink& rGfxLink )
 
 // ------------------------------------------------------------------------
 
-GfxLink Graphic::GetLink()
+GfxLink Graphic::GetLink() const
 {
     return mpImpGraphic->ImplGetLink();
 }

@@ -87,9 +87,9 @@ public:
 private:
     WordBreakCache cache[CACHE_MAX];
 
-    sal_Bool        seekSegment(const sal_Unicode *text, sal_Int32 pos, sal_Int32 len, Boundary& boundary);
+    sal_Bool        seekSegment(const rtl::OUString& rText, sal_Int32 pos, Boundary& boundary);
     WordBreakCache& getCache(const sal_Unicode *text, Boundary& boundary);
-    sal_Bool        exists(const sal_Unicode u);
+    sal_Bool        exists(const sal_uInt32 u);
     sal_Int32       getLongestMatch(const sal_Unicode *text, sal_Int32 len);
 };
 

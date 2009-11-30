@@ -737,9 +737,8 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes(
                 break;
             }
         }
-        NativeNumberXmlAttributes att(rLocale, OUString(&NumberChar[number][1], 1),
+        return NativeNumberXmlAttributes(rLocale, OUString(&NumberChar[number][1], 1),
                                             OUString::createFromAscii(attType[type]));
-        return att;
 }
 
 static sal_Bool natNumIn(sal_Int16 num, sal_Int16 natnum[], sal_Int16 len)

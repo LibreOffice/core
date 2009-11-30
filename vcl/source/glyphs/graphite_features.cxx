@@ -38,7 +38,7 @@
 
 #include <sal/types.h>
 
-#ifdef MSC
+#ifdef WNT
 #include <tools/svwin.h>
 #include <svsys.h>
 #endif

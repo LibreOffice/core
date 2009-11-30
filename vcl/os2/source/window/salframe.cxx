@@ -2172,6 +2172,7 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetDeactiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVEBORDER, 0 ) ) );
         aStyleSettings.SetMenuColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENU, 0 ) ) );
         aStyleSettings.SetMenuTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
+        aStyleSettings.SetMenuBarTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
     }
     aStyleSettings.SetDialogTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetRadioCheckTextColor( aStyleSettings.GetButtonTextColor() );
