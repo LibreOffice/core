@@ -434,7 +434,7 @@
             <value xml:lang="en-US">Previous slide, or previous effect</value>
           </prop>
         </node>
-        <node oor:name="c_Separator" oor:op="replace">
+        <node oor:name="c" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US"> </value>
           </prop>
@@ -458,7 +458,7 @@
             <value xml:lang="en-US">Last slide</value>
           </prop>
         </node>
-        <node oor:name="f_Separator" oor:op="replace">
+        <node oor:name="f" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US"> </value>
           </prop>
@@ -482,7 +482,7 @@
             <value xml:lang="en-US">Next slide without effects</value>
           </prop>
         </node>
-        <node oor:name="i_Separator" oor:op="replace">
+        <node oor:name="i" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US"> </value>
           </prop>
@@ -506,7 +506,7 @@
             <value xml:lang="en-US">Whites/Unwhites the screen</value>
           </prop>
         </node>
-        <node oor:name="l_Separator" oor:op="replace">
+        <node oor:name="l" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US"> </value>
           </prop>
@@ -522,7 +522,7 @@
             <value xml:lang="en-US">End slide show</value>
           </prop>
         </node>
-        <node oor:name="n_Separator" oor:op="replace">
+        <node oor:name="n" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US"> </value>
           </prop>
@@ -538,7 +538,7 @@
             <value xml:lang="en-US">Go to that slide</value>
           </prop>
         </node>
-        <node oor:name="p_Separator" oor:op="replace">
+        <node oor:name="p" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US"> </value>
           </prop>
@@ -562,7 +562,15 @@
             <value xml:lang="en-US">Scroll notes up/down</value>
           </prop>
         </node>
-        <node oor:name="s_Separator" oor:op="replace">
+        <node oor:name="s" oor:op="replace">
+          <prop oor:name="Left">
+            <value xml:lang="en-US">'H', 'L'</value>
+          </prop>
+          <prop oor:name="Right">
+            <value xml:lang="en-US">Move caret in notes view backward/forward</value>
+          </prop>
+        </node>
+        <node oor:name="t" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US"> </value>
           </prop>
@@ -570,7 +578,7 @@
             <value xml:lang="en-US"> </value>
           </prop>
         </node>
-        <node oor:name="t" oor:op="replace">
+        <node oor:name="u" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US">Ctrl-'1'</value>
           </prop>
@@ -578,7 +586,7 @@
             <value xml:lang="en-US">Shows the Presenter Console</value>
           </prop>
         </node>
-        <node oor:name="u" oor:op="replace">
+        <node oor:name="v" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US">Ctrl-'2'</value>
           </prop>
@@ -586,7 +594,7 @@
             <value xml:lang="en-US">Shows the Presentation Notes</value>
           </prop>
         </node>
-        <node oor:name="v" oor:op="replace">
+        <node oor:name="w" oor:op="replace">
           <prop oor:name="Left">
             <value xml:lang="en-US">Ctrl-'3'</value>
           </prop>
@@ -1007,6 +1015,9 @@
         <prop oor:name="Title">
           <value xml:lang="en-US">Current Slide (%CURRENT_SLIDE_NUMBER% of %SLIDE_COUNT%)</value>
         </prop>
+        <prop oor:name="AccessibleTitle">
+          <value xml:lang="en-US">Current Slide, %CURRENT_SLIDE_NAME%, %CURRENT_SLIDE_NUMBER% of %SLIDE_COUNT%</value>
+        </prop>
         <prop oor:name="IsOpaque"><value>true</value></prop>
         <node oor:name="Strings">
           <node oor:name="ClickToExitPresentationText" oor:op="replace">
@@ -1050,6 +1061,12 @@
           <value>private:resource/view/Presenter/SlideSorter</value>
         </prop>
         <prop oor:name="IsOpaque"><value>false</value></prop>
+        <prop oor:name="Title">
+          <value xml:lang="en-US"></value>
+        </prop>
+        <prop oor:name="AccessibleTitle">
+          <value xml:lang="en-US">Slide Overview, %CURRENT_SLIDE_NAME%, %CURRENT_SLIDE_NUMBER% of %SLIDE_COUNT%</value>
+        </prop>
       </node>
       <node oor:name="HelpView" oor:op="replace">
         <prop oor:name="ViewURL">
@@ -1188,6 +1205,23 @@
             </prop>
           </node>
         </node>
+      </node>
+    </node>
+    <node oor:name="Accessibility">
+      <node oor:name="Console" oor:op="replace">
+        <prop oor:name="String">
+          <value xml:lang="en-US">Presenter Console</value>
+        </prop>
+      </node>
+      <node oor:name="Preview" oor:op="replace">
+        <prop oor:name="String">
+          <value xml:lang="en-US">Current Slide Info</value>
+        </prop>
+      </node>
+      <node oor:name="Notes" oor:op="replace">
+        <prop oor:name="String">
+          <value xml:lang="en-US">Presenter Notes</value>
+        </prop>
       </node>
     </node>
   </node>

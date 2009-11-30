@@ -38,6 +38,8 @@ TARGET=sac-1.3
 
 .INCLUDE :	settings.mk
 
+.IF "$(L10N_framework)"==""
+
 # override buildfile
 ANT_BUILDFILE=build.xml
 
@@ -65,12 +67,13 @@ BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) all
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
-
+.ENDIF # L10N_framework
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 
+.IF "$(L10N_framework)"==""
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
@@ -79,4 +82,5 @@ ALLTAR : $(CLASSDIR)$/sac.jar
 $(CLASSDIR)$/sac.jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
     $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/sac.jar $(CLASSDIR)$/sac.jar
 .ENDIF
+.ENDIF # L10N_framework
 

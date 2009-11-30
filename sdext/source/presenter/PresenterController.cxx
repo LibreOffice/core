@@ -34,29 +34,33 @@
 
 #include "PresenterController.hxx"
 
+#include "PresenterAccessibility.hxx"
 #include "PresenterAnimator.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterCurrentSlideObserver.hxx"
 #include "PresenterFrameworkObserver.hxx"
 #include "PresenterHelper.hxx"
+#include "PresenterNotesView.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterPaneAnimator.hxx"
 #include "PresenterPaneBase.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneBorderPainter.hxx"
-#include "PresenterPaneFactory.hxx"
 #include "PresenterTheme.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
 
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
+#include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -78,6 +82,7 @@ using ::rtl::OUStringBuffer;
 namespace {
     const sal_Int32 ResourceActivationEventType = 0;
     const sal_Int32 ResourceDeactivationEventType = 1;
+    const sal_Int32 ConfigurationUpdateEndEventType = 2;
 }
 
 
@@ -128,7 +133,9 @@ PresenterController::PresenterController (
       mxPresenterHelper(),
       mpPaintManager(),
       mnPendingSlideNumber(-1),
-      mxUrlTransformer()
+      mxUrlTransformer(),
+      mpAccessibleObject(),
+      mbIsAccessibilityActive(false)
 {
     OSL_ASSERT(mxController.is());
 
@@ -153,6 +160,10 @@ PresenterController::PresenterController (
             this,
             A2S("ResourceDeactivation"),
             Any(ResourceDeactivationEventType));
+        mxConfigurationController->addConfigurationChangeListener(
+            this,
+            A2S("ConfigurationUpdateEnd"),
+            Any(ConfigurationUpdateEndEventType));
     }
 
     // Listen for the frame being activated.
@@ -286,6 +297,16 @@ void PresenterController::UpdateCurrentSlide (const sal_Int32 nOffset)
     GetSlides(nOffset);
     UpdatePaneTitles();
     UpdateViews();
+
+    // Update the accessibility object.
+    if (IsAccessibilityActive())
+    {
+        sal_Int32 nSlideCount (0);
+        Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
+        if (xIndexAccess.is())
+            nSlideCount = xIndexAccess->getCount();
+        mpAccessibleObject->NotifyCurrentSlideChange(mnCurrentSlideIndex, nSlideCount);
+    }
 }
 
 
@@ -349,7 +370,8 @@ void PresenterController::UpdatePaneTitles (void)
         return;
 
     // Get placeholders and their values.
-    const OUString sCurrentSlidePlaceholder (A2S("CURRENT_SLIDE_NUMBER"));
+    const OUString sCurrentSlideNumberPlaceholder (A2S("CURRENT_SLIDE_NUMBER"));
+    const OUString sCurrentSlideNamePlaceholder (A2S("CURRENT_SLIDE_NAME"));
     const OUString sSlideCountPlaceholder (A2S("SLIDE_COUNT"));
 
     // Get string for slide count.
@@ -359,7 +381,31 @@ void PresenterController::UpdatePaneTitles (void)
         sSlideCount = OUString::valueOf(xIndexAccess->getCount());
 
     // Get string for current slide index.
-    OUString sCurrentSlide (OUString::valueOf(mnCurrentSlideIndex + 1));
+    OUString sCurrentSlideNumber (OUString::valueOf(mnCurrentSlideIndex + 1));
+
+    // Get name of the current slide.
+    OUString sCurrentSlideName;
+    Reference<container::XNamed> xNamedSlide (mxCurrentSlide, UNO_QUERY);
+    if (xNamedSlide.is())
+        sCurrentSlideName = xNamedSlide->getName();
+    Reference<beans::XPropertySet> xSlideProperties (mxCurrentSlide, UNO_QUERY);
+    if (xSlideProperties.is())
+    {
+        try
+        {
+            OUString sName;
+            if (xSlideProperties->getPropertyValue(A2S("LinkDisplayName")) >>= sName)
+            {
+                // Find out whether the name of the current slide has been
+                // automatically created or has been set by the user.
+                if (sName != sCurrentSlideName)
+                    sCurrentSlideName = sName;
+            }
+        }
+        catch (beans::UnknownPropertyException&)
+        {
+        }
+    }
 
     // Replace the placeholders with their current values.
     PresenterPaneContainer::PaneList::const_iterator iPane;
@@ -367,7 +413,9 @@ void PresenterController::UpdatePaneTitles (void)
     {
         OSL_ASSERT((*iPane).get() != NULL);
 
-        OUString sTemplate ((*iPane)->msTitleTemplate);
+        OUString sTemplate (IsAccessibilityActive()
+            ? (*iPane)->msAccessibleTitleTemplate
+            : (*iPane)->msTitleTemplate);
         if (sTemplate.getLength() <= 0)
             continue;
 
@@ -397,8 +445,10 @@ void PresenterController::UpdatePaneTitles (void)
                 nIndex = nEndIndex+1;
 
                 // Replace the placeholder with its current value.
-                if (sPlaceholder == sCurrentSlidePlaceholder)
-                    sResult.append(sCurrentSlide);
+                if (sPlaceholder == sCurrentSlideNumberPlaceholder)
+                    sResult.append(sCurrentSlideNumber);
+                else if (sPlaceholder == sCurrentSlideNamePlaceholder)
+                    sResult.append(sCurrentSlideName);
                 else if (sPlaceholder == sSlideCountPlaceholder)
                     sResult.append(sSlideCount);
             }
@@ -660,9 +710,37 @@ Reference<drawing::framework::XConfigurationController>
 
 
 
-css::uno::Reference<css::drawing::XDrawPage> PresenterController::GetCurrentSlide (void) const
+Reference<drawing::XDrawPage> PresenterController::GetCurrentSlide (void) const
 {
     return mxCurrentSlide;
+}
+
+
+
+
+::rtl::Reference<PresenterAccessible> PresenterController::GetAccessible (void) const
+{
+    return mpAccessibleObject;
+}
+
+
+
+
+void PresenterController::SetAccessibilityActiveState (const bool bIsActive)
+{
+    if ( mbIsAccessibilityActive != bIsActive)
+    {
+        mbIsAccessibilityActive = bIsActive;
+        UpdatePaneTitles();
+    }
+}
+
+
+
+
+bool PresenterController::IsAccessibilityActive (void) const
+{
+    return mbIsAccessibilityActive;
 }
 
 
@@ -766,7 +844,6 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
                 {
                     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
                         mpPaneContainer->FindPaneId(xPane->getResourceId()));
-                    mpWindowManager->NotifyPaneCreation(pDescriptor);
 
                     // When there is a call out anchor location set then tell the
                     // window about it.
@@ -809,6 +886,14 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
                     if (pDescriptor.get() != NULL)
                         GetPaintManager()->Invalidate(pDescriptor->mxBorderWindow);
                 }
+            }
+            break;
+
+        case ConfigurationUpdateEndEventType:
+            if (IsAccessibilityActive())
+            {
+                mpAccessibleObject->UpdateAccessibilityHierarchy();
+                UpdateCurrentSlide(0);
             }
             break;
     }
@@ -907,8 +992,8 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
             }
             break;
 
-        case awt::Key::SPACE:
         case awt::Key::RIGHT:
+        case awt::Key::SPACE:
         case awt::Key::DOWN:
         case awt::Key::N:
             if (mxSlideShowController.is())
@@ -917,6 +1002,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
             }
             break;
 
+        case awt::Key::LEFT:
         case awt::Key::PAGEUP:
             if (mxSlideShowController.is())
             {
@@ -1004,7 +1090,11 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
         case awt::Key::F1:
             // Toggle the help view.
             if (mpWindowManager.get() != NULL)
-                mpWindowManager->SetHelpViewState( ! mpWindowManager->IsHelpViewActive());
+                if (mpWindowManager->GetViewMode() != PresenterWindowManager::VM_Help)
+                    mpWindowManager->SetViewMode(PresenterWindowManager::VM_Help);
+                else
+                    mpWindowManager->SetHelpViewState(false);
+
             break;
 
         default:
@@ -1047,18 +1137,13 @@ void PresenterController::HandleNumericKeyPress (
             switch(nKey)
             {
                 case 1:
-                    mpWindowManager->SetSlideSorterState(false);
-                    mpWindowManager->SetHelpViewState(false);
-                    mpWindowManager->SetLayoutMode(PresenterWindowManager::Standard);
+                    mpWindowManager->SetViewMode(PresenterWindowManager::VM_Standard);
                     break;
                 case 2:
-                    mpWindowManager->SetSlideSorterState(false);
-                    mpWindowManager->SetHelpViewState(false);
-                    mpWindowManager->SetLayoutMode(PresenterWindowManager::Notes);
+                    mpWindowManager->SetViewMode(PresenterWindowManager::VM_Notes);
                     break;
                 case 3:
-                    mpWindowManager->SetHelpViewState(false);
-                    mpWindowManager->SetSlideSorterState(true);
+                    mpWindowManager->SetViewMode(PresenterWindowManager::VM_SlideOverview);
                     break;
                 default:
                     // Ignore unsupported key.
@@ -1161,6 +1246,11 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     if ( ! rxPane.is())
         return;
 
+    mpAccessibleObject = new PresenterAccessible(
+        mxComponentContext,
+        this,
+        rxPane);
+
     LoadTheme(rxPane);
 
     // Main pane has been created and is now observed by the window
@@ -1180,6 +1270,9 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
         mxMainWindow->addMouseListener(this);
         mxMainWindow->addMouseMotionListener(this);
     }
+    Reference<XPane2> xPane2 (rxPane, UNO_QUERY);
+    if (xPane2.is())
+        xPane2->setVisible(sal_True);
 
     mpPaintManager.reset(new PresenterPaintManager(mxMainWindow, mxPresenterHelper, mpPaneContainer));
 
@@ -1187,6 +1280,8 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
 
     if (mxSlideShowController.is())
         mxSlideShowController->activate();
+
+    UpdateCurrentSlide(0);
 }
 
 

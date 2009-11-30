@@ -102,6 +102,7 @@ public:
         css::uno::Reference<css::awt::XWindow> mxContentWindow;
         css::uno::Reference<css::awt::XWindow> mxBorderWindow;
         ::rtl::OUString msTitleTemplate;
+        ::rtl::OUString msAccessibleTitleTemplate;
         ::rtl::OUString msTitle;
         ViewInitializationFunction maViewInitialization;
         double mnLeft;
@@ -128,6 +129,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         const ::rtl::OUString& rsViewURL,
         const ::rtl::OUString& rsTitle,
+        const ::rtl::OUString& rsAccessibleTitle,
         const bool bIsOpaque,
         const ViewInitializationFunction& rViewIntialization,
         const double nLeft,
