@@ -1003,7 +1003,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // calls for the views in side panes but prevents calling an already
     // dying SfxViewShell base class.
     // For issue #140703# we have to check the existence of the window,
-    // too.  The SfxTopViewFrame accesses the window without checking it.
+    // too.  The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != NULL && GetWindow()!=NULL)
     {

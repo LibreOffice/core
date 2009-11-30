@@ -371,7 +371,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
 
             ViewShell* pViewSh = NULL;
             SfxViewShell* pSfxViewSh = NULL;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0, false);
+            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
 
             while (pSfxViewFrame)
             {
@@ -385,7 +385,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
                     pFrameViewList->Insert( new FrameView( mpDoc, pViewSh->GetFrameView() ) );
                 }
 
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0, false);
+                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
             }
         }
     }
@@ -401,7 +401,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
         {
             ViewShell* pViewSh = NULL;
             SfxViewShell* pSfxViewSh = NULL;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0,false);
+            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
 
             sal_uInt32 i;
             for( i = 0; pSfxViewFrame && (i < pFrameViewList->Count()); i++ )
@@ -415,7 +415,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
                     pViewSh->ReadFrameViewData( (FrameView*)pFrameViewList->GetObject(i) );
                 }
 
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0,false);
+                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
             }
         }
     }
@@ -579,7 +579,7 @@ IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 void DrawDocShell::ClearUndoBuffer()
 {
     // clear possible undo buffers of outliners
-    SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0, false);
+    SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
     while(pSfxViewFrame)
     {
         ViewShellBase* pViewShellBase = dynamic_cast< ViewShellBase* >( pSfxViewFrame->GetViewShell() );
@@ -602,7 +602,7 @@ void DrawDocShell::ClearUndoBuffer()
                 }
             }
         }
-        pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0, false);
+        pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
     }
 
     SfxUndoManager* pUndoManager = GetUndoManager();

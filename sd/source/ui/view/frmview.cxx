@@ -103,8 +103,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
             ULONG nSdViewShellCount = 0;
             ViewShellBase* pBase = NULL;
             SfxViewShell* pSfxViewSh = NULL;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell,
-                                                                 TYPE(SfxTopViewFrame));
+            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell);
 
             while (pSfxViewFrame)
             {
@@ -145,8 +144,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                     }
                 }
 
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, pDocShell,
-                                                      TYPE(SfxTopViewFrame));
+                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, pDocShell);
             }
 
             SdDrawDocument* pDoc = pDocShell->GetDoc();

@@ -652,7 +652,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         SfxViewFrame* pSlideViewFrame = SfxViewFrame::Current();
         DBG_ASSERT(pSlideViewFrame!=NULL,
             "SlideSorterController::GetCtrlState: ViewFrame not found");
-        if (pSlideViewFrame && pSlideViewFrame->ISA(SfxTopViewFrame))
+        if (pSlideViewFrame)
         {
             pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }
