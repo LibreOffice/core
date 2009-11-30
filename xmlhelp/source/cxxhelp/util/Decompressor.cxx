@@ -41,10 +41,10 @@ const sal_Int32 Decompressor::NBits = 32;
 
 inline sal_Int32 getInteger_( const sal_Int8* v )
 {
-    return (((((( v[0]&0xFF ) << 8 )
-               | v[1]&0xFF ) << 8 )
-             | v[2]&0xFF ) << 8 )
-        | v[3]&0xFF;
+    return (((((( (v[0]&0xFF) ) << 8 )
+                | (v[1]&0xFF) ) << 8 )
+                | (v[2]&0xFF) ) << 8 )
+                | (v[3]&0xFF);
 }
 
 sal_Int32 StreamDecompressor::getNextByte()

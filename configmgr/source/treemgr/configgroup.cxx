@@ -353,12 +353,6 @@ bool GroupDefaulter::ensureDataAvailable(rtl::Reference< Tree > const& _aParentT
 }
 //-----------------------------------------------------------------------------
 
-bool GroupDefaulter::isDataAvailable()
-{
-    return m_aHelper.tree()->areValueDefaultsAvailable(m_aHelper.node());
-}
-//-----------------------------------------------------------------------------
-
 NodeChange GroupDefaulter::validateSetToDefaultValue(ValueRef const& aValueNode)
 {
     m_aHelper.validateNode(aValueNode);

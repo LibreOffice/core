@@ -143,9 +143,6 @@ namespace configmgr
         /// ensure this will execute cleanup duties for _xOptions (no later than after getCleanupDelay() has elapsed)
         void scheduleCleanup(RequestOptions const & _aOptions);
 
-        /// stop and discard pending activities for _xOptions
-        void clearTasks(RequestOptions const & _aOptions);
-
         /// stop and discard pending activities
         void stopAndClearTasks();
 

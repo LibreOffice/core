@@ -60,16 +60,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
-{
-    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
-    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
-    { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE },
-    { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR },
-    { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE },
-    { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION },
-    XML_TOKEN_MAP_END
-};
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_HatchStyle_Enum[] =
 {
@@ -111,6 +101,18 @@ sal_Bool XMLHatchStyleImport::importXML(
     aHatch.Color = 0;
     aHatch.Distance = 0;
     aHatch.Angle = 0;
+
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+{
+    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
+    { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE },
+    { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR },
+    { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE },
+    { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION },
+    XML_TOKEN_MAP_END
+};
 
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
     SvXMLNamespaceMap rNamespaceMap = rImport.GetNamespaceMap();
@@ -178,6 +180,8 @@ sal_Bool XMLHatchStyleImport::importXML(
     }
 
     bRet = bHasName && bHasStyle && bHasColor && bHasDist;
+
+    }
 
     return bRet;
 }

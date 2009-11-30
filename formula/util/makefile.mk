@@ -53,15 +53,12 @@ SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(TOOLSLIB) 			\
-        $(SVLLIB)				\
         $(SVTOOLLIB)			\
         $(UNOTOOLSLIB)			\
         $(COMPHELPERLIB) 		\
         $(CPPUHELPERLIB) 		\
         $(CPPULIB)				\
         $(VCLLIB)				\
-        $(TKLIB)				\
-        $(VOSLIB)				\
         $(SALLIB)
 
 SHL1IMPLIB=i$(TARGET)
@@ -93,17 +90,12 @@ SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 SHL2STDLIBS= \
         $(SFXLIB)				\
         $(SVTOOLLIB)			\
-        $(TKLIB)				\
         $(VCLLIB)				\
-        $(SVLLIB)				\
-        $(SOTLIB)				\
         $(UNOTOOLSLIB)			\
         $(TOOLSLIB)				\
-        $(COMPHELPERLIB)		\
-        $(CPPUHELPERLIB)		\
         $(CPPULIB)				\
         $(SO2LIB)				\
-        $(I18NISOLANGLIB)		\
+        $(CPPUHELPERLIB)        \
         $(SALLIB)
         
 .IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"

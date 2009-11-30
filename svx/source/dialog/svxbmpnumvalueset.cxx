@@ -51,7 +51,6 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/charmap.hxx>
 #include <flstitem.hxx>
 #include <dlgutil.hxx>
 #ifndef _XTABLE_HXX //autogen

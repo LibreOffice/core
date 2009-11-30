@@ -84,8 +84,7 @@ SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALHELPERLIB) \
-    $(SALLIB) \
-    $(TOOLSLIB)
+    $(SALLIB)
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
     SHL1STDLIBS += -lxo$(DLLPOSTFIX)
 .ELSE

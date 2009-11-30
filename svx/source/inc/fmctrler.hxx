@@ -555,7 +555,7 @@ protected:
 
     bool    impl_isDisposed_nofail() const { return FmXFormController_BASE::rBHelper.bDisposed; }
 
-    void onModify( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
+    void    impl_onModify();
 
     sal_Bool isLocked() const {return m_bLocked;}
     sal_Bool determineLockState() const;
@@ -595,6 +595,9 @@ protected:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
             locateControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel ) SAL_THROW(());
+
+    // set the text for all filters
+    void impl_setTextOnAllFilter_throw();
 
     // in filter mode we do not listen for changes
     sal_Bool isListeningForChanges() const {return m_bDBConnection && !m_bFiltering && !isLocked();}

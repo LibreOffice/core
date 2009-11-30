@@ -75,8 +75,7 @@ namespace com { namespace sun { namespace star {
 namespace scripting_protocolhandler
 {
 
-// for simplification
-#define css ::com::sun::star
+namespace css = ::com::sun::star;
 
 class ScriptProtocolHandler :
 public ::cppu::WeakImplHelper4< css::frame::XDispatchProvider,

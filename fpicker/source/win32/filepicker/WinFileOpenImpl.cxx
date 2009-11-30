@@ -713,7 +713,7 @@ void CWinFileOpenImpl::EnlargeStdControlLabels() const
     RECT rcFilterBox;
     GetWindowRect(hFilterBox, &rcFilterBox);
     w = rcFilterBox.right - rcFilterBox.left;
-    h = rcFilterBox.bottom, - rcFilterBox.top;
+    h = rcFilterBox.bottom - rcFilterBox.top;
     ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFilterBox);
     MoveWindow(hFilterBox, rcFilterBox.left + gap + OFFSET, rcFilterBox.top, w - OFFSET, h, true);
 

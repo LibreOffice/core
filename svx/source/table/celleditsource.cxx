@@ -551,19 +551,19 @@ SvxTextForwarder* CellEditSourceImpl::GetBackgroundTextForwarder()
     {
         mpTextForwarder->flushCache();
 
-        OutlinerParaObject* mpOutlinerParaObject = NULL;
+        OutlinerParaObject* pOutlinerParaObject = NULL;
         bool bTextEditActive = false;
 
-        mpOutlinerParaObject = mxCell->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+        pOutlinerParaObject = mxCell->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
-        if( mpOutlinerParaObject )
+        if( pOutlinerParaObject )
             bTextEditActive = true; // text edit active
         else
-            mpOutlinerParaObject = mxCell->GetOutlinerParaObject();
+            pOutlinerParaObject = mxCell->GetOutlinerParaObject();
 
-        if( mpOutlinerParaObject )
+        if( pOutlinerParaObject )
         {
-            mpOutliner->SetText( *mpOutlinerParaObject );
+            mpOutliner->SetText( *pOutlinerParaObject );
         }
         else
         {
@@ -597,6 +597,9 @@ SvxTextForwarder* CellEditSourceImpl::GetBackgroundTextForwarder()
                     mpOutliner->SetStyleSheet( 0, mxCell->GetStyleSheet());
             }
         }
+
+        if( bTextEditActive )
+            delete pOutlinerParaObject;
 
         mbDataValid = true;
     }

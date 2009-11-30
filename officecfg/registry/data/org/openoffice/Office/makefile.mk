@@ -68,6 +68,8 @@ XCUFILES= \
     Histories.xcu
 
 MODULEFILES= \
+    Accelerators-macosx.xcu \
+    Accelerators-unxwnt.xcu \
     Common-brand.xcu \
     Common-writer.xcu   \
     Common-calc.xcu   \

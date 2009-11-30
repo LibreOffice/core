@@ -52,20 +52,7 @@ namespace configmgr
 namespace
 {
 // manually implemented helpers, as rtl::References don't work well with std binders
-// ---------------------------------------------------------------------------
 
-    // replacing  std::bind2nd( std::mem_fun(&aFunc), aArg )
-    struct NotifyDisposing : std::unary_function<rtl::Reference<TreeManager>,void>
-    {
-        CacheController & m_arg;
-
-        NotifyDisposing(CacheController * _pProvider) SAL_THROW(())
-        : m_arg(*_pProvider)
-        {}
-
-        void operator()(rtl::Reference<TreeManager> const & _xListener) const SAL_THROW(())
-        { _xListener->disposing(m_arg); }
-    };
 // ---------------------------------------------------------------------------
 
     // replacing  std::bind2nd( std::mem_fun(&TreeManager::componentCreated), _aComponentName )

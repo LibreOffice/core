@@ -51,7 +51,6 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OFileTable :   public OTable_TYPEDEF
         {
         protected:
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
             OConnection*                                        m_pConnection;
             SvStream*                                           m_pFileStream;
             ::vos::ORef<OSQLColumns>                            m_aColumns;

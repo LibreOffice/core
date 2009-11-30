@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ooverinfo2.rc,v $
- * $Revision: 1.5 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,8 +25,8 @@
  *
  *************************************************************************/
 
-#define VERSION			1
-#define SUBVERSION		9
+#define VERSION			3
+#define SUBVERSION		2
 //#define VERVARIANT		0
 // .0 + VER_CONCEPT
 // .100 + VER_ALPHA
@@ -41,8 +38,8 @@
 #define VER_FINAL		0
 
 #define VER_DAY			1
-#define VER_MONTH		1
-#define VER_YEAR		2005
+#define VER_MONTH		9
+#define VER_YEAR		2009
 
 // -----------------------------------------------------------------------
 

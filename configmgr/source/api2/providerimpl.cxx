@@ -425,18 +425,6 @@ namespace configmgr
          m_pTreeManager->enableAsync(bEnableAsync);
     }
     //-----------------------------------------------------------------------------
-    void SAL_CALL OProviderImpl::acquire(  ) throw ()
-    {
-        m_pProvider->acquire();
-    }
-
-    //-----------------------------------------------------------------------------
-    void SAL_CALL OProviderImpl::release(  ) throw ()
-    {
-        m_pProvider->release();
-    }
-
-    //-----------------------------------------------------------------------------
     uno::XInterface* OProviderImpl::getProviderInstance()
     {
         return static_cast<com::sun::star::lang::XMultiServiceFactory*>(m_pProvider);

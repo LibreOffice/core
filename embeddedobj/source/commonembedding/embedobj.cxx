@@ -37,7 +37,7 @@
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/embed/XWindowSupplier.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
-
+#include <com/sun/star/embed/Aspects.hpp>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
@@ -225,6 +225,9 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
     {
         if ( nNextState == embed::EmbedStates::LOADED )
         {
+            m_nClonedMapUnit = m_pDocHolder->GetMapUnit( embed::Aspects::MSOLE_CONTENT );
+            m_bHasClonedSize = m_pDocHolder->GetExtent( embed::Aspects::MSOLE_CONTENT, &m_aClonedSize );
+
             // actually frame should not exist at this point
             m_pDocHolder->CloseDocument( sal_False, sal_False );
 

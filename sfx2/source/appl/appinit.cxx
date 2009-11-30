@@ -220,7 +220,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
         bDetermineFunction = true;
 
         String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-        sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "svx" ) ) );
+        sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "cui" ) ) );
 
         rtl::OUString aLibName( sLibName );
         oslModule handleMod = osl_loadModuleRelative(

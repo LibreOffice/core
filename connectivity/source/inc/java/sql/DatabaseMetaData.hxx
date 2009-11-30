@@ -50,11 +50,9 @@ namespace connectivity
 
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
 
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_sql_DatabaseMetaData();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myObj, java_sql_Connection& _rConnection );

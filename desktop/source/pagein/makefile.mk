@@ -53,12 +53,10 @@ OBJFILES= \
 
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
+APP1CODETYPE=C
 
 # depends on libc only.
 STDLIB=
-.IF "$(COMNAME)" == "sunpro5"
-STDLIB+=-library=no%Crun
-.ENDIF # sunpro5
 
 # --- Targets ------------------------------------------------------
 

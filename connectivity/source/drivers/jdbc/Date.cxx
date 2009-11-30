@@ -43,27 +43,14 @@ jclass java_util_Date::theClass = 0;
 java_util_Date::~java_util_Date()
 {}
 
-jclass java_util_Date::getMyClass()
+jclass java_util_Date::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass( "java/util/Date" );
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/util/Date");
     return theClass;
 }
 
-void java_util_Date::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
-}
 // -----------------------------------------------------------------------------
 
 

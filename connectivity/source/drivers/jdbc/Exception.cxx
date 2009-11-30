@@ -41,25 +41,11 @@ jclass java_lang_Exception::theClass = 0;
 java_lang_Exception::~java_lang_Exception()
 {}
 
-jclass java_lang_Exception::getMyClass()
+jclass java_lang_Exception::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass("java/lang/Exception"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/lang/Exception");
     return theClass;
-}
-
-void java_lang_Exception::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 

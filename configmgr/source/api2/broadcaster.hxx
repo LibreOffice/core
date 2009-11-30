@@ -60,7 +60,6 @@ namespace configmgr
             /// construct a broadcaster
             Broadcaster(Notifier const& aNotifier, configuration::NodeChange const& aChange, bool bLocal);
             Broadcaster(Notifier const& aNotifier, configuration::NodeChanges const& aChanges, bool bLocal);
-            Broadcaster(Notifier const& aNotifier, configuration::NodeChangeInformation const& aChange, bool bLocal);
             Broadcaster(Notifier const& aNotifier, configuration::NodeChangesInformation const& aChanges, bool bLocal);
             Broadcaster(Broadcaster const& aOther);
             ~Broadcaster();
@@ -74,8 +73,6 @@ namespace configmgr
             void notifyListeners(configuration::NodeChange const& aChange) throw();
             /// notify all listeners which are affected by any of these changes (potentially from many different bases)
             void notifyListeners(configuration::NodeChanges const& aChanges, bool bSingleBase) throw();
-            /// notify all listeners which are affected by this change
-            void notifyListeners(configuration::NodeChangeInformation const& aChange) throw();
             /// notify all listeners which are affected by any of these changes (potentially from many different bases)
             void notifyListeners(configuration::NodeChangesInformation const& aChanges, bool bSingleBase = false) throw();
 

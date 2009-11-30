@@ -40,6 +40,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/math.hxx>
+#include <rtl/logfile.hxx>
 
 #ifndef _TOOLS_DATE_HXX
 #include <tools/date.hxx>
@@ -203,7 +204,7 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
     double nVal = 0;
 
     sal_Int32 nPos = 0L;
-    sal_Int32 nLen = rString.getLength();
+    const sal_Int32 nLen = rString.getLength();
 
     // skip white space
     while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
@@ -212,7 +213,7 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
     if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
     {
         bNeg = sal_True;
-        nPos++;
+        ++nPos;
     }
 
     // get number
@@ -223,12 +224,12 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
         // TODO: check overflow!
         nVal *= 10;
         nVal += (rString[nPos] - sal_Unicode('0'));
-        nPos++;
+        ++nPos;
     }
     double nDiv = 1.;
     if( nPos < nLen && sal_Unicode('.') == rString[nPos] )
     {
-        nPos++;
+        ++nPos;
 
         while( nPos < nLen &&
                sal_Unicode('0') <= rString[nPos] &&
@@ -237,13 +238,13 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
             // TODO: check overflow!
             nDiv *= 10;
             nVal += ( ((double)(rString[nPos] - sal_Unicode('0'))) / nDiv );
-            nPos++;
+            ++nPos;
         }
     }
 
     // skip white space
     while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
-        nPos++;
+        ++nPos;
 
     if( nPos < nLen )
     {
@@ -375,7 +376,7 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                 return sal_False;
 
             double nScale = 0.;
-            for( sal_uInt16 i= 0; i < 2; i++ )
+            for( sal_uInt16 i= 0; i < 2; ++i )
             {
                 const sal_Char *pL = aCmpsL[i];
                 if( pL )
@@ -386,9 +387,9 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                         sal_Unicode c = rString[nPos];
                         if( c != *pL && c != *pU )
                             break;
-                        pL++;
-                        pU++;
-                        nPos++;
+                        ++pL;
+                        ++pU;
+                        ++nPos;
                     }
                     if( !*pL && (nPos == nLen || ' ' == rString[nPos]) )
                     {
@@ -503,7 +504,7 @@ sal_Bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
             rEnum = pMap->nValue;
             return sal_True;
         }
-        pMap++;
+        ++pMap;
     }
 
     return sal_False;
@@ -523,7 +524,7 @@ sal_Bool SvXMLUnitConverter::convertEnum(
             rEnum = pMap->nValue;
             return sal_True;
         }
-        pMap++;
+        ++pMap;
     }
     return sal_False;
 }
@@ -547,7 +548,7 @@ sal_Bool SvXMLUnitConverter::convertEnum( OUStringBuffer& rBuffer,
             pStr = pMap->pName;
             break;
         }
-        pMap++;
+        ++pMap;
     }
 
     if( NULL == pStr )
@@ -578,7 +579,7 @@ sal_Bool SvXMLUnitConverter::convertEnum(
             eTok = pMap->eToken;
             break;
         }
-        pMap++;
+        ++pMap;
     }
 
     // the map may have contained XML_TOKEN_INVALID
@@ -658,37 +659,12 @@ sal_Bool SvXMLUnitConverter::convertNumber( sal_Int32& rValue,
                                         const OUString& rString,
                                         sal_Int32 nMin, sal_Int32 nMax )
 {
-    sal_Bool bNeg = sal_False;
     rValue = 0;
-
-    sal_Int32 nPos = 0L;
-    sal_Int32 nLen = rString.getLength();
-
-    // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
-        nPos++;
-
-    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
-    {
-        bNeg = sal_True;
-        nPos++;
-    }
-
-    // get number
-    while( nPos < nLen &&
-           sal_Unicode('0') <= rString[nPos] &&
-           sal_Unicode('9') >= rString[nPos] )
-    {
-        // TODO: check overflow!
-        rValue *= 10;
-        rValue += (rString[nPos] - sal_Unicode('0'));
-        nPos++;
-    }
-
-    if( bNeg )
-        rValue *= -1;
-
-    return ( nPos == nLen && rValue >= nMin && rValue <= nMax );
+    sal_Int64 nNumber = 0;
+    sal_Bool bRet = convertNumber64(nNumber,rString,nMin,nMax);
+    if ( bRet )
+        rValue = static_cast<sal_Int32>(nNumber);
+    return bRet;
 }
 
 /** convert 64-bit number to string */
@@ -707,16 +683,16 @@ sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
     rValue = 0;
 
     sal_Int32 nPos = 0L;
-    sal_Int32 nLen = rString.getLength();
+    const sal_Int32 nLen = rString.getLength();
 
     // skip white space
     while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
-        nPos++;
+        ++nPos;
 
     if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
     {
         bNeg = sal_True;
-        nPos++;
+        ++nPos;
     }
 
     // get number
@@ -727,7 +703,7 @@ sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
         // TODO: check overflow!
         rValue *= 10;
         rValue += (rString[nPos] - sal_Unicode('0'));
-        nPos++;
+        ++nPos;
     }
 
     if( bNeg )
@@ -800,7 +776,7 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
     if(eStatus == rtl_math_ConversionStatus_Ok)
     {
         OUStringBuffer sUnit;
-        double fFactor = SvXMLExportHelper::GetConversionFactor(sUnit, eCoreUnit, eSrcUnit);
+        const double fFactor = SvXMLExportHelper::GetConversionFactor(sUnit, eCoreUnit, eSrcUnit);
         if(fFactor != 1.0 && fFactor != 0.0)
             rValue /= fFactor;
     }
@@ -822,15 +798,8 @@ sal_Bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <c
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormatsSupplier> xNumberFormatsSupplier (xModel, com::sun::star::uno::UNO_QUERY);
     if (xNumberFormatsSupplier.is())
     {
-        com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
-        if (xPropertySet.is() )
-        {
-            com::sun::star::uno::Any aAnyNullDate = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_NULLDATE)));
-            if (aAnyNullDate >>= aNullDate)
-            {
-                return sal_True;
-            }
-        }
+        const com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
+        return xPropertySet.is() && (xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_NULLDATE))) >>= aNullDate);
     }
     return sal_False;
 }
@@ -1194,104 +1163,24 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
                             const ::rtl::OUString& rString, const com::sun::star::util::Date& aTempNullDate)
 {
-    sal_Bool bSuccess = sal_True;
-
-    rtl::OUString aDateStr, aTimeStr, sDoubleStr;
-    sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
-    sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
-    if (nPos2 < 0)
-        nPos2 = rString.indexOf( (sal_Unicode) '.' );
-    if ( nPos >= 0 )
-    {
-        aDateStr = rString.copy( 0, nPos );
-        if ( nPos2 >= 0 )
-        {
-            aTimeStr = rString.copy( nPos + 1, nPos2 - nPos - 1 );
-            sDoubleStr = OUString(RTL_CONSTASCII_USTRINGPARAM("0."));
-            sDoubleStr += rString.copy( nPos2 + 1 );
-        }
-        else
-        {
-            aTimeStr = rString.copy(nPos + 1);
-            sDoubleStr = OUString(RTL_CONSTASCII_USTRINGPARAM("0.0"));
-        }
-    }
-    else
-        aDateStr = rString;         // no separator: only date part
-
-    sal_Int32 nYear  = 1899;
-    sal_Int32 nMonth = 12;
-    sal_Int32 nDay   = 30;
-    sal_Int32 nHour  = 0;
-    sal_Int32 nMin   = 0;
-    sal_Int32 nSec   = 0;
-
-    const sal_Unicode* pStr = aDateStr.getStr();
-    sal_Int32 nDateTokens = 1;
-    while ( *pStr )
-    {
-        if ( *pStr == '-' )
-            nDateTokens++;
-        pStr++;
-    }
-    if ( nDateTokens > 3 || aDateStr.getLength() == 0 )
-        bSuccess = sal_False;
-    else
-    {
-        sal_Int32 n = 0;
-        if ( !convertNumber( nYear, aDateStr.getToken( 0, '-', n ), 0, 9999 ) )
-            bSuccess = sal_False;
-        if ( nDateTokens >= 2 )
-            if ( !convertNumber( nMonth, aDateStr.getToken( 0, '-', n ), 0, 12 ) )
-                bSuccess = sal_False;
-        if ( nDateTokens >= 3 )
-            if ( !convertNumber( nDay, aDateStr.getToken( 0, '-', n ), 0, 31 ) )
-                bSuccess = sal_False;
-    }
-
-    if ( aTimeStr.getLength() > 0 )           // time is optional
-    {
-        pStr = aTimeStr.getStr();
-        sal_Int32 nTimeTokens = 1;
-        while ( *pStr )
-        {
-            if ( *pStr == ':' )
-                nTimeTokens++;
-            pStr++;
-        }
-        if ( nTimeTokens > 3 )
-            bSuccess = sal_False;
-        else
-        {
-            sal_Int32 n = 0;
-            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':', n ), 0, 23 ) )
-                bSuccess = sal_False;
-            if ( nTimeTokens >= 2 )
-                if ( !convertNumber( nMin, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
-                    bSuccess = sal_False;
-            if ( nTimeTokens >= 3 )
-                if ( !convertNumber( nSec, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
-                    bSuccess = sal_False;
-        }
-    }
+    com::sun::star::util::DateTime aDateTime;
+    sal_Bool bSuccess = convertDateTime(aDateTime,rString);
 
     if (bSuccess)
     {
         double fTempDateTime = 0.0;
-        Date aTmpNullDate(aTempNullDate.Day, aTempNullDate.Month, aTempNullDate.Year);
-        Date aTempDate((sal_uInt16)nDay, (sal_uInt16)nMonth, (sal_uInt16)nYear);
-        sal_Int32 nTage = aTempDate - aTmpNullDate;
+        const Date aTmpNullDate(aTempNullDate.Day, aTempNullDate.Month, aTempNullDate.Year);
+        const Date aTempDate((sal_uInt16)aDateTime.Day, (sal_uInt16)aDateTime.Month, (sal_uInt16)aDateTime.Year);
+        const sal_Int32 nTage = aTempDate - aTmpNullDate;
         fTempDateTime = nTage;
-        double Hour = nHour;
-        double Min = nMin;
-        double Sec = nSec;
-        double Sec100 = 0.0;
-        double fFraction = sDoubleStr.toDouble();
+        double Hour = aDateTime.Hours;
+        double Min = aDateTime.Minutes;
+        double Sec = aDateTime.Seconds;
+        double Sec100 = aDateTime.HundredthSeconds;
         fTempDateTime += Hour / 24;
         fTempDateTime += Min / (24 * 60);
         fTempDateTime += Sec / (24 * 60 * 60);
-        fTempDateTime += Sec100 / (24 * 60 * 60 * 60);
-        fTempDateTime += fFraction / (24 * 60 * 60);
+        fTempDateTime += Sec100 / (24 * 60 * 60 * 100);
         fDateTime = fTempDateTime;
     }
     return bSuccess;
@@ -1510,36 +1399,43 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
 }
 
 // ---
+bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
+{
+    if(!_sValue.getLength() || _sValue[0] != '(')
+        return false;
 
+    sal_Int32 nPos(1L);
+    sal_Int32 nFound = _sValue.indexOf(sal_Unicode(' '), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return false;
+
+    _rContentX = _sValue.copy(nPos, nFound - nPos);
+
+    nPos = nFound + 1;
+    nFound = _sValue.indexOf(sal_Unicode(' '), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return false;
+
+    _rContentY = _sValue.copy(nPos, nFound - nPos);
+
+    nPos = nFound + 1;
+    nFound = _sValue.indexOf(sal_Unicode(')'), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return false;
+
+    _rContentZ = _sValue.copy(nPos, nFound - nPos);
+    return true;
+
+}
 /** convert string to ::basegfx::B3DVector */
 sal_Bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, const OUString& rValue )
 {
-    if(!rValue.getLength() || rValue[0] != '(')
+    OUString aContentX,aContentY,aContentZ;
+    if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
         return sal_False;
-
-    sal_Int32 nPos(1L);
-    sal_Int32 nFound = rValue.indexOf(sal_Unicode(' '), nPos);
-
-    if(nFound == -1 || nFound <= nPos)
-        return sal_False;
-
-    OUString aContentX = rValue.copy(nPos, nFound - nPos);
-
-    nPos = nFound + 1;
-    nFound = rValue.indexOf(sal_Unicode(' '), nPos);
-
-    if(nFound == -1 || nFound <= nPos)
-        return sal_False;
-
-    OUString aContentY = rValue.copy(nPos, nFound - nPos);
-
-    nPos = nFound + 1;
-    nFound = rValue.indexOf(sal_Unicode(')'), nPos);
-
-    if(nFound == -1 || nFound <= nPos)
-        return sal_False;
-
-    OUString aContentZ = rValue.copy(nPos, nFound - nPos);
 
     rtl_math_ConversionStatus eStatus;
 
@@ -1578,32 +1474,9 @@ void SvXMLUnitConverter::convertB3DVector( OUStringBuffer &rBuffer, const ::base
 sal_Bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
     const OUString& rValue )
 {
-    if(!rValue.getLength() || rValue[0] != '(')
+    OUString aContentX,aContentY,aContentZ;
+    if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
         return sal_False;
-
-    sal_Int32 nPos(1L);
-    sal_Int32 nFound = rValue.indexOf(sal_Unicode(' '), nPos);
-
-    if(nFound == -1 || nFound <= nPos)
-        return sal_False;
-
-    OUString aContentX = rValue.copy(nPos, nFound - nPos);
-
-    nPos = nFound + 1;
-    nFound = rValue.indexOf(sal_Unicode(' '), nPos);
-
-    if(nFound == -1 || nFound <= nPos)
-        return sal_False;
-
-    OUString aContentY = rValue.copy(nPos, nFound - nPos);
-
-    nPos = nFound + 1;
-    nFound = rValue.indexOf(sal_Unicode(')'), nPos);
-
-    if(nFound == -1 || nFound <= nPos)
-        return sal_False;
-
-    OUString aContentZ = rValue.copy(nPos, nFound - nPos);
 
     if ( !convertDouble( rPosition.PositionX, aContentX, sal_True ) )
         return sal_False;
@@ -1937,18 +1810,15 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
     if (xPropertySetInfo.is())
     {
         uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
-        sal_Int32 nCount(aProps.getLength());
+        const sal_Int32 nCount(aProps.getLength());
         if (nCount)
         {
             rProps.realloc(nCount);
             beans::PropertyValue* pProps = rProps.getArray();
-            if (pProps)
+            for (sal_Int32 i = 0; i < nCount; i++, ++pProps)
             {
-                for (sal_Int32 i = 0; i < nCount; i++, pProps++)
-                {
-                    pProps->Name = aProps[i].Name;
-                    pProps->Value = aProperties->getPropertyValue(aProps[i].Name);
-                }
+                pProps->Name = aProps[i].Name;
+                pProps->Value = aProperties->getPropertyValue(aProps[i].Name);
             }
         }
     }

@@ -8,7 +8,6 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.document.XEmbeddedObjectSupplier;
-import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;

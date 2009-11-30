@@ -123,6 +123,7 @@
 #include <svtools/languageoptions.hxx>
 #include <svtools/internaloptions.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/menuoptions.hxx>
 #include <svtools/syslocaleoptions.hxx>
 #include <svtools/folderrestriction.hxx>
 #include <unotools/tempfile.hxx>
@@ -1771,6 +1772,24 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
     sal_uInt32 nFollow = hMouseSettings.GetFollow();
     hMouseSettings.SetFollow( aAppearanceCfg.IsMenuMouseFollow() ? (nFollow|MOUSE_FOLLOW_MENU) : (nFollow&~MOUSE_FOLLOW_MENU));
     rSettings.SetMouseSettings(hMouseSettings);
+
+    BOOL bUseImagesInMenus = hStyleSettings.GetUseImagesInMenus();
+
+    SvtMenuOptions aMenuOpt;
+    nGet = aMenuOpt.GetMenuIconsState();
+    switch ( nGet )
+    {
+        case 0:
+            bUseImagesInMenus = FALSE;
+            break;
+        case 1:
+            bUseImagesInMenus = TRUE;
+            break;
+        case 2:
+        default:
+            break;
+    }
+    hStyleSettings.SetUseImagesInMenus(bUseImagesInMenus);
 
     sal_uInt16 nTabStyle = hStyleSettings.GetTabControlStyle();
     nTabStyle &= ~STYLE_TABCONTROL_SINGLELINE;

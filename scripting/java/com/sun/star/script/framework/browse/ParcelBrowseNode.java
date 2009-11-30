@@ -31,7 +31,6 @@
 package com.sun.star.script.framework.browse;
 
 import com.sun.star.beans.XIntrospectionAccess;
-import com.sun.star.beans.PropertyAttribute;
 
 import com.sun.star.lib.uno.helper.PropertySet;
 
@@ -60,7 +59,6 @@ import com.sun.star.script.framework.container.Parcel;
 import com.sun.star.script.framework.container.ParcelContainer;
 import com.sun.star.script.framework.browse.DialogFactory;
 
-import java.io.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 

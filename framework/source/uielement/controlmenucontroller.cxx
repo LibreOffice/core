@@ -229,7 +229,8 @@ ControlMenuController::ControlMenuController( const ::com::sun::star::uno::Refer
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
-    m_bShowMenuImages   = SvtMenuOptions().IsMenuIconsEnabled();
+    m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
+
 }
 
 ControlMenuController::~ControlMenuController()
@@ -404,7 +405,7 @@ void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) thro
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_Bool bIsHiContrast      = rSettings.GetMenuColor().IsDark();
-        sal_Bool bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
+        sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
         sal_Bool bUpdateImages      = (( m_bWasHiContrast != bIsHiContrast ) || ( bShowMenuImages != m_bShowMenuImages ));
 
         if ( bUpdateImages )

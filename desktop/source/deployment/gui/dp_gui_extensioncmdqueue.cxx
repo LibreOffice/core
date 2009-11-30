@@ -430,7 +430,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
              ++i)
         {
             deps.push_back(
-                dp_misc::Dependencies::name( depExc.UnsatisfiedDependencies[i]) );
+                dp_misc::Dependencies::getErrorText( depExc.UnsatisfiedDependencies[i]) );
         }
         {
             vos::OGuard guard(Application::GetSolarMutex());

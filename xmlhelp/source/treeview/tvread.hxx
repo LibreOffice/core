@@ -350,6 +350,8 @@ namespace treeview {
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
         com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedHelpPackage
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        void implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,
+            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
         osl::Mutex                                                                  m_aMutex;
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
@@ -357,7 +359,6 @@ namespace treeview {
 
         IteratorState                                                               m_eState;
         rtl::OUString                                                               m_aLanguage;
-        rtl::OUString                                                               m_aCorrectedLanguage;
 
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference
             < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;

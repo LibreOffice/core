@@ -46,10 +46,8 @@ namespace connectivity
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_sql_Date();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Date( JNIEnv * pEnv, jobject myObj ) : java_util_Date(pEnv,myObj){}
@@ -68,10 +66,8 @@ namespace connectivity
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_sql_Time();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Time( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
@@ -87,10 +83,8 @@ namespace connectivity
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_sql_Timestamp();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Timestamp( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}

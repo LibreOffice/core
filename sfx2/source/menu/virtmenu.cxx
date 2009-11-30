@@ -443,7 +443,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId),
                                 pSVMenu->GetHelpText(nSlotId), *pBindings);
 
-                if (  aOptions.IsMenuIconsEnabled() )
+                if (  Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
                 {
                     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                     aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
@@ -540,7 +540,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
                     }
 
-                    if ( aOptions.IsMenuIconsEnabled() )
+                    if ( Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
                     {
                         Image aImage;
                         if ( bIsAddonPopupMenu || framework::AddonMenuManager::IsAddonMenuId( nSlotId ))
@@ -611,10 +611,9 @@ IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
 
 IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, EMPTYARG )
 {
-    SvtMenuOptions aOptions;
     USHORT nItemCount = pSVMenu->GetItemCount();
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    BOOL bIcons = aOptions.IsMenuIconsEnabled();
+    BOOL bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
     BOOL bIsHiContrastMode = IsHiContrastMode();
     Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame()->GetFrameInterface() );
 
@@ -681,8 +680,7 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, EMPTYARG )
 
 void SfxVirtualMenu::UpdateImages()
 {
-    SvtMenuOptions aOptions;
-    BOOL bIcons = aOptions.IsMenuIconsEnabled();
+    BOOL bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
     if ( bIcons )
     {
@@ -731,10 +729,9 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
     if ( !pMenu )
         return;
 
-    SvtMenuOptions              aOptions;
     framework::AddonsOptions    aAddonOptions;
 
-    BOOL bIcons = aOptions.IsMenuIconsEnabled();
+    BOOL bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
     if ( bIcons )
     {
         BOOL            bIsHiContrastMode   = IsHiContrastMode();
@@ -929,7 +926,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
         pMenu->InsertItem( SID_ADDONS, aAddonsTitle );
         pMenu->SetPopupMenu( SID_ADDONS, pAddonMenu );
 
-        if ( SvtMenuOptions().IsMenuIconsEnabled() )
+        if ( Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
         {
                rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_ADDONS ));

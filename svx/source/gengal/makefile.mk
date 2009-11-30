@@ -58,24 +58,14 @@ APP1TARGET= $(TARGET).bin
 APP1OBJS=   $(OBJFILES)
 
 APP1STDLIBS=$(TOOLSLIB) 		\
-            $(VOSLIB)			\
             $(SO2LIB)			\
-            $(SVTOOLLIB)		\
             $(SVLLIB)			\
             $(COMPHELPERLIB)		\
             $(CPPULIB)		\
             $(CPPUHELPERLIB)		\
             $(SALLIB)		\
-            $(GOODIESLIB)		\
-            $(SFXLIB)			\
-            $(SOTLIB)			\
             $(VCLLIB)			\
             $(UCBHELPERLIB)		\
-                        $(BASEGFXLIB) $(I18NISOLANGLIB) $(TKLIB) $(UNOTOOLSLIB) $(I18NUTILLIB) \
-                        $(ICUUCLIB) $(JVMFWKLIB) $(SALHELPERLIB) $(FWELIB) $(BASICLIB) \
-                        $(XMLSCRIPTLIB) $(SJLIB) $(ICUDATALIB) $(ICULELIB) $(JVMACCESSLIB) \
-                        $(AVMEDIALIB) $(XMLOFFLIB) $(SAXLIB) $(FWILIB) $(DRAWINGLAYERLIB) $(LNGLIB) \
-                        $(CPPCANVASLIB) $(CANVASTOOLSLIB) $(AGGLIB) \
             $(SVXLIB)
 
 #.IF "$(COM)"=="GCC"

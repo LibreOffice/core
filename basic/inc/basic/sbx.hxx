@@ -69,15 +69,14 @@ class SvDispatch;
 #ifndef __SBX_SBXPARAMINFO
 #define __SBX_SBXPARAMINFO
 
-// Informationen ueber einen Parameter
-
+// Parameter information
 struct SbxParamInfo
 {
-    const String aName;             // Name des Parameters
-    SbxBaseRef   aTypeRef;          // Objekt, falls Objekttyp
-    SbxDataType  eType;             // Datentyp
-    UINT16       nFlags;            // Flag-Bits
-    UINT32       nUserData;         // IDs etc.
+    const String aName;          // Name of the parameter
+    SbxBaseRef   aTypeRef;       // Object, if object type
+    SbxDataType  eType;          // Data type
+    UINT16       nFlags;         // Flag-Bits
+    UINT32       nUserData;      // IDs etc.
     SbxParamInfo( const String& s, SbxDataType t, USHORT n, SbxBase* b = NULL )
     : aName( s ), aTypeRef( b ), eType( t ), nFlags( n ), nUserData( 0 ) {}
     ~SbxParamInfo() {}
@@ -114,7 +113,7 @@ public:
 
     void                AddParam( const String&, SbxDataType, USHORT=SBX_READ );
     void                AddParam( const SbxParamInfo& );
-    const SbxParamInfo* GetParam( USHORT n ) const; // ab 1!
+    const SbxParamInfo* GetParam( USHORT n ) const; // index starts with 1!
     const String&       GetComment() const              { return aComment; }
     const String&       GetHelpFile() const             { return aHelpFile; }
     UINT32              GetHelpId() const               { return nHelpId;   }
@@ -143,8 +142,7 @@ public:
 #ifndef __SBX_SBXALIAS_HXX
 #define __SBX_SBXALIAS_HXX
 
-// SbxAlias ist ein Alias fuer eine Variable oder ein Objekt
-
+// SbxAlias is an alias for a var or object
 class SbxAlias : public SbxVariable, public SfxListener
 {
     SbxVariableRef xAlias;
@@ -180,11 +178,11 @@ class SbxArray : public SbxBase
     friend class SbClassModuleObject;
     void PutDirect( SbxVariable* pVar, UINT32 nIdx );
 
-    SbxArrayImpl* mpSbxArrayImpl;   // Impl data
-    SbxVarRefs* pData;              // Die Variablen
+    SbxArrayImpl* mpSbxArrayImpl; // Impl data
+    SbxVarRefs*   pData;          // The variables
 
 protected:
-    SbxDataType eType;              // Datentyp des Arrays
+    SbxDataType eType;            // Data type of the array
     virtual ~SbxArray();
     virtual BOOL LoadData( SvStream&, USHORT );
     virtual BOOL StoreData( SvStream& ) const;
@@ -225,19 +223,17 @@ public:
 #ifndef __SBX_SBXDIMARRAY_HXX
 #define __SBX_SBXDIMARRAY_HXX
 
-// SbxDimArray ist ein Array, was nach BASIC-Konventionen
-// dimensioniert werden kann.
-
+// SbxDimArray is an array that can dimensioned using BASIC conventions.
 struct SbxDim;
 
 class SbxDimArrayImpl;
 
 class SbxDimArray : public SbxArray
 {
-    SbxDimArrayImpl* mpSbxDimArrayImpl;     // Impl data
+    SbxDimArrayImpl* mpSbxDimArrayImpl;   // Impl data
 
-    SbxDim* pFirst, *pLast;         // Links fuer Dimension-Tabelle
-    short   nDim;                   // Anzahl Dimensionen
+    SbxDim* pFirst, *pLast;               // Links to Dimension table
+    short   nDim;                         // Number of dimensions
     void   AddDimImpl32( INT32, INT32, BOOL bAllowSize0 );
     bool mbHasFixedSize;
 protected:
@@ -296,7 +292,7 @@ protected:
     virtual BOOL LoadData( SvStream&, USHORT );
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
-    // ueberladbare Methoden:
+    // Overridable methods (why not pure virtual?):
     virtual void CollAdd( SbxArray* pPar );
     virtual void CollItem( SbxArray* pPar );
     virtual void CollRemove( SbxArray* pPar );

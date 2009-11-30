@@ -235,6 +235,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) th
 :   text::XTextRange()
 ,   beans::XPropertySet()
 ,   beans::XMultiPropertySet()
+,   beans::XMultiPropertyStates()
 ,   beans::XPropertyState()
 ,   lang::XServiceInfo()
 ,   text::XTextRangeCompare()
@@ -1247,19 +1248,27 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
+
+    if( pForwarder )
+    {
+        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(maPropSet.getPropertyMap(), PropertyName );
+        if( pMap )
+        {
+            CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
+            _setPropertyToDefault( pForwarder, pMap, nPara );
+            return;
+        }
+    }
+
+    throw beans::UnknownPropertyException();
+}
+
+void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, const SfxItemPropertyMap* pMap, sal_Int32 nPara )
+    throw( beans::UnknownPropertyException, uno::RuntimeException )
+{
     do
     {
-        SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
-
-        if( NULL == pForwarder )
-            break;
-
-        CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
-
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(maPropSet.getPropertyMap(), PropertyName );
-        if( NULL == pMap )
-            break;
-
         SfxItemSet aSet( *pForwarder->GetPool(), TRUE );
 
         if( pMap->nWID == WID_FONTDESC )
@@ -1295,8 +1304,6 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
         return;
     }
     while(0);
-
-    throw beans::UnknownPropertyException();
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aPropertyName )
@@ -1343,6 +1350,45 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
         }
     }
     throw beans::UnknownPropertyException();
+}
+
+// beans::XMultiPropertyStates
+void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault(  ) throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
+
+    if( pForwarder )
+    {
+        for( const SfxItemPropertyMap* pMap = maPropSet.getPropertyMap(); pMap->pName; pMap++ )
+        {
+            _setPropertyToDefault( pForwarder, pMap, -1 );
+        }
+    }
+}
+
+void SAL_CALL SvxUnoTextRangeBase::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    sal_Int32 nCount = aPropertyNames.getLength();
+    for( const OUString* pName = aPropertyNames.getConstArray(); nCount; pName++, nCount-- )
+    {
+        setPropertyToDefault( *pName );
+    }
+}
+
+uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    sal_Int32 nCount = aPropertyNames.getLength();
+    uno::Sequence< uno::Any > ret( nCount );
+    uno::Any* pDefaults = ret.getArray();
+
+    for( const OUString* pName = aPropertyNames.getConstArray(); nCount; pName++, nCount--, pDefaults++ )
+    {
+        *pDefaults = getPropertyDefault( *pName );
+    }
+
+    return ret;
 }
 
 // internal
@@ -1506,7 +1552,7 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionStarts( const uno::Referenc
     SvxUnoTextRangeBase* pR1 = SvxUnoTextRangeBase::getImplementation( xR1 );
     SvxUnoTextRangeBase* pR2 = SvxUnoTextRangeBase::getImplementation( xR2 );
 
-    if( (pR1 == 0) || (pR2 == 0) || (pR1->mpEditSource != mpEditSource) || (pR2->mpEditSource != mpEditSource) )
+    if( (pR1 == 0) || (pR2 == 0) )
         throw lang::IllegalArgumentException();
 
     const ESelection& r1 = pR1->maSelection;
@@ -1530,7 +1576,7 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference<
     SvxUnoTextRangeBase* pR1 = SvxUnoTextRangeBase::getImplementation( xR1 );
     SvxUnoTextRangeBase* pR2 = SvxUnoTextRangeBase::getImplementation( xR2 );
 
-    if( (pR1 == 0) || (pR2 == 0) || (pR1->mpEditSource->GetTextForwarder() != mpEditSource->GetTextForwarder()) || (pR2->mpEditSource->GetTextForwarder() != mpEditSource->GetTextForwarder()) )
+    if( (pR1 == 0) || (pR2 == 0) )
         throw lang::IllegalArgumentException();
 
     const ESelection& r1 = pR1->maSelection;
@@ -1581,8 +1627,8 @@ uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
     QUERYINT( text::XTextRange );
-//  else if( rType == ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0) )
-//      return uno::makeAny(uno::Reference< beans::XTolerantMultiPropertySet >(this));
+    else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertyStates >*)0) )
+        return uno::makeAny(uno::Reference< beans::XMultiPropertyStates >(this));
     else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
         return uno::makeAny(uno::Reference< beans::XPropertySet >(this));
     else QUERYINT( beans::XPropertyState );
@@ -1621,13 +1667,13 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextRange::getTypes()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 8 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 9 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
-//      *pTypes++ = ::getCppuType(( const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
@@ -1744,7 +1790,7 @@ uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
         return uno::makeAny(uno::Reference< text::XTextRange >((text::XText*)(this)));
     QUERYINT(container::XEnumerationAccess );
     QUERYINT( container::XElementAccess );
-//  QUERYINT( beans::XTolerantMultiPropertySet );
+    QUERYINT( beans::XMultiPropertyStates );
     QUERYINT( beans::XPropertySet );
     QUERYINT( beans::XMultiPropertySet );
     QUERYINT( beans::XPropertyState );
@@ -1767,14 +1813,14 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 14 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 15 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
-//      *pTypes++ = ::getCppuType(( const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextAppend >*)0);

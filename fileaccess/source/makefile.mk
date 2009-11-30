@@ -56,7 +56,6 @@ DEF1NAME=$(SHL1TARGET)
 SHL1STDLIBS= \
         $(UNOTOOLSLIB) \
         $(TOOLSLIB) \
-        $(VOSLIB) \
         $(UCBHELPERLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \

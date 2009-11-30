@@ -250,6 +250,28 @@ void FwkTabWindow::ClearEntryList()
 
 // -----------------------------------------------------------------------
 
+bool FwkTabWindow::RemoveEntry( sal_Int32 nIndex )
+{
+    TabEntryList::iterator pIt;
+    for (  pIt  = m_TabList.begin();
+           pIt != m_TabList.end();
+         ++pIt )
+    {
+        if ( (*pIt)->m_nIndex == nIndex )
+            break;
+    }
+
+    // remove entry from vector
+    if ( pIt != m_TabList.end())
+    {
+        m_TabList.erase(pIt);
+        return true;
+    }
+    else
+        return false;
+}
+
+// -----------------------------------------------------------------------
 TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
 {
     TabEntry* pEntry = NULL;
@@ -281,9 +303,10 @@ IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
         if ( pEntry )
         {
             pTabPage = new FwkTabPage( &m_aTabCtrl, pEntry->m_sPageURL, pEntry->m_xEventHdl, m_xWinProvider );
+            pEntry->m_pPage = pTabPage;
+            m_aTabCtrl.SetTabPage( nId, pTabPage );
             pTabPage->Show();
             pTabPage->ActivatePage();
-            m_aTabCtrl.SetTabPage( nId, pTabPage );
         }
     } else {
         pTabPage->ActivatePage();
@@ -371,7 +394,13 @@ void FwkTabWindow::ActivatePage( sal_Int32 nIndex )
 
 void FwkTabWindow::RemovePage( sal_Int32 nIndex )
 {
-    m_aTabCtrl.RemovePage( static_cast< USHORT >( nIndex ) );
+    TabEntry* pEntry = FindEntry(nIndex);
+    if ( pEntry )
+    {
+        m_aTabCtrl.RemovePage( static_cast< USHORT >( nIndex ) );
+        if (RemoveEntry(nIndex))
+            delete pEntry;
+    }
 }
 
 // -----------------------------------------------------------------------

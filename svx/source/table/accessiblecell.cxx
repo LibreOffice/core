@@ -42,6 +42,7 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 
+#include <svx/outlobj.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
 
@@ -85,6 +86,8 @@ void AccessibleCell::Init (void)
     {
         OutlinerParaObject* pOutlinerParaObject = mxCell->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
+        bool bOwnParaObject = pOutlinerParaObject != 0;
+
         if( !pOutlinerParaObject )
             pOutlinerParaObject = mxCell->GetOutlinerParaObject();
 
@@ -96,6 +99,9 @@ void AccessibleCell::Init (void)
             mpText = new AccessibleTextHelper( pEditSource );
             mpText->SetEventSource(this);
         }
+
+        if( bOwnParaObject)
+            delete pOutlinerParaObject;
     }
 }
 

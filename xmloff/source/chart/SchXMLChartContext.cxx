@@ -800,10 +800,8 @@ void SchXMLChartContext::EndElement()
     else if( msChartAddress.getLength() )
     {
         // in this case there are range addresses that are simply wrong.
-        bool bOldFileWithOwnDataFromRows =
-            (mbHasOwnTable && (meDataRowSource==chart::ChartDataRowSource_ROWS) &&
-             SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3(
-                 Reference< frame::XModel >( xNewDoc, uno::UNO_QUERY )));
+        bool bOlderThan2_3 = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( Reference< frame::XModel >( xNewDoc, uno::UNO_QUERY ));
+        bool bOldFileWithOwnDataFromRows = (bOlderThan2_3 && mbHasOwnTable && (meDataRowSource==chart::ChartDataRowSource_ROWS));
         if( mbAllRangeAddressesAvailable && !bSpecialHandlingForDonutChart && !mbIsStockChart &&
             !bOldFileWithOwnDataFromRows )
         {
@@ -826,6 +824,8 @@ void SchXMLChartContext::EndElement()
             // parameters and change the diagram via template mechanism
             try
             {
+                if( bOlderThan2_3 && xDiaProp.is() )//for older charts the hidden cells were removed by calc on the fly
+                    xDiaProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IncludeHiddenCells")),uno::makeAny(false));
                 ChangeDiagramAccordingToTemplate( xNewDoc );
             }
             catch( uno::Exception & )

@@ -30,23 +30,15 @@
 package com.sun.star.script.framework.container;
 import  com.sun.star.script.framework.log.*;
 import  com.sun.star.script.framework.io.*;
-import  com.sun.star.script.framework.browse.*;
 import  com.sun.star.script.framework.provider.PathUtils;
 
 import com.sun.star.container.*;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
-import com.sun.star.io.*;
-import com.sun.star.frame.*;
-
-import com.sun.star.embed.*;
 
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.ucb.XSimpleFileAccess2;
 import java.io.*;
-import java.util.*;
-import java.net.*;
 
 public class Parcel implements XNameContainer
 {

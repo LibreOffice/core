@@ -381,10 +381,10 @@ namespace svxform
     {
         try
         {
-            Reference< XVclWindowPeer > xPeer( _rxControl.is() ? _rxControl->getPeer() : Reference< XWindowPeer >(), UNO_QUERY );
-            OSL_ENSURE( xPeer.is(), "ControlBorderManager::validityChanged: invalid control/peer!" );
+            OSL_ENSURE( _rxControl.is(), "ControlBorderManager::validityChanged: invalid control!" );
             OSL_ENSURE( _rxValidatable.is(), "ControlBorderManager::validityChanged: invalid validatable!" );
 
+            Reference< XVclWindowPeer > xPeer( _rxControl.is() ? _rxControl->getPeer() : Reference< XWindowPeer >(), UNO_QUERY );
             if ( !xPeer.is() || !_rxValidatable.is() )
                 return;
 
@@ -426,7 +426,7 @@ namespace svxform
                 else
                 {
                     // and also the new font
-                    setUnderline( xPeer, UnderlineDescriptor( FontUnderline::WAVE, m_nInvalidColor ) );
+                    setUnderline( xPeer, UnderlineDescriptor( com::sun::star::awt::FontUnderline::WAVE, m_nInvalidColor ) );
                 }
             }
 

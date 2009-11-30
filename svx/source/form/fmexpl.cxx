@@ -88,6 +88,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <rtl/logfile.hxx>
 
 using namespace ::svxform;
 using namespace ::com::sun::star::uno;
@@ -233,6 +234,7 @@ DBG_NAME(FmEntryData);
 FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface >& _rxIFace )
     :pParent( pParentData )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::FmEntryData" );
     DBG_CTOR(FmEntryData,NULL);
     pChildList = new FmEntryDataList();
 
@@ -250,6 +252,7 @@ FmEntryData::~FmEntryData()
 //------------------------------------------------------------------------
 void FmEntryData::newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::newObject" );
     // do not just copy, normalize it
     m_xNormalizedIFace = Reference< XInterface >( _rxIFace, UNO_QUERY );
     m_xProperties = m_xProperties.query( m_xNormalizedIFace );
@@ -259,6 +262,7 @@ void FmEntryData::newObject( const ::com::sun::star::uno::Reference< ::com::sun:
 //------------------------------------------------------------------------
 FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::FmEntryData" );
     pChildList = new FmEntryDataList();
     aText = rEntryData.GetText();
     m_aNormalImage = rEntryData.GetNormalImage();
@@ -282,6 +286,7 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 //------------------------------------------------------------------------
 void FmEntryData::Clear()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::Clear" );
     for (;;)
     {
         FmEntryData* pEntryData = GetChildList()->Remove(ULONG(0));
@@ -294,6 +299,7 @@ void FmEntryData::Clear()
 //------------------------------------------------------------------------
 sal_Bool FmEntryData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::IsEqualWithoutChilds" );
     if(this == pEntryData)
         return sal_True;
 
@@ -396,6 +402,7 @@ FmControlData::FmControlData( const Reference< XFormComponent >& _rxComponent, c
     :FmEntryData( _pParent, _rxComponent )
     ,m_xFormComponent( _rxComponent )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::FmControlData" );
     DBG_CTOR(FmControlData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
@@ -437,6 +444,7 @@ FmEntryData* FmControlData::Clone()
 //------------------------------------------------------------------------
 Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::FmControlData" );
     //////////////////////////////////////////////////////////////////////
     // Default-Image
     Image aImage = ilNavigatorImages.GetImage( RID_SVXIMG_CONTROL );
@@ -545,6 +553,7 @@ Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
 //------------------------------------------------------------------------
 sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::IsEqualWithoutChilds" );
     if(this == pEntryData)
         return sal_True;
 
@@ -561,6 +570,7 @@ sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 //------------------------------------------------------------------------
 void FmControlData::ModelReplaced( const Reference< XFormComponent >& _rxNew, const ImageList& _rNormalImages, const ImageList& _rHCImages )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::ModelReplaced" );
     m_xFormComponent = _rxNew;
     newObject( m_xFormComponent );
 

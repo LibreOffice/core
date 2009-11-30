@@ -75,8 +75,6 @@ class SetupAppX : public SetupApp
     LPTSTR      m_pAppTitle;
     LPTSTR      m_pCmdLine;
     LPTSTR      m_pDatabase;
-    LPTSTR      m_pInstMsiW;
-    LPTSTR      m_pInstMsiA;
     LPTSTR      m_pReqVersion;
     LPTSTR      m_pProductName;
     LPTSTR      m_pAdvertise;
@@ -93,6 +91,7 @@ class SetupAppX : public SetupApp
     boolean     m_bRegNoMsoTypes :1;
     boolean     m_bRegAllMsoTypes :1;
     boolean     m_bIsMinorUpgrade :1;
+    boolean     m_bSupportsPatch :1;
 
     FILE       *m_pLogFile;
 
@@ -122,10 +121,10 @@ private:
 
 
     boolean     GetCommandLine();
-    boolean     InstallMsi( LPCTSTR pInstaller );
 
     boolean     IsTerminalServerInstalled() const;
-
+    void        AddFileToPatchList( TCHAR* pPath, TCHAR* pFile );
+    boolean     IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName );
 public:
                     SetupAppX();
                    ~SetupAppX();

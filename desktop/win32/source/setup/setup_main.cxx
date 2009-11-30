@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: setup_main.cxx,v $
- * $Revision: 1.8 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -111,12 +108,12 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
         if ( ! pSetup->ReadProfile() )
             throw pSetup->GetError();
 
+        if ( ! pSetup->CheckVersion() )
+            throw pSetup->GetError();
+
         if ( ! pSetup->IsAdminInstall() )
             if ( ! pSetup->GetPatches() )
                 throw pSetup->GetError();
-
-        if ( ! pSetup->CheckVersion() )
-            throw pSetup->GetError();
 
         // CheckForUpgrade() has to be called after calling GetPatches()!
         if ( ! pSetup->CheckForUpgrade() )

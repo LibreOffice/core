@@ -81,7 +81,7 @@ void SbiImage::Clear()
 
 /**************************************************************************
 *
-*   Service-Routinen fuer das Laden und Speichern
+*    Service-Routines for Load/Store
 *
 **************************************************************************/
 
@@ -90,8 +90,7 @@ BOOL SbiGood( SvStream& r )
     return BOOL( !r.IsEof() && r.GetError() == SVSTREAM_OK );
 }
 
-// Oeffnen eines Records
-
+// Open Record
 ULONG SbiOpenRecord( SvStream& r, UINT16 nSignature, UINT16 nElem )
 {
     ULONG nPos = r.Tell();
@@ -99,8 +98,7 @@ ULONG SbiOpenRecord( SvStream& r, UINT16 nSignature, UINT16 nElem )
     return nPos;
 }
 
-// Schliessen eines Records
-
+// Close Record
 void SbiCloseRecord( SvStream& r, ULONG nOff )
 {
     ULONG nPos = r.Tell();
@@ -111,16 +109,15 @@ void SbiCloseRecord( SvStream& r, ULONG nOff )
 
 /**************************************************************************
 *
-*   Laden und Speichern
+*    Load/Store
 *
 **************************************************************************/
 
-// Falls die Versionsnummer nicht passt, werden die binaeren Teile
-// nicht geladen, wohl aber Source, Kommentar und Name.
-
+// If the version number does not find, binary parts are omitted, but not
+// source, comments and name
 BOOL SbiImage::Load( SvStream& r )
 {
-    UINT32 nVersion = 0;            // Versionsnummer
+    UINT32 nVersion = 0;        // Versionsnumber
     return Load( r, nVersion );
 }
 BOOL SbiImage::Load( SvStream& r, UINT32& nVersion )
@@ -130,10 +127,10 @@ BOOL SbiImage::Load( SvStream& r, UINT32& nVersion )
     UINT32 nLen, nOff;
 
     Clear();
-    // Master-Record einlesen
+    // Read Master-Record
     r >> nSign >> nLen >> nCount;
     ULONG nLast = r.Tell() + nLen;
-    UINT32 nCharSet;                // System-Zeichensatz
+    UINT32 nCharSet;               // System charset
     UINT32 lDimBase;
     UINT16 nReserved1;
     UINT32 nReserved2;
@@ -275,7 +272,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
         aEmptyImg.Save( r, B_LEGACYVERSION );
         return TRUE;
     }
-    // Erst mal der Header:
+    // First of all the header
     ULONG nStart = SbiOpenRecord( r, B_MODULE, 1 );
     ULONG nPos;
 
@@ -299,7 +296,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
         //r << aName;
         SbiCloseRecord( r, nPos );
     }
-    // Kommentar?
+    // Comment?
     if( aComment.Len() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_COMMENT, 1 );
@@ -340,7 +337,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
         }
 #endif
     }
-    // Binaere Daten?
+    // Binary data?
     if( pCode && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_PCODE, 1 );
@@ -361,14 +358,14 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
     if( nStrings )
     {
         nPos = SbiOpenRecord( r, B_STRINGPOOL, nStrings );
-        // Fuer jeden String:
-        //  UINT32 Offset des Strings im Stringblock
+        // For every String:
+        //  UINT32 Offset of the Strings in the Stringblock
         short i;
 
         for( i = 0; i < nStrings && SbiGood( r ); i++ )
             r << (UINT32) pStringOff[ i ];
 
-        // Danach der String-Block
+        // Then the String-Block
         char* pByteStrings = new char[ nStringSize ];
         for( i = 0; i < nStrings; i++ )
         {
@@ -382,7 +379,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
         delete[] pByteStrings;
         SbiCloseRecord( r, nPos );
     }
-    // Und die Gesamtlaenge setzen
+    // Set overall length
     SbiCloseRecord( r, nStart );
     if( !SbiGood( r ) )
         bError = TRUE;
@@ -391,7 +388,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
 
 /**************************************************************************
 *
-*   Routinen, die auch vom Compiler gerufen werden
+*    Routines called by the compiler
 *
 **************************************************************************/
 
@@ -415,9 +412,8 @@ void SbiImage::MakeStrings( short nSize )
 
 // Hinzufuegen eines Strings an den StringPool. Der String-Puffer
 // waechst dynamisch in 1K-Schritten
-
-
-
+// Add a string to StringPool. The String buffer is dynamically
+// growing in 1K-Steps
 void SbiImage::AddString( const String& r )
 {
     if( nStringIdx >= nStrings )
@@ -451,26 +447,25 @@ void SbiImage::AddString( const String& r )
             //ByteString aByteStr( r, eCharSet );
             memcpy( pStrings + nStringOff, r.GetBuffer(), len * sizeof( sal_Unicode ) );
             nStringOff = nStringOff + len;
-            // war das der letzte String? Dann die Groesse
-            // des Puffers aktualisieren
+            // Last String? The update the size of the buffer
             if( nStringIdx >= nStrings )
                 nStringSize = nStringOff;
         }
     }
 }
 
-// Codeblock hinzufuegen
-// Der Block wurde vom Compiler aus der Klasse SbBuffer herausgeholt
-// und ist bereits per new angelegt. Ausserdem enthaelt er alle Integers
-// im Big Endian-Format, kann also direkt gelesen/geschrieben werden.
-
+// Add code block
+// The block was fetched by the compiler from class SbBuffer and
+// is already created with new. Additionally it contains all Integers
+// in Big Endian format, so can be directly read/written.
 void SbiImage::AddCode( char* p, UINT32 s )
 {
     pCode = p;
     nCodeSize = s;
 }
 
-void SbiImage::AddType(SbxObject* pObject) // User-Type mit aufnehmen
+// Add user type
+void SbiImage::AddType(SbxObject* pObject)
 {
     if( !rTypes.Is() )
         rTypes = new SbxArray;
@@ -488,12 +483,11 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 
 /**************************************************************************
 *
-*   Zugriffe auf das Image
+*    Accessing the image
 *
 **************************************************************************/
 
-// IDs zaehlen ab 1!!
-
+// Note: IDs start with 1
 String SbiImage::GetString( short nId ) const
 {
     if( nId && nId <= nStrings )
@@ -528,27 +522,24 @@ const SbxObject* SbiImage::FindType (String aTypeName) const
     return rTypes.Is() ? (SbxObject*)rTypes->Find(aTypeName,SbxCLASS_OBJECT) : NULL;
 }
 
-UINT16
-SbiImage::CalcLegacyOffset( INT32 nOffset )
+UINT16 SbiImage::CalcLegacyOffset( INT32 nOffset )
 {
     return SbiCodeGen::calcLegacyOffSet( (BYTE*)pCode, nOffset ) ;
 }
-UINT32
-SbiImage::CalcNewOffset( INT16 nOffset )
+
+UINT32 SbiImage::CalcNewOffset( INT16 nOffset )
 {
     return SbiCodeGen::calcNewOffSet( (BYTE*)pLegacyPCode, nOffset ) ;
 }
 
-void
-SbiImage::ReleaseLegacyBuffer()
+void  SbiImage::ReleaseLegacyBuffer()
 {
     delete[] pLegacyPCode;
     pLegacyPCode = NULL;
     nLegacyCodeSize = 0;
 }
 
-BOOL
-SbiImage::ExceedsLegacyLimits()
+BOOL SbiImage::ExceedsLegacyLimits()
 {
     if ( ( nStringSize > 0xFF00L ) || ( CalcLegacyOffset( nCodeSize ) > 0xFF00L ) )
         return TRUE;

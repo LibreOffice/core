@@ -42,10 +42,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SRS1NAME=$(TARGET)
-SRC1FILES =  \
-        config.src
-
 SLOFILES =	\
         $(SLO)$/evntconf.obj
 

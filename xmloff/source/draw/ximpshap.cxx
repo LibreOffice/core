@@ -3444,7 +3444,7 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
 
 void SdXMLCustomShapeContext::EndElement()
 {
-    if ( maCustomShapeGeometry.size() )
+    if ( !maCustomShapeGeometry.empty() )
     {
         const rtl::OUString sCustomShapeGeometry    ( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
 

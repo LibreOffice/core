@@ -228,39 +228,6 @@ TreeElement* Factory::makeAccessRoot(rtl::Reference< configuration::Tree > const
 }
 //-----------------------------------------------------------------------------
 
-uno::Reference< uno::XInterface > Factory::makeUnoGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
-{
-    return implToUno(makeGroupMember(aTree,aNode));
-}
-//-----------------------------------------------------------------------------
-NodeElement* Factory::makeGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
-{
-    OSL_PRECOND( !configuration::isEmpty(aTree.get()) , "ERROR: Configuration: Creating an object requires a valid tree");
-    if (configuration::isEmpty(aTree.get())) return 0;
-
-    OSL_PRECOND( aNode.isValid() , "ERROR: Configuration: Creating an object requires a valid node");
-    OSL_PRECOND( aTree->isValidNode(aNode.getOffset()), "ERROR: Configuration: NodeRef does not match Tree");
-    if (!aTree->isValidNode(aNode.getOffset())) return 0;
-
-    OSL_PRECOND( configuration::isStructuralNode(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
-    OSL_ENSURE(!aTree->isRootNode(aNode),"INTERNAL ERROR: Root of Tree should not be used for a group member object");
-
-    configuration::NodeID aNodeID(aTree,aNode);
-    NodeElement* pRet = findElement(aNodeID);
-    if (0 == pRet)
-    {
-        rtl::Reference<configuration::Template> aTemplate = implGetSetElementTemplate(aTree,aNode);
-
-        pRet = doCreateGroupMember(aTree,aNode,aTemplate.get());
-
-        OSL_ENSURE( pRet,"WARNING: New API object could not be created");
-
-        implHaveNewElement(aNodeID,pRet);
-    }
-    return pRet;
-}
-//-----------------------------------------------------------------------------
-
 uno::Reference< uno::XInterface > Factory::makeUnoSetElement(rtl::Reference< configuration::ElementTree > const& aElementTree)
 {
     uno::Reference< uno::XInterface > aRet = implToUno(makeSetElement(aElementTree));

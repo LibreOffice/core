@@ -56,46 +56,28 @@ java_sql_Blob::~java_sql_Blob()
     SDBThreadAttach::releaseRef();
 }
 
-jclass java_sql_Blob::getMyClass()
+jclass java_sql_Blob::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass( "java/sql/Blob" );
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/sql/Blob");
     return theClass;
-}
-
-void java_sql_Blob::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 
 sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         // temporaere Variable initialisieren
         static const char * cSignature = "()J";
         static const char * cMethodName = "length";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallLongMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
-            // und aufraeumen
-        } //mID
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        out = t.pEnv->CallLongMethod( object, mID );
+        ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
     return (sal_Int64)out;
 }
@@ -104,26 +86,22 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-    if( t.pEnv ){
+    {
         // temporaere Variable initialisieren
         static const char * cSignature = "(JI)[B";
         static const char * cMethodName = "getBytes";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            jbyteArray out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID,pos,count);
-            ThrowSQLException(t.pEnv,*this);
-            if(out)
-            {
-                jboolean p = sal_False;
-                aSeq.realloc(t.pEnv->GetArrayLength(out));
-                memcpy(aSeq.getArray(),t.pEnv->GetByteArrayElements(out,&p),aSeq.getLength());
-                t.pEnv->DeleteLocalRef(out);
-            }
-            // und aufraeumen
-        } //mID
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        jbyteArray out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID,pos,count);
+        ThrowSQLException(t.pEnv,*this);
+        if(out)
+        {
+            jboolean p = sal_False;
+            aSeq.realloc(t.pEnv->GetArrayLength(out));
+            memcpy(aSeq.getArray(),t.pEnv->GetByteArrayElements(out,&p),aSeq.getLength());
+            t.pEnv->DeleteLocalRef(out);
+        }
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return  aSeq;
@@ -131,21 +109,9 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_Blob::getBinaryStream(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()Ljava/io/InputStream;";
-        static const char * cMethodName = "getBinaryStream";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
-        } //mID
-    } //t.pEnv
+    static jmethodID mID(NULL);
+    jobject out = callObjectMethod(t.pEnv,"getBinaryStream","()Ljava/io/InputStream;", mID);
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_io_InputStream( t.pEnv, out );
 }
@@ -154,24 +120,20 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         // temporaere Variable initialisieren
         static const char * cSignature = "([BI)J";
         static const char * cMethodName = "position";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            // Parameter konvertieren
-            jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
-            t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),(jbyte*)pattern.getConstArray());
-            out = t.pEnv->CallLongMethod( object, mID, pByteArray,start );
-            t.pEnv->DeleteLocalRef(pByteArray);
-            ThrowSQLException(t.pEnv,*this);
-            // und aufraeumen
-        } //mID
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        // Parameter konvertieren
+        jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
+        t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),(jbyte*)pattern.getConstArray());
+        out = t.pEnv->CallLongMethod( object, mID, pByteArray,start );
+        t.pEnv->DeleteLocalRef(pByteArray);
+        ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
     return (sal_Int64)out;
 }

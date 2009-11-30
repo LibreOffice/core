@@ -41,9 +41,8 @@
 class ProcessWrapper : public SbxObject
 {
 using SbxVariable::GetInfo;
-    // Definition eines Tabelleneintrags. Dies wird hier gemacht,
-    // da dadurch die Methoden und Properties als private deklariert
-    // werden koennen.
+// Definition of a table entry. This is done here because
+// through this methods and property can declared as private.
 #if defined ( ICC ) || defined ( HPUX ) || defined ( C50 ) || defined ( C52 )
 public:
 #endif
@@ -54,25 +53,24 @@ private:
 #endif
 
     struct Methods {
-        const char* pName;      // Name des Eintrags
-        SbxDataType eType;      // Datentyp
+        const char* pName;      // Name of the entry
+        SbxDataType eType;      // Data type
         pMeth pFunc;            // Function Pointer
-        short nArgs;            // Argumente und Flags
+        short nArgs;            // Arguments and flags
     };
-    static Methods aProcessMethods[];   // Methodentabelle
-    Methods *pMethods;  // Aktuelle Methodentabelle
+    static Methods aProcessMethods[];   // Method table
+    Methods *pMethods;  // Current method table
 
-    // Methoden
     void PSetImage( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void PStart( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void PGetExitCode( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void PIsRunning( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void PWasGPF( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
 
-    // Interne Member und Methoden
+    // Internal members and methods
     Process *pProcess;
 
-    // Infoblock auffuellen
+    // Fill info block
     SbxInfo* GetInfo( short nIdx );
 
     // Broadcaster Notification
@@ -81,13 +79,11 @@ private:
 public:
     ProcessWrapper();
     ~ProcessWrapper();
-    // Suchen eines Elements
+    // Search for an element
     virtual SbxVariable* Find( const String&, SbxClassType );
 };
 
-
-// Die dazugehoerige Factory:
-
+// Factory
 class ProcessFactory : public SbxFactory
 {
 public:

@@ -277,10 +277,12 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
 
     GDIMetaFile * pMtf = pDev->GetConnectMetaFile();
     if( pMtf )
+    {
         if( pMtf->IsRecord() && pDev->GetOutDevType() != OUTDEV_PRINTER )
             pMtf->Stop();
         else
             pMtf = NULL;
+    }
 // #ifndef UNX
     if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
 // #endif

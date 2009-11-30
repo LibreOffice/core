@@ -51,8 +51,10 @@ class Window : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayer
 {
 public:
 
-            Window( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr,
-                    Player& rPlayer );
+            Window( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rxMgr,
+                    Player& i_rPlayer,
+                    NSView* i_pParentView
+                    );
             ~Window();
 
     bool    create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
@@ -103,6 +105,9 @@ private:
     ::com::sun::star::media::ZoomLevel          meZoomLevel;
     Player&                                     mrPlayer;
     int                                         mnPointerType;
+
+    NSView*                                     mpParentView; // parent view for our own private movie view
+    QTMovieView*                                mpMovieView;  // the view containing the movie object, output target and controller
 
     void                                        ImplLayoutVideoWindow();
 };

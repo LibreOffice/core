@@ -427,7 +427,7 @@
           <desc>Indicates whether the object creation and modification will be visualized using the full object attribute set or wireframe.</desc>
           <label>Modify with attributes</label>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 			<prop oor:name="ShowUndoDeleteWarning" oor:type="xs:boolean">
 				<!-- OldPath: -->

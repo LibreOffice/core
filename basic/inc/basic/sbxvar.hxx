@@ -67,7 +67,7 @@ struct SbxINT64
             nHigh++;
     }
 
-    // blc/os2i vertraegt kein operator =
+    // blc/os2i do not like operator =
     void Set(double n)
     {
         if( n >= 0 )
@@ -233,16 +233,16 @@ class SbxValueImpl;
 
 class SbxValue : public SbxBase
 {
-    friend class SbiDllMgr;             // BASIC-Runtime, muss an aData ran
+    friend class SbiDllMgr; // BASIC-Runtime must access aData
 
     SbxValueImpl* mpSbxValueImplImpl;   // Impl data
 
-    // #55226 Zusaetzliche Info transportieren
+    // #55226 Transport additional infos
     SbxValue* TheRealValue( BOOL bObjInObjError ) const;
     SbxValue* TheRealValue() const;
 protected:
-    SbxValues aData;                    // Daten
-    String    aPic;                     // Picture-String
+    SbxValues aData; // Data
+    String    aPic;  // Picture-String
 
     virtual void Broadcast( ULONG );    // Broadcast-Call
     virtual ~SbxValue();
@@ -279,7 +279,7 @@ public:
     BOOL IsUInt()    const { return BOOL( GetType() == SbxUINT     ); }
     BOOL IspChar()   const { return BOOL( GetType() == SbxLPSTR    ); }
     BOOL IsNumeric() const;
-    BOOL IsNumericRTL() const;  // #41692 Schnittstelle fuer Basic
+    BOOL IsNumericRTL() const;  // #41692 Interface for Basic
     BOOL ImpIsNumeric( BOOL bOnlyIntntl ) const;    // Implementation
 
     virtual SbxClassType GetClass() const;
@@ -328,10 +328,10 @@ public:
     BOOL PutDate( double );
     BOOL PutBool( BOOL );
     BOOL PutErr( USHORT );
-    BOOL PutStringExt( const String& ); // mit erweiterter Auswertung (International, "TRUE"/"FALSE")
+    BOOL PutStringExt( const String& );     // with extended analysis (International, "TRUE"/"FALSE")
     BOOL PutString( const String& );
-    BOOL PutString( const sal_Unicode* );   // Typ = SbxSTRING
-    BOOL PutpChar( const sal_Unicode* );    // Typ = SbxLPSTR
+    BOOL PutString( const sal_Unicode* );   // Type = SbxSTRING
+    BOOL PutpChar( const sal_Unicode* );    // Type = SbxLPSTR
     BOOL PutDecimal( SbxDecimal* pDecimal );
     BOOL PutObject( SbxBase* );
     BOOL PutData( void* );
@@ -353,12 +353,12 @@ public:
     BOOL Scan( const String&, USHORT* = NULL );
     void Format( String&, const String* = NULL ) const;
 
-    // Schnittstelle fuer CDbl im Basic
+    // Interface for CDbl in Basic
     static SbxError ScanNumIntnl( const String& rSrc, double& nVal, BOOL bSingle=FALSE );
 
-    // Die folgenden Operatoren sind zwecks einfacherem
-    // Zugriff definiert. Fehlerkonditionen wie Ueberlauf
-    // oder Konversionen werden nicht beruecksichtigt.
+    // The following operators are definied for easier handling.
+    // Error conditions (overflow, conversions) are not
+    // taken into consideration.
 
     inline int operator ==( const SbxValue& ) const;
     inline int operator !=( const SbxValue& ) const;
@@ -446,15 +446,14 @@ class SbxVariable : public SbxValue
     friend class SbMethod;
 
     SbxVariableImpl* mpSbxVariableImpl; // Impl data
-
-    SfxBroadcaster* pCst;       // Broadcaster, falls angefordert
-    String       maName;        // Name, falls vorhanden
-    SbxArrayRef  mpPar;         // Parameter-Array, falls gesetzt
-    USHORT       nHash;         // Hash-ID fuer die Suche
+    SfxBroadcaster*  pCst;      // Broadcaster, if needed
+    String           maName;            // Name, if available
+    SbxArrayRef      mpPar;             // Parameter-Array, if set
+    USHORT           nHash;             // Hash-ID for search
 protected:
-    SbxInfoRef  pInfo;          // Evtl. angeforderte Infos
-    sal_uIntPtr nUserData;      // Benutzerdaten fuer Call()
-    SbxObject* pParent;         // aktuell zugeordnetes Objekt
+    SbxInfoRef  pInfo;              // Probably called information
+    sal_uIntPtr nUserData;          // User data for Call()
+    SbxObject* pParent;             // Currently attached object
     virtual ~SbxVariable();
     virtual BOOL LoadData( SvStream&, USHORT );
     virtual BOOL StoreData( SvStream& ) const;
@@ -480,15 +479,14 @@ public:
     virtual SbxDataType  GetType()  const;
     virtual SbxClassType GetClass() const;
 
-    // Das Parameter-Interface
+    // Parameter-Interface
     virtual SbxInfo* GetInfo();
     void SetInfo( SbxInfo* p );
     void SetParameters( SbxArray* p );
     SbxArray* GetParameters() const     { return mpPar; }
 
     // Sfx-Broadcasting-Support:
-    // Zwecks Einsparung von Daten und besserer DLL-Hierarchie
-    // erst einmal per Casting
+    // Due to data reduction and better DLL-hierarchie currently via casting
     SfxBroadcaster& GetBroadcaster();
     BOOL IsBroadcaster() const { return BOOL( pCst != NULL ); }
     virtual void Broadcast( ULONG nHintId );

@@ -35,27 +35,13 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/scrbar.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <map>
 #include <tools/shl.hxx> //add CHINA001
 #include <tools/debug.hxx> //add CHINA001
-#include <vcl/sound.hxx> //add CHINA001
-#include <vcl/svapp.hxx> //add CHINA001
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx> //add CHINA001
-#endif
-#include <vcl/fixed.hxx> //add CHINA001
-#include <vcl/lstbox.hxx> //add CHINA001
-#include <vcl/edit.hxx> //add CHINA001
-#include <vcl/metric.hxx>
 #include "svx/svxdllapi.h"
-
-class SubsetMap;
-class SvxCharMapData;
 
 // define ----------------------------------------------------------------
 
-#define CHARMAP_MAXLEN  32
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
 
@@ -86,6 +72,7 @@ public:
     void            SetHighlightHdl( const Link& rHdl ) { aHighHdl = rHdl; }
     Link            GetPreSelectHdl() const { return aHighHdl; }
     void            SetPreSelectHdl( const Link& rHdl ) { aPreSelectHdl = rHdl; }
+    static sal_uInt32& getSelectedChar();
 
 #ifdef _SVX_CHARMAP_CXX_
     ::svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
@@ -149,71 +136,8 @@ private:
     void            InitSettings( BOOL bForeground, BOOL bBackground);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK( VscrollHdl, ScrollBar* );
-//#endif
 };
 
-// class SvxShowText =====================================================
-
-class SVX_DLLPUBLIC SvxShowText : public Control
-{
-public:
-                    SvxShowText( Window* pParent,
-                                 const ResId& rResId,
-                                 BOOL bCenter = FALSE );
-                    ~SvxShowText();
-
-    void            SetFont( const Font& rFont );
-    void            SetText( const String& rText );
-
-protected:
-    virtual void    Paint( const Rectangle& );
-
-private:
-    long            mnY;
-    BOOL            mbCenter;
-
-};
-
-class SVX_DLLPUBLIC SvxCharMapData
-{
-public:
-                    SvxCharMapData( class SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pResContext );
-
-    void            SetCharFont( const Font& rFont );
-
-private:
-friend class SvxCharacterMap;
-    SfxModalDialog* mpDialog;
-
-    SvxShowCharSet  aShowSet;
-//    Edit            aShowText;
-    SvxShowText     aShowText;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    PushButton      aDeleteBtn;
-    FixedText       aFontText;
-    ListBox         aFontLB;
-    FixedText       aSubsetText;
-    ListBox         aSubsetLB;
-    FixedText       aSymbolText;
-    SvxShowText     aShowChar;
-    FixedText       aCharCodeText;
-
-    Font            aFont;
-    BOOL            bOne;
-    const SubsetMap* pSubsetMap;
-
-    DECL_LINK( OKHdl, OKButton* );
-    DECL_LINK( FontSelectHdl, ListBox* );
-    DECL_LINK( SubsetSelectHdl, ListBox* );
-    DECL_LINK( CharDoubleClickHdl, Control* pControl );
-    DECL_LINK( CharSelectHdl, Control* pControl );
-    DECL_LINK( CharHighlightHdl, Control* pControl );
-    DECL_LINK( CharPreSelectHdl, Control* pControl );
-    DECL_LINK( DeleteHdl, PushButton* pBtn );
-};
 #endif
 

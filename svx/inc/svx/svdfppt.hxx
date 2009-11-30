@@ -1049,7 +1049,6 @@ class SVX_DLLPUBLIC PPTParagraphObj : public PPTParaPropSet, public PPTNumberFor
                                 ~PPTParagraphObj();
 
         UINT32                  GetTextSize();
-        sal_uInt16              GetLevel( sal_uInt32 nMappedInstance );
         PPTPortionObj*          First();
         PPTPortionObj*          Next();
 

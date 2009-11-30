@@ -1351,10 +1351,12 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         {
             sal_Bool bUseSystemDialog = sal_True;
             if ( aDlgIter->second >>= bUseSystemDialog )
+            {
                 if ( bUseSystemDialog )
                     nDialog = SFX2_IMPL_DIALOG_SYSTEM;
                 else
                     nDialog = SFX2_IMPL_DIALOG_OOO;
+            }
         }
 
         // The Dispatch supports parameter FolderName that overwrites SuggestedSaveAsDir

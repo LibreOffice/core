@@ -1916,8 +1916,8 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
             pMed->UseInteractionHandler(TRUE);
             if( pSfxApp->GetFilterMatcher().GuessFilter(
                 *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
-                pFilter && !pFilter->IsOwnFormat() ||
-                pFilter && !pFilter->UsesStorage() )
+                (pFilter && !pFilter->IsOwnFormat()) ||
+                (pFilter && !pFilter->UsesStorage()) )
             {
                 SfxErrorContext aEc( ERRCTX_SFX_LOADTEMPLATE,
                                      aTargetURL );
@@ -1966,6 +1966,7 @@ BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
             bRet = sal_False;
 
             if ( mbIsOwner )
+            {
                 if( mbDidConvert )
                 {
                     bRet=mxObjShell->PreDoSaveAs_Impl(
@@ -1991,6 +1992,7 @@ BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
                         }
                     }
                 }
+            }
         }
 
         if( bRet )

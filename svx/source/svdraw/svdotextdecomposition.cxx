@@ -206,6 +206,10 @@ namespace
                 false));
             basegfx::B2DHomMatrix aNewTransform;
 
+            // #i100489# need extra scale factor for DXArray which collects all scalings
+            // which are needed to get the DXArray to unit coordinates
+            double fDXArrayScaleFactor(aSize.getX());
+
             // add font scale to new transform
             aNewTransform.scale(aSize.getX(), aSize.getY());
 
@@ -214,6 +218,10 @@ namespace
             {
                 const double fFactor(rInfo.mrFont.GetPropr() / 100.0);
                 aNewTransform.scale(fFactor, fFactor);
+
+                // #i100489# proportional font scaling influences the DXArray,
+                // add to factor
+                fDXArrayScaleFactor *= fFactor;
             }
 
             // apply font rotate
@@ -265,7 +273,8 @@ namespace
 
             if(!bDisableTextArray && rInfo.mpDXArray && rInfo.mnTextLen)
             {
-                const double fScaleFactor(basegfx::fTools::equalZero(aSize.getX()) ? 1.0 : 1.0 / aSize.getX());
+                // #i100489# use fDXArrayScaleFactor here
+                const double fScaleFactor(basegfx::fTools::equalZero(fDXArrayScaleFactor) ? 1.0 : 1.0 / fDXArrayScaleFactor);
                 aDXArray.reserve(rInfo.mnTextLen);
 
                 for(xub_StrLen a(0); a < rInfo.mnTextLen; a++)

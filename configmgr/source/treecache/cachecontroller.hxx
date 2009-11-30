@@ -311,9 +311,6 @@ namespace configmgr
 
         // disposing
         void disposeAll(bool _bFlushRemainingUpdates);
-        void disposeOne(RequestOptions const & _aOptions, bool _bFlushUpdates = true);
-        void disposeUser(RequestOptions const & _aUserOptions, bool _bFlushUpdates = true);
-        void implDisposeOne(rtl::Reference<CacheLoadingAccess> const & _aCache, RequestOptions const & _aOptions, bool _bFlushUpdates);
 
         void closeModules(std::vector< rtl::Reference<CacheLine> > & _aList, RequestOptions const & _aOptions);
     private:

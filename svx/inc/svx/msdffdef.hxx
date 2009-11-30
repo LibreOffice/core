@@ -1284,6 +1284,7 @@ class SVX_DLLPUBLIC DffPropSet : public Table
 
 class SfxItemSet;
 class SdrObject;
+struct DffObjData;
 
 class SVX_DLLPUBLIC DffPropertyReader : public DffPropSet
 {
@@ -1292,9 +1293,9 @@ class SVX_DLLPUBLIC DffPropertyReader : public DffPropSet
 
     void        ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const;
     void        ApplyCustomShapeAdjustmentAttributes( SfxItemSet& rSet ) const;
-    void        ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxItemSet& rSet, const MSO_SPT eShapeType, const sal_uInt32 nShapeFlags ) const;
+    void        ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
     void        ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eShapeType ) const; // #i28269#
-    void        ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, const MSO_SPT eShapeType ) const;
+    void        ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
 
 public:
 
@@ -1311,7 +1312,8 @@ public:
 #endif
 
     void        SetDefaultPropSet( SvStream& rIn, UINT32 nOffDgg ) const;
-    void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const MSO_SPT = mso_sptNil, const sal_uInt32 nShapeFlags = 0 ) const;
+    void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
+    void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
 };
 
 #endif

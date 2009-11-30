@@ -1735,7 +1735,7 @@ BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry* pEntry )
     if(SfxOrganizeListBox_Impl::VIEW_FILES ==
        pFocusBox->GetViewType())
         nDepth++;
-    if( nDepth > 2 && !pEntry->GetUserData() ||
+    if( (nDepth > 2 && !pEntry->GetUserData()) ||
        //Delete ueber GetContent verboten
        nDepth==2 || //Vorlage / Konfigurtionsrubrik nicht loeshcen
        (nDepth==1 && SfxOrganizeListBox_Impl::VIEW_FILES ==

@@ -192,7 +192,7 @@ BOOL IsTTSignatureForUnicodeTextfile( String aLine )
     return aLine.EqualsAscii( TT_SIGNATURE_FOR_UNICODE_TEXTFILES );
 }
 
-BasicApp aBasicApp;                     // Applikations-Instanz
+BasicApp aBasicApp; // Application instance
 
 static const char * const components[] =
 {
@@ -202,7 +202,7 @@ static const char * const components[] =
     , "sax.uno" SAL_DLLEXTENSION
     , "stocservices.uno" SAL_DLLEXTENSION
     , SAL_MODULENAME( "fileacc" )
-    , SAL_MODULENAME( "mcnttype" )          //Clipboard   Ask Oliver Braun
+    , SAL_MODULENAME( "mcnttype" )          // Clipboard   Ask Oliver Braun
     , "i18npool.uno" SAL_DLLEXTENSION
         // Reading of files in specific encodings like UTF-8 using
         // createUnoService( "com.sun.star.io.TextInputStream" ) and such
@@ -408,7 +408,6 @@ void BasicApp::Main( )
     PostUserEvent( LINK( this, BasicApp, LateInit ) );
     Execute();
 
-    // Loeschen der Members:
 //  delete pHelp;
     delete pFrame;
 
@@ -584,7 +583,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     nFlags  = 0;
 //  Icon aAppIcon;
 
-    if ( pBasic->pTestObject )  // also sid wir testtool
+    if ( pBasic->pTestObject )  // Are we the testtool?
     {
 //      aAppIcon = Icon( ResId( RID_APPICON2 ) );
         aAppName = String( SttResId( IDS_APPNAME2 ) );
@@ -608,9 +607,9 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     pFileMenu->SetHighlightHdl( LINK( this, BasicFrame, HighlightMenu ) );
     pFileMenu->SetActivateHdl( LINK( this, BasicFrame, InitMenu ) );
     pFileMenu->SetDeactivateHdl( LINK( this, BasicFrame, DeInitMenu ) );
-    if (Basic().pTestObject )       // Wir sind also TestTool
+    if (Basic().pTestObject )       // Are we TestTool?
     {
-        pFileMenu->RemoveItem( pFileMenu->GetItemPos( RID_FILELOADLIB ) -1 );   // Der Trenner davor
+        pFileMenu->RemoveItem( pFileMenu->GetItemPos( RID_FILELOADLIB ) -1 );   // Separator before
         pFileMenu->RemoveItem( pFileMenu->GetItemPos( RID_FILELOADLIB ) );
         pFileMenu->RemoveItem( pFileMenu->GetItemPos( RID_FILESAVELIB ) );
     }
@@ -625,14 +624,14 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     pRunMenu->SetHighlightHdl( LINK( this, BasicFrame, HighlightMenu ) );
     pRunMenu->SetActivateHdl( LINK( this, BasicFrame, InitMenu ) );
     pRunMenu->SetDeactivateHdl( LINK( this, BasicFrame, DeInitMenu ) );
-    if (Basic().pTestObject )       // Wir sind also TestTool
+    if (Basic().pTestObject )       // Are we TestTool?
     {
         pRunMenu->RemoveItem( pRunMenu->GetItemPos( RID_RUNDISAS ) );
         pRunMenu->RemoveItem( pRunMenu->GetItemPos( RID_RUNCOMPILE ) );
     }
 
     PopupMenu *pExtras;
-    if (Basic().pTestObject )       // Wir sind also TestTool
+    if (Basic().pTestObject )       // Are we TestTool?
     {
         pExtras = new PopupMenu( SttResId( RID_TT_EXTRAS ) );
         pBar->InsertItem( RID_TT_EXTRAS, String( SttResId( RID_TT_EXTRAS_NAME ) ), 0, pBar->GetItemPos( RID_APPWINDOW ) );
@@ -666,7 +665,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     UpdateTitle();
 //  SetIcon( aAppIcon );
 
-    // Groesse: halbe Breite, dreiviertel Hoehe minus 2 * IconSize
+    // Size: half width, 0.75 * height - 2 * IconSize
     {
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
         aConf.SetGroup("WinGeom");
@@ -748,7 +747,7 @@ BasicFrame::~BasicFrame()
     delete pList;
 //  delete pExecutionStatus;
 //  delete pBasic;
-    pBasic.Clear();     // Da jetzt REF
+    pBasic.Clear();
 }
 
 void BasicFrame::Command( const CommandEvent& rCEvt )
@@ -887,12 +886,12 @@ void BasicFrame::Resize()
     pStatus->SetSizePixel( aStatusSize );
 
 
-    // Eventuell Maximized window resizen
+    // Resize possibly maximized window
     ULONG i;
     for( i = pList->Count(); i > 0 ; i-- )
     {
         if ( pList->GetObject( i-1 )->GetWinState() == TT_WIN_STATE_MAX )
-            pList->GetObject( i-1 )->Maximize();    // resized auch
+            pList->GetObject( i-1 )->Maximize();
     }
 }
 
@@ -950,10 +949,8 @@ void BasicFrame::WinShow_Hide()
     {
         if ( p->pDataEdit )
         {
-            if ( p->GetWinState() & TT_WIN_STATE_HIDE   // Versteckt
-                ||  ( bWasFullscreen
-                        && ( !p->IsPined() || p->GetWinState() & TT_WIN_STATE_MAX )
-                    )
+            if ( p->GetWinState() & TT_WIN_STATE_HIDE   // Hidden
+                 || ( bWasFullscreen && ( !p->IsPined() || p->GetWinState() & TT_WIN_STATE_MAX ))
                )
                 p->Hide( SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             else
@@ -965,7 +962,7 @@ void BasicFrame::WinShow_Hide()
 
 void BasicFrame::WinMax_Restore()
 {
-    // Die ApplicationButtons
+    // The application buttons
     AppWin* p;
     BOOL bHasFullscreenWin = FALSE;
     for( p = pList->First(); p && !bHasFullscreenWin ; p = pList->Next() )
@@ -998,7 +995,7 @@ void BasicFrame::RemoveWindow( AppWin *pWin )
 
     pWinMenu->RemoveItem( pWinMenu->GetItemPos( pWin->GetWinId() ) );
 
-    // Trenner entfernen
+    // Remove separator
     if ( pWinMenu->GetItemType( pWinMenu->GetItemCount() - 1 ) == MENUITEM_SEPARATOR )
         pWinMenu->RemoveItem( pWinMenu->GetItemCount() - 1 );
 
@@ -1007,13 +1004,12 @@ void BasicFrame::RemoveWindow( AppWin *pWin )
 
 void BasicFrame::AddWindow( AppWin *pWin )
 {
-    // Eintragen:
     pList->Insert( pWin, LIST_APPEND );
     pWork = pWin;
 
     WinMax_Restore();
 
-    // Hauptmenue aktivieren:
+    // Enable main menu
     MenuBar* pMenu = GetMenuBar();
     if( pList->Count() > 0 ) {
         pMenu->EnableItem( RID_APPEDIT,   TRUE );
@@ -1024,11 +1020,11 @@ void BasicFrame::AddWindow( AppWin *pWin )
     PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
     USHORT nLastID = pWinMenu->GetItemId( pWinMenu->GetItemCount() - 1 );
 
-    // Trenner erforderlich
+    // Separator necessary
     if ( nLastID < RID_WIN_FILE1 && pWinMenu->GetItemType( pWinMenu->GetItemCount() - 1 ) != MENUITEM_SEPARATOR )
         pWinMenu->InsertSeparator();
 
-    // Freie ID finden
+    // Find free ID
     USHORT nFreeID = RID_WIN_FILE1;
     while ( pWinMenu->GetItemPos( nFreeID ) != MENU_ITEM_NOTFOUND && nFreeID < RID_WIN_FILEn )
         nFreeID++;
@@ -1076,7 +1072,7 @@ BOOL BasicFrame::Close()
     {
         aLineNum.Stop();
 
-        // Alle übrigen Dialoge schliessen um assertions zu vermeiden!!
+        // Close remaining dialogs to avoid assertions
         while ( GetWindow( WINDOW_OVERLAP )->GetWindow( WINDOW_FIRSTOVERLAP ) )
         {
             delete GetWindow( WINDOW_OVERLAP )->GetWindow( WINDOW_FIRSTOVERLAP )->GetWindow( WINDOW_CLIENT );
@@ -1105,8 +1101,7 @@ BOOL BasicFrame::CompileAll()
     return TRUE;
 }
 
-// Menu aufsetzen
-
+// Setup menu
 #define MENU2FILENAME( Name ) Name.Copy( Name.SearchAscii(" ") +1).EraseAllChars( '~' )
 #define LRUNr( nNr ) CByteString("LRU").Append( ByteString::CreateFromInt32( nNr ) )
 String FILENAME2MENU( USHORT nNr, String aName )
@@ -1121,6 +1116,7 @@ String FILENAME2MENU( USHORT nNr, String aName )
 
     return aRet.AppendAscii(" ").Append( aName );
 }
+
 void BasicFrame::AddToLRU(String const& aFile)
 {
     Config aConfig(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
@@ -1203,7 +1199,7 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
 
     BOOL bHasEdit = BOOL( /*bNormal &&*/ pWork != NULL );
 
-//  pMenu->EnableItem( RID_FILENEW,     bNormal );  // immer möglich
+//  pMenu->EnableItem( RID_FILENEW,     bNormal );  // always possible
 //  pMenu->EnableItem( RID_FILEOPEN,    bNormal );
     pMenu->EnableItem( RID_FILECLOSE,   bHasEdit );
     pMenu->EnableItem( RID_FILESAVE,    bHasEdit );
@@ -1216,15 +1212,19 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
     BOOL bHasErr = BOOL( bNormal && pBasic->GetErrors() != 0 );
     BOOL bNext   = bHasErr & bNormal;
     BOOL bPrev   = bHasErr & bNormal;
-    if( bHasErr ) {
+    if( bHasErr )
+    {
         ULONG n = pBasic->aErrors.GetCurPos();
-        if( n == 0 ) bPrev = FALSE;
-        if( USHORT(n+1) == pBasic->GetErrors() ) bNext = FALSE;
+        if( n == 0 )
+            bPrev = FALSE;
+        if( USHORT(n+1) == pBasic->GetErrors() )
+            bNext = FALSE;
     }
     pMenu->EnableItem( RID_RUNNEXTERR, bNext );
     pMenu->EnableItem( RID_RUNPREVERR, bPrev );
     pMenu->CheckItem( RID_RUNDISAS, bDisas );
-    if( pWork ) pWork->InitMenu( pMenu );
+    if( pWork )
+        pWork->InitMenu( pMenu );
 
     return TRUE;
 }
@@ -1369,8 +1369,7 @@ BOOL BasicFrame::LoadFile( String aFilename )
     return bSuccess;
 }
 
-// Kommando ausfuehren
-
+// Execute command
 long BasicFrame::Command( short nID, BOOL bChecked )
 {
     BasicError* pErr;
@@ -1477,7 +1476,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 }
 
                 if( bInBreak )
-                    // Nur das Flag zuruecksetzen
+                    // Reset the flag
                     bInBreak = FALSE;
                 else
                 {
@@ -1491,12 +1490,12 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                         Basic().ClearGlobalVars();
                         p->Run();
                         BasicDLL::SetDebugMode( FALSE );
-                        // Falls waehrend Interactive=FALSE abgebrochen
+                        // If cancelled during Interactive=FALSE
 //                      BasicDLL::EnableBreak( TRUE );
                     }
                 }}
             }
-//          InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN )); // nach run
+//          InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN )); // after run
             break;
         case RID_RUNCOMPILE:
             if( pWork && pWork->ISA(AppBasEd) && SaveAll() )
@@ -1639,7 +1638,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
 */      case RID_HELPABOUT:
             {
                 SttResId aResId( IDD_ABOUT_DIALOG );
-                if ( Basic().pTestObject )      // Wir sind also TestTool
+                if ( Basic().pTestObject )    // Are we TestTool?
                     aResId = SttResId( IDD_TT_ABOUT_DIALOG );
                 else
                     aResId = SttResId( IDD_ABOUT_DIALOG );
@@ -1785,7 +1784,7 @@ void NewFileDialog::FilterSelect()
     if ( aLastPath.Len() == 0 )
         aLastPath = DirEntry( GetPath() ).GetPath().GetFull();
     if ( aLastPath.CompareIgnoreCaseToAscii( DirEntry( GetPath() ).GetPath().GetFull() ) != COMPARE_EQUAL )
-        return;     // Der Benutzer entscheidet sich nachdem er den Pfad geändert hat.
+        return; // User decides after he has changed the path
 
     String aCurFilter = GetCurFilter();
     USHORT nFilterNr = 0;
@@ -1860,7 +1859,7 @@ BOOL BasicFrame::QueryFileName
     else
         aDlg.SetCurFilter( String( SttResId( IDS_BASFILTER ) ) );
 
-    aDlg.FilterSelect();    // Setzt den Pfad vom letzten mal.
+    aDlg.FilterSelect(); // Selects the last used path
 //  if ( bSave )
     if ( rName.Len() > 0 )
         aDlg.SetPath( rName );
@@ -1904,7 +1903,7 @@ void BasicFrame::LoadLibrary()
         if( pNew && pNew->ISA( MyBasic ) )
         {
             pBasic = pNew;
-            // Alle Inhalte - sofern vorhanden - anzeigen
+            // Show all contents if existing
             SbxArray* pMods = pBasic->GetModules();
             for( USHORT i = 0; i < pMods->Count(); i++ )
             {
@@ -1962,7 +1961,7 @@ String BasicFrame::GenRealString( const String &aResString )
                 aString = String( SttResId( (USHORT)(aValue.ToInt32()) ) );
 //          else
             {
-//              DBG_ERROR( "Ressource konnte nicht geladen werden" );
+//              DBG_ERROR( "Could not load resource!" );
 //              return aResString;
             }
             nInsertPos = nStart;
@@ -1970,8 +1969,9 @@ String BasicFrame::GenRealString( const String &aResString )
             aResult.Erase( nStart, nEnd-nStart+1 );
             bFound = TRUE;
         }
-        else if ( aType.Search(BaseArgKenn) == 0 )      // Fängt mit BaseArgKenn an
+        else if ( aType.Search(BaseArgKenn) == 0 ) // Starts with BaseArgKenn
         {
+            // TODO: What the hell is that for??
             USHORT nArgNr = USHORT( aType.Copy( BaseArgKenn.Len() ).ToInt32() );
             DBG_ASSERT( aString.Search( CUniString("($Arg").Append( String::CreateFromInt32(nArgNr) ).AppendAscii(")") ) != STRING_NOTFOUND, "Extra Argument given in String");
             aString.SearchAndReplace( CUniString("($Arg").Append( String::CreateFromInt32(nArgNr) ).AppendAscii(")"), aValue );

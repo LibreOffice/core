@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "file/quotedstring.hxx"
+#include <rtl/logfile.hxx>
 
 namespace connectivity
 {
@@ -40,7 +41,9 @@ namespace connectivity
     //------------------------------------------------------------------
     xub_StrLen QuotedTokenizedString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) const
     {
-        if ( !Len() )
+        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "QuotedTokenizedString::GetTokenCount" );
+        const xub_StrLen nLen = m_sString.Len();
+        if ( !nLen )
             return 0;
 
         xub_StrLen nTokCount = 1;
@@ -48,27 +51,29 @@ namespace connectivity
         BOOL bInString = FALSE; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
         // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
-        for( xub_StrLen i = 0; i < Len(); i++ )
+        for( xub_StrLen i = 0; i < nLen; ++i )
         {
+            const sal_Unicode cChar = m_sString.GetChar(i);
             if (bStart)
             {
                 bStart = FALSE;
                 // Erstes Zeichen ein String-Delimiter?
-                if ((*this).GetChar(i) == cStrDel)
+                if ( cChar == cStrDel )
                 {
                     bInString = TRUE;   // dann sind wir jetzt INNERHALB des Strings!
                     continue;           // dieses Zeichen ueberlesen!
                 }
             }
 
-            if (bInString) {
+            if (bInString)
+            {
                 // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
-                if ( (*this).GetChar(i) == cStrDel )
+                if ( cChar == cStrDel )
                 {
-                    if ((i+1 < Len()) && ((*this).GetChar(i+1) == cStrDel))
+                    if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
                     {
                         // Verdoppeltes String-Delimiter-Zeichen:
-                        i++;    // kein String-Ende, naechstes Zeichen ueberlesen.
+                        ++i;    // kein String-Ende, naechstes Zeichen ueberlesen.
                     }
                     else
                     {
@@ -76,11 +81,13 @@ namespace connectivity
                         bInString = FALSE;
                     }
                 }
-            } else {
+            } // if (bInString)
+            else
+            {
                 // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
-                if ( (*this).GetChar(i) == cTok )
+                if ( cChar == cTok )
                 {
-                    nTokCount++;
+                    ++nTokCount;
                     bStart = TRUE;
                 }
             }
@@ -93,29 +100,36 @@ namespace connectivity
     //------------------------------------------------------------------
     void QuotedTokenizedString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unicode cTok, sal_Unicode cStrDel ) const
     {
+        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "QuotedTokenizedString::GetTokenCount" );
         _rStr.Erase();
-        xub_StrLen nLen = Len();
+        const xub_StrLen nLen = m_sString.Len();
         if ( nLen )
         {
-            BOOL bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel); // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+            BOOL bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
             // Erstes Zeichen ein String-Delimiter?
             if (bInString )
                 ++nStartPos;            // dieses Zeichen ueberlesen!
+            if ( nStartPos >= nLen )
+                return;
+
+            sal_Unicode* pData = _rStr.AllocBuffer(nLen - nStartPos);
+            const sal_Unicode* pStart = pData;
             // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
             for( xub_StrLen i = nStartPos; i < nLen; ++i )
             {
+                const sal_Unicode cChar = m_sString.GetChar(i);
                 if (bInString)
                 {
                     // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
-                    if ( (*this).GetChar(i) == cStrDel )
+                    if ( cChar == cStrDel )
                     {
-                        if ((i+1 < nLen) && ((*this).GetChar(i+1) == cStrDel))
+                        if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
                         {
                             // Verdoppeltes String-Delimiter-Zeichen:
-                            ++i;    // kein String-Ende, naechstes Zeichen ueberlesen.
-
-                            _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                            // kein String-Ende, naechstes Zeichen ueberlesen.
+                            ++i;
+                            *pData++ = m_sString.GetChar(i);    // Zeichen gehoert zum Resultat-String
                         }
                         else
                         {
@@ -125,14 +139,14 @@ namespace connectivity
                     }
                     else
                     {
-                        _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                        *pData++ = cChar;   // Zeichen gehoert zum Resultat-String
                     }
 
                 }
                 else
                 {
                     // Stimmt das Tokenzeichen ueberein, dann erhoehe nTok
-                    if ( (*this).GetChar(i) == cTok )
+                    if ( cChar == cTok )
                     {
                         // Vorzeitiger Abbruch der Schleife moeglich, denn
                         // wir haben, was wir wollten.
@@ -141,10 +155,11 @@ namespace connectivity
                     }
                     else
                     {
-                        _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                        *pData++ = cChar;   // Zeichen gehoert zum Resultat-String
                     }
                 }
-            }
+            } // for( xub_StrLen i = nStartPos; i < nLen; ++i )
+            _rStr.ReleaseBufferAccess(xub_StrLen(pData - pStart));
         }
     }
 }

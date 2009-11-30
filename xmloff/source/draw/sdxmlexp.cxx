@@ -208,7 +208,7 @@ DECLARE_LIST(ImpXMLEXPPageMasterList, ImpXMLEXPPageMasterInfo*)
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define IMP_AUTOLAYOUT_INFO_MAX         (33L)
+#define IMP_AUTOLAYOUT_INFO_MAX         (35L)
 
 class ImpXMLAutoLayoutInfo
 {
@@ -1248,6 +1248,53 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                     case 32 : // AUTOLAYOUT_TITLE
                     {
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderSubtitle, pInfo->GetPresRectangle());
+                        break;
+                    }
+
+                    case 33 : // AUTOLAYOUT_4CLIPART
+                    {
+                        Rectangle aTopLeft(pInfo->GetPresRectangle());
+                        aTopLeft.setHeight(long(aTopLeft.GetHeight() * 0.477));
+                        aTopLeft.setWidth(long(aTopLeft.GetWidth() * 0.488));
+                        Rectangle aBottomLeft(aTopLeft);
+                        aBottomLeft.Top() = long(aBottomLeft.Top() + aBottomLeft.GetHeight() * 1.095);
+                        Rectangle aTopRight(aTopLeft);
+                        aTopRight.Left() = long(aTopRight.Left() + aTopRight.GetWidth() * 1.05);
+                        Rectangle aBottomRight(aTopRight);
+                        aBottomRight.Top() = long(aBottomRight.Top() + aBottomRight.GetHeight() * 1.095);
+
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderTitle, pInfo->GetTitleRectangle());
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aTopLeft);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aTopRight);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aBottomLeft);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aBottomRight);
+                        break;
+                    }
+
+                    case 34 : // AUTOLAYOUT_6CLIPART
+                    {
+                        Rectangle aTopLeft(pInfo->GetPresRectangle());
+                        aTopLeft.setHeight(long(aTopLeft.GetHeight() * 0.477));
+                        aTopLeft.setWidth(long(aTopLeft.GetWidth() * 0.322));   
+                        Rectangle aTopCenter(aTopLeft);
+                        aTopCenter.Left() = long(aTopCenter.Left() + aTopCenter.GetWidth() * 1.05);
+                        Rectangle aTopRight(aTopLeft);
+                        aTopRight.Left() = long(aTopRight.Left() + aTopRight.GetWidth() * 2 * 1.05);
+                    
+                        Rectangle aBottomLeft(aTopLeft);
+                        aBottomLeft.Top() = long(aBottomLeft.Top() + aBottomLeft.GetHeight() * 1.095);
+                        Rectangle aBottomCenter(aTopCenter);
+                        aBottomCenter.Top() = long(aBottomCenter.Top() + aBottomCenter.GetHeight() * 1.095);
+                        Rectangle aBottomRight(aTopRight);
+                        aBottomRight.Top() = long(aBottomRight.Top() + aBottomRight.GetHeight() * 1.095);
+                                                
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderTitle, pInfo->GetTitleRectangle());
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aTopLeft);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aTopCenter);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aTopRight);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aBottomLeft);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aBottomCenter);
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aBottomRight);
                         break;
                     }
                     default:

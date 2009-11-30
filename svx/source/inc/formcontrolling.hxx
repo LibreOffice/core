@@ -36,8 +36,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
+#include <com/sun/star/sdb/XSQLErrorListener.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <comphelper/componentcontext.hxx>
 
 #include <vector>
@@ -184,7 +185,8 @@ namespace svx
     //====================================================================
     //= FormControllerHelper
     //====================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::form::runtime::XFeatureInvalidation
+    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::form::runtime::XFeatureInvalidation
+                                    ,   ::com::sun::star::sdb::XSQLErrorListener
                                     >   FormControllerHelper_Base;
     /** is a helper class which manages form controller functionality (such as moveNext etc.).
 
@@ -200,6 +202,8 @@ namespace svx
         IControllerFeatureInvalidation* m_pInvalidationCallback;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >
                                         m_xFormOperations;
+
+        ::com::sun::star::uno::Any      m_aOperationError;
 
     public:
         /** constructs the helper from a <type scope="com::sun::star::form">XFormController<type> instance
@@ -270,6 +274,29 @@ namespace svx
         // XFeatureInvalidation
         virtual void SAL_CALL invalidateFeatures( const ::com::sun::star::uno::Sequence< ::sal_Int16 >& Features ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL invalidateAllFeatures() throw (::com::sun::star::uno::RuntimeException);
+
+        // XSQLErrorListener
+        virtual void SAL_CALL errorOccured( const ::com::sun::star::sdb::SQLErrorEvent& _Event ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+        enum FormOperation { EXECUTE, EXECUTE_ARGS, COMMIT_CONTROL, COMMIT_RECORD };
+
+        bool    impl_operateForm_nothrow(
+                    const FormOperation _eWhat,
+                    const sal_Int16 _nFeature,  /* ignore for COMMIT_* */
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments /* ignore except for EXECUTE_ARGS */
+                ) const;
+        bool    impl_operateForm_nothrow( const FormOperation _eWhat ) const
+        {
+            return impl_operateForm_nothrow( _eWhat, 0, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >() );
+        }
+        bool    impl_operateForm_nothrow( const sal_Int16 _nFeature ) const
+        {
+            return impl_operateForm_nothrow( EXECUTE, _nFeature, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >() );
+        }
 
     private:
         FormControllerHelper();                                         // never implemented

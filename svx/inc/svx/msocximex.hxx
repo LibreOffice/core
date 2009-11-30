@@ -288,6 +288,7 @@ public:
     sal_Int32 mnForeColor;
         sal_uInt16 mnTabPos;
     UniString sName;
+    UniString msToolTip;
     OCX_FontData aFontData;
         SfxObjectShell *pDocSh;
 protected:
@@ -898,7 +899,7 @@ public:
     sal_uInt8   nKeepScrollBarsVisible;
     sal_uInt8   nCycle;
     sal_uInt16  nBorderStyle;
-    sal_uInt16  nSpecialEffect;
+    sal_uInt8   nSpecialEffect;
     sal_uInt16  nPicture;
     sal_uInt8   nPictureAlignment;
     sal_uInt8   nPictureSizeMode;

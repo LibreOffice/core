@@ -36,20 +36,21 @@
 
 class ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
-    // c++ interface
+    // C++ interface
     public:
     ModuleSizeExceeded( const com::sun::star::uno::Sequence< ::rtl::OUString>& sModules );
 
     sal_Bool isAbort() const;
     sal_Bool isApprove() const;
 
-    // uno interface
+    // UNO interface
     public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException ) { return m_lContinuations; }
     com::sun::star::uno::Any SAL_CALL getRequest() throw( com::sun::star::uno::RuntimeException )
     {
         return m_aRequest;
     }
+
     // member
     private:
     rtl::OUString m_sMods;

@@ -129,9 +129,6 @@ sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
     return (lhs == rhs) ? 0 : 2;
 }
 // -------------------------------------------------------------------------

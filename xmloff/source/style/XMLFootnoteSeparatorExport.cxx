@@ -60,14 +60,6 @@ XMLFootnoteSeparatorExport::~XMLFootnoteSeparatorExport()
 }
 
 
-static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
-{
-    { XML_LEFT,     text::HorizontalAdjust_LEFT },
-    { XML_CENTER,   text::HorizontalAdjust_CENTER },
-    { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
-    { XML_TOKEN_INVALID, 0 }
-};
-
 void XMLFootnoteSeparatorExport::exportXML(
     const vector<XMLPropertyState> * pProperties,
     sal_uInt32
@@ -148,6 +140,14 @@ void XMLFootnoteSeparatorExport::exportXML(
     }
 
     // adjustment
+    static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
+    {
+        { XML_LEFT,     text::HorizontalAdjust_LEFT },
+        { XML_CENTER,   text::HorizontalAdjust_CENTER },
+        { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
+        { XML_TOKEN_INVALID, 0 }
+    };
+
     if (rExport.GetMM100UnitConverter().convertEnum(
         sBuf, eLineAdjust, aXML_HorizontalAdjust_Enum))
     {

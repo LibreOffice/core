@@ -116,12 +116,19 @@ public:
 
 // class SvxSearchDialogWrapper ------------------------------------------
 
+#include <sfx2/layout.hxx>
+#include <sfx2/layout-pre.hxx>
+
+class SvxSearchDialog;
 class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
 {
+    SvxSearchDialog *dialog;
 public:
     SvxSearchDialogWrapper( Window*pParent, USHORT nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
+    ~SvxSearchDialogWrapper ();
+    SvxSearchDialog *getDialog ();
     SFX_DECL_CHILDWINDOW(SvxSearchDialogWrapper);
 };
 
@@ -234,7 +241,7 @@ private:
     ULONG           nModifyFlag;
     String          aStylesStr;
     String          aLayoutStr;
-    String          aCalcStr;
+    LocalizedString aCalcStr;
 
     SvStringsDtor   aSearchStrings;
     SvStringsDtor   aReplaceStrings;
@@ -285,6 +292,8 @@ private:
     void            ApplyTransliterationFlags_Impl( INT32 nSettings );
 #endif
 };
+
+#include <sfx2/layout-post.hxx>
 
 inline BOOL SvxSearchDialog::HasSearchAttributes() const
 {

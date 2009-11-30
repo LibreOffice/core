@@ -1523,11 +1523,11 @@ void Outliner::ImplCheckParagraphs( USHORT nStart, USHORT nEnd )
     // <--
     {
         Paragraph* pPara = pParaList->GetParagraph( n );
-                if (pPara)
-                {
-                    pPara->Invalidate();
-                    ImplCalcBulletText( n, FALSE, FALSE );
-                }
+        if (pPara)
+        {
+            pPara->Invalidate();
+            ImplCalcBulletText( static_cast< USHORT >(n), FALSE, FALSE );
+        }
     }
 }
 

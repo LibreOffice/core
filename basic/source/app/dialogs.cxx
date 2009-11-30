@@ -283,20 +283,20 @@ OptionsDialog::~OptionsDialog()
 
 BOOL OptionsDialog::Close()
 {
-    if ( TabDialog::Close() )
-    {
-        delete this;
-        return TRUE;
-    }
-    else
-        return FALSE;
+  if ( TabDialog::Close() )
+  {
+    delete this;
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 
 IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
     USHORT nId = pTabCtrl->GetCurPageId();
-    // Wenn TabPage noch nicht erzeugt wurde, dann erzeugen
+    // If TabPage was not yet created, do it
     if ( !pTabCtrl->GetTabPage( nId ) )
     {
         TabPage *pNewTabPage = NULL;
@@ -629,7 +629,7 @@ MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
     aNFUNOPort.SetValue( aTemp.ToInt32() );
 
     aConfig.SetGroup("Misc");
-    aTemp = aConfig.ReadKey( "ServerTimeout", "10000" );    // Vorgabe 1 Minute
+    aTemp = aConfig.ReadKey( "ServerTimeout", "10000" );    // Default 1 Minute
     aServerTimeout.SetTime( Time(aTemp.ToInt32()) );
 
     aConfig.SetGroup("LRU");
@@ -831,7 +831,7 @@ void GenericOptions::LoadData()
     aCbArea.SetText( aCbArea.GetEntry( 0 ) );
     CheckButtons( aCbArea, aPbNewArea, aPbDelArea );
 
-    // Und auch die Daten laden
+    // Add load the data
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
 }
 
@@ -897,10 +897,10 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
     String aType;
 
     if ( aLastGroupName.Len() )
-    {   // Werte zwischenspeichern?
+    {   // Cache values?
         aCurrentValue = aCbValue.GetText();
         if ( aCbValue.GetEntryPos( aCurrentValue ) == COMBOBOX_ENTRY_NOTFOUND )
-        {   // Dann legen wir mal einen neuen Wert an
+        {   // Create a new value
             LINK( this, GenericOptions, NewValue ).Call( NULL );
         }
 
@@ -909,7 +909,7 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
         USHORT i;
         for ( i=0 ; i < aCbValue.GetEntryCount() ; i++ )
         {
-            if ( i )    // ab Entry 1
+            if ( i > 0 )
                 aAllValues += ';';
             aAllValues += aCbValue.GetEntry( i );
         }
@@ -1012,7 +1012,7 @@ void GenericOptions::Save( Config &aConfig )
     (void) aConfig; /* avoid warning about unused parameter */
     DBG_ASSERT( &aConfig == &aConf, "Saving to different Configuration" );
 
-    // eventuelle �nderungen Speichern
+    // Save changes
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
 }
 
@@ -1023,7 +1023,7 @@ class TextAndWin : public DockingWindow
     Window *pWin;
     Window* pFtOriginalParent;
     Window* pWinOriginalParent;
-    long nSpace;    // Standardabstand
+    long nSpace;    // default space
     BOOL bAlignTop;
 
 public:
@@ -1068,16 +1068,16 @@ void TextAndWin::Resize()
         pFt->Show();
         nFixedTextOffset = pFt->GetSizePixel().Height() + nSpace;
 
-        // FixedText Positionieren
+        // FixedText positioning
         pFt->SetPosPixel( Point( 0, nTopSpace ) );
     }
 
-    // Window Positionieren
+    // Window positioning
     long nWinPosY = nFixedTextOffset;
     nWinPosY += nTopSpace;
     pWin->SetPosPixel( Point( 0, nWinPosY ) );
 
-    // Gr��e des Window anpassen
+    // Set size of window
     long nWinHeight = GetOutputSizePixel().Height();
     nWinHeight -= nWinPosY;
     nWinHeight -= nBottomSpace;
@@ -1095,7 +1095,7 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
 , aPbBenennen( this, SttResId( RID_PB_BENENNEN ) )
 , aPbSelectAll( this, SttResId( RID_PB_SELECTALL ) )
 , aOKClose( this, SttResId( RID_OK_CLOSE ) )
-, nDisplayMode( DH_MODE_KURZNAME | DH_MODE_LANGNAME )   // Falls wir ein altes Office haben diesen Default verwenden
+, nDisplayMode( DH_MODE_KURZNAME | DH_MODE_LANGNAME ) // If we have an old office use this default
 {
     FreeResource();
 
@@ -1200,8 +1200,8 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
         aMlbControls.Clear();
         aMlbSlots.Clear();
 
-        if ( pWinInfo->nRType & DH_MODE_DATA_VALID )    // kein altes Office
-            nDisplayMode = pWinInfo->nRType;            // Wird im Reset zur �bermittlung des Modus verwendet
+        if ( pWinInfo->nRType & DH_MODE_DATA_VALID )    // no old office
+            nDisplayMode = pWinInfo->nRType; // Is used for mode transmission while reset
 //        if ( pWinInfo->aUId.GetULONG() & DH_MODE_DATA_VALID ) // kein altes Office
 //          nDisplayMode = pWinInfo->aUId.GetULONG();   // Wird im Reset zur �bermittlung des Modus verwendet
 
@@ -1227,7 +1227,7 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
         aMsg += pWinInfo->aUId;
         aMsg.Expand(13);
     }
-    aMsg.AppendAscii( "   " );          // Mindestens 3 Blanks sollten schon sein.
+    aMsg.AppendAscii( "   " );          // At least three blanks
 
     if ( nDisplayMode & DH_MODE_LANGNAME )
     {
@@ -1240,12 +1240,12 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
     aMlbControls.InsertEntry( aMsg );
 
 
-    // Haben wir noch einen Slotname?
+    // Do we have a Slotname?
     if ( ( nDisplayMode & DH_MODE_KURZNAME ) && pWinInfo->aSlotname.Len() > 0 )
     {
         aMsg = pWinInfo->aSlotname;
         aMsg.Expand(20);
-        aMsg.AppendAscii( "   " );          // Mindestens 3 Blanks sollten schon sein.
+        aMsg.AppendAscii( "   " );
 
         if ( nDisplayMode & DH_MODE_LANGNAME )
         {
@@ -1264,62 +1264,62 @@ void DisplayHidDlg::Resize()
 
     if ( IsRollUp() )
     {
-        // Wir wollen nur die Toolbox sehen
+        // We want only the toolbox to be seend
         SetOutputSizePixel( aTbConf.GetSizePixel() );
     }
     else
     {
 //      SetUpdateMode( FALSE );
 
-        // Minimalgr��e
+        // Minimum size
         Size aSize( GetOutputSizePixel() );
         aSize.Width() = std::max( aSize.Width(), (long)(aOKClose.GetSizePixel().Width() * 3 ));
         aSize.Height() = std::max( aSize.Height(), (long)(aOKClose.GetSizePixel().Height() * 8 ));
         SetOutputSizePixel( aSize );
 
-        // Standardabstand
+        // Default space
         long nSpace = pSplit->GetPosPixel().X();
 
-        // ToolBox Breite anpassen
+        // Adapt ToolBox width
         aTbConf.SetSizePixel( Size ( GetSizePixel().Width(), aTbConf.CalcWindowSizePixel().Height() ) );
-        aTbConf.SetSizePixel( Size() );     // Vorerst verstecken!
+        aTbConf.SetSizePixel( Size() ); // Hide at first
 
-        // SplitWindow Positionieren
+        // SplitWindow positioning
         pSplit->SetPosPixel( Point( nSpace, nSpace + aTbConf.GetPosPixel().Y() + aTbConf.GetSizePixel().Height() ) );
 
-        // Breite des SplitWindows bestimmen
+        // Calculate width of SplitWindows
         long nSplitWidth = GetSizePixel().Width();
         nSplitWidth -= aPbBenennen.GetSizePixel().Width();
-        nSplitWidth -= 3 * nSpace;  // Die Zwischenr�ume
-        nSplitWidth -= nSpace / 2;  // Etwas mehr Platz am rechten Rand
+        nSplitWidth -= 3 * nSpace;  // Spaces
+        nSplitWidth -= nSpace / 2;  // Little more space at right margin
 
-        // H�he des SplitWindows bestimmen
+        // Calculate hight of SplitWindows
         long nSplitHeight = GetOutputSizePixel().Height();
         nSplitHeight -= pSplit->GetPosPixel().Y();
-        nSplitHeight -= nSpace; // der Abstand unten
+        nSplitHeight -= nSpace; // bottom margin
 
-        // Gr��e des SplitWindows setzen
+        // Set size of SplitWindows
         pSplit->SetSizePixel( Size( nSplitWidth, nSplitHeight ) );
 
         Point aPos;
 
-        // Button "Kopieren" Positionieren
+        // Button "Copy" positioning
         aPos = pSplit->GetPosPixel();
         aPos.Move( nSplitWidth, 0 );
         aPos.Move( nSpace, 0 );
         aPbKopieren.SetPosPixel( aPos );
 
-        // Button "Alles W�hlen" gleich darunter positionieren
+        // Button "Get all"
         aPos.Move( 0, aPbKopieren.GetSizePixel().Height() );
         aPos.Move( 0, nSpace );
         aPbSelectAll.SetPosPixel( aPos );
 
-        // Button "Benennen" gleich darunter positionieren
+        // Button "Name"
         aPos.Move( 0, aPbSelectAll.GetSizePixel().Height() );
         aPos.Move( 0, nSpace );
         aPbBenennen.SetPosPixel( aPos );
 
-        // Und zum Schlu� noch den "Close" Button positionieren
+        // "Close" Button
         aPos = pSplit->GetPosPixel();
         aPos.Move( nSpace, -aOKClose.GetSizePixel().Height() );
         aPos.Move( pSplit->GetSizePixel().Width(), pSplit->GetSizePixel().Height() );
@@ -1378,16 +1378,16 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 aNumericFieldRID_NF_NEW_LONG.Show();
                 aNumericFieldRID_NF_NEW_LONG.SetText( pVar->GetString() );
                 aNumericFieldRID_NF_NEW_LONG.Reformat();
-                // M�ssen hart gesetzt werden, da der Rsc Compiler damit nicht klar kommt.
+                // Must be hardcoded otherwise the Rsc Compiler will fail
                 aNumericFieldRID_NF_NEW_LONG.SetMin( -aNumericFieldRID_NF_NEW_LONG.GetMax()-1 );
                 aNumericFieldRID_NF_NEW_LONG.SetFirst( -aNumericFieldRID_NF_NEW_LONG.GetLast()-1 );
                 break;
-//              case SbxOBJECT:     // kann nicht editiert werden
+//              case SbxOBJECT:     // cannot be edited
 //              break;
             case SbxSINGLE:
             case SbxDOUBLE:
             case SbxSTRING:
-            case SbxVARIANT:    // Taucht wohl auch nicht auf. stattdessen SbxEMPTY
+            case SbxVARIANT:
             case SbxEMPTY:
                 aEditRID_ED_NEW_STRING.Show();
                 aEditRID_ED_NEW_STRING.SetText( pVar->GetString() );
@@ -1405,7 +1405,7 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
 IMPL_LINK( VarEditDialog, OKClick, Button *, pButton )
 {
     (void) pButton; /* avoid warning about unused parameter */
-    BOOL bWasError = SbxBase::IsError();    // Da eventuell ein Fehler geschmissen wird.
+    BOOL bWasError = SbxBase::IsError();    // Probably an error is thrown
 
 
     SbxDataType eType = pVar->GetType();
@@ -1433,15 +1433,15 @@ SvNumberformat::
                                 const International& rIntl,
                                 int& nErrno,
                                 const xub_Unicode** ppEnd = NULL );
-        // Konvertiert analog strtod einen dezimalen String in einen double,
-        // Dezimalseparator und Tausenderseparator werden aus International
-        // genommen, fuehrende Leerzeichen werden weggeparst.
-        // Ist ppEnd!=NULL wird *ppEnd hinter das Weggeparste gesetzt.
-        // Enthaelt pStr nur den zu parsenden String, ist also bei Erfolg
-        // **ppEnd=='\0' und *ppEnd-pStr==strlen(pStr).
-        // Bei Ueberlauf wird fVal=+/-HUGE_VAL gesetzt, bei Unterlauf 0,
-        // nErrno wird in diesen Faellen auf ERANGE gesetzt, sonst 0.
-        // "+/-1.#INF" werden als +/-HUGE_VAL erkannt.
+    // Converts just as strtod a decimal string to a double.
+    // Decimal and thousand separators come from International,
+    // leading spaces are omitted.
+    // If ppEnd!=NULL then *ppEnd is set after the parsed data.
+    // If pStr contains only the String to be parsed, then if success:
+    // **ppEnd=='\0' and *ppEnd-pStr==strlen(pStr).
+    // If overflow fVal=+/-HUGE_VAL, if underflow 0,
+    // nErrno is in this cases set to ERANGE otherwise 0.
+    // "+/-1.#INF" are recognized as +/-HUGE_VAL.
 
     */
 
@@ -1491,7 +1491,6 @@ SvNumberformat::
 
     if ( bError )
     {
-//      ErrorBox( this, WB_OK | WB_DEF_OK, "Der Wert ist ung�ltig und kann daher nicht gesetzt werden" ).Execute();
         ErrorBox( this, SttResId( IDS_INVALID_VALUE ) ).Execute();
         return 1;
     }

@@ -41,7 +41,7 @@ typedef Environment::value_type EnvironmentVariable;
 
 class Process
 {
-    // Interne Member und Methoden
+    // Internal members and methods
     NAMESPACE_VOS(OArgumentList) *pArgumentList;
     NAMESPACE_VOS(OEnvironment) *pEnvList;
     NAMESPACE_VOS(OProcess) *pProcess;

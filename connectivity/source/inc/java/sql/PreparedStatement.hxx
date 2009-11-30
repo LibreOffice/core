@@ -54,14 +54,12 @@ namespace connectivity
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
 
         virtual void createStatement(JNIEnv* _pEnv);
         virtual ~java_sql_PreparedStatement();
     public:
         DECLARE_SERVICE_INFO();
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
 
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection& _rCon,const ::rtl::OUString& sql );

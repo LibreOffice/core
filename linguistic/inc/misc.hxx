@@ -196,26 +196,16 @@ String      ToUpper( const String &rText, INT16 nLanguage );
 String      ToTitle( const String &rText, INT16 nLanguage );
 sal_Unicode ToLower( const sal_Unicode cChar, INT16 nLanguage );
 sal_Unicode ToUpper( const sal_Unicode cChar, INT16 nLanguage );
-BOOL        HasDigits( const String &rText );
+BOOL        HasDigits( const ::rtl::OUString &rText );
 BOOL        IsNumeric( const String &rText );
 
 ///////////////////////////////////////////////////////////////////////////
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface >
-        GetOneInstanceService( const char *pServiceName );
-
-::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >
-        GetLinguProperties();
-
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSearchableDictionaryList >
-        GetSearchableDictionaryList();
-
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionaryList >
-        GetDictionaryList();
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetLinguProperties();
+::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > GetSearchableDictionaryList();
+::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
+::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > GetIgnoreAllList();
 
 ///////////////////////////////////////////////////////////////////////////
 

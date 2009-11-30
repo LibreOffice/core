@@ -494,13 +494,6 @@ void TreeManager::nodeUpdated(TreeChangeList& _rChanges)
 
 // ----------------------------------------------------------------------------
 
-void TreeManager::disposing(backend::CacheController & /*_rProvider*/)   SAL_THROW(())
-{
-    CFG_TRACE_INFO("TreeManager: provider is being disposed");
-    this->dispose();
-}
-// ----------------------------------------------------------------------------
-
 void TreeManager::componentCreated(backend::ComponentRequest const & ) SAL_THROW(())
 {
     CFG_TRACE_INFO("TreeManager: component was created");

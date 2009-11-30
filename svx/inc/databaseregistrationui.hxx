@@ -36,6 +36,10 @@
 
 class Window;
 
+#define SID_SB_POOLING_ENABLED          (RID_OFA_START + 247)
+#define SID_SB_DRIVER_TIMEOUTS          (RID_OFA_START + 248)
+#define SID_SB_DB_REGISTER              (RID_OFA_START + 249)
+
 //........................................................................
 namespace svx
 {

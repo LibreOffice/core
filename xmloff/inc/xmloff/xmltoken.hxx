@@ -2967,6 +2967,7 @@ namespace xmloff { namespace token {
         XML_PERCENTAGE_DATA_STYLE_NAME,
         XML_VALUE_AND_PERCENTAGE,
         XML_GROUP_BARS_PER_AXIS,
+        XML_INCLUDE_HIDDEN_CELLS,
         XML_AUTOMATIC_POSITION,
         XML_AUTOMATIC_SIZE,
         XML_REVERSE_DIRECTION,
@@ -3070,6 +3071,12 @@ namespace xmloff { namespace token {
         XML_AT_LABELS,
         XML_AT_AXIS,
         XML_AT_LABELS_AND_AXIS,
+
+        // MathML only
+        XML_MATHVARIANT,
+        XML_MATHSIZE,
+        XML_MATHWEIGHT,
+        XML_MATHCOLOR,
 
         XML_TOKEN_END
     };

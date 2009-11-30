@@ -41,7 +41,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/grfflt.hxx>
-#include "grfflt.hrc"
+//#include "grfflt.hrc"
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx> //CHINA001
 

@@ -53,7 +53,7 @@ namespace xmloff
 //.........................................................................
 
     class IControlIdMap;
-    class IFormsImportContext;
+    class OFormLayerXMLImport_Impl;
 
     //=====================================================================
     //= OElementNameMap
@@ -88,7 +88,7 @@ namespace xmloff
     protected:
         ::rtl::OUString         m_sServiceName;     // the service name as extracted from the service-name attribute
         ::rtl::OUString         m_sName;            // the name of the object (redundant, already contained in the base class' array)
-        IFormsImportContext&    m_rFormImport;      // the form import context
+        OFormLayerXMLImport_Impl&   m_rFormImport;      // the form import context
         IEventAttacherManager&  m_rEventManager;    // the event attacher manager
 
         const XMLTextStyleContext*  m_pStyleElement;    // the XML element which describes the style we encountered
@@ -98,6 +98,8 @@ namespace xmloff
                         m_xParentContainer;
             // the parent container to insert the new element into
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                        m_xInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xElement;             // the element we're creating. Valid after StartElement
 
@@ -117,7 +119,7 @@ namespace xmloff
                 the container in which the new element should be inserted
         */
         OElementImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer
         );
@@ -207,14 +209,14 @@ namespace xmloff
     protected:
         // for use by derived classes only
         OControlImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer
             );
 
     public:
         OControlImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
@@ -285,7 +287,7 @@ namespace xmloff
 
     public:
         OImagePositionImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -312,7 +314,7 @@ namespace xmloff
 
     public:
         OReferredControlImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -334,7 +336,7 @@ namespace xmloff
     {
     public:
         OPasswordImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -352,7 +354,7 @@ namespace xmloff
     {
     public:
         ORadioImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -374,7 +376,7 @@ namespace xmloff
     {
     public:
         OURLReferenceImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -396,7 +398,7 @@ namespace xmloff
     {
     public:
         OButtonImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -420,7 +422,7 @@ namespace xmloff
 
     public:
         OValueRangeImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -451,7 +453,7 @@ namespace xmloff
 
     public:
         OTextLikeImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -503,7 +505,7 @@ namespace xmloff
 
     public:
         OListAndComboImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
@@ -589,7 +591,7 @@ namespace xmloff
         ::rtl::OUString m_sWrapperElementName;
 
     protected:
-        OContainerImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OContainerImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
                 const sal_Char* _pWrapperElementName)
             :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
@@ -629,7 +631,7 @@ namespace xmloff
                     m_xColumnFactory;
 
     public:
-        OColumnImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
                 OControlElement::ElementType _eType);
 
@@ -649,11 +651,11 @@ namespace xmloff
                                 m_xOwnAttributes;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                 m_xParentContainer;
-        IFormsImportContext&    m_rFormImport;
+        OFormLayerXMLImport_Impl&   m_rFormImport;
         IEventAttacherManager&  m_rEventManager;
 
     public:
-        OColumnWrapperImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OColumnWrapperImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer);
 
         // SvXMLImportContext overridables
@@ -678,7 +680,7 @@ namespace xmloff
     {
     public:
         OGridImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType);
 
@@ -698,7 +700,7 @@ namespace xmloff
     {
     public:
         OFormImport(
-            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer
         );
 

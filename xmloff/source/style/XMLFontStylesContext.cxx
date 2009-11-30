@@ -49,7 +49,7 @@
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
 #include <xmloff/XMLFontStylesContext.hxx>
 #endif
-
+#include <rtl/logfile.hxx>
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
@@ -76,21 +76,25 @@ enum XMLFontStyleAttrTokens
     XML_TOK_FONT_STYLE_ATTR_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
+const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
 {
-    { XML_NAMESPACE_SVG, XML_FONT_FAMILY,
-            XML_TOK_FONT_STYLE_ATTR_FAMILY },
-    { XML_NAMESPACE_STYLE, XML_FONT_FAMILY_GENERIC,
-            XML_TOK_FONT_STYLE_ATTR_FAMILY_GENERIC },
-    { XML_NAMESPACE_STYLE, XML_FONT_ADORNMENTS,
-            XML_TOK_FONT_STYLE_ATTR_STYLENAME },
-    { XML_NAMESPACE_STYLE, XML_FONT_PITCH,
-            XML_TOK_FONT_STYLE_ATTR_PITCH },
-    { XML_NAMESPACE_STYLE, XML_FONT_CHARSET,
-            XML_TOK_FONT_STYLE_ATTR_CHARSET },
+    static __FAR_DATA SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
+    {
+        { XML_NAMESPACE_SVG, XML_FONT_FAMILY,
+                XML_TOK_FONT_STYLE_ATTR_FAMILY },
+        { XML_NAMESPACE_STYLE, XML_FONT_FAMILY_GENERIC,
+                XML_TOK_FONT_STYLE_ATTR_FAMILY_GENERIC },
+        { XML_NAMESPACE_STYLE, XML_FONT_ADORNMENTS,
+                XML_TOK_FONT_STYLE_ATTR_STYLENAME },
+        { XML_NAMESPACE_STYLE, XML_FONT_PITCH,
+                XML_TOK_FONT_STYLE_ATTR_PITCH },
+        { XML_NAMESPACE_STYLE, XML_FONT_CHARSET,
+                XML_TOK_FONT_STYLE_ATTR_CHARSET },
 
-    XML_TOKEN_MAP_END
-};
+        XML_TOKEN_MAP_END
+    };
+    return aFontStyleAttrTokenMap;
+}
 
 class XMLFontStyleContext_Impl : public SvXMLStyleContext
 {
@@ -258,7 +262,7 @@ XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
     pFamilyHdl( new XMLFontFamilyPropHdl ),
     pPitchHdl( new XMLFontPitchPropHdl ),
     pEncHdl( new XMLFontEncodingPropHdl ),
-    pFontStyleAttrTokenMap( new SvXMLTokenMap(aFontStyleAttrTokenMap) ),
+    pFontStyleAttrTokenMap( new SvXMLTokenMap(lcl_getFontStyleAttrTokenMap()) ),
     eDfltEncoding( eDfltEnc )
 {
 }

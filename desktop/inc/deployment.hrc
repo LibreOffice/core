@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: deployment.hrc,v $
- * $Revision: 1.6 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -79,6 +76,8 @@
 
 #define RID_DEPLOYMENT_DEPENDENCIES_START    (RID_DEPLOYMENT_START + 4400)
 #define RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN  RID_DEPLOYMENT_DEPENDENCIES_START
+#define RID_DEPLYOMENT_DEPENDENCIES_MIN      (RID_DEPLOYMENT_DEPENDENCIES_START+1)
+#define RID_DEPLYOMENT_DEPENDENCIES_MAX      (RID_DEPLOYMENT_DEPENDENCIES_START+2)
 
 #define RID_DEPLOYMENT_LICENSE_START        (RID_DEPLOYMENT_START+4500)
 

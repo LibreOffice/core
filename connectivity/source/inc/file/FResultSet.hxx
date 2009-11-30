@@ -153,6 +153,7 @@ namespace connectivity
             sal_Int32                               m_nLastVisitedPos;
             sal_Int32                               m_nRowCountResult;
             sal_Int32                               m_nCurrentPosition;     // current position of the resultset is returned when ask for getRow()
+            sal_Int32                               m_nColumnCount;
             sal_Bool                                m_bWasNull;
             sal_Bool                                m_bEOF;                 // after last record
             sal_Bool                                m_bLastRecord;
@@ -162,6 +163,7 @@ namespace connectivity
             sal_Bool                                m_bRowInserted;
             sal_Bool                                m_bRowDeleted;
             sal_Bool                                m_bShowDeleted;
+            sal_Bool                                m_bIsCount;
 
             void initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount);
             void construct();
@@ -176,7 +178,7 @@ namespace connectivity
             BOOL IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
 
             // return true when the select statement is "select count(*) from table"
-            sal_Bool isCount() const;
+            inline sal_Bool isCount() const { return m_bIsCount; }
             void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
 
             const ORowSetValue& getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
@@ -310,7 +312,11 @@ namespace connectivity
             inline void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>&   _xParamColumns) { m_xParamColumns = _xParamColumns; }
             inline void setAssignValues(const ORefAssignValues& _aAssignValues)         { m_aAssignValues = _aAssignValues; }
             inline void setBindingRow(const OValueRefRow& _aRow)                        { m_aRow = _aRow; }
-            inline void setSelectRow(const OValueRefRow& _rRow)                         { m_aSelectRow = _rRow; }
+            inline void setSelectRow(const OValueRefRow& _rRow)
+            {
+                m_aSelectRow = _rRow;
+                m_nColumnCount = m_aSelectRow->get().size();
+            }
             inline void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
             inline void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                     { m_pSQLAnalyzer = _pSQLAnalyzer; }
 

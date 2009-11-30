@@ -36,15 +36,8 @@
 
 #include <osl/module.hxx>
 #include <tools/string.hxx>
-#include "cfg.hxx"
 
 SfxAbstractDialogFactory* SfxAbstractDialogFactory::Create()
 {
     return (SfxAbstractDialogFactory*) VclAbstractDialogFactory::Create();
-}
-
-SfxTabPage* SfxAbstractDialogFactory::CreateSfxAcceleratorConfigPage(
-    Window *pParent, const SfxItemSet& rSet )
-{
-    return new SfxAcceleratorConfigPage( pParent, rSet );
 }

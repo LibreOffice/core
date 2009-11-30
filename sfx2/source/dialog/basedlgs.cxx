@@ -170,7 +170,7 @@ void SfxModalDialog::init()
 
 // -----------------------------------------------------------------------
 
-SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId)
+SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
 
 /*      [Beschreibung]
 
@@ -179,8 +179,10 @@ SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId)
     Die dort gespeicherte Position wird gesetzt.
 */
 
-:       ModalDialog(pParent, rResId),
-    nUniqId(rResId.GetId())
+:   ModalDialog(pParent, rResId),
+    nUniqId(rResId.GetId()),
+    pInputSet(0),
+    pOutputSet(0)
 {
     init();
 }
@@ -198,7 +200,9 @@ SfxModalDialog::SfxModalDialog(Window* pParent,
 */
 
     ModalDialog(pParent, nWinStyle),
-    nUniqId(nUniqueId)
+    nUniqId(nUniqueId),
+    pInputSet(0),
+    pOutputSet(0)
 {
     init();
 }
@@ -220,6 +224,14 @@ SfxModalDialog::~SfxModalDialog()
 */
     SetDialogData_Impl();
     aTimer.Stop();
+    delete pOutputSet;
+}
+
+void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
+{
+    DBG_ASSERT( !pOutputSet, "Double creation of OutputSet!" );
+    if (!pOutputSet)
+        pOutputSet = new SfxAllItemSet( rPool );
 }
 
 // -----------------------------------------------------------------------
@@ -232,6 +244,16 @@ IMPL_LINK( SfxModalDialog, TimerHdl_Impl, Timer*, EMPTYARG )
         pHelpPI->LoadTopic( GetHelpId() );
  */
     return 0L;
+}
+
+void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
+{
+    DBG_ASSERT( !pOutputSet, "Double creation of OutputSet!" );
+    if (!pOutputSet)
+    {
+        pOutputSet = new SfxItemSet( rSet );
+        pOutputSet->ClearItem();
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -721,31 +743,29 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, EMPTYARG )
 */
 
 {
-    if ( !pOptions )
+    if ( !GetInputItemSet() )
     {
         // TabPage without ItemSet
         EndDialog( RET_OK );
         return 1;
     }
 
-    if ( !pOutSet )
+    if ( !GetOutputItemSet() )
     {
-        pOutSet = new SfxItemSet( *pOptions );
-        pOutSet->ClearItem();
+        CreateOutputItemSet( *GetInputItemSet() );
     }
     sal_Bool bModified = sal_False;
 
     if ( pImpl->m_pSfxPage->HasExchangeSupport() )
     {
-        int nRet = pImpl->m_pSfxPage->DeactivatePage( pOutSet );
-
+        int nRet = pImpl->m_pSfxPage->DeactivatePage( GetOutputSetImpl() );
         if ( nRet != SfxTabPage::LEAVE_PAGE )
             return 0;
         else
-            bModified = ( pOutSet->Count() > 0 );
+            bModified = ( GetOutputItemSet()->Count() > 0 );
     }
     else
-        bModified = pImpl->m_pSfxPage->FillItemSet( *pOutSet );
+        bModified = pImpl->m_pSfxPage->FillItemSet( *GetOutputSetImpl() );
 
     if ( bModified )
     {
@@ -781,12 +801,10 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-    pImpl           ( new SingleTabDlgImpl ),
-    pOptions        ( &rSet ),
-    pOutSet         ( 0 )
-
+    pImpl           ( new SingleTabDlgImpl )
 {
     DBG_WARNING( "please use the ctor with ViewFrame" );
+    SetInputSet( &rSet );
 }
 
 // -----------------------------------------------------------------------
@@ -810,12 +828,10 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-    pImpl           ( new SingleTabDlgImpl ),
-    pOptions        ( pInSet ),
-    pOutSet         ( 0 )
-
+    pImpl           ( new SingleTabDlgImpl )
 {
     DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
+    SetInputSet( pInSet );
 }
 
 // -----------------------------------------------------------------------
@@ -838,10 +854,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( NULL ),
     pCancelBtn      ( NULL ),
     pHelpBtn        ( NULL ),
-    pImpl           ( new SingleTabDlgImpl ),
-    pOptions        ( NULL ),
-    pOutSet         ( NULL )
-
+    pImpl           ( new SingleTabDlgImpl )
 {
     pImpl->m_sInfoURL = rInfoURL;
 }
@@ -858,7 +871,6 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
     delete pImpl->m_pLine;
     delete pImpl->m_pInfoImage;
     delete pImpl;
-    delete pOutSet;
 }
 
 // -----------------------------------------------------------------------
@@ -973,7 +985,7 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         if ( aUserItem >>= aTemp )
             sUserData = String( aTemp );
         pImpl->m_pSfxPage->SetUserData( sUserData );
-        pImpl->m_pSfxPage->Reset( *pOptions );
+        pImpl->m_pSfxPage->Reset( *GetInputItemSet() );
         pImpl->m_pSfxPage->Show();
 
         // Gr"ossen und Positionen anpassen
@@ -1035,10 +1047,10 @@ extern "C" int BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
  */
 const sal_uInt16* SfxSingleTabDialog::GetInputRanges( const SfxItemPool& rPool )
 {
-    if ( pOptions )
+    if ( GetInputItemSet() )
     {
         DBG_ERROR( "Set bereits vorhanden!" );
-        return pOptions->GetRanges();
+        return GetInputItemSet()->GetRanges();
     }
 
     if ( pRanges )

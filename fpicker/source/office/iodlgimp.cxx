@@ -131,44 +131,6 @@ namespace
 }
 
 //*****************************************************************************
-
-String GetRegularExpression_Impl( const String& rFilter )
-{
-    String aFilter = rFilter;
-    aFilter.EraseLeadingChars().EraseTrailingChars();
-    String aRegExp = '^';
-
-    for ( const sal_Unicode *pc = aFilter.GetBuffer(); *pc; ++pc )
-    {
-        if ( '*' == *pc )
-            aRegExp += String(RTL_CONSTASCII_USTRINGPARAM(".*"));
-        else if ( '?' == *pc )
-            aRegExp += '.';
-        else
-        {
-            aRegExp += '\'';
-
-            while ( *pc && *pc != '*' && *pc != '?' )
-            {
-                if ( '\'' == *pc )
-                    aRegExp += String(RTL_CONSTASCII_USTRINGPARAM("\\\'"));
-                else
-                    aRegExp += *pc;
-                pc++;
-            }
-            aRegExp += '\'';
-
-            if ( !*pc )
-                break;
-            else
-                pc--;
-        }
-    }
-    aRegExp += '$';
-    return aRegExp;
-}
-
-//*****************************************************************************
 // SvtFileDialogFilter_Impl
 //*****************************************************************************
 

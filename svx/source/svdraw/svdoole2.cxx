@@ -90,6 +90,12 @@
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
 
+// #i100710#
+#include <svx/xlnclit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbstit.hxx>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -409,7 +415,14 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
                     if ( xObject->getStatus( pObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
                         xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
                     else
-                        xObject->changeState( embed::EmbedStates::RUNNING );
+                    {
+                        // the links should not stay in running state for long time because of locking
+                        uno::Reference< embed::XLinkageSupport > xLink( xObject, uno::UNO_QUERY );
+                        if ( xLink.is() && xLink->isLink() )
+                            xObject->changeState( embed::EmbedStates::LOADED );
+                        else
+                            xObject->changeState( embed::EmbedStates::RUNNING );
+                    }
                 }
                 catch (com::sun::star::uno::Exception& )
                 {}
@@ -644,9 +657,7 @@ void SdrEmbedObjectLink::DataChanged( const String& /*rMimeType*/,
             try
             {
                 sal_Int32 nState = xObject->getCurrentState();
-                if ( nState == embed::EmbedStates::LOADED )
-                    xObject->changeState( embed::EmbedStates::RUNNING );
-                else
+                if ( nState != embed::EmbedStates::LOADED )
                 {
                     // in some cases the linked file probably is not locked so it could be changed
                     xObject->changeState( embed::EmbedStates::LOADED );
@@ -1473,17 +1484,39 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     // slow when the whole OLE needs to be cloned. Get the Metafile and
     // create a graphic object with it
     Graphic* pOLEGraphic = GetGraphic();
+    SdrObject* pClone = 0;
 
     if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         pOLEGraphic = getEmbeddedObjectRef().GetHCGraphic();
     }
 
-    SdrObject* pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
+    if(pOLEGraphic)
+    {
+        pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
 
-    // this would be the place where to copy all attributes
-    // when OLE will support fill and line style
-    // pClone->SetMergedItem(pOleObject->GetMergedItemSet());
+        // this would be the place where to copy all attributes
+        // when OLE will support fill and line style
+        // pClone->SetMergedItem(pOleObject->GetMergedItemSet());
+    }
+    else
+    {
+        // #i100710# pOLEGraphic may be zero (no visualisation available),
+        // so we need to use the OLE replacement graphic
+        pClone = new SdrRectObj(GetSnapRect());
+
+        // gray outline
+        pClone->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+        const svtools::ColorConfig aColorConfig;
+        const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
+        pClone->SetMergedItem(XLineColorItem(String(), aColor.nColor));
+
+        // bitmap fill
+        pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
+        pClone->SetMergedItem(XFillBitmapItem(String(), GetEmtyOLEReplacementBitmap()));
+        pClone->SetMergedItem(XFillBmpTileItem(false));
+        pClone->SetMergedItem(XFillBmpStretchItem(false));
+    }
 
     return pClone;
 }

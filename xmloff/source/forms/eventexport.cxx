@@ -154,7 +154,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool SAL_CALL OEventDescriptorMapper::hasElements(  ) throw(RuntimeException)
     {
-        return 0 != m_aMappedEvents.size();
+        return !m_aMappedEvents.empty();
     }
 
 //.........................................................................

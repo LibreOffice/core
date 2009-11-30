@@ -149,7 +149,7 @@ ModelessDialog DLG_PRINTMONITOR
     };
     String STR_FT_PREPARATION
     {
-        Text [ en-US ] = "is being pepared for printing";
+        Text [ en-US ] = "is being prepared for printing";
     };
 };
 

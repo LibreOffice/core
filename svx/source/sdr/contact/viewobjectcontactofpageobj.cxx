@@ -147,7 +147,15 @@ namespace sdr
                 const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
                     rOriginalViewInformation.getObjectTransformation(),
                     rOriginalViewInformation.getViewTransformation(),
-                    rOriginalViewInformation.getViewport(),
+
+                    // #i101075# use empty range for page content here to force
+                    // the content not to be physically clipped in any way. This
+                    // would be possible, but would require the internal transformation
+                    // which maps between the page visualisation object and the page
+                    // content, including the aspect ratios (for details see in
+                    // PagePreviewPrimitive2D::createLocalDecomposition)
+                    basegfx::B2DRange(),
+
                     GetXDrawPageForSdrPage(const_cast< SdrPage* >(pStartPage)),
                     0.0, // no time; page previews are not animated
                     rOriginalViewInformation.getExtendedInformationSequence());

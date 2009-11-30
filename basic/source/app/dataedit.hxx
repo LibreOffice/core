@@ -39,8 +39,8 @@
 class String;
 class Font;
 
-// Find, Load und Save müssen implementiert werden,
-// die anderen müssen in MemberType existieren
+// Find, Load and Save must be implemented,
+// the others must exist in MemberType
 #define DATA_FUNC_DEF( MemberName, MemberType )                                 \
 public:                                                                         \
     MemberType MemberName;                                                      \
@@ -88,9 +88,9 @@ public:
     virtual void Undo()=0;
     virtual void Redo()=0;
 
-    virtual BOOL Find( const String& )=0;           // Text suchen & markieren
-    virtual BOOL Load( const String& )=0;           // Text aus Datei laden
-    virtual BOOL Save( const String& )=0;           // Text in Datei speichern
+    virtual BOOL Find( const String& )=0;         // Find and select text
+    virtual BOOL Load( const String& )=0;         // Load text from file
+    virtual BOOL Save( const String& )=0;         // Save text to file
     virtual String GetSelected()=0;
     virtual void GrabFocus()=0;
     virtual TextSelection GetSelection() const=0;
@@ -98,7 +98,7 @@ public:
     virtual USHORT GetLineNr() const=0;
     virtual String GetText() const=0;
     virtual void SetText( const String& rStr )=0;
-    virtual BOOL HasText() const=0;             // damit vermeiden wir GetText.Len()
+    virtual BOOL HasText() const=0;               // to avoid GetText.Len()
     virtual void ReplaceSelected( const String& rStr )=0;
     virtual BOOL IsModified()=0;
     virtual void SetModifyHdl( Link )=0;
@@ -113,7 +113,7 @@ public:
     virtual void BuildKontextMenu( PopupMenu *&pMenu )
     {
         (void) pMenu; /* avoid warning about unused parameter */
-    }   // Wer will kann hier eigene Einträge hinzufügen
+    }
 };
 
 #endif

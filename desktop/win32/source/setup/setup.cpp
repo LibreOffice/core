@@ -44,7 +44,8 @@
 #include <time.h>
 #include <mbctype.h>
 #include <locale.h>
-
+#include <Msiquery.h>
+#include <MsiDefs.h>
 #include "strsafe.h"
 
 #include "setup.hxx"
@@ -63,6 +64,8 @@
 #define PRODUCT_NAME_VAR    TEXT( "%PRODUCTNAME" )
 #define PRODUCT_VERSION     TEXT( "ProductVersion" )
 #define ERROR_SHOW_USAGE      -2
+#define ERROR_SETUP_TO_OLD    -3
+#define ERROR_SETUP_NOT_FOUND -4
 
 #define PARAM_SETUP_USED    TEXT( " SETUP_USED=1 " )
 #define PARAM_PACKAGE       TEXT( "/I " )
@@ -123,8 +126,6 @@ SetupAppX::SetupAppX()
     m_pCmdLine  = NULL;
 
     m_pDatabase = NULL;
-    m_pInstMsiW = NULL;
-    m_pInstMsiA = NULL;
     m_pReqVersion   = NULL;
     m_pProductName  = NULL;
     m_pAdvertise    = NULL;
@@ -147,6 +148,7 @@ SetupAppX::SetupAppX()
     m_bRegNoMsoTypes  = false;
     m_bRegAllMsoTypes = false;
     m_bIsMinorUpgrade = false;
+    m_bSupportsPatch  = false;
 
     m_bIgnoreAlreadyRunning = false;
 }
@@ -181,8 +183,6 @@ SetupAppX::~SetupAppX()
 
     if ( m_pAppTitle ) delete [] m_pAppTitle;
     if ( m_pDatabase ) delete [] m_pDatabase;
-    if ( m_pInstMsiW ) delete [] m_pInstMsiW;
-    if ( m_pInstMsiA ) delete [] m_pInstMsiA;
     if ( m_pReqVersion ) delete [] m_pReqVersion;
     if ( m_pProductName ) delete [] m_pProductName;
     if ( m_pAdvertise )   delete [] m_pAdvertise;
@@ -344,16 +344,6 @@ boolean SetupAppX::ReadProfile()
                     m_pDatabase = pValue;
                     Log( TEXT( "    Database = %s\r\n" ), pValue );
                 }
-                else if ( lstrcmpi( TEXT( "instmsiw" ), pName ) == 0 )
-                {
-                    m_pInstMsiW = pValue;
-                    Log( TEXT( "    instmsiw = %s\r\n" ), pValue );
-                }
-                else if ( lstrcmpi( TEXT( "instmsia" ), pName ) == 0 )
-                {
-                    m_pInstMsiA = pValue;
-                    Log( TEXT( "    instmsia = %s\r\n" ), pValue );
-                }
                 else if ( lstrcmpi( TEXT( "msiversion" ), pName ) == 0 )
                 {
                     m_pReqVersion = pValue;
@@ -387,7 +377,7 @@ boolean SetupAppX::ReadProfile()
             }
         }
 
-        if ( bRet && ( !m_pDatabase || !m_pInstMsiW || !m_pInstMsiA || !m_pReqVersion || !m_pProductName ) )
+        if ( bRet && ( !m_pDatabase || !m_pReqVersion || !m_pProductName ) )
         {
             Log( TEXT( "ERROR: incomplete 'Setup' section in profile\r\n" ) );
             SetError( ERROR_INVALID_DATA );
@@ -447,6 +437,21 @@ boolean SetupAppX::ReadProfile()
 }
 
 //--------------------------------------------------------------------------
+void SetupAppX::AddFileToPatchList( TCHAR* pPath, TCHAR* pFile )
+{
+    if ( m_pPatchFiles == NULL )
+    {
+        m_pPatchFiles = new TCHAR[ MAX_STR_LENGTH ];
+        StringCchCopy( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
+    }
+    else
+        StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT(";") );
+
+    StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pPath );
+    StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pFile );
+}
+
+//--------------------------------------------------------------------------
 boolean SetupAppX::GetPatches()
 {
     boolean bRet = true;
@@ -475,19 +480,18 @@ boolean SetupAppX::GetPatches()
 
         if ( hFindPatches != INVALID_HANDLE_VALUE )
         {
-            bool fNextFile = false;
-            m_pPatchFiles = new TCHAR[ MAX_STR_LENGTH ];
-            StringCchCopy( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
-            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pBaseDir );
-            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, aFindFileData.cFileName );
+            if ( ! IsPatchInstalled( pBaseDir, aFindFileData.cFileName ) )
+                AddFileToPatchList( pBaseDir, aFindFileData.cFileName );
 
             while ( FindNextFile( hFindPatches, &aFindFileData ) )
             {
-                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT(";") );
-                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pBaseDir );
-                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, aFindFileData.cFileName );
+                if ( ! IsPatchInstalled( pBaseDir, aFindFileData.cFileName ) )
+                    AddFileToPatchList( pBaseDir, aFindFileData.cFileName );
             }
-            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
+
+            if ( m_pPatchFiles != NULL )
+                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
+
             FindClose( hFindPatches );
         }
     }
@@ -1065,6 +1069,14 @@ void SetupAppX::DisplayError( UINT nErr ) const
                                 StringCchPrintf( sError, MAX_TEXT_LENGTH, sTmp, m_pErrorText );
                                 break;
 
+        case ERROR_SETUP_TO_OLD:    // - 3
+                                WIN::LoadString( m_hInst, IDS_SETUP_TO_OLD, sTmp, MAX_TEXT_LENGTH );
+                                StringCchPrintf( sError, MAX_TEXT_LENGTH, sTmp, m_pReqVersion, m_pErrorText );
+                                break;
+        case ERROR_SETUP_NOT_FOUND: // - 4
+                                WIN::LoadString( m_hInst, IDS_SETUP_NOT_FOUND, sTmp, MAX_TEXT_LENGTH );
+                                StringCchPrintf( sError, MAX_TEXT_LENGTH, sTmp, m_pReqVersion );
+                                break;
         case ERROR_SHOW_USAGE:      // - 2
                                 nMsgType = MB_OK | MB_ICONINFORMATION;
                                 WIN::LoadString( m_hInst, IDS_USAGE, sError, MAX_TEXT_LENGTH );
@@ -1140,15 +1152,15 @@ void SetupAppX::GetLanguageName( long nLanguage, LPTSTR sName ) const
 //--------------------------------------------------------------------------
 boolean SetupAppX::CheckVersion()
 {
-    boolean bRet = true;
-    boolean bNeedUpdate = true;
+    boolean bRet = false;
     HMODULE hMsi = LoadMsiLibrary();
 
     Log( TEXT( " Looking for installed MSI with version >= %s\r\n" ), m_pReqVersion );
 
     if ( !hMsi )
     {
-        Log( TEXT( "Warning: No MSI found, update needed!\r\n" ) );
+        Log( TEXT( "Error: No MSI found!\r\n" ) );
+        SetError( (UINT) ERROR_SETUP_NOT_FOUND );
     }
     else
     {
@@ -1168,37 +1180,23 @@ boolean SetupAppX::CheckVersion()
                                  aInfo.dwBuildNumber );
                 if ( _tcsncmp( pMsiVersion, m_pReqVersion, _tcslen( pMsiVersion ) ) < 0 )
                 {
+                    StringCchCopy( m_pErrorText, MAX_TEXT_LENGTH, pMsiVersion );
+                    SetError( (UINT) ERROR_SETUP_TO_OLD );
                     Log( TEXT( "Warning: Old MSI version found <%s>, update needed!\r\n" ), pMsiVersion );
                 }
                 else
                 {
                     Log( TEXT( " Found MSI version <%s>, no update needed\r\n" ), pMsiVersion );
-                    bNeedUpdate = false;
+                    bRet = true;
                 }
+                if ( aInfo.dwMajorVersion >= 3 )
+                    m_bSupportsPatch = true;
+                else
+                    Log( TEXT("Warning: Patching not supported! MSI-Version <%s>\r\n"), pMsiVersion );
             }
         }
 
         FreeLibrary( hMsi );
-    }
-
-    if ( bNeedUpdate )
-    {
-        LPTSTR  pInstaller = 0;
-
-        if ( IsWin9x() )
-            bRet = GetPathToFile( m_pInstMsiA, &pInstaller );
-        else
-            bRet = GetPathToFile( m_pInstMsiW, &pInstaller );
-
-        if ( bRet )
-            bRet = InstallMsi( pInstaller );
-        else
-            Log( TEXT( "ERROR: Could not find InstMsiA/InstMsiW!\r\n" ) );
-
-        if ( bRet && IsWin9x() && ( GetMinorVersion() <= 10 ) )
-            SetRebootNeeded( true );
-
-        if ( pInstaller ) delete [] pInstaller;
     }
 
     return bRet;
@@ -1253,98 +1251,6 @@ boolean SetupAppX::CheckForUpgrade()
 
         delete [] sProductVersion;
     }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------
-boolean SetupAppX::InstallMsi( LPCTSTR pInstaller )
-{
-    if ( ! IsAdmin() )
-    {
-        Log( TEXT( "Error: need admin rights to update/install MSI!\r\n" ) );
-        SetError( ERROR_DS_INSUFF_ACCESS_RIGHTS );
-        return false;
-    }
-
-    if ( ! m_bQuiet )
-    {
-        TCHAR sUserPrompt[ MAX_TEXT_LENGTH ] = {0};
-        WIN::LoadString( m_hInst, IDS_ALLOW_MSI_UPDATE, sUserPrompt, MAX_TEXT_LENGTH );
-        ConvertNewline( sUserPrompt );
-
-        if ( IDYES != WIN::MessageBox( NULL, sUserPrompt, m_pAppTitle, MB_YESNO | MB_ICONQUESTION ) )
-        {
-            SetError( ERROR_INSTALL_USEREXIT );
-            Log( TEXT( "Error: User canceled update/installation of new MSI!\r\n" ) );
-            return false;
-        }
-    }
-
-    STARTUPINFO         aSUI;
-    PROCESS_INFORMATION aPI;
-
-    Log( TEXT( " Will install <%s>\r\n" ), pInstaller );
-
-    ZeroMemory( (void*)&aPI, sizeof( PROCESS_INFORMATION ) );
-    ZeroMemory( (void*)&aSUI, sizeof( STARTUPINFO ) );
-
-    aSUI.cb          = sizeof(STARTUPINFO);
-    aSUI.dwFlags     = STARTF_USESHOWWINDOW;
-    aSUI.wShowWindow = SW_SHOW;
-
-    DWORD  nCmdLineLength = lstrlen( pInstaller ) + lstrlen( sDelayReboot ) + 3;
-
-    if ( m_bQuiet )
-        nCmdLineLength += lstrlen( sMsiQuiet );
-
-    TCHAR *sCmdLine = new TCHAR[ nCmdLineLength ];
-
-    if ( FAILED( StringCchCopy( sCmdLine, nCmdLineLength, TEXT("\"")) ) ||
-         FAILED( StringCchCat(  sCmdLine, nCmdLineLength, pInstaller) ) ||
-         FAILED( StringCchCat(  sCmdLine, nCmdLineLength, TEXT("\"")) ) ||
-         FAILED( StringCchCat(  sCmdLine, nCmdLineLength, sDelayReboot) ) ||
-         ( m_bQuiet && FAILED( StringCchCat( sCmdLine, nCmdLineLength, sMsiQuiet ) ) ) )
-    {
-        Log( TEXT( "ERROR: Could not create command line for updating MSI.\r\n" ) );
-        delete [] sCmdLine;
-        SetError( ERROR_INSTALL_FAILURE );
-        return false;
-    }
-
-    if ( !WIN::CreateProcess( NULL, sCmdLine, NULL, NULL, FALSE,
-                              CREATE_DEFAULT_ERROR_MODE, NULL, NULL,
-                              &aSUI, &aPI ) )
-    {
-        Log( TEXT( "ERROR: Could not create process %s.\r\n" ), sCmdLine );
-        SetError( WIN::GetLastError() );
-        delete [] sCmdLine;
-        return false;
-    }
-
-    DWORD nResult = WaitForProcess( aPI.hProcess );
-
-    if( ERROR_SUCCESS != nResult )
-    {
-        Log( TEXT( "ERROR: While waiting for %s.\r\n" ), sCmdLine );
-        delete [] sCmdLine;
-        SetError( nResult );
-        return false;
-    }
-
-    GetExitCodeProcess( aPI.hProcess, &nResult );
-    CloseHandle( aPI.hProcess );
-
-    if ( nResult != ERROR_SUCCESS )
-    {
-        TCHAR sBuf[80];
-        StringCchPrintf( sBuf, 80, TEXT("Warning: Installation returned %u.\r\n"), nResult );
-        Log( sBuf );
-    }
-    else
-        Log( TEXT( " Installation of new version completed successfully.\r\n" ) );
-
-    delete [] sCmdLine;
 
     return true;
 }
@@ -1492,9 +1398,15 @@ void SetupAppX::Log( LPCTSTR pMessage, LPCTSTR pText ) const
                                    _tsetlocale( LC_ALL, NULL ), _getmbcp() );
         }
         if ( pText )
+        {
             _ftprintf( m_pLogFile, pMessage, pText );
+            OutputDebugStringFormat( pMessage, pText );
+        }
         else
+        {
             _ftprintf( m_pLogFile, pMessage );
+            OutputDebugStringFormat( pMessage );
+        }
 
         fflush( m_pLogFile );
     }
@@ -1922,6 +1834,66 @@ LPTSTR SetupAppX::SetProdToAppTitle( LPCTSTR pProdName )
     delete [] pAppProdTitle;
 
     return m_pAppTitle;
+}
+
+
+//--------------------------------------------------------------------------
+boolean SetupAppX::IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName )
+{
+    if ( !m_bSupportsPatch )
+        return false;
+
+    PMSIHANDLE hSummaryInfo;
+    int nLen = lstrlen( pBaseDir ) + lstrlen( pFileName ) + 1;
+    TCHAR *szDatabasePath = new TCHAR [ nLen ];
+    TCHAR sBuf[80];
+
+    StringCchCopy( szDatabasePath, nLen, pBaseDir );
+    StringCchCat( szDatabasePath, nLen, pFileName );
+
+    UINT nRet = MsiGetSummaryInformation( NULL, szDatabasePath, 0, &hSummaryInfo );
+
+    if ( nRet != ERROR_SUCCESS )
+    {
+        StringCchPrintf( sBuf, 80, TEXT("ERROR: IsPatchInstalled: MsiGetSummaryInformation returned %u.\r\n"), nRet );
+        Log( sBuf );
+        return false;
+    }
+
+    UINT    uiDataType;
+    LPTSTR  szPatchID = new TCHAR[ 64 ];
+    DWORD   cchValueBuf = 64;
+    nRet = MsiSummaryInfoGetProperty( hSummaryInfo, PID_REVNUMBER, &uiDataType, NULL, NULL, szPatchID, &cchValueBuf );
+
+    if ( nRet != ERROR_SUCCESS )
+    {
+        StringCchPrintf( sBuf, 80, TEXT("ERROR: IsPatchInstalled: MsiSummaryInfoGetProperty returned %u.\r\n"), nRet );
+        Log( sBuf );
+        return false;
+    }
+
+    nRet = MsiGetPatchInfo( szPatchID, INSTALLPROPERTY_LOCALPACKAGE, NULL, NULL );
+
+    StringCchPrintf( sBuf, 80, TEXT("  GetPatchInfo for (%s) returned (%u)\r\n"), szPatchID, nRet );
+    Log( sBuf );
+
+    delete []szPatchID;
+
+    if ( nRet == ERROR_BAD_CONFIGURATION )
+        return false;
+    else if ( nRet == ERROR_INVALID_PARAMETER )
+        return false;
+    else if ( nRet == ERROR_MORE_DATA )
+        return true;
+    else if ( nRet == ERROR_SUCCESS )
+        return true;
+    else if ( nRet == ERROR_UNKNOWN_PRODUCT )
+        return false;
+    else if ( nRet == ERROR_UNKNOWN_PROPERTY )
+        return false;
+    else return false;
+
+    return false;
 }
 
 //--------------------------------------------------------------------------

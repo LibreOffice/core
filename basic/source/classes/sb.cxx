@@ -66,10 +66,7 @@ TYPEINIT1(StarBASIC,SbxObject)
 
 #define RTLNAME "@SBRTL"
 
-
-//========================================================================
-// Array zur Umrechnung SFX <-> VB-Fehlercodes anlegen
-
+// Create array for conversion SFX <-> VB error code
 struct SFX_VB_ErrorItem
 {
     USHORT  nErrorVB;
@@ -199,17 +196,13 @@ const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
     { 1004, SbERR_METHOD_FAILED },
     { 1005, SbERR_SETPROP_FAILED },
     { 1006, SbERR_GETPROP_FAILED },
-    { 0xFFFF, 0xFFFFFFFFL }     // End-Marke
+    { 0xFFFF, 0xFFFFFFFFL }     // End mark
 };
 
-
-////////////////////////////////////////////////////////////////////////////
-
-// Die StarBASIC-Factory hat einen Hack. Wenn ein SbModule eingerichtet wird,
-// wird der Pointer gespeichert und an nachfolgende SbProperties/SbMethods
-// uebergeben. Dadurch wird die Modul-Relationship wiederhergestellt. Das
-// klappt aber nur, wenn ein Modul geladen wird. Fuer getrennt geladene
-// Properties kann es Probleme geben!
+// The StarBASIC factory is a hack. When a SbModule is created, its pointer
+// is saved and given to the following SbProperties/SbMethods. This restores
+// the Modul-relationshop. But it works only when a modul is loaded.
+// Can cause troubles with separately loaded properties!
 
 SbxBase* SbiFactory::Create( UINT16 nSbxId, UINT32 nCreator )
 {
@@ -637,9 +630,6 @@ SbModule* SbClassFactory::FindClass( const String& rClassName )
     return pMod;
 }
 
-
-////////////////////////////////////////////////////////////////////////////
-
 StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) ), bDocBasic( bIsDocBasic )
 {
@@ -662,18 +652,16 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
         AddFactory( pOLEFAC );
     }
     pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
-    // Suche ueber StarBASIC ist immer global
+    // Search via StarBasic is always global
     SetFlag( SBX_GBLSEARCH );
 }
 
-// #51727 SetModified ueberladen, damit der Modified-
-// Zustand nicht an den Parent weitergegeben wird.
+// #51727 Override SetModified so that the modified state
+// is not given to the parent
 void StarBASIC::SetModified( BOOL b )
 {
     SbxBase::SetModified( b );
 }
-
-//***
 
 StarBASIC::~StarBASIC()
 {
@@ -691,9 +679,9 @@ StarBASIC::~StarBASIC()
         pOLEFAC = NULL;
 
 #ifdef DBG_UTIL
-    // SbiData braucht am Programm-Ende nicht abgeraeumt werden,
-    // aber wir wollen keine MLK's beim Purify
-    // Wo sollte es sonst geschehen???
+    // There is no need to clean SbiData at program end,
+    // but we dislike MLK's at Purify
+    // TODO: Where else???
     SbiGlobals** pp = (SbiGlobals**) ::GetAppData( SHL_SBC );
     SbiGlobals* p = *pp;
     if( p )
@@ -717,9 +705,7 @@ StarBASIC::~StarBASIC()
     }
 }
 
-// operator new() wird hier versenkt, damit jeder eine Instanz
-// anlegen kann, ohne neu zu bilden.
-
+// Override new() operator, so that everyone can create a new instance
 void* StarBASIC::operator new( size_t n )
 {
     if( n < sizeof( StarBASIC ) )
@@ -737,7 +723,7 @@ void StarBASIC::operator delete( void* p )
 
 /**************************************************************************
 *
-*   Erzeugen/Verwalten von Modulen
+*    Creation/Managment of modules
 *
 **************************************************************************/
 
@@ -817,10 +803,10 @@ SbModule* StarBASIC::FindModule( const String& rName )
     return NULL;
 }
 
-// Init-Code aller Module ausfuehren (auch in inserteten Bibliotheken)
+// Run Init-Code of all modules (including inserted libraries)
 void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
-    // Eigene Module initialisieren
+    // Init own modules
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
@@ -836,8 +822,8 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
         pModule->RunInit();
     }
 
-    // Alle Objekte ueberpruefen, ob es sich um ein Basic handelt
-    // Wenn ja, auch dort initialisieren
+    // Check all objects if they are BASIC,
+    // if yes initialize
     for ( USHORT nObj = 0; nObj < pObjs->Count(); nObj++ )
     {
         SbxVariable* pVar = pObjs->Get( nObj );
@@ -851,15 +837,14 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 // force reinitialisation at next start
 void StarBASIC::DeInitAllModules( void )
 {
-    // Eigene Module initialisieren
+    // Deinit own modules
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
         if( pModule->pImage )
             pModule->pImage->bInit = false;
     }
-    // Alle Objekte ueberpruefen, ob es sich um ein Basic handelt
-    // Wenn ja, auch dort initialisieren
+
     for ( USHORT nObj = 0; nObj < pObjs->Count(); nObj++ )
     {
         SbxVariable* pVar = pObjs->Get( nObj );
@@ -869,7 +854,7 @@ void StarBASIC::DeInitAllModules( void )
     }
 }
 
-// #43011 Fuer das TestTool, um globale Variablen loeschen zu koennen
+// #43011 For TestTool, to delete global vars
 void StarBASIC::ClearGlobalVars( void )
 {
     SbxArrayRef xProps( GetProperties() );
@@ -882,14 +867,12 @@ void StarBASIC::ClearGlobalVars( void )
     SetModified( TRUE );
 }
 
-
-// Diese Implementation sucht erst innerhalb der Runtime-Library, dann
-// nach einem Element innerhalb eines Moduls. Dieses Element kann eine
-// Public-Variable oder ein Entrypoint sein. Wenn nicht gefunden, wird,
-// falls nach einer Methode gesucht wird und ein Modul mit dem angege-
-// benen Namen gefunden wurde, der Entrypoint "Main" gesucht. Wenn das
-// auch nicht klappt, laeuft die traditionelle Suche ueber Objekte an.
-
+// This implementation at first searches within the runtime library,
+// then it looks for an element within one module. This moudle can be
+// a public var or an entrypoint. If it is not found and we look for a
+// method and a module with the given name is found the search continues
+// for entrypoint "Main".
+// If this fails again a conventional search over objects is performend.
 SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
 {
     static String aMainStr( RTL_CONSTASCII_USTRINGPARAM("Main") );
@@ -897,7 +880,7 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
     SbxVariable* pRes = NULL;
     SbModule* pNamed = NULL;
     // "Extended" search in Runtime Lib
-    // aber nur, wenn SbiRuntime nicht das Flag gesetzt hat
+    // but only if SbiRuntime has not set the flag
     if( !bNoRtl )
     {
         if( t == SbxCLASS_DONTCARE || t == SbxCLASS_OBJECT )
@@ -910,15 +893,15 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
         if( pRes )
             pRes->SetFlag( SBX_EXTFOUND );
     }
-    // Module durchsuchen
+    // Search module
     if( !pRes )
       for( USHORT i = 0; i < pModules->Count(); i++ )
     {
         SbModule* p = (SbModule*) pModules->Get( i );
         if( p->IsVisible() )
         {
-            // Modul merken fuer Main()-Aufruf
-            // oder stimmt etwa der Name ueberein?!?
+            // Remember modul fpr Main() call
+            // or is the name equal?!?
             if( p->GetName().EqualsIgnoreCaseAscii( rName ) )
             {
                 if( t == SbxCLASS_OBJECT || t == SbxCLASS_DONTCARE )
@@ -927,8 +910,8 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
                 }
                 pNamed = p;
             }
-            // Sonst testen, ob das Element vorhanden ist
-            // GBLSEARCH-Flag rausnehmen (wg. Rekursion)
+            // otherwise check if the element is available
+            // unset GBLSEARCH-Flag (due to Rekursion)
             USHORT nGblFlag = p->GetFlags() & SBX_GBLSEARCH;
             p->ResetFlag( SBX_GBLSEARCH );
             pRes = p->Find( rName, t );
@@ -958,7 +941,7 @@ BOOL StarBASIC::Call( const String& rName, SbxArray* pParam )
     return bRes;
 }
 
-// Find-Funktion ueber Name (z.B. Abfrage aus BASIC-IDE)
+// Find method via name (e.g. query via BASIC IDE)
 SbxBase* StarBASIC::FindSBXInCurrentScope( const String& rName )
 {
     if( !pINST )
@@ -968,11 +951,11 @@ SbxBase* StarBASIC::FindSBXInCurrentScope( const String& rName )
     return pINST->pRun->FindElementExtern( rName );
 }
 
-// Alte Schnittstelle vorerst erhalten
+// Preserve old interface
 SbxVariable* StarBASIC::FindVarInCurrentScopy
 ( const String& rName, USHORT& rStatus )
 {
-    rStatus = 1;            // Annahme: Nichts gefunden
+    rStatus = 1;              // Presumption: nothing found
     SbxVariable* pVar = NULL;
     SbxBase* pSbx = FindSBXInCurrentScope( rName );
     if( pSbx )
@@ -981,7 +964,7 @@ SbxVariable* StarBASIC::FindVarInCurrentScopy
             pVar = PTR_CAST(SbxVariable,pSbx);
     }
     if( pVar )
-        rStatus = 0;        // doch gefunden
+        rStatus = 0;      // We found something
     return pVar;
 }
 
@@ -1002,14 +985,12 @@ BOOL StarBASIC::IsRunning()
 
 /**************************************************************************
 *
-*   Objekt-Factories etc.
+*    Object factories and others
 *
 **************************************************************************/
 
-// Aktivierung eines Objekts. Aktive Objekte muessen nicht mehr
-// von BASIC aus ueber den Namen angesprochen werden. Ist
-// NULL angegeben, wird alles aktiviert.
-
+// Activation of an object. There is no need to access active objects
+// with name via BASIC. If NULL is given, everything is activated.
 void StarBASIC::ActivateObject( const String* pName, BOOL bActivate )
 {
     if( pName )
@@ -1038,7 +1019,7 @@ void StarBASIC::ActivateObject( const String* pName, BOOL bActivate )
 
 /**************************************************************************
 *
-*   Debugging und Fehlerbehandlung
+*    Debugging and error handling
 *
 **************************************************************************/
 
@@ -1084,12 +1065,12 @@ USHORT __EXPORT StarBASIC::BreakHdl()
         ? aBreakHdl.Call( this ) : SbDEBUG_CONTINUE );
 }
 
-// Abfragen fuer den Error-Handler und den Break-Handler:
+// Calls for error handler and break handler
 USHORT StarBASIC::GetLine()     { return GetSbData()->nLine; }
 USHORT StarBASIC::GetCol1()     { return GetSbData()->nCol1; }
 USHORT StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 
-// Spezifisch fuer den Error-Handler:
+// Specific to error handler
 SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
 const String& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 BOOL StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
@@ -1101,10 +1082,10 @@ SbLanguageMode StarBASIC::GetGlobalLanguageMode()
 {
     return GetSbData()->eLanguageMode;
 }
-// Lokale Einstellung
+// Local settings
 SbLanguageMode StarBASIC::GetLanguageMode()
 {
-    // Globale Einstellung nehmen?
+    // Use global settings?
     if( eLanguageMode == SB_LANG_GLOBAL )
         return GetSbData()->eLanguageMode;
     else

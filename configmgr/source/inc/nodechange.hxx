@@ -92,16 +92,9 @@ namespace configmgr
             NodeChange const& apply() const;
 
             // retrieve the tree where the change is actually taking place
-            rtl::Reference< Tree > getBaseTree() const;
-            // retrieve the node where the change is actually taking place
-            NodeRef getBaseNode() const;
-
-            // retrieve the tree where the change is actually taking place
             rtl::Reference< Tree > getAffectedTree() const;
             // retrieve the node where the change is actually taking place
             NodeRef getAffectedNode() const;
-            // identify the node where the change is actually taking place
-            NodeID getAffectedNodeID() const;
 
             // Comparison
             friend bool operator==(NodeChange const& lhs, NodeChange const& rhs)
@@ -141,20 +134,12 @@ namespace configmgr
             NodeChanges& test()             { implTest(); return *this; }
             NodeChanges const& test() const { implTest(); return *this; }
 
-            /// apply all changes
-            NodeChanges& apply()            { implApply(); return *this; }
-            NodeChanges const& apply() const{ implApply(); return *this; }
-
             /// remove all changes known to be doing nothing from this collection.
             NodeChanges& compact();
 
             /** insert a change into this collection
             */
             void add(NodeChange const& aChange);
-
-            /** insert changes into this collection
-            */
-            void add(NodeChanges const& aChanges);
 
             /// returns an STL-style iterator to the first element of the collection
             std::vector<NodeChange>::const_iterator begin() const       { return m_aChanges.begin(); }
@@ -166,7 +151,6 @@ namespace configmgr
 
         private:
             void implTest() const;
-            void implApply() const;
             std::vector<NodeChange> m_aChanges;
         };
 

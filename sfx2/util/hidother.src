@@ -197,6 +197,4 @@ hidspecial HID_CLOSE_WARNING                    { HelpID = HID_CLOSE_WARNING; };
 hidspecial HID_DID_SAVE_PACKED_XML              { HelpID = HID_DID_SAVE_PACKED_XML; };
 hidspecial HID_HELP_ONHELP                      { HelpID = HID_HELP_ONHELP; };
 hidspecial HID_HELP_TEXT_SELECTION_MODE         { HelpID = HID_HELP_TEXT_SELECTION_MODE; };
-hidspecial HID_MACROCHECKDIALOG                 { HelpID = HID_MACROCHECKDIALOG; };
-hidspecial HID_MACRO_HEADERTABLISTBOX           { HelpID = HID_MACRO_HEADERTABLISTBOX; };
 hidspecial HID_DLG_CHECKFORONLINEUPDATE         { HelpID = HID_DLG_CHECKFORONLINEUPDATE; };

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: dp_gui_updatedialog.hxx,v $
- * $Revision: 1.9.86.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -213,6 +210,7 @@ private:
     rtl::OUString m_noDescription;
     rtl::OUString m_noInstall;
     rtl::OUString m_noDependency;
+    rtl::OUString m_noDependencyCurVer;
     rtl::OUString m_noPermission;
     rtl::OUString m_noPermissionVista;
     rtl::OUString m_browserbased;

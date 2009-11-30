@@ -51,26 +51,12 @@ java_io_Reader::~java_io_Reader()
     SDBThreadAttach::releaseRef();
 }
 
-jclass java_io_Reader::getMyClass()
+jclass java_io_Reader::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass( "java/io/Reader" );
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/io/Reader");
     return theClass;
-}
-
-void java_io_Reader::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 
 sal_Int32 SAL_CALL java_io_Reader::readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -80,62 +66,31 @@ sal_Int32 SAL_CALL java_io_Reader::readSomeBytes( ::com::sun::star::uno::Sequenc
 
 void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
-    {
-        static const char * cSignature = "(I)I";
-        static const char * cMethodName = "skip";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID )
-        {
-            out = t.pEnv->CallIntMethod( object, mID,nBytesToSkip);
-            ThrowSQLException(t.pEnv,*this);
-        }
-    } //t.pEnv
+    static jmethodID mID(NULL);
+    callIntMethodWithIntArg("skip",mID,nBytesToSkip);
 }
 
 sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         static const char * cSignature = "()Z";
         static const char * cMethodName = "available";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID )
-        {
-            out = t.pEnv->CallBooleanMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
-        }
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        out = t.pEnv->CallBooleanMethod( object, mID);
+        ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
     return out;
 }
 
 void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
-    {
-        static const char * cSignature = "()V";
-        static const char * cMethodName = "close";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID )
-        {
-            t.pEnv->CallVoidMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
-        }
-    } //t.pEnv
+    static jmethodID mID(NULL);
+    callVoidMethod("close",mID);
 }
 // -----------------------------------------------------
 sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -143,28 +98,24 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
     OSL_ENSURE(aData.getLength() < nBytesToRead," Sequence is smaller than BytesToRead");
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         jcharArray pCharArray = t.pEnv->NewCharArray(nBytesToRead);
         static const char * cSignature = "([CII)I";
         static const char * cMethodName = "read";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID )
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        out = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nBytesToRead );
+        if ( !out )
+            ThrowSQLException(t.pEnv,*this);
+        if(out > 0)
         {
-            out = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nBytesToRead );
-            if ( !out )
-                ThrowSQLException(t.pEnv,*this);
-            if(out > 0)
-            {
-                jboolean p = sal_False;
-                if(aData.getLength() < out)
-                    aData.realloc(out-aData.getLength());
+            jboolean p = sal_False;
+            if(aData.getLength() < out)
+                aData.realloc(out-aData.getLength());
 
-                memcpy(aData.getArray(),t.pEnv->GetCharArrayElements(pCharArray,&p),out);
-            }
+            memcpy(aData.getArray(),t.pEnv->GetCharArrayElements(pCharArray,&p),out);
         }
         t.pEnv->DeleteLocalRef((jcharArray)pCharArray);
     } //t.pEnv

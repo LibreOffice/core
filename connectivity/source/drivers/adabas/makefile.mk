@@ -89,7 +89,6 @@ SHL1STDLIBS=\
     $(DBTOOLSLIB)				\
     $(TOOLSLIB)					\
     $(ODBCBASELIB)				\
-    $(UCBHELPERLIB) 			\
     $(UNOTOOLSLIB)				\
     $(COMPHELPERLIB)
 

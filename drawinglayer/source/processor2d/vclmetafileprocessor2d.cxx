@@ -912,7 +912,7 @@ namespace drawinglayer
                 {
                     // for supporting TEXT_ MetaFile actions there is more to do here; get the candidate
                     const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate = static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate);
-                    const primitive2d::TextDecoratedPortionPrimitive2D* pTextDecoratedCandidate = dynamic_cast< const primitive2d::TextDecoratedPortionPrimitive2D* >(&rCandidate);
+                    // const primitive2d::TextDecoratedPortionPrimitive2D* pTextDecoratedCandidate = dynamic_cast< const primitive2d::TextDecoratedPortionPrimitive2D* >(&rCandidate);
 
                     // Adapt evtl. used special DrawMode
                     const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
@@ -924,7 +924,7 @@ namespace drawinglayer
                     // restore DrawMode
                     mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
-                    if(pTextDecoratedCandidate)
+                    // #i101169# if(pTextDecoratedCandidate)
                     {
                         // support for TEXT_ MetaFile actions only for decorated texts
                         if(!mxBreakIterator.is())
@@ -936,36 +936,37 @@ namespace drawinglayer
                         if(mxBreakIterator.is())
                         {
                             const rtl::OUString& rTxt = rTextCandidate.getText();
-                            const sal_Int32 nTextLength(rTxt.getLength());
+                            const sal_Int32 nTextLength(rTextCandidate.getTextLength()); // rTxt.getLength());
 
                             if(nTextLength)
                             {
                                 const ::com::sun::star::lang::Locale& rLocale = rTextCandidate.getLocale();
+                                const sal_Int32 nTextPosition(rTextCandidate.getTextPosition());
 
                                 sal_Int32 nDone;
-                                sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, 0, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
-                                ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, 0, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
-                                sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, 0, rLocale));
+                                sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
+                                ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
+                                sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
                                 static const ByteString aCommentStringA("XTEXT_EOC");
                                 static const ByteString aCommentStringB("XTEXT_EOW");
                                 static const ByteString aCommentStringC("XTEXT_EOS");
 
-                                for(sal_Int32 i(0); i < nTextLength; i++)
+                                for(sal_Int32 i(nTextPosition); i < nTextPosition + nTextLength; i++)
                                 {
                                     // create the entries for the respective break positions
                                     if(i == nNextCellBreak)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringA, i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringA, i - nTextPosition));
                                         nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                                     }
                                     if(i == nNextWordBoundary.endPos)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringB, i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringB, i - nTextPosition));
                                         nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
                                     }
                                     if(i == nNextSentenceBreak)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringC, i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringC, i - nTextPosition));
                                         nNextSentenceBreak = mxBreakIterator->endOfSentence(rTxt, i + 1, rLocale);
                                     }
                                 }

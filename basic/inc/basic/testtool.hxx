@@ -64,7 +64,7 @@ BOOL IsTTSignatureForUnicodeTextfile( String aLine );
     }                                                                   \
     P_FEHLERLISTE->C40_INSERT(ErrorEntry, pErr, P_FEHLERLISTE->Count());\
 }
-// Irgendwann noch was mit der UID anfangen !!
+// ??? Irgendwann noch was mit der UID anfangen !!
 #define ADD_ERROR(nNr, aStr) { \
         if ( !SbxBase::IsError() )              \
             SbxBase::SetError( nNr );           \
@@ -75,7 +75,7 @@ BOOL IsTTSignatureForUnicodeTextfile( String aLine );
 #define GET_ERROR() P_FEHLERLISTE->GetObject(0)
 #define IS_ERROR() ( P_FEHLERLISTE->Count() > 0 )
 
-//  Übertragen des Fehlerlogs
+// Transmission of error logs
 enum TTLogType { LOG_RUN, LOG_TEST_CASE, LOG_ERROR, LOG_CALL_STACK, LOG_MESSAGE, LOG_WARNING, LOG_ASSERTION, LOG_QA_ERROR, LOG_ASSERTION_STACK };
 
 struct TTDebugData
@@ -96,7 +96,7 @@ public:
     TTDebugData aDebugData;
 };
 
-//  Zum übertragen der Fensterinformation aus der Testapp
+// For transmission of window information from the Testapp
 struct WinInfoRec
 {
 public:
@@ -109,7 +109,7 @@ public:
     BOOL bIsReset;
 };
 
-/// defines für syntax Highlighting
+// Defines for syntax Highlighting
 #define TT_KEYWORD      ((SbTextType)100)   // Including locally executed commands like 'use' ...
 #define TT_REMOTECMD    ((SbTextType)101)   // Remotely executed commands like 'nodebug'
 #define TT_LOCALCMD     ((SbTextType)102)   // Locally executed commands like 'use'
@@ -123,7 +123,7 @@ public:
 #define FILELIST3       ((SbTextType)113)   // Symbols in file 3
 #define FILELIST4       ((SbTextType)114)   // Symbols in file 4
 
-/// defines für hints vom TestToolObj an die Applikation
+/// defines for hints from TestToolObj to the Application
 #define SBX_HINT_LANGUAGE_EXTENSION_LOADED      SFX_HINT_USER06
 #define SBX_HINT_EXECUTION_STATUS_INFORMATION   SFX_HINT_USER07
 
@@ -160,4 +160,4 @@ public:
     USHORT GetType(){ return mnType; }
 };
 
-#endif //#ifndef _BASIC_TESTTOOL_HXX_
+#endif // _BASIC_TESTTOOL_HXX_

@@ -33,6 +33,7 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=mozab
 TARGET2=$(TARGET)drv
+VISIBILITY_HIDDEN=TRUE
 
 .IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || ( "$(OS)" == "MACOSX" )
 all: 
@@ -107,11 +108,8 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(SALLIB)					\
-    $(DBTOOLSLIB)				\
-    $(COMPHELPERLIB)
-
+    $(DBTOOLSLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)$(DLLPOSTFIX)

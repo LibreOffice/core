@@ -84,6 +84,7 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
             E_ATTRIBUTE_MOD_SHIFT,
             E_ATTRIBUTE_MOD_MOD1,
             E_ATTRIBUTE_MOD_MOD2,
+                        E_ATTRIBUTE_MOD_MOD3,
             E_ATTRIBUTE_URL
         };
 

@@ -1254,7 +1254,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     ::rtl::OUString aTemplURL( xDocProps->getTemplateURL() );
     String aFoundName;
 
-    if ( aTemplName.getLength() || aTemplURL.getLength() && !IsReadOnly() )
+    if ( aTemplName.getLength() || (aTemplURL.getLength() && !IsReadOnly()) )
     {
         // try to locate template, first using filename
         // this must be done because writer global document uses this "great" idea to manage the templates of all parts

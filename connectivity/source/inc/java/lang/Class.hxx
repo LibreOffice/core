@@ -41,18 +41,13 @@ namespace connectivity
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_lang_Class();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_lang_Class( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         static java_lang_Class * forName( const ::rtl::OUString &_par0 );
-        sal_Bool isAssignableFrom( java_lang_Class * _par0 );
-        java_lang_Object * newInstance();
-        ::rtl::OUString getName();
         // return the jre object
         jobject newInstanceObject();
 

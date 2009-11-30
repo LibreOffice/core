@@ -79,13 +79,11 @@ namespace configmgr
             uno::Reference< uno::XInterface > makeUnoElement(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode);
             uno::Reference< uno::XInterface > findUnoElement(configuration::NodeID const& aNode);
 
-            uno::Reference< uno::XInterface > makeUnoGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode);
             uno::Reference< uno::XInterface > makeUnoSetElement(rtl::Reference< configuration::ElementTree > const& aTree);
 
             NodeElement* makeElement(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode);
             NodeElement* findElement(configuration::NodeID const& aNode);
 
-            NodeElement*    makeGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode);
             TreeElement*    makeAccessRoot(rtl::Reference< configuration::Tree > const& aTree, RequestOptions const& _aOptions);
             SetElement*     makeSetElement(rtl::Reference< configuration::ElementTree > const& aTree);
 

@@ -63,52 +63,23 @@ java_sql_SQLException_BASE::~java_sql_SQLException_BASE()
 {}
 
 
-jclass java_sql_SQLException_BASE::getMyClass()
+jclass java_sql_SQLException_BASE::getMyClass() const
+{
+    return st_getMyClass();
+}
+jclass java_sql_SQLException_BASE::st_getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass("java/sql/SQLException");
-        OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        if(!tempClass)
-        {
-            t.pEnv->ExceptionDescribe();
-            t.pEnv->ExceptionClear();
-        }
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/sql/SQLException");
     return theClass;
-}
-
-void java_sql_SQLException_BASE::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 
 starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 {
-    jobject out = NULL;
     SDBThreadAttach t;
-    if( t.pEnv ){
-
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()Ljava/sql/SQLException;";
-        static const char * cMethodName = "getNextException";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,0);
-        } //mID
-    } //t.pEnv
+    static jmethodID mID(NULL);
+    jobject out = callObjectMethod(t.pEnv,"getNextException","()Ljava/sql/SQLException;", mID);
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     if( out )
     {
@@ -121,44 +92,12 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 
 ::rtl::OUString java_sql_SQLException_BASE::getSQLState() const
 {
-    SDBThreadAttach t;
-    ::rtl::OUString aStr;
-    if( t.pEnv ){
-
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()Ljava/lang/String;";
-        static const char * cMethodName = "getSQLState";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            jstring out = (jstring) t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,0);
-            aStr = JavaString2String(t.pEnv,out);
-        } //mID
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return aStr;
+    static jmethodID mID(NULL);
+    return callStringMethod("getSQLState",mID);
 }
 sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
 {
-    jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv ){
-
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()I";
-        static const char * cMethodName = "getErrorCode";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallIntMethod( object, mID);
-            ThrowSQLException(t.pEnv,0);
-        } //mID
-    } //t.pEnv
-    return (sal_Int32)out;
+    static jmethodID mID(NULL);
+    return callIntMethod("getErrorCode",mID);
 }
 

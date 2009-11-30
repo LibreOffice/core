@@ -49,6 +49,7 @@
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <basegfx/polygon/b3dpolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -556,7 +557,51 @@ namespace drawinglayer
             if(mpBZPixelRaster)
             {
                 mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
-                mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize ? mnAntiAlialize : 1);
+
+                if(mnAntiAlialize > 1)
+                {
+                    const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
+
+                    if(bForceLineSnap)
+                    {
+                        basegfx::B3DHomMatrix aTransform;
+                        basegfx::B3DPolygon aSnappedHairline(rHairline);
+                        const double fScaleDown(1.0 / mnAntiAlialize);
+                        const double fScaleUp(mnAntiAlialize);
+
+                        // take oversampling out
+                        aTransform.scale(fScaleDown, fScaleDown, 1.0);
+                        aSnappedHairline.transform(aTransform);
+
+                        // snap to integer
+                        aSnappedHairline = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aSnappedHairline);
+
+                        // add oversampling again
+                        aTransform.identity();
+                        aTransform.scale(fScaleUp, fScaleUp, 1.0);
+
+                        if(false)
+                        {
+                            // when really want to go to single pixel lines, move to center.
+                            // Without this translation, all hor/ver hairlines will be centered exactly
+                            // between two pixel lines (which looks best)
+                            const double fTranslateToCenter(mnAntiAlialize * 0.5);
+                            aTransform.translate(fTranslateToCenter, fTranslateToCenter, 0.0);
+                        }
+
+                        aSnappedHairline.transform(aTransform);
+
+                        mpZBufferRasterConverter3D->rasterconvertB3DPolygon(aSnappedHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
+                    }
+                    else
+                    {
+                        mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
+                    }
+                }
+                else
+                {
+                    mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), 1);
+                }
             }
         }
 

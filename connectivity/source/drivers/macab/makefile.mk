@@ -34,7 +34,7 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=macab
 TARGET2=$(TARGET)drv
-
+VISIBILITY_HIDDEN=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------

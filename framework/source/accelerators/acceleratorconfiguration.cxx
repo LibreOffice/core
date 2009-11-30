@@ -1065,10 +1065,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
     css::uno::Reference< css::container::XNameAccess > xAccess;
 
     bPreferred = sal_True;
+    // on-demand creation of the primary write cache
+    impl_getCFG(bPreferred, sal_True);
     m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
     impl_ts_save(bPreferred, xAccess);
 
     bPreferred = sal_False;
+    // on-demand creation of the secondary write cache
+    impl_getCFG(bPreferred, sal_True);
     m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
     impl_ts_save(bPreferred, xAccess);
 
@@ -1242,6 +1246,10 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
         xModules->getByName(m_sModuleCFG) >>= xAccess;
     }
 
+    static KeyMapping aKeyMapping;
+    const ::rtl::OUString sIsoLang       = impl_ts_getLocale().toISO();
+    const ::rtl::OUString sDefaultLocale = ::rtl::OUString::createFromAscii("en-US");
+
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameAccess > xCommand;
     if (xAccess.is())
@@ -1263,13 +1271,12 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
             ::std::vector< ::rtl::OUString >::const_iterator pFound;
             for ( pFound = aLocales.begin(); pFound != aLocales.end(); ++pFound )
             {
-                if ( *pFound == impl_ts_getLocale().toISO() )
+                if ( *pFound == sIsoLang )
                     break;
             }
 
             if ( pFound == aLocales.end() )
             {
-                ::rtl::OUString sDefaultLocale = ::rtl::OUString::createFromAscii("en-US");
                 for ( pFound = aLocales.begin(); pFound != aLocales.end(); ++pFound )
                 {
                     if ( *pFound == sDefaultLocale )
@@ -1286,7 +1293,6 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
             if (sCommand.getLength()<1)
                 continue;
 
-            KeyMapping aKeyMapping;
             css::awt::KeyEvent aKeyEvent;
 
             sal_Int32 nIndex = 0;
@@ -1317,6 +1323,8 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
                 else if (sToken[k].equalsAscii("MOD2"))
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
+        else if (sToken[k].equalsAscii("MOD3"))
+            aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
                 else
                 {
                     bValid = sal_False;
@@ -1466,7 +1474,8 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         sKey += ::rtl::OUString::createFromAscii("_MOD1");
     if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  )
         sKey += ::rtl::OUString::createFromAscii("_MOD2");
-
+        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  )
+                sKey += ::rtl::OUString::createFromAscii("_MOD3");
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameContainer > xCommand;
     if ( !xContainer->hasByName(sKey) )
@@ -1517,6 +1526,8 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
         sKey += ::rtl::OUString::createFromAscii("_MOD1");
     if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  )
         sKey += ::rtl::OUString::createFromAscii("_MOD2");
+        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  )
+                sKey += ::rtl::OUString::createFromAscii("_MOD3");
 
     xContainer->removeByName(sKey);
 }
@@ -1561,6 +1572,8 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
         else if (sToken[i].equalsAscii("MOD2"))
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
+                else if (sToken[i].equalsAscii("MOD3"))
+                        aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
     }
 
     css::uno::Reference< css::container::XNameAccess > xKey;
@@ -1664,3 +1677,4 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
 }
 
 } // namespace framework
+

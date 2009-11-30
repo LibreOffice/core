@@ -30,12 +30,12 @@
 #ifndef _BASIC_DISPDEFS_HXX
 #define _BASIC_DISPDEFS_HXX
 
-#define DH_MODE_DATA_VALID  0x0001      // ModeData (für Kompatibilität mit altem Office)
+#define DH_MODE_DATA_VALID  0x0001      // ModeData (for compatibility with old Office)
 
-#define DH_MODE_KURZNAME    0x0002      // Anzeige des Kurznamens (wo möglich) anstatt der UniqueID
-#define DH_MODE_LANGNAME    0x0004      // Langname immer Anzeigen
-#define DH_MODE_ALLWIN      0x0008      // Alle Fenster anzeigen
-#define DH_MODE_SEND_DATA   0x0010      // Daten an Testtool übermitteln
+#define DH_MODE_KURZNAME    0x0002      // View short name instead of UniqueID (if possible)
+#define DH_MODE_LANGNAME    0x0004      // Always view long name
+#define DH_MODE_ALLWIN      0x0008      // View all windows
+#define DH_MODE_SEND_DATA   0x0010      // Send data to Testtool
 
 #endif
 

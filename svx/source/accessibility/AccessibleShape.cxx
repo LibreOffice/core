@@ -48,6 +48,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <svx/outlobj.hxx>
 #include <rtl/ref.hxx>
 #include <svx/unoedsrc.hxx>
 #include <svx/unoshtxt.hxx>
@@ -183,6 +184,8 @@ void AccessibleShape::Init (void)
                 if( pTextObj )
                     pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
+                bool bOwnParaObj = pOutlinerParaObject != NULL;
+
                 if( !pOutlinerParaObject && pSdrObject )
                     pOutlinerParaObject = pSdrObject->GetOutlinerParaObject();
 
@@ -199,6 +202,9 @@ void AccessibleShape::Init (void)
                     ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, 0, *pView, *pWindow) );
                     mpText = new AccessibleTextHelper( pEditSource );
                 }
+
+                if( bOwnParaObj )
+                    delete pOutlinerParaObject;
 
                 mpText->SetEventSource(this);
             }

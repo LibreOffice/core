@@ -54,7 +54,6 @@
 
 #include <basic/process.hxx>
 
-// Konstruktor für den Process
 Process::Process()
 : pArgumentList( NULL )
 , pEnvList( NULL )
@@ -64,7 +63,6 @@ Process::Process()
 {
 }
 
-// Destruktor
 Process::~Process()
 {
 //    delete pArgumentList;
@@ -106,9 +104,8 @@ long Process::ImplGetExitCode()
 
 ////////////////////////////////////////////////////////////////////////////
 
-// Die Methoden:
 void Process::SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv )
-{ // Imagedatei des Executables
+{ // Set image file of executable
     if ( pProcess && ImplIsRunning() )
         SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
     else
@@ -163,7 +160,7 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
 }
 
 BOOL Process::Start()
-{ // Programm wird gestartet
+{ // Start program
     BOOL bSuccess=FALSE;
     if ( pProcess && !ImplIsRunning() )
     {
@@ -196,6 +193,7 @@ BOOL Process::Start()
         catch( ... )
         {
             bWasGPF = TRUE;
+            // TODO: Output debug message !!
         }
         nErrorMode = SetErrorMode(nErrorMode);
 #endif
@@ -207,17 +205,17 @@ BOOL Process::Start()
 }
 
 ULONG Process::GetExitCode()
-{ // ExitCode des Programms(nachdem es beendet ist)
+{ // ExitCode of program after execution
     return ImplGetExitCode();
 }
 
 BOOL Process::IsRunning()
-{ // Programm läuft noch
+{
     return ImplIsRunning();
 }
 
 BOOL Process::WasGPF()
-{ // Programm mit GPF o.ä. abgebrochen
+{ // Did the process fail?
 #ifdef WNT
     return ImplGetExitCode() == 3221225477;
 #else

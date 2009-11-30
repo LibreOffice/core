@@ -48,7 +48,7 @@ using namespace cppu;
 
 //========================================================================
 
-// Deklaration Konvertierung von Sbx nach Uno mit bekannter Zielklasse
+// Declaration conversion from Sbx to UNO with known target type
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty = NULL );
 
 //========================================================================
@@ -383,14 +383,15 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite 
     (void)pBasic;
     (void)bWrite;
 
-    // Wir brauchen mindestens 1 Parameter
+    // We need at least one parameter
+    // TODO: In this case < 2 is not correct ;-)
     if ( rPar.Count() < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Klassen-Name der struct holen
+    // Get class names of struct
     String aServiceName( RTL_CONSTASCII_USTRINGPARAM("stardiv.uno.beans.PropertySet") );
 
 #if 0
@@ -406,7 +407,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite 
     SbxVariableRef refVar = rPar.Get(0);
     if( xInterface.is() )
     {
-        // PropertyValues setzen
+        // Set PropertyValues
         Any aArgAsAny = sbxToUnoValue( rPar.Get(1),
                 getCppuType( (Sequence<PropertyValue>*)0 ) );
         Sequence<PropertyValue> *pArg =
@@ -414,19 +415,19 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite 
         Reference< XPropertyAccess > xPropAcc = Reference< XPropertyAccess >::query( xInterface );
         xPropAcc->setPropertyValues( *pArg );
 
-        // SbUnoObject daraus basteln und zurueckliefern
+        // Build a SbUnoObject and return it
         Any aAny;
         aAny <<= xInterface;
         SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, aAny );
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
-            // Objekt zurueckliefern
+            // Return object
             refVar->PutObject( (SbUnoObject*)xUnoObj );
             return;
         }
     }
 
-    // Objekt konnte nicht erzeugt werden
+    // Object could not be created
     refVar->PutObject( NULL );
 }
 

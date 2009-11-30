@@ -828,13 +828,14 @@ KeyCode impl_KeyCodeAWT2VCL(const css::awt::KeyEvent& aAWTKey)
     BOOL   bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
     BOOL   bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
     BOOL   bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+    BOOL   bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
     USHORT nKey   = (USHORT)aAWTKey.KeyCode;
     // unfortunately MENU and CONTEXTMENU are twisted between vcl and awt
     if( aAWTKey.KeyCode == css::awt::Key::MENU )
         nKey = KEY_CONTEXTMENU;
     else if( aAWTKey.KeyCode == css::awt::Key::CONTEXTMENU )
         nKey = KEY_MENU;
-    return KeyCode(nKey, bShift, bMod1, bMod2);
+    return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }
 
 css::awt::KeyEvent impl_KeyCodeVCL2AWT(const KeyCode& aVCLKey)
@@ -854,6 +855,8 @@ css::awt::KeyEvent impl_KeyCodeVCL2AWT(const KeyCode& aVCLKey)
         aAWTKey.Modifiers |= css::awt::KeyModifier::MOD1;
     if (aVCLKey.IsMod2())
         aAWTKey.Modifiers |= css::awt::KeyModifier::MOD2;
+        if (aVCLKey.IsMod3())
+        aAWTKey.Modifiers |= css::awt::KeyModifier::MOD3;
 
     return aAWTKey;
 }
@@ -1911,6 +1914,7 @@ bool ReadResourceWriteAcceleratorXMLLang( const ::rtl::OUString& aOutDirURL,
         BOOL   bShift = ((aInfo.aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
         BOOL   bMod1  = ((aInfo.aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
         BOOL   bMod2  = ((aInfo.aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+        BOOL   bMod3  = ((aInfo.aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
 
         if (bShift)
             sAccBuf.appendAscii(" accel:shift=\"true\"");
@@ -1918,6 +1922,8 @@ bool ReadResourceWriteAcceleratorXMLLang( const ::rtl::OUString& aOutDirURL,
             sAccBuf.appendAscii(" accel:mod1=\"true\"");
         if (bMod2)
             sAccBuf.appendAscii(" accel:mod2=\"true\"");
+        if (bMod3)
+            sAccBuf.appendAscii(" accel:mod3=\"true\"");
 
         sAccBuf.appendAscii(" xlink:href=\"");
         sAccBuf.append(aInfo.sCommand);

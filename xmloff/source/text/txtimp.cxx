@@ -1367,7 +1367,7 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
                 mpOutlineStylesCandidates = new ::std::vector<OUString>[xChapterNumbering->getCount()];
             }
 
-            if ( mpOutlineStylesCandidates[nOutlineLevel].size() == 0 )
+            if ( mpOutlineStylesCandidates[nOutlineLevel].empty() )
             {
                 // no other name used previously? Then use default
 
@@ -1592,13 +1592,13 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
         {
             if ( bSetEmptyLevels ||
                  ( mpOutlineStylesCandidates &&
-                   mpOutlineStylesCandidates[i].size() > 0 ) )
+                   !mpOutlineStylesCandidates[i].empty() ) )
             {
                 // determine, which candidate is one to be assigned to the list
                 // level of the outline style
                 OUString sChoosenStyle( sEmpty );
                 if ( mpOutlineStylesCandidates &&
-                     mpOutlineStylesCandidates[i].size() > 0 )
+                     !mpOutlineStylesCandidates[i].empty() )
                 {
                     // --> OD 2007-12-19 #152540#
                     if ( bChooseLastOne )
@@ -2197,7 +2197,7 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
 
 ::rtl::OUString XMLTextImportHelper::FindActiveBookmarkName()
 {
-    if (aBookmarkVector.size()>0) {
+    if ( !aBookmarkVector.empty() ) {
         return aBookmarkVector.back();
     } else return ::rtl::OUString(); // return the empty string on error...
 }

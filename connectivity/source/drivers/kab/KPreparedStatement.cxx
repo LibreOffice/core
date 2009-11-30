@@ -34,6 +34,7 @@
 #include "KPreparedStatement.hxx"
 #include "propertyids.hxx"
 #include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 #include "resource/kab_res.hrc"
 #include "resource/sharedresources.hxx"
 
@@ -321,12 +322,12 @@ void SAL_CALL KabPreparedStatement::setCharacterStream(sal_Int32, const Referenc
 ::dbtools::throwFunctionNotSupportedException("setCharacterStream", NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setObject(sal_Int32, const Any&) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setObject(sal_Int32 parameterIndex, const Any& x) throw(SQLException, RuntimeException)
 {
-
-
-
-::dbtools::throwFunctionNotSupportedException("setObject", NULL);
+    if(!::dbtools::implSetObject(this,parameterIndex,x))
+    {
+        throw SQLException();
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL KabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, sal_Int32, sal_Int32) throw(SQLException, RuntimeException)

@@ -42,7 +42,6 @@ import com.sun.star.uno.Any;
 import com.sun.star.reflection.InvocationTargetException;
 
 import java.util.StringTokenizer;
-import java.io.*;
 
 import java.net.URL;
 

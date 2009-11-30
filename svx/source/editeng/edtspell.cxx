@@ -291,8 +291,9 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
     sal_uInt16 nEndChanges = nPos+nDeleted;
     if ( !IsInvalid() )
     {
-        nInvalidStart = nPos;
-        nInvalidEnd = nPos+1;   // Nicht nDeleted, weil da ja wegfaellt.
+        sal_uInt16 nNewInvalidStart = nPos ? nPos - 1 : 0;
+        nInvalidStart = nNewInvalidStart;
+        nInvalidEnd = nNewInvalidStart + 1;
     }
     else
     {

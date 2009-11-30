@@ -46,10 +46,10 @@
 
 #include "processw.hxx"
 
-// Der Process hat folgende Elemente:
+// Process has the following elements:
 // 1) Properties:
-//    Keine
-// 2) Methoden:
+//    none
+// 2) Methods:
 //    SetImage( Filename )
 //    BOOL Start
 //    USHORT GetExitCode
@@ -57,56 +57,53 @@
 //    BOOL WasGPF
 
 
-// Diese Implementation ist ein Beispiel fuer eine tabellengesteuerte
-// Version, die sehr viele Elemente enthalten kann. Die Elemente werden
-// je nach Bedarf aus der Tabelle in das Objekt uebernommen.
+// This implementation is a sample for a table driven version that
+// can contain lots of elements. The elements are taken into the object
+// when they are needed.
 
-// Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
+// The nArgs field of a table entry is scrambled as follows:
+#define _ARGSMASK   0x00FF  // Up to 255 arguments
+#define _RWMASK     0x0F00  // Mask for R/W-Bits
+#define _TYPEMASK   0xF000  // Mask for entry type
 
-#define _ARGSMASK   0x00FF  // Bis zu 255 Argumente
-#define _RWMASK     0x0F00  // Maske fuer R/W-Bits
-#define _TYPEMASK   0xF000  // Maske fuer den Typ des Eintrags
+#define _READ       0x0100  // can be read
+#define _BWRITE     0x0200  // can be used as Lvaluen
+#define _LVALUE     _BWRITE
+#define _READWRITE  0x0300  // can read and written
+#define _OPT        0x0400  // TRUE: optional parameter
+#define _METHOD     0x1000  // Mask-Bit for a method
+#define _PROPERTY   0x2000  // Mask-Bit for a property
+#define _COLL       0x4000  // Mask-Bit for a collection
 
-#define _READ       0x0100  // kann gelesen werden
-#define _BWRITE     0x0200  // kann as Lvalue verwendet werden
-#define _LVALUE     _BWRITE  // kann as Lvalue verwendet werden
-#define _READWRITE  0x0300  // beides
-#define _OPT        0x0400  // TRUE: optionaler Parameter
-#define _METHOD     0x1000  // Masken-Bit fuer eine Methode
-#define _PROPERTY   0x2000  // Masken-Bit fuer eine Property
-#define _COLL       0x4000  // Masken-Bit fuer eine Collection
-                            // Kombination von oberen Bits:
-#define _FUNCTION   0x1100  // Maske fuer Function
-#define _LFUNCTION  0x1300  // Maske fuer Function, die auch als Lvalue geht
-#define _ROPROP     0x2100  // Maske Read Only-Property
-#define _WOPROP     0x2200  // Maske Write Only-Property
-#define _RWPROP     0x2300  // Maske Read/Write-Property
-#define _COLLPROP   0x4100  // Maske Read-Collection-Element
+// Combination of the bits above:
+#define _FUNCTION   0x1100  // Mask for a Function
+#define _LFUNCTION  0x1300  // Mask for a Function, that can be uses as Lvalue
+#define _ROPROP     0x2100  // Mask Read Only-Property
+#define _WOPROP     0x2200  // Mask Write Only-Property
+#define _RWPROP     0x2300  // Mask Read/Write-Property
+#define _COLLPROP   0x4100  // Mask Read-Collection-Element
 
-#define COLLNAME    "Elements"  // Name der Collection, hier mal hart verdrahtet
-
+#define COLLNAME    "Elements"  // Name of the collection, hard coded
 
 
 ProcessWrapper::Methods ProcessWrapper::aProcessMethods[] = {
-// Imagedatei des Executables
+// Imagefile of the Executable
 { "SetImage", SbxEMPTY, &ProcessWrapper::PSetImage, 1 | _FUNCTION },
-    // Zwei Named Parameter
+    // Two Named Parameter
     { "Filename", SbxSTRING, NULL, 0 },
     { "Params", SbxSTRING, NULL, _OPT },
-// Programm wird gestartet
+// Program is started
 { "Start", SbxBOOL, &ProcessWrapper::PStart, 0 | _FUNCTION },
-// ExitCode des Programms(nachdem es beendet ist)
+// ExitCode of the program
 { "GetExitCode", SbxULONG, &ProcessWrapper::PGetExitCode, 0 | _FUNCTION },
-// Programm läuft noch
+// Program is running
 { "IsRunning", SbxBOOL, &ProcessWrapper::PIsRunning, 0 | _FUNCTION },
-// Programm mit GPF o.ä. abgebrochen
+// Program has faulted with GPF etc.
 { "WasGPF", SbxBOOL, &ProcessWrapper::PWasGPF, 0 | _FUNCTION },
 
-{ NULL, SbxNULL, NULL, -1 }};  // Tabellenende
+{ NULL, SbxNULL, NULL, -1 }};  // End of table
 
 
-
-// Konstruktor für den Process
 ProcessWrapper::ProcessWrapper() : SbxObject( CUniString("Process") )
 {
     pProcess = new Process();
@@ -114,26 +111,24 @@ ProcessWrapper::ProcessWrapper() : SbxObject( CUniString("Process") )
     pMethods = &aProcessMethods[0];
 }
 
-// Destruktor
 ProcessWrapper::~ProcessWrapper()
 {
     delete pProcess;
 }
 
-// Suche nach einem Element:
-// Hier wird linear durch die Methodentabelle gegangen, bis eine
-// passende Methode gefunden wurde.
-// Wenn die Methode/Property nicht gefunden wurde, nur NULL ohne
-// Fehlercode zurueckliefern, da so auch eine ganze Chain von
-// Objekten nach der Methode/Property befragt werden kann.
-
+// Search for an element:
+// Linear search through the method table until an appropriate one
+// can be found.
+// If the the method/property cannot be found, NULL is return
+// without an error code, so that we can ask the whole
+// chain of objects for the method/property.
 SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
 {
-    // Ist das Element bereits vorhanden?
+    // Is the element already available?
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if( !pRes && t != SbxCLASS_OBJECT )
     {
-        // sonst suchen
+        // otherwise search
         Methods* p = pMethods;
         short nIndex = 0;
         BOOL bFound = FALSE;
@@ -148,7 +143,7 @@ SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
         }
         if( bFound )
         {
-            // Args-Felder isolieren:
+            // isolate Args fields:
             short nAccess = ( p->nArgs & _RWMASK ) >> 8;
             short nType   = ( p->nArgs & _TYPEMASK );
             String aMethodName( p->pName, RTL_TEXTENCODING_ASCII_US );
@@ -158,9 +153,8 @@ SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
             else if( nType & _METHOD )
                 eCT = SbxCLASS_METHOD;
             pRes = Make( aMethodName, eCT, p->eType );
-            // Wir setzen den Array-Index + 1, da ja noch andere
-            // Standard-Properties existieren, die auch aktiviert
-            // werden muessen.
+            // We set array index + 1 because there are other
+            // default properties that must be activated
             pRes->SetUserData( nIndex + 1 );
             pRes->SetFlags( nAccess );
         }
@@ -168,8 +162,7 @@ SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
     return pRes;
 }
 
-// Aktivierung eines Elements oder Anfordern eines Infoblocks
-
+// Activation of an element or request for an info block
 void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                              const SfxHint& rHint, const TypeId& rHT )
 {
@@ -179,7 +172,7 @@ void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pNotifyPar = pVar->GetParameters();
         USHORT nIndex = (USHORT) pVar->GetUserData();
-        // kein Index: weiterreichen!
+        // No index: put through
         if( nIndex )
         {
             ULONG t = pHint->GetId();
@@ -192,13 +185,13 @@ void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                     bWrite = TRUE;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
-                    // Parameter-Test fuer Methoden:
+                    // Parameter-Test for methods:
                     USHORT nPar = pMethods[ --nIndex ].nArgs & 0x00FF;
-                    // Element 0 ist der Returnwert
+                    // Element 0 is the return value
                     if( ( !pNotifyPar && nPar )
                      || ( pNotifyPar && pNotifyPar->Count() < nPar+1 ) )
                         SetError( SbxERR_WRONG_ARGS );
-                    // Alles klar, man kann den Call ausfuehren
+                    // ready for call
                     else
                     {
                         (this->*(pMethods[ nIndex ].pFunc))( pVar, pNotifyPar, bWrite );
@@ -210,8 +203,7 @@ void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     }
 }
 
-// Zusammenbau der Infostruktur fuer einzelne Elemente
-
+// Building the info struct for single elements
 SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 {
     Methods* p = &pMethods[ nIdx ];
@@ -237,13 +229,11 @@ SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 
 ////////////////////////////////////////////////////////////////////////////
 
-// Properties und Methoden legen beim Get (bPut = FALSE) den Returnwert
-// im Element 0 des Argv ab; beim Put (bPut = TRUE) wird der Wert aus
-// Element 0 gespeichert.
+// Properties and methods save the return value in argv[0] (Get, bPut = FALSE)
+// and store the value from argv[0] (Put, bPut = TRUE)
 
-// Die Methoden:
 void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
-{ // Imagedatei des Executables
+{ // Imagefile of the executable
     (void) pVar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
     if ( pMethodePar->Count() >= 2 )
@@ -253,28 +243,28 @@ void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pMethodePar, BOOL b
 }
 
 void ProcessWrapper::PStart( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
-{ // Programm wird gestartet
+{ // Program is started
     (void) pMethodePar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutBool( pProcess->Start() );
 }
 
 void ProcessWrapper::PGetExitCode( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
-{ // ExitCode des Programms(nachdem es beendet ist)
+{ // ExitCode of the program after it was finished
     (void) pMethodePar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutULong( pProcess->GetExitCode() );
 }
 
 void ProcessWrapper::PIsRunning( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
-{ // Programm läuft noch
+{ // Program is still running
     (void) pMethodePar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutBool( pProcess->IsRunning() );
 }
 
 void ProcessWrapper::PWasGPF( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
-{ // Programm mit GPF o.ä. abgebrochen
+{ // Program faulted with GPF etc.
     (void) pMethodePar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutBool( pProcess->WasGPF() );
@@ -285,8 +275,7 @@ void ProcessWrapper::PWasGPF( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWr
 
 
 
-// Die Factory legt unser Objekte an.
-
+// The factory creates our object
 SbxObject* ProcessFactory::CreateObject( const String& rClass )
 {
     if( rClass.CompareIgnoreCaseToAscii( "Process" ) == COMPARE_EQUAL )

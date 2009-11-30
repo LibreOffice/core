@@ -42,98 +42,30 @@ jclass java_lang_Throwable::theClass = 0;
 java_lang_Throwable::~java_lang_Throwable()
 {}
 
-jclass java_lang_Throwable::getMyClass()
+jclass java_lang_Throwable::getMyClass() const
+{
+    return st_getMyClass();
+}
+jclass java_lang_Throwable::st_getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass("java/lang/Throwable"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/lang/Throwable");
     return theClass;
-}
-// -----------------------------------------------------------------------------
-
-void java_lang_Throwable::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 // -----------------------------------------------------------------------------
 
 ::rtl::OUString java_lang_Throwable::getMessage() const
 {
-    ::rtl::OUString aStr;
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()Ljava/lang/String;";
-        static const char * cMethodName = "getMessage";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,NULL);
-
-            aStr = JavaString2String(t.pEnv,out);
-        } //mID
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return aStr;
+    static jmethodID mID(NULL);
+    return callStringMethod("getMessage",mID);
 }
 // -----------------------------------------------------------------------------
 
 ::rtl::OUString java_lang_Throwable::getLocalizedMessage() const
 {
-    ::rtl::OUString aStr;
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()Ljava/lang/String;";
-        static const char * cMethodName = "getLocalizedMessage";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,NULL);
-
-            aStr = JavaString2String(t.pEnv,out);
-        } //mID
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return aStr;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString java_lang_Throwable::toString() const
-{
-    ::rtl::OUString aStr;
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()Ljava/lang/String;";
-        static const char * cMethodName = "toString";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,NULL);
-
-            aStr = JavaString2String(t.pEnv,out);
-        } //mID
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return aStr;
+    static jmethodID mID(NULL);
+    return callStringMethod("getLocalizedMessage",mID);
 }
 // -----------------------------------------------------------------------------
 

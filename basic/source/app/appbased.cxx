@@ -48,7 +48,7 @@
 #include "status.hxx"
 #include "appbased.hxx"
 #include "brkpnts.hxx"
-#include <basic/testtool.hxx>       // defines für das Syntaxhighlighting
+#include <basic/testtool.hxx>      // defines for Syntaxhighlighting
 #include "basrid.hxx"
 
 
@@ -82,21 +82,21 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
 
     pBreakpoints->SetModule( pMod );
 
-    // Icon definieren:
+    // Define icon:
 //  pIcon = new Icon( ResId( RID_WORKICON ) );
 //  if( pIcon ) SetIcon( *pIcon );
 
     SetText( pMod->GetName() );
     pDataEdit->SetText( pMod->GetSource() );
 
-    // Wurde ein Modul übergeben, dann den Quelltext von Platte laden
+    // If a module was given, load the source from harddisk
     if ( p )
         LoadSource();
 
-    // Erst nach Laden des Quelltextes die Events weiterleiten
+    // Dispatch event AFTER loading the sourcecode
     ((TextEdit*)pDataEdit)->SetBreakpointWindow( pBreakpoints );
 
-    // Compiled-Flag pflegen:
+    // Touch compile flag
     pDataEdit->SetModifyHdl( LINK( this, AppBasEd, EditChange ) );
 
 }
@@ -151,7 +151,6 @@ long AppBasEd::DeInitMenu( Menu* pMenu )
 }
 
 // Menu Handler
-
 void AppBasEd::Command( const CommandEvent& rCEvt )
 {
     switch( rCEvt.GetCommand() ) {
@@ -163,27 +162,26 @@ void AppBasEd::Command( const CommandEvent& rCEvt )
     }
 }
 
-// Sourcecode-Datei laden
-
 void AppBasEd::Resize()
 {
-    if( pDataEdit ) {
-        AppEdit::Resize();
+  if( pDataEdit )
+  {
+    AppEdit::Resize();
 
-        // Breakpoint window einfügen
-        Size aEditSize = pDataEdit->GetSizePixel();
-        Point aEditPos = pDataEdit->GetPosPixel();
+    // Insert breakpoint window
+    Size aEditSize = pDataEdit->GetSizePixel();
+    Point aEditPos = pDataEdit->GetPosPixel();
 
-        pBreakpoints->SetPosPixel( aEditPos );
+    pBreakpoints->SetPosPixel( aEditPos );
 
-        aEditPos.X() += BREAKPOINTSWIDTH;
-        pDataEdit->SetPosPixel( aEditPos );
-        aEditSize.Width() -= BREAKPOINTSWIDTH;
-        pDataEdit->SetSizePixel( aEditSize );
+    aEditPos.X() += BREAKPOINTSWIDTH;
+    pDataEdit->SetPosPixel( aEditPos );
+    aEditSize.Width() -= BREAKPOINTSWIDTH;
+    pDataEdit->SetSizePixel( aEditSize );
 
-        aEditSize.Width() = BREAKPOINTSWIDTH;
-        pBreakpoints->SetSizePixel( aEditSize );
-    }
+    aEditSize.Width() = BREAKPOINTSWIDTH;
+    pBreakpoints->SetSizePixel( aEditSize );
+  }
 }
 
 void AppBasEd::PostLoad()
@@ -210,7 +208,7 @@ void AppBasEd::Reload()
     pDataEdit->SetSelection( aSelMemo );
 }
 
-// Sourcecode-Datei nach Änderung auf Platte neu laden
+// Reload source code file after change
 void AppBasEd::LoadSource()
 {
     BOOL bErr;
@@ -226,15 +224,14 @@ void AppBasEd::LoadSource()
     bCompiled = FALSE;  // because the code might have changed in the meantime
 }
 
-// mit neuem Namen speichern
+// Save as (new name)
 void AppBasEd::PostSaveAs()
 {
     pMod->SetName( GetText() );
     AppEdit::PostSaveAs();
 }
 
-// Compilieren
-
+// Compile
 BOOL AppBasEd::Compile()
 {
     if( !pDataEdit->HasText() || bCompiled )
@@ -277,7 +274,8 @@ void AppBasEd::Run()
     {
         if ( (pAllModules->Get(i)->GetName()).Copy(0,2).CompareToAscii( "--" ) == COMPARE_EQUAL )
         {
-            SbxVariableRef pRMod = pAllModules->Get(i); // Kleiner Hack um ums basic rumzukommen. Sollte demnächst wieder dirkt gehen.
+            // Little hack to get around basic
+            SbxVariableRef pRMod = pAllModules->Get(i);
             pFrame->Basic().Remove(pRMod);
             i--;
         }
@@ -287,13 +285,14 @@ void AppBasEd::Run()
     if( pMain )
     {
         pMain->SetDebugFlags( pFrame->nFlags );
-        // Loest Call aus!
+        // Triggers a call!
         pFrame->SetAppMode( String( SttResId( IDS_APPMODE_RUN ) ) );
         pMain->Run();
         if (aBasicApp.pFrame)
         {
             BasicError* pErr = aBasicApp.pFrame->Basic().aErrors.First();
-                if( pErr ) pErr->Show();
+            if( pErr )
+                pErr->Show();
             aBasicApp.pFrame->SetAppMode( String() );
         }
         pMain->SetDebugFlags( 0 );

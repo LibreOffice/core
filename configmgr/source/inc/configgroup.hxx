@@ -96,8 +96,6 @@ namespace configmgr
 
             bool hasDoneSet() const { return m_bHasDoneSet; }
 
-            bool isDataAvailable();
-
             NodeChange validateSetToDefaultValue(ValueRef const& aValueNode);
 
             NodeChange validateSetToDefaultState(NodeRef const& aNode);

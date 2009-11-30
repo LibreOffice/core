@@ -35,6 +35,7 @@
 #include "MacabAddressBook.hxx"
 #include "propertyids.hxx"
 #include <connectivity/dbexception.hxx>
+#include "connectivity/dbtools.hxx"
 #include "resource/macab_res.hrc"
 #include "resource/sharedresources.hxx"
 
@@ -334,12 +335,16 @@ void SAL_CALL MacabPreparedStatement::setCharacterStream(sal_Int32, const Refere
 ::dbtools::throwFunctionNotSupportedException("setCharacterStream", NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL MacabPreparedStatement::setObject(sal_Int32, const Any&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabPreparedStatement::setObject(sal_Int32 parameterIndex, const Any& x) throw(SQLException, RuntimeException)
 {
-
-
-
-::dbtools::throwFunctionNotSupportedException("setObject", NULL);
+    if(!::dbtools::implSetObject(this,parameterIndex,x))
+    {
+        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+                STR_UNKNOWN_PARA_TYPE,
+                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, sal_Int32, sal_Int32) throw(SQLException, RuntimeException)

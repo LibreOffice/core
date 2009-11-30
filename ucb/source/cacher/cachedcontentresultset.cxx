@@ -815,8 +815,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
         return nRow == m_nLastAppliedPos;
     }
-    else
-        return sal_True;
+    return sal_True;
 };
 
 //--------------------------------------------------------------------------

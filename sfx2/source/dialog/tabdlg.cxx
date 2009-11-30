@@ -31,19 +31,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-// include ---------------------------------------------------------------
-
 #include <limits.h>
 #include <stdlib.h>
 #include <vcl/msgbox.hxx>
 #include <svtools/viewoptions.hxx>
-#ifndef GCC
-#endif
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
-// wg. nAutoPageID
 #include "appdata.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/minarray.hxx>
@@ -60,15 +55,31 @@
 #include "dialog.hrc"
 #include "helpid.hrc"
 
-// for OUString and Any
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+#undef TabPage
+#undef SfxTabPage
+#define SfxTabPage ::SfxTabPage
+#undef SfxTabDialog
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
+
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 #define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
 
-/*  -----------------------------------------------------------------
-    Verwaltungsdatenstruktur f"ur jede Seite
-    ----------------------------------------------------------------- */
+TYPEINIT1(LAYOUT_NS_SFX_TABDIALOG SfxTabDialogItem,SfxSetItem);
+
+struct TabPageImpl
+{
+    BOOL                        mbStandard;
+    sfx::ItemConnectionArray    maItemConn;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
+
+    TabPageImpl() : mbStandard( FALSE ) {}
+};
+
+NAMESPACE_LAYOUT_SFX_TABDIALOG
+
 struct Data_Impl
 {
     USHORT nId;                  // Die ID
@@ -100,8 +111,6 @@ struct Data_Impl
         }
     }
 };
-
-TYPEINIT1(SfxTabDialogItem,SfxSetItem);
 
 SfxTabDialogItem::SfxTabDialogItem( const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool )
     : SfxSetItem( rAttr, pItemPool )
@@ -171,7 +180,7 @@ void SfxTabDialogController::StateChanged( USHORT /*nSID*/, SfxItemState /*eStat
         for ( USHORT n=0; n<pDialog->aTabCtrl.GetPageCount(); n++ )
         {
             USHORT nPageId = pDialog->aTabCtrl.GetPageId( n );
-            SfxTabPage* pTabPage = (SfxTabPage*) pDialog->aTabCtrl.GetTabPage( nPageId );
+            SfxTabPage* pTabPage = dynamic_cast<SfxTabPage*> (pDialog->aTabCtrl.GetTabPage( nPageId ));
             if ( pTabPage )
             {
                 pTabPage->Reset( pSetItem->GetItemSet() );
@@ -211,32 +220,6 @@ struct TabDlg_Impl
     {}
 };
 
-struct TabPageImpl
-{
-    BOOL                        mbStandard;
-    sfx::ItemConnectionArray    maItemConn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
-
-    TabPageImpl() : mbStandard( FALSE ) {}
-};
-
-void SfxTabPage::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
-{
-    if (pImpl)
-        pImpl->mxFrame = xFrame;
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxTabPage::GetFrame()
-{
-    if (pImpl)
-        return pImpl->mxFrame;
-    return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
-}
-
-
-/*  -----------------------------------------------------------------
-    Hilfsfunktion: Finden einer Page anhand seiner Id
-    ----------------------------------------------------------------- */
 Data_Impl* Find( SfxTabDlgData_Impl& rArr, USHORT nId, USHORT* pPos = 0 );
 
 Data_Impl* Find( SfxTabDlgData_Impl& rArr, USHORT nId, USHORT* pPos )
@@ -257,7 +240,20 @@ Data_Impl* Find( SfxTabDlgData_Impl& rArr, USHORT nId, USHORT* pPos )
     return 0;
 }
 
-// class SfxTabPage-------------------------------------------------------
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
+
+void SfxTabPage::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+{
+    if (pImpl)
+        pImpl->mxFrame = xFrame;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxTabPage::GetFrame()
+{
+    if (pImpl)
+        return pImpl->mxFrame;
+    return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
+}
 
 SfxTabPage::SfxTabPage( Window *pParent,
                         const ResId &rResId, const SfxItemSet &rAttrSet ) :
@@ -295,7 +291,9 @@ SfxTabPage::~SfxTabPage()
 */
 
 {
+#if !ENABLE_LAYOUT
     delete pImpl;
+#endif /* ENABLE_LAYOUT */
 }
 
 // -----------------------------------------------------------------------
@@ -467,7 +465,22 @@ void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
     pImpl->maItemConn.AddConnection( pConnection );
 }
 
-// class SfxTabDialog ----------------------------------------------------
+#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
+
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+#undef ResId
+#define ResId(id, foo) #id
+#undef TabDialog
+#define TabDialog(parent, res_id) Dialog (parent, "tab-dialog.xml", "tab-dialog")
+
+#define aOKBtn(this) aOKBtn (this, "BTN_OK")
+#undef PushButton
+#define PushButton(this) layout::PushButton (this, "BTN_USER")
+#define aCancelBtn(this) aCancelBtn (this, "BTN_CANCEL")
+#define aHelpBtn(this) aHelpBtn (this, "BTN_HELP")
+#define aResetBtn(this) aResetBtn (this, "BTN_RESET")
+#define aBaseFmtBtn(this) aBaseFmtBtn (this, "BTN_BASEFMT")
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
 
 #define INI_LIST(ItemSetPtr) \
     aTabCtrl    ( this, ResId(ID_TABCONTROL,*rResId.GetResMgr() ) ),\
@@ -578,11 +591,24 @@ SfxTabDialog::SfxTabDialog
 
 // -----------------------------------------------------------------------
 
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+#undef ResId
+#undef TabDialog
+#undef aOKBtn
+#undef PushButton
+#undef aCancelBtn
+#undef aHelpBtn
+#undef aResetBtn
+#undef aBaseFmtBtn
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
+
 SfxTabDialog::~SfxTabDialog()
 {
     // save settings (screen position and current page)
     SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
     aDlgOpt.SetWindowState( OUString::createFromAscii( GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
+#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
     aDlgOpt.SetPageID( aTabCtrl.GetCurPageId() );
 
     const USHORT nCount = pImpl->pData->Count();
@@ -686,6 +712,11 @@ void SfxTabDialog::RemoveResetButton()
 
 // -----------------------------------------------------------------------
 
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+#undef TabDialog
+#define TabDialog Dialog
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
+
 short SfxTabDialog::Execute()
 {
     if ( !aTabCtrl.GetPageCount() )
@@ -698,10 +729,14 @@ short SfxTabDialog::Execute()
 
 void SfxTabDialog::StartExecuteModal( const Link& rEndDialogHdl )
 {
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
     if ( !aTabCtrl.GetPageCount() )
         return;
     Start_Impl();
     TabDialog::StartExecuteModal( rEndDialogHdl );
+#else
+    rEndDialogHdl.IsSet();
+#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
 }
 
 // -----------------------------------------------------------------------
@@ -748,9 +783,10 @@ void SfxTabDialog::EnableApplyButton(BOOL bEnable)
     if ( bEnable )
     {
         pImpl->pApplyButton = new PushButton( this );
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
         // in the z-order, the apply button should be behind the ok button, thus appearing at the right side of it
         pImpl->pApplyButton->SetZOrder(&aOKBtn, WINDOW_ZORDER_BEHIND);
-
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
         pImpl->pApplyButton->SetText( String( SfxResId( STR_APPLY ) ) );
         pImpl->pApplyButton->Show();
 
@@ -762,9 +798,11 @@ void SfxTabDialog::EnableApplyButton(BOOL bEnable)
         pImpl->pApplyButton = NULL;
     }
 
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
     // adjust the layout
     if (IsReallyShown())
         AdjustLayout();
+#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
 }
 
 // -----------------------------------------------------------------------
@@ -799,7 +837,9 @@ void SfxTabDialog::Start_Impl()
     SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
     if ( aDlgOpt.Exists() )
     {
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
         SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
 
         // initiale TabPage aus Programm/Hilfe/Konfig
         nActPage = (USHORT)aDlgOpt.GetPageID();
@@ -1164,19 +1204,18 @@ IMPL_LINK( SfxTabDialog, OkHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-BOOL SfxTabDialog::PrepareLeaveCurrentPage()
+bool SfxTabDialog::PrepareLeaveCurrentPage()
 {
-    SfxTabPage* pPage =
-        (SfxTabPage*)aTabCtrl.GetTabPage( aTabCtrl.GetCurPageId() );
-
+    USHORT const nId = aTabCtrl.GetCurPageId();
+    SfxTabPage* pPage = dynamic_cast<SfxTabPage*> (aTabCtrl.GetTabPage( nId ));
     bool bEnd = !pPage;
+
     if ( pPage )
     {
         int nRet = SfxTabPage::LEAVE_PAGE;
         if ( pSet )
         {
             SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
-            BOOL bRet = FALSE;
 
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
@@ -1189,8 +1228,6 @@ BOOL SfxTabDialog::PrepareLeaveCurrentPage()
                 pExampleSet->Put( aTmp );
                 pOutSet->Put( aTmp );
             }
-            else if ( bRet )
-                pImpl->bModified |= TRUE;
         }
         else
             nRet = pPage->DeactivatePage( NULL );
@@ -1215,37 +1252,7 @@ IMPL_LINK( SfxTabDialog, UserHdl, Button *, EMPTYARG )
 */
 
 {
-    SfxTabPage* pPage =
-        (SfxTabPage *)aTabCtrl.GetTabPage( aTabCtrl.GetCurPageId() );
-
-    FASTBOOL bEnd = !pPage;
-
-    if ( pPage )
-    {
-        int nRet = SfxTabPage::LEAVE_PAGE;
-
-        if ( pSet )
-        {
-            SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
-
-            if ( pPage->HasExchangeSupport() )
-                nRet = pPage->DeactivatePage( &aTmp );
-            else
-                nRet = pPage->DeactivatePage( NULL );
-
-            if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE
-                 && aTmp.Count() )
-            {
-                pExampleSet->Put( aTmp );
-                pOutSet->Put( aTmp );
-            }
-        }
-        else
-            nRet = pPage->DeactivatePage( NULL );
-        bEnd = nRet;
-    }
-
-    if ( bEnd )
+    if ( PrepareLeaveCurrentPage () )
     {
         short nRet = Ok();
 
@@ -1271,7 +1278,8 @@ IMPL_LINK( SfxTabDialog, ResetHdl, Button *, EMPTYARG )
 */
 
 {
-    Data_Impl* pDataObject = Find( *pImpl->pData, aTabCtrl.GetCurPageId() );
+    const USHORT nId = aTabCtrl.GetCurPageId();
+    Data_Impl* pDataObject = Find( *pImpl->pData, nId );
     DBG_ASSERT( pDataObject, "Id nicht bekannt" );
 
     if ( pDataObject->bOnDemand )
@@ -1365,6 +1373,12 @@ IMPL_LINK( SfxTabDialog, BaseFmtHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+#define tabControlWindow pTabCtrl->GetWindow ()
+#else /* !ENABLE_LAYOUT_SFX_TABDIALOG */
+#define tabControlWindow pTabCtrl
+#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
+
 IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 /*  [Beschreibung]
@@ -1379,18 +1393,23 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 */
 
 {
+    USHORT const nId = pTabCtrl->GetCurPageId();
+
     DBG_ASSERT( pImpl->pData->Count(), "keine Pages angemeldet" );
-    const USHORT nId = pTabCtrl->GetCurPageId();
     SFX_APP();
 
     // Tab Page schon da?
-    SfxTabPage* pTabPage = (SfxTabPage *)pTabCtrl->GetTabPage( nId );
+    SfxTabPage* pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     Data_Impl* pDataObject = Find( *pImpl->pData, nId );
     DBG_ASSERT( pDataObject, "Id nicht bekannt" );
 
     // ggf. TabPage erzeugen:
     if ( !pTabPage )
     {
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+        if (dynamic_cast<layout SfxTabPage*> (pTabPage))
+            layout::TabPage::global_parent = pTabCtrl->GetWindow ();
+#endif
         const SfxItemSet* pTmpSet = 0;
 
         if ( pSet )
@@ -1402,13 +1421,16 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         }
 
         if ( pTmpSet && !pDataObject->bOnDemand )
-            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, *pTmpSet );
+            pTabPage = (pDataObject->fnCreatePage)( tabControlWindow, *pTmpSet );
         else
             pTabPage = (pDataObject->fnCreatePage)
-                            ( pTabCtrl, *CreateInputItemSet( nId ) );
+                            ( tabControlWindow, *CreateInputItemSet( nId ) );
         DBG_ASSERT( NULL == pDataObject->pTabPage, "create TabPage more than once" );
         pDataObject->pTabPage = pTabPage;
+
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
         pDataObject->pTabPage->SetTabDialog( this );
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
         SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
         String sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
@@ -1417,22 +1439,47 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
             sUserData = String( aTemp );
         pTabPage->SetUserData( sUserData );
         Size aSiz = pTabPage->GetSizePixel();
+
+#if ENABLE_LAYOUT
+        Size optimalSize = pTabPage->GetOptimalSize (WINDOWSIZE_MINIMUM);
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+        if (dynamic_cast<layout SfxTabPage*> (pTabPage))
+        {
+            if (optimalSize.Height () && optimalSize.Width ())
+            {
+                optimalSize.Width () = optimalSize.Width ();
+                optimalSize.Height () = optimalSize.Height () + 40;
+            }
+        }
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
+        if (optimalSize.Height () > 0 && optimalSize.Width () > 0 )
+            aSiz = optimalSize;
+#endif /* ENABLE_LAYOUT */
+
         Size aCtrlSiz = pTabCtrl->GetTabPageSizePixel();
         // Gr"o/se am TabControl nur dann setzen, wenn < als TabPage
         if ( aCtrlSiz.Width() < aSiz.Width() ||
              aCtrlSiz.Height() < aSiz.Height() )
+        {
             pTabCtrl->SetTabPageSizePixel( aSiz );
+        }
+
         PageCreated( nId, *pTabPage );
 
         if ( pDataObject->bOnDemand )
             pTabPage->Reset( (SfxItemSet &)pTabPage->GetItemSet() );
         else
             pTabPage->Reset( *pSet );
+
         pTabCtrl->SetTabPage( nId, pTabPage );
     }
     else if ( pDataObject->bRefresh )
         pTabPage->Reset( *pSet );
     pDataObject->bRefresh = FALSE;
+
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+    pTabCtrl->GetPagePos (nId);
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
 
     if ( pExampleSet )
         pTabPage->ActivatePage( *pExampleSet );
@@ -1457,7 +1504,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 {
     USHORT nId = pTabCtrl->GetCurPageId();
     SFX_APP();
-    SfxTabPage *pPage = (SfxTabPage*)pTabCtrl->GetTabPage( nId );
+    SfxTabPage *pPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     DBG_ASSERT( pPage, "keine aktive Page" );
 #ifdef DBG_UTIL
     Data_Impl* pDataObject = Find( *pImpl->pData, pTabCtrl->GetCurPageId() );
@@ -1751,3 +1798,4 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
     return TabDialog::Notify( rNEvt );
 }
 
+END_NAMESPACE_LAYOUT_SFX_TABDIALOG

@@ -356,19 +356,6 @@ configuration::DefaultProvider extractDefaultProvider(ApiTreeImpl* pParentTree)
         return configuration::DefaultProvider::createEmpty();
 }
 //-------------------------------------------------------------------------
-ApiTreeImpl::ApiTreeImpl(uno::XInterface* pInstance, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl& rParentTree)
-: m_aTree(aTree)
-, m_aNotifier(new NotifierImpl(aTree))
-, m_aDefaultProvider(rParentTree.getDefaultProvider())
-, m_xProvider()
-, m_rProvider(rParentTree.getProvider())
-, m_pParentTree(0)
-, m_pInstance(pInstance)
-{
-    setNodeInstance(aTree->getRootNode(), pInstance);
-    init(&rParentTree);
-}
-//-------------------------------------------------------------------------
 ApiTreeImpl::ApiTreeImpl(uno::XInterface* pInstance, ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl* pParentTree)
 : m_aTree(aTree)
 , m_aNotifier(new NotifierImpl(aTree))

@@ -32,26 +32,10 @@ package com.sun.star.script.framework.provider;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.XPropertyChangeListener;
-import com.sun.star.beans.XVetoableChangeListener;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.document.XScriptInvocationContext;
-import com.sun.star.lib.uno.helper.PropertySet;
-import com.sun.star.uno.Type;
-
-import java.util.HashMap;
 
 import com.sun.star.script.provider.XScriptContext;
-
-import com.sun.star.script.framework.log.LogUtils;
 
 
 /**

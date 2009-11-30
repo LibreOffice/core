@@ -809,6 +809,17 @@
 
 #define HID_NUMBERFORMAT_WND_NUMBER_PREVIEW         (HID_SVX_EXT0_START + 207)
 #define HID_SPLDLG_BUTTON_IGNORERULE                (HID_SVX_EXT0_START + 208)
+
+#define HID_CONFIG_ACCEL                            (HID_SVX_EXT0_START + 209)
+#define HID_ACCELCONFIG_LISTBOX                     (HID_SVX_EXT0_START + 210)
+#define HID_CONFIGGROUP_ACC_LISTBOX                 (HID_SVX_EXT0_START + 211)
+#define HID_CONFIGFUNCTION_ACC_LISTBOX              (HID_SVX_EXT0_START + 212)
+#define HID_MACRO_LB_EVENT                          (HID_SVX_EXT0_START + 213)
+#define HID_MACRO_GROUP                             (HID_SVX_EXT0_START + 214)
+#define HID_MACRO_MACROS                            (HID_SVX_EXT0_START + 215)
+#define HID_MACROCHECKDIALOG                        (HID_SVX_EXT0_START + 216)
+#define HID_MACRO_HEADERTABLISTBOX                  (HID_SVX_EXT0_START + 217)
+
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
 // -----------------------------------------------------------------------
@@ -820,7 +831,7 @@
 #error Resource-Ueberlauf in #line, #file
 #endif
 
-#define ACT_SVX_HID_END2    HID_SPLDLG_BUTTON_IGNORERULE
+#define ACT_SVX_HID_END2    (HID_SVX_EXT0_START + 215)
 #if ACT_SVX_HID_END2 > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
 #endif

@@ -4179,6 +4179,87 @@ static const mso_CustomShape msoRibbon2 =
     (SvxMSDffHandle*)mso_sptRibbon2Handle, sizeof( mso_sptRibbon2Handle ) / sizeof( SvxMSDffHandle )
 };
 
+static const SvxMSDffVertPair mso_sptRibbonVert[] =
+{
+    { 0, 0 }, { 3 MSO_I, 0 },
+    { 4 MSO_I, 11 MSO_I }, { 4 MSO_I, 10 MSO_I }, { 5 MSO_I, 10 MSO_I }, { 5 MSO_I, 11 MSO_I },
+    { 6 MSO_I, 0 }, { 21600, 0 }, { 18 MSO_I, 14 MSO_I }, { 21600, 15 MSO_I }, { 9 MSO_I, 15 MSO_I }, { 9 MSO_I, 16 MSO_I }, { 8 MSO_I, 21600 }, { 1 MSO_I, 21600 },
+    { 0 MSO_I, 16 MSO_I }, { 0 MSO_I, 15 MSO_I }, { 0, 15 MSO_I }, { 2700, 14 MSO_I },
+
+    { 4 MSO_I, 11 MSO_I },
+    { 3 MSO_I, 12 MSO_I }, { 1 MSO_I, 12 MSO_I },
+    { 0 MSO_I, 13 MSO_I }, { 1 MSO_I, 10 MSO_I }, { 4 MSO_I, 10 MSO_I },
+    { 5 MSO_I, 11 MSO_I },
+    { 6 MSO_I, 12 MSO_I }, { 8 MSO_I, 12 MSO_I },
+    { 9 MSO_I, 13 MSO_I }, { 8 MSO_I, 10 MSO_I }, { 5 MSO_I, 10 MSO_I },
+    { 0 MSO_I, 13 MSO_I },
+    { 0 MSO_I, 15 MSO_I },
+    { 9 MSO_I, 13 MSO_I },
+    { 9 MSO_I, 15 MSO_I }
+};
+static const sal_uInt16 mso_sptRibbonSegm[] =
+{
+    0x4000, 0x0001, 0xa701, 0x0003, 0xa801, 0x0005, 0xa801, 0x0001, 0xa701, 0x0003, 0x6000, 0x8000,
+    0x4000, 0xaa00, 0xa801, 0x0001, 0xa702, 0x0001, 0x8000,
+    0x4000, 0xaa00, 0xa801, 0x0001, 0xa702, 0x0001, 0x8000,
+    0x4000, 0xaa00, 0x0001, 0x8000,
+    0x4000, 0xaa00, 0x0001, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptRibbonCalc[] =
+{
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 00
+    { 0x2000, { 0x400, 675, 0 } },                          // 01
+    { 0x2000, { 0x401, 675, 0 } },                          // 02
+    { 0x2000, { 0x402, 675, 0 } },                          // 03
+    { 0x2000, { 0x403, 675, 0 } },                          // 04
+    { 0x8000, { 21600, 0, 0x404 } },                        // 05
+    { 0x8000, { 21600, 0, 0x403 } },                        // 06
+    { 0x8000, { 21600, 0, 0x402 } },                        // 07
+    { 0x8000, { 21600, 0, 0x401 } },                        // 08
+    { 0x8000, { 21600, 0, 0x400 } },                        // 09
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            // 10
+    { 0x2001, { 0x40a, 1, 4 } },                            // 11
+    { 0x2001, { 0x40b, 2, 1 } },                            // 12
+    { 0x2001, { 0x40b, 3, 1 } },                            // 13
+    { 0x8000, { 10800, 0, 0x40c } },                        // 14
+    { 0x8000, { 21600, 0, 0x40a } },                        // 15
+    { 0x8000, { 21600, 0, 0x40b } },                        // 16
+    { 0x0001, { 21600, 1, 2 } },                            // 17
+    { 0x0000, { 21600, 0, 2700 } },                         // 18
+    { 0x2000, { 0x411, 0, 2700 } }                          // 19
+};
+static const sal_Int32 mso_sptRibbonDefault[] =
+{
+    2, 5400, 2700
+};
+static const SvxMSDffTextRectangles mso_sptRibbonTextRect[] =
+{
+    { { 0 MSO_I, 10 MSO_I }, { 9 MSO_I, 21600 } }
+};
+static const SvxMSDffVertPair mso_sptRibbonGluePoints[] =
+{
+    { 17 MSO_I, 10 MSO_I }, { 2700, 14 MSO_I }, { 17 MSO_I, 21600 }, { 18 MSO_I, 14 MSO_I }
+};
+static const SvxMSDffHandle mso_sptRibbonHandle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE,
+        0x100, 0, 10800, 10800, 2700, 8100, 0x80000000, 0x7fffffff },
+    {   MSDFF_HANDLE_FLAGS_RANGE,
+        10800, 0x101, 10800, 10800, 0x80000000, 0x7fffffff, 0, 7200 }
+};
+static const mso_CustomShape msoRibbon =
+{
+    (SvxMSDffVertPair*)mso_sptRibbonVert, sizeof( mso_sptRibbonVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptRibbonSegm, sizeof( mso_sptRibbonSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptRibbonCalc, sizeof( mso_sptRibbonCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptRibbonDefault,
+    (SvxMSDffTextRectangles*)mso_sptRibbonTextRect, sizeof( mso_sptRibbonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptRibbonGluePoints, sizeof( mso_sptRibbonGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffHandle*)mso_sptRibbonHandle, sizeof( mso_sptRibbonHandle ) / sizeof( SvxMSDffHandle )
+};
+
 static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 - 5400
 {
     { 1 MSO_I, 21600 }, { 0, 11 MSO_I }, { 1 MSO_I, 12 MSO_I }, { 0 MSO_I, 12 MSO_I },
@@ -7717,9 +7798,9 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptSeal24 :                    pCustomShape = &msoSeal24; break;
         case mso_sptSeal32 :                    pCustomShape = &msoSeal32; break;
         case mso_sptRibbon2 :                   pCustomShape = &msoRibbon2; break;
-        case mso_sptRibbon :                    pCustomShape = &msoRibbon2; break;
+        case mso_sptRibbon :                    pCustomShape = &msoRibbon; break;
         case mso_sptEllipseRibbon2 :            pCustomShape = &msoRibbon2; break;  // SJ: TODO
-        case mso_sptEllipseRibbon :             pCustomShape = &msoRibbon2; break;  // SJ: TODO
+        case mso_sptEllipseRibbon :             pCustomShape = &msoRibbon; break;   // SJ: TODO
         case mso_sptVerticalScroll :            pCustomShape = &msoVerticalScroll;  break;
         case mso_sptHorizontalScroll :          pCustomShape = &msoHorizontalScroll; break;
         case mso_sptFlowChartProcess :          pCustomShape = &msoFlowChartProcess; break;

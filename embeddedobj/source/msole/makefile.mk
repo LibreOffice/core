@@ -127,9 +127,6 @@ SHL1STDLIBS+=\
 
 DEF1EXPORTFILE=	exports.dxp
 
-.ELSE
-SHL1STDLIBS+=\
-    -lembobj
 .ENDIF
 
 

@@ -60,7 +60,7 @@ typedef int EContactField;
 
 EAPI_EXTERN const char      *(*e_contact_field_name)   ( EContactField field_id);
 EAPI_EXTERN gpointer        (*e_contact_get)   (EContact *contact, EContactField field_id);
-EAPI_EXTERN const gpointer  (*e_contact_get_const)   (EContact *contact, EContactField field_id);
+EAPI_EXTERN gconstpointer  (*e_contact_get_const)   (EContact *contact, EContactField field_id);
 // e-source.h
 typedef void ESource;
 #define E_SOURCE(a) ((ESource *)(a))

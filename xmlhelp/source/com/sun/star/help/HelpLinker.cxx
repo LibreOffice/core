@@ -51,6 +51,9 @@
 #include <expat/xmlparse.h>
 #endif
 
+#define DBHELP_ONLY
+
+
 class IndexerPreProcessor
 {
 private:
@@ -166,6 +169,22 @@ struct Data
     }
 };
 
+void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::string& aValueStr )
+{
+    if( pFile == NULL )
+        return;
+    char cLF = 10;
+    int nKeyLen = aKeyStr.length();
+    int nValueLen = aValueStr.length();
+    fprintf( pFile, "%x ", nKeyLen );
+    if( nKeyLen > 0 )
+        fwrite( aKeyStr.c_str(), 1, nKeyLen, pFile );
+    fprintf( pFile, " %x ", nValueLen );
+    if( nValueLen > 0 )
+        fwrite( aValueStr.c_str(), 1, nValueLen, pFile );
+    fprintf( pFile, "%c", cLF );
+}
+
 class HelpKeyword
 {
 private:
@@ -199,6 +218,19 @@ public:
 
             table->put(table, NULL, &key, &value, 0);
         }
+    }
+
+    void dump_DBHelp( const std::string& rFileName )
+    {
+        FILE* pFile = fopen( rFileName.c_str(), "wb" );
+        if( pFile == NULL )
+            return;
+
+        DataHashtable::const_iterator aEnd = _hash.end();
+        for (DataHashtable::const_iterator aIter = _hash.begin(); aIter != aEnd; ++aIter)
+            writeKeyValue_DBHelp( pFile, aIter->first, aIter->second.getString() );
+
+        fclose( pFile );
     }
 };
 
@@ -237,7 +269,7 @@ private:
     IndexerPreProcessor* m_pIndexerPreProcessor;
     void initIndexerPreProcessor();
     void link() throw( HelpProcessingException );
-    void addBookmark( DB* dbBase, std::string thishid,
+    void addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB );
 #if 0
@@ -277,7 +309,7 @@ namespace URLEncoder
     }
 }
 
-void HelpLinker::addBookmark( DB* dbBase, std::string thishid,
+void HelpLinker::addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB)
 {
@@ -327,7 +359,14 @@ void HelpLinker::addBookmark( DB* dbBase, std::string thishid,
     data.data = &dataB[0];
     data.size = dataB.size();
 
-    dbBase->put(dbBase, NULL, &key, &data, 0);
+    if( dbBase != NULL )
+        dbBase->put(dbBase, NULL, &key, &data, 0);
+
+    if( pFile_DBHelp != NULL )
+    {
+        std::string aValueStr( dataB.begin(), dataB.end() );
+        writeKeyValue_DBHelp( pFile_DBHelp, thishid, aValueStr );
+    }
 }
 
 void HelpLinker::initIndexerPreProcessor()
@@ -371,23 +410,45 @@ void HelpLinker::link() throw( HelpProcessingException )
     if (appl[0] == 's')
         appl = appl.substr(1);
 
-    fs::path helpTextFileName(indexDirParentName / (mod + ".ht"));
+    bool bUse_ = true;
+#ifdef DBHELP_ONLY
+    if( !bExtensionMode )
+        bUse_ = false;
+#endif
+
     DB* helpText(0);
+#ifndef DBHELP_ONLY
+    fs::path helpTextFileName(indexDirParentName / (mod + ".ht"));
     db_create(&helpText,0,0);
     helpText->open(helpText, NULL, helpTextFileName.native_file_string().c_str(), NULL, DB_BTREE,
         DB_CREATE | DB_TRUNCATE, 0644);
+#endif
 
-    fs::path dbBaseFileName(indexDirParentName / (mod + ".db"));
+    fs::path helpTextFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".ht_" : ".ht")));
+    FILE* pFileHelpText_DBHelp = fopen
+        ( helpTextFileName_DBHelp.native_file_string().c_str(), "wb" );
+
     DB* dbBase(0);
+#ifndef DBHELP_ONLY
+    fs::path dbBaseFileName(indexDirParentName / (mod + ".db"));
     db_create(&dbBase,0,0);
     dbBase->open(dbBase, NULL, dbBaseFileName.native_file_string().c_str(), NULL, DB_BTREE,
         DB_CREATE | DB_TRUNCATE, 0644);
+#endif
 
-    fs::path keyWordFileName(indexDirParentName / (mod + ".key"));
+    fs::path dbBaseFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".db_" : ".db")));
+    FILE* pFileDbBase_DBHelp = fopen
+        ( dbBaseFileName_DBHelp.native_file_string().c_str(), "wb" );
+
+#ifndef DBHELP_ONLY
     DB* keyWord(0);
+    fs::path keyWordFileName(indexDirParentName / (mod + ".key"));
     db_create(&keyWord,0,0);
     keyWord->open(keyWord, NULL, keyWordFileName.native_file_string().c_str(), NULL, DB_BTREE,
         DB_CREATE | DB_TRUNCATE, 0644);
+#endif
+
+    fs::path keyWordFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".key_" : ".key")));
 
     HelpKeyword helpKeyword;
 
@@ -423,8 +484,11 @@ void HelpLinker::link() throw( HelpProcessingException )
     HashSet::iterator end = helpFiles.end();
     for (HashSet::iterator iter = helpFiles.begin(); iter != end; ++iter)
     {
-        std::cout << ".";
-        std::cout.flush();
+        if( !bExtensionMode )
+        {
+            std::cout << ".";
+            std::cout.flush();
+        }
 
         // process one file
         // streamTable contains the streams in the hzip file
@@ -500,7 +564,7 @@ void HelpLinker::link() throw( HelpProcessingException )
         std::string& titleB = documentTitle;
 
         // add once this as its own id.
-        addBookmark(dbBase, documentPath, fileB, std::string(), jarfileB, titleB);
+        addBookmark(dbBase, pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
 
         // first the database *.db
         // ByteArrayInputStream bais = null;
@@ -525,7 +589,7 @@ void HelpLinker::link() throw( HelpProcessingException )
                     anchorB = thishid.substr(1 + index);
                     thishid = thishid.substr(0, index);
                 }
-                addBookmark(dbBase, thishid, fileB, anchorB, jarfileB, titleB);
+                addBookmark(dbBase, pFileDbBase_DBHelp, thishid, fileB, anchorB, jarfileB, titleB);
             }
         }
 
@@ -541,7 +605,7 @@ void HelpLinker::link() throw( HelpProcessingException )
                 enumer != aEnd; ++enumer)
             {
                 const std::string &anchor = enumer->first;
-                addBookmark(dbBase, documentPath, fileB,
+                addBookmark(dbBase, pFileDbBase_DBHelp, documentPath, fileB,
                     anchor, jarfileB, titleB);
                 std::string totalId = fakedHid + "#" + anchor;
                 // std::cerr << hzipFileName << std::endl;
@@ -587,7 +651,12 @@ void HelpLinker::link() throw( HelpProcessingException )
                 memset(&textDbt, 0, sizeof(textDbt));
                 textDbt.data = const_cast<char*>(helpTextText.c_str());
                 textDbt.size = helpTextText.length();
-                helpText->put(helpText, NULL, &keyDbt, &textDbt, 0);
+
+                if( helpText != NULL )
+                    helpText->put(helpText, NULL, &keyDbt, &textDbt, 0);
+
+                if( pFileHelpText_DBHelp != NULL )
+                    writeKeyValue_DBHelp( pFileHelpText_DBHelp, helpTextId, helpTextText );
             }
         }
 
@@ -614,16 +683,30 @@ void HelpLinker::link() throw( HelpProcessingException )
     catch( HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases
+#ifndef DBHELP_ONLY
         helpText->close(helpText, 0);
         dbBase->close(dbBase, 0);
         keyWord->close(keyWord, 0);
+#endif
+        if( pFileHelpText_DBHelp != NULL )
+            fclose( pFileHelpText_DBHelp );
+        if( pFileDbBase_DBHelp != NULL )
+            fclose( pFileDbBase_DBHelp );
         throw;
     }
 
+#ifndef DBHELP_ONLY
     helpText->close(helpText, 0);
     dbBase->close(dbBase, 0);
     helpKeyword.dump(keyWord);
     keyWord->close(keyWord, 0);
+#endif
+    if( pFileHelpText_DBHelp != NULL )
+        fclose( pFileHelpText_DBHelp );
+    if( pFileDbBase_DBHelp != NULL )
+        fclose( pFileDbBase_DBHelp );
+
+    helpKeyword.dump_DBHelp( keyWordFileName_DBHelp.native_file_string() );
 
     if( !bExtensionMode )
     {

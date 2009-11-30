@@ -32,6 +32,7 @@
 #define _SVX_XFLBMPIT_HXX
 
 #include <svtools/eitem.hxx>
+#include "svx/svxdllapi.h"
 
 /*************************************************************************
 |*
@@ -39,7 +40,7 @@
 |*
 \************************************************************************/
 
-class XFillBmpPosItem : public SfxEnumItem
+class SVX_DLLPUBLIC XFillBmpPosItem : public SfxEnumItem
 {
 public:
                             TYPEINFO();

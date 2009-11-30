@@ -6268,7 +6268,7 @@ SfxVoidItem InsertSound SID_INSERT_SOUND
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertSymbol SID_CHARMAP
-(SvxFontItem Font SID_CHARMAP,SfxStringItem Symbols SID_ATTR_SPECIALCHAR)
+(SfxStringItem Symbols SID_CHARMAP, SfxStringItem FontName SID_ATTR_SPECIALCHAR)
 [
     /* flags: */
     AutoUpdate = FALSE,

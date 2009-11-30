@@ -33,7 +33,6 @@ import com.sun.star.script.browse.XBrowseNode;
 import com.sun.star.script.browse.BrowseNodeTypes;
 import com.sun.star.script.provider.XScriptContext;
 
-import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Any;
@@ -52,13 +51,10 @@ import com.sun.star.reflection.InvocationTargetException;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.ElementExistException;
 
-import java.io.File;
 import java.util.*;
-import javax.swing.JOptionPane;
 
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.ScriptProvider;
-import com.sun.star.script.framework.browse.DialogFactory;
 import com.sun.star.script.framework.container.*;
 
 public class ScriptBrowseNode extends PropertySet

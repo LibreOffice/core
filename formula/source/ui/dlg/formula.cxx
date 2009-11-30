@@ -53,6 +53,7 @@
 
 #include <unotools/charclass.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "formdlgs.hrc"
 #include "funcpage.hxx"
@@ -676,49 +677,56 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,Formul
 
         uno::Sequence<sheet::FormulaToken> aArgs(1);
         aArgs[0] = m_aTokenMap.find(_pToken)->second;
-        const String aResult = m_pHelper->getFormulaParser()->printFormula(aArgs);
-
-        if ( nParas > 0 )
+        try
         {
-            SvLBoxEntry* pEntry;
+            const String aResult = m_pHelper->getFormulaParser()->printFormula(aArgs);
 
-            String aTest=_pTree->GetEntryText(pParent);
-
-            if(aTest==aResult &&
-                (eOp==ocAdd || eOp==ocMul ||
-                 eOp==ocAmpersand))
+            if ( nParas > 0 )
             {
-                pEntry=pParent;
+                SvLBoxEntry* pEntry;
+
+                String aTest=_pTree->GetEntryText(pParent);
+
+                if(aTest==aResult &&
+                    (eOp==ocAdd || eOp==ocMul ||
+                     eOp==ocAmpersand))
+                {
+                    pEntry=pParent;
+                }
+                else
+                {
+                    if(eOp==ocBad)
+                    {
+                        pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_ERROR,0,_pToken);
+                    }
+                    else
+                    {
+                        pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_FOLDER,0,_pToken);
+                    }
+                }
+
+                MakeTree(_pTree,pEntry,m_pTokenArray->PrevRPN(),nParas);
+                --Count;
+                m_pTokenArray->NextRPN();
+                MakeTree(_pTree,pParent,m_pTokenArray->PrevRPN(),Count);
             }
             else
             {
                 if(eOp==ocBad)
                 {
-                    pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_ERROR,0,_pToken);
+                    _pTree->InsertEntry(aResult,pParent,STRUCT_ERROR,0,_pToken);
                 }
                 else
                 {
-                    pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_FOLDER,0,_pToken);
+                    _pTree->InsertEntry(aResult,pParent,STRUCT_END,0,_pToken);
                 }
+                --Count;
+                MakeTree(_pTree,pParent,m_pTokenArray->PrevRPN(),Count);
             }
-
-            MakeTree(_pTree,pEntry,m_pTokenArray->PrevRPN(),nParas);
-            --Count;
-            m_pTokenArray->NextRPN();
-            MakeTree(_pTree,pParent,m_pTokenArray->PrevRPN(),Count);
         }
-        else
+        catch(uno::Exception&)
         {
-            if(eOp==ocBad)
-            {
-                _pTree->InsertEntry(aResult,pParent,STRUCT_ERROR,0,_pToken);
-            }
-            else
-            {
-                _pTree->InsertEntry(aResult,pParent,STRUCT_END,0,_pToken);
-            }
-            --Count;
-            MakeTree(_pTree,pParent,m_pTokenArray->PrevRPN(),Count);
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -737,7 +745,14 @@ void FormulaDlg_Impl::UpdateTokenArray( const String& rStrExp)
 {
     m_aTokenMap.clear();
     m_aTokenList.realloc(0);
-    m_aTokenList = m_pHelper->getFormulaParser()->parseFormula(rStrExp);
+    try
+    {
+        m_aTokenList = m_pHelper->getFormulaParser()->parseFormula(rStrExp);
+    }
+    catch(const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
     GetFormulaOpCodeMapper(); // just to get it initialized
     m_pTokenArray = m_pHelper->convertToTokenArray(m_aTokenList);
     const sal_Int32 nLen = static_cast<sal_Int32>(m_pTokenArray->GetLen());

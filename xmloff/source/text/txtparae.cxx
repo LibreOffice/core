@@ -258,7 +258,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
     }
 
-    if( xPropStates.size() > 0L )
+    if( !xPropStates.empty() )
     {
         Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
         OUString sParent, sCondParent;
@@ -432,7 +432,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
     }
 
-    if( xPropStates.size() > 0L )
+    if( !xPropStates.empty() )
     {
         OUString sParent, sCondParent;
         switch( nFamily )
@@ -3810,7 +3810,7 @@ void XMLTextParagraphExport::PopTextListsHelper()
     delete mpTextListsHelper;
     mpTextListsHelper = 0;
     maTextListsHelperStack.pop_back();
-    if ( maTextListsHelperStack.size() > 0 )
+    if ( !maTextListsHelperStack.empty() )
     {
         mpTextListsHelper = maTextListsHelperStack.back();
     }

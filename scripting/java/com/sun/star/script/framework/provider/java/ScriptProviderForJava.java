@@ -30,7 +30,6 @@
 package com.sun.star.script.framework.provider.java;
 
 import com.sun.star.frame.XModel;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.document.XScriptInvocationContext;
 import com.sun.star.uno.XComponentContext;

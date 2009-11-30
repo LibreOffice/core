@@ -313,8 +313,8 @@ namespace svx
         // determine conversion type
         if (m_nSourceLang == LANGUAGE_KOREAN && m_nTargetLang == LANGUAGE_KOREAN)
             m_eConvType = HHC::eConvHangulHanja;
-        else if (m_nSourceLang == LANGUAGE_CHINESE_TRADITIONAL && m_nTargetLang == LANGUAGE_CHINESE_SIMPLIFIED  ||
-                 m_nSourceLang == LANGUAGE_CHINESE_SIMPLIFIED  && m_nTargetLang == LANGUAGE_CHINESE_TRADITIONAL)
+        else if ( (m_nSourceLang == LANGUAGE_CHINESE_TRADITIONAL && m_nTargetLang == LANGUAGE_CHINESE_SIMPLIFIED)  ||
+                 (m_nSourceLang == LANGUAGE_CHINESE_SIMPLIFIED  && m_nTargetLang == LANGUAGE_CHINESE_TRADITIONAL) )
             m_eConvType = HHC::eConvSimplifiedTraditional;
         else
         {

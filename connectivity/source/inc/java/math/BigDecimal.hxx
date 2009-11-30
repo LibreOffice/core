@@ -40,10 +40,8 @@ namespace connectivity
     {
         // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_math_BigDecimal();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_math_BigDecimal( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}

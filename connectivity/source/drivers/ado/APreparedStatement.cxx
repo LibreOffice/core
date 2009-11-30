@@ -41,6 +41,7 @@
 #include <comphelper/sequence.hxx>
 #include "connectivity/dbexception.hxx"
 #include "connectivity/dbtools.hxx"
+#include "resource/ado_res.hrc"
 
 #include <limits>
 
@@ -433,9 +434,16 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setObject( sal_Int32 /*parameterIndex*/, const Any& /*x*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setObject", *this );
+    if(!::dbtools::implSetObject(this,parameterIndex,x))
+    {
+        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+                STR_UNKNOWN_PARA_TYPE,
+                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
+    }
     //  setObject (parameterIndex, x, sqlType, 0);
 }
 // -------------------------------------------------------------------------

@@ -324,7 +324,7 @@ throw( IllegalArgumentException )
     sal_Bool bReturn = sal_False;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
-    sal_Int16 aValue ;
+    sal_Int16 aValue = 0;
     convertPropertyValue( aValue, aNewValue );
 
     // If value change ...

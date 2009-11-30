@@ -60,6 +60,7 @@ namespace framework{
 #define ATTRIBUTE_MOD_SHIFT             DECLARE_ASCII("shift")
 #define ATTRIBUTE_MOD_MOD1              DECLARE_ASCII("mod1" )
 #define ATTRIBUTE_MOD_MOD2              DECLARE_ASCII("mod2" )
+#define ATTRIBUTE_MOD_MOD3              DECLARE_ASCII("mod3" )
 
 // same items with a name space alias
 #define AL_ELEMENT_ACCELERATORLIST      DECLARE_ASCII("accel:acceleratorlist")
@@ -73,6 +74,7 @@ namespace framework{
 #define AL_ATTRIBUTE_MOD_SHIFT          DECLARE_ASCII("accel:shift")
 #define AL_ATTRIBUTE_MOD_MOD1           DECLARE_ASCII("accel:mod1" )
 #define AL_ATTRIBUTE_MOD_MOD2           DECLARE_ASCII("accel:mod2" )
+#define AL_ATTRIBUTE_MOD_MOD3           DECLARE_ASCII("accel:mod3" )
 
 // same items with full qualified name space
 #define NS_ELEMENT_ACCELERATORLIST      DECLARE_ASCII("http://openoffice.org/2001/accel^acceleratorlist")
@@ -86,6 +88,7 @@ namespace framework{
 #define NS_ATTRIBUTE_MOD_SHIFT          DECLARE_ASCII("http://openoffice.org/2001/accel^shift")
 #define NS_ATTRIBUTE_MOD_MOD1           DECLARE_ASCII("http://openoffice.org/2001/accel^mod1" )
 #define NS_ATTRIBUTE_MOD_MOD2           DECLARE_ASCII("http://openoffice.org/2001/accel^mod2" )
+#define NS_ATTRIBUTE_MOD_MOD3           DECLARE_ASCII("http://openoffice.org/2001/accel^mod3" )
 
 // some storage related values (pathes, names of sub storages etcpp).
 #define PRESET_DEFAULT_XML              DECLARE_ASCII("default.xml")

@@ -324,7 +324,8 @@ struct ImpSdXMLExpTransObj2DMatrix : public ImpSdXMLExpTransObj2DBase
 
 void SdXMLImExTransform2D::EmptyList()
 {
-    for(sal_uInt32 a(0L); a < maList.size(); a++)
+    const sal_uInt32 nCount = maList.size();
+    for(sal_uInt32 a(0L); a < nCount; a++)
     {
         ImpSdXMLExpTransObj2DBase* pObj = maList[a];
 
@@ -418,7 +419,8 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
     OUString aClosingBrace(sal_Unicode(')'));
     OUString aEmptySpace(sal_Unicode(' '));
 
-    for(sal_uInt32 a(0UL); a < maList.size(); a++)
+    const sal_uInt32 nCount = maList.size();
+    for(sal_uInt32 a(0L); a < nCount; a++)
     {
         ImpSdXMLExpTransObj2DBase* pObj = maList[a];
         switch(pObj->mnType)
@@ -658,7 +660,8 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
 {
     rFullTrans.identity();
 
-    for(sal_uInt32 a(0L); a < maList.size(); a++)
+    const sal_uInt32 nCount = maList.size();
+    for(sal_uInt32 a(0L); a < nCount; a++)
     {
         ImpSdXMLExpTransObj2DBase* pObj = maList[a];
         switch(pObj->mnType)
@@ -777,7 +780,8 @@ struct ImpSdXMLExpTransObj3DMatrix : public ImpSdXMLExpTransObj3DBase
 
 void SdXMLImExTransform3D::EmptyList()
 {
-    for(sal_uInt32 a(0L); a< maList.size(); a++)
+    const sal_uInt32 nCount = maList.size();
+    for(sal_uInt32 a(0L); a < nCount; a++)
     {
         ImpSdXMLExpTransObj3DBase* pObj = maList[a];
 
@@ -891,7 +895,8 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
     OUString aClosingBrace(sal_Unicode(')'));
     OUString aEmptySpace(sal_Unicode(' '));
 
-    for(sal_uInt32 a(0UL); a < maList.size(); a++)
+    const sal_uInt32 nCount = maList.size();
+    for(sal_uInt32 a(0L); a < nCount; a++)
     {
         ImpSdXMLExpTransObj3DBase* pObj = maList[a];
         switch(pObj->mnType)
@@ -1225,7 +1230,8 @@ void SdXMLImExTransform3D::GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans)
 {
     rFullTrans.identity();
 
-    for(sal_uInt32 a(0L); a < maList.size(); a++)
+    const sal_uInt32 nCount = maList.size();
+    for(sal_uInt32 a(0L); a < nCount; a++)
     {
         ImpSdXMLExpTransObj3DBase* pObj = maList[a];
         switch(pObj->mnType)

@@ -470,6 +470,7 @@ bool Tree::isValidValueNode(ValueRef const & value) {
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 0
 bool Tree::isValidAnyNode(AnyNodeRef const & node) {
     OSL_ASSERT(nodeCount() != 0);
     return node.isValid() && isValidNode(node.m_nUsedPos) &&
@@ -477,6 +478,7 @@ bool Tree::isValidAnyNode(AnyNodeRef const & node) {
          (view::ViewTreeAccess(this).isGroupNodeAt(node.m_nUsedPos) &&
           getMemberNode(node.toValue()).isValid()));
 }
+#endif
 
 bool Tree::hasElements(NodeRef const & node) {
     OSL_ASSERT(

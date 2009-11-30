@@ -889,7 +889,7 @@ static UINT32 nValue;
 //------------------------------------------------------------------
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 {
-    rStream.Seek(rPage.GetPagePos() * 512);
+    rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
     rStream >> nValue >> rPage.aChild;
     rPage.nCount = USHORT(nValue);
 
@@ -903,17 +903,17 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& rPage)
 {
     // Seite existiert noch nicht
-    ULONG nSize = (rPage.GetPagePos() + 1) * 512;
+    ULONG nSize = (rPage.GetPagePos() + 1) * PAGE_SIZE;
     if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
     {
         rStream.SetStreamSize(nSize);
-        rStream.Seek(rPage.GetPagePos() * 512);
+        rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
 
-        char aEmptyData[512];
-        memset(aEmptyData,0x00,512);
-        rStream.Write((BYTE*)aEmptyData,512);
+        char aEmptyData[PAGE_SIZE];
+        memset(aEmptyData,0x00,PAGE_SIZE);
+        rStream.Write((BYTE*)aEmptyData,PAGE_SIZE);
     }
-    ULONG nCurrentPos = rStream.Seek(rPage.GetPagePos() * 512);
+    ULONG nCurrentPos = rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
     OSL_UNUSED( nCurrentPos );
 
     nValue = rPage.nCount;
@@ -926,7 +926,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
     // check if we have to fill the stream with '\0'
     if(i < rPage.rIndex.getHeader().db_maxkeys)
     {
-        ULONG nTell = rStream.Tell() % 512;
+        ULONG nTell = rStream.Tell() % PAGE_SIZE;
         USHORT nBufferSize = rStream.GetBufferSize();
         ULONG nRemainSize = nBufferSize - nTell;
         char* pEmptyData = new char[nRemainSize];
@@ -990,7 +990,7 @@ BOOL ONDXPage::IsFull() const
 USHORT ONDXPage::Search(const ONDXKey& rSearch)
 {
     // binare Suche spaeter
-    USHORT i = 0xFFFF;
+    USHORT i = NODE_NOTFOUND;
     while (++i < Count())
         if ((*this)[i].GetKey() == rSearch)
             break;
@@ -1001,7 +1001,7 @@ USHORT ONDXPage::Search(const ONDXKey& rSearch)
 //------------------------------------------------------------------
 USHORT ONDXPage::Search(const ONDXPage* pPage)
 {
-    USHORT i = 0xFFFF;
+    USHORT i = NODE_NOTFOUND;
     while (++i < Count())
         if (((*this)[i]).GetChild() == pPage)
             break;
@@ -1056,5 +1056,4 @@ void ONDXPage::Remove(USHORT nPos)
     bModified = TRUE;
 }
 // -----------------------------------------------------------------------------
-
 

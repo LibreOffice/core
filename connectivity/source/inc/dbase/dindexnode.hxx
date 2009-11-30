@@ -36,6 +36,9 @@
 #include "connectivity/FValue.hxx"
 #include <tools/ref.hxx>
 
+#define NODE_NOTFOUND 0xFFFF
+#define PAGE_SIZE 512
+
 namespace connectivity
 {
     namespace dbase
@@ -86,7 +89,7 @@ namespace connectivity
             StringCompare Compare(const ONDXKey& rKey) const;
         };
 
-        #define NODE_NOTFOUND 0xFFFF
+
 
 
         //==================================================================

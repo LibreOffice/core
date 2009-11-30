@@ -34,6 +34,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfx.hrc>
+#include <sfx2/docfac.hxx>
 #include "sfxresid.hxx"
 #include <osl/thread.h>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
@@ -43,20 +44,12 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/wldcrd.hxx>
+#include <tools/diagnose_ex.h>
 
-#ifndef _LIST_
 #include <list>
-#endif
-#ifndef _VECTOR_
 #include <vector>
-#endif
-#ifndef _MAP_
 #include <map>
-#endif
-#ifndef _ALGORITHM_
 #include <algorithm>
-#endif
-#include <sfx2/docfac.hxx>
 
 //........................................................................
 namespace sfx2
@@ -906,7 +899,7 @@ namespace sfx2
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "AppendFilterGroup::operator(): caught an exception while adding filters!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 

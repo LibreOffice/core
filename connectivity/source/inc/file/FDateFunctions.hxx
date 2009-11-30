@@ -45,7 +45,7 @@ namespace connectivity
         > SELECT DAYOFWEEK('1998-02-03');
                 -> 3
         */
-        class OOO_DLLPUBLIC_FILE OOp_DayOfWeek : public OUnaryOperator
+        class OOp_DayOfWeek : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -57,7 +57,7 @@ namespace connectivity
         > SELECT DAYOFMONTH('1998-02-03');
                 -> 3
         */
-        class OOO_DLLPUBLIC_FILE OOp_DayOfMonth : public OUnaryOperator
+        class OOp_DayOfMonth : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -70,7 +70,7 @@ namespace connectivity
                 -> 34
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_DayOfYear : public OUnaryOperator
+        class OOp_DayOfYear : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -82,7 +82,7 @@ namespace connectivity
         > SELECT MONTH('1998-02-03');
                 -> 2
         */
-        class OOO_DLLPUBLIC_FILE OOp_Month : public OUnaryOperator
+        class OOp_Month : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -95,7 +95,7 @@ namespace connectivity
                 -> 'Thursday'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_DayName : public OUnaryOperator
+        class OOp_DayName : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -108,7 +108,7 @@ namespace connectivity
                 -> 'February'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_MonthName : public OUnaryOperator
+        class OOp_MonthName : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -121,7 +121,7 @@ namespace connectivity
                 -> 2
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Quarter : public OUnaryOperator
+        class OOp_Quarter : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -146,7 +146,7 @@ namespace connectivity
                     -> 53
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Week : public ONthOperator
+        class OOp_Week : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -158,7 +158,7 @@ namespace connectivity
         > SELECT YEAR('98-02-03');
                 -> 1998
         */
-        class OOO_DLLPUBLIC_FILE OOp_Year : public OUnaryOperator
+        class OOp_Year : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -170,7 +170,7 @@ namespace connectivity
         > SELECT HOUR('10:05:03');
                 -> 10
         */
-        class OOO_DLLPUBLIC_FILE OOp_Hour : public OUnaryOperator
+        class OOp_Hour : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -183,7 +183,7 @@ namespace connectivity
                 -> 5
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Minute : public OUnaryOperator
+        class OOp_Minute : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -195,7 +195,7 @@ namespace connectivity
         > SELECT SECOND('10:05:03');
                 -> 3
         */
-        class OOO_DLLPUBLIC_FILE OOp_Second : public OUnaryOperator
+        class OOp_Second : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -208,7 +208,7 @@ namespace connectivity
             > SELECT CURDATE();
                     -> '1997-12-15'
         */
-        class OOO_DLLPUBLIC_FILE OOp_CurDate : public ONthOperator
+        class OOp_CurDate : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -221,7 +221,7 @@ namespace connectivity
             > SELECT CURTIME();
                     -> '23:50:26'
         */
-        class OOO_DLLPUBLIC_FILE OOp_CurTime : public ONthOperator
+        class OOp_CurTime : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -233,7 +233,7 @@ namespace connectivity
             > SELECT NOW();
                     -> '1997-12-15 23:50:26'
         */
-        class OOO_DLLPUBLIC_FILE OOp_Now : public ONthOperator
+        class OOp_Now : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;

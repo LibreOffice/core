@@ -478,7 +478,8 @@ void XMLTextStyleContext::FillPropertySet(
                 {
                     rPropSet->setPropertyValue( sAutoProp, makeAny(GetAutoName()) );
                 }
-                catch( UnknownPropertyException )
+                catch( const RuntimeException& ) { throw; }
+                catch( const Exception& )
                 {
                     bAutomatic = false;
                 }

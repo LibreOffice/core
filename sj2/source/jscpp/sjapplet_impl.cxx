@@ -30,10 +30,18 @@
 
 #include "sjapplet_impl.hxx"
 
-#ifndef OS2
-#define HWND int
-#define HMENU int
-#define HDC int
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#elif (defined QUARTZ)
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
+#elif (defined UNX)
+#include <tools/prex.h>
+#include "X11/Xlib.h"
+#include <tools/postx.h>
 #endif
 
 #include "rtl/ustring.hxx"
@@ -45,12 +53,6 @@
 
 #include <svtools/ownlist.hxx>
 
-#ifdef QUARTZ
-#include "premac.h"
-#include <Cocoa/Cocoa.h>
-#include "postmac.h"
-#endif
-
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -60,21 +62,6 @@
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "jvmaccess/classpath.hxx"
-
-#if defined(UNX) && !defined(QUARTZ)
-#define Time xlib_time
-#define Window xlib_window
-#define Font xlib_font
-#define Cursor xlib_cursor
-#define KeyCode xlib_keycode
-
-#include "X11/Xlib.h"
-#undef Time
-#undef Window
-#undef Font
-#undef Cursor
-#undef KeyCode
-#endif
 
 using namespace ::rtl;
 using namespace ::osl;

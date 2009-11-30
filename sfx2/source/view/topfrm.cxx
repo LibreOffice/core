@@ -963,7 +963,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     if ( !pImp->bHidden )
     {
-        if ( pDoc->IsHelpDocument() || pPluginItem && pPluginItem->GetValue() == 2 )
+        if ( pDoc->IsHelpDocument() || (pPluginItem && pPluginItem->GetValue() == 2) )
             pFrame->GetDispatcher()->HideUI( TRUE );
         else
             pFrame->GetDispatcher()->HideUI( FALSE );
@@ -978,7 +978,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
             pFrame->GetDispatcher()->Update_Impl();
         pFrame->Show();
         GetWindow().Show();
-        if ( !IsInPlace() || pPluginItem && pPluginItem->GetValue() == 3 )
+        if ( !IsInPlace() || (pPluginItem && pPluginItem->GetValue() == 3) )
             pFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
         pDoc->OwnerLock( sal_False );
 

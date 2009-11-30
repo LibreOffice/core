@@ -94,6 +94,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void implProcessHelp( Reference< deployment::XPackage > xPackage, bool doRegisterPackage );
     void implCollectXhpFiles( const rtl::OUString& aDir,
         std::vector< rtl::OUString >& o_rXhpFileVector );
+    rtl::OUString getFlagFileURL( Reference< deployment::XPackage > xPackage, const char* pFlagStr );
     rtl::OUString getRegisteredFlagFileURL( Reference< deployment::XPackage > xPackage );
     rtl::OUString getCompiledFlagFileURL( Reference< deployment::XPackage > xPackage );
     rtl::OUString expandURL( const rtl::OUString& aURL );
@@ -264,9 +265,16 @@ void BackendImpl::implProcessHelp
         Reference< script::XInvocation > xInvocation;
         if( xContext.is() )
         {
-            xInvocation = Reference< script::XInvocation >(
-                xContext->getServiceManager()->createInstanceWithContext( rtl::OUString::createFromAscii(
-                "com.sun.star.help.HelpIndexer" ), xContext ) , UNO_QUERY );
+            try
+            {
+                xInvocation = Reference< script::XInvocation >(
+                    xContext->getServiceManager()->createInstanceWithContext( rtl::OUString::createFromAscii(
+                    "com.sun.star.help.HelpIndexer" ), xContext ) , UNO_QUERY );
+            }
+            catch (Exception &)
+            {
+                // i98680: Survive missing lucene
+            }
         }
 
         // Scan languages
@@ -351,8 +359,13 @@ void BackendImpl::implProcessHelp
                     Sequence<uno::Any> aParamsSeq( 6 );
 
                     aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-lang" ) );
-                    rtl::OUString aLang;    // TODO
-                    aLang = rtl::OUString::createFromAscii( "de" ); // TODO
+
+                    rtl::OUString aLang;
+                    sal_Int32 nLastSlash = aLangURL.lastIndexOf( '/' );
+                    if( nLastSlash != -1 )
+                        aLang = aLangURL.copy( nLastSlash + 1 );
+                    else
+                        aLang = rtl::OUString::createFromAscii( "en" );
                     aParamsSeq[1] = uno::makeAny( aLang );
 
                     aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-mod" ) );
@@ -441,26 +454,25 @@ void BackendImpl::implProcessHelp
     }
 }
 
-rtl::OUString BackendImpl::getRegisteredFlagFileURL( Reference< deployment::XPackage > xPackage )
+rtl::OUString BackendImpl::getFlagFileURL( Reference< deployment::XPackage > xPackage, const char* pFlagStr )
 {
     rtl::OUString aRetURL;
     if( !xPackage.is() )
         return aRetURL;
     rtl::OUString aHelpURL = xPackage->getURL();
     aRetURL = expandURL( aHelpURL );
-    aRetURL += rtl::OUString::createFromAscii( "/RegisteredFlag" );
+    aRetURL += rtl::OUString::createFromAscii( pFlagStr );
     return aRetURL;
+}
+
+rtl::OUString BackendImpl::getRegisteredFlagFileURL( Reference< deployment::XPackage > xPackage )
+{
+    return getFlagFileURL( xPackage, "/RegisteredFlag" );
 }
 
 rtl::OUString BackendImpl::getCompiledFlagFileURL( Reference< deployment::XPackage > xPackage )
 {
-    rtl::OUString aRetURL;
-    if( !xPackage.is() )
-        return aRetURL;
-    rtl::OUString aHelpURL = xPackage->getURL();
-    aRetURL = expandURL( aHelpURL );
-    aRetURL += rtl::OUString::createFromAscii( "/CompiledFlag" );
-    return aRetURL;
+    return getFlagFileURL( xPackage, "/CompiledFlag" );
 }
 
 rtl::OUString BackendImpl::expandURL( const rtl::OUString& aURL )

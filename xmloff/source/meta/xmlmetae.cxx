@@ -410,7 +410,8 @@ SvXMLMetaExport::startElement(const ::rtl::OUString & i_rName,
     if (m_level == 0) {
         // namepace decls: default ones have been written at the root element
         // non-default ones must be preserved here
-        for (sal_Int16 i = 0; i < i_xAttribs->getLength(); ++i) {
+        const sal_Int16 nCount = i_xAttribs->getLength();
+        for (sal_Int16 i = 0; i < nCount; ++i) {
             const ::rtl::OUString name(i_xAttribs->getNameByIndex(i));
             if (name.matchAsciiL(s_xmlns, strlen(s_xmlns))) {
                 bool found(false);
@@ -440,7 +441,8 @@ SvXMLMetaExport::startElement(const ::rtl::OUString & i_rName,
             const ::rtl::OUString ns(iter->First);
             bool found(false);
             // but only if it is not already there
-            for (sal_Int16 i = 0; i < i_xAttribs->getLength(); ++i) {
+            const sal_Int16 nCount = i_xAttribs->getLength();
+            for (sal_Int16 i = 0; i < nCount; ++i) {
                 const ::rtl::OUString name(i_xAttribs->getNameByIndex(i));
                 if (ns.equals(name)) {
                     found = true;
@@ -457,7 +459,8 @@ SvXMLMetaExport::startElement(const ::rtl::OUString & i_rName,
     if (i_rName.matchAsciiL(s_meta, strlen(s_meta))) {
         // special handling for all elements that may have
         // xlink:href attributes; these must be made relative
-        for (sal_Int16 i = 0; i < i_xAttribs->getLength(); ++i) {
+        const sal_Int16 nLength = i_xAttribs->getLength();
+        for (sal_Int16 i = 0; i < nLength; ++i) {
             const ::rtl::OUString name (i_xAttribs->getNameByIndex (i));
             ::rtl::OUString value(i_xAttribs->getValueByIndex(i));
             if (name.matchAsciiL(s_href, strlen(s_href))) {
@@ -466,7 +469,8 @@ SvXMLMetaExport::startElement(const ::rtl::OUString & i_rName,
             mrExport.AddAttribute(name, value);
         }
     } else {
-        for (sal_Int16 i = 0; i < i_xAttribs->getLength(); ++i) {
+        const sal_Int16 nLength = i_xAttribs->getLength();
+        for (sal_Int16 i = 0; i < nLength; ++i) {
             const ::rtl::OUString name  (i_xAttribs->getNameByIndex(i));
             const ::rtl::OUString value (i_xAttribs->getValueByIndex(i));
             mrExport.AddAttribute(name, value);

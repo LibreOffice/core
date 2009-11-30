@@ -46,9 +46,11 @@
 				</info>
 			</prop>
 			<prop oor:name="Measure" oor:type="xs:string">
-				<!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a '1' is append if the label type is continuous otherwise a '0'-->
+				<!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order: 
+				'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while 'C' marks a continuous label and 'S' marks a sheet
+				-->
 				<info>
-					<desc>Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc>Contains the measurement data of the label concatenated by a colon (;) in the following order: 'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while &apos;C&apos; marks a continuous label and &apos;S&apos; marks a sheet.</desc>
 				</info>
 			</prop>
 		</group>

@@ -40,7 +40,7 @@
 
 class BasicFrame;
 
-class AppEdit : public AppWin    {  // Editor-Window:
+class AppEdit : public AppWin    {  // Editor window
 using Window::Scroll;
 
 public:
@@ -56,15 +56,15 @@ public:
     TYPEINFO();
     AppEdit( BasicFrame* );
     ~AppEdit();
-    USHORT GetLineNr();             // Aktuelle Zeilennummer
-    FileType GetFileType();         // Liefert den Filetype
-    virtual long InitMenu( Menu* );         // Initialisierung des Menues
-    virtual long DeInitMenu( Menu* );   // rücksetzen, so daß wieder alle Shortcuts enabled sind
-    virtual void Command( const CommandEvent& rCEvt );  // Kommando-Handler
+    USHORT GetLineNr();                                 // Current line number
+    FileType GetFileType();                             // Returns the file type
+    virtual long InitMenu( Menu* );                     // Inits the menu
+    virtual long DeInitMenu( Menu* );                   // Reset to enable all Shortcuts
+    virtual void Command( const CommandEvent& rCEvt );  // Command Handler
     void Resize();
-    void PostLoad();                // Nachbearbeiten des geladenen (Source am Modul setzen)
-    void PostSaveAs();              // Nachbearbeiten des Modils ...
-    void Mark( short, short, short );// Text markieren
+    void PostLoad();
+    void PostSaveAs();
+    void Mark( short, short, short );                   // Select text
     void Highlight( USHORT nLine, USHORT nCol1, USHORT nCol2 );
     virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
     virtual void LoadIniFile();     // (re)load ini file after change

@@ -87,8 +87,6 @@ namespace connectivity
     protected:
         // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -113,7 +111,7 @@ namespace connectivity
         virtual ~java_sql_ResultSet();
     public:
         DECLARE_SERVICE_INFO();
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,java_sql_Connection& _rConnection,
             java_sql_Statement_Base* pStmt = NULL );

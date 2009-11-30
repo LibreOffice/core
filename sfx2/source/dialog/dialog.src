@@ -148,36 +148,6 @@ String STR_DELETE_STYLE_USED
 {
     Text [ en-US ] = "You are deleting an applied Style!\n" ;
 };
-Image BMP_COLLAPSED
-{
-    ImageBitmap = Bitmap
-    {
-        File = "plus.bmp" ;
-    };
-     // MaskColor = Color { Predefine = COL_GREEN ; };
-};
-Image BMP_EXPANDED
-{
-    ImageBitmap = Bitmap
-    {
-        File = "minus.bmp" ;
-    };
-     // MaskColor = Color { Predefine = COL_GREEN ; };
-};
-Image BMP_EXPANDED_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "minus_h.bmp" ;
-    };
-};
-Image BMP_COLLAPSED_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "plus_h.bmp" ;
-    };
-};
 Menu MN_CONTEXT_TEMPLDLG
 {
     ItemList =
@@ -201,14 +171,6 @@ Menu MN_CONTEXT_TEMPLDLG
             HelpId = HID_STYLIST_DELETE ;
         };
     };
-};
-String STR_BASICMACROS
-{
-    Text [ en-US ] = "BASIC Macros" ;
-};
-String STR_DLG_MACROS
-{
-  Text [ en-US ] = "%PRODUCTNAME Macros" ;
 };
 
 InfoBox MSG_LAYOUT_NOT_LOADING
@@ -292,21 +254,12 @@ String SID_NAVIGATOR
 {
     Text [ en-US ] = "Navigator";
 };
-String STR_BASICNAME
-{
-    Text = "%PRODUCTNAME Basic" ;
-};
 
 ErrorBox MSG_ERROR_WRONG_CONFIRM
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
     Message [ en-US ] = "Faulty password confirmation";
-};
-
-String STR_GROUP_STYLES
-{
-    Text [ en-US ] = "Styles" ;
 };
 
 String STR_PDF_EXPORT_SEND

@@ -115,7 +115,7 @@ void XMLEventImportHelper::PopTranslationTable()
 {
     DBG_ASSERT(aEventNameMapList.size() > 0,
                "no translation tables left to pop");
-    if (aEventNameMapList.size() > 0)
+    if ( !aEventNameMapList.empty() )
     {
         // delete current and install old map
         delete pEventNameMap;

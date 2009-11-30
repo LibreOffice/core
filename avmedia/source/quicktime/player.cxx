@@ -75,7 +75,6 @@ namespace avmedia { namespace quicktime {
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr ),
-    mpMovieView( nil ),
     mpMovie( nil ),
     /* GST
     mbFakeVideo (sal_False ),
@@ -114,12 +113,6 @@ Player::~Player()
 {
     if( mbInitialized )
     {
-        if( mpMovieView )
-        {
-            [mpMovieView setMovie:nil];
-            mpMovieView = nil;
-        }
-
         if( mpMovie )
         {
             [mpMovie release];
@@ -439,15 +432,12 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
-        ::avmedia::quicktime::Window* pWindow = new ::avmedia::quicktime::Window( mxMgr, *this );
-        xRet = pWindow;
-
         sal_IntPtr nPtr = NULL;
         aArguments[0] >>= nPtr;
-        mpMovieView = reinterpret_cast< QTMovieView * >(nPtr);
-        [mpMovieView setMovie: mpMovie];
-        [mpMovieView setControllerVisible: NO];
-        [mpMovieView setFrameSize: nsSize ];
+        NSView* pParentView = reinterpret_cast< NSView * >(nPtr);
+
+        ::avmedia::quicktime::Window* pWindow = new ::avmedia::quicktime::Window( mxMgr, *this, pParentView );
+        xRet = pWindow;
     }
 
     return xRet;

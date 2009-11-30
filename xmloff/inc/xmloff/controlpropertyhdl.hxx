@@ -47,7 +47,7 @@ namespace xmloff
 //.........................................................................
 
     class IFormsExportContext;
-    class IFormsImportContext;
+    class OFormLayerXMLImport_Impl;
 
     //=====================================================================
     //= ORotationAngleHandler
@@ -109,7 +109,7 @@ namespace xmloff
     //=====================================================================
     //= ImageScaleModeHandler
     //=====================================================================
-    class ImageScaleModeHandler : public XMLConstantsPropertyHandler
+    class XMLOFF_DLLPUBLIC ImageScaleModeHandler : public XMLConstantsPropertyHandler
     {
     public:
         ImageScaleModeHandler();

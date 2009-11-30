@@ -58,7 +58,7 @@
 #define STR_COULD_NOT_CREATE_INDEX_NAME         ( STR_DBASE_BASE +   17 )
 #define STR_INVALID_COLUMN_VALUE                ( STR_DBASE_BASE +   18 )
 #define STR_TABLE_NOT_DROP                      ( STR_DBASE_BASE +   19 )
-
+#define STR_COULD_NOT_CREATE_INDEX_KEYSIZE      ( STR_DBASE_BASE +   20 )
 
 #endif // CONNECTIVITY_RESOURCE_DBASE_HRC
 

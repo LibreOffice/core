@@ -41,14 +41,12 @@ class SvStream;
 class String;
 class UniString;
 
-// Das nachfolgende Makro definiert die vier  (fuenf) notwendigen Methoden
-// innerhalb eines SBX-Objekts. LoadPrivateData() und StorePrivateData()
-// muessen selbst implementiert werden. Sie sind fuer das Laden/Speichern
-// der Daten der abgeleiteten Klasse notwendig. Load() und Store() duerfen
-// nicht ueberlagert werden.
+// The following Macro defines four (five) necessary methods within a
+// SBX object. LoadPrivateData() and StorePrivateData() must be implemented.
+// They are necessary for loading/storing the data of derived classes.
+// Load() and Store() must not be overridden.
 
-// Diese Version des Makros definiert keine Load/StorePrivateData()-Methoden
-
+// This version of the Macros does not define Load/StorePrivateData()-methods
 #define SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )       \
     virtual UINT32 GetCreator() const { return nCre;   }    \
     virtual UINT16 GetVersion() const { return nVer;   }    \
@@ -59,8 +57,7 @@ class UniString;
     virtual UINT16 GetVersion() const;                      \
     virtual UINT16 GetSbxId() const;
 
-// Diese Version des Makros definiert Load/StorePrivateData()-Methoden
-
+// This version of the macro defines Load/StorePrivateData()-methods
 #define SBX_DECL_PERSIST( nCre, nSbxId, nVer )              \
     virtual BOOL LoadPrivateData( SvStream&, USHORT );      \
     virtual BOOL StorePrivateData( SvStream& ) const;       \
@@ -132,13 +129,13 @@ public:
     static BOOL IsError();
     static void ResetError();
 
-    // Setzen der Factory fuer Load/Store/Create
+    // Set the factory for Load/Store/Create
     static void AddFactory( SbxFactory* );
     static void RemoveFactory( SbxFactory* );
 
     static SbxBase* Create( UINT16, UINT32=SBXCR_SBX );
     static SbxObject* CreateObject( const String& );
-    // Sbx-Loesung als Ersatz fuer SfxBroadcaster::Enable()
+    // Sbx solution as replacement for SfxBroadcaster::Enable()
     static void StaticEnableBroadcasting( BOOL bEnable );
     static BOOL StaticIsEnabledBroadcasting( void );
 };

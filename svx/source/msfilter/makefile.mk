@@ -49,10 +49,8 @@ SLOFILES=\
     $(SLO)$/msdffimp.obj	\
     $(SLO)$/msoleexp.obj	\
     $(SLO)$/msvbasic.obj	\
-    $(SLO)$/msashape.obj	\
     $(SLO)$/svxmsbas.obj	\
     $(SLO)$/msocximex.obj	\
-    $(SLO)$/msashape3d.obj	\
     $(SLO)$/mscodec.obj		\
     $(SLO)$/msfiltertracer.obj
 
@@ -60,7 +58,6 @@ EXCEPTIONSFILES= \
     $(SLO)$/eschesdo.obj	\
     $(SLO)$/escherex.obj	\
     $(SLO)$/msdffimp.obj	\
-    $(SLO)$/msashape3d.obj	\
     $(SLO)$/msvbasic.obj	\
     $(SLO)$/msocximex.obj	\
     $(SLO)$/msoleexp.obj	\

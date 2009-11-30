@@ -220,9 +220,13 @@ void SAL_CALL TitleHelper::notifyEvent(const css::document::EventObject& aEvent)
     aLock.clear ();
     // <- SYNCHRONIZED
 
-    if (aEvent.Source != xOwner
-      || aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnTitleChanged") && !xOwner.is())
+    if (
+         aEvent.Source != xOwner ||
+         (aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnTitleChanged") && !xOwner.is())
+       )
+    {
         return;
+    }
 
     impl_updateTitle ();
 }

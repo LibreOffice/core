@@ -83,7 +83,7 @@ public:
     void AddSkewY(double fNew);
     void AddMatrix(const ::basegfx::B2DHomMatrix& rNew);
 
-    bool NeedsAction() const { return 0L != maList.size(); }
+    bool NeedsAction() const { return !maList.empty(); }
     void GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans);
     const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
     void SetString(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
@@ -111,7 +111,7 @@ public:
     void AddMatrix(const ::basegfx::B3DHomMatrix& rNew);
 
     void AddHomogenMatrix(const com::sun::star::drawing::HomogenMatrix& xHomMat);
-    bool NeedsAction() const { return 0L != maList.size(); }
+    bool NeedsAction() const { return !maList.empty(); }
     void GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans);
     bool GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat);
     const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);

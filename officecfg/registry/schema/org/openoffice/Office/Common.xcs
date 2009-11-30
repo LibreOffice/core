@@ -2746,6 +2746,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</info>
 					<value>true</value>
 				</prop>
+				<prop oor:name="IsSystemIconsInMenus" oor:type="xs:boolean">
+					<info>
+						<author>CMC</author>
+						<desc>Indicates whether icons in the office menus should shown/hidden by following the System theme.</desc>
+					</info>
+					<value>true</value>
+				</prop>
 				<prop oor:name="ShowIconsInMenues" oor:type="xs:boolean">
 					<!-- OldPath: General/View -->
 					<!-- UIHints: Tools  Options - General  View  [Section] Options -->

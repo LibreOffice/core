@@ -31,9 +31,8 @@
 #ifndef _SVX_XFLBCKIT_HXX
 #define _SVX_XFLBCKIT_HXX
 
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
+#include "svx/svxdllapi.h"
 
 /*************************************************************************
 |*
@@ -41,7 +40,7 @@
 |*
 \************************************************************************/
 
-class XFillBackgroundItem : public SfxBoolItem
+class SVX_DLLPUBLIC XFillBackgroundItem : public SfxBoolItem
 {
 public:
                             TYPEINFO();

@@ -43,29 +43,16 @@ jclass java_math_BigDecimal::theClass = 0;
 java_math_BigDecimal::~java_math_BigDecimal()
 {}
 
-jclass java_math_BigDecimal::getMyClass()
+jclass java_math_BigDecimal::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass("java/math/BigDecimal"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/math/BigDecimal");
     return theClass;
 }
 
-void java_math_BigDecimal::saveClassRef( jclass pClass )
+java_math_BigDecimal::java_math_BigDecimal( const ::rtl::OUString& _par0 ): java_lang_Object( NULL, (jobject)NULL )
 {
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
-}
-
-java_math_BigDecimal::java_math_BigDecimal( const ::rtl::OUString& _par0 ): java_lang_Object( NULL, (jobject)NULL ){
     SDBThreadAttach t;
     if( !t.pEnv )
         return;
@@ -73,9 +60,8 @@ java_math_BigDecimal::java_math_BigDecimal( const ::rtl::OUString& _par0 ): java
     // temporaere Variable initialisieren
     static const char * cSignature = "(Ljava/lang/String;)V";
     jobject tempObj;
-    static jmethodID mID = NULL;
-    if ( !mID  )
-        mID  = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID(NULL);
+    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
 
     jstring str = convertwchar_tToJavaString(t.pEnv,_par0.replace(',','.'));
     tempObj = t.pEnv->NewObject( getMyClass(), mID, str );
@@ -86,7 +72,8 @@ java_math_BigDecimal::java_math_BigDecimal( const ::rtl::OUString& _par0 ): java
     // und aufraeumen
 }
 
-java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Object( NULL, (jobject)NULL ){
+java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Object( NULL, (jobject)NULL )
+{
     SDBThreadAttach t;
     if( !t.pEnv )
         return;
@@ -94,9 +81,8 @@ java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Obj
     // temporaere Variable initialisieren
     static const char * cSignature = "(D)V";
     jobject tempObj;
-    static jmethodID mID = NULL;
-    if ( !mID  )
-        mID  = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID(NULL);
+    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
     tempObj = t.pEnv->NewObject( getMyClass(), mID, _par0 );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );

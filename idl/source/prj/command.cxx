@@ -351,7 +351,7 @@ SvCommand::SvCommand( int argc, char ** argv )
             }
             else if( aParam.EqualsIgnoreCaseAscii( "help" ) || aParam.EqualsIgnoreCaseAscii( "?" ) )
             { // Hilfe
-                printf( CommandLineSyntax );
+                printf( "%s", CommandLineSyntax );
             }
             else if( aParam.EqualsIgnoreCaseAscii( "syntax" ) )
             { // Hilfe
@@ -391,7 +391,7 @@ SvCommand::SvCommand( int argc, char ** argv )
     }
     else
     {
-                printf( CommandLineSyntax );
+        printf( "%s", CommandLineSyntax );
     }
 
     String * pStr = aList.First();

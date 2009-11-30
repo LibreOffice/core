@@ -48,7 +48,6 @@ import java.net.URL;
 import java.util.Map;
 import java.util.HashMap;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

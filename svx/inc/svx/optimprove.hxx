@@ -79,6 +79,7 @@ public:
     inline String   GetYesButtonText() const { return m_aYesRB.GetText(); }
     inline String   GetNoButtonText() const { return m_aNoRB.GetText(); }
     inline String   GetInfoText() const { return m_sInfo; }
+    inline String   GetTitleText() const { return m_aImproveFL.GetText(); }
 };
 
 class SvxImprovementOptionsPage : public SfxTabPage
@@ -100,10 +101,10 @@ private:
     String                      m_sMoreInfo;
     ::rtl::OUString             m_sLogPath;
 
-    SVX_DLLPRIVATE  SvxImprovementOptionsPage( Window* pParent, const SfxItemSet& rSet );
+    SvxImprovementOptionsPage( Window* pParent, const SfxItemSet& rSet );
 
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlinkImage * );
-    DECL_DLLPRIVATE_LINK( HandleShowData, PushButton * );
+    DECL_LINK( HandleHyperlink, svt::FixedHyperlinkImage * );
+    DECL_LINK( HandleShowData, PushButton * );
 
 public:
     virtual             ~SvxImprovementOptionsPage();
@@ -115,13 +116,13 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-class SVX_DLLPUBLIC SvxImprovementDialog : public SfxSingleTabDialog
+class SvxImprovementDialog : public SfxSingleTabDialog
 {
 private:
     SvxImprovementPage*     m_pPage;
 
-    DECL_DLLPRIVATE_LINK( HandleOK, OKButton * );
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlinkImage * );
+    DECL_LINK( HandleOK, OKButton * );
+    DECL_LINK( HandleHyperlink, svt::FixedHyperlinkImage * );
 
 public:
     SvxImprovementDialog( Window* pParent, const String& rInfoURL );

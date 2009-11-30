@@ -30,17 +30,11 @@
 package com.sun.star.script.framework.provider.beanshell;
 
 import javax.swing.JTextArea;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.text.Document;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
 
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
@@ -48,8 +42,6 @@ import java.awt.FontMetrics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class PlainSourceView extends JScrollPane
     implements ScriptSourceView, DocumentListener {

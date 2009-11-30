@@ -43,17 +43,16 @@ class SbxBasicFormater;
 SV_DECL_PTRARR_DEL(SbxFacs,SbxFactory*,5,5)
 DECLARE_LIST(SbxVarList_Impl, SbxVariable*)
 
-// AppData-Struktur fuer SBX:
+// AppData-Struktur for SBX:
 struct SbxAppData
 {
-    SbxError            eSbxError;  // Fehlercode
+    SbxError            eSbxError;  // Error code
     SbxFacs             aFacs;      // Factories
-    SbxVarList_Impl     aVars;      // fuer Dump
-    SbxBasicFormater    *pBasicFormater;    // Zeiger auf Hilfsklasse f"ur den
-                                            // Format()-Befehl
+    SbxVarList_Impl     aVars;      // for Dump
+    SbxBasicFormater    *pBasicFormater;    // Pointer to Format()-Command helper class
+
     LanguageType        eBasicFormaterLangType;
-        // Bem.: es ist sinnvoll diese Klasse 'global' zu speichern, da
-        //       einige Resourcen (Strings) in der Klasse gehalten werden.
+        // It might be useful to store this class 'global' because some string reosurces are saved here
 
     SbxAppData() : eSbxError( SbxERR_OK ), aFacs(), pBasicFormater( NULL ) {}
     ~SbxAppData();

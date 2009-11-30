@@ -146,6 +146,9 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD2) == css::awt::KeyModifier::MOD2)
         pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD2, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
 
+    if ((aKey.Modifiers & css::awt::KeyModifier::MOD3) == css::awt::KeyModifier::MOD3)
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD3, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
+
     xConfig->ignorableWhitespace(::rtl::OUString());
     xConfig->startElement(AL_ELEMENT_ITEM, xAttribs);
     xConfig->ignorableWhitespace(::rtl::OUString());

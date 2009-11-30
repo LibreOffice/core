@@ -99,13 +99,13 @@ MyBasic::MyBasic() : StarBASIC()
 
     // AB-Uno-Test
 #ifdef unotest
-    // Uno-Service-Manager holenReflection Service bolen
-    createAndSetDefaultServiceManager();        // spaeter schon erledigt
+    // Get Uno-Service-Manager and Reflection Service
+    createAndSetDefaultServiceManager();        // done later
 
-    // Uno-Test-Objekt holen
+    // Get Uno-Test-Object
     UsrAny aObjAny = getIntrospectionTestObject();
 
-    // Objekt verpacken in ein SbUnoObject packen
+    // Box object into SbUnoObject
     String aName( "UnoObject" );
     SbxObjectRef xSbUnoObj = GetSbUnoObject( aName, aObjAny );
     //SbxObjectRef xSbUnoObj = new SbUnoObject( aName, aObjAny );
@@ -161,9 +161,9 @@ void MyBasic::LoadIniFile()
 
 SbTextType MyBasic::GetSymbolType( const String &rSymbol, BOOL bWasTTControl )
 {
-    (void) rSymbol; /* avoid warning about unused parameter */
+    (void) rSymbol;       /* avoid warning about unused parameter */
     (void) bWasTTControl; /* avoid warning about unused parameter */
-    return SB_SYMBOL;   // Alles was hier landet ist vom Typ SB_SYMBOL und bleibt es auch
+    return SB_SYMBOL;     // Everything here is of type SB_SYMBOL and continues to be so
 }
 
 
@@ -194,7 +194,7 @@ BOOL MyBasic::ErrorHdl()
 {
     AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( GetActiveModule()->GetName() );
     if( !pWin )
-    {       // erstmal Fenster aufmachen
+    {       // open a window
         pWin = aBasicApp.pFrame->CreateModuleWin( GetActiveModule() );
     }
     else
@@ -207,7 +207,7 @@ BOOL MyBasic::ErrorHdl()
               0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() ),
               LIST_APPEND );
         nError++;
-        return BOOL( nError < 20 ); // Abbruch nach 20 Fehlern
+        return BOOL( nError < 20 ); // Cancel after 20 errors
     }
     else
     {
@@ -246,7 +246,7 @@ USHORT MyBasic::BreakHdl()
     {
         AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( pMod->GetName() );
         if( !pWin )
-        {       // erstmal Fenster aufmachen
+        {       // open a window
             pWin = aBasicApp.pFrame->CreateModuleWin( pMod );
         }
         else
@@ -254,7 +254,7 @@ USHORT MyBasic::BreakHdl()
         pWin->Highlight( GetLine(), GetCol1(), GetCol2() );
     }
 
-    if( IsBreak() ) // Wenn Breakpoint (oder "Run to Cursor")
+    if( IsBreak() ) // If Breakpoint (or "Run to Cursor")
     {
 //      if ( GetActiveModule()->IsBP(GetLine()) )
 //          GetActiveModule()->ClearBP(GetLine());
@@ -268,7 +268,7 @@ USHORT MyBasic::BreakHdl()
 
 /***************************************************************************
 |*
-|*                          class BasicError
+|*    class BasicError
 |*
 ***************************************************************************/
 
@@ -290,16 +290,18 @@ BasicError::BasicError
         aText = r;
 }
 
-// Dies ist ein Beispiel, wie die Fehler-Information geschickt
-// aufgebaut werden kann, um ein Statement zu highlighten.
-
+// This is a sample how to build the error information
+// to highlight a statement
 void BasicError::Show()
 {
-    if( pWin && aBasicApp.pFrame->IsWinValid( pWin ) ) {
+    if( pWin && aBasicApp.pFrame->IsWinValid( pWin ) )
+    {
         pWin->Highlight( nLine, nCol1, nCol2 );
         aBasicApp.pFrame->pStatus->Message( aText );
-    } else MessBox( aBasicApp.pFrame, WB_OK, aBasicApp.pFrame->GetText(),
-                    aText ).Execute();
+    }
+    else
+        MessBox( aBasicApp.pFrame, WB_OK, aBasicApp.pFrame->GetText(),
+                 aText ).Execute();
 }
 
 

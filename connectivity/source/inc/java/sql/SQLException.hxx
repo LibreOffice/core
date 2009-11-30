@@ -53,10 +53,8 @@ namespace connectivity
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_sql_SQLException_BASE();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_SQLException_BASE( JNIEnv * pEnv, jobject myObj );
@@ -64,6 +62,8 @@ namespace connectivity
         ::rtl::OUString getSQLState() const;
         sal_Int32       getErrorCode() const;
         starsdbc::SQLException getNextException() const;
+
+        static jclass st_getMyClass();
     };
 
 }

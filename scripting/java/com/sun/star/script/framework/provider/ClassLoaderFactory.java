@@ -30,13 +30,7 @@
 
 package com.sun.star.script.framework.provider;
 
-import java.util.ArrayList;
-import java.util.Vector;
-import java.io.File;
-import java.io.IOException;
 import java.net.*;
-import com.sun.star.frame.XModel;
-import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.container.ScriptMetaData;

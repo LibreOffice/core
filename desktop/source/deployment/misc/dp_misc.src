@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: dp_misc.src,v $
- * $Revision: 1.6 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -32,4 +29,12 @@
 
 String RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN {
     Text[en-US] = "Unknown";
+};
+
+String RID_DEPLYOMENT_DEPENDENCIES_MIN {
+    Text[en-US] = "Extensions requires at least OpenOffice.org %VERSION";
+};
+
+String RID_DEPLYOMENT_DEPENDENCIES_MAX {
+    Text[en-US] = "Extension doesn't support versions greater than: OpenOffice.org %VERSION";
 };

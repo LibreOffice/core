@@ -451,9 +451,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 // the logic below is following, if the document seems not to need to be reloaded and the physical name is different
                 // to the logical one, then on file system it can be checked that the copy is still newer than the original and no document reload is required
-                if ( ( !bNeedsReload && ( aMedObj.GetProtocol() == INET_PROT_FILE &&
+                if ( ( !bNeedsReload && ( (aMedObj.GetProtocol() == INET_PROT_FILE &&
                         aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
-                        SfxContentHelper::IsYounger( aPhysObj.GetMainURL( INetURLObject::NO_DECODE ), aMedObj.GetMainURL( INetURLObject::NO_DECODE ) )
+                        SfxContentHelper::IsYounger( aPhysObj.GetMainURL( INetURLObject::NO_DECODE ), aMedObj.GetMainURL( INetURLObject::NO_DECODE ) ))
                       || pMed->IsRemote() ) )
                    || pVersionItem )
                 {

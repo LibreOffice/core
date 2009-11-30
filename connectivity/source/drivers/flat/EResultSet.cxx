@@ -87,7 +87,7 @@ Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType ) throw(RuntimeE
         || rType == ::getCppuType((const Reference<XRowUpdate>*)0))
         return Any();
 
-    Any aRet = OResultSet::queryInterface(rType);
+    const Any aRet = OResultSet::queryInterface(rType);
     return aRet.hasValue() ? aRet : OFlatResultSet_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
@@ -117,10 +117,9 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException)
 Any SAL_CALL OFlatResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 {
      ::osl::MutexGuard aGuard( m_aMutex );
-        checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-        return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
+    return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
