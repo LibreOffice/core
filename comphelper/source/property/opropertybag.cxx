@@ -35,6 +35,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/Property.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 
@@ -46,13 +47,6 @@
 
 
 //--------------------------------------------------------------------------
-#if 0
-extern "C" void SAL_CALL createRegistryInfo_OPropertyBag()
-{
-    static ::comphelper::OAutoRegistration< ::comphelper::OPropertyBag > aAutoRegistration;
-}
-#endif
-
 using namespace ::com::sun::star;
 
 uno::Sequence< ::rtl::OUString > SAL_CALL PropertyBag_getSupportedServiceNames() throw()
@@ -79,6 +73,7 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::container;
 
     //====================================================================
     //= OPropertyBag
@@ -235,6 +230,73 @@ namespace comphelper
     Reference< XPropertySetInfo > SAL_CALL OPropertyBag::getPropertySetInfo(  ) throw(RuntimeException)
     {
         return createPropertySetInfo( getInfoHelper() );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL OPropertyBag::has( const Any& /*aElement*/ ) throw (RuntimeException)
+    {
+        // XSet is only a workaround for addProperty not being able to add default-void properties.
+        // So, everything of XSet except insert is implemented empty
+        return sal_False;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OPropertyBag::insert( const Any& _element ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
+    {
+        // This is a workaround for addProperty not being able to add default-void properties.
+        // If we ever have a smarter XPropertyContainer::addProperty interface, we can remove this, ehm, well, hack.
+        Property aProperty;
+        if ( !( _element >>= aProperty ) )
+            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        // check whether the type is allowed, everything else will be checked
+        // by m_aDynamicProperties
+        if  (   !m_aAllowedTypes.empty()
+            &&  m_aAllowedTypes.find( aProperty.Type ) == m_aAllowedTypes.end()
+            )
+            throw IllegalTypeException( ::rtl::OUString(), *this );
+
+        m_aDynamicProperties.addVoidProperty( aProperty.Name, aProperty.Type, findFreeHandle(), aProperty.Attributes );
+
+        // our property info is dirty
+        m_pArrayHelper.reset();
+
+        setModified(sal_True);
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OPropertyBag::remove( const Any& /*aElement*/ ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+    {
+        // XSet is only a workaround for addProperty not being able to add default-void properties.
+        // So, everything of XSet except insert is implemented empty
+        throw NoSuchElementException( ::rtl::OUString(), *this );
+    }
+
+
+    //--------------------------------------------------------------------
+    Reference< XEnumeration > SAL_CALL OPropertyBag::createEnumeration(  ) throw (RuntimeException)
+    {
+        // XSet is only a workaround for addProperty not being able to add default-void properties.
+        // So, everything of XSet except insert is implemented empty
+        return NULL;
+    }
+
+    //--------------------------------------------------------------------
+    Type SAL_CALL OPropertyBag::getElementType(  ) throw (RuntimeException)
+    {
+        // XSet is only a workaround for addProperty not being able to add default-void properties.
+        // So, everything of XSet except insert is implemented empty
+        return Type();
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL OPropertyBag::hasElements(  ) throw (RuntimeException)
+    {
+        // XSet is only a workaround for addProperty not being able to add default-void properties.
+        // So, everything of XSet except insert is implemented empty
+        return sal_False;
     }
 
     //--------------------------------------------------------------------

@@ -40,7 +40,7 @@
 
 namespace
 {
-    static const ::rtl::OUString s_sData                     = ::rtl::OUString::createFromAscii("org.openoffice.UserProfile/Data"); 
+    static const ::rtl::OUString s_sData                     = ::rtl::OUString::createFromAscii("org.openoffice.UserProfile/Data");
     static const ::rtl::OUString s_so                        = ::rtl::OUString::createFromAscii("o"); // USER_OPT_COMPANY
     static const ::rtl::OUString s_sgivenname                = ::rtl::OUString::createFromAscii("givenname"); // USER_OPT_FIRSTNAME
     static const ::rtl::OUString s_ssn                       = ::rtl::OUString::createFromAscii("sn"); // USER_OPT_LASTNAME

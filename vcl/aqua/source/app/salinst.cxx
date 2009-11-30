@@ -178,7 +178,6 @@ static void initNSApp()
     // get System Version and store the value in GetSalData()->mnSystemVersion
     [NSApp getSystemVersionMajor: (unsigned int *)major minor:(unsigned int *)minor bugFix:(unsigned int *)bugFix ];
 
-// -----------------------------------------------------------------------------------------------------------------
      // Initialize Apple Remote
     GetSalData()->mpMainController = [[MainController alloc] init];
 
@@ -191,13 +190,9 @@ static void initNSApp()
                                            selector: @selector(applicationWillResignActive:)
                                            name: @"AppleRemoteWillResignActive"
                                            object: nil ];
-// -----------------------------------------------------------------------------------------------------------------
 
-    if( AquaSalInstance::isOnCommandLine( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "-enableautomation" ) ) ) )
-    {
+    if( ImplGetSVData()->mbIsTestTool )
         [NSApp activateIgnoringOtherApps: YES];
-        GetSalData()->mbIsTestTool = true;
-    }
 }
 
 BOOL ImplSVMainHook( BOOL * pbInit )

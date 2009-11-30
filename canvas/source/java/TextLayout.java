@@ -28,18 +28,8 @@
  *
  ************************************************************************/
 
-// UNO
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.lib.uno.helper.WeakBase;
-
-// OOo AWT
-import com.sun.star.awt.*;
-
 // Canvas
 import com.sun.star.rendering.*;
-import com.sun.star.geometry.*;
 
 public class TextLayout
     extends com.sun.star.lib.uno.helper.ComponentBase

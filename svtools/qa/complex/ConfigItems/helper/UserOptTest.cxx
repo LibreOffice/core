@@ -72,41 +72,41 @@ UserOptTest::~UserOptTest()
 
 void UserOptTest::impl_checkUserData()
 {
-    impl_checkSetCompany( ::rtl::OUString() );    
-    impl_checkSetFirstName( ::rtl::OUString() ); 
-    impl_checkSetLastName( ::rtl::OUString() );    
-    impl_checkSetID( ::rtl::OUString() );       
-    impl_checkSetStreet( ::rtl::OUString() );   
-    impl_checkSetCity( ::rtl::OUString() );   
-    impl_checkSetState( ::rtl::OUString() );     
-    impl_checkSetZip( ::rtl::OUString() );     
+    impl_checkSetCompany( ::rtl::OUString() );
+    impl_checkSetFirstName( ::rtl::OUString() );
+    impl_checkSetLastName( ::rtl::OUString() );
+    impl_checkSetID( ::rtl::OUString() );
+    impl_checkSetStreet( ::rtl::OUString() );
+    impl_checkSetCity( ::rtl::OUString() );
+    impl_checkSetState( ::rtl::OUString() );
+    impl_checkSetZip( ::rtl::OUString() );
     impl_checkSetCountry( ::rtl::OUString() );
     impl_checkSetPosition( ::rtl::OUString() );
-    impl_checkSetTitle( ::rtl::OUString() );     
+    impl_checkSetTitle( ::rtl::OUString() );
     impl_checkSetTelephoneHome( ::rtl::OUString() );
     impl_checkSetTelephoneWork( ::rtl::OUString() );
-    impl_checkSetFax( ::rtl::OUString() ); 
+    impl_checkSetFax( ::rtl::OUString() );
     impl_checkSetEmail( ::rtl::OUString() );
-    //impl_checkSetCustomerNumber( ::rtl::OUString() );  
+    //impl_checkSetCustomerNumber( ::rtl::OUString() );
     impl_checkSetFathersName( ::rtl::OUString() );
     impl_checkSetApartment( ::rtl::OUString() );
 
-    impl_checkSetCompany( ::rtl::OUString::createFromAscii("RedFlag2000") );    
-    impl_checkSetFirstName( ::rtl::OUString::createFromAscii("Yan") ); 
-    impl_checkSetLastName( ::rtl::OUString::createFromAscii("Wu") );    
-    impl_checkSetID( ::rtl::OUString::createFromAscii("wuy") );       
-    impl_checkSetStreet( ::rtl::OUString::createFromAscii("SouthFifthRing") );   
-    impl_checkSetCity( ::rtl::OUString::createFromAscii("Beijing") );   
-    impl_checkSetState( ::rtl::OUString::createFromAscii("Beijing") );     
-    impl_checkSetZip( ::rtl::OUString::createFromAscii("100176") );     
+    impl_checkSetCompany( ::rtl::OUString::createFromAscii("RedFlag2000") );
+    impl_checkSetFirstName( ::rtl::OUString::createFromAscii("Yan") );
+    impl_checkSetLastName( ::rtl::OUString::createFromAscii("Wu") );
+    impl_checkSetID( ::rtl::OUString::createFromAscii("wuy") );
+    impl_checkSetStreet( ::rtl::OUString::createFromAscii("SouthFifthRing") );
+    impl_checkSetCity( ::rtl::OUString::createFromAscii("Beijing") );
+    impl_checkSetState( ::rtl::OUString::createFromAscii("Beijing") );
+    impl_checkSetZip( ::rtl::OUString::createFromAscii("100176") );
     impl_checkSetCountry( ::rtl::OUString::createFromAscii("China") );
     impl_checkSetPosition( ::rtl::OUString::createFromAscii("Engineer") );
-    impl_checkSetTitle( ::rtl::OUString::createFromAscii("Software Engineer") );     
+    impl_checkSetTitle( ::rtl::OUString::createFromAscii("Software Engineer") );
     impl_checkSetTelephoneHome( ::rtl::OUString::createFromAscii("010-51570010") );
     impl_checkSetTelephoneWork( ::rtl::OUString::createFromAscii("010-51570010") );
-    impl_checkSetFax( ::rtl::OUString::createFromAscii("010-51570010") ); 
+    impl_checkSetFax( ::rtl::OUString::createFromAscii("010-51570010") );
     impl_checkSetEmail( ::rtl::OUString::createFromAscii("wuy@redflag2000.cn") );
-    //impl_checkSetCustomerNumber( ::rtl::OUString::createFromAscii("87654321") );  
+    //impl_checkSetCustomerNumber( ::rtl::OUString::createFromAscii("87654321") );
     impl_checkSetFathersName( ::rtl::OUString::createFromAscii("father") );
     impl_checkSetApartment( ::rtl::OUString::createFromAscii("apartment") );
 }

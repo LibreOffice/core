@@ -91,6 +91,54 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    namespace
+    {
+        void    lcl_checkForEmptyName( const bool _allowEmpty, const ::rtl::OUString& _name )
+        {
+            if ( !_allowEmpty && !_name.getLength() )
+                throw IllegalArgumentException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The property name must not be empty." ) ),
+                        // TODO: resource
+                        NULL,
+                        1
+                      );
+        }
+
+        void    lcl_checkNameAndHandle( const ::rtl::OUString& _name, const sal_Int32 _handle, const PropertyBag& _container )
+        {
+            if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
+                throw PropertyExistException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property name or handle already used." ) ),
+                    // TODO: resource
+                    NULL );
+
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void PropertyBag::addVoidProperty( const ::rtl::OUString& _rName, const Type& _rType, sal_Int32 _nHandle, sal_Int32 _nAttributes )
+    {
+        if ( _rType.getTypeClass() == TypeClass_VOID )
+            throw IllegalArgumentException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal property type: VOID" ) ),
+                        // TODO: resource
+                    NULL,
+                    1
+                  );
+
+        // check name/handle sanity
+        lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
+        lcl_checkNameAndHandle( _rName, _nHandle, *this );
+
+        // register the property
+        OSL_ENSURE( _nAttributes & PropertyAttribute::MAYBEVOID, "PropertyBag::addVoidProperty: this is for default-void properties only!" );
+        registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, NULL );
+
+        // remember the default
+        m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, Any() ) );
+    }
+
+    //--------------------------------------------------------------------
     void PropertyBag::addProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Any& _rInitialValue )
     {
         // check type sanity
@@ -102,17 +150,8 @@ namespace comphelper
                 NULL );
 
         // check name/handle sanity
-        if ( !m_pImpl->m_bAllowEmptyPropertyName && !_rName.getLength() )
-            throw IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The property name must not be empty." ) ),
-            // TODO: resource
-            NULL,
-            1 );
-        if ( isRegisteredProperty( _rName ) || isRegisteredProperty( _nHandle ) )
-            throw PropertyExistException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property name or handle already used." ) ),
-                // TODO: resource
-                NULL );
+        lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
+        lcl_checkNameAndHandle( _rName, _nHandle, *this );
 
         // register the property
         registerPropertyNoMember( _rName, _nHandle, _nAttributes, aPropertyType,

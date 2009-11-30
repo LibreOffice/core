@@ -74,14 +74,13 @@
 #include <ft2lib.h>
 #endif
 
-#ifndef __SUBFONT_H
-#include <list.h>
-#include <sft.h>
-#endif
+#include "sft.hxx"
 
 #ifdef GCP_KERN_HACK
 #include <algorithm>
 #endif
+
+using namespace vcl;
 
 // -----------
 // - Inlines -
@@ -1755,3 +1754,21 @@ void Os2SalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 
 //--------------------------------------------------------------------------
 
+SystemFontData Os2SalGraphics::GetSysFontData( int nFallbacklevel ) const
+{
+    SystemFontData aSysFontData;
+
+    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
+    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+
+    aSysFontData.nSize = sizeof( SystemFontData );
+    aSysFontData.hFont = mhFonts[nFallbacklevel];
+    aSysFontData.bFakeBold = false;
+    aSysFontData.bFakeItalic = false;
+    aSysFontData.bAntialias = true;
+    aSysFontData.bVerticalCharacterType = false;
+
+    return aSysFontData;
+}
+
+//--------------------------------------------------------------------------

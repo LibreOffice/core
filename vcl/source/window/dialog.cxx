@@ -347,7 +347,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
         {
             mpWindowImpl->mbFrame         = TRUE;
             mpWindowImpl->mbOverlapWin    = TRUE;
-            SystemWindow::ImplInit( pParent, nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE) | WB_CLOSEABLE, NULL );
+            SystemWindow::ImplInit( pParent, (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE)) | WB_CLOSEABLE, NULL );
             // Now set all style bits
             mpWindowImpl->mnStyle = nStyle;
         }

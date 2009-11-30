@@ -174,21 +174,7 @@ extern "C"
         pSalData->Init();
         pSalData->initNWF();
 
-        const char* pGtkModules = getenv( "GTK_MODULES" );
-        if( pGtkModules )
-        {
-            rtl::OString aModules( pGtkModules );
-            sal_Int32 nIndex = 0;
-            while( nIndex >= 0 )
-            {
-                rtl::OString aToken = aModules.getToken( 0, ':', nIndex );
-                if( aToken.equals( "gail" ) || aToken.equals( "atk-bridge" ) )
-                {
-                    InitAtkBridge();
-                    break;
-                }
-            }
-        }
+        InitAtkBridge();
 
         return pInstance;
     }

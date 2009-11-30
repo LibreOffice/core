@@ -50,6 +50,7 @@
 #include "pspgraphics.h"
 #include "salvd.h"
 #include "xfont.hxx"
+#include <vcl/sysdata.hxx>
 #include "xlfd_attr.hxx"
 #include "xlfd_smpl.hxx"
 #include "xlfd_extd.hxx"
@@ -797,7 +798,11 @@ CairoWrapper::CairoWrapper()
     if( !XQueryExtension( GetX11SalData()->GetDisplay()->GetDisplay(), "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
+#ifdef MACOSX
+    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.2.dylib" ));
+#else
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
+#endif
     mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
     if( !mpCairoLib )
         return;
@@ -1699,6 +1704,31 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         pLayout = NULL;
 
     return pLayout;
+}
+
+//--------------------------------------------------------------------------
+
+SystemFontData X11SalGraphics::GetSysFontData( int nFallbacklevel ) const
+{
+    SystemFontData aSysFontData;
+    aSysFontData.nSize = sizeof( SystemFontData );
+    aSysFontData.nFontId = 0;
+
+    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
+    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+
+    if (mpServerFont[nFallbacklevel] != NULL)
+    {
+        ServerFont* rFont = mpServerFont[nFallbacklevel];
+        aSysFontData.nFontId = rFont->GetFtFace();
+        aSysFontData.nFontFlags = rFont->GetLoadFlags();
+        aSysFontData.bFakeBold = rFont->NeedsArtificialBold();
+        aSysFontData.bFakeItalic = rFont->NeedsArtificialItalic();
+        aSysFontData.bAntialias = rFont->GetAntialiasAdvice();
+        aSysFontData.bVerticalCharacterType = rFont->GetFontSelData().mbVertical;
+    }
+
+    return aSysFontData;
 }
 
 //--------------------------------------------------------------------------

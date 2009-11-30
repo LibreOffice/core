@@ -497,24 +497,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         }
     }
 
-    // Detect if images in menus are allowed or not
-    {
-        sal_Bool bTmp = sal_False, bUseImagesInMenus = sal_True;
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-            vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "org.openoffice.Office.Common/View/Menu" ) );    // note: case sensisitive !
-        if ( aNode.isValid() )
-        {
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ShowIconsInMenues" ) );
-            if( aValue >>= bTmp )
-                bUseImagesInMenus = bTmp;
-        }
-
-        aStyleSettings = rSettings.GetStyleSettings();
-        aStyleSettings.SetUseImagesInMenus( bUseImagesInMenus );
-        rSettings.SetStyleSettings( aStyleSettings );
-    }
-
 #ifdef DBG_UTIL
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
     // ob fuer die Texte auf anderen Systemen genuegend Platz
@@ -2541,12 +2523,15 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, USHORT nFlags )
     if ( !ImplIsOverlapWindow() )
     {
         Window* pTempWindow = this;
+        USHORT nTranspPaint = IsPaintTransparent() ? IMPL_PAINT_PAINT : 0;
         do
         {
             pTempWindow = pTempWindow->ImplGetParent();
             if ( pTempWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDS )
                 break;
-            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDS;
+            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDS | nTranspPaint;
+            if( ! pTempWindow->IsPaintTransparent() )
+                nTranspPaint = 0;
         }
         while ( !pTempWindow->ImplIsOverlapWindow() );
     }
@@ -6526,7 +6511,10 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 
             if ( !mpWindowImpl->mbFrame )
             {
-                ImplInvalidate( NULL, INVALIDATE_NOTRANSPARENT | INVALIDATE_CHILDREN );
+                USHORT nInvalidateFlags = INVALIDATE_CHILDREN;
+                if( ! IsPaintTransparent() )
+                    nInvalidateFlags |= INVALIDATE_NOTRANSPARENT;
+                ImplInvalidate( NULL, nInvalidateFlags );
                 ImplGenerateMouseMove();
             }
         }

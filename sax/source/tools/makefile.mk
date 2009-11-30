@@ -52,14 +52,12 @@ SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
 
 SHL1STDLIBS= \
-                $(VOSLIB)		\
                 $(CPPULIB)		\
                 $(CPPUHELPERLIB)\
                 $(COMPHELPERLIB)\
                 $(RTLLIB)		\
                 $(SALLIB)		\
-                $(ONELIB)		\
-                $(SALHELPERLIB)
+                $(ONELIB)
 
 SHL1DEPN=
 SHL1OBJS=       $(SLOFILES)

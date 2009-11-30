@@ -794,6 +794,15 @@ void Button::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+void Button::SetSmallSymbol (bool small)
+{
+    ImplSetSmallSymbol (small);
+}
+
+bool Button::IsSmallSymbol () const
+{
+    return mpButtonData->mbSmallSymbol;
+}
 
 // =======================================================================
 
@@ -1964,7 +1973,12 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
     Size aSize;
 
     if ( IsSymbol() )
-        aSize = Size( 12, 12 );
+    {
+        if ( IsSmallSymbol ())
+            aSize = Size( 16, 12 );
+        else
+            aSize = Size( 26, 24 );
+    }
     else if ( IsImage() && ! (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) )
         aSize = GetModeImage().GetSizePixel();
     if ( PushButton::GetText().Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )

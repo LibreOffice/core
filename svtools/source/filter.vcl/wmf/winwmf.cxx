@@ -276,7 +276,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
         case W_META_ROUNDRECT:
         {
             Size aSize( ReadYXExt() );
-            pOut->DrawRoundRect( ReadRectangle(), aSize );
+            pOut->DrawRoundRect( ReadRectangle(), Size( aSize.Width() / 2, aSize.Height() / 2 ) );
         }
         break;
 
@@ -290,7 +290,9 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
         {
             Point aEnd( ReadYX() );
             Point aStart( ReadYX() );
-            pOut->DrawArc( ReadRectangle(), aStart, aEnd );
+            Rectangle aRect( ReadRectangle() );
+            aRect.Justify();
+            pOut->DrawArc( aRect, aStart, aEnd );
         }
         break;
 
@@ -299,6 +301,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
             Point     aEnd( ReadYX() );
             Point     aStart( ReadYX() );
             Rectangle aRect( ReadRectangle() );
+            aRect.Justify();
 
             // #i73608# OutputDevice deviates from WMF
             // semantics. start==end means full ellipse here.
@@ -313,7 +316,9 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
         {
             Point aEnd( ReadYX() );
             Point aStart( ReadYX() );
-            pOut->DrawChord( ReadRectangle(), aStart, aEnd );
+            Rectangle aRect( ReadRectangle() );
+            aRect.Justify();
+            pOut->DrawChord( aRect, aStart, aEnd );
         }
         break;
 

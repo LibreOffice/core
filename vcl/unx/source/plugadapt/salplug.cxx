@@ -37,9 +37,9 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <svunx.h>
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xatom.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <vcl/salinst.hxx>
 #include <saldata.hxx>
@@ -101,21 +101,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                  */
                 if( rModuleBase.equalsAscii("gtk") )
                 {
-                    const char* gtk_modules = getenv( "GTK_MODULES" );
-                    if( gtk_modules )
-                    {
-                        rtl::OString aModules( gtk_modules );
-                        sal_Int32 nIndex = 0;
-                        while( nIndex >= 0 )
-                        {
-                            rtl::OString aToken = aModules.getToken( 0, ':', nIndex );
-                            if( aToken.equals( "atk-bridge" ) )
-                            {
-                                pCloseModule = NULL;
-                                break;
-                            }
-                        }
-                    }
+                    pCloseModule = NULL;
                 }
 
                 GetSalData()->m_pPlugin = aMod;

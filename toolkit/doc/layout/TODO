@@ -4,6 +4,11 @@
 ** Move everything & development into new layout-dialogs CWS
 
 ** cleanups
+*** Add XRadioButton2 and layout::VCLXRadioButton with
+    {get,set}RadioGroup.  Remove import.cxx RadioGroups::RadioGroup,
+    VCLXRadioButton::getFirstActionListener () and [actionListener
+    juggling in] layout::RadioButton_impl::SetClickHdl() and
+    EnableRadioCheck() layout::RadioButton_impl::Check.
 *** layout/import.hxx: what's this generator stuff?
 #if 0
 // generator
@@ -87,7 +92,6 @@ but keep using yes/no on Windows, eg?
 *** remove -DTEST_LAYOUT=1 from util/makefile.mk?
 
 ** fixes
-*** mpRadioGroup HACK --> use radiogroup property
 *** missing properties
 	'title' -> 'Set Zoom'
 Missing prop Title
@@ -102,12 +106,18 @@ fHorAlign = fVerAlign = 0.5; --> float const [CENTER?] = 0.5;
 
 ** include full translations
 *** zoom
-grep zoom.src svx/source/dialog/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "janneke\\vc\\layout-cws\\toolkit\\workben\\layout\\zoom.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/FL_\(ZOOM\)_label/FL_\1_text/' -e 's/\t_label/\tRID_SVXDLG_ZOOM_title/'
-**** done, except for View Layout update: no strings in localize.sdf yet,
-     must redo.
+grep zoom.src svx/source/dialog/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "janneke\\vc\\layout-cws\\toolkit\\workben\\layout\\zoom.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tRID_SVXDLG_ZOOM_title/' 
 *** wordcount
 grep wordcountdialog.src sw/source/ui/dialog/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "janneke\\vc\\layout-cws\\toolkit\\workben\\layout\\workben.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/FL_\([A-Z]*\)_label/FL_\1_text/' -e 's/\t_label/\tDLG_WORDCOUNT_title/'s
-
+*** sortdlg
+grep sortdlg.src ../../../sc/source/ui/src/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "janneke\\vc\\layout-cws\\toolkit\\workben\\layout\\sort-options.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tRID_SCDLG_SORT_title/' | grep -E '	(nl|de|en-US)	' > localize-str.sdf
+grep sortdlg.src sc/source/ui/src/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "sc\\uiconfig\\layout\\sort-options.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tRID_SCDLG_SORT_title/' > sc/uiconfig/layout/localize-sort-options.sdf
+*** insert-sheet
+grep instbdlg.src sc/source/ui/miscdlgs/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "sc\\uiconfig\\layout\\insert-sheet.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tRID_SCDLG_INSERT_TABLE_title/' > sc/uiconfig/layout/localize-insert-sheet.sdf
+*** move-copy-sheet
+grep -E 'miscdlgs.src.*(FT_DEST|FT_INSERT|STR_NEWDOC|RID_SCDLG_MOVETAB|BTN_COPY)' sc/source/ui/src/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "sc\\uiconfig\\layout\\move-copy-sheet.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tRID_SCDLG_MOVETAB_title/' > sc/uiconfig/layout/localize-move-copy-sheet.sdf
+*** find-and-replace
+grep srchdlg.src svx/source/dialog/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "svx\\uiconfig\\layout\\find-and-replace.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tRID_SVXDLG_SEARCH_title/' > svx/uiconfig/layout/localize-find-and-replace.sdf
 
 * i18n
     + forget java property files nonsense

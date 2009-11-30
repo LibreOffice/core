@@ -56,13 +56,7 @@ SHL1STDLIBS=\
             $(VCLLIB)\
             $(BASEBMPLIB)\
             $(BASEGFXLIB)\
-            $(SOTLIB)           \
-            $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
-            $(COMPHELPERLIB)    \
-            $(UCBHELPERLIB)     \
-            $(CPPUHELPERLIB)    \
-            $(CPPULIB)          \
             $(VOSLIB)           \
             $(SALLIB)
 .ENDIF # GUIBASE unx

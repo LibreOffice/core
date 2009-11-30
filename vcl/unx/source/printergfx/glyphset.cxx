@@ -34,9 +34,7 @@
 #include "glyphset.hxx"
 #include "psputil.hxx"
 
-#define NO_LIST
-#include "sft.h"
-#undef NO_LIST
+#include "sft.hxx"
 
 #include "vcl/printergfx.hxx"
 #include "vcl/fontmanager.hxx"
@@ -51,6 +49,7 @@
 #include <set>
 #include <map>
 
+using namespace vcl;
 using namespace psp;
 using namespace rtl;
 

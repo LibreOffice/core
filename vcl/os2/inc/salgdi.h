@@ -328,6 +328,7 @@ public:
     virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
 
     virtual SystemGraphicsData GetGraphicsData() const;
+    virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
 };
 
 // Init/Deinit Graphics

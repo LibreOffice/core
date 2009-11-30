@@ -86,8 +86,6 @@ class RTSDialog : public TabDialog
 
     // helper functions
     void insertAllPPDValues( ListBox&, const ::psp::PPDKey* );
-
-    String getPaperSize();
 public:
     RTSDialog( const ::psp::PrinterInfo& rJobData, const String& rPrinter, bool bAllPages, Window* pParent = NULL );
     ~RTSDialog();

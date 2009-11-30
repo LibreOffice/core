@@ -126,7 +126,7 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
+    ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
 }
 
 // -----------------------------------------------------------------------------
@@ -203,7 +203,7 @@ void GraphicObject::ImplAssignGraphicData()
 
 // -----------------------------------------------------------------------------
 
-void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const ByteString* pID )
+void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const ByteString* pID, const GraphicObject* pCopyObj )
 {
     if( !mpMgr || ( pMgr != mpMgr ) )
     {
@@ -235,7 +235,7 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const Byt
             else
                 mpMgr = (GraphicManager*) pMgr;
 
-            mpMgr->ImplRegisterObj( *this, maGraphic, pID );
+            mpMgr->ImplRegisterObj( *this, maGraphic, pID, pCopyObj );
         }
     }
 }
@@ -407,7 +407,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         mbAutoSwapped = FALSE;
         mpMgr = rGraphicObj.mpMgr;
 
-        mpMgr->ImplRegisterObj( *this, maGraphic, NULL );
+        mpMgr->ImplRegisterObj( *this, maGraphic, NULL, &rGraphicObj );
     }
 
     return *this;
@@ -889,7 +889,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic )
     delete mpLink, mpLink = NULL;
     delete mpSimpleCache, mpSimpleCache = NULL;
 
-    mpMgr->ImplRegisterObj( *this, maGraphic, NULL );
+    mpMgr->ImplRegisterObj( *this, maGraphic );
 
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();

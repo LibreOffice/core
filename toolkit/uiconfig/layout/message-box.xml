@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated xml files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<modaldialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             id="message-box" _title="" optimumsize="true"
+             has_border="true" sizeable="true" moveable="true" closeable="true">
+    <vbox border="5" spacing="5">
+    <hbox border="5" spacing="20">
+        <align cnt:expand="false" cnt:fill="true">
+        <fixedimage id="FI_ERROR" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="res/commandimagelist/msgbox-error.png" />
+        </align>
+        <align cnt:expand="false" cnt:fill="true">
+        <fixedimage id="FI_INFO" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="res/commandimagelist/msgbox-info.png" />
+        </align>
+        <align cnt:expand="false" cnt:fill="true">
+        <fixedimage id="FI_QUERY" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="res/commandimagelist/msgbox-query.png" />
+        </align>
+        <align cnt:expand="false" cnt:fill="true">
+        <fixedimage id="FI_WARNING" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="res/commandimagelist/msgbox-warning.png" />
+        </align>
+        <align cnt:expand="false" cnt:fill="true">
+        <fixedtext id="FT_MESSAGE" _label="FT-LABEL" cnt:v-align="0.5" cnt:v-fill="0" />
+        </align>
+        <flow/>
+    </hbox>
+    <dialogbuttonhbox border="0" spacing="5">
+        <flow/>
+        <!-- deprecoted vcl/MsgBox compatibility !-->
+        <retrybutton id="BTN_RETRY" />
+        <ignorebutton id="BTN_IGNORE" />
+
+        <yesbutton id="BTN_YES"/>
+        <cancelbutton id="BTN_CANCEL"/>
+        <helpbutton id="BTN_HELP"/>
+        <nobutton id="BTN_NO" xlabel="~Alternate"/>
+    </dialogbuttonhbox>
+    </vbox>
+</modaldialog>

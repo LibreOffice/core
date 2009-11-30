@@ -3703,10 +3703,17 @@ BOOL WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
             BYTE vkeycode   = LOBYTE(scan);
             BYTE shiftstate = HIBYTE(scan);
 
+            // Last argument is set to FALSE, because there's no decission made
+            // yet which key should be assigned to MOD3 modifier on Windows.
+            // Windows key - user's can be confused, because it should display
+            //               Windows menu (applies to both left/right key)
+            // Menu key    - this key is used to display context menu
+            // AltGr key   - probably it has no sense
             rKeyCode = KeyCode( ImplSalGetKeyCode( vkeycode ),
                 (shiftstate & 0x01) ? TRUE : FALSE,     // shift
                 (shiftstate & 0x02) ? TRUE : FALSE,     // ctrl
-                (shiftstate & 0x04) ? TRUE : FALSE );   // alt
+                (shiftstate & 0x04) ? TRUE : FALSE,     // alt
+                FALSE );
             bRet = TRUE;
         }
     }

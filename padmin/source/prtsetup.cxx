@@ -148,23 +148,6 @@ RTSDialog::~RTSDialog()
 
 // --------------------------------------------------------------------------
 
-String RTSDialog::getPaperSize()
-{
-    String aRet;
-    if( m_aJobData.m_pParser )
-    {
-        const PPDKey* pKey = m_aJobData.m_pParser->getKey( String::CreateFromAscii( "PageSize" ) );
-        if( pKey )
-        {
-            const PPDValue* pValue = m_aJobData.m_aContext.getValue( pKey );
-            aRet = pValue->m_aOption;
-        }
-    }
-    return aRet;
-}
-
-// --------------------------------------------------------------------------
-
 IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
 {
     if( pTabCtrl != &m_aTabControl )

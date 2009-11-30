@@ -127,7 +127,6 @@ def convert (file_name, options):
     lexer.includeDirs = options.include_path
     lexer.stopOnHeader = options.stopOnHeader
     lexer.debugMacro = options.debug_macro
-#     lexer.debug = True
     if options.debug_lexer:
         lexer.debug = True
         lexer.tokenize()
@@ -145,8 +144,8 @@ def convert (file_name, options):
     if options.debug_parser:
         parser.debug = True
         root = parser.parse()
-        print root.dump()
-        return
+        s = root.dump()
+        return s
 
     # Parse the tokens.
     root = parser.parse()
@@ -174,13 +173,18 @@ def post_process (s):
     """Make output directly usable by layout module."""
     s = re.sub ('(</?)([a-z]+)-([a-z]+)-([a-z]+)', r'\1\2\3\4', s)
     s = re.sub ('(</?)([a-z]+)-([a-z]+)', r'\1\2\3', s)
-    s = re.sub ('(<(radiobutton|(fixed(info|text)))[^>]*) text=', r'\1 label=', s)
+    s = re.sub ('(<(checkbox|(cancel|help|ignore|ok|push|more|no|radio|reset|retry|yes)button|(fixed(info|text)))[^>]*) text=', r'\1 label=', s)
     s = re.sub (' (height|width|x|y)="[0-9]*"', '', s)
+    s = re.sub (' (label|text|title)="', r' _\1="', s)
+    s = re.sub ('&([^m][^p]*[^;]*)', r'&amp;\1', s)
+    s = re.sub (' hide="(TRUE|true|1)"', ' show="false"', s)
 
     s = s.replace ('<modaldialog', '<modaldialog sizeable="true"')
     s = s.replace (' rid=', ' id=')
     s = s.replace (' border="true"', ' has_border="true"')
-    s = s.replace (' def-button="true"', ' default="true"')
+    s = s.replace (' def-button="true"', ' defbutton="true"')
+    s = s.replace (' drop-down="', ' dropdown="')
+    s = s.replace (' tab-stop="', ' tabstop="')
     return s
 
 XML_HEADER = '''<?xml version="1.0" encoding="UTF-8"?>

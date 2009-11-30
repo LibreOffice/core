@@ -47,6 +47,11 @@ struct ImplToolBoxPrivateData;
 class  ImplTrackRect;
 class  PopupMenu;
 
+namespace vcl
+{
+    class IImageListProvider;
+}
+
 // -------------------------
 // - ToolBoxCustomizeEvent -
 // -------------------------
@@ -299,6 +304,7 @@ private:
     SAL_DLLPRIVATE                 ToolBox (const ToolBox &);
     SAL_DLLPRIVATE        ToolBox& operator= (const ToolBox &);
 
+    SAL_DLLPRIVATE void            ImplUpdateImageList(); // called if StateChanged
 public:
     SAL_DLLPRIVATE void            ImplFloatControl( BOOL bStart, FloatingWindow* pWindow = NULL );
     SAL_DLLPRIVATE void            ImplDisableFlatButtons();
@@ -632,6 +638,8 @@ public:
 
     const Size&         GetDefaultImageSize() const;
     void                ChangeHighlight( USHORT nPos );
+
+    void SetImageListProvider(vcl::IImageListProvider* _pProvider);
 };
 
 inline void ToolBox::CheckItem( USHORT nItemId, BOOL bCheck )

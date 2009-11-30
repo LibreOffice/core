@@ -9,11 +9,11 @@ class DlgLayoutBuilder(object):
 
     def addWidget (self, elem):
         x, y = int(elem.getAttr('x')), int(elem.getAttr('y'))
-        if self.rows.has_key(y):
-            self.rows[y][x] = elem
-        else:
-            self.rows[y] = {}
-            self.rows[y][x] = elem
+        self.rows[y] = self.rows.get (y, {})
+        while self.rows[y].has_key(x):
+            y += 1
+            self.rows[y] = self.rows.get (y, {})
+        self.rows[y][x] = elem
 
     def build (self):
         root = Element('vbox')
@@ -53,6 +53,8 @@ class Boxer(object):
 
         newnode = Element(dlgnode.name)
         newnode.clone(dlgnode)
+        if dlgnode.name == 'string':
+            return newnode
         newnode.setAttr("xmlns", "http://openoffice.org/2007/layout")
         newnode.setAttr("xmlns:cnt", "http://openoffice.org/2007/layout/container")
         mx = DlgLayoutBuilder(newnode)

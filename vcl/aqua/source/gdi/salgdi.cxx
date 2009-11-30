@@ -36,8 +36,7 @@
 #include "salbmp.h"
 #include "salframe.h"
 #include "salcolorutils.hxx"
-#include "list.h"
-#include "sft.h"
+#include "sft.hxx"
 #include "salatsuifontutils.hxx"
 
 #include "vcl/impfont.hxx"
@@ -57,6 +56,8 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+
+using namespace vcl;
 
 typedef unsigned char Boolean; // copied from MacTypes.h, should be properly included
 typedef std::vector<unsigned char> ByteVector;
@@ -400,19 +401,8 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
         DBG_ERROR( "no screen found" );
     }
 
-    // equalize x- and y-resolution if they are close enough to prevent unneeded font stretching
-    if( (mnRealDPIX != mnRealDPIY)
-    &&  (10*mnRealDPIX < 13*mnRealDPIY) && (13*mnRealDPIX > 10*mnRealDPIY) )
-    {
-        mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
-    }
-    else // #i89650# workaround bogus device resolutions
-    {
-        if( mnRealDPIY < 72 )
-            mnRealDPIY = 72;
-        if( mnRealDPIX < mnRealDPIY ) // e.g. for TripleHead2Go only mnRealDPIX is off
-            mnRealDPIX = mnRealDPIY;
-    }
+    // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
+    mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
 
     mfFakeDPIScale = 1.0;
 }
@@ -2304,6 +2294,43 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long nDataLen )
     // TODO: implementing this only makes sense when the implementation of
     //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
     DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
+}
+
+// -----------------------------------------------------------------------
+
+SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
+{
+    SystemFontData aSysFontData;
+    OSStatus err;
+    aSysFontData.nSize = sizeof( SystemFontData );
+
+    // NOTE: Native ATSU font fallbacks are used, not the VCL fallbacks.
+    ATSUFontID fontId;
+    err = ATSUGetAttribute( maATSUStyle, kATSUFontTag, sizeof(fontId), &fontId, 0 );
+    if (err) fontId = 0;
+    aSysFontData.aATSUFontID = (void *) fontId;
+
+    Boolean bFbold;
+    err = ATSUGetAttribute( maATSUStyle, kATSUQDBoldfaceTag, sizeof(bFbold), &bFbold, 0 );
+    if (err) bFbold = FALSE;
+    aSysFontData.bFakeBold = (bool) bFbold;
+
+    Boolean bFItalic;
+    err = ATSUGetAttribute( maATSUStyle, kATSUQDItalicTag, sizeof(bFItalic), &bFItalic, 0 );
+    if (err) bFItalic = FALSE;
+    aSysFontData.bFakeItalic = (bool) bFItalic;
+
+    ATSUVerticalCharacterType aVerticalCharacterType;
+    err = ATSUGetAttribute( maATSUStyle, kATSUVerticalCharacterTag, sizeof(aVerticalCharacterType), &aVerticalCharacterType, 0 );
+    if (!err && aVerticalCharacterType == kATSUStronglyVertical) {
+        aSysFontData.bVerticalCharacterType = true;
+    } else {
+        aSysFontData.bVerticalCharacterType = false;
+    }
+
+    aSysFontData.bAntialias = !mbNonAntialiasedText;
+
+    return aSysFontData;
 }
 
 // -----------------------------------------------------------------------

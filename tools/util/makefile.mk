@@ -82,12 +82,10 @@ LIB1FILES+=  \
             $(SLB)$/misc.lib
 
 .IF "$(OS)"=="MACOSX"
-SHL1STDLIBS += $(UCBHELPERLIB) \
-            $(CPPULIB)	 \
+SHL1STDLIBS += $(CPPULIB)	 \
             $(ZLIB3RDLIB)
 .ELSE
 SHL1STDLIBS += $(ZLIB3RDLIB) \
-            $(UCBHELPERLIB) \
             $(CPPULIB)
 .ENDIF
 

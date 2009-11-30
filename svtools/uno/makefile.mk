@@ -60,13 +60,11 @@ SHL1LIBS=	\
 
 SHL1STDLIBS=\
     $(SVTOOLLIB) \
-    $(TKLIB) \
     $(VCLLIB) \
     $(SVLLIB) \
     $(UNOTOOLSLIB) \
     $(TOOLSLIB) \
     $(COMPHELPERLIB) \
-    $(VOSLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)

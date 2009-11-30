@@ -1,13 +1,10 @@
 The new OOo Canvas Framework
 ============================
 
-The new OpenOffice.org canvas framework is the successor of the
-system GUI and graphics backend VCL. It is planned for the
-OpenOffice.org 2.0 release, and currently ready in a first developer
-version, with X11, Java, and DirectX/GDI+ backends. This means, that
-basic functionality is available, supplying just as much features as
-to provide a VCL-equivalent feature set (except proper BiDi/CTL
-support).
+The new OpenOffice.org canvas framework is the successor of the system
+GUI and graphics backend VCL. Basic functionality is available,
+supplying just as much features as necessary to provide a
+VCL-equivalent feature set (except proper BiDi/CTL support).
 
 For migration purposes, the new canvas and VCL will be shipped with
 OpenOffice.org for quite some time, allowing a step-by-step adaptation

@@ -35,7 +35,7 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <box.hxx>
+#include <layout/core/box.hxx>
 #include <layout/layout-pre.hxx>
 
 class SvxRecoverDialog : public SfxModalDialog

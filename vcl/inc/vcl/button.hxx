@@ -103,6 +103,8 @@ public:
 
     void                SetFocusRect( const Rectangle& rFocusRect );
     const Rectangle&    GetFocusRect() const;
+    void SetSmallSymbol (bool bSmall=true);
+    bool IsSmallSymbol () const;
 };
 
 // --------------------

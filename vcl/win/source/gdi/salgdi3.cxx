@@ -34,6 +34,10 @@
 #include <string.h>
 #include <malloc.h>
 
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#include <vcl/sysdata.hxx>
 #include "tools/svwin.h"
 
 #include "wincomp.hxx"
@@ -64,8 +68,7 @@
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
 
-#include <list.h>
-#include <sft.h>
+#include "sft.hxx"
 
 #ifdef GCP_KERN_HACK
 #include <algorithm>
@@ -75,6 +78,8 @@
 #include <set>
 #include <map>
 
+
+using namespace vcl;
 
 static const int MAXFONTHEIGHT = 2048;
 
@@ -2846,5 +2851,28 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
 void WinSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {}
+
+//--------------------------------------------------------------------------
+
+SystemFontData WinSalGraphics::GetSysFontData( int nFallbacklevel ) const
+{
+    SystemFontData aSysFontData;
+
+    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
+    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+
+    aSysFontData.nSize = sizeof( SystemFontData );
+    aSysFontData.hFont = mhFonts[nFallbacklevel];
+    aSysFontData.bFakeBold = false;
+    aSysFontData.bFakeItalic = false;
+    aSysFontData.bAntialias = true;
+    aSysFontData.bVerticalCharacterType = false;
+
+    OSL_TRACE("\r\n:WinSalGraphics::GetSysFontData(): FontID: %p, Fallback level: %d",
+              aSysFontData.hFont,
+              nFallbacklevel);
+
+    return aSysFontData;
+}
 
 //--------------------------------------------------------------------------

@@ -37,12 +37,12 @@
 
 // include ---------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <tools/shl.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <stdio.h>
+#include <cstdio>
 
 namespace SVX {
 #include <svx/paraprev.hxx>        // Preview

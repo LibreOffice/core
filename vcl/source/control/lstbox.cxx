@@ -604,18 +604,18 @@ BOOL ListBox::IsDDAutoWidthEnabled() const
 
 void ListBox::SetDropDownLineCount( USHORT nLines )
 {
+    mnLineCount = nLines;
     if ( mpFloatWin )
-        mpFloatWin->SetDropDownLineCount( nLines );
+        mpFloatWin->SetDropDownLineCount( mnLineCount );
 }
 
 // -----------------------------------------------------------------------
 
 USHORT ListBox::GetDropDownLineCount() const
 {
-    USHORT nLines = 0;
     if ( mpFloatWin )
-        nLines = mpFloatWin->GetDropDownLineCount();
-    return nLines;
+        return mpFloatWin->GetDropDownLineCount();
+    return mnLineCount;
 }
 
 // -----------------------------------------------------------------------
@@ -1260,9 +1260,7 @@ Size ListBox::CalcMinimumSize() const
 {
     Size aSz;
     if ( !IsDropDownBox() )
-    {
-        aSz = mpImplLB->CalcSize( mpImplLB->GetEntryList()->GetEntryCount() );
-    }
+        aSz = mpImplLB->CalcSize (mnLineCount ? mnLineCount : mpImplLB->GetEntryList()->GetEntryCount());
     else
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();

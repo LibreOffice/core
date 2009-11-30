@@ -38,10 +38,6 @@
 #include <cairo-quartz.h>
 #include "postmac.h"
 
-#include <vcl/sysdata.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/virdev.hxx>
-
 namespace cairo {
 
     class QuartzSurface : public Surface

@@ -60,44 +60,44 @@ const sal_Int32 MAX_ENTITY_LEN( 8L );
 // <INPUT TYPE=xxx>
 static HTMLOptionEnum __READONLY_DATA aInputTypeOptEnums[] =
 {
-    { sHTML_IT_text,        HTML_IT_TEXT        },
-    { sHTML_IT_password,    HTML_IT_PASSWORD    },
-    { sHTML_IT_checkbox,    HTML_IT_CHECKBOX    },
-    { sHTML_IT_radio,       HTML_IT_RADIO       },
-    { sHTML_IT_range,       HTML_IT_RANGE       },
-    { sHTML_IT_scribble,    HTML_IT_SCRIBBLE    },
-    { sHTML_IT_file,        HTML_IT_FILE        },
-    { sHTML_IT_hidden,      HTML_IT_HIDDEN      },
-    { sHTML_IT_submit,      HTML_IT_SUBMIT      },
-    { sHTML_IT_image,       HTML_IT_IMAGE       },
-    { sHTML_IT_reset,       HTML_IT_RESET       },
-    { sHTML_IT_button,      HTML_IT_BUTTON      },
+    { OOO_STRING_SVTOOLS_HTML_IT_text,      HTML_IT_TEXT        },
+    { OOO_STRING_SVTOOLS_HTML_IT_password,  HTML_IT_PASSWORD    },
+    { OOO_STRING_SVTOOLS_HTML_IT_checkbox,  HTML_IT_CHECKBOX    },
+    { OOO_STRING_SVTOOLS_HTML_IT_radio,     HTML_IT_RADIO       },
+    { OOO_STRING_SVTOOLS_HTML_IT_range,     HTML_IT_RANGE       },
+    { OOO_STRING_SVTOOLS_HTML_IT_scribble,  HTML_IT_SCRIBBLE    },
+    { OOO_STRING_SVTOOLS_HTML_IT_file,      HTML_IT_FILE        },
+    { OOO_STRING_SVTOOLS_HTML_IT_hidden,    HTML_IT_HIDDEN      },
+    { OOO_STRING_SVTOOLS_HTML_IT_submit,    HTML_IT_SUBMIT      },
+    { OOO_STRING_SVTOOLS_HTML_IT_image,     HTML_IT_IMAGE       },
+    { OOO_STRING_SVTOOLS_HTML_IT_reset,     HTML_IT_RESET       },
+    { OOO_STRING_SVTOOLS_HTML_IT_button,    HTML_IT_BUTTON      },
     { 0,                    0                   }
 };
 
 // <TABLE FRAME=xxx>
 static HTMLOptionEnum __READONLY_DATA aTableFrameOptEnums[] =
 {
-    { sHTML_TF_void,    HTML_TF_VOID    },
-    { sHTML_TF_above,   HTML_TF_ABOVE   },
-    { sHTML_TF_below,   HTML_TF_BELOW   },
-    { sHTML_TF_hsides,  HTML_TF_HSIDES  },
-    { sHTML_TF_lhs,     HTML_TF_LHS     },
-    { sHTML_TF_rhs,     HTML_TF_RHS     },
-    { sHTML_TF_vsides,  HTML_TF_VSIDES  },
-    { sHTML_TF_box,     HTML_TF_BOX     },
-    { sHTML_TF_border,  HTML_TF_BOX     },
+    { OOO_STRING_SVTOOLS_HTML_TF_void,  HTML_TF_VOID    },
+    { OOO_STRING_SVTOOLS_HTML_TF_above, HTML_TF_ABOVE   },
+    { OOO_STRING_SVTOOLS_HTML_TF_below, HTML_TF_BELOW   },
+    { OOO_STRING_SVTOOLS_HTML_TF_hsides,    HTML_TF_HSIDES  },
+    { OOO_STRING_SVTOOLS_HTML_TF_lhs,       HTML_TF_LHS     },
+    { OOO_STRING_SVTOOLS_HTML_TF_rhs,       HTML_TF_RHS     },
+    { OOO_STRING_SVTOOLS_HTML_TF_vsides,    HTML_TF_VSIDES  },
+    { OOO_STRING_SVTOOLS_HTML_TF_box,       HTML_TF_BOX     },
+    { OOO_STRING_SVTOOLS_HTML_TF_border,    HTML_TF_BOX     },
     { 0,                0               }
 };
 
 // <TABLE RULES=xxx>
 static HTMLOptionEnum __READONLY_DATA aTableRulesOptEnums[] =
 {
-    { sHTML_TR_none,    HTML_TR_NONE    },
-    { sHTML_TR_groups,  HTML_TR_GROUPS  },
-    { sHTML_TR_rows,    HTML_TR_ROWS    },
-    { sHTML_TR_cols,    HTML_TR_COLS    },
-    { sHTML_TR_all,     HTML_TR_ALL     },
+    { OOO_STRING_SVTOOLS_HTML_TR_none,  HTML_TR_NONE    },
+    { OOO_STRING_SVTOOLS_HTML_TR_groups,    HTML_TR_GROUPS  },
+    { OOO_STRING_SVTOOLS_HTML_TR_rows,  HTML_TR_ROWS    },
+    { OOO_STRING_SVTOOLS_HTML_TR_cols,  HTML_TR_COLS    },
+    { OOO_STRING_SVTOOLS_HTML_TR_all,       HTML_TR_ALL     },
     { 0,                0               }
 };
 
@@ -930,7 +930,7 @@ int HTMLParser::_GetNextRawToken()
                 {
                     if( !bReadComment )
                     {
-                        if( aTok.CompareToAscii( sHTML_comment, 3 )
+                        if( aTok.CompareToAscii( OOO_STRING_SVTOOLS_HTML_comment, 3 )
                                 == COMPARE_EQUAL )
                         {
                             bReadComment = TRUE;
@@ -942,7 +942,7 @@ int HTMLParser::_GetNextRawToken()
                             // erstmal nicht so genau nehmen
                             bDone = bOffState && // '>'==nNextCh &&
                             COMPARE_EQUAL == ( bReadScript
-                                ? aTok.CompareToAscii(sHTML_script)
+                                ? aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_script)
                                 : aTok.CompareTo(aEndToken) );
                         }
                     }
@@ -958,13 +958,13 @@ int HTMLParser::_GetNextRawToken()
                     // ein Style-Sheet kann mit </STYLE>, </HEAD> oder
                     // <BODY> aughoehren
                     if( bOffState )
-                        bDone = aTok.CompareToAscii(sHTML_style)
+                        bDone = aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_style)
                                     == COMPARE_EQUAL ||
-                                aTok.CompareToAscii(sHTML_head)
+                                aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_head)
                                     == COMPARE_EQUAL;
                     else
                         bDone =
-                            aTok.CompareToAscii(sHTML_body) == COMPARE_EQUAL;
+                            aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_body) == COMPARE_EQUAL;
                 }
 
                 if( bDone )
@@ -2002,7 +2002,7 @@ FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
         return TRUE;
 
     // oder wir finden irgendwo ein <HTML> in den ersten 80 Zeichen
-    nStart = sCmp.Search( sHTML_html );
+    nStart = sCmp.Search( OOO_STRING_SVTOOLS_HTML_html );
     if( nStart!=STRING_NOTFOUND &&
         nStart>0 && '<'==sCmp.GetChar(nStart-1) &&
         nStart+4 < sCmp.Len() && '>'==sCmp.GetChar(nStart+4) )
@@ -2015,65 +2015,65 @@ FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
 BOOL HTMLParser::InternalImgToPrivateURL( String& rURL )
 {
     if( rURL.Len() < 19 || 'i' != rURL.GetChar(0) ||
-        rURL.CompareToAscii( sHTML_internal_gopher, 9 ) != COMPARE_EQUAL )
+        rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher, 9 ) != COMPARE_EQUAL )
         return FALSE;
 
     BOOL bFound = FALSE;
 
-    if( rURL.CompareToAscii( sHTML_internal_gopher,16) == COMPARE_EQUAL )
+    if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher,16) == COMPARE_EQUAL )
     {
         String aName( rURL.Copy(16) );
         switch( aName.GetChar(0) )
         {
         case 'b':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_binary );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary );
             break;
         case 'i':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_image ) ||
-                     aName.EqualsAscii( sHTML_INT_GOPHER_index );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image ) ||
+                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index );
             break;
         case 'm':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_menu ) ||
-                     aName.EqualsAscii( sHTML_INT_GOPHER_movie );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu ) ||
+                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie );
             break;
         case 's':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_sound );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound );
             break;
         case 't':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_telnet ) ||
-                     aName.EqualsAscii( sHTML_INT_GOPHER_text );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet ) ||
+                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text );
             break;
         case 'u':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_unknown );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown );
             break;
         }
     }
-    else if( rURL.CompareToAscii( sHTML_internal_icon,14) == COMPARE_EQUAL )
+    else if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_icon,14) == COMPARE_EQUAL )
     {
         String aName( rURL.Copy(14) );
         switch( aName.GetChar(0) )
         {
         case 'b':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_baddata );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_baddata );
             break;
         case 'd':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_delayed );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_delayed );
             break;
         case 'e':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_embed );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_embed );
             break;
         case 'i':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_insecure );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_insecure );
             break;
         case 'n':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_notfound );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_notfound );
             break;
         }
     }
     if( bFound )
     {
         String sTmp ( rURL );
-        rURL.AssignAscii( sHTML_private_image );
+        rURL.AssignAscii( OOO_STRING_SVTOOLS_HTML_private_image );
         rURL.Append( sTmp );
     }
 

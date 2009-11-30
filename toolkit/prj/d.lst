@@ -22,7 +22,9 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\inc\toolkit\awt\vclxdevice.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxdevice.hxx
 ..\inc\toolkit\awt\vclxfont.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxfont.hxx
 ..\inc\toolkit\awt\vclxtopwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtopwindow.hxx
+..\inc\toolkit\awt\vclxtoolkit.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtoolkit.hxx
 ..\inc\toolkit\awt\vclxwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindow.hxx
+..\source\awt\vclxdialog.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxdialog.hxx
 ..\inc\toolkit\awt\vclxwindows.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindows.hxx
 ..\inc\toolkit\awt\vclxmenu.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxmenu.hxx
 
@@ -53,3 +55,9 @@ mkdir: %_DEST%\inc%_EXT%\layout
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 ..\inc\layout\*.hxx %_DEST%\inc%_EXT%\layout\*.hxx
+mkdir: %_DEST%\inc%_EXT%\layout\core
+..\source\layout\core\*.hxx  %_DEST%\inc%_EXT%\layout\core\*.hxx
+mkdir: %_DEST%\inc%_EXT%\layout\vcl
+..\source\layout\vcl\*.hxx  %_DEST%\inc%_EXT%\layout\vcl\*.hxx
+
+..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*

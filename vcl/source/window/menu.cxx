@@ -2323,6 +2323,8 @@ Size Menu::ImplCalcSize( Window* pWin )
             if ( !bIsMenuBar && ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
+                aImgSz.Height() += 4; // add a border for native marks
+                aImgSz.Width() += 4; // add a border for native marks
                 if ( aImgSz.Width() > aMaxImgSz.Width() )
                     aMaxImgSz.Width() = aImgSz.Width();
                 if ( aImgSz.Height() > aMaxImgSz.Height() )
@@ -2336,7 +2338,11 @@ Size Menu::ImplCalcSize( Window* pWin )
             {
                 nCheckWidth = nMaxCheckWidth;
                 if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
-                    nWidth += nCheckWidth + nExtra * 2;
+                {
+                    // checks / images take the same place
+                    if( ! ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
+                        nWidth += nCheckWidth + nExtra * 2;
+                }
             }
 
             // Text:
@@ -2397,16 +2403,14 @@ Size Menu::ImplCalcSize( Window* pWin )
         nCheckPos = (USHORT)nExtra;
         if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
         {
-            // non-NWF case has an implicit little extra space around
-            // the symbol; NWF case has not, so image pos needs to
-            // be distinct in this case
+            long nImgOrChkWidth = 0;
+            nImagePos = nCheckPos;
             if( nMax > 0 ) // NWF case
-                nImagePos = (USHORT)(nCheckPos + nMax + nExtra );
+                nImgOrChkWidth = nMax + nExtra;
             else // non NWF case
-                nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
-            nTextPos = (USHORT)(nImagePos+aMaxImgSz.Width());
-            if ( aMaxImgSz.Width() )
-                nTextPos = nTextPos + gfxExtra;
+                nImgOrChkWidth = nFontHeight/2 + gfxExtra;
+            nImgOrChkWidth = Max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
+            nTextPos = (USHORT)(nImagePos + nImgOrChkWidth);
         }
         else
         {
@@ -2462,6 +2466,45 @@ Size Menu::ImplCalcSize( Window* pWin )
         aSz.Width() += pLogo->aBitmap.GetSizePixel().Width();
 
     return aSz;
+}
+
+static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRect, bool i_bHighlight )
+{
+    BOOL bNativeOk = FALSE;
+    if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
+    {
+        ImplControlValue    aControlValue;
+        Region              aCtrlRegion( i_rRect );
+        ControlState        nState = CTRL_STATE_PRESSED | CTRL_STATE_ENABLED;
+
+        aControlValue.setTristateVal( BUTTONVALUE_ON );
+
+        bNativeOk = i_pWindow->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
+                                                  aCtrlRegion, nState, aControlValue,
+                                                  rtl::OUString() );
+    }
+
+    if( ! bNativeOk )
+    {
+        const StyleSettings& rSettings = i_pWindow->GetSettings().GetStyleSettings();
+        if( i_bHighlight )
+        {
+            i_pWindow->Push( PUSH_ALL );
+            Color aCol = rSettings.GetMenuHighlightTextColor();
+            i_pWindow->SetFillColor( rSettings.GetMenuHighlightTextColor() );
+            if( aCol.IsDark() )
+                aCol.IncreaseLuminance( 128 );
+            else
+                aCol.DecreaseLuminance( 128 );
+            i_pWindow->SetLineColor( aCol );
+            Polygon aPoly( i_rRect );
+            PolyPolygon aPolyPoly( aPoly );
+            i_pWindow->DrawTransparent( aPolyPoly, 20 );
+            i_pWindow->Pop();
+        }
+        else
+            i_pWindow->DrawSelectionBackground( i_rRect, 1, FALSE, TRUE, FALSE );
+    }
 }
 
 void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* pThisItemOnly, BOOL bHighlighted, bool bLayout ) const
@@ -2537,15 +2580,89 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     pWin->SetLineColor();
                 }
 
+                Rectangle aOuterCheckRect( Point( aPos.X()+nCheckPos, aPos.Y() ), Size( pData->aSz.Height(), pData->aSz.Height() ) );
+                aOuterCheckRect.Left()      += 1;
+                aOuterCheckRect.Right()     -= 1;
+                aOuterCheckRect.Top()       += 1;
+                aOuterCheckRect.Bottom()    -= 1;
+
+                // CheckMark
+                if ( !bLayout && !bIsMenuBar && pData->HasCheck() )
+                {
+                    // draw selection transparent marker if checked
+                    // onto that either a checkmark or the item image
+                    // will be painted
+                    // however do not do this if native checks will be painted since
+                    // the selection color too often does not fit the theme's check and/or radio
+
+                    if( ! ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
+                    {
+                        if ( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                                             (pData->nBits & MIB_RADIOCHECK)
+                                                             ? PART_MENU_ITEM_CHECK_MARK
+                                                             : PART_MENU_ITEM_RADIO_MARK ) )
+                        {
+                            ControlPart nPart = ((pData->nBits & MIB_RADIOCHECK)
+                                                 ? PART_MENU_ITEM_RADIO_MARK
+                                                 : PART_MENU_ITEM_CHECK_MARK);
+
+                            ControlState nState = 0;
+
+                            if ( pData->bChecked )
+                                nState |= CTRL_STATE_PRESSED;
+
+                            if ( pData->bEnabled )
+                                nState |= CTRL_STATE_ENABLED;
+
+                            if ( bHighlighted )
+                                nState |= CTRL_STATE_SELECTED;
+
+                            long nCtrlHeight = (pData->nBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
+                            aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight)/2;
+                            aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
+
+                            Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
+                            pWin->DrawNativeControl( CTRL_MENU_POPUP, nPart,
+                                                     Region( aCheckRect ),
+                                                     nState,
+                                                     ImplControlValue(),
+                                                     OUString() );
+                        }
+                        else if ( pData->bChecked ) // by default do nothing for unchecked items
+                        {
+                            ImplPaintCheckBackground( pWin, aOuterCheckRect, pThisItemOnly && bHighlighted );
+
+                            SymbolType eSymbol;
+                            Size aSymbolSize;
+                            if ( pData->nBits & MIB_RADIOCHECK )
+                            {
+                                eSymbol = SYMBOL_RADIOCHECKMARK;
+                                aSymbolSize = Size( nFontHeight/2, nFontHeight/2 );
+                            }
+                            else
+                            {
+                                eSymbol = SYMBOL_CHECKMARK;
+                                aSymbolSize = Size( (nFontHeight*25)/40, nFontHeight/2 );
+                            }
+                            aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width())/2;
+                            aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height())/2;
+                            Rectangle aRect( aTmpPos, aSymbolSize );
+                            aDecoView.DrawSymbol( aRect, eSymbol, pWin->GetTextColor(), nSymbolStyle );
+                        }
+                    }
+                }
+
                 // Image:
                 if ( !bLayout && !bIsMenuBar && ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
                 {
                     // Don't render an image for a check thing
                     if ((nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES) || !pData->HasCheck() )
                     {
-                        aTmpPos.Y() = aPos.Y();
-                        aTmpPos.X() = aPos.X() + nImagePos;
-                        aTmpPos.Y() += (pData->aSz.Height()-pData->aImage.GetSizePixel().Height())/2;
+                        if( pData->bChecked )
+                            ImplPaintCheckBackground( pWin, aOuterCheckRect, pThisItemOnly && bHighlighted );
+                        aTmpPos = aOuterCheckRect.TopLeft();
+                        aTmpPos.X() += (aOuterCheckRect.GetWidth()-pData->aImage.GetSizePixel().Width())/2;
+                        aTmpPos.Y() += (aOuterCheckRect.GetHeight()-pData->aImage.GetSizePixel().Height())/2;
                         pWin->DrawImage( aTmpPos, pData->aImage, nImageStyle );
                     }
                 }
@@ -2596,65 +2713,6 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
                     pWin->DrawCtrlText( aTmpPos, aAccText, 0, aAccText.Len(), nTextStyle );
-                }
-
-                // CheckMark
-                if ( !bLayout && !bIsMenuBar && pData->HasCheck() )
-                {
-                    if ( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
-                                                         (pData->nBits & MIB_RADIOCHECK)
-                                                         ? PART_MENU_ITEM_CHECK_MARK
-                                                         : PART_MENU_ITEM_RADIO_MARK ) )
-                    {
-                        ControlPart nPart = ((pData->nBits & MIB_RADIOCHECK)
-                                             ? PART_MENU_ITEM_RADIO_MARK
-                                             : PART_MENU_ITEM_CHECK_MARK);
-
-                        ControlState nState = 0;
-
-                        if ( pData->bChecked )
-                            nState |= CTRL_STATE_PRESSED;
-
-                        if ( pData->bEnabled )
-                            nState |= CTRL_STATE_ENABLED;
-
-                        if ( bHighlighted )
-                            nState |= CTRL_STATE_SELECTED;
-
-                        aTmpPos.X() = aPos.X() + nCheckPos;
-                        aTmpPos.Y() = aPos.Y() + nCheckPos;
-
-                        long nCtrlHeight = (pData->nBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
-                        Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
-                        pWin->DrawNativeControl( CTRL_MENU_POPUP, nPart,
-                                                 Region( aCheckRect ),
-                                                 nState,
-                                                 ImplControlValue(),
-                                                 OUString() );
-                    }
-                    else if ( pData->bChecked ) // by default do nothing for unchecked items
-                    {
-                        Rectangle aRect;
-                        SymbolType eSymbol;
-                        aTmpPos.Y() = aPos.Y();
-                        aTmpPos.Y() += nExtra/2;
-                        aTmpPos.Y() += pData->aSz.Height() / 2;
-                        if ( pData->nBits & MIB_RADIOCHECK )
-                        {
-                            aTmpPos.X() = aPos.X() + nCheckPos;
-                            eSymbol = SYMBOL_RADIOCHECKMARK;
-                            aTmpPos.Y() -= nFontHeight/4;
-                            aRect = Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) );
-                        }
-                        else
-                        {
-                            aTmpPos.X() = aPos.X() + nCheckPos;
-                            eSymbol = SYMBOL_CHECKMARK;
-                            aTmpPos.Y() -= nFontHeight/4;
-                            aRect = Rectangle( aTmpPos, Size( (nFontHeight*25)/40, nFontHeight/2 ) );
-                        }
-                        aDecoView.DrawSymbol( aRect, eSymbol, pWin->GetTextColor(), nSymbolStyle );
-                    }
                 }
 
                 // SubMenu?

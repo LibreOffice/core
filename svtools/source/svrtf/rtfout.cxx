@@ -68,10 +68,10 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
         rStream << "\\_";
         break;
     case '\n':
-        pStr = sRTF_LINE;
+        pStr = OOO_STRING_SVTOOLS_RTF_LINE;
         break;
     case '\t':
-        pStr = sRTF_TAB;
+        pStr = OOO_STRING_SVTOOLS_RTF_TAB;
         break;
     default:
         if(!bWriteHelpFile)
@@ -79,25 +79,25 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
             switch(c)
             {
                 case 149:
-                    pStr = sRTF_BULLET;
+                    pStr = OOO_STRING_SVTOOLS_RTF_BULLET;
                     break;
                 case 150:
-                    pStr = sRTF_ENDASH;
+                    pStr = OOO_STRING_SVTOOLS_RTF_ENDASH;
                     break;
                 case 151:
-                    pStr = sRTF_EMDASH;
+                    pStr = OOO_STRING_SVTOOLS_RTF_EMDASH;
                     break;
                 case 145:
-                    pStr = sRTF_LQUOTE;
+                    pStr = OOO_STRING_SVTOOLS_RTF_LQUOTE;
                     break;
                 case 146:
-                    pStr = sRTF_RQUOTE;
+                    pStr = OOO_STRING_SVTOOLS_RTF_RQUOTE;
                     break;
                 case 147:
-                    pStr = sRTF_LDBLQUOTE;
+                    pStr = OOO_STRING_SVTOOLS_RTF_LDBLQUOTE;
                     break;
                 case 148:
-                    pStr = sRTF_RDBLQUOTE;
+                    pStr = OOO_STRING_SVTOOLS_RTF_RDBLQUOTE;
                     break;
             }
 

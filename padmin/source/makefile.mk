@@ -85,8 +85,9 @@ SHL1STDLIBS=\
     $(VCLLIB)						\
     $(UNOTOOLSLIB)					\
     $(TOOLSLIB)						\
-    $(COMPHELPERLIB) \
-    $(CPPULIB) $(SALLIB)
+    $(COMPHELPERLIB)				\
+    $(CPPULIB)						\
+    $(SALLIB)
 
 APP1TARGET=spadmin.bin
 APP1DEPN+=$(SHL1TARGETN)
@@ -97,7 +98,6 @@ APP1OBJS=\
 
 APP1STDLIBS=	\
     -l$(SHL1TARGET)		\
-    $(SVTOOLLIB)		\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
@@ -106,10 +106,6 @@ APP1STDLIBS=	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
-    $(I18NISOLANGLIB) $(ICUUCLIB) $(ICULELIB) $(ICUDATALIB)\
-    $(TKLIB) $(SOTLIB) $(SVLLIB) $(I18NUTILLIB) $(VOSLIB) \
-    $(BASEGFXLIB) $(JVMFWKLIB) $(SALHELPERLIB) \
-    $(JVMACCESSLIB) \
     -lXext -lX11
 
 UNIXTEXT = $(MISC)$/spadmin.sh

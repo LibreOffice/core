@@ -174,6 +174,20 @@ namespace basegfx
         bool equal(const B3DPolygon& rCandidateA, const B3DPolygon& rCandidateB, const double& rfSmallValue);
         bool equal(const B3DPolygon& rCandidateA, const B3DPolygon& rCandidateB);
 
+        /** snap some polygon coordinates to discrete coordinates
+
+            This method allows to snap some polygon points to discrete (integer) values
+            which equals e.g. a snap to discrete coordinates. It will snap points of
+            horizontal and vertical edges
+
+            @param rCandidate
+            The source polygon
+
+            @return
+            The modified version of the source polygon
+        */
+        B3DPolygon snapPointsOfHorizontalOrVerticalEdges(const B3DPolygon& rCandidate);
+
     } // end of namespace tools
 } // end of namespace basegfx
 

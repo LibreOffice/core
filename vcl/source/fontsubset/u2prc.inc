@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: u2prc.inc,v $
- * $Revision: 1.4 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -27,6 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// use generic RTL_TEXTENCODING_ to get rid of this file
 
 sal_uInt16pair xlat_1_4[24035] = {
   {0x0020, 0x0020},{0x0021, 0x0021},{0x0022, 0x0022},{0x0023, 0x0023},{0x0024, 0x0024},{0x0025, 0x0025},{0x0026, 0x0026},{0x0027, 0x0027},

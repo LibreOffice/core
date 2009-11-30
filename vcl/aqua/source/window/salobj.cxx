@@ -37,11 +37,6 @@
 #include "salobj.h"
 #include "salframe.h"
 
-// get QTMovieView
-#include "premac.h"
-#include <QTKit/QTMovieView.h>
-#include "postmac.h"
-
 // =======================================================================
 
 AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
@@ -66,7 +61,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
         [mpFrame->getView() addSubview: mpClipView];
         [mpClipView setHidden: YES];
     }
-    maSysData.pView = [[QTMovieView alloc] initWithFrame: aInitFrame];
+    maSysData.pView = [[NSView alloc] initWithFrame: aInitFrame];
     if( maSysData.pView )
     {
         if( mpClipView )

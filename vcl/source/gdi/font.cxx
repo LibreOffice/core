@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "sft.h"
+#include "sft.hxx"
 
 #include "tools/stream.hxx"
 #include "tools/vcompat.hxx"
@@ -42,6 +42,8 @@
 #include "vcl/outdev.h" // just for ImplGetEnglishSearchFontName! TODO: move it
 
 #include <algorithm>
+
+using namespace vcl;
 
 // =======================================================================
 

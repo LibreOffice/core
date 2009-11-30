@@ -280,14 +280,17 @@ public:
     BOOL            IsShift()   const { return (mnCode & MODKEY_SHIFT) ? TRUE : FALSE; }
     BOOL            IsMod1()    const { return (mnCode & MODKEY_MOD1) ? TRUE : FALSE; }
     BOOL            IsMod2()    const { return (mnCode & MODKEY_MOD2) ? TRUE : FALSE; }
+    BOOL            IsMod3()    const { return (mnCode & MODKEY_MOD3) ? TRUE : FALSE; }
 
     BOOL            IsLeftShift() const { return (mnCode & MODKEY_LSHIFT) ? TRUE : FALSE; }
     BOOL            IsLeftMod1()  const { return (mnCode & MODKEY_LMOD1) ? TRUE : FALSE; }
     BOOL            IsLeftMod2()  const { return (mnCode & MODKEY_LMOD2) ? TRUE : FALSE; }
+    BOOL            IsLeftMod3()  const { return (mnCode & MODKEY_LMOD3) ? TRUE : FALSE; }
 
     BOOL            IsRightShift() const { return (mnCode & MODKEY_RSHIFT) ? TRUE : FALSE; }
     BOOL            IsRightMod1()  const { return (mnCode & MODKEY_RMOD1) ? TRUE : FALSE; }
     BOOL            IsRightMod2()  const { return (mnCode & MODKEY_RMOD2) ? TRUE : FALSE; }
+    BOOL            IsRightMod3()  const { return (mnCode & MODKEY_RMOD3) ? TRUE : FALSE; }
 };
 
 inline CommandModKeyData::CommandModKeyData()
