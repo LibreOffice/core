@@ -85,4 +85,5 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange );
 };
 
-#endif SFX2_IMPVIEWFRAME_HXX
+#endif // SFX2_IMPVIEWFRAME_HXX
+

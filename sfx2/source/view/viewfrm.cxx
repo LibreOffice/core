@@ -854,7 +854,6 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
             case SID_RELOAD:
             {
                 SfxFrame* pFrame = GetTopFrame();
-                SfxViewFrame *pView = pFrame->GetCurrentViewFrame();
 
                 if ( !pSh || !pSh->CanReload_Impl() || pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
                     rSet.DisableItem(nWhich);
@@ -2204,8 +2203,6 @@ void SfxViewFrame::ExecView_Impl
         case SID_FILLFRAME:
         {
             // Bei Mail etc. k"onnen die Frames nicht angesprochen werden
-            SfxFrame *pParent = GetFrame()->GetParentFrame();
-
             SfxViewFrame *pRet = NULL;
             SFX_REQUEST_ARG(
                 rReq, pItem, SfxStringItem, SID_FILLFRAME, sal_False );
