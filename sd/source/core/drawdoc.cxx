@@ -48,7 +48,6 @@
 #include <svtools/misccfg.hxx>
 #endif
 #include <sfx2/printer.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/app.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/dialogs.hrc>

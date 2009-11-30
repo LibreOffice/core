@@ -85,7 +85,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 

@@ -46,7 +46,6 @@
 
 #include <svtools/itemprop.hxx>
 
-#include <sfx2/topfrm.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <toolkit/unohlp.hxx>

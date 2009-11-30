@@ -36,7 +36,6 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <sfx2/topfrm.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <rtl/ustrbuf.hxx>

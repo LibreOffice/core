@@ -62,7 +62,6 @@
 #ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
 #endif
-#include <sfx2/topfrm.hxx>
 #include <svtools/cjkoptions.hxx>
 #include <svtools/visitem.hxx>
 
