@@ -37,9 +37,6 @@
 #ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
 #include <com/sun/star/rendering/XSpriteCanvas.idl>
 #endif
-#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
-#include <com/sun/star/geometry/RealRectangle2D.idl>
-#endif
 #ifndef __com_sun_star_util_XModifyListener_idl__
 #include <com/sun/star/util/XModifyListener.idl>
 #endif
@@ -51,6 +48,9 @@
 #endif
 #ifndef __com_sun_star_awt_XMouseMotionListener_idl__
 #include <com/sun/star/awt/XMouseMotionListener.idl>
+#endif
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
 #endif
 
 module com {  module sun {  module star {  module presentation {
@@ -179,6 +179,10 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
      */
     void setMouseCursor( [in] short nPointerShape );
 
+    /** Get rectangle defining area inside of canvas device which
+    this slideshow view uses.
+    */
+    ::com::sun::star::awt::Rectangle getCanvasArea();
 };
 
 }; }; }; };

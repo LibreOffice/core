@@ -31,24 +31,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#include <storpage.hxx>
-#include <sal/types.h>
-#include <rtl/memory.h>
-#include <rtl/string.h>
-#include <rtl/ref.hxx>
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
-#include <store/types.h>
-#include <store/object.hxx>
-#include <store/lockbyte.hxx>
-#include <storbase.hxx>
-#ifndef _STORE_STORCACH_HXX_
-#include <storcach.hxx>
-#endif
-#include <stordata.hxx>
-#ifndef _STORE_STORTREE_HXX_
-#include <stortree.hxx>
-#endif
+#include "storpage.hxx"
+
+#include "sal/types.h"
+#include "rtl/string.h"
+#include "rtl/ref.hxx"
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
+
+#include "store/types.h"
+
+#include "object.hxx"
+#include "lockbyte.hxx"
+
+#include "storbase.hxx"
+#include "stordata.hxx"
+#include "stortree.hxx"
 
 using namespace store;
 
@@ -63,20 +61,7 @@ const sal_uInt32 OStorePageManager::m_nTypeId = sal_uInt32(0x62190120);
  * OStorePageManager.
  */
 OStorePageManager::OStorePageManager (void)
-    : m_pCache    (NULL),
-      m_pDirect   (NULL),
-      m_pData     (NULL),
-      m_nPageSize (0)
 {
-    // Node pages.
-    m_pNode[0] = NULL;
-    m_pNode[1] = NULL;
-    m_pNode[2] = NULL;
-
-    // Indirect pages.
-    m_pLink[0] = NULL;
-    m_pLink[1] = NULL;
-    m_pLink[2] = NULL;
 }
 
 /*
@@ -84,17 +69,6 @@ OStorePageManager::OStorePageManager (void)
  */
 OStorePageManager::~OStorePageManager (void)
 {
-    delete m_pCache;
-    delete m_pDirect;
-    delete m_pData;
-
-    delete m_pNode[0];
-    delete m_pNode[1];
-    delete m_pNode[2];
-
-    delete m_pLink[0];
-    delete m_pLink[1];
-    delete m_pLink[2];
 }
 
 /*
@@ -109,10 +83,10 @@ sal_Bool SAL_CALL OStorePageManager::isKindOf (sal_uInt32 nTypeId)
  * initialize (two-phase construction).
  * Precond: none.
  */
-storeError OStorePageManager::initializeManager (
-    ILockBytes      *pLockBytes,
-    storeAccessMode  eAccessMode,
-    sal_uInt16       nPageSize)
+storeError OStorePageManager::initialize (
+    ILockBytes *    pLockBytes,
+    storeAccessMode eAccessMode,
+    sal_uInt16 &    rnPageSize)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard(*this);
@@ -122,375 +96,95 @@ storeError OStorePageManager::initializeManager (
         return store_E_InvalidParameter;
 
     // Initialize base.
-    storeError eErrCode = base::initialize (pLockBytes, eAccessMode);
-    if (eErrCode != store_E_None)
-    {
-        // Check mode and reason.
-        if (eErrCode != store_E_NotExists)
-            return eErrCode;
-
-        if (eAccessMode == store_AccessReadWrite)
-            return store_E_NotExists;
-        if (eAccessMode == store_AccessReadOnly)
-            return store_E_NotExists;
-
-        // Create.
-        eErrCode = base::create (nPageSize);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-    }
-
-    // Obtain page size.
-    eErrCode = base::getPageSize (m_nPageSize);
-    OSL_POSTCOND(
-        eErrCode == store_E_None,
-        "OStorePageManager::initialize(): getPageSize() failed");
+    storeError eErrCode = base::initialize (pLockBytes, eAccessMode, rnPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Cleanup.
-    __STORE_DELETEZ (m_pCache);
-    __STORE_DELETEZ (m_pDirect);
-    __STORE_DELETEZ (m_pData);
-
-    __STORE_DELETEZ (m_pNode[0]);
-    __STORE_DELETEZ (m_pNode[1]);
-    __STORE_DELETEZ (m_pNode[2]);
-
-    __STORE_DELETEZ (m_pLink[0]);
-    __STORE_DELETEZ (m_pLink[1]);
-    __STORE_DELETEZ (m_pLink[2]);
-
-    // Initialize page buffers.
-    m_pNode[0] = new(m_nPageSize) page(m_nPageSize);
-    if (eAccessMode != store_AccessReadOnly)
+    // Check for (not) writeable.
+    if (!base::isWriteable())
     {
-        m_pNode[1] = new(m_nPageSize) page(m_nPageSize);
-        m_pNode[2] = new(m_nPageSize) page(m_nPageSize);
+        // Readonly. Load RootNode.
+        return base::loadObjectAt (m_aRoot, rnPageSize);
     }
 
-    // Initialize page cache.
-    m_pCache = new OStorePageCache();
+    // Writeable. Load or Create RootNode.
+    eErrCode = m_aRoot.loadOrCreate (rnPageSize, *this);
+    if (eErrCode == store_E_Pending)
+    {
+        // Creation notification.
+        PageHolderObject< page > xRoot (m_aRoot.get());
+
+        // Pre-allocate left most entry (ugly, but we can't insert to left).
+        OStorePageKey aKey (rtl_crc32 (0, "/", 1), 0);
+        xRoot->insert (0, entry(aKey));
+
+        // Save RootNode.
+        eErrCode = base::saveObjectAt (m_aRoot, rnPageSize);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Flush for robustness.
+        (void) base::flush();
+    }
 
     // Done.
     return eErrCode;
 }
 
 /*
- * free (unmanaged).
- * Precond: initialized, writeable.
- */
-storeError OStorePageManager::free (OStorePageObject &rPage)
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
-
-    // Check precond.
-    if (!self::isValid())
-        return store_E_InvalidAccess;
-
-    if (!base::isWriteable())
-        return store_E_AccessViolation;
-
-    // Check for cacheable page.
-    OStorePageData &rData = rPage.getData();
-    if (rData.m_aGuard.m_nMagic == STORE_MAGIC_BTREENODE)
-    {
-        // Invalidate cache entry.
-        storeError eErrCode = m_pCache->invalidate (rData.m_aDescr);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-    }
-
-    // Free page.
-    return base::free (rPage);
-}
-
-/*
- * load (unmanaged).
- * Precond: initialized.
- */
-storeError OStorePageManager::load (OStorePageObject &rPage)
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
-
-    // Check precond.
-    if (!self::isValid())
-        return store_E_InvalidAccess;
-
-    // Check for cacheable page.
-    OStorePageData &rData = rPage.getData();
-    if (rData.m_aGuard.m_nMagic == STORE_MAGIC_BTREENODE)
-    {
-        // Save PageDescriptor.
-        OStorePageDescriptor aDescr (rData.m_aDescr);
-
-        // Load (cached) page.
-        storeError eErrCode = m_pCache->load (aDescr, rData, *this);
-        if (eErrCode != store_E_None)
-        {
-            // Check for pending verification.
-            if (eErrCode != store_E_Pending)
-                return eErrCode;
-
-            // Verify page.
-            eErrCode = rPage.verify (aDescr);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
-
-#ifdef OSL_BIGENDIAN
-        // Swap to internal representation.
-        rPage.swap (aDescr);
-#endif /* OSL_BIGENDIAN */
-
-        // Done.
-        return store_E_None;
-    }
-
-    // Load (uncached) page.
-    return base::load (rPage);
-}
-
-/*
- * save (unmanaged).
- * Precond: initialized, writeable.
- */
-storeError OStorePageManager::save (OStorePageObject &rPage)
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
-
-    // Check precond.
-    if (!self::isValid())
-        return store_E_InvalidAccess;
-
-    if (!base::isWriteable())
-        return store_E_AccessViolation;
-
-    // Check for cacheable page.
-    OStorePageData &rData = rPage.getData();
-    if (rData.m_aGuard.m_nMagic == STORE_MAGIC_BTREENODE)
-    {
-        // Save PageDescriptor.
-        OStorePageDescriptor aDescr (rData.m_aDescr);
-
-#ifdef OSL_BIGENDIAN
-        // Swap to external representation.
-        rPage.swap (aDescr);
-#endif /* OSL_BIGENDIAN */
-
-        // Guard page.
-        rPage.guard (aDescr);
-
-        // Save (cached) page.
-#if 0  /* EXPERIMENTAL */
-        storeError eErrCode = m_pCache->update (
-            aDescr, rData, *this, NULL,
-            OStorePageCache::UPDATE_WRITE_DELAYED);
-#else
-        storeError eErrCode = m_pCache->update (
-            aDescr, rData, *this, NULL,
-            OStorePageCache::UPDATE_WRITE_THROUGH);
-#endif /* EXPERIMENTAL */
-
-#ifdef OSL_BIGENDIAN
-        // Swap back to internal representation.
-        rPage.swap (aDescr);
-#endif /* OSL_BIGENDIAN */
-
-        // Mark page clean.
-        if (eErrCode == store_E_None)
-            rPage.clean();
-
-        // Done.
-        return eErrCode;
-    }
-
-    // Save (uncached) page.
-    return base::save (rPage);
-}
-
-/*
- * flush.
- * Precond: initialized.
- */
-storeError OStorePageManager::flush (void)
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
-
-    // Check precond.
-    if (!self::isValid())
-        return store_E_InvalidAccess;
-
-    // Check access mode.
-    if (!base::isWriteable())
-        return store_E_None;
-
-    // Flush cache.
-    if (m_pCache->flush (*this, NULL) != store_E_None) {
-        OSL_POSTCOND(
-            false, "OStorePageManager::flush(): cache::flush() failed");
-    }
-
-    // Flush base.
-    return base::flush();
-}
-
-/*
- * find (w/o split()).
+ * find_lookup (w/o split()).
  * Internal: Precond: initialized, readable, exclusive access.
  */
-storeError OStorePageManager::find (const entry &rEntry, page &rPage)
+storeError OStorePageManager::find_lookup (
+    OStoreBTreeNodeObject & rNode,
+    sal_uInt16 &            rIndex,
+    OStorePageKey const &   rKey)
 {
-    // Load RootNode.
-    OStoreBTreeRootObject aRoot (rPage);
-    aRoot.location (m_nPageSize);
-
-    storeError eErrCode = load (aRoot);
+    // Find Node and Index.
+    storeError eErrCode = m_aRoot.find_lookup (rNode, rIndex, rKey, *this);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Check current Page.
-    while (rPage.depth())
+    // Greater or Equal.
+    PageHolderObject< page > xPage (rNode.get());
+    OSL_POSTCOND(rIndex < xPage->usageCount(), "store::PageManager::find_lookup(): logic error");
+    entry e (xPage->m_pData[rIndex]);
+
+    // Check for exact match.
+    if (e.compare(entry(rKey)) != entry::COMPARE_EQUAL)
     {
-        // Find next page.
-        sal_uInt16 i = rPage.find(rEntry), n = rPage.usageCount();
-        if (!(i < n))
-        {
-            // Path to entry not exists (Must not happen(?)).
-            return store_E_NotExists;
-        }
-
-        // Check address.
-        sal_uInt32 nAddr = rPage.m_pData[i].m_aLink.m_nAddr;
-        if (nAddr == STORE_PAGE_NULL)
-        {
-            // Path to entry not exists (Must not happen(?)).
-            return store_E_NotExists;
-        }
-
-        // Load next page.
-        node aNode (rPage);
-        aNode.location (nAddr);
-
-        eErrCode = load (aNode);
-        if (eErrCode != store_E_None)
-            return eErrCode;
+        // Page not present.
+        return store_E_NotExists;
     }
 
-    // Done.
+    // Check address.
+    if (e.m_aLink.location() == STORE_PAGE_NULL)
+    {
+        // Page not present.
+        return store_E_NotExists;
+    }
+
     return store_E_None;
 }
 
 /*
- * find (possibly with split()).
+ * remove_Impl (possibly down from root).
  * Internal: Precond: initialized, writeable, exclusive access.
  */
-storeError OStorePageManager::find (
-    const entry &rEntry, page &rPage, page &rPageL, page &rPageR)
+#if 0  /* EXP */
+storeError OStorePageManager::remove_Impl (entry & rEntry)
 {
-    // Load RootNode.
-    OStoreBTreeRootObject aRoot (rPage);
-    aRoot.location (m_nPageSize);
+    // Find Node and Index.
+    OStoreBTreeNodeObject aNode;
+    sal_uInt16 nIndex = 0;
+    eErrCode = m_aRoot.find_lookup (aNode, nIndex, entry::CompareGreater(rEntry), *this);
 
-    storeError eErrCode = load (aRoot);
-    if (eErrCode != store_E_None)
-    {
-        // Check existence.
-        if (eErrCode != store_E_NotExists)
-            return eErrCode;
+    // @@@
 
-        // Pre-allocate left most entry (ugly, but we can't insert to left).
-        rPage.insert (0, entry());
-        rPage.m_pData[0].m_aKey.m_nLow = OStorePageGuard::crc32 (0, "/", 1);
+    PageHolderObject< page > xPage (aNode.get());
+    page & rPage = (*xPage);
 
-        // Allocate RootNode.
-        eErrCode = base::allocate (aRoot, ALLOCATE_EOF);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-    }
-    else
-    {
-        // Check for RootNode split.
-        if (aRoot.querySplit())
-        {
-            // Split root.
-            eErrCode = aRoot.split (0, rPageL, rPageR, *this);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
-    }
-
-    // Check current Page.
-    while (rPage.depth())
-    {
-        // Find next page.
-        sal_uInt16 i = rPage.find (rEntry), n = rPage.usageCount();
-        if (!(i < n))
-        {
-            // Path to entry not exists (Must not happen(?)).
-            return store_E_NotExists;
-        }
-
-        // Check address.
-        sal_uInt32 nAddr = rPage.m_pData[i].m_aLink.m_nAddr;
-        if (nAddr == STORE_PAGE_NULL)
-        {
-            // Path to entry not exists (Must not happen(?)).
-            return store_E_NotExists;
-        }
-
-        // Load next page.
-        node aNode (rPageL);
-        aNode.location (nAddr);
-
-        eErrCode = load (aNode);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        // Check for node split.
-        if (rPageL.querySplit())
-        {
-            // Split node.
-            node aParent (rPage);
-            eErrCode = aParent.split (i, rPageL, rPageR, *this);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-
-            // Restart.
-            continue;
-        }
-        else
-        {
-            // Let next page be current.
-            rPage = rPageL;
-            continue;
-        }
-    }
-
-    // Done.
-    return store_E_None;
-}
-
-/*
- * remove (possibly down from root).
- * Internal: Precond: initialized, writeable, exclusive access.
- */
-storeError OStorePageManager::remove (
-    entry &rEntry, page &rPage, page &rPageL)
-{
-    // Load RootNode.
-    OStoreBTreeRootObject aRoot (rPage);
-    aRoot.location (m_nPageSize);
-
-    storeError eErrCode = load (aRoot);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
-    // Check index.
+    // Check current page index.
     sal_uInt16 i = rPage.find (rEntry), n = rPage.usageCount();
     if (!(i < n))
     {
@@ -501,27 +195,35 @@ storeError OStorePageManager::remove (
     // Compare entry.
     entry::CompareResult result = rEntry.compare (rPage.m_pData[i]);
 
-    // Iterate down until equal match.
-    while ((result == entry::COMPARE_GREATER) && (rPage.depth() > 0))
+    for (; result == entry::COMPARE_GREATER && xPage->depth() > 0; )
     {
-        // Check link address.
-        sal_uInt32 nAddr = rPage.m_pData[i].m_aLink.m_nAddr;
+        // Check next node address.
+        sal_uInt32 const nAddr = rPage.m_pData[i].m_aLink.location();
         if (nAddr == STORE_PAGE_NULL)
         {
             // Path to entry not exists (Must not happen(?)).
             return store_E_NotExists;
         }
 
-        // Load link page.
-        node aNode (rPage);
-        aNode.location (nAddr);
+        // Load next node page.
+        eErrCode = loadObjectAt (aNode, nAddr);
 
-        eErrCode = load (aNode);
-        if (eErrCode != store_E_None)
-            return eErrCode;
+        PageHolderObject< page > xNext (aNode.get());
+        xNext.swap (xPage);
+    }
 
-        // Check index.
-        i = rPage.find (rEntry), n = rPage.usageCount();
+    aNode.remove (nIndex, rEntry, *this);
+
+
+    do
+    {
+        // Load next node page.
+        eErrCode = loadObjectAt (aNode, nAddr);
+
+        page const & rPage = (*xPage);
+
+        // Check current page index.
+        sal_uInt16 i = rPage.find (rEntry), n = rPage.usageCount();
         if (!(i < n))
         {
             // Path to entry not exists (Must not happen(?)).
@@ -530,6 +232,56 @@ storeError OStorePageManager::remove (
 
         // Compare entry.
         result = rEntry.compare (rPage.m_pData[i]);
+
+    } while (result == entry::COMPATE_GREATER);
+}
+#endif /* EXP */
+
+storeError OStorePageManager::remove_Impl (entry & rEntry)
+{
+    OStoreBTreeNodeObject aNode (m_aRoot.get());
+
+    // Check current page index.
+    PageHolderObject< page > xPage (aNode.get());
+    sal_uInt16 i = xPage->find (rEntry), n = xPage->usageCount();
+    if (!(i < n))
+    {
+        // Path to entry not exists (Must not happen(?)).
+        return store_E_NotExists;
+    }
+
+    // Compare entry.
+    entry::CompareResult result = rEntry.compare (xPage->m_pData[i]);
+
+    // Iterate down until equal match.
+    while ((result == entry::COMPARE_GREATER) && (xPage->depth() > 0))
+    {
+        // Check link address.
+        sal_uInt32 const nAddr = xPage->m_pData[i].m_aLink.location();
+        if (nAddr == STORE_PAGE_NULL)
+        {
+            // Path to entry not exists (Must not happen(?)).
+            return store_E_NotExists;
+        }
+
+        // Load link page.
+        storeError eErrCode = loadObjectAt (aNode, nAddr);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        PageHolderObject< page > xNext (aNode.get());
+        xNext.swap (xPage);
+
+        // Check index.
+        i = xPage->find (rEntry), n = xPage->usageCount();
+        if (!(i < n))
+        {
+            // Path to entry not exists (Must not happen(?)).
+            return store_E_NotExists;
+        }
+
+        // Compare entry.
+        result = rEntry.compare (xPage->m_pData[i]);
     }
 
     OSL_POSTCOND(
@@ -544,17 +296,42 @@ storeError OStorePageManager::remove (
     }
 
     // Remove down from current page (recursive).
-    node aNode (rPage);
-    return aNode.remove (i, rEntry, rPageL, *this, NULL);
+    return aNode.remove (i, rEntry, *this);
 }
 
 /*
- * load.
+ * namei.
+ * Precond: none (static).
+ */
+storeError OStorePageManager::namei (
+    const rtl_String *pPath, const rtl_String *pName, OStorePageKey &rKey)
+{
+    // Check parameter.
+    if (!(pPath && pName))
+        return store_E_InvalidParameter;
+
+    // Check name length.
+    if (!(pName->length < STORE_MAXIMUM_NAMESIZE))
+        return store_E_NameTooLong;
+
+    // Transform pathname into key.
+    rKey.m_nLow  = store::htonl(rtl_crc32 (0, pName->buffer, pName->length));
+    rKey.m_nHigh = store::htonl(rtl_crc32 (0, pPath->buffer, pPath->length));
+
+    // Done.
+    return store_E_None;
+}
+
+/*
+ * iget.
  * Precond: initialized.
  */
-storeError OStorePageManager::load (
-    const OStorePageKey       &rKey,
-    OStoreDirectoryPageObject &rPage)
+storeError OStorePageManager::iget (
+    OStoreDirectoryPageObject & rPage,
+    sal_uInt32                  nAttrib,
+    const rtl_String          * pPath,
+    const rtl_String          * pName,
+    storeAccessMode             eMode)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard(*this);
@@ -563,50 +340,83 @@ storeError OStorePageManager::load (
     if (!self::isValid())
         return store_E_InvalidAccess;
 
-    // Setup BTree entry.
-    entry e;
-    e.m_aKey = rKey;
-
-    // Find NodePage.
-    storeError eErrCode = find (e, *m_pNode[0]);
+    // Setup inode page key.
+    OStorePageKey aKey;
+    storeError eErrCode = namei (pPath, pName, aKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Find Index.
-    sal_uInt16 i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (!(i < n))
+    // Check for directory.
+    if (nAttrib & STORE_ATTRIB_ISDIR)
     {
-        // Page not present.
-        return store_E_NotExists;
+        // Ugly, but necessary (backward compatibility).
+        aKey.m_nLow = store::htonl(rtl_crc32 (store::ntohl(aKey.m_nLow), "/", 1));
     }
 
-    // Check for exact match.
-    if (!(e.compare (m_pNode[0]->m_pData[i]) == entry::COMPARE_EQUAL))
+    // Load inode page.
+    eErrCode = load_dirpage_Impl (aKey, rPage);
+    if (eErrCode != store_E_None)
     {
-        // Page not present.
-        return store_E_NotExists;
+        // Check mode and reason.
+        if (eErrCode != store_E_NotExists)
+            return eErrCode;
+
+        if (eMode == store_AccessReadWrite)
+            return store_E_NotExists;
+        if (eMode == store_AccessReadOnly)
+            return store_E_NotExists;
+
+        if (!base::isWriteable())
+            return store_E_AccessViolation;
+
+        // Create inode page.
+        eErrCode = rPage.construct< inode >(base::allocator());
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Setup inode nameblock.
+        PageHolderObject< inode > xPage (rPage.get());
+
+        rPage.key (aKey);
+        rPage.attrib (nAttrib);
+
+        memcpy (
+            &(xPage->m_aNameBlock.m_pData[0]),
+            pName->buffer, pName->length);
+
+        // Save inode page.
+        eErrCode = save_dirpage_Impl (aKey, rPage);
+        if (eErrCode != store_E_None)
+            return eErrCode;
     }
 
-    // Existing entry. Check address.
-    sal_uInt32 nAddr = m_pNode[0]->m_pData[i].m_aLink.m_nAddr;
-    if (nAddr == STORE_PAGE_NULL)
+    // Check for symbolic link.
+    if (rPage.attrib() & STORE_ATTRIB_ISLINK)
     {
-        // Page not present.
-        return store_E_NotExists;
+        // Obtain 'Destination' page key.
+        PageHolderObject< inode > xPage (rPage.get());
+        OStorePageKey aDstKey;
+        memcpy (&aDstKey, &(xPage->m_pData[0]), sizeof(aDstKey));
+
+        // Load 'Destination' inode.
+        eErrCode = load_dirpage_Impl (aDstKey, rPage);
+        if (eErrCode != store_E_None)
+            return eErrCode;
     }
 
-    // Load page.
-    rPage.location (nAddr);
-    return load (rPage);
+    // Done.
+    return store_E_None;
 }
 
 /*
- * save.
- * Precond: initialized, writeable.
+ * iterate.
+ * Precond: initialized.
+ * ToDo: skip hardlink entries.
  */
-storeError OStorePageManager::save (
-    const OStorePageKey       &rKey,
-    OStoreDirectoryPageObject &rPage)
+storeError OStorePageManager::iterate (
+    OStorePageKey &  rKey,
+    OStorePageLink & rLink,
+    sal_uInt32 &     rAttrib)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard(*this);
@@ -615,74 +425,97 @@ storeError OStorePageManager::save (
     if (!self::isValid())
         return store_E_InvalidAccess;
 
-    if (!base::isWriteable())
-        return store_E_AccessViolation;
-
-    // Setup BTree entry.
-    entry e;
-    e.m_aKey = rKey;
-
-    // Find NodePage.
-    storeError eErrCode = find (e, *m_pNode[0], *m_pNode[1], *m_pNode[2]);
+    // Find NodePage and Index.
+    OStoreBTreeNodeObject aNode;
+    sal_uInt16 i = 0;
+    storeError eErrCode = m_aRoot.find_lookup (aNode, i, rKey, *this);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Find Index.
-    sal_uInt16 i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (i < n)
+    // GreaterEqual. Found next entry.
+    PageHolderObject< page > xNode (aNode.get());
+    entry e (xNode->m_pData[i]);
+
+    // Setup result.
+    rKey    = e.m_aKey;
+    rLink   = e.m_aLink;
+    rAttrib = store::ntohl(e.m_nAttrib);
+
+    // Done.
+    return store_E_None;
+}
+
+/*
+ * load => private: iget() @@@
+ * Internal: Precond: initialized, exclusive access.
+ */
+storeError OStorePageManager::load_dirpage_Impl (
+    const OStorePageKey       &rKey,
+    OStoreDirectoryPageObject &rPage)
+{
+    // Find Node and Index.
+    OStoreBTreeNodeObject aNode;
+    sal_uInt16 i = 0;
+    storeError eErrCode = find_lookup (aNode, i, rKey);
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    // Existing entry. Load page.
+    PageHolderObject< page > xNode (aNode.get());
+    entry e (xNode->m_pData[i]);
+    return loadObjectAt (rPage, e.m_aLink.location());
+}
+
+/*
+ * save => private: iget(), rebuild() @@@
+ * Internal: Precond: initialized, writeable, exclusive access.
+ */
+storeError OStorePageManager::save_dirpage_Impl (
+    const OStorePageKey       &rKey,
+    OStoreDirectoryPageObject &rPage)
+{
+    // Find NodePage and Index.
+    node aNode;
+    sal_uInt16 i = 0;
+
+    storeError eErrCode = m_aRoot.find_insert (aNode, i, rKey, *this);
+    PageHolderObject< page > xNode (aNode.get());
+    if (eErrCode != store_E_None)
     {
-        // Compare entry.
-        entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-        OSL_POSTCOND(
-            result != entry::COMPARE_LESS,
-            "OStorePageManager::save(): find failed");
+        if (eErrCode != store_E_AlreadyExists)
+            return eErrCode;
 
-        // Check result.
-        if (result == entry::COMPARE_LESS)
+        // Existing entry.
+        entry e (xNode->m_pData[i]);
+        if (e.m_aLink.location() != STORE_PAGE_NULL)
         {
-            // Must not happen.
-            return store_E_Unknown;
+            // Save page to existing location.
+            return saveObjectAt (rPage, e.m_aLink.location());
         }
 
-        if (result == entry::COMPARE_EQUAL)
-        {
-            // Existing entry. Check address.
-            sal_uInt32 nAddr = m_pNode[0]->m_pData[i].m_aLink.m_nAddr;
-            if (nAddr == STORE_PAGE_NULL)
-            {
-                // Allocate page.
-                eErrCode = base::allocate (rPage);
-                if (eErrCode != store_E_None)
-                    return eErrCode;
+        // Allocate page.
+        eErrCode = base::allocate (rPage);
+        if (eErrCode != store_E_None)
+            return eErrCode;
 
-                // Modify page address.
-                m_pNode[0]->m_pData[i].m_aLink.m_nAddr = rPage.location();
+        // Update page location.
+        xNode->m_pData[i].m_aLink = rPage.location();
 
-                // Save modified NodePage.
-                node aNode (*m_pNode[0]);
-                return save (aNode);
-            }
-            else
-            {
-                // Save page.
-                rPage.location (nAddr);
-                return save (rPage);
-            }
-        }
+        // Save modified NodePage.
+        return saveObjectAt (aNode, aNode.location());
     }
 
-    // Allocate.
+    // Allocate page.
     eErrCode = base::allocate (rPage);
     if (eErrCode != store_E_None)
         return eErrCode;
 
     // Insert.
-    e.m_aLink.m_nAddr = rPage.location();
-    m_pNode[0]->insert (i + 1, e);
+    OStorePageLink aLink (rPage.location());
+    xNode->insert (i + 1, entry (rKey, aLink));
 
     // Save modified NodePage.
-    node aNode (*m_pNode[0]);
-    return save (aNode);
+    return saveObjectAt (aNode, aNode.location());
 }
 
 /*
@@ -702,52 +535,35 @@ storeError OStorePageManager::attrib (
     if (!self::isValid())
         return store_E_InvalidAccess;
 
-    // Setup BTree entry.
-    entry e;
-    e.m_aKey = rKey;
-
-    // Find NodePage.
-    storeError eErrCode = find (e, *m_pNode[0]);
+    // Find NodePage and index.
+    OStoreBTreeNodeObject aNode;
+    sal_uInt16 i = 0;
+    storeError eErrCode = find_lookup (aNode, i, rKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Find Index.
-    sal_uInt16 i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (!(i < n))
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
-
-    // Check for exact match.
-    if (!(e.compare (m_pNode[0]->m_pData[i]) == entry::COMPARE_EQUAL))
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
-
     // Existing entry.
-    e = m_pNode[0]->m_pData[i];
+    PageHolderObject< page > xNode (aNode.get());
+    entry e (xNode->m_pData[i]);
     if (nMask1 != nMask2)
     {
         // Evaluate new attributes.
-        sal_uInt32 nAttrib = e.m_nAttrib;
+        sal_uInt32 nAttrib = store::ntohl(e.m_nAttrib);
 
         nAttrib &= ~nMask1;
         nAttrib |=  nMask2;
 
-        if (nAttrib != e.m_nAttrib)
+        if (store::htonl(nAttrib) != e.m_nAttrib)
         {
             // Check access mode.
             if (base::isWriteable())
             {
                 // Set new attributes.
-                e.m_nAttrib = nAttrib;
-                m_pNode[0]->m_pData[i] = e;
+                e.m_nAttrib = store::htonl(nAttrib);
+                xNode->m_pData[i] = e;
 
                 // Save modified NodePage.
-                node aNode (*m_pNode[0]);
-                eErrCode = save (aNode);
+                eErrCode = saveObjectAt (aNode, aNode.location());
             }
             else
             {
@@ -758,7 +574,7 @@ storeError OStorePageManager::attrib (
     }
 
     // Obtain current attributes.
-    rAttrib = e.m_nAttrib;
+    rAttrib = store::ntohl(e.m_nAttrib);
     return eErrCode;
 }
 
@@ -780,76 +596,28 @@ storeError OStorePageManager::link (
     if (!base::isWriteable())
         return store_E_AccessViolation;
 
-    // Setup 'Destination' BTree entry.
-    entry e;
-    e.m_aKey = rDstKey;
-
-    // Find 'Destination' NodePage.
-    storeError eErrCode = find (e, *m_pNode[0]);
+    // Find 'Destination' NodePage and Index.
+    OStoreBTreeNodeObject aDstNode;
+    sal_uInt16 i = 0;
+    storeError eErrCode = find_lookup (aDstNode, i, rDstKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Find 'Destination' Index.
-    sal_uInt16 i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (!(i < n))
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
+    // Existing 'Destination' entry.
+    PageHolderObject< page > xDstNode (aDstNode.get());
+    entry e (xDstNode->m_pData[i]);
+    OStorePageLink aDstLink (e.m_aLink);
 
-    // Check for exact match.
-    if (!(e.compare (m_pNode[0]->m_pData[i]) == entry::COMPARE_EQUAL))
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
-
-    // Existing entry. Check address.
-    e = m_pNode[0]->m_pData[i];
-    if (e.m_aLink.m_nAddr == STORE_PAGE_NULL)
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
-
-    // Setup 'Source' BTree entry.
-    e.m_aKey    = rSrcKey;
-    e.m_nAttrib = STORE_ATTRIB_ISLINK;
-
-    // Find 'Source' NodePage.
-    eErrCode = find (e, *m_pNode[0], *m_pNode[1], *m_pNode[2]);
+    // Find 'Source' NodePage and Index.
+    OStoreBTreeNodeObject aSrcNode;
+    eErrCode = m_aRoot.find_insert (aSrcNode, i, rSrcKey, *this);
     if (eErrCode != store_E_None)
         return eErrCode;
-
-    // Find 'Source' Index.
-    i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (i < n)
-    {
-        // Compare entry.
-        entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-        OSL_POSTCOND(
-            result != entry::COMPARE_LESS,
-            "OStorePageManager::link(): find failed");
-
-        // Check result.
-        if (result == entry::COMPARE_LESS)
-        {
-            // Must not happen.
-            return store_E_Unknown;
-        }
-
-        if (result == entry::COMPARE_EQUAL)
-        {
-            // Existing 'Source' entry.
-            return store_E_AlreadyExists;
-        }
-    }
 
     // Insert 'Source' entry.
-    m_pNode[0]->insert (i + 1, e);
-
-    node aNode (*m_pNode[0]);
-    return save (aNode);
+    PageHolderObject< page > xSrcNode (aSrcNode.get());
+    xSrcNode->insert (i + 1, entry (rSrcKey, aDstLink, STORE_ATTRIB_ISLINK));
+    return saveObjectAt (aSrcNode, aSrcNode.location());
 }
 
 /*
@@ -878,66 +646,35 @@ storeError OStorePageManager::symlink (
 
     // Setup 'Source' page key.
     OStorePageKey aSrcKey;
-    eErrCode = OStorePageNameBlock::namei (pSrcPath, pSrcName, aSrcKey);
+    eErrCode = namei (pSrcPath, pSrcName, aSrcKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Setup 'Source' BTree entry.
-    entry e;
-    e.m_aKey = aSrcKey;
-
-    // Find 'Source' NodePage.
-    eErrCode = find (e, *m_pNode[0], *m_pNode[1], *m_pNode[2]);
+    // Find 'Source' NodePage and Index.
+    OStoreBTreeNodeObject aSrcNode;
+    sal_uInt16 i = 0;
+    eErrCode = m_aRoot.find_insert (aSrcNode, i, aSrcKey, *this);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Find 'Source' Index.
-    sal_uInt16 i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (i < n)
-    {
-        // Compare entry.
-        entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-        OSL_POSTCOND(
-            result != entry::COMPARE_LESS,
-            "OStorePageManager::symlink(): find failed");
-
-        // Check result.
-        if (result == entry::COMPARE_LESS)
-        {
-            // Must not happen.
-            return store_E_Unknown;
-        }
-
-        if (result == entry::COMPARE_EQUAL)
-        {
-            // Existing 'Source' entry.
-            return store_E_AlreadyExists;
-        }
-    }
-
-    // Initialize directory page buffer.
-    if (m_pDirect)
-        m_pDirect->initialize();
-    if (!m_pDirect)
-        m_pDirect = new(m_nPageSize) inode(m_nPageSize);
-    if (!m_pDirect)
-        return store_E_OutOfMemory;
+    // Initialize directory page.
+    OStoreDirectoryPageObject aPage;
+    eErrCode = aPage.construct< inode >(base::allocator());
+    if (eErrCode != store_E_None)
+        return eErrCode;
 
     // Setup as 'Source' directory page.
-    m_pDirect->m_aNameBlock.m_aKey = aSrcKey;
-    rtl_copyMemory (
-        &m_pDirect->m_aNameBlock.m_pData[0],
+    inode_holder_type xNode (aPage.get());
+    aPage.key (aSrcKey);
+    memcpy (
+        &(xNode->m_aNameBlock.m_pData[0]),
         pSrcName->buffer, pSrcName->length);
 
     // Store 'Destination' page key.
     OStorePageKey aDstKey (rDstKey);
-#ifdef OSL_BIGENDIAN
-    aDstKey.swap(); // Swap to external representation.
-#endif /* OSL_BIGENDIAN */
-    rtl_copyMemory (&m_pDirect->m_pData[0], &aDstKey, sizeof(aDstKey));
+    memcpy (&(xNode->m_pData[0]), &aDstKey, sizeof(aDstKey));
 
     // Mark 'Source' as symbolic link to 'Destination'.
-    OStoreDirectoryPageObject aPage (*m_pDirect);
     aPage.attrib (STORE_ATTRIB_ISLINK);
     aPage.dataLength (sal_uInt32(sizeof(aDstKey)));
 
@@ -947,12 +684,12 @@ storeError OStorePageManager::symlink (
         return eErrCode;
 
     // Insert 'Source' entry.
-    e.m_aLink.m_nAddr = aPage.location();
-    m_pNode[0]->insert (i + 1, e);
+    PageHolderObject< page > xSrcNode (aSrcNode.get());
+    OStorePageLink aSrcLink (aPage.location());
+    xSrcNode->insert (i + 1, entry(aSrcKey, aSrcLink));
 
     // Save modified NodePage.
-    node aNode (*m_pNode[0]);
-    return save (aNode);
+    return saveObjectAt (aSrcNode, aSrcNode.location());
 }
 
 /*
@@ -981,56 +718,27 @@ storeError OStorePageManager::rename (
 
     // Setup 'Destination' page key.
     OStorePageKey aDstKey;
-    eErrCode = OStorePageNameBlock::namei (pDstPath, pDstName, aDstKey);
+    eErrCode = namei (pDstPath, pDstName, aDstKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Setup 'Source' BTree entry.
-    entry e;
-    e.m_aKey = rSrcKey;
-
-    // Find 'Source' NodePage.
-    eErrCode = find (e, *m_pNode[0]);
+    // Find 'Source' NodePage and Index.
+    OStoreBTreeNodeObject aSrcNode;
+    sal_uInt16 i = 0;
+    eErrCode = find_lookup (aSrcNode, i, rSrcKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Find 'Source' Index.
-    sal_uInt16 i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (!(i < n))
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
+    // Existing 'Source' entry.
+    PageHolderObject< page > xSrcNode (aSrcNode.get());
+    entry e (xSrcNode->m_pData[i]);
 
-    // Check for exact match.
-    if (!(e.compare (m_pNode[0]->m_pData[i]) == entry::COMPARE_EQUAL))
+    // Check for (not a) hardlink.
+    OStoreDirectoryPageObject aPage;
+    if (!(store::ntohl(e.m_nAttrib) & STORE_ATTRIB_ISLINK))
     {
-        // Page not present.
-        return store_E_NotExists;
-    }
-
-    // Existing 'Source' entry. Check address.
-    e = m_pNode[0]->m_pData[i];
-    if (e.m_aLink.m_nAddr == STORE_PAGE_NULL)
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
-
-    // Check for hardlink.
-    if (!(e.m_nAttrib & STORE_ATTRIB_ISLINK))
-    {
-        // Check directory page buffer.
-        if (!m_pDirect)
-            m_pDirect = new(m_nPageSize) inode(m_nPageSize);
-        if (!m_pDirect)
-            return store_E_OutOfMemory;
-
         // Load directory page.
-        OStoreDirectoryPageObject aPage (*m_pDirect);
-        aPage.location (e.m_aLink.m_nAddr);
-
-        eErrCode = base::load (aPage);
+        eErrCode = base::loadObjectAt (aPage, e.m_aLink.location());
         if (eErrCode != store_E_None)
             return eErrCode;
 
@@ -1038,75 +746,52 @@ storeError OStorePageManager::rename (
         if (aPage.attrib() & STORE_ATTRIB_ISDIR)
         {
             // Ugly, but necessary (backward compatibility).
-            aDstKey.m_nLow = OStorePageGuard::crc32 (aDstKey.m_nLow, "/", 1);
+            aDstKey.m_nLow = store::htonl(rtl_crc32 (store::ntohl(aDstKey.m_nLow), "/", 1));
         }
     }
 
     // Let 'Source' entry be 'Destination' entry.
     e.m_aKey = aDstKey;
 
-    // Find 'Destination' NodePage.
-    eErrCode = find (e, *m_pNode[0], *m_pNode[1], *m_pNode[2]);
+    // Find 'Destination' NodePage and Index.
+    OStoreBTreeNodeObject aDstNode;
+    eErrCode = m_aRoot.find_insert (aDstNode, i, e.m_aKey, *this);
     if (eErrCode != store_E_None)
         return eErrCode;
-
-    // Find 'Destination' Index.
-    i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (i < n)
-    {
-        // Compare entry.
-        entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-        OSL_POSTCOND(
-            result != entry::COMPARE_LESS,
-            "OStorePageManager::rename(): find failed");
-
-        // Check result.
-        if (result == entry::COMPARE_LESS)
-        {
-            // Must not happen.
-            return store_E_Unknown;
-        }
-
-        if (result == entry::COMPARE_EQUAL)
-        {
-            // Existing 'Destination' entry.
-            return store_E_AlreadyExists;
-        }
-    }
 
     // Insert 'Destination' entry.
-    node aNode (*m_pNode[0]);
-    m_pNode[0]->insert (i + 1, e);
+    PageHolderObject< page > xDstNode (aDstNode.get());
+    xDstNode->insert (i + 1, e);
 
-    eErrCode = save (aNode);
+    eErrCode = saveObjectAt (aDstNode, aDstNode.location());
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Check for hardlink.
-    if (!(e.m_nAttrib & STORE_ATTRIB_ISLINK))
+    // Check for (not a) hardlink.
+    if (!(store::ntohl(e.m_nAttrib) & STORE_ATTRIB_ISLINK))
     {
+        // Modify 'Source' directory page.
+        inode_holder_type xNode (aPage.get());
+
         // Setup 'Destination' NameBlock.
         sal_Int32 nDstLen = pDstName->length;
-        rtl_copyMemory (
-            &m_pDirect->m_aNameBlock.m_pData[0],
-            pDstName->buffer, nDstLen);
-        rtl_zeroMemory (
-            &m_pDirect->m_aNameBlock.m_pData[nDstLen],
-            STORE_MAXIMUM_NAMESIZE - nDstLen);
-        m_pDirect->m_aNameBlock.m_aKey = e.m_aKey;
+        memcpy (
+            &(xNode->m_aNameBlock.m_pData[0]),
+            pDstName->buffer, pDstName->length);
+        memset (
+            &(xNode->m_aNameBlock.m_pData[nDstLen]),
+            0, STORE_MAXIMUM_NAMESIZE - nDstLen);
+        aPage.key (e.m_aKey);
 
         // Save directory page.
-        OStoreDirectoryPageObject aPage (*m_pDirect);
-        aPage.location (e.m_aLink.m_nAddr);
-
-        eErrCode = base::save (aPage);
+        eErrCode = base::saveObjectAt (aPage, e.m_aLink.location());
         if (eErrCode != store_E_None)
             return eErrCode;
     }
 
     // Remove 'Source' entry.
     e.m_aKey = rSrcKey;
-    return remove (e, *m_pNode[0], *m_pNode[1]);
+    return remove_Impl (e);
 }
 
 /*
@@ -1125,57 +810,30 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
     if (!base::isWriteable())
         return store_E_AccessViolation;
 
-    // Setup BTree entry.
-    entry e;
-    e.m_aKey = rKey;
-
-    // Find NodePage.
-    storeError eErrCode = find (e, *m_pNode[0]);
+    // Find NodePage and index.
+    OStoreBTreeNodeObject aNodePage;
+    sal_uInt16 i = 0;
+    storeError eErrCode = find_lookup (aNodePage, i, rKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Find Index.
-    sal_uInt16 i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (!(i < n))
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
+    // Existing entry.
+    PageHolderObject< page > xNodePage (aNodePage.get());
+    entry e (xNodePage->m_pData[i]);
 
-    // Check for exact match.
-    if (!(e.compare (m_pNode[0]->m_pData[i]) == entry::COMPARE_EQUAL))
+    // Check for (not a) hardlink.
+    if (!(store::ntohl(e.m_nAttrib) & STORE_ATTRIB_ISLINK))
     {
-        // Page not present.
-        return store_E_NotExists;
-    }
-
-    // Existing entry. Check address.
-    e = m_pNode[0]->m_pData[i];
-    if (e.m_aLink.m_nAddr == STORE_PAGE_NULL)
-    {
-        // Page not present.
-        return store_E_NotExists;
-    }
-
-    // Check for hardlink.
-    if (!(e.m_nAttrib & STORE_ATTRIB_ISLINK))
-    {
-        // Check directory page buffer.
-        if (!m_pDirect)
-            m_pDirect = new(m_nPageSize) inode(m_nPageSize);
-        if (!m_pDirect)
-            return store_E_OutOfMemory;
-
         // Load directory page.
-        OStoreDirectoryPageObject aPage (*m_pDirect);
-        aPage.location (e.m_aLink.m_nAddr);
-
-        eErrCode = base::load (aPage);
+        OStoreDirectoryPageObject aPage;
+        eErrCode = base::loadObjectAt (aPage, e.m_aLink.location());
         if (eErrCode != store_E_None)
             return eErrCode;
 
+        inode_holder_type xNode (aPage.get());
+
         // Acquire page write access.
-        OStorePageDescriptor aDescr (m_pDirect->m_aDescr);
+        OStorePageDescriptor aDescr (xNode->m_aDescr);
         eErrCode = base::acquirePage (aDescr, store_AccessReadWrite);
         if (eErrCode != store_E_None)
             return eErrCode;
@@ -1184,97 +842,30 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
         if (!(aPage.attrib() & STORE_ATTRIB_ISLINK))
         {
             // Ordinary inode. Determine 'Data' scope.
-            inode::ChunkScope eScope = m_pDirect->scope (aPage.dataLength());
+            inode::ChunkScope eScope = xNode->scope (aPage.dataLength());
             if (eScope == inode::SCOPE_EXTERNAL)
             {
-                // External 'Data' scope. Check data page buffer.
-                if (!m_pData)
-                    m_pData = new(m_nPageSize) data(m_nPageSize);
-                if (!m_pData)
-                    return store_E_OutOfMemory;
-
-                // Truncate all external data pages.
-                OStoreDataPageObject aData (*m_pData);
-                eErrCode = aPage.truncate (
-                    0, m_pLink[0], m_pLink[1], m_pLink[2], aData, *this);
+                // External 'Data' scope. Truncate all external data pages.
+                eErrCode = aPage.truncate (0, *this);
                 if (eErrCode != store_E_None)
                     return eErrCode;
             }
 
             // Truncate internal data page.
-            rtl_zeroMemory (&m_pDirect->m_pData[0], m_pDirect->capacity());
+            memset (&(xNode->m_pData[0]), 0, xNode->capacity());
             aPage.dataLength (0);
         }
 
         // Release page write access.
-        eErrCode = base::releasePage (aDescr);
+        eErrCode = base::releasePage (aDescr, store_AccessReadWrite);
 
         // Release and free directory page.
-        eErrCode = base::free (aPage);
+        OStorePageData aPageHead;
+        eErrCode = base::free (aPageHead, aPage.location());
     }
 
     // Remove entry.
-    return remove (e, *m_pNode[0], *m_pNode[1]);
-}
-
-/*
- * iterate.
- * Precond: initialized.
- * ToDo: skip hardlink entries.
- */
-storeError OStorePageManager::iterate (
-    OStorePageKey    &rKey,
-    OStorePageObject &rPage,
-    sal_uInt32       &rAttrib)
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
-
-    // Check precond.
-    if (!self::isValid())
-        return store_E_InvalidAccess;
-
-    // Setup BTree entry.
-    entry e;
-    e.m_aKey = rKey;
-
-    // Find NodePage.
-    storeError eErrCode = find (e, *m_pNode[0]);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
-    // Find Index.
-    sal_uInt16 i = m_pNode[0]->find(e), n = m_pNode[0]->usageCount();
-    if (!(i < n))
-    {
-        // Not found.
-        return store_E_NotExists;
-    }
-
-    // Compare entry.
-    entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-    OSL_POSTCOND(
-        result != entry::COMPARE_LESS,
-        "OStorePageManager::iterate(): find failed");
-
-    // Check result.
-    if (result == entry::COMPARE_LESS)
-    {
-        // Must not happen.
-        return store_E_Unknown;
-    }
-
-    // GreaterEqual. Found next entry.
-    e = m_pNode[0]->m_pData[i];
-
-    // Setup result.
-    rKey    = e.m_aKey;
-    rAttrib = e.m_nAttrib;
-
-    rPage.location (e.m_aLink.m_nAddr);
-
-    // Done.
-    return store_E_None;
+    return remove_Impl (e);
 }
 
 /*
@@ -1286,11 +877,13 @@ struct RebuildContext
     */
     rtl::Reference<OStorePageBIOS> m_xBIOS;
     OStorePageBIOS::ScanContext    m_aCtx;
+    sal_uInt16                     m_nPageSize;
 
     /** Construction.
      */
     RebuildContext (void)
-        : m_xBIOS (new OStorePageBIOS())
+        : m_xBIOS     (new OStorePageBIOS()),
+          m_nPageSize (0)
     {}
 
     /** initialize (PageBIOS and ScanContext).
@@ -1300,7 +893,7 @@ struct RebuildContext
         storeError eErrCode = store_E_InvalidParameter;
         if (pLockBytes)
         {
-            m_xBIOS->initialize (pLockBytes, store_AccessReadOnly);
+            m_xBIOS->initialize (pLockBytes, store_AccessReadOnly, m_nPageSize);
             eErrCode = m_xBIOS->scanBegin (m_aCtx, nMagic);
         }
         return eErrCode;
@@ -1321,13 +914,6 @@ struct RebuildContext
             return m_xBIOS->scanNext (m_aCtx, rPage);
         else
             return store_E_CantSeek;
-    }
-
-    /** getPageSize.
-     */
-    storeError getPageSize (sal_uInt16 &rnPageSize)
-    {
-        return m_xBIOS->getPageSize (rnPageSize);
     }
 };
 
@@ -1351,147 +937,129 @@ storeError OStorePageManager::rebuild (
     eErrCode = aCtx.initialize (pSrcLB, STORE_MAGIC_DIRECTORYPAGE);
     if (eErrCode != store_E_None)
         return eErrCode;
-
-    // Obtain 'Source' page size.
-    sal_uInt16 nPageSize = 0;
-    eErrCode = aCtx.getPageSize (nPageSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
+    rtl::Reference<OStorePageBIOS> xSrcBIOS (aCtx.m_xBIOS);
 
     // Initialize as 'Destination' with 'Source' page size.
-    eErrCode = self::initializeManager (pDstLB, store_AccessCreate, nPageSize);
+    eErrCode = self::initialize (pDstLB, store_AccessCreate, aCtx.m_nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Initialize directory and data page buffers.
-    if (!m_pDirect)
-        m_pDirect = new(m_nPageSize) inode(m_nPageSize);
-    if (!m_pData)
-        m_pData = new(m_nPageSize) data(m_nPageSize);
-    if (!(m_pDirect && m_pData))
-        return store_E_OutOfMemory;
-
-    // Initialize 'Source' directory page.
-    inode *pDirect = new(m_nPageSize) inode(m_nPageSize);
-    if (!pDirect)
-        return store_E_OutOfMemory;
-
-    // Scan 'Source' directory pages.
-    OStoreDirectoryPageObject aSrcPage (*pDirect);
-    while ((eErrCode = aCtx.load(aSrcPage)) == store_E_None)
+    // Pass One: Scan 'Source' directory pages.
     {
-        // Obtain page key and data length.
-        OStorePageKey aKey (pDirect->m_aNameBlock.m_aKey);
-        sal_uInt32 nDataLen = pDirect->m_aDataBlock.m_nDataLen;
-
-        // Determine data page scope.
-        inode::ChunkScope eScope = pDirect->scope (nDataLen);
-        if (eScope == inode::SCOPE_INTERNAL)
+        // Scan 'Source' directory pages.
+        OStoreDirectoryPageObject aSrcPage;
+        while ((eErrCode = aCtx.load(aSrcPage)) == store_E_None)
         {
-            // Internal scope. Just insert directory node.
-            eErrCode = save (aKey, aSrcPage);
+            OStoreDirectoryPageObject aDstPage;
+            eErrCode = aDstPage.construct< inode >(base::allocator());
             if (eErrCode != store_E_None)
                 break;
-        }
-        else
-        {
-            // External scope.
-            OStoreDirectoryPageObject aDstPage (*m_pDirect);
-            rtl_copyMemory (m_pDirect, pDirect, m_nPageSize);
 
-            m_pDirect->m_aDataBlock.initialize();
-            m_pDirect->m_aDataBlock.m_nDataLen = m_pDirect->capacity();
+            inode_holder_type xSrcDir (aSrcPage.get());
+            inode_holder_type xDstDir (aDstPage.get());
+
+            // Copy NameBlock @@@ OLD @@@
+            memcpy (&(xDstDir->m_aNameBlock), &(xSrcDir->m_aNameBlock), sizeof(xSrcDir->m_aNameBlock));
+
+            // Obtain 'Source' data length.
+            sal_uInt32 nDataLen = aSrcPage.dataLength();
+            if (nDataLen > 0)
+            {
+                // Copy internal data area @@@ OLD @@@
+                memcpy (&(xDstDir->m_pData[0]), &(xSrcDir->m_pData[0]), xSrcDir->capacity());
+            }
 
             // Insert 'Destination' directory page.
-            eErrCode = save (aKey, aDstPage);
+            eErrCode = save_dirpage_Impl (aDstPage.key(), aDstPage);
             if (eErrCode != store_E_None)
                 break;
 
-            // Determine data page count.
-            inode::ChunkDescriptor aDescr (
-                nDataLen - m_pDirect->capacity(), m_pData->capacity());
-
-            sal_uInt32 i, n = aDescr.m_nPage;
-            if (aDescr.m_nOffset) n += 1;
-
-            // Copy data pages.
-            OStoreDataPageObject aData (*m_pData);
-            for (i = 0; i < n; i++)
+            // Check for external data page scope.
+            if (xSrcDir->scope(nDataLen) != inode::SCOPE_INTERNAL)
             {
-                // Re-initialize data page size.
-                m_pData->m_aDescr.m_nSize = m_nPageSize;
+                // Initialize 'Destination' data page.
+                typedef OStoreDataPageData data;
+                PageHolderObject< data > xData;
+                if (!xData.construct(base::allocator()))
+                    return store_E_OutOfMemory;
 
-                // Read 'Source' data page.
-                OStorePageBIOS &rBIOS  = *(aCtx.m_xBIOS);
-                osl::Mutex     &rMutex = rBIOS;
+                // Determine data page count.
+                inode::ChunkDescriptor aDescr (
+                    nDataLen - xDstDir->capacity(), xData->capacity());
 
-                eErrCode = aSrcPage.get (
-                    i, m_pLink[0], m_pLink[1], m_pLink[2],
-                    aData, rBIOS, &rMutex);
-                if (eErrCode != store_E_None)
-                    continue;
+                sal_uInt32 i, n = aDescr.m_nPage;
+                if (aDescr.m_nOffset) n += 1;
 
-                // Write 'Destination' data page.
-                eErrCode = aDstPage.put (
-                    i, m_pLink[0], m_pLink[1], m_pLink[2],
-                    aData, *this, NULL);
+                // Copy data pages.
+                OStoreDataPageObject aData;
+                for (i = 0; i < n; i++)
+                {
+                    // Read 'Source' data page.
+                    osl::MutexGuard aSrcGuard (*xSrcBIOS);
+
+                    eErrCode = aSrcPage.read (i, aData, *xSrcBIOS);
+                    if (eErrCode != store_E_None)
+                        continue;
+
+                    // Write 'Destination' data page. @@@ READONLY @@@
+                    eErrCode = aDstPage.write (i, aData, *this);
+                }
             }
 
             // Update 'Destination' directory page.
-            m_pDirect->m_aDataBlock.m_nDataLen = nDataLen;
-            eErrCode = base::save (aDstPage);
+            aDstPage.dataLength (nDataLen);
+            eErrCode = base::saveObjectAt (aDstPage, aDstPage.location());
         }
+
+        // Save directory scan results.
+        flush();
     }
 
-    // Save directory scan results.
-    flush();
-
-    // Scan 'Source' BTree nodes.
-    page *pNode = new(m_nPageSize) page(m_nPageSize);
-    node aNode (*pNode);
-    entry e;
-
-    aCtx.initialize (STORE_MAGIC_BTREENODE);
-    while ((eErrCode = aCtx.load(aNode)) == store_E_None)
+    // Pass Two: Scan 'Source' BTree nodes.
     {
-        // Check for leaf node.
-        if (pNode->depth() == 0)
+        // Re-start 'Source' rebuild context.
+        aCtx.initialize (STORE_MAGIC_BTREENODE);
+
+        // Scan 'Source' BTree nodes.
+        OStoreBTreeNodeObject aNode;
+        while ((eErrCode = aCtx.load(aNode)) == store_E_None)
         {
-            sal_uInt16 i, n = pNode->usageCount();
-            for (i = 0; i < n; i++)
+            // Check for leaf node.
+            PageHolderObject< page > xNode (aNode.get());
+            if (xNode->depth() == 0)
             {
-                e = pNode->m_pData[i];
-                if (e.m_nAttrib & STORE_ATTRIB_ISLINK)
+                sal_uInt16 i, n = xNode->usageCount();
+                for (i = 0; i < n; i++)
                 {
-                    // Hard link.
-                    aSrcPage.location (e.m_aLink.m_nAddr);
-                    pDirect->m_aDescr.m_nSize = m_nPageSize;
+                    entry e (xNode->m_pData[i]);
 
-                    eErrCode = aCtx.m_xBIOS->load (aSrcPage);
-                    if (eErrCode == store_E_None)
+                    // Check for Hard link.
+                    if (e.m_nAttrib & STORE_ATTRIB_ISLINK)
                     {
-                        OStorePageKey aDstKey (pDirect->m_aNameBlock.m_aKey);
-                        eErrCode = link (e.m_aKey, aDstKey);
+                        // Load the hard link destination.
+                        OStoreDirectoryPageObject aSrcPage;
+                        eErrCode = xSrcBIOS->loadObjectAt (aSrcPage, e.m_aLink.location());
+                        if (eErrCode == store_E_None)
+                        {
+                            OStorePageKey aDstKey (aSrcPage.key());
+                            eErrCode = link (e.m_aKey, aDstKey);
+                        }
+                        e.m_nAttrib &= ~STORE_ATTRIB_ISLINK;
                     }
-                    e.m_nAttrib &= ~STORE_ATTRIB_ISLINK;
-                }
 
-                if (e.m_nAttrib)
-                {
-                    // Ordinary attributes.
-                    sal_uInt32 nAttrib = 0;
-                    eErrCode = attrib (e.m_aKey, 0, e.m_nAttrib, nAttrib);
+                    if (e.m_nAttrib)
+                    {
+                        // Ordinary attributes.
+                        sal_uInt32 nAttrib = 0;
+                        eErrCode = attrib (e.m_aKey, 0, e.m_nAttrib, nAttrib);
+                    }
                 }
             }
         }
+
+        // Save BTree node scan results.
+        flush();
     }
-
-    // Save BTree node scan results.
-    flush();
-
-    // Cleanup.
-    delete pDirect;
-    delete pNode;
 
     // Done.
     return store_E_None;

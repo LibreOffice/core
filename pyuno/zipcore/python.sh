@@ -51,6 +51,10 @@ export PATH
 LD_LIBRARY_PATH=$sd_prog/../basis-link/program:$sd_prog/../basis-link/ure-link/lib${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
+# Set UNO_PATH so that "officehelper.bootstrap()" can find soffice executable:
+: ${UNO_PATH=$sd_prog}
+export UNO_PATH
+
 # Set URE_BOOTSTRAP so that "uno.getComponentContext()" bootstraps a complete
 # OOo UNO environment:
 : ${URE_BOOTSTRAP=vnd.sun.star.pathname:$sd_prog/fundamentalrc}

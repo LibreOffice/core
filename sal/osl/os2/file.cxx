@@ -174,7 +174,6 @@ static oslFileError osl_psz_createDirectory(const sal_Char* pszPath);
 static oslFileError osl_psz_removeDirectory(const sal_Char* pszPath);
 static oslFileError osl_psz_copyFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
 static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
-static oslFileError osl_psz_setFileAttributes(const sal_Char* pszFilePath, sal_uInt64 uAttributes);
 static oslFileError osl_psz_setFileTime(const sal_Char* strFilePath, const TimeValue* pCreationTime, const TimeValue* pLastAccessTime, const TimeValue* pLastWriteTime);
 
 
@@ -1981,8 +1980,11 @@ oslFileError osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustr
 
 oslFileError osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt64 uAttributes )
 {
-    char path[PATH_MAX];
+    char         path[PATH_MAX];
     oslFileError eRet;
+    FILESTATUS3  fsts3ConfigInfo;
+    ULONG        ulBufSize     = sizeof(FILESTATUS3);
+    APIRET       rc            = NO_ERROR;
 
     OSL_ASSERT( ustrFileURL );
 
@@ -1991,7 +1993,25 @@ oslFileError osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt64 uAttrib
     if( eRet != osl_File_E_None )
         return eRet;
 
-    return osl_psz_setFileAttributes( path, uAttributes );
+    /* query current attributes */
+    rc = DosQueryPathInfo( (PCSZ)path, FIL_STANDARD, &fsts3ConfigInfo, ulBufSize);
+    if (rc != NO_ERROR)
+        return MapError( rc);
+
+    /* set/reset readonly/hidden (see w32\file.cxx) */
+    fsts3ConfigInfo.attrFile &= ~(FILE_READONLY | FILE_HIDDEN);
+    if ( uAttributes & osl_File_Attribute_ReadOnly )
+        fsts3ConfigInfo.attrFile |= FILE_READONLY;
+    if ( uAttributes & osl_File_Attribute_Hidden )
+        fsts3ConfigInfo.attrFile |= FILE_HIDDEN;
+
+    /* write new attributes */
+    rc = DosSetPathInfo( (PCSZ)path, FIL_STANDARD, &fsts3ConfigInfo, ulBufSize, 0);
+    if (rc != NO_ERROR)
+        return MapError( rc);
+
+    /* everything ok */
+    return osl_File_E_None;
 }
 
 /****************************************************************************/
@@ -2479,50 +2499,6 @@ static oslFileError osl_psz_getVolumeInformation (
         }
     }
     return osl_File_E_None;
-}
-
-/*************************************
- * osl_psz_setFileAttributes
- ************************************/
-
-static oslFileError osl_psz_setFileAttributes( const sal_Char* pszFilePath, sal_uInt64 uAttributes )
-{
-    oslFileError osl_error = osl_File_E_None;
-    mode_t       nNewMode  = 0;
-
-     OSL_ENSURE(!(osl_File_Attribute_Hidden & uAttributes), "osl_File_Attribute_Hidden doesn't work under Unix");
-
-    if (uAttributes & osl_File_Attribute_OwnRead)
-        nNewMode |= S_IRUSR;
-
-    if (uAttributes & osl_File_Attribute_OwnWrite)
-        nNewMode|=S_IWUSR;
-
-    if  (uAttributes & osl_File_Attribute_OwnExe)
-        nNewMode|=S_IXUSR;
-
-    if (uAttributes & osl_File_Attribute_GrpRead)
-        nNewMode|=S_IRGRP;
-
-    if (uAttributes & osl_File_Attribute_GrpWrite)
-        nNewMode|=S_IWGRP;
-
-    if (uAttributes & osl_File_Attribute_GrpExe)
-        nNewMode|=S_IXGRP;
-
-    if (uAttributes & osl_File_Attribute_OthRead)
-        nNewMode|=S_IROTH;
-
-    if (uAttributes & osl_File_Attribute_OthWrite)
-        nNewMode|=S_IWOTH;
-
-    if (uAttributes & osl_File_Attribute_OthExe)
-        nNewMode|=S_IXOTH;
-
-    if (chmod(pszFilePath, nNewMode) < 0)
-        osl_error = oslTranslateFileError(OSL_FET_ERROR, errno);
-
-    return osl_error;
 }
 
 /******************************************

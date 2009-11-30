@@ -33,7 +33,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <set>
 #include "registry/registry.hxx"
 #include "registry/reflread.hxx"
 #include <rtl/ustring.hxx>
@@ -104,8 +103,6 @@ struct LessString
         return (str1 < str2);
     }
 };
-
-typedef ::std::set< OUString, LessString > StringSet;
 
 class Options
 {

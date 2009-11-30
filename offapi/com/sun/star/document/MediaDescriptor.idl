@@ -461,6 +461,27 @@ published service MediaDescriptor
     [optional,property] com::sun::star::task::XStatusIndicator StatusIndicator;
 
     //-------------------------------------------------------------------------
+    /** allows to specify the URL that is used next time SaveAs dialog is opened
+
+        <p>
+        If the parameter is specified, the URL will be used by SaveAs dialog
+        next time as target folder.
+        </p>
+     */
+    [optional,property] string SuggestedSaveAsDir;
+
+    //-------------------------------------------------------------------------
+    /** allows to specify the suggested file name that is used next time SaveAs
+        dialog is opened
+
+        <p>
+        If the parameter is specified, the file name will be suggested by
+        SaveAs dialog next time.
+        </p>
+     */
+    [optional,property] string SuggestedSaveAsName;
+
+    //-------------------------------------------------------------------------
     /** name of the template instead of the URL
 
         <p>

@@ -185,10 +185,6 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         }
         else
         {
-printf( "rtti '%s' %x\n", symName.getStr(), rtti);
-printf( "ERROR! rtti info not found, please add proper definition to gcc3_uno.dll\n");
-printf( "for above symbol name. Program exiting.\n");
-exit(1);
             // try to lookup the symbol in the generated rtti map
             t_rtti_map::const_iterator iFind( m_generatedRttis.find( unoName ) );
             if (iFind == m_generatedRttis.end())

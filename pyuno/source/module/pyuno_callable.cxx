@@ -245,6 +245,9 @@ static PyTypeObject PyUNO_callable_Type =
     NULL,
     NULL,
     (destructor)0
+#if PY_VERSION_HEX >= 0x02060000
+    , 0
+#endif
 };
 
 PyRef PyUNO_callable_new (

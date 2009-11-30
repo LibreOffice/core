@@ -281,29 +281,21 @@ RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
                                                   RegValue pValueList,
                                                   sal_uInt32 len);
 
-/** This function creates a link with the specified link name and link target.
+/** This function used to create a link.
 
-    Links in the registry are similar to links in the UNIX fielsystem. If a link will be opened,
-    the link target will be resolved and the key speciefied by the link target will be opened.
-    @param  hKey identifies a currently open key. The link which will be created is a subkey
-                 of the key identified by hKey.
-    @param  linkName points to a null terminated string specifying the name of the new link.
-    @param  linkTarget points to a null terminated string specifying the link target of the new link.
-                       The linktarget must specify a valid name of an existing key. The linktarget itself
-                       can contain links in the full qualified name. All links will be resolved if the
-                       link will be opened.
-    @return REG_NO_ERROR if succeeds else an error code.
+    @obsolete Links are no longer supported.
+
+    @return REG_INVALID_LINK
 */
 RegError REGISTRY_CALLTYPE reg_createLink(RegKeyHandle hKey,
                                                rtl_uString* linkName,
                                           rtl_uString* linkTarget);
 
-/** This function deletes a link with the specified linkname.
+/** This function used to delete a link.
 
-    @param  hKey identifies a currently open key. The link which will be deleted is a subkey
-                 of the key identified by hKey.
-    @param  linkName points to a null terminated string specifying the name of the link.
-    @return REG_NO_ERROR if succeeds else an error code.
+    @obsolete Links are no longer supported.
+
+    @return REG_INVALID_LINK
 */
 RegError REGISTRY_CALLTYPE reg_deleteLink(RegKeyHandle hKey,
                                             rtl_uString* linkName);
@@ -312,7 +304,7 @@ RegError REGISTRY_CALLTYPE reg_deleteLink(RegKeyHandle hKey,
 
     The registry differentiates two possible types:
     - RG_KEYTYPE represents a real key
-    - RG_LINKTYPE represents a link
+    - RG_LINKTYPE used to represent a link (no longer used)
     @param  keyName points to a null terminated string specifying the name of the key which keytype
                     will be returned.
     @param  pKeyType returns the type of the key.
@@ -322,24 +314,24 @@ RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
                                           rtl_uString* keyName,
                                              RegKeyType* pKeyType);
 
-/** This function returns the linktarget of a link.
+/** This function used to return the linktarget of a link.
 
-    @param  linkName points to a null terminated string specifying the name of the link which
-                     linktarget will be returned.
-    @param  pLinkTarget contains the linktarget if succeeds else an empty string.
-    @return REG_NO_ERROR if succeeds else an error code.
+    @obsolete Links are no longer supported.
+
+    @return REG_INVALID_LINK
 */
 RegError REGISTRY_CALLTYPE reg_getLinkTarget(RegKeyHandle hKey,
                                              rtl_uString* linkName,
                                                rtl_uString** pLinkTarget);
 
-/** This function resolves all or only the first link of a keyname.
+/** This function resolves a keyname.
 
     and returns the resolved keyName in pResolvedName.
     @param  hKey identifies a currently open key. The key specified by keyName is a subkey
                  of the key identified by hKey.
     @param  keyName points to a null terminated string specifying the relativ name of a key.
-                    The name of hKey together with keyName will be resolved from links.
+                    The name of hKey together with keyName will be generated.
+    @param firstLinkOnly ignored
     @return REG_NO_ERROR if succeeds else an error code.
  */
 RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKey,
@@ -473,7 +465,7 @@ RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry,
 
 /** This function reports the complete registry information of a key and all of its subkeys.
 
-    All information which are available (keynames, value types, values, linknames, linktargets, ...)
+    All information which are available (keynames, value types, values, ...)
     will be printed to stdout for report issues only.
     @param  hKey identifies a currently open key which content will be reported.
     @return REG_NO_ERROR if succeeds else an error code.

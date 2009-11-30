@@ -31,634 +31,534 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _STORE_STORCACH_CXX "$Revision: 1.8 $"
-#include <sal/types.h>
-#include <rtl/alloc.h>
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
-#include <store/types.h>
-#include <storbase.hxx>
-#ifndef _STORE_STORCACH_HXX_
-#include <storcach.hxx>
-#endif
+#include "storcach.hxx"
 
-#ifndef INCLUDED_CSTDDEF
-#include <cstddef>
-#define INCLUDED_CSTDDEF
+#include "sal/types.h"
+#include "rtl/alloc.h"
+#include "osl/diagnose.h"
+
+#include "store/types.h"
+#include "object.hxx"
+#include "storbase.hxx"
+
+#ifndef INCLUDED_STDDEF_H
+#include <stddef.h>
+#define INCLUDED_STDDEF_H
 #endif
 
 using namespace store;
 
 /*========================================================================
  *
- * OStorePageCacheEntry.
+ * PageCache (non-virtual interface) implementation.
+ *
+ *======================================================================*/
+
+storeError PageCache::lookupPageAt (PageHolder & rxPage, sal_uInt32 nOffset)
+{
+    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::lookupPageAt(): invalid Offset");
+    if (nOffset == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
+    return lookupPageAt_Impl (rxPage, nOffset);
+}
+
+storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
+{
+    // [SECURITY:ValInput]
+    PageData const * pagedata = rxPage.get();
+    OSL_PRECOND(!(pagedata == 0), "store::PageCache::insertPageAt(): invalid Page");
+    if (pagedata == 0)
+        return store_E_InvalidParameter;
+
+    sal_uInt32 const offset = pagedata->location();
+    OSL_PRECOND(!(nOffset != offset), "store::PageCache::insertPageAt(): inconsistent Offset");
+    if (nOffset != offset)
+        return store_E_InvalidParameter;
+
+    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::insertPageAt(): invalid Offset");
+    if (nOffset == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
+    return insertPageAt_Impl (rxPage, nOffset);
+}
+
+storeError PageCache::updatePageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
+{
+    // [SECURITY:ValInput]
+    PageData const * pagedata = rxPage.get();
+    OSL_PRECOND(!(pagedata == 0), "store::PageCache::updatePageAt(): invalid Page");
+    if (pagedata == 0)
+        return store_E_InvalidParameter;
+
+    sal_uInt32 const offset = pagedata->location();
+    OSL_PRECOND(!(nOffset != offset), "store::PageCache::updatePageAt(): inconsistent Offset");
+    if (nOffset != offset)
+        return store_E_InvalidParameter;
+
+    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::updatePageAt(): invalid Offset");
+    if (nOffset == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
+    return updatePageAt_Impl (rxPage, nOffset);
+}
+
+storeError PageCache::removePageAt (sal_uInt32 nOffset)
+{
+    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::removePageAt(): invalid Offset");
+    if (nOffset == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
+    return removePageAt_Impl (nOffset);
+}
+
+/*========================================================================
+ *
+ * Entry.
+ *
+ *======================================================================*/
+namespace
+{
+
+struct Entry
+{
+    /** Representation.
+     */
+    PageHolder m_xPage;
+    sal_uInt32 m_nOffset;
+    Entry *    m_pNext;
+
+    /** Allocation.
+     */
+    static void * operator new (size_t, void * p) { return p; }
+    static void   operator delete (void *, void *) {}
+
+    /** Construction.
+     */
+    explicit Entry (PageHolder const & rxPage = PageHolder(), sal_uInt32 nOffset = STORE_PAGE_NULL)
+        : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(0)
+    {}
+
+    /** Destruction.
+     */
+    ~Entry() {}
+};
+
+} // namespace
+
+/*========================================================================
+ *
+ * EntryCache interface.
+ *
+ *======================================================================*/
+namespace
+{
+
+class EntryCache
+{
+    rtl_cache_type * m_entry_cache;
+
+public:
+    static EntryCache & get();
+
+    Entry * create (PageHolder const & rxPage, sal_uInt32 nOffset);
+
+    void destroy (Entry * entry);
+
+protected:
+    EntryCache();
+    ~EntryCache();
+};
+
+} // namespace
+
+/*========================================================================
+ *
+ * EntryCache implementation.
+ *
+ *======================================================================*/
+
+EntryCache & EntryCache::get()
+{
+    static EntryCache g_entry_cache;
+    return g_entry_cache;
+}
+
+EntryCache::EntryCache()
+{
+    m_entry_cache = rtl_cache_create (
+        "store_cache_entry_cache",
+        sizeof(Entry),
+        0, // objalign
+        0, // constructor
+        0, // destructor
+        0, // reclaim
+        0, // userarg
+        0, // default source
+        0  // flags
+        );
+}
+
+EntryCache::~EntryCache()
+{
+    rtl_cache_destroy (m_entry_cache), m_entry_cache = 0;
+}
+
+Entry * EntryCache::create (PageHolder const & rxPage, sal_uInt32 nOffset)
+{
+    void * pAddr = rtl_cache_alloc (m_entry_cache);
+    if (pAddr != 0)
+    {
+        // construct.
+        return new(pAddr) Entry (rxPage, nOffset);
+    }
+    return 0;
+}
+
+void EntryCache::destroy (Entry * entry)
+{
+    if (entry != 0)
+    {
+        // destruct.
+        entry->~Entry();
+
+        // return to cache.
+        rtl_cache_free (m_entry_cache, entry);
+    }
+}
+
+/*========================================================================
+ *
+ * highbit():= log2() + 1 (complexity O(1))
+ *
+ *======================================================================*/
+static int highbit(sal_Size n)
+{
+    register int k = 1;
+
+    if (n == 0)
+        return (0);
+#if SAL_TYPES_SIZEOFLONG == 8
+    if (n & 0xffffffff00000000ul)
+        k |= 32, n >>= 32;
+#endif
+    if (n & 0xffff0000)
+        k |= 16, n >>= 16;
+    if (n & 0xff00)
+        k |= 8, n >>= 8;
+    if (n & 0xf0)
+        k |= 4, n >>= 4;
+    if (n & 0x0c)
+        k |= 2, n >>= 2;
+    if (n & 0x02)
+        k++;
+
+    return (k);
+}
+
+/*========================================================================
+ *
+ * PageCache_Impl implementation.
  *
  *======================================================================*/
 namespace store
 {
 
-struct OStorePageCacheEntry
+class PageCache_Impl :
+    public store::OStoreObject,
+    public store::PageCache
 {
-    typedef OStorePageCacheEntry self;
-    typedef OStorePageData       data;
-    typedef OStorePageDescriptor D;
-
     /** Representation.
-    */
-    D     m_aDescr;
-    data *m_pData;
-    self *m_pNext;
-    self *m_pPrev;
-
-    /** Allocation.
      */
-    static void * operator new (std::size_t n) SAL_THROW(())
+    static size_t const theTableSize = 32;
+    STORE_STATIC_ASSERT(STORE_IMPL_ISP2(theTableSize));
+
+    Entry **     m_hash_table;
+    Entry *      m_hash_table_0[theTableSize];
+    size_t       m_hash_size;
+    size_t       m_hash_shift;
+    size_t const m_page_shift;
+
+    size_t       m_hash_entries; // total number of entries in table.
+    size_t       m_nHit;
+    size_t       m_nMissed;
+
+    inline int hash_Impl(sal_uInt32 a, size_t s, size_t q, size_t m)
     {
-        return rtl_allocateMemory (sal_uInt32(n));
+        return ((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m));
     }
-    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    inline int hash_index_Impl (sal_uInt32 nOffset)
     {
-        rtl_freeMemory (p);
+        return hash_Impl(nOffset, m_hash_shift, m_page_shift, m_hash_size - 1);
     }
 
+    Entry * lookup_Impl (Entry * entry, sal_uInt32 nOffset);
+    void rescale_Impl (sal_Size new_size);
+
+    /** PageCache Implementation.
+     */
+    virtual storeError lookupPageAt_Impl (
+        PageHolder & rxPage,
+        sal_uInt32   nOffset);
+
+    virtual storeError insertPageAt_Impl (
+        PageHolder const & rxPage,
+        sal_uInt32         nOffset);
+
+    virtual storeError updatePageAt_Impl (
+        PageHolder const & rxPage,
+        sal_uInt32         nOffset);
+
+    virtual storeError removePageAt_Impl (
+        sal_uInt32 nOffset);
+
+    /** Not implemented.
+     */
+    PageCache_Impl (PageCache_Impl const &);
+    PageCache_Impl & operator= (PageCache_Impl const &);
+
+public:
     /** Construction.
-    */
-    OStorePageCacheEntry (const D& rDescr, const data& rData)
-        : m_aDescr (rDescr)
-    {
-        sal_uInt16 nSize = m_aDescr.m_nSize;
-        m_pData = new(nSize) data(nSize);
-        __store_memcpy (m_pData, &rData, nSize);
-        m_pNext = m_pPrev = this;
-    }
+     */
+    explicit PageCache_Impl (sal_uInt16 nPageSize);
 
-    /** Data assignment.
-    */
-    void assign (const D& rDescr, const data& rData)
-    {
-        m_aDescr.m_nAddr = rDescr.m_nAddr;
-        if (!(m_aDescr.m_nSize == rDescr.m_nSize))
-        {
-            delete m_pData;
-            m_pData = new(rDescr.m_nSize) data(rDescr.m_nSize);
-            m_aDescr.m_nSize = rDescr.m_nSize;
-        }
-        __store_memcpy (m_pData, &rData, m_aDescr.m_nSize);
-    }
+    /** Delegate multiple inherited IReference.
+     */
+    virtual oslInterlockedCount SAL_CALL acquire();
+    virtual oslInterlockedCount SAL_CALL release();
 
+protected:
     /** Destruction.
-    */
-    ~OStorePageCacheEntry (void)
-    {
-        delete m_pData;
-    }
-
-    /** Comparison.
-    */
-    enum CompareResult
-    {
-        COMPARE_LESS    = -1,
-        COMPARE_EQUAL   =  0,
-        COMPARE_GREATER =  1
-    };
-
-    CompareResult compare (const D& rDescr) const
-    {
-        if (m_aDescr.m_nAddr == rDescr.m_nAddr)
-            return COMPARE_EQUAL;
-        if (m_aDescr.m_nAddr < rDescr.m_nAddr)
-            return COMPARE_LESS;
-        else
-            return COMPARE_GREATER;
-    }
-
-    CompareResult compare (const self& rOther) const
-    {
-        return compare (rOther.m_aDescr);
-    }
-
-    /** Address operation.
-    */
-    void invalidate (void)
-    {
-        m_aDescr.m_nAddr = STORE_PAGE_NULL;
-    }
-
-    sal_Bool isValid (void) const
-    {
-        return (m_aDescr.m_nAddr != STORE_PAGE_NULL);
-    }
-
-    /** Index operation.
-    */
-    sal_uInt16 index (void) const
-    {
-        return (m_aDescr.m_nUsed & 0x7fff);
-    }
-
-    void index (sal_uInt16 nIndex)
-    {
-        m_aDescr.m_nUsed = ((m_aDescr.m_nUsed & 0x8000) | (nIndex & 0x7fff));
-    }
-
-    /** DirtyBit operation.
-    */
-    void clean (void)
-    {
-        m_aDescr.m_nUsed &= 0x7fff;
-    }
-
-    void dirty (void)
-    {
-        m_aDescr.m_nUsed |= 0x8000;
-    }
-
-    sal_Bool isDirty (void) const
-    {
-        return ((m_aDescr.m_nUsed & 0x8000) == 0x8000);
-    }
-
-    /** List operation.
-    */
-    void backlink (self& rOther)
-    {
-        rOther.m_pNext = this;
-        rOther.m_pPrev = m_pPrev;
-        m_pPrev = &rOther;
-        rOther.m_pPrev->m_pNext = &rOther;
-    }
-
-    void unlink (void)
-    {
-        m_pNext->m_pPrev = m_pPrev;
-        m_pPrev->m_pNext = m_pNext;
-        m_pNext = this;
-        m_pPrev = this;
-    }
+     */
+    virtual ~PageCache_Impl (void);
 };
 
 } // namespace store
 
-/*========================================================================
- *
- * OStorePageCache debug internals.
- *
- *======================================================================*/
-#ifdef __STORE_CACHE_DEBUG
-
-/*
- * __store_check_entry.
- */
-static sal_Bool __store_check_entry (
-    OStorePageCacheEntry **ppData, sal_uInt16 nUsed)
+PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
+    : m_hash_table   (m_hash_table_0),
+      m_hash_size    (theTableSize),
+      m_hash_shift   (highbit(m_hash_size) - 1),
+      m_page_shift   (highbit(nPageSize) - 1),
+      m_hash_entries (0),
+      m_nHit         (0),
+      m_nMissed      (0)
 {
-    if (nUsed > 1)
-    {
-        for (sal_uInt16 i = 0; i < nUsed - 1; i++)
-        {
-            sal_uInt32 ai = ppData[i    ]->m_aDescr.m_nAddr;
-            sal_uInt32 ak = ppData[i + 1]->m_aDescr.m_nAddr;
-            if (!(ai <= ak))
-                return sal_False;
-            if (!(i == ppData[i]->index()))
-                return sal_False;
-        }
-    }
-    return sal_True;
+    static size_t const theSize = sizeof(m_hash_table_0) / sizeof(m_hash_table_0[0]);
+    STORE_STATIC_ASSERT(theSize == theTableSize);
+    memset(m_hash_table_0, 0, sizeof(m_hash_table_0));
 }
 
-/*
- * __store_find_entry.
- */
-static sal_uInt16 __store_find_entry (
-    const OStorePageDescriptor &rDescr,
-    const OStorePageCacheEntry *pHead)
+PageCache_Impl::~PageCache_Impl()
 {
-    if (pHead)
+    double s_x = 0.0, s_xx = 0.0;
+    sal_Size i, n = m_hash_size;
+    for (i = 0; i < n; i++)
     {
-        if (pHead->m_aDescr.m_nAddr == rDescr.m_nAddr)
-            return pHead->index();
-
-        OStorePageCacheEntry *pEntry = pHead->m_pNext;
-        while (pEntry != pHead)
+        int x = 0;
+        Entry * entry = m_hash_table[i];
+        while (entry != 0)
         {
-            if (pEntry->m_aDescr.m_nAddr == rDescr.m_nAddr)
-                return pEntry->index();
-            else
-                pEntry = pEntry->m_pNext;
+            m_hash_table[i] = entry->m_pNext, entry->m_pNext = 0;
+            EntryCache::get().destroy (entry);
+            entry = m_hash_table[i];
+            x += 1;
         }
+        s_x  += double(x);
+        s_xx += double(x) * double(x);
     }
-    return ((sal_uInt16)(-1));
+    double ave = s_x / double(n);
+    OSL_TRACE("ave hash chain length: %g", ave);
+    (void) ave;
+
+    if (m_hash_table != m_hash_table_0)
+    {
+        rtl_freeMemory (m_hash_table);
+        m_hash_table = m_hash_table_0;
+        m_hash_size  = theTableSize;
+        m_hash_shift = highbit(m_hash_size) - 1;
+    }
+    OSL_TRACE("Hits: %u, Misses: %u", m_nHit, m_nMissed);
 }
 
-#endif /* __STORE_CACHE_DEBUG */
+oslInterlockedCount PageCache_Impl::acquire()
+{
+    return OStoreObject::acquire();
+}
+
+oslInterlockedCount PageCache_Impl::release()
+{
+    return OStoreObject::release();
+}
+
+void PageCache_Impl::rescale_Impl (sal_Size new_size)
+{
+    sal_Size new_bytes = new_size * sizeof(Entry*);
+    Entry ** new_table = (Entry**)(rtl_allocateMemory(new_bytes));
+
+    if (new_table != 0)
+    {
+        Entry ** old_table = m_hash_table;
+        sal_Size old_size  = m_hash_size;
+
+        OSL_TRACE("ave chain length: %u, total entries: %u [old_size: %u, new_size: %u]",
+                  m_hash_entries >> m_hash_shift, m_hash_entries, old_size, new_size);
+
+        memset (new_table, 0, new_bytes);
+
+        m_hash_table = new_table;
+        m_hash_size  = new_size;
+        m_hash_shift = highbit(m_hash_size) - 1;
+
+        sal_Size i;
+        for (i = 0; i < old_size; i++)
+        {
+            Entry * curr = old_table[i];
+            while (curr != 0)
+            {
+                Entry * next = curr->m_pNext;
+                int index = hash_index_Impl(curr->m_nOffset);
+                curr->m_pNext = m_hash_table[index], m_hash_table[index] = curr;
+                curr = next;
+            }
+            old_table[i] = 0;
+        }
+        if (old_table != m_hash_table_0)
+        {
+            //
+            rtl_freeMemory (old_table);
+        }
+    }
+}
+
+Entry * PageCache_Impl::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
+{
+    register int lookups = 0;
+    while (entry != 0)
+    {
+        if (entry->m_nOffset == nOffset)
+            break;
+
+        lookups += 1;
+        entry = entry->m_pNext;
+    }
+    if (lookups > 2)
+    {
+        sal_Size new_size = m_hash_size, ave = m_hash_entries >> m_hash_shift;
+        for (; ave > 4; new_size *= 2, ave /= 2)
+            continue;
+        if (new_size != m_hash_size)
+            rescale_Impl (new_size);
+    }
+    return entry;
+}
+
+storeError PageCache_Impl::lookupPageAt_Impl (
+    PageHolder & rxPage,
+    sal_uInt32   nOffset)
+{
+    int index = hash_index_Impl(nOffset);
+    Entry const * entry = lookup_Impl (m_hash_table[index], nOffset);
+    if (entry != 0)
+    {
+        // Existing entry.
+        rxPage = entry->m_xPage;
+
+        // Update stats and leave.
+        m_nHit += 1;
+        return store_E_None;
+    }
+
+    // Cache miss. Update stats and leave.
+    m_nMissed += 1;
+    return store_E_NotExists;
+}
+
+storeError PageCache_Impl::insertPageAt_Impl (
+    PageHolder const & rxPage,
+    sal_uInt32         nOffset)
+{
+    Entry * entry = EntryCache::get().create (rxPage, nOffset);
+    if (entry != 0)
+    {
+        // Insert new entry.
+        int index = hash_index_Impl(nOffset);
+        entry->m_pNext = m_hash_table[index], m_hash_table[index] = entry;
+
+        // Update stats and leave.
+        m_hash_entries += 1;
+        return store_E_None;
+    }
+    return store_E_OutOfMemory;
+}
+
+storeError PageCache_Impl::updatePageAt_Impl (
+    PageHolder const & rxPage,
+    sal_uInt32         nOffset)
+{
+    int index = hash_index_Impl(nOffset);
+    Entry *  entry  = lookup_Impl (m_hash_table[index], nOffset);
+    if (entry != 0)
+    {
+        // Update existing entry.
+        entry->m_xPage = rxPage;
+
+        // Update stats and leave. // m_nUpdHit += 1;
+        return store_E_None;
+    }
+    return insertPageAt_Impl (rxPage, nOffset);
+}
+
+storeError PageCache_Impl::removePageAt_Impl (
+    sal_uInt32 nOffset)
+{
+    Entry ** ppEntry = &(m_hash_table[hash_index_Impl(nOffset)]);
+    while (*ppEntry != 0)
+    {
+        if ((*ppEntry)->m_nOffset == nOffset)
+        {
+            // Existing entry.
+            Entry * entry = (*ppEntry);
+
+            // Dequeue and destroy entry.
+            (*ppEntry) = entry->m_pNext, entry->m_pNext = 0;
+            EntryCache::get().destroy (entry);
+
+            // Update stats and leave.
+            m_hash_entries -= 1;
+            return store_E_None;
+        }
+        ppEntry = &((*ppEntry)->m_pNext);
+    }
+    return store_E_NotExists;
+}
 
 /*========================================================================
  *
- * OStorePageCache implementation.
+ * Old OStorePageCache implementation.
  *
  * (two-way association (sorted address array, LRU chain)).
  * (external OStorePageData representation).
  *
  *======================================================================*/
-/*
- * Allocation.
- */
-void * OStorePageCache::operator new (std::size_t n) SAL_THROW(())
+
+/*========================================================================
+ *
+ * PageCache factory implementation.
+ *
+ *======================================================================*/
+namespace store {
+
+storeError
+PageCache_createInstance (
+    rtl::Reference< store::PageCache > & rxCache,
+    sal_uInt16                           nPageSize)
 {
-    return rtl_allocateMemory (sal_uInt32(n));
-}
+    rxCache = new PageCache_Impl (nPageSize);
+    if (!rxCache.is())
+        return store_E_OutOfMemory;
 
-void OStorePageCache::operator delete (void * p, std::size_t) SAL_THROW(())
-{
-    rtl_freeMemory (p);
-}
-
-/*
- * OStorePageCache.
- */
-OStorePageCache::OStorePageCache (sal_uInt16 nPages)
-    : m_nSize    (STORE_LIMIT_CACHEPAGES),
-      m_nUsed    (0),
-      m_pHead    (0),
-      m_nHit     (0),
-      m_nMissed  (0),
-      m_nUpdHit  (0),
-      m_nUpdLRU  (0),
-      m_nWrtBack (0)
-{
-    for (sal_uInt16 i = 0; i < m_nSize; i++)
-        m_pData[i] = NULL;
-    if (nPages < m_nSize)
-        m_nSize = nPages;
-}
-
-/*
- * ~OStorePageCache.
- */
-OStorePageCache::~OStorePageCache (void)
-{
-#if OSL_DEBUG_LEVEL > 1
-    double x = hitRatio();
-    x = 0;
-#endif /* OSL_DEBUG_LEVEL > 1 */
-
-    for (sal_uInt16 i = 0; i < m_nSize; i++)
-        delete m_pData[i];
-}
-
-/*
- * find.
- */
-sal_uInt16 OStorePageCache::find (const OStorePageDescriptor &rDescr) const
-{
-    register sal_Int32 l = 0;
-    register sal_Int32 r = m_nUsed - 1;
-
-    while (l < r)
-    {
-        register sal_Int32 m = ((l + r) >> 1);
-
-        if (m_pData[m]->m_aDescr.m_nAddr == rDescr.m_nAddr)
-            return ((sal_uInt16)(m));
-        if (m_pData[m]->m_aDescr.m_nAddr < rDescr.m_nAddr)
-            l = m + 1;
-        else
-            r = m - 1;
-    }
-
-    // Match or insert position. Caller must do final compare.
-    return ((sal_uInt16)(r));
-}
-
-/*
- * move.
- */
-void OStorePageCache::move (sal_uInt16 nSI, sal_uInt16 nDI)
-{
-    entry *p = m_pData[nSI];
-    if (nSI < nDI)
-    {
-        // shift left.
-        __store_memmove (
-            &m_pData[nSI    ],
-            &m_pData[nSI + 1],
-            (nDI - nSI) * sizeof(entry*));
-
-        // re-index.
-        for (sal_uInt16 i = nSI; i < nDI; i++)
-            m_pData[i]->index(i);
-    }
-    if (nSI > nDI)
-    {
-        // shift right.
-        __store_memmove (
-            &m_pData[nDI + 1],
-            &m_pData[nDI    ],
-            (nSI - nDI) * sizeof(entry*));
-
-        // re-index.
-        for (sal_uInt16 i = nSI; i > nDI; i--)
-            m_pData[i]->index(i);
-    }
-    m_pData[nDI] = p;
-    m_pData[nDI]->index(nDI);
-
-#ifdef __STORE_CACHE_DEBUG
-    OSL_POSTCOND(
-        __store_check_entry(&m_pData[0], m_nUsed),
-        "OStorePageCache::move(): check_entry() failed");
-#endif /* __STORE_CACHE_DEBUG */
-}
-
-/*
- * insert.
- */
-storeError OStorePageCache::insert (
-    sal_uInt16                  nDI,
-    const OStorePageDescriptor &rDescr,
-    const OStorePageData       &rData,
-    OStorePageBIOS             &rBIOS,
-    InsertMode                  eMode)
-{
-#ifdef __STORE_CACHE_DEBUG
-    OSL_PRECOND(
-        __store_check_entry(&m_pData[0], m_nUsed),
-        "OStorePageCache::insert(): check_entry() failed");
-#endif /* __STORE_CACHE_DEBUG */
-
-    entry::CompareResult result = entry::COMPARE_EQUAL;
-    if (nDI < m_nUsed)
-    {
-        result = m_pData[nDI]->compare (rDescr);
-        if (result == entry::COMPARE_LESS)
-            nDI += 1;
-    }
-
-    if (nDI == (sal_uInt16)(-1))
-        nDI = 0;
-    if (nDI == m_nSize)
-        nDI -= 1;
-
-    if (m_nUsed < m_nSize)
-    {
-        // Allocate cache entry.
-        m_pData[m_nUsed] = new entry (rDescr, rData);
-        move (m_nUsed, nDI);
-        m_nUsed++;
-
-        // Update LRU.
-        if (m_pHead)
-            m_pHead->backlink (*m_pData[nDI]);
-        m_pHead = m_pData[nDI];
-    }
-    else
-    {
-        // Check for invalidated cache entry.
-        sal_uInt16 nSI = m_nUsed - 1;
-        if (m_pData[nSI]->isValid())
-        {
-            // Replace least recently used cache entry.
-            m_nUpdLRU++;
-
-            m_pHead = m_pHead->m_pPrev;
-            nSI     = m_pHead->index();
-
-            // Check DirtyBit.
-            if (m_pHead->isDirty())
-            {
-                // Save PageDescriptor.
-                OStorePageDescriptor aDescr (m_pHead->m_aDescr);
-
-                // Write page.
-                storeError eErrCode = rBIOS.write (
-                    aDescr.m_nAddr, m_pHead->m_pData, aDescr.m_nSize);
-                if (eErrCode != store_E_None)
-                    return eErrCode;
-
-                // Mark as clean.
-                m_pHead->clean();
-                m_nWrtBack++;
-            }
-        }
-        else
-        {
-            // Replace invalidated cache entry. Check LRU.
-            if (!(m_pData[nSI] == m_pHead))
-            {
-                // Update LRU.
-                m_pData[nSI]->unlink();
-                m_pHead->backlink (*m_pData[nSI]);
-                m_pHead = m_pData[nSI];
-            }
-        }
-
-        // Check source and destination indices.
-        if (nSI < nDI)
-        {
-            result = m_pData[nDI]->compare(rDescr);
-            if (result == entry::COMPARE_GREATER)
-                nDI -= 1;
-        }
-
-        // Assign data.
-        m_pData[nSI]->assign (rDescr, rData);
-        move (nSI, nDI);
-    }
-
-    // Check InsertMode.
-    if (eMode == INSERT_CLEAN)
-        m_pHead->clean();
-    else
-        m_pHead->dirty();
-
-    // Done.
     return store_E_None;
 }
 
-/*
- * load.
- */
-storeError OStorePageCache::load (
-    const OStorePageDescriptor &rDescr,
-    OStorePageData             &rData,
-    OStorePageBIOS             &rBIOS,
-    osl::Mutex                 *pMutex)
-{
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
-
-    // Find cache index.
-    sal_uInt16 i = find (rDescr);
-    if (i < m_nUsed)
-    {
-        if (m_pData[i]->compare(rDescr) == entry::COMPARE_EQUAL)
-        {
-            // Cache hit.
-            m_nHit++;
-
-            if (!(m_pData[i] == m_pHead))
-            {
-                // Update LRU.
-                m_pData[i]->unlink();
-                m_pHead->backlink (*m_pData[i]);
-                m_pHead = m_pData[i];
-            }
-
-            // Load data and Leave.
-            __store_memcpy (&rData, m_pHead->m_pData, rDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, store_E_None);
-        }
-    }
-
-    // Cache miss.
-    m_nMissed++;
-
-    // Load data.
-    storeError eErrCode = rBIOS.read (
-        rDescr.m_nAddr, &rData, rDescr.m_nSize);
-    if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-    // Insert data.
-    eErrCode = insert (i, rDescr, rData, rBIOS, INSERT_CLEAN);
-    if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-    // Leave with pending verification.
-    STORE_METHOD_LEAVE(pMutex, store_E_Pending);
-}
-
-/*
- * update.
- */
-storeError OStorePageCache::update (
-    const OStorePageDescriptor &rDescr,
-    const OStorePageData       &rData,
-    OStorePageBIOS             &rBIOS,
-    osl::Mutex                 *pMutex,
-    UpdateMode                  eMode)
-{
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
-
-    // Check UpdateMode.
-    if (eMode == UPDATE_WRITE_THROUGH)
-    {
-        // Save data.
-        storeError eErrCode = rBIOS.write (
-            rDescr.m_nAddr, &rData, rDescr.m_nSize);
-        if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-        m_nWrtBack++;
-    }
-
-    // Find cache index.
-    sal_uInt16 i = find (rDescr);
-    if (i < m_nUsed)
-    {
-        if (m_pData[i]->compare(rDescr) == entry::COMPARE_EQUAL)
-        {
-            // Cache hit. Check LRU.
-            m_nUpdHit++;
-            if (!(m_pData[i] == m_pHead))
-            {
-                // Update LRU.
-                m_pData[i]->unlink();
-                m_pHead->backlink (*m_pData[i]);
-                m_pHead = m_pData[i];
-            }
-
-            // Check UpdateMode.
-            if (eMode == UPDATE_WRITE_THROUGH)
-                m_pHead->clean();
-            else
-                m_pHead->dirty();
-
-            // Update data and leave.
-            __store_memcpy (m_pHead->m_pData, &rData, rDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, store_E_None);
-        }
-    }
-
-    // Cache miss. Insert data and leave.
-    storeError eErrCode = insert (
-        i, rDescr, rData, rBIOS,
-        ((eMode == UPDATE_WRITE_THROUGH) ? INSERT_CLEAN : INSERT_DIRTY));
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
-}
-
-/*
- * invalidate.
- */
-storeError OStorePageCache::invalidate (
-    const OStorePageDescriptor &rDescr,
-    osl::Mutex                 *pMutex)
-{
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
-
-    // Find cache index.
-    sal_uInt16 i = find (rDescr);
-    if (i < m_nUsed)
-    {
-        if (m_pData[i]->compare(rDescr) == entry::COMPARE_EQUAL)
-        {
-            // Cache hit. Update LRU.
-            if (!(m_pData[i] == m_pHead))
-            {
-                m_pData[i]->unlink();
-                m_pHead->backlink (*m_pData[i]);
-            }
-            else
-            {
-                m_pHead = m_pHead->m_pNext;
-            }
-
-            // Invalidate.
-            m_pData[i]->clean();
-            m_pData[i]->invalidate();
-            move (i, m_nUsed - 1);
-        }
-    }
-
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, store_E_None);
-}
-
-/*
- * flush.
- */
-storeError OStorePageCache::flush (
-    OStorePageBIOS &rBIOS,
-    osl::Mutex     *pMutex)
-{
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
-
-    // Check all entries.
-    for (sal_uInt16 i = 0; i < m_nUsed; i++)
-    {
-        // Check for dirty entry.
-        if (m_pData[i]->isDirty() && m_pData[i]->isValid())
-        {
-            // Save PageDescriptor.
-            OStorePageDescriptor aDescr (m_pData[i]->m_aDescr);
-
-            // Write page.
-            storeError eErrCode = rBIOS.write (
-                aDescr.m_nAddr, m_pData[i]->m_pData, aDescr.m_nSize);
-            OSL_POSTCOND(
-                eErrCode == store_E_None,
-                "OStorePageCache::flush(): write() failed");
-
-            // Mark entry clean.
-            if (eErrCode == store_E_None)
-                m_pData[i]->clean();
-            m_nWrtBack++;
-        }
-    }
-
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, store_E_None);
-}
+} // namespace store

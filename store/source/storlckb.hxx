@@ -29,115 +29,29 @@
  ************************************************************************/
 
 #ifndef _STORE_STORLCKB_HXX_
-#define _STORE_STORLCKB_HXX_ "$Revision: 1.6 $"
+#define _STORE_STORLCKB_HXX_ "$Revision: 1.6.8.1 $"
 
-#include <sal/types.h>
+#include "sal/types.h"
 
-#ifndef _RTL_TEXTCVT_H_
-#include <rtl/textcvt.h>
-#endif
-#include <rtl/ustring.h>
-#include <rtl/ref.hxx>
-#include <store/object.hxx>
-#include <store/lockbyte.hxx>
-#include <storbase.hxx>
-#include <storpage.hxx>
+#include "rtl/ustring.h"
+#include "rtl/ref.hxx"
+
+#include "object.hxx"
+#include "storbase.hxx"
+#include "storpage.hxx"
 
 namespace store
 {
 
 struct OStoreDataPageData;
 struct OStoreDirectoryPageData;
-struct OStoreIndirectionPageData;
-
-/*========================================================================
- *
- * OStoreDirectory interface.
- *
- *======================================================================*/
-class OStoreDirectory : public store::OStoreObject
-{
-public:
-    /** Construction.
-     */
-    OStoreDirectory (void);
-
-    /** create (two-phase construction).
-     *  @param  pManager [in]
-     *  @param  pszPath [in]
-     *  @param  pszName [in]
-     *  @param  eAccessMode [in]
-     *  @return store_E_None upon success.
-     */
-    storeError create (
-        OStorePageManager *pManager,
-        rtl_uString       *pPath,
-        rtl_uString       *pName,
-        storeAccessMode    eAccessMode);
-
-    /** iterate.
-     *  @param  rFindData [out]
-     *  @return store_E_None        upon success,
-     *          store_E_NoMoreFiles upon end of iteration.
-     */
-    storeError iterate (
-        storeFindData &rFindData);
-
-    /** IStoreHandle.
-     */
-    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
-
-protected:
-    /** Destruction.
-     */
-    virtual ~OStoreDirectory (void);
-
-private:
-    /** IStoreHandle TypeId.
-     */
-    static const sal_uInt32 m_nTypeId;
-
-    /** IStoreHandle query() template function specialization.
-     */
-    friend OStoreDirectory*
-    SAL_CALL query<> (IStoreHandle *pHandle, OStoreDirectory*);
-
-    /** Representation.
-     */
-    rtl::Reference<OStorePageManager> m_xManager;
-
-    typedef OStoreDirectoryPageData inode;
-    inode                     *m_pNode;
-
-    OStorePageDescriptor       m_aDescr;
-    sal_uInt32                 m_nPath;
-    rtl_TextToUnicodeConverter m_hTextCvt;
-
-    /** Not implemented.
-     */
-    OStoreDirectory (const OStoreDirectory&);
-    OStoreDirectory& operator= (const OStoreDirectory&);
-};
-
-template<> inline OStoreDirectory*
-SAL_CALL query (IStoreHandle *pHandle, OStoreDirectory*)
-{
-    if (pHandle && pHandle->isKindOf (OStoreDirectory::m_nTypeId))
-    {
-        // Handle is kind of OStoreDirectory.
-        return static_cast<OStoreDirectory*>(pHandle);
-    }
-    return 0;
-}
 
 /*========================================================================
  *
  * OStoreLockBytes interface.
  *
  *======================================================================*/
-class OStoreLockBytes :
-    public store::OStoreObject,
-    public store::ILockBytes
+class OStoreLockBytes : public store::OStoreObject
 {
 public:
     /** Construction.
@@ -146,14 +60,15 @@ public:
 
     /** create (two-phase construction).
      *  @param  pManager [in]
-     *  @param  rNode [in]
+     *  @param  pPath [in]
+     *  @param  pName [in]
      *  @param  eMode [in]
      *  @return store_E_None upon success
      */
     storeError create (
         OStorePageManager *pManager,
-        rtl_uString       *pPath,
-        rtl_uString       *pName,
+        rtl_String        *pPath,
+        rtl_String        *pName,
         storeAccessMode    eAccessMode);
 
     /** Read at Offset into Buffer.
@@ -163,7 +78,7 @@ public:
      *  @param  rnDone [out]
      *  @return store_E_None upon success
      */
-    virtual storeError readAt (
+    storeError readAt (
         sal_uInt32  nOffset,
         void       *pBuffer,
         sal_uInt32  nBytes,
@@ -176,7 +91,7 @@ public:
      *  @param  rnDone [out]
      *  @return store_E_None upon success
      */
-    virtual storeError writeAt (
+    storeError writeAt (
         sal_uInt32  nOffset,
         const void *pBuffer,
         sal_uInt32  nBytes,
@@ -185,48 +100,23 @@ public:
     /** flush.
      *  @return store_E_None upon success
      */
-    virtual storeError flush (void);
+    storeError flush (void);
 
     /** setSize.
      *  @param  nSize [in]
      *  @return store_E_None upon success
      */
-    virtual storeError setSize (sal_uInt32 nSize);
+    storeError setSize (sal_uInt32 nSize);
 
     /** stat.
      *  @paran  rnSize [out]
      *  @return store_E_None upon success
      */
-    virtual storeError stat (sal_uInt32 &rnSize);
-
-    /** Lock range at Offset.
-     *  @param  nOffset [in]
-     *  @param  nBytes [in]
-     *  @return store_E_None upon success
-     *          store_E_LockingViolation
-     */
-    virtual storeError lockRange (
-        sal_uInt32 nOffset,
-        sal_uInt32 nBytes);
-
-    /** Unlock range at Offset.
-     *  @param  nOffset [in]
-     *  @param  nBytes [in]
-     *  @return store_E_None upon success
-     *          store_E_LockingViolation
-     */
-    virtual storeError unlockRange (
-        sal_uInt32 nOffset,
-        sal_uInt32 nBytes);
+    storeError stat (sal_uInt32 &rnSize);
 
     /** IStoreHandle.
      */
     virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nMagic);
-
-    /** Delegate multiple inherited IReference.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire (void);
-    virtual oslInterlockedCount SAL_CALL release (void);
 
 protected:
     /** Destruction (OReference).
@@ -249,17 +139,11 @@ private:
 
     typedef OStoreDataPageData        data;
     typedef OStoreDirectoryPageData   inode;
-    typedef OStoreIndirectionPageData indirect;
 
-    inode     *m_pNode;
-    data      *m_pData;
+    typedef PageHolderObject< inode > inode_holder_type;
+    inode_holder_type                 m_xNode;
 
-    indirect  *m_pSingle;
-    indirect  *m_pDouble;
-    indirect  *m_pTriple;
-
-    sal_uInt16 m_nPageSize;
-    sal_Bool   m_bWriteable;
+    bool m_bWriteable;
 
     /** Not implemented.
      */

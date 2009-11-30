@@ -31,8 +31,11 @@
 #ifndef _REGIMPL_HXX_
 #define _REGIMPL_HXX_
 
+#include <set>
+
+#include <hash_map>
+
 #include    <registry/registry.h>
-#include    "regmap.hxx"
 #include    <osl/mutex.hxx>
 #include    <store/store.hxx>
 
@@ -51,9 +54,6 @@
 #define VALUE_MODE_OPEN     store_AccessReadWrite
 #define VALUE_MODE_OPENREAD store_AccessReadOnly
 
-#define VALUE_PREFIX        "$VL_"
-#define VALUE_LINKTARGET    "$VL_LINK_TARGET"
-
 // 5 Bytes = 1 (Byte fuer den Typ) + 4 (Bytes fuer die Groesse der Daten)
 #define VALUE_HEADERSIZE    5
 #define VALUE_TYPEOFFSET    1
@@ -68,17 +68,7 @@ using namespace rtl;
 using namespace osl;
 using namespace store;
 
-enum RESOLVE
-{
-    // alle Links werden aufgeloest
-    RESOLVE_FULL,
-    // alles bis zum letzten TeilStueck wird aufgeloest
-    RESOLVE_PART,
-    // kein Link wird aufgeloest
-    RESOLVE_NOTHING
-};
-
-class ORegManager;
+class ORegKey;
 class RegistryTypeReader;
 
 class ORegistry
@@ -105,8 +95,7 @@ public:
 
     RegError    openKey(RegKeyHandle hKey,
                         const OUString& keyName,
-                        RegKeyHandle* phOpenKey,
-                        RESOLVE eResolve=RESOLVE_FULL);
+                        RegKeyHandle* phOpenKey);
 
     RegError    closeKey(RegKeyHandle hKey);
 
@@ -124,11 +113,7 @@ public:
 
     RegError    dumpRegistry(RegKeyHandle hKey) const;
 
-       RegError     deleteLink(RegKeyHandle hKey,
-                           const OUString& linkName);
-
-public:
-    virtual ~ORegistry();
+    ~ORegistry();
 
     sal_Bool            isReadOnly() const
         { return m_readOnly; }
@@ -144,18 +129,12 @@ public:
     const OUString&     getName() const
         { return m_name; }
 
-    RegError getResolvedKeyName(RegKeyHandle hKey,
-                                 const OUString& keyName,
-                                 OUString& resolvedName);
-
     friend class ORegKey;
-protected:
-    RegError    eraseKey(ORegKey* pKey,
-                         const OUString& keyName,
-                         RESOLVE eResolve=RESOLVE_FULL);
 
-    RegError    deleteSubkeysAndValues(ORegKey* pKey,
-                                       RESOLVE eResolve=RESOLVE_FULL);
+private:
+    RegError    eraseKey(ORegKey* pKey, const OUString& keyName);
+
+    RegError    deleteSubkeysAndValues(ORegKey* pKey);
 
     RegError    loadAndSaveValue(ORegKey* pTargetKey,
                                  ORegKey* pSourceKey,
@@ -189,17 +168,7 @@ protected:
                         const OUString& sName,
                         sal_Int16 nSpace) const;
 
-    RegError    openKeyWithoutLink(RegKeyHandle hKey,
-                                   const OUString& keyName,
-                                   RegKeyHandle* phOpenKey);
-
-    OUString resolveLinks(ORegKey* pKey, const OUString& path);
-    ORegKey* resolveLink(ORegKey* pKey, OUString& resolvedPath, const OUString& name);
-
-    sal_Bool insertRecursionLink(ORegKey* pLink);
-    sal_Bool resetRecursionLinks();
-
-protected:
+    typedef std::hash_map< OUString, ORegKey*, OUStringHash > KeyMap;
 
     sal_uInt32      m_refCount;
     Mutex           m_mutex;
@@ -208,7 +177,6 @@ protected:
     OUString        m_name;
     OStoreFile      m_file;
     KeyMap          m_openKeyTable;
-    LinkList        m_recursionList;
 
     const OUString  ROOT;
 };

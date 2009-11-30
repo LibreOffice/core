@@ -31,13 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _T_FILE_CXX "$Revision: 1.8 $"
-#include <sal/types.h>
-#include <osl/file.h>
-#include <osl/thread.h>
-#include <rtl/ustring.hxx>
-#include <rtl/ref.hxx>
-#include <store/filelckb.hxx>
+#include "sal/types.h"
+#include "osl/thread.h"
+#include "rtl/ustring.hxx"
+
+#include "lockbyte.hxx"
 
 #ifndef INCLUDED_STDIO_H
 #include <stdio.h>
@@ -55,39 +53,54 @@ using namespace store;
  *======================================================================*/
 int SAL_CALL main (int argc, char **argv)
 {
-    if (argc < 2)
+    storeError eErrCode = store_E_None;
+    rtl::Reference<ILockBytes> xLockBytes;
+
+    if (argc > 1)
     {
-        fprintf (stderr, "usage: t_file <output-filename>\n");
-        return 0;
-    }
+        rtl::OUString aFilename (
+            argv[1], rtl_str_getLength(argv[1]),
+            osl_getThreadTextEncoding());
 
-    rtl::Reference<OFileLockBytes> xLockBytes (new OFileLockBytes());
-    if (!xLockBytes.is())
-        return 0;
-
-    rtl::OUString aFilename (
-        argv[1], rtl_str_getLength(argv[1]),
-        osl_getThreadTextEncoding());
-
-    storeError eErrCode = xLockBytes->create (
-        aFilename.pData, store_AccessReadWrite);
-    if (eErrCode != store_E_None)
-    {
-        // Check reason.
-        if (eErrCode != store_E_NotExists)
+        eErrCode = FileLockBytes_createInstance (
+            xLockBytes, aFilename.pData, store_AccessReadWrite);
+        if (eErrCode != store_E_None)
         {
-            fprintf (stderr, "t_file: create() error: %d\n", eErrCode);
-            return eErrCode;
-        }
+            // Check reason.
+            if (eErrCode != store_E_NotExists)
+            {
+                fprintf (stderr, "t_file: create() error: %d\n", eErrCode);
+                return eErrCode;
+            }
 
-        // Create.
-        eErrCode = xLockBytes->create (
-            aFilename.pData, store_AccessReadCreate);
+            // Create.
+            eErrCode = FileLockBytes_createInstance (
+                xLockBytes, aFilename.pData, store_AccessReadCreate);
+            if (eErrCode != store_E_None)
+            {
+                fprintf (stderr, "t_file: create() error: %d\n", eErrCode);
+                return eErrCode;
+            }
+        }
+        fprintf (stdout, "t_file: using FileLockBytes(\"%s\") implementation.\n", argv[1]);
+    }
+    else
+    {
+        eErrCode = MemoryLockBytes_createInstance (xLockBytes);
         if (eErrCode != store_E_None)
         {
             fprintf (stderr, "t_file: create() error: %d\n", eErrCode);
             return eErrCode;
         }
+        fprintf (stdout, "t_file: using MemoryLockBytes implementation.\n");
+    }
+
+    rtl::Reference< PageData::Allocator > xAllocator;
+    eErrCode = xLockBytes->initialize (xAllocator, TEST_PAGESIZE);
+    if (eErrCode != store_E_None)
+    {
+        fprintf (stderr, "t_file: initialize() error: %d\n", eErrCode);
+        return eErrCode;
     }
 
     sal_Char buffer[TEST_PAGESIZE];
@@ -112,12 +125,12 @@ int SAL_CALL main (int argc, char **argv)
 
         for (k = 0; k < 4; k++)
         {
-            sal_uInt32 magic = i * 4 + k, done = 0;
+            sal_uInt32 magic = i * 4 + k;
             if (magic)
             {
                 sal_uInt32 verify = 0;
                 eErrCode = xLockBytes->readAt (
-                    0, &verify, sizeof(verify), done);
+                    0, &verify, sizeof(verify));
                 if (eErrCode != store_E_None)
                 {
                     fprintf (stderr, "t_file: readAt() error: %d\n", eErrCode);
@@ -126,13 +139,13 @@ int SAL_CALL main (int argc, char **argv)
                 if (verify != magic)
                 {
                     // Failure.
-                    fprintf (stderr, "Expected %d read %d\n", magic, verify);
+                    fprintf (stderr, "Expected %ld read %ld\n", (unsigned long)(magic), (unsigned long)(verify));
                 }
             }
 
             sal_uInt32 index = k * TEST_PAGESIZE / 4;
             eErrCode = xLockBytes->writeAt (
-                offset + index, &(buffer[index]), TEST_PAGESIZE / 4, done);
+                offset + index, &(buffer[index]), TEST_PAGESIZE / 4);
             if (eErrCode != store_E_None)
             {
                 fprintf (stderr, "t_file: writeAt() error: %d\n", eErrCode);
@@ -141,7 +154,7 @@ int SAL_CALL main (int argc, char **argv)
 
             magic += 1;
             eErrCode = xLockBytes->writeAt (
-                0, &magic, sizeof(magic), done);
+                0, &magic, sizeof(magic));
             if (eErrCode != store_E_None)
             {
                 fprintf (stderr, "t_file: writeAt() error: %d\n", eErrCode);
@@ -160,9 +173,9 @@ int SAL_CALL main (int argc, char **argv)
     sal_Char verify[TEST_PAGESIZE];
     for (i = 0; i < 256; i++)
     {
-        sal_uInt32 offset = i * TEST_PAGESIZE, done = 0;
+        sal_uInt32 offset = i * TEST_PAGESIZE;
 
-        eErrCode = xLockBytes->readAt (offset, verify, TEST_PAGESIZE, done);
+        eErrCode = xLockBytes->readAt (offset, verify, TEST_PAGESIZE);
         if (eErrCode != store_E_None)
         {
             fprintf (stderr, "t_file: readAt() error: %d\n", eErrCode);
@@ -184,11 +197,26 @@ int SAL_CALL main (int argc, char **argv)
             &verify[index], &buffer[index], TEST_PAGESIZE - index))
         {
             // Failure.
-            fprintf (stderr, "t_file: Unexpected block at 0x%08x\n", offset);
+            fprintf (stderr, "t_file: Unexpected block at 0x%08x\n", (unsigned)(offset));
         }
+    }
+
+    for (i = 0; i < 256; i++)
+    {
+        PageHolder xPage;
+        sal_uInt32 offset = i * TEST_PAGESIZE;
+
+        eErrCode = xLockBytes->readPageAt (xPage, offset);
+        if (eErrCode != store_E_None)
+        {
+            fprintf (stderr, "t_file: readPageAt() error: %d\n", eErrCode);
+            return eErrCode;
+        }
+
+        PageData * page = xPage.get();
+        (void)page; // UNUSED
     }
 
     xLockBytes.clear();
     return 0;
 }
-

@@ -29,25 +29,22 @@
  ************************************************************************/
 
 #ifndef _STORE_STORPAGE_HXX_
-#define _STORE_STORPAGE_HXX_ "$Revision: 1.6 $"
+#define _STORE_STORPAGE_HXX_ "$Revision: 1.6.8.2 $"
 
-#include <sal/types.h>
-#include <store/object.hxx>
-#include <store/lockbyte.hxx>
-#include <storbase.hxx>
+#include "sal/types.h"
+
+#include "object.hxx"
+#include "lockbyte.hxx"
+
+#include "storbase.hxx"
+#include "storbios.hxx"
+#include "stortree.hxx"
 
 namespace store
 {
 
-struct OStoreBTreeEntry;
-struct OStoreBTreeNodeData;
-class  OStoreBTreeNodeObject;
-
-struct OStoreDataPageData;
-struct OStoreIndirectionPageData;
 struct OStoreDirectoryPageData;
 class  OStoreDirectoryPageObject;
-class  OStorePageCache;
 
 /*========================================================================
  *
@@ -63,10 +60,10 @@ public:
 
     /** Initialization (two-phase construction).
      */
-    storeError initializeManager (
-        ILockBytes      *pLockBytes,
-        storeAccessMode  eAccessMode,
-        sal_uInt16       nPageSize);
+    virtual storeError initialize (
+        ILockBytes *    pLockBytes,
+        storeAccessMode eAccessMode,
+        sal_uInt16 &    rnPageSize);
 
     /** isValid.
      *  @return sal_True  upon successful initialization,
@@ -74,30 +71,27 @@ public:
      */
     inline sal_Bool isValid (void) const;
 
-    /** Page I/O (unmanaged).
-     */
-    virtual storeError free (
-        OStorePageObject &rPage);
-
-    virtual storeError load (
-        OStorePageObject &rPage);
-
-    virtual storeError save (
-        OStorePageObject &rPage);
-
-    virtual storeError flush (void);
-
     /** DirectoryPage I/O (managed).
      */
-    storeError load (
-        const OStorePageKey       &rKey,
-        OStoreDirectoryPageObject &rPage);
+    static storeError namei (
+        const rtl_String *pPath,
+        const rtl_String *pName,
+        OStorePageKey    &rKey);
 
-    storeError save (
-        const OStorePageKey       &rKey,
-        OStoreDirectoryPageObject &rPage);
+    storeError iget (
+        OStoreDirectoryPageObject & rPage, // [out]
+        sal_uInt32                  nAttrib,
+        const rtl_String *          pPath,
+        const rtl_String *          pName,
+        storeAccessMode             eMode);
+
+    storeError iterate (
+        OStorePageKey &  rKey,
+        OStorePageLink & rLink,
+        sal_uInt32 &     rAttrib);
 
     /** attrib [nAttrib = ((nAttrib & ~nMask1) | nMask2)].
+     *  @see store_attrib()
      */
     storeError attrib (
         const OStorePageKey &rKey,
@@ -106,12 +100,14 @@ public:
         sal_uInt32          &rAttrib);
 
     /** link (insert Source Key as hardlink to Destination).
+     *  @see store_link()
      */
     storeError link (
         const OStorePageKey &rSrcKey,
         const OStorePageKey &rDstKey);
 
     /** symlink (insert Source DirectoryPage as symlink to Destination).
+     *  @see store_symlink()
      */
     storeError symlink (
         const rtl_String    *pSrcPath,
@@ -119,6 +115,7 @@ public:
         const OStorePageKey &rDstKey);
 
     /** rename.
+     *  @see store_rename()
      */
     storeError rename (
         const OStorePageKey &rSrcKey,
@@ -126,21 +123,17 @@ public:
         const rtl_String    *pDstName);
 
     /** remove.
+     *  @see store_remove()
      */
     storeError remove (
         const OStorePageKey &rKey);
-
-    /** iterate.
-     */
-    storeError iterate (
-        OStorePageKey    &rKey,
-        OStorePageObject &rPage,
-        sal_uInt32       &rAttrib);
 
     /** rebuild (combines recover and compact from 'Src' to 'Dst').
      *  @param  pSrcLB [in] accessed readonly.
      *  @param  pDstLB [in] truncated and accessed readwrite (as initialize()).
      *  @return store_E_None upon success.
+     *
+     *  @see store_rebuildFile()
      */
     storeError rebuild (
         ILockBytes *pSrcLB,
@@ -166,8 +159,7 @@ private:
     typedef OStoreBTreeNodeObject     node;
 
     typedef OStoreDirectoryPageData   inode;
-    typedef OStoreIndirectionPageData indirect;
-    typedef OStoreDataPageData        data;
+    typedef PageHolderObject< inode > inode_holder_type;
 
     /** IStoreHandle TypeId.
      */
@@ -180,27 +172,28 @@ private:
 
     /** Representation.
     */
-    OStorePageCache    *m_pCache;
-    page               *m_pNode[3];
-    inode              *m_pDirect;
-    indirect           *m_pLink[3];
-    data               *m_pData;
-    sal_uInt16         m_nPageSize;
+    OStoreBTreeRootObject m_aRoot;
 
-    /** find (node page, w/o split).
-    */
-    storeError find (
-        const entry& rEntry, page& rPage);
+    /** DirectoryPage I/O (managed).
+     */
+    storeError load_dirpage_Impl ( // @@@ => private: iget() @@@
+        const OStorePageKey       &rKey,
+        OStoreDirectoryPageObject &rPage);
 
-    /** find (node page, possibly with split).
+    storeError save_dirpage_Impl ( // @@@ => private: iget(), rebuild() @@@
+        const OStorePageKey       &rKey,
+        OStoreDirectoryPageObject &rPage);
+
+    /** find_lookup (node page and index, w/o split).
     */
-    storeError find (
-        const entry &rEntry, page &rPage, page &rPageL, page &rPageR);
+    storeError find_lookup (
+        OStoreBTreeNodeObject & rNode,
+        sal_uInt16 &            rIndex,
+        OStorePageKey const &   rKey);
 
     /** remove (possibly down from root).
     */
-    storeError remove (
-        entry &rEntry, page &rPage, page &rPageL);
+    storeError remove_Impl (entry & rEntry);
 
     /** Not implemented.
     */
@@ -210,7 +203,7 @@ private:
 
 inline sal_Bool OStorePageManager::isValid (void) const
 {
-    return (base::isValid() && (m_nPageSize > 0));
+    return (base::isValid() /* @@@ NYI && (m_aRoot.is()) */);
 }
 
 template<> inline OStorePageManager*

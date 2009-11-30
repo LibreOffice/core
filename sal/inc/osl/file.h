@@ -808,6 +808,37 @@ oslFileError SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize );
 oslFileError SAL_CALL osl_getFileSize( oslFileHandle Handle, sal_uInt64 *pSize );
 
 
+/** Map flags.
+
+    @since UDK 3.2.10
+ */
+#define osl_File_MapFlag_RandomAccess ((sal_uInt32)(0x1))
+
+/** Map a shared file into memory.
+
+    @since UDK 3.2.10
+ */
+oslFileError
+SAL_CALL osl_mapFile (
+  oslFileHandle Handle,
+  void**        ppAddr,
+  sal_uInt64    uLength,
+  sal_uInt64    uOffset,
+  sal_uInt32    uFlags
+);
+
+
+/** Unmap a shared file from memory.
+
+    @since UDK 3.2.10
+ */
+oslFileError
+SAL_CALL osl_unmapFile (
+  void*      pAddr,
+  sal_uInt64 uLength
+);
+
+
 /** Read a number of bytes from a file.
 
     Reads a number of bytes from a file. The internal file pointer is
@@ -912,6 +943,35 @@ oslFileError SAL_CALL osl_isEndOfFile( oslFileHandle Handle, sal_Bool *pIsEOF );
 */
 
 oslFileError SAL_CALL osl_writeFile( oslFileHandle Handle, const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64 *pBytesWritten );
+
+/** Read a number of bytes from a specified offset in a file.
+
+    The current position of the internal file pointer may or may not be changed.
+
+    @since UDK 3.2.10
+ */
+oslFileError SAL_CALL osl_readFileAt(
+  oslFileHandle Handle,
+  sal_uInt64    uOffset,
+  void*         pBuffer,
+  sal_uInt64    uBytesRequested,
+  sal_uInt64*   pBytesRead
+);
+
+
+/** Write a number of bytes to a specified offset in a file.
+
+    The current position of the internal file pointer may or may not be changed.
+
+    @since UDK 3.2.10
+ */
+oslFileError SAL_CALL osl_writeFileAt(
+  oslFileHandle Handle,
+  sal_uInt64    uOffset,
+  const void*   pBuffer,
+  sal_uInt64    uBytesToWrite,
+  sal_uInt64*   pBytesWritten
+);
 
 
 /** Read a line from a file.

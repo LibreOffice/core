@@ -31,13 +31,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_registry.hxx"
 
-#ifndef __REFLCNST_HXX__
 #include    "reflcnst.hxx"
-#endif
 
 #include "keyimpl.hxx"
 #include    <rtl/alloc.h>
 #include    <rtl/memory.h>
+#include "rtl/ustrbuf.hxx"
+
+namespace { static char const VALUE_PREFIX[] = "$VL_"; }
 
 //*********************************************************************
 //  ORegKey()
@@ -46,24 +47,8 @@ ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
     : m_refCount(1)
     , m_name(keyName)
     , m_bDeleted(sal_False)
-    , m_isLink(sal_False)
     , m_pRegistry(pReg)
-{
-    if (pReg)
-    {
-        m_storeFile = pReg->getStoreFile();
-    }
-
-    checkLink();
-}
-
-//*********************************************************************
-//  ~ORegKey()
-//
-ORegKey::~ORegKey()
-{
-}
-
+{}
 
 //*********************************************************************
 //  createKey
@@ -77,9 +62,9 @@ RegError ORegKey::createKey(const OUString& keyName, RegKeyHandle* phNewKey)
 //*********************************************************************
 //  openKey
 //
-RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey, RESOLVE eResolve)
+RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
 {
-    return (m_pRegistry->openKey(this, keyName, phOpenKey, eResolve));
+    return (m_pRegistry->openKey(this, keyName, phOpenKey));
 }
 
 
@@ -172,7 +157,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
 
     if (keyName.getLength())
     {
-        _ret = openKey(keyName, (RegKeyHandle*)&pKey, RESOLVE_PART);
+        _ret = openKey(keyName, (RegKeyHandle*)&pKey);
         if (_ret)
         {
             *pSubKeyNames = NULL;
@@ -261,7 +246,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(m_storeFile, m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if ( rValue.create(m_pRegistry->getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
     {
         *pValueType = RG_VALUETYPE_NOT_DEFINED;
         *pValueSize = 0;
@@ -332,7 +317,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(m_storeFile, m_name + m_pRegistry->ROOT , sImplValueName, VALUE_MODE_CREATE) )
+    if ( rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT , sImplValueName, VALUE_MODE_CREATE) )
     {
         return REG_SET_VALUE_FAILED;
     }
@@ -402,7 +387,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(m_storeFile, m_name + m_pRegistry->ROOT, sImplValueName, VALUE_MODE_CREATE) )
+    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, VALUE_MODE_CREATE) )
     {
         return REG_SET_VALUE_FAILED;
     }
@@ -460,7 +445,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(m_storeFile, m_name + m_pRegistry->ROOT, sImplValueName, VALUE_MODE_CREATE) )
+    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, VALUE_MODE_CREATE) )
     {
         return REG_SET_VALUE_FAILED;
     }
@@ -527,7 +512,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(m_storeFile, m_name + m_pRegistry->ROOT, sImplValueName, VALUE_MODE_CREATE) )
+    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, VALUE_MODE_CREATE) )
     {
         return REG_SET_VALUE_FAILED;
     }
@@ -597,7 +582,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(m_storeFile, m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
     {
         return REG_VALUE_NOT_EXISTS;
     }
@@ -691,7 +676,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(m_storeFile, m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
     {
         pValueList = NULL;
         *pLen = 0;
@@ -788,7 +773,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(m_storeFile, m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if ( rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
     {
         pValueList = NULL;
         *pLen = 0;
@@ -894,7 +879,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(m_storeFile, m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
+    if ( rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, accessMode) )
     {
         pValueList = NULL;
         *pLen = 0;
@@ -994,109 +979,25 @@ RegError ORegKey::getKeyType(const OUString& name, RegKeyType* pKeyType) const
     if ( name.getLength() )
     {
         _ret = ((ORegKey*)this)->openKey(
-            name, (RegKeyHandle*)&pKey, RESOLVE_PART);
+            name, (RegKeyHandle*)&pKey);
         if (_ret)
             return _ret;
-
-        if (pKey->isLink())
-            *pKeyType = RG_LINKTYPE;
-
         ((ORegKey*)this)->closeKey((RegKeyHandle)pKey);
         return _ret;
     } else
     {
-        if (m_isLink)
-            *pKeyType = RG_LINKTYPE;
-
         return _ret;
-    }
-}
-
-//*********************************************************************
-//  createLink()
-//
-RegError ORegKey::createLink(const OUString& linkName, const OUString& linkTarget)
-{
-    ORegKey*    pKey;
-    RegError    _ret = REG_NO_ERROR;
-
-    if ( !linkName.getLength() )
-        return REG_INVALID_LINKNAME;
-
-    if ( !linkTarget.getLength() )
-        return REG_INVALID_LINKTARGET;
-
-    REG_GUARD(m_pRegistry->m_mutex);
-
-    if (m_pRegistry->openKey(this, linkName, (RegKeyHandle*)&pKey, RESOLVE_PART))
-    {
-        _ret = m_pRegistry->createKey(this, linkName, (RegKeyHandle*)&pKey);
-        if (_ret)
-            return _ret;
-    } else
-    {
-        if (!pKey->isLink())
-        {
-            m_pRegistry->closeKey(pKey);
-            return REG_INVALID_LINK;
-        }
-    }
-
-    if ((_ret = pKey->setValue(OUString( RTL_CONSTASCII_USTRINGPARAM("LINK_TARGET") ),
-                              RG_VALUETYPE_UNICODE, (RegValue)linkTarget.getStr(), (linkTarget.getLength()+1)*2)))
-    {
-        m_pRegistry->closeKey(pKey);
-        _ret = m_pRegistry->deleteKey(this, linkName);
-        return _ret;
-    }
-
-    return m_pRegistry->closeKey(pKey);
-}
-
-//*********************************************************************
-//  deleteLink()
-//
-RegError ORegKey::deleteLink(const OUString& linkName)
-{
-    return (m_pRegistry->deleteLink(this, linkName));
-}
-
-//*********************************************************************
-//  getLinkTarget()
-//
-RegError ORegKey::getLinkTarget(const OUString& linkName, OUString& linkTarget) const
-{
-    ORegKey*        pKey;
-    RegError        _ret = REG_NO_ERROR;
-
-    REG_GUARD(m_pRegistry->m_mutex);
-
-    if ( linkName.getLength() )
-    {
-        _ret = ((ORegKey*)this)->openKey(
-            linkName, (RegKeyHandle*)&pKey, RESOLVE_PART);
-        if (_ret)
-            return REG_INVALID_LINK;
-
-        _ret = pKey->getLinkTarget(OUString(), linkTarget);
-        ((ORegKey*)this)->closeKey((RegKeyHandle)pKey);
-        return _ret;
-    } else
-    {
-        if (m_isLink)
-        {
-            linkTarget = m_link;
-            return REG_NO_ERROR;
-        } else
-            return REG_LINKTARGET_NOT_EXIST;
     }
 }
 
 RegError ORegKey::getResolvedKeyName(const OUString& keyName,
                                      OUString& resolvedName)
 {
-    return
-        m_pRegistry->getResolvedKeyName((ORegKey*)this, keyName, resolvedName);
+    if (keyName.getLength() == 0) {
+        return REG_INVALID_KEYNAME;
+    }
+    resolvedName = getFullPath(keyName);
+    return REG_NO_ERROR;
 }
 
 //*********************************************************************
@@ -1124,39 +1025,6 @@ sal_uInt32 ORegKey::countSubKeys()
     return count;
 }
 
-
-//*********************************************************************
-//  checkLink()
-//
-sal_Bool ORegKey::checkLink()
-{
-
-    OUString aPath (m_name); aPath += m_pRegistry->ROOT;
-    OUString aName (RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX "LINK_TARGET"));
-
-    if (m_storeFile.attrib (aPath, aName, 0, 0) == store_E_None)
-    {
-        OUString     valueName (RTL_CONSTASCII_USTRINGPARAM("LINK_TARGET"));
-        RegValueType valueType = RG_VALUETYPE_NOT_DEFINED;
-        sal_uInt32   valueSize = 0;
-
-        ORegKey* pThis = const_cast<ORegKey*>(this);
-        if (pThis->getValueInfo (valueName, &valueType, &valueSize) == REG_NO_ERROR)
-        {
-            sal_Unicode* value = (sal_Unicode*)rtl_allocateMemory(valueSize);
-            if (pThis->getValue (valueName, value) == REG_NO_ERROR)
-            {
-                m_link = OUString (value);
-                m_isLink = sal_True;
-            }
-
-            rtl_freeMemory (value);
-            return sal_True;
-        }
-    }
-    return sal_False;
-}
-
 OStoreDirectory ORegKey::getStoreDir()
 {
     OStoreDirectory rStoreDir;
@@ -1179,8 +1047,25 @@ OStoreDirectory ORegKey::getStoreDir()
         accessMode = KEY_MODE_OPENREAD;
     }
 
-    rStoreDir.create(m_storeFile, fullPath, relativName, accessMode);
+    rStoreDir.create(getStoreFile(), fullPath, relativName, accessMode);
 
     return rStoreDir;
 }
 
+OUString ORegKey::getFullPath(OUString const & path) const {
+    OSL_ASSERT(m_name.getLength() != 0 && path.getLength() != 0);
+    OUStringBuffer b(m_name);
+    if (b.charAt(b.getLength() - 1) == '/') {
+        if (path[0] == '/') {
+            b.append(path.getStr() + 1, path.getLength() - 1);
+        } else {
+            b.append(path);
+        }
+    } else {
+        if (path[0] != '/') {
+            b.append(sal_Unicode('/'));
+        }
+        b.append(path);
+    }
+    return b.makeStringAndClear();
+}

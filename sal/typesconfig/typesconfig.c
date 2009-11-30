@@ -28,13 +28,6 @@
  *
  ************************************************************************/
 
-/* POSIX defines that a program is undefined after a SIG_SEGV.  The
- * code stopped working on Linux Kernel 2.6 so I have moved this back to
- * use FORK.
- * If at a later time the signals work correctly with the Linux Kernel 2.6
- * then this change may be reverted although not strictly posix safe. */
-#define USE_FORK_TO_CHECK 1
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -43,20 +36,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#define I_STDARG
-#ifdef I_STDARG
 #include <stdarg.h>
-#else
-#include <varargs.h>
-#endif
 
-#define NO_USE_FORK_TO_CHECK
-#ifdef USE_FORK_TO_CHECK
-#include <sys/wait.h>
-#else
 #include <signal.h>
 #include <setjmp.h>
-#endif
 
 #define printTypeSize(Type,Name)    printf( "sizeof(%s)\t\t= %d\n", Name, (int) sizeof (Type) )
 
@@ -99,22 +82,12 @@ typedef int (*TestFunc)( Type, void* );
 |*  Letzte Aenderung
 |*
 *************************************************************************/
-#ifdef I_STDARG
 void PrintArgs( int p, ... )
-#else
-void PrintArgs( p, va_alist )
-int p;
-va_dcl
-#endif
 {
     int value;
     va_list ap;
 
-#ifdef I_STDARG
     va_start( ap, p );
-#else
-    va_start( ap );
-#endif
 
     printf( "value = %d", p );
 
@@ -125,7 +98,6 @@ va_dcl
     va_end(ap);
 }
 
-#ifndef USE_FORK_TO_CHECK
 /*************************************************************************
 |*
 |*  SignalHdl()
@@ -136,18 +108,16 @@ va_dcl
 |*  Letzte Aenderung
 |*
 *************************************************************************/
-static jmp_buf check_env;
-static int bSignal;
+
+static sigjmp_buf jmpbuf;
+static volatile sig_atomic_t hit;
+
 void SignalHdl( int sig )
 {
-  bSignal = 1;
-
-  fprintf( stderr, "Signal %d caught\n", sig );
-  signal( SIGSEGV,  SIG_DFL );
-  signal( SIGBUS,   SIG_DFL );
-  siglongjmp( check_env, sig );
+    (void) sig; // ignored
+    hit = 1;
+    siglongjmp(jmpbuf, 0);
 }
-#endif
 
 /*************************************************************************
 |*
@@ -161,40 +131,26 @@ void SignalHdl( int sig )
 *************************************************************************/
 int check( TestFunc func, Type eT, void* p )
 {
-#ifdef USE_FORK_TO_CHECK
-  pid_t nChild = fork();
-  if ( nChild )
-  {
-    int exitVal;
-    wait( &exitVal );
-    if ( exitVal & 0xff )
-      return -1;
-    else
-      return exitVal >> 8;
-  }
-  else
-  {
-    exit( func( eT, p ) );
-  }
-#else
-  int result;
-
-  bSignal = 0;
-
-  if ( !sigsetjmp( check_env, 1 ) )
-  {
-    signal( SIGSEGV,    SignalHdl );
-    signal( SIGBUS, SignalHdl );
-    result = func( eT, p );
-    signal( SIGSEGV,    SIG_DFL );
-    signal( SIGBUS, SIG_DFL );
-  }
-
-  if ( bSignal )
-    return -1;
-  else
-    return 0;
-#endif
+    hit = 0;
+    if (sigsetjmp(jmpbuf, 1) == 0) {
+        struct sigaction sa;
+        sa.sa_handler = SignalHdl;
+        sigemptyset(&sa.sa_mask);
+        sa.sa_flags = 0;
+        if (sigaction(SIGBUS, &sa, NULL) != 0 ||
+            sigaction(SIGSEGV, &sa, NULL) != 0)
+        {
+            abort();
+        }
+        func(eT, p);
+        sa.sa_handler = SIG_DFL;
+        if (sigaction(SIGBUS, &sa, NULL) != 0 ||
+            sigaction(SIGSEGV, &sa, NULL) != 0)
+        {
+            abort();
+        }
+    }
+    return hit ? -1 : 0;
 }
 
 /*************************************************************************

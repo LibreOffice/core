@@ -36,6 +36,7 @@ TARGET=workben
 
 LIBTARGET=NO
 TARGETTYPE=CUI
+NO_DEFAULT_STL=TRUE
 
 # --- Settings ---
 
@@ -59,13 +60,10 @@ CFLAGS+= -I..$/source
 
 # --- Files ---
 
-CXXFILES=	\
-    t_file.cxx	\
-    t_base.cxx	\
-    t_store.cxx
-
 OBJFILES=	\
+    $(OBJ)$/t_leak.obj	\
     $(OBJ)$/t_file.obj	\
+    $(OBJ)$/t_page.obj	\
     $(OBJ)$/t_base.obj	\
     $(OBJ)$/t_store.obj
 
@@ -73,25 +71,29 @@ APP1TARGET=		t_file
 APP1OBJS=		$(OBJ)$/t_file.obj
 APP1STDLIBS=	$(STOREDBGLIB)
 APP1STDLIBS+=	$(SALLIB)
-APP1DEPN=	\
-    $(STOREDBGLIB)	\
-    $(L)$/isal.lib
+APP1DEPN=	$(STOREDBGLIB)
 
-APP2TARGET=		t_base
-APP2OBJS=		$(OBJ)$/t_base.obj
+APP2TARGET=		t_page
+APP2OBJS=		$(OBJ)$/t_page.obj
 APP2STDLIBS=	$(STOREDBGLIB)
 APP2STDLIBS+=	$(SALLIB)
-APP2DEPN=	\
-    $(STOREDBGLIB)	\
-    $(L)$/isal.lib
+APP2DEPN=	$(STOREDBGLIB)
 
-APP3TARGET=		t_store
-APP3OBJS=		$(OBJ)$/t_store.obj
-APP3STDLIBS=	$(STORELIB)
+APP3TARGET=		t_base
+APP3OBJS=		$(OBJ)$/t_base.obj
+APP3STDLIBS=	$(STOREDBGLIB)
 APP3STDLIBS+=	$(SALLIB)
-APP3DEPN=	\
-    $(SLB)$/store.lib	\
-    $(L)$/isal.lib
+APP3DEPN=	$(STOREDBGLIB)
+
+ APP4TARGET=		t_store
+ APP4OBJS=		$(OBJ)$/t_store.obj
+ APP4STDLIBS=	$(STORELIB)
+ APP4STDLIBS+=	$(SALLIB)
+ APP4DEPN=	$(SLB)$/store.lib
+
+ APP5TARGET=		t_leak
+ APP5OBJS=		$(OBJ)$/t_leak.obj
+ APP5STDLIBS+=	$(SALLIB)
 
 # --- Targets ---
 

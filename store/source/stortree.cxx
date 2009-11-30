@@ -31,18 +31,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _STORE_STORTREE_CXX "$Revision: 1.8 $"
-#include <sal/types.h>
-#include <rtl/memory.h>
-#include <osl/diagnose.h>
-#include <osl/endian.h>
-#include <osl/mutex.hxx>
-#include <store/types.h>
+#include "stortree.hxx"
 
-#ifndef _STORE_STORBASE_HXX
-#include <storbase.hxx>
-#endif
-#include <stortree.hxx>
+#include "sal/types.h"
+#include "osl/diagnose.h"
+
+#include "store/types.h"
+
+#include "storbase.hxx"
+#include "storbios.hxx"
 
 using namespace store;
 
@@ -57,42 +54,15 @@ using namespace store;
 OStoreBTreeNodeData::OStoreBTreeNodeData (sal_uInt16 nPageSize)
     : OStorePageData (nPageSize)
 {
-    initialize();
-}
+    base::m_aGuard.m_nMagic = store::htonl(self::theTypeId);
+    base::m_aDescr.m_nUsed  = store::htons(self::thePageSize); // usageCount(0)
+    self::m_aGuard.m_nMagic = store::htonl(0); // depth(0)
 
-/*
- * initialize.
- */
-void OStoreBTreeNodeData::initialize (void)
-{
-    base::m_aGuard.m_nMagic = STORE_MAGIC_BTREENODE;
-    base::m_aDescr.m_nUsed  = base::size() + self::size();
-    self::m_aGuard.m_nMagic = 0;
+    sal_uInt16 const n = capacityCount();
+    T const          t;
 
-    sal_uInt16 i, n = capacityCount();
-    T          t;
-
-    for (i = 1; i < n; i++)
+    for (sal_uInt16 i = 1; i < n; i++)
         m_pData[i] = t;
-}
-
-/*
- * swap.
- */
-void OStoreBTreeNodeData::swap (
-    const D&
-#ifdef OSL_BIGENDIAN
-        rDescr
-#endif /* OSL_BIGENDIAN */
-)
-{
-#ifdef OSL_BIGENDIAN
-    m_aGuard.swap();
-
-    sal_uInt16 i, n = sal_uInt16(capacity(rDescr) / sizeof(T));
-    for (i = 0; i < n; i++)
-        m_pData[i].swap();
-#endif /* OSL_BIGENDIAN */
 }
 
 /*
@@ -105,7 +75,7 @@ sal_uInt16 OStoreBTreeNodeData::find (const T& t) const
 
     while (l < r)
     {
-        register sal_Int32 m = ((l + r) >> 1);
+        register sal_Int32 const m = ((l + r) >> 1);
 
         if (t.m_aKey == m_pData[m].m_aKey)
             return ((sal_uInt16)(m));
@@ -115,7 +85,7 @@ sal_uInt16 OStoreBTreeNodeData::find (const T& t) const
             l = m + 1;
     }
 
-    sal_uInt16 k = ((sal_uInt16)(r));
+    sal_uInt16 const k = ((sal_uInt16)(r));
     if ((k < capacityCount()) && (t.m_aKey < m_pData[k].m_aKey))
         return(k - 1);
     else
@@ -127,16 +97,16 @@ sal_uInt16 OStoreBTreeNodeData::find (const T& t) const
  */
 void OStoreBTreeNodeData::insert (sal_uInt16 i, const T& t)
 {
-    sal_uInt16 n = usageCount();
-    sal_uInt16 m = capacityCount();
+    sal_uInt16 const n = usageCount();
+    sal_uInt16 const m = capacityCount();
     if ((n < m) && (i < m))
     {
         // shift right.
-        rtl_moveMemory (&m_pData[i + 1], &m_pData[i], (n - i) * sizeof(T));
+        memmove (&(m_pData[i + 1]), &(m_pData[i]), (n - i) * sizeof(T));
 
         // insert.
         m_pData[i] = t;
-        base::m_aDescr.m_nUsed += sal_uInt16(sizeof(T));
+        usageCount (n + 1);
     }
 }
 
@@ -145,40 +115,39 @@ void OStoreBTreeNodeData::insert (sal_uInt16 i, const T& t)
  */
 void OStoreBTreeNodeData::remove (sal_uInt16 i)
 {
-    sal_uInt16 n = usageCount();
+    sal_uInt16 const n = usageCount();
     if (i < n)
     {
         // shift left.
-        rtl_moveMemory (
-            &m_pData[i], &m_pData[i + 1], (n - i - 1) * sizeof(T));
+        memmove (&(m_pData[i]), &(m_pData[i + 1]), (n - i - 1) * sizeof(T));
 
         // truncate.
         m_pData[n - 1] = T();
-        base::m_aDescr.m_nUsed -= sal_uInt16(sizeof(T));
+        usageCount (n - 1);
     }
 }
 
 /*
- * merge.
+ * merge (with right page).
  */
 void OStoreBTreeNodeData::merge (const self& rPageR)
 {
-    if (queryMerge (rPageR))
+    sal_uInt16 const n = usageCount();
+    sal_uInt16 const m = rPageR.usageCount();
+    if ((n + m) <= capacityCount())
     {
-        sal_uInt16 n = usageCount();
-        sal_uInt16 m = rPageR.usageCount();
-        rtl_copyMemory (&m_pData[n], &rPageR.m_pData[0], m * sizeof(T));
+        memcpy (&(m_pData[n]), &(rPageR.m_pData[0]), m * sizeof(T));
         usageCount (n + m);
     }
 }
 
 /*
- * split.
+ * split (left half copied from right half of left page).
  */
 void OStoreBTreeNodeData::split (const self& rPageL)
 {
-    sal_uInt16 h = capacityCount() / 2;
-    rtl_copyMemory (&m_pData[0], &rPageL.m_pData[h], h * sizeof(T));
+    sal_uInt16 const h = capacityCount() / 2;
+    memcpy (&(m_pData[0]), &(rPageL.m_pData[h]), h * sizeof(T));
     truncate (h);
 }
 
@@ -187,8 +156,8 @@ void OStoreBTreeNodeData::split (const self& rPageL)
  */
 void OStoreBTreeNodeData::truncate (sal_uInt16 n)
 {
-    sal_uInt16 m = capacityCount();
-    T          t;
+    sal_uInt16 const m = capacityCount();
+    T const          t;
 
     for (sal_uInt16 i = n; i < m; i++)
         m_pData[i] = t;
@@ -201,88 +170,78 @@ void OStoreBTreeNodeData::truncate (sal_uInt16 n)
  *
  *======================================================================*/
 /*
- * swap.
- */
-void OStoreBTreeNodeObject::swap (
-    const D&
-#ifdef OSL_BIGENDIAN
-        rDescr
-#endif /* OSL_BIGENDIAN */
-)
-{
-#ifdef OSL_BIGENDIAN
-    base::swap (rDescr);
-    m_rPage.swap (rDescr);
-#endif /* OSL_BIGENDIAN */
-}
-
-/*
  * guard.
  */
-void OStoreBTreeNodeObject::guard (const D& rDescr)
+storeError OStoreBTreeNodeObject::guard (sal_uInt32 nAddr)
 {
-    base::guard (rDescr);
-    m_rPage.guard (rDescr);
+    return PageHolderObject< page >::guard (m_xPage, nAddr);
 }
 
 /*
  * verify.
  */
-storeError OStoreBTreeNodeObject::verify (const D& rDescr)
+storeError OStoreBTreeNodeObject::verify (sal_uInt32 nAddr) const
 {
-    storeError eErrCode = base::verify (rDescr);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-    else
-        return m_rPage.verify (rDescr);
+    return PageHolderObject< page >::verify (m_xPage, nAddr);
 }
 
 /*
  * split.
  */
 storeError OStoreBTreeNodeObject::split (
-    sal_uInt16             nIndexL,
-    OStoreBTreeNodeData   &rPageL,
-    OStoreBTreeNodeData   &rPageR,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    sal_uInt16                 nIndexL,
+    PageHolderObject< page > & rxPageL,
+    OStorePageBIOS           & rBIOS)
 {
-    // Check usage.
-    if (!rPageL.querySplit())
+    PageHolderObject< page > xPage (m_xPage);
+    if (!xPage.is())
+        return store_E_InvalidAccess;
+
+    // Check left page usage.
+    if (!rxPageL.is())
+        return store_E_InvalidAccess;
+    if (!rxPageL->querySplit())
         return store_E_None;
 
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
-
     // Save PageDescriptor.
-    D aDescr (m_rPage.m_aDescr);
+    OStorePageDescriptor aDescr (xPage->m_aDescr);
+    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
+    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
 
     // Acquire Lock.
     storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
     if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
 
-    // Begin PageL Lock (NYI).
+    // [Begin PageL Lock (NYI)]
+
+    // Construct right page.
+    PageHolderObject< page > xPageR;
+    if (!xPageR.construct (rBIOS.allocator()))
+    {
+        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+        return store_E_OutOfMemory;
+    }
 
     // Split right page off left page.
-    rPageR.split (rPageL);
-    rPageR.depth (rPageL.depth());
+    xPageR->split (*rxPageL);
+    xPageR->depth (rxPageL->depth());
 
     // Allocate right page.
-    self aNodeR (rPageR);
+    self aNodeR (xPageR.get());
     eErrCode = rBIOS.allocate (aNodeR);
     if (eErrCode != store_E_None)
     {
         rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
     }
 
     // Truncate left page.
-    rPageL.truncate (rPageL.capacityCount() / 2);
+    rxPageL->truncate (rxPageL->capacityCount() / 2);
 
     // Save left page.
-    self aNodeL (rPageL);
-    eErrCode = rBIOS.save (aNodeL);
+    self aNodeL (rxPageL.get());
+    eErrCode = rBIOS.saveObjectAt (aNodeL, aNodeL.location());
     if (eErrCode != store_E_None)
     {
         // Must not happen.
@@ -290,20 +249,17 @@ storeError OStoreBTreeNodeObject::split (
 
         // Release Lock and Leave.
         rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
     }
 
-    // End PageL Lock (NYI).
+    // [End PageL Lock (NYI)]
 
     // Insert right page.
-    T entry;
-    entry.m_aKey          = rPageR.m_pData[0].m_aKey;
-    entry.m_aLink.m_nAddr = rPageR.location();
-
-    m_rPage.insert (nIndexL + 1, entry);
+    OStorePageLink aLink (xPageR->location());
+    xPage->insert (nIndexL + 1, T(xPageR->m_pData[0].m_aKey, aLink));
 
     // Save this page.
-    eErrCode = rBIOS.save (*this);
+    eErrCode = rBIOS.saveObjectAt (*this, location());
     if (eErrCode != store_E_None)
     {
         // Must not happen.
@@ -311,142 +267,120 @@ storeError OStoreBTreeNodeObject::split (
 
         // Release Lock and Leave.
         rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
     }
 
-#if 0  /* PERFORMANCE */
-    eErrCode = rBIOS.flush();
-#endif /* PERFORMANCE */
-
     // Release Lock and Leave.
-    eErrCode = rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
 }
 
 /*
  * remove (down to leaf node, recursive).
  */
 storeError OStoreBTreeNodeObject::remove (
-    sal_uInt16             nIndexL,
-    OStoreBTreeEntry      &rEntryL,
-    OStoreBTreeNodeData   &rPageL,
-#if 0  /* NYI */
-    OStoreBTreeNodeData   &rPageR,
-#endif /* NYI */
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    sal_uInt16         nIndexL,
+    OStoreBTreeEntry & rEntryL,
+    OStorePageBIOS &   rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page & rPage = (*xImpl);
 
     // Save PageDescriptor.
-    D aDescr (m_rPage.m_aDescr);
+    OStorePageDescriptor aDescr (rPage.m_aDescr);
+    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
+    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
 
     // Acquire Lock.
     storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
     if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
 
     // Check depth.
-    if (m_rPage.depth())
+    if (rPage.depth())
     {
         // Check link entry.
-        if (!(rEntryL.compare (m_rPage.m_pData[nIndexL]) == T::COMPARE_EQUAL))
+        T const aEntryL (rPage.m_pData[nIndexL]);
+        if (!(rEntryL.compare (aEntryL) == T::COMPARE_EQUAL))
         {
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, store_E_InvalidAccess);
+            return store_E_InvalidAccess;
         }
 
         // Load link node.
-        self aNodeL (rPageL);
-        aNodeL.location (m_rPage.m_pData[nIndexL].m_aLink.m_nAddr);
-
-        eErrCode = rBIOS.load (aNodeL);
+        self aNodeL;
+        eErrCode = rBIOS.loadObjectAt (aNodeL, aEntryL.m_aLink.location());
         if (eErrCode != store_E_None)
         {
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
         }
 
-        // Remove from link node (using current page as link buffer).
-        eErrCode = aNodeL.remove (0, rEntryL, m_rPage, rBIOS, NULL);
+        // Recurse: remove from link node.
+        eErrCode = aNodeL.remove (0, rEntryL, rBIOS);
         if (eErrCode != store_E_None)
         {
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
         }
 
-        // Reload current page.
-        m_rPage.location (aDescr.m_nAddr);
-        eErrCode = rBIOS.load (*this);
-        if (eErrCode != store_E_None)
-        {
-            // Must not happen.
-            OSL_TRACE("OStoreBTreeNodeObject::remove(): load() failed");
-
-            // Release Lock and Leave.
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-        }
-
-        // Check link node usage.
-        if (rPageL.usageCount() == 0)
+        // Check resulting link node usage.
+        PageHolderObject< page > xPageL (aNodeL.get());
+        if (xPageL->usageCount() == 0)
         {
             // Free empty link node.
-            eErrCode = rBIOS.free (aNodeL);
+            OStorePageData aPageHead;
+            eErrCode = rBIOS.free (aPageHead, xPageL->location());
             if (eErrCode != store_E_None)
             {
                 rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
+                return eErrCode;
             }
 
             // Remove index.
-            m_rPage.remove (nIndexL);
+            rPage.remove (nIndexL);
             touch();
         }
         else
         {
 #if 0   /* NYI */
             // Check for right sibling.
-            sal_uInt16 nIndexR = nIndexL + 1;
-            if (nIndexR < m_rPage.usageCount())
+            sal_uInt16 const nIndexR = nIndexL + 1;
+            if (nIndexR < rPage.usageCount())
             {
                 // Load right link node.
-                self aNodeR (rPageR);
-                aNodeR.location (m_rPage.m_pData[nIndexR].m_aLink.m_nAddr);
-
-                eErrCode = rBIOS.load (aNodeR);
+                self aNodeR;
+                eErrCode = rBIOS.loadObjectAt (aNodeR, rPage.m_pData[nIndexR].m_aLink.location());
                 if (eErrCode == store_E_None)
                 {
                     if (rPageL.queryMerge (rPageR))
                     {
                         rPageL.merge (rPageR);
 
-                        eErrCode = rBIOS.free (rPageR);
+                        eErrCode = rBIOS.free (aPageHead, rPageR.location());
                     }
                 }
             }
 #endif  /* NYI */
 
             // Relink.
-            m_rPage.m_pData[nIndexL].m_aKey = rPageL.m_pData[0].m_aKey;
+            rPage.m_pData[nIndexL].m_aKey = xPageL->m_pData[0].m_aKey;
             touch();
         }
     }
     else
     {
         // Check leaf entry.
-        if (!(rEntryL.compare (m_rPage.m_pData[nIndexL]) == T::COMPARE_EQUAL))
+        if (!(rEntryL.compare (rPage.m_pData[nIndexL]) == T::COMPARE_EQUAL))
         {
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, store_E_NotExists);
+            return store_E_NotExists;
         }
 
         // Save leaf entry.
-        rEntryL = m_rPage.m_pData[nIndexL];
+        rEntryL = rPage.m_pData[nIndexL];
 
         // Remove leaf index.
-        m_rPage.remove (nIndexL);
+        rPage.remove (nIndexL);
         touch();
     }
 
@@ -454,7 +388,7 @@ storeError OStoreBTreeNodeObject::remove (
     if (dirty())
     {
         // Save this page.
-        eErrCode = rBIOS.save (*this);
+        eErrCode = rBIOS.saveObjectAt (*this, location());
         if (eErrCode != store_E_None)
         {
             // Must not happen.
@@ -462,13 +396,12 @@ storeError OStoreBTreeNodeObject::remove (
 
             // Release Lock and Leave.
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
         }
     }
 
     // Release Lock and Leave.
-    eErrCode = rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
 }
 
 /*========================================================================
@@ -477,44 +410,94 @@ storeError OStoreBTreeNodeObject::remove (
  *
  *======================================================================*/
 /*
+ * testInvariant.
+ * Precond: root node page loaded.
+ */
+bool OStoreBTreeRootObject::testInvariant (char const * message)
+{
+    OSL_PRECOND(m_xPage.get() != 0, "OStoreBTreeRootObject::testInvariant(): Null pointer");
+    bool result = ((m_xPage->location() - m_xPage->size()) == 0);
+    OSL_POSTCOND(result, message); (void) message;
+    return result;
+}
+
+/*
+ * loadOrCreate.
+ */
+storeError OStoreBTreeRootObject::loadOrCreate (
+    sal_uInt32       nAddr,
+    OStorePageBIOS & rBIOS)
+{
+    storeError eErrCode = rBIOS.loadObjectAt (*this, nAddr);
+    if (eErrCode != store_E_NotExists)
+        return eErrCode;
+
+    eErrCode = construct<page>(rBIOS.allocator());
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    eErrCode = rBIOS.allocate (*this);
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    // Notify caller of the creation.
+    (void) testInvariant("OStoreBTreeRootObject::loadOrCreate(): leave");
+    return store_E_Pending;
+}
+
+/*
  * change.
  */
 storeError OStoreBTreeRootObject::change (
-    OStoreBTreeNodeData   &rPageL,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    PageHolderObject< page > & rxPageL,
+    OStorePageBIOS &           rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xPage (m_xPage);
+    (void) testInvariant("OStoreBTreeRootObject::change(): enter");
 
     // Save PageDescriptor.
-    OStorePageDescriptor aDescr (m_rPage.m_aDescr);
+    OStorePageDescriptor aDescr (xPage->m_aDescr);
+    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
+    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
+
+    // Save root location.
+    sal_uInt32 const nRootAddr = xPage->location();
 
     // Acquire Lock.
     storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
     if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
 
-    // Change root.
-    rPageL = m_rPage;
-
-    base aNodeL (rPageL);
-    eErrCode = rBIOS.allocate (aNodeL);
-    if (eErrCode != store_E_None)
+    // Construct new root.
+    if (!rxPageL.construct (rBIOS.allocator()))
     {
-        // Release Lock and Leave.
         rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return store_E_OutOfMemory;
     }
 
-    m_rPage.m_pData[0].m_aKey = rPageL.m_pData[0].m_aKey;
-    m_rPage.m_pData[0].m_aLink.m_nAddr = rPageL.location();
+    // Save this as prev root.
+    eErrCode = rBIOS.allocate (*this);
+    if (eErrCode != store_E_None)
+    {
+        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+        return store_E_OutOfMemory;
+    }
 
-    m_rPage.truncate (1);
-    m_rPage.depth (m_rPage.depth() + 1);
+    // Setup new root.
+    rxPageL->depth (xPage->depth() + 1);
+    rxPageL->m_pData[0] = xPage->m_pData[0];
+    rxPageL->m_pData[0].m_aLink = xPage->location();
+    rxPageL->usageCount(1);
 
-    // Save root.
-    eErrCode = rBIOS.save (*this);
+    // Change root.
+    rxPageL.swap (xPage);
+    {
+        PageHolder tmp (xPage.get());
+        tmp.swap (m_xPage);
+    }
+
+    // Save this as new root.
+    eErrCode = rBIOS.saveObjectAt (*this, nRootAddr);
     if (eErrCode != store_E_None)
     {
         // Must not happen.
@@ -522,44 +505,182 @@ storeError OStoreBTreeRootObject::change (
 
         // Release Lock and Leave.
         rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
     }
 
-#if 1  /* ROBUSTNESS */
-    eErrCode = rBIOS.flush();
-#endif /* ROBUSTNESS */
+    // Flush for robustness.
+    (void) rBIOS.flush();
 
     // Done. Release Lock and Leave.
-    eErrCode = rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    (void) testInvariant("OStoreBTreeRootObject::change(): leave");
+    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
 }
 
 /*
- * split.
+ * find_lookup (w/o split()).
+ * Precond: root node page loaded.
  */
-storeError OStoreBTreeRootObject::split (
-    sal_uInt16,
-    OStoreBTreeNodeData   &rPageL,
-    OStoreBTreeNodeData   &rPageR,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+storeError OStoreBTreeRootObject::find_lookup (
+    OStoreBTreeNodeObject & rNode,  // [out]
+    sal_uInt16 &            rIndex, // [out]
+    OStorePageKey const &   rKey,
+    OStorePageBIOS &        rBIOS)
 {
-    // Check usage.
-    if (!querySplit())
-        return store_E_None;
+    // Init node w/ root page.
+    (void) testInvariant("OStoreBTreeRootObject::find_lookup(): enter");
+    {
+        PageHolder tmp (m_xPage);
+        tmp.swap (rNode.get());
+    }
 
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    // Setup BTree entry.
+    T const entry (rKey);
 
-    // Change root.
-    storeError eErrCode = change (rPageL, rBIOS, NULL);
-    if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+    // Check current page.
+    PageHolderObject< page > xPage (rNode.get());
+    for (; xPage->depth() > 0; xPage = rNode.get< page >())
+    {
+        // Find next page.
+        page const & rPage = (*xPage);
+        sal_uInt16 const i = rPage.find(entry);
+        sal_uInt16 const n = rPage.usageCount();
+        if (!(i < n))
+        {
+            // Path to entry not exists (Must not happen(?)).
+            return store_E_NotExists;
+        }
 
-    // Split Left Page.
-    eErrCode = base::split (0, rPageL, rPageR, rBIOS, NULL);
+        // Check address.
+        sal_uInt32 const nAddr = rPage.m_pData[i].m_aLink.location();
+        if (nAddr == STORE_PAGE_NULL)
+        {
+            // Path to entry not exists (Must not happen(?)).
+            return store_E_NotExists;
+        }
 
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+        // Load next page.
+        storeError eErrCode = rBIOS.loadObjectAt (rNode, nAddr);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+    }
+
+    // Find index.
+    page const & rPage = (*xPage);
+    rIndex = rPage.find(entry);
+    if (!(rIndex < rPage.usageCount()))
+        return store_E_NotExists;
+
+    // Compare entry.
+    T::CompareResult eResult = entry.compare(rPage.m_pData[rIndex]);
+    OSL_POSTCOND(eResult != T::COMPARE_LESS, "store::BTreeRoot::find_lookup(): sort error");
+    if (eResult == T::COMPARE_LESS)
+        return store_E_Unknown;
+
+    // Greater or Equal.
+    (void) testInvariant("OStoreBTreeRootObject::find_lookup(): leave");
+    return store_E_None;
 }
 
+/*
+ * find_insert (possibly with split()).
+ * Precond: root node page loaded.
+ */
+storeError OStoreBTreeRootObject::find_insert (
+    OStoreBTreeNodeObject & rNode,  // [out]
+    sal_uInt16 &            rIndex, // [out]
+    OStorePageKey const &   rKey,
+    OStorePageBIOS &        rBIOS)
+{
+    (void) testInvariant("OStoreBTreeRootObject::find_insert(): enter");
+
+    // Check for RootNode split.
+    PageHolderObject< page > xRoot (m_xPage);
+    if (xRoot->querySplit())
+    {
+        PageHolderObject< page > xPageL;
+
+        // Change root.
+        storeError eErrCode = change (xPageL, rBIOS);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Split left page (prev root).
+        eErrCode = split (0, xPageL, rBIOS);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+    }
+
+    // Init node w/ root page.
+    {
+        PageHolder tmp (m_xPage);
+        tmp.swap (rNode.get());
+    }
+
+    // Setup BTree entry.
+    T const entry (rKey);
+
+    // Check current Page.
+    PageHolderObject< page > xPage (rNode.get());
+    for (; xPage->depth() > 0; xPage = rNode.get< page >())
+    {
+        // Find next page.
+        page const & rPage = (*xPage);
+        sal_uInt16 const i = rPage.find (entry);
+        sal_uInt16 const n = rPage.usageCount();
+        if (!(i < n))
+        {
+            // Path to entry not exists (Must not happen(?)).
+            return store_E_NotExists;
+        }
+
+        // Check address.
+        sal_uInt32 const nAddr = rPage.m_pData[i].m_aLink.location();
+        if (nAddr == STORE_PAGE_NULL)
+        {
+            // Path to entry not exists (Must not happen(?)).
+            return store_E_NotExists;
+        }
+
+        // Load next page.
+        OStoreBTreeNodeObject aNext;
+        storeError eErrCode = rBIOS.loadObjectAt (aNext, nAddr);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Check for next node split.
+        PageHolderObject< page > xNext (aNext.get());
+        if (xNext->querySplit())
+        {
+            // Split next node.
+            eErrCode = rNode.split (i, xNext, rBIOS);
+            if (eErrCode != store_E_None)
+                return eErrCode;
+
+            // Restart.
+            continue;
+        }
+
+        // Let next page be current.
+        PageHolder tmp (aNext.get());
+        tmp.swap (rNode.get());
+    }
+
+    // Find index.
+    page const & rPage = (*xPage);
+    rIndex = rPage.find(entry);
+    if (rIndex < rPage.usageCount())
+    {
+        // Compare entry.
+        T::CompareResult result = entry.compare (rPage.m_pData[rIndex]);
+        OSL_POSTCOND(result != T::COMPARE_LESS, "store::BTreeRoot::find_insert(): sort error");
+        if (result == T::COMPARE_LESS)
+            return store_E_Unknown;
+
+        if (result == T::COMPARE_EQUAL)
+            return store_E_AlreadyExists;
+    }
+
+    // Greater or not (yet) existing.
+    (void) testInvariant("OStoreBTreeRootObject::find_insert(): leave");
+    return store_E_None;
+}

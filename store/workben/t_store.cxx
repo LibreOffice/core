@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _T_STORE_CXX "$Revision: 1.7 $"
+#define _T_STORE_CXX "$Revision: 1.7.8.2 $"
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -50,7 +50,7 @@ extern "C"
 }
 #endif /* PROFILE */
 
-using namespace rtl;
+using rtl::OUString;
 
 /*========================================================================
  *
@@ -144,8 +144,8 @@ class DirectoryTraveller : public Directory::traveller
     OUString          m_aPath;
 
     sal_uInt32  m_nOptions;
-    sal_uInt32  m_nLevel;
-    sal_uInt32  m_nCount;
+    unsigned int  m_nLevel;
+    unsigned int  m_nCount;
 
 public:
     DirectoryTraveller (
@@ -153,7 +153,7 @@ public:
         const OUString &rPath,
         const OUString &rName,
         sal_uInt32      nOptions,
-        sal_uInt32      nLevel = 0);
+        unsigned int nLevel = 0);
 
     virtual ~DirectoryTraveller (void);
 
@@ -168,7 +168,7 @@ DirectoryTraveller::DirectoryTraveller (
     const OUString &rPath,
     const OUString &rName,
     sal_uInt32      nOptions,
-    sal_uInt32      nLevel)
+    unsigned int nLevel)
     : m_aFile    (rFile),
       m_aPath    (rPath),
       m_nOptions (nOptions),
@@ -194,10 +194,10 @@ sal_Bool DirectoryTraveller::visit (const iter& it)
     m_nCount++;
     if (m_nOptions & OPTION_DUMP)
     {
-        OString aName (it.m_pszName, it.m_nLength, RTL_TEXTENCODING_UTF8);
+        rtl::OString aName (it.m_pszName, it.m_nLength, RTL_TEXTENCODING_UTF8);
         printf ("Visit(%d,%d): %s [0x%08x] %d [Bytes]\n",
                 m_nLevel, m_nCount,
-                aName.pData->buffer, it.m_nAttrib, it.m_nSize);
+                aName.pData->buffer, (unsigned int)(it.m_nAttrib), (unsigned int)(it.m_nSize));
     }
     if (it.m_nAttrib & STORE_ATTRIB_ISDIR)
     {
@@ -233,7 +233,7 @@ int SAL_CALL main (int argc, char **argv)
 #if (defined(WNT) && defined(PROFILE))
     StartCAP();
 #else
-    OTime aStartTime (OTime::getSystemTime());
+    OTime aMainStartTime (OTime::getSystemTime());
 #endif /* PROFILE */
 
     store::OStoreFile aFile;
@@ -368,7 +368,7 @@ int SAL_CALL main (int argc, char **argv)
         OTime aStartTime (OTime::getSystemTime());
 #endif /* PROFILE */
 
-        for (sal_Int32 i = 0; i < _DEMOSTOR_LOOPS; i++)
+        for (int i = 0; i < _DEMOSTOR_LOOPS; i++)
         {
             OUString aName (RTL_CONSTASCII_USTRINGPARAM("demostor-"));
             aName += OUString::valueOf ((sal_Int32)(i + 1), 10);
@@ -384,13 +384,19 @@ int SAL_CALL main (int argc, char **argv)
             store::OStoreStream aStream;
             eErrCode = aStream.create (aFile, aPath, aName, eMode);
             if (eErrCode != store_E_None)
+            {
+                OSL_TRACE("OStoreStream(%d)::create(): error: %d", i, eErrCode);
                 break;
+            }
 
             if (nOptions & OPTION_TRUNC)
             {
                 eErrCode = aStream.setSize(0);
                 if (eErrCode != store_E_None)
+                {
+                    OSL_TRACE("OStoreStream(%d)::setSize(0): error: %d", i, eErrCode);
                     break;
+                }
             }
 
             sal_uInt32 nDone = 0;
@@ -399,7 +405,10 @@ int SAL_CALL main (int argc, char **argv)
                 eErrCode = aStream.writeAt (
                     0, pBuffer, sizeof(pBuffer), nDone);
                 if (eErrCode != store_E_None)
+                {
+                    OSL_TRACE("OStoreStream(%d)::writeAt(): error: %d", i, eErrCode);
                     break;
+                }
             }
 
             if (nOptions & OPTION_READ)
@@ -410,7 +419,10 @@ int SAL_CALL main (int argc, char **argv)
                     eErrCode = aStream.readAt (
                         nOffset, pBuffer, sizeof(pBuffer), nDone);
                     if (eErrCode != store_E_None)
+                    {
+                        OSL_TRACE("OStoreStream(%d)::readAt(): error: %d", i, eErrCode);
                         break;
+                    }
                     if (nDone == 0)
                         break;
                     nOffset += nDone;
@@ -439,7 +451,7 @@ int SAL_CALL main (int argc, char **argv)
         sal_uInt32 nDelta = aDelta.Seconds * 1000000;
         nDelta += (aDelta.Nanosec / 1000);
 
-        printf ("Total(rd,wr): %d[usec]\n", nDelta);
+        printf ("Total(rd,wr): %d[usec]\n", (unsigned int)(nDelta));
 #endif /* PROFILE */
     }
 
@@ -560,7 +572,7 @@ int SAL_CALL main (int argc, char **argv)
         sal_uInt32 nDelta = aDelta.Seconds * 1000000;
         nDelta += (aDelta.Nanosec / 1000);
 
-        printf ("Total(iter): %d[usec]\n", nDelta);
+        printf ("Total(iter): %d[usec]\n", (unsigned int)(nDelta));
 #endif /* PROFILE */
     }
 
@@ -584,12 +596,12 @@ int SAL_CALL main (int argc, char **argv)
     DumpCAP();
 #endif /* PROFILE */
 #ifndef PROFILE
-    OTime aDelta (OTime::getSystemTime() - aStartTime);
+    OTime aDelta (OTime::getSystemTime() - aMainStartTime);
 
     sal_uInt32 nDelta = aDelta.Seconds * 1000000;
     nDelta += (aDelta.Nanosec / 1000);
 
-    printf ("Total: %d[usec]\n", nDelta);
+    printf ("Total: %d[usec]\n", (unsigned int)(nDelta));
 #endif /* PROFILE */
 
     return 0;

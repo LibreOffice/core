@@ -35,7 +35,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-module com {  module sun {  module star {  module presentation {
+module com {  module sun {  module star {
+
+module rendering { interface XBitmap; };
+
+module presentation {
+
+interface XSlideShowView;
+
 /** Transition interface to render custom transitions over time.<p>
 
     @since OOo 2.4
@@ -49,6 +56,10 @@ interface XTransition : ::com::sun::star::uno::XInterface
         [0,1] range.
      */
     void update( [in] double t );
+
+    void viewChanged( [in] XSlideShowView                        view,
+              [in] com::sun::star::rendering::XBitmap    leavingBitmap,
+              [in] com::sun::star::rendering::XBitmap    enteringBitmap );
 };
 
 }; }; }; };
