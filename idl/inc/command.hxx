@@ -65,6 +65,7 @@ public:
     String      aCSVFile;
     String      aExportFile;
     String      aDocuFile;
+    UINT32      nVerbosity;
     UINT32      nFlags;
 
                 SvCommand( int argc, char ** argv );
