@@ -110,7 +110,7 @@ $(DLLDEST)$/%.py: %.py
 $(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLLPOST)
     -rm -f $@ $(DLLDEST)$/pyuno_services.tmp $(DLLDEST)$/pyuno_services.rdb
 .IF "$(GUI)$(COM)"=="WNTGCC"
-    cd $(DLLDEST) && sh -c "export PATH='$(PATH):$(OUT)$/bin'; regcomp -register -r pyuno_services.tmp -wop $(foreach,i,$(COMPONENTS) -c $(i))"
+    cd $(DLLDEST) && sh -c "export PATH='$(PATH):$(OUT)$/bin'; $(REGCOMP) -register -r pyuno_services.tmp -wop $(foreach,i,$(COMPONENTS) -c $(i))"
 .ELSE
     cd $(DLLDEST) && $(REGCOMP) -register -r pyuno_services.tmp -wop $(foreach,i,$(COMPONENTS) -c $(i))
 .ENDIF    # "$(GUI)$(COM)"=="WNTGCC" 

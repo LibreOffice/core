@@ -2678,7 +2678,7 @@ oslFileError SAL_CALL osl_getFileSize(oslFileHandle Handle, sal_uInt64 *pSize)
 
 oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
 {
-    oslFileError    error = error = osl_setFilePos( Handle, osl_Pos_Absolut, uSize );
+    oslFileError    error = osl_setFilePos( Handle, osl_Pos_Absolut, uSize );
     if ( osl_File_E_None == error )
     {
         if ( !SetEndOfFile( (HANDLE)Handle ) )

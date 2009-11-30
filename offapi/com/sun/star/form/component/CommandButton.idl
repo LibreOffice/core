@@ -30,25 +30,12 @@
 #ifndef __com_sun_star_form_component_CommandButton_idl__
 #define __com_sun_star_form_component_CommandButton_idl__
 
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_awt_UnoControlButtonModel_idl__
 #include <com/sun/star/awt/UnoControlButtonModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_XImageProducerSupplier_idl__
 #include <com/sun/star/form/XImageProducerSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_form_XApproveActionBroadcaster_idl__
 #include <com/sun/star/form/XApproveActionBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_form_FormButtonType_idl__
 #include <com/sun/star/form/FormButtonType.idl>
-#endif
+#include <com/sun/star/form/XReset.idl>
 
 
 //=============================================================================
@@ -101,6 +88,28 @@ published service CommandButton
         @see com::sun::star::form::FormButtonType
      */
     [property] string TargetURL;
+
+    /** specifies the default toggle state for the button, used when it is reset.
+
+        <p>This property is meaningful only when <member scope="com::sun::star::awt">UnoControlButtonModel::Toggle</member>
+        is <TRUE/>. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
+        be reset.</p>
+
+        <p>For a given implementation of the interface, if this (optional) property is present, then also the optional
+        interface <type scope="com::sun::star::form">XReset</type> must be present.</p>
+    */
+    [optional, property] boolean DefaultState;
+
+    /** allows resetting the button
+
+        <p>This property is meaningful only when <member scope="com::sun::star::awt">UnoControlButtonModel::Toggle</member>
+        is <TRUE/>. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
+        be reset, when <member scope="com::sun::star::form">XReset::reset</member> is invoked.</p>
+
+        <p>For a given implementation of the interface, if this (optional) interface is present, then also the optional
+        property <member>DefaultState</member> must be present.</p>
+    */
+    [optional] interface ::com::sun::star::form::XReset;
 };
 
 //=============================================================================

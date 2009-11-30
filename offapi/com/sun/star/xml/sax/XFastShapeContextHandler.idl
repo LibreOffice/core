@@ -32,7 +32,7 @@
 
 #include <com/sun/star/xml/sax/XFastContextHandler.idl>
 #include <com/sun/star/drawing/XShape.idl>
-#include <com/sun/star/drawing/XShapes.idl>
+#include <com/sun/star/drawing/XDrawPage.idl>
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/io/XInputStream.idl>
 
@@ -50,7 +50,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandler
 {
     [attribute, readonly] com::sun::star::drawing::XShape Shape;
-    [attribute] com::sun::star::drawing::XShapes Shapes;
+    [attribute] com::sun::star::drawing::XDrawPage DrawPage;
     [attribute] com::sun::star::frame::XModel Model;
     [attribute] com::sun::star::io::XInputStream InputStream;
     [attribute] string RelationFragmentPath;

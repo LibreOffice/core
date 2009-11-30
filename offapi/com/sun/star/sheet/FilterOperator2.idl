@@ -1,0 +1,164 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: FilterOperator2.idl,v $
+ * $Revision: 1.7 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_FilterOperator2_idl__
+#define __com_sun_star_sheet_FilterOperator2_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** specifies the type of a single condition in a filter descriptor.
+
+    <p>This constants group extends the <type>FilterOperator</type> enum by
+    additional filter operators.</p>
+
+    @since OOo 3.2
+ */
+published constants FilterOperator2
+{
+
+    //-------------------------------------------------------------------------
+
+    /** selects empty entries.
+     */
+    const long EMPTY = 0;
+
+    //-------------------------------------------------------------------------
+
+    /** selects non-empty entries.
+     */
+    const long NOT_EMPTY = 1;
+
+    //-------------------------------------------------------------------------
+
+    /** value has to be equal to the specified value.
+     */
+    const long EQUAL = 2;
+
+    //-------------------------------------------------------------------------
+
+    /** value must not be equal to the specified value.
+     */
+    const long NOT_EQUAL = 3;
+
+    //-------------------------------------------------------------------------
+
+    /** value has to be greater than the specified value.
+     */
+    const long GREATER = 4;
+
+    //-------------------------------------------------------------------------
+
+    /** value has to be greater than or equal to the specified value.
+     */
+    const long GREATER_EQUAL = 5;
+
+    //-------------------------------------------------------------------------
+
+    /** value has to be less than the specified value.
+     */
+    const long LESS = 6;
+
+    //-------------------------------------------------------------------------
+
+    /** value has to be less than or equal to the specified value.
+     */
+    const long LESS_EQUAL = 7;
+
+    //-------------------------------------------------------------------------
+
+    /** selects a specified number of entries with the greatest values.
+     */
+    const long TOP_VALUES = 8;
+
+    //-------------------------------------------------------------------------
+
+    /** selects a specified percentage of entries with the greatest values.
+     */
+    const long TOP_PERCENT = 9;
+
+    //-------------------------------------------------------------------------
+
+    /** selects a specified number of entries with the lowest values.
+     */
+    const long BOTTOM_VALUES = 10;
+
+    //-------------------------------------------------------------------------
+
+    /** selects a specified percentage of entries with the lowest values.
+     */
+    const long BOTTOM_PERCENT = 11;
+
+    //-------------------------------------------------------------------------
+
+    /** selects contains entries.
+     */
+    const long CONTAINS = 12;
+
+    //-------------------------------------------------------------------------
+
+    /** selects does-not-contain entries.
+     */
+    const long DOES_NOT_CONTAIN = 13;
+
+    //-------------------------------------------------------------------------
+
+    /** selects begins-with entries.
+     */
+    const long BEGINS_WITH = 14;
+
+    //-------------------------------------------------------------------------
+
+    /** selects does-not-begin-with entries.
+     */
+    const long DOES_NOT_BEGIN_WITH = 15;
+    //-------------------------------------------------------------------------
+
+    /** selects ends-with entries.
+     */
+    const long ENDS_WITH = 16;
+
+    //-------------------------------------------------------------------------
+
+    /** selects does-not-end-with entries.
+     */
+    const long DOES_NOT_END_WITH = 17;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

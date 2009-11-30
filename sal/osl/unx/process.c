@@ -650,6 +650,18 @@ static void ChildStatusProc(void *pData)
             close( stdOutput[0] );
             close( stdError[0] );
 
+            //if pid > 0 then a process was created, even if it later failed
+            //e.g. bash searching for a command to execute, and we still
+            //need to clean it up to avoid "defunct" processes
+            if (pid > 0)
+            {
+                pid_t child_pid;
+                do
+                {
+                    child_pid = waitpid(pid, &status, 0);
+                } while ( 0 > child_pid && EINTR == errno );
+            }
+
             /* notify (and unblock) parent thread */
             osl_setCondition(pdata->m_started);
         }
