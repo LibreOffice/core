@@ -221,7 +221,7 @@ storeError OStoreLockBytes::readAt (
             }
             else
             {
-                PageHolderObject< data > xData (aData.get<data>());
+                PageHolderObject< data > xData (aData.makeHolder<data>());
                 memcpy (
                     &pData[rnDone],
                     &xData->m_pData[aDescr.m_nOffset],
@@ -322,13 +322,13 @@ storeError OStoreLockBytes::writeAt (
                 }
             }
 
-            PageHolderObject< data > xData (aData.get<data>());
+            PageHolderObject< data > xData (aData.makeHolder<data>());
             if (!xData.is())
             {
                 eErrCode = aData.construct<data>(m_xManager->allocator());
                 if (eErrCode != store_E_None)
                     return eErrCode;
-                xData = aData.get<data>();
+                xData = aData.makeHolder<data>();
             }
 
             // Modify data page.

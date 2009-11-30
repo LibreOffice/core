@@ -836,13 +836,13 @@ private:
     */
     page & PAGE()
     {
-        page * pImpl = reinterpret_cast<page*>(m_xPage.get());
+        page * pImpl = static_cast<page*>(m_xPage.get());
         OSL_PRECOND(pImpl != 0, "OStoreDirectoryPageObject::PAGE(): Null pointer");
         return (*pImpl);
     }
     page const & PAGE() const
     {
-        page const * pImpl = reinterpret_cast<page const *>(m_xPage.get());
+        page const * pImpl = static_cast<page const *>(m_xPage.get());
         OSL_PRECOND(pImpl != 0, "OStoreDirectoryPageObject::PAGE(): Null pointer");
         return (*pImpl);
     }

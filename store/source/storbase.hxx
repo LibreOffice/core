@@ -910,7 +910,7 @@ protected:
 
 public:
     template< class U >
-    PageHolderObject<U> get() const
+    PageHolderObject<U> makeHolder() const
     {
         return PageHolderObject<U>(m_xPage);
     }

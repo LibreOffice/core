@@ -41,6 +41,7 @@
 #include "sal/types.h"
 #include "osl/diagnose.h"
 #include "osl/file.h"
+#include "osl/process.h"
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
 
@@ -278,8 +279,17 @@ struct FileHandle
         rtl::OUString aFileUrl;
         if (osl_getFileURLFromSystemPath (pFilename, &(aFileUrl.pData)) != osl_File_E_None)
         {
-            // Not system path. Maybe a file url, already.
+            // Not system path. Assume file url.
             rtl_uString_assign (&(aFileUrl.pData), pFilename);
+        }
+        if (aFileUrl.compareToAscii("file://", 7) != 0)
+        {
+            // Not file url. Assume relative path.
+            rtl::OUString aCwdUrl;
+            (void) osl_getProcessWorkingDir (&(aCwdUrl.pData));
+
+            // Absolute file url.
+            (void) osl_getAbsoluteFileURL (aCwdUrl.pData, aFileUrl.pData, &(aFileUrl.pData));
         }
 
         // Acquire handle.

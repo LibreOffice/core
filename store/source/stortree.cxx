@@ -538,7 +538,7 @@ storeError OStoreBTreeRootObject::find_lookup (
 
     // Check current page.
     PageHolderObject< page > xPage (rNode.get());
-    for (; xPage->depth() > 0; xPage = rNode.get< page >())
+    for (; xPage->depth() > 0; xPage = rNode.makeHolder< page >())
     {
         // Find next page.
         page const & rPage = (*xPage);
@@ -621,7 +621,7 @@ storeError OStoreBTreeRootObject::find_insert (
 
     // Check current Page.
     PageHolderObject< page > xPage (rNode.get());
-    for (; xPage->depth() > 0; xPage = rNode.get< page >())
+    for (; xPage->depth() > 0; xPage = rNode.makeHolder< page >())
     {
         // Find next page.
         page const & rPage = (*xPage);
