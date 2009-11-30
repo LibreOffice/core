@@ -124,6 +124,9 @@ public:
     SdPage* GetCurrentPage();
 
     SdDrawDocument* GetDoc() { return mpDoc; }
+
+    void ShowAnnotations(bool bShow);
+
 private:
     ViewShellBase& mrBase;
     SdDrawDocument* mpDoc;

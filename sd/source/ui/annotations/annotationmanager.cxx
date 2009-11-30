@@ -274,6 +274,21 @@ void SAL_CALL AnnotationManagerImpl::disposing( const ::com::sun::star::lang::Ev
 {
 }
 
+void AnnotationManagerImpl::ShowAnnotations( bool bShow )
+{
+    // enforce show annotations if a new annotation is inserted
+    if( mbShowAnnotations != bShow )
+    {
+        mbShowAnnotations = bShow;
+
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
+           if( pOptions )
+            pOptions->SetShowComments( mbShowAnnotations ? sal_True : sal_False );
+
+        UpdateTags();
+    }
+}
+
 // --------------------------------------------------------------------
 
 void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
@@ -296,16 +311,8 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
         ExecuteReplyToAnnotation( rReq );
         break;
     case SID_SHOW_POSTIT:
-        {
-            mbShowAnnotations = !mbShowAnnotations;
-
-               SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
-               if( pOptions )
-                pOptions->SetShowComments( mbShowAnnotations ? sal_True : sal_False );
-
-            UpdateTags();
-            break;
-        }
+        ShowAnnotations( !mbShowAnnotations );
+        break;
     }
 }
 
@@ -313,6 +320,7 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
 
 void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& /*rReq*/)
 {
+    ShowAnnotations(true);
     InsertAnnotation();
 }
 
@@ -320,6 +328,8 @@ void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& /*rReq*/)
 
 void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
 {
+    ShowAnnotations( true );
+
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     switch( rReq.GetSlot() )
@@ -640,6 +650,8 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
 
 void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 {
+    ShowAnnotations( true );
+
     Reference< XAnnotation > xCurrent;
     GetSelectedAnnotation( xCurrent );
     SdPage* pPage = GetCurrentPage();
@@ -1213,7 +1225,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
 
             nPageNum--;
         }
-        return static_cast< SdPage* >( mpDoc->GetMasterPage(nPageNum) );
+        return mpDoc->GetMasterSdPage(nPageNum,PK_STANDARD);
     }
 }
 

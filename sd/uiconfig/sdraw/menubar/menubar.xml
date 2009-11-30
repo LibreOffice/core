@@ -105,7 +105,7 @@
                     <menu:menuitem menu:id=".uno:HelplinesFront"/>
                 </menu:menupopup>
             </menu:menu>
-      <menu:menuitem menu:id=".uno:ShowAnnotation"/>
+      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
