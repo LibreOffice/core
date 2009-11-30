@@ -69,7 +69,6 @@
 #include <com/sun/star/awt/FontWidth.hpp>
 #endif
 
-#include <typeinfo.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
