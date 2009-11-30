@@ -41,10 +41,19 @@ nodep=true
 #----- compile .java files -----------------------------------------
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(FLUTE_JAR)$(PATH_SEPERATOR)$(LIBBASE_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(LIBSERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)$(PATH_SEPERATOR)$(LIBREPOSITORY_JAR)$(PATH_SEPERATOR)$(COMMONS_LOGGING_JAR)
-COMP=fix_system_jfreereport
+XCLASSPATH!:=$(XCLASSPATH)$(FLUTE_JAR)$(PATH_SEPERATOR)$(LIBBASE_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(LIBSERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)$(PATH_SEPERATOR)$(LIBREPOSITORY_JAR)
 .ELSE
-JARFILES += flute-1.3.0.jar libbase-1.0.0.jar libfonts-1.0.0.jar libformula-0.2.0.jar liblayout-0.2.9.jar libloader-1.0.0.jar librepository-1.0.0.jar libxml-1.0.0.jar flow-engine-0.9.2.jar sac.jar commons-logging-1.1.1.jar
+JARFILES += flute-1.3.0.jar libbase-1.0.0.jar libfonts-1.0.0.jar libformula-0.2.0.jar liblayout-0.2.9.jar libloader-1.0.0.jar librepository-1.0.0.jar libxml-1.0.0.jar flow-engine-0.9.2.jar sac.jar
+.ENDIF
+
+.IF "$(SYSTEM_APACHE_COMMONS)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(COMMONS_LOGGING_JAR)
+.ELSE
+JARFILES += commons-logging-1.1.1.jar
+.ENDIF
+
+.IF "$(SYSTEM_JFREEREPORT)" == "YES" || "$(SYSTEM_APACHE_COMMONS)" == "YES"
+COMP=fix_system_libs
 .ENDIF
 
 JAVAFILES       := $(shell @$(FIND) . -name "*.java")
@@ -94,13 +103,19 @@ CUSTOMMANIFESTFILE = Manifest.mf
 $(JARTARGETN) : $(COMP) $(PROPERTYFILES) $(CSSFILES) $(XSDFILES) $(TXTFILES) $(XMLFILES)
 .ENDIF          # "$(JARTARGETN)"!=""
 
-fix_system_jfreereport:
-    @echo "Fix Java Class-Path entry for JFree JFreeReport libraries from system."
+fix_system_libs:
+    @echo "Fix Java Class-Path entry for libraries from system."
+.IF ("$(SYSTEM_JFREEREPORT)" != "YES" && "$(SYSTEM_APACHE_COMMONS)" == "YES")
+    @$(SED) -r -e "s#commons-logging-1.1.1.jar#file://$(COMMONS_LOGGING_JAR)#" \
+        -i ../../../../../../$(INPATH)/class/sun-report-builder/META-INF/MANIFEST.MF
+.ENDIF
+.IF ("$(SYSTEM_JFREEREPORT)" == "YES" && "$(SYSTEM_APACHE_COMMONS)" == "YES")
     @$(SED) '/flute/,/sac/d' -i ../../../../../../$(INPATH)/class/sun-report-builder/META-INF/MANIFEST.MF
     @$(SED) -r -e "s#^Class-Path.*#\0\n  file://$(LIBBASE_JAR)\n  file://$(SAC_JAR)\n  file://$(LIBXML_JAR)\n\
   file://$(FLUTE_JAR)\n  file://$(JFREEREPORT_JAR)\n  file://$(LIBLAYOUT_JAR)\n  file://$(LIBLOADER_JAR)\n  file://$(LIBFORMULA_JAR)\n\
-  file://$(LIBREPOSITORY_JAR)\n  file://$(LIBFONTS_JAR)\n  file://$(LIBSERIALIZER_JAR)#" \
+  file://$(LIBREPOSITORY_JAR)\n  file://$(LIBFONTS_JAR)\n  file://$(LIBSERIALIZER_JAR)\n  file://$(COMMONS_LOGGING_JAR)#" \
     -i ../../../../../../$(INPATH)/class/sun-report-builder/META-INF/MANIFEST.MF
+.ENDIF
 
 $(CLASSDIR)$/$(PACKAGE)$/%.properties : %.properties
     @@-$(MKDIRHIER) $(@:d)

@@ -43,7 +43,7 @@ ANT_BUILDFILE=build.xml
 
 .INCLUDE : antsettings.mk
 
-.IF "$(SOLAR_JAVA)" != ""
+.IF "$(SOLAR_JAVA)" != "" && "$(ENABLE_MEDIAWIKI)" == "YES"
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=commons-codec-1.3-src
@@ -71,7 +71,7 @@ BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 
-.IF "$(SOLAR_JAVA)" != ""
+.IF "$(SOLAR_JAVA)" != "" && "$(ENABLE_MEDIAWIKI)" == "YES"
 .INCLUDE : tg_ext.mk
 .ENDIF
 

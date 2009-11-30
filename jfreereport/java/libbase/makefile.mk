@@ -66,13 +66,22 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(CLASSDIR)$/commons-logging-1.1.1.jar
 ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
 
-$(CLASSDIR)$/commons-logging-1.1.1.jar : 
-    $(COPY) $(SOLARBINDIR)$/commons-logging-1.1.1.jar $(CLASSDIR)$/commons-logging-1.1.1.jar
-    
-$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(CLASSDIR)$/commons-logging-1.1.1.jar $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+# XCLASSPATH/CLASSPATH does not work and we only can give lib once. But
+# the build.xmls fortunately take *.jar out of lib so we can copy our
+# commons-logging.jar here - yes, even in the system-apache commons case.
+# Sucks.
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(CLASSDIR)$/commons-logging.jar
+
+$(CLASSDIR)$/commons-logging.jar : 
+.IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
+    $(COPY) $(SOLARBINDIR)$/commons-logging-1.1.1.jar $(CLASSDIR)$/commons-logging.jar
+.ELSE
+    $(COPY) $(COMMONS_LOGGING_JAR) $(CLASSDIR)$/commons-logging.jar
+.ENDIF
+
+$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(CLASSDIR)$/commons-logging.jar $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
     $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
 .ENDIF
 

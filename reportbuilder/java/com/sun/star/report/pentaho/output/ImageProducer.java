@@ -146,7 +146,7 @@ public class ImageProducer
                 final byte b = keyData[i];
                 hashValue = b + hashValue * 23;
             }
-            this.hashCode = new Integer(hashValue);
+            this.hashCode = Integer.valueOf(hashValue);
             return hashValue;
         }
     }
@@ -154,7 +154,6 @@ public class ImageProducer
     private final InputRepository inputRepository;
     private final OutputRepository outputRepository;
     private final ImageService imageService;
-    private final DefaultNameGenerator nameGenerator;
 
     public ImageProducer(final InputRepository inputRepository,
             final OutputRepository outputRepository,
@@ -177,7 +176,6 @@ public class ImageProducer
         this.outputRepository = outputRepository;
         this.imageService = imageService;
         this.imageCache = new HashMap();
-        this.nameGenerator = new DefaultNameGenerator(outputRepository);
     }
 
     /**
@@ -275,8 +273,10 @@ public class ImageProducer
 
             // copy the image into the local output-storage
             // todo: Implement data-fingerprinting so that we can detect the mime-type
-            final String name = nameGenerator.generateName("Pictures/image", mimeType);
-            final OutputStream outputStream = outputRepository.createOutputStream(name, mimeType);
+            final OutputRepository storage = outputRepository.openOutputRepository("Pictures", null);
+            final DefaultNameGenerator nameGenerator = new DefaultNameGenerator(storage);
+            final String name = nameGenerator.generateName("image", mimeType);
+            final OutputStream outputStream = storage.createOutputStream(name, mimeType);
             final ByteArrayInputStream bin = new ByteArrayInputStream(data);
 
             try
@@ -285,11 +285,12 @@ public class ImageProducer
             } finally
             {
                 outputStream.close();
+                storage.closeOutputRepository();
             }
 
             final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getWidth() / 100.0);
             final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getHeight() / 100.0);
-            final OfficeImage officeImage = new OfficeImage(name, widthVal, heightVal);
+            final OfficeImage officeImage = new OfficeImage("Pictures/" + name, widthVal, heightVal);
             imageCache.put(imageKey, officeImage);
             return officeImage;
         }
@@ -442,8 +443,10 @@ public class ImageProducer
         }
 
         // copy the image into the local output-storage
-        final String name = nameGenerator.generateName("Pictures/image", mimeType);
-        final OutputStream outputStream = outputRepository.createOutputStream(name, mimeType);
+        final OutputRepository storage = outputRepository.openOutputRepository("Pictures", null);
+        final DefaultNameGenerator nameGenerator = new DefaultNameGenerator(storage);
+        final String name = nameGenerator.generateName("image", mimeType);
+        final OutputStream outputStream = storage.createOutputStream(name, mimeType);
         final ByteArrayInputStream bin = new ByteArrayInputStream(data);
 
         try
@@ -452,7 +455,8 @@ public class ImageProducer
         } finally
         {
             outputStream.close();
+            storage.closeOutputRepository();
         }
-        return name;
+        return "Pictures/" + name;
     }
 }
