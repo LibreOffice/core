@@ -82,6 +82,10 @@ interface XShape
         com.sun.star.drawing.EnhancedCustomShapeGeometry
     */
     [attribute,bound] sequence<::com::sun::star::beans::PropertyValue> CustomShapeGeometry;
+
+    /** determines if the object is opaque or transparent for text.
+     */
+    [attribute,bound] boolean Opaque;
 };
 
 service Shape : XShape;

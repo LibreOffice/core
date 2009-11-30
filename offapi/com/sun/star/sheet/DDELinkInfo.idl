@@ -41,42 +41,37 @@ module com {  module sun {  module star {  module sheet {
 //=============================================================================
 /** describes all items of a DDE connection used in formulas.
 
-    A DDE connection consists of the DDE service name, the DDE topic and a
-    list of DDE items which may contain results cached from the last update.
+    <p>A DDE connection consists of the DDE service name, the DDE topic and a
+    list of DDE items which may contain results cached from the last update.</p>
 
-    The formula that would need this information for example would contain
-    =[1]!'R1C1' or =[2]!'Sheet1.A1' where [1] is an external link with DDE
-    service name "excel" and topic "X:\PATH\[FILE.XLSX]Sheet1", and [2]
-    contains service "soffice" and topic "file:///X:/PATH/FILE.ODS". The
-    service name is stored in <member>DDELinkInfo::Service</member>, the topic
-    is stored in <member>DDELinkInfo::Topic</member>. Note that if the DDE
-    item contains single quotes they are escaped by doubling them, as usual.
-    For example =[2]!'''Sheet name''.A1' in a "soffice" service.
+    <p>The formula that would need this information for example would contain
+    <code>=[1]!'R1C1'</code> or <code>=[2]!'Sheet1.A1'</code> where
+    <em>[1]</em> is an external link with DDE service name "excel" and the
+    topic "X:\PATH\[FILE.XLSX]Sheet1", and <em>[2]</em> contains service
+    "soffice" and topic "file:///X:/PATH/FILE.ODS". The service name is stored
+    in <member>DDELinkInfo::Service</member>, the topic is stored in
+    <member>DDELinkInfo::Topic</member>. Note that if the DDE item contains
+    single quotes they are escaped by doubling them, as usual, for example
+    <code>=[2]!'''Sheet name''.A1'</code> in a "soffice" service.</p>
 
     @since OOo3.1
  */
 struct DDELinkInfo
 {
     //-------------------------------------------------------------------------
-
     /** The DDE service name.
      */
-
     string Service;
 
     //-------------------------------------------------------------------------
-
     /** The DDE topic.
      */
-
     string Topic;
 
     //-------------------------------------------------------------------------
-
     /** A list of DDE items. Each item may contain its results from the last
         update.
      */
-
     sequence< DDEItemInfo > Items;
 
 };

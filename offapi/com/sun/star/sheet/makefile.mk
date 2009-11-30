@@ -84,9 +84,11 @@ IDLFILES=\
     DataPilotFieldFilter.idl\
     DataPilotFieldGroup.idl\
     DataPilotFieldGroupBy.idl\
+    DataPilotFieldGroupEnumeration.idl\
     DataPilotFieldGroupInfo.idl\
     DataPilotFieldGroupItem.idl\
     DataPilotFieldGroups.idl\
+    DataPilotFieldGroupsEnumeration.idl\
     DataPilotFieldLayoutInfo.idl\
     DataPilotFieldLayoutMode.idl\
     DataPilotFieldOrientation.idl\
@@ -251,6 +253,7 @@ IDLFILES=\
     XDDELink.idl\
     XDDELinkResults.idl\
     XDDELinks.idl\
+    XDataPilotDataLayoutFieldSupplier.idl\
     XDataPilotDescriptor.idl\
     XDataPilotField.idl\
     XDataPilotFieldGrouping.idl\

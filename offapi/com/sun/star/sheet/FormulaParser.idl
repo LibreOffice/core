@@ -69,20 +69,20 @@ service FormulaParser
 
     // ------------------------------------------------------------------------
 
-    /** Whether to use English parser and formatter.
+    /** specifies whether to use English parser and formatter.
 
-        Note: When changing this, an already existing
-        <member>OpCodeMap</member> needs to be recreated internally, so
-        for performance reasons set this _before_ setting the OpCodeMap.
+        <p>Note: When changing this, an already existing <member>OpCodeMap
+        </member> needs to be recreated internally, so for performance reasons
+        set this <em>before</em> setting the <member>OpCodeMap</member>.
      */
     [property] boolean CompileEnglish;
 
     // ------------------------------------------------------------------------
 
-    /** Specifies which address reference style convention to use when
+    /** specifies which address reference style convention to use when
         parsing a formula string.
 
-        @see com::sun::star::sheet::AddressConvention
+        @see AddressConvention
       */
     [property] short FormulaConvention;
 
@@ -96,22 +96,22 @@ service FormulaParser
 
     // ------------------------------------------------------------------------
 
-    /** The complete mapping of Names to OpCodes.
+    /** contains the complete mapping of names to op-codes.
 
-        Names and symbols not defined here lead to a parser/print error.
+        <p>Names and symbols not defined here lead to a parser/print error.</p>
      */
     [property] sequence< FormulaOpCodeMapEntry > OpCodeMap;
 
     // ------------------------------------------------------------------------
 
-    /** List of external links referenced in formulas.
+    /** contains a list of external links referenced in formulas.
 
-        Use of this property depends on the
-        <member>FormulaConvention</member> in use. It is relevant only
-        for <type>AddressConvention::XL_OOX</type> to map indices to
-        external documents. The sequence must be in the order of indices
-        used. Note that indices are 1-based, the sequence must start
-        with an empty element.
+        <p>Use of this property depends on the <member>FormulaConvention
+        </member> in use. It is relevant only for <const>
+        AddressConvention::XL_OOX</const> to map indices to external
+        documents. The sequence must be in the order of indices used. Note
+        that indices are 1-based, the sequence must start with an empty
+        element.</p>
 
         @since OOo3.1
      */

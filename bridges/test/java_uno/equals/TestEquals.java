@@ -197,7 +197,8 @@ public final class TestEquals {
                                             loader.activate(
                                                 "com.sun.star.test.bridges."
                                                 + "testequals.impl",
-                                                "", "testequals.uno", null));
+                                                "", "../lib/testequals.uno",
+                                                null));
                                     XTestInterface test = (XTestInterface)
                                         UnoRuntime.queryInterface(
                                             XTestInterface.class,

@@ -182,6 +182,7 @@ struct StaticSingleton
 {
     ~StaticSingleton()
         {
+            ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
             g_bStaticDestructorsCalled = sal_True;
         }
 };
@@ -267,7 +268,13 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
       }
     // in case, that the static destructors already have been called, no
     // tiding up is done.
-    if( ! g_bStaticDestructorsCalled  && ! pContext->m_pBridgeImpl->m_bDisposed )
+    bool tidyUp;
+    {
+        ::osl::MutexGuard guard2( ::osl::Mutex::getGlobalMutex() );
+        tidyUp = ! g_bStaticDestructorsCalled &&
+            ! pContext->m_pBridgeImpl->m_bDisposed;
+    }
+    if( tidyUp )
     {
         // TODO : not threadsafe
         // synchronization with dispatch methods needed !
@@ -335,9 +342,12 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
             pImpl->m_pReader = 0;
         }
 
-        // delete the stubs
-        releaseStubs( pEnvRemote );
-
+        ::osl::MutexGuard guard2( ::osl::Mutex::getGlobalMutex() );
+        if( ! g_bStaticDestructorsCalled )
+        {
+            // delete the stubs
+            releaseStubs( pEnvRemote );
+        }
     }
 }
 

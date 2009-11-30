@@ -44,7 +44,6 @@ package com.sun.star.lib.uno.adapter;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XSeekable;
 import  com.sun.star.lib.uno.helper.ComponentBase;
-import java.io.*;
 
 public class ByteArrayToXInputStreamAdapter
     extends ComponentBase

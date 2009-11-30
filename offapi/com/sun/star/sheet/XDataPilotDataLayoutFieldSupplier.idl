@@ -1,0 +1,77 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XDataPilotDataLayoutFieldSupplier.idl,v $
+ * $Revision: 1.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XDataPilotDataLayoutFieldSupplier_idl__
+#define __com_sun_star_sheet_XDataPilotDataLayoutFieldSupplier_idl__
+
+#ifndef __com_sun_star_sheet_XDataPilotField_idl__
+#include <com/sun/star/sheet/XDataPilotField.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** Provides access to the <type>DataPilotField</type> used to layout
+    multiple data fields.
+
+    <p>This data field can be inserted into the rows dimension or columns
+    dimension by changing its <member scope="DataPilotField">Orientation</member>
+    property. This interface can be used to access the data layout field
+    before multiple data fields are inserted into the DataPilot table. It
+    remains invisible as long as the DataPilot table contains at most one data
+    field.</p>
+
+    @see com::sun::star::sheet::DataPilotDescriptor
+    @see com::sun::star::sheet::DataPilotTable
+ */
+published interface XDataPilotDataLayoutFieldSupplier
+{
+    //-------------------------------------------------------------------------
+
+    /** Returns the <type>DataPilotField</type> used to layout multiple data
+        fields.
+
+        <p>If the field does not exist yet, it will be created. It is possible
+        to insert this field into the rows or columns dimension by changing
+        its <member scope="DataPilotField">Orientation</member> property.</p>
+     */
+    XDataPilotField getDataLayoutField();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

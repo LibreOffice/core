@@ -126,6 +126,8 @@ IDLFILES=\
     XResultSetAccess.idl \
     XRowSetApproveBroadcaster.idl \
     XRowSetApproveListener.idl \
+    XRowSetChangeBroadcaster.idl \
+    XRowSetChangeListener.idl \
     XRowSetSupplier.idl \
     XSingleSelectQueryAnalyzer.idl \
     XSingleSelectQueryComposer.idl \

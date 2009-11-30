@@ -133,6 +133,22 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     if (pythonpath3End == NULL) {
         exit(EXIT_FAILURE);
     }
+#ifdef __MINGW32__
+    wchar_t pythonpath4[MAX_PATH];
+    wchar_t * pythonpath4End = tools::buildPath(
+        pythonpath4, path, pathEnd,
+        MY_STRING(L"\\program\\python-core-" MY_PYVERSION L"\\lib\\lib-dynload"));
+    if (pythonpath4End == NULL) {
+        exit(EXIT_FAILURE);
+    }
+    wchar_t pythonpath5[MAX_PATH];
+    wchar_t * pythonpath5End = tools::buildPath(
+        pythonpath5, path, pathEnd,
+        MY_STRING(L"\\program\\python-core-" MY_PYVERSION L"\\lib\\lib-dynload"));
+    if (pythonpath5End == NULL) {
+        exit(EXIT_FAILURE);
+    }
+#endif
     wchar_t pythonhome[MAX_PATH];
     wchar_t * pythonhomeEnd = tools::buildPath(
         pythonhome, path, pathEnd,
@@ -143,8 +159,13 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wchar_t pythonexe[MAX_PATH];
     wchar_t * pythonexeEnd = tools::buildPath(
         pythonexe, path, pathEnd,
+#ifdef __MINGW32__
+        MY_STRING(
+            L"\\program\\python-core-" MY_PYVERSION L"\\bin\\python.bin"));
+#else
         MY_STRING(
             L"\\program\\python-core-" MY_PYVERSION L"\\bin\\python.exe"));
+#endif
     if (pythonexeEnd == NULL) {
         exit(EXIT_FAILURE);
     }
@@ -231,6 +252,18 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             exit(EXIT_FAILURE);
         }
     }
+#ifdef __MINGW32__
+    value = new wchar_t[
+        (path1End - path1) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
+        MY_LENGTH(L";") + (pythonpath4End - pythonpath4) +
+        MY_LENGTH(L";") + (pythonpath5End - pythonpath5) +
+        MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
+        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1]; //TODO: overflow
+    wsprintfW(
+        value, L"%s;%s;%s;%s;%s%s%s", path1, pythonpath2, pythonpath4,
+        pythonpath5, pythonpath3,
+        n == 0 ? L"" : L";", orig);
+#else
     value = new wchar_t[
         (path1End - path1) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
         MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
@@ -238,6 +271,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wsprintfW(
         value, L"%s;%s;%s%s%s", path1, pythonpath2, pythonpath3,
         n == 0 ? L"" : L";", orig);
+#endif
     if (!SetEnvironmentVariableW(L"PYTHONPATH", value)) {
         exit(EXIT_FAILURE);
     }

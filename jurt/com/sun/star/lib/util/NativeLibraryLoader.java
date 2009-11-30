@@ -30,13 +30,8 @@
 package com.sun.star.lib.util;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /** Helper functions to locate and load native files.
 

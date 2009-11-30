@@ -34,6 +34,7 @@
 #include "rtl/ustring.hxx"
 #include "rtl/bootstrap.hxx"
 #include "osl/thread.hxx"
+#include "osl/file.hxx"
 #include "osl/module.hxx"
 #include "jvmfwk/framework.h"
 #include "jvmfwk/vendorplugin.h"
@@ -1111,6 +1112,35 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
     }
 
     return errcode;
+}
+
+
+javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
+{
+    javaFrameworkError ret = JFW_E_NONE;
+    if (!pInfo || !exist)
+        return JFW_E_INVALID_ARG;
+    ::rtl::OUString sLocation(pInfo->sLocation);
+
+    if (sLocation.getLength() == 0)
+        return JFW_E_INVALID_ARG;
+
+    ::osl::DirectoryItem item;
+    ::osl::File::RC rc_item = ::osl::DirectoryItem::get(sLocation, item);
+    if (::osl::File::E_None == rc_item)
+    {
+        *exist = sal_True;
+    }
+    else if (::osl::File::E_NOENT == rc_item)
+    {
+        *exist = sal_False;
+    }
+    else
+    {
+        ret = JFW_E_ERROR;
+    }
+
+    return ret;
 }
 
 void SAL_CALL jfw_lock()

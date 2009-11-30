@@ -115,7 +115,7 @@ $(OUT)$/bin$/TestRemote$(SCRIPTEXT) : $(JAVACLASSFILES)
 
 $(OUT)$/bin$/TestJni$(SCRIPTEXT) : $(JAVACLASSFILES)
     -rm -f $@
-    echo java -classpath \
+    echo '$(AUGMENT_LIBRARY_PATH)' java -classpath \
         .$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         -Djava.library.path=..$/lib test.java_uno.anytest.TestJni >> $@
     $(GIVE_EXEC_RIGHTS) $@

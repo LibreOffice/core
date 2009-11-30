@@ -71,17 +71,15 @@ VirtualMachine::VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
                                JNIEnv * pMainThreadEnv):
     m_pVm(pVm), m_nVersion(nVersion), m_bDestroy(bDestroy)
 {
+    (void) pMainThreadEnv; // avoid warnings
 #ifdef SOLAR_JAVA
     OSL_ENSURE(pVm != 0 && nVersion >= JNI_VERSION_1_2 && pMainThreadEnv != 0,
                "bad parameter");
 #endif
-
-    acquireInitialContextClassLoader(pMainThreadEnv);
 }
 
 VirtualMachine::~VirtualMachine()
 {
-    releaseInitialContextClassLoader();
     if (m_bDestroy)
     {
         // Do not destroy the VM.  Under Java 1.3, the AWT event loop thread is
@@ -93,48 +91,6 @@ VirtualMachine::~VirtualMachine()
         OSL_ENSURE(n == JNI_OK, "JNI: DestroyJavaVM failed");
 */
     }
-}
-
-void VirtualMachine::acquireInitialContextClassLoader(JNIEnv * pEnv)
-{
-#ifdef SOLAR_JAVA
-    jclass aClass = pEnv->FindClass("java/lang/Thread");
-    jmethodID aMethod1 = pEnv->GetStaticMethodID(aClass, "currentThread",
-                                                 "()Ljava/lang/Thread;");
-    jobject aThread = pEnv->CallStaticObjectMethod(aClass, aMethod1);
-    jmethodID aMethod2 = pEnv->GetMethodID(aClass, "getContextClassLoader",
-                                           "()Ljava/lang/ClassLoader;");
-    jobject aClassLoader = pEnv->CallObjectMethod(aThread, aMethod2);
-    OSL_ENSURE(!pEnv->ExceptionCheck(), "JNI: exception occured");
-    pEnv->ExceptionClear();
-    if (aClassLoader == 0)
-        m_aInitialContextClassLoader = 0;
-    else
-    {
-        m_aInitialContextClassLoader = pEnv->NewGlobalRef(aClassLoader);
-        OSL_ENSURE(m_aInitialContextClassLoader != 0,
-                   "JNI: NewGlobalRef failed");
-    }
-#endif
-}
-
-void VirtualMachine::releaseInitialContextClassLoader() const
-{
-#ifdef SOLAR_JAVA
-    if (m_aInitialContextClassLoader != 0)
-    {
-        JNIEnv * pEnv;
-        jint n = m_pVm->AttachCurrentThread(reinterpret_cast< void ** >(&pEnv),
-                                            0);
-        OSL_ENSURE(n == JNI_OK, "JNI: AttachCurrentThread failed");
-        if (n == JNI_OK)
-        {
-            pEnv->DeleteGlobalRef(m_aInitialContextClassLoader);
-            n = m_pVm->DetachCurrentThread();
-            OSL_ENSURE(n == JNI_OK, "JNI: DetachCurrentThread failed");
-        }
-    }
-#endif
 }
 
 JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
@@ -153,19 +109,6 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
         if (m_pVm->AttachCurrentThread(reinterpret_cast< void ** >(&pEnv), 0)
             != JNI_OK)
             return 0;
-        if (m_aInitialContextClassLoader != 0)
-        {
-            jclass aClass = pEnv->FindClass("java/lang/Thread");
-            jmethodID aMethod1 = pEnv->GetStaticMethodID(
-                aClass, "currentThread", "()Ljava/lang/Thread;");
-            jobject aThread = pEnv->CallStaticObjectMethod(aClass, aMethod1);
-            jmethodID aMethod2 = pEnv->GetMethodID(
-                aClass, "setContextClassLoader", "(Ljava/lang/ClassLoader;)V");
-            pEnv->CallVoidMethod(aThread, aMethod2,
-                                 m_aInitialContextClassLoader);
-            OSL_ENSURE(!pEnv->ExceptionCheck(), "JNI: exception occured");
-            pEnv->ExceptionClear();
-        }
         *pAttached = true;
     }
     else

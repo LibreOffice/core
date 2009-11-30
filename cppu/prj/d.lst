@@ -59,7 +59,7 @@ mkdir: %_DEST%\inc%_EXT%\uno
 
 ..\%__SRC%\lib\ipurpenvhelper*        %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\purpe*.dll     %_DEST%\bin%_EXT%\*
-..\%__SRC%\lib\libuno_purpenvhelper*  %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libuno_purpenvhelper*.*.* %_DEST%\lib%_EXT%\*
 
 ..\%__SRC%\bin\unsafe_u*.dll    %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\libunsafe_uno_uno.*    %_DEST%\lib%_EXT%\*
@@ -68,3 +68,4 @@ mkdir: %_DEST%\inc%_EXT%\uno
 ..\%__SRC%\lib\libaffine_uno_uno.*   %_DEST%\lib%_EXT%\*
 
 linklib: libuno_cppu.*.*
+linklib: libuno_purpenvhelper*.*.*

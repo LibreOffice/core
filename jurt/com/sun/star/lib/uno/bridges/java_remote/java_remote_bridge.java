@@ -34,10 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -53,15 +49,10 @@ import com.sun.star.lib.util.DisposeNotifier;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 
-import com.sun.star.comp.loader.FactoryHelper;
-
 import com.sun.star.connection.XConnection;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.DisposedException;
 
 import com.sun.star.lib.uno.environments.java.java_environment;
@@ -76,7 +67,6 @@ import com.sun.star.lib.uno.environments.remote.IThreadPool;
 import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 
-import com.sun.star.registry.XRegistryKey;
 
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.IEnvironment;

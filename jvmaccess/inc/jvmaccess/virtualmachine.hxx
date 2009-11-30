@@ -130,14 +130,16 @@ public:
         thread that has called JNI_CreateJavaVM in case the virtual machine has
         been started via the JNI Invocation API, and it must not already have
         called DetachCurrentThread; or it must be executing native code called
-        from a "primordial" virtual machine).  This environment pointer is used
-        to obtain a reference to the thread's current context class loader
-        (java.lang.Thread.getCurrentClassLoader).  If later a native thread is
-        attached to the virtual machine, that thread's context class loader
-        would be null, so the AttachGuard first of all sets it to the saved
-        value.  In a nutshell, this means that all native threads attached to
-        the virtual machine use the context class loader of the "initial Java
-        thread."
+        from a "primordial" virtual machine).  This environment pointer was
+        formerly used to obtain a reference to the thread's current context
+        class loader (java.lang.Thread.getCurrentClassLoader; if later a native
+        thread was attached to the virtual machine, that thread's context class
+        loader would be null, so the AttachGuard first of all set it to the
+        saved value; this feature has been removed again for performance reasons
+        and because the default context class loader is often not useful, so
+        that code relying on a context class loader has to set one explicitly,
+        anyway).  This parameter is currently unused (but may be used again in
+        the future).
      */
     VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
                    JNIEnv * pMainThreadEnv);
@@ -148,10 +150,6 @@ private:
 
     virtual ~VirtualMachine();
 
-    void acquireInitialContextClassLoader(JNIEnv * pEnv);
-
-    void releaseInitialContextClassLoader() const;
-
     JNIEnv * attachThread(bool * pAttached) const;
 
     void detachThread() const;
@@ -159,7 +157,6 @@ private:
     JavaVM * m_pVm;
     jint m_nVersion;
     bool m_bDestroy;
-    jobject m_aInitialContextClassLoader;
 
     friend class AttachGuard; // to access attachThread, detachThread
 };

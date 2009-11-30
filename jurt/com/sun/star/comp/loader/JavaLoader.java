@@ -31,8 +31,6 @@
 package com.sun.star.comp.loader;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -42,26 +40,18 @@ import com.sun.star.loader.CannotActivateFactoryException;
 import com.sun.star.loader.XImplementationLoader;
 
 import com.sun.star.registry.CannotRegisterImplementationException;
-import com.sun.star.registry.RegistryKeyType;
-import com.sun.star.registry.RegistryValueType;
-import com.sun.star.registry.InvalidRegistryException;
-import com.sun.star.registry.InvalidValueException;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.registry.XSimpleRegistry;
 
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.ServiceNotRegisteredException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XInitialization;
 
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.util.XMacroExpander;
 
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
@@ -69,8 +59,6 @@ import com.sun.star.lib.util.StringHelper;
 
 import com.sun.star.uno.AnyConverter;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * The <code>JavaLoader</code> class provides the functionality of the <code>com.sun.star.loader.Java</code>
