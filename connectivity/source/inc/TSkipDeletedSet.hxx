@@ -79,11 +79,11 @@ namespace connectivity
         /**
             getMappedPosition returns the mapped position of a logical position
             @param
-                sal_Int32 _nPos the logical position
+                sal_Int32 _nBookmark    the logical position
 
             @return the mapped position
         */
-        sal_Int32   getMappedPosition(sal_Int32 _nPos) const;
+        sal_Int32   getMappedPosition(sal_Int32 _nBookmark) const;
         /**
             insertNewPosition adds a new position to the map
             @param
@@ -101,6 +101,7 @@ namespace connectivity
             @return the last position
         */
         inline sal_Int32    getLastPosition() const { return m_aBookmarksPositions.size(); }
+        inline void SetDeleted(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
     };
 }
 #endif // CONNECTIVITY_SKIPDELETEDSSET_HXX

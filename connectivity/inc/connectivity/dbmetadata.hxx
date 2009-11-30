@@ -150,6 +150,10 @@ namespace dbtools
         * \return <TRUE/> when relations are supported, otherwise <FALSE/>
         */
         bool supportsColumnAliasInOrderBy() const;
+
+        /** determines whether in the application UI, empty table folders (aka catalogs/schemas) should be displayed
+        */
+        bool displayEmptyTableFolders() const;
     };
 
 //........................................................................

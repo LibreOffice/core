@@ -566,8 +566,42 @@ bool EditTextObject::operator==( const EditTextObject& rCompare ) const
     return static_cast< const BinTextObject* >( this )->operator==( static_cast< const BinTextObject& >( rCompare ) );
 }
 
+// from SfxItemPoolUser
+void BinTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
+{
+    if(!bOwnerOfPool && pPool && pPool == &rSfxItemPool)
+    {
+        // The pool we are based on gets destructed; get owner of pool by creating own one.
+        // No need to call RemoveSfxItemPoolUser(), this is done from the pool's destructor
+        // Base new pool on EditEnginePool; it would also be possible to clone the used
+        // pool if needed, but only text attributes should be used.
+        SfxItemPool* pNewPool = EditEngine::CreatePool();
+
+        if(pPool)
+        {
+            pNewPool->SetDefaultMetric(pPool->GetMetric(DEF_METRIC));
+        }
+
+        for(sal_uInt16 n(0); n < aContents.Count(); n++)
+        {
+            // clone ContentInfos for new pool
+            ContentInfo* pOrg = aContents.GetObject(n);
+            DBG_ASSERT(pOrg, "NULL-Pointer in ContentList!");
+
+            ContentInfo* pNew = new ContentInfo(*pOrg, *pNewPool);
+            aContents.Replace(pNew, n);
+            delete pOrg;
+        }
+
+        // set local variables
+        pPool = pNewPool;
+        bOwnerOfPool = TRUE;
+    }
+}
+
 BinTextObject::BinTextObject( SfxItemPool* pP ) :
-    EditTextObject( EE_FORMAT_BIN )
+    EditTextObject( EE_FORMAT_BIN ),
+    SfxItemPoolUser()
 {
     nVersion = 0;
     nMetric = 0xFFFF;
@@ -584,13 +618,20 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
         pPool = EditEngine::CreatePool();
         bOwnerOfPool =  TRUE;
     }
+
+    if(!bOwnerOfPool && pPool)
+    {
+        pPool->AddSfxItemPoolUser(*this);
+    }
+
     bVertical = FALSE;
     bStoreUnicodeStrings = FALSE;
     nScriptType = 0;
 }
 
 BinTextObject::BinTextObject( const BinTextObject& r ) :
-    EditTextObject( r )
+    EditTextObject( r ),
+    SfxItemPoolUser()
 {
     nVersion = r.nVersion;
     nMetric = r.nMetric;
@@ -613,6 +654,11 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
 
     }
 
+    if(!bOwnerOfPool && pPool)
+    {
+        pPool->AddSfxItemPoolUser(*this);
+    }
+
     if ( bOwnerOfPool && pPool && r.pPool )
         pPool->SetDefaultMetric( r.pPool->GetMetric( DEF_METRIC ) );
 
@@ -627,6 +673,11 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
 
 __EXPORT BinTextObject::~BinTextObject()
 {
+    if(!bOwnerOfPool && pPool)
+    {
+        pPool->RemoveSfxItemPoolUser(*this);
+    }
+
     ClearPortionInfo();
     DeleteContents();
     if ( bOwnerOfPool )
@@ -634,7 +685,7 @@ __EXPORT BinTextObject::~BinTextObject()
         // Nicht mehr, wegen 1xDefItems.
         // siehe auch ~EditDoc().
 //      pPool->ReleaseDefaults( TRUE /* bDelete */ );
-        delete pPool;
+        SfxItemPool::Free(pPool);
     }
 }
 

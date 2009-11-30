@@ -1940,10 +1940,12 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
         {
             FmXGridCell* pXCell = pLoop->GetCell();
             if (pXCell)
+            {
                 if (bVoid)
                     pXCell->SetTextLineColor();
                 else
                     pXCell->SetTextLineColor(aTextLineColor);
+            }
 
             pLoop = rColumns.Next();
         }
@@ -2911,11 +2913,15 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
     Sequence<sal_uInt16>& aSupported = getSupportedGridSlots();
     const sal_uInt16* pSlots = aSupported.getConstArray();
     for (sal_uInt16 i=0; i<aSupported.getLength(); ++i)
+    {
         if (pSlots[i] == nSlot)
+        {
             if (!m_pDispatchers[i].is())
                 return -1;  // nothing known about this slot
             else
                 return m_pStateCache[i];
+        }
+    }
 
     return  -1;
 }

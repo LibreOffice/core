@@ -36,7 +36,6 @@
 #include <sdrpaintwindow.hxx>
 #include <goodies/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/fmview.hxx>
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
@@ -868,13 +867,6 @@ SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
         pPaintWindow->setTemporaryTarget(true);
     }
 
-    // the following is a hack, only to be used on the 3.0.1 branch, to prevent becoming
-    // incompatible there
-    // #i94033# / 2008-10-16 / frank.schoenheit@sun.com
-    FmFormView* pMeAsFormView = dynamic_cast< FmFormView* >( this );
-    if ( pMeAsFormView )
-        pMeAsFormView->onBeginCompleteRedraw();
-
     return pPaintWindow;
 }
 
@@ -938,13 +930,6 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
             rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
         }
     }
-
-    // the following is a hack, only to be used on the 3.0.1 branch, to prevent becoming
-    // incompatible there
-    // #i94033# / 2008-10-16 / frank.schoenheit@sun.com
-    FmFormView* pMeAsFormView = dynamic_cast< FmFormView* >( this );
-    if ( pMeAsFormView )
-        pMeAsFormView->onEndCompleteRedraw();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

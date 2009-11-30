@@ -26,6 +26,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 ..\dtd\groupuinames.dtd %_DEST%\bin%_EXT%\groupuinames.dtd
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
+..\%__SRC%\lib\ifwi.lib %_DEST%\lib%_EXT%\ifwi.lib
 ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
 ..\inc\helper\acceleratorinfo.hxx %_DEST%\inc%_EXT%\framework\acceleratorinfo.hxx
 ..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
@@ -51,3 +52,4 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 ..\uiconfig\startmodule\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar\*.xml
 
 ..\source\unotypes\fw?.xml %_DEST%\xml%_EXT%\*.xml
+

@@ -812,6 +812,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 rReq.Ignore();
             }
 
+            pPrinter->SetNextJobIsQuick( false );
+
             delete pPrintDlg;
             break;
         }

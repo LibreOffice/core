@@ -407,6 +407,15 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 //        OSL_TRACE(" folder");
         return sal_True;
     }
+
+    NSFileWrapper *wrapper = [[NSFileWrapper alloc] initWithPath:sFilename];
+    MacOSBOOL bIsLink = [wrapper isSymbolicLink];
+    [wrapper release];
+    if (bIsLink) {
+//    OSL_TRACE(" symboliclink");
+        return sal_True;
+    }
+
 //    OSL_TRACE(" file");
 
     FilterList::iterator filter = ::std::find_if(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(m_aCurrentFilter));

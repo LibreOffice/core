@@ -409,7 +409,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
     if( xSourceCell.is() && mpProperties )
     {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
-        SetOutlinerParaObject( xSourceCell->GetOutlinerParaObject()->Clone() );
+        SetOutlinerParaObject( new OutlinerParaObject(*xSourceCell->GetOutlinerParaObject()) );
 
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
@@ -509,10 +509,7 @@ const SfxItemSet& Cell::GetObjectItemSet()
     else
     {
         DBG_ERROR("Cell::GetObjectItemSet(), called without properties!");
-        static UniString aEmptyStr;
-        static SfxItemPool aEmptyPool(aEmptyStr,0,0,0);
-        static SfxItemSet aSet(aEmptyPool);
-        return aSet;
+        return GetObject().GetObjectItemSet();
     }
 }
 
@@ -678,6 +675,9 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 {
     SdrText::SetOutlinerParaObject( pTextObject );
     maSelection.nStartPara = 0xffff;
+
+    if( pTextObject == 0 )
+        ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
 }
 
 // -----------------------------------------------------------------------------
@@ -694,12 +694,19 @@ void Cell::AddUndo()
 
 // -----------------------------------------------------------------------------
 
-sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell& rNewCell )
+sdr::properties::TextProperties* Cell::CloneProperties( sdr::properties::TextProperties* pProperties, SdrObject& rNewObj, Cell& rNewCell )
 {
-    if( mpProperties )
-        return new sdr::properties::CellProperties( *static_cast<sdr::properties::CellProperties*>(mpProperties), rNewObj, &rNewCell );
+    if( pProperties )
+        return new sdr::properties::CellProperties( *static_cast<sdr::properties::CellProperties*>(pProperties), rNewObj, &rNewCell );
     else
         return 0;
+}
+
+// -----------------------------------------------------------------------------
+
+sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell& rNewCell )
+{
+    return CloneProperties(mpProperties,rNewObj,rNewCell);
 }
 
 // -----------------------------------------------------------------------------

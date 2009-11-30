@@ -2461,7 +2461,7 @@ void SdrObjCustomShape::SetVerticalWriting( sal_Bool bVertical )
 
     if( pOutlinerParaObject )
     {
-        if(pOutlinerParaObject->IsVertical() != bVertical)
+        if(pOutlinerParaObject->IsVertical() != (bool)bVertical)
         {
             // get item settings
             const SfxItemSet& rSet = GetObjectItemSet();

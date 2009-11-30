@@ -3057,12 +3057,14 @@ void SchXMLExportHelper::exportDataPoints(
             {
                 aPropertyStates.clear();
                 uno::Reference< beans::XPropertySet > xPropSet;
+                bool bExportNumFmt = false;
                 if( aAttrPointSet.find( nElement ) != aEndIt )
                 {
                     try
                     {
                         xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
                                     xSeries, nElement, mrExport.GetModel() );
+                        bExportNumFmt = true;
                     }
                     catch( uno::Exception & rEx )
                     {
@@ -3081,7 +3083,7 @@ void SchXMLExportHelper::exportDataPoints(
                 if( xPropSet.is())
                 {
                     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                    if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                    if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 && bExportNumFmt )
                     {
                         lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
                         lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
@@ -3107,7 +3109,8 @@ void SchXMLExportHelper::exportDataPoints(
                     }
                 }
             }
-            DBG_ASSERT( static_cast<sal_Int32>(aDataPointList.size()) == nSeriesLength, "not enough data points" );
+            DBG_ASSERT( !bExportContent || (static_cast<sal_Int32>(aDataPointList.size()) == nSeriesLength),
+                        "not enough data points on content export" );
         }
         else
         {

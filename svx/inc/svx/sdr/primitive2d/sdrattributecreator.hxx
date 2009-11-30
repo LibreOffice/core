@@ -74,7 +74,10 @@ namespace drawinglayer
         attribute::SdrTextAttribute* createNewSdrTextAttribute(const SfxItemSet& rSet, const SdrText& rText);
         attribute::FillGradientAttribute* createNewTransparenceGradientAttribute(const SfxItemSet& rSet);
         attribute::SdrFillBitmapAttribute* createNewSdrFillBitmapAttribute(const SfxItemSet& rSet);
-        attribute::SdrShadowTextAttribute* createNewSdrShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText);
+        attribute::SdrShadowTextAttribute* createNewSdrShadowTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText& rText,
+            bool bSuppressText); // #i98072# added option to suppress text on demand
         attribute::SdrLineShadowTextAttribute* createNewSdrLineShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText);
         attribute::SdrLineFillShadowTextAttribute* createNewSdrLineFillShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText);
         attribute::SdrLineFillShadowAttribute* createNewSdrLineFillShadowAttribute(const SfxItemSet& rSet, bool bSuppressFill);

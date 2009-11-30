@@ -154,21 +154,26 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                     Reference<XContentProviderManager> xCPM =
                         cb->getContentProviderManagerInterface();
 #if 0
+                    try
+                    {
 
-                    Reference<XContentProviderFactory> xCPF(
-                        xServiceFactory->createInstance(
-                            rtl::OUString::createFromAscii(
-                                "com.sun.star.ucb.ContentProviderProxyFactory")),
-                        UNO_QUERY);
-                    if(xCPF.is())
-                        xCPM->registerContentProvider(
-                            xCPF->createContentProvider(
+                        Reference<XContentProviderFactory> xCPF(
+                            xServiceFactory->createInstance(
                                 rtl::OUString::createFromAscii(
-                                    "com.sun.star.ucb.GnomeVFSContentProvider"
-                                )
-                            ),
-                            rtl::OUString::createFromAscii(".*"),
-                            false);
+                                    "com.sun.star.ucb.ContentProviderProxyFactory")),
+                            UNO_QUERY);
+                        if(xCPF.is())
+                            xCPM->registerContentProvider(
+                                xCPF->createContentProvider(
+                                    rtl::OUString::createFromAscii(
+                                        "com.sun.star.ucb.GnomeVFSContentProvider"
+                                    )
+                                ),
+                                rtl::OUString::createFromAscii(".*"),
+                                false);
+                    } catch (...)
+                    {
+                    }
 #else
 
             // Workaround for P1 #124597#.  Instanciate GNOME-VFS-UCP in the thread that initialized
@@ -176,18 +181,23 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
             // a different thread. The latter may happen when calling the Office remotely via UNO.
             // THIS IS NOT A FIX, JUST A WORKAROUND!
 
-                    Reference<XContentProvider> xCP(
-                        xServiceFactory->createInstance(
-                            rtl::OUString::createFromAscii(
-                                "com.sun.star.ucb.GnomeVFSContentProvider")),
-                        UNO_QUERY);
-                    if(xCP.is())
-                        xCPM->registerContentProvider(
-                            xCP,
-                            rtl::OUString::createFromAscii(".*"),
-                            false);
-#endif
+                    try
+                    {
+                        Reference<XContentProvider> xCP(
+                            xServiceFactory->createInstance(
+                                rtl::OUString::createFromAscii(
+                                    "com.sun.star.ucb.GnomeVFSContentProvider")),
+                            UNO_QUERY);
+                        if(xCP.is())
+                            xCPM->registerContentProvider(
+                                xCP,
+                                rtl::OUString::createFromAscii(".*"),
+                                false);
+                    } catch (...)
+                    {
+                    }
                 }
+#endif
             }
         } catch (RuntimeException e) {
         }

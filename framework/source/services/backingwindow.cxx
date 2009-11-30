@@ -595,18 +595,49 @@ void BackingWindow::Resize()
     maControlRect = Rectangle( Point( (aWindowSize.Width() - aControlSize.Width()) / 2,
                                       (aWindowSize.Height() - aControlSize.Height()) / 2 ),
                                aControlSize );
+
+    maToolbox.calcMinSize();
+    Size aTBSize( maToolbox.getMinSize() );
+    Point aTBPos( maControlRect.Right() - aTBSize.Width() - 10,
+                  maControlRect.Bottom() - aTBSize.Height() - 10 );
+    maToolbox.SetPosSizePixel( aTBPos, aTBSize );
+
+    // #i93631# squeeze controls so they fit into the box
+    // this can be necessary due to application font height which has small deviations
+    // from the size set
+    const long nWDelta    = maWelcomeSize.Height();
+    const long nW2Delta   = (maWelcomeSize.Height()*3)/2;
+    const long nPDelta    = (maProductSize.Height()*3)/2;
+    const long nCDelta    = (maCreateSize.Height()*3)/2;
+    const long nBDelta    = maButtonImageSize.Height() + 10;
+    const long nB2Delta   = 3*maButtonImageSize.Height()/2;
+    const long nLastDelta = maButtonImageSize.Height();
+    long nDiff = 0;
+    while( ( maControlRect.Top()   +
+                 (nWDelta - nDiff) +
+                 (nW2Delta- nDiff) +
+                 (nPDelta - nDiff) +
+                 (nCDelta - nDiff) +
+             3 * (nBDelta - nDiff) +
+                 (nB2Delta- nDiff) +
+                 nLastDelta
+            ) > aTBPos.Y() )
+    {
+        nDiff++;
+    }
+
     long nYPos = maControlRect.Top();
-    nYPos += (maWelcomeSize.Height()*3)/2;
+    nYPos += nW2Delta - nDiff;
     maWelcome.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ),
                                 Size( maControlRect.GetWidth() - nBtnPos - 5, (maWelcomeSize.Height()*20)/19 ) );
-    nYPos += maWelcomeSize.Height();
+    nYPos += nWDelta - nDiff;
     maProduct.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), Size( maControlRect.GetWidth() - nBtnPos - 5, (maProductSize.Height()*20)/19 ) );
-    nYPos += (maProductSize.Height()*3)/2;
+    nYPos += nPDelta - nDiff;
 
     maCreateText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ),
                                   Size( maControlRect.GetWidth() - nBtnPos - 5, maCreateSize.Height() ) );
 
-    nYPos += (maCreateSize.Height()*3)/2;
+    nYPos += nCDelta - nDiff;
 
     maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maWriterText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
@@ -614,14 +645,14 @@ void BackingWindow::Resize()
     maCalcButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + mnColumnWidth[0], nYPos ), maButtonImageSize );
     maCalcText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10 + mnColumnWidth[0], nYPos ),
                                   Size( mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
-    nYPos += maButtonImageSize.Height() + 10;
+    nYPos += nBDelta - nDiff;
     maImpressButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maImpressText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                   Size( mnColumnWidth[0] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
     maDrawButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + mnColumnWidth[0], nYPos ), maButtonImageSize );
     maDrawText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10 + mnColumnWidth[0], nYPos ),
                                   Size( mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
-    nYPos += maButtonImageSize.Height() + 10;
+    nYPos += nBDelta - nDiff;
     maDBButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maDBText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                   Size( mnColumnWidth[0] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
@@ -629,21 +660,15 @@ void BackingWindow::Resize()
     maMathText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10 + mnColumnWidth[0], nYPos ),
                                     Size( mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
 
-    nYPos += 3*maButtonImageSize.Height()/2;
+    nYPos += nB2Delta - nDiff;
     maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maTemplateText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                 Size( mnColumnWidth[0]+mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
-    nYPos += maButtonImageSize.Height() + 10;
+    nYPos += nBDelta - nDiff;
     maOpenButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maOpenText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                 Size( mnColumnWidth[0]+mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
-    nYPos += maButtonImageSize.Height() + 10;
-
-    maToolbox.calcMinSize();
-    Size aTBSize( maToolbox.getMinSize() );
-    maToolbox.SetPosSizePixel( Point( maControlRect.Right() - aTBSize.Width() - 10,
-                                      maControlRect.Bottom() - aTBSize.Height() - 10 ),
-                               aTBSize );
+    nYPos += nBDelta - nDiff;
 }
 
 IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )

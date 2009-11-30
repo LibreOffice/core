@@ -130,7 +130,15 @@ namespace sdr
                 // the original ChartPrettyPainter does not do it for VDEV
                 if(!bPrettyPrintingForBitmaps && bDoChartPrettyPrinting && GetObjectContact().isOutputToVirtualDevice())
                 {
-                    bDoChartPrettyPrinting = false;
+                    if(GetObjectContact().isOutputToPDFFile())
+                    {
+                        // #i97982#
+                        // For PDF files, allow PrettyPrinting
+                    }
+                    else
+                    {
+                        bDoChartPrettyPrinting = false;
+                    }
                 }
 
                 // the chart model is needed. Check if it's available

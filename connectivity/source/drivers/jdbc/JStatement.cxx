@@ -185,6 +185,8 @@ Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeExc
 Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  ) throw (SQLException, RuntimeException)
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_GENERATED_VALUES );
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -232,6 +234,8 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
 void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     if( t.pEnv ){
 
         createStatement(t.pEnv);
@@ -285,9 +289,12 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::S
 sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_STATEMENT, sql );
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+
     if( t.pEnv )
     {
         createStatement(t.pEnv);
@@ -320,6 +327,8 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql )
 
 Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_QUERY, sql );
 
     jobject out(0);
@@ -356,6 +365,8 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const ::
 // -------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     return (Reference< XConnection >)m_pConnection;
 }
 // -------------------------------------------------------------------------
@@ -369,12 +380,14 @@ Any SAL_CALL java_sql_Statement::queryInterface( const Type & rType ) throw(Runt
 
 void SAL_CALL java_sql_Statement::addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
-        static const char * cSignature = "(Ljava/lang/String;)I";
+        static const char * cSignature = "(Ljava/lang/String;)V";
         static const char * cMethodName = "addBatch";
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -394,6 +407,8 @@ void SAL_CALL java_sql_Statement::addBatch( const ::rtl::OUString& sql ) throw(:
 
 Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     Sequence< sal_Int32 > aSeq;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -424,6 +439,8 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com:
 
 sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_UPDATE, sql );
 
     jint out(0);
@@ -459,6 +476,8 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const ::rtl::OUString
 
 Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base::getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -483,6 +502,8 @@ Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base
 
 sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -508,6 +529,8 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(::com::sun:
 
 sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -532,6 +555,8 @@ sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  ) throw(::com::sun::
 // -------------------------------------------------------------------------
 Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(NULL);
     SDBThreadAttach t;
     if( t.pEnv )
@@ -563,6 +588,8 @@ Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sd
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -583,6 +610,8 @@ void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star:
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_Statement_Base::getQueryTimeOut()  throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -605,6 +634,8 @@ sal_Int32 java_sql_Statement_Base::getQueryTimeOut()  throw(SQLException, Runtim
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_Statement_Base::getMaxRows() throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -627,6 +658,8 @@ sal_Int32 java_sql_Statement_Base::getMaxRows() throw(SQLException, RuntimeExcep
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_Statement_Base::getResultSetConcurrency() throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv && object ){
@@ -651,6 +684,8 @@ sal_Int32 java_sql_Statement_Base::getResultSetConcurrency() throw(SQLException,
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_Statement_Base::getResultSetType() throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv && object ){
@@ -674,6 +709,8 @@ sal_Int32 java_sql_Statement_Base::getResultSetType() throw(SQLException, Runtim
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_Statement_Base::getFetchDirection() throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -696,6 +733,8 @@ sal_Int32 java_sql_Statement_Base::getFetchDirection() throw(SQLException, Runti
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_Statement_Base::getFetchSize() throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -718,6 +757,8 @@ sal_Int32 java_sql_Statement_Base::getFetchSize() throw(SQLException, RuntimeExc
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_Statement_Base::getMaxFieldSize() throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -740,6 +781,8 @@ sal_Int32 java_sql_Statement_Base::getMaxFieldSize() throw(SQLException, Runtime
 //------------------------------------------------------------------------------
 ::rtl::OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv )
@@ -765,6 +808,8 @@ sal_Int32 java_sql_Statement_Base::getMaxFieldSize() throw(SQLException, Runtime
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -787,6 +832,8 @@ void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLExceptio
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setEscapeProcessing(sal_Bool _par0) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     m_aLogger.log( LogLevel::FINE, STR_LOG_SET_ESCAPE_PROCESSING, _par0 );
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -810,6 +857,8 @@ void java_sql_Statement_Base::setEscapeProcessing(sal_Bool _par0) throw(SQLExcep
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -866,6 +915,8 @@ void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0) throw(SQLExcepti
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     m_aLogger.log( LogLevel::FINER, STR_LOG_FETCH_DIRECTION, (sal_Int32)_par0 );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -888,6 +939,8 @@ void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLExcept
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     m_aLogger.log( LogLevel::FINER, STR_LOG_FETCH_SIZE, (sal_Int32)_par0 );
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -911,6 +964,8 @@ void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, 
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -932,6 +987,8 @@ void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLExceptio
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);

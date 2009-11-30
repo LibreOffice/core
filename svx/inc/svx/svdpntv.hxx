@@ -383,9 +383,9 @@ public:
     // DoCompleteRedraw draws the DrawingLayer hierarchy then.
     // EndCompleteRedraw does the necessary refreshes, evtl. paints text edit and overlay and evtl destroys the
     // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
-    SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
-    void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
-    void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
+    virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
+    virtual void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used for the other applications basctl/sc/sw which call DrawLayer at PageViews

@@ -177,7 +177,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
             // Copy text content
             OutlinerParaObject* pParaObj = pCustoObj->GetOutlinerParaObject();
             if( pParaObj )
-                pTextObj->NbcSetOutlinerParaObject( pParaObj->Clone() );
+                pTextObj->NbcSetOutlinerParaObject( new OutlinerParaObject(*pParaObj) );
 
             // copy all attributes
             SfxItemSet aTargetItemSet( pCustoObj->GetMergedItemSet() );

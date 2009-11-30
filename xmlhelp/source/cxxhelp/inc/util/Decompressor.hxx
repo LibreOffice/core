@@ -60,23 +60,10 @@ namespace xmlsearch {
 
             virtual sal_Int32 getNextByte() = 0;
 
-            sal_Int32 read( sal_Int32 kBits ) throw( xmlsearch::excep::XmlSearchException );
-
-            sal_Int32 ascendingDecode( sal_Int32 k,sal_Int32 start,sal_Int32 *concepts )
-                throw( xmlsearch::excep::XmlSearchException );
-
-            void ascDecode( sal_Int32 k,std::vector< sal_Int32 >& array) throw( xmlsearch::excep::XmlSearchException );
-
-            void decode(sal_Int32 k, sal_Int32* array ) throw( xmlsearch::excep::XmlSearchException );
-
-            void decode( sal_Int32 k,std::vector< sal_Int32 >& array) throw( xmlsearch::excep::XmlSearchException );
-
             virtual void initReading()
             {
                 toRead_ = 0;
             }
-
-            bool readNext( sal_Int32 k,CompressorIterator* it) throw( xmlsearch::excep::XmlSearchException );
 
         private:
 
@@ -84,11 +71,6 @@ namespace xmlsearch {
             static const sal_Int32 NBits;
 
             sal_Int32 readByte_, toRead_, path_;
-
-            sal_Int32 read() throw( xmlsearch::excep::XmlSearchException );
-
-            sal_Int32 countZeroes() throw( xmlsearch::excep::XmlSearchException );
-
         };
 
 

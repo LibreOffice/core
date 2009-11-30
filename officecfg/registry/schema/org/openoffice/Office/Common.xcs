@@ -1106,6 +1106,46 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="SnapHorVerLinesToDiscrete" oor:type="xs:boolean">
+        <info>
+          <author>AW</author>
+          <desc>
+            This switch allows to enhance visualisation of graphics which use Horizontal or Vertical Hairlines
+            combined with AntiAliased mode (e.g. in 2D charts). When not used, those lines will be AntiAliased
+            as everything else. Since this is not pleasing for the eye, this option allows to force those lines
+            to snap to discrete points (pixels) when activated and thus avoids AntiAliasing of pure Horizontal or
+            Vertical Hairlines.
+          </desc>
+          <label>Determines if Horizontal and Vertical HairLines in AntiAliased mode are snapped to discrete pixles to enhance visualisation</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="RenderDecoratedTextDirect" oor:type="xs:boolean">
+        <info>
+          <author>AW</author>
+          <desc>
+            This switch determines if the decorations of decorated text portions (e.g. underline, strike through)
+            are rendered using VCL direct rendering or if the primitive is decomposed into simple text and the
+            corresponding geometrical representations of the decorations. Default is true since VCL's usage
+            of the diverse System's hinting possibilities for decorations is useful.
+          </desc>
+          <label>Determines if decorated texts are decomposed at render time or directly rendered using VCL</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="RenderSimpleTextDirect" oor:type="xs:boolean">
+        <info>
+          <author>AW</author>
+          <desc>
+            This switch determines if simple text is directly rendered using VCL or not. If not, the simple text
+            is decomposed into PolyPolygons which will be painted then. Default is true, since VCL will use the
+            hinting for font rendering on the diverse supported systems, which gives better quality than rendering
+            the text as Polygons.
+          </desc>
+          <label>Determines if simple texts are decomposed at render time or directly rendered using VCL</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="SolidDragCreate" oor:type="xs:boolean">
         <info>
           <author>AW</author>

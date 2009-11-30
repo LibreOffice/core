@@ -89,6 +89,7 @@ class SvxForbiddenCharactersTable;
 #include <vos/ref.hxx>
 #include <svx/svxfont.hxx>
 #include <svx/eedata.hxx>
+#include <svx/paragraphdata.hxx>
 
 class SvxFieldData;
 //////////////////////////////////////////////////////////////////////////////
@@ -121,25 +122,6 @@ namespace basegfx { class B2DPolyPolygon; }
 #define OLUNDO_INSERT           EDITUNDO_USER+6
 // #define OLUNDO_MOVEPARAGRAPHS    EDITUNDO_USER+7
 #define OLUNDO_CHECKPARA        EDITUNDO_USER+8
-
-// MT 07/00: Only for internal use, oder some kind like hPara for the few
-// functions where you need it outside ( eg. moving paragraphs... )
-
-class ParagraphData
-{
-    friend class Paragraph;
-    friend class OutlinerParaObject;
-protected:
-    sal_Int16           nDepth;
-    sal_Int16           mnNumberingStartValue;
-    sal_Bool            mbParaIsNumberingRestart;
-
-public:
-    ParagraphData( const ParagraphData& );
-    ParagraphData();
-
-    ParagraphData& operator=( const ParagraphData& );
-};
 
 class Paragraph : protected ParagraphData
 {

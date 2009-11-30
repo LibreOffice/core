@@ -1282,8 +1282,9 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         String aStr_( pCurr->GetBankSymbol() );
         aStr_ += aTwoSpace;
         aStr_ += pCurr->GetSymbol();
+        aStr = ApplyLreOrRleEmbedding( aStr_ );
         aStr_ += aTwoSpace;
-        aStr_ += pLanguageTable->GetString( pCurr->GetLanguage() );
+        aStr_ += ApplyLreOrRleEmbedding( pLanguageTable->GetString( pCurr->GetLanguage() ) );
         USHORT nPos = aCurrencyLB.InsertEntry( aStr_ );
         aCurrencyLB.SetEntryData( nPos, (void*) pCurr );
     }

@@ -36,7 +36,7 @@ export GNOME_MIME_THEME=hicolor
 ./create_tree.sh
 
 %clean
-rm -rf $RPM_BUILD_ROOT/*
+rm -rf $RPM_BUILD_ROOT
 
 %triggerin -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
 if [ -x /opt/gnome/bin/update-desktop-database ]; then

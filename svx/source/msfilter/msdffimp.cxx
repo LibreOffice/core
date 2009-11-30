@@ -4453,7 +4453,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
 // PptSlidePersistEntry& rPersistEntry, SdPage* pPage
 SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
-    const Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup, sal_Int32* pShapeId )
+    Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup, sal_Int32* pShapeId )
 {
     SdrObject* pRet = NULL;
     DffRecordHeader aObjHd;
@@ -4471,7 +4471,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
 }
 
 SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
-                                            const Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
+                                            Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
                                                 int nCalledByGroup, sal_Int32* pShapeId )
 {
     SdrObject* pRet = NULL;
@@ -4495,8 +4495,6 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             nGroupRotateAngle = mnFix16Angle;
 
             Rectangle aClientRect( rClientRect );
-            if ( rClientRect.IsEmpty() )
-                 aClientRect = pRet->GetSnapRect();
 
             Rectangle aGlobalChildRect;
             if ( !nCalledByGroup || rGlobalChildRect.IsEmpty() )
@@ -4575,7 +4573,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
 }
 
 SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
-                                            const Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
+                                            Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
                                             int nCalledByGroup, sal_Int32* pShapeId )
 {
     SdrObject* pRet = NULL;
@@ -4686,7 +4684,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         if ( aObjData.nSpFlags & SP_FGROUP )
         {
             pRet = new SdrObjGroup;
-            pRet->NbcSetLogicRect( aBoundRect );        // SJ: SnapRect is allowed to be set at the group only for the first time
+            /*  After CWS aw033 has been integrated, an empty group object
+                cannot store its resulting bounding rectangle anymore. We have
+                to return this rectangle via rClientRect now, but only, if
+                caller has not passed an own bounding ractangle. */
+            if ( rClientRect.IsEmpty() )
+                 rClientRect = aBoundRect;
             nGroupShapeFlags = aObjData.nSpFlags;       // #73013#
         }
         else if ( ( aObjData.eShapeType != mso_sptNil ) || IsProperty( DFF_Prop_pVertices ) || bGraphic )

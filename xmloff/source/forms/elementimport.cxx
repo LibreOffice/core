@@ -1141,8 +1141,15 @@ namespace xmloff
         if ( bMakeAbsolute && ( _rValue.getLength() > 0  ) )
         {
             // make a global URL out of the local one
-            ::rtl::OUString sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, FALSE );
-            OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
+                        ::rtl::OUString sAdjustedValue;
+                        // only resolve image related url
+                        // we don't want say form url targets to be resolved
+                        // using ResolveGraphicObjectURL
+                        if ( 0 == _rLocalName.compareToAscii( s_pImageDataAttributeName ) )
+                                sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, FALSE );
+                        else
+                                 sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
+                        OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
         }
         else
             OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );

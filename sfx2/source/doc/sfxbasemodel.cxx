@@ -2410,6 +2410,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             }
             else if ( SFX_EVENT_LOADFINISHED == pNamedHint->GetEventId() )
             {
+                impl_getPrintHelper();
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
             else if ( SFX_EVENT_SAVEASDOCDONE == pNamedHint->GetEventId() )
@@ -2422,6 +2423,10 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 TransformItems( SID_SAVEASDOC, *pSet, aArgs );
                 addTitle_Impl( aArgs, aTitle );
                 attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
+            }
+            else if ( SFX_EVENT_DOCCREATED  == pNamedHint->GetEventId() )
+            {
+                impl_getPrintHelper();
             }
 
             postEvent_Impl( pNamedHint->GetEventId() );

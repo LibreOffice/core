@@ -1323,6 +1323,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
 
     // the 'insert' option affects our empty row
     if (bInsertChanged)
+    {
         if (m_nOptions & OPT_INSERT)
         {   // the insert option is to be set
             m_xEmptyRow = new DbGridRow();
@@ -1335,6 +1336,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
                 GoToRowColumnId(GetCurRow() - 1, GetCurColumnId());
             RowRemoved(GetRowCount(), 1, sal_True);
         }
+    }
 
     // the 'delete' options has no immediate consequences
 
@@ -1729,10 +1731,12 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     for (nNewModelPos = 0; nNewModelPos < m_aColumns.Count(); ++nNewModelPos)
     {
         if (!m_aColumns.GetObject(nNewModelPos)->IsHidden())
+        {
             if (!nNewViewPos)
                 break;
             else
                 --nNewViewPos;
+        }
     }
     DBG_ASSERT(nNewModelPos<m_aColumns.Count(), "DbGridControl::ColumnMoved : could not find the new model position !");
 

@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Settings" oor:package="org.openoffice.Office.OOoImprovement" xml:lang="en-US">
+  <info>
+    <desc>Contains preferences for the OpenOffice.org Improvement Program components.</desc>
+  </info>
+  <templates/>
+  <component>
+    <group oor:name="Participation">
+      <info>
+        <desc>invitations to usage tracking etc.</desc>
+      </info>
+      <prop oor:name="OfficeStartCounterdown" oor:type="xs:int">
+        <info>
+          <desc>the number of starts that will be skipped before the user will get invited to the
+                OpenOffice.org Improvement Program. If this is zero the user will get asked.
+                </desc>
+        </info>
+        <value>1</value>
+      </prop>
+      <prop oor:name="InvitationAccepted" oor:type="xs:boolean">
+        <info>
+          <desc>true, if the user accepted the invitation.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="ShowedInvitation" oor:type="xs:boolean">
+        <info>
+          <desc>true, if the user was already invited.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="DeliveredPrebundled" oor:type="xs:boolean">
+        <info>
+          <desc>true, if the extension is prebundled - is set by an onFirstRunInitialization job.
+                (currently not implemented)</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="HelpUrl" oor:type="xs:string">
+        <info>
+          <desc>the url where additional infomation can be found.</desc>
+        </info>
+        <value>http://wiki.services.openoffice.org/wiki/User_Experience/OpenOffice.org_User_Feedback_Program</value>
+      </prop>
+    </group>
+    <group oor:name="Counters">
+      <info>
+        <desc>counts of recorded events, uploaded reports etc.</desc>
+      </info>
+      <prop oor:name="UploadedReports" oor:type="xs:int">
+        <info>
+          <desc>the number of reports uploaded.</desc>
+        </info>
+        <value>0</value>
+      </prop>
+      <prop oor:name="LoggedEvents" oor:type="xs:int">
+        <info>
+          <desc>the number of events in zipped or already uploaded report.</desc>
+        </info>
+        <value>0</value>
+      </prop>
+      <prop oor:name="FailedAttempts" oor:type="xs:int">
+        <info>
+          <desc>the number of failed upload tries.</desc>
+        </info>
+        <value>0</value>
+      </prop>
+    </group>
+    <group oor:name="Upload">
+      <info>
+        <desc>settings on destination for uploading reports</desc>
+      </info>
+      <prop oor:name="SoapUrl" oor:type="xs:string">
+        <info>
+          <desc>the url where reports get send to.</desc>
+        </info>
+        <value>http://report.services.openoffice.org:80/soap/servlet/rpcrouter</value>
+      </prop>
+      <prop oor:name="SoapIdAdditions" oor:type="xs:string">
+        <info>
+          <desc>Additions to the SoapId for automated testing
+                DO NOT SET THIS VALUE UNLESS YOU KNOW WHAT YOU ARE DOING!
+          </desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="ReporterEmail" oor:type="xs:string">
+        <info>
+          <desc>The Emailaddress to fill out in the reportmail.xml file.
+                DO NOT SET THIS VALUE UNLESS YOU KNOW WHAT YOU ARE DOING!
+                Its only purpose is testing and quality assureance.
+          </desc>
+        </info>
+        <value></value>
+      </prop>
+    </group>
+  </component>
+</oor:component-schema>

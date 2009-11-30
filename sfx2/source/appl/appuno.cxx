@@ -63,6 +63,7 @@
 #include <svtools/ownlist.hxx>
 #include <svtools/lckbitem.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/slstitm.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -193,6 +194,7 @@ static const String sNoAutoSave     = String::CreateFromAscii( "NoAutoSave" );
 static const String sFolderName     = String::CreateFromAscii( "FolderName"   );
 static const String sUseSystemDialog   = String::CreateFromAscii( "UseSystemDialog"   );
 static const String sStandardDir   = String::CreateFromAscii( "StandardDir"   );
+static const String sBlackList   = String::CreateFromAscii( "BlackList"   );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -683,9 +685,21 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for FileName" );
+                    DBG_ASSERT( bOK, "invalid type or value for StanadardDir" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
+                }
+                else if ( aName == sBlackList )
+                {
+                    ::com::sun::star::uno::Sequence< ::rtl::OUString > xVal;
+                    sal_Bool bOK = (rProp.Value >>= xVal);
+                    DBG_ASSERT( bOK, "invalid type or value for BlackList" );
+                    if (bOK)
+                    {
+                        SfxStringListItem stringList(SID_BLACK_LIST);
+                        stringList.SetStringList( xVal );
+                        rSet.Put( stringList );
+                    }
                 }
                 else if ( aName == sFileName )
                 {
@@ -974,6 +988,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_STANDARD_DIR ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_BLACK_LIST ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_CONTENT ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
@@ -1156,6 +1172,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_FILE_DIALOG )
                         continue;
                     if ( nId == SID_STANDARD_DIR )
+                        continue;
+                    if ( nId == SID_BLACK_LIST )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
                         continue;
@@ -1453,6 +1471,14 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = sStandardDir;
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_BLACK_LIST, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sBlackList;
+
+                com::sun::star::uno::Sequence< rtl::OUString > aList;
+                ((SfxStringListItem*)pItem)->GetStringList( aList );
+                pValue[nActProp++].Value <<= aList ;
             }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {

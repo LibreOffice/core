@@ -425,7 +425,8 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbProcedureProperty* pNewProp = new SbProcedureProperty
                 ( pProcedureProp->GetName(), pProcedureProp->GetType() );
                 // ( pProcedureProp->GetName(), pProcedureProp->GetType(), this );
-            pNewProp->ResetFlag( SBX_NO_BROADCAST );
+            pNewProp->SetFlags( nFlags_ ); // Copy flags
+            pNewProp->ResetFlag( SBX_NO_BROADCAST ); // except the Broadcast if it was set
             pProcedureProp->SetFlags( nFlags_ );
             pProps->PutDirect( pNewProp, i );
             StartListening( pNewProp->GetBroadcaster(), TRUE );

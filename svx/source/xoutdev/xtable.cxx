@@ -120,7 +120,7 @@ XPropertyTable::~XPropertyTable()
     // Eigener Pool wird geloescht
     if( bOwnPool && pXPool )
     {
-        delete pXPool;
+        SfxItemPool::Free(pXPool);
     }
 }
 
@@ -352,7 +352,7 @@ XPropertyList::~XPropertyList()
 
     if( bOwnPool && pXPool )
     {
-        delete pXPool;
+        SfxItemPool::Free(pXPool);
     }
 }
 

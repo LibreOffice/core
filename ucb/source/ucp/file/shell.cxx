@@ -2297,6 +2297,11 @@ shell::commit( const shell::ContentMap::iterator& it,
 
     sal_Bool isDirectory,isFile,isVolume,isRemoveable,isRemote,isFloppy,isCompactDisc;
 
+    sal_Int64 dirSize = 0;
+
+    if( aFileStatus.isValid( FileStatusMask_FileSize ) )
+        dirSize = aFileStatus.getFileSize();
+
     if( aFileStatus.isValid( FileStatusMask_Type ) )
     {
         if( osl::FileStatus::Link == aFileStatus.getFileType() &&
@@ -2314,6 +2319,9 @@ shell::commit( const shell::ContentMap::iterator& it,
                     osl::FileStatus::Directory == aFileStatus2.getFileType();
                 isFile =
                     osl::FileStatus::Regular == aFileStatus2.getFileType();
+
+                if( aFileStatus2.isValid( FileStatusMask_FileSize ) )
+                    dirSize = aFileStatus2.getFileSize();
             }
             else
             {
@@ -2395,17 +2403,8 @@ shell::commit( const shell::ContentMap::iterator& it,
     it1 = properties.find( MyProperty( Size ) );
     if( it1 != properties.end() )
     {
-        if( aFileStatus.isValid( FileStatusMask_FileSize ) )
-        {
-            aAny <<= sal_Int64( aFileStatus.getFileSize() );
-            it1->setValue( aAny );
-        }
-        else
-        {
-            sal_Int64 dirSize = 0;
-            aAny <<= dirSize;
-            it1->setValue( aAny );
-        }
+        aAny <<= dirSize;
+        it1->setValue( aAny );
     }
 
 

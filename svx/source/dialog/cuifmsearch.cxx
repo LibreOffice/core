@@ -512,11 +512,15 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
         // die beiden jeweils anderen Boxes disablen oder enablen
         CheckBox* pBoxes[] = { &m_cbWildCard, &m_cbRegular, &m_cbApprox };
         for (sal_uInt32 i=0; i<sizeof(pBoxes)/sizeof(CheckBox*); ++i)
+        {
             if (pBoxes[i] != pBox)
+            {
                 if (bChecked)
                     pBoxes[i]->Disable();
                 else
                     pBoxes[i]->Enable();
+            }
+        }
 
         // an die Engine weiterreichen
         m_pSearchEngine->SetWildcard(m_cbWildCard.IsEnabled() ? m_cbWildCard.IsChecked() : sal_False);
@@ -526,6 +530,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
 
         // die Position-Listbox anpassen (ist bei Wildcard-Suche nicht erlaubt)
         if (pBox == &m_cbWildCard)
+        {
             if (bChecked)
             {
                 m_ftPosition.Disable();
@@ -536,13 +541,16 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
                 m_ftPosition.Enable();
                 m_lbPosition.Enable();
             }
+        }
 
         // und den Button fuer die Aehnlichkeitssuche
         if (pBox == &m_cbApprox)
+        {
             if (bChecked)
                 m_pbApproxSettings.Enable();
             else
                 m_pbApproxSettings.Disable();
+        }
     }
     else if (pBox == &m_aHalfFullFormsCJK)
     {

@@ -1365,9 +1365,11 @@
 #define RID_SVXSTR_SELMODE_BLK                              (RID_SVX_START + 1167)
 #define RID_SVXSTR_STYLEFAMILY_TABLEDESIGN                  (RID_SVX_START + 1168)
 #define STR_LINKEDDOC_NO_SYSTEM_FILE                        (RID_SVX_START + 1169)
-// pb: next free string resource id
-#define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1170)
+#define RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED                (RID_SVX_START + 1170)
+#define RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED                (RID_SVX_START + 1171)
+    // if you add here, remember to adjust RID_SVXSTR_NEXTFREE
 
+#define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1172)
 
 // ----------------------------------------------------------------------------
 // if we have _a_lot_ time, we should group the resource ids by type, instead

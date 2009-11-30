@@ -373,6 +373,7 @@ BOOL SfxHTMLParser::ParseMetaOptions(
     case HTML_META_CHANGEDBY:
         if (i_xDocProps.is()) {
             i_xDocProps->setModifiedBy( aContent );
+        bChanged = TRUE;
         }
         break;
 
@@ -403,6 +404,7 @@ BOOL SfxHTMLParser::ParseMetaOptions(
     case HTML_META_CONTENT_TYPE:
         if( aContent.Len() )
             rEnc = GetEncodingByMIME( aContent );
+        bChanged = TRUE;
         break;
 
     case HTML_META_NONE:

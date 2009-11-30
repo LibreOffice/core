@@ -1922,6 +1922,76 @@
 
                 </prop>
             </node>
+      <node oor:name="tile-flip" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Flipping tiles</value>
+        </prop>
+      </node>
+      <node oor:name="outside-cube" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Outside turning cube</value>
+        </prop>
+      </node>
+      <node oor:name="revolving-circles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Revolving circles</value>
+        </prop>
+      </node>
+      <node oor:name="turning-helix" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Turning helix</value>
+        </prop>
+      </node>
+      <node oor:name="inside-cube" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Inside turning cube</value>
+        </prop>
+      </node>
+      <node oor:name="fall" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Fall</value>
+        </prop>
+      </node>
+      <node oor:name="turn-around" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Turn around</value>
+        </prop>
+      </node>
+      <node oor:name="iris" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Iris</value>
+        </prop>
+      </node>
+      <node oor:name="turn-down" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Turn down</value>
+        </prop>
+      </node>
+      <node oor:name="rochade" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rochade</value>
+        </prop>
+      </node>
+      <node oor:name="venetian3dv" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Venetian Blinds 3D Vertical</value>
+        </prop>
+      </node>
+      <node oor:name="venetian3dh" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Venetian Blinds 3D Horizontal</value>
+        </prop>
+      </node>
+      <node oor:name="static" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Static</value>
+        </prop>
+      </node>
+      <node oor:name="finedissolve" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Fine Dissolve</value>
+        </prop>
+      </node>
         </node>
     </node>
     <node oor:name="Presets">

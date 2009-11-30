@@ -125,7 +125,8 @@ namespace drawinglayer
                 }
 
                 // create primitive and get text range
-                pBlockText = new SdrBlockTextPrimitive2D(pTextAttribute->getSdrText(), aTextMatrix, pTextAttribute->isScroll(), false, false);
+                pBlockText = new SdrBlockTextPrimitive2D(pTextAttribute->getSdrText(), pTextAttribute->getOutlinerParaObject(),
+                    aTextMatrix, pTextAttribute->isScroll(), false, false);
                 aTextRange = pBlockText->getB2DRange(aViewInformation);
             }
 

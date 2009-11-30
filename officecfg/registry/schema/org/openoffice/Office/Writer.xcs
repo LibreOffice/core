@@ -5657,6 +5657,19 @@
 				</prop>
 			</group>
 		</group>
+		<group oor:name="Notes">
+                	<info>
+                        	<desc>Contains settings for notes</desc>
+                	</info>
+                	<prop oor:name="ShowAnkor" oor:type="xs:boolean">
+               		<info>
+                        	<author>mod</author>
+                        	<desc>configures if note anchor should be shown or hidden when display is off</desc>
+                        	<label>Notes Ankor on/off</label>
+                	</info>
+                	<value>false</value>
+                	</prop>
+                </group>
 		<group oor:name="Navigator">
 			<info>
 				<desc>Contains settings for the Navigator.</desc>

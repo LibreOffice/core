@@ -41,6 +41,7 @@
 #include <svx/outliner.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdpool.hxx>
 
 //------------------------------------------------------------------------
 //
@@ -112,9 +113,10 @@ namespace accessibility
         String          GetText( const ESelection& /*rSel*/ ) const { return String(); }
         SfxItemSet      GetAttribs( const ESelection& /*rSel*/, BOOL /*bOnlyHardAttrib*/ = 0 ) const
         {
-            String aDummyStr(RTL_CONSTASCII_USTRINGPARAM("Dummy"));
-            SfxItemPool aPool(aDummyStr,0,0,NULL);
-            return SfxItemSet(aPool);
+            // AW: Very dangerous: The former implementation used a SfxItemPool created on the
+            // fly which of course was deleted again ASAP. Thus, the returned SfxItemSet was using
+            // a deleted Pool by design.
+            return SfxItemSet(SdrObject::GetGlobalDrawObjectItemPool());
         }
         SfxItemSet      GetParaAttribs( USHORT /*nPara*/ ) const { return GetAttribs(ESelection()); }
         void            SetParaAttribs( USHORT /*nPara*/, const SfxItemSet& /*rSet*/ ) {}

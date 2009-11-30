@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statcach.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.180.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weak.hxx>
 
 #ifndef _SFXBINDINGS_HXX
@@ -76,7 +77,7 @@ public:
 
     void                    Release();
     const ::com::sun::star::frame::FeatureStateEvent& GetStatus() const;
-    void                    Dispatch( sal_Bool bForceSynchron = sal_False );
+    void                    Dispatch( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aProps, sal_Bool bForceSynchron = sal_False );
 };
 
 class SfxStateCache
@@ -109,7 +110,7 @@ public:
     const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat )
                             { return GetSlotServer( rDispat, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > () ); }
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          GetDispatch() const;
-    void                    Dispatch( sal_Bool bForceSynchron = sal_False );
+    void                    Dispatch( const SfxItemSet* pSet, sal_Bool bForceSynchron = sal_False );
     sal_Bool                    IsControllerDirty() const
                             { return bCtrlDirty ? sal_True : sal_False; }
     SfxPoolItem*            GetItem() const { return pLastItem; }

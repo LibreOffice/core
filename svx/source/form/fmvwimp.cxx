@@ -197,23 +197,35 @@ FmXPageViewWinRec::~FmXPageViewWinRec()
 //------------------------------------------------------------------
 void FmXPageViewWinRec::dispose()
 {
-    for (::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
-            i != m_aControllerList.end(); i++)
+    for (   ::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
+            i != m_aControllerList.end();
+            ++i
+        )
     {
-        // detaching the events
-        Reference< XChild >  xChild((*i)->getModel(), UNO_QUERY);
-        if (xChild.is())
+        try
         {
-            Reference< XEventAttacherManager >  xEventManager(xChild->getParent(), UNO_QUERY);
-            Reference< XInterface >  xIfc(*i, UNO_QUERY);
-            xEventManager->detach( i - m_aControllerList.begin(), xIfc );
-        }
+            Reference< XFormController > xController( *i, UNO_SET_THROW );
 
-        // dispose the formcontroller
-        Reference< XComponent >  xComp(*i, UNO_QUERY);
-        xComp->dispose();
+            // detaching the events
+            Reference< XChild > xControllerModel( xController->getModel(), UNO_QUERY );
+            if ( xControllerModel.is() )
+            {
+                Reference< XEventAttacherManager >  xEventManager( xControllerModel->getParent(), UNO_QUERY );
+                Reference< XInterface > xControllerNormalized( xController, UNO_QUERY_THROW );
+                xEventManager->detach( i - m_aControllerList.begin(), xControllerNormalized );
+            }
+
+            // dispose the formcontroller
+            Reference< XComponent > xComp( xController, UNO_QUERY_THROW );
+            xComp->dispose();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
-    m_aControllerList.clear(); // this call deletes the formcontrollers
+
+    m_aControllerList.clear();
 }
 
 

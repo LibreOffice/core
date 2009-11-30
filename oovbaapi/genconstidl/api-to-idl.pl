@@ -131,12 +131,23 @@ sub generate_idls($) {
             my $fname = $path . "/" . $type . ".idl";
             open( IDL, ">$fname" ) || die "Cannot write $fname.";
 
-            print IDL "module org { module openoffice { module $module {\n";
+            if( $module eq "vba" ) {
+        print IDL "module ooo { module $module {\n";
+        }
+        else {
+                print IDL "module ooo { module vba { module $module {\n";
+            }
+
             print IDL "    constants $type {\n";
             foreach $constant ( @{$result{$module}{$type}} ) {
                 print IDL "        const long $constant->{'name'} = $constant->{'value'};\n";
             }
-            print IDL "    };\n}; }; };\n";
+            if( $module eq "vba" ) {
+        print IDL "    };\n}; };\n";
+        }
+        else {
+                print IDL "    };\n}; }; };\n";
+            }
 
             close( IDL );
         }

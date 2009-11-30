@@ -5177,7 +5177,7 @@
             </node>
             <node oor:name=".uno:ObjectMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Drawing ~Object</value>
+                    <value xml:lang="en-US">~Object</value>
                 </prop>
             </node>
             <node oor:name=".uno:EditMenu" oor:op="replace">

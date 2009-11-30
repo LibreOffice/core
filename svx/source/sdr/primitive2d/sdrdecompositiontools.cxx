@@ -54,6 +54,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -205,12 +206,12 @@ namespace drawinglayer
                     aScaledUnitPolyPolygon.transform(aScaleTransform);
 
                     // create with unit polygon
-                    pNew = new SdrContourTextPrimitive2D(rText.getSdrText(), aScaledUnitPolyPolygon, rObjectTransform);
+                    pNew = new SdrContourTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), aScaledUnitPolyPolygon, rObjectTransform);
                 }
                 else
                 {
                     // create with unit polygon
-                    pNew = new SdrContourTextPrimitive2D(rText.getSdrText(), rUnitPolyPolygon, rObjectTransform);
+                    pNew = new SdrContourTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), rUnitPolyPolygon, rObjectTransform);
                 }
             }
             else if(rText.isFontwork() && !rText.isScroll())
@@ -218,7 +219,7 @@ namespace drawinglayer
                 // text on path, use scaled polygon. Not allowed when text scrolling is used.
                 ::basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
                 aScaledPolyPolygon.transform(rObjectTransform);
-                pNew = new SdrPathTextPrimitive2D(rText.getSdrText(), aScaledPolyPolygon);
+                pNew = new SdrPathTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), aScaledPolyPolygon);
             }
             else
             {
@@ -266,12 +267,12 @@ namespace drawinglayer
                 if(rText.isFitToSize())
                 {
                     // streched text in range
-                    pNew = new SdrStretchTextPrimitive2D(rText.getSdrText(), aAnchorTransform);
+                    pNew = new SdrStretchTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform);
                 }
                 else // text in range
                 {
                     // build new primitive
-                    pNew = new SdrBlockTextPrimitive2D(rText.getSdrText(), aAnchorTransform, rText.isScroll(), bCellText, bWordWrap);
+                    pNew = new SdrBlockTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform, rText.isScroll(), bCellText, bWordWrap);
                 }
             }
 
@@ -397,8 +398,22 @@ namespace drawinglayer
             }
             else
             {
-                // add to decomposition
-                return Primitive2DReference(pNew);
+                if(rText.isInEditMode())
+                {
+                    // #i97628#
+                    // encapsulate with TextHierarchyEditPrimitive2D to allow renderers
+                    // to suppress actively edited content if needed
+                    const Primitive2DReference xRefA(pNew);
+                    const Primitive2DSequence aContent(&xRefA, 1L);
+
+                    // create and add TextHierarchyEditPrimitive2D primitive
+                    return Primitive2DReference(new TextHierarchyEditPrimitive2D(aContent));
+                }
+                else
+                {
+                    // add to decomposition
+                    return Primitive2DReference(pNew);
+                }
             }
         }
 

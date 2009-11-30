@@ -171,7 +171,40 @@
                 <value>SIT</value>
             </prop>
             <prop oor:name="Factor">
-                <value>239.64</value>
+                <value>239.640</value>
+            </prop>
+        </node>
+        <node oor:name="CR14" oor:op="replace">
+            <prop oor:name="FromUnit">
+                <value>EUR</value>
+            </prop>
+            <prop oor:name="ToUnit">
+                <value>MTL</value>
+            </prop>
+            <prop oor:name="Factor">
+              <value>.429300</value>
+            </prop>
+        </node>
+        <node oor:name="CR15" oor:op="replace">
+            <prop oor:name="FromUnit">
+                <value>EUR</value>
+            </prop>
+            <prop oor:name="ToUnit">
+                <value>CYP</value>
+            </prop>
+            <prop oor:name="Factor">
+              <value>.585274</value>
+            </prop>
+        </node>
+        <node oor:name="CR16" oor:op="replace">
+            <prop oor:name="FromUnit">
+                <value>EUR</value>
+            </prop>
+            <prop oor:name="ToUnit">
+                <value>SKK</value>
+            </prop>
+            <prop oor:name="Factor">
+                <value>30.1260</value>
             </prop>
         </node>
     </node>

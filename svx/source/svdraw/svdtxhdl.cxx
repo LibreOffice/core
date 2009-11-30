@@ -57,6 +57,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svtools/itemset.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

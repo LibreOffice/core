@@ -44,6 +44,7 @@ namespace drawinglayer
     {
         SdrTextAttribute::SdrTextAttribute(
             const SdrText& rSdrText,
+            const OutlinerParaObject& rOutlinerParaObject,
             XFormTextStyle eFormTextStyle,
             sal_Int32 aTextLeftDistance,
             sal_Int32 aTextUpperDistance,
@@ -53,9 +54,10 @@ namespace drawinglayer
             bool bFitToSize,
             bool bHideContour,
             bool bBlink,
-            bool bScroll)
+            bool bScroll,
+            bool bInEditMode)
         :   mrSdrText(rSdrText),
-            mpOutlinerParaObject(rSdrText.GetOutlinerParaObject()),
+            maOutlinerParaObject(rOutlinerParaObject),
             meFormTextStyle(eFormTextStyle),
             maTextLeftDistance(aTextLeftDistance),
             maTextUpperDistance(aTextUpperDistance),
@@ -65,15 +67,14 @@ namespace drawinglayer
             mbFitToSize(bFitToSize),
             mbHideContour(bHideContour),
             mbBlink(bBlink),
-            mbScroll(bScroll)
+            mbScroll(bScroll),
+            mbInEditMode(bInEditMode)
         {
         }
 
         bool SdrTextAttribute::operator==(const SdrTextAttribute& rCandidate) const
         {
-            const bool bOutlinerParaObjectSameAddress(mpOutlinerParaObject == rCandidate.mpOutlinerParaObject);
-
-            return (bOutlinerParaObjectSameAddress
+            return (getOutlinerParaObject() == rCandidate.getOutlinerParaObject()
                 && getFormTextStyle() == rCandidate.getFormTextStyle()
                 && getTextLeftDistance() == rCandidate.getTextLeftDistance()
                 && getTextUpperDistance() == rCandidate.getTextUpperDistance()
@@ -83,7 +84,8 @@ namespace drawinglayer
                 && isFitToSize() == rCandidate.isFitToSize()
                 && isHideContour() == rCandidate.isHideContour()
                 && isBlink() == rCandidate.isBlink()
-                && isScroll() == rCandidate.isScroll());
+                && isScroll() == rCandidate.isScroll()
+                && isInEditMode() == rCandidate.isInEditMode());
         }
 
         void SdrTextAttribute::getBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const

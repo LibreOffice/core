@@ -163,7 +163,7 @@ class ColumnInfoCache
 public:
     ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSupplier );
 
-    const size_t        getColumnCount() const { return m_aColumns.size(); }
+    size_t        getColumnCount() const { return m_aColumns.size(); }
     const ColumnInfo&   getColumnInfo( size_t _pos );
 
     bool    controlsInitialized() const { return m_bControlsInitialized; }

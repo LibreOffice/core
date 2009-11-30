@@ -156,4 +156,9 @@
       </node>
     </node>
   </node>
+  <node oor:name="Misc">
+    <prop oor:name="TransitionFiles" install:module="ogltrans">
+      <value oor:separator=";">vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml;vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/transitions-ogl.xml</value>
+    </prop>
+  </node>
 </oor:component-data>

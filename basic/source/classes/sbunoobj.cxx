@@ -117,7 +117,7 @@ static String ID_DBG_PROPERTIES( RTL_CONSTASCII_USTRINGPARAM("Dbg_Properties") )
 static String ID_DBG_METHODS( RTL_CONSTASCII_USTRINGPARAM("Dbg_Methods") );
 
 static ::rtl::OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
-static ::rtl::OUString defaultNameSpace( RTL_CONSTASCII_USTRINGPARAM("org.openoffice") );
+static ::rtl::OUString defaultNameSpace( RTL_CONSTASCII_USTRINGPARAM("ooo.vba") );
 
 // Gets the default property for an uno object. Note: There is some
 // redirection built in. The property name specifies the name
@@ -1600,7 +1600,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
             OSL_TRACE("Checking if object implements %s",
                 OUStringToOString( defaultNameSpace + aClass,
                     RTL_TEXTENCODING_UTF8 ).getStr() );
-            // although interfaces in the org.openoffice.vba namespace
+            // although interfaces in the ooo.vba.vba namespace
             // obey the idl rules and have a leading X, in basic we
             // want to be able to do something like
             // 'dim wrkbooks as WorkBooks'

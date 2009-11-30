@@ -216,6 +216,8 @@ public:
             void                FileSelect();
             void                FilterSelect();
 
+    void                        SetBlackList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList );
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetBlackList() const;
     void                        SetStandardDir( const String& rStdDir );
     const String&               GetStandardDir() const;
     SvStringsDtor*              GetPathList() const;        // bei MultiSelektion

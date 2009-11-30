@@ -195,7 +195,8 @@ namespace sfx2
                                     sal_Int64 nFlags,
                                     sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                                     Window* _pPreferredParentWindow = NULL,
-                                    const String& sStandardDir = String::CreateFromAscii( "" )
+                                    const String& sStandardDir = String::CreateFromAscii( "" ),
+                                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >&   rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >()
                                 );
         virtual                 ~FileDialogHelper_Impl();
 

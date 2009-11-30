@@ -1060,7 +1060,7 @@ void FormulaDlg_Impl::UpdateFunctionDesc()
             String aSig = pDesc->getSignature();
 
             aFtFuncName.SetText( aSig );
-            aFtFuncDesc.SetText( pDesc->getFunctionName() );
+            aFtFuncDesc.SetText( pDesc->getDescription() );
             ResizeArgArr( pDesc );
 
             if ( !m_aArguments.empty() )        // noch Argumente da?
@@ -1713,7 +1713,7 @@ IMPL_LINK( FormulaDlg_Impl, FuncSelHdl, FuncPage*, EMPTYARG )
             String aSig = pDesc->getSignature();
             aFtHeadLine.SetText( pDesc->getFunctionName() );
             aFtFuncName.SetText( aSig );
-            aFtFuncDesc.SetText( pDesc->getFunctionName() );
+            aFtFuncDesc.SetText( pDesc->getDescription() );
         }
     }
     else

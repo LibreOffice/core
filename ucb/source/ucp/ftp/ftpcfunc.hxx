@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftpcfunc.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,33 +59,7 @@ extern "C" {
      */
 
 
-    int ftp_write(void *buffer,size_t size,size_t nmemb,void *stream);
-
     int file_write(void *buffer,size_t size,size_t nmemb,void *stream);
-
-}
-
-
-
-
-namespace ftp {
-
-    /** Is the first argument to 'passwd' below.
-     */
-
-    class FTPClient
-    {
-    public:
-
-        virtual rtl::OUString passwd() const = 0;
-    };
-
-}
-
-
-extern "C" {
-
-    int ftp_passwd(void *client,char*prompt,char*buffer,int bufferlength);
 
 }
 

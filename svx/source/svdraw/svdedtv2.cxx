@@ -1430,7 +1430,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
         if(pLast && pSrcPath->GetOutlinerParaObject())
         {
-            pLast->SetOutlinerParaObject(pSrcPath->GetOutlinerParaObject()->Clone());
+            pLast->SetOutlinerParaObject(new OutlinerParaObject(*pSrcPath->GetOutlinerParaObject()));
         }
     }
     else if(pCustomShape)
@@ -1469,7 +1469,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     OutlinerParaObject* pParaObj = pCustomShape->GetOutlinerParaObject();
                     if(pParaObj)
                     {
-                        pTextObj->NbcSetOutlinerParaObject(pParaObj->Clone());
+                        pTextObj->NbcSetOutlinerParaObject(new OutlinerParaObject(*pParaObj));
                     }
 
                     // copy all attributes

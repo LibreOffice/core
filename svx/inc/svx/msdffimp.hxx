@@ -616,13 +616,13 @@ public:
 //                                  BOOL bLookForEnd );
 //
     SdrObject* ImportObj(SvStream& rSt, void* pData,
-        const Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
+        Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
 
     SdrObject* ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, void* pData,
-        const Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL );
+        Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL );
 
     SdrObject* ImportShape( const DffRecordHeader& rHd, SvStream& rSt, void* pData,
-        const Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
+        Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
 
     Rectangle GetGlobalChildAnchor( const DffRecordHeader& rHd, SvStream& rSt, Rectangle& aClientRect );
     void GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt,

@@ -38,6 +38,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -120,10 +121,56 @@ namespace sdr
 
             if(bTexture)
             {
-                const basegfx::B2DRange aTxRange(basegfx::tools::getRange(aPolyTexture2D));
-                aTextureSize.setX(aTxRange.getWidth());
-                aTextureSize.setY(aTxRange.getHeight());
+                // #i98314#
+                // create texture size from object's size
+                const basegfx::B3DRange aObjectRange(basegfx::tools::getRange(aPolyPolygon3D));
+
+                double fWidth(0.0);
+                double fHeight(0.0);
+
+                // this is a polygon object, so Width/Height and/or Depth may be zero (e.g. left
+                // wall of chart). Take this into account
+                if(basegfx::fTools::equalZero(aObjectRange.getWidth()))
+                {
+                    // width is zero, use height and depth
+                    fWidth = aObjectRange.getHeight();
+                    fHeight = aObjectRange.getDepth();
+                }
+                else if(basegfx::fTools::equalZero(aObjectRange.getHeight()))
+                {
+                    // height is zero, use width and depth
+                    fWidth = aObjectRange.getWidth();
+                    fHeight = aObjectRange.getDepth();
+                }
+                else
+                {
+                    // use width and height
+                    fWidth = aObjectRange.getWidth();
+                    fHeight = aObjectRange.getHeight();
+                }
+
+                if(basegfx::fTools::lessOrEqual(fWidth, 0.0) ||basegfx::fTools::lessOrEqual(fHeight, 0.0))
+                {
+                    // no texture; fallback to very small size
+                    aTextureSize.setX(0.01);
+                    aTextureSize.setY(0.01);
+                }
+                else
+                {
+                    aTextureSize.setX(fWidth);
+                    aTextureSize.setY(fHeight);
+                }
             }
+
+            // #i98295#
+            // unfortunately, this SdrObject type which allows a free 3d geometry definition was defined
+            // wrong topologically in relation to it's plane normal and 3D visibility when it was invented
+            // a long time ago. Since the API allows creation of this SDrObject type, it is not possible to
+            // simply change this definition. Only the chart should use it, and at least this object type
+            // only exists at Runtime (is not saved and/or loaded in any FileFormat). Still someone external
+            // may have used it in it's API. To not risk wrong 3D lightings, i have to switch the orientation
+            // of the polygon here
+            aPolyPolygon3D.flip();
 
             // create primitive and add
             const basegfx::B3DHomMatrix aWorldTransform;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filrec.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,14 +122,6 @@ sal_Bool ReconnectingFile::reconnect()
     return m_aFile.getPos( uPos );
 }
 
-::osl::FileBase::RC ReconnectingFile::isEndOfFile( sal_Bool *pIsEOF )
-{
-    if ( m_bDisconnect )
-        return ::osl::FileBase::E_NETWORK;
-
-    return m_aFile.isEndOfFile( pIsEOF );
-}
-
 ::osl::FileBase::RC ReconnectingFile::setSize( sal_uInt64 uSize )
 {
     ::osl::FileBase::RC nRes = ::osl::FileBase::E_NETWORK;
@@ -198,14 +190,6 @@ sal_Bool ReconnectingFile::reconnect()
         return ::osl::FileBase::E_NETWORK;
 
     return m_aFile.write( pBuffer, uBytesToWrite, rBytesWritten );
-}
-
-::osl::FileBase::RC ReconnectingFile::readLine( ::rtl::ByteSequence& aSeq )
-{
-    if ( m_bDisconnect )
-        return ::osl::FileBase::E_NETWORK;
-
-    return m_aFile.readLine( aSeq );
 }
 
 ::osl::FileBase::RC ReconnectingFile::sync() const

@@ -54,7 +54,7 @@
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #ifdef FAKE_VBA_EVENT_SUPPORT
-#include <org/openoffice/vba/XVBAToOOEventDescGen.hpp>
+#include <ooo/vba/XVBAToOOEventDescGen.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -125,7 +125,7 @@ namespace dlgprov
         {
             Sequence< Any > args(1);
             args[0] <<= xModel;
-            mxListener = Reference< XScriptListener >( xSMgr->createInstanceWithArgumentsAndContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.vba.EventListener" ) ), args, m_xContext ), UNO_QUERY );
+            mxListener = Reference< XScriptListener >( xSMgr->createInstanceWithArgumentsAndContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.EventListener" ) ), args, m_xContext ), UNO_QUERY );
         }
         if ( rxControl.is() )
         {
@@ -199,7 +199,7 @@ namespace dlgprov
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
         if ( xSMgr.is() )
         {
-            Reference< org::openoffice::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.vba.VBAToOOEventDesc" ) ), m_xContext ), UNO_QUERY );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAToOOEventDesc" ) ), m_xContext ), UNO_QUERY );
             if ( xVBAToOOEvtDesc.is() )
                 xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl ), UNO_QUERY );
 

@@ -71,6 +71,11 @@ APP1STDLIBS=$(TOOLSLIB) 		\
             $(SOTLIB)			\
             $(VCLLIB)			\
             $(UCBHELPERLIB)		\
+                        $(BASEGFXLIB) $(I18NISOLANGLIB) $(TKLIB) $(UNOTOOLSLIB) $(I18NUTILLIB) \
+                        $(ICUUCLIB) $(JVMFWKLIB) $(SALHELPERLIB) $(FWELIB) $(BASICLIB) \
+                        $(XMLSCRIPTLIB) $(SJLIB) $(ICUDATALIB) $(ICULELIB) $(JVMACCESSLIB) \
+                        $(AVMEDIALIB) $(XMLOFFLIB) $(SAXLIB) $(FWILIB) $(DRAWINGLAYERLIB) $(LNGLIB) \
+                        $(CPPCANVASLIB) $(CANVASTOOLSLIB) $(AGGLIB) \
             $(SVXLIB)
 
 #.IF "$(COM)"=="GCC"

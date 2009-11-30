@@ -758,6 +758,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     pCurObjShell            ( NULL ),
     xModuleManager          ( ::comphelper::getProcessServiceFactory()->createInstance(
                                 DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY ),
+    pbDeleted               ( NULL ),
 
     aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT ),
     aFilterLb               ( pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP ),
@@ -801,6 +802,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
     pStyleSheetPool         ( NULL ),
     pTreeBox                ( NULL ),
     pCurObjShell            ( NULL ),
+    pbDeleted               ( NULL ),
 
     aFmtLb                  ( this, SfxResId( BT_VLIST ) ),
     aFilterLb               ( pW, SfxResId( BT_FLIST ) ),
@@ -1013,6 +1015,11 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     pStyleSheetPool = NULL;
     delete pTreeBox;
     delete pTimer;
+    if ( pbDeleted )
+    {
+        pbDeleted->bDead = true;
+        pbDeleted = NULL;
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -1632,7 +1639,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
     // es kann sein, da\s sich ein neuer erst anmeldet, nachdem der Timer
     // abgelaufen ist - macht sich schlecht in UpdateStyles_Impl() !
 
-    ULONG nId = ((SfxSimpleHint&) rHint).GetId();
+    ULONG nId = rHint.ISA(SfxSimpleHint) ? ( (SfxSimpleHint&)rHint ).GetId() : 0;
 
     if(!bDontUpdate && nId != SFX_HINT_DYING &&
        (rHint.Type() == TYPE(SfxStyleSheetPoolHint)||
@@ -1717,13 +1724,14 @@ BOOL SfxCommonTemplateDialog_Impl::Execute_Impl(
 
     pItems[ nCount++ ] = 0;
 
-    const SfxPoolItem* pItem;
+    Deleted aDeleted;
+    pbDeleted = &aDeleted;
     USHORT nModi = pModifier ? *pModifier : 0;
-    pItem = rDispatcher.Execute(
+    const SfxPoolItem* pItem = rDispatcher.Execute(
         nId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
         pItems, nModi );
 
-    if ( !pItem )
+    if ( !pItem || aDeleted() )
         return FALSE;
 
     if ( nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId )

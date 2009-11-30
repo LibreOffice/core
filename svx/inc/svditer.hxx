@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svditer.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.246.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 
 class SdrObjList;
 class SdrObject;
+class SdrMarkList;
 
 // SdrObjListIter methods:
 // IM_FLAT              : Flach ueber die Liste
@@ -51,6 +52,8 @@ class SVX_DLLPUBLIC SdrObjListIter
     BOOL                        mbReverse;
 
     void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bUseZOrder);
+    void ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMode eMode);
+    void ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, BOOL bUseZOrder);
 
 public:
     SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
@@ -66,6 +69,9 @@ public:
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */
     SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+
+    /** Iterates over a list of marked objects received from the SdrMarkView. */
+    SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
 
     void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
     BOOL IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }

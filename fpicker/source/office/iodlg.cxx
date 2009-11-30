@@ -2319,7 +2319,7 @@ void SvtFileDialog::executeAsync( ::svt::AsyncPickerAction::Action _eAction,
     m_aConfiguration.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Timeout/Max" ) ) ) >>= nMaxTimeout;
 
     m_bInExecuteAsync = true;
-    m_pCurrentAsyncAction->execute( _rURL, _rFilter, bReallyAsync ? nMinTimeout : -1, nMaxTimeout );
+    m_pCurrentAsyncAction->execute( _rURL, _rFilter, bReallyAsync ? nMinTimeout : -1, nMaxTimeout, GetBlackList() );
     m_bInExecuteAsync = false;
 }
 
@@ -2356,6 +2356,17 @@ void SvtFileDialog::SetStandardDir( const String& rStdDir )
     _pImp->SetStandardDir( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 }
 
+void SvtFileDialog::SetBlackList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
+{
+    _pImp->SetBlackList( rBlackList );
+}
+
+//*****************************************************************************
+
+const ::com::sun::star::uno::Sequence< ::rtl::OUString >& SvtFileDialog::GetBlackList() const
+{
+    return _pImp->GetBlackList();
+}
 //*****************************************************************************
 
 const String& SvtFileDialog::GetStandardDir() const

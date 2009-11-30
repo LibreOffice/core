@@ -1,4 +1,4 @@
-/*************************************************************************
+ /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -742,6 +742,7 @@ void SbiParser::DefEnum( BOOL bPrivate )
 SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
 {
     BOOL bFunc = BOOL( eCurTok == FUNCTION );
+    BOOL bProp = BOOL( eCurTok == GET || eCurTok == SET || eCurTok == LET );
     if( !TestSymbol() ) return NULL;
     String aName( aSym );
     SbxDataType eType = eScanType;
@@ -862,7 +863,7 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
 //  if( pDef->GetType() == SbxOBJECT )
 //      pDef->SetType( SbxVARIANT ),
 //      Error( SbERR_SYNTAX );
-    if( pDef->GetType() == SbxVARIANT && !bFunc )
+    if( pDef->GetType() == SbxVARIANT && !( bFunc || bProp ) )
         pDef->SetType( SbxEMPTY );
     return pDef;
 }

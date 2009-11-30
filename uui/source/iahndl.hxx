@@ -65,6 +65,22 @@ struct CntHTTPCookieRequest;
 #define UUI_DOC_SAVE_LOCK       2
 #define UUI_DOC_OWN_SAVE_LOCK   3
 
+//============================================================================
+/** Information about a InteractionHandler
+ */
+struct InteractionHandlerData
+{
+    /** The UNO service name to use to instanciate the content provider.
+     */
+    rtl::OUString ServiceName;
+
+    InteractionHandlerData() {};
+    InteractionHandlerData( const rtl::OUString & rService)
+    : ServiceName( rService ){}
+};
+
+typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
+
 namespace cssu = com::sun::star::uno;
 namespace dcss = ::com::sun::star;
 
@@ -139,6 +155,8 @@ private:
                 rRequest)
         throw (com::sun::star::uno::RuntimeException);
 
+    void
+    GetInteractionHandlerList(InteractionHandlerDataList &rdataList);
 
     sal_Bool
     isDomainMatch( rtl::OUString hostName, rtl::OUString certHostName);
@@ -356,7 +374,7 @@ private:
     rtl::OUString & rErrorString)
         SAL_THROW((::com::sun::star::uno::RuntimeException));
 
-    void handleMessageboxRequests(
+    bool handleMessageboxRequests(
     ::com::sun::star::uno::Reference<
         ::com::sun::star::task::XInteractionRequest > const &
     rRequest,
@@ -364,12 +382,12 @@ private:
     bool & bHasErrorString,
     rtl::OUString & rErrorString);
 
-    void handleDialogRequests(
+    bool handleDialogRequests(
     ::com::sun::star::uno::Reference<
         ::com::sun::star::task::XInteractionRequest > const &
     rRequest);
 
-    void handleErrorHandlerRequests(
+    bool handleErrorHandlerRequests(
     ::com::sun::star::uno::Reference<
         ::com::sun::star::task::XInteractionRequest > const &
     rRequest,

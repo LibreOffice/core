@@ -50,7 +50,7 @@ class OutlinerParaObject;
 
 namespace sdr { namespace table {
 
-class CellUndo : public SdrUndoAction
+class CellUndo : public SdrUndoAction, public sdr::ObjectUser
 {
 public:
     CellUndo( const SdrObjectWeakRef& xObjRef, const CellRef& xCell );
@@ -59,6 +59,9 @@ public:
     virtual void            Undo();
     virtual void            Redo();
     virtual BOOL            Merge( SfxUndoAction *pNextAction );
+
+    void dispose();
+    virtual void ObjectInDestruction(const SdrObject& rObject);
 
 private:
     struct Data

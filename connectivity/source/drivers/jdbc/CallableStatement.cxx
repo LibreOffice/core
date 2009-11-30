@@ -83,6 +83,8 @@ Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType ) th
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -106,6 +108,8 @@ sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  ) throw(starsdbc::SQLExc
 
 sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -129,6 +133,8 @@ sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex 
 }
 sal_Int8 SAL_CALL java_sql_CallableStatement::getByte( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jbyte out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -152,6 +158,8 @@ sal_Int8 SAL_CALL java_sql_CallableStatement::getByte( sal_Int32 columnIndex ) t
 }
 Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     Sequence< sal_Int8 > aSeq;
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -182,6 +190,8 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
 }
 ::com::sun::star::util::Date SAL_CALL java_sql_CallableStatement::getDate( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -206,6 +216,8 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
 }
 double SAL_CALL java_sql_CallableStatement::getDouble( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jdouble out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -229,6 +241,8 @@ double SAL_CALL java_sql_CallableStatement::getDouble( sal_Int32 columnIndex ) t
 
 float SAL_CALL java_sql_CallableStatement::getFloat( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jfloat out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -253,6 +267,8 @@ float SAL_CALL java_sql_CallableStatement::getFloat( sal_Int32 columnIndex ) thr
 
 sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -277,6 +293,8 @@ sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex ) t
 
 sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -299,6 +317,8 @@ sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex ) 
 
 Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -322,6 +342,8 @@ Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const
 
 sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jshort out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -344,6 +366,8 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
 
 ::rtl::OUString SAL_CALL java_sql_CallableStatement::getString( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
@@ -368,6 +392,8 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
 
  ::com::sun::star::util::Time SAL_CALL java_sql_CallableStatement::getTime( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -392,6 +418,8 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
 
  ::com::sun::star::util::DateTime SAL_CALL java_sql_CallableStatement::getTimestamp( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -415,6 +443,8 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
 
 void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
@@ -439,6 +469,8 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
 }
 void SAL_CALL java_sql_CallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
@@ -495,6 +527,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_CallableStatem
 
 Reference< starsdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -518,6 +552,8 @@ Reference< starsdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal
 
 Reference< starsdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -540,6 +576,8 @@ Reference< starsdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_I
 }
 Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -563,6 +601,8 @@ Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_I
 
 Reference< starsdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){

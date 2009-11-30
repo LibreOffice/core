@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: webdavcontentcaps.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -521,17 +521,6 @@ uno::Sequence< beans::Property > Content::getProperties(
     }
 
     return aProperties;
-}
-
-//=========================================================================
-void Content::getProperties(
-    const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
-    PropertyMap & rProps )
-{
-    uno::Sequence< beans::Property > aProps = getProperties( xEnv );
-    sal_Int32 nCount = aProps.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
-        rProps.insert( aProps[ n ] );
 }
 
 //=========================================================================

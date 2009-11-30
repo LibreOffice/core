@@ -84,6 +84,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/sqlerror.obj                            \
         $(SLO)$/filtermanager.obj                       \
         $(SLO)$/parameters.obj							\
+        $(SLO)$/ParamterSubstitution.obj                \
         $(SLO)$/formattedcolumnvalue.obj
 
 SLOFILES=\

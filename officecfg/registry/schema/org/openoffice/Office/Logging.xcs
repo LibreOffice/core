@@ -89,11 +89,10 @@
       </info>
       <prop oor:name="EnablingAllowed" oor:type="xs:boolean">
         <info>
-          <desc>if true and the OOoImprovement Extension is installed, userinterface events (clicks on toolbars and menus for
-          example) will get logged in a CSV-File. Sending these files to the
-          OpenOffice.org team helps optimizing the user experience.</desc>
+          <desc>only if this is true, usage tracking is allowed and its options will be shown
+          </desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="LogPath" oor:type="xs:string">
         <info>

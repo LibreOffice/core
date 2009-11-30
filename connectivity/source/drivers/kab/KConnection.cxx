@@ -322,7 +322,7 @@ Reference< XTablesSupplier > SAL_CALL KabConnection::createCatalog()
     return m_pAddressBook;
 }
 // -----------------------------------------------------------------------------
-extern "C" void*  SAL_CALL createKabConnection( void* _pDriver )
+extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL createKabConnection( void* _pDriver )
 {
     KabConnection* pConnection = new KabConnection( static_cast< KabDriver* >( _pDriver ) );
     // by definition, the pointer crossing library boundaries as void ptr is acquired once

@@ -992,55 +992,65 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                               RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
         }
 
-        rtl::OString aPureExtensionId;
-        rtl::OString aExpandedExtensionPath;
-        if( !aPureProgramm.getLength() )
+        // Do we need to add extension path?
+        ::rtl::OUString aExtensionPath;
+        rtl::OUString aJar = urlParam->get_jar();
+
+        bool bAddExtensionPath = false;
+        sal_Int32 nQuestionMark1 = aJar.indexOf( sal_Unicode('?') );
+        sal_Int32 nQuestionMark2 = aJar.lastIndexOf( sal_Unicode('?') );
+        if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
         {
-            // Extension jar file? Search for ?
-            rtl::OUString aJar = urlParam->get_jar();
-            sal_Int32 nQuestionMark1 = aJar.indexOf( sal_Unicode('?') );
-            sal_Int32 nQuestionMark2 = aJar.lastIndexOf( sal_Unicode('?') );
-            if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
+            aExtensionPath = aJar.copy( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
+            bAddExtensionPath = true;
+        }
+        else
+        {
+            // Path not yet specified, search directly
+            Reference< XHierarchicalNameAccess > xNA = pDatabases->findJarFileForPath
+                ( aJar, urlParam->get_language(), urlParam->get_path(), &aExtensionPath );
+            if( xNA.is() && aExtensionPath.getLength() )
+                bAddExtensionPath = true;
+        }
+
+        if( bAddExtensionPath )
+        {
+            Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+            Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
+            OSL_ASSERT( xProps.is() );
+            Reference< XComponentContext > xContext;
+            if (xProps.is())
             {
-                // ExtensionPath
-                ::rtl::OUString aExtensionPath = aJar.copy( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
-
-                Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-                Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
-                OSL_ASSERT( xProps.is() );
-                Reference< XComponentContext > xContext;
-                if (xProps.is())
-                {
-                    xProps->getPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
-                }
-                if( !xContext.is() )
-                {
-                    throw RuntimeException(
-                        ::rtl::OUString::createFromAscii( "InputStreamTransformer::InputStreamTransformer(), no XComponentContext" ),
-                        Reference< XInterface >() );
-                }
-
-                rtl::OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionPath, xContext );
-                aExpandedExtensionPath = rtl::OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
-
-                // Add extension language part
-                rtl::OString aExtensionLanguage = aPureLanguage;
-                if( aExtensionLanguage.getLength() > 2 )
-                    aExtensionLanguage = aExtensionLanguage.copy( 0, 2 );
-                aExpandedExtensionPath += rtl::OString('/');
-                aExpandedExtensionPath += aExtensionLanguage;
-                parString[last++] = "ExtensionPath";
-                parString[last++] = rtl::OString('\'') + aExpandedExtensionPath + rtl::OString('\'');
-
-                // ExtensionId
-                sal_Int32 iSlash = aPath.indexOf( '/' );
-                if( iSlash != -1 )
-                    aPureExtensionId = aPath.copy( 0, iSlash );
-
-                parString[last++] = "ExtensionId";
-                parString[last++] = rtl::OString('\'') + aPureExtensionId + rtl::OString('\'');
+                xProps->getPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
             }
+            if( !xContext.is() )
+            {
+                throw RuntimeException(
+                    ::rtl::OUString::createFromAscii( "InputStreamTransformer::InputStreamTransformer(), no XComponentContext" ),
+                    Reference< XInterface >() );
+            }
+
+            rtl::OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionPath, xContext );
+            rtl::OString aExpandedExtensionPath = rtl::OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
+
+            // Add extension language part
+            rtl::OString aExtensionLanguage = aPureLanguage;
+            if( aExtensionLanguage.getLength() > 2 )
+                aExtensionLanguage = aExtensionLanguage.copy( 0, 2 );
+            aExpandedExtensionPath += rtl::OString('/');
+            aExpandedExtensionPath += aExtensionLanguage;
+            parString[last++] = "ExtensionPath";
+            parString[last++] = rtl::OString('\'') + aExpandedExtensionPath + rtl::OString('\'');
+
+            // ExtensionId
+            rtl::OString aPureExtensionId;
+            sal_Int32 iSlash = aPath.indexOf( '/' );
+            if( iSlash != -1 )
+                aPureExtensionId = aPath.copy( 0, iSlash );
+
+            parString[last++] = "ExtensionId";
+            parString[last++] = rtl::OString('\'') + aPureExtensionId + rtl::OString('\'');
         }
 
         for( int i = 0; i < last; ++i )

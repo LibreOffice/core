@@ -431,6 +431,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
         // And this would be wrong :)
         // 03.02.00 - 72529 - FS
         if (!pAs3DObject)
+        {
             if (pObj->IsGroupObject())
             {
                 SdrObjListIter aIter(*pObj->GetSubList());
@@ -445,6 +446,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
                 bHadAnyLeafs = sal_True;
                 bControlList = FmFormInventor == pObj->GetObjInventor();
             }
+        }
     }
 
     return bControlList && bHadAnyLeafs;
@@ -1150,14 +1152,17 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             {
                 Reference< XBindableValue > xOldBindable( xOldModel, UNO_QUERY );
                 Reference< XBindableValue > xNewBindable( xNewModel, UNO_QUERY );
+                if ( xOldBindable.is() )
                 {
                     try
                     {
-                        xNewBindable->setValueBinding( xOldBindable->getValueBinding() );
+                        if ( xNewBindable.is() )
+                            xNewBindable->setValueBinding( xOldBindable->getValueBinding() );
                         xOldBindable->setValueBinding( NULL );
                     }
-                    catch(const IncompatibleTypesException&)
+                    catch(const Exception&)
                     {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
@@ -1165,16 +1170,17 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             {
                 Reference< XListEntrySink > xOldSink( xOldModel, UNO_QUERY );
                 Reference< XListEntrySink > xNewSink( xNewModel, UNO_QUERY );
-                if ( xOldSink.is() && xNewSink.is() )
+                if ( xOldSink.is() )
                 {
                     try
                     {
-                        xNewSink->setListEntrySource( xOldSink->getListEntrySource() );
+                        if ( xNewSink.is() )
+                            xNewSink->setListEntrySource( xOldSink->getListEntrySource() );
                         xOldSink->setListEntrySource( NULL );
                     }
                     catch(const Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::executeControlConversionSlot: caught an exception while creating the control !");
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
@@ -2427,11 +2433,12 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     Reference< XPropertySet> xCursorSet(pfmscContextInfo->xCursor, UNO_QUERY);
     Reference< XResultSetUpdate> xUpdateCursor(pfmscContextInfo->xCursor, UNO_QUERY);
     if (xUpdateCursor.is() && xCursorSet.is() && xCursorSet.is())
+    {
         if (::comphelper::getBOOL(xCursorSet->getPropertyValue(FM_PROP_ISNEW)))
             xUpdateCursor->moveToCurrentRow();
-        else
-            if (::comphelper::getBOOL(xCursorSet->getPropertyValue(FM_PROP_ISMODIFIED)))
-                xUpdateCursor->cancelRowUpdates();
+        else if (::comphelper::getBOOL(xCursorSet->getPropertyValue(FM_PROP_ISMODIFIED)))
+            xUpdateCursor->cancelRowUpdates();
+    }
 
     return pfmscContextInfo->arrFields.size();
 }

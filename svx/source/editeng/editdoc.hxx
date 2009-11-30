@@ -784,7 +784,9 @@ class EditEngineItemPool : public SfxItemPool
 {
 public:
                         EditEngineItemPool( BOOL bPersistenRefCounts );
-                        ~EditEngineItemPool();
+protected:
+                        virtual ~EditEngineItemPool();
+public:
 
     virtual SvStream&   Store( SvStream& rStream ) const;
 };

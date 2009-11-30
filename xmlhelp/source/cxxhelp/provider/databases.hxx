@@ -271,8 +271,8 @@ namespace chelp {
                  const rtl::OUString& Language );
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
-        findJarFileForPath( const rtl::OUString& jar,
-                 const rtl::OUString& Language, const rtl::OUString& path );
+        findJarFileForPath( const rtl::OUString& jar, const rtl::OUString& Language,
+            const rtl::OUString& path, rtl::OUString* o_pExtensionPath = NULL );
 
         /**
          *  Maps a given language-locale combination to language.
@@ -533,7 +533,8 @@ namespace chelp {
         {}
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
-            nextJarFile( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+            nextJarFile( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
+                            rtl::OUString* o_pExtensionPath = NULL );
 
     private:
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >

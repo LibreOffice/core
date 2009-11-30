@@ -195,7 +195,7 @@ SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1, 4 )
 
 // MT 05/00: Sollte mal direkt EditTextObjekt werden => keine virtuellen Methoden mehr.
 
-class BinTextObject : public EditTextObject
+class BinTextObject : public EditTextObject, public SfxItemPoolUser
 {
     using EditTextObject::operator==;
 
@@ -303,6 +303,8 @@ public:
 
     bool                    operator==( const BinTextObject& rCompare ) const;
 
+    // from SfxItemPoolUser
+    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool);
 };
 
 #endif  // _EDITOBJ2_HXX

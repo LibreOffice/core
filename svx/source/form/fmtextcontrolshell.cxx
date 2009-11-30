@@ -670,14 +670,14 @@ namespace svx
     //------------------------------------------------------------------------
     void FmTextControlShell::executeAttributeDialog( AttributeSet _eSet, SfxRequest& _rReq )
     {
-        ::std::auto_ptr< SfxItemPool > pPool( EditEngine::CreatePool() );
-        pPool->FreezeIdRanges();
-        SfxItemSet aPureItems( *pPool );
-
         const SvxFontListItem* pFontList = PTR_CAST( SvxFontListItem, m_pViewFrame->GetObjectShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
         DBG_ASSERT( pFontList, "FmTextControlShell::executeAttributeDialog: no font list item!" );
         if ( !pFontList )
             return;
+
+        SfxItemPool* pPool = EditEngine::CreatePool();
+        pPool->FreezeIdRanges();
+        SfxItemSet aPureItems( *pPool );
 
         // put the current states of the items into the set
         SfxAllItemSet aCurrentItems( aPureItems );
@@ -774,6 +774,8 @@ namespace svx
             }
             _rReq.Done( rModifiedItems );
         }
+
+        SfxItemPool::Free(pPool);
     }
 
     //------------------------------------------------------------------------

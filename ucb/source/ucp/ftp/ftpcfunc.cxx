@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftpcfunc.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,18 +47,6 @@ using namespace com::sun::star::uno;
 
 extern "C" {
 
-    int ftp_write(void *buffer,size_t size,size_t nmemb,void *stream)
-    {
-        FTPStreamContainer *_stream =
-            reinterpret_cast<FTPStreamContainer*>(stream);
-
-        if(!_stream)
-            return 0;
-
-        return _stream->write(buffer,size,nmemb);
-    }
-
-
     int file_write(void *buffer,size_t size,size_t nmemb,void *stream)
     {
         FILE* file =
@@ -67,12 +55,5 @@ extern "C" {
             return 0;
         return fwrite(buffer,size,nmemb,file);
     }
-
-
-    int ftp_passwd(void *, char*, char*, int)
-    {
-        return 0;
-    }
-
 
 }

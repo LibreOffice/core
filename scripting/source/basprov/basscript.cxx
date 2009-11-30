@@ -131,7 +131,7 @@ namespace basprov
                     throw provider::ScriptFrameworkErrorException(
                         ::rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
-                                "wrong number of paramters!" ) ),
+                                "wrong number of parameters!" ) ),
                          Reference< XInterface >(),
                          m_funcName,
                          ::rtl::OUString(

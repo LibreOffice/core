@@ -64,6 +64,93 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        basegfx::B3DRange getRangeFrom3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
+        {
+            basegfx::B3DRange aRetval;
+
+            for(sal_uInt32 a(0); a < rFill.size(); a++)
+            {
+                aRetval.expand(basegfx::tools::getRange(rFill[a]));
+            }
+
+            return aRetval;
+        }
+
+        void applyNormalsKindSphereTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill, const basegfx::B3DRange& rRange)
+        {
+            // create sphere normals
+            const basegfx::B3DPoint aCenter(rRange.getCenter());
+
+            for(sal_uInt32 a(0); a < rFill.size(); a++)
+            {
+                rFill[a] = basegfx::tools::applyDefaultNormalsSphere(rFill[a], aCenter);
+            }
+        }
+
+        void applyNormalsKindFlatTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
+        {
+            for(sal_uInt32 a(0); a < rFill.size(); a++)
+            {
+                rFill[a].clearNormals();
+            }
+        }
+
+        void applyNormalsInvertTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
+        {
+            // invert normals
+            for(sal_uInt32 a(0); a < rFill.size(); a++)
+            {
+                rFill[a] = basegfx::tools::invertNormals(rFill[a]);
+            }
+        }
+
+        void applyTextureTo3DGeometry(
+            ::com::sun::star::drawing::TextureProjectionMode eModeX,
+            ::com::sun::star::drawing::TextureProjectionMode eModeY,
+            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
+            const basegfx::B3DRange& rRange,
+            const basegfx::B2DVector& rTextureSize)
+        {
+            sal_uInt32 a;
+
+            // handle texture coordinates X
+            const bool bParallelX(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == eModeX);
+            const bool bSphereX(!bParallelX && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == eModeX));
+
+            // handle texture coordinates Y
+            const bool bParallelY(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == eModeY);
+            const bool bSphereY(!bParallelY && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == eModeY));
+
+            if(bParallelX || bParallelY)
+            {
+                // apply parallel texture coordinates in X and/or Y
+                for(a = 0; a < rFill.size(); a++)
+                {
+                    rFill[a] = basegfx::tools::applyDefaultTextureCoordinatesParallel(rFill[a], rRange, bParallelX, bParallelY);
+                }
+            }
+
+            if(bSphereX || bSphereY)
+            {
+                // apply spherical texture coordinates in X and/or Y
+                const basegfx::B3DPoint aCenter(rRange.getCenter());
+
+                for(a = 0; a < rFill.size(); a++)
+                {
+                    rFill[a] = basegfx::tools::applyDefaultTextureCoordinatesSphere(rFill[a], aCenter, bSphereX, bSphereY);
+                }
+            }
+
+            // transform texture coordinates to texture size
+            basegfx::B2DHomMatrix aTexMatrix;
+            aTexMatrix.scale(rTextureSize.getX(), rTextureSize.getY());
+
+            for(a = 0; a < rFill.size(); a++)
+            {
+                rFill[a].transformTextureCoordiantes(aTexMatrix);
+            }
+        }
+
         Primitive3DSequence create3DPolyPolygonLinePrimitives(
             const basegfx::B3DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B3DHomMatrix& rObjectTransform,

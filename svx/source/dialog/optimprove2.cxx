@@ -51,10 +51,14 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/oooimprovement/XCore.hpp>
 #include <com/sun/star/oooimprovement/XCoreController.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/synchronousdispatch.hxx>
+#include <comphelper/uieventslogger.hxx>
+#include <tools/testtoolloader.hxx>
 
 #define C2S(s)  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -62,6 +66,7 @@ namespace beans  = ::com::sun::star::beans;
 namespace lang  = ::com::sun::star::lang;
 namespace uno   = ::com::sun::star::uno;
 namespace util  = ::com::sun::star::util;
+using namespace com::sun::star::system;
 
 // class SvxEmptyPage ----------------------------------------------------
 
@@ -97,11 +102,43 @@ SvxImprovementOptionsPage::SvxImprovementOptionsPage( Window* pParent, const Sfx
 {
     FreeResource();
 
+    m_aInfoFI.SetURL( C2S( "www.sun.com/privacy/" ) );
+    m_aInfoFI.SetClickHdl( LINK( this, SvxImprovementOptionsPage, HandleHyperlink ) );
     m_aShowDataPB.SetClickHdl( LINK( this, SvxImprovementOptionsPage, HandleShowData ) );
 }
 
 SvxImprovementOptionsPage::~SvxImprovementOptionsPage()
 {
+}
+
+IMPL_LINK( SvxImprovementOptionsPage, HandleHyperlink, svt::FixedHyperlinkImage*, EMPTYARG )
+{
+    ::rtl::OUString sURL( m_aInfoFI.GetURL() );
+
+    if ( sURL.getLength() > 0 )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xSMGR =
+                ::comphelper::getProcessServiceFactory();
+            uno::Reference< XSystemShellExecute > xSystemShell(
+                xSMGR->createInstance( ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                uno::UNO_QUERY_THROW );
+            if ( xSystemShell.is() )
+            {
+                xSystemShell->execute(
+                    sURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+            }
+        }
+        catch( const uno::Exception& e )
+        {
+             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+                rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+    }
+
+    return 0;
 }
 
 IMPL_LINK( SvxImprovementOptionsPage, HandleShowData, PushButton*, EMPTYARG )
@@ -148,6 +185,9 @@ sal_Bool SvxImprovementOptionsPage::FillItemSet( SfxItemSet& /*rSet*/ )
         ::comphelper::ConfigurationHelper::writeRelativeKey(
             xConfig, C2S("Participation"), C2S("InvitationAccepted"), uno::makeAny( m_aYesRB.IsChecked() != FALSE ) );
         ::comphelper::ConfigurationHelper::flush( xConfig );
+        // TODO: refactor
+        ::comphelper::UiEventsLogger::reinit();
+        ::tools::InitTestToolLib();
     }
     catch( uno::Exception& )
     {

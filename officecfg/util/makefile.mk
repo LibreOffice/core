@@ -45,6 +45,9 @@ $(MISC)$/$(TARGET)_delzip :
 
 $(BIN)$/registry_{$(alllangiso)}.zip : $(MISC)$/$(TARGET)_delzip
     cd $(MISC)$/registry$/res$/$(@:b:s/registry_//) && zip -ru ..$/..$/..$/..$/bin$/registry_$(@:b:s/registry_//).zip org/*
+.IF "$(USE_SHELL)"!="4nt"
+    $(PERL) -w $(SOLARENV)$/bin$/cleanzip.pl $@
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 
 ALLTAR: \
     $(MISC)$/$(TARGET)_delzip \

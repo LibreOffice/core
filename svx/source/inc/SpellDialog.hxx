@@ -134,6 +134,7 @@ class ExplainButton : public PushButton
     String              m_sExplanation;
 
     virtual void        RequestHelp( const HelpEvent& rHEvt );
+    virtual void        Click();
 public:
     ExplainButton( Window* pParent, const ResId& rResId ) : PushButton( pParent, rResId ){}
     ~ExplainButton();

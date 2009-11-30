@@ -1245,7 +1245,7 @@ EditDoc::~EditDoc()
 {
     ImplDestroyContents();
     if ( bOwnerOfPool )
-        delete pItemPool;
+        SfxItemPool::Free(pItemPool);
 }
 
 void EditDoc::ImplDestroyContents()

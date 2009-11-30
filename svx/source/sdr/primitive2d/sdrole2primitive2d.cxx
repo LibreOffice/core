@@ -66,32 +66,31 @@ namespace drawinglayer
             }
 
             // add line
-            if(getSdrLFSTAttribute().getLine())
+            // #i97981# condition was inverse to purpose. When being compatible to paint version,
+            // border needs to be suppressed
+            if(!bBehaveCompatibleToPaintVersion && getSdrLFSTAttribute().getLine())
             {
-                if(bBehaveCompatibleToPaintVersion)
+                // if line width is given, polygon needs to be grown by half of it to make the
+                // outline to be outside of the bitmap
+                if(0.0 != getSdrLFSTAttribute().getLine()->getWidth())
                 {
-                    // if line width is given, polygon needs to be grown by half of it to make the
-                    // outline to be outside of the bitmap
-                    if(0.0 != getSdrLFSTAttribute().getLine()->getWidth())
-                    {
-                        // decompose to get scale
-                        basegfx::B2DVector aScale, aTranslate;
-                        double fRotate, fShearX;
-                        getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+                    // decompose to get scale
+                    basegfx::B2DVector aScale, aTranslate;
+                    double fRotate, fShearX;
+                    getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-                        // create expanded range (add relative half line width to unit rectangle)
-                        double fHalfLineWidth(getSdrLFSTAttribute().getLine()->getWidth() * 0.5);
-                        double fScaleX(0.0 != aScale.getX() ? fHalfLineWidth / fabs(aScale.getX()) : 1.0);
-                        double fScaleY(0.0 != aScale.getY() ? fHalfLineWidth / fabs(aScale.getY()) : 1.0);
-                        const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
-                        basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
+                    // create expanded range (add relative half line width to unit rectangle)
+                    double fHalfLineWidth(getSdrLFSTAttribute().getLine()->getWidth() * 0.5);
+                    double fScaleX(0.0 != aScale.getX() ? fHalfLineWidth / fabs(aScale.getX()) : 1.0);
+                    double fScaleY(0.0 != aScale.getY() ? fHalfLineWidth / fabs(aScale.getY()) : 1.0);
+                    const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
+                    basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
 
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aExpandedUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
-                    }
-                    else
-                    {
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
-                    }
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aExpandedUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                }
+                else
+                {
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
                 }
             }
             else

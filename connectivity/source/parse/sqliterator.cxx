@@ -1066,6 +1066,26 @@ bool OSQLParseTreeIterator::traverseGroupByColumnNames(const OSQLParseNode* pSel
     traverseByColumnNames( pSelectNode, sal_False );
     return !hasErrors();
 }
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    ::rtl::OUString lcl_generateParameterName( const OSQLParseNode& _rParentNode, const OSQLParseNode& _rParamNode )
+    {
+        ::rtl::OUString sColumnName( RTL_CONSTASCII_USTRINGPARAM( "param" ) );
+        const sal_Int32 nCount = (sal_Int32)_rParentNode.count();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            if ( _rParentNode.getChild(i) == &_rParamNode )
+            {
+                sColumnName += ::rtl::OUString::valueOf( i+1 );
+                break;
+            }
+        }
+        return sColumnName;
+    }
+}
+
 // -----------------------------------------------------------------------------
 void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
 {
@@ -1081,33 +1101,34 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
             sal_uInt32 nPos = 0;
             if ( pParent->getChild(nPos) == _pNode )
                 nPos = 2;
-            pParent->getChild(nPos)->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+            const OSQLParseNode* pOther = pParent->getChild(nPos);
+            if ( SQL_ISRULE( pOther, column_ref ) )
+                getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
+            else
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
         } // if ( SQL_ISRULE(pParent,comparison_predicate) ) // x = X
         else if ( SQL_ISRULE(pParent,like_predicate) )
         {
-            pParent->getChild(0)->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+            const OSQLParseNode* pOther = pParent->getChild(0);
+            if ( SQL_ISRULE( pOther, column_ref ) )
+                getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
+            else
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
         }
         else if ( SQL_ISRULE(pParent,between_predicate) )
         {
-            sal_Int32 nPos = 2;
-            if ( pParent->getChild(3) == _pNode )
-                nPos = 1;
-            pParent->getChild(0)->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
-            sColumnName += ::rtl::OUString::valueOf(nPos);
+            const OSQLParseNode* pOther = pParent->getChild(0);
+            if ( SQL_ISRULE( pOther, column_ref ) )
+                getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
+            else
+            {
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+                lcl_generateParameterName( *pParent, *_pNode );
+            }
         }
         else if ( pParent->getNodeType() == SQL_NODE_COMMALISTRULE )
         {
-            const sal_Int32 nParamCount = (sal_Int32)pParent->count();
-            for (sal_Int32 i = 0; i < nParamCount; ++i)
-            {
-                if ( pParent->getChild(i) == _pNode )
-                {
-                    static const ::rtl::OUString s_sParam(RTL_CONSTASCII_USTRINGPARAM("param"));
-                    sColumnName = s_sParam;
-                    sColumnName += ::rtl::OUString::valueOf(i+1);
-                    break;
-                }
-            }
+            lcl_generateParameterName( *pParent, *_pNode );
         }
     }
     traverseParameter( _pNode, pParent, sColumnName, sTableRange, aColumnAlias );

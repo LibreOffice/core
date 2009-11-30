@@ -196,7 +196,7 @@ BOOL SbiScanner::NextSym()
     }
 
     // Leerstellen weg:
-    while( *pLine && ( *pLine == ' ' ) || ( *pLine == '\t' ) || ( *pLine == '\f' ) )
+    while( *pLine && (( *pLine == ' ' ) || ( *pLine == '\t' ) || ( *pLine == '\f' )) )
         pLine++, nCol++, bSpaces = TRUE;
 
     nCol1 = nCol;

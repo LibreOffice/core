@@ -65,6 +65,7 @@
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <cstdio>
+#include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -139,13 +140,13 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
                 {
                     // directdraw of text simple portion; added test possibility to check text decompose
-                    static bool bHandleSimpleTextDirectly(true);
+                    static bool bForceSimpleTextDecomposition(false);
 
                     // Adapt evtl. used special DrawMode
                     const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptTextToFillDrawMode();
 
-                    if(bHandleSimpleTextDirectly)
+                    if(!bForceSimpleTextDecomposition && getOptionsDrawinglayer().IsRenderSimpleTextDirect())
                     {
                         RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
                     }
@@ -162,13 +163,13 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
                     // directdraw of text simple portion; added test possibility to check text decompose
-                    static bool bHandleComplexTextDirectly(false);
+                    static bool bForceComplexTextDecomposition(false);
 
                     // Adapt evtl. used special DrawMode
                     const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptTextToFillDrawMode();
 
-                    if(bHandleComplexTextDirectly)
+                    if(!bForceComplexTextDecomposition && getOptionsDrawinglayer().IsRenderDecoratedTextDirect())
                     {
                         RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
                     }
@@ -185,7 +186,7 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
                 {
                     // direct draw of hairline
-                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
+                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate), true);
                     break;
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
@@ -224,8 +225,23 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 {
+                       // #i98289#
+                    const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
+                    const sal_uInt16 nOldAntiAliase(mpOutputDevice->GetAntialiasing());
+
+                    if(bForceLineSnap)
+                    {
+                        mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
+                    }
+
                     // direct draw of MetaFile
                     RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+
+                    if(bForceLineSnap)
+                    {
+                        mpOutputDevice->SetAntialiasing(nOldAntiAliase);
+                    }
+
                     break;
                 }
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
@@ -477,6 +493,43 @@ namespace drawinglayer
                         // draw hatch using VCL
                         mpOutputDevice->DrawHatch(PolyPolygon(Polygon(aHatchPolygon)), aVCLHatch);
                     }
+                    break;
+                }
+                case PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D :
+                {
+                    // #i98404# Handle directly, especially when AA is active
+                    const primitive2d::BackgroundColorPrimitive2D& rPrimitive = static_cast< const primitive2d::BackgroundColorPrimitive2D& >(rCandidate);
+                    const sal_uInt16 nOriginalAA(mpOutputDevice->GetAntialiasing());
+
+                    // switch AA off in all cases
+                    mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
+
+                    // create color for fill
+                    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
+                    mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                    mpOutputDevice->SetLineColor();
+
+                    // create rectangle for fill
+                    const basegfx::B2DRange& aViewport(getViewInformation2D().getDiscreteViewport());
+                    const Rectangle aRectangle(
+                        (sal_Int32)floor(aViewport.getMinX()), (sal_Int32)floor(aViewport.getMinY()),
+                        (sal_Int32)ceil(aViewport.getMaxX()), (sal_Int32)ceil(aViewport.getMaxY()));
+                    mpOutputDevice->DrawRect(aRectangle);
+
+                    // restore AA setting
+                    mpOutputDevice->SetAntialiasing(nOriginalAA);
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D :
+                {
+                    // #i97628#
+                    // This primitive means that the content is derived from an active text edit,
+                    // not from model data itself. Some renderers need to suppress this content, e.g.
+                    // the pixel renderer used for displaying the edit view (like this one). It's
+                    // not to be suppressed by the MetaFile renderers, so that the edited text is
+                    // part of the MetaFile, e.g. needed for presentation previews.
+                    // Action: Ignore here, do nothing.
                     break;
                 }
                 default :

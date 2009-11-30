@@ -179,7 +179,8 @@ public:
                                               sal_Int16 nDialog,
                                               SfxFilterFlags nMust,
                                               SfxFilterFlags nDont,
-                                              const String& rStandardDir);
+                                              const String& rStandardDir,
+                                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList);
 
                             FileDialogHelper( sal_Int64 nFlags,
                                               const String& rFactory,
@@ -198,7 +199,8 @@ public:
                                               sal_Int16 nDialog,
                                               SfxFilterFlags nMust,
                                               SfxFilterFlags nDont,
-                                              const String& rStandardDir );
+                                              const String& rStandardDir,
+                                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList);
 
                             FileDialogHelper( sal_Int64 nFlags );
 
@@ -211,6 +213,7 @@ public:
                                               const ::rtl::OUString& aFilterUIName,
                                               const ::rtl::OUString& aExtName,
                                               const ::rtl::OUString& rStandardDir,
+                                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList,
                                               Window* _pPreferredParent = NULL );
 
 
@@ -330,7 +333,8 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              SfxItemSet *& rpSet,
                              const String* pPath = NULL,
                              sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
-                             const String& rStandardDir = String::CreateFromAscii( "" ));
+                             const String& rStandardDir = String::CreateFromAscii( "" ),
+                             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >());
 //#endif
 }
 

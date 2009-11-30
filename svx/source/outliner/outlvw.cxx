@@ -1192,7 +1192,11 @@ void OutlinerView::ToggleBullets()
         }
     }
 
-    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount()-1);
+    // --> OD 2009-03-10 #i100014#
+    // It is not a good idea to substract 1 from a count and cast the result
+    // to USHORT without check, if the count is 0.
+    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount());
+    // <--
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
 
@@ -1222,7 +1226,11 @@ void OutlinerView::EnableBullets()
         }
     }
 
-    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount()-1);
+    // --> OD 2009-03-10 #i100014#
+    // It is not a good idea to substract 1 from a count and cast the result
+    // to USHORT without check, if the count is 0.
+    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount());
+    // <--
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
 

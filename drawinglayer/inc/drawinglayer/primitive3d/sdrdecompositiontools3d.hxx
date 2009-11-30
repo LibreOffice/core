@@ -37,6 +37,7 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
 
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
+#include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -62,6 +63,20 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        // #i98295#
+        basegfx::B3DRange getRangeFrom3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
+        void applyNormalsKindSphereTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill, const basegfx::B3DRange& rRange);
+        void applyNormalsKindFlatTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
+        void applyNormalsInvertTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
+
+        // #i98314#
+        void applyTextureTo3DGeometry(
+            ::com::sun::star::drawing::TextureProjectionMode eModeX,
+            ::com::sun::star::drawing::TextureProjectionMode eModeY,
+            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
+            const basegfx::B3DRange& rRange,
+            const basegfx::B2DVector& rTextureSize);
+
         Primitive3DSequence create3DPolyPolygonLinePrimitives(
             const basegfx::B3DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B3DHomMatrix& rObjectTransform,

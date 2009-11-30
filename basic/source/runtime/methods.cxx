@@ -1786,9 +1786,9 @@ INT16 implGetDateYear( double aDate )
 
 BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet )
 {
-    if ( nYear < 30 )
+    if ( nYear < 30 && SbiRuntime::isVBAEnabled() )
         nYear += 2000;
-    if ( nYear < 100 )
+    else if ( nYear < 100 )
         nYear += 1900;
     Date aCurDate( nDay, nMonth, nYear );
     if ((nYear < 100 || nYear > 9999) )

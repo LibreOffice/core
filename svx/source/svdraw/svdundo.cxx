@@ -348,7 +348,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
         {
             pTextUndo = pObj->GetOutlinerParaObject();
             if(pTextUndo)
-                pTextUndo = pTextUndo->Clone();
+                pTextUndo = new OutlinerParaObject(*pTextUndo);
         }
     }
 }
@@ -409,7 +409,7 @@ void SdrUndoAttrObj::Undo()
                 pTextRedo = pObj->GetOutlinerParaObject();
 
                 if(pTextRedo)
-                    pTextRedo = pTextRedo->Clone();
+                    pTextRedo = new OutlinerParaObject(*pTextRedo);
             }
         }
 
@@ -470,7 +470,7 @@ void SdrUndoAttrObj::Undo()
 
         if(pTextUndo)
         {
-            pObj->SetOutlinerParaObject(pTextUndo->Clone());
+            pObj->SetOutlinerParaObject(new OutlinerParaObject(*pTextUndo));
         }
     }
 
@@ -540,7 +540,7 @@ void SdrUndoAttrObj::Redo()
         // #i8508#
         if(pTextRedo)
         {
-            pObj->SetOutlinerParaObject(pTextRedo->Clone());
+            pObj->SetOutlinerParaObject(new OutlinerParaObject(*pTextRedo));
         }
     }
 
@@ -1096,7 +1096,7 @@ SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
 {
     SdrText* pText = static_cast< SdrTextObj*>( &rNewObj )->getText(mnText);
     if( pText && pText->GetOutlinerParaObject() )
-        pOldText = pText->GetOutlinerParaObject()->Clone();
+        pOldText = new OutlinerParaObject(*pText->GetOutlinerParaObject());
 
     bEmptyPresObj = rNewObj.IsEmptyPresObj();
 }
@@ -1115,7 +1115,7 @@ void SdrUndoObjSetText::AfterSetText()
     {
         SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
         if( pText && pText->GetOutlinerParaObject() )
-            pNewText = pText->GetOutlinerParaObject()->Clone();
+            pNewText = new OutlinerParaObject(*pText->GetOutlinerParaObject());
         bNewTextAvailable=TRUE;
     }
 }
@@ -1132,7 +1132,7 @@ void SdrUndoObjSetText::Undo()
     // Text fuer Undo kopieren, denn SetOutlinerParaObject() ist Eigentumsuebereignung
     OutlinerParaObject* pText1 = pOldText;
     if(pText1)
-        pText1 = pText1->Clone();
+        pText1 = new OutlinerParaObject(*pText1);
 
     SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
     if( pText )
@@ -1148,7 +1148,7 @@ void SdrUndoObjSetText::Redo()
     OutlinerParaObject* pText1 = pNewText;
 
     if(pText1)
-        pText1 = pText1->Clone();
+        pText1 = new OutlinerParaObject(*pText1);
 
     SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
     if( pText )
@@ -1192,7 +1192,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
                 rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
                 OutlinerParaObject* pText1=pNewText;
                 if (pText1!=NULL)
-                    pText1=pText1->Clone();
+                    pText1 = new OutlinerParaObject(*pText1);
                 pTextObj->SetOutlinerParaObject(pText1);
             }
         }

@@ -61,7 +61,12 @@ namespace sdr
 
             if(pSdrText)
             {
-                drawinglayer::attribute::SdrShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrShadowTextAttribute(rItemSet, *pSdrText);
+                // #i98072# Get shandow and text; eventually suppress the text if it's
+                // a TextPath FontworkGallery object
+                drawinglayer::attribute::SdrShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrShadowTextAttribute(
+                    rItemSet,
+                    *pSdrText,
+                    GetCustomShapeObj().IsTextPath());
                 drawinglayer::primitive2d::Primitive2DSequence xGroup;
                 bool bHasText(pAttribute && pAttribute->getText());
 

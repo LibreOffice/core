@@ -62,6 +62,38 @@ namespace drawinglayer
                 ::std::vector< basegfx::B3DPolyPolygon > aFill;
                 aFill.push_back(getPolyPolygon3D());
 
+                // get full range
+                const basegfx::B3DRange aRange(getRangeFrom3DGeometry(aFill));
+
+                // #i98295# normal creation
+                if(getSdrLFSAttribute().getFill())
+                {
+                    if(::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
+                    {
+                        applyNormalsKindSphereTo3DGeometry(aFill, aRange);
+                    }
+                    else if(::com::sun::star::drawing::NormalsKind_FLAT == getSdr3DObjectAttribute().getNormalsKind())
+                    {
+                        applyNormalsKindFlatTo3DGeometry(aFill);
+                    }
+
+                    if(getSdr3DObjectAttribute().getNormalsInvert())
+                    {
+                        applyNormalsInvertTo3DGeometry(aFill);
+                    }
+                }
+
+                // #i98314# texture coordinates
+                if(getSdrLFSAttribute().getFill())
+                {
+                    applyTextureTo3DGeometry(
+                        getSdr3DObjectAttribute().getTextureProjectionX(),
+                        getSdr3DObjectAttribute().getTextureProjectionY(),
+                        aFill,
+                        aRange,
+                        getTextureSize());
+                }
+
                 if(getSdrLFSAttribute().getFill())
                 {
                     // add fill

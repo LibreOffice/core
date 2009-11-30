@@ -500,10 +500,12 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     if(!bIsDisabled)
     {
         if( aTsbFullWidth.GetState() == STATE_CHECK )
+        {
             if (IsTextDirectionLeftToRight())
                 eTHA = SDRTEXTHORZADJUST_BLOCK;
             else
                 eTVA = SDRTEXTVERTADJUST_BLOCK;
+        }
 
         if ( rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SFX_ITEM_DONTCARE )
         {

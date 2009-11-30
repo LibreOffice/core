@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statcach.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.180.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weak.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
@@ -55,6 +56,7 @@
 #endif
 
 #include <sfx2/app.hxx>
+#include <sfx2/appuno.hxx>
 #include "statcach.hxx"
 #include <sfx2/msg.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -65,6 +67,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
@@ -191,13 +194,14 @@ const ::com::sun::star::frame::FeatureStateEvent& BindDispatch_Impl::GetStatus()
     return aStatus;
 }
 
-void BindDispatch_Impl::Dispatch( sal_Bool bForceSynchron )
+void BindDispatch_Impl::Dispatch( uno::Sequence < beans::PropertyValue > aProps, sal_Bool bForceSynchron )
 {
     if ( xDisp.is() && aStatus.IsEnabled )
     {
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aProps(1);
-        aProps.getArray()[0].Name = DEFINE_CONST_UNICODE("SynchronMode");
-        aProps.getArray()[0].Value <<= bForceSynchron ;
+        sal_Int32 nLength = aProps.getLength();
+        aProps.realloc(nLength+1);
+        aProps[nLength].Name = DEFINE_CONST_UNICODE("SynchronMode");
+        aProps[nLength].Value <<= bForceSynchron ;
         xDisp->dispatch( aURL, aProps );
     }
 }
@@ -560,12 +564,17 @@ void SfxStateCache::DeleteFloatingWindows()
     return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
 }
 
-void SfxStateCache::Dispatch( sal_Bool bForceSynchron )
+void SfxStateCache::Dispatch( const SfxItemSet* pSet, sal_Bool bForceSynchron )
 {
     // protect pDispatch against destruction in the call
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XStatusListener > xKeepAlive( pDispatch );
     if ( pDispatch )
-        pDispatch->Dispatch( bForceSynchron );
+    {
+        uno::Sequence < beans::PropertyValue > aArgs;
+        if (pSet)
+            TransformItems( nId, *pSet, aArgs );
+        pDispatch->Dispatch( aArgs, bForceSynchron );
+    }
 }
 
 

@@ -72,7 +72,6 @@ SHL1STDLIBS=                     \
 SHL1LIBS =                       \
     $(SLB)$/jaqe.lib         \
     $(SLB)$/jautil.lib       \
-    $(SLB)$/jadb.lib         \
     $(SLB)$/chelp.lib
 
 # --- Def-File ---------------------------------------------------------

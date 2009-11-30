@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NeonUri.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,6 @@ class NeonUri
                                             { return mPath; };
 
         ::rtl::OUString GetPathBaseName ( void ) const;
-        ::rtl::OUString GetPathDirName ( void ) const;
 
         ::rtl::OUString GetPathBaseNameUnescaped ( void ) const;
 

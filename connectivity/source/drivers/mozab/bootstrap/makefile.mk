@@ -64,7 +64,7 @@ SLOFILES += \
     $(SLO)$/MMozillaBootstrap.obj \
     $(SLO)$/MNSFolders.obj
 
-.IF ("$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
+.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES" ) || ( "$(WITH_MOZILLA)" == "NO" ) || ( "$(OS)" == "MACOSX" )
 CDEFS+=-DMINIMAL_PROFILEDISCOVER
 
 SHL1TARGET=$(TARGET)

@@ -61,6 +61,7 @@ typedef ::std::list < ElementEntry_Impl >                   ElementList;
 
 typedef ::com::sun::star::beans::StringPair                 UnoFilterEntry;
 typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
+typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >  OUStringList;   // can be transported more effectively
 
 // class SvtFilePicker ---------------------------------------------------
 
@@ -91,6 +92,7 @@ private:
     ::rtl::OUString     m_aOldHideDirectory;
 
     ::rtl::OUString     m_aStandardDir;
+    OUStringList        m_aBlackList;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
                         m_xListener;

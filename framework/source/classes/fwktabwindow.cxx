@@ -86,13 +86,14 @@ void FwkTabControl::BroadcastEvent( ULONG nEvent )
 // class FwkTabPage ------------------------------------------------
 
 FwkTabPage::FwkTabPage(
-    Window* pParent, const rtl::OUString& rPageURL, const rtl::OUString& rEventHdl,
-    const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider ) :
+               Window* pParent, const rtl::OUString& rPageURL,
+               const css::uno::Reference< css::awt::XContainerWindowEventHandler >& rEventHdl,
+               const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider ) :
 
     TabPage( pParent, WB_DIALOGCONTROL ),
 
     m_sPageURL          ( rPageURL ),
-    m_sEventHdl         ( rEventHdl ),
+    m_xEventHdl         ( rEventHdl ),
     m_xWinProvider      ( rProvider )
 
 {
@@ -113,13 +114,9 @@ void FwkTabPage::CreateDialog()
     try
     {
         uno::Reference< uno::XInterface > xHandler;
-        if ( m_sEventHdl.getLength() > 0 )
-        {
-            uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            m_xEventHdl = uno::Reference< awt::XContainerWindowEventHandler >(
-                xFactory->createInstance( m_sEventHdl ), uno::UNO_QUERY );
-            xHandler = m_xEventHdl;
-        }
+        if ( m_xEventHdl.is() )
+      xHandler = m_xEventHdl;
+
         uno::Reference< awt::XWindowPeer > xParent( VCLUnoHelper::GetInterface( this ), uno::UNO_QUERY );
         m_xPage = uno::Reference < awt::XWindow >(
             m_xWinProvider->createContainerWindow(
@@ -283,11 +280,13 @@ IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
         TabEntry* pEntry = FindEntry( nId );
         if ( pEntry )
         {
-            pTabPage = new FwkTabPage( &m_aTabCtrl, pEntry->m_sPageURL, pEntry->m_sEventHdl, m_xWinProvider );
+            pTabPage = new FwkTabPage( &m_aTabCtrl, pEntry->m_sPageURL, pEntry->m_xEventHdl, m_xWinProvider );
             pTabPage->Show();
             pTabPage->ActivatePage();
             m_aTabCtrl.SetTabPage( nId, pTabPage );
         }
+    } else {
+        pTabPage->ActivatePage();
     }
     m_aTabCtrl.BroadcastEvent( VCLEVENT_TABPAGE_ACTIVATE );
     return 1;
@@ -320,7 +319,8 @@ void FwkTabWindow::AddEventListener( const Link& rEventListener )
 
 FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< beans::NamedValue >& rProperties )
 {
-    ::rtl::OUString sTitle, sToolTip, sPageURL, sEventHdl;
+    ::rtl::OUString sTitle, sToolTip, sPageURL;
+    uno::Reference< css::awt::XContainerWindowEventHandler > xEventHdl;
     uno::Reference< graphic::XGraphic > xImage;
     bool bDisabled = false;
 
@@ -338,14 +338,14 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
         else if ( sName.equalsAscii("PageURL") )
             aAny >>= sPageURL;
         else if ( sName.equalsAscii("EventHdl") )
-            aAny >>= sEventHdl;
+            aAny >>= xEventHdl;
         else if ( sName.equalsAscii("Image") )
             aAny >>= xImage;
         else if ( sName.equalsAscii("Disabled") )
             aAny >>= bDisabled;
     }
 
-    TabEntry* pEntry = new TabEntry( nIndex, sPageURL, sEventHdl );
+    TabEntry* pEntry = new TabEntry( nIndex, sPageURL, xEventHdl );
     m_TabList.push_back( pEntry );
     USHORT nIdx = static_cast< USHORT >( nIndex );
     m_aTabCtrl.InsertPage( nIdx, sTitle );
@@ -355,7 +355,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
         m_aTabCtrl.SetPageImage( nIdx, Image( xImage ) );
     if ( bDisabled )
         m_aTabCtrl.EnablePage( nIdx, false );
-    
+
     return pEntry->m_pPage;
 }
 

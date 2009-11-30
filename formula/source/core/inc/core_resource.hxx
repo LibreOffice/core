@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace formula
         friend class OModuleClient;
         static ::osl::Mutex s_aMutex;       /// access safety
         static sal_Int32    s_nClients;     /// number of registered clients
-        static ResMgr*  m_pImpl;        
+        static ResMgr*  m_pImpl;
 
     private:
         // no instantiation allowed
@@ -96,7 +96,7 @@ namespace formula
     //=========================================================================
     //= OModuleClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources 
+    /** base class for objects which uses any global module-specific ressources
     */
     class OModuleClient
     {

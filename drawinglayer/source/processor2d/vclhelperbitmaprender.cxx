@@ -158,20 +158,56 @@ namespace drawinglayer
             basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
         const Rectangle aDestRectPixel(rOutDev.LogicToPixel(aDestRectLogic));
 
-        // intersect with output pixel size
+        // #i96708# check if Metafile is recorded
+        const GDIMetaFile* pMetaFile = rOutDev.GetConnectMetaFile();
+        const bool bRecordToMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+
+        // intersect with output pixel size, but only
+        // when not recording to metafile
         const Rectangle aOutputRectPixel(Point(), rOutDev.GetOutputSizePixel());
-        const Rectangle aCroppedRectPixel(aDestRectPixel.GetIntersection(aOutputRectPixel));
+        Rectangle aCroppedRectPixel(bRecordToMetaFile ? aDestRectPixel : aDestRectPixel.GetIntersection(aOutputRectPixel));
 
         if(!aCroppedRectPixel.IsEmpty())
         {
+            // as maximum for destination, orientate at SourceSizePixel, but
+            // take a rotation of 45 degrees (sqrt(2)) as maximum expansion into account
+            const Size aSourceSizePixel(rBitmapEx.GetSizePixel());
+            const double fMaximumArea(
+                (double)aSourceSizePixel.getWidth() *
+                (double)aSourceSizePixel.getHeight() *
+                1.4142136); // 1.4142136 taken as sqrt(2.0)
+
+            // test if discrete view size (pixel) maybe too big and limit it
+            const double fArea(aCroppedRectPixel.getWidth() * aCroppedRectPixel.getHeight());
+            const bool bNeedToReduce(fArea > fMaximumArea);
+            double fReduceFactor(1.0);
+
+            if(bNeedToReduce)
+            {
+                fReduceFactor = sqrt(fMaximumArea / fArea);
+                aCroppedRectPixel.setWidth(basegfx::fround(aCroppedRectPixel.getWidth() * fReduceFactor));
+                aCroppedRectPixel.setHeight(basegfx::fround(aCroppedRectPixel.getHeight() * fReduceFactor));
+            }
+
             // build transform from pixel in aDestination to pixel in rBitmapEx
             basegfx::B2DHomMatrix aTransform;
 
             // from relative in aCroppedRectPixel to relative in aDestRectPixel
+            // No need to take bNeedToReduce into account, TopLeft is unchanged
             aTransform.translate(aCroppedRectPixel.Left() - aDestRectPixel.Left(), aCroppedRectPixel.Top() - aDestRectPixel.Top());
 
-            // from relative in aDestRectPixel to absolute Logic
-            aTransform.scale((double)aDestRectLogic.getWidth() / (double)aDestRectPixel.getWidth(), (double)aDestRectLogic.getHeight() / (double)aDestRectPixel.getHeight());
+            // from relative in aDestRectPixel to absolute Logic. Here it
+            // is essential to adapt to reduce factor (if used)
+            double fAdaptedDRPWidth((double)aDestRectPixel.getWidth());
+            double fAdaptedDRPHeight((double)aDestRectPixel.getHeight());
+
+            if(bNeedToReduce)
+            {
+                fAdaptedDRPWidth *= fReduceFactor;
+                fAdaptedDRPHeight *= fReduceFactor;
+            }
+
+            aTransform.scale(aDestRectLogic.getWidth() / fAdaptedDRPWidth, aDestRectLogic.getHeight() / fAdaptedDRPHeight);
             aTransform.translate(aDestRectLogic.Left(), aDestRectLogic.Top());
 
             // from absolute in Logic to unified object coordinates (0.0 .. 1.0 in x and y)
@@ -180,17 +216,60 @@ namespace drawinglayer
             aTransform = aInvBitmapTransform * aTransform;
 
             // from unit object coordinates to rBitmapEx pixel coordintes
-            const Size aSourceSizePixel(rBitmapEx.GetSizePixel());
             aTransform.scale(aSourceSizePixel.getWidth() - 1L, aSourceSizePixel.getHeight() - 1L);
 
             // create bitmap using source, destination and linear back-transformation
             BitmapEx aDestination = impTransformBitmapEx(rBitmapEx, aCroppedRectPixel, aTransform);
 
             // paint
-            const bool bWasEnabled(rOutDev.IsMapModeEnabled());
-            rOutDev.EnableMapMode(false);
-            rOutDev.DrawBitmapEx(aCroppedRectPixel.TopLeft(), aDestination);
-            rOutDev.EnableMapMode(bWasEnabled);
+            if(bNeedToReduce)
+            {
+                // paint in target size
+                const double fFactor(1.0 / fReduceFactor);
+                const Size aDestSizePixel(
+                    basegfx::fround(aCroppedRectPixel.getWidth() * fFactor),
+                    basegfx::fround(aCroppedRectPixel.getHeight() * fFactor));
+
+                if(bRecordToMetaFile)
+                {
+                    rOutDev.DrawBitmapEx(
+                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()),
+                        rOutDev.PixelToLogic(aDestSizePixel),
+                        aDestination);
+                }
+                else
+                {
+                    const bool bWasEnabled(rOutDev.IsMapModeEnabled());
+                    rOutDev.EnableMapMode(false);
+
+                    rOutDev.DrawBitmapEx(
+                        aCroppedRectPixel.TopLeft(),
+                        aDestSizePixel,
+                        aDestination);
+
+                    rOutDev.EnableMapMode(bWasEnabled);
+                }
+            }
+            else
+            {
+                if(bRecordToMetaFile)
+                {
+                    rOutDev.DrawBitmapEx(
+                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()),
+                        aDestination);
+                }
+                else
+                {
+                    const bool bWasEnabled(rOutDev.IsMapModeEnabled());
+                    rOutDev.EnableMapMode(false);
+
+                    rOutDev.DrawBitmapEx(
+                        aCroppedRectPixel.TopLeft(),
+                        aDestination);
+
+                    rOutDev.EnableMapMode(bWasEnabled);
+                }
+            }
         }
     }
 } // end of namespace drawinglayer

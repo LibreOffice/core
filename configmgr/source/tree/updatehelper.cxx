@@ -450,36 +450,36 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
         virtual void handle(ValueNode const& _aNewNode)
         {
             sharable::Node * childNode = m_cacheNode->getSubnode(getNodeName(_aNewNode));
-
-            OSL_ENSURE(childNode != 0, "TreeDifferenceBuilder: could not find expected node !");
-
-            sharable::ValueNode * valueNode = childNode->valueData();
-
-            OSL_ENSURE(valueNode != 0, "TreeDifferenceBuilder: node must be a value node!");
-
-            // if the values differ add a new change
-            if (_aNewNode.getValue() != valueNode->getValue())
+            if (childNode != 0)
             {
-                bool bNewDefault = _aNewNode.isDefault();
-                bool bOldDefault = valueNode->info.isDefault();
+                sharable::ValueNode * valueNode = childNode->valueData();
 
-                ValueChange::Mode eMode;
-                if (bNewDefault)
-                    if (bOldDefault)
-                        eMode =  ValueChange::changeDefault;
+                OSL_ENSURE(valueNode != 0, "TreeDifferenceBuilder: node must be a value node!");
+
+                // if the values differ add a new change
+                if (_aNewNode.getValue() != valueNode->getValue())
+                {
+                    bool bNewDefault = _aNewNode.isDefault();
+                    bool bOldDefault = valueNode->info.isDefault();
+
+                    ValueChange::Mode eMode;
+                    if (bNewDefault)
+                        if (bOldDefault)
+                            eMode =  ValueChange::changeDefault;
+                        else
+                            eMode =  ValueChange::setToDefault;
                     else
-                        eMode =  ValueChange::setToDefault;
-                else
-                    if (bOldDefault)
-                        eMode =  ValueChange::wasDefault;
-                    else
-                        eMode =  ValueChange::changeValue;
+                        if (bOldDefault)
+                            eMode =  ValueChange::wasDefault;
+                        else
+                            eMode =  ValueChange::changeValue;
 
-                std::auto_ptr<Change> pChange(
-                    new ValueChange(_aNewNode.getName(), _aNewNode.getAttributes(), eMode,
-                                    _aNewNode.getValue(), valueNode->getValue()) );
+                    std::auto_ptr<Change> pChange(
+                        new ValueChange(_aNewNode.getName(), _aNewNode.getAttributes(), eMode,
+                                        _aNewNode.getValue(), valueNode->getValue()) );
 
-                m_rChangeList.addChange(pChange);
+                    m_rChangeList.addChange(pChange);
+                }
             }
         }
         virtual void handle(ISubtree const& _aNewNode)

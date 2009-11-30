@@ -371,28 +371,6 @@ void ContentProperties::UCBNamesToHTTPNames(
 }
 
 //=========================================================================
-// static
-void ContentProperties::getMappableHTTPHeaders(
-                            std::vector< rtl::OUString > & rHeaderNames )
-{
-    // -> DateModified
-    rHeaderNames.push_back(
-        rtl::OUString::createFromAscii( "Last-Modified" ) );
-
-    // -> MediaType
-    rHeaderNames.push_back(
-        rtl::OUString::createFromAscii( "Content-Type" ) );
-
-    // -> Size
-    rHeaderNames.push_back(
-        rtl::OUString::createFromAscii( "Content-Length" ) );
-
-    // -> BaseURI
-    rHeaderNames.push_back(
-        rtl::OUString::createFromAscii( "Content-Location" ) );
-}
-
-//=========================================================================
 bool ContentProperties::containsAllNames(
                     const uno::Sequence< beans::Property >& rProps,
                     std::vector< rtl::OUString > & rNamesNotContained ) const

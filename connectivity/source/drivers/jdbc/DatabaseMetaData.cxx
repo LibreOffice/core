@@ -388,7 +388,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
         sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
-    static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
+    static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IZ)Ljava/sql/ResultSet;";
     static const char * cMethodName = "getBestRowIdentifier";
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, cMethodName );
@@ -1540,7 +1540,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
     if( t.pEnv ){
 
 
-        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[I;)Ljava/sql/ResultSet;";
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[I)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getUDTs";
         // Java-Call absetzen
         static jmethodID mID = NULL;

@@ -34,6 +34,7 @@
 
 #include <svx/xenum.hxx>
 #include <sal/types.h>
+#include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -53,7 +54,7 @@ namespace drawinglayer
         class SdrTextAttribute
         {
             const SdrText&                          mrSdrText;
-            const OutlinerParaObject*               mpOutlinerParaObject;
+            const OutlinerParaObject                maOutlinerParaObject;
             XFormTextStyle                          meFormTextStyle;
 
             sal_Int32                               maTextLeftDistance;
@@ -67,28 +68,35 @@ namespace drawinglayer
             unsigned                                mbHideContour : 1;
             unsigned                                mbBlink : 1;
             unsigned                                mbScroll : 1;
+            unsigned                                mbInEditMode : 1;
 
         public:
             SdrTextAttribute(
                 const SdrText& rSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtr,
                 XFormTextStyle eFormTextStyle,
                 sal_Int32 aTextLeftDistance,
                 sal_Int32 aTextUpperDistance,
                 sal_Int32 aTextRightDistance,
                 sal_Int32 aTextLowerDistance,
-                bool bContour, bool bFitToSize,
-                bool bHideContour, bool bBlink,
-                bool bScroll);
+                bool bContour,
+                bool bFitToSize,
+                bool bHideContour,
+                bool bBlink,
+                bool bScroll,
+                bool bInEditMode);
             bool operator==(const SdrTextAttribute& rCandidate) const;
 
             // data access
             const SdrText& getSdrText() const { return mrSdrText; }
+            const OutlinerParaObject& getOutlinerParaObject() const { return maOutlinerParaObject; }
             bool isContour() const { return mbContour; }
             bool isFontwork() const { return (XFT_NONE != meFormTextStyle); }
             bool isFitToSize() const { return mbFitToSize; }
             bool isHideContour() const { return mbHideContour; }
             bool isBlink() const { return mbBlink; }
             bool isScroll() const { return mbScroll; }
+            bool isInEditMode() const { return mbInEditMode; }
             XFormTextStyle getFormTextStyle() const { return meFormTextStyle; }
             sal_Int32 getTextLeftDistance() const { return maTextLeftDistance; }
             sal_Int32 getTextUpperDistance() const { return maTextUpperDistance; }

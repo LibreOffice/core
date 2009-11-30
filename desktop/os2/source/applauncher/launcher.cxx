@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@ int main( int argc, char* argv[])
     // get executable fullpath
     DosGetInfoBlocks(NULL, &pib);
     DosQueryModuleName(pib->pib_hmte, sizeof(szApplicationName), szApplicationName);
-    
+
     // adjust libpath
     _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     char* basedir = strstr( szDir, "\\PROGRAM\\");
     if (basedir) *basedir = 0;
-    sprintf( szLibpath, "%s%s\\URE\\BIN;%s%s\\BASIS\\PROGRAM;%BeginLIBPATH%",
-        szDrive, szDir, szDrive, szDir);
+     sprintf( szLibpath, "\"%s%s\\URE\\BIN\";\"%s%s\\BASIS\\PROGRAM\";%BeginLIBPATH%",
+          szDrive, szDir, szDrive, szDir);
     DosSetExtLIBPATH( (PCSZ)szLibpath, BEGIN_LIBPATH);
     // make sure we load DLL from our path only, so multiple instances/versions
     // can be loaded.
@@ -75,9 +75,9 @@ int main( int argc, char* argv[])
     // copy command line parameters
     int i, len;
     len = strlen(szApplicationName) + 1 + strlen( APPLICATION_SWITCH) + 1 + 1;
-    for( i=1; i<argc; i++) 
+    for( i=1; i<argc; i++)
         len += strlen( argv[i]) + 1;
-    
+
     char* pszCommandLine, *pszArgs;
     pszCommandLine = (char*) calloc( 1, len);
     strcpy( pszCommandLine, szApplicationName);
@@ -110,9 +110,9 @@ int main( int argc, char* argv[])
         WinTerminate( hab);
         exit(1);
     }
-    
+
     WinDestroyMsgQueue( hmq);
     WinTerminate( hab);
-    
+
     exit( result.codeResult);
 }

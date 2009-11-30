@@ -73,6 +73,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <helperchartrenderer.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // for PDFExtOutDevData Graphic support
@@ -983,7 +984,7 @@ namespace drawinglayer
                     SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rHairlinePrimitive.getB2DPolygon(), &aLineColor, 0, 0, 0, 0);
 
                     impStartSvtGraphicStroke(pSvtGraphicStroke);
-                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
+                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate), false);
                     impEndSvtGraphicStroke(pSvtGraphicStroke);
                     break;
                 }
@@ -1648,6 +1649,27 @@ namespace drawinglayer
                     {
                         // write end tag
                         mpPDFExtOutDevData->EndStructureElement();
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_HITTESTPRIMITIVE2D :
+                {
+                    // #i99123#
+                    // invisible primitive; to rebuilt the old MetaFile creation, it is necessary to
+                    // not ignore them (as it was thought), but to add a MetaFile entry for them.
+                    basegfx::B2DRange aInvisibleRange(rCandidate.getB2DRange(getViewInformation2D()));
+
+                    if(!aInvisibleRange.isEmpty())
+                    {
+                        aInvisibleRange.transform(maCurrentTransformation);
+                        const Rectangle aRectLogic(
+                            (sal_Int32)floor(aInvisibleRange.getMinX()), (sal_Int32)floor(aInvisibleRange.getMinY()),
+                            (sal_Int32)ceil(aInvisibleRange.getMaxX()), (sal_Int32)ceil(aInvisibleRange.getMaxY()));
+
+                        mpOutputDevice->SetFillColor();
+                        mpOutputDevice->SetLineColor();
+                        mpOutputDevice->DrawRect(aRectLogic);
                     }
 
                     break;

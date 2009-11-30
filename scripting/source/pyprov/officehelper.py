@@ -54,7 +54,11 @@ def bootstrap():
 	"""
     try:
 	# soffice script used on *ix, Mac; soffice.exe used on Windoof
-        sOffice = os.path.join(os.path.dirname(__file__), "soffice")
+        if "UNO_PATH" in os.environ:
+            sOffice = os.environ["UNO_PATH"]
+        else:
+            sOffice = "" # lets hope for the best
+        sOffice = os.path.join(sOffice, "soffice")
         if platform.startswith("win"): 
             sOffice += ".exe"
 		

@@ -232,6 +232,14 @@ String RID_SVXSTR_EVENT_PAGECOUNTCHANGE
 {
     Text [ en-US ] = "Changing the page count" ;
 };
+String RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED
+{
+    Text = "Loaded a sub component" ;
+};
+String RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED
+{
+    Text = "Closed a sub component" ;
+};
 String RID_SVXSTR_EVENT_APPROVEPARAMETER
 {
     Text [ en-US ] = "Fill parameters" ;

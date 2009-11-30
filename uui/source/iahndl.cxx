@@ -40,6 +40,7 @@
 #include "com/sun/star/beans/XPropertyAccess.hpp"
 #include "com/sun/star/configuration/backend/MergeRecoveryRequest.hpp"
 #include "com/sun/star/configuration/backend/StratumCreationException.hpp"
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include "com/sun/star/container/XContainerQuery.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
@@ -59,6 +60,8 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/script/ModuleSizeExceededRequest.hpp"
 #include "com/sun/star/sync2/BadPartnershipException.hpp"
+#include "com/sun/star/task/XInteractionHandler.hpp"
+#include "com/sun/star/task/XInteractionHandler2.hpp"
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
 #include "com/sun/star/task/ErrorCodeIOException.hpp"
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
@@ -98,6 +101,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
 #include <com/sun/star/security/CertificateValidity.hpp>
+
 
 #include "vos/mutex.hxx"
 #include "tools/rcid.h"
@@ -140,6 +144,9 @@ using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionApprove;
 using ::com::sun::star::task::XInteractionAskLater;
 using ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest;
+
+
+#define CONFIG_INTERACTIONHANDLERS_KEY "/org.openoffice.ucb.InteractionHandler/InteractionHandlers"
 
 namespace {
 
@@ -526,7 +533,7 @@ UUIInteractionHelper::getStringFromRequest(
         return getStringFromRequest_impl(rRequest);
 }
 
-void UUIInteractionHelper::handleMessageboxRequests(
+bool UUIInteractionHelper::handleMessageboxRequests(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
@@ -560,7 +567,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                             bObtainErrorStringOnly,
                             bHasErrorString,
                             rErrorString);
-        return;
+        return true;
     }
 
     star::ucb::NameClashException aNCException;
@@ -582,7 +589,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                             bObtainErrorStringOnly,
                             bHasErrorString,
                             rErrorString);
-        return;
+        return true;
     }
 
     star::ucb::UnsupportedNameClashException aUORequest;
@@ -608,7 +615,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                             bHasErrorString,
                             rErrorString);
         }
-        return;
+        return true;
     }
 
     star::document::BrokenPackageRequest aBrokenPackageRequest;
@@ -624,7 +631,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                                     bObtainErrorStringOnly,
                                     bHasErrorString,
                                     rErrorString);
-        return;
+        return true;
     }
 
     star::ucb::InteractiveIOException aIoException;
@@ -846,7 +853,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
-        return;
+        return true;
     }
 
     star::ucb::InteractiveAppException aAppException;
@@ -860,6 +867,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                             bObtainErrorStringOnly,
                             bHasErrorString,
                             rErrorString);
+        return true;
     }
 
     star::ucb::InteractiveNetworkException aNetworkException;
@@ -905,7 +913,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
-        return;
+        return true;
     }
 
     star::ucb::InteractiveCHAOSException aChaosException;
@@ -928,7 +936,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
-        return;
+        return true;
     }
 
     star::ucb::InteractiveWrongMediumException aWrongMediumException;
@@ -945,7 +953,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
-        return;
+        return true;
     }
 
     star::java::WrongJavaVersionException aWrongJavaVersionException;
@@ -988,7 +996,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
-        return;
+        return true;
     }
 
     star::sync2::BadPartnershipException aBadPartnershipException;
@@ -1010,7 +1018,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
-        return;
+        return true;
     }
 
     star::configuration::backend::MergeRecoveryRequest aMergeRecoveryRequest;
@@ -1030,7 +1038,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
-        return;
+        return true;
     }
 
     star::configuration::backend::StratumCreationException
@@ -1054,7 +1062,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
-        return;
+        return true;
     }
 
     star::xforms::InvalidDataOnSubmitException aInvalidDataOnSubmitException;
@@ -1071,10 +1079,13 @@ void UUIInteractionHelper::handleMessageboxRequests(
                            bObtainErrorStringOnly,
                            bHasErrorString,
                            rErrorString);
+        return true;
     }
+
+    return false;
 }
 
-void UUIInteractionHelper::handleDialogRequests(
+bool UUIInteractionHelper::handleDialogRequests(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
 {
     star::uno::Any aAnyRequest(rRequest->getRequest());
@@ -1084,7 +1095,7 @@ void UUIInteractionHelper::handleDialogRequests(
     {
         handleAuthenticationRequest(aAuthenticationRequest,
                                     rRequest->getContinuations());
-        return;
+        return true;
     }
 
     star::ucb::CertificateValidationRequest aCertificateValidationRequest;
@@ -1092,7 +1103,7 @@ void UUIInteractionHelper::handleDialogRequests(
     {
         handleCertificateValidationRequest(aCertificateValidationRequest,
                                     rRequest->getContinuations());
-        return;
+        return true;
     }
 
 // @@@ Todo #i29340#: activate!
@@ -1109,7 +1120,7 @@ void UUIInteractionHelper::handleDialogRequests(
     {
         handleMasterPasswordRequest(aMasterPasswordRequest.Mode,
                                     rRequest->getContinuations());
-        return;
+        return true;
     }
 
     star::task::DocumentPasswordRequest aDocumentPasswordRequest;
@@ -1118,7 +1129,7 @@ void UUIInteractionHelper::handleDialogRequests(
         handlePasswordRequest(aDocumentPasswordRequest.Mode,
                               rRequest->getContinuations(),
                               aDocumentPasswordRequest.Name);
-        return;
+        return true;
     }
 
     star::task::PasswordRequest aPasswordRequest;
@@ -1126,7 +1137,7 @@ void UUIInteractionHelper::handleDialogRequests(
     {
         handlePasswordRequest(aPasswordRequest.Mode,
                               rRequest->getContinuations());
-        return;
+        return true;
     }
 
     star::ucb::HandleCookiesRequest aCookiesRequest;
@@ -1134,7 +1145,7 @@ void UUIInteractionHelper::handleDialogRequests(
     {
         handleCookiesRequest(aCookiesRequest,
                              rRequest->getContinuations());
-        return;
+        return true;
     }
 
     star::document::NoSuchFilterRequest aNoSuchFilterRequest;
@@ -1142,7 +1153,7 @@ void UUIInteractionHelper::handleDialogRequests(
     {
         handleNoSuchFilterRequest(aNoSuchFilterRequest,
                                   rRequest->getContinuations());
-        return;
+        return true;
     }
 
     star::document::AmbigousFilterRequest aAmbigousFilterRequest;
@@ -1150,7 +1161,7 @@ void UUIInteractionHelper::handleDialogRequests(
     {
         handleAmbigousFilterRequest(aAmbigousFilterRequest,
                                     rRequest->getContinuations());
-        return;
+        return true;
     }
 
     star::document::FilterOptionsRequest aFilterOptionsRequest;
@@ -1158,7 +1169,7 @@ void UUIInteractionHelper::handleDialogRequests(
     {
         handleFilterOptionsRequest(aFilterOptionsRequest,
                                    rRequest->getContinuations());
-        return;
+        return true;
     }
 
     star::document::LockedDocumentRequest aLockedDocumentRequest;
@@ -1168,7 +1179,7 @@ void UUIInteractionHelper::handleDialogRequests(
                                      aLockedDocumentRequest.UserInfo,
                                      rRequest->getContinuations(),
                                      UUI_DOC_LOAD_LOCK );
-        return;
+        return true;
     }
 
     star::document::OwnLockOnDocumentRequest aOwnLockOnDocumentRequest;
@@ -1178,7 +1189,7 @@ void UUIInteractionHelper::handleDialogRequests(
                                      aOwnLockOnDocumentRequest.TimeInfo,
                                      rRequest->getContinuations(),
                                      aOwnLockOnDocumentRequest.IsStoring ? UUI_DOC_OWN_SAVE_LOCK : UUI_DOC_OWN_LOAD_LOCK );
-        return;
+        return true;
     }
 
     star::document::LockedOnSavingRequest aLockedOnSavingRequest;
@@ -1188,25 +1199,27 @@ void UUIInteractionHelper::handleDialogRequests(
                                      aLockedOnSavingRequest.UserInfo,
                                      rRequest->getContinuations(),
                                      UUI_DOC_SAVE_LOCK );
-        return;
+        return true;
     }
 
     star::document::ChangedByOthersRequest aChangedByOthersRequest;
     if (aAnyRequest >>= aChangedByOthersRequest )
     {
         handleChangedByOthersRequest( rRequest->getContinuations() );
-        return;
+        return true;
     }
 
     star::document::LockFileIgnoreRequest aLockFileIgnoreRequest;
     if (aAnyRequest >>= aLockFileIgnoreRequest )
     {
         handleLockFileIgnoreRequest( rRequest->getContinuations() );
-        return;
+        return true;
     }
+
+    return false;
 }
 
-void UUIInteractionHelper::handleErrorHandlerRequests(
+bool UUIInteractionHelper::handleErrorHandlerRequests(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
@@ -1222,7 +1235,7 @@ void UUIInteractionHelper::handleErrorHandlerRequests(
                    bObtainErrorStringOnly,
                    bHasErrorString,
                    rErrorString);
-        return;
+        return true;
     }
 
     star::task::DocumentMacroConfirmationRequest aMacroConfirmRequest;
@@ -1232,7 +1245,7 @@ void UUIInteractionHelper::handleErrorHandlerRequests(
             aMacroConfirmRequest,
             rRequest->getContinuations()
         );
-        return;
+        return true;
     }
 
     FutureDocumentVersionProductUpdateRequest aProductUpdateRequest;
@@ -1242,7 +1255,7 @@ void UUIInteractionHelper::handleErrorHandlerRequests(
             aProductUpdateRequest,
             rRequest->getContinuations()
         );
-        return;
+        return true;
     }
 
     star::task::ErrorCodeIOException aErrorCodeIOException;
@@ -1253,8 +1266,10 @@ void UUIInteractionHelper::handleErrorHandlerRequests(
                    bObtainErrorStringOnly,
                    bHasErrorString,
                    rErrorString);
-        return;
+        return true;
     }
+
+    return false;
 }
 
 void
@@ -1272,17 +1287,43 @@ UUIInteractionHelper::handle_impl(
         ////////////////////////////////////////////////////////////
         bool bDummy = false;
         rtl::OUString aDummy;
-        handleMessageboxRequests(rRequest, false, bDummy, aDummy);
+        if (! handleMessageboxRequests(rRequest, false, bDummy, aDummy))
+        {
+            ////////////////////////////////////////////////////////////
+            // Use ErrorHandler::HandleError
+            ////////////////////////////////////////////////////////////
+            if (!handleErrorHandlerRequests(rRequest, false, bDummy, aDummy))
+            {
+                ////////////////////////////////////////////////////////////
+                // Display Special Dialog
+                ////////////////////////////////////////////////////////////
+                if (!handleDialogRequests(rRequest))
+                {
+                    ////////////////////////////////////////////////////////////
+                    // Use customized InteractionHandler from configuration
+                    ////////////////////////////////////////////////////////////
+                    InteractionHandlerDataList dataList;
 
-        ////////////////////////////////////////////////////////////
-        // Use ErrorHandler::HandleError
-        ////////////////////////////////////////////////////////////
-        handleErrorHandlerRequests(rRequest, false, bDummy, aDummy);
+                    GetInteractionHandlerList(dataList);
 
-        ////////////////////////////////////////////////////////////
-        // Display Special Dialog
-        ////////////////////////////////////////////////////////////
-        handleDialogRequests(rRequest);
+                    InteractionHandlerDataList::const_iterator aEnd(dataList.end());
+                    for (InteractionHandlerDataList::const_iterator aIt(dataList.begin());
+                         aIt != aEnd; ++aIt)
+                    {
+                        Reference< uno::XInterface > xIfc =
+                            m_xServiceFactory->createInstance(aIt->ServiceName);
+
+                        Reference< com::sun::star::task::XInteractionHandler2 > xInteractionHandler =
+                            Reference< com::sun::star::task::XInteractionHandler2 >( xIfc, UNO_QUERY );
+
+                        OSL_ENSURE( xInteractionHandler.is(), "Custom Interactionhandler does not implement mandatory interface XInteractionHandler2!" );
+                        if (xInteractionHandler.is())
+                            if (xInteractionHandler->handleInteractionRequest(rRequest))
+                                break;
+                    }
+                }
+            }
+        }
     }
     catch (std::bad_alloc const &)
     {
@@ -1290,6 +1331,113 @@ UUIInteractionHelper::handle_impl(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
             star::uno::Reference< star::uno::XInterface >());
     }
+}
+
+void UUIInteractionHelper::GetInteractionHandlerList(InteractionHandlerDataList &rdataList)
+{
+        uno::Reference< lang::XMultiServiceFactory > xConfigProv(
+                m_xServiceFactory->createInstance(
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                uno::UNO_QUERY );
+
+        if ( !xConfigProv.is() )
+        {
+            OSL_ENSURE( false,
+                        "GetInteractionHandlerList - No config provider!" );
+            return;
+        }
+
+        rtl::OUStringBuffer aFullPath;
+        aFullPath.appendAscii( CONFIG_INTERACTIONHANDLERS_KEY );
+
+        uno::Sequence< uno::Any > aArguments( 1 );
+        beans::PropertyValue      aProperty;
+        aProperty.Name
+            = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+        aProperty.Value <<= aFullPath.makeStringAndClear();
+        aArguments[ 0 ] <<= aProperty;
+
+        uno::Reference< uno::XInterface > xInterface(
+                xConfigProv->createInstanceWithArguments(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.ConfigurationAccess" ) ),
+                    aArguments ) );
+
+        if ( !xInterface.is() )
+        {
+            OSL_ENSURE( false,
+                        "GetInteractionHandlerList - No config access!" );
+            return;
+        }
+
+        uno::Reference< container::XNameAccess > xNameAccess(
+                                            xInterface, uno::UNO_QUERY );
+
+        if ( !xNameAccess.is() )
+        {
+            OSL_ENSURE( false,
+                        "GetInteractionHandlerList - No XNameAccess!" );
+            return;
+        }
+
+        uno::Sequence< rtl::OUString > aElems = xNameAccess->getElementNames();
+        const rtl::OUString* pElems = aElems.getConstArray();
+        sal_Int32 nCount = aElems.getLength();
+
+        if ( nCount > 0 )
+        {
+            uno::Reference< container::XHierarchicalNameAccess >
+                                xHierNameAccess( xInterface, uno::UNO_QUERY );
+
+            if ( !xHierNameAccess.is() )
+            {
+                OSL_ENSURE( false,
+                            "GetInteractionHandlerList - "
+                            "No XHierarchicalNameAccess!" );
+                return;
+            }
+
+            // Iterate over children.
+            for ( sal_Int32 n = 0; n < nCount; ++n )
+            {
+                rtl::OUStringBuffer aElemBuffer;
+                aElemBuffer.appendAscii( "['" );
+                aElemBuffer.append( pElems[ n ] );
+
+                try
+                {
+                    InteractionHandlerData aInfo;
+
+                    // Obtain service name.
+                    rtl::OUStringBuffer aKeyBuffer = aElemBuffer;
+                    aKeyBuffer.appendAscii( "']/ServiceName" );
+
+                    rtl::OUString aValue;
+                    if ( !( xHierNameAccess->getByHierarchicalName(
+                                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
+                    {
+                        OSL_ENSURE( false,
+                                    "GetInteractionHandlerList - "
+                                    "Error getting item value!" );
+                        continue;
+                    }
+
+                    aInfo.ServiceName = aValue;
+
+                    // Append info to list.
+                    rdataList.push_back( aInfo );
+                }
+                catch ( container::NoSuchElementException& )
+                {
+                    // getByHierarchicalName
+
+                    OSL_ENSURE( false,
+                                "GetInteractionHandlerList - "
+                                "caught NoSuchElementException!" );
+                }
+            }
+        }
 }
 
 Window * UUIInteractionHelper::getParentProperty() SAL_THROW(())
