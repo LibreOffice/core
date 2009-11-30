@@ -67,6 +67,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -2444,13 +2445,19 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         ImplInitLineColor();
 
     // use b2dpolygon drawing if possible
-    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
-    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
         ::basegfx::B2DPolygon aB2DPolyLine = rPoly.getB2DPolygon();
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyLine.transform( aTransform );
         const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+        if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && (mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE))
+        {
+            // #i98289#
+            aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+        }
+
         if( mpGraphics->DrawPolyLine( aB2DPolyLine, aB2DLineWidth, basegfx::B2DLINEJOIN_ROUND, this ) )
             return;
     }
@@ -2591,8 +2598,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         ImplInitFillColor();
 
     // use b2dpolygon drawing if possible
-    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
-    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
         ::basegfx::B2DPolyPolygon aB2DPolyPolygon( rPoly.getB2DPolygon() );
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -2655,8 +2661,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         ImplInitFillColor();
 
     // use b2dpolygon drawing if possible
-    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
-    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
         ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -2743,8 +2748,7 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
-        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
@@ -2804,23 +2808,29 @@ void OutputDevice::DrawPolyLine(
     if( mbInitLineColor )
         ImplInitLineColor();
 
-    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    // #i98289# use b2dpolygon drawing if possible
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
-#ifdef UNX // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        // transform the line width
-        ::basegfx::B2DVector aB2DLineWidth;
-        if( fLineWidth == 0.0 ) // hairline?
-            aB2DLineWidth = ::basegfx::B2DVector( 1.0, 1.0 );
-        else
+        ::basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
+
+        // transform the line width if used
+        if( fLineWidth != 0.0 )
             aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
+
         // transform the polygon
         ::basegfx::B2DPolygon aB2DPL = rB2DPolygon;
         aB2DPL.transform( aTransform );
+
+        if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && (mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE))
+        {
+            // #i98289#
+            aB2DPL = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPL);
+        }
+
         // draw the polyline
         if( mpGraphics->DrawPolyLine( aB2DPL, aB2DLineWidth, eLineJoin, this ) )
             return;
-#endif
     }
 
     // fallback to old polygon drawing if needed

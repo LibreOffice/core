@@ -51,7 +51,7 @@ class SalPrinter;
 
 DECLARE_LIST( SalDisplays, SalDisplay* )
 
-#if defined SCO || defined LINUX || defined NETBSD || defined AIX || defined HPUX || defined FREEBSD || defined MACOSX
+#if defined SCO || defined LINUX || defined NETBSD || defined AIX || defined HPUX || defined FREEBSD
 #include <pthread.h>
 #else
 typedef unsigned int pthread_t;

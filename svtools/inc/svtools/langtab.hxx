@@ -52,6 +52,9 @@ public:
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
 };
 
+// Add LRE or RLE embedding characters to the string based on the
+// String content (see #i78466#, #i32179#)
+SVT_DLLPUBLIC const String ApplyLreOrRleEmbedding( const String &rText );
 
 #endif
 

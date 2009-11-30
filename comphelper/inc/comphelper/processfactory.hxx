@@ -73,7 +73,7 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XI
     @see getProcessServiceFactory
     @see setProcessServiceFactory
 */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     createProcessComponentWithArguments(
         const ::rtl::OUString& _rServiceSpecifier,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArgs

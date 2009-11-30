@@ -36,12 +36,97 @@
 #include <tools/shl.hxx>
 #include <tools/debug.hxx>
 
+//#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
+
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
 
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <svtools/langtab.hxx>
+#include <svtools/syslocale.hxx>
+
+
+using namespace ::com::sun::star;
+
+//------------------------------------------------------------------------
+
+SVT_DLLPUBLIC const String ApplyLreOrRleEmbedding( const String &rText )
+{
+    const USHORT nLen = rText.Len();
+    if (nLen == 0)
+        return String();
+
+    const sal_Unicode cLRE_Embedding  = 0x202A;      // the start char of an LRE embedding
+    const sal_Unicode cRLE_Embedding  = 0x202B;      // the start char of an RLE embedding
+    const sal_Unicode cPopDirectionalFormat = 0x202C;   // the unicode PDF (POP_DIRECTIONAL_FORMAT) char that terminates an LRE/RLE embedding
+
+    // check if there are alreay embedding characters at the strings start
+    // if so change nothing
+    const sal_Unicode cChar = rText.GetBuffer()[0];
+    if (cChar == cLRE_Embedding || cChar == cRLE_Embedding)
+        return rText;
+
+    // since we only call the function getCharacterDirection
+    // it does not matter which locale the CharClass is for.
+    // Thus we can readily make use of SvtSysLocale::GetCharClass()
+    // which should come at no cost...
+    SvtSysLocale aSysLocale;
+    const CharClass &rCharClass = aSysLocale.GetCharClass();
+
+    // we should look for the first non-neutral LTR or RTL character
+    // and use that to determine the embedding of the whole text...
+    // Thus we can avoid to check every character of the text.
+    bool bFound     = false;
+    bool bIsRtlText = false;
+    for (USHORT i = 0;  i < nLen && !bFound;  ++i)
+    {
+        sal_Int16 nDirection = rCharClass.getCharacterDirection( rText, i );
+        switch (nDirection)
+        {
+            case i18n::DirectionProperty_LEFT_TO_RIGHT :
+            case i18n::DirectionProperty_LEFT_TO_RIGHT_EMBEDDING :
+            case i18n::DirectionProperty_LEFT_TO_RIGHT_OVERRIDE :
+            case i18n::DirectionProperty_EUROPEAN_NUMBER :
+            case i18n::DirectionProperty_ARABIC_NUMBER :        // yes! arabic numbers are written from left to right
+            {
+                bIsRtlText  = false;
+                bFound      = true;
+                break;
+            }
+
+            case i18n::DirectionProperty_RIGHT_TO_LEFT :
+            case i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC :
+            case i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING :
+            case i18n::DirectionProperty_RIGHT_TO_LEFT_OVERRIDE :
+            {
+                bIsRtlText  = true;
+                bFound      = true;
+                break;
+            }
+
+            default:
+            {
+                // nothing to be done, character is considered to be neutral we need to look further ...
+            }
+        }
+    }
+
+    sal_Unicode cStart  = cLRE_Embedding;   // default is to use LRE embedding characters
+    if (bIsRtlText)
+        cStart = cRLE_Embedding;            // then use RLE embedding
+
+    // add embedding start and end chars to the text if the direction could be determined
+    String aRes( rText );
+    if (bFound)
+    {
+        aRes.Insert( cStart, 0 );
+        aRes.Insert( cPopDirectionalFormat );
+    }
+
+    return aRes;
+}
 
 //------------------------------------------------------------------------
 

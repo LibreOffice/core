@@ -28,16 +28,16 @@
  *
  ************************************************************************/
 
-#include <vcl/svapp.hxx>
-#include <vcl/jobset.h>
+#include "vcl/svapp.hxx"
+#include "vcl/jobset.h"
+#include "vcl/print.h"
+#include "vcl/salptype.hxx"
+#include "vcl/timer.hxx"
+#include "vcl/printerinfomanager.hxx"
+
 #include "svpprn.hxx"
-#include <vcl/print.h>
-#include <vcl/salptype.hxx>
-#include <vcl/timer.hxx>
 #include "svppspgraphics.hxx"
 #include "svpinst.hxx"
-
-#include <psprint/printerinfomanager.hxx>
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -623,58 +623,13 @@ BOOL PspSalInfoPrinter::SetData(
             }
             String aPaper;
 
-#ifdef MACOSX
-            // For Mac OS X, many printers are directly attached
-            // USB/Serial printers with a stripped-down PPD that gives us
-            // problems.  We need to do PS->PDF conversion for these printers
-            // but they are not able to handle multiple page sizes in the same
-            // document at all, since we must pass -o media=... to them to get
-            // a good printout.
-            // So, we must find a match between the paper size from OOo and what
-            // the PPD of the printer has, and pass that paper size to -o media=...
-            // If a match cannot be found (ie the paper size from Format->Page is
-            // nowhere near anything in the PPD), we default to what has been
-            // chosen in File->Print->Properties.
-            //
-            // For printers capable of directly accepting PostScript data, none
-            // of this occurs and we default to the normal OOo behavior.
-            const PPDKey    *pCupsFilterKey;
-            const PPDValue  *pCupsFilterValue;
-            BOOL            bIsCUPSPrinter = TRUE;
-
-            // Printers that need PS->PDF conversion have a "cupsFilter" key and
-            // a value of "application/pdf" in that key
-            pCupsFilterKey = aData.m_pParser->getKey( String(RTL_CONSTASCII_USTRINGPARAM("cupsFilter")) );
-            pCupsFilterValue = pCupsFilterKey != NULL ? aData.m_aContext.getValue( pCupsFilterKey ) : NULL;
-            if ( pCupsFilterValue )
-            {
-                // PPD had a cupsFilter key, check for PS->PDF conversion requirement
-                ByteString    aCupsFilterString( pCupsFilterValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 );
-                if ( aCupsFilterString.Search("application/pdf") == 0 )
-                    bIsCUPSPrinter = FALSE;
-            }
+            if( pJobSetup->mePaperFormat == PAPER_USER )
+                aPaper = aData.m_pParser->matchPaper(
+                    TenMuToPt( pJobSetup->mnPaperWidth ),
+                    TenMuToPt( pJobSetup->mnPaperHeight ) );
             else
-                bIsCUPSPrinter = FALSE;
+                aPaper = String( ByteString( aPaperTab[ pJobSetup->mePaperFormat ].name ), RTL_TEXTENCODING_ISO_8859_1 );
 
-            if ( TRUE == bIsCUPSPrinter )
-            {
-                // If its a directly attached printer, with a
-                // stripped down PPD (most OS X printers are) always
-                // match the paper size.
-                 aPaper = aData.m_pParser->matchPaper(
-                     TenMuToPt( pJobSetup->mnPaperWidth ),
-                     TenMuToPt( pJobSetup->mnPaperHeight ) );
-            }
-             else
-#endif
-            {
-                if( pJobSetup->mePaperFormat == PAPER_USER )
-                    aPaper = aData.m_pParser->matchPaper(
-                        TenMuToPt( pJobSetup->mnPaperWidth ),
-                        TenMuToPt( pJobSetup->mnPaperHeight ) );
-                else
-                    aPaper = String( ByteString( aPaperTab[ pJobSetup->mePaperFormat ].name ), RTL_TEXTENCODING_ISO_8859_1 );
-            }
             pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
             pValue = pKey ? pKey->getValue( aPaper ) : NULL;
             if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue, false ) == pValue ) )

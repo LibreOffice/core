@@ -71,15 +71,15 @@
     AquaSalFrame*       mpFrame;
 
     // for NSTextInput
-    id mpLastEvent;
-    BOOL mbNeedSpecialKeyHandle;
-    BOOL mbInKeyInput;
-    BOOL mbKeyHandled;
-    NSRange mMarkedRange;
-    NSRange mSelectedRange;
-    id mpMouseEventListener;
-    id mDraggingDestinationHandler;
-    id mpLastSuperEvent;
+    NSEvent*        mpLastEvent;
+    BOOL            mbNeedSpecialKeyHandle;
+    BOOL            mbInKeyInput;
+    BOOL            mbKeyHandled;
+    NSRange         mMarkedRange;
+    NSRange         mSelectedRange;
+    id              mpMouseEventListener;
+    id              mDraggingDestinationHandler;
+    NSEvent*        mpLastSuperEvent;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
@@ -100,6 +100,9 @@
 -(void)otherMouseDragged: (NSEvent*)pEvent;
 -(void)otherMouseUp: (NSEvent*)pEvent;
 -(void)scrollWheel: (NSEvent*)pEvent;
+-(void)magnifyWithEvent: (NSEvent*)pEvent;
+-(void)rotateWithEvent: (NSEvent*)pEvent;
+-(void)swipeWithEvent: (NSEvent*)pEvent;
 -(void)keyDown: (NSEvent*)pEvent;
 -(void)flagsChanged: (NSEvent*)pEvent;
 -(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;

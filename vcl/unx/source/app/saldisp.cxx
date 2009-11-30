@@ -65,7 +65,7 @@
 
 #ifdef USE_XINERAMA
 #ifdef USE_XINERAMA_XORG
-#if defined(X86) || defined(X86_64) || defined(MACOSX)
+#if defined(X86) || defined(X86_64)
 #include <X11/extensions/Xinerama.h>
 #endif
 #elif defined USE_XINERAMA_XSUN
@@ -104,6 +104,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <dtint.hxx>
 
 #include <osl/socket.h>
+#include <poll.h>
 
 using namespace rtl;
 using namespace vcl_sal;
@@ -519,7 +520,8 @@ SalDisplay::SalDisplay( Display *display ) :
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
         m_pDtIntegrator( NULL ),
-        m_bUseRandRWrapper( true )
+        m_bUseRandRWrapper( true ),
+        m_nLastUserEventTime( CurrentTime )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
@@ -892,7 +894,7 @@ void SalDisplay::Init()
         sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX || defined MACOSX
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX
         nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
         // Server Bugs & Properties
@@ -918,7 +920,7 @@ void SalDisplay::Init()
         if( GetServerVendor() == vendor_xfree )
         {
             nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-#if defined LINUX || defined FREEBSD || defined MACOSX
+#if defined LINUX || defined FREEBSD
             // otherwm and olwm are a kind of default, which are not detected
             // carefully. if we are running linux (i.e. not netbsd) on an xfree
             // display, fvwm is most probable the wm to choose, confusing with mwm
@@ -1084,9 +1086,6 @@ void SalDisplay::ModifierMapping()
     nShiftKeySym_   = sal_XModifier2Keysym( pDisp_, pXModMap, ShiftMapIndex );
     nCtrlKeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, ControlMapIndex );
     nMod1KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod1MapIndex );
-#ifdef MACOSX
-    nMod2KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod2MapIndex );
-#endif
     // Auf Sun-Servern und SCO-Severn beruecksichtigt XLookupString
     // nicht den NumLock Modifier.
     if(     (GetServerVendor() == vendor_sun)
@@ -1115,25 +1114,12 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
     String aStrMap;
 
     if( nKeyCode & KEY_MOD1 )
+        aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
+
+    if( nKeyCode & KEY_MOD2 )
     {
         if( aStrMap.Len() )
             aStrMap += '+';
-        aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
-    }
-
-#ifdef MACOSX
-    if( nKeyCode & KEY_MOD3 )
-    {
-    aStrMap += GetKeyNameFromKeySym( nMod2KeySym_ );
-    }
-    if( nKeyCode & KEY_MOD2 )
-    {
-    if ( aStrMap.Len() )
-        aStrMap += '+' ;
-#else
-    if( nKeyCode & KEY_MOD2 )
-    {
-#endif
         aStrMap += GetKeyNameFromKeySym( nMod1KeySym_ );
     }
 
@@ -2331,6 +2317,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                                       ButtonMotionMask,
                                       pEvent ) )
                 ;
+            m_nLastUserEventTime = pEvent->xmotion.time;
             break;
         case PropertyNotify:
             if( pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
@@ -2358,7 +2345,14 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                     GetKeyboardName( TRUE );
             }
             break;
-
+        case ButtonPress:
+        case ButtonRelease:
+            m_nLastUserEventTime = pEvent->xbutton.time;
+            break;
+        case XLIB_KeyPress:
+        case KeyRelease:
+            m_nLastUserEventTime = pEvent->xkey.time;
+            break;
         default:
 
             if (   GetKbdExtension()->UseExtension()
@@ -2637,7 +2631,7 @@ void SalDisplay::InitXinerama()
         }
     }
 #elif defined(USE_XINERAMA_XORG)
-#if defined( X86 ) || defined( X86_64 ) || defined( MACOSX )
+#if defined( X86 ) || defined( X86_64 )
 if( XineramaIsActive( pDisp_ ) )
 {
     int nFramebuffers = 1;
@@ -2717,6 +2711,73 @@ void SalDisplay::deregisterFrame( SalFrame* pFrame )
     m_aFrames.remove( pFrame );
 }
 
+
+extern "C"
+{
+    static Bool timestamp_predicate( Display*, XEvent* i_pEvent, XPointer i_pArg )
+    {
+        SalDisplay* pSalDisplay = reinterpret_cast<SalDisplay*>(i_pArg);
+        if( i_pEvent->type == PropertyNotify &&
+            i_pEvent->xproperty.window == pSalDisplay->GetDrawable( pSalDisplay->GetDefaultScreenNumber() ) &&
+            i_pEvent->xproperty.atom == pSalDisplay->getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT )
+            )
+        return True;
+
+        return False;
+    }
+}
+
+XLIB_Time SalDisplay::GetLastUserEventTime( bool i_bAlwaysReget ) const
+{
+    if( m_nLastUserEventTime == CurrentTime || i_bAlwaysReget )
+    {
+        // get current server time
+        unsigned char c = 0;
+        XEvent aEvent;
+        Atom nAtom = getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT );
+        XChangeProperty( GetDisplay(), GetDrawable( GetDefaultScreenNumber() ),
+                         nAtom, nAtom, 8, PropModeReplace, &c, 1 );
+        XFlush( GetDisplay() );
+
+        if( ! XIfEventWithTimeout( &aEvent, (XPointer)this, timestamp_predicate ) )
+        {
+            // this should not happen at all; still sometimes it happens
+            aEvent.xproperty.time = CurrentTime;
+        }
+
+        m_nLastUserEventTime = aEvent.xproperty.time;
+    }
+    return m_nLastUserEventTime;
+}
+
+bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateData,
+                                      X_if_predicate i_pPredicate, long i_nTimeout ) const
+{
+    /* #i99360# ugly workaround an X11 library bug
+       this replaces the following call:
+       XIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData );
+    */
+    bool bRet = true;
+
+    if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
+    {
+        // wait for some event to arrive
+        struct pollfd aFD;
+        aFD.fd = ConnectionNumber(GetDisplay());
+        aFD.events = POLLIN;
+        aFD.revents = 0;
+        poll( &aFD, 1, i_nTimeout );
+        if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
+        {
+            poll( &aFD, 1, i_nTimeout ); // try once more for a packet of events from the Xserver
+            if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
+            {
+                bRet = false;
+            }
+        }
+    }
+    return bRet;
+}
 
 // -=-= SalVisual -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

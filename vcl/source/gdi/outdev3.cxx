@@ -2972,17 +2972,24 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
             }
         }
 
+        // check if the current font name token or its substitute is valid
+        ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
+        if( pFoundData )
+            return pFoundData;
+
         // some systems provide special customization
         // e.g. they suggest "serif" as UI-font, but this name cannot be used directly
         //      because the system wants to map it to another font first, e.g. "Helvetica"
         if( mpPreMatchHook )
+        {
             if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
+            {
                 ImplGetEnglishSearchFontName( aSearchName );
-
-        // check if the current font name token or its substitute is valid
-    ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
-        if( pFoundData )
-            return pFoundData;
+                pFoundData = ImplFindBySearchName( aSearchName );
+                if( pFoundData )
+                    return pFoundData;
+            }
+        }
 
         // break after last font name token was checked unsuccessfully
         if( nTokenPos == STRING_NOTFOUND)
@@ -5241,15 +5248,15 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
                 if ( xBI.is() )
                 {
-                    static const com::sun::star::lang::Locale aDefLocale(Application::GetSettings().GetUILocale());
+                    const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILocale());
                     xub_StrLen nSoftBreak = GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
                     //aHyphOptions.hyphenIndex = nSoftBreak;
-                    i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, aDefLocale, nPos, aHyphOptions, aUserOptions );
+                    i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
                     nBreakPos = (xub_StrLen)aLBR.breakIndex;
                     if ( nBreakPos <= nPos )
                         nBreakPos = nSoftBreak;
-                    if ( nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION )
+                    if ( (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION) == TEXT_DRAW_WORDBREAK_HYPHENATION )
                     {
                         // Egal ob Trenner oder nicht: Das Wort nach dem Trenner durch
                         // die Silbentrennung jagen...
@@ -5261,7 +5268,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                         {
                             sal_Unicode cAlternateReplChar = 0;
                             sal_Unicode cAlternateExtraChar = 0;
-                            i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, aDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
+                            i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
                 //          sal_uInt16 nWordStart = nBreakPos;
                 //          sal_uInt16 nBreakPos_OLD = nBreakPos;
                             sal_uInt16 nWordStart = nPos;
@@ -5277,7 +5284,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                 sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1);  //+1: Vor dem angeknacksten Buchstaben
                                 uno::Reference< linguistic2::XHyphenatedWord > xHyphWord;
                                 if (xHyph.is())
-                                    xHyphWord = xHyph->hyphenate( aWord, aDefLocale, aWord.Len() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
+                                    xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.Len() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
                                 if (xHyphWord.is())
                                 {
                                     sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
@@ -5344,7 +5351,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                     } // if (xHyphWord.is())
                                 } // if ( ( nWordEnd >= nSoftBreak ) && ( nWordLen > 3 ) )
                             } // if ( xHyph.is() )
-                        } // if ( nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION )
+                        } // if ( (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION) == TEXT_DRAW_WORDBREAK_HYPHENATION )
                     }
                     nLineWidth = GetTextWidth( rStr, nPos, nBreakPos-nPos );
                 }
@@ -6408,7 +6415,10 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
                 sal_Int32* pAry = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
                 if( nCutStart > nMinIndex )
                     memcpy( pAry, pDXArray, sizeof(sal_Int32)*(nCutStart-nMinIndex) );
-                memcpy( pAry+nCutStart-nMinIndex, pDXArray + nOrgLen - (nCutStop-nMinIndex), nLen - (nCutStop-nMinIndex) );
+                // note: nCutStart will never be smaller than nMinIndex
+                memcpy( pAry+nCutStart-nMinIndex,
+                        pDXArray + nOrgLen - (nCutStop-nMinIndex),
+                        sizeof(sal_Int32)*(nLen - (nCutStart-nMinIndex)) );
                 pDXArray = pAry;
             }
         }
@@ -6521,6 +6531,11 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
         // find a font family suited for glyph fallback
+#ifndef FONTFALLBACK_HOOKS_DISABLED
+        // GetGlyphFallbackFont() needs a valid aFontSelData.mpFontEntry
+        // if the system-specific glyph fallback is active
+        aFontSelData.mpFontEntry = mpFontEntry; // reset the fontentry to base-level
+#endif
         ImplFontEntry* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontList,
             aFontSelData, nFallbackLevel-nDevSpecificFallback, aMissingCodes );
         if( !pFallbackFont )
@@ -6566,7 +6581,10 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
                     pMultiSalLayout->SetInComplete();
             }
             else
+            {
+                // there is no need for a font that couldn't resolve anything
                 pFallback->Release();
+            }
         }
 
         mpFontCache->Release( pFallbackFont );

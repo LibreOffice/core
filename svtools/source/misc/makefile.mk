@@ -82,6 +82,7 @@ SLOFILES=\
     $(SLO)$/dialogclosedlistener.obj\
     $(SLO)$/dialogcontrolling.obj   \
     $(SLO)$/chartprettypainter.obj \
+    $(SLO)$/lockfilecommon.obj     \
     $(SLO)$/sharecontrolfile.obj   \
     $(SLO)$/documentlockfile.obj   \
     $(SLO)$/langtab.obj

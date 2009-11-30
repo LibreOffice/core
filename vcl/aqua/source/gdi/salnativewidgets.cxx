@@ -290,8 +290,6 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
             break;
 
         case CTRL_SPINBUTTONS:
-            if( nPart == PART_ENTIRE_CONTROL ||
-                nPart == PART_ALL_BUTTONS )
                 return false;
             break;
 
@@ -695,26 +693,58 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_LISTNODE:
         {
-            HIThemeButtonDrawInfo aInfo;
-            aInfo.version = 0;
-            aInfo.kind = kThemeDisclosureButton;
-            aInfo.state = getState( nState );
-
-            aInfo.adornment = kThemeAdornmentNone;
-
             ButtonValue aButtonValue = aValue.getTristateVal();
 
-            switch( aButtonValue ) {
-                case BUTTONVALUE_ON: aInfo.value = kThemeDisclosureDown;//expanded
-                    break;
-                case BUTTONVALUE_OFF: aInfo.value = kThemeDisclosureRight;//collapsed
-                    break;
-                case BUTTONVALUE_DONTKNOW: //what to do?
-                default:
-                    break;
-            }
+            if( Application::GetSettings().GetLayoutRTL() && aButtonValue == BUTTONVALUE_OFF )
+            {
+                // FIXME: a value of kThemeDisclosureLeft
+                // should draw a theme compliant left disclosure triangle
+                // sadly this does not seem to work, so we'll draw a left
+                // grey equilateral triangle here ourselves.
+                // Perhaps some other HIThemeButtonDrawInfo setting would do the trick ?
 
-            HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, NULL );
+                CGContextSetShouldAntialias( mrContext, true );
+                float aGrey[] = { 0.45, 0.45, 0.45, 1.0 };
+                CGContextSetFillColor( mrContext, aGrey );
+                CGContextBeginPath( mrContext );
+                float x = rc.origin.x + rc.size.width;
+                float y = rc.origin.y;
+                CGContextMoveToPoint( mrContext, x, y );
+                y += rc.size.height;
+                CGContextAddLineToPoint( mrContext, x, y );
+                x -= rc.size.height * 0.866; // cos( 30 degree ) is approx. 0.866
+                y -= rc.size.height/2;
+                CGContextAddLineToPoint( mrContext, x, y );
+                CGContextDrawPath( mrContext, kCGPathEOFill );
+            }
+            else
+            {
+                HIThemeButtonDrawInfo aInfo;
+                aInfo.version = 0;
+                aInfo.kind = kThemeDisclosureTriangle;
+                aInfo.value = kThemeDisclosureRight;
+                aInfo.state = getState( nState );
+
+                aInfo.adornment = kThemeAdornmentNone;
+
+                switch( aButtonValue ) {
+                    case BUTTONVALUE_ON: aInfo.value = kThemeDisclosureDown;//expanded
+                        break;
+                    case BUTTONVALUE_OFF:
+                        // FIXME: this should have drawn a theme compliant disclosure triangle
+                        // (see above)
+                        if( Application::GetSettings().GetLayoutRTL() )
+                        {
+                            aInfo.value = kThemeDisclosureLeft;//collapsed, RTL
+                        }
+                        break;
+                    case BUTTONVALUE_DONTKNOW: //what to do?
+                    default:
+                        break;
+                }
+
+                HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, NULL );
+            }
             bOK = true;
         }
         break;
@@ -1041,7 +1071,10 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     HIRect buttonRc = ImplGetHIRectFromRectangle(aSpinRect);
 
                     // FIXME: without this fuzz factor there is some unwanted clipping
-                    buttonRc.origin.x += FOCUS_RING_WIDTH + CLIP_FUZZ;
+                    if( Application::GetSettings().GetLayoutRTL() )
+                        buttonRc.origin.x -= FOCUS_RING_WIDTH - CLIP_FUZZ;
+                    else
+                        buttonRc.origin.x += FOCUS_RING_WIDTH + CLIP_FUZZ;
 
                     switch( aValue.getTristateVal() )
                     {

@@ -68,20 +68,8 @@ sal_Bool DocumentLockFile::m_bAllowInteraction = sal_True;
 
 // ----------------------------------------------------------------------
 DocumentLockFile::DocumentLockFile( const ::rtl::OUString& aOrigURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: m_xFactory( xFactory )
+: LockFileCommon( aOrigURL, xFactory, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".~lock." ) ) )
 {
-    if ( !m_xFactory.is() )
-        m_xFactory = ::comphelper::getProcessServiceFactory();
-
-    INetURLObject aDocURL( aOrigURL );
-    if ( aDocURL.HasError() )
-        throw lang::IllegalArgumentException();
-
-    ::rtl::OUString aShareURLString = aDocURL.GetPartBeforeLastName();
-    aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".~lock." ) );
-    aShareURLString += aDocURL.GetName();
-    aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "#" ) );
-    m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::NO_DECODE );
 }
 
 // ----------------------------------------------------------------------
@@ -92,6 +80,8 @@ DocumentLockFile::~DocumentLockFile()
 // ----------------------------------------------------------------------
 void DocumentLockFile::WriteEntryToStream( uno::Sequence< ::rtl::OUString > aEntry, uno::Reference< io::XOutputStream > xOutput )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     ::rtl::OUStringBuffer aBuffer;
 
     for ( sal_Int32 nEntryInd = 0; nEntryInd < aEntry.getLength(); nEntryInd++ )
@@ -111,6 +101,8 @@ void DocumentLockFile::WriteEntryToStream( uno::Sequence< ::rtl::OUString > aEnt
 // ----------------------------------------------------------------------
 sal_Bool DocumentLockFile::CreateOwnLockFile()
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     try
     {
         uno::Reference< io::XStream > xTempFile(
@@ -154,136 +146,10 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > DocumentLockFile::ParseEntry( const uno::Sequence< sal_Int8 >& aBuffer )
-{
-    sal_Int32 nCurPos = 0;
-
-    uno::Sequence< ::rtl::OUString > aResult( LOCKFILE_ENTRYSIZE );
-
-    for ( int nInd = 0; nInd < LOCKFILE_ENTRYSIZE; nInd++ )
-    {
-        aResult[nInd] = ParseName( aBuffer, nCurPos );
-        if ( nCurPos >= aBuffer.getLength()
-          || ( nInd < LOCKFILE_ENTRYSIZE - 1 && aBuffer[nCurPos++] != ',' )
-          || ( nInd == LOCKFILE_ENTRYSIZE - 1 && aBuffer[nCurPos++] != ';' ) )
-            throw io::WrongFormatException();
-    }
-
-    return aResult;
-}
-
-// ----------------------------------------------------------------------
-::rtl::OUString DocumentLockFile::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos )
-{
-    ::rtl::OStringBuffer aResult;
-    sal_Bool bHaveName = sal_False;
-    sal_Bool bEscape = sal_False;
-
-    while( !bHaveName )
-    {
-        if ( o_nCurPos >= aBuffer.getLength() )
-            throw io::WrongFormatException();
-
-        if ( bEscape )
-        {
-            if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' || aBuffer[o_nCurPos] == '\\' )
-                aResult.append( (sal_Char)aBuffer[o_nCurPos] );
-            else
-                throw io::WrongFormatException();
-
-            bEscape = sal_False;
-            o_nCurPos++;
-        }
-        else if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' )
-            bHaveName = sal_True;
-        else
-        {
-            if ( aBuffer[o_nCurPos] == '\\' )
-                bEscape = sal_True;
-            else
-                aResult.append( (sal_Char)aBuffer[o_nCurPos] );
-
-            o_nCurPos++;
-        }
-    }
-
-    return ::rtl::OStringToOUString( aResult.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
-}
-
-// ----------------------------------------------------------------------
-::rtl::OUString DocumentLockFile::EscapeCharacters( const ::rtl::OUString& aSource )
-{
-    ::rtl::OUStringBuffer aBuffer;
-    const sal_Unicode* pStr = aSource.getStr();
-    for ( sal_Int32 nInd = 0; nInd < aSource.getLength() && pStr[nInd] != 0; nInd++ )
-    {
-        if ( pStr[nInd] == '\\' || pStr[nInd] == ';' || pStr[nInd] == ',' )
-            aBuffer.append( (sal_Unicode)'\\' );
-        aBuffer.append( pStr[nInd] );
-    }
-
-    return aBuffer.makeStringAndClear();
-}
-
-// ----------------------------------------------------------------------
-::rtl::OUString DocumentLockFile::GetOOOUserName()
-{
-    SvtUserOptions aUserOpt;
-    ::rtl::OUString aName = aUserOpt.GetFirstName();
-    if ( aName.getLength() )
-        aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
-    aName += aUserOpt.GetLastName();
-
-    return aName;
-}
-
-// ----------------------------------------------------------------------
-::rtl::OUString DocumentLockFile::GetCurrentLocalTime()
-{
-    ::rtl::OUString aTime;
-
-    TimeValue aSysTime;
-    if ( osl_getSystemTime( &aSysTime ) )
-    {
-        TimeValue aLocTime;
-        if ( osl_getLocalTimeFromSystemTime( &aSysTime, &aLocTime ) )
-        {
-            oslDateTime aDateTime;
-            if ( osl_getDateTimeFromTimeValue( &aLocTime, &aDateTime ) )
-            {
-                char pDateTime[20];
-                sprintf( pDateTime, "%02d.%02d.%4d %02d:%02d", aDateTime.Day, aDateTime.Month, aDateTime.Year, aDateTime.Hours, aDateTime.Minutes );
-                aTime = ::rtl::OUString::createFromAscii( pDateTime );
-            }
-        }
-    }
-
-    return aTime;
-}
-
-// ----------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > DocumentLockFile::GenerateOwnEntry()
-{
-    uno::Sequence< ::rtl::OUString > aResult( LOCKFILE_ENTRYSIZE );
-
-    aResult[LOCKFILE_OOOUSERNAME_ID] = GetOOOUserName();
-
-    ::osl::Security aSecurity;
-    aSecurity.getUserName( aResult[LOCKFILE_SYSUSERNAME_ID] );
-
-    aResult[LOCKFILE_LOCALHOST_ID] = ::osl::SocketAddr::getLocalHostname();
-
-    aResult[LOCKFILE_EDITTIME_ID] = GetCurrentLocalTime();
-
-    ::utl::Bootstrap::locateUserInstallation( aResult[LOCKFILE_USERURL_ID] );
-
-
-    return aResult;
-}
-
-// ----------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > DocumentLockFile::GetLockData()
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     uno::Reference< io::XInputStream > xInput = OpenStream();
     if ( !xInput.is() )
         throw uno::RuntimeException();
@@ -299,12 +165,15 @@ uno::Sequence< ::rtl::OUString > DocumentLockFile::GetLockData()
     if ( nRead == nBufLen )
         throw io::WrongFormatException();
 
-    return ParseEntry( aBuffer );
+    sal_Int32 nCurPos = 0;
+    return ParseEntry( aBuffer, nCurPos );
 }
 
 // ----------------------------------------------------------------------
 uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
             xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
@@ -344,6 +213,8 @@ sal_Bool DocumentLockFile::OverwriteOwnLockFile()
 // ----------------------------------------------------------------------
 void DocumentLockFile::RemoveFile()
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     // TODO/LATER: the removing is not atomar, is it possible in general to make it atomar?
     uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
     uno::Sequence< ::rtl::OUString > aFileData = GetLockData();

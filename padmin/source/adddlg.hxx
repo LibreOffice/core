@@ -31,18 +31,15 @@
 #ifndef _PAD_ADDDLG_HXX_
 #define _PAD_ADDDLG_HXX_
 
-#include <vcl/dialog.hxx>
-#include <vcl/tabpage.hxx>
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#include <vcl/fixed.hxx>
-#include <vcl/combobox.hxx>
-#ifndef _PSP_PRINTERINFOMANAGER_HXX_
-#include <psprint/printerinfomanager.hxx>
-#endif
-#include <helper.hxx>
-#include <titlectrl.hxx>
+#include "helper.hxx"
+#include "titlectrl.hxx"
+
+#include "vcl/dialog.hxx"
+#include "vcl/tabpage.hxx"
+#include "vcl/button.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/combobox.hxx"
+#include "vcl/printerinfomanager.hxx"
 
 namespace padmin
 {

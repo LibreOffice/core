@@ -35,21 +35,11 @@
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
-#ifndef _VCL_APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VCL_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _VCL_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
-#endif
-#ifndef _VCL_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _VCL_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
 #include "svtaccessiblefactory.hxx"
 
 // =======================================================================
@@ -1418,6 +1408,16 @@ void TabBar::StateChanged( StateChangedType nType )
         ImplInitSettings( FALSE, TRUE );
         Invalidate();
     }
+    else if ( nType == STATE_CHANGE_MIRRORING )
+    {
+        // reacts on calls of EnableRTL, have to mirror all child controls
+        if( mpFirstBtn ) mpFirstBtn->EnableRTL( IsRTLEnabled() );
+        if( mpPrevBtn ) mpPrevBtn->EnableRTL( IsRTLEnabled() );
+        if( mpNextBtn ) mpNextBtn->EnableRTL( IsRTLEnabled() );
+        if( mpLastBtn ) mpLastBtn->EnableRTL( IsRTLEnabled() );
+        if( mpImpl->mpSizer ) mpImpl->mpSizer->EnableRTL( IsRTLEnabled() );
+        if( mpEdit ) mpEdit->EnableRTL( IsRTLEnabled() );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2167,6 +2167,16 @@ void TabBar::SetMirrored( BOOL bMirrored )
         Resize();               // recalculates control positions
         Mirror();
     }
+}
+
+void TabBar::SetEffectiveRTL( BOOL bRTL )
+{
+    SetMirrored( bRTL != Application::GetSettings().GetLayoutRTL() );
+}
+
+BOOL TabBar::IsEffectiveRTL() const
+{
+    return IsMirrored() != Application::GetSettings().GetLayoutRTL();
 }
 
 // -----------------------------------------------------------------------

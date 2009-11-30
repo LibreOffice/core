@@ -765,8 +765,8 @@ Calendar_gregorian::isValid() throw(RuntimeException)
 static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
         sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
 {
-    sal_Bool isShort = (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
-        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100 ||
+    sal_Bool isShort = ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
+        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100) ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
     sal_Bool isChinese = aLocale.Language.equalsAscii("zh");

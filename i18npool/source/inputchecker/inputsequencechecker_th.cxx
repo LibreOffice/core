@@ -122,19 +122,19 @@ http://www.openoffice.org/issues/show_bug.cgi?id=42661
 8. <cons> <thanthakhat> + <abv1> => <cons> <abv1> <thanthakhat> (reorder)
 9. <cons> <abv1>_x <thanthakhat> + <abv1>_y => <cons> <abv1>_y <thanthakhat>(reorder, replace)
 */
-#define CT_ABV(t)  (t>=CT_AV1 && t<=CT_AV3 || t==CT_BV1 || t==CT_BV2)
+#define CT_ABV(t)  ( (t>=CT_AV1 && t<=CT_AV3) || t==CT_BV1 || t==CT_BV2)
 #define CT_ABV1(t) (t==CT_AV1 || t==CT_BV1)
 
     if (check(Text[nStartPos], inputChar, inputCheckMode))
         Text = Text.replaceAt(++nStartPos, 0, OUString(inputChar));
     else if (nStartPos > 0 && getCharType(Text[nStartPos-1]) == CT_CONS) {
         sal_uInt16 t1=getCharType(Text[nStartPos]), t2=getCharType(inputChar);
-        if (CT_ABV(t1) && CT_ABV(t2) || // 1.
-                t1==CT_TONE && t2==CT_TONE) // 2.
+        if ( (CT_ABV(t1) && CT_ABV(t2)) || // 1.
+                (t1==CT_TONE && t2==CT_TONE) )// 2.
             Text = Text.replaceAt(nStartPos, 1, OUString(inputChar));
-        else if (t1==CT_TONE && CT_ABV(t2) ||  // 5.
-                t1==CT_FV1 && t2==CT_TONE ||  // 6.
-                Text[nStartPos]==0x0E4C && CT_ABV1(t2)) // 8.
+        else if ( (t1==CT_TONE && CT_ABV(t2)) ||  // 5.
+                (t1==CT_FV1 && t2==CT_TONE) ||  // 6.
+                (Text[nStartPos]==0x0E4C && CT_ABV1(t2)) ) // 8.
             Text = Text.replaceAt(nStartPos++, 0, OUString(inputChar));
         else
             nStartPos=Text.getLength();
@@ -142,9 +142,9 @@ http://www.openoffice.org/issues/show_bug.cgi?id=42661
         sal_uInt16 t1=getCharType(Text[nStartPos-1]), t2=getCharType(Text[nStartPos]), t3=getCharType(inputChar);
         if (CT_ABV(t1) && t2==CT_TONE && t3==CT_TONE) // 3.
             Text = Text.replaceAt(nStartPos, 1, OUString(inputChar));
-        else if (CT_ABV(t1) && t2==CT_TONE && CT_ABV(t3) || // 4.
-                t1==CT_TONE && t2==CT_FV1 && t3==CT_TONE || // 7.
-                CT_ABV1(t1) && Text[nStartPos]==0x0E4C && CT_ABV1(t3)) // 9.
+        else if ( (CT_ABV(t1) && t2==CT_TONE && CT_ABV(t3)) || // 4.
+                (t1==CT_TONE && t2==CT_FV1 && t3==CT_TONE) || // 7.
+                (CT_ABV1(t1) && Text[nStartPos]==0x0E4C && CT_ABV1(t3)) ) // 9.
             Text = Text.replaceAt(nStartPos-1, 1, OUString(inputChar));
         else
             nStartPos=Text.getLength();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: region.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,6 +109,19 @@ public:
     BOOL                InsertPoint( const Point &rPoint,
                                      long nLineID,
                                      BOOL bEndPoint, LineType eLineType );
+
+    /** Insert one band either after another band or as the first or only
+        band.  Both the forward as well as the backward links are updated.
+        @param pPreviousBand
+            When <NULL/> then pBandToInsert is inserted as first band or as
+            only band when there are no other bands.
+            When not <NULL/> then pBandToInsert is inserted directly after
+            pPreviousBand.
+        @param pBandToInsert
+            The band to insert.
+    */
+    void                InsertBand (ImplRegionBand* pPreviousBand,
+                                    ImplRegionBand* pBandToInsert);
 
     void                Union( long nLeft, long nTop, long nRight, long nBottom );
     void                Exclude( long nLeft, long nTop, long nRight, long nBottom );

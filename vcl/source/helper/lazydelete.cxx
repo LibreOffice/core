@@ -33,9 +33,10 @@
 #ifndef LAZYDELETE_CXX
 #define LAZYDELETE_CXX
 
-#include <vcl/window.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/lazydelete.hxx>
+#include "vcl/window.hxx"
+#include "vcl/menu.hxx"
+#include "vcl/lazydelete.hxx"
+#include "vcl/svdata.hxx"
 
 namespace vcl {
 
@@ -81,6 +82,44 @@ template<> bool LazyDeletor<Menu>::is_less( Menu* left, Menu* right )
     return left != NULL;
 }
 
+DeleteOnDeinitBase::~DeleteOnDeinitBase()
+{
 }
 
+void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData )
+    {
+        ImplInitSVData();
+        pSVData = ImplGetSVData();
+    }
+
+    DBG_ASSERT( ! pSVData->mbDeInit, "DeleteOnDeinit added after DeiInitVCL !" );
+    if( pSVData->mbDeInit )
+        return;
+
+    if( pSVData->mpDeinitDeleteList == NULL )
+        pSVData->mpDeinitDeleteList = new std::list< DeleteOnDeinitBase* >();
+    pSVData->mpDeinitDeleteList->push_back( i_pContainer );
+}
+
+void DeleteOnDeinitBase::ImplDeleteOnDeInit()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->mpDeinitDeleteList )
+    {
+        for( std::list< vcl::DeleteOnDeinitBase* >::iterator it = pSVData->mpDeinitDeleteList->begin();
+             it != pSVData->mpDeinitDeleteList->end(); ++it )
+        {
+            (*it)->doCleanup();
+        }
+        delete pSVData->mpDeinitDeleteList;
+        pSVData->mpDeinitDeleteList = NULL;
+    }
+}
+
+} // namespace vcl
+
 #endif
+

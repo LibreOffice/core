@@ -65,6 +65,43 @@
 
 // =======================================================================
 
+// TODO: ask the glyph directly, for now we need this method because of #i99367#
+// true if a codepoint doesn't influence the logical text width
+bool IsDiacritic( sal_UCS4 nChar )
+{
+    // shortcut abvious non-diacritics
+    if( nChar < 0x0300 )
+        return false;
+     if( nChar >= 0x2100 )
+        return false;
+
+    struct DiaRange { sal_UCS4 mnMin, mnEnd;};
+    static const DiaRange aRanges[] = {
+        {0x0300, 0x0370},
+        {0x0590, 0x05C0}, {0x05C1, 0x05C3}, {0x05C3, 0x05C6}, {0x05C7, 0x05C8},
+        {0x0610, 0x061B}, {0x064B, 0x0660}, {0x0670, 0x0671}, {0x06D6, 0x06DC}, {0x06DF, 0x06EE},
+        {0x0730, 0x074D}, {0x07A6, 0x07B1}, {0x07EB, 0x07F4},
+#if 0 // all known fonts have zero-width diacritics already, so no need to query it
+        {0x0900, 0x0904}, {0x093C, 0x093D}, {0x0941, 0x0948}, {0x094D, 0x0950}, {0x0951, 0x0958},
+        {0x0980, 0x0985}, {0x09BC, 0x09BD}, {0x09C1, 0x09C7}, {0x09CD, 0x09CE}, {0x09E2, 0x09E6},
+        {0x0A00, 0x0A05}, {0x0A3C, 0x0A59}, //...
+#endif
+        {0x1DC0, 0x1E00},
+        {0x205F, 0x2070}, {0x20D0, 0x2100}
+    };
+
+    // TODO: almost anything is faster than an O(n) search
+    static const int nCount = sizeof(aRanges) / sizeof(*aRanges);
+    const DiaRange* pRange = &aRanges[0];
+    for( int i = nCount; --i >= 0; ++pRange )
+        if( (pRange->mnMin <= nChar) && (nChar < pRange->mnEnd) )
+            return true;
+
+    return false;
+}
+
+// =======================================================================
+
 int GetVerticalFlags( sal_UCS4 nChar )
 {
     if( (nChar >= 0x1100 && nChar <= 0x11f9)    // Hangul Jamo
@@ -254,6 +291,7 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
         case LANGUAGE_ARABIC_SAUDI_ARABIA  & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0660 - '0';  // arabic-indic digits
             break;
+        case LANGUAGE_FARSI         & LANGUAGE_MASK_PRIMARY:
         case LANGUAGE_URDU          & LANGUAGE_MASK_PRIMARY:
         case LANGUAGE_PUNJABI       & LANGUAGE_MASK_PRIMARY: //???
         case LANGUAGE_SINDHI        & LANGUAGE_MASK_PRIMARY:
@@ -548,7 +586,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLen,
 
         UBiDiLevel nLevel = UBIDI_DEFAULT_LTR;
         if( mnFlags & SAL_LAYOUT_BIDI_RTL )
-            nLevel = UBIDI_RTL;
+            nLevel = UBIDI_DEFAULT_RTL;
 
         // prepare substring for BiDi analysis
         // TODO: reuse allocated pParaBidi
@@ -567,20 +605,16 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLen,
         }
 
         // run BiDi algorithm
-        int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n);
+        const int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n );
         //maRuns.resize( 2 * nRunCount );
-        // TODO: see comment about #110273# below, remove when external issue fixed
-        const UBiDiLevel* pParaLevels = ubidi_getLevels( pParaBidi, &rcI18n);
         for( int i = 0; i < nRunCount; ++i )
         {
             int32_t nMinPos, nLength;
-            ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
-            int nPos0 = nMinPos + mnMinCharPos;
-            int nPos1 = nPos0 + nLength;
+            const UBiDiDirection nDir = ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
+            const int nPos0 = nMinPos + mnMinCharPos;
+            const int nPos1 = nPos0 + nLength;
 
-            // bool bRTL = (nDir == UBIDI_RTL);
-            // workaround for #110273# (probably ICU problem TODO: analyze there)
-            bool bRTL = ((pParaLevels[ nPos0 ] & 1) != 0);
+            const bool bRTL = (nDir == UBIDI_RTL);
             AddRun( nPos0, nPos1, bRTL );
         }
 
@@ -953,8 +987,8 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
         pCharWidths[n] = 0;
 
     // determine cluster extents
-    const GlyphItem* pG = mpGlyphItems;
-    for( int i = mnGlyphCount; --i >= 0; ++pG )
+    const GlyphItem* const pEnd = mpGlyphItems + mnGlyphCount;
+    for( const GlyphItem* pG = mpGlyphItems; pG < pEnd; ++pG )
     {
         // use cluster start to get char index
         if( !pG->IsClusterStart() )
@@ -974,11 +1008,13 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
         // calculate right x-position for this glyph cluster
         // break if no more glyphs in layout
         // break at next glyph cluster start
-        for(; (i > 0) && !pG[1].IsClusterStart(); --i )
+        while( (pG+1 < pEnd) && !pG[1].IsClusterStart() )
         {
             // advance to next glyph in cluster
             ++pG;
 
+            if( pG->IsDiacritic() )
+                continue; // ignore diacritics
             // get leftmost x-extent of this glyph
             long nXPos = pG->maLinearPos.X();
             if( nXPosMin > nXPos )
@@ -992,8 +1028,19 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
 
         // when the current cluster overlaps with the next one assume
         // rightmost cluster edge is the leftmost edge of next cluster
-        if( (i > 0) && (nXPosMax > pG[1].maLinearPos.X()) )
-            nXPosMax = pG[1].maLinearPos.X();
+        // for clusters that do not have x-sorted glyphs
+        // TODO: avoid recalculation of left bound in next cluster iteration
+        for( const GlyphItem* pN = pG; ++pN < pEnd; )
+        {
+            if( pN->IsClusterStart() )
+                break;
+            if( pN->IsDiacritic() )
+                continue;   // ignore diacritics
+            if( nXPosMax > pN->maLinearPos.X() )
+                nXPosMax = pN->maLinearPos.X();
+        }
+        if( nXPosMax < nXPosMin )
+            nXPosMin = nXPosMax = 0;
 
         // character width is sum of glyph cluster widths
         pCharWidths[n] += nXPosMax - nXPosMin;
@@ -1067,7 +1114,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
         return;
 
     // determine cluster boundaries and x base offset
-    int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
+    const int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     int* pLogCluster = (int*)alloca( nCharCount * sizeof(int) );
     int i, n;
     long nBasePointX = -1;
@@ -1086,6 +1133,20 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
         if( nBasePointX < 0 )
             nBasePointX = pG->maLinearPos.X();
     }
+    // retarget unresolved pLogCluster[n] to a glyph inside the cluster
+    // TODO: better do it while the deleted-glyph markers are still there
+    for( n = 0; n < nCharCount; ++n )
+        if( (i = pLogCluster[0]) >= 0 )
+            break;
+    if( n >= nCharCount )
+        return;
+    for( n = 0; n < nCharCount; ++n )
+    {
+        if( pLogCluster[ n ] < 0 )
+            pLogCluster[ n ] = i;
+        else
+            i = pLogCluster[ n ];
+    }
 
     // calculate adjusted cluster widths
     sal_Int32* pNewGlyphWidths = (sal_Int32*)alloca( mnGlyphCount * sizeof(long) );
@@ -1096,15 +1157,11 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     for( int nCharPos = i = -1; rArgs.GetNextPos( &nCharPos, &bRTL ); )
     {
         n = nCharPos - rArgs.mnMinCharPos;
-        if( pLogCluster[ n ] >= 0 )
-            i = pLogCluster[ n ];
-        if( i >= 0 )
-        {
-            long nDelta = rArgs.mpDXArray[ n ] ;
-            if( n > 0 )
-                nDelta -= rArgs.mpDXArray[ n-1 ];
-            pNewGlyphWidths[ i ] += nDelta * mnUnitsPerPixel;
-        }
+        i = pLogCluster[ n ];
+        long nDelta = rArgs.mpDXArray[ n ] ;
+        if( n > 0 )
+            nDelta -= rArgs.mpDXArray[ n-1 ];
+        pNewGlyphWidths[ i ] += nDelta * mnUnitsPerPixel;
     }
 
     // move cluster positions using the adjusted widths
@@ -1123,22 +1180,22 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
             {
                 if( pClusterG->IsClusterStart() )
                     break;
-                nOldClusterWidth += pClusterG->mnNewWidth;
+                if( !pClusterG->IsDiacritic() ) // #i99367# ignore diacritics
+                    nOldClusterWidth += pClusterG->mnNewWidth;
                 nNewClusterWidth += pNewGlyphWidths[j];
             }
-            int nDiff = nNewClusterWidth - nOldClusterWidth;
+            const int nDiff = nNewClusterWidth - nOldClusterWidth;
 
             // adjust cluster glyph widths and positions
             nDelta = nBasePointX + (nNewPos - pG->maLinearPos.X());
-            if( !pG->IsRTLGlyph()
-            || (rArgs.mnFlags & SAL_LAYOUT_KASHIDA_JUSTIFICATON) )
+            if( !pG->IsRTLGlyph() )
             {
-                // for (LTR || KASHIDA) case extend rightmost glyph in cluster
+                // for LTR case extend rightmost glyph in cluster
                 pClusterG[-1].mnNewWidth += nDiff;
             }
             else
             {
-                // right align cluster in new space for (RTL && !KASHIDA) case
+                // right align cluster in new space for RTL case
                 pG->mnNewWidth += nDiff;
                 nDelta += nDiff;
             }
@@ -1168,15 +1225,15 @@ void GenericSalLayout::Justify( long nNewWidth )
     int nMaxGlyphWidth = 0;
     for( pG = mpGlyphItems; pG < pGRight; ++pG )
     {
-        if( pG->mnOrigWidth > 0 )
+        if( !pG->IsDiacritic() )
             ++nStretchable;
-    if( nMaxGlyphWidth < pG->mnOrigWidth)
-        nMaxGlyphWidth = pG->mnOrigWidth;
+        if( nMaxGlyphWidth < pG->mnOrigWidth )
+            nMaxGlyphWidth = pG->mnOrigWidth;
     }
 
     // move rightmost glyph to requested position
     nOldWidth -= pGRight->mnOrigWidth;
-    if( nOldWidth <= 0)
+    if( nOldWidth <= 0 )
         return;
     if( nNewWidth < nMaxGlyphWidth)
         nNewWidth = nMaxGlyphWidth;
@@ -1195,7 +1252,7 @@ void GenericSalLayout::Justify( long nNewWidth )
             pG->maLinearPos.X() += nDeltaSum;
 
             // do not stretch non-stretchable glyphs
-            if( (pG->mnOrigWidth <= 0) || (nStretchable <= 0) )
+            if( pG->IsDiacritic() || (nStretchable <= 0) )
                 continue;
 
             // distribute extra space equally to stretchable glyphs
@@ -1279,13 +1336,18 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
     int nKashidaCount = 0, i;
     for( i = 0; i < mnGlyphCount; ++i, ++pG1 )
     {
+        // only inject kashidas in RTL contexts
         if( !pG1->IsRTLGlyph() )
             continue;
+        // no kashida-injection for blank justified expansion either
+        if( IsSpacingGlyph( pG1->mnGlyphIndex ) )
+            continue;
 
-        int nDelta = pG1->mnNewWidth - pG1->mnOrigWidth;
+        // calculate gap, ignore if too small
+        const int nGapWidth = pG1->mnNewWidth - pG1->mnOrigWidth;
         // worst case is one kashida even for mini-gaps
-        if( nDelta > 0 )
-            nKashidaCount += 1 + (nDelta / nKashidaWidth);
+        if( 3 * nGapWidth >= nKashidaWidth )
+            nKashidaCount += 1 + (nGapWidth / nKashidaWidth);
     }
 
     if( !nKashidaCount )
@@ -1302,19 +1364,23 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         // default action is to copy array element
         *pG2 = *pG1;
 
-        // only apply kashida in a RTL context
+        // only inject kashida in RTL contexts
         if( !pG1->IsRTLGlyph() )
+            continue;
+        // no kashida-injection for blank justified expansion either
+        if( IsSpacingGlyph( pG1->mnGlyphIndex ) )
             continue;
 
         // calculate gap, skip if too small
-        int nDelta = pG1->mnNewWidth - pG1->mnOrigWidth;
-        if( 3*nDelta < nKashidaWidth )
+        int nGapWidth = pG1->mnNewWidth - pG1->mnOrigWidth;
+        if( 3*nGapWidth < nKashidaWidth )
             continue;
 
         // fill gap with kashidas
         nKashidaCount = 0;
         Point aPos = pG1->maLinearPos;
-        for(; nDelta > 0; nDelta -= nKashidaWidth, ++nKashidaCount )
+        aPos.X() -= nGapWidth; // cluster is already right aligned
+        for(; nGapWidth > 0; nGapWidth -= nKashidaWidth, ++nKashidaCount )
         {
             *(pG2++) = GlyphItem( pG1->mnCharPos, nKashidaIndex, aPos,
                 GlyphItem::IS_IN_CLUSTER|GlyphItem::IS_RTL_GLYPH, nKashidaWidth );
@@ -1322,21 +1388,21 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         }
 
         // fixup rightmost kashida for gap remainder
-        if( nDelta < 0 )
+        if( nGapWidth < 0 )
         {
-            aPos.X() += nDelta;
+            aPos.X() += nGapWidth;
             if( nKashidaCount <= 1 )
-                nDelta /= 2;              // for small gap move kashida to middle
-            pG2[-1].mnNewWidth += nDelta; // adjust kashida width to gap width
-            pG2[-1].maLinearPos.X() += nDelta;
+                nGapWidth /= 2;               // for small gap move kashida to middle
+            pG2[-1].mnNewWidth += nGapWidth;  // adjust kashida width to gap width
+            pG2[-1].maLinearPos.X() += nGapWidth;
         }
 
-        // when kashidas were used move the original glyph
+        // when kashidas were inserted move the original cluster
         // to the right and shrink it to it's original width
         *pG2 = *pG1;
         pG2->maLinearPos.X() = aPos.X();
         pG2->mnNewWidth = pG2->mnOrigWidth;
-    }
+     }
 
     // use the new glyph array
     DBG_ASSERT( mnGlyphCapacity >= pG2-pNewGlyphItems, "KashidaJustify overflow" );
@@ -1487,8 +1553,16 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
 {
     if( nStart >= mnGlyphCount )
         return;
+
     GlyphItem* pG = mpGlyphItems + nStart;
+    // the nNewXPos argument determines the new cell position
+    // as RTL-glyphs are right justified in their cell
+    // the cell position needs to be adjusted to the glyph position
+    if( pG->IsRTLGlyph() )
+        nNewXPos += pG->mnNewWidth - pG->mnOrigWidth;
+    // calculate the x-offset to the old position
     long nXDelta = nNewXPos - pG->maLinearPos.X();
+    // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
         GlyphItem* const pGEnd = mpGlyphItems + mnGlyphCount;
@@ -1534,27 +1608,37 @@ void GenericSalLayout::Simplify( bool bIsBase )
 // make sure GlyphItems are sorted left to right
 void GenericSalLayout::SortGlyphItems()
 {
+    // move cluster components behind their cluster start (especially for RTL)
     // using insertion sort because the glyph items are "almost sorted"
-    GlyphItem* pGL = mpGlyphItems;
-    const GlyphItem* pGEnd = mpGlyphItems + mnGlyphCount;
-    for( GlyphItem* pGR = pGL; ++pGR < pGEnd; pGL = pGR )
+    const GlyphItem* const pGEnd = mpGlyphItems + mnGlyphCount;
+    for( GlyphItem* pG = mpGlyphItems; pG < pGEnd; ++pG )
     {
-        // nothing to do when already in correct order
-        int nXPos = pGR->maLinearPos.X();
-        if( pGL->maLinearPos.X() <= nXPos )
+        // find a cluster starting with a diacritic
+        if( !pG->IsDiacritic() )
             continue;
+        if( !pG->IsClusterStart() )
+            continue;
+        for( GlyphItem* pBaseGlyph = pG; ++pBaseGlyph < pGEnd; )
+        {
+            // find the base glyph matching to the misplaced diacritic
+               if( pBaseGlyph->IsClusterStart() )
+                   break;
+               if( pBaseGlyph->IsDiacritic() )
+                   continue;
 
-        // keep data of misplaced item
-        GlyphItem aGI = *pGR;
-        // make room for misplaced item
-        do {
-            pGL[1] = pGL[0];
-            pGL[1].mnFlags |= GlyphItem::IS_IN_CLUSTER;
-        } while( (--pGL >= mpGlyphItems) && (nXPos < pGL->maLinearPos.X()) );
-        // move misplaced item to proper slot
-        pGL[1] = aGI;
-        // TODO: fix glyph cluster start flags
-        pGL[1].mnFlags &= ~GlyphItem::IS_IN_CLUSTER;
+            // found the matching base glyph
+            // => this base glyph becomes the new cluster start
+            const GlyphItem aDiacritic = *pG;
+            *pG = *pBaseGlyph;
+            *pBaseGlyph = aDiacritic;
+
+            // update glyph flags of swapped glyphitems
+            pG->mnFlags &= ~GlyphItem::IS_IN_CLUSTER;
+            pBaseGlyph->mnFlags |= GlyphItem::IS_IN_CLUSTER;
+            // prepare for checking next cluster
+            pG = pBaseGlyph;
+            break;
+        }
     }
 }
 
@@ -1871,7 +1955,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // the measured width is still in fallback font units
             // => convert it to base level font units
             if( n > 0 ) // optimization: because (fUnitMul==1.0) for (n==0)
-            nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
+                nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
         }
 
         // calculate new x position (in base level units)
@@ -1914,11 +1998,12 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
     for( int i = mnLevel; --i >= 0; )
     {
         SalLayout& rLayout = *mpLayouts[ i ];
-        rLayout.DrawBase() = maDrawBase;
+        rLayout.DrawBase() += maDrawBase;
         rLayout.DrawOffset() += maDrawOffset;
         rLayout.InitFont();
         rLayout.DrawText( rGraphics );
         rLayout.DrawOffset() -= maDrawOffset;
+        rLayout.DrawBase() -= maDrawBase;
     }
     // NOTE: now the baselevel font is active again
 }

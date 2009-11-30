@@ -54,6 +54,7 @@ namespace tools
 static oslModule    aTestToolModule = 0;
 // are we to be automated at all?
 static bool bAutomate = false;
+static bool bLoggerStarted = false;
 
 
 sal_uInt32 GetCommandLineParamCount()
@@ -137,7 +138,10 @@ void InitTestToolLib()
             oslGenericFunction pInitFunc = osl_getFunctionSymbol(
                 aTestToolModule, aFuncName.pData );
             if ( pInitFunc )
+            {
                 (reinterpret_cast< pfunc_CreateEventLogger >(pInitFunc))();
+                bLoggerStarted = TRUE;
+            }
             else
             {
                 DBG_ERROR1( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
@@ -164,14 +168,17 @@ void DeInitTestToolLib()
                 (reinterpret_cast< pfunc_DestroyRemoteControl >(pDeInitFunc))();
         }
 
-        if ( ::comphelper::UiEventsLogger::isEnabled() )
+        if ( bLoggerStarted /*::comphelper::UiEventsLogger::isEnabled()*/ )
         {
             OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyEventLogger" ));
 
             oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
                 aTestToolModule, aFuncName.pData );
             if ( pDeInitFunc )
+            {
                 (reinterpret_cast< pfunc_DestroyEventLogger >(pDeInitFunc))();
+                bLoggerStarted = FALSE;
+            }
         }
 
         osl_unloadModule( aTestToolModule );

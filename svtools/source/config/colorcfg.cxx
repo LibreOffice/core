@@ -562,13 +562,13 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLUE, // BASICOPERATOR  ,
         COL_BLUE, // BASICKEYWORD   ,
         COL_RED, //BASICERROR
-        0xF84E4E, // SQLIDENTIFIER
-        0xCC66CC, // SQLNUMBER
-        0x7CDB8C, // SQLSTRING
-        COL_BLACK, // SQLOPERATOR
-        0x0000FF, // SQLKEYWORD
+        0x009900, // SQLIDENTIFIER
+        0x000000, // SQLNUMBER
+        0xCE7B00, // SQLSTRING
+        0x000000, // SQLOPERATOR
+        0x0000E6, // SQLKEYWORD
         0x259D9D, // SQLPARAMTER
-        COL_GRAY,// SQLCOMMENT
+        0x969696,// SQLCOMMENT
     };
     Color aRet;
     switch(eEntry)

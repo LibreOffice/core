@@ -400,12 +400,17 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
     return xTempStorage;
 }
 
+// ----------------------------------------------------------------------
+sal_Bool OStorageHelper::IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed )
+{
+    return IsValidZipEntryFileName( aName.getStr(), aName.getLength(), bSlashAllowed );
+}
 
 // ----------------------------------------------------------------------
-sal_Bool IsValidZipEntryFileName(
+sal_Bool OStorageHelper::IsValidZipEntryFileName(
     const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed )
 {
-    for ( sal_Int32 i = 0 ; i < nLength ; i++ )
+    for ( sal_Int32 i = 0; i < nLength; i++ )
     {
         switch ( pChar[i] )
         {
@@ -422,9 +427,8 @@ sal_Bool IsValidZipEntryFileName(
                     return sal_False;
                 break;
             default:
-                if ( pChar[i] < 32  || pChar[i] > 127 )
+                if ( pChar[i] < 32  || pChar[i] >= 0xD800 && pChar[i] <= 0xDFFF )
                     return sal_False;
-// Note: in case this ever supports unicode, watch out for surrogate pairs!
         }
     }
     return sal_True;

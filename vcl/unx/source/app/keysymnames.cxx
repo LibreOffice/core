@@ -649,18 +649,7 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
         {
             XkbDescPtr pXkbDesc = NULL;
             // try X keyboard extension
-        #ifdef MACOSX
-            // FIXME
-            // XDarwin doesn't yet have very good support for the Xkeyboard extension.
-            // When we call XkbGetKeyboard(), the XServer throws a message up in the
-            // console about xkbcomp and files for geometry include.  The side effect of
-            // this is _very_ noticable lag when drawing menus.  The file menu, for example,
-            // takes about 1s to come down on my G4/450 DP and you can see it draw.  Therefore
-            // we are disabling it for the moment until better XDarwin support exists.
-            if ( 0 )
-        #else
             if( (pXkbDesc = XkbGetKeyboard( GetDisplay(), XkbAllComponentsMask, XkbUseCoreKbd )) )
-        #endif
             {
                 const char* pAtom = NULL;
                 if( pXkbDesc->names->groups[0] )

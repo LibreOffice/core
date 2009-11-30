@@ -114,7 +114,7 @@ $(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/types.rdb
     rm -f $@
     $(GNUCOPY) $(SOLARBINDIR)$/types.rdb $@
     cd $(BIN) && \
-        regcomp -register -r applicat.rdb \
+        $(REGCOMP) -register -r applicat.rdb \
             -c i18npool.uno$(DLLPOST)
 
 # --- Def-File ---

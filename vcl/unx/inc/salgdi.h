@@ -344,7 +344,7 @@ public:
      *  it is imperative to eat up graphics exposes even in case you don't need
      *  them because the next one using XCopyArea can depend on them
      */
-    static void YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, Drawable aDrawable );
+    void YieldGraphicsExpose();
 
     // do XCopyArea or XGet/PutImage depending on screen numbers
     // signature is like XCopyArea with screen numbers added

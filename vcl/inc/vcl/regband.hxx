@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regband.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.158.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,8 +92,21 @@ public:
 
                                 // create y-band with boundaries
                                 ImplRegionBand( long nYTop, long nYBottom );
-                                // copy y-band with with all data
-                                ImplRegionBand( const ImplRegionBand & theSourceBand );
+                                /** copy y-band with with all data
+                                    @param theSourceBand
+                                        The new ImplRegionBand object will
+                                        be a copy of this band.
+                                    @param bIgnorePoints
+                                        When <TRUE/> (the default) the
+                                        band points pointed to by
+                                        mpFirstBandPoint are not copied.
+                                        When <FALSE/> they are copied.
+                                        You need the points when you are
+                                        planning to call ProcessPoints()
+                                        later on.
+                                */
+                                ImplRegionBand( const ImplRegionBand & theSourceBand,
+                                                const bool bIgnorePoints = true);
                                 ~ImplRegionBand();
 
     long                        GetXLeftBoundary() const;
@@ -124,6 +137,17 @@ public:
     BOOL                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
 
     BOOL                        operator==( const ImplRegionBand& rRegionBand ) const;
+
+    /** Split the called band at the given vertical coordinate.  After the
+        split the called band will cover the upper part not including nY.
+        The new band will cover the lower part including nY.
+        @param nY
+            The band is split at this y coordinate.  The new, lower band
+            will include this very value.
+        @return
+            Returns the new, lower band.
+    */
+    ImplRegionBand*             SplitBand (const sal_Int32 nY);
 };
 
 #endif  // _SV_REGBAND_HXX

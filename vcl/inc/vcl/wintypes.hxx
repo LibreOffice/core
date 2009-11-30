@@ -185,6 +185,7 @@ typedef sal_Int64 WinBits;
 #define WB_DOCKABLE             ((WinBits)SAL_CONST_INT64(0x20000000))
 #define WB_AUTOVSCROLL          ((WinBits)SAL_CONST_INT64(0x40000000))
 #define WB_HYPHENATION          (((WinBits)SAL_CONST_INT64(0x80000000)) | WB_WORDBREAK)
+#define WB_CHILDDLGCTRL         ((WinBits)SAL_CONST_INT64(0x100000000000))
 
 // system floating window
 #define WB_SYSTEMFLOATWIN       ((WinBits)SAL_CONST_INT64(0x100000000))

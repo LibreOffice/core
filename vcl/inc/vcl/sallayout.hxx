@@ -145,6 +145,7 @@ protected:
 };
 
 // helper functions often used with ImplLayoutArgs
+bool IsDiacritic( sal_UCS4 );
 int GetVerticalFlags( sal_UCS4 );
 sal_UCS4 GetVerticalChar( sal_UCS4 );
 // #i80090# GetMirroredChar also needed outside vcl, moved to svapp.hxx
@@ -329,10 +330,11 @@ public:
                 mnGlyphIndex(nGlyphIndex), maLinearPos(rLinearPos)
             {}
 
-    enum{ FALLBACK_MASK=0xFF, IS_IN_CLUSTER=0x100, IS_RTL_GLYPH=0x200 };
+    enum{ FALLBACK_MASK=0xFF, IS_IN_CLUSTER=0x100, IS_RTL_GLYPH=0x200, IS_DIACRITIC=0x400 };
 
-    bool    IsClusterStart() const { return !(mnFlags & IS_IN_CLUSTER); }
-    bool    IsRTLGlyph() const { return ((mnFlags & IS_RTL_GLYPH) != 0); }
+    bool    IsClusterStart() const  { return ((mnFlags & IS_IN_CLUSTER) == 0); }
+    bool    IsRTLGlyph() const      { return ((mnFlags & IS_RTL_GLYPH) != 0); }
+    bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
 };
 
 // ---------------

@@ -485,7 +485,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 {
                     // Naechstes Zeichen holen
                     c = peekChar();
-                    bIdentifierChar = testCharFlags( c, CHAR_IN_IDENTIFIER );
+                    bIdentifierChar =  BasicSimpleCharClass::isAlpha( c, true );
                     if( bIdentifierChar )
                         getChar();
                 }
@@ -499,16 +499,28 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             if (cPeekNext=='-')
             {
                 // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
-                sal_Unicode cPeek = peekChar();
-                while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == FALSE )
+                while( cPeekNext != CHAR_EOF && testCharFlags( cPeekNext, CHAR_EOL ) == FALSE )
                 {
                     getChar();
-                    cPeek = peekChar();
+                    cPeekNext = peekChar();
                 }
-
                 reType = TT_COMMENT;
             }
         }
+       else if (c=='/')
+       {
+           sal_Unicode cPeekNext = peekChar();
+           if (cPeekNext=='/')
+           {
+               // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
+               while( cPeekNext != CHAR_EOF && testCharFlags( cPeekNext, CHAR_EOL ) == FALSE )
+               {
+                   getChar();
+                   cPeekNext = peekChar();
+               }
+               reType = TT_COMMENT;
+           }
+       }
         else
         {
             // Kommentar ?
