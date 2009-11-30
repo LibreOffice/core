@@ -45,7 +45,6 @@
 #include "sfx2/sfx.hrc"
 #include "sfx2/sfxsids.hrc"
 #include "sfx2/sfxuno.hxx"
-#include "sfx2/topfrm.hxx"
 #include "sfx2/viewfrm.hxx"
 
 /** === begin UNO includes === **/
