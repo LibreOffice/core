@@ -485,7 +485,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     if ( pDocSh->GetTitle() == aStrDocName )
                     {
-                        pViewFrame = SfxViewFrame::GetFirst( pDocSh, TYPE(SfxTopViewFrame) );
+                        pViewFrame = SfxViewFrame::GetFirst( pDocSh );
                         bFound = ( NULL != pViewFrame );
                     }
 
@@ -493,8 +493,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 }
 
                 if ( bFound )
-                    if ( pViewFrame->ISA(SfxTopViewFrame) )
-                        pViewFrame->GetFrame()->Appear();
+                    pViewFrame->GetFrame()->Appear();
 
                 rReq.Ignore();//XXX wird von SFX erledigt
             }

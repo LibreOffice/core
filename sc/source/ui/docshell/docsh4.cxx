@@ -2559,7 +2559,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( BOOL bOnlyVisible )
     if( !pViewSh )
     {
         // 1. ViewShell suchen
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame), bOnlyVisible );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, bOnlyVisible );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();

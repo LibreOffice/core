@@ -401,17 +401,13 @@ ScVbaWindow::getWindowState() throw (uno::RuntimeException)
     sal_Int32 nwindowState = xlNormal;
     ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
     SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
-    SfxTopViewFrame *pTop= PTR_CAST( SfxTopViewFrame, pViewFrame -> GetTopViewFrame() );
-    if ( pTop )
+    WorkWindow* pWork = (WorkWindow*) pTop->GetFrame()->GetSystemWindow();
+    if ( pWork )
     {
-        WorkWindow* pWork = (WorkWindow*) pTop->GetFrame()->GetSystemWindow();
-        if ( pWork )
-        {
-            if ( pWork -> IsMaximized())
-                nwindowState = xlMaximized;
-            else if (pWork -> IsMinimized())
-                nwindowState = xlMinimized;
-        }
+        if ( pWork -> IsMaximized())
+            nwindowState = xlMaximized;
+        else if (pWork -> IsMinimized())
+            nwindowState = xlMinimized;
     }
     return uno::makeAny( nwindowState );
 }
@@ -423,21 +419,17 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
     _windowstate >>= nwindowState;
     ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
     SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
-    SfxTopViewFrame *pTop= PTR_CAST( SfxTopViewFrame, pViewFrame -> GetTopViewFrame() );
-    if ( pTop )
+    WorkWindow* pWork = (WorkWindow*) pTop->GetFrame()->GetSystemWindow();
+    if ( pWork )
     {
-        WorkWindow* pWork = (WorkWindow*) pTop->GetFrame()->GetSystemWindow();
-        if ( pWork )
-        {
-            if ( nwindowState == xlMaximized)
-                pWork -> Maximize();
-            else if (nwindowState == xlMinimized)
-                pWork -> Minimize();
-            else if (nwindowState == xlNormal)
-                pWork -> Restore();
-            else
-                throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Parameter" ) ), uno::Reference< uno::XInterface >() );
-        }
+        if ( nwindowState == xlMaximized)
+            pWork -> Maximize();
+        else if (nwindowState == xlMinimized)
+            pWork -> Minimize();
+        else if (nwindowState == xlNormal)
+            pWork -> Restore();
+        else
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Parameter" ) ), uno::Reference< uno::XInterface >() );
     }
 }
 

@@ -311,7 +311,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
 {
     ScInputHandler* pHdl=NULL;
 
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell, TYPE(SfxTopViewFrame) );
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
     while( pFrame && pHdl==NULL)
     {
         SfxViewShell* p = pFrame->GetViewShell();
@@ -321,7 +321,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
             pHdl=pViewSh->GetInputHandler();
             if(ppViewSh!=NULL) *ppViewSh=pViewSh;
         }
-        pFrame = SfxViewFrame::GetNext(*pFrame,pDocShell, TYPE(SfxTopViewFrame) );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
     }
 
 

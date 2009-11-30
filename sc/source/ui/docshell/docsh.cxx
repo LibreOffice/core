@@ -2097,7 +2097,7 @@ USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     if(SC_MOD()->GetCurRefDlgId()>0)
     {
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame) );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();

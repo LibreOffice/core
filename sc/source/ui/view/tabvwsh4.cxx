@@ -294,8 +294,7 @@ void ScTabViewShell::SetActive()
 
 #if 0
     SfxViewFrame* pFrame = GetViewFrame();
-    if ( pFrame->ISA(SfxTopViewFrame) )
-        pFrame->GetFrame()->Appear();
+    pFrame->GetFrame()->Appear();
 
     SFX_APP()->SetViewFrame( pFrame );          // immer erst Appear, dann SetViewFrame (#29290#)
 #endif
@@ -1385,8 +1384,7 @@ void ScTabViewShell::StartSimpleRefDialog(
         // Then the view has to be activated first, the same way as in Execute for SID_CURRENTDOC.
         // Can't use GrabFocus here, because it needs to take effect immediately.
 
-        if ( pViewFrm->ISA(SfxTopViewFrame) )
-            pViewFrm->GetFrame()->Appear();
+        pViewFrm->GetFrame()->Appear();
     }
 
     USHORT nId = ScSimpleRefDlgWrapper::GetChildWindowId();
