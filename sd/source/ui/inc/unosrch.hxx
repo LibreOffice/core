@@ -38,7 +38,7 @@
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svx/editdata.hxx>
 #include <svx/unoipset.hxx>
 

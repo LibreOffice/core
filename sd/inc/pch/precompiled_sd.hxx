@@ -841,7 +841,7 @@
 #include "unotools/confignode.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/localfilehelper.hxx"
-#include "unotools/servicehelper.hxx"
+#include "comphelper/servicehelper.hxx"
 #include "unotools/tempfile.hxx"
 #include "unotools/ucbstreamhelper.hxx"
 

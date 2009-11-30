@@ -324,7 +324,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
     // 2. Create a new page or duplicate an existing one.
     View* pDrView = GetView();
-    pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
+    const bool bUndo = pDrView && pDrView->IsUndoEnabled();
+    if( bUndo )
+        pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
 
     USHORT nNewPageIndex = 0xffff;
     switch (nSId)
@@ -403,13 +405,18 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     }
     SdPage* pNewPage = 0;
     if(nNewPageIndex != 0xffff)
-    {
         pNewPage = pDocument->GetSdPage(nNewPageIndex, PK_STANDARD);
-        pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pNewPage));
-        pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
-    }
 
-    pDrView->EndUndo();
+    if( bUndo )
+    {
+        if( pNewPage )
+        {
+            pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pNewPage));
+            pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
+        }
+
+        pDrView->EndUndo();
+    }
 
     return pNewPage;
 }

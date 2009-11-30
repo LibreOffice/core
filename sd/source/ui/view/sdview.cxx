@@ -793,7 +793,7 @@ sal_Bool View::SdrBeginTextEdit(
             Color aBackground;
             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_TABLE )
             {
-                aBackground = ImpGetTextEditBackgroundColor();
+                aBackground = GetTextEditBackgroundColor(*this);
             }
             else
             {
@@ -1252,8 +1252,15 @@ IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
 
 bool View::isRecordingUndo() const
 {
-    sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
-    return pUndoManager && pUndoManager->isInListAction();
+    if( mpDoc && mpDoc->IsUndoEnabled() )
+    {
+        sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
+        return pUndoManager && pUndoManager->isInListAction();
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void View::AddCustomHdl()

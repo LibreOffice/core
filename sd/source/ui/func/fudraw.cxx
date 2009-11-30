@@ -78,8 +78,8 @@
 #include "fusel.hxx"
 #include <svtools/aeitem.hxx>
 #include <vcl/msgbox.hxx>
-
 #include "slideshow.hxx"
+#include <svx/sdrhittesthelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -690,7 +690,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             if (eHit == SDRHIT_NONE)
             {
                 // found nothing -> look after at the masterpage
-                mpView->PickObj(aPnt, pObj, pPV, SDRSEARCH_ALSOONMASTER);
+                mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER);
             }
             else if (eHit == SDRHIT_UNMARKEDOBJECT)
             {
@@ -719,7 +719,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 if (bDefPointer && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
                 {
                     // In die Gruppe hineinschauen
-                    if (mpView->PickObj(aPnt, pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                    if (mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                         bDefPointer = !SetPointer(pObj, aPnt);
                 }
             }
@@ -767,10 +767,10 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
         aHitPosB.Y() -= n2HitLog;
 
         if ( !pObj->IsClosedObj() ||
-            ( pObj->IsHit(aHitPosR, nHitLog, pVisiLayer) &&
-              pObj->IsHit(aHitPosL, nHitLog, pVisiLayer) &&
-              pObj->IsHit(aHitPosT, nHitLog, pVisiLayer) &&
-              pObj->IsHit(aHitPosB, nHitLog, pVisiLayer) ) )
+            ( SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+              SdrObjectPrimitiveHit(*pObj, aHitPosL, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+              SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+              SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false)))
         {
             /**********************************************************
             * hit inside the object (without margin) or open object
@@ -922,7 +922,7 @@ BOOL FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
                 Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(aPosPixel)));
 
-                if (mpView->PickObj(aPos, pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                if (mpView->PickObj(aPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                     bReturn = SetHelpText(pObj, aPosPixel, aVEvt);
             }
         }

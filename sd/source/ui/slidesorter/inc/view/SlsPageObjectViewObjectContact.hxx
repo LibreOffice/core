@@ -105,13 +105,6 @@ public:
     */
     model::SharedPageDescriptor GetPageDescriptor (void) const;
 
-    /** Return the device independent part of the page border.  This border
-        is returned in pixel coordinates.  Note that the device dependent
-        parts--for the page number and the page title--have to be added.
-        This is done by CalculatePageModelBorder().
-    */
-    static SvBorder GetPagePixelBorder (void);
-
     /** Return the border widths in the screen coordinate system of the
         border arround the page object.  The border contains frames for
         selection, focus, the page name and number, and the indicator for
@@ -144,7 +137,7 @@ public:
             When bVisible is <FALSE/> then paint the area of the mouse over
             effect in the background color, i.e. erase it.
     */
-    void PaintMouseOverEffect (OutputDevice& rDevice, bool bVisible) const;
+    drawinglayer::primitive2d::Primitive2DSequence createMouseOverEffectPrimitive2DSequence();
 
     enum BoundingBoxType {
         // This is the outer bounding box that includes the preview, page
@@ -189,33 +182,6 @@ public:
     // access to the current page content primitive vector which may be used for visualisation
     const drawinglayer::primitive2d::Primitive2DSequence& getCurrentPageContents() const { return mxCurrentPageContents; }
 
-    /** This convenience method paints a dotted or dashed rectangle.  The
-        length of dots or dashes is indepent of zoom factor or map mode.
-    */
-    enum DashType { Dotted, Dashed };
-    static void PaintDottedRectangle (
-        OutputDevice& rDevice,
-        const Rectangle& rRectangle,
-        const DashType eDashType = Dotted);
-
-
-    enum ColorSpec { CS_SELECTION, CS_BACKGROUND, CS_WINDOW, CS_TEXT };
-    /** Return a color for one of the screen elements in ColorSpec.  For
-        Background the background color is updated when
-        mbIsBackgroundColorUpdatePending is <TRUE/>.
-        @param rDevice
-            Base colors are taken from the device.
-        @param eSpec
-            The type of color to return.
-        @param nOpacity
-            This parameter controls the blending between the background and
-            the actual color.
-    */
-    Color GetColor (
-        const OutputDevice& rDevice,
-        const ColorSpec eSpec,
-        const double nOpacity = 1.0) const;
-
     virtual void ActionChanged (void);
 
 private:
@@ -239,11 +205,6 @@ private:
     */
     bool mbInDestructor;
 
-    /** Set this flag to <TRUE/> to update the background color on the next
-        call to GetBackgroundColor().
-    */
-    mutable bool mbIsBackgroundColorUpdatePending;
-
     /// The primitive sequence of the page contents, completely scaled
     /// and prepared for painiting
     drawinglayer::primitive2d::Primitive2DSequence      mxCurrentPageContents;
@@ -251,12 +212,6 @@ private:
     ::boost::shared_ptr<cache::PageCache> mpCache;
 
     ::boost::shared_ptr<controller::Properties> mpProperties;
-
-    /** Do not use this member directly.  Use GetColor(Background) instead.
-        That method determines the background color when
-        mbIsBackgroundColorUpdatePending is <TRUE/>.
-    */
-    mutable Color maBackgroundColor;
 
     BitmapEx GetPreview (
         const sdr::contact::DisplayInfo& rDisplayInfo,
@@ -266,46 +221,6 @@ private:
         is painted).
     */
     Rectangle GetPageNumberArea (OutputDevice& rDevice) const;
-
-    void PaintBackground (OutputDevice& rDevice) const;
-
-    /** Paint the preview bitmap.
-    */
-    void PaintPreview (OutputDevice& rDevice);
-
-    /** Paint a border arround the page preview.
-    */
-    void PaintBorder (OutputDevice& rDevice) const;
-
-    /** Paint the focus indicator for the specified page.
-    */
-    void PaintFocusIndicator (
-        OutputDevice& rDevice,
-        bool bEraseBackground) const;
-
-    /** Paint the selection indicator when the page is currently selected.
-        Otherwise the call is ignored.
-    */
-    void PaintSelectionIndicator (OutputDevice& rDevice) const;
-
-    /** Paint the fade effect indicator which indicates whether a fade
-        effect is currently associated with a page.
-        @param rDescriptor
-            The descriptor of the page for which to paint the fade effect
-            indicator.
-    */
-    void PaintFadeEffectIndicator (OutputDevice& rDevice) const;
-
-    /** Paint the name of the page to the bottom right of the page object.
-    */
-    void PaintPageName (OutputDevice& rDevice) const;
-
-    /** Paint the number of the page to the upper left of the page object.
-    */
-    void PaintPageNumber (
-        ::sdr::contact::DisplayInfo& rDisplayInfo);
-
-    Color GetBackgroundColor (const OutputDevice& rDevice) const;
 };
 
 } } } // end of namespace ::sd::slidesorter::view

@@ -3153,11 +3153,15 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
     if ( mbEmptyPresObj )
         mnTextSize = 0;
-    if ( mnTextSize )
+    if ( !mbEmptyPresObj )
     {
         ParagraphObj* pPara;
         TextObj aTextObj( mXText, nTextInstance, maFontCollection, (PPTExBulletProvider&)*this );
-        aTextObj.Write( &rOut );
+
+        // leaving out EPP_TextCharsAtom w/o text - still write out
+        // attribute info though
+        if ( mnTextSize )
+            aTextObj.Write( &rOut );
 
         if ( pPropOpt )
             ImplAdjustFirstLineLineSpacing( aTextObj, *pPropOpt );
@@ -4925,9 +4929,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( mbPresObj )
                 {
                     nOutlinerCount++;
-                    if ( rLayout.bOutlinerPossible && ( nOutlinerCount == 1 ) ||
-                        ( ( rLayout.bSecOutlinerPossible && ( nOutlinerCount == 2 ) )
-                            && ( nPrevTextStyle == EPP_TEXTSTYLE_BODY ) ) )
+                    if ( (rLayout.bOutlinerPossible && ( nOutlinerCount == 1 )) ||
+                         (( rLayout.bSecOutlinerPossible && ( nOutlinerCount == 2 ) ) && ( nPrevTextStyle == EPP_TEXTSTYLE_BODY ))
+                       )
                     {
                         ImplGetText();
                         TextObj aTextObj( mXText, EPP_TEXTTYPE_Body, maFontCollection, (PPTExBulletProvider&)*this );
@@ -5694,38 +5698,25 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
                             aPropOptSp.CreateFillProperties( mXPropSet, sal_True );
                             aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-                            if ( mnTextSize )
-                                aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                            aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
                             aPropOptSp.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
 
-                            if ( mnTextSize )
-                            {
-                                SvMemoryStream aClientTextBox( 0x200, 0x200 );
-                                SvMemoryStream  aExtBu( 0x200, 0x200 );
+                            SvMemoryStream aClientTextBox( 0x200, 0x200 );
+                            SvMemoryStream  aExtBu( 0x200, 0x200 );
 
-                                ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
+                            ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
 
-                                aPropOptSp.Commit( *mpStrm );
-                                mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-                                *mpStrm     << nLeft
-                                            << nTop
-                                               << nRight
-                                            << nBottom;
+                            aPropOptSp.Commit( *mpStrm );
+                            mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
+                            *mpStrm     << nLeft
+                                        << nTop
+                                        << nRight
+                                        << nBottom;
 
-                                *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
-                                        << (sal_uInt32)aClientTextBox.Tell();
+                            *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
+                                    << (sal_uInt32)aClientTextBox.Tell();
 
-                                mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
-                            }
-                            else
-                            {
-                                aPropOptSp.Commit( *mpStrm );
-                                mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-                                *mpStrm     << nLeft
-                                            << nTop
-                                               << nRight
-                                            << nBottom;
-                            }
+                            mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
                             mpPptEscherEx->CloseContainer();
                         }
                     }

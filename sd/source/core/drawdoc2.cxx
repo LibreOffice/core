@@ -566,8 +566,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
     if (nPageCount <= 1)
     {
         // #i57181# Paper size depends on Language, like in Writer
-        SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper( Application::GetSettings().GetLanguage() );
-        Size aDefSize( SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM) );
+        Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MAP_100TH_MM );
 
         /**********************************************************************
         * Handzettel-Seite einfuegen
@@ -661,7 +660,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             else
             {
                 // Impress: stets Bildschirmformat, quer
-                Size aSz( SvxPaperInfo::GetPaperSize(SVX_PAPER_SCREEN, MAP_100TH_MM) );
+                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN, MAP_100TH_MM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
             }
@@ -812,7 +811,10 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
     USHORT  nNoOfPages         = GetSdPageCount(PK_STANDARD);
     BOOL    bSomethingHappened = FALSE;
 
-    BegUndo(String(SdResId(STR_UNDO_MOVEPAGES)));
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+        BegUndo(String(SdResId(STR_UNDO_MOVEPAGES)));
 
     // Liste mit selektierten Seiten
     List    aPageList;
@@ -853,10 +855,12 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
             if (nPage != 0)
             {
                 SdrPage* pPg = GetPage(nPage);
-                AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, 1));
+                if( bUndo )
+                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, 1));
                 MovePage(nPage, 1);
                 pPg = GetPage(nPage+1);
-                AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, 2));
+                if( bUndo )
+                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, 2));
                 MovePage(nPage+1, 2);
                 bSomethingHappened = TRUE;
             }
@@ -880,10 +884,12 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
                 if (nPage != nTargetPage)
                 {
                     SdrPage* pPg = GetPage(nPage);
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
+                    if( bUndo )
+                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
                     pPg = GetPage(nPage+1);
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
+                    if( bUndo )
+                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
                     bSomethingHappened = TRUE;
                 }
@@ -893,10 +899,12 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
                 if (nPage != nTargetPage)
                 {
                     SdrPage* pPg = GetPage(nPage+1);
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
+                    if( bUndo )
+                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
                     pPg = GetPage(nPage);
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
+                    if( bUndo )
+                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
                     bSomethingHappened = TRUE;
                 }
@@ -906,7 +914,8 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
         }
     }
 
-    EndUndo();
+    if( bUndo )
+        EndUndo();
 
     return bSomethingHappened;
 }

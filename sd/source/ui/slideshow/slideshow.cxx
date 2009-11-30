@@ -117,10 +117,10 @@ namespace {
 //////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------------
 
-const SfxItemPropertyMap* ImplGetPresentationPropertyMap()
+const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 {
     // NOTE: First member must be sorted
-    static const SfxItemPropertyMap aPresentationPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("AllowAnimations"),          ATTR_PRESENT_ANIMATION_ALLOWED, &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("CustomShow"),               ATTR_PRESENT_CUSTOMSHOW,        &::getCppuType((const OUString*)0),     0, 0 },
@@ -143,7 +143,7 @@ const SfxItemPropertyMap* ImplGetPresentationPropertyMap()
     return aPresentationPropertyMap_Impl;
 }
 
-SfxItemPropertyMap map_impl[] = { { 0,0,0,0,0,0 } };
+//SfxItemPropertyMap map_impl[] = { { 0,0,0,0,0,0 } };
 
 // --------------------------------------------------------------------
 // class SlideShow
@@ -297,7 +297,8 @@ Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(Runt
 Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo() throw(RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    return maPropSet.getPropertySetInfo();
+    static Reference< XPropertySetInfo > xInfo = maPropSet.getPropertySetInfo();
+    return xInfo;
  }
 
 // --------------------------------------------------------------------
@@ -309,15 +310,15 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
     sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = maPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pMap && ((pMap->nFlags & PropertyAttribute::READONLY) != 0) )
+    if( pEntry && ((pEntry->nFlags & PropertyAttribute::READONLY) != 0) )
         throw PropertyVetoException();
 
     bool bValuesChanged = false;
     bool bIllegalArgument = true;
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case ATTR_PRESENT_ALL:
     {
@@ -582,9 +583,9 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
 
     const sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = maPropSet.getPropertyMapEntry(PropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case ATTR_PRESENT_ALL:
         return Any( (sal_Bool) ( !rPresSettings.mbCustomShow && rPresSettings.mbAll ) );

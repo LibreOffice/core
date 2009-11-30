@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+
 #include "DrawViewShell.hxx"
 #include <vcl/msgbox.hxx>
 #include <svtools/urlbmk.hxx>
@@ -92,6 +94,8 @@ namespace sd {
 #pragma optimize ( "", off )
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 
 /*************************************************************************
 |*
@@ -102,25 +106,20 @@ namespace sd {
 void DrawViewShell::DeleteActualPage()
 {
     USHORT          nPage = maTabControl.GetCurPageId() - 1;
-    SdPage*         pPage = GetDoc()->GetSdPage(nPage,PK_STANDARD);
-
-#ifdef DBG_UTIL
-    USHORT nPageCount = GetDoc()->GetPageCount();
-    DBG_ASSERT(nPageCount > 1, "aber das ist die letzte!");
-#endif
 
     mpDrawView->SdrEndTextEdit();
 
-    mpDrawView->BegUndo();
-
-    mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-    GetDoc()->RemovePage(pPage->GetPageNum());
-
-    pPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
-    mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-    GetDoc()->RemovePage(pPage->GetPageNum());
-
-    mpDrawView->EndUndo();
+    try
+    {
+        Reference<XDrawPagesSupplier> xDrawPagesSupplier( GetDoc()->getUnoModel(), UNO_QUERY_THROW );
+        Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
+        xPages->remove( xPage );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+    }
 }
 
 /*************************************************************************
@@ -659,7 +658,16 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     UnlockInput();
                                 }
                                 else
-                                    nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                {
+                                    if( (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+                                    {
+                                        nSdResId = RID_DRAW_TABLEOBJ_INSIDE_POPUP;
+                                    }
+                                    else
+                                    {
+                                        nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                    }
+                                }
                             }
                         }
                         else

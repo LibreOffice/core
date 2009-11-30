@@ -521,6 +521,22 @@ sal_Bool ImplSdPPTImport::Import()
                                                     pHyperlink->aConvSubString.Append( mpDoc->CreatePageNumValue( (USHORT)nPageNumber + 1 ) );
                                                 }
                                             }
+                                            else    // searching for "FIRST" or "LAST" page
+                                            {
+                                                for ( nToken = 0; nToken < nTokenCount; nToken++ )
+                                                {
+                                                    if ( aStringAry[ nToken ] == "FIRST" )
+                                                    {
+                                                        pHyperlink->aConvSubString = String( RTL_CONSTASCII_USTRINGPARAM( "action?jump=firstslide" ) );
+                                                        break;
+                                                    }
+                                                    else if ( aStringAry[ nToken ] == "LAST" )
+                                                    {
+                                                        pHyperlink->aConvSubString = String( RTL_CONSTASCII_USTRINGPARAM( "action?jump=lastslide" ) );
+                                                        break;
+                                                    }
+                                                }
+                                            }
                                         }
                                         aHyperList.Insert( pHyperlink, LIST_APPEND );
                                     }
@@ -2599,6 +2615,14 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     // Animationseffekte des Objektes lesen
     if ( pObj )
     {
+        // further setup placeholder objects
+        if( pObj->ISA(SdrPageObj) && pData )
+        {
+            const ProcessData* pProcessData=(const ProcessData*)pData;
+            if( pProcessData->pPage )
+                pProcessData->pPage->InsertPresObj( pObj, PRESOBJ_PAGE );
+        }
+
         BOOL bInhabitanceChecked = FALSE;
         BOOL bAnimationInfoFound = FALSE;
         DffRecordHeader aMasterShapeHd;

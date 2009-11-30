@@ -727,11 +727,19 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( rMarkList.GetMark(0) && !mpDrawView->IsAction() )
             {
                 SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
-                mpDrawView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+                const bool bUndo = mpDrawView->IsUndoEnabled();
+                if( bUndo )
+                    mpDrawView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+
                 mpDrawView->UnmarkAllPoints();
-                mpDrawView->AddUndo(new SdrUndoGeoObj(*pPathObj));
+
+                if( bUndo )
+                    mpDrawView->AddUndo(new SdrUndoGeoObj(*pPathObj));
+
                 pPathObj->ToggleClosed();
-                mpDrawView->EndUndo();
+
+                if( bUndo )
+                    mpDrawView->EndUndo();
             }
             rReq.Done();
         }
