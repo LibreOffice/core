@@ -40,5 +40,5 @@ import com.sun.star.uno.Exception;
 public interface ReportJobFactory
 {
 
-    public ReportJob createReportJob(final NamedValue[] namedValue) throws IllegalArgumentException, ReportExecutionException, Exception;
+    ReportJob createReportJob(final NamedValue[] namedValue) throws IllegalArgumentException, ReportExecutionException, Exception;
 }

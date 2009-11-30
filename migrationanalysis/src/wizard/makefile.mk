@@ -110,7 +110,7 @@ $(PAW_LAUNCHER) : $(ALTERNATE_SRC)$/$$(@:f)
 # using lngconvex.exe 
 
 $(RCFILES) : $(MANIFEST) $(ULFDIR)$/$(TARGET).ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt
-    $(WRAPCMD) lngconvex.exe -ulf $(ULFDIR)$/$(TARGET).ulf -rc $(RES)$/$(TARGET).rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
+    $(LNGCONVEX) -ulf $(ULFDIR)$/$(TARGET).ulf -rc $(RES)$/$(TARGET).rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
 
 $(PAW_RES_DLLS) : $(RCFILES)
     -$(MKDIRHIER) $(@:d)

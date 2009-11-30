@@ -35,7 +35,7 @@ import org.jfree.layouting.input.style.CSSDeclarationRule;
 
 public interface StyleMapper
 {
-  public void updateStyle (final String uri,
+    void updateStyle (final String uri,
                            final String attrName,
                            final String attrValue,
                            final CSSDeclarationRule targetRule);

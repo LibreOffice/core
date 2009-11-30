@@ -70,7 +70,7 @@ public class DataStyleReadHandler extends ElementReadHandler
     {
         if (OfficeNamespaces.DATASTYLE_NS.equals(uri) || OfficeNamespaces.STYLE_NS.equals(uri))
         {
-            final DataStyleReadHandler xrh = new DataStyleReadHandler("text".equals(tagName) || "currency-symbol".equals(tagName));
+            final DataStyleReadHandler xrh = new DataStyleReadHandler("text".equals(tagName) || "currency-symbol".equals(tagName) || "embedded-text".equals(tagName));
             children.add(xrh);
             return xrh;
         }

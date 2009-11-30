@@ -63,20 +63,20 @@ public interface ReportJob
      * threading code or wont receive any progress information in single
      * threaded environments.
      */
-    public void execute()
+    void execute()
             throws ReportExecutionException, IOException;
 
     /**
      * Interrupt the job.
      */
-    public void interrupt();
+    void interrupt();
 
     /**
      * Queries the jobs execution status.
      *
      * @return true, if the job is currently running, false otherwise.
      */
-    public boolean isRunning();
+    boolean isRunning();
 
     /**
      * Queries the jobs result status.
@@ -84,9 +84,9 @@ public interface ReportJob
      * @return true, if the job is finished (or has been interrupted), false
      * if the job waits for activation.
      */
-    public boolean isFinished();
+    boolean isFinished();
 
-    public void addProgressIndicator(JobProgressIndicator indicator);
+    void addProgressIndicator(JobProgressIndicator indicator);
 
-    public void removeProgressIndicator(JobProgressIndicator indicator);
+    void removeProgressIndicator(JobProgressIndicator indicator);
 }

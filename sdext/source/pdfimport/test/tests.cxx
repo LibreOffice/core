@@ -444,6 +444,10 @@ namespace
                                     xMask[1].Name.compareToAscii( "InputStream" ) == 0 );
         }
 
+        virtual void setTextRenderMode( sal_Int32 )
+        {
+        }
+
         typedef std::hash_map<sal_Int32,FontAttributes> IdToFontMap;
         typedef std::hash_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
@@ -517,6 +521,8 @@ namespace
             pdfi::ContentSinkSharedPtr pSink( new TestSink() );
             pdfi::xpdf_ImportFromFile( msBaseDir + rtl::OUString::createFromAscii("pdfi_unittest_test.pdf"),
                                        pSink,
+                                       uno::Reference< task::XInteractionHandler >(),
+                                       rtl::OUString(),
                                        mxCtx );
 
             // make destruction explicit, a bunch of things are

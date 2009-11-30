@@ -152,7 +152,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
       throws DataSourceException
   {
     final AttributeMap map = new AttributeMap( super.computeAttributes(fc, element, target) );
-    map.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "iteration-count", new Integer(getIterationCount()));
+    map.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "iteration-count", Integer.valueOf(getIterationCount()));
     map.makeReadOnly();
     return map;
   }

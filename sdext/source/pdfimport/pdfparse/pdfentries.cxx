@@ -703,10 +703,11 @@ static void unzipToBuffer( const char* pBegin, unsigned int nLen,
         {
             if( err != Z_STREAM_END )
             {
-                *pOutLen += buf_increment_size;
-                *pOutBuf = (sal_uInt8*)rtl_reallocateMemory( *pOutBuf, *pOutLen );
+                const int nNewAlloc = *pOutLen + buf_increment_size;
+                *pOutBuf = (sal_uInt8*)rtl_reallocateMemory( *pOutBuf, nNewAlloc );
                 aZStr.next_out = (Bytef*)(*pOutBuf + *pOutLen);
                 aZStr.avail_out = buf_increment_size;
+                *pOutLen = nNewAlloc;
             }
         }
     }

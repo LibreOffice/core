@@ -103,18 +103,18 @@ CUSTOMMANIFESTFILE = Manifest.mf
 $(JARTARGETN) : $(COMP) $(PROPERTYFILES) $(CSSFILES) $(XSDFILES) $(TXTFILES) $(XMLFILES)
 .ENDIF          # "$(JARTARGETN)"!=""
 
-fix_system_libs:
+fix_system_libs: $(JARMANIFEST)
     @echo "Fix Java Class-Path entry for libraries from system."
 .IF ("$(SYSTEM_JFREEREPORT)" != "YES" && "$(SYSTEM_APACHE_COMMONS)" == "YES")
     @$(SED) -r -e "s#commons-logging-1.1.1.jar#file://$(COMMONS_LOGGING_JAR)#" \
-        -i ../../../../../../$(INPATH)/class/sun-report-builder/META-INF/MANIFEST.MF
+        -i $<
 .ENDIF
 .IF ("$(SYSTEM_JFREEREPORT)" == "YES" && "$(SYSTEM_APACHE_COMMONS)" == "YES")
     @$(SED) '/flute/,/sac/d' -i ../../../../../../$(INPATH)/class/sun-report-builder/META-INF/MANIFEST.MF
     @$(SED) -r -e "s#^Class-Path.*#\0\n  file://$(LIBBASE_JAR)\n  file://$(SAC_JAR)\n  file://$(LIBXML_JAR)\n\
   file://$(FLUTE_JAR)\n  file://$(JFREEREPORT_JAR)\n  file://$(LIBLAYOUT_JAR)\n  file://$(LIBLOADER_JAR)\n  file://$(LIBFORMULA_JAR)\n\
   file://$(LIBREPOSITORY_JAR)\n  file://$(LIBFONTS_JAR)\n  file://$(LIBSERIALIZER_JAR)\n  file://$(COMMONS_LOGGING_JAR)#" \
-    -i ../../../../../../$(INPATH)/class/sun-report-builder/META-INF/MANIFEST.MF
+    -i $<
 .ENDIF
 
 $(CLASSDIR)$/$(PACKAGE)$/%.properties : %.properties

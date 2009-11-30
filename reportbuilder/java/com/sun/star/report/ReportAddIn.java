@@ -40,9 +40,9 @@ package com.sun.star.report;
 public interface ReportAddIn
 {
 
-    public int getExpressionCount();
+    int getExpressionCount();
 
-    public ReportExpression createExpression(int expression);
+    ReportExpression createExpression(int expression);
 
-    public ReportExpressionMetaData getMetaData(int expression);
+    ReportExpressionMetaData getMetaData(int expression);
 }

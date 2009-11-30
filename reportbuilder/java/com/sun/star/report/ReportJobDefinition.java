@@ -47,7 +47,7 @@ public interface ReportJobDefinition
      *
      * @return a map containing the report parameters
      */
-    public ParameterMap getQueryParameters();
+    ParameterMap getQueryParameters();
 
     /**
      * The report processing parameters control the behaviour of the report. There are
@@ -56,5 +56,5 @@ public interface ReportJobDefinition
      *
      * @return the processing parameters
      */
-    public JobProperties getProcessingParameters();
+    JobProperties getProcessingParameters();
 }

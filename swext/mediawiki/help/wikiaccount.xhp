@@ -51,9 +51,9 @@
 <bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.EditSetting.PasswordField" id="bm_id4558246" localize="false"/>
 <paragraph role="paragraph" id="par_id1113010" xml-lang="en-US" l10n="NEW"><ahelp hid="." visibility="hidden">Enter your password on the MediaWiki server. Leave empty for anonymous access.</ahelp></paragraph><comment>Save password</comment>
 <bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.EditSetting.SaveBox" id="bm_id4558247" localize="false"/>
-<paragraph role="paragraph" id="par_id656758" xml-lang="en-US" l10n="NEW"><ahelp hid="." visibility="hidden">Enable to store your password between sessions. The master password must be enabled, see <item type="menuitem">Tools - Options - StarOffice/OpenOffice.org - Security</item>.</ahelp></paragraph>
+<paragraph role="paragraph" id="par_id656758" xml-lang="en-US" l10n="NEW"><ahelp hid="." visibility="hidden">Enable to store your password between sessions. The master password must be enabled, see <item type="menuitem">Tools - Options - %PRODUCTNAME - Security</item>.</ahelp></paragraph>
 <paragraph role="paragraph" id="par_id3112582" xml-lang="en-US" l10n="NEW">Enter the Internet address of a Wiki server in a format like http://wiki.services.openoffice.org/wiki or copy the URL from a web browser.</paragraph>
 <paragraph role="paragraph" id="par_id628070" xml-lang="en-US" l10n="NEW">If the Wiki allows anonymous access, you can leave the account text boxes empty. Else enter your user name and password.</paragraph>
-<paragraph role="paragraph" id="par_id9046601" xml-lang="en-US" l10n="NEW">If you have enabled the master password feature on the Security tab page of the Tools - Options - StarOffice/OpenOffice.org dialog, then the software can store your password and automatically insert the data where necessary. Enable the "Save password" checkbox to store your password.</paragraph>
+<paragraph role="paragraph" id="par_id9046601" xml-lang="en-US" l10n="NEW">If you have enabled the master password feature on the Security tab page of the Tools - Options - %PRODUCTNAME dialog, then the software can store your password and automatically insert the data where necessary. Enable the "Save password" checkbox to store your password.</paragraph>
 </body>
 </helpdocument>

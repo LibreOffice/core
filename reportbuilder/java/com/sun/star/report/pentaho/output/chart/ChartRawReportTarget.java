@@ -101,6 +101,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         tableCount = 0;
         final XmlWriter xmlWriter = getXmlWriter();
         xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, getStartContent(), null, XmlWriterSupport.OPEN);
+        writeNullDate();
         ++closeTags;
     }
 
@@ -280,7 +281,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         }
         catch (IOException ioe)
         {
-            throw new ReportProcessingException("Failed to write settings document");
+            throw new ReportProcessingException("Failed to write settings document",ioe);
         }
     }
 }

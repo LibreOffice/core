@@ -32,7 +32,6 @@ package com.sun.star.report.function.metadata;
 import org.pentaho.reporting.libraries.formula.function.AbstractFunctionDescription;
 import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 import org.pentaho.reporting.libraries.formula.typing.Type;
-import org.pentaho.reporting.libraries.formula.typing.coretypes.NumberType;
 import org.pentaho.reporting.libraries.formula.typing.coretypes.TextType;
 
 /**

@@ -61,4 +61,7 @@ public class OfficeToken {
     public static final String SCALE                = "scale";
     public static final String NAME                 = "name";
     public static final String SHAPES               = "shapes";
+    public static final String ISOTROPIC            = "isotropic";
+    public static final String ANISOTROPIC          = "anisotropic";
+    public static final String NONE                 = "none";
 }

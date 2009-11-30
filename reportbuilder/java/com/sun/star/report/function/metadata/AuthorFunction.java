@@ -45,10 +45,6 @@ import org.pentaho.reporting.libraries.formula.typing.coretypes.TextType;
 public class AuthorFunction implements Function
 {
 
-    public AuthorFunction()
-    {
-    }
-
     public String getCanonicalName()
     {
         return "AUTHOR";

@@ -96,7 +96,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     private static final String VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT = "variables_paragraph_with_next";
     private static final String VARIABLES_HIDDEN_STYLE_WITHOUT_KEEPWNEXT = "variables_paragraph_without_next";
     private static final int TABLE_LAYOUT_VARIABLES_PARAGRAPH = 0;
-    private static final int TABLE_LAYOUT_VARIABLES_IN_FIRST_CELL = 1;
     private static final int TABLE_LAYOUT_SINGLE_DETAIL_TABLE = 2;
     private static final int CP_SETUP = 0;
     private static final int CP_FIRST_TABLE = 1;
@@ -132,7 +131,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     private final int tableLayoutConfig;
     private int expectedTableRowCount;
     private boolean firstCellSeen;
-    private boolean cellEmpty;
 
     public TextRawReportTarget(final ReportJob reportJob,
             final ResourceManager resourceManager,
@@ -543,6 +541,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         final XmlWriter xmlWriter = getXmlWriter();
         xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, "text", null, XmlWriterSupport.OPEN);
 
+        writeNullDate();
+
         // now start the buffering. We have to insert the variables declaration
         // later ..
         startBuffering(getStylesCollection(), true);
@@ -646,11 +646,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 variables = null;
             }
 
-            if (isTableNS && ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType))
-            {
-                cellEmpty = true;
-            }
-
             final boolean keepTogetherOnParagraph = true;
 
             if (keepTogetherOnParagraph)
@@ -658,7 +653,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs))
                 {
                     final int keepTogetherState = getCurrentContext().getKeepTogether();
-                    cellEmpty = false;
                     if (!firstCellSeen && (sectionKeepTogether || keepTogetherState == PageContext.KEEP_TOGETHER_GROUP))
                     {
                         OfficeStyle style = null;
@@ -740,15 +734,12 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             final AttributeList attrList = buildAttributeList(attrs);
             xmlWriter.writeTag(namespace, elementType, attrList, XmlWriterSupport.OPEN);
 
-            if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs))
+            if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs) &&
+                tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH && variables != null)
             {
-                cellEmpty = false;
-                if (tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH && variables != null)
-                {
-                    //LOGGER.debug("Variables-Section in existing cell " + variables);
-                    xmlWriter.writeText(variables);
-                    variables = null;
-                }
+                //LOGGER.debug("Variables-Section in existing cell " + variables);
+                xmlWriter.writeText(variables);
+                variables = null;
             }
         }
     }

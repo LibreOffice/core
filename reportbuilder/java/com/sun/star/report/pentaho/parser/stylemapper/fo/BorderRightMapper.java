@@ -47,11 +47,6 @@ import org.jfree.layouting.input.style.CSSDeclarationRule;
 public class BorderRightMapper implements StyleMapper
 {
 
-    /** Creates a new instance of BorderRightMapper */
-    public BorderRightMapper()
-    {
-    }
-
     public void updateStyle(final String uri,
             final String attrName,
             final String attrValue,

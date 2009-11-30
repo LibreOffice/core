@@ -265,7 +265,7 @@ public class MasterPageFactory
             }
             catch (CloneNotSupportedException cne)
             {
-                throw new IllegalStateException("Implementation error: Unable to derive page");
+                throw new IllegalStateException("Implementation error: Unable to derive page",cne);
             }
         }
 
@@ -403,7 +403,7 @@ public class MasterPageFactory
         }
         catch (CloneNotSupportedException e)
         {
-            throw new IllegalStateException("Clone failed.");
+            throw new IllegalStateException("Clone failed.",e);
         }
     }
 
