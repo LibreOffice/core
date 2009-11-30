@@ -212,7 +212,9 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual void                updateGraphics( Drawable drawable );
+    // call with true to clear graphics (setting None as drawable)
+    // call with false to setup graphics with window (GetWindow())
+    virtual void                updateGraphics( bool bClear );
 
     virtual BOOL                PostEvent( void* pData );
 
