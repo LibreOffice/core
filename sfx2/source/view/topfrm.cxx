@@ -856,15 +856,7 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
 
     if ( !IsInPlace() )
     {
-        if ( pViewFrame->GetViewShell()->UseObjectSize() )
-        {
-            pViewFrame->UnlockAdjustPosSizePixel();
-            pViewFrame->Resize(TRUE);
-            pViewFrame->ForceInnerResize_Impl( FALSE );
-            pViewFrame->Resize(TRUE);
-        }
-        else
-            pViewFrame->Resize(TRUE);
+        pViewFrame->Resize(TRUE);
     }
 
     SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), &rDoc ) );

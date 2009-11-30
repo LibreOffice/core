@@ -148,10 +148,6 @@ private:
     SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh=NULL );
 #endif
 
-//                          SfxViewFrame( SfxBindings&, SfxFrame*, SfxObjectShell *pDoc, sal_uInt32 nType );
-//                          SfxViewFrame( SfxObjectShell&, SfxBindings&, SfxFrame* p = NULL, sal_uInt32 nType = NULL );
-//                          SfxViewFrame( const SfxViewFrame &, SfxBindings &, SfxFrame *pFrame );
-
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

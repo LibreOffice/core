@@ -1255,8 +1255,6 @@ SfxViewShell::SfxViewShell
     ,pFrame(pViewFrame)
     ,pSubShell(0)
     ,pWindow(0)
-    ,bMaximizeFirst( 0 != (nFlags & SFX_VIEW_MAXIMIZE_FIRST) )
-    ,bOptimizeEach(0 != (nFlags & SFX_VIEW_OPTIMIZE_EACH))
     ,bNoNewWindow( 0 != (nFlags & SFX_VIEW_NO_NEWWINDOW) )
 {
     DBG_CTOR(SfxViewShell, 0);
@@ -1266,11 +1264,7 @@ SfxViewShell::SfxViewShell
     pImp->bIsShowView =
         !(SFX_VIEW_NO_SHOW == (nFlags & SFX_VIEW_NO_SHOW));
 
-    pImp->bUseObjectSize = FALSE;
-//        SFX_CREATE_MODE_EMBEDDED==pFrame->GetObjectShell()->GetCreateMode() &&
-//        SFX_VIEW_OBJECTSIZE_EMBEDDED == (nFlags & SFX_VIEW_OBJECTSIZE_EMBEDDED);
     pImp->bCanPrint = SFX_VIEW_CAN_PRINT == (nFlags & SFX_VIEW_CAN_PRINT);
-    pImp->bFrameSetImpl = (nFlags & SFX_VIEW_IMPLEMENTED_AS_FRAMESET) != 0;
     pImp->bHasPrintOptions =
         SFX_VIEW_HAS_PRINTOPTIONS == (nFlags & SFX_VIEW_HAS_PRINTOPTIONS);
     pImp->bPlugInsActive = TRUE;
@@ -1778,13 +1772,6 @@ void SfxViewShell::DisconnectAllClients()
 
 //--------------------------------------------------------------------
 
-BOOL SfxViewShell::UseObjectSize() const
-{
-    return pImp->bUseObjectSize;
-}
-
-//--------------------------------------------------------------------
-
 void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 {
 }
@@ -1794,14 +1781,7 @@ void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 void SfxViewShell::AdjustVisArea(const Rectangle& rRect)
 {
     DBG_ASSERT (pFrame, "Kein Frame?");
-    if ( UseObjectSize() )
-    {
-        Point aPos = rRect.TopLeft();
-        Size aSize = GetObjectShell()->GetVisArea().GetSize();
-        GetObjectShell()->SetVisArea( Rectangle(aPos, aSize) );
-    }
-    else
-        GetObjectShell()->SetVisArea( rRect );
+    GetObjectShell()->SetVisArea( rRect );
 }
 
 //--------------------------------------------------------------------
@@ -1971,13 +1951,6 @@ BOOL SfxViewShell::IsShowView_Impl() const
 SfxFrame* SfxViewShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
 {
     return pSelf;
-}
-
-//--------------------------------------------------------------------
-
-BOOL SfxViewShell::IsImplementedAsFrameset_Impl( ) const
-{
-    return pImp->bFrameSetImpl;
 }
 
 //------------------------------------------------------------------------

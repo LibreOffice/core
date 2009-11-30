@@ -410,11 +410,6 @@ interface TopWindow : BrowseWindow
         ExecMethod = Exec_Impl ;
         StateMethod = GetState_Impl ;
     ]
-    SID_BACKTOWEBTOP // ole(no) api(final/play/rec)
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
     SID_BROWSE_FORWARD // ole(no) api()
     [
         ExecMethod = INetExecute_Impl ;

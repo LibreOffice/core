@@ -97,19 +97,7 @@ class SfxFrameArr_Impl;
 
 DECLARE_LIST( TargetList, String* )
 
-#define SFXFRAME_INTERNAL     0x0001
-#define SFXFRAME_EXTERNAL     0x0002
-#define SFXFRAME_OWNSDOCUMENT 0x0004
-#define SFXFRAME_PLUGIN       0x0008
-#define SFXFRAME_HASTITLE     0x0010
-#define SFXFRAME_SERVER       0x0020 // Is es ein Frame, der in einem Container steckt ?
-
-#define BROWSE_NORMAL         0
-#define BROWSE_FORWARD        1
-#define BROWSE_BACKWARD       2
-#define NO_BROWSE             3
-#define BROWSE_FRAME          4
-#define BROWSE_MAX_MODE       10
+#define SFXFRAME_HASTITLE     0x0001
 
 //==========================================================================
 // Ein SfxFrame ist eine Verwaltungsklasse f"ur Fenster und deren Inhalte.
@@ -126,14 +114,10 @@ DECLARE_LIST( TargetList, String* )
 
 class SfxFrameArr_Impl;
 struct SfxFramePickEntry_Impl;
-class SfxUnoFrame;
 class SFX2_DLLPUBLIC SfxFrame
 {
     friend class SfxFrameIterator;
     friend class SfxTopWindow_Impl;
-//  friend struct SfxFramePickEntry_Impl;
-//  friend class SfxUnoFrame;
-//  friend class SfxViewFrame; /*HACK!*/
 
 private:
     SfxFrame*           pParentFrame;

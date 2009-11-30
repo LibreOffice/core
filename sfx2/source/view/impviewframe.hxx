@@ -46,19 +46,20 @@ struct SfxViewFrame_Impl
     sal_Bool            bObjLocked:1;
     sal_Bool            bReloading:1;
     sal_Bool            bIsDowning:1;
-    sal_Bool            bInCtor:1;
     sal_Bool            bModal:1;
     sal_Bool            bEnabled:1;
     sal_Bool            bWindowWasEnabled:1;
     sal_Bool            bActive;
     String              aFactoryName;
 
-                        SfxViewFrame_Impl()
-                        : pReloader(0 )
+                        SfxViewFrame_Impl( SfxFrame* i_pFrame )
+                        : pFrame( i_pFrame )
+                        , pReloader(0 )
                         , pWindow( 0 )
                         , bWindowWasEnabled(sal_True)
                         , bActive( sal_False )
-                        {}
+                        {
+                        }
 
                         ~SfxViewFrame_Impl()
                         {

@@ -562,31 +562,6 @@ SfxVoidItem Backspace SID_BACKSPACE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem BackToWebtop SID_BACKTOWEBTOP
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem BasicBreak SID_BASICBREAK
 ()
 [

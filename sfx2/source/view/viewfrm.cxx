@@ -855,14 +855,6 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
             {
                 SfxFrame* pFrame = GetTopFrame();
                 SfxViewFrame *pView = pFrame->GetCurrentViewFrame();
-                if ( pView && pView->GetViewShell() &&
-                    pView->GetViewShell()->IsImplementedAsFrameset_Impl() &&
-                    pView->GetViewShell()->GetInterface()->GetSlot( nWhich ) )
-                {
-                    // Hack f"ur Explorer: Reload wird an der ViewShell ausgef"uhrt
-                    pView->GetViewShell()->GetSlotState( nWhich, 0, &rSet );
-                    break;
-                }
 
                 if ( !pSh || !pSh->CanReload_Impl() || pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
                     rSet.DisableItem(nWhich);
@@ -1217,24 +1209,8 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
                 return;
             }
 
-            if ( GetViewShell()->UseObjectSize() )
-            {
-                // Zun"achst die Gr"o\se des MDI-Fensters berechnen
-
-                DoAdjustPosSizePixel( GetViewShell(), Point(),
-                                GetViewShell()->GetWindow()->GetSizePixel() );
-
-                // Da nach einem InnerResize die Position des EditFensters und
-                // damit auch der Tools nocht stimmt, mu\s nun noch einmal von
-                // au\sen resized werden !
-
-                ForceOuterResize_Impl(sal_True);
-            }
-
             DoAdjustPosSizePixel( (SfxViewShell *) GetViewShell(), Point(),
                                             GetWindow().GetOutputSizePixel() );
-            if ( GetViewShell()->UseObjectSize() )
-                ForceOuterResize_Impl(sal_False);
         }
     }
 }
@@ -1420,7 +1396,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 //------------------------------------------------------------------------
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 {
-    pImp->bInCtor = sal_True;
     pImp->bResizeInToOut = sal_True;
     pImp->bDontOverwriteResizeInToOut = sal_False;
     pImp->bObjLocked = sal_False;
@@ -1469,7 +1444,6 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     SfxViewFrame *pThis = this; // wegen der kranken Array-Syntax
     SfxViewFrameArr_Impl &rViewArr = SFX_APP()->GetViewFrames_Impl();
     rViewArr.C40_INSERT(SfxViewFrame, pThis, rViewArr.Count() );
-    pImp->bInCtor = sal_False;
 }
 
 SfxViewFrame::SfxViewFrame
@@ -1486,30 +1460,21 @@ SfxViewFrame::SfxViewFrame
     (default ist die zuerst registrierte SfxViewShell-Subklasse).
 */
 
-    : pImp( new SfxViewFrame_Impl )
+    : pImp( new SfxViewFrame_Impl( pFrame ) )
     , pDispatcher(0)
     , pBindings( new SfxBindings )
     , nAdjustPosPixelLock( 0 )
 {
     DBG_CTOR( SfxViewFrame, NULL );
 
-    SetFrame_Impl( pFrame );
-    pImp->pFrame->SetCurrentViewFrame_Impl( this );
-    GetFrame()->SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
+    pFrame->SetCurrentViewFrame_Impl( this );
+    pFrame->SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
     Construct_Impl( pObjShell );
 
-//(mba)/task    if ( !pFrame->GetTask() )
-    {
-        pImp->pWindow = new SfxTopViewWin_Impl( this, pFrame->GetWindow() );
-        pImp->pWindow->SetSizePixel( pFrame->GetWindow().GetOutputSizePixel() );
-        pFrame->SetOwnsBindings_Impl( sal_True );
-        pFrame->CreateWorkWindow_Impl();
-    }
-
-    sal_uInt32 nType = SFXFRAME_OWNSDOCUMENT | SFXFRAME_HASTITLE;
-    if ( pObjShell && pObjShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        nType |= SFXFRAME_EXTERNAL;
-    GetFrame()->SetFrameType_Impl( GetFrame()->GetFrameType() | nType );
+    pImp->pWindow = new SfxTopViewWin_Impl( this, pFrame->GetWindow() );
+    pImp->pWindow->SetSizePixel( pFrame->GetWindow().GetOutputSizePixel() );
+    pFrame->SetOwnsBindings_Impl( sal_True );
+    pFrame->CreateWorkWindow_Impl();
 
     if ( GetFrame()->IsInPlace() )
     {
@@ -1525,30 +1490,6 @@ SfxViewFrame::SfxViewFrame
     if ( GetFrame()->IsInPlace() )
     {
         UnlockAdjustPosSizePixel();
-    }
-    else if ( GetViewShell() && GetViewShell()->UseObjectSize() )
-    {
-        // initiale Gr"o\se festlegen
-        // Zuerst die logischen Koordinaten von IP-Objekt und EditWindow
-        // ber"ucksichtigen
-        LockAdjustPosSizePixel();
-        ForceInnerResize_Impl( TRUE );
-
-        Window *pWindow = GetViewShell()->GetWindow();
-
-        // Da in den Applikationen bei der R"ucktransformation immer die
-        // Eckpunkte tranformiert werden und nicht die Size (um die Ecken
-        // alignen zu k"onnen), transformieren wir hier auch die Punkte, um
-        // m"oglichst wenig Rundungsfehler zu erhalten.
-/*
-        Rectangle aRect = pWindow->LogicToLogic( GetObjectShell()->GetVisArea(),
-                                        GetObjectShell()->GetMapUnit(),
-                                        pWindow->GetMapMode() );
-*/
-        Rectangle aRect = pWindow->LogicToPixel( GetObjectShell()->GetVisArea() );
-        Size aSize = aRect.GetSize();
-        GetViewShell()->GetWindow()->SetSizePixel( aSize );
-        DoAdjustPosSizePixel(GetViewShell(), Point(), aSize );
     }
 }
 
@@ -1806,7 +1747,7 @@ void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
     SfxShell::SetViewShell_Impl( pVSh );
 
     // Hack: InPlaceMode
-    if ( pVSh && !pVSh->UseObjectSize() )
+    if ( pVSh )
         pImp->bResizeInToOut = sal_False;
 }
 
@@ -1844,7 +1785,7 @@ void SfxViewFrame::DoAdjustPosSize( SfxViewShell *pSh,
                                 const Point rPos, const Size &rSize )
 {
     DBG_CHKTHIS(SfxViewFrame, 0);
-    if( pSh && !nAdjustPosPixelLock && pSh->UseObjectSize())
+    if( pSh && !nAdjustPosPixelLock )
     {
         Window *pWindow = pSh->GetWindow();
         Point aPos = pWindow->LogicToPixel(rPos);
@@ -1927,7 +1868,7 @@ void SfxViewFrame::Show()
             LockObjectShell_Impl( sal_True );
 
         // Doc-Shell Titel-Nummer anpassen, get unique view-no
-        if ( 0 == pImp->nDocViewNo && !(GetFrameType() & SFXFRAME_PLUGIN ) )
+        if ( 0 == pImp->nDocViewNo  )
         {
             GetDocNumber_Impl();
             UpdateTitle();
@@ -1958,8 +1899,6 @@ void SfxViewFrame::Show()
 //--------------------------------------------------------------------
 sal_Bool SfxViewFrame::IsVisible_Impl() const
 {
-    //Window *pWin = pImp->bInCtor ? 0 : &GetWindow();
-    //return GetFrame()->HasComponent() || pImp->bObjLocked || ( pWin && pWin->IsVisible() );
     return pImp->bObjLocked;
 }
 
@@ -2266,9 +2205,6 @@ void SfxViewFrame::ExecView_Impl
         {
             // Bei Mail etc. k"onnen die Frames nicht angesprochen werden
             SfxFrame *pParent = GetFrame()->GetParentFrame();
-            if ( pParent && pParent->GetCurrentViewFrame()->
-                    GetViewShell()->IsImplementedAsFrameset_Impl() )
-                break;
 
             SfxViewFrame *pRet = NULL;
             SFX_REQUEST_ARG(
@@ -2669,11 +2605,7 @@ void SfxViewFrame::Resize( BOOL bForce )
             }
             else
             {
-                if ( pShell->UseObjectSize() )
-                    ForceOuterResize_Impl(TRUE);
                 DoAdjustPosSizePixel( pShell, Point(), aSize );
-                if ( pShell->UseObjectSize() )
-                    ForceOuterResize_Impl(FALSE);
             }
         }
     }

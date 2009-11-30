@@ -586,7 +586,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
         // nur fuer in sichtbaren Fenstern dargestellte Dokumente fragen
     SfxViewFrame *pFrame = SfxObjectShell::Current() == this
         ? SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
-    while ( pFrame && (pFrame->GetFrameType() & SFXFRAME_SERVER ) )
+    while ( pFrame )
         pFrame = SfxViewFrame::GetNext( *pFrame, this );
 
     sal_Bool bClose = sal_False;

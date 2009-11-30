@@ -522,7 +522,7 @@
 #define SID_LOGOUT                          (SID_SFX_START + 1652)
 #define SID_JUMPMARK                        (SID_SFX_START + 1654)
 #define SID_BROWSE                          (SID_SFX_START + 1658)
-#define SID_BACKTOWEBTOP                    (SID_SFX_START + 1657)
+    // FREE (was: SID_BACKTOWEBTOP)
 #define SID_SEGMENTSIZE                     (SID_SFX_START + 1659)
 #define SID_VIEW_DATA_SOURCE_BROWSER        (SID_SFX_START + 1660)
 #define SID_TOGGLE_MENUBAR                  (SID_SFX_START + 1661)

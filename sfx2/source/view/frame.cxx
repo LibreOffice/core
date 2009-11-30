@@ -536,7 +536,7 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     }
 
     SfxViewFrame* pView = GetCurrentViewFrame();
-    if( pView && pView->GetViewShell() && !pView->GetViewShell()->IsImplementedAsFrameset_Impl() && pChildArr )
+    if( pView && pView->GetViewShell() && pChildArr )
     {
         sal_uInt16 nCount = pChildArr->Count();
         for ( sal_uInt16 n=0; n<nCount; n++)
