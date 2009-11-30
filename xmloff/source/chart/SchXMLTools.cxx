@@ -613,18 +613,21 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
 {
     bool bResult = false;
     ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+    //if there is a meta stream at the chart object it was not written with an older OpenOffice version < 2.3
     if( !aGenerator.getLength() )
     {
-        //if there is no meta stream at the chart object it was not written with a newer OpenOffice version >= 2.3
-
-        //so it is sufficient to check now whether it was written by an OpenOffice version at all
-        //->check the meta information at the parent document
+        //if there is no meta stream at the chart object we need to check the version from the parent document
+        //and we need to check whether the document was created with OpenOffice.org at all
         uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );
         if( xChild.is() )
         {
             ::rtl::OUString aParentGenerator( lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) ) );
             if( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
-                bResult= true;
+            {
+                sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( aParentGenerator );
+                if( nBuilId<=9161 ) //9161 is build id of OpenOffice.org 2.2.1
+                    bResult= true;
+            }
             else if(
                    ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org 1") ) ) == 0 )
                 || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 6") ) ) == 0 )

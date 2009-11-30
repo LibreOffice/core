@@ -111,7 +111,7 @@ void BreakpointWindow::SetBPsInModule()
     {
         pModule->SetBP( (USHORT)pBrk->nLine );
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (USHORT)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" )
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (USHORT)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
 #endif
         pBrk = Next();
     }
@@ -152,7 +152,7 @@ void BreakpointWindow::InsertBreakpoint( USHORT nLine )
     if ( pModule->SetBP( nLine ) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" )
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" );
 #endif
         if ( StarBASIC::IsRunning() )
         {
@@ -165,7 +165,7 @@ void BreakpointWindow::InsertBreakpoint( USHORT nLine )
         }
     }
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" )
+    DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" );
 #endif
 }
 
@@ -282,7 +282,7 @@ void BreakpointWindow::Paint( const Rectangle& )
     while ( pBrk )
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" )
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
 #endif
         ULONG nLine = pBrk->nLine-1;
         ULONG nY = nLine*nLineHeight - nCurYOffset;

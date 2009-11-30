@@ -94,6 +94,8 @@ class MsgEdit : public DataEdit
 
     static USHORT nMaxLogLen;
     static BOOL bLimitLogLen;
+    static BOOL bPrintLogToStdout;
+    static BOOL bPrintLogToStdoutSet;   // has it been initialized yet
 public:
     MsgEdit( AppError*, BasicFrame *pBF, const WinBits& );
     ~MsgEdit();

@@ -1731,6 +1731,7 @@ BOOL SfxCommonTemplateDialog_Impl::Execute_Impl(
         nId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
         pItems, nModi );
 
+    // FIXME: Dialog can be destroyed while in Execute() check stack variable for dtor flag!
     if ( !pItem || aDeleted() )
         return FALSE;
 
@@ -1753,6 +1754,11 @@ BOOL SfxCommonTemplateDialog_Impl::Execute_Impl(
                 *pIdx = i;
         }
     }
+
+    // Reset destroyed flag otherwise we use the pointer in the dtor
+    // where the local stack object is already destroyed. This would
+    // overwrite objects on the stack!! See #i100110
+    pbDeleted = NULL;
     return TRUE;
 }
 
