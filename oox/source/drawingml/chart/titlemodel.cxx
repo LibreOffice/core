@@ -37,25 +37,6 @@ namespace chart {
 
 // ============================================================================
 
-LayoutModel::LayoutModel() :
-    mfX( 0.0 ),
-    mfY( 0.0 ),
-    mfW( 0.0 ),
-    mfH( 0.0 ),
-    mnXMode( XML_factor ),
-    mnYMode( XML_factor ),
-    mnWMode( XML_factor ),
-    mnHMode( XML_factor ),
-    mnTarget( XML_outer )
-{
-}
-
-LayoutModel::~LayoutModel()
-{
-}
-
-// ============================================================================
-
 TextModel::TextModel()
 {
 }

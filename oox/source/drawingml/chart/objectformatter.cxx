@@ -1199,12 +1199,12 @@ void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eO
         pFormat->convertAutomaticFill( rPropSet, nSeriesIdx );
 }
 
-bool ObjectFormatter::isAutomaticLine( const ModelRef< Shape >& rxShapeProp )
+/*static*/ bool ObjectFormatter::isAutomaticLine( const ModelRef< Shape >& rxShapeProp )
 {
     return !rxShapeProp || !rxShapeProp->getLineProperties().maLineFill.moFillType.has();
 }
 
-bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
+/*static*/ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
 {
     return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has();
 }

@@ -30,11 +30,15 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/titleconverter.hxx"
+#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart2/LegendPosition.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include "properties.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/chart/datasourceconverter.hxx"
@@ -45,6 +49,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XFormattedString;
 using ::com::sun::star::chart2::XLegend;
@@ -198,12 +203,66 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 {
     if( rxDiagram.is() ) try
     {
+        namespace cssc2 = ::com::sun::star::chart2;
+
         // create the legend
         Reference< XLegend > xLegend( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Legend" ) ), UNO_QUERY_THROW );
         rxDiagram->setLegend( xLegend );
+        PropertySet aPropSet( xLegend );
+        aPropSet.setProperty( PROP_Show, true );
+
+        // legend position and expansion
+        LayoutModel& rLayout = mrModel.mxLayout.getOrCreate();
+        LayoutConverter aLayoutConv( *this, rLayout );
+        Rectangle aLegendRect;
+        bool bManualLayout = aLayoutConv.calcAbsRectangle( aLegendRect );
+        if( bManualLayout )
+        {
+            // relative position
+            cssc2::RelativePosition aRelPos;
+            aRelPos.Primary = getLimitedValue< double, double >( rLayout.mfX, 0.0, 1.0 );
+            aRelPos.Secondary = getLimitedValue< double, double >( rLayout.mfY, 0.0, 1.0 );
+            aRelPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
+            aPropSet.setProperty( PROP_AnchorPosition, cssc2::LegendPosition_CUSTOM );
+            aPropSet.setProperty( PROP_RelativePosition, aRelPos );
+
+            // #i71697# it is not possible to set the size directly, do some magic here
+            cssc2::LegendExpansion eLegendExpand = cssc2::LegendExpansion_BALANCED;
+            double fRatio = static_cast< double >( aLegendRect.Width ) / aLegendRect.Height;
+            if( fRatio > 1.5 )
+                eLegendExpand = cssc2::LegendExpansion_WIDE;
+            else if( fRatio < 0.75 )
+                eLegendExpand = cssc2::LegendExpansion_HIGH;
+            aPropSet.setProperty( PROP_Expansion, eLegendExpand );
+        }
+        else // automatic layout
+        {
+            cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_LINE_END;
+            cssc2::LegendExpansion eLegendExpand = cssc2::LegendExpansion_HIGH;
+            switch( mrModel.mnPosition )
+            {
+                case XML_l:
+                    eLegendPos = cssc2::LegendPosition_LINE_START;
+                    eLegendExpand = cssc2::LegendExpansion_HIGH;
+                break;
+                case XML_r:
+                    eLegendPos = cssc2::LegendPosition_LINE_END;
+                    eLegendExpand = cssc2::LegendExpansion_HIGH;
+                break;
+                case XML_t:
+                    eLegendPos = cssc2::LegendPosition_PAGE_START;
+                    eLegendExpand = cssc2::LegendExpansion_WIDE;
+                break;
+                case XML_b:
+                    eLegendPos = cssc2::LegendPosition_PAGE_END;
+                    eLegendExpand = cssc2::LegendExpansion_WIDE;
+                break;
+            }
+            aPropSet.setProperty( PROP_AnchorPosition, eLegendPos );
+            aPropSet.setProperty( PROP_Expansion, eLegendExpand );
+        }
 
         // legend formatting
-        PropertySet aPropSet( xLegend );
         getFormatter().convertFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_LEGEND );
     }
     catch( Exception& )

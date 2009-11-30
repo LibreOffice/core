@@ -6,6 +6,7 @@ Adjust
 AdjustContrast
 AdjustLuminance
 Align
+AnchorPosition
 ArrangeOrder
 Aspect
 AttachedAxisIndex
@@ -115,6 +116,7 @@ ErrorBarX
 ErrorBarY
 ErrorMessage
 ErrorTitle
+Expansion
 ExternalDocLinks
 ExternalLinks
 FileFormat
@@ -293,6 +295,7 @@ ReferenceDevice
 RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
+RelativePosition
 Repeat
 RepeatDelay
 Representation

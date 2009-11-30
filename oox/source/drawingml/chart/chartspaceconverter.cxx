@@ -30,11 +30,11 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
@@ -85,8 +85,8 @@ void ChartSpaceConverter::convertFromModel()
     }
 
     // formatting of the chart background
-    PropertySet aPropSet( getChartDocument()->getPageBackground() );
-    getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
+    PropertySet aBackPropSet( getChartDocument()->getPageBackground() );
+    getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
 
     // convert plot area (container of all chart type groups)
     PlotAreaConverter aPlotAreaConv( *this, mrModel.mxPlotArea.getOrCreate() );
@@ -125,10 +125,10 @@ void ChartSpaceConverter::convertFromModel()
     }
 
     // legend
-    if( mrModel.mxLegend.is() )
+    if( xDiagram.is() && mrModel.mxLegend.is() )
     {
         LegendConverter aLegendConv( *this, *mrModel.mxLegend );
-        aLegendConv.convertFromModel( getChartDocument()->getFirstDiagram() );
+        aLegendConv.convertFromModel( xDiagram );
     }
 
     // treatment of missing values
@@ -146,13 +146,11 @@ void ChartSpaceConverter::convertFromModel()
         aDiaProp.setProperty( PROP_MissingValueTreatment, nMissingValues );
     }
 
-    // set the IncludeHiddenCells property via the old API as only this ensures that the data provider and al created sequences get this flag correctly
-    Reference< com::sun::star::chart::XChartDocument > xStandardApiChartDoc( getChartDocument(), UNO_QUERY );
-    if( xStandardApiChartDoc.is() )
-    {
-        PropertySet aStandardApiDiagramProp( xStandardApiChartDoc->getDiagram() );
-        aStandardApiDiagramProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
-    }
+    /*  Set the IncludeHiddenCells property via the old API as only this
+        ensures that the data provider and all created sequences get this flag
+        correctly. */
+    PropertySet aOldDiaProp( getChart1Diagram() );
+    aOldDiaProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
 }
 
 // ============================================================================

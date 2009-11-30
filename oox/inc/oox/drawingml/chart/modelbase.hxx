@@ -117,6 +117,25 @@ struct NumberFormat
 
 // ============================================================================
 
+struct LayoutModel
+{
+    double              mfX;                /// Left position of this object.
+    double              mfY;                /// Top position of this object.
+    double              mfW;                /// Width of this object.
+    double              mfH;                /// Height of this object.
+    sal_Int32           mnXMode;            /// Mode for left position.
+    sal_Int32           mnYMode;            /// Mode for top position.
+    sal_Int32           mnWMode;            /// Mode for width.
+    sal_Int32           mnHMode;            /// Mode for height.
+    sal_Int32           mnTarget;           /// Layout target for plot area.
+    bool                mbAutoLayout;       /// True = automatic positioning.
+
+    explicit            LayoutModel();
+                        ~LayoutModel();
+};
+
+// ============================================================================
+
 } // namespace chart
 } // namespace drawingml
 } // namespace oox

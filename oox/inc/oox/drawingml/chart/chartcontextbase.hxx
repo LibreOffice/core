@@ -82,6 +82,21 @@ public:
 
 // ============================================================================
 
+struct LayoutModel;
+
+/** Handler for a chart layout context (c:layout element).
+ */
+class LayoutContext : public ContextBase< LayoutModel >
+{
+public:
+    explicit            LayoutContext( ::oox::core::ContextHandler2Helper& rParent, LayoutModel& rModel );
+    virtual             ~LayoutContext();
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
 } // namespace chart
 } // namespace drawingml
 } // namespace oox

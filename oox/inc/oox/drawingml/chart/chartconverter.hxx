@@ -36,14 +36,13 @@
 #include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
+    namespace awt { struct Size; }
     namespace chart2 { class XChartDocument; }
     namespace chart2 { namespace data { class XDataProvider; } }
     namespace chart2 { namespace data { class XDataSequence; } }
 } } }
 
-namespace oox { namespace core {
-    class XmlFilterBase;
-} }
+namespace oox { namespace core { class XmlFilterBase; } }
 
 namespace oox {
 namespace drawingml {
@@ -60,11 +59,21 @@ public:
     explicit            ChartConverter();
     virtual             ~ChartConverter();
 
-    /** Converts the passed OOXML chart model to the passed chart2 document. */
+    /** Converts the passed OOXML chart model to the passed chart2 document.
+
+        @param rChartModel  The filled MSOOXML chart model structure.
+
+        @param rxChartDoc  The UNO chart document model to be initialized.
+
+        @param rChartSize  The size of the chart shape in 1/100 mm. Needed for
+            calculation of position and size of the chart elements (diagram,
+            titles, legend, etc.) and embedded shapes.
+     */
     void                convertFromModel(
                             ::oox::core::XmlFilterBase& rFilter,
-                            ChartSpaceModel& rModel,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc );
+                            ChartSpaceModel& rChartModel,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
+                            const ::com::sun::star::awt::Size& rChartSize );
 
     /** Creates an internal data provider. Derived classes may override this
         function to create an external data provider. */

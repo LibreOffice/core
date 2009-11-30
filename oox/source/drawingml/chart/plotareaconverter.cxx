@@ -32,6 +32,7 @@
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -45,6 +46,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::awt::Rectangle;
+using ::com::sun::star::chart::XDiagramPositioning;
 using ::com::sun::star::chart2::XCoordinateSystem;
 using ::com::sun::star::chart2::XCoordinateSystemContainer;
 using ::com::sun::star::chart2::XDiagram;
@@ -407,6 +410,29 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     {
         PropertySet aPropSet( xDiagram->getWall() );
         getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_PLOTAREA2D );
+    }
+
+    // plot area position and size
+    LayoutModel& rLayout = mrModel.mxLayout.getOrCreate();
+    LayoutConverter aLayoutConv( *this, rLayout );
+    Rectangle aDiagramRect;
+    if( aLayoutConv.calcAbsRectangle( aDiagramRect ) ) try
+    {
+        Reference< XDiagramPositioning > xPositioning( getChart1Diagram(), UNO_QUERY_THROW );
+        switch( rLayout.mnTarget )
+        {
+            case XML_inner:
+                xPositioning->setDiagramPositionExcludingAxes( aDiagramRect );
+            break;
+            case XML_outer:
+                xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
+            break;
+            default:
+                OSL_ENSURE( false, "PlotAreaConverter::convertFromModel - unknown positioning target" );
+        }
+    }
+    catch( Exception& )
+    {
     }
 }
 

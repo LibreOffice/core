@@ -34,6 +34,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
 
@@ -41,9 +42,12 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
+using ::com::sun::star::awt::Rectangle;
+using ::com::sun::star::awt::Size;
 using ::com::sun::star::chart2::XChartDocument;
 using ::oox::core::XmlFilterBase;
 
@@ -55,16 +59,18 @@ namespace chart {
 
 struct ConverterData
 {
+    ObjectFormatter     maFormatter;
     XmlFilterBase&      mrFilter;
     ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;
-    ObjectFormatter     maFormatter;
+    Size                maSize;
 
     explicit            ConverterData(
                             XmlFilterBase& rFilter,
                             ChartConverter& rChartConverter,
+                            const ChartSpaceModel& rChartModel,
                             const Reference< XChartDocument >& rxChartDoc,
-                            const ChartSpaceModel& rChartSpace );
+                            const Size& rChartSize );
                         ~ConverterData();
 };
 
@@ -73,12 +79,14 @@ struct ConverterData
 ConverterData::ConverterData(
         XmlFilterBase& rFilter,
         ChartConverter& rChartConverter,
+        const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
-        const ChartSpaceModel& rChartSpace ) :
+        const Size& rChartSize ) :
+    maFormatter( rFilter, rxChartDoc, rChartModel ),
     mrFilter( rFilter ),
     mrConverter( rChartConverter ),
     mxDoc( rxChartDoc ),
-    maFormatter( rFilter, rxChartDoc, rChartSpace )
+    maSize( rChartSize )
 {
     OSL_ENSURE( mxDoc.is(), "ConverterData::ConverterData - missing chart document" );
     // lock the model to suppress internal updates during conversion
@@ -110,9 +118,10 @@ ConverterData::~ConverterData()
 ConverterRoot::ConverterRoot(
         XmlFilterBase& rFilter,
         ChartConverter& rChartConverter,
+        const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
-        const ChartSpaceModel& rChartSpace ) :
-    mxData( new ConverterData( rFilter, rChartConverter, rxChartDoc, rChartSpace ) )
+        const Size& rChartSize ) :
+    mxData( new ConverterData( rFilter, rChartConverter, rChartModel, rxChartDoc, rChartSize ) )
 {
 }
 
@@ -120,24 +129,18 @@ ConverterRoot::~ConverterRoot()
 {
 }
 
-Reference< XInterface > ConverterRoot::createInstance(
-        const Reference< XMultiServiceFactory >& rxFactory, const OUString& rServiceName )
+Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceName ) const
 {
     Reference< XInterface > xInt;
-    if( rxFactory.is() ) try
+    try
     {
-        xInt = rxFactory->createInstance( rServiceName );
+        xInt = mxData->mrFilter.getGlobalFactory()->createInstance( rServiceName );
     }
     catch( Exception& )
     {
     }
     OSL_ENSURE( xInt.is(), "ConverterRoot::createInstance - cannot create instance" );
     return xInt;
-}
-
-Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceName ) const
-{
-    return createInstance( mxData->mrFilter.getGlobalFactory(), rServiceName );
 }
 
 XmlFilterBase& ConverterRoot::getFilter() const
@@ -155,9 +158,87 @@ Reference< XChartDocument > ConverterRoot::getChartDocument() const
     return mxData->mxDoc;
 }
 
+const Size& ConverterRoot::getChartSize() const
+{
+    return mxData->maSize;
+}
+
 ObjectFormatter& ConverterRoot::getFormatter() const
 {
     return mxData->maFormatter;
+}
+
+Reference< ::com::sun::star::chart::XDiagram > ConverterRoot::getChart1Diagram() const
+{
+    Reference< ::com::sun::star::chart::XDiagram > xDiagram;
+    Reference< ::com::sun::star::chart::XChartDocument > xChart1Doc( mxData->mxDoc, UNO_QUERY );
+    if( xChart1Doc.is() )
+        xDiagram = xChart1Doc->getDiagram();
+    return xDiagram;
+}
+
+// ============================================================================
+
+namespace {
+
+sal_Int32 lclCalcPosition( sal_Int32 nChartSize, double fPos, sal_Int32 nPosMode )
+{
+    switch( nPosMode )
+    {
+        case XML_edge:      // absolute start position as factor of chart size
+            return getLimitedValue< sal_Int32, double >( nChartSize * fPos + 0.5, 0, nChartSize );
+        case XML_factor:    // position relative to object default position
+            OSL_ENSURE( false, "lclCalcPosition - relative positioning not supported" );
+            return -1;
+    };
+
+    OSL_ENSURE( false, "lclCalcPosition - unknown positioning mode" );
+    return -1;
+}
+
+sal_Int32 lclCalcSize( sal_Int32 nPos, sal_Int32 nChartSize, double fSize, sal_Int32 nSizeMode )
+{
+    sal_Int32 nValue = getLimitedValue< sal_Int32, double >( nChartSize * fSize + 0.5, 0, nChartSize );
+    switch( nSizeMode )
+    {
+        case XML_factor:    // size as factor of chart size
+            return nValue;
+        case XML_edge:      // absolute end position as factor of chart size
+            return nValue - nPos + 1;
+    };
+
+    OSL_ENSURE( false, "lclCalcSize - unknown size mode" );
+    return -1;
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+LayoutConverter::LayoutConverter( const ConverterRoot& rParent, LayoutModel& rModel ) :
+    ConverterBase< LayoutModel >( rParent, rModel )
+{
+}
+
+LayoutConverter::~LayoutConverter()
+{
+}
+
+bool LayoutConverter::calcAbsRectangle( Rectangle& orRect )
+{
+    if( !mrModel.mbAutoLayout )
+    {
+        const Size& rChartSize = getChartSize();
+        orRect.X = lclCalcPosition( rChartSize.Width,  mrModel.mfX, mrModel.mnXMode );
+        orRect.Y = lclCalcPosition( rChartSize.Height, mrModel.mfY, mrModel.mnYMode );
+        if( (orRect.X >= 0) && (orRect.Y >= 0) )
+        {
+            orRect.Width  = lclCalcSize( orRect.X, rChartSize.Width,  mrModel.mfW, mrModel.mnWMode );
+            orRect.Height = lclCalcSize( orRect.Y, rChartSize.Height, mrModel.mfH, mrModel.mnHMode );
+            return (orRect.Width > 0) && (orRect.Height > 0);
+        }
+    }
+    return false;
 }
 
 // ============================================================================
