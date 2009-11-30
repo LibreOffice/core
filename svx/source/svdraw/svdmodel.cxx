@@ -144,6 +144,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     nMaxUndoCount=16;
     pAktUndoGroup=NULL;
     nUndoLevel=0;
+    mbUndoEnabled=true;
     nProgressPercent=0;
     nLoadVersion=0;
     bExtColorTable=FALSE;
@@ -461,10 +462,13 @@ FASTBOOL SdrModel::Undo()
         SfxUndoAction* pDo=(SfxUndoAction*)GetUndoAction(0);
         if(pDo!=NULL)
         {
+            const bool bWasUndoEnabled = mbUndoEnabled;
+            mbUndoEnabled = false;
             pDo->Undo();
             if(pRedoStack==NULL)
                 pRedoStack=new Container(1024,16,16);
             pRedoStack->Insert(pUndoStack->Remove((ULONG)0),(ULONG)0);
+            mbUndoEnabled = bWasUndoEnabled;
         }
     }
     return bRet;
@@ -482,10 +486,13 @@ FASTBOOL SdrModel::Redo()
         SfxUndoAction* pDo=(SfxUndoAction*)GetRedoAction(0);
         if(pDo!=NULL)
         {
+            const bool bWasUndoEnabled = mbUndoEnabled;
+            mbUndoEnabled = false;
             pDo->Redo();
             if(pUndoStack==NULL)
                 pUndoStack=new Container(1024,16,16);
             pUndoStack->Insert(pRedoStack->Remove((ULONG)0),(ULONG)0);
+            mbUndoEnabled = bWasUndoEnabled;
         }
     }
     return bRet;
@@ -516,15 +523,28 @@ FASTBOOL SdrModel::Repeat(SfxRepeatTarget& rView)
 void SdrModel::ImpPostUndoAction(SdrUndoAction* pUndo)
 {
     DBG_ASSERT( mpImpl->mpUndoManager == 0, "svx::SdrModel::ImpPostUndoAction(), method not supported with application undo manager!" );
-    if (aUndoLink.IsSet()) {
-        aUndoLink.Call(pUndo);
-    } else {
-        if (pUndoStack==NULL) pUndoStack=new Container(1024,16,16);
-        pUndoStack->Insert(pUndo,(ULONG)0);
-        while (pUndoStack->Count()>nMaxUndoCount) {
-            delete (SfxUndoAction*)  pUndoStack->Remove(pUndoStack->Count()-1);
+    if( IsUndoEnabled() )
+    {
+        if (aUndoLink.IsSet())
+        {
+            aUndoLink.Call(pUndo);
         }
-        if (pRedoStack!=NULL) pRedoStack->Clear();
+        else
+        {
+            if (pUndoStack==NULL)
+                pUndoStack=new Container(1024,16,16);
+            pUndoStack->Insert(pUndo,(ULONG)0);
+            while (pUndoStack->Count()>nMaxUndoCount)
+            {
+                delete (SfxUndoAction*)pUndoStack->Remove(pUndoStack->Count()-1);
+            }
+            if (pRedoStack!=NULL)
+                pRedoStack->Clear();
+        }
+    }
+    else
+    {
+        delete pUndo;
     }
 }
 
@@ -536,7 +556,7 @@ void SdrModel::BegUndo()
         mpImpl->mpUndoManager->EnterListAction(aEmpty,aEmpty);
         nUndoLevel++;
     }
-    else
+    else if( IsUndoEnabled() )
     {
         if(pAktUndoGroup==NULL)
         {
@@ -558,7 +578,7 @@ void SdrModel::BegUndo(const XubString& rComment)
         mpImpl->mpUndoManager->EnterListAction( rComment, aEmpty );
         nUndoLevel++;
     }
-    else
+    else if( IsUndoEnabled() )
     {
         BegUndo();
         if (nUndoLevel==1)
@@ -582,7 +602,7 @@ void SdrModel::BegUndo(const XubString& rComment, const XubString& rObjDescr, Sd
         mpImpl->mpUndoManager->EnterListAction( aComment,aEmpty );
         nUndoLevel++;
     }
-    else
+    else if( IsUndoEnabled() )
     {
         BegUndo();
         if (nUndoLevel==1)
@@ -601,7 +621,7 @@ void SdrModel::BegUndo(SdrUndoGroup* pUndoGrp)
         DBG_ERROR("svx::SdrModel::BegUndo(), method not supported with application undo manager!" );
         nUndoLevel++;
     }
-    else
+    else if( IsUndoEnabled() )
     {
         if (pAktUndoGroup==NULL)
         {
@@ -613,6 +633,10 @@ void SdrModel::BegUndo(SdrUndoGroup* pUndoGrp)
             delete pUndoGrp;
             nUndoLevel++;
         }
+    }
+    else
+    {
+        delete pUndoGrp;
     }
 }
 
@@ -629,7 +653,7 @@ void SdrModel::EndUndo()
     }
     else
     {
-        if(pAktUndoGroup!=NULL)
+        if(pAktUndoGroup!=NULL && IsUndoEnabled())
         {
             nUndoLevel--;
             if(nUndoLevel==0)
@@ -659,7 +683,7 @@ void SdrModel::SetUndoComment(const XubString& rComment)
     {
         DBG_ERROR("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
     }
-    else
+    else if( IsUndoEnabled() )
     {
         if(nUndoLevel==1)
         {
@@ -691,6 +715,10 @@ void SdrModel::AddUndo(SdrUndoAction* pUndo)
     {
         mpImpl->mpUndoManager->AddUndoAction( pUndo );
     }
+    else if( !IsUndoEnabled() )
+    {
+        delete pUndo;
+    }
     else
     {
         if (pAktUndoGroup!=NULL)
@@ -701,6 +729,30 @@ void SdrModel::AddUndo(SdrUndoAction* pUndo)
         {
             ImpPostUndoAction(pUndo);
         }
+    }
+}
+
+void SdrModel::EnableUndo( bool bEnable )
+{
+    if( mpImpl->mpUndoManager )
+    {
+        mpImpl->mpUndoManager->EnableUndo( bEnable );
+    }
+    else
+    {
+        mbUndoEnabled = bEnable;
+    }
+}
+
+bool SdrModel::IsUndoEnabled() const
+{
+    if( mpImpl->mpUndoManager )
+    {
+        return mpImpl->mpUndoManager->IsUndoEnabled();
+    }
+    else
+    {
+        return mbUndoEnabled;
     }
 }
 
@@ -1568,53 +1620,77 @@ void SdrModel::CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
                          USHORT nDestPos,
                          FASTBOOL bUndo, FASTBOOL bMoveNoCopy)
 {
-    if (bUndo) {
+    if( bUndo && !IsUndoEnabled() )
+        bUndo = false;
+
+    if( bUndo )
         BegUndo(ImpGetResStr(STR_UndoMergeModel));
-    }
+
     USHORT nPageAnz=GetPageCount();
-    USHORT nMaxPage=nPageAnz; if (nMaxPage!=0) nMaxPage--;
-    if (nFirstPageNum>nMaxPage) nFirstPageNum=nMaxPage;
-    if (nLastPageNum>nMaxPage)  nLastPageNum =nMaxPage;
+    USHORT nMaxPage=nPageAnz;
+
+    if (nMaxPage!=0)
+        nMaxPage--;
+    if (nFirstPageNum>nMaxPage)
+        nFirstPageNum=nMaxPage;
+    if (nLastPageNum>nMaxPage)
+        nLastPageNum =nMaxPage;
     FASTBOOL bReverse=nLastPageNum<nFirstPageNum;
-    if (nDestPos>nPageAnz) nDestPos=nPageAnz;
+    if (nDestPos>nPageAnz)
+        nDestPos=nPageAnz;
 
     // Zunaechst die Zeiger der betroffenen Seiten in einem Array sichern
     USHORT nPageNum=nFirstPageNum;
     USHORT nCopyAnz=((!bReverse)?(nLastPageNum-nFirstPageNum):(nFirstPageNum-nLastPageNum))+1;
     SdrPage** pPagePtrs=new SdrPage*[nCopyAnz];
     USHORT nCopyNum;
-    for (nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++) {
+    for(nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++)
+    {
         pPagePtrs[nCopyNum]=GetPage(nPageNum);
-        if (bReverse) nPageNum--;
-        else nPageNum++;
+        if (bReverse)
+            nPageNum--;
+        else
+            nPageNum++;
     }
 
     // Jetzt die Seiten kopieren
     USHORT nDestNum=nDestPos;
-    for (nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++) {
+    for (nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++)
+    {
         SdrPage* pPg=pPagePtrs[nCopyNum];
         USHORT nPageNum2=pPg->GetPageNum();
-        if (!bMoveNoCopy) {
+        if (!bMoveNoCopy)
+        {
             const SdrPage* pPg1=GetPage(nPageNum2);
             pPg=pPg1->Clone();
             InsertPage(pPg,nDestNum);
-            if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoCopyPage(*pPg));
+            if (bUndo)
+                AddUndo(GetSdrUndoFactory().CreateUndoCopyPage(*pPg));
             nDestNum++;
-        } else {
+        }
+        else
+        {
             // Move ist nicht getestet!
-            if (nDestNum>nPageNum2) nDestNum--;
-            if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*GetPage(nPageNum2),nPageNum2,nDestNum));
+            if (nDestNum>nPageNum2)
+                nDestNum--;
+
+            if(bUndo)
+                AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*GetPage(nPageNum2),nPageNum2,nDestNum));
+
             pPg=RemovePage(nPageNum2);
             InsertPage(pPg,nDestNum);
             nDestNum++;
         }
 
-        if (bReverse) nPageNum2--;
-        else nPageNum2++;
+        if(bReverse)
+            nPageNum2--;
+        else
+            nPageNum2++;
     }
 
     delete[] pPagePtrs;
-    if (bUndo) EndUndo();
+    if(bUndo)
+        EndUndo();
 }
 
 void SdrModel::Merge(SdrModel& rSourceModel,
@@ -1623,13 +1699,18 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                      FASTBOOL bMergeMasterPages, FASTBOOL bAllMasterPages,
                      FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
 {
-    if (&rSourceModel==this) { // #48289#
+    if (&rSourceModel==this)
+    { // #48289#
         CopyPages(nFirstPageNum,nLastPageNum,nDestPos,bUndo,!bTreadSourceAsConst);
         return;
     }
-    if (bUndo) {
+
+    if( bUndo && !IsUndoEnabled() )
+        bUndo = false;
+
+    if (bUndo)
         BegUndo(ImpGetResStr(STR_UndoMergeModel));
-    }
+
     USHORT nSrcPageAnz=rSourceModel.GetPageCount();
     USHORT nSrcMasterPageAnz=rSourceModel.GetMasterPageCount();
     USHORT nDstMasterPageAnz=GetMasterPageCount();

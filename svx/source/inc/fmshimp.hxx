@@ -181,6 +181,7 @@ typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
 struct SdrViewEvent;
 class FmFormShell;
+class FmFormView;
 class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public ::svxform::OStaticDataAccessTools

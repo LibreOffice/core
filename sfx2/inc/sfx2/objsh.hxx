@@ -63,6 +63,7 @@
 #include <sot/storage.hxx>
 #include <rsc/rscsfx.hxx>
 
+#include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/shell.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -207,11 +208,13 @@ enum SfxTitleQuery
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
 
-class SFX2_DLLPUBLIC SfxObjectShell: public SfxShell, virtual public SotObject, public ::comphelper::IEmbeddedHelper
+class SFX2_DLLPUBLIC SfxObjectShell :
+    public SfxShell, virtual public SotObject,
+    public ::comphelper::IEmbeddedHelper, public ::sfx2::IXmlIdRegistrySupplier
 {
 friend struct ModifyBlocker_Impl;
 
-public:
+private:
     struct SfxObjectShell_Impl* pImp;               // interne Daten
 
     SfxMedium *                 pMedium;            // Beschreibung der Datei bzw. des Storage, in dem sich das Objekt befindet
@@ -325,7 +328,10 @@ public:
     void                        ResetError();
     sal_uInt32                  GetError() const;
     sal_uInt32                  GetErrorCode() const;
-    void                        SetError(sal_uInt32 rErr);
+    void                        SetError( sal_uInt32 rErr, const ::rtl::OUString& aLogMessage );
+
+    void                        AddLog( const ::rtl::OUString& aMessage );
+    void                        StoreLog();
 
     sal_Bool                    DoInitNew( SfxMedium* pMedium=0 );
     sal_Bool                    DoLoad( SfxMedium* pMedium );
@@ -521,6 +527,7 @@ public:
 
     //determine the position of the "Automatic" filter in the stylist
     void                        SetAutoStyleFilterIndex(sal_uInt16 nSet);
+    sal_uInt16                  GetAutoStyleFilterIndex();
     virtual sal_Bool            HasBasic() const;
     BasicManager*               GetBasicManager() const;
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >

@@ -44,9 +44,6 @@
 #include <xmloff/xmlnume.hxx>
 #include "numehelp.hxx"
 
-#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include <xmloff/maptypes.hxx>
-#endif
 #include <xmloff/families.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
@@ -65,9 +62,7 @@
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
-#ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP
 #include <com/sun/star/text/SetVariableType.hpp>
-#endif
 #include <com/sun/star/text/PlaceholderType.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
@@ -78,6 +73,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/rdf/XMetadatable.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -152,6 +148,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
 static sal_Char __READONLY_DATA FIELD_SERVICE_SCRIPT[] = "Script";
 static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
 static sal_Char __READONLY_DATA FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
+static sal_Char __READONLY_DATA FIELD_SERVICE_META[] = "MetaField";
 static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
 static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DROP_DOWN[] = "DropDown";
@@ -219,6 +216,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_ANNOTATION, FIELD_ID_ANNOTATION ),
 
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_COMBINED_CHARACTERS, FIELD_ID_COMBINED_CHARACTERS ),
+    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_META, FIELD_ID_META ),
 
     // non-writer fields
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_SHEET_NAME, FIELD_ID_SHEET_NAME ),
@@ -604,6 +602,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_TEMPLATE_NAME:
         case FIELD_ID_CHAPTER:
         case FIELD_ID_FILE_NAME:
+        case FIELD_ID_META:
         case FIELD_ID_SHEET_NAME:
         case FIELD_ID_MEASURE:
         case FIELD_ID_URL:
@@ -645,6 +644,9 @@ sal_Bool XMLTextFieldExport::IsStringField(
                                         GetMasterPropertySet(xTextField));
         return !bRet;
     }
+
+    case FIELD_ID_META://FIXME ?????? no idea...
+        return 0 > GetIntProperty(sPropertyNumberFormat, xPropSet);
 
     case FIELD_ID_DATABASE_DISPLAY:
         // TODO: depends on... ???
@@ -738,7 +740,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
 /// export the styles needed by the given field. Called on first pass
 /// through document
 void XMLTextFieldExport::ExportFieldAutoStyle(
-    const Reference<XTextField> & rTextField)
+    const Reference<XTextField> & rTextField, sal_Bool bProgress )
 {
     // get property set
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
@@ -831,6 +833,10 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         }
         break;
 
+    case FIELD_ID_META:
+        // recurse into content (does not export element, so can be done first)
+        ExportMetaField(xPropSet, true, bProgress);
+        // fall-through: for the meta-field itself!
     case FIELD_ID_DOCINFO_PRINT_TIME:
     case FIELD_ID_DOCINFO_PRINT_DATE:
     case FIELD_ID_DOCINFO_CREATION_DATE:
@@ -948,7 +954,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 }
 
 /// export the given field to XML. Called on second pass through document
-void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
+void XMLTextFieldExport::ExportField(
+    const Reference<XTextField> & rTextField, sal_Bool bProgress )
 {
     // get property set
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
@@ -1026,7 +1033,8 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
                                   sal_False, sal_False);
 
         // finally, export the field itself
-        ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken );
+        ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken,
+            bProgress );
     }
 }
 
@@ -1035,7 +1043,8 @@ void XMLTextFieldExport::ExportFieldHelper(
     const Reference<XTextField> & rTextField,
     const Reference<XPropertySet> & rPropSet,
     const Reference<XPropertySet> &,
-    enum FieldIdEnum nToken)
+    enum FieldIdEnum nToken,
+    sal_Bool bProgress )
 {
     // get property set info (because some attributes are not support
     // in all implementations)
@@ -1738,8 +1747,14 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         // The style with the combined characters attribute has
         // already been handled in the ExportField method. So all that
-        // is left to do now is to exprot the characters.
+        // is left to do now is to export the characters.
         GetExport().Characters(sPresentation);
+        break;
+    }
+
+    case FIELD_ID_META:
+    {
+        ExportMetaField(rPropSet, false, bProgress);
         break;
     }
 
@@ -2246,6 +2261,47 @@ void XMLTextFieldExport::ExportMacro(
 
     // and finally, the field presentation
     GetExport().Characters(rContent);
+}
+
+// FIXME: this is untested
+void XMLTextFieldExport::ExportMetaField(
+    const Reference<XPropertySet> & i_xMeta,
+    bool i_bAutoStyles, sal_Bool i_bProgress )
+{
+    bool doExport(!i_bAutoStyles); // do not export element if autostyles
+    // check version >= 1.2
+    switch (GetExport().getDefaultVersion()) {
+        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_010: doExport = false; break;
+        default: break;
+    }
+
+    const Reference < XEnumerationAccess > xEA( i_xMeta, UNO_QUERY_THROW );
+    const Reference < XEnumeration > xTextEnum( xEA->createEnumeration() );
+
+    if (doExport)
+    {
+        const Reference<rdf::XMetadatable> xMeta( i_xMeta, UNO_QUERY_THROW );
+
+        // style:data-style-name
+        ProcessValueAndType(sal_False,
+            GetIntProperty(sPropertyNumberFormat, i_xMeta),
+            sEmpty, sEmpty, 0.0, sal_False, sal_False, sal_True,
+            sal_False, sal_False /*, sal_False*/ );
+
+        // text:meta-field without xml:id is invalid
+        xMeta->ensureMetadataReference();
+
+        // xml:id for RDF metadata
+        GetExport().AddAttributeXmlId(xMeta);
+    }
+
+    SvXMLElementExport aElem( GetExport(), doExport,
+        XML_NAMESPACE_TEXT, XML_META_FIELD, sal_False, sal_False );
+
+    // recurse to export content
+    GetExport().GetTextParagraphExport()->
+        exportTextRangeEnumeration( xTextEnum, i_bAutoStyles, i_bProgress );
 }
 
 /// export all data-style related attributes

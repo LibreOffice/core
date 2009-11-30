@@ -69,19 +69,19 @@ IMPL_LINK( PasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr )
+PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr, bool bMSCryptoMode)
     :ModalDialog( _pParent, ResId( DLG_UUI_PASSWORD_CRT, *pResMgr ) )
     ,aFTPasswordCrt           ( this, ResId( FT_PASSWORD_CRT, *pResMgr )             )
     ,aEDPasswordCrt       ( this, ResId( ED_PASSWORD_CRT, *pResMgr )        )
     ,aFTPasswordRepeat           ( this, ResId( FT_PASSWORD_REPEAT, *pResMgr )             )
     ,aEDPasswordRepeat       ( this, ResId( ED_PASSWORD_REPEAT, *pResMgr )        )
-    ,aFTWarning           ( this, ResId( FT_PASSWORD_WARNING, *pResMgr )             )
+    ,aFTWarning           ( this, ResId( bMSCryptoMode ? FT_MSPASSWORD_WARNING : FT_PASSWORD_WARNING, *pResMgr )             )
     ,aFixedLine1       ( this, ResId( FL_FIXED_LINE_1, *pResMgr )        )
     ,aOKBtn   ( this, ResId( BTN_PASSCRT_OK, *pResMgr )    )
     ,aCancelBtn   ( this, ResId( BTN_PASSCRT_CANCEL, *pResMgr )    )
     ,aHelpBtn   ( this, ResId( BTN_PASSCRT_HELP, *pResMgr )    )
     ,pResourceMgr           ( pResMgr )
-    ,nMinLen(5)
+    ,nMinLen( bMSCryptoMode ? 1 : 5 )
 {
     FreeResource();
 
@@ -89,6 +89,12 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr )
     aEDPasswordCrt.SetModifyHdl( LINK( this, PasswordCreateDialog, EditHdl_Impl ) );
 
     aOKBtn.Enable( sal_False );
+
+    if ( bMSCryptoMode )
+    {
+        aEDPasswordCrt.SetMaxTextLen( 15 );
+        aEDPasswordRepeat.SetMaxTextLen( 15 );
+    }
 
     long nLabelWidth = aFTWarning.GetSizePixel().Width();
     long nLabelHeight = aFTWarning.GetSizePixel().Height();
@@ -101,7 +107,7 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr )
     long nNewLabelHeight = 0;
     for( nNewLabelHeight = ( nTextWidth / nLabelWidth + 1 ) * nTextHeight;
         nNewLabelHeight < aRect.GetHeight();
-        nNewLabelHeight += nTextHeight ) ;
+        nNewLabelHeight += nTextHeight ) {} ;
 
     long nDelta = nNewLabelHeight - nLabelHeight;
 

@@ -90,6 +90,9 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                     ||  SQL_ISRULE(pColumnRef,position_exp)
                     ||  SQL_ISRULE(pColumnRef,fold)
                     ||  SQL_ISRULE(pColumnRef,length_exp)
+                    ||  SQL_ISRULE(pColumnRef,num_value_exp)
+                    ||  SQL_ISRULE(pColumnRef,term)
+                    ||  SQL_ISRULE(pColumnRef,factor)
                     ||  SQL_ISRULE(pColumnRef,set_fct_spec) )
                 {
                     ::vos::ORef<OPredicateCompiler>     pCompiler = new OPredicateCompiler(this);

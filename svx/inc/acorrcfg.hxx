@@ -135,3 +135,140 @@ public:
 
 #endif
 
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: acorrcfg.hxx,v $
+ * $Revision: 1.7 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVXACCFG_HXX
+#define _SVXACCFG_HXX
+
+// include ---------------------------------------------------------------
+
+#include "svx/svxdllapi.h"
+#include <unotools/configitem.hxx>
+/* -----------------------------12.10.00 11:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SvxAutoCorrect;
+class SvxAutoCorrCfg;
+class SVX_DLLPUBLIC SvxBaseAutoCorrCfg : public utl::ConfigItem
+{
+    SvxAutoCorrCfg& rParent;
+    com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
+
+public:
+    SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rParent);
+    ~SvxBaseAutoCorrCfg();
+
+    void                    Load(sal_Bool bInit);
+    virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    void                    SetModified() {ConfigItem::SetModified();}
+};
+/* -----------------------------12.10.00 11:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SVX_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
+{
+    SvxAutoCorrCfg& rParent;
+    com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
+
+public:
+    SvxSwAutoCorrCfg(SvxAutoCorrCfg& rParent);
+    ~SvxSwAutoCorrCfg();
+
+    void                    Load(sal_Bool bInit);
+    virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    void                    SetModified() {ConfigItem::SetModified();}
+};
+/*--------------------------------------------------------------------
+    Beschreibung:   Konfiguration fuer Auto Correction
+ --------------------------------------------------------------------*/
+class SVX_DLLPUBLIC SvxAutoCorrCfg
+{
+    friend class SvxBaseAutoCorrCfg;
+    friend class SvxSwAutoCorrCfg;
+
+    SvxAutoCorrect* pAutoCorrect;
+
+    SvxBaseAutoCorrCfg      aBaseConfig;
+    SvxSwAutoCorrCfg        aSwConfig;
+
+    // Flags f"ur Autotext:
+    sal_Bool    bFileRel;
+    sal_Bool    bNetRel;
+    // Tiphilfe f"ur Autotext w"ahrend der Eingabe
+    sal_Bool    bAutoTextTip;
+    sal_Bool    bAutoTextPreview;
+    sal_Bool    bAutoFmtByInput;
+    sal_Bool    bSearchInAllCategories;
+
+public:
+    void        SetModified()
+                {
+                    aBaseConfig.SetModified();
+                    aSwConfig.SetModified();
+                }
+    void        Commit()
+                {
+                    aBaseConfig.Commit();
+                    aSwConfig.Commit();
+                }
+
+          SvxAutoCorrect* GetAutoCorrect()          { return pAutoCorrect; }
+    const SvxAutoCorrect* GetAutoCorrect() const    { return pAutoCorrect; }
+    // der Pointer geht in den Besitz des ConfigItems!
+    void SetAutoCorrect( SvxAutoCorrect* );
+
+    sal_Bool IsAutoFmtByInput() const       { return bAutoFmtByInput; }
+    void SetAutoFmtByInput( sal_Bool bSet ) { bAutoFmtByInput = bSet;aSwConfig.SetModified();}
+
+    sal_Bool IsSaveRelFile() const          { return bFileRel; }
+    void SetSaveRelFile( sal_Bool bSet )    { bFileRel = bSet; aSwConfig.SetModified(); }
+
+    sal_Bool IsSaveRelNet() const           { return bNetRel; }
+    void SetSaveRelNet( sal_Bool bSet )     { bNetRel = bSet; aSwConfig.SetModified();}
+
+    sal_Bool IsAutoTextPreview() const {return bAutoTextPreview;}
+    void     SetAutoTextPreview(sal_Bool bSet) {bAutoTextPreview = bSet; aSwConfig.SetModified();}
+
+    sal_Bool IsAutoTextTip() const          { return bAutoTextTip; }
+    void SetAutoTextTip(sal_Bool bSet )     { bAutoTextTip = bSet;aSwConfig.SetModified();}
+
+    sal_Bool IsSearchInAllCategories() const        { return bSearchInAllCategories;}
+    void SetSearchInAllCategories(sal_Bool bSet )   { bSearchInAllCategories = bSet; aSwConfig.SetModified(); }
+
+    SvxAutoCorrCfg();
+    virtual ~SvxAutoCorrCfg();
+    static SvxAutoCorrCfg*      Get();
+};
+
+
+#endif
+

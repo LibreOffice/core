@@ -98,22 +98,30 @@ void SdrEditView::ObjOrderChanged(SdrObject* /*pObj*/, ULONG /*nOldPos*/, ULONG 
 void SdrEditView::MovMarkedToTop()
 {
     ULONG nAnz=GetMarkedObjectCount();
-    if (nAnz!=0) {
-        BegUndo(ImpGetResStr(STR_EditMovToTop),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVTOTOP);
+    if (nAnz!=0)
+    {
+        const bool bUndo = IsUndoEnabled();
+
+        if( bUndo )
+            BegUndo(ImpGetResStr(STR_EditMovToTop),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVTOTOP);
+
         SortMarkedObjects();
         ULONG nm;
-        for (nm=0; nm<nAnz; nm++) { // Ordnums muessen alle stimmen!
+        for (nm=0; nm<nAnz; nm++)
+        { // Ordnums muessen alle stimmen!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
         BOOL bChg=FALSE;
         SdrObjList* pOL0=NULL;
         ULONG nNewPos=0;
-        for (nm=nAnz; nm>0;) {
+        for (nm=nAnz; nm>0;)
+        {
             nm--;
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();
             SdrObjList* pOL=pObj->GetObjList();
-            if (pOL!=pOL0) {
+            if (pOL!=pOL0)
+            {
                 nNewPos=ULONG(pOL->GetObjCount()-1);
                 pOL0=pOL;
             }
@@ -121,58 +129,87 @@ void SdrEditView::MovMarkedToTop()
             const Rectangle& rBR=pObj->GetCurrentBoundRect();
             ULONG nCmpPos=nNowPos+1;
             SdrObject* pMaxObj=GetMaxToTopObj(pObj);
-            if (pMaxObj!=NULL) {
+            if (pMaxObj!=NULL)
+            {
                 ULONG nMaxPos=pMaxObj->GetOrdNum();
-                if (nMaxPos!=0) nMaxPos--;
-                if (nNewPos>nMaxPos) nNewPos=nMaxPos; // diesen nicht ueberholen.
-                if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+                if (nMaxPos!=0)
+                    nMaxPos--;
+                if (nNewPos>nMaxPos)
+                    nNewPos=nMaxPos; // diesen nicht ueberholen.
+                if (nNewPos<nNowPos)
+                    nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
             }
             BOOL bEnd=FALSE;
-            while (nCmpPos<nNewPos && !bEnd) {
+            while (nCmpPos<nNewPos && !bEnd)
+            {
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
-                if (pCmpObj==NULL) {
+                if (pCmpObj==NULL)
+                {
                     DBG_ERROR("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
-                } else if (pCmpObj==pMaxObj) {
+                }
+                else if (pCmpObj==pMaxObj)
+                {
                     nNewPos=nCmpPos;
                     nNewPos--;
                     bEnd=TRUE;
-                } else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect())) {
+                }
+                else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect()))
+                {
                     nNewPos=nCmpPos;
                     bEnd=TRUE;
-                } else nCmpPos++;
+                }
+                else
+                {
+                    nCmpPos++;
+                }
             }
-            if (nNowPos!=nNewPos) {
+            if (nNowPos!=nNewPos)
+            {
                 bChg=TRUE;
                 pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
                 ObjOrderChanged(pObj,nNowPos,nNewPos);
             }
             nNewPos--;
         }
-        EndUndo();
-        if (bChg) MarkListHasChanged();
+
+        if( bUndo )
+            EndUndo();
+
+        if (bChg)
+            MarkListHasChanged();
     }
 }
 
 void SdrEditView::MovMarkedToBtm()
 {
     ULONG nAnz=GetMarkedObjectCount();
-    if (nAnz!=0) {
-        BegUndo(ImpGetResStr(STR_EditMovToBtm),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVTOBTM);
+    if (nAnz!=0)
+    {
+        const bool bUndo = IsUndoEnabled();
+
+        if( bUndo )
+            BegUndo(ImpGetResStr(STR_EditMovToBtm),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVTOBTM);
+
         SortMarkedObjects();
         ULONG nm;
-        for (nm=0; nm<nAnz; nm++) { // Ordnums muessen alle stimmen!
+        for (nm=0; nm<nAnz; nm++)
+        { // Ordnums muessen alle stimmen!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
+
         BOOL bChg=FALSE;
         SdrObjList* pOL0=NULL;
         ULONG nNewPos=0;
-        for (nm=0; nm<nAnz; nm++) {
+        for (nm=0; nm<nAnz; nm++)
+        {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();
             SdrObjList* pOL=pObj->GetObjList();
-            if (pOL!=pOL0) {
+            if (pOL!=pOL0)
+            {
                 nNewPos=0;
                 pOL0=pOL;
             }
@@ -180,39 +217,58 @@ void SdrEditView::MovMarkedToBtm()
             const Rectangle& rBR=pObj->GetCurrentBoundRect();
             ULONG nCmpPos=nNowPos; if (nCmpPos>0) nCmpPos--;
             SdrObject* pMaxObj=GetMaxToBtmObj(pObj);
-            if (pMaxObj!=NULL) {
+            if (pMaxObj!=NULL)
+            {
                 ULONG nMinPos=pMaxObj->GetOrdNum()+1;
-                if (nNewPos<nMinPos) nNewPos=nMinPos; // diesen nicht ueberholen.
-                if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+                if (nNewPos<nMinPos)
+                    nNewPos=nMinPos; // diesen nicht ueberholen.
+                if (nNewPos>nNowPos)
+                    nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
             }
             BOOL bEnd=FALSE;
             // nNewPos ist an dieser Stelle noch die maximale Position,
             // an der das Obj hinruecken darf, ohne seinen Vorgaenger
             // (Mehrfachselektion) zu ueberholen.
-            while (nCmpPos>nNewPos && !bEnd) {
+            while (nCmpPos>nNewPos && !bEnd)
+            {
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
-                if (pCmpObj==NULL) {
+                if (pCmpObj==NULL)
+                {
                     DBG_ERROR("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
-                } else if (pCmpObj==pMaxObj) {
+                }
+                else if (pCmpObj==pMaxObj)
+                {
                     nNewPos=nCmpPos;
                     nNewPos++;
                     bEnd=TRUE;
-                } else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect())) {
+                }
+                else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect()))
+                {
                     nNewPos=nCmpPos;
                     bEnd=TRUE;
-                } else nCmpPos--;
+                }
+                else
+                {
+                    nCmpPos--;
+                }
             }
-            if (nNowPos!=nNewPos) {
+            if (nNowPos!=nNewPos)
+            {
                 bChg=TRUE;
                 pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
                 ObjOrderChanged(pObj,nNowPos,nNewPos);
             }
             nNewPos++;
         }
-        EndUndo();
-        if (bChg) MarkListHasChanged();
+
+        if(bUndo)
+            EndUndo();
+
+        if(bChg)
+            MarkListHasChanged();
     }
 }
 
@@ -224,10 +280,16 @@ void SdrEditView::PutMarkedToTop()
 void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
 {
     ULONG nAnz=GetMarkedObjectCount();
-    if (nAnz!=0) {
-        BegUndo(ImpGetResStr(STR_EditPutToTop),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_PUTTOTOP);
+    if (nAnz!=0)
+    {
+        const bool bUndo = IsUndoEnabled();
+        if( bUndo )
+            BegUndo(ImpGetResStr(STR_EditPutToTop),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_PUTTOTOP);
+
         SortMarkedObjects();
-        if (pRefObj!=NULL) {
+
+        if (pRefObj!=NULL)
+        {
             // Damit "Vor das Objekt" auch funktioniert wenn die
             // markierten Objekte bereits vor dem Objekt stehen
             ULONG nRefMark=TryToFindMarkedObject(pRefObj);
@@ -245,50 +307,70 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
             }
         }
         ULONG nm;
-        for (nm=0; nm<nAnz; nm++) { // Ordnums muessen alle stimmen!
+        for (nm=0; nm<nAnz; nm++)
+        { // Ordnums muessen alle stimmen!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
         BOOL bChg=FALSE;
         SdrObjList* pOL0=NULL;
         ULONG nNewPos=0;
-        for (nm=nAnz; nm>0;) {
+        for (nm=nAnz; nm>0;)
+        {
             nm--;
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();
-            if (pObj!=pRefObj) {
+            if (pObj!=pRefObj)
+            {
                 SdrObjList* pOL=pObj->GetObjList();
-                if (pOL!=pOL0) {
+                if (pOL!=pOL0)
+                {
                     nNewPos=ULONG(pOL->GetObjCount()-1);
                     pOL0=pOL;
                 }
                 ULONG nNowPos=pObj->GetOrdNumDirect();
                 SdrObject* pMaxObj=GetMaxToTopObj(pObj);
-                if (pMaxObj!=NULL) {
+                if (pMaxObj!=NULL)
+                {
                     ULONG nMaxOrd=pMaxObj->GetOrdNum(); // geht leider nicht anders
-                    if (nMaxOrd>0) nMaxOrd--;
-                    if (nNewPos>nMaxOrd) nNewPos=nMaxOrd; // nicht ueberholen.
-                    if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+                    if (nMaxOrd>0)
+                        nMaxOrd--;
+                    if (nNewPos>nMaxOrd)
+                        nNewPos=nMaxOrd; // nicht ueberholen.
+                    if (nNewPos<nNowPos)
+                        nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
                 }
-                if (pRefObj!=NULL) {
-                    if (pRefObj->GetObjList()==pObj->GetObjList()) {
+                if (pRefObj!=NULL)
+                {
+                    if (pRefObj->GetObjList()==pObj->GetObjList())
+                    {
                         ULONG nMaxOrd=pRefObj->GetOrdNum(); // geht leider nicht anders
-                        if (nNewPos>nMaxOrd) nNewPos=nMaxOrd; // nicht ueberholen.
-                        if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-                    } else {
+                        if (nNewPos>nMaxOrd)
+                            nNewPos=nMaxOrd; // nicht ueberholen.
+                        if (nNewPos<nNowPos)
+                            nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+                    }
+                    else
+                    {
                         nNewPos=nNowPos; // andere PageView, also nicht veraendern
                     }
                 }
-                if (nNowPos!=nNewPos) {
+                if (nNowPos!=nNewPos)
+                {
                     bChg=TRUE;
                     pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
+                    if( bUndo )
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
                     ObjOrderChanged(pObj,nNowPos,nNewPos);
                 }
                 nNewPos--;
             } // if (pObj!=pRefObj)
         } // for-Schleife ueber alle Markierten Objekte
-        EndUndo();
-        if (bChg) MarkListHasChanged();
+
+        if( bUndo )
+            EndUndo();
+
+        if(bChg)
+            MarkListHasChanged();
     }
 }
 
@@ -300,10 +382,16 @@ void SdrEditView::PutMarkedToBtm()
 void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
 {
     ULONG nAnz=GetMarkedObjectCount();
-    if (nAnz!=0) {
-        BegUndo(ImpGetResStr(STR_EditPutToBtm),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_PUTTOBTM);
+    if (nAnz!=0)
+    {
+        const bool bUndo = IsUndoEnabled();
+
+        if( bUndo )
+            BegUndo(ImpGetResStr(STR_EditPutToBtm),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_PUTTOBTM);
+
         SortMarkedObjects();
-        if (pRefObj!=NULL) {
+        if (pRefObj!=NULL)
+        {
             // Damit "Hinter das Objekt" auch funktioniert wenn die
             // markierten Objekte bereits hinter dem Objekt stehen
             ULONG nRefMark=TryToFindMarkedObject(pRefObj);
@@ -355,14 +443,19 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
                 if (nNowPos!=nNewPos) {
                     bChg=TRUE;
                     pOL->SetObjectOrdNum(nNowPos,nNewPos);
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
+                    if( bUndo )
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj,nNowPos,nNewPos));
                     ObjOrderChanged(pObj,nNowPos,nNewPos);
                 }
                 nNewPos++;
             } // if (pObj!=pRefObj)
         } // for-Schleife ueber alle markierten Objekte
-        EndUndo();
-        if (bChg) MarkListHasChanged();
+
+        if(bUndo)
+            EndUndo();
+
+        if(bChg)
+            MarkListHasChanged();
     }
 }
 
@@ -370,10 +463,15 @@ void SdrEditView::ReverseOrderOfMarked()
 {
     SortMarkedObjects();
     ULONG nMarkAnz=GetMarkedObjectCount();
-    if (nMarkAnz>0) {
+    if (nMarkAnz>0)
+    {
         //BOOL bNeedBundle=FALSE;
         BOOL bChg=FALSE;
-        BegUndo(ImpGetResStr(STR_EditRevOrder),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_REVORDER);
+
+        bool bUndo = IsUndoEnabled();
+        if( bUndo )
+            BegUndo(ImpGetResStr(STR_EditRevOrder),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_REVORDER);
+
         ULONG a=0;
         do {
             // Markierung ueber mehrere PageViews berueksichtigen
@@ -390,8 +488,11 @@ void SdrEditView::ReverseOrderOfMarked()
                 SdrObject* pObj2=GetMarkedObjectByIndex(c);
                 ULONG nOrd1=pObj1->GetOrdNumDirect();
                 ULONG nOrd2=pObj2->GetOrdNumDirect();
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj1,nOrd1,nOrd2));
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj2,nOrd2-1,nOrd1));
+                if( bUndo )
+                {
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj1,nOrd1,nOrd2));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectOrdNum(*pObj2,nOrd2-1,nOrd1));
+                }
                 pOL->SetObjectOrdNum(nOrd1,nOrd2);
                 // Obj 2 ist um eine Position nach vorn gerutscht, deshalb nun nOrd2-1
                 pOL->SetObjectOrdNum(nOrd2-1,nOrd1);
@@ -401,16 +502,22 @@ void SdrEditView::ReverseOrderOfMarked()
             }
             a=b+1;
         } while (a<nMarkAnz);
-        EndUndo();
-        if (bChg) MarkListHasChanged();
+
+        if(bUndo)
+            EndUndo();
+
+        if(bChg)
+            MarkListHasChanged();
     }
 }
 
 void SdrEditView::ImpCheckToTopBtmPossible()
 {
     ULONG nAnz=GetMarkedObjectCount();
-    if (nAnz==0) return;
-    if (nAnz==1) { // Sonderbehandlung fuer Einzelmarkierung
+    if (nAnz==0)
+        return;
+    if (nAnz==1)
+    { // Sonderbehandlung fuer Einzelmarkierung
         SdrObject* pObj=GetMarkedObjectByIndex(0);
         SdrObjList* pOL=pObj->GetObjList();
         ULONG nMax=pOL->GetObjCount();
@@ -700,8 +807,6 @@ DECLARE_LIST(ImpDistributeEntryList, ImpDistributeEntry*)
 
 void SdrEditView::DistributeMarkedObjects()
 {
-#ifndef SVX_LIGHT
-
     UINT32 nMark(GetMarkedObjectCount());
 
     if(nMark > 2)
@@ -723,7 +828,9 @@ void SdrEditView::DistributeMarkedObjects()
                 ImpDistributeEntryList aEntryList;
                 UINT32 a, nInsPos, nFullLength;
 
-                BegUndo();
+                const bool bUndo = IsUndoEnabled();
+                if( bUndo )
+                    BegUndo();
 
                 if(eHor != SvxDistributeHorizontalNone)
                 {
@@ -785,7 +892,8 @@ void SdrEditView::DistributeMarkedObjects()
                             ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
                             ImpDistributeEntry* pNext = aEntryList.GetObject(a+1);
                             INT32 nDelta = (INT32)(fStepStart + 0.5) - pCurr->mnPos;
-                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
+                            if( bUndo )
+                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(nDelta, 0));
                             fStepStart += fStepWidth + (double)((pCurr->mnLength + pNext->mnLength) / 2);
                         }
@@ -803,7 +911,8 @@ void SdrEditView::DistributeMarkedObjects()
                         {
                             ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
                             INT32 nDelta = (INT32)(fStepStart + 0.5) - pCurr->mnPos;
-                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
+                            if( bUndo )
+                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(nDelta, 0));
                             fStepStart += fStepWidth;
                         }
@@ -874,7 +983,8 @@ void SdrEditView::DistributeMarkedObjects()
                             ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
                             ImpDistributeEntry* pNext = aEntryList.GetObject(a+1);
                             INT32 nDelta = (INT32)(fStepStart + 0.5) - pCurr->mnPos;
-                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
+                            if( bUndo )
+                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(0, nDelta));
                             fStepStart += fStepWidth + (double)((pCurr->mnLength + pNext->mnLength) / 2);
                         }
@@ -892,7 +1002,8 @@ void SdrEditView::DistributeMarkedObjects()
                         {
                             ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
                             INT32 nDelta = (INT32)(fStepStart + 0.5) - pCurr->mnPos;
-                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
+                            if( bUndo )
+                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
                             pCurr->mpObj->Move(Size(0, nDelta));
                             fStepStart += fStepWidth;
                         }
@@ -905,13 +1016,14 @@ void SdrEditView::DistributeMarkedObjects()
 
                 // UNDO-Comment and end of UNDO
                 SetUndoComment(ImpGetResStr(STR_DistributeMarkedObjects));
-                EndUndo();
+
+                if( bUndo )
+                    EndUndo();
             }
 
             delete(pDlg);
         }
     }
-#endif
 }
 
 void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
@@ -921,7 +1033,11 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     {
         SdrMarkList aRemove;
         SortMarkedObjects();
-        BegUndo();
+
+        const bool bUndo = IsUndoEnabled();
+
+        if( bUndo )
+            BegUndo();
 
         UINT32 nInsPos=0xFFFFFFFF;
         const SdrObject* pAttrObj = NULL;
@@ -1044,7 +1160,8 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
             ImpCopyAttributes(pAttrObj, pPath);
             SdrInsertReason aReason(SDRREASON_VIEWCALL, pAttrObj);
             pInsOL->InsertObject(pPath, nInsPos, &aReason);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
+            if( bUndo )
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
             MarkObj(pPath, pInsPV, FALSE, TRUE);
         }
 
@@ -1075,7 +1192,8 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         }
         DeleteMarkedList(aRemove);
 
-        EndUndo();
+        if( bUndo )
+            EndUndo();
     }
 }
 
@@ -1084,8 +1202,11 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
     // #105899# Start of Combine-Undo put to front, else ConvertMarkedToPolyObj would
     // create a 2nd Undo-action and Undo-Comment.
 
+    bool bUndo = IsUndoEnabled();
+
     // Undo-String will be set later
-    BegUndo(String(), String(), bNoPolyPoly ? SDRREPFUNC_OBJ_COMBINE_ONEPOLY : SDRREPFUNC_OBJ_COMBINE_POLYPOLY);
+    if( bUndo )
+        BegUndo(String(), String(), bNoPolyPoly ? SDRREPFUNC_OBJ_COMBINE_ONEPOLY : SDRREPFUNC_OBJ_COMBINE_POLYPOLY);
 
     // #105899# First, guarantee that all objects are converted to polyobjects,
     // especially for SdrGrafObj with bitmap filling this is necessary to not
@@ -1228,7 +1349,8 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
 
         SdrInsertReason aReason(SDRREASON_VIEWCALL,pAttrObj);
         pInsOL->InsertObject(pPath,nInsPos,&aReason);
-        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
+        if( bUndo )
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
 
         // #111111#
         // Here was a severe error: Without UnmarkAllObj, the new object was marked
@@ -1241,11 +1363,13 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
 
     // UndoComment aus den tatsaechlich verwendeten Objekten zusammenbauen
     aRemoveMerker.ForceSort(); // wichtig fuer Remove (s.u.)
-    SetUndoComment(ImpGetResStr(bNoPolyPoly?STR_EditCombine_OnePoly:STR_EditCombine_PolyPoly),aRemoveMerker.GetMarkDescription());
+    if( bUndo )
+        SetUndoComment(ImpGetResStr(bNoPolyPoly?STR_EditCombine_OnePoly:STR_EditCombine_PolyPoly),aRemoveMerker.GetMarkDescription());
 
     // die tatsaechlich verwendeten Objekten aus der Liste entfernen
     DeleteMarkedList(aRemoveMerker);
-    EndUndo();
+    if( bUndo )
+        EndUndo();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1368,6 +1492,8 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
     const SdrPathObj* pSrcPath = PTR_CAST(SdrPathObj, pObj);
     const SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj);
 
+    const bool bUndo = IsUndoEnabled();
+
     if(pSrcPath)
     {
         // #i74631# redesigned due to XpolyPolygon removal and explicit constructors
@@ -1387,7 +1513,8 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 pLast = pPath;
                 SdrInsertReason aReason(SDRREASON_VIEWCALL, pSrcPath);
                 rOL.InsertObject(pPath, rPos, &aReason);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, TRUE));
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, TRUE));
                 MarkObj(pPath, pPV, FALSE, TRUE);
                 rPos++;
             }
@@ -1421,7 +1548,8 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     pLast = pPath;
                     SdrInsertReason aReason(SDRREASON_VIEWCALL, pSrcPath);
                     rOL.InsertObject(pPath, rPos, &aReason);
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, TRUE));
+                    if( bUndo )
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, TRUE));
                     MarkObj(pPath, pPV, FALSE, TRUE);
                     rPos++;
                 }
@@ -1456,7 +1584,8 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                 SdrInsertReason aReason(SDRREASON_VIEWCALL, pCustomShape);
                 rOL.InsertObject(pCandidate, rPos, &aReason);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pCandidate, true));
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pCandidate, true));
                 MarkObj(pCandidate, pPV, FALSE, TRUE);
 
                 if(pCustomShape->HasText() && !pCustomShape->IsTextPath())
@@ -1500,7 +1629,8 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                     // insert object
                     rOL.InsertObject(pTextObj, rPos + 1, &aReason);
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pTextObj, true));
+                    if( bUndo )
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pTextObj, true));
                     MarkObj(pTextObj, pPV, FALSE, TRUE);
                 }
             }
@@ -1515,9 +1645,15 @@ void SdrEditView::DismantleMarkedObjects(BOOL bMakeLines)
     SdrMarkList aRemoveMerker;
 
     SortMarkedObjects();
-    // Der Comment wird spaeter zusammengebaut
-    BegUndo(String(), String(),
-        bMakeLines ? SDRREPFUNC_OBJ_DISMANTLE_LINES : SDRREPFUNC_OBJ_DISMANTLE_POLYS);
+
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+    {
+        // Der Comment wird spaeter zusammengebaut
+        BegUndo(String(), String(),
+            bMakeLines ? SDRREPFUNC_OBJ_DISMANTLE_LINES : SDRREPFUNC_OBJ_DISMANTLE_POLYS);
+    }
 
     ULONG nm;
     ULONG nAnz=GetMarkedObjectCount();
@@ -1543,14 +1679,22 @@ void SdrEditView::DismantleMarkedObjects(BOOL bMakeLines)
             } else {
                 ImpDismantleOneObject(pObj,*pOL,nPos,pPV,bMakeLines);
             }
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj,TRUE));
+            if( bUndo )
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj,TRUE));
             pOL->RemoveObject(nPos0);
+
+            if( !bUndo )
+                SdrObject::Free(pObj);
         }
     }
-    // UndoComment aus den tatsaechlich verwendeten Objekten zusammenbauen
-    SetUndoComment(ImpGetResStr(bMakeLines?STR_EditDismantle_Lines:STR_EditDismantle_Polys),aRemoveMerker.GetMarkDescription());
-    // die tatsaechlich verwendeten Objekten aus der Liste entfernen
-    EndUndo();
+
+    if( bUndo )
+    {
+        // UndoComment aus den tatsaechlich verwendeten Objekten zusammenbauen
+        SetUndoComment(ImpGetResStr(bMakeLines?STR_EditDismantle_Lines:STR_EditDismantle_Polys),aRemoveMerker.GetMarkDescription());
+        // die tatsaechlich verwendeten Objekten aus der Liste entfernen
+        EndUndo();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1565,17 +1709,26 @@ void SdrEditView::DismantleMarkedObjects(BOOL bMakeLines)
 
 void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
 {
-    if (AreObjectsMarked()) {
-        BegUndo(ImpGetResStr(STR_EditGroup),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_GROUP);
+    if (AreObjectsMarked())
+    {
         SortMarkedObjects();
-        ULONG nAnz=GetMarkedObjectCount();
-        for (ULONG nm=nAnz; nm>0;) { // UndoActions fuer alle betroffenen Objekte anlegen
-            nm--;
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            SdrObject* pObj = pM->GetMarkedSdrObj();
-            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
-            AddUndoActions( vConnectorUndoActions );
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj ));
+
+        const bool bUndo = IsUndoEnabled();
+        if( bUndo )
+        {
+            BegUndo(ImpGetResStr(STR_EditGroup),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_GROUP);
+
+            const ULONG nAnz = GetMarkedObjectCount();
+            for(ULONG nm = nAnz; nm>0; )
+            {
+                // UndoActions fuer alle betroffenen Objekte anlegen
+                nm--;
+                SdrMark* pM=GetSdrMarkByIndex(nm);
+                SdrObject* pObj = pM->GetMarkedSdrObj();
+                    std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
+                    AddUndoActions( vConnectorUndoActions );
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj ));
+            }
         }
 
         SdrMarkList aNewMark;
@@ -1588,7 +1741,8 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
             SdrObjList* pSrcLst0=pSrcLst;
             SdrPage*    pPage=pPV->GetPage();
             // sicherstellen, dass die OrdNums stimmen
-            if (pSrcLst->IsObjOrdNumsDirty()) pSrcLst->RecalcObjOrdNums();
+            if (pSrcLst->IsObjOrdNumsDirty())
+                pSrcLst->RecalcObjOrdNums();
             SdrObject*  pGrp=NULL;
             SdrObject*  pRefObj=NULL; // Referenz fuer InsertReason (-> rumankern im Writer)
             SdrObject*  pRefObj1=NULL; // Referenz fuer InsertReason (-> rumankern im Writer)
@@ -1597,55 +1751,75 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
             // kommen, kommt das Gruppenobjekt an das Ende der Liste.
             ULONG       nInsPos=pSrcLst->GetObjCount();
             BOOL    bNeedInsPos=TRUE;
-            for (ULONG nm=GetMarkedObjectCount(); nm>0;) {
+            for (ULONG nm=GetMarkedObjectCount(); nm>0;)
+            {
                 nm--;
                 SdrMark* pM=GetSdrMarkByIndex(nm);
-                if (pM->GetPageView()==pPV) {
-                    if (pGrp==NULL) {
-                        if (pUserGrp!=NULL) pGrp=pUserGrp->Clone();
-                        if (pGrp==NULL) pGrp=new SdrObjGroup;
+                if (pM->GetPageView()==pPV)
+                {
+                    if (pGrp==NULL)
+                    {
+                        if (pUserGrp!=NULL)
+                            pGrp=pUserGrp->Clone();
+                        if (pGrp==NULL)
+                            pGrp=new SdrObjGroup;
                         pDstLst=pGrp->GetSubList();
                         DBG_ASSERT(pDstLst!=NULL,"Angebliches Gruppenobjekt liefert keine Objektliste");
                     }
                     SdrObject* pObj=pM->GetMarkedSdrObj();
                     pSrcLst=pObj->GetObjList();
-                    if (pSrcLst!=pSrcLst0) {
-                        if (pSrcLst->IsObjOrdNumsDirty()) pSrcLst->RecalcObjOrdNums();
+                    if (pSrcLst!=pSrcLst0)
+                    {
+                        if (pSrcLst->IsObjOrdNumsDirty())
+                            pSrcLst->RecalcObjOrdNums();
                     }
                     BOOL bForeignList=pSrcLst!=pAktLst;
                     BOOL bGrouped=pSrcLst!=pPage;
-                    if (!bForeignList && bNeedInsPos) {
+                    if (!bForeignList && bNeedInsPos)
+                    {
                         nInsPos=pObj->GetOrdNum(); // ua, damit sind alle ObjOrdNum der Page gesetzt
                         nInsPos++;
                         bNeedInsPos=FALSE;
                     }
                     pSrcLst->RemoveObject(pObj->GetOrdNumDirect());
-                    if (!bForeignList) nInsPos--; // InsertPos korregieren
+                    if (!bForeignList)
+                        nInsPos--; // InsertPos korregieren
                     SdrInsertReason aReason(SDRREASON_VIEWCALL);
                     pDstLst->InsertObject(pObj,0,&aReason);
                     GetMarkedObjectListWriteAccess().DeleteMark(nm);
-                    if (pRefObj1==NULL) pRefObj1=pObj; // Das oberste sichtbare Objekt
-                    if (!bGrouped) {
-                        if (pRefObj==NULL) pRefObj=pObj; // Das oberste sichtbare nicht gruppierte Objekt
+                    if (pRefObj1==NULL)
+                        pRefObj1=pObj; // Das oberste sichtbare Objekt
+                    if (!bGrouped)
+                    {
+                        if (pRefObj==NULL)
+                            pRefObj=pObj; // Das oberste sichtbare nicht gruppierte Objekt
                     }
                     pSrcLst0=pSrcLst;
                 }
             }
-            if (pRefObj==NULL) pRefObj=pRefObj1;
-            if (pGrp!=NULL) {
+            if (pRefObj==NULL)
+                pRefObj=pRefObj1;
+            if (pGrp!=NULL)
+            {
                 aNewMark.InsertEntry(SdrMark(pGrp,pPV));
-                ULONG nAnz2=pDstLst->GetObjCount();
+                ULONG nAnz=pDstLst->GetObjCount();
                 SdrInsertReason aReason(SDRREASON_VIEWCALL,pRefObj);
                 pAktLst->InsertObject(pGrp,nInsPos,&aReason);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pGrp,true)); // Kein Recalc!
-                for (ULONG no=0; no<nAnz2; no++) {
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pDstLst->GetObj(no)));
+                if( bUndo )
+                {
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pGrp,true)); // Kein Recalc!
+                    for (ULONG no=0; no<nAnz; no++)
+                    {
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pDstLst->GetObj(no)));
+                    }
                 }
             }
         }
         GetMarkedObjectListWriteAccess().Merge(aNewMark);
         MarkListHasChanged();
-        EndUndo();
+
+        if( bUndo )
+            EndUndo();
     }
 }
 
@@ -1663,7 +1837,10 @@ void SdrEditView::UnGroupMarked()
 {
     SdrMarkList aNewMark;
 
-    BegUndo(String(), String(), SDRREPFUNC_OBJ_UNGROUP);
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
+        BegUndo(String(), String(), SDRREPFUNC_OBJ_UNGROUP);
+
     ULONG nCount=0;
     XubString aName1;
     XubString aName;
@@ -1697,16 +1874,23 @@ void SdrEditView::UnGroupMarked()
             // when AddUndo(new SdrUndoDelObj(*pGrp)) is called.
             ULONG nAnz=pSrcLst->GetObjCount();
             ULONG no;
-            for (no=nAnz; no>0;) {
-                no--;
-                SdrObject* pObj=pSrcLst->GetObj(no);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject(*pObj));
+
+            if( bUndo )
+            {
+                for (no=nAnz; no>0;)
+                {
+                    no--;
+                    SdrObject* pObj=pSrcLst->GetObj(no);
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject(*pObj));
+                }
             }
-            for (no=0; no<nAnz; no++) {
+            for (no=0; no<nAnz; no++)
+            {
                 SdrObject* pObj=pSrcLst->RemoveObject(0);
                 SdrInsertReason aReason(SDRREASON_VIEWCALL,pGrp);
                 pDstLst->InsertObject(pObj,nDstCnt,&aReason);
-                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pObj,true));
+                if( bUndo )
+                    AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pObj,true));
                 nDstCnt++;
                 // Kein SortCheck beim einfuegen in die MarkList, denn das
                 // wuerde wg. pObj->GetOrdNum() jedesmal ein RecalcOrdNums()
@@ -1714,22 +1898,32 @@ void SdrEditView::UnGroupMarked()
                 aNewMark.InsertEntry(SdrMark(pObj,pM->GetPageView()),FALSE);
             }
 
-            // Now it is safe to add the delete-UNDO which trigers the
-            // MigrateItemPool now only for itself, not for the subobjects.
-            // nDstCnt is right, because previous inserts move group
-            // object deeper and increase nDstCnt.
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pGrp));
+            if( bUndo )
+            {
+                // Now it is safe to add the delete-UNDO which trigers the
+                // MigrateItemPool now only for itself, not for the subobjects.
+                // nDstCnt is right, because previous inserts move group
+                // object deeper and increase nDstCnt.
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pGrp));
+            }
             pDstLst->RemoveObject(nDstCnt);
+
+            if( !bUndo )
+                SdrObject::Free(pGrp);
 
             GetMarkedObjectListWriteAccess().DeleteMark(nm);
         }
     }
     if (nCount!=0)
     {
-        if (!bNameOk) aName=ImpGetResStr(STR_ObjNamePluralGRUP); // Oberbegriff Gruppenobjekte verwenden, wenn verschiedene Objekte.
+        if (!bNameOk)
+            aName=ImpGetResStr(STR_ObjNamePluralGRUP); // Oberbegriff Gruppenobjekte verwenden, wenn verschiedene Objekte.
         SetUndoComment(ImpGetResStr(STR_EditUngroup),aName);
     }
-    EndUndo();
+
+    if( bUndo )
+        EndUndo();
+
     if (nCount!=0)
     {
         GetMarkedObjectListWriteAccess().Merge(aNewMark,TRUE); // Durch das obige Einsortieren ist aNewMark genau verkehrtherum
@@ -1750,12 +1944,20 @@ void SdrEditView::UnGroupMarked()
 SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, BOOL bPath, BOOL bLineToArea)
 {
     SdrObject* pNewObj = pObj->ConvertToPolyObj(bPath, bLineToArea);
-    if (pNewObj!=NULL) {
+    if (pNewObj!=NULL)
+    {
         SdrObjList* pOL=pObj->GetObjList();
         DBG_ASSERT(pOL!=NULL,"ConvertTo: Obj liefert keine ObjList");
-        if (pOL!=NULL) {
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pObj,*pNewObj));
+        if (pOL!=NULL)
+        {
+            const bool bUndo = IsUndoEnabled();
+            if( bUndo )
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pObj,*pNewObj));
+
             pOL->ReplaceObject(pNewObj,pObj->GetOrdNum());
+
+            if( !bUndo )
+                SdrObject::Free(pObj);
         }
     }
     return pNewObj;
@@ -1838,7 +2040,11 @@ void SdrEditView::ConvertMarkedToPolyObj(BOOL bLineToArea)
 
 void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 {
-    BegUndo(String(), String(), SDRREPFUNC_OBJ_IMPORTMTF);
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+        BegUndo(String(), String(), SDRREPFUNC_OBJ_IMPORTMTF);
+
     SortMarkedObjects();
     SdrMarkList aForTheDescription;
     SdrMarkList aNewMarked;
@@ -1878,10 +2084,13 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             aFilter.SetLayer(pObj->GetLayer());
             nInsAnz=aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(),*pOL,nInsPos,pProgrInfo);
         }
-        if (nInsAnz!=0) {
+        if (nInsAnz!=0)
+        {
             ULONG nObj=nInsPos;
-            for (ULONG i=0; i<nInsAnz; i++) {
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pOL->GetObj(nObj)));
+            for (ULONG i=0; i<nInsAnz; i++)
+            {
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pOL->GetObj(nObj)));
 
                 // Neue MarkList pflegen
                 SdrMark aNewMark(pOL->GetObj(nObj), pPV);
@@ -1890,11 +2099,16 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                 nObj++;
             }
             aForTheDescription.InsertEntry(*pM);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+
+            if( bUndo )
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
 
             // Objekt aus selektion loesen und loeschen
             GetMarkedObjectListWriteAccess().DeleteMark(TryToFindMarkedObject(pObj));
             pOL->RemoveObject(nInsPos-1);
+
+            if( !bUndo )
+                SdrObject::Free(pObj);
         }
     }
 
@@ -1910,7 +2124,10 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SortMarkedObjects();
     }
 
-    SetUndoComment(ImpGetResStr(STR_EditImportMtf),aForTheDescription.GetMarkDescription());
-    EndUndo();
+    if( bUndo )
+    {
+        SetUndoComment(ImpGetResStr(STR_EditImportMtf),aForTheDescription.GetMarkDescription());
+        EndUndo();
+    }
 }
 

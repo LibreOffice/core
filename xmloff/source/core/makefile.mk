@@ -77,7 +77,10 @@ SLOFILES =	\
         $(SLO)$/XMLEmbeddedObjectImportContext.obj \
         $(SLO)$/XMLBase64Export.obj \
         $(SLO)$/XMLBase64ImportContext.obj \
-        $(SLO)$/XMLBasicExportFilter.obj
+        $(SLO)$/XMLBasicExportFilter.obj \
+        $(SLO)$/RDFaImportHelper.obj \
+        $(SLO)$/RDFaExportHelper.obj \
+
 
 # --- Targets -------------------------------------------------------
 

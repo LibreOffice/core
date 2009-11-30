@@ -41,7 +41,7 @@ class XSecondaryFillColorItem : public XColorItem
 public:
             TYPEINFO();
             XSecondaryFillColorItem() {}
-            XSecondaryFillColorItem(long nIndex, const Color& rTheColor);
+            XSecondaryFillColorItem(INT32 nIndex, const Color& rTheColor);
             XSecondaryFillColorItem(const String& rName, const Color& rTheColor);
             XSecondaryFillColorItem(SvStream& rIn);
 

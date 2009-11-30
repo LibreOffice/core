@@ -52,7 +52,7 @@ ModalDialog DLG_UUI_SSLWARN
     FixedText FT_LABEL_1
     {
         Pos = MAP_APPFONT( DLG_TEXT_START_X, RSC_SP_DLG_INNERBORDER_TOP );
-        Size = MAP_APPFONT( 165, DLG_TEXT_1_HEIGHT );
+        Size = MAP_APPFONT( 195, DLG_TEXT_1_HEIGHT );
 
         Text [ en-US ] = "No Text";
 
@@ -63,7 +63,7 @@ ModalDialog DLG_UUI_SSLWARN
     PushButton PB_VIEW__CERTIFICATE
     {
         Pos = MAP_APPFONT( DLG_CTLBTN_CERT_START_X, DLG_CTLBTN_START_Y );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Size = MAP_APPFONT( DLG_CTLBTN_CERT_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
 
         Text [ en-US ] = "View Certificate";
 

@@ -184,12 +184,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQL
     if ( m_pTable->getConnection()->isLDAP() )
     {
         const OColumnAlias& aAliases( m_pTable->getConnection()->getColumnAlias() );
-        OColumnAlias::ProgrammaticName eProgrammatic( aAliases.getProgrammaticNameIndex( sColumnName ) );
-        if  (   ( eProgrammatic == OColumnAlias::HOMECOUNTRY )
-            ||  ( eProgrammatic == OColumnAlias::WORKCOUNTRY )
-            )
-            // for those, we know that they're not searchable in the Mozilla/LDAP implementation.
-            // There might be more ...
+        if ( !aAliases.isColumnSearchable( sColumnName ) )
             return sal_False;
     }
 

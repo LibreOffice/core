@@ -40,7 +40,6 @@
 #include <svx/svdocirc.hxx>
 #include <math.h>
 #include <svx/xpool.hxx>
-#include "svdtouch.hxx"
 #include <svx/svdattr.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdattrx.hxx>
@@ -310,127 +309,6 @@ void SdrCircObj::RecalcXPoly()
 {
     const basegfx::B2DPolygon aPolyCirc(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));
     mpXPoly = new XPolygon(aPolyCirc);
-}
-
-SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    Point aPt(rPnt);
-    Point aZero;
-    aPt.X()-=aRect.Left();
-    aPt.Y()-=aRect.Top();
-
-    INT32 nMyTol=nTol;
-    FASTBOOL bFilled=meCircleKind!=OBJ_CARC && (bTextFrame || HasFill());
-
-    INT32 nWdt=ImpGetLineWdt()/2; // Halbe Strichstaerke
-    long nBoundWdt=aRect.GetWidth()-1;
-    long nBoundHgt=aRect.GetHeight()-1;
-    if (meCircleKind==OBJ_SECT) {
-        long nTmpWink=NormAngle360(nEndWink-nStartWink);
-        if (nTmpWink<9000) {
-            nBoundWdt=0;
-            nBoundHgt=0;
-        } else if (nTmpWink<27000) {
-            nBoundWdt/=2;
-            nBoundHgt/=2;
-        }
-    }
-    if (bFilled && nBoundWdt>short(nTol) && nBoundHgt>short(nTol) && Abs(aGeo.nShearWink)<=4500) nMyTol=0; // Keine Toleranz noetig hier
-    if (nWdt>nMyTol) nMyTol=nWdt; // Bei dicker Umrandung keine Toleranz noetig
-
-    // Den uebergebenen Punkt auf den gedrehten, geshearten Kreis transformieren
-    // Unrotate:
-    if (aGeo.nDrehWink!=0) RotatePoint(aPt,aZero,-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
-    // Unshear:
-    if (aGeo.nShearWink!=0) ShearPoint(aPt,aZero,-aGeo.nTan); // -tan fuer Umkehrung
-
-    long nXRad=aRect.GetWidth()/2;  if (nXRad<1) nXRad=1;
-    long nYRad=aRect.GetHeight()/2; if (nYRad<1) nYRad=1;
-
-    // Die wirklichen Radien fuer spaeter merken
-    long nXRadReal=nXRad;
-    long nYRadReal=nYRad;
-    aPt.X()-=nXRad;
-    aPt.Y()-=nYRad;
-    Point aPtNoStretch(aPt);
-
-    if (nXRad>nYRad) {
-        aPt.Y()=BigMulDiv(aPt.Y(),nXRad,nYRad);
-        // Da die Strichstaerke bei Ellipsen ueberall gleich ist:
-        if (Abs(aPt.X())<Abs(aPt.Y())) {
-            nMyTol=BigMulDiv(nMyTol,nXRad,nYRad);
-        }
-        nYRad=nXRad;
-    }
-    if (nYRad>nXRad) {
-        aPt.X()=BigMulDiv(aPt.X(),nYRad,nXRad);
-        // Da die Strichstaerke bei Ellipsen ueberall gleich ist:
-        if (Abs(aPt.Y())<Abs(aPt.X())) {
-            nMyTol=BigMulDiv(nMyTol,nYRad,nXRad);
-        }
-        nXRad=nYRad;
-    }
-
-    // Die BigInts haben bei *= leider ein Vorzeichenproblem (a*=a;)
-    // (SV250A), deshalb hier soviele Instanzen. (JOE)
-    long nAussen=nXRad+nMyTol;
-    BigInt nBigTmpA(nAussen);
-    BigInt nAusRadQ(nBigTmpA*nBigTmpA);
-    long nInnen=nXRad-nMyTol; if (nInnen<=0) nInnen=0;
-    BigInt nBigTmpI(nInnen);
-    // wird sonst nicht benoetigt, ggf. BugMul sparen:
-    BigInt nInnRadQ((!bFilled && nInnen!=0) ? nBigTmpI*nBigTmpI : nBigTmpI);
-
-    // Radius von aPt berechnen
-    BigInt nBigTmpX(aPt.X());
-    BigInt nBigTmpY(aPt.Y());
-    BigInt nPntRadQ(nBigTmpX*nBigTmpX+nBigTmpY*nBigTmpY);
-
-    sal_Bool bRet(sal_False);
-    if (nPntRadQ<=nAusRadQ) { // sonst ausserhalb
-        if (nInnen==0) bRet = sal_True;
-        else if (meCircleKind==OBJ_CIRC) { // Vollkreis
-            if (bFilled) bRet = sal_True;
-            else if (nPntRadQ>=nInnRadQ) bRet = sal_True;
-        } else { // Teilkreise
-            long nWink=NormAngle360(GetAngle(aPt));
-            long a=nStartWink;
-            long e=nEndWink;
-            if (e<a) e+=36000;
-            if (nWink<a) nWink+=36000;
-            if (nWink>=a && nWink<=e) {
-                if (bFilled) bRet = sal_True;
-                else if (nPntRadQ>=nInnRadQ) bRet = sal_True;
-            }
-            if (!bRet) {
-                Rectangle aR(aPtNoStretch.X()-nMyTol,aPtNoStretch.Y()-nMyTol,
-                             aPtNoStretch.X()+nMyTol,aPtNoStretch.Y()+nMyTol);
-                Point aP1(GetWinkPnt(aRect,nStartWink));
-                aP1.X()-=aRect.Left()+nXRadReal;
-                aP1.Y()-=aRect.Top()+nYRadReal;
-                Point aP2(GetWinkPnt(aRect,nEndWink));
-                aP2.X()-=aRect.Left()+nXRadReal;
-                aP2.Y()-=aRect.Top()+nYRadReal;
-                if (meCircleKind==OBJ_SECT) { // Kreissektor: nur noch die beiden Strecken testen
-                    bRet=IsRectTouchesLine(aZero,aP1,aR) || IsRectTouchesLine(aZero,aP2,aR);
-                }
-                if (meCircleKind==OBJ_CCUT) { // Kreisabschnitt noch die Sehne und die MaeuseEcke (Dreieck) testen
-                    if (IsRectTouchesLine(aP1,aP2,aR)) bRet = sal_True; // die Sehne
-                    else if (bFilled) { // und nun die Maeusescke
-                        const Polygon aPoly(GetXPoly().getB2DPolygon().getDefaultAdaptiveSubdivision());
-                        bRet=IsPointInsidePoly(aPoly,rPnt);
-                    }
-                }
-            }
-        }
-    }
-    if (!bRet && HasText()) bRet=SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
-    return bRet ? (SdrObject*)this : NULL;
 }
 
 void SdrCircObj::TakeObjNameSingul(XubString& rName) const

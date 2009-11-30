@@ -54,8 +54,10 @@
 #include <xmloff/xmlexp.hxx>
 #include "xmlnmspe.hxx"
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -123,6 +125,24 @@ sal_Int32 lcl_getBuildIDFromGenerator( const ::rtl::OUString& rGenerator )
     return nBuildId;
 }
 
+Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange( const Reference< chart2::data::XDataSequence >& xSeq, const Reference< chart2::data::XDataProvider >& xDataProvider )
+{
+    Reference< chart2::data::XDataSequence > xRet;
+    OUString aRange;
+    Reference< chart2::data::XRangeXMLConversion > xRangeConversion( xDataProvider, uno::UNO_QUERY );
+    if( xRangeConversion.is() )
+    {
+        if( xSeq.is() && SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) )
+        {
+            xRet.set( xDataProvider->createDataSequenceByRangeRepresentation(
+                xRangeConversion->convertRangeFromXML( aRange )) );
+            SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                Reference< beans::XPropertySet >( xRet, uno::UNO_QUERY ));
+        }
+    }
+    return xRet;
+}
+
 } // anonymous namespace
 
 // ----------------------------------------
@@ -185,6 +205,9 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" ) )
 
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" ) )
+
         ;
     return g_aChartTypeNameMap;
 }
@@ -241,6 +264,9 @@ OUString GetChartTypeByClassName(
         else
             aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Scatter"));
     }
+
+    else if( IsXMLToken( rClassName, XML_BUBBLE ))
+        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Bubble"));
     else if( IsXMLToken( rClassName, XML_RADAR ))
         aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Net"));
     else if( IsXMLToken( rClassName, XML_STOCK ))
@@ -306,6 +332,8 @@ XMLTokenEnum getTokenByChartType(
             else if( (bUseOldNames && aServiceName.equalsAscii("XY")) ||
                      (!bUseOldNames && aServiceName.equalsAscii("Scatter")))
                 eResult = XML_SCATTER;
+            else if( aServiceName.equalsAscii("Bubble"))
+                eResult = XML_BUBBLE;
             else if( aServiceName.equalsAscii("Net"))
                 eResult = XML_RADAR;
             else if( (bUseOldNames && aServiceName.equalsAscii("Stock")) ||
@@ -583,6 +611,68 @@ bool getXMLRangePropertyFromDataSequence(
     return bResult;
 }
 
+void copyProperties(
+    const Reference< beans::XPropertySet > & xSource,
+    const Reference< beans::XPropertySet > & xDestination )
+{
+    if( ! (xSource.is() && xDestination.is()) )
+        return;
+
+    try
+    {
+        Reference< beans::XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+        Reference< beans::XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+        Sequence< beans::Property > aProperties( xSrcInfo->getProperties());
+        const sal_Int32 nLength = aProperties.getLength();
+        for( sal_Int32 i = 0; i < nLength; ++i )
+        {
+            OUString aName( aProperties[i].Name);
+            if( xDestInfo->hasPropertyByName( aName ))
+            {
+                beans::Property aProp( xDestInfo->getPropertyByName( aName ));
+                if( (aProp.Attributes & beans::PropertyAttribute::READONLY) == 0 )
+                    xDestination->setPropertyValue(
+                        aName, xSource->getPropertyValue( aName ));
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        OSL_ENSURE( false, "Copying property sets failed!" );
+    }
+}
+
+bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument >& xChartDoc, const tSchXMLLSequencesPerIndex & rLSequencesPerIndex )
+{
+    //return whether the switch is successful
+    if( !xChartDoc.is() || !xChartDoc->hasInternalDataProvider() )
+        return false;
+    Reference< chart2::data::XDataProvider > xDataProviderFromParent( SchXMLTools::getDataProviderFromParent( xChartDoc ) );
+    if( !xDataProviderFromParent.is() )
+        return false;
+    uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartDoc, uno::UNO_QUERY );
+    if( !xDataReceiver.is() )
+        return false;
+
+    xDataReceiver->attachDataProvider( xDataProviderFromParent );
+
+    for( tSchXMLLSequencesPerIndex::const_iterator aLSeqIt( rLSequencesPerIndex.begin() );
+         aLSeqIt != rLSequencesPerIndex.end(); ++aLSeqIt )
+    {
+        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( aLSeqIt->second );
+        if( !xLabeledSeq.is() )
+            continue;
+        Reference< chart2::data::XDataSequence > xNewSeq;
+        xNewSeq = lcl_createNewSequenceFromCachedXMLRange( xLabeledSeq->getValues(), xDataProviderFromParent );
+        if( xNewSeq.is() )
+            xLabeledSeq->setValues( xNewSeq );
+        xNewSeq = lcl_createNewSequenceFromCachedXMLRange( xLabeledSeq->getLabel(), xDataProviderFromParent );
+        if( xNewSeq.is() )
+            xLabeledSeq->setLabel( xNewSeq );
+    }
+    return true;
+}
+
 bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame::XModel >& xChartModel )
 {
     bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan2_3( xChartModel );
@@ -639,6 +729,29 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
         }
     }
     return bResult;
+}
+
+Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Reference< chart2::XChartDocument >& xChartDoc )
+{
+    Reference< chart2::data::XDataProvider > xRet;
+    uno::Reference< container::XChild > xChild( xChartDoc, uno::UNO_QUERY );
+    if( xChild.is() )
+    {
+        Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
+        if( xFact.is() )
+        {
+            const OUString aDataProviderServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"));
+            const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
+            const OUString * pBegin = aServiceNames.getConstArray();
+            const OUString * pEnd = pBegin + aServiceNames.getLength();
+            if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
+            {
+                xRet = Reference< chart2::data::XDataProvider >(
+                    xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
+            }
+        }
+    }
+    return xRet;
 }
 
 } // namespace SchXMLTools

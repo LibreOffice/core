@@ -43,6 +43,7 @@
 
 class SdrObjEditView;
 class SdrObject;
+class SfxItemSet;
 
 namespace sdr { namespace table {
 
@@ -72,7 +73,7 @@ public:
     virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
 
     // slots
-    void onInsert( sal_uInt16 nSId );
+    void onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs = 0 );
     void onDelete( sal_uInt16 nSId );
     void onSelect( sal_uInt16 nSId );
     void onFormatTable( SfxRequest& rReq );

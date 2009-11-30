@@ -38,7 +38,6 @@
 #include <svx/xpoly.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdpool.hxx>
-#include "svdtouch.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svddrag.hxx>
@@ -237,81 +236,6 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             rRect.Right()-=nDst;
         }
     }
-}
-
-SdrObject* SdrRectObj::ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer, FASTBOOL bForceFilled, FASTBOOL bForceTol) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    INT32 nMyTol=nTol;
-    FASTBOOL bFilled=bForceFilled || HasFill();
-    FASTBOOL bPickThrough=pModel!=NULL && pModel->IsPickThroughTransparentTextFrames();
-    if (bTextFrame && !bPickThrough) bFilled=TRUE;
-    FASTBOOL bLine=HasLine();
-
-    INT32 nWdt=bLine ? ImpGetLineWdt() :0; // Halbe Strichstaerke
-
-    // #i25616#
-    if(nWdt && !LineIsOutsideGeometry())
-    {
-        nWdt /= 2;
-    }
-
-    long nBoundWdt=aRect.GetWidth()-1;
-    long nBoundHgt=aRect.GetHeight()-1;
-    if (bFilled && nBoundWdt>short(nTol) && nBoundHgt>short(nTol) && Abs(aGeo.nShearWink)<=4500) {
-        if (!bForceTol && !bTextFrame ) nMyTol=0; // Keine Toleranz noetig hier
-    }
-    if (nWdt>nMyTol && (!bTextFrame || pEdtOutl==NULL)) nMyTol=nWdt; // Bei dicker Umrandung keine Toleranz noetig, ausser wenn bei TextEdit
-    Rectangle aR(aRect);
-    if (nMyTol!=0 && bFilled) {
-        aR.Left  ()-=nMyTol;
-        aR.Top   ()-=nMyTol;
-        aR.Right ()+=nMyTol;
-        aR.Bottom()+=nMyTol;
-    }
-
-    if (bFilled || bLine || bTextFrame) { // Bei TextFrame so tun, alsob Linie da
-        unsigned nCnt=0;
-        INT32 nXShad=0,nYShad=0;
-        long nEckRad=/*bTextFrame ? 0 :*/ GetEckenradius();
-        do { // 1 Durchlauf, bei Schatten 2 Durchlaeufe.
-            if (nCnt!=0) aR.Move(nXShad,nYShad);
-            if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || nEckRad!=0 || !bFilled) {
-                Polygon aPol(aR);
-                if (nEckRad!=0) {
-                    INT32 nRad=nEckRad;
-                    if (bFilled) nRad+=nMyTol; // um korrekt zu sein ...
-                    XPolygon aXPoly(ImpCalcXPoly(aR,nRad));
-                    aPol = Polygon(aXPoly.getB2DPolygon().getDefaultAdaptiveSubdivision());
-                } else {
-                    if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
-                    if (aGeo.nDrehWink!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-                }
-                if (bFilled) {
-                    if (IsPointInsidePoly(aPol,rPnt)) return (SdrObject*)this;
-                } else {
-                    Rectangle aTouchRect(rPnt.X()-nMyTol,rPnt.Y()-nMyTol,rPnt.X()+nMyTol,rPnt.Y()+nMyTol);
-                    if (IsRectTouchesLine(aPol,aTouchRect)) return (SdrObject*)this;
-                }
-            } else {
-                if (aR.IsInside(rPnt)) return (SdrObject*)this;
-            }
-        } while (nCnt++==0 && ImpGetShadowDist(nXShad,nYShad));
-    }
-    FASTBOOL bCheckText=TRUE;
-    if (bCheckText && HasText() && (!bTextFrame || bPickThrough)) {
-        return SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer);
-    }
-    return NULL;
-}
-
-SdrObject* SdrRectObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return ImpCheckHit(rPnt,nTol,pVisiLayer,FALSE/*,bTextFrame*/);
 }
 
 void SdrRectObj::TakeObjNameSingul(XubString& rName) const

@@ -66,6 +66,7 @@
 
 using namespace ucbhelper;
 using namespace osl;
+using namespace ::com::sun::star;
 using namespace com::sun::star::task;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -277,7 +278,7 @@ namespace fileaccess {
 
         if( errorCode ==  TASKHANDLER_UNSUPPORTED_COMMAND )
         {
-            aAny <<= UnsupportedCommandException();
+            aAny <<= UnsupportedCommandException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             cancelCommandExecution( aAny,xEnv );
         }
         else if( errorCode == TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT ||

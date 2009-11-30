@@ -66,7 +66,7 @@ class AppletObject : public ::cppu::WeakImplHelper6 <
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >
         mxContext;
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxObj;
-    SfxItemPropertySet  maPropSet;
+    SfxItemPropertyMap  maPropMap;
     SvCommandList       maCmdList;
     ::rtl::OUString     maClass;
     ::rtl::OUString     maName;

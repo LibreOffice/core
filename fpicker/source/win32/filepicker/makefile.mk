@@ -48,9 +48,6 @@ CDEFS+=-DUNICODE
 #CDEFS+=-DWIN32_LEAN_AND_MEAN
 #CDEFS+=-DWIN32
 
-.IF "$(COM)"=="GCC"
-CDEFS+=-UWINVER -DWINVER=0x500
-.ENDIF
 
 # --- Resources ----------------------------------------------------
 
@@ -82,7 +79,8 @@ SLOFILES=$(SLO)$/FileOpenDlg.obj\
          $(SLO)$/asyncrequests.obj\
          $(SLO)$/VistaFilePickerEventHandler.obj\
          $(SLO)$/VistaFilePickerImpl.obj\
-         $(SLO)$/VistaFilePicker.obj
+         $(SLO)$/VistaFilePicker.obj\
+         $(SLO)$/SolarMutex.obj
 
 # --- Targets ------------------------------------------------------
 

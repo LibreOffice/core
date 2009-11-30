@@ -209,6 +209,9 @@ class NeonSession : public DAVSession
                               const DAVRequestEnvironment & rEnv )
             throw ( DAVException );
 
+        virtual void ABORT()
+            throw ( DAVException );
+
         // Note: Uncomment the following if locking support is required
         /*
         virtual void LOCK (const Lock & inLock,

@@ -81,10 +81,10 @@ extern BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine, sal_Bool bConver
 
 // -----------------------------------------------------------------------------
 
-static const SfxItemPropertyMap* ImplGetSvxCellPropertyMap()
+static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
 {
     // Propertymap fuer einen Outliner Text
-    static const SfxItemPropertyMap aSvxCellPropertyMap[] =
+    static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] =
     {
         FILL_PROPERTIES
 //      { MAP_CHAR_LEN("HasLevels"),                    OWN_ATTR_HASLEVELS,             &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
@@ -110,7 +110,8 @@ static const SfxItemPropertyMap* ImplGetSvxCellPropertyMap()
         {0,0,0,0,0,0}
     };
 
-    return aSvxCellPropertyMap;
+    static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap );
+    return &aSvxCellPropertySet;
 }
 
 namespace sdr
@@ -315,8 +316,8 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, OutlinerParaObject*
 
 Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw()
 : SdrText( rTableObj, pOutlinerParaObject )
-, SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
-, maPropSet( ImplGetSvxCellPropertyMap() )
+, SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+, mpPropSet( ImplGetSvxCellPropertySet() )
 , mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )
 , mnCellContentType( CellContentType_EMPTY )
 , mfValue( 0.0 )
@@ -449,6 +450,11 @@ void Cell::cloneFrom( const CellRef& xCell )
         msFormula = xCell->msFormula;
         mfValue = xCell->mfValue;
         mnError = xCell->mnError;
+
+        mbMerged = xCell->mbMerged;
+        mnRowSpan = xCell->mnRowSpan;
+        mnColSpan = xCell->mnColSpan;
+
     }
     notifyModified();
 }
@@ -742,7 +748,7 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 void Cell::AddUndo()
 {
     SdrObject& rObj = GetObject();
-    if( rObj.IsInserted() && GetModel() )
+    if( rObj.IsInserted() && GetModel() && GetModel()->IsUndoEnabled() )
     {
         CellRef xCell( this );
         GetModel()->AddUndo( new CellUndo( &rObj, xCell ) );
@@ -973,9 +979,9 @@ sal_Int32 SAL_CALL Cell::getError(  ) throw (RuntimeException)
 // XPropertySet
 // -----------------------------------------------------------------------------
 
-Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap )
+Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap )
 {
-    Any aAny( maPropSet.getPropertyValue( pMap, aSet ) );
+    Any aAny( mpPropSet->getPropertyValue( pMap, aSet ) );
 
     if( *pMap->pType != aAny.getValueType() )
     {
@@ -997,7 +1003,7 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap )
 
 Reference< XPropertySetInfo > SAL_CALL Cell::getPropertySetInfo() throw(RuntimeException)
 {
-    return maPropSet.getPropertySetInfo();
+    return mpPropSet->getPropertySetInfo();
 }
 
 // -----------------------------------------------------------------------------
@@ -1009,7 +1015,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(rPropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
     if( pMap )
     {
         if( (pMap->nFlags & PropertyAttribute::READONLY ) != 0 )
@@ -1131,7 +1137,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 
                     if( aSet.GetItemState( pMap->nWID ) == SFX_ITEM_SET )
                     {
-                        maPropSet.setPropertyValue( pMap, rValue, aSet );
+                        mpPropSet->setPropertyValue( pMap, rValue, aSet );
                     }
                 }
             }
@@ -1154,7 +1160,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
     if( pMap )
     {
         switch( pMap->nWID )
@@ -1355,7 +1361,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( pMap )
     {
@@ -1498,7 +1504,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
     if( pMap )
     {
         switch( pMap->nWID )
@@ -1541,7 +1547,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
     if( pMap )
     {
         switch( pMap->nWID )

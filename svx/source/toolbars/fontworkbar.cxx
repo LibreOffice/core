@@ -492,9 +492,14 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                     SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                     if( pObj->ISA(SdrObjCustomShape) )
                     {
-                        String aStr( SVX_RES( RID_SVXSTR_UNDO_APPLY_FONTWORK_SHAPE ) );
-                        pSdrView->BegUndo( aStr );
-                        pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
+                        const bool bUndo = pSdrView->IsUndoEnabled();
+
+                        if( bUndo )
+                        {
+                            String aStr( SVX_RES( RID_SVXSTR_UNDO_APPLY_FONTWORK_SHAPE ) );
+                            pSdrView->BegUndo( aStr );
+                            pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
+                        }
                         SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         GetGeometryForCustomShape( aGeometryItem, aCustomShape );
                         pObj->SetMergedItem( aGeometryItem );
@@ -508,7 +513,8 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                         }
 
                         pObj->BroadcastObjectChange();
-                        pSdrView->EndUndo();
+                        if( bUndo )
+                            pSdrView->EndUndo();
                         pSdrView->AdjustMarkHdl(); //HMH sal_True );
                         rBindings.Invalidate( SID_FONTWORK_SHAPE_TYPE );
                     }
@@ -562,14 +568,19 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                 SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                 if( pObj->ISA(SdrObjCustomShape) )
                 {
-                    String aStr( SVX_RES( nStrResId ) );
-                    pSdrView->BegUndo( aStr );
-                    pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
+                    const bool bUndo = pSdrView->IsUndoEnabled();
+                    if( bUndo )
+                    {
+                        String aStr( SVX_RES( nStrResId ) );
+                        pSdrView->BegUndo( aStr );
+                        pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
+                    }
                     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                     impl_execute( pSdrView, rReq, aGeometryItem, pObj );
                     pObj->SetMergedItem( aGeometryItem );
                     pObj->BroadcastObjectChange();
-                    pSdrView->EndUndo();
+                    if( bUndo )
+                        pSdrView->EndUndo();
                 }
             }
         }

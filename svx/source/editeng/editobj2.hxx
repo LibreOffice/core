@@ -181,13 +181,10 @@ public:
 
     WrongList*          GetWrongList() const            { return pWrongs; }
     void                SetWrongList( WrongList* p )    { pWrongs = p; }
-
-/* cl removed because not needed anymore since binfilter
-    LoadStoreTempInfos* GetLoadStoreTempInfos() const   { return pTempLoadStoreInfos; }
-    void                CreateLoadStoreTempInfos();
-    void                DestroyLoadStoreTempInfos();
-*/
     bool                operator==( const ContentInfo& rCompare ) const;
+
+    // #i102062#
+    bool isWrongListEqual(const ContentInfo& rCompare) const;
 };
 
 typedef ContentInfo* ContentInfoPtr;
@@ -198,6 +195,7 @@ SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1, 4 )
 class BinTextObject : public EditTextObject, public SfxItemPoolUser
 {
     using EditTextObject::operator==;
+    using EditTextObject::isWrongListEqual;
 
 private:
     ContentInfoList         aContents;
@@ -302,6 +300,9 @@ public:
 */
 
     bool                    operator==( const BinTextObject& rCompare ) const;
+
+    // #i102062#
+    bool isWrongListEqual(const BinTextObject& rCompare) const;
 
     // from SfxItemPoolUser
     virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool);

@@ -142,7 +142,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 //////////////////////////////////////////////////////////////////////////////
 
 #define CTF_NUMBERINGRULES          1000
-//#define CTF_NUMBERINGRULES_NAME       1001
+#define CTF_CONTROLWRITINGMODE      1001
 #define CTF_WRITINGMODE             1002
 #define CTF_REPEAT_OFFSET_X         1003
 #define CTF_REPEAT_OFFSET_Y         1004

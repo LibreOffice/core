@@ -308,39 +308,57 @@ Reference<XInterface> XMLTextMarkImportContext::CreateAndInsertMark(
     const OUString& i_rXmlId)
 {
     // create mark
-    Reference<XMultiServiceFactory> xFactory(rImport.GetModel(),UNO_QUERY);
-    if( xFactory.is() )
-    {
-        Reference<XInterface> xIfc = xFactory->createInstance(sServiceName);
+    const Reference<XMultiServiceFactory> xFactory(rImport.GetModel(),
+        UNO_QUERY);
+    Reference<XInterface> xIfc;
 
-        // set name
-        Reference<XNamed> xNamed(xIfc, UNO_QUERY);
+    if (xFactory.is())
+    {
+        xIfc = xFactory->createInstance(sServiceName);
+
+        if (!xIfc.is())
+        {
+            OSL_ENSURE(false, "CreateAndInsertMark: cannot create service?");
+            return 0;
+        }
+
+        // set name (unless there is no name (text:meta))
+        const Reference<XNamed> xNamed(xIfc, UNO_QUERY);
         if (xNamed.is())
         {
             xNamed->setName(sMarkName);
-
-            // xml:id for RDF metadata
-            rImport.SetXmlId(xIfc, i_rXmlId);
-
-            // cast to XTextContent and attach to document
-            Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
-            if (xTextContent.is())
+        }
+        else
+        {
+            if (sMarkName.getLength())
             {
-                try
-                {
-                // if inserting marks, bAbsorb==sal_False will cause
-                // collapsing of the given XTextRange.
-                    rImport.GetTextImport()->GetText()->insertTextContent(rRange,
-                        xTextContent, sal_True);
-                }
-                catch (com::sun::star::lang::IllegalArgumentException e)
-                {
-                    // ignore
-                }
+                OSL_ENSURE(false, "name given, but XNamed not supported?");
+                return 0;
             }
         }
-        return xIfc;
-    } else return NULL;
+
+        // xml:id for RDF metadata
+        rImport.SetXmlId(xIfc, i_rXmlId);
+
+        // cast to XTextContent and attach to document
+        const Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
+        if (xTextContent.is())
+        {
+            try
+            {
+                // if inserting marks, bAbsorb==sal_False will cause
+                // collapsing of the given XTextRange.
+                rImport.GetTextImport()->GetText()->insertTextContent(rRange,
+                    xTextContent, sal_True);
+            }
+            catch (com::sun::star::lang::IllegalArgumentException &)
+            {
+                OSL_ENSURE(false, "CreateAndInsertMark: cannot insert?");
+                return 0;
+            }
+        }
+    }
+    return xIfc;
 }
 
 sal_Bool XMLTextMarkImportContext::FindName(

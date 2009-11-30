@@ -59,11 +59,6 @@ public:
     FmFormPage(const FmFormPage& rPage);
     ~FmFormPage();
 
-    using SdrPage::NbcInsertObject;
-    using SdrPage::NbcRemoveObject;
-    using SdrPage::NbcReplaceObject;
-    using SdrPage::ReplaceObject;
-
     virtual void    SetModel(SdrModel* pNewModel);
 
     virtual SdrPage* Clone() const;
@@ -77,7 +72,9 @@ public:
     // Zugriff auf alle Formulare
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;
 
-    FmFormPageImpl*  GetImpl() const {return m_pImpl;}
+#ifndef SVX_LIGHT
+    FmFormPageImpl& GetImpl() const { return *m_pImpl; }
+#endif // SVX_LIGHT
 
 public:
     const String&       GetName() const { return m_sPageName; }

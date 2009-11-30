@@ -909,7 +909,7 @@
 #include "unotools/configvaluecontainer.hxx"
 #include "unotools/localfilehelper.hxx"
 #include "unotools/processfactory.hxx"
-#include "unotools/servicehelper.hxx"
+#include "comphelper/servicehelper.hxx"
 #include "unotools/streamwrap.hxx"
 #include "unotools/textsearch.hxx"
 #include "unotools/transliterationwrapper.hxx"

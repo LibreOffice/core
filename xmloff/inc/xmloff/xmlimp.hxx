@@ -61,8 +61,10 @@
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
+    namespace uno { class XComponentContext; }
     namespace frame { class XModel; }
     namespace io { class XOutputStream; }
+    namespace rdf { class XMetadatable; }
 } } }
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
@@ -346,7 +348,7 @@ public:
 
     sal_uInt16  getImportFlags() const { return mnImportFlags; }
     sal_Bool    IsFormsSupported() const { return mbIsFormsSupported; }
-    rtl::OUString GetAbsoluteReference(const rtl::OUString& rValue);
+    rtl::OUString GetAbsoluteReference(const rtl::OUString& rValue) const;
 
     sal_Unicode ConvStarBatsCharToStarSymbol( sal_Unicode c );
     sal_Unicode ConvStarMathCharToStarSymbol( sal_Unicode c );
@@ -400,6 +402,9 @@ public:
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceFactory();
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    GetComponentContext() const;
+
     // --> OD 2004-08-10 #i28749#
     sal_Bool IsShapePositionInHoriL2R() const;
     // <--
@@ -411,13 +416,22 @@ public:
     String GetBaseURL() const;
     String GetDocumentBase() const;
 
-    /// relative path of stream in package, e.g. "someobject/content.xml"
-    ::rtl::OUString GetStreamPath() const;
+    /// name of stream in package, e.g., "content.xml"
+    ::rtl::OUString GetStreamName() const;
 
     /// set the XmlId attribute of given UNO object (for RDF metadata)
     void SetXmlId(::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface> const & i_xIfc,
         ::rtl::OUString const & i_rXmlId);
+
+    /// Add a RDFa statement; parameters are XML attribute values
+    void AddRDFa(
+        ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable>
+            i_xObject,
+        ::rtl::OUString const & i_rAbout,
+        ::rtl::OUString const & i_rProperty,
+        ::rtl::OUString const & i_rContent,
+        ::rtl::OUString const & i_rDatatype);
 
     // #i31958# XForms helper method
     // (to be implemented by applications suporting XForms)

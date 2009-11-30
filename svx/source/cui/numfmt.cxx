@@ -64,7 +64,9 @@
 #include <svx/dialmgr.hxx>
 #include <sfx2/request.hxx> //CHINA001
 #include <sfx2/app.hxx> //CHINA001
+#include <sfx2/basedlgs.hxx>
 #include "flagsdef.hxx" //CHINA001
+
 #define NUMKEY_UNDEFINED SAL_MAX_UINT32
 
 // static ----------------------------------------------------------------
@@ -1278,8 +1280,18 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
     if ( pLb == &aLbFormat )
     {
         SelFormatHdl_Impl( pLb );
-        // Uebergangsloesung, sollte von SfxTabPage angeboten werden
-        fnOkHdl.Call( NULL );
+
+        if ( fnOkHdl.IsSet() )
+        {   // Uebergangsloesung, sollte von SfxTabPage angeboten werden
+            fnOkHdl.Call( NULL );
+        }
+        else
+        {
+            SfxSingleTabDialog* pParent = dynamic_cast< SfxSingleTabDialog* >( GetParent() );
+            OKButton* pOKButton = pParent ? pParent->GetOKButton() : NULL;
+            if ( pOKButton )
+                pOKButton->Click();
+        }
     }
     return 0;
 }

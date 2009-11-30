@@ -42,7 +42,7 @@ class SVX_DLLPUBLIC XLineColorItem : public XColorItem
 public:
             TYPEINFO();
             XLineColorItem() {}
-            XLineColorItem(long nIndex, const Color& rTheColor);
+            XLineColorItem(INT32 nIndex, const Color& rTheColor);
             XLineColorItem(const String& rName, const Color& rTheColor);
             XLineColorItem(SvStream& rIn);
 

@@ -63,7 +63,7 @@ class PluginObject : public ::cppu::WeakImplHelper5 <
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > mxFact;
     com::sun::star::uno::Reference< com::sun::star::plugin::XPlugin > mxPlugin;
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxObj;
-    SfxItemPropertySet  maPropSet;
+    SfxItemPropertyMap  maPropMap;
     SvCommandList       maCmdList;
     ::rtl::OUString     maURL;
     ::rtl::OUString     maMimeType;

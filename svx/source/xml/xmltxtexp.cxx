@@ -395,7 +395,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
 {
     SvxEditEngineSource aEditSource( pEditEngine );
 
-    static const SfxItemPropertyMap SvxXMLTextExportComponentPropertyMap[] =
+    static const SfxItemPropertyMapEntry SvxXMLTextExportComponentPropertyMap[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
@@ -406,8 +406,9 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
         SVX_UNOEDIT_PARA_PROPERTIES,
         {0,0,0,0,0,0}
     };
+    static SvxItemPropertySet aSvxXMLTextExportComponentPropertySet( SvxXMLTextExportComponentPropertyMap );
 
-    SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, SvxXMLTextExportComponentPropertyMap, mxText );
+    SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextExportComponentPropertySet, mxText );
     pUnoText->SetSelection( rSel );
     mxText = pUnoText;
 

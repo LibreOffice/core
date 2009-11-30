@@ -85,7 +85,9 @@ EXCEPTIONSFILES=\
         $(SLO)$/filtermanager.obj                       \
         $(SLO)$/parameters.obj							\
         $(SLO)$/ParamterSubstitution.obj                \
-        $(SLO)$/formattedcolumnvalue.obj
+        $(SLO)$/DriversConfig.obj                       \
+        $(SLO)$/formattedcolumnvalue.obj                \
+        $(SLO)$/warningscontainer.obj
 
 SLOFILES=\
         $(EXCEPTIONSFILES)								\

@@ -143,13 +143,6 @@ public:
     sal_Int32   GetLengthOfSeries();
     void        ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoints = -1 );
 
-    // if no data provider exists by, now the model (as XChild) is asked for its
-    // parent which creates the data provider that is finally set at the chart
-    // document
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
-        GetDataProvider( const ::com::sun::star::uno::Reference<
-                             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
-
     /** @param bPushLastChartType If </FALSE>, in case a new chart type has to
                be added (because it does not exist yet), it is appended at the
                end of the chart-type container.  When </TRUE>, a new chart type

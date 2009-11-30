@@ -50,7 +50,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_TABLE) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_TABLE), aSvxMapProvider.GetPropertySet(SVXMAP_TABLE) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ) );
 }
@@ -62,7 +62,11 @@ SvxTableShape::~SvxTableShape() throw()
 
 //----------------------------------------------------------------------
 
-bool SvxTableShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxTableShape::setPropertyValueImpl(
+    const ::rtl::OUString& rName,
+    const SfxItemPropertySimpleEntry* pProperty,
+    const ::com::sun::star::uno::Any& rValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -106,14 +110,18 @@ bool SvxTableShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, c
     }
     default:
     {
-        return SvxShape::setPropertyValueImpl( pProperty, rValue );
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
     }
 }
 
 extern Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector );
 
-bool SvxTableShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxTableShape::getPropertyValueImpl(
+    const ::rtl::OUString& rName,
+    const SfxItemPropertySimpleEntry* pProperty,
+    ::com::sun::star::uno::Any& rValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -168,7 +176,7 @@ bool SvxTableShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, :
     }
     default:
     {
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
     }
 }

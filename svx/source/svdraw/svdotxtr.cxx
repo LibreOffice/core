@@ -43,9 +43,13 @@
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include "svdtxhdl.hxx"
 #include <svtools/itemset.hxx>
 #include <svditer.hxx>
+#include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnwtit.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -335,37 +339,139 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(FALSE);
 }
 
-SdrObject* SdrTextObj::ImpConvertObj(FASTBOOL bToPoly) const
+//////////////////////////////////////////////////////////////////////////////
+
+SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 {
-    if (!ImpCanConvTextToCurve()) return NULL;
-    SdrObjGroup* pGroup=new SdrObjGroup();
+    SdrObject* pRetval = 0;
 
-    boost::shared_ptr< SdrOutliner > xOutl( const_cast< SdrTextObj* >(this)->CreateDrawOutliner() );
-    xOutl->SetUpdateMode(TRUE);
-    ImpTextPortionHandler aConverter(*(xOutl.get()),*this);
-
-    aConverter.ConvertToPathObj(*pGroup,bToPoly);
-
-    // Nachsehen, ob ueberhaupt was drin ist:
-    SdrObjList* pOL=pGroup->GetSubList();
-
-    if (pOL->GetObjCount()==0) {
-        delete pGroup;
-        return NULL;
+    if(!ImpCanConvTextToCurve())
+    {
+        // suppress HelpTexts from PresObj's
+        return 0;
     }
-    // Ein einzelnes Objekt muss nicht gruppiert werden:
-    if (pOL->GetObjCount()==1) {
-        SdrObject* pObj=pOL->RemoveObject(0);
-        delete pGroup;
-        return pObj;
+
+    // get primitives
+    const drawinglayer::primitive2d::Primitive2DSequence xSequence(GetViewContact().getViewIndependentPrimitive2DSequence());
+
+    if(xSequence.hasElements())
+    {
+        // create an extractor with neutral ViewInformation
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+        drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
+
+        // extract text as polygons
+        aExtractor.process(xSequence);
+
+        // get results
+        const drawinglayer::processor2d::TextAsPolygonDataNodeVector& rResult = aExtractor.getTarget();
+        const sal_uInt32 nResultCount(rResult.size());
+
+        if(nResultCount)
+        {
+            // prepare own target
+            SdrObjGroup* pGroup = new SdrObjGroup();
+            SdrObjList* pObjectList = pGroup->GetSubList();
+
+            // process results
+            for(sal_uInt32 a(0); a < nResultCount; a++)
+            {
+                const drawinglayer::processor2d::TextAsPolygonDataNode& rCandidate = rResult[a];
+                basegfx::B2DPolyPolygon aPolyPolygon(rCandidate.getB2DPolyPolygon());
+
+                if(aPolyPolygon.count())
+                {
+                    // take care of wanted polygon type
+                    if(bToPoly)
+                    {
+                        if(aPolyPolygon.areControlPointsUsed())
+                        {
+                            aPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aPolyPolygon);
+                        }
+                    }
+                    else
+                    {
+                        if(!aPolyPolygon.areControlPointsUsed())
+                        {
+                            aPolyPolygon = basegfx::tools::expandToCurve(aPolyPolygon);
+                        }
+                    }
+
+                    // create ItemSet with object attributes
+                    SfxItemSet aAttributeSet(GetObjectItemSet());
+                    SdrPathObj* pPathObj = 0;
+
+                    // always clear objectshadow; this is included in the extraction
+                    aAttributeSet.Put(SdrShadowItem(false));
+
+                    if(rCandidate.getIsFilled())
+                    {
+                        // set needed items
+                        aAttributeSet.Put(XFillColorItem(String(), Color(rCandidate.getBColor())));
+                        aAttributeSet.Put(XLineStyleItem(XLINE_NONE));
+                        aAttributeSet.Put(XFillStyleItem(XFILL_SOLID));
+
+                        // create filled SdrPathObj
+                        pPathObj = new SdrPathObj(OBJ_PATHFILL, aPolyPolygon);
+                    }
+                    else
+                    {
+                        // set needed items
+                        aAttributeSet.Put(XLineColorItem(String(), Color(rCandidate.getBColor())));
+                        aAttributeSet.Put(XLineStyleItem(XLINE_SOLID));
+                        aAttributeSet.Put(XLineWidthItem(0));
+                        aAttributeSet.Put(XFillStyleItem(XFILL_NONE));
+
+                        // create line SdrPathObj
+                        pPathObj = new SdrPathObj(OBJ_PATHLINE, aPolyPolygon);
+                    }
+
+                    // copy basic information from original
+                    pPathObj->ImpSetAnchorPos(GetAnchorPos());
+                    pPathObj->NbcSetLayer(GetLayer());
+
+                    if(GetModel())
+                    {
+                        pPathObj->SetModel(GetModel());
+                        pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
+                    }
+
+                    // apply prepared ItemSet and add to target
+                    pPathObj->SetMergedItemSet(aAttributeSet);
+                    pObjectList->InsertObject(pPathObj);
+                }
+            }
+
+            // postprocess; if no result and/or only one object, simplify
+            if(!pObjectList->GetObjCount())
+            {
+                delete pGroup;
+            }
+            else if(1 == pObjectList->GetObjCount())
+            {
+                pRetval = pObjectList->RemoveObject(0);
+                delete pGroup;
+            }
+            else
+            {
+                pRetval = pGroup;
+            }
+        }
     }
-    // Ansonsten die Gruppe zurueckgeben
-    return pGroup;
+
+    return pRetval;
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 SdrObject* SdrTextObj::DoConvertToPolyObj(BOOL bBezier) const
 {
-    return ImpConvertObj(!bBezier);
+    return ImpConvertContainedTextToSdrPathObjs(!bBezier);
+}
+
+bool SdrTextObj::ImpCanConvTextToCurve() const
+{
+    return !IsOutlText();
 }
 
 SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr) const
@@ -388,25 +494,23 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
         pPathObj->SetPathPoly(basegfx::tools::expandToCurve(pPathObj->GetPathPoly()));
     }
 
+    if(pPathObj)
     {
-        if(pPathObj)
+        pPathObj->ImpSetAnchorPos(aAnchor);
+        pPathObj->NbcSetLayer(SdrLayerID(GetLayer()));
+
+        if(pModel)
         {
-            pPathObj->ImpSetAnchorPos(aAnchor);
-            pPathObj->NbcSetLayer(SdrLayerID(GetLayer()));
+            pPathObj->SetModel(pModel);
 
-            if(pModel)
+            if(!bNoSetAttr)
             {
-                pPathObj->SetModel(pModel);
+                sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
 
-                if(!bNoSetAttr)
-                {
-                    sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
-
-                    pPathObj->ClearMergedItem();
-                    pPathObj->SetMergedItemSet(GetObjectItemSet());
-                    pPathObj->GetProperties().BroadcastItemChange(aC);
-                    pPathObj->NbcSetStyleSheet(GetStyleSheet(), sal_True);
-                }
+                pPathObj->ClearMergedItem();
+                pPathObj->SetMergedItemSet(GetObjectItemSet());
+                pPathObj->GetProperties().BroadcastItemChange(aC);
+                pPathObj->NbcSetStyleSheet(GetStyleSheet(), sal_True);
             }
         }
     }
@@ -421,7 +525,7 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) cons
         return pObj;
     }
 
-    SdrObject* pText = ImpConvertObj(!bBezier);
+    SdrObject* pText = ImpConvertContainedTextToSdrPathObjs(!bBezier);
 
     if(!pText)
     {
@@ -431,40 +535,6 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) cons
     if(!pObj)
     {
         return pText;
-    }
-
-    // #i97874#
-    // if shadow is set, apply it to created text, too
-    const bool bShadowOn(((SdrShadowItem&)GetObjectItem(SDRATTR_SHADOW)).GetValue());
-    SfxItemSet aShadowSet(*(GetObjectItemSet().GetPool()), SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST);
-
-    if(bShadowOn)
-    {
-        // filter shadow items
-        aShadowSet.Put(GetObjectItemSet());
-    }
-
-    {   // #i97874#
-        // copy needed attributes from local object to all newly created objects
-        SdrObjListIter aIter(*pText);
-
-        while(aIter.IsMore())
-        {
-            SdrObject* pCandidate = aIter.Next();
-
-            // make sure Layer and model are correct
-            pCandidate->NbcSetLayer(SdrLayerID(GetLayer()));
-            pCandidate->SetModel(pModel);
-
-            // set shadow if needed
-            if(bShadowOn)
-            {
-                pCandidate->SetMergedItemSet(aShadowSet);
-            }
-
-            // set used StyleSheet
-            pCandidate->NbcSetStyleSheet(GetStyleSheet(), true);
-        }
     }
 
     if(pText->IsGroupObject())
@@ -487,4 +557,5 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) cons
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

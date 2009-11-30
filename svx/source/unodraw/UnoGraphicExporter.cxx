@@ -104,6 +104,9 @@ using namespace ::com::sun::star::task;
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
+// #i102251#
+#include <editstat.hxx>
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace svx
@@ -225,16 +228,27 @@ namespace svx
         Graphic     aGraphic( rMtf );
         BitmapEx    aBmpEx;
 
+        // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
+        // rasterconverted to a bitmap
+        const SvtOptionsDrawinglayer aDrawinglayerOpt;
+        const GraphicConversionParameters aParameters(
+            pSize ? *pSize : Size(0, 0),
+            true, // allow unlimited size
+            aDrawinglayerOpt.IsAntiAliasing(),
+            aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
+
         if( bTransparent )
         {
-            Graphic aMaskGraphic( rMtf.GetMonochromeMtf( COL_BLACK ) );
-            Bitmap  aMaskBmp( aMaskGraphic.GetUnlimitedBitmap( pSize ) );
+            Graphic aMaskGraphic(rMtf.GetMonochromeMtf(COL_BLACK));
+            Bitmap  aMaskBmp(aMaskGraphic.GetBitmap(aParameters));
 
-            aMaskBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
-            aBmpEx = BitmapEx( aGraphic.GetUnlimitedBitmap( pSize ), aMaskBmp );
+            aMaskBmp.Convert(BMP_CONVERSION_1BIT_THRESHOLD);
+            aBmpEx = BitmapEx(aGraphic.GetBitmap(aParameters), aMaskBmp);
         }
         else
-            aBmpEx = BitmapEx( aGraphic.GetUnlimitedBitmap( pSize ) );
+        {
+            aBmpEx = BitmapEx(aGraphic.GetBitmap(aParameters));
+        }
 
         aBmpEx.SetPrefMapMode( rMtf.GetPrefMapMode() );
         aBmpEx.SetPrefSize( rMtf.GetPrefSize() );
@@ -625,8 +639,12 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
     rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pView->GetSdrPageView()) );
 
-    std::vector< SdrObject* > aShapes;
+    // #i102251#
+    const sal_uInt32 nOldCntrl(rOutl.GetControlWord());
+    sal_uInt32 nCntrl = nOldCntrl & ~EE_CNTRL_ONLINESPELLING;
+    rOutl.SetControlWord(nCntrl);
 
+    std::vector< SdrObject* > aShapes;
     bool bRet = true;
 
     // export complete page?
@@ -976,6 +994,9 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     }
 
     rOutl.SetCalcFieldValueHdl( maOldCalcFieldValueHdl );
+
+    // #i102251#
+    rOutl.SetControlWord(nOldCntrl);
 
     return bRet;
 

@@ -30,22 +30,26 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-#include "MConnection.hxx"
 
+#include "diagnose_ex.h"
+#include "MConnection.hxx"
 #include "MDatabaseMetaData.hxx"
 #include "MDriver.hxx"
 #include "MColumnAlias.hxx"
 #include "MStatement.hxx"
 #include "MPreparedStatement.hxx"
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/TransactionIsolation.hpp>
+
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/dbexception.hxx>
-#include "diagnose_ex.h"
+#include <connectivity/sqlerror.hxx>
 
 #include "resource/mozab_res.hrc"
 #include "resource/common_res.hrc"
+
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/TransactionIsolation.hpp>
+
 #include <comphelper/officeresourcebundle.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -173,7 +177,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else
         {
             OSL_TRACE( "No subschema given!!!\n");
-            throwGenericSQLException( STR_URI_SYNTAX_ERROR,*this );
+            throwSQLException( STR_URI_SYNTAX_ERROR, *this );
         }
     }
     else
@@ -284,7 +288,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             m_sMozillaURI += m_sHostName;
         }
         else
-            throwGenericSQLException( STR_NO_HOSTNAME ,*this);
+            throwSQLException( STR_NO_HOSTNAME, *this );
 
         if ( nPortNumber > 0 ) {
             m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(":") );
@@ -296,7 +300,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             m_sMozillaURI += sBaseDN;
         }
         else
-            throwGenericSQLException( STR_NO_BASEDN ,*this);
+            throwSQLException( STR_NO_BASEDN, *this );
 
         // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
         m_sMozillaURI += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?(or(DisplayName,=,DontDoThisAtHome)))"));
@@ -313,7 +317,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     else
     {
         OSL_TRACE("Invalid subschema given!!!\n");
-        throwGenericSQLException( STR_URI_SYNTAX_ERROR ,*this);
+        throwSQLException( STR_URI_SYNTAX_ERROR, *this );
     }
 
     OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")), usesFactory() ? "uses factory" : "no factory");
@@ -324,12 +328,15 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // The creation of the nsIAbDirectory i/f for LDAP doesn't actually test
     // the validity of the connection, it's normally delayed until the query
     // is executed, but it's a bit late then to fail...
-    if ( isLDAP() ) {
-        if ( !_aDbHelper.testLDAPConnection( this ) ) {
+    if ( isLDAP() )
+    {
+        if ( !_aDbHelper.testLDAPConnection( this ) )
+        {
             OSL_TRACE("testLDAPConnection : FAILED\n" );
-            throwGenericSQLException( _aDbHelper.getErrorResourceId() ,*this);
+            throwSQLException( _aDbHelper.getError(), *this );
         }
-        else {
+        else
+        {
             OSL_TRACE("testLDAPConnection : SUCCESS\n" );
         }
     }
@@ -337,8 +344,9 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // Test connection by getting to get the Table Names
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
-    if ( !_aDbHelper.getTableStrings( this, tables, types ) ) {
-        throwGenericSQLException( _aDbHelper.getErrorResourceId() ,*this);
+    if ( !_aDbHelper.getTableStrings( this, tables, types ) )
+    {
+        throwSQLException( _aDbHelper.getError(), *this );
     }
 
 }
@@ -370,8 +378,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     // the statement can only be executed more than once
     OPreparedStatement* pPrepared = new OPreparedStatement(this,_sSql);
     Reference< XPreparedStatement > xReturn = pPrepared;
-    if ( !pPrepared->lateInit() )
-        throw SQLException();
+    pPrepared->lateInit();
 
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
@@ -550,6 +557,50 @@ MNameMapper* OConnection::getNameMapper ()
 
     return m_aNameMapper;
 }
+
 // -----------------------------------------------------------------------------
+void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Reference< XInterface >& _rxContext )
+{
+    if ( _rError.getResId() != 0 )
+    {
+        OSL_ENSURE( ( _rError.getErrorCondition() == 0 ),
+            "OConnection::throwSQLException: unsupported error code combination!" );
+
+        ::rtl::OUString sParameter( _rError.getParameter() );
+        if ( sParameter.getLength() )
+        {
+            const ::rtl::OUString sError( getResources().getResourceStringWithSubstitution(
+                _rError.getResId(),
+                "$1$", sParameter
+             ) );
+            ::dbtools::throwGenericSQLException( sError, _rxContext );
+            OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (1)!" );
+        }
+
+        throwGenericSQLException( _rError.getResId(), _rxContext );
+        OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (2)!" );
+    }
+
+    if ( _rError.getErrorCondition() != 0 )
+    {
+        SQLError aErrorHelper( getDriver()->getMSFactory() );
+        ::rtl::OUString sParameter( _rError.getParameter() );
+        if ( sParameter.getLength() )
+            aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
+        else
+            aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);
+        OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (3)!" );
+    }
+
+    throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );
+}
+
+// -----------------------------------------------------------------------------
+void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const Reference< XInterface >& _rxContext )
+{
+    ErrorDescriptor aError;
+    aError.setResId( _nErrorResourceId );
+    throwSQLException( aError, _rxContext );
+}
 
 } } // namespace connectivity::mozab

@@ -16,15 +16,18 @@
 ..\source\drivers\odbc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\mozab\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\evoab2\*.xml %_DEST%\xml%_EXT%\*.xml
-..\source\drivers\evoab\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\calc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\mysql\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
 
 mkdir: %_DEST%\inc%_EXT%\connectivity
 mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx
+mkdir: %_DEST%\xml%_EXT%\registry\spool\DataAccess
 
 ..\inc\connectivity\*.hxx %_DEST%\inc%_EXT%\connectivity\*.hxx
 ..\%__SRC%\inc\sqlbison.hxx %_DEST%\inc%_EXT%\connectivity\sqlbison.hxx
 ..\inc\connectivity\sdbcx\*.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\*.hxx
 #..\version.mk %_DEST%\inc%_EXT%\connectivity\version.mk
+..\%__SRC%\misc\registry\data\org\openoffice\Office\DataAccess\*.xcu %_DEST%\xml%_EXT%\registry\spool\DataAccess\*.xcu
+..\%COMMON_OUTDIR%\bin\fcfg_drivers_*.zip %_DEST%\pck%_EXT%\fcfg_drivers_*.zip
+..\%__SRC%\bin\fcfg_drivers_*.zip %_DEST%\pck%_EXT%\fcfg_drivers_*.zip

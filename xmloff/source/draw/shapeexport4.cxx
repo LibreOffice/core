@@ -1130,21 +1130,21 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 {
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
 
-                    const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
-
-                    while( pEntry->msApiName ) try
+                    for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; pEntry->msApiName; pEntry++ )
                     {
-                        sal_Bool bBool = sal_False;
-                        const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+                        try
+                        {
+                            sal_Bool bBool = sal_False;
+                            const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
 
-                        xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
-                        if( bBool )
-                            mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
-                        pEntry++;
-                    }
-                    catch( uno::Exception& )
-                    {
-                        DBG_ERROR("XMLShapeExport::ImpExportTableShape(), exception caught!");
+                            xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
+                            if( bBool )
+                                mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
+                        }
+                        catch( uno::Exception& )
+                        {
+                            DBG_ERROR("XMLShapeExport::ImpExportTableShape(), exception caught!");
+                        }
                     }
                 }
             }

@@ -64,7 +64,7 @@ sal_Bool ReconnectingFile::reconnect()
     if ( nResult == ::osl::FileBase::E_None )
     {
         if ( uFlags & OpenFlag_Create )
-            m_nFlags = uFlags & ( ~OpenFlag_Create ) | OpenFlag_Write;
+            m_nFlags = (uFlags & ( ~OpenFlag_Create )) | OpenFlag_Write;
         else
             m_nFlags = uFlags;
 

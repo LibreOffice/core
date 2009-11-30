@@ -30,24 +30,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "fmPropBrw.hxx"
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <svx/fmshell.hxx>
-#include "fmshimp.hxx"
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
-#ifndef _SVX_FMHELP_HRC
+
 #include "fmhelp.hrc"
-#endif
-#include <svx/dialmgr.hxx>
-#ifndef _SVX_FMRESIDS_HRC
+#include "fmprop.hrc"
+#include "fmPropBrw.hxx"
 #include "fmresids.hrc"
-#endif
 #include "fmservs.hxx"
-#include <svx/svdpagv.hxx>
+#include "fmshimp.hxx"
+#include "fmpgeimp.hxx"
+
+#include "svx/dialmgr.hxx"
+#include "svx/fmpage.hxx"
+#include "svx/fmshell.hxx"
+#include "svx/sdrpagewindow.hxx"
+#include "svx/svdpagv.hxx"
+#include "svx/svxids.hrc"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -64,24 +61,22 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
 /** === end UNO includes === **/
+
 #include <comphelper/processfactory.hxx>
+#include <comphelper/property.hxx>
 #include <cppuhelper/component_context.hxx>
-#include <tools/shl.hxx>
-#include <tools/diagnose_ex.h>
-#include <vcl/stdtext.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <tools/debug.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <sfx2/objsh.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <toolkit/unohlp.hxx>
-#endif
-#include <comphelper/property.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/shl.hxx>
 #include <unotools/confignode.hxx>
-#include <svx/sdrpagewindow.hxx>
+#include <vcl/stdtext.hxx>
 
 #include <algorithm>
 
@@ -303,19 +298,24 @@ FmPropBrw::~FmPropBrw()
         implDetachController();
     try
     {
+        // remove our own properties from the component context. We cannot ensure that the component context
+        // is freed (there might be refcount problems :-\), so at least ensure the context itself
+        // does hold the objects anymore
         Reference<XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
         if ( xName.is() )
         {
             const ::rtl::OUString pProps[] = { ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) )
-                                            ,  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
-                                            , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) )};
-            for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
-                xName->removeByName(pProps[i]);
+                                             , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
+                                             , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) )
+                                             , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ) };
+            for ( size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i )
+                xName->removeByName( pProps[i] );
         }
     }
-    catch(Exception&)
-    {}
-
+    catch (const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
     DBG_DTOR(FmPropBrw,NULL);
 }
 
@@ -574,6 +574,12 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     // the default parent window for message boxes
     Reference< XWindow > xParentWindow( VCLUnoHelper::GetInterface ( this ) );
 
+    // the mapping from control models to control shapes
+    Reference< XMap > xControlMap;
+    FmFormPage* pFormPage = _pFormShell ? _pFormShell->GetCurPage() : NULL;
+    if ( pFormPage )
+        xControlMap = pFormPage->GetImpl().getControlToShapeMap();
+
     // our own component context
     Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
     Reference< XComponentContext > xOwnContext(
@@ -585,7 +591,8 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     {
         ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( xDocument ) ),
         ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( xParentWindow ) ),
-        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) ), makeAny( xControlContext ) )
+        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) ), makeAny( xControlContext ) ),
+        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ), makeAny( xControlMap ) )
     };
     m_xInspectorContext.set(
         ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),

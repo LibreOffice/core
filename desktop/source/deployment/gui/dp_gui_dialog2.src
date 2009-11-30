@@ -97,6 +97,66 @@ ModelessDialog RID_DLG_EXTENSION_MANAGER
     };
 };
 
+ModalDialog RID_DLG_UPDATE_REQUIRED
+{
+    HelpId = HID_PACKAGE_MANAGER_UPD_REQ;
+    Text [ en-US ] = "Extension Update Required";
+
+    Size = MAP_APPFONT( 300, 200 );
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Sizeable = TRUE;
+    Hide = TRUE;
+
+    FixedText RID_EM_FT_MSG
+    {
+        Text [ en-US ] = "%PRODUCTNAME has been updated to a new version. Some installed %PRODUCTNAME extensions are not compatible with this version and need to be updated before they can be used.";
+        WordBreak = TRUE;
+        NoLabel = TRUE;
+        Size = MAP_APPFONT( 280, 3*RSC_BS_CHARHEIGHT );
+        Pos = MAP_APPFONT( 5, 5 );
+    };
+
+    FixedText RID_EM_FT_PROGRESS
+    {
+        Hide = TRUE;
+        Right = TRUE;
+        Text [ en-US ] = "Adding %EXTENSION_NAME";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+
+    HelpButton RID_EM_BTN_HELP
+    {
+        TabStop = TRUE;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    PushButton RID_EM_BTN_CHECK_UPDATES
+    {
+        TabStop = TRUE;
+        Text [ en-US ] = "Check for ~Updates...";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    PushButton RID_EM_BTN_CLOSE
+    {
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [ en-US ] = "Disable all";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    CancelButton RID_EM_BTN_CANCEL
+    {
+        TabStop = TRUE;
+        Hide = TRUE;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+};
+
 Image RID_IMG_WARNING
 {
     ImageBitmap = Bitmap { File = "caution_16.png"; };

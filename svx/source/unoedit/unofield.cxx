@@ -81,9 +81,9 @@ public:
     OUString    msPresentation;
 };
 
-SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
+const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
 {
-    static SfxItemPropertyMap aExDateTimeFieldPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aExDateTimeFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("DateTime"),         WID_DATE,       &::getCppuType((const util::DateTime*)0),       0, 0 },
         { MAP_CHAR_LEN("IsFixed"),          WID_BOOL1,      &::getBooleanCppuType(),                0, 0 },
@@ -91,14 +91,16 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         { MAP_CHAR_LEN("NumberFormat"),     WID_INT32,      &::getCppuType((const sal_Int16*)0),    0, 0 },
         {0,0,0,0,0,0}
     };
+    static SfxItemPropertySet aExDateTimeFieldPropertySet_Impl(aExDateTimeFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMap aDateTimeFieldPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aDateTimeFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("IsDate"),           WID_BOOL2,      &::getBooleanCppuType(),                0, 0 },
         {0,0,0,0,0,0}
     };
+    static SfxItemPropertySet aDateTimeFieldPropertySet_Impl(aDateTimeFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMap aUrlFieldPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aUrlFieldPropertyMap_Impl[] =
     {
 
         { MAP_CHAR_LEN("Format"),           WID_INT16,      &::getCppuType((const sal_Int16*)0),    0, 0 },
@@ -107,21 +109,24 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         { MAP_CHAR_LEN("URL"),              WID_STRING3,    &::getCppuType((const OUString*)0),     0, 0 },
         {0,0,0,0,0,0}
     };
+    static SfxItemPropertySet aUrlFieldPropertySet_Impl(aUrlFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMap aEmptyPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aEmptyPropertyMap_Impl[] =
     {
         {0,0,0,0,0,0}
     };
+    static SfxItemPropertySet aEmptyPropertySet_Impl(aEmptyPropertyMap_Impl);
 
-    static SfxItemPropertyMap aExtFileFieldPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aExtFileFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("IsFixed"),              WID_BOOL1,  &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("FileFormat"),           WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
         { MAP_CHAR_LEN("CurrentPresentation"),  WID_STRING1,&::getCppuType((const OUString*)0),     0, 0 },
         {0,0,0,0,0,0}
     };
+    static SfxItemPropertySet aExtFileFieldPropertySet_Impl(aExtFileFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMap aAuthorFieldPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aAuthorFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("IsFixed"),              WID_BOOL1,  &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("CurrentPresentation"),  WID_STRING1,&::getCppuType((const OUString*)0),     0, 0 },
@@ -130,29 +135,31 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         { MAP_CHAR_LEN("FullName"),             WID_BOOL2,  &::getBooleanCppuType(),                0, 0 },
         {0,0,0,0,0,0}
     };
+    static SfxItemPropertySet aAuthorFieldPropertySet_Impl(aAuthorFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMap aMeasureFieldPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aMeasureFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("Kind"),                 WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
         {0,0,0,0,0,0}
     };
+    static SfxItemPropertySet aMeasureFieldPropertySet_Impl(aMeasureFieldPropertyMap_Impl);
 
     switch( mnId )
     {
     case ID_EXT_DATEFIELD:
     case ID_EXT_TIMEFIELD:
-        return aExDateTimeFieldPropertyMap_Impl;
+        return &aExDateTimeFieldPropertySet_Impl;
     case ID_URLFIELD:
-        return aUrlFieldPropertyMap_Impl;
+        return &aUrlFieldPropertySet_Impl;
     case ID_DATEFIELD:
     case ID_TIMEFIELD:
-        return aDateTimeFieldPropertyMap_Impl;
+        return &aDateTimeFieldPropertySet_Impl;
     case ID_EXT_FILEFIELD:
-        return aExtFileFieldPropertyMap_Impl;
+        return &aExtFileFieldPropertySet_Impl;
     case ID_AUTHORFIELD:
-        return aAuthorFieldPropertyMap_Impl;
+        return &aAuthorFieldPropertySet_Impl;
     case ID_MEASUREFIELD:
-        return aMeasureFieldPropertyMap_Impl;
+        return &aMeasureFieldPropertySet_Impl;
 //  case ID_PAGEFIELD:
 //  case ID_PAGESFIELD:
 //  case ID_FILEFIELD:
@@ -161,7 +168,7 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
 //  case ID_FOOTERFIELD:
 //  case ID_DATETIMEFIELD::
     default:
-        return aEmptyPropertyMap_Impl;
+        return &aEmptyPropertySet_Impl;
     }
 }
 
@@ -262,7 +269,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 ,   mnServiceId(nServiceId)
 ,   mpImpl( new SvxUnoFieldData_Impl )
 {
-    mpPropSet = new SfxItemPropertySet( ImplGetFieldItemPropertyMap(mnServiceId) );
+    mpPropSet = ImplGetFieldItemPropertySet(mnServiceId);
 
     memset( &(mpImpl->maDateTime), 0, sizeof( util::DateTime ) );
 
@@ -388,12 +395,11 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
         }
     }
 
-    mpPropSet = new SfxItemPropertySet( ImplGetFieldItemPropertyMap(mnServiceId) );
+    mpPropSet = ImplGetFieldItemPropertySet(mnServiceId);
 }
 
 SvxUnoTextField::~SvxUnoTextField() throw()
 {
-    delete mpPropSet;
     delete mpImpl;
 }
 
@@ -671,7 +677,7 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
     if( mpImpl == NULL )
         throw uno::RuntimeException();
 
-    const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(mpPropSet->getPropertyMap(), aPropertyName );
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMap()->getByName( aPropertyName );
     if ( !pMap )
         throw beans::UnknownPropertyException();
 
@@ -840,7 +846,7 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
 
     uno::Any aValue;
 
-    const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(mpPropSet->getPropertyMap(), PropertyName );
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMap()->getByName( PropertyName );
     if ( !pMap )
         throw beans::UnknownPropertyException();
 

@@ -70,16 +70,13 @@ namespace sdr
             OverlayObject& getOverlayObject(sal_uInt32 nIndex) const { return *(maVector[nIndex]); }
 
             // Hittest with logical coordinates
-            sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
+            bool isHitLogic(const basegfx::B2DPoint& rLogicPosition, double fLogicTolerance = 0.0) const;
 
             // Hittest with pixel coordinates and pixel tolerance
-            sal_Bool isHitPixel(const Point& rPos, sal_uInt32 nTol = DEFAULT_VALUE_FOR_HITTEST_PIXEL) const;
+            bool isHitPixel(const Point& rDiscretePosition, sal_uInt32 fDiscreteTolerance = DEFAULT_VALUE_FOR_HITTEST_PIXEL) const;
 
             // calculate BaseRange of all included OverlayObjects and return
             basegfx::B2DRange getBaseRange() const;
-
-            // transform all members coordinates
-            void transform(const basegfx::B2DHomMatrix& rMatrix);
         };
     } // end of namespace overlay
 } // end of namespace sdr

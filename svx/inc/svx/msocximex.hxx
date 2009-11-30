@@ -230,7 +230,7 @@ class SVX_DLLPUBLIC OCX_Control
 {
 public:
     OCX_Control(UniString sN, OCX_Control* parent = NULL ) : nWidth( 0 ), nHeight( 0 ), mnLeft(0), mnTop(0),
-        mnStep(0), mnBackColor(0x8000000FL), mnForeColor(0), mnTabPos(0), sName(sN), pDocSh(0),
+        mnStep(0), mnBackColor(0x8000000FL), mnForeColor(0), mnTabPos(0), mbVisible(true), sName(sN), pDocSh(0),
         bSetInDialog(FALSE), mpParent( parent ) {}
     sal_Bool FullRead(SotStorageStream *pS)
     {
@@ -287,6 +287,7 @@ public:
     sal_Int32 mnBackColor;
     sal_Int32 mnForeColor;
         sal_uInt16 mnTabPos;
+    bool mbVisible;
     UniString sName;
     UniString msToolTip;
     OCX_FontData aFontData;
@@ -483,7 +484,7 @@ public:
 };
 struct ContainerRecord
 {
-    ContainerRecord():nTop(0), nLeft(0), nSubStorageId(0), nSubStreamLen(0), nTabPos(0), nTypeIdent(0) {}
+    ContainerRecord():nTop(0), nLeft(0), nSubStorageId(0), nSubStreamLen(0), nTabPos(0), nTypeIdent(0), bVisible( true ) {}
 
     ::rtl::OUString cName;
     ::rtl::OUString controlTip;
@@ -494,6 +495,7 @@ struct ContainerRecord
     sal_uInt32 nSubStreamLen;
     sal_uInt16  nTabPos;
     sal_uInt16 nTypeIdent;
+    bool bVisible;
 };
 
 typedef std::vector<OCX_Control*>::iterator CtrlIterator;

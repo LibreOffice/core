@@ -68,7 +68,7 @@
 #include <com/sun/star/reflection/XIdlArray.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
@@ -104,6 +104,8 @@ TYPEINIT1(SbUnoMethod,SbxMethod)
 TYPEINIT1(SbUnoProperty,SbxProperty)
 TYPEINIT1(SbUnoObject,SbxObject)
 TYPEINIT1(SbUnoClass,SbxObject)
+TYPEINIT1(SbUnoService,SbxObject)
+TYPEINIT1(SbUnoServiceCtor,SbxMethod)
 
 typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 
@@ -2496,35 +2498,7 @@ SbUnoProperty::~SbUnoProperty()
 {}
 
 
-// #72732 Spezielle SbxVariable, die beim put/get prueft,
-// ob der Kontext fuer eine UnoClass sinnvoll ist. Sonst
-// liegt eventuell ein Schreibfehler im Basic-Source vor.
-BOOL UnoClassMemberVariable::Get( SbxValues& rRes ) const
-{
-    // Zugriff auf den Member einer UnoClass mit Parametern ist unsinnig
-    if( GetParameters() )
-    {
-        if( mpRuntime )
-            mpRuntime->Error( SbERR_NO_METHOD );
-    }
-    return SbxVariable::Get( rRes );
-}
-
-BOOL UnoClassMemberVariable::Put( const SbxValues& rRes )
-{
-    if( bInternalUse )
-    {
-        return SbxVariable::Put( rRes );
-    }
-    // Schreibzugriff auf den Member einer UnoClass ist immer falsch
-    mpRuntime->Error( SbERR_NO_METHOD );
-    return FALSE;
-}
-
-TYPEINIT1(UnoClassMemberVariable,SbxVariable)
-
-
-SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
+SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
 {
     static Reference< XIdlMethod > xDummyMethod;
     static Property aDummyProp;
@@ -3201,16 +3175,16 @@ SbxVariable* getVBAConstant( const String& rName )
 
 // Funktion, um einen globalen Bezeichner im
 // UnoScope zu suchen und fuer Sbx zu wrappen
-SbxVariable* findUnoClass( const String& rName )
+SbUnoClass* findUnoClass( const String& rName )
 {
     // #105550 Check if module exists
     SbUnoClass* pUnoClass = NULL;
 
     Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
-    Reference< XTypeDescription > xTypeDesc;
     if( xTypeAccess->hasByHierarchicalName( rName ) )
     {
         Any aRet = xTypeAccess->getByHierarchicalName( rName );
+        Reference< XTypeDescription > xTypeDesc;
         aRet >>= xTypeDesc;
 
         if( xTypeDesc.is() )
@@ -3287,7 +3261,6 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                                 pRes = new SbxVariable( SbxVARIANT );
                                 SbxObjectRef xWrapper = (SbxObject*)new SbUnoClass( aNewName, xClass );
                                 pRes->PutObject( xWrapper );
-
                             }
                         }
                         else
@@ -3305,12 +3278,23 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                 // Sonst wieder als Klasse annehmen
                 if( !pRes )
                 {
-                    SbxVariable* pNewClass = findUnoClass( aNewName );
+                    SbUnoClass* pNewClass = findUnoClass( aNewName );
                     if( pNewClass )
                     {
-                        Reference< XIdlClass > xClass;
                         pRes = new SbxVariable( SbxVARIANT );
                         SbxObjectRef xWrapper = (SbxObject*)pNewClass;
+                        pRes->PutObject( xWrapper );
+                    }
+                }
+
+                // An UNO service?
+                if( !pRes )
+                {
+                    SbUnoService* pUnoService = findUnoService( aNewName );
+                    if( pUnoService )
+                    {
+                        pRes = new SbxVariable( SbxVARIANT );
+                        SbxObjectRef xWrapper = (SbxObject*)pUnoService;
                         pRes->PutObject( xWrapper );
                     }
                 }
@@ -3332,6 +3316,266 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
     }
     return pRes;
 }
+
+
+SbUnoService* findUnoService( const String& rName )
+{
+    SbUnoService* pSbUnoService = NULL;
+
+    Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
+    if( xTypeAccess->hasByHierarchicalName( rName ) )
+    {
+        Any aRet = xTypeAccess->getByHierarchicalName( rName );
+        Reference< XTypeDescription > xTypeDesc;
+        aRet >>= xTypeDesc;
+
+        if( xTypeDesc.is() )
+        {
+            TypeClass eTypeClass = xTypeDesc->getTypeClass();
+            if( eTypeClass == TypeClass_SERVICE )
+            {
+                Reference< XServiceTypeDescription2 > xServiceTypeDesc( xTypeDesc, UNO_QUERY );
+                if( xServiceTypeDesc.is() )
+                    pSbUnoService = new SbUnoService( rName, xServiceTypeDesc );
+            }
+        }
+    }
+    return pSbUnoService;
+}
+
+SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
+{
+    SbxVariable* pRes = SbxObject::Find( rName, SbxCLASS_METHOD );
+
+    if( !pRes )
+    {
+        // Wenn es schon eine Klasse ist, nach einen Feld fragen
+        if( m_bNeedsInit && m_xServiceTypeDesc.is() )
+        {
+            m_bNeedsInit = false;
+
+            Sequence< Reference< XServiceConstructorDescription > > aSCDSeq = m_xServiceTypeDesc->getConstructors();
+            const Reference< XServiceConstructorDescription >* pCtorSeq = aSCDSeq.getConstArray();
+            int nCtorCount = aSCDSeq.getLength();
+            for( int i = 0 ; i < nCtorCount ; ++i )
+            {
+                Reference< XServiceConstructorDescription > xCtor = pCtorSeq[i];
+
+                String aName( xCtor->getName() );
+                if( !aName.Len() )
+                {
+                    if( xCtor->isDefaultConstructor() )
+                        aName = String::CreateFromAscii( "create" );
+                }
+
+                if( aName.Len() )
+                {
+                    // Create and insert SbUnoServiceCtor
+                    SbxVariableRef xSbCtorRef = new SbUnoServiceCtor( aName, xCtor );
+                    QuickInsert( (SbxVariable*)xSbCtorRef );
+                    pRes = xSbCtorRef;
+                }
+            }
+        }
+    }
+
+    return pRes;
+}
+
+void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                           const SfxHint& rHint, const TypeId& rHintType )
+{
+    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    if( pHint )
+    {
+        SbxVariable* pVar = pHint->GetVar();
+        SbxArray* pParams = pVar->GetParameters();
+        SbUnoServiceCtor* pUnoCtor = PTR_CAST(SbUnoServiceCtor,pVar);
+        if( pUnoCtor && pHint->GetId() == SBX_HINT_DATAWANTED )
+        {
+            // Parameter count -1 because of Param0 == this
+            UINT32 nParamCount = pParams ? ((UINT32)pParams->Count() - 1) : 0;
+            Sequence<Any> args;
+            BOOL bOutParams = FALSE;
+
+            Reference< XServiceConstructorDescription > xCtor = pUnoCtor->getServiceCtorDesc();
+            Sequence< Reference< XParameter > > aParameterSeq = xCtor->getParameters();
+            const Reference< XParameter >* pParameterSeq = aParameterSeq.getConstArray();
+            UINT32 nUnoParamCount = aParameterSeq.getLength();
+
+            // Default: Ignore not needed parameters
+            bool bParameterError = false;
+
+            // Is the last parameter a rest parameter?
+            bool bRestParameterMode = false;
+            if( nUnoParamCount > 0 )
+            {
+                Reference< XParameter > xLastParam = pParameterSeq[ nUnoParamCount - 1 ];
+                if( xLastParam.is() )
+                {
+                    if( xLastParam->isRestParameter() )
+                        bRestParameterMode = true;
+                }
+            }
+
+            // Too many parameters with context as first parameter?
+            USHORT nSbxParameterOffset = 1;
+            USHORT nParameterOffsetByContext = 0;
+            Reference < XComponentContext > xFirstParamContext;
+            if( nParamCount > nUnoParamCount )
+            {
+                // Check if first parameter is a context and use it
+                // then in createInstanceWithArgumentsAndContext
+                Any aArg0 = sbxToUnoValue( pParams->Get( nSbxParameterOffset ) );
+                if( (aArg0 >>= xFirstParamContext) && xFirstParamContext.is() )
+                    nParameterOffsetByContext = 1;
+            }
+
+            UINT32 nEffectiveParamCount = nParamCount - nParameterOffsetByContext;
+            UINT32 nAllocParamCount = nEffectiveParamCount;
+            if( nEffectiveParamCount > nUnoParamCount )
+            {
+                if( !bRestParameterMode )
+                {
+                    nEffectiveParamCount = nUnoParamCount;
+                    nAllocParamCount = nUnoParamCount;
+                }
+            }
+            // Not enough parameters?
+            else if( nUnoParamCount > nEffectiveParamCount )
+            {
+                // RestParameterMode only helps if one (the last) parameter is missing
+                int nDiff = nUnoParamCount - nEffectiveParamCount;
+                if( !bRestParameterMode || nDiff > 1 )
+                {
+                    bParameterError = true;
+                    StarBASIC::Error( SbERR_NOT_OPTIONAL );
+                }
+            }
+
+            if( !bParameterError )
+            {
+                if( nAllocParamCount > 0 )
+                {
+                    args.realloc( nAllocParamCount );
+                    Any* pAnyArgs = args.getArray();
+                    for( UINT32 i = 0 ; i < nEffectiveParamCount ; i++ )
+                    {
+                        USHORT iSbx = (USHORT)(i + nSbxParameterOffset + nParameterOffsetByContext);
+
+                        // bRestParameterMode allows nEffectiveParamCount > nUnoParamCount
+                        Reference< XParameter > xParam;
+                        if( i < nUnoParamCount )
+                        {
+                            xParam = pParameterSeq[i];
+                            if( !xParam.is() )
+                                continue;
+
+                            Reference< XTypeDescription > xParamTypeDesc = xParam->getType();
+                            if( !xParamTypeDesc.is() )
+                                continue;
+                            com::sun::star::uno::Type aType( xParamTypeDesc->getTypeClass(), xParamTypeDesc->getName() );
+
+                            // sbx paramter needs offset 1
+                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( iSbx ), aType );
+
+                            // Check for out parameter if not already done
+                            if( !bOutParams )
+                            {
+                                if( xParam->isOut() )
+                                    bOutParams = TRUE;
+                            }
+                        }
+                        else
+                        {
+                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( iSbx ) );
+                        }
+                    }
+                }
+
+                // "Call" ctor using createInstanceWithArgumentsAndContext
+                Reference < XComponentContext > xContext;
+                if( xFirstParamContext.is() )
+                {
+                    xContext = xFirstParamContext;
+                }
+                else
+                {
+                    Reference < XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+                    xContext.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ), UNO_QUERY_THROW );
+                }
+                Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
+
+                Any aRetAny;
+                if( xServiceMgr.is() )
+                {
+                    String aServiceName = GetName();
+                    Reference < XInterface > xRet;
+                    try
+                    {
+                        xRet = xServiceMgr->createInstanceWithArgumentsAndContext( aServiceName, args, xContext );
+                    }
+                    catch( const Exception& )
+                    {
+                        implHandleAnyException( ::cppu::getCaughtException() );
+                    }
+                    aRetAny <<= xRet;
+                }
+                unoToSbxValue( pVar, aRetAny );
+
+                // Copy back out parameters?
+                if( bOutParams )
+                {
+                    const Any* pAnyArgs = args.getConstArray();
+
+                    for( UINT32 j = 0 ; j < nUnoParamCount ; j++ )
+                    {
+                        Reference< XParameter > xParam = pParameterSeq[j];
+                        if( !xParam.is() )
+                            continue;
+
+                        if( xParam->isOut() )
+                            unoToSbxValue( (SbxVariable*)pParams->Get( (USHORT)(j+1) ), pAnyArgs[ j ] );
+                    }
+                }
+            }
+        }
+        else
+            SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+    }
+}
+
+
+
+static SbUnoServiceCtor* pFirstCtor = NULL;
+
+void clearUnoServiceCtors( void )
+{
+    SbUnoServiceCtor* pCtor = pFirstCtor;
+    while( pCtor )
+    {
+        pCtor->SbxValue::Clear();
+        pCtor = pCtor->pNext;
+    }
+}
+
+SbUnoServiceCtor::SbUnoServiceCtor( const String& aName_, Reference< XServiceConstructorDescription > xServiceCtorDesc )
+    : SbxMethod( aName_, SbxOBJECT )
+    , m_xServiceCtorDesc( xServiceCtorDesc )
+{
+}
+
+SbUnoServiceCtor::~SbUnoServiceCtor()
+{
+}
+
+SbxInfo* SbUnoServiceCtor::GetInfo()
+{
+    SbxInfo* pRet = NULL;
+
+    return pRet;
+}
+
 
 
 //========================================================================
@@ -3703,7 +3947,6 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite 
 //========================================================================
 // Creates a Basic wrapper object for a strongly typed Uno value
 // 1. parameter: Uno type as full qualified type name, e.g. "byte[]"
-// void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
     (void)pBasic;

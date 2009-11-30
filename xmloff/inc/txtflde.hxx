@@ -38,9 +38,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include "xmlnmspe.hxx"
 
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <xmloff/xmltoken.hxx>
 
 #include <map>
@@ -148,6 +146,8 @@ enum FieldIdEnum {
 
     FIELD_ID_COMBINED_CHARACTERS,   // combined characters (asian typography)
 
+    FIELD_ID_META,                  // text:meta-field (RDF metadata)
+
     FIELD_ID_MEASURE,               // for measure shapes
 
     FIELD_ID_TABLE_FORMULA,         // DEPRECATED: table formulas (Writer 2.0)
@@ -182,14 +182,16 @@ public:
     /// Export this field and the surrounding span element with the formatting.
     /// To be called for every field in the document body.
     void ExportField(const ::com::sun::star::uno::Reference <
-                      ::com::sun::star::text::XTextField > & rTextField );
+                        ::com::sun::star::text::XTextField > & rTextField,
+                     sal_Bool bProgress );
 
     /// collect styles (character styles, data styles, ...) for this field
     /// (if appropriate).
     /// Also collect used field masters (if pUsedMasters is set)
     /// to be called for every field during style export.
     void ExportFieldAutoStyle(const ::com::sun::star::uno::Reference <
-                      ::com::sun::star::text::XTextField > & rTextField );
+                        ::com::sun::star::text::XTextField > & rTextField,
+                     sal_Bool bProgress );
 
     /// export field declarations.
     /// to be called once at beginning of document body.
@@ -239,7 +241,8 @@ protected:
                 ::com::sun::star::beans::XPropertySet> & rPropSet,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet> & rRangePropSet,
-        enum FieldIdEnum nToken);
+        enum FieldIdEnum nToken,
+        sal_Bool bProgress );
 
     /// export an empty element
     void ExportElement(enum ::xmloff::token::XMLTokenEnum eElement, /// element token
@@ -256,6 +259,11 @@ protected:
     void ExportMacro( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::beans::XPropertySet> & rPropSet,
                       const ::rtl::OUString& rContent);
+
+    /// export text:meta-field (RDF metadata)
+    void ExportMetaField( const ::com::sun::star::uno::Reference<
+                              ::com::sun::star::beans::XPropertySet> & i_xMeta,
+                          bool i_bAutoStyles, sal_Bool i_bProgress );
 
     /// export a boolean attribute
     void ProcessBoolean(

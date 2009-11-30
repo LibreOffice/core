@@ -64,21 +64,28 @@ namespace connectivity
 
         typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::sdbc::XCloseable> OStatement_BASE;
+                                                    ::com::sun::star::sdbc::XCloseable> OCommonStatement_IBASE;
 
         //**************************************************************
-        //************ Class: OStatement_Base
+        //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
         //**************************************************************
-        class OStatement_Base       :   public comphelper::OBaseMutex,
-                                        public  OStatement_BASE,
-                                        public  ::cppu::OPropertySetHelper,
-                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
+        class OCommonStatement;
+        typedef ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >  OCommonStatement_SBASE;
 
+        class OCommonStatement  :public comphelper::OBaseMutex
+                                ,public OCommonStatement_IBASE
+                                ,public ::cppu::OPropertySetHelper
+                                ,public ::comphelper::OPropertyArrayUsageHelper< OCommonStatement >
+                                ,public OCommonStatement_SBASE
         {
-        ::com::sun::star::sdbc::SQLWarning                            m_aLastWarning;
+            friend class ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >;
+
+        private:
+            ::com::sun::star::sdbc::SQLWarning                            m_aLastWarning;
+
         protected:
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet >   m_xResultSet;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> m_xDBMetaData;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>  m_xColNames; // table columns
 
@@ -105,8 +112,6 @@ namespace connectivity
 
         protected:
 
-            void disposeResultSet();
-
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper
@@ -123,23 +128,37 @@ namespace connectivity
             virtual void SAL_CALL getFastPropertyValue(
                                                                 ::com::sun::star::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const;
-            virtual ~OStatement_Base();
+            virtual ~OCommonStatement();
 
         protected:
             //
             // Driver Internal Methods
             //
-            virtual sal_Bool parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted = sal_False) throw (
-                        ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
+            enum StatementType { eSelect, eCreateTable };
+            /** called to do the parsing of a to-be-executed SQL statement, and set all members as needed
+            */
+            virtual StatementType
+                            parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted = sal_False) throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
+            /** called to initialize a result set, according to a previously parsed SQL statement
+            */
+            virtual void    initializeResultSet( OResultSet* _pResult );
+            /** called when a possible cached instance of our last result set should be cleared
+            */
+            virtual void    clearCachedResultSet();
+            /** caches a result set which has just been created by an execution of an SQL statement
+            */
+            virtual void    cacheResultSet( const ::rtl::Reference< OResultSet >& _pResult );
 
-            OResultSet*  createResultSet();
-            virtual void initializeResultSet( OResultSet* _pResult );
+
+            /** executes the current query (the one which has been passed to the last parseSql call)
+            */
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+                            impl_executeCurrentQuery();
+
             void         createColumnMapping();
             void         analyseSQL();
             void         setOrderbyColumn( connectivity::OSQLParseNode* pColumnRef,
                                            connectivity::OSQLParseNode* pAscendingDescending);
-            void         reset () throw( ::com::sun::star::sdbc::SQLException);
-            void         clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
             virtual void createTable(  ) throw (
                         ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
 
@@ -147,11 +166,12 @@ namespace connectivity
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
 
-            OStatement_Base(OConnection* _pConnection );
-            using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
+            OCommonStatement(OConnection* _pConnection );
+            using OCommonStatement_IBASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void){OStatement_BASE::disposing();}
+            virtual void SAL_CALL disposing(void);
+
             // XInterface
             virtual void SAL_CALL release() throw();
             virtual void SAL_CALL acquire() throw();
@@ -177,28 +197,14 @@ namespace connectivity
             using OPropertySetHelper::getFastPropertyValue;
         };
 
-        class OStatement_BASE2  :public OStatement_Base
-                                ,public ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>
-
-        {
-            friend class OSubComponent<OStatement_BASE2, OStatement_BASE>;
-        public:
-            OStatement_BASE2(OConnection* _pConnection ) :  OStatement_Base(_pConnection ),
-                                    ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this){}
-            // OComponentHelper
-            virtual void SAL_CALL disposing(void);
-            // XInterface
-            virtual void SAL_CALL release() throw();
-        };
-
-        class OStatement :  public OStatement_BASE2,
+        class OStatement :  public OCommonStatement,
                             public ::com::sun::star::lang::XServiceInfo
         {
         protected:
             ~OStatement(){}
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
+            OStatement( OConnection* _pConnection) : OCommonStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

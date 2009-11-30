@@ -134,6 +134,9 @@ public:
         const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    virtual void    ABORT()
+        throw( DAVException ) = 0;
+
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
                     POST( const rtl::OUString & inPath,
                           const rtl::OUString & rContentType,

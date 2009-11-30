@@ -95,7 +95,7 @@ TYPEINIT1(FmFormPage, SdrPage);
 FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMasterPage)
            :SdrPage(rModel, bMasterPage)
 #ifndef SVX_LIGHT
-           ,m_pImpl(new FmFormPageImpl(this))
+           ,m_pImpl( new FmFormPageImpl( *this ) )
 #else
            ,m_pImpl(NULL)
 #endif
@@ -108,7 +108,7 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMaster
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
 #ifndef SVX_LIGHT
-           ,m_pImpl(new FmFormPageImpl(this, *rPage.GetImpl()))
+           ,m_pImpl(new FmFormPageImpl( *this, rPage.GetImpl() ) )
 #else
            ,m_pImpl(NULL)
 #endif

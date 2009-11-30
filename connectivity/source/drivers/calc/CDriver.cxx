@@ -91,11 +91,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url,
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
                 throw(SQLException, RuntimeException)
 {
-    if(!url.compareTo(::rtl::OUString::createFromAscii("sdbc:calc:"),10))
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return url.compareTo(::rtl::OUString::createFromAscii("sdbc:calc:"),10) == 0;
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)

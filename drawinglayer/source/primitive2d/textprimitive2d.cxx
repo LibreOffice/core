@@ -145,17 +145,25 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY(), getLocale());
 #ifdef WIN32
                     // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
                     if(bCorrectScale)
                     {
-                        aScale.setX(aScale.getX() * aTextLayouter.getCurrentFontRelation());
+                        const double fFontRelation(aTextLayouter.getCurrentFontRelation());
+                        aScale.setX(aScale.getX() * fFontRelation);
+                        aFontScale.setX(aFontScale.getX() / fFontRelation);
                     }
 #endif
                     // get the text outlines. No DXArray is given (would contain integers equal to unit vector
                     // transformed by object's transformation), let VCL do the job
-                    aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength());
+                    aTextLayouter.getTextOutlines(
+                        rTarget, getText(),
+                        getTextPosition(),
+                        getTextLength(),
+                        // #i89784# added support for DXArray for justified text
+                        getDXArray(),
+                        aFontScale.getX());
 
                     // create primitives for the outlines
                     const sal_uInt32 nCount(rTarget.size());
@@ -300,7 +308,7 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY(), getLocale());
 
                     // get basic text range
                     basegfx::B2DRange aNewRange(aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength()));

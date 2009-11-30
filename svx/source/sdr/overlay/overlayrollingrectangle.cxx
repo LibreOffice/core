@@ -35,6 +35,11 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/overlay/overlaytools.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -42,65 +47,59 @@ namespace sdr
 {
     namespace overlay
     {
-        void OverlayRollingRectangleStriped::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayRollingRectangleStriped::createOverlayObjectPrimitive2DSequence()
         {
-            const basegfx::B2DRange aRange(getBasePosition(), getSecondPosition());
+            drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
-            if(getShowBounds())
+            if(getOverlayManager() && (getShowBounds() || getExtendedLines()))
             {
-                ImpDrawRangeStriped(rOutputDevice, aRange);
+                const basegfx::BColor aRGBColorA(getOverlayManager()->getStripeColorA().getBColor());
+                const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
+                const double fStripeLengthPixel(getOverlayManager()->getStripeLengthPixel());
+                const basegfx::B2DRange aRollingRectangle(getBasePosition(), getSecondPosition());
+
+                if(getShowBounds())
+                {
+                    // view-independent part, create directly
+                    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRollingRectangle));
+                    const drawinglayer::primitive2d::Primitive2DReference aReference(
+                        new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
+                            aPolygon,
+                            aRGBColorA,
+                            aRGBColorB,
+                            fStripeLengthPixel));
+
+                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aReference);
+                }
+
+                if(getExtendedLines())
+                {
+                    // view-dependent part, use helper primitive
+                    const drawinglayer::primitive2d::Primitive2DReference aReference(
+                        new drawinglayer::primitive2d::OverlayRollingRectanglePrimitive(
+                            aRollingRectangle,
+                            aRGBColorA,
+                            aRGBColorB,
+                            fStripeLengthPixel));
+
+                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aReference);
+                }
             }
 
-            if(getExtendedLines())
-            {
-                const Point aEmptyPoint;
-                const Rectangle aVisiblePixel(aEmptyPoint, rOutputDevice.GetOutputSizePixel());
-                const Rectangle aVisibleLogic(rOutputDevice.PixelToLogic(aVisiblePixel));
-
-                // Left lines
-                ImpDrawLineStriped(rOutputDevice, aVisibleLogic.Left(), aRange.getMinY(), aRange.getMinX(), aRange.getMinY());
-                ImpDrawLineStriped(rOutputDevice, aVisibleLogic.Left(), aRange.getMaxY(), aRange.getMinX(), aRange.getMaxY());
-
-                // Right lines
-                ImpDrawLineStriped(rOutputDevice, aRange.getMaxX(), aRange.getMinY(), aVisibleLogic.Right(), aRange.getMinY());
-                ImpDrawLineStriped(rOutputDevice, aRange.getMaxX(), aRange.getMaxY(), aVisibleLogic.Right(), aRange.getMaxY());
-
-                // Top lines
-                ImpDrawLineStriped(rOutputDevice, aRange.getMinX(), aVisibleLogic.Top(), aRange.getMinX(), aRange.getMinY());
-                ImpDrawLineStriped(rOutputDevice, aRange.getMaxX(), aVisibleLogic.Top(), aRange.getMaxX(), aRange.getMinY());
-
-                // Bottom lines
-                ImpDrawLineStriped(rOutputDevice, aRange.getMinX(), aRange.getMaxY(), aRange.getMinX(), aVisibleLogic.Bottom());
-                ImpDrawLineStriped(rOutputDevice, aRange.getMaxX(), aRange.getMaxY(), aRange.getMaxX(), aVisibleLogic.Bottom());
-            }
+            return aRetval;
         }
 
-        void OverlayRollingRectangleStriped::createBaseRange(OutputDevice& rOutputDevice)
+        void OverlayRollingRectangleStriped::stripeDefinitionHasChanged()
         {
-            // reset range and expand it
-            maBaseRange.reset();
-
-            if(getExtendedLines())
-            {
-                const Point aEmptyPoint;
-                const Rectangle aVisiblePixel(aEmptyPoint, rOutputDevice.GetOutputSizePixel());
-                const Rectangle aVisibleLogic(rOutputDevice.PixelToLogic(aVisiblePixel));
-                maBaseRange.expand(basegfx::B2DPoint(aVisibleLogic.Left(), aVisibleLogic.Top()));
-                maBaseRange.expand(basegfx::B2DPoint(aVisibleLogic.Right(), aVisibleLogic.Bottom()));
-            }
-
-            if(getShowBounds())
-            {
-                maBaseRange.expand(getBasePosition());
-                maBaseRange.expand(getSecondPosition());
-            }
+            // react on OverlayManager's stripe definition change
+            objectChange();
         }
 
         OverlayRollingRectangleStriped::OverlayRollingRectangleStriped(
             const basegfx::B2DPoint& rBasePos,
             const basegfx::B2DPoint& rSecondPos,
-            sal_Bool bExtendedLines,
-            sal_Bool bShowBounds)
+            bool bExtendedLines,
+            bool bShowBounds)
         :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
             maSecondPosition(rSecondPos),
             mbExtendedLines(bExtendedLines),
@@ -124,9 +123,9 @@ namespace sdr
             }
         }
 
-        void OverlayRollingRectangleStriped::setExtendedLines(sal_Bool bNew)
+        void OverlayRollingRectangleStriped::setExtendedLines(bool bNew)
         {
-            if(bNew != mbExtendedLines)
+            if(bNew != (bool)mbExtendedLines)
             {
                 // remember new value
                 mbExtendedLines = bNew;
@@ -136,9 +135,9 @@ namespace sdr
             }
         }
 
-        void OverlayRollingRectangleStriped::setShowBounds(sal_Bool bNew)
+        void OverlayRollingRectangleStriped::setShowBounds(bool bNew)
         {
-            if(bNew != mbShowBounds)
+            if(bNew != (bool)mbShowBounds)
             {
                 // remember new value
                 mbShowBounds = bNew;
@@ -146,138 +145,6 @@ namespace sdr
                 // register change (after change)
                 objectChange();
             }
-        }
-
-        sal_Bool OverlayRollingRectangleStriped::isHit(const basegfx::B2DPoint& rPos, double fTol) const
-        {
-            if(isHittable())
-            {
-                if(getExtendedLines())
-                {
-                    const basegfx::B2DRange aRange(getBaseRange());
-                    const basegfx::B2DPoint aMinimum(aRange.getMinimum());
-                    const basegfx::B2DPoint aMaximum(aRange.getMaximum());
-
-                    // test upper line horizontal
-                    if(rPos.getY() > (aMinimum.getY() - fTol) && rPos.getY() < (aMinimum.getY() + fTol))
-                    {
-                        return sal_True;
-                    }
-
-                    // test lower line horizontal
-                    if(rPos.getY() > (aMaximum.getY() - fTol) && rPos.getY() < (aMaximum.getY() + fTol))
-                    {
-                        return sal_True;
-                    }
-
-                    // test left line vertical
-                    if(rPos.getX() > (aMinimum.getX() - fTol) && rPos.getX() < (aMinimum.getX() + fTol))
-                    {
-                        return sal_True;
-                    }
-
-                    // test rightline vertical
-                    if(rPos.getX() > (aMaximum.getX() - fTol) && rPos.getX() < (aMaximum.getX() + fTol))
-                    {
-                        return sal_True;
-                    }
-                }
-
-                if(getShowBounds())
-                {
-                    // test for inside grown range, outside shrinked one to test for border
-                    // hit without interiour
-                    basegfx::B2DRange aOuterRange(getBaseRange());
-                    aOuterRange.grow(fTol);
-
-                    if(aOuterRange.isInside(rPos))
-                    {
-                        basegfx::B2DRange aInnerRange(getBaseRange());
-                        aInnerRange.grow(-fTol);
-
-                        return !aInnerRange.isInside(rPos);
-                    }
-                }
-            }
-
-            return sal_False;
-        }
-
-        void OverlayRollingRectangleStriped::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            if(!rMatrix.isIdentity())
-            {
-                // transform base position
-                OverlayObjectWithBasePosition::transform(rMatrix);
-
-                // transform maSecondPosition
-                const basegfx::B2DPoint aNewSecondPosition = rMatrix * getSecondPosition();
-                setSecondPosition(aNewSecondPosition);
-            }
-        }
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        void OverlayRollingRectangle::drawGeometry(OutputDevice& rOutputDevice)
-        {
-            const Point aStart(FRound(getBasePosition().getX()), FRound(getBasePosition().getY()));
-            const Point aEnd(FRound(getSecondPosition().getX()), FRound(getSecondPosition().getY()));
-            Rectangle aRectangle(aStart, aEnd);
-            aRectangle.Justify();
-
-            if(getShowBounds())
-            {
-                rOutputDevice.SetLineColor(getBaseColor());
-                rOutputDevice.SetFillColor();
-
-                rOutputDevice.DrawRect(aRectangle);
-            }
-
-            if(getExtendedLines())
-            {
-                const Point aEmptyPoint;
-                const Rectangle aVisiblePixel(aEmptyPoint, rOutputDevice.GetOutputSizePixel());
-                const Rectangle aVisibleLogic(rOutputDevice.PixelToLogic(aVisiblePixel));
-
-                // Left lines
-                rOutputDevice.DrawLine(Point(aVisibleLogic.Left(), aRectangle.Top()), aRectangle.TopLeft());
-                rOutputDevice.DrawLine(Point(aVisibleLogic.Left(), aRectangle.Bottom()), aRectangle.BottomLeft());
-
-                // Right lines
-                rOutputDevice.DrawLine(aRectangle.TopRight(), Point(aVisibleLogic.Right(), aRectangle.Top()));
-                rOutputDevice.DrawLine(aRectangle.BottomRight(), Point(aVisibleLogic.Right(), aRectangle.Bottom()));
-
-                // Top lines
-                rOutputDevice.DrawLine(Point(aRectangle.Left(), aVisibleLogic.Top()), aRectangle.TopLeft());
-                rOutputDevice.DrawLine(Point(aRectangle.Right(), aVisibleLogic.Top()), aRectangle.TopRight());
-
-                // Bottom lines
-                rOutputDevice.DrawLine(aRectangle.BottomLeft(), Point(aRectangle.Left(), aVisibleLogic.Bottom()));
-                rOutputDevice.DrawLine(aRectangle.BottomRight(), Point(aRectangle.Right(), aVisibleLogic.Bottom()));
-            }
-        }
-
-        OverlayRollingRectangle::OverlayRollingRectangle(
-            const basegfx::B2DPoint& rBasePos,
-            const basegfx::B2DPoint& rSecondPos,
-            Color aLineColor,
-            sal_Bool bExtendedLines,
-            sal_Bool bShowBounds)
-        :   OverlayRollingRectangleStriped(rBasePos, rSecondPos, bExtendedLines, bShowBounds)
-        {
-            // set base color here, OverlayCrosshairStriped constructor has set
-            // it to it's own default.
-            maBaseColor = aLineColor;
-        }
-
-        OverlayRollingRectangle::~OverlayRollingRectangle()
-        {
         }
     } // end of namespace overlay
 } // end of namespace sdr

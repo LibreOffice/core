@@ -60,6 +60,8 @@ static OUString FilePicker_getSystemPickerServiceName()
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFilePicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFilePicker"));
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde4"))
+        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDE4FilePicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFilePicker"));
     else

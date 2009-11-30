@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: NPreparedStatement.hxx,v $
- * $Revision: 1.5 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -53,8 +50,8 @@ namespace connectivity
                         ::com::sun::star::sdbc::XMultipleResults,
                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OEvoabPreparedStatement : public  OStatement_BASE2,
-                        public  OPreparedStatement_BASE
+        class OEvoabPreparedStatement   :public OCommonStatement
+                                        ,public OPreparedStatement_BASE
         {
         protected:
             struct Parameter
@@ -74,25 +71,23 @@ namespace connectivity
             // Data attributes
             //====================================================================
 
-            sal_Int32                       m_nNumParams;       // Number of parameter markers
-            //  for the prepared statement
-
-            ::rtl::OUString                             m_sSqlStatement;
+            // our SQL statement
+            ::rtl::OUString                                                                 m_sSqlStatement;
+            // the EBookQuery we're working with
+            QueryData                                                                       m_aQueryData;
+            // our meta data
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
 
-            sal_Bool    m_bPrepared;
+        protected:
+            virtual ~OEvoabPreparedStatement();
+
+        public:
+            OEvoabPreparedStatement( OEvoabConnection* _pConnection );
+
+            void construct( const ::rtl::OUString& _sql );
 
         protected:
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
-                                           const ::com::sun::star::uno::Any& rValue)
-                throw (::com::sun::star::uno::Exception);
-            virtual ~OEvoabPreparedStatement();
-        public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            //OEvoabPreparedStatement( OEvoabConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql);
-            OEvoabPreparedStatement( OEvoabConnection* _pConnection, const ::rtl::OUString& sql);
-
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL acquire() throw();
@@ -137,7 +132,6 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int32 SAL_CALL getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
         };
     }
 }

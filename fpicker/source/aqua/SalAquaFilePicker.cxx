@@ -192,8 +192,10 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
     implInitialize();
 
     // if m_pDialog is nil after initialization, something must have gone wrong before
+    // or there was no initialization (see issue http://www.openoffice.org/issues/show_bug.cgi?id=100214)
     if (m_pDialog == nil) {
-        throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog was not properly initialized!"), static_cast< XFilePicker* >( this ));
+        //throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog was not properly initialized!"), static_cast< XFilePicker* >( this ));
+        m_nDialogType = NAVIGATIONSERVICES_OPEN;
     }
 
     if (m_pFilterHelper) {

@@ -33,6 +33,7 @@
 //#include <hash_map>
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <tools/datetime.hxx>
 
 #include <svtools/securityoptions.hxx>
@@ -168,8 +169,12 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     ::rtl::OUString         m_aSharedFileURL;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing > m_xLogRing;
+
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();
+
+    static sal_Bool NeedsOfficeUpdateDialog();
 
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getCurrentMacroExecMode() const;

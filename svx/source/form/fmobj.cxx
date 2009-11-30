@@ -148,13 +148,17 @@ void FmFormObj::impl_isolateControlModel_nothrow()
 //------------------------------------------------------------------
 void FmFormObj::SetPage(SdrPage* _pNewPage)
 {
-    FmFormPage* pNewFormPage = PTR_CAST(FmFormPage, _pNewPage);
     if ( GetPage() == _pNewPage )
     {
         SdrUnoObj::SetPage(_pNewPage);
         return;
     }
 
+    FmFormPage* pOldFormPage = PTR_CAST( FmFormPage, GetPage() );
+    if ( pOldFormPage )
+        pOldFormPage->GetImpl().formObjectRemoved( *this );
+
+    FmFormPage* pNewFormPage = PTR_CAST( FmFormPage, _pNewPage );
     if ( !pNewFormPage )
     {   // Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
         // me may want to remember our place within the old page. For this we could create a new m_xEnvironmentHistory to store it.
@@ -202,7 +206,6 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     {
         // are we a valid part of our current page forms ?
         Reference< XIndexContainer > xOldForms;
-        FmFormPage* pOldFormPage = dynamic_cast< FmFormPage* >( GetPage() );
         if ( pOldFormPage )
             xOldForms.set( pOldFormPage->GetForms(), UNO_QUERY_THROW );
 
@@ -296,6 +299,9 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
 
     m_xEnvironmentHistory = NULL;
     m_aEventsHistory.realloc(0);
+
+    if ( pNewFormPage )
+        pNewFormPage->GetImpl().formObjectInserted( *this );
 }
 
 //------------------------------------------------------------------
@@ -584,6 +590,14 @@ const FmFormObj* FmFormObj::GetFormObject( const SdrObject* _pSdrObject )
 }
 
 //------------------------------------------------------------------
+void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XControlModel >& _rxModel )
+{
+    SdrUnoObj::SetUnoControlModel( _rxModel );
+
+    // TODO: call something like formObjectInserted at the form page, to tell it the new model
+}
+
+//------------------------------------------------------------------
 FASTBOOL FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
@@ -602,11 +616,11 @@ FASTBOOL FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 
                 if ( !xParentForm.is() )
                 {   // model is not yet part of a form component hierachy
-                    xParentForm.set( rPage.GetImpl()->findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
+                    xParentForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
                     xFormToInsertInto.set( xParentForm, UNO_QUERY_THROW );
                 }
 
-                rPage.GetImpl()->setUniqueName( xContent, xParentForm );
+                rPage.GetImpl().setUniqueName( xContent, xParentForm );
 
                 if ( xFormToInsertInto.is() )
                     xFormToInsertInto->insertByIndex( xFormToInsertInto->getCount(), makeAny( xContent ) );

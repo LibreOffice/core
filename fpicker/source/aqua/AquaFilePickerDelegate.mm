@@ -59,8 +59,10 @@
 
 - (MacOSBOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
 {
-    if (filterHelper == NULL)
+    if( filterHelper == NULL )
         return true;
+    if( filename == nil )
+        return false;
     return filterHelper->filenameMatchesFilter(filename);
 }
 

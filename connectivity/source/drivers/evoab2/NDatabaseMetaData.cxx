@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: NDatabaseMetaData.cxx,v $
- * $Revision: 1.12 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -174,19 +171,22 @@ namespace connectivity
             return NULL;
     }
 
+    GType
+    getGFieldType( guint nCol )
+    {
+        initFields();
+
+        sal_Int32 nType = G_TYPE_STRING;
+        if ( nCol < nFields )
+            return ((GParamSpec *)pFields[nCol]->pField)->value_type;
+        return nType;
+    }
+
     sal_Int32
     getFieldType( guint nCol )
     {
-        sal_Int32 nType = DataType::VARCHAR;
-        initFields();
-        if ( nCol < nFields )
-        {
-            if( ((GParamSpec *)pFields[nCol]->pField)->value_type == G_TYPE_STRING )
-                nType = DataType::VARCHAR;
-            else
-                nType = DataType::BIT;
-        }
-        return nType;
+        sal_Int32 nType = getGFieldType( nCol );
+        return nType == G_TYPE_STRING ? DataType::VARCHAR : DataType::BIT;
     }
 
     guint findEvoabField(const rtl::OUString& aColName)
@@ -271,9 +271,7 @@ OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
 }
 
 // -------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORows& SAL_CALL OEvoabDatabaseMetaData::getColumnRows(
-                                         const ::rtl::OUString& /*tableNamePattern*/,
-                                         const ::rtl::OUString& columnNamePattern ) throw(SQLException)
+ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const ::rtl::OUString& columnNamePattern )
 {
     static ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow  aRow(19);
@@ -322,7 +320,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL OEvoabDatabaseMetaData::getColumnRow
             aRow[5] = new ORowSetValueDecorator( static_cast<sal_Int16>( getFieldType( i ) ) );
             aRow[6] = new ORowSetValueDecorator( getFieldTypeName( i ) );
 
-            OSL_TRACE( "   ColumnName = '%s'", g_param_spec_get_name( pFields[i]->pField ) );
+            OSL_TRACE( "ColumnName = '%s'", g_param_spec_get_name( pFields[i]->pField ) );
             // COLUMN_NAME
             aRow[4] = new ORowSetValueDecorator( getFieldName( i ) );
             // ORDINAL_POSITION
@@ -1019,18 +1017,9 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
     static ::rtl::OUString sTableTypes[] =
     {
         ::rtl::OUString::createFromAscii("TABLE"),
-        //m_pConnection->getCurrentTableName(),
-        //
         // Currently we only support a 'TABLE' nothing more complex
-        //
-        // ::rtl::OUString::createFromAscii("VIEW"),
-        // ::rtl::OUString::createFromAscii("SYSTEM TABLE"),
-        // ::rtl::OUString::createFromAscii("GLOBAL TEMPORARY"),
-        // ::rtl::OUString::createFromAscii("LOCAL TEMPORARY"),
-        // ::rtl::OUString::createFromAscii("ALIAS"),
-        // ::rtl::OUString::createFromAscii("SYNONYM")
     };
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
@@ -1043,7 +1032,6 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
         aRow.push_back(new ORowSetValueDecorator(sTableTypes[i]));
 
         // bound row
-        ODatabaseMetaDataResultSet::ORow::iterator aIter = aRow.begin();
         aRows.push_back(aRow);
     }
     // here we set the rows at the resultset
@@ -1076,7 +1064,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         // aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnValue::NULLABLE));
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnSearch::CHAR));
+        aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnSearch::FULL));
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
@@ -1099,14 +1087,14 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern,
+    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*tableNamePattern*/,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
     Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setRows( getColumnRows( tableNamePattern, columnNamePattern ) );
+    pResultSet->setRows( getColumnRows( columnNamePattern ) );
     return xResultSet;
 }
 // -------------------------------------------------------------------------

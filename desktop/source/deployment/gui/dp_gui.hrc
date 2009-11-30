@@ -32,7 +32,8 @@
 #include "helpid.hrc"
 
 // Package Manager Dialog:
-#define RID_DLG_PACKAGE_MANAGER                RID_DEPLOYMENT_GUI_START
+#define RID_DLG_EXTENSION_MANAGER              RID_DEPLOYMENT_GUI_START
+#define RID_DLG_UPDATE_REQUIRED               (RID_DEPLOYMENT_GUI_START + 11)
 
 #define RID_EM_BTN_CLOSE                       10
 #define RID_EM_BTN_HELP                        11
@@ -42,27 +43,9 @@
 #define RID_EM_BTN_CANCEL                      15
 #define RID_EM_FT_GET_EXTENSIONS               20
 #define RID_EM_FT_PROGRESS                     21
+#define RID_EM_FT_MSG                          22
 
 // local RIDs:
-#define RID_FT_PACKAGES                        5
-
-#define RID_BTN_CLOSE                          10
-#define RID_BTN_HELP                           11
-
-#define RID_BTN_ADD                            20
-#define RID_BTN_REMOVE                         21
-#define RID_BTN_ENABLE                         22
-#define RID_BTN_DISABLE                        23
-#define RID_BTN_EXPORT                         24
-#define RID_BTN_CHECK_UPDATES                  25
-#define RID_BTN_OPTIONS                        26
-#define RID_BTN_GET_EXTENSIONS                 27
-
-#define RID_IMG_PLUS                           41
-#define RID_IMG_PLUS_HC                        42
-#define RID_IMG_MINUS                          43
-#define RID_IMG_MINUS_HC                       44
-
 #define PB_LICENSE_DOWN                         50
 #define ML_LICENSE                              51
 #define BTN_LICENSE_DECLINE                     53
@@ -145,18 +128,10 @@
 #define RID_DLG_UPDATE_NOUPDATE             30
 #define RID_DLG_UPDATE_VERSION              31
 
-#define RID_DLG_EXTENSION_MANAGER (RID_DEPLOYMENT_GUI_START + 6)
-
 
 #define RID_DLG_UPDATEINSTALL                  (RID_DEPLOYMENT_GUI_START + 20)
 #define RID_INFOBOX_UPDATE_SHARED_EXTENSION    (RID_DEPLOYMENT_GUI_START + 21)
 
-#define RID_IMG_DEF_INSTALLATION               (RID_DEPLOYMENT_GUI_START+50)
-#define RID_IMG_DEF_INSTALLATION_HC            (RID_DEPLOYMENT_GUI_START+51)
-#define RID_IMG_DEF_DOCUMENT                   (RID_DEPLOYMENT_GUI_START+52)
-#define RID_IMG_DEF_DOCUMENT_HC                (RID_DEPLOYMENT_GUI_START+53)
-#define RID_IMG_DEF_PACKAGE                    (RID_DEPLOYMENT_GUI_START+54)
-#define RID_IMG_DEF_PACKAGE_HC                 (RID_DEPLOYMENT_GUI_START+55)
 #define RID_IMG_WARNING                        (RID_DEPLOYMENT_GUI_START+56)
 #define RID_IMG_WARNING_HC                     (RID_DEPLOYMENT_GUI_START+57)
 #define RID_IMG_LOCKED                         (RID_DEPLOYMENT_GUI_START+58)
@@ -164,39 +139,26 @@
 #define RID_IMG_EXTENSION                      (RID_DEPLOYMENT_GUI_START+60)
 #define RID_IMG_EXTENSION_HC                   (RID_DEPLOYMENT_GUI_START+61)
 
-
-#define RID_STR_USER_INSTALLATION              (RID_DEPLOYMENT_GUI_START+60)
-#define RID_STR_SHARED_INSTALLATION            (RID_DEPLOYMENT_GUI_START+61)
-#define RID_STR_ENABLED                        (RID_DEPLOYMENT_GUI_START+62)
-#define RID_STR_DISABLED                       (RID_DEPLOYMENT_GUI_START+63)
-#define RID_STR_UNKNOWN                        (RID_DEPLOYMENT_GUI_START+64)
-#define RID_STR_PACKAGE                        (RID_DEPLOYMENT_GUI_START+65)
-#define RID_STR_PACKAGE_STATUS                 (RID_DEPLOYMENT_GUI_START+66)
-#define RID_STR_EXTENSION_VERSION              (RID_DEPLOYMENT_GUI_START+67)
-
-
 #define RID_STR_ADD_PACKAGES                   (RID_DEPLOYMENT_GUI_START+70)
-#define RID_STR_EXPORT_PACKAGE                 (RID_DEPLOYMENT_GUI_START+71)
-#define RID_STR_EXPORT_PACKAGES                (RID_DEPLOYMENT_GUI_START+72)
 
-#define RID_CTX_ITEM_ADD                       (RID_DEPLOYMENT_GUI_START+80)
-#define RID_CTX_ITEM_REMOVE                    (RID_DEPLOYMENT_GUI_START+81)
-#define RID_CTX_ITEM_ENABLE                    (RID_DEPLOYMENT_GUI_START+82)
-#define RID_CTX_ITEM_DISABLE                   (RID_DEPLOYMENT_GUI_START+83)
-#define RID_CTX_ITEM_EXPORT                    (RID_DEPLOYMENT_GUI_START+84)
-#define RID_CTX_ITEM_CHECK_UPDATE              (RID_DEPLOYMENT_GUI_START+85)
-#define RID_CTX_ITEM_OPTIONS                   (RID_DEPLOYMENT_GUI_START+86)
+#define RID_CTX_ITEM_REMOVE                    (RID_DEPLOYMENT_GUI_START+80)
+#define RID_CTX_ITEM_ENABLE                    (RID_DEPLOYMENT_GUI_START+81)
+#define RID_CTX_ITEM_DISABLE                   (RID_DEPLOYMENT_GUI_START+82)
+#define RID_CTX_ITEM_CHECK_UPDATE              (RID_DEPLOYMENT_GUI_START+83)
+#define RID_CTX_ITEM_OPTIONS                   (RID_DEPLOYMENT_GUI_START+84)
 
-#define RID_STR_ADDING_PACKAGES                (RID_DEPLOYMENT_GUI_START+90)
-#define RID_STR_REMOVING_PACKAGES              (RID_DEPLOYMENT_GUI_START+91)
-#define RID_STR_ENABLING_PACKAGES              (RID_DEPLOYMENT_GUI_START+92)
-#define RID_STR_DISABLING_PACKAGES             (RID_DEPLOYMENT_GUI_START+93)
-#define RID_STR_EXPORTING_PACKAGES             (RID_DEPLOYMENT_GUI_START+94)
+#define RID_STR_ADDING_PACKAGES                (RID_DEPLOYMENT_GUI_START+85)
+#define RID_STR_REMOVING_PACKAGES              (RID_DEPLOYMENT_GUI_START+86)
+#define RID_STR_ENABLING_PACKAGES              (RID_DEPLOYMENT_GUI_START+87)
+#define RID_STR_DISABLING_PACKAGES             (RID_DEPLOYMENT_GUI_START+88)
 
-#define RID_STR_INSTALL_FOR_ALL                (RID_DEPLOYMENT_GUI_START+95)
-#define RID_STR_INSTALL_FOR_ME                 (RID_DEPLOYMENT_GUI_START+96)
-#define RID_STR_PUBLISHER_LINK                 (RID_DEPLOYMENT_GUI_START+97)
-#define RID_STR_ERROR_UNKNOWN_STATUS           (RID_DEPLOYMENT_GUI_START+98)
+#define RID_STR_INSTALL_FOR_ALL                (RID_DEPLOYMENT_GUI_START+90)
+#define RID_STR_INSTALL_FOR_ME                 (RID_DEPLOYMENT_GUI_START+91)
+#define RID_STR_ERROR_UNKNOWN_STATUS           (RID_DEPLOYMENT_GUI_START+92)
+#define RID_STR_CLOSE_BTN                      (RID_DEPLOYMENT_GUI_START+93)
+#define RID_STR_EXIT_BTN                       (RID_DEPLOYMENT_GUI_START+94)
+#define RID_STR_NO_ADMIN_PRIVILEGE             (RID_DEPLOYMENT_GUI_START+95)
+#define RID_STR_ERROR_MISSING_DEPENDENCIES     (RID_DEPLOYMENT_GUI_START+96)
 
 #define WARNINGBOX_CONCURRENTINSTANCE          (RID_DEPLOYMENT_GUI_START+100)
 

@@ -32,19 +32,14 @@
 #ifndef INCLUDED_DP_GUI_EXTENSIONCMDQUEUE_HXX
 #define INCLUDED_DP_GUI_EXTENSIONCMDQUEUE_HXX
 
-#ifndef _SAL_CONFIG_H_
 #include "sal/config.h"
-#endif
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include "com/sun/star/uno/Reference.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include "com/sun/star/uno/Sequence.hxx"
-#endif
-#ifndef _RTL_REF_HXX_
 #include "rtl/ref.hxx"
-#endif
+
+#include <vector>
+
+#include "dp_gui_updatedata.hxx"
 
 /// @HTML
 
@@ -56,7 +51,7 @@ namespace com { namespace sun { namespace star {
 
 namespace dp_gui {
 
-class ExtMgrDialog;
+class DialogHelper;
 class TheExtensionManager;
 
 /**
@@ -79,7 +74,7 @@ public:
     /**
        Create an instance.
     */
-    ExtensionCmdQueue( ExtMgrDialog * pDialog,
+    ExtensionCmdQueue( DialogHelper * pDialogHelper,
                        TheExtensionManager *pManager,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext);
 
@@ -94,9 +89,7 @@ public:
                           const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
     void enableExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage,
                           const bool bEnable );
-    void checkForUpdates( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > > &rPackageManagers );
-    void checkForUpdate( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &rPackageManager,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
+    void checkForUpdates( const std::vector< TUpdateListEntry > &vList );
     /**
        This call does not block. It signals the internal thread
        that it should install the remaining extensions and then terminate.

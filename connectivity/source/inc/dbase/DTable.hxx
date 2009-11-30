@@ -55,6 +55,7 @@ namespace connectivity
                             dBaseIV          = 0x04,
                             dBaseV           = 0x05,
                             VisualFoxPro     = 0x30,
+                            VisualFoxProAuto = 0x31, // Visual FoxPro w. AutoIncrement field
                             dBaseFS          = 0x43,
                             dBaseFSMemo      = 0xB3,
                             dBaseIIIMemo     = 0x83,
@@ -95,6 +96,7 @@ namespace connectivity
             ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
             ::std::vector<sal_Int32> m_aPrecisions; // same as aboth
             ::std::vector<sal_Int32> m_aScales;
+            ::std::vector<sal_Int32> m_aRealFieldLengths;
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;

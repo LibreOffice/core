@@ -164,11 +164,11 @@ CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
     CellContentType eCellType = xCell->getType();
     if ( eCellType == CellContentType_FORMULA )
     {
+        static const ::rtl::OUString s_sFormulaResultType(RTL_CONSTASCII_USTRINGPARAM("FormulaResultType"));
         Reference<XPropertySet> xProp( xCell, UNO_QUERY );
         try
         {
-            static ::rtl::OUString s_FormulaResultType(RTL_CONSTASCII_USTRINGPARAM("FormulaResultType"));
-            xProp->getPropertyValue( s_FormulaResultType ) >>= eCellType;       // type of formula result
+            xProp->getPropertyValue( s_sFormulaResultType ) >>= eCellType;      // type of formula result
         }
         catch (UnknownPropertyException&)
         {
@@ -346,101 +346,101 @@ void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
     const Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, nDocRow );
     if ( xCell.is() )
     {
-        if ( DataType::VARCHAR == nType )
+        CellContentType eCellType = lcl_GetContentOrResultType( xCell );
+        switch (nType)
         {
-            // no difference between empty cell and empty string in spreadsheet
-            const Reference<XText> xText( xCell, UNO_QUERY );
-            if ( xText.is() )
-                rValue = xText->getString();
-        }
-        else
-        {
-            CellContentType eCellType = lcl_GetContentOrResultType( xCell );
-            switch (nType)
-            {
-                case DataType::DECIMAL:
-                    if ( eCellType == CellContentType_VALUE )
-                        rValue = xCell->getValue();         // double
-                    else
-                        rValue.setNull();
-                    break;
-                case DataType::BIT:
-                    if ( eCellType == CellContentType_VALUE )
-                        rValue = (sal_Bool)( xCell->getValue() != 0.0 );
-                    else
-                        rValue.setNull();
-                    break;
-                case DataType::DATE:
-                    if ( eCellType == CellContentType_VALUE )
+            case DataType::VARCHAR:
+                if ( eCellType == CellContentType_TEXT )
+                {
+                    const Reference<XText> xText( xCell, UNO_QUERY );
+                    if ( xText.is() )
+                        rValue = xText->getString();
+                } // if ( eCellType == CellContentType_TEXT )
+                else
+                    rValue.setNull();
+                break;
+            case DataType::DECIMAL:
+                if ( eCellType == CellContentType_VALUE )
+                    rValue = xCell->getValue();         // double
+                else
+                    rValue.setNull();
+                break;
+            case DataType::BIT:
+                if ( eCellType == CellContentType_VALUE )
+                    rValue = (sal_Bool)( xCell->getValue() != 0.0 );
+                else
+                    rValue.setNull();
+                break;
+            case DataType::DATE:
+                if ( eCellType == CellContentType_VALUE )
+                {
+                    ::Date aDate( rNullDate );
+                    aDate += (long)::rtl::math::approxFloor( xCell->getValue() );
+                    ::com::sun::star::util::Date aDateStruct( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
+                    rValue = aDateStruct;
+                }
+                else
+                    rValue.setNull();
+                break;
+            case DataType::TIME:
+                if ( eCellType == CellContentType_VALUE )
+                {
+                    double fCellVal = xCell->getValue();
+                    double fTime = fCellVal - rtl::math::approxFloor( fCellVal );
+                    long nIntTime = (long)rtl::math::round( fTime * 8640000.0 );
+                    if ( nIntTime == 8640000 )
+                        nIntTime = 0;                       // 23:59:59.995 and above is 00:00:00.00
+                    ::com::sun::star::util::Time aTime;
+                    aTime.HundredthSeconds = (sal_uInt16)( nIntTime % 100 );
+                    nIntTime /= 100;
+                    aTime.Seconds = (sal_uInt16)( nIntTime % 60 );
+                    nIntTime /= 60;
+                    aTime.Minutes = (sal_uInt16)( nIntTime % 60 );
+                    nIntTime /= 60;
+                    OSL_ENSURE( nIntTime < 24, "error in time calculation" );
+                    aTime.Hours = (sal_uInt16) nIntTime;
+                    rValue = aTime;
+                }
+                else
+                    rValue.setNull();
+                break;
+            case DataType::TIMESTAMP:
+                if ( eCellType == CellContentType_VALUE )
+                {
+                    double fCellVal = xCell->getValue();
+                    double fDays = ::rtl::math::approxFloor( fCellVal );
+                    double fTime = fCellVal - fDays;
+                    long nIntDays = (long)fDays;
+                    long nIntTime = (long)::rtl::math::round( fTime * 8640000.0 );
+                    if ( nIntTime == 8640000 )
                     {
-                        ::Date aDate( rNullDate );
-                        aDate += (long)::rtl::math::approxFloor( xCell->getValue() );
-                        ::com::sun::star::util::Date aDateStruct( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
-                        rValue = aDateStruct;
+                        nIntTime = 0;                       // 23:59:59.995 and above is 00:00:00.00
+                        ++nIntDays;                         // (next day)
                     }
-                    else
-                        rValue.setNull();
-                    break;
-                case DataType::TIME:
-                    if ( eCellType == CellContentType_VALUE )
-                    {
-                        double fCellVal = xCell->getValue();
-                        double fTime = fCellVal - rtl::math::approxFloor( fCellVal );
-                        long nIntTime = (long)rtl::math::round( fTime * 8640000.0 );
-                        if ( nIntTime == 8640000 )
-                            nIntTime = 0;                       // 23:59:59.995 and above is 00:00:00.00
-                        ::com::sun::star::util::Time aTime;
-                        aTime.HundredthSeconds = (sal_uInt16)( nIntTime % 100 );
-                        nIntTime /= 100;
-                        aTime.Seconds = (sal_uInt16)( nIntTime % 60 );
-                        nIntTime /= 60;
-                        aTime.Minutes = (sal_uInt16)( nIntTime % 60 );
-                        nIntTime /= 60;
-                        OSL_ENSURE( nIntTime < 24, "error in time calculation" );
-                        aTime.Hours = (sal_uInt16) nIntTime;
-                        rValue = aTime;
-                    }
-                    else
-                        rValue.setNull();
-                    break;
-                case DataType::TIMESTAMP:
-                    if ( eCellType == CellContentType_VALUE )
-                    {
-                        double fCellVal = xCell->getValue();
-                        double fDays = ::rtl::math::approxFloor( fCellVal );
-                        double fTime = fCellVal - fDays;
-                        long nIntDays = (long)fDays;
-                        long nIntTime = (long)::rtl::math::round( fTime * 8640000.0 );
-                        if ( nIntTime == 8640000 )
-                        {
-                            nIntTime = 0;                       // 23:59:59.995 and above is 00:00:00.00
-                            ++nIntDays;                         // (next day)
-                        }
 
-                        ::com::sun::star::util::DateTime aDateTime;
+                    ::com::sun::star::util::DateTime aDateTime;
 
-                        aDateTime.HundredthSeconds = (sal_uInt16)( nIntTime % 100 );
-                        nIntTime /= 100;
-                        aDateTime.Seconds = (sal_uInt16)( nIntTime % 60 );
-                        nIntTime /= 60;
-                        aDateTime.Minutes = (sal_uInt16)( nIntTime % 60 );
-                        nIntTime /= 60;
-                        OSL_ENSURE( nIntTime < 24, "error in time calculation" );
-                        aDateTime.Hours = (sal_uInt16) nIntTime;
+                    aDateTime.HundredthSeconds = (sal_uInt16)( nIntTime % 100 );
+                    nIntTime /= 100;
+                    aDateTime.Seconds = (sal_uInt16)( nIntTime % 60 );
+                    nIntTime /= 60;
+                    aDateTime.Minutes = (sal_uInt16)( nIntTime % 60 );
+                    nIntTime /= 60;
+                    OSL_ENSURE( nIntTime < 24, "error in time calculation" );
+                    aDateTime.Hours = (sal_uInt16) nIntTime;
 
-                        ::Date aDate( rNullDate );
-                        aDate += nIntDays;
-                        aDateTime.Day = aDate.GetDay();
-                        aDateTime.Month = aDate.GetMonth();
-                        aDateTime.Year = aDate.GetYear();
+                    ::Date aDate( rNullDate );
+                    aDate += nIntDays;
+                    aDateTime.Day = aDate.GetDay();
+                    aDateTime.Month = aDate.GetMonth();
+                    aDateTime.Year = aDate.GetYear();
 
-                        rValue = aDateTime;
-                    }
-                    else
-                        rValue.setNull();
-                    break;
-            } // switch (nType)
-        }
+                    rValue = aDateTime;
+                }
+                else
+                    rValue.setNull();
+                break;
+        } // switch (nType)
     }
 
 //  rValue.setTypeKind(nType);

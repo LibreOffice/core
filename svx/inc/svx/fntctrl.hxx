@@ -71,6 +71,7 @@ public:
     SvxFont&            GetCJKFont();
     SvxFont&            GetCTLFont();
     void                SetColor( const Color& rColor );
+    void                ResetColor();
     void                SetBackColor( const Color& rColor );
     void                UseResourceText( BOOL bUse = TRUE );
     void                Paint( const Rectangle& );

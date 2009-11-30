@@ -831,7 +831,11 @@
 #define SID_OFASLOTS_START                              ( SID_SVX_START + 425 )
 //#define SID_SD_AUTOPILOT                                ( SID_SVX_START + 425 )   -> sfxsids.hrc
 #define SID_AUTOPILOT                                       SID_SD_AUTOPILOT
-// 4 defines of Writer's old wizards have been removed here
+
+#define SID_TABLE_INSERT_COL_DLG                        ( SID_SVX_START + 426 )
+#define SID_TABLE_INSERT_ROW_DLG                        ( SID_SVX_START + 427 )
+#define SID_TABLE_PARAM_INSERT_AFTER                    ( SID_SVX_START + 428 )
+
 #define SID_TABLEDESIGN                                 ( SID_SVX_START + 429 )
 #define SID_MN_AUTOPILOT                                ( SID_SVX_START + 430 )
 #define SID_GENERAL_OPTIONS                             ( SID_SVX_START + 432 )

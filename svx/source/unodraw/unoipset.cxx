@@ -54,175 +54,10 @@ using namespace ::rtl;
 
 //----------------------------------------------------------------------
 
-struct SfxItemPropertyMapHash
+struct SfxItemPropertyMapEntryHash
 {
-    size_t operator()(const SfxItemPropertyMap* pMap) const { return (size_t)pMap; }
+    size_t operator()(const SfxItemPropertyMapEntry* pMap) const { return (size_t)pMap; }
 };
-
-class SvxInfoSetCache;
-
-class SvxCachedItemPropertySetInfo : public SfxItemPropertySetInfo
-{
-private:
-    SvxInfoSetCache*    mpCache;
-
-public:
-    SvxCachedItemPropertySetInfo(const SfxItemPropertyMap *pMap, SvxInfoSetCache* pCache );
-    virtual void SAL_CALL release() throw ();
-};
-
-/** this class caches the created XPropertySetInfo objects for each different
-    SfxItemPropertyMap pointer. This class can't be used with dynamicly created
-    SfxItemPropertyMaps!
-*/
-
-class SvxInfoSetCache
-{
-private:
-    typedef std::hash_map< const SfxItemPropertyMap*, uno::Reference< beans::XPropertySetInfo >,  SfxItemPropertyMapHash > InfoMap;
-    typedef std::hash_map< const SfxItemPropertyMap*, const SfxItemPropertyMap*,  SfxItemPropertyMapHash > PropertyMap;
-
-    InfoMap maInfoMap;
-    PropertyMap maPropertyMap;
-
-    static ::osl::Mutex maMutex;
-    static SvxInfoSetCache* mpGlobalCache;
-
-    SvxInfoSetCache() {};
-    ~SvxInfoSetCache() {};
-public:
-    static uno::Reference< beans::XPropertySetInfo > getCachedPropertySetInfo( const SfxItemPropertyMap* pMap );
-    static const SfxItemPropertyMap* getSortedPropertyMap( const SfxItemPropertyMap* pMap );
-
-    void dispose( SvxCachedItemPropertySetInfo* pInfo );
-};
-
-SvxCachedItemPropertySetInfo::SvxCachedItemPropertySetInfo(const SfxItemPropertyMap *pMap, SvxInfoSetCache* pCache )
-: SfxItemPropertySetInfo( pMap ), mpCache( pCache )
-{
-}
-
-void SAL_CALL SvxCachedItemPropertySetInfo::release() throw ()
-{
-    SvxInfoSetCache* pCache = mpCache;
-    if( pCache && m_refCount == 2 )
-    {
-        mpCache = NULL;
-        pCache->dispose( this );
-    }
-    SfxItemPropertySetInfo::release();
-}
-
-::osl::Mutex SvxInfoSetCache::maMutex;
-SvxInfoSetCache* SvxInfoSetCache::mpGlobalCache = NULL;
-
-uno::Reference< beans::XPropertySetInfo > SvxInfoSetCache::getCachedPropertySetInfo( const SfxItemPropertyMap* pMap )
-{
-    ::osl::MutexGuard aGuard(maMutex);
-
-    if( NULL == mpGlobalCache )
-        mpGlobalCache = new SvxInfoSetCache();
-
-    InfoMap::iterator aIt(mpGlobalCache->maInfoMap.find(pMap));
-    if (aIt != mpGlobalCache->maInfoMap.end())
-        return aIt->second.get();
-
-    uno::Reference< beans::XPropertySetInfo > xInfo( new SvxCachedItemPropertySetInfo( pMap, mpGlobalCache ) );
-    mpGlobalCache->maInfoMap.insert(InfoMap::value_type(pMap,xInfo));
-
-    /* if this assertion is triggered this class is possible used with dynamicly created
-       SfxItemPropertyMap pointers. This will cause a cache overflow as the current
-       implementation is designed for a limited number of different SfxItemPropertyMap
-       pointers */
-    DBG_ASSERT( mpGlobalCache->maInfoMap.size() < 200, "WARNING: SvxInfoSetCache::get(), possible cache overflow!" );
-
-    return xInfo;
-}
-
-/** removes a cached property set info from the cache. This is called by the property set
-    info when its refcount goes to 1, meaning the cache holds the last reference to the
-    info
-*/
-void SvxInfoSetCache::dispose( SvxCachedItemPropertySetInfo* pInfo )
-{
-    if( pInfo )
-    {
-        ::osl::MutexGuard aGuard(maMutex);
-
-        InfoMap::iterator aIt(mpGlobalCache->maInfoMap.find(pInfo->getMap()));
-        if (aIt != mpGlobalCache->maInfoMap.end())
-        {
-            mpGlobalCache->maInfoMap.erase( aIt );
-        }
-    }
-}
-
-inline bool greater_size_pmap( const SfxItemPropertyMap* pFirst,
-                              const SfxItemPropertyMap* pSecond )
-{
-    return strcmp( pFirst->pName, pSecond->pName ) < 0;
-}
-
-
-const SfxItemPropertyMap* SvxInfoSetCache::getSortedPropertyMap( const SfxItemPropertyMap* pMap )
-{
-    ::osl::MutexGuard aGuard(maMutex);
-
-    if( NULL == mpGlobalCache )
-        mpGlobalCache = new SvxInfoSetCache();
-
-    const SfxItemPropertyMap* pSortedMap = NULL;
-    PropertyMap::iterator aIt( mpGlobalCache->maPropertyMap.find(pMap) );
-    if (aIt != mpGlobalCache->maPropertyMap.end())
-        pSortedMap = aIt->second;
-
-    if( NULL == pSortedMap )
-    {
-        // count the entries in the map
-        std::vector< const SfxItemPropertyMap * >::size_type nCount = 0;
-        const SfxItemPropertyMap* pTempMap = pMap;
-        while( pTempMap->pName )
-        {
-            pTempMap++;
-            nCount++;
-        }
-
-        // fill a stl vector with the entry pointers
-        std::vector< const SfxItemPropertyMap * > aMap( nCount );
-        std::vector< const SfxItemPropertyMap * >::iterator aIter( aMap.begin() );
-
-        pTempMap = pMap;
-        while( pTempMap->pName )
-            *aIter++ = pTempMap++;
-
-        // sort the vector
-        std::sort( aMap.begin(), aMap.end(), greater_size_pmap );
-
-        // create a new map
-        pSortedMap = new SfxItemPropertyMap[nCount+1];
-        pTempMap = pSortedMap;
-
-        // copy the sorted entries to a new map
-        aIter = aMap.begin();
-        while( aIter != aMap.end() )
-        {
-            memcpy( (void*)pTempMap, *aIter++, sizeof( SfxItemPropertyMap ) );
-            pTempMap++;
-        }
-
-        ((SfxItemPropertyMap*)pTempMap)->pName = NULL;
-
-        mpGlobalCache->maPropertyMap[pMap] = pSortedMap;
-
-        /* if this assertion is triggered this class is possible used with dynamicly created
-           SfxItemPropertyMap pointers. This will cause a cache overflow as the current
-           implementation is designed for a limited number of different SfxItemPropertyMap
-           pointers */
-        DBG_ASSERT( mpGlobalCache->maPropertyMap.size() < 200, "WARNING: SvxInfoSetCache::get(), possible cache overflow!" );
-    }
-
-    return pSortedMap;
-}
 
 //----------------------------------------------------------------------
 
@@ -234,10 +69,10 @@ struct SvxIDPropertyCombine
 
 DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * )
 
-SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMap* pMap, sal_Bool bConvertTwips )
-:   _pMap(SvxInfoSetCache::getSortedPropertyMap(pMap)), mbConvertTwips(bConvertTwips)
+SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, sal_Bool bConvertTwips )
+:   m_aPropertyMap( pMap ),
+    _pMap(pMap), mbConvertTwips(bConvertTwips)
 {
-    mpLastMap = NULL;
     pCombiList = NULL;
 }
 
@@ -285,55 +120,46 @@ void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 }
 
 //----------------------------------------------------------------------
-void SvxItemPropertySet::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet,
-  SfxItemSet& rSet, uno::Reference< beans::XPropertySet > xSet )
+void SvxItemPropertySet::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet,
+  SfxItemSet& rSet, uno::Reference< beans::XPropertySet > xSet ) const
 {
     if(rPropSet.AreThereOwnUsrAnys())
     {
         const SfxItemPropertyMap* pSrc = rPropSet.getPropertyMap();
-        const SfxItemPropertyMap* pDst = _pMap;
-        while(pSrc->pName)
+        PropertyEntryVector_t aSrcPropVector = pSrc->getPropertyEntries();
+        PropertyEntryVector_t::const_iterator aSrcIt = aSrcPropVector.begin();
+        while(aSrcIt != aSrcPropVector.end())
         {
-            if(pSrc->nWID)
+            if(aSrcIt->nWID)
             {
-                uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(pSrc->nWID);
+                uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(aSrcIt->nWID);
                 if(pUsrAny)
                 {
                     // Aequivalenten Eintrag in pDst suchen
-                    const SfxItemPropertyMap* pTmp = pDst;
-                    int nDiff = strcmp( pSrc->pName, pTmp->pName );
-                    while(nDiff > 0)
+                    const SfxItemPropertySimpleEntry* pEntry = m_aPropertyMap.getByName( aSrcIt->sName );
+                    if(pEntry)
                     {
-                        pTmp++;
-                        nDiff = strcmp( pSrc->pName, pTmp->pName );
-                    }
-
-                    if(nDiff == 0)
-                    {
-                        // Eintrag gefunden
-                        pDst = pTmp;
-
-                        if(pDst->nWID >= OWN_ATTR_VALUE_START && pDst->nWID <= OWN_ATTR_VALUE_END)
+                        // entry found
+                        if(pEntry->nWID >= OWN_ATTR_VALUE_START && pEntry->nWID <= OWN_ATTR_VALUE_END)
                         {
                             // Special ID im PropertySet, kann nur direkt am
                             // Objekt gesetzt werden+
-                            OUString aName( OUString::createFromAscii( pDst->pName ) );
-                            xSet->setPropertyValue( aName, *pUsrAny);
+                            xSet->setPropertyValue( aSrcIt->sName, *pUsrAny);
                         }
                         else
                         {
-                            if(rSet.GetPool()->IsWhich(pDst->nWID))
-                                rSet.Put(rSet.GetPool()->GetDefaultItem(pDst->nWID));
+                            if(rSet.GetPool()->IsWhich(pEntry->nWID))
+                                rSet.Put(rSet.GetPool()->GetDefaultItem(pEntry->nWID));
 
                             // setzen
-                            setPropertyValue(pDst, *pUsrAny, rSet);
+                            setPropertyValue(pEntry, *pUsrAny, rSet);
                         }
                     }
                 }
             }
 
-            // Naechster Eintrag
-            pSrc++;
+            // next entry
+            ++aSrcIt;
         }
     }
 }
@@ -363,7 +189,7 @@ sal_Bool SvxUnoCheckForConversion( const SfxItemSet&, sal_Int32 nWID, const uno:
 }
 
 //----------------------------------------------------------------------
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, const SfxItemSet& rSet ) const
+uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet ) const
 {
     uno::Any aVal;
     if(!pMap || !pMap->nWID)
@@ -419,7 +245,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, c
 }
 
 //----------------------------------------------------------------------
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const uno::Any& rVal, SfxItemSet& rSet ) const
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet ) const
 {
     if(!pMap || !pMap->nWID)
         return;
@@ -475,7 +301,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
 }
 
 //----------------------------------------------------------------------
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) const
+uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const
 {
     // Schon ein Wert eingetragen? Dann schnell fertig
     uno::Any* pUsrAny = GetUsrAnyForID(pMap->nWID);
@@ -535,7 +361,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
 
 //----------------------------------------------------------------------
 
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const uno::Any& rVal ) const
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal ) const
 {
     uno::Any* pUsrAny = GetUsrAnyForID(pMap->nWID);
     if(!pUsrAny)
@@ -546,46 +372,18 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
 
 //----------------------------------------------------------------------
 
-const SfxItemPropertyMap* SvxItemPropertySet::getPropertyMapEntry(const OUString &rName) const
+const SfxItemPropertySimpleEntry* SvxItemPropertySet::getPropertyMapEntry(const OUString &rName) const
 {
-    const SfxItemPropertyMap* pMap = mpLastMap ? mpLastMap : _pMap;
-    while ( pMap->pName )
-    {
-        if( rName.equalsAsciiL( pMap->pName, pMap->nNameLen ) )
-        {
-            const_cast<SvxItemPropertySet*>(this)->mpLastMap = pMap + 1;
-            if( NULL == mpLastMap->pName )
-                const_cast<SvxItemPropertySet*>(this)->mpLastMap = NULL;
-
-            return pMap;
-        }
-        ++pMap;
-    }
-
-    if( mpLastMap == NULL )
-        return 0;
-
-    pMap = _pMap;
-    while ( pMap->pName && (_pMap != mpLastMap) )
-    {
-        if( rName.equalsAsciiL( pMap->pName, pMap->nNameLen ) )
-        {
-            const_cast<SvxItemPropertySet*>(this)->mpLastMap = pMap + 1;
-            if( NULL == mpLastMap->pName )
-                const_cast<SvxItemPropertySet*>(this)->mpLastMap = NULL;
-            return pMap;
-        }
-        ++pMap;
-    }
-
-    return 0;
-}
+    return m_aPropertyMap.getByName( rName );
+ }
 
 //----------------------------------------------------------------------
 
 uno::Reference< beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInfo() const
 {
-    return SvxInfoSetCache::getCachedPropertySetInfo( _pMap );
+    if( !m_xInfo.is() )
+        m_xInfo = new SfxItemPropertySetInfo( &m_aPropertyMap );
+    return m_xInfo;
 }
 
 //----------------------------------------------------------------------

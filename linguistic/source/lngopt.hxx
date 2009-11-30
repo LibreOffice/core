@@ -132,7 +132,7 @@ class LinguProps :
     ::cppu::OInterfaceContainerHelper           aEvtListeners;
     OPropertyListenerContainerHelper            aPropListeners;
 
-    SfxItemPropertyMap                         *pMap;
+    SfxItemPropertyMap                          aPropertyMap;
     SvtLinguConfig                              aConfig;
 
     BOOL                                        bDisposing;

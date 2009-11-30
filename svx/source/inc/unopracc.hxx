@@ -48,7 +48,7 @@ class SvxAccessibleTextPropertySet : public SvxUnoTextRangeBase,
                                      public ::cppu::OWeakObject
 {
 public:
-    SvxAccessibleTextPropertySet( const SvxEditSource*, const SfxItemPropertyMap* );
+    SvxAccessibleTextPropertySet( const SvxEditSource*, const SvxItemPropertySet* );
     virtual ~SvxAccessibleTextPropertySet() throw();
 
     // XTextRange

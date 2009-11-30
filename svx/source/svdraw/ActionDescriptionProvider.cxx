@@ -80,6 +80,6 @@
 
     XubString aStr(ImpGetResStr(nResID));
     XubString aName(rObjectName);
-    aStr.SearchAndReplaceAscii("%O", aName);
+    aStr.SearchAndReplaceAscii("%1", aName);
     return rtl::OUString(aStr);
 }

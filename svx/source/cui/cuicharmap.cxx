@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: cuicharmap.cxx,v $
- * $Revision: 1.10 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -405,6 +402,11 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
     USHORT nPos = aFontLB.GetSelectEntryPos(),
         nFont = (USHORT)(ULONG)aFontLB.GetEntryData( nPos );
     aFont = mpDialog->GetDevFont( nFont );
+    aFont.SetWeight( WEIGHT_DONTKNOW );
+    aFont.SetItalic( ITALIC_NONE );
+    aFont.SetWidthType( WIDTH_DONTKNOW );
+    aFont.SetPitch( PITCH_DONTKNOW );
+    aFont.SetFamily( FAMILY_DONTKNOW );
 
     // notify children using this font
     aShowSet.SetFont( aFont );

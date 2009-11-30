@@ -41,6 +41,7 @@
 #define BTN_PASSCRT_OK 7
 #define BTN_PASSCRT_HELP 8
 #define FT_PASSWORD_CRT          9
+#define FT_MSPASSWORD_WARNING 10
 
 
 #endif // UUI_PASSCRTDLG_HRC

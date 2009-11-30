@@ -2106,7 +2106,10 @@ namespace drawinglayer
                        mpOutputDevice->Push(PUSH_MAPMODE);
                     mpOutputDevice->SetMapMode(maOriginalMapMode);
 
-                    if(!renderChartPrimitive2D(rChartPrimitive, *mpOutputDevice))
+                    if(!renderChartPrimitive2D(
+                        rChartPrimitive,
+                        *mpOutputDevice,
+                        getViewInformation2D()))
                     {
                         // fallback to decomposition (MetaFile)
                         process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));

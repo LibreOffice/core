@@ -93,8 +93,8 @@ using namespace ::com::sun::star::beans;
                         ::rtl::OUString aTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
                         sal_Int32 nIndex = (sal_Int32)-1;
-                        ::rtl::OUString sQuot(RTL_CONSTASCII_USTRINGPARAM("\'"));
-                        ::rtl::OUString sQuotToReplace(RTL_CONSTASCII_USTRINGPARAM("\'\'"));
+                        const ::rtl::OUString sQuot(RTL_CONSTASCII_USTRINGPARAM("\'"));
+                        const ::rtl::OUString sQuotToReplace(RTL_CONSTASCII_USTRINGPARAM("\'\'"));
                         do
                         {
                             nIndex += 2;

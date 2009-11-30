@@ -34,6 +34,7 @@
 #include <rsc/rscsfx.hxx>
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 
 class EditEngine;
 class ImpEditEngine;
@@ -242,6 +243,9 @@ public:
     void            ChangeFontSize( bool bGrow, const FontList* pList );
 
     static bool ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFontList );
+
+    String          GetSurroundingText() const;
+    Selection       GetSurroundingTextSelection() const;
 };
 
 #endif // _MyEDITVIEW_HXX

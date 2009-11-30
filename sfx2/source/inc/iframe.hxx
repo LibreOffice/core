@@ -65,7 +65,7 @@ class IFrameObject : public ::cppu::WeakImplHelper6 <
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > mxFact;
     com::sun::star::uno::Reference < com::sun::star::frame::XFrame > mxFrame;
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxObj;
-    SfxItemPropertySet  maPropSet;
+    SfxItemPropertyMap  maPropMap;
     SfxFrameDescriptor  maFrmDescr;
 
                         IFrameObject( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rFact );

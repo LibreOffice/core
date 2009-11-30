@@ -295,32 +295,6 @@ const Rectangle& SdrObjGroup::GetSnapRect() const
     // <--
 }
 
-SdrObject* SdrObjGroup::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if (pSub->GetObjCount()!=0) {
-        return pSub->CheckHit(rPnt,nTol,pVisiLayer);
-    } else { // ansonsten ist es eine leere Gruppe
-        if(!pVisiLayer || pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-        {
-            Rectangle aAussen(aOutRect);
-            aAussen.Top()   -=nTol;
-            aAussen.Left()  -=nTol;
-            aAussen.Bottom()+=nTol;
-            aAussen.Right() +=nTol;
-            nTol++;
-            Rectangle aInnen(aOutRect);
-            aInnen.Top()   +=nTol;
-            aInnen.Left()  +=nTol;
-            aInnen.Bottom()-=nTol;
-            aInnen.Right() -=nTol;
-            if (aAussen.IsInside(rPnt) && !aInnen.IsInside(rPnt)) {
-                return (SdrObject*)this;
-            }
-        }
-    }
-    return NULL;
-}
-
 void SdrObjGroup::operator=(const SdrObject& rObj)
 {
     if(rObj.IsGroupObject())

@@ -150,6 +150,12 @@ public:
 
     const ::com::sun::star::uno::Any& get() const { return m_aContent; }
 
+    void    clear()
+    {
+        m_aContent.clear();
+        m_eType = UNDEFINED;
+    }
+
 protected:
     void implDetermineType();
 };

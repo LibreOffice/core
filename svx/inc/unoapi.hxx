@@ -111,7 +111,8 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
     SfxItemPropertyMap, the search in the map is not done via bsearch, but by
     linear search.
  */
-SVX_DLLPUBLIC sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName );
+// os: unused function
+//SVX_DLLPUBLIC sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName );
 
 /** converts the given any with a metric to 100th/mm if needed */
 void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw();

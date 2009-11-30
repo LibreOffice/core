@@ -71,9 +71,12 @@ SLOFILES = \
     $(SLO)$/MQuery.obj			            \
     $(SLO)$/MTypeConverter.obj              \
     $(SLO)$/MNameMapper.obj					\
-    $(SLO)$/MNSMozabProxy.obj	\
-    $(SLO)$/MNSTerminateListener.obj
+    $(SLO)$/MNSMozabProxy.obj	            \
+    $(SLO)$/MNSTerminateListener.obj        \
+    $(SLO)$/MLdapAttributeMap.obj           \
     
+
+CDEFS     += -DMOZILLA_INTERNAL_API
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -154,7 +157,7 @@ CFLAGS +=   -fPIC
 CFLAGSCXX += \
             -fno-rtti -Wconversion -Wpointer-arith \
             -Wcast-align -Woverloaded-virtual -Wsynth \
-            -Wno-long-long
+            -Wno-long-long -Wno-deprecated
 CDEFS     += -DTRACING
 .ENDIF
 .ENDIF

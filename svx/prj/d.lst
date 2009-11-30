@@ -218,6 +218,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\svdedtv.hxx %_DEST%\inc%_EXT%\svx\svdedtv.hxx
 ..\inc\svx\svdedxv.hxx %_DEST%\inc%_EXT%\svx\svdedxv.hxx
 ..\inc\svx\svdetc.hxx %_DEST%\inc%_EXT%\svx\svdetc.hxx
+..\inc\svx\sdrhittesthelper.hxx %_DEST%\inc%_EXT%\svx\sdrhittesthelper.hxx
 ..\inc\svx\svdglev.hxx %_DEST%\inc%_EXT%\svx\svdglev.hxx
 ..\inc\svx\svdglue.hxx %_DEST%\inc%_EXT%\svx\svdglue.hxx
 ..\inc\svx\svdhdl.hxx %_DEST%\inc%_EXT%\svx\svdhdl.hxx
@@ -254,7 +255,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\svdpoev.hxx %_DEST%\inc%_EXT%\svx\svdpoev.hxx
 ..\inc\svx\svdpool.hxx %_DEST%\inc%_EXT%\svx\svdpool.hxx
 ..\inc\svx\svdsnpv.hxx %_DEST%\inc%_EXT%\svx\svdsnpv.hxx
-..\inc\svdtouch.hxx %_DEST%\inc%_EXT%\svx\svdtouch.hxx
 ..\inc\svx\svdtrans.hxx %_DEST%\inc%_EXT%\svx\svdtrans.hxx
 ..\inc\svx\svdundo.hxx %_DEST%\inc%_EXT%\svx\svdundo.hxx
 ..\inc\svx\svdoutl.hxx %_DEST%\inc%_EXT%\svx\svdoutl.hxx
@@ -324,6 +324,8 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\unopage.hxx %_DEST%\inc%_EXT%\svx\unopage.hxx
 ..\inc\svx\unoprnms.hxx %_DEST%\inc%_EXT%\svx\unoprnms.hxx
 ..\inc\svx\unoshape.hxx %_DEST%\inc%_EXT%\svx\unoshape.hxx
+..\inc\svx\shapepropertynotifier.hxx %_DEST%\inc%_EXT%\svx\shapepropertynotifier.hxx
+..\inc\svx\shapeproperty.hxx %_DEST%\inc%_EXT%\svx\shapeproperty.hxx
 ..\inc\unoshcol.hxx %_DEST%\inc%_EXT%\svx\unoshcol.hxx
 ..\inc\svx\unoipset.hxx %_DEST%\inc%_EXT%\svx\unoipset.hxx
 ..\inc\svx\unoprov.hxx %_DEST%\inc%_EXT%\svx\unoprov.hxx
@@ -591,11 +593,9 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
 ..\inc\svx\sdr\overlay\overlayanimatedbitmapex.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayanimatedbitmapex.hxx
-..\inc\svx\sdr\overlay\overlaybitmap.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaybitmap.hxx
 ..\inc\svx\sdr\overlay\overlaybitmapex.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaybitmapex.hxx
 ..\inc\svx\sdr\overlay\overlayline.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayline.hxx
 ..\inc\svx\sdr\overlay\overlayhelpline.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayhelpline.hxx
-..\inc\svx\sdr\overlay\overlaylinestriped.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaylinestriped.hxx
 ..\inc\svx\sdr\overlay\overlaymanager.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaymanager.hxx
 ..\inc\svx\sdr\overlay\overlaymanagerbuffered.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaymanagerbuffered.hxx
 ..\inc\svx\sdr\overlay\overlayobject.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobject.hxx
@@ -603,7 +603,8 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
 ..\inc\svx\sdr\overlay\overlaytriangle.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaytriangle.hxx
 ..\inc\svx\sdr\overlay\overlaypolypolygon.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaypolypolygon.hxx
 ..\inc\svx\sdr\overlay\overlayobjectcell.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobjectcell.hxx
-..\inc\svx\sdr\overlay\overlaysdrobject.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaysdrobject.hxx
+..\inc\svx\sdr\overlay\overlayprimitive2dsequenceobject.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayprimitive2dsequenceobject.hxx
+..\inc\svx\sdr\overlay\overlaytools.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaytools.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
 ..\inc\svx\sdr\animation\ainfographic.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfographic.hxx

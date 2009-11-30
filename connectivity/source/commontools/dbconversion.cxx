@@ -40,7 +40,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-
+#include <rtl/ustrbuf.hxx>
 
 #define MAX_DAYS    3636532
 
@@ -96,13 +96,13 @@ namespace dbtools
     ::rtl::OUString DBTypeConversion::toDateTimeString(const DateTime& _rDateTime)
     {
         Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
-        ::rtl::OUString aTemp(toDateString(aDate));
-        aTemp += ::rtl::OUString::createFromAscii(" ");
+        ::rtl::OUStringBuffer aTemp(toDateString(aDate));
+        aTemp.appendAscii(" ");
         Time aTime(0,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
-        aTemp += toTimeString(aTime);
-        aTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-        aTemp += ::rtl::OUString::valueOf(static_cast<sal_Int32>(_rDateTime.HundredthSeconds));
-        return  aTemp;
+        aTemp.append(toTimeString(aTime));
+        aTemp.appendAscii(".");
+        aTemp.append(static_cast<sal_Int32>(_rDateTime.HundredthSeconds));
+        return  aTemp.makeStringAndClear();
     }
     //------------------------------------------------------------------------------
     Date DBTypeConversion::toDate(sal_Int32 _nVal)

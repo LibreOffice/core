@@ -862,8 +862,20 @@ uno::Any SAL_CALL Content::execute(
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
-    // @@@ Implement logic to abort running commands, if this makes
-    //     sense for your conten.t
+    try
+        {
+            std::auto_ptr< DAVResourceAccess > xResAccess;
+            {
+                osl::MutexGuard aGuard( m_aMutex );
+                xResAccess.reset(
+                    new DAVResourceAccess( *m_xResAccess.get() ) );
+            }
+            xResAccess->ABORT();
+        }
+        catch ( DAVException const & /*e*/ )
+        {
+            // ABORT command failed!
+        }
 }
 
 //=========================================================================

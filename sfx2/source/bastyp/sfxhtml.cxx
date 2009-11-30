@@ -37,7 +37,6 @@
 #include <sfx2/docfile.hxx>
 #include "openflag.hxx"
 
-#include <comphelper/string.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/imap.hxx>
@@ -50,15 +49,13 @@
 #include <svtools/svstdarr.hxx>
 #endif
 #include <svtools/zforlist.hxx>
-#include <svtools/inettype.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 
 #include <sfx2/sfxhtml.hxx>
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+
 
 using namespace ::com::sun::star;
 
@@ -66,20 +63,6 @@ using namespace ::com::sun::star;
 sal_Char __FAR_DATA sHTML_MIME_text[] = "text/";
 sal_Char __FAR_DATA sHTML_MIME_application[] = "application/";
 sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";
-
-#define HTML_META_NONE          0
-#define HTML_META_AUTHOR        1
-#define HTML_META_DESCRIPTION   2
-#define HTML_META_KEYWORDS      3
-#define HTML_META_REFRESH       4
-#define HTML_META_CLASSIFICATION 5
-#define HTML_META_CREATED       6
-#define HTML_META_CHANGEDBY     7
-#define HTML_META_CHANGED       8
-#define HTML_META_GENERATOR     9
-#define HTML_META_SDFOOTNOTE    10
-#define HTML_META_SDENDNOTE     11
-#define HTML_META_CONTENT_TYPE  12
 
 // <INPUT TYPE=xxx>
 #ifdef __MINGW32__ // for runtime pseudo reloc
@@ -95,28 +78,6 @@ static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_SH_poly,          IMAP_OBJ_POLYGON    },
     { OOO_STRING_SVTOOLS_HTML_SH_polygon,       IMAP_OBJ_POLYGON    },
     { 0,                    0                   }
-};
-
-// <META NAME=xxx>
-#ifdef __MINGW32__ // for runtime pseudo reloc
-static HTMLOptionEnum aHTMLMetaNameTable[] =
-#else
-static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
-#endif
-{
-    { OOO_STRING_SVTOOLS_HTML_META_author,      HTML_META_AUTHOR        },
-    { OOO_STRING_SVTOOLS_HTML_META_changed,     HTML_META_CHANGED       },
-    { OOO_STRING_SVTOOLS_HTML_META_changedby,       HTML_META_CHANGEDBY     },
-    { OOO_STRING_SVTOOLS_HTML_META_classification,HTML_META_CLASSIFICATION},
-    { OOO_STRING_SVTOOLS_HTML_META_content_type,    HTML_META_CONTENT_TYPE  },
-    { OOO_STRING_SVTOOLS_HTML_META_created,     HTML_META_CREATED       },
-    { OOO_STRING_SVTOOLS_HTML_META_description, HTML_META_DESCRIPTION   },
-    { OOO_STRING_SVTOOLS_HTML_META_keywords,        HTML_META_KEYWORDS      },
-    { OOO_STRING_SVTOOLS_HTML_META_generator,       HTML_META_GENERATOR     },
-    { OOO_STRING_SVTOOLS_HTML_META_refresh,     HTML_META_REFRESH       },
-    { OOO_STRING_SVTOOLS_HTML_META_sdendnote,       HTML_META_SDENDNOTE     },
-    { OOO_STRING_SVTOOLS_HTML_META_sdfootnote,  HTML_META_SDFOOTNOTE    },
-    { 0,                        0                       }
 };
 
 SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bIsNewDoc,
@@ -288,169 +249,6 @@ IMAPOBJ_SETEVENT:
     return bNewArea;
 }
 
-BOOL SfxHTMLParser::ParseMetaOptions(
-        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
-        SvKeyValueIterator *pHTTPHeader,
-        const HTMLOptions *pOptions,
-        rtl_TextEncoding& rEnc )
-{
-    String aName, aContent;
-    USHORT nAction = HTML_META_NONE;
-    BOOL bHTTPEquiv = FALSE, bChanged = FALSE;
-
-    for( USHORT i = pOptions->Count(); i; )
-    {
-        const HTMLOption *pOption = (*pOptions)[ --i ];
-        switch( pOption->GetToken() )
-        {
-        case HTML_O_NAME:
-            aName = pOption->GetString();
-            if( HTML_META_NONE==nAction )
-                pOption->GetEnum( nAction, aHTMLMetaNameTable );
-            break;
-        case HTML_O_HTTPEQUIV:
-            aName = pOption->GetString();
-            pOption->GetEnum( nAction, aHTMLMetaNameTable );
-            bHTTPEquiv = TRUE;
-            break;
-        case HTML_O_CONTENT:
-            aContent = pOption->GetString();
-            break;
-        }
-    }
-
-    if( bHTTPEquiv || HTML_META_DESCRIPTION!=nAction )
-    {
-        // wenn's keine Description ist CRs und LFs aus dem CONTENT entfernen
-        aContent.EraseAllChars( _CR );
-        aContent.EraseAllChars( _LF );
-    }
-    else
-    {
-        // fuer die Beschreibung die Zeilen-Umbrueche entsprechen wandeln
-        aContent.ConvertLineEnd();
-    }
-
-
-    if( bHTTPEquiv && pHTTPHeader )
-    {
-        // #57232#: Netscape scheint ein abschliessendes " einfach zu
-        // ignorieren, also tun wir das auch.
-        if( aContent.Len() && '"' == aContent.GetChar( aContent.Len()-1 ) )
-            aContent.Erase( aContent.Len() - 1 );
-        SvKeyValue aKeyValue( aName, aContent );
-        pHTTPHeader->Append( aKeyValue );
-    }
-
-    switch( nAction )
-    {
-    case HTML_META_AUTHOR:
-        if (i_xDocProps.is()) {
-            i_xDocProps->setAuthor( aContent );
-            bChanged = TRUE;
-        }
-        break;
-    case HTML_META_DESCRIPTION:
-        if (i_xDocProps.is()) {
-            i_xDocProps->setDescription( aContent );
-            bChanged = TRUE;
-        }
-        break;
-    case HTML_META_KEYWORDS:
-        if (i_xDocProps.is()) {
-            i_xDocProps->setKeywords(
-                ::comphelper::string::convertCommaSeparated(aContent));
-            bChanged = TRUE;
-        }
-        break;
-    case HTML_META_CLASSIFICATION:
-        if (i_xDocProps.is()) {
-            i_xDocProps->setSubject( aContent );
-            bChanged = TRUE;
-        }
-        break;
-
-    case HTML_META_CHANGEDBY:
-        if (i_xDocProps.is()) {
-            i_xDocProps->setModifiedBy( aContent );
-        bChanged = TRUE;
-        }
-        break;
-
-    case HTML_META_CREATED:
-    case HTML_META_CHANGED:
-        if( i_xDocProps.is() && aContent.Len() && aContent.GetTokenCount()==2 )
-        {
-            Date aDate( (ULONG)aContent.GetToken(0).ToInt32() );
-            Time aTime( (ULONG)aContent.GetToken(1).ToInt32() );
-            DateTime aDateTime( aDate, aTime );
-            ::util::DateTime uDT(aDateTime.Get100Sec(),
-                aDateTime.GetSec(), aDateTime.GetMin(),
-                aDateTime.GetHour(), aDateTime.GetDay(),
-                aDateTime.GetMonth(), aDateTime.GetYear());
-            if( HTML_META_CREATED==nAction )
-                i_xDocProps->setCreationDate( uDT );
-            else
-                i_xDocProps->setModificationDate( uDT );
-            bChanged = TRUE;
-        }
-        break;
-
-    case HTML_META_REFRESH:
-        DBG_ASSERT( !bHTTPEquiv || pHTTPHeader,
-                "Reload-URL aufgrund unterlsassener MUSS-Aenderung verlorengegangen" );
-        break;
-
-    case HTML_META_CONTENT_TYPE:
-        if( aContent.Len() )
-            rEnc = GetEncodingByMIME( aContent );
-        bChanged = TRUE;
-        break;
-
-    case HTML_META_NONE:
-        if( !bHTTPEquiv )
-        {
-            if (i_xDocProps.is()) {
-                uno::Reference<beans::XPropertyContainer> xUDProps
-                    = i_xDocProps->getUserDefinedProperties();
-                try {
-                    xUDProps->addProperty(aName,
-                        beans::PropertyAttribute::REMOVEABLE,
-                        uno::makeAny(::rtl::OUString(aContent)));
-                    bChanged = TRUE;
-                } catch (uno::Exception &) {
-                    // ignore
-                }
-            }
-        }
-        break;
-    }
-
-    return bChanged;
-}
-
-BOOL SfxHTMLParser::ParseMetaOptions(
-        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
-                                      SvKeyValueIterator *pHeader )
-{
-    USHORT nContentOption = HTML_O_CONTENT;
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-
-    BOOL bRet = ParseMetaOptions( i_xDocProps, pHeader,
-                                  GetOptions(&nContentOption),
-                                  eEnc );
-
-    // If the encoding is set by a META tag, it may only overwrite the
-    // current encoding if both, the current and the new encoding, are 1-BYTE
-    // encodings. Everything else cannot lead to reasonable results.
-    if( RTL_TEXTENCODING_DONTKNOW != eEnc &&
-        rtl_isOctetTextEncoding( eEnc ) &&
-        rtl_isOctetTextEncoding( GetSrcEncoding() ) )
-        SetSrcEncoding( eEnc );
-
-    return bRet;
-}
-
 
 void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
                                        SfxObjectShell *pSh )
@@ -559,24 +357,6 @@ IMPL_STATIC_LINK( SfxHTMLParser, FileDownloadDone, void*, EMPTYARG )
     return 0;
 }
 
-rtl_TextEncoding SfxHTMLParser::GetEncodingByMIME( const String& rMime )
-{
-    ByteString sType;
-    ByteString sSubType;
-    INetContentTypeParameterList aParameters;
-    ByteString sMime( rMime, RTL_TEXTENCODING_ASCII_US );
-    if (INetContentTypes::parse(sMime, sType, sSubType, &aParameters))
-    {
-        const INetContentTypeParameter * pCharset
-            = aParameters.find("charset");
-        if (pCharset != 0)
-        {
-            ByteString sValue( pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US );
-            return GetExtendedCompatibilityTextEncoding(rtl_getTextEncodingFromMimeCharset( sValue.GetBuffer() ) );
-        }
-    }
-    return RTL_TEXTENCODING_DONTKNOW;
-}
 rtl_TextEncoding SfxHTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader )
 {
     rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;

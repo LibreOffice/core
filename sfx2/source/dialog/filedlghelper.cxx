@@ -87,6 +87,7 @@
 #endif
 #include <svtools/pickerhelper.hxx>
 #include <svtools/docpasswdrequest.hxx>
+#include <svtools/docmspasswdrequest.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -556,13 +557,34 @@ void FileDialogHelper_Impl::updateSelectionBox()
 }
 
 // ------------------------------------------------------------------------
+struct CheckMSPasswordCapability
+{
+    sal_Bool operator() ( const String rFilterName )
+    {
+        return rFilterName.EqualsAscii("MS Word 97");
+    }
+};
+
+// ------------------------------------------------------------------------
 struct CheckPasswordCapability
 {
     sal_Bool operator() ( const SfxFilter* _pFilter )
     {
-        return  _pFilter && _pFilter->IsOwnFormat()
-            &&  _pFilter->UsesStorage()
-            &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() );
+        if (!_pFilter)
+            return false;
+
+#if 0 // to be enabled in the future
+        if (_pFilter->GetFilterName().EqualsAscii("MS Excel 97"))
+            // For now, we eanble password protection for Excel 97 as a
+            // special case.  If we start having more filters supporting
+            // export encryption with password, we should probably switch to
+            // using a filter flag instead.
+            return true;
+#endif
+
+        return  ( _pFilter->IsOwnFormat() && _pFilter->UsesStorage()
+            &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() ) )
+            || CheckMSPasswordCapability()( _pFilter->GetFilterName() );
     }
 };
 
@@ -1347,6 +1369,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 //On MacOSX the native file picker has to run in the primordial thread because of drawing issues
 //On Linux the native gtk file picker, when backed by gnome-vfs2, needs to be run in the same
 //primordial thread as the ucb gnome-vfs2 provider was initialized in.
+/*
 #ifdef WNT
     if ( mbSystemPicker )
     {
@@ -1360,9 +1383,18 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
     }
     else
 #endif
+*/
     {
         try
         {
+#ifdef WNT
+            if ( mbSystemPicker )
+            {
+                OReleaseSolarMutex aSolarMutex;
+                nRet = mxFileDlg->execute();
+            }
+            else
+#endif
             nRet = mxFileDlg->execute();
         }
         catch( const Exception& )
@@ -1633,20 +1665,36 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                 sal_Bool bPassWord = sal_False;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
-                    // ask for the password
+                    // ask for a password
                     uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
 
                     if( xInteractionHandler.is() )
                     {
-                        RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
-                            ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+                        // TODO: find out a way to set the 1-15 char limits on MS Excel 97 filter.
+                        if ( CheckMSPasswordCapability()( rFilter ) )
+                        {
+                            RequestMSDocumentPassword* pMSPasswordRequest = new RequestMSDocumentPassword(
+                                ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
 
-                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
-                        xInteractionHandler->handle( rRequest );
-                        if ( pPasswordRequest->isPassword() )
-                            rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                            uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pMSPasswordRequest );
+                            xInteractionHandler->handle( rRequest );
+                            if ( pMSPasswordRequest->isPassword() )
+                                rpSet->Put( SfxStringItem( SID_PASSWORD, pMSPasswordRequest->getPassword() ) );
+                            else
+                                return ERRCODE_ABORT;
+                        }
                         else
-                            return ERRCODE_ABORT;
+                        {
+                            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
+                                ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+
+                            uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
+                            xInteractionHandler->handle( rRequest );
+                            if ( pPasswordRequest->isPassword() )
+                                rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                            else
+                                return ERRCODE_ABORT;
+                        }
                     }
                 }
             }
@@ -2567,6 +2615,46 @@ Sequence < OUString > FileDialogHelper::GetMPath() const
         Sequence < OUString > aEmpty;
         return aEmpty;
     }
+}
+
+// ------------------------------------------------------------------------
+Sequence< ::rtl::OUString > FileDialogHelper::GetSelectedFiles() const
+{
+    // a) the new way (optional!)
+    uno::Sequence< ::rtl::OUString > aResultSeq;
+    uno::Reference< XFilePicker2 > xPickNew(mpImp->mxFileDlg, UNO_QUERY);
+    if (xPickNew.is())
+    {
+        aResultSeq = xPickNew->getSelectedFiles();
+    }
+    // b) the olde way ... non optional.
+    else
+    {
+        uno::Reference< XFilePicker > xPickOld(mpImp->mxFileDlg, UNO_QUERY_THROW);
+        Sequence< OUString > lFiles = xPickOld->getFiles();
+        ::sal_Int32          nFiles = lFiles.getLength();
+        if ( nFiles > 1 )
+        {
+            aResultSeq = Sequence< ::rtl::OUString >( nFiles-1 );
+
+            INetURLObject aPath( lFiles[0] );
+            aPath.setFinalSlash();
+
+            for (::sal_Int32 i = 1; i < nFiles; i++)
+            {
+                if (i == 1)
+                    aPath.Append( lFiles[i] );
+                else
+                    aPath.setName( lFiles[i] );
+
+                aResultSeq[i-1] = ::rtl::OUString(aPath.GetMainURL( INetURLObject::NO_DECODE ));
+            }
+        }
+        else
+            aResultSeq = lFiles;
+    }
+
+    return aResultSeq;
 }
 
 // ------------------------------------------------------------------------

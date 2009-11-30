@@ -66,3 +66,71 @@ public:
 };
 
 #endif
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: ActionDescriptionProvider.hxx,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
+#define _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
+
+#include "svx/svxdllapi.h"
+
+// header for class OUString
+#include <rtl/ustring.hxx>
+
+//-----------------------------------------------------------------------------
+/** This class provides localized descriptions for some basic actions done with objects.
+The strings are intended to be provided to the user e.g. as description for undo actions in the menu.
+The name of the object acted on and the type of action needs to be given as input parameter.
+*/
+
+class SVX_DLLPUBLIC ActionDescriptionProvider
+{
+public:
+    enum ActionType
+    {
+        INSERT
+        , DELETE
+        , CUT
+        , MOVE
+        , RESIZE
+        , ROTATE
+        , TRANSFORM
+        , FORMAT
+        , MOVE_TOTOP
+        , MOVE_TOBOTTOM
+        , POS_SIZE
+    };
+
+public:
+    static ::rtl::OUString createDescription( ActionType eActionType
+                        , const ::rtl::OUString& rObjectName );
+};
+
+#endif

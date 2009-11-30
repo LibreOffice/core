@@ -64,9 +64,12 @@
 #include <tools/string.hxx> // used in StartElement for logging
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vcl/fontcvt.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include <com/sun/star/rdf/XRepositorySupplier.hpp>
+#include "RDFaImportHelper.hxx"
 
 #define LOGFILE_AUTHOR "unknown"
 
@@ -111,6 +114,7 @@ sal_Char __READONLY_DATA sXML_np__xforms[] = "_xforms";
 sal_Char __READONLY_DATA sXML_np__xsd[] = "_xsd";
 sal_Char __READONLY_DATA sXML_np__xsi[] = "_xsi";
 sal_Char __READONLY_DATA sXML_np__field[] = "_field";
+sal_Char __READONLY_DATA sXML_np__xhtml[] = "_xhtml";
 
 sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
 sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
@@ -169,8 +173,8 @@ public:
     INetURLObject aBaseURL;
     INetURLObject aDocBase;
 
-    /// relative path of stream in package, e.g. "someobject/content.xml"
-    ::rtl::OUString mStreamPath;
+    /// name of stream in package, e.g., "content.xml"
+    ::rtl::OUString mStreamName;
 
     ::rtl::OUString aODFVersion;
 
@@ -183,18 +187,28 @@ public:
     sal_Bool mbTextDocInOOoFileFormat;
     // <--
 
+    const uno::Reference< uno::XComponentContext > mxComponentContext;
+
+    std::auto_ptr< xmloff::RDFaImportHelper > mpRDFaHelper;
+
     SvXMLImport_Impl() :
         hBatsFontConv( 0 ), hMathFontConv( 0 ),
         mbOwnGraphicResolver( false ),
         mbOwnEmbeddedResolver( false ),
-        mStreamPath(),
+        mStreamName(),
         // --> OD 2004-08-11 #i28749#
         mbShapePositionInHoriL2R( sal_False ),
         // <--
         // --> OD 2007-12-19 #152540#
-        mbTextDocInOOoFileFormat( sal_False )
+        mbTextDocInOOoFileFormat( sal_False ),
         // <--
-    {}
+        mxComponentContext( ::comphelper::getProcessComponentContext() ),
+        mpRDFaHelper() // lazy
+    {
+        OSL_ENSURE(mxComponentContext.is(), "SvXMLImport: no ComponentContext");
+        if (!mxComponentContext.is()) throw uno::RuntimeException();
+    }
+
     ~SvXMLImport_Impl()
     {
         if( hBatsFontConv )
@@ -222,7 +236,6 @@ void SvXMLImport::_InitCtor()
     if( mnImportFlags != 0 )
     {
         // implicit "xml" namespace prefix
-        const ::rtl::OUString Xml;
         mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML),
                             XML_NAMESPACE_XML );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
@@ -294,6 +307,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__field ) ), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__of ) ),
                             GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
+        mpNamespaceMap->Add(
+            OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xhtml ) ),
+            GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
     }
 
     msPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
@@ -526,6 +542,16 @@ void SAL_CALL SvXMLImport::endDocument( void )
 
     //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,
     //  because the SvXMLImport dtor might not be called until after the document has been closed.
+
+    if (mpImpl->mpRDFaHelper.get())
+    {
+        const uno::Reference<rdf::XRepositorySupplier> xRS(mxModel,
+            uno::UNO_QUERY);
+        if (xRS.is())
+        {
+            mpImpl->mpRDFaHelper->InsertRDFa( xRS );
+        }
+    }
 
     if (mpNumImport)
     {
@@ -935,9 +961,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                         mpImpl->aBaseURL.insertName( sRelPath );
                     mpImpl->aBaseURL.insertName( sName );
                 }
-                OSL_ENSURE(sName.getLength(), "no StreamName ???");
-                mpImpl->mStreamPath = sRelPath.getLength() ? sRelPath +
-                    ::rtl::OUString::createFromAscii("/") + sName : sName;
+                mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
                 // --> OD 2004-08-10 #i28749# - retrieve property <ShapePositionInHoriL2R>
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R" ) );
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
@@ -1562,7 +1586,7 @@ const SvXMLStylesContext *SvXMLImport::GetMasterStyles() const
     return (const SvXMLStylesContext *)&mxMasterStyles;
 }
 
-OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue)
+OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
 {
     if( rValue.getLength() == 0 || rValue[0] == '#' )
         return rValue;
@@ -1753,6 +1777,13 @@ void SvXMLImport::DisposingModel()
     // #110680#
     return mxServiceFactory;
 }
+
+uno::Reference< uno::XComponentContext >
+SvXMLImport::GetComponentContext() const
+{
+    return mpImpl->mxComponentContext;
+}
+
 String SvXMLImport::GetBaseURL() const
 {
     return mpImpl->aBaseURL.GetMainURL( INetURLObject::NO_DECODE );
@@ -1763,9 +1794,9 @@ String SvXMLImport::GetDocumentBase() const
     return mpImpl->aDocBase.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-::rtl::OUString SvXMLImport::GetStreamPath() const
+::rtl::OUString SvXMLImport::GetStreamName() const
 {
-    return mpImpl->mStreamPath;
+    return mpImpl->mStreamName;
 }
 
 // --> OD 2004-08-10 #i28749#
@@ -1854,17 +1885,33 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
 //FIXME: not yet
 //            OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
             if (xMeta.is()) {
-                ::rtl::OUStringBuffer XmlId( GetStreamPath() );
-                XmlId.appendAscii("#");
-                XmlId.append(i_rXmlId);
+                const beans::StringPair mdref( GetStreamName(), i_rXmlId );
                 try {
-                    xMeta->setXmlId(XmlId.makeStringAndClear());
+                    xMeta->setMetadataReference(mdref);
                 } catch (lang::IllegalArgumentException &) {
                     // probably duplicate; ignore
+                    OSL_TRACE("SvXMLImport::SetXmlId: cannot set xml:id");
                 }
             }
         } catch (uno::Exception &) {
         }
     }
+}
+
+void
+SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
+    ::rtl::OUString const & i_rAbout,
+    ::rtl::OUString const & i_rProperty,
+    ::rtl::OUString const & i_rContent,
+    ::rtl::OUString const & i_rDatatype)
+{
+    // N.B.: we only get called if i_xObject had xhtml:about attribute
+    // (an empty attribute value is valid)
+    if (!mpImpl->mpRDFaHelper.get())
+    {
+        mpImpl->mpRDFaHelper.reset( new ::xmloff::RDFaImportHelper(*this) );
+    }
+    mpImpl->mpRDFaHelper->AddRDFa(i_xObject,
+        i_rAbout, i_rProperty, i_rContent, i_rDatatype);
 }
 

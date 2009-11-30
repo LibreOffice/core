@@ -86,7 +86,7 @@ namespace drawinglayer
             // public helpers
             // Geometry extractor. Shadow will be added as in createLocalDecomposition, but
             // the 3D content is not converted to a bitmap visualisation but to projected 2D gemetry. This
-            // helper is useful for Contour extraction.
+            // helper is useful e.g. for Contour extraction or HitTests.
             Primitive2DSequence getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const;
 
             // constructor/destructor

@@ -41,10 +41,53 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <unoapi.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdoutl.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace
+{
+    sal_Int16 getPageNumber(const uno::Reference< drawing::XDrawPage >& rxDrawPage)
+    {
+        sal_Int16 nRetval(0);
+        uno::Reference< beans::XPropertySet > xSet(rxDrawPage, uno::UNO_QUERY);
+
+        if (xSet.is())
+        {
+            try
+            {
+                const uno::Any aNumber(xSet->getPropertyValue(::rtl::OUString::createFromAscii("Number")));
+                aNumber >>= nRetval;
+            }
+            catch(const uno::Exception&)
+            {
+                OSL_ASSERT(false);
+            }
+        }
+
+        return nRetval;
+    }
+
+    sal_Int16 getPageCount(const uno::Reference< drawing::XDrawPage >& rxDrawPage)
+    {
+        sal_Int16 nRetval(0);
+        SdrPage* pPage = GetSdrPageFromXDrawPage(rxDrawPage);
+
+        if(pPage && pPage->GetModel())
+        {
+            const sal_uInt16 nPageCount(pPage->GetModel()->GetPageCount());
+            nRetval = ((sal_Int16)nPageCount - 1) / 2;
+        }
+
+        return nRetval;
+    }
+} // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -64,20 +107,28 @@ namespace drawinglayer
         }
 
         SdrTextPrimitive2D::SdrTextPrimitive2D(
-            const SdrText& rSdrText,
+            const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject)
         :   BasePrimitive2D(),
-            mrSdrText(rSdrText),
+            mrSdrText(const_cast< SdrText* >(pSdrText)),
             maOutlinerParaObject(rOutlinerParaObject),
             mxLastVisualizingPage(),
+            mnLastPageNumber(0),
+            mnLastPageCount(0),
+            maLastTextBackgroundColor(),
             mbLastSpellCheck(false),
-            mbContainsPageField(false)
+            mbContainsPageField(false),
+            mbContainsPageCountField(false),
+            mbContainsOtherFields(false)
         {
             const EditTextObject& rETO = maOutlinerParaObject.GetTextObject();
-            mbContainsPageField = rETO.HasField(SvxPageField::StaticType())
-                || rETO.HasField(SvxHeaderField::StaticType())
+            
+            mbContainsPageField = rETO.HasField(SvxPageField::StaticType());
+            mbContainsPageCountField = rETO.HasField(SvxPagesField::StaticType());
+            mbContainsOtherFields = rETO.HasField(SvxHeaderField::StaticType())
                 || rETO.HasField(SvxFooterField::StaticType())
-                || rETO.HasField(SvxDateTimeField::StaticType());
+                || rETO.HasField(SvxDateTimeField::StaticType())
+                || rETO.HasField(SvxAuthorField::StaticType());
         }
 
         bool SdrTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -94,18 +145,63 @@ namespace drawinglayer
 
         Primitive2DSequence SdrTextPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            const bool bCurrentSpellCheck(getSdrText().GetObject().impCheckSpellCheckForDecomposeTextPrimitive());
+            const bool bCurrentSpellCheck(getSdrText()
+                ? getSdrText()->GetObject().impCheckSpellCheckForDecomposeTextPrimitive()
+                : false);
             uno::Reference< drawing::XDrawPage > xCurrentlyVisualizingPage;
+            bool bCurrentlyVisualizingPageIsSet(false);
+            Color aNewTextBackgroundColor;
+            bool bNewTextBackgroundColorIsSet(false);
+            sal_Int16 nCurrentlyValidPageNumber(0);
+            sal_Int16 nCurrentlyValidPageCount(0);
 
             if(getLocalDecomposition().hasElements())
             {
                 bool bDoDelete(getLastSpellCheck() != bCurrentSpellCheck);
 
-                if(!bDoDelete && mbContainsPageField)
+                // check visualized page
+                if(!bDoDelete && (mbContainsPageField || mbContainsPageCountField || mbContainsOtherFields))
                 {
+                    // get visualized page and remember
                     xCurrentlyVisualizingPage = rViewInformation.getVisualizedPage();
+                    bCurrentlyVisualizingPageIsSet = true;
 
                     if(xCurrentlyVisualizingPage != mxLastVisualizingPage)
+                    {
+                        bDoDelete = true;
+                    }
+
+                    // #i98870# check visualized PageNumber
+                    if(!bDoDelete && mbContainsPageField)
+                    {
+                        nCurrentlyValidPageNumber = getPageNumber(xCurrentlyVisualizingPage);
+
+                        if(nCurrentlyValidPageNumber != mnLastPageNumber)
+                        {
+                            bDoDelete = true;
+                        }
+                    }
+
+                    // #i98870# check visualized PageCount, too
+                    if(!bDoDelete && mbContainsPageCountField)
+                    {
+                        nCurrentlyValidPageCount = getPageCount(xCurrentlyVisualizingPage);
+
+                        if(nCurrentlyValidPageCount != mnLastPageCount)
+                        {
+                            bDoDelete = true;
+                        }
+                    }
+                }
+
+                // #i101443#  check change of TextBackgroundolor
+                if(!bDoDelete && getSdrText() && getSdrText()->GetModel())
+                {
+                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner(0);
+                    aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
+                    bNewTextBackgroundColorIsSet = true;
+
+                    if(aNewTextBackgroundColor != maLastTextBackgroundColor)
                     {
                         bDoDelete = true;
                     }
@@ -119,8 +215,32 @@ namespace drawinglayer
 
             if(!getLocalDecomposition().hasElements())
             {
+                if(!bCurrentlyVisualizingPageIsSet && mbContainsPageField)
+                {
+                    xCurrentlyVisualizingPage = rViewInformation.getVisualizedPage();
+                }
+
+                if(!nCurrentlyValidPageNumber && mbContainsPageField)
+                {
+                    nCurrentlyValidPageNumber = getPageNumber(xCurrentlyVisualizingPage);
+                }
+
+                if(!nCurrentlyValidPageCount && mbContainsPageCountField)
+                {
+                    nCurrentlyValidPageCount = getPageCount(xCurrentlyVisualizingPage);
+                }
+
+                if(!bNewTextBackgroundColorIsSet && getSdrText() && getSdrText()->GetModel())
+                {
+                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner(0);
+                    aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
+                }
+
                 const_cast< SdrTextPrimitive2D* >(this)->setLastSpellCheck(bCurrentSpellCheck);
                 const_cast< SdrTextPrimitive2D* >(this)->mxLastVisualizingPage = xCurrentlyVisualizingPage;
+                const_cast< SdrTextPrimitive2D* >(this)->mnLastPageNumber = nCurrentlyValidPageNumber;
+                const_cast< SdrTextPrimitive2D* >(this)->mnLastPageCount = nCurrentlyValidPageCount;
+                const_cast< SdrTextPrimitive2D* >(this)->maLastTextBackgroundColor = aNewTextBackgroundColor;
             }
 
             // call parent
@@ -138,7 +258,9 @@ namespace drawinglayer
         Primitive2DSequence SdrContourTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            const bool bCurrentSpellCheck(getSdrText().GetObject().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation));
+            const bool bCurrentSpellCheck(getSdrText()
+                ? getSdrText()->GetObject().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation)
+                : false);
 
             if(getLastSpellCheck() != bCurrentSpellCheck)
             {
@@ -150,11 +272,11 @@ namespace drawinglayer
         }
 
         SdrContourTextPrimitive2D::SdrContourTextPrimitive2D(
-            const SdrText& rSdrText,
+            const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon,
-            const ::basegfx::B2DHomMatrix& rObjectTransform)
-        :   SdrTextPrimitive2D(rSdrText, rOutlinerParaObject),
+            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+            const basegfx::B2DHomMatrix& rObjectTransform)
+        :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maUnitPolyPolygon(rUnitPolyPolygon),
             maObjectTransform(rObjectTransform)
         {
@@ -166,16 +288,20 @@ namespace drawinglayer
             {
                 const SdrContourTextPrimitive2D& rCompare = (SdrContourTextPrimitive2D&)rPrimitive;
 
-                return (maUnitPolyPolygon == rCompare.maUnitPolyPolygon
-                    && maObjectTransform == rCompare.maObjectTransform);
+                return (getUnitPolyPolygon() == rCompare.getUnitPolyPolygon()
+                    && getObjectTransform() == rCompare.getObjectTransform());
             }
 
             return false;
         }
 
-        SdrTextPrimitive2D* SdrContourTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
+        SdrTextPrimitive2D* SdrContourTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            return new SdrContourTextPrimitive2D(getSdrText(), getOutlinerParaObject(), maUnitPolyPolygon, rTransform * maObjectTransform);
+            return new SdrContourTextPrimitive2D(
+                getSdrText(),
+                getOutlinerParaObject(),
+                getUnitPolyPolygon(),
+                rTransform * getObjectTransform());
         }
 
         // provide unique ID
@@ -193,7 +319,9 @@ namespace drawinglayer
         Primitive2DSequence SdrPathTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            const bool bCurrentSpellCheck(getSdrText().GetObject().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation));
+            const bool bCurrentSpellCheck(getSdrText()
+                ? getSdrText()->GetObject().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation)
+                : false);
 
             if(getLastSpellCheck() != bCurrentSpellCheck)
             {
@@ -205,11 +333,13 @@ namespace drawinglayer
         }
 
         SdrPathTextPrimitive2D::SdrPathTextPrimitive2D(
-            const SdrText& rSdrText,
+            const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const ::basegfx::B2DPolyPolygon& rPathPolyPolygon)
-        :   SdrTextPrimitive2D(rSdrText, rOutlinerParaObject),
-            maPathPolyPolygon(rPathPolyPolygon)
+            const basegfx::B2DPolyPolygon& rPathPolyPolygon,
+            const attribute::SdrFormTextAttribute& rSdrFormTextAttribute)
+        :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
+            maPathPolyPolygon(rPathPolyPolygon),
+            maSdrFormTextAttribute(rSdrFormTextAttribute)
         {
         }
 
@@ -219,17 +349,23 @@ namespace drawinglayer
             {
                 const SdrPathTextPrimitive2D& rCompare = (SdrPathTextPrimitive2D&)rPrimitive;
 
-                return (maPathPolyPolygon == rCompare.maPathPolyPolygon);
+                return (getPathPolyPolygon() == rCompare.getPathPolyPolygon()
+                    && getSdrFormTextAttribute() == rCompare.getSdrFormTextAttribute());
             }
 
             return false;
         }
 
-        SdrTextPrimitive2D* SdrPathTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
+        SdrTextPrimitive2D* SdrPathTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            ::basegfx::B2DPolyPolygon aNewPolyPolygon(maPathPolyPolygon);
+            basegfx::B2DPolyPolygon aNewPolyPolygon(getPathPolyPolygon());
             aNewPolyPolygon.transform(rTransform);
-            return new SdrPathTextPrimitive2D(getSdrText(), getOutlinerParaObject(), aNewPolyPolygon);
+
+            return new SdrPathTextPrimitive2D(
+                getSdrText(),
+                getOutlinerParaObject(),
+                aNewPolyPolygon,
+                getSdrFormTextAttribute());
         }
 
         // provide unique ID
@@ -247,7 +383,9 @@ namespace drawinglayer
         Primitive2DSequence SdrBlockTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            const bool bCurrentSpellCheck(getSdrText().GetObject().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation));
+            const bool bCurrentSpellCheck(getSdrText()
+                ? getSdrText()->GetObject().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation)
+                : false);
 
             if(getLastSpellCheck() != bCurrentSpellCheck)
             {
@@ -259,13 +397,13 @@ namespace drawinglayer
         }
 
         SdrBlockTextPrimitive2D::SdrBlockTextPrimitive2D(
-            const SdrText& rSdrText,
+            const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const ::basegfx::B2DHomMatrix& rTextRangeTransform,
+            const basegfx::B2DHomMatrix& rTextRangeTransform,
             bool bUnlimitedPage,
             bool bCellText,
             bool bWordWrap)
-        :   SdrTextPrimitive2D(rSdrText, rOutlinerParaObject),
+        :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maTextRangeTransform(rTextRangeTransform),
             mbUnlimitedPage(bUnlimitedPage),
             mbCellText(bCellText),
@@ -288,9 +426,15 @@ namespace drawinglayer
             return false;
         }
 
-        SdrTextPrimitive2D* SdrBlockTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
+        SdrTextPrimitive2D* SdrBlockTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            return new SdrBlockTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform(), getUnlimitedPage(), getCellText(), getWordWrap());
+            return new SdrBlockTextPrimitive2D(
+                getSdrText(),
+                getOutlinerParaObject(),
+                rTransform * getTextRangeTransform(),
+                getUnlimitedPage(),
+                getCellText(),
+                getWordWrap());
         }
 
         // provide unique ID
@@ -308,7 +452,9 @@ namespace drawinglayer
         Primitive2DSequence SdrStretchTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            const bool bCurrentSpellCheck(getSdrText().GetObject().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation));
+            const bool bCurrentSpellCheck(getSdrText()
+                ? getSdrText()->GetObject().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation)
+                : false);
 
             if(getLastSpellCheck() != bCurrentSpellCheck)
             {
@@ -320,10 +466,10 @@ namespace drawinglayer
         }
 
         SdrStretchTextPrimitive2D::SdrStretchTextPrimitive2D(
-            const SdrText& rSdrText,
+            const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const ::basegfx::B2DHomMatrix& rTextRangeTransform)
-        :   SdrTextPrimitive2D(rSdrText, rOutlinerParaObject),
+            const basegfx::B2DHomMatrix& rTextRangeTransform)
+        :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maTextRangeTransform(rTextRangeTransform)
         {
         }
@@ -334,15 +480,18 @@ namespace drawinglayer
             {
                 const SdrStretchTextPrimitive2D& rCompare = (SdrStretchTextPrimitive2D&)rPrimitive;
 
-                return (maTextRangeTransform == rCompare.maTextRangeTransform);
+                return (getTextRangeTransform() == rCompare.getTextRangeTransform());
             }
 
             return false;
         }
 
-        SdrTextPrimitive2D* SdrStretchTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
+        SdrTextPrimitive2D* SdrStretchTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            return new SdrStretchTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * maTextRangeTransform);
+            return new SdrStretchTextPrimitive2D(
+                getSdrText(),
+                getOutlinerParaObject(),
+                rTransform * getTextRangeTransform());
         }
 
         // provide unique ID

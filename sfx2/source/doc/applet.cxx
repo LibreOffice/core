@@ -45,8 +45,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/javaoptions.hxx>
 #include <svtools/miscopt.hxx>
+#include <comphelper/TypeGeneration.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::comphelper;
 
 namespace sfx2
 {
@@ -83,16 +85,26 @@ void AppletWrapper_Impl::showStatus( const XubString & ) {}
 #define PROPERTY_UNBOUND 0
 #define PROPERTY_MAYBEVOID ::com::sun::star::beans::PropertyAttribute::MAYBEVOID
 
-SfxItemPropertyMap aAppletPropertyMap_Impl[] =
+#define WID_APPLET_CODE                 1
+#define WID_APPLET_CODEBASE             2
+#define WID_APPLET_COMMANDS             3
+#define WID_APPLET_DOCBASE              4
+#define WID_APPLET_ISSCRIPT             5
+#define WID_APPLET_NAME                 6
+const SfxItemPropertyMapEntry* lcl_GetAppletPropertyMap_Impl()
 {
-    { "AppletCode"    , 10, 1, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "AppletCodeBase", 14, 2, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "AppletCommands", 14, 3, &::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), PROPERTY_UNBOUND, 0 },
-    { "AppletDocBase",  13, 4, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "AppletIsScript", 14, 5, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-    { "AppletName"    , 10, 6, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    {0,0,0,0,0,0}
-};
+    static SfxItemPropertyMapEntry aAppletPropertyMap_Impl[] =
+    {
+        { MAP_CHAR_LEN("AppletCode")    , WID_APPLET_CODE     , CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("AppletCodeBase"), WID_APPLET_CODEBASE , CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("AppletCommands"), WID_APPLET_COMMANDS , CPPU_E2T(CPPUTYPE_PROPERTYVALUE), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("AppletDocBase"),  WID_APPLET_DOCBASE  , CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("AppletIsScript"), WID_APPLET_ISSCRIPT , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("AppletName")    , WID_APPLET_NAME     , CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_UNBOUND, 0 },
+        {0,0,0,0,0,0}
+    };
+return aAppletPropertyMap_Impl;
+}
 
 ::rtl::OUString AppletObject::getImplementationName()
     throw( ::com::sun::star::uno::RuntimeException )
@@ -161,7 +173,7 @@ AppletObject::impl_createFactory()
 AppletObject::AppletObject(
     const uno::Reference < uno::XComponentContext >& rContext )
     : mxContext( rContext )
-    , maPropSet( aAppletPropertyMap_Impl )
+    , maPropMap( lcl_GetAppletPropertyMap_Impl() )
     , mpApplet( NULL )
     , mbMayScript( FALSE )
 {
@@ -259,76 +271,85 @@ void SAL_CALL AppletObject::disposing( const com::sun::star::lang::EventObject& 
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL AppletObject::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return maPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( &maPropMap );
+    return xInfo;
 }
 
 void SAL_CALL AppletObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const uno::Any& aAny)
     throw ( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if ( aPropertyName.equalsAscii("AppletCode") )
-    {
-        aAny >>= maClass;
-    }
-    else if ( aPropertyName.equalsAscii("AppletCodeBase") )
-    {
-        //pImpl->aCodeBase = rURL.GetMainURL( INetURLObject::NO_DECODE );
-        //if( rURL.GetProtocol() == INET_PROT_FILE
-        //    && pImpl->aCodeBase.GetChar( 9 ) == INET_ENC_DELIM_TOKEN )
-        //    // Laufwerksbuchstabe auf ':' patchen
-        //    pImpl->aCodeBase.SetChar( 9, INET_DELIM_TOKEN );
 
-        aAny >>= maCodeBase;
-    }
-    else if ( aPropertyName.equalsAscii("AppletCommands") )
-    {
-        maCmdList.Clear();
-        uno::Sequence < beans::PropertyValue > aCommandSequence;
-        if( aAny >>= aCommandSequence )
-            maCmdList.FillFromSequence( aCommandSequence );
-    }
-    else if ( aPropertyName.equalsAscii("AppletIsScript") )
-    {
-        aAny >>= mbMayScript;
-    }
-    else if ( aPropertyName.equalsAscii("AppletName") )
-    {
-        aAny >>= maName;
-    }
-    else if ( aPropertyName.equalsAscii("AppletDocBase") )
-    {
-        aAny >>= maDocBase;
-    }
-    else
+    const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
+    if( !pEntry )
          throw beans::UnknownPropertyException();
+    switch( pEntry->nWID )
+    {
+        case WID_APPLET_CODE      :
+            aAny >>= maClass;
+        break;
+        case WID_APPLET_CODEBASE  :
+            //pImpl->aCodeBase = rURL.GetMainURL( INetURLObject::NO_DECODE );
+            //if( rURL.GetProtocol() == INET_PROT_FILE
+            //    && pImpl->aCodeBase.GetChar( 9 ) == INET_ENC_DELIM_TOKEN )
+            //    // Laufwerksbuchstabe auf ':' patchen
+            //    pImpl->aCodeBase.SetChar( 9, INET_DELIM_TOKEN );
+
+            aAny >>= maCodeBase;
+        break;
+        case WID_APPLET_COMMANDS  :
+        {
+            maCmdList.Clear();
+            uno::Sequence < beans::PropertyValue > aCommandSequence;
+            if( aAny >>= aCommandSequence )
+                maCmdList.FillFromSequence( aCommandSequence );
+        }
+        break;
+        case WID_APPLET_DOCBASE   :
+            aAny >>= maDocBase;
+        break;
+        case WID_APPLET_ISSCRIPT  :
+            aAny >>= mbMayScript;
+        break;
+        case WID_APPLET_NAME      :
+            aAny >>= maName;
+        break;
+        default:;
+
+    }
 }
 
 uno::Any SAL_CALL AppletObject::getPropertyValue(const ::rtl::OUString& aPropertyName) throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    if ( aPropertyName.equalsAscii("AppletCode") )
-    {
-        aAny <<= maClass;
-    }
-    else if ( aPropertyName.equalsAscii("AppletCodeBase") )
-    {
-        aAny <<= maCodeBase;
-    }
-    else if ( aPropertyName.equalsAscii("AppletCommands") )
-    {
-        uno::Sequence< beans::PropertyValue > aCommandSequence;
-        maCmdList.FillSequence( aCommandSequence );
-        aAny <<= aCommandSequence;
-    }
-    else if ( aPropertyName.equalsAscii("AppletIsScript") )
-    {
-        aAny <<= mbMayScript;
-    }
-    else if ( aPropertyName.equalsAscii("AppletName") )
-    {
-         aAny <<= maName;
-    }
-    else
+    const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
+    if( !pEntry )
          throw beans::UnknownPropertyException();
+    switch( pEntry->nWID )
+    {
+        case WID_APPLET_CODE      :
+        aAny <<= maClass;
+        break;
+        case WID_APPLET_CODEBASE  :
+        aAny <<= maCodeBase;
+        break;
+        case WID_APPLET_COMMANDS  :
+        {
+            uno::Sequence< beans::PropertyValue > aCommandSequence;
+            maCmdList.FillSequence( aCommandSequence );
+            aAny <<= aCommandSequence;
+        }
+        break;
+        case WID_APPLET_DOCBASE   :
+        break;
+        case WID_APPLET_ISSCRIPT  :
+            aAny <<= mbMayScript;
+        break;
+        case WID_APPLET_NAME      :
+            aAny <<= maName;
+        break;
+        default:;
+
+    }
     return aAny;
 }
 

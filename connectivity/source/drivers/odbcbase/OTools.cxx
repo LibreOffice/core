@@ -37,6 +37,8 @@
 #include "odbc/OConnection.hxx"
 #include "diagnose_ex.h"
 #include <rtl/logfile.hxx>
+#include <rtl/ustrbuf.hxx>
+
 
 #include <string.h>
 #include <string>
@@ -544,7 +546,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                                        rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getStringValue" );
-    ::rtl::OUString aData;
+    ::rtl::OUStringBuffer aData;
     switch(_fSqlType)
     {
     case SQL_WVARCHAR:
@@ -599,7 +601,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                 nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
                 waCharArray[nLen] = 0;
 
-                aData += ::rtl::OUString(waCharArray);
+                aData.append(::rtl::OUString(waCharArray));
             }
         }
         break;
@@ -648,7 +650,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                     --nLen;
                 aCharArray[nLen] = 0;
 
-                aData += ::rtl::OUString((const sal_Char*)aCharArray,nLen,_nTextEncoding);
+                aData.append(::rtl::OUString((const sal_Char*)aCharArray,nLen,_nTextEncoding));
             }
 
             // delete all blanks
@@ -656,7 +658,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
         }
     }
 
-    return aData;
+    return aData.makeStringAndClear();
 }
 // -------------------------------------------------------------------------
 void OTools::GetInfo(OConnection* _pConnection,

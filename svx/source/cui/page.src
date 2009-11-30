@@ -399,11 +399,11 @@ String RID_SVXSTR_PAPER_A5
 {
     Text = "A5" ;
 };
-String RID_SVXSTR_PAPER_B4
+String RID_SVXSTR_PAPER_B4_ISO
 {
     Text = "B4 (ISO)" ;
 };
-String RID_SVXSTR_PAPER_B5
+String RID_SVXSTR_PAPER_B5_ISO
 {
     Text = "B5 (ISO)" ;
 };
@@ -423,45 +423,37 @@ String RID_SVXSTR_PAPER_USER
 {
     Text [ en-US ] = "User Defined" ;
 };
-String RID_SVXSTR_PAPER_B6
+String RID_SVXSTR_PAPER_B6_ISO
 {
     Text = "B6 (ISO)" ;
 };
 String RID_SVXSTR_PAPER_C4
 {
-    Text = "C4" ;
+    Text = "C4 Envelope" ;
 };
 String RID_SVXSTR_PAPER_C5
 {
-    Text = "C5" ;
+    Text = "C5 Envelope" ;
 };
 String RID_SVXSTR_PAPER_C6
 {
-    Text = "C6" ;
+    Text = "C6 Envelope" ;
 };
 String RID_SVXSTR_PAPER_C65
 {
-    Text = "C6/5" ;
+    Text = "C6/5 Envelope" ;
 };
 String RID_SVXSTR_PAPER_DL
 {
-    Text = "DL" ;
+    Text = "DL Envelope" ;
 };
 String RID_SVXSTR_PAPER_DIA
 {
-    Text = "Dia" ;
+    Text = "Dia Slide" ;
 };
 String RID_SVXSTR_PAPER_SCREEN
 {
     Text [ en-US ] = "Screen" ;
-};
-String RID_SVXSTR_PAPER_A
-{
-    Text = "A" ;
-};
-String RID_SVXSTR_PAPER_B
-{
-    Text = "B" ;
 };
 String RID_SVXSTR_PAPER_C
 {
@@ -477,47 +469,47 @@ String RID_SVXSTR_PAPER_E
 };
 String RID_SVXSTR_PAPER_EXECUTIVE
 {
-    Text = "Executive" ;
+       Text = "Executive" ;
 };
 String RID_SVXSTR_PAPER_LEGAL2
 {
-    Text = "Legal" ;
+    Text = "Long Bond" ;
 };
 String RID_SVXSTR_PAPER_MONARCH
 {
-    Text = "Monarch" ;
+    Text = "#8 (Monarch) Envelope" ;
 };
 String RID_SVXSTR_PAPER_COM675
 {
-    Text = "Env. 6¾" ;
+    Text = "#6 3/4 (Personal) Envelope" ;
 };
 String RID_SVXSTR_PAPER_COM9
 {
-    Text = "Env. 9" ;
+    Text = "#9 Envelope" ;
 };
 String RID_SVXSTR_PAPER_COM10
 {
-    Text = "Env. 10" ;
+    Text = "#10 Envelope" ;
 };
 String RID_SVXSTR_PAPER_COM11
 {
-    Text = "Env. 11" ;
+    Text = "#11 Envelope" ;
 };
 String RID_SVXSTR_PAPER_COM12
 {
-    Text = "Env. 12" ;
+    Text = "#12 Envelope" ;
 };
 String RID_SVXSTR_PAPER_KAI16
 {
-    Text = "16 kai" ;
+    Text = "16 Kai" ;
 };
 String RID_SVXSTR_PAPER_KAI32
 {
-    Text = "32 kai" ;
+    Text = "32 Kai" ;
 };
 String RID_SVXSTR_PAPER_KAI32BIG
 {
-    Text = "32 kai big" ;
+    Text = "Big 32 Kai" ;
 };
 String RID_SVXSTR_PAPER_B4_JIS
 {
@@ -535,67 +527,69 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
 {
     ItemList [ en-US ] =
     {
-             < "A3" ; PAPERSIZE_A3 ; > ;
-        < "A4" ; PAPERSIZE_A4 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
-        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
-        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
-        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A3" ; PAPERSIZE_A3 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6_ISO ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5_ISO ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4_ISO ; > ;
         < "Letter" ; PAPERSIZE_LETTER ; > ;
         < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Long Bond" ; PAPERSIZE_LEGAL2 ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "16 Kai" ; PAPERSIZE_KAI16; > ;
+        < "32 Kai" ; PAPERSIZE_KAI32; > ;
+        < "Big 32 Kai" ; PAPERSIZE_KAI32BIG; > ;
         < "User" ; PAPERSIZE_USER ; > ;
-        < "C4" ; PAPERSIZE_C4 ; > ;
-        < "C5" ; PAPERSIZE_C5 ; > ;
-        < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C6/5" ; PAPERSIZE_C65 ; > ;
-        < "DL" ; PAPERSIZE_DL ; > ;
-        < "Env. #6¾" ; PAPERSIZE_COM675; > ;
-        < "Env. Monarch" ; PAPERSIZE_MONARCH; > ;
-        < "Env. #9" ; PAPERSIZE_COM9; > ;
-        < "Env. #10" ; PAPERSIZE_COM10; > ;
-        < "Env. #11" ; PAPERSIZE_COM11; > ;
-        < "Env. #12" ; PAPERSIZE_COM12; > ;
-        < "16 kai" ; PAPERSIZE_KAI16; > ;
-        < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
+        < "DL Envelope" ; PAPERSIZE_DL ; > ;
+        < "C6 Envelope" ; PAPERSIZE_C6 ; > ;
+        < "C6/5 Envelope" ; PAPERSIZE_C65 ; > ;
+        < "C5 Envelope" ; PAPERSIZE_C5 ; > ;
+        < "C4 Envelope" ; PAPERSIZE_C4 ; > ;
+        < "#6 3/4 (Personal) Envelope" ; PAPERSIZE_COM675; > ;
+        < "#8 (Monarch) Envelope" ; PAPERSIZE_MONARCH; > ;
+        < "#9 Envelope" ; PAPERSIZE_COM9; > ;
+        < "#10 Envelope" ; PAPERSIZE_COM10; > ;
+        < "#11 Envelope" ; PAPERSIZE_COM11; > ;
+        < "#12 Envelope" ; PAPERSIZE_COM12; > ;
     };
-    };
+};
 StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
 {
     ItemList [ en-US ] =
     {
-             < "A0" ; PAPERSIZE_A0 ; > ;
-        < "A1" ; PAPERSIZE_A1 ; > ;
-        < "A2" ; PAPERSIZE_A2 ; > ;
-        < "A3" ; PAPERSIZE_A3 ; > ;
-        < "A4" ; PAPERSIZE_A4 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
-        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
-        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
-        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A2" ; PAPERSIZE_A2 ; > ;
+        < "A1" ; PAPERSIZE_A1 ; > ;
+        < "A0" ; PAPERSIZE_A0 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6_ISO ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5_ISO ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4_ISO ; > ;
         < "Letter" ; PAPERSIZE_LETTER ; > ;
         < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Long Bond" ; PAPERSIZE_LEGAL2 ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "16 Kai" ; PAPERSIZE_KAI16; > ;
+        < "32 Kai" ; PAPERSIZE_KAI32; > ;
+        < "Big 32 Kai" ; PAPERSIZE_KAI32BIG; > ;
         < "User" ; PAPERSIZE_USER ; > ;
-        < "C4" ; PAPERSIZE_C4 ; > ;
-        < "C5" ; PAPERSIZE_C5 ; > ;
-        < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C6/5" ; PAPERSIZE_C65 ; > ;
-        < "DL" ; PAPERSIZE_DL ; > ;
-        < "Slide" ; PAPERSIZE_DIA ; > ;
+        < "DL Envelope" ; PAPERSIZE_DL ; > ;
+        < "C6 Envelope" ; PAPERSIZE_C6 ; > ;
+        < "C6/5 Envelope" ; PAPERSIZE_C65 ; > ;
+        < "C5 Envelope" ; PAPERSIZE_C5 ; > ;
+        < "C4 Envelope" ; PAPERSIZE_C4 ; > ;
+        < "Dia Slide" ; PAPERSIZE_DIA ; > ;
         < "Screen" ; PAPERSIZE_SCREEN ; > ;
-        < "16 kai" ; PAPERSIZE_KAI16; > ;
-        < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
     };
-    };
+};
 String RID_SVXSTR_PAPERBIN
 {
     Text [ en-US ] = "Paper tray" ;

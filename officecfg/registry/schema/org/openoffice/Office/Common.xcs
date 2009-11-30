@@ -1455,6 +1455,18 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<author>MBA</author>
 				<desc>Contains the current and default path settings used by the Office.</desc>
 			</info>
+      <group oor:name="Info">
+        <info>
+          <author>CD</author>
+          <desc>Contains various properties information purpose only.</desc>
+        </info>
+        <prop oor:name="WorkPathChanged" oor:type="xs:boolean">
+          <info>
+            <desc>A flag which is set by the tools options dialog whenever a user changed the work path.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
 			<group oor:name="Current">
 				<info>
 					<author>MBA</author>
@@ -2331,6 +2343,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<author>MBA</author>
 					<desc>Specifies whether the user defined configuration settings are loaded together with the document.</desc>
 					<label>Load user-defined settings</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean">
+				<info>
+					<author>MAV</author>
+					<desc>Specifies whether the office update dialog should be shown in case the loaded document has newer ODF version than the maximal supported one.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -5624,11 +5643,17 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 			<prop oor:name="UseDocumentSystemFileLocking" oor:type="xs:boolean">
 				<info>
 					<author>MAV</author>
-					<desc>Allows to specify whether the OOo document file locking mechanics should use the system file locking additionaly.</desc>
+					<desc>Allows to specify whether the OOo document file locking mechanics should use the system file locking.</desc>
 				</info>
 				<value>true</value>
 			</prop>
-
+			<prop oor:name="UseDocumentOOoLockFile" oor:type="xs:boolean">
+				<info>
+					<author>MAV</author>
+					<desc>Allows to specify whether the OOo document file locking mechanics should use the lock file for locking.</desc>
+				</info>
+				<value>true</value>
+			</prop>
 			<prop oor:name="UseSystemPrintDialog" oor:type="xs:boolean">
 				<info>
 					<author>PL</author>

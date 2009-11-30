@@ -109,6 +109,8 @@ public:
     */
     sal_Int32   getType() const;
 
+    virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel );
+
 protected:
     virtual FASTBOOL    EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd );
     virtual void        BrkCreate( SdrDragStat& rStat );

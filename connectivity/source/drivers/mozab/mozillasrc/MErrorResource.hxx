@@ -31,25 +31,48 @@
 #ifndef CONNECITIVITY_MOZAB_ERROR_RESOURCE_HXX
 #define CONNECITIVITY_MOZAB_ERROR_RESOURCE_HXX
 
-#include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 namespace connectivity
 {
     namespace mozab
     {
-        class ErrorResourceAccess
+        class ErrorDescriptor
         {
         private:
-            mutable sal_uInt16               m_nErrorResourceId;
+            sal_uInt16      m_nErrorResourceId;
+            sal_Int32       m_nErrorCondition;
+            ::rtl::OUString m_sParameter;
 
-        protected:
-            ErrorResourceAccess() : m_nErrorResourceId(0) { }
-
-            inline void setError( sal_uInt16 _nErrorResourceId ) const { const_cast< ErrorResourceAccess* >( this )->m_nErrorResourceId = _nErrorResourceId; }
-            inline void resetError( ) const { const_cast< ErrorResourceAccess* >( this )->m_nErrorResourceId = 0; }
         public:
-            inline sal_uInt16    getErrorResourceId() const
-                                { return m_nErrorResourceId; }
+            ErrorDescriptor()
+                :m_nErrorResourceId(0)
+                ,m_nErrorCondition(0)
+                ,m_sParameter()
+            {
+            }
+
+            inline void set( const sal_uInt16 _nErrorResourceId, const sal_Int32 _nErrorCondition, const ::rtl::OUString& _rParam )
+            {
+                m_nErrorResourceId = _nErrorResourceId;
+                m_nErrorCondition = _nErrorCondition;
+                m_sParameter = _rParam;
+            }
+            inline void setResId( const sal_uInt16 _nErrorResourceId )
+            {
+                m_nErrorResourceId = _nErrorResourceId;
+            }
+            inline void reset()
+            {
+                m_nErrorResourceId = 0;
+                m_nErrorCondition = 0;
+            }
+
+            inline sal_uInt16 getResId() const                  { return m_nErrorResourceId; }
+            inline sal_Int32  getErrorCondition() const         { return m_nErrorCondition; }
+            inline const ::rtl::OUString& getParameter() const  { return m_sParameter; }
+
+            inline bool is() const { return ( m_nErrorResourceId != 0 ) || ( m_nErrorCondition != 0 ); }
         };
     }
 }

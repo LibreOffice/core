@@ -40,7 +40,6 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
-#include "svdtouch.hxx"
 #include <svx/svdhdl.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
@@ -61,6 +60,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 // #i32599#
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
@@ -253,31 +253,6 @@ UINT16 SdrCaptionObj::GetObjIdentifier() const
     return UINT16(OBJ_CAPTION);
 }
 
-SdrObject* SdrCaptionObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    sal_Bool bHit(SdrRectObj::CheckHit(rPnt,nTol,pVisiLayer) != NULL);
-    if (!bHit) {
-        INT32 nMyTol=nTol;
-        INT32 nWdt = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
-        nWdt++;
-        nWdt /= 2;
-
-        if (nWdt>nMyTol) nMyTol=nWdt; // Bei dicker Linie keine Toleranz noetig
-        Rectangle aR(rPnt,rPnt);
-        aR.Left()  -=nMyTol;
-        aR.Right() +=nMyTol;
-        aR.Top()   -=nMyTol;
-        aR.Bottom()+=nMyTol;
-        bHit = IsRectTouchesLine(aTailPoly,aR);
-    }
-    return bHit ? (SdrObject*)this : NULL;
-}
-
 void SdrCaptionObj::operator=(const SdrObject& rObj)
 {
     SdrRectObj::operator=(rObj);
@@ -377,8 +352,10 @@ bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
             Point aHit(rDrag.GetStart());
 
-            if(SdrRectObj::CheckHit(aHit, 0, NULL))
+            if(rDrag.GetPageView() && SdrObjectPrimitiveHit(*this, aHit, 0, *rDrag.GetPageView(), 0, false))
+            {
                 return true;
+            }
         }
         else
         {

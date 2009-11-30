@@ -47,7 +47,7 @@
 
 class SfxItemSet;
 class OutlinerParaObject;
-struct SfxItemPropertyMap;
+
 namespace sdr { namespace properties {
     class TextProperties;
 } }
@@ -213,13 +213,13 @@ protected:
     virtual const SfxItemSet& GetObjectItemSet();
     virtual void SetObjectItem(const SfxPoolItem& rItem);
 
-    ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap );
+    ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
 
 private:
     Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw();
     virtual ~Cell() throw();
 
-    SvxItemPropertySet maPropSet;
+    const SvxItemPropertySet* mpPropSet;
 
     sdr::properties::TextProperties*    mpProperties;
 

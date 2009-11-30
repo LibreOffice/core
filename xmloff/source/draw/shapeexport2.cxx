@@ -49,6 +49,7 @@
 #endif
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -1166,8 +1167,30 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 OUString aStreamURL;
                 OUString aStr;
 
+                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL"))) >>= aStreamURL;
                 xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= sImageURL;
-                aStr = mrExport.AddEmbeddedGraphicObject( sImageURL );
+
+                OUString aResolveURL( sImageURL );
+                const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
+
+                    // sj: trying to preserve the filename
+                if ( aStreamURL.match( sPackageURL, 0 ) )
+                {
+                    rtl::OUString sRequestedName( aStreamURL.copy( sPackageURL.getLength(), aStreamURL.getLength() - sPackageURL.getLength() ) );
+                    sal_Int32 nLastIndex = sRequestedName.lastIndexOf( '/' ) + 1;
+                    if ( ( nLastIndex > 0 ) && ( nLastIndex < sRequestedName.getLength() ) )
+                        sRequestedName = sRequestedName.copy( nLastIndex, sRequestedName.getLength() - nLastIndex );
+                    nLastIndex = sRequestedName.lastIndexOf( '.' );
+                    if ( nLastIndex >= 0 )
+                        sRequestedName = sRequestedName.copy( 0, nLastIndex );
+                    if ( sRequestedName.getLength() )
+                    {
+                        aResolveURL = aResolveURL.concat( OUString(RTL_CONSTASCII_USTRINGPARAM("?requestedName=")));
+                        aResolveURL = aResolveURL.concat( sRequestedName );
+                    }
+                }
+
+                aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
 
                 if( aStr.getLength() )

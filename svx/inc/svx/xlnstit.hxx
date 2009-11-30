@@ -46,7 +46,7 @@ class SVX_DLLPUBLIC XLineStartItem : public NameOrIndex
 
 public:
             TYPEINFO();
-            XLineStartItem(long nIndex = -1);
+            XLineStartItem(INT32 nIndex = -1);
             XLineStartItem(const String& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(SfxItemPool* pPool, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(SfxItemPool* pPool );

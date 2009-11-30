@@ -36,12 +36,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/window.hxx>
-
-// #i72754#
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
-
-// #i75163#
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -63,7 +59,7 @@ namespace sdr
             // compare the MapModes for zoom/scroll changes
             if(maBufferDevice.GetMapMode() != getOutputDevice().GetMapMode())
             {
-                const sal_Bool bZoomed(
+                const bool bZoomed(
                     maBufferDevice.GetMapMode().GetScaleX() != getOutputDevice().GetMapMode().GetScaleX()
                     || maBufferDevice.GetMapMode().GetScaleY() != getOutputDevice().GetMapMode().GetScaleY());
 
@@ -71,7 +67,7 @@ namespace sdr
                 {
                     const Point& rOriginOld = maBufferDevice.GetMapMode().GetOrigin();
                     const Point& rOriginNew = getOutputDevice().GetMapMode().GetOrigin();
-                    const sal_Bool bScrolled(rOriginOld != rOriginNew);
+                    const bool bScrolled(rOriginOld != rOriginNew);
 
                     if(bScrolled)
                     {
@@ -81,8 +77,8 @@ namespace sdr
                         const Size aOutputSizePixel(maBufferDevice.GetOutputSizePixel());
 
                         // remember and switch off MapMode
-                        const sal_Bool bMapModeWasEnabled(maBufferDevice.IsMapModeEnabled());
-                        maBufferDevice.EnableMapMode(sal_False);
+                        const bool bMapModeWasEnabled(maBufferDevice.IsMapModeEnabled());
+                        maBufferDevice.EnableMapMode(false);
 
                         // scroll internally buffered stuff
                         const Point aDestinationOffsetPixel(aOriginNewPixel - aOriginOldPixel);
@@ -132,10 +128,10 @@ namespace sdr
             Rectangle aRegionRectanglePixel;
 
             // MapModes off
-            const sal_Bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
-            const sal_Bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
-            getOutputDevice().EnableMapMode(sal_False);
-            ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(sal_False);
+            const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
+            const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
+            getOutputDevice().EnableMapMode(false);
+            ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(false);
 
             while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
             {
@@ -200,10 +196,10 @@ namespace sdr
             Rectangle aRegionRectanglePixel;
 
             // MapModes off
-            const sal_Bool bMapModeWasEnabledDest(rSource.IsMapModeEnabled());
-            const sal_Bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
-            rSource.EnableMapMode(sal_False);
-            maBufferDevice.EnableMapMode(sal_False);
+            const bool bMapModeWasEnabledDest(rSource.IsMapModeEnabled());
+            const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
+            rSource.EnableMapMode(false);
+            maBufferDevice.EnableMapMode(false);
 
             while(aRegion.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
             {
@@ -221,7 +217,7 @@ namespace sdr
                 static bool bDoPaintForVisualControl(false);
                 if(bDoPaintForVisualControl)
                 {
-                    const sal_Bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
+                    const bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
                     getOutputDevice().EnableMapMode(false);
                     getOutputDevice().SetLineColor(COL_LIGHTRED);
                     getOutputDevice().SetFillColor();
@@ -282,7 +278,7 @@ namespace sdr
                     }
 
                     maOutputBufferDevice.SetMapMode(getOutputDevice().GetMapMode());
-                    maOutputBufferDevice.EnableMapMode(sal_False);
+                    maOutputBufferDevice.EnableMapMode(false);
                     maOutputBufferDevice.SetDrawMode(maBufferDevice.GetDrawMode());
                     maOutputBufferDevice.SetSettings(maBufferDevice.GetSettings());
                     maOutputBufferDevice.SetAntialiasing(maBufferDevice.GetAntialiasing());
@@ -320,8 +316,8 @@ namespace sdr
                     const Size aSize(aRegionRectanglePixel.GetSize());
 
                     {
-                        const sal_Bool bMapModeWasEnabledDest(maBufferDevice.IsMapModeEnabled());
-                        maBufferDevice.EnableMapMode(sal_False);
+                        const bool bMapModeWasEnabledDest(maBufferDevice.IsMapModeEnabled());
+                        maBufferDevice.EnableMapMode(false);
 
                         maOutputBufferDevice.DrawOutDev(
                             aTopLeft, aSize, // destination
@@ -334,14 +330,14 @@ namespace sdr
 
                     // paint overlay content for remembered region, use
                     // method from base class directly
-                    maOutputBufferDevice.EnableMapMode(sal_True);
+                    maOutputBufferDevice.EnableMapMode(true);
                     OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, maOutputBufferDevice);
-                    maOutputBufferDevice.EnableMapMode(sal_False);
+                    maOutputBufferDevice.EnableMapMode(false);
 
                     // copy to output
                     {
-                        const sal_Bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
-                        getOutputDevice().EnableMapMode(sal_False);
+                        const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
+                        getOutputDevice().EnableMapMode(false);
 
                         getOutputDevice().DrawOutDev(
                             aTopLeft, aSize, // destination
@@ -417,8 +413,11 @@ namespace sdr
             return 0;
         }
 
-        OverlayManagerBuffered::OverlayManagerBuffered(OutputDevice& rOutputDevice, sal_Bool bRefreshWithPreRendering)
-        :   OverlayManager(rOutputDevice),
+        OverlayManagerBuffered::OverlayManagerBuffered(
+            OutputDevice& rOutputDevice,
+            OverlayManager* pOldOverlayManager,
+            bool bRefreshWithPreRendering)
+        :   OverlayManager(rOutputDevice, pOldOverlayManager),
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer
@@ -515,9 +514,9 @@ namespace sdr
             }
         }
 
-        void OverlayManagerBuffered::SetRefreshWithPreRendering(sal_Bool bNew)
+        void OverlayManagerBuffered::SetRefreshWithPreRendering(bool bNew)
         {
-            if(mbRefreshWithPreRendering != bNew)
+            if((bool)mbRefreshWithPreRendering != bNew)
             {
                 mbRefreshWithPreRendering = bNew;
             }

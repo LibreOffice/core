@@ -36,8 +36,10 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <boost/shared_ptr.hpp>
 #include <svx/outlobj.hxx>
+#include <tools/color.hxx>
+#include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <tools/weakbase.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -54,11 +56,11 @@ namespace drawinglayer
         private:
             // The text model data; this sould later just be the OutlinerParaObject or
             // something equal
-            const SdrText&                          mrSdrText;              // text model data
+            ::tools::WeakReference< SdrText >       mrSdrText;
 
             // #i97628#
-            // The text content; now as OutlinerParaObject* and in exclusive, local, cloned
-            // form as needed in a primitive
+            // The text content; now as local OutlinerParaObject copy (internally RefCounted and
+            // COW) and in exclusive, local form as needed in a primitive
             const OutlinerParaObject                maOutlinerParaObject;
 
             // remeber last VisualizingPage for which a decomposition was made. If the new target
@@ -66,6 +68,18 @@ namespace drawinglayer
             // for supporting e.g. page number change on MasterPage objects or the different
             // field renderings in SubGeometry and MasterPage mnode
             com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > mxLastVisualizingPage;
+
+            // remember last PageNumber for which a decomposition was made. This is only used
+            // when mbContainsPageField is true, else it is 0
+            sal_Int16                               mnLastPageNumber;
+
+            // remember last PageCount for which a decomposition was made. This is only used
+            // when mbContainsPageCountField is true, else it is 0
+            sal_Int16                               mnLastPageCount;
+
+            // #i101443# remember last TextBackgroundColor to decide if a new decomposition is
+            // needed because of background color change
+            Color                                   maLastTextBackgroundColor;
 
             // bitfield
             // remember if last decomposition was with or without spell checker. In this special
@@ -75,6 +89,8 @@ namespace drawinglayer
 
             // is there a PageNumber, Header, Footer or DateTimeField used? Evaluated at construction
             unsigned                                mbContainsPageField : 1;
+            unsigned                                mbContainsPageCountField : 1;
+            unsigned                                mbContainsOtherFields : 1;
 
         protected:
             // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
@@ -85,11 +101,11 @@ namespace drawinglayer
 
         public:
             SdrTextPrimitive2D(
-                const SdrText& rSdrText,
+                const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr);
 
             // get data
-            const SdrText& getSdrText() const { return mrSdrText; }
+            const SdrText* getSdrText() const { return mrSdrText.get(); }
             const OutlinerParaObject& getOutlinerParaObject() const { return maOutlinerParaObject; }
 
             // compare operator
@@ -100,7 +116,7 @@ namespace drawinglayer
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const = 0;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const = 0;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -114,8 +130,11 @@ namespace drawinglayer
         class SdrContourTextPrimitive2D : public SdrTextPrimitive2D
         {
         private:
-            ::basegfx::B2DPolyPolygon               maUnitPolyPolygon;      // unit contour polygon (scaled to [0.0 .. 1.0])
-            ::basegfx::B2DHomMatrix                 maObjectTransform;      // complete contour polygon transform (scale, rotate, shear, translate)
+            // unit contour polygon (scaled to [0.0 .. 1.0])
+            basegfx::B2DPolyPolygon             maUnitPolyPolygon;
+
+            // complete contour polygon transform (scale, rotate, shear, translate)
+            basegfx::B2DHomMatrix               maObjectTransform;
 
         protected:
             // local decomposition.
@@ -123,20 +142,20 @@ namespace drawinglayer
 
         public:
             SdrContourTextPrimitive2D(
-                const SdrText& rSdrText,
+                const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon,
-                const ::basegfx::B2DHomMatrix& rObjectTransform);
+                const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+                const basegfx::B2DHomMatrix& rObjectTransform);
 
             // get data
-            const ::basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
-            const ::basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
+            const basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
+            const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -153,7 +172,11 @@ namespace drawinglayer
         class SdrPathTextPrimitive2D : public SdrTextPrimitive2D
         {
         private:
-            ::basegfx::B2DPolyPolygon               maPathPolyPolygon;      // the path to use. Each paragraph will use one Polygon.
+            // the path to use. Each paragraph will use one Polygon.
+            basegfx::B2DPolyPolygon             maPathPolyPolygon;
+
+            // the Fontwork parameters
+            attribute::SdrFormTextAttribute     maSdrFormTextAttribute;
 
         protected:
             // local decomposition.
@@ -161,18 +184,20 @@ namespace drawinglayer
 
         public:
             SdrPathTextPrimitive2D(
-                const SdrText& rSdrText,
+                const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const ::basegfx::B2DPolyPolygon& rPathPolyPolygon);
+                const basegfx::B2DPolyPolygon& rPathPolyPolygon,
+                const attribute::SdrFormTextAttribute& rSdrFormTextAttribute);
 
             // get data
-            const ::basegfx::B2DPolyPolygon& getPathPolyPolygon() const { return maPathPolyPolygon; }
+            const basegfx::B2DPolyPolygon& getPathPolyPolygon() const { return maPathPolyPolygon; }
+            const attribute::SdrFormTextAttribute& getSdrFormTextAttribute() const { return maSdrFormTextAttribute; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -189,7 +214,8 @@ namespace drawinglayer
         class SdrBlockTextPrimitive2D : public SdrTextPrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
+            // text range transformation from unit range ([0.0 .. 1.0]) to text range
+            basegfx::B2DHomMatrix                   maTextRangeTransform;
 
             // bitfield
             unsigned                                mbUnlimitedPage : 1;    // force layout with no text break
@@ -202,9 +228,9 @@ namespace drawinglayer
 
         public:
             SdrBlockTextPrimitive2D(
-                const SdrText& rSdrText,
+                const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const ::basegfx::B2DHomMatrix& rTextRangeTransform,
+                const basegfx::B2DHomMatrix& rTextRangeTransform,
                 bool bUnlimitedPage,
                 bool bCellText,
                 bool bWordWrap);
@@ -219,7 +245,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -236,7 +262,8 @@ namespace drawinglayer
         class SdrStretchTextPrimitive2D : public SdrTextPrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
+            // text range transformation from unit range ([0.0 .. 1.0]) to text range
+            basegfx::B2DHomMatrix                   maTextRangeTransform;
 
         protected:
             // local decomposition.
@@ -244,18 +271,18 @@ namespace drawinglayer
 
         public:
             SdrStretchTextPrimitive2D(
-                const SdrText& rSdrText,
+                const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const ::basegfx::B2DHomMatrix& rTextRangeTransform);
+                const basegfx::B2DHomMatrix& rTextRangeTransform);
 
             // get data
-            const ::basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
+            const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

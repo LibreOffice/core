@@ -69,6 +69,7 @@ const sal_Unicode   AMPERSAND_SIGN = L'&';
 // Windows 2000     VER_PLATFORM_WIN32_NT       5       0
 // Windows XP       VER_PLATFORM_WIN32_NT       5       1
 // Windows Vista    VER_PLATFORM_WIN32_NT       6       0
+// Windows 7        VER_PLATFORM_WIN32_NT       6       1
 // Windows 95       VER_PLATFORM_WIN32_WINDOWS  4       0
 // Windows 98       VER_PLATFORM_WIN32_WINDOWS  4       10
 // Windows ME       VER_PLATFORM_WIN32_WINDOWS  4       90
@@ -94,7 +95,38 @@ bool SAL_CALL IsWindowsVersion(unsigned int PlatformId, unsigned int MajorVersio
 }
 
 //------------------------------------------------------------
-// determine if we are running under Win2000
+// determine if we are running under Vista or newer OS
+//------------------------------------------------------------
+
+bool SAL_CALL IsWindowsVistaOrNewer()
+{
+    OSVERSIONINFO osvi;
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+
+    if(!GetVersionEx(&osvi))
+        return false;
+
+    bool bRet = (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId) &&
+                (osvi.dwMajorVersion >= 6);
+
+    bRet = bRet &&
+        (osvi.dwMinorVersion >=
+         sal::static_int_cast< unsigned int >(0));
+
+    return bRet;
+}
+
+//------------------------------------------------------------
+// determine if we are running under Windows 7
+//------------------------------------------------------------
+
+bool SAL_CALL IsWindows7()
+{
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 6, 1);
+}
+
+//------------------------------------------------------------
+// determine if we are running under Windows Vista
 //------------------------------------------------------------
 
 bool SAL_CALL IsWindowsVista()
@@ -103,21 +135,21 @@ bool SAL_CALL IsWindowsVista()
 }
 
 //------------------------------------------------------------
-// determine if we are running under Win2000
-//------------------------------------------------------------
-
-bool SAL_CALL IsWindows2000()
-{
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 0);
-}
-
-//------------------------------------------------------------
-//
+// determine if we are running under Windows XP
 //------------------------------------------------------------
 
 bool SAL_CALL IsWindowsXP()
 {
     return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 1);
+}
+
+//------------------------------------------------------------
+// determine if we are running under Windows 2000
+//------------------------------------------------------------
+
+bool SAL_CALL IsWindows2000()
+{
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 0);
 }
 
 //------------------------------------------------------------

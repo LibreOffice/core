@@ -33,6 +33,7 @@
 #include "exp_share.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
@@ -996,6 +997,24 @@ void ElementDescriptor::readDefaults( bool supportPrintable )
         OSL_ENSURE( 0, "unexpected property type for \"Enabled\": not bool!" );
     }
 
+    sal_Bool bVisible = sal_True;
+    try
+    {
+        if (_xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("EnableVisible") ) ) >>= bVisible)
+        {
+
+            // only write out the non default case
+            if (! bVisible)
+            {
+                addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":visible") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
     // force writing of pos/size
     a = _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ) );
     if (a.getValueTypeClass() == TypeClass_LONG)

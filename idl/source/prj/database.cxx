@@ -251,7 +251,7 @@ void SvIdlDataBase::SetError( const ByteString & rError, SvToken * pTok )
         aError.SetText( "hgchcg" );
 
     if( aError.nLine < pTok->GetLine()
-      || aError.nLine == pTok->GetLine() && aError.nColumn < pTok->GetColumn() )
+      || (aError.nLine == pTok->GetLine() && aError.nColumn < pTok->GetColumn()) )
     {
         aError = SvIdlError( pTok->GetLine(), pTok->GetColumn() );
         aError.SetText( rError );

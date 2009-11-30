@@ -64,6 +64,7 @@
 #include <vcl/hatch.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <cstdio>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 
@@ -425,7 +426,10 @@ namespace drawinglayer
                        mpOutputDevice->Push(PUSH_MAPMODE);
                     mpOutputDevice->SetMapMode(maOriginalMapMode);
 
-                    if(!renderChartPrimitive2D(rChartPrimitive, *mpOutputDevice))
+                    if(!renderChartPrimitive2D(
+                        rChartPrimitive,
+                        *mpOutputDevice,
+                        getViewInformation2D()))
                     {
                         // fallback to decomposition (MetaFile)
                         process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));
@@ -530,6 +534,28 @@ namespace drawinglayer
                     // not to be suppressed by the MetaFile renderers, so that the edited text is
                     // part of the MetaFile, e.g. needed for presentation previews.
                     // Action: Ignore here, do nothing.
+                    break;
+                }
+                case PRIMITIVE2D_ID_INVERTPRIMITIVE2D :
+                {
+                    // invert primitive (currently only used for HighContrast fallback for selection in SW and SC).
+                    // Set OutDev to XOR
+                    mpOutputDevice->Push();
+                    mpOutputDevice->SetRasterOp( ROP_XOR );
+
+                    // force paint color to white by using ColorModifierStack
+                    const basegfx::BColor aColWhite(1.0, 1.0, 1.0);
+                    const basegfx::BColorModifier aColorModifier(aColWhite, 0.0, basegfx::BCOLORMODIFYMODE_REPLACE);
+                    maBColorModifierStack.push(aColorModifier);
+
+                    // process content recursively
+                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+
+                    // restore ColorModifierStack
+                    maBColorModifierStack.pop();
+
+                    // restore OutDev
+                    mpOutputDevice->Pop();
                     break;
                 }
                 default :

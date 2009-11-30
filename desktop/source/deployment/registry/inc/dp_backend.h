@@ -177,6 +177,12 @@ public:
             css::ucb::CommandAbortedException,
             css::uno::RuntimeException);
 
+    virtual ::sal_Bool SAL_CALL checkDependencies(
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+        throw (css::deployment::DeploymentException,
+            css::ucb::CommandFailedException,
+            css::uno::RuntimeException);
+
     virtual void SAL_CALL registerPackage(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )

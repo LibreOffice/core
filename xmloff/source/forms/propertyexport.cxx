@@ -455,8 +455,10 @@ namespace xmloff
         exportedProperty(PROPERTY_DATEFORMAT);
         exportedProperty(PROPERTY_TIMEFORMAT);
 
-        // the "VerticalAlign" property should have been exported at the shape, too
+        // the following properties should have been exported at the shape already:
         exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VerticalAlign" ) ) );
+        exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) ) );
+        exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScaleMode" ) ) );
         // ditto the TextWritingMode
         exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) ) );
     }

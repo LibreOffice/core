@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: NDatabaseMetaData.hxx,v $
- * $Revision: 1.10 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -70,6 +67,7 @@ namespace connectivity
 
         const ColumnProperty *getField(guint n);
         guint                 getFieldCount() ;
+        GType                 getGFieldType(guint nCol) ;
         sal_Int32             getFieldType(guint nCol) ;
         rtl::OUString         getFieldTypeName(guint nCol) ;
         rtl::OUString         getFieldName(guint nCol) ;
@@ -81,7 +79,7 @@ namespace connectivity
         {
             OEvoabConnection*                      m_pConnection;
 
-            ODatabaseMetaDataResultSet::ORows& SAL_CALL getColumnRows( const ::rtl::OUString& tableNamePattern, const ::rtl::OUString& columnNamePattern ) throw( ::com::sun::star::sdbc::SQLException );
+            ODatabaseMetaDataResultSet::ORows& getColumnRows( const ::rtl::OUString& columnNamePattern );
 
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw();

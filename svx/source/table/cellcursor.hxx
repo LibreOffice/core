@@ -75,8 +75,6 @@ public:
 protected:
     bool GetMergedSelection( CellPos& rStart, CellPos& rEnd );
 
-    void merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan );
-
     void split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< sal_Int32 >& rLeftOvers );
     void split_horizontal( sal_Int32 nColumns );
     void split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_Int32 >& rLeftOvers );

@@ -62,12 +62,10 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > m_xSeries;
     sal_Int32 mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
-    sal_Int32& mrMaxSeriesLength;
-    sal_Int32& mrNumOfLines;
-    sal_Bool& mrStockHasVolume;
-    ::rtl::OUString& mrFirstFirstDomainAddress;
-    sal_Int32& mrFirstFirstDomainIndex;
-    sal_Bool& mrAllRangeAddressesAvailable;
+    sal_Bool m_bStockHasVolume;
+
+    GlobalSeriesImportInfo& m_rGlobalSeriesImportInfo;
+
     SchXMLAxis* mpAttachedAxis;
     sal_Int32 mnAttachedAxis;
     ::rtl::OUString msAutoStyleName;
@@ -78,7 +76,6 @@ private:
     ::rtl::OUString m_aSeriesLabelRange;
     bool            m_bHasDomainContext;
     tSchXMLLSequencesPerIndex & mrLSequencesPerIndex;
-    sal_Int32& mrCurrentDataIndex;
     tSchXMLLSequencesPerIndex maPostponedSequences;
     bool& mrGlobalChartTypeUsedBySeries;
     bool mbSymbolSizeIsMissingInFile;
@@ -92,15 +89,10 @@ public:
                           std::vector< SchXMLAxis >& rAxes,
                           ::std::list< DataRowPointStyle >& rStyleList,
                           sal_Int32 nSeriesIndex,
-                          sal_Int32& rMaxSeriesLength,
-                          sal_Int32& rNumOfLines,
-                          sal_Bool&  rStockHasVolume,
-                          ::rtl::OUString& rFirstFirstDomainAddress,
-                          sal_Int32& rFirstFirstDomainIndex,
-                          sal_Bool&  rAllRangeAddressesAvailable,
+                          sal_Bool bStockHasVolume,
+                          GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
                           const ::rtl::OUString & aGlobalChartTypeName,
                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
-                          sal_Int32& rCurrentDataIndex,
                           bool& rGlobalChartTypeUsedBySeries,
                           const ::com::sun::star::awt::Size & rChartSize );
     virtual ~SchXMLSeries2Context();

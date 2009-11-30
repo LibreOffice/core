@@ -41,6 +41,7 @@
 #include <tools/poly.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vector>
+#include <com/sun/star/lang/Locale.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -75,8 +76,8 @@ namespace drawinglayer
             ~TextLayouterDevice();
 
             void setFont(const Font& rFont);
-            void setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform);
-            void setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY);
+            void setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform, const ::com::sun::star::lang::Locale & rLocale);
+            void setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY, const ::com::sun::star::lang::Locale & rLocale);
 
             double getTextHeight() const;
             double getOverlineHeight() const;
@@ -97,7 +98,10 @@ namespace drawinglayer
                 basegfx::B2DPolyPolygonVector&,
                 const String& rText,
                 xub_StrLen nIndex,
-                xub_StrLen nLength);
+                xub_StrLen nLength,
+                // #i89784# added suppirt for DXArray for justified text
+                const ::std::vector< double >& rDXArray,
+                double fFontScaleWidth);
 
             basegfx::B2DRange getTextBoundRect(
                 const String& rText,
@@ -119,11 +123,13 @@ namespace drawinglayer
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
+            const ::com::sun::star::lang::Locale & rLocale,
             const OutputDevice& rOutDev);
 
         Font getVclFontFromFontAttributes(
             const FontAttributes& rFontAttributes,
             const basegfx::B2DHomMatrix& rTransform,
+            const ::com::sun::star::lang::Locale & rLocale,
             const OutputDevice& rOutDev);
 
         FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong);

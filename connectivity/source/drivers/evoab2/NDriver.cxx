@@ -147,7 +147,7 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const ::rtl::OUString& 
     if ( ! acceptsURL(url) )
         return NULL;
 
-    OEvoabConnection* pCon = new OEvoabConnection(this);
+    OEvoabConnection* pCon = new OEvoabConnection( *this );
     pCon->construct(url,info);
         Reference< XConnection > xCon = pCon;
         m_xConnections.push_back(WeakReferenceHelper(*pCon));

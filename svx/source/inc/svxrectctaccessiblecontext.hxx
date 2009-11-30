@@ -55,7 +55,7 @@
 //#endif
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/implbase6.hxx>
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt {
