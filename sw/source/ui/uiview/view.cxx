@@ -998,13 +998,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
     pWrtShell->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
-    if( UseObjectSize() )
-    {
-        //Damit der Sfx _rechtzeitig weiss_, wie gross die sheet::Border sind.
-        SvBorder aTmp;
-        CalcAndSetBorderPixel( aTmp, sal_True );
-    }
-
     if( pWrtShell->GetDoc()->IsUpdateExpFld() )
     {
         SET_CURR_SHELL( pWrtShell );
