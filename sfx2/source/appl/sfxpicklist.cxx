@@ -449,7 +449,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     return;
 
                 // ignore hidden documents
-                if ( !SfxViewFrame::GetFirst( pDocSh, 0, TRUE ) )
+                if ( !SfxViewFrame::GetFirst( pDocSh, TRUE ) )
                     return;
 
                 ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);

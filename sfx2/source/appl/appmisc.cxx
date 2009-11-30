@@ -89,7 +89,7 @@
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "openflag.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objface.hxx>

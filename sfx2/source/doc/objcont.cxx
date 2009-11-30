@@ -76,7 +76,7 @@
 #include "sfxhelp.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "basmgr.hxx"
 #include <sfx2/doctempl.hxx>
 #include "doc.hrc"

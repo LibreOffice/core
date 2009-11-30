@@ -441,11 +441,23 @@ interface TopWindow : BrowseWindow
 
 shell SfxViewFrame
 {
-    import BrowseWindow [Automation];
+    import TopWindow [Automation];
 
     SID_FORMATMENUSTATE
     [
         StateMethod = MiscState_Impl ;
+    ]
+
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    SID_SHOWPOPUPS
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
     ]
 }
 

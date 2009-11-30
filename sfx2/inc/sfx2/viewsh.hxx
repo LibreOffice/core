@@ -160,11 +160,7 @@ class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
 #ifdef _SFXVIEWSH_HXX
 friend class SfxViewFrame;
-friend class SfxTopViewFrame;
 friend class SfxPlugInFrame;
-friend class SfxInternalFrame;
-friend class SfxExternalTopViewFrame_Impl;
-friend class SfxOfficeDocController;
 friend class SfxBaseController;
 #endif
 

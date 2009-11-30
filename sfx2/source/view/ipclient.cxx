@@ -60,7 +60,7 @@
 #include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 #include "guisaveas.hxx"
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <vcl/salbtype.hxx>
 #include <svtools/ehdl.hxx>

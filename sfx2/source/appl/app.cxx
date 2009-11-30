@@ -111,7 +111,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/genlink.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "appdata.hxx"
 #include "openflag.hxx"
 #include "app.hrc"

@@ -61,6 +61,10 @@ namespace sfx2
 {
 class SvLinkSource;
 }
+namespace svtools
+{
+    class AsynchronLink;
+}
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
@@ -129,6 +133,7 @@ Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder );
 Rectangle & operator -= ( Rectangle & rRect, const SvBorder & rBorder );
 
 
+DBG_NAMEEX(SfxViewFrame)
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
     struct SfxViewFrame_Impl*   pImp;
@@ -143,10 +148,12 @@ private:
     SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh=NULL );
 #endif
 
+//                          SfxViewFrame( SfxBindings&, SfxFrame*, SfxObjectShell *pDoc, sal_uInt32 nType );
+//                          SfxViewFrame( SfxObjectShell&, SfxBindings&, SfxFrame* p = NULL, sal_uInt32 nType = NULL );
+//                          SfxViewFrame( const SfxViewFrame &, SfxBindings &, SfxFrame *pFrame );
+
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
-    SAL_DLLPRIVATE void SetWindow_Impl( Window *pWin );
 
 #ifndef _SFX_HXX
     SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
@@ -156,13 +163,10 @@ protected:
     virtual                 ~SfxViewFrame();
 
 public:
+                            SfxViewFrame( SfxFrame* pFrame, SfxObjectShell *pDoc = NULL, USHORT nViewId = 0 );
+
                             TYPEINFO();
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
-
-                            SfxViewFrame( SfxBindings&, SfxFrame*, SfxObjectShell *pDoc=0, sal_uInt32 nType = 0 );
-                            SfxViewFrame(SfxObjectShell&, SfxBindings&, SfxFrame*p=0, sal_uInt32 nType = 0);
-                            SfxViewFrame(
-                                const SfxViewFrame &, SfxBindings &, SfxFrame *pFrame);
 
     static void             SetViewFrame( SfxViewFrame* );
     static SfxViewFrame*    CreateViewFrame( SfxObjectShell& rDoc,
@@ -170,14 +174,9 @@ public:
                                                  BOOL bHidden=FALSE );
 
     static SfxViewFrame*    Current();
-    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0,
-                                   TypeId aType = 0,
-                                   BOOL bOnlyVisible = TRUE );
-    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev,
-                                    const SfxObjectShell* pDoc = 0,
-                                    TypeId aType = 0 ,
-                                    BOOL bOnlyVisible = TRUE );
-    static USHORT           Count(TypeId = 0);
+    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
+    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
+    static USHORT           Count();
 
             void            DoActivate(BOOL bMDI, SfxViewFrame *pOld=NULL);
             void            DoDeactivate(BOOL bMDI, SfxViewFrame *pOld=NULL);
@@ -189,8 +188,7 @@ public:
     SfxBindings&            GetBindings() { return *pBindings; }
     const SfxBindings&      GetBindings() const  { return *pBindings; }
     Window&                 GetWindow() const;
-    virtual void            SetZoomFactor( const Fraction &rZoomX,
-                                           const Fraction &rZoomY ) = 0;
+    virtual void            SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     SfxProgress*            GetProgress() const;
 #ifdef ENABLE_INIMANAGER//MUSTINI
@@ -214,6 +212,8 @@ public:
     void                    ToTop();
     void                    Enable( BOOL bEnable );
     virtual BOOL            Close();
+    virtual void            Activate( BOOL bUI );
+    virtual void            Deactivate( BOOL bUI );
 
     // DDE-Interface
     virtual long            DdeExecute( const String& rCmd );
@@ -225,10 +225,10 @@ public:
                                 const ::com::sun::star::uno::Any & rValue );
     virtual ::sfx2::SvLinkSource*   DdeCreateLinkSource( const String& rItem );
 
-    virtual void            ShowStatusText( const String& rText );
-    virtual void            HideStatusText();
+    void                    ShowStatusText( const String& rText );
+    void                    HideStatusText();
 
-    virtual String          UpdateTitle();
+    String                  UpdateTitle();
 
     // interne Handler
     SAL_DLLPRIVATE virtual BOOL SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
@@ -302,6 +302,9 @@ public:
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl( USHORT nId );
     SAL_DLLPRIVATE void AddDispatchMacroToBasic_Impl(const ::rtl::OUString& sMacro);
 
+    SAL_DLLPRIVATE void Exec_Impl(SfxRequest &);
+    SAL_DLLPRIVATE void INetExecute_Impl(SfxRequest &);
+    SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 //#endif
 private:
     SAL_DLLPRIVATE SfxViewShell* LoadNewView_Impl( const USHORT i_nNewViewNo, SfxViewShell* i_pOldShell );

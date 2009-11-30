@@ -46,7 +46,7 @@
 #include "stbitem.hxx"
 #include <sfx2/navigat.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "partwnd.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "recfloat.hxx"
@@ -62,7 +62,6 @@ void SfxApplication::Registrations_Impl()
     SfxApplication::RegisterInterface();
     SfxModule::RegisterInterface();
     SfxViewFrame::RegisterInterface();
-    SfxTopViewFrame::RegisterInterface();
     SfxObjectShell::RegisterInterface();
     SfxViewShell::RegisterInterface();
 

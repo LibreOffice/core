@@ -134,7 +134,6 @@ DBG_NAME(SfxObjectShell)
 #define DocumentInfo
 #include "sfxslots.hxx"
 
-extern svtools::AsynchronLink* pPendingCloser;
 static WeakReference< XInterface > s_xCurrentComponent;
 
 //=========================================================================
@@ -251,7 +250,6 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,pFrame( 0 )
     ,pTbxConfig( 0 )
     ,eFlags( SFXOBJECTSHELL_UNDEFINED )
-    ,pCloser( 0 )
     ,bReadOnlyUI( sal_False )
     ,bHiddenLockedByAPI( sal_False )
     ,bInCloseEvent( sal_False )
@@ -271,9 +269,6 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 
 SfxObjectShell_Impl::~SfxObjectShell_Impl()
 {
-    if ( pPendingCloser == pCloser )
-        pPendingCloser = 0;
-    delete pCloser;
     delete pBasicManager;
 }
 
@@ -489,7 +484,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
             continue;
 
         if ( ( !pType || pSh->IsA(*pType) ) &&
-             ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, 0, sal_True )))
+             ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, sal_True )))
             return pSh;
     }
 
@@ -522,7 +517,7 @@ SfxObjectShell* SfxObjectShell::GetNext
             continue;
 
         if ( ( !pType || pSh->IsA(*pType) ) &&
-             ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, 0, sal_True )))
+             ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, sal_True )))
             return pSh;
     }
     return 0;
@@ -566,8 +561,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
         return sal_False;
 
     // prepare views for closing
-    for ( SfxViewFrame* pFrm = SfxViewFrame::GetFirst(
-        this, TYPE(SfxViewFrame));
+    for ( SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
           pFrm; pFrm = SfxViewFrame::GetNext( *pFrm, this ) )
     {
         DBG_ASSERT(pFrm->GetViewShell(),"KeineShell");

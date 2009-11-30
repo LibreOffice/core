@@ -132,7 +132,6 @@ TypeLibFile( "sfxslots.tlb" )
     include "docslots.sdi"
     include "frmslots.sdi"
     include "viwslots.sdi"
-    include "mdislots.sdi"
     include "appslots.sdi"
 }
 

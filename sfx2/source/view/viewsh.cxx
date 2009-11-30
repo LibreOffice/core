@@ -84,7 +84,7 @@
 #include "view.hrc"
 #include "sfxlocal.hrc"
 #include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "mailmodelapi.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>

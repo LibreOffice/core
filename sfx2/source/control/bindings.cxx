@@ -71,7 +71,7 @@
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxuno.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
 
@@ -2349,7 +2349,7 @@ SystemWindow* SfxBindings::GetSystemWindow() const
     SfxViewFrame *pFrame = pDispatcher->GetFrame();
     while ( pFrame->GetParentViewFrame_Impl() )
         pFrame = pFrame->GetParentViewFrame_Impl();
-    SfxTopViewFrame* pTop = PTR_CAST( SfxTopViewFrame, pFrame->GetTopViewFrame() );
+    SfxViewFrame* pTop = pFrame->GetTopViewFrame();
     return pTop->GetFrame()->GetTopWindow_Impl();
 }
 

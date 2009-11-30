@@ -354,7 +354,7 @@ void SfxApplication::EnterBasicCall()
         }
 
         // die SbxObjects der SfxShells auf den Stacks der Frames erzeugen
-        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(0,0,sal_False);
+        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(0,sal_False);
               pFrame;
               pFrame = SfxViewFrame::GetNext(*pFrame,0,0,sal_False) )
         {

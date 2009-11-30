@@ -99,8 +99,7 @@ class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
     der Klasse SfxBindings. Sie wird von der SfxApplication automatisch
     angelegt und zerst"ort. Instanzen werden aber i.d.R. "uber das
     Makro <SFX_BINDINGS> oder den zugeh"origen <SfxViewFrame> besorgt
-    werden. Bestimmte SfxViewFrame Subklassen (z.B. <SfxInPlaceFrame>)
-    legen ihre eigene Instanz der SfxBindings an.
+    werden.
 
     Die SfxBindings verwalten alle in den an ihr angemeldeten Controllern
     gebundenen Slot-Ids und cachen die jeweiligen <Slot-Server>

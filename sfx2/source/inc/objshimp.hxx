@@ -143,7 +143,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     SfxFrame*               pFrame;
     SfxToolBoxConfig*       pTbxConfig;
     SfxObjectShellFlags     eFlags;
-    svtools::AsynchronLink* pCloser;
     String                  aBaseURL;
     sal_Bool                bReadOnlyUI;
     SvRefBaseRef            xHeaderAttributes;

@@ -104,7 +104,7 @@
 #include "sfxresid.hxx"
 #include <sfx2/viewsh.hxx>
 #include "app.hrc"
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -196,7 +196,7 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
                     // Vergleiche anhand der URLs
                     INetURLObject aUrl( xDoc->GetMedium()->GetName() );
                     if ( !aUrl.HasError() && aUrl == aUrlToFind &&
-                         (!bForbidVisible || !SfxViewFrame::GetFirst( xDoc, 0, TRUE )) &&
+                         (!bForbidVisible || !SfxViewFrame::GetFirst( xDoc, TRUE )) &&
                          !xDoc->IsLoading())
                     {
                             break;
@@ -213,12 +213,10 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
         DBG_ASSERT(
             !bForbidVisible, "Unsichtbares kann nicht aktiviert werden" );
 
-        SfxTopViewFrame *pFrame;
-        for( pFrame = (SfxTopViewFrame*)
-                 SfxViewFrame::GetFirst( xDoc, TYPE(SfxTopViewFrame) );
+        SfxViewFrame* pFrame;
+        for( pFrame = SfxViewFrame::GetFirst( xDoc );
              pFrame && !pFrame->IsVisible_Impl();
-             pFrame = (SfxTopViewFrame*)
-                 SfxViewFrame::GetNext( *pFrame, xDoc, TYPE(SfxTopViewFrame) ) ) ;
+             pFrame = SfxViewFrame::GetNext( *pFrame, xDoc ) ) ;
         if ( pFrame )
         {
             SfxViewFrame *pCur = SfxViewFrame::Current();

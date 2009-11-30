@@ -49,7 +49,7 @@
 #include "appdata.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/sfxsids.hrc>
@@ -632,7 +632,7 @@ String ImplDdeService::Topics()
     SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
     while( pShell )
     {
-        if( SfxViewFrame::GetFirst( pShell, TYPE(SfxTopViewFrame) ))
+        if( SfxViewFrame::GetFirst( pShell ) )
         {
             if( sRet.Len() )
                 sRet += '\t';

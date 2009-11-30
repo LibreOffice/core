@@ -41,7 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 #include "workwin.hxx"
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>

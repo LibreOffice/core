@@ -79,7 +79,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/mnumgr.hxx>
@@ -1676,7 +1676,7 @@ void SfxDispatcher::SetMenu_Impl()
 {
     if ( pImp->pFrame )
     {
-        SfxTopViewFrame* pTop= PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() );
+        SfxViewFrame* pTop = pImp->pFrame->GetTopViewFrame();
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
             SfxFrame* pFrm = pTop->GetFrame();
@@ -1732,7 +1732,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     if ( !bUpdate || pImp->pFrame->GetFrame()->IsClosing_Impl() )
         return 0;
 
-    SfxTopViewFrame* pTop = pImp->pFrame ? PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() ) : NULL;
+    SfxViewFrame* pTop = pImp->pFrame ? pImp->pFrame->GetTopViewFrame() : NULL;
     sal_Bool bUIActive = pTop && pTop->GetBindings().GetDispatcher() == this;
 
     if ( !bUIActive && pTop && GetBindings() == &pTop->GetBindings() )
@@ -2911,7 +2911,7 @@ void SfxDispatcher::HideUI( sal_Bool bHide )
     pImp->bNoUI = bHide;
     if ( pImp->pFrame )
     {
-        SfxTopViewFrame* pTop= PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() );
+        SfxViewFrame* pTop = pImp->pFrame->GetTopViewFrame();
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
             SfxFrame* pFrm = pTop->GetFrame();
@@ -3160,27 +3160,6 @@ void SfxDispatcher::InvalidateBindings_Impl( sal_Bool bModify )
                 pFrame;
                 pFrame = SfxViewFrame::GetNext( *pFrame ) )
             pFrame->GetBindings().InvalidateAll(bModify);
-/*
-        // alle Bindings sind betroffen
-        for ( SfxInPlaceFrame *pIPFrame = (SfxInPlaceFrame*)
-                    SfxViewFrame::GetFirst(0, TYPE(SfxInPlaceFrame));
-                pIPFrame;
-                pIPFrame = (SfxInPlaceFrame*)
-                    SfxViewFrame::GetNext(*pIPFrame, 0, TYPE(SfxInPlaceFrame)) )
-            pIPFrame->GetBindings().InvalidateAll(bModify);
-
-        for ( SfxPlugInFrame *pPIFrame = (SfxPlugInFrame*)
-                    SfxViewFrame::GetFirst(0, TYPE(SfxPlugInFrame));
-                pPIFrame;
-                pPIFrame = (SfxPlugInFrame*)
-                    SfxViewFrame::GetNext(*pPIFrame, 0, TYPE(SfxPlugInFrame)) )
-            pPIFrame->GetBindings().InvalidateAll(bModify);
-
-        for ( SfxTask* pTask = SfxTask::GetFirst(); pTask;
-                pTask = SfxTask::GetNext( *pTask ) )
-            if ( !pTask->IsExternal() )
-                pTask->GetBindings()->InvalidateAll(bModify);
-*/
     }
     else
     {

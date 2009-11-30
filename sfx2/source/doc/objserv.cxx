@@ -88,7 +88,7 @@
 #include "sfxtypes.hxx"
 //#include "interno.hxx"
 #include <sfx2/module.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "versdlg.hxx"
 #include "doc.hrc"
 #include <sfx2/docfac.hxx>
@@ -139,8 +139,6 @@ public:
 
 #define SfxObjectShell
 #include "sfxslots.hxx"
-
-svtools::AsynchronLink* pPendingCloser = 0;
 
 //=========================================================================
 
@@ -283,7 +281,7 @@ void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
 void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 {
     bool bPrinting = false;
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this, TYPE(SfxTopViewFrame));
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
     if ( pFrame )
     {
         SfxPrinter *pPrinter = pFrame->GetViewShell()->GetPrinter();
@@ -1218,8 +1216,7 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
     {
         case SID_ACTIVATE:
         {
-            SfxViewFrame *pFrame =
-                    SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame), TRUE );
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, TRUE );
             if ( pFrame )
                 pFrame->GetFrame()->Appear();
             rReq.SetReturnValue( SfxObjectItem( 0, pFrame ) );

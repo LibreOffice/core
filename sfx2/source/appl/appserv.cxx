@@ -131,7 +131,7 @@
 #include "minfitem.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "sfxpicklist.hxx"
 #include "imestatuswindow.hxx"
 #include <sfx2/sfxdlg.hxx>

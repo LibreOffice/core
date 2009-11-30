@@ -118,7 +118,7 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "appdata.hxx"
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -361,8 +361,10 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
     if ( !pObjectShell )
         return;
 
-    for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pObjectShell, TYPE(SfxTopViewFrame) ); pFrame;
-            pFrame = SfxViewFrame::GetNext(*pFrame, pObjectShell, TYPE(SfxTopViewFrame) ) )
+    for (   SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pObjectShell );
+            pFrame;
+            pFrame = SfxViewFrame::GetNext( *pFrame, pObjectShell )
+        )
     {
         SfxFrame* pSfxFrame = pFrame->GetFrame();
         if ( pSfxFrame )
@@ -2937,7 +2939,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() 
     {
         SfxViewFrame *pActFrame = SfxViewFrame::Current();
         if ( !pActFrame || pActFrame->GetObjectShell() != m_pData->m_pObjectShell )
-            pActFrame = SfxViewFrame::GetFirst(m_pData->m_pObjectShell, TYPE(SfxTopViewFrame));
+            pActFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell );
 
         if ( !pActFrame || !pActFrame->GetViewShell() )
             // currently no frame for this document at all or View is under construction
@@ -2958,8 +2960,8 @@ uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() 
         sal_Int32 nCount = 0;
         uno::Sequence < beans::PropertyValue > aSeq;
         ::com::sun::star::uno::Any aAny;
-        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(m_pData->m_pObjectShell, TYPE(SfxTopViewFrame) ); pFrame;
-                pFrame = SfxViewFrame::GetNext(*pFrame, m_pData->m_pObjectShell, TYPE(SfxTopViewFrame) ) )
+        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell ); pFrame;
+                pFrame = SfxViewFrame::GetNext( *pFrame, m_pData->m_pObjectShell ) )
         {
             BOOL bIsActive = ( pFrame == pActFrame );
             pFrame->GetViewShell()->WriteUserDataSequence( aSeq );
@@ -3391,7 +3393,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     if ( !m_pData->m_pObjectShell.Is() )
         throw uno::Exception(); // TODO: error handling
 
-    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False );
+    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False );
     if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !pViewFrm->GetFrame()->IsInPlace() )
     {
         Window* pWindow = VCLUnoHelper::GetWindow( pViewFrm->GetFrame()->GetFrameInterface()->getContainerWindow() );
