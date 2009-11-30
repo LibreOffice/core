@@ -1694,8 +1694,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                         if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                         {
                             com::sun::star::io::WrongFormatException aWFE;
-                            aWFE.Message = ::rtl::OUString::createFromAscii("Extension not present.");
-                                // TODO: resource
+                            aWFE.Message = DBACORE_RESSTRING( RID_STR_MISSING_EXTENSION );
                             throw aWFE;
                         }
                     }

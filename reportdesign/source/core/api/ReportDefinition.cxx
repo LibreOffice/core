@@ -563,8 +563,7 @@ namespace
         }
         catch(uno::Exception& ex)
         {
-            (void)ex;
-            OSL_ASSERT(0);
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     void SAL_CALL FactoryLoader::onTerminated()
