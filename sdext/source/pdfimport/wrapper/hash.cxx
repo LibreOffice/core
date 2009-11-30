@@ -1,4 +1,4 @@
-/* C++ code produced by gperf version 3.0.2 */
+/* C++ code produced by gperf version 3.0.1 */
 /* Command-line: gperf -C -t -l -L C++ -m 20 -Z PdfKeywordHash keyword_list  */
 /* Computed positions: -k'4-5,$' */
 
@@ -36,12 +36,12 @@ struct hash_entry { const char* name; enum parseKey eKey; };
 #pragma GCC system_header
 #endif
 
-#define TOTAL_KEYWORDS 45
+#define TOTAL_KEYWORDS 46
 #define MIN_WORD_LENGTH 7
 #define MAX_WORD_LENGTH 19
 #define MIN_HASH_VALUE 8
-#define MAX_HASH_VALUE 63
-/* maximum key range = 56, duplicates = 0 */
+#define MAX_HASH_VALUE 68
+/* maximum key range = 61, duplicates = 0 */
 
 class PdfKeywordHash
 {
@@ -56,32 +56,32 @@ PdfKeywordHash::hash (register const char *str, register unsigned int len)
 {
   static const unsigned char asso_values[] =
     {
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 14, 64, 38, 64,
-       1, 64, 64, 64, 31, 64, 16, 32, 20, 64,
-      15,  0, 64, 21, 15, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64,  0, 14, 64,
-      64,  5, 20, 64,  4, 11,  0, 19,  2, 22,
-      11, 30,  0, 64,  0,  9,  0,  5, 64,  4,
-      64, 13, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-      64, 64, 64, 64, 64, 64, 64
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69,  9, 69, 38, 69,
+       1, 69, 69, 69, 31, 69, 16, 35, 21, 69,
+      15,  0, 69, 21, 15, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69,  0, 15, 69,
+      69,  5,  8, 69,  4,  8,  0, 20,  2, 27,
+      11, 31,  0, 69,  0,  9,  0,  5, 69,  5,
+      69, 13, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69, 69, 69, 69,
+      69, 69, 69, 69, 69, 69, 69
     };
   return len + asso_values[(unsigned char)str[4]+1] + asso_values[(unsigned char)str[3]] + asso_values[(unsigned char)str[len - 1]];
 }
@@ -93,9 +93,9 @@ PdfKeywordHash::in_word_set (register const char *str, register unsigned int len
     {
        0,  0,  0,  0,  0,  0,  0,  0,  7,  0,  0,  0,  8, 12,
        8, 10, 10, 12, 13,  9, 15, 16, 17, 14, 15, 15, 10, 13,
-      14, 15, 14, 11, 12,  9,  9, 17,  9, 19, 11,  8, 14,  7,
-       9, 19, 15, 13, 10, 10, 13,  9,  8,  8, 17, 12,  0,  0,
-       0,  0,  0,  0,  0, 10,  0,  8
+      14, 15, 14, 11, 12,  9,  9, 17, 13, 19, 11,  8, 14,  9,
+       7,  9, 19, 17, 15, 10, 13, 10,  9,  8, 17, 12,  8,  0,
+       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 10,  8
     };
   static const struct hash_entry wordlist[] =
     {
@@ -109,37 +109,37 @@ PdfKeywordHash::in_word_set (register const char *str, register unsigned int len
       {"setFillColor",SETFILLCOLOR},
 #line 19 "keyword_list"
       {"fillPath",FILLPATH},
-#line 45 "keyword_list"
+#line 46 "keyword_list"
       {"updateFont",UPDATEFONT},
 #line 17 "keyword_list"
       {"eoClipPath",EOCLIPPATH},
 #line 25 "keyword_list"
       {"restoreState",RESTORESTATE},
-#line 46 "keyword_list"
-      {"updateLineCap",UPDATELINECAP},
-#line 38 "keyword_list"
-      {"startPage",STARTPAGE},
-#line 42 "keyword_list"
-      {"updateFillColor",UPDATEFILLCOLOR},
-#line 50 "keyword_list"
-      {"updateMiterLimit",UPDATEMITERLIMIT},
-#line 51 "keyword_list"
-      {"updateStrokeColor",UPDATESTROKECOLOR},
 #line 47 "keyword_list"
+      {"updateLineCap",UPDATELINECAP},
+#line 39 "keyword_list"
+      {"startPage",STARTPAGE},
+#line 43 "keyword_list"
+      {"updateFillColor",UPDATEFILLCOLOR},
+#line 51 "keyword_list"
+      {"updateMiterLimit",UPDATEMITERLIMIT},
+#line 52 "keyword_list"
+      {"updateStrokeColor",UPDATESTROKECOLOR},
+#line 48 "keyword_list"
       {"updateLineDash",UPDATELINEDASH},
-#line 49 "keyword_list"
+#line 50 "keyword_list"
       {"updateLineWidth",UPDATELINEWIDTH},
-#line 40 "keyword_list"
+#line 41 "keyword_list"
       {"updateBlendMode",UPDATEBLENDMODE},
 #line 30 "keyword_list"
       {"setLineCap",SETLINECAP},
 #line 21 "keyword_list"
       {"intersectClip",INTERSECTCLIP},
-#line 44 "keyword_list"
+#line 45 "keyword_list"
       {"updateFlatness",UPDATEFLATNESS},
 #line 22 "keyword_list"
       {"intersectEoClip",INTERSECTEOCLIP},
-#line 48 "keyword_list"
+#line 49 "keyword_list"
       {"updateLineJoin",UPDATELINEJOIN},
 #line 31 "keyword_list"
       {"setLineDash",SETLINEDASH},
@@ -149,11 +149,11 @@ PdfKeywordHash::in_word_set (register const char *str, register unsigned int len
       {"pushState",PUSHSTATE},
 #line 26 "keyword_list"
       {"saveState",SAVESTATE},
-#line 43 "keyword_list"
+#line 44 "keyword_list"
       {"updateFillOpacity",UPDATEFILLOPACITY},
-#line 41 "keyword_list"
-      {"updateCtm",UPDATECTM},
-#line 52 "keyword_list"
+#line 16 "keyword_list"
+      {"endTextObject",ENDTEXTOBJECT},
+#line 53 "keyword_list"
       {"updateStrokeOpacity",UPDATESTROKEOPACITY},
 #line 32 "keyword_list"
       {"setLineJoin",SETLINEJOIN},
@@ -161,36 +161,38 @@ PdfKeywordHash::in_word_set (register const char *str, register unsigned int len
       {"popState",POPSTATE},
 #line 36 "keyword_list"
       {"setStrokeColor",SETSTROKECOLOR},
+#line 42 "keyword_list"
+      {"updateCtm",UPDATECTM},
 #line 15 "keyword_list"
       {"endPage",ENDPAGE},
 #line 20 "keyword_list"
       {"hyperLink",HYPERLINK},
 #line 14 "keyword_list"
       {"drawSoftMaskedImage",DRAWSOFTMASKEDIMAGE},
+#line 37 "keyword_list"
+      {"setTextRenderMode",SETTEXTRENDERMODE},
 #line 13 "keyword_list"
       {"drawMaskedImage",DRAWMASKEDIMAGE},
+#line 40 "keyword_list"
+      {"strokePath",STROKEPATH},
 #line 34 "keyword_list"
       {"setMiterLimit",SETMITERLIMIT},
-#line 39 "keyword_list"
-      {"strokePath",STROKEPATH},
 #line 18 "keyword_list"
       {"eoFillPath",EOFILLPATH},
-#line 16 "keyword_list"
-      {"endTextObject",ENDTEXTOBJECT},
 #line 10 "keyword_list"
       {"drawImage",DRAWIMAGE},
 #line 9 "keyword_list"
       {"drawChar",DRAWCHAR},
-#line 12 "keyword_list"
-      {"drawMask",DRAWMASK},
-#line 37 "keyword_list"
+#line 38 "keyword_list"
       {"setTransformation",SETTRANSFORMATION},
 #line 27 "keyword_list"
       {"setBlendMode",SETBLENDMODE},
-      {""}, {""}, {""}, {""}, {""}, {""}, {""},
+#line 12 "keyword_list"
+      {"drawMask",DRAWMASK},
+      {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
+      {""}, {""}, {""},
 #line 35 "keyword_list"
       {"setPageNum",SETPAGENUM},
-      {""},
 #line 11 "keyword_list"
       {"drawLink",DRAWLINK  }
     };

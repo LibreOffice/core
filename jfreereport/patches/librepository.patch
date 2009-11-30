@@ -1,22 +1,10 @@
-*** misc/librepository/build.properties	Sun May 27 19:23:24 2007
---- misc/build/librepository/build.properties	Fri Jul 27 09:06:11 2007
-***************
-*** 18,25 ****
-  
-  #
-  # Make sure that JDK 1.2 compatible class files are generated
-  build.target=1.4
-! build.source=1.2
-  build.retro.target=1.2
-  build.retro.jdk=/opt/jdk1.2.2
-  
---- 18,25 ----
-  
-  #
-  # Make sure that JDK 1.2 compatible class files are generated
-  build.target=1.4
-! build.source=1.3
-  build.retro.target=1.2
-  build.retro.jdk=/opt/jdk1.2.2
-  
-  
+--- misc/librepository/build.xml	(Revision 6728)
++++ misc/build/librepository/build.xml	(Arbeitskopie)
+@@ -24,6 +24,6 @@
+   <!-- Setup the compile classpath -->
+   <path id="classpath">
+-    <fileset dir="lib">
++    <fileset dir="${lib}">
+       <include name="*.jar" />
+     </fileset>
+   </path>

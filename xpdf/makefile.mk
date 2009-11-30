@@ -51,7 +51,7 @@ dummy:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=xpdf-3.02
-PATCH_FILE_NAME=$(TARFILE_NAME).patch
+PATCH_FILES=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=
 BUILD_DIR=$(CONFIGURE_DIR)

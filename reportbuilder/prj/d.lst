@@ -1,0 +1,12 @@
+# Extensions
+
+..\%__SRC%\bin\*.oxt %_DEST%\bin%_EXT%\*.oxt
+
+# License
+mkdir: %_DEST%\bin%_EXT%\reportbuilder
+
+..\license\license_en-US.txt %_DEST%\bin%_EXT%\reportbuilder\license_en-US.txt
+..\license\license_en-US.html %_DEST%\bin%_EXT%\reportbuilder\license_en-US.html
+..\license\readme_en-US.html %_DEST%\bin%_EXT%\reportbuilder\readme_en-US.html
+..\license\readme_en-US.txt %_DEST%\bin%_EXT%\reportbuilder\readme_en-US.txt
+..\license\THIRDPARTYREADMELICENSE.html %_DEST%\bin%_EXT%\reportbuilder\THIRDPARTYREADMELICENSE.html

@@ -89,6 +89,16 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     return nRet;
 }
 
+sal_Int32 StyleContainer::getStandardStyleId( const rtl::OString& rName )
+{
+    PropertyMap aProps;
+    aProps[ USTR( "style:family" ) ] = rtl::OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
+    aProps[ USTR( "style:name" ) ] = USTR( "standard" );
+
+    Style aStyle( "style:style", aProps );
+    return getStyleId( aStyle );
+}
+
 const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
 {
     std::hash_map< sal_Int32, HashedStyle >::const_iterator it =
@@ -159,18 +169,23 @@ OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
     {
         const HashedStyle& rStyle = style_it->second;
 
-        PropertyMap::const_iterator fam_it = rStyle.Properties.find( USTR("style:family" ) );
-        OUString aStyleName;
-        if( fam_it != rStyle.Properties.end() )
-        {
-            aStyleName = fam_it->second;
-        }
+        PropertyMap::const_iterator name_it = rStyle.Properties.find( USTR("style:name") );
+        if( name_it != rStyle.Properties.end() )
+            aRet.append( name_it->second );
         else
-            aStyleName = OStringToOUString( rStyle.Name, RTL_TEXTENCODING_ASCII_US );
-        sal_Int32 nIndex = aStyleName.lastIndexOf( ':' );
-        aRet.append( aStyleName.copy( nIndex+1 ) );
-        aRet.append( nStyle );
-
+        {
+            PropertyMap::const_iterator fam_it = rStyle.Properties.find( USTR("style:family" ) );
+            OUString aStyleName;
+            if( fam_it != rStyle.Properties.end() )
+            {
+                aStyleName = fam_it->second;
+            }
+            else
+                aStyleName = OStringToOUString( rStyle.Name, RTL_TEXTENCODING_ASCII_US );
+            sal_Int32 nIndex = aStyleName.lastIndexOf( ':' );
+            aRet.append( aStyleName.copy( nIndex+1 ) );
+            aRet.append( nStyle );
+        }
     }
     else
     {
@@ -208,7 +223,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
 void StyleContainer::emit( EmitContext&        rContext,
                            ElementTreeVisitor& rContainedElemVisitor )
 {
-    std::vector< sal_Int32 > aMasterPageSection, aAutomaticStyleSection;
+    std::vector< sal_Int32 > aMasterPageSection, aAutomaticStyleSection, aOfficeStyleSection;
     for( std::hash_map< sal_Int32, HashedStyle >::iterator it = m_aIdToStyle.begin();
          it != m_aIdToStyle.end(); ++it )
     {
@@ -216,6 +231,8 @@ void StyleContainer::emit( EmitContext&        rContext,
         {
             if( it->second.Name.equals( "style:master-page" ) )
                 aMasterPageSection.push_back( it->first );
+            else if( getStyleName( it->first ).equalsAscii( "standard" ) )
+                aOfficeStyleSection.push_back( it->first );
             else
                 aAutomaticStyleSection.push_back( it->first );
         }
@@ -225,14 +242,18 @@ void StyleContainer::emit( EmitContext&        rContext,
         std::stable_sort( aMasterPageSection.begin(), aMasterPageSection.end(), StyleIdNameSort(&m_aIdToStyle) );
     if( ! aAutomaticStyleSection.empty() )
         std::stable_sort( aAutomaticStyleSection.begin(), aAutomaticStyleSection.end(), StyleIdNameSort(&m_aIdToStyle) );
+    if( ! aOfficeStyleSection.empty() )
+        std::stable_sort( aOfficeStyleSection.begin(), aOfficeStyleSection.end(), StyleIdNameSort(&m_aIdToStyle) );
 
-    rContext.rEmitter.beginTag( "office:automatic-styles", PropertyMap() );
     int n = 0, nElements = 0;
+    rContext.rEmitter.beginTag( "office:styles", PropertyMap() );
+    for( n = 0, nElements = aOfficeStyleSection.size(); n < nElements; n++ )
+        impl_emitStyle( aOfficeStyleSection[n], rContext, rContainedElemVisitor );
+    rContext.rEmitter.endTag( "office:styles" );
+    rContext.rEmitter.beginTag( "office:automatic-styles", PropertyMap() );
     for( n = 0, nElements = aAutomaticStyleSection.size(); n < nElements; n++ )
         impl_emitStyle( aAutomaticStyleSection[n], rContext, rContainedElemVisitor );
     rContext.rEmitter.endTag( "office:automatic-styles" );
-    rContext.rEmitter.beginTag( "office:styles", PropertyMap() );
-    rContext.rEmitter.endTag( "office:styles" );
     rContext.rEmitter.beginTag( "office:master-styles", PropertyMap() );
     for( n = 0, nElements = aMasterPageSection.size(); n < nElements; n++ )
         impl_emitStyle( aMasterPageSection[n], rContext, rContainedElemVisitor );

@@ -225,7 +225,7 @@ namespace pdfi
         virtual void updateFont(GfxState *state);
         // virtual void updateTextMat(GfxState *state);
         // virtual void updateCharSpace(GfxState *state) {}
-        // virtual void updateRender(GfxState *state) {}
+        virtual void updateRender(GfxState *state);
         // virtual void updateRise(GfxState *state) {}
         // virtual void updateWordSpace(GfxState *state) {}
         // virtual void updateHorizScaling(GfxState *state) {}

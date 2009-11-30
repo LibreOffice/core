@@ -50,7 +50,7 @@ TARFILE_NAME=commons-httpclient-3.1-src
 
 TARFILE_ROOTDIR=commons-httpclient-3.1
 
-#PATCH_FILE_NAME=$(PRJ)$/patches$/httpclient.patch
+#PATCH_FILES=$(PRJ)$/patches$/httpclient.patch
 
 #CONVERTFILES=build.xml
                 

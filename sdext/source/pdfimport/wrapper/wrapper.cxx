@@ -120,6 +120,7 @@ enum parseKey {
     SETMITERLIMIT,
     SETPAGENUM,
     SETSTROKECOLOR,
+    SETTEXTRENDERMODE,
     SETTRANSFORMATION,
     STARTPAGE,
     STROKEPATH,
@@ -504,6 +505,7 @@ void Parser::readFont()
                             nIsBold != 0,
                             nIsItalic != 0,
                             nIsUnderline != 0,
+                            false,
                             nSize );
 
     // extract textual attributes (bold, italic in the name, etc.)
@@ -776,6 +778,8 @@ void Parser::parseLine( const ::rtl::OString& rLine )
             m_pSink->setStrokeColor( readColor() ); break;
         case UPDATESTROKEOPACITY:
             break;
+        case SETTEXTRENDERMODE:
+            m_pSink->setTextRenderMode( readInt32() ); break;
 
         case NONE:
         default:

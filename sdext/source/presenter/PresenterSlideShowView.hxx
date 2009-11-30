@@ -149,6 +149,8 @@ public:
     virtual void SAL_CALL setMouseCursor(::sal_Int16 nPointerShape)
         throw (css::uno::RuntimeException);
 
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getCanvasArea(  )
+    throw (::com::sun::star::uno::RuntimeException);
 
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
@@ -236,6 +238,8 @@ private:
     css::uno::Reference<css::awt::XPointer> mxPointer;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::awt::XWindow> mxViewWindow;
+    css::uno::Reference<css::drawing::framework::XPane> mxTopPane;
+    css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolygon1;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolygon2;
     bool mbIsViewAdded;
@@ -267,8 +271,7 @@ private:
     css::uno::Reference<css::awt::XWindow> CreateViewWindow (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow) const;
     css::uno::Reference<css::rendering::XCanvas> CreateViewCanvas (
-        const css::uno::Reference<css::awt::XWindow>& rxWindow,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxParentPane) const;
+        const css::uno::Reference<css::awt::XWindow>& rxWindow) const;
 
     void Resize (void);
 

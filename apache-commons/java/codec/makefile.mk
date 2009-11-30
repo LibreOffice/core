@@ -50,7 +50,7 @@ TARFILE_NAME=commons-codec-1.3-src
 
 TARFILE_ROOTDIR=commons-codec-1.3
 
-PATCH_FILE_NAME=$(PRJ)$/patches$/codec.patch
+PATCH_FILES=$(PRJ)$/patches$/codec.patch
 
 #CONVERTFILES=build.xml
                 

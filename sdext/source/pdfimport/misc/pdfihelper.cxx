@@ -35,7 +35,7 @@
 #include "pdfihelper.hxx"
 
 #include <rtl/ustrbuf.hxx>
-#include <vcl/canvastools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 using namespace pdfi;
 using namespace com::sun::star;
@@ -43,9 +43,9 @@ using namespace com::sun::star;
 rtl::OUString pdfi::getColorString( const rendering::ARGBColor& rCol )
 {
     rtl::OUStringBuffer aBuf( 7 );
-    const sal_uInt8 nRed  ( vcl::unotools::toByteColor(rCol.Red)   );
-    const sal_uInt8 nGreen( vcl::unotools::toByteColor(rCol.Green) );
-    const sal_uInt8 nBlue ( vcl::unotools::toByteColor(rCol.Blue)  );
+    const sal_uInt8 nRed  ( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Red * 255.0 ) ) );
+    const sal_uInt8 nGreen( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Green * 255.0 ) ) );
+    const sal_uInt8 nBlue ( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Blue * 255.0 ) ) );
     aBuf.append( sal_Unicode('#') );
     if( nRed < 10 )
         aBuf.append( sal_Unicode('0') );

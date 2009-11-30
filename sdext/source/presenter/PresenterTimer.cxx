@@ -76,7 +76,6 @@ class TimerScheduler
 {
 public:
     static ::boost::shared_ptr<TimerScheduler> Instance (void);
-    static void Release (void);
     static SharedTimerTask CreateTimerTask (
         const PresenterTimer::Task& rTask,
         const TimeValue& rDueTime,
@@ -107,12 +106,15 @@ private:
     ::osl::Mutex maCurrentTaskMutex;
     SharedTimerTask mpCurrentTask;
 
+    static void Release (void);
+
     TimerScheduler (void);
     virtual ~TimerScheduler (void);
     class Deleter {public: void operator () (TimerScheduler* pScheduler) { delete pScheduler; } };
     friend class Deleter;
 
     virtual void SAL_CALL run (void);
+    virtual void SAL_CALL onTerminated (void);
 };
 
 
@@ -380,7 +382,13 @@ void SAL_CALL TimerScheduler::run (void)
             mpCurrentTask.reset();
         }
     }
+}
 
+
+
+
+void SAL_CALL TimerScheduler::onTerminated (void)
+{
     Release();
 }
 

@@ -82,6 +82,8 @@ PresenterSlideShowView::PresenterSlideShowView (
       mxPointer(),
       mxWindow(),
       mxViewWindow(),
+      mxTopPane(),
+      mxPresenterHelper(),
       mxBackgroundPolygon1(),
       mxBackgroundPolygon2(),
       mbIsViewAdded(false),
@@ -114,6 +116,13 @@ void PresenterSlideShowView::LateInit (void)
     if (xSlideShowComponent.is())
         xSlideShowComponent->addEventListener(static_cast<awt::XWindowListener*>(this));
 
+    Reference<lang::XMultiComponentFactory> xFactory (
+        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
+    mxPresenterHelper.set (xFactory->createInstanceWithContext(
+                   OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
+                   mxComponentContext),
+               UNO_QUERY_THROW);
+
     // Use view id and controller to retrieve window and canvas from
     // configuration controller.
     Reference<XControllerManager> xCM (mxController, UNO_QUERY_THROW);
@@ -121,6 +130,8 @@ void PresenterSlideShowView::LateInit (void)
 
     if (xCC.is())
     {
+    mxTopPane.set(xCC->getResource(mxViewId->getAnchor()->getAnchor()), UNO_QUERY);
+
         Reference<XPane> xPane (xCC->getResource(mxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxWindow = xPane->getWindow();
@@ -142,8 +153,8 @@ void PresenterSlideShowView::LateInit (void)
     // Create a window for the actual slide show view.  It is places
     // centered and with maximal size inside the pane.
     mxViewWindow = CreateViewWindow(mxWindow);
-    mxViewCanvas = CreateViewCanvas(mxViewWindow,
-        Reference<XPane>(xCC->getResource(mxViewId->getAnchor()->getAnchor()), UNO_QUERY));
+
+    mxViewCanvas = CreateViewCanvas(mxViewWindow);
 
     if (mxViewWindow.is())
     {
@@ -551,6 +562,19 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
     }
 }
 
+
+
+awt::Rectangle SAL_CALL PresenterSlideShowView::getCanvasArea(  ) throw (RuntimeException)
+{
+    if( mxViewWindow.is() && mxTopPane.is() )
+    return mxPresenterHelper->getWindowExtentsRelative( mxViewWindow, mxTopPane->getWindow() );
+
+    awt::Rectangle aRectangle;
+
+    aRectangle.X = aRectangle.Y = aRectangle.Width = aRectangle.Height = 0;
+
+    return aRectangle;
+}
 
 
 
@@ -986,22 +1010,14 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
 
 
 Reference<rendering::XCanvas> PresenterSlideShowView::CreateViewCanvas (
-    const Reference<awt::XWindow>& rxViewWindow,
-    const Reference<XPane>& rxParentPane) const
+    const Reference<awt::XWindow>& rxViewWindow) const
 {
     // Create a canvas for the view window.
-    Reference<lang::XMultiComponentFactory> xFactory (
-        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
-    Reference<drawing::XPresenterHelper> xPresenterHelper(
-        xFactory->createInstanceWithContext(
-            OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
-            mxComponentContext),
-        UNO_QUERY_THROW);
-    return xPresenterHelper->createSharedCanvas(
-        Reference<rendering::XSpriteCanvas>(rxParentPane->getCanvas(), UNO_QUERY),
-        rxParentPane->getWindow(),
-        rxParentPane->getCanvas(),
-        rxParentPane->getWindow(),
+    return mxPresenterHelper->createSharedCanvas(
+        Reference<rendering::XSpriteCanvas>(mxTopPane->getCanvas(), UNO_QUERY),
+        mxTopPane->getWindow(),
+        mxTopPane->getCanvas(),
+        mxTopPane->getWindow(),
         rxViewWindow);
 }
 

@@ -1,86 +1,19 @@
-*** misc/flute/ant/build.properties	Thu Oct 18 08:20:03 2007
---- misc/build/flute/ant/build.properties	Thu Oct 18 14:07:28 2007
-***************
-*** 14,21 ****
-  
-  #
-  # Make sure that JDK 1.2 compatible class files are generated
-! build.target=1.2
-! build.source=1.2
-  
-  #
-  # All path settings are relative to the project root directory
---- 14,21 ----
-  
-  #
-  # Make sure that JDK 1.2 compatible class files are generated
-! build.target=1.3
-! build.source=1.3
-  
-  #
-  # All path settings are relative to the project root directory
-*** misc/flute/ant/build.xml	Thu Oct 18 08:20:03 2007
---- misc/build/flute/ant/build.xml	Mon Oct 22 09:13:22 2007
-***************
-*** 19,26 ****
-      </path>
-      <isClassAndFileAvailable class-name="org.w3c.css.sac.Parser"
-                               property-name="core.Enabled"
-!                              file-name="${libdir}/${sac-jar-file}"
-!                              classpath-id="core.Classpath"/>
-      <fail unless="core.Enabled"/>
-  
-    </target>
---- 19,25 ----
-      </path>
-      <isClassAndFileAvailable class-name="org.w3c.css.sac.Parser"
-                               property-name="core.Enabled"
-!                              file-name="${libdir}/${sac-jar-file}"/>
-      <fail unless="core.Enabled"/>
-  
-    </target>
-***************
-*** 38,59 ****
-  
-    <target name="compile" depends="initialise">
-  
-!     <fileset dir="source/" id="core.SourceFiles">
-!       <exclude name="**/junit/**"/>
-!       <include name="**/*.java"/>
-!     </fileset>
-! 
-!     <fileset dir="source/" id="core.ResourceFiles">
-!       <exclude name="**/junit/**"/>
-!       <include name="**/*.properties"/>
-!       <include name="**/*.jj"/>
-!     </fileset>
-! 
-!     <build-core target-jar="${flute-jar-file}"
-!                 source-files-id="core.SourceFiles"
-!                 resource-files-id="core.ResourceFiles"
-!                 classpath-id="core.Classpath">
-!     </build-core>
-    </target>
-  
-  
---- 37,56 ----
-  
-    <target name="compile" depends="initialise">
-  
-!     <build-all target-jar="${flute-jar-file}" source-dir="source">
-!       <all-classpath>
-!         <pathelement location="${libdir}/${sac-jar-file}"/>
-!       </all-classpath>
-!       <all-sources>
-!        <exclude name="**/junit/**"/>
-!        <include name="**/*.java"/>
-!       </all-sources>
-!       <all-resources>
-!         <exclude name="**/junit/**"/>
-! 		<include name="**/*.properties"/>
-! 		<include name="**/*.jj"/>
-!       </all-resources>
-!     </build-all>
-    </target>
-  
-  
+--- misc/flute/build.xml	(Revision 6820)
++++ misc/build/flute/build.xml	(Arbeitskopie)
+@@ -9,6 +9,7 @@
+    <property name="build.doc" value="${build}/api"/>
+    <property name="build.lib" value="${build}/lib"/>
+    <property name="packagenames" value="org.w3c.flute.*"/>
++   <property name="lib" value="lib"/>
+ 
+    <!-- Targets -->
+    <!-- Prepare build directories -->
+@@ -21,7 +22,7 @@
+ 
+   <!-- Setup the compile classpath -->
+   <path id="classpath">
+-    <fileset dir="lib">
++    <fileset dir="${lib}">
+       <include name="*.jar" />
+     </fileset>
+   </path>
