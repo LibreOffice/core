@@ -131,13 +131,8 @@ using ::rtl::OUStringBuffer;
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-#define SWVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|          \
-                      SFX_VIEW_OBJECTSIZE_EMBEDDED|     \
-                      SFX_VIEW_CAN_PRINT|               \
+#define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
                       SFX_VIEW_HAS_PRINTOPTIONS)
-
-//MA 06. Nov. 95: Each raus in Absprache mit MI wg. Bug 21523
-//                    SFX_VIEW_OPTIMIZE_EACH|
 
 /*--------------------------------------------------------------------
     Beschreibung:   Statics
@@ -932,10 +927,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if( SFX_CREATE_MODE_EMBEDDED != pDocSh->GetCreateMode() )
         aBrwsBorder = GetMargin();
 
-    if( _pFrame->GetFrameType() & SFXFRAME_INTERNAL )
-        pWrtShell->SetFrameView( aBrwsBorder );
-    else
-        pWrtShell->SetBrowseBorder( aBrwsBorder );
+    pWrtShell->SetBrowseBorder( aBrwsBorder );
 
     // Im CTOR duerfen keine Shell wechsel erfolgen, die muessen ueber
     // den Timer "zwischen gespeichert" werden. Sonst raeumt der SFX
