@@ -865,8 +865,9 @@ bool impl_isDuplicateKey(const KeyCommandInfoList& rList,
                          const KeyCommandInfo&     aInfo)
 {
     KeyCommandInfoList::const_iterator pInfo;
+    KeyCommandInfoList::const_iterator aEnd = rList.end();
     for (  pInfo  = rList.begin();
-           pInfo != rList.end()  ;
+           pInfo != aEnd  ;
          ++pInfo                 )
     {
         if (
@@ -886,6 +887,7 @@ bool ReadAccelerators( int nLangIndex, ResMgr* pResMgr, MODULES eModule, const :
     KeyCommandInfoList&        rAccs   = rLocale[nLangIndex];
 
     USHORT c = pAcc->GetItemCount();
+    rAccs.reserve(rAccs.size()+c);
     USHORT i = 0;
     for (i=0; i<c; ++i)
     {
@@ -1067,11 +1069,12 @@ SfxSlotInfo::SfxSlotInfo( const ResId &rResId ) :
 
 bool ReadSlotInfos( int nLangIndex, ResMgr* pResMgr, MODULES eModule, const OUString& aProjectName )
 {
-    CommandIDToLabelsMap::iterator pIter = moduleMapFiles[MODULE_GLOBAL].begin();;
+    CommandIDToLabelsMap::iterator pIter = moduleMapFiles[MODULE_GLOBAL].begin();
+    CommandIDToLabelsMap::iterator pEnd = moduleMapFiles[MODULE_GLOBAL].end();
 
     if ( eModule != MODULE_GLOBAL )
     {
-        while ( pIter != moduleMapFiles[MODULE_GLOBAL].end() )
+        while ( pIter != pEnd )
         {
             int nId = pIter->first;
             CommandLabels& rCmdLabels = pIter->second;
@@ -1091,7 +1094,8 @@ bool ReadSlotInfos( int nLangIndex, ResMgr* pResMgr, MODULES eModule, const OUSt
     }
 
     pIter = moduleMapFiles[eModule].begin();
-    while ( pIter != moduleMapFiles[eModule].end() )
+    pEnd = moduleMapFiles[eModule].end();
+    while ( pIter != pEnd )
     {
         int nId = pIter->first;
         CommandLabels& rCmdLabels = pIter->second;
@@ -1261,13 +1265,15 @@ void FindAndMarkModulePopupMenuCmds()
     for ( int i = 0; i < int( MODULE_COUNT ); i++ )
     {
         CommandToLabelsMap::iterator pCmdIter = modulePopupMenusCmd[i].begin();
-        while ( pCmdIter != modulePopupMenusCmd[i].end() )
+        CommandToLabelsMap::iterator pCmdEnd = modulePopupMenusCmd[i].end();
+        while ( pCmdIter != pCmdEnd )
         {
             CommandLabels& rCmdLabel = pCmdIter->second;
             if ( rCmdLabel.bPopupMenu )
             {
                 CommandIDToLabelsMap::iterator pIDIter = moduleMapFiles[i].begin();
-                while ( pIDIter != moduleMapFiles[i].end() )
+                CommandIDToLabelsMap::iterator pIDEnd = moduleMapFiles[i].end();
+                while ( pIDIter != pIDEnd )
                 {
                     CommandLabels& rIDLabel = pIDIter->second;
                     if ( rIDLabel.aCommand.equals( rCmdLabel.aCommand ))
@@ -1311,7 +1317,8 @@ bool FindAndMoveGlobalPopupMenus()
     for ( int i = 1; i < int( MODULE_COUNT ); i++ )
     {
         CommandToLabelsMap::iterator pCmdIter = modulePopupMenusCmd[i].begin();
-        while ( pCmdIter != modulePopupMenusCmd[i].end() )
+        CommandToLabelsMap::iterator pCmdEnd = modulePopupMenusCmd[i].end();
+        while ( pCmdIter != pCmdEnd )
         {
             CommandLabels& rCmdLabel = pCmdIter->second;
             if ( rCmdLabel.bPopupMenu )
@@ -1409,8 +1416,8 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
             aXMLFile.write( ComponentDataStartEnd, strlen( ComponentDataStartEnd ), nWritten );
             aXMLFile.write( GroupText, strlen( GroupText ), nWritten );
 
-            if (( moduleMapFiles[i].size() > 0      ) ||
-                ( modulePopupMenusCmd[i].size() > 0 )    )
+            if (( !moduleMapFiles[i].empty()      ) ||
+                ( !modulePopupMenusCmd[i].empty() )    )
             {
                 for ( int nSets = 0; nSets < 2; nSets++ )
                 {
@@ -1420,7 +1427,8 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
                         aXMLFile.write( SetTextPopups, strlen( SetTextPopups ), nWritten );
 
                     CommandIDToLabelsMap::iterator pIter = moduleMapFiles[i].begin();
-                    while ( pIter != moduleMapFiles[i].end() )
+                    CommandIDToLabelsMap::iterator pEnd = moduleMapFiles[i].end();
+                    while ( pIter != pEnd )
                     {
                         CommandLabels& rCmdLabels = pIter->second;
 
@@ -1813,8 +1821,9 @@ bool impl_isAccListDuplicate(const KeyCommandInfoList& rAccsReference,
                              const KeyCommandInfoList& rAccs         )
 {
     KeyCommandInfoList::const_iterator pIt1;
+    KeyCommandInfoList::const_iterator aEnd = rAccsReference.end();
     for (  pIt1  = rAccsReference.begin();
-           pIt1 != rAccsReference.end()  ;
+           pIt1 != aEnd  ;
          ++pIt1                          )
     {
         KeyCommandInfoList::const_iterator pIt2 = ::std::find(rAccs.begin(), rAccs.end(), *pIt1);
@@ -1839,7 +1848,7 @@ bool ReadResourceWriteAcceleratorXMLLang( const ::rtl::OUString& aOutDirURL,
     KeyCommandInfoList&        rAccsReference = rLocale[1];         // en-US!
 
     // dont write empty files :-)
-    if (rAccs.size()<1)
+    if ( rAccs.empty() )
         return true;
 
     ::rtl::OUString sLanguage = ::rtl::OUString::createFromAscii(Language_codes[nLanguage].pLanguage);
@@ -1901,8 +1910,9 @@ bool ReadResourceWriteAcceleratorXMLLang( const ::rtl::OUString& aOutDirURL,
 
     ::rtl::OUStringBuffer sAccBuf(10000);
     KeyCommandInfoList::const_iterator pIt;
+    KeyCommandInfoList::const_iterator aEnd = rAccs.end();
     for (  pIt  = rAccs.begin();
-           pIt != rAccs.end()  ;
+           pIt != aEnd  ;
          ++pIt                 )
     {
         const KeyCommandInfo& aInfo = *pIt;
@@ -2620,7 +2630,7 @@ bool GetCommandOptions( const ::std::vector< OUString >& rArgs, const OUString& 
         }
     }
 
-    return( rParams.size() > 0 );
+    return( !rParams.empty() );
 }
 
 void ShowUsage()
@@ -2694,7 +2704,7 @@ void Main()
         if ( aVersion.getLength() > 0 &&
              aPlatformName.getLength() > 0 &&
              aUseRes.getLength() > 0 &&
-             aInDirVector.size() > 0 )
+             !aInDirVector.empty() )
         {
             Convert( bUseProduct, aUseRes, aVersion, aOutputDirName, aPlatformName, aInDirVector, aErrOutputFileName );
         }

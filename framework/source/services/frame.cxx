@@ -62,6 +62,7 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -991,10 +992,9 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
                         sal_Int32 nCount = xContainer->getCount();
                         for( sal_Int32 i=0; i<nCount; ++i )
                         {
-                            css::uno::Any aItem = xContainer->getByIndex(i);
                             css::uno::Reference< css::frame::XFrame > xSibling;
                             if (
-                                ( !(aItem>>=xSibling)                                 ) ||  // control unpacking
+                                ( !(xContainer->getByIndex(i)>>=xSibling)                                 ) ||  // control unpacking
                                 ( ! xSibling.is()                                     ) ||  // check for valid items
                                 ( xSibling==static_cast< ::cppu::OWeakObject* >(this) )     // ignore ourself! (We are a part of this container too - but search on our children was already done.)
                             )
@@ -2899,11 +2899,7 @@ void Frame::implts_setIconOnWindow()
         {
             try
             {
-                css::uno::Any aID = xSet->getPropertyValue( DECLARE_ASCII("IconId") );
-                if( aID.hasValue() == sal_True )
-                {
-                    aID >>= nIcon;
-                }
+                xSet->getPropertyValue( DECLARE_ASCII("IconId") )>>= nIcon;
             }
             catch( css::beans::UnknownPropertyException& )
             {
@@ -3243,50 +3239,6 @@ sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XF
     return  (
                 ( &xFrame                                                                                   ==  NULL        )   ||
                 ( css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is()           ==  sal_True    )
-            );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer ... but NULL-References are allowed!
-sal_Bool Frame::implcp_initialize( const css::uno::Reference< css::awt::XWindow >& xWindow )
-{
-    return( &xWindow == NULL );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer or references!
-sal_Bool Frame::implcp_setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator )
-{
-    return  (
-                ( &xCreator     ==  NULL        )   ||
-                ( xCreator.is() ==  sal_False   )
-            );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer or references!
-sal_Bool Frame::implcp_setName( const ::rtl::OUString& sName )
-{
-    return( &sName == NULL );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer or references!
-// An empty target name is allowed => is the same like "_self"
-sal_Bool Frame::implcp_findFrame(  const   ::rtl::OUString& sTargetFrameName,
-                                            sal_Int32        /*nSearchFlags*/    )
-{
-    return( &sTargetFrameName == NULL );
-}
-
-//*****************************************************************************************************************
-// We don't accept null pointer!
-sal_Bool Frame::implcp_setComponent(   const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow    ,
-                                        const   css::uno::Reference< css::frame::XController >& xController         )
-{
-    return  (
-                ( &xComponentWindow ==  NULL    )   ||
-                ( &xController      ==  NULL    )
             );
 }
 

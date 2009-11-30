@@ -43,11 +43,13 @@ ENABLE_EXCEPTIONS=	TRUE
 
 SLOFILES=			\
                     $(SLO)$/uiconfigurationmanager.obj          \
+                    $(SLO)$/uiconfigurationmanagerimpl.obj      \
                     $(SLO)$/moduleuiconfigurationmanager.obj    \
                     $(SLO)$/moduleuicfgsupplier.obj             \
                     $(SLO)$/windowstateconfiguration.obj        \
                     $(SLO)$/moduleimagemanager.obj              \
                     $(SLO)$/imagemanager.obj                    \
+                    $(SLO)$/imagemanagerimpl.obj                \
                     $(SLO)$/graphicnameaccess.obj               \
                     $(SLO)$/uicategorydescription.obj           \
                     $(SLO)$/globalsettings.obj

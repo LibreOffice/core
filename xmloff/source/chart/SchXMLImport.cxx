@@ -35,6 +35,8 @@
 #include "SchXMLChartContext.hxx"
 #include "contexts.hxx"
 #include "XMLChartPropertySetMapper.hxx"
+#include "SchXMLTools.hxx"
+
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 // header for class ByteString
@@ -872,6 +874,9 @@ SvXMLImportContext* SchXMLImport::CreateStylesContext(
     const OUString& rLocalName,
     const Reference<xml::sax::XAttributeList>& xAttrList )
 {
+    //#i103287# make sure that the version information is set before importing all the properties (especially stroke-opacity!)
+    SchXMLTools::setBuildIDAtImportInfo( GetModel(), getImportInfo() );
+
     SvXMLStylesContext* pStylesCtxt =
         new SvXMLStylesContext( *(this), XML_NAMESPACE_OFFICE, rLocalName, xAttrList );
 

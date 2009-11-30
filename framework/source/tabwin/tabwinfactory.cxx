@@ -70,19 +70,6 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3                    (    TabWinFactory                                                  ,
-                                            OWeakObject                                                     ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                      ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                       ),
-                                            DIRECT_INTERFACE( css::lang::XSingleComponentFactory            )
-                                        )
-
-DEFINE_XTYPEPROVIDER_3                  (   TabWinFactory                                   ,
-                                            css::lang::XTypeProvider                        ,
-                                            css::lang::XServiceInfo                         ,
-                                            css::lang::XSingleComponentFactory
-                                        )
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   TabWinFactory                                   ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TABWINFACTORY                       ,

@@ -37,6 +37,7 @@
 #include "migration.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vos/security.hxx>
 #include <app.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -59,7 +60,6 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <tools/config.hxx>
-
 
 using namespace rtl;
 using namespace osl;
@@ -100,9 +100,10 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid, sal_B
     // we need to choose the welcome text that is diplayed
     // choices are the default text, default text+migradtion,
     // OEM and extended OEM
-    switch (checkOEM())
-    {
-    case OEM_NONE:
+    // No OEM is built, remove the check
+//     switch (checkOEM())
+//     {
+//     case OEM_NONE:
         // check for migration
         if (Migration::checkMigration())
         {
@@ -112,27 +113,11 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid, sal_B
             m_ftBody.SetText( aText );
         }
         else
-        if (bIsEvalVersion && (! bNoEvalText))
-        {
-            String aText(WizardResId(STR_WELCOME_EVAL));
-            aText.SearchAndReplaceAll( UniString::CreateFromAscii("%EVALDAYS"), UniString::CreateFromAscii("90"));
-            m_ftBody.SetText( aText );
-        }
-        else
         if ( ! m_bLicenseNeedsAcceptance )
         {
             String aText(WizardResId(STR_WELCOME_WITHOUT_LICENSE));
             m_ftBody.SetText( aText );
         }
-        break;
-    case OEM_NORMAL:
-        m_ftBody.SetText(String(WizardResId(STR_WELCOME_OEM)));
-        break;
-    case OEM_EXTENDED:
-        m_ftBody.SetText(String(WizardResId(STR_WELCOME_OEM_EXT)));
-        break;
-    }
-
 }
 
 
@@ -388,6 +373,10 @@ UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     SvtUserOptions aUserOpt;
     m_edFirst.SetText(aUserOpt.GetFirstName());
     m_edLast.SetText(aUserOpt.GetLastName());
+    rtl::OUString aUserName;
+    vos::OSecurity().getUserName( aUserName );
+       aUserOpt.SetID( aUserName );
+
     m_edInitials.SetText(aUserOpt.GetID());
     if (m_lang == LANGUAGE_RUSSIAN)
     {
@@ -403,6 +392,7 @@ sal_Bool UserPage::commitPage( CommitPageReason )
     aUserOpt.SetFirstName(m_edFirst.GetText());
     aUserOpt.SetLastName(m_edLast.GetText());
     aUserOpt.SetID( m_edInitials.GetText());
+
     if (m_lang == LANGUAGE_RUSSIAN)
         aUserOpt.SetFathersName(m_edFather.GetText());
 

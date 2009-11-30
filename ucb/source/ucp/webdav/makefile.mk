@@ -50,6 +50,7 @@ NO_BSYMBOLIC=TRUE
 # --- Settings ---------------------------------------------------------
 
 .INCLUDE: settings.mk
+.IF "$(L10N_framework)"==""
 
 .IF "$(DISABLE_NEON)" == "TRUE"
 
@@ -160,6 +161,7 @@ DEF1NAME=$(SHL1TARGET)
 
 .ENDIF #"$(DISABLE_NEON)" == "TRUE"
 
+.ENDIF # L10N_framework
 # --- Targets ----------------------------------------------------------
 
 .INCLUDE: target.mk

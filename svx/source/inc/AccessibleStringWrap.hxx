@@ -34,6 +34,8 @@
 #include <sal/types.h>
 #include <tools/string.hxx>
 
+#include <svx/svxdllapi.h>
+
 class OutputDevice;
 class SvxFont;
 class Rectangle;
@@ -49,10 +51,10 @@ class AccessibleStringWrap
 {
 public:
 
-    AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const String& rText );
+    SVX_DLLPUBLIC AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const String& rText );
 
-    sal_Bool GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect );
-    sal_Int32 GetIndexAtPoint( const Point& rPoint );
+    SVX_DLLPUBLIC sal_Bool GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect );
+    SVX_DLLPUBLIC sal_Int32 GetIndexAtPoint( const Point& rPoint );
 
 private:
 

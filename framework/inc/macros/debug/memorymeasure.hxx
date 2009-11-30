@@ -111,7 +111,7 @@
             {
                 ::rtl::OStringBuffer sBuffer( 10000 );
 
-                if( m_lSnapshots.size() > 0 )
+                if( !m_lSnapshots.empty() )
                 {
                     // Write informations to return buffer
                     ::std::vector< _MemoryInfo >::const_iterator pItem1;

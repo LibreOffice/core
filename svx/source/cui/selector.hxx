@@ -216,6 +216,7 @@ class SvxScriptSelectorDialog : public ModelessDialog
 
     DECL_LINK( ClickHdl, Button * );
     DECL_LINK( SelectHdl, Control* );
+    DECL_LINK( FunctionDoubleClickHdl, Control* );
 
     void                                UpdateUI();
     void                                ResizeControls();

@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 
-#include "systemshell.hxx"
 #include "osl/process.h"
 #include "rtl/ustring.hxx"
 #include "rtl/string.hxx"

@@ -148,7 +148,9 @@ namespace sdr { namespace contact {
                 return *new UnoControlWindowContact( *pPageViewContact, *this );
         }
 
-        return *new UnoControlDefaultContact( _rObjectContact, *this );
+        // if we're not working for a ObjectContactOfPageView, then we can't use a ViewObjectContactOfUnoControl, or any
+        // of its derivees. Fall back to a "normal" SdrObj's contact object.
+        return *new ViewObjectContactOfSdrObj( _rObjectContact, *this );
     }
 
     //--------------------------------------------------------------------

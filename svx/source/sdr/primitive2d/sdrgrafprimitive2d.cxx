@@ -110,16 +110,7 @@ namespace drawinglayer
             // add shadow
             if(getSdrLFSTAttribute().getShadow())
             {
-                // attention: shadow is added BEFORE object stuff to render it BEHIND object (!)
-                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow()));
-
-                if(xShadow.is())
-                {
-                    Primitive2DSequence aContentWithShadow(2L);
-                    aContentWithShadow[0L] = xShadow;
-                    aContentWithShadow[1L] = Primitive2DReference(new GroupPrimitive2D(aRetval));
-                    aRetval = aContentWithShadow;
-                }
+                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow());
             }
 
             return aRetval;

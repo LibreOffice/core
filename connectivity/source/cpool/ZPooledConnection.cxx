@@ -64,14 +64,14 @@ void SAL_CALL OPooledConnection::disposing(void)
     MutexGuard aGuard(m_aMutex);
     if (m_xComponent.is())
         m_xComponent->removeEventListener(this);
-    m_xComponent = NULL;
+m_xComponent.clear();
     ::comphelper::disposeComponent(m_xRealConnection);
 }
 // -----------------------------------------------------------------------------
 // XEventListener
 void SAL_CALL OPooledConnection::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
 {
-    m_xComponent = NULL;
+m_xComponent.clear();
 }
 // -----------------------------------------------------------------------------
 //XPooledConnection

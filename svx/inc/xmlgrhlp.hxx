@@ -142,9 +142,9 @@ namespace svx
     uses eCreateMode == GRAPHICHELPER_MODE_READ, bDirect == TRUE in
     SvXMLGraphicHelper
  */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicImportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames() throw();
-::rtl::OUString SAL_CALL SvXMLGraphicImportHelper_getImplementationName() throw();
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicImportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
+SVX_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames() throw();
+SVX_DLLPUBLIC ::rtl::OUString SAL_CALL SvXMLGraphicImportHelper_getImplementationName() throw();
 
 /** Create this with createInstanceWithArguments. service name
     "com.sun.star.comp.Svx.GraphicExportHelper", one argument which is the
@@ -158,9 +158,9 @@ namespace svx
     uses eCreateMode == GRAPHICHELPER_MODE_WRITE, bDirect == TRUE in
     SvXMLGraphicHelper
  */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicExportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServiceNames() throw();
-::rtl::OUString SAL_CALL SvXMLGraphicExportHelper_getImplementationName() throw();
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicExportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
+SVX_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServiceNames() throw();
+SVX_DLLPUBLIC ::rtl::OUString SAL_CALL SvXMLGraphicExportHelper_getImplementationName() throw();
 }
 
 #endif

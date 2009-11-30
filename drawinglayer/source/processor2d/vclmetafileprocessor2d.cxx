@@ -614,13 +614,13 @@ namespace drawinglayer
                         {
                             const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
 
-                            if(!rAttr.IsSpecialDrawMode() && !rAttr.IsMirrored() && !rAttr.IsRotated() && !rAttr.IsAdjusted())
+                            if(!rAttr.IsSpecialDrawMode() && !rAttr.IsAdjusted())
                             {
                                 const basegfx::B2DHomMatrix& rTransform = rGraphicPrimitive.getTransform();
                                 double fRotate, fShearX;
                                 rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
-                                if(aScale.getX() > 0.0 && aScale.getY() > 0.0)
+                                if( basegfx::fTools::equalZero( fRotate ) && ( aScale.getX() > 0.0 ) && ( aScale.getY() > 0.0 ) )
                                 {
                                     bUsingPDFExtOutDevData = true;
                                     mpPDFExtOutDevData->BeginGroup();

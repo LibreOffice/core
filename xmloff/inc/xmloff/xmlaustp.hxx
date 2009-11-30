@@ -112,6 +112,10 @@ public:
     sal_Bool        Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
     sal_Bool        Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
 
+    /// Add an item set with a pre-defined name (needed for saving sheets separately in Calc).
+    sal_Bool        AddNamed( const ::rtl::OUString& rName, sal_Int32 nFamily, const ::rtl::OUString& rParent,
+                              const ::std::vector< XMLPropertyState >& rProperties );
+
     /// Find an item set's name.
     ::rtl::OUString Find( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties ) const;
     ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties ) const;

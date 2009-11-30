@@ -38,7 +38,7 @@
 // SdrGrafCropItem -
 //------------------
 
-class SdrGrafCropItem : public SvxGrfCrop
+class SVX_DLLPUBLIC SdrGrafCropItem : public SvxGrfCrop
 {
 public:
 

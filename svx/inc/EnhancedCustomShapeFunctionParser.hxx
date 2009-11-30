@@ -32,13 +32,13 @@
 #define _ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
 
 #include <sal/config.h>
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include "EnhancedCustomShapeFunctionParser.hxx"
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <vector>
+
+#include <svx/svxdllapi.h>
 
 struct EnhancedCustomShapeEquation
 {
@@ -97,7 +97,7 @@ enum ExpressionFunct
 
 #define EXPRESSION_FLAG_SUMANGLE_MODE 1
 
-void FillEquationParameter( const com::sun::star::drawing::EnhancedCustomShapeParameter&, const sal_Int32, EnhancedCustomShapeEquation& );
+SVX_DLLPUBLIC void FillEquationParameter( const com::sun::star::drawing::EnhancedCustomShapeParameter&, const sal_Int32, EnhancedCustomShapeEquation& );
 
 class ExpressionNode
 {
@@ -200,7 +200,7 @@ public:
         @return the generated function object.
        */
 
-    static ExpressionNodeSharedPtr parseFunction( const ::rtl::OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
+    SVX_DLLPUBLIC static ExpressionNodeSharedPtr parseFunction( const ::rtl::OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
 
 private:
     // disabled constructor/destructor, since this is

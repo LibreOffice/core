@@ -33,13 +33,14 @@
 
 #include <classes/fwktabwindow.hxx>
 #include "framework.hrc"
-#include <classes/fwkresid.hxx>
+#include <classes/fwlresid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
 #include <com/sun/star/awt/XContainerWindowProvider.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -90,7 +91,7 @@ FwkTabPage::FwkTabPage(
                const css::uno::Reference< css::awt::XContainerWindowEventHandler >& rEventHdl,
                const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider ) :
 
-    TabPage( pParent, WB_DIALOGCONTROL ),
+    TabPage( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_CHILDDLGCTRL ),
 
     m_sPageURL          ( rPageURL ),
     m_xEventHdl         ( rEventHdl ),
@@ -121,6 +122,18 @@ void FwkTabPage::CreateDialog()
         m_xPage = uno::Reference < awt::XWindow >(
             m_xWinProvider->createContainerWindow(
                 m_sPageURL, rtl::OUString(), xParent, xHandler ), uno::UNO_QUERY );
+
+        uno::Reference< awt::XControl > xPageControl( m_xPage, uno::UNO_QUERY );
+        if ( xPageControl.is() )
+        {
+            uno::Reference< awt::XWindowPeer > xWinPeer( xPageControl->getPeer() );
+            if ( xWinPeer.is() )
+            {
+                Window* pWindow = VCLUnoHelper::GetWindow( xWinPeer );
+                if ( pWindow )
+                    pWindow->SetStyle( pWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
+            }
+        }
 
         CallMethod( INITIALIZE_METHOD );
     }
@@ -192,28 +205,13 @@ void FwkTabPage::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
-
-void FwkTabPage::Reset()
-{
-    CallMethod( BACK_METHOD );
-    ActivatePage();
-}
-
-// -----------------------------------------------------------------------
-
-void FwkTabPage::Save()
-{
-    CallMethod( OK_METHOD );
-}
-
 // class FwkTabWindow ---------------------------------------------
 
 FwkTabWindow::FwkTabWindow( Window* pParent ) :
 
-    Window( pParent, FwkResId( WIN_TABWINDOW ) ),
+    Window( pParent, FwlResId( WIN_TABWINDOW ) ),
 
-    m_aTabCtrl  ( this, FwkResId( TC_TABCONTROL ) )
+    m_aTabCtrl  ( this, FwlResId( TC_TABCONTROL ) )
 {
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     m_xWinProvider = uno::Reference < awt::XContainerWindowProvider >(
@@ -352,20 +350,19 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
     {
         beans::NamedValue aValue = rProperties[i];
         ::rtl::OUString sName = aValue.Name;
-        uno::Any aAny = aValue.Value;
 
         if ( sName.equalsAscii("Title") )
-            aAny >>= sTitle;
+            aValue.Value >>= sTitle;
         else if ( sName.equalsAscii("ToolTip") )
-            aAny >>= sToolTip;
+            aValue.Value >>= sToolTip;
         else if ( sName.equalsAscii("PageURL") )
-            aAny >>= sPageURL;
+            aValue.Value >>= sPageURL;
         else if ( sName.equalsAscii("EventHdl") )
-            aAny >>= xEventHdl;
+            aValue.Value >>= xEventHdl;
         else if ( sName.equalsAscii("Image") )
-            aAny >>= xImage;
+            aValue.Value >>= xImage;
         else if ( sName.equalsAscii("Disabled") )
-            aAny >>= bDisabled;
+            aValue.Value >>= bDisabled;
     }
 
     TabEntry* pEntry = new TabEntry( nIndex, sPageURL, xEventHdl );
@@ -401,13 +398,6 @@ void FwkTabWindow::RemovePage( sal_Int32 nIndex )
         if (RemoveEntry(nIndex))
             delete pEntry;
     }
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int32 FwkTabWindow::GetActivePageId() const
-{
-    return m_aTabCtrl.GetCurPageId();
 }
 
 // -----------------------------------------------------------------------

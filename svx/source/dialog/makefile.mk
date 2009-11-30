@@ -31,6 +31,7 @@
 PRJ=..$/..
 PRJNAME=svx
 TARGET=dialogs
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -76,9 +77,28 @@ SRC1FILES =  \
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
-        sdstring.src \
+        sdstring.src
 
-SLOFILES= \
+LIB1TARGET=$(SLB)$/$(TARGET)-core.lib
+
+LIB1OBJFILES= \
+        $(SLO)$/dialmgr.obj\
+        $(SLO)$/dlgutil.obj \
+        $(SLO)$/framelink.obj\
+        $(SLO)$/hangulhanja.obj \
+        $(SLO)$/hyphen.obj \
+        $(SLO)$/impgrf.obj \
+        $(SLO)$/langbox.obj \
+        $(SLO)$/opengrf.obj \
+        $(SLO)$/simptabl.obj \
+        $(SLO)$/splwrap.obj \
+        $(SLO)$/svxdlg.obj \
+        $(SLO)$/stddlg.obj \
+        $(SLO)$/thesdlg.obj
+
+LIB2TARGET=$(SLB)$/$(TARGET).lib
+
+LIB2OBJFILES= \
         $(SLO)$/charmap.obj \
         $(SLO)$/checklbx.obj \
         $(SLO)$/connctrl.obj \
@@ -86,31 +106,23 @@ SLOFILES= \
         $(SLO)$/ctredlin.obj \
         $(SLO)$/databaseregistrationui.obj \
         $(SLO)$/dialcontrol.obj \
-        $(SLO)$/dialmgr.obj\
         $(SLO)$/dlgctl3d.obj \
         $(SLO)$/dlgctrl.obj \
-        $(SLO)$/dlgutil.obj \
         $(SLO)$/docrecovery.obj \
         $(SLO)$/fntctrl.obj \
         $(SLO)$/fontlb.obj \
         $(SLO)$/fontwork.obj \
-        $(SLO)$/framelink.obj\
         $(SLO)$/framelinkarray.obj \
         $(SLO)$/frmdirlbox.obj \
         $(SLO)$/frmsel.obj \
         $(SLO)$/graphctl.obj \
         $(SLO)$/grfflt.obj \
-        $(SLO)$/hangulhanja.obj \
         $(SLO)$/hdft.obj \
         $(SLO)$/hyperdlg.obj \
-        $(SLO)$/hyphen.obj \
         $(SLO)$/hyprlink.obj \
         $(SLO)$/imapdlg.obj \
         $(SLO)$/imapwnd.obj \
-        $(SLO)$/impgrf.obj \
-        $(SLO)$/langbox.obj \
         $(SLO)$/measctrl.obj \
-        $(SLO)$/opengrf.obj \
         $(SLO)$/orienthelper.obj \
         $(SLO)$/pagectrl.obj \
         $(SLO)$/paraprev.obj \
@@ -122,21 +134,16 @@ SLOFILES= \
         $(SLO)$/rlrcitem.obj \
         $(SLO)$/rubydialog.obj \
         $(SLO)$/rulritem.obj \
-        $(SLO)$/simptabl.obj \
         $(SLO)$/SpellDialogChildWindow.obj \
-        $(SLO)$/splwrap.obj \
         $(SLO)$/srchctrl.obj \
         $(SLO)$/srchdlg.obj \
-        $(SLO)$/stddlg.obj \
         $(SLO)$/strarray.obj \
         $(SLO)$/svxbmpnumvalueset.obj\
         $(SLO)$/svxbox.obj \
-        $(SLO)$/svxdlg.obj \
         $(SLO)$/svxgrahicitem.obj \
         $(SLO)$/svxruler.obj \
         $(SLO)$/swframeexample.obj \
         $(SLO)$/swframeposstrings.obj \
-        $(SLO)$/thesdlg.obj \
         $(SLO)$/txencbox.obj \
         $(SLO)$/txenctab.obj \
         $(SLO)$/wrapfield.obj \
@@ -144,14 +151,16 @@ SLOFILES= \
         $(SLO)$/_contdlg.obj
 
 .IF "$(GUI)"=="UNX"
-SLOFILES +=    $(SLO)$/sendreportunx.obj
+LIB2OBJFILES +=    $(SLO)$/sendreportunx.obj
 .ELSE
 .IF "$(GUI)"=="WNT"
-SLOFILES +=	$(SLO)$/sendreportw32.obj
+LIB2OBJFILES +=	$(SLO)$/sendreportw32.obj
 .ELSE
-SLOFILES +=	$(SLO)$/sendreportgen.obj
+LIB2OBJFILES +=	$(SLO)$/sendreportgen.obj
 .ENDIF
 .ENDIF
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 # --- Targets -------------------------------------------------------
 

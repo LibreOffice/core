@@ -34,7 +34,7 @@
 #ifndef SVX_SOURCE_FORM_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
 #endif
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>

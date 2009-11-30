@@ -31,13 +31,14 @@
 #ifndef _ENHANCEDCUSTOMSHAPE3D_HXX
 #define _ENHANCEDCUSTOMSHAPE3D_HXX
 
-#include <svx/msdffimp.hxx>
 #include <vector>
-//#include <poly3d.hxx>
-//#include <goodies/point3d.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+
+#include <tools/gen.hxx>
+
+class SdrObject;
 
 class EnhancedCustomShape3d
 {

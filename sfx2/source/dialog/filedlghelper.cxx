@@ -45,9 +45,7 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HDL_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -82,12 +80,9 @@
 #include <svtools/filter.hxx>
 #include <svtools/viewoptions.hxx>
 #include <svtools/moduleoptions.hxx>
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 #include <svtools/pickerhelper.hxx>
-#include <svtools/docpasswdrequest.hxx>
-#include <svtools/docmspasswdrequest.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -99,13 +94,9 @@
 #include <sfx2/passwd.hxx>
 #include "sfxresid.hxx"
 #include <sfx2/sfxsids.hrc>
-#ifndef _SFX_FILEDLGHELPER_HRC
 #include "filedlghelper.hrc"
-#endif
 #include "filtergrouping.hxx"
-#ifndef SFX2_REQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
 #include "filedlgimpl.hxx"
 
 #include <sfxlocal.hrc>
@@ -137,6 +128,7 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
     static const OUString aSD_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SdExportLastFilter" ) );
     static const OUString aSI_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SiExportLastFilter" ) );
+    static const OUString aSW_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SwExportLastFilter" ) );
 
     const OUString* pRet = NULL;
 
@@ -144,6 +136,7 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
     {
         case FileDialogHelper::SD_EXPORT: pRet = &aSD_EXPORT_IDENTIFIER; break;
         case FileDialogHelper::SI_EXPORT: pRet = &aSI_EXPORT_IDENTIFIER; break;
+        case FileDialogHelper::SW_EXPORT: pRet = &aSW_EXPORT_IDENTIFIER; break;
         default: break;
     }
 
@@ -474,6 +467,31 @@ sal_Bool FileDialogHelper_Impl::isInOpenMode() const
 
 // ------------------------------------------------------------------------
 
+namespace {
+
+bool lclCheckODFPasswordCapability( const SfxFilter* pFilter )
+{
+    return pFilter && pFilter->IsOwnFormat() && pFilter->UsesStorage() && (pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60);
+}
+
+bool lclCheckMSPasswordCapability( const SfxFilter* pFilter )
+{
+    // TODO #i105076# this should be in the filter configuration!!!
+    return pFilter && CheckMSPasswordCapabilityForExport( pFilter->GetFilterName() );
+}
+
+bool lclCheckPasswordCapability( const SfxFilter* pFilter )
+{
+    return
+        lclCheckODFPasswordCapability( pFilter ) ||
+        // TODO #i105076# this should be in the filter configuration!!!
+        lclCheckMSPasswordCapability( pFilter );
+}
+
+}
+
+// ------------------------------------------------------------------------
+
 void FileDialogHelper_Impl::updateFilterOptionsBox()
 {
     if ( !m_bHaveFilterOptions )
@@ -557,38 +575,6 @@ void FileDialogHelper_Impl::updateSelectionBox()
 }
 
 // ------------------------------------------------------------------------
-struct CheckMSPasswordCapability
-{
-    sal_Bool operator() ( const String rFilterName )
-    {
-        return rFilterName.EqualsAscii("MS Word 97");
-    }
-};
-
-// ------------------------------------------------------------------------
-struct CheckPasswordCapability
-{
-    sal_Bool operator() ( const SfxFilter* _pFilter )
-    {
-        if (!_pFilter)
-            return false;
-
-#if 0 // to be enabled in the future
-        if (_pFilter->GetFilterName().EqualsAscii("MS Excel 97"))
-            // For now, we eanble password protection for Excel 97 as a
-            // special case.  If we start having more filters supporting
-            // export encryption with password, we should probably switch to
-            // using a filter flag instead.
-            return true;
-#endif
-
-        return  ( _pFilter->IsOwnFormat() && _pFilter->UsesStorage()
-            &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() ) )
-            || CheckMSPasswordCapability()( _pFilter->GetFilterName() );
-    }
-};
-
-// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 {
     if ( ! mbHasPassword )
@@ -598,7 +584,7 @@ void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
-        CheckPasswordCapability()( getCurentSfxFilter() )
+        lclCheckPasswordCapability( getCurentSfxFilter() )
     );
 
     if( bInit )
@@ -1670,31 +1656,21 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
                     if( xInteractionHandler.is() )
                     {
-                        // TODO: find out a way to set the 1-15 char limits on MS Excel 97 filter.
-                        if ( CheckMSPasswordCapability()( rFilter ) )
-                        {
-                            RequestMSDocumentPassword* pMSPasswordRequest = new RequestMSDocumentPassword(
-                                ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+                        // TODO: need a save way to distinguish MS filters from other filters
+                        bool bMSType = CheckMSPasswordCapabilityForExport( rFilter );
+                        ::comphelper::DocPasswordRequestType eType = bMSType ?
+                            ::comphelper::DocPasswordRequestType_MS :
+                            ::comphelper::DocPasswordRequestType_STANDARD;
 
-                            uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pMSPasswordRequest );
-                            xInteractionHandler->handle( rRequest );
-                            if ( pMSPasswordRequest->isPassword() )
-                                rpSet->Put( SfxStringItem( SID_PASSWORD, pMSPasswordRequest->getPassword() ) );
-                            else
-                                return ERRCODE_ABORT;
-                        }
+                        ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
+                            eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+
+                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
+                        xInteractionHandler->handle( rRequest );
+                        if ( pPasswordRequest->isPassword() )
+                            rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
                         else
-                        {
-                            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
-                                ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
-
-                            uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
-                            xInteractionHandler->handle( rRequest );
-                            if ( pPasswordRequest->isPassword() )
-                                rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
-                            else
-                                return ERRCODE_ABORT;
-                        }
+                            return ERRCODE_ABORT;
                     }
                 }
             }

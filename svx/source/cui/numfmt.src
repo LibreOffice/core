@@ -256,10 +256,6 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         IdCount = { 3 ; };
     };
 
-    String STR_EUROPE
-    {
-        Text [ en-US ] = "Europe";
-    };
     String STR_AUTO_ENTRY
     {
         Text [ en-US ] = "Automatic";

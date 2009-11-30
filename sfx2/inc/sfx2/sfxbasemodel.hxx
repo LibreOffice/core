@@ -1513,7 +1513,7 @@ private:
     SAL_DLLPRIVATE void impl_store( const   OUSTRING&                   sURL            ,
                         const   SEQUENCE< PROPERTYVALUE >&  seqArguments    ,
                                 sal_Bool                    bSaveTo         ) ;
-    SAL_DLLPRIVATE void postEvent_Impl( ULONG nEventID );
+    SAL_DLLPRIVATE void postEvent_Impl( ::rtl::OUString );
     SAL_DLLPRIVATE String getEventName_Impl( long nID );
     SAL_DLLPRIVATE void NotifyStorageListeners_Impl();
        SAL_DLLPRIVATE bool QuerySaveSizeExceededModules( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler );

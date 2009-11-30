@@ -282,7 +282,11 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         // #103894# Expand test for HDL_ANCHOR_TR
         BOOL bNotDraggable = (HDL_ANCHOR == eDragHdl || HDL_ANCHOR_TR == eDragHdl);
 
-        if(bDragHdl)
+        if(pHdl && (pHdl->GetKind() == HDL_SMARTTAG) && pForcedMeth )
+        {
+            // just use the forced method for smart tags
+        }
+        else if(bDragHdl)
         {
             mpCurrentSdrDragMethod = new SdrDragMovHdl(*this);
         }

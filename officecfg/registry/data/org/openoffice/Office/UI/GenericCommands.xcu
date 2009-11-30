@@ -1951,7 +1951,7 @@
             </node>
             <node oor:name=".uno:InsertAnnotation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Not~e</value>
+                    <value xml:lang="en-US">Comme~nt</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -4144,8 +4144,15 @@
             </node>
             <node oor:name=".uno:ExportDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Dialog exportieren</value>
                     <value xml:lang="en-US">Export Dialog</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ImportDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Import Dialog</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -5127,17 +5134,17 @@
             </node> -->
       <node oor:name=".uno:DeleteAllNotes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete All Notes</value>
+          <value xml:lang="en-US">Delete All Comments</value>
         </prop>
       </node>
       <node oor:name=".uno:DeleteAuthor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete All Notes by This Author</value>
+          <value xml:lang="en-US">Delete All Comments by This Author</value>
         </prop>
       </node>
       <node oor:name=".uno:DeleteNote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete Note</value>
+          <value xml:lang="en-US">Delete Comment</value>
         </prop>
       </node>
     </node>

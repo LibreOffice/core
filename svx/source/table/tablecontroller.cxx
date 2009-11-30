@@ -568,9 +568,6 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
             if( bUndo )
                 mpModel->EndUndo();
 
-            if( mpModel )
-                mpModel->SetChanged();
-
             aStart.mnCol = nNewStartColumn;
             aStart.mnRow = 0;
             aEnd.mnCol = aStart.mnCol + nNewColumns - 1;
@@ -602,13 +599,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
             }
 
             if( bUndo )
-            {
                 mpModel->EndUndo();
-                mpModel->SetChanged();
-            }
-
-            if( mpModel )
-                mpModel->SetChanged();
 
             aStart.mnCol = 0;
             aStart.mnRow = nNewRowStart;
@@ -879,7 +870,8 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                 pModel->AddUndo( new TableStyleUndo( *pTableObj ) );
             }
 
-/*
+            pTableObj->setTableStyle( xNewTableStyle );
+
             const sal_Int32 nRowCount = mxTable->getRowCount();
             const sal_Int32 nColCount = mxTable->getColumnCount();
             for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
@@ -889,9 +881,26 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                     CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
                     if( xCell.is() )
                     {
-                        if( bUndo )
-                            xCell->AddUndo();
-                        xCell->setAllPropertiesToDefault();
+                        SfxItemSet aSet( xCell->GetItemSet() );
+                        bool bChanges = false;
+                        const SfxItemSet& rStyleAttribs = xCell->GetStyleSheet()->GetItemSet();
+
+                        for ( USHORT nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
+                        {
+                            if( (rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON) && (aSet.GetItemState( nWhich ) == SFX_ITEM_ON) )
+                            {
+                                aSet.ClearItem( nWhich );
+                                bChanges = true;
+                            }
+                        }
+
+                        if( bChanges )
+                        {
+                            if( bUndo )
+                                xCell->AddUndo();
+
+                            xCell->SetMergedItemSetAndBroadcast( aSet, sal_True );
+                        }
                     }
                 }
                 catch( Exception& e )
@@ -900,9 +909,6 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                     DBG_ERROR( "svx::SvxTableController::SetTableStyle(), exception caught!" );
                 }
             }
-*/
-
-            pTableObj->setTableStyle( xNewTableStyle );
 
             if( bUndo )
                 pModel->EndUndo();
@@ -1067,9 +1073,6 @@ void SvxTableController::SplitMarkedCells()
 
                 if( bUndo )
                     mpModel->EndUndo();
-
-                if( mpModel )
-                    mpModel->SetChanged();
             }
             aEnd.mnRow += mxTable->getRowCount() - nRowCount;
             aEnd.mnCol += mxTable->getColumnCount() - nColCount;

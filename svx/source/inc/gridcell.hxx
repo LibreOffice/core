@@ -42,20 +42,24 @@
 #include <com/sun/star/form/XBoundControl.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
+#include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
+#include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/form/XChangeBroadcaster.hpp>
 /** === end UNO includes === **/
-
-#include <tools/rtti.hxx>
 
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/componentcontext.hxx>
-
 #include <cppuhelper/component.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/rtti.hxx>
 
 class DbCellControl;
 class Edit;
@@ -282,7 +286,11 @@ public:
     virtual ~DbCellControl();
 
 
-    Window* GetControl() const { return m_pWindow; }
+    Window& GetWindow() const
+    {
+        ENSURE_OR_THROW( m_pWindow, "no window" );
+        return *m_pWindow;
+    }
 
     // control alignment
     inline  sal_Bool    isAlignedController() const { return m_bAlignedController; }
@@ -732,20 +740,34 @@ protected:
 //==================================================================
 // Base class providing the access to a grid cell
 //==================================================================
-class FmXGridCell : public ::cppu::OComponentHelper,
-                    public ::com::sun::star::awt::XControl,
-                    public ::com::sun::star::form::XBoundControl
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XControl
+                            ,   ::com::sun::star::form::XBoundControl
+                            >   FmXGridCell_Base;
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XWindow
+                            >   FmXGridCell_WindowBase;
+class FmXGridCell   :public ::cppu::OComponentHelper
+                    ,public FmXGridCell_Base
+                    ,public FmXGridCell_WindowBase
 {
 protected:
-    ::osl::Mutex    m_aMutex;
-    DbGridColumn*           m_pColumn;
-    DbCellControl*          m_pCellControl;
+    ::osl::Mutex        m_aMutex;
+    DbGridColumn*       m_pColumn;
+    DbCellControl*      m_pCellControl;
 
+private:
+    ::cppu::OInterfaceContainerHelper   m_aWindowListeners;
+    ::cppu::OInterfaceContainerHelper   m_aFocusListeners;
+    ::cppu::OInterfaceContainerHelper   m_aKeyListeners;
+    ::cppu::OInterfaceContainerHelper   m_aMouseListeners;
+    ::cppu::OInterfaceContainerHelper   m_aMouseMotionListeners;
+
+protected:
     virtual ~FmXGridCell();
+
 public:
     TYPEINFO();
-    FmXGridCell(DbGridColumn* pColumn, DbCellControl* pControl);
-
+    FmXGridCell( DbGridColumn* pColumn, DbCellControl* pControl );
+    void init();
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridCell, OComponentHelper);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -754,6 +776,7 @@ public:
     void SetTextLineColor(const Color& _rColor);
 
 // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
@@ -781,6 +804,25 @@ public:
     virtual sal_Bool SAL_CALL getLock() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setLock(sal_Bool _bLock) throw(::com::sun::star::uno::RuntimeException);
 
+    // XWindow
+    virtual void SAL_CALL setPosSize( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height, ::sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setVisible( ::sal_Bool Visible ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setEnable( ::sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setFocus(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
     sal_Bool Commit() {return m_pCellControl->Commit();}
     void ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat )
         { m_pCellControl->ImplInitWindow( rParent, _eInitWhat ); }
@@ -788,6 +830,17 @@ public:
     sal_Bool isAlignedController() const { return m_pCellControl->isAlignedController(); }
     void AlignControl(sal_Int16 nAlignment)
         { m_pCellControl->AlignControl(nAlignment);}
+
+protected:
+    virtual Window* getEventWindow() const;
+    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+
+    // default implementations call our focus listeners, don't forget to call them if you override this
+    virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent );
+    virtual void onFocusLost( const ::com::sun::star::awt::FocusEvent& _rEvent );
+
+private:
+    DECL_LINK( OnWindowEvent, VclWindowEvent* );
 };
 
 //==================================================================
@@ -795,7 +848,10 @@ class FmXDataCell : public FmXGridCell
 {
 public:
     TYPEINFO();
-    FmXDataCell(DbGridColumn* pColumn, DbCellControl* pControl):FmXGridCell(pColumn, pControl){}
+    FmXDataCell( DbGridColumn* pColumn, DbCellControl& _rControl )
+        :FmXGridCell( pColumn, &_rControl )
+    {
+    }
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
                const Rectangle& rRect,
@@ -831,11 +887,7 @@ protected:
 
 public:
     TYPEINFO();
-    FmXTextCell( DbGridColumn* pColumn, DbCellControl* pControl )
-        :FmXDataCell( pColumn, pControl )
-        ,m_bFastPaint( sal_True )
-    {
-    }
+    FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
                const Rectangle& rRect,
@@ -849,23 +901,31 @@ public:
 };
 
 //==================================================================
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XTextComponent
+                            ,   ::com::sun::star::form::XChangeBroadcaster
+                            >   FmXEditCell_Base;
 class FmXEditCell : public FmXTextCell,
-                    public ::com::sun::star::awt::XTextComponent
+                    public FmXEditCell_Base
 {
+private:
+    ::rtl::OUString                     m_sValueOnEnter;
+
 protected:
     ::cppu::OInterfaceContainerHelper   m_aTextListeners;
+    ::cppu::OInterfaceContainerHelper   m_aChangeListeners;
     ::svt::IEditImplementation*         m_pEditImplementation;
     bool                                m_bOwnEditImplementation;
 
     virtual ~FmXEditCell();
 public:
-    FmXEditCell(DbGridColumn* pColumn, DbCellControl* pControl);
+    FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXEditCell, FmXTextCell);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
 
 // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
@@ -884,26 +944,43 @@ public:
     virtual void SAL_CALL setMaxTextLen(sal_Int16 nLen) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getMaxTextLen() throw(::com::sun::star::uno::RuntimeException);
 
+    // XChangeBroadcaster
+    virtual void SAL_CALL addChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
 protected:
-    DECL_LINK( OnTextChanged, void* );
+    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+
+    virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent );
+    virtual void onFocusLost( const ::com::sun::star::awt::FocusEvent& _rEvent );
+
+private:
+    void onTextChanged();
 };
 
 //==================================================================
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XCheckBox
+                            ,   ::com::sun::star::awt::XButton
+                            >   FmXCheckBoxCell_Base;
 class FmXCheckBoxCell : public FmXDataCell,
-                        public ::com::sun::star::awt::XCheckBox
+                        public FmXCheckBoxCell_Base
 {
     ::cppu::OInterfaceContainerHelper   m_aItemListeners;
+    ::cppu::OInterfaceContainerHelper   m_aActionListeners;
+    ::rtl::OUString                     m_aActionCommand;
     CheckBox*                           m_pBox;
+
 protected:
     virtual ~FmXCheckBoxCell();
-public:
-    FmXCheckBoxCell(DbGridColumn* pColumn, DbCellControl* pControl);
 
+public:
+    FmXCheckBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(FmXCheckBoxCell, FmXDataCell);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
@@ -916,26 +993,37 @@ public:
     virtual void SAL_CALL setLabel(const ::rtl::OUString& Label) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL enableTriState(sal_Bool b) throw(::com::sun::star::uno::RuntimeException);
 
+    // XButton
+    virtual void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw (::com::sun::star::uno::RuntimeException);
+
 protected:
-    DECL_LINK( OnClick, void* );
+    virtual Window* getEventWindow() const;
+    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
 };
 
 //==================================================================
-class FmXListBoxCell : public FmXTextCell,
-                       public ::com::sun::star::awt::XListBox
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XListBox
+                            >   FmXListBoxCell_Base;
+class FmXListBoxCell    :public FmXTextCell
+                        ,public FmXListBoxCell_Base
 {
     ::cppu::OInterfaceContainerHelper   m_aItemListeners,
                                         m_aActionListeners;
     ListBox*                            m_pBox;
+
 protected:
     virtual ~FmXListBoxCell();
-public:
-    FmXListBoxCell(DbGridColumn* pColumn, DbCellControl* pControl);
 
+public:
+    FmXListBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
@@ -965,14 +1053,60 @@ public:
     virtual void SAL_CALL SAL_CALL makeVisible(sal_Int16 nEntry) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    DECL_LINK( OnSelect, VclWindowEvent* );
+    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+
     DECL_LINK( OnDoubleClick, void* );
 };
 
 //==================================================================
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XComboBox
+                            >   FmXComboBoxCell_Base;
+class FmXComboBoxCell   :public FmXTextCell
+                        ,public FmXComboBoxCell_Base
+{
+private:
+    ::cppu::OInterfaceContainerHelper   m_aItemListeners,
+                                        m_aActionListeners;
+    ComboBox*                           m_pComboBox;
+
+protected:
+    virtual ~FmXComboBoxCell();
+
+public:
+    FmXComboBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
+
+    DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
+
+    // XComboBox
+    virtual void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addItem( const ::rtl::OUString& _Item, ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _Items, ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getItemCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getItem( ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getItems(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 _Lines ) throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+};
+
+//==================================================================
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XTextComponent
+                            ,   ::com::sun::star::lang::XUnoTunnel
+                            >   FmXFilterCell_Base;
 class FmXFilterCell :public FmXGridCell
-                    ,public ::com::sun::star::awt::XTextComponent
-                    ,public ::com::sun::star::lang::XUnoTunnel
+                    ,public FmXFilterCell_Base
 {
     ::cppu::OInterfaceContainerHelper m_aTextListeners;
 protected:
@@ -985,6 +1119,7 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

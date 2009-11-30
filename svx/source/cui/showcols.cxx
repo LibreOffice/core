@@ -36,19 +36,17 @@
 #endif
 #include "showcols.hxx"
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
-#include "fmstatic.hxx" //CHINA001
 
-IMPLEMENT_CONSTASCII_USTRING(CUIFM_PROP_HIDDEN, "Hidden");
-IMPLEMENT_CONSTASCII_USTRING(CUIFM_PROP_LABEL,"Label");
+#define CUIFM_PROP_HIDDEN rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Hidden" ) )
+#define CUIFM_PROP_LABEL  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ) )
+
 //==========================================================================
 //  FmShowColsDialog
 //==========================================================================

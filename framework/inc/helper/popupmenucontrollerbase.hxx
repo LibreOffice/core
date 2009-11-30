@@ -56,7 +56,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
-
+#include <com/sun/star/util/XURLTransformer.hpp>
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -93,7 +93,7 @@ namespace framework
             virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
             // XPopupMenuController
-            virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException) = 0;
+            virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
 
             // XInitialization
@@ -127,7 +127,10 @@ namespace framework
 
         protected:
             virtual void resetPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+            virtual void impl_setPopupMenu();
+            virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
             ::rtl::OUString determineBaseURL( const ::rtl::OUString& aURL );
+
 
             bool                                                                             m_bInitialized;
             bool                                                                             m_bDisposed;
@@ -136,6 +139,7 @@ namespace framework
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >           m_xDispatch;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >      m_xURLTransformer;
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >            m_xPopupMenu;
             ::cppu::OMultiTypeInterfaceContainerHelper                                       m_aListenerContainer; // container for ALL Listener
     };

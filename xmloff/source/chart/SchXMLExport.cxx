@@ -93,6 +93,7 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
@@ -1123,6 +1124,12 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
             OUString aDataProviderURL( RTL_CONSTASCII_USTRINGPARAM( ".." ) );
             if( xNewDoc->hasInternalDataProvider() )
                 aDataProviderURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) );
+            else //special handling for data base data provider necessary
+            {
+                Reference< chart2::data::XDatabaseDataProvider > xDBDataProvider( xNewDoc->getDataProvider(), uno::UNO_QUERY );
+                if( xDBDataProvider.is() )
+                    aDataProviderURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) );
+            }
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aDataProviderURL );
         }
 

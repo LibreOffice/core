@@ -33,6 +33,7 @@
 
 #include <sal/types.h>
 #include <vcl/timer.hxx>
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // event class
@@ -52,7 +53,7 @@ namespace sdr
         public:
             // constructor/destructor
             Event(sal_uInt32 nTime);
-            virtual ~Event();
+            SVX_DLLPUBLIC virtual ~Event();
 
             // access to mpNext
             Event* GetNext() const;
@@ -83,7 +84,7 @@ namespace sdr
         public:
             // constructor/destructor
             EventList();
-            virtual ~EventList();
+            SVX_DLLPUBLIC virtual ~EventList();
 
             // insert/remove time dependent
             void Insert(Event* pNew);
@@ -123,10 +124,10 @@ namespace sdr
         public:
             // constructor/destructor
             Scheduler();
-            virtual ~Scheduler();
+            SVX_DLLPUBLIC virtual ~Scheduler();
 
             // From baseclass Timer, the timeout call
-            virtual void Timeout();
+            SVX_DLLPUBLIC virtual void Timeout();
 
             // get time
             sal_uInt32 GetTime();

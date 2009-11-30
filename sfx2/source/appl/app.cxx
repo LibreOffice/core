@@ -505,7 +505,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         if ( pOldContainerFrame )
         {
             if ( bTaskActivate )
-                NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, pOldContainerFrame->GetObjectShell() ) );
+                NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_DEACTIVATEDOC), pOldContainerFrame->GetObjectShell() ) );
             pOldContainerFrame->DoDeactivate( bTaskActivate, pFrame );
 
             if( pOldContainerFrame->GetProgress() )
@@ -529,7 +529,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
             if ( bTaskActivate && pNewContainerFrame->GetObjectShell() )
             {
                 pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl( pNewContainerFrame );
-                NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, pNewContainerFrame->GetObjectShell() ) );
+                NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_ACTIVATEDOC), pNewContainerFrame->GetObjectShell() ) );
             }
 
             SfxProgress *pProgress = pNewContainerFrame->GetProgress();

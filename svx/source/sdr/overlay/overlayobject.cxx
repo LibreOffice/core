@@ -107,7 +107,7 @@ namespace sdr
             OSL_ENSURE(0 == getOverlayManager(), "OverlayObject is destructed which is still registered at OverlayManager (!)");
         }
 
-        const drawinglayer::primitive2d::Primitive2DSequence& OverlayObject::getOverlayObjectPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DSequence OverlayObject::getOverlayObjectPrimitive2DSequence() const
         {
             if(!getPrimitive2DSequence().hasElements())
             {

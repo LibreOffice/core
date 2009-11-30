@@ -40,7 +40,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayAnimatedBitmapEx : public OverlayObjectWithBasePosition
+        class SVX_DLLPUBLIC OverlayAnimatedBitmapEx : public OverlayObjectWithBasePosition
         {
         protected:
             // the Bitmaps

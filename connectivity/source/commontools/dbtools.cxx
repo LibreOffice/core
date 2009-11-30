@@ -842,9 +842,8 @@ static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaDa
         return ::rtl::OUString();
     OSL_ENSURE(_rName.getLength(), "impl_doComposeTableName : at least the name should be non-empty !");
 
-    ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
-
-    NameComponentSupport aNameComps( lcl_getNameComponentSupport( _rxMetaData, _eComposeRule ) );
+    const ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
+    const NameComponentSupport aNameComps( lcl_getNameComponentSupport( _rxMetaData, _eComposeRule ) );
 
     ::rtl::OUStringBuffer aComposedName;
 
@@ -1014,7 +1013,6 @@ try
             Property* pResult = ::std::lower_bound(pNewProps, pNewProps + nNewLen,pOldProps[i].Name, ::comphelper::PropertyStringLessFunctor());
             if (    pResult
                 && ( pResult != pNewProps + nNewLen && pResult->Name == pOldProps[i].Name )
-                && ( pResult->Attributes == pOldProps[i].Attributes )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
                 && ( pResult->Type.equals(pOldProps[i].Type)) )
             {   // Attribute stimmen ueberein und Property ist nicht read-only

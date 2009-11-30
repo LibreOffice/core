@@ -93,8 +93,8 @@
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
 					<info>
 						<author>OS</author>
-						<desc>Specifies if notes are displayed.</desc>
-						<label>Notes</label>
+						<desc>Specifies if comments are displayed.</desc>
+						<label>Comments</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -686,7 +686,7 @@
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Notes -->
 					<info>
 						<author>OS</author>
-						<desc>Specifies if notes are printed and how they are printed.</desc>
+						<desc>Specifies if comments are printed and how they are printed.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -696,7 +696,7 @@
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc>Notes only</desc>
+								<desc>Comments only</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">

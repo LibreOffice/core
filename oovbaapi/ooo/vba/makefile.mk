@@ -44,7 +44,7 @@ dummy:
 .ENDIF
 
 # ------------------------------------------------------------------------
-
+.IF "$(L10N_framework)"=""
 IDLFILES=\
     XErrObject.idl \
     XGlobals.idl \
@@ -60,5 +60,5 @@ IDLFILES=\
     Globals.idl\
 
 # ------------------------------------------------------------------
-
+.ENDIF
 .INCLUDE :  target.mk

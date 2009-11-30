@@ -273,7 +273,7 @@ public:
 // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-    static FmXFormController* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+    SVX_DLLPUBLIC static FmXFormController* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
 // XDispatch
     virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& _rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs ) throw (::com::sun::star::uno::RuntimeException);
@@ -462,7 +462,7 @@ public:
         --m_nCurrentFilterPosition;
     }
 
-    void setCurrentFilterPosition(sal_Int32 nPos);
+    SVX_DLLPUBLIC void setCurrentFilterPosition(sal_Int32 nPos);
     sal_Int32 getCurrentFilterPosition() const {return m_nCurrentFilterPosition;}
 
 protected:

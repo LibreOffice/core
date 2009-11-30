@@ -476,6 +476,12 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaChordAction& rAct)
 
 bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly)
 {
+    // #i102706# Do not merge closed polygons
+    if(rSrcPoly.isClosed())
+    {
+        return false;
+    }
+
     // #i73407# reformulation to use new B2DPolygon classes
     if(bLastObjWasLine && (aOldLineColor == aVD.GetLineColor()) && rSrcPoly.count())
     {
@@ -488,6 +494,12 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
             {
                 bool bOk(false);
                 basegfx::B2DPolygon aDstPoly(pLastPoly->GetPathPoly().getB2DPolygon(0L));
+
+                // #i102706# Do not merge closed polygons
+                if(aDstPoly.isClosed())
+                {
+                    return false;
+                }
 
                 if(aDstPoly.count())
                 {

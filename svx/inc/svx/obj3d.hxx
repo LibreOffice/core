@@ -92,8 +92,8 @@ class E3dObjList : public SdrObjList
 public:
     TYPEINFO();
     E3dObjList(SdrModel* pNewModel = 0, SdrPage* pNewPage = 0, E3dObjList* pNewUpList = 0);
-    E3dObjList(const E3dObjList& rSrcList);
-    virtual ~E3dObjList();
+    SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
+    SVX_DLLPUBLIC virtual ~E3dObjList();
 
     virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
     virtual void InsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);

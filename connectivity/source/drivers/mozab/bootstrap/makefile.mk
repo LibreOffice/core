@@ -44,6 +44,11 @@ USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
 
+.IF "$(OS)" == "OS2"
+all: 
+    @echo "    Not building under OS/2"
+.ENDIF
+
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/

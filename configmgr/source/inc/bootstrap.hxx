@@ -34,7 +34,6 @@
 #include "bootstrapcontext.hxx"
 
 // ---------------------------------------------------------------------------------------
-#define CONFIGMGR_INIFILE                   SAL_CONFIGFILE("configmgr")
 #define BOOTSTRAP_ITEM_INIFILE              "CFG_INIFILE"
 // ---------------------------------------------------------------------------------------
 // standard settings

@@ -48,8 +48,8 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-OAdabasPreparedStatement::OAdabasPreparedStatement( OAdabasConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql)
-: ::connectivity::odbc::OPreparedStatement( _pConnection,_TypeInfo,sql)
+OAdabasPreparedStatement::OAdabasPreparedStatement( OAdabasConnection* _pConnection,const ::rtl::OUString& sql)
+: ::connectivity::odbc::OPreparedStatement( _pConnection,sql)
 {
     m_aSelectColumns = _pConnection->createSelectColumns(sql);
 }

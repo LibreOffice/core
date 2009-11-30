@@ -45,7 +45,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-
+#include <com/sun/star/lang/DisposedException.hpp>
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________

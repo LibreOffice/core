@@ -121,7 +121,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
                 uno_Environment ** /*ppEnv*/
             )
 {
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ":affine";
 }
 
 //---------------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     }
     catch (::com::sun::star::registry::InvalidRegistryException& )
     {
-        OSL_ENSURE(sal_False, "ODBC::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_ENSURE(sal_False, "ADO::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
     }
 
     return sal_False;

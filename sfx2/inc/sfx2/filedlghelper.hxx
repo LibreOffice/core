@@ -151,7 +151,8 @@ public:
         SD_INSERT_SOUND,                // insert sound in draw
         SD_INSERT_VIDEO,                // insert video in draw
         SD_EXPORT,                      // export in draw
-        SI_EXPORT                       // export in impress
+        SI_EXPORT,                      // export in impress
+        SW_EXPORT                       // export in writer
     };
 
 private:

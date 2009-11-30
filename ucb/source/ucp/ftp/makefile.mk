@@ -45,7 +45,7 @@ UCPFTP_MAJOR=1
 .INCLUDE: settings.mk
 
 # --- General -----------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 # first target ( shared library )
 
 SLOFILES1=\
@@ -93,6 +93,7 @@ SHL1LIBS= \
 
 DEF1NAME=$(SHL1TARGET)
 
+.ENDIF # L10N_framework
 .INCLUDE: target.mk
 
 

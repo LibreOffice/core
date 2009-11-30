@@ -51,62 +51,68 @@ namespace desktop
 
 sal_Bool CheckInstallation( OUString& rTitle )
 {
-    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-    Reference< XExactName > xExactName( xSMgr->createInstance(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.comp.desktop.Evaluation" ))),
-                                UNO_QUERY );
-    if ( xExactName.is() )
+    try
     {
-        try
+        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+        Reference< XExactName > xExactName( xSMgr->createInstance(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.comp.desktop.Evaluation" ))),
+                                    UNO_QUERY );
+        if ( xExactName.is() )
         {
-            rTitle = xExactName->getExactName( rTitle );
-            Reference< XMaterialHolder > xMaterialHolder( xExactName, UNO_QUERY );
-            if ( xMaterialHolder.is() )
+            try
             {
-                com::sun::star::util::Date aExpirationDate;
-                Any a = xMaterialHolder->getMaterial();
-                if ( a >>= aExpirationDate )
+                rTitle = xExactName->getExactName( rTitle );
+                Reference< XMaterialHolder > xMaterialHolder( xExactName, UNO_QUERY );
+                if ( xMaterialHolder.is() )
                 {
-                    Date aToday;
-                    Date aTimeBombDate( aExpirationDate.Day, aExpirationDate.Month, aExpirationDate.Year );
-                    if ( aToday > aTimeBombDate )
+                    com::sun::star::util::Date aExpirationDate;
+                    Any a = xMaterialHolder->getMaterial();
+                    if ( a >>= aExpirationDate )
                     {
-                        InfoBox aInfoBox( NULL, String::CreateFromAscii( "This version has expired" ) );
-                        aInfoBox.Execute();
-                        return sal_False;
+                        Date aToday;
+                        Date aTimeBombDate( aExpirationDate.Day, aExpirationDate.Month, aExpirationDate.Year );
+                        if ( aToday > aTimeBombDate )
+                        {
+                            InfoBox aInfoBox( NULL, String::CreateFromAscii( "This version has expired" ) );
+                            aInfoBox.Execute();
+                            return sal_False;
+                        }
                     }
-                }
 
-                return sal_True;
+                    return sal_True;
+                }
+                else
+                {
+                    InfoBox aInfoBox( NULL, rTitle );
+                    aInfoBox.Execute();
+                    return sal_False;
+                }
             }
-            else
+            catch ( RuntimeException& )
             {
-                InfoBox aInfoBox( NULL, rTitle );
-                aInfoBox.Execute();
+                // Evaluation version expired!
                 return sal_False;
             }
         }
-        catch ( RuntimeException& )
+        else
         {
-            // Evaluation version expired!
-            return sal_False;
+            Reference< com::sun::star::container::XContentEnumerationAccess > rContent( xSMgr , UNO_QUERY );
+            if( rContent.is() )
+            {
+                OUString sEvalService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Evaluation" ) );
+                Reference < com::sun::star::container::XEnumeration > rEnum = rContent->createContentEnumeration( sEvalService );
+                if ( rEnum.is() )
+                {
+                    InfoBox aInfoBox( NULL, rTitle );
+                    aInfoBox.Execute();
+                    return sal_False;
+                }
+            }
         }
     }
-    else
+    catch(Exception)
     {
-        Reference< com::sun::star::container::XContentEnumerationAccess > rContent( xSMgr , UNO_QUERY );
-        if( rContent.is() )
-        {
-            OUString sEvalService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Evaluation" ) );
-            Reference < com::sun::star::container::XEnumeration > rEnum = rContent->createContentEnumeration( sEvalService );
-            if ( rEnum.is() )
-            {
-                InfoBox aInfoBox( NULL, rTitle );
-                aInfoBox.Execute();
-                return sal_False;
-            }
-        }
     }
 
     return sal_True;

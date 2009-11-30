@@ -175,6 +175,8 @@ protected:
     void SetAutoStyles( SvXMLStylesContext *pAutoStyles );
     void SetMasterStyles( SvXMLStylesContext *pMasterStyles );
 
+    sal_Bool IsODFVersionConsistent( const ::rtl::OUString& aODFVersion );
+
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
     inline void SetEmbeddedResolver( com::sun::star::uno::Reference< com::sun::star::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
 

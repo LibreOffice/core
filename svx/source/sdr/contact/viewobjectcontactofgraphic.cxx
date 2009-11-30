@@ -220,6 +220,11 @@ namespace sdr
             SdrGrafObj& rGrafObj = getSdrGrafObj();
             rGrafObj.ForceSwapIn();
 
+            // #i103720# forget event to avoid possible deletion by the following ActionChanged call
+            // which may use createPrimitive2DSequence/impPrepareGraphicWithAsynchroniousLoading again.
+            // Deletion is actally done by the scheduler who leaded to coming here
+            mpAsynchLoadEvent = 0;
+
             // Invalidate all paint areas and check existing animation (which may have changed).
             GetViewContact().ActionChanged();
         }
@@ -230,11 +235,15 @@ namespace sdr
         void ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent)
         {
             (void) pEvent; // suppress warning
-            DBG_ASSERT(mpAsynchLoadEvent, "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: I did not trigger a event, why am i called (?)");
-            DBG_ASSERT(mpAsynchLoadEvent == pEvent, "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then i have scheduled (?)");
 
-            // forget event
-            mpAsynchLoadEvent = 0;
+            if(mpAsynchLoadEvent)
+            {
+                OSL_ENSURE(!pEvent || mpAsynchLoadEvent == pEvent,
+                    "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then i have scheduled (?)");
+
+                // forget event
+                mpAsynchLoadEvent = 0;
+            }
         }
 
         SdrGrafObj& ViewObjectContactOfGraphic::getSdrGrafObj()

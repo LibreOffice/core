@@ -1882,6 +1882,11 @@ uno::Reference< uno::XInterface > SdrModel::getUnoModel()
     return mxUnoModel;
 }
 
+void SdrModel::setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel )
+{
+    mxUnoModel = xModel;
+}
+
 uno::Reference< uno::XInterface > SdrModel::createUnoModel()
 {
     DBG_ERROR( "SdrModel::createUnoModel() - base implementation should not be called!" );

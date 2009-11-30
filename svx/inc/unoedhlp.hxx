@@ -49,7 +49,7 @@ class EditEngine;
     case denotes the destination position, the two parameters the
     start and the end of the moved paragraph range.
  */
-class SvxEditSourceHint : public TextHint
+class SVX_DLLPUBLIC SvxEditSourceHint : public TextHint
 {
 private:
     ULONG   mnStart;

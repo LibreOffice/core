@@ -27,60 +27,71 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.connectivity;
+package qa.drivers.dbase;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XCloseable;
 import com.sun.star.sdbc.*;
-import com.sun.star.sdb.*;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
-
 import com.sun.star.lang.XMultiServiceFactory;
-
 import complexlib.ComplexTestCase;
-
-import java.io.PrintWriter;
-
-import util.utils;
 import java.util.*;
 import java.io.*;
+import share.LogWriter;
 //import complex.connectivity.DBaseStringFunctions;
 
-public class DBaseDriverTest  extends ComplexTestCase {
+public class DBaseDriverTest extends ComplexTestCase
+{
 
     private static Properties props = new Properties();
     private XDriver m_xDiver;
-        private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
+    private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
 
-    static {
-        try {
+    static
+    {
+        try
+        {
             String propsFile = "test.properties";
-            props.load( new FileInputStream(propsFile) );
-        } catch(Exception ex) {
+            props.load(new FileInputStream(propsFile));
+        }
+        catch (Exception ex)
+        {
             throw new RuntimeException(ex);
         }
     }
 
-    public String[] getTestMethodNames() {
-        return new String[] { "Functions" };
+    public String[] getTestMethodNames()
+    {
+        return new String[]
+                {
+                    "Functions"
+                };
     }
 
-    public String getTestObjectName() {
+    public String getTestObjectName()
+    {
         return "DBaseDriverTest";
     }
-    public void assure2(String s,boolean b){
-        assure(s,b);
+
+    public void assure2(String s, boolean b)
+    {
+        assure(s, b);
     }
 
-    public void Functions() throws com.sun.star.uno.Exception,com.sun.star.beans.UnknownPropertyException {
-        DBaseStringFunctions aStringTest = new DBaseStringFunctions(((XMultiServiceFactory)param.getMSF()),this);
+    public LogWriter getLog()
+    {
+        return log;
+    }
+
+    public void Functions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    {
+        DBaseStringFunctions aStringTest = new DBaseStringFunctions(((XMultiServiceFactory) param.getMSF()), this);
         aStringTest.testFunctions();
 
-        DBaseNumericFunctions aNumericTest = new DBaseNumericFunctions(((XMultiServiceFactory)param.getMSF()),this);
+        DBaseNumericFunctions aNumericTest = new DBaseNumericFunctions(((XMultiServiceFactory) param.getMSF()), this);
         aNumericTest.testFunctions();
 
-        DBaseDateFunctions aDateTest = new DBaseDateFunctions(((XMultiServiceFactory)param.getMSF()),this);
+        DBaseDateFunctions aDateTest = new DBaseDateFunctions(((XMultiServiceFactory) param.getMSF()), this);
         aDateTest.testFunctions();
+
+        DBaseSqlTests aSqlTest = new DBaseSqlTests(((XMultiServiceFactory) param.getMSF()), this);
+        aSqlTest.testFunctions();
     }
 }

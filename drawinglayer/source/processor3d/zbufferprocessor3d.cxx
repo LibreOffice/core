@@ -675,15 +675,25 @@ namespace drawinglayer
                 {
                     // step two:
                     //
-                    // bring from [0.0 .. 1.0] in X,Y and Z to view cordinates. also:
-                    // - scale Z to [0.0 .. fMaxZDepth]
-                    const double fMaxZDepth(double(0x0000ff00));
+                    // bring from [0.0 .. 1.0] in X,Y and Z to view cordinates
+                    //
+                    // #i102611#
+                    // also: scale Z to [1.5 .. 65534.5]. Normally, a range of [0.0 .. 65535.0]
+                    // could be used, but a 'unused' value is needed, so '0' is used what reduces
+                    // the range to [1.0 .. 65535.0]. It has also shown that small numerical errors
+                    // (smaller as basegfx::fTools::mfSmallValue, which is 0.000000001) happen.
+                    // Instead of checking those by basegfx::fTools methods which would cost
+                    // runtime, just add another 0.5 tolerance to the start and end of the Z-Buffer
+                    // range, thus resulting in [1.5 .. 65534.5]
+                    const double fMaxZDepth(65533.0);
                     aDeviceToView.translate(-rVisiblePart.getMinX(), -rVisiblePart.getMinY(), 0.0);
 
                     if(mnAntiAlialize)
                         aDeviceToView.scale(fFullViewSizeX * mnAntiAlialize, fFullViewSizeY * mnAntiAlialize, fMaxZDepth);
                     else
                         aDeviceToView.scale(fFullViewSizeX, fFullViewSizeY, fMaxZDepth);
+
+                    aDeviceToView.translate(0.0, 0.0, 1.5);
                 }
 
                 // update local ViewInformation3D with own DeviceToView

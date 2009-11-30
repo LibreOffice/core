@@ -56,62 +56,36 @@ CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 CFLAGS+=-DSYSTEM_EXPAT
 .ENDIF
 
-OBJFILES=\
-        $(OBJ)$/HelpLinker.obj \
-        $(OBJ)$/HelpCompiler.obj
-SLOFILES=\
-        $(SLO)$/HelpLinker.obj \
-        $(SLO)$/HelpCompiler.obj
-
-EXCEPTIONSFILES=\
-        $(OBJ)$/HelpLinker.obj \
-        $(OBJ)$/HelpCompiler.obj \
-        $(SLO)$/HelpLinker.obj \
-        $(SLO)$/HelpCompiler.obj
-.IF "$(OS)" == "MACOSX" && "$(CPU)" == "P" && "$(COM)" == "GCC"
-# There appears to be a GCC 4.0.1 optimization error causing _file:good() to
-# report true right before the call to writeOut at HelpLinker.cxx:1.12 l. 954
-# but out.good() to report false right at the start of writeOut at
-# HelpLinker.cxx:1.12 l. 537:
-NOOPTFILES=\
-        $(OBJ)$/HelpLinker.obj \
-        $(SLO)$/HelpLinker.obj
-.ENDIF
-
-APP1TARGET= $(TARGET)
-APP1OBJS=\
-      $(OBJ)$/HelpLinker.obj \
-      $(OBJ)$/HelpCompiler.obj
-APP1RPATH=NONE
-
-APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
-
-SHL1TARGET	=$(LIBBASENAME)$(DLLPOSTFIX)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1IMPLIB	=i$(LIBBASENAME)
-SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
-SHL1STDLIBS =$(SALLIB) $(BERKELEYLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
-SHL1USE_EXPORTS	=ordinal
-
-DEF1NAME	=$(SHL1TARGET) 
-DEFLIB1NAME	=$(TARGET)
 
 JAVACLASSFILES = \
+    $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpIndexerTool.class			\
+    $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpFileDocument.class		\
     $(CLASSDIR)$/$(PACKAGE)$/HelpSearch.class			        \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpComponent.class			        \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
+    $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        
 
-JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar
+JAVAFILES = \
+    HelpSearch.java 							\
+    HelpComponent.java							\
+    HelpIndexer.java
+
+TRANSEX3FILES = \
+        $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpIndexerTool.class		\
+        $(SOLARBINDIR)$/help$/$(PACKAGE)$/HelpFileDocument.class				
+
+ADDFILES = $(subst,$(SOLARBINDIR)$/help,$(CLASSDIR) $(TRANSEX3FILES))
+
+#JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
+
+JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar HelpIndexerTool.jar
 .IF "$(SYSTEM_LUCENE)" == "YES"
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
 COMP=fix_system_lucene
 .ELSE
 JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
 .ENDIF
-JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
   
-JARTARGET	   = LuceneHelpWrapper.jar
+JARTARGET	   	   = LuceneHelpWrapper.jar
 JARCOMPRESS        = TRUE 
 CUSTOMMANIFESTFILE = MANIFEST.MF 
  
@@ -119,9 +93,17 @@ CUSTOMMANIFESTFILE = MANIFEST.MF
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(ADDFILES)
+
 .IF "$(JARTARGETN)"!=""
+$(JARTARGETN) : $(ADDFILES)
 $(JARTARGETN) : $(COMP)
 .ENDIF
+
+$(CLASSDIR)$/$(PACKAGE)$/%.class : $(SOLARBINDIR)$/help$/$(PACKAGE)$/%.class 
+    $(MKDIRHIER) $(@:d)	
+    $(COPY) $< $@
+
 
 fix_system_lucene:
     @echo "Fix Java Class-Path entry for Lucene libraries from system."

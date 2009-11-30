@@ -32,6 +32,7 @@
 #include "precompiled_framework.hxx"
 #include <xml/eventsconfiguration.hxx>
 #include <xml/eventsdocumenthandler.hxx>
+#include <services.h>
 
 #ifndef __FRAMEWORK_XML_SAXNAMESPACEFILTER_HXX_
 #include <xml/saxnamespacefilter.hxx>
@@ -74,8 +75,8 @@ static Reference< XParser > GetSaxParser(
     )
 {
     //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XParser >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
-    return Reference< XParser >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
+    //return Reference< XParser >( xServiceManager->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
+    return Reference< XParser >( xServiceFactory->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
 }
 
 static Reference< XDocumentHandler > GetSaxWriter(
@@ -84,8 +85,8 @@ static Reference< XDocumentHandler > GetSaxWriter(
     )
 {
     //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XDocumentHandler >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
-    return Reference< XDocumentHandler >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
+    //return Reference< XDocumentHandler >( xServiceManager->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
+    return Reference< XDocumentHandler >( xServiceFactory->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
 }
 
 // #110897#

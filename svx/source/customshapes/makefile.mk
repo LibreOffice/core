@@ -32,6 +32,7 @@
 PRJ=..$/..
 PRJNAME=svx
 TARGET=customshapes
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
@@ -48,17 +49,26 @@ ENABLE_EXCEPTIONS=TRUE
 NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
 .ENDIF
 
+ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
+
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/EnhancedCustomShapeEngine.obj			\
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
             $(SLO)$/EnhancedCustomShapeTypeNames.obj		\
             $(SLO)$/EnhancedCustomShapeGeometry.obj			\
             $(SLO)$/EnhancedCustomShape2d.obj				\
+            $(SLO)$/EnhancedCustomShapeFunctionParser.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+            $(SLO)$/EnhancedCustomShapeEngine.obj			\
             $(SLO)$/EnhancedCustomShape3d.obj				\
             $(SLO)$/EnhancedCustomShapeFontWork.obj			\
             $(SLO)$/EnhancedCustomShapeHandle.obj			\
-            $(SLO)$/EnhancedCustomShapeFunctionParser.obj	\
             $(SLO)$/tbxcustomshapes.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 # --- Targets ----------------------------------
 

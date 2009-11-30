@@ -96,7 +96,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/component.hxx>
-#include "fmstatic.hxx"
+
+#include <svx/svxdllapi.h>
 
 #include <set>
 
@@ -109,19 +110,12 @@ class Window;
 // display info about a simple ::com::sun::star::sdbc::SQLException
 void displayException(const ::com::sun::star::sdbc::SQLException&, Window* _pParent = NULL);
 void displayException(const ::com::sun::star::sdbc::SQLWarning&, Window* _pParent = NULL);
-void displayException(const ::com::sun::star::sdb::SQLContext&, Window* _pParent = NULL);
+SVX_DLLPUBLIC void displayException(const ::com::sun::star::sdb::SQLContext&, Window* _pParent = NULL);
 void displayException(const ::com::sun::star::sdb::SQLErrorEvent&, Window* _pParent = NULL);
 void displayException(const ::com::sun::star::uno::Any&, Window* _pParent = NULL);
 
-// StringConversion
-namespace svxform
-{
-    // modes for the XModeSelector
-    DECLARE_CONSTASCII_USTRING(DATA_MODE);
-    DECLARE_CONSTASCII_USTRING(FILTER_MODE);
-
-}   // namespace svxform
-
+#define DATA_MODE   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) )
+#define FILTER_MODE rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) )
 
 // Kopieren von Persistenten Objecten
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> cloneUsingProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>& _xObj);
@@ -139,7 +133,7 @@ String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com:
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel> getXModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xIface);
 
-::rtl::OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
+SVX_DLLPUBLIC ::rtl::OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
 
 // ===================================================================================================
 // = class CursorWrapper - eine Hilfsklasse, die parallel mit je einem ::com::sun::star::uno::Reference<XDatabaseUpdateCursor>,
@@ -159,7 +153,7 @@ public:
     // Construction/Destruction
     CursorWrapper() { }
     CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned = sal_False);
-    CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned = sal_False);
+    SVX_DLLPUBLIC CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned = sal_False);
         // bei bUseCloned == sal_True wird der Cursor ueber das XCloneable-Interface (dass er besitzen muss) gedoubled und
         // erst dann benutzt
 

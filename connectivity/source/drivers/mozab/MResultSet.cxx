@@ -139,10 +139,10 @@ void OResultSet::disposing(void)
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    m_xStatement    = NULL;
-    m_xMetaData     = NULL;
+    m_xStatement.clear();
+    m_xMetaData.clear();
     m_pParseTree    = NULL;
-    m_xColumns      = NULL;
+    m_xColumns = NULL;
     m_xParamColumns = NULL;
     m_pKeySet       = NULL;
     if(m_pTable)

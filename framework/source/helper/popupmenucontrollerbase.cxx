@@ -44,9 +44,8 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-
+#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -57,7 +56,7 @@
 #endif
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-
+#include <rtl/logfile.hxx>
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
@@ -111,6 +110,10 @@ PopupMenuControllerBase::PopupMenuControllerBase( const ::com::sun::star::uno::R
     m_xServiceManager( xServiceManager ),
     m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
+    if ( m_xServiceManager.is() )
+        m_xURLTransformer.set( m_xServiceManager->createInstance(
+                                                                SERVICENAME_URLTRANSFORMER),
+                                                             UNO_QUERY );
 }
 
 PopupMenuControllerBase::~PopupMenuControllerBase()
@@ -178,10 +181,12 @@ void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& ) throw ( R
 // XMenuListener
 void SAL_CALL PopupMenuControllerBase::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+}
 
-    if ( m_bDisposed )
-        throw DisposedException();
+void PopupMenuControllerBase::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL)
+{
+    Sequence<PropertyValue>      aArgs;
+    _xDispatch->dispatch( aURL, aArgs );
 }
 
 void SAL_CALL PopupMenuControllerBase::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
@@ -205,37 +210,24 @@ void SAL_CALL PopupMenuControllerBase::select( const css::awt::MenuEvent& rEvent
         if ( pPopupMenu )
         {
             css::util::URL               aTargetURL;
-            Sequence<PropertyValue>      aArgs;
-            Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-
             {
                 vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
                 PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
                 aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
             }
 
-            xURLTransformer->parseStrict( aTargetURL );
-            xDispatch->dispatch( aTargetURL, aArgs );
+            m_xURLTransformer->parseStrict( aTargetURL );
+            impl_select(xDispatch,aTargetURL);
         }
     }
 }
 
 void SAL_CALL PopupMenuControllerBase::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
 }
 
 void SAL_CALL PopupMenuControllerBase::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
 }
 
 void SAL_CALL PopupMenuControllerBase::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
@@ -247,12 +239,9 @@ void SAL_CALL PopupMenuControllerBase::updatePopupMenu() throw ( ::com::sun::sta
 
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XDispatch > xDispatch( m_xDispatch );
-    Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                UNO_QUERY );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = m_aCommandURL;
-    xURLTransformer->parseStrict( aTargetURL );
+    m_xURLTransformer->parseStrict( aTargetURL );
     aLock.unlock();
 
     // Add/remove status listener to get a status update once
@@ -279,10 +268,7 @@ throw( RuntimeException )
     return Reference< XDispatch >();
 }
 
-Sequence< Reference< XDispatch > > SAL_CALL
-PopupMenuControllerBase::queryDispatches(
-    const Sequence< DispatchDescriptor >& lDescriptor )
-throw( RuntimeException )
+Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispatches( const Sequence< DispatchDescriptor >& lDescriptor ) throw( RuntimeException )
 {
     // Create return list - which must have same size then the given descriptor
     // It's not allowed to pack it!
@@ -381,9 +367,6 @@ throw( ::com::sun::star::uno::RuntimeException )
 // XInitialization
 void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
     ResetableGuard aLock( m_aLock );
 
     sal_Bool bInitalized( m_bInitialized );
@@ -413,5 +396,35 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
         }
     }
 }
+// XPopupMenuController
+void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
+{
+    ResetableGuard aLock( m_aLock );
 
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    if ( m_xFrame.is() && !m_xPopupMenu.is() )
+    {
+        // Create popup menu on demand
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+        m_xPopupMenu = xPopupMenu;
+        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
+
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+
+        com::sun::star::util::URL aTargetURL;
+        aTargetURL.Complete = m_aCommandURL;
+        m_xURLTransformer->parseStrict( aTargetURL );
+        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+
+        impl_setPopupMenu();
+
+        updatePopupMenu();
+    }
+}
+void PopupMenuControllerBase::impl_setPopupMenu()
+{
+}
 }

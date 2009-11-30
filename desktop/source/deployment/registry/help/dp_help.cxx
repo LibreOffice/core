@@ -40,7 +40,7 @@
 #include "comphelper/servicedecl.hxx"
 #include "svtools/inettype.hxx"
 
-#include <xmlhelp/compilehelp.hxx>
+#include <transex3/compilehelp.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>

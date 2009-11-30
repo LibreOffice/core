@@ -32,7 +32,7 @@
 #include "precompiled_shell.hxx"
 #include <osl/diagnose.h>
 #include <osl/process.h>
-#include <osl/module.hxx>
+#include <rtl/bootstrap.hxx>
 #include "smplmailclient.hxx"
 #include "smplmailmsg.hxx"
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
@@ -112,12 +112,10 @@ namespace /* private */
 
         if (senddocUrl.getLength() == 0)
         {
-            rtl::OUString baseUrl;
-            if (!osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(getSenddocUrl), baseUrl))
-                return rtl::OUString();
-
-            senddocUrl = baseUrl.copy(0, baseUrl.lastIndexOf('/') + 1);
-            senddocUrl += rtl::OUString::createFromAscii("senddoc.exe");
+            senddocUrl = rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "$OOO_BASE_DIR/program/senddoc.exe"));
+            rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
         }
         return senddocUrl;
     }
