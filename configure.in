@@ -2709,11 +2709,18 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\$stub|\(PLT\)' visibility.s; then
-             gccvisbroken=no;
-         else 
-             gccvisbroken=yes; 
-         fi
+         case "$build_cpu" in
+            i?86|x86_64)
+               if $EGREP -q '@PLT' visibility.s; then
+                  gccvisbroken=no
+               else 
+                  gccvisbroken=yes
+               fi
+               ;;
+            *)
+               gccvisbroken=no
+               ;;
+         esac
       fi
       rm -f visibility.s
 
