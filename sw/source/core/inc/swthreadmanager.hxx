@@ -34,6 +34,10 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
+#include <boost/utility.hpp>
+#include <memory>
+
+
 class ObservableThread;
 class ThreadManager;
 
@@ -45,6 +49,7 @@ class ThreadManager;
     @author OD
 */
 class SwThreadManager
+    : private ::boost::noncopyable
 {
     public:
 
@@ -52,6 +57,9 @@ class SwThreadManager
 
         static bool ExistsThreadManager();
 
+        // private: don't call!
+        SwThreadManager();
+        // private: don't call!
         ~SwThreadManager();
 
         oslInterlockedCount AddThread( const rtl::Reference< ObservableThread >& rThread );
@@ -76,12 +84,9 @@ class SwThreadManager
         bool StartingOfThreadsSuspended();
 
     private:
-        static SwThreadManager* mpThreadManager;
-        static osl::Mutex* mpGetManagerMutex;
+        static bool mbThreadManagerInstantiated;
 
-        ThreadManager* mpThreadManagerImpl;
-
-        SwThreadManager();
+        ::std::auto_ptr<ThreadManager> mpThreadManagerImpl;
 
 };
 #endif
