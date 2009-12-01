@@ -631,7 +631,9 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
 {
     const sal_Unicode* pTmp = NULL;
     String aExternDocName, aStartTabName, aEndTabName;
-    USHORT nFlags = SCA_VALID | SCA_VALID_TAB, nFlags2 = SCA_VALID_TAB2;
+    USHORT nFlags = SCA_VALID | SCA_VALID_TAB;
+    // Keep in mind that nFlags2 gets left-shifted by 4 bits before being merged.
+    USHORT nFlags2 = SCA_VALID_TAB;
 
 #if 0
     {
