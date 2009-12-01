@@ -176,7 +176,7 @@ namespace drawinglayer
             bool bWordWrap)
         {
             ::basegfx::B2DHomMatrix aAnchorTransform(rObjectTransform);
-            SdrTextPrimitive2D* pNew = 0L;
+            SdrTextPrimitive2D* pNew = 0;
 
             if(rText.isContour())
             {
@@ -206,20 +206,32 @@ namespace drawinglayer
                     aScaledUnitPolyPolygon.transform(aScaleTransform);
 
                     // create with unit polygon
-                    pNew = new SdrContourTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), aScaledUnitPolyPolygon, rObjectTransform);
+                    pNew = new SdrContourTextPrimitive2D(
+                        &rText.getSdrText(),
+                        rText.getOutlinerParaObject(),
+                        aScaledUnitPolyPolygon,
+                        rObjectTransform);
                 }
                 else
                 {
                     // create with unit polygon
-                    pNew = new SdrContourTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), rUnitPolyPolygon, rObjectTransform);
+                    pNew = new SdrContourTextPrimitive2D(
+                        &rText.getSdrText(),
+                        rText.getOutlinerParaObject(),
+                        rUnitPolyPolygon,
+                        rObjectTransform);
                 }
             }
-            else if(rText.isFontwork() && !rText.isScroll())
+            else if(rText.getSdrFormTextAttribute())
             {
-                // text on path, use scaled polygon. Not allowed when text scrolling is used.
+                // text on path, use scaled polygon
                 ::basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
                 aScaledPolyPolygon.transform(rObjectTransform);
-                pNew = new SdrPathTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), aScaledPolyPolygon);
+                pNew = new SdrPathTextPrimitive2D(
+                    &rText.getSdrText(),
+                    rText.getOutlinerParaObject(),
+                    aScaledPolyPolygon,
+                    *rText.getSdrFormTextAttribute());
             }
             else
             {
@@ -267,12 +279,21 @@ namespace drawinglayer
                 if(rText.isFitToSize())
                 {
                     // streched text in range
-                    pNew = new SdrStretchTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform);
+                    pNew = new SdrStretchTextPrimitive2D(
+                        &rText.getSdrText(),
+                        rText.getOutlinerParaObject(),
+                        aAnchorTransform);
                 }
                 else // text in range
                 {
                     // build new primitive
-                    pNew = new SdrBlockTextPrimitive2D(rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform, rText.isScroll(), bCellText, bWordWrap);
+                    pNew = new SdrBlockTextPrimitive2D(
+                        &rText.getSdrText(),
+                        rText.getOutlinerParaObject(),
+                        aAnchorTransform,
+                        rText.isScroll(),
+                        bCellText,
+                        bWordWrap);
                 }
             }
 
@@ -299,121 +320,124 @@ namespace drawinglayer
                     return Primitive2DReference(pNew);
                 }
             }
-            else if(rText.isScroll())
+
+            if(rText.isScroll())
             {
-                // get scroll direction
-                const SdrTextAniDirection eDirection(rText.getSdrText().GetObject().GetTextAniDirection());
-                const bool bHorizontal(SDRTEXTANI_LEFT == eDirection || SDRTEXTANI_RIGHT == eDirection);
-
-                // decompose to get separated values for the scroll box
-                ::basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                aAnchorTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                // build transform from scaled only to full AnchorTransform and inverse
-                ::basegfx::B2DHomMatrix aSRT;
-                aSRT.shearX(fShearX);
-                aSRT.rotate(fRotate);
-                aSRT.translate(aTranslate.getX(), aTranslate.getY());
-                ::basegfx::B2DHomMatrix aISRT(aSRT);
-                aISRT.invert();
-
-                // bring the primitive back to scaled only and get scaled range, create new clone for this
-                SdrTextPrimitive2D* pNew2 = pNew->createTransformedClone(aISRT);
-                OSL_ENSURE(pNew2, "createTextPrimitive: Could not create transformed clone of text primitive (!)");
-                delete pNew;
-                pNew = pNew2;
-
-                // create neutral geometry::ViewInformation2D for local range and decompose calls. This is okay
-                // since the decompose is view-independent
-                const uno::Sequence< beans::PropertyValue > xViewParameters;
-                geometry::ViewInformation2D aViewInformation2D(xViewParameters);
-
-                // get range
-                const ::basegfx::B2DRange aScaledRange(pNew->getB2DRange(aViewInformation2D));
-
-                // create left outside and right outside transformations. Also take care
-                // of the clip rectangle
-                ::basegfx::B2DHomMatrix aLeft, aRight;
-                ::basegfx::B2DPoint aClipTopLeft(0.0, 0.0);
-                ::basegfx::B2DPoint aClipBottomRight(aScale.getX(), aScale.getY());
-
-                if(bHorizontal)
+                // suppress scroll when FontWork
+                if(!rText.getSdrFormTextAttribute())
                 {
-                    aClipTopLeft.setY(aScaledRange.getMinY());
-                    aClipBottomRight.setY(aScaledRange.getMaxY());
-                    aLeft.translate(-aScaledRange.getMaxX(), 0.0);
-                    aRight.translate(aScale.getX() - aScaledRange.getMinX(), 0.0);
-                }
-                else
-                {
-                    aClipTopLeft.setX(aScaledRange.getMinX());
-                    aClipBottomRight.setX(aScaledRange.getMaxX());
-                    aLeft.translate(0.0, -aScaledRange.getMaxY());
-                    aRight.translate(0.0, aScale.getY() - aScaledRange.getMinY());
-                }
+                    // get scroll direction
+                    const SdrTextAniDirection eDirection(rText.getSdrText().GetObject().GetTextAniDirection());
+                    const bool bHorizontal(SDRTEXTANI_LEFT == eDirection || SDRTEXTANI_RIGHT == eDirection);
 
-                aLeft *= aSRT;
-                aRight *= aSRT;
+                    // decompose to get separated values for the scroll box
+                    ::basegfx::B2DVector aScale, aTranslate;
+                    double fRotate, fShearX;
+                    aAnchorTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
-                // prepare animation list
-                drawinglayer::animation::AnimationEntryList aAnimationList;
+                    // build transform from scaled only to full AnchorTransform and inverse
+                    ::basegfx::B2DHomMatrix aSRT;
+                    aSRT.shearX(fShearX);
+                    aSRT.rotate(fRotate);
+                    aSRT.translate(aTranslate.getX(), aTranslate.getY());
+                    ::basegfx::B2DHomMatrix aISRT(aSRT);
+                    aISRT.invert();
 
-                if(bHorizontal)
-                {
-                    rText.getScrollTextTiming(aAnimationList, aScale.getX(), aScaledRange.getWidth());
-                }
-                else
-                {
-                    rText.getScrollTextTiming(aAnimationList, aScale.getY(), aScaledRange.getHeight());
-                }
-
-                if(0.0 != aAnimationList.getDuration())
-                {
-                    // create a new Primitive2DSequence containing the animated text in it's scaled only state.
-                    // use the decomposition to force to simple text primitives, those will no longer
-                    // need the outliner for formatting (alternatively it is also possible to just add
-                    // pNew to aNewPrimitiveSequence)
-                    Primitive2DSequence aAnimSequence(pNew->get2DDecomposition(aViewInformation2D));
+                    // bring the primitive back to scaled only and get scaled range, create new clone for this
+                    SdrTextPrimitive2D* pNew2 = pNew->createTransformedClone(aISRT);
+                    OSL_ENSURE(pNew2, "createTextPrimitive: Could not create transformed clone of text primitive (!)");
                     delete pNew;
+                    pNew = pNew2;
 
-                    // create a new animatedInterpolatePrimitive and add it
-                    std::vector< basegfx::B2DHomMatrix > aMatrixStack;
-                    aMatrixStack.push_back(aLeft);
-                    aMatrixStack.push_back(aRight);
-                    const Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D(aMatrixStack, aAnimationList, aAnimSequence, true));
-                    const Primitive2DSequence aContent(&xRefA, 1L);
+                    // create neutral geometry::ViewInformation2D for local range and decompose calls. This is okay
+                    // since the decompose is view-independent
+                    const uno::Sequence< beans::PropertyValue > xViewParameters;
+                    geometry::ViewInformation2D aViewInformation2D(xViewParameters);
 
-                    // scrolling needs an encapsulating clipping primitive
-                    const ::basegfx::B2DRange aClipRange(aClipTopLeft, aClipBottomRight);
-                    ::basegfx::B2DPolygon aClipPolygon(::basegfx::tools::createPolygonFromRect(aClipRange));
-                    aClipPolygon.transform(aSRT);
-                    return Primitive2DReference(new MaskPrimitive2D(::basegfx::B2DPolyPolygon(aClipPolygon), aContent));
+                    // get range
+                    const ::basegfx::B2DRange aScaledRange(pNew->getB2DRange(aViewInformation2D));
+
+                    // create left outside and right outside transformations. Also take care
+                    // of the clip rectangle
+                    ::basegfx::B2DHomMatrix aLeft, aRight;
+                    ::basegfx::B2DPoint aClipTopLeft(0.0, 0.0);
+                    ::basegfx::B2DPoint aClipBottomRight(aScale.getX(), aScale.getY());
+
+                    if(bHorizontal)
+                    {
+                        aClipTopLeft.setY(aScaledRange.getMinY());
+                        aClipBottomRight.setY(aScaledRange.getMaxY());
+                        aLeft.translate(-aScaledRange.getMaxX(), 0.0);
+                        aRight.translate(aScale.getX() - aScaledRange.getMinX(), 0.0);
+                    }
+                    else
+                    {
+                        aClipTopLeft.setX(aScaledRange.getMinX());
+                        aClipBottomRight.setX(aScaledRange.getMaxX());
+                        aLeft.translate(0.0, -aScaledRange.getMaxY());
+                        aRight.translate(0.0, aScale.getY() - aScaledRange.getMinY());
+                    }
+
+                    aLeft *= aSRT;
+                    aRight *= aSRT;
+
+                    // prepare animation list
+                    drawinglayer::animation::AnimationEntryList aAnimationList;
+
+                    if(bHorizontal)
+                    {
+                        rText.getScrollTextTiming(aAnimationList, aScale.getX(), aScaledRange.getWidth());
+                    }
+                    else
+                    {
+                        rText.getScrollTextTiming(aAnimationList, aScale.getY(), aScaledRange.getHeight());
+                    }
+
+                    if(0.0 != aAnimationList.getDuration())
+                    {
+                        // create a new Primitive2DSequence containing the animated text in it's scaled only state.
+                        // use the decomposition to force to simple text primitives, those will no longer
+                        // need the outliner for formatting (alternatively it is also possible to just add
+                        // pNew to aNewPrimitiveSequence)
+                        Primitive2DSequence aAnimSequence(pNew->get2DDecomposition(aViewInformation2D));
+                        delete pNew;
+
+                        // create a new animatedInterpolatePrimitive and add it
+                        std::vector< basegfx::B2DHomMatrix > aMatrixStack;
+                        aMatrixStack.push_back(aLeft);
+                        aMatrixStack.push_back(aRight);
+                        const Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D(aMatrixStack, aAnimationList, aAnimSequence, true));
+                        const Primitive2DSequence aContent(&xRefA, 1L);
+
+                        // scrolling needs an encapsulating clipping primitive
+                        const ::basegfx::B2DRange aClipRange(aClipTopLeft, aClipBottomRight);
+                        ::basegfx::B2DPolygon aClipPolygon(::basegfx::tools::createPolygonFromRect(aClipRange));
+                        aClipPolygon.transform(aSRT);
+                        return Primitive2DReference(new MaskPrimitive2D(::basegfx::B2DPolyPolygon(aClipPolygon), aContent));
+                    }
+                    else
+                    {
+                        // add to decomposition
+                        return Primitive2DReference(pNew);
+                    }
                 }
-                else
-                {
-                    // add to decomposition
-                    return Primitive2DReference(pNew);
-                }
+            }
+
+            if(rText.isInEditMode())
+            {
+                // #i97628#
+                // encapsulate with TextHierarchyEditPrimitive2D to allow renderers
+                // to suppress actively edited content if needed
+                const Primitive2DReference xRefA(pNew);
+                const Primitive2DSequence aContent(&xRefA, 1L);
+
+                // create and add TextHierarchyEditPrimitive2D primitive
+                return Primitive2DReference(new TextHierarchyEditPrimitive2D(aContent));
             }
             else
             {
-                if(rText.isInEditMode())
-                {
-                    // #i97628#
-                    // encapsulate with TextHierarchyEditPrimitive2D to allow renderers
-                    // to suppress actively edited content if needed
-                    const Primitive2DReference xRefA(pNew);
-                    const Primitive2DSequence aContent(&xRefA, 1L);
-
-                    // create and add TextHierarchyEditPrimitive2D primitive
-                    return Primitive2DReference(new TextHierarchyEditPrimitive2D(aContent));
-                }
-                else
-                {
-                    // add to decomposition
-                    return Primitive2DReference(pNew);
-                }
+                // add to decomposition
+                return Primitive2DReference(pNew);
             }
         }
 

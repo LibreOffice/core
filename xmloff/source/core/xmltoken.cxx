@@ -146,9 +146,11 @@ namespace xmloff { namespace token {
         TOKEN( "of",                    XML_NP_OF ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:of:1.2",  XML_N_OF ),
 
-        // ODF 1.2 metadata: RDFa
-        TOKEN( "rdfa",                      XML_NP_RDFA ),
-        TOKEN( "http://docs.oasis-open.org/opendocument/meta/rdfa#", XML_N_RDFA ),
+        // ODF 1.2 metadata: RDFa and GRDDL
+        TOKEN( "xhtml",                                 XML_NP_XHTML ),
+        TOKEN( "http://www.w3.org/1999/xhtml",          XML_N_XHTML ),
+        TOKEN( "grddl",                                 XML_NP_GRDDL ),
+        TOKEN( "http://www.w3.org/2003/g/data-view#",   XML_N_GRDDL ),
 
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
@@ -3043,6 +3045,7 @@ namespace xmloff { namespace token {
         TOKEN( "meta-field",            XML_META_FIELD ),
         TOKEN( "about",                 XML_ABOUT ),
         TOKEN( "datatype",              XML_DATATYPE ),
+        TOKEN( "transformation",        XML_TRANSFORMATION ),
 
         // ODF 1.2 numbered-paragraph
         TOKEN( "list-id",               XML_LIST_ID ),
@@ -3078,6 +3081,13 @@ namespace xmloff { namespace token {
         TOKEN( "mathsize",              XML_MATHSIZE ),
         TOKEN( "mathweight",            XML_MATHWEIGHT ),
         TOKEN( "mathcolor",             XML_MATHCOLOR ),
+
+        TOKEN( "contains",              XML_CONTAINS ),
+        TOKEN( "does-not-contain",      XML_DOES_NOT_CONTAIN ),
+        TOKEN( "begins-with",           XML_BEGINS_WITH ),
+        TOKEN( "does-not-begin-with",   XML_DOES_NOT_BEGIN_WITH ),
+        TOKEN( "ends-with",             XML_ENDS_WITH ),
+        TOKEN( "does-not-end-with",     XML_DOES_NOT_END_WITH ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

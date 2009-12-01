@@ -554,7 +554,17 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( BOOL bNoVDevIfOneBmpMarked ) const
         if( !aBmp )
         {
             const Graphic aGraphic( GetMarkedObjMetaFile( bNoVDevIfOneBmpMarked ) );
-            aBmp = aGraphic.GetBitmap();
+
+            // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
+            // rasterconverted to a bitmap
+            const SvtOptionsDrawinglayer aDrawinglayerOpt;
+            const GraphicConversionParameters aParameters(
+                Size(),
+                false,
+                aDrawinglayerOpt.IsAntiAliasing(),
+                aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
+
+            aBmp = aGraphic.GetBitmap(aParameters);
         }
     }
 

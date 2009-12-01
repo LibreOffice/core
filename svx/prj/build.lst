@@ -1,4 +1,4 @@
-sx	svx	:	connectivity xmloff linguistic jvmfwk avmedia configmgr ucb fileaccess drawinglayer NULL
+sx	svx	:	l10n connectivity xmloff linguistic jvmfwk avmedia configmgr ucb fileaccess drawinglayer NULL
 sx	svx										usr1	-	all	sx_mkout NULL
 sx	svx\inc									nmake	-	all	sx_inc NULL
 sx	svx\uiconfig\layout									nmake	-	all	sx_layout NULL

@@ -716,7 +716,7 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 
     if ( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
     {
-        if ( pView->PickObj( aPos, pSdrObj, pPageView ) )
+        if ( pView->PickObj( aPos, pView->getHitTolLog(), pSdrObj, pPageView ) )
         {
             const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );
             String              aStr;

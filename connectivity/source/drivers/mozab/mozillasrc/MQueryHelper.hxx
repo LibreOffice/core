@@ -40,6 +40,8 @@
 #include <comphelper/stl_types.hxx>
 #include <osl/thread.hxx>
 
+#include <hash_map>
+
 namespace connectivity
 {
     namespace mozab
@@ -47,20 +49,20 @@ namespace connectivity
         class MQueryHelperResultEntry
         {
         private:
-            mutable ::osl::Mutex        m_aMutex;
+            typedef ::std::hash_map< ::rtl::OString, ::rtl::OUString, ::rtl::OStringHash >  FieldMap;
 
-            DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString,fieldMap);
+            mutable ::osl::Mutex    m_aMutex;
+            FieldMap                m_Fields;
+            nsCOMPtr<nsIAbCard>     m_Card;
+            sal_Int32               m_RowStates;
 
-            fieldMap    m_Fields;
-            nsCOMPtr<nsIAbCard> m_Card;
-            sal_Int32   m_RowStates;
         public:
             MQueryHelperResultEntry();
             ~MQueryHelperResultEntry();
 
-            void insert( const rtl::OUString &key, rtl::OUString &value );
-            rtl::OUString getValue( const rtl::OUString &key ) const;
-            rtl::OUString setValue( const rtl::OUString &key, const rtl::OUString & rValue);
+            void            insert( const rtl::OString &key, rtl::OUString &value );
+            rtl::OUString   getValue( const rtl::OString &key ) const;
+            void            setValue( const rtl::OString &key, const rtl::OUString & rValue);
 
             void setCard(nsIAbCard *card);
             nsIAbCard *getCard();
@@ -90,8 +92,6 @@ namespace connectivity
             void            clearResultOrComplete();
             void            notifyResultOrComplete();
             sal_Bool        waitForResultOrComplete( );
-            void            addCardAttributeAndValue(const ::rtl::OUString& sName, nsXPIDLString sValue,MQueryHelperResultEntry *resEntry);
-            void            getCardAttributeAndValue(const ::rtl::OUString& sName, ::rtl::OUString &ouValue, MQueryHelperResultEntry *resEntry) ;
             void            getCardValues(nsIAbCard  *card,sal_Int32 rowIndex=0);
 #if OSL_DEBUG_LEVEL > 0
             oslThreadIdentifier m_oThreadID;

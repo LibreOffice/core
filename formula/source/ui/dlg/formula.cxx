@@ -132,7 +132,7 @@ namespace formula
         void            UpdateFunctionDesc();
         void            ResizeArgArr( const IFunctionDescription* pNewFunc );
         void            FillListboxes();
-        void            FillControls();
+        void            FillControls(BOOL &rbNext, BOOL &rbPrev);
 
         FormulaDlgMode  SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,BOOL bMatrix,BOOL _bSelect,BOOL _bUpdate);
         void            SetMeText(const String& _sText);
@@ -497,6 +497,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
     if ( m_aTokenList.getLength() )
     {
         const uno::Reference< sheet::XFormulaParser > xParser(m_pHelper->getFormulaParser());
+        const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
 
         const sheet::FormulaToken* pIter = m_aTokenList.getConstArray();
         const sheet::FormulaToken* pEnd = pIter + m_aTokenList.getLength();
@@ -509,7 +510,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
                 const sal_Int32 eOp = pIter->OpCode;
                 uno::Sequence<sheet::FormulaToken> aArgs(1);
                 aArgs[0] = *pIter;
-                const String aString = xParser->printFormula(aArgs);
+                const String aString = xParser->printFormula(aArgs, aRefPos);
                 const sheet::FormulaToken* pNextToken = pIter + 1;
 
                 if(!bUserMatrixFlag && FormulaCompiler::IsMatrixFunction((OpCode)eOp) )
@@ -533,7 +534,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
                     if ( pNextToken != pEnd )
                     {
                         aArgs[0] = *pNextToken;
-                        const String a2String = xParser->printFormula(aArgs);
+                        const String a2String = xParser->printFormula(aArgs, aRefPos);
                         const xub_StrLen n3 = aFormString.Search(a2String,nXXX);
                         if ( n3 < nTokPos )
                             nTokPos = n3;
@@ -675,11 +676,14 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,Formul
         long nParas = _pToken->GetParamCount();
         OpCode eOp = _pToken->GetOpCode();
 
+        // #i101512# for output, the original token is needed
+        FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
         uno::Sequence<sheet::FormulaToken> aArgs(1);
-        aArgs[0] = m_aTokenMap.find(_pToken)->second;
+        aArgs[0] = m_aTokenMap.find(pOrigToken)->second;
         try
         {
-            const String aResult = m_pHelper->getFormulaParser()->printFormula(aArgs);
+            const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
+            const String aResult = m_pHelper->getFormulaParser()->printFormula(aArgs, aRefPos);
 
             if ( nParas > 0 )
             {
@@ -747,7 +751,8 @@ void FormulaDlg_Impl::UpdateTokenArray( const String& rStrExp)
     m_aTokenList.realloc(0);
     try
     {
-        m_aTokenList = m_pHelper->getFormulaParser()->parseFormula(rStrExp);
+        const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
+        m_aTokenList = m_pHelper->getFormulaParser()->parseFormula(rStrExp, aRefPos);
     }
     catch(const uno::Exception&)
     {
@@ -766,14 +771,21 @@ void FormulaDlg_Impl::UpdateTokenArray( const String& rStrExp)
     } // if ( pTokens && nLen == m_aTokenList.getLength() )
 
     FormulaCompiler aCompiler(*m_pTokenArray.get());
+    aCompiler.SetCompileForFAP(TRUE);   // #i101512# special handling is needed
     aCompiler.CompileTokenArray();
 }
 
 void FormulaDlg_Impl::FillDialog(BOOL nFlag)
 {
-    if ( nFlag )
-        FillControls();
+    BOOL bNext=TRUE, bPrev=TRUE;
+    if(nFlag)
+        FillControls(bNext, bPrev);
     FillListboxes();
+    if(nFlag)
+    {
+        aBtnBackward.Enable(bPrev);
+        aBtnForward.Enable(bNext);
+    }
 
     String aStrResult;
 
@@ -821,7 +833,7 @@ void FormulaDlg_Impl::FillListboxes()
     m_pParent->SetUniqueId( nOldUnique );
 }
 // -----------------------------------------------------------------------------
-void FormulaDlg_Impl::FillControls()
+void FormulaDlg_Impl::FillControls(BOOL &rbNext, BOOL &rbPrev)
 {
     //  Umschalten zwischen den "Seiten"
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -917,12 +929,10 @@ void FormulaDlg_Impl::FillControls()
         //  Test, ob vorne/hinten noch mehr Funktionen sind
 
     xub_StrLen nTempStart = m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
-    BOOL bNext = m_aFormulaHelper.GetNextFunc( aFormula, FALSE, nTempStart );
+    rbNext = m_aFormulaHelper.GetNextFunc( aFormula, FALSE, nTempStart );
     nTempStart=(xub_StrLen)pMEdit->GetSelection().Min();
     pData->SetFStart(nTempStart);
-    BOOL bPrev = m_aFormulaHelper.GetNextFunc( aFormula, TRUE, nTempStart );
-    aBtnBackward.Enable(bPrev);
-    aBtnForward.Enable(bNext);
+    rbPrev = m_aFormulaHelper.GetNextFunc( aFormula, TRUE, nTempStart );
 }
 // -----------------------------------------------------------------------------
 
@@ -955,7 +965,8 @@ String FormulaDlg_Impl::RepairFormula(const String& aFormula)
 
         if ( m_aTokenList.getLength() )
         {
-            const String sFormula(m_pHelper->getFormulaParser()->printFormula(m_aTokenList));
+            const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
+            const String sFormula(m_pHelper->getFormulaParser()->printFormula(m_aTokenList, aRefPos));
             if ( !sFormula.Len() || sFormula.GetChar(0) != '=' )
                 aResult += sFormula;
             else

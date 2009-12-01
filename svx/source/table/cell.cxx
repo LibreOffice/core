@@ -450,6 +450,11 @@ void Cell::cloneFrom( const CellRef& xCell )
         msFormula = xCell->msFormula;
         mfValue = xCell->mfValue;
         mnError = xCell->mnError;
+
+        mbMerged = xCell->mbMerged;
+        mnRowSpan = xCell->mnRowSpan;
+        mnColSpan = xCell->mnColSpan;
+
     }
     notifyModified();
 }

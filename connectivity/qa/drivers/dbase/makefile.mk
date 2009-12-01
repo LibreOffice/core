@@ -59,15 +59,9 @@ JARCOMPRESS 	= TRUE
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
-ALL :   ALLTAR
-.ELSE
-ALL: 	ALLDEP
-.ENDIF
-
 .INCLUDE :  target.mk
 
 
 run:
-    java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -o complex.connectivity.$(TARGET)
+    java -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar" org.openoffice.Runner -TestBase java_complex -o complex.connectivity.$(TARGET)
 

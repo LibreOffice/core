@@ -199,6 +199,8 @@ public:
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
+    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
+
     virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
 
     // special drag methods
@@ -222,8 +224,6 @@ public:
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE,
         Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
-
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;

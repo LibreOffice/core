@@ -62,5 +62,5 @@ ULFDIR:=.
 # using lngconvex.exe 
 
 $(RCFILES) : $(ULFDIR)$/shlxthdl.ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt
-    $(WRAPCMD) $(BIN)$/lngconvex.exe -ulf $(ULFDIR)$/shlxthdl.ulf -rc $(RES)$/shlxthdl.rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
+    $(subst,$(SOLARBINDIR)$/lngconvex,$(BIN)$/lngconvex $(LNGCONVEX)) -ulf $(ULFDIR)$/shlxthdl.ulf -rc $(RES)$/shlxthdl.rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
     

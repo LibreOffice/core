@@ -35,6 +35,8 @@
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -42,21 +44,33 @@ namespace sdr
 {
     namespace overlay
     {
-        void OverlayPolyPolygonStriped::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayPolyPolygonStriped::createOverlayObjectPrimitive2DSequence()
         {
-            if(maPolyPolygon.count())
+            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+
+            if(getOverlayManager())
             {
-                for(sal_uInt32 a(0L); a < maPolyPolygon.count(); a++)
-                {
-                    ImpDrawPolygonStriped(rOutputDevice, maPolyPolygon.getB2DPolygon(a));
-                }
+                const basegfx::BColor aRGBColorA(getOverlayManager()->getStripeColorA().getBColor());
+                const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
+                const double fStripeLengthPixel(getOverlayManager()->getStripeLengthPixel());
+
+                const drawinglayer::primitive2d::Primitive2DReference aReference(
+                    new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
+                        getPolyPolygon(),
+                        aRGBColorA,
+                        aRGBColorB,
+                        fStripeLengthPixel));
+
+                aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
             }
+
+            return aRetval;
         }
 
-        void OverlayPolyPolygonStriped::createBaseRange(OutputDevice& /*rOutputDevice*/)
+        void OverlayPolyPolygonStriped::stripeDefinitionHasChanged()
         {
-            // use tooling to get range from PolyPolygon
-            maBaseRange = basegfx::tools::getRange(maPolyPolygon);
+            // react on OverlayManager's stripe definition change
+            objectChange();
         }
 
         OverlayPolyPolygonStriped::OverlayPolyPolygonStriped(
@@ -80,67 +94,6 @@ namespace sdr
                 // register change (after change)
                 objectChange();
             }
-        }
-
-        sal_Bool OverlayPolyPolygonStriped::isHit(const basegfx::B2DPoint& rPos, double fTol) const
-        {
-            if(isHittable())
-            {
-                return basegfx::tools::isInEpsilonRange(maPolyPolygon, rPos, fTol);
-            }
-
-            return sal_False;
-        }
-
-        void OverlayPolyPolygonStriped::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            if(!rMatrix.isIdentity())
-            {
-                // transform maPolyPolygon
-                maPolyPolygon.transform(rMatrix);
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        void OverlayPolyPolygon::drawGeometry(OutputDevice& rOutputDevice)
-        {
-            if(maPolyPolygon.count())
-            {
-                rOutputDevice.SetLineColor(getBaseColor());
-                rOutputDevice.SetFillColor();
-
-                // iterate self, else the single polygons will be closed when
-                // using DrawPolyPolygon
-                for(sal_uInt32 a(0L); a < maPolyPolygon.count(); a++)
-                {
-                    const Polygon aPaintPoly(maPolyPolygon.getB2DPolygon(a));
-                    rOutputDevice.DrawPolyLine(aPaintPoly);
-                }
-            }
-        }
-
-        OverlayPolyPolygon::OverlayPolyPolygon(
-            const basegfx::B2DPolyPolygon& rPolyPolygon,
-            Color aPolygonColor)
-        :   OverlayPolyPolygonStriped(rPolyPolygon)
-        {
-            // set base color here, OverlayCrosshairStriped constructor has set
-            // it to it's own default.
-            maBaseColor = aPolygonColor;
-        }
-
-        OverlayPolyPolygon::~OverlayPolyPolygon()
-        {
         }
     } // end of namespace overlay
 } // end of namespace sdr

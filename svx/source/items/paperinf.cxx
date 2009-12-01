@@ -44,129 +44,6 @@
 #include <svx/paperinf.hxx>
 #include <svx/dialmgr.hxx>
 
-#define SVX_PAPER_OFFSET    3   // Anfang: enum Paper A3 - SvxPaper A0; Diff=3
-
-// STATIC DATA -----------------------------------------------------------
-
-static Size __FAR_DATA aDinTab[] =
-{
-    Size(lA0Width,lA0Height),           // A0
-    Size(lA1Width,lA1Height),           // A1
-    Size(lA2Width,lA2Height),           // A2
-    Size(lA3Width,lA3Height),           // A3
-    Size(lA4Width,lA4Height),           // A4
-    Size(lA5Width,lA5Height),           // A5
-    Size(lB4Width, lB4Height),          // B4
-    Size(lB5Width,lB5Height),           // B5
-    Size(lLetterWidth,lLetterHeight),   // LETTER
-    Size(lLegalWidth,lLegalHeight),     // LEGAL
-    Size(lTabloidWidth,lTabloidHeight), // TABLOID
-    Size(0, 0),                         // USER
-    Size(lB6Width, lB6Height),          // B6
-    Size(lC4Width, lC4Height),          // C4
-    Size(lC5Width, lC5Height),          // C5
-    Size(lC6Width, lC6Height),          // C6
-    Size(lC65Width, lC65Height),        // C65
-    Size(lDLWidth, lDLHeight),          // DL
-    Size(lDiaWidth,lDiaHeight ),        // DIA
-    Size(lScreenWidth, lScreenHeight),  // SCREEN
-    Size(lAWidth, lAHeight),            // A
-    Size(lBWidth, lBHeight),            // B
-    Size(lCWidth, lCHeight),            // C
-    Size(lDWidth, lDHeight),            // D
-    Size(lEWidth, lEHeight),            // E
-    Size(lExeWidth, lExeHeight),        // Executive
-    Size(lLegal2Width, lLegal2Height),  // Legal2
-    Size(lMonarchWidth, lMonarchHeight),// Monarch
-    Size(lCom675Width, lCom675Height),  // COM-6 3/4
-    Size(lCom9Width, lCom9Height),      // COM-9
-    Size(lCom10Width, lCom10Height),    // COM-10
-    Size(lCom11Width, lCom11Height),    // COM-11
-    Size(lCom12Width, lCom12Height),    // COM-12
-    Size(lKai16Width, lKai16Height),    // 16 kai
-    Size(lKai32Width, lKai32Height),    // 32 kai
-    Size(lKai32BigWidth, lKai32BigHeight), // 32 kai gross
-    Size(lJISB4Width, lJISB4Height),       // B4 (JIS)
-    Size(lJISB5Width, lJISB5Height),       // B5 (JIS)
-    Size(lJISB6Width, lJISB6Height)        // B6 (JIS)
-};
-
-static const int nTabSize = sizeof(aDinTab) / sizeof(aDinTab[0]);
-
-// -----------------------------------------------------------------------
-
-long TwipsTo100thMM( long nIn )
-{
-    long nRet = OutputDevice::LogicToLogic( nIn, MAP_TWIP, MAP_100TH_MM );
-    long nTmp = nRet % 10;
-
-    if ( nTmp )
-        nRet += 10 - nTmp;
-    return nRet;
-}
-
-// -----------------------------------------------------------------------
-
-Size ConvertTo100thMM( Size& rSize )
-{
-    // Convert form TWIPS to 100TH_MM
-    long nW = TwipsTo100thMM( rSize.Width() );
-    long nH = TwipsTo100thMM( rSize.Height() );
-
-    rSize.Width() = nW;
-    rSize.Height() = nH;
-    return rSize;
-}
-
-// -----------------------------------------------------------------------
-
-long HundMMToTwips( long nIn )
-{
-    long nRet = OutputDevice::LogicToLogic( nIn, MAP_100TH_MM, MAP_TWIP );
-    return nRet;
-}
-
-// -----------------------------------------------------------------------
-
-Size ConvertToTwips( Size& rSize )
-{
-    // Convert form TWIPS to 100TH_MM
-    long nW = HundMMToTwips( rSize.Width() );
-    long nH = HundMMToTwips( rSize.Height() );
-
-    rSize.Width() = nW;
-    rSize.Height() = nH;
-    return rSize;
-}
-
-// -----------------------------------------------------------------------
-
-SvxPaper GetPaper_Impl( const Size &rSize, MapUnit eUnit, BOOL bSloppy )
-{
-    DBG_ASSERT( eUnit == MAP_TWIP || eUnit == MAP_100TH_MM,
-                "map unit not supported" );
-    Size aSize = rSize;
-
-    if ( eUnit == MAP_100TH_MM )
-        ConvertToTwips( aSize );
-
-    for ( USHORT i = 0; i < nTabSize; i++ )
-    {
-        if ( aDinTab[i] == aSize )
-            return (SvxPaper)i;
-        else if ( bSloppy )
-        {
-            long lDiffW = Abs(aDinTab[i].Width () - aSize.Width ()),
-                 lDiffH = Abs(aDinTab[i].Height() - aSize.Height());
-
-            if ( lDiffW < 6 && lDiffH < 6 )
-                return (SvxPaper)i;
-        }
-    }
-    return SVX_PAPER_USER;
-}
-
-
 /*--------------------------------------------------------------------
     Beschreibung:   Ist der Printer gueltig
  --------------------------------------------------------------------*/
@@ -176,22 +53,13 @@ inline BOOL IsValidPrinter( const Printer* pPtr )
     return pPtr->GetName().Len() ? TRUE : FALSE;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Konvertierung eines SV-Defines fuer Papiergroesse in
-                Twips.
-                Funktioniert logischerweise nicht fuer User Groessen
-                (ASSERT).
-------------------------------------------------------------------------*/
+//------------------------------------------------------------------------
 
-Size SvxPaperInfo::GetPaperSize( SvxPaper ePaper, MapUnit eUnit )
+Size SvxPaperInfo::GetPaperSize( Paper ePaper, MapUnit eUnit )
 {
-    DBG_ASSERT( ePaper < nTabSize, "Tabelle der Papiergroessen ueberindiziert" );
-    DBG_ASSERT( eUnit == MAP_TWIP || eUnit == MAP_100TH_MM, "this MapUnit not supported" );
-    Size aSize = aDinTab[ePaper];   // in Twips
-
-    if ( eUnit == MAP_100TH_MM )
-        ConvertTo100thMM( aSize );
-    return aSize;
+    PaperInfo aInfo(ePaper);
+    Size aRet(aInfo.getWidth(), aInfo.getHeight()); // in 100thMM
+    return eUnit == MAP_100TH_MM ? aRet : OutputDevice::LogicToLogic(aRet, MAP_100TH_MM, eUnit);
 }
 
 /*------------------------------------------------------------------------
@@ -201,21 +69,25 @@ Size SvxPaperInfo::GetPaperSize( SvxPaper ePaper, MapUnit eUnit )
                 wird DIN A4 Portrait als Defaultpapiergroesse geliefert.
 ------------------------------------------------------------------------*/
 
+//Is this method may be confused about the units it returns ?
+//Always returns TWIPS for known paper sizes or on failure.
+//But in the case of PAPER_USER paper and with a Printer with a mapmode set
+//will return in those printer units ?
 Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
 {
     if ( !IsValidPrinter(pPrinter) )
-        return GetPaperSize( SVX_PAPER_A4 );
-    const SvxPaper ePaper = (SvxPaper)(pPrinter->GetPaper() + SVX_PAPER_OFFSET);
+        return GetPaperSize( PAPER_A4 );
+    const Paper ePaper = pPrinter->GetPaper();
 
-    if ( ePaper == SVX_PAPER_USER )
+    if ( ePaper == PAPER_USER )
     {
-            // Orientation nicht beruecksichtigen, da durch SV bereits
-            // die richtigen Masze eingestellt worden sind.
+        // Orientation nicht beruecksichtigen, da durch SV bereits
+        // die richtigen Masze eingestellt worden sind.
         Size aPaperSize = pPrinter->GetPaperSize();
         const Size aInvalidSize;
 
         if ( aPaperSize == aInvalidSize )
-            return GetPaperSize(SVX_PAPER_A4);
+            return GetPaperSize(PAPER_A4);
         MapMode aMap1 = pPrinter->GetMapMode();
         MapMode aMap2;
 
@@ -233,64 +105,33 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
     return aSize;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Konvertierung einer Papiergroesse in Twips in das
-                SV-Define. Ist bSloppy TRUE, so wird nur auf 1/10 mm genau
-                verglichen.
-------------------------------------------------------------------------*/
+// -----------------------------------------------------------------------
 
-SvxPaper SvxPaperInfo::GetPaper( const Size &rSize, MapUnit eUnit, BOOL bSloppy )
+Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy )
 {
-    return GetPaper_Impl( rSize, eUnit, bSloppy );
+    Size aSize(eUnit == MAP_100TH_MM ? rSize : OutputDevice::LogicToLogic(rSize, eUnit, MAP_100TH_MM));
+    PaperInfo aInfo(aSize.Width(), aSize.Height());
+    if (bSloppy)
+        aInfo.doSloppyFit();
+    return aInfo.getPaper();
 }
 
 // -----------------------------------------------------------------------
 
-SvxPaper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, BOOL bSloppy )
+long SvxPaperInfo::GetSloppyPaperDimension( long nSize, MapUnit eUnit )
 {
-    return GetPaper_Impl( rSize, eUnit, bSloppy );
-}
-
-SvxPaper SvxPaperInfo::GetDefaultSvxPaper( LanguageType eLanguage )
-{
-    SvxPaper ePaper;
-    switch ( eLanguage )
-    {
-        case LANGUAGE_ENGLISH_US:
-        case LANGUAGE_ENGLISH_CAN:
-        case LANGUAGE_FRENCH_CANADIAN:
-        case LANGUAGE_SPANISH_MEXICAN:
-        case LANGUAGE_SPANISH_VENEZUELA:
-            ePaper = SvxPaper( SVX_PAPER_LETTER );
-            break;
-        default:
-            ePaper = SvxPaper( SVX_PAPER_A4 );
-    }
-    return ePaper;
+    nSize = eUnit == MAP_100TH_MM ? nSize : OutputDevice::LogicToLogic(nSize, eUnit, MAP_100TH_MM);
+    nSize = PaperInfo::sloppyFitPageDimension(nSize);
+    return eUnit == MAP_100TH_MM ? nSize : OutputDevice::LogicToLogic(nSize, MAP_100TH_MM, eUnit);
 }
 
 // -----------------------------------------------------------------------
 
-Paper SvxPaperInfo::GetSvPaper( const Size &rSize, MapUnit eUnit,
-                                BOOL bSloppy )
+Size SvxPaperInfo::GetDefaultPaperSize( MapUnit eUnit )
 {
-    Paper eRet = PAPER_USER;
-    SvxPaper ePaper = GetPaper_Impl( rSize, eUnit, bSloppy );
-
-    switch ( ePaper )
-    {
-        case SVX_PAPER_A3:      eRet = PAPER_A3;                        break;
-        case SVX_PAPER_A4:      eRet = PAPER_A4;                        break;
-        case SVX_PAPER_A5:      eRet = PAPER_A5;                        break;
-        case SVX_PAPER_B4:      eRet = PAPER_B4;                        break;
-        case SVX_PAPER_B5:      eRet = PAPER_B5;                        break;
-        case SVX_PAPER_LETTER:  eRet = PAPER_LETTER;                    break;
-        case SVX_PAPER_LEGAL:   eRet = PAPER_LEGAL;                     break;
-        case SVX_PAPER_TABLOID: eRet = PAPER_TABLOID;                   break;
-        default: ;//prevent warning
-    }
-
-    return eRet;
+    PaperInfo aInfo(PaperInfo::getSystemDefaultPaper());
+    Size aRet(aInfo.getWidth(), aInfo.getHeight());
+    return eUnit == MAP_100TH_MM ? aRet : OutputDevice::LogicToLogic(aRet, MAP_100TH_MM, eUnit);
 }
 
 /*------------------------------------------------------------------------
@@ -298,52 +139,49 @@ Paper SvxPaperInfo::GetSvPaper( const Size &rSize, MapUnit eUnit,
                 Papiergroessen.
 ------------------------------------------------------------------------*/
 
-String SvxPaperInfo::GetName( SvxPaper ePaper )
+String SvxPaperInfo::GetName( Paper ePaper )
 {
     USHORT  nResId = 0;
 
     switch ( ePaper )
     {
-        case SVX_PAPER_A0:          nResId = RID_SVXSTR_PAPER_A0;       break;
-        case SVX_PAPER_A1:          nResId = RID_SVXSTR_PAPER_A1;       break;
-        case SVX_PAPER_A2:          nResId = RID_SVXSTR_PAPER_A2;       break;
-        case SVX_PAPER_A3:          nResId = RID_SVXSTR_PAPER_A3;       break;
-        case SVX_PAPER_A4:          nResId = RID_SVXSTR_PAPER_A4;       break;
-        case SVX_PAPER_A5:          nResId = RID_SVXSTR_PAPER_A5;       break;
-        case SVX_PAPER_B4:          nResId = RID_SVXSTR_PAPER_B4;       break;
-        case SVX_PAPER_B5:          nResId = RID_SVXSTR_PAPER_B5;       break;
-        case SVX_PAPER_LETTER:      nResId = RID_SVXSTR_PAPER_LETTER;   break;
-        case SVX_PAPER_LEGAL:       nResId = RID_SVXSTR_PAPER_LEGAL;    break;
-        case SVX_PAPER_TABLOID:     nResId = RID_SVXSTR_PAPER_TABLOID;  break;
-        case SVX_PAPER_USER:        nResId = RID_SVXSTR_PAPER_USER;     break;
-        case SVX_PAPER_B6:          nResId = RID_SVXSTR_PAPER_B6;       break;
-        case SVX_PAPER_C4:          nResId = RID_SVXSTR_PAPER_C4;       break;
-        case SVX_PAPER_C5:          nResId = RID_SVXSTR_PAPER_C5;       break;
-        case SVX_PAPER_C6:          nResId = RID_SVXSTR_PAPER_C6;       break;
-        case SVX_PAPER_C65:         nResId = RID_SVXSTR_PAPER_C65;      break;
-        case SVX_PAPER_DL:          nResId = RID_SVXSTR_PAPER_DL;       break;
-        case SVX_PAPER_DIA:         nResId = RID_SVXSTR_PAPER_DIA;      break;
-        case SVX_PAPER_SCREEN:      nResId = RID_SVXSTR_PAPER_SCREEN;   break;
-        case SVX_PAPER_A:           nResId = RID_SVXSTR_PAPER_A;        break;
-        case SVX_PAPER_B:           nResId = RID_SVXSTR_PAPER_B;        break;
-        case SVX_PAPER_C:           nResId = RID_SVXSTR_PAPER_C;        break;
-        case SVX_PAPER_D:           nResId = RID_SVXSTR_PAPER_D;        break;
-        case SVX_PAPER_E:           nResId = RID_SVXSTR_PAPER_E;        break;
-        case SVX_PAPER_EXECUTIVE:   nResId = RID_SVXSTR_PAPER_EXECUTIVE;break;
-        case SVX_PAPER_LEGAL2:      nResId = RID_SVXSTR_PAPER_LEGAL2;   break;
-        case SVX_PAPER_MONARCH:     nResId = RID_SVXSTR_PAPER_MONARCH;  break;
-        case SVX_PAPER_COM675:      nResId = RID_SVXSTR_PAPER_COM675;   break;
-        case SVX_PAPER_COM9:        nResId = RID_SVXSTR_PAPER_COM9;     break;
-        case SVX_PAPER_COM10:       nResId = RID_SVXSTR_PAPER_COM10;    break;
-        case SVX_PAPER_COM11:       nResId = RID_SVXSTR_PAPER_COM11;    break;
-        case SVX_PAPER_COM12:       nResId = RID_SVXSTR_PAPER_COM12;    break;
-        case SVX_PAPER_KAI16:       nResId = RID_SVXSTR_PAPER_KAI16;    break;
-        case SVX_PAPER_KAI32:       nResId = RID_SVXSTR_PAPER_KAI32;    break;
-        case SVX_PAPER_KAI32BIG:    nResId = RID_SVXSTR_PAPER_KAI32BIG; break;
-        case SVX_PAPER_B4_JIS:      nResId = RID_SVXSTR_PAPER_B4_JIS;   break;
-        case SVX_PAPER_B5_JIS:      nResId = RID_SVXSTR_PAPER_B5_JIS;   break;
-        case SVX_PAPER_B6_JIS:      nResId = RID_SVXSTR_PAPER_B6_JIS;   break;
-
+        case PAPER_A0:          nResId = RID_SVXSTR_PAPER_A0;       break;
+        case PAPER_A1:          nResId = RID_SVXSTR_PAPER_A1;       break;
+        case PAPER_A2:          nResId = RID_SVXSTR_PAPER_A2;       break;
+        case PAPER_A3:          nResId = RID_SVXSTR_PAPER_A3;       break;
+        case PAPER_A4:          nResId = RID_SVXSTR_PAPER_A4;       break;
+        case PAPER_A5:          nResId = RID_SVXSTR_PAPER_A5;       break;
+        case PAPER_B4_ISO:      nResId = RID_SVXSTR_PAPER_B4_ISO;   break;
+        case PAPER_B5_ISO:      nResId = RID_SVXSTR_PAPER_B5_ISO;   break;
+        case PAPER_LETTER:      nResId = RID_SVXSTR_PAPER_LETTER;   break;
+        case PAPER_LEGAL:       nResId = RID_SVXSTR_PAPER_LEGAL;    break;
+        case PAPER_TABLOID:     nResId = RID_SVXSTR_PAPER_TABLOID;  break;
+        case PAPER_USER:        nResId = RID_SVXSTR_PAPER_USER;     break;
+        case PAPER_B6_ISO:      nResId = RID_SVXSTR_PAPER_B6_ISO;   break;
+        case PAPER_ENV_C4:      nResId = RID_SVXSTR_PAPER_C4;       break;
+        case PAPER_ENV_C5:      nResId = RID_SVXSTR_PAPER_C5;       break;
+        case PAPER_ENV_C6:      nResId = RID_SVXSTR_PAPER_C6;       break;
+        case PAPER_ENV_C65:     nResId = RID_SVXSTR_PAPER_C65;      break;
+        case PAPER_ENV_DL:      nResId = RID_SVXSTR_PAPER_DL;       break;
+        case PAPER_SLIDE_DIA:   nResId = RID_SVXSTR_PAPER_DIA;      break;
+        case PAPER_SCREEN:      nResId = RID_SVXSTR_PAPER_SCREEN;   break;
+        case PAPER_C:           nResId = RID_SVXSTR_PAPER_C;        break;
+        case PAPER_D:           nResId = RID_SVXSTR_PAPER_D;        break;
+        case PAPER_E:           nResId = RID_SVXSTR_PAPER_E;        break;
+        case PAPER_EXECUTIVE:   nResId = RID_SVXSTR_PAPER_EXECUTIVE;break;
+        case PAPER_FANFOLD_LEGAL_DE: nResId = RID_SVXSTR_PAPER_LEGAL2;  break;
+        case PAPER_ENV_MONARCH: nResId = RID_SVXSTR_PAPER_MONARCH;  break;
+        case PAPER_ENV_PERSONAL:    nResId = RID_SVXSTR_PAPER_COM675;   break;
+        case PAPER_ENV_9:       nResId = RID_SVXSTR_PAPER_COM9;     break;
+        case PAPER_ENV_10:      nResId = RID_SVXSTR_PAPER_COM10;    break;
+        case PAPER_ENV_11:      nResId = RID_SVXSTR_PAPER_COM11;    break;
+        case PAPER_ENV_12:      nResId = RID_SVXSTR_PAPER_COM12;    break;
+        case PAPER_KAI16:       nResId = RID_SVXSTR_PAPER_KAI16;    break;
+        case PAPER_KAI32:       nResId = RID_SVXSTR_PAPER_KAI32;    break;
+        case PAPER_KAI32BIG:    nResId = RID_SVXSTR_PAPER_KAI32BIG; break;
+        case PAPER_B4_JIS:      nResId = RID_SVXSTR_PAPER_B4_JIS;   break;
+        case PAPER_B5_JIS:      nResId = RID_SVXSTR_PAPER_B5_JIS;   break;
+        case PAPER_B6_JIS:      nResId = RID_SVXSTR_PAPER_B6_JIS;   break;
         default: DBG_ERRORFILE( "unknown papersize" );
     }
 

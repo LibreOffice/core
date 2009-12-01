@@ -32,18 +32,15 @@
 #ifndef _SDR_ATTRIBUTE_SDRTEXTATTRIBUTE_HXX
 #define _SDR_ATTRIBUTE_SDRTEXTATTRIBUTE_HXX
 
-#include <svx/xenum.hxx>
 #include <sal/types.h>
-#include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <svx/xenum.hxx>
+#include <svx/outlobj.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 class SdrText;
-class OutlinerParaObject;
-
-namespace drawinglayer { namespace animation {
-    class AnimationEntryList;
-}}
+namespace drawinglayer { namespace animation { class AnimationEntryList; }}
+namespace drawinglayer { namespace attribute { class SdrFormTextAttribute; }}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -53,14 +50,23 @@ namespace drawinglayer
     {
         class SdrTextAttribute
         {
-            const SdrText&                          mrSdrText;
-            const OutlinerParaObject                maOutlinerParaObject;
-            XFormTextStyle                          meFormTextStyle;
+        private:
+            // all-text attributes. The SdrText itself and a copy
+            // of te OPO
+            const SdrText*                          mpSdrText;
+            OutlinerParaObject                      maOutlinerParaObject;
 
+            // Set when it's a FormText; contains all FormText attributes
+            SdrFormTextAttribute*                   mpSdrFormTextAttribute;
+
+            // text distances
             sal_Int32                               maTextLeftDistance;
             sal_Int32                               maTextUpperDistance;
             sal_Int32                               maTextRightDistance;
             sal_Int32                               maTextLowerDistance;
+
+            // #i101556# use versioning from text attributes to detect changes
+            sal_uInt32                              maPropertiesVersion;
 
             // bitfield
             unsigned                                mbContour : 1;
@@ -85,23 +91,30 @@ namespace drawinglayer
                 bool bBlink,
                 bool bScroll,
                 bool bInEditMode);
+            ~SdrTextAttribute();
+
+            // copy constructor and assigment operator
+            SdrTextAttribute(const SdrTextAttribute& rCandidate);
+            SdrTextAttribute& operator=(const SdrTextAttribute& rCandidate);
+
+            // compare operator
             bool operator==(const SdrTextAttribute& rCandidate) const;
 
             // data access
-            const SdrText& getSdrText() const { return mrSdrText; }
+            const SdrText& getSdrText() const { return *mpSdrText; }
             const OutlinerParaObject& getOutlinerParaObject() const { return maOutlinerParaObject; }
             bool isContour() const { return mbContour; }
-            bool isFontwork() const { return (XFT_NONE != meFormTextStyle); }
             bool isFitToSize() const { return mbFitToSize; }
             bool isHideContour() const { return mbHideContour; }
             bool isBlink() const { return mbBlink; }
             bool isScroll() const { return mbScroll; }
             bool isInEditMode() const { return mbInEditMode; }
-            XFormTextStyle getFormTextStyle() const { return meFormTextStyle; }
+            const SdrFormTextAttribute* getSdrFormTextAttribute() const { return mpSdrFormTextAttribute; }
             sal_Int32 getTextLeftDistance() const { return maTextLeftDistance; }
             sal_Int32 getTextUpperDistance() const { return maTextUpperDistance; }
             sal_Int32 getTextRightDistance() const { return maTextRightDistance; }
             sal_Int32 getTextLowerDistance() const { return maTextLowerDistance; }
+            sal_uInt32 getPropertiesVersion() const { return maPropertiesVersion; }
 
             // animation timing generation
             void getBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;

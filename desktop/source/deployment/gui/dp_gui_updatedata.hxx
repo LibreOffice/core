@@ -34,6 +34,8 @@
 #include "rtl/ustring.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 
+#include <boost/shared_ptr.hpp>
+
 
 namespace com { namespace sun { namespace star { namespace deployment {
         class XPackageManager;
@@ -45,6 +47,19 @@ namespace com { namespace sun { namespace star { namespace xml { namespace dom {
 
 
 namespace dp_gui {
+
+struct UpdateListEntry
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> m_xPackageManager;
+
+    UpdateListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+                     const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+   ~UpdateListEntry();
+};
+
+typedef ::boost::shared_ptr< UpdateListEntry > TUpdateListEntry;
+
 
 struct UpdateData
 {

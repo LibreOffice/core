@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: DataAccess.xcs,v $
+ * $Revision: 1.43 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xml:lang="en-US">
+  <info>
+    <desc>Contains the installed OpenOffice.org Base database drivers.</desc>
+  </info>
+  <templates>
+    <group oor:name="Property">
+      <info>
+        <desc>Describes a property of a driver.</desc>
+      </info>
+      <prop oor:name="Value" oor:type="oor:any" oor:localized="true">
+        <info>
+          <desc>Describes the value.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Feature">
+      <info>
+        <desc>Describes a feature a driver supports.</desc>
+      </info>
+      <prop oor:name="Value" oor:type="xs:boolean" oor:localized="true">
+        <info>
+          <desc>The feature value.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="URLPattern">
+      <info>
+        <desc>Specifies a database driver.</desc>
+      </info>
+      <prop oor:name="ParentURLPattern" oor:type="xs:string">
+        <info>
+          <desc>Specifies the URL pattern of the parent which settings should be used if not present.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Driver" oor:type="xs:string">
+        <info>
+          <desc>Specifies the factory name of the database driver.</desc>
+        </info>
+      </prop>
+      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies the UI name of the database driver.</desc>
+        </info>
+      </prop>
+      <set oor:name="Properties" oor:node-type="Property">
+        <info>
+          <desc>Defines a list of all properties which are different from default.</desc>
+        </info>
+      </set>
+      <set oor:name="Features" oor:node-type="Feature">
+        <info>
+          <desc>Defines a list of all properties which are different from default.</desc>
+        </info>
+      </set>
+      <set oor:name="MetaData" oor:node-type="Property">
+        <info>
+          <desc>Defines a list of all meta data properties which the database application should supports.</desc>
+        </info>
+      </set>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Installed" oor:node-type="URLPattern">
+      <info>
+        <desc>Contains a list of URLs supported by installed database drivers.</desc>
+      </info>
+    </set>
+  </component>
+</oor:component-schema>

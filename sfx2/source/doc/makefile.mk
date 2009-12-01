@@ -40,6 +40,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SRS1NAME=$(TARGET)
@@ -80,9 +84,12 @@ SLOFILES =	\
         $(SLO)$/docinsert.obj \
         $(SLO)$/docmacromode.obj \
         $(SLO)$/SfxDocumentMetaData.obj \
+        $(SLO)$/DocumentMetadataAccess.obj \
+        $(SLO)$/Metadatable.obj \
         $(SLO)$/sfxmodelfactory.obj \
         $(SLO)$/docstoragemodifylistener.obj \
         $(SLO)$/querytemplate.obj
+
 
 # --- Tagets -------------------------------------------------------
 

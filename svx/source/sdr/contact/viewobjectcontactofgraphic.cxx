@@ -38,6 +38,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -245,9 +246,18 @@ namespace sdr
         {
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
             SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
-            const bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
+            bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
             static bool bSuppressAsynchLoading(false);
             bool bSwapInDone(false);
+
+            if(bDoAsynchronGraphicLoading
+                && rGrafObj.IsSwappedOut()
+                && rGrafObj.GetPage()
+                && rGrafObj.GetPage()->IsMasterPage())
+            {
+                // #i102380# force Swap-In for GraphicObjects on MasterPage to have a nicer visualisation
+                bDoAsynchronGraphicLoading = false;
+            }
 
             if(bDoAsynchronGraphicLoading && !bSuppressAsynchLoading)
             {
@@ -260,6 +270,23 @@ namespace sdr
 
             // get return value by calling parent
             drawinglayer::primitive2d::Primitive2DSequence xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
+
+            if(xRetval.hasElements())
+            {
+                // #i103255# suppress when graphic needs draft visualisation and output
+                // is for PDF export/Printer
+                const ViewContactOfGraphic& rVCOfGraphic = static_cast< const ViewContactOfGraphic& >(GetViewContact());
+
+                if(rVCOfGraphic.visualisationUsesDraft())
+                {
+                    const ObjectContact& rObjectContact = GetObjectContact();
+
+                    if(rObjectContact.isOutputToPDFFile() || rObjectContact.isOutputToPrinter())
+                    {
+                        xRetval = drawinglayer::primitive2d::Primitive2DSequence();
+                    }
+                }
+            }
 
             // if swap in was forced only for printing, swap out again
             const bool bSwapInExclusiveForPrinting(bSwapInDone && GetObjectContact().isOutputToPrinter());

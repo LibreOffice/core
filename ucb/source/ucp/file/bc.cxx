@@ -607,7 +607,7 @@ BaseContent::addProperty(
 {
     if( ( m_nState & JustInserted ) || ( m_nState & Deleted ) || Name == rtl::OUString() )
     {
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
     }
 
     m_pMyShell->associate( m_aUncPath,Name,DefaultValue,Attributes );
@@ -623,7 +623,7 @@ BaseContent::removeProperty(
 {
 
     if( m_nState & Deleted )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     m_pMyShell->deassociate( m_aUncPath, Name );
 }
@@ -792,7 +792,7 @@ BaseContent::setParent(
     throw( lang::NoSupportException,
            RuntimeException)
 {
-    throw lang::NoSupportException();
+    throw lang::NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -973,12 +973,12 @@ BaseContent::setPropertyValues(
             rtl::OUString NewTitle;
             if( !( Values[i].Value >>= NewTitle ) )
             {
-                ret[i] <<= beans::IllegalTypeException();
+                ret[i] <<= beans::IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
                 break;
             }
             else if( ! NewTitle.getLength() )
             {
-                ret[i] <<= lang::IllegalArgumentException();
+                ret[i] <<= lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
                 break;
             }
 

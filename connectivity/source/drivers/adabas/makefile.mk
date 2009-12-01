@@ -42,8 +42,8 @@ VISIBILITY_HIDDEN=TRUE
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-.INCLUDE : settings.mk
-.INCLUDE :  $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
+.INCLUDE : $(PRJ)$/version.mk
 
 .IF "$(SYSTEM_ODBC_HEADERS)" == "YES"
 CFLAGS+=-DSYSTEM_ODBC_HEADERS
@@ -104,9 +104,7 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
-
 # --- Targets ----------------------------------
 
-.INCLUDE : target.mk
 
-
+.INCLUDE : $(PRJ)$/target.pmk

@@ -96,8 +96,7 @@ enum FilterState
     FilteringContent,                           // Filtering the content property
     FilteringProperty                           // Filtering the pseudo property
 };
-
-class COooFilter : public IFilter, public IPersistFile
+class COooFilter : public IFilter, public IPersistFile, public IPersistStream
 {
 public:
     // From IUnknown
@@ -144,6 +143,18 @@ public:
     virtual  SCODE STDMETHODCALLTYPE  GetCurFile(
         LPWSTR  * ppszFileName);
 
+    // From IPersistStream
+    virtual SCODE STDMETHODCALLTYPE  Load(
+        IStream *pStm);
+
+    virtual SCODE STDMETHODCALLTYPE Save(
+        IStream *pStm,
+        BOOL fClearDirty);
+
+    virtual SCODE STDMETHODCALLTYPE  GetSizeMax(
+        ULARGE_INTEGER *pcbSize);
+
+
 private:
     friend class COooFilterCF;
 
@@ -166,6 +177,8 @@ private:
     ULONG                     m_ChunkPosition;          // Chunk pointer to specify the current Chunk;
     ULONG                     m_cAttributes;            // Count of attributes
     CFullPropSpec *           m_pAttributes;            // Attributes to filter
+    IStream *                 m_pStream;
+
 };
 
 //C-------------------------------------------------------------------------
@@ -206,6 +219,22 @@ private:
 
     long m_lRefs;           // Reference count
 };
+
+extern "C" {
+
+    voidpf ZCALLBACK cb_sopen OF((voidpf opaque, const char * filename, int mode));
+    uLong ZCALLBACK cb_sread OF((voidpf opaque, voidpf stream, void* vuf, uLong size));
+    uLong ZCALLBACK cb_swrite OF((voidpf opaque, voidpf stream, const void* buf, uLong size));
+    long ZCALLBACK cb_stell OF((voidpf opaque, voidpf stream));
+    long ZCALLBACK cb_sseek OF((voidpf opaque, voidpf stream, uLong offset, int origin));
+    int ZCALLBACK cb_sclose OF((voidpf opaque, voidpf stream));
+    int ZCALLBACK cb_serror OF((voidpf opaque, voidpf stream));
+
+    void fill_stream_filefunc (zlib_filefunc_def* pzlib_filefunc_def);  
+    
+}
+
+
 
 
 
