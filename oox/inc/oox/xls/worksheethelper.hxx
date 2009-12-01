@@ -175,8 +175,9 @@ struct PageBreakModel
 /** Stores data about a hyperlink range. */
 struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
 {
-    ::com::sun::star::table::CellRangeAddress maRange;
-    ::rtl::OUString     maTooltip;
+    ::com::sun::star::table::CellRangeAddress
+                        maRange;            /// The cell area containing the hyperlink.
+    ::rtl::OUString     maTooltip;          /// Additional tooltip text.
 
     explicit            HyperlinkModel();
 };
@@ -442,7 +443,7 @@ protected:
                             const WorkbookHelper& rHelper,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
     /** Constructs from another sheet helper, does not create a data object. */
     explicit            WorksheetHelperRoot(

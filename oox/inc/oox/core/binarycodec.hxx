@@ -34,8 +34,23 @@
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
 
+namespace oox { class AttributeList; }
+
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+class CodecHelper
+{
+public:
+    /** Returns the password hash if it is in the required 16-bit limit. */
+    static sal_uInt16   getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement );
+
+private:
+                        CodecHelper();
+                        ~CodecHelper();
+};
 
 // ============================================================================
 
@@ -182,12 +197,12 @@ public:
         @param pnPassData
             Unicode character array containing the password. Must be zero
             terminated, which results in a maximum length of 15 characters.
-        @param pnUnique
-            Unique document identifier read from or written to the file.
+        @param pnSalt
+            Random salt data block read from or written to the file.
      */
     void                initKey(
                             const sal_uInt16 pnPassData[ 16 ],
-                            const sal_uInt8 pnUnique[ 16 ] );
+                            const sal_uInt8 pnSalt[ 16 ] );
 
     /** Verifies the validity of the password using the passed salt data.
 
@@ -195,17 +210,17 @@ public:
             The codec must be initialized with the initKey() function before
             this function can be used.
 
-        @param pnSaltData
-            Salt data block read from the file.
-        @param pnSaltDigest
-            Salt digest read from the file.
+        @param pnVerifier
+            Verifier block read from the file.
+        @param pnVerifierHash
+            Verifier hash read from the file.
 
         @return
             True = test was successful.
      */
     bool                verifyKey(
-                            const sal_uInt8 pnSaltData[ 16 ],
-                            const sal_uInt8 pnSaltDigest[ 16 ] );
+                            const sal_uInt8 pnVerifier[ 16 ],
+                            const sal_uInt8 pnVerifierHash[ 16 ] );
 
     /** Rekeys the codec using the specified counter.
 

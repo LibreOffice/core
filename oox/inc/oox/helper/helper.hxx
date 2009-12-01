@@ -104,7 +104,8 @@ inline ReturnType getLimitedValue( Type nValue, Type nMin, Type nMax )
 template< typename ReturnType, typename Type >
 inline ReturnType getIntervalValue( Type nValue, Type nBegin, Type nEnd )
 {
-    BOOST_STATIC_ASSERT( ::std::numeric_limits< Type >::is_integer );
+//    this BOOST_STATIC_ASSERT fails with suncc
+//    BOOST_STATIC_ASSERT( ::std::numeric_limits< Type >::is_integer );
     Type nInterval = nEnd - nBegin;
     Type nCount = (nValue < nBegin) ? -((nBegin - nValue - 1) / nInterval + 1) : ((nValue - nBegin) / nInterval);
     return static_cast< ReturnType >( nValue - nCount * nInterval );

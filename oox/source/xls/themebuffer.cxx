@@ -117,14 +117,6 @@ sal_Int32 ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
     return getClrScheme().getColor( nToken, nColor ) ? nColor : API_RGB_TRANSPARENT;
 }
 
-sal_Int32 ThemeBuffer::getColorByIndex( sal_Int32 nIndex ) const
-{
-    static const sal_Int32 spnColorTokens[] = {
-        XML_lt1, XML_dk1, XML_lt2, XML_dk2, XML_accent1, XML_accent2,
-        XML_accent3, XML_accent4, XML_accent5, XML_accent6, XML_hlink, XML_folHlink };
-    return getColorByToken( STATIC_ARRAY_SELECT( spnColorTokens, nIndex, XML_TOKEN_INVALID ) );
-}
-
 // ============================================================================
 
 } // namespace xls

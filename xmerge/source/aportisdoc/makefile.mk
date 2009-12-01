@@ -34,4 +34,6 @@ PRJ=../..
 PRJNAME=xmerge
 
 .INCLUDE : ant.mk
+.IF "$(L10N_framework)"==""
 ALLTAR: ANTBUILD
+.ENDIF

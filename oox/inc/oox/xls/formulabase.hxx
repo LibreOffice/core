@@ -58,8 +58,6 @@ const size_t BIFF_TOKARR_MAXLEN                 = 4096;     /// Maximum size of 
 // token class flags ----------------------------------------------------------
 
 const sal_uInt8 BIFF_TOKCLASS_MASK              = 0x60;
-const sal_uInt8 BIFF_TOKID_MASK                 = 0x1F;
-
 const sal_uInt8 BIFF_TOKCLASS_NONE              = 0x00;     /// 00-1F: Base tokens.
 const sal_uInt8 BIFF_TOKCLASS_REF               = 0x20;     /// 20-3F: Reference class tokens.
 const sal_uInt8 BIFF_TOKCLASS_VAL               = 0x40;     /// 40-5F: Value class tokens.
@@ -68,6 +66,8 @@ const sal_uInt8 BIFF_TOKCLASS_ARR               = 0x60;     /// 60-7F: Array cla
 const sal_uInt8 BIFF_TOKFLAG_INVALID            = 0x80;     /// This bit must be null for a valid token identifier.
 
 // base token identifiers -----------------------------------------------------
+
+const sal_uInt8 BIFF_TOKID_MASK                 = 0x1F;
 
 const sal_uInt8 BIFF_TOKID_NONE                 = 0x00;     /// Placeholder for invalid token id.
 const sal_uInt8 BIFF_TOKID_EXP                  = 0x01;     /// Array or shared formula reference.
@@ -361,6 +361,115 @@ struct ApiOpCodes
     sal_Int32           OPCODE_RANGE;           /// Range operator.
 };
 
+// Function parameter info ====================================================
+
+/** Enumerates validity modes for a function parameter. */
+enum FuncParamValidity
+{
+    FUNC_PARAM_NONE = 0,        /// Default for an unspecified entry in a C-array.
+    FUNC_PARAM_REGULAR,         /// Parameter supported by Calc and Excel.
+    FUNC_PARAM_CALCONLY,        /// Parameter supported by Calc only.
+    FUNC_PARAM_EXCELONLY        /// Parameter supported by Excel only.
+};
+
+/** Enumerates different types of token class conversion in function parameters. */
+enum FuncParamConversion
+{
+    FUNC_PARAMCONV_ORG,         /// Use original class of current token.
+    FUNC_PARAMCONV_VAL,         /// Convert tokens to VAL class.
+    FUNC_PARAMCONV_ARR,         /// Convert tokens to ARR class.
+    FUNC_PARAMCONV_RPT,         /// Repeat parent conversion in VALTYPE parameters.
+    FUNC_PARAMCONV_RPX,         /// Repeat parent conversion in REFTYPE parameters.
+    FUNC_PARAMCONV_RPO          /// Repeat parent conversion in operands of operators.
+};
+
+/** Structure that contains all needed information for a parameter in a
+    function.
+
+    The member meValid specifies which application supports the parameter. If
+    set to CALCONLY, import filters have to insert a default value for this
+    parameter, and export filters have to skip the parameter. If set to
+    EXCELONLY, import filters have to skip the parameter, and export filters
+    have to insert a default value for this parameter.
+
+    The member mbValType specifies whether the parameter requires tokens to be
+    of value type (VAL or ARR class).
+
+        If set to false, the parameter is called to be REFTYPE. Tokens with REF
+        default class can be inserted for the parameter (e.g. tAreaR tokens).
+
+        If set to true, the parameter is called to be VALTYPE. Tokens with REF
+        class need to be converted to VAL tokens first (e.g. tAreaR will be
+        converted to tAreaV), and further conversion is done according to this
+        new token class.
+
+    The member meConv specifies how to convert the current token class of the
+    token inserted for the parameter. If the token class is still REF this
+    means that the token has default REF class and the parameter is REFTYPE
+    (see member mbValType), the token will not be converted at all and remains
+    in REF class. Otherwise, token class conversion is depending on the actual
+    token class of the return value of the function containing this parameter.
+    The function may return REF class (tFuncR, tFuncVarR, tFuncCER), or it may
+    return VAL or ARR class (tFuncV, tFuncA, tFuncVarV, tFuncVarA, tFuncCEV,
+    tFuncCEA). Even if the function is able to return REF class, it may return
+    VAL or ARR class instead due to the VALTYPE data type of the parent
+    function parameter that calls the own function. Example: The INDIRECT
+    function returns REF class by default. But if called from a VALTYPE
+    function parameter, e.g. in the formula =ABS(INDIRECT("A1")), it returns
+    VAL or ARR class instead. Additionally, the repeating conversion types RPT
+    and RPX rely on the conversion executed for the function token class.
+
+        1) ORG:
+        Use the original class of the token (VAL or ARR), regardless of any
+        conversion done for the function return class.
+
+        2) VAL:
+        Convert ARR tokens to VAL class, regardless of any conversion done for
+        the function return class.
+
+        3) ARR:
+        Convert VAL tokens to ARR class, regardless of any conversion done for
+        the function return class.
+
+        4) RPT:
+        If the own function returns REF class (thus it is called from a REFTYPE
+        parameter, see above), and the parent conversion type (for the function
+        return class) was ORG, VAL, or ARR, ignore that conversion and always
+        use VAL conversion for the own token instead. If the parent conversion
+        type was RPT or RPX, repeat the conversion that would have been used if
+        the function would return value type.
+        If the own function returns value type (VAL or ARR class, see above),
+        and the parent conversion type (for the function return class) was ORG,
+        VAL, ARR, or RPT, repeat this conversion for the own token. If the
+        parent conversion type was RPX, always use ORG conversion type for the
+        own token instead.
+
+        5) RPX:
+        This type of conversion only occurs in functions returning VAL class by
+        default. If the own token is value type, and the VAL return class of
+        the own function has been changed to ARR class (due to direct ARR
+        conversion, or due to ARR conversion repeated by RPT or RPX), set the
+        own token to ARR type. Otherwise use the original token type (VAL
+        conversion from parent parameter will not be repeated at all). If
+        nested functions have RPT or value-type RPX parameters, they will not
+        repeat this conversion type, but will use ORG conversion instead (see
+        description of RPT above).
+
+        6) RPO:
+        This type of conversion is only used for the operands of all operators
+        (unary and binary arithmetic operators, comparison operators, and range
+        operators). It is not used for function parameters. On conversion, it
+        will be replaced by the last conversion type that was not the RPO
+        conversion. This leads to a slightly different behaviour than the RPT
+        conversion for operands in conjunction with a parent RPX conversion.
+ */
+struct FunctionParamInfo
+{
+    FuncParamValidity   meValid;        /// Parameter validity.
+    FuncParamConversion meConv;         /// Token class conversion type.
+    bool                mbValType;      /// Data type (false = REFTYPE, true = VALTYPE).
+};
+
 // function data ==============================================================
 
 /** This enumeration contains constants for all known external libraries
@@ -373,23 +482,13 @@ enum FunctionLibraryType
 
 // ----------------------------------------------------------------------------
 
-const sal_uInt8 FUNCINFO_MAXPARAM           = 30;       /// Maximum parameter count.
-
-const sal_uInt8 FUNCINFO_PARAM_EXCELONLY    = 0x01;     /// Flag for a parameter existing in Excel, but not in Calc.
-const sal_uInt8 FUNCINFO_PARAM_CALCONLY     = 0x02;     /// Flag for a parameter existing in Calc, but not in Excel.
-const sal_uInt8 FUNCINFO_PARAM_INVALID      = 0x04;     /// Flag for an invalid token class.
-
 /** Represents information for a spreadsheet function.
 
-    The member mpnParamClass contains an array of BIFF token classes for each
-    parameter of the function. The last existing (non-null) value in this array
-    is used for all following parameters used in a function. Additionally to
-    the three actual token classes, this array may contain the special values
-    FUNCINFO_PARAM_CALCONLY, FUNCINFO_PARAM_EXCELONLY, and
-    FUNCINFO_PARAM_INVALID. The former two specify parameters only existing in
-    one of the applications. FUNCINFO_PARAM_INVALID is simply a terminator for
-    the array to prevent repetition of the last token class or special value
-    for additional parameters.
+    The member mpParamInfos points to an array of type information structures
+    for all parameters of the function. The last initialized structure
+    describing a regular parameter (member meValid == EXC_PARAMVALID_ALWAYS) in
+    this array is used repeatedly for all following parameters supported by a
+    function.
  */
 struct FunctionInfo
 {
@@ -404,7 +503,8 @@ struct FunctionInfo
     sal_uInt8           mnMinParamCount;    /// Minimum number of parameters.
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
-    const sal_uInt8*    mpnParamClass;      /// Expected BIFF token classes of parameters.
+    const FunctionParamInfo* mpParamInfos;  /// Information about all parameters.
+    bool                mbParamPairs;       /// true = optional parameters are expected to appear in pairs.
     bool                mbVolatile;         /// True = volatile function.
     bool                mbExternal;         /// True = external function in Calc.
     bool                mbMacroFunc;        /// True = macro sheet function or command.
@@ -415,28 +515,28 @@ typedef RefVector< FunctionInfo > FunctionInfoVector;
 
 // function info parameter class iterator =====================================
 
-/** Iterator working on the mpnParamClass member of the FunctionInfo struct.
+/** Iterator working on the mpParamInfos member of the FunctionInfo struct.
 
     This iterator can be used to iterate through the array containing the
-    expected token classes of function parameters. This iterator repeats the
-    last valid token class in the array - it stops automatically before the
-    first empty array entry or before the end of the array, even for repeated
-    calls to the increment operator.
+    token class conversion information of function parameters. This iterator
+    repeats the last valid structure in the array - it stops automatically
+    before the first empty array entry or before the end of the array, even for
+    repeated calls to the increment operator.
  */
-class FuncInfoParamClassIterator
+class FunctionParamInfoIterator
 {
 public:
-    explicit            FuncInfoParamClassIterator( const FunctionInfo& rFuncInfo );
+    explicit            FunctionParamInfoIterator( const FunctionInfo& rFuncInfo );
 
-    FuncInfoParamClassIterator& operator++();
-
-    inline sal_uInt8    getParamClass() const { return *mpnParamClass; }
-    inline sal_uInt8    isExcelOnlyParam() const { return getFlag( *mpnParamClass, FUNCINFO_PARAM_EXCELONLY ); }
-    inline sal_uInt8    isCalcOnlyParam() const { return getFlag( *mpnParamClass, FUNCINFO_PARAM_CALCONLY ); }
+    const FunctionParamInfo& getParamInfo() const;
+    bool                isCalcOnlyParam() const;
+    bool                isExcelOnlyParam() const;
+    FunctionParamInfoIterator& operator++();
 
 private:
-    const sal_uInt8*    mpnParamClass;
-    const sal_uInt8*    mpnParamClassEnd;
+    const FunctionParamInfo* mpParamInfo;
+    const FunctionParamInfo* mpParamInfoEnd;
+    bool                mbParamPairs;
 };
 
 // base function provider =====================================================

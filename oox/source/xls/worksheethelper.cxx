@@ -362,7 +362,7 @@ public:
                             const WorkbookHelper& rHelper,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
     /** Returns true, if this helper refers to an existing Calc sheet. */
     inline bool         isValidSheet() const { return mxSheet.is(); }
@@ -522,8 +522,10 @@ private:
 
     /** Inserts all imported hyperlinks into their cell ranges. */
     void                finalizeHyperlinkRanges() const;
+    /** Generates the final URL for the passed hyperlink. */
+    OUString            getHyperlinkUrl( const HyperlinkModel& rHyperlink ) const;
     /** Inserts a hyperlinks into the specified cell. */
-    void                finalizeHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const;
+    void                insertHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const;
 
     /** Inserts all imported data validations into their cell ranges. */
     void                finalizeValidationRanges() const;
@@ -593,7 +595,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
     maTrueFormula( CREATE_OUSTRING( "=TRUE()" ) ),
     maFalseFormula( CREATE_OUSTRING( "=FALSE()" ) ),
@@ -608,10 +610,9 @@ WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBar
     maSheetViewSett( *this ),
     mxProgressBar( xProgressBar ),
     meSheetType( eSheetType ),
-    mnSheet( static_cast< sal_Int16 >( nSheet ) ),
+    mnSheet( nSheet ),
     mbHasDefWidth( false )
 {
-    OSL_ENSURE( nSheet <= SAL_MAX_INT16, "WorksheetData::WorksheetData - invalid sheet index" );
     mxSheet = getSheetFromDoc( nSheet );
     if( !mxSheet.is() )
         mnSheet = -1;
@@ -978,14 +979,11 @@ void WorksheetData::convertRowFormat( sal_Int32 nFirstRow, sal_Int32 nLastRow, s
 
 void WorksheetData::initializeWorksheetImport()
 {
-#if OOX_XLS_USE_DEFAULT_STYLE
-#else
     // set default cell style for unused cells
     PropertySet aPropSet( mxSheet );
     aPropSet.setProperty( PROP_CellStyle, getStyles().getDefaultStyleName() );
-#endif
 
-    /*  remember current sheet index in global data, needed by some global
+    /*  Remember current sheet index in global data, needed by some global
         objects, e.g. the chart converter. */
     setCurrentSheetIndex( mnSheet );
 }
@@ -1006,9 +1004,9 @@ void WorksheetData::finalizeWorksheetImport()
     convertColumns();
     convertRows();
     lclUpdateProgressBar( mxFinalProgress, 0.75 );
-    maComments.finalizeImport();
     finalizeDrawing();
     finalizeVmlDrawing();
+    maComments.finalizeImport();    // after VML drawing
     lclUpdateProgressBar( mxFinalProgress, 1.0 );
 
     // reset current sheet index in global data
@@ -1169,42 +1167,44 @@ void WorksheetData::finalizeHyperlinkRanges() const
 {
     for( HyperlinkModelList::const_iterator aIt = maHyperlinks.begin(), aEnd = maHyperlinks.end(); aIt != aEnd; ++aIt )
     {
-        OUStringBuffer aUrlBuffer;
-        if( aIt->maTarget.getLength() > 0 )
-            aUrlBuffer.append( getBaseFilter().getAbsoluteUrl( aIt->maTarget ) );
-        if( aIt->maLocation.getLength() > 0 )
-            aUrlBuffer.append( sal_Unicode( '#' ) ).append( aIt->maLocation );
-        OUString aUrl = aUrlBuffer.makeStringAndClear();
+        OUString aUrl = getHyperlinkUrl( *aIt );
+        // try to insert URL into each cell of the range
         if( aUrl.getLength() > 0 )
-        {
-            // convert '#SheetName!A1' to '#SheetName.A1'
-            if( aUrl[ 0 ] == '#' )
-            {
-                sal_Int32 nSepPos = aUrl.lastIndexOf( '!' );
-                if( nSepPos > 0 )
-                {
-                    // replace the exclamation mark with a period
-                    aUrl = aUrl.replaceAt( nSepPos, 1, OUString( sal_Unicode( '.' ) ) );
-                    // #i66592# convert sheet names that have been renamed on import
-                    bool bQuotedName = (nSepPos > 3) && (aUrl[ 1 ] == '\'') && (aUrl[ nSepPos - 1 ] == '\'');
-                    sal_Int32 nNamePos = bQuotedName ? 2 : 1;
-                    sal_Int32 nNameLen = nSepPos - (bQuotedName ? 3 : 1);
-                    OUString aSheetName = aUrl.copy( nNamePos, nNameLen );
-                    OUString aCalcName = getWorksheets().getCalcSheetName( aSheetName );
-                    if( aCalcName.getLength() > 0 )
-                        aUrl = aUrl.replaceAt( nNamePos, nNameLen, aCalcName );
-                }
-            }
-
-            // try to insert URL into each cell of the range
             for( CellAddress aAddress( mnSheet, aIt->maRange.StartColumn, aIt->maRange.StartRow ); aAddress.Row <= aIt->maRange.EndRow; ++aAddress.Row )
                 for( aAddress.Column = aIt->maRange.StartColumn; aAddress.Column <= aIt->maRange.EndColumn; ++aAddress.Column )
-                    finalizeHyperlink( aAddress, aUrl );
-        }
+                    insertHyperlink( aAddress, aUrl );
     }
 }
 
-void WorksheetData::finalizeHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const
+OUString WorksheetData::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) const
+{
+    OUStringBuffer aUrlBuffer;
+    if( rHyperlink.maTarget.getLength() > 0 )
+        aUrlBuffer.append( getBaseFilter().getAbsoluteUrl( rHyperlink.maTarget ) );
+    if( rHyperlink.maLocation.getLength() > 0 )
+        aUrlBuffer.append( sal_Unicode( '#' ) ).append( rHyperlink.maLocation );
+    OUString aUrl = aUrlBuffer.makeStringAndClear();
+
+    // convert '#SheetName!A1' to '#SheetName.A1'
+    if( (aUrl.getLength() > 0) && (aUrl[ 0 ] == '#') )
+    {
+        sal_Int32 nSepPos = aUrl.lastIndexOf( '!' );
+        if( nSepPos > 0 )
+        {
+            // replace the exclamation mark with a period
+            aUrl = aUrl.replaceAt( nSepPos, 1, OUString( sal_Unicode( '.' ) ) );
+            // #i66592# convert sheet names that have been renamed on import
+            OUString aSheetName = aUrl.copy( 1, nSepPos - 1 );
+            OUString aCalcName = getWorksheets().getCalcSheetName( aSheetName );
+            if( aCalcName.getLength() > 0 )
+                aUrl = aUrl.replaceAt( 1, nSepPos - 1, aCalcName );
+        }
+    }
+
+    return aUrl;
+}
+
+void WorksheetData::insertHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const
 {
     Reference< XCell > xCell = getCell( rAddress );
     if( xCell.is() ) switch( xCell->getType() )
@@ -1217,7 +1217,7 @@ void WorksheetData::finalizeHyperlink( const CellAddress& rAddress, const OUStri
             {
                 // create a URL field object and set its properties
                 Reference< XTextContent > xUrlField( getDocumentFactory()->createInstance( maUrlTextField ), UNO_QUERY );
-                OSL_ENSURE( xUrlField.is(), "WorksheetData::finalizeHyperlink - cannot create text field" );
+                OSL_ENSURE( xUrlField.is(), "WorksheetData::insertHyperlink - cannot create text field" );
                 if( xUrlField.is() )
                 {
                     // properties of the URL field
@@ -1233,7 +1233,7 @@ void WorksheetData::finalizeHyperlink( const CellAddress& rAddress, const OUStri
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( false, "WorksheetData::finalizeHyperlink - cannot insert text field" );
+                        OSL_ENSURE( false, "WorksheetData::insertHyperlink - cannot insert text field" );
                     }
                 }
             }
@@ -1246,7 +1246,7 @@ void WorksheetData::finalizeHyperlink( const CellAddress& rAddress, const OUStri
         case ::com::sun::star::table::CellContentType_VALUE:
         {
             Reference< XFormulaTokens > xTokens( xCell, UNO_QUERY );
-            OSL_ENSURE( xTokens.is(), "WorksheetHelper::finalizeHyperlink - missing formula interface" );
+            OSL_ENSURE( xTokens.is(), "WorksheetHelper::insertHyperlink - missing formula interface" );
             if( xTokens.is() )
             {
                 SimpleFormulaContext aContext( xTokens, false, false );
@@ -2072,7 +2072,7 @@ WorksheetDataOwner::~WorksheetDataOwner()
 
 // ----------------------------------------------------------------------------
 
-WorksheetHelperRoot::WorksheetHelperRoot( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+WorksheetHelperRoot::WorksheetHelperRoot( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     prv::WorksheetDataOwner( prv::WorksheetDataRef( new WorksheetData( rHelper, xProgressBar, eSheetType, nSheet ) ) ),
     WorksheetHelper( *mxSheetData )
 {

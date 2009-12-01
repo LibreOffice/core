@@ -423,11 +423,11 @@ Reference< XShape > Shape::createAndInsert(
         // applying properties
         PropertySet aPropSet( xSet );
         if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
-            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rFilterBase, -1 );
+            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rFilterBase );
         if ( mpTablePropertiesPtr.get() && ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
-        aFillProperties.pushToPropSet( aPropSet, FillProperties::DEFAULT_IDS, rFilterBase, rFilterBase.getModelObjectHelper(), mnRotation, nFillPhClr );
-        aLineProperties.pushToPropSet( aPropSet, LineProperties::DEFAULT_IDS, rFilterBase, rFilterBase.getModelObjectHelper(), nLinePhClr );
+        aFillProperties.pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper(), FillProperties::DEFAULT_IDS, mnRotation, nFillPhClr );
+        aLineProperties.pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper(), LineProperties::DEFAULT_IDS, nLinePhClr );
 
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true

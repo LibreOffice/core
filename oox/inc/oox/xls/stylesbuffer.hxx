@@ -38,6 +38,7 @@
 #include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include "oox/helper/containerhelper.hxx"
+#include "oox/drawingml/color.hxx"
 #include "oox/xls/numberformatsbuffer.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -45,8 +46,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace oox { class PropertySet; }
-
-#define OOX_XLS_USE_DEFAULT_STYLE 0
 
 namespace oox {
 namespace xls {
@@ -67,9 +66,6 @@ const sal_Int32 OOX_COLOR_FONTAUTO          = 0x7FFF;   /// Font auto color (sys
 
 // ----------------------------------------------------------------------------
 
-const sal_Int32 API_RGB_TRANSPARENT         = -1;       /// Transparent color for API calls.
-const sal_Int32 API_RGB_BLACK               = 0;        /// Black color for API calls.
-
 const sal_Int16 API_LINE_NONE               = 0;
 const sal_Int16 API_LINE_HAIR               = 2;
 const sal_Int16 API_LINE_THIN               = 35;
@@ -85,11 +81,9 @@ const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       /// Relative character h
 
 // ============================================================================
 
-class Color
+class Color : public ::oox::drawingml::Color
 {
 public:
-    explicit            Color();
-
     /** Sets the color to automatic. */
     void                setAuto();
     /** Sets the color to the passed RGB value. */
@@ -115,23 +109,7 @@ public:
     void                importColorRgb( BiffInputStream& rStrm );
 
     /** Returns true, if the color is set to automatic. */
-    bool                isAuto() const;
-    /** Returns the RGB value of the color, or nAuto for automatic colors. */
-    sal_Int32           getColor( const WorkbookHelper& rHelper, sal_Int32 nAuto = API_RGB_TRANSPARENT ) const;
-
-private:
-    enum ColorMode
-    {
-        COLOR_AUTO,         /// Automatic color (dependent on context).
-        COLOR_RGB,          /// Hexadecimal RGB color.
-        COLOR_THEME,        /// Indexed theme color.
-        COLOR_INDEXED,      /// Indexed palette color.
-        COLOR_FINAL         /// Finalized RGB color (resolved theme, applied tint).
-    };
-
-    mutable ColorMode   meMode;             /// Current color mode.
-    mutable sal_Int32   mnValue;            /// RGB value, palette index, scheme index.
-    double              mfTint;             /// Color tint (darken/lighten).
+    inline bool         isAuto() const { return isPlaceHolder(); }
 };
 
 // ----------------------------------------------------------------------------
@@ -817,8 +795,10 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Creates the style sheet described by the DXF. */
-    const ::rtl::OUString& createDxfStyle( sal_Int32 nDxfId );
+    /** Writes all formatting attributes to the passed property map. */
+    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
+    /** Writes all formatting attributes to the passed property set. */
+    void                writeToPropertySet( PropertySet& rPropSet ) const;
 
 private:
     FontRef             mxFont;             /// Font data.
@@ -827,7 +807,6 @@ private:
     ProtectionRef       mxProtection;       /// Protection data.
     BorderRef           mxBorder;           /// Border data.
     FillRef             mxFill;             /// Fill data.
-    ::rtl::OUString     maFinalName;        /// Final style name used in API.
 };
 
 typedef ::boost::shared_ptr< Dxf > DxfRef;
@@ -848,11 +827,9 @@ struct CellStyleModel
     explicit            CellStyleModel();
 
     /** Returns true, if this style is a builtin style. */
-    inline bool         isBuiltin() const { return mbBuiltin && (mnBuiltinId >= 0); }
+    bool                isBuiltin() const;
     /** Returns true, if this style represents the default document cell style. */
     bool                isDefaultStyle() const;
-    /** Returns the style name used in the UI. */
-    ::rtl::OUString     createStyleName() const;
 };
 
 // ============================================================================
@@ -869,20 +846,64 @@ public:
     /** Imports style settings from a STYLE record. */
     void                importStyle( BiffInputStream& rStrm );
 
-    /** Returns true, if this style represents the default document cell style. */
-    inline bool         isDefaultStyle() const { return maModel.isDefaultStyle(); }
-    /** Returns the XF identifier for this cell style. */
-    inline sal_Int32    getXfId() const { return maModel.mnXfId; }
+    /** Creates the style sheet in the document described by this cell style object. */
+    void                createCellStyle();
+    /** Stores tha passed final style name and creates the cell style, if it is
+        user-defined or modified built-in. */
+    void                finalizeImport( const ::rtl::OUString& rFinalName );
 
-    /** Creates the style sheet described by the style XF with the passed identifier. */
-    const ::rtl::OUString& createCellStyle( sal_Int32 nXfId, bool bSkipDefaultBuiltin = false );
+    /** Returns the cell style model structure. */
+    inline const CellStyleModel& getModel() const { return maModel; }
+    /** Returns the final style name used in the document. */
+    inline const ::rtl::OUString& getFinalStyleName() const { return maFinalName; }
 
 private:
     CellStyleModel      maModel;
-    ::rtl::OUString     maCalcName;         /// Final style name used in API.
+    ::rtl::OUString     maFinalName;        /// Final style name used in API.
+    bool                mbCreated;          /// True = style sheet created.
 };
 
 typedef ::boost::shared_ptr< CellStyle > CellStyleRef;
+
+// ============================================================================
+
+class CellStyleBuffer : public WorkbookHelper
+{
+public:
+    explicit            CellStyleBuffer( const WorkbookHelper& rHelper );
+
+    /** Appends and returns a new named cell style object. */
+    CellStyleRef        importCellStyle( const AttributeList& rAttribs );
+    /** Imports the CELLSTYLE record from the passed stream. */
+    CellStyleRef        importCellStyle( RecordInputStream& rStrm );
+    /** Imports the STYLE record from the passed stream. */
+    CellStyleRef        importStyle( BiffInputStream& rStrm );
+
+    /** Final processing after import of all style settings. */
+    void                finalizeImport();
+
+    /** Returns the XF identifier associated to the default cell style. */
+    sal_Int32           getDefaultXfId() const;
+    /** Returns the default style sheet for unused cells. */
+    ::rtl::OUString     getDefaultStyleName() const;
+    /** Creates the style sheet described by the style XF with the passed identifier. */
+    ::rtl::OUString     createCellStyle( sal_Int32 nXfId ) const;
+
+private:
+    /** Inserts the passed cell style object into the internal maps. */
+    void                insertCellStyle( CellStyleRef xCellStyle );
+    /** Creates the style sheet described by the passed cell style object. */
+    ::rtl::OUString     createCellStyle( const CellStyleRef& rxCellStyle ) const;
+
+private:
+    typedef RefVector< CellStyle >          CellStyleVector;
+    typedef RefMap< sal_Int32, CellStyle >  CellStyleXfIdMap;
+
+    CellStyleVector     maBuiltinStyles;    /// All built-in cell styles.
+    CellStyleVector     maUserStyles;       /// All user defined cell styles.
+    CellStyleXfIdMap    maStylesByXf;       /// All cell styles, mapped by XF identifier.
+    CellStyleRef        mxDefStyle;         /// Default cell style.
+};
 
 // ============================================================================
 
@@ -960,15 +981,12 @@ public:
     /** Returns the model of the default application font (used in the "Normal" cell style). */
     const FontModel&    getDefaultFontModel() const;
 
-    /** Creates the style sheet described by the style XF with the passed identifier. */
-    const ::rtl::OUString& createCellStyle( sal_Int32 nXfId ) const;
-    /** Creates the style sheet described by the DXF with the passed identifier. */
-    const ::rtl::OUString& createDxfStyle( sal_Int32 nDxfId ) const;
-#if OOX_XLS_USE_DEFAULT_STYLE
-#else
     /** Returns the default style sheet for unused cells. */
-    const ::rtl::OUString& getDefaultStyleName() const;
-#endif
+    ::rtl::OUString     getDefaultStyleName() const;
+    /** Creates the style sheet described by the style XF with the passed identifier. */
+    ::rtl::OUString     createCellStyle( sal_Int32 nXfId ) const;
+    /** Creates the style sheet described by the DXF with the passed identifier. */
+    ::rtl::OUString     createDxfStyle( sal_Int32 nDxfId ) const;
 
     /** Writes the font attributes of the specified font data to the passed property map. */
     void                writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const;
@@ -989,27 +1007,23 @@ public:
     void                writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;
 
 private:
-    void                insertCellStyle( CellStyleRef xCellStyle );
-
-private:
-    typedef RefVector< Font >               FontVec;
-    typedef RefVector< Border >             BorderVec;
-    typedef RefVector< Fill >               FillVec;
-    typedef RefVector< Xf >                 XfVec;
-    typedef RefVector< Dxf >                DxfVec;
-    typedef RefMap< sal_Int32, CellStyle >  CellStyleMap;
+    typedef RefVector< Font >                           FontVector;
+    typedef RefVector< Border >                         BorderVector;
+    typedef RefVector< Fill >                           FillVector;
+    typedef RefVector< Xf >                             XfVector;
+    typedef RefVector< Dxf >                            DxfVector;
+    typedef ::std::map< sal_Int32, ::rtl::OUString >    DxfStyleMap;
 
     ColorPalette        maPalette;          /// Color palette.
-    FontVec             maFonts;            /// List of font objects.
+    FontVector          maFonts;            /// List of font objects.
     NumberFormatsBuffer maNumFmts;          /// List of all number format codes.
-    BorderVec           maBorders;          /// List of cell border objects.
-    FillVec             maFills;            /// List of cell area fill objects.
-    XfVec               maCellXfs;          /// List of cell formats.
-    XfVec               maStyleXfs;         /// List of cell styles.
-    DxfVec              maDxfs;             /// List of differential cell styles.
-    CellStyleMap        maCellStyles;       /// List of named cell styles.
-    ::rtl::OUString     maDefStyleName;     /// API name of default cell style.
-    sal_Int32           mnDefStyleXf;       /// Style XF index of default cell style.
+    BorderVector        maBorders;          /// List of cell border objects.
+    FillVector          maFills;            /// List of cell area fill objects.
+    XfVector            maCellXfs;          /// List of cell formats.
+    XfVector            maStyleXfs;         /// List of cell styles.
+    CellStyleBuffer     maCellStyles;       /// All built-in and user defined cell styles.
+    DxfVector           maDxfs;             /// List of differential cell styles.
+    mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
 };
 
 // ============================================================================

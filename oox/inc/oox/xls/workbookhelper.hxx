@@ -169,6 +169,14 @@ enum FilterType
 
 // ============================================================================
 
+/** Functor for case-insensitive string comparison, usable in maps etc. */
+struct IgnoreCaseCompare
+{
+    bool                operator()( const ::rtl::OUString& rName1, const ::rtl::OUString& rName2 ) const;
+};
+
+// ============================================================================
+
 class WorkbookData;
 class WorkbookSettings;
 class ViewSettings;
@@ -253,7 +261,7 @@ public:
 
     /** Returns a reference to the specified spreadsheet in the document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
-                        getSheetFromDoc( sal_Int32 nSheet ) const;
+                        getSheetFromDoc( sal_Int16 nSheet ) const;
     /** Returns a reference to the specified spreadsheet in the document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                         getSheetFromDoc( const ::rtl::OUString& rSheet ) const;
@@ -281,12 +289,11 @@ public:
                         createNamedRangeObject(
                             ::rtl::OUString& orName,
                             sal_Int32 nNameFlags = 0 ) const;
-    /** Creates a com.sun.star.style.Style object and returns its final name. */
+    /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
                         createStyleObject(
                             ::rtl::OUString& orStyleName,
-                            bool bPageStyle,
-                            bool bRenameOldExisting = false ) const;
+                            bool bPageStyle ) const;
 
     // buffers ----------------------------------------------------------------
 
@@ -359,7 +366,7 @@ public:
     /** Enables workbook file mode, used for BIFF4 workspace files. */
     void                setIsWorkbookFile();
     /** Recreates global buffers that are used per sheet in specific BIFF versions. */
-    void                createBuffersPerSheet();
+    void                createBuffersPerSheet( sal_Int16 nSheet );
 
     /** Returns the codec helper that stores the encoder/decoder object. */
     BiffCodecHelper&    getCodecHelper() const;

@@ -41,6 +41,7 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 namespace oox {
@@ -127,7 +128,8 @@ Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Refere
     if( rxFactory.is() && rxInStrm.is() )
     {
         StorageRef xStrg( new ZipStorage( rxFactory, rxInStrm ) );
-        ConfigRef xCfg( new Config( DUMP_PPTX_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName ) );
+        MediaDescriptor aMediaDesc;
+        ConfigRef xCfg( new Config( DUMP_PPTX_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
     }
 }

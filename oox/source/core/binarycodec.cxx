@@ -31,7 +31,7 @@
 #include "oox/core/binarycodec.hxx"
 #include <algorithm>
 #include <string.h>
-#include <osl/diagnose.h>
+#include "oox/helper/attributelist.hxx"
 
 namespace oox {
 namespace core {
@@ -110,6 +110,15 @@ sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, sal_Int32 nBufferSize )
 }
 
 } // namespace
+
+// ============================================================================
+
+/*static*/ sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement )
+{
+    sal_Int32 nPasswordHash = rAttribs.getIntegerHex( nElement, 0 );
+    OSL_ENSURE( (0 <= nPasswordHash) && (nPasswordHash <= SAL_MAX_UINT16), "CodecHelper::getPasswordHash - invalid password hash" );
+    return static_cast< sal_uInt16 >( ((0 <= nPasswordHash) && (nPasswordHash <= SAL_MAX_UINT16)) ? nPasswordHash : 0 );
+}
 
 // ============================================================================
 
@@ -249,7 +258,7 @@ BinaryCodec_RCF::~BinaryCodec_RCF()
     rtl_cipher_destroy( mhCipher );
 }
 
-void BinaryCodec_RCF::initKey( const sal_uInt16 pnPassData[ 16 ], const sal_uInt8 pnUnique[ 16 ] )
+void BinaryCodec_RCF::initKey( const sal_uInt16 pnPassData[ 16 ], const sal_uInt8 pnSalt[ 16 ] )
 {
     // create little-endian key data array from password data
     sal_uInt8 pnKeyData[ 64 ];
@@ -271,11 +280,11 @@ void BinaryCodec_RCF::initKey( const sal_uInt16 pnPassData[ 16 ], const sal_uInt
     (void)rtl_digest_updateMD5( mhDigest, pnKeyData, sizeof( pnKeyData ) );
     (void)rtl_digest_rawMD5( mhDigest, pnKeyData, RTL_DIGEST_LENGTH_MD5 );
 
-    // update digest with key data and passed unique data
+    // update digest with key data and passed salt data
     for( size_t nIndex = 0; nIndex < 16; ++nIndex )
     {
         rtl_digest_updateMD5( mhDigest, pnKeyData, 5 );
-        rtl_digest_updateMD5( mhDigest, pnUnique, 16 );
+        rtl_digest_updateMD5( mhDigest, pnSalt, 16 );
     }
 
     // update digest with padding
@@ -292,7 +301,7 @@ void BinaryCodec_RCF::initKey( const sal_uInt16 pnPassData[ 16 ], const sal_uInt
     (void)memset( pnKeyData, 0, sizeof( pnKeyData ) );
 }
 
-bool BinaryCodec_RCF::verifyKey( const sal_uInt8 pnSaltData[ 16 ], const sal_uInt8 pnSaltDigest[ 16 ] )
+bool BinaryCodec_RCF::verifyKey( const sal_uInt8 pnVerifier[ 16 ], const sal_uInt8 pnVerifierHash[ 16 ] )
 {
     if( !startBlock( 0 ) )
         return false;
@@ -301,7 +310,7 @@ bool BinaryCodec_RCF::verifyKey( const sal_uInt8 pnSaltData[ 16 ], const sal_uIn
     sal_uInt8 pnBuffer[ 64 ];
 
     // decode salt data into buffer
-    rtl_cipher_decode( mhCipher, pnSaltData, 16, pnBuffer, sizeof( pnBuffer ) );
+    rtl_cipher_decode( mhCipher, pnVerifier, 16, pnBuffer, sizeof( pnBuffer ) );
 
     pnBuffer[ 16 ] = 0x80;
     (void)memset( pnBuffer + 17, 0, sizeof( pnBuffer ) - 17 );
@@ -312,7 +321,7 @@ bool BinaryCodec_RCF::verifyKey( const sal_uInt8 pnSaltData[ 16 ], const sal_uIn
     rtl_digest_rawMD5( mhDigest, pnDigest, sizeof( pnDigest ) );
 
     // decode original salt digest into buffer
-    rtl_cipher_decode( mhCipher, pnSaltDigest, 16, pnBuffer, sizeof( pnBuffer ) );
+    rtl_cipher_decode( mhCipher, pnVerifierHash, 16, pnBuffer, sizeof( pnBuffer ) );
 
     // compare buffer with computed digest
     bool bResult = memcmp( pnBuffer, pnDigest, sizeof( pnDigest ) ) == 0;

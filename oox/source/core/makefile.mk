@@ -42,6 +42,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
+.IF "$(SYSTEM_OPENSSL)" == "YES"
+CFLAGS+= $(OPENSSL_CFLAGS)
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
@@ -50,6 +54,7 @@ SLOFILES =	\
         $(SLO)$/contexthandler.obj			\
         $(SLO)$/contexthandler2.obj			\
         $(SLO)$/facreg.obj					\
+        $(SLO)$/fasttokenhandler.obj		\
         $(SLO)$/filterbase.obj				\
         $(SLO)$/filterdetect.obj			\
         $(SLO)$/fragmenthandler.obj			\

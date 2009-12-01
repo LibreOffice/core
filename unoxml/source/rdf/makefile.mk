@@ -46,6 +46,7 @@ CFLAGS+=-DSYSTEM_REDLAND $(REDLAND_CFLAGS)
 .ENDIF
 
 # --- Files --------------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 SLOFILES =	\
    $(SLO)$/CBlankNode.obj \
@@ -71,6 +72,7 @@ SHL1STDLIBS= \
     $(CPPULIB)	\
     $(SALLIB) \
 
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

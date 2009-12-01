@@ -47,6 +47,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES =	\
         $(SLO)$/vmldrawing.obj			\
         $(SLO)$/vmldrawingfragment.obj  \
+        $(SLO)$/vmlformatting.obj		\
         $(SLO)$/vmlinputstream.obj		\
         $(SLO)$/vmlshape.obj			\
         $(SLO)$/vmlshapecontainer.obj	\

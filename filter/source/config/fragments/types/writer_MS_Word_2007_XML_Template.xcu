@@ -1,5 +1,5 @@
     <node oor:name="writer_MS_Word_2007_Template" oor:op="replace" >
-        <prop oor:name="DetectService"><value>com.sun.star.comp.Writer.WriterFilterDetector</value></prop>
+    <prop oor:name="DetectService"><value>com.sun.star.comp.oox.FormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>dotx dotm</value></prop>
         <prop oor:name="MediaType"><value>application/msword</value></prop>

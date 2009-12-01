@@ -34,10 +34,11 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <sal/types.h>
+#include <rtl/instance.hxx>
+#include <rtl/ustring.hxx>
+#include "oox/helper/helper.hxx"
 
-namespace oox { namespace core {
-    class XmlFilterBase;
-} }
+namespace oox { namespace core { class FilterBase; } }
 
 namespace oox {
 namespace drawingml {
@@ -49,6 +50,11 @@ class Color
 public:
                         Color();
                         ~Color();
+
+    /** Returns the RGB value for the passed DrawingML color token, or nDefaultRgb on error. */
+    static sal_Int32    getDmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb );
+    /** Returns the RGB value for the passed VML color token, or nDefaultRgb on error. */
+    static sal_Int32    getVmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb );
 
     /** Sets the color to unused state. */
     void                setUnused();
@@ -64,6 +70,8 @@ public:
     void                setSchemeClr( sal_Int32 nToken );
     /** Sets a system color from the a:sysClr element. */
     void                setSysClr( sal_Int32 nToken, sal_Int32 nLastRgb );
+    /** Sets a palette color index. */
+    void                setPaletteClr( sal_Int32 nPaletteIdx );
 
     /** Inserts the passed color transformation. */
     void                addTransformation( sal_Int32 nElement, sal_Int32 nValue = -1 );
@@ -71,17 +79,21 @@ public:
     void                addChartTintTransformation( double fTint );
     /** Inserts Excel specific color tint (-1.0...0.0 = shade, 0.0...1.0 = tint). */
     void                addExcelTintTransformation( double fTint );
-
-    /** Overwrites this color with the passed color, if it is used. */
-    inline void         assignIfUsed( const Color& rColor ) { if( rColor.isUsed() ) *this = rColor; }
+    /** Removes all color transformations. */
+    void                clearTransformations();
     /** Removes transparence from the color. */
     void                clearTransparence();
 
+    /** Overwrites this color with the passed color, if it is used. */
+    inline void         assignIfUsed( const Color& rColor ) { if( rColor.isUsed() ) *this = rColor; }
+
     /** Returns true, if the color is initialized. */
     bool                isUsed() const { return meMode != COLOR_UNUSED; }
+    /** Returns true, if the color is a placeholder color in theme style lists. */
+    bool                isPlaceHolder() const { return meMode == COLOR_PH; }
     /** Returns the final RGB color value.
         @param nPhClr  Actual color for the phClr placeholder color used in theme style lists. */
-    sal_Int32           getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 nPhClr = -1 ) const;
+    sal_Int32           getColor( const ::oox::core::FilterBase& rFilter, sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Returns true, if the color has a transparence set. */
     bool                hasTransparence() const;
@@ -89,6 +101,9 @@ public:
     sal_Int16           getTransparence() const;
 
 private:
+    /** Internal helper for getColor(). */
+    void                setResolvedRgb( sal_Int32 nRgb ) const;
+
     /** Converts the color components to RGB values. */
     void                toRgb() const;
     /** Converts the color components to CRGB values (gamma corrected percentage). */
@@ -104,8 +119,9 @@ private:
         COLOR_CRGB,         /// Relative RGB (r/g/b: 0...100000).
         COLOR_HSL,          /// HSL (hue: 0...21600000, sat/lum: 0...100000).
         COLOR_SCHEME,       /// Color from scheme.
-        COLOR_PH,           /// Placeholder color in theme style lists.
+        COLOR_PALETTE,      /// Color from application defined palette.
         COLOR_SYSTEM,       /// Color from system palette.
+        COLOR_PH,           /// Placeholder color in theme style lists.
         COLOR_FINAL         /// Finalized RGB color.
     };
 
@@ -120,7 +136,7 @@ private:
 
     mutable ColorMode   meMode;         /// Current color mode.
     mutable TransformVec maTransforms;  /// Color transformations.
-    mutable sal_Int32   mnC1;           /// Red, red%, hue, scheme token, system token, or final RGB.
+    mutable sal_Int32   mnC1;           /// Red, red%, hue, scheme token, palette index, system token, or final RGB.
     mutable sal_Int32   mnC2;           /// Green, green%, saturation, or system default RGB.
     mutable sal_Int32   mnC3;           /// Blue, blue%, or luminance.
     sal_Int32           mnAlpha;        /// Alpha value (color opacity).

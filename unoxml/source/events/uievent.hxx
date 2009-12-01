@@ -14,7 +14,7 @@
 #include <com/sun/star/xml/dom/views/XAbstractView.hpp>
 #include "event.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::xml::dom::views;
 
 namespace DOM { namespace events {

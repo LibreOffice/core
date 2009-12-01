@@ -233,23 +233,23 @@ const ApiToken* FormulaFinalizer::processParameters(
             }
 
             // process all parameters
-            FuncInfoParamClassIterator aClassIt( *pRealFuncInfo );
+            FunctionParamInfoIterator aParamInfoIt( *pRealFuncInfo );
             size_t nLastValidSize = maTokens.size();
             size_t nLastValidCount = 0;
-            for( size_t nParam = 0; nParam < nParamCount; ++nParam, ++aPosIt, ++aClassIt )
+            for( size_t nParam = 0; nParam < nParamCount; ++nParam, ++aPosIt, ++aParamInfoIt )
             {
                 // add embedded Calc-only parameters
-                if( aClassIt.isCalcOnlyParam() )
+                if( aParamInfoIt.isCalcOnlyParam() )
                 {
                     appendCalcOnlyParameter( *pRealFuncInfo, nParam );
-                    while( aClassIt.isCalcOnlyParam() ) ++aClassIt;
+                    while( aParamInfoIt.isCalcOnlyParam() ) ++aParamInfoIt;
                 }
 
                 const ApiToken* pParamBegin = *aPosIt + 1;
                 const ApiToken* pParamEnd = *(aPosIt + 1);
                 bool bIsEmpty = isEmptyParameter( pParamBegin, pParamEnd );
 
-                if( !aClassIt.isExcelOnlyParam() )
+                if( !aParamInfoIt.isExcelOnlyParam() )
                 {
                     // replace empty second and third parameter in IF function with zeros
                     if( (pRealFuncInfo->mnOobFuncId == OOBIN_FUNC_IF) && ((nParam == 1) || (nParam == 2)) && bIsEmpty )
@@ -279,7 +279,7 @@ const ApiToken* FormulaFinalizer::processParameters(
             maTokens.resize( nLastValidSize );
 
             // add trailing Calc-only parameters
-            if( aClassIt.isCalcOnlyParam() )
+            if( aParamInfoIt.isCalcOnlyParam() )
                 appendCalcOnlyParameter( *pRealFuncInfo, nLastValidCount );
 
             // add optional parameters that are required in Calc
@@ -1420,6 +1420,7 @@ bool OoxFormulaParserImpl::importAttrToken( RecordInputStream& rStrm )
     // equal flags in BIFF and OOBIN
     switch( nType )
     {
+        case 0:     // sometimes, tAttrSkip tokens miss the type flag
         case OOBIN_TOK_ATTR_VOLATILE:
         case OOBIN_TOK_ATTR_IF:
         case OOBIN_TOK_ATTR_SKIP:
@@ -2199,6 +2200,7 @@ bool BiffFormulaParserImpl::importAttrToken( BiffInputStream& rStrm )
     rStrm >> nType;
     switch( nType )
     {
+        case 0:     // sometimes, tAttrSkip tokens miss the type flag
         case BIFF_TOK_ATTR_VOLATILE:
         case BIFF_TOK_ATTR_IF:
         case BIFF_TOK_ATTR_SKIP:

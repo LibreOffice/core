@@ -71,7 +71,7 @@ public:
                             const ::rtl::OUString& rFragmentPath,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
 protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
@@ -147,7 +147,7 @@ public:
                             const BiffWorkbookFragmentBase& rParent,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
     virtual             ~BiffWorksheetFragment();
 
     /** Imports the entire worksheet fragment, returns true, if EOF record has been reached. */

@@ -44,13 +44,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 
 namespace oox {
 
-// ============================================================================
-
-/** A vector that contains all predefined property names used in the filters. */
-struct PropertyNamesList : public ::std::vector< ::rtl::OUString >
-{
-    explicit            PropertyNamesList();
-};
+struct PropertyList;
 
 // ============================================================================
 
@@ -66,6 +60,9 @@ typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapBase;
 class PropertyMap : public PropertyMapBase
 {
 public:
+    explicit            PropertyMap();
+                        ~PropertyMap();
+
     /** Returns the name of the passed property identifier. */
     static const ::rtl::OUString& getPropertyName( sal_Int32 nPropId );
 
@@ -94,6 +91,9 @@ public:
     /** Creates and fills a new instance supporting the XPropertySet interface. */
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         makePropertySet() const;
+
+private:
+    const PropertyList* mpPropNames;
 };
 
 // ============================================================================

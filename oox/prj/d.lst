@@ -1,10 +1,10 @@
 mkdir: %_DEST%\inc%_EXT%\oox
-mkdir: %_DEST%\inc%_EXT%\oox\core
 mkdir: %_DEST%\inc%_EXT%\oox\helper
-mkdir: %_DEST%\inc%_EXT%\oox\vml
+mkdir: %_DEST%\inc%_EXT%\oox\core
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml\chart
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml\table
+mkdir: %_DEST%\inc%_EXT%\oox\vml
 
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\%__SRC%\lib\ixo.lib %_DEST%\lib%_EXT%\ixo.lib
@@ -13,23 +13,24 @@ mkdir: %_DEST%\inc%_EXT%\oox\drawingml\table
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\i*.lib %_DEST%\lib%_EXT%\i*.lib
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
-..\inc\oox\dllapi.h %_DEST%\inc%_EXT%\oox\dllapi.h
-..\source\token\tokens.txt %_DEST%\inc%_EXT%\oox\token.txt
-..\inc\oox\core\filterbase.hxx %_DEST%\inc%_EXT%\oox\core\filterbase.hxx
-..\inc\oox\core\relations.hxx %_DEST%\inc%_EXT%\oox\core\relations.hxx
 ..\%__SRC%\inc\tokens.hxx %_DEST%\inc%_EXT%\oox\core\tokens.hxx
-..\inc\oox\core\xmlfilterbase.hxx %_DEST%\inc%_EXT%\oox\core\xmlfilterbase.hxx
+
+..\source\token\tokens.txt %_DEST%\inc%_EXT%\oox\token.txt
+..\inc\oox\dllapi.h %_DEST%\inc%_EXT%\oox\dllapi.h
 ..\inc\oox\helper\binarystreambase.hxx %_DEST%\inc%_EXT%\oox\helper\binarystreambase.hxx
 ..\inc\oox\helper\helper.hxx %_DEST%\inc%_EXT%\oox\helper\helper.hxx
 ..\inc\oox\helper\storagebase.hxx %_DEST%\inc%_EXT%\oox\helper\storagebase.hxx
 ..\inc\oox\helper\zipstorage.hxx %_DEST%\inc%_EXT%\oox\helper\zipstorage.hxx
-..\inc\oox\vml\drawing.hxx %_DEST%\inc%_EXT%\oox\vml\drawing.hxx
+..\inc\oox\core\filterbase.hxx %_DEST%\inc%_EXT%\oox\core\filterbase.hxx
+..\inc\oox\core\filterdetect.hxx %_DEST%\inc%_EXT%\oox\core\filterdetect.hxx
+..\inc\oox\core\relations.hxx %_DEST%\inc%_EXT%\oox\core\relations.hxx
+..\inc\oox\core\xmlfilterbase.hxx %_DEST%\inc%_EXT%\oox\core\xmlfilterbase.hxx
 ..\inc\oox\drawingml\chart\chartconverter.hxx %_DEST%\inc%_EXT%\oox\drawingml\chart\chartconverter.hxx
 ..\inc\oox\drawingml\table\tablestylelist.hxx %_DEST%\inc%_EXT%\oox\drawingml\table\tablestylelist.hxx
-..\inc\oox\vml\shape.hxx %_DEST%\inc%_EXT%\oox\vml\shape.hxx
-
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\inc\oox\vml\vmldrawing.hxx %_DEST%\inc%_EXT%\oox\vml\vmldrawing.hxx
+..\inc\oox\vml\vmlshape.hxx %_DEST%\inc%_EXT%\oox\vml\vmlshape.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 

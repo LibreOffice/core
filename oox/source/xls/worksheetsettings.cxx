@@ -41,6 +41,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::util::XProtectable;
+using ::oox::core::CodecHelper;
 
 namespace oox {
 namespace xls {
@@ -112,16 +113,6 @@ SheetProtectionModel::SheetProtectionModel() :
 
 // ============================================================================
 
-namespace {
-
-sal_uInt16 lclGetCheckedHash( sal_Int32 nHash )
-{
-    OSL_ENSURE( (0 <= nHash) && (nHash <= SAL_MAX_UINT16), "lclGetCheckedHash - invalid password hash" );
-    return getLimitedValue< sal_uInt16, sal_Int32 >( nHash, 0, SAL_MAX_UINT16 );
-}
-
-} // namespace
-
 WorksheetSettings::WorksheetSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
     maPhoneticSett( rHelper )
@@ -153,7 +144,7 @@ void WorksheetSettings::importOutlinePr( const AttributeList& rAttribs )
 
 void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
 {
-    maSheetProt.mnPasswordHash     = lclGetCheckedHash( rAttribs.getIntegerHex( XML_password, 0 ) );
+    maSheetProt.mnPasswordHash     = CodecHelper::getPasswordHash( rAttribs, XML_password );
     maSheetProt.mbSheet            = rAttribs.getBool( XML_sheet, false );
     maSheetProt.mbObjects          = rAttribs.getBool( XML_objects, false );
     maSheetProt.mbScenarios        = rAttribs.getBool( XML_scenarios, false );
@@ -174,7 +165,7 @@ void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
 
 void WorksheetSettings::importChartProtection( const AttributeList& rAttribs )
 {
-    maSheetProt.mnPasswordHash = lclGetCheckedHash( rAttribs.getIntegerHex( XML_password, 0 ) );
+    maSheetProt.mnPasswordHash = CodecHelper::getPasswordHash( rAttribs, XML_password );
     maSheetProt.mbSheet        = rAttribs.getBool( XML_content, false );
     maSheetProt.mbObjects      = rAttribs.getBool( XML_objects, false );
 }

@@ -92,6 +92,8 @@ struct SheetViewModel
     sal_Int32           getNormalZoom() const;
     /** Returns the zoom in pagebreak preview (returns default, if current value is 0). */
     sal_Int32           getPageBreakZoom() const;
+    /** Returns the grid color as RGB value. */
+    sal_Int32           getGridColor( const ::oox::core::FilterBase& rFilter ) const;
 
     /** Returns the selection data, if available, otherwise 0. */
     const PaneSelectionModel* getPaneSelection( sal_Int32 nPaneId ) const;
@@ -186,23 +188,23 @@ public:
     void                importWindow1( BiffInputStream& rStrm );
 
     /** Stores converted view settings for a specific worksheet. */
-    void                setSheetViewSettings( sal_Int32 nSheet,
+    void                setSheetViewSettings( sal_Int16 nSheet,
                             const SheetViewModelRef& rxSheetView,
                             const ::com::sun::star::uno::Any& rProperties );
 
     /** Converts all imported document view settings. */
     void                finalizeImport();
 
-    /** Returns the index of the active sheet. */
-    sal_Int32           getActiveSheetIndex() const;
+    /** Returns the Calc index of the active sheet. */
+    sal_Int16           getActiveCalcSheet() const;
 
 private:
     WorkbookViewModel&  createWorkbookView();
 
 private:
     typedef RefVector< WorkbookViewModel >                      WorkbookViewModelVec;
-    typedef RefMap< sal_Int32, SheetViewModel >                 SheetViewModelMap;
-    typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > SheetPropertiesMap;
+    typedef RefMap< sal_Int16, SheetViewModel >                 SheetViewModelMap;
+    typedef ::std::map< sal_Int16, ::com::sun::star::uno::Any > SheetPropertiesMap;
 
     WorkbookViewModelVec maBookViews;       /// Workbook view models.
     SheetViewModelMap   maSheetViews;       /// Active view model for each sheet.

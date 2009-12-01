@@ -63,7 +63,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
         // DOCX filter handles plain shape elements with this fragment handler
         case VMLDRAWING_WORD:
             if( isRootElement() )
-                return ShapeContextBase::createContext( *this, nElement, rAttribs, mrDrawing.getShapes() );
+                return ShapeContextBase::createShapeContext( *this, nElement, rAttribs, mrDrawing.getShapes() );
         break;
 
         // XLSX and PPTX filters load the entire VML fragment
@@ -75,7 +75,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
                     if( nElement == XML_xml ) return this;
                 break;
                 case XML_xml:
-                    return ShapeContextBase::createContext( *this, nElement, rAttribs, mrDrawing.getShapes() );
+                    return ShapeContextBase::createShapeContext( *this, nElement, rAttribs, mrDrawing.getShapes() );
             }
         break;
     }

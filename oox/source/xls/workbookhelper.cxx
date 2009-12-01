@@ -250,6 +250,15 @@ TimeCount& WorkbookHelper::getTimeCount( TimerType eType ) const
 
 // ============================================================================
 
+bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
+{
+    // there is no wrapper in rtl::OUString, TODO: compare with collator
+    return ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
+        rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
+}
+
+// ============================================================================
+
 class WorkbookData
 #if OSL_DEBUG_LEVEL > 0
     : public dbg::WorkbookData
@@ -298,8 +307,8 @@ public:
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
     Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
-    /** Creates a com.sun.star.style.Style object and returns its final name. */
-    Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const;
+    /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
+    Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle ) const;
 
     // buffers ----------------------------------------------------------------
 
@@ -365,7 +374,7 @@ public:
     /** Enables workbook file mode, used for BIFF4 workspace files. */
     void                setIsWorkbookFile();
     /** Recreates global buffers that are used per sheet in specific BIFF versions. */
-    void                createBuffersPerSheet();
+    void                createBuffersPerSheet( sal_Int16 nSheet );
     /** Returns the codec helper that stores the encoder/decoder object. */
     inline BiffCodecHelper& getCodecHelper() { return *mxCodecHelper; }
 
@@ -561,14 +570,14 @@ Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName,
     return xNamedRange;
 }
 
-Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const
+Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
 {
     Reference< XStyle > xStyle;
     try
     {
         Reference< XNameContainer > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
         xStyle.set( mrBaseFilter.getModelFactory()->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
-        orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ), bRenameOldExisting );
+        orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ), false );
     }
     catch( Exception& )
     {
@@ -603,22 +612,28 @@ void WorkbookData::setIsWorkbookFile()
     mbWorkbook = true;
 }
 
-void WorkbookData::createBuffersPerSheet()
+void WorkbookData::createBuffersPerSheet( sal_Int16 nSheet )
 {
+    // set mnCurrSheet to enable usage of WorkbookHelper::getCurrentSheetIndex()
+    mnCurrSheet = nSheet;
     switch( meBiff )
     {
         case BIFF2:
         case BIFF3:
+            OSL_ENSURE( mnCurrSheet == 0, "WorkbookData::createBuffersPerSheet - unexpected sheet index" );
+            mxDefNames->setLocalCalcSheet( mnCurrSheet );
         break;
 
         case BIFF4:
-            // #i11183# sheets in BIFF4W files have own styles or names
-            if( mbWorkbook )
+            OSL_ENSURE( mbWorkbook || (mnCurrSheet == 0), "WorkbookData::createBuffersPerSheet - unexpected sheet index" );
+            // #i11183# sheets in BIFF4W files have own styles and names
+            if( mbWorkbook && (mnCurrSheet > 0) )
             {
                 mxStyles.reset( new StylesBuffer( *this ) );
                 mxDefNames.reset( new DefinedNamesBuffer( *this ) );
                 mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
             }
+            mxDefNames->setLocalCalcSheet( mnCurrSheet );
         break;
 
         case BIFF5:
@@ -632,6 +647,7 @@ void WorkbookData::createBuffersPerSheet()
         case BIFF_UNKNOWN:
         break;
     }
+    mnCurrSheet = -1;
 }
 
 // private --------------------------------------------------------------------
@@ -848,7 +864,7 @@ Reference< XNameAccess > WorkbookHelper::getDdeLinks() const
     return mrBookData.getDdeLinks();
 }
 
-Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int32 nSheet ) const
+Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int16 nSheet ) const
 {
     Reference< XSpreadsheet > xSheet;
     try
@@ -919,9 +935,9 @@ Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orNam
     return mrBookData.createNamedRangeObject( orName, nNameFlags );
 }
 
-Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const
+Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
 {
-    return mrBookData.createStyleObject( orStyleName, bPageStyle, bRenameOldExisting );
+    return mrBookData.createStyleObject( orStyleName, bPageStyle );
 }
 
 // buffers --------------------------------------------------------------------
@@ -1071,9 +1087,9 @@ void WorkbookHelper::setIsWorkbookFile()
     mrBookData.setIsWorkbookFile();
 }
 
-void WorkbookHelper::createBuffersPerSheet()
+void WorkbookHelper::createBuffersPerSheet( sal_Int16 nSheet )
 {
-    mrBookData.createBuffersPerSheet();
+    mrBookData.createBuffersPerSheet( nSheet );
 }
 
 BiffCodecHelper& WorkbookHelper::getCodecHelper() const

@@ -51,15 +51,16 @@ BinaryFilterBase::~BinaryFilterBase()
 {
 }
 
-StorageRef BinaryFilterBase::implCreateStorage(
-        Reference< XInputStream >& rxInStream, Reference< XStream >& rxOutStream ) const
+// private --------------------------------------------------------------------
+
+StorageRef BinaryFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    StorageRef xStorage;
-    if( rxInStream.is() )
-        xStorage.reset( new OleStorage( getGlobalFactory(), rxInStream, true ) );
-    else if( rxOutStream.is() )
-        xStorage.reset( new OleStorage( getGlobalFactory(), rxOutStream, true ) );
-    return xStorage;
+    return StorageRef( new OleStorage( getGlobalFactory(), rxInStream, true ) );
+}
+
+StorageRef BinaryFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
+{
+    return StorageRef( new OleStorage( getGlobalFactory(), rxOutStream, true ) );
 }
 
 // ============================================================================

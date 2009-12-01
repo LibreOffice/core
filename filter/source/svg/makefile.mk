@@ -56,7 +56,7 @@ SLOFILES+=		$(SLO)$/svgimport.obj
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS=\
-    $(SVXLIB)			\
+    $(SVXCORELIB)			\
     $(XMLOFFLIB)		\
     $(GOODIESLIB)		\
     $(VCLLIB)			\

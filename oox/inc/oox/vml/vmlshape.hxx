@@ -34,7 +34,7 @@
 #include <memory>
 #include <vector>
 #include <com/sun/star/awt/Point.hpp>
-#include "oox/helper/helper.hxx"
+#include "oox/vml/vmlformatting.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
@@ -56,12 +56,10 @@ struct ShapeTypeModel
 {
     ::rtl::OUString     maShapeId;              /// Unique identifier of the shape.
     ::rtl::OUString     maName;                 /// Name of the shape, if present.
-    OptValue< sal_Int32 > monShapeType;         /// Builtin shape type identifier.
+    OptValue< sal_Int32 > moShapeType;          /// Builtin shape type identifier.
 
-    OptValue< sal_Int32 > monCoordLeft;         /// Left position of coordinate system for children scaling.
-    OptValue< sal_Int32 > monCoordTop;          /// Top position of coordinate system for children scaling.
-    OptValue< sal_Int32 > monCoordWidth;        /// Width of coordinate system for children scaling.
-    OptValue< sal_Int32 > monCoordHeight;       /// Height of coordinate system for children scaling.
+    OptValue< Int32Pair > moCoordPos;           /// Top-left position of coordinate system for children scaling.
+    OptValue< Int32Pair > moCoordSize;          /// Size of coordinate system for children scaling.
     ::rtl::OUString     maPosition;             /// Position type of the shape.
     ::rtl::OUString     maLeft;                 /// X position of the shape bounding box (number with unit).
     ::rtl::OUString     maTop;                  /// Y position of the shape bounding box (number with unit).
@@ -70,11 +68,8 @@ struct ShapeTypeModel
     ::rtl::OUString     maMarginLeft;           /// X position of the shape bounding box to shape anchor (number with unit).
     ::rtl::OUString     maMarginTop;            /// Y position of the shape bounding box to shape anchor (number with unit).
 
-    OptValue< bool >    mobStroked;             /// True or missing = solid border line.
-    OptValue< ::rtl::OUString > moStrokeColor;  /// Solid border color.
-
-    OptValue< bool >    mobFilled;              /// True or missing = path is filled.
-    OptValue< ::rtl::OUString > moFillColor;    /// Solid fill color.
+    StrokeModel         maStrokeModel;          /// Border line formatting.
+    FillModel           maFillModel;            /// Shape fill formatting.
 
     OptValue< ::rtl::OUString > moGraphicPath;  /// Path to a graphic for this shape.
     OptValue< ::rtl::OUString > moGraphicTitle; /// Title of the graphic.
@@ -131,7 +126,10 @@ struct ShapeClientData
     ::rtl::OUString     maLinkedCell;       /// Link to value cell associated to the control.
     ::rtl::OUString     maSourceRange;      /// Link to cell range used as data source for the control.
     sal_Int32           mnObjType;          /// Type of the shape.
+    sal_Int32           mnCol;              /// Column index for spreadsheet cell note.
+    sal_Int32           mnRow;              /// Row index for spreadsheet cell note.
     bool                mbPrintObject;      /// True = print the object.
+    bool                mbVisible;          /// True = cell note is visible.
 
     explicit            ShapeClientData();
 };
@@ -179,6 +177,11 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
 
+    /** Converts position and formatting into the passed existing XShape. */
+    void                convertFormatting(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const ShapeParentAnchor* pParentAnchor = 0 ) const;
+
 protected:
     explicit            ShapeBase( const Drawing& rDrawing );
 
@@ -187,6 +190,11 @@ protected:
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const = 0;
+
+    /** Calculates the final shape rectangle according to the passed anchor,
+        if present, otherwise according to the own anchor settings. */
+    ::com::sun::star::awt::Rectangle calcShapeRectangle(
+                            const ShapeParentAnchor* pParentAnchor ) const;
 
     /** Converts common shape properties such as formatting attributes. */
     void                convertShapeProperties(

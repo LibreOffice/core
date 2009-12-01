@@ -47,7 +47,7 @@ namespace xls {
 // ============================================================================
 
 OoxChartsheetFragment::OoxChartsheetFragment( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, sal_Int32 nSheet ) :
+        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, sal_Int16 nSheet ) :
     OoxWorksheetFragmentBase( rHelper, rFragmentPath, xProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
 {
 }
@@ -185,7 +185,7 @@ void OoxChartsheetFragment::importDrawing( RecordInputStream& rStrm )
 // ============================================================================
 
 BiffChartsheetFragment::BiffChartsheetFragment( const BiffWorkbookFragmentBase& rParent,
-        ISegmentProgressBarRef xProgressBar, sal_Int32 nSheet ) :
+        ISegmentProgressBarRef xProgressBar, sal_Int16 nSheet ) :
     BiffWorksheetFragmentBase( rParent, xProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
 {
 }

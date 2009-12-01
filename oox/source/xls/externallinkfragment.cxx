@@ -338,7 +338,7 @@ ContextHandlerRef OoxExternalLinkFragment::onCreateRecordContext( sal_Int32 nRec
 
 ContextHandlerRef OoxExternalLinkFragment::createSheetDataContext( sal_Int32 nSheetId )
 {
-    return new OoxExternalSheetDataContext( *this, mrExtLink.getExternalSheetCache( nSheetId ) );
+    return new OoxExternalSheetDataContext( *this, mrExtLink.getSheetCache( nSheetId ) );
 }
 
 // oox.core.FragmentHandler2 interface ----------------------------------------
@@ -475,11 +475,11 @@ void BiffExternalLinkFragment::importXct()
             case BIFF3:
             case BIFF4:
             case BIFF5:
-                mxSheetCache = mxExtLink->getExternalSheetCache( 0 );
+                mxSheetCache = mxExtLink->getSheetCache( 0 );
             break;
             case BIFF8:
                 mrStrm.skip( 2 );
-                mxSheetCache = mxExtLink->getExternalSheetCache( mrStrm.readInt16() );
+                mxSheetCache = mxExtLink->getSheetCache( mrStrm.readInt16() );
             break;
             case BIFF_UNKNOWN: break;
         }

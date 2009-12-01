@@ -48,6 +48,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::util::DateTime;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 using namespace ::oox::xls;
@@ -1492,6 +1493,12 @@ void RecordStreamObject::implDumpRecordBody()
                 dumpString( "#sheet-name" );
         break;
 
+        case OOBIN_ID_FILESHARING:
+            dumpBool< sal_uInt16 >( "recommend-read-only" );
+            dumpHex< sal_uInt16 >( "password-hash" );
+            dumpString( "password-creator" );
+        break;
+
         case OOBIN_ID_FILL:
             dumpDec< sal_Int32 >( "fill-pattern", "FILLPATTERNS" );
             dumpColor( "fg-color" );
@@ -2267,7 +2274,8 @@ Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Refere
     if( rxFactory.is() && rxInStrm.is() )
     {
         StorageRef xStrg( new ZipStorage( rxFactory, rxInStrm ) );
-        ConfigRef xCfg( new Config( DUMP_XLSB_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName ) );
+        MediaDescriptor aMediaDesc;
+        ConfigRef xCfg( new Config( DUMP_XLSB_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
     }
 }

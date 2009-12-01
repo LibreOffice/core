@@ -1436,8 +1436,8 @@ ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& r
 
 {
     // load images
-    Image aWarnImg( BitmapEx( ResId( IMG_WARN, rResMgr ) ) );
-    Image aErrImg( BitmapEx( ResId( IMG_ERR, rResMgr ) ) );
+    Image aWarnImg = Image ( BitmapEx( ResId( IMG_WARN, rResMgr ) ) );
+    Image aErrImg= Image ( BitmapEx( ResId( IMG_ERR, rResMgr ) ) );
 
     for( std::set<vcl::PDFWriter::ErrorCode>::const_iterator it = rErrors.begin();
          it != rErrors.end(); ++it )

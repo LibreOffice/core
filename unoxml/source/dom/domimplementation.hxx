@@ -41,7 +41,7 @@
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 

@@ -164,6 +164,12 @@ class VmlDrawing : public ::oox::vml::Drawing, public WorksheetHelper
 public:
     explicit            VmlDrawing( const WorksheetHelper& rHelper );
 
+    /** Returns the drawing shape for a cell note at the specified position. */
+    const ::oox::vml::ShapeBase* getNoteShape( const ::com::sun::star::table::CellAddress& rPos ) const;
+
+    /** Filters cell note shapes. */
+    virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const;
+
     /** Calculates the shape rectangle from a cell anchor string. */
     virtual bool        convertShapeClientAnchor(
                             ::com::sun::star::awt::Rectangle& orShapeRect,

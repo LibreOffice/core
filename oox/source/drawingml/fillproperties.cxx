@@ -44,7 +44,8 @@
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include "oox/core/filterbase.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
@@ -55,7 +56,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::oox::core::XmlFilterBase;
+using ::com::sun::star::geometry::IntegerRectangle2D;
+using ::oox::core::FilterBase;
 
 namespace oox {
 namespace drawingml {
@@ -106,7 +108,7 @@ RectanglePoint lclGetRectanglePoint( sal_Int32 nToken )
     return RectanglePoint_LEFT_TOP;
 }
 
-const awt::Size lclGetOriginalSize( const XmlFilterBase& rFilter, const Reference< XGraphic >& rxGraphic )
+const awt::Size lclGetOriginalSize( const FilterBase& rFilter, const Reference< XGraphic >& rxGraphic )
 {
     awt::Size aSize100thMM( 0, 0 );
     try
@@ -222,8 +224,8 @@ Color FillProperties::getBestSolidColor() const
     return aSolidColor;
 }
 
-void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds& rPropIds,
-        const XmlFilterBase& rFilter, ModelObjectHelper& rModelObjHelper,
+void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter,
+        ModelObjectHelper& rModelObjHelper, const FillPropertyIds& rPropIds,
         sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const
 {
     if( moFillType.has() )
@@ -254,7 +256,8 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
                     aGradient.StartIntensity = 100;
                     aGradient.EndIntensity = 100;
 
-                    if( maGradientProps.maGradientStops.size() > 1 )
+                    size_t nColorCount = maGradientProps.maGradientStops.size();
+                    if( nColorCount > 1 )
                     {
                         aGradient.StartColor = maGradientProps.maGradientStops.begin()->second.getColor( rFilter, nPhClr );
                         aGradient.EndColor = maGradientProps.maGradientStops.rbegin()->second.getColor( rFilter, nPhClr );
@@ -264,19 +267,36 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
                     if ( !maGradientProps.moRotateWithShape.get( false ) )
                         nShapeRotation = 0;
 
+                    sal_Int32 nDmlAngle = 0;
                     if( maGradientProps.moGradientPath.has() )
                     {
                         aGradient.Style = (maGradientProps.moGradientPath.get() == XML_circle) ? awt::GradientStyle_ELLIPTICAL : awt::GradientStyle_RECT;
-                        aGradient.Angle = static_cast< sal_Int16 >( (900 - (nShapeRotation / 6000)) % 3600 );
-                        aGradient.XOffset = maGradientProps.moFillToRect.has() ? getLimitedValue< sal_Int16, sal_Int32 >( maGradientProps.moFillToRect.get().X1 / 1000, 30, 70 ) : 50;
-                        aGradient.YOffset = maGradientProps.moFillToRect.has() ? getLimitedValue< sal_Int16, sal_Int32 >( maGradientProps.moFillToRect.get().Y1 / 1000, 30, 70 ) : 50;
+                        // position of gradient center (limited to [30%;70%], otherwise gradient is too hidden)
+                        IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.get( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
+                        sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
+                        aGradient.XOffset = getLimitedValue< sal_Int16, sal_Int32 >( nCenterX / PER_PERCENT, 30, 70 );
+                        sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
+                        aGradient.YOffset = getLimitedValue< sal_Int16, sal_Int32 >( nCenterY / PER_PERCENT, 30, 70 );
                         ::std::swap( aGradient.StartColor, aGradient.EndColor );
+                        nDmlAngle = nShapeRotation;
                     }
                     else
                     {
-                        aGradient.Style = awt::GradientStyle_LINEAR;
-                        aGradient.Angle = static_cast< sal_Int16 >( (4500 - ((maGradientProps.moShadeAngle.get( 0 ) - nShapeRotation) / 6000)) % 3600 );
+                        /*  Try to detect a VML axial gradient. This type of
+                            gradient is simulated by a 3-point linear gradient
+                            with equal start and end color. */
+                        bool bAxial = (nColorCount == 3) && (aGradient.StartColor == aGradient.EndColor);
+                        aGradient.Style = bAxial ? awt::GradientStyle_AXIAL : awt::GradientStyle_LINEAR;
+                        if( bAxial )
+                        {
+                            GradientFillProperties::GradientStopMap::const_iterator aIt = maGradientProps.maGradientStops.begin();
+                            // API StartColor is inner color in axial gradient
+                            aGradient.StartColor = (++aIt)->second.getColor( rFilter, nPhClr );
+                        }
+                        nDmlAngle = maGradientProps.moShadeAngle.get( 0 ) - nShapeRotation;
                     }
+                    // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
+                    aGradient.Angle = static_cast< sal_Int16 >( (4500 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
 
                     // push gradient or named gradient to property map
                     if( rPropIds.mbNamedFillGradient )
@@ -340,10 +360,10 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
                             if( (aOriginalSize.Width > 0) && (aOriginalSize.Height > 0) )
                             {
                                 // size of one bitmap tile (given as 1/1000 percent of bitmap size), convert to 1/100 mm
-                                double fScaleX = maBlipProps.moTileScaleX.get( 100000 ) / 100000.0;
+                                double fScaleX = maBlipProps.moTileScaleX.get( MAX_PERCENT ) / static_cast< double >( MAX_PERCENT );
                                 sal_Int32 nFillBmpSizeX = getLimitedValue< sal_Int32, double >( aOriginalSize.Width * fScaleX, 1, SAL_MAX_INT32 );
                                 rPropMap.setProperty( rPropIds[ FillBitmapSizeXId ], nFillBmpSizeX );
-                                double fScaleY = maBlipProps.moTileScaleY.get( 100000 ) / 100000.0;
+                                double fScaleY = maBlipProps.moTileScaleY.get( MAX_PERCENT ) / static_cast< double >( MAX_PERCENT );
                                 sal_Int32 nFillBmpSizeY = getLimitedValue< sal_Int32, double >( aOriginalSize.Height * fScaleY, 1, SAL_MAX_INT32 );
                                 rPropMap.setProperty( rPropIds[ FillBitmapSizeYId ], nFillBmpSizeY );
 
@@ -383,12 +403,12 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
     }
 }
 
-void FillProperties::pushToPropSet( PropertySet& rPropSet, const FillPropertyIds& rPropIds,
-        const XmlFilterBase& rFilter, ModelObjectHelper& rModelObjHelper,
+void FillProperties::pushToPropSet( PropertySet& rPropSet, const FilterBase& rFilter,
+        ModelObjectHelper& rModelObjHelper, const FillPropertyIds& rPropIds,
         sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const
 {
     PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rPropIds, rFilter, rModelObjHelper, nShapeRotation, nPhClr );
+    pushToPropMap( aPropMap, rFilter, rModelObjHelper, rPropIds, nShapeRotation, nPhClr );
     rPropSet.setProperties( aPropMap );
 }
 
@@ -399,7 +419,7 @@ void GraphicProperties::assignUsed( const GraphicProperties& rSourceProps )
     maBlipProps.assignUsed( rSourceProps.maBlipProps );
 }
 
-void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter, sal_Int32 nPhClr ) const
+void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter, sal_Int32 nPhClr ) const
 {
     if( maBlipProps.mxGraphic.is() )
     {
@@ -436,15 +456,15 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBas
     rPropMap[ PROP_GraphicColorMode ] <<= eColorMode;
 
     // brightness and contrast
-    sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / 1000, -100, 100 );
+    sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
     if( nBrightness != 0 )
         rPropMap[ PROP_AdjustLuminance ] <<= nBrightness;
-    sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / 1000, -100, 100 );
+    sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
     if( nContrast != 0 )
         rPropMap[ PROP_AdjustContrast ] <<= nContrast;
 }
 
-void GraphicProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter, sal_Int32 nPhClr ) const
+void GraphicProperties::pushToPropSet( PropertySet& rPropSet, const FilterBase& rFilter, sal_Int32 nPhClr ) const
 {
     PropertyMap aPropMap;
     pushToPropMap( aPropMap, rFilter, nPhClr );

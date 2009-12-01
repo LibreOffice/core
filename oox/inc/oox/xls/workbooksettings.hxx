@@ -40,6 +40,18 @@ namespace xls {
 
 // ============================================================================
 
+/** Settings for workbook write protection. */
+struct FileSharingModel
+{
+    ::rtl::OUString     maUserName;             /// User who added the write protection password.
+    sal_uInt16          mnPasswordHash;         /// Hash value of the write protection password.
+    bool                mbRecommendReadOnly;    /// True = recommend read-only mode on opening.
+
+    explicit            FileSharingModel();
+};
+
+// ============================================================================
+
 /** Global workbook settings. */
 struct WorkbookSettingsModel
 {
@@ -84,11 +96,15 @@ class WorkbookSettings : public WorkbookHelper
 public:
     explicit            WorkbookSettings( const WorkbookHelper& rHelper );
 
+    /** Imports the fileSharing element containing write protection settings. */
+    void                importFileSharing( const AttributeList& rAttribs );
     /** Imports the workbookPr element containing global workbook settings. */
     void                importWorkbookPr( const AttributeList& rAttribs );
     /** Imports the calcPr element containing workbook calculation settings. */
     void                importCalcPr( const AttributeList& rAttribs );
 
+    /** Imports the FILESHARING record containing write protection settings. */
+    void                importFileSharing( RecordInputStream& rStrm );
     /** Imports the WORKBOOKPR record containing global workbook settings. */
     void                importWorkbookPr( RecordInputStream& rStrm );
     /** Imports the CALCPR record containing workbook calculation settings. */
@@ -96,6 +112,8 @@ public:
 
     /** Sets the save external linked values flag, e.g. from the WSBOOL record. */
     void                setSaveExtLinkValues( bool bSaveExtLinks );
+    /** Imports the FILESHARING record. */
+    void                importFileSharing( BiffInputStream& rStrm );
     /** Imports the BOOKBOOL record. */
     void                importBookBool( BiffInputStream& rStrm );
     /** Imports the CALCCOUNT record. */
@@ -136,6 +154,7 @@ private:
     void                setDateMode( bool bDateMode1904 );
 
 private:
+    FileSharingModel    maFileSharing;
     WorkbookSettingsModel maBookSettings;
     CalcSettingsModel   maCalcSettings;
 };

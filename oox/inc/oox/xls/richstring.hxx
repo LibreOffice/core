@@ -71,6 +71,9 @@ public:
     /** Final processing after import of all strings. */
     void                finalizeImport();
 
+    /** Returns the text data of this portion. */
+    inline const ::rtl::OUString& getText() const { return maText; }
+
     /** Converts the portion and appends it to the passed XText. */
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
@@ -253,6 +256,9 @@ public:
 
     /** Final processing after import of all strings. */
     void                finalizeImport();
+
+    /** Returns the plain text concatenated from all string portions. */
+    ::rtl::OUString     getPlainText() const;
 
     /** Converts the string and writes it into the passed XText. */
     void                convert(

@@ -228,7 +228,7 @@ void OoxDataValidationsContext::importDataValidation( RecordInputStream& rStrm )
 // ============================================================================
 
 OoxWorksheetFragment::OoxWorksheetFragment( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     OoxWorksheetFragmentBase( rHelper, rFragmentPath, xProgressBar, eSheetType, nSheet )
 {
     // import data tables related to this worksheet
@@ -741,7 +741,7 @@ void OoxWorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbedded
 
 // ============================================================================
 
-BiffWorksheetFragment::BiffWorksheetFragment( const BiffWorkbookFragmentBase& rParent, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+BiffWorksheetFragment::BiffWorksheetFragment( const BiffWorkbookFragmentBase& rParent, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     BiffWorksheetFragmentBase( rParent, xProgressBar, eSheetType, nSheet )
 {
 }

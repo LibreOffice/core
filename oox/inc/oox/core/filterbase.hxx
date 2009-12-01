@@ -44,7 +44,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include "oox/helper/binarystreambase.hxx"
 #include "oox/helper/storagebase.hxx"
-#include <oox/dllapi.h>
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
@@ -57,6 +57,11 @@ namespace com { namespace sun { namespace star {
     namespace io { class XStream; }
     namespace graphic { class XGraphic; }
 } } }
+
+namespace comphelper {
+    class IDocPasswordVerifier;
+    class MediaDescriptor;
+}
 
 namespace oox {
     class GraphicHelper;
@@ -109,6 +114,9 @@ public:
     /** Returns the global service factory passed in the filter constructor (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getGlobalFactory() const;
+
+    /** Returns the media descriptor. */
+    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
 
     /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
@@ -190,8 +198,17 @@ public:
     sal_Int32           convertScreenPixelX( double fPixelX ) const;
     /** Converts the passed value from vertical screen pixels to 1/100 mm. */
     sal_Int32           convertScreenPixelY( double fPixelY ) const;
+
     /** Returns a system color specified by the passed XML token identifier. */
-    sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = -1 ) const;
+    sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = API_RGB_TRANSPARENT ) const;
+    /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
+    /** Derived classes may implement to resolve a palette index to an RGB color. */
+    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
+
+    /** Requests a password from the media descriptor or from the user. On
+        success, the password will be inserted into the media descriptor. */
+    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
 
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */
@@ -251,19 +268,29 @@ public:
     // com.sun.star.document.XFilter interface --------------------------------
 
     virtual sal_Bool SAL_CALL filter(
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor )
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq )
                             throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL cancel()
                             throw( ::com::sun::star::uno::RuntimeException );
 
     // ------------------------------------------------------------------------
+protected:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                        implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+                        implGetOutputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+
 private:
+    void                setMediaDescriptor(
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq );
+
     virtual ::rtl::OUString implGetImplementationName() const = 0;
 
     virtual StorageRef  implCreateStorage(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const = 0;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const = 0;
+    virtual StorageRef  implCreateStorage(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const = 0;
 
 private:
     ::std::auto_ptr< FilterBaseImpl > mxImpl;

@@ -45,19 +45,62 @@ namespace vml {
 
 namespace {
 
-bool lclSeparateValue( OUString& orName, OUString& orValue, const OUString& rAttrib, sal_Unicode cSep = ':' )
+/** Returns the boolean value from the specified VML attribute (if present).
+ */
+OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nElement )
 {
-    sal_Int32 nSepPos = rAttrib.indexOf( cSep );
-    if( nSepPos <= 0 ) return false;
-    orName = rAttrib.copy( 0, nSepPos ).trim();
-    orValue = rAttrib.copy( nSepPos + 1 ).trim();
-    return (orName.getLength() > 0) && (orValue.getLength() > 0);
+    OptValue< OUString > oValue = rAttribs.getString( nElement );
+    if( oValue.has() ) return OptValue< bool >( ConversionHelper::decodeBool( oValue.get() ) );
+    return OptValue< bool >();
 }
 
-/** Returns the boolean value from the passed string (supported: f, t, False, True).
+/** Returns the percentage value from the specified VML attribute (if present).
+    The value will be normalized (1.0 is returned for 100%).
+ */
+OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nElement, double fDefValue )
+{
+    OptValue< OUString > oValue = rAttribs.getString( nElement );
+    if( oValue.has() ) return OptValue< double >( ConversionHelper::decodePercent( oValue.get(), fDefValue ) );
+    return OptValue< double >();
+}
+
+/** Returns the integer value pair from the specified VML attribute (if present).
+ */
+OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int32 nElement )
+{
+    OptValue< OUString > oValue = rAttribs.getString( nElement );
+    OptValue< Int32Pair > oRetValue;
+    if( oValue.has() )
+    {
+        OUString aValue1, aValue2;
+        ConversionHelper::separatePair( aValue1, aValue2, oValue.get(), ',' );
+        oRetValue = Int32Pair( aValue1.toInt32(), aValue2.toInt32() );
+    }
+    return oRetValue;
+}
+
+/** Returns the percentage pair from the specified VML attribute (if present).
+ */
+OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_Int32 nElement )
+{
+    OptValue< OUString > oValue = rAttribs.getString( nElement );
+    OptValue< DoublePair > oRetValue;
+    if( oValue.has() )
+    {
+        OUString aValue1, aValue2;
+        ConversionHelper::separatePair( aValue1, aValue2, oValue.get(), ',' );
+        oRetValue = DoublePair(
+            ConversionHelper::decodePercent( aValue1, 0.0 ),
+            ConversionHelper::decodePercent( aValue2, 0.0 ) );
+    }
+    return oRetValue;
+}
+
+/** Returns the boolean value from the passed string of an attribute in the x:
+    namespace (VML for spreadsheets). Supported values: f, t, False, True.
     @param bDefaultForEmpty  Default value for the empty string.
  */
-bool lclDecodeBool( const OUString& rValue, bool bDefaultForEmpty )
+bool lclDecodeVmlxBool( const OUString& rValue, bool bDefaultForEmpty )
 {
     if( rValue.getLength() == 0 ) return bDefaultForEmpty;
     // anything else than 't' or 'True' is considered to be false, as specified
@@ -85,11 +128,14 @@ void ShapeClientDataContext::onEndElement( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {
-        case VMLX_TOKEN( Anchor ):      mrClientData.maAnchor = rChars;                             break;
-        case VMLX_TOKEN( FmlaLink ):    mrClientData.maLinkedCell = rChars;                         break;
-        case VMLX_TOKEN( FmlaPict ):    mrClientData.maPictureLink = rChars;                        break;
-        case VMLX_TOKEN( FmlaRange ):   mrClientData.maSourceRange = rChars;                        break;
-        case VMLX_TOKEN( PrintObject ): mrClientData.mbPrintObject = lclDecodeBool( rChars, true ); break;
+        case VMLX_TOKEN( Anchor ):      mrClientData.maAnchor = rChars;                                 break;
+        case VMLX_TOKEN( FmlaPict ):    mrClientData.maPictureLink = rChars;                            break;
+        case VMLX_TOKEN( FmlaLink ):    mrClientData.maLinkedCell = rChars;                             break;
+        case VMLX_TOKEN( FmlaRange ):   mrClientData.maSourceRange = rChars;                            break;
+        case VMLX_TOKEN( Column ):      mrClientData.mnCol = rChars.toInt32();                          break;
+        case VMLX_TOKEN( Row ):         mrClientData.mnRow = rChars.toInt32();                          break;
+        case VMLX_TOKEN( PrintObject ): mrClientData.mbPrintObject = lclDecodeVmlxBool( rChars, true ); break;
+        case VMLX_TOKEN( Visible ):     mrClientData.mbVisible = true;                                  break;
     }
 }
 
@@ -100,7 +146,7 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
 {
 }
 
-/*static*/ ContextHandlerRef ShapeContextBase::createContext( ContextHandler2Helper& rParent,
+/*static*/ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& rParent,
         sal_Int32 nElement, const AttributeList& rAttribs, ShapeContainer& rShapes )
 {
     switch( nElement )
@@ -144,24 +190,56 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, const Attrib
     if( bHasOspid )
         mrTypeModel.maName = rAttribs.getXString( XML_id, OUString() );
     // builtin shape type identifier
-    mrTypeModel.monShapeType = rAttribs.getInteger( O_TOKEN( spt ) );
-    // coordinate system position/size
-    setCoordOrigin( rAttribs.getString( XML_coordorigin, OUString() ) );
-    setCoordSize( rAttribs.getString( XML_coordsize, OUString() ) );
-    // CSS style
+    mrTypeModel.moShapeType = rAttribs.getInteger( O_TOKEN( spt ) );
+
+    // coordinate system position/size, CSS style
+    mrTypeModel.moCoordPos = lclDecodeInt32Pair( rAttribs, XML_coordorigin );
+    mrTypeModel.moCoordSize = lclDecodeInt32Pair( rAttribs, XML_coordsize );
     setStyle( rAttribs.getString( XML_style, OUString() ) );
-    // border line
-    mrTypeModel.mobStroked = rAttribs.getBool( XML_stroked );
-    mrTypeModel.moStrokeColor = rAttribs.getString( XML_strokecolor );
-    // shape fill
-    mrTypeModel.mobFilled = rAttribs.getBool( XML_filled );
-    mrTypeModel.moFillColor = rAttribs.getString( XML_fillcolor );
+
+    // stroke settings (may be overridden by v:stroke element later)
+    mrTypeModel.maStrokeModel.moStroked = lclDecodeBool( rAttribs, XML_stroked );
+    mrTypeModel.maStrokeModel.moColor = rAttribs.getString( XML_strokecolor );
+    mrTypeModel.maStrokeModel.moWeight = rAttribs.getString( XML_strokeweight );
+
+    // fill settings (may be overridden by v:fill element later)
+    mrTypeModel.maFillModel.moFilled = lclDecodeBool( rAttribs, XML_filled );
+    mrTypeModel.maFillModel.moColor = rAttribs.getString( XML_fillcolor );
 }
 
 ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
+        case VML_TOKEN( stroke ):
+            mrTypeModel.maStrokeModel.moStroked.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
+            mrTypeModel.maStrokeModel.maStartArrow.moArrowType = rAttribs.getToken( XML_startarrow );
+            mrTypeModel.maStrokeModel.maStartArrow.moArrowWidth = rAttribs.getToken( XML_startarrowwidth );
+            mrTypeModel.maStrokeModel.maStartArrow.moArrowLength = rAttribs.getToken( XML_startarrowlength );
+            mrTypeModel.maStrokeModel.maEndArrow.moArrowType = rAttribs.getToken( XML_endarrow );
+            mrTypeModel.maStrokeModel.maEndArrow.moArrowWidth = rAttribs.getToken( XML_endarrowwidth );
+            mrTypeModel.maStrokeModel.maEndArrow.moArrowLength = rAttribs.getToken( XML_endarrowlength );
+            mrTypeModel.maStrokeModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
+            mrTypeModel.maStrokeModel.moOpacity = lclDecodePercent( rAttribs, XML_opacity, 1.0 );
+            mrTypeModel.maStrokeModel.moWeight.assignIfUsed( rAttribs.getString( XML_weight ) );
+            mrTypeModel.maStrokeModel.moDashStyle = rAttribs.getString( XML_dashstyle );
+            mrTypeModel.maStrokeModel.moLineStyle = rAttribs.getToken( XML_linestyle );
+            mrTypeModel.maStrokeModel.moEndCap = rAttribs.getToken( XML_endcap );
+            mrTypeModel.maStrokeModel.moJoinStyle = rAttribs.getToken( XML_joinstyle );
+        break;
+        case VML_TOKEN( fill ):
+            mrTypeModel.maFillModel.moFilled.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
+            mrTypeModel.maFillModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
+            mrTypeModel.maFillModel.moOpacity = lclDecodePercent( rAttribs, XML_opacity, 1.0 );
+            mrTypeModel.maFillModel.moColor2 = rAttribs.getString( XML_color2 );
+            mrTypeModel.maFillModel.moOpacity2 = lclDecodePercent( rAttribs, XML_opacity2, 1.0 );
+            mrTypeModel.maFillModel.moType = rAttribs.getToken( XML_type );
+            mrTypeModel.maFillModel.moAngle = rAttribs.getInteger( XML_angle );
+            mrTypeModel.maFillModel.moFocus = lclDecodePercent( rAttribs, XML_focus, 0.0 );
+            mrTypeModel.maFillModel.moFocusPos = lclDecodePercentPair( rAttribs, XML_focusposition );
+            mrTypeModel.maFillModel.moFocusSize = lclDecodePercentPair( rAttribs, XML_focussize );
+            mrTypeModel.maFillModel.moRotate = lclDecodeBool( rAttribs, XML_rotate );
+        break;
         case VML_TOKEN( imagedata ):
             OptValue< OUString > oGraphicRelId = rAttribs.getString( O_TOKEN( relid ) );
             if( oGraphicRelId.has() )
@@ -172,33 +250,13 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
     return 0;
 }
 
-void ShapeTypeContext::setCoordOrigin( const OUString& rCoordOrigin )
-{
-    OUString aCoordL, aCoordT;
-    if( lclSeparateValue( aCoordL, aCoordT, rCoordOrigin, ',' ) )
-    {
-        mrTypeModel.monCoordLeft = aCoordL.toInt32();
-        mrTypeModel.monCoordTop = aCoordT.toInt32();
-    }
-}
-
-void ShapeTypeContext::setCoordSize( const OUString& rCoordSize )
-{
-    OUString aCoordW, aCoordH;
-    if( lclSeparateValue( aCoordW, aCoordH, rCoordSize, ',' ) )
-    {
-        mrTypeModel.monCoordWidth = aCoordW.toInt32();
-        mrTypeModel.monCoordHeight = aCoordH.toInt32();
-    }
-}
-
 void ShapeTypeContext::setStyle( const OUString& rStyle )
 {
     sal_Int32 nIndex = 0;
     while( nIndex >= 0 )
     {
         OUString aName, aValue;
-        if( lclSeparateValue( aName, aValue, rStyle.getToken( 0, ';', nIndex ) ) )
+        if( ConversionHelper::separatePair( aName, aValue, rStyle.getToken( 0, ';', nIndex ), ':' ) )
         {
                  if( aName.equalsAscii( "position" ) )      mrTypeModel.maPosition = aValue;
             else if( aName.equalsAscii( "left" ) )          mrTypeModel.maLeft = aValue;
@@ -255,7 +313,7 @@ GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent, const Attr
 ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     // try to create a context of an embedded shape
-    ContextHandlerRef xContext = ShapeContextBase::createContext( *this, nElement, rAttribs, mrShapes );
+    ContextHandlerRef xContext = createShapeContext( *this, nElement, rAttribs, mrShapes );
     // handle remaining stuff of this shape in base class
     return xContext.get() ? xContext : ShapeContext::onCreateContext( nElement, rAttribs );
 }

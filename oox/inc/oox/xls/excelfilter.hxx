@@ -41,7 +41,23 @@ namespace xls {
 
 class WorkbookHelper;
 
-class ExcelFilter : public ::oox::core::XmlFilterBase
+class ExcelFilterBase
+{
+protected:
+    explicit            ExcelFilterBase();
+    virtual             ~ExcelFilterBase();
+
+    void                setWorkbookHelper( WorkbookHelper& rHelper );
+    WorkbookHelper&     getWorkbookHelper() const;
+    void                clearWorkbookHelper();
+
+private:
+    WorkbookHelper*     mpHelper;       /// Nonowning pointer to helper base.
+};
+
+// ============================================================================
+
+class ExcelFilter : public ::oox::core::XmlFilterBase, public ExcelFilterBase
 {
 public:
     explicit            ExcelFilter(
@@ -51,23 +67,21 @@ public:
     virtual bool        importDocument() throw();
     virtual bool        exportDocument() throw();
 
-    virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
-    virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const;
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
+    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
 
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
     virtual ::oox::vml::Drawing* getVmlDrawing();
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
 private:
     virtual ::rtl::OUString implGetImplementationName() const;
-
-private:
-    WorkbookHelper*     mpHelper;       /// Nonowning pointer to helper base.
 };
 
 // ============================================================================
 
-class ExcelBiffFilter : public ::oox::core::BinaryFilterBase
+class ExcelBiffFilter : public ::oox::core::BinaryFilterBase, public ExcelFilterBase
 {
 public:
     explicit            ExcelBiffFilter(
@@ -76,6 +90,8 @@ public:
 
     virtual bool        importDocument() throw();
     virtual bool        exportDocument() throw();
+
+    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
 
 private:
     virtual ::rtl::OUString implGetImplementationName() const;

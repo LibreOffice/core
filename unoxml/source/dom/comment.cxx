@@ -30,6 +30,8 @@
 
 #include "comment.hxx"
 
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+
 namespace DOM
 {
     CComment::CComment(const xmlNodePtr aNodePtr)

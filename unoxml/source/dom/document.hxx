@@ -34,7 +34,7 @@
 #include <list>
 #include <set>
 #include <sal/types.h>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -45,7 +45,9 @@
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -68,9 +70,9 @@ using namespace com::sun::star::xml::dom::events;
 namespace DOM
 {
 
-    class CDocument : public cppu::ImplInheritanceHelper5<
+    class CDocument : public cppu::ImplInheritanceHelper6<
         CNode, XDocument, XDocumentEvent,
-        XActiveDataControl, XActiveDataSource, XSAXSerializable>
+        XActiveDataControl, XActiveDataSource, XSAXSerializable, XFastSAXSerializable>
     {
         friend class CNode;
         typedef std::list< Reference< XNode >* > nodereflist_t;
@@ -96,6 +98,8 @@ namespace DOM
 
         virtual void SAL_CALL saxify(
             const Reference< XDocumentHandler >& i_xHandler);
+
+        virtual void SAL_CALL fastSaxify( Context& rContext );
 
         /**
         Creates an Attr of the given name.
@@ -347,12 +351,18 @@ namespace DOM
             return CNode::setPrefix(prefix);
         }
 
-
-    // ::com::sun::star::xml::sax::XSAXSerializable
-    virtual void SAL_CALL serialize(
+        // ::com::sun::star::xml::sax::XSAXSerializable
+        virtual void SAL_CALL serialize(
             const Reference< XDocumentHandler >& i_xHandler,
             const Sequence< beans::StringPair >& i_rNamespaces)
-        throw (RuntimeException, SAXException);
+            throw (RuntimeException, SAXException);
+
+        // ::com::sun::star::xml::sax::XFastSAXSerializable
+        virtual void SAL_CALL fastSerialize( const Reference< XFastDocumentHandler >& handler,
+                                             const Reference< XFastTokenHandler >& tokenHandler,
+                                             const Sequence< beans::StringPair >& i_rNamespaces,
+                                             const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& namespaces )
+            throw (SAXException, RuntimeException);
     };
 }
 

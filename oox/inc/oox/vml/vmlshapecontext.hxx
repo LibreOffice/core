@@ -70,7 +70,7 @@ class ShapeContextBase : public ::oox::core::ContextHandler2
 {
 public:
     static ::oox::core::ContextHandlerRef
-                        createContext(
+                        createShapeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
                             sal_Int32 nElement,
                             const AttributeList& rAttribs,
@@ -94,10 +94,6 @@ public:
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 
 private:
-    /** Processes the 'coordorigin' attribute. */
-    void                setCoordOrigin( const ::rtl::OUString& rCoordOrigin );
-    /** Processes the 'coordsize' attribute. */
-    void                setCoordSize( const ::rtl::OUString& rCoordSize );
     /** Processes the 'style' attribute. */
     void                setStyle( const ::rtl::OUString& rStyle );
 

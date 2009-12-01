@@ -43,8 +43,8 @@
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/core/namespaces.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 
 using namespace ::com::sun::star::drawing;
@@ -55,7 +55,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::container::XNameContainer;
-using ::oox::core::XmlFilterBase;
+using ::oox::core::FilterBase;
 
 namespace oox {
 namespace drawingml {
@@ -81,6 +81,85 @@ static const sal_Int32 spnDefaultLineIds[ LineId_END ] =
 };
 
 // ----------------------------------------------------------------------------
+
+void lclSetDashData( LineDash& orLineDash, sal_Int16 nDots, sal_Int32 nDotLen,
+        sal_Int16 nDashes, sal_Int32 nDashLen, sal_Int32 nDistance )
+{
+    orLineDash.Dots = nDots;
+    orLineDash.DotLen = nDotLen;
+    orLineDash.Dashes = nDashes;
+    orLineDash.DashLen = nDashLen;
+    orLineDash.Distance = nDistance;
+}
+
+/** Converts the specified preset dash to API dash.
+
+    Line length and dot length are set relative to line width and have to be
+    multiplied by the actual line width after this function.
+ */
+void lclConvertPresetDash( LineDash& orLineDash, sal_Int32 nPresetDash )
+{
+    switch( nPresetDash )
+    {
+        case XML_dot:           lclSetDashData( orLineDash, 1, 1, 0, 0, 3 );    break;
+        case XML_dash:          lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );    break;
+        case XML_dashDot:       lclSetDashData( orLineDash, 1, 1, 1, 4, 3 );    break;
+
+        case XML_lgDash:        lclSetDashData( orLineDash, 0, 0, 1, 8, 3 );    break;
+        case XML_lgDashDot:     lclSetDashData( orLineDash, 1, 1, 1, 8, 3 );    break;
+        case XML_lgDashDotDot:  lclSetDashData( orLineDash, 2, 1, 1, 8, 3 );    break;
+
+        case XML_sysDot:        lclSetDashData( orLineDash, 1, 1, 0, 0, 1 );    break;
+        case XML_sysDash:       lclSetDashData( orLineDash, 0, 0, 1, 3, 1 );    break;
+        case XML_sysDashDot:    lclSetDashData( orLineDash, 1, 1, 1, 3, 1 );    break;
+        case XML_sysDashDotDot: lclSetDashData( orLineDash, 2, 1, 1, 3, 1 );    break;
+
+        default:
+            OSL_ENSURE( false, "lclConvertPresetDash - unsupported preset dash" );
+            lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
+    }
+}
+
+/** Converts the passed custom dash to API dash.
+
+    Line length and dot length are set relative to line width and have to be
+    multiplied by the actual line width after this function.
+ */
+void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopVector& rCustomDash )
+{
+    if( rCustomDash.empty() )
+    {
+        OSL_ENSURE( false, "lclConvertCustomDash - unexpected empty custom dash" );
+        lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
+        return;
+    }
+
+    // count dashes and dots (stops equal or less than 2 are assumed to be dots)
+    sal_Int16 nDots = 0;
+    sal_Int32 nDotLen = 0;
+    sal_Int16 nDashes = 0;
+    sal_Int32 nDashLen = 0;
+    sal_Int32 nDistance = 0;
+    for( LineProperties::DashStopVector::const_iterator aIt = rCustomDash.begin(), aEnd = rCustomDash.end(); aIt != aEnd; ++aIt )
+    {
+        if( aIt->first <= 2 )
+        {
+            ++nDots;
+            nDotLen += aIt->first;
+        }
+        else
+        {
+            ++nDashes;
+            nDashLen += aIt->first;
+        }
+        nDistance += aIt->second;
+    }
+    orLineDash.DotLen = (nDots > 0) ? ::std::max< sal_Int32 >( nDotLen / nDots, 1 ) : 0;
+    orLineDash.Dots = nDots;
+    orLineDash.DashLen = (nDashes > 0) ? ::std::max< sal_Int32 >( nDashLen / nDashes, 1 ) : 0;
+    orLineDash.Dashes = nDashes;
+    orLineDash.Distance = ::std::max< sal_Int32 >( nDistance / rCustomDash.size(), 1 );
+}
 
 DashStyle lclGetDashStyle( sal_Int32 nToken )
 {
@@ -122,7 +201,7 @@ sal_Int32 lclGetArrowSize( sal_Int32 nToken )
 // ----------------------------------------------------------------------------
 
 void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& rArrowProps,
-        const LinePropertyIds& rPropIds, ModelObjectHelper& rModelObjHelper, sal_Int32 nLineWidth, bool bLineEnd )
+        ModelObjectHelper& rModelObjHelper, const LinePropertyIds& rPropIds, sal_Int32 nLineWidth, bool bLineEnd )
 {
     PolyPolygonBezierCoords aMarker;
     OUString aMarkerName;
@@ -310,14 +389,17 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
     maStartArrow.assignUsed( rSourceProps.maStartArrow );
     maEndArrow.assignUsed( rSourceProps.maEndArrow );
     maLineFill.assignUsed( rSourceProps.maLineFill );
+    if( !rSourceProps.maCustomDash.empty() )
+        maCustomDash = rSourceProps.maCustomDash;
     moLineWidth.assignIfUsed( rSourceProps.moLineWidth );
     moPresetDash.assignIfUsed( rSourceProps.moPresetDash );
+    moLineCompound.assignIfUsed( rSourceProps.moLineCompound );
     moLineCap.assignIfUsed( rSourceProps.moLineCap );
     moLineJoint.assignIfUsed( rSourceProps.moLineJoint );
 }
 
-void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyIds& rPropIds,
-        const XmlFilterBase& rFilter, ModelObjectHelper& rModelObjHelper, sal_Int32 nPhClr ) const
+void LineProperties::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter,
+        ModelObjectHelper& rModelObjHelper, const LinePropertyIds& rPropIds, sal_Int32 nPhClr ) const
 {
     // line fill type must exist, otherwise ignore other properties
     if( maLineFill.moFillType.has() )
@@ -326,51 +408,22 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyIds
         LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? LineStyle_NONE : LineStyle_SOLID;
 
         // create line dash from preset dash token (not for invisible line)
-        if( (eLineStyle != LineStyle_NONE) && moPresetDash.differsFrom( XML_solid ) )
+        if( (eLineStyle != LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) )
         {
             LineDash aLineDash;
-
-            sal_Int32 nLineWidth = GetCoordinate( moLineWidth.get( 103500 ) );
             aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_rnd ) );
-            aLineDash.Dots  = 1;
-            aLineDash.DotLen = nLineWidth;
-            aLineDash.Dashes = 0;
-            aLineDash.DashLen = 8 * nLineWidth;
-            aLineDash.Distance = 3 * nLineWidth;
 
-            switch( moPresetDash.get() )
-            {
-                default:
-                case XML_dash:
-                case XML_sysDash:
-                    aLineDash.DashLen = 4 * nLineWidth;
-                // passthrough intended
-                case XML_lgDash:
-                    aLineDash.Dots = 0;
-                    aLineDash.Dashes = 1;
-                break;
+            // convert preset dash or custom dash
+            if( moPresetDash.has() )
+                lclConvertPresetDash( aLineDash, moPresetDash.get() );
+            else
+                lclConvertCustomDash( aLineDash, maCustomDash );
 
-                case XML_dashDot:
-                case XML_sysDashDot:
-                    aLineDash.DashLen = 4 * nLineWidth;
-                // passthrough intended
-                case XML_lgDashDot:
-                    aLineDash.Dashes = 1;
-                break;
-
-                case XML_sysDashDotDot:
-                    aLineDash.DashLen = 4 * nLineWidth;
-                // passthrough intended
-                case XML_lgDashDotDot:
-                    aLineDash.Dots = 2;
-                    aLineDash.Dashes = 1;
-                break;
-
-                case XML_dot:
-                case XML_sysDot:
-                    aLineDash.Distance = aLineDash.DotLen;
-                break;
-            }
+            // convert relative dash/dot length to absolute length
+            sal_Int32 nLineWidth = GetCoordinate( moLineWidth.get( 103500 ) );
+            aLineDash.DotLen *= nLineWidth;
+            aLineDash.DashLen *= nLineWidth;
+            aLineDash.Distance *= nLineWidth;
 
             if( rPropIds.mbNamedLineDash )
             {
@@ -409,16 +462,16 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyIds
         }
 
         // line markers
-        lclPushMarkerProperties( rPropMap, maStartArrow, rPropIds, rModelObjHelper, moLineWidth.get( 0 ), false );
-        lclPushMarkerProperties( rPropMap, maEndArrow,   rPropIds, rModelObjHelper, moLineWidth.get( 0 ), true );
+        lclPushMarkerProperties( rPropMap, maStartArrow, rModelObjHelper, rPropIds, moLineWidth.get( 0 ), false );
+        lclPushMarkerProperties( rPropMap, maEndArrow,   rModelObjHelper, rPropIds, moLineWidth.get( 0 ), true );
     }
 }
 
-void LineProperties::pushToPropSet( PropertySet& rPropSet, const LinePropertyIds& rPropIds,
-        const XmlFilterBase& rFilter, ModelObjectHelper& rModelObjHelper, sal_Int32 nPhClr ) const
+void LineProperties::pushToPropSet( PropertySet& rPropSet, const FilterBase& rFilter,
+    ModelObjectHelper& rModelObjHelper, const LinePropertyIds& rPropIds, sal_Int32 nPhClr ) const
 {
     PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rPropIds, rFilter, rModelObjHelper, nPhClr );
+    pushToPropMap( aPropMap, rFilter, rModelObjHelper, rPropIds, nPhClr );
     rPropSet.setProperties( aPropMap );
 }
 

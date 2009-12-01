@@ -159,18 +159,20 @@ struct FillProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const FillPropertyIds& rPropIds,
-                            const ::oox::core::XmlFilterBase& rFilter,
+                            const ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjHelper,
-                            sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const;
+                            const FillPropertyIds& rPropIds = DEFAULT_IDS,
+                            sal_Int32 nShapeRotation = 0,
+                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Writes the properties to the passed property set. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const FillPropertyIds& rPropIds,
-                            const ::oox::core::XmlFilterBase& rFilter,
+                            const ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjHelper,
-                            sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const;
+                            const FillPropertyIds& rPropIds = DEFAULT_IDS,
+                            sal_Int32 nShapeRotation = 0,
+                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
 
 // ============================================================================
@@ -185,14 +187,14 @@ struct GraphicProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::XmlFilterBase& rFilter,
-                            sal_Int32 nPhClr ) const;
+                            const ::oox::core::FilterBase& rFilter,
+                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Writes the properties to the passed property set. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const ::oox::core::XmlFilterBase& rFilter,
-                            sal_Int32 nPhClr ) const;
+                            const ::oox::core::FilterBase& rFilter,
+                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
 
 // ============================================================================

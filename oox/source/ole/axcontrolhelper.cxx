@@ -117,12 +117,12 @@ sal_Int32 AxControlHelper::convertColor( sal_uInt32 nAxColor ) const
             switch( meColorMode )
             {
                 case AX_DEFAULTCOLORMODE_BGR:       return lclDecodeBgrColor( nAxColor );
-                case AX_DEFAULTCOLORMODE_PALETTE:   return getPaletteColor( static_cast< sal_uInt16 >( nAxColor & AX_PALETTECOLOR_MASK ) );
+                case AX_DEFAULTCOLORMODE_PALETTE:   return mrFilter.getPaletteColor( nAxColor & AX_PALETTECOLOR_MASK );
             }
         break;
 
         case AX_COLORTYPE_PALETTE:
-            return getPaletteColor( static_cast< sal_uInt16 >( nAxColor & AX_PALETTECOLOR_MASK ) );
+            return mrFilter.getPaletteColor( nAxColor & AX_PALETTECOLOR_MASK );
 
         case AX_COLORTYPE_BGR:
             return lclDecodeBgrColor( nAxColor );
@@ -131,12 +131,6 @@ sal_Int32 AxControlHelper::convertColor( sal_uInt32 nAxColor ) const
             return mrFilter.getSystemColor( STATIC_ARRAY_SELECT( spnSystemColors, nAxColor & AX_SYSTEMCOLOR_MASK, XML_TOKEN_INVALID ), API_RGB_WHITE );
     }
     OSL_ENSURE( false, "AxControlHelper::convertColor - unknown color type" );
-    return 0;
-}
-
-sal_Int32 AxControlHelper::getPaletteColor( sal_uInt16 /*nPaletteIdx*/ ) const
-{
-    OSL_ENSURE( false, "AxControlHelper::getPaletteColor - palette colors not implemented" );
     return 0;
 }
 

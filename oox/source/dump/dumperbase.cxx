@@ -39,6 +39,7 @@
 #include <com/sun/star/io/XTextOutputStream.hpp>
 #include <rtl/math.hxx>
 #include <osl/file.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffhelper.hxx"
@@ -51,8 +52,8 @@ using ::rtl::OStringToOUString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringToOString;
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::util::DateTime;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -60,9 +61,10 @@ using ::com::sun::star::ucb::XSimpleFileAccess;
 using ::com::sun::star::io::XActiveDataSink;
 using ::com::sun::star::io::XActiveDataSource;
 using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XTextInputStream;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XTextInputStream;
 using ::com::sun::star::io::XTextOutputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 namespace oox {
@@ -1528,11 +1530,14 @@ NameListRef NameListWrapper::getNameList( const Config& rCfg ) const
 // ============================================================================
 
 SharedConfigData::SharedConfigData( const OUString& rFileName,
-        const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName ) :
+        const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg,
+        const OUString& rSysFileName, MediaDescriptor& rMediaDesc ) :
     mxFactory( rxFactory ),
     mxRootStrg( rxRootStrg ),
     maSysFileName( rSysFileName ),
-    mbLoaded( false )
+    mrMediaDesc( rMediaDesc ),
+    mbLoaded( false ),
+    mbPwCancelled( false )
 {
     OUString aFileUrl = InputOutputHelper::convertFileNameToUrl( rFileName );
     if( aFileUrl.getLength() > 0 )
@@ -1576,6 +1581,20 @@ NameListRef SharedConfigData::getNameList( const OUString& rListName ) const
     if( aIt != maNameLists.end() )
         xList = aIt->second;
     return xList;
+}
+
+OUString SharedConfigData::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier )
+{
+    OUString aPassword;
+    if( !mbPwCancelled )
+    {
+        ::std::vector< OUString > aDefaultPasswords;
+        aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
+        aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+            rVerifier, mrMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
+        mbPwCancelled = aPassword.getLength() == 0;
+    }
+    return aPassword;
 }
 
 bool SharedConfigData::implIsValid() const
@@ -1677,9 +1696,9 @@ Config::Config( const sal_Char* pcEnvVar, const FilterBase& rFilter )
     construct( pcEnvVar, rFilter );
 }
 
-Config::Config( const sal_Char* pcEnvVar, const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName )
+Config::Config( const sal_Char* pcEnvVar, const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
 {
-    construct( pcEnvVar, rxFactory, rxRootStrg, rSysFileName );
+    construct( pcEnvVar, rxFactory, rxRootStrg, rSysFileName, rMediaDesc );
 }
 
 Config::~Config()
@@ -1694,14 +1713,14 @@ void Config::construct( const Config& rParent )
 void Config::construct( const sal_Char* pcEnvVar, const FilterBase& rFilter )
 {
     if( rFilter.getFileUrl().getLength() > 0 )
-        construct( pcEnvVar, rFilter.getGlobalFactory(), rFilter.getStorage(), rFilter.getFileUrl() );
+        construct( pcEnvVar, rFilter.getGlobalFactory(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
 }
 
-void Config::construct( const sal_Char* pcEnvVar, const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName )
+void Config::construct( const sal_Char* pcEnvVar, const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
 {
     if( pcEnvVar && rxRootStrg.get() && (rSysFileName.getLength() > 0) )
         if( const sal_Char* pcFileName = ::getenv( pcEnvVar ) )
-            mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxFactory, rxRootStrg, rSysFileName ) );
+            mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxFactory, rxRootStrg, rSysFileName, rMediaDesc ) );
 }
 
 void Config::setStringOption( const String& rKey, const String& rData )
@@ -1744,6 +1763,16 @@ void Config::eraseNameList( const String& rListName )
 NameListRef Config::getNameList( const String& rListName ) const
 {
     return implGetNameList( rListName );
+}
+
+OUString Config::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier )
+{
+    return mxCfgData->requestPassword( rVerifier );
+}
+
+bool Config::isPasswordCancelled() const
+{
+    return mxCfgData->isPasswordCancelled();
 }
 
 bool Config::implIsValid() const
@@ -3112,7 +3141,7 @@ void RecordObjectBase::implDump()
         sal_Int64 nRecPos = in().tell();
 
         // record body
-        if( cfg().hasName( xRecNames, mnRecId ) )
+        if( !mbBinaryOnly && cfg().hasName( xRecNames, mnRecId ) )
         {
             ItemFormatMap::const_iterator aIt = aSimpleRecs.find( mnRecId );
             if( aIt != aSimpleRecs.end() )
@@ -3143,6 +3172,7 @@ void RecordObjectBase::constructRecObjBase( const BinaryInputStreamRef& rxBaseSt
     maRecNames = rRecNames;
     maSimpleRecs = rSimpleRecs;
     mnRecPos = mnRecId = mnRecSize = 0;
+    mbBinaryOnly = false;
     if( InputObjectBase::implIsValid() )
         mbShowRecPos = cfg().getBoolOption( "show-record-position", true );
 }
@@ -3226,6 +3256,11 @@ DumperBase::~DumperBase()
 bool DumperBase::isImportEnabled() const
 {
     return !isValid() || cfg().isImportEnabled();
+}
+
+bool DumperBase::isImportCancelled() const
+{
+    return isValid() && cfg().isPasswordCancelled();
 }
 
 void DumperBase::construct( const ConfigRef& rxConfig )

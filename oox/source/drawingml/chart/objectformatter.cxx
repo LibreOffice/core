@@ -892,7 +892,7 @@ void LineFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Sh
         aLineProps.assignUsed( *mxAutoLine );
     if( rxShapeProp.is() )
         aLineProps.assignUsed( rxShapeProp->getLineProperties() );
-    aLineProps.pushToPropSet( rPropSet, mrLinePropIds, mrData.mrFilter, mrData.maModelObjHelper, getPhColor( nSeriesIdx ) );
+    aLineProps.pushToPropSet( rPropSet, mrData.mrFilter, mrData.maModelObjHelper, mrLinePropIds, getPhColor( nSeriesIdx ) );
 }
 
 // ============================================================================
@@ -920,7 +920,7 @@ void FillFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Sh
         aFillProps.assignUsed( rxShapeProp->getFillProperties() );
     if( pPicOptions )
         lclConvertPictureOptions( aFillProps, *pPicOptions );
-    aFillProps.pushToPropSet( rPropSet, mrFillPropIds, mrData.mrFilter, mrData.maModelObjHelper, 0, getPhColor( nSeriesIdx ) );
+    aFillProps.pushToPropSet( rPropSet, mrData.mrFilter, mrData.maModelObjHelper, mrFillPropIds, 0, getPhColor( nSeriesIdx ) );
 }
 
 // ============================================================================
