@@ -78,13 +78,15 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
 {
     if ( m_aCustomPropertyName.getLength() )
     {
-        uno::Reference< beans::XPropertyContainer > xUserProps = m_xDocProp->getUserDefinedProperties();
+        const uno::Reference< beans::XPropertyContainer > xUserProps =
+            m_xDocProp->getUserDefinedProperties();
         if ( !xUserProps.is() )
             throw uno::RuntimeException();
 
         try
         {
-            xUserProps->addProperty( m_aCustomPropertyName, beans::PropertyAttribute::TRANSIENT, aAny );
+            xUserProps->addProperty( m_aCustomPropertyName,
+                    beans::PropertyAttribute::REMOVEABLE, aAny );
         }
         catch( beans::PropertyExistException& )
         {
