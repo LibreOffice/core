@@ -33,6 +33,7 @@
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/fillproperties.hxx"
+#include "oox/vml/vmldrawing.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "tokens.hxx"
@@ -52,10 +53,10 @@ using namespace ::com::sun::star::animations;
 
 namespace oox { namespace ppt {
 
-SlidePersist::SlidePersist( sal_Bool bMaster, sal_Bool bNotes,
+SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool bNotes,
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxPage,
         oox::drawingml::ShapePtr pShapesPtr, const drawingml::TextListStylePtr & pDefaultTextStyle )
-: mpDrawingPtr( new oox::vml::Drawing )
+: mpDrawingPtr( new oox::vml::Drawing( rFilter, rxPage, oox::vml::VMLDRAWING_POWERPOINT ) )
 , mxPage( rxPage )
 , maShapesPtr( pShapesPtr )
 , mnLayoutValueToken( 0 )
@@ -181,7 +182,7 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
             PropertySet aPropSet( xPropertySet );
             mpBackgroundPropertiesPtr->pushToPropSet(
                 aPropSet, ::oox::drawingml::FillProperties::DEFAULT_IDS,
-                rFilterBase, rFilterBase.getModelObjectContainer(), 0, -1 );
+                rFilterBase, rFilterBase.getModelObjectHelper(), 0, -1 );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
         catch( Exception )

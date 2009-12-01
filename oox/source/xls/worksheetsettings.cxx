@@ -153,7 +153,7 @@ void WorksheetSettings::importOutlinePr( const AttributeList& rAttribs )
 
 void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
 {
-    maSheetProt.mnPasswordHash     = lclGetCheckedHash( rAttribs.getHex( XML_password, 0 ) );
+    maSheetProt.mnPasswordHash     = lclGetCheckedHash( rAttribs.getIntegerHex( XML_password, 0 ) );
     maSheetProt.mbSheet            = rAttribs.getBool( XML_sheet, false );
     maSheetProt.mbObjects          = rAttribs.getBool( XML_objects, false );
     maSheetProt.mbScenarios        = rAttribs.getBool( XML_scenarios, false );
@@ -174,7 +174,7 @@ void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
 
 void WorksheetSettings::importChartProtection( const AttributeList& rAttribs )
 {
-    maSheetProt.mnPasswordHash = lclGetCheckedHash( rAttribs.getHex( XML_password, 0 ) );
+    maSheetProt.mnPasswordHash = lclGetCheckedHash( rAttribs.getIntegerHex( XML_password, 0 ) );
     maSheetProt.mbSheet        = rAttribs.getBool( XML_content, false );
     maSheetProt.mbObjects      = rAttribs.getBool( XML_objects, false );
 }

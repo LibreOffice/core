@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: stylematrixreferencecontext.hxx,v $
- *
- * $Revision: 1.3 $
+ * $RCSfile:$
+ * $Revision:$
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,24 +28,26 @@
  *
  ************************************************************************/
 
-#ifndef OOX_DRAWINGML_STYLEMATRIXREFERENCECONTEXT_HXX
-#define OOX_DRAWINGML_STYLEMATRIXREFERENCECONTEXT_HXX
 
+
+#ifndef OOX_PPT_HEADERFOOTERCONTEXT
+#define OOX_PPT_HEADERFOOTERCONTEXT
+
+#include "oox/ppt/headerfooter.hxx"
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/color.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox { namespace ppt {
 
-class StyleMatrixReferenceContext : public oox::core::ContextHandler
-{
-public:
-    StyleMatrixReferenceContext( ::oox::core::ContextHandler& rParent, Color& rColor );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    /** CT_HeaderFooter */
+    class HeaderFooterContext : public ::oox::core::ContextHandler
+    {
+    public:
+        HeaderFooterContext( ::oox::core::ContextHandler& rParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, HeaderFooter& rHeaderFooter );
 
-private:
-    Color& mrColor;
-};
+        ~HeaderFooterContext( );
+    };
 
 } }
 
-#endif  //  OOX_DRAWINGML_STYLEMATRIXREFERENCECONTEXT_HXX
+#endif

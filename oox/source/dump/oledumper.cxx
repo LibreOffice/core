@@ -1201,6 +1201,8 @@ void OcxControlObject::implDump()
             OcxSpinButtonObject( *this ).dump();
         else if( maProgId.equalsAscii( "Forms.TabStrip.1" ) )
             OcxTabStripObject( *this ).dump();
+        else if( maProgId.equalsAscii( "StdPic" ) )
+            StdPicObject( *this ).dump();
     }
     dumpRemainingTo( nEndPos );
 }
@@ -1211,6 +1213,18 @@ OcxGuidControlObject::OcxGuidControlObject( const InputObjectBase& rParent, sal_
     mnLength( nLength )
 {
     InputObjectBase::construct( rParent );
+}
+
+OcxGuidControlObject::OcxGuidControlObject( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
+{
+    mnLength = rxStrm.get() ? rxStrm->getLength() : -1;
+    InputObjectBase::construct( rParent, rxStrm );
+}
+
+OcxGuidControlObject::OcxGuidControlObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
+{
+    mnLength = rxStrm.get() ? rxStrm->getLength() : -1;
+    InputObjectBase::construct( rParent, rxStrm, rSysFileName );
 }
 
 void OcxGuidControlObject::implDump()

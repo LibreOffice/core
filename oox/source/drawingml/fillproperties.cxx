@@ -30,22 +30,21 @@
 
 #include "oox/drawingml/fillproperties.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
-#include "oox/core/modelobjectcontainer.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
 #include "properties.hxx"
 #include "tokens.hxx"
+#include "oox/helper/graphichelper.hxx"
+#include "oox/helper/modelobjecthelper.hxx"
+#include "oox/helper/propertymap.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
@@ -56,7 +55,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::oox::core::ModelObjectContainer;
 using ::oox::core::XmlFilterBase;
 
 namespace oox {
@@ -72,33 +70,12 @@ static const sal_Int32 spnDefaultFillIds[ FillId_END ] =
     PROP_FillColor,
     PROP_FillTransparence,
     PROP_FillGradient,
-    PROP_FillBitmap,
+    PROP_FillBitmapURL,
     PROP_FillBitmapMode,
-    PROP_FillBitmapTile,
-    PROP_FillBitmapStretch,
-    PROP_FillBitmapLogicalSize,
     PROP_FillBitmapSizeX,
     PROP_FillBitmapSizeY,
-    PROP_FillBitmapOffsetX,
-    PROP_FillBitmapOffsetY,
-    PROP_FillBitmapRectanglePoint
-};
-
-static const sal_Int32 spnDefaultPicIds[ FillId_END ] =
-{
-    PROP_FillStyle,
-    PROP_FillColor,
-    PROP_FillTransparence,
-    PROP_FillGradient,
-    PROP_Graphic,
-    PROP_FillBitmapMode,
-    PROP_FillBitmapTile,
-    PROP_FillBitmapStretch,
-    PROP_FillBitmapLogicalSize,
-    PROP_FillBitmapSizeX,
-    PROP_FillBitmapSizeY,
-    PROP_FillBitmapOffsetX,
-    PROP_FillBitmapOffsetY,
+    PROP_FillBitmapPositionOffsetX,
+    PROP_FillBitmapPositionOffsetY,
     PROP_FillBitmapRectanglePoint
 };
 
@@ -129,27 +106,6 @@ RectanglePoint lclGetRectanglePoint( sal_Int32 nToken )
     return RectanglePoint_LEFT_TOP;
 }
 
-const awt::DeviceInfo& lclGetDeviceInfo( const XmlFilterBase& rFilter )
-{
-    static awt::DeviceInfo aDeviceInfo;
-    if( aDeviceInfo.Width <= 0 )
-    {
-        try
-        {
-            Reference< frame::XFramesSupplier > xDesktop( rFilter.getGlobalFactory()->createInstance(
-                    CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
-            Reference< frame::XFrame > xFrame( xDesktop->getActiveFrame() );
-            Reference< awt::XWindow > xWindow( xFrame->getContainerWindow() );
-            Reference< awt::XDevice > xDevice( xWindow, UNO_QUERY_THROW );
-            aDeviceInfo = xDevice->getInfo();
-        }
-        catch( Exception& )
-        {
-        }
-    }
-    return aDeviceInfo;
-}
-
 const awt::Size lclGetOriginalSize( const XmlFilterBase& rFilter, const Reference< XGraphic >& rxGraphic )
 {
     awt::Size aSize100thMM( 0, 0 );
@@ -163,12 +119,9 @@ const awt::Size lclGetOriginalSize( const XmlFilterBase& rFilter, const Referenc
                 awt::Size aSourceSizePixel( 0, 0 );
                 if( xGraphicPropertySet->getPropertyValue( CREATE_OUSTRING( "SizePixel" ) ) >>= aSourceSizePixel )
                 {
-                    const awt::DeviceInfo& rDeviceInfo = lclGetDeviceInfo( rFilter );
-                    if( rDeviceInfo.PixelPerMeterX && rDeviceInfo.PixelPerMeterY )
-                    {
-                        aSize100thMM.Width = static_cast< sal_Int32 >( ( aSourceSizePixel.Width * 100000.0 ) / rDeviceInfo.PixelPerMeterX );
-                        aSize100thMM.Height = static_cast< sal_Int32 >( ( aSourceSizePixel.Height * 100000.0 ) / rDeviceInfo.PixelPerMeterY );
-                    }
+                    aSize100thMM = awt::Size(
+                        rFilter.convertScreenPixelX( aSourceSizePixel.Width ),
+                        rFilter.convertScreenPixelY( aSourceSizePixel.Height ) );
                 }
             }
         }
@@ -179,71 +132,75 @@ const awt::Size lclGetOriginalSize( const XmlFilterBase& rFilter, const Referenc
     return aSize100thMM;
 }
 
-Reference< XGraphic > lclTransformGraphic( const Reference< XGraphic >& rxGraphic,
-        const Color& rFromColor, const Color& rToColor, const XmlFilterBase& rFilter, sal_Int32 nPhClr )
-{
-    if( rxGraphic.is() && rFromColor.isUsed() && rToColor.isUsed() ) try
-    {
-        sal_Int32 nFromColor = rFromColor.getColor( rFilter, nPhClr );
-        sal_Int32 nToColor = rToColor.getColor( rFilter, nPhClr );
-        if ( (nFromColor != nToColor) || rToColor.hasTransparence() )
-        {
-            sal_Int16 nToTransparence = rToColor.getTransparence();
-            sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) / 39.062 );   // ?!? correct ?!?
-            Reference< XGraphicTransformer > xTransformer( rxGraphic, UNO_QUERY_THROW );
-            return xTransformer->colorChange( rxGraphic, nFromColor, 9, nToColor, nToAlpha );
-        }
-    }
-    catch( Exception& )
-    {
-    }
-    return rxGraphic;
-}
-
 } // namespace
 
 // ============================================================================
 
-FillPropertyIds::FillPropertyIds( const sal_Int32* pnPropertyIds, bool bNamedFillGradient, bool bNamedFillBitmap, bool bTransformGraphic ) :
+FillPropertyIds::FillPropertyIds( const sal_Int32* pnPropertyIds, bool bNamedFillGradient, bool bNamedFillBitmap ) :
     mpnPropertyIds( pnPropertyIds ),
     mbNamedFillGradient( bNamedFillGradient ),
-    mbNamedFillBitmap( bNamedFillBitmap ),
-    mbTransformGraphic( bTransformGraphic )
+    mbNamedFillBitmap( bNamedFillBitmap )
 {
     OSL_ENSURE( mpnPropertyIds != 0, "FillPropertyIds::FillPropertyIds - missing property identifiers" );
 }
 
 // ============================================================================
 
-FillPropertyIds FillProperties::DEFAULT_IDS( spnDefaultFillIds, false, false, false );
-FillPropertyIds FillProperties::DEFAULT_PICIDS( spnDefaultPicIds, false, false, true );
+void GradientFillProperties::assignUsed( const GradientFillProperties& rSourceProps )
+{
+    if( !rSourceProps.maGradientStops.empty() )
+        maGradientStops = rSourceProps.maGradientStops;
+    moFillToRect.assignIfUsed( rSourceProps.moFillToRect );
+    moTileRect.assignIfUsed( rSourceProps.moTileRect );
+    moGradientPath.assignIfUsed( rSourceProps.moGradientPath );
+    moShadeAngle.assignIfUsed( rSourceProps.moShadeAngle );
+    moShadeFlip.assignIfUsed( rSourceProps.moShadeFlip );
+    moShadeScaled.assignIfUsed( rSourceProps.moShadeScaled );
+    moRotateWithShape.assignIfUsed( rSourceProps.moRotateWithShape );
+}
+
+// ============================================================================
+
+void PatternFillProperties::assignUsed( const PatternFillProperties& rSourceProps )
+{
+    maPattFgColor.assignIfUsed( rSourceProps.maPattFgColor );
+    maPattBgColor.assignIfUsed( rSourceProps.maPattBgColor );
+    moPattPreset.assignIfUsed( rSourceProps.moPattPreset );
+}
+
+// ============================================================================
+
+void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
+{
+    if( rSourceProps.mxGraphic.is() )
+        mxGraphic = rSourceProps.mxGraphic;
+    moBitmapMode.assignIfUsed( rSourceProps.moBitmapMode );
+    moFillRect.assignIfUsed( rSourceProps.moFillRect );
+    moTileOffsetX.assignIfUsed( rSourceProps.moTileOffsetX );
+    moTileOffsetY.assignIfUsed( rSourceProps.moTileOffsetY );
+    moTileScaleX.assignIfUsed( rSourceProps.moTileScaleX );
+    moTileScaleY.assignIfUsed( rSourceProps.moTileScaleY );
+    moTileAlign.assignIfUsed( rSourceProps.moTileAlign );
+    moTileFlip.assignIfUsed( rSourceProps.moTileFlip );
+    moRotateWithShape.assignIfUsed( rSourceProps.moRotateWithShape );
+    moColorEffect.assignIfUsed( rSourceProps.moColorEffect );
+    moBrightness.assignIfUsed( rSourceProps.moBrightness );
+    moContrast.assignIfUsed( rSourceProps.moContrast );
+    maColorChangeFrom.assignIfUsed( rSourceProps.maColorChangeFrom );
+    maColorChangeTo.assignIfUsed( rSourceProps.maColorChangeTo );
+}
+
+// ============================================================================
+
+FillPropertyIds FillProperties::DEFAULT_IDS( spnDefaultFillIds, false, false );
 
 void FillProperties::assignUsed( const FillProperties& rSourceProps )
 {
     moFillType.assignIfUsed( rSourceProps.moFillType );
-    moRotateWithShape.assignIfUsed( rSourceProps.moRotateWithShape );
-
     maFillColor.assignIfUsed( rSourceProps.maFillColor );
-
-    if( !rSourceProps.maGradientStops.empty() )
-        maGradientStops = rSourceProps.maGradientStops;
-    moGradientPath.assignIfUsed( rSourceProps.moGradientPath );
-    moShadeAngle.assignIfUsed( rSourceProps.moShadeAngle );
-    moShadeScaled.assignIfUsed( rSourceProps.moShadeScaled );
-    moFlipModeToken.assignIfUsed( rSourceProps.moFlipModeToken );
-    moFillToRect.assignIfUsed( rSourceProps.moFillToRect );
-    moTileRect.assignIfUsed( rSourceProps.moTileRect );
-
-    if( rSourceProps.mxGraphic.is() )
-        mxGraphic = rSourceProps.mxGraphic;
-    maColorChangeFrom.assignIfUsed( rSourceProps.maColorChangeFrom );
-    maColorChangeTo.assignIfUsed( rSourceProps.maColorChangeTo );
-    moBitmapMode.assignIfUsed( rSourceProps.moBitmapMode );
-    moTileX.assignIfUsed( rSourceProps.moTileX );
-    moTileY.assignIfUsed( rSourceProps.moTileY );
-    moTileSX.assignIfUsed( rSourceProps.moTileSX );
-    moTileSY.assignIfUsed( rSourceProps.moTileSY );
-    moTileAlign.assignIfUsed( rSourceProps.moTileAlign );
+    maGradientProps.assignUsed( rSourceProps.maGradientProps );
+    maPatternProps.assignUsed( rSourceProps.maPatternProps );
+    maBlipProps.assignUsed( rSourceProps.maBlipProps );
 }
 
 Color FillProperties::getBestSolidColor() const
@@ -255,26 +212,22 @@ Color FillProperties::getBestSolidColor() const
             aSolidColor = maFillColor;
         break;
         case XML_gradFill:
-            if( !maGradientStops.empty() )
-                aSolidColor = maGradientStops.begin()->second;
+            if( !maGradientProps.maGradientStops.empty() )
+                aSolidColor = maGradientProps.maGradientStops.begin()->second;
         break;
         case XML_pattFill:
-            aSolidColor = maPattBgColor.isUsed() ? maPattBgColor : maPattFgColor;
+            aSolidColor = maPatternProps.maPattBgColor.isUsed() ? maPatternProps.maPattBgColor : maPatternProps.maPattFgColor;
         break;
     }
     return aSolidColor;
 }
 
 void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds& rPropIds,
-        const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer,
+        const XmlFilterBase& rFilter, ModelObjectHelper& rModelObjHelper,
         sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const
 {
     if( moFillType.has() )
     {
-        // "rotate with shape" not set, or set to false -> do not rotate
-        if ( !moRotateWithShape.get( false ) )
-            nShapeRotation = 0;
-
         FillStyle eFillStyle = FillStyle_NONE;
         switch( moFillType.get() )
         {
@@ -301,30 +254,34 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
                     aGradient.StartIntensity = 100;
                     aGradient.EndIntensity = 100;
 
-                    if( maGradientStops.size() > 1 )
+                    if( maGradientProps.maGradientStops.size() > 1 )
                     {
-                        aGradient.StartColor = maGradientStops.begin()->second.getColor( rFilter, nPhClr );
-                        aGradient.EndColor = maGradientStops.rbegin()->second.getColor( rFilter, nPhClr );
+                        aGradient.StartColor = maGradientProps.maGradientStops.begin()->second.getColor( rFilter, nPhClr );
+                        aGradient.EndColor = maGradientProps.maGradientStops.rbegin()->second.getColor( rFilter, nPhClr );
                     }
 
-                    if( moGradientPath.has() )
+                    // "rotate with shape" not set, or set to false -> do not rotate
+                    if ( !maGradientProps.moRotateWithShape.get( false ) )
+                        nShapeRotation = 0;
+
+                    if( maGradientProps.moGradientPath.has() )
                     {
-                        aGradient.Style = (moGradientPath.get() == XML_circle) ? awt::GradientStyle_ELLIPTICAL : awt::GradientStyle_RECT;
+                        aGradient.Style = (maGradientProps.moGradientPath.get() == XML_circle) ? awt::GradientStyle_ELLIPTICAL : awt::GradientStyle_RECT;
                         aGradient.Angle = static_cast< sal_Int16 >( (900 - (nShapeRotation / 6000)) % 3600 );
-                        aGradient.XOffset = moFillToRect.has() ? getLimitedValue< sal_Int16, sal_Int32 >( moFillToRect.get().X1 / 1000, 30, 70 ) : 50;
-                        aGradient.YOffset = moFillToRect.has() ? getLimitedValue< sal_Int16, sal_Int32 >( moFillToRect.get().Y1 / 1000, 30, 70 ) : 50;
+                        aGradient.XOffset = maGradientProps.moFillToRect.has() ? getLimitedValue< sal_Int16, sal_Int32 >( maGradientProps.moFillToRect.get().X1 / 1000, 30, 70 ) : 50;
+                        aGradient.YOffset = maGradientProps.moFillToRect.has() ? getLimitedValue< sal_Int16, sal_Int32 >( maGradientProps.moFillToRect.get().Y1 / 1000, 30, 70 ) : 50;
                         ::std::swap( aGradient.StartColor, aGradient.EndColor );
                     }
                     else
                     {
                         aGradient.Style = awt::GradientStyle_LINEAR;
-                        aGradient.Angle = static_cast< sal_Int16 >( (4500 - ((moShadeAngle.get( 0 ) - nShapeRotation) / 6000)) % 3600 );
+                        aGradient.Angle = static_cast< sal_Int16 >( (4500 - ((maGradientProps.moShadeAngle.get( 0 ) - nShapeRotation) / 6000)) % 3600 );
                     }
 
                     // push gradient or named gradient to property map
                     if( rPropIds.mbNamedFillGradient )
                     {
-                        OUString aGradientName = rObjContainer.insertFillGradient( aGradient );
+                        OUString aGradientName = rModelObjHelper.insertFillGradient( aGradient );
                         if( aGradientName.getLength() > 0 )
                         {
                             rPropMap.setProperty( rPropIds[ FillGradientId ], aGradientName );
@@ -341,30 +298,26 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
 
             case XML_blipFill:
                 // do not start complex graphic transformation if property is not supported...
-                if( mxGraphic.is() && rPropIds.has( FillBitmapId ) )
+                if( maBlipProps.mxGraphic.is() && rPropIds.has( FillBitmapUrlId ) )
                 {
                     // TODO: "rotate with shape" is not possible with our current core
 
-                    // created transformed graphic
-                    Reference< XGraphic > xGraphic = rPropIds.mbTransformGraphic ?
-                        lclTransformGraphic( mxGraphic, maColorChangeFrom, maColorChangeTo, rFilter, nPhClr ) :
-                        mxGraphic;
-
-                    if( xGraphic.is() )
+                    OUString aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject( maBlipProps.mxGraphic );
+                    if( aGraphicUrl.getLength() > 0 )
                     {
                         // push bitmap or named bitmap to property map
                         if( rPropIds.mbNamedFillBitmap )
                         {
-                            OUString aBitmapName = rObjContainer.insertFillBitmap( Reference< awt::XBitmap >( xGraphic, UNO_QUERY ) );
+                            OUString aBitmapName = rModelObjHelper.insertFillBitmap( aGraphicUrl );
                             if( aBitmapName.getLength() > 0 )
                             {
-                                rPropMap.setProperty( rPropIds[ FillBitmapId ], aBitmapName );
+                                rPropMap.setProperty( rPropIds[ FillBitmapUrlId ], aBitmapName );
                                 eFillStyle = FillStyle_BITMAP;
                             }
                         }
                         else
                         {
-                            rPropMap.setProperty( rPropIds[ FillBitmapId ], xGraphic );
+                            rPropMap.setProperty( rPropIds[ FillBitmapUrlId ], aGraphicUrl );
                             eFillStyle = FillStyle_BITMAP;
                         }
                     }
@@ -373,35 +326,33 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
                     if( eFillStyle == FillStyle_BITMAP )
                     {
                         // bitmap mode (single, repeat, stretch)
-                        BitmapMode eBitmapMode = lclGetBitmapMode( moBitmapMode.get( XML_TOKEN_INVALID ) );
+                        BitmapMode eBitmapMode = lclGetBitmapMode( maBlipProps.moBitmapMode.get( XML_TOKEN_INVALID ) );
                         rPropMap.setProperty( rPropIds[ FillBitmapModeId ], eBitmapMode );
-
-                        // anchor position inside bitmap
-                        RectanglePoint eRectPoint = lclGetRectanglePoint( moTileAlign.get( XML_tl ) );
-                        rPropMap.setProperty( rPropIds[ FillBitmapRectanglePointId ], eRectPoint );
 
                         // additional settings for repeated bitmap
                         if( eBitmapMode == BitmapMode_REPEAT )
                         {
-                            rPropMap.setProperty( rPropIds[ FillBitmapTileId ], true );
-                            rPropMap.setProperty( rPropIds[ FillBitmapStretchId ], true );
-                            rPropMap.setProperty( rPropIds[ FillBitmapLogicalSizeId ], true );
+                            // anchor position inside bitmap
+                            RectanglePoint eRectPoint = lclGetRectanglePoint( maBlipProps.moTileAlign.get( XML_tl ) );
+                            rPropMap.setProperty( rPropIds[ FillBitmapRectanglePointId ], eRectPoint );
 
-                            // size of one bitmap tile
-                            awt::Size aOriginalSize = lclGetOriginalSize( rFilter, mxGraphic );
+                            awt::Size aOriginalSize = lclGetOriginalSize( rFilter, maBlipProps.mxGraphic );
                             if( (aOriginalSize.Width > 0) && (aOriginalSize.Height > 0) )
                             {
-                                sal_Int32 nFillBmpSizeX = static_cast< sal_Int32 >( (aOriginalSize.Width / 100000.0) * moTileSX.get( 100000 ) );
+                                // size of one bitmap tile (given as 1/1000 percent of bitmap size), convert to 1/100 mm
+                                double fScaleX = maBlipProps.moTileScaleX.get( 100000 ) / 100000.0;
+                                sal_Int32 nFillBmpSizeX = getLimitedValue< sal_Int32, double >( aOriginalSize.Width * fScaleX, 1, SAL_MAX_INT32 );
                                 rPropMap.setProperty( rPropIds[ FillBitmapSizeXId ], nFillBmpSizeX );
-                                sal_Int32 nFillBmpSizeY = static_cast< sal_Int32 >( (aOriginalSize.Height / 100000.0) * moTileSY.get( 100000 ) );
+                                double fScaleY = maBlipProps.moTileScaleY.get( 100000 ) / 100000.0;
+                                sal_Int32 nFillBmpSizeY = getLimitedValue< sal_Int32, double >( aOriginalSize.Height * fScaleY, 1, SAL_MAX_INT32 );
                                 rPropMap.setProperty( rPropIds[ FillBitmapSizeYId ], nFillBmpSizeY );
-                            }
 
-                            // offset of the first bitmap tile
-//                            if( moTileX.has() )
-//                                rPropMap.setProperty( rPropIds[ FillBitmapOffsetXId ], static_cast< sal_Int16 >( moTileX.get() / 360 ) );
-//                            if( moTileY.has() )
-//                                rPropMap.setProperty( rPropIds[ FillBitmapOffsetYId ], static_cast< sal_Int16 >( moTileY.get() / 360 ) );
+                                // offset of the first bitmap tile (given as EMUs), convert to percent
+                                sal_Int16 nTileOffsetX = getDoubleIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetX.get( 0 ) / 3.6 / aOriginalSize.Width, 0, 100 );
+                                rPropMap.setProperty( rPropIds[ FillBitmapOffsetXId ], nTileOffsetX );
+                                sal_Int16 nTileOffsetY = getDoubleIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetY.get( 0 ) / 3.6 / aOriginalSize.Height, 0, 100 );
+                                rPropMap.setProperty( rPropIds[ FillBitmapOffsetYId ], nTileOffsetY );
+                            }
                         }
                     }
                 }
@@ -433,11 +384,70 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
 }
 
 void FillProperties::pushToPropSet( PropertySet& rPropSet, const FillPropertyIds& rPropIds,
-        const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer,
+        const XmlFilterBase& rFilter, ModelObjectHelper& rModelObjHelper,
         sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const
 {
     PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rPropIds, rFilter, rObjContainer, nShapeRotation, nPhClr );
+    pushToPropMap( aPropMap, rPropIds, rFilter, rModelObjHelper, nShapeRotation, nPhClr );
+    rPropSet.setProperties( aPropMap );
+}
+
+// ============================================================================
+
+void GraphicProperties::assignUsed( const GraphicProperties& rSourceProps )
+{
+    maBlipProps.assignUsed( rSourceProps.maBlipProps );
+}
+
+void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter, sal_Int32 nPhClr ) const
+{
+    if( maBlipProps.mxGraphic.is() )
+    {
+        // created transformed graphic
+        Reference< XGraphic > xGraphic = maBlipProps.mxGraphic;
+        if( maBlipProps.maColorChangeFrom.isUsed() && maBlipProps.maColorChangeTo.isUsed() )
+        {
+            sal_Int32 nFromColor = maBlipProps.maColorChangeFrom.getColor( rFilter, nPhClr );
+            sal_Int32 nToColor = maBlipProps.maColorChangeTo.getColor( rFilter, nPhClr );
+            if ( (nFromColor != nToColor) || maBlipProps.maColorChangeTo.hasTransparence() ) try
+            {
+                sal_Int16 nToTransparence = maBlipProps.maColorChangeTo.getTransparence();
+                sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) / 39.062 );   // ?!? correct ?!?
+                Reference< XGraphicTransformer > xTransformer( maBlipProps.mxGraphic, UNO_QUERY_THROW );
+                xGraphic = xTransformer->colorChange( maBlipProps.mxGraphic, nFromColor, 9, nToColor, nToAlpha );
+            }
+            catch( Exception& )
+            {
+            }
+        }
+
+        OUString aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject( xGraphic );
+        if( aGraphicUrl.getLength() > 0 )
+            rPropMap[ PROP_GraphicURL ] <<= aGraphicUrl;
+    }
+
+    // color effect
+    ColorMode eColorMode = ColorMode_STANDARD;
+    switch( maBlipProps.moColorEffect.get( XML_TOKEN_INVALID ) )
+    {
+        case XML_biLevel:   eColorMode = ColorMode_MONO;    break;
+        case XML_grayscl:   eColorMode = ColorMode_GREYS;   break;
+    }
+    rPropMap[ PROP_GraphicColorMode ] <<= eColorMode;
+
+    // brightness and contrast
+    sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / 1000, -100, 100 );
+    if( nBrightness != 0 )
+        rPropMap[ PROP_AdjustLuminance ] <<= nBrightness;
+    sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / 1000, -100, 100 );
+    if( nContrast != 0 )
+        rPropMap[ PROP_AdjustContrast ] <<= nContrast;
+}
+
+void GraphicProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter, sal_Int32 nPhClr ) const
+{
+    PropertyMap aPropMap;
+    pushToPropMap( aPropMap, rFilter, nPhClr );
     rPropSet.setProperties( aPropMap );
 }
 

@@ -51,70 +51,7 @@ const sal_Int32 MAX_DEGREE      = 360 * PER_DEGREE;
 const double DEC_GAMMA          = 2.3;
 const double INC_GAMMA          = 1.0 / DEC_GAMMA;
 
-inline void lclRgbToRgbComponents( sal_Int32& ornR, sal_Int32& ornG, sal_Int32& ornB, sal_Int32 nRGB )
-{
-    ornR = (nRGB >> 16) & 0xFF;
-    ornG = (nRGB >> 8) & 0xFF;
-    ornB = nRGB & 0xFF;
-}
-
-inline sal_Int32 lclRgbComponentsToRgb( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB )
-{
-    return static_cast< sal_Int32 >( (nR << 16) | (nG << 8) | nB );
-}
-
-inline sal_Int32 lclRgbCompToCrgbComp( sal_Int32 nRgbComp )
-{
-    return static_cast< sal_Int32 >( nRgbComp * MAX_PERCENT / 255 );
-}
-
-inline sal_Int32 lclCrgbCompToRgbComp( sal_Int32 nCrgbComp )
-{
-    return static_cast< sal_Int32 >( nCrgbComp * 255 / MAX_PERCENT );
-}
-
-inline sal_Int32 lclGamma( sal_Int32 nComp, double fGamma )
-{
-    return static_cast< sal_Int32 >( pow( static_cast< double >( nComp ) / MAX_PERCENT, fGamma ) * MAX_PERCENT + 0.5 );
-}
-
-void lclSetValue( sal_Int32& ornValue, sal_Int32 nNew, sal_Int32 nMax = MAX_PERCENT )
-{
-    OSL_ENSURE( (0 <= nNew) && (nNew <= nMax), "lclSetValue - invalid value" );
-    if( (0 <= nNew) && (nNew <= nMax) )
-        ornValue = nNew;
-}
-
-void lclModValue( sal_Int32& ornValue, sal_Int32 nMod, sal_Int32 nMax = MAX_PERCENT )
-{
-    OSL_ENSURE( (0 <= nMod), "lclModValue - invalid modificator" );
-    ornValue = getLimitedValue< sal_Int32, double >( static_cast< double >( ornValue ) * nMod / MAX_PERCENT, 0, nMax );
-}
-
-void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERCENT )
-{
-    OSL_ENSURE( (-nMax <= nOff) && (nOff <= nMax), "lclOffValue - invalid offset" );
-    ornValue = getLimitedValue< sal_Int32, sal_Int32 >( ornValue + nOff, 0, nMax );
-}
-
-} // namespace
-
-// ----------------------------------------------------------------------------
-
-Color::Color() :
-    meMode( COLOR_UNUSED ),
-    mnC1( 0 ),
-    mnC2( 0 ),
-    mnC3( 0 ),
-    mnAlpha( MAX_PERCENT )
-{
-}
-
-Color::~Color()
-{
-}
-
-sal_Int32 Color::getPresetColor( sal_Int32 nToken )
+sal_Int32 lclGetPresetColor( sal_Int32 nToken )
 {
     switch( nToken )
     {
@@ -259,21 +196,71 @@ sal_Int32 Color::getPresetColor( sal_Int32 nToken )
         case XML_yellow:            return 0xFFFF00;
         case XML_yellowGreen:       return 0x9ACD32;
     }
-    OSL_ENSURE( false, "Color::getPresetColor - invalid preset color token" );
-    return 0;
+    OSL_ENSURE( false, "lclGetPresetColor - invalid preset color token" );
+    return API_RGB_BLACK;
 }
 
-sal_Int32 Color::getSystemColor( sal_Int32 nToken, sal_Int32 nDefault )
+inline void lclRgbToRgbComponents( sal_Int32& ornR, sal_Int32& ornG, sal_Int32& ornB, sal_Int32 nRgb )
 {
-    //! TODO: get colors from system
-    switch( nToken )
-    {
-        case XML_window:        if( nDefault < 0 ) nDefault = 0xFFFFFF; break;
-        case XML_windowText:    if( nDefault < 0 ) nDefault = 0x000000; break;
-        //! TODO: more colors to follow... (chapter 5.1.12.58)
-        default:                if( nDefault < 0 ) nDefault = 0x000000;
-    }
-    return nDefault;
+    ornR = (nRgb >> 16) & 0xFF;
+    ornG = (nRgb >> 8) & 0xFF;
+    ornB = nRgb & 0xFF;
+}
+
+inline sal_Int32 lclRgbComponentsToRgb( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB )
+{
+    return static_cast< sal_Int32 >( (nR << 16) | (nG << 8) | nB );
+}
+
+inline sal_Int32 lclRgbCompToCrgbComp( sal_Int32 nRgbComp )
+{
+    return static_cast< sal_Int32 >( nRgbComp * MAX_PERCENT / 255 );
+}
+
+inline sal_Int32 lclCrgbCompToRgbComp( sal_Int32 nCrgbComp )
+{
+    return static_cast< sal_Int32 >( nCrgbComp * 255 / MAX_PERCENT );
+}
+
+inline sal_Int32 lclGamma( sal_Int32 nComp, double fGamma )
+{
+    return static_cast< sal_Int32 >( pow( static_cast< double >( nComp ) / MAX_PERCENT, fGamma ) * MAX_PERCENT + 0.5 );
+}
+
+void lclSetValue( sal_Int32& ornValue, sal_Int32 nNew, sal_Int32 nMax = MAX_PERCENT )
+{
+    OSL_ENSURE( (0 <= nNew) && (nNew <= nMax), "lclSetValue - invalid value" );
+    if( (0 <= nNew) && (nNew <= nMax) )
+        ornValue = nNew;
+}
+
+void lclModValue( sal_Int32& ornValue, sal_Int32 nMod, sal_Int32 nMax = MAX_PERCENT )
+{
+    OSL_ENSURE( (0 <= nMod), "lclModValue - invalid modificator" );
+    ornValue = getLimitedValue< sal_Int32, double >( static_cast< double >( ornValue ) * nMod / MAX_PERCENT, 0, nMax );
+}
+
+void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERCENT )
+{
+    OSL_ENSURE( (-nMax <= nOff) && (nOff <= nMax), "lclOffValue - invalid offset" );
+    ornValue = getLimitedValue< sal_Int32, sal_Int32 >( ornValue + nOff, 0, nMax );
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+Color::Color() :
+    meMode( COLOR_UNUSED ),
+    mnC1( 0 ),
+    mnC2( 0 ),
+    mnC3( 0 ),
+    mnAlpha( MAX_PERCENT )
+{
+}
+
+Color::~Color()
+{
 }
 
 void Color::setUnused()
@@ -281,11 +268,11 @@ void Color::setUnused()
     meMode = COLOR_UNUSED;
 }
 
-void Color::setSrgbClr( sal_Int32 nRGB )
+void Color::setSrgbClr( sal_Int32 nRgb )
 {
-    OSL_ENSURE( (0 <= nRGB) && (nRGB <= 0xFFFFFF), "Color::setSrgbClr - invalid RGB value" );
+    OSL_ENSURE( (0 <= nRgb) && (nRgb <= 0xFFFFFF), "Color::setSrgbClr - invalid RGB value" );
     meMode = COLOR_RGB;
-    lclRgbToRgbComponents( mnC1, mnC2, mnC3, nRGB );
+    lclRgbToRgbComponents( mnC1, mnC2, mnC3, nRgb );
 }
 
 void Color::setScrgbClr( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB )
@@ -312,19 +299,22 @@ void Color::setHslClr( sal_Int32 nHue, sal_Int32 nSat, sal_Int32 nLum )
 
 void Color::setPrstClr( sal_Int32 nToken )
 {
-    setSrgbClr( getPresetColor( nToken ) );
+    setSrgbClr( lclGetPresetColor( nToken ) );
 }
 
 void Color::setSchemeClr( sal_Int32 nToken )
 {
-    meMode = COLOR_SCHEME;
+    OSL_ENSURE( nToken != XML_TOKEN_INVALID, "Color::setSchemeClr - invalid color token" );
+    meMode = (nToken == XML_phClr) ? COLOR_PH : COLOR_SCHEME;
     mnC1 = nToken;
 }
 
-void Color::setSysClr( sal_Int32 nToken, sal_Int32 nLastRGB )
+void Color::setSysClr( sal_Int32 nToken, sal_Int32 nLastRgb )
 {
-    OSL_ENSURE( (-1 <= nLastRGB) && (nLastRGB <= 0xFFFFFF), "Color::setSysClr - invalid RGB value" );
-    setSrgbClr( getSystemColor( nToken, nLastRGB ) );
+    OSL_ENSURE( (-1 <= nLastRgb) && (nLastRgb <= 0xFFFFFF), "Color::setSysClr - invalid RGB value" );
+    meMode = COLOR_SYSTEM;
+    mnC1 = nToken;
+    mnC2 = nLastRgb;
 }
 
 void Color::addTransformation( sal_Int32 nElement, sal_Int32 nValue )
@@ -364,6 +354,14 @@ void Color::clearTransparence()
 
 sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 nPhClr ) const
 {
+    /*  Special handling for theme style list placeholder colors (state
+        COLOR_PH), Color::getColor() may be called with different placeholder
+        colors in the nPhClr parameter. Therefore, the resolved color will not
+        be stored in this object, thus the state COLOR_FINAL will not be
+        reached and the transformation container will not be cleared, but the
+        original COLOR_PH state will be restored instead. */
+    bool bIsPh = false;
+
     switch( meMode )
     {
         case COLOR_UNUSED:  return -1;
@@ -375,7 +373,16 @@ sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 
 
         case COLOR_SCHEME:
             meMode = COLOR_RGB;
-            lclRgbToRgbComponents( mnC1, mnC2, mnC3, (mnC1 == XML_phClr) ? nPhClr : rFilter.getSchemeClr( mnC1 ) );
+            lclRgbToRgbComponents( mnC1, mnC2, mnC3, rFilter.getSchemeClr( mnC1 ) );
+        break;
+        case COLOR_PH:
+            meMode = COLOR_RGB;
+            lclRgbToRgbComponents( mnC1, mnC2, mnC3, nPhClr );
+            bIsPh = true;
+        break;
+        case COLOR_SYSTEM:
+            meMode = COLOR_RGB;
+            lclRgbToRgbComponents( mnC1, mnC2, mnC3, rFilter.getSystemColor( mnC1, mnC2 ) );
         break;
     }
 
@@ -443,7 +450,7 @@ sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 
                     mnC3 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC3) * fFactor );
                 }
             break;
-            case NMSP_XLS | XML_tint:
+            case XLS_TOKEN( tint ):
                 // Excel tint: move luminance relative to current value
                 toHsl();
                 OSL_ENSURE( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
@@ -496,10 +503,11 @@ sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 
             break;
         }
     }
-    maTransforms.clear();
 
     toRgb();
-    meMode = COLOR_FINAL;
+    meMode = bIsPh ? COLOR_PH : COLOR_FINAL;
+    if( meMode == COLOR_FINAL )
+        maTransforms.clear();
     return mnC1 = lclRgbComponentsToRgb( mnC1, mnC2, mnC3 );
 }
 

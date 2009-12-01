@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: drawing.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile:$
+ * $Revision:$
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,36 +28,27 @@
  *
  ************************************************************************/
 
-#ifndef OOX_VML_DRAWING_HXX
-#define OOX_VML_DRAWING_HXX
+#ifndef OOX_PPT_HEADERFOOTER
+#define OOX_PPT_HEADERFOOTER
 
-#include <boost/shared_ptr.hpp>
-#include "oox/vml/shape.hxx"
-#include <vector>
+#include <sal/types.h>
 
-namespace oox { namespace vml {
+namespace oox { namespace ppt {
 
-class Drawing
-{
-public:
+    struct HeaderFooter
+    {
+        sal_Bool mbSlideNumber;
+        sal_Bool mbHeader;
+        sal_Bool mbFooter;
+        sal_Bool mbDateTime;
 
-    Drawing();
-    ~Drawing();
-
-    std::vector< ShapePtr >&    getShapeTypes() { return maShapeTypes; };
-    std::vector< ShapePtr >&    getShapes() { return maShapes; };
-
-    ShapePtr createShapeById( const rtl::OUString sId ) const;
-    rtl::OUString getGraphicUrlById( const rtl::OUString sId ) const;
-
-private:
-
-    std::vector< ShapePtr > maShapeTypes;
-    std::vector< ShapePtr > maShapes;
-};
-
-typedef boost::shared_ptr< Drawing > DrawingPtr;
+        HeaderFooter()
+        : mbSlideNumber( sal_True )
+        , mbHeader( sal_True )
+        , mbFooter( sal_True )
+        , mbDateTime( sal_True ) {};
+    };
 
 } }
 
-#endif  //  OOX_VML_DRAWING_HXX
+#endif

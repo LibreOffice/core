@@ -58,9 +58,9 @@ sal_Int32 ShapeFilterBase::getSchemeClr(sal_Int32 /*nColorSchemeToken*/ ) const
     return 0;
 }
 
-const vml::DrawingPtr ShapeFilterBase::getDrawings()
+::oox::vml::Drawing* ShapeFilterBase::getVmlDrawing()
 {
-    return vml::DrawingPtr();
+    return 0;
 }
 
 const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles()

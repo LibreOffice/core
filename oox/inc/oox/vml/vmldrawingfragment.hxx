@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: stylematrixreferencecontext.cxx,v $
- *
- * $Revision: 1.3 $
+ * $RCSfile: vmldrawingfragment.hxx,v $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,27 +28,42 @@
  *
  ************************************************************************/
 
-#include "oox/drawingml/stylematrixreferencecontext.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
+#ifndef OOX_VML_VMLDRAWINGFRAGMENT_HXX
+#define OOX_VML_VMLDRAWINGFRAGMENT_HXX
 
-using ::rtl::OUString;
-using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
+#include "oox/core/fragmenthandler2.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace vml {
 
-StyleMatrixReferenceContext::StyleMatrixReferenceContext( ContextHandler& rParent, Color& rColor )
-: ContextHandler( rParent )
-, mrColor( rColor )
+class Drawing;
+
+// ============================================================================
+
+class DrawingFragment : public ::oox::core::FragmentHandler2
 {
-}
+public:
+    explicit            DrawingFragment(
+                            ::oox::core::XmlFilterBase& rFilter,
+                            const ::rtl::OUString& rFragmentPath,
+                            Drawing& rDrawing );
 
-Reference< XFastContextHandler > StyleMatrixReferenceContext::createFastChildContext( sal_Int32 /* aElementToken */, const Reference< XFastAttributeList >& /* rxAttributes */ ) throw (SAXException, RuntimeException)
-{
-    return new colorChoiceContext( *this, mrColor );
-}
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                        openFragmentStream() const;
 
-} }
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+    virtual void        finalizeImport();
+
+private:
+    Drawing&            mrDrawing;
+};
+
+// ============================================================================
+
+} // namespace vml
+} // namespace oox
+
+#endif
+

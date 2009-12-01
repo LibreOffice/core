@@ -216,7 +216,7 @@ TabPage  RID_PDF_TAB_GENER
         Size = MAP_APPFONT ( 158 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
-        Text[ en-US ] = "E~xport automatically inserted blank pages";
+        Text[ en-US ] = "Exp~ort automatically inserted blank pages";
     };
     CheckBox CB_ADDSTREAM
     {

@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include "headerfootercontext.hxx"
 #include "oox/ppt/layoutfragmenthandler.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 #include "oox/core/namespaces.hxx"
@@ -71,6 +72,9 @@ Reference< XFastContextHandler > LayoutFragmentHandler::createFastChildContext( 
     {
         case NMSP_PPT|XML_sldLayout:        // CT_SlideLayout
             mpSlidePersistPtr->setLayoutValueToken( xAttribs->getOptionalValueToken( XML_type, 0 ) );   // CT_SlideLayoutType
+        break;
+        case NMSP_PPT|XML_hf:               // CT_HeaderFooter
+            xRet.set( new HeaderFooterContext( *this, xAttribs, mpSlidePersistPtr->getHeaderFooter() ) );
         break;
         default:
             xRet.set( SlideFragmentHandler::createFastChildContext( aElementToken, xAttribs ) );

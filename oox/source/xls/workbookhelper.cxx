@@ -51,6 +51,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/xls/addressconverter.hxx"
+#include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffcodec.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
@@ -59,6 +60,7 @@
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/pivotcachebuffer.hxx"
 #include "oox/xls/pivottablebuffer.hxx"
+#include "oox/xls/scenariobuffer.hxx"
 #include "oox/xls/sharedstringsbuffer.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/tablebuffer.hxx"
@@ -319,6 +321,8 @@ public:
     inline DefinedNamesBuffer& getDefinedNames() const { return *mxDefNames; }
     /** Returns the tables collection (equivalent to Calc's database ranges). */
     inline TableBuffer& getTables() const { return *mxTables; }
+    /** Returns the scenarios collection. */
+    inline ScenarioBuffer& getScenarios() const { return *mxScenarios; }
     /** Returns the web queries. */
     inline WebQueryBuffer& getWebQueries() const { return *mxWebQueries; }
     /** Returns the collection of pivot caches. */
@@ -382,6 +386,7 @@ private:
     typedef ::std::auto_ptr< ExternalLinkBuffer >       ExtLinkBfrPtr;
     typedef ::std::auto_ptr< DefinedNamesBuffer >       DefNamesBfrPtr;
     typedef ::std::auto_ptr< TableBuffer >              TableBfrPtr;
+    typedef ::std::auto_ptr< ScenarioBuffer >           ScenarioBfrPtr;
     typedef ::std::auto_ptr< WebQueryBuffer >           WebQueryBfrPtr;
     typedef ::std::auto_ptr< PivotCacheBuffer >         PivotCacheBfrPtr;
     typedef ::std::auto_ptr< PivotTableBuffer >         PivotTableBfrPtr;
@@ -413,6 +418,7 @@ private:
     ExtLinkBfrPtr       mxExtLinks;             /// All external links.
     DefNamesBfrPtr      mxDefNames;             /// All defined names.
     TableBfrPtr         mxTables;               /// All tables (database ranges).
+    ScenarioBfrPtr      mxScenarios;            /// All scenarios.
     WebQueryBfrPtr      mxWebQueries;           /// Web queries buffer.
     PivotCacheBfrPtr    mxPivotCaches;          /// All pivot caches in the document.
     PivotTableBfrPtr    mxPivotTables;          /// All pivot tables in the document.
@@ -561,8 +567,7 @@ Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool
     try
     {
         Reference< XNameContainer > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
-        Reference< XMultiServiceFactory > xFactory( mxDoc, UNO_QUERY_THROW );
-        xStyle.set( xFactory->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
+        xStyle.set( mrBaseFilter.getModelFactory()->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
         orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ), bRenameOldExisting );
     }
     catch( Exception& )
@@ -655,6 +660,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
     mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
     mxDefNames.reset( new DefinedNamesBuffer( *this ) );
     mxTables.reset( new TableBuffer( *this ) );
+    mxScenarios.reset( new ScenarioBuffer( *this ) );
     mxWebQueries.reset( new WebQueryBuffer( *this ) );
     mxPivotCaches.reset( new PivotCacheBuffer( *this ) );
     mxPivotTables.reset( new PivotTableBuffer( *this ) );
@@ -752,6 +758,11 @@ FilterBase& WorkbookHelper::getBaseFilter() const
     return mrBookData.getBaseFilter();
 }
 
+Reference< XMultiServiceFactory > WorkbookHelper::getGlobalFactory() const
+{
+    return mrBookData.getBaseFilter().getGlobalFactory();
+}
+
 FilterType WorkbookHelper::getFilterType() const
 {
     return mrBookData.getFilterType();
@@ -787,8 +798,13 @@ void WorkbookHelper::finalizeWorkbookImport()
         data pilots expect existing source data on creation. */
     mrBookData.getPivotTables().finalizeImport();
 
+    /*  Insert scenarios after all sheet processing is done, because new hidden
+        sheets are created for scenarios which would confuse code that relies
+        on certain sheet indexes. Must be done after pivot tables too. */
+    mrBookData.getScenarios().finalizeImport();
+
     /*  Set 'Default' page style to automatic page numbering (default is manual
-        number 1). Otherwise hidden tables (e.g. for scenarios) which have
+        number 1). Otherwise hidden sheets (e.g. for scenarios) which have
         'Default' page style will break automatic page numbering for following
         sheets. Automatic numbering is set by passing the value 0. */
     PropertySet aDefPageStyle( getStyleObject( CREATE_OUSTRING( "Default" ), true ) );
@@ -800,6 +816,11 @@ void WorkbookHelper::finalizeWorkbookImport()
 Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
 {
     return mrBookData.getDocument();
+}
+
+Reference< XMultiServiceFactory > WorkbookHelper::getDocumentFactory() const
+{
+    return mrBookData.getBaseFilter().getModelFactory();
 }
 
 Reference< XDevice > WorkbookHelper::getReferenceDevice() const
@@ -834,6 +855,20 @@ Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int32 nSheet ) co
     {
         Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
         xSheet.set( xSheetsIA->getByIndex( nSheet ), UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+    }
+    return xSheet;
+}
+
+Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( const OUString& rSheet ) const
+{
+    Reference< XSpreadsheet > xSheet;
+    try
+    {
+        Reference< XNameAccess > xSheetsNA( getDocument()->getSheets(), UNO_QUERY_THROW );
+        xSheet.set( xSheetsNA->getByName( rSheet ), UNO_QUERY );
     }
     catch( Exception& )
     {
@@ -934,6 +969,11 @@ DefinedNamesBuffer& WorkbookHelper::getDefinedNames() const
 TableBuffer& WorkbookHelper::getTables() const
 {
     return mrBookData.getTables();
+}
+
+ScenarioBuffer& WorkbookHelper::getScenarios() const
+{
+    return mrBookData.getScenarios();
 }
 
 WebQueryBuffer& WorkbookHelper::getWebQueries() const

@@ -133,7 +133,9 @@ typedef ::boost::shared_ptr< BinaryXOutputStream > BinaryXOutputStreamRef;
 
 /** Wraps a StreamDataSequence and provides convenient access functions.
 
-    The binary data in the stream is written in little-endian format.
+    The binary data in the stream is written in little-endian format. After
+    construction, the stream points to the beginning of the passed data
+    sequence. The data sequence is expanded automatically while writing to it.
  */
 class SequenceOutputStream : public SequenceSeekableStream, public BinaryOutputStream
 {

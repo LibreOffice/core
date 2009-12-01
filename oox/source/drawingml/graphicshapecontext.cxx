@@ -28,28 +28,28 @@
  *
  ************************************************************************/
 
+#include "oox/drawingml/graphicshapecontext.hxx"
 #include <osl/diagnose.h>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/diagram/diagramfragmenthandler.hxx"
 #include "oox/drawingml/table/tablecontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/vml/vmldrawing.hxx"
+#include "oox/vml/vmlshape.hxx"
+#include "oox/vml/vmlshapecontainer.hxx"
+#include "oox/ole/oleobjecthelper.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/transform2dcontext.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartspacefragment.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "properties.hxx"
 #include "tokens.hxx"
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -57,14 +57,16 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::oox::core;
+using ::oox::vml::OleObjectInfo;
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-
-// ====================================================================
+// ============================================================================
 // CT_Picture
+
 GraphicShapeContext::GraphicShapeContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
 : ShapeContext( rParent, pMasterShapePtr, pShapePtr )
 {
@@ -81,7 +83,7 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
         xRet.set( new Transform2DContext( *this, xAttribs, *mpShapePtr ) );
         break;
     case XML_blipFill:
-        xRet.set( new BlipFillPropertiesContext( *this, xAttribs, *mpShapePtr->getGraphicProperties() ) );
+        xRet.set( new BlipFillContext( *this, xAttribs, mpShapePtr->getGraphicProperties().maBlipProps ) );
         break;
     }
 
@@ -104,11 +106,12 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
     return xRet;
 }
 
-// ====================================================================
+// ============================================================================
 // CT_GraphicalObjectFrameContext
-GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart )
-: ShapeContext( rParent, pMasterShapePtr, pShapePtr )
-, mbEmbedShapesInChart( bEmbedShapesInChart )
+
+GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart ) :
+    ShapeContext( rParent, pMasterShapePtr, pShapePtr ),
+    mbEmbedShapesInChart( bEmbedShapesInChart )
 {
 }
 
@@ -132,7 +135,7 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
         {
             OUString sUri( xAttribs->getOptionalValue( XML_uri ) );
             if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/presentationml/2006/ole" ) )
-                xRet.set( new PresentationOle2006Context( *this, mpShapePtr ) );
+                xRet.set( new OleObjectGraphicDataContext( *this, mpShapePtr ) );
             else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ) )
                 xRet.set( new DiagramGraphicDataContext( *this, mpShapePtr ) );
             else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/chart" ) )
@@ -153,111 +156,115 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
     return xRet;
 }
 
-// ====================================================================
+// ============================================================================
 
-PresentationOle2006Context::PresentationOle2006Context( ContextHandler& rParent, ShapePtr pShapePtr )
-: ShapeContext( rParent, ShapePtr(), pShapePtr )
+class CreateOleObjectCallback : public CreateShapeCallback
+{
+public:
+    explicit            CreateOleObjectCallback( XmlFilterBase& rFilter, const ::boost::shared_ptr< OleObjectInfo >& rxOleObjectInfo );
+    virtual OUString    onCreateXShape( const OUString& rServiceName, const awt::Rectangle& rShapeRect );
+
+private:
+    ::boost::shared_ptr< OleObjectInfo > mxOleObjectInfo;
+};
+
+// ----------------------------------------------------------------------------
+
+CreateOleObjectCallback::CreateOleObjectCallback( XmlFilterBase& rFilter, const ::boost::shared_ptr< OleObjectInfo >& rxOleObjectInfo ) :
+    CreateShapeCallback( rFilter ),
+    mxOleObjectInfo( rxOleObjectInfo )
 {
 }
 
-PresentationOle2006Context::~PresentationOle2006Context()
+OUString CreateOleObjectCallback::onCreateXShape( const OUString&, const awt::Rectangle& rShapeRect )
 {
-    static sal_Int32 nObjectCount = 100;
+    awt::Size aOleSize( rShapeRect.Width, rShapeRect.Height );
+    bool bSuccess = mrFilter.getOleObjectHelper().importOleObject( maShapeProps, *mxOleObjectInfo, aOleSize );
+    OUString aServiceName = bSuccess ? CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" ) : CREATE_OUSTRING( "com.sun.star.drawing.GraphicObjectShape" );
 
-    XmlFilterBase& rFilter = getFilter();
-    const OUString aFragmentPath = getFragmentPathFromRelId( msId );
-    if( aFragmentPath.getLength() > 0 ) try
+    // get the path to the representation graphic
+    OUString aGraphicPath;
+    if( mxOleObjectInfo->maShapeId.getLength() > 0 )
+        if( ::oox::vml::Drawing* pVmlDrawing = mrFilter.getVmlDrawing() )
+            if( const ::oox::vml::ShapeBase* pVmlShape = pVmlDrawing->getShapes().getShapeById( mxOleObjectInfo->maShapeId, true ) )
+                aGraphicPath = pVmlShape->getGraphicPath();
+
+    // import and store the graphic
+    if( aGraphicPath.getLength() > 0 )
     {
-        Reference< ::com::sun::star::io::XInputStream > xInputStream( rFilter.openInputStream( aFragmentPath ), UNO_QUERY_THROW );
-
-        Sequence< sal_Int8 > aData;
-        xInputStream->readBytes( aData, 0x7fffffff );
-        uno::Reference< lang::XMultiServiceFactory > xMSF( rFilter.getModel(), UNO_QUERY_THROW );
-        Reference< com::sun::star::document::XEmbeddedObjectResolver > xEmbeddedResolver( xMSF->createInstance( CREATE_OUSTRING( "com.sun.star.document.ImportEmbeddedObjectResolver" ) ), UNO_QUERY_THROW );
-
-        Reference< com::sun::star::container::XNameAccess > xNA( xEmbeddedResolver, UNO_QUERY_THROW );
-        OUString aURL = CREATE_OUSTRING( "Obj" ) + OUString::valueOf( nObjectCount++ );
-        Reference < XOutputStream > xOLEStream;
-        if( (xNA->getByName( aURL ) >>= xOLEStream) && xOLEStream.is() )
-        {
-            xOLEStream->writeBytes( aData );
-            xOLEStream->closeOutput();
-
-            static const OUString sProtocol = CREATE_OUSTRING( "vnd.sun.star.EmbeddedObject:" );
-            OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
-            aPersistName = aPersistName.copy( sProtocol.getLength() );
-
-            mpShapePtr->getShapeProperties()[ PROP_PersistName ] <<= aPersistName;
-        }
-        Reference< XComponent > xComp( xEmbeddedResolver, UNO_QUERY_THROW );
-        xComp->dispose();
-    }
-    catch( Exception& )
-    {
+        Reference< graphic::XGraphic > xGraphic = mrFilter.importEmbeddedGraphic( aGraphicPath );
+        if( xGraphic.is() )
+            maShapeProps[ PROP_Graphic ] <<= xGraphic;
     }
 
-    // taking care of the representation graphic
-    if ( msSpid.getLength() )
-    {
-        oox::vml::DrawingPtr pDrawingPtr = rFilter.getDrawings();
-        if ( pDrawingPtr )
-        {
-            OUString aGraphicURL( pDrawingPtr->getGraphicUrlById( msSpid ) );
-            if ( aGraphicURL.getLength() )
-            {
-                try
-                {
-                    Reference< io::XInputStream > xInputStream( rFilter.openInputStream( aGraphicURL ), UNO_QUERY_THROW );
-                    Reference< graphic::XGraphicProvider > xGraphicProvider( rFilter.getGlobalFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY_THROW );
-                    Sequence< PropertyValue > aArgs( 1 );
-                    const OUString sInputStream = CREATE_OUSTRING( "InputStream" );
-                    aArgs[ 0 ].Name = sInputStream;
-                    aArgs[ 0 ].Value <<= xInputStream;
-                    Reference< graphic::XGraphic > xGraphic = xGraphicProvider->queryGraphic( aArgs );
-                    if ( xGraphic.is() )
-                    {
-                        mpShapePtr->getShapeProperties()[ PROP_GraphicURL ] <<= OUString();
-                        mpShapePtr->getShapeProperties()[ PROP_Graphic ] <<= xGraphic;
-                    }
-                }
-                catch( Exception& )
-                {
-                }
-            }
-        }
-    }
+    return aServiceName;
 }
 
-Reference< XFastContextHandler > PresentationOle2006Context::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+// ============================================================================
+
+OleObjectGraphicDataContext::OleObjectGraphicDataContext( ContextHandler& rParent, ShapePtr xShape ) :
+    ShapeContext( rParent, ShapePtr(), xShape ),
+    mxOleObjectInfo( new OleObjectInfo( true ) )
+{
+    CreateShapeCallbackRef xCallback( new CreateOleObjectCallback( getFilter(), mxOleObjectInfo ) );
+    xShape->setCreateShapeCallback( xCallback );
+}
+
+OleObjectGraphicDataContext::~OleObjectGraphicDataContext()
+{
+    /*  Register the OLE shape at the VML drawing, this prevents that the
+        related VML shape converts the OLE object by itself. */
+    if( mxOleObjectInfo->maShapeId.getLength() > 0 )
+        if( ::oox::vml::Drawing* pVmlDrawing = getFilter().getVmlDrawing() )
+            pVmlDrawing->registerOleObject( *mxOleObjectInfo );
+}
+
+Reference< XFastContextHandler > OleObjectGraphicDataContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
+    AttributeList aAttribs( xAttribs );
 
-    switch( aElementToken &(~NMSP_MASK) )
+    switch( nElement )
     {
-        case XML_oleObj:
+        case PPT_TOKEN( oleObj ):
         {
-            msSpid = xAttribs->getOptionalValue( XML_spid );
-            msName = xAttribs->getOptionalValue( XML_name );
-            msId = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_id );
-            mnWidth = GetCoordinate( xAttribs->getOptionalValue( XML_imgW ) );
-            mnHeight = GetCoordinate( xAttribs->getOptionalValue( XML_imgH ) );
-            msProgId = xAttribs->getOptionalValue( XML_progId );
+            mxOleObjectInfo->maShapeId = aAttribs.getXString( XML_spid, OUString() );
+            const Relation* pRelation = getRelations().getRelationFromRelId( aAttribs.getString( R_TOKEN( id ), OUString() ) );
+            OSL_ENSURE( pRelation, "OleObjectGraphicDataContext::createFastChildContext - missing relation for OLE object" );
+            if( pRelation )
+            {
+                mxOleObjectInfo->mbLinked = pRelation->mbExternal;
+                if( pRelation->mbExternal )
+                {
+                    mxOleObjectInfo->maTargetLink = getFilter().getAbsoluteUrl( pRelation->maTarget );
+                }
+                else
+                {
+                    OUString aFragmentPath = getFragmentPathFromRelation( *pRelation );
+                    if( aFragmentPath.getLength() > 0 )
+                        getFilter().importBinaryData( mxOleObjectInfo->maEmbeddedData, aFragmentPath );
+                }
+            }
+            mxOleObjectInfo->maName = aAttribs.getXString( XML_name, OUString() );
+            mxOleObjectInfo->maProgId = aAttribs.getXString( XML_progId, OUString() );
+            mxOleObjectInfo->mbShowAsIcon = aAttribs.getBool( XML_showAsIcon, false );
+            xRet.set( this );
         }
         break;
 
-            case XML_embed:
-            {
-                mnFollowColorSchemeToken = xAttribs->getOptionalValueToken( XML_followColorScheme, XML_full );
-            }
-            break;
-    }
-    if( !xRet.is() )
-        xRet.set( ShapeContext::createFastChildContext( aElementToken, xAttribs ) );
+        case PPT_TOKEN( embed ):
+            OSL_ENSURE( !mxOleObjectInfo->mbLinked, "OleObjectGraphicDataContext::createFastChildContext - unexpected child element" );
+        break;
 
+        case PPT_TOKEN( link ):
+            OSL_ENSURE( mxOleObjectInfo->mbLinked, "OleObjectGraphicDataContext::createFastChildContext - unexpected child element" );
+            mxOleObjectInfo->mbAutoUpdate = aAttribs.getBool( XML_updateAutomatic, false );
+        break;
+    }
     return xRet;
 }
 
-// ====================================================================
+// ============================================================================
 
 DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler& rParent, ShapePtr pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
@@ -266,11 +273,8 @@ DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler& rParent, S
     pShapePtr->setSubType( 0 );
 }
 
-
-
 DiagramGraphicDataContext::~DiagramGraphicDataContext()
 {
-
 }
 
 DiagramPtr DiagramGraphicDataContext::loadDiagram()
@@ -344,32 +348,31 @@ Reference< XFastContextHandler > DiagramGraphicDataContext::createFastChildConte
     return xRet;
 }
 
-// ====================================================================
+// ============================================================================
 
 class CreateChartCallback : public CreateShapeCallback
 {
 public:
     explicit            CreateChartCallback( XmlFilterBase& rFilter, const OUString& rFragmentPath, bool bEmbedShapes );
-    virtual void        onCreateXShape( const Reference< drawing::XShape >& rxShape, const Reference< drawing::XShapes >& rxShapes );
+    virtual void        onXShapeCreated( const Reference< drawing::XShape >& rxShape, const Reference< drawing::XShapes >& rxShapes ) const;
 
 private:
-    XmlFilterBase&      mrFilter;
     OUString            maFragmentPath;
     bool                mbEmbedShapes;
 };
 
-// --------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 CreateChartCallback::CreateChartCallback( XmlFilterBase& rFilter, const OUString& rFragmentPath, bool bEmbedShapes ) :
-    mrFilter( rFilter ),
+    CreateShapeCallback( rFilter ),
     maFragmentPath( rFragmentPath ),
     mbEmbedShapes( bEmbedShapes )
 {
 }
 
-void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rxShape, const Reference< drawing::XShapes >& rxShapes )
+void CreateChartCallback::onXShapeCreated( const Reference< drawing::XShape >& rxShape, const Reference< drawing::XShapes >& rxShapes ) const
 {
-    OSL_ENSURE( maFragmentPath.getLength() > 0, "CreateChartCallback::onCreateXShape - missing chart fragment" );
+    OSL_ENSURE( maFragmentPath.getLength() > 0, "CreateChartCallback::onXShapeCreated - missing chart fragment" );
     if( maFragmentPath.getLength() > 0 ) try
     {
         // set the chart2 OLE class ID at the OLE shape
@@ -396,28 +399,30 @@ void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rx
     }
 }
 
-// ====================================================================
+// ============================================================================
 
-ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler& rParent, ShapePtr pShapePtr, bool bEmbedShapes ) :
-    ShapeContext( rParent, ShapePtr(), pShapePtr ),
+ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler& rParent, const ShapePtr& rxShape, bool bEmbedShapes ) :
+    ShapeContext( rParent, ShapePtr(), rxShape ),
     mbEmbedShapes( bEmbedShapes )
 {
-    pShapePtr->setServiceName( "com.sun.star.drawing.OLE2Shape" );
+    rxShape->setServiceName( "com.sun.star.drawing.OLE2Shape" );
 }
 
 Reference< XFastContextHandler > ChartGraphicDataContext::createFastChildContext( ::sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
     throw (SAXException, RuntimeException)
 {
-    if( nElement == (NMSP_CHART | XML_chart) )
+    if( nElement == C_TOKEN( chart ) )
     {
         AttributeList aAttribs( rxAttribs );
-        OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( NMSP_RELATIONSHIPS | XML_id, OUString() ) );
+        OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( id ), OUString() ) );
         CreateShapeCallbackRef xCallback( new CreateChartCallback( getFilter(), aFragmentPath, mbEmbedShapes ) );
         mpShapePtr->setCreateShapeCallback( xCallback );
     }
     return 0;
 }
 
-// ====================================================================
+// ============================================================================
 
-} }
+} // namespace drawingml
+} // namespace oox
+

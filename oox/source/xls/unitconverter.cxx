@@ -36,6 +36,7 @@
 #include <com/sun/star/awt/XFont.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include "oox/core/filterbase.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 
 using ::rtl::OUString;
@@ -110,14 +111,17 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     mnNullDate( lclGetDays( Date( 30, 12, 1899 ) ) )
 {
     // initialize constant and default coefficients
-    maCoeffs[ UNIT_INCH ]   = MM100_PER_INCH;
-    maCoeffs[ UNIT_POINT ]  = MM100_PER_POINT;
-    maCoeffs[ UNIT_TWIP ]   = MM100_PER_TWIP;
-    maCoeffs[ UNIT_EMU ]    = MM100_PER_EMU;
-    maCoeffs[ UNIT_PIXELX ] = 12.5;                 // default: 1 px = 0.125 mm
-    maCoeffs[ UNIT_PIXELY ] = 12.5;                 // default: 1 px = 0.125 mm
-    maCoeffs[ UNIT_DIGIT ]  = 200.0;                // default: 1 digit = 2 mm
-    maCoeffs[ UNIT_SPACE ]  = 100.0;                // default  1 space = 1 mm
+    const DeviceInfo& rDeviceInfo = getBaseFilter().getDeviceInfo();
+    maCoeffs[ UNIT_INCH ]    = MM100_PER_INCH;
+    maCoeffs[ UNIT_POINT ]   = MM100_PER_POINT;
+    maCoeffs[ UNIT_TWIP ]    = MM100_PER_TWIP;
+    maCoeffs[ UNIT_EMU ]     = MM100_PER_EMU;
+    maCoeffs[ UNIT_SCREENX ] = (rDeviceInfo.PixelPerMeterX > 0) ? (100000.0 / rDeviceInfo.PixelPerMeterX) : 50.0;
+    maCoeffs[ UNIT_SCREENY ] = (rDeviceInfo.PixelPerMeterY > 0) ? (100000.0 / rDeviceInfo.PixelPerMeterY) : 50.0;
+    maCoeffs[ UNIT_REFDEVX ] = 12.5;                 // default: 1 px = 0.125 mm
+    maCoeffs[ UNIT_REFDEVY ] = 12.5;                 // default: 1 px = 0.125 mm
+    maCoeffs[ UNIT_DIGIT ]   = 200.0;                // default: 1 digit = 2 mm
+    maCoeffs[ UNIT_SPACE ]   = 100.0;                // default  1 space = 1 mm
 
     // error code maps
     addErrorCode( BIFF_ERR_NULL,  CREATE_OUSTRING( "#NULL!" ) );
@@ -134,28 +138,28 @@ void UnitConverter::finalizeImport()
     Reference< XDevice > xDevice = getReferenceDevice();
     if( xDevice.is() )
     {
-        // get pixel metric first, needed to get character widths below
+        // get reference device metric first, needed to get character widths below
         DeviceInfo aInfo = xDevice->getInfo();
-        maCoeffs[ UNIT_PIXELX ] = 100000.0 / aInfo.PixelPerMeterX;
-        maCoeffs[ UNIT_PIXELY ] = 100000.0 / aInfo.PixelPerMeterY;
+        maCoeffs[ UNIT_REFDEVX ] = 100000.0 / aInfo.PixelPerMeterX;
+        maCoeffs[ UNIT_REFDEVY ] = 100000.0 / aInfo.PixelPerMeterY;
 
         // get character widths from default font
         if( const Font* pDefFont = getStyles().getDefaultFont().get() )
         {
             // XDevice expects pixels in font descriptor, but font contains twips
             FontDescriptor aDesc = pDefFont->getFontDescriptor();
-            aDesc.Height = static_cast< sal_Int16 >( scaleValue( aDesc.Height, UNIT_TWIP, UNIT_PIXELX ) + 0.5 );
+            aDesc.Height = static_cast< sal_Int16 >( scaleValue( aDesc.Height, UNIT_TWIP, UNIT_REFDEVX ) + 0.5 );
             Reference< XFont > xFont = xDevice->getFont( aDesc );
             if( xFont.is() )
             {
                 // get maximum width of all digits
                 sal_Int32 nDigitWidth = 0;
                 for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
-                    nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), UNIT_PIXELX ) );
+                    nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), UNIT_REFDEVX ) );
                 if( nDigitWidth > 0 )
                     maCoeffs[ UNIT_DIGIT ] = nDigitWidth;
                 // get width of space character
-                sal_Int32 nSpaceWidth = scaleToMm100( xFont->getCharWidth( ' ' ), UNIT_PIXELX );
+                sal_Int32 nSpaceWidth = scaleToMm100( xFont->getCharWidth( ' ' ), UNIT_REFDEVX );
                 if( nSpaceWidth > 0 )
                     maCoeffs[ UNIT_SPACE ] = nSpaceWidth;
             }
@@ -173,7 +177,7 @@ void UnitConverter::finalizeNullDate( const Date& rNullDate )
 
 double UnitConverter::scaleValue( double fValue, Unit eFromUnit, Unit eToUnit ) const
 {
-    return fValue * getCoefficient( eFromUnit ) / getCoefficient( eToUnit );
+    return (eFromUnit == eToUnit) ? fValue : (fValue * getCoefficient( eFromUnit ) / getCoefficient( eToUnit ));
 }
 
 sal_Int32 UnitConverter::scaleToMm100( double fValue, Unit eUnit ) const

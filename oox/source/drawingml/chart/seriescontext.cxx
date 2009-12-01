@@ -169,6 +169,43 @@ void DataLabelsContext::onEndElement( const OUString& rChars )
 
 // ============================================================================
 
+PictureOptionsContext::PictureOptionsContext( ContextHandler2Helper& rParent, PictureOptionsModel& rModel ) :
+    ContextBase< PictureOptionsModel >( rParent, rModel )
+{
+}
+
+PictureOptionsContext::~PictureOptionsContext()
+{
+}
+
+ContextHandlerRef PictureOptionsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( isRootElement() ) switch( nElement )
+    {
+        case C_TOKEN( applyToEnd ):
+            // default is 'false', not 'true' as specified
+            mrModel.mbApplyToEnd = rAttribs.getBool( XML_val, false );
+            return 0;
+        case C_TOKEN( applyToFront ):
+            // default is 'false', not 'true' as specified
+            mrModel.mbApplyToFront = rAttribs.getBool( XML_val, false );
+            return 0;
+        case C_TOKEN( applyToSides ):
+            // default is 'false', not 'true' as specified
+            mrModel.mbApplyToSides = rAttribs.getBool( XML_val, false );
+            return 0;
+        case C_TOKEN( pictureFormat ):
+            mrModel.mnPictureFormat = rAttribs.getToken( XML_val, XML_stretch );
+            return 0;
+        case C_TOKEN( pictureStackUnit ):
+            mrModel.mfStackUnit = rAttribs.getDouble( XML_val, 1.0 );
+            return 0;
+    }
+    return 0;
+}
+
+// ============================================================================
+
 ErrorBarContext::ErrorBarContext( ContextHandler2Helper& rParent, ErrorBarModel& rModel ) :
     ContextBase< ErrorBarModel >( rParent, rModel )
 {
@@ -333,6 +370,8 @@ ContextHandlerRef DataPointContext::onCreateContext( sal_Int32 nElement, const A
                     return 0;
                 case C_TOKEN( marker ):
                     return this;
+                case C_TOKEN( pictureOptions ):
+                    return new PictureOptionsContext( *this, mrModel.mxPicOptions.create() );
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
             }
@@ -469,6 +508,8 @@ ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const A
                     // default is 'false', not 'true' as specified
                     mrModel.mbInvertNeg = rAttribs.getBool( XML_val, false );
                     return 0;
+                case C_TOKEN( pictureOptions ):
+                    return new PictureOptionsContext( *this, mrModel.mxPicOptions.create() );
                 case C_TOKEN( shape ):
                     // missing attribute does not change shape type to 'box' as specified
                     mrModel.monShape = rAttribs.getToken( XML_val );

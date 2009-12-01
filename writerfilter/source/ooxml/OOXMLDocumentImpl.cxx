@@ -137,7 +137,7 @@ OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
     OOXMLDocumentImpl * pTemp;
     writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream) );
     pTemp->setModel(mxModel);
-    pTemp->setShapes(mxShapes);
+    pTemp->setDrawPage(mxDrawPage);
     return pRet;
 }
 
@@ -359,14 +359,14 @@ uno::Reference<frame::XModel> OOXMLDocumentImpl::getModel()
     return mxModel;
 }
 
-void OOXMLDocumentImpl::setShapes(uno::Reference<drawing::XShapes> xShapes)
+void OOXMLDocumentImpl::setDrawPage(uno::Reference<drawing::XDrawPage> xDrawPage)
 {
-    mxShapes.set(xShapes);
+    mxDrawPage.set(xDrawPage);
 }
 
-uno::Reference<drawing::XShapes> OOXMLDocumentImpl::getShapes()
+uno::Reference<drawing::XDrawPage> OOXMLDocumentImpl::getDrawPage()
 {
-    return mxShapes;
+    return mxDrawPage;
 }
 
 uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStream()

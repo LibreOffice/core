@@ -3010,7 +3010,7 @@ void XmlStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 )
 
         /*  check for start element at beginning of the line - pcEnd and thus (pcPos+1)
             are dereferenceable, because OUStringBuffer::getStr is null-terminated. */
-        if( (*pcPos == '<') && (*(pcPos + 1) != '/') )
+        if( (*pcPos == '<') && (pcPos[ 1 ] != '/') )
         {
             const sal_Unicode* pcElementEnd = ::std::find( pcPos, pcEnd, '>' );
             if( pcElementEnd == pcEnd )
@@ -3021,7 +3021,7 @@ void XmlStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 )
             }
             else
             {
-                bIsComplElement = (*(pcPos + 1) == '?') || (*(pcElementEnd - 1) == '/');
+                bIsComplElement = (pcPos[ 1 ] == '?') || (pcPos[ 1 ] == '!') || (pcElementEnd[ -1 ] == '/');
                 bIsStartElement = !bIsComplElement;
                 ++pcElementEnd;
                 aOutLine.append( pcPos, static_cast< sal_Int32 >( pcElementEnd - pcPos ) );
@@ -3044,7 +3044,7 @@ void XmlStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 )
         }
 
         // check for stand-alone or following end element
-        if( !bIsComplElement && (pcPos < pcEnd) && (*(pcPos + 1) == '/') )
+        if( !bIsComplElement && (pcPos < pcEnd) && (pcPos[ 1 ] == '/') )
         {
             const sal_Unicode* pcElementEnd = ::std::find( pcPos, pcEnd, '>' );
             if( pcElementEnd == pcEnd )

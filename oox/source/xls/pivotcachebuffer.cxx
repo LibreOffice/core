@@ -185,7 +185,7 @@ PivotCacheItem::PivotCacheItem() :
 
 void PivotCacheItem::readString( const AttributeList& rAttribs )
 {
-    maValue <<= rAttribs.getString( XML_v, OUString() );
+    maValue <<= rAttribs.getXString( XML_v, OUString() );
     mnType = XML_s;
 }
 
@@ -209,7 +209,7 @@ void PivotCacheItem::readBool( const AttributeList& rAttribs )
 
 void PivotCacheItem::readError( const AttributeList& rAttribs, const UnitConverter& rUnitConverter )
 {
-    maValue <<= static_cast< sal_Int32 >( rUnitConverter.calcBiffErrorCode( rAttribs.getString( XML_v, OUString() ) ) );
+    maValue <<= static_cast< sal_Int32 >( rUnitConverter.calcBiffErrorCode( rAttribs.getXString( XML_v, OUString() ) ) );
     mnType = XML_e;
 }
 
@@ -265,7 +265,7 @@ void PivotCacheItem::readIndex( RecordInputStream& rStrm )
 
 void PivotCacheItem::readString( BiffInputStream& rStrm, const WorkbookHelper& rHelper )
 {
-    maValue <<= (rHelper.getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( true, rHelper.getTextEncoding() );
+    maValue <<= (rHelper.getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( true, rHelper.getTextEncoding() );
     mnType = XML_s;
 }
 
@@ -499,10 +499,10 @@ PivotCacheField::PivotCacheField( const WorkbookHelper& rHelper, bool bIsDatabas
 
 void PivotCacheField::importCacheField( const AttributeList& rAttribs )
 {
-    maFieldModel.maName            = rAttribs.getString( XML_name, OUString() );
-    maFieldModel.maCaption         = rAttribs.getString( XML_caption, OUString() );
-    maFieldModel.maPropertyName    = rAttribs.getString( XML_propertyName, OUString() );
-    maFieldModel.maFormula         = rAttribs.getString( XML_formula, OUString() );
+    maFieldModel.maName            = rAttribs.getXString( XML_name, OUString() );
+    maFieldModel.maCaption         = rAttribs.getXString( XML_caption, OUString() );
+    maFieldModel.maPropertyName    = rAttribs.getXString( XML_propertyName, OUString() );
+    maFieldModel.maFormula         = rAttribs.getXString( XML_formula, OUString() );
     maFieldModel.mnNumFmtId        = rAttribs.getInteger( XML_numFmtId, 0 );
     maFieldModel.mnSqlType         = rAttribs.getInteger( XML_sqlType, 0 );
     maFieldModel.mnHierarchy       = rAttribs.getInteger( XML_hierarchy, 0 );
@@ -650,7 +650,7 @@ void PivotCacheField::importPCDField( BiffInputStream& rStrm )
     maFieldGroupModel.mnBaseField    = rStrm.readuInt16();
     rStrm.skip( 2 );    // number of unique items (either shared or group)
     rStrm >> nGroupItems >> nBaseItems >> nSharedItems;
-    maFieldModel.maName = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( true, getTextEncoding() );
+    maFieldModel.maName = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( true, getTextEncoding() );
 
     maFieldModel.mbServerField          = getFlag( nFlags, BIFF_PCDFIELD_SERVERFIELD );
     maFieldModel.mbUniqueList           = !getFlag( nFlags, BIFF_PCDFIELD_NOUNIQUEITEMS );
@@ -1057,7 +1057,7 @@ PivotCache::PivotCache( const WorkbookHelper& rHelper ) :
 void PivotCache::importPivotCacheDefinition( const AttributeList& rAttribs )
 {
     maDefModel.maRelId            = rAttribs.getString( R_TOKEN( id ), OUString() );
-    maDefModel.maRefreshedBy      = rAttribs.getString( XML_refreshedBy, OUString() );
+    maDefModel.maRefreshedBy      = rAttribs.getXString( XML_refreshedBy, OUString() );
     maDefModel.mfRefreshedDate    = rAttribs.getDouble( XML_refreshedDate, 0.0 );
     maDefModel.mnRecords          = rAttribs.getInteger( XML_recordCount, 0 );
     maDefModel.mnMissItemsLimit   = rAttribs.getInteger( XML_missingItemsLimit, 0 );
@@ -1082,11 +1082,11 @@ void PivotCache::importCacheSource( const AttributeList& rAttribs )
 void PivotCache::importWorksheetSource( const AttributeList& rAttribs, const Relations& rRelations )
 {
     maSheetSrcModel.maRelId   = rAttribs.getString( R_TOKEN( id ), OUString() );
-    maSheetSrcModel.maSheet   = rAttribs.getString( XML_sheet, OUString() );
-    maSheetSrcModel.maDefName = rAttribs.getString( XML_name, OUString() );
+    maSheetSrcModel.maSheet   = rAttribs.getXString( XML_sheet, OUString() );
+    maSheetSrcModel.maDefName = rAttribs.getXString( XML_name, OUString() );
 
     // resolve URL of external document
-    maTargetUrl = rRelations.getTargetFromRelId( maSheetSrcModel.maRelId );
+    maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
     // store range address unchecked with sheet index 0, will be resolved/checked later
     getAddressConverter().convertToCellRangeUnchecked( maSheetSrcModel.maRange, rAttribs.getString( XML_ref, OUString() ), 0 );
 }
@@ -1146,7 +1146,7 @@ void PivotCache::importPCDSheetSource( RecordInputStream& rStrm, const Relations
     }
 
     // resolve URL of external document
-    maTargetUrl = rRelations.getTargetFromRelId( maSheetSrcModel.maRelId );
+    maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
 }
 
 void PivotCache::importPCDSource( BiffInputStream& rStrm )
@@ -1192,7 +1192,7 @@ void PivotCache::importPCDefinition( BiffInputStream& rStrm )
     if( nUserNameLen != BIFF_PC_NOSTRING )
         maDefModel.maRefreshedBy = (getBiff() == BIFF8) ?
             rStrm.readUniString( nUserNameLen ) :
-            rStrm.readCharArray( nUserNameLen, getTextEncoding() );
+            rStrm.readCharArrayUC( nUserNameLen, getTextEncoding() );
 
     maDefModel.mbInvalid          = getFlag( nFlags, BIFF_PCDEFINITION_INVALID );
     maDefModel.mbSaveData         = getFlag( nFlags, BIFF_PCDEFINITION_SAVEDATA );
@@ -1330,7 +1330,7 @@ void PivotCache::importDConRef( BiffInputStream& rStrm )
 
 void PivotCache::importDConName( BiffInputStream& rStrm )
 {
-    maSheetSrcModel.maDefName = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
+    maSheetSrcModel.maDefName = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( false, getTextEncoding() );
     OSL_ENSURE( maSheetSrcModel.maDefName.getLength() > 0, "PivotCache::importDConName - missing defined name" );
     importDConUrl( rStrm );
 }
@@ -1356,7 +1356,7 @@ void PivotCache::importDConUrl( BiffInputStream& rStrm )
     }
     else
     {
-        aEncodedUrl = rStrm.readByteString( false, getTextEncoding() );
+        aEncodedUrl = rStrm.readByteStringUC( false, getTextEncoding() );
     }
 
     if( aEncodedUrl.getLength() > 0 )

@@ -40,20 +40,32 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase5.hxx>
-#include "oox/helper/helper.hxx"
+#include "oox/helper/binarystreambase.hxx"
 #include "oox/helper/storagebase.hxx"
 #include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
+    namespace awt { struct DeviceInfo; }
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
     namespace task { class XInteractionHandler; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
+    namespace graphic { class XGraphic; }
 } } }
+
+namespace oox {
+    class GraphicHelper;
+    class ModelObjectHelper;
+}
+
+namespace oox { namespace ole {
+    class OleObjectHelper;
+} }
 
 namespace oox {
 namespace core {
@@ -62,16 +74,19 @@ namespace core {
 
 struct FilterBaseImpl;
 
-class OOX_DLLPUBLIC FilterBase : public ::cppu::WeakImplHelper5<
-                            ::com::sun::star::lang::XServiceInfo,
-                            ::com::sun::star::lang::XInitialization,
-                            ::com::sun::star::document::XImporter,
-                            ::com::sun::star::document::XExporter,
-                            ::com::sun::star::document::XFilter >
+typedef ::cppu::WeakImplHelper5<
+        ::com::sun::star::lang::XServiceInfo,
+        ::com::sun::star::lang::XInitialization,
+        ::com::sun::star::document::XImporter,
+        ::com::sun::star::document::XExporter,
+        ::com::sun::star::document::XFilter >
+    FilterBaseBase;
+
+class OOX_DLLPUBLIC FilterBase : public FilterBaseBase, public ::cppu::BaseMutex
 {
 public:
     explicit            FilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
 
     virtual             ~FilterBase();
 
@@ -88,23 +103,26 @@ public:
 
     // ------------------------------------------------------------------------
 
-    /** Returns the arguments passed through the XInitialisation interface. */
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
-                        getArguments() const;
+    /** Returns the specified argument passed through the XInitialization interface. */
+    ::com::sun::star::uno::Any getArgument( const ::rtl::OUString& rArgName ) const;
 
-    /** Returns the global service factory passed in the filter constructor. */
+    /** Returns the global service factory passed in the filter constructor (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getGlobalFactory() const;
 
-    /** Returns the document model. */
+    /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
                         getModel() const;
 
-    /** Returns the status indicator. */
+    /** Returns the service factory provided by the document model (always existing). */
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+                        getModelFactory() const;
+
+    /** Returns the status indicator (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >&
                         getStatusIndicator() const;
 
-    /** Returns the status interaction handler. */
+    /** Returns the status interaction handler (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >&
                         getInteractionHandler() const;
 
@@ -152,7 +170,38 @@ public:
                         openOutputStream( const ::rtl::OUString& rStreamName ) const;
 
     /** Commits changes to base storage (and substorages) */
-    void commit() { getStorage()->commit(); }
+    void                commitStorage() const;
+
+    // helpers ----------------------------------------------------------------
+
+    /** Returns a helper for the handling of graphics and graphic objects. */
+    GraphicHelper&      getGraphicHelper() const;
+
+    /** Returns a helper with containers for various named drawing objects for
+        the imported document. */
+    ModelObjectHelper&  getModelObjectHelper() const;
+
+    /** Returns a helper for the handling of OLE obejcts. */
+    ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
+
+    /** Returns information about the output device. */
+    const ::com::sun::star::awt::DeviceInfo& getDeviceInfo() const;
+    /** Converts the passed value from horizontal screen pixels to 1/100 mm. */
+    sal_Int32           convertScreenPixelX( double fPixelX ) const;
+    /** Converts the passed value from vertical screen pixels to 1/100 mm. */
+    sal_Int32           convertScreenPixelY( double fPixelY ) const;
+    /** Returns a system color specified by the passed XML token identifier. */
+    sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = -1 ) const;
+
+    /** Imports the raw binary data from the specified stream.
+        @return  True, if the data could be imported from the stream. */
+    bool                importBinaryData( StreamDataSequence& orDataSeq, const ::rtl::OUString& rStreamName );
+
+    /** Imports a graphic from the storage stream with the passed path and name. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+                        importEmbeddedGraphic( const ::rtl::OUString& rStreamName ) const;
+    /** Imports a graphic object from the storage stream with the passed path and name. */
+    ::rtl::OUString     importEmbeddedGraphicObject( const ::rtl::OUString& rStreamName ) const;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
@@ -170,6 +219,16 @@ public:
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
+    /** Receives user defined arguments.
+
+        @param rArgs
+            the sequence of arguments passed to the filter. The implementation
+            expects one or two arguments. The first argument shall be the
+            com.sun.star.lang.XMultiServiceFactory interface of the global
+            service factory. The optional second argument may contain a
+            sequence of com.sun.star.beans.NamedValue objects. The different
+            filter implemetations may support different arguments.
+     */
     virtual void SAL_CALL initialize(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
                             throw(  ::com::sun::star::uno::Exception,
@@ -204,7 +263,7 @@ private:
 
     virtual StorageRef  implCreateStorage(
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream ) const = 0;
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const = 0;
 
 private:
     ::std::auto_ptr< FilterBaseImpl > mxImpl;

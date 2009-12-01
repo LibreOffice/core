@@ -110,6 +110,7 @@ struct TypeGroupInfo
     bool                mbSupportsStacking;     /// True = data points can be stacked on each other.
     bool                mbReverseSeries;        /// True = insert unstacked series in reverse order.
     bool                mbTicksBetweenCateg;    /// True = X axis ticks between categories.
+    bool                mbPictureOptions;       /// True = bitmaps support options from c:pictureOptions.
 };
 
 // ============================================================================

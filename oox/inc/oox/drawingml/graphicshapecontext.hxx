@@ -35,6 +35,8 @@
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 
+namespace oox { namespace vml { struct OleObjectInfo; } }
+
 namespace oox { namespace drawingml {
 
 class GraphicShapeContext : public ShapeContext
@@ -61,21 +63,15 @@ private:
 
 // ====================================================================
 
-class PresentationOle2006Context : public ShapeContext
+class OleObjectGraphicDataContext : public ShapeContext
 {
 public:
-    PresentationOle2006Context( ::oox::core::ContextHandler& rParent, ShapePtr pShapePtr );
-    ~PresentationOle2006Context();
+    OleObjectGraphicDataContext( ::oox::core::ContextHandler& rParent, ShapePtr pShapePtr );
+    ~OleObjectGraphicDataContext();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    ::rtl::OUString msSpid;
-    ::rtl::OUString msName;
-    ::rtl::OUString msId;
-    sal_Int32       mnWidth;
-    sal_Int32       mnHeight;
-    ::rtl::OUString msProgId;
-    sal_Int32       mnFollowColorSchemeToken;
+    ::boost::shared_ptr< ::oox::vml::OleObjectInfo > mxOleObjectInfo;
 };
 
 // ====================================================================
@@ -104,7 +100,7 @@ class ChartGraphicDataContext : public ShapeContext
 public:
     explicit            ChartGraphicDataContext(
                             ::oox::core::ContextHandler& rParent,
-                            ShapePtr pShapePtr, bool bEmbedShapes );
+                            const ShapePtr& rxShape, bool bEmbedShapes );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext(

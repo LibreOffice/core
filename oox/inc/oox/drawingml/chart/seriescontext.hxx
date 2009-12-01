@@ -71,6 +71,21 @@ public:
 
 // ============================================================================
 
+struct PictureOptionsModel;
+
+/** Handler for fill bitmap settings (c:pictureOptions element).
+ */
+class PictureOptionsContext : public ContextBase< PictureOptionsModel >
+{
+public:
+    explicit            PictureOptionsContext( ::oox::core::ContextHandler2Helper& rParent, PictureOptionsModel& rModel );
+    virtual             ~PictureOptionsContext();
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
 struct ErrorBarModel;
 
 /** Handler for a series error bar context (c:errBars element).

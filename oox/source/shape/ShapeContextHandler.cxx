@@ -29,7 +29,9 @@
  ************************************************************************/
 
 #include "ShapeContextHandler.hxx"
-#include "oox/vml/drawingfragmenthandler.hxx"
+#include "oox/vml/vmldrawingfragment.hxx"
+#include "oox/vml/vmlshape.hxx"
+#include "oox/vml/vmlshapecontainer.hxx"
 
 namespace oox { namespace shape {
 
@@ -90,11 +92,11 @@ ShapeContextHandler::getDrawingShapeContext()
 {
     if (!mxDrawingFragmentHandler.is())
     {
-        mpDrawing.reset( new oox::vml::Drawing() );
+        mpDrawing.reset( new oox::vml::Drawing( *mxFilterBase, mxDrawPage, oox::vml::VMLDRAWING_WORD ) );
         mxDrawingFragmentHandler.set
-        (dynamic_cast<ContextHandler *>
-         (new oox::vml::DrawingFragmentHandler
-          ( *mxFilterBase, msRelationFragmentPath, mpDrawing->getShapes(), mpDrawing->getShapeTypes() )));
+          (dynamic_cast<ContextHandler *>
+           (new oox::vml::DrawingFragment
+            ( *mxFilterBase, msRelationFragmentPath, *mpDrawing )));
     }
 
     return mxDrawingFragmentHandler;
@@ -217,21 +219,19 @@ uno::Reference< drawing::XShape > SAL_CALL
 ShapeContextHandler::getShape() throw (uno::RuntimeException)
 {
     uno::Reference< drawing::XShape > xResult;
+    uno::Reference< drawing::XShapes > xShapes( mxDrawPage, uno::UNO_QUERY );
 
-    if (mxFilterBase.is() && mxShapes.is())
+    if (mxFilterBase.is() && xShapes.is())
     {
         if (mpDrawing.get() != NULL)
         {
-            std::vector< oox::vml::ShapePtr >& rShapes = mpDrawing->getShapes();
-            if ( rShapes.size() )
-            {
-                rShapes[ 0 ]->addShape( *mxFilterBase, *mpDrawing, mxShapes, NULL );
-                xResult.set(rShapes[ 0 ]->getXShape());
-            }
+            mpDrawing->finalizeFragmentImport();
+            if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().getFirstShape() )
+                xResult = pShape->convertAndInsert( xShapes );
         }
         else if (mpShape.get() != NULL)
         {
-            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), mxShapes);
+            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes);
             xResult.set(mpShape->getXShape());
         }
     }
@@ -239,17 +239,17 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
     return xResult;
 }
 
-css::uno::Reference< css::drawing::XShapes > SAL_CALL
-ShapeContextHandler::getShapes() throw (css::uno::RuntimeException)
+css::uno::Reference< css::drawing::XDrawPage > SAL_CALL
+ShapeContextHandler::getDrawPage() throw (css::uno::RuntimeException)
 {
-    return mxShapes;
+    return mxDrawPage;
 }
 
-void SAL_CALL ShapeContextHandler::setShapes
-(const css::uno::Reference< css::drawing::XShapes > & the_value)
+void SAL_CALL ShapeContextHandler::setDrawPage
+(const css::uno::Reference< css::drawing::XDrawPage > & the_value)
     throw (css::uno::RuntimeException)
 {
-    mxShapes = the_value;
+    mxDrawPage = the_value;
 }
 
 css::uno::Reference< css::frame::XModel > SAL_CALL

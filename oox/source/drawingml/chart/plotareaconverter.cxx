@@ -299,7 +299,7 @@ void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             default:                OSL_ENSURE( false, "WallFloorConverter::convertFromModel - invalid object type" );
         }
         if( aPropSet.is() )
-            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, eObjType );
+            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(), eObjType );
     }
 }
 

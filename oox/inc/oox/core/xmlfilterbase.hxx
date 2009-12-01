@@ -34,11 +34,13 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include "oox/vml/drawing.hxx"
 #include "oox/drawingml/table/tablestylelist.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/core/relations.hxx"
 #include <oox/dllapi.h>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -48,6 +50,7 @@ namespace com { namespace sun { namespace star {
 
 namespace oox { namespace drawingml { class Theme; } }
 namespace oox { namespace drawingml { namespace chart { class ChartConverter; } } }
+namespace oox { namespace vml { class Drawing; } }
 
 namespace sax_fastparser {
     class FastSerializerHelper;
@@ -59,7 +62,13 @@ namespace oox {
 namespace core {
 
 class FragmentHandler;
-class ModelObjectContainer;
+
+struct TextField {
+    com::sun::star::uno::Reference< com::sun::star::text::XText > xText;
+    com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > xTextCursor;
+    com::sun::star::uno::Reference< com::sun::star::text::XTextField > xTextField;
+};
+typedef std::vector< TextField > TextFieldStack;
 
 // ============================================================================
 
@@ -69,7 +78,7 @@ class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 {
 public:
     explicit            XmlFilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
 
     virtual             ~XmlFilterBase();
 
@@ -80,23 +89,21 @@ public:
     /** Has to be implemented by each filter to resolve scheme colors. */
     virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const = 0;
 
-    /** Has to be implemented by each filter to return drawings collection. */
-    virtual const ::oox::vml::DrawingPtr
-                        getDrawings() = 0;
+    /** Has to be implemented by each filter to return the collection of VML shapes. */
+    virtual ::oox::vml::Drawing* getVmlDrawing() = 0;
 
     /** Has to be implemented by each filter, returns a filter-specific chart
         converter object, that should be global per imported document. */
-    virtual ::oox::drawingml::chart::ChartConverter&
-                        getChartConverter() = 0;
+    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter() = 0;
 
     /** Has to be implemented by each filter to return the table style list. */
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
 
     // ------------------------------------------------------------------------
 
-    /** Returns the fragment path for the passed type, used for fragments
-        referred by the root relations. */
-    ::rtl::OUString     getFragmentPathFromType( const ::rtl::OUString& rType );
+    /** Returns the fragment path from the first relation of the passed type,
+        used for fragments referred by the root relations. */
+    ::rtl::OUString     getFragmentPathFromFirstType( const ::rtl::OUString& rType );
 
     /** Imports a fragment using the passed fragment handler, which contains
         the full path to the fragment stream.
@@ -121,7 +128,7 @@ public:
 
         @return  Added relation Id.
      */
-    ::rtl::OUString addRelation( const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, const ::rtl::OUString& rTargetMode = ::rtl::OUString() );
+    ::rtl::OUString     addRelation( const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, bool bExternal = false );
 
     /** Adds new relation to part's relations.
 
@@ -136,17 +143,10 @@ public:
 
         @return  Added relation Id.
      */
-    ::rtl::OUString addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream, const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, const ::rtl::OUString& rTargetMode = ::rtl::OUString() );
+    ::rtl::OUString     addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream, const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, bool bExternal = false );
 
-    /** Copies the picture element specified with rPicturePath from the source
-        document to the target models picture substorage.
-
-        @return  The URL of the picture in the target models storage.
-     */
-    ::rtl::OUString     copyPictureStream( const ::rtl::OUString& rPicturePath );
-
-    /** Returns object containers for various named drawing objects for the imported document. */
-    ModelObjectContainer& getModelObjectContainer() const;
+    /** Returns a stack of used textfields, used by the pptx importer to replace links to slidepages with rhe real page name */
+    TextFieldStack& getTextFieldStack() const;
 
     /** Opens and returns the specified output stream from the base storage with specified media type.
 
@@ -157,16 +157,18 @@ public:
             accessed by passing an empty string as stream name.
 
         @param rMediaType
-            The media type string, used in [Content_Types].xml stream in base storage.
+            The media type string, used in [Content_Types].xml stream in base
+            storage.
 
         @return The opened output stream.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        openOutputStream( const ::rtl::OUString& rStreamName,
-                                          const ::rtl::OUString& rMediaType );
-    using FilterBase::openOutputStream;
+                        openFragmentStream(
+                            const ::rtl::OUString& rStreamName,
+                            const ::rtl::OUString& rMediaType );
 
-    /** Opens specified output stream from the base storage with specified media type and returns new fast serializer for that stream.
+    /** Opens specified output stream from the base storage with specified
+        media type and returns new fast serializer for that stream.
 
         @param rStreamName
             The name of the embedded storage stream. The name may contain
@@ -175,13 +177,15 @@ public:
             accessed by passing an empty string as stream name.
 
         @param rMediaType
-            The media type string, used in [Content_Types].xml stream in base storage.
+            The media type string, used in [Content_Types].xml stream in base
+            storage.
 
         @return newly created serializer helper.
      */
     ::sax_fastparser::FSHelperPtr
-                        openOutputStreamWithSerializer( const ::rtl::OUString& rStreamName,
-                                                        const ::rtl::OUString& rMediaType );
+                        openFragmentStreamWithSerializer(
+                            const ::rtl::OUString& rStreamName,
+                            const ::rtl::OUString& rMediaType );
 
     /** Returns new unique ID for exported document.
 
@@ -194,10 +198,9 @@ public:
 private:
     virtual StorageRef  implCreateStorage(
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream ) const;
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const;
 
 private:
-
     ::std::auto_ptr< XmlFilterBaseImpl > mxImpl;
     sal_Int32 mnRelId;
     sal_Int32 mnMaxDocId;

@@ -28,11 +28,10 @@
  *
  ************************************************************************/
 
-#include "oox/core/skipcontext.hxx"
+#include "diagramdefinitioncontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/helper/helper.hxx"
 #include "layoutnodecontext.hxx"
-#include "diagramdefinitioncontext.hxx"
 #include "oox/drawingml/diagram/datamodelcontext.hxx"
 
 using namespace ::oox::core;
@@ -95,8 +94,7 @@ DiagramDefinitionContext::createFastChildContext( ::sal_Int32 aElement,
         break;
      case NMSP_DIAGRAM|XML_clrData:
         // TODO, does not matter for the UI. skip.
-        xRet.set( new SkipContext( *this ) );
-        break;
+        return xRet;
     case NMSP_DIAGRAM|XML_sampData:
         mpLayout->getSampData().reset( new DiagramData );
         xRet.set( new DataModelContext( *this, mpLayout->getSampData() ) );
