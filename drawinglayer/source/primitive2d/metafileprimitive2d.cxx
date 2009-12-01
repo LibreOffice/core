@@ -1630,9 +1630,9 @@ namespace
     {
         const sal_uInt32 nCount(rMetaFile.GetActionCount());
 
-        for(sal_uInt32 a(0); a < nCount; a++)
+        for(sal_uInt32 nAction(0); nAction < nCount; nAction++)
         {
-            MetaAction* pAction = rMetaFile.GetAction(a);
+            MetaAction* pAction = rMetaFile.GetAction(nAction);
 
             switch(pAction->GetType())
             {
@@ -1647,7 +1647,7 @@ namespace
                     std::vector< basegfx::B2DPoint > aPositions;
                     Color aLastColor(COL_BLACK);
 
-                    while(META_PIXEL_ACTION == pAction->GetType() && a < nCount)
+                    while(META_PIXEL_ACTION == pAction->GetType() && nAction < nCount)
                     {
                         const MetaPixelAction* pA = (const MetaPixelAction*)pAction;
 
@@ -1664,10 +1664,10 @@ namespace
 
                         const Point& rPoint = pA->GetPoint();
                         aPositions.push_back(basegfx::B2DPoint(rPoint.X(), rPoint.Y()));
-                        a++; if(a < nCount) pAction = rMetaFile.GetAction(a);
+                        nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
                     }
 
-                    a--;
+                    nAction--;
 
                     if(aPositions.size())
                     {
@@ -1683,15 +1683,15 @@ namespace
                     {
                         std::vector< basegfx::B2DPoint > aPositions;
 
-                        while(META_POINT_ACTION == pAction->GetType() && a < nCount)
+                        while(META_POINT_ACTION == pAction->GetType() && nAction < nCount)
                         {
                             const MetaPointAction* pA = (const MetaPointAction*)pAction;
                             const Point& rPoint = pA->GetPoint();
                             aPositions.push_back(basegfx::B2DPoint(rPoint.X(), rPoint.Y()));
-                            a++; if(a < nCount) pAction = rMetaFile.GetAction(a);
+                            nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
                         }
 
-                        a--;
+                        nAction--;
 
                         if(aPositions.size())
                         {
@@ -1709,7 +1709,7 @@ namespace
                         basegfx::B2DPolygon aLinePolygon;
                         LineInfo aLineInfo;
 
-                        while(META_LINE_ACTION == pAction->GetType() && a < nCount)
+                        while(META_LINE_ACTION == pAction->GetType() && nAction < nCount)
                         {
                             const MetaLineAction* pA = (const MetaLineAction*)pAction;
                             const Point& rStartPoint = pA->GetStartPoint();
@@ -1741,10 +1741,10 @@ namespace
                                 aLinePolygon.append(aEnd);
                             }
 
-                            a++; if(a < nCount) pAction = rMetaFile.GetAction(a);
+                            nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
                         }
 
-                        a--;
+                        nAction--;
 
                         if(aLinePolygon.count())
                         {
@@ -1937,7 +1937,7 @@ namespace
                             if(aPolygonOutline.count() > 1 && !aPolygonOutline.isClosed())
                             {
                                 aPolygonOutline.setClosed(true);
-                                aPolyPolygonOutline.setB2DPolygon(a, aPolygonOutline);
+                                aPolyPolygonOutline.setB2DPolygon(b, aPolygonOutline);
                             }
                         }
 
@@ -2923,7 +2923,7 @@ namespace
                         // better to use this info
                         const MetaGradientExAction* pMetaGradientExAction = 0;
                         bool bDone(false);
-                        sal_uInt32 b(a + 1);
+                        sal_uInt32 b(nAction + 1);
 
                         for(; !bDone && b < nCount; b++)
                         {
@@ -2945,7 +2945,7 @@ namespace
                         if(bDone && pMetaGradientExAction)
                         {
                             // consume actions and skip forward
-                            a = b - 1;
+                            nAction = b - 1;
 
                             // get geometry data
                             basegfx::B2DPolyPolygon aPolyPolygon(pMetaGradientExAction->GetPolyPolygon().getB2DPolyPolygon());
