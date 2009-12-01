@@ -56,51 +56,25 @@ function hOpenHelp() as boolean
     
     '///<u>Description</u>:
     '///<ul>
+   
     const CFN = "hOpenHelp::"
 
-    dim iTry as integer
-    dim brc as boolean
-        brc = false
-        
-    printlog( CFN & "Enter" )
+    HelpContents
     
-    '///+<li>Open the help Browser using the slot</li>
-    try
-        HelpContents
-    catch
-        printlog( CFN & "Failed to open help, slot failed" )
-        hOpenHelp() = false
-        exit function
-    endcatch
-
-    '///+<li>Verify that the help is indeed open (max 10 sec.)</li>
-    Kontext "StarOfficeHelp"
-    for iTry = 1 to 10
-
-        if ( StarOfficeHelp.exists() ) then
-            brc = true
-            exit for
-        endif
-
-        sleep( 1 )
-
-    next iTry
-
-    '///+<li>Print a status to the log, return TRUE or FALSE</li>
-    if ( brc ) then
-        printlog( CFN & "Exit: Help is open" )
+    if ( WaitSlot( 3000 ) <> WSFinished ) then
+        printlog( CFN & "Failed to open help" )
+        hOpenHelp() = FALSE
     else
-        printlog( CFN & "Exit: Help is not open" )
-        kontext "Active"
-        if ( Active.exists( 2 ) ) then
-            printlog( "Msgbox: " & Active.getText()
-            Active.ok()
+        kontext "StarOfficeHelp"
+        if ( StarOfficeHelp.exists() ) then
+            printlog( CFN & "Help was opened" )
+            hOpenHelp() = TRUE
+        else
+            printlog( CFN & "Help was not opened" )
+            hOpenHelp() = FALSE
         endif
     endif
-
-    '///</ul>
-    hOpenHelp() = brc
-
+    
 end function
 
 '*******************************************************************************
@@ -122,37 +96,23 @@ function hCloseHelp() as boolean
     '///</ul>
     '///</ol>
     
-    '///<u>Description</u>:
-    '///<ul>
     const CFN = "hCloseHelp::"
-    dim brc as boolean
-    
-    printlog( CFN & "Enter" )
 
-    '///+<li>Verify that the Help Browser is Open</li>
-    kontext "StarOfficeHelp"
-    if ( not StarOfficeHelp.exists() ) then
-        printlog( CFN & "Help is not open" )
-        hCloseHelp() = false 
-        exit function
-    endif
-
-    '///+<li>Close the Help Browser by typing CTRL+F4</li>
-    StarOfficeHelp.typeKeys( "<MOD1 F4>" )
-
-    '///+<li>Verify that the Help Browser is not open (anymore)</li>
     kontext "StarOfficeHelp"
     if ( StarOfficeHelp.exists() ) then
-        printlog( CFN & "Exit: Help is still open" )
-        brc = false
+        ''StarOfficeHelp.typeKeys( "<MOD1 F4>" )
+        hUseAsyncSlot( "FileClose")
+        if ( StarOfficeHelp.notExists( 3 ) ) then
+            printlog( CFN & "Help was closed")
+            hCloseHelp() = TRUE
+        else
+            printlog( CFN & "Help was not closed")
+            hCloseHelp() = FALSE
+        endif
     else
-        printlog( CFN & "Exit: Help has been closed" )
-        brc = true
+        printlog( CFN & "Help is not open, no action taken")
+        hCloseHelp() = TRUE
     endif
-
-    '///+<li>Return TRUE or FALSE</li>
-    '///</ul>
-    hCloseHelp() = brc
 
 end function
 

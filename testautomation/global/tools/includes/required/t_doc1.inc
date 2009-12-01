@@ -229,33 +229,12 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-sub hCloseDocument ( optional bANewDoc )
-    '/// hCloseDocument : close a document without saving ///'
-    '///+ all documents will be closed without saving ///'
-    Dim sFehler$
+function hCloseDocument()
 
-    if IsMissing ( bANewDoc ) <> TRUE then
-        if bANewDoc = TRUE then
-            gNoNewDoc = FALSE
-        else
-            gNoNewDoc = TRUE
-        end if
-    end if
+    '/// Trigger FileClose slot'
+    hUseAsyncSlot( "FileClose")
 
-    ' if no new document was created, it isn't closed
-    if gNoNewDoc = TRUE then
-        exit sub
-    end if
-
-    Sleep 3
-    try
-        FileClose
-    catch
-        Exceptlog
-        exit sub
-    endcatch
-
-    Sleep 1
+    '/// Accept to lose changes'
     Kontext "Active"
     if Active.Exists(2) then
         try
@@ -264,8 +243,11 @@ sub hCloseDocument ( optional bANewDoc )
             Active.Click ( 202 )
         endcatch
     end if
-    Sleep (2)
-end sub
+    
+    '/// Wait for FileClose to complete'
+    WaitSlot( 2000 )
+    
+end function
 '
 '-------------------------------------------------------------------------------
 '

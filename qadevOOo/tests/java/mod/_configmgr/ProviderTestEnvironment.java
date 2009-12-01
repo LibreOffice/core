@@ -1,0 +1,53 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: code,v $
+*
+* $Revision: 1.4 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+package mod._configmgr;
+
+import com.sun.star.beans.NamedValue;
+import com.sun.star.uno.XInterface;
+import lib.TestEnvironment;
+
+final class ProviderTestEnvironment {
+    private ProviderTestEnvironment() {}
+
+    public static TestEnvironment create(Object provider) {
+        TestEnvironment env = new TestEnvironment((XInterface) provider);
+        env.addObjRelation(
+            "XMSF.serviceNamesWithArgs",
+            new String[] {
+                "com.sun.star.configuration.ConfigurationAccess",
+                "com.sun.star.configuration.ConfigurationUpdateAccess" });
+        Object[] args = new Object[] {
+            new NamedValue("nodepath", "/org.openoffice.Setup") };
+        env.addObjRelation("XMSF.Args", new Object[][] { args, args });
+        env.addObjRelation(
+            "needArgs", "com.sun.star.configuration.ConfigurationProvider");
+        return env;
+    }
+}

@@ -507,7 +507,7 @@ testcase tFileSaveAsDBF
     Kontext
     if Active.exists(2) then
         printlog " "
-        warnlog "The following warning exists. This could be #i87325:"
+        warnlog "#i87325# - Unexpected messagebox"
         Printlog Active.GetText
         Printlog " "
         Active.OK

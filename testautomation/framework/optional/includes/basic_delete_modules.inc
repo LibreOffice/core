@@ -1,5 +1,5 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '* 
 '* Copyright 2008 by Sun Microsystems, Inc.
@@ -29,7 +29,7 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
 '*
@@ -43,20 +43,20 @@ testcase tDeleteModulesAtRunningBasic
 
     dim brc as boolean
     const MAX_WAIT = 3000
-    
+    dim iMenuItemCount as integer
 
     printlog( "Open a new writer-doc" )
     gApplication = "WRITER"
-
     Call hNewDocument()
 
-    printlog( "Create a new module " )
+    printlog( "Open the BASIC Organizer" )
     brc = hOpenBasicOrganizerFromDoc()
     if ( not brc ) then
         warnlog( "Unable to open BASIC organizer for the document" )
         goto endsub
     endif
-    
+
+    printlog( "Create a new module for the current document" )
     brc = hCreateModuleForDoc()
     if ( not brc ) then
         warnlog( "Unable to create a basic module for the document" )
@@ -82,15 +82,14 @@ testcase tDeleteModulesAtRunningBasic
     Tabbar.OpenContextMenu()
 
     try
-        if ( hMenuItemGetCount() = 5 ) then
-            warnlog( "#i101972# - Disabled entries are shown in context menu on tab bar" )
-        end if
+        iMenuItemCount = hMenuItemGetCount()
 
-
-        if ( hMenuItemGetCount() = 3 ) then
-            warnlog( "Delete is active in context menu for a running macro => BUG!" )
-        end if
-
+        select case ( iMenuItemCount )
+        case 2  : printlog( "Correct number of items in menu: " & iMenuItemCount )
+        case 3  : warnlog ( "Delete is active in context menu for a running macro => BUG!" )
+        case 5  : warnlog ( "#i101972# - Disabled entries are shown in context menu on tab bar" )
+        default : warnlog ( "Incorrect itemcount in context menu: " & iMenuItemCount )
+        end select
     catch
         warnlog( "Unable to retrieve the number of menuitems" )
     endcatch
@@ -104,8 +103,7 @@ testcase tDeleteModulesAtRunningBasic
         warnlog( "Slot not finished, timeout reached" )
     endif
 
-    Call hCloseDocument()
-    Call hCloseDocument()
+    Call hFileCloseAll()
 
 endcase
 

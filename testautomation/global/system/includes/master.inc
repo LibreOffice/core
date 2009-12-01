@@ -922,7 +922,7 @@ sub mMakeGeneralOptionsAPI
         endcatch
 
         '///+ OOo Improvement - only if BUILD_SPECIAL is set we have this file created.
-        sTempPath = gOfficeBasisPath & "share/registry/modules/org/openoffice/Office/Jobs/Jobs-oooimprovement.xcu"
+        sTempPath = gOfficeBasisPath & "share/registry/oooimprovement.xcd"
         sTempPath = ConvertPath( sTempPath )
         
         if ( FileExists( sTempPath ) ) then
