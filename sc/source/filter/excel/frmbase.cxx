@@ -248,6 +248,12 @@ void ExcelConverterBase::Reset()
     aEingPos.Set( 0, 0, 0 );
 }
 
+ExcelConverterBase::ConvertParam::ConvertParam() :
+    mbAllowArrays(true),
+    mnArrayColSize(0),
+    mnArrayRowSize(0)
+{
+}
 
 
 

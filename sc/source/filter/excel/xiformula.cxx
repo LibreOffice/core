@@ -97,7 +97,9 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
     aFmlaStrm.StartNextRecord();
     const ScTokenArray* pArray = NULL;
     GetOldFmlaConverter().Reset();
-    GetOldFmlaConverter().Convert(pArray, aFmlaStrm, aFmlaStrm.GetRecSize(), true);
+    ExcelToSc::ConvertParam aParam;
+    aParam.mbAllowArrays = true;
+    GetOldFmlaConverter().Convert(pArray, aFmlaStrm, aFmlaStrm.GetRecSize(), aParam);
     return pArray;
 }
 

@@ -62,7 +62,7 @@ public:
                         ExcelToSc( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc();
     virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen,
-                                 bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
+                                 const ConvertParam& rParam, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
@@ -138,7 +138,8 @@ public:
                         ExcelToSc8( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc8();
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen,
+                                 const ConvertParam& rParam, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 

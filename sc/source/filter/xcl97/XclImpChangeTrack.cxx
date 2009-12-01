@@ -210,11 +210,12 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     // read the formula, 3D tab refs from extended data
     const ScTokenArray* pArray = NULL;
     aFmlConv.Reset( rPosition );
-    BOOL bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   // JEG : Check This
+    ExcelConverterBase::ConvertParam aParam;
+    aParam.mbAllowArrays = false;
+    BOOL bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, aParam, FT_CellFormula) == ConvOK);  // JEG : Check This
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }
-
 void XclImpChangeTrack::ReadCell(
         ScBaseCell*& rpCell,
         sal_uInt32& rFormat,

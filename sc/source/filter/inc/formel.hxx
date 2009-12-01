@@ -214,8 +214,17 @@ public:
     void                Reset();
     void                Reset( const ScAddress& rEingPos );
 
+    struct ConvertParam
+    {
+        bool    mbAllowArrays;
+        SCSIZE  mnArrayColSize;
+        SCSIZE  mnArrayRowSize;
+
+        ConvertParam();
+    };
+
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
-                                 bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
+                                 const ConvertParam& rParam, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
