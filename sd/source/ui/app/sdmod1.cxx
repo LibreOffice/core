@@ -230,6 +230,7 @@ void SdModule::Execute(SfxRequest& rReq)
 
             break;
 
+        case SID_OPENHYPERLINK:
         case SID_OPENDOC:
         {
             BOOL bIntercept = FALSE;
@@ -401,6 +402,14 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     if (rItemSet.GetItemState(SID_OPENDOC) != SFX_ITEM_UNKNOWN)
     {
         const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENDOC, SFX_APP()->GetInterface());
+        if (pItem)
+            rItemSet.Put(*pItem);
+    }
+
+    // der Status von SID_OPENHYPERLINK wird von der Basisklasse bestimmt
+    if (rItemSet.GetItemState(SID_OPENHYPERLINK) != SFX_ITEM_UNKNOWN)
+    {
+        const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENHYPERLINK, SFX_APP()->GetInterface());
         if (pItem)
             rItemSet.Put(*pItem);
     }

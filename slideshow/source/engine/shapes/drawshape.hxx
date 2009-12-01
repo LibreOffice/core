@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawshape.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -338,6 +338,7 @@ namespace slideshow
             mutable State::StateId                                                  mnAttributeAlphaState;
             mutable State::StateId                                                  mnAttributePositionState;
             mutable State::StateId                                                  mnAttributeContentState;
+            mutable State::StateId                                                  mnAttributeVisibilityState;
 
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewShapeSharedPtr > ViewShapeVector;

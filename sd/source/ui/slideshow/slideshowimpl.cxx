@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.57.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,6 +133,7 @@ static USHORT __READONLY_DATA pAllowed[] =
     SID_JUMPTOMARK                          , //     5598
 //  SID_SHOWPOPUPS                          , //     5929
 //    SID_GALLERY                             , //     5960
+    SID_OPENHYPERLINK                       , //     6676
 //    SID_GALLERY_FORMATS                     , //    10280
     SID_NAVIGATOR                           , //    10366
 //  SID_FM_DESIGN_MODE                      , //    10629
@@ -1861,7 +1862,12 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
             else
 */
             {
-                const float MIN_UPDATE = 0.05f; // do not wait less than 50 ms
+                // Avoid busy loop when the previous call to update()
+                // returns 0.  The minimum value is small enough to allow
+                // high frame rates.  Values larger than 0 are typically
+                // also larger then the small minimum value and thus are
+                // used to determine the frame rate.
+                const float MIN_UPDATE = 0.01f; // 10ms corresponds to 100 frames per second.
                 if( fUpdate < MIN_UPDATE )
                     fUpdate = MIN_UPDATE;
                 else

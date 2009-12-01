@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapeattributelayer.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <rtl/math.hxx>
 
 
@@ -76,6 +77,8 @@ namespace slideshow
                     ++mnPositionState;
                 if( mnContentState != mpChild->getContentState() )
                     ++mnContentState;
+                if( mnVisibilityState != mpChild->getVisibilityState() )
+                    ++mnVisibilityState;
             }
         }
 
@@ -172,6 +175,7 @@ namespace slideshow
             mnAlphaState( rChildLayer ? rChildLayer->getAlphaState() : 0),
             mnPositionState( rChildLayer ? rChildLayer->getPositionState() : 0 ),
             mnContentState( rChildLayer ? rChildLayer->getContentState() : 0 ),
+            mnVisibilityState( rChildLayer ? rChildLayer->getVisibilityState() : 0 ),
 
             mnAdditiveMode( animations::AnimationAdditiveMode::BASE ),
 
@@ -233,6 +237,7 @@ namespace slideshow
                     ++mnAlphaState;
                     ++mnPositionState;
                     ++mnContentState;
+                    ++mnVisibilityState;
                 }
             }
             else
@@ -267,6 +272,7 @@ namespace slideshow
                 ++mnAlphaState;
                 ++mnPositionState;
                 ++mnContentState;
+                ++mnVisibilityState;
             }
 
             mnAdditiveMode = nMode;
@@ -633,7 +639,7 @@ namespace slideshow
         {
             mbVisibility = bVisible;
             mbVisibilityValid = true;
-            ++mnContentState;
+            ++mnVisibilityState;
         }
 
         bool ShapeAttributeLayer::isCharColorValid() const
@@ -839,6 +845,14 @@ namespace slideshow
                 ::std::max( mnContentState,
                             mpChild->getContentState() ) :
                 mnContentState;
+        }
+
+        State::StateId ShapeAttributeLayer::getVisibilityState() const
+        {
+            return haveChild() ?
+                ::std::max( mnVisibilityState,
+                            mpChild->getVisibilityState() ) :
+                mnVisibilityState;
         }
 
     }

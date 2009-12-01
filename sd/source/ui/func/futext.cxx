@@ -732,7 +732,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 pPara = GetTextObj()->GetOutlinerParaObject();
             }
 
-            if(pPara && bVertical != pPara->IsVertical())
+            if(pPara && (bool)bVertical != pPara->IsVertical())
             {
                 // set ParaObject orientation accordingly
                 pPara->SetVertical(bVertical);
