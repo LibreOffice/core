@@ -295,7 +295,7 @@ function LoadDocumentReadOnly ( sDatei as String, TypeOfDocument as Integer, Rea
     endif
     
     Oeffnen.Click
-    IsItLoaded
+    hFileWait( FALSE )
     
     Kontext "Active"
     if Active.Exists( 2 ) then
@@ -396,7 +396,6 @@ sub hSetUNIXAttributes()
     ' If you are not the owner of the testtool snapshot, this is *not* going to
     ' work.
     
-    '///Make sure the file-attributes are correct for the next tests.
     
     dim cFullPath as string
     dim cParameter as string
@@ -450,57 +449,36 @@ end sub
 function hGetFirstNameFromFileList() as string
     
     
-    '///<h3>Retrieve the first valid ffilename from the filepickers filelist</h3><br>
-    
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>No input parameters</li>
-    '///</ol>
     
     
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>First valid filename from filelist (either first or second item)</li>
-    '///<ul>
-    '///+<li>Eliminates directory &quot;CVS&quot;</li>
-    '///</ul>
-    '///</ol>
+    
     
     const CFN = "hGetFirstNameFromFileList()::"
     dim brc as boolean 'a multi purpose boolean returnvalue
     dim cFileName as string
     
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Select the first item in the filelist of the File Open Dialog</li>
     
     Kontext "OeffnenDlg"
     Dateiauswahl.typeKeys( "<HOME>" )
     Dateiauswahl.typeKeys( "<SPACE>" )
     
-    '///+<li>Retrieve the current name (First entry, usually this is <CVS>)</li>
     cFileName =lcase( Dateiauswahl.GetSelText() )
     printlog( CFN & "File: " & cFileName )
     
-    '///+<li>Intercept blank filename (might be a timing issue)</li>
     if ( cFileName = "" ) then
         warnlog( CFN & "Filename is empty, probably a timing issue" )
     endif
     
-    '///+<li>Move one down if we are on the CVS directory</li>
     if ( cFileName = "cvs" ) then
         printlog( CFN & "Skipping CVS directory" )
         Dateiauswahl.TypeKeys( "<Down>" )
         
-        '///+<li>Retrieve the filename at pos. 2</li>
         cFileName = lcase ( Dateiauswahl.GetSelText() )
         printlog( CFN & "File: " & cFileName )
     endif
     
-    '///+<li>Return the filename</li>
     hGetFirstNameFromFileList() = cFileName
     
-    '///</ul>
     
 end function
 

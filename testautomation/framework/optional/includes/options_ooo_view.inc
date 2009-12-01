@@ -39,31 +39,25 @@
 
 testcase tOOoView
 
-    '///Verify that all settings on the Tools/Options -> OpenOffice.org/View are saved
 
     dim sFile as string
 
-    '///<ul><li>Check if the defaults are correct</li>
     printlog "Check if the defaults are correct"
     sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_defaults.ref"
     call checkPage( sFile , false )
 
-    '///<li>Change all settings to something different to the default</li>
     printlog "Change all settings to something different to the default"
     sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_changed.ref"
     call changePage( sFile , true, 1 )
 
-    '///<li>Verify that all changes persist after a restart</li>
     printlog "Verify that all changes persist after a restart"
     sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_changed.ref"
     call checkPage( sFile , true, 1 )
 
-    '///<li>Re-apply the defaults to all controls and restart the application</li>
     printlog "Re-apply the defaults to all controls and restart the application"
     sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_defaults.ref"
     call changePage( sFile , false )
 
-    '///<li>Verify that all settings have indeed been reset to defaults</li></ul>
     printlog "Verify that all settings have indeed been reset to defaults"
     call checkPage( sFile , false )
 
@@ -123,7 +117,13 @@ sub checkPage( sFile as string , bDisabled as boolean, optional iMiddleMouseButt
     else
         printlog( "Hardware acceleration is not available on this system" )
     endif
-    checkCheckBox( sFile , "*" , UseAntiAliasing )
+    
+    if ( UseAntiAliasing.isEnabled() ) then
+        checkCheckBox( sFile , "*" , UseAntiAliasing )
+    else
+        printlog( "Antialiasing is not available on this system" )
+    endif
+    
     checkListBox( sFile , "*" , MousePositioning)
     ' needs to get handled differently on platforms!
     iMiddleMouseButton = MausAktion.getSelIndex
@@ -136,10 +136,26 @@ sub checkPage( sFile as string , bDisabled as boolean, optional iMiddleMouseButt
             iTemp = 2 ' Automatic scrolling
         endif
         if Itemp = iMiddleMouseButton then
-            printlog "      * Middle mouse button: OK"
+            printlog "     * Middle mouse button: ok"
         else
-            warnlog "Middle mouse button: expected: '" + iTemp + "' '" + MausAktion.getItemText(iTemp) + "'; is: '" + iMiddleMouseButton + "' '" + MausAktion.getItemText(iMiddleMouseButton) + "'"
+            warnlog "Middle mouse button: expected: '" + iTemp + "' '" _
+                    + MausAktion.getItemText(iTemp) + "'; is: '" _
+                    + iMiddleMouseButton + "' '" _
+                    + MausAktion.getItemText(iMiddleMouseButton) + "'"
         endif
+    endif
+    
+    if ( Transparency.isEnabled() ) then
+        if ( Transparency.isChecked() ) then
+            checkCheckBox( sFile , "*" , transparency )
+            checkEntryField( sFile , "*", selectionopacity )
+        else
+            Transparency.check()
+            checkEntryField( sFile , "*", selectionopacity, "i104150" )
+            Transparency.unCheck()
+        endif
+    else
+        printlog( "Transparency is not available on this system" )
     endif
 
     Kontext "OptionenDLG"
@@ -193,7 +209,13 @@ sub changePage( sFile as string , bInverted as boolean, optional iMiddleMouseBut
     else
         printlog( "Harware acceleration is not available on this system" )
     endif
-    setCheckBox( sFile , "*" , useantialiasing )
+    
+    if ( UseAntiAliasing.isEnabled() ) then
+        setCheckBox( sFile , "*" , useantialiasing )
+    else
+        printlog( "Antialiasing is not available on this system" )
+    endif
+    
     setListBox( sFile , "*" , MousePositioning )
     ' needs to get handled differently on platforms!
     if iMiddleMouseButtonExtern = 1 then
@@ -204,6 +226,18 @@ sub changePage( sFile as string , bInverted as boolean, optional iMiddleMouseBut
         else
             MausAktion.select(2) ' Automatic scrolling
         endif
+    endif
+    
+    if ( Transparency.isEnabled() ) then
+        if ( Transparency.isChecked() ) then
+            setEntryField( sFile , "*", selectionopacity )
+            setCheckBox( sFile , "*" , transparency )
+        else
+            setCheckBox( sFile , "*" , transparency )
+            setEntryField( sFile , "*", selectionopacity )
+        endif        
+    else
+        printlog( "Transparency is not available on this system" )
     endif
 
     Kontext "OptionenDLG"

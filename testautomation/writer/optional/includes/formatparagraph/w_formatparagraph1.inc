@@ -896,9 +896,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphIndent13
-Warnlog "#i102752# - tParagraphIndent13 outcommented due to bug."
-goto endsub
-
 
   Dim sTestFile  as String
   Dim sAtLeast   as String
@@ -968,8 +965,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphIndent14
-Warnlog "#i102752# - tParagraphIndent14 outcommented due to bug."
-goto endsub
 
   Dim sTestFile  as String
   Dim sAtLeast   as String
@@ -1104,9 +1099,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphIndent16
-Warnlog "#i102752# - tParagraphIndent16 outcommented due to bug."
-goto endsub
-
 
   Dim sTestFile    as String
   Dim sPositionX as String

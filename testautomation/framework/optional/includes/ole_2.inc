@@ -38,7 +38,6 @@
 '\******************************************************************************
 
 testcase tCheckTheOLEObjectDialog
-'///check in all applications ( Writer/Calc/Draw/Impress/Masterdocument ) the names of all OLE-Objects in the OLE-Dialog
 
    qaerrorlog( "#i80670# The OLE retrieval routine is broken beyond repair, redesign required" )
    goto endsub
@@ -63,10 +62,8 @@ testcase tCheckTheOLEObjectDialog
       lListe ( 0 ) = 0 : lListSoll ( 0 ) = 0
       printlog "check OLE-Object-Dialog for " + gApplication
       
-      '///file / new / .sxw or .sxc, .sxd, .sxi, .sxm 
       Call hNewDocument
       
-      '///+insert / objects / OLE-objects
       InsertObjectOLEObject
 
       Kontext "OLEObjektEinfuegen"
@@ -75,11 +72,9 @@ testcase tCheckTheOLEObjectDialog
         goto endsub
       endif
       
-      '///+select 'create new'
       NeuErstellen.Check
       WaitSlot()
       
-      '///+check all names in the list with a comparison list in [TesttoolPath]\global\input\olenames\ole_[lang-code].txt
       for j=1 to ObjektTyp.GetItemCount
          ObjektTyp.Select j
          ListAppend ( lListe(), ObjektTyp.GetSelText )
@@ -133,9 +128,7 @@ testcase tCheckTheOLEObjectDialog
          next j
       end if
       
-      '///+cancel the dialog
       OLEObjektEinfuegen.Cancel
-      '///+close the document and repeat it for each application
       hCloseDocument()
    next i
 endcase

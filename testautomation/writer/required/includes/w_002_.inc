@@ -664,7 +664,6 @@ endcase
 '---------------------------------------------------
 
 testcase tEditAutotext
-    Dim j as integer
     Dim k as integer
     Dim i as integer
     Dim CurrentEntryNr as integer
@@ -679,16 +678,14 @@ testcase tEditAutotext
     DialogTest ( AutoText )
 
     Kontext "AutoText"
-
-    PrintLog "Click Categories"
-    Bereiche.Click
-    Sleep 1
-
     Printlog "If it exists: Delete DummyAutotext."
     if wDeleteAutotext("DummyAutotext") = true then
         qaerrorlog "DummyAutotext from previous testrun found, now deleted."
     end if
 
+    PrintLog "Click Categories"
+    Bereiche.Click
+    Sleep 1    
     Kontext "BereicheBearbeitenAutoText"
     if BereicheBearbeitenAutoText.Exists then
         DialogTest ( BereicheBearbeitenAutoText )

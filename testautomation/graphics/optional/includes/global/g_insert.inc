@@ -51,8 +51,7 @@
 '\*************************************************************************************
 
 testcase tdInsertObjectOleObjects
-    QaErrorLog "#79794# - tdInsertObjectOleObjects outcommented due to bug."
-    goto endsub
+
     Dim Zaehler as Integer
     Dim i as integer
     Dim a as integer

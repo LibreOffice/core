@@ -39,29 +39,29 @@
 
 sub w_fields3
 
-    Call tFieldsReferences       'Insert/Cross-reference
-    Call tSetReferences_1        'Set Reference - Cursor at any position
-    Call tSetReferences_2        'Set Reference - Select some text
-    Call tInsertReference_1      'Insert Reference - Page
-    Call tInsertReference_2      'Insert Reference - Chapter
-    Call tInsertReference_3      'Insert Reference - Reference
-    Call tInsertReference_4      'Insert Reference - Above/Below
-    Call tInsertReference_5      'Insert Reference - As Page Style
-    Call tInsertReference_6      'Insert Footnote
-    Call tInsertReference_7      'Insert Endnote
-    Call tInsertReference_8_1    'Insert Caption - Above
-    Call tInsertReference_8_2    'Insert Caption - Below
-    Call tInsertBookmark_1       'Insert Bookmark - Page
-    Call tInsertBookmark_2       'Insert Bookmark - Chapter
-    Call tInsertBookmark_3       'Insert Bookmark - Reference
-    Call tInsertBookmark_4       'Insert Bookmark - Above/Below
-    Call tInsertBookmark_5       'Insert Bookmark - As Page Style
+    Call tCrossReference
+    Call tSetReferenceNoSelection
+    Call tSetReferenceTextSelection
+    Call tInsertReferencePage
+    Call tInsertReferenceChapter
+    Call tInsertReferenceReference
+    Call tInsertReferenceAboveBelow
+    Call tInsertReferenceAsPageStyle
+    Call tInsertFootnote
+    Call tInsertEndnote
+    Call tInsertCaptionAbove
+    Call tInsertCaptionBelow
+    Call tInsertBookmarkPage
+    Call tInsertBookmarkChapter
+    Call tInsertBookmarkReference
+    Call tInsertBookmarkAboveBelow
+    Call tInsertBookmarkAsPageStyle
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tFieldsReferences
+testcase tCrossReference
 
   printlog "Insert/Cross-reference"
  '/// <b> Insert/Cross-reference </b>
@@ -86,7 +86,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tSetReferences_1
+testcase tSetReferenceNoSelection
 
   Dim sReference as String
   Dim sTestFile  as String
@@ -133,7 +133,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tSetReferences_2
+testcase tSetReferenceTextSelection
 
   Dim sReference as String
 
@@ -174,7 +174,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_1
+testcase tInsertReferencePage
 
   Dim sReference as String
   Dim sTestFile  as String
@@ -234,7 +234,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_2
+testcase tInsertReferenceChapter
 
   Dim sReference as String
   Dim sTestFile  as String
@@ -294,7 +294,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_3
+testcase tInsertReferenceReference
 
   Dim sReference     as String
   Dim sReferenceName as String
@@ -355,7 +355,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_4
+testcase tInsertReferenceAboveBelow
 
   Dim sReference as String
   Dim sAbove     as String
@@ -446,7 +446,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_5
+testcase tInsertReferenceAsPageStyle
 
   Dim sReference as String
   Dim sTestSytle as String
@@ -509,7 +509,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_6
+testcase tInsertFootnote
 
   Dim sFootnote as String
 
@@ -543,7 +543,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_7
+testcase tInsertEndnote
 
   Dim sEndnote as String
 
@@ -577,7 +577,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_8_1
+testcase tInsertCaptionAbove
 
   Dim sCategory  as String
   Dim sCaption   as String
@@ -627,7 +627,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_8_2
+testcase tInsertCaptionBelow
 
   Dim sCategory  as String
   Dim sCaption   as String
@@ -677,7 +677,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_1
+testcase tInsertBookmarkPage
 
   Dim sBookmark as String
   Dim sTestFile as String
@@ -735,7 +735,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_2
+testcase tInsertBookmarkChapter
 
   Dim sBookmark as String
   Dim sTestFile as String
@@ -792,7 +792,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_3
+testcase tInsertBookmarkReference
 
   Dim sReference as String
   Dim sBookmark  as String
@@ -850,7 +850,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_4
+testcase tInsertBookmarkAboveBelow
 
   Dim sBookmark as String
   Dim sAbove    as String
@@ -938,7 +938,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_5
+testcase tInsertBookmarkAsPageStyle
 
   Dim sBookmark  as String
   Dim sTestSytle as String

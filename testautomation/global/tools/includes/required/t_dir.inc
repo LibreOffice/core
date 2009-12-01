@@ -193,7 +193,7 @@ function GetDirList ( sPath$, sMatch$ ,lsFile() as String ) as integer
         case ".."
         case ".svn"
         case ".hg"
-        case default
+        case else
             lsFile(0) = Val(lsFile(0)) + 1
             lsFile( lsFile(0) ) = sPath$  + Folder + gPathSigne
             iFolderCount = iFolderCount + 1

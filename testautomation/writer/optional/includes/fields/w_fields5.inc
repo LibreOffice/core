@@ -33,29 +33,29 @@
 '*
 '* owner : helge.delfs@sun.com
 '*
-'* short description : Fields - Variabs
+'* short description : Fields - Variables
 '*
 '\***********************************************************************
 
 sub w_fields5
 
-    Call tVariables_1        'Set value to text
-    Call tVariables_2        'Set value to number
-    Call tVariables_3        'Set format as 'Additional formats...'
-    Call tVariables_4        'Show Variable - 1
-    Call tVariables_5        'Show Variable - 2
-    Call tVariables_6        'Insert formula
-    Call tVariables_7        'Number range
-    Call tVariables_8        'Input field
-    Call tVariables_9        'User field
-    Call tVariables_10       'DDE field - manual
-    Call tVariables_11       'DDE field - automatic
+    Call tVariablesSetValueToText
+    Call tVariablesSetValueToNumber
+    Call tVariablesSetFormats
+    Call tVariablesShowVariable1
+    Call tVariablesShowVariable2
+    Call tVariablesInsertFormula
+    Call tVariablesNumberRange	
+    Call tVariablesInputfield
+    Call tVariablesUserfield
+    Call tVariablesDDEFieldManual
+    Call tVariablesDDEFieldAutomatic
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tVariables_1
+testcase tVariablesSetValueToText
     if bAsianLan = true then
         QaErrorLog "No testing with Asian language. Aborting."
         exit sub
@@ -127,7 +127,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_2
+testcase tVariablesSetValueToNumber
     if bAsianLan = true then
         QaErrorLog "No testing with Asian language. Aborting."
         exit sub
@@ -199,8 +199,8 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_3
-    qaerrorlog "#i94596# - tVariables_3 outcommented due to bug."
+testcase tVariablesSetFormats
+    qaerrorlog "#i94596# - tVariablesSetFormats outcommented due to bug."
     goto endsub
 
   Dim sName     as String
@@ -270,7 +270,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_4
+testcase tVariablesShowVariable1
 
   Dim sName()   as String
   Dim sResult() as String
@@ -348,7 +348,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_5
+testcase tVariablesShowVariable2
 
   Dim sName     as String
   Dim sValue    as String
@@ -427,7 +427,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_6
+testcase tVariablesInsertFormula
 
   Dim sName()   as String
   Dim sValue()  as String
@@ -482,7 +482,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_7
+testcase tVariablesNumberRange
 
   Dim sResult() as String
   Dim i         as Integer
@@ -541,7 +541,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_8
+testcase tVariablesInputfield
 
   Dim sName         as String
   Dim sValue        as String
@@ -614,7 +614,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_9
+testcase tVariablesUserfield
 
   Dim sName()    as String
   Dim sValue()   as String
@@ -672,8 +672,8 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_10
-    qaerrorlog "#i93906# - tVariables_10 outcommented due to a problem with copying field-contents outside the office."
+testcase tVariablesDDEFieldManual
+    qaerrorlog "#i93906# - tVariablesDDEFieldManual outcommented due to a problem with copying field-contents outside the office."
     goto endsub
 
   Dim sDDEFile        as String
@@ -765,8 +765,8 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_11
-    qaerrorlog "#i102792# - tVariables_11 outcommented. Fields not updated."
+testcase tVariablesDDEFieldAutomatic
+    qaerrorlog "#i102792# - tVariablesDDEFieldAutomatic outcommented. Fields not updated."
     goto endsub
 
   Dim sDDEFile      as String

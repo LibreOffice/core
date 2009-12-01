@@ -753,51 +753,51 @@ qaerrorlog
    endif
    hCloseDocument ()
    Printlog "'/// now save a SELECTION in ORIGINAL SIZE and load the file afterwards ///'"
-   qaerrorlog "#i93258#"
-   'hFileOpen (sDocument)
-   'kontext "Filterauswahl"
-   'if Filterauswahl.exists(10) then
-   '   Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
-   '   Filterauswahl.Cancel
-   '   goto endsub
-   'endif
+   
+   hFileOpen (sDocument)
+   kontext "Filterauswahl"
+   if Filterauswahl.exists(10) then
+      Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
+      Filterauswahl.Cancel
+      goto endsub
+   endif
 
-    '' check if the document is writable
-    'if fIsDocumentWritable = false then
-    '    ' make the document writable and check if it's succesfull
-    '    if fMakeDocumentWritable = false then
-    '        warnlog "The document can't be make writeable. Test stopped."
-    '        goto endsub
-    '    endif
-    'endif
+   ' check if the document is writable
+    if fIsDocumentWritable = false then
+        ' make the document writable and check if it's succesfull
+        if fMakeDocumentWritable = false then
+            warnlog "The document can't be make writeable. Test stopped."
+            goto endsub
+        endif
+    endif
 
-   'hTypeKeys ("<escape><tab>")
-   'fGetSizeXY sx1, sy, TRUE
-   'if hCallExport (OutputGrafikTBO + "1" , "BMP - Windows Bitmap (.bmp)", TRUE ) = TRUE then
-   '   Kontext "BMPOptionen"
-   '   if BMPOptionen.Exists (2) then
-   '      Original.Check
-   '      BMPOptionen.OK
-   '      sleep 5
-   '   endif
-   '   if ( dir(OutputGrafikTBO + "1"+".bmp") <> "") then
-   '      Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "1"+".bmp" + "'"
-   '   else
-   '      warnlog "File didn't get saved :-("
-   '   endif
+   hTypeKeys ("<escape><tab>")
+   fGetSizeXY sx1, sy, TRUE
+   if hCallExport (OutputGrafikTBO + "1" , "BMP - Windows Bitmap (.bmp)", TRUE ) = TRUE then
+      Kontext "BMPOptionen"
+      if BMPOptionen.Exists (2) then
+         Original.Check
+         BMPOptionen.OK
+         sleep 5
+      endif
+      if ( dir(OutputGrafikTBO + "1"+".bmp") <> "") then
+         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "1"+".bmp" + "'"
+      else
+         warnlog "File didn't get saved :-("
+      endif
      
-    '  qaerrorlog "#i92902: Export to bmp: bmp options not respected"
-      'sleep 5
-      'hNewDocument()
-      'sleep 5
-      'Call hGrafikEinfuegen ( OutputGrafikTBO + "1"+".bmp" )
-      'bTemp = FALSE
-      'fGetSizeXY sx1, sY, bTemp
-      'if (bTemp = FALSE) then
-      '   warnlog "Selected original size NOT OK :-("
-      'endif
-   'endif
-   'hCloseDocument ()
+      sleep 5
+      hNewDocument()
+      sleep 5
+      Call hGrafikEinfuegen ( OutputGrafikTBO + "1"+".bmp" )
+      bTemp = FALSE
+      fGetSizeXY sx1, sY, bTemp
+      if (bTemp = FALSE) then
+         warnlog "Selected original size NOT OK :-("
+      endif
+   endif
+   hCloseDocument ()
+   
    Printlog "'/// now CREATE a rectangle, select it, save it in SIZE and load the file afterwards ///'"
    hNewDocument()
    hTypeKeys "<TAB>"
@@ -832,13 +832,12 @@ qaerrorlog
       kontext "DocumentDraw"
       DocumentDraw.TypeKeys ("<escape><tab>")
       
-      qaerrorlog "#i92902: Export to bmp: bmp options not respected"
-      'ContextOriginalSize
-      'bTemp = FALSE
-      'fGetSizeXY sx1, sY, bTemp
-      'if (bTemp = FALSE) then
-      '   warnlog "Selected original size NOT OK :-("
-      'endif
+      ContextOriginalSize
+      bTemp = FALSE
+      fGetSizeXY sx1, sY, bTemp
+      if (bTemp = FALSE) then
+         warnlog "Selected original size NOT OK :-("
+      endif
       
    endif
    if hCallExport (OutputGrafikTBO + "3" , "BMP - Windows Bitmap (.bmp)", TRUE ) = TRUE then

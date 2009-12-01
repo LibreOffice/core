@@ -258,7 +258,7 @@ public class MultiMethodTest
      * Is called before calling method tests, but after initialization.
      * Subclasses may override to perform actions before method tests.
      */
-    protected void before()
+    protected void before() throws Exception
     {
     }
 

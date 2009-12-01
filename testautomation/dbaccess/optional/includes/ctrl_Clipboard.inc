@@ -48,9 +48,6 @@ end sub
 '--------------------------------------------------------------------------------------
 testcase tFromText
 
-    qaerrorlog "#85993# control property dialog could not open"
-    goto endsub
-
     '/// Open a new document and empty clipboard
         printlog "Open a new document and empty clipboard"
 	call hNewDocument
@@ -162,9 +159,6 @@ endcase
 
 '--------------------------------------------------------------------------------------
 testcase tFromCalc
-
-    qaerrorlog "#85993# control property dialog could not open"
-    goto endsub
 
     '/// Open a new document and empty clipboard
         printlog "Open a new document and empty clipboard"
@@ -280,9 +274,6 @@ endcase
 '--------------------------------------------------------------------------------------
 testcase tFromDraw
 
-    qaerrorlog "#85993# control property dialog could not open"
-    goto endsub
-
     '/// Open a new document and empty clipboard
         printlog "Open a new document and empty clipboard"
         gApplication = "DRAW"
@@ -395,9 +386,6 @@ endcase
 
 '--------------------------------------------------------------------------------------
 testcase tFromImpress
-
-    qaerrorlog "#85993# control property dialog could not open"
-    goto endsub
 
     '/// Open a new document and empty clipboard
         printlog "Open a new document and empty clipboard"

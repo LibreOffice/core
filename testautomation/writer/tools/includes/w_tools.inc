@@ -182,27 +182,28 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
 
     Objekt = UCase( Objekt )
     select case Objekt
-    case "RECHTECK" : Rechteck.Click
-    case "LINIE"     : Linie.Click
-    case "ELLIPSE"  : Ellipse.Click
-    case "TEXT"      : Textobjekt.Click
-    case "VTEXT"     :
-        try
-            VerticalText.Click
-        catch
-            if gAsianSup = True then
-                Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
-            end if
-        endcatch
-    case "LAUFTEXT" : Lauftext.Click
-    case "LEGENDE"  : Legende.Click
-    case "VLEGENDE" :
-        try
-            VerticalCallout.Click
-        catch
-            Warnlog "Unable to insert Vertical Callout! Asian Support in Options activated ?"
-        endcatch
+    	case "RECHTECK" : Rechteck.Click
+		case "LINIE"     : Linie.Click
+		case "ELLIPSE"  : Ellipse.Click
+		case "TEXT"      : Textobjekt.Click
+		case "VTEXT"     :
+        	try
+            	VerticalText.Click
+			catch
+				if gAsianSup = True then
+                	Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
+				end if
+			endcatch
+		case "LAUFTEXT" : Lauftext.Click
+		case "LEGENDE"  : Legende.Click
+		case "VLEGENDE" :
+			try
+				VerticalCallout.Click
+			catch
+				Warnlog "Unable to insert Vertical Callout! Asian Support in Options activated ?"
+			endcatch
     end select
+	Sleep (2)
 
     Select Case gApplication
     Case "WRITER"
@@ -219,7 +220,7 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         end if
         if Objekt <> "TEXT" and Objekt <> "VTEXT" then
             Kontext "DocumentWriter"
-            Call gMouseClick (1, 1)
+            Call gMouseClick (10, 10)
             wait 100
         end if
 
@@ -237,10 +238,11 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         end if
         if Objekt <> "TEXT" and Objekt <> "VTEXT" then
             Kontext "DocumentMasterDoc"
-            Call gMouseClick (1, 1)
+            Call gMouseClick (10, 10)
             wait 100
         end if
     end select
+	sleep (1)
 end sub
 
 ' -----------------------------------------------------------------------

@@ -760,13 +760,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchor
-Warnlog "#i102752# - tFormatAnchor outcommented due to bug."
-goto endsub
 
     PrintLog "- Format / Anchor"
-	
-	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
-	goto endsub
 	
     printlog " Open new document"
     Call hNewDocument
@@ -900,9 +895,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorArea
-
-	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
-	goto endsub
 
     PrintLog "- Format / Anchor drawing objects"
     if gApplication = "HTML" then

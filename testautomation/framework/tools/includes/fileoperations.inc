@@ -277,7 +277,7 @@ function hLoadFileExpectFailure( fpath as string ) as boolean
     
     '///+<li>If the document is loaded, set errorcondition to false</li>
     if ( not brc ) then
-        IsItLoaded
+        hFileWait( FALSE )
         warnlog( CFN & "The file appears to have loaded correctly. Not good" )
     
         '///+<li>Click away possible messagebox to recover</li>

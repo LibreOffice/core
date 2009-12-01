@@ -47,9 +47,6 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
 
     const CFN = "tOpenObjectsWithFileDialog::"   
 
-    '///<h1>Open all templates using the File-Open dialog</h1>
-    '///<i>Retrieve the templates out of ..\share\template\-directory</i><br>
-    '///<ul>
 
     dim lsFile ( MAX_FILE_COUNT ) as String ' list of all files below samples or templates
     dim sRootPath as String       ' rootpath, depends on cCategory
@@ -95,7 +92,6 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
    
     sRootPath = convertpath( sRootPath )
    
-    '///+<li>Get the complete list of all files below templates/samples</li>
     if ( dir( sRootPath ) = "" ) then
         qaerrorlog( "Root Path does not exist: " & sRootPath )
         sRootPath = sRootPathFallback
@@ -146,8 +142,6 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
     	endif
     endif
 
-    '///+<li>Go through the list of samples/templates and do things</li>
-    '///<ul>
     iTemplateCount = listCount( lsFile() )
     for iCurrentTemplate = 1 to iTemplateCount
    
@@ -157,11 +151,9 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
         ' sFileIn holds the file we currently work with
         sFileIn = lsFile( iCurrentTemplate )
         
-        '///+<li>Load the file</li>
         brc = hFileOpen( sFileIn ) 
         brc = hHandleActivesOnLoad( 0 , 2 )
         
-        '///+<li>Cancel the filterdialog if present -> bug</li>
         Kontext "FilterAuswahl"        
         if ( FilterAuswahl.exists( 1 ) ) then
             warnlog( "Loading failed, ASCII filter dialog present" )
@@ -171,40 +163,31 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
             wend
         else
         
-            '///+<li>Close the navigator if present</li>
             brc = hCloseNavigator()
     
             ' Build the filename
             sFileOut = cCategory & "_" & iCurrentTemplate
             sFileOut = convertpath( sPathOut & sFileOut ) 
           
-            '///+<li>Save the file, use autoextension</li> 
             brc = hFileSaveAsKill( sFileOut )
     
-            '///+<li>Close possible dialogs like "Update links" etc.</li>
             ' note: this is delayed, because the dialogs take time to pop up
             '       even while the dialog is visible, we can work with the doc.
             brc = hHandleInitialDialogs()
             
-            '///+<li>Close the document</li>
             brc = hDestroyDocument()
           
-            '///+<li>Load the file, close the navigator if present</li>
             brc = hFileOpen( sFileOut )
             brc = hHandleActivesOnLoad( 0 , 2 )
             brc = hCloseNavigator()
     
-            '///+<li>Close the file</li>
             brc = hDestroyDocument()
         
         endif
   
-        '///+<li>Delete the file</li>
         brc = hDeleteFile( sFileOut )
-        '///</ul>
         
     next iCurrentTemplate
-    '///</ul>
    
 endcase
 

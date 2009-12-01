@@ -94,7 +94,6 @@ testcase tiPengineAnimationEffectsPreview
            kontext "TabMotionPaths"
               if TabMotionPaths.exists(5) then
                  DialogTest(TabMotionPaths)
-'                 qaErrorLog("#i44701# selection needs to be made on the page where you say 'OK'")
                  TestAnimations
               else
                  bError = true
@@ -592,7 +591,7 @@ Function TestAnimations
    Effects.TypeKeys "<HOME>"
    For e = 1 to i
        If e <> p Then
-           if AutomaticPreview.isChecked = TRUE then sleep 2
+           if AutomaticPreview.isChecked = TRUE then sleep 1
            Printlog "Effect has position Nr: " + Effects.GetSelIndex + ". Name of effect: " + Effects.GetSelText
            '/// Select the next entry ///'
            Effects.TypeKeys "<DOWN>"

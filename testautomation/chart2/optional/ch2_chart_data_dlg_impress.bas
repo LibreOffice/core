@@ -38,7 +38,8 @@
 '\************************************************************************************************
 
 sub main
-    use "chart2\required\includes\ch2_datadialogue.inc"
+    use "chart2\optional\includes\ch2_datadialogue.inc"
+    
     Call hStatusIn("Chart2", "ch2_chart_data_dlg_impress.bas")
         printlog "--------------------------------------------"
         printlog "C h a r t   D a t a   D i a l o g Updatetest"

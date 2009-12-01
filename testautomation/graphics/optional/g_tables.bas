@@ -39,7 +39,7 @@
 
 sub main
     Printlog "------------------- Impress Tables Test -------------------------"
-    call hStatusIn ("Graphics","i_tables.bas")
+    call hStatusIn ("Graphics","g_tables.bas")
 
     use "graphics\optional\includes\global\g_tables.inc"
 
@@ -54,7 +54,7 @@ sub main
     PrintLog "-------------------------" + gApplication + "-------------------"
 
     call tiInsertTableUsingMenu
-    call tiInsertTableUsingButton
+    call tiInsertTableUsingToolbarbutton
     call tiTableObjectBar
 
     call hStatusOut

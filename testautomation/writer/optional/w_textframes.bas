@@ -65,8 +65,6 @@ sub main
     gSeperator = GetDecimalSeperator()
     'Setting the measurementunit to 'cm'
     gMeasurementUnit = fSetMeasurementToCM()
-    'Sets all writer-options to default
-    Call wOptionsUndo ( "All" )
     printlog Chr(13) + "      - Test of TextFrame function -"
     Call w_textframes1
 

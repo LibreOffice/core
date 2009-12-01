@@ -143,27 +143,33 @@ testcase tExportAllReadableFormatsIntoODF
 			printlog "-  Alien warning passed"
 		end if
 
-		sExportFile = WorkDirectory & "ExportedFile" & i & ".odf"
-		Printlog "-  Save as : " & ConvertPath ( sExportFile )
-		if hFileSaveAsWithFilterKill (sExportFile, "writer8") = true then
-			printlog "-  done"
-			printlog "-  close file"
-			Call hCloseDocument
-
-			Printlog "-  Open previous saved file"
-			Call hFileOpenWithFilter (sExportFile, "writer8")
-			printlog "-  done"
-			' Check for macro alert
-			Kontext "SecurityWarning"
-			if SecurityWarning.Exists then
-				if inStr(ImportFileList(i),"sw40")  = false then
-					QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
+		' HTML-File can't be exported as odf this way
+		if GetExtention(ImportFileList(i)) <> "html" then		
+		
+			sExportFile = WorkDirectory & "ExportedFile" & i & ".odf"
+			Printlog "-  Save as : " & ConvertPath ( sExportFile )
+			if hFileSaveAsWithFilterKill (sExportFile, "writer8") = true then
+				printlog "-  done"
+				printlog "-  close file"
+				Call hCloseDocument
+	
+				Printlog "-  Open previous saved file"
+				Call hFileOpenWithFilter (sExportFile, "writer8")
+				printlog "-  done"
+				' Check for macro alert
+				Kontext "SecurityWarning"
+				if SecurityWarning.Exists then
+					if inStr(ImportFileList(i),"sw40")  = false then
+						QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
+					end if
+					SecurityWarning.Cancel
 				end if
-				SecurityWarning.Cancel
+				Sleep 1
+			else
+				Warnlog "Unable to save file: " & sExportFile
 			end if
-			Sleep 1
 		else
-			Warnlog "Unable to save file: " & sExportFile
+			printlog "-  HTML-file is not exported this way"
 		end if
 
 		printlog "-  Close all open files."
@@ -214,7 +220,7 @@ testcase tExportAllReadableFormatsIntoThemselves
     end if
     app.Mkdir sWorkDirectory
 
-warnlog "#i102221# - Pocketword-filter seems broken."
+	QAErrorlog "#i102221#Pocketword-filter seems broken."
 
     For iCurrentFileIndex = 1 to 16
         select case iCurrentFileIndex

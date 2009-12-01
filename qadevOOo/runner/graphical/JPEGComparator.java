@@ -160,10 +160,9 @@ public class JPEGComparator extends EnhancedComplexTestCase
                 assure("File '" + sJPEGFilename + "' doesn't exists.", aFile.exists(), true);
                 if (aFile.exists())
                 {
+                    GlobalLogWriter.println("Page: " + i);
                     checkOnePicture(sJPEGFilename, _sResult, _aParams);
                 }
-
-
             }
         }
         else
@@ -513,14 +512,20 @@ public class JPEGComparator extends EnhancedComplexTestCase
      *       between old and new graphics. The font of the new graphics is little bit bigger,
      *       so the pixel count between old graphics and new graphics is twice the more.
      *
+     * @param _sOldGfx path & name to the jpeg file (1)
+     * @param _sNewGfx path & name to the other jpeg file (2)
+     * @param _sDiffGfx path & name to the new difference file which shows the difference between (1) and (2)
+     * @return the count of different pixels
+     * @throws java.io.IOException if file access is not possible
      */
-    public int estimateGfx(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
+
+    public static int estimateGfx(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
         throws java.io.IOException
         {
             // new count pixels
-            int nNotWhiteCount_OldGraphic = PixelCounter.countNotWhitePixelsFromImage(_sOldGfx);
-            int nNotWhiteCount_NewGraphic = PixelCounter.countNotWhitePixelsFromImage(_sNewGfx);
-            int nNotBlackCount_DiffGraphic = PixelCounter.countNotBlackPixelsFromImage(_sDiffGfx);
+            final int nNotWhiteCount_OldGraphic = PixelCounter.countNotWhitePixelsFromImage(_sOldGfx);
+            final int nNotWhiteCount_NewGraphic = PixelCounter.countNotWhitePixelsFromImage(_sNewGfx);
+            final int nNotBlackCount_DiffGraphic = PixelCounter.countNotBlackPixelsFromImage(_sDiffGfx);
 
             int nMinNotWhiteCount = Math.min(nNotWhiteCount_NewGraphic, nNotWhiteCount_OldGraphic);
 
@@ -539,7 +544,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
             return nPercent;
         }
 
-        public int compareJPEG(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
+        private static int compareJPEG(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
         {
             String sComposite = "composite";
             if (OSHelper.isWindows())
@@ -570,6 +575,15 @@ public class JPEGComparator extends EnhancedComplexTestCase
                 GlobalLogWriter.println("'" + sComposite + "' return with ");
                 String sBack = aHandler.getOutputText();
                 GlobalLogWriter.get().println("'" + sBack + "'");
+            }
+            else
+            {
+                // creates an extra smaller difference picture
+                File aDiffFile = new File(_sDiffGfx);
+                if (aDiffFile.exists())
+                {
+                    JPEGCreator.convertToNearSameFileWithWidth340(_sDiffGfx);
+                }
             }
             return nExitCode;
         }
@@ -624,7 +638,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
             }
             catch(java.lang.NumberFormatException e)
             {
-                GlobalLogWriter.get().println("Number format exception");
+                GlobalLogWriter.get().println("identify(): Number format exception");
                 nResult = 0;
             }
             return nResult;

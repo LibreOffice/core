@@ -760,7 +760,6 @@ function fInsertFrame (x1 as Integer , y1 as Integer , x2 as Integer , y2 as Int
     'This function will insert a frame with the coordinate
 
     Call wDocSetContext
-    Call gMouseClick (x1, y1)
 
     Call hToolbarSelect("INSERT", true )
     Sleep 1

@@ -50,7 +50,7 @@ testcase tHtmlExport
     dim sTemp as string
     dim sFile as string
 
-   '/// open 'tools->options' and set first/last name and email adress on the page 'StarOffice->UserData' ///'
+   printlog "open 'tools->options' and set first/last name and email adress on the page 'StarOffice->UserData' "
    ToolsOptions
    hToolsOptions ("STAROFFICE","USERDATA")
    VorName.SetText "Garfield"
@@ -59,7 +59,7 @@ testcase tHtmlExport
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
 
-   '/// create directory if not exists and delete the content, if exists user\\work\\html\\ ///'
+   printlog "create directory if not exists and delete the content, if exists user\\work\\html\\ "
    app.mkDir ((ConvertPath (gOfficePath + "user\work\html\"))
    Liste(0) = 0
    GetFileList ((ConvertPath (gOfficePath + "user\work\html\")), "*.*" , Liste() )
@@ -69,43 +69,43 @@ testcase tHtmlExport
       next i
    endif
 
-   '/// open application ///'
+   printlog "open application "
    Call hNewDocument
    WaitSlot (3000)
-'---------------------------------- simple document -----------------------------------------------
-   '/// create a rectrangle ///'
+'------------------ simple document --------------------
+   printlog "create a rectrangle "
    hTextrahmenErstellen ("This is a test text",10,10,40,20)
    WaitSlot (2000)
-   '/// create another rectrangle ///'
+   printlog "create another rectrangle "
    hRechteckErstellen (50,50,70,70)
    WaitSlot (3000)
-'###################################################################################################
-   Printlog "'///<b> test if no file is created, if dialog is canceld </b>///'"
-   '/// call 'File->Export'///'
+'####################################
+   Printlog "test if no file is created, if dialog is canceld"
+   printlog "call 'File->Export'"
    FileExport
    Kontext "ExportierenDlg"
    WaitSlot (1000)
    gHTMLFilter = Dateityp.GetItemText(1)
    Dateityp.Select(gHTMLFilter)
-   '/// set Filename to 'user\\work\\html\\expo0.html' ///'
+   printlog "set Filename to 'user\\work\\html\\expo0.html' "
    sFile = ConvertPath (gOfficePath + "user\work\html\expo0")
    Dateiname.SetText sFile
    WaitSlot (2000)
-   '/// click button 'Save' ///'
+   printlog "click button 'Save' "
    Speichern.Click
    WaitSlot (3000)
    Kontext "Active"
       if Active.Exists Then Active.Yes
-'--------------------------------------------------------------------------
-   '/// now we are on the dialog -1- 'Assign design' ///'
+'---------------------------------------------------------
+   printlog "now we are on the dialog -1- 'Assign design' "
    Kontext "HTMLExport1"
-   '/// click button 'Cancel' ///'
+   printlog "click button 'Cancel' "
    HTMLExport1.Cancel
    WaitSlot (5000)
    Liste(0) = 0
    GetFileList ((ConvertPath (gOfficePath + "user\work\html\")), "*.*" , Liste() )
    WaitSlot (1000)
-   Printlog "used file name: '" + sFile + "'"
+   Printlog "used file name: " + sFile
    if (ListCount (Liste()) > 0) then
       warnlog "dialog for export was canceled, but file was created :-("
       for i = 1 to ListCount (Liste())
@@ -113,88 +113,89 @@ testcase tHtmlExport
       next i
       KillFileList (Liste())
    end if
-'###################################################################################################
-   Printlog "'///<b> test if files are created </b>///'"
-   '/// call 'File->Export'///'
+'####################################
+   Printlog "'test if files are created"
+   printlog "call 'File->Export'"
    FileExport
    Kontext "ExportierenDlg"
    WaitSlot (1000)
    try
-      '/// select Filetype 'HTML...' aka 'WebPage' ///'
+      printlog "select Filetype 'HTML...' aka 'WebPage' "
       Dateityp.Select gHTMLFilter
    catch
       errorlog  " Filter not available :-( : '"+gHTMLFilter+"'"
-      Dateityp.Select 1 '/// Selects the first entry - which should be html ///'
+      Dateityp.Select 1 
+      printlog "Selects the first entry - which should be html "
    endcatch
    WaitSlot (1000)
-   '/// set Filename to 'user\\work\\html\\expo.html' ///'
+   printlog "set Filename to 'user\\work\\html\\expo.html' "
    sFile = ConvertPath (gOfficePath + "user\work\html\expo.html")
    Dateiname.SetText sFile
    WaitSlot (2000)
-   '/// click button 'Save' ///'
+   printlog "click button 'Save' "
    Speichern.Click
    WaitSlot (3000)
    Kontext "Active"
       if Active.Exists Then Active.Yes
-'--------------------------------------------------------------------------
-   Printlog "'/// now we are on the dialog -1- 'Assign design' ///'"
+'---------------------------------------------------------
+   Printlog  "now we are on the dialog -1- 'Assign design' "
    Kontext "HTMLExport1"
-   '/// 'New design' should be checked ///'
+   printlog "'New design' should be checked "
    if (NeuesDesign.IsEnabled <> TRUE) then
       warnlog "NewDesign is not enabled by default :-("
    endif
-   '/// click button 'Next >>' ///'
+   printlog "click button 'Next >>' "
    Weiter.Click
    WaitSlot (1000)
-   Printlog "'/// now we are on the dialog -2- 'Publication Type & Options' ///'"
+   Printlog "now we are on the dialog -2- 'Publication Type & Options' "
    Kontext "HTMLExport2"
-   '/// checkbox 'Standard HTML Format' is checked by default ///'
+   printlog "checkbox 'Standard HTML Format' is checked by default "
    if (Standard.IsChecked <> TRUE) then
       warnlog "Standard is not enabled by default :-("
       Standard.Check
    end if
-   '/// checkbox 'Title Page' is checked by default ///'
+   printlog "checkbox 'Title Page' is checked by default "
    if Not TitelseiteErzeugen.IsChecked Then
        TitelSeiteErzeugen.Check
        Warnlog  "- 'create Titlepage' should be checked as default :-("
    end if
    if (gApplication = "IMPRESS") then
-      '/// if applcation is impress: the checkbox 'Show notes' is enabled by default///'
+      printlog "if application is impress: the checkbox 'Show notes' is enabled by default"
       If (Notizenanzeigen.IsChecked <> TRUE) Then
           warnlog "- 'Show notes' checked as default :-("
           Notizenanzeigen.Check
       end if
    end if
-   '/// click button 'Next >>' ///'
+   printlog "click button 'Next >>' "
    Weiter.Click
-   Printlog "'/// now we are on the dialog -3- 'png/gif/jpeg & resolution & sound' ///'"
+   Printlog "now we are on the dialog -3- 'png/gif/jpeg & resolution & sound' "
    Kontext "HTMLExport3"
-   '/// checkbox 'PNG' is checked by default ///'
+   printlog "checkbox 'PNG' is checked by default "
    if (PNG.isChecked <> TRUE) then
       warnlog "Save Graphic as 'PNG' is not checked as default :-("
       PNG.Check
    end if
-   '/// Listbox compression '75%' is selected by default ///'
+   printlog "Listbox compression '75%' is selected by default "
    if (Kompressionswert.GetSelText <> "75%") then
       warnlog "'Compression' should be '75%', but is: '" + Kompressionswert.GetSelText + "'"
       Kompressionswert.Select "75%"
    end if
-   '/// checkbox 'low monitor resolution' is checked by default ///'
+   printlog "checkbox 'low monitor resolution' is checked by default "
    if (NiedrigeAufloesung.IsChecked <> TRUE)Then
       warnlog "Monitor resolution 'low' is not selected as default :-("
       NiedrigeAufloesung.Check
    end if
-   '/// checkbox 'export sounds' is checked by default ///'
+   printlog "checkbox 'export sounds' is checked by default "
    if (KlaengeExportieren.IsChecked <> true) then
       warnlog "'Export Sounds' is not checked as default :-("
       KlaengeExportieren.Check
    end if
-   '/// click button 'Next >>' ///'
+   printlog "click button 'Next >>' "
    Weiter.Click
    WaitSlot (1000)
-   Printlog "'/// now we are on the dialog -4- 'Information for the title page' ///'"
+   Printlog "now we are on the dialog -4- 'Information for the title page' "
    Kontext "HTMLExport4"
-   '/// the names you entered in the options have to appeare here! ///'
+   printlog "the names you entered in the options have to appeare here! "
    sTemp = Autor.GetText
    Autor1=Autor.GetText
    if (sTemp <> "Garfield Peanuts") then
@@ -205,24 +206,24 @@ testcase tHtmlExport
    if (sTemp <> "recumbent@sun.com") then
       warnlog "Value for 'Email' is other than expected, should be 'recumbent@sun.com', is: '"+sTemp+"'"
    end if
-   '/// set text in field 'your homepage' ///'
+   printlog "set text in field 'your homepage' "
    Homepage.SetText "mahler"
    AdditionalInformation.SetText "QualityApprooved"
-   '/// click button 'Next >>' ///'
+   printlog "click button 'Next >>' "
    Weiter.Click
    WaitSlot (2000)
-   Printlog "'/// now we are on the dialog -5- 'select button style' ///'"
+   Printlog "now we are on the dialog -5- 'select button style' "
    Kontext "HTMLExport5"
    WaitSlot (5000)
-   '/// checkbox 'Text only' should be checked by default ///'
+   printlog "checkbox 'Text only' should be checked by default "
    if (NurText.ischecked <> TRUE) then
       warnlog "'Text only' is not checked by default :-("
       NurText.check
    end if
-   '/// click button 'Next >>' ///'
+   printlog "click button 'Next >>' "
    Weiter.Click
    WaitSlot (1000)
-   Printlog "'/// now we are on the dialog -6- 'select color scheme' ///'"
+   printlog "now we are on the dialog -6- 'select color scheme' "
    Kontext "HTMLExport6"
    WaitSlot (2000)
    ' maybe check if colour dialog comes up ?! TBO
@@ -231,16 +232,16 @@ testcase tHtmlExport
    'AktiverLink
    'GesichteterLink
    'Hintergrund
-   '/// 'Apply color schemes from document' should be checked per default :-) ///'
+   printlog "'Apply color schemes from document' should be checked per default :-) "
    if (FarbenAusDok.IsChecked <> TRUE) Then
       warnlog "'Apply color schemes from document' should be checked per default :-("
       FarbenAusDok.Check
    end if
    WaitSlot (2000)
-   '/// click button 'Create' ///'
+   printlog "click button 'Create' "
    HTMLExport6.OK
    WaitSlot (5000)
-   Printlog "'/// now we are on the dialog -7- 'Name HTML Design' ///'"
+   Printlog "now we are on the dialog -7- 'Name HTML Design' "
    Kontext "HTMLDesign"
    WaitSlot (1000)
    Designname.SetText "Lem's Standard"
@@ -248,17 +249,15 @@ testcase tHtmlExport
    WaitSlot (3000)
     Kontext "active"
     if active.exists (5) then
-      printlog " the name for this design already exists : '" + active.GetText+ "'"
-        printlog " SAY YES!------------------"
+        printlog " the name for this design already exists : '" + active.GetText+ "'"
         active.yes
     end if
-   '/// check number and names of created files ///'
+   printlog "check number and names of created files "
    Printlog "used file name: '" + sFile + "'"
    Liste(0) = 0
    GetFileList ((ConvertPath (gOfficePath + "user\work\html\")), "*.*" , Liste() )
    WaitSlot (1000)
    x =  ListCount(Liste())
-'   Printlog "gApplication is: " + gApplication   ' For debugging - FHA
    if gApplication = "DRAW" then
       if (x <> "3") then
          Warnlog "- Number of files is not correct, it should be:3 but it is: '" + x + "' - Draw"
@@ -274,7 +273,7 @@ testcase tHtmlExport
             next
       end if
    end if
-   '/// check if fileextension is common - .htm or .html for all files the same ///'
+   printlog "check if fileextension is common - .htm or .html for all files the same "
    Liste(0) = 0
    GetFileList ((ConvertPath (gOfficePath + "user\work\html\")), "*.htm" , Liste() )
    WaitSlot (1000)
@@ -288,36 +287,36 @@ testcase tHtmlExport
       Warnlog " htm : " + x
       Warnlog " html: " + i
    end if
-'------------------------------------------------------------------------------------------------------------------------------
-   Printlog "'///<b> check if design is created in dialog </b>///'"
+'--------------------------------------------------------
+   Printlog "check if design is created in dialog"
    WaitSlot (3000)
-   '/// File->Export ///'
+   printlog "File->Export "
    FileExport
    Kontext "ExportierenDlg"
-   '/// Set Filename to "user\\work\\html\\expo.html" ///'
+   printlog "Set Filename to user\\work\\html\\expo.html "
    Dateiname.SetText sFile
    try
-      '/// select Filetype 'HTML...' aka 'WebPage' ///'
+      printlog "select Filetype 'HTML...' aka 'WebPage' "
       Dateityp.Select gHTMLFilter
    catch
       errorlog " Filter not available :-( : '"+gHTMLFilter+"'"
    endcatch
    WaitSlot (1000)
-   '/// click button 'save' ///'
+   printlog "click button 'save' "
    Speichern.Click
    WaitSlot (1000)
       Kontext "Active"
       ' active about overwriting existing file
       if Active.Exists Then Active.Yes
-'--------------------------------------------------------------------------
+'---------------------------------------------------------
    WaitSlot (1000)
       Kontext "HTMLExport1"
    WaitSlot (1000)
       try
-         '/// now 'existing design' is checkable -> check it ///'
+         printlog "now 'existing design' is checkable -> check it "
          ExistierendesDesign.Check
          WaitSlot (3000)
-         '/// there has to be 1 design in the list, select and delete it ///'
+         printlog "there has to be 1 design in the list, select and delete it "
          x = Designliste.GetItemCount
          if (x <> 1) then
             warnlog "there is an unexpected count on designs in the list, expected 1, but there are : '" + x + "'"
@@ -344,9 +343,11 @@ testcase tHtmlExport
    Call hCloseDocument
    Printlog "used file name: '" + sFile + "'"
    ' TBOTODO CHECK files contenet !
-   
+  
 endcase 'tHtmlExport
-'-------------------------------------------------------------------------------
+
+'---------------------------------------------------------
+
 testcase tHtmlExport_Webcast
 
     Dim iWaitIndex as integer
@@ -356,7 +357,7 @@ testcase tHtmlExport_Webcast
     dim Liste ( 200 ) as String
     dim sFile as string
 
-   '/// create directories if not exists and delete the content, if exists user\\work\\html\\[asp|perl]\\ ///'
+   printlog "create directories if not exists and delete the content, if exists user\\work\\html\\[asp|perl]\\ "
    app.mkDir (ConvertPath (gOfficePath + "user\work\html\asp\"))
    app.mkDir (ConvertPath (gOfficePath + "user\work\html\perl\"))
    Liste(0) = 0
@@ -376,8 +377,8 @@ testcase tHtmlExport_Webcast
       next i
    end if
 
-   '/// File->Autopillot->Presentation... ///'----------------------------------
-    FileAutopilotPresentation
+   printlog "File->Autopillot->Presentation... " '---------
+   FileAutopilotPresentation
     Kontext "Active"
     if Active.Exists(1) then
         WarnlogActive.GetText
@@ -388,18 +389,18 @@ testcase tHtmlExport_Webcast
         endcatch
         goto endsub
     end if
-    '/// Page 1 of autopilot///'
+    printlog "Page 1 of autopilot"
     Kontext "AutopilotPraesentation1"
-    '/// uncheck 'preview' ///'
+    printlog "uncheck 'preview' "
     Preview.Uncheck
-    '/// click on button 'create' ///'
+    printlog "click on button 'create' "
     AutopilotPraesentation1.OK
     WaitSlot (3000)
-    '************************************************************ Page 1
-    Printlog "'///<b> create a presentation and save it for further references </b>///'"
-    '/// start creating the presentation now ///'-------------------------------
+    '************************************ Page 1
+    Printlog "create a presentation and save it for further references"
+    printlog "start creating the presentation now "'------------------------------
     Printlog "- Create presentation"
-    '/// select 'click to add title' with [TAB] and press [F2] to edit the placeholder title ///'
+    printlog "select 'click to add title' with [TAB] and press [F2] to edit the placeholder title "
     hTypeKeys "<TAB><F2>"
     WaitSlot (2000)
     Select Case Ucase(gApplication)
@@ -407,32 +408,39 @@ testcase tHtmlExport_Webcast
         case "IMPRESS"      : hMouseClick DocumentImpress,50,50
     end select
     WaitSlot (3000)
-    '/// Type 'This is a test text', select it. ///'
+    printlog "Type 'This is a test text', select it. "
     hTextrahmenErstellen ("This is a test text",10,10,40,20)
     EditSelectAll
+    
     Kontext "TextObjectbar"
-    '/// click 'bold text' in object toolbar ///'
+    
+    if TextObjectbar.Exists <> TRUE then 
+        ViewToolbarsTextFormatting
+    end if
+    WaitSlot (3000) 
+    Kontext "TextObjectbar"
+    printlog "click 'bold text' in object toolbar "
     Fett.Click
     WaitSlot (2000)
-    '/// press [esacpe][tab] to get out of edit mode and select the next placeholder ///'
+    printlog "press [esacpe][tab] to get out of edit mode and select the next placeholder "
     hTypeKeys "<escape><TAB>"
     WaitSlot (1000)
-    '/// SlideShow->Effects ///'
+    printlog "SlideShow->Effects "
     SlideShowCustomAnimation
     WaitSlot (1000)
     Kontext "Tasks"
     WaitSlot (1000)
     EffectAdd.Click
-    '/// Dialog 'Custom Animation' comes up ///'
+    printlog "Dialog 'Custom Animation' comes up "
     kontext
-    '/// Switch to TabPage: Entrance ///'
+    printlog "Switch to TabPage: Entrance "
     active.setPage(TabEntrance)
     Kontext "TabEntrance"
     if TabEntrance.Exists (5) then
           WaitSlot (1000)
-          '/// select effect 'ABC v' :-) ///'
+          printlog "select effect 'ABC v' :-) "
           Effects.Select(5)
-          '/// select speed 'slow' -> first item in list ///'
+          printlog "select speed 'slow' -> first item in list "
           Speed.Select 1
           try
               TabEntrance.Ok
@@ -447,43 +455,41 @@ testcase tHtmlExport_Webcast
           end if
           kontext "Tasks"
       end if
-   WaitSlot (3000)
-   '/// activate grafik insert dialog by typing [return] ///'
-'Doesnt work, will work when accessability works better - FHA.
+    WaitSlot (3000)
+    printlog "activate grafik insert dialog by typing [return] "
 
-'   hTypeKEys "<return>"  ' i love accessability feartures .-)))))))))))))))))
-      InsertGraphicsFromFile
-      Kontext "GrafikEinfuegenDlg"
-      if GrafikEinfuegenDlg.Exists <> TRUE then
-          WaitSlot (1000)
+    InsertGraphicsFromFile
+    Kontext "GrafikEinfuegenDlg"
+    if GrafikEinfuegenDlg.Exists <> TRUE then
+        WaitSlot (1000)
       end if
-      '/// insert grafik: global\\input\\graf_inp\\borabora.jpg ///'
+      printlog "insert grafik: global\\input\\graf_inp\\borabora.jpg "
       Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\borabora.jpg")
       WaitSlot (3000)
       Oeffnen.Click
    WaitSlot (2000)
-   '/// select 'click to add an outline' with [TAB] and press [F2] to edit the placeholder ///'
+   printlog "select 'click to add an outline' with [TAB] and press [F2] to edit the placeholder "
    hTypeKeys "<TAB><F2>"
-   '/// insert text and select the words by typing [strg a] ///'
+   printlog "insert text and select the words by typing [strg a] "
    hTypeKeys "Mecury<RETURN>Venus<RETURN>Earth<RETURN>Mars<RETURN>Jupiter<RETURN>Saturn<RETURN>Uranus<RETURN>Neptune<RETURN>Pluto"
    EditSelectAll
    WaitSlot (1000)
-   '/// format->character ///'
+   printlog "format->character "
    FormatCharacter
       WaitSlot (2000)
       Kontext
       Active.SetPage TabFont
       Kontext "TabFont"
-      '/// set font size to '18' on tabpage 'font' ///'
+      printlog "set font size to '18' on tabpage 'font' "
       try
          SizeWest.SetText "18"
       catch
          Size.SetText "18"
       endcatch
-   '/// click button OK ///'
+   printlog "click button OK "
    TabFont.OK
    WaitSlot (1000)
-   '/// click 'bold text' in object toolbar ///'
+   printlog "click 'bold text' in object toolbar "
    Kontext "TextObjectbar"
    try
        usebindings
@@ -504,14 +510,14 @@ testcase tHtmlExport_Webcast
        endcatch
    endcatch
    WaitSlot (2000)
-   '/// SlideShow-> CustomAnimation ///'
+   printlog "SlideShow-> CustomAnimation "
    SlideShowCustomAnimation
        WaitSlot (1000)
        Kontext "Tasks"
        WaitSlot (1000)
        EffectChange.Click
        kontext
-       '/// Switch to TabPage: Entrance ///'
+       printlog "Switch to TabPage: Entrance "
        active.setPage(TabEntrance)
        kontext "TabEntrance"
        Effects.TypeKeys "<DOWN>",8
@@ -521,37 +527,37 @@ testcase tHtmlExport_Webcast
        catch
            warnlog "select another effect, assign is not possible"
        endcatch
-'************************************************************ Page 2 Merkur
-   '/// create a 2nd slide with: insert->slide ///'
+'******************************** Page 2 Merkur
+   printlog "create a 2nd slide with: insert->slide "
    InsertSlide
    WaitSlot (2000)
    hTypekeys "<Pagedown>"
    WaitSlot (2000)
-   '/// select 'click to add title' with [TAB] and press [F2] to edit the placeholder title ///'
+   printlog "select 'click to add title' with [TAB] and press [F2] to edit the placeholder title "
    hTypeKeys "<TAB><F2>"
    WaitSlot (2000)
-   '/// Type 'MERKUR', select it via Edit-Select All///'
+   printlog "Type 'MERKUR', select it via Edit-Select All"
    hTextrahmenErstellen ("MERKUR",10,10,60,30)
    EditSelectAll
    WaitSlot (2000)
-   '/// click 'bold text' in object toolbar ///'
+   printlog "click 'bold text' in object toolbar "
    Kontext "TextObjectbar"
    Fett.Click
    WaitSlot (1000)
-   '/// press [esacpe][tab][return] to get out of edit mode and select the next placeholder and activate grafik insert dialog ///'
+   printlog "press [esacpe][tab][return] to get out of edit mode and select the next placeholder and activate grafik insert dialog "
 '   hTypeKeys "<escape><tab><return>"
    hTypeKeys "<escape><tab>"
    InsertGraphicsFromFile
       WaitSlot (4000)
-      '/// insert grafik: global\\input\\graf_inp\\borabora.jpg ///'
+      printlog "insert grafik: global\\input\\graf_inp\\borabora.jpg "
       Kontext "GrafikEinfuegenDlg"
       Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\borabora.jpg")
       WaitSlot (3000)
    Oeffnen.Click
    WaitSlot (2000)
-   '/// select 'click to add an outline' with [TAB] and press [F2] to edit the placeholder ///'
+   printlog "select 'click to add an outline' with [TAB] and press [F2] to edit the placeholder "
    hTypeKeys "<TAB><F2>"
-   '/// insert text and select the words by typing [strg a] ///'
+   printlog "insert text and select the words by typing [strg a] "
    WaitSlot (1000)
    hTypeKeys "Reciprocal Mass *5972000<SHIFT RETURN>Mass (Erde=1) 0,0558<SHIFT RETURN>Mass in kg 3,30310<SHIFT RETURN>"
    hTypeKeys "Equator-radius (km) 2440<SHIFT RETURN>Equator-radius (Erde=1)0,382<SHIFT RETURN>Middle density (kg/m^3) 5400<SHIFT RETURN>"
@@ -560,22 +566,22 @@ testcase tHtmlExport_Webcast
    hTypeKeys "Temperatur at night -170C<SHIFT RETURN>Diameter (km) 4800"
    EditSelectAll
    WaitSlot (1000)
-   '/// format->character ///'
+   printlog "format->character "
    FormatCharacter
       WaitSlot (2000)
       Kontext
       Active.SetPage TabFont
       Kontext "TabFont"
-      '/// set font size to '18' on tabpage 'font' ///'
+      printlog "set font size to '18' on tabpage 'font' "
       try
          SizeWest.SetText "16"
       catch
          Size.SetText "16"
       endcatch
-   '/// click button OK ///'
+   printlog "click button OK "
    TabFont.OK
    WaitSlot (2000)
-   '/// click 'bold text' in object toolbar ///'
+   printlog "click 'bold text' in object toolbar "
    Kontext "TextObjectbar"
    try
       Fett.Click 'culprint
@@ -594,65 +600,66 @@ testcase tHtmlExport_Webcast
       endcatch
    endcatch
    WaitSlot (2000)
-   '/// save file with impress filter :  "user\\work\\webcast.odp" ///'
+   printlog "save file with impress filter :  user\\work\\webcast.odp "
    sFile = ConvertPath (gOfficePath + "user\work\webcast")
    if (Dir (sFile + ".odp") <> "") then app.kill (sFile + ".odp")
    WaitSlot (2000)
    hFileSaveAsWithFilterKill ((sFile + ".odp") , "impress8" )
-   Printlog "saved presentation: '" + sFile + ".odp"
-'----------------------------------- Exportieren als ASP Web-Cast
-   Printlog "'///<b> export as webcast ASP </b>///'"
-   '/// File->SaveAs ///'
+   Printlog "saved presentation: " + sFile + ".odp"
+'------------------------- Exportieren als ASP Web-Cast
+   Printlog "'export as webcast ASP"
+   printlog "File->SaveAs "
    FileExport
       WaitSlot (2000)
       Kontext "ExportierenDlg"
       try
-        '/// select Filetype 'HTML...' aka 'WebPage' ///'
+        printlog "select Filetype 'HTML...' aka 'WebPage' "
         gHTMLFilter = Dateityp.GetItemText(1)
         Dateityp.Select(gHTMLFilter)
       catch
          errorlog  " Filter not available :-( : '"+gHTMLFilter+"'"
-         Dateityp.Select 1 '/// Selects the first entry - which should be html ///'
+         Dateityp.Select 1 
+         printlog "Selects the first entry - which should be html "
       endcatch
-      '/// Set Filename to "user\\work\\webcst_asp.html" ///'
+      printlog "Set Filename to user\\work\\webcst_asp.html "
       sFile = ConvertPath (gOfficePath + "user\work\html\asp\webcast.html")
       Dateiname.SetText sFile
-      '/// click button 'save' ///'
+      printlog "click button 'save' "
       Speichern.Click
       WaitSlot (5000)
       Kontext "Active"' ????????? TBO
          if Active.Exists (5) Then Active.Yes
       WaitSlot (3000)
-      '/// now we are on the dialog -1- 'Assign design' ///'
+      printlog "now we are on the dialog -1- 'Assign design' "
       Kontext "HTMLExport1"
       WaitSlot (2000)
-      '/// click button 'Next >>' ///'
+      printlog "click button 'Next >>' "
       Weiter.Click
       WaitSlot (2000)
-      '/// now we are on the dialog -2- 'Publication Type & Options' ///'
+      printlog "now we are on the dialog -2- 'Publication Type & Options' "
       Kontext "HTMLExport2"
       WaitSlot (2000)
-      Printlog "'/// check 'WebCast' ///"
+      Printlog "check 'WebCast'"
       WebCast.Check
       WaitSlot (2000)
-      Printlog "'/// check 'Active Server Pages (ASP)'  ///"
+      Printlog "check 'Active Server Pages (ASP)'"
       ASP.Check
-      '/// click button 'Next >>' ///'
+      printlog "click button 'Next >>' "
       Weiter.Click
-      '/// now we are on the dialog -3- 'gif/jpeg & resolution & sound' ///'
+      printlog "now we are on the dialog -3- 'gif/jpeg & resolution & sound' "
       Kontext "HTMLExport3"
       WaitSlot (2000)
-      '/// check Save graphics as 'GIF' ///'
+      printlog "check Save graphics as 'GIF' "
       Gif.Check
-      '/// check 'Medium (monitor) Resolution' ///'
+      printlog "check 'Medium (monitor) Resolution' "
       MittlereAufloesung.Check
       WaitSlot (1000)
-      '/// click button 'Create' ///'
+      printlog "click button 'Create' "
       HTMLExport3.OK
       WaitSlot (2000)
-      '/// now we are on the dialog -7- 'Name HTML Design' ///'
+      printlog "now we are on the dialog -7- 'Name HTML Design' "
       Kontext "HTMLDesign"
-      '/// click button 'Do Not Save' ///'
+      printlog "click button 'Do Not Save' "
    if HTMLDesign.Exists Then HTMLDesign.Cancel
    iWaitIndex = 0
    do while HTMLDesign.Exists AND iWaitIndex < 30
@@ -671,15 +678,15 @@ testcase tHtmlExport_Webcast
          printlog "("+i+"/"+x+"): '"+Liste(i)+"'"
       next
    end if
-'----------------------------------- Exportieren als ASP Web-Cast
-   Printlog "'///<b> export as webcast PERL </b>///'"
+'------------------------- Exportieren als ASP Web-Cast
+   Printlog "export as webcast PERL"
    Kontext "DocumentImpress"
    WaitSlot (2000)
-   '/// File->export ///'
+   printlog "File->export "
    FileExport
       WaitSlot (2000)
       Kontext "ExportierenDlg"
-         '/// select Filetype 'HTML...' aka 'WebPage' ///'
+         printlog "select Filetype 'HTML...' aka 'WebPage' "
       try
          Dateityp.Select gHTMLFilter
       catch
@@ -688,51 +695,52 @@ testcase tHtmlExport_Webcast
          printlog "Selected " + Dateityp.GetSelText + " manually."
       endcatch
       WaitSlot (1000)
-      '/// Set Filename to "user\\work\\wbcst_p.html" ///'
+      printlog "Set Filename to user\\work\\wbcst_p.html "
       sFile = ConvertPath (gOfficePath + "user\work\html\perl\webcast")
       Dateiname.SetText sFile
-      '/// click button 'save' ///'
+      printlog "click button 'save' "
       Speichern.Click
       WaitSlot (2000)
-      Kontext "Active"      '/// click button 'save' ///'
+      Kontext "Active"      
+      printlog "click button 'save' "
          if Active.Exists Then Active.Yes
       WaitSlot (2000)
-      '/// now we are on the dialog -1- 'Assign design' ///'
+      printlog "now we are on the dialog -1- 'Assign design' "
       Kontext "HTMLExport1"
       WaitSlot (2000)
-      '/// click button 'Next >>' ///'
+      printlog "click button 'Next >>' "
       Weiter.Click
       WaitSlot (2000)
-      '/// now we are on the dialog -2- 'Publication Type & Options' ///'
+      printlog "now we are on the dialog -2- 'Publication Type & Options' "
       Kontext "HTMLExport2"
       WaitSlot (2000)
-      Printlog "'/// check 'WebCast' ///"
+      Printlog "check 'WebCast'"
       WebCast.Check
       WaitSlot (2000)
-      Printlog "'/// check 'Perl'  ///"
+      Printlog "check 'Perl'"
       PERL.Check
       WaitSlot (1000)
-      '/// 'URL for listeners' ///'
-    printlog "URL for listeners compare to to TBO: '"+BeamerURL.GetText+"'"
-      '/// set 'URL for presentation' to 'wbcst_prl.html' ///'
+      printlog "'URL for listeners' "
+    printlog "URL for listeners compare to to TBO: "+BeamerURL.GetText
+      printlog "set 'URL for presentation' to 'wbcst_prl.html' "
       PraesentationURL.SetText "wbcst_prl"
       WaitSlot (1000)
-      '/// set 'URL for perl scrips' to '/WebCast/cgi-bin/' ///'
+      printlog "set 'URL for perl scrips' to '/WebCast/cgi-bin/' "
       ScriptURL.SetText "/WebCast/cgi-bin/"
     printlog "presentation url? : "+ (gOfficePath + "/WebCast/cgi-bin/wbcst_prl")
       WaitSlot (1000)           
-      '/// click button 'Next >>' ///'
+      printlog "click button 'Next >>' "
       Weiter.Click
       WaitSlot (1000)
-      '/// now we are on the dialog -3- 'gif/jpeg & resolution & sound' ///'
+      printlog "now we are on the dialog -3- 'gif/jpeg & resolution & sound' "
       Kontext "HTMLExport3"
       WaitSlot (1000)
-      '/// check Save graphics as 'GIF' ///'
+      printlog "check Save graphics as 'GIF' "
       Gif.Check
-      '/// check 'Medium (monitor) Resolution' ///'
+      printlog "check 'Medium (monitor) Resolution' "
       MittlereAufloesung.Check
       WaitSlot (3000)
-      '/// click button 'Create' ///'
+      printlog "click button 'Create' "
    HTMLExport3.OK
    WaitSlot (3000)
    Kontext "HTMLDesign"

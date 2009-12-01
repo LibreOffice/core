@@ -39,19 +39,19 @@
 
 sub w_fields1
 
-    Call tFields_1           'Insert / Fields / Date
-    Call tFields_2           'Insert / Fields / Time
-    Call tFields_3           'Insert / Fields / Page Number
-    Call tFields_4           'Insert / Fields / Page Count
-    Call tFields_5           'Insert / Fields / Subject
-    Call tFields_6           'Insert / Fields / Title
-    Call tFields_7           'Insert / Fields / Author
+    Call tInsertFieldsDate
+    Call tInsertFieldsTime
+    Call tInsertFieldsPageNumber
+    Call tInsertFieldsPageCount
+    Call tInsertFieldsSubject
+    Call tInsertFieldsTitle
+    Call tInsertFieldsAuthor
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tFields_1
+testcase tInsertFieldsDate
 
     Dim sDate as String
     sDate  = Date
@@ -112,7 +112,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFields_2
+testcase tInsertFieldsTime
 
     Dim sTime  as String
     Dim sTime1 as String
@@ -175,7 +175,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFields_3
+testcase tInsertFieldsPageNumber
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -221,7 +221,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFields_4
+testcase tInsertFieldsPageCount
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -278,7 +278,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFields_5
+testcase tInsertFieldsSubject
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -311,7 +311,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFields_6
+testcase tInsertFieldsTitle
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -345,7 +345,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFields_7
+testcase tInsertFieldsAuthor
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 

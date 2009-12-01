@@ -58,6 +58,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/swriter", "FrameName", "_default", "SynchronMode", TRUE
         end if
+        if ( DocumentWriter.IsMax() = false ) then		
+			DocumentWriter.Maximize()
+			Wait( 2000 )
+		end if        				
     case "CALC"
         Kontext "DocumentCalc"
         if gNoNewDoc = TRUE then
@@ -65,6 +69,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/scalc", "FrameName", "_default", "SynchronMode", TRUE
         end if
+        if ( DocumentCalc.IsMax() = false ) then		
+			DocumentCalc.Maximize()
+			Wait( 2000 )
+		end if        						
     case "IMPRESS"
         Kontext "DocumentImpress"
         if gNoNewDoc = TRUE then
@@ -82,6 +90,10 @@ sub hNewDocument ( optional bANewDoc )
             end if
             Kontext "DocumentImpress"
             Sleep 2
+            if ( DocumentImpress.IsMax() = false ) then		
+            	DocumentImpress.Maximize()
+            	Wait( 2000 )
+            end if        							
         end if
     case "DRAW"
         Kontext "DocumentDraw"
@@ -90,6 +102,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/sdraw", "FrameName", "_default", "SynchronMode", TRUE
         end if
+        if ( DocumentDraw.IsMax() = false ) then		
+			DocumentDraw.Maximize()
+			Wait( 2000 )
+		end if        									
     case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
         if gNoNewDoc = TRUE then
@@ -101,15 +117,22 @@ sub hNewDocument ( optional bANewDoc )
         sleep (1)
         if Navigator.Exists(5) then Navigator.Close
         Kontext "DocumentMasterDoc"
+        if ( DocumentMasterDoc.IsMax() = false ) then		
+			DocumentMasterDoc.Maximize()
+			Wait( 2000 )
+		end if        											
     case "MATH"
         Kontext "DocumentMath"
         if gNoNewDoc = TRUE then
             FileOpen "FileName", "private:factory/smath", "SynchronMode", TRUE
         else
-            '                                             FileOpen "FileName", "private:factory/smath", "FrameName", "_blank"
             FileOpen "FileName", "private:factory/smath", "FrameName", "_default", "SynchronMode", TRUE
         end if
         Kontext "DocumentMath"
+        if ( DocumentMath.IsMax() = false ) then		
+			DocumentMath.Maximize()
+			Wait( 2000 )
+		end if        													
     case "HTML"
         Kontext "DocumentWriterWeb"
         if gNoNewDoc = TRUE then
@@ -118,6 +141,10 @@ sub hNewDocument ( optional bANewDoc )
             FileOpen "FileName", "private:factory/swriter/web", "FrameName", "_default", "SynchronMode", TRUE
         end if
         Kontext "DocumentWriterWeb"
+        if ( DocumentWriterWeb.IsMax() = false ) then		
+			DocumentWriterWeb.Maximize()
+			Wait( 2000 )
+		end if        															
     case "DATABASE"
         FileOpen "FileName", "private:factory/sdatabase?Interactive", "FrameName", "_default", "SynchronMode", TRUE
         Kontext "DatabaseWizard"
@@ -238,26 +265,6 @@ sub hCloseDocument ( optional bANewDoc )
         endcatch
     end if
     Sleep (2)
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hCloseAndLooseDocument
-    '/// <i>hCloseAndLooseDocument</i>
-    '///+ Closes a (modified) document and the verify dialog will be answered
-    '///+ with yes. That means you want to loose format information or you want
-    '///+ to loose the document!
-    Dim sFehler$
-
-    try
-        FileClose
-    catch
-        Exceptlog
-        exit sub
-    endcatch
-    sleep (2)
-    Kontext
-    if Active.Exists(2) then Active.Yes
 end sub
 '
 '-------------------------------------------------------------------------------
@@ -544,61 +551,4 @@ sub hTypeKeys ( OutputText , optional iLoop as Integer )
         wait 500
     next i
 end sub
-'
-'-------------------------------------------------------------------------------
-'
-function hOpenFileAndIgnoreMacroWarning (sDocName as string, optional IgnoreW) as Boolean
-    '/// Loading a (known) document with macro security warning.
-    '/// If the OPTIONAL parameter is used a PRINTLOG will be written into the result file otherwise a wrning.
-    Dim i as integer
-
-    'ConvertPath: Be sure that the path seperators has been set correctly (/ or \).
-    sDocName = ConvertPath(sDocName)
-
-    hOpenFileAndIgnoreMacroWarning = FALSE
-
-    if hFileExists(sDocName) = FALSE then
-        warnlog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: '" & sDocName & "' does not exists!"
-        'Setting the function to FALSE because file has not been found.
-        exit function
-    else
-        FileOpen
-        sleep (1)
-        Kontext "OeffnenDlg"
-        Dateiname.SetText sDocName
-        sleep (3)
-        Oeffnen.Click
-        sleep(2)
-        for i = 1 to 2
-            ' Since SRC680m?? we have TWO Security Warnings for
-            ' StarBasic and JavaScript; So this routine needs to
-            ' run twice.
-            Kontext "SecurityWarning"
-            if SecurityWarning.Exists(2) then
-                if IsMissing(IgnoreW) = FALSE then
-                    printLog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: Securitywarning dialog is visible."
-                else
-                    warnlog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: Securitywarning dialog is visible"
-                end if
-                SecurityWarning.OK
-            else
-                if i <> 2 then
-                    QAErrorLog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: No Security warning dialog occured! Document loading aborted."
-                    hOpenFileAndIgnoreMacroWarning = FALSE
-                    exit function
-                end if
-            end if
-        next i
-        Kontext "OeffnenDlg"
-        if OeffnenDlg.Exists(1) then
-            OeffnenDlg.Cancel
-            warnlog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: The 'FileOpen'-Dialog is open!"
-        else
-            ' After the external routine IsItLoaded has been run the return value of this function should be set to TRUE.
-            if IsItLoaded = TRUE then
-                hOpenFileAndIgnoreMacroWarning = TRUE
-            end if
-        end if
-    end if
-end function
 
