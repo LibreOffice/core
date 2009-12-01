@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,15 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	\
+SLOFILES =							\
+        $(SLO)$/propertylist.obj	\
         $(SLO)$/tokenmap.obj
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-$(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx : 
+$(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$/propertywords.inc $(INCCOM)$/properties.hxx :
     @@noop $(assign do_phony:=.PHONY)
 
 $(MISC)$/do_tokens $(do_phony) : tokens.txt gentoken.pl $(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx
@@ -60,4 +61,9 @@ $(INCCOM)$/tokens.inc : $(MISC)$/tokens.gperf $(MISC)$/do_tokens
         gperf --compare-strncmp $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" | $(GREP) -v "^#line" >$(INCCOM)$/tokens.inc
 
 $(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.inc $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(MISC)$/do_tokens
+
+$(MISC)$/do_properties $(do_phony) : properties.txt genproperties.pl $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc
+        $(PERL) genproperties.pl properties.txt $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc && $(TOUCH) $@
+
+$(SLO)$/propertylist.obj : $(INCCOM)$/propertywords.inc $(INCCOM)$/properties.hxx $(MISC)$/do_properties
 

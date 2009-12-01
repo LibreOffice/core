@@ -73,9 +73,9 @@ void BiffInputRecordBuffer::restartAt( sal_Int64 nPos )
     mbValidHeader = false;
 }
 
-void BiffInputRecordBuffer::setDecoder( BiffDecoderRef xDecoder )
+void BiffInputRecordBuffer::setDecoder( const BiffDecoderRef& rxDecoder )
 {
-    mxDecoder = xDecoder;
+    mxDecoder = rxDecoder;
     enableDecoder( true );
     updateDecoded();
 }
@@ -230,14 +230,9 @@ void BiffInputStream::rewindRecord()
 
 // decoder --------------------------------------------------------------------
 
-void BiffInputStream::setDecoder( BiffDecoderRef xDecoder )
+void BiffInputStream::setDecoder( const BiffDecoderRef& rxDecoder )
 {
-    maRecBuffer.setDecoder( xDecoder );
-}
-
-BiffDecoderRef BiffInputStream::getDecoder() const
-{
-    return maRecBuffer.getDecoder();
+    maRecBuffer.setDecoder( rxDecoder );
 }
 
 void BiffInputStream::enableDecoder( bool bEnable )

@@ -140,12 +140,11 @@ Reference< XTextInputStream > InputOutputHelper::openTextInputStream(
         Reference< XActiveDataSink > xDataSink( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TextInputStream" ) ), UNO_QUERY_THROW );
         xDataSink->setInputStream( rxInStrm );
         xTextInStrm.set( xDataSink, UNO_QUERY_THROW );
+        xTextInStrm->setEncoding( rEncoding );
     }
     catch( Exception& )
     {
     }
-    if( xTextInStrm.is() )
-        xTextInStrm->setEncoding( rEncoding );
     return xTextInStrm;
 }
 
@@ -181,12 +180,11 @@ Reference< XTextOutputStream > InputOutputHelper::openTextOutputStream(
         Reference< XActiveDataSource > xDataSource( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TextOutputStream" ) ), UNO_QUERY_THROW );
         xDataSource->setOutputStream( rxOutStrm );
         xTextOutStrm.set( xDataSource, UNO_QUERY_THROW );
+        xTextOutStrm->setEncoding( rEncoding );
     }
     catch( Exception& )
     {
     }
-    if( xTextOutStrm.is() )
-        xTextOutStrm->setEncoding( rEncoding );
     return xTextOutStrm;
 }
 
@@ -3062,7 +3060,7 @@ void RecordObjectBase::implDump()
         }
 
         // remaining undumped data
-        else if( !in().isEof() && (in().tell() == nRecPos) )
+        if( !in().isEof() && (in().tell() == nRecPos) )
             dumpRawBinary( mnRecSize, false );
         else
             dumpRemainingTo( nRecPos + mnRecSize );
@@ -3083,13 +3081,15 @@ void RecordObjectBase::constructRecObjBase( const BinaryInputStreamRef& rxBaseSt
     maRecNames = rRecNames;
     maSimpleRecs = rSimpleRecs;
     mnRecPos = mnRecId = mnRecSize = 0;
+    if( InputObjectBase::implIsValid() )
+        mbShowRecPos = cfg().getBoolOption( "show-record-position", true );
 }
 
 void RecordObjectBase::writeHeader()
 {
     MultiItemsGuard aMultiGuard( out() );
     writeEmptyItem( "REC" );
-    if( mxBaseStrm->isSeekable() )
+    if( mbShowRecPos && mxBaseStrm->isSeekable() )
         writeShortHexItem( "pos", mnRecPos, "CONV-DEC" );
     writeShortHexItem( "size", mnRecSize, "CONV-DEC" );
     ItemGuard aItem( out(), "id" );

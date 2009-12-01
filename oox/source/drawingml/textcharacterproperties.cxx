@@ -35,6 +35,7 @@
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 using ::rtl::OUString;
@@ -77,29 +78,29 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
     if( maLatinFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
     {
-        rPropMap[ CREATE_OUSTRING( "CharFontName" ) ] <<= aFontName;
-        rPropMap[ CREATE_OUSTRING( "CharFontPitch" ) ] <<= nFontPitch;
-        rPropMap[ CREATE_OUSTRING( "CharFontFamily" ) ] <<= nFontFamily;
+        rPropMap[ PROP_CharFontName ] <<= aFontName;
+        rPropMap[ PROP_CharFontPitch ] <<= nFontPitch;
+        rPropMap[ PROP_CharFontFamily ] <<= nFontFamily;
     }
 
     if( maAsianFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
     {
-        rPropMap[ CREATE_OUSTRING( "CharFontNameAsian" ) ] <<= aFontName;
-        rPropMap[ CREATE_OUSTRING( "CharFontPitchAsian" ) ] <<= nFontFamily;
-        rPropMap[ CREATE_OUSTRING( "CharFontFamilyAsian" ) ] <<= nFontPitch;
+        rPropMap[ PROP_CharFontNameAsian ] <<= aFontName;
+        rPropMap[ PROP_CharFontPitchAsian ] <<= nFontFamily;
+        rPropMap[ PROP_CharFontFamilyAsian ] <<= nFontPitch;
     }
 
     if( maComplexFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
     {
-        rPropMap[ CREATE_OUSTRING( "CharFontNameComplex" ) ] <<= aFontName;
-        rPropMap[ CREATE_OUSTRING( "CharFontPitchComplex" ) ] <<= nFontPitch;
-        rPropMap[ CREATE_OUSTRING( "CharFontFamilyComplex" ) ] <<= nFontFamily;
+        rPropMap[ PROP_CharFontNameComplex ] <<= aFontName;
+        rPropMap[ PROP_CharFontPitchComplex ] <<= nFontPitch;
+        rPropMap[ PROP_CharFontFamilyComplex ] <<= nFontFamily;
     }
 
     // symbol font not supported
 
     if( maCharColor.isUsed() )
-        rPropMap[ CREATE_OUSTRING( "CharColor" ) ] <<= maCharColor.getColor( rFilter );
+        rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter );
 
     if( moLang.has() && (moLang.get().getLength() > 0) )
     {
@@ -114,38 +115,38 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         {
             aLocale.Language = moLang.get();
         }
-        rPropMap[ CREATE_OUSTRING( "CharLocale" ) ] <<= aLocale;
-        rPropMap[ CREATE_OUSTRING( "CharLocaleAsian" ) ] <<= aLocale;
-        rPropMap[ CREATE_OUSTRING( "CharLocaleComplex" ) ] <<= aLocale;
+        rPropMap[ PROP_CharLocale ] <<= aLocale;
+        rPropMap[ PROP_CharLocaleAsian ] <<= aLocale;
+        rPropMap[ PROP_CharLocaleComplex ] <<= aLocale;
     }
 
     if( moHeight.has() )
     {
         float fHeight = GetFontHeight( moHeight.get() );
-        rPropMap[ CREATE_OUSTRING( "CharHeight" ) ] <<= fHeight;
-        rPropMap[ CREATE_OUSTRING( "CharHeightAsian" ) ] <<= fHeight;
-        rPropMap[ CREATE_OUSTRING( "CharHeightComplex" ) ] <<= fHeight;
+        rPropMap[ PROP_CharHeight ] <<= fHeight;
+        rPropMap[ PROP_CharHeightAsian ] <<= fHeight;
+        rPropMap[ PROP_CharHeightComplex ] <<= fHeight;
     }
 
-    rPropMap[ CREATE_OUSTRING( "CharUnderline" ) ] <<= GetFontUnderline( moUnderline.get( XML_none ) );
-    rPropMap[ CREATE_OUSTRING( "CharStrikeout" ) ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
-    rPropMap[ CREATE_OUSTRING( "CharCaseMap" ) ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
+    rPropMap[ PROP_CharUnderline ] <<= GetFontUnderline( moUnderline.get( XML_none ) );
+    rPropMap[ PROP_CharStrikeout ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
+    rPropMap[ PROP_CharCaseMap ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
 
     float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
-    rPropMap[ CREATE_OUSTRING( "CharWeight" ) ] <<= fWeight;
-    rPropMap[ CREATE_OUSTRING( "CharWeightAsian" ) ] <<= fWeight;
-    rPropMap[ CREATE_OUSTRING( "CharWeightComplex" ) ] <<= fWeight;
+    rPropMap[ PROP_CharWeight ] <<= fWeight;
+    rPropMap[ PROP_CharWeightAsian ] <<= fWeight;
+    rPropMap[ PROP_CharWeightComplex ] <<= fWeight;
 
     awt::FontSlant eSlant = moItalic.get( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
-    rPropMap[ CREATE_OUSTRING( "CharPosture" ) ] <<= eSlant;
-    rPropMap[ CREATE_OUSTRING( "CharPostureAsian" ) ] <<= eSlant;
-    rPropMap[ CREATE_OUSTRING( "CharPostureComplex" ) ] <<= eSlant;
+    rPropMap[ PROP_CharPosture ] <<= eSlant;
+    rPropMap[ PROP_CharPostureAsian ] <<= eSlant;
+    rPropMap[ PROP_CharPostureComplex ] <<= eSlant;
 
     bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
     if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
     {
-        rPropMap[ CREATE_OUSTRING( "CharUnderlineHasColor" ) ] <<= true;
-        rPropMap[ CREATE_OUSTRING( "CharUnderlineColor" ) ] <<= maUnderlineColor.getColor( rFilter );
+        rPropMap[ PROP_CharUnderlineHasColor ] <<= true;
+        rPropMap[ PROP_CharUnderlineColor ] <<= maUnderlineColor.getColor( rFilter );
     }
 }
 

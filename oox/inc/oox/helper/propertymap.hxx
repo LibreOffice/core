@@ -31,35 +31,72 @@
 #ifndef OOX_HELPER_PROPERTYMAP_HXX
 #define OOX_HELPER_PROPERTYMAP_HXX
 
+#include <vector>
 #include <map>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "oox/helper/helper.hxx"
+
+namespace com { namespace sun { namespace star { namespace beans {
+    struct PropertyValue;
+    class XPropertySet;
+} } } }
 
 namespace oox {
 
-typedef std::map< ::rtl::OUString, com::sun::star::uno::Any > PropertyMapBase;
+// ============================================================================
 
+/** A vector that contains all predefined property names used in the filters. */
+struct PropertyNamesList : public ::std::vector< ::rtl::OUString >
+{
+    explicit            PropertyNamesList();
+};
+
+// ============================================================================
+
+typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapBase;
+
+/** A helper that maps property identifiers to property values.
+
+    The property identifiers are generated on compile time and refer to the
+    property name strings that are held by a static vector. The identifier to
+    name mapping is done internally while the properties are written to
+    property sets.
+ */
 class PropertyMap : public PropertyMapBase
 {
 public:
-    bool hasProperty( const ::rtl::OUString& rName ) const;
-    const com::sun::star::uno::Any* getPropertyValue( const ::rtl::OUString& rName ) const;
+    /** Returns the name of the passed property identifier. */
+    static const ::rtl::OUString& getPropertyName( sal_Int32 nPropId );
 
+    /** Returns true, if the map contains a property with the passed identifier. */
+    inline bool         hasProperty( sal_Int32 nPropId ) const
+                            { return find( nPropId ) != end(); }
+
+    /** Returns the property value of the specified property, or 0 if not found. */
+    const ::com::sun::star::uno::Any* getProperty( sal_Int32 nPropId ) const;
+
+    /** Sets the specified property to the passed value. Does nothing, if the
+        identifier is invalid. */
     template< typename Type >
-    inline void setProperty( const ::rtl::OUString& rName, const Type& rValue )
-        { if( rName.getLength() > 0 ) (*this)[ rName ] <<= rValue; }
+    inline void         setProperty( sal_Int32 nPropId, const Type& rValue )
+                            { if( nPropId >= 0 ) (*this)[ nPropId ] <<= rValue; }
 
-    void makeSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rSequence ) const;
-    void makeSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rSequence ) const;
-    void makeSequence( ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
-                       ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) const;
+    /** Returns a sequence of property values, filled with all contained properties. */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                        makePropertyValueSequence() const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > makePropertySet() const;
-    void dump_debug(const char *pMessage = NULL);
+    /** Fills the passed sequences of names and anys with all contained properties. */
+    void                fillSequences(
+                            ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
+                            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) const;
+
+    /** Creates and fills a new instance supporting the XPropertySet interface. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        makePropertySet() const;
 };
+
+// ============================================================================
 
 } // namespace oox
 

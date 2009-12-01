@@ -32,9 +32,6 @@ package com.sun.star.filter.config.tools.merge;
 
 //_______________________________________________
 
-import java.lang.*;
-import java.util.*;
-import java.io.*;
 import com.sun.star.filter.config.tools.utils.*;
 
 //_______________________________________________

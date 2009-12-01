@@ -42,6 +42,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::sheet::XExternalSheetCache;
+using ::oox::core::ContextHandlerRef;
 using ::oox::core::RecordInfo;
 using ::oox::core::Relation;
 
@@ -60,28 +61,21 @@ OoxExternalSheetDataContext::OoxExternalSheetDataContext(
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxExternalSheetDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxExternalSheetDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( sheetData ):
-            return  (nElement == XLS_TOKEN( row ));
+            if( nElement == XLS_TOKEN( row ) ) return this;
+        break;
         case XLS_TOKEN( row ):
-            return  (nElement == XLS_TOKEN( cell ));
+            if( nElement == XLS_TOKEN( cell ) ) { importCell( rAttribs ); return this; }
+        break;
         case XLS_TOKEN( cell ):
-            return  (nElement == XLS_TOKEN( v ));
-    }
-    return false;
-}
-
-void OoxExternalSheetDataContext::onStartElement( const AttributeList& rAttribs )
-{
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( cell ):
-            importCell( rAttribs );
+            if( nElement == XLS_TOKEN( v ) ) return this;   // collect characters in onEndElement()
         break;
     }
+    return 0;
 }
 
 void OoxExternalSheetDataContext::onEndElement( const OUString& rChars )
@@ -107,33 +101,25 @@ void OoxExternalSheetDataContext::onEndElement( const OUString& rChars )
     }
 }
 
-ContextWrapper OoxExternalSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef OoxExternalSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case OOBIN_ID_EXTSHEETDATA:
-            return  (nRecId == OOBIN_ID_EXTROW);
+            if( nRecId == OOBIN_ID_EXTROW ) { maCurrPos.Row = rStrm.readInt32(); return this; }
+        break;
         case OOBIN_ID_EXTROW:
-            return  (nRecId == OOBIN_ID_EXTCELL_BLANK) ||
-                    (nRecId == OOBIN_ID_EXTCELL_BOOL) ||
-                    (nRecId == OOBIN_ID_EXTCELL_DOUBLE) ||
-                    (nRecId == OOBIN_ID_EXTCELL_ERROR) ||
-                    (nRecId == OOBIN_ID_EXTCELL_STRING);
+            switch( nRecId )
+            {
+                case OOBIN_ID_EXTCELL_BLANK:    importExtCellBlank( rStrm );    break;
+                case OOBIN_ID_EXTCELL_BOOL:     importExtCellBool( rStrm );     break;
+                case OOBIN_ID_EXTCELL_DOUBLE:   importExtCellDouble( rStrm );   break;
+                case OOBIN_ID_EXTCELL_ERROR:    importExtCellError( rStrm );    break;
+                case OOBIN_ID_EXTCELL_STRING:   importExtCellString( rStrm );   break;
+            }
+        break;
     }
-    return false;
-}
-
-void OoxExternalSheetDataContext::onStartRecord( RecordInputStream& rStrm )
-{
-    switch( getCurrentElement() )
-    {
-        case OOBIN_ID_EXTCELL_BLANK:    importExtCellBlank( rStrm );        break;
-        case OOBIN_ID_EXTCELL_BOOL:     importExtCellBool( rStrm );         break;
-        case OOBIN_ID_EXTCELL_DOUBLE:   importExtCellDouble( rStrm );       break;
-        case OOBIN_ID_EXTCELL_ERROR:    importExtCellError( rStrm );        break;
-        case OOBIN_ID_EXTCELL_STRING:   importExtCellString( rStrm );       break;
-        case OOBIN_ID_EXTROW:           maCurrPos.Row = rStrm.readInt32();  break;
-    }
+    return 0;
 }
 
 // private --------------------------------------------------------------------
@@ -200,60 +186,79 @@ OoxExternalLinkFragment::OoxExternalLinkFragment( const WorkbookHelper& rHelper,
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxExternalLinkFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef OoxExternalLinkFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == XLS_TOKEN( externalLink ));
+            if( nElement == XLS_TOKEN( externalLink ) ) return this;
+        break;
+
         case XLS_TOKEN( externalLink ):
-            return  (nElement == XLS_TOKEN( externalBook )) ||
-                    (nElement == XLS_TOKEN( ddeLink )) ||
-                    (nElement == XLS_TOKEN( oleLink ));
+            switch( nElement )
+            {
+                case XLS_TOKEN( externalBook ): mrExtLink.importExternalBook( getRelations(), rAttribs );   return this;
+                case XLS_TOKEN( ddeLink ):      mrExtLink.importDdeLink( rAttribs );                        return this;
+                case XLS_TOKEN( oleLink ):      mrExtLink.importOleLink( getRelations(), rAttribs );        return this;
+            }
+        break;
+
         case XLS_TOKEN( externalBook ):
-            return  (nElement == XLS_TOKEN( sheetNames )) ||
-                    (nElement == XLS_TOKEN( definedNames )) ||
-                    (nElement == XLS_TOKEN( sheetDataSet ));
+            switch( nElement )
+            {
+                case XLS_TOKEN( sheetNames ):
+                case XLS_TOKEN( definedNames ):
+                case XLS_TOKEN( sheetDataSet ): return this;
+            }
+        break;
+
         case XLS_TOKEN( sheetNames ):
-            return  (nElement == XLS_TOKEN( sheetName ));
+            if( nElement == XLS_TOKEN( sheetName ) ) mrExtLink.importSheetName( rAttribs );
+        break;
         case XLS_TOKEN( definedNames ):
-            return  (nElement == XLS_TOKEN( definedName ));
+            if( nElement == XLS_TOKEN( definedName ) ) mrExtLink.importDefinedName( rAttribs );
+        break;
         case XLS_TOKEN( sheetDataSet ):
             if( (nElement == XLS_TOKEN( sheetData )) && (mrExtLink.getLinkType() == LINKTYPE_EXTERNAL) )
                 return createSheetDataContext( rAttribs.getInteger( XML_sheetId, -1 ) );
         break;
+
         case XLS_TOKEN( ddeLink ):
-            return  (nElement == XLS_TOKEN( ddeItems ));
+            if( nElement == XLS_TOKEN( ddeItems ) ) return this;
+        break;
         case XLS_TOKEN( ddeItems ):
-            return  (nElement == XLS_TOKEN( ddeItem ));
+            if( nElement == XLS_TOKEN( ddeItem ) )
+            {
+                mxExtName = mrExtLink.importDdeItem( rAttribs );
+                return this;
+            }
+        break;
         case XLS_TOKEN( ddeItem ):
-            return  (nElement == XLS_TOKEN( values ));
+            if( nElement == XLS_TOKEN( values ) )
+            {
+                if( mxExtName.get() ) mxExtName->importValues( rAttribs );
+                return this;
+            }
+        break;
         case XLS_TOKEN( values ):
-            return  (nElement == XLS_TOKEN( value ));
+            if( nElement == XLS_TOKEN( value ) )
+            {
+                mnResultType = rAttribs.getToken( XML_t, XML_n );
+                return this;
+            }
+        break;
         case XLS_TOKEN( value ):
-            return  (nElement == XLS_TOKEN( val ));
+            if( nElement == XLS_TOKEN( val ) ) return this; // collect value in onEndElement()
+        break;
+
         case XLS_TOKEN( oleLink ):
-            return  (nElement == XLS_TOKEN( oleItems ));
+            if( nElement == XLS_TOKEN( oleItems ) ) return this;
+        break;
         case XLS_TOKEN( oleItems ):
-            return  (nElement == XLS_TOKEN( oleItem ));
+            if( nElement == XLS_TOKEN( oleItem ) ) mxExtName = mrExtLink.importOleItem( rAttribs );
+        break;
     }
     return false;
-}
-
-void OoxExternalLinkFragment::onStartElement( const AttributeList& rAttribs )
-{
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( externalBook ): mrExtLink.importExternalBook( getRelations(), rAttribs );   break;
-        case XLS_TOKEN( sheetName ):    mrExtLink.importSheetName( rAttribs );                      break;
-        case XLS_TOKEN( definedName ):  mrExtLink.importDefinedName( rAttribs );                    break;
-        case XLS_TOKEN( ddeLink ):      mrExtLink.importDdeLink( rAttribs );                        break;
-        case XLS_TOKEN( ddeItem ):      mxExtName = mrExtLink.importDdeItem( rAttribs );            break;
-        case XLS_TOKEN( values ):       if( mxExtName.get() ) mxExtName->importValues( rAttribs );  break;
-        case XLS_TOKEN( value ):        mnResultType = rAttribs.getToken( XML_t, XML_n );           break;
-        case XLS_TOKEN( oleLink ):      mrExtLink.importOleLink( getRelations(), rAttribs );        break;
-        case XLS_TOKEN( oleItem ):      mxExtName = mrExtLink.importOleItem( rAttribs );            break;
-    }
 }
 
 void OoxExternalLinkFragment::onEndElement( const OUString& rChars )
@@ -285,46 +290,53 @@ void OoxExternalLinkFragment::onEndElement( const OUString& rChars )
     }
 }
 
-ContextWrapper OoxExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef OoxExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nRecId == OOBIN_ID_EXTERNALBOOK);
+            if( nRecId == OOBIN_ID_EXTERNALBOOK )
+            {
+                mrExtLink.importExternalBook( getRelations(), rStrm );
+                return this;
+            }
+        break;
+
         case OOBIN_ID_EXTERNALBOOK:
-            if( (nRecId == OOBIN_ID_EXTSHEETDATA) && (mrExtLink.getLinkType() == LINKTYPE_EXTERNAL) )
-                return createSheetDataContext( rStrm.readInt32() );
-            return  (nRecId == OOBIN_ID_EXTSHEETNAMES) ||
-                    (nRecId == OOBIN_ID_EXTERNALNAME);
+            switch( nRecId )
+            {
+                case OOBIN_ID_EXTSHEETDATA:
+                    if( mrExtLink.getLinkType() == LINKTYPE_EXTERNAL )
+                        return createSheetDataContext( rStrm.readInt32() );
+                break;
+
+                case OOBIN_ID_EXTSHEETNAMES:        mrExtLink.importExtSheetNames( rStrm );                             break;
+                case OOBIN_ID_EXTERNALNAME:         mxExtName = mrExtLink.importExternalName( rStrm );                  return this;
+            }
+        break;
+
         case OOBIN_ID_EXTERNALNAME:
-            return  (nRecId == OOBIN_ID_EXTERNALNAMEFLAGS) ||
-                    (nRecId == OOBIN_ID_DDEITEMVALUES);
+            switch( nRecId )
+            {
+                case OOBIN_ID_EXTERNALNAMEFLAGS:    if( mxExtName.get() ) mxExtName->importExternalNameFlags( rStrm );  break;
+                case OOBIN_ID_DDEITEMVALUES:        if( mxExtName.get() ) mxExtName->importDdeItemValues( rStrm );      return this;
+            }
+        break;
+
         case OOBIN_ID_DDEITEMVALUES:
-            return  (nRecId == OOBIN_ID_DDEITEM_BOOL) ||
-                    (nRecId == OOBIN_ID_DDEITEM_DOUBLE) ||
-                    (nRecId == OOBIN_ID_DDEITEM_ERROR) ||
-                    (nRecId == OOBIN_ID_DDEITEM_STRING);
+            switch( nRecId )
+            {
+                case OOBIN_ID_DDEITEM_BOOL:         if( mxExtName.get() ) mxExtName->importDdeItemBool( rStrm );        break;
+                case OOBIN_ID_DDEITEM_DOUBLE:       if( mxExtName.get() ) mxExtName->importDdeItemDouble( rStrm );      break;
+                case OOBIN_ID_DDEITEM_ERROR:        if( mxExtName.get() ) mxExtName->importDdeItemError( rStrm );       break;
+                case OOBIN_ID_DDEITEM_STRING:       if( mxExtName.get() ) mxExtName->importDdeItemString( rStrm );      break;
+            }
+        break;
     }
-    return false;
+    return 0;
 }
 
-void OoxExternalLinkFragment::onStartRecord( RecordInputStream& rStrm )
-{
-    switch( getCurrentElement() )
-    {
-        case OOBIN_ID_EXTERNALBOOK:         mrExtLink.importExternalBook( getRelations(), rStrm );              break;
-        case OOBIN_ID_EXTSHEETNAMES:        mrExtLink.importExtSheetNames( rStrm );                             break;
-        case OOBIN_ID_EXTERNALNAME:         mxExtName = mrExtLink.importExternalName( rStrm );                  break;
-        case OOBIN_ID_EXTERNALNAMEFLAGS:    if( mxExtName.get() ) mxExtName->importExternalNameFlags( rStrm );  break;
-        case OOBIN_ID_DDEITEMVALUES:        if( mxExtName.get() ) mxExtName->importDdeItemValues( rStrm );      break;
-        case OOBIN_ID_DDEITEM_BOOL:         if( mxExtName.get() ) mxExtName->importDdeItemBool( rStrm );        break;
-        case OOBIN_ID_DDEITEM_DOUBLE:       if( mxExtName.get() ) mxExtName->importDdeItemDouble( rStrm );      break;
-        case OOBIN_ID_DDEITEM_ERROR:        if( mxExtName.get() ) mxExtName->importDdeItemError( rStrm );       break;
-        case OOBIN_ID_DDEITEM_STRING:       if( mxExtName.get() ) mxExtName->importDdeItemString( rStrm );      break;
-    }
-}
-
-ContextWrapper OoxExternalLinkFragment::createSheetDataContext( sal_Int32 nSheetId )
+ContextHandlerRef OoxExternalLinkFragment::createSheetDataContext( sal_Int32 nSheetId )
 {
     return new OoxExternalSheetDataContext( *this, mrExtLink.getExternalSheetCache( nSheetId ) );
 }

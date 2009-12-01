@@ -199,18 +199,11 @@ bool ExcelBiffFilter::importDocument() throw()
     // detect BIFF version and workbook stream name
     OUString aWorkbookName;
     BiffType eBiff = BiffDetector::detectStorageBiffVersion( aWorkbookName, getStorage() );
-    BinaryXInputStream aInStrm( getStorage()->openInputStream( aWorkbookName ), aWorkbookName.getLength() > 0 );
-    OSL_ENSURE( (eBiff != BIFF_UNKNOWN) && !aInStrm.isEof(), "ExcelBiffFilter::ExcelBiffFilter - invalid file format" );
-
-    if( (eBiff != BIFF_UNKNOWN) && !aInStrm.isEof() )
+    OSL_ENSURE( eBiff != BIFF_UNKNOWN, "ExcelBiffFilter::ExcelBiffFilter - invalid file format" );
+    if( eBiff != BIFF_UNKNOWN )
     {
         WorkbookHelperRoot aHelper( *this, eBiff );
-        if( aHelper.isValid() )
-        {
-            BiffInputStream aBiffStream( aInStrm );
-            BiffWorkbookFragment aFragment( aHelper, aBiffStream );
-            bRet = aFragment.importFragment();
-        }
+        bRet = aHelper.isValid() && BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
     }
     return bRet;
 }

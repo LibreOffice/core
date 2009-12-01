@@ -37,6 +37,7 @@
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
+#include "properties.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
@@ -655,17 +656,17 @@ bool FormulaParserImpl::pushEmbeddedRefOperand( const DefinedNameBase& rName, bo
     Any aRefAny = rName.getReference( mpContext->getBaseAddress() );
     if( aRefAny.hasValue() )
         return pushAnyOperand( aRefAny, OPCODE_PUSH );
-    if( bPushBadToken && (rName.getOoxName().getLength() > 0) && (rName.getOoxName()[ 0 ] >= ' ') )
-        return pushValueOperand( rName.getOoxName(), OPCODE_BAD );
+    if( bPushBadToken && (rName.getModelName().getLength() > 0) && (rName.getModelName()[ 0 ] >= ' ') )
+        return pushValueOperand( rName.getModelName(), OPCODE_BAD );
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
 
 bool FormulaParserImpl::pushDefinedNameOperand( const DefinedNameRef& rxDefName )
 {
-    if( !rxDefName || (rxDefName->getOoxName().getLength() == 0) )
+    if( !rxDefName || (rxDefName->getModelName().getLength() == 0) )
         return pushBiffErrorOperand( BIFF_ERR_NAME );
     if( rxDefName->isMacroFunction() )
-        return pushValueOperand( rxDefName->getOoxName(), OPCODE_MACRO );
+        return pushValueOperand( rxDefName->getModelName(), OPCODE_MACRO );
     if( rxDefName->getTokenIndex() >= 0 )
         return pushValueOperand( rxDefName->getTokenIndex(), OPCODE_NAME );
     return pushEmbeddedRefOperand( *rxDefName, true );
@@ -698,12 +699,12 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
 
         case LINKTYPE_ANALYSIS:
             // TODO: need support for localized addin function names
-            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseOoxName() ) )
+            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseModelName() ) )
                 return pushExternalFuncOperand( *pFuncInfo );
         break;
 
         case LINKTYPE_LIBRARY:
-            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseOoxName() ) )
+            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseModelName() ) )
                 if( (pFuncInfo->meFuncLibType != FUNCLIB_UNKNOWN) && (pFuncInfo->meFuncLibType == rExtLink.getFuncLibraryType()) )
                     return pushExternalFuncOperand( *pFuncInfo );
         break;
@@ -1111,7 +1112,7 @@ const FunctionInfo* FormulaParserImpl::convertExternCallParam( ApiToken& orFuncT
             if( const DefinedName* pDefName = getDefinedNames().getByTokenIndex( nTokenIndex ).get() )
             {
                 orFuncToken.OpCode = OPCODE_BAD;
-                orFuncToken.Data <<= pDefName->getDocName();
+                orFuncToken.Data <<= pDefName->getCalcName();
             }
         }
     }
@@ -1248,7 +1249,6 @@ private:
 private:
     Reference< XFormulaParser > mxParser;
     PropertySet         maParserProps;
-    const OUString      maRefPosProp;
     sal_Int64           mnAddDataPos;       /// Current stream position for additional data (tExp, tArray, tMemArea).
     bool                mbNeedExtRefs;      /// True = parser needs initialization of external reference info.
 };
@@ -1257,7 +1257,6 @@ private:
 
 OoxFormulaParserImpl::OoxFormulaParserImpl( const OpCodeProvider& rOpCodeProv ) :
     FormulaParserImpl( rOpCodeProv ),
-    maRefPosProp( CREATE_OUSTRING( "ReferencePosition" ) ),
     mnAddDataPos( 0 ),
     mbNeedExtRefs( true )
 {
@@ -1271,10 +1270,10 @@ OoxFormulaParserImpl::OoxFormulaParserImpl( const OpCodeProvider& rOpCodeProv ) 
     }
     OSL_ENSURE( mxParser.is(), "OoxFormulaParserImpl::OoxFormulaParserImpl - cannot create formula parser" );
     maParserProps.set( mxParser );
-    maParserProps.setProperty( CREATE_OUSTRING( "CompileEnglish" ), true );
-    maParserProps.setProperty( CREATE_OUSTRING( "FormulaConvention" ), ::com::sun::star::sheet::AddressConvention::XL_OOX );
-    maParserProps.setProperty( CREATE_OUSTRING( "IgnoreLeadingSpaces" ), false );
-    maParserProps.setProperty( CREATE_OUSTRING( "OpCodeMap" ), getOoxParserMap() );
+    maParserProps.setProperty( PROP_CompileEnglish, true );
+    maParserProps.setProperty( PROP_FormulaConvention, ::com::sun::star::sheet::AddressConvention::XL_OOX );
+    maParserProps.setProperty( PROP_IgnoreLeadingSpaces, false );
+    maParserProps.setProperty( PROP_OpCodeMap, getOoxParserMap() );
 }
 
 void OoxFormulaParserImpl::importOoxFormula(
@@ -1284,10 +1283,10 @@ void OoxFormulaParserImpl::importOoxFormula(
     {
         if( mbNeedExtRefs )
         {
-            maParserProps.setProperty( CREATE_OUSTRING( "ExternalLinks" ), getExternalLinks().getLinkInfos() );
+            maParserProps.setProperty( PROP_ExternalLinks, getExternalLinks().getLinkInfos() );
             mbNeedExtRefs = false;
         }
-        maParserProps.setProperty( maRefPosProp, rContext.getBaseAddress() );
+        maParserProps.setProperty( PROP_ReferencePosition, rContext.getBaseAddress() );
         initializeImport( rContext );
         finalizeImport( mxParser->parseFormula( rFormulaString ) );
     }
@@ -2730,16 +2729,19 @@ FormulaParser::~FormulaParser()
 
 void FormulaParser::importFormula( FormulaContext& rContext, const OUString& rFormulaString ) const
 {
+    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importOoxFormula( rContext, rFormulaString );
 }
 
 void FormulaParser::importFormula( FormulaContext& rContext, RecordInputStream& rStrm ) const
 {
+    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importOobFormula( rContext, rStrm );
 }
 
 void FormulaParser::importFormula( FormulaContext& rContext, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
 {
+    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importBiffFormula( rContext, rStrm, pnFmlaSize );
 }
 

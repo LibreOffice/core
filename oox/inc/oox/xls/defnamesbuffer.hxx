@@ -66,7 +66,7 @@ const sal_Unicode OOX_DEFNAME_UNKNOWN           = '\x0E';
 
 // ============================================================================
 
-struct OoxDefinedNameData
+struct DefinedNameModel
 {
     ::rtl::OUString     maName;         /// The original name.
     ::rtl::OUString     maFormula;      /// The formula string.
@@ -77,7 +77,7 @@ struct OoxDefinedNameData
     bool                mbVBName;       /// True = VBasic macro, false = sheet macro.
     bool                mbHidden;       /// True = name hidden in UI.
 
-    explicit            OoxDefinedNameData();
+    explicit            DefinedNameModel();
 };
 
 // ============================================================================
@@ -89,17 +89,17 @@ public:
     explicit            DefinedNameBase( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet );
 
     /** Returns true, if this defined name is global in the document. */
-    inline bool         isGlobalName() const { return maOoxData.mnSheet < 0; }
+    inline bool         isGlobalName() const { return maModel.mnSheet < 0; }
 
     /** Returns the original name as imported from or exported to the file. */
-    inline const ::rtl::OUString& getOoxName() const { return maOoxData.maName; }
+    inline const ::rtl::OUString& getModelName() const { return maModel.maName; }
     /** Returns the name as used in the Calc document. */
-    inline const ::rtl::OUString& getDocName() const { return maFinalName; }
+    inline const ::rtl::OUString& getCalcName() const { return maCalcName; }
     /** Returns the 0-based sheet index for local names, or -1 for global names. */
-    inline sal_Int32    getSheetIndex() const { return maOoxData.mnSheet; }
+    inline sal_Int32    getSheetIndex() const { return maModel.mnSheet; }
 
     /** Returns the original name as imported from or exported to the file. */
-    const ::rtl::OUString& getUpcaseOoxName() const;
+    const ::rtl::OUString& getUpcaseModelName() const;
     /** Returns an Any with a SingleReference or ComplexReference, or an empty Any. */
     ::com::sun::star::uno::Any getReference( const ::com::sun::star::table::CellAddress& rBaseAddress ) const;
 
@@ -115,9 +115,9 @@ protected:
     void                setReference( const ApiTokenSequence& rTokens );
 
 protected:
-    OoxDefinedNameData  maOoxData;          /// OOX data for this defined name.
-    mutable ::rtl::OUString maUpOoxName;    /// OOX name converted to uppercase ASCII.
-    ::rtl::OUString     maFinalName;        /// Final name used in the Calc document.
+    DefinedNameModel    maModel;            /// Model data for this defined name.
+    mutable ::rtl::OUString maUpModelName;  /// Model name converted to uppercase ASCII.
+    ::rtl::OUString     maCalcName;         /// Final name used in the Calc document.
 
 private:
     ::com::sun::star::uno::Any maRefAny;    /// Single cell/range reference.
@@ -147,10 +147,12 @@ public:
     /** Returns true, if this defined name is a special builtin name. */
     inline bool         isBuiltinName() const { return mcBuiltinId != OOX_DEFNAME_UNKNOWN; }
     /** Returns true, if this defined name is a macro function call. */
-    inline bool         isMacroFunction() const { return maOoxData.mbMacro && maOoxData.mbFunction; }
+    inline bool         isMacroFunction() const { return maModel.mbMacro && maModel.mbFunction; }
 
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
+    /** Tries to resolve the defined name to an absolute cell range. */
+    bool                getAbsoluteRange( ::com::sun::star::table::CellRangeAddress& orRange ) const;
 
 private:
     /** Imports the OOX or OOBIN formula, using the passed formula context. */
@@ -197,11 +199,11 @@ public:
     DefinedNameRef      getByIndex( sal_Int32 nIndex ) const;
     /** Returns a defined name by token index (index in XDefinedNames container). */
     DefinedNameRef      getByTokenIndex( sal_Int32 nIndex ) const;
-    /** Returns a defined name by its OOX name.
+    /** Returns a defined name by its model name.
         @param nSheet  The sheet index for local names or -1 for global names.
             If no local name is found, tries to find a matching global name.
         @return  Reference to the defined name or empty reference. */
-    DefinedNameRef      getByOoxName( const ::rtl::OUString& rOoxName, sal_Int32 nSheet = -1 ) const;
+    DefinedNameRef      getByModelName( const ::rtl::OUString& rModelName, sal_Int32 nSheet = -1 ) const;
 
 private:
     DefinedNameRef      createDefinedName();

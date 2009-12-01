@@ -40,6 +40,7 @@
 #include <com/sun/star/sheet/FilterConnection.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/filterbase.hxx"
@@ -65,7 +66,6 @@ using ::com::sun::star::sheet::TableFilterField;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::std::list;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Sequence;
@@ -81,6 +81,7 @@ using ::com::sun::star::sheet::XSheetFilterDescriptor;
 using ::com::sun::star::i18n::LocaleDataItem;
 using ::com::sun::star::i18n::XLocaleData;
 using ::com::sun::star::lang::Locale;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace xls {
@@ -131,23 +132,42 @@ OoxAutoFilterContext::OoxAutoFilterContext( OoxWorksheetFragmentBase& rFragment 
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxAutoFilterContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxAutoFilterContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( autoFilter ):
-            return (nElement == XLS_TOKEN( filterColumn ));
+            switch( nElement )
+            {
+                case XLS_TOKEN( filterColumn ):     return this;
+            }
+        break;
+
         case XLS_TOKEN( filterColumn ):
-            return (nElement == XLS_TOKEN( filters )) ||
-                   (nElement == XLS_TOKEN( customFilters )) ||
-                   (nElement == XLS_TOKEN( top10 )) ||
-                   (nElement == XLS_TOKEN( dynamicFilter ));
+            switch( nElement )
+            {
+                case XLS_TOKEN( filters ):
+                case XLS_TOKEN( customFilters ):
+                case XLS_TOKEN( top10 ):
+                case XLS_TOKEN( dynamicFilter ):    return this;
+            }
+        break;
+
         case XLS_TOKEN( filters ):
-            return (nElement == XLS_TOKEN( filter ));
+            switch( nElement )
+            {
+                case XLS_TOKEN( filter ):           return this;
+            }
+        break;
+
         case XLS_TOKEN( customFilters ):
-            return (nElement == XLS_TOKEN( customFilter ));
+            switch( nElement )
+            {
+                case XLS_TOKEN( customFilter ):     return this;
+            }
+        break;
     }
-    return false;
+    return 0;
 }
 
 void OoxAutoFilterContext::onStartElement( const AttributeList& rAttribs )
@@ -357,15 +377,11 @@ void OoxAutoFilterContext::setAutoFilter()
     // Create a new database range, add filters to it and refresh the database
     // for that to take effect.
 
-    Reference< XDatabaseRanges > xDBRanges;
+    Reference< XDatabaseRanges > xDBRanges = getDatabaseRanges();
+    if ( !xDBRanges.is() )
     {
-        PropertySet aDocProp( getDocument() );
-        aDocProp.getProperty( xDBRanges, CREATE_OUSTRING("DatabaseRanges") );
-        if ( !xDBRanges.is() )
-        {
-            OSL_ENSURE(false, "OoxAutoFilterContext::setAutoFilter: DBRange empty");
-            return;
-        }
+        OSL_ENSURE( false, "OoxAutoFilterContext::setAutoFilter: DBRange empty" );
+        return;
     }
 
     Reference< XNameAccess > xNA( xDBRanges, UNO_QUERY_THROW );
@@ -376,7 +392,7 @@ void OoxAutoFilterContext::setAutoFilter()
     if ( xDB.is() )
     {
         PropertySet aProp( xDB );
-        aProp.setProperty( CREATE_OUSTRING("AutoFilter"), true );
+        aProp.setProperty( PROP_AutoFilter, true );
     }
 
     sal_Int32 nSize = maFields.size();
@@ -385,9 +401,9 @@ void OoxAutoFilterContext::setAutoFilter()
     if ( xDescriptor.is() )
     {
         PropertySet aProp( xDescriptor );
-        aProp.setProperty( CREATE_OUSTRING("ContainsHeader"), true );
-        aProp.setProperty( CREATE_OUSTRING("UseRegularExpressions"), mbUseRegex );
-        aProp.getProperty( nMaxFieldCount, CREATE_OUSTRING("MaxFieldCount") );
+        aProp.setProperty( PROP_ContainsHeader, true );
+        aProp.setProperty( PROP_UseRegularExpressions, mbUseRegex );
+        aProp.getProperty( nMaxFieldCount, PROP_MaxFieldCount );
     }
     else
     {
@@ -406,7 +422,7 @@ void OoxAutoFilterContext::setAutoFilter()
 
     xExtDescriptor->begin();
 
-    list< FilterFieldItem >::const_iterator itr = maFields.begin(), itrEnd = maFields.end();
+    ::std::list< FilterFieldItem >::const_iterator itr = maFields.begin(), itrEnd = maFields.end();
     for (sal_Int32 i = 0; itr != itrEnd && i < nMaxFieldCount; ++itr, ++i)
     {
 #if DEBUG_OOX_AUTOFILTER
@@ -432,7 +448,7 @@ void OoxAutoFilterContext::setAutoFilter()
 
 #else
     Sequence< TableFilterField > aFields(nSize);
-    list< FilterFieldItem >::const_iterator itr = maFields.begin(), itrEnd = maFields.end();
+    ::std::list< FilterFieldItem >::const_iterator itr = maFields.begin(), itrEnd = maFields.end();
     for (sal_Int32 i = 0; itr != itrEnd && i < nMaxFieldCount; ++itr, ++i)
     {
 #if DEBUG_OOX_AUTOFILTER
@@ -480,7 +496,7 @@ void OoxAutoFilterContext::setFilterNames()
 
 #if USE_SC_MULTI_STRING_FILTER_PATCH
     Sequence< OUString > aStrList(size);
-    list< OUString >::const_iterator itr = maFilterNames.begin(), itrEnd = maFilterNames.end();
+    ::std::list< OUString >::const_iterator itr = maFilterNames.begin(), itrEnd = maFilterNames.end();
     for (sal_Int32 i = 0; itr != itrEnd; ++itr, ++i)
         aStrList[i] = *itr;
 
@@ -501,7 +517,7 @@ void OoxAutoFilterContext::setFilterNames()
         mbUseRegex = true;
     }
 
-    list< OUString >::const_iterator itr = maFilterNames.begin(), itrEnd = maFilterNames.end();
+    ::std::list< OUString >::const_iterator itr = maFilterNames.begin(), itrEnd = maFilterNames.end();
     bool bFirst = true;
     for (; itr != itrEnd; ++itr)
     {
@@ -529,7 +545,7 @@ void OoxAutoFilterContext::importAutoFilter( const AttributeList& rAttribs )
     initialize();
 
     mbValidAddress = getAddressConverter().convertToCellRange(
-        maAutoFilterRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true );
+        maAutoFilterRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true, true );
 }
 
 void OoxAutoFilterContext::importFilterColumn( const AttributeList& rAttribs )

@@ -35,6 +35,10 @@
 #include <map>
 #include "oox/xls/workbookhelper.hxx"
 
+namespace com { namespace sun { namespace star {
+    namespace util { struct Date; struct DateTime; }
+} } }
+
 namespace oox {
 namespace xls {
 
@@ -74,6 +78,8 @@ public:
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
+    /** Updates internal nulldate for date/serial conversion. */
+    void                finalizeNullDate( const ::com::sun::star::util::Date& rNullDate );
 
     /** Converts the passed value between the passed units. */
     double              scaleValue( double fValue, Unit eFromUnit, Unit eToUnit ) const;
@@ -83,19 +89,31 @@ public:
     /** Converts the passed value from 1/100 millimeters to the passed unit. */
     double              scaleFromMm100( sal_Int32 nMm100, Unit eUnit ) const;
 
+    /** Returns the serial value of the passed datetime, based on current nulldate. */
+    double              calcSerialFromDateTime( const ::com::sun::star::util::DateTime& rDateTime ) const;
+    /** Returns the datetime of the passed serial value, based on current nulldate. */
+    ::com::sun::star::util::DateTime calcDateTimeFromSerial( double fSerial ) const;
+
+    /** Returns an error string from the passed BIFF error code. */
+    ::rtl::OUString     calcOoxErrorCode( sal_uInt8 nErrorCode ) const;
     /** Returns a BIFF error code from the passed error string. */
     sal_uInt8           calcBiffErrorCode( const ::rtl::OUString& rErrorCode ) const;
 
 private:
+    /** Adds an error code to the internal maps. */
+    void                addErrorCode( sal_uInt8 nErrorCode, const ::rtl::OUString& rErrorCode );
     /** Returns the conversion coefficient for the passed unit. */
     double              getCoefficient( Unit eUnit ) const;
 
 private:
     typedef ::std::vector< double >                     DoubleVector;
-    typedef ::std::map< ::rtl::OUString, sal_uInt8 >    ErrorCodeMap;
+    typedef ::std::map< ::rtl::OUString, sal_uInt8 >    OoxErrorCodeMap;
+    typedef ::std::map< sal_uInt8, ::rtl::OUString >    BiffErrorCodeMap;
 
     DoubleVector        maCoeffs;           /// Coefficients for unit conversion.
-    ErrorCodeMap        maErrorCodes;       /// Maps error code strings to BIFF error constants.
+    OoxErrorCodeMap     maOoxErrCodes;      /// Maps error code strings to BIFF error constants.
+    BiffErrorCodeMap    maBiffErrCodes;     /// Maps BIFF error constants to error code strings.
+    sal_Int32           mnNullDate;         /// Nulldate of this workbook (number of days since 0000-01-01).
 };
 
 // ============================================================================

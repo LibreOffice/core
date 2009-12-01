@@ -39,6 +39,102 @@ namespace xls {
 
 // ============================================================================
 
+class OoxIndexedColorsContext : public OoxWorkbookContextBase
+{
+public:
+    explicit            OoxIndexedColorsContext( OoxWorkbookFragmentBase& rFragment );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+};
+
+// ============================================================================
+
+class OoxFontContext : public OoxWorkbookContextBase
+{
+public:
+    template< typename ParentType >
+    inline explicit     OoxFontContext( ParentType& rParent, const FontRef& rxFont ) :
+                            OoxWorkbookContextBase( rParent ), mxFont( rxFont ) {}
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+private:
+    FontRef             mxFont;
+};
+
+// ============================================================================
+
+class OoxBorderContext : public OoxWorkbookContextBase
+{
+public:
+    template< typename ParentType >
+    inline explicit     OoxBorderContext( ParentType& rParent, const BorderRef& rxBorder ) :
+                            OoxWorkbookContextBase( rParent ), mxBorder( rxBorder ) {}
+
+protected:
+    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+private:
+    BorderRef           mxBorder;
+};
+
+// ============================================================================
+
+class OoxFillContext : public OoxWorkbookContextBase
+{
+public:
+    template< typename ParentType >
+    inline explicit     OoxFillContext( ParentType& rParent, const FillRef& rxFill ) :
+                            OoxWorkbookContextBase( rParent ), mxFill( rxFill ), mfGradPos( -1.0 ) {}
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+private:
+    FillRef             mxFill;
+    double              mfGradPos;      /// Gradient color position.
+};
+
+// ============================================================================
+
+class OoxXfContext : public OoxWorkbookContextBase
+{
+public:
+    template< typename ParentType >
+    inline explicit     OoxXfContext( ParentType& rParent, const XfRef& rxXf, bool bCellXf ) :
+                            OoxWorkbookContextBase( rParent ), mxXf( rxXf ), mbCellXf( bCellXf ) {}
+
+protected:
+    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+private:
+    XfRef               mxXf;
+    bool                mbCellXf;       /// True = cell XF, false = style XF.
+};
+
+// ============================================================================
+
+class OoxDxfContext : public OoxWorkbookContextBase
+{
+public:
+    template< typename ParentType >
+    inline explicit     OoxDxfContext( ParentType& rParent, const DxfRef& rxDxf ) :
+                            OoxWorkbookContextBase( rParent ), mxDxf( rxDxf ) {}
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+private:
+    DxfRef              mxDxf;
+};
+
+// ============================================================================
+
 class OoxStylesFragment : public OoxWorkbookFragmentBase
 {
 public:
@@ -49,25 +145,13 @@ public:
 protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
-
-    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
 
     // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        finalizeImport();
-
-private:
-    FontRef             mxFont;         /// Current font object.
-    BorderRef           mxBorder;       /// Current cell border object.
-    FillRef             mxFill;         /// Current cell area fill object.
-    XfRef               mxXf;           /// Current cell format/style object.
-    DxfRef              mxDxf;          /// Current differential format object.
-    double              mfGradPos;      /// Gradient color position.
 };
 
 // ============================================================================

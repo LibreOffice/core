@@ -31,13 +31,20 @@
 #ifndef OOX_XLS_STYLESBUFFER_HXX
 #define OOX_XLS_STYLESBUFFER_HXX
 
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/util/CellProtection.hpp>
+#include <com/sun/star/table/CellHoriJustify.hpp>
+#include <com/sun/star/table/CellOrientation.hpp>
+#include <com/sun/star/table/CellVertJustify.hpp>
+#include <com/sun/star/table/TableBorder.hpp>
 #include "oox/helper/containerhelper.hxx"
-#include "oox/xls/stylespropertyhelper.hxx"
 #include "oox/xls/numberformatsbuffer.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct FontDescrtiptor; }
 } } }
+
+namespace oox { class PropertySet; }
 
 #define OOX_XLS_USE_DEFAULT_STYLE 0
 
@@ -57,6 +64,24 @@ const sal_Int32 OOX_COLOR_CHBORDERAUTO      = 79;       /// Automatic frame bord
 const sal_Int32 OOX_COLOR_NOTEBACK          = 80;       /// Note background color.
 const sal_Int32 OOX_COLOR_NOTETEXT          = 81;       /// Note text color.
 const sal_Int32 OOX_COLOR_FONTAUTO          = 0x7FFF;   /// Font auto color (system window text color).
+
+// ----------------------------------------------------------------------------
+
+const sal_Int32 API_RGB_TRANSPARENT         = -1;       /// Transparent color for API calls.
+const sal_Int32 API_RGB_BLACK               = 0;        /// Black color for API calls.
+
+const sal_Int16 API_LINE_NONE               = 0;
+const sal_Int16 API_LINE_HAIR               = 2;
+const sal_Int16 API_LINE_THIN               = 35;
+const sal_Int16 API_LINE_MEDIUM             = 88;
+const sal_Int16 API_LINE_THICK              = 141;
+
+const sal_Int16 API_ESCAPE_NONE             = 0;        /// No escapement.
+const sal_Int16 API_ESCAPE_SUPERSCRIPT      = 101;      /// Superscript: raise characters automatically (magic value 101).
+const sal_Int16 API_ESCAPE_SUBSCRIPT        = -101;     /// Subscript: lower characters automatically (magic value -101).
+
+const sal_Int8 API_ESCAPEHEIGHT_NONE        = 100;      /// Relative character height if not escaped.
+const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       /// Relative character height if escaped.
 
 // ============================================================================
 
@@ -146,7 +171,7 @@ private:
 // ============================================================================
 
 /** Contains all XML font attributes, e.g. from a font or rPr element. */
-struct OoxFontData
+struct FontModel
 {
     ::rtl::OUString     maName;             /// Font name.
     Color               maColor;            /// Font color.
@@ -162,7 +187,7 @@ struct OoxFontData
     bool                mbOutline;          /// True = outlined characters.
     bool                mbShadow;           /// True = shadowed chgaracters.
 
-    explicit            OoxFontData();
+    explicit            FontModel();
 
     void                setBinScheme( sal_uInt8 nScheme );
     void                setBiffHeight( sal_uInt16 nHeight );
@@ -171,16 +196,75 @@ struct OoxFontData
     void                setBiffEscapement( sal_uInt16 nEscapement );
 };
 
+// ----------------------------------------------------------------------------
+
+/** Enumerates different types of API font property sets. */
+enum FontPropertyType
+{
+    FONT_PROPTYPE_CELL,             /// Font properties in a spreadsheet cell (table::Cell service).
+    FONT_PROPTYPE_TEXT              /// Font properties in a text object (text::Text service).
+};
+
+// ----------------------------------------------------------------------------
+
+/** Contains used flags for all API font attributes. */
+struct ApiFontUsedFlags
+{
+    bool                mbNameUsed;         /// True = font name/family/char set are used.
+    bool                mbColorUsed;        /// True = font color is used.
+    bool                mbSchemeUsed;       /// True = font scheme is used.
+    bool                mbHeightUsed;       /// True = font height is used.
+    bool                mbUnderlineUsed;    /// True = underline style is used.
+    bool                mbEscapementUsed;   /// True = escapement style is used.
+    bool                mbWeightUsed;       /// True = font weight (boldness) is used.
+    bool                mbPostureUsed;      /// True = font posture (italic) is used.
+    bool                mbStrikeoutUsed;    /// True = strike out style is used.
+    bool                mbOutlineUsed;      /// True = outline style is used.
+    bool                mbShadowUsed;       /// True = shadow style is used.
+
+    explicit            ApiFontUsedFlags( bool bAllUsed );
+};
+
+// ----------------------------------------------------------------------------
+
+/** Contains API font name, family, and charset for a script type. */
+struct ApiScriptFontName
+{
+    ::rtl::OUString     maName;             /// Font name.
+    sal_Int16           mnFamily;           /// Font family.
+    sal_Int16           mnCharSet;          /// Font character set.
+
+    explicit            ApiScriptFontName();
+};
+
+// ----------------------------------------------------------------------------
+
+/** Contains all API font attributes. */
+struct ApiFontData
+{
+    typedef ::com::sun::star::awt::FontDescriptor ApiFontDescriptor;
+
+    ApiScriptFontName   maLatinFont;        /// Font name for latin scripts.
+    ApiScriptFontName   maAsianFont;        /// Font name for east-asian scripts.
+    ApiScriptFontName   maCmplxFont;        /// Font name for complex scripts.
+    ApiFontDescriptor   maDesc;             /// Font descriptor (height in twips, weight in %).
+    sal_Int32           mnColor;            /// Font color.
+    sal_Int16           mnEscapement;       /// Escapement style.
+    sal_Int8            mnEscapeHeight;     /// Escapement font height.
+    bool                mbOutline;          /// True = outlined characters.
+    bool                mbShadow;           /// True = shadowed chgaracters.
+
+    explicit            ApiFontData();
+};
+
 // ============================================================================
 
 class Font : public WorkbookHelper
 {
 public:
     explicit            Font( const WorkbookHelper& rHelper, bool bDxf );
-    explicit            Font( const WorkbookHelper& rHelper, const OoxFontData& rFontData );
+    explicit            Font( const WorkbookHelper& rHelper, const FontModel& rModel );
 
-    /** Returns true, if the passed element represents a supported font context. */
-    static bool         isSupportedContext( sal_Int32 nElement, sal_Int32 nParentContext );
     /** Sets font formatting attributes for the passed element. */
     void                importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
 
@@ -210,9 +294,9 @@ public:
     /** Sets the font attributes from the font block of a CFRULE record. */
     void                importCfRule( BiffInputStream& rStrm );
 
-    /** Returns the OOX font data structure. This function can be called before
+    /** Returns the font model structure. This function can be called before
         finalizeImport() has been called. */
-    inline const OoxFontData& getFontData() const { return maOoxData; }
+    inline const FontModel& getModel() const { return maModel; }
     /** Returns the text encoding for strings used with this font. This
         function can be called before finalizeImport() has been called. */
     rtl_TextEncoding    getFontEncoding() const;
@@ -227,6 +311,10 @@ public:
         needs an rich text cell for this attribute. */
     bool                needsRichTextFormat() const;
 
+    /** Writes all font attributes to the passed property map. */
+    void                writeToPropertyMap(
+                            PropertyMap& rPropMap,
+                            FontPropertyType ePropType ) const;
     /** Writes all font attributes to the passed property set. */
     void                writeToPropertySet(
                             PropertySet& rPropSet,
@@ -244,7 +332,7 @@ private:
     void                importFontName8( BiffInputStream& rStrm );
 
 private:
-    OoxFontData         maOoxData;
+    FontModel           maModel;
     ApiFontData         maApiData;
     ApiFontUsedFlags    maUsedFlags;
     bool                mbDxf;
@@ -255,7 +343,7 @@ typedef ::boost::shared_ptr< Font > FontRef;
 // ============================================================================
 
 /** Contains all XML cell alignment attributes, e.g. from an alignment element. */
-struct OoxAlignmentData
+struct AlignmentModel
 {
     sal_Int32           mnHorAlign;         /// Horizontal alignment.
     sal_Int32           mnVerAlign;         /// Vertical alignment.
@@ -266,7 +354,7 @@ struct OoxAlignmentData
     bool                mbShrink;           /// True = shrink to fit cell size.
     bool                mbJustLastLine;     /// True = justify last line in block text.
 
-    explicit            OoxAlignmentData();
+    explicit            AlignmentModel();
 
     /** Sets horizontal alignment from the passed OOBIN or BIFF data. */
     void                setBinHorAlign( sal_uInt8 nHorAlign );
@@ -275,6 +363,29 @@ struct OoxAlignmentData
     /** Sets rotation from the passed OOBIN or BIFF text orientation. */
     void                setBinTextOrient( sal_uInt8 nTextOrient );
 };
+
+// ----------------------------------------------------------------------------
+
+/** Contains all API cell alignment attributes. */
+struct ApiAlignmentData
+{
+    typedef ::com::sun::star::table::CellHoriJustify ApiCellHoriJustify;
+    typedef ::com::sun::star::table::CellVertJustify ApiCellVertJustify;
+    typedef ::com::sun::star::table::CellOrientation ApiCellOrientation;
+
+    ApiCellHoriJustify  meHorJustify;       /// Horizontal alignment.
+    ApiCellVertJustify  meVerJustify;       /// Vertical alignment.
+    ApiCellOrientation  meOrientation;      /// Normal or stacked text.
+    sal_Int32           mnRotation;         /// Text rotation angle.
+    sal_Int16           mnWritingMode;      /// CTL text direction.
+    sal_Int16           mnIndent;           /// Indentation.
+    bool                mbWrapText;         /// True = multi-line text.
+    bool                mbShrink;           /// True = shrink to fit cell size.
+
+    explicit            ApiAlignmentData();
+};
+
+bool operator==( const ApiAlignmentData& rLeft, const ApiAlignmentData& rRight );
 
 // ============================================================================
 
@@ -302,16 +413,16 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Returns the OOX alignment data struct. */
-    inline const OoxAlignmentData& getOoxData() const { return maOoxData; }
+    /** Returns the alignment model structure. */
+    inline const AlignmentModel& getModel() const { return maModel; }
     /** Returns the converted API alignment data struct. */
     inline const ApiAlignmentData& getApiData() const { return maApiData; }
 
-    /** Writes all alignment attributes to the passed property set. */
-    void                writeToPropertySet( PropertySet& rPropSet ) const;
+    /** Writes all alignment attributes to the passed property map. */
+    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
-    OoxAlignmentData    maOoxData;          /// Data from alignment element.
+    AlignmentModel      maModel;            /// Alignment model data.
     ApiAlignmentData    maApiData;          /// Alignment data converted to API constants.
 };
 
@@ -320,13 +431,27 @@ typedef ::boost::shared_ptr< Alignment > AlignmentRef;
 // ============================================================================
 
 /** Contains all XML cell protection attributes, e.g. from a protection element. */
-struct OoxProtectionData
+struct ProtectionModel
 {
     bool                mbLocked;           /// True = locked against editing.
     bool                mbHidden;           /// True = formula is hidden.
 
-    explicit            OoxProtectionData();
+    explicit            ProtectionModel();
 };
+
+// ----------------------------------------------------------------------------
+
+/** Contains all API cell protection attributes. */
+struct ApiProtectionData
+{
+    typedef ::com::sun::star::util::CellProtection ApiCellProtection;
+
+    ApiCellProtection   maCellProt;
+
+    explicit            ApiProtectionData();
+};
+
+bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight );
 
 // ============================================================================
 
@@ -348,16 +473,16 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Returns the OOX protection data struct. */
-    inline const OoxProtectionData& getOoxData() const { return maOoxData; }
+    /** Returns the protection model structure. */
+    inline const ProtectionModel& getModel() const { return maModel; }
     /** Returns the converted API protection data struct. */
     inline const ApiProtectionData& getApiData() const { return maApiData; }
 
-    /** Writes all protection attributes to the passed property set. */
-    void                writeToPropertySet( PropertySet& rPropSet ) const;
+    /** Writes all protection attributes to the passed property map. */
+    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
-    OoxProtectionData   maOoxData;          /// Data from protection element.
+    ProtectionModel     maModel;            /// Protection model data.
     ApiProtectionData   maApiData;          /// Protection data converted to API constants.
 };
 
@@ -366,13 +491,13 @@ typedef ::boost::shared_ptr< Protection > ProtectionRef;
 // ============================================================================
 
 /** Contains XML attributes of a single border line. */
-struct OoxBorderLineData
+struct BorderLineModel
 {
     Color               maColor;            /// Borderline color.
     sal_Int32           mnStyle;            /// Border line style.
     bool                mbUsed;             /// True = line format used.
 
-    explicit            OoxBorderLineData( bool bDxf );
+    explicit            BorderLineModel( bool bDxf );
 
     /** Sets the passed OOBIN or BIFF line style. */
     void                setBiffStyle( sal_Int32 nLineStyle );
@@ -383,17 +508,34 @@ struct OoxBorderLineData
 // ----------------------------------------------------------------------------
 
 /** Contains XML attributes of a complete cell border. */
-struct OoxBorderData
+struct BorderModel
 {
-    OoxBorderLineData   maLeft;             /// Left line format.
-    OoxBorderLineData   maRight;            /// Right line format.
-    OoxBorderLineData   maTop;              /// Top line format.
-    OoxBorderLineData   maBottom;           /// Bottom line format.
-    OoxBorderLineData   maDiagonal;         /// Diagonal line format.
+    BorderLineModel     maLeft;             /// Left line format.
+    BorderLineModel     maRight;            /// Right line format.
+    BorderLineModel     maTop;              /// Top line format.
+    BorderLineModel     maBottom;           /// Bottom line format.
+    BorderLineModel     maDiagonal;         /// Diagonal line format.
     bool                mbDiagTLtoBR;       /// True = top-left to bottom-right on.
     bool                mbDiagBLtoTR;       /// True = bottom-left to top-right on.
 
-    explicit            OoxBorderData( bool bDxf );
+    explicit            BorderModel( bool bDxf );
+};
+
+// ----------------------------------------------------------------------------
+
+/** Contains API attributes of a complete cell border. */
+struct ApiBorderData
+{
+    typedef ::com::sun::star::table::TableBorder    ApiTableBorder;
+    typedef ::com::sun::star::table::BorderLine     ApiBorderLine;
+
+    ApiTableBorder      maBorder;           /// Left/right/top/bottom line format.
+    ApiBorderLine       maTLtoBR;           /// Diagonal top-left to bottom-right line format.
+    ApiBorderLine       maBLtoTR;           /// Diagonal bottom-left to top-right line format.
+    bool                mbBorderUsed;       /// True = left/right/top/bottom line format used.
+    bool                mbDiagUsed;         /// True = diagonal line format used.
+
+    explicit            ApiBorderData();
 };
 
 // ============================================================================
@@ -403,8 +545,6 @@ class Border : public WorkbookHelper
 public:
     explicit            Border( const WorkbookHelper& rHelper, bool bDxf );
 
-    /** Returns true, if the passed element represents a supported border context. */
-    static bool         isSupportedContext( sal_Int32 nElement, sal_Int32 nParentContext );
     /** Sets global border attributes from the border element. */
     void                importBorder( const AttributeList& rAttribs );
     /** Sets border attributes for the border line with the passed element identifier. */
@@ -414,7 +554,7 @@ public:
 
     /** Imports the BORDER record from the passed stream. */
     void                importBorder( RecordInputStream& rStrm );
-    /** Imports a boder from a DXF record from the passed stream. */
+    /** Imports a border from a DXF record from the passed stream. */
     void                importDxfBorder( sal_Int32 nElement, RecordInputStream& rStrm );
 
     /** Sets the border attributes from the passed BIFF2 XF record data. */
@@ -431,20 +571,20 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Writes all border attributes to the passed property set. */
-    void                writeToPropertySet( PropertySet& rPropSet ) const;
+    /** Writes all border attributes to the passed property map. */
+    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
     /** Returns the border line struct specified by the passed XML token identifier. */
-    OoxBorderLineData*  getBorderLine( sal_Int32 nElement );
+    BorderLineModel*    getBorderLine( sal_Int32 nElement );
 
     /** Converts border line data to an API struct, returns true, if the line is marked as used. */
     bool                convertBorderLine(
                             ::com::sun::star::table::BorderLine& rBorderLine,
-                            const OoxBorderLineData& rLineData );
+                            const BorderLineModel& rModel );
 
 private:
-    OoxBorderData       maOoxData;
+    BorderModel         maModel;
     ApiBorderData       maApiData;
     bool                mbDxf;
 };
@@ -454,7 +594,7 @@ typedef ::boost::shared_ptr< Border > BorderRef;
 // ============================================================================
 
 /** Contains XML pattern fill attributes from the patternFill element. */
-struct OoxPatternFillData
+struct PatternFillModel
 {
     Color               maPatternColor;     /// Pattern foreground color.
     Color               maFillColor;        /// Background fill color.
@@ -463,7 +603,7 @@ struct OoxPatternFillData
     bool                mbFillColorUsed;    /// True = background fill color used.
     bool                mbPatternUsed;      /// True = pattern used.
 
-    explicit            OoxPatternFillData( bool bDxf );
+    explicit            PatternFillModel( bool bDxf );
 
     /** Sets the passed OOBIN or BIFF pattern identifier. */
     void                setBinPattern( sal_Int32 nPattern );
@@ -474,7 +614,7 @@ struct OoxPatternFillData
 // ----------------------------------------------------------------------------
 
 /** Contains XML gradient fill attributes from the gradientFill element. */
-struct OoxGradientFillData
+struct GradientFillModel
 {
     typedef ::std::map< double, Color > ColorMap;
 
@@ -486,12 +626,24 @@ struct OoxGradientFillData
     double              mfBottom;           /// Bottom convergence for type path.
     ColorMap            maColors;           /// Gradient colors.
 
-    explicit            OoxGradientFillData();
+    explicit            GradientFillModel();
 
     /** Reads OOBIN gradient settings from a FILL or DXF record. */
     void                readGradient( RecordInputStream& rStrm );
     /** Reads OOBIN gradient stop settings from a FILL or DXF record. */
     void                readGradientStop( RecordInputStream& rStrm, bool bDxf );
+};
+
+// ----------------------------------------------------------------------------
+
+/** Contains API fill attributes. */
+struct ApiSolidFillData
+{
+    sal_Int32           mnColor;            /// Fill color.
+    bool                mbTransparent;      /// True = transparent area.
+    bool                mbUsed;             /// True = fill data is valid.
+
+    explicit            ApiSolidFillData();
 };
 
 // ============================================================================
@@ -502,8 +654,6 @@ class Fill : public WorkbookHelper
 public:
     explicit            Fill( const WorkbookHelper& rHelper, bool bDxf );
 
-    /** Returns true, if the passed element represents a supported fill context. */
-    static bool         isSupportedContext( sal_Int32 nElement, sal_Int32 nParentContext );
     /** Sets attributes of a patternFill element. */
     void                importPatternFill( const AttributeList& rAttribs );
     /** Sets the pattern color from the fgColor element. */
@@ -542,15 +692,15 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Writes all fill attributes to the passed property set. */
-    void                writeToPropertySet( PropertySet& rPropSet ) const;
+    /** Writes all fill attributes to the passed property map. */
+    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
-    typedef ::boost::shared_ptr< OoxPatternFillData >   OoxPatternRef;
-    typedef ::boost::shared_ptr< OoxGradientFillData >  OoxGradientRef;
+    typedef ::boost::shared_ptr< PatternFillModel >   PatternModelRef;
+    typedef ::boost::shared_ptr< GradientFillModel >  GradientModelRef;
 
-    OoxPatternRef       mxOoxPattData;
-    OoxGradientRef      mxOoxGradData;
+    PatternModelRef     mxPatternModel;
+    GradientModelRef    mxGradientModel;
     ApiSolidFillData    maApiData;
     bool                mbDxf;
 };
@@ -560,7 +710,7 @@ typedef ::boost::shared_ptr< Fill > FillRef;
 // ============================================================================
 
 /** Contains all data for a cell format or cell style. */
-struct OoxXfData
+struct XfModel
 {
     sal_Int32           mnStyleXfId;        /// Index to parent style XF.
     sal_Int32           mnFontId;           /// Index to font data list.
@@ -575,7 +725,7 @@ struct OoxXfData
     bool                mbBorderUsed;       /// True = border data used.
     bool                mbAreaUsed;         /// True = area data used.
 
-    explicit            OoxXfData();
+    explicit            XfModel();
 };
 
 // ============================================================================
@@ -620,6 +770,8 @@ public:
     /** Returns true, if any "attribute used" flags are ste in this XF. */
     bool                hasAnyUsedFlags() const;
 
+    /** Writes all formatting attributes to the passed property map. */
+    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
     /** Writes all formatting attributes to the passed property set. */
     void                writeToPropertySet( PropertySet& rPropSet ) const;
 
@@ -630,7 +782,7 @@ private:
     void                updateUsedFlags( const Xf& rStyleXf );
 
 private:
-    OoxXfData           maOoxData;          /// Data from cellXf or cellStyleXf element.
+    XfModel             maModel;            /// Cell XF or style XF model data.
     Alignment           maAlignment;        /// Cell alignment data.
     Protection          maProtection;       /// Cell protection data.
 };
@@ -644,18 +796,19 @@ class Dxf : public WorkbookHelper
 public:
     explicit            Dxf( const WorkbookHelper& rHelper );
 
-    /** Appends and returns a new font object. */
-    FontRef             importFont( const AttributeList& rAttribs );
+    /** Creates a new empty font object. */
+    FontRef             createFont( bool bAlwaysNew = true );
+    /** Creates a new empty border object. */
+    BorderRef           createBorder( bool bAlwaysNew = true );
+    /** Creates a new empty fill object. */
+    FillRef             createFill( bool bAlwaysNew = true );
+
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );
     /** Sets all attributes from the alignment element. */
     void                importAlignment( const AttributeList& rAttribs );
     /** Sets all attributes from the protection element. */
     void                importProtection( const AttributeList& rAttribs );
-    /** Appends and returns a new cell border object. */
-    BorderRef           importBorder( const AttributeList& rAttribs );
-    /** Appends and returns a new cell fill object. */
-    FillRef             importFill( const AttributeList& rAttribs );
 
     /** Imports the DXF record from the passed stream. */
     void                importDxf( RecordInputStream& rStrm );
@@ -668,11 +821,6 @@ public:
 
     /** Creates the style sheet described by the DXF. */
     const ::rtl::OUString& createDxfStyle( sal_Int32 nDxfId );
-
-private:
-    void                createFont( bool bAlwaysNew );
-    void                createBorder( bool bAlwaysNew );
-    void                createFill( bool bAlwaysNew );
 
 private:
     FontRef             mxFont;             /// Font data.
@@ -689,7 +837,7 @@ typedef ::boost::shared_ptr< Dxf > DxfRef;
 // ============================================================================
 
 /** Contains attributes of a cell style, e.g. from the cellStyle element. */
-struct OoxCellStyleData
+struct CellStyleModel
 {
     ::rtl::OUString     maName;             /// Cell style name.
     sal_Int32           mnXfId;             /// Formatting for this cell style.
@@ -699,7 +847,7 @@ struct OoxCellStyleData
     bool                mbCustom;           /// True = customized builtin style.
     bool                mbHidden;           /// True = style not visible in GUI.
 
-    explicit            OoxCellStyleData();
+    explicit            CellStyleModel();
 
     /** Returns true, if this style is a builtin style. */
     inline bool         isBuiltin() const { return mbBuiltin && (mnBuiltinId >= 0); }
@@ -724,16 +872,16 @@ public:
     void                importStyle( BiffInputStream& rStrm );
 
     /** Returns true, if this style represents the default document cell style. */
-    inline bool         isDefaultStyle() const { return maOoxData.isDefaultStyle(); }
+    inline bool         isDefaultStyle() const { return maModel.isDefaultStyle(); }
     /** Returns the XF identifier for this cell style. */
-    inline sal_Int32    getXfId() const { return maOoxData.mnXfId; }
+    inline sal_Int32    getXfId() const { return maModel.mnXfId; }
 
     /** Creates the style sheet described by the style XF with the passed identifier. */
     const ::rtl::OUString& createCellStyle( sal_Int32 nXfId, bool bSkipDefaultBuiltin = false );
 
 private:
-    OoxCellStyleData    maOoxData;
-    ::rtl::OUString     maFinalName;        /// Final style name used in API.
+    CellStyleModel      maModel;
+    ::rtl::OUString     maCalcName;         /// Final style name used in API.
 };
 
 typedef ::boost::shared_ptr< CellStyle > CellStyleRef;
@@ -768,35 +916,15 @@ public:
 
     /** Appends a new color to the color palette. */
     void                importPaletteColor( const AttributeList& rAttribs );
-    /** Appends and returns a new font object. */
-    FontRef             importFont( const AttributeList& rAttribs );
     /** Inserts a new number format code. */
     NumberFormatRef     importNumFmt( const AttributeList& rAttribs );
-    /** Appends and returns a new cell border object. */
-    BorderRef           importBorder( const AttributeList& rAttribs );
-    /** Appends and returns a new cell fill object. */
-    FillRef             importFill( const AttributeList& rAttribs );
-    /** Appends and returns a new cell format or cell style object. */
-    XfRef               importXf( sal_Int32 nContext, const AttributeList& rAttribs );
-    /** Appends and returns a new differential cell format object. */
-    DxfRef              importDxf( const AttributeList& rAttribs );
     /** Appends and returns a new named cell style object. */
     CellStyleRef        importCellStyle( const AttributeList& rAttribs );
 
     /** Appends a new color to the color palette. */
     void                importPaletteColor( RecordInputStream& rStrm );
-    /** Imports the FONT record from the passed stream. */
-    void                importFont( RecordInputStream& rStrm );
     /** Imports the NUMFMT record from the passed stream. */
     void                importNumFmt( RecordInputStream& rStrm );
-    /** Imports the BORDER record from the passed stream. */
-    void                importBorder( RecordInputStream& rStrm );
-    /** Imports the FILL record from the passed stream. */
-    void                importFill( RecordInputStream& rStrm );
-    /** Imports a cell format or cell style object from the passed stream. */
-    void                importXf( sal_Int32 nContext, RecordInputStream& rStrm );
-    /** Imports a new differential cell format object from the passed stream. */
-    void                importDxf( RecordInputStream& rStrm );
     /** Imports the CELLSTYLE record from the passed stream. */
     void                importCellStyle( RecordInputStream& rStrm );
 
@@ -831,8 +959,8 @@ public:
     FontRef             getFontFromCellXf( sal_Int32 nXfId ) const;
     /** Returns the default application font (used in the "Normal" cell style). */
     FontRef             getDefaultFont() const;
-    /** Returns the default application font data (used in the "Normal" cell style). */
-    const OoxFontData&  getDefaultFontData() const;
+    /** Returns the model of the default application font (used in the "Normal" cell style). */
+    const FontModel&    getDefaultFontModel() const;
 
     /** Creates the style sheet described by the style XF with the passed identifier. */
     const ::rtl::OUString& createCellStyle( sal_Int32 nXfId ) const;
@@ -844,14 +972,19 @@ public:
     const ::rtl::OUString& getDefaultStyleName() const;
 #endif
 
-    /** Writes the font attributes of the specified font data to the passed property set. */
-    void                writeFontToPropertySet( PropertySet& rPropSet, sal_Int32 nFontId ) const;
-    /** Writes the specified number format to the passed property set. */
-    void                writeNumFmtToPropertySet( PropertySet& rPropSet, sal_Int32 nNumFmtId ) const;
-    /** Writes the border attributes of the specified border data to the passed property set. */
-    void                writeBorderToPropertySet( PropertySet& rPropSet, sal_Int32 nBorderId ) const;
-    /** Writes the fill attributes of the specified fill data to the passed property set. */
-    void                writeFillToPropertySet( PropertySet& rPropSet, sal_Int32 nFillId ) const;
+    /** Writes the font attributes of the specified font data to the passed property map. */
+    void                writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const;
+    /** Writes the specified number format to the passed property map. */
+    void                writeNumFmtToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;
+    /** Writes the border attributes of the specified border data to the passed property map. */
+    void                writeBorderToPropertyMap( PropertyMap& rPropMap, sal_Int32 nBorderId ) const;
+    /** Writes the fill attributes of the specified fill data to the passed property map. */
+    void                writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const;
+    /** Writes the cell formatting attributes of the specified XF to the passed property map. */
+    void                writeCellXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const;
+    /** Writes the cell formatting attributes of the specified style XF to the passed property map. */
+    void                writeStyleXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const;
+
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;
     /** Writes the cell formatting attributes of the specified style XF to the passed property set. */

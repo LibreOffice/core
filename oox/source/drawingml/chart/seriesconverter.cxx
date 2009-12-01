@@ -42,6 +42,7 @@
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -127,7 +128,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     if( bHasAnyElement || rDataLabel.mbDeleted )
     {
         DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
-        rPropSet.setProperty( CREATE_OUSTRING( "Label" ), aPointLabel );
+        rPropSet.setProperty( PROP_Label, aPointLabel );
     }
 
     if( !rDataLabel.mbDeleted )
@@ -135,12 +136,13 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         // data label number format (percentage format wins over value format)
         rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat, bShowPercent );
 
-        // data label text formatting (frame formatting and text rotation not supported by Chart2)
+        // data label text formatting (frame formatting not supported by Chart2)
         rFormatter.convertTextFormatting( rPropSet, rDataLabel.mxTextProp, OBJECTTYPE_DATALABEL );
+        rFormatter.convertTextRotation( rPropSet, rDataLabel.mxTextProp, false );
 
         // data label separator (do not overwrite series separator, if no explicit point separator is present)
         if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
-            rPropSet.setProperty( CREATE_OUSTRING( "LabelSeparator" ), rDataLabel.moaSeparator.get( CREATE_OUSTRING( "; " ) ) );
+            rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( CREATE_OUSTRING( "; " ) ) );
 
         // data label placement (do not overwrite series placement, if no explicit point placement is present)
         if( bDataSeriesLabel || rDataLabel.monLabelPos.has() )
@@ -159,7 +161,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
                 case XML_r:         nPlacement = csscd::RIGHT;          break;
                 case XML_bestFit:   nPlacement = csscd::AVOID_OVERLAP;  break;
             }
-            rPropSet.setProperty( CREATE_OUSTRING( "LabelPlacement" ), nPlacement );
+            rPropSet.setProperty( PROP_LabelPlacement, nPlacement );
         }
     }
 }
@@ -237,8 +239,8 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
         PropertySet aBarProp( xErrorBar );
 
         // plus/minus bars
-        aBarProp.setProperty( CREATE_OUSTRING( "ShowPositiveError" ), bShowPos );
-        aBarProp.setProperty( CREATE_OUSTRING( "ShowNegativeError" ), bShowNeg );
+        aBarProp.setProperty( PROP_ShowPositiveError, bShowPos );
+        aBarProp.setProperty( PROP_ShowNegativeError, bShowNeg );
 
         // type of displayed error
         namespace cssc = ::com::sun::star::chart;
@@ -247,7 +249,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
             case XML_cust:
             {
                 // #i87806# manual error bars
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::FROM_DATA );
+                aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::FROM_DATA );
                 // attach data sequences to erorr bar
                 Reference< XDataSink > xDataSink( xErrorBar, UNO_QUERY );
                 if( xDataSink.is() )
@@ -277,21 +279,21 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
             }
             break;
             case XML_fixedVal:
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::ABSOLUTE );
-                aBarProp.setProperty( CREATE_OUSTRING( "PositiveError" ), mrModel.mfValue );
-                aBarProp.setProperty( CREATE_OUSTRING( "NegativeError" ), mrModel.mfValue );
+                aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::ABSOLUTE );
+                aBarProp.setProperty( PROP_PositiveError, mrModel.mfValue );
+                aBarProp.setProperty( PROP_NegativeError, mrModel.mfValue );
             break;
             case XML_percentage:
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::RELATIVE );
-                aBarProp.setProperty( CREATE_OUSTRING( "PositiveError" ), mrModel.mfValue );
-                aBarProp.setProperty( CREATE_OUSTRING( "NegativeError" ), mrModel.mfValue );
+                aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::RELATIVE );
+                aBarProp.setProperty( PROP_PositiveError, mrModel.mfValue );
+                aBarProp.setProperty( PROP_NegativeError, mrModel.mfValue );
             break;
             case XML_stdDev:
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::STANDARD_DEVIATION );
-                aBarProp.setProperty( CREATE_OUSTRING( "Weight" ), mrModel.mfValue );
+                aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::STANDARD_DEVIATION );
+                aBarProp.setProperty( PROP_Weight, mrModel.mfValue );
             break;
             case XML_stdErr:
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::STANDARD_ERROR );
+                aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::STANDARD_ERROR );
             break;
             default:
                 OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - unknown error bar type" );
@@ -306,8 +308,8 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
             PropertySet aSeriesProp( rxDataSeries );
             switch( mrModel.mnDirection )
             {
-                case XML_x: aSeriesProp.setProperty( CREATE_OUSTRING( "ErrorBarX" ), xErrorBar );   break;
-                case XML_y: aSeriesProp.setProperty( CREATE_OUSTRING( "ErrorBarY" ), xErrorBar );   break;
+                case XML_x: aSeriesProp.setProperty( PROP_ErrorBarX, xErrorBar );   break;
+                case XML_y: aSeriesProp.setProperty( PROP_ErrorBarY, xErrorBar );   break;
                 default:    OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - invalid error bar direction" );
             }
         }
@@ -381,8 +383,8 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 
             // #i83100# show equation and correlation coefficient
             PropertySet aLabelProp( xRegCurve->getEquationProperties() );
-            aLabelProp.setProperty( CREATE_OUSTRING( "ShowEquation" ), mrModel.mbDispEquation );
-            aLabelProp.setProperty( CREATE_OUSTRING( "ShowCorrelationCoefficient" ), mrModel.mbDispRSquared );
+            aLabelProp.setProperty( PROP_ShowEquation, mrModel.mbDispEquation );
+            aLabelProp.setProperty( PROP_ShowCorrelationCoefficient, mrModel.mbDispRSquared );
 
             // #i83100# formatting of the equation text box
             if( mrModel.mbDispEquation || mrModel.mbDispRSquared )
@@ -528,7 +530,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
 
     // set the (unused) property default value used by the Chart2 templates (true for pie/doughnut charts)
     bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
-    aSeriesProp.setProperty( CREATE_OUSTRING( "VaryColorsByPoint" ), bIsPie );
+    aSeriesProp.setProperty( PROP_VaryColorsByPoint, bIsPie );
 
     // own area formatting for every data point (TODO: varying line color not supported)
     // #i91271# always set area formatting for every point in pie/doughnut charts to override their automatic point formatting

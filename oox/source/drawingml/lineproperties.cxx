@@ -44,6 +44,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 using namespace ::com::sun::star::drawing;
@@ -64,12 +65,20 @@ namespace drawingml {
 
 namespace {
 
-static const sal_Char* const sppcDefaultLineNames[] =
+static const sal_Int32 spnDefaultLineIds[ LineId_END ] =
 {
-    "LineStyle", "LineWidth", "LineColor", "LineTransparence", "LineDash", "LineJoint",
-    "LineStartName", "LineStartWidth", "LineStartCenter",
-    "LineEndName", "LineEndWidth", "LineEndCenter",
-    0
+    PROP_LineStyle,
+    PROP_LineWidth,
+    PROP_LineColor,
+    PROP_LineTransparence,
+    PROP_LineDash,
+    PROP_LineJoint,
+    PROP_LineStartName,
+    PROP_LineStartWidth,
+    PROP_LineStartCenter,
+    PROP_LineEndName,
+    PROP_LineEndWidth,
+    PROP_LineEndCenter
 };
 
 // ----------------------------------------------------------------------------
@@ -114,7 +123,7 @@ sal_Int32 lclGetArrowSize( sal_Int32 nToken )
 // ----------------------------------------------------------------------------
 
 void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& rArrowProps,
-        const LinePropertyNames& rPropNames, ModelObjectContainer& rObjContainer, sal_Int32 nLineWidth, bool bLineEnd )
+        const LinePropertyIds& rPropIds, ModelObjectContainer& rObjContainer, sal_Int32 nLineWidth, bool bLineEnd )
 {
     PolyPolygonBezierCoords aMarker;
     OUString aMarkerName;
@@ -173,7 +182,7 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
         nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nApiLineWidth );
 
         // test if the arrow already exists, do not create it again in this case
-        if( !rPropNames.mbNamedLineMarker || !rObjContainer.hasLineMarker( aMarkerName ) )
+        if( !rPropIds.mbNamedLineMarker || !rObjContainer.hasLineMarker( aMarkerName ) )
         {
 // pass X and Y as percentage to OOX_ARROW_POINT
 #define OOX_ARROW_POINT( x, y ) Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
@@ -238,7 +247,7 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
                 aMarker.Flags.realloc( 1 );
                 aMarker.Flags[ 0 ] = ContainerHelper::vectorToSequence( aFlags );
 
-                if( rPropNames.mbNamedLineMarker && !rObjContainer.insertLineMarker( aMarkerName, aMarker ) )
+                if( rPropIds.mbNamedLineMarker && !rObjContainer.insertLineMarker( aMarkerName, aMarker ) )
                     aMarkerName = OUString();
             }
             else
@@ -253,21 +262,21 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
     {
         if( bLineEnd )
         {
-            if( rPropNames.mbNamedLineMarker )
-                rPropMap.setProperty( rPropNames.maLineEnd, aMarkerName );
+            if( rPropIds.mbNamedLineMarker )
+                rPropMap.setProperty( rPropIds[ LineEndId ], aMarkerName );
             else
-                rPropMap.setProperty( rPropNames.maLineEnd, aMarker );
-            rPropMap.setProperty( rPropNames.maLineEndWidth, nMarkerWidth );
-            rPropMap.setProperty( rPropNames.maLineEndCenter, bMarkerCenter );
+                rPropMap.setProperty( rPropIds[ LineEndId ], aMarker );
+            rPropMap.setProperty( rPropIds[ LineEndWidthId ], nMarkerWidth );
+            rPropMap.setProperty( rPropIds[ LineEndCenterId ], bMarkerCenter );
         }
         else
         {
-            if( rPropNames.mbNamedLineMarker )
-                rPropMap.setProperty( rPropNames.maLineStart, aMarkerName );
+            if( rPropIds.mbNamedLineMarker )
+                rPropMap.setProperty( rPropIds[ LineStartId ], aMarkerName );
             else
-                rPropMap.setProperty( rPropNames.maLineStart, aMarker );
-            rPropMap.setProperty( rPropNames.maLineStartWidth, nMarkerWidth );
-            rPropMap.setProperty( rPropNames.maLineStartCenter, bMarkerCenter );
+                rPropMap.setProperty( rPropIds[ LineStartId ], aMarker );
+            rPropMap.setProperty( rPropIds[ LineStartWidthId ], nMarkerWidth );
+            rPropMap.setProperty( rPropIds[ LineStartCenterId ], bMarkerCenter );
         }
     }
 }
@@ -276,29 +285,12 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
 
 // ============================================================================
 
-LinePropertyNames::LinePropertyNames() :
-    mbNamedLineDash( false ),
-    mbNamedLineMarker( false )
-{
-}
-
-LinePropertyNames::LinePropertyNames( const sal_Char* const* ppcPropertyNames, bool bNamedLineDash, bool bNamedLineMarker ) :
-    maLineStyle( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineWidth( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineColor( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineTransparence( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineDash( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineJoint( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineStart( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineStartWidth( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineStartCenter( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineEnd( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineEndWidth( OUString::createFromAscii( *ppcPropertyNames++ ) ),
-    maLineEndCenter( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+LinePropertyIds::LinePropertyIds( const sal_Int32* pnPropertyIds, bool bNamedLineDash, bool bNamedLineMarker ) :
+    mpnPropertyIds( pnPropertyIds ),
     mbNamedLineDash( bNamedLineDash ),
     mbNamedLineMarker( bNamedLineMarker )
 {
-    OSL_ENSURE( !*ppcPropertyNames, "LinePropertyNames::LinePropertyNames - unexpected trailing property names" );
+    OSL_ENSURE( mpnPropertyIds != 0, "LinePropertyIds::LinePropertyIds - missing property identifiers" );
 }
 
 // ============================================================================
@@ -312,7 +304,7 @@ void LineArrowProperties::assignUsed( const LineArrowProperties& rSourceProps )
 
 // ============================================================================
 
-LinePropertyNames LineProperties::DEFAULTNAMES( sppcDefaultLineNames, false, true );
+LinePropertyIds LineProperties::DEFAULT_IDS( spnDefaultLineIds, false, true );
 
 void LineProperties::assignUsed( const LineProperties& rSourceProps )
 {
@@ -325,7 +317,7 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
     moLineJoint.assignIfUsed( rSourceProps.moLineJoint );
 }
 
-void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyNames& rPropNames,
+void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyIds& rPropIds,
         const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer, sal_Int32 nPhClr ) const
 {
     // line fill type must exist, otherwise ignore other properties
@@ -381,53 +373,53 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyNam
                 break;
             }
 
-            if( rPropNames.mbNamedLineDash )
+            if( rPropIds.mbNamedLineDash )
             {
                 OUString aDashName = rObjContainer.insertLineDash( aLineDash );
                 if( aDashName.getLength() > 0 )
                 {
-                    rPropMap.setProperty( rPropNames.maLineDash, aDashName );
+                    rPropMap.setProperty( rPropIds[ LineDashId ], aDashName );
                     eLineStyle = LineStyle_DASH;
                 }
             }
             else
             {
-                rPropMap.setProperty( rPropNames.maLineDash, aLineDash );
+                rPropMap.setProperty( rPropIds[ LineDashId ], aLineDash );
                 eLineStyle = LineStyle_DASH;
             }
         }
 
         // set final line style property
-        rPropMap.setProperty( rPropNames.maLineStyle, eLineStyle );
+        rPropMap.setProperty( rPropIds[ LineStyleId ], eLineStyle );
 
         // line joint type
         if( moLineJoint.has() )
-            rPropMap.setProperty( rPropNames.maLineJoint, lclGetLineJoint( moLineJoint.get() ) );
+            rPropMap.setProperty( rPropIds[ LineJointId ], lclGetLineJoint( moLineJoint.get() ) );
 
         // convert line width from EMUs to 1/100 mm
         if( moLineWidth.has() )
-            rPropMap.setProperty( rPropNames.maLineWidth, GetCoordinate( moLineWidth.get() ) );
+            rPropMap.setProperty( rPropIds[ LineWidthId ], GetCoordinate( moLineWidth.get() ) );
 
         // line color and transparence
         Color aLineColor = maLineFill.getBestSolidColor();
         if( aLineColor.isUsed() )
         {
-            rPropMap.setProperty( rPropNames.maLineColor, aLineColor.getColor( rFilter, nPhClr ) );
+            rPropMap.setProperty( rPropIds[ LineColorId ], aLineColor.getColor( rFilter, nPhClr ) );
             if( aLineColor.hasTransparence() )
-                rPropMap.setProperty( rPropNames.maLineTransparence, aLineColor.getTransparence() );
+                rPropMap.setProperty( rPropIds[ LineTransparenceId ], aLineColor.getTransparence() );
         }
 
         // line markers
-        lclPushMarkerProperties( rPropMap, maStartArrow, rPropNames, rObjContainer, moLineWidth.get( 0 ), false );
-        lclPushMarkerProperties( rPropMap, maEndArrow,   rPropNames, rObjContainer, moLineWidth.get( 0 ), true );
+        lclPushMarkerProperties( rPropMap, maStartArrow, rPropIds, rObjContainer, moLineWidth.get( 0 ), false );
+        lclPushMarkerProperties( rPropMap, maEndArrow,   rPropIds, rObjContainer, moLineWidth.get( 0 ), true );
     }
 }
 
-void LineProperties::pushToPropSet( PropertySet& rPropSet, const LinePropertyNames& rPropNames,
+void LineProperties::pushToPropSet( PropertySet& rPropSet, const LinePropertyIds& rPropIds,
         const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer, sal_Int32 nPhClr ) const
 {
     PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rPropNames, rFilter, rObjContainer, nPhClr );
+    pushToPropMap( aPropMap, rPropIds, rFilter, rObjContainer, nPhClr );
     rPropSet.setProperties( aPropMap );
 }
 

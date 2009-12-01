@@ -47,6 +47,7 @@ using ::com::sun::star::awt::Size;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::table::CellAddress;
+using ::oox::core::ContextHandlerRef;
 using ::oox::drawingml::ConnectorShapeContext;
 using ::oox::drawingml::GraphicalObjectFrameContext;
 using ::oox::drawingml::GraphicShapeContext;
@@ -60,7 +61,7 @@ namespace xls {
 
 // ============================================================================
 
-OoxAnchorPosition::OoxAnchorPosition() :
+AnchorPosModel::AnchorPosModel() :
     mnX( -1 ),
     mnY( -1 )
 {
@@ -68,7 +69,7 @@ OoxAnchorPosition::OoxAnchorPosition() :
 
 // ----------------------------------------------------------------------------
 
-OoxAnchorSize::OoxAnchorSize() :
+AnchorSizeModel::AnchorSizeModel() :
     mnWidth( -1 ),
     mnHeight( -1 )
 {
@@ -76,7 +77,7 @@ OoxAnchorSize::OoxAnchorSize() :
 
 // ----------------------------------------------------------------------------
 
-OoxAnchorCell::OoxAnchorCell() :
+AnchorCellModel::AnchorCellModel() :
     mnCol( -1 ),
     mnRow( -1 ),
     mnColOffset( 0 ),
@@ -86,7 +87,7 @@ OoxAnchorCell::OoxAnchorCell() :
 
 // ----------------------------------------------------------------------------
 
-OoxAnchorClientData::OoxAnchorClientData() :
+AnchorClientDataModel::AnchorClientDataModel() :
     mbLocksWithSheet( true ),
     mbPrintsWithSheet( true )
 {
@@ -101,20 +102,23 @@ ShapeAnchor::ShapeAnchor( const WorksheetHelper& rHelper ) :
 {
 }
 
-void ShapeAnchor::importAbsoluteAnchor( const AttributeList& )
+void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    meType = ANCHOR_ABSOLUTE;
-}
-
-void ShapeAnchor::importOneCellAnchor( const AttributeList& )
-{
-    meType = ANCHOR_ONECELL;
-}
-
-void ShapeAnchor::importTwoCellAnchor( const AttributeList& rAttribs )
-{
-    meType = ANCHOR_TWOCELL;
-    mnEditAs = rAttribs.getToken( XML_editAs, XML_twoCell );
+    switch( nElement )
+    {
+        case XDR_TOKEN( absoluteAnchor ):
+            meType = ANCHOR_ABSOLUTE;
+        break;
+        case XDR_TOKEN( oneCellAnchor ):
+            meType = ANCHOR_ONECELL;
+        break;
+        case XDR_TOKEN( twoCellAnchor ):
+            meType = ANCHOR_TWOCELL;
+            mnEditAs = rAttribs.getToken( XML_editAs, XML_twoCell );
+        break;
+        default:
+            OSL_ENSURE( false, "ShapeAnchor::importAnchor - unexpected element" );
+    }
 }
 
 void ShapeAnchor::importPos( const AttributeList& rAttribs )
@@ -139,7 +143,7 @@ void ShapeAnchor::importClientData( const AttributeList& rAttribs )
 
 void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue )
 {
-    OoxAnchorCell* pAnchorCell = 0;
+    AnchorCellModel* pAnchorCell = 0;
     switch( nParentContext )
     {
         case XDR_TOKEN( from ):
@@ -163,7 +167,37 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
     }
 }
 
-Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const OoxAnchorSize& rEmuSheetSize ) const
+bool ShapeAnchor::isValidAnchor() const
+{
+    bool bValid = false;
+    switch( meType )
+    {
+        case ANCHOR_ABSOLUTE:
+            OSL_ENSURE( maPos.isValid(), "ShapeAnchor::isValidAnchor - invalid position" );
+            OSL_ENSURE( maSize.isValid(), "ShapeAnchor::isValidAnchor - invalid size" );
+            bValid = maPos.isValid() && maSize.isValid() && (maSize.mnWidth > 0) && (maSize.mnHeight > 0);
+        break;
+        case ANCHOR_ONECELL:
+            OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::isValidAnchor - invalid from position" );
+            OSL_ENSURE( maSize.isValid(), "ShapeAnchor::isValidAnchor - invalid size" );
+            bValid = maFrom.isValid() && maSize.isValid() && (maSize.mnWidth > 0) && (maSize.mnHeight > 0);
+        break;
+        case ANCHOR_TWOCELL:
+            OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::isValidAnchor - invalid from position" );
+            OSL_ENSURE( maTo.isValid(), "ShapeAnchor::isValidAnchor - invalid to position" );
+            bValid = maFrom.isValid() && maTo.isValid() &&
+                ((maFrom.mnCol < maTo.mnCol) || ((maFrom.mnCol == maTo.mnCol) && (maFrom.mnColOffset < maTo.mnColOffset))) &&
+                ((maFrom.mnRow < maTo.mnRow) || ((maFrom.mnRow == maTo.mnRow) && (maFrom.mnRowOffset < maTo.mnRowOffset)));
+        break;
+        case ANCHOR_INVALID:
+            OSL_ENSURE( false, "ShapeAnchor::isValidAnchor - invalid anchor" );
+        break;
+    }
+    return bValid;
+}
+
+#if 0 // unused code
+Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorSizeModel& rEmuSheetSize ) const
 {
     AddressConverter& rAddrConv = getAddressConverter();
     UnitConverter& rUnitConv = getUnitConverter();
@@ -241,8 +275,9 @@ Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const OoxAnch
 
     return aApiLoc;
 }
+#endif
 
-Rectangle ShapeAnchor::calcEmuLocation( const OoxAnchorSize& rEmuSheetSize ) const
+Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) const
 {
     AddressConverter& rAddrConv = getAddressConverter();
     UnitConverter& rUnitConv = getUnitConverter();
@@ -340,7 +375,7 @@ Rectangle ShapeAnchor::calcEmuLocation( const OoxAnchorSize& rEmuSheetSize ) con
 OoxDrawingFragment::OoxDrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     OoxWorksheetFragmentBase( rHelper, rFragmentPath )
 {
-    Reference< XDrawPageSupplier > xDrawPageSupp( getXSpreadsheet(), UNO_QUERY );
+    Reference< XDrawPageSupplier > xDrawPageSupp( getSheet(), UNO_QUERY );
     if( xDrawPageSupp.is() )
         mxDrawPage.set( xDrawPageSupp->getDrawPage(), UNO_QUERY );
     OSL_ENSURE( mxDrawPage.is(), "OoxDrawingFragment::OoxDrawingFragment - missing drawing page" );
@@ -352,16 +387,26 @@ OoxDrawingFragment::OoxDrawingFragment( const WorksheetHelper& rHelper, const OU
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxDrawingFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxDrawingFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == XDR_TOKEN( wsDr ));
+            if( nElement == XDR_TOKEN( wsDr ) ) return this;
+        break;
+
         case XDR_TOKEN( wsDr ):
-            return  (nElement == XDR_TOKEN( absoluteAnchor )) ||
-                    (nElement == XDR_TOKEN( oneCellAnchor )) ||
-                    (nElement == XDR_TOKEN( twoCellAnchor ));
+            switch( nElement )
+            {
+                case XDR_TOKEN( absoluteAnchor ):
+                case XDR_TOKEN( oneCellAnchor ):
+                case XDR_TOKEN( twoCellAnchor ):
+                    mxAnchor.reset( new ShapeAnchor( *this ) );
+                    mxAnchor->importAnchor( nElement, rAttribs );
+                    return this;
+            }
+        break;
+
         case XDR_TOKEN( absoluteAnchor ):
         case XDR_TOKEN( oneCellAnchor ):
         case XDR_TOKEN( twoCellAnchor ):
@@ -382,48 +427,28 @@ ContextWrapper OoxDrawingFragment::onCreateContext( sal_Int32 nElement, const At
                 case XDR_TOKEN( grpSp ):
                     mxShape.reset( new Shape( "com.sun.star.drawing.GroupShape" ) );
                     return new ShapeGroupContext( *this, ShapePtr(), mxShape );
+
+                case XDR_TOKEN( from ):
+                case XDR_TOKEN( to ):           return this;
+
+                case XDR_TOKEN( pos ):          if( mxAnchor.get() ) mxAnchor->importPos( rAttribs );           break;
+                case XDR_TOKEN( ext ):          if( mxAnchor.get() ) mxAnchor->importExt( rAttribs );           break;
+                case XDR_TOKEN( clientData ):   if( mxAnchor.get() ) mxAnchor->importClientData( rAttribs );    break;
             }
-            return  (nElement == XDR_TOKEN( pos )) ||
-                    (nElement == XDR_TOKEN( ext )) ||
-                    (nElement == XDR_TOKEN( from )) ||
-                    (nElement == XDR_TOKEN( to )) ||
-                    (nElement == XDR_TOKEN( clientData ));
+        break;
+
         case XDR_TOKEN( from ):
         case XDR_TOKEN( to ):
-            return  (nElement == XDR_TOKEN( col )) ||
-                    (nElement == XDR_TOKEN( row )) ||
-                    (nElement == XDR_TOKEN( colOff )) ||
-                    (nElement == XDR_TOKEN( rowOff ));
-    }
-    return false;
-}
-
-void OoxDrawingFragment::onStartElement( const AttributeList& rAttribs )
-{
-    switch( getCurrentElement() )
-    {
-        case XDR_TOKEN( absoluteAnchor ):
-            mxAnchor.reset( new ShapeAnchor( *this ) );
-            mxAnchor->importAbsoluteAnchor( rAttribs );
-        break;
-        case XDR_TOKEN( oneCellAnchor ):
-            mxAnchor.reset( new ShapeAnchor( *this ) );
-            mxAnchor->importOneCellAnchor( rAttribs );
-        break;
-        case XDR_TOKEN( twoCellAnchor ):
-            mxAnchor.reset( new ShapeAnchor( *this ) );
-            mxAnchor->importTwoCellAnchor( rAttribs );
-        break;
-        case XDR_TOKEN( pos ):
-            if( mxAnchor.get() ) mxAnchor->importPos( rAttribs );
-        break;
-        case XDR_TOKEN( ext ):
-            if( mxAnchor.get() ) mxAnchor->importExt( rAttribs );
-        break;
-        case XDR_TOKEN( clientData ):
-            if( mxAnchor.get() ) mxAnchor->importClientData( rAttribs );
+            switch( nElement )
+            {
+                case XDR_TOKEN( col ):
+                case XDR_TOKEN( row ):
+                case XDR_TOKEN( colOff ):
+                case XDR_TOKEN( rowOff ):       return this;    // collect index in onEndElement()
+            }
         break;
     }
+    return 0;
 }
 
 void OoxDrawingFragment::onEndElement( const OUString& rChars )
@@ -439,7 +464,7 @@ void OoxDrawingFragment::onEndElement( const OUString& rChars )
         case XDR_TOKEN( absoluteAnchor ):
         case XDR_TOKEN( oneCellAnchor ):
         case XDR_TOKEN( twoCellAnchor ):
-            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
+            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() && mxAnchor->isValidAnchor() )
             {
                 Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuSheetSize );
                 if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )

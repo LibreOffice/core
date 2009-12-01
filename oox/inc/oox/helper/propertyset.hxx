@@ -88,20 +88,16 @@ public:
 
     /** Gets the specified property from the property set.
         @return  true, if the any could be filled with the property value. */
-    bool                getAnyProperty(
-                            ::com::sun::star::uno::Any& orValue,
-                            const ::rtl::OUString& rPropName ) const;
+    bool                getAnyProperty( ::com::sun::star::uno::Any& orValue, sal_Int32 nPropId ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
     template< typename Type >
-    inline bool         getProperty(
-                            Type& orValue,
-                            const ::rtl::OUString& rPropName ) const;
+    inline bool         getProperty( Type& orValue, sal_Int32 nPropId ) const;
 
     /** Gets the specified boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occured. */
-    bool                getBoolProperty( const ::rtl::OUString& rPropName ) const;
+    bool                getBoolProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
         @param orValues  (out-parameter) The related property values.
@@ -113,15 +109,11 @@ public:
     // Set properties ---------------------------------------------------------
 
     /** Puts the passed any into the property set. */
-    void                setAnyProperty(
-                            const ::rtl::OUString& rPropName,
-                            const ::com::sun::star::uno::Any& rValue );
+    void                setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
 
     /** Puts the passed value into the property set. */
     template< typename Type >
-    inline void         setProperty(
-                            const ::rtl::OUString& rPropName,
-                            const Type& rValue );
+    inline void         setProperty( sal_Int32 nPropId, const Type& rValue );
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
@@ -136,6 +128,14 @@ public:
 
     // ------------------------------------------------------------------------
 private:
+    /** Gets the specified property from the property set.
+        @return  true, if the any could be filled with the property value. */
+    bool                getAnyProperty( ::com::sun::star::uno::Any& orValue, const ::rtl::OUString& rPropName ) const;
+
+    /** Puts the passed any into the property set. */
+    void                setAnyProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
+
+private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         mxPropSet;          /// The mandatory property set interface.
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
@@ -145,16 +145,16 @@ private:
 // ----------------------------------------------------------------------------
 
 template< typename Type >
-inline bool PropertySet::getProperty( Type& orValue, const ::rtl::OUString& rPropName ) const
+inline bool PropertySet::getProperty( Type& orValue, sal_Int32 nPropId ) const
 {
     ::com::sun::star::uno::Any aAny;
-    return getAnyProperty( aAny, rPropName ) && (aAny >>= orValue);
+    return getAnyProperty( aAny, nPropId ) && (aAny >>= orValue);
 }
 
 template< typename Type >
-inline void PropertySet::setProperty( const ::rtl::OUString& rPropName, const Type& rValue )
+inline void PropertySet::setProperty( sal_Int32 nPropId, const Type& rValue )
 {
-    setAnyProperty( rPropName, ::com::sun::star::uno::Any( rValue ) );
+    setAnyProperty( nPropId, ::com::sun::star::uno::Any( rValue ) );
 }
 
 // ============================================================================

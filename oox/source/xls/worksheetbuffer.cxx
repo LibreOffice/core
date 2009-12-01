@@ -36,6 +36,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -75,7 +76,7 @@ OUString lclGetBaseFileName( const OUString& rUrl )
 
 // ============================================================================
 
-OoxSheetInfo::OoxSheetInfo() :
+SheetInfoModel::SheetInfoModel() :
     mnSheetId( -1 ),
     mnState( XML_visible )
 {
@@ -84,37 +85,36 @@ OoxSheetInfo::OoxSheetInfo() :
 // ============================================================================
 
 WorksheetBuffer::WorksheetBuffer( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper ),
-    maIsVisibleProp( CREATE_OUSTRING( "IsVisible" ) )
+    WorkbookHelper( rHelper )
 {
 }
 
 void WorksheetBuffer::initializeSingleSheet()
 {
     OSL_ENSURE( maSheetInfos.empty(), "WorksheetBuffer::initializeSingleSheet - invalid call" );
-    OoxSheetInfo aSheetInfo;
-    aSheetInfo.maName = lclGetBaseFileName( getBaseFilter().getFileUrl() );
-    insertSheet( aSheetInfo );
+    SheetInfoModel aModel;
+    aModel.maName = lclGetBaseFileName( getBaseFilter().getFileUrl() );
+    insertSheet( aModel );
 }
 
 void WorksheetBuffer::importSheet( const AttributeList& rAttribs )
 {
-    OoxSheetInfo aSheetInfo;
-    aSheetInfo.maRelId = rAttribs.getString( R_TOKEN( id ), OUString() );
-    aSheetInfo.maName = rAttribs.getString( XML_name, OUString() );
-    aSheetInfo.mnSheetId = rAttribs.getInteger( XML_sheetId, -1 );
-    aSheetInfo.mnState = rAttribs.getToken( XML_state, XML_visible );
-    insertSheet( aSheetInfo );
+    SheetInfoModel aModel;
+    aModel.maRelId = rAttribs.getString( R_TOKEN( id ), OUString() );
+    aModel.maName = rAttribs.getString( XML_name, OUString() );
+    aModel.mnSheetId = rAttribs.getInteger( XML_sheetId, -1 );
+    aModel.mnState = rAttribs.getToken( XML_state, XML_visible );
+    insertSheet( aModel );
 }
 
 void WorksheetBuffer::importSheet( RecordInputStream& rStrm )
 {
     sal_Int32 nState;
-    OoxSheetInfo aSheetInfo;
-    rStrm >> nState >> aSheetInfo.mnSheetId >> aSheetInfo.maRelId >> aSheetInfo.maName;
+    SheetInfoModel aModel;
+    rStrm >> nState >> aModel.mnSheetId >> aModel.maRelId >> aModel.maName;
     static const sal_Int32 spnStates[] = { XML_visible, XML_hidden, XML_veryHidden };
-    aSheetInfo.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
-    insertSheet( aSheetInfo );
+    aModel.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
+    insertSheet( aModel );
 }
 
 void WorksheetBuffer::importSheet( BiffInputStream& rStrm )
@@ -126,13 +126,19 @@ void WorksheetBuffer::importSheet( BiffInputStream& rStrm )
         rStrm >> nState;
     }
 
-    OoxSheetInfo aSheetInfo;
-    aSheetInfo.maName = (getBiff() == BIFF8) ?
+    SheetInfoModel aModel;
+    aModel.maName = (getBiff() == BIFF8) ?
         rStrm.readUniString( rStrm.readuInt8() ) :
         rStrm.readByteString( false, getTextEncoding() );
     static const sal_Int32 spnStates[] = { XML_visible, XML_hidden, XML_veryHidden };
-    aSheetInfo.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
-    insertSheet( aSheetInfo );
+    aModel.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
+    insertSheet( aModel );
+}
+
+sal_Int16 WorksheetBuffer::insertEmptySheet( const OUString& rPreferredName, bool bVisible )
+{
+    IndexNamePair aIndexName = insertSheet( rPreferredName, SAL_MAX_INT16, bVisible );
+    return aIndexName.first;
 }
 
 sal_Int32 WorksheetBuffer::getSheetCount() const
@@ -143,48 +149,49 @@ sal_Int32 WorksheetBuffer::getSheetCount() const
 OUString WorksheetBuffer::getSheetRelId( sal_Int32 nSheet ) const
 {
     OUString aRelId;
-    if( const OoxSheetInfo* pInfo = getSheetInfo( nSheet ) )
-        aRelId = pInfo->maRelId;
+    if( const SheetInfoModel* pModel = getSheetInfo( nSheet ) )
+        aRelId = pModel->maRelId;
     return aRelId;
 }
 
-OUString WorksheetBuffer::getFinalSheetName( sal_Int32 nSheet ) const
+OUString WorksheetBuffer::getCalcSheetName( sal_Int32 nSheet ) const
 {
     OUString aName;
-    if( const OoxSheetInfo* pInfo = getSheetInfo( nSheet ) )
-        aName = pInfo->maFinalName;
+    if( const SheetInfoModel* pModel = getSheetInfo( nSheet ) )
+        aName = pModel->maFinalName;
     return aName;
 }
 
-OUString WorksheetBuffer::getFinalSheetName( const OUString& rName ) const
+OUString WorksheetBuffer::getCalcSheetName( const OUString& rModelName ) const
 {
-    for( SheetInfoVec::const_iterator aIt = maSheetInfos.begin(), aEnd = maSheetInfos.end(); aIt != aEnd; ++aIt )
+    for( SheetInfoModelVec::const_iterator aIt = maSheetInfos.begin(), aEnd = maSheetInfos.end(); aIt != aEnd; ++aIt )
         // TODO: handle encoded characters
-        if( aIt->maName.equalsIgnoreAsciiCase( rName ) )
+        if( aIt->maName.equalsIgnoreAsciiCase( rModelName ) )
             return aIt->maFinalName;
     return OUString();
 }
 
-sal_Int32 WorksheetBuffer::getFinalSheetIndex( const OUString& rName ) const
+sal_Int32 WorksheetBuffer::getCalcSheetIndex( const OUString& rModelName ) const
 {
-    for( SheetInfoVec::const_iterator aIt = maSheetInfos.begin(), aEnd = maSheetInfos.end(); aIt != aEnd; ++aIt )
+    for( SheetInfoModelVec::const_iterator aIt = maSheetInfos.begin(), aEnd = maSheetInfos.end(); aIt != aEnd; ++aIt )
         // TODO: handle encoded characters
-        if( aIt->maName.equalsIgnoreAsciiCase( rName ) )
+        if( aIt->maName.equalsIgnoreAsciiCase( rModelName ) )
             return static_cast< sal_Int32 >( aIt - maSheetInfos.begin() );
     return -1;
 }
 
 // private --------------------------------------------------------------------
 
-const OoxSheetInfo* WorksheetBuffer::getSheetInfo( sal_Int32 nSheet ) const
+const SheetInfoModel* WorksheetBuffer::getSheetInfo( sal_Int32 nSheet ) const
 {
-    return ((0 <= nSheet) && (static_cast< size_t >( nSheet ) < maSheetInfos.size())) ?
-        &maSheetInfos[ static_cast< size_t >( nSheet ) ] : 0;
+    return ContainerHelper::getVectorElement( maSheetInfos, nSheet );
 }
 
-OUString WorksheetBuffer::insertSheet( const OUString& rName, sal_Int16 nSheet, bool bVisible )
+WorksheetBuffer::IndexNamePair WorksheetBuffer::insertSheet( const OUString& rPreferredName, sal_Int16 nSheet, bool bVisible )
 {
-    OUString aFinalName = (rName.getLength() == 0) ? CREATE_OUSTRING( "Sheet" ) : rName;
+    IndexNamePair aIndexName;
+    aIndexName.first = -1;
+    aIndexName.second = (rPreferredName.getLength() == 0) ? CREATE_OUSTRING( "Sheet" ) : rPreferredName;
     try
     {
         Reference< XSpreadsheets > xSheets( getDocument()->getSheets(), UNO_QUERY_THROW );
@@ -195,36 +202,42 @@ OUString WorksheetBuffer::insertSheet( const OUString& rName, sal_Int16 nSheet, 
         {
             // existing sheet - try to rename
             Reference< XNamed > xSheetName( xSheetsIA->getByIndex( nSheet ), UNO_QUERY_THROW );
-            if( xSheetName->getName() != aFinalName )
+            if( xSheetName->getName() != aIndexName.second )
             {
-                aFinalName = ContainerHelper::getUnusedName( xSheetsNA, aFinalName, ' ' );
-                xSheetName->setName( aFinalName );
+                aIndexName.second = ContainerHelper::getUnusedName( xSheetsNA, aIndexName.second, ' ' );
+                xSheetName->setName( aIndexName.second );
             }
             aPropSet.set( xSheetName );
         }
         else
         {
             // new sheet - insert with unused name
-            aFinalName = ContainerHelper::getUnusedName( xSheetsNA, aFinalName, ' ' );
-            xSheets->insertNewByName( aFinalName, nSheet );
+            aIndexName.second = ContainerHelper::getUnusedName( xSheetsNA, aIndexName.second, ' ' );
+            nSheet = static_cast< sal_Int16 >( xSheetsIA->getCount() );
+            xSheets->insertNewByName( aIndexName.second, nSheet );
             aPropSet.set( xSheetsIA->getByIndex( nSheet ) );
         }
 
         // sheet properties
-        aPropSet.setProperty( maIsVisibleProp, bVisible );
+        aPropSet.setProperty( PROP_IsVisible, bVisible );
+
+        // return final sheet index if sheet exists
+        aIndexName.first = nSheet;
     }
     catch( Exception& )
     {
         OSL_ENSURE( false, "WorksheetBuffer::insertSheet - cannot insert or rename worksheet" );
     }
-    return aFinalName;
+    return aIndexName;
 }
 
-void WorksheetBuffer::insertSheet( const OoxSheetInfo& rSheetInfo )
+void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
 {
     sal_Int16 nSheet = static_cast< sal_Int16 >( maSheetInfos.size() );
-    maSheetInfos.push_back( rSheetInfo );
-    maSheetInfos.back().maFinalName = insertSheet( rSheetInfo.maName, nSheet, rSheetInfo.mnState == XML_visible );
+    maSheetInfos.push_back( rModel );
+    IndexNamePair aIndexName = insertSheet( rModel.maName, nSheet, rModel.mnState == XML_visible );
+    if( aIndexName.first >= 0 )
+        maSheetInfos.back().maFinalName = aIndexName.second;
 }
 
 // ============================================================================

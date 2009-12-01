@@ -31,6 +31,7 @@
 #include "oox/xls/sharedformulabuffer.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
+#include "properties.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
@@ -90,15 +91,14 @@ void ExtCellFormulaContext::setSharedFormula( const CellAddress& rBaseAddr )
 // ============================================================================
 
 SharedFormulaBuffer::SharedFormulaBuffer( const WorksheetHelper& rHelper ) :
-    WorksheetHelper( rHelper ),
-    maIsSharedProp( CREATE_OUSTRING( "IsSharedFormula" ) )
+    WorksheetHelper( rHelper )
 {
 }
 
 void SharedFormulaBuffer::importSharedFmla( const OUString& rFormula, const OUString& rSharedRange, sal_Int32 nSharedId, const CellAddress& rBaseAddr )
 {
     CellRangeAddress aFmlaRange;
-    if( getAddressConverter().convertToCellRange( aFmlaRange, rSharedRange, getSheetIndex(), true ) )
+    if( getAddressConverter().convertToCellRange( aFmlaRange, rSharedRange, getSheetIndex(), true, true ) )
     {
         // create the defined name representing the shared formula
         OSL_ENSURE( lclContains( aFmlaRange, rBaseAddr ), "SharedFormulaBuffer::importSharedFmla - invalid range for shared formula" );
@@ -121,7 +121,7 @@ void SharedFormulaBuffer::importSharedFmla( RecordInputStream& rStrm, const Cell
     BinRange aRange;
     rStrm >> aRange;
     CellRangeAddress aFmlaRange;
-    if( getAddressConverter().convertToCellRange( aFmlaRange, aRange, getSheetIndex(), true ) )
+    if( getAddressConverter().convertToCellRange( aFmlaRange, aRange, getSheetIndex(), true, true ) )
     {
         // create the defined name representing the shared formula
         OSL_ENSURE( lclContains( aFmlaRange, rBaseAddr ), "SharedFormulaBuffer::importSharedFmla - invalid range for shared formula" );
@@ -144,7 +144,7 @@ void SharedFormulaBuffer::importSharedFmla( BiffInputStream& rStrm, const CellAd
     BinRange aRange;
     aRange.read( rStrm, false );        // always 8bit column indexes
     CellRangeAddress aFmlaRange;
-    if( getAddressConverter().convertToCellRange( aFmlaRange, aRange, getSheetIndex(), true ) )
+    if( getAddressConverter().convertToCellRange( aFmlaRange, aRange, getSheetIndex(), true, true ) )
     {
         // create the defined name representing the shared formula
         OSL_ENSURE( lclContains( aFmlaRange, rBaseAddr ), "SharedFormulaBuffer::importSharedFmla - invalid range for shared formula" );
@@ -185,9 +185,9 @@ Reference< XNamedRange > SharedFormulaBuffer::createDefinedName( const BinAddres
         append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
     Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName );
     PropertySet aNameProps( xNamedRange );
-    aNameProps.setProperty( maIsSharedProp, true );
+    aNameProps.setProperty( PROP_IsSharedFormula, true );
     sal_Int32 nTokenIndex = -1;
-    if( aNameProps.getProperty( nTokenIndex, CREATE_OUSTRING( "TokenIndex" ) ) && (nTokenIndex >= 0) )
+    if( aNameProps.getProperty( nTokenIndex, PROP_TokenIndex ) && (nTokenIndex >= 0) )
         maIndexMap[ rMapKey ] = nTokenIndex;
     return xNamedRange;
 }

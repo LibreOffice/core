@@ -50,7 +50,7 @@ public:
     explicit            LayoutContext( ::oox::core::ContextHandler2Helper& rParent, LayoutModel& rModel );
     virtual             ~LayoutContext();
 
-    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
 // ============================================================================
@@ -65,7 +65,7 @@ public:
     explicit            TextContext(  ::oox::core::ContextHandler2Helper& rParent, TextModel& rModel );
     virtual             ~TextContext();
 
-    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 };
 
@@ -81,7 +81,7 @@ public:
     explicit            TitleContext( ::oox::core::ContextHandler2Helper& rParent, TitleModel& rModel );
     virtual             ~TitleContext();
 
-    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
 // ============================================================================
@@ -96,7 +96,7 @@ public:
     explicit            LegendContext( ::oox::core::ContextHandler2Helper& rParent, LegendModel& rModel );
     virtual             ~LegendContext();
 
-    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
 // ============================================================================

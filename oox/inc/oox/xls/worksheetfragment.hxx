@@ -38,6 +38,31 @@ namespace xls {
 
 // ============================================================================
 
+class OoxDataValidationsContext : public OoxWorksheetContextBase
+{
+public:
+    explicit            OoxDataValidationsContext( OoxWorksheetFragmentBase& rFragment );
+
+protected:
+    // oox.core.ContextHandler2Helper interface -------------------------------
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+
+private:
+    /** Imports the dataValidation element containing data validation settings. */
+    void                importDataValidation( const AttributeList& rAttribs );
+    /** Imports the DATAVALIDATION record containing data validation settings. */
+    void                importDataValidation( RecordInputStream& rStrm );
+
+private:
+    ::std::auto_ptr< ValidationModel > mxValModel;
+};
+
+// ============================================================================
+
 class OoxWorksheetFragment : public OoxWorksheetFragmentBase
 {
 public:
@@ -51,12 +76,10 @@ public:
 protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
 
     // oox.core.FragmentHandler2 interface ------------------------------------
 
@@ -75,12 +98,10 @@ private:
     void                importCol( const AttributeList& rAttribs );
     /** Imports a merged cell range from a mergeCell element. */
     void                importMergeCell( const AttributeList& rAttribs );
-    /** Imports the dataValidation element containing data validation settings. */
-    void                importDataValidation( const AttributeList& rAttribs );
     /** Imports the hyperlink element containing a hyperlink for a cell range. */
     void                importHyperlink( const AttributeList& rAttribs );
     /** Imports individual break that is either within row or column break context. */
-    void                importBrk( const AttributeList& rAttribs );
+    void                importBrk( const AttributeList& rAttribs, bool bRowBreak );
     /** Imports the the relation identifier for the DrawingML part. */
     void                importDrawing( const AttributeList& rAttribs );
     /** Imports the the relation identifier for the legacy VML drawing part. */
@@ -100,10 +121,8 @@ private:
     void                importMergeCell( RecordInputStream& rStrm );
     /** Imports a hyperlink for a cell range from a HYPERLINK record. */
     void                importHyperlink( RecordInputStream& rStrm );
-    /** Imports the DATAVALIDATION record containing data validation settings. */
-    void                importDataValidation( RecordInputStream& rStrm );
     /** Imports the BRK record for an individual row or column page break. */
-    void                importBrk( RecordInputStream& rStrm );
+    void                importBrk( RecordInputStream& rStrm, bool bRowBreak );
     /** Imports the DRAWING record containing the relation identifier for the DrawingML part. */
     void                importDrawing( RecordInputStream& rStrm );
     /** Imports the LEGACYDRAWING record containing the relation identifier for the VML drawing part. */
@@ -112,12 +131,11 @@ private:
     void                importOleObject( RecordInputStream& rStrm );
     /** Imports additional data for an OCX form control. */
     void                importControl( RecordInputStream& rStrm );
-
-private:
-    ::std::auto_ptr< OoxValidationData > mxValData;
 };
 
 // ============================================================================
+
+class BiffPivotTableContext;
 
 class BiffWorksheetFragment : public BiffWorksheetFragmentBase
 {
@@ -127,6 +145,7 @@ public:
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
                             sal_Int32 nSheet );
+    virtual             ~BiffWorksheetFragment();
 
     /** Imports the entire worksheet fragment, returns true, if EOF record has been reached. */
     virtual bool        importFragment();
@@ -158,8 +177,13 @@ private:
     void                importMergedCells();
     /** Imports the HORPAGEBREAKS or VERPAGEBREAKS record and inserts page breaks. */
     void                importPageBreaks( bool bRowBreak );
+    /** Imports a pivot table. */
+    void                importPTDefinition();
     /** Imports the STANDARDWIDTH record and sets standard column width. */
     void                importStandardWidth();
+
+private:
+    ::boost::shared_ptr< BiffPivotTableContext > mxPTContext;
 };
 
 // ============================================================================

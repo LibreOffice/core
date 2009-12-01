@@ -43,6 +43,7 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/chart/seriesconverter.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -131,7 +132,7 @@ void UpDownBarsConverter::convertFromModel( const Reference< XChartType >& rxCha
 
     // upbar format
     Reference< XPropertySet > xWhitePropSet;
-    if( aTypeProp.getProperty( xWhitePropSet, CREATE_OUSTRING( "WhiteDay" ) ) )
+    if( aTypeProp.getProperty( xWhitePropSet, PROP_WhiteDay ) )
     {
         PropertySet aPropSet( xWhitePropSet );
         getFormatter().convertFrameFormatting( aPropSet, mrModel.mxUpBars, OBJECTTYPE_UPBAR );
@@ -139,7 +140,7 @@ void UpDownBarsConverter::convertFromModel( const Reference< XChartType >& rxCha
 
     // downbar format
     Reference< XPropertySet > xBlackPropSet;
-    if( aTypeProp.getProperty( xBlackPropSet, CREATE_OUSTRING( "BlackDay" ) ) )
+    if( aTypeProp.getProperty( xBlackPropSet, PROP_BlackDay ) )
     {
         PropertySet aPropSet( xBlackPropSet );
         getFormatter().convertFrameFormatting( aPropSet, mrModel.mxDownBars, OBJECTTYPE_DOWNBAR );
@@ -295,7 +296,7 @@ Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
     if( maTypeInfo.mbSwappedAxesSet )
     {
         PropertySet aPropSet( xCoordSystem );
-        aPropSet.setProperty( CREATE_OUSTRING( "SwapXAndYAxis" ), true );
+        aPropSet.setProperty( PROP_SwapXAndYAxis, true );
     }
 
     return xCoordSystem;
@@ -337,14 +338,14 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             {
                 Sequence< sal_Int32 > aInt32Seq( 2 );
                 aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = mrModel.mnOverlap;
-                aTypeProp.setProperty( CREATE_OUSTRING( "OverlapSequence" ), aInt32Seq );
+                aTypeProp.setProperty( PROP_OverlapSequence, aInt32Seq );
                 aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = mrModel.mnGapWidth;
-                aTypeProp.setProperty( CREATE_OUSTRING( "GapwidthSequence" ), aInt32Seq );
+                aTypeProp.setProperty( PROP_GapwidthSequence, aInt32Seq );
             }
             break;
             case TYPECATEGORY_PIE:
             {
-                aTypeProp.setProperty( CREATE_OUSTRING( "UseRings" ), maTypeInfo.meTypeId == TYPEID_DOUGHNUT );
+                aTypeProp.setProperty( PROP_UseRings, maTypeInfo.meTypeId == TYPEID_DOUGHNUT );
                 /*  #i85166# starting angle of first pie slice. 3D pie charts
                     use Y rotation setting in view3D element. Of-pie charts do
                     not support pie rotation. */
@@ -407,18 +408,18 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                 xDataSink->setData( ContainerHelper::vectorToSequence( aLabeledSeqVec ) );
 
                 // formatting of high/low lines
-                aTypeProp.setProperty( CREATE_OUSTRING( "ShowHighLow" ), true );
+                aTypeProp.setProperty( PROP_ShowHighLow, true );
                 PropertySet aSeriesProp( xDataSeries );
                 if( mrModel.mxHiLowLines.is() )
                     getFormatter().convertFrameFormatting( aSeriesProp, mrModel.mxHiLowLines, OBJECTTYPE_HILOLINE );
                 else
                     // hi/low-lines cannot be switched off via "ShowHighLow" property (?)
-                    aSeriesProp.setProperty( CREATE_OUSTRING( "LineStyle" ), ::com::sun::star::drawing::LineStyle_NONE );
+                    aSeriesProp.setProperty( PROP_LineStyle, ::com::sun::star::drawing::LineStyle_NONE );
 
                 // formatting of up/down bars
                 bool bUpDownBars = mrModel.mxUpDownBars.is();
-                aTypeProp.setProperty( CREATE_OUSTRING( "Japanese" ), bUpDownBars );
-                aTypeProp.setProperty( CREATE_OUSTRING( "ShowFirst" ), bUpDownBars );
+                aTypeProp.setProperty( PROP_Japanese, bUpDownBars );
+                aTypeProp.setProperty( PROP_ShowFirst, bUpDownBars );
                 if( bUpDownBars )
                 {
                     UpDownBarsConverter aUpDownConv( *this, *mrModel.mxUpDownBars );
@@ -456,7 +457,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 
         // set existence of bar connector lines at diagram (only in stacked 2D bar charts)
         if( mrModel.mxSerLines.is() && !mb3dChart && (maTypeInfo.meTypeCategory == TYPECATEGORY_BAR) && (isStacked() || isPercent()) )
-            aDiaProp.setProperty( CREATE_OUSTRING( "ConnectBars" ), true );
+            aDiaProp.setProperty( PROP_ConnectBars, true );
     }
     catch( Exception& )
     {
@@ -493,7 +494,7 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
         aSymbol.Size.Width = aSymbol.Size.Height = nSize;
 
         // set the property
-        rPropSet.setProperty( CREATE_OUSTRING( "Symbol" ), aSymbol );
+        rPropSet.setProperty( PROP_Symbol, aSymbol );
     }
 }
 
@@ -503,7 +504,7 @@ void TypeGroupConverter::convertLineSmooth( PropertySet& rPropSet, bool bOoxSmoo
     {
         namespace cssc = ::com::sun::star::chart2;
         cssc::CurveStyle eCurveStyle = bOoxSmooth ? cssc::CurveStyle_CUBIC_SPLINES : cssc::CurveStyle_LINES;
-        rPropSet.setProperty( CREATE_OUSTRING( "CurveStyle" ), eCurveStyle );
+        rPropSet.setProperty( PROP_CurveStyle, eCurveStyle );
     }
 }
 
@@ -524,7 +525,7 @@ void TypeGroupConverter::convertBarGeometry( PropertySet& rPropSet, sal_Int32 nO
             case XML_pyramidToMax:  nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
             default:                OSL_ENSURE( false, "TypeGroupConverter::convertBarGeometry - unknown 3D bar shape type" );
         }
-        rPropSet.setProperty( CREATE_OUSTRING( "Geometry3D" ), nGeom3d );
+        rPropSet.setProperty( PROP_Geometry3D, nGeom3d );
     }
 }
 
@@ -534,7 +535,7 @@ void TypeGroupConverter::convertPieRotation( PropertySet& rPropSet, sal_Int32 nO
     {
         // map OOXML [0,360] clockwise (0deg top) to Chart2 counterclockwise (0deg left)
         sal_Int32 nAngle = (450 - nOoxAngle) % 360;
-        rPropSet.setProperty( CREATE_OUSTRING( "StartingAngle" ), nAngle );
+        rPropSet.setProperty( PROP_StartingAngle, nAngle );
     }
 }
 
@@ -544,7 +545,7 @@ void TypeGroupConverter::convertPieExplosion( PropertySet& rPropSet, sal_Int32 n
     {
         // pie explosion restricted to 100% in Chart2, set as double in range [0,1]
         double fOffset = getLimitedValue< double >( nOoxExplosion / 100.0, 0.0, 1.0 );
-        rPropSet.setProperty( CREATE_OUSTRING( "Offset" ), fOffset );
+        rPropSet.setProperty( PROP_Offset, fOffset );
     }
 }
 
@@ -564,10 +565,10 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
             eStacking = cssc::StackingDirection_Y_STACKING;
         else if( isDeep3dChart() )
             eStacking = cssc::StackingDirection_Z_STACKING;
-        aSeriesProp.setProperty( CREATE_OUSTRING( "StackingDirection" ), eStacking );
+        aSeriesProp.setProperty( PROP_StackingDirection, eStacking );
 
         // additional series properties
-        aSeriesProp.setProperty( CREATE_OUSTRING( "AttachedAxisIndex" ), nAxesSetIdx );
+        aSeriesProp.setProperty( PROP_AttachedAxisIndex, nAxesSetIdx );
 
         // insert series into container
         try

@@ -38,28 +38,36 @@ namespace drawingml {
 
 // ============================================================================
 
-struct LinePropertyNames
+enum LinePropertyId
 {
-    ::rtl::OUString     maLineStyle;
-    ::rtl::OUString     maLineWidth;
-    ::rtl::OUString     maLineColor;
-    ::rtl::OUString     maLineTransparence;
-    ::rtl::OUString     maLineDash;
-    ::rtl::OUString     maLineJoint;
-    ::rtl::OUString     maLineStart;
-    ::rtl::OUString     maLineStartWidth;
-    ::rtl::OUString     maLineStartCenter;
-    ::rtl::OUString     maLineEnd;
-    ::rtl::OUString     maLineEndWidth;
-    ::rtl::OUString     maLineEndCenter;
+    LineStyleId,
+    LineWidthId,
+    LineColorId,
+    LineTransparenceId,
+    LineDashId,
+    LineJointId,
+    LineStartId,
+    LineStartWidthId,
+    LineStartCenterId,
+    LineEndId,
+    LineEndWidthId,
+    LineEndCenterId,
+    LineId_END
+};
+
+struct LinePropertyIds
+{
+    const sal_Int32*    mpnPropertyIds;
     bool                mbNamedLineDash;
     bool                mbNamedLineMarker;
 
-    explicit            LinePropertyNames();
-    explicit            LinePropertyNames(
-                            const sal_Char* const* ppcPropertyNames,
+    explicit            LinePropertyIds(
+                            const sal_Int32* pnPropertyIds,
                             bool bNamedLineDash,
                             bool bNamedLineMarker );
+
+    inline bool         has( LinePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ] >= 0; }
+    inline sal_Int32    operator[]( LinePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
 };
 
 // ============================================================================
@@ -86,7 +94,7 @@ struct LineProperties
     OptValue< sal_Int32 > moLineCap;        /// Line cap (OOXML token).
     OptValue< sal_Int32 > moLineJoint;      /// Line joint type (OOXML token).
 
-    static LinePropertyNames DEFAULTNAMES;  /// Default line property names.
+    static LinePropertyIds DEFAULT_IDS;     /// Default line property identifiers.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const LineProperties& rSourceProps );
@@ -94,7 +102,7 @@ struct LineProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const LinePropertyNames& rPropNames,
+                            const LinePropertyIds& rPropIds,
                             const ::oox::core::XmlFilterBase& rFilter,
                             ::oox::core::ModelObjectContainer& rObjContainer,
                             sal_Int32 nPhClr ) const;
@@ -102,7 +110,7 @@ struct LineProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const LinePropertyNames& rPropNames,
+                            const LinePropertyIds& rPropIds,
                             const ::oox::core::XmlFilterBase& rFilter,
                             ::oox::core::ModelObjectContainer& rObjContainer,
                             sal_Int32 nPhClr ) const;

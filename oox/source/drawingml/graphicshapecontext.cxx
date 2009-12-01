@@ -42,6 +42,7 @@
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartspacefragment.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -185,8 +186,7 @@ PresentationOle2006Context::~PresentationOle2006Context()
             OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
             aPersistName = aPersistName.copy( sProtocol.getLength() );
 
-            static const OUString sPersistName = CREATE_OUSTRING( "PersistName" );
-            mpShapePtr->getShapeProperties()[ sPersistName ] <<= aPersistName;
+            mpShapePtr->getShapeProperties()[ PROP_PersistName ] <<= aPersistName;
         }
         Reference< XComponent > xComp( xEmbeddedResolver, UNO_QUERY_THROW );
         xComp->dispose();
@@ -215,12 +215,8 @@ PresentationOle2006Context::~PresentationOle2006Context()
                     Reference< graphic::XGraphic > xGraphic = xGraphicProvider->queryGraphic( aArgs );
                     if ( xGraphic.is() )
                     {
-                        static const OUString sEmptyGraphicURL;
-                        static const OUString sGraphicURL = CREATE_OUSTRING( "GraphicURL" );
-                        mpShapePtr->getShapeProperties()[ sGraphicURL ] <<= sEmptyGraphicURL;
-
-                        static const OUString sThumbnailGraphic = CREATE_OUSTRING( "Graphic" );
-                        mpShapePtr->getShapeProperties()[ sThumbnailGraphic ] <<= xGraphic;
+                        mpShapePtr->getShapeProperties()[ PROP_GraphicURL ] <<= OUString();
+                        mpShapePtr->getShapeProperties()[ PROP_Graphic ] <<= xGraphic;
                     }
                 }
                 catch( Exception& )
@@ -375,11 +371,11 @@ void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rx
     {
         // set the chart2 OLE class ID at the OLE shape
         PropertySet aShapeProp( rxShape );
-        aShapeProp.setProperty( CREATE_OUSTRING( "CLSID" ), CREATE_OUSTRING( "12dcae26-281f-416f-a234-c3086127382e" ) );
+        aShapeProp.setProperty( PROP_CLSID, CREATE_OUSTRING( "12dcae26-281f-416f-a234-c3086127382e" ) );
 
         // get the XModel interface of the embedded object from the OLE shape
         Reference< frame::XModel > xDocModel;
-        aShapeProp.getProperty( xDocModel, CREATE_OUSTRING( "Model" ) );
+        aShapeProp.getProperty( xDocModel, PROP_Model );
 
         // load the chart data from the XML fragment
         chart::ChartSpaceModel aModel;

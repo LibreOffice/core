@@ -36,6 +36,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/namespaces.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 using ::rtl::OUString;
@@ -58,29 +59,25 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
 
     // ST_TextWrappingType
     sal_Int32 nWrappingType = aAttribs.getToken( XML_wrap, XML_square );
-    mrTextBodyProp.maPropertyMap[ CREATE_OUSTRING( "TextWordWrap" ) ] <<= (nWrappingType == XML_square);
+    mrTextBodyProp.maPropertyMap[ PROP_TextWordWrap ] <<= (nWrappingType == XML_square);
 
     // ST_Coordinate
-    const OUString sTextLeftDistance( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
-    const OUString sTextUpperDistance( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
-    const OUString sTextRightDistance( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
-    const OUString sTextLowerDistance( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
     OUString sValue;
     sValue = xAttributes->getOptionalValue( XML_lIns );
     sal_Int32 nLeftInset = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrTextBodyProp.maPropertyMap[ sTextLeftDistance ]  <<= static_cast< sal_Int32 >( nLeftInset );
+    mrTextBodyProp.maPropertyMap[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( nLeftInset );
 
     sValue = xAttributes->getOptionalValue( XML_tIns );
     sal_Int32 nTopInset  = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrTextBodyProp.maPropertyMap[ sTextUpperDistance ] <<= static_cast< sal_Int32 >( nTopInset );
+    mrTextBodyProp.maPropertyMap[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( nTopInset );
 
     sValue = xAttributes->getOptionalValue( XML_rIns );
     sal_Int32 nRightInset  = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrTextBodyProp.maPropertyMap[ sTextRightDistance ] <<= static_cast< sal_Int32 >( nRightInset );
+    mrTextBodyProp.maPropertyMap[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( nRightInset );
 
     sValue = xAttributes->getOptionalValue( XML_bIns );
     sal_Int32 nBottonInset = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 45720 / 360 );
-    mrTextBodyProp.maPropertyMap[ sTextLowerDistance ] <<= static_cast< sal_Int32 >( nBottonInset );
+    mrTextBodyProp.maPropertyMap[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( nBottonInset );
 
 
     // ST_TextAnchoringType
@@ -124,7 +121,6 @@ void TextBodyPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException,
 Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& /*xAttributes*/) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
-    const OUString sTextAutoGrowHeight( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) );
     switch( aElementToken )
     {
             // Sequence
@@ -134,11 +130,11 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
 
             // EG_TextAutofit
             case NMSP_DRAWINGML|XML_noAutofit:
-                mrTextBodyProp.maPropertyMap[ sTextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
+                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
             case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
             case NMSP_DRAWINGML|XML_spAutoFit:
-                mrTextBodyProp.maPropertyMap[ sTextAutoGrowHeight ] <<= true;
+                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
                 break;
 
             case NMSP_DRAWINGML|XML_scene3d:        // CT_Scene3D

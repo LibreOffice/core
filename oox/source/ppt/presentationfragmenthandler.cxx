@@ -89,17 +89,6 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
     {
         PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
 
-#ifdef DEBUG
-    if ( false )
-    {
-        if ( mpTextListStyle.get() )
-        {
-            ::oox::drawingml::TextParagraphPropertiesPtr rParaProps( mpTextListStyle->getListStyle()[ 0 ] );
-            rParaProps->getTextParagraphPropertyMap().dump_debug("TextParagraph paragraph props");
-        }
-    }
-
-#endif
         Reference< frame::XModel > xModel( rFilter.getModel() );
         Reference< drawing::XDrawPage > xSlide;
         sal_uInt32 nSlide;

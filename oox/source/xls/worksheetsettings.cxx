@@ -37,8 +37,9 @@
 #include "oox/xls/workbooksettings.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::util::XProtectable;
 
 namespace oox {
@@ -78,7 +79,7 @@ const sal_uInt16 BIFF_SHEETPROT_SELECT_UNLOCKED = 0x4000;
 
 // ============================================================================
 
-OoxSheetPrData::OoxSheetPrData() :
+SheetSettingsModel::SheetSettingsModel() :
     mbFilterMode( false ),
     mbApplyStyles( false ),
     mbSummaryBelow( true ),
@@ -88,7 +89,7 @@ OoxSheetPrData::OoxSheetPrData() :
 
 // ============================================================================
 
-OoxSheetProtectionData::OoxSheetProtectionData() :
+SheetProtectionModel::SheetProtectionModel() :
     mnPasswordHash( 0 ),
     mbSheet( false ),
     mbObjects( false ),
@@ -129,53 +130,53 @@ WorksheetSettings::WorksheetSettings( const WorksheetHelper& rHelper ) :
 
 void WorksheetSettings::importSheetPr( const AttributeList& rAttribs )
 {
-    maOoxSheetData.maCodeName = rAttribs.getString( XML_codeName, OUString() );
-    maOoxSheetData.mbFilterMode = rAttribs.getBool( XML_filterMode, false );
+    maSheetSettings.maCodeName = rAttribs.getString( XML_codeName, OUString() );
+    maSheetSettings.mbFilterMode = rAttribs.getBool( XML_filterMode, false );
 }
 
 void WorksheetSettings::importChartSheetPr( const AttributeList& rAttribs )
 {
-    maOoxSheetData.maCodeName = rAttribs.getString( XML_codeName, OUString() );
+    maSheetSettings.maCodeName = rAttribs.getString( XML_codeName, OUString() );
 }
 
 void WorksheetSettings::importTabColor( const AttributeList& rAttribs )
 {
-    maOoxSheetData.maTabColor.importColor( rAttribs );
+    maSheetSettings.maTabColor.importColor( rAttribs );
 }
 
 void WorksheetSettings::importOutlinePr( const AttributeList& rAttribs )
 {
-    maOoxSheetData.mbApplyStyles  = rAttribs.getBool( XML_applyStyles, false );
-    maOoxSheetData.mbSummaryBelow = rAttribs.getBool( XML_summaryBelow, true );
-    maOoxSheetData.mbSummaryRight = rAttribs.getBool( XML_summaryRight, true );
+    maSheetSettings.mbApplyStyles  = rAttribs.getBool( XML_applyStyles, false );
+    maSheetSettings.mbSummaryBelow = rAttribs.getBool( XML_summaryBelow, true );
+    maSheetSettings.mbSummaryRight = rAttribs.getBool( XML_summaryRight, true );
 }
 
 void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
 {
-    maOoxProtData.mnPasswordHash     = lclGetCheckedHash( rAttribs.getHex( XML_password, 0 ) );
-    maOoxProtData.mbSheet            = rAttribs.getBool( XML_sheet, false );
-    maOoxProtData.mbObjects          = rAttribs.getBool( XML_objects, false );
-    maOoxProtData.mbScenarios        = rAttribs.getBool( XML_scenarios, false );
-    maOoxProtData.mbFormatCells      = rAttribs.getBool( XML_formatCells, true );
-    maOoxProtData.mbFormatColumns    = rAttribs.getBool( XML_formatColumns, true );
-    maOoxProtData.mbFormatRows       = rAttribs.getBool( XML_formatRows, true );
-    maOoxProtData.mbInsertColumns    = rAttribs.getBool( XML_insertColumns, true );
-    maOoxProtData.mbInsertRows       = rAttribs.getBool( XML_insertRows, true );
-    maOoxProtData.mbInsertHyperlinks = rAttribs.getBool( XML_insertHyperlinks, true );
-    maOoxProtData.mbDeleteColumns    = rAttribs.getBool( XML_deleteColumns, true );
-    maOoxProtData.mbDeleteRows       = rAttribs.getBool( XML_deleteRows, true );
-    maOoxProtData.mbSelectLocked     = rAttribs.getBool( XML_selectLockedCells, false );
-    maOoxProtData.mbSort             = rAttribs.getBool( XML_sort, true );
-    maOoxProtData.mbAutoFilter       = rAttribs.getBool( XML_autoFilter, true );
-    maOoxProtData.mbPivotTables      = rAttribs.getBool( XML_pivotTables, true );
-    maOoxProtData.mbSelectUnlocked   = rAttribs.getBool( XML_selectUnlockedCells, false );
+    maSheetProt.mnPasswordHash     = lclGetCheckedHash( rAttribs.getHex( XML_password, 0 ) );
+    maSheetProt.mbSheet            = rAttribs.getBool( XML_sheet, false );
+    maSheetProt.mbObjects          = rAttribs.getBool( XML_objects, false );
+    maSheetProt.mbScenarios        = rAttribs.getBool( XML_scenarios, false );
+    maSheetProt.mbFormatCells      = rAttribs.getBool( XML_formatCells, true );
+    maSheetProt.mbFormatColumns    = rAttribs.getBool( XML_formatColumns, true );
+    maSheetProt.mbFormatRows       = rAttribs.getBool( XML_formatRows, true );
+    maSheetProt.mbInsertColumns    = rAttribs.getBool( XML_insertColumns, true );
+    maSheetProt.mbInsertRows       = rAttribs.getBool( XML_insertRows, true );
+    maSheetProt.mbInsertHyperlinks = rAttribs.getBool( XML_insertHyperlinks, true );
+    maSheetProt.mbDeleteColumns    = rAttribs.getBool( XML_deleteColumns, true );
+    maSheetProt.mbDeleteRows       = rAttribs.getBool( XML_deleteRows, true );
+    maSheetProt.mbSelectLocked     = rAttribs.getBool( XML_selectLockedCells, false );
+    maSheetProt.mbSort             = rAttribs.getBool( XML_sort, true );
+    maSheetProt.mbAutoFilter       = rAttribs.getBool( XML_autoFilter, true );
+    maSheetProt.mbPivotTables      = rAttribs.getBool( XML_pivotTables, true );
+    maSheetProt.mbSelectUnlocked   = rAttribs.getBool( XML_selectUnlockedCells, false );
 }
 
 void WorksheetSettings::importChartProtection( const AttributeList& rAttribs )
 {
-    maOoxProtData.mnPasswordHash = lclGetCheckedHash( rAttribs.getHex( XML_password, 0 ) );
-    maOoxProtData.mbSheet        = rAttribs.getBool( XML_content, false );
-    maOoxProtData.mbObjects      = rAttribs.getBool( XML_objects, false );
+    maSheetProt.mnPasswordHash = lclGetCheckedHash( rAttribs.getHex( XML_password, 0 ) );
+    maSheetProt.mbSheet        = rAttribs.getBool( XML_content, false );
+    maSheetProt.mbObjects      = rAttribs.getBool( XML_objects, false );
 }
 
 void WorksheetSettings::importPhoneticPr( const AttributeList& rAttribs )
@@ -187,15 +188,15 @@ void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
 {
     sal_uInt16 nFlags1;
     sal_uInt8 nFlags2;
-    rStrm >> nFlags1 >> nFlags2 >> maOoxSheetData.maTabColor;
+    rStrm >> nFlags1 >> nFlags2 >> maSheetSettings.maTabColor;
     rStrm.skip( 8 );    // sync anchor cell
-    rStrm >> maOoxSheetData.maCodeName;
+    rStrm >> maSheetSettings.maCodeName;
     // sheet settings
-    maOoxSheetData.mbFilterMode = getFlag( nFlags2, OOBIN_SHEETPR_FILTERMODE );
+    maSheetSettings.mbFilterMode = getFlag( nFlags2, OOBIN_SHEETPR_FILTERMODE );
     // outline settings, equal flags in BIFF and OOBIN
-    maOoxSheetData.mbApplyStyles  = getFlag( nFlags1, BIFF_SHEETPR_APPLYSTYLES );
-    maOoxSheetData.mbSummaryRight = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSRIGHT );
-    maOoxSheetData.mbSummaryBelow = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSBELOW );
+    maSheetSettings.mbApplyStyles  = getFlag( nFlags1, BIFF_SHEETPR_APPLYSTYLES );
+    maSheetSettings.mbSummaryRight = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSRIGHT );
+    maSheetSettings.mbSummaryBelow = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSBELOW );
     /*  Fit printout to width/height - for whatever reason, this flag is still
         stored separated from the page settings */
     getPageSettings().setFitToPagesMode( getFlag( nFlags1, BIFF_SHEETPR_FITTOPAGES ) );
@@ -204,37 +205,37 @@ void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
 void WorksheetSettings::importChartSheetPr( RecordInputStream& rStrm )
 {
     rStrm.skip( 2 );    // flags, contains only the 'published' flag
-    rStrm >> maOoxSheetData.maTabColor >> maOoxSheetData.maCodeName;
+    rStrm >> maSheetSettings.maTabColor >> maSheetSettings.maCodeName;
 }
 
 void WorksheetSettings::importSheetProtection( RecordInputStream& rStrm )
 {
-    rStrm >> maOoxProtData.mnPasswordHash;
+    rStrm >> maSheetProt.mnPasswordHash;
     // no flags field for all these boolean flags?!?
-    maOoxProtData.mbSheet            = rStrm.readInt32() != 0;
-    maOoxProtData.mbObjects          = rStrm.readInt32() != 0;
-    maOoxProtData.mbScenarios        = rStrm.readInt32() != 0;
-    maOoxProtData.mbFormatCells      = rStrm.readInt32() != 0;
-    maOoxProtData.mbFormatColumns    = rStrm.readInt32() != 0;
-    maOoxProtData.mbFormatRows       = rStrm.readInt32() != 0;
-    maOoxProtData.mbInsertColumns    = rStrm.readInt32() != 0;
-    maOoxProtData.mbInsertRows       = rStrm.readInt32() != 0;
-    maOoxProtData.mbInsertHyperlinks = rStrm.readInt32() != 0;
-    maOoxProtData.mbDeleteColumns    = rStrm.readInt32() != 0;
-    maOoxProtData.mbDeleteRows       = rStrm.readInt32() != 0;
-    maOoxProtData.mbSelectLocked     = rStrm.readInt32() != 0;
-    maOoxProtData.mbSort             = rStrm.readInt32() != 0;
-    maOoxProtData.mbAutoFilter       = rStrm.readInt32() != 0;
-    maOoxProtData.mbPivotTables      = rStrm.readInt32() != 0;
-    maOoxProtData.mbSelectUnlocked   = rStrm.readInt32() != 0;
+    maSheetProt.mbSheet            = rStrm.readInt32() != 0;
+    maSheetProt.mbObjects          = rStrm.readInt32() != 0;
+    maSheetProt.mbScenarios        = rStrm.readInt32() != 0;
+    maSheetProt.mbFormatCells      = rStrm.readInt32() != 0;
+    maSheetProt.mbFormatColumns    = rStrm.readInt32() != 0;
+    maSheetProt.mbFormatRows       = rStrm.readInt32() != 0;
+    maSheetProt.mbInsertColumns    = rStrm.readInt32() != 0;
+    maSheetProt.mbInsertRows       = rStrm.readInt32() != 0;
+    maSheetProt.mbInsertHyperlinks = rStrm.readInt32() != 0;
+    maSheetProt.mbDeleteColumns    = rStrm.readInt32() != 0;
+    maSheetProt.mbDeleteRows       = rStrm.readInt32() != 0;
+    maSheetProt.mbSelectLocked     = rStrm.readInt32() != 0;
+    maSheetProt.mbSort             = rStrm.readInt32() != 0;
+    maSheetProt.mbAutoFilter       = rStrm.readInt32() != 0;
+    maSheetProt.mbPivotTables      = rStrm.readInt32() != 0;
+    maSheetProt.mbSelectUnlocked   = rStrm.readInt32() != 0;
 }
 
 void WorksheetSettings::importChartProtection( RecordInputStream& rStrm )
 {
-    rStrm >> maOoxProtData.mnPasswordHash;
+    rStrm >> maSheetProt.mnPasswordHash;
     // no flags field for all these boolean flags?!?
-    maOoxProtData.mbSheet            = rStrm.readInt32() != 0;
-    maOoxProtData.mbObjects          = rStrm.readInt32() != 0;
+    maSheetProt.mbSheet            = rStrm.readInt32() != 0;
+    maSheetProt.mbObjects          = rStrm.readInt32() != 0;
 }
 
 void WorksheetSettings::importPhoneticPr( RecordInputStream& rStrm )
@@ -253,9 +254,9 @@ void WorksheetSettings::importSheetPr( BiffInputStream& rStrm )
         setSheetType( SHEETTYPE_DIALOGSHEET );
     }
     // outline settings
-    maOoxSheetData.mbApplyStyles  = getFlag( nFlags, BIFF_SHEETPR_APPLYSTYLES );
-    maOoxSheetData.mbSummaryRight = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSRIGHT );
-    maOoxSheetData.mbSummaryBelow = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSBELOW );
+    maSheetSettings.mbApplyStyles  = getFlag( nFlags, BIFF_SHEETPR_APPLYSTYLES );
+    maSheetSettings.mbSummaryRight = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSRIGHT );
+    maSheetSettings.mbSummaryBelow = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSBELOW );
     // fit printout to width/height
     getPageSettings().setFitToPagesMode( getFlag( nFlags, BIFF_SHEETPR_FITTOPAGES ) );
     // save external linked values, in BIFF5-BIFF8 moved to BOOKBOOK record
@@ -265,22 +266,22 @@ void WorksheetSettings::importSheetPr( BiffInputStream& rStrm )
 
 void WorksheetSettings::importProtect( BiffInputStream& rStrm )
 {
-    maOoxProtData.mbSheet = rStrm.readuInt16() != 0;
+    maSheetProt.mbSheet = rStrm.readuInt16() != 0;
 }
 
 void WorksheetSettings::importObjectProtect( BiffInputStream& rStrm )
 {
-    maOoxProtData.mbObjects = rStrm.readuInt16() != 0;
+    maSheetProt.mbObjects = rStrm.readuInt16() != 0;
 }
 
 void WorksheetSettings::importScenProtect( BiffInputStream& rStrm )
 {
-    maOoxProtData.mbScenarios = rStrm.readuInt16() != 0;
+    maSheetProt.mbScenarios = rStrm.readuInt16() != 0;
 }
 
 void WorksheetSettings::importPassword( BiffInputStream& rStrm )
 {
-    rStrm >> maOoxProtData.mnPasswordHash;
+    rStrm >> maSheetProt.mnPasswordHash;
 }
 
 void WorksheetSettings::importSheetProtection( BiffInputStream& rStrm )
@@ -288,21 +289,21 @@ void WorksheetSettings::importSheetProtection( BiffInputStream& rStrm )
     rStrm.skip( 19 );
     sal_uInt16 nFlags = rStrm.readuInt16();
     // set flag means protection is disabled
-    maOoxProtData.mbObjects          = !getFlag( nFlags, BIFF_SHEETPROT_OBJECTS );
-    maOoxProtData.mbScenarios        = !getFlag( nFlags, BIFF_SHEETPROT_SCENARIOS );
-    maOoxProtData.mbFormatCells      = !getFlag( nFlags, BIFF_SHEETPROT_FORMAT_CELLS );
-    maOoxProtData.mbFormatColumns    = !getFlag( nFlags, BIFF_SHEETPROT_FORMAT_COLUMNS );
-    maOoxProtData.mbFormatRows       = !getFlag( nFlags, BIFF_SHEETPROT_FORMAT_ROWS );
-    maOoxProtData.mbInsertColumns    = !getFlag( nFlags, BIFF_SHEETPROT_INSERT_COLUMNS );
-    maOoxProtData.mbInsertRows       = !getFlag( nFlags, BIFF_SHEETPROT_INSERT_ROWS );
-    maOoxProtData.mbInsertHyperlinks = !getFlag( nFlags, BIFF_SHEETPROT_INSERT_HLINKS );
-    maOoxProtData.mbDeleteColumns    = !getFlag( nFlags, BIFF_SHEETPROT_DELETE_COLUMNS );
-    maOoxProtData.mbDeleteRows       = !getFlag( nFlags, BIFF_SHEETPROT_DELETE_ROWS );
-    maOoxProtData.mbSelectLocked     = !getFlag( nFlags, BIFF_SHEETPROT_SELECT_LOCKED );
-    maOoxProtData.mbSort             = !getFlag( nFlags, BIFF_SHEETPROT_SORT );
-    maOoxProtData.mbAutoFilter       = !getFlag( nFlags, BIFF_SHEETPROT_AUTOFILTER );
-    maOoxProtData.mbPivotTables      = !getFlag( nFlags, BIFF_SHEETPROT_PIVOTTABLES );
-    maOoxProtData.mbSelectUnlocked   = !getFlag( nFlags, BIFF_SHEETPROT_SELECT_UNLOCKED );
+    maSheetProt.mbObjects          = !getFlag( nFlags, BIFF_SHEETPROT_OBJECTS );
+    maSheetProt.mbScenarios        = !getFlag( nFlags, BIFF_SHEETPROT_SCENARIOS );
+    maSheetProt.mbFormatCells      = !getFlag( nFlags, BIFF_SHEETPROT_FORMAT_CELLS );
+    maSheetProt.mbFormatColumns    = !getFlag( nFlags, BIFF_SHEETPROT_FORMAT_COLUMNS );
+    maSheetProt.mbFormatRows       = !getFlag( nFlags, BIFF_SHEETPROT_FORMAT_ROWS );
+    maSheetProt.mbInsertColumns    = !getFlag( nFlags, BIFF_SHEETPROT_INSERT_COLUMNS );
+    maSheetProt.mbInsertRows       = !getFlag( nFlags, BIFF_SHEETPROT_INSERT_ROWS );
+    maSheetProt.mbInsertHyperlinks = !getFlag( nFlags, BIFF_SHEETPROT_INSERT_HLINKS );
+    maSheetProt.mbDeleteColumns    = !getFlag( nFlags, BIFF_SHEETPROT_DELETE_COLUMNS );
+    maSheetProt.mbDeleteRows       = !getFlag( nFlags, BIFF_SHEETPROT_DELETE_ROWS );
+    maSheetProt.mbSelectLocked     = !getFlag( nFlags, BIFF_SHEETPROT_SELECT_LOCKED );
+    maSheetProt.mbSort             = !getFlag( nFlags, BIFF_SHEETPROT_SORT );
+    maSheetProt.mbAutoFilter       = !getFlag( nFlags, BIFF_SHEETPROT_AUTOFILTER );
+    maSheetProt.mbPivotTables      = !getFlag( nFlags, BIFF_SHEETPROT_PIVOTTABLES );
+    maSheetProt.mbSelectUnlocked   = !getFlag( nFlags, BIFF_SHEETPROT_SELECT_UNLOCKED );
 }
 
 void WorksheetSettings::importPhoneticPr( BiffInputStream& rStrm )
@@ -312,11 +313,13 @@ void WorksheetSettings::importPhoneticPr( BiffInputStream& rStrm )
 
 void WorksheetSettings::finalizeImport()
 {
-    if( maOoxProtData.mbSheet )
+    if( maSheetProt.mbSheet ) try
     {
-        Reference< XProtectable > xProtectable( getXSpreadsheet(), UNO_QUERY );
-        if( xProtectable.is() )
-            xProtectable->protect( OUString() );
+        Reference< XProtectable > xProtectable( getSheet(), UNO_QUERY_THROW );
+        xProtectable->protect( OUString() );
+    }
+    catch( Exception& )
+    {
     }
 }
 

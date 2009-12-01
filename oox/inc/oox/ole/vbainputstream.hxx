@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef OOX_HELPER_VBAINPUTSTREAM_HXX
-#define OOX_HELPER_VBAINPUTSTREAM_HXX
+#ifndef OOX_OLE_VBAINPUTSTREAM_HXX
+#define OOX_OLE_VBAINPUTSTREAM_HXX
 
 #include <vector>
 #include "oox/helper/binaryinputstream.hxx"

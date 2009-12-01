@@ -407,13 +407,13 @@ void BiffObjectBase::writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode
     writeHexItem( rName, nErrCode, mxErrCodes );
 }
 
-void BiffObjectBase::writeFontPortions( const BinFontPortionList& rPortions )
+void BiffObjectBase::writeFontPortions( const FontPortionModelList& rPortions )
 {
     if( !rPortions.empty() )
     {
         writeDecItem( "font-count", static_cast< sal_uInt32 >( rPortions.size() ) );
         TableGuard aTabGuard( out(), 14 );
-        for( BinFontPortionList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
+        for( FontPortionModelList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
         {
             MultiItemsGuard aMultiGuard( out() );
             writeDecItem( "char-pos", aIt->mnPos );
@@ -430,7 +430,7 @@ OUString BiffObjectBase::dumpByteString( const String& rName, BiffStringFlags nF
     bool b8BitLength = getFlag( nFlags, BIFF_STR_8BITLENGTH );
 
     OString aString = mxBiffStrm->readByteString( !b8BitLength );
-    BinFontPortionList aPortions;
+    FontPortionModelList aPortions;
     if( getFlag( nFlags, BIFF_STR_EXTRAFONTS ) )
         aPortions.importPortions( *mxBiffStrm, false );
 
@@ -441,16 +441,16 @@ OUString BiffObjectBase::dumpByteString( const String& rName, BiffStringFlags nF
     {
         // add leading and trailing string position to ease the following loop
         if( aPortions.empty() || (aPortions.front().mnPos > 0) )
-            aPortions.insert( aPortions.begin(), BinFontPortionData( 0, -1 ) );
+            aPortions.insert( aPortions.begin(), FontPortionModel( 0, -1 ) );
         if( aPortions.back().mnPos < nStrLen )
-            aPortions.push_back( BinFontPortionData( nStrLen, -1 ) );
+            aPortions.push_back( FontPortionModel( nStrLen, -1 ) );
 
         // use global text encoding, if nothing special is specified
         if( eDefaultTextEnc == RTL_TEXTENCODING_DONTKNOW )
             eDefaultTextEnc = getBiffData().getTextEncoding();
 
         // create all string portions according to the font id vector
-        for( BinFontPortionList::const_iterator aIt = aPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
+        for( FontPortionModelList::const_iterator aIt = aPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
         {
             sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
             if( nPortionLen > 0 )
@@ -494,7 +494,7 @@ OUString BiffObjectBase::dumpUniString( const String& rName, BiffStringFlags nFl
     if( nFontCount > 0 )
     {
         IndentGuard aIndGuard( out() );
-        BinFontPortionList aPortions;
+        FontPortionModelList aPortions;
         aPortions.importPortions( *mxBiffStrm, nFontCount, BIFF_FONTPORTION_16BIT );
         writeFontPortions( aPortions );
     }
@@ -674,6 +674,19 @@ OUString BiffObjectBase::dumpConstValue( sal_Unicode cStrQuote )
 sal_uInt16 BiffObjectBase::dumpRepeatedRecId()
 {
     return dumpHex< sal_uInt16 >( "repeated-rec-id", getRecNames() );
+}
+
+void BiffObjectBase::dumpFrHeader( bool bWithFlags, bool bWithRange )
+{
+    dumpHex< sal_uInt16 >( "rec-id", getRecNames() );
+    sal_Int16 nFlags = bWithFlags ? dumpHex< sal_uInt16 >( "flags", "FR-FLAGS" ) : 0x0001;
+    if( bWithRange )
+    {
+        if( getFlag< sal_uInt16 >( nFlags, 0x0001 ) )
+            dumpRange( "range" );
+        else
+            dumpUnused( 8 );
+    }
 }
 
 void BiffObjectBase::dumpDffClientRect()
@@ -1530,7 +1543,7 @@ WorkbookStreamObject::WorkbookStreamObject( const ObjectBase& rParent, const Bin
             mxFillPatterns = rCfg.getNameList( "FILLPATTERNS" );
             mnPTRowFields = 0;
             mnPTColFields = 0;
-            mnPTSxliIdx = 0;
+            mnPTRowColItemsIdx = 0;
             mbHasDff = false;
             initializePerSheet();
         }
@@ -1578,7 +1591,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( nRecSize >= 6 )  dumpDec< sal_uInt16 >( "build-id" );
             if( nRecSize >= 8 )  dumpDec< sal_uInt16 >( "build-year" );
             if( nRecSize >= 12 ) dumpHex< sal_uInt32 >( "history-flags", "BOF-HISTORY-FLAGS" );
-            if( nRecSize >= 16 ) dumpDec< sal_uInt32 >( "lowest-ver" );
+            if( nRecSize >= 16 ) dumpHex< sal_uInt32 >( "lowest-version", "BOF-LOWESTVERSION-FLAGS" );
             if( (eBiff == BIFF4) && (getLastRecId() != BIFF_ID_OBJ) )
                 initializePerSheet();
         break;
@@ -1736,6 +1749,50 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
         break;
 
+        case BIFF_ID_CHFRBLOCKBEGIN:
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt16 >( "type", "CHFRBLOCK-TYPE" );
+            dumpDec< sal_uInt16 >( "context" );
+            dumpDec< sal_uInt16 >( "value-1" );
+            dumpDec< sal_uInt16 >( "value-2" );
+        break;
+
+        case BIFF_ID_CHFRBLOCKEND:
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt16 >( "type", "CHFRBLOCK-TYPE" );
+            if( rStrm.getRemaining() >= 6 )
+                dumpUnused( 6 );
+        break;
+
+        case BIFF_ID_CHFRINFO:
+        {
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt8 >( "creator", "CHFRINFO-APPVERSION" );
+            dumpDec< sal_uInt8 >( "writer", "CHFRINFO-APPVERSION" );
+            sal_uInt16 nCount = dumpDec< sal_uInt16 >( "rec-range-count" );
+            out().resetItemIndex();
+            for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
+                dumpHexPair< sal_uInt16 >( "#rec-range", '-' );
+        }
+        break;
+
+        case BIFF_ID_CHFRLABELPROPS:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt16 >( "flags", "CHFRLABELPROPS-FLAGS" );
+            dumpUniString( "separator", BIFF_STR_SMARTFLAGS );
+        break;
+
+        case BIFF_ID_CHFRUNITPROPS:
+            dumpFrHeader( true, false );
+            dumpDec< sal_Int16 >( "preset", "CHFRUNITPROPS-PRESET" );
+            dumpDec< double >( "unit" );
+            dumpHex< sal_uInt16 >( "flags", "CHFRUNITPROPS-FLAGS" );
+        break;
+
+        case BIFF_ID_CHFRWRAPPER:
+            dumpFrHeader( true, false );
+        break;
+
         case BIFF_ID_CHLABELRANGE:
             dumpDec< sal_uInt16 >( "axis-crossing" );
             dumpDec< sal_uInt16 >( "label-frequency" );
@@ -1884,14 +1941,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "label-rotation", "TEXTROTATION" );
         break;
 
-        case BIFF_ID_CHUNITPROPERTIES:
-            dumpRepeatedRecId();
-            dumpUnused( 2 );
-            dumpDec< sal_Int16 >( "preset", "CHUNITPROPERTIES-PRESET" );
-            dumpDec< double >( "unit" );
-            dumpHex< sal_uInt16 >( "flags", "CHUNITPROPERTIES-FLAGS" );
-        break;
-
         case BIFF_ID_CHVALUERANGE:
             dumpDec< double >( "minimum" );
             dumpDec< double >( "maximum" );
@@ -1899,11 +1948,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< double >( "minor-inc" );
             dumpDec< double >( "axis-crossing" );
             dumpHex< sal_uInt16 >( "flags", "CHVALUERANGE-FLAGS" );
-        break;
-
-        case BIFF_ID_CHWRAPPEDRECORD:
-            dumpRepeatedRecId();
-            dumpUnused( 2 );
         break;
 
         case BIFF_ID_CODENAME:
@@ -1969,14 +2013,20 @@ void WorkbookStreamObject::implDumpRecordBody()
         }
         break;
 
+        case BIFF_ID_DCONBINAME:
+            dumpDec< sal_uInt8 >( "builtin-id", "DEFINEDNAME-BUILTINID" );
+            dumpUnused( 3 );
+            dumpString( "source-link", BIFF_STR_8BITLENGTH, BIFF_STR_SMARTFLAGS );
+        break;
+
         case BIFF_ID_DCONNAME:
             dumpString( "source-name", BIFF_STR_8BITLENGTH );
-            dumpString( "source-link", BIFF_STR_8BITLENGTH );
+            dumpString( "source-link", BIFF_STR_8BITLENGTH, BIFF_STR_SMARTFLAGS );
         break;
 
         case BIFF_ID_DCONREF:
             dumpRange( "source-range", false );
-            dumpString( "source-link", BIFF_STR_8BITLENGTH );
+            dumpString( "source-link", BIFF_STR_8BITLENGTH, BIFF_STR_SMARTFLAGS );
         break;
 
         case BIFF2_ID_DATATABLE:
@@ -2306,6 +2356,10 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt8 >( "active-pane", "PANE-ID" );
         break;
 
+        case BIFF_ID_PCITEM_STRING:
+            dumpString( "value" );
+        break;
+
         case BIFF_ID_PHONETICPR:
             dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
             dumpHex< sal_uInt16 >( "flags", "PHONETICPR-FLAGS" );
@@ -2316,6 +2370,138 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt8 >( "sheet-type", "PROJEXTSHEET-TYPE" );
             dumpUnused( 1 );
             dumpByteString( "sheet-link", BIFF_STR_8BITLENGTH );
+        break;
+
+        case BIFF_ID_PTDATAFIELD:
+            dumpDec< sal_Int16 >( "field" );
+            dumpDec< sal_uInt16 >( "subtotal", "PTDATAFIELD-SUBTOTAL" );
+            dumpDec< sal_uInt16 >( "show-data-as", "PTDATAFIELD-SHOWDATAAS" );
+            dumpDec< sal_Int16 >( "base-field" );
+            dumpDec< sal_Int16 >( "base-item", "PTDATAFIELD-BASEITEM" );
+            dumpFormatIdx();
+            dumpPivotString( "name" );
+        break;
+
+        case BIFF_ID_PTDEFINITION:
+        {
+            dumpRange( "output-range" );
+            dumpRowIndex( "first-header-row-idx" );
+            dumpAddress( "first-data-pos" );
+            dumpDec< sal_uInt16 >( "cache-idx" );
+            dumpUnused( 2 );
+            dumpDec< sal_uInt16 >( "default-data-axis", "PTFIELD-AXISTYPE" );
+            dumpDec< sal_Int16 >( "default-data-pos", "PTDEFINITION-DATAFIELD-POS" );
+            dumpDec< sal_uInt16 >( "field-count" );
+            mnPTRowFields = dumpDec< sal_uInt16 >( "row-field-count" );
+            mnPTColFields = dumpDec< sal_uInt16 >( "column-field-count" );
+            dumpDec< sal_uInt16 >( "page-field-count" );
+            dumpDec< sal_uInt16 >( "data-field-count" );
+            dumpDec< sal_uInt16 >( "data-row-count" );
+            dumpDec< sal_uInt16 >( "data-column-count" );
+            dumpHex< sal_uInt16 >( "flags", "PTDEFINITION-FLAGS" );
+            dumpDec< sal_uInt16 >( "auto-format-idx" );
+            sal_uInt16 nTabNameLen = dumpDec< sal_uInt16 >( "table-name-len" );
+            sal_uInt16 nDataNameLen = dumpDec< sal_uInt16 >( "data-name-len" );
+            dumpPivotString( "table-name", nTabNameLen );
+            dumpPivotString( "data-name", nDataNameLen );
+            mnPTRowColItemsIdx = 0;
+        }
+        break;
+
+        case BIFF_ID_PTDEFINITION2:
+        {
+            dumpDec< sal_uInt16 >( "format-rec-count" );
+            sal_uInt16 nErrCaptLen = dumpDec< sal_uInt16 >( "error-caption-len" );
+            sal_uInt16 nMissCaptLen = dumpDec< sal_uInt16 >( "missing-caption-len" );
+            sal_uInt16 nTagLen = dumpDec< sal_uInt16 >( "tag-len" );
+            dumpDec< sal_uInt16 >( "select-rec-count" );
+            dumpDec< sal_uInt16 >( "page-rows" );
+            dumpDec< sal_uInt16 >( "page-cols" );
+            dumpHex< sal_uInt32 >( "flags", "PTDEFINITION2-FLAGS" );
+            sal_uInt16 nPageStyleLen = dumpDec< sal_uInt16 >( "page-field-style-len" );
+            sal_uInt16 nTabStyleLen = dumpDec< sal_uInt16 >( "pivot-table-style-len" );
+            sal_uInt16 nVacStyleLen = dumpDec< sal_uInt16 >( "vacated-style-len" );
+            dumpPivotString( "error-caption", nErrCaptLen );
+            dumpPivotString( "missing-caption", nMissCaptLen );
+            dumpPivotString( "tag", nTagLen );
+            dumpPivotString( "page-field-style", nPageStyleLen );
+            dumpPivotString( "pivot-table-style", nTabStyleLen );
+            dumpPivotString( "vacated-style", nVacStyleLen );
+        }
+        break;
+
+        case BIFF_ID_PTFIELD:
+            dumpDec< sal_uInt16 >( "axis-type", "PTFIELD-AXISTYPE" );
+            dumpDec< sal_uInt16 >( "subtotal-count" );
+            dumpHex< sal_uInt16 >( "subtotals", "PTFIELD-SUBTOTALS" );
+            dumpDec< sal_uInt16 >( "item-count" );
+            dumpPivotString( "field-name" );
+        break;
+
+        case BIFF_ID_PTFIELD2:
+            dumpHex< sal_uInt32 >( "flags", "PTFIELD2-FLAGS" );
+            dumpDec< sal_Int16 >( "autosort-basefield-idx" );
+            dumpDec< sal_Int16 >( "autoshow-basefield-idx" );
+            dumpFormatIdx();
+            if( rStrm.getRemaining() >= 2 )
+            {
+                sal_uInt16 nFuncNameLen = dumpDec< sal_uInt16 >( "subtotal-func-name-len" );
+                dumpUnused( 8 );
+                dumpPivotString( "subtotal-func-name", nFuncNameLen );
+            }
+        break;
+
+        case BIFF_ID_PTFITEM:
+            dumpDec< sal_uInt16 >( "item-type", "PTFITEM-ITEMTYPE" );
+            dumpHex< sal_uInt16 >( "flags", "PTFITEM-FLAGS" );
+            dumpDec< sal_Int16 >( "cache-idx", "PTFITEM-CACHEIDX" );
+            dumpPivotString( "item-name" );
+        break;
+
+        case BIFF_ID_PTPAGEFIELDS:
+        {
+            out().resetItemIndex();
+            TableGuard aTabGuard( out(), 17, 17, 17 );
+            while( rStrm.getRemaining() >= 6 )
+            {
+                writeEmptyItem( "#page-field" );
+                MultiItemsGuard aMultiGuard( out() );
+                IndentGuard aIndGuard( out() );
+                dumpDec< sal_Int16 >( "base-field" );
+                dumpDec< sal_Int16 >( "item", "PTPAGEFIELDS-ITEM" );
+                dumpDec< sal_uInt16 >( "dropdown-obj-id" );
+            }
+        }
+        break;
+
+        case BIFF_ID_PTROWCOLFIELDS:
+            out().resetItemIndex();
+            for( sal_Int64 nIdx = 0, nCount = rStrm.getRemaining() / 2; nIdx < nCount; ++nIdx )
+                dumpDec< sal_Int16 >( "#field-idx" );
+        break;
+
+        case BIFF_ID_PTROWCOLITEMS:
+            if( mnPTRowColItemsIdx < 2 )
+            {
+                sal_uInt16 nCount = (mnPTRowColItemsIdx == 0) ? mnPTRowFields : mnPTColFields;
+                sal_Int64 nLineSize = 8 + 2 * nCount;
+                out().resetItemIndex();
+                while( rStrm.getRemaining() >= nLineSize )
+                {
+                    writeEmptyItem( "#line-data" );
+                    IndentGuard aIndGuard( out() );
+                    MultiItemsGuard aMultiGuard( out() );
+                    dumpDec< sal_uInt16 >( "ident-count" );
+                    dumpDec< sal_uInt16 >( "item-type", "PTROWCOLITEMS-ITEMTYPE" );
+                    dumpDec< sal_uInt16 >( "used-count" );
+                    dumpHex< sal_uInt16 >( "flags", "PTROWCOLITEMS-FLAGS" );
+                    OUStringBuffer aItemList;
+                    for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
+                        StringHelper::appendToken( aItemList, in().readInt16() );
+                    writeInfoItem( "item-idxs", aItemList.makeStringAndClear() );
+                }
+                ++mnPTRowColItemsIdx;
+            }
         break;
 
         case BIFF_ID_RK:
@@ -2354,7 +2540,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             getBiffData().setTextEncoding( getBiffData().getXfEncoding( nXfIdx ) );
             dumpString( "value" );
             getBiffData().setTextEncoding( eOldTextEnc );
-            BinFontPortionList aPortions;
+            FontPortionModelList aPortions;
             aPortions.importPortions( rStrm, eBiff == BIFF8 );
             writeFontPortions( aPortions );
         }
@@ -2369,8 +2555,7 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_SCREENTIP:
-            dumpRepeatedRecId();
-            dumpRange();
+            dumpFrHeader( false, true );
             dumpNullUnicodeArray( "tooltip" );
         break;
 
@@ -2401,8 +2586,8 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_SHEETPROTECTION:
-            dumpRepeatedRecId();
-            dumpUnused( 17 );
+            dumpFrHeader( true, true );
+            dumpUnused( 7 );
             dumpHex< sal_uInt16 >( "allowed-flags", "SHEETPROTECTION-FLAGS" );
             dumpUnused( 2 );
         break;
@@ -2433,20 +2618,6 @@ void WorkbookStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF_ID_SXDI:
-        {
-            dumpDec< sal_uInt16 >( "field-idx" );
-            dumpDec< sal_uInt16 >( "function", "SXDI-FUNC" );
-            dumpDec< sal_uInt16 >( "data-format", "SXDI-FORMAT" );
-            dumpDec< sal_uInt16 >( "format-basefield-idx" );
-            dumpDec< sal_uInt16 >( "format-baseitem-idx", "SXDI-BASEITEM" );
-            dumpFormatIdx();
-            sal_uInt16 nNameLen = dumpDec< sal_uInt16 >( "item-name-len", "SX-NAMELEN" );
-            if( nNameLen != BIFF_PT_NOSTRING )
-                writeStringItem( "item-name", rStrm.readUniString( nNameLen ) );
-        }
-        break;
-
         case BIFF_ID_SXEXT:
             if( eBiff == BIFF8 )
             {
@@ -2457,96 +2628,6 @@ void WorkbookStreamObject::implDumpRecordBody()
                 dumpDec< sal_uInt16 >( "server-pagefields-string-count" );
                 dumpDec< sal_uInt16 >( "odbc-connection-string-count" );
             }
-        break;
-
-        case BIFF_ID_SXIVD:
-            out().resetItemIndex();
-            for( sal_Int64 nIdx = 0, nCount = rStrm.getRemaining() / 2; nIdx < nCount; ++nIdx )
-                dumpDec< sal_uInt16 >( "#field-idx" );
-        break;
-
-        case BIFF_ID_SXLI:
-            if( mnPTSxliIdx < 2 )
-            {
-                sal_uInt16 nCount = (mnPTSxliIdx == 0) ? mnPTRowFields : mnPTColFields;
-                sal_Int64 nLineSize = 8 + 2 * nCount;
-                out().resetItemIndex();
-                while( rStrm.getRemaining() >= nLineSize )
-                {
-                    writeEmptyItem( "#line-data" );
-                    IndentGuard aIndGuard( out() );
-                    MultiItemsGuard aMultiGuard( out() );
-                    dumpDec< sal_uInt16 >( "ident-count" );
-                    dumpDec< sal_uInt16 >( "item-type", "SXLI-ITEMTYPE" );
-                    dumpDec< sal_uInt16 >( "used-count" );
-                    dumpHex< sal_uInt16 >( "flags", "SXLI-FLAGS" );
-                    OUStringBuffer aItemList;
-                    for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
-                        StringHelper::appendToken( aItemList, in().readuInt16() );
-                    writeInfoItem( "item-idxs", aItemList.makeStringAndClear() );
-                }
-                ++mnPTSxliIdx;
-            }
-        break;
-
-        case BIFF_ID_SXSTRING:
-            dumpString( "value" );
-        break;
-
-        case BIFF_ID_SXVD:
-        {
-            dumpDec< sal_uInt16 >( "axis-type", "SXVD-AXISTYPE" );
-            dumpDec< sal_uInt16 >( "subtotal-count" );
-            dumpHex< sal_uInt16 >( "subtotals", "SXVD-SUBTOTALS" );
-            dumpDec< sal_uInt16 >( "item-count" );
-            sal_uInt16 nNameLen = dumpDec< sal_uInt16 >( "field-name-len", "SX-NAMELEN" );
-            if( nNameLen != BIFF_PT_NOSTRING )
-                writeStringItem( "field-name", rStrm.readUniString( nNameLen ) );
-        }
-        break;
-
-        case BIFF_ID_SXVDEX:
-            dumpHex< sal_uInt32 >( "flags", "SXVDEX-FLAGS" );
-            dumpDec< sal_uInt16 >( "autosort-basefield-idx" );
-            dumpDec< sal_uInt16 >( "autoshow-basefield-idx" );
-            dumpFormatIdx();
-        break;
-
-        case BIFF_ID_SXVI:
-        {
-            dumpDec< sal_uInt16 >( "item-type", "SXVI-ITEMTYPE" );
-            dumpHex< sal_uInt16 >( "flags", "SXVI-FLAGS" );
-            dumpDec< sal_uInt16 >( "cache-idx" );
-            sal_uInt16 nNameLen = dumpDec< sal_uInt16 >( "item-name-len", "SX-NAMELEN" );
-            if( nNameLen != BIFF_PT_NOSTRING )
-                writeStringItem( "item-name", rStrm.readUniString( nNameLen ) );
-        }
-        break;
-
-        case BIFF_ID_SXVIEW:
-        {
-            dumpRange( "output-range" );
-            dumpRowIndex( "first-header-row-idx" );
-            dumpAddress( "first-data-pos" );
-            dumpDec< sal_uInt16 >( "cache-idx" );
-            dumpUnused( 2 );
-            dumpDec< sal_uInt16 >( "default-data-axis", "SXVD-AXISTYPE" );
-            dumpDec< sal_Int16 >( "default-data-pos" );
-            dumpDec< sal_uInt16 >( "field-count" );
-            mnPTRowFields = dumpDec< sal_uInt16 >( "row-field-count" );
-            mnPTColFields = dumpDec< sal_uInt16 >( "column-field-count" );
-            dumpDec< sal_uInt16 >( "page-field-count" );
-            dumpDec< sal_uInt16 >( "data-field-count" );
-            dumpDec< sal_uInt16 >( "data-row-count" );
-            dumpDec< sal_uInt16 >( "data-column-count" );
-            dumpHex< sal_uInt16 >( "flags", "SXVIEW-FLAGS" );
-            dumpDec< sal_uInt16 >( "auto-format-idx" );
-            sal_uInt16 nTabNameLen = dumpDec< sal_uInt16 >( "table-name-len" );
-            sal_uInt16 nDataNameLen = dumpDec< sal_uInt16 >( "data-name-len" );
-            writeStringItem( "table-name", rStrm.readUniString( nTabNameLen ) );
-            writeStringItem( "data-name", rStrm.readUniString( nDataNameLen ) );
-            mnPTSxliIdx = 0;
-        }
         break;
 
         case BIFF_ID_TXO:
@@ -2678,6 +2759,25 @@ sal_uInt16 WorkbookStreamObject::dumpXfIdx( const String& rName, bool bBiff2Styl
     else
         nXfIdx = dumpDec< sal_uInt16 >( aName );
     return nXfIdx;
+}
+
+OUString WorkbookStreamObject::dumpPivotString( const String& rName, sal_uInt16 nStrLen )
+{
+    OUString aString;
+    if( nStrLen != BIFF_PT_NOSTRING )
+    {
+        aString = (getBiff() == BIFF8) ?
+            getBiffStream().readUniString( nStrLen ) :
+            getBiffStream().readCharArray( nStrLen, getBiffData().getTextEncoding() );
+        writeStringItem( rName, aString );
+    }
+    return aString;
+}
+
+OUString WorkbookStreamObject::dumpPivotString( const String& rName )
+{
+    sal_uInt16 nStrLen = dumpDec< sal_uInt16 >( "string-len", "PIVOT-NAMELEN" );
+    return dumpPivotString( rName, nStrLen );
 }
 
 sal_uInt16 WorkbookStreamObject::dumpCellHeader( bool bBiff2Style )
@@ -3391,7 +3491,7 @@ void WorkbookStreamObject::dumpObjRecString( const String& rName, sal_uInt16 nTe
 
 void WorkbookStreamObject::dumpObjRecTextFmt( sal_uInt16 nFormatSize )
 {
-    BinFontPortionList aPortions;
+    FontPortionModelList aPortions;
     aPortions.importPortions( getBiffStream(), nFormatSize / 8, BIFF_FONTPORTION_OBJ );
     writeFontPortions( aPortions );
 }
@@ -3442,9 +3542,9 @@ void WorkbookStreamObject::dumpObjRecPictFmla( sal_uInt16 nFmlaSize )
 
 // ============================================================================
 
-PivotCacheStreamObject::PivotCacheStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName )
+PivotCacheStreamObject::PivotCacheStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, BiffType eBiff, const ::rtl::OUString& rSysFileName )
 {
-    RecordStreamObject::construct( rParent, rxStrm, BIFF8, rSysFileName );
+    RecordStreamObject::construct( rParent, rxStrm, eBiff, rSysFileName );
 }
 
 void PivotCacheStreamObject::implDumpRecordBody()
@@ -3454,42 +3554,56 @@ void PivotCacheStreamObject::implDumpRecordBody()
 
     switch( nRecId )
     {
-        case BIFF_ID_SXDATETIME:
+        case BIFF_ID_PCDEFINITION:
+            dumpDec< sal_Int32 >( "source-records" );
+            dumpHex< sal_uInt16 >( "cache-id" );
+            dumpHex< sal_uInt16 >( "flags", "PCDEFINITION-FLAGS" );
+            dumpUnused( 2 );
+            dumpDec< sal_uInt16 >( "sourcedata-field-count" );
+            dumpDec< sal_uInt16 >( "cache-field-count" );
+            dumpDec< sal_uInt16 >( "report-record-count" );
+            dumpDec< sal_uInt16 >( "database-type", "PCDSOURCE-TYPE" );
+            dumpString( "user-name" );
+        break;
+
+        case BIFF_ID_PCDEFINITION2:
+            dumpDec< double >( "refreshed-date" );
+            dumpDec< sal_Int32 >( "formula-count" );
+        break;
+
+        case BIFF_ID_PCDFDISCRETEPR:
+            out().resetItemIndex();
+            while( !rStrm.isEof() && (rStrm.getRemaining() >= 2) )
+                dumpDec< sal_uInt16 >( "#item-index" );
+        break;
+
+        case BIFF_ID_PCDFIELD:
+            dumpHex< sal_uInt16 >( "flags", "PCDFIELD-FLAGS" );
+            dumpDec< sal_uInt16 >( "group-parent-field" );
+            dumpDec< sal_uInt16 >( "group-base-field" );
+            dumpDec< sal_uInt16 >( "unique-items" );
+            dumpDec< sal_uInt16 >( "group-items" );
+            dumpDec< sal_uInt16 >( "base-items" );
+            dumpDec< sal_uInt16 >( "shared-items" );
+            if( rStrm.getRemaining() >= 3 )
+                dumpString( "item-name" );
+        break;
+
+        case BIFF_ID_PCITEM_DATE:
         {
-            sal_uInt16 nYear, nMonth;
-            sal_uInt8 nDay, nHour, nMin, nSec;
-            rStrm >> nYear >> nMonth >> nDay >> nHour >> nMin >> nSec;
-            DateTime aDateTime( 0, nSec, nMin, nHour, nDay, nMonth, nYear );
+            DateTime aDateTime;
+            aDateTime.Year = in().readuInt16();
+            aDateTime.Month = in().readuInt16();
+            aDateTime.Day = in().readuInt8();
+            aDateTime.Hours = in().readuInt8();
+            aDateTime.Minutes = in().readuInt8();
+            aDateTime.Seconds = in().readuInt8();
             writeDateTimeItem( "value", aDateTime );
         }
         break;
 
-        case BIFF_ID_SXDB:
-            dumpDec< sal_uInt32 >( "source-records" );
-            dumpHex< sal_uInt16 >( "stream-id" );
-            dumpHex< sal_uInt16 >( "flags", "SXDB-FLAGS" );
-            dumpDec< sal_uInt16 >( "block-records" );
-            dumpDec< sal_uInt16 >( "standard-field-count" );
-            dumpDec< sal_uInt16 >( "total-field-count" );
-            dumpUnused( 2 );
-            dumpDec< sal_uInt16 >( "database-type", "SXDB-TYPE" );
-            dumpUniString( "user-name" );
-        break;
-
-        case BIFF_ID_SXFIELD:
-            dumpHex< sal_uInt16 >( "flags", "SXFIELD-FLAGS" );
-            dumpDec< sal_uInt16 >( "group-child-field" );
-            dumpDec< sal_uInt16 >( "group-base-field" );
-            dumpDec< sal_uInt16 >( "visible-items" );
-            dumpDec< sal_uInt16 >( "group-items" );
-            dumpDec< sal_uInt16 >( "base-items" );
-            dumpDec< sal_uInt16 >( "original-items" );
-            if( rStrm.getRemaining() >= 3 )
-                dumpUniString( "item-name" );
-        break;
-
-        case BIFF_ID_SXSTRING:
-            dumpUniString( "value" );
+        case BIFF_ID_PCITEM_STRING:
+            dumpString( "value" );
         break;
     }
 }
@@ -3508,8 +3622,10 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
 {
     if( (rStrgPath.getLength() == 0) && (rStrmName.equalsAscii( "Book" ) || rStrmName.equalsAscii( "Workbook" )) )
         WorkbookStreamObject( *this, rxStrm, rSysFileName ).dump();
+    else if( rStrgPath.equalsAscii( "_SX_DB" ) )
+        PivotCacheStreamObject( *this, rxStrm, BIFF5, rSysFileName ).dump();
     else if( rStrgPath.equalsAscii( "_SX_DB_CUR" ) )
-        PivotCacheStreamObject( *this, rxStrm, rSysFileName ).dump();
+        PivotCacheStreamObject( *this, rxStrm, BIFF8, rSysFileName ).dump();
     else
         OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
 }

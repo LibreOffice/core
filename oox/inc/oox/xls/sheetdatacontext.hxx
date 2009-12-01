@@ -56,12 +56,10 @@ public:
 protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
 
 private:
     /** Different types of cell records. */
@@ -106,8 +104,8 @@ private:
     void                importDataTable( RecordInputStream& rStrm );
 
 private:
-    OoxCellData         maCurrCell;         /// Position and formatting of current imported cell.
-    OoxDataTableData    maTableData;        /// Additional data for table operation ranges.
+    CellModel           maCurrCell;         /// Position and formatting of current imported cell.
+    DataTableModel      maTableData;        /// Additional data for table operation ranges.
     BinAddress          maCurrPos;          /// Current position for binary import.
     RichStringRef       mxInlineStr;        /// Inline rich string from 'is' element.
 };
@@ -164,7 +162,7 @@ private:
     void                importDataTable();
 
 private:
-    OoxCellData         maCurrCell;             /// Position and formatting of current imported cell.
+    CellModel           maCurrCell;             /// Position and formatting of current imported cell.
     sal_uInt32          mnFormulaIgnoreSize;    /// Number of bytes to be ignored in FORMULA record.
     sal_uInt32          mnArrayIgnoreSize;      /// Number of bytes to be ignored in ARRAY record.
     sal_uInt16          mnBiff2XfId;            /// Current XF identifier from IXFE record.

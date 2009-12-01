@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: headerfooterparser.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: tokenmap.cxx,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,45 +28,24 @@
  *
  ************************************************************************/
 
-#ifndef OOX_XLS_HEADERFOOTERPARSER_HXX
-#define OOX_XLS_HEADERFOOTERPARSER_HXX
-
-#include <memory>
-#include "oox/xls/workbookhelper.hxx"
-
-namespace com { namespace sun { namespace star {
-    namespace sheet { class XHeaderFooterContent; }
-} } }
+#include <rtl/ustring.hxx>
+#include "properties.hxx"
+#include "oox/helper/propertymap.hxx"
 
 namespace oox {
-namespace xls {
+
+#include "propertywords.inc"
 
 // ============================================================================
 
-class HeaderFooterParserImpl;
-
-class HeaderFooterParser : public WorkbookHelper
+PropertyNamesList::PropertyNamesList()
 {
-public:
-    explicit            HeaderFooterParser( const WorkbookHelper& rHelper );
-    virtual             ~HeaderFooterParser();
-
-    /** Parses the passed string and creates the header/footer contents. */
-    void                parse(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XHeaderFooterContent >& rxContext,
-                            const ::rtl::OUString& rData );
-
-    /** Returns the total height of the converted header or footer in points. */
-    double              getTotalHeight() const;
-
-private:
-    ::std::auto_ptr< HeaderFooterParserImpl > mxImpl;
-};
+    reserve( static_cast< size_t >( PROP_COUNT ) );
+    for( sal_Int32 nIdx = 0; nIdx < PROP_COUNT; ++nIdx )
+        push_back( ::rtl::OUString::createFromAscii( propertywordlist[ nIdx ] ) );
+}
 
 // ============================================================================
 
-} // namespace xls
 } // namespace oox
-
-#endif
 

@@ -42,6 +42,7 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
+#include "properties.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
@@ -1254,13 +1255,15 @@ void SimpleFormulaContext::setTokens( const ApiTokenSequence& rTokens )
 
 namespace {
 
+const sal_Int32 nForbiddenFlags = COLUMN_DELETED | ROW_DELETED | SHEET_DELETED | COLUMN_RELATIVE | ROW_RELATIVE | SHEET_RELATIVE | RELATIVE_NAME;
+
 bool lclConvertToCellAddress( CellAddress& orAddress, const SingleReference& rSingleRef, sal_Int32 nFilterBySheet )
 {
     orAddress = CellAddress( static_cast< sal_Int16 >( rSingleRef.Sheet ),
         rSingleRef.Column, rSingleRef.Row );
     return
         ((nFilterBySheet < 0) || (nFilterBySheet == rSingleRef.Sheet)) &&
-        !getFlag( rSingleRef.Flags, COLUMN_DELETED | ROW_DELETED | SHEET_DELETED );
+        !getFlag( rSingleRef.Flags, nForbiddenFlags );
 }
 
 bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& rComplexRef, sal_Int32 nFilterBySheet )
@@ -1271,8 +1274,8 @@ bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& r
     return
         (rComplexRef.Reference1.Sheet == rComplexRef.Reference2.Sheet) &&
         ((nFilterBySheet < 0) || (nFilterBySheet == rComplexRef.Reference1.Sheet)) &&
-        !getFlag( rComplexRef.Reference1.Flags, COLUMN_DELETED | ROW_DELETED | SHEET_DELETED ) &&
-        !getFlag( rComplexRef.Reference2.Flags, COLUMN_DELETED | ROW_DELETED | SHEET_DELETED );
+        !getFlag( rComplexRef.Reference1.Flags, nForbiddenFlags ) &&
+        !getFlag( rComplexRef.Reference2.Flags, nForbiddenFlags );
 }
 
 enum TokenToRangeListState { STATE_REF, STATE_SEP, STATE_OPEN, STATE_CLOSE, STATE_ERROR };
@@ -1283,7 +1286,7 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
     if( rData >>= aSingleRef )
     {
         CellAddress aAddress;
-        // ignore invalid addresses (with #REF! errors), but to not stop parsing
+        // ignore invalid addresses (with #REF! errors), but do not stop parsing
         if( lclConvertToCellAddress( aAddress, aSingleRef, nFilterBySheet ) )
             orRanges.push_back( CellRangeAddress( aAddress.Sheet, aAddress.Column, aAddress.Row, aAddress.Column, aAddress.Row ) );
         return STATE_REF;
@@ -1292,7 +1295,7 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
     if( rData >>= aComplexRef )
     {
         CellRangeAddress aRange;
-        // ignore invalid ranges (with #REF! errors), but to not stop parsing
+        // ignore invalid ranges (with #REF! errors), but do not stop parsing
         if( lclConvertToCellRange( aRange, aComplexRef, nFilterBySheet ) )
             orRanges.push_back( aRange );
         return STATE_REF;
@@ -1317,8 +1320,7 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
 // ----------------------------------------------------------------------------
 
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
-    OpCodeProvider( rHelper ),
-    maAbsNameProp( CREATE_OUSTRING( "AbsoluteName" ) )
+    OpCodeProvider( rHelper )
 {
 }
 
@@ -1379,9 +1381,8 @@ OUString FormulaProcessorBase::generateApiAddressString( const CellAddress& rAdd
     OUString aCellName;
     try
     {
-        Reference< XCellRange > xSheet( getSheet( rAddress.Sheet ), UNO_QUERY_THROW );
-        PropertySet aCellProp( xSheet->getCellByPosition( rAddress.Column, rAddress.Row ) );
-        aCellProp.getProperty( aCellName, maAbsNameProp );
+        PropertySet aCellProp( getCellFromDoc( rAddress ) );
+        aCellProp.getProperty( aCellName, PROP_AbsoluteName );
     }
     catch( Exception& )
     {
@@ -1395,9 +1396,8 @@ OUString FormulaProcessorBase::generateApiRangeString( const CellRangeAddress& r
     OUString aRangeName;
     try
     {
-        Reference< XCellRange > xSheet( getSheet( rRange.Sheet ), UNO_QUERY_THROW );
-        PropertySet aRangeProp( xSheet->getCellRangeByPosition( rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow ) );
-        aRangeProp.getProperty( aRangeName, maAbsNameProp );
+        PropertySet aRangeProp( getCellRangeFromDoc( rRange ) );
+        aRangeProp.getProperty( aRangeName, PROP_AbsoluteName );
     }
     catch( Exception& )
     {
@@ -1470,6 +1470,18 @@ Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) co
             return aRefAny;
     }
     return Any();
+}
+
+bool FormulaProcessorBase::extractAbsoluteRange( CellRangeAddress& orRange, const ApiTokenSequence& rTokens ) const
+{
+    ApiCellRangeList aRanges;
+    lclProcessRef( aRanges, extractReference( rTokens ), -1 );
+    if( !aRanges.empty() )
+    {
+        orRange = aRanges.front();
+        return true;
+    }
+    return false;
 }
 
 void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,

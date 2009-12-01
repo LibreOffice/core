@@ -46,7 +46,7 @@ namespace xls {
 // ============================================================================
 
 /** Contains data from the 'sheet' element describing a sheet in the workbook. */
-struct OoxSheetInfo
+struct SheetInfoModel
 {
     ::rtl::OUString     maRelId;        /// Relation identifier for the sheet substream.
     ::rtl::OUString     maName;         /// Original name of the sheet.
@@ -54,7 +54,7 @@ struct OoxSheetInfo
     sal_Int32           mnSheetId;      /// Sheet identifier.
     sal_Int32           mnState;        /// Visibility state.
 
-    explicit            OoxSheetInfo();
+    explicit            SheetInfoModel();
 };
 
 // ============================================================================
@@ -80,28 +80,33 @@ public:
     /** Imports the SHEET record from the passed BIFF stream. */
     void                importSheet( BiffInputStream& rStrm );
 
-    /** Returns the number of sheets contained in the workbook. */
+    /** Inserts a new empty sheet into the document. Looks for an unused name.
+         @return  Internal index of the new sheet. */
+    sal_Int16           insertEmptySheet( const ::rtl::OUString& rPreferredName, bool bVisible );
+
+    /** Returns the number of original sheets contained in the workbook. */
     sal_Int32           getSheetCount() const;
     /** Returns the OOX relation identifier of the specified sheet. */
     ::rtl::OUString     getSheetRelId( sal_Int32 nSheet ) const;
     /** Returns the finalized name of the specified sheet. */
-    ::rtl::OUString     getFinalSheetName( sal_Int32 nSheet ) const;
+    ::rtl::OUString     getCalcSheetName( sal_Int32 nSheet ) const;
     /** Returns the finalized name of the sheet with the passed original name. */
-    ::rtl::OUString     getFinalSheetName( const ::rtl::OUString& rName ) const;
+    ::rtl::OUString     getCalcSheetName( const ::rtl::OUString& rModelName ) const;
     /** Returns the index of the sheet with the passed original name. */
-    sal_Int32           getFinalSheetIndex( const ::rtl::OUString& rName ) const;
+    sal_Int32           getCalcSheetIndex( const ::rtl::OUString& rModelName ) const;
 
 private:
-    const OoxSheetInfo* getSheetInfo( sal_Int32 nSheet ) const;
+    typedef ::std::pair< sal_Int16, ::rtl::OUString > IndexNamePair;
 
-    ::rtl::OUString     insertSheet( const ::rtl::OUString& rName, sal_Int16 nSheet, bool bVisible );
-    void                insertSheet( const OoxSheetInfo& rSheetInfo );
+    const SheetInfoModel* getSheetInfo( sal_Int32 nSheet ) const;
+
+    IndexNamePair       insertSheet( const ::rtl::OUString& rPreferredName, sal_Int16 nSheet, bool bVisible );
+    void                insertSheet( const SheetInfoModel& rModel );
 
 private:
-    typedef ::std::vector< OoxSheetInfo > SheetInfoVec;
+    typedef ::std::vector< SheetInfoModel > SheetInfoModelVec;
 
-    const ::rtl::OUString maIsVisibleProp;
-    SheetInfoVec        maSheetInfos;
+    SheetInfoModelVec   maSheetInfos;
 };
 
 // ============================================================================

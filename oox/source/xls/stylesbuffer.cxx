@@ -29,12 +29,15 @@
  ************************************************************************/
 
 #include "oox/xls/stylesbuffer.hxx"
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/awt/FontType.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XFont2.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -42,9 +45,12 @@
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/condformatbuffer.hxx"
 #include "oox/xls/excelhandlers.hxx"
@@ -557,9 +563,9 @@ void ColorPalette::importPalette( BiffInputStream& rStrm )
 sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
 {
     sal_Int32 nColor = API_RGB_TRANSPARENT;
-    if( (0 <= nPaletteIdx) && (static_cast< size_t >( nPaletteIdx ) < maColors.size()) )
+    if( const sal_Int32* pnPaletteColor = ContainerHelper::getVectorElement( maColors, nPaletteIdx ) )
     {
-        nColor = maColors[ nPaletteIdx ];
+        nColor = *pnPaletteColor;
     }
     else switch( nPaletteIdx )
     {
@@ -572,7 +578,7 @@ sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
 //        case OOX_COLOR_BUTTONBACK:
 //        case OOX_COLOR_CHBORDERAUTO:
 //        case OOX_COLOR_NOTEBACK:
-//        case OOX_COLOR_NOTETEXT:
+        case OOX_COLOR_NOTETEXT:        nColor = mnWinTextColor;        break;  // !TODO
         case OOX_COLOR_FONTAUTO:        nColor = API_RGB_TRANSPARENT;   break;
         default:
             OSL_ENSURE( false, "ColorPalette::getColor - unknown color index" );
@@ -611,7 +617,7 @@ void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDe
 
 // ----------------------------------------------------------------------------
 
-OoxFontData::OoxFontData() :
+FontModel::FontModel() :
     mnScheme( XML_none ),
     mnFamily( OOX_FONTFAMILY_NONE ),
     mnCharSet( OOX_FONTCHARSET_ANSI ),
@@ -626,23 +632,23 @@ OoxFontData::OoxFontData() :
 {
 }
 
-void OoxFontData::setBinScheme( sal_uInt8 nScheme )
+void FontModel::setBinScheme( sal_uInt8 nScheme )
 {
     static const sal_Int32 spnSchemes[] = { XML_none, XML_major, XML_minor };
     mnScheme = STATIC_ARRAY_SELECT( spnSchemes, nScheme, XML_none );
 }
 
-void OoxFontData::setBiffHeight( sal_uInt16 nHeight )
+void FontModel::setBiffHeight( sal_uInt16 nHeight )
 {
     mfHeight = nHeight / 20.0;  // convert twips to points
 }
 
-void OoxFontData::setBiffWeight( sal_uInt16 nWeight )
+void FontModel::setBiffWeight( sal_uInt16 nWeight )
 {
     mbBold = nWeight >= BIFF_FONTWEIGHT_BOLD;
 }
 
-void OoxFontData::setBiffUnderline( sal_uInt16 nUnderline )
+void FontModel::setBiffUnderline( sal_uInt16 nUnderline )
 {
     switch( nUnderline )
     {
@@ -655,124 +661,140 @@ void OoxFontData::setBiffUnderline( sal_uInt16 nUnderline )
     }
 }
 
-void OoxFontData::setBiffEscapement( sal_uInt16 nEscapement )
+void FontModel::setBiffEscapement( sal_uInt16 nEscapement )
 {
     static const sal_Int32 spnEscapes[] = { XML_baseline, XML_superscript, XML_subscript };
     mnEscapement = STATIC_ARRAY_SELECT( spnEscapes, nEscapement, XML_baseline );
+}
+
+// ----------------------------------------------------------------------------
+
+ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
+    mbNameUsed( bAllUsed ),
+    mbColorUsed( bAllUsed ),
+    mbSchemeUsed( bAllUsed ),
+    mbHeightUsed( bAllUsed ),
+    mbUnderlineUsed( bAllUsed ),
+    mbEscapementUsed( bAllUsed ),
+    mbWeightUsed( bAllUsed ),
+    mbPostureUsed( bAllUsed ),
+    mbStrikeoutUsed( bAllUsed ),
+    mbOutlineUsed( bAllUsed ),
+    mbShadowUsed( bAllUsed )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+ApiScriptFontName::ApiScriptFontName() :
+    mnFamily( ::com::sun::star::awt::FontFamily::DONTKNOW ),
+    mnCharSet( RTL_TEXTENCODING_DONTKNOW )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+ApiFontData::ApiFontData() :
+    maDesc(
+        CREATE_OUSTRING( "Calibri" ),
+        220,                                            // height 11 points
+        0,
+        OUString(),
+        ::com::sun::star::awt::FontFamily::DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        ::com::sun::star::awt::FontPitch::DONTKNOW,
+        100.0,
+        ::com::sun::star::awt::FontWeight::NORMAL,
+        ::com::sun::star::awt::FontSlant_NONE,
+        ::com::sun::star::awt::FontUnderline::NONE,
+        ::com::sun::star::awt::FontStrikeout::NONE,
+        0.0,
+        sal_False,
+        sal_False,
+        ::com::sun::star::awt::FontType::DONTKNOW ),
+    mnColor( API_RGB_TRANSPARENT ),
+    mnEscapement( API_ESCAPE_NONE ),
+    mnEscapeHeight( API_ESCAPEHEIGHT_NONE ),
+    mbOutline( false ),
+    mbShadow( false )
+{
+    maLatinFont.maName = maDesc.Name;
 }
 
 // ============================================================================
 
 Font::Font( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
-    maOoxData( rHelper.getTheme().getDefaultFontData() ),
+    maModel( rHelper.getTheme().getDefaultFontModel() ),
     maUsedFlags( !bDxf ),
     mbDxf( bDxf )
 {
 }
 
-Font::Font( const WorkbookHelper& rHelper, const OoxFontData& rFontData ) :
+Font::Font( const WorkbookHelper& rHelper, const FontModel& rModel ) :
     WorkbookHelper( rHelper ),
-    maOoxData( rFontData ),
+    maModel( rModel ),
     maUsedFlags( true ),
     mbDxf( false )
 {
 }
 
-bool Font::isSupportedContext( sal_Int32 nElement, sal_Int32 nParentContext )
-{
-    switch( nParentContext )
-    {
-        case XLS_TOKEN( font ):
-            return  (nElement == XLS_TOKEN( name )) ||
-                    (nElement == XLS_TOKEN( scheme )) ||
-                    (nElement == XLS_TOKEN( charset )) ||
-                    (nElement == XLS_TOKEN( family )) ||
-                    (nElement == XLS_TOKEN( sz )) ||
-                    (nElement == XLS_TOKEN( color )) ||
-                    (nElement == XLS_TOKEN( u )) ||
-                    (nElement == XLS_TOKEN( vertAlign )) ||
-                    (nElement == XLS_TOKEN( b )) ||
-                    (nElement == XLS_TOKEN( i )) ||
-                    (nElement == XLS_TOKEN( outline )) ||
-                    (nElement == XLS_TOKEN( shadow )) ||
-                    (nElement == XLS_TOKEN( strike ));
-
-        case XLS_TOKEN( rPr ):
-            return  (nElement == XLS_TOKEN( rFont )) ||
-                    (nElement == XLS_TOKEN( scheme )) ||
-                    (nElement == XLS_TOKEN( charset )) ||
-                    (nElement == XLS_TOKEN( family )) ||
-                    (nElement == XLS_TOKEN( sz )) ||
-                    (nElement == XLS_TOKEN( color )) ||
-                    (nElement == XLS_TOKEN( u )) ||
-                    (nElement == XLS_TOKEN( vertAlign )) ||
-                    (nElement == XLS_TOKEN( b )) ||
-                    (nElement == XLS_TOKEN( i )) ||
-                    (nElement == XLS_TOKEN( outline )) ||
-                    (nElement == XLS_TOKEN( shadow )) ||
-                    (nElement == XLS_TOKEN( strike )) ||
-                    (nElement == XLS_TOKEN( vertAlign ));
-    }
-    return false;
-}
-
 void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    const OoxFontData& rDefFontData = getTheme().getDefaultFontData();
+    const FontModel& rDefModel = getTheme().getDefaultFontModel();
     switch( nElement )
     {
-        case XLS_TOKEN( name ):
-        case XLS_TOKEN( rFont ):
+        case XLS_TOKEN( name ):     // when in <font> element
+        case XLS_TOKEN( rFont ):    // when in <rPr> element
             if( rAttribs.hasAttribute( XML_val ) )
             {
-                maOoxData.maName = rAttribs.getString( XML_val, OUString() );
+                maModel.maName = rAttribs.getString( XML_val, OUString() );
                 maUsedFlags.mbNameUsed = true;
             }
         break;
         case XLS_TOKEN( scheme ):
-            maOoxData.mnScheme = rAttribs.getToken( XML_val, rDefFontData.mnScheme );
+            maModel.mnScheme = rAttribs.getToken( XML_val, rDefModel.mnScheme );
         break;
         case XLS_TOKEN( family ):
-            maOoxData.mnFamily = rAttribs.getInteger( XML_val, rDefFontData.mnFamily );
+            maModel.mnFamily = rAttribs.getInteger( XML_val, rDefModel.mnFamily );
         break;
         case XLS_TOKEN( charset ):
-            maOoxData.mnCharSet = rAttribs.getInteger( XML_val, rDefFontData.mnCharSet );
+            maModel.mnCharSet = rAttribs.getInteger( XML_val, rDefModel.mnCharSet );
         break;
         case XLS_TOKEN( sz ):
-            maOoxData.mfHeight = rAttribs.getDouble( XML_val, rDefFontData.mfHeight );
+            maModel.mfHeight = rAttribs.getDouble( XML_val, rDefModel.mfHeight );
             maUsedFlags.mbHeightUsed = true;
         break;
         case XLS_TOKEN( color ):
-            maOoxData.maColor.importColor( rAttribs );
+            maModel.maColor.importColor( rAttribs );
             maUsedFlags.mbColorUsed = true;
         break;
         case XLS_TOKEN( u ):
-            maOoxData.mnUnderline = rAttribs.getToken( XML_val, XML_single );
+            maModel.mnUnderline = rAttribs.getToken( XML_val, XML_single );
             maUsedFlags.mbUnderlineUsed = true;
         break;
         case XLS_TOKEN( vertAlign ):
-            maOoxData.mnEscapement = rAttribs.getToken( XML_val, XML_baseline );
+            maModel.mnEscapement = rAttribs.getToken( XML_val, XML_baseline );
             maUsedFlags.mbEscapementUsed = true;
         break;
         case XLS_TOKEN( b ):
-            maOoxData.mbBold = rAttribs.getBool( XML_val, true );
+            maModel.mbBold = rAttribs.getBool( XML_val, true );
             maUsedFlags.mbWeightUsed = true;
         break;
         case XLS_TOKEN( i ):
-            maOoxData.mbItalic = rAttribs.getBool( XML_val, true );
+            maModel.mbItalic = rAttribs.getBool( XML_val, true );
             maUsedFlags.mbPostureUsed = true;
         break;
         case XLS_TOKEN( strike ):
-            maOoxData.mbStrikeout = rAttribs.getBool( XML_val, true );
+            maModel.mbStrikeout = rAttribs.getBool( XML_val, true );
             maUsedFlags.mbStrikeoutUsed = true;
         break;
         case XLS_TOKEN( outline ):
-            maOoxData.mbOutline = rAttribs.getBool( XML_val, true );
+            maModel.mbOutline = rAttribs.getBool( XML_val, true );
             maUsedFlags.mbOutlineUsed = true;
         break;
         case XLS_TOKEN( shadow ):
-            maOoxData.mbShadow = rAttribs.getBool( XML_val, true );
+            maModel.mbShadow = rAttribs.getBool( XML_val, true );
             maUsedFlags.mbShadowUsed = true;
         break;
     }
@@ -786,69 +808,69 @@ void Font::importFont( RecordInputStream& rStrm )
     sal_uInt8 nUnderline, nFamily, nCharSet, nScheme;
     rStrm >> nHeight >> nFlags >> nWeight >> nEscapement >> nUnderline >> nFamily >> nCharSet;
     rStrm.skip( 1 );
-    rStrm >> maOoxData.maColor >> nScheme >> maOoxData.maName;
+    rStrm >> maModel.maColor >> nScheme >> maModel.maName;
 
     // equal constants in BIFF and OOBIN for weight, underline, and escapement
-    maOoxData.setBinScheme( nScheme );
-    maOoxData.setBiffHeight( nHeight );
-    maOoxData.setBiffWeight( nWeight );
-    maOoxData.setBiffUnderline( nUnderline );
-    maOoxData.setBiffEscapement( nEscapement );
-    maOoxData.mnFamily    = nFamily;
-    maOoxData.mnCharSet   = nCharSet;
+    maModel.setBinScheme( nScheme );
+    maModel.setBiffHeight( nHeight );
+    maModel.setBiffWeight( nWeight );
+    maModel.setBiffUnderline( nUnderline );
+    maModel.setBiffEscapement( nEscapement );
+    maModel.mnFamily    = nFamily;
+    maModel.mnCharSet   = nCharSet;
     // equal flags in BIFF and OOBIN
-    maOoxData.mbItalic    = getFlag( nFlags, BIFF_FONTFLAG_ITALIC );
-    maOoxData.mbStrikeout = getFlag( nFlags, BIFF_FONTFLAG_STRIKEOUT );
-    maOoxData.mbOutline   = getFlag( nFlags, BIFF_FONTFLAG_OUTLINE );
-    maOoxData.mbShadow    = getFlag( nFlags, BIFF_FONTFLAG_SHADOW );
+    maModel.mbItalic    = getFlag( nFlags, BIFF_FONTFLAG_ITALIC );
+    maModel.mbStrikeout = getFlag( nFlags, BIFF_FONTFLAG_STRIKEOUT );
+    maModel.mbOutline   = getFlag( nFlags, BIFF_FONTFLAG_OUTLINE );
+    maModel.mbShadow    = getFlag( nFlags, BIFF_FONTFLAG_SHADOW );
 }
 
 void Font::importDxfName( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfName - missing conditional formatting flag" );
-    maOoxData.maName = rStrm.readString( false );
+    maModel.maName = rStrm.readString( false );
     maUsedFlags.mbColorUsed = true;
 }
 
 void Font::importDxfColor( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfColor - missing conditional formatting flag" );
-    rStrm >> maOoxData.maColor;
+    rStrm >> maModel.maColor;
     maUsedFlags.mbColorUsed = true;
 }
 
 void Font::importDxfScheme( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfScheme - missing conditional formatting flag" );
-    maOoxData.setBinScheme( rStrm.readuInt8() );
+    maModel.setBinScheme( rStrm.readuInt8() );
     maUsedFlags.mbSchemeUsed = true;
 }
 
 void Font::importDxfHeight( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfHeight - missing conditional formatting flag" );
-    maOoxData.setBiffHeight( rStrm.readuInt16() );
+    maModel.setBiffHeight( rStrm.readuInt16() );
     maUsedFlags.mbHeightUsed = true;
 }
 
 void Font::importDxfWeight( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfWeight - missing conditional formatting flag" );
-    maOoxData.setBiffWeight( rStrm.readuInt16() );
+    maModel.setBiffWeight( rStrm.readuInt16() );
     maUsedFlags.mbWeightUsed = true;
 }
 
 void Font::importDxfUnderline( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfUnderline - missing conditional formatting flag" );
-    maOoxData.setBiffUnderline( rStrm.readuInt16() );
+    maModel.setBiffUnderline( rStrm.readuInt16() );
     maUsedFlags.mbUnderlineUsed = true;
 }
 
 void Font::importDxfEscapement( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfEscapement - missing conditional formatting flag" );
-    maOoxData.setBiffEscapement( rStrm.readuInt16() );
+    maModel.setBiffEscapement( rStrm.readuInt16() );
     maUsedFlags.mbEscapementUsed = true;
 }
 
@@ -859,19 +881,19 @@ void Font::importDxfFlag( sal_Int32 nElement, RecordInputStream& rStrm )
     switch( nElement )
     {
         case XML_i:
-            maOoxData.mbItalic = bFlag;
+            maModel.mbItalic = bFlag;
             maUsedFlags.mbPostureUsed = true;
         break;
         case XML_strike:
-            maOoxData.mbStrikeout = bFlag;
+            maModel.mbStrikeout = bFlag;
             maUsedFlags.mbStrikeoutUsed = true;
         break;
         case XML_outline:
-            maOoxData.mbOutline = bFlag;
+            maModel.mbOutline = bFlag;
             maUsedFlags.mbOutlineUsed = true;
         break;
         case XML_shadow:
-            maOoxData.mbShadow = bFlag;
+            maModel.mbShadow = bFlag;
             maUsedFlags.mbShadowUsed = true;
         break;
         default:
@@ -913,7 +935,7 @@ void Font::importFont( BiffInputStream& rStrm )
 void Font::importFontColor( BiffInputStream& rStrm )
 {
     OSL_ENSURE( !mbDxf, "Font::importFontColor - unexpected conditional formatting flag" );
-    maOoxData.maColor.importColorId( rStrm );
+    maModel.maColor.importColorId( rStrm );
 }
 
 void Font::importCfRule( BiffInputStream& rStrm )
@@ -927,8 +949,8 @@ void Font::importCfRule( BiffInputStream& rStrm )
 
     OSL_ENSURE( rStrm.getRemaining() >= 118, "Font::importCfRule - missing record data" );
     sal_Int64 nRecPos = rStrm.tell();
-    maOoxData.maName = rStrm.readUniString( rStrm.readuInt8() );
-    maUsedFlags.mbNameUsed = maOoxData.maName.getLength() > 0;
+    maModel.maName = rStrm.readUniString( rStrm.readuInt8() );
+    maUsedFlags.mbNameUsed = maModel.maName.getLength() > 0;
     OSL_ENSURE( !rStrm.isEof() && (rStrm.tell() <= nRecPos + 64), "Font::importCfRule - font name too long" );
     rStrm.seek( nRecPos + 64 );
     rStrm >> nHeight >> nStyle >> nWeight >> nEscapement >> nUnderline;
@@ -939,24 +961,24 @@ void Font::importCfRule( BiffInputStream& rStrm )
     rStrm.skip( 18 );
 
     if( (maUsedFlags.mbColorUsed = (0 <= nColor) && (nColor <= 0x7FFF)) == true )
-        maOoxData.maColor.setIndexed( nColor );
+        maModel.maColor.setIndexed( nColor );
     if( (maUsedFlags.mbHeightUsed = (0 < nHeight) && (nHeight <= 0x7FFF)) == true )
-        maOoxData.setBiffHeight( static_cast< sal_uInt16 >( nHeight ) );
+        maModel.setBiffHeight( static_cast< sal_uInt16 >( nHeight ) );
     if( (maUsedFlags.mbUnderlineUsed = !getFlag( nFontFlags3, BIFF_CFRULE_FONT_UNDERL )) == true )
-        maOoxData.setBiffUnderline( nUnderline );
+        maModel.setBiffUnderline( nUnderline );
     if( (maUsedFlags.mbEscapementUsed = !getFlag( nFontFlags2, BIFF_CFRULE_FONT_ESCAPEM )) == true )
-        maOoxData.setBiffEscapement( nEscapement );
+        maModel.setBiffEscapement( nEscapement );
     if( (maUsedFlags.mbWeightUsed = maUsedFlags.mbPostureUsed = !getFlag( nFontFlags1, BIFF_CFRULE_FONT_STYLE )) == true )
     {
-        maOoxData.setBiffWeight( nWeight );
-        maOoxData.mbItalic = getFlag( nStyle, BIFF_CFRULE_FONT_STYLE );
+        maModel.setBiffWeight( nWeight );
+        maModel.mbItalic = getFlag( nStyle, BIFF_CFRULE_FONT_STYLE );
     }
     if( (maUsedFlags.mbStrikeoutUsed = !getFlag( nFontFlags1, BIFF_CFRULE_FONT_STRIKEOUT )) == true )
-        maOoxData.mbStrikeout = getFlag( nStyle, BIFF_CFRULE_FONT_STRIKEOUT );
+        maModel.mbStrikeout = getFlag( nStyle, BIFF_CFRULE_FONT_STRIKEOUT );
     if( (maUsedFlags.mbOutlineUsed = !getFlag( nFontFlags1, BIFF_CFRULE_FONT_OUTLINE )) == true )
-        maOoxData.mbOutline = getFlag( nStyle, BIFF_CFRULE_FONT_OUTLINE );
+        maModel.mbOutline = getFlag( nStyle, BIFF_CFRULE_FONT_OUTLINE );
     if( (maUsedFlags.mbShadowUsed = !getFlag( nFontFlags1, BIFF_CFRULE_FONT_SHADOW )) == true )
-        maOoxData.mbShadow = getFlag( nStyle, BIFF_CFRULE_FONT_SHADOW );
+        maModel.mbShadow = getFlag( nStyle, BIFF_CFRULE_FONT_SHADOW );
 }
 
 rtl_TextEncoding Font::getFontEncoding() const
@@ -965,8 +987,8 @@ rtl_TextEncoding Font::getFontEncoding() const
     // #i67768# BIFF2-BIFF4 FONT records do not contain character set
     // #i71033# do not use maApiData, this function is used before finalizeImport()
     rtl_TextEncoding eFontEnc = RTL_TEXTENCODING_DONTKNOW;
-    if( (0 <= maOoxData.mnCharSet) && (maOoxData.mnCharSet <= SAL_MAX_UINT8) )
-        eFontEnc = rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maOoxData.mnCharSet ) );
+    if( (0 <= maModel.mnCharSet) && (maModel.mnCharSet <= SAL_MAX_UINT8) )
+        eFontEnc = rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maModel.mnCharSet ) );
     return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? getTextEncoding() : eFontEnc;
 }
 
@@ -975,10 +997,10 @@ void Font::finalizeImport()
     namespace cssawt = ::com::sun::star::awt;
 
     // font name
-    maApiData.maDesc.Name = maOoxData.maName;
+    maApiData.maDesc.Name = maModel.maName;
 
     // font family
-    switch( maOoxData.mnFamily )
+    switch( maModel.mnFamily )
     {
         case OOX_FONTFAMILY_NONE:           maApiData.maDesc.Family = cssawt::FontFamily::DONTKNOW;     break;
         case OOX_FONTFAMILY_ROMAN:          maApiData.maDesc.Family = cssawt::FontFamily::ROMAN;        break;
@@ -989,21 +1011,21 @@ void Font::finalizeImport()
     }
 
     // character set
-    if( (0 <= maOoxData.mnCharSet) && (maOoxData.mnCharSet <= 255) )
+    if( (0 <= maModel.mnCharSet) && (maModel.mnCharSet <= 255) )
         maApiData.maDesc.CharSet = static_cast< sal_Int16 >(
-            rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maOoxData.mnCharSet ) ) );
+            rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maModel.mnCharSet ) ) );
 
     // color, height, weight, slant, strikeout, outline, shadow
-    maApiData.mnColor          = maOoxData.maColor.getColor( *this, API_RGB_TRANSPARENT );
-    maApiData.maDesc.Height    = static_cast< sal_Int16 >( maOoxData.mfHeight * 20.0 );
-    maApiData.maDesc.Weight    = maOoxData.mbBold ? cssawt::FontWeight::BOLD : cssawt::FontWeight::NORMAL;
-    maApiData.maDesc.Slant     = maOoxData.mbItalic ? cssawt::FontSlant_ITALIC : cssawt::FontSlant_NONE;
-    maApiData.maDesc.Strikeout = maOoxData.mbStrikeout ? cssawt::FontStrikeout::SINGLE : cssawt::FontStrikeout::NONE;
-    maApiData.mbOutline        = maOoxData.mbOutline;
-    maApiData.mbShadow         = maOoxData.mbShadow;
+    maApiData.mnColor          = maModel.maColor.getColor( *this, API_RGB_TRANSPARENT );
+    maApiData.maDesc.Height    = static_cast< sal_Int16 >( maModel.mfHeight * 20.0 );
+    maApiData.maDesc.Weight    = maModel.mbBold ? cssawt::FontWeight::BOLD : cssawt::FontWeight::NORMAL;
+    maApiData.maDesc.Slant     = maModel.mbItalic ? cssawt::FontSlant_ITALIC : cssawt::FontSlant_NONE;
+    maApiData.maDesc.Strikeout = maModel.mbStrikeout ? cssawt::FontStrikeout::SINGLE : cssawt::FontStrikeout::NONE;
+    maApiData.mbOutline        = maModel.mbOutline;
+    maApiData.mbShadow         = maModel.mbShadow;
 
     // underline
-    switch( maOoxData.mnUnderline )
+    switch( maModel.mnUnderline )
     {
         case XML_double:            maApiData.maDesc.Underline = cssawt::FontUnderline::DOUBLE; break;
         case XML_doubleAccounting:  maApiData.maDesc.Underline = cssawt::FontUnderline::DOUBLE; break;
@@ -1013,7 +1035,7 @@ void Font::finalizeImport()
     }
 
     // escapement
-    switch( maOoxData.mnEscapement )
+    switch( maModel.mnEscapement )
     {
         case XML_baseline:
             maApiData.mnEscapement = API_ESCAPE_NONE;
@@ -1086,9 +1108,81 @@ bool Font::needsRichTextFormat() const
     return maApiData.mnEscapement != API_ESCAPE_NONE;
 }
 
+void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType ) const
+{
+    // font name properties
+    if( maUsedFlags.mbNameUsed )
+    {
+        if( maApiData.maLatinFont.maName.getLength() > 0 )
+        {
+            rPropMap[ PROP_CharFontName ]    <<= maApiData.maLatinFont.maName;
+            rPropMap[ PROP_CharFontFamily ]  <<= maApiData.maLatinFont.mnFamily;
+            rPropMap[ PROP_CharFontCharSet ] <<= maApiData.maLatinFont.mnCharSet;
+        }
+        if( maApiData.maAsianFont.maName.getLength() > 0 )
+        {
+            rPropMap[ PROP_CharFontNameAsian ]    <<= maApiData.maAsianFont.maName;
+            rPropMap[ PROP_CharFontFamilyAsian ]  <<= maApiData.maAsianFont.mnFamily;
+            rPropMap[ PROP_CharFontCharSetAsian ] <<= maApiData.maAsianFont.mnCharSet;
+        }
+        if( maApiData.maCmplxFont.maName.getLength() > 0 )
+        {
+            rPropMap[ PROP_CharFontNameComplex ]    <<= maApiData.maCmplxFont.maName;
+            rPropMap[ PROP_CharFontFamilyComplex ]  <<= maApiData.maCmplxFont.mnFamily;
+            rPropMap[ PROP_CharFontCharSetComplex ] <<= maApiData.maCmplxFont.mnCharSet;
+        }
+    }
+    // font height
+    if( maUsedFlags.mbHeightUsed )
+    {
+        float fHeight = static_cast< float >( maApiData.maDesc.Height / 20.0 ); // twips to points
+        rPropMap[ PROP_CharHeight ] <<= fHeight;
+        rPropMap[ PROP_CharHeightAsian ] <<= fHeight;
+        rPropMap[ PROP_CharHeightComplex ] <<= fHeight;
+    }
+    // font weight
+    if( maUsedFlags.mbWeightUsed )
+    {
+        float fWeight = maApiData.maDesc.Weight;
+        rPropMap[ PROP_CharWeight ] <<= fWeight;
+        rPropMap[ PROP_CharWeightAsian ] <<= fWeight;
+        rPropMap[ PROP_CharWeightComplex ] <<= fWeight;
+    }
+    // font posture
+    if( maUsedFlags.mbPostureUsed )
+    {
+        rPropMap[ PROP_CharPosture ] <<= maApiData.maDesc.Slant;
+        rPropMap[ PROP_CharPostureAsian ] <<= maApiData.maDesc.Slant;
+        rPropMap[ PROP_CharPostureComplex ] <<= maApiData.maDesc.Slant;
+    }
+    // character color
+    if( maUsedFlags.mbColorUsed )
+        rPropMap[ PROP_CharColor ] <<= maApiData.mnColor;
+    // underline style
+    if( maUsedFlags.mbUnderlineUsed )
+        rPropMap[ PROP_CharUnderline ] <<= maApiData.maDesc.Underline;
+    // strike out style
+    if( maUsedFlags.mbStrikeoutUsed )
+        rPropMap[ PROP_CharStrikeout ] <<= maApiData.maDesc.Strikeout;
+    // outline style
+    if( maUsedFlags.mbOutlineUsed )
+        rPropMap[ PROP_CharContoured ] <<= maApiData.mbOutline;
+    // shadow style
+    if( maUsedFlags.mbShadowUsed )
+        rPropMap[ PROP_CharShadowed ] <<= maApiData.mbShadow;
+    // escapement
+    if( maUsedFlags.mbEscapementUsed && (ePropType == FONT_PROPTYPE_TEXT) )
+    {
+        rPropMap[ PROP_CharEscapement ] <<= maApiData.mnEscapement;
+        rPropMap[ PROP_CharEscapementHeight ] <<= maApiData.mnEscapeHeight;
+    }
+}
+
 void Font::writeToPropertySet( PropertySet& rPropSet, FontPropertyType ePropType ) const
 {
-    getStylesPropertyHelper().writeFontProperties( rPropSet, maApiData, maUsedFlags, ePropType );
+    PropertyMap aPropMap;
+    writeToPropertyMap( aPropMap, ePropType );
+    rPropSet.setProperties( aPropMap );
 }
 
 void Font::importFontData2( BiffInputStream& rStrm )
@@ -1096,16 +1190,16 @@ void Font::importFontData2( BiffInputStream& rStrm )
     sal_uInt16 nHeight, nFlags;
     rStrm >> nHeight >> nFlags;
 
-    maOoxData.setBiffHeight( nHeight );
-    maOoxData.mnFamily     = OOX_FONTFAMILY_NONE;
-    maOoxData.mnCharSet    = OOX_FONTCHARSET_UNUSED;    // ensure to not use font charset in byte string import
-    maOoxData.mnUnderline  = getFlagValue( nFlags, BIFF_FONTFLAG_UNDERLINE, XML_single, XML_none );
-    maOoxData.mnEscapement = XML_none;
-    maOoxData.mbBold       = getFlag( nFlags, BIFF_FONTFLAG_BOLD );
-    maOoxData.mbItalic     = getFlag( nFlags, BIFF_FONTFLAG_ITALIC );
-    maOoxData.mbStrikeout  = getFlag( nFlags, BIFF_FONTFLAG_STRIKEOUT );
-    maOoxData.mbOutline    = getFlag( nFlags, BIFF_FONTFLAG_OUTLINE );
-    maOoxData.mbShadow     = getFlag( nFlags, BIFF_FONTFLAG_SHADOW );
+    maModel.setBiffHeight( nHeight );
+    maModel.mnFamily     = OOX_FONTFAMILY_NONE;
+    maModel.mnCharSet    = OOX_FONTCHARSET_UNUSED;    // ensure to not use font charset in byte string import
+    maModel.mnUnderline  = getFlagValue( nFlags, BIFF_FONTFLAG_UNDERLINE, XML_single, XML_none );
+    maModel.mnEscapement = XML_none;
+    maModel.mbBold       = getFlag( nFlags, BIFF_FONTFLAG_BOLD );
+    maModel.mbItalic     = getFlag( nFlags, BIFF_FONTFLAG_ITALIC );
+    maModel.mbStrikeout  = getFlag( nFlags, BIFF_FONTFLAG_STRIKEOUT );
+    maModel.mbOutline    = getFlag( nFlags, BIFF_FONTFLAG_OUTLINE );
+    maModel.mbShadow     = getFlag( nFlags, BIFF_FONTFLAG_SHADOW );
 }
 
 void Font::importFontData5( BiffInputStream& rStrm )
@@ -1115,27 +1209,27 @@ void Font::importFontData5( BiffInputStream& rStrm )
     rStrm >> nWeight >> nEscapement >> nUnderline >> nFamily >> nCharSet;
     rStrm.skip( 1 );
 
-    maOoxData.setBiffWeight( nWeight );
-    maOoxData.setBiffUnderline( nUnderline );
-    maOoxData.setBiffEscapement( nEscapement );
+    maModel.setBiffWeight( nWeight );
+    maModel.setBiffUnderline( nUnderline );
+    maModel.setBiffEscapement( nEscapement );
     // equal constants in XML and BIFF for family and charset
-    maOoxData.mnFamily  = nFamily;
-    maOoxData.mnCharSet = nCharSet;
+    maModel.mnFamily  = nFamily;
+    maModel.mnCharSet = nCharSet;
 }
 
 void Font::importFontName2( BiffInputStream& rStrm )
 {
-    maOoxData.maName = rStrm.readByteString( false, getTextEncoding() );
+    maModel.maName = rStrm.readByteString( false, getTextEncoding() );
 }
 
 void Font::importFontName8( BiffInputStream& rStrm )
 {
-    maOoxData.maName = rStrm.readUniString( rStrm.readuInt8() );
+    maModel.maName = rStrm.readUniString( rStrm.readuInt8() );
 }
 
 // ============================================================================
 
-OoxAlignmentData::OoxAlignmentData() :
+AlignmentModel::AlignmentModel() :
     mnHorAlign( XML_general ),
     mnVerAlign( XML_bottom ),
     mnTextDir( OOX_XF_TEXTDIR_CONTEXT ),
@@ -1147,7 +1241,7 @@ OoxAlignmentData::OoxAlignmentData() :
 {
 }
 
-void OoxAlignmentData::setBinHorAlign( sal_uInt8 nHorAlign )
+void AlignmentModel::setBinHorAlign( sal_uInt8 nHorAlign )
 {
     static const sal_Int32 spnHorAligns[] = {
         XML_general, XML_left, XML_center, XML_right,
@@ -1155,19 +1249,46 @@ void OoxAlignmentData::setBinHorAlign( sal_uInt8 nHorAlign )
     mnHorAlign = STATIC_ARRAY_SELECT( spnHorAligns, nHorAlign, XML_general );
 }
 
-void OoxAlignmentData::setBinVerAlign( sal_uInt8 nVerAlign )
+void AlignmentModel::setBinVerAlign( sal_uInt8 nVerAlign )
 {
     static const sal_Int32 spnVerAligns[] = {
         XML_top, XML_center, XML_bottom, XML_justify, XML_distributed };
     mnVerAlign = STATIC_ARRAY_SELECT( spnVerAligns, nVerAlign, XML_bottom );
 }
 
-void OoxAlignmentData::setBinTextOrient( sal_uInt8 nTextOrient )
+void AlignmentModel::setBinTextOrient( sal_uInt8 nTextOrient )
 {
     static const sal_Int32 spnRotations[] = {
         OOX_XF_ROTATION_NONE, OOX_XF_ROTATION_STACKED,
         OOX_XF_ROTATION_90CCW, OOX_XF_ROTATION_90CW };
     mnRotation = STATIC_ARRAY_SELECT( spnRotations, nTextOrient, OOX_XF_ROTATION_NONE );
+}
+
+// ----------------------------------------------------------------------------
+
+ApiAlignmentData::ApiAlignmentData() :
+    meHorJustify( ::com::sun::star::table::CellHoriJustify_STANDARD ),
+    meVerJustify( ::com::sun::star::table::CellVertJustify_STANDARD ),
+    meOrientation( ::com::sun::star::table::CellOrientation_STANDARD ),
+    mnRotation( 0 ),
+    mnWritingMode( ::com::sun::star::text::WritingMode2::PAGE ),
+    mnIndent( 0 ),
+    mbWrapText( false ),
+    mbShrink( false )
+{
+}
+
+bool operator==( const ApiAlignmentData& rLeft, const ApiAlignmentData& rRight )
+{
+    return
+        (rLeft.meHorJustify  == rRight.meHorJustify) &&
+        (rLeft.meVerJustify  == rRight.meVerJustify) &&
+        (rLeft.meOrientation == rRight.meOrientation) &&
+        (rLeft.mnRotation    == rRight.mnRotation) &&
+        (rLeft.mnWritingMode == rRight.mnWritingMode) &&
+        (rLeft.mnIndent      == rRight.mnIndent) &&
+        (rLeft.mbWrapText    == rRight.mbWrapText) &&
+        (rLeft.mbShrink      == rRight.mbShrink);
 }
 
 // ============================================================================
@@ -1179,65 +1300,65 @@ Alignment::Alignment( const WorkbookHelper& rHelper ) :
 
 void Alignment::importAlignment( const AttributeList& rAttribs )
 {
-    maOoxData.mnHorAlign     = rAttribs.getToken( XML_horizontal, XML_general );
-    maOoxData.mnVerAlign     = rAttribs.getToken( XML_vertical, XML_bottom );
-    maOoxData.mnTextDir      = rAttribs.getInteger( XML_readingOrder, OOX_XF_TEXTDIR_CONTEXT );
-    maOoxData.mnRotation     = rAttribs.getInteger( XML_textRotation, OOX_XF_ROTATION_NONE );
-    maOoxData.mnIndent       = rAttribs.getInteger( XML_indent, OOX_XF_INDENT_NONE );
-    maOoxData.mbWrapText     = rAttribs.getBool( XML_wrapText, false );
-    maOoxData.mbShrink       = rAttribs.getBool( XML_shrinkToFit, false );
-    maOoxData.mbJustLastLine = rAttribs.getBool( XML_justifyLastLine, false );
+    maModel.mnHorAlign     = rAttribs.getToken( XML_horizontal, XML_general );
+    maModel.mnVerAlign     = rAttribs.getToken( XML_vertical, XML_bottom );
+    maModel.mnTextDir      = rAttribs.getInteger( XML_readingOrder, OOX_XF_TEXTDIR_CONTEXT );
+    maModel.mnRotation     = rAttribs.getInteger( XML_textRotation, OOX_XF_ROTATION_NONE );
+    maModel.mnIndent       = rAttribs.getInteger( XML_indent, OOX_XF_INDENT_NONE );
+    maModel.mbWrapText     = rAttribs.getBool( XML_wrapText, false );
+    maModel.mbShrink       = rAttribs.getBool( XML_shrinkToFit, false );
+    maModel.mbJustLastLine = rAttribs.getBool( XML_justifyLastLine, false );
 }
 
 void Alignment::setBinData( sal_uInt32 nFlags )
 {
-    maOoxData.setBinHorAlign( extractValue< sal_uInt8 >( nFlags, 16, 3 ) );
-    maOoxData.setBinVerAlign( extractValue< sal_uInt8 >( nFlags, 19, 3 ) );
-    maOoxData.mnTextDir      = extractValue< sal_Int32 >( nFlags, 26, 2 );
-    maOoxData.mnRotation     = extractValue< sal_Int32 >( nFlags, 0, 8 );
-    maOoxData.mnIndent       = extractValue< sal_uInt8 >( nFlags, 8, 8 );
-    maOoxData.mbWrapText     = getFlag( nFlags, OOBIN_XF_WRAPTEXT );
-    maOoxData.mbShrink       = getFlag( nFlags, OOBIN_XF_SHRINK );
-    maOoxData.mbJustLastLine = getFlag( nFlags, OOBIN_XF_JUSTLASTLINE );
+    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nFlags, 16, 3 ) );
+    maModel.setBinVerAlign( extractValue< sal_uInt8 >( nFlags, 19, 3 ) );
+    maModel.mnTextDir      = extractValue< sal_Int32 >( nFlags, 26, 2 );
+    maModel.mnRotation     = extractValue< sal_Int32 >( nFlags, 0, 8 );
+    maModel.mnIndent       = extractValue< sal_uInt8 >( nFlags, 8, 8 );
+    maModel.mbWrapText     = getFlag( nFlags, OOBIN_XF_WRAPTEXT );
+    maModel.mbShrink       = getFlag( nFlags, OOBIN_XF_SHRINK );
+    maModel.mbJustLastLine = getFlag( nFlags, OOBIN_XF_JUSTLASTLINE );
 }
 
 void Alignment::setBiff2Data( sal_uInt8 nFlags )
 {
-    maOoxData.setBinHorAlign( extractValue< sal_uInt8 >( nFlags, 0, 3 ) );
+    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nFlags, 0, 3 ) );
 }
 
 void Alignment::setBiff3Data( sal_uInt16 nAlign )
 {
-    maOoxData.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maOoxData.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT ); // new in BIFF3
+    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
+    maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT ); // new in BIFF3
 }
 
 void Alignment::setBiff4Data( sal_uInt16 nAlign )
 {
-    maOoxData.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maOoxData.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 2 ) ); // new in BIFF4
-    maOoxData.setBinTextOrient( extractValue< sal_uInt8 >( nAlign, 6, 2 ) ); // new in BIFF4
-    maOoxData.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT );
+    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
+    maModel.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 2 ) ); // new in BIFF4
+    maModel.setBinTextOrient( extractValue< sal_uInt8 >( nAlign, 6, 2 ) ); // new in BIFF4
+    maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT );
 }
 
 void Alignment::setBiff5Data( sal_uInt16 nAlign )
 {
-    maOoxData.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maOoxData.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
-    maOoxData.setBinTextOrient( extractValue< sal_uInt8 >( nAlign, 8, 2 ) );
-    maOoxData.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT );
+    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
+    maModel.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
+    maModel.setBinTextOrient( extractValue< sal_uInt8 >( nAlign, 8, 2 ) );
+    maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT );
 }
 
 void Alignment::setBiff8Data( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
 {
-    maOoxData.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maOoxData.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
-    maOoxData.mnTextDir      = extractValue< sal_Int32 >( nMiscAttrib, 6, 2 ); // new in BIFF8
-    maOoxData.mnRotation     = extractValue< sal_Int32 >( nAlign, 8, 8 ); // new in BIFF8
-    maOoxData.mnIndent       = extractValue< sal_uInt8 >( nMiscAttrib, 0, 4 ); // new in BIFF8
-    maOoxData.mbWrapText     = getFlag( nAlign, BIFF_XF_WRAPTEXT );
-    maOoxData.mbShrink       = getFlag( nMiscAttrib, BIFF_XF_SHRINK ); // new in BIFF8
-    maOoxData.mbJustLastLine = getFlag( nAlign, BIFF_XF_JUSTLASTLINE ); // new in BIFF8(?)
+    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
+    maModel.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
+    maModel.mnTextDir      = extractValue< sal_Int32 >( nMiscAttrib, 6, 2 ); // new in BIFF8
+    maModel.mnRotation     = extractValue< sal_Int32 >( nAlign, 8, 8 ); // new in BIFF8
+    maModel.mnIndent       = extractValue< sal_uInt8 >( nMiscAttrib, 0, 4 ); // new in BIFF8
+    maModel.mbWrapText     = getFlag( nAlign, BIFF_XF_WRAPTEXT );
+    maModel.mbShrink       = getFlag( nMiscAttrib, BIFF_XF_SHRINK ); // new in BIFF8
+    maModel.mbJustLastLine = getFlag( nAlign, BIFF_XF_JUSTLASTLINE ); // new in BIFF8(?)
 }
 
 void Alignment::finalizeImport()
@@ -1246,7 +1367,7 @@ void Alignment::finalizeImport()
     namespace csstxt = ::com::sun::star::text;
 
     // horizontal alignment
-    switch( maOoxData.mnHorAlign )
+    switch( maModel.mnHorAlign )
     {
         case XML_center:            maApiData.meHorJustify = csstab::CellHoriJustify_CENTER;    break;
         case XML_centerContinuous:  maApiData.meHorJustify = csstab::CellHoriJustify_CENTER;    break;
@@ -1259,7 +1380,7 @@ void Alignment::finalizeImport()
     }
 
     // vertical alignment
-    switch( maOoxData.mnVerAlign )
+    switch( maModel.mnVerAlign )
     {
         case XML_bottom:        maApiData.meVerJustify = csstab::CellVertJustify_BOTTOM;    break;
         case XML_center:        maApiData.meVerJustify = csstab::CellVertJustify_CENTER;    break;
@@ -1273,15 +1394,15 @@ void Alignment::finalizeImport()
     sal_Int32 nIndent = 0;
     switch( getFilterType() )
     {
-        case FILTER_OOX:    nIndent = getUnitConverter().scaleToMm100( 3.0 * maOoxData.mnIndent, UNIT_SPACE );  break;
-        case FILTER_BIFF:   nIndent = getUnitConverter().scaleToMm100( 10.0 * maOoxData.mnIndent, UNIT_POINT ); break;
+        case FILTER_OOX:    nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, UNIT_SPACE );  break;
+        case FILTER_BIFF:   nIndent = getUnitConverter().scaleToMm100( 10.0 * maModel.mnIndent, UNIT_POINT ); break;
         case FILTER_UNKNOWN: break;
     }
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
         maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
 
     // complex text direction
-    switch( maOoxData.mnTextDir )
+    switch( maModel.mnTextDir )
     {
         case OOX_XF_TEXTDIR_CONTEXT:    maApiData.mnWritingMode = csstxt::WritingMode2::PAGE;   break;
         case OOX_XF_TEXTDIR_LTR:        maApiData.mnWritingMode = csstxt::WritingMode2::LR_TB;  break;
@@ -1289,7 +1410,7 @@ void Alignment::finalizeImport()
     }
 
     // rotation: 0-90 means 0 to 90 degrees ccw, 91-180 means 1 to 90 degrees cw, 255 means stacked
-    sal_Int32 nOoxRot = maOoxData.mnRotation;
+    sal_Int32 nOoxRot = maModel.mnRotation;
     maApiData.mnRotation = ((0 <= nOoxRot) && (nOoxRot <= 90)) ?
         (100 * nOoxRot) :
         (((91 <= nOoxRot) && (nOoxRot <= 180)) ? (100 * (450 - nOoxRot)) : 0);
@@ -1299,22 +1420,46 @@ void Alignment::finalizeImport()
         csstab::CellOrientation_STACKED : csstab::CellOrientation_STANDARD;
 
     // alignment flags (#i84960 automatic line break, if vertically justified/distributed)
-    maApiData.mbWrapText = maOoxData.mbWrapText || (maOoxData.mnVerAlign == XML_distributed) || (maOoxData.mnVerAlign == XML_justify);
-    maApiData.mbShrink = maOoxData.mbShrink;
+    maApiData.mbWrapText = maModel.mbWrapText || (maModel.mnVerAlign == XML_distributed) || (maModel.mnVerAlign == XML_justify);
+    maApiData.mbShrink = maModel.mbShrink;
 
 }
 
-void Alignment::writeToPropertySet( PropertySet& rPropSet ) const
+void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    getStylesPropertyHelper().writeAlignmentProperties( rPropSet, maApiData );
+    rPropMap[ PROP_HoriJustify ]     <<= maApiData.meHorJustify;
+    rPropMap[ PROP_VertJustify ]     <<= maApiData.meVerJustify;
+    rPropMap[ PROP_WritingMode ]     <<= maApiData.mnWritingMode;
+    rPropMap[ PROP_RotateAngle ]     <<= maApiData.mnRotation;
+    rPropMap[ PROP_RotateReference ] <<= ::com::sun::star::table::CellVertJustify_STANDARD;    // rotation reference
+    rPropMap[ PROP_Orientation ]     <<= maApiData.meOrientation;
+    rPropMap[ PROP_ParaIndent ]      <<= maApiData.mnIndent;
+    rPropMap[ PROP_IsTextWrapped ]   <<= maApiData.mbWrapText;
+    rPropMap[ PROP_ShrinkToFit ]     <<= maApiData.mbShrink;
 }
 
 // ============================================================================
 
-OoxProtectionData::OoxProtectionData() :
+ProtectionModel::ProtectionModel() :
     mbLocked( true ),   // default in Excel and Calc
     mbHidden( false )
 {
+}
+
+// ----------------------------------------------------------------------------
+
+ApiProtectionData::ApiProtectionData() :
+    maCellProt( sal_True, sal_False, sal_False, sal_False )
+{
+}
+
+bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight )
+{
+    return
+        (rLeft.maCellProt.IsLocked        == rRight.maCellProt.IsLocked) &&
+        (rLeft.maCellProt.IsFormulaHidden == rRight.maCellProt.IsFormulaHidden) &&
+        (rLeft.maCellProt.IsHidden        == rRight.maCellProt.IsHidden) &&
+        (rLeft.maCellProt.IsPrintHidden   == rRight.maCellProt.IsPrintHidden);
 }
 
 // ============================================================================
@@ -1326,49 +1471,49 @@ Protection::Protection( const WorkbookHelper& rHelper ) :
 
 void Protection::importProtection( const AttributeList& rAttribs )
 {
-    maOoxData.mbLocked = rAttribs.getBool( XML_locked, true );
-    maOoxData.mbHidden = rAttribs.getBool( XML_hidden, false );
+    maModel.mbLocked = rAttribs.getBool( XML_locked, true );
+    maModel.mbHidden = rAttribs.getBool( XML_hidden, false );
 }
 
 void Protection::setBinData( sal_uInt32 nFlags )
 {
-    maOoxData.mbLocked = getFlag( nFlags, OOBIN_XF_LOCKED );
-    maOoxData.mbHidden = getFlag( nFlags, OOBIN_XF_HIDDEN );
+    maModel.mbLocked = getFlag( nFlags, OOBIN_XF_LOCKED );
+    maModel.mbHidden = getFlag( nFlags, OOBIN_XF_HIDDEN );
 }
 
 void Protection::setBiff2Data( sal_uInt8 nNumFmt )
 {
-    maOoxData.mbLocked = getFlag( nNumFmt, BIFF2_XF_LOCKED );
-    maOoxData.mbHidden = getFlag( nNumFmt, BIFF2_XF_HIDDEN );
+    maModel.mbLocked = getFlag( nNumFmt, BIFF2_XF_LOCKED );
+    maModel.mbHidden = getFlag( nNumFmt, BIFF2_XF_HIDDEN );
 }
 
 void Protection::setBiff3Data( sal_uInt16 nProt )
 {
-    maOoxData.mbLocked = getFlag( nProt, BIFF_XF_LOCKED );
-    maOoxData.mbHidden = getFlag( nProt, BIFF_XF_HIDDEN );
+    maModel.mbLocked = getFlag( nProt, BIFF_XF_LOCKED );
+    maModel.mbHidden = getFlag( nProt, BIFF_XF_HIDDEN );
 }
 
 void Protection::finalizeImport()
 {
-    maApiData.maCellProt.IsLocked = maOoxData.mbLocked;
-    maApiData.maCellProt.IsFormulaHidden = maOoxData.mbHidden;
+    maApiData.maCellProt.IsLocked = maModel.mbLocked;
+    maApiData.maCellProt.IsFormulaHidden = maModel.mbHidden;
 }
 
-void Protection::writeToPropertySet( PropertySet& rPropSet ) const
+void Protection::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    getStylesPropertyHelper().writeProtectionProperties( rPropSet, maApiData );
+    rPropMap[ PROP_CellProtection ] <<= maApiData.maCellProt;
 }
 
 // ============================================================================
 
-OoxBorderLineData::OoxBorderLineData( bool bDxf ) :
+BorderLineModel::BorderLineModel( bool bDxf ) :
     mnStyle( XML_none ),
     mbUsed( !bDxf )
 {
     maColor.setIndexed( OOX_COLOR_WINDOWTEXT );
 }
 
-void OoxBorderLineData::setBiffStyle( sal_Int32 nLineStyle )
+void BorderLineModel::setBiffStyle( sal_Int32 nLineStyle )
 {
     static const sal_Int32 spnStyleIds[] = {
         XML_none, XML_thin, XML_medium, XML_dashed,
@@ -1378,15 +1523,15 @@ void OoxBorderLineData::setBiffStyle( sal_Int32 nLineStyle )
     mnStyle = STATIC_ARRAY_SELECT( spnStyleIds, nLineStyle, XML_none );
 }
 
-void OoxBorderLineData::setBiffData( sal_uInt8 nLineStyle, sal_uInt16 nLineColor )
+void BorderLineModel::setBiffData( sal_uInt8 nLineStyle, sal_uInt16 nLineColor )
 {
     maColor.setIndexed( nLineColor );
     setBiffStyle( nLineStyle );
 }
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
-OoxBorderData::OoxBorderData( bool bDxf ) :
+BorderModel::BorderModel( bool bDxf ) :
     maLeft( bDxf ),
     maRight( bDxf ),
     maTop( bDxf ),
@@ -1394,6 +1539,14 @@ OoxBorderData::OoxBorderData( bool bDxf ) :
     maDiagonal( bDxf ),
     mbDiagTLtoBR( false ),
     mbDiagBLtoTR( false )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+ApiBorderData::ApiBorderData() :
+    mbBorderUsed( false ),
+    mbDiagUsed( false )
 {
 }
 
@@ -1431,40 +1584,20 @@ const BorderLine* lclGetThickerLine( const BorderLine& rBorderLine1, sal_Bool bV
 
 Border::Border( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
-    maOoxData( bDxf ),
+    maModel( bDxf ),
     mbDxf( bDxf )
 {
 }
 
-bool Border::isSupportedContext( sal_Int32 nElement, sal_Int32 nParentContext )
-{
-    switch( nParentContext )
-    {
-        case XLS_TOKEN( border ):
-            return  (nElement == XLS_TOKEN( left )) ||
-                    (nElement == XLS_TOKEN( right )) ||
-                    (nElement == XLS_TOKEN( top )) ||
-                    (nElement == XLS_TOKEN( bottom )) ||
-                    (nElement == XLS_TOKEN( diagonal ));
-        case XLS_TOKEN( left ):
-        case XLS_TOKEN( right ):
-        case XLS_TOKEN( top ):
-        case XLS_TOKEN( bottom ):
-        case XLS_TOKEN( diagonal ):
-            return  (nElement == XLS_TOKEN( color ));
-    }
-    return false;
-}
-
 void Border::importBorder( const AttributeList& rAttribs )
 {
-    maOoxData.mbDiagTLtoBR = rAttribs.getBool( XML_diagonalDown, false );
-    maOoxData.mbDiagBLtoTR = rAttribs.getBool( XML_diagonalUp, false );
+    maModel.mbDiagTLtoBR = rAttribs.getBool( XML_diagonalDown, false );
+    maModel.mbDiagBLtoTR = rAttribs.getBool( XML_diagonalUp, false );
 }
 
 void Border::importStyle( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( OoxBorderLineData* pBorderLine = getBorderLine( nElement ) )
+    if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
     {
         pBorderLine->mnStyle = rAttribs.getToken( XML_style, XML_none );
         pBorderLine->mbUsed = true;
@@ -1473,31 +1606,31 @@ void Border::importStyle( sal_Int32 nElement, const AttributeList& rAttribs )
 
 void Border::importColor( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( OoxBorderLineData* pBorderLine = getBorderLine( nElement ) )
+    if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
         pBorderLine->maColor.importColor( rAttribs );
 }
 
 void Border::importBorder( RecordInputStream& rStrm )
 {
     sal_uInt8 nFlags = rStrm.readuInt8();
-    maOoxData.mbDiagTLtoBR = getFlag( nFlags, OOBIN_BORDER_DIAG_TLBR );
-    maOoxData.mbDiagBLtoTR = getFlag( nFlags, OOBIN_BORDER_DIAG_BLTR );
-    maOoxData.maTop.setBiffStyle( rStrm.readuInt16() );
-    rStrm >> maOoxData.maTop.maColor;
-    maOoxData.maBottom.setBiffStyle( rStrm.readuInt16() );
-    rStrm >> maOoxData.maBottom.maColor;
-    maOoxData.maLeft.setBiffStyle( rStrm.readuInt16() );
-    rStrm >> maOoxData.maLeft.maColor;
-    maOoxData.maRight.setBiffStyle( rStrm.readuInt16() );
-    rStrm >> maOoxData.maRight.maColor;
-    maOoxData.maDiagonal.setBiffStyle( rStrm.readuInt16() );
-    rStrm >> maOoxData.maDiagonal.maColor;
+    maModel.mbDiagTLtoBR = getFlag( nFlags, OOBIN_BORDER_DIAG_TLBR );
+    maModel.mbDiagBLtoTR = getFlag( nFlags, OOBIN_BORDER_DIAG_BLTR );
+    maModel.maTop.setBiffStyle( rStrm.readuInt16() );
+    rStrm >> maModel.maTop.maColor;
+    maModel.maBottom.setBiffStyle( rStrm.readuInt16() );
+    rStrm >> maModel.maBottom.maColor;
+    maModel.maLeft.setBiffStyle( rStrm.readuInt16() );
+    rStrm >> maModel.maLeft.maColor;
+    maModel.maRight.setBiffStyle( rStrm.readuInt16() );
+    rStrm >> maModel.maRight.maColor;
+    maModel.maDiagonal.setBiffStyle( rStrm.readuInt16() );
+    rStrm >> maModel.maDiagonal.maColor;
 }
 
 void Border::importDxfBorder( sal_Int32 nElement, RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Border::importDxfBorder - missing conditional formatting flag" );
-    if( OoxBorderLineData* pBorderLine = getBorderLine( nElement ) )
+    if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
     {
         sal_uInt16 nStyle;
         rStrm >> pBorderLine->maColor >> nStyle;
@@ -1509,44 +1642,44 @@ void Border::importDxfBorder( sal_Int32 nElement, RecordInputStream& rStrm )
 void Border::setBiff2Data( sal_uInt8 nFlags )
 {
     OSL_ENSURE( !mbDxf, "Border::setBiff2Data - unexpected conditional formatting flag" );
-    maOoxData.maLeft.setBiffData(   getFlagValue( nFlags, BIFF2_XF_LEFTLINE,   BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
-    maOoxData.maRight.setBiffData(  getFlagValue( nFlags, BIFF2_XF_RIGHTLINE,  BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
-    maOoxData.maTop.setBiffData(    getFlagValue( nFlags, BIFF2_XF_TOPLINE,    BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
-    maOoxData.maBottom.setBiffData( getFlagValue( nFlags, BIFF2_XF_BOTTOMLINE, BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
-    maOoxData.maDiagonal.mbUsed = false;
+    maModel.maLeft.setBiffData(   getFlagValue( nFlags, BIFF2_XF_LEFTLINE,   BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
+    maModel.maRight.setBiffData(  getFlagValue( nFlags, BIFF2_XF_RIGHTLINE,  BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
+    maModel.maTop.setBiffData(    getFlagValue( nFlags, BIFF2_XF_TOPLINE,    BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
+    maModel.maBottom.setBiffData( getFlagValue( nFlags, BIFF2_XF_BOTTOMLINE, BIFF_LINE_THIN, BIFF_LINE_NONE ), BIFF2_COLOR_BLACK );
+    maModel.maDiagonal.mbUsed = false;
 }
 
 void Border::setBiff3Data( sal_uInt32 nBorder )
 {
     OSL_ENSURE( !mbDxf, "Border::setBiff3Data - unexpected conditional formatting flag" );
-    maOoxData.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder,  8, 3 ), extractValue< sal_uInt16 >( nBorder, 11, 5 ) );
-    maOoxData.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder, 24, 3 ), extractValue< sal_uInt16 >( nBorder, 27, 5 ) );
-    maOoxData.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder,  0, 3 ), extractValue< sal_uInt16 >( nBorder,  3, 5 ) );
-    maOoxData.maBottom.setBiffData( extractValue< sal_uInt8 >( nBorder, 16, 3 ), extractValue< sal_uInt16 >( nBorder, 19, 5 ) );
-    maOoxData.maDiagonal.mbUsed = false;
+    maModel.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder,  8, 3 ), extractValue< sal_uInt16 >( nBorder, 11, 5 ) );
+    maModel.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder, 24, 3 ), extractValue< sal_uInt16 >( nBorder, 27, 5 ) );
+    maModel.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder,  0, 3 ), extractValue< sal_uInt16 >( nBorder,  3, 5 ) );
+    maModel.maBottom.setBiffData( extractValue< sal_uInt8 >( nBorder, 16, 3 ), extractValue< sal_uInt16 >( nBorder, 19, 5 ) );
+    maModel.maDiagonal.mbUsed = false;
 }
 
 void Border::setBiff5Data( sal_uInt32 nBorder, sal_uInt32 nArea )
 {
     OSL_ENSURE( !mbDxf, "Border::setBiff5Data - unexpected conditional formatting flag" );
-    maOoxData.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder,  3, 3 ), extractValue< sal_uInt16 >( nBorder, 16, 7 ) );
-    maOoxData.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder,  6, 3 ), extractValue< sal_uInt16 >( nBorder, 23, 7 ) );
-    maOoxData.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder,  0, 3 ), extractValue< sal_uInt16 >( nBorder,  9, 7 ) );
-    maOoxData.maBottom.setBiffData( extractValue< sal_uInt8 >( nArea,   22, 3 ), extractValue< sal_uInt16 >( nArea,   25, 7 ) );
-    maOoxData.maDiagonal.mbUsed = false;
+    maModel.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder,  3, 3 ), extractValue< sal_uInt16 >( nBorder, 16, 7 ) );
+    maModel.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder,  6, 3 ), extractValue< sal_uInt16 >( nBorder, 23, 7 ) );
+    maModel.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder,  0, 3 ), extractValue< sal_uInt16 >( nBorder,  9, 7 ) );
+    maModel.maBottom.setBiffData( extractValue< sal_uInt8 >( nArea,   22, 3 ), extractValue< sal_uInt16 >( nArea,   25, 7 ) );
+    maModel.maDiagonal.mbUsed = false;
 }
 
 void Border::setBiff8Data( sal_uInt32 nBorder1, sal_uInt32 nBorder2 )
 {
     OSL_ENSURE( !mbDxf, "Border::setBiff8Data - unexpected conditional formatting flag" );
-    maOoxData.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder1,  0, 4 ), extractValue< sal_uInt16 >( nBorder1, 16, 7 ) );
-    maOoxData.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder1,  4, 4 ), extractValue< sal_uInt16 >( nBorder1, 23, 7 ) );
-    maOoxData.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder1,  8, 4 ), extractValue< sal_uInt16 >( nBorder2,  0, 7 ) );
-    maOoxData.maBottom.setBiffData( extractValue< sal_uInt8 >( nBorder1, 12, 4 ), extractValue< sal_uInt16 >( nBorder2,  7, 7 ) );
-    maOoxData.mbDiagTLtoBR = getFlag( nBorder1, BIFF_XF_DIAG_TLBR );
-    maOoxData.mbDiagBLtoTR = getFlag( nBorder1, BIFF_XF_DIAG_BLTR );
-    if( maOoxData.mbDiagTLtoBR || maOoxData.mbDiagBLtoTR )
-        maOoxData.maDiagonal.setBiffData( extractValue< sal_uInt8 >( nBorder2, 21, 4 ), extractValue< sal_uInt16 >( nBorder2, 14, 7 ) );
+    maModel.maLeft.setBiffData(   extractValue< sal_uInt8 >( nBorder1,  0, 4 ), extractValue< sal_uInt16 >( nBorder1, 16, 7 ) );
+    maModel.maRight.setBiffData(  extractValue< sal_uInt8 >( nBorder1,  4, 4 ), extractValue< sal_uInt16 >( nBorder1, 23, 7 ) );
+    maModel.maTop.setBiffData(    extractValue< sal_uInt8 >( nBorder1,  8, 4 ), extractValue< sal_uInt16 >( nBorder2,  0, 7 ) );
+    maModel.maBottom.setBiffData( extractValue< sal_uInt8 >( nBorder1, 12, 4 ), extractValue< sal_uInt16 >( nBorder2,  7, 7 ) );
+    maModel.mbDiagTLtoBR = getFlag( nBorder1, BIFF_XF_DIAG_TLBR );
+    maModel.mbDiagBLtoTR = getFlag( nBorder1, BIFF_XF_DIAG_BLTR );
+    if( maModel.mbDiagTLtoBR || maModel.mbDiagBLtoTR )
+        maModel.maDiagonal.setBiffData( extractValue< sal_uInt8 >( nBorder2, 21, 4 ), extractValue< sal_uInt16 >( nBorder2, 14, 7 ) );
 }
 
 void Border::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
@@ -1557,25 +1690,25 @@ void Border::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
     sal_uInt32 nColor;
     rStrm >> nStyle >> nColor;
     rStrm.skip( 2 );
-    maOoxData.maLeft.setBiffData(   extractValue< sal_uInt8 >( nStyle,  0, 4 ), extractValue< sal_uInt16 >( nColor,  0, 7 ) );
-    maOoxData.maRight.setBiffData(  extractValue< sal_uInt8 >( nStyle,  4, 4 ), extractValue< sal_uInt16 >( nColor,  7, 7 ) );
-    maOoxData.maTop.setBiffData(    extractValue< sal_uInt8 >( nStyle,  8, 4 ), extractValue< sal_uInt16 >( nColor, 16, 7 ) );
-    maOoxData.maBottom.setBiffData( extractValue< sal_uInt8 >( nStyle, 12, 4 ), extractValue< sal_uInt16 >( nColor, 23, 7 ) );
-    maOoxData.maLeft.mbUsed   = !getFlag( nFlags, BIFF_CFRULE_BORDER_LEFT );
-    maOoxData.maRight.mbUsed  = !getFlag( nFlags, BIFF_CFRULE_BORDER_RIGHT );
-    maOoxData.maTop.mbUsed    = !getFlag( nFlags, BIFF_CFRULE_BORDER_TOP );
-    maOoxData.maBottom.mbUsed = !getFlag( nFlags, BIFF_CFRULE_BORDER_BOTTOM );
+    maModel.maLeft.setBiffData(   extractValue< sal_uInt8 >( nStyle,  0, 4 ), extractValue< sal_uInt16 >( nColor,  0, 7 ) );
+    maModel.maRight.setBiffData(  extractValue< sal_uInt8 >( nStyle,  4, 4 ), extractValue< sal_uInt16 >( nColor,  7, 7 ) );
+    maModel.maTop.setBiffData(    extractValue< sal_uInt8 >( nStyle,  8, 4 ), extractValue< sal_uInt16 >( nColor, 16, 7 ) );
+    maModel.maBottom.setBiffData( extractValue< sal_uInt8 >( nStyle, 12, 4 ), extractValue< sal_uInt16 >( nColor, 23, 7 ) );
+    maModel.maLeft.mbUsed   = !getFlag( nFlags, BIFF_CFRULE_BORDER_LEFT );
+    maModel.maRight.mbUsed  = !getFlag( nFlags, BIFF_CFRULE_BORDER_RIGHT );
+    maModel.maTop.mbUsed    = !getFlag( nFlags, BIFF_CFRULE_BORDER_TOP );
+    maModel.maBottom.mbUsed = !getFlag( nFlags, BIFF_CFRULE_BORDER_BOTTOM );
 }
 
 void Border::finalizeImport()
 {
-    maApiData.mbBorderUsed = maOoxData.maLeft.mbUsed || maOoxData.maRight.mbUsed || maOoxData.maTop.mbUsed || maOoxData.maBottom.mbUsed;
-    maApiData.mbDiagUsed   = maOoxData.maDiagonal.mbUsed;
+    maApiData.mbBorderUsed = maModel.maLeft.mbUsed || maModel.maRight.mbUsed || maModel.maTop.mbUsed || maModel.maBottom.mbUsed;
+    maApiData.mbDiagUsed   = maModel.maDiagonal.mbUsed;
 
-    maApiData.maBorder.IsLeftLineValid   = convertBorderLine( maApiData.maBorder.LeftLine,   maOoxData.maLeft );
-    maApiData.maBorder.IsRightLineValid  = convertBorderLine( maApiData.maBorder.RightLine,  maOoxData.maRight );
-    maApiData.maBorder.IsTopLineValid    = convertBorderLine( maApiData.maBorder.TopLine,    maOoxData.maTop );
-    maApiData.maBorder.IsBottomLineValid = convertBorderLine( maApiData.maBorder.BottomLine, maOoxData.maBottom );
+    maApiData.maBorder.IsLeftLineValid   = convertBorderLine( maApiData.maBorder.LeftLine,   maModel.maLeft );
+    maApiData.maBorder.IsRightLineValid  = convertBorderLine( maApiData.maBorder.RightLine,  maModel.maRight );
+    maApiData.maBorder.IsTopLineValid    = convertBorderLine( maApiData.maBorder.TopLine,    maModel.maTop );
+    maApiData.maBorder.IsBottomLineValid = convertBorderLine( maApiData.maBorder.BottomLine, maModel.maBottom );
 
     if( !mbDxf )
     {
@@ -1588,34 +1721,40 @@ void Border::finalizeImport()
             maApiData.maBorder.HorizontalLine = *pHorLine;
     }
 
-    if( maOoxData.mbDiagTLtoBR )
-        convertBorderLine( maApiData.maTLtoBR, maOoxData.maDiagonal );
-    if( maOoxData.mbDiagBLtoTR )
-        convertBorderLine( maApiData.maBLtoTR, maOoxData.maDiagonal );
+    if( maModel.mbDiagTLtoBR )
+        convertBorderLine( maApiData.maTLtoBR, maModel.maDiagonal );
+    if( maModel.mbDiagBLtoTR )
+        convertBorderLine( maApiData.maBLtoTR, maModel.maDiagonal );
 }
 
-void Border::writeToPropertySet( PropertySet& rPropSet ) const
+void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    getStylesPropertyHelper().writeBorderProperties( rPropSet, maApiData );
+    if( maApiData.mbBorderUsed )
+        rPropMap[ PROP_TableBorder ] <<= maApiData.maBorder;
+    if( maApiData.mbDiagUsed )
+    {
+        rPropMap[ PROP_DiagonalTLBR ] <<= maApiData.maTLtoBR;
+        rPropMap[ PROP_DiagonalBLTR ] <<= maApiData.maBLtoTR;
+    }
 }
 
-OoxBorderLineData* Border::getBorderLine( sal_Int32 nElement )
+BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
 {
     switch( nElement )
     {
-        case XLS_TOKEN( left ):     return &maOoxData.maLeft;
-        case XLS_TOKEN( right ):    return &maOoxData.maRight;
-        case XLS_TOKEN( top ):      return &maOoxData.maTop;
-        case XLS_TOKEN( bottom ):   return &maOoxData.maBottom;
-        case XLS_TOKEN( diagonal ): return &maOoxData.maDiagonal;
+        case XLS_TOKEN( left ):     return &maModel.maLeft;
+        case XLS_TOKEN( right ):    return &maModel.maRight;
+        case XLS_TOKEN( top ):      return &maModel.maTop;
+        case XLS_TOKEN( bottom ):   return &maModel.maBottom;
+        case XLS_TOKEN( diagonal ): return &maModel.maDiagonal;
     }
     return 0;
 }
 
-bool Border::convertBorderLine( BorderLine& rBorderLine, const OoxBorderLineData& rLineData )
+bool Border::convertBorderLine( BorderLine& rBorderLine, const BorderLineModel& rModel )
 {
-    rBorderLine.Color = rLineData.maColor.getColor( *this, API_RGB_BLACK );
-    switch( rLineData.mnStyle )
+    rBorderLine.Color = rModel.maColor.getColor( *this, API_RGB_BLACK );
+    switch( rModel.mnStyle )
     {
         case XML_dashDot:           lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
         case XML_dashDotDot:        lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
@@ -1633,13 +1772,13 @@ bool Border::convertBorderLine( BorderLine& rBorderLine, const OoxBorderLineData
         case XML_thin:              lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
         default:                    lclSetBorderLineWidth( rBorderLine, API_LINE_NONE );    break;
     }
-    return rLineData.mbUsed;
+    return rModel.mbUsed;
 }
 
 
 // ============================================================================
 
-OoxPatternFillData::OoxPatternFillData( bool bDxf ) :
+PatternFillModel::PatternFillModel( bool bDxf ) :
     mnPattern( XML_none ),
     mbPattColorUsed( !bDxf ),
     mbFillColorUsed( !bDxf ),
@@ -1649,7 +1788,7 @@ OoxPatternFillData::OoxPatternFillData( bool bDxf ) :
     maFillColor.setIndexed( OOX_COLOR_WINDOWBACK );
 }
 
-void OoxPatternFillData::setBinPattern( sal_Int32 nPattern )
+void PatternFillModel::setBinPattern( sal_Int32 nPattern )
 {
     static const sal_Int32 spnPatternIds[] = {
         XML_none, XML_solid, XML_mediumGray, XML_darkGray,
@@ -1660,7 +1799,7 @@ void OoxPatternFillData::setBinPattern( sal_Int32 nPattern )
     mnPattern = STATIC_ARRAY_SELECT( spnPatternIds, nPattern, XML_none );
 }
 
-void OoxPatternFillData::setBiffData( sal_uInt16 nPatternColor, sal_uInt16 nFillColor, sal_uInt8 nPattern )
+void PatternFillModel::setBiffData( sal_uInt16 nPatternColor, sal_uInt16 nFillColor, sal_uInt8 nPattern )
 {
     maPatternColor.setIndexed( nPatternColor );
     maFillColor.setIndexed( nFillColor );
@@ -1670,7 +1809,7 @@ void OoxPatternFillData::setBiffData( sal_uInt16 nPatternColor, sal_uInt16 nFill
 
 // ----------------------------------------------------------------------------
 
-OoxGradientFillData::OoxGradientFillData() :
+GradientFillModel::GradientFillModel() :
     mnType( XML_linear ),
     mfAngle( 0.0 ),
     mfLeft( 0.0 ),
@@ -1680,7 +1819,7 @@ OoxGradientFillData::OoxGradientFillData() :
 {
 }
 
-void OoxGradientFillData::readGradient( RecordInputStream& rStrm )
+void GradientFillModel::readGradient( RecordInputStream& rStrm )
 {
     sal_Int32 nType;
     rStrm >> nType >> mfAngle >> mfLeft >> mfRight >> mfTop >> mfBottom;
@@ -1688,7 +1827,7 @@ void OoxGradientFillData::readGradient( RecordInputStream& rStrm )
     mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
 
-void OoxGradientFillData::readGradientStop( RecordInputStream& rStrm, bool bDxf )
+void GradientFillModel::readGradientStop( RecordInputStream& rStrm, bool bDxf )
 {
     Color aColor;
     double fPosition;
@@ -1703,6 +1842,15 @@ void OoxGradientFillData::readGradientStop( RecordInputStream& rStrm, bool bDxf 
     }
     if( !rStrm.isEof() && (fPosition >= 0.0) )
         maColors[ fPosition ] = aColor;
+}
+
+// ----------------------------------------------------------------------------
+
+ApiSolidFillData::ApiSolidFillData() :
+    mnColor( API_RGB_TRANSPARENT ),
+    mbTransparent( true ),
+    mbUsed( false )
+{
 }
 
 // ============================================================================
@@ -1732,68 +1880,50 @@ Fill::Fill( const WorkbookHelper& rHelper, bool bDxf ) :
 {
 }
 
-bool Fill::isSupportedContext( sal_Int32 nElement, sal_Int32 nParentContext )
-{
-    switch( nParentContext )
-    {
-        case XLS_TOKEN( fill ):
-            return  (nElement == XLS_TOKEN( patternFill )) ||
-                    (nElement == XLS_TOKEN( gradientFill ));
-        case XLS_TOKEN( patternFill ):
-            return  (nElement == XLS_TOKEN( fgColor )) ||
-                    (nElement == XLS_TOKEN( bgColor ));
-        case XLS_TOKEN( gradientFill ):
-            return  (nElement == XLS_TOKEN( stop ));
-        case XLS_TOKEN( stop ):
-            return  (nElement == XLS_TOKEN( color ));
-    }
-    return false;
-}
-
 void Fill::importPatternFill( const AttributeList& rAttribs )
 {
-    mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-    mxOoxPattData->mnPattern = rAttribs.getToken( XML_patternType, XML_none );
+    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel->mnPattern = rAttribs.getToken( XML_patternType, XML_none );
     if( mbDxf )
-        mxOoxPattData->mbPatternUsed = rAttribs.hasAttribute( XML_patternType );
+        mxPatternModel->mbPatternUsed = rAttribs.hasAttribute( XML_patternType );
 }
 
 void Fill::importFgColor( const AttributeList& rAttribs )
 {
-    OSL_ENSURE( mxOoxPattData.get(), "Fill::importFgColor - missing pattern data" );
-    if( mxOoxPattData.get() )
+    OSL_ENSURE( mxPatternModel.get(), "Fill::importFgColor - missing pattern data" );
+    if( mxPatternModel.get() )
     {
-        mxOoxPattData->maPatternColor.importColor( rAttribs );
-        mxOoxPattData->mbPattColorUsed = true;
+        mxPatternModel->maPatternColor.importColor( rAttribs );
+        mxPatternModel->mbPattColorUsed = true;
     }
 }
 
 void Fill::importBgColor( const AttributeList& rAttribs )
 {
-    OSL_ENSURE( mxOoxPattData.get(), "Fill::importBgColor - missing pattern data" );
-    if( mxOoxPattData.get() )
+    OSL_ENSURE( mxPatternModel.get(), "Fill::importBgColor - missing pattern data" );
+    if( mxPatternModel.get() )
     {
-        mxOoxPattData->maFillColor.importColor( rAttribs );
-        mxOoxPattData->mbFillColorUsed = true;
+        mxPatternModel->maFillColor.importColor( rAttribs );
+        mxPatternModel->mbFillColorUsed = true;
     }
 }
 
 void Fill::importGradientFill( const AttributeList& rAttribs )
 {
-    mxOoxGradData.reset( new OoxGradientFillData );
-    mxOoxGradData->mnType = rAttribs.getToken( XML_type, XML_linear );
-    mxOoxGradData->mfAngle = rAttribs.getDouble( XML_degree, 0.0 );
-    mxOoxGradData->mfLeft = rAttribs.getDouble( XML_left, 0.0 );
-    mxOoxGradData->mfRight = rAttribs.getDouble( XML_right, 0.0 );
-    mxOoxGradData->mfTop = rAttribs.getDouble( XML_top, 0.0 );
-    mxOoxGradData->mfBottom = rAttribs.getDouble( XML_bottom, 0.0 );
+    mxGradientModel.reset( new GradientFillModel );
+    mxGradientModel->mnType = rAttribs.getToken( XML_type, XML_linear );
+    mxGradientModel->mfAngle = rAttribs.getDouble( XML_degree, 0.0 );
+    mxGradientModel->mfLeft = rAttribs.getDouble( XML_left, 0.0 );
+    mxGradientModel->mfRight = rAttribs.getDouble( XML_right, 0.0 );
+    mxGradientModel->mfTop = rAttribs.getDouble( XML_top, 0.0 );
+    mxGradientModel->mfBottom = rAttribs.getDouble( XML_bottom, 0.0 );
 }
 
 void Fill::importColor( const AttributeList& rAttribs, double fPosition )
 {
-    OSL_ENSURE( mxOoxGradData.get(), "Fill::importColor - missing gradient data" );
-    if( mxOoxGradData.get() && (fPosition >= 0.0) )
-        mxOoxGradData->maColors[ fPosition ].importColor( rAttribs );
+    OSL_ENSURE( mxGradientModel.get(), "Fill::importColor - missing gradient data" );
+    if( mxGradientModel.get() && (fPosition >= 0.0) )
+        mxGradientModel->maColors[ fPosition ].importColor( rAttribs );
 }
 
 void Fill::importFill( RecordInputStream& rStrm )
@@ -1802,70 +1932,70 @@ void Fill::importFill( RecordInputStream& rStrm )
     sal_Int32 nPattern = rStrm.readInt32();
     if( nPattern == OOBIN_FILL_GRADIENT )
     {
-        mxOoxGradData.reset( new OoxGradientFillData );
+        mxGradientModel.reset( new GradientFillModel );
         sal_Int32 nStopCount;
         rStrm.skip( 16 );
-        mxOoxGradData->readGradient( rStrm );
+        mxGradientModel->readGradient( rStrm );
         rStrm >> nStopCount;
         for( sal_Int32 nStop = 0; (nStop < nStopCount) && !rStrm.isEof(); ++nStop )
-            mxOoxGradData->readGradientStop( rStrm, false );
+            mxGradientModel->readGradientStop( rStrm, false );
     }
     else
     {
-        mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-        mxOoxPattData->setBinPattern( nPattern );
-        rStrm >> mxOoxPattData->maPatternColor >> mxOoxPattData->maFillColor;
+        mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+        mxPatternModel->setBinPattern( nPattern );
+        rStrm >> mxPatternModel->maPatternColor >> mxPatternModel->maFillColor;
     }
 }
 
 void Fill::importDxfPattern( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfPattern - missing conditional formatting flag" );
-    if( !mxOoxPattData )
-        mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-    mxOoxPattData->setBinPattern( rStrm.readuInt8() );
-    mxOoxPattData->mbPatternUsed = true;
+    if( !mxPatternModel )
+        mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel->setBinPattern( rStrm.readuInt8() );
+    mxPatternModel->mbPatternUsed = true;
 }
 
 void Fill::importDxfFgColor( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfFgColor - missing conditional formatting flag" );
-    if( !mxOoxPattData )
-        mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-    mxOoxPattData->maPatternColor.importColor( rStrm );
-    mxOoxPattData->mbPattColorUsed = true;
+    if( !mxPatternModel )
+        mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel->maPatternColor.importColor( rStrm );
+    mxPatternModel->mbPattColorUsed = true;
 }
 
 void Fill::importDxfBgColor( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfBgColor - missing conditional formatting flag" );
-    if( !mxOoxPattData )
-        mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-    mxOoxPattData->maFillColor.importColor( rStrm );
-    mxOoxPattData->mbFillColorUsed = true;
+    if( !mxPatternModel )
+        mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel->maFillColor.importColor( rStrm );
+    mxPatternModel->mbFillColorUsed = true;
 }
 
 void Fill::importDxfGradient( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfGradient - missing conditional formatting flag" );
-    if( !mxOoxGradData )
-        mxOoxGradData.reset( new OoxGradientFillData );
-    mxOoxGradData->readGradient( rStrm );
+    if( !mxGradientModel )
+        mxGradientModel.reset( new GradientFillModel );
+    mxGradientModel->readGradient( rStrm );
 }
 
 void Fill::importDxfStop( RecordInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfStop - missing conditional formatting flag" );
-    if( !mxOoxGradData )
-        mxOoxGradData.reset( new OoxGradientFillData );
-    mxOoxGradData->readGradientStop( rStrm, true );
+    if( !mxGradientModel )
+        mxGradientModel.reset( new GradientFillModel );
+    mxGradientModel->readGradientStop( rStrm, true );
 }
 
 void Fill::setBiff2Data( sal_uInt8 nFlags )
 {
     OSL_ENSURE( !mbDxf, "Fill::setBiff2Data - unexpected conditional formatting flag" );
-    mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-    mxOoxPattData->setBiffData(
+    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel->setBiffData(
         BIFF2_COLOR_BLACK,
         BIFF2_COLOR_WHITE,
         getFlagValue( nFlags, BIFF2_XF_BACKGROUND, BIFF_PATT_125, BIFF_PATT_NONE ) );
@@ -1874,8 +2004,8 @@ void Fill::setBiff2Data( sal_uInt8 nFlags )
 void Fill::setBiff3Data( sal_uInt16 nArea )
 {
     OSL_ENSURE( !mbDxf, "Fill::setBiff3Data - unexpected conditional formatting flag" );
-    mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-    mxOoxPattData->setBiffData(
+    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel->setBiffData(
         extractValue< sal_uInt16 >( nArea, 6, 5 ),
         extractValue< sal_uInt16 >( nArea, 11, 5 ),
         extractValue< sal_uInt8 >( nArea, 0, 6 ) );
@@ -1884,8 +2014,8 @@ void Fill::setBiff3Data( sal_uInt16 nArea )
 void Fill::setBiff5Data( sal_uInt32 nArea )
 {
     OSL_ENSURE( !mbDxf, "Fill::setBiff5Data - unexpected conditional formatting flag" );
-    mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-    mxOoxPattData->setBiffData(
+    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel->setBiffData(
         extractValue< sal_uInt16 >( nArea, 0, 7 ),
         extractValue< sal_uInt16 >( nArea, 7, 7 ),
         extractValue< sal_uInt8 >( nArea, 16, 6 ) );
@@ -1894,8 +2024,8 @@ void Fill::setBiff5Data( sal_uInt32 nArea )
 void Fill::setBiff8Data( sal_uInt32 nBorder2, sal_uInt16 nArea )
 {
     OSL_ENSURE( !mbDxf, "Fill::setBiff8Data - unexpected conditional formatting flag" );
-    mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
-    mxOoxPattData->setBiffData(
+    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel->setBiffData(
         extractValue< sal_uInt16 >( nArea, 0, 7 ),
         extractValue< sal_uInt16 >( nArea, 7, 7 ),
         extractValue< sal_uInt8 >( nBorder2, 26, 6 ) );
@@ -1905,41 +2035,41 @@ void Fill::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
 {
     OSL_ENSURE( mbDxf, "Fill::importCfRule - missing conditional formatting flag" );
     OSL_ENSURE( getFlag( nFlags, BIFF_CFRULE_FILLBLOCK ), "Fill::importCfRule - missing fill block flag" );
-    mxOoxPattData.reset( new OoxPatternFillData( mbDxf ) );
+    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
     sal_uInt32 nFillData;
     rStrm >> nFillData;
-    mxOoxPattData->setBiffData(
+    mxPatternModel->setBiffData(
         extractValue< sal_uInt16 >( nFillData, 16, 7 ),
         extractValue< sal_uInt16 >( nFillData, 23, 7 ),
         extractValue< sal_uInt8 >( nFillData, 10, 6 ) );
-    mxOoxPattData->mbPattColorUsed = !getFlag( nFlags, BIFF_CFRULE_FILL_PATTCOLOR );
-    mxOoxPattData->mbFillColorUsed = !getFlag( nFlags, BIFF_CFRULE_FILL_FILLCOLOR );
-    mxOoxPattData->mbPatternUsed   = !getFlag( nFlags, BIFF_CFRULE_FILL_PATTERN );
+    mxPatternModel->mbPattColorUsed = !getFlag( nFlags, BIFF_CFRULE_FILL_PATTCOLOR );
+    mxPatternModel->mbFillColorUsed = !getFlag( nFlags, BIFF_CFRULE_FILL_FILLCOLOR );
+    mxPatternModel->mbPatternUsed   = !getFlag( nFlags, BIFF_CFRULE_FILL_PATTERN );
 }
 
 void Fill::finalizeImport()
 {
-    if( mxOoxPattData.get() )
+    if( mxPatternModel.get() )
     {
         // finalize the OOX data struct
-        OoxPatternFillData& rOoxData = *mxOoxPattData;
+        PatternFillModel& rModel = *mxPatternModel;
         if( mbDxf )
         {
-            if( rOoxData.mbFillColorUsed && (!rOoxData.mbPatternUsed || (rOoxData.mnPattern == XML_solid)) )
+            if( rModel.mbFillColorUsed && (!rModel.mbPatternUsed || (rModel.mnPattern == XML_solid)) )
             {
-                rOoxData.maPatternColor = rOoxData.maFillColor;
-                rOoxData.mnPattern = XML_solid;
-                rOoxData.mbPattColorUsed = rOoxData.mbPatternUsed = true;
+                rModel.maPatternColor = rModel.maFillColor;
+                rModel.mnPattern = XML_solid;
+                rModel.mbPattColorUsed = rModel.mbPatternUsed = true;
             }
-            else if( !rOoxData.mbFillColorUsed && rOoxData.mbPatternUsed && (rOoxData.mnPattern == XML_solid) )
+            else if( !rModel.mbFillColorUsed && rModel.mbPatternUsed && (rModel.mnPattern == XML_solid) )
             {
-                rOoxData.mbPatternUsed = false;
+                rModel.mbPatternUsed = false;
             }
         }
 
         // convert to API fill settings
-        maApiData.mbUsed = rOoxData.mbPatternUsed;
-        if( rOoxData.mnPattern == XML_none )
+        maApiData.mbUsed = rModel.mbPatternUsed;
+        if( rModel.mnPattern == XML_none )
         {
             maApiData.mnColor = API_RGB_TRANSPARENT;
             maApiData.mbTransparent = true;
@@ -1947,7 +2077,7 @@ void Fill::finalizeImport()
         else
         {
             sal_Int32 nAlpha = 0x80;
-            switch( rOoxData.mnPattern )
+            switch( rModel.mnPattern )
             {
                 case XML_darkDown:          nAlpha = 0x40;  break;
                 case XML_darkGray:          nAlpha = 0x60;  break;
@@ -1969,28 +2099,28 @@ void Fill::finalizeImport()
                 case XML_solid:             nAlpha = 0x80;  break;
             }
 
-            if( !rOoxData.mbPattColorUsed )
-                rOoxData.maPatternColor.setAuto();
-            sal_Int32 nPattColor = rOoxData.maPatternColor.getColor(
+            if( !rModel.mbPattColorUsed )
+                rModel.maPatternColor.setAuto();
+            sal_Int32 nPattColor = rModel.maPatternColor.getColor(
                 *this, ::oox::drawingml::Color::getSystemColor( XML_windowText ) );
 
-            if( !rOoxData.mbFillColorUsed )
-                rOoxData.maFillColor.setAuto();
-            sal_Int32 nFillColor = rOoxData.maFillColor.getColor(
+            if( !rModel.mbFillColorUsed )
+                rModel.maFillColor.setAuto();
+            sal_Int32 nFillColor = rModel.maFillColor.getColor(
                 *this, ::oox::drawingml::Color::getSystemColor( XML_window ) );
 
             maApiData.mnColor = lclGetMixedColor( nPattColor, nFillColor, nAlpha );
             maApiData.mbTransparent = false;
         }
     }
-    else if( mxOoxGradData.get() && !mxOoxGradData->maColors.empty() )
+    else if( mxGradientModel.get() && !mxGradientModel->maColors.empty() )
     {
-        OoxGradientFillData& rOoxData = *mxOoxGradData;
+        GradientFillModel& rModel = *mxGradientModel;
         maApiData.mbUsed = true;    // no support for differential attributes
-        OoxGradientFillData::ColorMap::const_iterator aIt = rOoxData.maColors.begin();
+        GradientFillModel::ColorMap::const_iterator aIt = rModel.maColors.begin();
         OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
         maApiData.mnColor = aIt->second.getColor( *this );
-        if( ++aIt != rOoxData.maColors.end() )
+        if( ++aIt != rModel.maColors.end() )
         {
             OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
             sal_Int32 nEndColor = aIt->second.getColor( *this );
@@ -2000,14 +2130,18 @@ void Fill::finalizeImport()
     }
 }
 
-void Fill::writeToPropertySet( PropertySet& rPropSet ) const
+void Fill::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    getStylesPropertyHelper().writeSolidFillProperties( rPropSet, maApiData );
+    if( maApiData.mbUsed )
+    {
+        rPropMap[ PROP_CellBackColor ] <<= maApiData.mnColor;
+        rPropMap[ PROP_IsCellBackgroundTransparent ] <<= maApiData.mbTransparent;
+    }
 }
 
 // ============================================================================
 
-OoxXfData::OoxXfData() :
+XfModel::XfModel() :
     mnStyleXfId( -1 ),
     mnFontId( -1 ),
     mnNumFmtId( -1 ),
@@ -2034,27 +2168,27 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
 
 void Xf::setAllUsedFlags( bool bUsed )
 {
-    maOoxData.mbAlignUsed = maOoxData.mbProtUsed = maOoxData.mbFontUsed =
-        maOoxData.mbNumFmtUsed = maOoxData.mbBorderUsed = maOoxData.mbAreaUsed = bUsed;
+    maModel.mbAlignUsed = maModel.mbProtUsed = maModel.mbFontUsed =
+        maModel.mbNumFmtUsed = maModel.mbBorderUsed = maModel.mbAreaUsed = bUsed;
 }
 
 void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
 {
-    maOoxData.mbCellXf = bCellXf;
-    maOoxData.mnStyleXfId = rAttribs.getInteger( XML_xfId, -1 );
-    maOoxData.mnFontId = rAttribs.getInteger( XML_fontId, -1 );
-    maOoxData.mnNumFmtId = rAttribs.getInteger( XML_numFmtId, -1 );
-    maOoxData.mnBorderId = rAttribs.getInteger( XML_borderId, -1 );
-    maOoxData.mnFillId = rAttribs.getInteger( XML_fillId, -1 );
+    maModel.mbCellXf = bCellXf;
+    maModel.mnStyleXfId = rAttribs.getInteger( XML_xfId, -1 );
+    maModel.mnFontId = rAttribs.getInteger( XML_fontId, -1 );
+    maModel.mnNumFmtId = rAttribs.getInteger( XML_numFmtId, -1 );
+    maModel.mnBorderId = rAttribs.getInteger( XML_borderId, -1 );
+    maModel.mnFillId = rAttribs.getInteger( XML_fillId, -1 );
 
     /*  Default value of the apply*** attributes is dependent on context:
         true in cellStyleXfs element, false in cellXfs element... */
-    maOoxData.mbAlignUsed  = rAttribs.getBool( XML_applyAlignment,    !maOoxData.mbCellXf );
-    maOoxData.mbProtUsed   = rAttribs.getBool( XML_applyProtection,   !maOoxData.mbCellXf );
-    maOoxData.mbFontUsed   = rAttribs.getBool( XML_applyFont,         !maOoxData.mbCellXf );
-    maOoxData.mbNumFmtUsed = rAttribs.getBool( XML_applyNumberFormat, !maOoxData.mbCellXf );
-    maOoxData.mbBorderUsed = rAttribs.getBool( XML_applyBorder,       !maOoxData.mbCellXf );
-    maOoxData.mbAreaUsed   = rAttribs.getBool( XML_applyFill,         !maOoxData.mbCellXf );
+    maModel.mbAlignUsed  = rAttribs.getBool( XML_applyAlignment,    !maModel.mbCellXf );
+    maModel.mbProtUsed   = rAttribs.getBool( XML_applyProtection,   !maModel.mbCellXf );
+    maModel.mbFontUsed   = rAttribs.getBool( XML_applyFont,         !maModel.mbCellXf );
+    maModel.mbNumFmtUsed = rAttribs.getBool( XML_applyNumberFormat, !maModel.mbCellXf );
+    maModel.mbBorderUsed = rAttribs.getBool( XML_applyBorder,       !maModel.mbCellXf );
+    maModel.mbAreaUsed   = rAttribs.getBool( XML_applyFill,         !maModel.mbCellXf );
 }
 
 void Xf::importAlignment( const AttributeList& rAttribs )
@@ -2069,29 +2203,29 @@ void Xf::importProtection( const AttributeList& rAttribs )
 
 void Xf::importXf( RecordInputStream& rStrm, bool bCellXf )
 {
-    maOoxData.mbCellXf = bCellXf;
-    maOoxData.mnStyleXfId = rStrm.readuInt16();
-    maOoxData.mnNumFmtId = rStrm.readuInt16();
-    maOoxData.mnFontId = rStrm.readuInt16();
-    maOoxData.mnFillId = rStrm.readuInt16();
-    maOoxData.mnBorderId = rStrm.readuInt16();
+    maModel.mbCellXf = bCellXf;
+    maModel.mnStyleXfId = rStrm.readuInt16();
+    maModel.mnNumFmtId = rStrm.readuInt16();
+    maModel.mnFontId = rStrm.readuInt16();
+    maModel.mnFillId = rStrm.readuInt16();
+    maModel.mnBorderId = rStrm.readuInt16();
     sal_uInt32 nFlags = rStrm.readuInt32();
     maAlignment.setBinData( nFlags );
     maProtection.setBinData( nFlags );
     // used flags, see comments in Xf::setBiffUsedFlags()
     sal_uInt16 nUsedFlags = rStrm.readuInt16();
-    maOoxData.mbFontUsed   = maOoxData.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_FONT_USED );
-    maOoxData.mbNumFmtUsed = maOoxData.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_NUMFMT_USED );
-    maOoxData.mbAlignUsed  = maOoxData.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_ALIGN_USED );
-    maOoxData.mbProtUsed   = maOoxData.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_PROT_USED );
-    maOoxData.mbBorderUsed = maOoxData.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_BORDER_USED );
-    maOoxData.mbAreaUsed   = maOoxData.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_AREA_USED );
+    maModel.mbFontUsed   = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_FONT_USED );
+    maModel.mbNumFmtUsed = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_NUMFMT_USED );
+    maModel.mbAlignUsed  = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_ALIGN_USED );
+    maModel.mbProtUsed   = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_PROT_USED );
+    maModel.mbBorderUsed = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_BORDER_USED );
+    maModel.mbAreaUsed   = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_AREA_USED );
 }
 
 void Xf::importXf( BiffInputStream& rStrm )
 {
-    BorderRef xBorder = getStyles().createBorder( &maOoxData.mnBorderId );
-    FillRef xFill = getStyles().createFill( &maOoxData.mnFillId );
+    BorderRef xBorder = getStyles().createBorder( &maModel.mnBorderId );
+    FillRef xFill = getStyles().createFill( &maModel.mnFillId );
 
     switch( getBiff() )
     {
@@ -2110,8 +2244,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             maProtection.setBiff2Data( nNumFmtId );
             xBorder->setBiff2Data( nFlags );
             xFill->setBiff2Data( nFlags );
-            maOoxData.mnFontId = static_cast< sal_Int32 >( nFontId );
-            maOoxData.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId & BIFF2_XF_VALFMT_MASK );
+            maModel.mnFontId = static_cast< sal_Int32 >( nFontId );
+            maModel.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId & BIFF2_XF_VALFMT_MASK );
         }
         break;
 
@@ -2123,8 +2257,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             rStrm >> nFontId >> nNumFmtId >> nTypeProt >> nAlign >> nArea >> nBorder;
 
             // XF type/parent
-            maOoxData.mbCellXf = !getFlag( nTypeProt, BIFF_XF_STYLE ); // new in BIFF3
-            maOoxData.mnStyleXfId = extractValue< sal_Int32 >( nAlign, 4, 12 ); // new in BIFF3
+            maModel.mbCellXf = !getFlag( nTypeProt, BIFF_XF_STYLE ); // new in BIFF3
+            maModel.mnStyleXfId = extractValue< sal_Int32 >( nAlign, 4, 12 ); // new in BIFF3
             // attribute used flags
             setBiffUsedFlags( extractValue< sal_uInt8 >( nTypeProt, 10, 6 ) ); // new in BIFF3
 
@@ -2133,8 +2267,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             maProtection.setBiff3Data( nTypeProt );
             xBorder->setBiff3Data( nBorder );
             xFill->setBiff3Data( nArea );
-            maOoxData.mnFontId = static_cast< sal_Int32 >( nFontId );
-            maOoxData.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId );
+            maModel.mnFontId = static_cast< sal_Int32 >( nFontId );
+            maModel.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId );
         }
         break;
 
@@ -2146,8 +2280,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             rStrm >> nFontId >> nNumFmtId >> nTypeProt >> nAlign >> nArea >> nBorder;
 
             // XF type/parent
-            maOoxData.mbCellXf = !getFlag( nTypeProt, BIFF_XF_STYLE );
-            maOoxData.mnStyleXfId = extractValue< sal_Int32 >( nTypeProt, 4, 12 );
+            maModel.mbCellXf = !getFlag( nTypeProt, BIFF_XF_STYLE );
+            maModel.mnStyleXfId = extractValue< sal_Int32 >( nTypeProt, 4, 12 );
             // attribute used flags
             setBiffUsedFlags( extractValue< sal_uInt8 >( nAlign, 10, 6 ) );
 
@@ -2156,8 +2290,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             maProtection.setBiff3Data( nTypeProt );
             xBorder->setBiff3Data( nBorder );
             xFill->setBiff3Data( nArea );
-            maOoxData.mnFontId = static_cast< sal_Int32 >( nFontId );
-            maOoxData.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId );
+            maModel.mnFontId = static_cast< sal_Int32 >( nFontId );
+            maModel.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId );
         }
         break;
 
@@ -2168,8 +2302,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             rStrm >> nFontId >> nNumFmtId >> nTypeProt >> nAlign >> nArea >> nBorder;
 
             // XF type/parent
-            maOoxData.mbCellXf = !getFlag( nTypeProt, BIFF_XF_STYLE );
-            maOoxData.mnStyleXfId = extractValue< sal_Int32 >( nTypeProt, 4, 12 );
+            maModel.mbCellXf = !getFlag( nTypeProt, BIFF_XF_STYLE );
+            maModel.mnStyleXfId = extractValue< sal_Int32 >( nTypeProt, 4, 12 );
             // attribute used flags
             setBiffUsedFlags( extractValue< sal_uInt8 >( nAlign, 10, 6 ) );
 
@@ -2178,8 +2312,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             maProtection.setBiff3Data( nTypeProt );
             xBorder->setBiff5Data( nBorder, nArea );
             xFill->setBiff5Data( nArea );
-            maOoxData.mnFontId = static_cast< sal_Int32 >( nFontId );
-            maOoxData.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId );
+            maModel.mnFontId = static_cast< sal_Int32 >( nFontId );
+            maModel.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId );
         }
         break;
 
@@ -2190,8 +2324,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             rStrm >> nFontId >> nNumFmtId >> nTypeProt >> nAlign >> nMiscAttrib >> nBorder1 >> nBorder2 >> nArea;
 
             // XF type/parent
-            maOoxData.mbCellXf = !getFlag( nTypeProt, BIFF_XF_STYLE );
-            maOoxData.mnStyleXfId = extractValue< sal_Int32 >( nTypeProt, 4, 12 );
+            maModel.mbCellXf = !getFlag( nTypeProt, BIFF_XF_STYLE );
+            maModel.mnStyleXfId = extractValue< sal_Int32 >( nTypeProt, 4, 12 );
             // attribute used flags
             setBiffUsedFlags( extractValue< sal_uInt8 >( nMiscAttrib, 10, 6 ) );
 
@@ -2200,8 +2334,8 @@ void Xf::importXf( BiffInputStream& rStrm )
             maProtection.setBiff3Data( nTypeProt );
             xBorder->setBiff8Data( nBorder1, nBorder2 );
             xFill->setBiff8Data( nBorder2, nArea );
-            maOoxData.mnFontId = static_cast< sal_Int32 >( nFontId );
-            maOoxData.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId );
+            maModel.mnFontId = static_cast< sal_Int32 >( nFontId );
+            maModel.mnNumFmtId = static_cast< sal_Int32 >( nNumFmtId );
         }
         break;
 
@@ -2215,46 +2349,53 @@ void Xf::finalizeImport()
     maAlignment.finalizeImport();
     maProtection.finalizeImport();
     // update used flags from cell style
-    if( maOoxData.mbCellXf )
-        if( const Xf* pStyleXf = getStyles().getStyleXf( maOoxData.mnStyleXfId ).get() )
+    if( maModel.mbCellXf )
+        if( const Xf* pStyleXf = getStyles().getStyleXf( maModel.mnStyleXfId ).get() )
             updateUsedFlags( *pStyleXf );
 }
 
 FontRef Xf::getFont() const
 {
-    return getStyles().getFont( maOoxData.mnFontId );
+    return getStyles().getFont( maModel.mnFontId );
 }
 
 bool Xf::hasAnyUsedFlags() const
 {
     return
-        maOoxData.mbAlignUsed || maOoxData.mbProtUsed || maOoxData.mbFontUsed ||
-        maOoxData.mbNumFmtUsed || maOoxData.mbBorderUsed || maOoxData.mbAreaUsed;
+        maModel.mbAlignUsed || maModel.mbProtUsed || maModel.mbFontUsed ||
+        maModel.mbNumFmtUsed || maModel.mbBorderUsed || maModel.mbAreaUsed;
 }
 
-void Xf::writeToPropertySet( PropertySet& rPropSet ) const
+void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     StylesBuffer& rStyles = getStyles();
 
     // create and set cell style
-    if( maOoxData.mbCellXf )
+    if( maModel.mbCellXf )
     {
-        const OUString& rStyleName = rStyles.createCellStyle( maOoxData.mnStyleXfId );
-        rPropSet.setProperty( CREATE_OUSTRING( "CellStyle" ), rStyleName );
+        const OUString& rStyleName = rStyles.createCellStyle( maModel.mnStyleXfId );
+        rPropMap[ PROP_CellStyle ] <<= rStyleName;
     }
 
-    if( maOoxData.mbFontUsed )
-        rStyles.writeFontToPropertySet( rPropSet, maOoxData.mnFontId );
-    if( maOoxData.mbNumFmtUsed )
-        rStyles.writeNumFmtToPropertySet( rPropSet, maOoxData.mnNumFmtId );
-    if( maOoxData.mbAlignUsed )
-        maAlignment.writeToPropertySet( rPropSet );
-    if( maOoxData.mbProtUsed )
-        maProtection.writeToPropertySet( rPropSet );
-    if( maOoxData.mbBorderUsed )
-        rStyles.writeBorderToPropertySet( rPropSet, maOoxData.mnBorderId );
-    if( maOoxData.mbAreaUsed )
-        rStyles.writeFillToPropertySet( rPropSet, maOoxData.mnFillId );
+    if( maModel.mbFontUsed )
+        rStyles.writeFontToPropertyMap( rPropMap, maModel.mnFontId );
+    if( maModel.mbNumFmtUsed )
+        rStyles.writeNumFmtToPropertyMap( rPropMap, maModel.mnNumFmtId );
+    if( maModel.mbAlignUsed )
+        maAlignment.writeToPropertyMap( rPropMap );
+    if( maModel.mbProtUsed )
+        maProtection.writeToPropertyMap( rPropMap );
+    if( maModel.mbBorderUsed )
+        rStyles.writeBorderToPropertyMap( rPropMap, maModel.mnBorderId );
+    if( maModel.mbAreaUsed )
+        rStyles.writeFillToPropertyMap( rPropMap, maModel.mnFillId );
+}
+
+void Xf::writeToPropertySet( PropertySet& rPropSet ) const
+{
+    PropertyMap aPropMap;
+    writeToPropertyMap( aPropMap );
+    rPropSet.setProperties( aPropMap );
 }
 
 void Xf::setBiffUsedFlags( sal_uInt8 nUsedFlags )
@@ -2263,15 +2404,15 @@ void Xf::setBiffUsedFlags( sal_uInt8 nUsedFlags )
         - In cell XFs a *set* bit means a used attribute.
         - In style XFs a *cleared* bit means a used attribute.
         The boolean flags always store true, if the attribute is used.
-        The "maOoxData.mbCellXf == getFlag(...)" construct evaluates to true in
+        The "maModel.mbCellXf == getFlag(...)" construct evaluates to true in
         both mentioned cases: cell XF and set bit; or style XF and cleared bit.
      */
-    maOoxData.mbFontUsed   = maOoxData.mbCellXf == getFlag( nUsedFlags, BIFF_XF_FONT_USED );
-    maOoxData.mbNumFmtUsed = maOoxData.mbCellXf == getFlag( nUsedFlags, BIFF_XF_NUMFMT_USED );
-    maOoxData.mbAlignUsed  = maOoxData.mbCellXf == getFlag( nUsedFlags, BIFF_XF_ALIGN_USED );
-    maOoxData.mbProtUsed   = maOoxData.mbCellXf == getFlag( nUsedFlags, BIFF_XF_PROT_USED );
-    maOoxData.mbBorderUsed = maOoxData.mbCellXf == getFlag( nUsedFlags, BIFF_XF_BORDER_USED );
-    maOoxData.mbAreaUsed   = maOoxData.mbCellXf == getFlag( nUsedFlags, BIFF_XF_AREA_USED );
+    maModel.mbFontUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_FONT_USED );
+    maModel.mbNumFmtUsed = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_NUMFMT_USED );
+    maModel.mbAlignUsed  = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_ALIGN_USED );
+    maModel.mbProtUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_PROT_USED );
+    maModel.mbBorderUsed = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_BORDER_USED );
+    maModel.mbAreaUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF_XF_AREA_USED );
 }
 
 void Xf::updateUsedFlags( const Xf& rStyleXf )
@@ -2281,19 +2422,19 @@ void Xf::updateUsedFlags( const Xf& rStyleXf )
         differ from the parent style XF.
         #109899# ...or if the respective flag is not set in parent style XF.
      */
-    const OoxXfData& rStyleData = rStyleXf.maOoxData;
-    if( !maOoxData.mbFontUsed )
-        maOoxData.mbFontUsed = !rStyleData.mbFontUsed || (maOoxData.mnFontId != rStyleData.mnFontId);
-    if( !maOoxData.mbNumFmtUsed )
-        maOoxData.mbNumFmtUsed = !rStyleData.mbNumFmtUsed || (maOoxData.mnNumFmtId != rStyleData.mnNumFmtId);
-    if( !maOoxData.mbAlignUsed )
-        maOoxData.mbAlignUsed = !rStyleData.mbAlignUsed || !(maAlignment.getApiData() == rStyleXf.maAlignment.getApiData());
-    if( !maOoxData.mbProtUsed )
-        maOoxData.mbProtUsed = !rStyleData.mbProtUsed || !(maProtection.getApiData() == rStyleXf.maProtection.getApiData());
-    if( !maOoxData.mbBorderUsed )
-        maOoxData.mbBorderUsed = !rStyleData.mbBorderUsed || (maOoxData.mnBorderId != rStyleData.mnBorderId);
-    if( !maOoxData.mbAreaUsed )
-        maOoxData.mbAreaUsed = !rStyleData.mbAreaUsed || (maOoxData.mnFillId != rStyleData.mnFillId);
+    const XfModel& rStyleData = rStyleXf.maModel;
+    if( !maModel.mbFontUsed )
+        maModel.mbFontUsed = !rStyleData.mbFontUsed || (maModel.mnFontId != rStyleData.mnFontId);
+    if( !maModel.mbNumFmtUsed )
+        maModel.mbNumFmtUsed = !rStyleData.mbNumFmtUsed || (maModel.mnNumFmtId != rStyleData.mnNumFmtId);
+    if( !maModel.mbAlignUsed )
+        maModel.mbAlignUsed = !rStyleData.mbAlignUsed || !(maAlignment.getApiData() == rStyleXf.maAlignment.getApiData());
+    if( !maModel.mbProtUsed )
+        maModel.mbProtUsed = !rStyleData.mbProtUsed || !(maProtection.getApiData() == rStyleXf.maProtection.getApiData());
+    if( !maModel.mbBorderUsed )
+        maModel.mbBorderUsed = !rStyleData.mbBorderUsed || (maModel.mnBorderId != rStyleData.mnBorderId);
+    if( !maModel.mbAreaUsed )
+        maModel.mbAreaUsed = !rStyleData.mbAreaUsed || (maModel.mnFillId != rStyleData.mnFillId);
 }
 
 // ============================================================================
@@ -2303,10 +2444,25 @@ Dxf::Dxf( const WorkbookHelper& rHelper ) :
 {
 }
 
-FontRef Dxf::importFont( const AttributeList& )
+FontRef Dxf::createFont( bool bAlwaysNew )
 {
-    createFont( true );
+    if( bAlwaysNew || !mxFont )
+        mxFont.reset( new Font( *this, true ) );
     return mxFont;
+}
+
+BorderRef Dxf::createBorder( bool bAlwaysNew )
+{
+    if( bAlwaysNew || !mxBorder )
+        mxBorder.reset( new Border( *this, true ) );
+    return mxBorder;
+}
+
+FillRef Dxf::createFill( bool bAlwaysNew )
+{
+    if( bAlwaysNew || !mxFill )
+        mxFill.reset( new Fill( *this, true ) );
+    return mxFill;
 }
 
 void Dxf::importNumFmt( const AttributeList& rAttribs )
@@ -2326,19 +2482,6 @@ void Dxf::importProtection( const AttributeList& rAttribs )
     mxProtection->importProtection( rAttribs );
 }
 
-BorderRef Dxf::importBorder( const AttributeList& rAttribs )
-{
-    createBorder( true );
-    mxBorder->importBorder( rAttribs );
-    return mxBorder;
-}
-
-FillRef Dxf::importFill( const AttributeList& )
-{
-    createFill( true );
-    return mxFill;
-}
-
 void Dxf::importDxf( RecordInputStream& rStrm )
 {
     sal_Int32 nNumFmtId = -1;
@@ -2354,28 +2497,28 @@ void Dxf::importDxf( RecordInputStream& rStrm )
         nRecEnd += nSubRecSize;
         switch( nSubRecId )
         {
-            case OOBIN_DXF_FILL_PATTERN:    createFill( false ); mxFill->importDxfPattern( rStrm );                         break;
-            case OOBIN_DXF_FILL_FGCOLOR:    createFill( false ); mxFill->importDxfFgColor( rStrm );                         break;
-            case OOBIN_DXF_FILL_BGCOLOR:    createFill( false ); mxFill->importDxfBgColor( rStrm );                         break;
-            case OOBIN_DXF_FILL_GRADIENT:   createFill( false ); mxFill->importDxfGradient( rStrm );                        break;
-            case OOBIN_DXF_FILL_STOP:       createFill( false ); mxFill->importDxfStop( rStrm );                            break;
-            case OOBIN_DXF_FONT_COLOR:      createFont( false ); mxFont->importDxfColor( rStrm );                           break;
-            case OOBIN_DXF_BORDER_TOP:      createBorder( false ); mxBorder->importDxfBorder( XLS_TOKEN( top ), rStrm );    break;
-            case OOBIN_DXF_BORDER_BOTTOM:   createBorder( false ); mxBorder->importDxfBorder( XLS_TOKEN( bottom ), rStrm ); break;
-            case OOBIN_DXF_BORDER_LEFT:     createBorder( false ); mxBorder->importDxfBorder( XLS_TOKEN( left ), rStrm );   break;
-            case OOBIN_DXF_BORDER_RIGHT:    createBorder( false ); mxBorder->importDxfBorder( XLS_TOKEN( right ), rStrm );  break;
-            case OOBIN_DXF_FONT_NAME:       createFont( false ); mxFont->importDxfName( rStrm );                            break;
-            case OOBIN_DXF_FONT_WEIGHT:     createFont( false ); mxFont->importDxfWeight( rStrm );                          break;
-            case OOBIN_DXF_FONT_UNDERLINE:  createFont( false ); mxFont->importDxfUnderline( rStrm );                       break;
-            case OOBIN_DXF_FONT_ESCAPEMENT: createFont( false ); mxFont->importDxfEscapement( rStrm );                      break;
-            case OOBIN_DXF_FONT_ITALIC:     createFont( false ); mxFont->importDxfFlag( XML_i, rStrm );                     break;
-            case OOBIN_DXF_FONT_STRIKE:     createFont( false ); mxFont->importDxfFlag( XML_strike, rStrm );                break;
-            case OOBIN_DXF_FONT_OUTLINE:    createFont( false ); mxFont->importDxfFlag( XML_outline, rStrm );               break;
-            case OOBIN_DXF_FONT_SHADOW:     createFont( false ); mxFont->importDxfFlag( XML_shadow, rStrm );                break;
-            case OOBIN_DXF_FONT_HEIGHT:     createFont( false ); mxFont->importDxfHeight( rStrm );                          break;
-            case OOBIN_DXF_FONT_SCHEME:     createFont( false ); mxFont->importDxfScheme( rStrm );                          break;
-            case OOBIN_DXF_NUMFMT_CODE:     aFmtCode = rStrm.readString( false );                                           break;
-            case OOBIN_DXF_NUMFMT_ID:       nNumFmtId = rStrm.readuInt16();                                                 break;
+            case OOBIN_DXF_FILL_PATTERN:    createFill( false )->importDxfPattern( rStrm );                         break;
+            case OOBIN_DXF_FILL_FGCOLOR:    createFill( false )->importDxfFgColor( rStrm );                         break;
+            case OOBIN_DXF_FILL_BGCOLOR:    createFill( false )->importDxfBgColor( rStrm );                         break;
+            case OOBIN_DXF_FILL_GRADIENT:   createFill( false )->importDxfGradient( rStrm );                        break;
+            case OOBIN_DXF_FILL_STOP:       createFill( false )->importDxfStop( rStrm );                            break;
+            case OOBIN_DXF_FONT_COLOR:      createFont( false )->importDxfColor( rStrm );                           break;
+            case OOBIN_DXF_BORDER_TOP:      createBorder( false )->importDxfBorder( XLS_TOKEN( top ), rStrm );      break;
+            case OOBIN_DXF_BORDER_BOTTOM:   createBorder( false )->importDxfBorder( XLS_TOKEN( bottom ), rStrm );   break;
+            case OOBIN_DXF_BORDER_LEFT:     createBorder( false )->importDxfBorder( XLS_TOKEN( left ), rStrm );     break;
+            case OOBIN_DXF_BORDER_RIGHT:    createBorder( false )->importDxfBorder( XLS_TOKEN( right ), rStrm );    break;
+            case OOBIN_DXF_FONT_NAME:       createFont( false )->importDxfName( rStrm );                            break;
+            case OOBIN_DXF_FONT_WEIGHT:     createFont( false )->importDxfWeight( rStrm );                          break;
+            case OOBIN_DXF_FONT_UNDERLINE:  createFont( false )->importDxfUnderline( rStrm );                       break;
+            case OOBIN_DXF_FONT_ESCAPEMENT: createFont( false )->importDxfEscapement( rStrm );                      break;
+            case OOBIN_DXF_FONT_ITALIC:     createFont( false )->importDxfFlag( XML_i, rStrm );                     break;
+            case OOBIN_DXF_FONT_STRIKE:     createFont( false )->importDxfFlag( XML_strike, rStrm );                break;
+            case OOBIN_DXF_FONT_OUTLINE:    createFont( false )->importDxfFlag( XML_outline, rStrm );               break;
+            case OOBIN_DXF_FONT_SHADOW:     createFont( false )->importDxfFlag( XML_shadow, rStrm );                break;
+            case OOBIN_DXF_FONT_HEIGHT:     createFont( false )->importDxfHeight( rStrm );                          break;
+            case OOBIN_DXF_FONT_SCHEME:     createFont( false )->importDxfScheme( rStrm );                          break;
+            case OOBIN_DXF_NUMFMT_CODE:     aFmtCode = rStrm.readString( false );                                   break;
+            case OOBIN_DXF_NUMFMT_ID:       nNumFmtId = rStrm.readuInt16();                                         break;
         }
         rStrm.seek( nRecEnd );
     }
@@ -2386,28 +2529,15 @@ void Dxf::importDxf( RecordInputStream& rStrm )
 void Dxf::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
 {
     if( getFlag( nFlags, BIFF_CFRULE_FONTBLOCK ) )
-    {
-        createFont( true );
-        mxFont->importCfRule( rStrm );
-    }
+        createFont()->importCfRule( rStrm );
     if( getFlag( nFlags, BIFF_CFRULE_ALIGNBLOCK ) )
-    {
         rStrm.skip( 8 );
-    }
     if( getFlag( nFlags, BIFF_CFRULE_BORDERBLOCK ) )
-    {
-        createBorder( true );
-        mxBorder->importCfRule( rStrm, nFlags );
-    }
+        createBorder()->importCfRule( rStrm, nFlags );
     if( getFlag( nFlags, BIFF_CFRULE_FILLBLOCK ) )
-    {
-        createFill( true );
-        mxFill->importCfRule( rStrm, nFlags );
-    }
+        createFill()->importCfRule( rStrm, nFlags );
     if( getFlag( nFlags, BIFF_CFRULE_PROTBLOCK ) )
-    {
         rStrm.skip( 2 );
-    }
 }
 
 void Dxf::finalizeImport()
@@ -2432,39 +2562,23 @@ const OUString& Dxf::createDxfStyle( sal_Int32 nDxfId )
         maFinalName = OUStringBuffer( CREATE_OUSTRING( "ConditionalStyle_" ) ).append( nDxfId + 1 ).makeStringAndClear();
         Reference< XStyle > xStyle = createStyleObject( maFinalName, false );
         // write style formatting properties
-        PropertySet aPropSet( xStyle );
+        PropertyMap aPropMap;
         if( mxFont.get() )
-            mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_CELL );
+            mxFont->writeToPropertyMap( aPropMap, FONT_PROPTYPE_CELL );
         if( mxNumFmt.get() )
-            mxNumFmt->writeToPropertySet( aPropSet );
+            mxNumFmt->writeToPropertyMap( aPropMap );
         if( mxAlignment.get() )
-            mxAlignment->writeToPropertySet( aPropSet );
+            mxAlignment->writeToPropertyMap( aPropMap );
         if( mxProtection.get() )
-            mxProtection->writeToPropertySet( aPropSet );
+            mxProtection->writeToPropertyMap( aPropMap );
         if( mxBorder.get() )
-            mxBorder->writeToPropertySet( aPropSet );
+            mxBorder->writeToPropertyMap( aPropMap );
         if( mxFill.get() )
-            mxFill->writeToPropertySet( aPropSet );
+            mxFill->writeToPropertyMap( aPropMap );
+        PropertySet aPropSet( xStyle );
+        aPropSet.setProperties( aPropMap );
     }
     return maFinalName;
-}
-
-void Dxf::createFont( bool bAlwaysNew )
-{
-    if( bAlwaysNew || !mxFont )
-        mxFont.reset( new Font( *this, true ) );
-}
-
-void Dxf::createBorder( bool bAlwaysNew )
-{
-    if( bAlwaysNew || !mxBorder )
-        mxBorder.reset( new Border( *this, true ) );
-}
-
-void Dxf::createFill( bool bAlwaysNew )
-{
-    if( bAlwaysNew || !mxFill )
-        mxFill.reset( new Fill( *this, true ) );
 }
 
 // ============================================================================
@@ -2670,7 +2784,7 @@ bool lclGetBuiltinStyleId( sal_Int32& rnBuiltinId, sal_Int32& rnLevel, const OUS
 
 // ----------------------------------------------------------------------------
 
-OoxCellStyleData::OoxCellStyleData() :
+CellStyleModel::CellStyleModel() :
     mnXfId( -1 ),
     mnBuiltinId( -1 ),
     mnLevel( 0 ),
@@ -2680,12 +2794,12 @@ OoxCellStyleData::OoxCellStyleData() :
 {
 }
 
-bool OoxCellStyleData::isDefaultStyle() const
+bool CellStyleModel::isDefaultStyle() const
 {
     return mbBuiltin && (mnBuiltinId == OOX_STYLE_NORMAL);
 }
 
-OUString OoxCellStyleData::createStyleName() const
+OUString CellStyleModel::createStyleName() const
 {
     return isBuiltin() ? lclGetBuiltinStyleName( mnBuiltinId, maName, mnLevel ) : maName;
 }
@@ -2699,56 +2813,56 @@ CellStyle::CellStyle( const WorkbookHelper& rHelper ) :
 
 void CellStyle::importCellStyle( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name, OUString() );
-    maOoxData.mnXfId = rAttribs.getInteger( XML_xfId, -1 );
-    maOoxData.mnBuiltinId = rAttribs.getInteger( XML_builtinId, -1 );
-    maOoxData.mnLevel = rAttribs.getInteger( XML_iLevel, 0 );
-    maOoxData.mbBuiltin = rAttribs.hasAttribute( XML_builtinId );
-    maOoxData.mbCustom = rAttribs.getBool( XML_customBuiltin, false );
-    maOoxData.mbHidden = rAttribs.getBool( XML_hidden, false );
+    maModel.maName      = rAttribs.getString( XML_name, OUString() );
+    maModel.mnXfId      = rAttribs.getInteger( XML_xfId, -1 );
+    maModel.mnBuiltinId = rAttribs.getInteger( XML_builtinId, -1 );
+    maModel.mnLevel     = rAttribs.getInteger( XML_iLevel, 0 );
+    maModel.mbBuiltin   = rAttribs.hasAttribute( XML_builtinId );
+    maModel.mbCustom    = rAttribs.getBool( XML_customBuiltin, false );
+    maModel.mbHidden    = rAttribs.getBool( XML_hidden, false );
 }
 
 void CellStyle::importCellStyle( RecordInputStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> maOoxData.mnXfId >> nFlags;
-    maOoxData.mnBuiltinId = rStrm.readuInt8();
-    maOoxData.mnLevel = rStrm.readuInt8();
-    rStrm >> maOoxData.maName;
-    maOoxData.mbBuiltin = getFlag( nFlags, OOBIN_CELLSTYLE_BUILTIN );
-    maOoxData.mbCustom = getFlag( nFlags, OOBIN_CELLSTYLE_CUSTOM );
-    maOoxData.mbHidden = getFlag( nFlags, OOBIN_CELLSTYLE_HIDDEN );
+    rStrm >> maModel.mnXfId >> nFlags;
+    maModel.mnBuiltinId = rStrm.readuInt8();
+    maModel.mnLevel = rStrm.readuInt8();
+    rStrm >> maModel.maName;
+    maModel.mbBuiltin = getFlag( nFlags, OOBIN_CELLSTYLE_BUILTIN );
+    maModel.mbCustom = getFlag( nFlags, OOBIN_CELLSTYLE_CUSTOM );
+    maModel.mbHidden = getFlag( nFlags, OOBIN_CELLSTYLE_HIDDEN );
 }
 
 void CellStyle::importStyle( BiffInputStream& rStrm )
 {
     sal_uInt16 nStyleXf;
     rStrm >> nStyleXf;
-    maOoxData.mnXfId = static_cast< sal_Int32 >( nStyleXf & BIFF_STYLE_XFMASK );
-    maOoxData.mbBuiltin = getFlag( nStyleXf, BIFF_STYLE_BUILTIN );
-    if( maOoxData.mbBuiltin )
+    maModel.mnXfId = static_cast< sal_Int32 >( nStyleXf & BIFF_STYLE_XFMASK );
+    maModel.mbBuiltin = getFlag( nStyleXf, BIFF_STYLE_BUILTIN );
+    if( maModel.mbBuiltin )
     {
-        maOoxData.mnBuiltinId = rStrm.readuInt8();
-        maOoxData.mnLevel = rStrm.readuInt8();
+        maModel.mnBuiltinId = rStrm.readuInt8();
+        maModel.mnLevel = rStrm.readuInt8();
     }
     else
     {
-        maOoxData.maName = (getBiff() == BIFF8) ?
+        maModel.maName = (getBiff() == BIFF8) ?
             rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
     }
 }
 
 const OUString& CellStyle::createCellStyle( sal_Int32 nXfId, bool bSkipDefaultBuiltin )
 {
-    if( maFinalName.getLength() == 0 )
+    if( maCalcName.getLength() == 0 )
     {
-        bool bBuiltin = maOoxData.isBuiltin();
-        if( !bSkipDefaultBuiltin || !bBuiltin || maOoxData.mbCustom )
+        bool bBuiltin = maModel.isBuiltin();
+        if( !bSkipDefaultBuiltin || !bBuiltin || maModel.mbCustom )
         {
             // name of the style (generate unique name for builtin styles)
-            maFinalName = maOoxData.createStyleName();
+            maCalcName = maModel.createStyleName();
             // #i1624# #i1768# ignore unnamed user styles
-            if( maFinalName.getLength() > 0 )
+            if( maCalcName.getLength() > 0 )
             {
                 Reference< XStyle > xStyle;
 #if OOX_XLS_USE_DEFAULT_STYLE
@@ -2760,19 +2874,17 @@ const OUString& CellStyle::createCellStyle( sal_Int32 nXfId, bool bSkipDefaultBu
                     if( Xf* pXf = getStyles().getStyleXf( nXfId ).get() )
                         pXf->setAllUsedFlags( true );
                     // use existing built-in style
-                    xStyle = getStyleObject( maFinalName, false );
+                    xStyle = getStyleObject( maCalcName, false );
                 }
                 else
-                {
 #endif
+                {
                     /*  Insert into cell styles collection, rename existing user styles,
                         if this is a built-in style, but do not do this in BIFF4 workspace
                         files, where built-in styles occur repeatedly. */
                     bool bRenameExisting = bBuiltin && (getBiff() != BIFF4);
-                    xStyle = createStyleObject( maFinalName, false, bRenameExisting );
-#if OOX_XLS_USE_DEFAULT_STYLE
+                    xStyle = createStyleObject( maCalcName, false, bRenameExisting );
                 }
-#endif
 
                 // write style formatting properties
                 PropertySet aPropSet( xStyle );
@@ -2785,7 +2897,7 @@ const OUString& CellStyle::createCellStyle( sal_Int32 nXfId, bool bSkipDefaultBu
             }
         }
     }
-    return maFinalName;
+    return maCalcName;
 }
 
 // ============================================================================
@@ -2857,48 +2969,9 @@ void StylesBuffer::importPaletteColor( const AttributeList& rAttribs )
     maPalette.importPaletteColor( rAttribs );
 }
 
-FontRef StylesBuffer::importFont( const AttributeList& )
-{
-    return createFont();
-}
-
 NumberFormatRef StylesBuffer::importNumFmt( const AttributeList& rAttribs )
 {
     return maNumFmts.importNumFmt( rAttribs );
-}
-
-BorderRef StylesBuffer::importBorder( const AttributeList& rAttribs )
-{
-    BorderRef xBorder = createBorder();
-    xBorder->importBorder( rAttribs );
-    return xBorder;
-}
-
-FillRef StylesBuffer::importFill( const AttributeList& )
-{
-    return createFill();
-}
-
-XfRef StylesBuffer::importXf( sal_Int32 nContext, const AttributeList& rAttribs )
-{
-    XfRef xXf;
-    switch( nContext )
-    {
-        case XLS_TOKEN( cellXfs ):
-            xXf = createCellXf();
-            xXf->importXf( rAttribs, true );
-        break;
-        case XLS_TOKEN( cellStyleXfs ):
-            xXf = createStyleXf();
-            xXf->importXf( rAttribs, false );
-        break;
-    }
-    return xXf;
-}
-
-DxfRef StylesBuffer::importDxf( const AttributeList& )
-{
-    return createDxf();
 }
 
 CellStyleRef StylesBuffer::importCellStyle( const AttributeList& rAttribs )
@@ -2914,42 +2987,9 @@ void StylesBuffer::importPaletteColor( RecordInputStream& rStrm )
     maPalette.importPaletteColor( rStrm );
 }
 
-void StylesBuffer::importFont( RecordInputStream& rStrm )
-{
-    createFont()->importFont( rStrm );
-}
-
 void StylesBuffer::importNumFmt( RecordInputStream& rStrm )
 {
     maNumFmts.importNumFmt( rStrm );
-}
-
-void StylesBuffer::importBorder( RecordInputStream& rStrm )
-{
-    createBorder()->importBorder( rStrm );
-}
-
-void StylesBuffer::importFill( RecordInputStream& rStrm )
-{
-    createFill()->importFill( rStrm );
-}
-
-void StylesBuffer::importXf( sal_Int32 nContext, RecordInputStream& rStrm )
-{
-    switch( nContext )
-    {
-        case OOBIN_ID_CELLXFS:
-            createCellXf()->importXf( rStrm, true );
-        break;
-        case OOBIN_ID_CELLSTYLEXFS:
-            createStyleXf()->importXf( rStrm, false );
-        break;
-    }
-}
-
-void StylesBuffer::importDxf( RecordInputStream& rStrm )
-{
-    createDxf()->importDxf( rStrm );
 }
 
 void StylesBuffer::importCellStyle( RecordInputStream& rStrm )
@@ -3016,7 +3056,7 @@ void StylesBuffer::finalizeImport()
 {
     // fonts first, are needed to finalize unit converter and XFs below
     maFonts.forEachMem( &Font::finalizeImport );
-    // finalize unit converter after default font is known
+    // finalize unit coefficients after default font is known
     getUnitConverter().finalizeImport();
     // number formats
     maNumFmts.finalizeImport();
@@ -3091,10 +3131,10 @@ FontRef StylesBuffer::getDefaultFont() const
     return xDefFont;
 }
 
-const OoxFontData& StylesBuffer::getDefaultFontData() const
+const FontModel& StylesBuffer::getDefaultFontModel() const
 {
     FontRef xDefFont = getDefaultFont();
-    return xDefFont.get() ? xDefFont->getFontData() : getTheme().getDefaultFontData();
+    return xDefFont.get() ? xDefFont->getModel() : getTheme().getDefaultFontModel();
 }
 
 const OUString& StylesBuffer::createCellStyle( sal_Int32 nXfId ) const
@@ -3121,27 +3161,39 @@ const OUString& StylesBuffer::getDefaultStyleName() const
 }
 #endif
 
-void StylesBuffer::writeFontToPropertySet( PropertySet& rPropSet, sal_Int32 nFontId ) const
+void StylesBuffer::writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const
 {
     if( Font* pFont = maFonts.get( nFontId ).get() )
-        pFont->writeToPropertySet( rPropSet, FONT_PROPTYPE_CELL );
+        pFont->writeToPropertyMap( rPropMap, FONT_PROPTYPE_CELL );
 }
 
-void StylesBuffer::writeNumFmtToPropertySet( PropertySet& rPropSet, sal_Int32 nNumFmtId ) const
+void StylesBuffer::writeNumFmtToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const
 {
-    maNumFmts.writeToPropertySet( rPropSet, nNumFmtId );
+    maNumFmts.writeToPropertyMap( rPropMap, nNumFmtId );
 }
 
-void StylesBuffer::writeBorderToPropertySet( PropertySet& rPropSet, sal_Int32 nBorderId ) const
+void StylesBuffer::writeBorderToPropertyMap( PropertyMap& rPropMap, sal_Int32 nBorderId ) const
 {
     if( Border* pBorder = maBorders.get( nBorderId ).get() )
-        pBorder->writeToPropertySet( rPropSet );
+        pBorder->writeToPropertyMap( rPropMap );
 }
 
-void StylesBuffer::writeFillToPropertySet( PropertySet& rPropSet, sal_Int32 nFillId ) const
+void StylesBuffer::writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const
 {
     if( Fill* pFill = maFills.get( nFillId ).get() )
-        pFill->writeToPropertySet( rPropSet );
+        pFill->writeToPropertyMap( rPropMap );
+}
+
+void StylesBuffer::writeCellXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const
+{
+    if( Xf* pXf = maCellXfs.get( nXfId ).get() )
+        pXf->writeToPropertyMap( rPropMap );
+}
+
+void StylesBuffer::writeStyleXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const
+{
+    if( Xf* pXf = maStyleXfs.get( nXfId ).get() )
+        pXf->writeToPropertyMap( rPropMap );
 }
 
 void StylesBuffer::writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const
