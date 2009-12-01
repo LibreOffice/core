@@ -169,6 +169,13 @@ template< typename T >
                  ::std::back_inserter( rDestination ));
 }
 
+template< typename T >
+    void lcl_SequenceToVector( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
+{
+    rDestination.clear();
+    lcl_SequenceToVectorAppend( rSource, rDestination );
+}
+
 Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )
 {
     Reference< chart2::data::XLabeledDataSequence >  xResult;
@@ -472,30 +479,6 @@ sal_Int32 lcl_getMaxSequenceLength(
     return nResult;
 }
 
-void lcl_fillCategoriesIntoStringVector(
-    const Reference< chart2::data::XDataSequence > & xCategories,
-    ::std::vector< OUString > & rOutCategories )
-{
-    OSL_ASSERT( xCategories.is());
-    if( !xCategories.is())
-        return;
-    Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xCategories, uno::UNO_QUERY );
-    if( xTextualDataSequence.is())
-    {
-        rOutCategories.clear();
-        Sequence< OUString > aTextData( xTextualDataSequence->getTextualData());
-        ::std::copy( aTextData.getConstArray(), aTextData.getConstArray() + aTextData.getLength(),
-                     ::std::back_inserter( rOutCategories ));
-    }
-    else
-    {
-        Sequence< uno::Any > aAnies( xCategories->getData());
-        rOutCategories.resize( aAnies.getLength());
-        for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
-            aAnies[i] >>= rOutCategories[i];
-    }
-}
-
 double lcl_getValueFromSequence( const Reference< chart2::data::XDataSequence > & xSeq, sal_Int32 nIndex )
 {
     double fResult = 0.0;
@@ -598,39 +581,29 @@ typedef ::std::map< sal_Int32, SchXMLExportHelper::tLabelValuesDataPair >
 struct lcl_SequenceToMapElement :
     public ::std::unary_function< lcl_DataSequenceMap::mapped_type, lcl_DataSequenceMap::value_type >
 {
-    lcl_SequenceToMapElement( sal_Int32 nOffset = 0 ) :
-            m_nOffset( nOffset )
+    lcl_SequenceToMapElement()
     {}
     result_type operator() ( const argument_type & rContent )
     {
         sal_Int32 nIndex = -1;
-        if( rContent.second.is())
+        if( rContent.second.is()) //has values
         {
             OUString aRangeRep( rContent.second->getSourceRangeRepresentation());
-            if( aRangeRep.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("categories")))
-            {
-                OSL_ASSERT( m_nOffset > 0 );
-                nIndex = 0;
-            }
-            else
-                nIndex = aRangeRep.toInt32() + m_nOffset;
+            nIndex = aRangeRep.toInt32();
         }
-        else if( rContent.first.is())
-            nIndex = rContent.first->getSourceRangeRepresentation().copy( sizeof("label ")).toInt32() + m_nOffset;
+        else if( rContent.first.is()) //has labels
+            nIndex = rContent.first->getSourceRangeRepresentation().copy( sizeof("label ")).toInt32();
         return result_type( nIndex, rContent );
     }
-private:
-    sal_Int32 m_nOffset;
 };
 
-void lcl_PrepareInternalSequencesForTableExport(
-    SchXMLExportHelper::tDataSequenceCont & rInOutSequences, bool bHasCategories )
+void lcl_ReorderInternalSequencesAccordingToTheirRangeName(
+    SchXMLExportHelper::tDataSequenceCont & rInOutSequences )
 {
     lcl_DataSequenceMap aIndexSequenceMap;
-    const sal_Int32 nOffset = bHasCategories ? 1 : 0;
     ::std::transform( rInOutSequences.begin(), rInOutSequences.end(),
                       ::std::inserter( aIndexSequenceMap, aIndexSequenceMap.begin()),
-                      lcl_SequenceToMapElement( nOffset ));
+                      lcl_SequenceToMapElement());
 
     rInOutSequences.clear();
     sal_Int32 nIndex = 0;
@@ -650,7 +623,9 @@ void lcl_PrepareInternalSequencesForTableExport(
 
 
 lcl_TableData lcl_getDataForLocalTable(
-    const SchXMLExportHelper::tDataSequenceCont & aPassedSequences, bool bHasCategoryLabels,
+    const SchXMLExportHelper::tDataSequenceCont & aPassedSequences,
+    const Sequence< OUString >& rInputCategories,
+    const OUString& rCategoriesRange,
     bool bSwap,
     bool bHasOwnData,
     const Reference< chart2::data::XRangeXMLConversion > & xRangeConversion )
@@ -659,21 +634,15 @@ lcl_TableData lcl_getDataForLocalTable(
 
     SchXMLExportHelper::tDataSequenceCont aSequencesToExport( aPassedSequences );
     if( bHasOwnData )
-        lcl_PrepareInternalSequencesForTableExport( aSequencesToExport, bHasCategoryLabels );
+        lcl_ReorderInternalSequencesAccordingToTheirRangeName( aSequencesToExport );
 
     SchXMLExportHelper::tDataSequenceCont::size_type nNumSequences = aSequencesToExport.size();
     SchXMLExportHelper::tDataSequenceCont::const_iterator aBegin( aSequencesToExport.begin());
     SchXMLExportHelper::tDataSequenceCont::const_iterator aEnd( aSequencesToExport.end());
     SchXMLExportHelper::tDataSequenceCont::const_iterator aIt( aBegin );
 
-    if( bHasCategoryLabels )
-    {
-        if( nNumSequences>=1 ) //#i83537#
-            --nNumSequences;
-        else
-            bHasCategoryLabels=false;
-    }
     size_t nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
+    nMaxSequenceLength = std::max( nMaxSequenceLength, size_t( rInputCategories.getLength() ) );
     size_t nNumColumns( bSwap ? nMaxSequenceLength : nNumSequences );
     size_t nNumRows( bSwap ? nNumSequences : nMaxSequenceLength );
 
@@ -691,29 +660,17 @@ lcl_TableData lcl_getDataForLocalTable(
     lcl_TableData::tStringContainer & rLabels =
         (bSwap ? aResult.aFirstColumnStrings : aResult.aFirstRowStrings );
 
-    if( aIt != aEnd )
+    //categories
+    lcl_SequenceToVector( rInputCategories, rCategories );
+    if(rCategoriesRange.getLength())
     {
-        if( bHasCategoryLabels )
-        {
-            lcl_fillCategoriesIntoStringVector( aIt->second, rCategories );
-            if( aIt->second.is())
-            {
-                OUString aRange( aIt->second->getSourceRangeRepresentation());
-                if( xRangeConversion.is())
-                    aRange = xRangeConversion->convertRangeToXML( aRange );
-                if( bSwap )
-                    aResult.aFirstRowRangeRepresentations.push_back( aRange );
-                else
-                    aResult.aFirstColumnRangeRepresentations.push_back( aRange );
-            }
-            ++aIt;
-        }
+        OUString aRange(rCategoriesRange);
+        if( xRangeConversion.is())
+            aRange = xRangeConversion->convertRangeToXML( aRange );
+        if( bSwap )
+            aResult.aFirstRowRangeRepresentations.push_back( aRange );
         else
-        {
-            // autogenerated categories
-            rCategories.clear();
-            lcl_SequenceToVectorAppend( aIt->second->generateLabel( chart2::data::LabelOrigin_LONG_SIDE ), rCategories );
-        }
+            aResult.aFirstColumnRangeRepresentations.push_back( aRange );
     }
 
     // iterate over all sequences
@@ -1453,8 +1410,25 @@ void SchXMLExportHelper::exportTable()
         xRangeConversion.set( xNewDoc->getDataProvider(), uno::UNO_QUERY );
     }
 
+    Sequence< OUString > aCategories;
+    if(mbHasCategoryLabels)
+    {
+        //ensure correct strings even for complex hierarchical categories
+        Reference< chart::XChartDocument > xChartDoc( mrExport.GetModel(), uno::UNO_QUERY );
+        if( xChartDoc.is() )
+        {
+            Reference< chart::XChartDataArray > xData( xChartDoc->getData(), uno::UNO_QUERY );
+            if(xData.is())
+            {
+                if( mbRowSourceColumns )
+                    aCategories = xData->getRowDescriptions();
+                else
+                    aCategories = xData->getColumnDescriptions();
+            }
+        }
+    }
     lcl_TableData aData( lcl_getDataForLocalTable(
-                             m_aDataSequencesToExport, mbHasCategoryLabels, !mbRowSourceColumns, bHasOwnData, xRangeConversion ));
+                             m_aDataSequencesToExport, aCategories, maCategoriesRange, !mbRowSourceColumns, bHasOwnData, xRangeConversion ));
 
     lcl_TableData::tStringContainer::const_iterator aDataRangeIter( aData.aDataRangeRepresentations.begin());
     const lcl_TableData::tStringContainer::const_iterator aDataRangeEndIter( aData.aDataRangeRepresentations.end());
@@ -2098,7 +2072,7 @@ void SchXMLExportHelper::exportAxes(
                         {
                             Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
                             aCategoriesRange = lcl_ConvertRange( xValues->getSourceRangeRepresentation(), xNewDoc );
-                            m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, xValues ));
+                            maCategoriesRange = aCategoriesRange;
                         }
                     }
                 }

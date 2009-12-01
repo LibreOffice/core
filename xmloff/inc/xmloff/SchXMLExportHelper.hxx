@@ -117,6 +117,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
 
     tDataSequenceCont m_aDataSequencesToExport;
+    rtl::OUString maCategoriesRange;
 
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
