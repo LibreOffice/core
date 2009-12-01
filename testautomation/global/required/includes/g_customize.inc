@@ -147,7 +147,7 @@ testcase tToolsCustomize
         if Messagebox.exists (5) then
             if Messagebox.GetRT = 304 then
                 printlog "Messagebox: Menu configuration will be reset...: '"+Messagebox.getText+"'"
-                call dialogtest2(Messagebox, 50)
+                call DialogTest(Messagebox, 50)
                 Messagebox.yes
             endif
         endif
@@ -244,7 +244,7 @@ testcase tToolsCustomize
         if Messagebox.exists (5) then
             if Messagebox.GetRT = 304 then
                 printlog "Messagebox: Menu configuration will be reset...: '"+Messagebox.getText+"'"
-                call dialogtest2(Messagebox, 50)
+                call DialogTest(Messagebox, 50)
                 Messagebox.no
             endif
         endif
@@ -260,7 +260,7 @@ testcase tToolsCustomize
         if Messagebox.exists (5) then
             if Messagebox.GetRT = 304 then
                 printlog "Messagebox: Toolbar configuration will be reset...: '"+Messagebox.getText+"'"
-                call dialogtest2(Messagebox, 50)
+                call DialogTest(Messagebox, 50)
                 Messagebox.no
             endif
         endif

@@ -273,7 +273,7 @@ testcase i75027
     Dim sClipBrd() as string
     Dim bNumberingError as boolean
 
-    gApplication   = "HTMLDOKUMENT"
+    gApplication   = "HTML"
     '/// New HTML Document
     Call hNewDocument
     '/// type 'This<BR>is<BR>a numbering<BR>test'

@@ -373,7 +373,7 @@ testcase tiTextToolbar
         ViewToolbarsTextFormatting
         WaitSlot (2000)    'sleep 1
     '/// Clear the document from content ///'
-    if (lcase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
         Kontext "DocumentImpressOutlineView"
             DocumentImpressOutlineView.TypeKeys "<ESCAPE>"
             EditSelectAll

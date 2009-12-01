@@ -112,7 +112,7 @@ testcase tInsertFloatingFrame
 
    dim iWaitIndex as integer
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -173,7 +173,7 @@ testcase tInsertFields
    dim sFile as string
    dim i as integer
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -346,7 +346,7 @@ testcase tdInsertSnapPoint_Line
         printlog " select Grid tab page in application "
         Select Case Ucase(gApplication)
             case "DRAW"         :    hToolsOptions ("Drawing","GRID")
-            case "IMPRESS"     :    hToolsOptions ("Presentation","GRID")
+            case "IMPRESS"     :    hToolsOptions ("IMPRESS","GRID")
         end select
         sGridArea = fangenFangBereich.GetText
         printlog " set metric field 'Snap Range' to Maximum "
@@ -486,7 +486,7 @@ testcase tdInsertSnapPoint_Line
     ToolsOptions
         Select Case Ucase(gApplication)
             case "DRAW"         :    hToolsOptions ("Drawing","GRID")
-            case "IMPRESS"      :    hToolsOptions ("Presentation","GRID")
+            case "IMPRESS"      :    hToolsOptions ("IMPRESS","GRID")
         end select
         fangenFangBereich.SetText sGridArea
         Kontext "ExtrasOptionenDlg"
@@ -505,7 +505,7 @@ testcase tdInsertFile
    dim i as integer
    dim iCut as integer
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"

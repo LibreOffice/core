@@ -267,7 +267,7 @@ testcase tCollectSaveAsFilter
          case 2: gApplication = "CALC"
          case 3: gApplication = "IMPRESS"
          case 4: gApplication = "DRAW"
-         case 5: gApplication = "GLOBALDOC"
+         case 5: gApplication = "MASTERDOCUMENT"
          case 6: gApplication = "MATH"
          case 7: gApplication = "HTML"
       end select
@@ -330,7 +330,7 @@ testcase tCollectExportFilters
          case 2: gApplication = "CALC"
          case 3: gApplication = "IMPRESS"
          case 4: gApplication = "DRAW"
-         case 5: gApplication = "GLOBALDOC"
+         case 5: gApplication = "MASTERDOCUMENT"
          case 6: gApplication = "MATH"
          case 7: gApplication = "HTML"
       end select

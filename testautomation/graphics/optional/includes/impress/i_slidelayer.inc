@@ -378,7 +378,7 @@ testcase t114174
     dim i as integer
     dim sFile as string
     
-    if lCase(gApplication) = "impress" then 
+    if gApplication = "IMPRESS" then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"

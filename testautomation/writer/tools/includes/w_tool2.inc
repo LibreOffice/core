@@ -1,6 +1,6 @@
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ sub OptionenAufrufen(Seite as string)
     next i
     Kontext
     Select case Seite
-        case "TabErsetzung"   : active.SetPage TabErsetzung
-        case "TabAusnahmen"   : active.SetPage TabAusnahmen
-        case "TabOptionen"    : active.SetPage TabOptionen
-        case "TabTypografisch": active.SetPage TabTypografisch
+    case "TabErsetzung"   : active.SetPage TabErsetzung
+    case "TabAusnahmen"   : active.SetPage TabAusnahmen
+    case "TabOptionen"    : active.SetPage TabOptionen
+    case "TabTypografisch": active.SetPage TabTypografisch
     end select
     for i = 1 to 5
         Kontext "Active"
@@ -129,14 +129,14 @@ end sub
 ' -----------------------------------------------------------------------------
 
 function wCreateAutotextCategory(vCategoryName as string) as boolean
-    Dim i as integer, bCategoryExist as boolean    
+    Dim i as integer, bCategoryExist as boolean
     '/// This function creates an autotext-category
     '/// requires CategoryName to create
     '/// returns true if category could be created
     '/// Attention: Autotext-Dialog leaves open after creating category
     Kontext "Autotext"
     if Not Autotext.Exists then EditAutotext
-    
+
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then
@@ -144,10 +144,10 @@ function wCreateAutotextCategory(vCategoryName as string) as boolean
             Active.Ok
         end if
     end if
-    
+
     Kontext "Autotext"
     try
-        Bereiche.Click        
+        Bereiche.Click
         Kontext "Active"
         if Active.Exists then
             if Active.GetRT = 304 then
@@ -156,73 +156,73 @@ function wCreateAutotextCategory(vCategoryName as string) as boolean
             end if
         end if
     catch
-       Warnlog "Button 'Categories' is disabled!"
-       goto NotPassed
+        Warnlog "Button 'Categories' is disabled!"
+        exit function
     endcatch
-    
-    wait 500
+
     Kontext "BereicheBearbeitenAutotext"
-    if Not BereicheBearbeitenAutotext.Exists then goto NotPassed
-    
-    Liste.TypeKeys "<Home>"
-    For i = 1 to Liste.GetItemCount
-        if Liste.GetText = vCategoryName then
-            QAErrorlog "Category " & vCategoryName & " already existing"
-            bCategoryExist = true
-            exit for
-        end if
-    next i
-    
-    if bCategoryExist = false then
-		for i = 1 to Pfad.GetItemCount        
-			Pfad.Select i
-			Bereich.Settext vCategoryName
-			try
-            	Neu.Click
-				exit for
-			catch
-				if i = Pfad.GetItemCount then
-					Warnlog "Unable to create new category"
-					BereicheBearbeitenAutotext.Close
-					goto NotPassed				
-				end if
-			endcatch
-		next i
-        
-        if Liste.GetText <> vCategoryName then
-            Warnlog "New category is not selected after creation"        
-            try
-                Liste.Select vCategoryName
+    if ( BereicheBearbeitenAutotext.Exists( 1 ) ) then
+
+        Liste.TypeKeys "<Home>"
+        For i = 1 to Liste.GetItemCount
+            if Liste.GetText = vCategoryName then
+                QAErrorlog "Category " & vCategoryName & " already existing"
+                bCategoryExist = true
+                exit for
+            end if
+        next i
+
+        if bCategoryExist = false then
+            for i = 1 to Pfad.GetItemCount
+                Pfad.Select i
+                Bereich.Settext vCategoryName
+                try
+                    Neu.Click
+                    exit for
+                catch
+                    if i = Pfad.GetItemCount then
+                        Warnlog "Unable to create new category"
+                        BereicheBearbeitenAutotext.Close
+                        exit function
+                    end if
+                endcatch
+            next i
+
+            if Liste.GetText <> vCategoryName then
+                Warnlog "New category is not selected after creation"
+                try
+                    Liste.Select vCategoryName
+                    wCreateAutotextCategory = true
+                catch
+                    exit function
+                endcatch
+            else
                 wCreateAutotextCategory = true
-            catch
-                goto NotPassed
-            endcatch
+            end if
         else
             wCreateAutotextCategory = true
         end if
-    else
-        wCreateAutotextCategory = true
-    end if
-    
-    Sleep 1
-    BereicheBearbeitenAutotext.Ok      
 
-    Kontext "Active"
-    if Active.Exists then
-        if Active.GetRT = 304 then
-            QAErrorlog Active.Gettext
-            Active.Ok
+        BereicheBearbeitenAutotext.Ok
+
+        Kontext "Active"
+        if Active.Exists then
+            if Active.GetRT = 304 then
+                QAErrorlog Active.Gettext
+                Active.Ok
+            end if
         end if
-    end if    
-    
-    NotPassed:
+
+    else
+        warnlog( "Dialog <BereicheBearbeitenAutotext> is not available" )
+    endif
 
 end function
 
 ' -----------------------------------------------------------------------------
 
 function wSelectAutotextCategory(vCategoryName as string) as boolean
-    Dim i as integer    
+    Dim i as integer
     '/// This function selects an autotext-category
     '/// requires CategoryName to select
     '/// returns true if category could be selected
@@ -236,7 +236,7 @@ function wSelectAutotextCategory(vCategoryName as string) as boolean
             QAErrorlog Active.Gettext
             Active.Ok
         end if
-    end if    
+    end if
     '/// close all categories
     Kontext "Autotext"
     Liste.Select 1
@@ -252,16 +252,16 @@ function wSelectAutotextCategory(vCategoryName as string) as boolean
             Liste.TypeKeys "<Down>"
             wait 500
         end if
-    next i    
-    
+    next i
+
     if Liste.Gettext =  vCategoryName then wSelectAutotextCategory = true
 
-end function    
+end function
 
 ' -----------------------------------------------------------------------------
 
 function wDeleteAutotextCategory(vCategoryName as string) as boolean
-    Dim i as integer    
+    Dim i as integer
     '/// This function deletes an autotext-category
     '/// requires CategoryName to delete
     '/// returns true if category could be deleted
@@ -276,11 +276,11 @@ function wDeleteAutotextCategory(vCategoryName as string) as boolean
             Active.Ok
         end if
     end if
-    
+
     Kontext "Autotext"
     try
         Bereiche.Click
-        
+
         Kontext "Active"
         if Active.Exists then
             if Active.GetRT = 304 then
@@ -290,32 +290,32 @@ function wDeleteAutotextCategory(vCategoryName as string) as boolean
         end if
 
     catch
-       Warnlog "Button 'Categories' is disabled!"
-       goto NotPassed
+        Warnlog "Button 'Categories' is disabled!"
+        exit function
     endcatch
-    
+
     wait 500
     Kontext "BereicheBearbeitenAutotext"
-    if Not BereicheBearbeitenAutotext.Exists then goto NotPassed
-    
+    if Not BereicheBearbeitenAutotext.Exists then exit function
+
     Liste.TypeKeys "<Home>"
     for i=1 to 10
         if Liste.Gettext <>  vCategoryName then
             Liste.TypeKeys "<Down>"
             wait 500
         end if
-    next i    
-    
-    if Liste.Gettext = vCategoryName then    
+    next i
+
+    if Liste.Gettext = vCategoryName then
         try
-            Loeschen.Click    
+            Loeschen.Click
         catch
-            goto NotPassed
+            exit function
             BereicheBearbeitenAutotext.Close
-        endcatch           
+        endcatch
     end if
     BereicheBearbeitenAutotext.Ok
-    
+
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then
@@ -337,8 +337,6 @@ function wDeleteAutotextCategory(vCategoryName as string) as boolean
         end if
     end if
 
-    NotPassed:
-
 end function
 
 '----------------------------------------------------------------------
@@ -348,7 +346,7 @@ function wDeleteAutotext(vAutotextName as string) as boolean
     '/// requires AutotextName to delete
     '/// returns true if Autotext could be deleted
     '/// Attention: Autotext-Dialog leaves open after deleting autotext
-    
+
     Dim j as integer, sAll as integer
     Kontext "Autotext"
     if Not Autotext.Exists then EditAutotext
@@ -360,8 +358,8 @@ function wDeleteAutotext(vAutotextName as string) as boolean
             Active.Ok
         end if
     end if
-    
-    Kontext "Autotext"            
+
+    Kontext "Autotext"
     Liste.Select 1
     for j=1 to 10
         Liste.TypeKeys "-"
@@ -373,7 +371,7 @@ function wDeleteAutotext(vAutotextName as string) as boolean
     Liste.TypeKeys "+"
     sAll = Liste.GetItemCount
     For j = 1 to sAll
-        Liste.TypeKeys "<Down>"        
+        Liste.TypeKeys "<Down>"
         if Liste.Gettext = vAutotextName then
             try
                 Menue.Click

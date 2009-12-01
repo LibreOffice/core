@@ -35,12 +35,6 @@
 '*
 '* short description : Global Tools III
 '*
-'***************************************************************************************
-'*
-' #1 hToolbarSelect                   ' opens/closes a toolbar through View/Toolbar menu
-' #1 hCloseAllToolbars                ' light implementation of i38796
-' #0 hIsAccessBridgeInstalled         ' Find out whether the access bridge is installed
-'*
 '\*************************************************************************************
 
 
@@ -821,7 +815,7 @@ sub hToolbarSelect( sType as string, sOpen as boolean, optional SetToDefault as 
             endif
             
                 
-        case "FORMULA"
+        case "MATH"
             Kontext "OL_SW_Rechenleiste"
             if OL_SW_Rechenleiste.Exists then
                 Select Case sOpen

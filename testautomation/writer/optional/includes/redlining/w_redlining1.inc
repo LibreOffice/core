@@ -84,7 +84,7 @@ testcase tRedlining_1
 
   '/// Tools / Options / Textdocument / Changes
    ToolsOptions
-   Call hToolsOptions("TEXTDOCUMENT","CHANGES")
+   Call hToolsOptions("WRITER","CHANGES")
 
   '/// Check default settings
 

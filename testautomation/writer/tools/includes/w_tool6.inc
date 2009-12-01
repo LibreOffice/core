@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -29,56 +29,21 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/******************************************************************************
 '*
 '* owner : fredrik.haegg@sun.com
 '*
 '* short description : Tools for writer tests.
 '*
-'************************************************************************
-'*
-' #0 wOfficeRestart                                                     **
-' #1 LiberalMeasurement                                             **
-' #1 GetMeasUnit                                                    **
-' #1 StrToDouble                                                    **
-' #1 wKillUpcomingActives                                                  **
-' #1 wGetCharacterFont
-' #1 wGetCharacterFontSize
-' #1 ScreenShot
-' #1 ZeilenHoeheHolen
-' #1 ZeilenHoeheTesten
-' #1 SpaltenBreiteHolen
-' #1 SpaltenBreiteTesten
-' #1 SeitenAbstaendeHolen
-' #1 SeitenAbstaendeTesten
-' #1 ZahlAusSpinnfield
-' #1 ZeilenTesten
-' #1 SpaltenTesten
-' #1 TBOhTabelleEinfuegen
-' #1 hGetTableName
-' #1 dec
-' #1 inc
-' #1 hGetColumn
-' #1 hNavigatorOpenWindows
-' #1 hIsNamedDocLoaded
-' #1 hSetSpellHypLanguage
-' #1 hFindSpellHypLanguage
-' #1 wSearchWriteableArea
-' **                                                                **
-' \*******************************************************************
+'\******************************************************************************
 
 sub wOfficeRestart
-    Dim i as integer
-    Call sleep(5)
-	for i = 1 to GetDocumentCount
-        Call hCloseDocument
-    next i
-    Call sleep(5)
-	' Close the backing windows
-	FileExit "SynchronMode", TRUE
+
+    hFileCloseAll()
+    ' Close the backing windows
+    FileExit "SynchronMode", TRUE
 
     Call hStartTheOffice
-    Call sleep(5)
 end sub
 
 '--------------------------------------------------------------
@@ -169,7 +134,7 @@ function StrToDouble ( sWert$ ) as Double
         if i1 > i2 then i = i1 else i = i2
         ' vorkommateil
         try
-           a = val (left$ (sDummy$,i-1))
+            a = val (left$ (sDummy$,i-1))
         catch
         endcatch
         n = (len (sDummy$)-i)
@@ -204,10 +169,10 @@ function wKillUpcomingActives(optional sDocument as string)
                 Warnlog "(1/2): " + Active.GetText ' Changed from Warn to print.
             else
                 Select case sDocument
-                    Case "sw31.sdw", "sw31.vor"
-                        warnlog "Saving sdw-file as sxw fails"
-                    Case else
-                        Warnlog Active.Gettext
+                Case "sw31.sdw", "sw31.vor"
+                    warnlog "Saving sdw-file as sxw fails"
+                Case else
+                    Warnlog Active.Gettext
                 end select
             end if
             try
@@ -439,10 +404,10 @@ sub TBOhTabelleEinfuegen (optional tName as string, optional tHeader as boolean,
     Kontext "TabelleEinfuegenWriter"
     wait 500
 
-	' Default had been changed. Not to rewrite the whole test I decided to changed the row-number
-	Spalten.Settext "5"
-	wait 500
-	
+    ' Default had been changed. Not to rewrite the whole test I decided to changed the row-number
+    Spalten.Settext "5"
+    wait 500
+
     if (IsMissing (tName) <> True) then TabellenName.SetText tName
     if (IsMissing (tHeader) <> True) then
         if tHeader then
@@ -470,10 +435,10 @@ sub TBOhTabelleEinfuegen (optional tName as string, optional tHeader as boolean,
     end if
 
     if IsMissing(tWidth) <> True then
-		Spalten.SetText tWidth
-	else
-		Spalten.Settext "5"
-	end if
+        Spalten.SetText tWidth
+    else
+        Spalten.Settext "5"
+    end if
     if IsMissing(tHeight) <> True then Zeilen.SetText tHeight
 
     TabelleEinfuegenWriter.OK
@@ -487,14 +452,14 @@ sub TBOhTabelleEinfuegen (optional tName as string, optional tHeader as boolean,
     end if
 
     Select Case gApplication
-        Case "WRITER"
-            Kontext "DocumentWriter"
+    Case "WRITER"
+        Kontext "DocumentWriter"
 
-        Case "GLOBALDOKUMENT"
-            Kontext "DocumentMasterDoc"
+    Case "MASTERDOCUMENT"
+        Kontext "DocumentMasterDoc"
 
-        Case "HTMLDOKUMENT"
-            Kontext "DocumentWriterWeb"
+    Case "HTML"
+        Kontext "DocumentWriterWeb"
 
     end select
     Sleep 1
@@ -606,12 +571,12 @@ function hNavigatorOpenWindows() as Integer
     sleep (3)
     hNavigatorOpenWindows = DokumentListe.GetItemCount - 2  ' couldn' see dokumentliste :-( reason:: active that prevents it :-(
     sleep (3)
-'   printlog " hnow: "+DokumentListe.GetItemCount +" "+DokumentListe.GetSelText
+    '   printlog " hnow: "+DokumentListe.GetItemCount +" "+DokumentListe.GetSelText
     if (DokumentListe.GetItemCount = 0) then print "waassss o ??!!?!??!?!"
-'   close Navigator
+    '   close Navigator
     ViewNavigator
     Kontext "DocumentWriter"
-ENDE:
+    ENDE:
 end function
 
 '--------------------------------------------------------------
@@ -626,17 +591,17 @@ function hIsNamedDocLoaded (ShouldFile as String) as Boolean
     '///' Plan A :-( ///
     ''///+ to be able to check, that document was loaded, print something before opening new doc ///'
     ''///+ during test, check if it is readable ... ///'
-'   Kontext "DocumentWriter"
-'   DocumentWriter.TypeKeys "<Mod1 home>"
-'   DocumentWriter.TypeKeys "TBOlastWindow"
-'   DocumentWriter.TypeKeys "<Return>"
+    '   Kontext "DocumentWriter"
+    '   DocumentWriter.TypeKeys "<Mod1 home>"
+    '   DocumentWriter.TypeKeys "TBOlastWindow"
+    '   DocumentWriter.TypeKeys "<Return>"
 
-'   Kontext "DocumentWriter"
-'   DocumentWriter.TypeKeys "<Mod1 Home>"
-'   DocumentWriter.TypeKeys "<Shift End>"
-'   EditCopy
-'   DocumentWriter.TypeKeys "<Home>"
-'   if GetClipboardText <> "TBOlastWindow" Then ///'
+    '   Kontext "DocumentWriter"
+    '   DocumentWriter.TypeKeys "<Mod1 Home>"
+    '   DocumentWriter.TypeKeys "<Shift End>"
+    '   EditCopy
+    '   DocumentWriter.TypeKeys "<Home>"
+    '   if GetClipboardText <> "TBOlastWindow" Then ///'
 
     '///      ' Plan B :-) ///
     '///+' if a doc got loaded, the filename in a 'SaveAs' Dlg is different from "" ///
@@ -647,8 +612,8 @@ function hIsNamedDocLoaded (ShouldFile as String) as Boolean
     Kontext "SpeichernDlg"
     If DateiOhneExt(DateiExtract(Dateiname.GetSelText)) = DateiOhneExt(DateiExtract(ShouldFile)) Then
         hIsNamedDocLoaded = True
-'       Printlog "Filename: " + Dateiname.GetSelText+"; "+ShouldFile
-'       Printlog "--------------------------------------------------Loaded as: " + Dateityp.GetSelText
+        '       Printlog "Filename: " + Dateiname.GetSelText+"; "+ShouldFile
+        '       Printlog "--------------------------------------------------Loaded as: " + Dateityp.GetSelText
     Else
         'exception! for templates
         if lcase(right(ShouldFile,3)) = "vor" or lcase(right(ShouldFile,3)) = "dot" then hIsNamedDocLoaded = True
@@ -677,20 +642,20 @@ sub hSetSpellHypLanguage
             ExtrasOptionenDlg.Cancel
             sTrieit = hFindSpellHypLanguage
             ToolsOptions
-                Call hToolsOptions ("LANGUAGESETTINGS","LANGUAGES")
-                AktuellesDokument.Check
-                if sTrieit <> "" then
-                    Westlich.Select sTrieit
-                else
-                    warnlog "SOrry no spellbook found :-("
-                end if
+            Call hToolsOptions ("LANGUAGESETTINGS","LANGUAGES")
+            AktuellesDokument.Check
+            if sTrieit <> "" then
+                Westlich.Select sTrieit
+            else
+                warnlog "SOrry no spellbook found :-("
+            end if
         else
             Westlich.Select glLocale (4)
         end if
         printlog "selected: "+Westlich.GetSelText
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
-   end if
+    end if
 end sub
 
 '--------------------------------------------------------------
@@ -793,16 +758,16 @@ end sub
 
 function fInsertFrame (x1 as Integer , y1 as Integer , x2 as Integer , y2 as Integer)
     'This function will insert a frame with the coordinate
-    
+
     Call wDocSetContext
     Call gMouseClick (x1, y1)
-    
+
     Call hToolbarSelect("INSERT", true )
     Sleep 1
     Kontext "Insertbar"
     Rahmen.Click
     Sleep 1
-    
+
     Call gMouseDown ( x1,y1 )
     Call gMouseMove ( x1,y1,x2,y2 )
     Call gMouseUp( x2,y2 )

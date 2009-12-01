@@ -72,8 +72,6 @@ OKButton HID_DLGDEPOT_0_CMDGOON_HISTORY
 CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
 
 *PurchaseStarOffice HID_LICENSING_DIALOG
-back Eval1TBO
-nextbutton Eval2TBO
 TabPurchase HID_TP_PURCHASE
 getSerialNumber tab:PushButton:TP_PURCHASE:PB_PURCHASE_GET
 TabUnlockStarOffice HID_TP_UNLOCK

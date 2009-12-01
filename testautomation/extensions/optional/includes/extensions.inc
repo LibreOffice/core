@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -191,7 +191,7 @@ testcase tExtensionsFunction
     '/// - installs and is enabled ///'
     '/// (41/41): versions/version_1.2.15.3/plain.oxt
     '/// - You are about to install version 1.2.15.3 of the extension org.openoffice.legacy.plain.oxt. The older version 1.2.3 is already installed.
-    
+
     dim j,b,i,a,x,y as integer
     dim sPath as string
     dim aFiles(50) as string
@@ -208,17 +208,13 @@ testcase tExtensionsFunction
     dim aRemovePackages(50) as string
     dim bFoundNumber as boolean
     dim sLastVersion as string
-    
+
     sLastVersion = ""
     ' want to start and work with just one document window
     b = getDocumentCount
-    for j = 1 to b
-        printlog "closing: " + j
-        hCloseDocument()
-    next j
+    hFileCloseAll()
     hNewDocument()
-    sleep (5)
-    
+
     ' load about twenty one extension files, to test the features
     ' the list tells the filename and in encoded numbers the features
     ' a line looks like:
@@ -230,7 +226,7 @@ testcase tExtensionsFunction
     ' 3rd number: If the extension should successfully install the value is one, else zero.
     ' 4th number: If an active is expected after selecting a file for installation the value is one, else zero.
     ' 5th number: If active is expected the expected version information after selecting a file for installation the value is one, else zero and if an upgrade/downgrade is expected, the number is 2.
-    
+
     ' Base path for test files
     sPath = convertPath(gTestToolPath+"extensions/optional/input/")
     ' read filelist and expected features
@@ -244,7 +240,7 @@ testcase tExtensionsFunction
             listAppend(aFeatures(),aTemp(1))
         endif
     next i
-    
+
     ' there are some dependencys to languages...
     if iSprache = 49 then
         sTemp = aFeatures(4)
@@ -273,7 +269,7 @@ testcase tExtensionsFunction
             kontext "PackageManager"
             'BrowsePackages.typeKeys("+")
             'BrowsePackages.typeKeys("<down>")
-             BrowsePackages.select ii
+            BrowsePackages.select ii
             sTemp = BrowsePackages.getItemText (ii,1)
             if right(sTemp,3) = "oxt" then
                 for x = 1 to a
@@ -287,11 +283,19 @@ testcase tExtensionsFunction
                         qaErrorLog "Package is already installed, trying to remove it: '" + sTemp + "'"
                         if remove.isEnabled then
                             remove.click
+                            
+                            kontext "Active"
+                            if ( Active.exists( 2 ) ) then
+                                Active.ok()
+                            else
+                                warnlog( "No confirmation dialog for Extension removal" )
+                            endif
+                            
                             Kontext "AddingPackages"
                             y=0
-                            while AddingPackages.exists(1) AND (y<6)
+                            while AddingPackages.exists(1) AND (y<30)
                                 printlog "RemovingPackages..."
-                                sleep 5
+                                sleep 1
                                 y=y+1
                             wend
                             kontext "PackageManager"
@@ -308,14 +312,14 @@ testcase tExtensionsFunction
                     ii=ii+1
                 endif
             else
-            ii=ii+1
+                ii=ii+1
             endif
         wend
         kontext "PackageManager"
         PackageManager.close
-        sleep 5
+        WaitSlot( 5000 )
     endif
-    
+
     ' for every test file do...
     a = listCount(aFiles())
     for i = 1 to a
@@ -343,13 +347,13 @@ testcase tExtensionsFunction
             'printlog BrowsePackages.getSelText
             '/// click button 'Add' ///'
             try
-            Add.click
+                Add.click
             catch
-            warnlog "#i90870# extension manager deadlock/C++ runtimes"
-            exitrestarttheoffice
-        ToolsPackageManager
-        kontext "PackageManager"
-            Add.click
+                warnlog "#i90870# extension manager deadlock/C++ runtimes"
+                exitrestarttheoffice
+                ToolsPackageManager
+                kontext "PackageManager"
+                Add.click
             endcatch
             '/// Add Package(s)... dialg comes up ///'
             Kontext "OeffnenDlg"
@@ -362,25 +366,25 @@ testcase tExtensionsFunction
             else
                 warnlog "Add Package(s)... dialog didn't came up"
             endif
-            
+
             'Asking for whom to install; All: YES, Me: NO, nobody: Cancel
-             kontext
-             if active.exists(5) then
+            kontext
+            if active.exists(5) then
                 sTemp = active.getText
                 try
-                active.yes
+                    active.yes
                 catch
-                'printlog sTemp
+                    warnlog( "Try...catch: Failed to click Yes-button" )
                 endcatch
-             endif
+            endif
 
-           '/// Progress dialog comes up ///'
+            '/// Progress dialog comes up ///'
             Kontext "AddingPackages"
             if AddingPackages.exists(1) then
                 printlog " - AddingPackages dialog exists"
                 'DialogTest(AddingPackages)
             endif
-            
+
             '/// If any error happens, an active comes up, telling what is wrong ///'
             ' error is just a dialog with one button
             ' version infos have two buttons
@@ -439,11 +443,11 @@ testcase tExtensionsFunction
                     if i = 3 then
                         qaErrorLog "#i73367# "
                     else
-                            warnlog "errormessage expected, but none came up."
+                        warnlog "errormessage expected, but none came up."
                     endif
                 endif
             endif
-            
+
             '/// If there are any unsatisfied dependencies, they are shown now ///'
             Kontext "UnsatisfiedDependencies"
             if UnsatisfiedDependencies.exists(10) then
@@ -467,14 +471,14 @@ testcase tExtensionsFunction
                     warnLog "UnsatisfiedDependencies expected but none shown."
                 endif
             endif
-            
+
             '/// If there is a license, it is shown now ///'
             Kontext "ExtensionSoftwareLicenseAgreement"
             if ExtensionSoftwareLicenseAgreement.exists(10) then
                 if cBool(aTemp(1)) then
                     printlog " - ExtensionSoftwareLicenseAgreement dialog exists"
                 else
-                        warnlog "ExtensionSoftwareLicenseAgreement are not expected but shown"
+                    warnlog "ExtensionSoftwareLicenseAgreement are not expected but shown"
                 endif
                 if NOT Accept.isEnabled then
                     if cInt(aTemp(1)) = 2 then
@@ -517,7 +521,7 @@ testcase tExtensionsFunction
                     errorlog "ExtensionSoftwareLicenseAgreement dialog expected but not shown."
                 endif
             endif
-            
+
             '/// There may come up another active right now, which would be an error ///'
             Kontext
             if active.exists(5) then
@@ -533,16 +537,16 @@ testcase tExtensionsFunction
                 endif
                 active.ok
             endif
-            
+
             '/// the progress dialog is now available again ///'
             Kontext "AddingPackages"
             x=0
-            while AddingPackages.exists(1) AND (x<6)
+            while AddingPackages.exists(1) AND (x<30)
                 printlog "AddingPackages..."
-                sleep 5
+                sleep 1
                 x=x+1
             wend
-            
+
             '/// There may come up another active right now, which would be an error ///'
             Kontext
             if active.exists(5) then
@@ -550,7 +554,7 @@ testcase tExtensionsFunction
                 warnlog sTemp
                 active.ok
             endif
-            
+
             ' find out, if the extension got installed
             kontext "PackageManager"
             BrowsePackages.typeKeys("<home>")
@@ -594,7 +598,7 @@ testcase tExtensionsFunction
                         if i = 3 then
                             qaerrorLog "#i73367# "
                         else
-                                warnLog "-------------------------------- Extension got installed, but shouldn't do that"
+                            warnLog "-------------------------------- Extension got installed, but shouldn't do that"
                         endif
                     endif
                 endif
@@ -610,7 +614,7 @@ testcase tExtensionsFunction
             goto endsub
         endif
     next i
-    
+
     '/// after installing all extensions, remove them ///'
     ' uninstall all components, that were installed
     a = listCount(aRemovePackages())
@@ -632,11 +636,19 @@ testcase tExtensionsFunction
                         printlog "Package is installed, trying to remove it: '" + sTemp + "'"
                         if remove.isEnabled then
                             remove.click
+
+                            kontext "Active"
+                            if ( Active.exists( 2 ) ) then
+                                Active.ok()
+                            else
+                                warnlog( "No confirmation for extension removal" )
+                            endif
+
                             Kontext "AddingPackages"
                             y=0
-                            while AddingPackages.exists(1) AND (y<6)
+                            while AddingPackages.exists(1) AND (y<30)
                                 printlog "RemovingPackages..."
-                                sleep 5
+                                sleep 1
                                 y=y+1
                             wend
                             kontext "PackageManager"
@@ -653,14 +665,11 @@ testcase tExtensionsFunction
         wend
         kontext "PackageManager"
         PackageManager.close
-        sleep 5
     else
         qaErrorLog "disabling installed extensions failed;"
     endif
-    'close window only if we don't leave with backing window
-    while( getDocumentCount() > 0 ) 
-        hCloseDocument()
-    wend
+    WaitSlot()
+    hFileCloseAll()
 endcase
 
 

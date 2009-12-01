@@ -56,7 +56,7 @@ sub main
         call tStrokeSort          
         call tPinyinSort          
         
-        gApplication = "Calc"      
+        gApplication = "CALC"      
         printlog Chr(13) + "- Sort option --- Calc"
         call tSortOptionTest_1 
     

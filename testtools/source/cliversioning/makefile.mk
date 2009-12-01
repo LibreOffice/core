@@ -81,15 +81,15 @@ ALLTAR: \
 
 
 COPYVERSIONLIBS: 
-        -$(GNUCOPY) -p $(VERSIONLIBS)$/* $(BIN)
+        -$(GNUCOPY) $(VERSIONLIBS)$/* $(BIN)
 
 
 $(MISC)$/copyassemblies.done .ERRREMOVE: 
-    $(GNUCOPY) -p $(CLI_CPPUHELPER) $(BIN)$/$(CLI_CPPUHELPER:f)
-    $(GNUCOPY) -p $(CLI_BASETYPES) $(BIN)$/$(CLI_BASETYPES:f)
-    $(GNUCOPY) -p $(CLI_URETYPES) $(BIN)$/$(CLI_URETYPES:f)
-    $(GNUCOPY) -p $(CLI_URE) $(BIN)$/$(CLI_URE:f)
-    $(GNUCOPY) -p $(CLI_OOOTYPES) $(BIN)$/$(CLI_OOOTYPES:f)
+    $(GNUCOPY) $(CLI_CPPUHELPER) $(BIN)$/$(CLI_CPPUHELPER:f)
+    $(GNUCOPY) $(CLI_BASETYPES) $(BIN)$/$(CLI_BASETYPES:f)
+    $(GNUCOPY) $(CLI_URETYPES) $(BIN)$/$(CLI_URETYPES:f)
+    $(GNUCOPY) $(CLI_URE) $(BIN)$/$(CLI_URE:f)
+    $(GNUCOPY) $(CLI_OOOTYPES) $(BIN)$/$(CLI_OOOTYPES:f)
     $(TOUCH) $@
  
 CSFILES2 = runtests.cs

@@ -121,7 +121,7 @@ testcase tiToolsThesaurus
     '/// call subroutine 'hSetSpellHypLanguage' for setting the default language in the options, to enable it for languages, which don't provide a dictionary (usually asian ones) ///'
     call hSetSpellHypLanguage
     '/// open application-specific document which contains an American-formatted textframe with text. And select the text ///'
-    if (lCase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
         sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odp"))
     else
         sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))
@@ -258,14 +258,14 @@ testcase tiToolsAutoCorrect
                     EinfacheErsetzen.Check
                     EinfachWortAnfang.Click
                     Kontext "Sonderzeichen"
-                        Call Dialogtest2 ( Sonderzeichen, 1 )
+                        Call DialogTest ( Sonderzeichen, 1 )
                         '///+  cancel dialog 'start quote' ///'
                         Sonderzeichen.Cancel
                 Kontext "TabTypografisch"  ' 1b
                     '///+ click 'end quote' ///'
                     EinfachWortEnde.Click
                     Kontext "Sonderzeichen"
-                        Call Dialogtest2 ( Sonderzeichen, 2 )
+                        Call DialogTest ( Sonderzeichen, 2 )
                         '///+  cancel dialog 'end quote' ///'
                         Sonderzeichen.Cancel
                 Kontext "TabTypografisch"  ' 1s
@@ -277,14 +277,14 @@ testcase tiToolsAutoCorrect
                     '///+ click 'start quote' ///'
                     DoppeltWortAnfang.Click
                     Kontext "Sonderzeichen"
-                        Call Dialogtest2 ( Sonderzeichen, 3 )
+                        Call DialogTest ( Sonderzeichen, 3 )
                         '///+  cancel dialog 'start quote' ///'
                         Sonderzeichen.Cancel
                 Kontext "TabTypografisch"  ' 2b
                     '///+ click 'end quote' ///'
                     DoppeltWortEnde.Click
                     Kontext "Sonderzeichen"
-                        Call Dialogtest2 ( Sonderzeichen, 4 )
+                        Call DialogTest ( Sonderzeichen, 4 )
                         '///+  cancel dialog 'end quote' ///'
                         Sonderzeichen.Cancel
                 Kontext "TabTypografisch"  ' 2s

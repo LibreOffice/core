@@ -60,10 +60,10 @@ testcase tQueryWizard
 
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
     
     call fStartQueryWizard
@@ -114,10 +114,10 @@ testcase tReportWizard
 
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
     
     StartReportWizard
@@ -166,10 +166,10 @@ testcase tTableWizard
 
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
 
     ViewTables
@@ -207,10 +207,10 @@ testcase tFormWizard
         
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
     
     StartFormWizard

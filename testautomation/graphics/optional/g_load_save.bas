@@ -67,7 +67,7 @@ sub main
         call tSaveLoadLayoutChart
         call tSaveLoadLayoutSpreadsheet
 
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call tFileOpenSaveEtc
         Call tFileProperties
@@ -90,7 +90,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     Call GetUseFiles
-    gApplication = "Draw"
+    gApplication = "DRAW"
 end sub
 
 

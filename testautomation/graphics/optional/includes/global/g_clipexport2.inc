@@ -119,7 +119,7 @@ sub Make3dObject
         Kontext "ThreeDObjectsbar"
         ThreeDObjectsbar.close
     else
-        if (lCase(gApplication) = "DRAW") then
+        if (gApplication = "DRAW") then
             Toolbar.OpenContextMenu           '/// enable 3d-object-button in menubar
             sleep 1
             hMenuselectNr (1)

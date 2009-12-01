@@ -58,7 +58,7 @@ testcase tToolsOptionsTextdocument
         goto endsub
     endif
 '/// Create a new document    
-    if gApplication <> "DESKTOP" then   
+    if gApplication <> "BACKGROUND" then   
         Call hNewDocument
     end if
  '/// <i>Tools</i> / <i>Options</i> / <i>Text document</i>
@@ -221,7 +221,7 @@ testcase tToolsOptionsTextdocument
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close the document  
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hCloseDocument
     end if
 endcase
@@ -238,7 +238,7 @@ testcase tToolsOptionsHTMLDocument
         goto endsub
     endif
 '/// Create a new document    
-    if gApplication <> "DESKTOP" then    
+    if gApplication <> "BACKGROUND" then    
         Call hNewDocument
     end if
  '/// <i>Tools</i> / <i>options</i> / <i>HTML Document</i>
@@ -311,7 +311,7 @@ testcase tToolsOptionsHTMLDocument
     Kontext "OptionenDlg"
     OptionenDlg.Cancel
 '/// Close the document    
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hCloseDocument
     end if
 endcase
@@ -328,7 +328,7 @@ testcase tToolsOptionsSpreadsheet
         goto endsub
     endif
 '/// Create a new document
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hNewDocument
     end if
  '/// <i>Tools</i> / <i>Options</i> / <i>Spreadsheet</i>
@@ -404,7 +404,7 @@ testcase tToolsOptionsSpreadsheet
     Kontext "OptionenDlg"
     OptionenDlg.Cancel
 '/// Close the document
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hCloseDocument
     end if
 endcase
@@ -422,7 +422,7 @@ testcase tToolsOptionsPresentation
         goto endsub
     endif
 '/// Create a new document
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hNewDocument
     end if
    kontext "DocumentImpress"
@@ -497,7 +497,7 @@ testcase tToolsOptionsPresentation
     Kontext "OptionenDlg"
     OptionenDlg.Cancel
 '/// Close the document    
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hCloseDocument
     end if
 endcase
@@ -514,7 +514,7 @@ testcase tToolsOptionsDrawing
         goto endsub
     end if
 '/// Create a new document
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hNewDocument
     end if
    Kontext "DocumentDraw"
@@ -594,7 +594,7 @@ testcase tToolsOptionsDrawing
     Kontext "OptionenDlg"
      OptionenDlg.Cancel
 '/// Close the document
-     if gApplication <> "DESKTOP" then 
+     if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
     end if
 endcase
@@ -610,7 +610,7 @@ testcase tToolsOptionsFormula
         goto endsub
     endif
 '/// Create a new document
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hNewDocument
     end if
 '/// <i>Tools</i> / <i>Options</i> / <i>Formula</i>    
@@ -627,7 +627,7 @@ testcase tToolsOptionsFormula
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close the document   
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hCloseDocument
     end if
 endcase
@@ -641,7 +641,7 @@ testcase tToolsOptionsChart
         goto endsub
     endif    
 '/// Create a new document    
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hNewDocument
     end if
 '/// <i>Tools</i> / <i>Options</i> / <i>Chart</i>    
@@ -657,7 +657,7 @@ testcase tToolsOptionsChart
 '/// Close the options dialog
     Kontext "OptionenDlg"
     OptionenDlg.Cancel
-    if gApplication <> "DESKTOP" then
+    if gApplication <> "BACKGROUND" then
 '/// Close bthe document    
         Call hCloseDocument
     end if
@@ -674,7 +674,7 @@ testcase tToolsOptionsDataSources
         goto endsub
     endif   
     '/// Create a new document
-    if gApplication <> "DESKTOP" then    
+    if gApplication <> "BACKGROUND" then    
         Call hNewDocument
     end if
     '/// <i>Tools</i> / <i>Options</i> / <i>Data source</i>
@@ -705,7 +705,7 @@ testcase tToolsOptionsDataSources
     '/// Close the options dialog
     OptionenDlg.Cancel
     '/// Close the document
-    if gApplication <> "DESKTOP" then 
+    if gApplication <> "BACKGROUND" then 
         Call hCloseDocument
     end if
 endcase

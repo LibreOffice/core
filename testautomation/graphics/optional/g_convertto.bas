@@ -57,7 +57,7 @@ sub main
         Call tiAendernUmwandelnIn3DRotationsKoerper
         Call tiAendernUmwandelnInMetaFile
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call tiModifyConvertToPolygon
         Call tdContextConvertIntoBitmap
@@ -73,6 +73,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

@@ -51,7 +51,7 @@ end sub
 
 testcase HTMLToWRITERText
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select first paragraph "
@@ -118,7 +118,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERField
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select paragraph with 'Date Field' "
@@ -183,7 +183,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERTable
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Table' "
@@ -248,7 +248,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERGraphicLinked
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Linked Graphic' "
@@ -302,7 +302,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERControl
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Control' "
@@ -357,7 +357,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERFloatingFrame
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Floating Frame' "

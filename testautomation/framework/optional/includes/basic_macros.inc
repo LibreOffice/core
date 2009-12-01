@@ -127,7 +127,7 @@ testcase tMakro_Dialog
     const CMACRO = "MacroDlg"
     
     
-    gApplication = "Writer"
+    gApplication = "WRITER"
     '///+<li>Open a new document</li>
     printlog( "Open a new document" )
     brc = hCreateDocument()

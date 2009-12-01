@@ -44,6 +44,7 @@ sub main
 
     use "writer\required\includes\w_001_.inc"
     use "writer\required\includes\w_001a_.inc"
+    use "writer\required\includes\w_001b_.inc"
     use "writer\required\includes\w_002_.inc"
     use "writer\required\includes\w_003_.inc"
     use "writer\required\includes\w_004_.inc"
@@ -60,9 +61,10 @@ sub main
 
     Printlog "******* Ressource-Test Writer Document *******"
 
-    Call hStatusIn ( "writer", "w_updt.bas","Writer Update-Test" )
+    Call hStatusIn ( "writer", "w_updt.bas" )
     Call w_001_              ' Menu File
     Call w_001a_             ' Menu File
+    Call w_001b_             ' Menu File
     Call w_002_              ' Menu Edit
     Call w_003_              ' Menu View
     Call w_004_              ' Menu Insert

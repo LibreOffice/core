@@ -48,7 +48,7 @@ testcase tiDiaLeiste
    sleep 1
 '/// Change options so the presentation won't start from the current, but the first slide. ///'
    ToolsOptions
-   hToolsOptions ( "Presentation", "General" )
+   hToolsOptions ( "IMPRESS", "General" )
    MitAktuellerSeite.Uncheck
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
@@ -167,7 +167,7 @@ testcase tiDiaLeiste
  endif
 '/// Restore default settings in ToolsOptions ///'
    ToolsOptions
-   hToolsOptions ( "Presentation", "General" )
+   hToolsOptions ( "IMPRESS", "General" )
    MitAktuellerSeite.Check
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,12 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description: Testcases for Toolbars. 
+'* short description: Testcases for Toolbars.
 '*
 '\******************************************************************
 
 sub w_020_
+
     printLog Chr(13) + "--------- Toolbars (w_020_.inc) ----------"
 
     'Toolbar
@@ -52,7 +53,7 @@ sub w_020_
     Call t_TB_Rest
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDoc_TB_Insert
     Call tHtmlDoc_TB_InsertFields
     Call tHtmlDoc_TB_Form
@@ -64,8 +65,8 @@ end sub
 '-----------------------------------------------------------
 
 testcase t_TB_Insert
-   qaErrorLog "#158646# - Inserting Indexes causes crash."
-   goto endsub
+    qaErrorLog "#158646# - Inserting Indexes causes crash."
+    goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
 
@@ -74,8 +75,8 @@ testcase t_TB_Insert
     printlog "- TearOff Insert-Toolbox"
     Kontext "Insertbar"
     if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
-    
-    if gApplication <> "HTMLDOKUMENT" then
+
+    if gApplication <> "HTML" then
         Kontext "Insertbar"
         printlog "  - Frame"
         printlog " Click 'Frame' and Insert a Frame"
@@ -87,40 +88,47 @@ testcase t_TB_Insert
 
     printlog "  - Graphic"
     Kontext "Insertbar"
-    if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
+    if ( Insertbar.Exists ) then 
+        ' all good
+    else    
+        Call hToolbarSelect("Insert", true)
+    endif
     wait 500
-	if gUSeSysDlg = False then
-        printlog " Click 'Insert Graphics' in Toolbox"
-        if Grafik.IsEnabled then
-            Grafik.Click
-            Kontext "GrafikEinfuegenDlg"
-            if GrafikEinfuegenDlg.Exists then
-                printlog " Select graphic from file '..\writer\required\input\graphics\jolink.jpg'"
-                Dateiname.SetText ( ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" ) )
-                Oeffnen.Click
-            else
-                Warnlog "Dialog 'Insert Graphic' not up!"
-            end if
-            Sleep 1
-            Kontext "Active"
-            if Active.Exists then
-                Warnlog Active.Gettext
-                Active.Ok
-                Kontext "GrafikEinfuegenDlg"
-                GrafikEinfuegenDlg.Cancel
-            end if
-            printlog " Hit 'Delete' to remove graphic"
-            Call wTypeKeys ("<Delete>")
+
+    printlog " Click 'Insert Graphics' in Toolbox"
+    if Grafik.IsEnabled then
+        Grafik.Click
+        Kontext "GrafikEinfuegenDlg"
+        if GrafikEinfuegenDlg.Exists then
+            printlog " Select graphic from file '..\writer\required\input\graphics\jolink.jpg'"
+            Dateiname.SetText ( ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" ) )
+            Oeffnen.Click
         else
-            Warnlog "Button 'Graphic' on Insertbar is not enabled!"
+            Warnlog "Dialog 'Insert Graphic' not up!"
         end if
+
+        Kontext "Active"
+        if Active.Exists( 1 ) then
+            Warnlog Active.Gettext
+            Active.Ok
+            Kontext "GrafikEinfuegenDlg"
+            GrafikEinfuegenDlg.Cancel
+        end if
+        printlog " Hit 'Delete' to remove graphic"
+        Call wTypeKeys ("<Delete>")
+    else
+        Warnlog "Button 'Graphic' on Insertbar is not enabled!"
     end if
 
-    Sleep 2
     printlog "  - Table"
     printlog " Click 'Insert Table' in Toolbox"
     Kontext "Insertbar"
-    if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
+    if ( Insertbar.Exists() ) then 
+        ' No action required
+    else
+        Call hToolbarSelect("Insert", true)
+    endif
+    
     if Tabelle.IsEnabled then
         Tabelle.Click
         Kontext "TabelleEinfuegenWriter"
@@ -135,7 +143,7 @@ testcase t_TB_Insert
     Kontext "Insertbar"
     if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         printlog "  - Footnote"
         printlog " Click 'Insert Footnote Directly' in Toolbox"
         Kontext "Insertbar"
@@ -232,10 +240,10 @@ testcase t_TB_InsertFields
     Dim i as Integer
     printlog "- Toolbox ( normal ) : Fields"
 
-	if gPlatgroup = "unx" then
-		QAErrorlog "Doesn't run on unix"
-		goto endsub
-	end if
+    if gPlatgroup = "unx" then
+        QAErrorlog "Doesn't run on unix"
+        goto endsub
+    end if
     printlog " Open new document"
     Call hNewDocument
     printlog "- TearOff Insert Toolbox"
@@ -246,7 +254,7 @@ testcase t_TB_InsertFields
     Sleep 1
     Feldbefehle.OpenMenu
     wait 500
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         Call hMenuSelectNr(6)
     else
         Call hMenuSelectNr(8)
@@ -268,7 +276,7 @@ endcase
 
 testcase t_TB_ShowDrawFunctions
     printlog "- Toolbox ( normal ) : Draw Functions"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -356,9 +364,13 @@ testcase t_TB_Form
 
     printlog " Open new document"
     Call hNewDocument
-    Sleep 1
+    
     Kontext "FormControls"
-    if Not FormControls.Exists then Call hToolbarSelect("Controls", true)
+    if ( FormControls.Exists( 1 ) ) then 
+        'do nothing
+    else
+        Call hToolbarSelect("Controls", true)
+    endif
 
     try
         printlog " Tear off 'Form' Toolbox"
@@ -367,7 +379,7 @@ testcase t_TB_Form
             Warnlog "Toolbar 'FormControls' is not opened!"
             Call hCloseDocument
             goto endsub
-        end sub
+        end if
         wait 500
         Pushbutton.Click
         printlog " Insert a pushbutton from toolbox"
@@ -387,7 +399,7 @@ testcase t_TB_Form
         printlog "+ Open Control Properties"
         printlog "   - Control Properties"
         Call sMenufunktionen("-Pushbutton-")
-        
+
         Kontext "FormControls"
         wait 500
         Radiobutton.Click
@@ -395,7 +407,7 @@ testcase t_TB_Form
         Call hMalZeichnenMitSelektion ( 32, 20, 42, 25 )
         printlog "+ Open Control Properties"
         Call sMenufunktionen("-Radiobutton-")
-        
+
         Kontext "FormControls"
         wait 500
         Checkbox.Click
@@ -405,7 +417,7 @@ testcase t_TB_Form
         Call sMenufunktionen("-Checkbox-")
 
         Kontext "FormControls"
-        if Ucase(gApplication) <> "HTMLDOKUMENT" then
+        if Ucase(gApplication) <> "HTML" then
             wait 500
             Label.Click
             printlog " Insert a textbox from toolbox"
@@ -432,9 +444,9 @@ testcase t_TB_Form
         Call sAutopilot_ListboxCombobox("Listbox")
         printlog "+ Open Control Properties"
         Call sMenufunktionen("-Listbox-")
-        
+
         Kontext "FormControls"
-        if Ucase(gApplication) <> "HTMLDOKUMENT" then
+        if ( gApplication <> "HTML" ) then
             Combobox.Click
             printlog " Insert a Combobox from toolbox"
             Wait 500
@@ -444,10 +456,10 @@ testcase t_TB_Form
             printlog "+ Open Control Properties"
             Call sMenufunktionen("-Combobox-")
         end if
-        
+
         printlog " Insert a Formatted Field from toolbox"
         Kontext "FormControls"
-        if Ucase(gApplication) <> "HTMLDOKUMENT" then
+        if ( gApplication <> "HTML" ) then
             FormattedField.Click
             Wait 500
             Call hMalZeichnenMitSelektion ( 45, 50, 55, 55 )
@@ -486,16 +498,20 @@ testcase t_TB_EditAutotext
     Sleep 2
     Autotext.Click
     printlog " Click 'Autotext' in Toolbar"
-    wait 500
+
     Kontext "Active"
-    if Active.Exists then
+    if ( Active.Exists( 1 ) ) then
         Active.Gettext
         Active.Ok
     end if
-    Sleep 5
+    
     Kontext "Autotext"
-    printlog " Close upcoming 'Autotext' dialog"
-    Autotext.Close
+    if ( Autotext.exists( 4 ) ) then
+        printlog " Close upcoming 'Autotext' dialog"
+        Autotext.Close
+    else
+        warnlog( "Dialog <Autotext> is not available" )
+    endif
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -552,7 +568,7 @@ endcase
 
 testcase t_TB_DirektCursor
     printlog "- Toolbox ( normal ) : Direct Cursor"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -602,7 +618,7 @@ testcase t_TB_Rest
     endcatch
 
     printlog "  - OnlineLayout"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext "Toolbar"
         if Not Toolbar.Exists then Call hToolbarSelect("Tools", true)
         try
@@ -648,11 +664,11 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDoc_TB_Insert
-   qaErrorLog "#158646# - Inserting Indexes causes crash."
-   goto endsub
+    qaErrorLog "#158646# - Inserting Indexes causes crash."
+    goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument
@@ -665,30 +681,29 @@ testcase tHtmlDoc_TB_Insert
     Kontext "Insertbar"
     if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
     wait 500
-	if gUSeSysDlg = False then
-        if Grafik.IsEnabled then
-            Grafik.Click
-            Kontext "GrafikEinfuegenDlg"
-            if GrafikEinfuegenDlg.Exists then
-                printlog " Select graphic from file '..\writer\required\input\graphics\jolink.jpg'"
-                Dateiname.SetText ( ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" ) )
-                Oeffnen.Click
-            else
-                Warnlog "Dialog 'Insert Graphic' not up!"
-            end if
-            Sleep 1
-            Kontext "Active"
-            if Active.Exists then
-                Warnlog Active.Gettext
-                Active.Ok
-                Kontext "GrafikEinfuegenDlg"
-                GrafikEinfuegenDlg.Cancel
-            end if
-            printlog " Hit 'Delete' to remove graphic"
-            Call wTypeKeys ("<Delete>")
+    
+    if Grafik.IsEnabled then
+        Grafik.Click
+        Kontext "GrafikEinfuegenDlg"
+        if ( GrafikEinfuegenDlg.Exists( 1 ) ) then
+            printlog " Select graphic from file '..\writer\required\input\graphics\jolink.jpg'"
+            Dateiname.SetText ( ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" ) )
+            Oeffnen.Click
         else
-            Warnlog "Button 'Graphic' on Insertbar is not enabled!"
+            Warnlog "Dialog 'Insert Graphic' not up!"
         end if
+
+        Kontext "Active"
+        if ( Active.Exists( 1 ) ) then
+            Warnlog Active.Gettext
+            Active.Ok
+            Kontext "GrafikEinfuegenDlg"
+            GrafikEinfuegenDlg.Cancel
+        end if
+        printlog " Hit 'Delete' to remove graphic"
+        Call wTypeKeys ("<Delete>")
+    else
+        Warnlog "Button 'Graphic' on Insertbar is not enabled!"
     end if
 
     Sleep 2
@@ -768,12 +783,12 @@ testcase tHtmlDoc_TB_InsertFields
     Dim Ende as Integer
     Dim i as Integer
     printlog "- Toolbox ( normal ) : Fields"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
-	if gPlatgroup = "unx" then
-		QAErrorlog "Doesn't run on unix"
-		goto endsub
-	end if
+    if gPlatgroup = "unx" then
+        QAErrorlog "Doesn't run on unix"
+        goto endsub
+    end if
 
     printlog " Open new document"
     Call hNewDocument
@@ -804,13 +819,15 @@ endcase
 '-----------------------------------------------------------
 testcase tHtmlDoc_TB_Form
     printlog "- Toolbox ( normal ) : Formular"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument
-    Sleep 1
+    
     Kontext "FormControls"
-    if Not FormControls.Exists then 
+    if ( FormControls.Exists( 1 ) ) then
+        ' do nothing
+    else
         Call hToolbarSelect("Controls", true)
     end if
 

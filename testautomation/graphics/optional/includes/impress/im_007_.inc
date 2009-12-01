@@ -613,11 +613,11 @@ testcase tSlideShowInteraction
 '/// Slide Show->Interaction ///'
    SlideShowInteraction
       Kontext "TabInteraktion"
-      Call DialogTest2 (TabInteraktion, 1)
+      Call DialogTest (TabInteraktion, 1)
    '///+ Select 6th entry from top in 'Action at mouse click' : 'Go to page or object' ///'
       AktionBeiMausklick.select 6
       Printlog AktionBeiMausklick.GetSelText + " chosen"
-      Call DialogTest2 (TabInteraktion, 2)
+      Call DialogTest (TabInteraktion, 2)
    '///+ click button 'Find' ///'
       sleep 1
       suchen.click
@@ -628,7 +628,7 @@ testcase tSlideShowInteraction
       sleep 1
       Printlog AktionBeiMausklick.GetSelText + " chosen"
       Kontext "TabInteraktion"
-      Call DialogTest2 (TabInteraktion, 3)
+      Call DialogTest (TabInteraktion, 3)
    '///+ click button 'Browse...' ///'
       Durchsuchen.click
         sleep 1
@@ -641,7 +641,7 @@ testcase tSlideShowInteraction
 '/// Select 9th entry from top in 'Action at mouse click' : 'Play Sound' ///'
       AktionBeiMausklick.select 8
       Printlog AktionBeiMausklick.GetSelText + " chosen"
-      Call DialogTest2 (TabInteraktion, 4)
+      Call DialogTest (TabInteraktion, 4)
    '///+ click button 'Browse...' ///'
       Durchsuchen.click
    sleep 1
@@ -654,7 +654,7 @@ testcase tSlideShowInteraction
 '/// Select 8th entry from top in 'Action at mouse click' : 'Run Program' ///'
          AktionBeiMausklick.select 9
          Printlog AktionBeiMausklick.GetSelText + " chosen"
-            Call DialogTest2 (TabInteraktion, 7)
+            Call DialogTest (TabInteraktion, 7)
             Kontext "TabInteraktion"
    '///+ click button 'Browse...' ///'
             Durchsuchen.Click
@@ -669,7 +669,7 @@ testcase tSlideShowInteraction
       AktionBeiMausklick.select 10
         Printlog AktionBeiMausklick.GetSelText + " chosen"
       sleep 3
-      Call DialogTest2 (TabInteraktion, 6)
+      Call DialogTest (TabInteraktion, 6)
    '///+ click button 'Browse...' ///'
            Durchsuchen.Click
            sleep 1
@@ -684,7 +684,7 @@ testcase tSlideShowInteraction
       Kontext "TabInteraktion"
       AktionBeiMausklick.select 11
       Printlog AktionBeiMausklick.GetSelText + " chosen"
-      Call DialogTest2 (TabInteraktion, 7)
+      Call DialogTest (TabInteraktion, 7)
       Kontext "TabInteraktion"
 '/// close dialog 'Interaction' ///'
       TabInteraktion.Close

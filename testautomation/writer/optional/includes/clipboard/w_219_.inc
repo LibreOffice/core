@@ -50,7 +50,7 @@ end sub
 ' ---------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSText
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
   printlog "  Jump to beginning of document "
   printlog "  Select first paragraph "
@@ -116,7 +116,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSField
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
   printlog "  Jump to beginning of document "
   printlog "  Select paragraph with 'Date Field' "
@@ -173,7 +173,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSTable
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
   printlog "  Jump to beginning of document "
   printlog "  Select 'Table' "
@@ -230,7 +230,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSGraphicLinked
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Linked Graphic' "
@@ -286,7 +286,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSControl
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Control' "
@@ -343,7 +343,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSFloatingFrame
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Floating Frame' "

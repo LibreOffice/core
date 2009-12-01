@@ -41,7 +41,7 @@ sub t_getMenuText
     dim k,c as integer
     dim sApplication() as string
 
-    sApplication = array("WRITER","MASTERDOC","HTMLDOKUMENT","CALC","IMPRESS","DRAW","MATH","BASIC","INSIGHT")
+    sApplication = array("WRITER","MASTERDOCUMENT","HTML","CALC","IMPRESS","DRAW","MATH","BASIC","DATABASE")
 
     ' for every application
     c = uBound(sApplication())
@@ -50,7 +50,7 @@ sub t_getMenuText
         printlog "********** " + gApplication
         call s_getMenuText
     next k
-    gApplication = "Writer"
+    gApplication = "WRITER"
 end sub
 
 testcase s_getMenuText

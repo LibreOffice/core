@@ -1166,7 +1166,7 @@ testcase tParagraphIndent17
     Call sMakeReadOnlyDocumentEditable
 
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
         Kontext "TabCompatibility"
         Sleep 2
         Options.TypeKeys "<Down>"
@@ -1188,7 +1188,7 @@ testcase tParagraphIndent17
     Call sMakeReadOnlyDocumentEditable
 
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
         Kontext "TabCompatibility"
         Sleep 2
         Options.TypeKeys "<Down>"

@@ -90,7 +90,7 @@ sub LoadIncludeFiles
    
     use "framework\tools\includes\CJK_tools.inc"    
 
-    gApplication   = "Writer"
+    gApplication   = "WRITER"
     Call GetUseFiles
     
 End sub

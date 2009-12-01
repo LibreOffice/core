@@ -383,7 +383,7 @@ testcase tToolsSpellcheckForward
             goto endsub
     end select
     
-    if gApplication = "MASTERDOC" then
+    if gApplication = "MASTERDOCUMENT" then
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
             EditPaste
     else
@@ -556,7 +556,7 @@ testcase tToolsSpellcheckOnlyOneWord
             goto endsub
     end select
     
-    if gApplication = "MASTERDOC" then
+    if gApplication = "MASTERDOCUMENT" then
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
             EditPaste
     else
@@ -927,7 +927,7 @@ testcase tToolsSpellcheckChangeLanguageAttribute
             goto endsub
     end select
     
-    if gApplication = "MASTERDOC" then
+    if gApplication = "MASTERDOCUMENT" then
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
         EditPaste
     else
@@ -1124,7 +1124,7 @@ testcase tToolsSpellcheckButtonChange
             goto endsub
     end select
     
-    if gApplication = "MASTERDOC" then
+    if gApplication = "MASTERDOCUMENT" then
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
         EditPaste
     else
@@ -1191,7 +1191,7 @@ testcase tToolsSpellcheckButtonChangeAll
             goto endsub
     end select
     
-    if gApplication = "MASTERDOC" then
+    if gApplication = "MASTERDOCUMENT" then
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
         EditPaste
     else

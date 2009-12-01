@@ -48,12 +48,12 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
     dim gApplicationTemp as string
 
     gApplicationTemp = gApplication
-    gApplication = "writer"
+    gApplication = "WRITER"
     printlog "Take Measurement Units from Writer "
     hNewDocument
     ToolsOptions
     ' Take General Measurement units from writer, there are only 5!
-    hToolsOptions ("textdocument","General")
+    hToolsOptions ("WRITER","General")
 
     iCount2 = Masseinheit.GetItemCount
     for i=1 to iCount2
@@ -97,8 +97,9 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
         Dateiname.SetText "adagio"
         Dateityp.Select "BMP - Windows Bitmap (.bmp)"
         if AutomatischeDateinamenserweiterung.Exists then
-            QAErrorLog "OBSOLETE: Automatic file extension check-box in file dialog will be removed soon!"                         
             AutomatischeDateinamenserweiterung.Check
+        else
+            warnlog( "Automatic Filename Extension checkbox is mising" )
         endif
         Speichern.Click
         kontext "AlienWarning"

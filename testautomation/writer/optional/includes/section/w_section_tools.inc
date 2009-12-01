@@ -164,7 +164,7 @@ end function
 function fCheckDirectCursor
 
     ToolsOptions
-    Call hToolsOptions("TextDocument","FormattingAids")
+    Call hToolsOptions("WRITER","FormattingAids")
     Zonen_Cursor.Check
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK

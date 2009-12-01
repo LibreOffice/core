@@ -891,8 +891,8 @@ testcase tNewFolder
 
     '/// insert a new folder via INSERT/FOLDER menu
     printlog "insert a new folder via INSERT/FOLDER menu"
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(8)
 
@@ -944,8 +944,8 @@ testcase tRenameFolder
 
     '/// insert a new folder via INSERT/FOLDER menu
     printlog "insert a new folder via INSERT/FOLDER menu"
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(8)
 
@@ -967,8 +967,8 @@ testcase tRenameFolder
     '/// insert a new folder under the first folder
     printlog "insert a new folder under the first folder"   
     
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(8)
 
@@ -989,8 +989,8 @@ testcase tRenameFolder
 
     '/// rename the firt folder
     printlog "rename the firt folder"    
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         hMenuSelectNr(2)
         hMenuSelectNr(7)
 

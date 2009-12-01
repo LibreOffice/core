@@ -7,7 +7,7 @@ IMPRESS=.sdd
 DRAW=.sda
 MATH=.smf
 HTML=.htm
-MASTERDOC=.sgl
+MASTERDOCUMENT=.sgl
 
 [641]
 #StarOffice 6.x
@@ -18,7 +18,7 @@ IMPRESS=.sxi
 DRAW=.sxd
 MATH=.sxm
 HTML=.htm
-MASTERDOC=.sxg
+MASTERDOCUMENT=.sxg
 
 [645]
 #OpenOffice.org 1.x / StarOffice 7 / StarSuite 7
@@ -29,7 +29,7 @@ IMPRESS=.sxi
 DRAW=.sxd
 MATH=.sxm
 HTML=.htm
-MASTERDOC=.sxg
+MASTERDOCUMENT=.sxg
 
 [680]
 #OpenOffice.org 2.0 / StarOffice 8 / StarSuite 8
@@ -40,7 +40,7 @@ IMPRESS=.odp
 DRAW=.odg
 MATH=.odf
 HTML=.htm
-MASTERDOC=.odm
+MASTERDOCUMENT=.odm
 
 [current]
 #the current build is 680
@@ -50,4 +50,4 @@ IMPRESS=.odp
 DRAW=.odg
 MATH=.odf
 HTML=.htm
-MASTERDOC=.odm
+MASTERDOCUMENT=.odm

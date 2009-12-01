@@ -51,10 +51,6 @@ FontAntiAliasing svx:CheckBox:OFA_TP_VIEW:CB_FONTANTIALIASING
 AAPixel svx:NumericField:OFA_TP_VIEW:NF_AA_POINTLIMIT
 VorschauInSchriftlisten svx:CheckBox:OFA_TP_VIEW:CB_FONT_SHOW
 SchriftenHistorie svx:CheckBox:OFA_TP_VIEW:CB_FONT_HISTORY
-OpenGL svx:CheckBox:OFA_TP_VIEW:CB_3D_OPENGL
-OptimierteAusgabe svx:CheckBox:OFA_TP_VIEW:CB_3D_OPENGL_FASTER
-Dithering svx:CheckBox:OFA_TP_VIEW:CB_3D_DITHERING
-Volldarstellung svx:CheckBox:OFA_TP_VIEW:CB_3D_SHOWFULL
 IconsInMenueAnzeigen svx:CheckBox:OFA_TP_VIEW:CB_MENU_ICONS
 MausAktion svx:ListBox:OFA_TP_VIEW:LB_MOUSEMIDDLE
 MousePositioning svx:ListBox:OFA_TP_VIEW:LB_MOUSEPOS

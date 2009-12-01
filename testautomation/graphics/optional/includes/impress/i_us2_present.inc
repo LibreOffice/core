@@ -47,16 +47,16 @@ testcase i_us2_pres1
     dim PresentationFile1 as string
     PresentationFile1 = (ConvertPath (gOfficePath + "user\work\PwrPres1.odp"))
     kontext "DocumentImpress"
-    '/// New - Wizard - Presentation. ///'
+    printlog "New - Wizard - Presentation."
     FileAutopilotPresentation
-      printlog "   Called File-Autopilot-Presentation."
-      '/// Create from Template ///'
+      printlog "Called File-Autopilot-Presentation."
+      printlog "Create from Template"
       kontext "AutoPilotPraesentation1"
       FromTemplate.Check
       'This part is for language-indepencancy
       if gOOO = TRUE then
          TemplateRegion.Select (1)
-         '/// Choose a Presentation ///'
+         printlog "Choose a Presentation"
          TemplateList.Select (2)
       else
          TemplateRegion.Select (1)
@@ -70,10 +70,10 @@ testcase i_us2_pres1
                endif
             endif
          endif
-         '/// Choose a Presentation ///'
+         printlog "Choose a Presentation"
          TemplateList.Select (4)
       endif
-      '/// Next ///'
+      printlog "Next"
       Nextbutton.Click
       sleep (1)
       Backbutton.Click
@@ -82,9 +82,9 @@ testcase i_us2_pres1
 
       printlog "   Switched to the second Wizard-page."
       sleep (1)
-      '/// Presentations ///'
+      printlog "Presentations"
       kontext "AutoPilotPraesentation2"
-      '/// Output: Screen ///'
+      printlog "Output: Screen"
       if gOOO = TRUE then  'OpenOffice.org
          Background.Select (2)
          if Backgroundchoice.GetItemCount < 2 then
@@ -110,42 +110,43 @@ testcase i_us2_pres1
          Backgroundchoice.Select (5)
       endif
       Screen.Check
-      '/// Next ///'
+      printlog "Next"
       Nextbutton.Click
 
       printlog "   Switched to the third Wizard-page."
       sleep (1)
       kontext "AutoPilotPraesentation3"
-      '/// Random Effect. Random Speed. Click through every choice. ///'
+      printlog "Random Effect. Random Speed. Click through every choice."
       Effect.Select (15)
       Speed.Select (3)
+      WaitSlot (5000)
       Automatic.Check
       Timebutton.SetText "00:00:15"
       Break.SetText "00:00:20"
       Logo.Check
-      '/// Next ///'
+      printlog "Next"
       Nextbutton.Click
 
       printlog "   Switched to the fourth Wizard-page."
       sleep (1)
       kontext "AutoPilotPraesentation4"
-      '/// Fill in some company-name-subject-text ///'
+      printlog "Fill in some company-name-subject-text"
       AddName.SetText "Lala1"
       AddTopic.SetText "Lala2"
       Askinformation.SetText "Lala3"
-      '/// Next ///'
+      printlog "Next"
       Nextbutton.Click
       printlog "   Switched to the fifth Wizard-page."
       sleep (1)
       kontext "AutoPilotPraesentation5"
       Summary.Check
-      '/// Create ///'
+      printlog "Create"
       WaitSlot (2000)
       AutoPilotPraesentation5.OK
 
    sleep (1)
    printlog "   Pressed 'Create'."
-   '/// Add a Slide via Insert - Slide. ///'
+   printlog "Add a Slide via Insert - Slide."
    Kontext "DocumentImpress"
    hTypeKeys "What we will talk about"
    gMouseClick 1,1
@@ -159,22 +160,22 @@ testcase i_us2_pres1
    SlidesControl.TypeKeys "<HOME><RETURN>"
    kontext "DocumentImpress"
    DocumentImpress.TypeKeys "<TAB>Text we just wrote..."
-   '/// Switch to the second slide. ///'
+   printlog "Switch to the second slide."
    kontext "Slides"
       SlidesControl.TypeKeys "<DOWN><RETURN>"
       SlidesControl.TypeKeys "<RETURN>"
    kontext "DocumentImpress"
-   '/// Insert three lines with text, all with different formatting. ///'
+   printlog "Insert three lines with text, all with different formatting."
       call hTextrahmenErstellen ("First line with text",20,50,70,50)
       call hTextrahmenErstellen ("Second line with text",20,60,70,60)
       call hTextrahmenErstellen ("Third line with text",20,70,70,70)
-   '/// Go down to the eleventh slide. ///'
+   printlog "Go down to the eleventh slide."
    kontext "Slides"
       SlidesControl.TypeKeys "<HOME>"
       SlidesControl.TypeKeys "<PAGEDOWN>", 10
       SlidesControl.TypeKeys "<RETURN>"
-   '/// Insert Smiley, + two circles around the eyes, + two new pupils, ///'
-   '/// placed at some interesteing place inside the circles. ///'
+   printlog "Insert Smiley, + two circles around the eyes, + two new pupils,"
+   printlog "placed at some interesteing place inside the circles."
       Kontext "Toolbar"
       SymbolShapes.TearOff
       sleep (1)
@@ -183,7 +184,8 @@ testcase i_us2_pres1
       sleep (1)
       kontext "DrawingObjectbar"
          AreaFilling.TypeKeys "<HOME>"
-         AreaFilling.TypeKeys "<DOWN>", 10    'Select (11) 'Lime-Green
+         AreaFilling.TypeKeys "<DOWN>", 10    
+         printlog "Select (11) 'Lime-Green"
          AreaFilling.TypeKeys "<RETURN>"
       sleep (1)
       gMouseMove (53,50,90,80)
@@ -192,79 +194,80 @@ testcase i_us2_pres1
       kontext "SymbolShapes"
       SymbolShapes.Close
       Kontext "DocumentImpress"
-      gMouseMove (60,43,70,65)    'Right eye
+      gMouseMove (60,43,70,65)    
       hTypeKeys "<Escape>"
       Kontext "Toolbar"
       Ellipsen.Click
-      gMouseMove (65,57,69,63)    'Right pupil
+      gMouseMove (65,57,69,63)    
       hTypeKeys "<Escape>"
       Kontext "Toolbar"
       Ellipsen.Click
-      gMouseMove (70,50,82,65)    'Left eye
+      gMouseMove (70,50,82,65)    
       hTypeKeys "<Escape>"
       Kontext "Toolbar"
       Ellipsen.Click
-      gMouseMove (77,57,80,63)    'Left pupil
+      gMouseMove (77,57,80,63)    
       hTypeKeys "<Escape>"
       sleep (1)
 
-   '/// Insert new slide. ///'
+   printlog "Insert new slide."
    kontext "Slides"
-      SlidesControl.TypeKeys "<PAGEDOWN>", 15  'To get to the last slide.
+   printlog "get to the last slide."
+      SlidesControl.TypeKeys "<PAGEDOWN>", 15  
       SlidesControl.TypeKeys "<RETURN>"
-   '/// Delete the two fields the stylist has. ///'
+   printlog "Delete the two fields the stylist has."
    kontext "DocumentImpress"
    gMouseClick 1,1
    EditSelectAll
    DocumentImpress.TypeKeys "<DELETE>"
-   '/// Insert-Picture-From File. (some crazy picture which fits the theme) ///'
+   printlog "Insert-Picture-From File. (some crazy picture which fits the theme)"
    InsertGraphicsFromFile
    Kontext "GrafikEinfuegenDlg"
-   '/// Open graphic  ///'
+   printlog "Open graphic"
    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\ball.eps")
    Oeffnen.Click
    gMouseClick 1,1
-   '/// Add a text above the picture. 'There is movement...' ///'
+   printlog "Add a text above the picture. 'There is movement..."
    call hTextrahmenErstellen ("There is movement...",20,20,70,30)
 
-   '/// Add a new slide. ///'
+   printlog "Add a new slide."
    InsertSlide
    printlog "   Inserted new slide."
    kontext "DocumentImpress"
    EditSelectAll
    DocumentImpress.TypeKeys "<DELETE>"
-   '/// Bla bla about everything... ///'
+   printlog "Bla bla about everything..."
    call hTextrahmenErstellen ("Bla bla about everything...",20,20,70,30)
 
-   '/// Add a new slide. ///'
+   printlog "Add a new slide."
    InsertSlide
    printlog "   Inserted new slide."
    kontext "DocumentImpress"
    EditSelectAll
    DocumentImpress.TypeKeys "<DELETE>"
-   '/// Write text:  Q & A  ///'
+   printlog "Write text:  Q & A"
    call hTextrahmenErstellen ("Q & A",20,20,70,30)
    DocumentImpress.TypeKeys "<SHIFT HOME>"
    sleep (1)
 
-   '/// Add a new slide. ///'
+   printlog "Add a new slide."
    InsertSlide
    kontext "DocumentImpress"
    EditSelectAll
    DocumentImpress.TypeKeys "<DELETE>"
-   '/// Thanks for listening, time for coffee... (ending) ///'
+   printlog "Thanks for listening, time for coffee... (ending)"
    call hTextrahmenErstellen ("Class dismissed...",20,20,70,30)
 
-   '/// Save Document ///'
+   printlog "Save Document"
    call hFileSaveAsKill (PresentationFile1)
    printlog "OK   saved at ", PresentationFile1
    sleep (1)
 
-   '/// Close Document ///'
+   printlog "Close Document"
    Call hCloseDocument
-endcase
+endcase 'i_us2_pres1
 
-'00oo...//==---...---...---...---....---...---...---...---...---...---...--..--.--.-.-.-.-....---....
+'------------------------------------------------------------------------------
 
 testcase i_us2_pres2
     qaerrorlog "not yet ready."
@@ -275,10 +278,10 @@ testcase i_us2_pres2
    PresentationFile1 = (ConvertPath (gTesttoolPath + "graphics\required\input\rightfont.odp"))
    PresentationFile2 = (ConvertPath (gOfficePath + "user\work\xxxxxx9.odp"))
    kontext "DocumentImpress"
-   '/// New - Wizard - Presentation ///'
+   printlog "New - Wizard - Presentation"
    FileAutopilotPresentation
       printlog "   Called File-Autopilot-Presentation."
-      '/// Create from Template ///'
+      printlog "Create from Template"
       kontext "AutoPilotPraesentation1"
       EmptyPresentation.Check
       AutoPilotPraesentation1.TypeKeys "<DOWN>"
@@ -289,9 +292,9 @@ testcase i_us2_pres2
       else
          warnlog "   Pressing down didnt work as expected."
       endif
-      '/// Click the Open-button ///'
+      printlog "Click the Open-button"
       ExistingOpen.Click
-      '/// Check if the Open-dialogue is there ///'
+      printlog "Check if the Open-dialogue is there"
       kontext "GeneralFileDialog"
       if GeneralFileDialog.Exists(10) = FALSE then
          warnlog "   Open-file-dialogue didnt show up."
@@ -332,11 +335,11 @@ testcase i_us2_pres2
    if DocumentImpress.StatusIsProgress then
       sleep (5)
    endif
-   '/// Save Document ///'
+   printlog "Save Document"
    call hFileSaveAsKill (PresentationFile2)
    printlog "OK   saved at ", PresentationFile2
    sleep (1)
 
-   '/// Close Document ///'
+   printlog "Close Document"
    Call hCloseDocument
-endcase
+endcase 'i_us2_pres2

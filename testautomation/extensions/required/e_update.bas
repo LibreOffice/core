@@ -40,11 +40,9 @@
 sub main
 
     use "extensions\required\includes\e_update.inc"
-    use "extensions\required\includes\e_update_oooimprovement.inc"
 
     call hStatusIn( "extensions" , "e_update.bas" )
     call tExtensionManagerResources()
-    call tUpdtOOoImprovement()
     call hStatusOut()
 
 end sub

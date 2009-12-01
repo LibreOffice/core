@@ -52,7 +52,7 @@ sub main
         Call tSetFormatCharacter
         Call tGetFormatCharacter
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
 
         Call tDialogCharacter
@@ -67,6 +67,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

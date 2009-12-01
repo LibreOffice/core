@@ -192,21 +192,21 @@ sub GetOfficeInformation
       else
          if gNetzInst = TRUE then                              ' wenn es sich um eine Netzwerkinstallation handelt
                select case UCase(gApplication)
-                  case "WRITER",  "TEXTDOKUMENT"    : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "WRITER"        : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-writer"
-                  case "CALC", "TABELLENDOKUMENT"   : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "CALC"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-calc"
-                  case "IMPRESS", "PRAESENTATION"   : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "IMPRESS"       : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "private:factory/simpress"
-                  case "DRAW", "ZEICHNUNG"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "DRAW"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-draw"
-                  case "GLOBALDOC", "GLOBALDOKUMENT": sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "MASTERDOCUMENT": sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-global"
-                  case "MATH", "FORMEL"             : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "MATH"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-math"
-                  case "HTML", "HTMLDOKUMENT"       : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                  case "HTML"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
                                                       sFactory = "-web"
-                  case else                         : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                  case else            : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
                end select
          'If it's a normal (FAT) office
          else
@@ -219,21 +219,21 @@ sub GetOfficeInformation
               end if
             else
                select case UCase(gApplication)
-                  case "WRITER",  "TEXTDOKUMENT"    : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "WRITER"        : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-writer"
-                  case "CALC", "TABELLENDOKUMENT"   : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "CALC"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-calc"
-                  case "IMPRESS", "PRAESENTATION"   : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "IMPRESS"       : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "private:factory/simpress"
-                  case "DRAW", "ZEICHNUNG"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "DRAW"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-draw"
-                  case "GLOBALDOC", "GLOBALDOKUMENT": sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "MASTERDOCUMENT": sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-global"
-                  case "MATH", "FORMEL"             : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "MATH"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-math"
-                  case "HTML", "HTMLDOKUMENT"       : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                  case "HTML"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
                                                       sFactory = "-web"
-                  case else                         : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                  case else            : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
                end select
             end if
          end if

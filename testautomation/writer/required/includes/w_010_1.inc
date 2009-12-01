@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,11 @@
 '\******************************************************************
 
 sub w_010_1
+
     printLog Chr(13) + "--------- Objectbars . Part two. (w_010_1.inc) ----------"
     gApplication = "WRITER"
 
-'   ** Objectbar Table
+    '   ** Objectbar Table
     Call tInsertFormula
     Call tMergeCells
     Call tSplitCells
@@ -50,7 +51,7 @@ sub w_010_1
     Call tDeleteRow
     Call tDeleteColumn
 
-'   ** Graphics ( same as OLE-Objects and Frames )
+    '   ** Graphics ( same as OLE-Objects and Frames )
     Call tGraphicWrap
     Call tGraphicAlign
     Call tGraphicFlip
@@ -59,12 +60,12 @@ sub w_010_1
     Call tGraphicProperties
     Call tGraphicAnchor
 
-'   ** Formula Bar
+    '   ** Formula Bar
     Call tFormulaCancel
     Call tFormulaApply
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocGraphicWrap
     Call tHtmlDocGraphicAlign
     Call tHtmlDocGraphicProperties
@@ -80,22 +81,22 @@ testcase tInsertFormula
     printlog " Insert a table"
     Call hTabelleEinfuegen
     printlog " Click 'Sum' in object bar"
-	Call hToolbarSelect ( "Table", true )
+    Call hToolbarSelect ( "Table", true )
     if TableObjectbar.IsVisible = true then
-		try
-			FormelEingeben.Click
-		catch
-			Warnlog "Unable to access 'Formula'-Button on toolbar!"
-			Call hCloseDocument
-			goto endsub
-		endcatch
-	else
-		Warnlog "TableObjectbar is not visible!"
-		Call hCloseDocument
-		goto endsub
-	end if
+        try
+            FormelEingeben.Click
+        catch
+            Warnlog "Unable to access 'Formula'-Button on toolbar!"
+            Call hCloseDocument
+            goto endsub
+        endcatch
+    else
+        Warnlog "TableObjectbar is not visible!"
+        Call hCloseDocument
+        goto endsub
+    end if
 
-	Sleep 1
+    Sleep 1
     Kontext "OL_SW_Rechenleiste"
     if OL_SW_Rechenleiste.NotExists then
         warnlog "Formula border doesn't come up"
@@ -120,14 +121,14 @@ testcase tMergeCells
     Call wTypeKeys ("<Shift Right>", 2)
     Sleep 2
     printlog " Click 'Merge cells' in object bar"
-	Call hToolbarSelect ( "Table", true )
+    Call hToolbarSelect ( "Table", true )
     if TableObjectbar.IsVisible = true then
-    	ZellenVerbinden.Click
-	else
-		Warnlog "TableObjectbar is not visible!"
-		Call hCloseDocument
-		goto endsub
-	end if
+        ZellenVerbinden.Click
+    else
+        Warnlog "TableObjectbar is not visible!"
+        Call hCloseDocument
+        goto endsub
+    end if
 
     printlog " Close active document"
     Call hCloseDocument
@@ -141,15 +142,15 @@ testcase tSplitCells
     Call hNewDocument
     printlog " Insert a table"
     Call hTabelleEinfuegen
-	Call hToolbarSelect ( "Table", true )
+    Call hToolbarSelect ( "Table", true )
     printlog " Click 'Split Cells' in object bar"
     if TableObjectbar.IsVisible = true then
-    		ZelleTeilen.Click
-	else
-		Warnlog "TableObjectbar is not visible!"
-		Call hCloseDocument
-		goto endsub
-	end if
+        ZelleTeilen.Click
+    else
+        Warnlog "TableObjectbar is not visible!"
+        Call hCloseDocument
+        goto endsub
+    end if
     printlog " Cancel upcoming dialog"
     Kontext "ZellenTeilen"
     ZellenTeilen.Cancel
@@ -167,7 +168,7 @@ testcase tOptimize
     printlog " Insert a table and select all in document"
     Call hTabelleEinfuegen
     Call wTypeKeys ("<Mod1 A>")
-	Call hToolbarSelect ( "Table", true )
+    Call hToolbarSelect ( "Table", true )
     wait 500
     printlog " Tear Off toolbar 'Optimize'"
     Kontext "TableObjectBar"
@@ -211,14 +212,14 @@ testcase tInsertCellRow
     Call hNewDocument
     printlog " Insert Table"
     Call hTabelleEinfuegen
-	Call hToolbarSelect ( "Table", true )
+    Call hToolbarSelect ( "Table", true )
     if TableObjectbar.IsVisible = true then
-    		ZeileEinfuegen.Click
-	else
-		Warnlog "TableObjectbar is not visible!"
-		Call hCloseDocument
-		goto endsub
-	end if
+        ZeileEinfuegen.Click
+    else
+        Warnlog "TableObjectbar is not visible!"
+        Call hCloseDocument
+        goto endsub
+    end if
 
     printlog " Click 'Insert Column' in object bar"
     Sleep 1
@@ -240,12 +241,12 @@ testcase tDeleteRow
     Call hToolbarSelect ( "Table", true )
     printlog " Click 'Delete Row'"
     if TableObjectbar.IsVisible = true then
-    		ZeileLoeschen.Click
-	else
-		Warnlog "TableObjectbar is not visible!"
-		Call hCloseDocument
-		goto endsub
-	end if
+        ZeileLoeschen.Click
+    else
+        Warnlog "TableObjectbar is not visible!"
+        Call hCloseDocument
+        goto endsub
+    end if
 
     Sleep 1
     printlog " Click 'Delete Row'"
@@ -296,7 +297,7 @@ testcase tGraphicWrap
         Warnlog "'Wrap Off' in Objectbar couldn't be checked"
     endcatch
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         try
             printlog " Check 'Wrap through' in object bar"
             Durchlauf.Click
@@ -322,7 +323,7 @@ testcase tGraphicWrap
             Warnlog "'Wrap Left' in Objectbar couldn't be checked"
         endcatch
 
-       try
+        try
             printlog " Check 'Wrap Right' in object bar"
             WrapRight.Click
             Sleep 1
@@ -362,7 +363,7 @@ testcase tGraphicAlign
     endcatch
 
     ' Only Left and Right in WriterWeb
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog " Close active document"
         Call hCloseDocument
         goto endsub
@@ -408,7 +409,7 @@ endcase
 
 testcase tGraphicFlip
     printlog "- Graphic-(Frame)-Objectbar: Flip"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -526,7 +527,7 @@ testcase tGraphicBorders
         printlog " Close toolbox"
         Sleep 1
     catch
-		warnlog "Error in Toolbox Colour"
+        warnlog "Error in Toolbox Colour"
     endcatch
 
     printlog " Close active document"
@@ -606,7 +607,7 @@ testcase tGraphicProperties
     Call DialogTest ( TabMakro )
 
     printlog " Close 'Graphic' dialog"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabHintergrund
         Kontext "TabHintergrund"
@@ -699,12 +700,12 @@ testcase tFormulaApply
     Call hToolbarSelect ( "Table", true )
     printlog " Click 'Sum' in object bar"
     if TableObjectbar.IsVisible = true then
-    		FormelEingeben.Click
-	else
-		Warnlog "TableObjectbar is not visible!"
-		Call hCloseDocument
-		goto endsub
-	end if
+        FormelEingeben.Click
+    else
+        Warnlog "TableObjectbar is not visible!"
+        Call hCloseDocument
+        goto endsub
+    end if
 
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.TypeKeys "(" + Chr(60)+ "A1:B1"
@@ -715,7 +716,7 @@ testcase tFormulaApply
     printlog " Check result of formula"
     Call wTypeKeys ("<Mod1 A>")
     EditCopy
-    if GetClipboardText <> "25" then 
+    if GetClipboardText <> "25" then
         warnlog "Not possible to calculate in tables anymore. Result isn't 25, is: " + GetClipboardText
     end if
     printlog " Close active document"
@@ -726,7 +727,7 @@ endcase
 
 testcase tHtmlDocGraphicWrap
     printlog "- Grafik-(Rahmen)-Objectbar: Wrap"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument
@@ -768,7 +769,7 @@ endcase
 
 testcase tHtmlDocGraphicAlign
     printlog "- Graphic-(Frame)-Objectbar: Align"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument
@@ -804,7 +805,7 @@ testcase tHtmlDocGraphicProperties
     printlog "- Graphic-(Frame)-Objectbar: Properties"
     Dim j as integer
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 

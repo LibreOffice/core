@@ -122,8 +122,8 @@ function fSelectSchemaInTableFilter(sSchema as String)
     
     dim iRem as integer
 	iRem = 0
-    Kontext "Insight"
-        Insight.useMenu
+    Kontext "DATABASE"
+        Database.useMenu
         hMenuSelectNr 5
         hMenuSelectNr 3
     
@@ -182,14 +182,14 @@ function fOpenDataBase ( sFileName , optional sPassword)
     sleep (3)
     
     'click on the main window to get the focus
-    Kontext "Insight"    
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50) 
+    Kontext "DATABASE"    
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50) 
     
     ViewTables
     sleep(1)
     
-    Kontext "Insight"
+    Kontext "DATABASE"
     '/// if the password is given add the password    
     if ( Not IsMissing(sPassword) ) then
         printlog "set password : " + sPassword
@@ -227,10 +227,10 @@ function fCloseDatabase(optional bSave)
     '/// <u>parameter:</u>
     '/// <b><i>optional</i>bSave:</b> if true the the database is saved if false then the changes are lost
     sleep(1)
- 	Kontext "Insight"
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
-        Insight.useMenu
+ 	Kontext "DATABASE"
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
+        Database.useMenu
         hMenuSelectNr 1
         hMenuSelectNr 5    
         

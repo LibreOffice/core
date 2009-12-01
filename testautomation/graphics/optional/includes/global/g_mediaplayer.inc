@@ -233,7 +233,7 @@ testcase g_mediaplayer
         ToolsMediaPlayer
         
         '/// Check if there is an object available. ///'
-        if (lcase(gApplication) = "impress") then
+        if (gApplication = "IMPRESS") then
            kontext "DocumentImpress"
         else
            kontext "DocumentDraw"

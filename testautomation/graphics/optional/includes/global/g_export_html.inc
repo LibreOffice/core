@@ -158,7 +158,7 @@ testcase tHtmlExport
        TitelSeiteErzeugen.Check
        Warnlog  "- 'create Titlepage' should be checked as default :-("
    end if
-   if (lCase(gApplication) = "impress") then
+   if (gApplication = "IMPRESS") then
       '/// if applcation is impress: the checkbox 'Show notes' is enabled by default///'
       If (Notizenanzeigen.IsChecked <> TRUE) Then
           warnlog "- 'Show notes' checked as default :-("

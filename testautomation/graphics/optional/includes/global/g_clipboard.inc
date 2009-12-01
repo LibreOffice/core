@@ -51,7 +51,7 @@ testcase tiEditUndo
     Dim sDatei as string
     Dim Ueber_Text_1 as string
     
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -137,7 +137,7 @@ testcase tiEditRedo
     Dim Datei$
     Dim Ueber_Text_1
     
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"

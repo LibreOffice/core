@@ -41,19 +41,19 @@ testcase NewCloseDok
    PrintLog "    open and close all documenttypes"
     '///open all applications and close the document
     '///file/new/textdocument => file/close
-   Call hNewCloseDocument ("Writer")
+   Call hNewCloseDocument ("WRITER")
     '///file/new/spreadsheet => file/close
-   Call hNewCloseDocument ("Calc")
+   Call hNewCloseDocument ("CALC")
     '///file/new/presentation => file/close
-   Call hNewCloseDocument ("Impress")
+   Call hNewCloseDocument ("IMPRESS")
     '///file/new/drawing => file/close
-   Call hNewCloseDocument ("Draw")
+   Call hNewCloseDocument ("DRAW")
     '///file/new/formular => file/close
-   Call hNewCloseDocument ("Math")
+   Call hNewCloseDocument ("MATH")
     '///file/new/HTML document => file/close
-   Call hNewCloseDocument ("HTMLDokument")
+   Call hNewCloseDocument ("HTML")
     '///file/new/master document => file/close
-   Call hNewCloseDocument ("MASTERDOC")
+   Call hNewCloseDocument ("MASTERDOCUMENT")
 endcase
 
 testcase NewDok
@@ -67,13 +67,13 @@ testcase NewDok
     '///+a new HTML-doc
     '///+a new Master-doc
     '///+a new Math-doc
-   Call NewDocument ("Writer")
-   Call NewDocument ("Calc")
-   Call NewDocument ("Impress")
-   Call NewDocument ("Draw")
-   Call NewDocument ("Math")
-   Call NewDocument ("HTMLDokument")
-   Call NewDocument ("MASTERDOC")
+   Call NewDocument ("WRITER")
+   Call NewDocument ("CALC")
+   Call NewDocument ("IMPRESS")
+   Call NewDocument ("DRAW")
+   Call NewDocument ("MATH")
+   Call NewDocument ("HTML")
+   Call NewDocument ("MASTERDOCUMENT")
 
     '///close one by one with file/close
    PrintLog "   Close all documents ( file/close )"

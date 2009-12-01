@@ -44,7 +44,7 @@ sub sToolsCustomizeKeyboardFunction
     dim sTemp as string
     
     ' go through all applications:
-    aApplication()=array("WRITER","MASTERDOC","HTMLDOKUMENT","CALC","IMPRESS","DRAW","MATH","INSIGHT")
+    aApplication()=array("WRITER","MASTERDOCUMENT","HTML","CALC","IMPRESS","DRAW","MATH","DATABASE")
     a=uBound(aApplication())
     sTemp = gApplication
     for i = 0 to a
@@ -93,6 +93,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
     dim i87952 as string
     dim i92080 as string
     dim i96322 as string
+    dim i100037 as string
     
     i60617 = ".uno:ContinueNumbering"
     i43969 = ".uno:MacroOrganizer"
@@ -105,6 +106,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
 	i87952 = ".uno:InsertApplet"
 	i92080 = ".uno:SaveGraphic"
 	i96322 = ".uno:ActivateStyleApply"
+	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage"
     
     '/// open application ///'
     Call hNewDocument
@@ -180,6 +182,11 @@ testcase tToolsCustomizeKeyboardFunction(lList())
                         endif
                         if (inStr(i96322,sTemp2)>0) then
                             qaErrorLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            bErrorFound = true
+                        endif
+                        
+                        if (inStr(i100037,sTemp2)>0) then
+                            qaErrorLog "#i100037# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if ( not bErrorFound ) then

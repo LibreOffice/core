@@ -206,7 +206,9 @@ testcase tiPengineAnimationEffectsPreview
         sleep (2)
     '/// close application ///'
     Call hCloseDocument
-endcase
+endcase 'tiPengineAnimationEffectsPreview
+
+'------------------------------------------------------------------------------
 
 testcase tiPengineAnimationEffectsOptions
     dim bError as boolean
@@ -309,7 +311,7 @@ SlideShowCustomAnimation
    EffectRemove.Click
    '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiPengineAnimationEffectsOptions
 
 '------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -370,7 +372,7 @@ testcase tiPengineAllShapesAndEffects
 '/// Close Application ///'
     Call hCloseDocument
     Printlog "Finished Optional-test for Presentation-Engine"
-endcase
+endcase 'tiPengineAllShapesAndEffects
 
 '-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -381,17 +383,17 @@ testcase tiPengine2ObjectsGetsEffects
     dim e as integer
     dim sFileName as string
 
-    '/// the Presentation-Engine consists of showing the presentation, with all it's effects. ///'
+    printlog "the Presentation-Engine consists of showing the presentation, with all it's effects."
 
-    '/// Create a new presentation. ///'
+    printlog "Create a new presentation."
     Call hNewDocument
     sleep (1)
 
     kontext "Toolbar"
     sleep (1)
     printlog "insert a Smiley."
-    '/// From the toolbar: Insert three objects: ///'
-    '/// insert a Smiley. ///'
+    printlog "From the toolbar: Insert three objects:"
+    printlog "insert a Smiley."
     kontext "Toolbar"
     if Toolbar.Exists then
         if Toolbar.IsVisible then
@@ -414,51 +416,51 @@ testcase tiPengine2ObjectsGetsEffects
             kontext "SymbolShapes"
 	    SymbolShapes.Close
 
-            '/// Unmark all objects ///'
+            printlog "Unmark all objects"
             hTypeKeys "<ESCAPE>"
 
-            '/// Mark the Smiley ///'
+            printlog "Mark the Smiley"
             hTypeKeys "<TAB>"
         else
             warnlog "No toolbar visible, please notify the test-administrator"
         end if
     else        
-        warnlog "bla bla" ' sch�nes warnlog
+        warnlog "toolbar not visible"
     end if
 
-    '/// Smiley inserted, time to add some effects. ///'
+    printlog "Smiley inserted, time to add some effects."
 
-    '/// Effect no 1 ///'
+    printlog "Effect no 1"
 
-    '/// Slide Show->Custom Animation... ///'
+    printlog "Slide Show->Custom Animation..."
     SlideShowCustomAnimation
         Kontext "Tasks"
-        '/// Click button 'Add...' ///'
+        printlog "Click button 'Add...'"
         EffectAdd.click
-        '/// Dialog 'Custom Animation' comes up ///'
+        printlog "Dialog 'Custom Animation' comes up"
         kontext
-        '/// Switch to TabPage: Entrance ///'
+        printlog "Switch to TabPage: Entrance"
         active.setPage(TabEntrance)
         kontext "TabEntrance"
         if TabEntrance.exists(5) then
             DialogTest(TabEntrance)
-            '/// Find "Dissolve-in". ///' 
+            printlog "Find 'Dissolve-in'." 
             TabEntrance.TypeKeys "<DOWN>", 6
             Sleep (3)
             TabEntrance.Ok
             Printlog "Added effect 'Dissolve-in'"
         else
-            warnlog "uh hu?"
+            warnlog "Tab Entrance does not exist?"
         end if
         Kontext "Tasks"
 
-    '/// Effect no 2 ///'
+    printlog "Effect no 2"
 
-    '/// Add a second effect to the object ///'
+    printlog "Add a second effect to the object"
     EffectAdd.click
     
-    '/// Dialog 'Custom Animation' comes up ///'
-    '/// Switch to TabPage: Emphasis ///'
+    printlog "Dialog 'Custom Animation' comes up"
+    printlog "Switch to TabPage: Emphasis"
     kontext
     active.setPage(TabEmphasis)
     kontext "TabEmphasis"
@@ -466,7 +468,7 @@ testcase tiPengine2ObjectsGetsEffects
         DialogTest(TabEmphasis)
         Effects.Select 5    'Transparency
         Sleep (3)
-        '/// Close dialog 'Custom Animation' with 'OK' ///'
+        printlog "Close dialog 'Custom Animation' with 'OK'"
         TabEmphasis.OK
         Printlog "Added effect 'Transparency'"
     else
@@ -474,34 +476,34 @@ testcase tiPengine2ObjectsGetsEffects
     end if
     Kontext "Tasks"
 
-    '/// Effect no 3 ///'
+    printlog "Effect no 3"
 
-    '/// Insert new slide ///'
+    printlog "Insert new slide"
     InsertSlide
     Printlog "Inserted new Slide" 
 
     kontext "Slides"
-    '/// Make sure the last slide is selcted ///'
+    printlog "Make sure the last slide is selcted"
     SlidesControl.TypeKeys "<TAB>"
     SlidesControl.TypeKeys "<PAGEDOWN>", 3
     Sleep (1)
 
-    '/// Insert new object ///'
+    printlog "Insert new object"
     Call hTextrahmenErstellen ("Test text for the second slide to test the PresentationEngine", 35, 35, 70, 70)
 
-    '/// Add the Transformation-Effect "put on the brakes" ///' 
+    printlog "Add the Transformation-Effect 'put on the brakes'" 
     SlideShowCustomAnimation
         Kontext "Tasks"
-        '/// Click button 'Add...' ///'
+        printlog "Click button 'Add...'"
         EffectAdd.click
-            '/// Dialog 'Custom Animation' comes up ///'
+            printlog "Dialog 'Custom Animation' comes up"
             kontext
-            '/// Switch to TabPage: Entrance ///'
+            printlog "Switch to TabPage: Entrance"
             active.setPage(TabEntrance)
             kontext "TabEntrance"
             if TabEntrance.exists(5) then
-                '/// Add Transformation-Effect: "Put on the Breaks" ///' ' ist das Sprachabh�nig 
-                TabEntrance.TypeKeys "<DOWN>", 30  ' ist das Sprachabh�nig
+                printlog "Add Transformation-Effect: 'Put on the Breaks'"
+                TabEntrance.TypeKeys "<DOWN>", 30  
                 Sleep (3)
                 TabEntrance.Ok
                 Printlog "Added effect 'Put on the Breaks'"
@@ -510,18 +512,18 @@ testcase tiPengine2ObjectsGetsEffects
             end if
             Kontext "Tasks"
 
-            '/// Effect no 4 ///'
+            printlog "Effect no 4"
 
-            '/// Click button 'Add...' ///'
+            printlog "Click button 'Add...'"
             EffectAdd.click
-            '/// Dialog 'Custom Animation' comes up ///'
+            printlog "Dialog 'Custom Animation' comes up"
             kontext
-            '/// Switch to TabPage: Motion Paths ///'
+            printlog "Switch to TabPage: Motion Paths"
             active.setPage(TabMotionPaths)
             kontext "TabMotionPaths"
             if TabMotionPaths.exists(5) then
-                '/// Add "motion-path"-effect:  '"schwosch"  ///'  ' ist das Sprachabh�nig  
-                TabMotionPaths.TypeKeys "<DOWN>", 66  ' ist das Sprachabh�nig
+                printlog "Add motion-path-effect:  'schwosch'"
+                TabMotionPaths.TypeKeys "<DOWN>", 66 
                 Sleep (3)                
                 TabMotionPaths.Ok
                 Printlog "Added effect 'Schwosch'"
@@ -530,33 +532,37 @@ testcase tiPengine2ObjectsGetsEffects
                 warnlog "Couldn't find the Tabpage: MotionPaths. Check why."
             end if
 
-        '/// Press 'PageUp' to get to the first slide. ///'
+        printlog "Press 'PageUp' to get to the first slide"
         hTypeKeys "<PAGEUP>"
 
-        '/// Run the slideshow. ///'
+        printlog "Run the slideshow with F5."
         hTypeKeys "<F5>"
-
+        Sleep (5)
         kontext "DocumentPresentation"
         if DocumentPresentation.Exists (15) then
-            Printlog "Presentation started"
+            Printlog "Presentation started, calling 1st effect, 1st object."
             DocumentPresentation.TypeKeys "<SPACE>"
             sleep (5)
         else
             warnlog "Slideshow didn't start. Check why."
-            ' Wenn keine Slideshow vorhanden ist,
-            ' dann kann man auch den ganzen Test abbrechen            
         end if
-
+        printlog "calling 2nd effect, 1st object."
         DocumentPresentation.TypeKeys "<SPACE>"
         Sleep (5)
+        printlog "calling 2nd slide."
         DocumentPresentation.TypeKeys "<SPACE>"
         Sleep (5)
+        printlog "calling 1st effect, 2nd object"
         DocumentPresentation.TypeKeys "<SPACE>"
         Sleep (5)
+        printlog "calling 2nd effect, 2nd object"
         DocumentPresentation.TypeKeys "<SPACE>"
         Sleep (5)
+        printlog "ending presentation"
         DocumentPresentation.TypeKeys "<SPACE>"
         Sleep (5)
+        Kontext "DocumentPresentation"
+        printlog "getting back to edit view."
         DocumentPresentation.TypeKeys "<SPACE>"
         
         if DocumentPresentation.Exists(5) then 
@@ -565,10 +571,10 @@ testcase tiPengine2ObjectsGetsEffects
 
         Kontext "DocumentImpress"
 
-    '/// Close the document ///'
+    printlog "Close the document"
     Call hCloseDocument
     Printlog "Finished Optional-test for Presentation-Engine"
-endcase
+endcase 'tiPengine2ObjectsGetsEffects
 
 '------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -607,5 +613,3 @@ Function TestAnimations
    AutomaticPreview.Check
    Kontext
 end Function
-
-

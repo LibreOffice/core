@@ -125,7 +125,7 @@ testcase tiViewToolbar
     ViewToolbarsFontwork
     WaitSlot (1000)
 
-    '   if LCase(gApplication) = "impress" then
+    '   if gApplication = "IMPRESS" then
     '/// View->Toolbars->Presentation ///'
     '      ViewToolbarsPresentation ' only in impress, not draw
     '/// View->Toolbars->Presentation ///'

@@ -313,7 +313,7 @@ testcase tToolsOptions
     ToolsOptions
     '/// Choose 'Calc – General'
     printlog " Choose 'Calc – General'"
-    hToolsOptions("SPREADSHEET", "GENERAL")
+    hToolsOptions("CALC", "GENERAL")
     Call DialogTest ( TabLayoutCalc )
     '/// Verify that the 'Measurement' combobox has items
     printlog " Verify that the 'Measurement' combobox has items"
@@ -330,7 +330,7 @@ testcase tToolsOptions
     end if
     '/// Choose 'Calc – View'
     printlog " Choose 'Calc – View'"
-    hToolsOptions("SPREADSHEET", "VIEW")
+    hToolsOptions("CALC", "VIEW")
     Call DialogTest ( TabInhaltCalc )
     '/// Verify that the 'Color' combobox has items
     printlog " Verify that the 'Color' combobox has items"
@@ -354,11 +354,11 @@ testcase tToolsOptions
     end if
     '/// Choose 'Calc – Calculate'
     printlog " Choose 'Calc – Calculate'"
-    hToolsOptions("SPREADSHEET", "CALCULATE")
+    hToolsOptions("CALC", "CALCULATE")
     Call DialogTest ( TabBerechnen )
     '/// Choose 'Calc – Sortlists'
     printlog " Choose 'Calc – Sortlists'"
-    hToolsOptions("SPREADSHEET", "SORTLISTS")
+    hToolsOptions("CALC", "SORTLISTS")
     Call DialogTest ( TabSortierlisten )
     '/// Verify that there are sortlists available
     printlog " Verify that there are sortlists available"
@@ -367,7 +367,7 @@ testcase tToolsOptions
     end if
     '/// Choose 'Calc – Changes'
     printlog " Choose 'Calc – Changes'"
-    hToolsOptions("SPREADSHEET", "CHANGES")
+    hToolsOptions("CALC", "CHANGES")
     Call DialogTest ( TabAenderungenCalc )
     '/// Verify that the 'Changes' combobox has items
     printlog " Verify that the 'Changes' combobox has items"
@@ -376,7 +376,7 @@ testcase tToolsOptions
     end if
     '/// Choose 'Calc – Grid'
     printlog " Choose 'Calc – Grid'"
-    hToolsOptions("SPREADSHEET", "GRID")
+    hToolsOptions("CALC", "GRID")
     Call DialogTest ( TabRaster )
     '/// Decrease 'Horizontal Resolution'
     printlog " Decrease 'Horizontal Resolution'"
@@ -386,7 +386,7 @@ testcase tToolsOptions
     RasterUnterteilungXAchse.More
     '/// Choose 'Calc – Print'
     printlog " Choose 'Calc – Print'"
-    hToolsOptions("SPREADSHEET", "PRINT")
+    hToolsOptions("CALC", "PRINT")
     Call DialogTest ( TabPrintCalcOptions )
     '/// Close 'Options' dialog with 'Cancel'
     printlog " Close 'Options' dialog with 'Cancel'"

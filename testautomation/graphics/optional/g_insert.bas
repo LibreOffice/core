@@ -66,7 +66,7 @@ sub main
     Call tInsertChart
     Call tdInsertFile
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
 
     Call tInsertFloatingFrame
@@ -95,6 +95,6 @@ end sub
 sub LoadIncludeFiles
    use "global\system\includes\master.inc"
    use "global\system\includes\gvariabl.inc"
-   gApplication = "Impress"
+   gApplication = "IMPRESS"
    Call GetUseFiles
 end sub

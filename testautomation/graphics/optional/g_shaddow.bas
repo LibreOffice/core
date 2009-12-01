@@ -48,11 +48,11 @@ sub main
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_shaddow.inc"
 
-   gApplication = "Impress"
+   gApplication = "IMPRESS"
    PrintLog "------------------------- " + gApplication + " Shaddow-Optional Test -------------------"
    Call tiShaddow
 
-   gApplication = "Draw"
+   gApplication = "DRAW"
    PrintLog "------------------------- " + gApplication + " Shaddow-Optional Test -------------------"
    Call tiShaddow
 
@@ -62,6 +62,6 @@ end sub
 sub LoadIncludeFiles
    use "global\system\includes\master.inc"
    use "global\system\includes\gvariabl.inc"
-   gApplication = "Draw"
+   gApplication = "DRAW"
    Call GetUseFiles
 end sub

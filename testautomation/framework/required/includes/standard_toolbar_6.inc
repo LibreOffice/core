@@ -53,7 +53,7 @@ testcase tStandardBar_6
     
     '///+<li>Open a new writer doc</li>
     printlog "   - Writer"
-    gApplication = "Writer"
+    gApplication = "WRITER"
     hCreateDocument()
     '///+click on 'new'
 
@@ -70,7 +70,7 @@ testcase tStandardBar_6
     
     '///+<li>Open a new calc doc</li>
     printlog "   - Calc"
-    gApplication = "Calc"
+    gApplication = "CALC"
     hCreateDocument()
     
     '///+<li>Click on 'new'</li>
@@ -87,7 +87,7 @@ testcase tStandardBar_6
     
     '///+<li>Open a new draw doc</li>
     printlog "   - Draw"
-    gApplication = "Draw"
+    gApplication = "DRAW"
     hCreateDocument()
 
     kontext "standardbar"
@@ -103,7 +103,7 @@ testcase tStandardBar_6
     
     '///+<li>Open a new impress doc</li>
     printlog "   - Impress"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     hCreateDocument()
 
     kontext "standardbar"
@@ -136,7 +136,7 @@ testcase tStandardBar_6
     
     '///+<li>Open a new master document</li>
     printlog "   - Master-document"
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     hCreateDocument()
     '///+<li>Click on &quot;new&quot;</li>
 
@@ -159,7 +159,7 @@ testcase tStandardBar_6
     
     '///+<li>Open a new math document</li>
     printlog "   - Math"
-    gApplication = "Math"
+    gApplication = "MATH"
     hCreateDocument()
     '///+<li>Click on 'new'</li>
 

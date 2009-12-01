@@ -30,7 +30,7 @@ Grafikenkopieren svx:CheckBox:RID_OFAPAGE_HTMLOPT:CB_LOCAL_GRF
 Drucklayout svx:CHECKBOX:RID_OFAPAGE_HTMLOPT:CB_PRINT_EXTENSION
 WarnungAnzeigen svx:CheckBox:RID_OFAPAGE_HTMLOPT:CB_STARBASIC_WARNING
 Zeichensatz svx:ListBox:RID_OFAPAGE_HTMLOPT:LB_CHARSET
-UseEnglishLocaleForNumbers HTMLTBO
+UseEnglishLocaleForNumbers svx:CheckBox:RID_OFAPAGE_HTMLOPT:CB_NUMBERS_ENGLISH_US
 
 *TabHyperlinkRahmen HID_FRM_URL
 URL sw:Edit:TP_FRM_URL:ED_URL

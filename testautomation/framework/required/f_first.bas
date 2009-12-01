@@ -31,7 +31,7 @@
 '*
 '/******************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : joerg.skottke@sun.com
 '*
 '* short description : first test, to check global functionality
 '*
@@ -46,12 +46,12 @@ sub main
     call hStatusIn ("framework", "f_first.bas")
     call tAllNew
     
-    gApplication = "Draw"
+    gApplication = "DRAW"
     call tInFilterCountCompare
     call tQuickInsertGraphNotAsLink
     call tJava
     
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call tToolsOptionsTest
     call tDatabaseCheck
     call tHelpRegistration

@@ -55,7 +55,7 @@ testcase tiGruppierung
     Printlog "- Created 3 rectangles for group testing"
   gMouseClick (50,50)                              '/// Put the mouse-marker in the middle of the screen ///'
   EditSelectAll 						   '/// select all rectangles ///'
-  if (lcase(gApplication) = "draw") then
+  if (gApplication = "DRAW") then
      hOpenContextMenu
         sleep(2)
         hMenuSelectNr(12) ' Select "Group"

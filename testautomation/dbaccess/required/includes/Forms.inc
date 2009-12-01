@@ -54,10 +54,10 @@ testcase tNewFormDesign
     printlog "open biblio database"    
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
 
     '/// view forms

@@ -67,7 +67,7 @@ sub main
           call tWriterUIChangesTest11   
           call tProlongedVowelsTest1    
       printlog Chr(13) + "- CJK Feature Switch test -- Calc"
-          gApplication = "Calc"
+          gApplication = "CALC"
           '--Turn on/off Asian language support --"
           call tCalcUIChangesTest_10       
       printlog Chr(13) + "- CJK Feature Switch test -- Impress"
@@ -97,7 +97,7 @@ sub LoadIncludeFiles
    
     use "framework\tools\includes\CJK_tools.inc"
    
-    gApplication   = "Writer"
+    gApplication   = "WRITER"
     call GetUseFiles
     
 end sub

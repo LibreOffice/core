@@ -84,7 +84,7 @@ testcase tStandardBar_1
 
     '///+<li>Open a master-doc and check if the Standardbar does exist</li>
     Printlog " - GLOBALDOC: check if Standardbar exists"
-    gApplication = "GLOBALDOC"
+    gApplication = "MASTERDOCUMENT"
     hAccessStandardBar()
 
     '///+<li>Go back to a writer document</li>

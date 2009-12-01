@@ -708,7 +708,6 @@ function hCountMatchesInList( acItemList() as string, cSearchTerm as string ) as
 
     const CFN = "hCountMatchesInList::"
     printlog( CFN & "Enter" )
-    dim brc as boolean 'a multi purpose boolean returnvalue
     
     dim iHitCount as integer
     dim iItemCount as integer
@@ -720,13 +719,17 @@ function hCountMatchesInList( acItemList() as string, cSearchTerm as string ) as
     iItemCount = ListCount( acItemList() )
     
     '///+<li>Walk through the list and count the hits</li>
+    printlog( CFN & "Begin with term: " & cSearchTerm )
     for iCurrentItem = 1 to iItemCount
     
-        if ( cSearchTerm = acItemList( iCurrentItem ) ) then
+        printlog( acItemList( iCurrentItem ) )
+    
+        if ( instr( acItemList( iCurrentItem ), cSearchTerm ) > 0 ) then
             iHitCount = iHitCount + 1
         endif
         
     next iCurrentItem
+    printlog( CFN & "End" )
    '///</ul>
 
     printlog( CFN & "Exit with result: " & iHitCount )

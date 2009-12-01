@@ -73,7 +73,7 @@ testcase tToolsOptionsWriterCursor
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","FORMATTINGAIDS")
+    Call hToolsOptions ("WRITER","FORMATTINGAIDS")
 
     irgendwas(1) = DirektCursor.IsChecked
     irgendwas(2) = Zonen_Cursor.IsChecked
@@ -123,7 +123,7 @@ testcase tToolsOptionsWriterCursor
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "FORMATTINGAIDS" )
+    Call hToolsOptions ( "WRITER" , "FORMATTINGAIDS" )
 
     if ( irgendwas(1) = DirektCursor.IsChecked ) then WarnLog "DirektCursor state changed BugID: 82955"
     if ( irgendwas(2) = Zonen_Cursor.IsChecked ) then WarnLog "Zonen_Cursor state changed"
@@ -147,7 +147,7 @@ testcase tToolsOptionsWriterCursor
 
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "FORMATTINGAIDS" )
+    Call hToolsOptions ( "WRITER" , "FORMATTINGAIDS" )
 
     DirektCursor.UnCheck
     Zonen_Cursor.UnCheck
@@ -172,7 +172,7 @@ testcase tToolsOptionsWriterCursor
     
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "FORMATTINGAIDS" )
+    Call hToolsOptions ( "WRITER" , "FORMATTINGAIDS" )
     
     if DirektCursor.IsChecked then WarnLog "DirektCursor x"
     if Zonen_Cursor.IsChecked then WarnLog "Zonen_Cursor x"
@@ -216,7 +216,7 @@ testcase tToolsOptionsWriterCursor
     
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "FORMATTINGAIDS" )
+    Call hToolsOptions ( "WRITER" , "FORMATTINGAIDS" )
     
     if not DirektCursor.IsChecked then WarnLog "DirektCursor o"
     if not Zonen_Cursor.IsChecked then WarnLog "Zonen_Cursor o"
@@ -281,7 +281,7 @@ testcase tToolsOptionsWriterChanges
     
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","CHANGES")
+    Call hToolsOptions ("WRITER","CHANGES")
     
     iListBox2(1,1) = EinfuegenAttribute.GetSelIndex
     iListBox2(1,2) = EinfuegenFarbe.GetSelIndex
@@ -332,7 +332,7 @@ testcase tToolsOptionsWriterChanges
     printlog ("'/// - all states inverting ///")
     
     ToolsOptions
-    Call hToolsOptions ("TextDocument","CHANGES")
+    Call hToolsOptions ("WRITER","CHANGES")
     
     if ( EinfuegenAttribute.GetItemCount <> iListBox2(1,1) ) then EinfuegenAttribute.Select (iListBox2(1,1)+1) Else EinfuegenAttribute.Select(iListBox2(1,1)-1)
     if ( EinfuegenFarbe.GetItemCount     <> iListBox2(1,2) ) then EinfuegenFarbe.Select     (EinfuegenFarbe.GetItemCount    ) Else EinfuegenFarbe.Select    (1)
@@ -360,7 +360,7 @@ testcase tToolsOptionsWriterChanges
     
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "CHANGES" )
+    Call hToolsOptions ( "WRITER" , "CHANGES" )
     
     if ( EinfuegenAttribute.GetSelIndex <> iTempListBox2(1,1) ) then WarnLog "EinfuegenAttribute state changed; is: "+EinfuegenAttribute.GetSelIndex +"; should: "+ iTempListBox2(1,1)
     if ( EinfuegenFarbe.GetSelIndex     <> iTempListBox2(1,2) ) then WarnLog "EinfuegenFarbe state changed"
@@ -376,7 +376,7 @@ testcase tToolsOptionsWriterChanges
     
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "CHANGES" )
+    Call hToolsOptions ( "WRITER" , "CHANGES" )
     
     EinfuegenAttribute.Select(1)
     EinfuegenFarbe.Select    (1)
@@ -393,7 +393,7 @@ testcase tToolsOptionsWriterChanges
     
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "CHANGES" )
+    Call hToolsOptions ( "WRITER" , "CHANGES" )
     
     if (EinfuegenAttribute.GetSelIndex <> 1 ) then WarnLog "EinfuegenAttribute is not item 1"
     if (EinfuegenFarbe.GetSelIndex     <> 1 ) then WarnLog "EinfuegenFarbe is not item 1"
@@ -420,7 +420,7 @@ testcase tToolsOptionsWriterChanges
     
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "CHANGES" )
+    Call hToolsOptions ( "WRITER" , "CHANGES" )
     
     if (EinfuegenAttribute.GetSelIndex <> EinfuegenAttribute.GetItemCount ) then WarnLog "EinfuegenAttribute is not item (GetItemCount)"
     if (EinfuegenFarbe.GetSelIndex     <> EinfuegenFarbe.GetItemCount     ) then WarnLog "EinfuegenFarbe is not item (GetItemCount)"
@@ -448,7 +448,7 @@ testcase tToolsOptionsWriterChanges
     DocumentWriter.TypeKeys "<return>"
     
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "CHANGES" )
+    Call hToolsOptions ( "WRITER" , "CHANGES" )
     EinfuegenAttribute.Select (2) 'bold
     EinfuegenFarbe.Select     (8) 'mangenta
     LoeschenAttribute.Select  (4) 'strikethrough
@@ -496,7 +496,7 @@ testcase tToolsOptionsWriterChanges
     '--------------------------------------------------------------------------
     printlog ("'/// - restore states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "CHANGES" )
+    Call hToolsOptions ( "WRITER" , "CHANGES" )
     
     try
         EinfuegenAttribute.Select (iListBox2(1,1))
@@ -575,7 +575,7 @@ goto endsub
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
 
     irgendwas(2) = Ueberschrift.IsChecked
     irgendwas(3) = Wiederholen.IsChecked
@@ -605,7 +605,7 @@ goto endsub
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "Table" )
+    Call hToolsOptions ( "WRITER" , "Table" )
 
     if ( Ueberschrift.IsChecked                = False ) then WarnLog "Ueberschrift state changed"
     if ( irgendwas(3) = Wiederholen.IsChecked                 ) then WarnLog "Wiederholen state changed"
@@ -621,7 +621,7 @@ goto endsub
 
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "Table" )
+    Call hToolsOptions ( "WRITER" , "Table" )
 
     Ueberschrift.UnCheck
     NichtTrennen.UnCheck
@@ -658,7 +658,7 @@ goto endsub
 
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "Table" )
+    Call hToolsOptions ( "WRITER" , "Table" )
 
     if Ueberschrift.IsChecked                then WarnLog "Ueberschrift x"
     if NichtTrennen.IsChecked                then WarnLog "NichtTrennen x"
@@ -710,7 +710,7 @@ goto endsub
 
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "Table" )
+    Call hToolsOptions ( "WRITER" , "Table" )
 
     if ( Ueberschrift.IsChecked                = FALSE ) then WarnLog "Ueberschrift o"
     if ( Wiederholen.IsChecked                 = FALSE ) then WarnLog "Wiederholen o"
@@ -747,7 +747,7 @@ goto endsub
 
     Call hNewDocument
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","AutoCaption")
+    Call hToolsOptions("WRITER","AutoCaption")
     Kontext "TabAutocaption"
     Select Case iSprache
         case 36     :   SplitString = "-"
@@ -866,7 +866,7 @@ goto endsub
     Massstab.OK
 
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","AutoCaption")
+    Call hToolsOptions("WRITER","AutoCaption")
     Kontext "TabAutocaption"
     for i=1 to ObjectList.GetItemCount
         ObjectList.Select i
@@ -891,7 +891,7 @@ testcase tToolsOptionsWriterCompatibility1
     printlog " Test of option 'Use StarOffice 6.0/7 tabstop formatting'"
     Call hNewDocument
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     printlog " Check defaults of checkboxes. if default is wrong then set to default"
     Kontext "TabCompatibility"
     For i = 1 to Options.GetItemCount
@@ -929,7 +929,7 @@ testcase tToolsOptionsWriterCompatibility1
 
     Printlog "check state of all checkboxes and uncheck all checkboxes"
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
     For i = 1 to Options.GetItemCount
         Options.Select i
@@ -954,7 +954,7 @@ testcase tToolsOptionsWriterCompatibility1
 
     printlog "check state of all checkboxes and set defaults"
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
     For i = 1 to Options.GetItemCount
         Options.Select i
@@ -1029,7 +1029,7 @@ testcase tToolsOptionsWriterCompatibility2
     if DefaultFailed = false then
         printlog " in Tools->Options->StarOffice Writer->Compatitibility check option 'Use StarOffice 6.0/7 tabstop formatting'"
         ToolsOptions
-        Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+        Call hToolsOptions("WRITER","COMPATIBILITY")
         printlog " Check defaults of checkboxes. if default is wrong then set to default"
         Kontext "TabCompatibility"
         Options.Select 4
@@ -1063,7 +1063,7 @@ testcase tToolsOptionsWriterCompatibility2
 
         printlog "in Tools->Options->StarOffice Writer->Compatitibility uncheck option 'Use StarOffice 6.0/7 tabstop formatting'"
         ToolsOptions
-        Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+        Call hToolsOptions("WRITER","COMPATIBILITY")
         printlog "Check defaults of checkboxes. if default is wrong then set to default"
         Kontext "TabCompatibility"
         Options.Select 4
@@ -1097,7 +1097,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     printlog "Checking Options settings"
     
     printlog "Tools-Options-OOo Writer-Compatibility"
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
     
     printlog "Verify that the entry 'Expand word space on lines with manual line breaks in justified paragraphs' is checked by default"
@@ -1167,7 +1167,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     Kontext "ExtrasOptionenDLG"
 
     printlog "Uncheck the entry 'Expand word space [...]'"
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
     iOptionsCount = Options.GetItemCount
     Options.Select iOptionsCount
@@ -1221,7 +1221,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     printlog "Tools-Options-OOo Writer-Compatibility"
     ToolsOptions
     Kontext "ExtrasOptionenDLG"
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
 
     printlog "Verify that the entry 'Expand word space [...]' is checked"
@@ -1243,7 +1243,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     printlog "Tools-Options-OOo Writer-Compatibility"
     ToolsOptions
     Kontext "ExtrasOptionenDLG"
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
 
     printlog "Verify that the entry 'Expand word space [...]' is unchecked"
@@ -1328,7 +1328,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     printlog " Tools-Options-OOo Writer-Compatibility"
     ToolsOptions 'calling options
     Kontext "ExtrasOptionenDLG"
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
 
     printlog " Check the entry 'Expand word space [...]"
@@ -1366,7 +1366,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     printlog " Tools-Options-OOo Writer-Compatibility"
     ToolsOptions 'calling options 
     Kontext "ExtrasOptionenDLG"
-    Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
+    Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
     
     printlog " Verify that the entry 'Expand word space [...]' is checked"

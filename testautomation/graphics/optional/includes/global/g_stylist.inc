@@ -245,7 +245,7 @@ testcase tFormatStylistTemplatesUse
     endif
     printlog "   - Presentation-templates"
     '/// if application is impress: click on button 'Presentation Styles' ///'
-    if (Lcase (gApplication) = "impress") then
+    if (Lcase (gApplication) = "IMPRESS") then
         TBGestalter.Click Praesentationsvorlagen
     endif
     '/// select every item from the list 'Styles' ///'
@@ -788,22 +788,22 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
     '/// switch to tabpage 'Area' ///'
     Messagebox.SetPage TabArea
       kontext "TabArea"
-      Call DialogTest2 ( TabArea, 1 )
+      Call DialogTest ( TabArea, 1 )
     '/// select radio button 'none' ///'
       FillOptions.Select 1  '  NoFill.Check
-      Call DialogTest2 ( TabArea, 1 )
+      Call DialogTest ( TabArea, 1 )
     '/// select radio button 'color' ///'
       FillOptions.Select 2
-      Call DialogTest2 ( TabArea, 2 )
+      Call DialogTest ( TabArea, 2 )
     '/// select radio button 'gradient' ///'
       FillOptions.Select 3
-      Call DialogTest2 ( TabArea, 3 )
+      Call DialogTest ( TabArea, 3 )
     '/// select radio button 'hatching' ///'
       FillOptions.Select 4
-      Call DialogTest2 ( TabArea, 4 )
+      Call DialogTest ( TabArea, 4 )
     '/// select radio button 'bitmap' ///'
       FillOptions.Select 5
-      Call DialogTest2 ( TabArea, 5 )
+      Call DialogTest ( TabArea, 5 )
     Kontext
     '/// switch to tabpage 'shadowing' ///'
     Messagebox.SetPage TabSchatten

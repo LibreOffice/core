@@ -91,7 +91,7 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_locale_strings1.inc"
     Call GetUseFiles
-    gApplication = "Writer"
+    gApplication = "WRITER"
 end sub
 
 sub TableConfiguration

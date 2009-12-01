@@ -205,7 +205,7 @@ testcase tEis1523
       warnlog "Unexpected error :-("
    endcatch
 
-   if (lcase(gApplication) = "impress") then
+   if (gApplication = "IMPRESS") then
    '/// IMPRESS only ///'
       '///+ check if Layout placeholders are inherited ///'
       '///+ create new page with [ctrl]+[Return]] ///'
@@ -254,7 +254,7 @@ testcase tEis1581
    '/// open application ///'
    call hNewDocument
 
-   if (lcase(gApplication) = "impress") then
+   if (gApplication = "IMPRESS") then
       '/// Format -> Layout ///'
       FormatModifyPage
       '/// choose layout with graphic ///'

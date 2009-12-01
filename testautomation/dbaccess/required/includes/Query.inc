@@ -936,16 +936,16 @@ sub initQueryDesign
 
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     
     sleep(1)
     
     NewQueryDesign
         
-    ' if not InsightSwapIconView.exists(1) then        
+    ' if not DatabaseSwapIconView.exists(1) then        
         ' warnlog "InsightSwapIconView doesn't exists"
         ' exit sub
     ' end if
@@ -953,17 +953,17 @@ sub initQueryDesign
     ' '/// display Queries View
     ' printlog "display Queries View"
     ' ViewQueries    
-    ' if InsightQueriesView.exists(1) then
+    ' if DatabaseQueriesView.exists(1) then
         ' printlog "InsightQueriesView appear"        
     ' else
         ' warnlog "InsightQueriesView doesn't appear"
         ' exit sub
     ' end if
     ' 
-    ' Kontext "Insight"
+    ' Kontext "DATABASE"
         ' CreationList.select(1)
         ' sleep(1)
-        ' Insight.TypeKeys "<TAB>" , true
-        ' Insight.TypeKeys "<RETURN>" , true
+        ' Database.TypeKeys "<TAB>" , true
+        ' Database.TypeKeys "<RETURN>" , true
         ' sleep(1)
 end sub    

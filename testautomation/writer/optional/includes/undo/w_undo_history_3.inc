@@ -306,7 +306,7 @@ testcase tUndoNote
     kontext "Navigator"
     Navigator.TypeKeys "<DELETE>"
     '/// Close the Navigator
-    EditNavigator
+    ViewNavigator
     '///  string in Undo-list has to be: "Delete: 'This is a note'") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteNote" )
 
@@ -466,7 +466,7 @@ testcase tUndoTableGeneral
 	printlog "- format a cell"
 	'/// <B>Format cell (enable number recognition form that)</B>
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     if Not AutomatischeZahlenerkennung.IsChecked then AutomatischeZahlenerkennung.Check
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Cancel
@@ -478,7 +478,7 @@ testcase tUndoTableGeneral
 	Call CheckUndoStringInUndoList ( 10, "FormatCell" )
 	
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     if AutomatischeZahlenerkennung.IsChecked then AutomatischeZahlenerkennung.UnCheck
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Cancel

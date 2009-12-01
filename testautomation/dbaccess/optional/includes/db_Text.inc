@@ -51,8 +51,8 @@ testcase tCountCharacterSet(sFilename as string)
 
 	'/// open the properties dialog of the open database
     printlog "open the properties dialog of the open database"            
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(1)
@@ -85,17 +85,17 @@ endcase
 '-------------------------------------------------------------------------
 testcase tOpenUTF8File(sFilename as string)
     
-    '/// copy the file TesttoolPath + dbaccess/optional/input/text_datasource/text_database.txt" to your local wotk directory
-    printlog "copy the file TesttoolPath + dbaccess/optional/input/text_datasource/text_database.txt to your local wotk directory"
-    app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/text_datasource/text_database.txt"),gOfficePath + ConvertPath("user/work/text_database.txt")
+    '/// copy the file TesttoolPath + dbaccess/optional/input/text_datasource/text_Database.txt" to your local wotk directory
+    printlog "copy the file TesttoolPath + dbaccess/optional/input/text_datasource/text_Database.txt to your local wotk directory"
+    app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/text_datasource/text_Database.txt"),gOfficePath + ConvertPath("user/work/text_Database.txt")
 
     '/// open the text database create in the bas file
     call fOpendatabase(sFileName)
     
     '/// open the properties dialog of the open database
     printlog "open the properties dialog of the open database"
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(1)

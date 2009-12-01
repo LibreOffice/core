@@ -105,7 +105,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_stringtools.inc"
    
     Call GetUseFiles
-    gApplication   = "DESKTOP"
+    gApplication   = "BACKGROUND"
     
 End Sub
 

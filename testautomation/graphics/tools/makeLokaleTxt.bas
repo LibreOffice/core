@@ -116,7 +116,7 @@ printlog "Strings from current office: "
    hCloseDocument
 
 '(3)tFormatStylistTemplateSelect 'stylist.inc::tFormatStylistTemplateSelect
-    gApplication = "Writer"
+    gApplication = "WRITER"
    hNewDocument
    kontext "Gestalter"
    if NOT Gestalter.Exists then
@@ -126,14 +126,14 @@ printlog "Strings from current office: "
    glLocale (3) = Vorlagenliste.getSelText    '   HID_STYLE_LISTBOX   ' get "Default"
    printlog "L3: '" + glLocale (3) + "'"
    hCloseDocument
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
 
 '(4)ASIANONLY tiToolsSpellcheckError
 ' no need to exclude eurtopean!
 ' this entry will get English (USA)
 '   spellbook language as alternative for not existijng asians one
 '    tiToolsSpellcheckError
-    gApplication = "Draw"
+    gApplication = "DRAW"
     hDateiOeffnen (convertPath(gTesttoolpath + "graphics/required/input/recht_1.sxd"))
     sleep 5
     hTypeKeys "<Tab><F2><Mod1 Home><Shift End>"
@@ -154,7 +154,7 @@ printlog "Strings from current office: "
     TabFont.Ok
     sleep 5
     Call hCloseDocument
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
 
 '(5)tFormatStylistBackground
 '    stylist only one tabpage area!
@@ -245,7 +245,7 @@ printlog "Strings from current office: "
 
 '(6)
 ' this entry will get German (Germany)
-    gApplication = "Draw"
+    gApplication = "DRAW"
     hDateiOeffnen (convertPath(gTesttoolpath + "graphics/required/input/recht_49.sxd"))
     sleep 5
     hTypeKeys "<Tab><F2><Mod1 Home><Shift End>"
@@ -267,7 +267,7 @@ printlog "Strings from current office: "
     sleep 5
     Call hCloseDocument
 
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
 
    dim lLocale (15*20) as string ' list, where file gets loaded into
    dim flocale as string
@@ -287,7 +287,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub
 

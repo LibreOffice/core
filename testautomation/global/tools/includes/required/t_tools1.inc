@@ -41,7 +41,7 @@ private SLEEP_TIME_REQUESTED as integer
 private SLEEP_CALLS_SUM as integer
 private SLEEP_TIME_USED as integer
 
-private const VERBOSE = false
+private const VERBOSE = true
 
 function GetClipboardText as string
 
@@ -116,11 +116,13 @@ function hDoubleClickInList ( window, Selektion as String, optional bFocus as bo
                 window.MouseDown 5, i +1
                 window.MouseUp 5, i +1
                 
-                if Window.GetText = Selektion then     ' catch if <down> had any effects
+                ' catch if <down> had any effects
+                if Window.GetText = Selektion then     
                 
                     window.MouseDoubleClick 5, i +1
                     
-                    if (isMissing (bFocus) = FALSE) then ' if optional parameter provided
+                    ' if optional parameter provided
+                    if (isMissing (bFocus) = FALSE) then 
                         window.MouseDown 5, i +1
                         window.MouseUp 5, i +1
                     endif
@@ -203,10 +205,11 @@ function wielange (StrtTime, optional iFormat as integer) as String
     Zeitspannesek = Zeitspannesek - Zeitspannemin * 60
     Zeitspannesek = Fix(Zeitspannesek)
     select case iFormat
-    case 0: 
+    case 0 
         sTemp = "" & Zeitspanneh & "h " & Zeitspannemin & "m " & Zeitspannesek & "s"
-    case 1: 
-        if Zeitspanneh < 10 then         ' mysql format for status.inc
+    case 1 
+    ' mysql format for status.inc
+        if Zeitspanneh < 10 then         
             sTemp = "0" & Zeitspanneh & ":"
         else
             sTemp = "" & Zeitspanneh & ":"
@@ -421,15 +424,6 @@ sub DialogTest( Window, optional iNumber as integer)
         endcatch
         printlog sPicName
     end if
-    
-end sub
-
-'*******************************************************************************
-
-sub DialogTest2( Window, i% )
-
-    'deprecated TBO:2006/03/16
-    DialogTest( Window, i% )
     
 end sub
 
@@ -938,20 +932,27 @@ function GetDecimalSeperator ( optional sDummy$ ) as String
         '/// Tools / Options / (Modul: gApplication) / General tabpage.
         ToolsOptions
         '///+ <ol><li>Reading the string of the tabulator numeric field</li>
-        select case UCase(gApplication)
-        case "WRITER",  "TEXTDOKUMENT"    : Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+        select case gApplication
+        case "WRITER" 
+            Call hToolsOptions("WRITER","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case "CALC", "TABELLENDOKUMENT"   : Call hToolsOptions("SPREADSHEET","GENERAL")
+        case "CALC" 
+            Call hToolsOptions("CALC","GENERAL")
             sCheckForSeparator = Tabulator.GetText
-        case "IMPRESS", "PRAESENTATION"   : Call hToolsOptions("PRESENTATION","GENERAL")
+        case "IMPRESS" 
+            Call hToolsOptions("IMPRESS","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case "DRAW", "ZEICHNUNG"          : Call hToolsOptions("DRAWING","GENERAL")
+        case "DRAW" 
+            Call hToolsOptions("DRAW","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case "GLOBALDOC", "GLOBALDOKUMENT": Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+        case "MASTERDOCUMENT"
+            Call hToolsOptions("WRITER","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case "HTML", "HTMLDOKUMENT"       : Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+        case "HTML"
+            Call hToolsOptions("WRITER","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case else                         : warnlog cWhereIsThisFunction & "For this module ("& gApplication &") no decimal seperator setting exists."
+        case else
+            warnlog cWhereIsThisFunction & "For this module ("& gApplication &") no decimal seperator setting exists."
         end select
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
@@ -1193,4 +1194,121 @@ sub raiseApplication
         
     end if
 end sub
+
+'*******************************************************************************
+
+function hUseAsyncSlot( cSlot as string ) as integer
+
+    dim iWait as integer
+    dim iTime as integer : iTime = 0
+    const MAX_WAIT = 50
+    const CFN = "global::tools::includes::required::hUseAsyncSlot():"
+
+    if ( VERBOSE ) then printlog( CFN & "Using slot: " & cSlot )    
+    WaitSlot()
+    for iWait = 1 to MAX_WAIT
+        try
+            select case ( lcase( cSlot ) )
+            case "fileclose"                      : FileClose
+            case "filesaveas"                     : FileSaveAs
+            case "filesaveall"                    : FileSaveAll
+            case "fileexport"                     : FileExport
+            case "filereload"                     : FileReload
+            
+            case "editcopy"                       : EditCopy
+            case "editchangesrecord"              : EditChangesRecord
+            case "editchangesshow"                : EditChangesShow
+            case "editchangesprotecttrace"        : EditChangesProtectTrace
+            case "editchangescomment"             : EditChangesComment
+
+            case "editpaste"                      : EditPaste
+            case "editcut"                        : EditCut
+            case "editselectall"                  : EditSelectAll
+            case "editselectallmath"              : EditSelectAllMath
+            case "editselectionmodeblock"         : EditSelectionModeBlock
+            case "editselectionmodestandard"      : EditSelectionModeStandard
+            case "editdeletecontents"             : EditDeleteContents
+            case "editundo"                       : EditUndo
+            case "editredo"                       : EditRedo
+            case "editrepeat"                     : EditRepeat
+            case "editpastespecial"               : EditPasteSpecial
+            case "editpastespecialwriter"         : EditPasteSpecialWriter
+            case "editsearchandreplace"           : EditSearchAndReplace
+            case "editduplicate"                  : EditDuplicate
+            case "editgluepoints"                 : EditGluePoints
+            case "editdeleteslide"                : EditDeleteSlide
+            case "editobjectproperties"           : EditObjectProperties
+            case "editobjectedit"                 : EditObjectEdit
+            case "editobjectsavecopyas"           : EditObjectSaveCopyAs
+            
+            case "formatcontrol"                  : FormatControl
+            case "formateditpoints"               : FormatEditPoints
+            case "formatsections"                 : FormatSections
+            case "formatchangecaseupper"          : FormatChangeCaseUpper
+            case "formatchangecaselower"          : FormatChangeCaseLower
+            case "formatarea"                     : FormatArea
+            case "formatarrangebringtofrontcalc"  : FormatArrangeBringToFrontCalc
+            case "formatflipvertically"           : FormatFlipVertically
+            case "formatfliphorizontally"         : FormatFlipHorizontally
+            case "formatline"                     : FormatLine
+            case "formatpositionandsize"          : FormatPositionAndSize
+            
+            case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
+            
+            case "contextpositionandsize"         : ContextPositionAndSize
+            
+            case else : warnlog( "Unknown slot called: " & cSlot )
+            end select
+            
+            exit for
+        catch
+            wait( 100 )
+            iTime = iWait * 100
+        endcatch
+    next iWait
+    
+    ' Timeout is -1
+    if ( iTime = 5000 ) then
+        iTime = -1 
+    endif
+    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
+    hUseAsyncSlot() = iTime
+    
+    
+end function
+
+'*******************************************************************************
+
+function hClickButton( oButton as object ) as integer
+
+    dim iWait as integer
+    dim iTime as integer : iTime = 0
+    const MAX_WAIT = 50
+    const CFN = "global::tools::includes::required::hClickButton():"
+
+    if ( VERBOSE ) then printlog( CFN & "Click button: " & oButton.name() )    
+    WaitSlot()
+    for iWait = 1 to MAX_WAIT
+        try
+            if ( oButton.exists() ) then
+                if ( VERBOSE ) then printlog( CFN & "Button exists" )
+                if ( oButton.isEnabled() ) then
+                    if ( VERBOSE ) then printlog( "Button is enabled" )
+                    oButton.click()
+                endif
+            endif
+            exit for
+        catch
+            wait( 100 )
+            iTime = iWait * 100
+        endcatch
+    next iWait
+    if ( iTime = 5000 ) then
+        iTime = -1 
+    endif
+    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
+    hClickButton() = iTime
+    
+end function
+
 

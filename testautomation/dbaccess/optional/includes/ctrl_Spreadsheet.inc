@@ -56,7 +56,7 @@ testcase tListBox
     dim i as integer
     printlog "- Formular toolbox: List box element (" & gApplication & ")"
     '/// open a spreadsheet, insert a listbox (the wizard appears)
-    gApplication = "Calc"
+    gApplication = "CALC"
     call hNewDocument
     Kontext "DocumentCalc"
     DocumentCalc.TypeKeys("Value1")
@@ -134,7 +134,7 @@ endcase
 testcase tTextBox     
     
     '/// Open a new document,
-    gApplication = "Calc"
+    gApplication = "CALC"
     printlog "Open a new document,"
 	call hNewDocument
     Kontext "DocumentCalc"       
@@ -248,14 +248,14 @@ testcase tTextBox
             warnlog "the cell bound doesn't work"
         endif
     hCloseDocument
-    gApplication = "Writer"
+    gApplication = "WRITER"
 
 endcase
 '--------------------------------------------------------------------------------------
 testcase tCheckBox     
     
     '/// Open a new document,
-    gApplication = "Calc"
+    gApplication = "CALC"
     printlog "Open a new document,"
 	call hNewDocument
     Kontext "DocumentCalc"	
@@ -378,7 +378,7 @@ testcase tCheckBox
             warnlog "the cell bound doesn't work"
         endif
     hCloseDocument
-    gApplication = "Writer"
+    gApplication = "WRITER"
 
 endcase
 '-------------------------------------------------------------------------

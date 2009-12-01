@@ -65,7 +65,7 @@ testcase DrawToHTMLScrollingText
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>"
   EditCopy
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open a new writerdocument "
   Call hNewDocument
   Sleep 2
@@ -81,7 +81,7 @@ testcase DrawToHTMLScrollingText
   printlog "  Paste 'Scrolling Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog " + Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_html_scrolling_text.html", "HTML")
     printlog " + Save document as ..\user\work\draw_to_html_scrolling_text.html"
@@ -123,7 +123,7 @@ testcase DrawToHTMLGroupedObject
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",2
   EditCopy
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open a new writerdocument "
   Call hNewDocument
   Sleep 2
@@ -139,7 +139,7 @@ testcase DrawToHTMLGroupedObject
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog " + Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_html_grouped_object.html", "HTML")
     printlog " + Save document as ..\user\work\draw_to_html_grouped_object.html"
@@ -181,7 +181,7 @@ testcase DrawToHTML3D
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",3
   EditCopy
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open a new writerdocument "
   Call hNewDocument
   Sleep 2
@@ -197,7 +197,7 @@ testcase DrawToHTML3D
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog " + Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_html_3d.html", "HTML")
     printlog " + Save document as ..\user\work\draw_to_html_3d.html"
@@ -239,7 +239,7 @@ testcase DrawToHTMLFontwork
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",4
   EditCopy
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open a new writerdocument "
   Call hNewDocument
   Sleep 2
@@ -255,7 +255,7 @@ testcase DrawToHTMLFontwork
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog " + Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_html_fontwork.html", "HTML")
     printlog " + Save document as ..\user\work\draw_to_html_fontwork.html"
@@ -297,7 +297,7 @@ testcase DrawToHTMLBullets
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",5
   EditCopy
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open a new writerdocument "
   Call hNewDocument
   Sleep 2
@@ -313,7 +313,7 @@ testcase DrawToHTMLBullets
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog " + Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_html_bullets.html", "HTML")
     printlog " + Save document as ..\user\work\draw_to_html_bullets.html"
@@ -356,7 +356,7 @@ testcase DrawToHTMLDimensionLines
   DocumentDraw.TypeKeys "<PageDown>"
   DocumentDraw.TypeKeys "<Tab>"
   EditCopy
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open a new writerdocument "
   Call hNewDocument
   Sleep 2
@@ -372,7 +372,7 @@ testcase DrawToHTMLDimensionLines
   printlog "  Paste 'Dimension Lines' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog " + Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_html_dim_lines.html", "HTML")
     printlog " + Save document as ..\user\work\draw_to_html_dim_lines.html"
@@ -415,7 +415,7 @@ testcase DrawToHTMLConnectors
   DocumentDraw.TypeKeys "<PageDown>"
   DocumentDraw.TypeKeys "<Tab>"
   EditCopy
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open a new writerdocument "
   Call hNewDocument
   Sleep 2
@@ -431,7 +431,7 @@ testcase DrawToHTMLConnectors
   printlog "  Paste 'Connectors' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog " + Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_html_connectors.html", "HTML")
     printlog " + Save document as ..\user\work\draw_to_html_connectors.html"

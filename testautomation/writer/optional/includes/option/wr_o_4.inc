@@ -82,7 +82,7 @@ testcase tToolsOptionsWriterOther
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","GENERAL")
+    Call hToolsOptions ("WRITER","GENERAL")
 
     irgendwas(2) = Feldbefehle.IsChecked
     irgendwas(3) = Diagramme.IsChecked
@@ -130,7 +130,7 @@ testcase tToolsOptionsWriterOther
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GENERAL" )
+    Call hToolsOptions ( "WRITER" , "GENERAL" )
 
     if ( irgendwas(2) = Feldbefehle.IsChecked                         ) Then WarnLog "Feldbefehle state changed"
     if Feldbefehle.IsChecked Then if ( irgendwas(3) = Diagramme.IsChecked ) Then WarnLog "Diagramme state changed"
@@ -146,7 +146,7 @@ testcase tToolsOptionsWriterOther
 
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GENERAL" )
+    Call hToolsOptions ( "WRITER" , "GENERAL" )
 
     Feldbefehle.UnCheck
 
@@ -169,7 +169,7 @@ testcase tToolsOptionsWriterOther
 
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GENERAL" )
+    Call hToolsOptions ( "WRITER" , "GENERAL" )
 
     if Feldbefehle.IsChecked                         Then WarnLog "Feldbefehle x"
 
@@ -191,7 +191,7 @@ testcase tToolsOptionsWriterOther
 
     ' set Default Tab Stop to 2,5cm
     ToolsOptions
-    Call hToolsOptions ("TextDocument","GENERAL")
+    Call hToolsOptions ("WRITER","GENERAL")
     Masseinheit.Select (2) ' cm
 '   printlog "before " + Tabulatorenabstand.GetText
     Tabulatorenabstand.SetText ("2" + GetDecimalSeperator(Tabulatorenabstand.GetText) + "50" + mUnit)
@@ -212,7 +212,7 @@ testcase tToolsOptionsWriterOther
     Call hNewDocument
 '   set Default Tab Stop to 2,9cm
     ToolsOptions
-    Call hToolsOptions ("TextDocument","GENERAL")
+    Call hToolsOptions ("WRITER","GENERAL")
     Masseinheit.Select (2) ' cm
 '   printlog "before " + Tabulatorenabstand.GetText
     Tabulatorenabstand.SetText ( "2" + GetDecimalSeperator(Tabulatorenabstand.GetText) + "90" + mUnit )
@@ -227,7 +227,7 @@ testcase tToolsOptionsWriterOther
     sleep (2)
 '   check TabStops, have to be the ones this file was saved with
     ToolsOptions
-    Call hToolsOptions ("TextDocument","GENERAL")
+    Call hToolsOptions ("WRITER","GENERAL")
     Masseinheit.Select (2) ' cm
 '   printlog "before " + Tabulatorenabstand.GetText
     if Tabulatorenabstand.GetText <> ("2" + GetDecimalSeperator(Tabulatorenabstand.GetText) + "50" + mUnit) Then
@@ -243,7 +243,7 @@ testcase tToolsOptionsWriterOther
     Printlog ("'/// - all Check -> x ///")
 
     ToolsOptions
-    Call hToolsOptions ("TextDocument","GENERAL")
+    Call hToolsOptions ("WRITER","GENERAL")
 
 '   NurFuerAktuellesDokument.Check
     Feldbefehle.Check
@@ -266,7 +266,7 @@ testcase tToolsOptionsWriterOther
 
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GENERAL" )
+    Call hToolsOptions ( "WRITER" , "GENERAL" )
 
 '   if not NurFuerAktuellesDokument.IsChecked            Then WarnLog "NurFuerAktuellesDokument o"
     if not Feldbefehle.IsChecked                         Then WarnLog "Feldbefehle o"
@@ -333,7 +333,7 @@ sub hGetAllOptionsWriterGeneralCaption
     Call hNewDocument
 
     ToolsOptions
-    Call hToolsOptions ("TextDocument","AutoCaption")
+    Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
 
     for x=1 to ObjectList.GetItemCount
@@ -357,7 +357,7 @@ sub hGetAllOptionsWriterGeneralCaption
 
     Printlog "'///(2/3) Select every ListItem & exit with OK ///"
     ToolsOptions
-    Call hToolsOptions ("TextDocument","AutoCaption")
+    Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
 
     for x=1 to ObjectList.GetItemCount
@@ -385,7 +385,7 @@ sub hGetAllOptionsWriterGeneralCaption
     ' put them in lsHoleTabPage2 and write them to 'user\work\opt2_...'
 
     ToolsOptions
-    Call hToolsOptions ("TextDocument","AutoCaption")
+    Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
     for x=1 to ObjectList.GetItemCount
 '       Printlog x
@@ -433,7 +433,7 @@ testcase tToolsOptionsWriterAutoCaption
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","AutoCaption")
+    Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
 
     NumberOfObjects = ObjectList.GetItemCount
@@ -473,7 +473,7 @@ testcase tToolsOptionsWriterAutoCaption
     
     printlog ("'/// - verify if all unchecked and check all ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","AutoCaption")
+    Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
     for i=1 to NumberOfObjects
         ObjectList.Select (i)
@@ -488,7 +488,7 @@ testcase tToolsOptionsWriterAutoCaption
 
     printlog ("'/// - verify all checkboxes are checked ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","AutoCaption")
+    Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
     for i=1 to NumberOfObjects
         ObjectList.Select (i)
@@ -562,7 +562,7 @@ testcase tToolsOptionsWriterAutoCaption
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","AutoCaption")
+    Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
     for i=1 to NumberOfObjects
         printlog "-   checking: " & ObjectList.Gettext
@@ -713,7 +713,7 @@ testcase tToolsOptionsWriterAutoCaption
     printlog ("'/// - restore states ///")
 
     ToolsOptions
-    Call hToolsOptions ("TextDocument","AutoCaption")
+    Call hToolsOptions ("WRITER","AutoCaption")
     Kontext "TabAutoCaption"
 
     for i=1 to NumberOfObjects
@@ -766,7 +766,7 @@ testcase tToolsOptionsWriterGeneral
     Call hNewDocument
     printlog "'///- Extras / Optionen / Sonstiges / Verkn?pfungen aktualisieren ///"
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+    Call hToolsOptions("WRITER","GENERAL")
     printlog "'///- Update links when loading -> always ///"
     Immer.Check
     Kontext "ExtrasOptionenDlg"
@@ -793,7 +793,7 @@ testcase tToolsOptionsWriterGeneral
     Sleep 2
 
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+    Call hToolsOptions("WRITER","GENERAL")
     if not Immer.IsChecked then Warnlog "Option 'always' has not been changed"
     printlog "'///- Update links when loading -> On request ///"
     AufNachfrage.Check
@@ -817,7 +817,7 @@ testcase tToolsOptionsWriterGeneral
     Sleep 2
 
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+    Call hToolsOptions("WRITER","GENERAL")
     if not AufNachfrage.IsChecked then Warnlog "Option 'On request' has been changed"
     printlog "'///- Update links when loading -> Never ///"
     Nie.Check
@@ -856,7 +856,7 @@ testcase tToolsOptionsWriterGeneral
     Sleep 2
 
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+    Call hToolsOptions("WRITER","GENERAL")
     if Nie.IsChecked = false then Warnlog "Option 'Never' is not checked"
     AufNachfrage.Check
     Kontext "ExtrasOptionenDlg"
@@ -875,7 +875,7 @@ testcase tToolsOptionsWriterMailMerge
     Kontext "Navigator"
     if Navigator.Exists then ViewNavigator
     ToolsOptions
-    Call hToolsOptions ("TextDocument","MailMergeEMail")
+    Call hToolsOptions ("WRITER","MailMergeEMail")
 
     '/// Fill out all fields
     printlog " - fill out Mail Settings"
@@ -931,7 +931,7 @@ testcase tToolsOptionsWriterMailMerge
     '/// Reopen Tools/Options and check settings
     printlog " - check settings"
     ToolsOptions
-    Call hToolsOptions ("TextDocument","MailMergeEMail")
+    Call hToolsOptions ("WRITER","MailMergeEMail")
 
     Kontext "TabMailMergeEmail"
     if YourName.Gettext <> "Helge Delfs" then Warnlog "'Your Name' has been changed after a restart"

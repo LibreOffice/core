@@ -53,7 +53,7 @@ sub main
         warnlog "Locales file doesn't exist graphics\tools\locale_1.txt"
     endif
 
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
 
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tFormatStylistFlyer
@@ -79,7 +79,7 @@ else
    qaerrorlog "Deactivated tFormatStylistBackground due to string-name-difficulties."
 endif
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
 
     Call tFormatStylistFlyer
@@ -101,6 +101,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

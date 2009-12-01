@@ -53,7 +53,7 @@ testcase tGallery_DialogTest
     '///Open a new Writer document
     '///Tools / Gallery
     printlog "- Working with Gallery-Beamer!"
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call hNewDocument
     call hOpenGallery
     Kontext "DocumentWriter"
@@ -88,7 +88,7 @@ testcase tGallery_ActivateAndUpdateAllThemes
     '///+Tools / Gallery
     '///+Click on each theme and update it (via context menu)
     printlog "activate and update all gallery-themes"
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call hNewDocument
     Kontext
     call hOpenGallery
@@ -149,7 +149,7 @@ testcase tGallery_CheckNames
     '///Check the names for the gallery themes
     '///Open a new Writer document
     '///+Tools / Gallery
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call hNewDocument
     Kontext
     call hOpenGallery
@@ -203,7 +203,7 @@ testcase tGallery_CheckContextMenuForGalleryThemes
     '/// Open a new Writer document
     '/// +Tools / Gallery
     printlog "check the contextmenu for the gallery-themes"
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call hNewDocument
     call hOpenGallery
     '/// +Testing <i>rename</i> and <i>properties</i> for each gallery theme (via context-menu)
@@ -271,7 +271,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
     '/// Open a new Writer document
     '/// Tools / Gallery
     printlog "create a new gallery-theme ( TT-theme )"
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call hNewDocument
     call hOpenGallery
     iMenuEntries = Gallerys.GetItemCount
@@ -513,7 +513,7 @@ testcase tGallery_GalleryView_Preview
     '/// Open a new Writer document
     '/// Tools / Gallery
     printlog "open a writer and the gallery"
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call hNewDocument
     Kontext
     call hOpenGallery
@@ -643,14 +643,14 @@ testcase tGallery_GalleryView_Preview
     '/// If the MediaPlayer exists - close it ///'
     kontext "Mplayer"
         if Mplayer.Exists then
-            if (lcase(gApplication) = "impress") then
+            if (gApplication = "IMPRESS") then
                 kontext "DocumentImpress"
             else
                 kontext "DocumentDraw"
             end if
             ToolsMediaPlayer
         else
-            if (lcase(gApplication) = "impress") then
+            if (gApplication = "IMPRESS") then
                 kontext "DocumentImpress"
             else
                 kontext "DocumentDraw"
@@ -712,10 +712,10 @@ testcase tGallery_GalleryView_Insert
     end if
     '/// Test following for all applications (Writer, Calc, Impress, Draw)
     for i=1 to 4           ' each application
-        if i=1 then gApplication = "Writer"
-        if i=2 then gApplication = "Calc"
-        if i=3 then gApplication = "Impress"
-        if i=4 then gApplication = "Draw"
+        if i=1 then gApplication = "WRITER"
+        if i=2 then gApplication = "CALC"
+        if i=3 then gApplication = "IMPRESS"
+        if i=4 then gApplication = "DRAW"
 
         '/// +Open a new document
         '/// +Open the Gallery
@@ -919,7 +919,7 @@ testcase tGallery_GalleryView_Delete
 
     '/// Open a new writer-doc
     '/// Tools / Gallery
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call hNewDocument
     call hOpenGallery
     '/// Delete one object in list-view and icon-view for 3D, Animation and Sound

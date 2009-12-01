@@ -56,7 +56,7 @@ testcase tToolsOptionsWriterPrint
 
     Printlog "  - check all (real print)"
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","PRINT")
+    Call hToolsOptions("WRITER","PRINT")
 
     Grafiken.Check
     Tabellen.Check
@@ -92,7 +92,7 @@ testcase tToolsOptionsWriterPrint
     end if
 
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","PRINT")
+    Call hToolsOptions("WRITER","PRINT")
 
     Printlog "  - uncheck everything"
 
@@ -158,7 +158,7 @@ testcase tToolsOptionsWriterTableMove
     '/// New writerdocument
     Call hNewDocument
     ToolsOptions     ' Measurement unit should be set to cm
-    Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+    Call hToolsOptions("WRITER","GENERAL")
     '/// Set measurement unit to cm in options
     Masseinheit.Select 2
     sSeparator = GetDecimalSeperator ( Tabulatorenabstand.GetText )
@@ -167,7 +167,7 @@ testcase tToolsOptionsWriterTableMove
     printlog "'///- Tools / Options / Table: Move"
     '/// Tools / Options / Table
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","TABLE")
+    Call hToolsOptions("WRITER","TABLE")
 
     Printlog "'///  - check minimum settings"
     '/// check minimum settings
@@ -345,7 +345,7 @@ testcase tToolsOptionsWriterTableInsert
 
     printlog "- Tools / Options / Table"
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","TABLE")
+    Call hToolsOptions("WRITER","TABLE")
 
     Printlog "- make settings"
     sSeparator = GetDecimalSeperator(EinfuegenZeile.GetText)
@@ -445,7 +445,7 @@ testcase tToolsOptionsWriterTableEffects
 
     printlog "- Tools / Options / Table"
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","TABLE")
+    Call hToolsOptions("WRITER","TABLE")
     VerschubZeile = ZahlAusSpinnfield ( VerschiebenZeile.GetText )
     VerhaltenFix.Check
     Kontext "ExtrasOptionenDlg"
@@ -524,7 +524,7 @@ testcase tToolsOptionsWriterTableEffects
     
     printlog "- Fixed, proportional: Changes affect the entire table"
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","TABLE"
+    Call hToolsOptions("WRITER","TABLE"
     FixProportional.Check
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -617,7 +617,7 @@ testcase tToolsOptionsWriterTableEffects2
     Spalte1 = SpaltenBreiteHolen
 
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","TABLE")
+    Call hToolsOptions("WRITER","TABLE")
     VerschubZeile = ZahlAusSpinnfield ( VerschiebenZeile.GetText )
     if NOT Variabel.IsChecked then
         Warnlog "Variable is not checked so test will be interrupted here"
@@ -661,7 +661,7 @@ testcase tToolsOptionsWriterDirectCursor2
 
     Printlog "- set left paragraph margin"
     ToolsOptions
-    Call hToolsOptions("TEXTDOCUMENT","FORMATTINGAIDS")
+    Call hToolsOptions("WRITER","FORMATTINGAIDS")
     DirektCursor.Check
     LinkerAbsatzrand.Check
     Kontext "ExtrasOptionenDlg"

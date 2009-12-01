@@ -1005,7 +1005,7 @@ testcase tKeyboardShortcutToStyles()
     sTempa = Vorlage.getSelText
 
     printlog "should now be the default from the beginning"
-    if (uCase(gApplication)<>"HTMLDOKUMENT") then
+    if (uCase(gApplication)<>"HTML") then
         if (sTempa = sTempc) then
             printlog "OK: Heading changed to default: '" + sTempa + "'"
         else

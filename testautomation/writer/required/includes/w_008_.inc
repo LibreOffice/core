@@ -1,6 +1,6 @@
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,12 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :   Diverse Testcases for the office. 
+'* short description :   Diverse Testcases for the office.
 '*
 '\******************************************************************
 
 sub w_008_
+
     printLog Chr(13) + "--------- Window Menu (w_008_.inc) ----------"
     gApplication = "WRITER"
 
@@ -48,7 +49,7 @@ end sub
 
 testcase tWindowNewWindow
     PrintLog "- Window / New Window"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb !"
         goto endsub
     end if

@@ -1,6 +1,7 @@
+'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +33,12 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :  Testcases with connection to the Insert-menu. 
+'* short description :  Testcases with connection to the Insert-menu.
 '*
 '\***********************************************************************
 
 sub w_004_
+
     printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
     gApplication = "WRITER"
 
@@ -76,7 +78,7 @@ sub w_004_
     Call tInsertFile
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocInsertFields
     Call tHtmlDocInsertFieldsOther
     Call tHtmlDocInsertSection
@@ -118,7 +120,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Date"
         InsertFieldsDate
     catch
-       Warnlog "Unable to execute: Insert / Fields / Date "
+        Warnlog "Unable to execute: Insert / Fields / Date "
     endcatch
     printlog " Insert / Fields / Date"
     Call wTypeKeys (" <Return>")
@@ -126,7 +128,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Time"
         InsertFieldsTime
     catch
-       Warnlog "Unable to execute: Insert / Fields / Time"
+        Warnlog "Unable to execute: Insert / Fields / Time"
     endcatch
     printlog " Insert / Fields / Time"
     Call wTypeKeys (" <Return>")
@@ -134,7 +136,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Page Number"
         InsertFieldsPageNumbers
     catch
-       Warnlog "Unable to execute: Insert / Fields / Page numbers"
+        Warnlog "Unable to execute: Insert / Fields / Page numbers"
     endcatch
     printlog " Insert / Fields / Page numbers"
     Call wTypeKeys (" <Return>")
@@ -142,7 +144,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Page Count"
         InsertFieldsPageCount
     catch
-       Warnlog "Unable to execute: Insert / Fields / Page Count"
+        Warnlog "Unable to execute: Insert / Fields / Page Count"
     endcatch
     printlog " Insert / Fields / Page count"
     Call wTypeKeys (" <Return>")
@@ -150,7 +152,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Title"
         InsertFieldsTitle
     catch
-       Warnlog "Unable to execute: Insert / Fields / Title"
+        Warnlog "Unable to execute: Insert / Fields / Title"
     endcatch
     printlog " Insert / Fields / Title"
     Call wTypeKeys (" <Return>")
@@ -158,10 +160,10 @@ testcase tInsertFields
         printlog "Insert / Fields / Author"
         InsertFieldsAuthor
     catch
-       Warnlog "Unable to execute: Insert / Fields / Author"
+        Warnlog "Unable to execute: Insert / Fields / Author"
     endcatch
     printlog " Insert / Fields / Author"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         try
             printlog "Insert / Fields / Subject"
             InsertFieldsSubject
@@ -206,7 +208,7 @@ testcase tInsertFieldsOther
     Kontext "TabVariablen"
     Call Dialogtest ( TabVariablen )
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         Active.SetPage TabReferenzen
         Kontext "TabReferenzen"
@@ -217,8 +219,8 @@ testcase tInsertFieldsOther
         Kontext "TabFunktionen"
         Call Dialogtest ( TabFunktionen )
         for i=1 to Feldtyp.GetItemCount
-            Feldtyp.Select i            
-			if MakroButton.IsEnabled then
+            Feldtyp.Select i
+            if MakroButton.IsEnabled then
                 MakroButton.Click
                 ' if no JRE is installed a messagebox appears
                 Do
@@ -235,10 +237,13 @@ testcase tInsertFieldsOther
                         exit do
                     end if
                 Loop
-                Sleep 5
+                
                 Kontext "ScriptSelector"
-                Sleep 1
-                ScriptSelector.Close
+                if ( ScriptSelector.exists( 5 ) ) then
+                    ScriptSelector.Close
+                else
+                    warnlog( "Dialog <ScriptSelector> is not available" )
+                endif
                 Kontext "TabFunktionen"
                 i=100
             end if
@@ -314,7 +319,7 @@ testcase tInsertSection
     Kontext "TabHintergrund"
     Call DialogTest (TabHintergrund)
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         printlog "Tabpage Indents"
         Kontext
         Active.Setpage TabSectionIndent
@@ -361,25 +366,26 @@ testcase tInsertHyperlink
     Call wEinfuegenHyperlink(3)
     wait 500
     Call DialogTest ( TabHyperlinkDokument )
-    if gUseSysDlg = False then
-        DateiOeffnen.Click
-        Sleep 1
-        Kontext "OeffnenDlg"
+    
+    DateiOeffnen.Click
+
+    Kontext "OeffnenDlg"
+    if ( OeffnenDlg.exists( 1 ) ) then
         OeffnenDlg.Cancel
-        Sleep 1
-    end if
+    else
+        warnlog( "Dialog <OeffnenDlg> is not available" )
+    endif
 
     Kontext "Hyperlink"
     printlog "-  New Document"
     Call wEinfuegenHyperlink(4)
     wait 500
     Call DialogTest ( TabHyperlinkNeuesDokument )
-    if gUseSysDlg = False then
-        Pfad.Click
-        Sleep 1
-        Kontext "OeffnenDlg"
-        OeffnenDlg.Cancel
-    end if
+    
+    Pfad.Click
+    Sleep 1
+    Kontext "OeffnenDlg"
+    OeffnenDlg.Cancel
 
     Kontext "TabHyperlinkNeuesDokument"
     TabHyperlinkNeuesDokument.Cancel
@@ -501,7 +507,7 @@ testcase tInsertCrossReference
     Dim i as integer
     Dim j as integer
     printlog "- Insert / Reference Field"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -539,8 +545,11 @@ testcase tInsertCrossReference
                 end if
             Loop
             Kontext "ScriptSelector"
-            Sleep 1
-            ScriptSelector.Close
+            if ( ScriptSelector.exists( 3 ) ) then
+                ScriptSelector.Close
+            else
+                warnlog( "Dialog <ScriptSelector> is not available" )
+            endif
             Kontext "TabFunktionen"
             i=100
         end if
@@ -591,11 +600,11 @@ endcase
 '-----------------------------------------------------------
 
 testcase tInsertIndexesEntry
-   qaErrorLog "#158646# - Insert Indexes Entry causes crash."
-   goto endsub
-   
+    qaErrorLog "#158646# - Insert Indexes Entry causes crash."
+    goto endsub
+
     PrintLog "- Insert / Indexes / Entry"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -625,7 +634,7 @@ endcase
 testcase tInsertIndexesIndex
     Dim i as integer
     Printlog "- Insert / Indexes / Index"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -651,12 +660,12 @@ testcase tInsertIndexesIndex
     For i= 1 to VerzeichnisTyp.GetItemCount
         Sleep 1
         if i = 2 then printlog "Alphabetical index see bug #i33671 (ok in m54)"
-		VerzeichnisTyp.Select i
+        VerzeichnisTyp.Select i
         printlog "- " + VerzeichnisTyp.GetSelText
         Call DialogTest (TabVerzeichnisseVerzeichnis)
         printlog "-  Entry's to " + VerzeichnisTyp.GetSelText
 
-        if i = 1 then    ' Inhaltsverzeichnis
+        if i = 1 then
             ErzeugenAusGliederung.Check
         end if
 
@@ -694,7 +703,7 @@ testcase tInsertIndexesIndex
                     Warnlog "- Concordance-File couldn't be selected, though checkbox is checked!"
                 end if
                 Sleep 1
-          end if
+            end if
         end if
 
         Kontext
@@ -758,21 +767,21 @@ endcase
 
 testcase tInsertIndexesBibliographyEntry
     Printlog "- Insert / Indexes / Bibliography Entry"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
     printlog " Open new document"
     Call hNewDocument
-    Sleep 2
-
+    
     printlog " Insert / Indexes and Tables / Bibliography Entry "
-    InsertIndexesBibliographyEntry
+    hUseAsyncSlot( "InsertIndexesBibliographyEntry" )
+    
     Kontext "Active"
-    if Active.Exists then
-        Do 
+    if ( Active.Exists() ) then
+        Do
             try
-                if Active.GetRT = 304 then
+                if ( Active.GetRT = 304 ) then
                     Warnlog Active.Gettext
                     Active.Ok
                 end if
@@ -781,19 +790,29 @@ testcase tInsertIndexesBibliographyEntry
             endcatch
         Loop
     end if
-            
-    Kontext "LiteratureintragEinfuegen"
-    Call DialogTest ( LiteratureintragEinfuegen )
-    printlog " In dialog 'Insert Bibliography Entry' click 'Edit'"
-    EintragBearbeiten.Click
 
-    Kontext "LiteratureintragDefinieren"
-    Call DialogTest ( LiteratureintragDefinieren )
-    printlog " Close dialog 'Define Bibliography Entry'"
-    LiteratureintragDefinieren.Close
     Kontext "LiteratureintragEinfuegen"
-    printlog " Close dialog 'Insert Bibliography Entry'"
-    EintragSchliessen.Click
+    if ( LiteratureintragEinfuegen.exists( 1 ) ) then
+        Call DialogTest ( LiteratureintragEinfuegen )
+        
+        printlog " In dialog 'Insert Bibliography Entry' click 'Edit'"
+        EintragBearbeiten.Click
+
+        Kontext "LiteratureintragDefinieren"
+        if ( LiteratureintragDefinieren.exists( 1 ) ) then
+            Call DialogTest ( LiteratureintragDefinieren )
+            printlog " Close dialog 'Define Bibliography Entry'"
+            LiteratureintragDefinieren.Close
+        else
+            warnlog( "Dialog <LiteratureintragDefinieren> is not available" )
+        endif
+        
+        Kontext "LiteratureintragEinfuegen"
+        printlog " Close dialog 'Insert Bibliography Entry'"
+        EintragSchliessen.Click
+    else
+        warnlog( "Dialog <LiteratureintragEinfuegen> is not available" )
+    endif
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -802,7 +821,7 @@ endcase
 
 testcase tInsertEnvelope
     PrintLog "- Insert / Envelope"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -931,17 +950,17 @@ testcase tInsertFrame
     Kontext
     active.SetPage TabHintergrund
     Kontext "TabHintergrund"
-    Call DialogTest2 (TabHintergrund, 1)
+    Call DialogTest (TabHintergrund, 1)
     Sleep 1
-	try
-		Als.Select (2)
-		Call DialogTest2 (TabHintergrund, 2)
-		Sleep 1
-	catch
-		Warnlog "Maybe missing combobox! (#i29517)"
-	endcatch
+    try
+        Als.Select (2)
+        Call DialogTest (TabHintergrund, 2)
+        Sleep 1
+    catch
+        Warnlog "Maybe missing combobox! (#i29517)"
+    endcatch
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabHyperlinkRahmen
         Kontext "TabHyperlinkRahmen"
@@ -1050,10 +1069,9 @@ testcase tInsertGraphicsFromFile
     printlog " Select as graphic to insert: '...\writer\required\input\graphics\jolink.jpg"
     Dateiname.Settext ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
     Oeffnen.Click
-    sleep 1
 
     Kontext "Active"
-    if Active.Exists then
+    if Active.Exists( 1 ) then
         Warnlog Active.Gettext
         Active.Ok
         Kontext "GrafikEinfuegenDlg"
@@ -1108,9 +1126,9 @@ testcase tInsertGraphicsFromFile
         Do
             j = j + 1
             Kontext "Active"
-            if Active.Exists then
+            if Active.Exists() then
                 if Active.GetRT = 304 then
-                    if j = 1 then Warnlog Active.Gettext    
+                    if j = 1 then Warnlog Active.Gettext
                     Active.Ok
                 else
                     exit do
@@ -1123,7 +1141,7 @@ testcase tInsertGraphicsFromFile
         Kontext "TabMakro"
         Call DialogTest ( TabMakro )
 
-        if gApplication <> "HTMLDOKUMENT" then
+        if gApplication <> "HTML" then
             Kontext
             active.SetPage TabZuschneiden
             wait 500
@@ -1164,6 +1182,10 @@ testcase tInsertAllGraphicsFromFile
 
     GetFileList(quellpfad, "*.*" , Ziel())
     for i=1 to ListCount(Ziel())
+        if (gPlatform = "osx") AND (right(ziel(i),3) = "eps") then
+            qaerrorlog "#i100253# skipping eps"
+            i=i+1
+        endif
         printlog "- Graphic: " + Right(Ziel(i),3) + "-Format"
         Call hGrafikEinfuegen ( Ziel(i) )
         Sleep 5
@@ -1190,9 +1212,9 @@ testcase tInsertObjectOLEObject
     Kontext "OLEObjektEinfuegen"
     printlog " Check both radiobuttons 'Create now' and 'Create from file'"
     NeuErstellen.Check
-    Call DialogTest2 (OLEObjektEinfuegen, 1)
+    Call DialogTest (OLEObjektEinfuegen, 1)
     AusDateiErstellen.Check
-    Call DialogTest2 (OLEObjektEinfuegen, 2)
+    Call DialogTest (OLEObjektEinfuegen, 2)
     OLEObjektEinfuegen.Cancel
 
     printlog " Close active document"
@@ -1341,30 +1363,28 @@ testcase tInsertFile
 
     printlog " Open new document"
     Call hNewDocument
-    if gUseSysDlg = False then
-        InsertFileWriter
-        printlog " Insert / File"
-        WaitSlot (3000)
-        Kontext "OeffnenDlg"
-        WaitSlot (2000)
-        printlog " Check 'File dialog'"
-        if OeffnenDlg.Exists then
-            Call DialogTest ( OeffnenDlg )
-            try
-                Standard.Click
-            catch
-                Exceptlog
-            endcatch
+    InsertFileWriter
+    WaitSlot( 2000 )
+    
+    printlog " Insert / File"
+    Kontext "OeffnenDlg"
 
-            Kontext "Active"
-            if Active.Exists then
-                Warnlog Active.Gettext
-                Active.Ok
-            else
-                Kontext "OeffnenDlg"
-                OeffnenDlg.Cancel
-            end if
-            Sleep 1
+    printlog " Check 'File dialog'"
+    if OeffnenDlg.Exists( 2 ) then
+        Call DialogTest ( OeffnenDlg )
+        try
+            Standard.Click
+        catch
+            Exceptlog
+        endcatch
+
+        Kontext "Active"
+        if Active.Exists then
+            Warnlog Active.Gettext
+            Active.Ok
+        else
+            Kontext "OeffnenDlg"
+            OeffnenDlg.Cancel
         end if
     end if
 
@@ -1377,7 +1397,7 @@ endcase
 testcase tHtmlDocInsertFields
     PrintLog "- Insert / Fields"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1385,7 +1405,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Date"
         InsertFieldsDate
     catch
-       Warnlog "Unable to execute: Insert / Fields / Date "
+        Warnlog "Unable to execute: Insert / Fields / Date "
     endcatch
     printlog " Insert / Fields / Date"
     Call wTypeKeys (" <Return>")
@@ -1393,7 +1413,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Time"
         InsertFieldsTime
     catch
-       Warnlog "Unable to execute: Insert / Fields / Time"
+        Warnlog "Unable to execute: Insert / Fields / Time"
     endcatch
     printlog " Insert / Fields / Time"
     Call wTypeKeys (" <Return>")
@@ -1401,7 +1421,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Page Number"
         InsertFieldsPageNumbers
     catch
-       Warnlog "Unable to execute: Insert / Fields / Page numbers"
+        Warnlog "Unable to execute: Insert / Fields / Page numbers"
     endcatch
     printlog " Insert / Fields / Page numbers"
     Call wTypeKeys (" <Return>")
@@ -1409,7 +1429,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Page Count"
         InsertFieldsPageCount
     catch
-       Warnlog "Unable to execute: Insert / Fields / Page Count"
+        Warnlog "Unable to execute: Insert / Fields / Page Count"
     endcatch
     printlog " Insert / Fields / Page count"
     Call wTypeKeys (" <Return>")
@@ -1417,7 +1437,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Title"
         InsertFieldsTitle
     catch
-       Warnlog "Unable to execute: Insert / Fields / Title"
+        Warnlog "Unable to execute: Insert / Fields / Title"
     endcatch
     printlog " Insert / Fields / Title"
     Call wTypeKeys (" <Return>")
@@ -1425,10 +1445,10 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Author"
         InsertFieldsAuthor
     catch
-       Warnlog "Unable to execute: Insert / Fields / Author"
+        Warnlog "Unable to execute: Insert / Fields / Author"
     endcatch
     printlog " Insert / Fields / Author"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         try
             printlog "Insert / Fields / Subject"
             InsertFieldsSubject
@@ -1451,8 +1471,8 @@ testcase tHtmlDocInsertFieldsOther
     Dim i as integer
     Dim j as integer
     printlog "- Insert / Fields / Other"
-    
-    gApplication = "HTMLDOKUMENT"
+
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1475,7 +1495,7 @@ testcase tHtmlDocInsertFieldsOther
     Kontext "TabVariablen"
     Call Dialogtest ( TabVariablen )
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         Active.SetPage TabReferenzen
         Kontext "TabReferenzen"
@@ -1487,7 +1507,7 @@ testcase tHtmlDocInsertFieldsOther
         Call Dialogtest ( TabFunktionen )
         for i=1 to Feldtyp.GetItemCount
             Feldtyp.Select i
-			if MakroButton.IsEnabled then
+            if MakroButton.IsEnabled then
                 MakroButton.Click
                 ' if no JRE is installed a messagebox appears
                 Do
@@ -1504,10 +1524,13 @@ testcase tHtmlDocInsertFieldsOther
                         exit do
                     end if
                 Loop
-                Sleep 5
+
                 Kontext "ScriptSelector"
-                Sleep 1
-                ScriptSelector.Close
+                if ( ScriptSelector.exists( 3 ) ) then
+                    ScriptSelector.Close
+                else
+                    warnlog( "Dialog <ScriptSelector> is not available" )
+                endif
                 Kontext "TabFunktionen"
                 i=100
             end if
@@ -1534,7 +1557,7 @@ endcase
 testcase tHtmlDocInsertSection
     PrintLog "- Insert / Section"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1548,11 +1571,15 @@ testcase tHtmlDocInsertSection
     Kontext "TabBereiche"
     Call DialogTest (TabBereiche)
     Verknuepfung.Check
-    if gUseSysDlg = False then
-        Auswaehlen.Click
-        Kontext "OeffnenDlg"
+
+    Auswaehlen.Click
+    Kontext "OeffnenDlg"
+    if ( OeffnenDlg.exists( 1 ) ) then
         OeffnenDlg.Cancel
-    end if
+    else
+        warnlog( "Dialog <OeffnenDlg> is not available" )
+    endif
+
     Wait 500
     Kontext
     printlog "-  Tabpage Columns"
@@ -1566,7 +1593,7 @@ testcase tHtmlDocInsertSection
     Kontext "TabHintergrund"
     Call DialogTest (TabHintergrund)
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         printlog "Tabpage Indents"
         Kontext
         Active.Setpage TabSectionIndent
@@ -1592,7 +1619,7 @@ endcase
 testcase tHtmlDocInsertFrame
     PrintLog "- Insert / Frame"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1628,17 +1655,17 @@ testcase tHtmlDocInsertFrame
     Kontext
     active.SetPage TabHintergrund
     Kontext "TabHintergrund"
-    Call DialogTest2 (TabHintergrund, 1)
+    Call DialogTest (TabHintergrund, 1)
     Sleep 1
-	try
-		Als.Select (2)
-		Call DialogTest2 (TabHintergrund, 2)
-		Sleep 1
-	catch
-		Warnlog "Maybe missing combobox! (#i29517)"
-	endcatch
+    try
+        Als.Select (2)
+        Call DialogTest (TabHintergrund, 2)
+        Sleep 1
+    catch
+        Warnlog "Maybe missing combobox! (#i29517)"
+    endcatch
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabHyperlinkRahmen
         Kontext "TabHyperlinkRahmen"
@@ -1672,7 +1699,7 @@ testcase tHtmlDocInsertGraphicsFromFile
     PrintLog "- Insert / Graphics / From File"
     Dim j as integer
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1683,10 +1710,9 @@ testcase tHtmlDocInsertGraphicsFromFile
     printlog " Select as graphic to insert: '...\writer\required\input\graphics\jolink.jpg"
     Dateiname.Settext ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
     Oeffnen.Click
-    sleep 1
 
     Kontext "Active"
-    if Active.Exists then
+    if Active.Exists( 1 ) then
         Warnlog Active.Gettext
         Active.Ok
         Kontext "GrafikEinfuegenDlg"
@@ -1743,7 +1769,7 @@ testcase tHtmlDocInsertGraphicsFromFile
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then
-                    if j = 1 then Warnlog Active.Gettext    
+                    if j = 1 then Warnlog Active.Gettext
                     Active.Ok
                 else
                     exit do
@@ -1756,7 +1782,7 @@ testcase tHtmlDocInsertGraphicsFromFile
         Kontext "TabMakro"
         Call DialogTest ( TabMakro )
 
-        if gApplication <> "HTMLDOKUMENT" then
+        if gApplication <> "HTML" then
             Kontext
             active.SetPage TabZuschneiden
             wait 500

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -29,22 +29,13 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
-'*                                                                **
-'* owner : fredrik.haegg@sun.com                                    **
-'*                                                                **
-'* short description : Description of file                        **
-'*                                                                **
-'*******************************************************************
-'*                                                                **
-' #1 hLevelContent () as String
-' #1 hLevelChange( aL() as integer,i as integer,x as integer ,y as integer, sublevel as boolean ) as boolean
-' #1 hLevelPrint (aL()as integer) as boolean
-' #1 hIsNumberingBullets () as Boolean
-' #1 hFormatParagraphNumbering (sStyle as string
-' #1 hFindInDocument (sTempSearch as string) as boolean
-'*                                                                **
-'\******************************************************************
+'/******************************************************************************
+'*
+'* owner : fredrik.haegg@sun.com
+'*
+'* short description : Description of file
+'*
+'\******************************************************************************
 
 function hLevelContent () as String
     ' presupposition: just stay in line with the to check content
@@ -62,86 +53,86 @@ end function
 '------------------------------------------------------------------------------
 
 function hLevelChange(aL() as integer,i as integer,x as integer ,y as integer, sublevel as boolean ) as boolean
-' ALSO boolean, if it schould be checked, if it got changed! else don't adjust array!!!
-' input: level Nr., how many levels +/-
-' return: false, if wrong paragraph
+    ' ALSO boolean, if it schould be checked, if it got changed! else don't adjust array!!!
+    ' input: level Nr., how many levels +/-
+    ' return: false, if wrong paragraph
 
-  dim itemp as integer
-  dim xtemp as integer
-  dim ytemp as integer
-  dim stemp as integer
-  dim j as integer
+    dim itemp as integer
+    dim xtemp as integer
+    dim ytemp as integer
+    dim stemp as integer
+    dim j as integer
 
-   if (hLevelOk (i)) then
-      if (aL (i,1) + x) > 0 then  ' CHG <-> level 'stufen'
-      ' has to work for +/- x
-         xTemp = aL (i,1)
-         aL (i,1) = aL (i,1) + x
-         if (sublevel) then
-            iTemp = i+1
-            do while (aL (iTemp,1) > xTemp)
-               aL (iTemp,1) = aL (iTemp,1) + x
-               iTemp=iTemp + 1
-            loop
-         end if
-      else
-         'warnlog "This makes no sense; you trie to 'move to the left'; it doesn't go further! Entry: "+i
-      end if
-      iTemp = 1
-      do while (i <> aL(itemp,2))
-         inc iTemp
-      loop
-      printlog "CHG: found i="+i+" at: "+iTemp
+    if (hLevelOk (i)) then
+        if (aL (i,1) + x) > 0 then  ' CHG <-> level 'stufen'
+            ' has to work for +/- x
+            xTemp = aL (i,1)
+            aL (i,1) = aL (i,1) + x
+            if (sublevel) then
+                iTemp = i+1
+                do while (aL (iTemp,1) > xTemp)
+                    aL (iTemp,1) = aL (iTemp,1) + x
+                    iTemp=iTemp + 1
+                loop
+            end if
+        else
+            'warnlog "This makes no sense; you trie to 'move to the left'; it doesn't go further! Entry: "+i
+        end if
+        iTemp = 1
+        do while (i <> aL(itemp,2))
+            inc iTemp
+        loop
+        printlog "CHG: found i="+i+" at: "+iTemp
 
-      ' move entry without sublevels
-      if (y < -1) OR (y > 1) then warnlog "y ! aus (-1,1) is not implemented :-( yet !"
-      if (y > 0) then
+        ' move entry without sublevels
+        if (y < -1) OR (y > 1) then warnlog "y ! aus (-1,1) is not implemented :-( yet !"
+        if (y > 0) then
             xtemp = aL( itemp+y ,1)
             aL( itemp+y ,1) = aL( itemp ,1)
             aL( itemp ,1) = xtemp
             xtemp = aL( itemp+y ,2)
             aL( itemp+y ,2) = aL( itemp ,2)
             aL( itemp ,2) = xtemp
-         if (sublevel) then            ' with sublevel
-            yTemp = aL( iTemp+y ,1)            ' save hor <-> level in yTemp
-            sTemp = 2
-            do while (aL (iTemp ,1) > yTemp)
-               xtemp = aL( itemp+sTemp ,1)
-               aL( itemp+sTemp ,1) = aL( itemp ,1)
-               aL( itemp ,1) = xtemp
-               xtemp = aL( itemp+sTemp ,2)
-               aL( itemp+sTemp ,2) = aL( itemp ,2)
-               aL( itemp ,2) = xtemp
-               inc sTemp
-            loop
-         end if
-      else
-         if (y < 0) then
-            for j=-1 to y
-               xtemp = aL( itemp+j ,1)              ' hori <-> level copy
-               aL( itemp+j ,1) = aL( itemp+j+1 ,1)
-               aL( itemp+j+1 ,1) = xtemp            '      ^
-               xtemp = aL( itemp+j ,2)              ' vert | level copy
-               aL( itemp+j ,2) = aL( itemp+j+1 ,2)  '      v
-               aL( itemp+j+1 ,2) = xtemp
-            next j
             if (sublevel) then            ' with sublevel
-               yTemp = aL( iTemp+y ,1)            ' save hor <-> level in yTemp
-               iTemp = itemp+1
-               do while (aL (iTemp,1) > yTemp)
-                     xtemp = aL( itemp+y ,1)
-                     aL( itemp+y ,1) = aL( itemp+y+1 ,1)
-                     aL( itemp+y+1 ,1) = xtemp
-                     xtemp = aL( itemp+y ,2)
-                     aL( itemp+y ,2) = aL( itemp+y+1 ,2)
-                     aL( itemp+y+1 ,2) = xtemp
-                  iTemp=iTemp + 1
-               loop
+                yTemp = aL( iTemp+y ,1)            ' save hor <-> level in yTemp
+                sTemp = 2
+                do while (aL (iTemp ,1) > yTemp)
+                    xtemp = aL( itemp+sTemp ,1)
+                    aL( itemp+sTemp ,1) = aL( itemp ,1)
+                    aL( itemp ,1) = xtemp
+                    xtemp = aL( itemp+sTemp ,2)
+                    aL( itemp+sTemp ,2) = aL( itemp ,2)
+                    aL( itemp ,2) = xtemp
+                    inc sTemp
+                loop
             end if
-         else ' 0
-         end if
-      end if
-   end if
+        else
+            if (y < 0) then
+                for j=-1 to y
+                    xtemp = aL( itemp+j ,1)              ' hori <-> level copy
+                    aL( itemp+j ,1) = aL( itemp+j+1 ,1)
+                    aL( itemp+j+1 ,1) = xtemp            '      ^
+                    xtemp = aL( itemp+j ,2)              ' vert | level copy
+                    aL( itemp+j ,2) = aL( itemp+j+1 ,2)  '      v
+                    aL( itemp+j+1 ,2) = xtemp
+                next j
+                if (sublevel) then            ' with sublevel
+                    yTemp = aL( iTemp+y ,1)            ' save hor <-> level in yTemp
+                    iTemp = itemp+1
+                    do while (aL (iTemp,1) > yTemp)
+                        xtemp = aL( itemp+y ,1)
+                        aL( itemp+y ,1) = aL( itemp+y+1 ,1)
+                        aL( itemp+y+1 ,1) = xtemp
+                        xtemp = aL( itemp+y ,2)
+                        aL( itemp+y ,2) = aL( itemp+y+1 ,2)
+                        aL( itemp+y+1 ,2) = xtemp
+                        iTemp=iTemp + 1
+                    loop
+                end if
+            else ' 0
+            end if
+        end if
+    end if
 end function
 
 '------------------------------------------------------------------------------
@@ -149,7 +140,7 @@ end function
 function hLevelPrint (aL()as integer) as boolean
     dim sTemp as string
     dim iTemp as integer
-    dim i,j as integer    
+    dim i,j as integer
     ' how big is this array??!!! pd: it has to be in aL(0,0)
     printlog "---------------------------------------------------------------------"
     for i=1 to aL(0,0)
@@ -213,22 +204,22 @@ sub hFormatParagraphNumbering (sStyle as string,bRestart as integer,sStartW as s
         end if
         if (bRestart <> -1) then
             select case bRestart
-                case 0: NumerierungNeuBeginnen.UnCheck
-                case 1: NumerierungNeuBeginnen.Check
-                case 2: NumerierungNeuBeginnen.TriState
+            case 0: NumerierungNeuBeginnen.UnCheck
+            case 1: NumerierungNeuBeginnen.Check
+            case 2: NumerierungNeuBeginnen.TriState
             end select
         end if
         if (sStartW <> -1) then
             select case sStartW
-                case 0: NumerierungBeginnenBei.UnCheck
-                case 1: NumerierungBeginnenBei.Check
+            case 0: NumerierungBeginnenBei.UnCheck
+            case 1: NumerierungBeginnenBei.Check
             end select
         end if
     catch
         Warnlog "Not possible; wrong style=none??"
     endcatch
 
-   TabNumerierungAbsatz.OK
+    TabNumerierungAbsatz.OK
 
 end sub
 

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -42,33 +42,33 @@
 '\***********************************************************************
 
 function fPositionAndSize(Options as string)
-'/// Open Format/Position and Size diglog with Options.
+    '/// Open Format/Position and Size diglog with Options.
     Kontext
     FormatPositionAndSize
 
-  Select case Options
+    Select case Options
     case "TabPositionAndSizeWriter"  : active.SetPage TabPositionAndSizeWriter
     case "TabDrehung"                : active.SetPage TabDrehung
     case "TabSchraegstellen"         : active.SetPage TabSchraegstellen
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 end function
 
 '-------------------------------------------------------------------------
 
 function fFormatLine(Options as string)
-'/// Open Format/Line with Options.
-  Kontext
-  FormatLine
+    '/// Open Format/Line with Options.
+    Kontext
+    FormatLine
 
-  Select case Options
+    Select case Options
     case "TabLinie"           : active.SetPage TabLinie
     case "TabLinienstile"     : active.SetPage TabLinienstile
     case "TabLinienenden"     : active.SetPage TabLinienenden
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 end function
 
 '-------------------------------------------------------------------------

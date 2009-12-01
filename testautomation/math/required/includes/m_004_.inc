@@ -158,7 +158,7 @@ testcase tFormatDistance
       for i=1 to hMenuItemGetCount
          hMenuSelectNr (i)
          Sleep 1
-         Call DialogTest2 (Spacing,i)
+         Call DialogTest (Spacing,i)
          Select Case i
             Case 1
                '/// select 'Spacing' from Category menu ///'

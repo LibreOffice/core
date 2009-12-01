@@ -46,7 +46,7 @@ function db_Query( sFileName , optional sType , optional sPassword)
         sType = UCase(sType)
         printlog sType
         select case sType
-            case "TEXT", "SPREADSHEET"
+            case "TEXT", "CALC"
                 sType = "1"
             case "ODBC", "JDBC"
                 sType = "2"

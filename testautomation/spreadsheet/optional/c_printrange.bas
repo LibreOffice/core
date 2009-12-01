@@ -67,7 +67,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_spreadsheet_tools1.inc"
-    gApplication   = "Calc"
+    gApplication   = "CALC"
     Call GetUseFiles
 
 end sub

@@ -60,6 +60,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Writer"
+    gApplication = "WRITER"
     Call GetUseFiles
 end sub

@@ -66,7 +66,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
       irgendwas(4) = KopieBeimVerschieben.IsChecked
       irgendwas(5) = ObjekteImmerVerschiebbar.IsChecked
 
-      if (lCase(gApplication) = "draw") then
+      if (gApplication = "DRAW") then
           irgendwas(6) = SetzenAufKreis.IsChecked   ' DRAW
           iZeichnungsmasstab = Zeichnungsmasstab.GetSelIndex ' DRAW
       else ' IMPRESS
@@ -94,7 +94,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
       if (LiberalMeasurement (sTemp,Tabulatorabstand.GetText) <> TRUE) Then Warnlog "Something wrong, please check!"
       Tabulatorabstand.SetText (sTabAbstand)
 
-      if (lCase(gApplication) = "draw") then
+      if (gApplication = "DRAW") then
          If ( Zeichnungsmasstab.GetItemCount <> iZeichnungsmasstab ) Then Zeichnungsmasstab.Select (Zeichnungsmasstab.GetItemCount) _
             Else Zeichnungsmasstab.Select (1)
          iTemp2 = Zeichnungsmasstab.GetSelIndex
@@ -134,7 +134,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
       If ( irgendwas(4) = KopieBeimVerschieben.IsChecked       ) Then WarnLog "Copy When Moving state changed"
       If ( irgendwas(5) = ObjekteImmerVerschiebbar.IsChecked   ) Then WarnLog "Objects Always Movable state changed"
 
-      if (lCase(gApplication) = "draw") then
+      if (gApplication = "DRAW") then
          If ( Zeichnungsmasstab.GetSelIndex <> iTemp2 ) Then WarnLog "Drawing Scale state changed BUG #97391 is:"+Zeichnungsmasstab.GetSelIndex+"; should: "+iTemp2
          If ( irgendwas(6) = SetzenAufKreis.IsChecked             ) Then WarnLog "'Do not disort objects in curve' state changed"
       else ' IMPRESS
@@ -156,7 +156,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
       KopieBeimVerschieben.UnCheck
       ObjekteImmerVerschiebbar.UnCheck
 
-      if (lCase(gApplication) = "draw") then
+      if (gApplication = "DRAW") then
          Zeichnungsmasstab.Select (1)
          SetzenAufKreis.UnCheck
       else ' IMPRESS
@@ -187,7 +187,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
       If KopieBeimVerschieben.IsChecked      Then WarnLog "Copy When Moving x"
       If ObjekteImmerVerschiebbar.IsChecked  Then WarnLog "Objects Always Movable x"
 
-      if (lCase(gApplication) = "draw") then
+      if (gApplication = "DRAW") then
          If ( Zeichnungsmasstab.GetSelIndex <> 1 ) Then WarnLog "'Drawing Scale' is not item 1"
          If SetzenAufKreis.IsChecked            Then WarnLog "'Do not disort objects in curve' x"
       else ' IMPRESS
@@ -221,7 +221,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
     ExtrasOptionenDlg.OK
 
     printlog "creating document with tabstops and save it"
-   if (lCase(gApplication) = "draw") then
+   if (gApplication = "DRAW") then
       kontext "Toolbar"
       Textfield.Click
       kontext "DocumentDraw"
@@ -235,7 +235,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
    hTypeKeys "a<Tab>b<Tab>c<Tab>d<Tab>e<Tab>f<Tab>g<Tab>h<Tab>i<Tab>j"
    
    
-    if lCase(gApplication = "IMPRESS") then 
+    if ( gApplication = "IMPRESS" ) then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -286,7 +286,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
      printlog "Click in the open impress document to get the focus back to the document"
      printlog "Otherwise it sometimes happend that the Tools/Option dialog doesn't display the correct applications"
      hNewDocument
-     if ( sApplication = "Presentation") then
+     if ( sApplication = "IMPRESS") then
         Kontext "DocumentImpress"
             DocumentImpress.MouseDown(50,50)
             DocumentImpress.MouseUp(50,50)
@@ -307,7 +307,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
       KopieBeimVerschieben.Check
       ObjekteImmerVerschiebbar.Check
 
-      if (lCase(gApplication) = "draw") then
+      if (gApplication = "DRAW") then
          Zeichnungsmasstab.Select (2)
          itemp2 = Zeichnungsmasstab.GetSelIndex
          SetzenAufKreis.Check
@@ -336,7 +336,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
       If True <> KopieBeimVerschieben.IsChecked      Then WarnLog "Copy When Moving o"
       If True <> ObjekteImmerVerschiebbar.IsChecked  Then WarnLog "Objects Always Movable o"
 
-      if (lCase(gApplication) = "draw") then
+      if (gApplication = "DRAW") then
          If ( Zeichnungsmasstab.GetSelIndex <> iTemp2 ) Then WarnLog "Drawing Scale is not item " + iTemp2 + " it's: " + Zeichnungsmasstab.GetSelIndex
          If True <> SetzenAufKreis.IsChecked            Then WarnLog "'Do not disort objects in curve' o"
       else ' IMPRESS
@@ -357,7 +357,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
       If ( irgendwas(4) = TRUE ) Then  KopieBeimVerschieben.Check Else     KopieBeimVerschieben.UnCheck
       If ( irgendwas(5) = TRUE ) Then  ObjekteImmerVerschiebbar.Check Else ObjekteImmerVerschiebbar.UnCheck
 
-      if (lCase(gApplication) = "draw") then
+      if (gApplication = "DRAW") then
          Zeichnungsmasstab.Select (iZeichnungsmasstab)
          If ( irgendwas(6) = TRUE ) Then  SetzenAufKreis.Check Else           SetzenAufKreis.UnCheck
       else ' IMPRESS
@@ -472,7 +472,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
    dim sTempMetricField(7) as string
    dim iTry as integer ' some increment variable
 
-    if lCase(gApplication = "IMPRESS") then 
+    if ( gApplication = "IMPRESS" ) then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -735,7 +735,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
     printlog "Function Test: Grid Resolution"
     printlog "gTesttoolPath + graphics\required\input\gridtst.od?" 
 
-    if lCase(gApplication = "IMPRESS") then 
+    if ( gApplication = "IMPRESS" ) then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"

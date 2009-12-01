@@ -1039,7 +1039,7 @@ testcase tInsertObjectOLE
     '/// Choose 'Create new'
     printlog " Choose 'Create new'"
     NeuErstellen.Check
-    Call DialogTest2 (OLEObjektEinfuegen, 1)
+    Call DialogTest (OLEObjektEinfuegen, 1)
     '/// Check that there are more than 1 entries (amount is dependant from operating system)
     printlog " Check that there are more than 1 entries (amount is dependant from operating system)"
     if Objekttyp.getitemcount < 2 then 
@@ -1048,7 +1048,7 @@ testcase tInsertObjectOLE
     '/// Choose 'Create from file'
     printlog " Choose 'Create from file'"
     AusDateierstellen.Check
-    Call DialogTest2 (OLEObjektEinfuegen, 2)
+    Call DialogTest (OLEObjektEinfuegen, 2)
     '/// Click on 'Search' – button
     printlog " Click on 'Search' – button"
     Durchsuchen.Click

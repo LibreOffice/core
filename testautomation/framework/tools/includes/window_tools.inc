@@ -75,7 +75,7 @@ function hMaximizeDocument() as boolean
     case "MATH"      : Kontext "DocumentMath"
                        DocumentMath.maximize()
                        brc = DocumentMath.isMaximized()
-    case "MASTERDOC" : Kontext "DocumentWriter"
+    case "MASTERDOCUMENT" : Kontext "DocumentWriter"
                        DocumentWriter.maximize()
                        brc = DocumentWriter.isMaximized()
     case "HTML"      : Kontext "DocumentWriter"

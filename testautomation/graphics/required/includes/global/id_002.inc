@@ -105,21 +105,21 @@ testcase tiEditCutPasteCopySelectall
     call hTBOtypeInDoc
 
     EditCut
-    WaitSlot (2000)
+    sleep (1)
     EditPaste
-    WaitSlot (2000)
+    sleep (1)
     EditCopy
-    WaitSlot (2000)
+    sleep (1)
     EditPaste
-    WaitSlot (2000)
+    sleep (1)
     EditSelectAll
-    WaitSlot (2000)
+    sleep (1)
     EditCut
-    WaitSlot (2000)
+    sleep (1)
     EditPaste
-    WaitSlot (2000)
+    sleep (1)
     EditDeleteContents
-    WaitSlot (2000)
+    sleep (1)
     '/// close application ///'
     Call hCloseDocument
 endcase

@@ -88,7 +88,7 @@ sub LoadIncludeFiles
     use "framework\tools\includes\options_tools.inc"
     
     Call GetUseFiles
-    gApplication = "Writer"
+    gApplication = "WRITER"
    
 end sub
 

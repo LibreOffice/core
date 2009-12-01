@@ -65,7 +65,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     Call GetUseFiles
-    gApplication = "Calc"
+    gApplication = "CALC"
 end sub
 
 '

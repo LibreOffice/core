@@ -50,10 +50,10 @@ testcase tNewForm
 
     ViewForms
 
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
     
     StartFormWizard
@@ -106,10 +106,10 @@ testcase tCheckTemplate
 
     ViewForms
 
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
     
     StartFormWizard
@@ -222,10 +222,10 @@ testcase tStartFromTableContextMenu
 
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
 
     '/// select the table biblio

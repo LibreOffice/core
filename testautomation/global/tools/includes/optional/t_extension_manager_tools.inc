@@ -57,7 +57,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     '///+<li>Path to extension (String)</li>
     '///<ul>
     '///+<li>The path has to be fully qualified</li>
-    '///+<li>The path may be platform specifix</li>
+    '///+<li>The path may be platform specific</li>
     '///</ul>
     
     '///+<li>Flags (String), defaults underlined</li>
@@ -256,7 +256,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     if ( instr( flags, "license" ) <> 0 ) then
         if ( bLogs ) then printlog( CFN & "Testing software license dialog" )
         kontext "ExtensionSoftwareLicenseAgreement"
-        if ( ExtensionSoftwareLicenseAgreement.exists( 1 ) ) then
+        if ( ExtensionSoftwareLicenseAgreement.exists( 5 ) ) then
             if ( bLogs ) then printlog( CFN & "Software license dialog found" )
             if ( instr( flags , "denylicense" ) <> 0 ) then
                 printlog( CFN & "Cancelling software license dialog" )
@@ -273,7 +273,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
             if ( instr( flags , "nolicense" ) <> 0 ) then
                 printlog( CFN & "No license dialog displayed. Good." )
             else
-                printlog( CFN & "Expected license dialog is missing" )
+                warnlog( CFN & "Expected license dialog is missing" )
             endif
         endif
     else
@@ -322,6 +322,8 @@ function hExtensionRemoveGUI( cExtensionName as string ) as integer
     '///</ul>
     '///</ol>
     
+    const CFN = "hExtensionRemoveGUI(): "
+    
     printlog( "Removing extension by name: " & cExtensionName )
 
     ToolsPackageManager
@@ -332,7 +334,14 @@ function hExtensionRemoveGUI( cExtensionName as string ) as integer
             if ( Remove.exists() ) then
                 if ( Remove.isEnabled() ) then
                     Remove.click()
-                    WaitSlot( 5000 )
+                    
+                    kontext "Active"
+                    if ( Active.exists( 3 ) ) then
+                        printlog( Active.getText() )
+                        Active.OK()
+                    else
+                        warnlog( CFN & "Expected confirmation dialog is missing" )
+                    endif
                     hExtensionRemoveGUI() = 0
                 else
                     hExtensionRemoveGUI() = 2
@@ -344,6 +353,7 @@ function hExtensionRemoveGUI( cExtensionName as string ) as integer
             hExtensionRemoveGUI() = 3
         endcatch
         
+        kontext "PackageManager"
         PackageManager.close()
     else
         hExtensionRemoveGUI() = 1

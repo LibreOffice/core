@@ -81,7 +81,7 @@ testcase DrawToWriterScrollingText
   printlog "  Paste 'Scrolling Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog "  Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_writer_scrolling_text.odt", "writer8")
     printlog "  Save document as ..\user\work\draw_to_writer_scrolling_text.odt"
@@ -139,7 +139,7 @@ testcase DrawToWriterGroupedObject
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog "  Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_writer_grouped_object.odt", "writer8")
     printlog "  Save document as ..\user\work\draw_to_writer_grouped_object.odt"
@@ -197,7 +197,7 @@ testcase DrawToWriter3D
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog "  Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_writer_3d.odt", "writer8")
     printlog "  Save document as ..\user\work\draw_to_writer_3d.odt"
@@ -255,7 +255,7 @@ testcase DrawToWriterFontwork
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog "  Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_writer_fontwork.odt", "writer8")
     printlog "  Save document as ..\user\work\draw_to_writer_fontwork.odt"
@@ -313,7 +313,7 @@ testcase DrawToWriterBullets
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog "  Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_writer_bullets.odt", "writer8")
     printlog "  Save document as ..\user\work\draw_to_writer_bullets.odt"
@@ -372,7 +372,7 @@ testcase DrawToWriterDimensionLines
   printlog "  Paste 'Dimension Lines' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog "  Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_writer_dim_lines.odt", "writer8")
     printlog "  Save document as ..\user\work\draw_to_writer_dim_lines.odt"
@@ -431,7 +431,7 @@ testcase DrawToWriterConnectors
   printlog "  Paste 'Connectors' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
     printlog "  Write Clipboard format under pasted content "
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\draw_to_writer_connectors.odt", "writer8")
     printlog "  Save document as ..\user\work\draw_to_writer_connectors.odt"

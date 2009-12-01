@@ -54,7 +54,7 @@ sub main
         Call Toolboxen_Linien
         Call tToolsCustomize              'global\required\includes
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call Toolboxen_Rechtecke
         Call Toolboxen_Kreise
@@ -71,5 +71,5 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\required\includes\g_customize.inc"
     Call GetUseFiles
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
 end sub

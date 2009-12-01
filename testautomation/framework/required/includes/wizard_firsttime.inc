@@ -123,7 +123,7 @@ testcase tUpdtWizardFirsttime
     if ( TabPersonalDataMigration.exists( 2 ) ) then
         call dialogtest( TabPersonalDataMigration )
         printlog( "The data migration page is visible" )
-    
+        TransferPersonalData.uncheck()
         '///+<li>Click the 'next' button to get to the next page</li>    
         kontext "WelcomeDialog"
         NextBtn.click()

@@ -59,7 +59,7 @@ testcase WriterToHTMLText
   printlog " + Select first paragraph "
   printlog " + Copy selected text "
   if wSetClipboardtestDefaults("text") = True then
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "
@@ -112,7 +112,7 @@ testcase WriterToHTMLField
   printlog " + Select paragraph with 'Date Field' "
   printlog " + Copy selected text "
   if wSetClipboardtestDefaults("field") = True then
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "
@@ -165,7 +165,7 @@ testcase WriterToHTMLTable
   printlog " + Select 'Table' "
   printlog " + Copy selected table "
   if wSetClipboardtestDefaults("table") = True then
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "
@@ -218,7 +218,7 @@ testcase WriterToHTMLFrame
   printlog " + Select 'Frame' "
   printlog " + Copy selected frame "
   if wSetClipboardtestDefaults("frame") = True then
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "
@@ -272,8 +272,8 @@ testcase WriterToHTMLDrawingObject
   printlog " + Jump to beginning of document "
   printlog " + Select 'Drawing Object' "
   printlog " + Copy selected Drawing Object "
-  if wSetClipboardtestDefaults("draw") = True then
-    gApplication = "HTMLDOKUMENT"
+  if wSetClipboardtestDefaults("DRAW") = True then
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "
@@ -290,7 +290,7 @@ testcase WriterToHTMLDrawingObject
     printlog "  Paste 'Table' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
      printlog " + Write Clipboard format under pasted content "
      Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_html_draw.html", "HTML")
      printlog " + Save document as ..\user\work\writer_to_html_draw.html"
@@ -326,7 +326,7 @@ testcase WriterToHTMLGraphicLinked
   printlog " + Select 'Linked Graphic' "
   printlog " + Copy selected Linked Graphic "
   if wSetClipboardtestDefaults("graphicL") = True then
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "
@@ -379,7 +379,7 @@ testcase WriterToHTMLGraphicEmbedded
   printlog " + Select 'Embedded Graphic' "
   printlog " + Copy selected Embedded Graphic "
   if wSetClipboardtestDefaults("graphicE") = True then
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "
@@ -432,7 +432,7 @@ testcase WriterToHTMLOLEObject
   printlog " + Select 'OLE Object' "
   printlog " + Copy selected OLE Object "
   if wSetClipboardtestDefaults("ole") = True then
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "
@@ -485,7 +485,7 @@ testcase WriterToHTMLControl
   printlog " + Select 'Control' "
   printlog " + Copy selected Control "
   if wSetClipboardtestDefaults("control") = True then
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " + Open new document "
     Call hNewDocument
     printlog " + Edit / Paste Special "

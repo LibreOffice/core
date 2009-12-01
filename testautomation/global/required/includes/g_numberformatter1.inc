@@ -697,7 +697,7 @@ testcase tButtonsNumberformatter
     else
         warnlog "Format Box shows wrong value, " & sFormatText
     endif
-    if gApplication ="Calc" then 'checking Application for using Reset button
+    if gApplication ="CALC" then 'checking Application for using Reset button
         Zurueck.Click
         if Category.GetSelIndex = 7.then
             printlog "Reset to Time."
@@ -724,7 +724,7 @@ testcase tButtonsNumberformatter
         warnlog "Format Box shows wrong value: " & sFormatText
     endif
     
-    if gApplication = "Calc" then
+    if gApplication = "CALC" then
         TabChartAxisNumbers.TypeKeys "<MOD2 R>", true 'using ALT+R to reset back from percent to time
         if Category.GetSelIndex = 7 then
             printlog "ALT-R changed back to Time."

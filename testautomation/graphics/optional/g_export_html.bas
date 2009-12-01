@@ -53,7 +53,7 @@ sub main
         Call tHTMLExport
         Call tHtmlExport_Webcast
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call tHTMLExport
 
@@ -65,5 +65,5 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_ui_filters.inc"
     Call GetUseFiles
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
 end sub

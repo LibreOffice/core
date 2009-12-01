@@ -71,7 +71,7 @@ testcase tiFileSaveAs
     dim sFileNameLoaded as string 'gets name of fiel from Dateiname that will be loaded
 
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -83,13 +83,13 @@ testcase tiFileSaveAs
     sFileName = "graphics\required\input\tbo_alf_." + ExtensionString    ' this is the file with all features
     printlog "FileName is " + sFileName
     sFile = "isas_"                                ' this is the filename of the export files
-    sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+Lcase(gApplication)+"\"+ gPlatform) ' this is the export path
+    sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+gApplication+"\"+ gPlatform) ' this is the export path
     printlog "sPath is " + sPath
     if dir (sPath) = "" then
         app.mkdir (sPath)
     end if
 
-    Printlog "'/// deleting all files in output directory: \\user\\work\\graphics\\required\\Lcase(gApplication) gPlatform isas_* ///'"
+    Printlog "'/// deleting all files in output directory: \\user\\work\\graphics\\required\\gApplication gPlatform isas_* ///'"
     if gSamePC = TRUE then ' delete export directory
         GetFileList ( sPath, sFile+"*", Exlist() )
         if KillFileList ( Exlist() ) <> TRUE then
@@ -148,7 +148,7 @@ testcase tiFileSaveAs
         printlog "File will be loaded: " & sFileNameLoaded
         Oeffnen.Click
         printlog "Closing doc if it gets loaded: " & sFileNameLoaded
-        if lCase(gApplication) = "impress" then 
+        if gApplication = "IMPRESS" then 
             Kontext "DocumentImpress"
             if DocumentImpress.exists(5) then
                 Call hCloseDocument
@@ -175,7 +175,7 @@ testcase tiFileReload
   Dim DokumentPfad$
   Dim Datei$
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -233,7 +233,7 @@ testcase tiFileVersion
   Dim DokumentPfad$
   Dim Datei$
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -303,15 +303,15 @@ testcase tiFilePassword
    dim sFile as string ' filename to export
    dim sPath as string ' and path to export
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
     end if
 
-'///  save file to:  "graphics\required\output\"+Lcase(gApplication)+"\"+ gPlatform+"\"isp__" ///'
+'///  save file to:  "graphics\required\output\"+gApplication+"\"+ gPlatform+"\"isp__" ///'
    sFile = "isp__"                                                     ' this is the filename of the export files
-   sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+Lcase(gApplication)+"\"+ gPlatform+"\") ' this is the export path
+   sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+gApplication+"\"+ gPlatform+"\") ' this is the export path
    mkdir (sPath)
    if dir (sPath) = "" then app.mkdir (sPath)
    sFileIn = (sPath + sFile + "." + ExtensionString)

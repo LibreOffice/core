@@ -51,7 +51,7 @@ sub main
     GetOLEDefaultNames
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
 
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     PrintLog "-------------------------" + gApplication + "-------------------"
 'qaErrorLog "#i76832# - tToolsAutocorrectCustomQuotes (x4) outcommented due to Bug."
     Call tToolsAutocorrectCustomQuotes (TRUE)
@@ -60,7 +60,7 @@ sub main
     Call tToolsAutocorrectReplace
     Call tToolsAutocorrectExceptions
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tToolsAutocorrectCustomQuotes (TRUE)
     Call tToolsAutocorrectCustomQuotes (FALSE)
@@ -74,6 +74,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

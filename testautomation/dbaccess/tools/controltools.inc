@@ -57,7 +57,7 @@ function fSwitchAutopilotOff(SwitchAutoOff as boolean)
                 
     '/// open a new document
     printlog "open a new document"
-    gApplication = "Writer"
+    gApplication = "WRITER"
 	call hNewDocument
     Kontext "DocumentWriter"       
 	DocumentWriter.TypeKeys "tt_doc" , true
@@ -590,12 +590,12 @@ sub hDrawingWithSelection ( iStartX, iStartY, iEndX, iEndY )
                             DocumentWriter.MouseMove ( iEndX, iEndY )
                             DocumentWriter.MouseUp ( iEndX, iEndY )
 
-      case "HTMLDOKUMENT": Kontext "DocumentWriterWeb"
+      case "HTML": Kontext "DocumentWriterWeb"
                             DocumentWriterWeb.MouseDown ( iStartX, iStartY )
                             DocumentWriterWeb.MouseMove ( iEndX, iEndY )
                             DocumentWriterWeb.MouseUp ( iEndX, iEndY )
 
-      case "GLOBALDOC"   : Kontext "DocumentMasterDoc"
+      case "MASTERDOCUMENT"   : Kontext "DocumentMasterDoc"
                             DocumentMasterDoc.MouseDown ( iStartX, iStartY )
                             DocumentMasterDoc.MouseMove ( iEndX, iEndY )
                             DocumentMasterDoc.MouseUp ( iEndX, iEndY )

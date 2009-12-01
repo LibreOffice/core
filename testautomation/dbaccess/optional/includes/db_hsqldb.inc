@@ -148,8 +148,8 @@ testcase tRenameTable
     fFindTable("TT_1")
     
     printlog "rename the selected table"
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         call hMenuSelectNr(2)
         call hMenuSelectNr(7)
 
@@ -213,8 +213,8 @@ testcase tRenameTableWhichUsedInViews
 
     '/// rename the selcted table
     printlog "rename the selcted table"
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         call hMenuSelectNr(2)
         call hMenuSelectNr(7)
 

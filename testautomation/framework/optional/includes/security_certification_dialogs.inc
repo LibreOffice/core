@@ -63,7 +63,7 @@ testcase tCertificationDialogs
         active.yes()
         printlog( CFN & "Allow to save the document" )
     else
-        if ( gApplication <> "MASTERDOC" ) then
+        if ( gApplication <> "MASTERDOCUMENT" ) then
             warnlog( CFN & "No message that the file must be saved to be signed" )
         else
             printlog( CFN & "OK - No save-message for Masterdoc." )
@@ -78,7 +78,7 @@ testcase tCertificationDialogs
         endif
         Speichern.click()
     else
-        if ( gApplication <> "MASTERDOC" ) then
+        if ( gApplication <> "MASTERDOCUMENT" ) then
             warnlog( CFN & "Save As Dialog is not open" )
         else
             printlog( CFN & "OK - No filesave for Masterdoc." )
@@ -90,7 +90,7 @@ testcase tCertificationDialogs
         printlog( CFN & "Digital signatures is open" )
         DigitalSignature.cancel()
     else
-        if ( gApplication <> "MASTERDOC" ) then
+        if ( gApplication <> "MASTERDOCUMENT" ) then
             warnlog( CFN & "Digital Signatures Dialog is not open" )
         else
             printlog( CFN & "OK - No signature dialog for Masterdoc." )

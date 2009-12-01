@@ -558,19 +558,23 @@ testcase tCreateNewLineChart
         sControlString = DataRange.GetText
         printlog "Data Range is: " & sControlString
         if instr ( sControlString , "$A$2:$C$13" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload."
+            warnlog "Data range wasn't correctly preserved after save and reload: $A$2:$C$13"
         endif
         if instr ( sControlString , "$A$19" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload."
+            warnlog "Data range wasn't correctly preserved after save and reload: $A$19"
         endif
         if instr ( sControlString , "$B$1:$C$13" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload."
+            if (gPlatform = "osx") then
+                qaerrorlog "Data range wasn't correctly preserved after save and reload: $B$1:$C$13"
+            else
+                warnlog "Data range wasn't correctly preserved after save and reload: $B$1:$C$13"
+            endif
         endif
         if instr ( sControlString , "$E$1:$F$13" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload."
+            warnlog "Data range wasn't correctly preserved after save and reload: $E$1:$F$13"
         endif
         if instr ( sControlString , "$B$17:$E$17" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload."
+            warnlog "Data range wasn't correctly preserved after save and reload: $B$17:$E$17"
         endif        
         printlog "Check if Radio Button ROWS is checked"
         if Rows.IsChecked then

@@ -98,14 +98,14 @@ sub sFileExport
     Dim ExPath as String
     Dim Liste( 50 ) as String
     
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
       ExtensionString = "odp"
     else
       ExtensionString = "odg"
     end if
 
     '///- all files are saved in [StarOfficePath]/user/work/[applicatoion]/export ///'
-    ExPath = ConvertPath (gOfficePath + "user\work\" + lCase(gApplication) + "\export\" )
+    ExPath = ConvertPath (gOfficePath + "user\work\" + gApplication + "\export\" )
     OutputGrafikTBO = ExPath & "expo"
     Printlog "Create the export-dir for the graphics ( " + ExPath + " )"
     try
@@ -315,14 +315,14 @@ end Sub
 '-------------------------------------------------------------------------------
 sub SaveMeasurementSetFirst
 
-    if (lCase(gApplication) = "draw") then
+    if (gApplication = "DRAW") then
        sApplication = "DRAWING"
-    elseIf (lCase(gApplication) = "impress") then
-       sApplication = "PRESENTATION"
-    elseIf (lCase(gApplication) = "writer") then
-       sApplication = "TEXTDOCUMENT"
-    elseIf (lCase(gApplication) = "calc") then
-       sApplication = "SPREADSHEET"
+    elseIf (gApplication = "IMPRESS") then
+       sApplication = "IMPRESS"
+    elseIf (gApplication = "WRITER") then
+       sApplication = "WRITER"
+    elseIf (gApplication = "CALC") then
+       sApplication = "CALC"
     endif
     printlog "   '/// - save states ///'"
     ToolsOptions
@@ -338,14 +338,14 @@ end Sub
 sub MeasurementSetFirst
 
     dim f as integer
-    if (lCase(gApplication) = "draw") then
+    if (gApplication = "DRAW") then
        sApplication = "DRAWING"
-    elseIf (lCase(gApplication) = "impress") then
-       sApplication = "PRESENTATION"
-    elseIf (lCase(gApplication) = "writer") then
-       sApplication = "TEXTDOCUMENT"
-    elseIf (lCase(gApplication) = "calc") then
-       sApplication = "SPREADSHEET"
+    elseIf (gApplication = "IMPRESS") then
+       sApplication = "IMPRESS"
+    elseIf (gApplication = "WRITER") then
+       sApplication = "WRITER"
+    elseIf (gApplication = "CALC") then
+       sApplication = "CALC"
     endif
     ToolsOptions
      hToolsOptions (sApplication,"General")
@@ -367,14 +367,14 @@ end Sub
 sub ResetMeasurement
 
     dim f as integer
-    if (lCase(gApplication) = "draw") then
+    if (gApplication = "DRAW") then
        sApplication = "DRAWING"
-    elseIf (lCase(gApplication) = "impress") then
-       sApplication = "PRESENTATION"
-    elseIf (lCase(gApplication) = "writer") then
-       sApplication = "TEXTDOCUMENT"
-    elseIf (lCase(gApplication) = "calc") then
-       sApplication = "SPREADSHEET"
+    elseIf (gApplication = "IMPRESS") then
+       sApplication = "IMPRESS"
+    elseIf (gApplication = "WRITER") then
+       sApplication = "WRITER"
+    elseIf (gApplication = "CALC") then
+       sApplication = "CALC"
     endif
     printlog "'/// - Reset states back to what they were before ///'"
     ToolsOptions
@@ -951,22 +951,22 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
     '/// switch to tabpage 'Area' ///'
     Messagebox.SetPage TabArea
       kontext "TabArea"
-      Call DialogTest2 ( TabArea )
+      Call DialogTest ( TabArea )
     '/// select radio button 'none' ///'
       NoFill.Check
-      Call DialogTest2 ( TabArea, 1 )
+      Call DialogTest ( TabArea, 1 )
     '/// select radio button 'color' ///'
       Color.Check
-      Call DialogTest2 ( TabArea, 2 )
+      Call DialogTest ( TabArea, 2 )
     '/// select radio button 'gradient' ///'
       Gradient.Check
-      Call DialogTest2 ( TabArea, 3 )
+      Call DialogTest ( TabArea, 3 )
     '/// select radio button 'hatching' ///'
       Hatching.Check
-      Call DialogTest2 ( TabArea, 4 )
+      Call DialogTest ( TabArea, 4 )
     '/// select radio button 'bitmap' ///'
       Bitmap.Check
-      Call DialogTest2 ( TabArea, 5 )
+      Call DialogTest ( TabArea, 5 )
     Kontext
     '/// switch to tabpage 'shadowing' ///'
     Messagebox.SetPage TabSchatten

@@ -98,6 +98,6 @@ sub LoadIncludeFiles
    use "global\system\includes\gvariabl.inc"
    use "global\tools\includes\required\t_lists.inc"
    Call GetUseFiles
-   gApplication = "Writer"
+   gApplication = "WRITER"
 
 end sub

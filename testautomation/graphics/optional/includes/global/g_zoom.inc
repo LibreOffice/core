@@ -46,7 +46,7 @@ testcase tViewZoom
  Dim Datei$
    Printlog "- view Zoom"
 
-    if (lCase(gApplication) = "Impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"

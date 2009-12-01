@@ -48,7 +48,7 @@ testcase tDeleteModulesAtRunningBasic
     '///<ul>
     '///<li>open a new writer-doc</li>
     printlog "open a new writer-doc"
-    gApplication = "Writer"
+    gApplication = "WRITER"
 
     Call hNewDocument()
 

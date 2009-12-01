@@ -52,7 +52,7 @@ sub main
      call tiMinimize_Maximize_Docking_TaskPane
      call tiPaneview_LoadSave_Windowsstate
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
      call tdMinimize_Maximize_Docking_Pagepane
      call tdPaneview_LoadSave_Windowsstate
@@ -63,6 +63,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

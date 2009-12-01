@@ -49,14 +49,14 @@ function fOpenNewFormDesign()
     '/// open a a new form design from an open database
     '/// <u>parameter:</u>
           
-    Kontext "Insight"    
-	    if ( Insight.NotExists(3) ) then
+    Kontext "DATABASE"    
+	    if ( Database.NotExists(3) ) then
 	        fOpenNewFormDesign = false
 	        exit function
 	    end if
 
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
     sleep(1)
     

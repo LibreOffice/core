@@ -393,8 +393,8 @@ function fGetObject(sToolbar as String , sObject as String) as Integer
   select case gApplication
       
       case "WRITER"       :  fGetObject = fGetObjectWriter(sToolbar , sObject)   
-      case "HTMLDOKUMENT" :  fGetObject = fGetObjectWriter(sToolbar , sObject)
-      case "MASTERDOC"    :  fGetObject = fGetObjectWriter(sToolbar , sObject)
+      case "HTML" :  fGetObject = fGetObjectWriter(sToolbar , sObject)
+      case "MASTERDOCUMENT"    :  fGetObject = fGetObjectWriter(sToolbar , sObject)
                  
       case "CALC"         :  fGetObject = fGetObjectCalc(sToolbar , sObject)
 

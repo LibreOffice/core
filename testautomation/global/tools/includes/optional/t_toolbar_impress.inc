@@ -250,7 +250,7 @@ function fGetObjectImpress(sToolbar as String , sObject as String) as Integer
               case "Can't Restore"              : fGetObjectImpress  = 23
                    '-----------------                                  24
               case "Chart"                      : fGetObjectImpress  = 25
-              case "Spreadsheet"                : fGetObjectImpress  = 26
+              case "CALC"                : fGetObjectImpress  = 26
               case "Hyperlink"                  : fGetObjectImpress  = 27
                    '-----------------                                  28
               case "Display Grid"               : fGetObjectImpress  = 29

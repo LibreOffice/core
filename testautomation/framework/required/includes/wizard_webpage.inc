@@ -48,13 +48,13 @@ testcase tUpdtWizardWebpage
     if WebWizard.exists(20) then
 
         printlog " 1. Introduction"
-        Call Dialogtest2 (WebWizard,1)
+        Call DialogTest (WebWizard,1)
         IntroductionChooseSettings.getItemCount
         IntroductionChooseSettings.getSelText
         NextButton.click
         
         printlog " 2. Documents"
-        Call Dialogtest2 (WebWizard,2)
+        Call DialogTest (WebWizard,2)
         DocumentsAdd.click
 
         Kontext "OeffnenDlg"
@@ -77,12 +77,12 @@ testcase tUpdtWizardWebpage
         NextButton.click
         
         printlog " 3. Main Layout"
-        Call Dialogtest2 (WebWizard,3)
+        Call DialogTest (WebWizard,3)
         MainLayoutLayout2.typeKeys "<space>"
         NextButton.click
         
         printlog " 4. Layout details"
-        Call Dialogtest2 (WebWizard,4)
+        Call DialogTest (WebWizard,4)
         LayoutDetailsFileName.isChecked
         LayoutDetailsDescription.isChecked
         LayoutDetailsAuthor.isChecked
@@ -98,7 +98,7 @@ testcase tUpdtWizardWebpage
         NextButton.click
         
         printlog " 5. Style"
-        Call Dialogtest2 (WebWizard,5)
+        Call DialogTest (WebWizard,5)
         StyleStyle.getItemCount
         StyleStyle.getSelText
         StyleBackgroundImage.click
@@ -136,7 +136,7 @@ testcase tUpdtWizardWebpage
         NextButton.click
 
         printlog " 6. Web site information"
-        Call Dialogtest2 (WebWizard,6)
+        Call DialogTest (WebWizard,6)
         WebSiteInformationTitle.getText
         WebSiteInformationDescription.getText
         WebSiteInformationEmail.getText
@@ -150,7 +150,7 @@ testcase tUpdtWizardWebpage
         NextButton.click
         
         printlog " 7. Preview"
-        Call Dialogtest2 (WebWizard,7)
+        Call DialogTest (WebWizard,7)
         PreviewToALocalFolderCB.unCheck
         PreviewToALocalFolderTF.getText
         PublishToALocalFolderB.click

@@ -50,7 +50,7 @@ end sub
 ' ---------------------------------------------------------------------------------
 
 testcase HTMLToCALCText
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
   printlog "  Jump to beginning of document " 
   printlog "  Select first paragraph " 
@@ -116,7 +116,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToCALCField
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
   printlog "  Jump to beginning of document " 
   printlog "  Select paragraph with 'Date Field' " 
@@ -173,7 +173,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToCALCTable
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
     printlog "  Jump to beginning of document " 
     printlog "  Select 'Table' " 
@@ -227,7 +227,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToCALCGraphicLinked
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
     printlog "  Jump to beginning of document " 
     printlog "  Select 'Linked Graphic' " 
@@ -283,7 +283,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToCALCControl
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
     printlog "  Jump to beginning of document " 
     printlog "  Select 'Control' " 
@@ -340,7 +340,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToCALCFloatingFrame
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
     printlog "  Jump to beginning of document " 
     printlog "  Select 'Floating Frame' " 

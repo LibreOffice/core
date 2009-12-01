@@ -50,7 +50,7 @@ end sub
 ' ---------------------------------------------------------------------------------
 
 testcase HTMLToDRAWText
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
   printlog " + Jump to beginning of document "
   printlog " + Select first paragraph "
@@ -116,7 +116,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToDRAWField
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog " + Jump to beginning of document "
     printlog " + Select paragraph with 'Date Field' "
@@ -178,7 +178,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToDRAWTable
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
   printlog " + Jump to beginning of document "
   printlog " + Select 'Table' "
@@ -235,7 +235,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToDRAWGraphicLinked
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog " + Jump to beginning of document "
     printlog " + Select 'Linked Graphic' "
@@ -291,7 +291,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToDRAWControl
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog " + Jump to beginning of document "
     printlog " + Select 'Control' "
@@ -348,7 +348,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToDRAWFloatingFrame
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog " + Jump to beginning of document "
     printlog " + Select 'Floating Frame' "
