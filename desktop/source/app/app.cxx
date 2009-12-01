@@ -1738,8 +1738,15 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         aSeq[0] <<= bQuickstart;
 
         // Try to instanciate quickstart service. This service is not mandatory, so
-        // do nothing if service is not available.
+        // do nothing if service is not available
+
+        // #i105753# the following if was invented for performance
+        // unfortunately this broke the QUARTZ behavior which is to always run
+        // in quickstart mode since Mac applications do not usually quit
+        // when the last document closes
+        #ifndef QUARTZ
         if ( bQuickstart )
+        #endif
         {
             Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
                                                 DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
