@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
     // this is the entry point from the DLL back to the executable.
-    sal_Int32 CallbackDispatch(int x, ...);
+    long CallbackDispatch(int x, ...);
 
 //# void TestResult_startTest(hTestResult _pResult, hTest _pTest);
 //# void TestResult_addFailure( hTestResult _pResult, hTest _pTest, hException _pException );

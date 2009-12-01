@@ -202,7 +202,7 @@ sal_Int32 SignalHandlerA( TagHelper const& _aTagItems );
 sal_Int32 ExecutionA( TagHelper const& _aTagItems );
 
 // -----------------------------------------------------------------------------
-sal_Int32 CallbackDispatch(int x, ...)
+long CallbackDispatch(int x, ...)
 {
     (void) x; // avoid warning
 
@@ -238,7 +238,7 @@ sal_Int32 CallbackDispatch(int x, ...)
 
     // printf(".\n");
 
-    sal_Int32 nRetValue = 0;
+    long nRetValue = 0;
     Tag nPreTag = aTagItems.GetTagData(TAG_TYPE);
     if ( (nPreTag & TAG_RESULT) == TAG_RESULT)
     {
