@@ -44,12 +44,17 @@
 
 namespace chart
 {
+
+OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XColorScheme > createConfigColorScheme(
+    const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext );
+
 namespace impl
 {
 class ChartConfigItem;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS ConfigColorScheme :
+class ConfigColorScheme :
     public ConfigItemListener,
     public ::cppu::WeakImplHelper2<
         ::com::sun::star::chart2::XColorScheme,
@@ -59,7 +64,7 @@ public:
     explicit ConfigColorScheme(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext );
-    virtual ~ConfigColorScheme();
+    SAL_DLLPRIVATE virtual ~ConfigColorScheme();
 
     /// establish methods for factory instatiation
     APPHELPER_SERVICE_FACTORY_HELPER( ConfigColorScheme )
@@ -68,14 +73,14 @@ public:
 
 protected:
     // ____ XColorScheme ____
-    virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex )
+    SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ConfigItemListener ____
-    virtual void notify( const ::rtl::OUString & rPropertyName );
+    SAL_DLLPRIVATE virtual void notify( const ::rtl::OUString & rPropertyName );
 
 private:
-    void retrieveConfigColors();
+    SAL_DLLPRIVATE void retrieveConfigColors();
 
     // member variables
     ::com::sun::star::uno::Reference<

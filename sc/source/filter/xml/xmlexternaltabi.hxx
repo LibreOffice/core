@@ -65,6 +65,30 @@ private:
 
 // ============================================================================
 
+class ScXMLExternalRefRowsContext : public SvXMLImportContext
+{
+public:
+    ScXMLExternalRefRowsContext( ScXMLImport& rImport, USHORT nPrefix,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLExternalTabData& rRefInfo );
+
+    virtual ~ScXMLExternalRefRowsContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+private:
+    ScXMLImport&            mrScImport;
+    ScXMLExternalTabData&   mrExternalRefInfo;
+};
+
+// ============================================================================
+
 class ScXMLExternalRefRowContext : public SvXMLImportContext
 {
 public:

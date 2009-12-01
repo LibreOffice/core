@@ -47,7 +47,7 @@ DataLabelsDialog::DataLabelsDialog(Window* pWindow, const SfxItemSet& rInAttrs, 
     m_aBtnOK(this, SchResId(BTN_OK)),
     m_aBtnCancel(this, SchResId(BTN_CANCEL)),
     m_aBtnHelp(this, SchResId(BTN_HELP)),
-    m_apDataLabelResources( new DataLabelResources(this,rInAttrs,false) ),
+    m_apDataLabelResources( new DataLabelResources(this,rInAttrs) ),
     m_rInAttrs(rInAttrs)
 {
     FreeResource();

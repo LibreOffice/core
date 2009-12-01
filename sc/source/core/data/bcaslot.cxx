@@ -35,6 +35,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <svtools/listener.hxx>
+#include <svtools/listeneriter.hxx>
 
 #include "document.hxx"
 #include "brdcst.hxx"
@@ -89,7 +90,7 @@ ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
 
 ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 {
-    for ( ScBroadcastAreas::iterator aIter = aBroadcastAreaTbl.begin();
+    for ( ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.begin());
             aIter != aBroadcastAreaTbl.end(); ++aIter)
     {
         if (!(*aIter)->DecRef())
@@ -98,16 +99,10 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 }
 
 
-// Only here new ScBroadcastArea objects are created, prevention of dupes.
-// If rpArea != NULL then no listeners are startet, only the area is inserted
-// and the reference count increased.
-void ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
-        SvtListener* pListener, ScBroadcastArea*& rpArea
-    )
+bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
 {
-    DBG_ASSERT(pListener, "StartListeningArea: pListener Null");
     if ( pDoc->GetHardRecalcState() )
-        return;
+        return true;
     if (aBroadcastAreaTbl.size() >= aBroadcastAreaTbl.max_size())
     {   // this is more hypothetical now, check existed for old SV_PTRARR_SORT
         if ( !pDoc->GetHardRecalcState() )
@@ -123,43 +118,69 @@ void ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
             pDoc->SetAutoCalc( FALSE );
             pDoc->SetHardRecalcState( 2 );
         }
-        return;
+        return true;
     }
+    return false;
+}
+
+
+bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
+        SvtListener* pListener, ScBroadcastArea*& rpArea )
+{
+    bool bNewArea = false;
+    DBG_ASSERT(pListener, "StartListeningArea: pListener Null");
+    if (CheckHardRecalcStateCondition())
+        return false;
     if ( !rpArea )
     {
-        rpArea = new ScBroadcastArea( rRange );
-        // Most times the area doesn't exist yet, immediately trying to insert
-        // it saves an attempt to find it.
-        if (aBroadcastAreaTbl.insert( rpArea).second)
-            rpArea->IncRef();
+        // Even if most times the area doesn't exist yet and immediately trying
+        // to new and insert it would save an attempt to find it, on mass
+        // operations like identical large [HV]LOOKUP() areas the new/delete
+        // would add quite some penalty for all but the first formula cell.
+        ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
+        if (aIter != aBroadcastAreaTbl.end())
+            rpArea = *aIter;
         else
         {
-            delete rpArea;
-            ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
-            if (aIter != aBroadcastAreaTbl.end())
-                rpArea = *aIter;
+            rpArea = new ScBroadcastArea( rRange);
+            if (aBroadcastAreaTbl.insert( rpArea).second)
+            {
+                rpArea->IncRef();
+                bNewArea = true;
+            }
             else
             {
-                DBG_ERRORFILE("BroadcastArea not inserted and not found?!?");
+                DBG_ERRORFILE("StartListeningArea: area not found and not inserted in slot?!?");
+                delete rpArea;
                 rpArea = 0;
             }
         }
         if (rpArea)
-            pListener->StartListening( rpArea->GetBroadcaster() );
+            pListener->StartListening( rpArea->GetBroadcaster());
     }
     else
     {
-        aBroadcastAreaTbl.insert( rpArea );
-        rpArea->IncRef();
+        if (aBroadcastAreaTbl.insert( rpArea).second)
+            rpArea->IncRef();
     }
+    return bNewArea;
+}
+
+
+void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
+{
+    DBG_ASSERT( pArea, "InsertListeningArea: pArea NULL");
+    if (CheckHardRecalcStateCondition())
+        return;
+    if (aBroadcastAreaTbl.insert( pArea).second)
+        pArea->IncRef();
 }
 
 
 // If rpArea != NULL then no listeners are stopped, only the area is removed
-// and the reference count decreased.
+// and the reference count decremented.
 void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
-        SvtListener* pListener, ScBroadcastArea*& rpArea
-    )
+        SvtListener* pListener, ScBroadcastArea*& rpArea )
 {
     DBG_ASSERT(pListener, "EndListeningArea: pListener Null");
     if ( !rpArea )
@@ -186,6 +207,7 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
             ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
             if (aIter == aBroadcastAreaTbl.end())
                 return;
+            DBG_ASSERT( *aIter == rpArea, "EndListeningArea: area pointer mismatch");
             aBroadcastAreaTbl.erase( aIter);
             if ( !rpArea->DecRef() )
             {
@@ -211,9 +233,8 @@ BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
         return FALSE;
     BOOL bIsBroadcasted = FALSE;
     const ScAddress& rAddress = rHint.GetAddress();
-    // Unfortunately we can't search for the first matching entry.
-    ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
-    while (aIter != aBroadcastAreaTbl.end())
+    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
+            aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
         ScBroadcastArea* pArea = *aIter;
         // A Notify() during broadcast may call EndListeningArea() and thus
@@ -229,8 +250,6 @@ BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
                 bIsBroadcasted = TRUE;
             }
         }
-        else if (rAddress < rAreaRange.aStart)
-            break;  // while loop, only ranges greater than rAddress follow
     }
     return bIsBroadcasted;
 }
@@ -242,9 +261,8 @@ BOOL ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
     if (aBroadcastAreaTbl.empty())
         return FALSE;
     BOOL bIsBroadcasted = FALSE;
-    // Unfortunately we can't search for the first matching entry.
-    ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
-    while (aIter != aBroadcastAreaTbl.end())
+    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
+            aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
         ScBroadcastArea* pArea = *aIter;
         // A Notify() during broadcast may call EndListeningArea() and thus
@@ -260,8 +278,6 @@ BOOL ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
                 bIsBroadcasted = TRUE;
             }
         }
-        else if (rRange.aEnd < rAreaRange.aStart)
-            break;  // while loop, only ranges greater than end address follow
     }
     return bIsBroadcasted;
 }
@@ -271,14 +287,8 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
 {
     if (aBroadcastAreaTbl.empty())
         return;
-    // Searching for areas bound completely within rRange, so it's fine to
-    // exclude all upper left corners smaller than the upper left corner of
-    // rRange and get a lower bound.
-    aTmpSeekBroadcastArea.UpdateRange( ScRange( rRange.aStart));
-    // Search for lower bound, inclusive, not less than.
-    ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.lower_bound(
-                &aTmpSeekBroadcastArea));
-    for ( ; aIter != aBroadcastAreaTbl.end(); )
+    for (ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.begin());
+            aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
         const ScRange& rAreaRange = (*aIter)->GetRange();
         if (rRange.In( rAreaRange))
@@ -290,12 +300,8 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
                     pBASM->RemoveBulkArea( pArea);
                 delete pArea;
             }
-            ScBroadcastAreas::iterator aDel( aIter);
-            ++aIter;
-            aBroadcastAreaTbl.erase( aDel);
+            aBroadcastAreaTbl.erase( aIter++);
         }
-        else if (rRange.aEnd < rAreaRange.aStart)
-            break;  // for loop, only ranges greater than end address follow
         else
             ++aIter;
     }
@@ -303,8 +309,7 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
 
 
 void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz
-    )
+        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     if (aBroadcastAreaTbl.empty())
         return;
@@ -312,39 +317,24 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
     SCCOL nCol1, nCol2, theCol1, theCol2;
     SCROW nRow1, nRow2, theRow1, theRow2;
     SCTAB nTab1, nTab2, theTab1, theTab2;
-    nCol1 = rRange.aStart.Col();
-    nRow1 = rRange.aStart.Row();
-    nTab1 = rRange.aStart.Tab();
-    nCol2 = rRange.aEnd.Col();
-    nRow2 = rRange.aEnd.Row();
-    nTab2 = rRange.aEnd.Tab();
+    rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
     for ( ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.begin());
-            aIter != aBroadcastAreaTbl.end(); )
+            aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
         ScBroadcastArea* pArea = *aIter;
-        ScBroadcastAreas::iterator aDel( aIter);
-        ++aIter;
         if ( pArea->IsInUpdateChain() )
         {
-            aBroadcastAreaTbl.erase( aDel);
+            aBroadcastAreaTbl.erase( aIter++);
             pArea->DecRef();
         }
         else
         {
-            const ScAddress& rAdr1 = pArea->GetStart();
-            theCol1 = rAdr1.Col();
-            theRow1 = rAdr1.Row();
-            theTab1 = rAdr1.Tab();
-            const ScAddress& rAdr2 = pArea->GetEnd();
-            theCol2 = rAdr2.Col();
-            theRow2 = rAdr2.Row();
-            theTab2 = rAdr2.Tab();
+            pArea->GetRange().GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2);
             if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
                     nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
-                    theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 )
-                )
+                    theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ))
             {
-                aBroadcastAreaTbl.erase( aDel);
+                aBroadcastAreaTbl.erase( aIter++);
                 pArea->DecRef();
                 if (pBASM->IsInBulkBroadcast())
                     pBASM->RemoveBulkArea( pArea);
@@ -356,6 +346,8 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
                     pBASM->SetUpdateChain( pArea );
                 pBASM->SetEOUpdateChain( pArea );
             }
+            else
+                ++aIter;
         }
     }
 }
@@ -363,12 +355,47 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
 
 void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 {
-    aBroadcastAreaTbl.insert( pArea );
-    pArea->IncRef();
+    ::std::pair< ScBroadcastAreas::iterator, bool > aPair =
+        aBroadcastAreaTbl.insert( pArea );
+    if (aPair.second)
+        pArea->IncRef();
+    else
+    {
+        // Identical area already exists, add listeners.
+        ScBroadcastArea* pTarget = *(aPair.first);
+        if (pArea != pTarget)
+        {
+            SvtBroadcaster& rTarget = pTarget->GetBroadcaster();
+            SvtListenerIter it( pArea->GetBroadcaster());
+            for (SvtListener* pListener = it.GetCurr(); pListener;
+                    pListener = it.GoNext())
+            {
+                pListener->StartListening( rTarget);
+            }
+        }
+    }
 }
 
 
 // --- ScBroadcastAreaSlotMachine -------------------------------------
+
+ScBroadcastAreaSlotMachine::TableSlots::TableSlots()
+{
+    ppSlots = new ScBroadcastAreaSlot* [ BCA_SLOTS ];
+    memset( ppSlots, 0 , sizeof( ScBroadcastAreaSlot* ) * BCA_SLOTS );
+}
+
+
+ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
+{
+    for ( ScBroadcastAreaSlot** pp = ppSlots + BCA_SLOTS; --pp >= ppSlots; /* nothing */ )
+    {
+        if (*pp)
+            delete *pp;
+    }
+    delete [] ppSlots;
+}
+
 
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
         ScDocument* pDocument ) :
@@ -378,20 +405,16 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     pEOUpdateChain( NULL ),
     nInBulkBroadcast( 0 )
 {
-    ppSlots = new ScBroadcastAreaSlot* [ BCA_SLOTS ];
-    memset( ppSlots, 0 , sizeof( ScBroadcastAreaSlot* ) * BCA_SLOTS );
+    for (TableSlotsMap::iterator iTab( aTableSlotsMap.begin());
+            iTab != aTableSlotsMap.end(); ++iTab)
+    {
+        delete (*iTab).second;
+    }
 }
 
 
 ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 {
-    for ( ScBroadcastAreaSlot** pp = ppSlots + BCA_SLOTS; --pp >= ppSlots; )
-    {
-        if ( *pp )
-            delete *pp;
-    }
-    delete[] ppSlots;
-
     delete pBCAlways;
 }
 
@@ -414,8 +437,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
 
 
 void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
-        SCSIZE& rStart, SCSIZE& rEnd, SCSIZE& rRowBreak
-    ) const
+        SCSIZE& rStart, SCSIZE& rEnd, SCSIZE& rRowBreak ) const
 {
     rStart = ComputeSlotOffset( rRange.aStart );
     rEnd = ComputeSlotOffset( rRange.aEnd );
@@ -426,8 +448,7 @@ void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
 
 
 void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
-        SvtListener* pListener
-    )
+        SvtListener* pListener )
 {
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
@@ -437,29 +458,48 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
     }
     else
     {
-        SCSIZE nStart, nEnd, nRowBreak;
-        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-        SCSIZE nOff = nStart;
-        SCSIZE nBreak = nOff + nRowBreak;
-        ScBroadcastAreaSlot** pp = ppSlots + nOff;
-        ScBroadcastArea* pArea = NULL;
-        while ( nOff <= nEnd )
+        bool bDone = false;
+        for (SCTAB nTab = rRange.aStart.Tab();
+                !bDone && nTab <= rRange.aEnd.Tab(); ++nTab)
         {
-            if ( !*pp )
-                *pp = new ScBroadcastAreaSlot( pDoc, this );
-            // the first call creates the ScBroadcastArea
-            (*pp)->StartListeningArea( rRange, pListener, pArea );
-            if ( nOff < nBreak )
+            TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
+            if (iTab == aTableSlotsMap.end())
+                iTab = aTableSlotsMap.insert( TableSlotsMap::value_type(
+                            nTab, new TableSlots)).first;
+            ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+            SCSIZE nStart, nEnd, nRowBreak;
+            ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
+            SCSIZE nOff = nStart;
+            SCSIZE nBreak = nOff + nRowBreak;
+            ScBroadcastAreaSlot** pp = ppSlots + nOff;
+            ScBroadcastArea* pArea = NULL;
+            while ( !bDone && nOff <= nEnd )
             {
-                ++nOff;
-                ++pp;
-            }
-            else
-            {
-                nStart += BCA_SLOTS_ROW;
-                nOff = nStart;
-                pp = ppSlots + nOff;
-                nBreak = nOff + nRowBreak;
+                if ( !*pp )
+                    *pp = new ScBroadcastAreaSlot( pDoc, this );
+                if (!pArea)
+                {
+                    // If the call to StartListeningArea didn't create the
+                    // ScBroadcastArea, listeners were added to an already
+                    // existing identical area that doesn't need to be inserted
+                    // to slots again.
+                    if (!(*pp)->StartListeningArea( rRange, pListener, pArea))
+                        bDone = true;
+                }
+                else
+                    (*pp)->InsertListeningArea( pArea);
+                if ( nOff < nBreak )
+                {
+                    ++nOff;
+                    ++pp;
+                }
+                else
+                {
+                    nStart += BCA_SLOTS_ROW;
+                    nOff = nStart;
+                    pp = ppSlots + nOff;
+                    nBreak = nOff + nRowBreak;
+                }
             }
         }
     }
@@ -467,8 +507,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
 
 
 void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
-        SvtListener* pListener
-    )
+        SvtListener* pListener )
 {
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
@@ -485,27 +524,47 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
     }
     else
     {
-        SCSIZE nStart, nEnd, nRowBreak;
-        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-        SCSIZE nOff = nStart;
-        SCSIZE nBreak = nOff + nRowBreak;
-        ScBroadcastAreaSlot** pp = ppSlots + nOff;
-        ScBroadcastArea* pArea = NULL;
-        while ( nOff <= nEnd )
+        SCTAB nEndTab = rRange.aEnd.Tab();
+        for (TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+                iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
         {
-            if ( *pp )
-                (*pp)->EndListeningArea( rRange, pListener, pArea );
-            if ( nOff < nBreak )
+            ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+            SCSIZE nStart, nEnd, nRowBreak;
+            ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
+            SCSIZE nOff = nStart;
+            SCSIZE nBreak = nOff + nRowBreak;
+            ScBroadcastAreaSlot** pp = ppSlots + nOff;
+            ScBroadcastArea* pArea = NULL;
+            if (nOff == 0 && nEnd == BCA_SLOTS-1)
             {
-                ++nOff;
-                ++pp;
+                // Slightly optimized for 0,0,MAXCOL,MAXROW calls as they
+                // happen for insertion and deletion of sheets.
+                ScBroadcastAreaSlot** const pStop = ppSlots + nEnd;
+                do
+                {
+                    if ( *pp )
+                        (*pp)->EndListeningArea( rRange, pListener, pArea );
+                } while (++pp < pStop);
             }
             else
             {
-                nStart += BCA_SLOTS_ROW;
-                nOff = nStart;
-                pp = ppSlots + nOff;
-                nBreak = nOff + nRowBreak;
+                while ( nOff <= nEnd )
+                {
+                    if ( *pp )
+                        (*pp)->EndListeningArea( rRange, pListener, pArea );
+                    if ( nOff < nBreak )
+                    {
+                        ++nOff;
+                        ++pp;
+                    }
+                    else
+                    {
+                        nStart += BCA_SLOTS_ROW;
+                        nOff = nStart;
+                        pp = ppSlots + nOff;
+                        nBreak = nOff + nRowBreak;
+                    }
+                }
             }
         }
     }
@@ -527,7 +586,11 @@ BOOL ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
     }
     else
     {
-        ScBroadcastAreaSlot* pSlot = ppSlots[ ComputeSlotOffset( rAddress ) ];
+        TableSlotsMap::const_iterator iTab( aTableSlotsMap.find( rAddress.Tab()));
+        if (iTab == aTableSlotsMap.end())
+            return FALSE;
+        ScBroadcastAreaSlot* pSlot = (*iTab).second->getAreaSlot(
+                ComputeSlotOffset( rAddress));
         if ( pSlot )
             return pSlot->AreaBroadcast( rHint );
         else
@@ -540,136 +603,20 @@ BOOL ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint ) const
 {
     BOOL bBroadcasted = FALSE;
-    SCSIZE nStart, nEnd, nRowBreak;
-    ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-    SCSIZE nOff = nStart;
-    SCSIZE nBreak = nOff + nRowBreak;
-    ScBroadcastAreaSlot** pp = ppSlots + nOff;
-    while ( nOff <= nEnd )
+    SCTAB nEndTab = rRange.aEnd.Tab();
+    for (TableSlotsMap::const_iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+            iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
     {
-        if ( *pp )
-            bBroadcasted |= (*pp)->AreaBroadcastInRange( rRange, rHint );
-        if ( nOff < nBreak )
-        {
-            ++nOff;
-            ++pp;
-        }
-        else
-        {
-            nStart += BCA_SLOTS_ROW;
-            nOff = nStart;
-            pp = ppSlots + nOff;
-            nBreak = nOff + nRowBreak;
-        }
-    }
-    return bBroadcasted;
-}
-
-
-void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
-        const ScRange& rRange
-    )
-{
-    SCSIZE nStart, nEnd, nRowBreak;
-    ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-    SCSIZE nOff = nStart;
-    SCSIZE nBreak = nOff + nRowBreak;
-    ScBroadcastAreaSlot** pp = ppSlots + nOff;
-    while ( nOff <= nEnd )
-    {
-        if ( *pp )
-            (*pp)->DelBroadcastAreasInRange( rRange );
-        if ( nOff < nBreak )
-        {
-            ++nOff;
-            ++pp;
-        }
-        else
-        {
-            nStart += BCA_SLOTS_ROW;
-            nOff = nStart;
-            pp = ppSlots + nOff;
-            nBreak = nOff + nRowBreak;
-        }
-    }
-}
-
-
-// for all affected: remove, chain, update range, insert
-void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
-        UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz
-    )
-{
-    SCSIZE nStart, nEnd, nRowBreak;
-    // remove affected and put in chain
-    ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-    SCSIZE nOff = nStart;
-    SCSIZE nBreak = nOff + nRowBreak;
-    ScBroadcastAreaSlot** pp = ppSlots + nOff;
-    while ( nOff <= nEnd )
-    {
-        if ( *pp )
-            (*pp)->UpdateRemove( eUpdateRefMode, rRange, nDx, nDy, nDz );
-        if ( nOff < nBreak )
-        {
-            ++nOff;
-            ++pp;
-        }
-        else
-        {
-            nStart += BCA_SLOTS_ROW;
-            nOff = nStart;
-            pp = ppSlots + nOff;
-            nBreak = nOff + nRowBreak;
-        }
-    }
-    // work off chain
-    SCCOL nCol1, nCol2, theCol1, theCol2;
-    SCROW nRow1, nRow2, theRow1, theRow2;
-    SCTAB nTab1, nTab2, theTab1, theTab2;
-    nCol1 = rRange.aStart.Col();
-    nRow1 = rRange.aStart.Row();
-    nTab1 = rRange.aStart.Tab();
-    nCol2 = rRange.aEnd.Col();
-    nRow2 = rRange.aEnd.Row();
-    nTab2 = rRange.aEnd.Tab();
-    while ( pUpdateChain )
-    {
-        ScAddress aAdr;
-        ScRange aRange;
-        ScBroadcastArea* pArea = pUpdateChain;
-        pUpdateChain = pArea->GetUpdateChainNext();
-
-        // update range
-        aAdr = pArea->GetStart();
-        theCol1 = aAdr.Col();
-        theRow1 = aAdr.Row();
-        theTab1 = aAdr.Tab();
-        aAdr = pArea->GetEnd();
-        theCol2 = aAdr.Col();
-        theRow2 = aAdr.Row();
-        theTab2 = aAdr.Tab();
-        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
-                theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 )
-            )
-        {
-            aRange = ScRange( ScAddress( theCol1,theRow1,theTab1 ),
-                                ScAddress( theCol2,theRow2,theTab2 ) );
-            pArea->UpdateRange( aRange );
-            pArea->GetBroadcaster().Broadcast( ScAreaChangedHint( aRange ) );   // for DDE
-        }
-
-        // insert in slot
-        ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );
-        nOff = nStart;
-        nBreak = nOff + nRowBreak;
-        pp = ppSlots + nOff;
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        SCSIZE nStart, nEnd, nRowBreak;
+        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
+        ScBroadcastAreaSlot** pp = ppSlots + nOff;
         while ( nOff <= nEnd )
         {
             if ( *pp )
-                (*pp)->UpdateInsert( pArea );
+                bBroadcasted |= (*pp)->AreaBroadcastInRange( rRange, rHint );
             if ( nOff < nBreak )
             {
                 ++nOff;
@@ -683,10 +630,219 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
                 nBreak = nOff + nRowBreak;
             }
         }
+    }
+    return bBroadcasted;
+}
+
+
+void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
+        const ScRange& rRange )
+{
+    SCTAB nEndTab = rRange.aEnd.Tab();
+    for (TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+            iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
+    {
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        SCSIZE nStart, nEnd, nRowBreak;
+        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
+        ScBroadcastAreaSlot** pp = ppSlots + nOff;
+        if (nOff == 0 && nEnd == BCA_SLOTS-1)
+        {
+            // Slightly optimized for 0,0,MAXCOL,MAXROW calls as they
+            // happen for insertion and deletion of sheets.
+            ScBroadcastAreaSlot** const pStop = ppSlots + nEnd;
+            do
+            {
+                if ( *pp )
+                    (*pp)->DelBroadcastAreasInRange( rRange );
+            } while (++pp < pStop);
+        }
+        else
+        {
+            while ( nOff <= nEnd )
+            {
+                if ( *pp )
+                    (*pp)->DelBroadcastAreasInRange( rRange );
+                if ( nOff < nBreak )
+                {
+                    ++nOff;
+                    ++pp;
+                }
+                else
+                {
+                    nStart += BCA_SLOTS_ROW;
+                    nOff = nStart;
+                    pp = ppSlots + nOff;
+                    nBreak = nOff + nRowBreak;
+                }
+            }
+        }
+    }
+}
+
+
+// for all affected: remove, chain, update range, insert, and maybe delete
+void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
+        UpdateRefMode eUpdateRefMode,
+        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+{
+    // remove affected and put in chain
+    SCTAB nEndTab = rRange.aEnd.Tab();
+    for (TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+            iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
+    {
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        SCSIZE nStart, nEnd, nRowBreak;
+        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
+        ScBroadcastAreaSlot** pp = ppSlots + nOff;
+        if (nOff == 0 && nEnd == BCA_SLOTS-1)
+        {
+            // Slightly optimized for 0,0,MAXCOL,MAXROW calls as they
+            // happen for insertion and deletion of sheets.
+            ScBroadcastAreaSlot** const pStop = ppSlots + nEnd;
+            do
+            {
+                if ( *pp )
+                    (*pp)->UpdateRemove( eUpdateRefMode, rRange, nDx, nDy, nDz );
+            } while (++pp < pStop);
+        }
+        else
+        {
+            while ( nOff <= nEnd )
+            {
+                if ( *pp )
+                    (*pp)->UpdateRemove( eUpdateRefMode, rRange, nDx, nDy, nDz );
+                if ( nOff < nBreak )
+                {
+                    ++nOff;
+                    ++pp;
+                }
+                else
+                {
+                    nStart += BCA_SLOTS_ROW;
+                    nOff = nStart;
+                    pp = ppSlots + nOff;
+                    nBreak = nOff + nRowBreak;
+                }
+            }
+        }
+    }
+
+    // shift sheets
+    if (nDz)
+    {
+        if (nDz < 0)
+        {
+            TableSlotsMap::iterator iDel( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+            TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab() - nDz));
+            // Remove sheets, if any, iDel or/and iTab may as well point to end().
+            while (iDel != iTab)
+            {
+                delete (*iDel).second;
+                aTableSlotsMap.erase( iDel++);
+            }
+            // shift remaining down
+            while (iTab != aTableSlotsMap.end())
+            {
+                SCTAB nTab = (*iTab).first + nDz;
+                aTableSlotsMap[nTab] = (*iTab).second;
+                aTableSlotsMap.erase( iTab++);
+            }
+        }
+        else
+        {
+            TableSlotsMap::iterator iStop( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+            if (iStop != aTableSlotsMap.end())
+            {
+                bool bStopIsBegin = (iStop == aTableSlotsMap.begin());
+                if (!bStopIsBegin)
+                    --iStop;
+                TableSlotsMap::iterator iTab( aTableSlotsMap.end());
+                --iTab;
+                while (iTab != iStop)
+                {
+                    SCTAB nTab = (*iTab).first + nDz;
+                    aTableSlotsMap[nTab] = (*iTab).second;
+                    aTableSlotsMap.erase( iTab--);
+                }
+                // Shift the very first, iTab==iStop in this case.
+                if (bStopIsBegin)
+                {
+                    SCTAB nTab = (*iTab).first + nDz;
+                    aTableSlotsMap[nTab] = (*iTab).second;
+                    aTableSlotsMap.erase( iStop);
+                }
+            }
+        }
+    }
+
+    // work off chain
+    SCCOL nCol1, nCol2, theCol1, theCol2;
+    SCROW nRow1, nRow2, theRow1, theRow2;
+    SCTAB nTab1, nTab2, theTab1, theTab2;
+    rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+    while ( pUpdateChain )
+    {
+        ScBroadcastArea* pArea = pUpdateChain;
+        ScRange aRange( pArea->GetRange());
+        pUpdateChain = pArea->GetUpdateChainNext();
+
+        // update range
+        aRange.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2);
+        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
+                theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ))
+        {
+            aRange = ScRange( theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );
+            pArea->UpdateRange( aRange );
+            pArea->GetBroadcaster().Broadcast( ScAreaChangedHint( aRange ) );   // for DDE
+        }
+
+        // insert to slots
+        for (SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); ++nTab)
+        {
+            TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
+            if (iTab == aTableSlotsMap.end())
+                iTab = aTableSlotsMap.insert( TableSlotsMap::value_type(
+                            nTab, new TableSlots)).first;
+            ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+            SCSIZE nStart, nEnd, nRowBreak;
+            ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );
+            SCSIZE nOff = nStart;
+            SCSIZE nBreak = nOff + nRowBreak;
+            ScBroadcastAreaSlot** pp = ppSlots + nOff;
+            while ( nOff <= nEnd )
+            {
+                if (!*pp)
+                    *pp = new ScBroadcastAreaSlot( pDoc, this );
+                (*pp)->UpdateInsert( pArea );
+                if ( nOff < nBreak )
+                {
+                    ++nOff;
+                    ++pp;
+                }
+                else
+                {
+                    nStart += BCA_SLOTS_ROW;
+                    nOff = nStart;
+                    pp = ppSlots + nOff;
+                    nBreak = nOff + nRowBreak;
+                }
+            }
+        }
 
         // unchain
         pArea->SetUpdateChainNext( NULL );
         pArea->SetInUpdateChain( FALSE );
+
+        // Delete if not inserted to any slot. RemoveBulkArea(pArea) was
+        // already executed in UpdateRemove().
+        if (!pArea->GetRef())
+            delete pArea;
     }
     pEOUpdateChain = NULL;
 }

@@ -283,6 +283,7 @@ void ScDocShell::BeforeXMLLoading()
     pModificator = new ScDocShellModificator( *this );
 
     aDocument.SetImportingXML( TRUE );
+    aDocument.EnableExecuteLink( false );   // #i101304# to be safe, prevent nested loading from external references
     aDocument.EnableUndo( FALSE );
     // prevent unnecessary broadcasts and "half way listeners"
     aDocument.SetInsertingFromOtherDoc( TRUE );
@@ -363,6 +364,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         aDocument.SetInsertingFromOtherDoc( FALSE );
 
     aDocument.SetImportingXML( FALSE );
+    aDocument.EnableExecuteLink( true );
     aDocument.EnableUndo( TRUE );
     bIsEmpty = FALSE;
 
@@ -1076,6 +1078,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
+            bSetRowHeights = TRUE;
         }
         else if (aFltName.EqualsAscii(pFilterSylk))
         {
@@ -1103,6 +1106,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 SetError(eError);
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
+            bSetRowHeights = TRUE;
         }
         else if (aFltName.EqualsAscii(pFilterQPro6))
         {
@@ -2165,7 +2169,6 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))), \
         nPrtToScreenFactor( 1.0 ), \
         pImpl           ( new DocShell_Impl ), \
-        pUndoManager    ( NULL ), \
         bHeaderOn       ( TRUE ), \
         bFooterOn       ( TRUE ), \
         bNoInformLost   ( TRUE ), \
@@ -2265,7 +2268,8 @@ __EXPORT ScDocShell::~ScDocShell()
         pSfxApp->RemoveDdeTopic( this );
 
     delete pDocFunc;
-    delete pUndoManager;
+    delete aDocument.mpUndoManager;
+    aDocument.mpUndoManager = 0;
     delete pImpl;
 
     delete pPaintLockData;
@@ -2286,9 +2290,7 @@ __EXPORT ScDocShell::~ScDocShell()
 
 SfxUndoManager* __EXPORT ScDocShell::GetUndoManager()
 {
-    if (!pUndoManager)
-        pUndoManager = new SfxUndoManager;
-    return pUndoManager;
+    return aDocument.GetUndoManager();
 }
 
 void ScDocShell::SetModified( BOOL bModified )

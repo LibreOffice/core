@@ -330,7 +330,7 @@ SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
                     0);
     SfxItemSet aGeoSet( E3dView::GetGeoAttrFromMarked() );
     aFullSet.Put( aGeoSet );
-    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,static_cast< sal_uInt16 >( ConfigurationAccess::getConfigurationAccess()->getFieldUnit())));
+    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,static_cast< sal_uInt16 >( ConfigurationAccess::getFieldUnit())));
     return aFullSet;
 }
 

@@ -352,7 +352,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 aSortParam.bHasHeader       = bHasHeader;
                 aSortParam.bByRow           = TRUE;
                 aSortParam.bCaseSens        = FALSE;
-                aSortParam.bIncludePattern  = FALSE;
+                aSortParam.bIncludePattern  = TRUE;
                 aSortParam.bInplace         = TRUE;
                 aSortParam.bDoSort[0]       = TRUE;
                 aSortParam.nField[0]        = nCol;
@@ -980,9 +980,40 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pOutSet->GetItemState( FID_VALID_CONDMODE, TRUE, &pItem ) == SFX_ITEM_SET )
                             eOper = (ScConditionMode) ((const SfxAllEnumItem*)pItem)->GetValue();
                         if ( pOutSet->GetItemState( FID_VALID_VALUE1, TRUE, &pItem ) == SFX_ITEM_SET )
-                            aExpr1 = ((const SfxStringItem*)pItem)->GetValue();
+                        {
+                            String aTemp1 = ((const SfxStringItem*)pItem)->GetValue();
+                            if (eMode == SC_VALID_DATE || eMode == SC_VALID_TIME)
+                            {
+                                sal_uInt32 nNumIndex = 0;
+                                double nVal;
+                                if (pDoc->GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
+                                    aExpr1 =String( ::rtl::math::doubleToUString( nVal,
+                                            rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE));
+                                else
+                                    aExpr1 = aTemp1;
+                            }
+                            else
+                                aExpr1 = aTemp1;
+                        }
                         if ( pOutSet->GetItemState( FID_VALID_VALUE2, TRUE, &pItem ) == SFX_ITEM_SET )
-                            aExpr2 = ((const SfxStringItem*)pItem)->GetValue();
+                        {
+                            String aTemp2 = ((const SfxStringItem*)pItem)->GetValue();
+                            if (eMode == SC_VALID_DATE || eMode == SC_VALID_TIME)
+                            {
+                                sal_uInt32 nNumIndex = 0;
+                                double nVal;
+                                if (pDoc->GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
+                                    aExpr2 =String( ::rtl::math::doubleToUString( nVal,
+                                            rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE));
+                                else
+                                    aExpr2 = aTemp2;
+                            }
+                            else
+                                aExpr2 = aTemp2;
+                        }
+
                         if ( pOutSet->GetItemState( FID_VALID_BLANK, TRUE, &pItem ) == SFX_ITEM_SET )
                             bBlank = ((const SfxBoolItem*)pItem)->GetValue();
                         if ( pOutSet->GetItemState( FID_VALID_LISTTYPE, TRUE, &pItem ) == SFX_ITEM_SET )
@@ -1036,6 +1067,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     DBG_ASSERT( pDoc, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDoc is null!" );
 
                     ScImportExport aExport( pDoc, aRange );
+                    aExport.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::None, 0, false ) );
 
                     // #i87703# text to columns fails with tab separator
                     aExport.SetDelimiter( static_cast< sal_Unicode >( 0 ) );

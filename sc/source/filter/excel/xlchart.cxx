@@ -94,6 +94,16 @@ bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
         ((rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx < rR.mnPointIdx));
 }
 
+// ----------------------------------------------------------------------------
+
+XclChFrBlock::XclChFrBlock( sal_uInt16 nType ) :
+    mnType( nType ),
+    mnContext( 0 ),
+    mnValue1( 0 ),
+    mnValue2( 0 )
+{
+}
+
 // Frame formatting ===========================================================
 
 XclChFramePos::XclChFramePos() :
@@ -164,6 +174,13 @@ XclChSourceLink::XclChSourceLink() :
 
 XclChObjectLink::XclChObjectLink() :
     mnTarget( EXC_CHOBJLINK_NONE )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+XclChFrLabelProps::XclChFrLabelProps() :
+    mnFlags( 0 )
 {
 }
 
@@ -500,12 +517,12 @@ namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
 
 static const XclChTypeInfo spTypeInfos[] =
 {
-    // chart type             chart type category      record id           service                 varied point color     def label combi       comb2d 3d     polar  area2d area3d 1stvis xcateg swap   stack  revers betw
+    // chart type             chart type category      record id           service                 varied point color     def label pos         comb2d 3d     polar  area2d area3d 1stvis xcateg swap   stack  revers betw
     { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
     { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  false, true,  true,  true,  false, true  },
-    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  true,  false, false, true,  false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  true,  false, false, true,  false, true,  false, true,  false, false },
     { EXC_CHTYPEID_AREA,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHAREA,      SERVICE_CHART2_AREA,    EXC_CHVARPOINT_NONE,   csscd::CENTER,        true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
-    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,  EXC_CHVARPOINT_NONE,   csscd::RIGHT,         true,  false, false, false, false, false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,  EXC_CHVARPOINT_NONE,   csscd::RIGHT,         true,  false, false, false, false, false, true,  false, true,  false, false },
     { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,     EXC_CHVARPOINT_SINGLE, csscd::TOP,           false, false, true,  false, true,  false, true,  false, false, false, false },
     { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_NET,     EXC_CHVARPOINT_NONE,   csscd::TOP,           false, false, true,  true,  true,  false, true,  false, false, false, false },
     { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  true,  false, false, false, false },
@@ -664,8 +681,6 @@ const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Colo
 /** Property names for bitmap area style. */
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
-/** Property names for text rotation properties. */
-const sal_Char* const sppcRotationNames[] = { "TextRotation", "StackCharacters", 0 };
 /** Property names for legend properties. */
 const sal_Char* const sppcLegendNames[] =
     { "Show", "AnchorPosition", "Expansion", "RelativePosition", 0 };
@@ -685,7 +700,6 @@ XclChPropSetHelper::XclChPropSetHelper() :
     maHatchHlpCommon( sppcHatchNamesCommon ),
     maHatchHlpFilled( sppcHatchNamesFilled ),
     maBitmapHlp( sppcBitmapNames ),
-    maRotationHlp( sppcRotationNames ),
     maLegendHlp( sppcLegendNames )
 {
 }
@@ -934,13 +948,12 @@ void XclChPropSetHelper::ReadMarkerProperties(
     }
 }
 
-sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet )
+sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet, bool bSupportsStacked )
 {
     // chart2 handles rotation as double in the range [0,360)
-    double fAngle(0);
-    bool bStacked;
-    maRotationHlp.ReadFromPropertySet( rPropSet );
-    maRotationHlp >> fAngle >> bStacked;
+    double fAngle = 0.0;
+    rPropSet.GetProperty( fAngle, EXC_CHPROP_TEXTROTATION );
+    bool bStacked = bSupportsStacked && rPropSet.GetBoolProperty( EXC_CHPROP_STACKCHARACTERS );
     return bStacked ? EXC_ROT_STACKED :
         XclTools::GetXclRotation( static_cast< sal_Int32 >( fAngle * 100.0 + 0.5 ) );
 }
@@ -1183,16 +1196,15 @@ void XclChPropSetHelper::WriteMarkerProperties(
 }
 
 void XclChPropSetHelper::WriteRotationProperties(
-        ScfPropertySet& rPropSet, sal_uInt16 nRotation )
+        ScfPropertySet& rPropSet, sal_uInt16 nRotation, bool bSupportsStacked )
 {
     if( nRotation != EXC_CHART_AUTOROTATION )
     {
         // chart2 handles rotation as double in the range [0,360)
         double fAngle = XclTools::GetScRotation( nRotation, 0 ) / 100.0;
-        bool bStacked = nRotation == EXC_ROT_STACKED;
-        maRotationHlp.InitializeWrite();
-        maRotationHlp << fAngle << bStacked;
-        maRotationHlp.WriteToPropertySet( rPropSet );
+        rPropSet.SetProperty( EXC_CHPROP_TEXTROTATION, fAngle );
+        if( bSupportsStacked )
+            rPropSet.SetProperty( EXC_CHPROP_STACKCHARACTERS, nRotation == EXC_ROT_STACKED );
     }
 }
 

@@ -789,6 +789,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
+        case FID_TAB_DESELECTALL:
+            DeselectAllTables();
+            rReq.Done();
+            break;
+
         case SID_SELECT_TABLES:
         {
             ScViewData& rViewData = *GetViewData();
@@ -865,7 +870,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
 
                     rViewData.GetDocShell()->PostPaintExtras();
-                    rViewData.GetBindings().Invalidate( FID_FILL_TAB );
+                    SfxBindings& rBind = rViewData.GetBindings();
+                    rBind.Invalidate( FID_FILL_TAB );
+                    rBind.Invalidate( FID_TAB_DESELECTALL );
                 }
 
                 rReq.Done();

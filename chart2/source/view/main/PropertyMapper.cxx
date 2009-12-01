@@ -250,6 +250,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
 //      ( C2U( "RubyAdjust" ),              C2U("RubyAdjust") )
 //      ( C2U( "RubyCharStyleName" ),       C2U("RubyStyleName") )
 //      ( C2U( "RubyIsAbove" ),             C2U("RubyIsAbove") )
+        ( C2U( "ParaIsCharacterDistance" ), C2U("ParaIsCharacterDistance") )
         ;
     return m_aShapePropertyMapForCharacterProperties;
 }

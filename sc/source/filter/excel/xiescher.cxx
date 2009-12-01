@@ -2989,7 +2989,7 @@ XclImpSimpleDffManager::XclImpSimpleDffManager( const XclImpRoot& rRoot, SvStrea
     SvxMSDffManager( rDffStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
     XclImpRoot( rRoot )
 {
-    SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL | SVXMSDFF_SETTINGS_IMPORT_IAS );
+    SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL );
 }
 
 XclImpSimpleDffManager::~XclImpSimpleDffManager()

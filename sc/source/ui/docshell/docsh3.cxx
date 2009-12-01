@@ -1292,7 +1292,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             ScChangeAction* pAction = pThisTrack->GetLast();
             while ( pAction && pAction->GetActionNumber() >= nStartShared )
             {
-                pThisTrack->Reject( pAction );
+                pThisTrack->Reject( pAction, true );
                 pAction = pAction->GetPrev();
             }
 

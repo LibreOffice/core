@@ -623,38 +623,44 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             //  Charts muessen beim Ein-/Ausblenden angepasst werden
             ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
-            if ( pCharts && !pCharts->GetCount() )
-                pCharts = NULL;
 
-            if (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth)
-                for (SCCOL i=nCol1; i<=nCol2; i++)
-                {
-                    BOOL bChange = pCharts &&
-                        ( pDestTab->pColFlags[i] & CR_HIDDEN ) != ( pColFlags[i] & CR_HIDDEN );
-                    pDestTab->pColWidth[i] = pColWidth[i];
-                    pDestTab->pColFlags[i] = pColFlags[i];
-                    //! Aenderungen zusammenfassen?
-                    if (bChange)
-                        pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
-                }
+            BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
+            BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && pRowHeight && pDestTab->pRowHeight);
 
-            if (nCol1==0 && nCol2==MAXCOL && pRowHeight && pDestTab->pRowHeight)
+            if (bWidth||bHeight)
             {
-                pDestTab->pRowHeight->CopyFrom( *pRowHeight, nRow1, nRow2);
-                for (SCROW i=nRow1; i<=nRow2; i++)
-                {
-                    // TODO: might need some performance improvement, block
-                    // operations instead of single GetValue()/SetValue() calls.
-                    BYTE nThisRowFlags = pRowFlags->GetValue(i);
-                    BOOL bChange = pCharts &&
-                        ( pDestTab->pRowFlags->GetValue(i) & CR_HIDDEN ) != ( nThisRowFlags & CR_HIDDEN );
-                    pDestTab->pRowFlags->SetValue( i, nThisRowFlags );
-                    //! Aenderungen zusammenfassen?
-                    if (bChange)
-                        pCharts->SetRangeDirty(ScRange( 0, i, nTab, MAXCOL, i, nTab ));
-                }
-            }
+                pDestTab->IncRecalcLevel();
 
+                if (bWidth)
+                    for (SCCOL i=nCol1; i<=nCol2; i++)
+                    {
+                        BOOL bChange = pCharts &&
+                            ( pDestTab->pColFlags[i] & CR_HIDDEN ) != ( pColFlags[i] & CR_HIDDEN );
+                        pDestTab->pColWidth[i] = pColWidth[i];
+                        pDestTab->pColFlags[i] = pColFlags[i];
+                        //! Aenderungen zusammenfassen?
+                        if (bChange)
+                            pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
+                    }
+
+                if (bHeight)
+                {
+                    pDestTab->pRowHeight->CopyFrom( *pRowHeight, nRow1, nRow2);
+                    for (SCROW i=nRow1; i<=nRow2; i++)
+                    {
+                        // TODO: might need some performance improvement, block
+                        // operations instead of single GetValue()/SetValue() calls.
+                        BYTE nThisRowFlags = pRowFlags->GetValue(i);
+                        BOOL bChange = pCharts &&
+                            ( pDestTab->pRowFlags->GetValue(i) & CR_HIDDEN ) != ( nThisRowFlags & CR_HIDDEN );
+                        pDestTab->pRowFlags->SetValue( i, nThisRowFlags );
+                        //! Aenderungen zusammenfassen?
+                        if (bChange)
+                            pCharts->SetRangeDirty(ScRange( 0, i, nTab, MAXCOL, i, nTab ));
+                    }
+                }
+                pDestTab->DecRecalcLevel();
+            }
             pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
         }
     }
@@ -1971,7 +1977,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
 
         long nNewPix = (long) ( nNewHeight * nPPTY );
 
-        BOOL bSingle = FALSE;
+        BOOL bSingle = FALSE;   // TRUE = process every row for its own
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if (pDrawLayer)
             if (pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ))
@@ -1997,7 +2003,23 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
                     if (*aIter != nNewHeight)
                         bChanged = (nNewPix != (long) (*aIter * nPPTY));
                 } while (!bChanged && aIter.NextRange());
-                pRowHeight->SetValue( nStartRow, nEndRow, nNewHeight);
+
+                /*  #i94028# #i94991# If drawing objects are involved, each row
+                    has to be changed for its own, because each call to
+                    ScDrawLayer::HeightChanged expects correct row heights
+                    above passed row in the document. Cannot use array iterator
+                    because array changes in every cycle. */
+                if( pDrawLayer )
+                {
+                    for( SCROW nRow = nStartRow; nRow <= nEndRow ; ++nRow )
+                    {
+                        pDrawLayer->HeightChanged( nTab, nRow,
+                            ((long) nNewHeight) - ((long) pRowHeight->GetValue( nRow )));
+                        pRowHeight->SetValue( nRow, nNewHeight );
+                    }
+                }
+                else
+                    pRowHeight->SetValue( nStartRow, nEndRow, nNewHeight);
             }
             else
             {
@@ -2230,7 +2252,7 @@ void ScTable::ShowCol(SCCOL nCol, BOOL bShow)
                 SetDrawPageSize();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ));
         }
     }
@@ -2267,7 +2289,7 @@ void ScTable::ShowRow(SCROW nRow, BOOL bShow)
                 SetDrawPageSize();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
         }
     }
@@ -2308,7 +2330,7 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
         if (bWasVis != bShow)
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
 
             if (pOutlineTable)
@@ -2356,7 +2378,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
         if ( bChanged )
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab ));
         }
 
@@ -2408,7 +2430,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
         if ( bChanged )
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab ));
         }
 

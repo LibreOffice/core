@@ -126,6 +126,7 @@ using namespace ::com::sun::star;
 #include "externalrefmgr.hxx"
 
 #include "sharedocdlg.hxx"
+#include "conditio.hxx"
 
 //------------------------------------------------------------------
 
@@ -1266,6 +1267,8 @@ void ScDocShell::DoRecalc( BOOL bApi )
         if ( pSh )
             pSh->UpdateCharts(TRUE);
 
+        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+
         //  #47939# Wenn es Charts gibt, dann alles painten, damit nicht
         //  PostDataChanged und die Charts nacheinander kommen und Teile
         //  doppelt gepainted werden.
@@ -1291,6 +1294,12 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
     GetDocFunc().DetectiveRefresh();    // erzeugt eigenes Undo
     if ( pSh )
         pSh->UpdateCharts(TRUE);
+
+    // CalcAll doesn't broadcast value changes, so SC_HINT_CALCALL is broadcasted globally
+    // in addition to SFX_HINT_DATACHANGED.
+    aDocument.BroadcastUno( SfxSimpleHint( SC_HINT_CALCALL ) );
+    aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+
     PostPaintGridAll();
 }
 
@@ -1365,6 +1374,23 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
                     pBindings->Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
                     pBindings->Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
                 }
+            }
+        }
+    }
+    else if ( pStyle->GetFamily() == SFX_STYLE_FAMILY_PARA )
+    {
+        if ( nId == SFX_STYLESHEET_MODIFIED)
+        {
+            String aNewName = pStyle->GetName();
+            String aOldName = aNewName;
+            BOOL bExtended = rHint.ISA(SfxStyleSheetHintExtended);
+            if (bExtended)
+                aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
+            if ( aNewName != aOldName )
+            {
+                ScConditionalFormatList* pList = aDocument.GetCondFormList();
+                if (pList)
+                    pList->RenameCellStyle( aOldName,aNewName );
             }
         }
     }
@@ -2406,10 +2432,12 @@ long __EXPORT ScDocShell::DdeGetData( const String& rItem,
         if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
             aDdeTextFmt.EqualsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
+        aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
         return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
     }
 
     ScImportExport aObj( &aDocument, rItem );
+    aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
     if( aObj.IsRef() )
         return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
     return 0;

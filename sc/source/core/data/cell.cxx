@@ -1919,6 +1919,13 @@ void ScFormulaCell::GetURLResult( String& rURL, String& rCellText )
     }
 }
 
+bool ScFormulaCell::IsMultilineResult()
+{
+    if (!IsValue())
+        return aResult.IsMultiline();
+    return false;
+}
+
 EditTextObject* ScFormulaCell::CreateURLObject()
 {
     String aCellText;

@@ -58,6 +58,8 @@ namespace chart
 namespace ModifyListenerHelper
 {
 
+OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > createModifyEventForwarder();
+
 // ================================================================================
 
 /** This helper class serves as forwarder of modify events.  It can be used
@@ -68,7 +70,7 @@ namespace ModifyListenerHelper
     life time of the listeners is independent of the broadcaster's lifetime in
     this case.</p>
  */
-class OOO_DLLPUBLIC_CHARTTOOLS ModifyEventForwarder :
+class ModifyEventForwarder :
         public MutexContainer,
         public ::cppu::WeakComponentImplHelper2<
             ::com::sun::star::util::XModifyBroadcaster,
@@ -77,8 +79,6 @@ class OOO_DLLPUBLIC_CHARTTOOLS ModifyEventForwarder :
 public:
     ModifyEventForwarder();
 
-    void FireEvent( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::uno::XWeak > & xSource );
     void FireEvent( const ::com::sun::star::lang::EventObject & rEvent );
 
     void AddListener(

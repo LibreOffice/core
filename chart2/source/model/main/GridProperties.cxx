@@ -128,20 +128,20 @@ namespace chart
 
 GridProperties::GridProperties( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
 }
 
 GridProperties::GridProperties() :
         ::property::OPropertySet( m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 GridProperties::GridProperties( const GridProperties & rOther ) :
         MutexContainer(),
         impl::GridProperties_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
 }
 

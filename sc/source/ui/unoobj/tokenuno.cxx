@@ -57,9 +57,9 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetFormulaParserMap()
+const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 {
-    static SfxItemPropertyMap aFormulaParserMap_Impl[] =
+    static SfxItemPropertyMapEntry aFormulaParserMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_REFERENCEPOS),         0,  &getCppuType((table::CellAddress*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNO_COMPILEFAP),           0,  &getBooleanCppuType(),                   0, 0 },

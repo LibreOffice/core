@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notesuno.cxx,v $
- * $Revision: 1.11.128.4 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,13 +64,14 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 
 //  keine Properties fuer Text in Notizen
-const SfxItemPropertyMap* lcl_GetAnnotationPropertyMap()
+const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
 {
-    static SfxItemPropertyMap aAnnotationPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aAnnotationPropertyMap_Impl[] =
     {
         {0,0,0,0,0,0}
     };
-    return aAnnotationPropertyMap_Impl;
+    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl );
+    return &aAnnotationPropertySet_Impl;
 }
 
 //------------------------------------------------------------------------
@@ -257,7 +258,7 @@ SvxUnoText& ScAnnotationObj::GetUnoText()
     if (!pUnoText)
     {
         ScAnnotationEditSource aEditSource( pDocShell, aCellPos );
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertyMap(),
+        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertySet(),
                                     uno::Reference<text::XText>() );
         pUnoText->acquire();
     }
@@ -268,7 +269,6 @@ const ScPostIt* ScAnnotationObj::ImplGetNote() const
 {
     return pDocShell ? pDocShell->GetDocument()->GetNote( aCellPos ) : 0;
 }
-
 //------------------------------------------------------------------------
 
 ScAnnotationShapeObj::ScAnnotationShapeObj(ScDocShell* pDocSh, const ScAddress& rPos) :
@@ -287,7 +287,7 @@ SvxUnoText& ScAnnotationShapeObj::GetUnoText()
     if (!pUnoText)
     {
         ScAnnotationEditSource aEditSource( pDocShell, aCellPos );
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertyMap(),
+        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertySet(),
                                     uno::Reference<text::XText>() );
         pUnoText->acquire();
     }

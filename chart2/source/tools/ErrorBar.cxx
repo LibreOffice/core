@@ -166,11 +166,16 @@ bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequenc
 namespace chart
 {
 
+uno::Reference< beans::XPropertySet > createErrorBar( const uno::Reference< uno::XComponentContext > & xContext )
+{
+    return new ErrorBar( xContext );
+}
+
 ErrorBar::ErrorBar(
     uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
     m_xContext( xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 ErrorBar::ErrorBar( const ErrorBar & rOther ) :
@@ -178,7 +183,7 @@ ErrorBar::ErrorBar( const ErrorBar & rOther ) :
         impl::ErrorBar_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     if( ! rOther.m_aDataSequences.empty())
     {

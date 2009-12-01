@@ -32,7 +32,6 @@
 #include "precompiled_chart2.hxx"
 #include "AxisWrapper.hxx"
 #include "AxisHelper.hxx"
-#include "Scaling.hxx"
 #include "Chart2ModelContact.hxx"
 #include "ContainerHelper.hxx"
 #include "macros.hxx"

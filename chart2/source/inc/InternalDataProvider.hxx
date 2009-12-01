@@ -41,7 +41,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/implbase6.hxx>
 #include "ServiceMacros.hxx"
-#include "charttoolsdllapi.hxx"
 
 #include "CachedDataSequence.hxx"
 
@@ -75,7 +74,7 @@ typedef ::cppu::WeakImplHelper6<
     <p>The format for a complete range is "all". (Do we need more than
     that?)</p>
  */
-class OOO_DLLPUBLIC_CHARTTOOLS InternalDataProvider :
+class InternalDataProvider :
         public impl::InternalDataProvider_Base
 {
 public:

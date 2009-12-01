@@ -40,6 +40,8 @@
 #include "ContainerHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "PropertyHelper.hxx"
+#include "CachedDataSequence.hxx"
+#include "LabeledDataSequence.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -116,6 +118,41 @@ void lcl_addErrorBarRanges(
 }
 
 } // anonymous namespace
+
+Reference< chart2::data::XDataSource > DataSourceHelper::createDataSource(
+        const Sequence< Reference< chart2::data::XLabeledDataSequence > >& rSequences )
+{
+    return new DataSource(rSequences);
+}
+
+Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSequence()
+{
+    return new ::chart::CachedDataSequence();
+}
+
+Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSequence( const ::rtl::OUString& rSingleText )
+{
+    return new ::chart::CachedDataSequence( rSingleText );
+}
+
+Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
+        const Reference< chart2::data::XDataSequence >& xValues ,
+        const Reference< chart2::data::XDataSequence >& xLabels )
+{
+    return new ::chart::LabeledDataSequence( xValues, xLabels );
+}
+
+Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
+        const Reference< chart2::data::XDataSequence >& xValues )
+{
+    return new ::chart::LabeledDataSequence( xValues );
+}
+
+Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
+        const Reference< uno::XComponentContext >& xContext )
+{
+    return new ::chart::LabeledDataSequence( xContext );
+}
 
 uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
                                             bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories )

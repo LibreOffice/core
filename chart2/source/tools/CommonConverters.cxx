@@ -155,15 +155,6 @@ drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPoint& rPoint)
         );
 }
 
-::basegfx::B3DPoint Direction3DToB3DPoint( const drawing::Direction3D& rDirection)
-{
-    return ::basegfx::B3DPoint(
-          rDirection.DirectionX
-        , rDirection.DirectionY
-        , rDirection.DirectionZ
-        );
-}
-
 ::basegfx::B3DVector Direction3DToB3DVector( const drawing::Direction3D& rDirection)
 {
     return ::basegfx::B3DVector(
@@ -171,39 +162,6 @@ drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPoint& rPoint)
         , rDirection.DirectionY
         , rDirection.DirectionZ
         );
-}
-
-drawing::PolyPolygonShape3D MakeLine3D(
-    const drawing::Position3D & rStart,
-    const drawing::Position3D & rEnd )
-{
-    drawing::PolyPolygonShape3D aPP;
-
-    aPP.SequenceX.realloc(1);
-    aPP.SequenceY.realloc(1);
-    aPP.SequenceZ.realloc(1);
-
-    drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
-    drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
-    drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
-
-    pOuterSequenceX->realloc(2);
-    pOuterSequenceY->realloc(2);
-    pOuterSequenceZ->realloc(2);
-
-    double* pInnerSequenceX = pOuterSequenceX->getArray();
-    double* pInnerSequenceY = pOuterSequenceY->getArray();
-    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-
-    *pInnerSequenceX++ = rStart.PositionX;
-    *pInnerSequenceY++ = rStart.PositionY;
-    *pInnerSequenceZ++ = rStart.PositionZ;
-
-    *pInnerSequenceX++ = rEnd.PositionX;
-    *pInnerSequenceY++ = rEnd.PositionY;
-    *pInnerSequenceZ++ = rEnd.PositionZ;
-
-    return aPP;
 }
 
 void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position3D& rPos, sal_Int32 nPolygonIndex )
@@ -298,110 +256,6 @@ void appendPoly( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonSh
     }
 }
 
-/*
-drawing::PolyPolygonShape3D operator+(
-          const drawing::PolyPolygonShape3D& rPoly1
-        , const drawing::PolyPolygonShape3D& rPoly2 )
-{
-    drawing::PolyPolygonShape3D aRet;
-
-    sal_Int32 nOuterCount = Max( rPoly1.SequenceX.getLength(), rPoly2.SequenceX.getLength() );
-    aRet.SequenceX.realloc(nOuterCount);
-    aRet.SequenceY.realloc(nOuterCount);
-    aRet.SequenceZ.realloc(nOuterCount);
-
-    for( sal_Int32 nOuter=0;nOuter<nOuterCount;nOuter++ )
-    {
-        sal_Int32 nPointCount_1 = 0;
-        sal_Int32 nPointCount_2 = 0;
-        if(nOuter<rPoly1.SequenceX.getLength())
-            nPointCount_1 = rPoly1.SequenceX[nOuter].getLength();
-        if(nOuter<rPoly2.SequenceX.getLength())
-            nPointCount_2 = rPoly2.SequenceX[nOuter].getLength();
-
-        sal_Int32 nPointCount = nPointCount_1 + nPointCount_2;
-
-        aRet.SequenceX[nOuter].realloc(nPointCount);
-        aRet.SequenceY[nOuter].realloc(nPointCount);
-        aRet.SequenceZ[nOuter].realloc(nPointCount);
-
-        sal_Int32 nPointTarget=0;
-
-        {
-            sal_Int32 nPointSourceCount = nPointCount_1;
-            const drawing::PolyPolygonShape3D* pPoly = &rPoly1;
-            for( sal_Int32 nPointSource=0; nPointSource<nPointSourceCount ; nPointSource++,nPointTarget++ )
-            {
-                aRet.SequenceX[nOuter][nPointTarget] = pPoly->SequenceX[nOuter][nPointSource];
-                aRet.SequenceY[nOuter][nPointTarget] = pPoly->SequenceY[nOuter][nPointSource];
-                aRet.SequenceZ[nOuter][nPointTarget] = pPoly->SequenceZ[nOuter][nPointSource];
-            }
-        }
-        {
-            sal_Int32 nPointSourceCount = nPointCount_2;
-            const drawing::PolyPolygonShape3D* pPoly = &rPoly2;
-            for( sal_Int32 nPointSource=nPointSourceCount; nPointSource-- ; nPointTarget++ )
-            {
-                aRet.SequenceX[nOuter][nPointTarget] = pPoly->SequenceX[nOuter][nPointSource];
-                aRet.SequenceY[nOuter][nPointTarget] = pPoly->SequenceY[nOuter][nPointSource];
-                aRet.SequenceZ[nOuter][nPointTarget] = pPoly->SequenceZ[nOuter][nPointSource];
-            }
-        }
-    }
-    return aRet;
-}
-*/
-/*
-drawing::PolyPolygonShape3D operator+(
-          const drawing::PolyPolygonShape3D& rPoly1
-        , const drawing::PolyPolygonShape3D& rPoly2 )
-{
-    drawing::PolyPolygonShape3D aRet;
-
-    sal_Int32 nOuterCount = rPoly1.SequenceX.getLength()+rPoly2.SequenceX.getLength();
-    aRet.SequenceX.realloc(nOuterCount);
-    aRet.SequenceY.realloc(nOuterCount);
-    aRet.SequenceZ.realloc(nOuterCount);
-
-    drawing::DoubleSequence* pOuterSequenceX = aRet.SequenceX.getArray();
-    drawing::DoubleSequence* pOuterSequenceY = aRet.SequenceY.getArray();
-    drawing::DoubleSequence* pOuterSequenceZ = aRet.SequenceZ.getArray();
-
-    for( sal_Int32 nOuterTarget=0;nOuterTarget<nOuterCount;nOuterTarget++ )
-    {
-        const drawing::PolyPolygonShape3D* pPoly = &rPoly1;
-        sal_Int32 nOuterSource = nOuterTarget;
-        if(nOuterTarget>=rPoly1.SequenceX.getLength())
-        {
-            pPoly = &rPoly2;
-            nOuterSource -=  rPoly1.SequenceX.getLength();
-        }
-
-        sal_Int32 nPointCount = pPoly->SequenceX[nOuterSource].getLength();
-
-        pOuterSequenceX->realloc(nPointCount);
-        pOuterSequenceY->realloc(nPointCount);
-        pOuterSequenceZ->realloc(nPointCount);
-
-        double* pInnerSequenceX = pOuterSequenceX->getArray();
-        double* pInnerSequenceY = pOuterSequenceY->getArray();
-        double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-
-        for( sal_Int32 nPoint=0;nPoint<nPointCount;nPoint++ )
-        {
-            *pInnerSequenceX = pPoly->SequenceX[nOuterSource][nPoint];
-            *pInnerSequenceY = pPoly->SequenceY[nOuterSource][nPoint];
-            *pInnerSequenceZ = pPoly->SequenceZ[nOuterSource][nPoint];
-
-            pInnerSequenceX++; pInnerSequenceY++; pInnerSequenceZ++;
-        }
-
-        pOuterSequenceX++; pOuterSequenceY++; pOuterSequenceZ++;
-    }
-    return aRet;
-}
-*/
-
 drawing::PolyPolygonShape3D BezierToPoly(
     const drawing::PolyPolygonBezierCoords& rBezier )
 {
@@ -494,26 +348,6 @@ drawing::Position3D  operator+( const drawing::Position3D& rPos
         );
 }
 
-drawing::Direction3D operator+( const drawing::Direction3D& rDirection
-                           , const drawing::Direction3D& rDirectionAdd)
-{
-    return drawing::Direction3D(
-          rDirection.DirectionX + rDirectionAdd.DirectionX
-        , rDirection.DirectionY + rDirectionAdd.DirectionY
-        , rDirection.DirectionZ + rDirectionAdd.DirectionZ
-        );
-}
-
-drawing::Position3D  operator-( const drawing::Position3D& rPos
-                           , const drawing::Direction3D& rDirection)
-{
-    return drawing::Position3D(
-          rPos.PositionX - rDirection.DirectionX
-        , rPos.PositionY - rDirection.DirectionY
-        , rPos.PositionZ - rDirection.DirectionZ
-        );
-}
-
 drawing::Direction3D  operator-( const drawing::Position3D& rPos1
                            , const drawing::Position3D& rPos2)
 {
@@ -521,16 +355,6 @@ drawing::Direction3D  operator-( const drawing::Position3D& rPos1
           rPos1.PositionX - rPos2.PositionX
         , rPos1.PositionY - rPos2.PositionY
         , rPos1.PositionZ - rPos2.PositionZ
-        );
-}
-
-drawing::Direction3D  operator*( const drawing::Direction3D& rDirection
-                           , double fFraction)
-{
-    return drawing::Direction3D(
-          fFraction*rDirection.DirectionX
-        , fFraction*rDirection.DirectionY
-        , fFraction*rDirection.DirectionZ
         );
 }
 
@@ -595,16 +419,6 @@ uno::Sequence< double > Position3DToSequence( const drawing::Position3D& rPositi
     aRet[1] = rPosition.PositionY;
     aRet[2] = rPosition.PositionZ;
     return aRet;
-}
-
-drawing::Direction3D operator/( const drawing::Direction3D& rDirection, double f )
-{
-    OSL_ENSURE(f,"a Direction3D is divided by NULL");
-    return drawing::Direction3D(
-        rDirection.DirectionX/f
-        , rDirection.DirectionY/f
-        , rDirection.DirectionZ/f
-        );
 }
 
 using namespace ::com::sun::star::chart2;

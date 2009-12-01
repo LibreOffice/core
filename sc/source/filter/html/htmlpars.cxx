@@ -173,7 +173,7 @@ ULONG ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
             aContentType.AppendAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
-            xValues->Append( SvKeyValue( String::CreateFromAscii( sHTML_META_content_type ), aContentType ) );
+            xValues->Append( SvKeyValue( String::CreateFromAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
             pAttributes = xValues;
         }
     }
@@ -958,11 +958,11 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
                 bHorJustifyCenterTH = FALSE;
                 SvxCellHorJustify eVal;
                 const String& rOptVal = pOption->GetString();
-                if ( rOptVal.CompareIgnoreCaseToAscii( sHTML_AL_right ) == COMPARE_EQUAL )
+                if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
-                else if ( rOptVal.CompareIgnoreCaseToAscii( sHTML_AL_center ) == COMPARE_EQUAL )
+                else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) == COMPARE_EQUAL )
                     eVal = SVX_HOR_JUSTIFY_CENTER;
-                else if ( rOptVal.CompareIgnoreCaseToAscii( sHTML_AL_left ) == COMPARE_EQUAL )
+                else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_left ) == COMPARE_EQUAL )
                     eVal = SVX_HOR_JUSTIFY_LEFT;
                 else
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
@@ -974,11 +974,11 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             {
                 SvxCellVerJustify eVal;
                 const String& rOptVal = pOption->GetString();
-                if ( rOptVal.CompareIgnoreCaseToAscii( sHTML_VA_top ) == COMPARE_EQUAL )
+                if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_VA_top ) == COMPARE_EQUAL )
                     eVal = SVX_VER_JUSTIFY_TOP;
-                else if ( rOptVal.CompareIgnoreCaseToAscii( sHTML_VA_middle ) == COMPARE_EQUAL )
+                else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_VA_middle ) == COMPARE_EQUAL )
                     eVal = SVX_VER_JUSTIFY_CENTER;
-                else if ( rOptVal.CompareIgnoreCaseToAscii( sHTML_VA_bottom ) == COMPARE_EQUAL )
+                else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_VA_bottom ) == COMPARE_EQUAL )
                     eVal = SVX_VER_JUSTIFY_BOTTOM;
                 else
                     eVal = SVX_VER_JUSTIFY_STANDARD;
@@ -2520,11 +2520,11 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
             {
                 SvxCellHorJustify eVal = SVX_HOR_JUSTIFY_STANDARD;
                 const String& rOptVal = aIter->GetString();
-                if( rOptVal.EqualsIgnoreCaseAscii( sHTML_AL_right ) )
+                if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) )
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
-                else if( rOptVal.EqualsIgnoreCaseAscii( sHTML_AL_center ) )
+                else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) )
                     eVal = SVX_HOR_JUSTIFY_CENTER;
-                else if( rOptVal.EqualsIgnoreCaseAscii( sHTML_AL_left ) )
+                else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_left ) )
                     eVal = SVX_HOR_JUSTIFY_LEFT;
                 if( eVal != SVX_HOR_JUSTIFY_STANDARD )
                     rItemSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY ) );
@@ -2535,11 +2535,11 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
             {
                 SvxCellVerJustify eVal = SVX_VER_JUSTIFY_STANDARD;
                 const String& rOptVal = aIter->GetString();
-                if( rOptVal.EqualsIgnoreCaseAscii( sHTML_VA_top ) )
+                if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_VA_top ) )
                     eVal = SVX_VER_JUSTIFY_TOP;
-                else if( rOptVal.EqualsIgnoreCaseAscii( sHTML_VA_middle ) )
+                else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_VA_middle ) )
                     eVal = SVX_VER_JUSTIFY_CENTER;
-                else if( rOptVal.EqualsIgnoreCaseAscii( sHTML_VA_bottom ) )
+                else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_VA_bottom ) )
                     eVal = SVX_VER_JUSTIFY_BOTTOM;
                 if( eVal != SVX_VER_JUSTIFY_STANDARD )
                     rItemSet.Put( SvxVerJustifyItem( eVal, ATTR_VER_JUSTIFY ) );
@@ -2807,7 +2807,7 @@ ULONG ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
             aContentType.AppendAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
-            xValues->Append( SvKeyValue( String::CreateFromAscii( sHTML_META_content_type ), aContentType ) );
+            xValues->Append( SvKeyValue( String::CreateFromAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
             pAttributes = xValues;
         }
     }

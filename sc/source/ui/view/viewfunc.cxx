@@ -1414,24 +1414,26 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties;
         sal_Int32 nCount = 0;
+        const SfxItemPropertyMap* pMap = ScCellObj::GetCellPropertyMap();
+        PropertyEntryVector_t aPropVector = pMap->getPropertyEntries();
         for ( USHORT nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )
         {
             const SfxPoolItem* pItem = 0;
             if ( rNewSet.GetItemState( nWhich, TRUE, &pItem ) == SFX_ITEM_SET && pItem )
             {
-                const SfxItemPropertyMap* pMap = ScCellObj::GetCellPropertyMap();
-                while ( pMap->pName )
+                PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
+                while ( aIt != aPropVector.end())
                 {
-                    if ( pMap->nWID == nWhich )
+                    if ( aIt->nWID == nWhich )
                     {
                         ::com::sun::star::uno::Any aVal;
-                        pItem->QueryValue( aVal, pMap->nMemberId );
+                        pItem->QueryValue( aVal, aIt->nMemberId );
                         aProperties.realloc( nCount + 1 );
-                        aProperties[ nCount ].Name = ::rtl::OUString::createFromAscii( pMap->pName );
+                        aProperties[ nCount ].Name = aIt->sName;
                         aProperties[ nCount ].Value <<= aVal;
                         ++nCount;
                     }
-                    ++pMap;
+                    ++aIt;
                 }
             }
         }

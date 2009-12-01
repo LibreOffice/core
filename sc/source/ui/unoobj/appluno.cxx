@@ -148,9 +148,9 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_crea
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-static const SfxItemPropertyMap* lcl_GetSettingsPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 {
-    static SfxItemPropertyMap aSettingsPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aSettingsPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_DOAUTOCP), 0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_ENTERED),  0,  &getBooleanCppuType(),              0, 0},

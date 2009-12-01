@@ -587,8 +587,26 @@ void ScTabView::SelectAllTables()
 //      pDoc->ExtendMarksFromTable( nTab );
 
         aViewData.GetDocShell()->PostPaintExtras();
-        aViewData.GetBindings().Invalidate( FID_FILL_TAB );
+        SfxBindings& rBind = aViewData.GetBindings();
+        rBind.Invalidate( FID_FILL_TAB );
+        rBind.Invalidate( FID_TAB_DESELECTALL );
     }
+}
+
+void ScTabView::DeselectAllTables()
+{
+    ScDocument* pDoc = aViewData.GetDocument();
+    ScMarkData& rMark = aViewData.GetMarkData();
+    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nCount = pDoc->GetTableCount();
+
+    for (SCTAB i=0; i<nCount; i++)
+        rMark.SelectTable( i, ( i == nTab ) );
+
+    aViewData.GetDocShell()->PostPaintExtras();
+    SfxBindings& rBind = aViewData.GetBindings();
+    rBind.Invalidate( FID_FILL_TAB );
+    rBind.Invalidate( FID_TAB_DESELECTALL );
 }
 
 BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,

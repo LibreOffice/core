@@ -34,7 +34,6 @@
 #include "GridWrapper.hxx"
 #include "macros.hxx"
 #include "AxisHelper.hxx"
-#include "Scaling.hxx"
 #include "Chart2ModelContact.hxx"
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"

@@ -42,7 +42,7 @@
 #include "DataSeriesHelper.hxx"
 #include "tp_DataSourceControls.hxx"
 #include "ControllerLockGuard.hxx"
-#include "LabeledDataSequence.hxx"
+#include "DataSourceHelper.hxx"
 #include <com/sun/star/sheet/XRangeSelection.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -890,7 +890,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                 // create or change categories
                 if( !xLabeledSeq.is())
                 {
-                    xLabeledSeq.set( new ::chart::LabeledDataSequence( Reference< uno::XComponentContext >(0)));
+                    xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(0)));
                     m_rDialogModel.setCategories( xLabeledSeq );
                 }
                 try
@@ -945,7 +945,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                             if( ! xLabeledSeq.is())
                             {
                                 // no corresponding labeled data sequence for label found
-                                xLabeledSeq.set( new ::chart::LabeledDataSequence( Reference< uno::XComponentContext >(0)));
+                                xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(0)));
                                 lcl_addLSequenceToDataSource( xLabeledSeq, xSource );
                             }
                         }
@@ -1009,7 +1009,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                         xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSource ));
                                     if( ! xLabeledSeq.is())
                                     {
-                                        xLabeledSeq.set( new ::chart::LabeledDataSequence( Reference< uno::XComponentContext >(0)));
+                                        xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(0)));
                                         lcl_addLSequenceToDataSource( xLabeledSeq, xSource );
                                     }
                                 }

@@ -1455,6 +1455,13 @@ void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
     pAreas = NULL;
 }
 
+void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew)
+{
+    for (USHORT i=0; i<nEntryCount; i++)
+        if ( ppEntries[i]->GetStyle() == rOld )
+            ppEntries[i]->UpdateStyleName( rNew );
+}
+
 void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     for (USHORT i=0; i<nEntryCount; i++)
@@ -1559,6 +1566,13 @@ void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
     USHORT nCount = Count();
     for (USHORT i=0; i<nCount; i++)
         (*this)[i]->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+}
+
+void ScConditionalFormatList::RenameCellStyle( const String& rOld, const String& rNew )
+{
+    ULONG nCount=Count();
+    for (USHORT i=0; i<nCount; i++)
+        (*this)[i]->RenameCellStyle(rOld,rNew);
 }
 
 void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )

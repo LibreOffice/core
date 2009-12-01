@@ -69,9 +69,6 @@ private:
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
 
-    bool        IsFullScreen() const;
-    void        SetFullScreen( bool bSet );
-
 public:
 
     TYPEINFO();

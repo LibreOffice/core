@@ -42,6 +42,17 @@ class SvStream;
 class SfxMedium;
 class ScAsciiOptions;
 
+struct ScExportTextOptions
+{
+    enum NewlineConversion { ToSystem, ToSpace, None };
+    ScExportTextOptions( NewlineConversion eNewlineConversion = ToSystem, sal_Unicode cSeparatorConvertTo = 0, bool bAddQuotes = false ) :
+        meNewlineConversion( eNewlineConversion ), mcSeparatorConvertTo( cSeparatorConvertTo ), mbAddQuotes( bAddQuotes ) {}
+
+    NewlineConversion meNewlineConversion;
+    sal_Unicode mcSeparatorConvertTo;   // Convert separator to this character
+    bool mbAddQuotes;
+};
+
 class ScImportExport
 {
     ScDocShell* pDocSh;
@@ -60,6 +71,7 @@ class ScImportExport
     BOOL        bUndo;                  // Mit Undo?
     BOOL        bOverflow;              // zuviele Zeilen/Spalten
     bool        mbApi;
+    ScExportTextOptions mExportTextOptions;
 
     ScAsciiOptions* pExtOptions;        // erweiterte Optionen
 
@@ -138,6 +150,8 @@ public:
 
     bool IsApi() const { return mbApi; }
     void SetApi( bool bApi ) { mbApi = bApi; }
+    const ScExportTextOptions& GetExportTextOptions() { return mExportTextOptions; }
+    void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 };
 
 

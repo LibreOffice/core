@@ -313,6 +313,8 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             BOOL bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
             ScImportExport aObj( pDoc, aBlock );
+            if ( bUsedForLink )
+                aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
             aObj.SetFormulas( pDoc->GetViewOptions().GetOption( VOPT_FORMULAS ) );
             aObj.SetIncludeFiltered( bIncludeFiltered );
 
@@ -817,7 +819,10 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                 {
                     String aStr;
                     pFCell->GetString(aStr);
-                    pNew = new ScStringCell( aStr );
+                    if ( pFCell->IsMultilineResult() )
+                        pNew = new ScEditCell( aStr, pDestDoc );
+                    else
+                        pNew = new ScStringCell( aStr );
                 }
                 pDestDoc->PutCell( nCol,nRow,nDestTab, pNew );
 

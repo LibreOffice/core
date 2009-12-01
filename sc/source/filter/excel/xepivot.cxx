@@ -1500,7 +1500,11 @@ void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sa
     {
         sal_uInt16 nLineSize = 8 + 2 * nIndexCount;
         rStrm.StartRecord( EXC_ID_SXLI, nLineSize * nLineCount );
-        rStrm.SetSliceSize( nLineSize );
+
+        /*  #158444# Excel expects the records to be filled completely, do not
+            set a segment size... */
+//        rStrm.SetSliceSize( nLineSize );
+
         for( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
         {
             // #106598# Excel XP needs a partly initialized SXLI record

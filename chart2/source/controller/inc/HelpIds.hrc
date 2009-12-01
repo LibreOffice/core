@@ -31,7 +31,7 @@
 #define CHART_HELPIDS_HRC
 
 #include <svtools/solar.hrc>
-//next is 118
+//next is 120
 
 //see old chart: schhids.h
 
@@ -142,6 +142,8 @@
 #define HID_SCH_TEXTDIRECTION               (HID_SCH_START + 115)
 #define HID_SCH_TEXTDIRECTION_TITLE         (HID_SCH_START + 116)
 #define HID_SCH_TEXTDIRECTION_EQUATION      (HID_SCH_START + 117)
+#define HID_SCH_DATALABEL_ROTATION_KNOB     (HID_SCH_START + 118)
+#define HID_SCH_DATALABEL_ROTATION_EDIT     (HID_SCH_START + 119)
 
 #define HID_SCH_TITLE_MAIN  (HID_SCH_START + 80)
 #define HID_SCH_TITLE_SUB   (HID_SCH_START + 81)

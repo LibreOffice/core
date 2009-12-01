@@ -103,7 +103,6 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     double              nPrtToScreenFactor;
 //!   FontList*           pFontList;
     DocShell_Impl*      pImpl;
-    SfxUndoManager*     pUndoManager;
     ScDocFunc*          pDocFunc;
 
     //SfxObjectCreateMode   eShellMode;

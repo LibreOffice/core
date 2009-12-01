@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 #include "HelpIds.hrc"
-#include "TabPages.hrc"
+#include "tp_SeriesToAxis.hrc"
 
 TabPage TP_OPTIONS
 {
@@ -120,7 +120,7 @@ TabPage TP_OPTIONS
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Connection Lines";
+        Text [ en-US ] = "Connection lines";
     };
 
     CheckBox CB_BARS_SIDE_BY_SIDE
@@ -131,16 +131,23 @@ TabPage TP_OPTIONS
         Text [ en-US ] = "Show ~bars side by side";
     };
 
-    FixedLine FL_PLOT_MISSING_VALUES
+    FixedLine FL_PLOT_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 113  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Plot options";
+    };
+
+    FixedText FT_MISSING_VALUES
+    {
+        Pos = MAP_APPFONT ( 12 , 127  ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "Plot missing values";
     };
 
     RadioButton RB_DONT_PAINT
     {
-        Pos = MAP_APPFONT ( 12 , 127  ) ;
+        Pos = MAP_APPFONT ( 82 , 127  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Leave gap";
@@ -148,7 +155,7 @@ TabPage TP_OPTIONS
 
     RadioButton RB_ASSUME_ZERO
     {
-        Pos = MAP_APPFONT ( 12 , 141  ) ;
+        Pos = MAP_APPFONT ( 82 , 141  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Assume zero";
@@ -156,9 +163,17 @@ TabPage TP_OPTIONS
 
     RadioButton RB_CONTINUE_LINE
     {
-        Pos = MAP_APPFONT ( 12 , 155  ) ;
+        Pos = MAP_APPFONT ( 82 , 155  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Continue line";
+    };
+
+    CheckBox CB_INCLUDE_HIDDEN_CELLS
+    {
+        Pos = MAP_APPFONT ( 12 , 172 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Include ~values from hidden cells";
     };
 };

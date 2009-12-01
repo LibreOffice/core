@@ -57,7 +57,6 @@ public:
                                  , long nMinimumListBoxWidth /*use -1 to indicate that this can be automatic*/ );
     Point GetCurrentListBoxPosition() const;
     Size GetCurrentListBoxSize() const;
-    long GetBottom() const;
 
     ::rtl::OUString GetValue() const;
     void SetValue( const ::rtl::OUString& rSeparator );

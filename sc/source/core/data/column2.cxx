@@ -319,9 +319,12 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         }
 
         BOOL bAddMargin = TRUE;
-        BOOL bEditEngine = ( pCell->GetCellType() == CELLTYPE_EDIT ||
+        CellType eCellType = pCell->GetCellType();
+
+        BOOL bEditEngine = ( eCellType == CELLTYPE_EDIT ||
                                 eOrient == SVX_ORIENTATION_STACKED ||
-                                IsAmbiguousScript( nScript ) );
+                                IsAmbiguousScript( nScript ) ||
+                                ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) );
 
         if (!bEditEngine)                                   // direkte Ausgabe
         {

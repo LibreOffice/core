@@ -337,7 +337,7 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     if( !( xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBar ) ||
         !xErrorBar.is())
     {
-        xErrorBar.set( new ErrorBar( xContext ));
+        xErrorBar.set( createErrorBar( xContext ));
     }
 
     OSL_ASSERT( xErrorBar.is());

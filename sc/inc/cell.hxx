@@ -485,6 +485,9 @@ public:
     inline BOOL     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
     EditTextObject*     CreateURLObject() ;
     void            GetURLResult( String& rURL, String& rCellText );
+
+    /** Determines whether or not the result string contains more than one paragraph */
+    bool            IsMultilineResult();
 };
 
 //          Iterator fuer Referenzen in einer Formelzelle

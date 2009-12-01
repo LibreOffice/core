@@ -132,6 +132,13 @@ class ScRangeData;
 class CollatorRessource;
 class CollatorWrapper;
 
+#if ENABLE_LAYOUT_EXPERIMENTAL
+#include <sfx2/layout.hxx>
+#include <layout/layout-pre.hxx>
+#else /* !ENABLE_LAYOUT_EXPERIMENTAL */
+#define LocalizedString String
+#endif /* !ENABLE_LAYOUT_EXPERIMENTAL */
+
 class ScTabPageSortOptions : public SfxTabPage
 {
 public:
@@ -139,6 +146,8 @@ public:
                                       const SfxItemSet&  rArgSet );
                 ~ScTabPageSortOptions();
 
+#undef SfxTabPage
+#define SfxTabPage ::SfxTabPage
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
     static  USHORT*     GetRanges   ();
@@ -177,9 +186,9 @@ private:
 
     FixedText           aFtAreaLabel;
 //  FixedInfo           aFtArea;
-    String              aStrRowLabel;
-    String              aStrColLabel;
-    String              aStrUndefined;
+    LocalizedString aStrRowLabel;
+    LocalizedString aStrColLabel;
+    LocalizedString aStrUndefined;
     String              aStrNoName;
     String              aStrAreaLabel;
 
@@ -208,7 +217,9 @@ private:
 #endif
 };
 
-
+#if ENABLE_LAYOUT_EXPERIMENTAL
+#include <layout/layout-post.hxx>
+#endif /* ENABLE_LAYOUT_EXPERIMENTAL */
 
 #endif // SC_TPSORT_HXX
 

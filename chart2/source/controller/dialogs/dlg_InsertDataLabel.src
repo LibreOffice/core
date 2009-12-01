@@ -38,8 +38,8 @@ ModalDialog DLG_DATA_DESCR
     HelpID = SID_INSERT_DESCRIPTION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 136 ) ;
+    Size = MAP_APPFONT ( 316 , 185 ) ;
     Moveable = TRUE ;
-    BUTTONS_OK_CANCEL_HELP_STACKED(144)
+    BUTTONS_OK_CANCEL_HELP_STACKED(260)
     RESOURCE_DATALABEL( 6, 7 )
 };

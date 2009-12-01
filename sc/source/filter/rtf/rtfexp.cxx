@@ -84,8 +84,8 @@ ScRTFExport::~ScRTFExport()
 
 ULONG ScRTFExport::Write()
 {
-    rStrm << '{' << sRTF_RTF;
-    rStrm << sRTF_ANSI << sNewLine;
+    rStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
+    rStrm << OOO_STRING_SVTOOLS_RTF_ANSI << sNewLine;
 
 #if 0
 // das ist noch nicht ausgegoren
@@ -101,9 +101,9 @@ ULONG ScRTFExport::Write()
     // fonttbl
     String aFontFamilyName(
         ((const SvxFontItem&)(rSetPara.Get( ATTR_FONT ))).GetFamilyName() );
-    rStrm << sRTF_DEFF << '0'
-        << '{' << sRTF_FONTTBL
-        << '{' << sRTF_F << '0' << sRTF_FNIL << ' ' << aFontFamilyName.GetStr() << ";}"
+    rStrm << OOO_STRING_SVTOOLS_RTF_DEFF << '0'
+        << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL
+        << '{' << OOO_STRING_SVTOOLS_RTF_F << '0' << OOO_STRING_SVTOOLS_RTF_FNIL << ' ' << aFontFamilyName.GetStr() << ";}"
         << '}' << sNewLine;
 
     // hier kaeme die colortbl
@@ -111,8 +111,8 @@ ULONG ScRTFExport::Write()
     // stylesheet
     UINT32 nFontHeight =
         ((const SvxFontHeightItem&)(rSetPara.Get( ATTR_FONT_HEIGHT ))).GetHeight();
-    rStrm << '{' << sRTF_STYLESHEET
-        << '{' << sRTF_FS << String( UINT32(nFontHeight / TWIPS_PER_POINT) ).GetStr()
+    rStrm << '{' << OOO_STRING_SVTOOLS_RTF_STYLESHEET
+        << '{' << OOO_STRING_SVTOOLS_RTF_FS << String( UINT32(nFontHeight / TWIPS_PER_POINT) ).GetStr()
             << ' ' << pStyleSheet->GetName().GetStr() << ";}"
         << '}' << sNewLine;
 */
@@ -122,7 +122,7 @@ ULONG ScRTFExport::Write()
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
     {
         if ( nTab > aRange.aStart.Tab() )
-            rStrm << sRTF_PAR;
+            rStrm << OOO_STRING_SVTOOLS_RTF_PAR;
         WriteTab( nTab );
     }
 
@@ -156,8 +156,8 @@ void ScRTFExport::WriteTab( SCTAB nTab )
 
 void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 {
-    rStrm << sRTF_TROWD << sRTF_TRGAPH << "30" << sRTF_TRLEFT << "-30";
-    rStrm << sRTF_TRRH << ByteString::CreateFromInt32( pDoc->GetRowHeight( nRow, nTab ) ).GetBuffer();
+    rStrm << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH << "30" << OOO_STRING_SVTOOLS_RTF_TRLEFT << "-30";
+    rStrm << OOO_STRING_SVTOOLS_RTF_TRRH << ByteString::CreateFromInt32( pDoc->GetRowHeight( nRow, nTab ) ).GetBuffer();
     SCCOL nCol;
     SCCOL nEndCol = aRange.aEnd.Col();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -169,30 +169,30 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         const sal_Char* pChar;
 
         if ( rMergeAttr.GetColMerge() != 0 )
-            rStrm << sRTF_CLMGF;
+            rStrm << OOO_STRING_SVTOOLS_RTF_CLMGF;
         else
         {
             const ScMergeFlagAttr& rMergeFlagAttr = (const ScMergeFlagAttr&) pAttr->GetItem( ATTR_MERGE_FLAG );
             if ( rMergeFlagAttr.IsHorOverlapped() )
-                rStrm << sRTF_CLMRG;
+                rStrm << OOO_STRING_SVTOOLS_RTF_CLMRG;
         }
 
         switch( rVerJustifyItem.GetValue() )
         {
-            case SVX_VER_JUSTIFY_TOP:       pChar = sRTF_CLVERTALT; break;
-            case SVX_VER_JUSTIFY_CENTER:    pChar = sRTF_CLVERTALC; break;
-            case SVX_VER_JUSTIFY_BOTTOM:    pChar = sRTF_CLVERTALB; break;
-            case SVX_VER_JUSTIFY_STANDARD:  pChar = sRTF_CLVERTALB; break;  //! Bottom
+            case SVX_VER_JUSTIFY_TOP:       pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALT;   break;
+            case SVX_VER_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;   break;
+            case SVX_VER_JUSTIFY_BOTTOM:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;
+            case SVX_VER_JUSTIFY_STANDARD:  pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;  //! Bottom
             default:                        pChar = NULL;           break;
         }
         if ( pChar )
             rStrm << pChar;
 
-        rStrm << sRTF_CELLX << ByteString::CreateFromInt32( pCellX[nCol+1] ).GetBuffer();
+        rStrm << OOO_STRING_SVTOOLS_RTF_CELLX << ByteString::CreateFromInt32( pCellX[nCol+1] ).GetBuffer();
         if ( (nCol & 0x0F) == 0x0F )
             rStrm << sNewLine;      // Zeilen nicht zu lang werden lassen
     }
-    rStrm << sRTF_PARD << sRTF_PLAIN << sRTF_INTBL << sNewLine;
+    rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << sNewLine;
 
     ULONG nStrmPos = rStrm.Tell();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -204,7 +204,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
             nStrmPos = rStrm.Tell();
         }
     }
-    rStrm << sRTF_ROW << sNewLine;
+    rStrm << OOO_STRING_SVTOOLS_RTF_ROW << sNewLine;
 }
 
 
@@ -215,7 +215,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     const ScMergeFlagAttr& rMergeFlagAttr = (const ScMergeFlagAttr&) pAttr->GetItem( ATTR_MERGE_FLAG );
     if ( rMergeFlagAttr.IsHorOverlapped() )
     {
-        rStrm << sRTF_CELL;
+        rStrm << OOO_STRING_SVTOOLS_RTF_CELL;
         return ;
     }
 
@@ -268,41 +268,41 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     switch( rHorJustifyItem.GetValue() )
     {
         case SVX_HOR_JUSTIFY_STANDARD:
-            pChar = (bValueData ? sRTF_QR : sRTF_QL);
+            pChar = (bValueData ? OOO_STRING_SVTOOLS_RTF_QR : OOO_STRING_SVTOOLS_RTF_QL);
             break;
-        case SVX_HOR_JUSTIFY_CENTER:    pChar = sRTF_QC;    break;
-        case SVX_HOR_JUSTIFY_BLOCK:     pChar = sRTF_QJ;    break;
-        case SVX_HOR_JUSTIFY_RIGHT:     pChar = sRTF_QR;    break;
+        case SVX_HOR_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_QC;  break;
+        case SVX_HOR_JUSTIFY_BLOCK:     pChar = OOO_STRING_SVTOOLS_RTF_QJ;  break;
+        case SVX_HOR_JUSTIFY_RIGHT:     pChar = OOO_STRING_SVTOOLS_RTF_QR;  break;
         case SVX_HOR_JUSTIFY_LEFT:
         case SVX_HOR_JUSTIFY_REPEAT:
-        default:                        pChar = sRTF_QL;    break;
+        default:                        pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
     }
     rStrm << pChar;
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
     {   // bold
         bResetAttr = TRUE;
-        rStrm << sRTF_B;
+        rStrm << OOO_STRING_SVTOOLS_RTF_B;
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
     {   // italic
         bResetAttr = TRUE;
-        rStrm << sRTF_I;
+        rStrm << OOO_STRING_SVTOOLS_RTF_I;
     }
     if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
     {   // underline
         bResetAttr = TRUE;
-        rStrm << sRTF_UL;
+        rStrm << OOO_STRING_SVTOOLS_RTF_UL;
     }
 
     rStrm << ' ';
     RTFOutFuncs::Out_String( rStrm, aContent );
-    rStrm << sRTF_CELL;
+    rStrm << OOO_STRING_SVTOOLS_RTF_CELL;
 
     if ( bResetPar )
-        rStrm << sRTF_PARD << sRTF_INTBL;
+        rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
     if ( bResetAttr )
-        rStrm << sRTF_PLAIN;
+        rStrm << OOO_STRING_SVTOOLS_RTF_PLAIN;
 }
 
 

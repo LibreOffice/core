@@ -354,6 +354,23 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void        SetText( const XubString& rStr ); //add by CHINA001
     virtual String      GetText() const; //add by CHINA001
 };
+#if ENABLE_LAYOUT
+namespace layout
+{
+//add for ScAttrDlg , ScHFEditDlg, ScStyleDlg, ScSubTotalDlg, ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
+class AbstractTabDialog_Impl : public SfxAbstractTabDialog
+{
+    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
+    virtual void                SetCurPageId( USHORT nId );
+    virtual const SfxItemSet*   GetOutputItemSet() const;
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
+    virtual void                SetInputSet( const SfxItemSet* pInSet );   //add by CHINA001
+        //From class Window.
+    virtual void        SetText( const XubString& rStr ); //add by CHINA001
+    virtual String      GetText() const; //add by CHINA001
+};
+} // end namespace layout
+#endif /* ENABLE_LAYOUT */
 //------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory

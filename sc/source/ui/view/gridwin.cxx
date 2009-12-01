@@ -118,6 +118,7 @@
 #include "userdat.hxx"
 #include "drwlayer.hxx"
 #include "attrib.hxx"
+#include "validat.hxx"
 
 // #114409#
 #include <vcl/salbtype.hxx>     // FRound
@@ -989,9 +990,50 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
                 nSelPos = SC_AUTOFILTER_CUSTOM;
         }
     }
+    else
+    {
+
+        ULONG nIndex = ((SfxUInt32Item*)pDoc->GetAttr(
+                                nCol, nRow, nTab, ATTR_VALIDDATA ))->GetValue();
+        if ( nIndex )
+        {
+            const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
+            if (pData)
+            {
+                TypedStrData* pNew = NULL;
+                String aDocStr;
+                pDoc->GetString( nCol, nRow, nTab, aDocStr );
+                if ( pDoc->HasValueData( nCol, nRow, nTab ) )
+                {
+                    double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nTab));
+                    pNew = new TypedStrData( aDocStr, fVal, SC_STRTYPE_VALUE );
+                }
+                else
+                    pNew = new TypedStrData( aDocStr, 0.0, SC_STRTYPE_STANDARD );
+
+                bool bSortList = ( pData->GetListType() == ValidListType::SORTEDASCENDING);
+                if ( bSortList )
+                {
+                    USHORT nStrIndex;
+                    if (aStrings.Search(pNew,nStrIndex))
+                        nSelPos = nStrIndex;
+                }
+                else
+                {
+                    USHORT nCount = aStrings.GetCount();
+                    for (i = 0; ((i < nCount) && ( LISTBOX_ENTRY_NOTFOUND == nSelPos)); i++)
+                    {
+                        if ( aStrings.Compare(aStrings[i], pNew)==0 )
+                            nSelPos = i;
+                    }
+                }
+                delete pNew;
+            }
+        }
+    }
 
         //  neu (309): irgendwas muss immer selektiert sein:
-    if ( LISTBOX_ENTRY_NOTFOUND == nSelPos && pFilterBox->GetEntryCount() > 0 )
+    if ( LISTBOX_ENTRY_NOTFOUND == nSelPos && pFilterBox->GetEntryCount() > 0 && !bDataSelect)
         nSelPos = 0;
 
     //  keine leere Auswahl-Liste anzeigen:
@@ -1010,6 +1052,11 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
             //  Select erst nach GrabFocus, damit das Focus-Rechteck richtig landet
         if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
             pFilterBox->SelectEntryPos( nSelPos );
+        else
+        {
+            if (bDataSelect)
+                pFilterBox->SetNoSelection();
+        }
 
         pFilterBox->EndInit();
 
@@ -2332,6 +2379,8 @@ void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseE
     rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
     if ( rEvt.IsMod2() )
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+        if ( rEvt.IsMod3() )
+                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
 
     rEvent.Buttons = 0;
     if ( rEvt.IsLeft() )

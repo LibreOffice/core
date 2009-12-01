@@ -112,6 +112,7 @@ enum
     PROP_DIAGRAM_DATAROW_SOURCE,
 
     PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+    PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
 
     PROP_DIAGRAM_SORT_BY_X_VALUES,
 
@@ -229,6 +230,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "GroupBarsPerAxis" ),
                   PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "IncludeHiddenCells" ),
+                  PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -1970,6 +1978,44 @@ Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XP
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
+//PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS
+class WrappedIncludeHiddenCellsProperty : public WrappedProperty
+{
+public:
+    WrappedIncludeHiddenCellsProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    virtual ~WrappedIncludeHiddenCellsProperty();
+
+    virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+private: //member
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+};
+
+WrappedIncludeHiddenCellsProperty::WrappedIncludeHiddenCellsProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            : WrappedProperty(C2U("IncludeHiddenCells"),C2U("IncludeHiddenCells"))
+            , m_spChart2ModelContact( spChart2ModelContact )
+{
+}
+
+WrappedIncludeHiddenCellsProperty::~WrappedIncludeHiddenCellsProperty()
+{
+}
+
+void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    sal_Bool bNewValue = false;
+    if( ! (rOuterValue >>= bNewValue) )
+        throw lang::IllegalArgumentException( C2U("Property Dim3D requires boolean value"), 0, 0 );
+
+    ChartModelHelper::setIncludeHiddenCells( bNewValue, m_spChart2ModelContact->getChartModel() );
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
     throw (uno::RuntimeException)
@@ -2025,6 +2071,8 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedProperty( C2U( "StackedBarsConnected" ), C2U( "ConnectBars" ) ) );
     aWrappedProperties.push_back( new WrappedSolidTypeProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedAutomaticSizeProperty() );
+    aWrappedProperties.push_back( new WrappedIncludeHiddenCellsProperty( m_spChart2ModelContact ) );
+
     return aWrappedProperties;
 }
 

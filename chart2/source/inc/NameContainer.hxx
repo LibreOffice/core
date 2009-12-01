@@ -45,6 +45,9 @@ namespace chart
 {
 //.............................................................................
 
+OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createNameContainer(
+    const ::com::sun::star::uno::Type& rType, const rtl::OUString& rServicename, const rtl::OUString& rImplementationName );
+
 namespace impl
 {
 typedef ::cppu::WeakImplHelper3<
@@ -54,7 +57,7 @@ typedef ::cppu::WeakImplHelper3<
     NameContainer_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS NameContainer : public impl::NameContainer_Base
+class NameContainer : public impl::NameContainer_Base
 {
 public:
     NameContainer( const ::com::sun::star::uno::Type& rType, const rtl::OUString& rServicename, const rtl::OUString& rImplementationName );

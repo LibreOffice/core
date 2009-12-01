@@ -173,7 +173,7 @@ public:
      */
     ScExternalRefCache::TokenRef getCellData(
         sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
-        bool bEmptyCellOnNull, sal_uInt32* pnFmtIndex = NULL);
+        bool bEmptyCellOnNull, bool bWriteEmpty, sal_uInt32* pnFmtIndex);
 
     /**
      * Get a cached cell range data.
@@ -183,7 +183,7 @@ public:
      *         guaranteed if the TokenArrayRef is properly used..
      */
     ScExternalRefCache::TokenArrayRef getCellRangeData(
-        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull);
+        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull, bool bWriteEmpty);
 
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName);
     void setRangeNameTokens(sal_uInt16 nFileId, const String& rName, TokenArrayRef pArray);

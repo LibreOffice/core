@@ -120,7 +120,7 @@ CheckBox CB_SHOW_CORRELATION_COEFF \
     Pos = MAP_APPFONT( 10, 134 + yoffset ); \
     Size = MAP_APPFONT( availablewidth - 20, 10 ); \
     TabStop = TRUE; \
-    Text[ en-US ] = "Show ~correlation coefficient (R²)"; \
+    Text[ en-US ] = "Show ~coefficient of determination (R²)"; \
 };
 
 #endif

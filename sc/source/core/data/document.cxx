@@ -325,6 +325,10 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                     pTab[i] = pTab[i - 1];
                 pTab[nPos] = new ScTable(this, nPos, rName);
                 ++nMaxTableNumber;
+                // UpdateBroadcastAreas must be called between UpdateInsertTab,
+                // which ends listening, and StartAllListeners, to not modify
+                // areas that are to be inserted by starting listeners.
+                UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,1);
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateCompile();
@@ -419,6 +423,10 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                     pTab[i - 1] = pTab[i];
                 pTab[nTabCount - 1] = NULL;
                 --nMaxTableNumber;
+                // UpdateBroadcastAreas must be called between UpdateDeleteTab,
+                // which ends listening, and StartAllListeners, to not modify
+                // areas that are to be inserted by starting listeners.
+                UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,-1);
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateCompile();
@@ -4467,5 +4475,18 @@ BOOL ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
     return FALSE;       // sonst nicht
 }
 
+SfxUndoManager* ScDocument::GetUndoManager()
+{
+    if (!mpUndoManager)
+        mpUndoManager = new SfxUndoManager;
+    return mpUndoManager;
+}
+
+
+void ScDocument::EnableUndo( bool bVal )
+{
+    GetUndoManager()->EnableUndo(bVal);
+    mbUndoEnabled = bVal;
+}
 
 

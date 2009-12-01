@@ -60,6 +60,7 @@
 #include <svx/drawitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/scriptspaceitem.hxx>
+#include <svx/shapepropertynotifier.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
@@ -1809,10 +1810,15 @@ void ScDrawLayer::EnsureGraphicNames()
 
 void ScDrawLayer::SetAnchor( SdrObject* pObj, ScAnchorType eType )
 {
+    ScAnchorType eOldAnchorType = GetAnchor( pObj );
+
     // Ein an der Seite verankertes Objekt zeichnet sich durch eine Anker-Pos
     // von (0,1) aus. Das ist ein shabby Trick, der aber funktioniert!
     Point aAnchor( 0, eType == SCA_PAGE ? 1 : 0 );
     pObj->SetAnchorPos( aAnchor );
+
+    if ( eOldAnchorType != eType )
+        pObj->notifyShapePropertyChange( ::svx::eSpreadsheetAnchor );
 }
 
 ScAnchorType ScDrawLayer::GetAnchor( const SdrObject* pObj )

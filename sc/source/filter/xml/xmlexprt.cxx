@@ -68,6 +68,7 @@
 #include "convuno.hxx"
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
+#include "editutil.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -179,6 +180,35 @@ OUString lcl_RangeSequenceToString(
             aResult.append( cSep );
     }
     return aResult.makeStringAndClear();
+}
+
+OUString lcl_GetRawString( ScDocument* pDoc, const ScAddress& rPos )
+{
+    // return text/edit cell string content, with line feeds in edit cells
+
+    String aVal;        // document uses tools-strings
+    if (pDoc)
+    {
+        ScBaseCell* pCell = pDoc->GetCell( rPos );
+        if (pCell)
+        {
+            CellType eType = pCell->GetCellType();
+            if ( eType == CELLTYPE_STRING )
+                static_cast<ScStringCell*>(pCell)->GetString(aVal);     // string cell: content
+            else if ( eType == CELLTYPE_EDIT )
+            {
+                // edit cell: text with line breaks
+                const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
+                if (pData)
+                {
+                    EditEngine& rEngine = pDoc->GetEditEngine();
+                    rEngine.SetText( *pData );
+                    aVal = rEngine.GetText( LINEEND_LF );
+                }
+            }
+        }
+    }
+    return aVal;
 }
 } // anonymous namespace
 
@@ -2335,9 +2365,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
         {
             if (GetCellText(aCell, aCellPos))
             {
-                rtl::OUString sFormula(ScCellObj::GetInputString_Impl(pDoc, aCellPos, TRUE));
-                if (sFormula[0] == '\'')
-                    sFormula = sFormula.copy(1);
+                rtl::OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                     sFormula, aCell.sStringValue, sal_True, sal_True);
             }
@@ -2427,7 +2455,8 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
 
     if (!bIsEmpty)
     {
-        if ((aCell.nType == table::CellContentType_TEXT) && IsEditCell(aCell))
+        if ((aCell.nType == table::CellContentType_TEXT && IsEditCell(aCell)) ||
+            (aCell.nType == table::CellContentType_FORMULA && IsMultiLineFormulaCell(aCell)))
         {
             bEditCell = sal_True;
             uno::Reference<text::XText> xText(xCurrentTableCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row), uno::UNO_QUERY);
@@ -2842,12 +2871,15 @@ sal_Bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& a
     return (aCell1.nType == aCell2.nType);
 }
 
-sal_Bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddress) const
+sal_Bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell) const
 {
     ScAddress aCoreAddress(static_cast<SCCOL>(aAddress.Column),
                         static_cast<SCROW>(aAddress.Row),
                         static_cast<SCTAB>(aAddress.Sheet));
     ScBaseCell* pBaseCell = GetDocument() ? GetDocument()->GetCell(aCoreAddress) : NULL;
+    if (pMyCell)
+        pMyCell->pBaseCell = pBaseCell;
+
     if (pBaseCell)
         return (pBaseCell->GetCellType() == CELLTYPE_EDIT);
     return sal_False;
@@ -2867,10 +2899,34 @@ sal_Bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
         return rCell.bIsEditCell;
     else
     {
-        rCell.bIsEditCell = IsEditCell(rCell.aCellAddress);
+         rCell.bIsEditCell = IsEditCell(rCell.aCellAddress, &rCell);
         rCell.bKnowWhetherIsEditCell = sal_True;
         return rCell.bIsEditCell;
     }
+}
+
+sal_Bool ScXMLExport::IsMultiLineFormulaCell(ScMyCell& rCell) const
+{
+    if (rCell.pBaseCell)
+    {
+        if (rCell.pBaseCell->GetCellType() != CELLTYPE_FORMULA)
+            return false;
+
+        return static_cast<ScFormulaCell*>(rCell.pBaseCell)->IsMultilineResult();
+    }
+
+    ScAddress aAddr(static_cast<SCCOL>(rCell.aCellAddress.Column),
+                    static_cast<SCROW>(rCell.aCellAddress.Row),
+                    static_cast<SCTAB>(rCell.aCellAddress.Sheet));
+    ScBaseCell* pBaseCell = pDoc ? pDoc->GetCell(aAddr) : NULL;
+    if (!pBaseCell)
+        return false;
+
+    rCell.pBaseCell = pBaseCell;
+    if (rCell.pBaseCell->GetCellType() != CELLTYPE_FORMULA)
+        return false;
+
+    return static_cast<ScFormulaCell*>(rCell.pBaseCell)->IsMultilineResult();
 }
 
 //UNUSED2008-05  sal_Bool ScXMLExport::IsAnnotationEqual(const uno::Reference<table::XCell>& /* xCell1 */,
@@ -2974,7 +3030,7 @@ sal_Bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
                                 if (GetCellText(aCell1, aCellPos1) && GetCellText(aCell2, aCellPos2))
                                 {
                                     bIsEqual = (aCell1.sStringValue == aCell2.sStringValue) &&
-                                               (ScCellObj::GetInputString_Impl(pDoc, aCellPos1, TRUE) == ScCellObj::GetInputString_Impl(pDoc, aCellPos2, TRUE));
+                                               (lcl_GetRawString(pDoc, aCellPos1) == lcl_GetRawString(pDoc, aCellPos2));
                                 }
                                 else
                                     bIsEqual = sal_False;

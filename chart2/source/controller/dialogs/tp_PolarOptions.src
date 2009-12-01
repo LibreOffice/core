@@ -28,7 +28,6 @@
  *
  ************************************************************************/
 
-#include "TabPages.hrc"
 #include "tp_PolarOptions.hrc"
 #include "HelpIds.hrc"
 
@@ -47,8 +46,8 @@ TabPage TP_POLAROPTIONS
     };
     FixedLine FL_STARTING_ANGLE
     {
-        Pos = MAP_APPFONT ( 12 , 21  ) ;
-        Size = MAP_APPFONT ( 242 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 21  ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
         Text [ en-US ] = "Starting angle" ;
     };
     Control CT_ANGLE_DIAL
@@ -74,5 +73,18 @@ TabPage TP_POLAROPTIONS
         Minimum = 0 ;
         Maximum = 359 ;
         SpinSize = 5 ;
+    };
+    FixedLine FL_PLOT_OPTIONS_POLAR
+    {
+        Pos = MAP_APPFONT ( 6 , 90  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Plot options";
+    };
+    CheckBox CB_INCLUDE_HIDDEN_CELLS_POLAR
+    {
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Include ~values from hidden cells";
     };
 };

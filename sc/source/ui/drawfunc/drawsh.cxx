@@ -71,9 +71,11 @@
 
 #include "userdat.hxx"
 #include <sfx2/objsh.hxx>
-#include <sfx2/macropg.hxx>
 #include <svtools/macitem.hxx>
+#include <sfx2/evntconf.hxx>
+#include <sfx2/viewsh.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 //------------------------------------------------------------------
 
@@ -325,25 +327,31 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
         aTab.Insert( SFX_EVENT_MOUSECLICK_OBJECT, new SvxMacro( sMacro, String() ) );
         aItem.SetMacroTable( aTab );
     }
+
     // create empty itemset for macro-dlg
-    SfxItemSet* pItemSet = new SfxItemSet(SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
+    SfxItemSet* pItemSet = new SfxItemSet(SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
     pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
 
-    SfxMacroAssignDlg aDlg( pWin, GetObjectShell(), *pItemSet );
-    SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();
-    pMacroPage->AddEvent( ScResId(RID_SCSTR_ONCLICK),
-        SFX_EVENT_MOUSECLICK_OBJECT);
+    SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
+    aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), String(), SFX_EVENT_MOUSECLICK_OBJECT );
+    pItemSet->Put( aNamesItem, SID_EVENTCONFIG );
 
-    if ( RET_OK == aDlg.Execute() )
+    com::sun::star::uno::Reference < com::sun::star::frame::XFrame > xFrame;
+    if (GetViewShell())
+        xFrame = GetViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface();
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( pWin, *pItemSet, xFrame, SID_EVENTCONFIG );
+    if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {
-        const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
+        const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, FALSE, &pItem ))
         {
             rtl::OUString sMacro;
             SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
             if ( pMacro )
-        sMacro = pMacro->GetMacName();
+                sMacro = pMacro->GetMacName();
 
             if ( pObj->IsGroupObject() )
             {
@@ -361,6 +369,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
         }
     }
 
+    delete pMacroDlg;
     delete pItemSet;
 }
 

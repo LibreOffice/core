@@ -56,9 +56,9 @@ using namespace com::sun::star;
 #define SCSAVEVERSION                           "SaveVersionOnClose"
 
 
-const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
 {
-    static SfxItemPropertyMap aConfigPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aConfigPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_SHOWZERO),     0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_SHOWNOTES),    0,  &getBooleanCppuType(),              0, 0},

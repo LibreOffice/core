@@ -37,24 +37,27 @@
 #include <svtools/lstner.hxx>
 #include <svtools/itemprop.hxx>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
+#include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.hpp>
+#include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
+#include <com/sun/star/sheet/XDataPilotField.hpp>
+#include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/sheet/XDataPilotTable2.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
-#include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/XDataPilotField.hpp>
-#include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
-#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
-#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
-#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
-#include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
+
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -81,20 +84,21 @@ class ScDataPilotTableObj;
 class ScDataPilotFieldObj;
 class ScDataPilotItemObj;
 
-#define SC_FIELDORIENT_ALL  USHRT_MAX
-
 
 class ScDataPilotConversion
 {
 public:
     static com::sun::star::sheet::GeneralFunction   FirstFunc( USHORT nBits );
     static USHORT           FunctionBit( com::sun::star::sheet::GeneralFunction eFunc );
+
+    static void         FillGroupInfo(
+                            ::com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo,
+                            const ScDPNumGroupInfo& rGroupInfo );
 };
 
+// ============================================================================
 
-
-//  DataPilotTables Collection ist pro Tabelle
-
+/** DataPilotTables collection per sheet. */
 class ScDataPilotTablesObj : public cppu::WeakImplHelper4<
                                         com::sun::star::sheet::XDataPilotTables,
                                         com::sun::star::container::XEnumerationAccess,
@@ -106,7 +110,7 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;
 
-    ScDataPilotTableObj*    GetObjectByIndex_Impl(SCSIZE nIndex);
+    ScDataPilotTableObj*    GetObjectByIndex_Impl( sal_Int32 nIndex );
     ScDataPilotTableObj*    GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
@@ -161,10 +165,12 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+// ============================================================================
 
 //  ScDataPilotDescriptorBase is never instantiated directly
 class ScDataPilotDescriptorBase : public com::sun::star::sheet::XDataPilotDescriptor,
                                   public com::sun::star::beans::XPropertySet,
+                                  public com::sun::star::sheet::XDataPilotDataLayoutFieldSupplier,
                                   public com::sun::star::lang::XServiceInfo,
                                   public com::sun::star::lang::XUnoTunnel,
                                   public com::sun::star::lang::XTypeProvider,
@@ -172,8 +178,8 @@ class ScDataPilotDescriptorBase : public com::sun::star::sheet::XDataPilotDescri
                                   public SfxListener
 {
 private:
-    SfxItemPropertySet          aPropSet;
-    ScDocShell*     pDocShell;
+    SfxItemPropertySet  maPropSet;
+    ScDocShell*         pDocShell;
 
 public:
                             ScDataPilotDescriptorBase(ScDocShell* pDocSh);
@@ -256,6 +262,11 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
+                            // XDataPilotDataLayoutFieldSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
+                            SAL_CALL getDataLayoutField()
+                                throw(::com::sun::star::uno::RuntimeException);
+
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
@@ -274,6 +285,7 @@ public:
                             // XServiceInfo is in derived classes
 };
 
+// ============================================================================
 
 class ScDataPilotDescriptor : public ScDataPilotDescriptorBase
 {
@@ -304,6 +316,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+// ============================================================================
 
 class ScDataPilotTableObj : public ScDataPilotDescriptorBase,
                             public com::sun::star::sheet::XDataPilotTable2
@@ -369,23 +382,77 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+// ============================================================================
 
-class ScDataPilotFieldsObj : public cppu::WeakImplHelper4<
-                                        com::sun::star::container::XEnumerationAccess,
-                                        com::sun::star::container::XIndexAccess,
-                                        com::sun::star::container::XNameAccess,
-                                        com::sun::star::lang::XServiceInfo>
+struct ScFieldIdentifier
 {
+    ::rtl::OUString     maFieldName;    /// Source field name.
+    sal_Int32           mnFieldIdx;     /// Field index (if several fields with same name exist).
+    bool                mbDataLayout;   /// True = data layout field collecting all data fields as items.
+
+    inline explicit     ScFieldIdentifier() :
+                            mnFieldIdx( 0 ), mbDataLayout( false ) {}
+
+    inline explicit     ScFieldIdentifier( const ::rtl::OUString& rFieldName, sal_Int32 nFieldIdx, bool bDataLayout ) :
+                            maFieldName( rFieldName ), mnFieldIdx( nFieldIdx ), mbDataLayout( bDataLayout ) {}
+};
+
+// ============================================================================
+
+/** Base class of all implementation objects based on a DataPilot descriptor
+    or DataPilot table object. Wraps acquiring and releasing the parent. */
+class ScDataPilotChildObjBase
+{
+protected:
+    explicit            ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent );
+    explicit            ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId );
+    virtual             ~ScDataPilotChildObjBase();
+
+    /** Returns the wrapped DataPilot object (calls GetDPObject() at parent). */
+    ScDPObject*         GetDPObject() const;
+    /** Sets the passed DataPilot object (calls SetDPObject() at parent). */
+    void                SetDPObject( ScDPObject* pDPObject );
+
+    /** Returns the DataPilot dimension object related to the field described by maFieldId. */
+    ScDPSaveDimension*  GetDPDimension( ScDPObject** ppDPObject = 0 ) const;
+
+    /** Returns the number of members for the field described by maFieldId. */
+    sal_Int32           GetMemberCount() const;
+    /** Returns the collection of members for the field described by maFieldId. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+                        GetMembers() const;
+
+protected:
+    ScDataPilotDescriptorBase& mrParent;
+    ScFieldIdentifier   maFieldId;
+
 private:
-    ScDataPilotDescriptorBase*  pParent;
-    USHORT                      nType;  // DataPilotFieldOrientation oder SC_FIELDORIENT_ALL
+    ScDataPilotChildObjBase& operator=( const ScDataPilotChildObjBase& );
+};
 
-    ScDataPilotFieldObj*    GetObjectByIndex_Impl(SCSIZE nIndex) const;
-    ScDataPilotFieldObj*    GetObjectByName_Impl(const ::rtl::OUString& aName) const;
+// ============================================================================
 
+typedef ::cppu::WeakImplHelper4
+<
+    ::com::sun::star::container::XEnumerationAccess,
+    ::com::sun::star::container::XIndexAccess,
+    ::com::sun::star::container::XNameAccess,
+    ::com::sun::star::lang::XServiceInfo
+>
+ScDataPilotFieldsObjImpl;
+
+/** Collection of all DataPilot fields, or of all fields from a specific dimension. */
+class ScDataPilotFieldsObj : public ScDataPilotChildObjBase, public ScDataPilotFieldsObjImpl
+{
 public:
-                            ScDataPilotFieldsObj(ScDataPilotDescriptorBase* pPar, USHORT nTy);
-    virtual                 ~ScDataPilotFieldsObj();
+    explicit            ScDataPilotFieldsObj(
+                            ScDataPilotDescriptorBase& rParent );
+
+    explicit            ScDataPilotFieldsObj(
+                            ScDataPilotDescriptorBase& rParent,
+                            ::com::sun::star::sheet::DataPilotFieldOrientation eOrient );
+
+    virtual             ~ScDataPilotFieldsObj();
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -420,51 +487,41 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
-};
 
-struct ScFieldGroup
-{
-    ::rtl::OUString sName;
-    ::std::vector < ::rtl::OUString > aMembers;
-};
-
-typedef ::std::vector < ScFieldGroup > ScFieldGroups;
-
-
-struct ScFieldIdentifier
-{
-    String      sFieldName;             // source field name
-    sal_Bool    bDataLayoutField;
-    sal_Int32   nRepeat;                // to allow using one source column for several data fields
-                                        // nRepeat always counts in all fields, not just of one orientation
-
-    ScFieldIdentifier() :
-        bDataLayoutField( sal_False ), nRepeat( 0 ) {}
-
-    ScFieldIdentifier( const String& rName, sal_Bool bDataLayout, sal_Int32 nRep ) :
-        sFieldName( rName ), bDataLayoutField( bDataLayout ), nRepeat( nRep ) {}
-};
-
-class ScDataPilotFieldObj : public cppu::WeakImplHelper5<
-                                        com::sun::star::container::XNamed,
-                                        com::sun::star::beans::XPropertySet,
-                                        com::sun::star::sheet::XDataPilotField,
-                                        com::sun::star::sheet::XDataPilotFieldGrouping,
-                                        com::sun::star::lang::XServiceInfo>
-{
 private:
-    com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> xItems;
-    SfxItemPropertySet          aPropSet;
-    ScDataPilotDescriptorBase*  pParent;
-    USHORT                      nSourceType;
-    ScFieldIdentifier           aSourceIdent;
-    USHORT                      nLastFunc;      // valid while type is HIDDEN (or PAGE)
+    ScDataPilotFieldObj*    GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
+    ScDataPilotFieldObj*    GetObjectByName_Impl( const ::rtl::OUString& rName ) const;
 
+private:
+    ::com::sun::star::uno::Any maOrient;    /// Field orientation, no value = all fields.
+};
 
+// ============================================================================
+
+typedef ::cppu::WeakImplHelper5
+<
+    ::com::sun::star::container::XNamed,
+    ::com::sun::star::beans::XPropertySet,
+    ::com::sun::star::sheet::XDataPilotField,
+    ::com::sun::star::sheet::XDataPilotFieldGrouping,
+    ::com::sun::star::lang::XServiceInfo
+>
+ScDataPilotFieldObjImpl;
+
+/** Implementation of a single DataPilot field. */
+class ScDataPilotFieldObj : public ScDataPilotChildObjBase, public ScDataPilotFieldObjImpl
+{
 public:
-                            ScDataPilotFieldObj(ScDataPilotDescriptorBase* pPar,
-                                                    USHORT nST, const ScFieldIdentifier& rIdent);
-    virtual                 ~ScDataPilotFieldObj();
+                        ScDataPilotFieldObj(
+                            ScDataPilotDescriptorBase& rParent,
+                            const ScFieldIdentifier& rIdent );
+
+                        ScDataPilotFieldObj(
+                            ScDataPilotDescriptorBase& rParent,
+                            const ScFieldIdentifier& rIdent,
+                            const ::com::sun::star::uno::Any& rOrient );
+
+    virtual             ~ScDataPilotFieldObj();
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -521,6 +578,8 @@ public:
     void setOrientation(com::sun::star::sheet::DataPilotFieldOrientation Orientation);
     com::sun::star::sheet::GeneralFunction getFunction(void) const;
     void setFunction(com::sun::star::sheet::GeneralFunction Function);
+    com::sun::star::uno::Sequence< com::sun::star::sheet::GeneralFunction > getSubtotals() const;
+    void setSubtotals(const com::sun::star::uno::Sequence< com::sun::star::sheet::GeneralFunction >& rFunctions);
     rtl::OUString getCurrentPage() const;
     void setCurrentPage(const rtl::OUString& sPage);
     sal_Bool getUseCurrentPage() const;
@@ -536,10 +595,6 @@ public:
     sal_Bool getShowEmpty() const;
     void setShowEmpty(sal_Bool bShow);
 
-    void SetGroupInfo(const ScDPNumGroupInfo& rGroupInfo,
-        com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo);
-    void FillGroupInfo(const ScDPSaveGroupDimension* pGroupDim,
-        const ScDPSaveNumGroupDimension* pNumGroupDim, com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo);
     sal_Bool hasGroupInfo();
     com::sun::star::sheet::DataPilotFieldGroupInfo getGroupInfo();
     void setGroupInfo(const com::sun::star::sheet::DataPilotFieldGroupInfo* pInfo);
@@ -562,20 +617,48 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
+                        mxItems;
+    SfxItemPropertySet  maPropSet;
+    ::com::sun::star::uno::Any maOrient;
 };
 
-class ScDataPilotFieldGroupsObj : public cppu::WeakImplHelper4<
-                                        com::sun::star::container::XEnumerationAccess,
-                                        com::sun::star::container::XIndexAccess,
-                                        com::sun::star::container::XNameContainer,
-                                        com::sun::star::lang::XServiceInfo>
-{
-private:
-    ScFieldGroups           aGroups;
+// ============================================================================
 
+typedef ::std::vector< ::rtl::OUString > ScFieldGroupMembers;
+
+struct ScFieldGroup
+{
+    ::rtl::OUString     maName;
+    ScFieldGroupMembers maMembers;
+};
+
+typedef ::std::vector< ScFieldGroup > ScFieldGroups;
+
+// ============================================================================
+
+typedef ::cppu::WeakImplHelper4
+<
+    ::com::sun::star::container::XNameContainer,
+    ::com::sun::star::container::XEnumerationAccess,
+    ::com::sun::star::container::XIndexAccess,
+    ::com::sun::star::lang::XServiceInfo
+>
+ScDataPilotFieldGroupsObjImpl;
+
+/** Implementation of all grouped items in a DataPilot field.
+
+    This is a stand-alone object without any connection to the base DataPilot
+    field. Grouping info has to be written back with the GroupInfo property of
+    the DataPilot field after modifying this object.
+ */
+class ScDataPilotFieldGroupsObj : public ScDataPilotFieldGroupsObjImpl
+{
 public:
-                            ScDataPilotFieldGroupsObj(const ScFieldGroups& rGroups);
-    virtual                 ~ScDataPilotFieldGroupsObj();
+    explicit            ScDataPilotFieldGroupsObj( const ScFieldGroups& rGroups );
+    virtual             ~ScDataPilotFieldGroupsObj();
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -587,7 +670,7 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XNameReplace
+                                // XNameReplace
     virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName,
                                 const ::com::sun::star::uno::Any& aElement )
                                 throw (::com::sun::star::lang::IllegalArgumentException,
@@ -607,7 +690,7 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
-                            // XIndexAccess
+                        // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
@@ -630,34 +713,35 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+    // implementation
+    ScFieldGroup&       getFieldGroup( const ::rtl::OUString& rName ) throw(::com::sun::star::uno::RuntimeException);
+    void                renameFieldGroup( const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName ) throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    ScFieldGroups::iterator implFindByName( const ::rtl::OUString& rName );
+
+private:
+    ScFieldGroups       maGroups;
 };
 
-class ScDataPilotFieldGroupObj : public cppu::WeakImplHelper5<
-                                        com::sun::star::container::XEnumerationAccess,
-                                        com::sun::star::container::XIndexAccess,
-                                        com::sun::star::container::XNameContainer,
-                                        com::sun::star::container::XNamed,
-                                        com::sun::star::lang::XServiceInfo>
+// ============================================================================
+
+typedef ::cppu::WeakImplHelper5
+<
+    ::com::sun::star::container::XNameContainer,
+    ::com::sun::star::container::XEnumerationAccess,
+    ::com::sun::star::container::XIndexAccess,
+    ::com::sun::star::container::XNamed,
+    ::com::sun::star::lang::XServiceInfo
+>
+ScDataPilotFieldGroupObjImpl;
+
+class ScDataPilotFieldGroupObj : public ScDataPilotFieldGroupObjImpl
 {
-private:
-    ScFieldGroup            aGroup;
-
 public:
-                            ScDataPilotFieldGroupObj(const ScFieldGroup& rGroup);
-    virtual                 ~ScDataPilotFieldGroupObj();
-
-                            // XNamed
-    virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException);
-
-                            // XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName,
-                                const ::com::sun::star::uno::Any& aElement )
-                                throw (::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::container::NoSuchElementException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+    explicit            ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, const ::rtl::OUString& rGroupName );
+    virtual             ~ScDataPilotFieldGroupObj();
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -669,7 +753,15 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XNameContainer
+                                // XNameReplace
+    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName,
+                                const ::com::sun::star::uno::Any& aElement )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                                // XNameContainer
     virtual void SAL_CALL insertByName( const ::rtl::OUString& aName,
                                 const ::com::sun::star::uno::Any& aElement )
                                 throw (::com::sun::star::lang::IllegalArgumentException,
@@ -681,7 +773,7 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
-                            // XIndexAccess
+                    // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
@@ -697,6 +789,11 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 
+                            // XNamed
+    virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -704,18 +801,26 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    ScDataPilotFieldGroupsObj& mrParent;
+    ::rtl::OUString     maGroupName;
 };
 
-class ScDataPilotFieldGroupItemObj : public cppu::WeakImplHelper2<
-                                        com::sun::star::container::XNamed,
-                                        com::sun::star::lang::XServiceInfo>
-{
-private:
-    rtl::OUString           sName;
+// ============================================================================
 
+typedef ::cppu::WeakImplHelper2
+<
+    ::com::sun::star::container::XNamed,
+    ::com::sun::star::lang::XServiceInfo
+>
+ScDataPilotFieldGroupItemObjImpl;
+
+class ScDataPilotFieldGroupItemObj : public ScDataPilotFieldGroupItemObjImpl
+{
 public:
-                            ScDataPilotFieldGroupItemObj(const rtl::OUString& rName);
-    virtual                 ~ScDataPilotFieldGroupItemObj();
+    explicit            ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, const ::rtl::OUString& rName );
+    virtual             ~ScDataPilotFieldGroupItemObj();
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -729,23 +834,28 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    ScDataPilotFieldGroupObj& mrParent;
+    ::rtl::OUString     maName;
 };
 
-class ScDataPilotItemsObj : public cppu::WeakImplHelper4<
-                                        com::sun::star::container::XEnumerationAccess,
-                                        com::sun::star::container::XIndexAccess,
-                                        com::sun::star::container::XNameAccess,
-                                        com::sun::star::lang::XServiceInfo>
+// ============================================================================
+
+typedef ::cppu::WeakImplHelper4
+<
+    ::com::sun::star::container::XEnumerationAccess,
+    ::com::sun::star::container::XIndexAccess,
+    ::com::sun::star::container::XNameAccess,
+    ::com::sun::star::lang::XServiceInfo
+>
+ScDataPilotItemsObjImpl;
+
+class ScDataPilotItemsObj : public ScDataPilotChildObjBase, public ScDataPilotItemsObjImpl
 {
-private:
-    ScDataPilotDescriptorBase*  pParent;
-    ScFieldIdentifier           aSourceIdent;   // of the field
-
-    ScDataPilotItemObj* GetObjectByIndex_Impl(SCSIZE nIndex) const;
-
 public:
-                            ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, const ScFieldIdentifier& rIdent);
-    virtual                 ~ScDataPilotItemsObj();
+    explicit            ScDataPilotItemsObj( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId );
+    virtual             ~ScDataPilotItemsObj();
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -780,23 +890,30 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    ScDataPilotItemObj* GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
 };
 
-class ScDataPilotItemObj : public cppu::WeakImplHelper3<
-                                        com::sun::star::container::XNamed,
-                                        com::sun::star::beans::XPropertySet,
-                                        com::sun::star::lang::XServiceInfo>
+// ============================================================================
+
+typedef ::cppu::WeakImplHelper3
+<
+    ::com::sun::star::container::XNamed,
+    ::com::sun::star::beans::XPropertySet,
+    ::com::sun::star::lang::XServiceInfo
+>
+ScDataPilotItemObjImpl;
+
+class ScDataPilotItemObj : public ScDataPilotChildObjBase, public ScDataPilotItemObjImpl
 {
-private:
-    SfxItemPropertySet          aPropSet;
-    ScDataPilotDescriptorBase*  pParent;
-    ScFieldIdentifier           aSourceIdent;
-    SCSIZE                      nIndex;
-
-
 public:
-                            ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, const ScFieldIdentifier& rIdent, SCSIZE nI);
-    virtual                 ~ScDataPilotItemObj();
+    explicit            ScDataPilotItemObj(
+                            ScDataPilotDescriptorBase& rParent,
+                            const ScFieldIdentifier& rFieldId,
+                            sal_Int32 nIndex );
+
+    virtual             ~ScDataPilotItemObj();
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -851,7 +968,13 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    SfxItemPropertySet  maPropSet;
+    sal_Int32           mnIndex;
 };
+
+// ============================================================================
 
 #endif
 

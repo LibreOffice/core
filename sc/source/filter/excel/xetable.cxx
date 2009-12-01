@@ -839,13 +839,15 @@ XclExpFormulaCell::XclExpFormulaCell(
 
         // #i41420# find script type according to result type (always latin for numeric results)
         sal_Int16 nScript = ApiScriptType::LATIN;
+        bool bForceLineBreak = false;
         if( nFormatType == NUMBERFORMAT_TEXT )
         {
             String aResult;
             mrScFmlaCell.GetString( aResult );
+            bForceLineBreak = mrScFmlaCell.IsMultilineResult();
             nScript = XclExpStringHelper::GetLeadingScriptType( rRoot, aResult );
         }
-        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, nScript, nAltScNumFmt ) );
+        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, nScript, nAltScNumFmt, bForceLineBreak ) );
     }
 
     // *** Convert the formula token array *** --------------------------------

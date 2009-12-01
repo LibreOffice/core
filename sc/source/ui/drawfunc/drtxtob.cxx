@@ -221,7 +221,32 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 String aString;
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
 
-                if (ScViewUtil::ExecuteCharMap( rItem, aNewItem, aString ))
+                const SfxItemSet *pArgs = rReq.GetArgs();
+                const SfxPoolItem* pItem = 0;
+                if( pArgs )
+                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
+
+                if ( pItem )
+                {
+                    aString = ((const SfxStringItem*)pItem)->GetValue();
+                    const SfxPoolItem* pFtItem = NULL;
+                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
+                    const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+                    if ( pFontItem )
+                    {
+                        String aFontName(pFontItem->GetValue());
+                        Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
+                        aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
+                                    aFont.GetStyleName(), aFont.GetPitch(),
+                                    aFont.GetCharSet(), ATTR_FONT  );
+                    }
+                    else
+                        aNewItem = rItem;
+                }
+                else
+                    ScViewUtil::ExecuteCharMap( rItem, *pViewData->GetViewShell()->GetViewFrame(), aNewItem, aString );
+
+                if ( aString.Len() )
                 {
                     SfxItemSet aSet( pOutliner->GetEmptyItemSet() );
                     aSet.Put( aNewItem );
