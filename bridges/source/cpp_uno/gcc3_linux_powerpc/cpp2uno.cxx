@@ -61,7 +61,9 @@ static typelib_TypeClass cpp2uno_call(
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
         int ng = 0; //number of gpr registers used
+#ifndef __NO_FPRS__
         int nf = 0; //number of fpr regsiters used
+#endif
         void ** pCppStack; //temporary stack pointer
 
         // gpreg:  [ret *], this, [gpr params]
@@ -123,11 +125,23 @@ static typelib_TypeClass cpp2uno_call(
             {
 
               case typelib_TypeClass_DOUBLE:
+#ifndef __NO_FPRS__
                if (nf < 8) {
                   pCppArgs[nPos] = fpreg;
                   pUnoArgs[nPos] = fpreg;
                   nf++;
                   fpreg += 2;
+#else
+               if (ng & 1) {
+                   ng++;
+                   gpreg++;
+               }
+               if (ng < 8) {
+                   pCppArgs[nPos] = gpreg;
+                   pUnoArgs[nPos] = gpreg;
+                   ng += 2;
+                   gpreg += 2;
+#endif
                } else {
                 if (((long)ovrflw) & 4) ovrflw++;
                 pCppArgs[nPos] = ovrflw;
@@ -139,6 +153,7 @@ static typelib_TypeClass cpp2uno_call(
                case typelib_TypeClass_FLOAT:
                 // fpreg are all double values so need to
                 // modify fpreg to be a single word float value
+#ifndef __NO_FPRS__
                 if (nf < 8) {
                    float tmp = (float) (*((double *)fpreg));
                    (*((float *) fpreg)) = tmp;
@@ -146,6 +161,13 @@ static typelib_TypeClass cpp2uno_call(
                    pUnoArgs[nPos] = fpreg;
                    nf++;
                    fpreg += 2;
+#else
+                if (ng < 8) {
+                   pCppArgs[nPos] = gpreg;
+                   pUnoArgs[nPos] = gpreg;
+                   ng++;
+                   gpreg++;
+#endif
                 } else {
 #if 0 /* abi is not being followed correctly */
                   if (((long)ovrflw) & 4) ovrflw++;
@@ -488,10 +510,12 @@ static typelib_TypeClass cpp_mediate(
 static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpregptr, void** fpregptr, void** ovrflw)
 {
         sal_Int32     gpreg[8];
-        double        fpreg[8];
-
         memcpy( gpreg, gpregptr, 32);
+
+#ifndef __NO_FPRS__
+        double        fpreg[8];
         memcpy( fpreg, fpregptr, 64);
+#endif
 
     volatile long nRegReturn[2];
 
@@ -499,10 +523,14 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
         // fprintf(stderr,"in cpp_vtable_call nVtableOffset is %x\n",nVtableOffset);
         // fflush(stderr);
 
-        sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
-
     typelib_TypeClass aType =
-             cpp_mediate( nFunctionIndex, nVtableOffset, (void**)gpreg, (void**)fpreg, ovrflw, (sal_Int64*)nRegReturn );
+             cpp_mediate( nFunctionIndex, nVtableOffset, (void**)gpreg,
+#ifndef __NO_FPRS__
+                 (void**)fpreg,
+#else
+                 NULL,
+#endif
+                 ovrflw, (sal_Int64*)nRegReturn );
 
     switch( aType )
     {
@@ -524,13 +552,25 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
                   break;
 
         case typelib_TypeClass_FLOAT:
+#ifndef __NO_FPRS__
                   __asm__( "lfs 1,%0\n\t" : :
                            "m" (*((float*)nRegReturn)) );
+ #else
+                  __asm__( "lwz 3,%0\n\t" : :
+                           "m"(nRegReturn[0]) );
+#endif
           break;
 
         case typelib_TypeClass_DOUBLE:
+#ifndef __NO_FPRS__
           __asm__( "lfd 1,%0\n\t" : :
                            "m" (*((double*)nRegReturn)) );
+#else
+          __asm__( "lwz 3,%0\n\t" : :
+                           "m"(nRegReturn[0]) );
+          __asm__( "lwz 4,%0\n\t" : :
+                           "m"(nRegReturn[1]) );
+#endif
           break;
 
         case typelib_TypeClass_HYPER:
@@ -577,6 +617,7 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal
 
 
     // # next save fpr 1 to fpr 8 (aligned to 8)
+    // if dedicated floating point registers are used
     //  stfd    f1,-2016(r1)
     //  stfd    f2,-2008(r1)
     //  stfd    f3,-2000(r1)
@@ -604,6 +645,10 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal
 
     // #now load up the pointer to the saved fpr registers
     //  addi    r6,r1,-2016
+    // if no dedicated floating point registers are used than we have NULL
+    // pointer there
+    //  li      r6, 0
+    //
 
     // #now load up the pointer to the overflow call stack
     //  addi    r7,r1,8
@@ -617,6 +662,7 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal
       * p++ = 0x9101f814;
       * p++ = 0x9121f818;
       * p++ = 0x9141f81c;
+#ifndef __NO_FPRS__
       * p++ = 0xd821f820;
       * p++ = 0xd841f828;
       * p++ = 0xd861f830;
@@ -625,6 +671,17 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal
       * p++ = 0xd8c1f848;
       * p++ = 0xd8e1f850;
       * p++ = 0xd901f858;
+#else
+      /* these nops could be replaced with a smaller codeSnippetSize - 8 * 4 */
+      * p++ = 0x60000000;
+      * p++ = 0x60000000;
+      * p++ = 0x60000000;
+      * p++ = 0x60000000;
+      * p++ = 0x60000000;
+      * p++ = 0x60000000;
+      * p++ = 0x60000000;
+      * p++ = 0x60000000;
+#endif
       * p++ = 0x3c600000 | (((unsigned long)cpp_vtable_call) >> 16);
       * p++ = 0x60630000 | (((unsigned long)cpp_vtable_call) & 0x0000FFFF);
       * p++ = 0x7c6903a6;
@@ -633,7 +690,11 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal
       * p++ = 0x3c800000 | (((unsigned long)vtableOffset) >> 16);
       * p++ = 0x60840000 | (((unsigned long)vtableOffset) & 0x0000FFFF);
       * p++ = 0x38a1f800;
+#ifndef __NO_FPRS__
       * p++ = 0x38c1f820;
+#else
+      * p++ = 0x38c00000;
+#endif
       * p++ = 0x38e10008;
       * p++ = 0x4e800420;
       return (code + codeSnippetSize);
