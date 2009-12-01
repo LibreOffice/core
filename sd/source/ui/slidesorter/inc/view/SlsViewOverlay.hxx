@@ -140,8 +140,9 @@ protected:
 
 private:
     Point maPosition;
-    basegfx::B2DRange maBoundingBox;
-    basegfx::B2DPolyPolygon maShapes;
+    Point maTranslation;
+    Rectangle maBoundingBox;
+    ::std::vector<Rectangle> maShapes;
 };
 
 

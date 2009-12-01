@@ -88,6 +88,7 @@
 #include <sdresid.hxx>
 #include <sdpage.hxx>
 
+#include <strings.hrc>
 #include "unohelp.hxx"
 #include <unolayer.hxx>
 #include <unoprnms.hxx>
@@ -187,10 +188,10 @@ const sal_Int32 WID_MODEL_BUILDID = 10;
 const sal_Int32 WID_MODEL_HASVALIDSIGNATURES = 11;
 const sal_Int32 WID_MODEL_DIALOGLIBS = 12;
 
-const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
+const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
-    const static SfxItemPropertyMap aDrawModelPropertyMap_Impl[] =
+    const static SfxItemPropertyMapEntry aDrawModelPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("BuildId"),                      WID_MODEL_BUILDID,  &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE, &::getCppuType((const lang::Locale*)0),     0,  0},
@@ -206,8 +207,8 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { 0,0,0,0,0,0 }
     };
-
-    return aDrawModelPropertyMap_Impl;
+    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl );
+    return &aDrawModelPropertySet_Impl;
 }
 
 // this ctor is used from the DocShell
@@ -218,7 +219,7 @@ SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBo
     mbDisposed(false),
     mbImpressDoc( pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
     mbClipBoard( bClipBoard ),
-    maPropSet( ImplGetDrawModelPropertyMap() )
+    mpPropSet( ImplGetDrawModelPropertySet() )
 {
     if( mpDoc )
     {
@@ -237,7 +238,7 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) 
     mbDisposed(false),
     mbImpressDoc( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
     mbClipBoard( bClipBoard ),
-    maPropSet( ImplGetDrawModelPropertyMap() )
+    mpPropSet( ImplGetDrawModelPropertySet() )
 {
     if( mpDoc )
     {
@@ -364,7 +365,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTu
     return *pSeq;
 }
 
-SdXImpressDocument* SdXImpressDocument::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
+SdXImpressDocument* SdXImpressDocument::getImplementation( const uno::Reference< uno::XInterface >& xInt )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY );
     if( xUT.is() )
@@ -1270,7 +1271,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdXImpressDocument::getProper
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    return maPropSet.getPropertySetInfo();
+    return mpPropSet->getPropertySetInfo();
 }
 
 void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
@@ -1281,9 +1282,9 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
         case WID_MODEL_LANGUAGE:
         {
@@ -1356,9 +1357,9 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
         case WID_MODEL_LANGUAGE:
         {
@@ -2453,10 +2454,12 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( NULL == mpModel )
+    if( NULL == mpModel || mpModel->mpDoc == NULL )
         throw lang::DisposedException();
 
-    sal_uInt16 nPageCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
+    SdDrawDocument& rDoc = *mpModel->mpDoc;
+
+    sal_uInt16 nPageCount = rDoc.GetSdPageCount( PK_STANDARD );
     if( nPageCount > 1 )
     {
         // pPage von xPage besorgen und dann die Id (nPos )ermitteln
@@ -2464,16 +2467,33 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
         if( pSvxPage )
         {
             SdPage* pPage = (SdPage*) pSvxPage->GetSdrPage();
-            if(pPage)
+            if(pPage && ( pPage->GetPageKind() == PK_STANDARD ) )
             {
-                // Es duerfen nur Standardpages DIREKT geloescht werden
-                if( pPage->GetPageKind() == PK_STANDARD )
-                {
-                    sal_uInt16 nPage = pPage->GetPageNum();
-                    mpModel->mpDoc->RemovePage( nPage );
+                sal_uInt16 nPage = pPage->GetPageNum();
 
-                    // Die darauffolgende Seite ist die dazugeoerige Notizseite
-                    mpModel->mpDoc->RemovePage( nPage );
+                SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetPage( nPage+1 ) );
+
+                bool bUndo = rDoc.IsUndoEnabled();
+                if( bUndo )
+                {
+                    // Add undo actions and delete the pages.  The order of adding
+                    // the undo actions is important.
+                    rDoc.BegUndo( SdResId( STR_UNDO_DELETEPAGES ) );
+                    rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+                    rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+                }
+
+                rDoc.RemovePage( nPage ); // the page
+                rDoc.RemovePage( nPage ); // the notes page
+
+                if( bUndo )
+                {
+                    rDoc.EndUndo();
+                }
+                else
+                {
+                    delete pNotesPage;
+                    delete pPage;
                 }
             }
         }
@@ -2708,8 +2728,10 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( NULL == mpModel )
+    if( NULL == mpModel || mpModel->mpDoc == NULL )
         throw lang::DisposedException();
+
+    SdDrawDocument& rDoc = *mpModel->mpDoc;
 
     SdMasterPage* pSdPage = SdMasterPage::getImplementation( xPage );
     if(pSdPage == NULL)
@@ -2726,10 +2748,31 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     if( pPage->GetPageKind() == PK_STANDARD )
     {
         sal_uInt16 nPage = pPage->GetPageNum();
-        mpModel->mpDoc->RemoveMasterPage( nPage );
 
-        // next page is the notes master
-        mpModel->mpDoc->RemoveMasterPage( nPage );
+        SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetMasterPage( nPage+1 ) );
+
+        bool bUndo = rDoc.IsUndoEnabled();
+        if( bUndo )
+        {
+            // Add undo actions and delete the pages.  The order of adding
+            // the undo actions is important.
+            rDoc.BegUndo( SdResId( STR_UNDO_DELETEPAGES ) );
+            rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+            rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+        }
+
+        rDoc.RemoveMasterPage( nPage );
+        rDoc.RemoveMasterPage( nPage );
+
+        if( bUndo )
+        {
+            rDoc.EndUndo();
+        }
+        else
+        {
+            delete pNotesPage;
+            delete pPage;
+        }
     }
 }
 

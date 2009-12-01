@@ -378,7 +378,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_INSERT_LRM :
         case SID_INSERT_ZWNBSP :
         case SID_INSERT_ZWSP:
-        case SID_BULLET:
+        case SID_CHARMAP:
         {
             SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
             Cancel();
@@ -485,6 +485,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_INSERT_FLD_TIME_VAR:
         case SID_INSERT_FLD_AUTHOR:
         case SID_INSERT_FLD_PAGE:
+        case SID_INSERT_FLD_PAGES:
         case SID_INSERT_FLD_FILE:
         {
             SvxFieldItem* pFieldItem = 0;
@@ -523,6 +524,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     pFieldItem = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
                 break;
 
+                case SID_INSERT_FLD_PAGES:
+                    pFieldItem = new SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD );
+                break;
+
                 case SID_INSERT_FLD_FILE:
                 {
                     String aName;
@@ -543,7 +548,8 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                                 pOldFldItem->GetField()->ISA( SvxExtTimeField ) ||
                                 pOldFldItem->GetField()->ISA( SvxExtFileField ) ||
                                 pOldFldItem->GetField()->ISA( SvxAuthorField ) ||
-                                pOldFldItem->GetField()->ISA( SvxPageField ) ) )
+                                pOldFldItem->GetField()->ISA( SvxPageField ) ||
+                                pOldFldItem->GetField()->ISA( SvxPagesField )) )
             {
                 // Feld selektieren, so dass es beim Insert geloescht wird
                 ESelection aSel = pOutlinerView->GetSelection();

@@ -153,7 +153,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERT_LRM :
         case SID_INSERT_ZWNBSP :
         case SID_INSERT_ZWSP:
-        case SID_BULLET:
+        case SID_CHARMAP:
         {
             SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();

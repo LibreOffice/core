@@ -131,7 +131,7 @@ public:
     void notifyModifyListener();
 
 protected:
-    const SfxItemPropertyMap* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
+    const SfxItemPropertySimpleEntry* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 
     virtual void Load (SvStream& rIn, USHORT nVersion);
     virtual void Store(SvStream& rOut);

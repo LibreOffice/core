@@ -429,9 +429,8 @@ bool SlideSorterController::Command (
                 // When there is no selection, then we show the insertion
                 // indicator so that the user knows where a page insertion
                 // would take place.
-                mrView.GetOverlay().GetInsertionIndicatorOverlay()
-                    .SetPosition(
-                        pWindow->PixelToLogic(rEvent.GetMousePosPixel()));
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().SetPosition(
+                    pWindow->PixelToLogic(rEvent.GetMousePosPixel()));
                 mrView.GetOverlay().GetInsertionIndicatorOverlay().Show();
             }
 
@@ -473,11 +472,11 @@ bool SlideSorterController::Command (
             mbIsContextMenuOpen = false;
             if (pPage == NULL)
             {
-                // Select slide before the insertion indicator before it is
-                // hidden, so that a pending slide insertion slot finds the
-                // right place to insert a new slide.
-                mpPageSelector->SelectPage(
-                    mrView.GetOverlay().GetInsertionIndicatorOverlay().GetInsertionPageIndex()-1);
+                // Remember the position of the insertion indicator before
+                // it is hidden, so that a pending slide insertion slot call
+                // finds the right place to insert a new slide.
+                GetSelectionManager()->SetInsertionPosition(
+                    mrView.GetOverlay().GetInsertionIndicatorOverlay().GetInsertionPageIndex());
                 mrView.GetOverlay().GetInsertionIndicatorOverlay().Hide();
             }
             bEventHasBeenHandled = true;

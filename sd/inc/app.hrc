@@ -52,7 +52,6 @@
 #define SID_INSERTSYMBOL                    (SID_SD_START+16)
 #define SID_ZOOM_PANNING                    (SID_SD_START+17)
 #define SID_PRESENTATION_END                (SID_SD_START+18)
-#define SID_BULLET                          (SID_SD_START+19)
 #define SID_TEXTFORMAT                      (SID_SD_START+20)
 #define SID_POSITION                        (SID_SD_START+22)
 #define SID_MIRROR                          (SID_SD_START+23)
@@ -395,6 +394,8 @@
 #define SID_PREVIEW_QUALITY_BLACKWHITE      (SID_SD_START+371)
 #define SID_VECTORIZE                       (SID_SD_START+372)
 
+#define SID_INSERT_FLD_PAGES                (SID_SD_START+373)
+
 #define SID_CONVERT_TO_BITMAP               (SID_SD_START+378)
 #define SID_CONVERT_TO_METAFILE             (SID_SD_START+379)
 
@@ -459,6 +460,7 @@
 #define SID_DISPLAY_MASTER_BACKGROUND       (SID_SD_START+436)
 #define SID_DISPLAY_MASTER_OBJECTS          (SID_SD_START+437)
 #define SID_INSERTPAGE_LAYOUT_MENU          (SID_SD_START+438)
+#define SID_TP_EDIT_MASTER                  (SID_SD_START+439)
 
 // Add companion for the SID_HIDE_SLIDE (that is defined in svx)
 #define SID_SHOW_SLIDE                      (SID_SD_START+440)

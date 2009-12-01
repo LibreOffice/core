@@ -502,6 +502,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
         case SID_INSERT_FLD_TIME_VAR:
         case SID_INSERT_FLD_AUTHOR:
         case SID_INSERT_FLD_PAGE:
+        case SID_INSERT_FLD_PAGES:
         case SID_INSERT_FLD_FILE:
         {
             USHORT nMul = 1;
@@ -539,6 +540,13 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 case SID_INSERT_FLD_PAGE:
                 {
                     pFieldItem = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
+                    nMul = 3;
+                }
+                break;
+
+                case SID_INSERT_FLD_PAGES:
+                {
+                    pFieldItem = new SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD );
                     nMul = 3;
                 }
                 break;

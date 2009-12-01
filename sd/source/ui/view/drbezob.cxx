@@ -307,11 +307,19 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                     case SID_BEZIER_CLOSE:
                     {
                         SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
-                        mpView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+                        const bool bUndo = mpView->IsUndoEnabled();
+                        if( bUndo )
+                            mpView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+
                         mpView->UnmarkAllPoints();
-                        mpView->AddUndo(mpView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
+
+                        if( bUndo )
+                            mpView->AddUndo(mpView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
+
                         pPathObj->ToggleClosed();
-                        mpView->EndUndo();
+
+                        if( bUndo )
+                            mpView->EndUndo();
                         break;
                     }
                 }

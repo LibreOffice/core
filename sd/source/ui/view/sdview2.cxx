@@ -421,10 +421,13 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
         mpDragSrcMarkList = new SdrMarkList(GetMarkedObjectList());
         mnDragSrcPgNum = GetSdrPageView()->GetPage()->GetPageNum();
 
-        String aStr( SdResId(STR_UNDO_DRAGDROP) );
-        aStr += sal_Unicode(' ');
-        aStr += mpDragSrcMarkList->GetMarkDescription();
-        BegUndo(aStr);
+        if( IsUndoEnabled() )
+        {
+            String aStr( SdResId(STR_UNDO_DRAGDROP) );
+            aStr += sal_Unicode(' ');
+            aStr += mpDragSrcMarkList->GetMarkDescription();
+            BegUndo(aStr);
+        }
         CreateDragDataObject( this, *pWindow, rStartPos );
     }
 }
@@ -433,6 +436,8 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
 
 void View::DragFinished( sal_Int8 nDropAction )
 {
+    const bool bUndo = IsUndoEnabled();
+
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
     if( pDragTransferable )
@@ -444,7 +449,9 @@ void View::DragFinished( sal_Int8 nDropAction )
         !IsPresObjSelected() )
     {
         mpDragSrcMarkList->ForceSort();
-        BegUndo();
+
+        if( bUndo )
+            BegUndo();
 
         ULONG nm, nAnz = mpDragSrcMarkList->GetMarkCount();
 
@@ -452,7 +459,8 @@ void View::DragFinished( sal_Int8 nDropAction )
         {
             nm--;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
-            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
+            if( bUndo )
+                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
         }
 
         mpDragSrcMarkList->GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
@@ -474,13 +482,15 @@ void View::DragFinished( sal_Int8 nDropAction )
             }
         }
 
-        EndUndo();
+        if( bUndo )
+            EndUndo();
     }
 
     if( pDragTransferable )
         pDragTransferable->SetInternalMove( FALSE );
 
-    EndUndo();
+    if( bUndo )
+        EndUndo();
     mnDragSrcPgNum = SDRPAGE_NOTFOUND;
     delete mpDragSrcMarkList;
     mpDragSrcMarkList = NULL;
@@ -839,7 +849,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
                                 pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
-                                pAction->SetBookmark(pInfo->maBookmark, aBookmark);
+                                pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
 //                              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
                                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
@@ -851,7 +861,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetComment(aString);
                                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                                 pInfo->meClickAction = eClickAction;
-                                pInfo->maBookmark = aBookmark;
+                                pInfo->SetBookmark( aBookmark );
                                 mpDoc->SetChanged();
 
                                 nRet = nDropAction;

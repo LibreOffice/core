@@ -74,7 +74,7 @@ SdAnimationPrmsUndoAction::SdAnimationPrmsUndoAction(
         pNewPathObj     = pOldPathObj    = pInfo->mpPathObj;
 
         eNewClickAction     = eOldClickAction    = pInfo->meClickAction;
-        aNewBookmark        = aOldBookmark       = pInfo->maBookmark;
+        aNewBookmark        = aOldBookmark       = pInfo->GetBookmark();
 //      bNewInvisibleInPres = bOldInvisibleInPres= pInfo->mbInvisibleInPresentation;
         nNewVerb            = nOldVerb           = pInfo->mnVerb;
         nNewPresOrder       = nOldPresOrder      = pInfo->mnPresOrder;
@@ -115,7 +115,7 @@ void SdAnimationPrmsUndoAction::Undo()
             pInfo->mbPlayFull    = bOldPlayFull;
 //          pInfo->mSetPath(pOldPathObj);
             pInfo->meClickAction = eOldClickAction;
-            pInfo->maBookmark    = aOldBookmark;
+            pInfo->SetBookmark( aOldBookmark );
 //          pInfo->mbInvisibleInPresentation = bOldInvisibleInPres;
             pInfo->mnVerb        = nOldVerb;
             pInfo->mnPresOrder   = nOldPresOrder;
@@ -161,7 +161,7 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->mbPlayFull    = bNewPlayFull;
 //  pInfo->mSetPath(pNewPathObj);
     pInfo->meClickAction = eNewClickAction;
-    pInfo->maBookmark    = aNewBookmark;
+    pInfo->SetBookmark( aNewBookmark );
 //  pInfo->mbInvisibleInPresentation = bNewInvisibleInPres;
     pInfo->mnVerb        = nNewVerb;
     pInfo->mnPresOrder   = nNewPresOrder;

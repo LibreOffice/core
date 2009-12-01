@@ -75,7 +75,8 @@ Image PagePreviewProvider::operator () (
         aPreview = rRenderer.RenderPage(
             pPage,
             nWidth,
-            String::CreateFromAscii(""));
+            String::CreateFromAscii(""),
+            false);
     }
 
     return aPreview;

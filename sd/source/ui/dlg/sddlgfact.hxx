@@ -32,6 +32,7 @@
 
 // include ---------------------------------------------------------------
 #include "sdabstdlg.hxx"
+#include <sfx2/basedlgs.hxx>
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -229,10 +230,12 @@ class AbstractSdPresLayoutDlg_Impl : public AbstractSdPresLayoutDlg
 
 // add for SdActionDlg
 class SfxSingleTabDialog;
-class AbstractSfxSingleTabDialog_Impl :public AbstractSfxSingleTabDialog
+class AbstractSfxDialog_Impl : public SfxAbstractDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl,SfxSingleTabDialog)
+    DECL_ABSTDLG_BASE(AbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
 };
 
 // add for SdVectorizeDlg
@@ -285,7 +288,7 @@ public:
     virtual SfxAbstractTabDialog*       CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, ::Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
     virtual AbstractSdPresLayoutDlg*    CreateSdPresLayoutDlg( ::sd::DrawDocShell* pDocShell, ::sd::ViewShell* pViewShell, ::Window* pWindow, const SfxItemSet& rInAttrs);
     virtual SfxAbstractTabDialog*       CreateSdTabTemplateDlg( ::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView );
-    virtual AbstractSfxSingleTabDialog* CreatSdActionDialog( ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView );
+    virtual SfxAbstractDialog*          CreatSdActionDialog( ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView );
     virtual AbstractSdVectorizeDlg*     CreateSdVectorizeDlg( ::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
     virtual AbstractSdPublishingDlg*    CreateSdPublishingDlg( ::Window* pWindow, DocumentType eDocType);
 

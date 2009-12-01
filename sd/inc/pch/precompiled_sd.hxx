@@ -576,7 +576,6 @@
 #include "svx/brshitem.hxx"
 #include "svx/bulitem.hxx"
 #include "svx/camera3d.hxx"
-#include "svx/charmap.hxx"
 #include "svx/charreliefitem.hxx"
 #include "svx/clipboardctl.hxx"
 #include "svx/clipfmtitem.hxx"
@@ -842,7 +841,7 @@
 #include "unotools/confignode.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/localfilehelper.hxx"
-#include "unotools/servicehelper.hxx"
+#include "comphelper/servicehelper.hxx"
 #include "unotools/tempfile.hxx"
 #include "unotools/ucbstreamhelper.hxx"
 
