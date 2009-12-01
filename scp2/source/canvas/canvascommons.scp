@@ -30,19 +30,6 @@
 
 #include "macros.inc"
 
-File gid_File_Oo_Office_Canvas_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
-    Name = "/registry/schema/org/openoffice/Office/Canvas.xcs";
-End 
-File gid_File_Oo_Office_Canvas_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/Canvas.xcu";
-End 
-
 STD_LIB_FILE_PATCH(gid_File_Lib_CppCanvas, cppcanvas)
 STD_LIB_FILE(gid_File_Lib_CanvasTools, canvastools)
 

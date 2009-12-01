@@ -82,38 +82,9 @@ File gid_File_Help_Sdatabase_Zip
     Patchfiles = (); 
 End
 
-File gid_File_Registry_Spool_Oo_Setup_Base_Xcu
+File gid_File_Share_Registry_Base_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
-    Name = "/registry/spool/org/openoffice/Setup-base.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "base.xcd";
 End
-
-File gid_File_Registry_Spool_Oo_Common_Base_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name = "/registry/spool/org/openoffice/Office/Common-base.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_database_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Database_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_database_filters.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
-    Name = "/registry/spool/fcfg_database_others.xcu";
-End
-

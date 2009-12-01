@@ -31,126 +31,12 @@
 
 #include "macros.inc"
 
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Bf_Types_Xcu
+File gid_File_Share_Registry_Binfilter_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_chart_bf_types.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "binfilter.xcd";
 End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Bf_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_chart_bf_filters.xcu";
-End
-
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Bf_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_calc_bf_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Bf_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_calc_bf_filters.xcu";
-End
-
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Draw_Bf_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_draw_bf_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Draw_Bf_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_draw_bf_filters.xcu";
-End
-
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Global_Bf_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_global_bf_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Global_Bf_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_global_bf_filters.xcu";
-End
-
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Impress_Bf_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_impress_bf_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Impress_Bf_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_impress_bf_filters.xcu";
-End
-
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Math_Bf_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_math_bf_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Math_Bf_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_math_bf_filters.xcu";
-End
-
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Web_Bf_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_web_bf_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Web_Bf_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_web_bf_filters.xcu";
-End
-
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Writer_Bf_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_writer_bf_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Writer_Bf_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_writer_bf_filters.xcu";
-End
-
 
 File gid_Starregistry_Legacy_Binfilters_Rdb
     TXT_FILE_BODY;

@@ -51,6 +51,15 @@ File gid_File_Lib_Gnomevfs
 End
 #endif
 
+#if (defined ENABLE_GNOMEVFS && defined ENABLE_LOCKDOWN) || defined ENABLE_GIO
+File gid_File_Share_Registry_Gnome_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "gnome.xcd";
+End
+#endif
+
 #ifdef ENABLE_GCONF
 File gid_File_Lib_Gconfbe
     TXT_FILE_BODY;

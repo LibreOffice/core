@@ -52,46 +52,25 @@ End
 
 #endif
 
-File gid_File_Registry_Spool_Oo_TypeDetection_Palm_Types_Xcu
+File gid_File_Share_Registry_Palm_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_palm_types.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "palm.xcd";
 End
 
-File gid_File_Registry_Spool_Oo_TypeDetection_Palm_Filters_Xcu
+File gid_File_Share_Registry_Pocketexcel_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_palm_filters.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "pocketexcel.xcd";
 End
 
-File gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Types_Xcu
+File gid_File_Share_Registry_Pocketword_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_pocketword_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_pocketword_filters.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_pocketexcel_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_pocketexcel_filters.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "pocketword.xcd";
 End
 
 #ifdef SOLAR_JAVA

@@ -37,22 +37,7 @@ Module gid_Module_Optional_Binfilter
     InstallOrder = "1100";
     ParentID = gid_Module_Optional;
     Default = YES;
-    Files = (gid_File_Registry_Spool_Oo_TypeDetection_Chart_Bf_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Chart_Bf_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Calc_Bf_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Calc_Bf_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Draw_Bf_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Draw_Bf_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Global_Bf_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Global_Bf_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Impress_Bf_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Impress_Bf_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Math_Bf_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Math_Bf_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Web_Bf_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Web_Bf_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Writer_Bf_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Writer_Bf_Filters_Xcu,
+    Files = (gid_File_Share_Registry_Binfilter_Xcd,
     gid_Starregistry_Legacy_Binfilters_Rdb,
     gid_File_Lib_Bf_Go,
     gid_File_Lib_Bf_Sch,

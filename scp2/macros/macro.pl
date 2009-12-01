@@ -64,6 +64,7 @@ write_DIR_ISOLANGUAGE_ALL_LANG();
 write_DIR_ISOLANGUAGE_ALL_LANG_LPROJ();
 write_DIR_IDENT_ALL_LANG();
 write_EXTRA_ALL_LANG();
+write_EXTRA_ALL_LANG_BUT_EN_US();
 write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG();
 write_EXTRA_IDENT_ALL_LANG();
 write_RESFILE_ALL_LANG();
@@ -138,10 +139,25 @@ sub write_DIR_IDENT_ALL_LANG
 
 sub write_EXTRA_ALL_LANG
 {
-    print OUTFILE "#define EXTRA_ALL_LANG(name) ";
+    print OUTFILE "#define EXTRA_ALL_LANG(name,ext) ";
     foreach $lang (@completelangiso) {
-        print OUTFILE "\\\n\tName ($lang) = EXTRAFILENAME(name,_$lang)";
+        print OUTFILE "\\\n\tName ($lang) = CONFIGLANGFILENAME(name,_$lang,ext)";
         print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
+    }
+    print OUTFILE "\n\n";
+}
+
+sub write_EXTRA_ALL_LANG_BUT_EN_US
+{
+    print OUTFILE "#define EXTRA_ALL_LANG_BUT_EN_US(name,ext) ";
+    my $first = 1;
+    foreach $lang (@completelangiso) {
+        if ($lang ne "en-US") {
+            print OUTFILE "; " unless $first;
+            $first = 0;
+            print OUTFILE
+                "\\\n\tName ($lang) = CONFIGLANGFILENAME(name,_$lang,ext)";
+        }
     }
     print OUTFILE "\n\n";
 }

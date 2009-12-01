@@ -41,7 +41,7 @@ File gid_File_Extra_Autotextshare_Lang
     Dir = gid_Dir_Autotext_Language;
     USER_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(autotextshare);
+    EXTRA_ALL_LANG(autotextshare,zip);
 End
 
 File gid_File_Extra_Autotextuser
@@ -308,7 +308,7 @@ File gid_File_Extra_Palettes_Lang
     Dir = gid_Dir_User_Config;
     USER_FILE_BODY;
     Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(palettes);
+    EXTRA_ALL_LANG(palettes,zip);
 End
 
 File gid_File_Extra_Poll_Asp
@@ -357,14 +357,14 @@ File gid_File_Extra_Tpllayoutimpr_Lang
     Dir = gid_Dir_Template_Layout;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tpllayoutimpr);
+    EXTRA_ALL_LANG(tpllayoutimpr,zip);
 End
 
 File gid_File_Extra_Tplpresntimpr_Lang
     Dir = gid_Dir_Template_Presnt;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplpresntimpr);
+    EXTRA_ALL_LANG(tplpresntimpr,zip);
 End
 
 File gid_File_Extra_Tplwizbitmap
@@ -378,7 +378,7 @@ File gid_File_Extra_Tplwizdesktop_Lang
     Dir = gid_Dir_Template_Internal;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizdesktop);
+    EXTRA_ALL_LANG(tplwizdesktop,zip);
 End
 
 File gid_File_Extra_Tplwizletter
@@ -390,35 +390,35 @@ End
 File gid_File_Extra_Tplwizletter_Lang
     Dir = gid_Dir_Template_Wizard_Letter;
     ARCHIVE_TXT_FILE_BODY;
-    EXTRA_ALL_LANG(tplwizletter);
+    EXTRA_ALL_LANG(tplwizletter,zip);
 End
 
 File gid_File_Extra_Tplwizfax_Lang
     Dir = gid_Dir_Template_Wizard_Fax;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizfax);
+    EXTRA_ALL_LANG(tplwizfax,zip);
 End
 
 File gid_File_Extra_Tplwizagenda_Lang
     Dir = gid_Dir_Template_Wizard_Agenda;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizagenda);
+    EXTRA_ALL_LANG(tplwizagenda,zip);
 End
 
 File gid_File_Extra_Tplwizreport_Lang
     Dir = gid_Dir_Template_Wizard_Report;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizreport);
+    EXTRA_ALL_LANG(tplwizreport,zip);
 End
 
 File gid_File_Extra_Tplwizstyles_Lang
     Dir = gid_Dir_Template_Wizard_Styles;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizstyles);
+    EXTRA_ALL_LANG(tplwizstyles,zip);
 End
 
 File gid_File_Extra_Webcast_Asp
@@ -444,5 +444,5 @@ File gid_File_Extra_Wordbook_Lang
     Dir = gid_Dir_Wordbook_Language;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(wordbook);
+    EXTRA_ALL_LANG(wordbook,zip);
 End

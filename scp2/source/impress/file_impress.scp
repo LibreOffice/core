@@ -40,11 +40,11 @@ File gid_File_Lib_Animcore
 	PACKED_UNO_LIB_FILE_BODY;
 End
 
-File gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu
+File gid_File_Share_Registry_Impress_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
-    Name = "/registry/spool/org/openoffice/Office/Embedding-impress.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "impress.xcd";
 End
 
 File gid_File_Help_Simpress_Zip
@@ -77,55 +77,6 @@ File gid_File_Share_Config_Sofficecfg_Impress_Menubar_Xml
 End
 */
 
-File gid_File_Registry_Spool_Oo_TypeDetection_Impress_UISort_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_UISort;
-    Name = "/registry/spool/org/openoffice/TypeDetection/UISort-impress.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Impress_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_impress_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Impress_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_impress_filters.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Common_Impress_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name = "/registry/spool/org/openoffice/Office/Common-impress.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Setup_Impress_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
-    Name = "/registry/spool/org/openoffice/Setup-impress.xcu";
-End
-
-File gid_File_Oo_Office_Ui_Impresswindowstate_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/ImpressWindowState.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Impresswindowstate_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-    Name = "/registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu";
-End
-
 // configuration files for custom animation effects
 
 File gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml
@@ -140,18 +91,4 @@ File gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml
     Styles = (PACKED);
     Dir = gid_Dir_Share_Config_Sofficecfg_Simpress;
     Name = "transitions.xml";
-End
-
-File gid_File_Oo_Office_Ui_Effects_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/Effects.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Effects_Xcu
-	TXT_FILE_BODY;
-	Styles = (PACKED);
-	Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-	Name = "/registry/data/org/openoffice/Office/UI/Effects.xcu";
 End
