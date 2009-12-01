@@ -34,9 +34,7 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HRC
 #include "taborder.hrc"
 #endif
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "propctrlr.hrc"
 
 ModalDialog RID_DLG_TABORDER
 {
