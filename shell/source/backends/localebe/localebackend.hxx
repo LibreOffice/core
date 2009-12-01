@@ -31,10 +31,8 @@
 #ifndef _FIXEDVALUEBACKEND_HXX_
 #define _FIXEDVALUEBACKEND_HXX_
 
-#include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/configuration/backend/XBackendChangesNotifier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/string.hxx>
 
@@ -42,19 +40,14 @@
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
-namespace backend = css::configuration::backend ;
 
-
-/**
-  Implements the SingleLayerStratum service.
-  */
 class LocaleBackend : public ::cppu::WeakImplHelper2 <
-        backend::XSingleLayerStratum,
+        css::beans::XPropertySet,
         lang::XServiceInfo > {
 
     public :
 
-        static LocaleBackend* createInstance(const uno::Reference<uno::XComponentContext>& xContext);
+        static LocaleBackend* createInstance();
 
         // XServiceInfo
         virtual rtl::OUString SAL_CALL
@@ -81,45 +74,70 @@ class LocaleBackend : public ::cppu::WeakImplHelper2 <
           @return   service names
           */
         static uno::Sequence<rtl::OUString> SAL_CALL getBackendServiceNames(void) ;
-        /**
-          Provides the supported component nodes
 
-          @return supported component nodes
-        */
-        static uno::Sequence<rtl::OUString> SAL_CALL getSupportedComponents(void) ;
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo() throw (css::uno::RuntimeException)
+        { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
-        //XSingleLayerStratum
-        virtual uno::Reference<backend::XLayer> SAL_CALL
-        getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
-            throw (backend::BackendAccessException,
-                   lang::IllegalArgumentException) ;
+        virtual void SAL_CALL setPropertyValue(
+            rtl::OUString const &, css::uno::Any const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-        virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
-        getUpdatableLayer( const rtl::OUString& aLayerId )
-            throw (backend::BackendAccessException,
-                   lang::NoSupportException,
-                   lang::IllegalArgumentException) ;
+        virtual css::uno::Any SAL_CALL getPropertyValue(
+            rtl::OUString const & PropertyName)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException);
+
+        virtual void SAL_CALL addPropertyChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL removePropertyChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL addVetoableChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL removeVetoableChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
     protected:
         /**
           Service constructor from a service factory.
 
           @param xContext   component context
           */
-        LocaleBackend(const uno::Reference<uno::XComponentContext>& xContext)
-            throw (backend::BackendAccessException);
+        LocaleBackend();
 
         /** Destructor */
         ~LocaleBackend(void) ;
 
     private:
-
-        uno::Reference<uno::XComponentContext> m_xContext ;
-        uno::Reference<backend::XLayer> m_xSystemLayer ;
-
-        // Returns a time stamp in the appropriate format
-        // for configuration layers.
-        static rtl::OUString createTimeStamp(void);
-
         // Returns the user locale
         static rtl::OUString getLocale(void);
 

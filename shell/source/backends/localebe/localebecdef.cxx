@@ -32,7 +32,6 @@
 #include "precompiled_shell.hxx"
 
 #include <localebackend.hxx>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
@@ -42,14 +41,13 @@
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
-namespace backend = css::configuration::backend ;
 
 //------------------------------------------------------------------------------
 
 static uno::Reference<uno::XInterface> SAL_CALL createLocaleBackend(
-    const uno::Reference<uno::XComponentContext>& xContext){
+    const uno::Reference<uno::XComponentContext>&){
 
-    return * LocaleBackend::createInstance(xContext);
+    return * LocaleBackend::createInstance();
 }
 
 //------------------------------------------------------------------------------
@@ -77,41 +75,9 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 
 //------------------------------------------------------------------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(void * /*pServiceManager*/, void *pRegistryKey) {
-
-    using namespace ::com::sun::star::registry;
-    if (pRegistryKey)
-    {
-        try
-        {
-            uno::Reference< XRegistryKey > xImplKey = static_cast< XRegistryKey* >( pRegistryKey )->createKey(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + LocaleBackend::getBackendName()
-            );
-
-        // Register associated service names
-            uno::Reference< XRegistryKey > xServicesKey = xImplKey->createKey(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") )
-            );
-
-            uno::Sequence<rtl::OUString> sServiceNames = LocaleBackend::getBackendServiceNames();
-            for (sal_Int32 i = 0 ; i < sServiceNames.getLength() ; ++ i)
-                xServicesKey->createKey(sServiceNames[i]);
-
-            // Register supported components
-            uno::Reference<XRegistryKey> xComponentKey = xImplKey->createKey(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/DATA/SupportedComponents") )
-            );
-
-            xComponentKey->setAsciiListValue( LocaleBackend::getSupportedComponents() );
-
-            return sal_True;
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-        }
-    }
-    return sal_False;
+extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void *pRegistryKey) {
+    return cppu::component_writeInfoHelper(
+        pServiceManager, pRegistryKey, kImplementations_entries);
 }
 
 //------------------------------------------------------------------------------

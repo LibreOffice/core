@@ -1,14 +1,13 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2008 by Sun Microsystems, Inc.
+#
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
+# $RCSfile: makefile,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -26,50 +25,31 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
-PRJ=..$/..$/..
+#***********************************************************************/
 
-PRJNAME=shell
-TARGET=desktopbe
+PRJ = ../../..
+PRJNAME = shell
+TARGET = desktopbe
 
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS = TRUE
+VISIBILITY_HIDDEN = TRUE
 
-COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE=$(UNOUCROUT)
+.INCLUDE: settings.mk
 
-# --- Settings ---
-
-.INCLUDE : settings.mk
-
-UNIXTEXT=$(MISC)/$(TARGET)1-ucd.txt
-
-# no "lib" prefix
 DLLPRE =
 
-# --- Files ---
+SLOFILES = $(SLO)/desktopbackend.obj
 
-SLOFILES=\
-    $(SLO)$/desktopbecdef.obj
+SHL1IMPLIB = i$(SHL1TARGET)
+SHL1OBJS = $(SLOFILES)
+SHL1STDLIBS = \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB)
+SHL1TARGET = desktopbe1.uno
+SHL1USE_EXPORTS = name
+DEF1NAME = $(SHL1TARGET)
 
-SHL1NOCHECK=TRUE
-SHL1TARGET=$(TARGET)1.uno   
-SHL1OBJS=$(SLOFILES)
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+UNIXTEXT = $(MISC)/desktopbe1-ucd.txt
 
-SHL1IMPLIB=i$(SHL1TARGET)
-SHL1STDLIBS=    \
-        $(CPPUHELPERLIB) \
-        $(CPPULIB) \
-        $(SALLIB)
-        
-SHL1VERSIONMAP=exports.map
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-
-# --- Targets ---
-
-.INCLUDE : target.mk
+.INCLUDE: target.mk

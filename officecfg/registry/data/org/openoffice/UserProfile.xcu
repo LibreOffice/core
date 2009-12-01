@@ -37,5 +37,12 @@
   <prop oor:name="fathersname" oor:type="xs:string">
    <value/>
   </prop>
+  <prop oor:name="givenname" install:module="gconflockdown">
+    <value oor:external=
+        "com.sun.star.configuration.backend.GconfBackend givenname"/>
+  </prop>
+  <prop oor:name="sn" install:module="gconflockdown">
+    <value oor:external="com.sun.star.configuration.backend.GconfBackend sn"/>
+  </prop>
  </node>
 </oor:component-data>

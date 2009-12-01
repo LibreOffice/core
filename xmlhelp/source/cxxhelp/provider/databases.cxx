@@ -142,9 +142,6 @@ Databases::Databases( sal_Bool showBasic,
                       const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
                       const rtl::OUString& productName,
                       const rtl::OUString& productVersion,
-                      const rtl::OUString& vendorName,
-                      const rtl::OUString& vendorVersion,
-                      const rtl::OUString& vendorShort,
                       const rtl::OUString& styleSheet,
                       Reference< uno::XComponentContext > xContext )
     : m_xContext( xContext ),
@@ -176,9 +173,7 @@ Databases::Databases( sal_Bool showBasic,
 
     m_vReplacement[0] = productName;
     m_vReplacement[1] = productVersion;
-    m_vReplacement[2] = vendorName;
-    m_vReplacement[3] = vendorVersion;
-    m_vReplacement[4] = vendorShort;
+    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
     m_vReplacement[5] = productName;
     m_vReplacement[6] = productVersion;
 

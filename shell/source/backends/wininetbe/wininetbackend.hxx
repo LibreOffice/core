@@ -31,38 +31,23 @@
 #ifndef _FIXEDVALUEBACKEND_HXX_
 #define _FIXEDVALUEBACKEND_HXX_
 
-#include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/configuration/backend/XBackendChangesNotifier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/string.hxx>
-
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <windows.h>
-#include <wininet.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
-namespace backend = css::configuration::backend ;
 
-
-/**
-  Implements the SingleLayerStratum service.
-  */
 class WinInetBackend : public ::cppu::WeakImplHelper2 <
-        backend::XSingleLayerStratum,
+        css::beans::XPropertySet,
         lang::XServiceInfo > {
 
     public :
 
-        static WinInetBackend* createInstance(const uno::Reference<uno::XComponentContext>& xContext);
+        static WinInetBackend* createInstance();
 
         // XServiceInfo
         virtual rtl::OUString SAL_CALL
@@ -89,43 +74,86 @@ class WinInetBackend : public ::cppu::WeakImplHelper2 <
           @return   service names
           */
         static uno::Sequence<rtl::OUString> SAL_CALL getBackendServiceNames(void) ;
-        /**
-          Provides the supported component nodes
 
-          @return supported component nodes
-        */
-        static uno::Sequence<rtl::OUString> SAL_CALL getSupportedComponents(void) ;
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo() throw (css::uno::RuntimeException)
+        { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
-        //XSingleLayerStratum
-        virtual uno::Reference<backend::XLayer> SAL_CALL
-        getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
-            throw (backend::BackendAccessException,
-                   lang::IllegalArgumentException) ;
+        virtual void SAL_CALL setPropertyValue(
+            rtl::OUString const &, css::uno::Any const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-        virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
-        getUpdatableLayer( const rtl::OUString& aLayerId )
-            throw (backend::BackendAccessException,
-                   lang::NoSupportException,
-                   lang::IllegalArgumentException) ;
+        virtual css::uno::Any SAL_CALL getPropertyValue(
+            rtl::OUString const & PropertyName)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException);
+
+        virtual void SAL_CALL addPropertyChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL removePropertyChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL addVetoableChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL removeVetoableChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
     protected:
         /**
           Service constructor from a service factory.
 
           @param xContext   component context
           */
-        WinInetBackend(const uno::Reference<uno::XComponentContext>& xContext)
-            throw (backend::BackendAccessException);
+        WinInetBackend();
 
         /** Destructor */
         ~WinInetBackend(void) ;
 
     private:
-
-        uno::Reference<uno::XComponentContext> m_xContext ;
-        uno::Reference<backend::XLayer> m_xSystemLayer ;
-
-        // The wininet.dll module handle
-        HMODULE m_hWinInetDll;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueProxyType_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueNoProxy_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueHttpProxyName_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueHttpProxyPort_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueHttpsProxyName_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueHttpsProxyPort_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueFtpProxyName_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueFtpProxyPort_;
 } ;
 
 

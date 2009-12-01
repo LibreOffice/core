@@ -1,14 +1,13 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2008 by Sun Microsystems, Inc.
+#
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
+# $RCSfile: makefile,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -26,23 +25,16 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..
-PRJNAME=configmgr
-TARGET=qa_unoapi
+PRJ = ../..
+PRJNAME = configmgr
+TARGET = unoapi
 
 .INCLUDE: settings.mk
-
 .INCLUDE: target.mk
 
-ALLTAR : UNOAPI_TEST
+ALLTAR: TEST
 
-UNOAPI_TEST:
-    +$(SOLARENV)$/bin$/checkapi -sce cfgmgr2.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
-    @echo =======================================================================
-    @echo In case of problems with sysmgr1.SystemIntegration make sure that you 
-    @echo =======================================================================
-    @echo built and registered qadevOOo/testsdocs/backend/org/openoffice/JavaSystemBackend 
-    @echo =======================================================================			
+TEST .PHONY:
+    $(SOLARENV)/bin/checkapi -sce module.sce

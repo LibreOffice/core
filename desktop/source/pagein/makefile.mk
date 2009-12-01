@@ -119,7 +119,7 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)package2$(DLLPOST) >> $@
     @-echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
     @-echo $(DLLPRE)ucb1$(DLLPOST)     >> $@
-    @-echo configmgr2$(UNODLLPOST)     >> $@
+    @-echo $(DLLPRE)configmgr$(DLLPOST) >> $@
 #
     @-echo $(DLLPRE)dtransX11$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)vclplug_gen$(DFTDLLPOST) >> $@

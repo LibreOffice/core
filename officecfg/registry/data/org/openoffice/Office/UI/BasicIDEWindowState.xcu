@@ -116,7 +116,7 @@
 
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>False</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>

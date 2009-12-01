@@ -132,7 +132,8 @@ rtl::OUString HelpLocaleString()
         Any aLocale =
             ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
                ::utl::ConfigManager::LOCALE );
-        bool bOk = (aLocale >>= aLocaleStr);
+        aLocale >>= aLocaleStr;
+        bool bOk = aLocaleStr.getLength() != 0;
         if ( bOk )
         {
             rtl::OUString aBaseInstallPath;
