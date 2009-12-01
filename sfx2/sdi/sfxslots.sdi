@@ -59,6 +59,7 @@ TypeLibFile( "sfxslots.tlb" )
     item String     SfxFrameItem;           //! Dummy
     item String     SfxObjectShellItem      //! Dummy
     item String     SfxUsrAnyItem           //! Dummy
+    item String     SvxClipboardFmtItem;    //! Dummy
 
     struct Point
     {

@@ -123,7 +123,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
         aDomain = rtl::OUString(default_domain, strlen(default_domain), RTL_TEXTENCODING_UTF8);
 
     uno::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
-        = new ucbhelper::SimpleAuthenticationRequest (aHostName, eDomain, aDomain, eUserName, aUserName, ePassword, aPassword);
+        = new ucbhelper::SimpleAuthenticationRequest (rtl::OUString() /* FIXME: provide URL here */, aHostName, eDomain, aDomain, eUserName, aUserName, ePassword, aPassword);
 
     xIH->handle( xRequest.get() );
 

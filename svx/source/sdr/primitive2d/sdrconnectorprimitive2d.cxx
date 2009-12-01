@@ -72,21 +72,13 @@ namespace drawinglayer
             // add text
             if(getSdrLSTAttribute().getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(getUnitPolygon()), aEmptyMatrix, *getSdrLSTAttribute().getText(), getSdrLSTAttribute().getLine(), false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(getUnitPolygon()), aEmptyMatrix, *getSdrLSTAttribute().getText(), getSdrLSTAttribute().getLine(), false, false, false));
             }
 
             // add shadow
             if(getSdrLSTAttribute().getShadow())
             {
-                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *getSdrLSTAttribute().getShadow()));
-
-                if(xShadow.is())
-                {
-                    Primitive2DSequence aContentWithShadow(2L);
-                    aContentWithShadow[0L] = xShadow;
-                    aContentWithShadow[1L] = Primitive2DReference(new GroupPrimitive2D(aRetval));
-                    aRetval = aContentWithShadow;
-                }
+                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLSTAttribute().getShadow());
             }
 
             return aRetval;

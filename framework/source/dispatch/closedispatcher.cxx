@@ -46,11 +46,9 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
-
-#ifndef __COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-
+#include <com/sun/star/document/XActionLockable.hpp>
 #include "com/sun/star/beans/XFastPropertySet.hpp"
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -174,7 +172,7 @@ void SAL_CALL CloseDispatcher::removeStatusListener(const css::uno::Reference< c
 
 //-----------------------------------------------
 void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
-                                                        const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
+                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
     throw(css::uno::RuntimeException)
 {
@@ -239,7 +237,20 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
-    m_aAsyncCallback.Post(0);
+    sal_Bool bIsSynchron = sal_False;
+    for (sal_Int32 nArgs=0; nArgs<lArguments.getLength(); nArgs++ )
+    {
+        if ( lArguments[nArgs].Name.equalsAscii("SynchronMode") )
+        {
+            lArguments[nArgs].Value >>= bIsSynchron;
+            break;
+        }
+    }
+
+    if ( bIsSynchron )
+        impl_asyncCallback(0);
+    else
+        m_aAsyncCallback.Post(0);
 }
 
 //-----------------------------------------------
@@ -541,6 +552,10 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
     // <- SAFE ----------------------------------
 
     if (!xFrame.is())
+        return sal_False;
+
+    css::uno::Reference < css::document::XActionLockable > xLock( xFrame, css::uno::UNO_QUERY );
+    if ( xLock.is() && xLock->isActionLocked() )
         return sal_False;
 
     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();

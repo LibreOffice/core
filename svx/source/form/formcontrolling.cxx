@@ -57,7 +57,6 @@ namespace svx
 {
 //........................................................................
 
-    using namespace ::svxform;
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;

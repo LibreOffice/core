@@ -95,6 +95,7 @@ class ComplexToolbarController : public svt::ToolboxController
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rInfo );
 
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) = 0;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const;
         const ::com::sun::star::util::URL& getInitializedURL();
         void notifyFocusGet();
         void notifyFocusLost();

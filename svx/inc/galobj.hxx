@@ -85,7 +85,7 @@ enum GalSoundType
 // - SgaObject -
 // -------------
 
-class SgaObject
+class SVX_DLLPUBLIC SgaObject
 {
     friend class GalleryTheme;
 

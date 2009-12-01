@@ -147,6 +147,11 @@
             <value></value>
           </prop>
         </node>
+        <node oor:name="BooleanComparisonMode" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:int">
+            <value>3</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
         <node oor:name="UseSQL92NamingConstraints" oor:op="replace">
@@ -214,11 +219,6 @@
         <node oor:name="Extension" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:string">
             <value>mdb</value>
-          </prop>
-        </node>
-        <node oor:name="BooleanComparisonMode" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:int">
-            <value>3</value>
           </prop>
         </node>
       </node>

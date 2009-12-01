@@ -1257,6 +1257,7 @@ void Desktop::Main()
     std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
     std::auto_ptr<SvtPathOptions> pPathOptions;
 
+    Reference < css::document::XEventListener > xGlobalBroadcaster;
     try
     {
         RegisterServices( xSMgr );
@@ -1379,7 +1380,8 @@ void Desktop::Main()
         }
 
         // create service for loadin SFX (still needed in startup)
-        Reference < css::document::XEventListener > xGlobalBroadcaster( xSMgr->createInstance(
+        xGlobalBroadcaster = Reference < css::document::XEventListener >
+            ( xSMgr->createInstance(
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
         // initialize test-tool library (if available)
@@ -1617,6 +1619,13 @@ void Desktop::Main()
         FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
     }
 
+    if (xGlobalBroadcaster.is())
+    {
+        css::document::EventObject aEvent;
+        aEvent.EventName = ::rtl::OUString::createFromAscii("OnCloseApp");
+        xGlobalBroadcaster->notifyEvent(aEvent);
+    }
+
     delete pResMgr;
 
     // Restore old value
@@ -1730,9 +1739,12 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
 
         // Try to instanciate quickstart service. This service is not mandatory, so
         // do nothing if service is not available.
-        Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
+        if ( bQuickstart )
+        {
+            Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
                                                 DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
                                                 UNO_QUERY );
+        }
         return sal_True;
     }
     catch( ::com::sun::star::uno::Exception& )

@@ -50,65 +50,90 @@ namespace drawinglayer
         Primitive2DSequence SdrRectanglePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
+            Primitive2DSequence aHitTestContent;
 
             // create unit outline polygon
-            ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromRect(::basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), getCornerRadiusX(), getCornerRadiusY()));
+            const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
+                basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
+                getCornerRadiusX(),
+                getCornerRadiusY()));
 
             // add fill
             if(getSdrLFSTAttribute().getFill())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getFill(), getSdrLFSTAttribute().getFillFloatTransGradient()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        *getSdrLFSTAttribute().getFill(),
+                        getSdrLFSTAttribute().getFillFloatTransGradient()));
+            }
+            else if(getTextFrame())
+            {
+                // if no fill and it's a text frame, create a fill for HitTest and
+                // BoundRect fallback
+                appendPrimitive2DReferenceToPrimitive2DSequence(aHitTestContent,
+                    createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        attribute::SdrFillAttribute(0.0, basegfx::BColor(0.0, 0.0, 0.0)),
+                        getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
             if(getSdrLFSTAttribute().getLine())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolygonLinePrimitive(
+                        aUnitOutline,
+                        getTransform(),
+                        *getSdrLFSTAttribute().getLine()));
             }
-            else
+            else if(!getTextFrame())
             {
-                // if initially no line is defined, create one for HitTest and BoundRect
-                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
-                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline));
-                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
+                // if initially no line is defined and it's not a text frame, create
+                // a line for HitTest and BoundRect
+                appendPrimitive2DReferenceToPrimitive2DSequence(aHitTestContent,
+                    createPolygonLinePrimitive(
+                        aUnitOutline,
+                        getTransform(),
+                        attribute::SdrLineAttribute(basegfx::BColor(0.0, 0.0, 0.0))));
+            }
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
+            // add HitTest and BoundRect helper geometry (if exists)
+            if(aHitTestContent.hasElements())
+            {
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    Primitive2DReference(new HitTestPrimitive2D(aHitTestContent)));
             }
 
             // add text
             if(getSdrLFSTAttribute().getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false, false));
             }
 
             // add shadow
             if(getSdrLFSTAttribute().getShadow())
             {
-                // attention: shadow is added BEFORE object stuff to render it BEHIND object (!)
-                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow()));
-
-                if(xShadow.is())
-                {
-                    Primitive2DSequence aContentWithShadow(2L);
-                    aContentWithShadow[0L] = xShadow;
-                    aContentWithShadow[1L] = Primitive2DReference(new GroupPrimitive2D(aRetval));
-                    aRetval = aContentWithShadow;
-                }
+                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow());
             }
 
             return aRetval;
         }
 
         SdrRectanglePrimitive2D::SdrRectanglePrimitive2D(
-            const ::basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             double fCornerRadiusX,
-            double fCornerRadiusY)
+            double fCornerRadiusY,
+            bool bTextFrame)
         :   BasePrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),
-            mfCornerRadiusY(fCornerRadiusY)
+            mfCornerRadiusY(fCornerRadiusY),
+            mbTextFrame(bTextFrame)
         {
         }
 
@@ -121,7 +146,8 @@ namespace drawinglayer
                 return (getCornerRadiusX() == rCompare.getCornerRadiusX()
                     && getCornerRadiusY() == rCompare.getCornerRadiusY()
                     && getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
+                    && getTextFrame() == rCompare.getTextFrame());
             }
 
             return false;

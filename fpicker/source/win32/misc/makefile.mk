@@ -33,6 +33,7 @@ PRJ=..$/..$/..
 PRJNAME=fpicker
 TARGET=utils
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
@@ -41,7 +42,7 @@ LIBTARGET=NO
 .IF "$(COM)"=="GCC"
 CFLAGSAPPEND+=-fexceptions -fno-enforce-eh-specs -DUNICODE -D_UNICODE
 .ELSE
-CFLAGS+=-GX -DUNICODE -D_UNICODE
+CFLAGS+=-EHa -DUNICODE -D_UNICODE
 .ENDIF
 
 # --- Files -------------------------------------

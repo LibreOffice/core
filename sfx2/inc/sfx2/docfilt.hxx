@@ -75,6 +75,20 @@
 #include <sfx2/sfxdefs.hxx>
 
 //========================================================================
+
+namespace sfx2 {
+
+/** Returns true if the passed string is the name of a Microsoft Office file
+    format filter supporting export of password protected documents.
+
+    This function is just a hack for #i105076# is fixed and needs to be removed
+    then.
+ */
+SFX2_DLLPUBLIC bool CheckMSPasswordCapabilityForExport( const String& rFilterName );
+
+} // namespace sfx2
+
+//========================================================================
 class SfxFilterContainer;
 class SotStorage;
 class SFX2_DLLPUBLIC SfxFilter

@@ -100,6 +100,7 @@ LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::R
     svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 ),
     m_bShowMenu( sal_True ),
     m_nScriptType( 7 )
+    ,m_aLangGuessHelper(xServiceManager)
 {
 }
 
@@ -123,6 +124,7 @@ void SAL_CALL LangSelectionStatusbarController::release() throw ()
 void SAL_CALL LangSelectionStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::initialize" );
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
 
     svt::StatusbarController::initialize( aArguments );
@@ -142,6 +144,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
 void SAL_CALL LangSelectionStatusbarController::dispose()
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::dispose" );
     svt::StatusbarController::dispose();
 }
 
@@ -149,6 +152,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL LangSelectionStatusbarController::disposing( const com::sun::star::lang::EventObject& Source )
 throw ( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::disposing" );
     svt::StatusbarController::disposing( Source );
 }
 
@@ -157,6 +161,7 @@ throw ( RuntimeException )
     const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::mouseButtonDown" );
     return sal_False;
 }
 
@@ -164,6 +169,7 @@ throw (::com::sun::star::uno::RuntimeException)
     const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::mouseMove" );
     return sal_False;
 }
 
@@ -171,18 +177,21 @@ throw (::com::sun::star::uno::RuntimeException)
     const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::mouseButtonUp" );
     return sal_False;
 }
 
 void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::LangMenu" );
     if (!m_bShowMenu)
         return;
 
     //add context menu
-    Reference< awt::XPopupMenu > xPopupMenu( m_xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.PopupMenu" ) ), UNO_QUERY );
+    const static ::rtl::OUString s_sPopupMenu(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.PopupMenu"));
+    Reference< awt::XPopupMenu > xPopupMenu( m_xServiceManager->createInstance( s_sPopupMenu ), UNO_QUERY );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
-    Reference< awt::XPopupMenu > subPopupMenu(m_xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.PopupMenu" ) ), UNO_QUERY );
+    Reference< awt::XPopupMenu > subPopupMenu(m_xServiceManager->createInstance( s_sPopupMenu ), UNO_QUERY );
 
     std::set< ::rtl::OUString > LangItems;
 
@@ -190,7 +199,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     USHORT nItemId=1;
 
     //1--add current language
-    if( m_aCurLang != ::rtl::OUString::createFromAscii( "" ) &&
+    if( m_aCurLang != ::rtl::OUString( ) &&
         LANGUAGE_DONTKNOW != aLanguageTable.GetType( m_aCurLang ))
         LangItems.insert( m_aCurLang );
 
@@ -394,6 +403,7 @@ void SAL_CALL LangSelectionStatusbarController::command(
     const ::com::sun::star::uno::Any& /*aData*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::command" );
     if ( nCommand & ::awt::Command::CONTEXTMENU )
     {
         LangMenu();
@@ -407,18 +417,21 @@ void SAL_CALL LangSelectionStatusbarController::paint(
     ::sal_Int32 nStyle )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::paint" );
     svt::StatusbarController::paint( xGraphics, rOutputRectangle, nItemId, nStyle );
 }
 
 void SAL_CALL LangSelectionStatusbarController::click()
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::click" );
     LangMenu();
 }
 
 void SAL_CALL LangSelectionStatusbarController::doubleClick()
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::doubleClick" );
     svt::StatusbarController::doubleClick();
 }
 
@@ -426,6 +439,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::statusChanged" );
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
 
     if ( m_bDisposed )

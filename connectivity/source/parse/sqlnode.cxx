@@ -742,12 +742,15 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rSt
 sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
                                             ::com::sun::star::uno::Any &_rCatalog,
                                             ::rtl::OUString &_rSchema,
-                                            ::rtl::OUString &_rTable)
+                                            ::rtl::OUString &_rTable,
+                                            const Reference< XDatabaseMetaData >& _xMetaData)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::getTableComponents" );
     OSL_ENSURE(_pTableNode,"Wrong use of getTableComponents! _pTableNode is not allowed to be null!");
     if(_pTableNode)
     {
+        const sal_Bool bSupportsCatalog = _xMetaData.is() && _xMetaData->supportsCatalogsInDataManipulation();
+        const sal_Bool bSupportsSchema = _xMetaData.is() && _xMetaData->supportsSchemasInDataManipulation();
         const OSQLParseNode* pTableNode = _pTableNode;
         // clear the parameter given
         _rCatalog = Any();
@@ -762,7 +765,10 @@ sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
         // check if we have schema_name rule
         if(SQL_ISRULE(pTableNode,schema_name))
         {
-            _rSchema = pTableNode->getChild(0)->getTokenValue();
+            if ( bSupportsCatalog && !bSupportsSchema )
+                _rCatalog <<= pTableNode->getChild(0)->getTokenValue();
+            else
+                _rSchema = pTableNode->getChild(0)->getTokenValue();
             pTableNode = pTableNode->getChild(2);
         }
         // check if we have table_name rule
@@ -1246,8 +1252,8 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
     if (SQLyyparse() != 0)
     {
         m_sFieldName= ::rtl::OUString();
-        m_xField = NULL;
-        m_xFormatter = NULL;
+    m_xField.clear();
+    m_xFormatter.clear();
         m_nFormatKey = 0;
         m_nDateFormatKey = 0;
 
@@ -1267,8 +1273,8 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         (*s_pGarbageCollector)->clear();
 
         m_sFieldName= ::rtl::OUString();
-        m_xField = NULL;
-        m_xFormatter = NULL;
+    m_xField.clear();
+    m_xFormatter.clear();
         m_nFormatKey = 0;
         m_nDateFormatKey = 0;
 

@@ -149,8 +149,9 @@ TabPage RID_SFXPAGE_SAVE
         DropDown = TRUE;
         StringList [ en-US ] =
         {
-            < "1.0/1.1 (OpenOffice.org 2.x)" ;  2 ; > ;
-            < "1.2 (recommended)" ;             3 ;  > ;
+            < "1.0/1.1" ;  2 ; > ;
+            < "1.2" ;      4 ;  > ;
+            < "1.2 Extended (recommended)"; 0x7fffffff ; > ;
         };
     };
     CheckBox BTN_NOPRETTYPRINTING
@@ -219,7 +220,8 @@ TabPage RID_SFXPAGE_SAVE
         Pos = MAP_APPFONT ( 23 , 169 ) ;
         Size = MAP_APPFONT ( 239 , 8 ) ;
         Hide = TRUE;
-        Text [ en-US ] = "Not using ODF 1.2 may cause infomation to be lost.";
+        Text [ en-US ] = "Not using ODF 1.2 Extended may cause infomation to be lost.";
+        Text [ x-comment ] = "EN-US, the term 'extended' must not be translated.";
     };
     Image IMG_ODF_WARNING
     {

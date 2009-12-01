@@ -36,6 +36,8 @@ PRJNAME=oovbaapi
 
 .INCLUDE : settings.mk
 
+.IF "$(L10N_framework)"==""
+
 .IF "$(ENABLE_VBA)"!="YES"
 dummy:
         @echo "not building vba..."
@@ -70,3 +72,7 @@ CLEAN :
     @$(RM) $(MY_GEN_IDL_PATH)$/*.idl
     @$(RM) $(foreach,i,$(MYSYMFILES) $(MISC)$/$(i:b).done)
 
+.ELSE
+ivo:
+    $(ECHO)
+.ENDIF # L10N_framework

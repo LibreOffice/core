@@ -158,7 +158,34 @@
 			<Text id="DLLA3" xml:lang="en-US"></Text>
 		</Paragraph>
 		
-		<Paragraph id="StartupProblemsHeader" style="H3" os="all">
+	<Section id="BerkeleyDB">
+	<Paragraph id="BDB1" style="H2">
+			<Text id="BDB11" xml:lang="en-US">Extension Database Incompatibility</Text>
+		</Paragraph>
+	</Section>
+	
+	<Paragraph id="BDB2">
+		<Text id="BDB2a" xml:lang="en-US">The Berkeley database engine has been upgraded in this version of ${PRODUCTNAME}. The database engine 
+		upgrade introduces an incompatibility with user data for installed extensions for ${PRODUCTNAME} versions prior to 3.2 that may 
+		require your action if you downgrade your version of ${PRODUCTNAME}.
+		</Text>
+	</Paragraph>
+
+	<Paragraph id="BDB3">
+		<Text id="BDB3a" xml:lang="en-US">This version of ${PRODUCTNAME} will convert your extension database to the new Berkeley 
+		database format when extensions are installed or removed. After this conversion, the database can no longer be read
+		by earlier versions of ${PRODUCTNAME}. Downgrading to an earlier version may result in a dysfunctional installation.
+		</Text>
+	</Paragraph>
+
+	<Paragraph id="BDB4">
+		<Text id="BDB4a" xml:lang="en-US">If you downgrade to an earlier version of ${PRODUCTNAME}, you must remove the user 
+		data directory {user data}/uno_packages, for example ~/.openoffice.org/3/user/uno_packages, and reinstall all extensions.
+		</Text>
+	</Paragraph>
+		
+		
+		<Paragraph id="StartupProblemsHeader" style="H2" os="all">
 			<Text id="naso" xml:lang="en-US">Problems During Program Startup</Text>
 		</Paragraph>
 
@@ -223,7 +250,7 @@
 
 	<Section id="Scroll">
 
-		<Paragraph id="F1a" style="H3" gui="WNT">
+		<Paragraph id="F1a" style="H2" gui="WNT">
 			<Text id="naso" xml:lang="en-US">ALPS/Synaptics notebook touchpads in Windows</Text>
 		</Paragraph>
 
@@ -249,7 +276,7 @@
 
 	<Section id="NetscapeAdressBook">
 
-		<Paragraph id="AdressBookHeader" style="H3" os="SOLARIS">
+		<Paragraph id="AdressBookHeader" style="H2" os="SOLARIS">
 			<Text id="sdfsd32asrc" xml:lang="en-US">Mozilla Address Book Driver</Text>
 		</Paragraph>
 
@@ -260,7 +287,7 @@
 
 	<Section id="Keyboard">
 
-		<Paragraph id="abc2" style="H3">
+		<Paragraph id="abc2" style="H2">
 			<Text id="awe1" xml:lang="en-US">Shortcut Keys</Text>
 		</Paragraph>
 
@@ -308,7 +335,7 @@
 
 	<Section id="FileLocking">
 
-		<Paragraph id="G1" style="H3" gui="UNX">
+		<Paragraph id="G1" style="H2" gui="UNX">
 			<Text id="gfh6w" xml:lang="en-US">File Locking</Text>
 		</Paragraph>
 
@@ -323,7 +350,7 @@
 
 	<Section id="Mapi">
 
-		<Paragraph id="G1a" style="H3" gui="WNT">
+		<Paragraph id="G1a" style="H2" gui="WNT">
 			<Text id="gfh6w" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</Text>
 		</Paragraph>
 

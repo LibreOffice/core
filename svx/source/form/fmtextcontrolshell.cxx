@@ -94,7 +94,6 @@ namespace svx
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
-    using namespace ::svxform;
 
     //====================================================================
     typedef USHORT WhichId;
@@ -102,6 +101,7 @@ namespace svx
     //====================================================================
     static SfxSlotId pTextControlSlots[] =
     {
+        SID_CLIPBOARD_FORMAT_ITEMS,
         SID_CUT,
         SID_COPY,
         SID_PASTE,
@@ -141,7 +141,6 @@ namespace svx
 //        SID_TEXTDIRECTION_TOP_TO_BOTTOM,
         SID_ATTR_CHAR_SCALEWIDTH,       /* 911 */
         SID_ATTR_CHAR_RELIEF,
-        SID_CLIPBOARD_FORMAT_ITEMS,     /* 922 */
         SID_ATTR_PARA_LEFT_TO_RIGHT,    /* 950 */
         SID_ATTR_PARA_RIGHT_TO_LEFT,
         0

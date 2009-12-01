@@ -181,8 +181,8 @@ void OConnectionPool::clear(sal_Bool _bDispose)
     if (xProp.is())
         xProp->removePropertyChangeListener(getTimeoutNodeName(),this);
 
-    m_xDriverNode   = NULL;
-    m_xDriver       = NULL;
+m_xDriverNode.clear();
+m_xDriver.clear();
 }
 //--------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
@@ -223,7 +223,7 @@ void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObj
     }
     else
     {
-        m_xDriverNode = NULL;
+    m_xDriverNode.clear();
     }
 }
 // -----------------------------------------------------------------------------

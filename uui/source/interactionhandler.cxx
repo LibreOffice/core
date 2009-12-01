@@ -31,10 +31,10 @@
 #include "iahndl.hxx"
 #include "interactionhandler.hxx"
 
-using namespace com::sun;
+using namespace com::sun::star;
 
 UUIInteractionHandler::UUIInteractionHandler(
-    star::uno::Reference< star::lang::XMultiServiceFactory > const &
+    uno::Reference< lang::XMultiServiceFactory > const &
         rServiceFactory)
     SAL_THROW(())
         : m_xServiceFactory(rServiceFactory),
@@ -48,16 +48,16 @@ UUIInteractionHandler::~UUIInteractionHandler()
 }
 
 rtl::OUString SAL_CALL UUIInteractionHandler::getImplementationName()
-    throw (star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return rtl::OUString::createFromAscii(m_aImplementationName);
 }
 
 sal_Bool SAL_CALL
 UUIInteractionHandler::supportsService(rtl::OUString const & rServiceName)
-    throw (star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
-    star::uno::Sequence< rtl::OUString >
+    uno::Sequence< rtl::OUString >
     aNames(getSupportedServiceNames_static());
     for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
         if (aNames[i] == rServiceName)
@@ -65,17 +65,17 @@ UUIInteractionHandler::supportsService(rtl::OUString const & rServiceName)
     return false;
 }
 
-star::uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< rtl::OUString > SAL_CALL
 UUIInteractionHandler::getSupportedServiceNames()
-    throw (star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
 
 void SAL_CALL
 UUIInteractionHandler::initialize(
-    star::uno::Sequence< star::uno::Any > const & rArguments)
-    throw (star::uno::Exception)
+    uno::Sequence< uno::Any > const & rArguments)
+    throw (uno::Exception)
 {
     delete m_pImpl;
     m_pImpl = new UUIInteractionHelper(m_xServiceFactory, rArguments);
@@ -83,26 +83,40 @@ UUIInteractionHandler::initialize(
 
 void SAL_CALL
 UUIInteractionHandler::handle(
-    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
-    throw (star::uno::RuntimeException)
+    uno::Reference< task::XInteractionRequest > const & rRequest)
+    throw (uno::RuntimeException)
 {
     try
     {
         m_pImpl->handleRequest(rRequest);
     }
-    catch (star::uno::RuntimeException const & ex)
+    catch (uno::RuntimeException const & ex)
     {
-        throw star::uno::RuntimeException(ex.Message, *this);
+        throw uno::RuntimeException(ex.Message, *this);
     }
+}
+
+::sal_Bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
+    const uno::Reference< task::XInteractionRequest >& _Request ) throw ( uno::RuntimeException )
+{
+    try
+    {
+        return m_pImpl->handleRequest( _Request );
+    }
+    catch (uno::RuntimeException const & ex)
+    {
+        throw uno::RuntimeException( ex.Message, *this );
+    }
+    return sal_False;
 }
 
 char const UUIInteractionHandler::m_aImplementationName[]
     = "com.sun.star.comp.uui.UUIInteractionHandler";
 
-star::uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString >
 UUIInteractionHandler::getSupportedServiceNames_static()
 {
-    star::uno::Sequence< rtl::OUString > aNames(3);
+    uno::Sequence< rtl::OUString > aNames(3);
     aNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.task.InteractionHandler"));
     // added to indicate support for configuration.backend.MergeRecoveryRequest
@@ -114,11 +128,11 @@ UUIInteractionHandler::getSupportedServiceNames_static()
     return aNames;
 }
 
-star::uno::Reference< star::uno::XInterface > SAL_CALL
+uno::Reference< uno::XInterface > SAL_CALL
 UUIInteractionHandler::createInstance(
-    star::uno::Reference< star::lang::XMultiServiceFactory > const &
+    uno::Reference< lang::XMultiServiceFactory > const &
         rServiceFactory)
-    SAL_THROW((star::uno::Exception))
+    SAL_THROW((uno::Exception))
 {
     try
     {
@@ -126,7 +140,7 @@ UUIInteractionHandler::createInstance(
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
         0);
     }

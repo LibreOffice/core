@@ -98,6 +98,46 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) with a given name.
+// If the name exists already, nothing is done. If a style with a different name and
+// the same properties exists, a new one is added (like with bDontSeek).
+//
+
+sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl* pFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
+{
+    sal_Bool bAdded = sal_False;
+    sal_uInt32 i = 0;
+    sal_Int32 nProperties = rProperties.size();
+    sal_uInt32 nCount = maPropertiesList.Count();
+
+    for( i = 0; i < nCount; i++ )
+    {
+        SvXMLAutoStylePoolPropertiesP_Impl *pIS = maPropertiesList.GetObject( i );
+        if( nProperties > (sal_Int32)pIS->GetProperties().size() )
+        {
+            continue;
+        }
+        else if( nProperties < (sal_Int32)pIS->GetProperties().size() )
+        {
+            break;
+        }
+    }
+
+    if( !pFamilyData->mpNameList->Seek_Entry( &rName, 0 ) )
+    {
+        SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
+                new SvXMLAutoStylePoolPropertiesP_Impl( pFamilyData, rProperties );
+        // ignore the generated name
+        pProperties->SetName( rName );
+        maPropertiesList.Insert( pProperties, i );
+        bAdded = sal_True;
+    }
+
+    return bAdded;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
 //
 

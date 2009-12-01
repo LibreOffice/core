@@ -57,7 +57,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -107,12 +107,8 @@ struct tIMPLExtractedArguments
     @devstatus  deprecated
 *//*-*************************************************************************************************************/
 
-class FrameLoaderFactory    :   public css::lang::XTypeProvider             ,
-                                public css::lang::XServiceInfo              ,
-                                public css::lang::XMultiServiceFactory      ,
-                                public css::container::XNameAccess          ,       // => XElementAccess
-                                public ThreadHelpBase                           ,       // Struct for right initalization of mutex member! Mst first of baseclasses
-                                public ::cppu::OWeakObject
+class FrameLoaderFactory    :   public ThreadHelpBase                           ,       // Struct for right initalization of mutex member! Mst first of baseclasses
+                                public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::lang::XMultiServiceFactory,::com::sun::star::container::XNameAccess >
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -158,8 +154,6 @@ class FrameLoaderFactory    :   public css::lang::XTypeProvider             ,
         //  XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
 
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------

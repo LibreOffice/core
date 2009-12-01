@@ -70,7 +70,8 @@ public:
     inline void    SetCaseMap( const SvxCaseMap eNew ) { eCaseMap = eNew; }
 
     inline LanguageType GetLanguage() const { return eLang; }
-    inline void SetLanguage( const LanguageType eNewLan ) { eLang = eNewLan; }
+    inline void SetLanguage( const LanguageType eNewLan )
+        { eLang = eNewLan;  Font::SetLanguage(eNewLan); }
 
     // Is-Methoden:
     inline BOOL IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }

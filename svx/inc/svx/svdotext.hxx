@@ -259,7 +259,7 @@ protected:
     // Flag for allowing text animation. Default is sal_true.
     BOOL                        mbTextAnimationAllowed : 1;
 
-    SVX_DLLPRIVATE SdrOutliner& ImpGetDrawOutliner() const;
+    SdrOutliner& ImpGetDrawOutliner() const;
 
 private:
     SVX_DLLPRIVATE void ImpCheckMasterCachable();
@@ -575,20 +575,19 @@ public:
 public:
     //////////////////////////////////////////////////////////////////////////////
     // text primitive decomposition helpers
-    bool impCheckSpellCheckForDecomposeTextPrimitive() const;
-    bool impDecomposeContourTextPrimitive(
+    void impDecomposeContourTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
         const drawinglayer::primitive2d::SdrContourTextPrimitive2D& rSdrContourTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
-    bool impDecomposePathTextPrimitive(
+    void impDecomposePathTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
         const drawinglayer::primitive2d::SdrPathTextPrimitive2D& rSdrPathTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
-    bool impDecomposeBlockTextPrimitive(
+    void impDecomposeBlockTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
         const drawinglayer::primitive2d::SdrBlockTextPrimitive2D& rSdrBlockTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
-    bool impDecomposeStretchTextPrimitive(
+    void impDecomposeStretchTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
         const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;

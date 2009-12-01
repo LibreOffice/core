@@ -71,14 +71,9 @@ using namespace ::com::sun::star::style;
 
 sal_Int32 SvxNumberType::nRefCount = 0;
 com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> SvxNumberType::xFormatter = 0;
-/* -----------------------------22.02.01 14:24--------------------------------
-
- ---------------------------------------------------------------------------*/
-SvxNumberType::SvxNumberType(sal_Int16 nType) :
-    nNumType(nType),
-    bShowSymbol(sal_True)
+void lcl_getFormatter(com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter>& _xFormatter)
 {
-    if(!xFormatter.is())
+    if(!_xFormatter.is())
        {
         try
         {
@@ -87,12 +82,20 @@ SvxNumberType::SvxNumberType(sal_Int16 nType) :
                 ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
             Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
             DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
-            xFormatter = Reference<XNumberingFormatter> (xRet, UNO_QUERY);
+            _xFormatter = Reference<XNumberingFormatter> (xRet, UNO_QUERY);
         }
         catch(Exception& )
         {
         }
     }
+}
+/* -----------------------------22.02.01 14:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxNumberType::SvxNumberType(sal_Int16 nType) :
+    nNumType(nType),
+    bShowSymbol(sal_True)
+{
     nRefCount++;
 }
 /* -----------------------------22.02.01 14:31--------------------------------
@@ -126,6 +129,7 @@ String SvxNumberType::GetNumStr( ULONG nNo ) const
  * --------------------------------------------------*/
 String  SvxNumberType::GetNumStr( ULONG nNo, const Locale& rLocale ) const
 {
+    lcl_getFormatter(xFormatter);
     String aTmpStr;
     if(!xFormatter.is())
         return aTmpStr;

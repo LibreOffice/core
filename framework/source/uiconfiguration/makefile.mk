@@ -48,6 +48,7 @@ SLOFILES=			\
                     $(SLO)$/windowstateconfiguration.obj        \
                     $(SLO)$/moduleimagemanager.obj              \
                     $(SLO)$/imagemanager.obj                    \
+                    $(SLO)$/imagemanagerimpl.obj                \
                     $(SLO)$/graphicnameaccess.obj               \
                     $(SLO)$/uicategorydescription.obj           \
                     $(SLO)$/globalsettings.obj

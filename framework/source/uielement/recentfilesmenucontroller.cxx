@@ -49,9 +49,8 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
-
+#include <com/sun/star/lang/DisposedException.hpp>
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -166,11 +165,12 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             }
         }
 
-        if ( m_aRecentFilesItems.size() > 0 )
+        if ( !m_aRecentFilesItems.empty() )
         {
             URL aTargetURL;
 
-            for ( sal_uInt32 i = 0; i < m_aRecentFilesItems.size(); i++ )
+            const sal_uInt32 nCount = m_aRecentFilesItems.size();
+            for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
                 char menuShortCut[5] = "~n: ";
 
@@ -260,14 +260,10 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     if (( nIndex >= 0 ) &&
         ( nIndex < sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() )))
     {
-        Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-
         const RecentFile& rRecentFile = m_aRecentFilesItems[ nIndex ];
 
         aTargetURL.Complete = rRecentFile.aURL;
-        xURLTransformer->parseStrict( aTargetURL );
+        m_xURLTransformer->parseStrict( aTargetURL );
 
         aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
         aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
@@ -287,14 +283,14 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
                 aFilterOptions = aFilter.copy( nPos+1 );
 
             aArgsList[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
-            aArgsList[2].Value = makeAny( aFilterOptions );
+            aArgsList[2].Value <<= aFilterOptions;
 
             aFilter = aFilter.copy( 0, nPos-1 );
             aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
         }
 
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
-        aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = makeAny( aFilter );
+        aArgsList[NUM_OF_PICKLIST_ARGS-1].Value <<= aFilter;
 
         xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_default"), 0 );
     }
@@ -336,11 +332,6 @@ void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent&
     m_bDisabled = !Event.IsEnabled;
 }
 
-// XMenuListener
-void SAL_CALL RecentFilesMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
 void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu > xPopupMenu;
@@ -368,43 +359,14 @@ void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEve
 void SAL_CALL RecentFilesMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
-    if ( m_xPopupMenu.is() )
-        fillPopupMenu( m_xPopupMenu );
-}
-
-void SAL_CALL RecentFilesMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
+    impl_setPopupMenu();
 }
 
 // XPopupMenuController
-void SAL_CALL RecentFilesMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
+void RecentFilesMenuController::impl_setPopupMenu()
 {
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-    {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        com::sun::star::util::URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        if ( m_xPopupMenu.is() )
-            fillPopupMenu( m_xPopupMenu );
-    }
+    if ( m_xPopupMenu.is() )
+        fillPopupMenu( m_xPopupMenu );
 }
 
 void SAL_CALL RecentFilesMenuController::updatePopupMenu() throw (RuntimeException)
@@ -416,12 +378,9 @@ void SAL_CALL RecentFilesMenuController::updatePopupMenu() throw (RuntimeExcepti
 
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XDispatch > xDispatch( m_xDispatch );
-    Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                UNO_QUERY );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = m_aCommandURL;
-    xURLTransformer->parseStrict( aTargetURL );
+    m_xURLTransformer->parseStrict( aTargetURL );
     aLock.unlock();
 
     // Add/remove status listener to get a status update once
@@ -448,18 +407,6 @@ throw( RuntimeException )
         return Reference< XDispatch >( static_cast< OWeakObject* >( this ), UNO_QUERY );
     else
         return Reference< XDispatch >();
-}
-
-Sequence< Reference< XDispatch > > SAL_CALL RecentFilesMenuController::queryDispatches(
-    const Sequence< DispatchDescriptor >& lDescriptor )
-throw( RuntimeException )
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    return PopupMenuControllerBase::queryDispatches( lDescriptor );
 }
 
 // XDispatch
@@ -518,12 +465,6 @@ void SAL_CALL RecentFilesMenuController::removeStatusListener(
 throw( RuntimeException )
 {
     PopupMenuControllerBase::removeStatusListener( xControl, aURL );
-}
-
-// XInitialization
-void SAL_CALL RecentFilesMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
-{
-    PopupMenuControllerBase::initialize( aArguments );
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )

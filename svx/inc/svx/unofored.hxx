@@ -81,6 +81,8 @@ public:
     virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
     virtual USHORT          GetLineCount( USHORT nPara ) const;
     virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
+    virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
+    virtual USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const;
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );

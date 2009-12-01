@@ -31,76 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <com/sun/star/container/XSet.hpp>
-#include "fmstatic.hxx"
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
-
-namespace svxform
-{
-
-    // -----------------------
-    // service names for compatibility
-    // -----------------------
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_EDIT,"stardiv.one.form.component.Edit");          // compatibility
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_TEXTFIELD,"stardiv.one.form.component.TextField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_LISTBOX,"stardiv.one.form.component.ListBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_COMBOBOX,"stardiv.one.form.component.ComboBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_RADIOBUTTON,"stardiv.one.form.component.RadioButton");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_GROUPBOX,"stardiv.one.form.component.GroupBox");      // compatibility
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_FIXEDTEXT,"stardiv.one.form.component.FixedText");        // compatibility
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_COMMANDBUTTON,"stardiv.one.form.component.CommandButton");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_CHECKBOX,"stardiv.one.form.component.CheckBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_GRID,"stardiv.one.form.component.Grid");          // compatibility
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_GRIDCONTROL,"stardiv.one.form.component.GridControl");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_IMAGEBUTTON,"stardiv.one.form.component.ImageButton");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_FILECONTROL,"stardiv.one.form.component.FileControl");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_TIMEFIELD,"stardiv.one.form.component.TimeField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_DATEFIELD,"stardiv.one.form.component.DateField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_NUMERICFIELD,"stardiv.one.form.component.NumericField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_CURRENCYFIELD,"stardiv.one.form.component.CurrencyField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_PATTERNFIELD,"stardiv.one.form.component.PatternField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_HIDDEN,"stardiv.one.form.component.Hidden");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_HIDDENCONTROL,"stardiv.one.form.component.HiddenControl");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_IMAGECONTROL,"stardiv.one.form.component.ImageControl");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COMPONENT_FORMATTEDFIELD,"stardiv.one.form.component.FormattedField");
-
-    IMPLEMENT_CONSTASCII_USTRING(FM_CONTROL_GRID,"stardiv.one.form.control.Grid");                  // compatibility
-    IMPLEMENT_CONSTASCII_USTRING(FM_CONTROL_GRIDCONTROL,"stardiv.one.form.control.GridControl");
-
-    // -----------------------
-    // new (sun) service names
-    // -----------------------
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_FORM,"com.sun.star.form.component.Form");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_TEXTFIELD,"com.sun.star.form.component.TextField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_LISTBOX,"com.sun.star.form.component.ListBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_COMBOBOX,"com.sun.star.form.component.ComboBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_RADIOBUTTON,"com.sun.star.form.component.RadioButton");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_GROUPBOX,"com.sun.star.form.component.GroupBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_FIXEDTEXT,"com.sun.star.form.component.FixedText");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_COMMANDBUTTON,"com.sun.star.form.component.CommandButton");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_CHECKBOX,"com.sun.star.form.component.CheckBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_GRIDCONTROL,"com.sun.star.form.component.GridControl");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_IMAGEBUTTON,"com.sun.star.form.component.ImageButton");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_FILECONTROL,"com.sun.star.form.component.FileControl");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_TIMEFIELD,"com.sun.star.form.component.TimeField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_DATEFIELD,"com.sun.star.form.component.DateField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_NUMERICFIELD,"com.sun.star.form.component.NumericField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_CURRENCYFIELD,"com.sun.star.form.component.CurrencyField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_PATTERNFIELD,"com.sun.star.form.component.PatternField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_HIDDENCONTROL,"com.sun.star.form.component.HiddenControl");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_IMAGECONTROL,"com.sun.star.form.component.DatabaseImageControl");
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_FORMATTEDFIELD,"com.sun.star.form.component.FormattedField");
-    IMPLEMENT_CONSTASCII_USTRING( FM_SUN_COMPONENT_SCROLLBAR,    "com.sun.star.form.component.ScrollBar"         );
-    IMPLEMENT_CONSTASCII_USTRING( FM_SUN_COMPONENT_SPINBUTTON,   "com.sun.star.form.component.SpinButton"        );
-    IMPLEMENT_CONSTASCII_USTRING( FM_SUN_COMPONENT_NAVIGATIONBAR,"com.sun.star.form.component.NavigationToolBar" );
-
-    IMPLEMENT_CONSTASCII_USTRING(FM_SUN_CONTROL_GRIDCONTROL,"com.sun.star.form.control.GridControl");
-
-    IMPLEMENT_CONSTASCII_USTRING(FM_NUMBER_FORMATTER,"com.sun.star.util.NumberFormatter");
-    IMPLEMENT_CONSTASCII_USTRING(FM_FORM_CONTROLLER,"com.sun.star.form.FormController");
-    IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_CONNECTION,"com.sun.star.sdb.Connection");
-    IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_INTERACTION_HANDLER,"com.sun.star.sdb.InteractionHandler");
-}   // namespace svxform
+#include "fmservs.hxx"
 
 // ------------------------------------------------------------------------
 #define DECL_SERVICE(ImplName)                      \

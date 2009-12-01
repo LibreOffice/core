@@ -104,7 +104,7 @@
         </node>
         <node oor:name="MediaType" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:string">
-            <value>application/csv</value>
+            <value>text/csv</value>
           </prop>
         </node>
       </node>
