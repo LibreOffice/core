@@ -342,6 +342,12 @@ public:
      */
     static const sal_uInt16 UNLIMITED_PRECISION;
 
+    /**
+     * Precision suitable for numbers displayed in input bar, for instance
+     * Calc's formula input bar.
+     */
+    static const sal_uInt16 INPUTSTRING_PRECISION;
+
     /// Preferred ctor with service manager and language/country enum
     SvNumberFormatter(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr,

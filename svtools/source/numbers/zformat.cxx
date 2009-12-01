@@ -2061,16 +2061,23 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
     BOOL bHadStandard = FALSE;
     if (bStandard)                              // einzelne Standardformate
     {
-        if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)     // alle Zahlformate InputLine
+        if (rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION)     // alle Zahlformate InputLine
         {
             ImpGetOutputInputLine(fNumber, OutString);
-            return FALSE;
+            return false;
         }
         switch (eType)
         {
             case NUMBERFORMAT_NUMBER:                   // Standardzahlformat
+            {
+                if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
+                {
+                    ImpGetOutputInputLine(fNumber, OutString);
+                    return false;
+                }
                 ImpGetOutputStandard(fNumber, OutString);
                 bHadStandard = TRUE;
+            }
             break;
             case NUMBERFORMAT_DATE:
                 bRes |= ImpGetDateOutput(fNumber, 0, OutString);
