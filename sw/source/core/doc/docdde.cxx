@@ -62,7 +62,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-    static ::sw::mark::DdeBookmark* const lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName)
+    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName)
     {
         //Iterating over all bookmarks, checking DdeBookmarks
         const String sNameLc = GetAppCharClass().lower(rName);

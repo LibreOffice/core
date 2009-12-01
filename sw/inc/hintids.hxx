@@ -375,6 +375,53 @@ RES_FLTRATTR_END
 #define RES_WHICHHINT_END HINT_END
 
 
+inline bool isATR(const USHORT nWhich)
+{
+    return (RES_CHRATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
+}
+inline bool isCHRATR(const USHORT nWhich)
+{
+    return (RES_CHRATR_BEGIN <= nWhich) && (RES_CHRATR_END > nWhich);
+}
+inline bool isTXTATR_WITHEND(const USHORT nWhich)
+{
+    return (RES_TXTATR_WITHEND_BEGIN <= nWhich)
+        && (RES_TXTATR_WITHEND_END > nWhich);
+}
+inline bool isTXTATR_NOEND(const USHORT nWhich)
+{
+    return (RES_TXTATR_NOEND_BEGIN <= nWhich)
+        && (RES_TXTATR_NOEND_END > nWhich);
+}
+inline bool isTXTATR(const USHORT nWhich)
+{
+    return (RES_TXTATR_BEGIN <= nWhich) && (RES_TXTATR_END > nWhich);
+}
+inline bool isPARATR(const USHORT nWhich)
+{
+    return (RES_PARATR_BEGIN <= nWhich) && (RES_PARATR_END > nWhich);
+}
+inline bool isPARATR_LIST(const USHORT nWhich)
+{
+    return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich); }
+inline bool isFRMATR(const USHORT nWhich)
+{
+    return (RES_FRMATR_BEGIN <= nWhich) && (RES_FRMATR_END > nWhich);
+}
+inline bool isGRFATR(const USHORT nWhich)
+{
+    return (RES_GRFATR_BEGIN <= nWhich) && (RES_GRFATR_END > nWhich);
+}
+inline bool isBOXATR(const USHORT nWhich)
+{
+    return (RES_BOXATR_BEGIN <= nWhich) && (RES_BOXATR_END > nWhich);
+}
+inline bool isUNKNOWNATR(const USHORT nWhich)
+{
+    return (RES_UNKNOWNATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
+}
+
+
 /*
  * hole aus der statischen Default-Attribut Tabelle ueber den Which-Wert
  * das entsprechende default Attribut.

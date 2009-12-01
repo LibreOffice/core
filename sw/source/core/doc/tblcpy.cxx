@@ -567,7 +567,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if( pRg.get() )
-        pCpyDoc->CopyWithFlyInFly( *pRg, aInsIdx, FALSE );
+        pCpyDoc->CopyWithFlyInFly( *pRg, 0, aInsIdx, FALSE );
     else
         pDoc->GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
     aSavePos++;

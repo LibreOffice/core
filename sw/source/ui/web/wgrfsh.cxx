@@ -32,8 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include <svx/srchitem.hxx>
 #include <sfx2/app.hxx>
 

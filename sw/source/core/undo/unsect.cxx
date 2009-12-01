@@ -167,8 +167,10 @@ void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
     if( bSplitAtEnd )
         Join( rDoc, nEndNode );
 
-    if( pHistory )
-        pHistory->TmpRollback( &rDoc, 0, FALSE );
+    if ( pHistory )
+    {
+        pHistory->TmpRollback( &rDoc, 0, false );
+    }
 
     if( bUpdateFtn )
         rDoc.GetFtnIdxs().UpdateFtn( aIdx );
@@ -265,7 +267,7 @@ void SwUndoInsSection::SaveSplitNode( SwTxtNode* pTxtNd, BOOL bAtStt )
         if( !pHistory )
             pHistory = new SwHistory;
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), pTxtNd->GetIndex(), 0,
-                            pTxtNd->GetTxt().Len(), FALSE );
+                            pTxtNd->GetTxt().Len(), false );
     }
 
     if( bAtStt )

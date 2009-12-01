@@ -507,7 +507,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         // sorge dafuer das auch Fly's in Fly's kopiert werden
         aIdx = *pSttNd->EndOfSectionNode();
-        pSrcDoc->CopyWithFlyInFly( aRg, aIdx, sal_False, sal_True, sal_True );
+        pSrcDoc->CopyWithFlyInFly( aRg, 0, aIdx, sal_False, sal_True, sal_True );
     }
     else
     {
@@ -885,7 +885,7 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
-                        Copy( *pTmp, aPos );
+                        Copy( *pTmp, aPos, false );
                 } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
                 mbCopyIsMove = bOldFlag;
                 mbUndo = bOldUndo;

@@ -296,10 +296,11 @@ void SwPageDesc::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     const USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     SwModify::Modify( pOld, pNew );
 
-    if( RES_ATTRSET_CHG == nWhich || RES_FMT_CHG == nWhich ||
-        ( nWhich >= RES_CHRATR_BEGIN && nWhich < RES_CHRATR_END ) ||
-         nWhich == RES_PARATR_LINESPACING )
+    if ( (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich)
+        || isCHRATR(nWhich) || (RES_PARATR_LINESPACING == nWhich) )
+    {
         RegisterChange();
+    }
 }
 
 static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )

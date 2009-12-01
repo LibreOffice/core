@@ -63,10 +63,9 @@
 #include <node2lay.hxx>
 #include <tblrwcl.hxx>
 #include <fmtanchr.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <unochart.hxx>
+
 
 #ifdef PRODUCT
 #define CHECK_TABLE(t)
@@ -215,13 +214,16 @@ So we need to remember not only the start node position but the end node positio
 
 struct SwTblToTxtSave
 {
-    ULONG nNode;
-    ULONG nEndNd;
-    xub_StrLen nCntnt;
-    SwHistory* pHstry;
+    ULONG m_nSttNd;
+    ULONG m_nEndNd;
+    xub_StrLen m_nCntnt;
+    SwHistory* m_pHstry;
+    // metadata references for first and last paragraph in cell
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
     SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, ULONG nEndIdx, xub_StrLen nCntnt );
-    ~SwTblToTxtSave() { delete pHstry; }
+    ~SwTblToTxtSave() { delete m_pHstry; }
 };
 
 SV_IMPL_PTRARR( SfxItemSets, SfxItemSetPtr )
@@ -387,26 +389,41 @@ SwRewriter SwUndoInsTbl::GetRewriter() const
 // -----------------------------------------------------
 
 SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, ULONG nEndIdx, xub_StrLen nCnt )
-    : nNode( nNd ), nEndNd( nEndIdx), nCntnt( nCnt ), pHstry( 0 )
+    : m_nSttNd( nNd ), m_nEndNd( nEndIdx), m_nCntnt( nCnt ), m_pHstry( 0 )
 {
     // Attributierung des gejointen Node merken.
-    if( USHRT_MAX != nCnt )
-        ++nNd;
-
     SwTxtNode* pNd = rDoc.GetNodes()[ nNd ]->GetTxtNode();
     if( pNd )
     {
-        pHstry = new SwHistory;
+        m_pHstry = new SwHistory;
 
-        pHstry->Add( pNd->GetTxtColl(), nNd, ND_TEXTNODE );
-        if( pNd->GetpSwpHints() )
-            pHstry->CopyAttr( pNd->GetpSwpHints(), nNd, 0,
-                        pNd->GetTxt().Len(), FALSE );
+        m_pHstry->Add( pNd->GetTxtColl(), nNd, ND_TEXTNODE );
+        if ( pNd->GetpSwpHints() )
+        {
+            m_pHstry->CopyAttr( pNd->GetpSwpHints(), nNd, 0,
+                        pNd->GetTxt().Len(), false );
+        }
         if( pNd->HasSwAttrSet() )
-            pHstry->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNd );
+            m_pHstry->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNd );
 
-        if( !pHstry->Count() )
-            delete pHstry, pHstry = 0;
+        if( !m_pHstry->Count() )
+            delete m_pHstry, m_pHstry = 0;
+
+        // METADATA: store
+        m_pMetadataUndoStart = pNd->CreateUndo();
+    }
+
+    // we also need to store the metadata reference of the _last_ paragraph
+    // we subtract 1 to account for the removed cell start/end node pair
+    // (after SectionUp, the end of the range points to the node after the cell)
+    if ( nEndIdx - 1 > nNd )
+    {
+        SwTxtNode* pLastNode( rDoc.GetNodes()[ nEndIdx - 1 ]->GetTxtNode() );
+        if( pLastNode )
+        {
+            // METADATA: store
+            m_pMetadataUndoEnd = pLastNode->CreateUndo();
+        }
     }
 }
 
@@ -433,7 +450,7 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     for( USHORT n = 0; n < rFrmFmtTbl.Count(); ++n )
     {
         const SwPosition* pAPos;
-        const SwFrmFmt* pFmt = rFrmFmtTbl[ n ];
+        SwFrmFmt* pFmt = rFrmFmtTbl[ n ];
         const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
         if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
             ( FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ||
@@ -562,22 +579,24 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
     for( USHORT n = rSavedData.Count(); n; )
     {
         SwTblToTxtSave* pSave = rSavedData[ --n ];
-        aSttIdx = pSave->nNode;
+        // if the start node was merged with last from prev. cell,
+        // subtract 1 from index to get the merged paragraph, and split that
+        aSttIdx = pSave->m_nSttNd - ( ( USHRT_MAX != pSave->m_nCntnt ) ? 1 : 0);
         SwTxtNode* pTxtNd = aSttIdx.GetNode().GetTxtNode();
 
-        if( USHRT_MAX != pSave->nCntnt )
+        if( USHRT_MAX != pSave->m_nCntnt )
         {
             // an der ContentPosition splitten, das vorherige Zeichen
             // loeschen (ist der Trenner!)
             ASSERT( pTxtNd, "Wo ist der TextNode geblieben?" );
-            SwIndex aCntPos( pTxtNd, pSave->nCntnt - 1 );
+            SwIndex aCntPos( pTxtNd, pSave->m_nCntnt - 1 );
 
             pTxtNd->Erase( aCntPos, 1 );
             SwCntntNode* pNewNd = pTxtNd->SplitCntntNode(
                                         SwPosition( aSttIdx, aCntPos ));
             if( aBkmkArr.Count() )
-                _RestoreCntntIdx( aBkmkArr, *pNewNd, pSave->nCntnt,
-                                                    pSave->nCntnt + 1 );
+                _RestoreCntntIdx( aBkmkArr, *pNewNd, pSave->m_nCntnt,
+                                                     pSave->m_nCntnt + 1 );
         }
         else
         {
@@ -590,6 +609,8 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
 
         if( pTxtNd )
         {
+            // METADATA: restore
+            pTxtNd->GetTxtNode()->RestoreMetadata(pSave->m_pMetadataUndoStart);
             if( pTxtNd->HasSwAttrSet() )
                 pTxtNd->ResetAllAttr();
 
@@ -597,14 +618,25 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
                 pTxtNd->ClearSwpHintsArr( false );
         }
 
-        if( pSave->pHstry )
+        if( pSave->m_pHstry )
         {
-            USHORT nTmpEnd = pSave->pHstry->GetTmpEnd();
-            pSave->pHstry->TmpRollback( GetDoc(), 0 );
-            pSave->pHstry->SetTmpEnd( nTmpEnd );
+            USHORT nTmpEnd = pSave->m_pHstry->GetTmpEnd();
+            pSave->m_pHstry->TmpRollback( GetDoc(), 0 );
+            pSave->m_pHstry->SetTmpEnd( nTmpEnd );
         }
 
-        aEndIdx = pSave->nEndNd;
+        // METADATA: restore
+        // end points to node after cell
+        if ( pSave->m_nEndNd - 1 > pSave->m_nSttNd )
+        {
+            SwTxtNode* pLastNode = (*this)[ pSave->m_nEndNd - 1 ]->GetTxtNode();
+            if (pLastNode)
+            {
+                pLastNode->RestoreMetadata(pSave->m_pMetadataUndoEnd);
+            }
+        }
+
+        aEndIdx = pSave->m_nEndNd;
         SwStartNode* pSttNd = new SwStartNode( aSttIdx, ND_STARTNODE,
                                                 SwTableBoxStartNode );
         pSttNd->pStartOfSection = pTblNd;
@@ -2229,11 +2261,10 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
 
         pHistory = new SwHistory;
         SwRegHistory aRHst( *rBox.GetSttNd(), pHistory );
-        // immer alle TextAttribute sichern; ist fuers Undo mit voll-
-        // staendiger Attributierung am besten, wegen den evt.
-        // Ueberlappenden Bereichen von An/Aus.
+        // always save all text atttibutes because of possibly overlapping
+        // areas of on/off
         pHistory->CopyAttr( pTNd->GetpSwpHints(), nNdPos, 0,
-                            pTNd->GetTxt().Len(), TRUE );
+                            pTNd->GetTxt().Len(), true );
 
         if( pTNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTNd->GetpSwAttrSet(), nNdPos );
@@ -2827,7 +2858,8 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     }
     else if( !rJoin ) // If the old part is empty and joined, we are finished
     {   // if it is not joined, we have to delete this empty paragraph
-        aCellEnd = SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode() );
+        aCellEnd = SwPosition(
+            SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode() ));
         SwPaM aTmpPam( aDeleteStart, aCellEnd );
         pUndo = new SwUndoDelete( aTmpPam, TRUE );
     }

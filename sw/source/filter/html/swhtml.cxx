@@ -50,9 +50,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -99,9 +97,7 @@
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>        // fuer SwBookmark ...
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <editsh.hxx>       // fuer Start/EndAction
 #include <docufld.hxx>
 #include <swcss1.hxx>
@@ -334,6 +330,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bInFootEndNoteSymbol( FALSE ),
 //    bIgnoreHTMLComments( bNoHTMLComments )
     bIgnoreHTMLComments( bNoHTMLComments ),
+    bRemoveHidden( FALSE ),
     pTempViewFrame(0)
 {
     nEventId = 0;
@@ -501,10 +498,17 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
     {
         // keiner will mehr das Doc haben, also weg damit
         delete pDoc;
+        pDoc = NULL;
     }
 
     if ( pTempViewFrame )
+    {
         pTempViewFrame->DoClose();
+
+        // the temporary view frame is hidden, so the hidden flag might need to be removed
+        if ( bRemoveHidden && pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
+            pDoc->GetDocShell()->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
+    }
 }
 
 IMPL_LINK( SwHTMLParser, AsyncCallback, void*, /*pVoid*/ )
@@ -1341,11 +1345,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                     xDocProps = xDPS->getDocumentProperties();
                     DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
                 }
-                // always call ParseMetaOptions, it sets the encoding (#i96700#)
-                if (!ParseMetaOptions( xDocProps, pHTTPHeader ) && IsNewDoc())
-                {
-                    ParseMoreMetaOptions();
-                }
+                ParseMetaOptions( xDocProps, pHTTPHeader );
             }
         }
         break;
@@ -2303,7 +2303,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
         SwpHints& rHints = pTxtNd->GetSwpHints();
         for( sal_uInt16 i=0; i < nCntAttr; i++ )
         {
-            SwTxtAttr *pHt = rHints.GetHt( i );
+            SwTxtAttr *pHt = rHints.GetTextHint( i );
             sal_uInt16 nWhich = pHt->Which();
             sal_Int16 nIdx = -1;
             if( RES_CHRATR_CJK_FONT <= nWhich &&
@@ -2613,8 +2613,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                        ( !pAttr->IsLikePara() &&
                          nEndParaIdx == rEndIdx.GetIndex() &&
                          pAttr->GetEndCnt() < nEndCnt &&
-                         RES_CHRATR_BEGIN <= nWhich &&
-                         RES_TXTATR_WITHEND_END > nWhich ) ||
+                         (isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich)) ) ||
                        ( bBeforeTable &&
                          nEndParaIdx == rEndIdx.GetIndex() &&
                          !pAttr->GetEndCnt() );
@@ -2663,9 +2662,8 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                 {
                     // durch die elende Loescherei von Nodes kann auch mal
                     // ein Index auf einen End-Node zeigen :-(
-                    if( pAttr->GetSttPara() == pAttr->GetEndPara() &&
-                        (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                         nWhich >= RES_TXTATR_NOEND_END) )
+                    if ( (pAttr->GetSttPara() == pAttr->GetEndPara()) &&
+                         !isTXTATR_NOEND(nWhich) )
                     {
                         // wenn der End-Index auch auf den Node zeigt
                         // brauchen wir auch kein Attribut mehr zu setzen,
@@ -2696,9 +2694,8 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                 pAttrPam->GetPoint()->nContent.Assign( pCNd, pAttr->nSttCntnt );
 
                 pAttrPam->SetMark();
-                if( pAttr->GetSttPara() != pAttr->GetEndPara() &&
-                    (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                     nWhich >= RES_TXTATR_NOEND_END) )
+                if ( (pAttr->GetSttPara() != pAttr->GetEndPara()) &&
+                         !isTXTATR_NOEND(nWhich) )
                 {
                     pCNd = pDoc->GetNodes()[ pAttr->nEndPara ]->GetCntntNode();
                     if( !pCNd )
@@ -2738,8 +2735,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                     // muessen wir es im Node davor beenden oder wegschmeissen,
                     // wenn es erst in dem Node beginnt
                     if( nWhich != RES_BREAK && nWhich != RES_PAGEDESC &&
-                        (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                         nWhich >= RES_TXTATR_NOEND_END) )
+                         !isTXTATR_NOEND(nWhich) )
                     {
                         if( pAttrPam->GetMark()->nNode.GetIndex() !=
                             rEndIdx.GetIndex() )
@@ -5501,3 +5497,32 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 
     pAttr->pPrev = pPrv;
 }
+
+bool SwHTMLParser::ParseMetaOptions(
+        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
+        SvKeyValueIterator *i_pHeader )
+{
+    // always call base ParseMetaOptions, it sets the encoding (#i96700#)
+    bool ret( HTMLParser::ParseMetaOptions(i_xDocProps, i_pHeader) );
+    if (!ret && IsNewDoc())
+    {
+        ParseMoreMetaOptions();
+    }
+    return ret;
+}
+
+// override so we can parse DOCINFO field subtypes INFO[1-4]
+void SwHTMLParser::AddMetaUserDefined( ::rtl::OUString const & i_rMetaName )
+{
+    // unless we already have 4 names, append the argument to m_InfoNames
+    ::rtl::OUString* pName // the first empty string in m_InfoNames
+         (!m_InfoNames[0].getLength() ? &m_InfoNames[0] :
+         (!m_InfoNames[1].getLength() ? &m_InfoNames[1] :
+         (!m_InfoNames[2].getLength() ? &m_InfoNames[2] :
+         (!m_InfoNames[3].getLength() ? &m_InfoNames[3] : 0 ))));
+    if (pName)
+    {
+        (*pName) = i_rMetaName;
+    }
+}
+

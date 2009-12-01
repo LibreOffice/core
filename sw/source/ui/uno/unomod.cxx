@@ -50,12 +50,12 @@
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <doc.hxx>
 #include <comphelper/TypeGeneration.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
+#include <com/sun/star/view/DocumentZoomType.hpp>
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <edtwin.hxx>
 #include <rtl/ustrbuf.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -726,22 +726,27 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nZoom))
                 throw IllegalArgumentException();
             SvxZoomType eZoom = (SvxZoomType)USHRT_MAX;
-            switch(nZoom)
+            switch (nZoom)
             {
-                case /*DocumentZoomType_OPTIMAL       */0:
+                case view::DocumentZoomType::OPTIMAL:
                     eZoom = SVX_ZOOM_OPTIMAL;
                 break;
-                case /*DocumentZoomType_PAGE_WIDTH  */  1:
+                case view::DocumentZoomType::PAGE_WIDTH:
                     eZoom = SVX_ZOOM_PAGEWIDTH;
                 break;
-                case /*DocumentZoomType_ENTIRE_PAGE */  2:
+                case view::DocumentZoomType::ENTIRE_PAGE:
                     eZoom = SVX_ZOOM_WHOLEPAGE;
                 break;
-                case /*DocumentZoomType_BY_VALUE    */  3:
+                case view::DocumentZoomType::BY_VALUE:
                     eZoom = SVX_ZOOM_PERCENT;
                 break;
-                case /*DocumentZoomType_PAGE_WIDTH_EXACT */ 4:
+                case view::DocumentZoomType::PAGE_WIDTH_EXACT:
                     eZoom = SVX_ZOOM_PAGEWIDTH_NOBORDER;
+                break;
+                default:
+                    throw IllegalArgumentException(
+                        ::rtl::OUString::createFromAscii(
+                            "SwXViewSettings: invalid zoom type"), 0, 0);
                 break;
             }
             if(eZoom < USHRT_MAX)
@@ -915,23 +920,27 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case HANDLE_VIEWSET_ZOOM_TYPE:
         {
             bBool = FALSE;
-            sal_Int16 nRet;
-            switch(mpConstViewOption->GetZoomType())
+            sal_Int16 nRet(0);
+            switch (mpConstViewOption->GetZoomType())
             {
                 case SVX_ZOOM_OPTIMAL:
-                    nRet = /*DocumentZoomType_OPTIMAL*/ 0;
+                    nRet = view::DocumentZoomType::OPTIMAL;
                 break;
                 case SVX_ZOOM_PAGEWIDTH:
-                    nRet = /*DocumentZoomType_PAGE_WIDTH    */1;
+                    nRet = view::DocumentZoomType::PAGE_WIDTH;
                 break;
                 case SVX_ZOOM_WHOLEPAGE:
-                    nRet = /*DocumentZoomType_ENTIRE_PAGE */  2;
+                    nRet = view::DocumentZoomType::ENTIRE_PAGE;
                 break;
                 case SVX_ZOOM_PERCENT:
-                    nRet = /*DocumentZoomType_BY_VALUE  */  3;
+                    nRet = view::DocumentZoomType::BY_VALUE;
+                break;
+                case SVX_ZOOM_PAGEWIDTH_NOBORDER:
+                    nRet = view::DocumentZoomType::PAGE_WIDTH_EXACT;
                 break;
                 default:
-                    ;
+                    OSL_ENSURE(false, "SwXViewSettings: invalid zoom type");
+                break;
             }
             rValue <<= nRet;
         }

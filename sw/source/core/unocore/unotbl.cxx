@@ -79,9 +79,7 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 #include <com/sun/star/chart/ChartDataChangeEvent.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
@@ -1600,7 +1598,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox) :
     SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, sal_True);
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     pUnoCrsr->Add(&aCrsrDepend);
-    SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+    SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
     pTblCrsr->MakeBoxSels();
 }
 /*-- 11.12.98 12:16:14---------------------------------------------------
@@ -1618,12 +1616,12 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
         *pUnoCrsr->GetMark() = *pTableSelection->GetMark();
     }
     const SwSelBoxes& rBoxes = pTableSelection->GetBoxes();
-    SwTableCursor* pTableCrsr = (SwTableCursor*) *pUnoCrsr;
+    SwTableCursor* pTableCrsr = dynamic_cast<SwTableCursor*>(pUnoCrsr);
     for(sal_uInt16 i = 0; i < rBoxes.Count(); i++)
         pTableCrsr->InsertBox( *rBoxes.GetObject(i) );
 
     pUnoCrsr->Add(&aCrsrDepend);
-    SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+    SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
     pTblCrsr->MakeBoxSels();
 }
 /*-- 11.12.98 12:16:14---------------------------------------------------
@@ -1648,7 +1646,7 @@ OUString SwXTextTableCursor::getRangeName(void) throw( uno::RuntimeException )
     //!! see also SwChartDataSequence::getSourceRangeRepresentation
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         pTblCrsr->MakeBoxSels();
         const SwStartNode* pNode = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
         const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
@@ -1689,7 +1687,7 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& CellName, sal_Bool E
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
         String sCellName(CellName);
         bRet = pTblCrsr->GotoTblBox(sCellName);
@@ -1706,7 +1704,7 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool Expand) throw( uno
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
         bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS, FALSE, FALSE);
     }
@@ -1722,7 +1720,7 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool Expand) throw( un
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
         bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS, FALSE, FALSE);
     }
@@ -1738,7 +1736,7 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool Expand) throw( uno::
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
         bRet = pTblCrsr->UpDown(sal_True, Count, 0, 0);
     }
@@ -1754,7 +1752,7 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool Expand) throw( uno
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
         bRet = pTblCrsr->UpDown(sal_False, Count, 0, 0);
     }
@@ -1769,7 +1767,7 @@ void SwXTextTableCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
         pTblCrsr->MoveTable(fnTableCurr, fnTableStart);
     }
@@ -1783,7 +1781,7 @@ void SwXTextTableCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException )
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
         pTblCrsr->MoveTable(fnTableCurr, fnTableEnd);
     }
@@ -1802,7 +1800,7 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
             // hier muessen die Actions aufgehoben werden
             UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
         }
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         pTblCrsr->MakeBoxSels();
 
         {
@@ -1835,7 +1833,7 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal) th
             // hier muessen die Actions aufgehoben werden
             UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
         }
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         pTblCrsr->MakeBoxSels();
         {
             UnoActionContext aContext(pUnoCrsr->GetDoc());
@@ -1877,7 +1875,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
         SwStartNode* pSttNode = pUnoCrsr->GetNode()->StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         const SfxItemPropertySimpleEntry* pEntry =
                                     m_pPropSet->getPropertyMap()->getByName(rPropertyName);
         if(pEntry)
@@ -1936,7 +1934,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         SwStartNode* pSttNode = pUnoCrsr->GetNode()->StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
-        SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
+        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         const SfxItemPropertySimpleEntry* pEntry =
                                     m_pPropSet->getPropertyMap()->getByName(rPropertyName);
         if(pEntry)
@@ -2648,7 +2646,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
             pUnoCrsr->SetMark();
             pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
             pUnoCrsr->Move( fnMoveForward, fnGoNode );
-            SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+            SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
             pCrsr->MakeBoxSels();
             // pUnoCrsr wird uebergeben und nicht geloescht
             SwXCellRange* pCellRange = new SwXCellRange(pUnoCrsr, *pFmt, rDesc);
@@ -3322,7 +3320,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                             pUnoCrsr->SetMark();
                             pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                             pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                            SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                            SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                             pCrsr->MakeBoxSels();
 
                             SfxItemSet aSet(pDoc->GetAttrPool(),
@@ -3517,7 +3515,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         pUnoCrsr->SetMark();
                         pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                         pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                        SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                        SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                         pCrsr->MakeBoxSels();
 
                         SfxItemSet aSet(pDoc->GetAttrPool(),
@@ -4011,7 +4009,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                     pUnoCrsr->SetMark();
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                     pCrsr->MakeBoxSels();
                     // pUnoCrsr wird uebergeben und nicht geloescht
                     SwXCellRange* pCellRange = new SwXCellRange(pUnoCrsr, *pFmt, aNewDesc);
@@ -4081,7 +4079,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                 // remove actions to enable box selection
                 UnoActionRemoveContext aRemoveContext(pDoc);
             }
-            SwUnoTableCrsr* pCrsr = *pTblCrsr;
+            SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
             pCrsr->MakeBoxSels();
             switch(pEntry->nWID )
             {
@@ -4243,7 +4241,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     // erstmal die Attribute des Cursors
-                    SwUnoTableCrsr* pCrsr = *pTblCrsr;
+                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
                     SwXTextCursor::GetCrsrAttr(pCrsr->GetSelRing(), aSet);
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
                 }
@@ -4459,7 +4457,7 @@ SwUnoCrsr * lcl_CreateCursor( SwFrmFmt &rTblFmt,
         pUnoCrsr->SetMark();
         pUnoCrsr->GetPoint()->nNode = *pEndBox->GetSttNd();
         pUnoCrsr->Move( fnMoveForward, fnGoNode );
-        SwUnoTableCrsr *pCrsr = *pUnoCrsr;
+        SwUnoTableCrsr *pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         pCrsr->MakeBoxSels();
     }
     return pUnoCrsr;
@@ -4891,7 +4889,7 @@ void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rD
     if(pFmt &&
         SwXTextCursor::convertSortProperties(rDescriptor, aSortOpt))
     {
-        SwUnoTableCrsr* pTableCrsr = *pTblCrsr;
+        SwUnoTableCrsr* pTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
         pTableCrsr->MakeBoxSels();
         UnoActionContext aContext( pFmt->GetDoc() );
         pFmt->GetDoc()->SortTbl(pTableCrsr->GetBoxes(), aSortOpt);
@@ -5152,7 +5150,8 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                     pUnoCrsr->SetMark();
                     pUnoCrsr->GetPoint()->nNode = *pBLBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                    SwUnoTableCrsr* pCrsr =
+                        dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                     pCrsr->MakeBoxSels();
                     {   // Die Klammer ist wichtig
                         UnoActionContext aAction(pFrmFmt->GetDoc());
@@ -5384,7 +5383,8 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                     pUnoCrsr->SetMark();
                     pUnoCrsr->GetPoint()->nNode = *pTRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                    SwUnoTableCrsr* pCrsr =
+                        dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                     pCrsr->MakeBoxSels();
                     {   // Die Klammer ist wichtig
                         UnoActionContext aAction(pFrmFmt->GetDoc());

@@ -35,8 +35,6 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentInfo.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
 #include "docsh.hxx"
 #include <svtools/htmltokn.h>
@@ -487,16 +485,9 @@ void SwHTMLParser::NewField()
 
                 if( nSub >= DI_INFO1 && nSub <= DI_INFO4 && aName.Len() == 0 )
                 {
-                    // backward compatibility: map to names from document info
-                    SfxObjectShell* pShell = pDoc->GetDocShell();
-                    DBG_ASSERT(pShell, "no object shell");
-                    if (pShell) {
-                        uno::Reference<document::XDocumentInfoSupplier> xDIS(
-                            pShell->GetModel(), uno::UNO_QUERY_THROW);
-                        uno::Reference<document::XDocumentInfo> xDocInfo
-                            = xDIS->getDocumentInfo();
-                        aName = xDocInfo->getUserFieldName(nSub - DI_INFO1);
-                    }
+                    // backward compatibility for OOo 2:
+                    // map to names stored in AddMetaUserDefined
+                    aName = m_InfoNames[nSub - DI_INFO1];
                     nSub = DI_CUSTOM;
                 }
 

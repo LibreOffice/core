@@ -59,15 +59,11 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <initui.hxx>               // fuer SpellPointer
-#ifndef _DRWTXTSH_HXX
 #include <drwtxtsh.hxx>
-#endif
 #include <swundo.hxx>
 #include <breakit.hxx>
 
@@ -85,19 +81,13 @@
 #endif
 
 #define SwDrawTextShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
 #include <uitool.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <swmodule.hxx>
 
 #include <svx/xtable.hxx>

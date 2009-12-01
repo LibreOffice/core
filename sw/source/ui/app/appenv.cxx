@@ -395,10 +395,7 @@ static USHORT nTitleNo = 0;
         Size aPaperSize = pPrt->PixelToLogic( pPrt->GetPaperSizePixel(),
                                               MAP_TWIP);
         if ( !aPaperSize.Width() && !aPaperSize.Height() )
-        {
-            aPaperSize.Width() = lA4Width;
-            aPaperSize.Height()= lA4Height;
-        }
+                    aPaperSize = SvxPaperInfo::GetPaperSize(PAPER_A4);
         if ( aPaperSize.Width() > aPaperSize.Height() )
             Swap( aPaperSize );
 

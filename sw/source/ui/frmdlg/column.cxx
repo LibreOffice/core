@@ -230,6 +230,8 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     //#i80458# if no columns can be set then disable OK
     if( !aApplyToLB.GetEntryCount() )
         aOK.Enable( sal_False );
+    //#i97810# set focus to the TabPage
+    pTabPage->ActivateColumnControl();
 }
 
 /*--------------------------------------------------------------------

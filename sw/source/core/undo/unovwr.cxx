@@ -97,7 +97,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
             pHistory = new SwHistory;
         SwRegHistory aRHst( *pTxtNd, pHistory );
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode, 0,
-                            nTxtNdLen, FALSE );
+                            nTxtNdLen, false );
         rPos.nContent++;
         bInsChar = FALSE;
     }
@@ -254,7 +254,7 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
     {
         if( pTxtNd->GetpSwpHints() )
             pTxtNd->ClearSwpHintsArr( false );
-        pHistory->TmpRollback( pDoc, 0, FALSE );
+        pHistory->TmpRollback( pDoc, 0, false );
     }
 
     if( pAktPam->GetMark()->nContent.GetIndex() != nSttCntnt )
@@ -420,7 +420,7 @@ void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.pLastUndoObj = this;
 }
 
-void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
+void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
                     xub_StrLen nStart, xub_StrLen nLen,
                     uno::Sequence <sal_Int32>& rOffsets )
 {
@@ -485,7 +485,7 @@ void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
                 pNew->pHistory = new SwHistory;
                 SwRegHistory aRHst( rTNd, pNew->pHistory );
                 pNew->pHistory->CopyAttr( rTNd.GetpSwpHints(),
-                        pNew->nNdIdx, 0, rTNd.GetTxt().Len(), FALSE );
+                        pNew->nNdIdx, 0, rTNd.GetTxt().Len(), false );
             }
             break;
         }
@@ -511,7 +511,7 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
         {
             if( pTNd->GetpSwpHints() )
                 pTNd->ClearSwpHintsArr( false );
-            pHistory->TmpRollback( &rDoc, 0, FALSE );
+            pHistory->TmpRollback( &rDoc, 0, false );
             pHistory->SetTmpEnd( pHistory->Count() );
         }
     }

@@ -35,9 +35,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
@@ -544,96 +542,7 @@ void SwXText::insertTextContent(const uno::Reference< text::XTextRange > & xRang
                 xTempRange = xRange;
             else
                 xTempRange = xRange->getStart();
-            SwXTextTable* pTable = reinterpret_cast< SwXTextTable * >(
-                    sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXTextTable::getUnoTunnelId()) ));
-
-            if(pTable)
-                pTable->attachToRange(xTempRange);
-            else
-            {
-                if(pBookmark)
-                    pBookmark ->attachToRange(xTempRange);
-                else
-                {
-                    if(pSection)
-                        pSection ->attachToRange(xTempRange);
-                    else
-                    {
-                        SwXFootnote* pFootnote = reinterpret_cast< SwXFootnote * >(
-                                sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXFootnote::getUnoTunnelId()) ));
-
-                        if(pFootnote)
-                            pFootnote->attachToRange(xTempRange);
-                        else
-                        {
-                            if(pReferenceMark)
-                                pReferenceMark->attachToRange(xTempRange);
-                            else
-                            {
-                                SwXFrame* pFrame = reinterpret_cast< SwXFrame * >(
-                                        sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXFrame::getUnoTunnelId()) ));
-
-                                if(pFrame)
-                                    pFrame->attachToRange(xTempRange);
-                                else
-                                {
-                                    SwXDocumentIndex* pDocumentIndex = reinterpret_cast< SwXDocumentIndex * >(
-                                            sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXDocumentIndex::getUnoTunnelId()) ));
-
-                                    if(pDocumentIndex)
-                                        pDocumentIndex->attachToRange(xTempRange);
-                                    else
-                                    {
-                                        if(pDocumentIndexMark)
-                                            pDocumentIndexMark->attachToRange(xTempRange);
-                                        else
-                                        {
-                                            SwXTextField* pTextField = reinterpret_cast< SwXTextField * >(
-                                                    sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXTextField::getUnoTunnelId()) ));
-
-                                            if(pTextField)
-                                                pTextField->attachToRange(xTempRange);
-                                            else
-                                            {
-                                                uno::Reference<beans::XPropertySet> xShapeProperties(xContent, uno::UNO_QUERY);
-                                                SwXShape* pShape = 0;
-                                                if(xShapeProperties.is())
-                                                    pShape = reinterpret_cast< SwXShape * >(
-                                                            sal::static_int_cast< sal_IntPtr >( xContentTunnel->getSomething( SwXShape::getUnoTunnelId()) ));
-                                                if(pShape)
-                                                {
-                                                    uno::Any aPos(&xRange,
-                                                        ::getCppuType((uno::Reference<text::XTextRange>*)0));
-                                                    pShape->setPropertyValue(C2U("TextRange"), aPos);
-
-                                                    uno::Reference<frame::XModel> xModel =
-                                                                    pDoc->GetDocShell()->GetBaseModel();
-                                                    uno::Reference<drawing::XDrawPageSupplier> xPageSupp(
-                                                                xModel, uno::UNO_QUERY);
-
-                                                    uno::Reference<drawing::XDrawPage> xPage = xPageSupp->getDrawPage();
-
-                                                    uno::Reference<drawing::XShape> xShape((cppu::OWeakObject*)pShape,
-                                                                                                            uno::UNO_QUERY);
-                                                    //nuer die XShapes haengen an der Sw-Drawpage
-                                                    uno::Reference<drawing::XShapes> xShps(xPage, uno::UNO_QUERY);
-                                                    xShps->add(xShape);
-                                                }
-                                                else
-                                                {
-                                                    lang::IllegalArgumentException aArgException;
-                                                    aArgException.Message = C2U("unknown text content");
-                                                    throw aArgException;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            xContent->attach(xTempRange);
         }
         else
         {
@@ -1411,8 +1320,9 @@ uno::Reference< text::XTextRange > SwXText::finishOrAppendParagraph(
                 throw aEx;
             }
         }
-        SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(*aPam.Start(), sal_False);
-        xRet = new SwXParagraph(this, pUnoCrsr);
+        SwTxtNode * pTxtNode( aPam.Start()->nNode.GetNode().GetTxtNode() );
+        OSL_ENSURE(pTxtNode, "no SwTxtNode?");
+        xRet = new SwXParagraph(this, pTxtNode);
     }
 
     return xRet;

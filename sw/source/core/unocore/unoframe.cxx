@@ -1020,12 +1020,10 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             throw beans::PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         SwDoc* pDoc = pFmt->GetDoc();
-        if( eType == FLYCNTTYPE_GRF &&
-                    (pEntry->nWID >=  RES_GRFATR_BEGIN &&
-                        pEntry->nWID < RES_GRFATR_END)||
-                            pEntry->nWID == FN_PARAM_COUNTOUR_PP ||
-                            pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
-                            pEntry->nWID == FN_UNO_IS_PIXEL_CONTOUR )
+        if ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID) ||
+            (FN_PARAM_COUNTOUR_PP        == pEntry->nWID) ||
+            (FN_UNO_IS_AUTOMATIC_CONTOUR == pEntry->nWID) ||
+            (FN_UNO_IS_PIXEL_CONTOUR     == pEntry->nWID) )
         {
             const :: SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
@@ -1468,8 +1466,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     {
         if( ((eType == FLYCNTTYPE_GRF) || (eType == FLYCNTTYPE_OLE)) &&
                 pEntry &&
-                ((pEntry->nWID >=  RES_GRFATR_BEGIN &&
-                    pEntry->nWID < RES_GRFATR_END )||
+                (isGRFATR(pEntry->nWID) ||
                         pEntry->nWID == FN_PARAM_COUNTOUR_PP ||
                         pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
                         pEntry->nWID == FN_UNO_IS_PIXEL_CONTOUR ))
@@ -1758,13 +1755,13 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
                 FN_UNO_GRAPHIC_FILTER     == pEntry->nWID||
                 FN_UNO_ACTUAL_SIZE == pEntry->nWID||
                 FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID)
+            {
                 pStates[i] = beans::PropertyState_DIRECT_VALUE;
+            }
             else
             {
-                if(eType == FLYCNTTYPE_GRF &&
-                        pEntry &&
-                        (pEntry->nWID >= RES_GRFATR_BEGIN &&
-                            pEntry->nWID <= RES_GRFATR_END))
+                if ((eType == FLYCNTTYPE_GRF) &&
+                        pEntry && isGRFATR(pEntry->nWID))
                 {
                     const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
                     if(pIdx)
@@ -1817,9 +1814,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             pEntry->nWID != FN_UNO_ANCHOR_TYPES &&
             pEntry->nWID != FN_PARAM_LINK_DISPLAY_NAME)
         {
-            if( eType == FLYCNTTYPE_GRF &&
-                        (pEntry->nWID >= RES_GRFATR_BEGIN &&
-                            pEntry->nWID < RES_GRFATR_END))
+            if ( (eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID) )
             {
                 const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
                 if(pIdx)

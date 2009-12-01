@@ -540,7 +540,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 SwTxtAttr* pFtnHnt = pTxtNd->GetTxtAttr( nFtnSttIdx );
                 ASSERT( pFtnHnt, "kein FtnAttribut" );
                 SwIndex aIdx( pTxtNd, nFtnSttIdx );
-                pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), FALSE );
+                pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), false );
                 pTxtNd->Erase( aIdx, 1 );
             }
 
@@ -563,7 +563,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 SwTxtAttr* pFtnHnt = pTxtNd->GetTxtAttr( nFtnSttIdx );
                 ASSERT( pFtnHnt, "kein FtnAttribut" );
                 SwIndex aIdx( pTxtNd, nFtnSttIdx );
-                pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), FALSE );
+                pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), false );
                 pTxtNd->Erase( aIdx, 1 );
             }
         }
@@ -600,7 +600,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         SwTxtNode* pTxtNd = pDoc->GetNodes()[ pAPos->nNode]->GetTxtNode();
                         SwTxtAttr* pFlyHnt = pTxtNd->GetTxtAttr( pAPos->nContent.GetIndex());
                         ASSERT( pFlyHnt, "kein FlyAttribut" );
-                        pHistory->Add( pFlyHnt, 0, FALSE );
+                        pHistory->Add( pFlyHnt, 0, false );
                         // n wieder zurueck, damit nicht ein Format uebesprungen wird !
                         n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
                     }

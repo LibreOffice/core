@@ -299,10 +299,12 @@ public:
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
+
+    virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const;
 };
 
 class Graphic;
 //implemented in source/ui/docvw/romenu.cxx
-String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const String &rName );
+String ExportGraphic( const Graphic &rGraphic, const String &rGrfName );
 
 #endif

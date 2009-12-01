@@ -120,6 +120,13 @@ interface BaseTextSelection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_PASTE_UNFORMATTED  // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     FN_PASTESPECIAL  // status(final|play)
     [
         ExecMethod = ExecClpbrd ;

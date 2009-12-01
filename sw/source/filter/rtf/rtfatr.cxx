@@ -1328,8 +1328,6 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             nChrCnt = nStrPos & 0xff00;
         }
 
-        HandleHyperlinks(rWrt, pNd->GetpSwpHints(), nStrPos);
-
         if( nAttrPos < nCntAttr && *pHt->GetStart() == nStrPos
             && nStrPos != nEnde )
         {
@@ -1360,6 +1358,8 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
         else
             aEndPosLst.OutScriptChange( nStrPos );
+
+        HandleHyperlinks(rWrt, pNd->GetpSwpHints(), nStrPos);
 
         if( rRTFWrt.bOutFmtAttr )
             rRTFWrt.Strm() << ' ';

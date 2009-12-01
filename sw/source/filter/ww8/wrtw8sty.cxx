@@ -432,7 +432,13 @@ void WW8WrtStyle::BuildUpx(const SwFmt* pFmt, bool bPap, USHORT nPos,
     if( bPap )
         SwWW8Writer::InsUInt16( *pO, nPos);     // Style-Nummer
 
+    ASSERT(rWrt.pCurrentStyle==NULL, "Current style not NULL");   // set current style before calling out
+    rWrt.pCurrentStyle=pFmt;
+
     rWrt.Out_SwFmt( *pFmt, bPap, !bPap );
+
+    ASSERT(rWrt.pCurrentStyle!=pFmt, "current style was changed");  // reset current style...
+    rWrt.pCurrentStyle=NULL;
 
     if( bInsDefCharSiz  )                   // nicht abgeleitet v. anderem Style
         Set1StyleDefaults( *pFmt, bPap );

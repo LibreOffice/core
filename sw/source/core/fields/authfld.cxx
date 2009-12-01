@@ -288,8 +288,9 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
 /* -----------------------------21.12.99 13:20--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
+bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
 {
+    bool bChanged = false;
     for( USHORT j = 0; j < m_pDataArr->Count(); ++j )
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
@@ -299,9 +300,11 @@ void SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
             for(USHORT i = 0; i < AUTH_FIELD_END; i++)
                 pTemp->SetAuthorField((ToxAuthorityField) i,
                     pNewEntry->GetAuthorField((ToxAuthorityField)i));
+            bChanged = true;
             break;
         }
     }
+    return bChanged;
 }
 /*-- 11.10.99 08:49:22---------------------------------------------------
     Description:    appends a new entry (if new) and returns the array position

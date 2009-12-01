@@ -30,12 +30,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>      // define ITEMIDs
 #include <svtools/macitem.hxx>
 #include <sfx2/frame.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/urihelper.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
@@ -47,9 +46,7 @@
 #include <frmatr.hxx>
 #include <swtypes.hxx>      // SET_CURR_SHELL
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <fldbas.hxx>       // Felder
 #include <expfld.hxx>
 #include <ddefld.hxx>
@@ -61,9 +58,7 @@
 #include <frmfmt.hxx>       // fuer UpdateTable
 #include <swtable.hxx>      // fuer UpdateTable
 #include <mdiexp.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swevent.hxx>
 #include <poolfmt.hxx>
 #include <section.hxx>
@@ -71,12 +66,8 @@
 #include <navipi.hxx>
 #include <crsskip.hxx>
 #include <txtinet.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
-#endif
 #include "swabstdlg.hxx"
 #include "fldui.hrc"
 
@@ -355,8 +346,8 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, USHORT nFilter )
     const SwTxtINetFmt* pTxtAttr = rItem.GetTxtINetFmt();
     if( pTxtAttr )
     {
-        ((SwTxtINetFmt*)pTxtAttr)->SetVisited( sal_True );
-        ((SwTxtINetFmt*)pTxtAttr)->SetValidVis( sal_True );
+        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisited( true );
+        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( true );
     }
 
     bIsInClickToEdit = FALSE;

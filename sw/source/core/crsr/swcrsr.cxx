@@ -35,13 +35,8 @@
 #include <hintids.hxx>
 #include <svx/protitem.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_CHARTYPE_HDL
 #include <com/sun/star/i18n/CharType.hdl>
-#endif
-
 
 #include <unotools/charclass.hxx>
 #include <svtools/ctloptions.hxx>
@@ -60,9 +55,7 @@
 #include <txtfrm.hxx>
 #include <scriptinfo.hxx>
 #include <crstate.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <frmatr.hxx>
 #include <breakit.hxx>
 #include <crsskip.hxx>
@@ -73,7 +66,9 @@
 #endif
 #include <redline.hxx>      // SwRedline
 
+
 using namespace ::com::sun::star::i18n;
+
 
 static const USHORT coSrchRplcThreshold = 60000;
 
@@ -162,11 +157,20 @@ SwCursor* SwCursor::Create( SwPaM* pRing ) const
     return new SwCursor( *GetPoint(), pRing, false );
 }
 
-SwCursor::operator SwTableCursor* ()        { return 0; }
-SwCursor::operator SwShellCrsr* ()          { return 0; }
-SwCursor::operator SwShellTableCrsr* ()     { return 0; }
-SwCursor::operator SwUnoCrsr* ()            { return 0; }
-SwCursor::operator SwUnoTableCrsr* ()       { return 0; }
+bool SwCursor::IsReadOnlyAvailable() const
+{
+    return false;
+}
+
+BOOL SwCursor::IsSkipOverHiddenSections() const
+{
+    return TRUE;
+}
+
+BOOL SwCursor::IsSkipOverProtectSections() const
+{
+    return !IsReadOnlyAvailable();
+}
 
 
 // Sicher die aktuelle Position, damit ggfs. auf diese zurueck
@@ -206,36 +210,41 @@ BOOL SwCursor::IsNoCntnt() const
             GetDoc()->GetNodes().GetEndOfExtras().GetIndex();
 }
 
-
-BOOL SwCursor::IsSelOvr( int eFlags )
+bool SwCursor::IsSelOvrCheck(int)
 {
-    SwTableCursor* pTblCrsr = *this;
-    SwDoc* pDoc = GetDoc();
-    SwNodes& rNds = pDoc->GetNodes();
+    return false;
+}
 
-    BOOL bSkipOverHiddenSections, bSkipOverProtectSections;
-    SwUnoCrsr* pUnoCrsr = *this;
-    if( pUnoCrsr )
+// extracted from IsSelOvr()
+bool SwTableCursor::IsSelOvrCheck(int eFlags)
+{
+    SwNodes& rNds = GetDoc()->GetNodes();
+    // check sections of nodes array
+    if( (nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION & eFlags)
+        && HasMark() )
     {
-        bSkipOverHiddenSections = pUnoCrsr->IsSkipOverHiddenSections();
-        bSkipOverProtectSections = pUnoCrsr->IsSkipOverProtectSections();
-    }
-    else
-    {
-        bSkipOverHiddenSections = TRUE;
-        bSkipOverProtectSections = !IsReadOnlyAvailable();
-    }
-
-    // Bereiche vom Nodes-Array ueberpruefen
-    if( (nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION & eFlags) && pTblCrsr && HasMark() )
-    {
-        SwNodeIndex aOldPos( rNds, pSavePos->nNode );
+        SwNodeIndex aOldPos( rNds, GetSavePos()->nNode );
         if( !CheckNodesRange( aOldPos, GetPoint()->nNode, TRUE ))
         {
             GetPoint()->nNode = aOldPos;
-            GetPoint()->nContent.Assign( GetCntntNode(), pSavePos->nCntnt );
-            return TRUE;
+            GetPoint()->nContent.Assign( GetCntntNode(), GetSavePos()->nCntnt );
+            return true;
         }
+    }
+    return SwCursor::IsSelOvrCheck(eFlags);
+}
+
+BOOL SwCursor::IsSelOvr( int eFlags )
+{
+    SwDoc* pDoc = GetDoc();
+    SwNodes& rNds = pDoc->GetNodes();
+
+    BOOL bSkipOverHiddenSections = IsSkipOverHiddenSections();
+    BOOL bSkipOverProtectSections = IsSkipOverProtectSections();
+
+    if ( IsSelOvrCheck( eFlags ) )
+    {
+        return TRUE;
     }
 
 // neu: Bereiche ueberpruefen
@@ -343,7 +352,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
 // neu: Bereiche ueberpruefen
 
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
-    if( pNd->IsCntntNode() && 0 == (SwUnoCrsr*)*this )
+    if( pNd->IsCntntNode() && !dynamic_cast<SwUnoCrsr*>(this) )
     {
         const SwCntntFrm* pFrm = ((SwCntntNode*)pNd)->GetFrm();
         if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() &&
@@ -419,7 +428,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
     const SwTableNode* pPtNd = pNd->FindTableNode();
 
     if( (pNd = &GetMark()->nNode.GetNode())->IsCntntNode() &&
-        !((SwCntntNode*)pNd)->GetFrm() && 0 == (SwUnoCrsr*)*this )
+        !((SwCntntNode*)pNd)->GetFrm() && !dynamic_cast<SwUnoCrsr*>(this) )
     {
         DeleteMark();
         RestoreSavePos();
@@ -691,8 +700,10 @@ BOOL SwCursor::IsAtValidPos( BOOL bPoint ) const
     const SwNode* pNd = &pPos->nNode.GetNode();
 
     if( pNd->IsCntntNode() && !((SwCntntNode*)pNd)->GetFrm() &&
-        0 == (const SwUnoCrsr*)*this )
+        !dynamic_cast<const SwUnoCrsr*>(this) )
+    {
         return FALSE;
+    }
 
         //JP 28.10.97: Bug 45129 - im UI-ReadOnly ist alles erlaubt
     if( !pDoc->GetDocShell() || !pDoc->GetDocShell()->IsReadOnlyUI() )
@@ -741,8 +752,8 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
     int bSrchBkwrd = fnMove == fnMoveBackward, bEnde = FALSE;
     SwPaM *pTmpCrsr = pCurCrsr, *pSaveCrsr = pCurCrsr;
 
-    // nur beim ShellCrsr einen Prgogressbar erzeugen
-    BOOL bIsUnoCrsr = 0 != (SwUnoCrsr*)*pCurCrsr;
+    // only create progress-bar for ShellCrsr
+    bool bIsUnoCrsr = 0 != dynamic_cast<SwUnoCrsr*>(pCurCrsr);
     _PercentHdl* pPHdl = 0;
     USHORT nCrsrCnt = 0;
     if( FND_IN_SEL & eFndRngs )
@@ -829,16 +840,20 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
             if( *pSttPos == *pEndPos )      // im Bereich, aber am Ende
                 break;                      // fertig
 
-            if( !nCrsrCnt && !bIsUnoCrsr )
+            if( !nCrsrCnt && pPHdl )
+            {
                 pPHdl->NextPos( *aRegion.GetMark() );
+            }
         }
 
         if( bEnde || !( eFndRngs & ( FND_IN_SELALL | FND_IN_SEL )) )
             break;
 
         pTmpCrsr = ((SwPaM*)pTmpCrsr->GetNext());
-        if( nCrsrCnt && !bIsUnoCrsr )
+        if( nCrsrCnt && pPHdl )
+        {
             pPHdl->NextPos( ++pPHdl->nActPos );
+        }
 
     } while( pTmpCrsr != pSaveCrsr );
 
@@ -1472,60 +1487,71 @@ BOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
     return bRet;
 }
 
-BOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
-                          BOOL bVisualAllowed,BOOL bSkipHidden, BOOL bInsertCrsr )
+BOOL SwTableCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT /*nMode*/,
+    BOOL /*bVisualAllowed*/, BOOL /*bSkipHidden*/, BOOL /*bInsertCrsr*/ )
 {
-    SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
-    if( pTblCrsr )
-        return bLeft ? pTblCrsr->GoPrevCell( nCnt )
-                     : pTblCrsr->GoNextCell( nCnt );
+    return bLeft ? GoPrevCell( nCnt )
+                 : GoNextCell( nCnt );
+}
 
+
+// calculate cursor bidi level: extracted from LeftRight()
+const SwCntntFrm*
+SwCursor::DoSetBidiLevelLeftRight(
+    BOOL & io_rbLeft, BOOL bVisualAllowed, BOOL bInsertCrsr)
+{
     // calculate cursor bidi level
     const SwCntntFrm* pSttFrm = NULL;
     SwNode& rNode = GetPoint()->nNode.GetNode();
-    const BOOL bDoNotSetBidiLevel = 0 != (SwUnoCrsr*)*this;
 
-    if ( !bDoNotSetBidiLevel )
+    if( rNode.IsTxtNode() )
     {
-        if( rNode.IsTxtNode() )
-        {
-            const SwTxtNode& rTNd = *rNode.GetTxtNode();
-            SwIndex& rIdx = GetPoint()->nContent;
-            xub_StrLen nPos = rIdx.GetIndex();
+        const SwTxtNode& rTNd = *rNode.GetTxtNode();
+        SwIndex& rIdx = GetPoint()->nContent;
+        xub_StrLen nPos = rIdx.GetIndex();
 
-            const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-            if ( bVisualAllowed && rCTLOptions.IsCTLFontEnabled() &&
-                 SvtCTLOptions::MOVEMENT_VISUAL ==
-                 rCTLOptions.GetCTLCursorMovement() )
+        const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+        if ( bVisualAllowed && rCTLOptions.IsCTLFontEnabled() &&
+             SvtCTLOptions::MOVEMENT_VISUAL ==
+             rCTLOptions.GetCTLCursorMovement() )
+        {
+            // for visual cursor travelling (used in bidi layout)
+            // we first have to convert the logic to a visual position
+            Point aPt;
+            pSttFrm = rTNd.GetFrm( &aPt, GetPoint() );
+            if( pSttFrm )
             {
-                // for visual cursor travelling (used in bidi layout)
-                // we first have to convert the logic to a visual position
-                Point aPt;
-                pSttFrm = rTNd.GetFrm( &aPt, GetPoint() );
-                if( pSttFrm )
-                {
-                    BYTE nCrsrLevel = GetCrsrBidiLevel();
-                    sal_Bool bForward = ! bLeft;
-                    ((SwTxtFrm*)pSttFrm)->PrepareVisualMove( nPos, nCrsrLevel,
-                                                             bForward, bInsertCrsr );
-                    rIdx = nPos;
-                    SetCrsrBidiLevel( nCrsrLevel );
-                    bLeft = ! bForward;
-                }
+                BYTE nCrsrLevel = GetCrsrBidiLevel();
+                sal_Bool bForward = ! io_rbLeft;
+                ((SwTxtFrm*)pSttFrm)->PrepareVisualMove( nPos, nCrsrLevel,
+                                                         bForward, bInsertCrsr );
+                rIdx = nPos;
+                SetCrsrBidiLevel( nCrsrLevel );
+                io_rbLeft = ! bForward;
             }
-            else
+        }
+        else
+        {
+            const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rTNd );
+            if ( pSI )
             {
-                const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rTNd );
-                if ( pSI )
-                {
-                    const xub_StrLen nMoveOverPos = bLeft ?
-                                                   ( nPos ? nPos - 1 : 0 ) :
-                                                    nPos;
-                    SetCrsrBidiLevel( pSI->DirType( nMoveOverPos ) );
-                }
+                const xub_StrLen nMoveOverPos = io_rbLeft ?
+                                               ( nPos ? nPos - 1 : 0 ) :
+                                                nPos;
+                SetCrsrBidiLevel( pSI->DirType( nMoveOverPos ) );
             }
         }
     }
+    return pSttFrm;
+}
+
+BOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
+                          BOOL bVisualAllowed,BOOL bSkipHidden, BOOL bInsertCrsr )
+{
+    // calculate cursor bidi level
+    SwNode& rNode = GetPoint()->nNode.GetNode();
+    const SwCntntFrm* pSttFrm = // may side-effect bLeft!
+        DoSetBidiLevelLeftRight(bLeft, bVisualAllowed, bInsertCrsr);
 
     // kann der Cursor n-mal weiterverschoben werden ?
     SwCrsrSaveState aSave( *this );
@@ -1650,10 +1676,40 @@ BOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
 }
 
+// calculate cursor bidi level: extracted from UpDown()
+void SwCursor::DoSetBidiLevelUpDown()
+{
+    SwNode& rNode = GetPoint()->nNode.GetNode();
+    if ( rNode.IsTxtNode() )
+    {
+        const SwScriptInfo* pSI =
+            SwScriptInfo::GetScriptInfo( (SwTxtNode&)rNode );
+        if ( pSI )
+        {
+            SwIndex& rIdx = GetPoint()->nContent;
+            xub_StrLen nPos = rIdx.GetIndex();
+
+            if( nPos && nPos < ((SwTxtNode&)rNode).GetTxt().Len() )
+            {
+                const BYTE nCurrLevel = pSI->DirType( nPos );
+                const BYTE nPrevLevel = pSI->DirType( nPos - 1 );
+
+                if ( nCurrLevel % 2 != nPrevLevel % 2 )
+                {
+                    // set cursor level to the lower of the two levels
+                    SetCrsrBidiLevel( Min( nCurrLevel, nPrevLevel ) );
+                }
+                else
+                    SetCrsrBidiLevel( nCurrLevel );
+            }
+        }
+    }
+}
+
 BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                             Point* pPt, long nUpDownX )
 {
-    SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
+    SwTableCursor* pTblCrsr = dynamic_cast<SwTableCursor*>(this);
     sal_Bool bAdjustTableCrsr = sal_False;
 
     // vom Tabellen Crsr Point/Mark in der gleichen Box ??
@@ -1752,36 +1808,7 @@ BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
         else
             *GetPoint() = aOldPos;
 
-        // calculate cursor bidi level
-        const BOOL bDoNotSetBidiLevel = 0 != (SwUnoCrsr*)*this;
-
-        if ( ! bDoNotSetBidiLevel )
-        {
-            SwNode& rNode = GetPoint()->nNode.GetNode();
-            if ( rNode.IsTxtNode() )
-            {
-                const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( (SwTxtNode&)rNode );
-                if ( pSI )
-                {
-                    SwIndex& rIdx = GetPoint()->nContent;
-                    xub_StrLen nPos = rIdx.GetIndex();
-
-                    if( nPos && nPos < ((SwTxtNode&)rNode).GetTxt().Len() )
-                    {
-                        const BYTE nCurrLevel = pSI->DirType( nPos );
-                        const BYTE nPrevLevel = pSI->DirType( nPos - 1 );
-
-                        if ( nCurrLevel % 2 != nPrevLevel % 2 )
-                        {
-                            // set cursor level to the lower of the two levels
-                            SetCrsrBidiLevel( Min( nCurrLevel, nPrevLevel ) );
-                        }
-                        else
-                            SetCrsrBidiLevel( nCurrLevel );
-                    }
-                }
-            }
-        }
+        DoSetBidiLevelUpDown(); // calculate cursor bidi level
     }
 
     return bRet;
@@ -1895,12 +1922,15 @@ BOOL SwCursor::GoPrevNextCell( BOOL bNext, USHORT nCnt )
     return !IsInProtectTable( TRUE );
 }
 
+BOOL SwTableCursor::GotoTable( const String& /*rName*/ )
+{
+    return FALSE; // invalid action
+}
+
 BOOL SwCursor::GotoTable( const String& rName )
 {
     BOOL bRet = FALSE;
-    // Tabellenselektion oder ueberhaupt Selection ?
-    // Das ist eine ungueltige Action !
-    if( !(SwTableCursor*)*this && !HasMark() )
+    if ( !HasMark() )
     {
         SwTable* pTmpTbl = SwTable::FindTable( GetDoc()->FindTblFmtByName( rName ) );
         if( pTmpTbl )
@@ -2017,7 +2047,6 @@ SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
 
 SwTableCursor::~SwTableCursor() {}
 
-SwTableCursor::operator SwTableCursor* () { return this; }
 
 BOOL lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, USHORT& rFndPos )
 {

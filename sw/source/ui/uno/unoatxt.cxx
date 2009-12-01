@@ -416,7 +416,7 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
         if(pxCursor)
         {
             SwPaM* pUnoCrsr = pxCursor->GetPaM();
-            bRet |= (true == pxCursor->GetDoc()->Copy( *pUnoCrsr, aPos ));
+            bRet |= (true == pxCursor->GetDoc()->Copy( *pUnoCrsr, aPos, false ));
         }
         else
         {
@@ -424,7 +424,7 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
             if(pBkmk && pBkmk->IsExpanded())
             {
                 SwPaM aTmp(pBkmk->GetOtherMarkPos(), pBkmk->GetMarkPos());
-                bRet |= (true == pxRange->GetDoc()->Copy(aTmp, aPos));
+                bRet |= (true == pxRange->GetDoc()->Copy(aTmp, aPos, false));
             }
         }
     }

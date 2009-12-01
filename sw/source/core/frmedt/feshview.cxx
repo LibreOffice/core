@@ -1178,7 +1178,7 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
         USHORT nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        bRet = 0 != pDView->PickObj( rPt, pObj, pPV, SDRSEARCH_PICKMARKABLE );
+        bRet = 0 != pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMARKABLE );
         pDView->SetHitTolerancePixel( nOld );
     }
     return bRet;
@@ -1202,7 +1202,7 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
         sal_uInt16 nOld(pDrawView->GetHitTolerancePixel());
 
         pDrawView->SetHitTolerancePixel(pDrawView->GetMarkHdlSizePixel()/2);
-        bRet = pDrawView->PickObj(rPt, pObj, pPV, SDRSEARCH_PICKMARKABLE);
+        bRet = pDrawView->PickObj(rPt, pDrawView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMARKABLE);
         pDrawView->SetHitTolerancePixel(nOld);
 
         if(bRet && pObj)
@@ -2724,7 +2724,7 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
         SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
         const USHORT nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
-        if( pDView->PickObj( rPt, pObj, pPView, SDRSEARCH_PICKMARKABLE ) &&
+        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) &&
             pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
@@ -2759,7 +2759,7 @@ int SwFEShell::Chain( SwFrmFmt &rSource, const Point &rPt )
         SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
         const USHORT nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
-        pDView->PickObj( rPt, pObj, pPView, SDRSEARCH_PICKMARKABLE );
+        pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE );
         pDView->SetHitTolerancePixel( nOld );
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
 

@@ -93,7 +93,6 @@
 #include <glossary.hxx> //add for SwGlossaryDlg
 #include <inpdlg.hxx> //add for SwFldInputDlg
 #include <insfnote.hxx> //add for SwInsFootNoteDlg
-#include <insrc.hxx> //add for SwInsRowColDlg
 #include <insrule.hxx> //add for SwInsertGrfRulerDlg
 #include <instable.hxx> //add for SwInsTableDlg
 #include <javaedit.hxx> //add for SwJavaEditDialog
@@ -1359,14 +1358,11 @@ AbstractInsFootNoteDlg* SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg( int 
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nResId,
-                                            SwView& rView, BOOL bCol ) //add for SwInsRowColDlg, SwLineNumberingDlg
+                                            SwView& rView, BOOL /*bCol*/ ) //add for SwInsRowColDlg, SwLineNumberingDlg
 {
     Dialog* pDlg=NULL;
     switch ( nResId )
     {
-        case DLG_INS_ROW_COL :
-            pDlg = new SwInsRowColDlg( rView, bCol );
-            break;
         case DLG_LINE_NUMBERING :
             pDlg = new SwLineNumberingDlg( &rView );
             break;

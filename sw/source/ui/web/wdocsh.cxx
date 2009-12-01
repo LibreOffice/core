@@ -43,7 +43,7 @@
 #include <sot/clsids.hxx>
 #include <sfx2/objface.hxx>
 
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "cfgid.h"
 #include "cmdid.h"
 #include "swtypes.hxx"

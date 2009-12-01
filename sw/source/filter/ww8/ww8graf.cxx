@@ -2749,6 +2749,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if ( bMoveToBackgrd )
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
+    String aObjName = pObject->GetName();
+
     SwFrmFmt* pRetFrmFmt = 0;
     if (bReplaceable)
     {
@@ -2834,6 +2836,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // <--
     if (!IsInlineEscherHack())
         MapWrapIntoFlyFmt(pRecord, pRetFrmFmt);
+
+    // Set frame name with object name
+    if( aObjName.Len() )
+        pRetFrmFmt->SetName( aObjName );
     return AddAutoAnchor(pRetFrmFmt);
 }
 

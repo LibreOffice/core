@@ -112,6 +112,9 @@
 #include <EnhancedPDFExportHelper.hxx>
 // <--
 
+#include <ndole.hxx>
+#include <svtools/chartprettypainter.hxx>
+
 #include <PostItMgr.hxx>
 #include <tools/color.hxx>
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
@@ -3512,6 +3515,19 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
     const SwNoTxtFrm *pNoTxt = Lower() && Lower()->IsNoTxtFrm()
                                                 ? (SwNoTxtFrm*)Lower() : 0;
 
+    bool bIsChart = false; //#i102950# don't paint additional borders for charts
+    //check whether we have a chart
+    if(pNoTxt)
+    {
+        const SwNoTxtNode* pNoTNd = dynamic_cast<const SwNoTxtNode*>(pNoTxt->GetNode());
+        if( pNoTNd )
+        {
+            SwOLENode* pOLENd = const_cast<SwOLENode*>(pNoTNd->GetOLENode());
+            if( pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() ) )
+                bIsChart = true;
+        }
+    }
+
     {
         bool bContour = GetFmt()->GetSurround().IsContour();
         PolyPolygon aPoly;
@@ -3641,7 +3657,8 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
     // OD 19.12.2002 #106318# - fly frame will paint it's subsidiary lines and
     // the subsidiary lines of its lowers on its own, due to overlapping with
     // other fly frames or other objects.
-    if( pGlobalShell->GetWin() )
+    if( pGlobalShell->GetWin()
+        && !bIsChart ) //#i102950# don't paint additional borders for charts
     {
         bool bSubsLineRectsCreated;
         if ( pSubsLines )

@@ -386,8 +386,10 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
 
 void SwModify::CheckCaching( const USHORT nWhich )
 {
-    if( RES_CHRATR_BEGIN <= nWhich && RES_CHRATR_END > nWhich )
+    if (isCHRATR(nWhich))
+    {
         SetInSwFntCache( FALSE );
+    }
     else
         switch ( nWhich )
         {

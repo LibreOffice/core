@@ -31,6 +31,7 @@
 #define _COLEX_HXX
 
 #include <svx/pagectrl.hxx>
+#include <svx/paperinf.hxx>
 #include "swdllapi.h"
 #include <fmtclds.hxx>
 #include "frmatr.hxx"
@@ -46,7 +47,7 @@ class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
 public:
     SwPageExample(Window* pPar, const ResId& rResId ) :
                                 SvxPageWindow(pPar, rResId )
-                                {SetSize(Size(11907, 16433));/*DIN A4*/}
+                                {SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));/*DIN A4*/}
 
     void UpdateExample( const SfxItemSet& rSet );
 };

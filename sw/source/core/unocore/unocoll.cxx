@@ -985,7 +985,8 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
     throw(IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid()) throw uno::RuntimeException();
+    if(!IsValid())
+        throw uno::RuntimeException();
     if(nIndex < 0 || nIndex >= USHRT_MAX) throw IndexOutOfBoundsException();
     const Reference<XEnumeration> xEnum = createEnumeration();
     while(xEnum->hasMoreElements())
@@ -1000,7 +1001,8 @@ uno::Any SwXFrames::getByName(const OUString& rName)
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid()) throw uno::RuntimeException();
+    if(!IsValid())
+        throw uno::RuntimeException();
     const Reference<XEnumeration> xEnum = createEnumeration();
     while(xEnum->hasMoreElements())
     {
@@ -1016,7 +1018,8 @@ uno::Any SwXFrames::getByName(const OUString& rName)
 uno::Sequence<OUString> SwXFrames::getElementNames(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid()) throw uno::RuntimeException();
+    if(!IsValid())
+        throw uno::RuntimeException();
     const Reference<XEnumeration> xEnum = createEnumeration();
     ::std::vector<OUString> vNames;
     while(xEnum->hasMoreElements())
@@ -1063,7 +1066,8 @@ uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
 sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(IsValid()) throw uno::RuntimeException();
+    if(!IsValid())
+        throw uno::RuntimeException();
     return createEnumeration()->hasMoreElements();
 }
 
@@ -1650,9 +1654,9 @@ Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( Runtime
 /*-- 14.01.99 09:03:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc) :
-    SwUnoCollection(_pDoc),
-    bEndnote(bEnd)
+SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc)
+    : SwUnoCollection(_pDoc)
+    , m_bEndnote(bEnd)
 {
 }
 /*-- 14.01.99 09:03:52---------------------------------------------------
@@ -1676,7 +1680,7 @@ sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException )
     {
         pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
         const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-        if ( rFtn.IsEndNote() != bEndnote )
+        if ( rFtn.IsEndNote() != m_bEndnote )
             continue;
         nCount++;
     }
@@ -1700,7 +1704,7 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
         {
             pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( rFtn.IsEndNote() != bEndnote )
+            if ( rFtn.IsEndNote() != m_bEndnote )
                 continue;
 
             if(nCount == nIndex)

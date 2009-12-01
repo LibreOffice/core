@@ -141,14 +141,14 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     aRepeatHeaderAfterFT    (this),
     aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
 
+    aOptionsFL      (this, SW_RES(FL_OPTIONS)),
     aDontSplitCB    (this, SW_RES(CB_DONT_SPLIT)),
     aBorderCB       (this, SW_RES(CB_BORDER)),
-    aOptionsFL      (this, SW_RES(FL_OPTIONS)),
+    aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
 
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP)),
-    aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
 #ifdef MSC
 #pragma warning (default : 4355)
 #endif

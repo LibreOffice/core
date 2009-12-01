@@ -500,18 +500,4 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     }
     return pRet;
 }
-/* -----------------26.06.2003 13:54-----------------
 
- --------------------------------------------------*/
-void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
-{
-    //if not in undo section notify the change
-    if(pMyTxtNd && pMyTxtNd->GetNodes().IsDocNodes())
-        pMyTxtNd->Modify(0, &rFmtFld);
-}
-
-// #111840#
-SwPosition * SwTxtFld::GetPosition() const
-{
-    return GetTxtNode().GetPosition(this);
-}

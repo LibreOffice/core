@@ -49,9 +49,7 @@
 #include <svx/srchdlg.hxx>
 #include <sfx2/templdlg.hxx>
 #include <uivwimp.hxx>
-#ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 #include <swmodule.hxx>
 
 #include <sfx2/objface.hxx>
@@ -92,7 +90,7 @@
 #define WebListInText
 #define WebListInTable
 #define TextPage
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include <svx/svxslots.hxx>
 #include "swslots.hxx"
 #include <PostItMgr.hxx>

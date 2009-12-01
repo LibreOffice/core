@@ -286,7 +286,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXBookmark::getPropertySetInfo(void)
     static uno::Reference< beans::XPropertySetInfo >  aRef;
     if(!aRef.is())
     {
-        uno::Reference< beans::XPropertySetInfo >  xInfo = aSwMapProvider.GetPropertySet(PROPERTY_MAP_BOOKMARK)->getPropertySetInfo();
+        aRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_BOOKMARK)->getPropertySetInfo();
     }
     return aRef;
 }

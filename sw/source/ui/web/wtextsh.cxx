@@ -37,9 +37,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
 #include <svx/srchitem.hxx> //***
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
@@ -63,7 +61,7 @@
 #define HyphenZone
 #define TextFont
 #define DropCap
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 

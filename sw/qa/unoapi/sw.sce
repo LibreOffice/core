@@ -41,7 +41,7 @@
 #i85640 -o sw.SwXMailMerge
 -o sw.SwXModule
 -o sw.SwXNumberingRules
--o sw.SwXParagraph
+#i103696 -o sw.SwXParagraph
 -o sw.SwXParagraphEnumeration
 -o sw.SwXPrintSettings
 -o sw.SwXPropertySet
@@ -67,7 +67,7 @@
 -o sw.SwXTextFrameText
 -o sw.SwXTextGraphicObject
 -o sw.SwXTextGraphicObjects
--o sw.SwXTextPortion
+#i103696 -o sw.SwXTextPortion
 -o sw.SwXTextPortionEnumeration
 -o sw.SwXTextRange
 -o sw.SwXTextRanges

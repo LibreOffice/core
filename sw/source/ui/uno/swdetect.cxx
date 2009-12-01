@@ -223,7 +223,7 @@ SwFilterDetect::~SwFilterDetect()
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since impossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState() );
+                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                     if ( xInteraction.is() )
                     {
                         OUString empty;
@@ -299,12 +299,12 @@ SwFilterDetect::~SwFilterDetect()
                                     if ( nIndexOfInteractionHandler != -1 )
                                         lDescriptor[nIndexOfInteractionHandler].Value <<= uno::Reference< XInteractionHandler >( static_cast< task::XInteractionHandler* >( xHandler.get() ) );
 
-                                    aMedium.SetError( ERRCODE_ABORT );
+                                    aMedium.SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                                 }
                             }
                             else
                                 // no interaction, error handling as usual
-                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE );
+                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
                             if ( !bRepairAllowed )
                             {

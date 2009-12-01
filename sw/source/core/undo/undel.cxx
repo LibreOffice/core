@@ -371,11 +371,10 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         xub_StrLen nLen = bOneNode ? nEndCntnt - nSttCntnt
                                 : pSttTxtNd->GetTxt().Len() - nSttCntnt;
         SwRegHistory aRHst( *pSttTxtNd, pHistory );
-        // immer alle TextAttribute sichern; ist fuers Undo mit voll-
-        // staendiger Attributierung am besten, wegen den evt.
-        // Ueberlappenden Bereichen von An/Aus.
+        // always save all text atttibutes because of possibly overlapping
+        // areas of on/off
         pHistory->CopyAttr( pSttTxtNd->GetpSwpHints(), nNdIdx,
-                            0, pSttTxtNd->GetTxt().Len(), TRUE );
+                            0, pSttTxtNd->GetTxt().Len(), true );
         if( !bOneNode && pSttTxtNd->HasSwAttrSet() )
                 pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx );
 
@@ -383,12 +382,20 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         nLen = ( bOneNode ? pEnd->nContent.GetIndex() : pSttTxtNd->GetTxt().Len() )
                 - pStt->nContent.GetIndex();
 
+
         // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
         // die Undo-History
         pSttStr = (String*)new String( pSttTxtNd->GetTxt().Copy( nSttCntnt, nLen ));
         pSttTxtNd->Erase( pStt->nContent, nLen );
         if( pSttTxtNd->GetpSwpHints() )
             pSttTxtNd->GetpSwpHints()->DeRegister();
+
+        // METADATA: store
+        bool emptied( pSttStr->Len() && !pSttTxtNd->Len() );
+        if (!bOneNode || emptied) // merging may overwrite xmlids...
+        {
+            m_pMetadataUndoStart = pSttTxtNd->CreateUndo( emptied );
+        }
 
         if( bOneNode )
             return FALSE;           // keine Nodes mehr verschieben
@@ -402,14 +409,14 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         nNdIdx = pEnd->nNode.GetIndex();
         SwRegHistory aRHst( *pEndTxtNd, pHistory );
 
-        // immer alle TextAttribute sichern; ist fuers Undo mit voll-
-        // staendiger Attributierung am besten, wegen den evt.
-        // Ueberlappenden Bereichen von An/Aus.
+        // always save all text atttibutes because of possibly overlapping
+        // areas of on/off
         pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nNdIdx, 0,
-                            pEndTxtNd->GetTxt().Len(), TRUE );
+                            pEndTxtNd->GetTxt().Len(), true );
 
         if( pEndTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx );
+
 
         // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
         // die Undo-History
@@ -418,6 +425,10 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         pEndTxtNd->Erase( aEndIdx, pEnd->nContent.GetIndex() );
         if( pEndTxtNd->GetpSwpHints() )
             pEndTxtNd->GetpSwpHints()->DeRegister();
+
+        // METADATA: store
+        bool emptied( pEndStr->Len() && !pEndTxtNd->Len() );
+        m_pMetadataUndoEnd = pEndTxtNd->CreateUndo( emptied );
     }
 
     // sind es nur zwei Nodes, dann ist schon alles erledigt.
@@ -698,8 +709,12 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                     lcl_ReAnchorAtCntntFlyFrames( *pDoc->GetSpzFrmFmts(), aPos, nOldIdx );
                 pTxtNd = aPos.nNode.GetNode().GetTxtNode();
             }
-            if( pTxtNd ) // Robust
+            if( pTxtNd )
+            {
                 pTxtNd->Insert( *pEndStr, aPos.nContent, INS_NOHINTEXPAND );
+                // METADATA: restore
+                pTxtNd->RestoreMetadata(m_pMetadataUndoEnd);
+            }
         }
         else if( pSttStr && bNodeMove )
         {
@@ -757,7 +772,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 }
                 else
                 {
-                    aPos = aCopyIndex;
+                    aPos = SwPosition( aCopyIndex );
                     nMoveIndex = aPos.nNode.GetIndex() + nReplaceDummy + 1;
                 }
                 SwNodeIndex aMvIdx( pDoc->GetNodes(), nMoveIndex );
@@ -790,12 +805,14 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 //  -> im StartNode steht noch der Rest vom Join => loeschen
                 aPos.nContent.Assign( pTxtNd, nSttCntnt );
                 pTxtNd->Insert( *pSttStr, aPos.nContent, INS_NOHINTEXPAND );
+                // METADATA: restore
+                pTxtNd->RestoreMetadata(m_pMetadataUndoStart);
             }
         }
 
         if( pHistory )
         {
-            pHistory->TmpRollback( pDoc, nSetPos, FALSE );
+            pHistory->TmpRollback( pDoc, nSetPos, false );
             if( nSetPos )       // es gab Fussnoten/FlyFrames
             {
                 // gibts ausser diesen noch andere ?

@@ -33,7 +33,7 @@
 
 
 
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>

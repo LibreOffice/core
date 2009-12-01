@@ -157,6 +157,7 @@ public:
     void    SetInsMode( BOOL bOn = TRUE );
     void    ToggleInsMode() { SetInsMode( !bIns ); }
     BOOL    IsInsMode() const { return bIns; }
+    void    SetRedlineModeAndCheckInsMode( USHORT eMode );
 
     void    EnterSelFrmMode(const Point *pStartDrag = 0);
     void    LeaveSelFrmMode();

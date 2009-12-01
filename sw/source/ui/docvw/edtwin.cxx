@@ -420,7 +420,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
             SdrObject* pObj; SdrPageView* pPV;
             pSdrView->SetHitTolerancePixel( HIT_PIX );
             if ( bNotInSelObj && bExecHyperlinks &&
-                 pSdrView->PickObj( rLPt, pObj, pPV, SDRSEARCH_PICKMACRO ))
+                 pSdrView->PickObj( rLPt, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO ))
             {
                 SdrObjMacroHitRec aTmp;
                 aTmp.aPos = rLPt;

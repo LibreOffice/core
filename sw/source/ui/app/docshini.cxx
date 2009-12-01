@@ -668,7 +668,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         UpdateFontList();
         InitDraw();
 
-        SetError( nErr );
+        SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         bRet = !IsError( nErr );
 
         // --> OD 2006-11-07 #i59688#
@@ -749,7 +749,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
          */
         }
 
-        SetError( nErr );
+        SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         bRet = !IsError( nErr );
 
     } while( sal_False );

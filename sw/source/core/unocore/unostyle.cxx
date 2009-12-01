@@ -3025,10 +3025,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                             // --> OD 2008-07-25 #i91928#
 //                            aFrmSz.SetWidth( LONG_MAX );
 //                            aFrmSz.SetHeight( LONG_MAX );
-                            SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper(
-                                static_cast<LanguageType>( GetAppLanguage() ) );
-                            const Size aPhysSize = SvxPaperInfo::GetPaperSize( ePaper );
-                            aFrmSz.SetSize( aPhysSize );
+                            aFrmSz.SetSize( SvxPaperInfo::GetDefaultPaperSize() );
                             // <--
                         }
 

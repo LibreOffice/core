@@ -815,7 +815,7 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
     BOOL bRet = FALSE;
     if( SfxObjectShell::Load( rMedium ))
     {
-        uno::Reference < embed::XStorage > xStorage = pMedium->GetStorage();
+        uno::Reference < embed::XStorage > xStorage = GetMedium()->GetStorage();
         uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
         if (
             (
@@ -833,7 +833,7 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
             SmXMLImportWrapper aEquation(xModel);
             ULONG nError = aEquation.Import(rMedium);
             bRet = 0 == nError;
-            SetError( nError );
+            SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         }
     }
 

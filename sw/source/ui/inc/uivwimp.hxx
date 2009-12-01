@@ -153,7 +153,7 @@ public:
 
     SfxObjectShellRef &             GetTmpSelectionDoc()    { return xTmpSelDocSh; }
 
-    SfxObjectShellRef&              GetEmbeddedObjRef()     { return (SfxObjectShellRef&)(long&)aEmbeddedObjRef; }
+    SfxObjectShellRef&              GetEmbeddedObjRef()     { return *boost::addressof(aEmbeddedObjRef); }
 
     void                            AddTransferable(SwTransferable& rTransferable);
 

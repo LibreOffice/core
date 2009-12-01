@@ -238,7 +238,7 @@ BOOL GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 BOOL SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
     SwCrsrSaveState aSaveState( *this );
-    return !(SwTableCursor*)*this &&
+    return !dynamic_cast<SwTableCursor*>(this) &&
             (*fnWhichRegion)( *this, fnPosRegion, IsReadOnlyAvailable()  ) &&
             !IsSelOvr() &&
             ( GetPoint()->nNode.GetIndex() != pSavePos->nNode ||

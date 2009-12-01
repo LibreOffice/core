@@ -65,9 +65,7 @@
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <poolfmt.hxx>
 #include <edimp.hxx>
 #include <fchrfmt.hxx>
@@ -620,7 +618,8 @@ uno::Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( Ru
         *pNewCrsr->GetMark() = *pUnoCrsr->GetMark();
     }
     CursorType eSetType = eType == CURSOR_TBLTEXT ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    SwXParagraphEnumeration *pEnum = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
+    SwXParagraphEnumeration *pEnum =
+        new SwXParagraphEnumeration(pParentText, pNewCrsr, eSetType);
     uno::Reference< XEnumeration > xRet = pEnum;
     if (eType == CURSOR_TBLTEXT)
     {
@@ -1078,8 +1077,9 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
             }
             else
             {
-                SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False);
-                aRef =  (XTextContent*)new SwXParagraph((SwXText*)pText, pNewCrsr, nFirstContent, nLastContent);
+                aRef = new SwXParagraph(static_cast<SwXText*>(pText),
+                    pStart->nNode.GetNode().GetTxtNode(),
+                    nFirstContent, nLastContent);
             }
         }
     }
@@ -1170,8 +1170,9 @@ Sequence< OUString > SwXTextRange::getSupportedServiceNames(void) throw( Runtime
     return aRet;
 }
 
-SwXTextRange::SwXTextRange(SwPaM& rPam, const uno::Reference< XText > & rxParent) :
-    eRangePosition(RANGE_IN_TEXT),
+SwXTextRange::SwXTextRange(SwPaM& rPam,
+        const uno::Reference< XText > & rxParent, enum RangePosition eRange) :
+    eRangePosition(eRange),
     pDoc(rPam.GetDoc()),
     pBox(0),
     pBoxStartNode(0),
@@ -1180,46 +1181,6 @@ SwXTextRange::SwXTextRange(SwPaM& rPam, const uno::Reference< XText > & rxParent
     xParentText(rxParent),
     pMark(NULL)
 {
-    //Bookmark an der anlegen
-    _CreateNewBookmark(rPam);
-}
-
-SwXTextRange::SwXTextRange(SwFrmFmt& rFmt, SwPaM& rPam) :
-    eRangePosition(RANGE_IN_FRAME),
-    pDoc(rPam.GetDoc()),
-    pBox(0),
-    pBoxStartNode(0),
-    aObjectDepend(this, &rFmt),
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
-    pMark(NULL)
-{
-    //Bookmark an der anlegen
-    _CreateNewBookmark(rPam);
-}
-
-SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, SwTableBox& rTblBox, SwPaM& rPam) :
-    eRangePosition(RANGE_IN_CELL),
-    pDoc(rPam.GetDoc()),
-    pBox(&rTblBox),
-    pBoxStartNode(0),
-    aObjectDepend(this, &rTblFmt),
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
-    pMark(NULL)
-{
-    //Bookmark an der anlegen
-    _CreateNewBookmark(rPam);
-}
-
-SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, const SwStartNode& rStartNode, SwPaM& rPam) :
-    eRangePosition(RANGE_IN_CELL),
-    pDoc(rPam.GetDoc()),
-    pBox(0),
-    pBoxStartNode(&rStartNode),
-    aObjectDepend(this, &rTblFmt),
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
-    pMark(NULL)
-{
-    //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
 }
 
@@ -1287,50 +1248,22 @@ void SwXTextRange::DeleteAndInsert(const String& rText)
 uno::Reference< XText >  SwXTextRange::getText(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!xParentText.is())
+    if (!xParentText.is())
     {
-        if(eRangePosition == RANGE_IN_FRAME &&
-            aObjectDepend.GetRegisteredIn())
-        {
-            SwFrmFmt* pFrmFmt = (SwFrmFmt*)aObjectDepend.GetRegisteredIn();
-            SwXTextFrame* pxFrm = (SwXTextFrame*)SwClientIter( *pFrmFmt ).
-                                                First( TYPE( SwXTextFrame ));
-            if(pxFrm)
-                ((SwXTextRange*)this)->xParentText = pxFrm;
-            else
-                ((SwXTextRange*)this)->xParentText = new SwXTextFrame(*pFrmFmt);
-            ((SwModify*)aObjectDepend.GetRegisteredIn())->
-                    Remove(&((SwXTextRange*)this)->aObjectDepend);
-
-        }
-        else if(eRangePosition == RANGE_IN_CELL &&
-            aObjectDepend.GetRegisteredIn())
-        {
-            const SwStartNode* pSttNd = pBoxStartNode ? pBoxStartNode : pBox->GetSttNd();
-            const SwTableNode* pTblNode = pSttNd->FindTableNode();
-            const SwFrmFmt* pTableFmt = pTblNode->GetTable().GetFrmFmt();
-            ((SwXTextRange*)this)->xParentText =
-                    pBox ? SwXCell::CreateXCell((SwFrmFmt*)pTableFmt, pBox)
-                         : new SwXCell( (SwFrmFmt*)pTableFmt, *pBoxStartNode );
-            ((SwModify*)aObjectDepend.GetRegisteredIn())->
-                    Remove(&((SwXTextRange*)this)->aObjectDepend);
-        }
-        else if(eRangePosition == RANGE_IS_TABLE &&
+        if (eRangePosition == RANGE_IS_TABLE &&
             aObjectDepend.GetRegisteredIn() )
         {
             SwFrmFmt* pTblFmt = (SwFrmFmt*)aObjectDepend.GetRegisteredIn();
             SwTable* pTable = SwTable::FindTable( pTblFmt );
             SwTableNode* pTblNode = pTable->GetTableNode();
             SwPosition aPosition( *pTblNode );
-            uno::Reference< XTextRange >  xRange = SwXTextRange::CreateTextRangeFromPosition(pDoc,
-                        aPosition, 0);
+            uno::Reference< XTextRange >  xRange =
+                SwXTextRange::CreateTextRangeFromPosition(pDoc, aPosition, 0);
             xParentText = xRange->getText();
         }
         else
         {
-            // jetzt noch alle Faelle finden, die nicht abgedeckt sind
-            // (Body, Kopf-/Fusszeilen, Fussnotentext )
-            DBG_WARNING("not implemented");
+            OSL_ENSURE(false, "SwXTextRange::getText: no text");
         }
     }
     return xParentText;
@@ -1491,34 +1424,32 @@ sal_Bool SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     }
     else
     {
-        SwDoc* pDoc = 0;
-        const SwPaM* pUnoCrsr = 0;
         if (pPara)
         {
-            pUnoCrsr = pPara->GetCrsr();
-            if (pUnoCrsr)
-                pDoc = pUnoCrsr->GetDoc();
+            const SwTxtNode * pTxtNode( pPara->GetTxtNode() );
+
+            if (pTxtNode) {
+                bRet = sal_True;
+                *rToFill.GetPoint() = SwPosition( *pTxtNode );
+                // set selection to the whole paragraph
+                rToFill.SetMark();
+                rToFill.GetMark()->nContent = pTxtNode->GetTxt().Len();
+            }
         }
         else
         {
-            pDoc = pCursor ? pCursor->GetDoc() : NULL;
+            const SwPaM* pUnoCrsr = 0;
+            SwDoc* pDoc = pCursor ? pCursor->GetDoc() : NULL;
+
             if ( !pDoc )
                 pDoc = pPortion ? pPortion->GetCrsr()->GetDoc() : NULL;
             pUnoCrsr = pCursor ? pCursor->GetPaM() : pPortion ? pPortion->GetCrsr() : 0;
-        }
-        if(pUnoCrsr && pDoc == rToFill.GetDoc())
+            if (pUnoCrsr && pDoc == rToFill.GetDoc())
             {
                 DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr, "was machen wir mit Ringen?" );
                 bRet = sal_True;
                 *rToFill.GetPoint() = *pUnoCrsr->GetPoint();
-                if(pPara)
-                {
-                    // set selection to the whole paragraph
-                    rToFill.SetMark();
-                    rToFill.GetMark()->nContent =
-                        pUnoCrsr->GetNode()->GetTxtNode()->GetTxt().Len();
-                }
-                else if(pUnoCrsr->HasMark())
+                if (pUnoCrsr->HasMark())
                 {
                     rToFill.SetMark();
                     *rToFill.GetMark() = *pUnoCrsr->GetMark();
@@ -1526,6 +1457,7 @@ sal_Bool SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
                 else
                     rToFill.DeleteMark();
             }
+        }
     }
     return bRet;
 }
@@ -1555,18 +1487,28 @@ sal_Bool lcl_IsStartNodeInFormat(sal_Bool bHeader, SwStartNode* pSttNode,
     return bRet;
 }
 
-uno::Reference< XTextRange > SwXTextRange::CreateTextRangeFromPosition(SwDoc* pDoc,
-                        const SwPosition& rPos, const SwPosition* pMark)
+uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(
+    SwDoc* pDoc, const SwPosition& rPos, const SwPosition* pMark)
 {
-    uno::Reference< XTextRange >  aRet;
-    SwUnoCrsr* pNewCrsr = pDoc->CreateUnoCrsr(rPos, sal_False);
+    uno::Reference< XText > xParentText( CreateParentXText(pDoc, rPos) );
+    std::auto_ptr<SwUnoCrsr> pNewCrsr( pDoc->CreateUnoCrsr(rPos, sal_False) );
     if(pMark)
     {
         pNewCrsr->SetMark();
         *pNewCrsr->GetMark() = *pMark;
     }
-    uno::Reference< XText >  xParentText;
-    //jetzt besorgen wir uns mal den Parent:
+    bool isCell( dynamic_cast<SwXCell*>(xParentText.get()) );
+    uno::Reference< XTextRange > xRet(
+        new SwXTextRange(*pNewCrsr, xParentText,
+            isCell ? RANGE_IN_CELL : RANGE_IN_TEXT) );
+    return xRet;
+
+}
+
+uno::Reference< XText >  SwXTextRange::CreateParentXText(SwDoc* pDoc,
+        const SwPosition& rPos)
+{
+    uno::Reference< XText > xParentText;
     SwStartNode* pSttNode = rPos.nNode.GetNode().StartOfSectionNode();
     while(pSttNode && pSttNode->IsSectionNode())
     {
@@ -1581,19 +1523,19 @@ uno::Reference< XTextRange > SwXTextRange::CreateTextRangeFromPosition(SwDoc* pD
             SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
             SwTableBox* pBox = pSttNode->GetTblBox();
 
-            if( pBox )
-                aRet = new SwXTextRange(*pTableFmt, *pBox, *pNewCrsr);
-            else
-                aRet = new SwXTextRange(*pTableFmt, *pSttNode, *pNewCrsr);
+            xParentText = pBox
+                ? SwXCell::CreateXCell( pTableFmt, pBox )
+                : new SwXCell( pTableFmt, *pSttNode );
         }
         break;
         case SwFlyStartNode:
         {
-            SwFrmFmt* pFmt;
-            if(0 != (pFmt = pSttNode->GetFlyFmt()))
+            SwFrmFmt* pFmt = pSttNode->GetFlyFmt();
+            if (0 != pFmt)
             {
-                aRet = new SwXTextRange(*pFmt, *pNewCrsr);
-
+                SwXTextFrame* pFrame( static_cast<SwXTextFrame*>(
+                    SwClientIter( *pFmt ).First( TYPE( SwXTextFrame ) ) ) );
+                xParentText = pFrame ? pFrame : new SwXTextFrame( *pFmt );
             }
         }
         break;
@@ -1640,13 +1582,15 @@ uno::Reference< XTextRange > SwXTextRange::CreateTextRangeFromPosition(SwDoc* pD
                 (void)pTmpSttNode;
 #endif
 
-                if(pSttNode == pTxtFtn->GetStartNode()->GetNode().
+                if (pSttNode == pTxtFtn->GetStartNode()->GetNode().
                                     FindSttNodeByType(SwFootnoteStartNode))
                 {
                     xParentText = ((SwUnoCallBack*)pDoc->GetUnoCallBack())->
                                                             GetFootnote(rFtn);
-                    if(!xParentText.is())
+                    if (!xParentText.is())
+                    {
                         xParentText = new SwXFootnote(pDoc, rFtn);
+                    }
                     break;
                 }
             }
@@ -1654,17 +1598,16 @@ uno::Reference< XTextRange > SwXTextRange::CreateTextRangeFromPosition(SwDoc* pD
         break;
         default:
         {
-            // dann ist es der Body-Text
-            uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
+            // then it is the body text
+            uno::Reference<frame::XModel> xModel =
+                pDoc->GetDocShell()->GetBaseModel();
             uno::Reference< XTextDocument > xDoc(
                 xModel, uno::UNO_QUERY);
             xParentText = xDoc->getText();
         }
     }
-    if(!aRet.is())
-        aRet = new SwXTextRange(*pNewCrsr, xParentText);
-    delete pNewCrsr;
-    return aRet;
+    OSL_ENSURE(xParentText.is(), "no parent text?");
+    return xParentText;
 }
 
 uno::Reference< XEnumeration >  SAL_CALL SwXTextRange::createContentEnumeration(
@@ -1707,7 +1650,8 @@ uno::Reference< XEnumeration > SwXTextRange::createEnumeration(void) throw( Runt
     }
     DBG_ASSERT(pParentText, "parent is not a SwXText");
     CursorType eSetType = RANGE_IN_CELL == eRangePosition ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    uno::Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
+    uno::Reference< XEnumeration > xRet =
+        new SwXParagraphEnumeration(pParentText, pNewCrsr, eSetType);
     return xRet;
 }
 
@@ -2090,23 +2034,25 @@ Sequence< OUString > SwXParaFrameEnumeration::getSupportedServiceNames(void) thr
 /*-- 23.03.99 13:22:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
+SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwPaM& rPaM,
                                                 sal_uInt8 nParaFrameMode,
                                                 SwFrmFmt* pFmt)
 {
-    SwDoc* pDoc = rUnoCrsr.GetDoc();
-    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(*rUnoCrsr.GetPoint(), sal_False);
-    if(rUnoCrsr.HasMark())
+    SwDoc* pDoc = rPaM.GetDoc();
+    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(*rPaM.GetPoint(), sal_False);
+    if (rPaM.HasMark())
     {
         pUnoCrsr->SetMark();
-        *pUnoCrsr->GetMark() = *rUnoCrsr.GetMark();
+        *pUnoCrsr->GetMark() = *rPaM.GetMark();
     }
     pUnoCrsr->Add(this);
 
-    if(PARAFRAME_PORTION_PARAGRAPH == nParaFrameMode)
-        ::CollectFrameAtNode( *this, rUnoCrsr.GetPoint()->nNode,
+    if (PARAFRAME_PORTION_PARAGRAPH == nParaFrameMode)
+    {
+        ::CollectFrameAtNode( *this, rPaM.GetPoint()->nNode,
                                 aFrameArr, FALSE );
-    else if(pFmt)
+    }
+    else if (pFmt)
     {
         //jetzt einen SwDepend anlegen und in das Array einfuegen
         SwDepend* pNewDepend = new SwDepend(this, pFmt);

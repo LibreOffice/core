@@ -193,6 +193,7 @@ public:
 
     static BOOL IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
+    static int PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& );
     static int PasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, ULONG& rFormatUsed );
     static int PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              ULONG nFormat );

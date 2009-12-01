@@ -428,6 +428,8 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_aSendAllRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
 
     m_aFromRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
+    //#i63267# printing might be disabled
+    m_aPrintRB.Enable(!Application::GetSettings().GetMiscSettings().GetDisablePrinting());
 }
 
 /*-- 02.04.2004 13:15:44---------------------------------------------------

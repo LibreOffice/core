@@ -179,11 +179,11 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aSizeFormatBox     .SetSelectHdl(LINK(this, SwEnvFmtPage, FormatHdl));
 
     // aSizeFormatBox
-    for (USHORT i = SVX_PAPER_A3; i <= SVX_PAPER_KAI32BIG; i++)
+    for (USHORT i = PAPER_A3; i <= PAPER_KAI32BIG; i++)
     {
-        if (i != SVX_PAPER_USER)
+        if (i != PAPER_USER)
         {
-            String aPaperName = SvxPaperInfo::GetName((SvxPaper) i),
+            String aPaperName = SvxPaperInfo::GetName((Paper) i),
                    aEntryName;
 
             USHORT nPos   = 0;
@@ -200,8 +200,8 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
             aIDs.Insert((USHORT) i, nPos);
         }
     }
-    aSizeFormatBox.InsertEntry(SvxPaperInfo::GetName(SVX_PAPER_USER));
-    aIDs.Insert((USHORT) SVX_PAPER_USER, aIDs.Count());
+    aSizeFormatBox.InsertEntry(SvxPaperInfo::GetName(PAPER_USER));
+    aIDs.Insert((USHORT) PAPER_USER, aIDs.Count());
 
 }
 
@@ -228,14 +228,14 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 
     if (pEdit == &aSizeWidthField || pEdit == &aSizeHeightField)
     {
-        SvxPaper ePaper = SvxPaperInfo::GetPaper(
+        Paper ePaper = SvxPaperInfo::GetSvxPaper(
             Size(lHeight, lWidth), MAP_TWIP, TRUE);
         for (USHORT i = 0; i < aIDs.Count(); i++)
             if (aIDs[i] == (USHORT)ePaper)
                 aSizeFormatBox.SelectEntryPos(i);
 
         // Benutzergroesse merken
-        if (aIDs[aSizeFormatBox.GetSelectEntryPos()] == (USHORT)SVX_PAPER_USER)
+        if (aIDs[aSizeFormatBox.GetSelectEntryPos()] == (USHORT)PAPER_USER)
         {
             lUserW = lWidth ;
             lUserH = lHeight;
@@ -470,9 +470,9 @@ IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
     long lAddrFromTop;
 
     USHORT nPaper = aIDs[aSizeFormatBox.GetSelectEntryPos()];
-    if (nPaper != (USHORT)SVX_PAPER_USER)
+    if (nPaper != (USHORT)PAPER_USER)
     {
-        Size aSz = SvxPaperInfo::GetPaperSize((SvxPaper)nPaper);
+        Size aSz = SvxPaperInfo::GetPaperSize((Paper)nPaper);
         lWidth  = Max(aSz.Width(), aSz.Height());
         lHeight = Min(aSz.Width(), aSz.Height());
     }
@@ -581,7 +581,7 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     rItem.lSendFromTop  = static_cast< sal_Int32 >(GetFldVal(aSendTopField ));
 
     USHORT nPaper = aIDs[aSizeFormatBox.GetSelectEntryPos()];
-    if (nPaper == (USHORT)SVX_PAPER_USER)
+    if (nPaper == (USHORT)PAPER_USER)
     {
         long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
         long lHVal = static_cast< long >(GetFldVal(aSizeHeightField));
@@ -590,8 +590,8 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     }
     else
     {
-        long lWVal = SvxPaperInfo::GetPaperSize((SvxPaper)nPaper).Width ();
-        long lHVal = SvxPaperInfo::GetPaperSize((SvxPaper)nPaper).Height();
+        long lWVal = SvxPaperInfo::GetPaperSize((Paper)nPaper).Width ();
+        long lHVal = SvxPaperInfo::GetPaperSize((Paper)nPaper).Height();
         rItem.lWidth  = Max(lWVal, lHVal);
         rItem.lHeight = Min(lWVal, lHVal);
     }
@@ -614,7 +614,7 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 {
     const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
 
-    SvxPaper ePaper = SvxPaperInfo::GetPaper(
+    Paper ePaper = SvxPaperInfo::GetSvxPaper(
         Size( Min(rItem.lWidth, rItem.lHeight),
         Max(rItem.lWidth, rItem.lHeight)), MAP_TWIP, TRUE);
     for (USHORT i = 0; i < (USHORT) aIDs.Count(); i++)

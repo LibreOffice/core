@@ -1332,7 +1332,8 @@ void _SaveCntntIdx(SwDoc* pDoc,
                 aSave.IncCount();
             FOREACHPAM_END()
 
-            SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ n ];
+            SwUnoTableCrsr* pUnoTblCrsr =
+                dynamic_cast<SwUnoTableCrsr*>(rTbl[ n ]);
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
@@ -1474,8 +1475,9 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                     if( pPos )
                         break;
 
-                    SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ i ];
-                    if( pUnoTblCrsr )
+                    SwUnoTableCrsr* pUnoTblCrsr =
+                        dynamic_cast<SwUnoTableCrsr*>(rTbl[ i ]);
+                    if ( pUnoTblCrsr )
                     {
                         FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
                             if( aSave.GetCount() == nCnt )
@@ -1487,7 +1489,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                             ++nCnt;
                         FOREACHPAM_END()
                     }
-                    if( pPos )
+                    if ( pPos )
                         break;
                 }
             }
@@ -1629,8 +1631,9 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
                         if( pPos )
                             break;
 
-                        SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ i ];
-                        if( pUnoTblCrsr )
+                        SwUnoTableCrsr* pUnoTblCrsr =
+                            dynamic_cast<SwUnoTableCrsr*>(rTbl[ i ]);
+                        if ( pUnoTblCrsr )
                         {
                             FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
                                 if( aSave.GetCount() == nCnt )
@@ -1642,7 +1645,7 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
                                 ++nCnt;
                             FOREACHPAM_END()
                         }
-                        if( pPos )
+                        if ( pPos )
                             break;
                     }
                 }

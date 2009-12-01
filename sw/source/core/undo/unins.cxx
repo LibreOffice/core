@@ -66,11 +66,14 @@ using namespace ::com::sun::star;
 
 class _UnReplaceData : private SwUndoSaveCntnt
 {
-    String sOld, sIns;
-    ULONG nSttNd, nEndNd, nOffset;
-    xub_StrLen nSttCnt, nEndCnt, nSetPos, nSelEnd;
-    BOOL bSplitNext : 1;
-    BOOL bRegExp : 1;
+    String m_sOld, m_sIns;
+    ULONG m_nSttNd, m_nEndNd, m_nOffset;
+    xub_StrLen m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
+    BOOL m_bSplitNext : 1;
+    BOOL m_bRegExp : 1;
+    // metadata references for paragraph and following para (if m_bSplitNext)
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
 public:
     _UnReplaceData( const SwPaM& rPam, const String& rIns, BOOL bRegExp );
@@ -80,8 +83,8 @@ public:
     void Redo( SwUndoIter& rIter );
     void SetEnd( const SwPaM& rPam );
 
-    const String & GetOld() const { return sOld; }
-    const String & GetIns() const { return sIns; }
+    const String & GetOld() const { return m_sOld; }
+    const String & GetIns() const { return m_sIns; }
 };
 
 
@@ -626,20 +629,18 @@ void SwUndoReplace::SetEntryEnd( const SwPaM& rPam )
 
 _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
                                 BOOL bRgExp )
-    : sIns( rIns ), nOffset( 0 )
+    : m_sIns( rIns ), m_nOffset( 0 )
 {
-    bRegExp = bRgExp;
+    m_bRegExp = bRgExp;
 
-    const SwPosition *pStt = rPam.Start(),
-                    *pEnd = rPam.GetPoint() == pStt
-                        ? rPam.GetMark()
-                        : rPam.GetPoint();
+    const SwPosition * pStt( rPam.Start() );
+    const SwPosition * pEnd( rPam.End() );
 
-    nSttNd = nEndNd = pStt->nNode.GetIndex();
-    nSttCnt = pStt->nContent.GetIndex();
-    nSelEnd = nEndCnt = pEnd->nContent.GetIndex();
+    m_nSttNd = m_nEndNd = pStt->nNode.GetIndex();
+    m_nSttCnt = pStt->nContent.GetIndex();
+    m_nSelEnd = m_nEndCnt = pEnd->nContent.GetIndex();
 
-    bSplitNext = nSttNd != pEnd->nNode.GetIndex();
+    m_bSplitNext = m_nSttNd != pEnd->nNode.GetIndex();
 
     SwTxtNode* pNd = pStt->nNode.GetNode().GetTxtNode();
     ASSERT( pNd, "wo ist der TextNode" );
@@ -647,16 +648,18 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
     pHistory = new SwHistory;
     DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint() );
 
-    nSetPos = pHistory->Count();
+    m_nSetPos = pHistory->Count();
 
     ULONG nNewPos = pStt->nNode.GetIndex();
-    nOffset = nSttNd - nNewPos;
+    m_nOffset = m_nSttNd - nNewPos;
 
-    if( pNd->GetpSwpHints() )
+    if ( pNd->GetpSwpHints() )
+    {
         pHistory->CopyAttr( pNd->GetpSwpHints(), nNewPos, 0,
-                            pNd->GetTxt().Len(), TRUE );
+                            pNd->GetTxt().Len(), true );
+    }
 
-    if( bSplitNext )
+    if ( m_bSplitNext )
     {
         if( pNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNewPos );
@@ -665,17 +668,21 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
         SwTxtNode* pNext = pEnd->nNode.GetNode().GetTxtNode();
         ULONG nTmp = pNext->GetIndex();
         pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
-                            pNext->GetTxt().Len(), TRUE );
+                            pNext->GetTxt().Len(), true );
         if( pNext->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pNext->GetpSwAttrSet(), nTmp );
         pHistory->Add( pNext->GetTxtColl(),nTmp, ND_TEXTNODE );
+        // METADATA: store
+        m_pMetadataUndoStart = pNd  ->CreateUndo();
+        m_pMetadataUndoEnd   = pNext->CreateUndo();
     }
 
     if( !pHistory->Count() )
         delete pHistory, pHistory = 0;
 
-    xub_StrLen nECnt = bSplitNext ? pNd->GetTxt().Len() : pEnd->nContent.GetIndex();
-    sOld = pNd->GetTxt().Copy( nSttCnt, nECnt - nSttCnt );
+    xub_StrLen nECnt = m_bSplitNext ? pNd->GetTxt().Len()
+        : pEnd->nContent.GetIndex();
+    m_sOld = pNd->GetTxt().Copy( m_nSttCnt, nECnt - m_nSttCnt );
 }
 
 _UnReplaceData::~_UnReplaceData()
@@ -688,72 +695,68 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     SwPaM& rPam = *rIter.pAktPam;
     rPam.DeleteMark();
 
-    SwTxtNode* pNd = pDoc->GetNodes()[ nSttNd - nOffset ]->GetTxtNode();
+    SwTxtNode* pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTxtNode();
     ASSERT( pNd, "Wo ist der TextNode geblieben?" )
 
     SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
     if( pACEWord )
     {
-        if( 1 == sIns.Len() && 1 == sOld.Len() )
+        if( 1 == m_sIns.Len() && 1 == m_sOld.Len() )
         {
-            SwPosition aPos( *pNd ); aPos.nContent.Assign( pNd, nSttCnt );
-            pACEWord->CheckChar( aPos, sOld.GetChar( 0 ) );
+            SwPosition aPos( *pNd ); aPos.nContent.Assign( pNd, m_nSttCnt );
+            pACEWord->CheckChar( aPos, m_sOld.GetChar( 0 ) );
         }
         pDoc->SetAutoCorrExceptWord( 0 );
     }
 
-    SwIndex aIdx( pNd, nSttCnt );
-    if( nSttNd == nEndNd )
+    SwIndex aIdx( pNd, m_nSttCnt );
+    if( m_nSttNd == m_nEndNd )
     {
-        pNd->Erase( aIdx, sIns.Len() );
-/*      if( bSplitNext )
-        {
-            SwPosition aPos( *pNd, aIdx );
-            pDoc->SplitNode( aPos, FALSE );
-            pNd = pDoc->GetNodes()[ nSttNd - nOffset ]->GetTxtNode();
-            aIdx.Assign( pNd, nSttCnt );
-        }
-*/  }
+        pNd->Erase( aIdx, m_sIns.Len() );
+    }
     else
     {
         rPam.GetPoint()->nNode = *pNd;
-        rPam.GetPoint()->nContent.Assign( pNd, nSttCnt );
+        rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
         rPam.SetMark();
-        rPam.GetPoint()->nNode = nEndNd - nOffset;
-        rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), nEndCnt );
+        rPam.GetPoint()->nNode = m_nEndNd - m_nOffset;
+        rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), m_nEndCnt );
 
         pDoc->DeleteAndJoin( rPam );
         rPam.DeleteMark();
         pNd = rPam.GetNode()->GetTxtNode();
         ASSERT( pNd, "Wo ist der TextNode geblieben?" );
-        aIdx.Assign( pNd, nSttCnt );
+        aIdx.Assign( pNd, m_nSttCnt );
     }
 
-    if( bSplitNext )
+    if( m_bSplitNext )
     {
         SwPosition aPos( *pNd, aIdx );
         pDoc->SplitNode( aPos, false );
-        pNd = pDoc->GetNodes()[ nSttNd - nOffset ]->GetTxtNode();
-        aIdx.Assign( pNd, nSttCnt );
+        pNd->RestoreMetadata(m_pMetadataUndoEnd);
+        pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTxtNode();
+        aIdx.Assign( pNd, m_nSttCnt );
+        // METADATA: restore
+        pNd->RestoreMetadata(m_pMetadataUndoStart);
     }
 
-    if( sOld.Len() )
-        pNd->Insert( sOld, aIdx );
+    if( m_sOld.Len() )
+        pNd->Insert( m_sOld, aIdx );
 
     if( pHistory )
     {
         if( pNd->GetpSwpHints() )
             pNd->ClearSwpHintsArr( true );
 
-        pHistory->TmpRollback( pDoc, nSetPos, FALSE );
-        if( nSetPos )       // es gab Fussnoten/FlyFrames
+        pHistory->TmpRollback( pDoc, m_nSetPos, false );
+        if ( m_nSetPos ) // there were footnotes/FlyFrames
         {
             // gibts ausser diesen noch andere ?
-            if( nSetPos < pHistory->Count() )
+            if( m_nSetPos < pHistory->Count() )
             {
                 // dann sicher die Attribute anderen Attribute
                 SwHistory aHstr;
-                aHstr.Move( 0, pHistory, nSetPos );
+                aHstr.Move( 0, pHistory, m_nSetPos );
                 pHistory->Rollback( pDoc );
                 pHistory->Move( 0, &aHstr );
             }
@@ -765,7 +768,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
         }
     }
 
-    rPam.GetPoint()->nNode = nSttNd;
+    rPam.GetPoint()->nNode = m_nSttNd;
     rPam.GetPoint()->nContent = aIdx;
 }
 
@@ -777,18 +780,18 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
 
     SwPaM& rPam = *rIter.pAktPam;
     rPam.DeleteMark();
-    rPam.GetPoint()->nNode = nSttNd;
+    rPam.GetPoint()->nNode = m_nSttNd;
 
     SwTxtNode* pNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
     ASSERT( pNd, "Wo ist der TextNode geblieben?" )
-    rPam.GetPoint()->nContent.Assign( pNd, nSttCnt );
+    rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
     rPam.SetMark();
-    if( bSplitNext )
+    if( m_bSplitNext )
     {
-        rPam.GetPoint()->nNode = nSttNd + 1;
+        rPam.GetPoint()->nNode = m_nSttNd + 1;
         pNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
     }
-    rPam.GetPoint()->nContent.Assign( pNd, nSelEnd );
+    rPam.GetPoint()->nContent.Assign( pNd, m_nSelEnd );
 
     if( pHistory )
     {
@@ -796,7 +799,7 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
         SwHistory aHst;
         pHistory = &aHst;
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint() );
-        nSetPos = pHistory->Count();
+        m_nSetPos = pHistory->Count();
 
         pHistory = pSave;
         pHistory->Move( 0, &aHst );
@@ -805,12 +808,12 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
     {
         pHistory = new SwHistory;
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint() );
-        nSetPos = pHistory->Count();
-        if( !nSetPos )
+        m_nSetPos = pHistory->Count();
+        if( !m_nSetPos )
             delete pHistory, pHistory = 0;
     }
 
-    rDoc.Replace( rPam, sIns, bRegExp );
+    rDoc.Replace( rPam, m_sIns, m_bRegExp );
     rPam.DeleteMark();
     rDoc.DoUndo( bUndo );
 }
@@ -821,8 +824,8 @@ void _UnReplaceData::SetEnd( const SwPaM& rPam )
     {
         // es wurden mehrere Absaetze eingefuegt
         const SwPosition* pEnd = rPam.End();
-        nEndNd = nOffset + pEnd->nNode.GetIndex();
-        nEndCnt = pEnd->nContent.GetIndex();
+        m_nEndNd = m_nOffset + pEnd->nNode.GetIndex();
+        m_nEndCnt = pEnd->nContent.GetIndex();
     }
 }
 
@@ -1087,10 +1090,12 @@ void SwUndoInsertLabel::SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet,
 {
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
     {
-        _UndoFmtAttr aTmp( rOldFly, FALSE );
+        SwUndoFmtAttrHelper aTmp( rOldFly, false );
         rOldFly.SetFmtAttr( rChgSet );
-        if( aTmp.pUndo )
-            OBJECT.pUndoAttr = aTmp.pUndo;
+        if ( aTmp.GetUndo() )
+        {
+            OBJECT.pUndoAttr = aTmp.ReleaseUndo();
+        }
         OBJECT.pUndoFly = new SwUndoInsLayFmt( &rNewFly,0,0 );
     }
 }

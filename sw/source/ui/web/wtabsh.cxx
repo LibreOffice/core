@@ -51,7 +51,7 @@
 #include "wtabsh.hxx"
 
 #define SwWebTableShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "svx/svxids.hrc"
 #include "swslots.hxx"
 

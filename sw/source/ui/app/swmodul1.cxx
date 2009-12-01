@@ -437,7 +437,7 @@ sal_uInt16 SwModule::InsertRedlineAuthor(const String& rAuthor)
 void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
                         const AuthorCharAttr &rAttr )
 {
-    Color aCol( (ColorData)rAttr.nColor );
+    Color aCol( rAttr.nColor );
 
     if( COL_TRANSPARENT == rAttr.nColor )
     {

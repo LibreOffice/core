@@ -54,6 +54,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <svtools/svstdarr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/sfxecode.hxx>
@@ -70,16 +71,12 @@
 #include <errhdl.hxx>
 #include <fltini.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX //autogen wg. SwDoc
 #include <docsh.hxx>
-#endif
 #include <unoobj.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 
 // --> OD 2005-09-06 #i44177#
 #include <SwStyleNameMapper.hxx>
@@ -102,6 +99,8 @@
 
 #include <istyleaccess.hxx>
 #define LOGFILE_AUTHOR "mb93740"
+
+#include <sfx2/DocumentMetadataAccess.hxx>
 
 
 using namespace ::com::sun::star;
@@ -516,6 +515,7 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 }
 // <--
 
+
 ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
@@ -810,23 +810,25 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
 
     // TODO/LATER: separate links from usual embedded objects
+    ::rtl::OUString StreamPath;
     if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
     {
-        OUString aName;
         if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
         {
             const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
                 pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
             if ( pDocHierarchItem )
-                aName = pDocHierarchItem->GetValue();
+                StreamPath = pDocHierarchItem->GetValue();
         }
         else
-            aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+        {
+            StreamPath = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+        }
 
-        if( aName.getLength() )
+        if( StreamPath.getLength() )
         {
             sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
-            xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+            xInfoSet->setPropertyValue( sPropName, makeAny( StreamPath ) );
         }
     }
 
@@ -869,6 +871,38 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
                 makeAny( bTextDocInOOoFileFormat ) );
     }
     // <--
+
+    sal_uInt32 nWarnRDF = 0;
+    // RDF metadata - must be read before styles/content
+    // N.B.: embedded documents have their own manifest.rdf!
+    try
+    {
+        const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(xModelComp,
+            uno::UNO_QUERY_THROW);
+        const uno::Reference<rdf::XURI> xBaseURI( ::sfx2::createBaseURI(
+            aContext.getUNOContext(), xStorage, aBaseURL, StreamPath) );
+        const uno::Reference<task::XInteractionHandler> xHandler(
+            pDocSh->GetMedium()->GetInteractionHandler() );
+        xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
+    }
+    catch (lang::WrappedTargetException & e)
+    {
+        ucb::InteractiveAugmentedIOException iaioe;
+        if (e.TargetException >>= iaioe)
+        {
+            // import error that was not ignored by InteractionHandler!
+            nWarnRDF = ERR_SWG_READ_ERROR;
+        }
+        else
+        {
+            nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something went wrong?
+        }
+    }
+    catch (uno::Exception &)
+    {
+        nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something went wrong?
+    }
+
     sal_uInt32 nWarn = 0;
     sal_uInt32 nWarn2 = 0;
     // read storage streams
@@ -924,13 +958,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     else if ( rDoc.IsOLEPrtNotifyPending() )
         rDoc.PrtOLENotify( TRUE );
 
-    if( !nRet )
-    {
-        if( nWarn )
-            nRet = nWarn;
-        else if( nWarn2 )
-            nRet = nWarn2;
-    }
+    nRet = nRet ? nRet : (nWarn ? nWarn : (nWarn2 ? nWarn2 : nWarnRDF ) );
 
     aOpt.ResetAllFmtsOnly();
 

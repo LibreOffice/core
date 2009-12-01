@@ -168,7 +168,7 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             aStt = pGDoc->GetNodes().GetEndOfExtras();
             pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
             SwPosition aInsPos( aStt, SwIndex( pCntntNd ));
-            pMyDoc->Copy( aCpyPam, aInsPos );
+            pMyDoc->Copy( aCpyPam, aInsPos, false );
 
             nRet = rBlock.PutDoc();
         }
@@ -250,13 +250,13 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                 {
                     PCURCRSR->SetMark();
                     PCURCRSR->Move( fnMoveForward, fnGoCntnt );
-                    bRet = GetDoc()->Copy( *PCURCRSR, aPos ) || bRet;
+                    bRet = GetDoc()->Copy( *PCURCRSR, aPos, false ) || bRet;
                     PCURCRSR->Exchange();
                     PCURCRSR->DeleteMark();
                 }
             }
             else
-                bRet = GetDoc()->Copy( *PCURCRSR, aPos ) || bRet;
+                bRet = GetDoc()->Copy( *PCURCRSR, aPos, false ) || bRet;
 
         FOREACHPAM_END()
         }

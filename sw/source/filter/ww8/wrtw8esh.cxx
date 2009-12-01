@@ -1137,11 +1137,11 @@ void WW8_SdrAttrIter::OutParaAttr(bool bCharAttr)
                 if( nSlotId && nWhich != nSlotId &&
                     0 != ( nWhich = pDstPool->GetWhich( nSlotId ) ) &&
                     nWhich != nSlotId &&
-                    0 != ( pOut = aWW8AttrFnTab[ nWhich - RES_CHRATR_BEGIN ] )
-                    && ( bCharAttr ? ( nWhich >= RES_CHRATR_BEGIN
+                    ( bCharAttr ? ( nWhich >= RES_CHRATR_BEGIN
                                       && nWhich < RES_TXTATR_END)
                                    : (nWhich >= RES_PARATR_BEGIN
-                                      && nWhich < RES_FRMATR_END) ) )
+                                      && nWhich < RES_FRMATR_END) ) &&
+                    0 != ( pOut = aWW8AttrFnTab[ nWhich - RES_CHRATR_BEGIN ] ) )
                 {
                     // use always the SW-Which Id !
                     SfxPoolItem* pI = pItem->Clone();

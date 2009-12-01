@@ -57,9 +57,7 @@
 #include <fmtcnct.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <frmatr.hxx>
 #include <uitool.hxx>
 #include <frmfmt.hxx>
@@ -104,7 +102,7 @@ const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const String& rName)
 }
 
 #define SwFrameShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))

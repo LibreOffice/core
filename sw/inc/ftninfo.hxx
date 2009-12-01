@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
     String      sPrefix;
     String      sSuffix;
 protected:
-    BOOL      bEndNote;
+    bool        m_bEndNote;
 public:
     SvxNumberType aFmt;
     USHORT    nFtnOffset;

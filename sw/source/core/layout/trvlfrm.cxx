@@ -961,7 +961,7 @@ USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
         pCNd->MakeStartIndex( (SwIndex*)&pToSet->GetPoint()->nContent );
         pToSet->GetPoint()->nContent = ((SwTxtFrm*)pCntnt)->GetOfst();
 
-        SwShellCrsr* pSCrsr = (SwShellCrsr*)*pToSet;
+        SwShellCrsr* pSCrsr = dynamic_cast<SwShellCrsr*>(pToSet);
         if( pSCrsr )
         {
             Point &rPt = pSCrsr->GetPtPos();
@@ -1868,9 +1868,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
     Point aPtPt, aMkPt;
     {
-        SwShellCrsr* pShCrsr =  rTblCrsr.operator SwShellCrsr*();
-        // Aufgrund eines CompilerBugs von Linux muss
-        // der Zeigeroperator explizit gerufen werden
+        SwShellCrsr* pShCrsr = dynamic_cast<SwShellCrsr*>(&rTblCrsr);
 
         if( pShCrsr )
         {

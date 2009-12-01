@@ -42,32 +42,33 @@ class SvxTwoLinesItem;
 
 class SwTxtCharFmt : public SwTxtAttrEnd
 {
-    SwTxtNode* pMyTxtNd;
-    USHORT mnSortNumber;
+    SwTxtNode * m_pTxtNode;
+    USHORT m_nSortNumber;
 
 public:
-    SwTxtCharFmt( const SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
-    ~SwTxtCharFmt( );
+    SwTxtCharFmt( SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    virtual ~SwTxtCharFmt( );
 
     // werden vom SwFmtCharFmt hierher weitergeleitet
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );    // SwClient
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
-    // erfrage und setze den TxtNode Pointer
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    // get and set TxtNode pointer
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
-    void SetSortNumber( USHORT nSortNumber ) { mnSortNumber = nSortNumber; }
-    USHORT GetSortNumber() const { return mnSortNumber; }
+    void SetSortNumber( USHORT nSortNumber ) { m_nSortNumber = nSortNumber; }
+    USHORT GetSortNumber() const { return m_nSortNumber; }
 };
 
 // ATT_HARDBLANK ******************************
 
 class SwTxtHardBlank : public SwTxtAttr
 {
-    sal_Unicode cChar;
+    sal_Unicode m_Char;
+
 public:
     SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStart );
-    inline sal_Unicode GetChar() const  { return cChar; }
+    inline sal_Unicode GetChar() const  { return m_Char; }
 };
 
 // ATT_XNLCONTAINERITEM ******************************
@@ -83,20 +84,20 @@ public:
 
 class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrEnd, public SwClient
 {
-    SwTxtNode* pMyTxtNd;
+    SwTxtNode* m_pTxtNode;
 
 public:
-    SwTxtRuby( const SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtRuby( SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtRuby();
     TYPEINFO();
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
-    // erfrage und setze den TxtNode Pointer
-    const SwTxtNode* GetpTxtNode() const            { return pMyTxtNd; }
+    /// get and set TxtNode pointer
+           const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
     inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
           SwCharFmt* GetCharFmt();
     const SwCharFmt* GetCharFmt() const
@@ -116,8 +117,8 @@ public:
 
 inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
 {
-    ASSERT( pMyTxtNd, "SwTxtRuby:: wo ist mein TextNode?" );
-    return *pMyTxtNd;
+    ASSERT( m_pTxtNode, "SwTxtRuby: where is my TxtNode?" );
+    return *m_pTxtNode;
 }
 
 #endif

@@ -118,7 +118,7 @@ public:
     void                GetAllEntryIdentifiers( SvStringsDtor& rToFill )const;
     const SwAuthEntry*  GetEntryByIdentifier(const String& rIdentifier)const;
 
-    void                ChangeEntryContent(const SwAuthEntry* pNewEntry);
+    bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface
     USHORT              AppendField(const SwAuthEntry& rInsert);
     long                GetHandle(USHORT nPos);

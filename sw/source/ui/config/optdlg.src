@@ -60,19 +60,19 @@ TabPage TP_CONTENT_OPT
     CheckBox CB_CROSS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Guides ~while moving";
     };
     CheckBox CB_HANDLE
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Sim~ple handles";
     };
     CheckBox CB_BIGHANDLE
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Large handles";
     };
     FixedLine FL_WINDOW
@@ -103,7 +103,7 @@ TabPage TP_CONTENT_OPT
     CheckBox CB_HRULER
     {
         Pos = MAP_APPFONT ( 142 , 53 ) ;
-        Size = MAP_APPFONT ( 61 , 10 ) ;
+        Size = MAP_APPFONT ( 62 , 10 ) ;
         Text [ en-US ] = "Hori~zontal ruler" ;
     };
     ListBox LB_HMETRIC
@@ -115,7 +115,7 @@ TabPage TP_CONTENT_OPT
     CheckBox CB_VRULER
     {
         Pos = MAP_APPFONT ( 142 , 66 ) ;
-        Size = MAP_APPFONT ( 61 , 10 ) ;
+        Size = MAP_APPFONT ( 62 , 10 ) ;
         Text [ en-US ] = "Verti~cal ruler" ;
     };
     CheckBox CB_VRULER_RIGHT

@@ -518,7 +518,8 @@ SwSimpleIndexAccessBaseClass;
 class SwXFootnotes : public SwSimpleIndexAccessBaseClass,
                      public SwUnoCollection
 {
-    sal_Bool                bEndnote;
+    const bool m_bEndnote;
+
 protected:
     virtual ~SwXFootnotes();
 public:

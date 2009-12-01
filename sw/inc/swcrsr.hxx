@@ -35,11 +35,6 @@
 #include <cshtyp.hxx>
 
 
-class SwShellCrsr;
-class SwShellTableCrsr;
-class SwTableCursor;
-class SwUnoCrsr;
-class SwUnoTableCrsr;
 struct _SwCursor_SavePos;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -89,6 +84,11 @@ protected:
 
     const _SwCursor_SavePos* GetSavePos() const { return pSavePos; }
 
+    virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
+        BOOL & io_rbLeft, BOOL bVisualAllowed, BOOL bInsertCrsr);
+    virtual void DoSetBidiLevelUpDown();
+    virtual bool IsSelOvrCheck(int eFlags);
+
 public:
     // single argument ctors shall be explicit.
     SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel );
@@ -104,18 +104,6 @@ private:
 public:
 
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
-
-    virtual operator SwShellCrsr* ();
-    virtual operator SwShellTableCrsr* ();
-    virtual operator SwTableCursor* ();
-    virtual operator SwUnoCrsr* ();
-    virtual operator SwUnoTableCrsr* ();
-
-    inline operator const SwShellCrsr* () const;
-    inline operator const SwShellTableCrsr* () const;
-    inline operator const SwTableCursor* () const;
-    inline operator const SwUnoCrsr* () const;
-    inline operator const SwUnoTableCrsr* () const;
 
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
@@ -178,8 +166,8 @@ public:
     BOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
     BOOL GoStartSentence(){return GoSentence(START_SENT);}
 
-    BOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden,
-                        BOOL bInsertCrsr );
+    virtual BOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
+        BOOL bAllowVisual, BOOL bSkipHidden, BOOL bInsertCrsr );
     BOOL UpDown( BOOL bUp, USHORT nCnt, Point* pPt, long nUpDownX );
     BOOL LeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE );
     BOOL IsAtLeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE ) const;
@@ -192,7 +180,7 @@ public:
                                     { return LeftRight( FALSE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
     BOOL GoNextCell( USHORT nCnt = 1 )  { return GoPrevNextCell( TRUE, nCnt ); }
     BOOL GoPrevCell( USHORT nCnt = 1 )  { return GoPrevNextCell( FALSE, nCnt ); }
-    BOOL GotoTable( const String& rName );
+    virtual BOOL GotoTable( const String& rName );
     BOOL GotoTblBox( const String& rName );
     BOOL GotoRegion( const String& rName );
     BOOL GotoFtnAnchor();
@@ -224,7 +212,10 @@ public:
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
     // darf der Cursor in ReadOnlyBereiche?
-    BOOL IsReadOnlyAvailable() const;
+    virtual bool IsReadOnlyAvailable() const;
+
+    virtual BOOL IsSkipOverProtectSections() const;
+    virtual BOOL IsSkipOverHiddenSections() const;
 
     BYTE GetCrsrBidiLevel() const { return nCursorBidiLevel; }
     void SetCrsrBidiLevel( BYTE nNewLevel ) { nCursorBidiLevel = nNewLevel; }
@@ -275,12 +266,16 @@ protected:
     BOOL bChg : 1;
     BOOL bParked : 1;       // Tabellen-Cursor wurde geparkt
 
+    virtual bool IsSelOvrCheck(int eFlags);
+
 public:
     SwTableCursor( const SwPosition &rPos, SwPaM* pRing = 0 );
     SwTableCursor( SwTableCursor& );
     virtual ~SwTableCursor();
 
-    virtual operator SwTableCursor* ();
+    virtual BOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
+        BOOL bAllowVisual, BOOL bSkipHidden, BOOL bInsertCrsr );
+    virtual BOOL GotoTable( const String& rName );
 
     void InsertBox( const SwTableBox& rTblBox );
     void DeleteBox( USHORT nPos ) { aSelBoxes.Remove( nPos ); bChg = TRUE; }
@@ -312,35 +307,6 @@ public:
     bool NewTableSelection();
     void ActualizeSelection( const SwSelBoxes &rBoxes );
 };
-
-
-// --------------------------- inline Methoden ----------------------
-
-inline SwCursor::operator const SwShellCrsr* () const
-{
-    return (SwShellCrsr*)*((SwCursor*)this);
-}
-
-inline SwCursor::operator const SwShellTableCrsr* () const
-{
-    return (SwShellTableCrsr*)*((SwCursor*)this);
-}
-
-inline SwCursor::operator const SwTableCursor* () const
-{
-    return (SwTableCursor*)*((SwCursor*)this);
-}
-
-inline SwCursor::operator const SwUnoCrsr* () const
-{
-    return (SwUnoCrsr*)*((SwCursor*)this);
-}
-
-inline SwCursor::operator const SwUnoTableCrsr* () const
-{
-    return (SwUnoTableCrsr*)*((SwCursor*)this);
-}
-
 
 #endif
 

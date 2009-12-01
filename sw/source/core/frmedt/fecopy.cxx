@@ -840,7 +840,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
             {
                 SwNodeIndex aIndexBefore(rInsPos.nNode);
                 aIndexBefore--;
-                pClpDoc->Copy( rCopy, rInsPos );
+                pClpDoc->Copy( rCopy, rInsPos, false );
                 {
                     aIndexBefore++;
                     SwPaM aPaM(SwPosition(aIndexBefore, 0),
@@ -1069,7 +1069,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
                 aIndexBefore--;
 
-                pClpDoc->Copy( aCpyPam, rInsPos );
+                pClpDoc->Copy( aCpyPam, rInsPos, false );
 
                 {
                     aIndexBefore++;

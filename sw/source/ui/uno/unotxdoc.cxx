@@ -37,16 +37,12 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <wdocsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <pview.hxx>
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
 #include <swprtopt.hxx>
@@ -84,9 +80,7 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/document/RedlineDisplayType.hpp>
 #include <svx/linkmgr.hxx>
 #include <svx/unofill.hxx>
@@ -94,13 +88,9 @@
 #include <sfx2/progress.hxx>
 #include <swmodule.hxx>
 #include <docstat.hxx>
-#ifndef _MODOPT_HXX //
 #include <modcfg.hxx>
-#endif
 #include <ndtxt.hxx>
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 #include <swcont.hxx>
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
@@ -2851,7 +2841,27 @@ uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlat
 {
     return new SwXFlatParagraphIterator( *pDocShell->GetDoc(), nTextMarkupType, bAutomatic );
 }
+/*-- 07.05.2009 09:21:12---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    //create a new document - hidden - copy the storage and return it
+    SwDoc* pCopyDoc = pDocShell->GetDoc()->CreateCopy();
+    SfxObjectShell* pShell = new SwDocShell( pCopyDoc, SFX_CREATE_MODE_STANDARD );
+    pShell->DoInitNew();
+
+    uno::Reference< embed::XStorage > xSourceStorage = getDocumentStorage();
+    uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
+    //copy this storage
+    uno::Reference< document::XStorageBasedDocument > xStorageDoc( xNewModel, uno::UNO_QUERY );
+    uno::Reference< embed::XStorage > xNewStorage = xStorageDoc->getDocumentStorage();
+    xSourceStorage->copyToStorage( xNewStorage );
+    return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
+}
 /* -----------------------------20.06.00 09:54--------------------------------
 
  ---------------------------------------------------------------------------*/

@@ -36,7 +36,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
 {
     HelpID = FN_CONVERT_TEXT_TABLE ;
     OUTPUTSIZE = TRUE ;
-    Size = MAP_APPFONT ( 203 , 152 ) ;
+    Size = MAP_APPFONT ( 203 , 169 ) ;
     Text [ en-US ] = "Convert Table to Text" ;
     MOVEABLE = TRUE ;
     SVLOOK = TRUE ;
@@ -176,8 +176,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
     };
     PushButton BT_AUTOFORMAT
     {
-        Pos = MAP_APPFONT ( 147 , 60 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 152 ) ;
+        Size = MAP_APPFONT ( 66 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
         Text [ en-US ] = "Auto~Format..." ;

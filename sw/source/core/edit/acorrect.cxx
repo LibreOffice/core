@@ -374,7 +374,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
                 SwDontExpandItem aExpItem;
                 aExpItem.SaveDontExpandItems( *aPam.GetPoint() );
 
-                pAutoDoc->Copy( aCpyPam, *aPam.GetPoint() );
+                pAutoDoc->Copy( aCpyPam, *aPam.GetPoint(), false );
 
                 aExpItem.RestoreDontExpandItems( *aPam.GetPoint() );
 
@@ -491,7 +491,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
 
             for( n = 0; n < nSize; ++n )
             {
-                SwTxtAttr* pHt = pTxtNd->GetpSwpHints()->GetHt( n );
+                SwTxtAttr* pHt = pTxtNd->GetpSwpHints()->GetTextHint( n );
                 nAttrStart = *pHt->GetStart();
                 if( nAttrStart > nStart )       // ueber den Bereich hinaus
                     break;

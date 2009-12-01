@@ -499,6 +499,10 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_Bool bInFootEndNoteAnchor : 1;
     sal_Bool bInFootEndNoteSymbol : 1;
     sal_Bool bIgnoreHTMLComments : 1;
+    sal_Bool bRemoveHidden : 1; // the filter implementation might set the hidden flag
+
+    /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
+    ::rtl::OUString m_InfoNames[4];
 
     SfxViewFrame* pTempViewFrame;
 
@@ -925,6 +929,8 @@ protected:
     // wird das Dok geloescht, ist auch der Parser zu loeschen
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
+    virtual void AddMetaUserDefined( ::rtl::OUString const & i_rMetaName );
+
 public:
 
     SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
@@ -941,6 +947,10 @@ public:
 
     // fuers asynchrone lesen aus dem SvStream
     virtual void Continue( int nToken );
+
+    virtual bool ParseMetaOptions( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::document::XDocumentProperties>&,
+            SvKeyValueIterator* );
 };
 
 

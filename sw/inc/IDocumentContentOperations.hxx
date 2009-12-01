@@ -71,7 +71,7 @@
     /** Kopieren eines Bereiches im oder in ein anderes Dokument !
         Die Position kann auch im Bereich liegen !!
     */
-    virtual bool Copy(SwPaM&, SwPosition&) const = 0;
+    virtual bool Copy(SwPaM&, SwPosition&, bool bCopyAll ) const = 0;
 
     /** Loesche die Section, in der der Node steht.
     */

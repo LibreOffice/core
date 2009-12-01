@@ -172,11 +172,6 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
 
                 if( aSet.Count() )
                     aSet.ClearItem();
-
-#ifdef JP_NEWCORE
-            // vieleicht sollte man hier noch erfragen, ob schon alle Attribute
-            // "DontCare" sind. Dann kann man abbrechen!
-#endif
             }
             pSet = &aSet;
         }
@@ -251,9 +246,9 @@ BOOL SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
 }
 
 
-BOOL SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
+bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 {
-    BOOL bChgd = FALSE;
+    bool bChgd = false;
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr(), *pFirst = pCrsr;
@@ -284,7 +279,7 @@ BOOL SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 } */
 
 
-BOOL SwEditShell::HasFtns( BOOL bEndNotes ) const
+bool SwEditShell::HasFtns( bool bEndNotes ) const
 {
     const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
     for ( USHORT i = 0; i < rIdxs.Count(); ++i )
@@ -298,7 +293,7 @@ BOOL SwEditShell::HasFtns( BOOL bEndNotes ) const
 
 
     // gebe Liste aller Fussnoten und deren Anfangstexte
-USHORT SwEditShell::GetSeqFtnList( SwSeqFldList& rList, BOOL bEndNotes )
+USHORT SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
     if( rList.Count() )
         rList.Remove( 0, rList.Count() );
