@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fumark.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,7 @@ class FuMarkRect : public FuPoor
     ScRangeListRef  aSourceRange;
 
  public:
-    FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuMarkRect();
 

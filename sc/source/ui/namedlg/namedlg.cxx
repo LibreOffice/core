@@ -128,7 +128,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aEdName         ( this, ScResId( ED_NAME ) ),
         //
         aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
-        aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
+        aEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
         aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
         //
         aFlType         ( this, ScResId( FL_TYPE ) ),

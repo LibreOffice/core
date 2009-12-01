@@ -939,6 +939,15 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             aContextMenuHelper.completeAndExecute( aPos, xPopupMenu );
         }
     }
+    else if( ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT ) ||
+             ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT ) ||
+             ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT ) ||
+             ( rCEvt.GetCommand() == COMMAND_INPUTCONTEXTCHANGE ) )
+    {
+        //#i84417# enable editing with IME
+        if( m_pDrawViewWrapper )
+            m_pDrawViewWrapper->Command( rCEvt, m_pChartWindow );
+    }
 }
 
 bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )

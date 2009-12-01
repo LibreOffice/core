@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: op.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.18.126.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -462,12 +462,11 @@ void OP_Note123( SvStream& r, UINT16 n)
     r.Read( pText, n );
     pText[ n ] = 0;
 
-    String aTmp(pText,pLotusRoot->eCharsetQ);
-    ScPostIt *pNote = new ScPostIt(aTmp, pLotusRoot->pDoc);
-
-    pDoc->SetNote( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), *pNote ) ;
-
+    String aNoteText(pText,pLotusRoot->eCharsetQ);
     delete [] pText;
+
+    ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab) );
+    ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false );
 }
 
 void OP_HorAlign123( BYTE nAlignPattern, SfxItemSet& rPatternItemSet )

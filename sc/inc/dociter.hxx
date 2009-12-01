@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dociter.hxx,v $
- * $Revision: 1.9.32.2 $
+ * $Revision: 1.9.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,9 +181,10 @@ public:
                                    const ScRange& rRange, BOOL bSTotal = FALSE);
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
-    SCCOL          GetCol() { return nCol; }
-    SCROW          GetRow() { return nRow; }
-    SCTAB          GetTab() { return nTab; }
+    SCCOL           GetCol() const { return nCol; }
+    SCROW           GetRow() const { return nRow; }
+    SCTAB           GetTab() const { return nTab; }
+    ScAddress       GetPos() const { return ScAddress( nCol, nRow, nTab ); }
 };
 
 class ScQueryCellIterator           // alle nichtleeren Zellen in einem Bereich

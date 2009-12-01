@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconpol.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +31,7 @@
 #ifndef SC_FUCONPOL_HXX
 #define SC_FUCONPOL_HXX
 
-#ifndef _SV_HXX
-#endif
-
 #include "fuconstr.hxx"
-
-
 
 /*************************************************************************
 |*
@@ -49,7 +44,7 @@ class FuConstPolygon : public FuConstruct
     Point aLastPos;
 
  public:
-    FuConstPolygon(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuConstPolygon(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstPolygon();

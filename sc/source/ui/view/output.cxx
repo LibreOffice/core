@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: output.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.35.100.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2196,7 +2196,7 @@ void ScOutputData::DrawNoteMarks()
                     // use origin's pCell for NotePtr test below
                 }
 
-                if ( pCell && pCell->GetNotePtr() && ( bIsMerged ||
+                if ( pCell && pCell->HasNote() && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     if (bFirst)
@@ -2274,7 +2274,7 @@ void ScOutputData::AddPDFNotes()
                     // use origin's pCell for NotePtr test below
                 }
 
-                if ( pCell && pCell->GetNotePtr() && ( bIsMerged ||
+                if ( pCell && pCell->HasNote() && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     long nNoteWidth = (long)( SC_CLIPMARK_SIZE * nPPTX );
@@ -2294,7 +2294,7 @@ void ScOutputData::AddPDFNotes()
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
                     {
                         Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
-                        const ScPostIt* pNote = pCell->GetNotePtr();
+                        const ScPostIt* pNote = pCell->GetNote();
 
                         // Note title is the cell address (as on printed note pages)
                         String aTitle;
@@ -2303,7 +2303,6 @@ void ScOutputData::AddPDFNotes()
 
                         // Content has to be a simple string without line breaks
                         String aContent = pNote->GetText();
-                        aContent.ConvertLineEnd(LINEEND_LF);
                         xub_StrLen nPos;
                         while ( (nPos=aContent.Search('\n')) != STRING_NOTFOUND )
                             aContent.SetChar( nPos, ' ' );

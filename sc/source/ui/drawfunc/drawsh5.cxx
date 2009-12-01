@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawsh5.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -372,41 +372,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_DELETE:
         case SID_DELETE_CONTENTS:
-        {
-            const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
-            if(rNoteMarkList.GetMarkCount() == 1)
-            {
-                SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
-                {
-                    ScAddress aTabPos;
-                    ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, pViewData->GetTabNo() );
-                    if( pData )
-                        aTabPos = pData->aStt;
-                    ScDocument* pDoc = pViewData->GetDocument();
-                    ScPostIt aNote(pDoc);
-                    pViewData->GetViewShell()->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );   // with Undo
-
-                    ScDrawLayer* pModel = pDoc->GetDrawLayer();
-                    if (pModel)
-                    {
-                        SdrPage* pPage = pModel->GetPage( aTabPos.Tab() );
-                        if(pPage)
-                        {
-                            ScDocShell* pDocSh = pViewData->GetDocShell();
-                            pDocSh->GetUndoManager()->AddUndoAction( new SdrUndoRemoveObj( *pObj));
-                            pPage->RemoveObject( pObj->GetOrdNum() );
-                        }
-                    }
-                    if (!pTabView->IsDrawSelMode())
-                        pViewData->GetViewShell()->SetDrawShell( FALSE );
-                    break;
-                }
-            }
             pView->DeleteMarked();
             if (!pTabView->IsDrawSelMode())
                 pViewData->GetViewShell()->SetDrawShell( FALSE );
-        }
         break;
 
         case SID_CUT:

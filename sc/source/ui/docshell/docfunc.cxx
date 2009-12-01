@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfunc.cxx,v $
- * $Revision: 1.69.28.2 $
+ * $Revision: 1.70.100.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -577,11 +577,12 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
     //  3) Inhalte fuer Undo kopieren und Undo-Aktion anlegen
     //  4) Inhalte loeschen
 
+    bool bDrawUndo = bObjects || (nFlags & IDF_NOTE);
+    if (bRecord && bDrawUndo)
+        pDoc->BeginDrawUndo();
+
     if (bObjects)
     {
-        if (bRecord)
-            pDoc->BeginDrawUndo();
-
         if (bMulti)
             pDoc->DeleteObjectsInSelection( aMultiMark );
         else
@@ -604,10 +605,9 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
             nUndoDocFlags |= IDF_STRING;    // -> Zellen werden geaendert
         if (nFlags & IDF_NOTE)
             nUndoDocFlags |= IDF_CONTENTS;  // #68795# copy all cells with their notes
+        // note captions are handled in drawing undo
+        nUndoDocFlags |= IDF_NOCAPTIONS;
         pDoc->CopyToDocument( aExtendedRange, nUndoDocFlags, bMulti, pUndoDoc, &aMultiMark );
-        rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoDeleteContents( &rDocShell, aMultiMark, aExtendedRange,
-                                      pUndoDoc, bMulti, nFlags, bObjects ) );
     }
 
 //! HideAllCursors();   // falls Zusammenfassung aufgehoben wird
@@ -618,8 +618,14 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
     else
     {
         pDoc->DeleteSelection( nFlags, aMultiMark );
-        aMultiMark.MarkToSimple();
+//       aMultiMark.MarkToSimple();
     }
+
+    // add undo action after drawing undo is complete (objects and note captions)
+    if( bRecord )
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoDeleteContents( &rDocShell, aMultiMark, aExtendedRange,
+                                      pUndoDoc, bMulti, nFlags, bDrawUndo ) );
 
     if (!AdjustRowHeight( aExtendedRange ))
         rDocShell.PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
@@ -727,7 +733,7 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
         pTabs = new SCTAB[1];
         pTabs[0] = rPos.Tab();
         ppOldCells  = new ScBaseCell*[1];
-        ppOldCells[0] = pDocCell ? pDocCell->Clone(pDoc) : NULL;
+        ppOldCells[0] = pDocCell ? pDocCell->CloneWithoutNote( *pDoc ) : 0;
 
         pHasFormat = new BOOL[1];
         pOldFormats = new ULONG[1];
@@ -755,7 +761,7 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
     if ( bEditDeleted || pDoc->HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) )
         AdjustRowHeight( ScRange(rPos) );
 
-    rDocShell.PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
+    rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
 
     // #107160# notify input handler here the same way as in PutCell
@@ -767,7 +773,6 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
 
 BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi )
 {
-
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
@@ -791,13 +796,9 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     BOOL bEditDeleted = (pDocCell && pDocCell->GetCellType() == CELLTYPE_EDIT);
     BOOL bHeight = ( bEditDeleted || bEditCell ||
                     pDoc->HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) );
-    ScBaseCell* pUndoCell = NULL;
-    ScBaseCell* pRedoCell = NULL;
-    if (bUndo)
-    {
-        pUndoCell = pDocCell ? pDocCell->Clone(pDoc) : NULL;
-        pRedoCell = pNewCell ? pNewCell->Clone(pDoc) : NULL;
-    }
+
+    ScBaseCell* pUndoCell = (bUndo && pDocCell) ? pDocCell->CloneWithoutNote( *pDoc, rPos ) : 0;
+    ScBaseCell* pRedoCell = (bUndo && pNewCell) ? pNewCell->CloneWithoutNote( *pDoc, rPos ) : 0;
 
     pDoc->PutCell( rPos, pNewCell );
 
@@ -812,7 +813,7 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
         AdjustRowHeight( ScRange(rPos) );
 
     if (!bXMLLoading)
-        rDocShell.PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
+        rDocShell.PostPaintCell( rPos );
 
     aModificator.SetDocumentModified();
 
@@ -1033,7 +1034,25 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
 
 //------------------------------------------------------------------------
 
-BOOL ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bApi )
+bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
+{
+    ScDocument& rDoc = *rDocShell.GetDocument();
+    ScPostIt* pNote = rDoc.GetNote( rPos );
+    if( !pNote || (bShow == pNote->IsCaptionShown()) ) return false;
+
+    // move the caption to internal or hidden layer and create undo action
+    pNote->ShowCaption( bShow );
+    if( rDoc.IsUndoEnabled() )
+        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideNote( rDocShell, rPos, bShow ) );
+
+    rDocShell.SetDocumentModified();
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+
+bool ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -1043,33 +1062,76 @@ BOOL ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bA
     {
         if (!bApi)
             rDocShell.ErrorMessage(aTester.GetMessageId());
-        return FALSE;
+        return false;
     }
 
     String aNewText = rText;
     aNewText.ConvertLineEnd();      //! ist das noetig ???
 
-    ScPostIt aNote(pDoc);
-    pDoc->GetNote( rPos.Col(), rPos.Row(), rPos.Tab(), aNote );
-    aNote.SetText( aNewText );      // setzt auch Author und Date
-    pDoc->SetNote( rPos.Col(), rPos.Row(), rPos.Tab(), aNote );
-
-    if ( aNote.IsShown() )
-    {
-        //  Zeichenobjekt updaten
-        //! bei gelocktem Paint auch erst spaeter !!!
-
-        ScDetectiveFunc aDetFunc( pDoc, rPos.Tab() );
-        aDetFunc.HideComment( rPos.Col(), rPos.Row() );
-        aDetFunc.ShowComment( rPos.Col(), rPos.Row(), FALSE );  // FALSE: nur wenn gefunden
-    }
+    if( ScPostIt* pNote = (aNewText.Len() > 0) ? pDoc->GetOrCreateNote( rPos ) : pDoc->GetNote( rPos ) )
+        pNote->SetText( aNewText );
 
     //! Undo !!!
 
-    rDocShell.PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
+    rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
 
-    return TRUE;
+    return true;
+}
+
+//------------------------------------------------------------------------
+
+bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate, BOOL bApi )
+{
+    bool bDone = false;
+
+    ScDocShellModificator aModificator( rDocShell );
+    ScDocument& rDoc = *rDocShell.GetDocument();
+    ScEditableTester aTester( &rDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
+    if (aTester.IsEditable())
+    {
+        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+        SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
+
+        // collect drawing undo actions for deleting/inserting caption obejcts
+        if( pUndoMgr )
+            pDrawLayer->BeginCalcUndo();
+
+        // delete old note
+        ScNoteData aOldData;
+        if( ScPostIt* pOldNote = rDoc.ReleaseNote( rPos ) )
+        {
+            // rescue note data for undo
+            aOldData = pOldNote->GetNoteData();
+            // delete the note (creates drawing undo action for the caption object)
+            delete pOldNote;
+        }
+
+        // create new note (creates drawing undo action for the new caption object)
+        ScNoteData aNewData;
+        if( ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false ) )
+        {
+            if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
+            if( pDate ) pNewNote->SetDate( *pDate );
+            // rescue note data for undo
+            aNewData = pNewNote->GetNoteData();
+        }
+
+        // create the undo action
+        if( pUndoMgr && (aOldData.mpCaption || aNewData.mpCaption) )
+            pUndoMgr->AddUndoAction( new ScUndoReplaceNote( rDocShell, rPos, aOldData, aNewData, pDrawLayer->GetCalcUndo() ) );
+
+        // repaint cell (to make note marker visible)
+        rDocShell.PostPaintCell( rPos );
+        aModificator.SetDocumentModified();
+        bDone = true;
+    }
+    else if (!bApi)
+    {
+        rDocShell.ErrorMessage(aTester.GetMessageId());
+    }
+
+    return bDone;
 }
 
 //------------------------------------------------------------------------
@@ -2008,6 +2070,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     {
         BOOL bWholeCols = ( nStartRow == 0 && nEndRow == MAXROW );
         BOOL bWholeRows = ( nStartCol == 0 && nEndCol == MAXCOL );
+        USHORT nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
 
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab, bWholeCols, bWholeRows );
@@ -2015,7 +2078,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         if (bCut)
         {
             pDoc->CopyToDocument( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
-                                    IDF_ALL, FALSE, pUndoDoc );
+                                    nUndoFlags, FALSE, pUndoDoc );
             pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRefUndoDoc->InitUndo( pDoc, 0, nTabCount-1, FALSE, FALSE );
         }
@@ -2024,7 +2087,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
             pUndoDoc->AddUndoTab( nDestTab, nDestEndTab, bWholeCols, bWholeRows );
         pDoc->CopyToDocument( nDestCol, nDestRow, nDestTab,
                                     nDestEndCol, nDestEndRow, nDestEndTab,
-                                    IDF_ALL, FALSE, pUndoDoc );
+                                    nUndoFlags, FALSE, pUndoDoc );
 
         pUndoData = new ScRefUndoData( pDoc );
 
@@ -2078,7 +2141,12 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         aDestMark.SelectTable( nTab, TRUE );        // Destination selektieren
     aDestMark.SetMarkArea( aPasteDest );
 
-    pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL & ~IDF_OBJECTS,
+    /*  Do not copy cell notes and drawing objects here. While pasting, the
+        function ScDocument::UpdateReference() is called which calls
+        ScDrawLayer::MoveCells() which may move away inserted objects to wrong
+        positions (e.g. if source and destination range overlaps). Cell notes
+        and drawing objects are pasted below after doing all adjusting. */
+    pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS),
                         pRefUndoDoc, pClipDoc, TRUE, FALSE, bIncludeFiltered );
 
     // skipped rows and merged cells don't mix
@@ -2090,9 +2158,11 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                             ScRange( 0,nDestRow,nDestTab, MAXCOL,nDestEndRow,nDestEndTab ),
                             FALSE );
 
-    //  paste drawing objects after adjusting row heights
+    /*  Paste cell notes and drawing objects after adjusting formula references
+        and row heights. There are no cell notes or drawing objects, if the
+        clipdoc does not contain a drawing layer. */
     if ( pClipDoc->GetDrawLayer() )
-        pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_OBJECTS,
+        pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_NOTE | IDF_OBJECTS,
                             pRefUndoDoc, pClipDoc, TRUE, FALSE, bIncludeFiltered );
 
     if (bRecord)
@@ -3347,8 +3417,7 @@ BOOL ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
             ScRange aCopyRange = aDestArea;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(nTabCount-1);
-            pDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pUndoDoc, &aMark );
-            pDoc->BeginDrawUndo();
+            pDoc->CopyToDocument( aCopyRange, IDF_AUTOFILL, FALSE, pUndoDoc, &aMark );
         }
 
         pDoc->Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
@@ -3455,8 +3524,7 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             pDoc->CopyToDocument(
                 aDestArea.aStart.Col(), aDestArea.aStart.Row(), 0,
                 aDestArea.aEnd.Col(), aDestArea.aEnd.Row(), nTabCount-1,
-                IDF_ALL, FALSE, pUndoDoc, &aMark );
-            pDoc->BeginDrawUndo();
+                IDF_AUTOFILL, FALSE, pUndoDoc, &aMark );
         }
 
         if (aDestArea.aStart.Col() <= aDestArea.aEnd.Col() &&
@@ -3591,11 +3659,11 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
             if (i != nDestStartTab && aMark.GetTableSelect(i))
                 pUndoDoc->AddUndoTab( i, i );
 
+        // do not clone note captions in undo document
         pDoc->CopyToDocument(
             aDestArea.aStart.Col(), aDestArea.aStart.Row(), 0,
             aDestArea.aEnd.Col(), aDestArea.aEnd.Row(), nTabCount-1,
-            IDF_ALL, FALSE, pUndoDoc, &aMark );
-        pDoc->BeginDrawUndo();
+            IDF_AUTOFILL, FALSE, pUndoDoc, &aMark );
     }
 
     pDoc->Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
@@ -3660,33 +3728,47 @@ BOOL ScDocFunc::MergeCells( const ScRange& rRange, BOOL bContents, BOOL bRecord,
     }
 
     BOOL bNeedContents = bContents &&
-            ( !pDoc->IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow ) ||
-              !pDoc->IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow ) );
+            ( !pDoc->IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) ||
+              !pDoc->IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true ) );
 
+    ScDocument* pUndoDoc = 0;
     if (bRecord)
     {
-        ScDocument* pUndoDoc = NULL;
-        if (bNeedContents && bContents)
+        // test if the range contains other notes which also implies that we need an undo document
+        bool bHasNotes = false;
+        for( ScAddress aPos( nStartCol, nStartRow, nTab ); !bHasNotes && (aPos.Col() <= nEndCol); aPos.IncCol() )
+            for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
+                bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->GetNote( aPos ) != 0);
+
+        if (bNeedContents || bHasNotes)
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nTab, nTab );
+            // note captions are collected by drawing undo
             pDoc->CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                    IDF_ALL, FALSE, pUndoDoc );
+                                    IDF_ALL|IDF_NOCAPTIONS, FALSE, pUndoDoc );
         }
+        if( bHasNotes )
+            pDoc->BeginDrawUndo();
+    }
+
+    if (bNeedContents)
+        pDoc->DoMergeContents( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+    pDoc->DoMerge( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+
+    if( bRecord )
+    {
+        SdrUndoGroup* pDrawUndo = pDoc->GetDrawLayer() ? pDoc->GetDrawLayer()->GetCalcUndo() : 0;
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoMerge( &rDocShell,
                             nStartCol, nStartRow, nTab,
-                            nEndCol, nEndRow, nTab, TRUE, pUndoDoc ) );
+                            nEndCol, nEndRow, nTab, bNeedContents, pUndoDoc, pDrawUndo ) );
     }
-
-    if (bNeedContents && bContents)
-        pDoc->DoMergeContents( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
-    pDoc->DoMerge( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
 
     if ( !AdjustRowHeight( ScRange( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab ) ) )
         rDocShell.PostPaint( nStartCol, nStartRow, nTab,
                                             nEndCol, nEndRow, nTab, PAINT_GRID );
-    if (bNeedContents && bContents)
+    if (bNeedContents)
         pDoc->SetDirty( rRange );
     aModificator.SetDocumentModified();
 
@@ -3748,41 +3830,6 @@ BOOL ScDocFunc::UnmergeCells( const ScRange& rRange, BOOL bRecord, BOOL bApi )
         Sound::Beep();      //! FALSE zurueck???
 
     return TRUE;
-}
-
-//------------------------------------------------------------------------
-
-BOOL ScDocFunc::SetNote( const ScAddress& rPos, const ScPostIt& rNote, BOOL bApi )
-{
-    ScDocShellModificator aModificator( rDocShell );
-
-    BOOL bDone = FALSE;
-    SCCOL nCol = rPos.Col();
-    SCROW nRow = rPos.Row();
-    SCTAB nTab = rPos.Tab();
-
-    ScDocument* pDoc = rDocShell.GetDocument();
-    BOOL bUndo (pDoc->IsUndoEnabled());
-    ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
-    if (aTester.IsEditable())
-    {
-        if (bUndo)
-        {
-            ScPostIt aOld(pDoc);
-            pDoc->GetNote( nCol, nRow, nTab, aOld );
-            rDocShell.GetUndoManager()->AddUndoAction(
-                new ScUndoEditNote( &rDocShell, rPos, aOld, rNote ) );
-        }
-        pDoc->SetNote( nCol, nRow, nTab, rNote );
-
-        rDocShell.PostPaintCell( nCol, nRow, nTab );
-        aModificator.SetDocumentModified();
-        bDone = TRUE;
-    }
-    else if (!bApi)
-        rDocShell.ErrorMessage(aTester.GetMessageId());
-
-    return bDone;
 }
 
 //------------------------------------------------------------------------

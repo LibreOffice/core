@@ -109,6 +109,14 @@ NOOPTFILES= \
              $(SLO)$/cellsuno.obj
 .ENDIF
 
+# Work around bug in gcc 4.2 / 4.3, see
+# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=35182
+.IF "$(COM)"=="GCC"
+NOOPTFILES+= \
+    $(SLO)$/chart2uno.obj
+.ENDIF
+
+
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk

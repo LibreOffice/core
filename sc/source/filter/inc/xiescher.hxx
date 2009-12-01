@@ -957,13 +957,29 @@ private:
 
 // ----------------------------------------------------------------------------
 
+/** Simple implementation of the SVX DFF manager. Implements resolving palette
+    colors. Used by XclImpDffPropSet (as is), extended by XclImpDffManager.
+ */
+class XclImpSimpleDffManager : public SvxMSDffManager, protected XclImpRoot
+{
+public:
+    explicit            XclImpSimpleDffManager( const XclImpRoot& rRoot, SvStream& rDffStrm );
+    virtual             ~XclImpSimpleDffManager();
+
+protected:
+    /** Returns a color from the Excel color palette. */
+    virtual FASTBOOL    GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
+};
+
+// ----------------------------------------------------------------------------
+
 class XclImpObjectManager;
 class SdrObjList;
 
 /** Derived from SvxMSDffManager and SvxMSConvertOCXControls, contains core
     implementation of DFF stream import and OCX form control import.
  */
-class XclImpDffManager : protected SvxMSDffManager, protected SvxMSConvertOCXControls, protected XclImpRoot
+class XclImpDffManager : protected XclImpSimpleDffManager, protected SvxMSConvertOCXControls
 {
 public:
     explicit            XclImpDffManager(
@@ -1010,8 +1026,6 @@ protected:
                             SdrObject* pOldSdrObj = 0 );
     /** Returns the BLIP stream position, based on the passed DFF stream position. */
     virtual ULONG       Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
-    /** Returns a color from the Excel color palette. */
-    virtual FASTBOOL    GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
 
     // virtual functions of SvxMSConvertOCXControls
 
@@ -1187,7 +1201,7 @@ private:
     typedef ::std::auto_ptr< SvMemoryStream > SvMemoryStreamPtr;
 
     SvMemoryStream      maDummyStrm;    /// Dummy stream for DFF manager.
-    SvxMSDffManager     maDffManager;   /// DFF manager.
+    XclImpSimpleDffManager maDffManager;/// DFF manager used to resolve palette colors.
     SvMemoryStreamPtr   mxMemStrm;      /// Helper stream.
 };
 

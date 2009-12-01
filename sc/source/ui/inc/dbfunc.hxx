@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfunc.hxx,v $
- * $Revision: 1.11.30.2 $
+ * $Revision: 1.12.100.1 $
  *
  * This file is part of OpenOffice.org.
  *

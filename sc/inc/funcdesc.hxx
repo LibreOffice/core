@@ -172,7 +172,7 @@ public:
     virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const;
     virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const;
     virtual const formula::IFunctionDescription*    getFunctionByName(const ::rtl::OUString& _sFunctionName) const;
-    virtual const sal_Unicode                       getSingleToken(const formula::IFunctionManager::EToken _eToken) const;
+    virtual sal_Unicode                             getSingleToken(const formula::IFunctionManager::EToken _eToken) const;
 private:
     ScFunctionList* pFuncList;
     List*           aCatLists[MAX_FUNCCAT];

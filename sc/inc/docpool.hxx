@@ -56,7 +56,9 @@ class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 
 public:
             ScDocumentPool( SfxItemPool* pSecPool = NULL, BOOL bLoadRefCounts = FALSE );
-            ~ScDocumentPool();
+protected:
+            virtual ~ScDocumentPool();
+public:
 
     virtual SfxItemPool*        Clone() const;
     virtual SfxMapUnit          GetMetric( USHORT nWhich ) const;

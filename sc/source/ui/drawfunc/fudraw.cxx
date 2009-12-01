@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fudraw.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +38,9 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -55,6 +55,7 @@
 #include "docsh.hxx"
 #include "postit.hxx"
 #include "globstr.hrc"
+#include "drawview.hxx"
 
 /*************************************************************************
 |*
@@ -62,7 +63,7 @@
 |*
 \************************************************************************/
 
-FuDraw::FuDraw(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuDraw::FuDraw(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     FuPoor      (pViewSh, pWin, pViewP, pDoc, rReq),
     aNewPointer ( POINTER_ARROW ),
@@ -166,8 +167,6 @@ BOOL __EXPORT FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     DoModifiers( rMEvt );
-    if( !IsSizingOrMovingNote( rMEvt ) )
-        CheckVisibleNote();
     return FALSE;
 }
 
@@ -247,6 +246,7 @@ BOOL lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEven
 BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FALSE;
+    ScViewData& rViewData = *pViewShell->GetViewData();
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -273,33 +273,23 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             if ( pViewShell->IsDrawTextShell() || aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
             {
                 // in normale Draw-Shell, wenn Objekt selektiert, sonst Zeichnen aus
-                pViewShell->GetViewData()->GetDispatcher().
-                    Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                 bReturn = TRUE;
             }
             else if ( pViewShell->IsDrawSelMode() )
             {
                 pView->UnmarkAll();
-                pViewShell->GetViewData()->GetDispatcher().
-                    Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                 bReturn = TRUE;
             }
             else if ( pView->AreObjectsMarked() )
             {
-
                 // #97016# III
-                const SdrHdlList& rHdlList = pView->GetHdlList();
-                SdrHdl* pHdl = rHdlList.GetFocusHdl();
-
-                if(pHdl)
-                {
-                    ((SdrHdlList&)rHdlList).ResetFocusHdl();
-                }
+                SdrHdlList& rHdlList = const_cast< SdrHdlList& >( pView->GetHdlList() );
+                if( rHdlList.GetFocusHdl() )
+                    rHdlList.ResetFocusHdl();
                 else
-                {
-                    CheckVisibleNote();
                     pView->UnmarkAll();
-                }
 
                 //  Beim Bezier-Editieren ist jetzt wieder das Objekt selektiert
                 if (!pView->AreObjectsMarked())
@@ -310,56 +300,9 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             break;
 
         case KEY_DELETE:                    //! ueber Accelerator
-        {
-            const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
-            if(rNoteMarkList.GetMarkCount() == 1)
-            {
-                SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
-                {
-                    ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
-                    SfxUndoManager* pUndoMan = NULL;
-                    ScDrawLayer* pModel = pDoc->GetDrawLayer();
-                    if (pModel)
-                    {
-                        SfxObjectShell* pObjSh = pViewShell->GetViewData()->GetSfxDocShell();
-                        if (pObjSh)
-                            pUndoMan = pObjSh->GetUndoManager();
-                        if (pUndoMan)
-                        {
-                            String aUndoStr(ScGlobal::GetRscString( STR_UNDO_EDITNOTE ));
-                            pUndoMan->EnterListAction( aUndoStr, aUndoStr );
-                            SdrUndoGroup* pShowUndo = pModel->GetCalcUndo();
-                            if (pShowUndo)
-                                pUndoMan->AddUndoAction( pShowUndo );
-                        }
-                        ScAddress aTabPos;
-                        ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, pViewShell->GetViewData()->GetTabNo() );
-                        if( pData )
-                            aTabPos = pData->aStt;
-                        ScPostIt aNote(pDoc);
-                        pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );  // with Undo
-
-                        SdrLayer* pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-                        if (pLockLayer && !pView->IsLayerLocked(pLockLayer->GetName()))
-                            pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
-                        SdrPage* pPage = pModel->GetPage( aTabPos.Tab() );
-                        if(pPage)
-                        {
-                            pDrDoc->AddUndo( new SdrUndoRemoveObj( *pObj ) );
-                            pPage->RemoveObject( pObj->GetOrdNum() );
-                        }
-                        if (pUndoMan)
-                            pUndoMan->LeaveListAction();
-                    }
-                    bReturn = TRUE;
-                    break;
-                }
-            }
             pView->DeleteMarked();
             bReturn = TRUE;
-        }
-            break;
+        break;
 
         case KEY_RETURN:
         {
@@ -524,10 +467,8 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     // disable cursor travelling on note objects as the tail connector position
                     // must not move.
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                    if(pObj && pObj->ISA(SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN)
-                    {
-                            break;
-                    }
+                    if( ScDrawLayer::IsNoteCaption( pObj ) )
+                        break;
                 }
 
                 long nX = 0;
@@ -559,8 +500,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     nY = 0;
                 }
 
-                ScViewData* pViewData = pViewShell->GetViewData();
-                BOOL bReadOnly = pViewData ? pViewData->GetDocShell()->IsReadOnly() : FALSE;
+                BOOL bReadOnly = rViewData.GetDocShell()->IsReadOnly();
 
                 if(!rKEvt.GetKeyCode().IsMod1() && !bReadOnly)
                 {
@@ -913,7 +853,7 @@ BOOL FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
         if(rNoteMarkList.GetMarkCount() == 1)
         {
             SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
-            if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
+            if ( ScDrawLayer::IsNoteCaption( pObj ) )
             {
                 Point aMPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
                 bIsSizingOrMoving =
@@ -923,41 +863,4 @@ BOOL FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
         }
     }
     return bIsSizingOrMoving;
-}
-
-// we can arrive here if a Note set to 'not shown' has changed its
-// text alignment leaving the note in resize/draw mode. The next mouse
-// button-down action or ESC  should remove this note.
-void FuDraw::CheckVisibleNote() const
-{
-    const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
-    if(rNoteMarkList.GetMarkCount() == 1)
-    {
-        SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
-        {
-            ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, pViewShell->GetViewData()->GetTabNo() );
-            if( pData )
-            {
-                ScAddress aTabPos = ScAddress( pData->aStt);
-                ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
-                ScPostIt aNote(pDoc);
-                if(pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote ) && !aNote.IsShown())
-                {
-
-                    SdrLayer* pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-                    if (pLockLayer && !pView->IsLayerLocked(pLockLayer->GetName()))
-                        pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
-                    if(ScDrawLayer* pModel = pDoc->GetDrawLayer())
-                    {
-                        if(SdrPage* pPage = pModel->GetPage( aTabPos.Tab()))
-                        {
-                            pDrDoc->AddUndo( new SdrUndoRemoveObj( *pObj ) );
-                            pPage->RemoveObject( pObj->GetOrdNum() );
-                        }
-                    }
-                }
-            }
-        }
-    }
 }

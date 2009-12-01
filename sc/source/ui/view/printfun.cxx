@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printfun.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.58.50.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1964,8 +1964,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
         if (pPos)
         {
             ScBaseCell* pCell = pDoc->GetCell( *pPos);
-            const ScPostIt* pNote = pCell->GetNotePtr();
-            if (pNote)
+            if( const ScPostIt* pNote = pCell->GetNote() )
             {
                 if(const EditTextObject *pEditText = pNote->GetEditTextObject())
                     pEditEngine->SetText(*pEditText);
@@ -2600,7 +2599,7 @@ long ScPrintFunc::CountNotePages()
             ScBaseCell* pCell = aIter.GetNext( nCol, nRow );
             while (pCell)
             {
-                if (pCell->GetNotePtr())
+                if (pCell->HasNote())
                 {
                     aNotePosList.Insert( new ScAddress( nCol,nRow,nPrintTab ), LIST_APPEND );
                     ++nCount;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xeescher.cxx,v $
- * $Revision: 1.24.90.8 $
+ * $Revision: 1.24.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
@@ -50,6 +51,9 @@
 #include <rtl/ustrbuf.h>
 #include <vcl/bmpacc.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/outlobj.hxx>
+#include <svx/editobj.hxx>
 
 #include "editutil.hxx"
 #include "unonames.hxx"
@@ -822,7 +826,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     XclExpRecord( EXC_ID_NOTE ),
     maScPos( rScPos ),
     mnObjId( EXC_OBJ_INVALID_ID ),
-    mbVisible( pScNote && pScNote->IsShown() )
+    mbVisible( pScNote && pScNote->IsCaptionShown() )
 {
     // get the main note text
     String aNoteText;
@@ -841,56 +845,11 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
 
         case EXC_BIFF8:
         {
-            ::std::auto_ptr< EditTextObject > xObj;
-            Rectangle aRect;
-            ::std::auto_ptr< SdrCaptionObj > xCaption;
-            ScDocument& rDoc = rRoot.GetDoc();
-
-            // #i79416# create dummy note for cells without note but with content in rAddText
-            ::std::auto_ptr< ScPostIt > xDummyNote;
+            // TODO: additional text
             if( pScNote )
-            {
-                aRect = pScNote->GetRectangle();
-            }
-            else
-            {
-                xDummyNote.reset( new ScPostIt( rAddText, &rDoc ) );
-                xDummyNote->SetItemSet( xDummyNote->DefaultItemSet() );
-                aRect = xDummyNote->DefaultRectangle( rScPos );
-                pScNote = xDummyNote.get();
-            }
-
-            // read strings from note object, if present
-            if( const EditTextObject* pEditObj = pScNote->GetEditTextObject() )
-            {
-                xObj.reset( pEditObj->Clone() );
-                // append additional text to original note if any
-                if( pScNote->GetText() != aNoteText )
-                {
-                    EditEngine& rEE = rRoot.GetEditEngine();
-                    rEE.SetText( aNoteText );
-                    ::std::auto_ptr< EditTextObject > xNewTextObj( rEE.CreateTextObject() );
-                    xObj->Insert( *xNewTextObj, pEditObj->GetParagraphCount() );
-                }
-                maAuthor.Assign( pScNote->GetAuthor() );
-                const SfxItemSet& rSet = pScNote->GetItemSet();
-                Point aDummyTailPos;
-
-                // In order to transform the SfxItemSet to an EscherPropertyContainer
-                // and export the properties, we need to recreate the drawing object and
-                // pass this to XclObjComment() for processing.
-                xCaption.reset( new SdrCaptionObj( aRect, aDummyTailPos ) );
-
-                pScNote->InsertObject( xCaption.get(), rDoc, rScPos.Tab(), sal_True );
-                xCaption->SetMergedItemSet( rSet );
-            }
-
-            // create the object record
-            if( xObj.get() )
-                mnObjId = rRoot.GetOldRoot().pObjRecs->Add( new XclObjComment( rRoot, aRect, *xObj, xCaption.get(), mbVisible ) );
-
-            if( pScNote )
-                pScNote->RemoveObject( xCaption.get(), rDoc, rScPos.Tab() );
+                if( SdrCaptionObj* pCaption = pScNote->GetCaption() )
+                    if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
+                        mnObjId = rRoot.GetOldRoot().pObjRecs->Add( new XclObjComment( rRoot, pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible ) );
 
             SetRecSize( 9 + maAuthor.GetSize() );
         }

@@ -70,6 +70,7 @@
 #include "sc.hrc"
 #include "servuno.hxx"
 #include "unonames.hxx"
+#include "externalrefmgr.hxx"
 
 #include <com/sun/star/table/CellAddress.hpp>
 
@@ -469,7 +470,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 BOOL ScFormulaDlg::IsRefInputMode() const
 {
     const IFunctionDescription* pDesc = getCurrentFunctionDescription();
-    BOOL bRef = (!pDesc || (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=NULL);
+    BOOL bRef = (pDesc && (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=NULL);
     return bRef;
 }
 
@@ -659,7 +660,7 @@ uno::Reference< sheet::XFormulaOpCodeMapper> ScFormulaDlg::getFormulaOpCodeMappe
 ::std::auto_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());
-    pArray->Fill(_aTokenList);
+    pArray->Fill( _aTokenList, pDoc->GetExternalRefManager());
     return pArray;
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconrec.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,196 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------------
-
-// TOOLS
-#define _BIGINT_HXX
-#define _SFXMULTISEL_HXX
-#define _STACK_HXX
-#define _QUEUE_HXX
-#define _DYNARR_HXX
-#define _TREELIST_HXX
-#define _CACHESTR_HXX
-#define _NEW_HXX
-//#define _SHL_HXX
-//#define _LINK_HXX
-//#define _ERRCODE_HXX
-//#define _GEN_HXX
-//#define _FRACT_HXX
-//#define _STRING_HXX
-//#define _MTF_HXX
-//#define _CONTNR_HXX
-//#define _LIST_HXX
-//#define _TABLE_HXX
-#define _DYNARY_HXX
-//#define _UNQIDX_HXX
-#define _SVMEMPOOL_HXX
-//#define _UNQID_HXX
-//#define _DEBUG_HXX
-//#define _DATE_HXX
-//#define _TIME_HXX
-//#define _DATETIME_HXX
-//#define _INTN_HXX
-//#define _WLDCRD_HXX
-//#define _FSYS_HXX
-//#define _STREAM_HXX
-#define _CACHESTR_HXX
-#define _SV_MULTISEL_HXX
-
-//SV
-//#define _CLIP_HXX ***
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-//#define _COLOR_HXX
-//#define _PAL_HXX
-//#define _BITMAP_HXX
-//#define _GDIOBJ_HXX
-//#define _POINTR_HXX
-//#define _ICON_HXX
-//#define _IMAGE_HXX
-//#define _KEYCOD_HXX
-//#define _EVENT_HXX
-#define _HELP_HXX
-//#define _APP_HXX
-//#define _MDIAPP_HXX
-//#define _TIMER_HXX
-//#define _METRIC_HXX
-//#define _REGION_HXX
-//#define _OUTDEV_HXX
-//#define _SYSTEM_HXX
-//#define _VIRDEV_HXX
-//#define _JOBSET_HXX
-//#define _PRINT_HXX
-//#define _WINDOW_HXX
-//#define _SYSWIN_HXX
-//#define _WRKWIN_HXX
-#define _MDIWIN_HXX
-//#define _FLOATWIN_HXX
-//#define _DOCKWIN_HXX
-//#define _CTRL_HXX
-//#define _SCRBAR_HXX
-//#define _BUTTON_HXX
-//#define _IMAGEBTN_HXX
-//#define _FIXED_HXX
-//#define _GROUP_HXX
-//#define _EDIT_HXX
-//#define _COMBOBOX_HXX
-//#define _LSTBOX_HXX
-//#define _SELENG_HXX ***
-//#define _SPLIT_HXX
-#define _SPIN_HXX
-//#define _FIELD_HXX
-//#define _MOREBTN_HXX ***
-//#define _TOOLBOX_HXX
-//#define _STATUS_HXX ***
-//#define _DIALOG_HXX
-//#define _MSGBOX_HXX
-//#define _SYSDLG_HXX
-//#define _FILDLG_HXX
-//#define _PRNDLG_HXX
-#define _COLDLG_HXX
-//#define _TABDLG_HXX
-//#define _MENU_HXX
-//#define _GDIMTF_HXX
-//#define _POLY_HXX
-//#define _ACCEL_HXX
-//#define _GRAPH_HXX
-#define _SOUND_HXX
-
-//svtools
-#define _SCRWIN_HXX
-#define _RULER_HXX
-#define _TABBAR_HXX
-#define _VALUESET_HXX
-#define _STDMENU_HXX
-#define _STDCTRL_HXX
-#define _CTRLBOX_HXX
-#define _CTRLTOOL_HXX
-#define _EXTATTR_HXX
-#define _FRM3D_HXX
-//SVTOOLS
-#define _SVTREELIST_HXX
-#define _FILTER_HXX
-#define _SVLBOXITM_HXX
-#define _SVTREEBOX_HXX
-#define _SVICNVW_HXX
-#define _SVTABBX_HXX
-
-
-#define _BASE_DLGS_HXX
-#define _BIGINT_HXX
-#define _CACHESTR_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _CTRLBOX_HXX
-#define _CTRLTOOL_HXX
-#define _DLGCFG_HXX
-#define _DYNARR_HXX
-#define _EXTATTR_HXX
-//#define _FILDLG_HXX ***
-#define _FILTER_HXX
-#define _FONTDLG_HXX
-
-//xout.hxx
-//#define _XENUM_HXX
-//#define _XPOLY_HXX
-//#define _XATTR_HXH
-#define _XOUTX_HXX
-//#define _XPOOL_HXX
-#define _XTABLE_HXX
-
-
-//#define _SVDLAYER_HXX
-//#define _SVDATTR_HXX
-#define _SVDIO_HXX
-#define _SVBOXITM_HXX
-#define _SVDEC_HXX
-#define _SVDXOUT_HXX
-#define _SDR_NOVIEWMARKER
-#define _SDR_NODRAGMETHODS
-#define _SDR_NOUNDO
-#define _SDR_NOXOUTDEV
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-#define _SDR_NOOBJECTS
-//#define _SDR_NOVIEWS ***
-
-#define _SVDRAG_HXX
-#define _SVINCVW_HXX
-#define _SV_MULTISEL_HXX
-#define _SVRTV_HXX
-#define _SVTABBX_HXX
-
-#define _SVX_DAILDLL_HXX
-#define _SVX_HYPHEN_HXX
-#define _SVX_IMPGRF_HXX
-#define _SVX_OPTITEMS_HXX
-#define _SVX_OPTGERL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTSPELL_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_SPLDLG_HXX
-#define _SVX_THESDLG_HXX
-
-//------------------------------------------------------------------------
-
-#include <svx/svdview.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/outlobj.hxx>
-
 #include "fuconrec.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
+#include "drawview.hxx"
 
+#include <svx/outlobj.hxx>
 // #98185# Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
@@ -238,7 +54,7 @@
 |*
 \************************************************************************/
 
-FuConstRectangle::FuConstRectangle(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuConstRectangle::FuConstRectangle(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {

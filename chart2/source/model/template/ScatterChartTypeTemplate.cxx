@@ -271,6 +271,9 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
     // with symbols (or with lines)
     if( bResult )
     {
+        bool bSymbolFound = false;
+        bool bLineFound = false;
+
         ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
@@ -283,16 +286,25 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
                 drawing::LineStyle eLineStyle;
                 Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
 
-                if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp) &&
-                    (aSymbProp.Style != chart2::SymbolStyle_NONE) &&
-                    (!m_bHasSymbols) )
+                bool bCurrentHasSymbol = (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp) &&
+                    (aSymbProp.Style != chart2::SymbolStyle_NONE);
+
+                if( bCurrentHasSymbol )
+                    bSymbolFound = true;
+
+                if( bCurrentHasSymbol && (!m_bHasSymbols) )
                 {
                     bResult = false;
                     break;
                 }
 
-                if( (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle) &&
-                    (m_bHasLines != ( eLineStyle != drawing::LineStyle_NONE )) )
+                bool bCurrentHasLine = (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle) &&
+                    ( eLineStyle != drawing::LineStyle_NONE );
+
+                if( bCurrentHasLine )
+                    bLineFound = true;
+
+                if( bCurrentHasLine && (!m_bHasLines) )
                 {
                     bResult = false;
                     break;
@@ -302,6 +314,16 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
             {
                 ASSERT_EXCEPTION( ex );
             }
+        }
+
+        if(bResult)
+        {
+            if( !bLineFound && m_bHasLines && bSymbolFound )
+                bResult = false;
+            else if( !bSymbolFound && m_bHasSymbols && bLineFound )
+                bResult = false;
+            else if( !bLineFound && !bSymbolFound )
+                return m_bHasLines && m_bHasSymbols;
         }
     }
 

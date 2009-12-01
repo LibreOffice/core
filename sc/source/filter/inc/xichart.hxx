@@ -44,6 +44,8 @@
 #include "xistring.hxx"
 #include "xiroot.hxx"
 
+#include <boost/shared_ptr.hpp>
+
 namespace com { namespace sun { namespace star {
     namespace frame
     {
@@ -79,6 +81,7 @@ struct XclObjFillData;
 class ScfProgressBar;
 class XclImpChRootData;
 class XclImpChChart;
+class ScTokenArray;
 
 /** Base class for complex chart classes, provides access to other components of the chart. */
 class XclImpChRoot : public XclImpRoot
@@ -390,7 +393,7 @@ public:
     /** Returns explicit string data or an empty string. */
     inline const String& GetString() const { return mxString.is() ? mxString->GetText() : String::EmptyString(); }
     /** Returns the number of data points of this source link. */
-    inline sal_uInt16   GetCellCount() const { return limit_cast< sal_uInt16 >( maScRanges.GetCellCount() ); }
+    sal_uInt16          GetCellCount() const;
 
     /** Converts and writes the contained number format to the passed property set. */
     void                ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const;
@@ -404,7 +407,10 @@ public:
 private:
     XclChSourceLink     maData;             /// Contents of the CHSOURCELINK record.
     XclImpStringRef     mxString;           /// Text data (CHSTRING record).
-    ScRangeList         maScRanges;         /// Source ranges in the Calc document.
+
+    // Tokens representing data ranges.  This must be ref-counted to allow the
+    // parent class to be stored in a STL container.
+    ::boost::shared_ptr<ScTokenArray> mpTokenArray;
 };
 
 typedef ScfRef< XclImpChSourceLink > XclImpChSourceLinkRef;

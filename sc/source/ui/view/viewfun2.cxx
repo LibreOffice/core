@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun2.cxx,v $
- * $Revision: 1.40.20.3 $
+ * $Revision: 1.41.100.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1125,12 +1125,10 @@ BOOL ScViewFunc::MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord )
     }
 
     BOOL bOk = TRUE;
-    BOOL bNeedContents = FALSE;
 
-    if ( !pDoc->IsBlockEmpty( nStartTab, nStartCol,nStartRow+1, nStartCol,nEndRow ) ||
-         !pDoc->IsBlockEmpty( nStartTab, nStartCol+1,nStartRow, nEndCol,nEndRow ) )
+    if ( !pDoc->IsBlockEmpty( nStartTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) ||
+         !pDoc->IsBlockEmpty( nStartTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true ) )
     {
-        bNeedContents = TRUE;
         if (!bApi)
         {
             MessBox aBox( GetViewData()->GetDialogParent(),
@@ -1919,7 +1917,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
         USHORT nRetVal = aBox.Execute();
 
         if ( RET_YES == nRetVal )
-            EnterData( nDestCol, nDestRow, nDestTab, nSolveResult );
+            EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );
 
         GetViewData()->GetViewShell()->UpdateInputHandler( TRUE );
     }

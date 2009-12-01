@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.25.30.2 $
+ * $Revision: 1.26.102.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -872,9 +872,8 @@ const ScAreaLink* ScContentTree::GetLink( ULONG nIndex )
 String lcl_NoteString( const ScPostIt& rNote )
 {
     String aText = rNote.GetText();
-    aText.ConvertLineEnd( LINEEND_CR );
     xub_StrLen nAt;
-    while ( (nAt = aText.Search( CHAR_CR )) != STRING_NOTFOUND )
+    while ( (nAt = aText.Search( '\n' )) != STRING_NOTFOUND )
         aText.SetChar( nAt, ' ' );
     return aText;
 }
@@ -892,15 +891,9 @@ void ScContentTree::GetNoteStrings()
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
     {
         ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
-        ScBaseCell* pCell = aIter.GetFirst();
-        while (pCell)
-        {
-            const ScPostIt* pNote = pCell->GetNotePtr();
-            if (pNote)
-                InsertContent( SC_CONTENT_NOTE, lcl_NoteString(*pNote) );
-
-            pCell = aIter.GetNext();
-        }
+        for( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
+            if( const ScPostIt* pNote = pCell->GetNote() )
+                InsertContent( SC_CONTENT_NOTE, lcl_NoteString( *pNote ) );
     }
 }
 
@@ -918,8 +911,7 @@ ScAddress ScContentTree::GetNotePos( ULONG nIndex )
         ScBaseCell* pCell = aIter.GetFirst();
         while (pCell)
         {
-            const ScPostIt* pNote = pCell->GetNotePtr();
-            if (pNote)
+            if( pCell->HasNote() )
             {
                 if (nFound == nIndex)
                     return ScAddress( aIter.GetCol(), aIter.GetRow(), nTab );   // gefunden
@@ -953,14 +945,13 @@ BOOL ScContentTree::NoteStringsChanged()
         ScBaseCell* pCell = aIter.GetFirst();
         while (pCell && bEqual)
         {
-            const ScPostIt* pNote = pCell->GetNotePtr();
-            if (pNote)
+            if( const ScPostIt* pNote = pCell->GetNote() )
             {
                 if ( !pEntry )
                     bEqual = FALSE;
                 else
                 {
-                    if ( lcl_NoteString(*pNote) != GetEntryText(pEntry) )
+                    if ( lcl_NoteString( *pNote ) != GetEntryText(pEntry) )
                         bEqual = FALSE;
 
                     pEntry = NextSibling( pEntry );

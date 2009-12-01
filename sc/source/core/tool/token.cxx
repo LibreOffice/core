@@ -883,6 +883,16 @@ ScSingleRefData& ScExternalSingleRefToken::GetSingleRef()
     return maSingleRef;
 }
 
+void ScExternalSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
+{
+    maSingleRef.CalcAbsIfRel( rPos );
+}
+
+void ScExternalSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
+{
+    maSingleRef.CalcRelFromAbs( rPos );
+}
+
 BOOL ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 {
     if (!FormulaToken::operator==(r))
@@ -957,6 +967,16 @@ const ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef() const
 ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef()
 {
     return maDoubleRef;
+}
+
+void ScExternalDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
+{
+    maDoubleRef.CalcAbsIfRel( rPos );
+}
+
+void ScExternalDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
+{
+    maDoubleRef.CalcRelFromAbs( rPos );
 }
 
 BOOL ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
@@ -1207,7 +1227,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                                     lcl_ExternalRefToCalc( aComplRef.Ref1, aApiCRef.Reference1 );
                                     lcl_ExternalRefToCalc( aComplRef.Ref2, aApiCRef.Reference2 );
                                     // NOTE: This assumes that cached sheets are in consecutive order!
-                                    aComplRef.Ref2.nTab = sal::static_int_cast< SCsTAB >( aComplRef.Ref1.nTab + (aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet) );
+                                    aComplRef.Ref2.nTab = aComplRef.Ref1.nTab + static_cast<SCsTAB>(aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet);
                                     AddExternalDoubleReference( nFileId, aTabName, aComplRef );
                                 }
                                 else

@@ -731,7 +731,7 @@ void ScInputHandler::ShowTipCursor()
                 if( nLeftParentPos != STRING_NOTFOUND )
                 {
                     sal_Unicode c = aSelText.GetChar( nLeftParentPos-1 );
-                    if( !(c >= 'A' && c<= 'Z' || c>= 'a' && c<= 'z' ) )
+                    if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z' )) )
                         continue;
                     nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, TRUE);
                     if( aHelper.GetNextFunc( aSelText, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
@@ -739,7 +739,7 @@ void ScInputHandler::ShowTipCursor()
                         if( ppFDesc->getFunctionName().getLength() )
                         {
                             nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
-                            nArgs = sal::static_int_cast< USHORT >( ppFDesc->getParameterCount() );
+                            nArgs = static_cast<USHORT>(ppFDesc->getParameterCount());
 
                             USHORT nActive = 0;
                             USHORT nCount = 0;
@@ -754,7 +754,7 @@ void ScInputHandler::ShowTipCursor()
                             {
                                 for( USHORT i=0; i < nArgs; i++ )
                                 {
-                                    xub_StrLen nLength = sal::static_int_cast< xub_StrLen >( aArgs[i].getLength() );
+                                    xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
                                     if( nArgPos <= aSelText.Len()-1 )
                                     {
                                         nActive = i+1;
@@ -970,14 +970,15 @@ void ScInputHandler::UseFormulaData()
                     break;
 
                 sal_Unicode c = aFormula.GetChar( nLeftParentPos-1 );
-                if( !(c >= 'A' && c<= 'Z' || c>= 'a' && c<= 'z' ) )
+                if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z') ) )
                     continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, TRUE);
                 if( aHelper.GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
                 {
+                    if( ppFDesc->getFunctionName().getLength() )
                     {
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
-                        nArgs = sal::static_int_cast< USHORT >( ppFDesc->getParameterCount() );
+                        nArgs = static_cast<USHORT>(ppFDesc->getParameterCount());
 
                         USHORT nActive = 0;
                         USHORT nCount = 0;
@@ -992,7 +993,7 @@ void ScInputHandler::UseFormulaData()
                         {
                             for( USHORT i=0; i < nArgs; i++ )
                             {
-                                xub_StrLen nLength = sal::static_int_cast< xub_StrLen >( aArgs[i].getLength() );
+                                xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
                                 if( nArgPos <= aFormula.Len()-1 )
                                 {
                                     nActive = i+1;

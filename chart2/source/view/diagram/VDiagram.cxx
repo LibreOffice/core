@@ -523,55 +523,6 @@ void VDiagram::createShapes_3d()
             "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
     m_xLogicTarget->add(m_xOuterGroupShape);
 
-    try
-    {
-        uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xDestProp( m_xOuterGroupShape, uno::UNO_QUERY_THROW );
-
-        //perspective
-        {
-            //ignore distance and focal length from file format and model comcpletely
-            //use vrp only to indicate the distance of the camera and thus influence the perspecitve
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_DISTANCE ), uno::makeAny(
-                                        static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE ),
-                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE )));
-        }
-
-        //light
-        {
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ),
-                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE )));
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_AMBIENTCOLOR ),
-                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_AMBIENTCOLOR )));
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING ),
-                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING )));
-            lcl_setLightSources( xSourceProp, xDestProp );
-        }
-
-        //rotation
-        {
-            //set diagrams rotation is set exclusively vie the transformation matrix
-            //don't set a camera at all!
-            //the cameras rotation is incorporated into this matrix
-
-            ::basegfx::B3DHomMatrix aEffectiveTranformation;
-            aEffectiveTranformation.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0);
-
-            if(!m_bRightAngledAxes)
-                aEffectiveTranformation.rotate(m_fXAnglePi,m_fYAnglePi,m_fZAnglePi);
-            else
-                aEffectiveTranformation.shearXY(m_fYAnglePi,-m_fXAnglePi);
-
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX ),
-                    uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
-        }
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
 
@@ -586,65 +537,6 @@ void VDiagram::createShapes_3d()
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
-    //add floor plate
-    {
-        uno::Reference< beans::XPropertySet > xFloorProp( NULL );
-        if( m_xDiagram.is() )
-            xFloorProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getFloor());
-
-        uno::Reference< drawing::XShape > xShape(
-                m_xShapeFactory->createInstance( C2U(
-                    "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
-        xOuterGroup_Shapes->add(xShape);
-        uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-        if( xShapeProp.is())
-        {
-            //depth
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
-                , uno::makeAny((sal_Int32)FLOOR_THICKNESS) );
-            //PercentDiagonal
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
-                , uno::makeAny( sal_Int32(0) ) );
-
-            drawing::Direction3D aSize(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME,FLOOR_THICKNESS);
-
-            //Polygon
-            drawing::PolyPolygonShape3D aPoly;
-            AddPointToPoly( aPoly, drawing::Position3D(0,0,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(0,0,0) );
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D ), uno::makeAny( aPoly ) );
-
-            //Matrix for position
-            {
-                ::basegfx::B3DHomMatrix aM;
-                aM.rotate(F_PI/2.0,0.0,0.0);
-                aM.translate(0.0,FLOOR_THICKNESS, 0.0);
-                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
-                    , uno::makeAny(aHM) );
-            }
-
-            PropertyMapper::setMappedProperties( xShapeProp, xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
-        }
-
-        CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
-        if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )
-        {
-            //we always need this object as dummy object for correct scene dimensions
-            //but it should not be visible in this case:
-            ShapeFactory::makeShapeInvisible( xShape );
-        }
-        else
-        {
-            rtl::OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, rtl::OUString() ) );//@todo read CID from model
-            ShapeFactory::setShapeName( xShape, aFloorCID );
-        }
-    }
-
-    //---------------------------
     //add walls
     {
         uno::Reference< beans::XPropertySet > xWallProp( NULL );
@@ -696,6 +588,116 @@ void VDiagram::createShapes_3d()
             }
         }
     }
+
+    try
+    {
+        uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xDestProp( m_xOuterGroupShape, uno::UNO_QUERY_THROW );
+
+        //perspective
+        {
+            //ignore distance and focal length from file format and model comcpletely
+            //use vrp only to indicate the distance of the camera and thus influence the perspecitve
+            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_DISTANCE ), uno::makeAny(
+                                        static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
+            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE ),
+                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE )));
+        }
+
+        //light
+        {
+            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ),
+                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE )));
+            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_AMBIENTCOLOR ),
+                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_AMBIENTCOLOR )));
+            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING ),
+                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING )));
+            lcl_setLightSources( xSourceProp, xDestProp );
+        }
+
+        //rotation
+        {
+            //set diagrams rotation is set exclusively vie the transformation matrix
+            //don't set a camera at all!
+            //the cameras rotation is incorporated into this matrix
+
+            ::basegfx::B3DHomMatrix aEffectiveTranformation;
+            aEffectiveTranformation.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0);
+
+            if(!m_bRightAngledAxes)
+                aEffectiveTranformation.rotate(m_fXAnglePi,m_fYAnglePi,m_fZAnglePi);
+            else
+                aEffectiveTranformation.shearXY(m_fYAnglePi,-m_fXAnglePi);
+
+            //#i98497# 3D charts are rendered with wrong size
+            E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
+            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX ),
+                    uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    //add floor plate
+    {
+        uno::Reference< beans::XPropertySet > xFloorProp( NULL );
+        if( m_xDiagram.is() )
+            xFloorProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getFloor());
+
+        uno::Reference< drawing::XShape > xShape(
+                m_xShapeFactory->createInstance( C2U(
+                    "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
+        xOuterGroup_Shapes->add(xShape);
+        uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+        if( xShapeProp.is())
+        {
+            //depth
+            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
+                , uno::makeAny((sal_Int32)FLOOR_THICKNESS) );
+            //PercentDiagonal
+            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
+                , uno::makeAny( sal_Int32(0) ) );
+
+            drawing::Direction3D aSize(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME,FLOOR_THICKNESS);
+
+            //Polygon
+            drawing::PolyPolygonShape3D aPoly;
+            AddPointToPoly( aPoly, drawing::Position3D(0,0,0) );
+            AddPointToPoly( aPoly, drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
+            AddPointToPoly( aPoly, drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
+            AddPointToPoly( aPoly, drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
+            AddPointToPoly( aPoly, drawing::Position3D(0,0,0) );
+            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D ), uno::makeAny( aPoly ) );
+
+            //Matrix for position
+            {
+                ::basegfx::B3DHomMatrix aM;
+                aM.rotate(F_PI/2.0,0.0,0.0);
+                aM.translate(0.0,FLOOR_THICKNESS, 0.0);
+                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
+                E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
+                xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                    , uno::makeAny(aHM) );
+            }
+
+            PropertyMapper::setMappedProperties( xShapeProp, xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
+        }
+
+        CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
+        if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )
+        {
+            //we always need this object as dummy object for correct scene dimensions
+            //but it should not be visible in this case:
+            ShapeFactory::makeShapeInvisible( xShape );
+        }
+        else
+        {
+            rtl::OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, rtl::OUString() ) );//@todo read CID from model
+            ShapeFactory::setShapeName( xShape, aFloorCID );
+        }
+    }
     //---------------------------
 
     //create an additional scene for the smaller inner coordinate region:
@@ -716,6 +718,7 @@ void VDiagram::createShapes_3d()
                 ::basegfx::B3DHomMatrix aM;
                 aM.translate(GRID_TO_WALL_DISTANCE/fXScale, (FLOOR_THICKNESS+GRID_TO_WALL_DISTANCE)/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
                 aM.scale( fXScale, fYScale, fZScale );
+                E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
                 xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
             }

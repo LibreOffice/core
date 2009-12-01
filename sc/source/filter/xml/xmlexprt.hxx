@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexprt.hxx,v $
- * $Revision: 1.83.32.3 $
+ * $Revision: 1.84.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,7 +180,6 @@ class ScXMLExport : public SvXMLExport
     void WriteCell (ScMyCell& aCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(ScMyCell& rMyCell);
-    void RemoveTempAnnotaionShape(const sal_Int32 nTable);
     void WriteDetective(const ScMyCell& rMyCell);
     void ExportShape(const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape, com::sun::star::awt::Point* pPoint);
     void WriteShapes(const ScMyCell& rMyCell);

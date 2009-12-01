@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undoblk.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -806,6 +806,9 @@ void ScUndoCut::DoChange( const BOOL bUndo )
     ScDocument* pDoc = pDocShell->GetDocument();
     USHORT nExtFlags = 0;
 
+    // do not undo/redo objects and note captions, they are handled via drawing undo
+    USHORT nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+
     if (bUndo)  // nur bei Undo
     {
         //  all sheets - CopyToDocument skips those that don't exist in pUndoDoc
@@ -813,7 +816,7 @@ void ScUndoCut::DoChange( const BOOL bUndo )
         ScRange aCopyRange = aExtendedRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pDoc );
+        pUndoDoc->CopyToDocument( aCopyRange, nUndoFlags, FALSE, pDoc );
         ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
         if ( pChangeTrack )
             pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
@@ -822,7 +825,7 @@ void ScUndoCut::DoChange( const BOOL bUndo )
     {
         pDocShell->UpdatePaintExt( nExtFlags, aExtendedRange );
         pDoc->DeleteArea( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
-                          aBlockRange.aEnd.Col(), aBlockRange.aEnd.Row(), aMarkData, IDF_ALL );
+                          aBlockRange.aEnd.Col(), aBlockRange.aEnd.Row(), aMarkData, nUndoFlags );
         SetChangeTrack();
     }
 
@@ -830,7 +833,7 @@ void ScUndoCut::DoChange( const BOOL bUndo )
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
 
-    if ( !bUndo )                               //  draw redo after updating row heights
+    if ( !bUndo )                               //   draw redo after updating row heights
         RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
 
     pDocShell->PostDataChanged();
@@ -947,6 +950,9 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
         nUndoFlags |= IDF_CONTENTS;
     if (nFlags & IDF_ATTRIB)
         nUndoFlags |= IDF_ATTRIB;
+
+    // do not undo/redo objects and note captions, they are handled via drawing undo
+    (nUndoFlags &= ~IDF_OBJECTS) |= IDF_NOCAPTIONS;
 
     BOOL bPaintAll = FALSE;
 
@@ -1069,7 +1075,7 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
         pDocShell->UpdatePaintExt( nExtFlags, aDrawRange );
     }
 
-    if ( !bUndo )                               //  draw redo after updating row heights
+    if ( !bUndo )                               //   draw redo after updating row heights
         RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
 
     pDocShell->PostPaint( aDrawRange, nPaint, nExtFlags );
@@ -1254,8 +1260,11 @@ void ScUndoDragDrop::DoUndo( ScRange aRange ) const
     USHORT nExtFlags = 0;
     pDocShell->UpdatePaintExt( nExtFlags, aPaintRange );
 
-    pDoc->DeleteAreaTab( aRange, IDF_ALL );
-    pRefUndoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
+    // do not undo objects and note captions, they are handled via drawing undo
+    USHORT nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+
+    pDoc->DeleteAreaTab( aRange, nUndoFlags );
+    pRefUndoDoc->CopyToDocument( aRange, nUndoFlags, FALSE, pDoc );
     if ( pDoc->HasAttrib( aRange, HASATTR_MERGED ) )
         pDoc->ExtendMerge( aRange, TRUE );
 
@@ -1285,13 +1294,31 @@ void __EXPORT ScUndoDragDrop::Redo()
 
     EnableDrawAdjust( pDoc, FALSE );                //! include in ScBlockUndo?
 
+    // do not undo/redo objects and note captions, they are handled via drawing undo
+    USHORT nRedoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+
+    /*  TODO: Redoing note captions is quite tricky due to the fact that a
+        helper clip document is used. While (re-)pasting the contents to the
+        destination area, the original pointers to the captions created while
+        dropping have to be restored. A simple CopyFromClip() would create new
+        caption objects that are not tracked by drawing undo, and the captions
+        restored by drawing redo would live without cell note objects pointing
+        to them. So, first, CopyToClip() and CopyFromClip() are called without
+        cloning the caption objects. This leads to cell notes pointing to the
+        wrong captions from source area that will be removed by drawing redo
+        later. Second, the pointers to the new captions have to be restored.
+        Sadly, currently these pointers are not stored anywhere but in the list
+        of drawing undo actions. */
+
     SCTAB nTab;
     ScMarkData aSourceMark;
     for (nTab=aSrcRange.aStart.Tab(); nTab<=aSrcRange.aEnd.Tab(); nTab++)
         aSourceMark.SelectTable( nTab, TRUE );
+
+    // do not clone objects and note captions into clipdoc (see above)
     pDoc->CopyToClip( aSrcRange.aStart.Col(), aSrcRange.aStart.Row(),
                       aSrcRange.aEnd.Col(),   aSrcRange.aEnd.Row(),
-                      bCut, pClipDoc, FALSE, &aSourceMark, bKeepScenarioFlags );
+                      bCut, pClipDoc, FALSE, &aSourceMark, bKeepScenarioFlags, FALSE, FALSE );
 
     if (bCut)
     {
@@ -1299,7 +1326,7 @@ void __EXPORT ScUndoDragDrop::Redo()
         pDoc->ExtendMerge( aSrcPaintRange );            // before deleting
         USHORT nExtFlags = 0;
         pDocShell->UpdatePaintExt( nExtFlags, aSrcPaintRange );
-        pDoc->DeleteAreaTab( aSrcRange, IDF_ALL );
+        pDoc->DeleteAreaTab( aSrcRange, nRedoFlags );
         PaintArea( aSrcPaintRange, nExtFlags );
     }
 
@@ -1308,6 +1335,7 @@ void __EXPORT ScUndoDragDrop::Redo()
         aDestMark.SelectTable( nTab, TRUE );
 
     BOOL bIncludeFiltered = bCut;
+    // TODO: restore old note captions instead of cloning new captions...
     pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL & ~IDF_OBJECTS, NULL, pClipDoc, TRUE, FALSE, bIncludeFiltered );
 
     if (bCut)

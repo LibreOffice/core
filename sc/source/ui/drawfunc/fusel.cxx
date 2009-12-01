@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fusel.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,6 @@
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/imapobj.hxx>
-#include <svx/svdview.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>
@@ -53,6 +52,7 @@
 #include "sc.hrc"
 #include "fudraw.hxx"
 #include "futext.hxx"
+#include "drawview.hxx"
 #include "tabvwsh.hxx"
 #include "drawpage.hxx"
 #include "globstr.hrc"
@@ -80,7 +80,7 @@ using namespace com::sun::star;
 |*
 \************************************************************************/
 
-FuSelection::FuSelection(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuSelection::FuSelection(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq ) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq),
     bVCAction(FALSE)
@@ -146,7 +146,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pMarkedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pMarkedObj && pMarkedObj->ISA( SdrCaptionObj )&& pMarkedObj->GetLayer() == SC_LAYER_INTERN)
+                if( ScDrawLayer::IsNoteCaption( pMarkedObj ) )
                 {
                     // move using the valid caption handles for note text box.
                     if(pHdl && (pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC))
@@ -272,14 +272,18 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                 //  Markieren
 
-                if ( !rMEvt.IsShift() )
+                // do not allow multiselection with note caption
+                bool bCaptionClicked = IsNoteCaptionClicked( aMDPos );
+                if ( !rMEvt.IsShift() || bCaptionClicked || IsNoteCaptionMarked() )
                     pView->UnmarkAll();
 
-                // if a comment: unlock the internal layer here.
-                // re-lock in ScDrawView::MarkListHasChanged()
-                TestComment( pView->GetSdrPageView(), aMDPos );
+                /*  Unlock internal layer, if a note caption is clicked. The
+                    layer will be relocked in ScDrawView::MarkListHasChanged(). */
+                if( bCaptionClicked )
+                    pView->UnlockInternalLayer();
 
-                if ( pView->MarkObj(aMDPos, -2, FALSE, rMEvt.IsMod1()) )
+                // try to select the clicked object
+                if ( pView->MarkObj( aMDPos, -2, FALSE, rMEvt.IsMod1() ) )
                 {
                     //*********************************************************
                     //Objekt verschieben
@@ -421,9 +425,32 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else if (pView->IsAction() )
         {
+            // unlock internal layer to include note captions
+            pView->UnlockInternalLayer();
             pView->EndAction();
             if ( pView->AreObjectsMarked() )
+            {
                 bReturn = TRUE;
+
+                /*  if multi-selection contains a note caption object, remove
+                    all other objects from selection. */
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                ULONG nCount = rMarkList.GetMarkCount();
+                if( nCount > 1 )
+                {
+                    bool bFound = false;
+                    for( ULONG nIdx = 0; !bFound && (nIdx < nCount); ++nIdx )
+                    {
+                        SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj();
+                        bFound = ScDrawLayer::IsNoteCaption( pObj );
+                        if( bFound )
+                        {
+                            pView->UnMarkAll();
+                            pView->MarkObj( pObj, pView->GetSdrPageView() );
+                        }
+                    }
+                }
+            }
         }
     }
 

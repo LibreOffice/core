@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.hxx,v $
- * $Revision: 1.50.32.2 $
+ * $Revision: 1.50.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,6 +134,21 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE void          DoEnterHandler();
     SC_DLLPRIVATE void          InitOptions();
     SC_DLLPRIVATE void          ResetDrawObjectShell();
+
+    // SUNWS needs a forward declared friend, otherwise types and members
+    // of the outer class are not accessible.
+    class PrepareSaveGuard;
+    friend class ScDocShell::PrepareSaveGuard;
+    /** Do things that need to be done before saving to our own format and
+        necessary clean ups in dtor. */
+    class PrepareSaveGuard
+    {
+        public:
+            explicit    PrepareSaveGuard( ScDocShell & rDocShell );
+                        ~PrepareSaveGuard();
+        private:
+                        ScDocShell & mrDocShell;
+    };
 
     SC_DLLPRIVATE BOOL            LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     SC_DLLPRIVATE BOOL            SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
@@ -321,6 +336,7 @@ public:
     void            PostPaint( const ScRange& rRange, USHORT nPart, USHORT nExtFlags = 0 );
 
     void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void            PostPaintCell( const ScAddress& rPos );
     void            PostPaintGridAll();
     void            PostPaintExtras();
 

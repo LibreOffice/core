@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwshb.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.39.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -288,7 +288,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
     ScTabView*   pTabView  = GetViewData()->GetView();
     Window*      pWin      = pTabView->GetActiveWin();
-    SdrView*     pView     = pTabView->GetSdrView();
+    ScDrawView*  pView     = pTabView->GetScDrawView();
     ScDocShell*  pDocSh    = GetViewData()->GetDocShell();
     ScDocument*  pDoc      = pDocSh->GetDocument();
 //  SdrModel*    pDrModel  = pDocSh->MakeDrawLayer();

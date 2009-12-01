@@ -389,7 +389,7 @@ __EXPORT ScDocumentPool::~ScDocumentPool()
     }
 
     delete[] ppPoolDefaults;
-    delete pSecondary;
+    SfxItemPool::Free(pSecondary);
 }
 
 void ScDocumentPool::InitVersionMaps()

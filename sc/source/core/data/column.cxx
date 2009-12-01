@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: column.cxx,v $
- * $Revision: 1.31.32.1 $
+ * $Revision: 1.31.128.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,11 +60,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 using namespace formula;
-
-inline BOOL CellVisible( const ScBaseCell* pCell )      //! an Zelle verschieben
-{
-    return ( pCell->GetCellType() != CELLTYPE_NOTE || pCell->GetNotePtr() );
-}
 
 inline BOOL IsAmbiguousScriptNonZero( BYTE nScript )
 {
@@ -826,131 +821,124 @@ void ScColumn::Resize( SCSIZE nSize )
 
 //  SwapRow zum Sortieren
 
+namespace {
+
+/** Moves broadcaster from old cell to new cell if exists, otherwise creates a new note cell. */
+void lclTakeBroadcaster( ScBaseCell*& rpCell, SvtBroadcaster* pBC )
+{
+    if( pBC )
+    {
+        if( rpCell )
+            rpCell->TakeBroadcaster( pBC );
+        else
+            rpCell = new ScNoteCell( pBC );
+    }
+}
+
+} // namespace
+
 void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 {
-    //      Zeiger vertauschen klappt nicht wegen Broadcastern
-    //      (Absturz, wenn Zelle, auch indirekt, auf sich selbst broadcasted)
+    /*  Simple swap of cell pointers does not work if broadcasters exist (crash
+        if cell broadcasts directly or indirectly to itself). While swapping
+        the cells, broadcasters have to remain at old positions! */
 
-    ScBaseCell *pCell1, *pCell2;
-    SCSIZE nIndex1, nIndex2;
+    /*  While cloning cells, do not clone notes, but move note pointers to new
+        cells. This prevents creation of new caption drawing objects for every
+        swap operation while sorting. */
 
+    ScBaseCell* pCell1 = 0;
+    SCSIZE nIndex1;
     if ( Search( nRow1, nIndex1 ) )
         pCell1 = pItems[nIndex1].pCell;
-    else
-        pCell1 = NULL;
+
+    ScBaseCell* pCell2 = 0;
+    SCSIZE nIndex2;
     if ( Search( nRow2, nIndex2 ) )
         pCell2 = pItems[nIndex2].pCell;
-    else
-        pCell2 = NULL;
 
+    // no cells found, nothing to do
     if ( !pCell1 && !pCell2 )
         return ;
 
-    CellType eType1 = ( pCell1 ? pCell1->GetCellType() : CELLTYPE_NONE );
-    CellType eType2 = ( pCell2 ? pCell2->GetCellType() : CELLTYPE_NONE );
+    // swap variables if first cell is empty, to save some code below
+    if ( !pCell1 )
+    {
+        ::std::swap( nRow1, nRow2 );
+        ::std::swap( nIndex1, nIndex2 );
+        ::std::swap( pCell1, pCell2 );
+    }
 
-    // Broadcaster bleiben an alter Stelle
-    SvtBroadcaster *pBC1, *pBC2;
+    // from here: first cell (pCell1, nIndex1) exists always
 
-    if ( eType1 != CELLTYPE_FORMULA && eType2 != CELLTYPE_FORMULA )
-    {   // simple swap, kann nichts auf sich selbst broadcasten
-        if ( pCell1 )
-        {
-            pBC1 = pCell1->GetBroadcaster();
-            if ( pBC1 )
-                pCell1->ForgetBroadcaster();
-        }
-        else
-            pBC1 = NULL;
+    ScAddress aPos1( nCol, nRow1, nTab );
+    ScAddress aPos2( nCol, nRow2, nTab );
+
+    CellType eType1 = pCell1->GetCellType();
+    CellType eType2 = pCell2 ? pCell2->GetCellType() : CELLTYPE_NONE;
+
+    ScFormulaCell* pFmlaCell1 = (eType1 == CELLTYPE_FORMULA) ? static_cast< ScFormulaCell* >( pCell1 ) : 0;
+    ScFormulaCell* pFmlaCell2 = (eType2 == CELLTYPE_FORMULA) ? static_cast< ScFormulaCell* >( pCell2 ) : 0;
+
+    // simple swap if no formula cells present
+    if ( !pFmlaCell1 && !pFmlaCell2 )
+    {
+        // remember cell broadcasters, must remain at old position
+        SvtBroadcaster* pBC1 = pCell1->ReleaseBroadcaster();
 
         if ( pCell2 )
         {
-            pBC2 = pCell2->GetBroadcaster();
-            if ( pBC2 )
-                pCell2->ForgetBroadcaster();
-        }
-        else
-            pBC2 = NULL;
-
-        if ( pCell1 && pCell2 )
-        {
+            /*  Both cells exist, no formula cells involved, a simple swap can
+                be performed (but keep broadcasters and notes at old position). */
             pItems[nIndex1].pCell = pCell2;
             pItems[nIndex2].pCell = pCell1;
-            if ( pBC1 )
-                pCell2->SetBroadcaster( pBC1 );
-            if ( pBC2 )
-                pCell1->SetBroadcaster( pBC2 );
-            ScAddress aPos( nCol, nRow1, nTab );
-            ScHint aHint( SC_HINT_DATACHANGED, aPos, pCell2 );
-            pDocument->Broadcast( aHint );
-            aHint.GetAddress().SetRow( nRow2 );
-            aHint.SetCell( pCell1 );
-            pDocument->Broadcast( aHint );
+
+            SvtBroadcaster* pBC2 = pCell2->ReleaseBroadcaster();
+            pCell1->TakeBroadcaster( pBC2 );
+            pCell2->TakeBroadcaster( pBC1 );
+
+            ScHint aHint1( SC_HINT_DATACHANGED, aPos1, pCell2 );
+            pDocument->Broadcast( aHint1 );
+            ScHint aHint2( SC_HINT_DATACHANGED, aPos2, pCell1 );
+            pDocument->Broadcast( aHint2 );
         }
-        else if ( pCell1 )
+        else
         {
-            ScNoteCell* pNew = ( pBC1 ? new ScNoteCell : NULL );
-            if ( pNew )
+            ScNoteCell* pDummyCell = pBC1 ? new ScNoteCell( pBC1 ) : 0;
+            if ( pDummyCell )
             {
-                pItems[nIndex1].pCell = pNew;
-                pNew->SetBroadcaster( pBC1 );
+                // insert dummy note cell (without note) containing old broadcaster
+                pItems[nIndex1].pCell = pDummyCell;
             }
             else
-            {   // Loeschen
+            {
+                // remove ColEntry at old position
                 --nCount;
                 memmove( &pItems[nIndex1], &pItems[nIndex1 + 1], (nCount - nIndex1) * sizeof(ColEntry) );
                 pItems[nCount].nRow = 0;
-                pItems[nCount].pCell = NULL;
+                pItems[nCount].pCell = 0;
             }
-            // Einfuegen
+
+            // insert ColEntry at new position
             Insert( nRow2, pCell1 );
-            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                ScAddress( nCol, nRow1, nTab ), pNew ) );
-        }
-        else    // pCell2
-        {
-            ScNoteCell* pNew = ( pBC2 ? new ScNoteCell : NULL );
-            if ( pNew )
-            {
-                pItems[nIndex2].pCell = pNew;
-                pNew->SetBroadcaster( pBC2 );
-            }
-            else
-            {   // Loeschen
-                --nCount;
-                memmove( &pItems[nIndex2], &pItems[nIndex2 + 1], (nCount - nIndex2) * sizeof(ColEntry) );
-                pItems[nCount].nRow = 0;
-                pItems[nCount].pCell = NULL;
-            }
-            // Einfuegen
-            Insert( nRow1, pCell2 );
-            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                ScAddress( nCol, nRow2, nTab ), pNew ) );
-        }
-        ScPostIt aCellNote(pDocument);
-        // Hide the visible note if doing a swap.
-        if(pCell1 && pCell1->GetNote(aCellNote) && aCellNote.IsShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow1 );
-            aCellNote.SetShown(FALSE);
-            pCell1->SetNote(aCellNote);
-        }
-        if(pCell2 && pCell2->GetNote(aCellNote) && aCellNote.IsShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow2 );
-            aCellNote.SetShown(FALSE);
-            pCell2->SetNote(aCellNote);
+            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos1, pDummyCell ) );
         }
 
-        return ;
+        return;
     }
 
-    // ab hier ist mindestens eine Formelzelle beteiligt
+    // from here: at least one of the cells is a formula cell
 
-    if ( eType1 == CELLTYPE_FORMULA && eType2 == CELLTYPE_FORMULA )
+    /*  Never move any array formulas. Disabling sort if parts of array
+        formulas are contained is done at UI. */
+    if ( (pFmlaCell1 && (pFmlaCell1->GetMatrixFlag() != 0)) || (pFmlaCell2 && (pFmlaCell2->GetMatrixFlag() != 0)) )
+        return;
+
+    // do not swap, if formulas are equal
+    if ( pFmlaCell1 && pFmlaCell2 )
     {
-        ScTokenArray* pCode1 = ((ScFormulaCell*)pCell1)->GetCode();
-        ScTokenArray* pCode2 = ((ScFormulaCell*)pCell2)->GetCode();
+        ScTokenArray* pCode1 = pFmlaCell1->GetCode();
+        ScTokenArray* pCode2 = pFmlaCell2->GetCode();
 
         if (pCode1->GetLen() == pCode2->GetLen())       // nicht-UPN
         {
@@ -968,218 +956,128 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 }
             }
 
-            if (bEqual)             // gleiche Formeln nicht vertauschen
+            // do not swap formula cells with equal formulas, but swap notes
+            if (bEqual)
+            {
+                ScPostIt* pNote1 = pCell1->ReleaseNote();
+                pCell1->TakeNote( pCell2->ReleaseNote() );
+                pCell2->TakeNote( pNote1 );
                 return;
+            }
         }
     }
-
-    if ( ( eType1 == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell1)->GetMatrixFlag() != 0 ) ||
-         ( eType2 == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell2)->GetMatrixFlag() != 0 ) )
-    {
-        //  never move any array formulas
-        //  (disabling sort if parts of array formulas are contained is done at ui)
-
-        return;
-    }
-
-    ScBaseCell *pNew1, *pNew2;
 
     //  hier kein UpdateReference wegen #30529# - mitsortiert werden nur noch relative Referenzen
 //  long dy = (long)nRow2 - (long)nRow1;
 
-    if (pCell1)
+    /*  Create clone of pCell1 at position of pCell2 (pCell1 exists always, see
+        variable swapping above). Do not clone the note, but move pointer of
+        old note to new cell. */
+    ScBaseCell* pNew2 = pCell1->CloneWithoutNote( *pDocument, aPos2, SC_CLONECELL_ADJUST3DREL );
+    pNew2->TakeNote( pCell1->ReleaseNote() );
+
+    /*  Create clone of pCell2 at position of pCell1. Do not clone the note,
+        but move pointer of old note to new cell. */
+    ScBaseCell* pNew1 = 0;
+    if ( pCell2 )
     {
-        pBC1 = pCell1->GetBroadcaster();
-        if ( pBC1 )
-            pCell1->ForgetBroadcaster();
-        ScPostIt aCellNote(pDocument);
-        // Hide the visible note if doing a swap.
-        if(pCell1->GetNote(aCellNote) && aCellNote.IsShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow1 );
-            aCellNote.SetShown(FALSE);
-            pCell1->SetNote(aCellNote);
-        }
-        if ( eType1 == CELLTYPE_FORMULA )
-        {
-            pNew2 = new ScFormulaCell( pDocument, ScAddress( nCol, nRow2, nTab ),
-                *(const ScFormulaCell*)pCell1, 0x0001 );
-//          ScRange aRange( ScAddress( 0, nRow2, nTab ), ScAddress( MAXCOL, nRow2, nTab ) );
-//          ((ScFormulaCell*)pNew2)->UpdateReference(URM_MOVE, aRange, 0, dy, 0);
-        }
-        else
-            pNew2 = pCell1->Clone( pDocument );
+        pNew1 = pCell2->CloneWithoutNote( *pDocument, aPos1, SC_CLONECELL_ADJUST3DREL );
+        pNew1->TakeNote( pCell2->ReleaseNote() );
     }
+
+    // move old broadcasters new cells at the same old position
+    SvtBroadcaster* pBC1 = pCell1->ReleaseBroadcaster();
+    lclTakeBroadcaster( pNew1, pBC1 );
+    SvtBroadcaster* pBC2 = pCell2 ? pCell2->ReleaseBroadcaster() : 0;
+    lclTakeBroadcaster( pNew2, pBC2 );
+
+    /*  Insert the new cells. Old cell has to be deleted, if there is no new
+        cell (call to Insert deletes old cell by itself). */
+    if ( !pNew1 )
+        Delete( nRow1 );            // deletes pCell1
     else
-    {
-        pNew2 = NULL;
-        pBC1 = NULL;
-    }
+        Insert( nRow1, pNew1 );     // deletes pCell1, inserts pNew1
 
-    if (pCell2)
-    {
-        pBC2 = pCell2->GetBroadcaster();
-        if ( pBC2 )
-            pCell2->ForgetBroadcaster();
-        ScPostIt aCellNote(pDocument);
-        // Hide the visible note if doing a swap.
-        if(pCell2->GetNote(aCellNote) && aCellNote.IsShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow2 );
-            aCellNote.SetShown(FALSE);
-            pCell2->SetNote(aCellNote);
-        }
-        if ( eType2 == CELLTYPE_FORMULA )
-        {
-            pNew1 = new ScFormulaCell( pDocument, ScAddress( nCol, nRow1, nTab ),
-                *(const ScFormulaCell*)pCell2, 0x0001 );
-//          ScRange aRange( ScAddress( 0, nRow1, nTab ), ScAddress( MAXCOL, nRow1, nTab ) );
-//          ((ScFormulaCell*)pNew1)->UpdateReference(URM_MOVE, aRange, 0, -dy, 0);
-        }
-        else
-            pNew1 = pCell2->Clone( pDocument );
-    }
-    else
-    {
-        pNew1 = NULL;
-        pBC2 = NULL;
-    }
-
-    if ( !pNew1 && pBC1 )
-        pNew1 = new ScNoteCell;
-    if ( !pNew2 && pBC2 )
-        pNew2 = new ScNoteCell;
-
-    //  Delete nur, wenn es keine neue Zelle gibt (Insert loescht die alte Zelle auch)
-    //  Notizen muessen aber einzeln geloescht werden, weil Insert sie stehenlaesst
-
-    if ( pCell1 && ( !pNew1 || (pCell1->GetNotePtr() && !pNew1->GetNotePtr()) ) )
-        Delete( nRow1 );
-    if ( pCell2 && ( !pNew2 || (pCell2->GetNotePtr() && !pNew2->GetNotePtr()) ) )
-        Delete( nRow2 );
-
-    if (pNew1)
-    {
-        Insert( nRow1, pNew1 );
-        if ( pBC1 )
-            pNew1->SetBroadcaster( pBC1 );
-    }
-    if (pNew2)
-    {
-        Insert( nRow2, pNew2 );
-        if ( pBC2 )
-            pNew2->SetBroadcaster( pBC2 );
-    }
+    if ( pCell2 && !pNew2 )
+        Delete( nRow2 );            // deletes pCell2
+    else if ( pNew2 )
+        Insert( nRow2, pNew2 );     // deletes pCell2 (if existing), inserts pNew2
 
     //  #64122# Bei Formeln hinterher nochmal broadcasten, damit die Formel nicht in irgendwelchen
     //  FormulaTrack-Listen landet, ohne die Broadcaster beruecksichtigt zu haben
     //  (erst hier, wenn beide Zellen eingefuegt sind)
-    if ( pBC1 && eType2 == CELLTYPE_FORMULA )
-        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( nCol, nRow1, nTab ), pNew1 ) );
-    if ( pBC2 && eType1 == CELLTYPE_FORMULA )
-        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( nCol, nRow2, nTab ), pNew2 ) );
+    if ( pBC1 && pFmlaCell2 )
+        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos1, pNew1 ) );
+    if ( pBC2 && pFmlaCell1 )
+        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos2, pNew2 ) );
 }
 
 
 void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
 {
-    BOOL bFound1;
-    BOOL bFound2;
+    ScBaseCell* pCell1 = 0;
     SCSIZE nIndex1;
+    if ( Search( nRow, nIndex1 ) )
+        pCell1 = pItems[nIndex1].pCell;
+
+    ScBaseCell* pCell2 = 0;
     SCSIZE nIndex2;
-    bFound1 = Search(nRow, nIndex1);
-    bFound2 = rCol.Search(nRow, nIndex2);
-    if (bFound1 && bFound2)
+    if ( rCol.Search( nRow, nIndex2 ) )
+        pCell2 = rCol.pItems[nIndex2].pCell;
+
+    // reverse call if own cell is missing (ensures own existing cell in following code)
+    if( !pCell1 )
+    {
+        if( pCell2 )
+            rCol.SwapCell( nRow, *this );
+        return;
+    }
+
+    // from here: own cell (pCell1, nIndex1) exists always
+
+    ScFormulaCell* pFmlaCell1 = (pCell1->GetCellType() == CELLTYPE_FORMULA) ? static_cast< ScFormulaCell* >( pCell1 ) : 0;
+    ScFormulaCell* pFmlaCell2 = (pCell2 && (pCell2->GetCellType() == CELLTYPE_FORMULA)) ? static_cast< ScFormulaCell* >( pCell2 ) : 0;
+
+    if ( pCell2 )
     {
         // Tauschen
-        ScFormulaCell* pCell1 = (ScFormulaCell*) pItems[nIndex1].pCell;
-        ScFormulaCell* pCell2 = (ScFormulaCell*) rCol.pItems[nIndex2].pCell;
-        ScPostIt aCellNote(pDocument);
-        // Hide the visible note if doing a swap.
-        if(pCell1->GetNote(aCellNote) && aCellNote.IsShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow );
-            aCellNote.SetShown(FALSE);
-            pCell1->SetNote(aCellNote);
-        }
-        if(pCell2->GetNote(aCellNote) && aCellNote.IsShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( rCol.nCol, nRow );
-            aCellNote.SetShown(FALSE);
-            pCell2->SetNote(aCellNote);
-        }
         pItems[nIndex1].pCell = pCell2;
         rCol.pItems[nIndex2].pCell = pCell1;
         // Referenzen aktualisieren
         SCsCOL dx = rCol.nCol - nCol;
-        if (pCell1->GetCellType() == CELLTYPE_FORMULA)
+        if ( pFmlaCell1 )
         {
             ScRange aRange( ScAddress( rCol.nCol, 0, nTab ),
                             ScAddress( rCol.nCol, MAXROW, nTab ) );
-            pCell1->aPos.SetCol( rCol.nCol );
-            pCell1->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
+            pFmlaCell1->aPos.SetCol( rCol.nCol );
+            pFmlaCell1->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
         }
-        if (pCell2->GetCellType() == CELLTYPE_FORMULA)
+        if ( pFmlaCell2 )
         {
             ScRange aRange( ScAddress( nCol, 0, nTab ),
                             ScAddress( nCol, MAXROW, nTab ) );
-            pCell2->aPos.SetCol( nCol );
-            pCell2->UpdateReference(URM_MOVE, aRange, -dx, 0, 0);
+            pFmlaCell2->aPos.SetCol( nCol );
+            pFmlaCell2->UpdateReference(URM_MOVE, aRange, -dx, 0, 0);
         }
     }
-    else if (bFound1)
+    else
     {
-        ScFormulaCell* pCell = (ScFormulaCell*) pItems[nIndex1].pCell;
-        ScPostIt aCellNote(pDocument);
-        if(pCell->GetNote(aCellNote) && aCellNote.IsShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow );
-            aCellNote.SetShown(FALSE);
-            pCell->SetNote(aCellNote);
-        }
         // Loeschen
         --nCount;
         memmove( &pItems[nIndex1], &pItems[nIndex1 + 1], (nCount - nIndex1) * sizeof(ColEntry) );
         pItems[nCount].nRow = 0;
-        pItems[nCount].pCell = NULL;
+        pItems[nCount].pCell = 0;
         // Referenzen aktualisieren
         SCsCOL dx = rCol.nCol - nCol;
-        if (pCell->GetCellType() == CELLTYPE_FORMULA)
+        if ( pFmlaCell1 )
         {
             ScRange aRange( ScAddress( rCol.nCol, 0, nTab ),
                             ScAddress( rCol.nCol, MAXROW, nTab ) );
-            pCell->aPos.SetCol( rCol.nCol );
-            pCell->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
+            pFmlaCell1->aPos.SetCol( rCol.nCol );
+            pFmlaCell1->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
         }
         // Einfuegen
-        rCol.Insert(nRow, pCell);
-    }
-    else if (bFound2)
-    {
-        ScFormulaCell* pCell = (ScFormulaCell*) rCol.pItems[nIndex2].pCell;
-        ScPostIt aCellNote(pDocument);
-        if(pCell->GetNote(aCellNote) && aCellNote.IsShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( rCol.nCol, nRow );
-            aCellNote.SetShown(FALSE);
-            pCell->SetNote(aCellNote);
-        }
-        // Loeschen
-        --(rCol.nCount);
-        memmove( &rCol.pItems[nIndex2], &rCol.pItems[nIndex2 + 1], (rCol.nCount - nIndex2) * sizeof(ColEntry) );
-        rCol.pItems[rCol.nCount].nRow = 0;
-        rCol.pItems[rCol.nCount].pCell = NULL;
-        // Referenzen aktualisieren
-        SCsCOL dx = rCol.nCol - nCol;
-        if (pCell->GetCellType() == CELLTYPE_FORMULA)
-        {
-            ScRange aRange( ScAddress( nCol, 0, nTab ),
-                            ScAddress( nCol, MAXROW, nTab ) );
-            pCell->aPos.SetCol( nCol );
-            pCell->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
-        }
-        // Einfuegen
-        Insert(nRow, pCell);
+        rCol.Insert(nRow, pCell1);
     }
 }
 
@@ -1192,7 +1090,7 @@ BOOL ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
         if (pItems)
             for (SCSIZE i=0; (i<nCount) && bTest; i++)
                 bTest = (pItems[i].nRow < nStartRow) || (pItems[i].nRow > nEndRow)
-                        || !CellVisible(pItems[i].pCell);
+                        || pItems[i].pCell->IsBlank();
 
         //  AttrArray testet nur zusammengefasste
 
@@ -1225,7 +1123,7 @@ BOOL ScColumn::TestInsertRow( SCSIZE nSize ) const
         return FALSE;
 
     SCSIZE nVis = nCount;
-    while ( nVis && !CellVisible(pItems[nVis-1].pCell) )
+    while ( nVis && pItems[nVis-1].pCell->IsBlank() )
         --nVis;
 
     if ( nVis )
@@ -1325,12 +1223,12 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         for (i = 0; i < nDelCount; i++)
         {
             ScBaseCell* pCell = ppDelCells[i];
-            DBG_ASSERT( !CellVisible(pCell), "sichtbare Zelle weggeschoben" );
+            DBG_ASSERT( pCell->IsBlank(), "sichtbare Zelle weggeschoben" );
             SvtBroadcaster* pBC = pCell->GetBroadcaster();
             if (pBC)
             {
                 MoveListeners( *pBC, pDelRows[i] - nSize );
-                pCell->SetBroadcaster(NULL);
+                pCell->DeleteBroadcaster();
                 pCell->Delete();
             }
         }
@@ -1343,7 +1241,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 }
 
 
-void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags)
+void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags, BOOL bCloneNoteCaptions)
 {
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
                             bKeepScenarioFlags ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
@@ -1372,9 +1270,14 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKee
 
     if (nBlockCount)
     {
+        int nCloneFlags = bCloneNoteCaptions ? SC_CLONECELL_DEFAULT : SC_CLONECELL_NOCAPTION;
         rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
+        ScAddress aPos( rColumn.nCol, 0, rColumn.nTab );
         for (i = nStartIndex; i <= nEndIndex; i++)
-            rColumn.Append(pItems[i].nRow, pItems[i].pCell->Clone(rColumn.pDocument));
+        {
+            aPos.SetRow( pItems[i].nRow );
+            rColumn.Append( aPos.Row(), pItems[i].pCell->CloneWithNote( *rColumn.pDocument, aPos, nCloneFlags ) );
+        }
     }
 }
 
@@ -1441,22 +1344,13 @@ void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarke
         if (nBlockCount)
         {
             rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
-            ScAddress aAdr( rColumn.nCol, 0, rColumn.nTab );
+            ScAddress aDestPos( rColumn.nCol, 0, rColumn.nTab );
             for (i = nStartIndex; i <= nEndIndex; i++)
             {
-                aAdr.SetRow( pItems[i].nRow );
-                ScBaseCell* pNew;
-                if (bAsLink)
-                {
-                    pNew = CreateRefCell( rColumn.pDocument, aAdr, i, nFlags );
-                }
-                else
-                {
-                    pNew = CloneCell( i, nFlags, rColumn.pDocument, aAdr );
-
-                    if ( pNew && pNew->GetNotePtr() && (nFlags & IDF_NOTE) == 0 )
-                        pNew->DeleteNote();
-                }
+                aDestPos.SetRow( pItems[i].nRow );
+                ScBaseCell* pNew = bAsLink ?
+                    CreateRefCell( rColumn.pDocument, aDestPos, i, nFlags ) :
+                    CloneCell( i, nFlags, *rColumn.pDocument, aDestPos );
 
                 if (pNew)
                     rColumn.Insert(pItems[i].nRow, pNew);
@@ -1481,17 +1375,18 @@ void ScColumn::UndoToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarke
 
 void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 {
-    ScDocument* pDestDoc = rDestCol.pDocument;
+    ScDocument& rDestDoc = *rDestCol.pDocument;
+    ScAddress aDestPos( rDestCol.nCol, 0, rDestCol.nTab );
 
     SCSIZE nPosCount = rPosCol.nCount;
     for (SCSIZE nPosIndex = 0; nPosIndex < nPosCount; nPosIndex++)
     {
-        SCROW nRow = rPosCol.pItems[nPosIndex].nRow;
+        aDestPos.SetRow( rPosCol.pItems[nPosIndex].nRow );
         SCSIZE nThisIndex;
-        if ( Search( nRow, nThisIndex ) )
+        if ( Search( aDestPos.Row(), nThisIndex ) )
         {
-            ScBaseCell* pNew = pItems[nThisIndex].pCell->Clone(pDestDoc);
-            rDestCol.Insert( nRow, pNew );
+            ScBaseCell* pNew = pItems[nThisIndex].pCell->CloneWithNote( rDestDoc, aDestPos );
+            rDestCol.Insert( aDestPos.Row(), pNew );
         }
     }
 
@@ -1879,10 +1774,9 @@ void ScColumn::UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScColumn* pRefUndo )
                 SCROW nRow = pItems[i].nRow;
                 ScFormulaCell* pOld = (ScFormulaCell*)pItems[i].pCell;
 
-                ScFormulaCell* pSave = NULL;
-                if (pRefUndo)
-                    pSave = (ScFormulaCell*)pOld->Clone( pDocument,
-                        ScAddress( nCol, nRow, nTab ), TRUE );
+                /*  Do not copy cell note to the undo document. Undo will copy
+                    back the formula cell while keeping the original note. */
+                ScBaseCell* pSave = pRefUndo ? pOld->CloneWithoutNote( *pDocument ) : 0;
 
                 BOOL bChanged = pOld->UpdateDeleteTab(nTable, bIsMove);
                 if ( nRow != pItems[i].nRow )
@@ -1892,8 +1786,8 @@ void ScColumn::UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScColumn* pRefUndo )
                 {
                     if (bChanged)
                         pRefUndo->Insert( nRow, pSave );
-                    else
-                        delete pSave;
+                    else if(pSave)
+                        pSave->Delete();
                 }
             }
 }
@@ -2199,6 +2093,22 @@ void ScColumn::CalcAfterLoad()
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pCell)->CalcAfterLoad();
         }
+}
+
+
+bool ScColumn::MarkUsedExternalReferences()
+{
+    bool bAllMarked = false;
+    if (pItems)
+    {
+        for (SCSIZE i = 0; i < nCount && !bAllMarked; ++i)
+        {
+            ScBaseCell* pCell = pItems[i].pCell;
+            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+                bAllMarked = ((ScFormulaCell*)pCell)->MarkUsedExternalReferences();
+        }
+    }
+    return bAllMarked;
 }
 
 

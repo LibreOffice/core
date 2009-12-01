@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notemark.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.12.126.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdocapt.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
@@ -45,12 +42,10 @@
 
 #include "notemark.hxx"
 #include "document.hxx"
-#include "detfunc.hxx"
+#include "postit.hxx"
 
 #define SC_NOTEMARK_TIME    800
 #define SC_NOTEMARK_SHORT   70
-
-// STATIC DATA -----------------------------------------------------------
 
 // -----------------------------------------------------------------------
 
@@ -71,6 +66,14 @@ ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Windo
     pObject( NULL ),
     bVisible( FALSE )
 {
+    Size aSizePixel = pWindow->GetOutputSizePixel();
+    if( pRightWin )
+        aSizePixel.Width() += pRightWin->GetOutputSizePixel().Width();
+    if( pBottomWin )
+        aSizePixel.Height() += pBottomWin->GetOutputSizePixel().Height();
+    Rectangle aVisPixel( Point( 0, 0 ), aSizePixel );
+    aVisRect = pWindow->PixelToLogic( aVisPixel, aMapMode );
+
     aTimer.SetTimeoutHdl( LINK( this, ScNoteMarker, TimeHdl ) );
     aTimer.SetTimeout( bForce ? SC_NOTEMARK_SHORT : SC_NOTEMARK_TIME );
     aTimer.Start();
@@ -104,24 +107,16 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
             rOutliner.SetRefDevice(pPrinter);
         }
 
-        SdrPage* pPage = pModel->AllocPage(FALSE);
+        if( SdrPage* pPage = pModel->AllocPage( FALSE ) )
+        {
+            pObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
+            if( pObject )
+                aRect = pObject->GetCurrentBoundRect();
 
-        Size aSizePixel = pWindow->GetOutputSizePixel();
-        Rectangle aVisPixel( Point(0,0), aSizePixel );
-        Rectangle aVisible = pWindow->PixelToLogic( aVisPixel, aMapMode );
+            // #39351# Page einfuegen damit das Model sie kennt und auch deleted
+            pModel->InsertPage( pPage );
 
-        SCCOL nCol = aDocPos.Col();
-        SCROW nRow = aDocPos.Row();
-        SCTAB nTab = aDocPos.Tab();
-        pObject = ScDetectiveFunc( pDoc,nTab ).
-                    ShowCommentUser( nCol, nRow, aUserText, aVisible, bLeft, FALSE, pPage );
-
-        if (pObject)
-            aRect = pObject->GetCurrentBoundRect();
-
-        // #39351# Page einfuegen damit das Model sie kennt und auch deleted
-        pModel->InsertPage( pPage );
-
+        }
         bVisible = TRUE;
     }
 

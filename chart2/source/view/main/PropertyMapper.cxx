@@ -200,8 +200,8 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
         ( C2U( "CharContoured" ),           C2U("CharContoured") )
 /////// ( C2U( "CharCrossedOut" ),          C2U("CharCrossedOut") ) //setting this explicitly somehow conflicts with CharStrikeout
         ( C2U( "CharEmphasis" ),            C2U("CharEmphasis") )//the service style::CharacterProperties  describes a property called 'CharEmphasize' wich is nowhere implemented
-        ( C2U( "CharEscapement" ),          C2U("CharEscapement") )
-        ( C2U( "CharEscapementHeight" ),    C2U("CharEscapementHeight") )
+//        ( C2U( "CharEscapement" ),          C2U("CharEscapement") ) //#i98344# @future: add these to properties again, if the user interface offers the possibility to change them; then make sure that older wrong files are corrected on import
+//        ( C2U( "CharEscapementHeight" ),    C2U("CharEscapementHeight") ) //#i98344# @future: add these to properties again, if the user interface offers the possibility to change them; then make sure that older wrong files are corrected on import
 //      ( C2U( "CharFlash" ),               C2U("Flashing") )
 
         ( C2U( "CharFontFamily" ),          C2U("CharFontFamily") )

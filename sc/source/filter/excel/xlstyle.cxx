@@ -546,8 +546,7 @@ namespace {
 /** Property names for common font settings. */
 const sal_Char *const sppcPropNamesChCommon[] =
 {
-    "CharUnderline", "CharStrikeout", "CharEscapement", "CharColor",
-    "CharContoured", "CharShadowed", 0
+    "CharUnderline", "CharStrikeout", "CharColor", "CharContoured", "CharShadowed", 0
 };
 /** Property names for Western font settings. */
 const sal_Char *const sppcPropNamesChWstrn[] =
@@ -564,6 +563,12 @@ const sal_Char *const sppcPropNamesChCmplx[] =
 {
     "CharFontNameComplex", "CharHeightComplex", "CharPostureComplex", "CharWeightComplex", 0
 };
+/** Property names for escapement. */
+const sal_Char *const sppcPropNamesChEscapement[] =
+{
+    "CharEscapement", "CharEscapementHeight", 0
+};
+const sal_Int8 EXC_API_ESC_HEIGHT           = 58;   /// Default escapement font height.
 
 /** Property names for Western font settings without font name. */
 const sal_Char *const *const sppcPropNamesChWstrnNoName = sppcPropNamesChWstrn + 1;
@@ -622,6 +627,7 @@ XclFontPropSetHelper::XclFontPropSetHelper() :
     maHlpChWstrnNoName( sppcPropNamesChWstrnNoName ),
     maHlpChAsianNoName( sppcPropNamesChAsianNoName ),
     maHlpChCmplxNoName( sppcPropNamesChCmplxNoName ),
+    maHlpChEscapement( sppcPropNamesChEscapement ),
     maHlpControl( sppcPropNamesControl )
 {
 }
@@ -635,7 +641,7 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
         {
             String aApiFontName;
             float fApiHeight, fApiWeight;
-            sal_Int16 nApiUnderl = 0, nApiStrikeout = 0, nApiEscapement = 0;
+            sal_Int16 nApiUnderl = 0, nApiStrikeout = 0;
             Awt::FontSlant eApiPosture;
 
             // read script type dependent properties
@@ -646,7 +652,6 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
             maHlpChCommon.ReadFromPropertySet( rPropSet );
             maHlpChCommon   >> nApiUnderl
                             >> nApiStrikeout
-                            >> nApiEscapement
                             >> rFontData.maColor
                             >> rFontData.mbOutline
                             >> rFontData.mbShadow;
@@ -654,6 +659,11 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
             // convert API property values to Excel settings
             lclSetApiFontSettings( rFontData, aApiFontName,
                 fApiHeight, fApiWeight, eApiPosture, nApiUnderl, nApiStrikeout );
+
+            // font escapement
+            sal_Int16 nApiEscapement;
+            sal_Int8 nApiEscHeight;
+            maHlpChEscapement >> nApiEscapement >> nApiEscHeight;
             rFontData.SetApiEscapement( nApiEscapement );
         }
         break;
@@ -701,15 +711,22 @@ void XclFontPropSetHelper::WriteFontProperties(
             const Color& rColor = pFontColor ? *pFontColor : rFontData.maColor;
             maHlpChCommon   << rFontData.GetApiUnderline()
                             << rFontData.GetApiStrikeout()
-                            << rFontData.GetApiEscapement()
                             << rColor
                             << rFontData.mbOutline
                             << rFontData.mbShadow;
             maHlpChCommon.WriteToPropertySet( rPropSet );
+
             // write script type dependent properties
             lclWriteChartFont( rPropSet, maHlpChWstrn, maHlpChWstrnNoName, rFontData, bHasWstrn );
             lclWriteChartFont( rPropSet, maHlpChAsian, maHlpChAsianNoName, rFontData, bHasAsian );
             lclWriteChartFont( rPropSet, maHlpChCmplx, maHlpChCmplxNoName, rFontData, bHasCmplx );
+
+            // font escapement
+            if( rFontData.GetScEscapement() != SVX_ESCAPEMENT_OFF )
+            {
+                maHlpChEscapement << rFontData.GetApiEscapement() << EXC_API_ESC_HEIGHT;
+                maHlpChEscapement.WriteToPropertySet( rPropSet );
+            }
         }
         break;
 

@@ -62,6 +62,8 @@ public:
 
     void ShowAxisOrigin( bool bShowOrigin );
 
+    virtual void StateChanged( StateChangedType nType );
+
 private:
     FixedLine           aFlScale;
 
@@ -98,6 +100,7 @@ private:
 
     bool                m_bShowAxisOrigin;
 
+    void AdjustControlPositions();
     void EnableControls();
 
     DECL_LINK( EnableValueHdl, CheckBox* );

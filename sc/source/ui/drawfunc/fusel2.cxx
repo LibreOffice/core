@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fusel2.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/svdview.hxx>
 #include <svx/outliner.hxx>
 
 #include "fusel.hxx"
@@ -52,6 +51,8 @@
 #include "scitems.hxx"
 #include "userdat.hxx"
 #include "drwlayer.hxx"
+#include "docsh.hxx"
+#include "drawview.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -123,64 +124,59 @@ BOOL FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
     return bFound;
 }
 
-BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
+bool FuSelection::IsNoteCaptionMarked() const
 {
-    if (!pPV)
-        return FALSE;
-
-    SdrObject* pFoundObj = NULL;
-    ScAddress  aTabPos;
-
-    SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
-    SdrObject* pObject = aIter.Next();
-    while (pObject)
+    if( pView )
     {
-        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj)
-            && pObject->GetLogicRect().IsInside( rPos ) )
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        if( rMarkList.GetMarkCount() == 1 )
         {
-            pFoundObj = pObject;
-            ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, pViewShell->GetViewData()->GetTabNo() );
-            if( pData )
-            {
-                aTabPos = ScAddress( pData->aStt);
-            }
-            // keep searching - use the last matching object (on top)
+            SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+            return ScDrawLayer::IsNoteCaption( pObj );
         }
-        pObject = aIter.Next();
     }
-
-
-    if ( pFoundObj )
-    {
-        SdrLayer* pLockLayer = NULL;
-        ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
-        SfxObjectShell* pDocSh = pViewShell->GetViewData()->GetSfxDocShell();
-        const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* > (pDoc->GetAttr(aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), ATTR_PROTECTION ) );
-        BOOL bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
-        BOOL bProtectDoc =  pDoc->IsTabProtected(aTabPos.Tab()) || pDocSh->IsReadOnly() ;
-        BOOL bProtect = bProtectDoc && bProtectAttr ;
-        pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-        if (pLockLayer && pView->IsLayerLocked(pLockLayer->GetName()))
-            pView->SetLayerLocked( pLockLayer->GetName(), bProtect );
-    }
-
-    return (pFoundObj != NULL);
+    return false;
 }
 
-void FuSelection::ActivateNoteHandles(SdrObject* pObject) const
+bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
 {
-    if(!pObject && !pView)
-        return;
-    if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj))
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : 0;
+    if( pPageView )
     {
-        SdrLayer* pLockLayer = NULL;
+        const ScViewData& rViewData = *pViewShell->GetViewData();
+        ScDocument& rDoc = *rViewData.GetDocument();
+        SCTAB nTab = rViewData.GetTabNo();
+        ScDocShell* pDocSh = rViewData.GetDocShell();
+        bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || (pDocSh && pDocSh->IsReadOnly());
 
-        // Leave the internal note object unlocked - re-lock in ScDrawView::MarkListHasChanged()
-        pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-        if (pLockLayer && pView->IsLayerLocked(pLockLayer->GetName()))
-            pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
-        SdrPageView* pPV = pView->GetSdrPageView();
-        pView->MarkObj(pObject, pPV);
+        // search the last object (on top) in the object list
+        SdrObjListIter aIter( *pPageView->GetObjList(), IM_DEEPNOGROUPS, TRUE );
+        for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
+        {
+            if( pObj->GetLogicRect().IsInside( rPos ) )
+            {
+                if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab ) )
+                {
+                    const ScAddress& rNotePos = pCaptData->maStart;
+                    // skip caption objects of notes in protected cells
+                    const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* >( rDoc.GetAttr( rNotePos.Col(), rNotePos.Row(), nTab, ATTR_PROTECTION ) );
+                    bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell();
+                    if( !bProtectAttr || !bProtectDoc )
+                        return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void FuSelection::ActivateNoteHandles(SdrObject* pObject)
+{
+    if( pView && ScDrawLayer::IsNoteCaption( pObject ) )
+    {
+        // Leave the internal layer unlocked - relock in ScDrawView::MarkListHasChanged()
+        pView->UnlockInternalLayer();
+        pView->MarkObj( pObject, pView->GetSdrPageView() );
     }
 }
 

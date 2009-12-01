@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.48.126.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -563,32 +563,11 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_RANGE_NOTETEXT:
                 {
-                    SCCOL nNoteCol;
-                    SCROW nNoteRow;
-                    SCTAB nNoteTab;
-
-                    //  #43343# immer Cursorposition
-#if 0
-                    ScRange aRange;
-                    if (GetViewData()->GetSimpleArea(aRange,TRUE) == SC_MARK_SIMPLE)
-                    {
-                        nNoteCol = aRange.aStart.Col();
-                        nNoteRow = aRange.aStart.Row();
-                        nNoteTab = aRange.aStart.Tab();
-                    }
-                    else        // Cursor bei Mehrfachselektion
-#endif
-                    {
-                        nNoteCol = nPosX;
-                        nNoteRow = nPosY;
-                        nNoteTab = nTab;
-                    }
-
+                    //  #43343# always take cursor position, do not use top-left cell of selection
+                    ScAddress aPos( nPosX, nPosY, nTab );
                     String aNoteText;
-                    ScPostIt aNote(pDoc);
-                    if ( pDoc->GetNote( nNoteCol, nNoteRow, nNoteTab, aNote ) )
-                        aNoteText = aNote.GetText();
-
+                    if ( const ScPostIt* pNote = pDoc->GetNote( aPos ) )
+                        aNoteText = pNote->GetText();
                     rSet.Put( SfxStringItem( nWhich, aNoteText ) );
                 }
                 break;
@@ -926,14 +905,9 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_NOTE_VISIBLE:
                 {
-                    ScPostIt aNote(pDoc);
-                    if ( pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) &&
-                         pDoc->GetNote( nPosX, nPosY, nTab, aNote ) )
-                    {
-                        BOOL bShown = aNote.IsShown() &&
-                                    pDoc->HasNoteObject( nPosX, nPosY, nTab );
-                        rSet.Put( SfxBoolItem( nWhich, bShown ) );
-                    }
+                    const ScPostIt* pNote = pDoc->GetNote( ScAddress( nPosX, nPosY, nTab ) );
+                    if ( pNote && pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) )
+                        rSet.Put( SfxBoolItem( nWhich, pNote->IsCaptionShown() ) );
                     else
                         rSet.DisableItem( nWhich );
                 }
@@ -953,21 +927,16 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             for (ULONG nPos=0; nPos<nCount && !bEnable; nPos++)
                             {
                                 ScCellIterator aCellIter( pDoc, *aRanges.GetObject(nPos) );
-                                ScBaseCell* pCell = aCellIter.GetFirst();
-                                while ( pCell && !bEnable )
-                                {
-                                    if ( pCell->GetNotePtr() )
+                                for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bEnable; pCell = aCellIter.GetNext() )
+                                    if ( pCell->HasNote() )
                                         bEnable = TRUE;             // note found
-                                    pCell = aCellIter.GetNext();
-                                }
                             }
                         }
                     }
                     else
                     {
-                        ScPostIt aNote(pDoc);
                         bEnable = pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) &&
-                                  pDoc->GetNote( nPosX, nPosY, nTab, aNote );
+                                  pDoc->GetNote( ScAddress( nPosX, nPosY, nTab ) );
                     }
                     if ( !bEnable )
                         rSet.DisableItem( nWhich );

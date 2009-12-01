@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.82.28.20 $
+ * $Revision: 1.82.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,7 @@
 #include "parclass.hxx"
 #include "autonamecache.hxx"
 #include "externalrefmgr.hxx"
+#include "rangeutl.hxx"
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -855,16 +856,6 @@ static bool lcl_getLastTabName( String& rTabName2, const String& rTabName1,
     return true;
 }
 
-static void lcl_appendTabName(::rtl::OUStringBuffer& rBuffer, const String& rTabName)
-{
-    bool bQuote = (rTabName.Search(sal_Unicode(' '), 0) != STRING_NOTFOUND);
-    if (bQuote)
-        rBuffer.append(sal_Unicode('\''));
-    rBuffer.append(rTabName);
-    if (bQuote)
-        rBuffer.append(sal_Unicode('\''));
-}
-
 struct Convention_A1 : public ScCompiler::Convention
 {
     Convention_A1( FormulaGrammar::AddressConvention eConv ) : ScCompiler::Convention( eConv ) { }
@@ -1079,9 +1070,9 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append(sal_Unicode('\''));
             rBuffer.append(sal_Unicode('#'));
 
-            // external reference is always 3D and the sheet is absolute.
-            rBuffer.append(sal_Unicode('$'));
-            lcl_appendTabName(rBuffer, rTabName);
+            if (!rRef.IsTabRel())
+                rBuffer.append(sal_Unicode('$'));
+            ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
 
             rBuffer.append(sal_Unicode('.'));
         }
@@ -1134,24 +1125,25 @@ struct ConventionOOO_A1 : public Convention_A1
 
             rBuffer.append(sal_Unicode(':'));
 
-            // Get the name of the last table.
-            vector<String> aTabNames;
-            pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-            if (aTabNames.empty())
-            {
-                DBG_ERROR1( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %s", nFileId);
-                break;
-            }
-
             String aLastTabName;
-            if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))
-            {
-                rBuffer.append(aLastTabName);
-                DBG_ERROR( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
-                break;
-            }
             bool bDisplayTabName = (aRef.Ref1.nTab != aRef.Ref2.nTab);
-            if (bODF && !bDisplayTabName)
+            if (bDisplayTabName)
+            {
+                // Get the name of the last table.
+                vector<String> aTabNames;
+                pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
+                if (aTabNames.empty())
+                {
+                    DBG_ERROR1( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %s", nFileId);
+                }
+
+                if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))
+                {
+                    DBG_ERROR( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
+                    // aLastTabName contains #REF!, proceed.
+                }
+            }
+            else if (bODF)
                 rBuffer.append( sal_Unicode('.'));      // need at least the sheet separator in ODF
             makeExternalSingleRefStr( rBuffer, nFileId, aLastTabName,
                     aRef.Ref2, pRefMgr, bDisplayTabName);
@@ -1347,15 +1339,15 @@ struct ConventionXL
         String aLastTabName;
         if (!lcl_getLastTabName(aLastTabName, rTabName, rTabNames, rRef))
         {
-            rBuf.append(aLastTabName);
+            ScRangeStringConverter::AppendTableName(rBuf, aLastTabName);
             return;
         }
 
-        lcl_appendTabName(rBuf, rTabName);
+        ScRangeStringConverter::AppendTableName(rBuf, rTabName);
         if (rTabName != aLastTabName)
         {
             rBuf.append(sal_Unicode(':'));
-            lcl_appendTabName(rBuf, aLastTabName);
+            ScRangeStringConverter::AppendTableName(rBuf, rTabName);
         }
     }
 
@@ -1542,7 +1534,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         aRef.CalcAbsIfRel(rCompiler.GetPos());
 
         ConventionXL::makeExternalDocStr(rBuffer, *pFullName);
-        lcl_appendTabName(rBuffer, rTabName);
+        ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append(sal_Unicode('!'));
 
         makeSingleCellStr(rBuffer, aRef);
@@ -1746,7 +1738,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         aRef.CalcAbsIfRel(rCompiler.GetPos());
 
         ConventionXL::makeExternalDocStr(rBuffer, *pFullName);
-        lcl_appendTabName(rBuffer, rTabName);
+        ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append(sal_Unicode('!'));
 
         r1c1_add_row(rBuffer, aRef);
@@ -3010,7 +3002,9 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                             case CELLTYPE_VALUE:
                             case CELLTYPE_NOTE:
                             case CELLTYPE_SYMBOLS:
+#if DBG_UTIL
                             case CELLTYPE_DESTROYED:
+#endif
                                 ;   // nothing, prevent compiler warning
                             break;
                         }
@@ -3137,7 +3131,9 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                         case CELLTYPE_VALUE:
                         case CELLTYPE_NOTE:
                         case CELLTYPE_SYMBOLS:
+#if DBG_UTIL
                         case CELLTYPE_DESTROYED:
+#endif
                             ;   // nothing, prevent compiler warning
                         break;
                     }
@@ -3711,7 +3707,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
                 SetError(errCodeOverflow); break;
             }
         }
-        else if (bPODF)
+        if (bPODF)
         {
             /* TODO: for now this is the only PODF adapter. If there were more,
              * factor this out. */
@@ -4093,32 +4089,44 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             else if( t->GetType() != svIndex )  // it may be a DB area!!!
             {
                 t->CalcAbsIfRel( rOldPos );
-                if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
+                switch (t->GetType())
                 {
-                    if ( ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
-                            r, nDx, nDy, nDz,
-                            SingleDoubleRefModifier( t->GetSingleRef() ).Ref() )
-                            != UR_NOTHING
-                        )
-                        rChanged = TRUE;
-                }
-                else
-                {
-                    ScComplexRefData& rRef = t->GetDoubleRef();
-                    SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
-                    SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
-                    SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
-                    if ( ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
-                                r, nDx, nDy, nDz, t->GetDoubleRef() )
-                            != UR_NOTHING
-                        )
-                    {
-                        rChanged = TRUE;
-                        if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
-                                rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
-                                rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
-                            rRefSizeChanged = TRUE;
-                    }
+                    case svExternalSingleRef:
+                    case svExternalDoubleRef:
+                        // External references never change their positioning
+                        // nor point to parts that will be removed or expanded.
+                        // In fact, calling ScRefUpdate::Update() for URM_MOVE
+                        // may have negative side effects. Simply adapt
+                        // relative references to the new position.
+                        t->CalcRelFromAbs( aPos);
+                        break;
+                    case svSingleRef:
+                        {
+                            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                                        aPos, r, nDx, nDy, nDz,
+                                        SingleDoubleRefModifier(
+                                            t->GetSingleRef()).Ref())
+                                    != UR_NOTHING)
+                                rChanged = TRUE;
+                        }
+                        break;
+                    default:
+                        {
+                            ScComplexRefData& rRef = t->GetDoubleRef();
+                            SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
+                            SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
+                            SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
+                            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                                        aPos, r, nDx, nDy, nDz,
+                                        t->GetDoubleRef()) != UR_NOTHING)
+                            {
+                                rChanged = TRUE;
+                                if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
+                                        rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
+                                        rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
+                                    rRefSizeChanged = TRUE;
+                            }
+                        }
                 }
             }
         }

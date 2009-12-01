@@ -40,6 +40,8 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=filt_pch
 PROJECTPCHSOURCE=..\pch\filt_pch
 
+VISIBILITY_HIDDEN=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	scpre.mk

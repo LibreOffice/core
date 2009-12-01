@@ -45,6 +45,8 @@
 #include "stlsheet.hxx"
 #include "compiler.hxx"
 
+#include <stdio.h>
+
 // ============================================================================
 // ScFilterTools::ReadLongDouble()
 
@@ -394,7 +396,6 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
 
 ScFormatFilterPluginImpl::ScFormatFilterPluginImpl()
 {
-  fprintf (stderr, "loaded\n");
 }
 
 ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)

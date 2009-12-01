@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfunc.cxx,v $
- * $Revision: 1.44.22.2 $
+ * $Revision: 1.46.18.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -388,7 +388,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     pDoc->GetCell( nCol, nRow, i, pDocCell );
                     if ( pDocCell )
                     {
-                        ppOldCells[nUndoPos] = pDocCell->Clone(pDoc);
+                        ppOldCells[nUndoPos] = pDocCell->CloneWithoutNote( *pDoc );
                         if ( pDocCell->GetCellType() == CELLTYPE_EDIT )
                             bEditDeleted = TRUE;
 
@@ -599,7 +599,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     }
                     else
                     {
-                        ScFormulaCell* pCell = new ScFormulaCell( pDoc, aPos, aCell );
+                        ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
                         if ( nError )
                         {
                             pCell->GetCode()->DelRPN();
@@ -683,9 +683,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
 }
 
 //  Wert in einzele Zelle eintragen (nur auf nTab)
-//! umbenennen in EnterValue !!!!
 
-void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue )
+void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -698,18 +697,14 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rV
         ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
         if (aTester.IsEditable())
         {
-            ScBaseCell* pOldCell;
-            pDoc->GetCell( nCol, nRow, nTab, pOldCell );
+            ScAddress aPos( nCol, nRow, nTab );
+            ScBaseCell* pOldCell = pDoc->GetCell( aPos );
             BOOL bNeedHeight = ( pOldCell && pOldCell->GetCellType() == CELLTYPE_EDIT )
                                 || pDoc->HasAttrib(
                                     nCol,nRow,nTab, nCol,nRow,nTab, HASATTR_NEEDHEIGHT );
 
             //  Undo
-            ScBaseCell* pUndoCell = NULL;
-            if (bUndo)
-            {
-                pUndoCell = pOldCell ? pOldCell->Clone(pDoc) : NULL;
-            }
+            ScBaseCell* pUndoCell = (bUndo && pOldCell) ? pOldCell->CloneWithoutNote( *pDoc ) : 0;
 
             pDoc->SetValue( nCol, nRow, nTab, rValue );
 
@@ -717,8 +712,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rV
             if (bUndo)
             {
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterValue( pDocSh, ScAddress(nCol,nRow,nTab),
-                                            pUndoCell, rValue, bNeedHeight ) );
+                    new ScUndoEnterValue( pDocSh, aPos, pUndoCell, rValue, bNeedHeight ) );
             }
 
 /*!             Zeilenhoehe anpassen? Dann auch bei Undo...
@@ -726,7 +720,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rV
                 AdjustRowHeight(nRow,nRow);
 */
 
-            pDocSh->PostPaintCell( nCol, nRow, nTab );
+            pDocSh->PostPaintCell( aPos );
             pDocSh->UpdateOle(GetViewData());
             aModificator.SetDocumentModified();
         }
@@ -811,10 +805,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
                     pTabs[nPos] = i;
                     ScBaseCell* pDocCell;
                     pDoc->GetCell( nCol, nRow, i, pDocCell );
-                    if ( pDocCell )
-                        ppOldCells[nPos] = pDocCell->Clone( pDoc );
-                    else
-                        ppOldCells[nPos] = NULL;
+                    ppOldCells[nPos] = pDocCell ? pDocCell->CloneWithoutNote( *pDoc ) : 0;
                     ++nPos;
                 }
 
@@ -2054,6 +2045,8 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
             nUndoDocFlags |= IDF_STRING;    // -> Zellen werden geaendert
         if (nFlags & IDF_NOTE)
             nUndoDocFlags |= IDF_CONTENTS;  // #68795# copy all cells with their notes
+        // do not copy note captions to undo document
+        nUndoDocFlags |= IDF_NOCAPTIONS;
         pDoc->CopyToDocument( aCopyRange, nUndoDocFlags, bMulti, pUndoDoc, &aFuncMark );
     }
 
@@ -2065,7 +2058,7 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
     else
     {
         pDoc->DeleteSelection( nFlags, aFuncMark );
-        aFuncMark.MarkToSimple();
+//       aFuncMark.MarkToSimple();
     }
 
     if ( bRecord )
@@ -2654,10 +2647,14 @@ BOOL ScViewFunc::Unprotect( SCTAB nTab, const String& rPassword )
     return bChanged;
 }
 
-void ScViewFunc::SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote )
+void ScViewFunc::SetNoteText( const ScAddress& rPos, const String& rNoteText )
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().SetNote( ScAddress(nCol,nRow,nTab), rNote, FALSE );
+    GetViewData()->GetDocShell()->GetDocFunc().SetNoteText( rPos, rNoteText, FALSE );
+}
+
+void ScViewFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate )
+{
+    GetViewData()->GetDocShell()->GetDocFunc().ReplaceNote( rPos, rNoteText, pAuthor, pDate, FALSE );
 }
 
 void ScViewFunc::SetNumberFormat( short nFormatType, ULONG nAdd )

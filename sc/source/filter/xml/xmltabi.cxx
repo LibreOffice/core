@@ -331,7 +331,7 @@ void ScXMLTableContext::EndElement()
             if( xPrintAreas.is() )
             {
                 uno::Sequence< table::CellRangeAddress > aRangeList;
-                ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
+                ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                 xPrintAreas->setPrintAreas( aRangeList );
             }
         }

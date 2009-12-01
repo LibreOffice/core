@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: column2.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.32.126.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,6 @@
 #include "compiler.hxx"         // ScTokenArray GetCodeLen
 #include "dbcolect.hxx"
 #include "fillinfo.hxx"
-#include "postit.hxx"
 
 #include <math.h>
 
@@ -79,11 +78,6 @@
 #define SC_ROT_BREAK_FACTOR     6
 
 // -----------------------------------------------------------------------
-
-inline BOOL CellVisible( const ScBaseCell* pCell )
-{
-    return ( pCell->GetCellType() != CELLTYPE_NOTE || pCell->GetNotePtr() );
-}
 
 inline BOOL IsAmbiguousScript( BYTE nScript )
 {
@@ -1008,11 +1002,8 @@ void ScColumn::RemoveAutoSpellObj()
             {
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
-                SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
-                pNewCell->SetBroadcaster( pBC );
-                pOldCell->ForgetBroadcaster();
-                if (pOldCell->GetNotePtr())
-                    pNewCell->SetNote( *pOldCell->GetNotePtr() );
+                pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
+                pNewCell->TakeNote( pOldCell->ReleaseNote() );
                 pItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
@@ -1083,11 +1074,8 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
             {
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
-                SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
-                pNewCell->SetBroadcaster( pBC );
-                pOldCell->ForgetBroadcaster();
-                if (pOldCell->GetNotePtr())
-                    pNewCell->SetNote( *pOldCell->GetNotePtr() );
+                pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
+                pNewCell->TakeNote( pOldCell->ReleaseNote() );
                 pItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
@@ -1236,7 +1224,7 @@ BOOL ScColumn::IsEmptyVisData(BOOL bNotes) const
         for (i=0; i<nCount && !bVisData; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->GetNotePtr()) )
+            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
                 bVisData = TRUE;
         }
         return !bVisData;
@@ -1273,7 +1261,7 @@ SCROW ScColumn::GetLastVisDataPos(BOOL bNotes) const
         {
             --i;
             ScBaseCell* pCell = pItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->GetNotePtr()) )
+            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
             {
                 bFound = TRUE;
                 nRet = pItems[i].nRow;
@@ -1293,7 +1281,7 @@ SCROW ScColumn::GetFirstVisDataPos(BOOL bNotes) const
         for (i=0; i<nCount && !bFound; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->GetNotePtr()) )
+            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
             {
                 bFound = TRUE;
                 nRet = pItems[i].nRow;
@@ -1307,7 +1295,7 @@ BOOL ScColumn::HasVisibleDataAt(SCROW nRow) const
 {
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
-        if (CellVisible(pItems[nIndex].pCell))
+        if (!pItems[nIndex].pCell->IsBlank())
             return TRUE;
 
     return FALSE;
@@ -1326,7 +1314,7 @@ BOOL ScColumn::IsEmpty() const
     return (IsEmptyData() && IsEmptyAttr());
 }
 
-BOOL ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
+BOOL ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) const
 {
     if ( nCount == 0 || !pItems )
         return TRUE;
@@ -1335,7 +1323,7 @@ BOOL ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
     Search( nStartRow, nIndex );
     while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
     {
-        if ( CellVisible(pItems[nIndex].pCell) )    // found a cell
+        if ( !pItems[nIndex].pCell->IsBlank( bIgnoreNotes ) )   // found a cell
             return FALSE;                           // not empty
         ++nIndex;
     }
@@ -1357,7 +1345,7 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
                 i--;
                 if ( pItems[i].nRow < nStartRow )
                     break;
-                bFound = pItems[i].nRow <= nEndRow && CellVisible(pItems[i].pCell);
+                bFound = pItems[i].nRow <= nEndRow && !pItems[i].pCell->IsBlank();
             }
             if (bFound)
                 nLines = static_cast<SCSIZE>(nEndRow - pItems[i].nRow);
@@ -1371,7 +1359,7 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
             {
                 if ( pItems[i].nRow > nEndRow )
                     break;
-                bFound = pItems[i].nRow >= nStartRow && CellVisible(pItems[i].pCell);
+                bFound = pItems[i].nRow >= nStartRow && !pItems[i].pCell->IsBlank();
                 i++;
             }
             if (bFound)
@@ -1434,7 +1422,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 
     SCSIZE nIndex;
     BOOL bThere = Search(rRow, nIndex);
-    if (bThere && !CellVisible(pItems[nIndex].pCell))
+    if (bThere && pItems[nIndex].pCell->IsBlank())
         bThere = FALSE;
 
     if (bThere)
@@ -1447,13 +1435,13 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
             {
                 ++nIndex;
                 while (nIndex<nCount-1 && pItems[nIndex].nRow==nLast+1
-                                        && CellVisible(pItems[nIndex].pCell))
+                                        && !pItems[nIndex].pCell->IsBlank())
                 {
                     ++nIndex;
                     ++nLast;
                 }
                 if (nIndex==nCount-1)
-                    if (pItems[nIndex].nRow==nLast+1 && CellVisible(pItems[nIndex].pCell))
+                    if (pItems[nIndex].nRow==nLast+1 && !pItems[nIndex].pCell->IsBlank())
                         ++nLast;
             }
         }
@@ -1463,13 +1451,13 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
             {
                 --nIndex;
                 while (nIndex>0 && pItems[nIndex].nRow+1==nLast
-                                        && CellVisible(pItems[nIndex].pCell))
+                                        && !pItems[nIndex].pCell->IsBlank())
                 {
                     --nIndex;
                     --nLast;
                 }
                 if (nIndex==0)
-                    if (pItems[nIndex].nRow+1==nLast && CellVisible(pItems[nIndex].pCell))
+                    if (pItems[nIndex].nRow+1==nLast && !pItems[nIndex].pCell->IsBlank())
                         --nLast;
             }
         }
@@ -1486,7 +1474,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
     {
         if (bForward)
         {
-            while (nIndex<nCount && !CellVisible(pItems[nIndex].pCell))
+            while (nIndex<nCount && pItems[nIndex].pCell->IsBlank())
                 ++nIndex;
             if (nIndex<nCount)
                 rRow = pItems[nIndex].nRow;
@@ -1495,7 +1483,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
         }
         else
         {
-            while (nIndex>0 && !CellVisible(pItems[nIndex-1].pCell))
+            while (nIndex>0 && pItems[nIndex-1].pCell->IsBlank())
                 --nIndex;
             if (nIndex>0)
                 rRow = pItems[nIndex-1].nRow;
@@ -1515,7 +1503,7 @@ BOOL ScColumn::HasDataAt(SCROW nRow) const
 
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
-        if (CellVisible(pItems[nIndex].pCell))
+        if (!pItems[nIndex].pCell->IsBlank())
             return TRUE;
 
     return FALSE;
@@ -1599,7 +1587,7 @@ void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
     if (!pBC)
     {
         pBC = new SvtBroadcaster;
-        pCell->SetBroadcaster(pBC);
+        pCell->TakeBroadcaster(pBC);
     }
     rLst.StartListening(*pBC);
 }
@@ -1624,7 +1612,7 @@ void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
     if (!pBC)
     {
         pBC = new SvtBroadcaster;
-        pCell->SetBroadcaster(pBC);
+        pCell->TakeBroadcaster(pBC);
     }
 
     if (rSource.HasListeners())
@@ -1651,10 +1639,10 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 
             if (!pBC->HasListeners())
             {
-                if (pCell->GetCellType() == CELLTYPE_NOTE && !pCell->GetNotePtr())
+                if (pCell->IsBlank())
                     DeleteAtIndex(nIndex);
                 else
-                    pCell->SetBroadcaster(NULL);
+                    pCell->DeleteBroadcaster();
             }
         }
 //      else

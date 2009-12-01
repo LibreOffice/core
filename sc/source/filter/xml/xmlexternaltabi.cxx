@@ -166,10 +166,13 @@ void ScXMLExternalRefRowContext::EndElement()
     for (sal_Int32 i = 1; i < mnRepeatRowCount; ++i)
     {
         // Performance: duplicates of a non-existent row will still not exist.
-        // Don't find that out that for every cell.
+        // Don't find that out for every cell.
         // External references often are a sparse matrix.
         if (i == 1 && !pTab->hasRow( mrExternalRefInfo.mnRow))
+        {
+            mrExternalRefInfo.mnRow += mnRepeatRowCount;
             return;
+        }
 
         for (sal_Int32 j = 0; j < mrExternalRefInfo.mnCol; ++j)
         {

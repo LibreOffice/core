@@ -705,7 +705,8 @@ void XclTxo::SaveCont( XclExpStream& rStrm )
 {
     DBG_ASSERT( mpString.get(), "XclTxo::SaveCont - missing string" );
 
-    sal_uInt16 nRunLen = 8 * mpString->GetFormatsCount();
+    // #i96858# do not save existing string formatting if text is empty
+    sal_uInt16 nRunLen = mpString->IsEmpty() ? 0 : (8 * mpString->GetFormatsCount());
     // alignment
     sal_uInt16 nFlags = 0;
     ::insert_value( nFlags, mnHorAlign, 1, 3 );

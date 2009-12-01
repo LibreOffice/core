@@ -444,7 +444,7 @@ XLRGBToOORGB( sal_Int32 nCol )
 uno::Any
 OORGBToXLRGB( const uno::Any& aCol )
 {
-    sal_Int32 nCol;
+    sal_Int32 nCol=0;
     aCol >>= nCol;
     nCol = OORGBToXLRGB( nCol );
     return uno::makeAny( nCol );
@@ -452,7 +452,7 @@ OORGBToXLRGB( const uno::Any& aCol )
 uno::Any
 XLRGBToOORGB(  const uno::Any& aCol )
 {
-    sal_Int32 nCol;
+    sal_Int32 nCol=0;
     aCol >>= nCol;
     nCol = XLRGBToOORGB( nCol );
     return uno::makeAny( nCol );

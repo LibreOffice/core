@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.hxx,v $
- * $Revision: 1.29.32.5 $
+ * $Revision: 1.30.38.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,42 +62,88 @@ class ScPostIt;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 
+// ============================================================================
+
+/** Default cell clone flags: do not start listening, do not adjust 3D refs to
+    old position, clone note captions of cell notes. */
+const int SC_CLONECELL_DEFAULT          = 0x0000;
+
+/** If set, cloned formula cells will start to listen to the document. */
+const int SC_CLONECELL_STARTLISTENING   = 0x0001;
+
+/** If set, relative 3D references of cloned formula cells will be adjusted to
+    old position (used while swapping cells for sorting a cell range). */
+const int SC_CLONECELL_ADJUST3DREL      = 0x0002;
+
+/** If set, the caption object of a cell note will not be cloned (used while
+    copying cells to undo document, where captions are handled in drawing undo). */
+const int SC_CLONECELL_NOCAPTION        = 0x0004;
+
+// ============================================================================
+
 class SC_DLLPUBLIC ScBaseCell
 {
-protected:
-    ScPostIt*       pNote;
-    SvtBroadcaster* pBroadcaster;
-    USHORT          nTextWidth;
-    BYTE            eCellType;      // enum CellType - BYTE spart Speicher
-    BYTE            nScriptType;
-
-public: // fuer Idle-Berechnung
-    USHORT  GetTextWidth() const        { return nTextWidth; }
-    void    SetTextWidth( USHORT nNew ) { nTextWidth = nNew; }
-
-    BYTE    GetScriptType() const       { return nScriptType; }
-    void    SetScriptType( BYTE nNew )  { nScriptType = nNew; }
-
 protected:
                     ~ScBaseCell();  // nicht virtuell -> darf nicht direkt aufgerufen werden
 
 public:
     explicit        ScBaseCell( CellType eNewType );
-                    ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc );
 
-    ScBaseCell*     Clone(ScDocument* pDoc) const;
-    void            Delete();                       // simulierter virtueller Destructor
-    CellType        GetCellType() const;
+    /** Base copy constructor. Does NOT clone cell note or broadcaster! */
+                    ScBaseCell( const ScBaseCell& rCell );
 
-    void            SetNote( const ScPostIt& rNote );
-    BOOL            GetNote( ScPostIt& rNote ) const;
-    inline const ScPostIt* GetNotePtr() const { return pNote; }
+    /** Returns a clone of this cell at the same position, cell note and
+        broadcaster will not be cloned. */
+    ScBaseCell*     CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+
+    /** Returns a clone of this cell for the passed document position, cell
+        note and broadcaster will not be cloned. */
+    ScBaseCell*     CloneWithoutNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+
+    /** Returns a clone of this cell, clones cell note and caption object too
+        (unless SC_CLONECELL_NOCAPTION flag is set). Broadcaster will not be cloned. */
+    ScBaseCell*     CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+
+    /** Due to the fact that ScBaseCell does not have a vtable, this function
+        deletes the cell by calling the appropriate d'tor of the derived class. */
+    void            Delete();
+
+    inline CellType GetCellType() const { return (CellType)eCellType; }
+
+    /** Returns true, if the cell is empty (neither value nor formula nor cell note).
+        Returns false for formula cells returning nothing, use HasEmptyData() for that. */
+    bool            IsBlank( bool bIgnoreNotes = false ) const;
+
+// fuer Idle-Berechnung
+    inline USHORT   GetTextWidth() const { return nTextWidth; }
+    inline void     SetTextWidth( USHORT nNew ) { nTextWidth = nNew; }
+
+    inline BYTE     GetScriptType() const { return nScriptType; }
+    inline void     SetScriptType( BYTE nNew ) { nScriptType = nNew; }
+
+    /** Returns true, if the cell contains a note. */
+    inline bool     HasNote() const { return mpNote != 0; }
+    /** Returns the pointer to a cell note object (read-only). */
+    inline const ScPostIt* GetNote() const { return mpNote; }
+    /** Returns the pointer to a cell note object. */
+    inline ScPostIt* GetNote() { return mpNote; }
+    /** Takes ownership of the passed cell note object. */
+    void            TakeNote( ScPostIt* pNote );
+    /** Returns and forgets the own cell note object. Caller takes ownership! */
+    ScPostIt*       ReleaseNote();
+    /** Deletes the own cell note object. */
     void            DeleteNote();
 
-    inline SvtBroadcaster*  GetBroadcaster() const;
-    void            SetBroadcaster(SvtBroadcaster* pNew);
-    inline void     ForgetBroadcaster();
-    inline void     SwapBroadcaster(ScBaseCell& rOther);    // zum Sortieren
+    /** Returns true, if the cell contains a broadcaster. */
+    inline bool     HasBroadcaster() const { return mpBroadcaster != 0; }
+    /** Returns the pointer to the cell broadcaster. */
+    inline SvtBroadcaster* GetBroadcaster() const { return mpBroadcaster; }
+    /** Takes ownership of the passed cell broadcaster. */
+    void            TakeBroadcaster( SvtBroadcaster* pBroadcaster );
+    /** Returns and forgets the own cell broadcaster. Caller takes ownership! */
+    SvtBroadcaster* ReleaseBroadcaster();
+    /** Deletes the own cell broadcaster. */
+    void            DeleteBroadcaster();
 
                         // String- oder EditCell
     static ScBaseCell* CreateTextCell( const String& rString, ScDocument* );
@@ -118,55 +164,93 @@ public:
     String          GetStringData() const;          // nur echte Strings
 
     static BOOL     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
+
+private:
+    ScBaseCell&     operator=( const ScBaseCell& );
+
+private:
+    ScPostIt*       mpNote;         /// The cell note. Cell takes ownership!
+    SvtBroadcaster* mpBroadcaster;  /// Broadcaster for changed values. Cell takes ownership!
+
+protected:
+    USHORT          nTextWidth;
+    BYTE            eCellType;      // enum CellType - BYTE spart Speicher
+    BYTE            nScriptType;
 };
 
+// ============================================================================
 
+class SC_DLLPUBLIC ScNoteCell : public ScBaseCell
+{
+public:
+#ifdef USE_MEMPOOL
+    DECL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
+#endif
+
+    /** Cell takes ownership of the passed broadcaster. */
+    explicit        ScNoteCell( SvtBroadcaster* pBC = 0 );
+    /** Cell takes ownership of the passed note and broadcaster. */
+    explicit        ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC = 0 );
+
+#ifdef DBG_UTIL
+                    ~ScNoteCell();
+#endif
+
+                    ScNoteCell( SvStream& rStream, USHORT nVer );
+
+    void            Save( SvStream& rStream ) const;
+
+private:
+                    ScNoteCell( const ScNoteCell& );
+};
+
+// ============================================================================
 
 class SC_DLLPUBLIC ScValueCell : public ScBaseCell
 {
-private:
-    double      aValue;
-
 public:
-
 #ifdef USE_MEMPOOL
     DECL_FIXEDMEMPOOL_NEWDEL( ScValueCell )
 #endif
-                    ~ScValueCell();
-
                     ScValueCell();
-                    ScValueCell( const double& rValue );
-                    ScValueCell( const ScValueCell& rScValueCell, ScDocument* pDoc );
-    ScBaseCell*     Clone(ScDocument* pDoc) const;
+    explicit        ScValueCell( double fValue );
 
-    void            SetValue( const double& rValue );
-    double          GetValue() const;
+#ifdef DBG_UTIL
+                    ~ScValueCell();
+#endif
+
+    inline void     SetValue( double fValue ) { mfValue = fValue; }
+    inline double   GetValue() const { return mfValue; }
+
+private:
+    double          mfValue;
 };
 
+// ============================================================================
 
 class SC_DLLPUBLIC ScStringCell : public ScBaseCell
 {
-private:
-    String      aString;
-
 public:
-
 #ifdef USE_MEMPOOL
     DECL_FIXEDMEMPOOL_NEWDEL( ScStringCell )
 #endif
+
+                    ScStringCell();
+    explicit        ScStringCell( const String& rString );
+
 #ifdef DBG_UTIL
                     ~ScStringCell();
 #endif
 
-                    ScStringCell();
-                    ScStringCell( const String& rString );
-                    ScStringCell( const ScStringCell& rScStringCell, ScDocument* pDoc );
-    ScBaseCell*     Clone(ScDocument* pDoc) const;
+    inline void     SetString( const String& rString ) { maString = rString; }
+    inline void     GetString( String& rString ) const { rString = maString; }
+    inline const String& GetString() const { return maString; }
 
-    void            SetString( const String& rString );
-    void            GetString( String& rString ) const;
+private:
+    String          maString;
 };
 
+// ============================================================================
 
 class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
@@ -180,7 +264,6 @@ private:
 
                     // not implemented
                     ScEditCell( const ScEditCell& );
-    ScEditCell&     operator=( const ScEditCell& );
 
 public:
 
@@ -192,10 +275,9 @@ public:
 
                     ScEditCell( const EditTextObject* pObject, ScDocument*,
                                 const SfxItemPool* pFromPool /* = NULL */ );
-                    ScEditCell( const ScEditCell& rEditCell, ScDocument* );
+                    ScEditCell( const ScEditCell& rCell, ScDocument& rDoc );
                     // fuer Zeilenumbrueche
                     ScEditCell( const String& rString, ScDocument* );
-    ScBaseCell*     Clone( ScDocument* ) const;
 
     void            SetData( const EditTextObject* pObject,
                             const SfxItemPool* pFromPool /* = NULL */ );
@@ -205,13 +287,14 @@ public:
     const EditTextObject* GetData() const   { return pData; }
 };
 
+// ============================================================================
+
 enum ScMatrixMode {
     MM_NONE      = 0,                   // No matrix formula
     MM_FORMULA   = 1,                   // Upper left matrix formula cell
     MM_REFERENCE = 2,                   // Remaining cells, via ocMatRef reference token
     MM_FAKE      = 3                    // Interpret "as-if" matrix formula (legacy)
 };
-
 
 class ScIndexMap;
 
@@ -248,6 +331,8 @@ private:
                     };
     void            InterpretTail( ScInterpretTailParameter );
 
+    ScFormulaCell( const ScFormulaCell& );
+
 public:
 
 #ifdef USE_MEMPOOL
@@ -273,15 +358,7 @@ public:
                     const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                     BYTE cMatInd = MM_NONE );
 
-    // copy-ctor
-    // nCopyFlags:  0 := nothing special
-    //              0x0001 := readjust 3D references to point to old position even if relative
-    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                   const ScFormulaCell& rScFormulaCell, USHORT nCopyFlags = 0 );
-
-    using ScBaseCell::Clone;
-    ScBaseCell*     Clone(ScDocument* pDoc, const ScAddress&,
-                            BOOL bNoListening = FALSE ) const;
+    ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags = SC_CLONECELL_DEFAULT );
 
     void            GetFormula( String& rFormula,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
@@ -304,6 +381,7 @@ public:
     void            CompileTokenArray( BOOL bNoListening = FALSE );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
+    bool            MarkUsedExternalReferences();
     void            Interpret();
     inline BOOL     IsIterCell() const { return bIsIterCell; }
     inline USHORT   GetSeenInIteration() const { return nSeenInIteration; }
@@ -420,155 +498,7 @@ public:
     BOOL        GetNextRef( ScRange& rRange );
 };
 
-class ScNoteCell : public ScBaseCell
-{
-public:
-
-#ifdef USE_MEMPOOL
-    DECL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
-#endif
-#ifdef DBG_UTIL
-                    ~ScNoteCell();
-#endif
-
-                    ScNoteCell();
-                    ScNoteCell( const ScPostIt& rNote );
-                    ScNoteCell( const ScNoteCell& rScNoteCell, ScDocument* pDoc );
-    ScBaseCell*     Clone(ScDocument* pDoc) const;
-};
-
-
-//      ScBaseCell
-
-inline CellType ScBaseCell::GetCellType() const
-{
-    return (CellType)eCellType;
-}
-
-inline SvtBroadcaster* ScBaseCell::GetBroadcaster() const
-{
-    return pBroadcaster;
-}
-
-inline void ScBaseCell::ForgetBroadcaster()
-{
-    pBroadcaster = NULL;
-}
-
-inline void ScBaseCell::SwapBroadcaster(ScBaseCell& rOther)
-{
-    SvtBroadcaster* pTemp = pBroadcaster;
-    pBroadcaster = rOther.pBroadcaster;
-    rOther.pBroadcaster = pTemp;
-}
-
-//      ScValueCell
-
-inline ScValueCell::ScValueCell() :
-    ScBaseCell( CELLTYPE_VALUE )
-{
-    aValue = 0.0;
-}
-
-inline ScValueCell::ScValueCell( const double& rValue ) :
-    ScBaseCell( CELLTYPE_VALUE )
-{
-    aValue = rValue;
-}
-
-inline ScValueCell::ScValueCell(const ScValueCell& rScValueCell, ScDocument* pDoc) :
-    ScBaseCell( rScValueCell, pDoc ),
-    aValue( rScValueCell.aValue )
-{
-}
-
-inline ScBaseCell* ScValueCell::Clone(ScDocument* pDoc) const
-{
-    return new ScValueCell(*this, pDoc);
-}
-
-inline void ScValueCell::SetValue( const double& rValue )
-{
-    aValue = rValue;
-}
-
-inline double ScValueCell::GetValue() const
-{
-    return aValue;
-}
-
-
-
-//      ScStringCell
-
-inline ScStringCell::ScStringCell() :
-    ScBaseCell( CELLTYPE_STRING )
-{
-}
-
-inline ScStringCell::ScStringCell( const ScStringCell& rScStringCell, ScDocument* pDoc ) :
-    ScBaseCell( rScStringCell, pDoc ),
-    aString( rScStringCell.aString )
-{
-}
-
-inline ScStringCell::ScStringCell( const String& rString ) :
-    ScBaseCell( CELLTYPE_STRING ),
-    aString( rString.intern() )
-{
-}
-
-inline ScBaseCell* ScStringCell::Clone(ScDocument* pDoc) const
-{
-    return new ScStringCell(*this, pDoc);
-}
-
-inline void ScStringCell::GetString( String& rString ) const
-{
-    rString = aString;
-}
-
-inline void ScStringCell::SetString( const String& rString )
-{
-    aString = rString;
-}
-
-
-/*
-
-//      ScFormulaCell
-
-inline ScBaseCell* ScFormulaCell::Clone(ScDocument* pDoc) const
-{
-    return new ScFormulaCell(pDoc, *this);
-}
-*/
-
-
-
-//      ScNoteCell
-
-inline ScNoteCell::ScNoteCell() :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-}
-
-inline ScNoteCell::ScNoteCell( const ScNoteCell& rScNoteCell, ScDocument* pDoc ) :
-    ScBaseCell( rScNoteCell, pDoc )
-{
-}
-
-inline ScNoteCell::ScNoteCell( const ScPostIt& rNote ) :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-    ScBaseCell::SetNote(rNote);
-}
-
-inline ScBaseCell* ScNoteCell::Clone(ScDocument* pDoc) const
-{
-    return new ScNoteCell(*this, pDoc);
-}
-
+// ============================================================================
 
 #endif
 

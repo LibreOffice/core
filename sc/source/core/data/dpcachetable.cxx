@@ -143,8 +143,7 @@ bool ScDPCacheTable::SingleFilter::hasValue() const
 // ----------------------------------------------------------------------------
 
 ScDPCacheTable::GroupFilter::GroupFilter(ScSimpleSharedString& rSharedString) :
-    mrSharedString(rSharedString),
-    mbMatchIfFound(true)
+    mrSharedString(rSharedString)
 {
 }
 
@@ -160,14 +159,9 @@ bool ScDPCacheTable::GroupFilter::match(const ScDPCacheCell& rCell) const
             bMatch = (itr->mnMatchStrId == rCell.mnStrId);
 
         if (bMatch)
-            return mbMatchIfFound ? true : false;
+            return true;
     }
-    return mbMatchIfFound ? false : true;
-}
-
-void ScDPCacheTable::GroupFilter::setMatchIfFound(bool b)
-{
-    mbMatchIfFound = b;
+    return false;
 }
 
 void ScDPCacheTable::GroupFilter::addMatchItem(const String& rStr, double fVal, bool bHasValue)

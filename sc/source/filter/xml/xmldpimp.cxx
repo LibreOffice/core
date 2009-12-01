@@ -174,7 +174,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS :
             {
                 sal_Int32 nOffset(0);
-                bTargetRangeAddress = ScRangeStringConverter::GetRangeFromString( aTargetRangeAddress, sValue, pDoc, nOffset );
+                bTargetRangeAddress = ScRangeStringConverter::GetRangeFromString( aTargetRangeAddress, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset );
             }
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS :
@@ -266,7 +266,7 @@ void ScXMLDataPilotTableContext::SetButtons()
         {
             ScAddress aScAddress;
             sal_Int32 nAddrOffset(0);
-            if (pDoc && ScRangeStringConverter::GetAddressFromString( aScAddress, sAddress, pDoc, nAddrOffset ))
+            if (pDoc && ScRangeStringConverter::GetAddressFromString( aScAddress, sAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nAddrOffset ))
             {
                 ScMergeFlagAttr aAttr( SC_MF_BUTTON );
                 pDoc->ApplyAttr( aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aAttr );
@@ -668,7 +668,7 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
             {
                 ScRange aSourceRangeAddress;
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aSourceRangeAddress, sValue, GetScImport().GetDocument(), nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aSourceRangeAddress, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                     pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
             }
             break;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docuno.hxx,v $
- * $Revision: 1.27.32.2 $
+ * $Revision: 1.27.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -741,8 +741,8 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;           // Collection haengt am Sheet
 
-    BOOL                    GetAddressByIndex_Impl( ULONG nIndex, ScAddress& rPos ) const;
-    ScAnnotationObj*        GetObjectByIndex_Impl(sal_Int32 nIndex) const;
+    bool                    GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const;
+    ScAnnotationObj*        GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
 
 public:
                             ScAnnotationsObj(ScDocShell* pDocSh, SCTAB nT);

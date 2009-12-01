@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen3.cxx,v $
- * $Revision: 1.41.28.4 $
+ * $Revision: 1.42.100.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,8 +77,6 @@
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
-#include "editutil.hxx"    // ScPostIt EditTextObject
-#include "postit.hxx"
 
 #include <memory>
 
@@ -484,6 +482,29 @@ ScExternalRefManager* ScDocument::GetExternalRefManager()
         pExternalRefMgr.reset(new ScExternalRefManager(this));
 
     return pExternalRefMgr.get();
+}
+
+bool ScDocument::IsInExternalReferenceMarking() const
+{
+    return pExternalRefMgr.get() && pExternalRefMgr->isInReferenceMarking();
+}
+
+void ScDocument::MarkUsedExternalReferences()
+{
+    if (!pExternalRefMgr.get())
+        return;
+    if (!pExternalRefMgr->hasExternalData())
+        return;
+    // Charts.
+    bool bAllMarked = pExternalRefMgr->markUsedByLinkListeners();
+    // Formula cells.
+    for (SCTAB nTab = 0; !bAllMarked && nTab < nMaxTableNumber; ++nTab)
+    {
+        if (pTab[nTab])
+            bAllMarked = pTab[nTab]->MarkUsedExternalReferences();
+    }
+    /* NOTE: Conditional formats and validation objects are marked when
+     * collecting them during export. */
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )
@@ -1836,12 +1857,6 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     String aCellStr;
     SCCOL nCol;
     SCROW nRow;
-    ScPostIt aCellNote(this);
-    ::std::auto_ptr <EditTextObject> pObj;
-    // assign the resulting merged note the ItemSet properties of first note occurring text object.
-    ScPostIt aFirstNote(this);
-    BOOL bDoNote = FALSE;
-
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)
         for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         {
@@ -1854,51 +1869,13 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
             }
             if (nCol != nStartCol || nRow != nStartRow)
                 SetString(nCol,nRow,nTab,aEmpty);
-
-            if (GetNote(nCol,nRow,nTab,aCellNote))
-            {
-                // Create the first occurrence of a Note text object.
-                if(!pObj.get())
-                {
-                     if(const EditTextObject* pEditObj = aCellNote.GetEditTextObject())
-                         pObj.reset(pEditObj->Clone());
-                     // Hide this note if visible during merge as it will be shown
-                     // in a new location following the merge.
-                     if (aCellNote.IsShown())
-                     {
-                        ScDetectiveFunc( this, nTab ).HideComment( nCol, nRow );
-                        aCellNote.SetShown(FALSE);
-                        SetNote(nCol,nRow,nTab,aCellNote);
-                     }
-                     aFirstNote = aCellNote;
-                }
-                else
-                {
-                    const EditTextObject* pAddText = aCellNote.GetEditTextObject();
-                    pObj->Insert(*pAddText, pObj->GetParagraphCount());
-                }
-
-                if (nCol != nStartCol || nRow != nStartRow)
-                {
-                    if (aCellNote.IsShown())
-                        ScDetectiveFunc( this, nTab ).HideComment( nCol, nRow );
-                    SetNote(nCol,nRow,nTab,ScPostIt(this));
-                    bDoNote = TRUE;
-                }
-            }
         }
 
     SetString(nStartCol,nStartRow,nTab,aTotal);
-    if (bDoNote)
-    {
-        ScPostIt aNewNote(pObj.get(),this);
-        aNewNote.SetItemSet(aFirstNote.GetItemSet());
-        SetNote(nStartCol,nStartRow,nTab,aNewNote);
-    }
 }
 
 void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow )
+                                    SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions )
 {
     ScMergeAttr aAttr( nEndCol-nStartCol+1, nEndRow-nStartRow+1 );
     ApplyAttr( nStartCol, nStartRow, nTab, aAttr );
@@ -1910,28 +1887,12 @@ void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     if ( nEndCol > nStartCol && nEndRow > nStartRow )
         ApplyFlagsTab( nStartCol+1, nStartRow+1, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
 
-    ScPostIt aCellNote(this);
-    Rectangle aRect;
-
-    // Set all cell note rectangle dimensions to default position following the merge.
-    for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
-    {
-        for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
-        {
-            if (GetNote(nCol,nRow,nTab,aCellNote))
-            {
-                // Hide this note if visible during merge.
-                if(aCellNote.IsShown())
-                {
-                    ScDetectiveFunc( this, nTab ).HideComment( nCol, nRow );
-                    aCellNote.SetShown(FALSE);
-                }
-                aRect = aCellNote.DefaultRectangle(ScAddress(nCol,nRow,nTab));
-                aCellNote.SetRectangle(aRect);
-                SetNote(nCol,nRow,nTab,aCellNote);
-            }
-        }
-    }
+    // remove all covered notes (removed captions are collected by drawing undo if active)
+    USHORT nDelFlag = IDF_NOTE | (bDeleteCaptions ? 0 : IDF_NOCAPTIONS);
+    if( nStartCol < nEndCol )
+        DeleteAreaTab( nStartCol + 1, nStartRow, nEndCol, nStartRow, nTab, nDelFlag );
+    if( nStartRow < nEndRow )
+        DeleteAreaTab( nStartCol, nStartRow + 1, nEndCol, nEndRow, nTab, nDelFlag );
 }
 
 void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )

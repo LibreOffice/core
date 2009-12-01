@@ -141,11 +141,17 @@ public:
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
 
+    static void         AppendTableName(
+                            ::rtl::OUStringBuffer& rBuf,
+                            const ::rtl::OUString& rTabName,
+                            sal_Unicode cQuote = '\'');
+
 // String to Range core
     static sal_Bool     GetAddressFromString(
                             ScAddress& rAddress,
                             const ::rtl::OUString& rAddressStr,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
@@ -153,6 +159,7 @@ public:
                             ScRange& rRange,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
@@ -160,6 +167,7 @@ public:
                             ScRangeList& rRangeList,
                             const ::rtl::OUString& rRangeListStr,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
 
@@ -167,6 +175,7 @@ public:
                             ScArea& rArea,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
@@ -176,6 +185,7 @@ public:
                             ::com::sun::star::table::CellAddress& rAddress,
                             const ::rtl::OUString& rAddressStr,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
@@ -183,6 +193,7 @@ public:
                             ::com::sun::star::table::CellRangeAddress& rRange,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
@@ -190,6 +201,7 @@ public:
                             ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const ::rtl::OUString& rRangeListStr,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
 
@@ -198,6 +210,7 @@ public:
                             ::rtl::OUString& rString,
                             const ScAddress& rAddress,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
@@ -205,6 +218,7 @@ public:
                             ::rtl::OUString& rString,
                             const ScRange& rRange,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
@@ -212,6 +226,7 @@ public:
                             ::rtl::OUString& rString,
                             const ScRangeList* pRangeList,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D));
 
@@ -219,6 +234,7 @@ public:
                             ::rtl::OUString& rString,
                             const ScArea& rArea,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
@@ -228,6 +244,7 @@ public:
                             ::rtl::OUString& rString,
                             const ::com::sun::star::table::CellAddress& rAddress,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
@@ -235,6 +252,7 @@ public:
                             ::rtl::OUString& rString,
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
@@ -242,8 +260,15 @@ public:
                             ::rtl::OUString& rString,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const ScDocument* pDocument,
+                            formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
+
+// XML Range to Calc Range
+    static void         GetStringFromXMLRangeString(
+                            ::rtl::OUString& rString,
+                            const ::rtl::OUString& rXMLRange,
+                            ScDocument* pDoc );
 };
 
 //------------------------------------------------------------------------

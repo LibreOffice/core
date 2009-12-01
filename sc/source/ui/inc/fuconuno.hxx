@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconuno.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,7 @@ protected:
     UINT16 nIdentifier;
 
 public:
-    FuConstUnoControl(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuConstUnoControl(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
                        SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstUnoControl();

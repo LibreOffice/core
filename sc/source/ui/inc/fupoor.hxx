@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fupoor.hxx,v $
- * $Revision: 1.7.146.1 $
+ * $Revision: 1.7.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,11 @@
 #ifndef _SC_FUPOOR_HXX
 #define _SC_FUPOOR_HXX
 
-#ifndef _EVENT_HXX //autogen
 #include <vcl/event.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <sfx2/request.hxx>
 
-class SdrView;
+class ScDrawView;
 class ScTabViewShell;
 class Window;
 class SdrModel;
@@ -59,8 +57,8 @@ class SdrObject;
 
 class FuPoor
 {
- protected:
-    SdrView*        pView;
+protected:
+    ScDrawView*     pView;
     ScTabViewShell* pViewShell;
     Window*         pWindow;
     SdrModel*       pDrDoc;
@@ -83,8 +81,8 @@ class FuPoor
 private:
     sal_uInt16      mnCode;
 
- public:
-    FuPoor(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+public:
+    FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuPoor();
 
@@ -126,6 +124,7 @@ private:
 
     // #98185# Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+
 protected:
     void ImpForceQuadratic(Rectangle& rRect);
 

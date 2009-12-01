@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimprt.hxx,v $
- * $Revision: 1.96.32.3 $
+ * $Revision: 1.97.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -637,7 +637,6 @@ struct ScMyImportValidation
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
-typedef std::list<com::sun::star::table::CellAddress> ScMyDefaultNotes;
 class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
@@ -738,7 +737,6 @@ class ScXMLImport: public SvXMLImport
     ScMyLabelRanges*        pMyLabelRanges;
     ScMyImportValidations*  pValidations;
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
-    ScMyDefaultNotes*       pDefaultNotes;
     ScUnoGuard*             pScUnoGuard;
 
     std::vector<rtl::OUString>          aTableStyles;
@@ -951,7 +949,6 @@ private:
     void AddStyleRange(const com::sun::star::table::CellRangeAddress& rCellRange);
     void SetStyleToRanges();
 
-    void SetDefaultNotes();
     void ExamineDefaultStyle();
 public:
     void SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,

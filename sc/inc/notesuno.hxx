@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notesuno.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 
 class ScDocShell;
 class SvxUnoText;
+class ScPostIt;
 
 
 class ScAnnotationObj : public cppu::WeakImplHelper5<
@@ -56,14 +57,6 @@ class ScAnnotationObj : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
-private:
-    ScDocShell*             pDocShell;
-    ScAddress               aCellPos;
-    SvxUnoText*             pUnoText;
-
-private:
-    SvxUnoText& GetUnoText();
-
 public:
                             ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos);
     virtual                 ~ScAnnotationObj();
@@ -127,6 +120,16 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    SvxUnoText&         GetUnoText();
+
+    const ScPostIt*     ImplGetNote() const;
+
+private:
+    ScDocShell*             pDocShell;
+    ScAddress               aCellPos;
+    SvxUnoText*             pUnoText;
 };
 
 class ScAnnotationShapeObj : public cppu::WeakImplHelper10<
@@ -151,8 +154,6 @@ private:
 private:
     SvxUnoText& GetUnoText();
     com::sun::star::uno::Reference < com::sun::star::drawing::XShape > GetXShape();
-    SdrObject* GetCaptionObj();
-    void UpdateData();
 
 public:
                             ScAnnotationShapeObj(ScDocShell* pDocSh, const ScAddress& rPos);

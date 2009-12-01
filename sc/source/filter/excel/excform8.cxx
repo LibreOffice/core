@@ -68,7 +68,7 @@ ExcelToSc8::~ExcelToSc8()
 bool ExcelToSc8::GetExternalFileIdFromXti( UINT16 nIxti, sal_uInt16& rFileId ) const
 {
     const String* pFileUrl = rLinkMan.GetSupbookUrl(nIxti);
-    if (!pFileUrl || pFileUrl->Len() == 0)
+    if (!pFileUrl || pFileUrl->Len() == 0 || !GetDocShell())
         return false;
 
     String aFileUrl = ScGlobal::GetAbsDocName(*pFileUrl, GetDocShell());
@@ -1222,6 +1222,9 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
                                        const String& rUrl, const vector<String>& rTabNames )
 {
+    if( !GetDocShell() )
+        return ConvErrNi;
+
     String aFileUrl = ScGlobal::GetAbsDocName(rUrl, GetDocShell());
 
     sal_uInt8               nOp, nByte;

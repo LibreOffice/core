@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fudraw.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,7 @@
 #define SC_FUDRAW_HXX
 
 #include "fupoor.hxx"
-
-#ifndef _SV_POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
 
 /*************************************************************************
 |*
@@ -50,7 +47,7 @@ class FuDraw : public FuPoor
     Pointer aOldPointer;
 
  public:
-    FuDraw(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuDraw(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuDraw();
 
@@ -72,7 +69,6 @@ class FuDraw : public FuPoor
     virtual void SelectionHasChanged();
 
     BOOL IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
-    void CheckVisibleNote() const;
 
  private:
     void    DoModifiers(const MouseEvent& rMEvt);

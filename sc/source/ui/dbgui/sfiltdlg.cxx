@@ -75,7 +75,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         //
         aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
         aFtFilterArea   ( this, ScResId( FT_CRITERIA_AREA ) ),
-        aEdFilterArea   ( this, ScResId( ED_CRITERIA_AREA ) ),
+        aEdFilterArea   ( this, this, ScResId( ED_CRITERIA_AREA ) ),
         aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
         //
         _INIT_COMMON_FILTER_RSCOBJS

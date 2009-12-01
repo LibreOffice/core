@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spelleng.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,14 +132,14 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 (bMultiTab && rMark.GetTableSelect( nTab ) &&
                  lclHasString( mrDoc, mnCurrCol, mnCurrRow, nTab, aVisibleStr )) )
             {
-                CellType eCellType;
-                mrDoc.GetCellType( mnCurrCol, mnCurrRow, nTab, eCellType );
-                mrDoc.GetCell( mnCurrCol, mnCurrRow, nTab, pCell );
+                ScAddress aPos( mnCurrCol, mnCurrRow, nTab );
+                CellType eCellType = mrDoc.GetCellType( aPos );
+                pCell = mrDoc.GetCell( aPos );
 
                 if( mpUndoDoc && pCell )
                 {
-                    ScBaseCell* pUndoCell = pCell->Clone( mpUndoDoc );
-                    mpUndoDoc->PutCell( mnCurrCol, mnCurrRow, nTab, pUndoCell );
+                    ScBaseCell* pUndoCell = pCell->CloneWithoutNote( *mpUndoDoc );
+                    mpUndoDoc->PutCell( aPos, pUndoCell );
                 }
 
                 if( eCellType == CELLTYPE_EDIT )
@@ -154,13 +154,13 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 else
                 {
                     mrDoc.SetString( mnCurrCol, mnCurrRow, nTab, aNewStr );
-                    mrDoc.GetCell( mnCurrCol, mnCurrRow, nTab, pCell );
+                    pCell = mrDoc.GetCell( aPos );
                 }
 
                 if( mpRedoDoc && pCell )
                 {
-                    ScBaseCell* pRedoCell = pCell->Clone( mpRedoDoc );
-                    mpRedoDoc->PutCell( mnCurrCol, mnCurrRow, nTab, pRedoCell );
+                    ScBaseCell* pRedoCell = pCell->CloneWithoutNote( *mpRedoDoc );
+                    mpRedoDoc->PutCell( aPos, pRedoCell );
                 }
 
                 mrDocShell.PostPaintCell( mnCurrCol, mnCurrRow, nTab );

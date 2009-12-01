@@ -196,7 +196,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 ScRange aConditionRange(aQueryParam.nCol1, aQueryParam.nRow1, aQueryParam.nTab,
                     aQueryParam.nCol2, aQueryParam.nRow2, aQueryParam.nTab);
                 rtl::OUString sConditionRange;
-                ScRangeStringConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc );
+                ScRangeStringConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, sConditionRange);
             }
             if (!aQueryParam.bDuplicate)
@@ -726,7 +726,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                     {
                         ScRange aOutRange((*pDPs)[i]->GetOutRange());
                         rtl::OUString sTargetRangeAddress;
-                        ScRangeStringConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc );
+                        ScRangeStringConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                         ScDocAttrIterator aAttrItr(pDoc, aOutRange.aStart.Tab(),
                             aOutRange.aStart.Col(), aOutRange.aStart.Row(),
                             aOutRange.aEnd.Col(), aOutRange.aEnd.Row());
@@ -743,7 +743,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                                 {
                                     ScAddress aButtonAddr(nCol, nButtonRow, aOutRange.aStart.Tab());
                                     ScRangeStringConverter::GetStringFromAddress(
-                                        sOUButtonList, aButtonAddr, pDoc, ' ', sal_True );
+                                        sOUButtonList, aButtonAddr, pDoc, ::formula::FormulaGrammar::CONV_OOO, ' ', sal_True );
                                 }
                             }
                             pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
@@ -779,7 +779,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                         {
                             const ScSheetSourceDesc* pSheetSource = (*pDPs)[i]->GetSheetDesc();
                             rtl::OUString sCellRangeAddress;
-                            ScRangeStringConverter::GetStringFromRange( sCellRangeAddress, pSheetSource->aSourceRange, pDoc );
+                            ScRangeStringConverter::GetStringFromRange( sCellRangeAddress, pSheetSource->aSourceRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sCellRangeAddress);
                             SvXMLElementExport aElemSCR(rExport, XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE, sal_True, sal_True);
                             rExport.CheckAttrList();

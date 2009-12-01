@@ -125,7 +125,6 @@ public:
         virtual ~GroupFilter(){}
         virtual bool match(const ScDPCacheCell& rCell) const;
 
-        void setMatchIfFound(bool b);
         void addMatchItem(const String& rStr, double fVal, bool bHasValue);
         size_t getMatchItemCount() const;
 
@@ -134,7 +133,6 @@ public:
 
         ::std::vector<FilterItem> maItems;
         ScSimpleSharedString mrSharedString;
-        bool mbMatchIfFound;
     };
 
     /** single filtering criterion. */

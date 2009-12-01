@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,7 +88,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
         {
             ScAddress aPos;
             sal_Int32 nOffset(0);
-            ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
+            ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
             pCell = new ScFormulaCell(pDoc, aPos, sFormula, eGrammar, nMatrixFlag);
             static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
         }
@@ -104,10 +104,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
         }
     }
 
-    if (pCell)
-        return pCell->Clone(pDoc);
-    else
-        return NULL;
+    return pCell ? pCell->CloneWithoutNote( *pDoc ) : 0;
 }
 
 ScMyDeleted::ScMyDeleted()
@@ -688,7 +685,7 @@ void ScXMLChangeTrackingImportHelper::SetContentDependencies(ScMyContentAction* 
                 const ScBaseCell* pOldCell = pActContent->GetOldCell();
                 if (pOldCell)
                 {
-                    ScBaseCell* pNewCell = pOldCell->Clone(pDoc);
+                    ScBaseCell* pNewCell = pOldCell->CloneWithoutNote( *pDoc );
                     if (pNewCell)
                     {
                         pPrevActContent->SetNewCell(pNewCell, pDoc, EMPTY_STRING);
@@ -780,7 +777,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                     {
                         ScBaseCell* pNewCell = NULL;
                         if (pCell->GetCellType() != CELLTYPE_FORMULA)
-                            pNewCell = pCell->Clone(pDoc);
+                            pNewCell = pCell->CloneWithoutNote( *pDoc );
                         else
                         {
                             sal_uInt8 nMatrixFlag = static_cast<ScFormulaCell*>(pCell)->GetMatrixFlag();

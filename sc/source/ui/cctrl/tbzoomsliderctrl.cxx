@@ -118,21 +118,11 @@ void ScZoomSliderControl::StateChanged( USHORT /*nSID*/, SfxItemState eState,
 
 Window* ScZoomSliderControl::CreateItemWindow( Window *pParent )
 {
-    SfxViewFrame* pViewFrame        = SfxViewFrame::Current();
-    ScDocShell*   pDocShell         = (ScDocShell*)pViewFrame->GetObjectShell();
-    SCTAB         nTab              = ScDocShell::GetCurTab();
-    ScDocument*   pDoc              = pDocShell->GetDocument();
-    ScStyleSheetPool* pStylePool    = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
-    USHORT  nCurrentZoom = 0;
-    if ( pStyleSheet )
-    {
-        SfxItemSet& rStyleSet   = pStyleSheet->GetItemSet();
-        nCurrentZoom            = ((const SfxUInt16Item&)rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
-    }
+    // #i98000# Don't try to get a value via SfxViewFrame::Current here.
+    // The view's value is always notified via StateChanged later.
     ScZoomSliderWnd* pSlider    = new ScZoomSliderWnd( pParent,
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >( m_xFrame->getController(),
-        ::com::sun::star::uno::UNO_QUERY ), m_xFrame, nCurrentZoom ? nCurrentZoom : 100 );
+        ::com::sun::star::uno::UNO_QUERY ), m_xFrame, 100 );
     return  pSlider;
 }
 

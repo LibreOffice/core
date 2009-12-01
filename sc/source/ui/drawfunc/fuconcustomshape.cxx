@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconcustomshape.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,30 +31,27 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-//------------------------------------------------------------------------
-#include <fuconcustomshape.hxx>
+#include "fuconcustomshape.hxx"
 #include <svx/svxenum.hxx>
 #include <svx/gallery.hxx>
 #include <sfx2/request.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 #include <svtools/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
-#include <svx/svdview.hxx>
 #include "fuconuno.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
+#include "drawview.hxx"
 #include <svx/adjitem.hxx>
 
 #include <math.h>
 
 //------------------------------------------------------------------------
 
-FuConstCustomShape::FuConstCustomShape( ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP, SdrModel* pDoc, SfxRequest& rReq )
+FuConstCustomShape::FuConstCustomShape( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP, SdrModel* pDoc, SfxRequest& rReq )
     : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();

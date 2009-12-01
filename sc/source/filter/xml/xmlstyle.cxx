@@ -65,6 +65,7 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+using namespace ::formula;
 using ::rtl::OUString;
 
 #define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
@@ -707,8 +708,9 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                 OUString sOUBaseAddress;
+                                                ScDocument* pDoc = rScXMLExport.GetDocument();
                                                 ScRangeStringConverter::GetStringFromAddress( sOUBaseAddress,
-                                                    xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
+                                                    xSheetCondition->getSourcePosition(), pDoc, FormulaGrammar::CONV_OOO );
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
                                                 SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
                                             }
@@ -761,7 +763,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                 OUString sOUBaseAddress;
                                                 ScRangeStringConverter::GetStringFromAddress( sOUBaseAddress,
-                                                    xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
+                                                    xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument(), FormulaGrammar::CONV_OOO );
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
                                                 SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
                                             }

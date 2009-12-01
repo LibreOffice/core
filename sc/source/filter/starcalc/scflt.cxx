@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scflt.cxx,v $
- * $Revision: 1.25.30.2 $
+ * $Revision: 1.25.124.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1707,10 +1707,10 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 sal_Char* pNote = new sal_Char[NoteLen+1];
                 rStream.Read(pNote, NoteLen);
                 pNote[NoteLen] = 0;
-                String aText( SC10TOSTRING(pNote));
-                ScPostIt aNote(aText, pDoc);
-                pDoc->SetNote(Col, static_cast<SCROW> (Row), Tab, aNote );
+                String aNoteText( SC10TOSTRING(pNote));
                 delete [] pNote;
+                ScAddress aPos( Col, static_cast<SCROW>(Row), Tab );
+                ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false );
             }
         }
         pPrgrsBar->Progress();

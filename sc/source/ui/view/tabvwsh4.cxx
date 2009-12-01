@@ -1817,6 +1817,14 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             // Check if there are any external data.
             bool bLink = pDoc->GetExternalRefManager()->hasExternalData();
             if (!bLink)
+            {
+                // #i100042# sheet links can still exist independently from external formula references
+                SCTAB nTabCount = pDoc->GetTableCount();
+                for (SCTAB i=0; i<nTabCount && !bLink; i++)
+                    if (pDoc->IsLinked(i))
+                        bLink = true;
+            }
+            if (!bLink)
                 if (pDoc->HasDdeLinks() || pDoc->HasAreaLinks())
                     bLink = TRUE;
             if (bLink)

@@ -137,52 +137,61 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     FreeResource();
     SetExchangeSupport();
 
-    //optimize position of the controls
-    {
-        long nLabelWidth = ::std::max( aTxtMin.CalcMinimumSize().Width(), aTxtMax.CalcMinimumSize().Width() );
-        nLabelWidth = ::std::max( aTxtMain.CalcMinimumSize().Width(), nLabelWidth );
-        nLabelWidth = ::std::max( aTxtHelp.CalcMinimumSize().Width(), nLabelWidth );
-        nLabelWidth = ::std::max( aTxtOrigin.CalcMinimumSize().Width(), nLabelWidth );
-        nLabelWidth+=1;
-
-        long nLabelDistance = aTxtMin.LogicToPixel( Size(RSC_SP_CTRL_DESC_X, 0), MapMode(MAP_APPFONT) ).Width();
-        long nNewXPos = aTxtMin.GetPosPixel().X() + nLabelWidth + nLabelDistance;
-
-        //ensure that the auto checkboxes are wide enough and have correct size for calculation
-        aCbxAutoMin.SetSizePixel( aCbxAutoMin.CalcMinimumSize() );
-        aCbxAutoMax.SetSizePixel( aCbxAutoMax.CalcMinimumSize() );
-        aCbxAutoStepMain.SetSizePixel( aCbxAutoStepMain.CalcMinimumSize() );
-        aCbxAutoStepHelp.SetSizePixel( aCbxAutoStepHelp.CalcMinimumSize() );
-        aCbxAutoOrigin.SetSizePixel( aCbxAutoOrigin.CalcMinimumSize() );
-
-        //ensure new pos is ok
-        long nWidthOfOtherControls = aCbxAutoMin.GetPosPixel().X() + aCbxAutoMin.GetSizePixel().Width() - aFmtFldMin.GetPosPixel().X();
-        long nDialogWidth = GetSizePixel().Width();
-
-        long nLeftSpace = nDialogWidth - nNewXPos - nWidthOfOtherControls;
-        if(nLeftSpace>=0)
-        {
-            Size aSize( aTxtMin.GetSizePixel() );
-            aSize.Width() = nLabelWidth;
-            aTxtMin.SetSizePixel(aSize);
-            aTxtMax.SetSizePixel(aSize);
-            aTxtMain.SetSizePixel(aSize);
-            aTxtHelp.SetSizePixel(aSize);
-            aTxtOrigin.SetSizePixel(aSize);
-
-            lcl_shiftControls( aFmtFldMin, aCbxAutoMin, nNewXPos );
-            lcl_shiftControls( aFmtFldMax, aCbxAutoMax, nNewXPos );
-            lcl_shiftControls( aFmtFldStepMain, aCbxAutoStepMain, nNewXPos );
-            lcl_shiftControls( aMtStepHelp, aCbxAutoStepHelp, nNewXPos );
-            lcl_shiftControls( aFmtFldOrigin, aCbxAutoOrigin, nNewXPos );
-        }
-    }
-
     aCbxAutoMin.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
     aCbxAutoMax.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
     aCbxAutoStepMain.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
     aCbxAutoStepHelp.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
     aCbxAutoOrigin.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+}
+
+void ScaleTabPage::StateChanged( StateChangedType nType )
+{
+    TabPage::StateChanged( nType );
+
+    if( nType == STATE_CHANGE_INITSHOW )
+        AdjustControlPositions();
+}
+
+void ScaleTabPage::AdjustControlPositions()
+{
+    //optimize position of the controls
+    long nLabelWidth = ::std::max( aTxtMin.CalcMinimumSize().Width(), aTxtMax.CalcMinimumSize().Width() );
+    nLabelWidth = ::std::max( aTxtMain.CalcMinimumSize().Width(), nLabelWidth );
+    nLabelWidth = ::std::max( aTxtHelp.CalcMinimumSize().Width(), nLabelWidth );
+    nLabelWidth = ::std::max( aTxtOrigin.CalcMinimumSize().Width(), nLabelWidth );
+    nLabelWidth+=1;
+
+    long nLabelDistance = aTxtMin.LogicToPixel( Size(RSC_SP_CTRL_DESC_X, 0), MapMode(MAP_APPFONT) ).Width();
+    long nNewXPos = aTxtMin.GetPosPixel().X() + nLabelWidth + nLabelDistance;
+
+    //ensure that the auto checkboxes are wide enough and have correct size for calculation
+    aCbxAutoMin.SetSizePixel( aCbxAutoMin.CalcMinimumSize() );
+    aCbxAutoMax.SetSizePixel( aCbxAutoMax.CalcMinimumSize() );
+    aCbxAutoStepMain.SetSizePixel( aCbxAutoStepMain.CalcMinimumSize() );
+    aCbxAutoStepHelp.SetSizePixel( aCbxAutoStepHelp.CalcMinimumSize() );
+    aCbxAutoOrigin.SetSizePixel( aCbxAutoOrigin.CalcMinimumSize() );
+
+    //ensure new pos is ok
+    long nWidthOfOtherControls = aCbxAutoMin.GetPosPixel().X() + aCbxAutoMin.GetSizePixel().Width() - aFmtFldMin.GetPosPixel().X();
+    long nDialogWidth = GetSizePixel().Width();
+
+    long nLeftSpace = nDialogWidth - nNewXPos - nWidthOfOtherControls;
+    if(nLeftSpace>=0)
+    {
+        Size aSize( aTxtMin.GetSizePixel() );
+        aSize.Width() = nLabelWidth;
+        aTxtMin.SetSizePixel(aSize);
+        aTxtMax.SetSizePixel(aSize);
+        aTxtMain.SetSizePixel(aSize);
+        aTxtHelp.SetSizePixel(aSize);
+        aTxtOrigin.SetSizePixel(aSize);
+
+        lcl_shiftControls( aFmtFldMin, aCbxAutoMin, nNewXPos );
+        lcl_shiftControls( aFmtFldMax, aCbxAutoMax, nNewXPos );
+        lcl_shiftControls( aFmtFldStepMain, aCbxAutoStepMain, nNewXPos );
+        lcl_shiftControls( aMtStepHelp, aCbxAutoStepHelp, nNewXPos );
+        lcl_shiftControls( aFmtFldOrigin, aCbxAutoOrigin, nNewXPos );
+    }
 }
 
 void ScaleTabPage::EnableControls()

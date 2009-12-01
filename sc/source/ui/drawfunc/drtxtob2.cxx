@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob2.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
-
-//-------------------------------------------------------------------------
 
 #include "scitems.hxx"
 #include <svx/adjitem.hxx>
@@ -60,6 +56,7 @@
 #include "docsh.hxx"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
+#include "drwlayer.hxx"
 
 //------------------------------------------------------------------------
 
@@ -70,10 +67,7 @@ USHORT ScGetFontWorkId()
 
 BOOL ScDrawTextObjectBar::IsNoteEdit()
 {
-    ScTabView* pTabView = pViewData->GetView();
-    SdrView*   pSdrView = pTabView->GetSdrView();
-    SdrObject* pObject  = pSdrView->GetTextEditObject();
-    return ( pObject && pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) );
+    return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetSdrView()->GetTextEditObject() );
 }
 
 //  wenn kein Text editiert wird, Funktionen wie in drawsh
