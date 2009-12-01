@@ -788,11 +788,6 @@
                     </value>
                 </prop>
             </node>
-            <node oor:name="Java" oor:op="replace">
-        <prop oor:name="IncludedFiles">
-          <value>.*/config/javasettings_.*\.xml</value>
-        </prop>
-            </node>
             <node oor:name="Basic" oor:op="replace">
                 <prop oor:name="MigrationService">
                     <value>com.sun.star.migration.Basic</value>
@@ -808,11 +803,6 @@
                     <value>
             .*/autotext/.*
             .*/autocorr/.*
-            <node oor:name="Java" oor:op="replace">
-        <prop oor:name="IncludedFiles">
-          <value>.*/config/javasettings_.*\.xml</value>
-        </prop>
-            </node>
             .*/config/.*\.so[bcdegh]
             .*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml
             .*/config/soffice.cfg/modules/.*/images/.*

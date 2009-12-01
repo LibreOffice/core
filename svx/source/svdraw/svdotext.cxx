@@ -1341,7 +1341,7 @@ void SdrTextObj::operator=(const SdrObject& rObj)
             }
             else
             {
-                pNewOutlinerParaObject = pTextObj->getActiveText()->GetOutlinerParaObject()->Clone();
+                pNewOutlinerParaObject = new OutlinerParaObject(*pTextObj->getActiveText()->GetOutlinerParaObject());
             }
         }
 
@@ -1717,7 +1717,7 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
         pOutlinerParaObject = GetOutlinerParaObject();
     }
 
-    if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != bVertical) )
+    if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != (bool)bVertical) )
     {
         // get item settings
         const SfxItemSet& rSet = GetObjectItemSet();

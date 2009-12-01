@@ -56,7 +56,8 @@ public:
     XOutdevItemPool(const XOutdevItemPool& rPool);
 
     virtual SfxItemPool* Clone() const;
-    ~XOutdevItemPool();
+protected:
+    virtual ~XOutdevItemPool();
 };
 
 #endif      // _XPOOL_HXX

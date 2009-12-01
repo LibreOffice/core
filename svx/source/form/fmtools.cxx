@@ -860,12 +860,14 @@ sal_Int16   GridView2ModelPos(const Reference< ::com::sun::star::container::XInd
             {
                 rColumns->getByIndex(i) >>= xCur;
                 if (!::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
+                {
                     // for every visible col : if nViewPos is greater zero, decrement it, else we
                     // have found the model position
                     if (!nViewPos)
                         break;
                     else
                         --nViewPos;
+                }
             }
             if (i<rColumns->getCount())
                 return i;

@@ -394,6 +394,10 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     xCertificateContainer = uno::Reference< ::com::sun::star::security::XCertificateContainer >(
                     pSession->getMSF().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.security.CertificateContainer" )), uno::UNO_QUERY );
 
+    // YD if xmlsecurity is not built (os2), we cannot continue.
+    if (!xCertificateContainer.is())
+        return 1;
+
     char * dn;
 
     failures = 0;
@@ -763,8 +767,10 @@ void NeonSession::Init()
         // Note: Calling ne_set_[server|proxy]_auth more than once per
         //       m_pHttpSession instance sometimes(?) crashes Neon! ( last
         //       checked: 0.22.0)
-        ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
-        ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
+        //ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
+        ne_add_server_auth( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
+        //ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
+        ne_add_proxy_auth ( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
 
     }
 }

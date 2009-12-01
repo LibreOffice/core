@@ -44,7 +44,7 @@ TARGET=slackware
 
 # --- Files --------------------------------------------------------
 
-MENUFILES=$(PKGDIR)$/{$(PRODUCTLIST)}3.1-$(TARGET)-menus-$(PKGVERSION)-noarch-$(PKGREV).tgz
+MENUFILES=$(PKGDIR)$/{$(PRODUCTLIST)}3.2-$(TARGET)-menus-$(PKGVERSION)-noarch-$(PKGREV).tgz
 
 .IF "$(USE_SHELL)"=="bash"
 ECHOPARAM=-e
@@ -67,26 +67,26 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
 # FIXME: removal of *-extension.* only to create identical packages to OOF680
 %/usr/share/applications : 
     @$(MKDIRHIER) $@
-    /bin/sh -c "cd $(COMMONMISC)$/$(*:b:s/-/ /:1:s/3.1//); DESTDIR=$(shell @cd $*; pwd) GNOMEDIR="" ICON_PREFIX=$(ICONPREFIX.$(*:b:s/-/ /:1:s/3.1//)) KDEMAINDIR=/opt/kde .$/create_tree.sh"
+    /bin/sh -c "cd $(COMMONMISC)$/$(*:b:s/-/ /:1:s/3.2//); DESTDIR=$(shell @cd $*; pwd) GNOMEDIR="" ICON_PREFIX=$(ICONPREFIX.$(*:b:s/-/ /:1:s/3.2//)) KDEMAINDIR=/opt/kde .$/create_tree.sh"
     $(RM) $*$/opt$/kde$/share$/icons$/*$/*$/*$/*-extension.png	
     $(RM) $*$/opt$/kde$/share$/mimelnk$/application$/*-extension.desktop 
     $(RM) $*$/usr$/share$/applications$/*.desktop
     $(RM) $*$/usr$/bin$/soffice
 
 %$/install$/doinst.sh : update-script
-    @echo "( cd etc ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.1//)) )" > $@
-    @echo "( cd etc ; ln -snf /opt/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.1//):s/-//) $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.1//)) )" >> $@
+    @echo "( cd etc ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.2//)) )" > $@
+    @echo "( cd etc ; ln -snf /opt/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.2//):s/-//) $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.2//)) )" >> $@
     @echo "( cd usr/bin ; rm -rf soffice )" >> $@
-    @echo "( cd usr/bin ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.1//))/program/soffice soffice )" >> $@
-    @echo $(ECHOPARAM) $(foreach,i,$(shell @cat $(COMMONMISC)$/$(*:b:s/-/ /:1:s/3.1//)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.1//))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.1//))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.1//))-$i )") >> $@
+    @echo "( cd usr/bin ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.2//))/program/soffice soffice )" >> $@
+    @echo $(ECHOPARAM) $(foreach,i,$(shell @cat $(COMMONMISC)$/$(*:b:s/-/ /:1:s/3.2//)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.2//))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.2//))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.2//))-$i )") >> $@
     @cat $< >> $@
 
 %$/install$/slack-desc : slack-desc
     @$(MKDIRHIER) $(@:d)
-    @sed -e "s/PKGNAME/$(*:b:s/-/ /:1:s/3.1//)-$(TARGET)-menus/g" -e "s/PKGVERSION/$(PKGVERSION.$(*:b:s/-/ /:1:s/3.1//))/g" \
-        -e "s/LONGPRODUCTNAME/$(PRODUCTNAME.$(*:b:s/-/ /:1:s/3.1//)) $(PRODUCTVERSION.$(*:b:s/-/ /:1:s/3.1//))/g" \
-        -e "s/PRODUCTNAME/$(PRODUCTNAME.$(*:b:s/-/ /:1:s/3.1//))/g" \
-        -e "s/UNIXFILENAME/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.1//))/g" $< > $@
+    @sed -e "s/PKGNAME/$(*:b:s/-/ /:1:s/3.2//)-$(TARGET)-menus/g" -e "s/PKGVERSION/$(PKGVERSION.$(*:b:s/-/ /:1:s/3.2//))/g" \
+        -e "s/LONGPRODUCTNAME/$(PRODUCTNAME.$(*:b:s/-/ /:1:s/3.2//)) $(PRODUCTVERSION.$(*:b:s/-/ /:1:s/3.2//))/g" \
+        -e "s/PRODUCTNAME/$(PRODUCTNAME.$(*:b:s/-/ /:1:s/3.2//))/g" \
+        -e "s/UNIXFILENAME/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.2//))/g" $< > $@
 
 # needed to satisfy the slackware package tools - they need
 # the entries like this

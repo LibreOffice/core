@@ -79,20 +79,20 @@ void SAL_CALL KDEPathsLayer::readData( const uno::Reference<backend::XLayerHandl
     uno::Sequence<backend::PropertyInfo> aPropInfoList(1);
     sal_Int32 nProperties = 0;
 
-    QString aDocumentsDir( "file:" );
-    ::rtl::OUString sDocumentsDir;
-
-    aDocumentsDir += KGlobalSettings::documentPath();
+    QString aDocumentsDir( KGlobalSettings::documentPath() );
+    rtl::OUString sDocumentsDir;
+    rtl::OUString sDocumentsURL;
     if ( aDocumentsDir.endsWith(QChar('/')) )
         aDocumentsDir.truncate ( aDocumentsDir.length() - 1 );
     sDocumentsDir = (const sal_Unicode *) aDocumentsDir.ucs2();
+    osl_getFileURLFromSystemPath( sDocumentsDir.pData, &sDocumentsURL.pData );
 
     aPropInfoList[nProperties].Name = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Paths/Variables/Work") );
     aPropInfoList[nProperties].Type = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM( "string" ) );
     aPropInfoList[nProperties].Protected = sal_False;
-    aPropInfoList[nProperties++].Value = uno::makeAny( sDocumentsDir );
+    aPropInfoList[nProperties++].Value = uno::makeAny( sDocumentsURL );
 
     if( nProperties > 0 )
     {

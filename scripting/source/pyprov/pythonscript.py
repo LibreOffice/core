@@ -91,7 +91,8 @@ log.debug( "pythonscript loading" )
 from com.sun.star.uno import RuntimeException
 from com.sun.star.lang import XServiceInfo
 from com.sun.star.io import IOException
-from com.sun.star.ucb import CommandAbortedException
+from com.sun.star.ucb import CommandAbortedException, XCommandEnvironment, XProgressHandler
+from com.sun.star.task import XInteractionHandler
 from com.sun.star.beans import XPropertySet
 from com.sun.star.container import XNameContainer
 from com.sun.star.xml.sax import XDocumentHandler, InputSource
@@ -102,6 +103,7 @@ from com.sun.star.awt import XActionListener
 from com.sun.star.script.provider import XScriptProvider, XScript, XScriptContext, ScriptFrameworkErrorException
 from com.sun.star.script.browse import XBrowseNode
 from com.sun.star.script.browse.BrowseNodeTypes import SCRIPT, CONTAINER, ROOT
+from com.sun.star.util import XModifyListener
 
 LANGUAGENAME = "Python"
 GLOBAL_SCRIPTCONTEXT_NAME = "XSCRIPTCONTEXT"
@@ -238,7 +240,7 @@ class ProviderContext:
     def addPackageByUrl( self, url ):
         packageName = self.getPackageNameFromUrl( url )
         transientPart = self.getTransientPartFromUrl( url )
-        log.isDebugLevel() and log.debug( "addPackageByUrl : " + packageName + ", " + transientPart )
+        log.isDebugLevel() and log.debug( "addPackageByUrl : " + packageName + ", " + transientPart + "("+url+")" + ", rootUrl="+self.rootUrl )
         if self.mapPackageName2Path.has_key( packageName ):
             package = self.mapPackageName2Path[ packageName ]
             package.pathes = package.pathes + (url, )
@@ -249,8 +251,10 @@ class ProviderContext:
     def isUrlInPackage( self, url ):
         values = self.mapPackageName2Path.values()
         for i in values:
+#	    print "checking " + url + " in " + str(i.pathes)
             if url in i.pathes:
                return True
+#        print "false"
         return False
             
     def setPackageAttributes( self, mapPackageName2Path, rootUrl ):
@@ -545,6 +549,18 @@ class ManifestHandler( XDocumentHandler, unohelper.Base ):
     def setDocumentLocator( self, locator ):
         pass
 
+def isPyFileInPath( sfa, path ):
+    ret = False
+    contents = sfa.getFolderContents( path, True )
+    for i in contents:
+        if sfa.isFolder(i):
+            ret = isPyFileInPath(sfa,i)
+        else:
+            if i.endswith(".py"):
+                ret = True
+        if ret:
+            break
+    return ret
 
 # extracts META-INF directory from 
 def getPathesFromPackage( rootUrl, sfa ):
@@ -556,6 +572,9 @@ def getPathesFromPackage( rootUrl, sfa ):
         handler = ManifestHandler( rootUrl )
         parser.setDocumentHandler( handler )
         parser.parseStream( InputSource( inputStream , "", fileUrl, fileUrl ) )
+        for i in tuple(handler.urlList):
+            if not isPyFileInPath( sfa, i ):
+                handler.urlList.remove(i)
         ret = tuple( handler.urlList )
     except UnoException, e:
         text = lastException2String()
@@ -569,23 +588,76 @@ class Package:
         self.pathes = pathes
         self.transientPathElement = transientPathElement
 
-def getPackageName2PathMap( sfa, rootUrl ):
-    ret = {}
-    contents = sfa.getFolderContents( rootUrl, True )
-    for i in contents:
-        if sfa.isFolder( i ):
-            transientPathElement = lastElement( i )
-            subcontents = sfa.getFolderContents( i , True )
-            for j in subcontents:
-                if sfa.isFolder( j ):
-                    # ok, found a package. Now let's have a look, if
-                    # it contains scripts
-                    pathes = getPathesFromPackage( j, sfa )
-                    if len( pathes ) > 0:
-                        # map package name to url, we need this later
-                        log.isErrorLevel() and log.error( "adding Package " + transientPathElement + " " + str( pathes ) )
-                        ret[ lastElement( j ) ] = Package( pathes, transientPathElement )
+class DummyInteractionHandler( unohelper.Base, XInteractionHandler ):
+    def __init__( self ):
+        pass
+    def handle( self, event):
+        log.isDebugLevel() and log.debug( "pythonscript: DummyInteractionHandler.handle " + str( event ) )
+
+class DummyProgressHandler( unohelper.Base, XProgressHandler ):
+    def __init__( self ):
+        pass
+    
+    def push( self,status ): 
+        log.isDebugLevel() and log.debug( "pythonscript: DummyProgressHandler.push " + str( status ) )
+    def update( self,status ): 
+        log.isDebugLevel() and log.debug( "pythonscript: DummyProgressHandler.update " + str( status ) )
+    def pop( self ): 
+        log.isDebugLevel() and log.debug( "pythonscript: DummyProgressHandler.push " + str( event ) )
+
+class CommandEnvironment(unohelper.Base, XCommandEnvironment):
+    def __init__( self ):
+        self.progressHandler = DummyProgressHandler()
+        self.interactionHandler = DummyInteractionHandler()
+    def getInteractionHandler( self ):
+        return self.interactionHandler
+    def getProgressHandler( self ):
+        return self.progressHandler
+
+#maybe useful for debugging purposes
+#class ModifyListener( unohelper.Base, XModifyListener ):
+#    def __init__( self ):
+#        pass
+#    def modified( self, event ):
+#        log.isDebugLevel() and log.debug( "pythonscript: ModifyListener.modified " + str( event ) )
+#    def disposing( self, event ):
+#        log.isDebugLevel() and log.debug( "pythonscript: ModifyListener.disposing " + str( event ) )
+    
+def mapStorageType2PackageContext( storageType ):
+    ret = storageType
+    if( storageType == "share:uno_packages" ):
+        ret = "shared"
+    if( storageType == "user:uno_packages" ):
+        ret = "user"
     return ret
+
+def getPackageName2PathMap( sfa, storageType ):
+    ret = {}
+    packageManagerFactory = uno.getComponentContext().getValueByName(
+        "/singletons/com.sun.star.deployment.thePackageManagerFactory" )
+    packageManager = packageManagerFactory.getPackageManager(
+        mapStorageType2PackageContext(storageType))
+#    packageManager.addModifyListener( ModifyListener() )
+    log.isDebugLevel() and log.debug( "pythonscript: getPackageName2PathMap start getDeployedPackages" )
+    packages = packageManager.getDeployedPackages(
+        packageManager.createAbortChannel(), CommandEnvironment( ) )
+    log.isDebugLevel() and log.debug( "pythonscript: getPackageName2PathMap end getDeployedPackages (" + str(len(packages))+")" )
+
+    for i in packages:
+        log.isDebugLevel() and log.debug( "inspecting package " + i.Name + "("+i.Identifier.Value+")" )
+        transientPathElement = penultimateElement( i.URL )
+        j = expandUri( i.URL )
+        pathes = getPathesFromPackage( j, sfa )
+        if len( pathes ) > 0:
+            # map package name to url, we need this later
+            log.isErrorLevel() and log.error( "adding Package " + transientPathElement + " " + str( pathes ) )
+            ret[ lastElement( j ) ] = Package( pathes, transientPathElement )
+    return ret
+
+def penultimateElement( aStr ):
+    lastSlash = aStr.rindex("/")
+    penultimateSlash = aStr.rindex("/",0,lastSlash-1)
+    return  aStr[ penultimateSlash+1:lastSlash ]
 
 def lastElement( aStr):
     return aStr[ aStr.rfind( "/" )+1:len(aStr)]
@@ -690,7 +762,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             
             log.isDebugLevel() and log.debug( "got urlHelper " + str( urlHelper ) )
         
-            rootUrl = urlHelper.getRootStorageURI()
+            rootUrl = expandUri( urlHelper.getRootStorageURI() )
             log.isDebugLevel() and log.debug( storageType + " transformed to " + rootUrl )
 
             ucbService = "com.sun.star.ucb.SimpleFileAccess"
@@ -702,7 +774,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             self.provCtx = ProviderContext(
                 storageType, sfa, urlHelper, ScriptContext( uno.getComponentContext(), None ) )
             if isPackage:
-                mapPackageName2Path = getPackageName2PathMap( sfa, rootUrl )
+                mapPackageName2Path = getPackageName2PathMap( sfa, storageType )
                 self.provCtx.setPackageAttributes( mapPackageName2Path , rootUrl )
                 self.dirBrowseNode = PackageBrowseNode( self.provCtx, LANGUAGENAME, rootUrl )
             else:
@@ -787,14 +859,23 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
     def removeByName( self, name ):
         log.debug( "removeByName called" + str( name ))
         uri = expandUri( name )
-        self.provCtx.removePackageByUrl( uri )
+        if self.provCtx.isUrlInPackage( uri ):
+            self.provCtx.removePackageByUrl( uri )
+        else:
+            log.debug( "removeByName unknown uri " + str( name ) + ", ignoring" )
+            raise NoSuchElementException( uri + "is not in package" , self )
         log.debug( "removeByName called" + str( uri ) + " successful" )
         
     def insertByName( self, name, value ):
         log.debug( "insertByName called " + str( name ) + " " + str( value ))
         uri = expandUri( name )
-        self.provCtx.addPackageByUrl( uri )
-        log.debug( "insertByName called" + str( uri ) + " successful" )
+        if isPyFileInPath( self.provCtx.sfa, uri ):
+            self.provCtx.addPackageByUrl( uri )
+        else:
+            # package is no python package ...
+            log.debug( "insertByName: no python files in " + str( uri ) + ", ignoring" )
+            raise IllegalArgumentException( uri + " does not contain .py files", self, 1 )
+        log.debug( "insertByName called " + str( uri ) + " successful" )
 
     def replaceByName( self, name, value ):
         log.debug( "replaceByName called " + str( name ) + " " + str( value ))

@@ -361,7 +361,7 @@ int _tmain( int, _TCHAR ** )
 				hErrorThread
 			};
 
- #ifdef GUISTDIO_KEEPRUNNING       
+ #ifdef UNOPKG       
         dwWaitResult = WaitForMultipleObjects( elementsof(hObjects), hObjects, TRUE, INFINITE );
  #else        
 		bool	bDetach = false;

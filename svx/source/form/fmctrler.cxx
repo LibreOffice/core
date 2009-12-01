@@ -163,7 +163,7 @@ class ColumnInfoCache
 public:
     ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSupplier );
 
-    const size_t        getColumnCount() const { return m_aColumns.size(); }
+    size_t        getColumnCount() const { return m_aColumns.size(); }
     const ColumnInfo&   getColumnInfo( size_t _pos );
 
     bool    controlsInitialized() const { return m_bControlsInitialized; }
@@ -1912,7 +1912,7 @@ void FmXFormController::setControlLock(const Reference< XControl > & xControl)
     // a.) wenn der ganze Datensatz gesperrt ist
     // b.) wenn das zugehoerige Feld gespeert ist
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
-    if (xBound.is() && ((bLocked && bLocked != xBound->getLock() ||
+    if (xBound.is() && (( (bLocked && bLocked != xBound->getLock()) ||
                          !bLocked)))    // beim entlocken immer einzelne Felder ueberprüfen
     {
         // gibt es eine Datenquelle

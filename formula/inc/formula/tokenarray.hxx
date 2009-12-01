@@ -74,30 +74,30 @@ class FORMULA_DLLPUBLIC FormulaTokenArray
     friend class FormulaMissingContext;
 
 protected:
-    FormulaToken**       pCode;                  // Token code array
-    FormulaToken**       pRPN;                   // RPN array
+    FormulaToken**  pCode;                  // Token code array
+    FormulaToken**  pRPN;                   // RPN array
     USHORT          nLen;                   // Length of token array
     USHORT          nRPN;                   // Length of RPN array
     USHORT          nIndex;                 // Current step index
     USHORT          nError;                 // Error code
     short           nRefs;                  // Count of cell references
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
-    BOOL            bHyperLink; // If HYPERLINK() occurs in the formula.
+    BOOL            bHyperLink;             // If HYPERLINK() occurs in the formula.
 
 protected:
     void                    Assign( const FormulaTokenArray& );
 
     /// Also used by the compiler. The token MUST had been allocated with new!
-    FormulaToken*                Add( FormulaToken* );
+    FormulaToken*           Add( FormulaToken* );
     inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
-                            { nMode |= (nBits & ~RECALCMODE_EMASK); }
+                                { nMode |= (nBits & ~RECALCMODE_EMASK); }
     inline  ScRecalcMode    GetCombinedBitsRecalcMode() const
-                            { return nMode & ~RECALCMODE_EMASK; }
+                                { return nMode & ~RECALCMODE_EMASK; }
                             /** Exclusive bits already set in nMode are
                                 zero'ed, nVal may contain combined bits, but
                                 only one exclusive bit may be set! */
     inline  void            SetMaskedRecalcMode( ScRecalcMode nBits )
-                            { nMode = GetCombinedBitsRecalcMode() | nBits; }
+                                { nMode = GetCombinedBitsRecalcMode() | nBits; }
 
 public:
     FormulaTokenArray();
@@ -222,14 +222,14 @@ public:
 
     /** Determines if this formula needs any changes to convert it to something
         previous versions of OOo could consume (Plain Old Formula). */
-            bool            NeedsPofRewrite(const MissingConvention & rConv);
+            bool                NeedsPofRewrite(const MissingConvention & rConv);
 
     /** Rewrites to Plain Old Formula, substituting missing parameters. The
         FormulaTokenArray* returned is new'ed. */
-            FormulaTokenArray*   RewriteMissingToPof(const MissingConvention & rConv);
+            FormulaTokenArray*  RewriteMissingToPof(const MissingConvention & rConv);
 
     /** Determines if this formula may be followed by a reference. */
-    bool                    MayReferenceFollow();
+            bool                MayReferenceFollow();
 };
 
 inline OpCode FormulaTokenArray::GetOuterFuncOpCode()

@@ -170,8 +170,12 @@ void FuncPage::UpdateFunctionList()
 
         for ( ; aIter != aEnd; ++aIter )
         {
-            aLbFunction.SetEntryData(
-                aLbFunction.InsertEntry( (*aIter)->getFunctionName() ),(void*)*aIter );
+            const IFunctionDescription* pDesc = *aIter;
+            if (pDesc)  // may be null if a function is no longer available
+            {
+                aLbFunction.SetEntryData(
+                    aLbFunction.InsertEntry( pDesc->getFunctionName() ), (void*)pDesc );
+            }
         }
     }
 

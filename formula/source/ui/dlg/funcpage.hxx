@@ -80,7 +80,7 @@ private:
     FixedText       aFtCategory;
     ListBox         aLbCategory;
     FixedText       aFtFunction;
-    ListBox         aLbFunction;
+    FormulaListBox  aLbFunction;
     const IFunctionManager*
                     m_pFunctionManager;
 

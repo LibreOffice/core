@@ -93,6 +93,7 @@ class SetupAppX : public SetupApp
     boolean     m_bRegNoMsoTypes :1;
     boolean     m_bRegAllMsoTypes :1;
     boolean     m_bIsMinorUpgrade :1;
+    boolean     m_bSupportsPatch :1;
 
     FILE       *m_pLogFile;
 
@@ -125,7 +126,8 @@ private:
     boolean     InstallMsi( LPCTSTR pInstaller );
 
     boolean     IsTerminalServerInstalled() const;
-
+    void        AddFileToPatchList( TCHAR* pPath, TCHAR* pFile );
+    boolean     IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName );
 public:
                     SetupAppX();
                    ~SetupAppX();

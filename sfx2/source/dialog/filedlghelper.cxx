@@ -88,6 +88,7 @@
 #include <svtools/pickerhelper.hxx>
 #include <svtools/docpasswdrequest.hxx>
 #include <ucbhelper/content.hxx>
+#include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/app.hxx>
@@ -904,7 +905,15 @@ sal_Bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
-FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_Int16 nDialogType, sal_Int64 nFlags, sal_Int16 nDialog, Window* _pPreferredParentWindow, const String& sStandardDir )
+FileDialogHelper_Impl::FileDialogHelper_Impl(
+    FileDialogHelper* _pAntiImpl,
+    sal_Int16 nDialogType,
+    sal_Int64 nFlags,
+    sal_Int16 nDialog,
+    Window* _pPreferredParentWindow,
+    const String& sStandardDir,
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList
+    )
     :m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
 {
@@ -1065,7 +1074,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
 
 
         //Sequence < Any > aInitArguments( mbSystemPicker || !mpPreferredParentWindow ? 1 : 3 );
-        Sequence < Any > aInitArguments( !mpPreferredParentWindow ? 2 : 3 );
+        Sequence < Any > aInitArguments( !mpPreferredParentWindow ? 3 : 4 );
 
         // This is a hack. We currently know that the internal file picker implementation
         // supports the extended arguments as specified below.
@@ -1089,8 +1098,15 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StandardDir" ) ),
                                     makeAny( sStandardDirTemp )
                                 );
+
+            aInitArguments[2] <<= NamedValue(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BlackList" ) ),
+                                    makeAny( rBlackList )
+                                );
+
+
             if ( mpPreferredParentWindow )
-                aInitArguments[2] <<= NamedValue(
+                aInitArguments[3] <<= NamedValue(
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
                                         makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
                                     );
@@ -2298,9 +2314,10 @@ FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialog,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
-    const String& rStandardDir)
+    const String& rStandardDir,
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList)
 {
-    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags, nDialog, NULL , rStandardDir );
+    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags, nDialog, NULL , rStandardDir, rBlackList );
     mxImp = mpImp;
 
     // create the list of filters
@@ -2353,9 +2370,10 @@ FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialog,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
-    const String& rStandardDir )
+    const String& rStandardDir,
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList)
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, NULL, rStandardDir );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, NULL, rStandardDir, rBlackList );
     mxImp = mpImp;
 
     // create the list of filters
@@ -2379,9 +2397,10 @@ FileDialogHelper::FileDialogHelper(
     const ::rtl::OUString& aFilterUIName,
     const ::rtl::OUString& aExtName,
     const ::rtl::OUString& rStandardDir,
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList,
     Window* _pPreferredParent )
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent,rStandardDir );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent,rStandardDir, rBlackList );
     mxImp = mpImp;
 
     // the wildcard here is expected in form "*.extension"
@@ -2571,10 +2590,21 @@ ErrCode FileDialogHelper::GetGraphic( Graphic& rGraphic ) const
 // ------------------------------------------------------------------------
 static int impl_isFolder( const OUString& rPath )
 {
+    uno::Reference< task::XInteractionHandler > xHandler;
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        xHandler.set( xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.task.InteractionHandler" ) ),
+                      uno::UNO_QUERY_THROW );
+    }
+    catch ( Exception const & )
+    {
+    }
+
     try
     {
         ::ucbhelper::Content aContent(
-            rPath, uno::Reference< ucb::XCommandEnvironment >() );
+            rPath, new ::ucbhelper::CommandEnvironment( xHandler, uno::Reference< ucb::XProgressHandler >() ) );
         if ( aContent.isFolder() )
             return 1;
 
@@ -2733,10 +2763,11 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              SfxItemSet *& rpSet,
                              const String* pPath,
                              sal_Int16 nDialog,
-                             const String& rStandardDir )
+                             const String& rStandardDir,
+                             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
 {
     ErrCode nRet;
-    FileDialogHelper aDialog( nFlags, rFact, nDialog, 0, 0, rStandardDir );
+    FileDialogHelper aDialog( nFlags, rFact, nDialog, 0, 0, rStandardDir, rBlackList );
 
     String aPath;
     if ( pPath )

@@ -63,33 +63,30 @@ namespace drawinglayer
             return xRetval;
         }
 
-        SdrTextPrimitive2D::SdrTextPrimitive2D(const SdrText& rSdrText)
+        SdrTextPrimitive2D::SdrTextPrimitive2D(
+            const SdrText& rSdrText,
+            const OutlinerParaObject& rOutlinerParaObject)
         :   BasePrimitive2D(),
             mrSdrText(rSdrText),
+            maOutlinerParaObject(rOutlinerParaObject),
             mxLastVisualizingPage(),
             mbLastSpellCheck(false),
             mbContainsPageField(false)
         {
-            if(mrSdrText.GetOutlinerParaObject())
-            {
-                const EditTextObject& rETO = mrSdrText.GetOutlinerParaObject()->GetTextObject();
-                mbContainsPageField = rETO.HasField(SvxPageField::StaticType())
-                    || rETO.HasField(SvxHeaderField::StaticType())
-                    || rETO.HasField(SvxFooterField::StaticType())
-                    || rETO.HasField(SvxDateTimeField::StaticType());
-            }
+            const EditTextObject& rETO = maOutlinerParaObject.GetTextObject();
+            mbContainsPageField = rETO.HasField(SvxPageField::StaticType())
+                || rETO.HasField(SvxHeaderField::StaticType())
+                || rETO.HasField(SvxFooterField::StaticType())
+                || rETO.HasField(SvxDateTimeField::StaticType());
         }
 
         bool SdrTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
-                // since OutlinerParaObject has no compare operator, i do not clone it for this class and
-                // use the address in the SdrText for comparison if it did change
                 const SdrTextPrimitive2D& rCompare = (SdrTextPrimitive2D&)rPrimitive;
-                const bool bOutlinerParaSameAddress(getSdrText().GetOutlinerParaObject() == rCompare.getSdrText().GetOutlinerParaObject());
 
-                return bOutlinerParaSameAddress;
+                return (getOutlinerParaObject() == rCompare.getOutlinerParaObject());
             }
 
             return false;
@@ -154,9 +151,10 @@ namespace drawinglayer
 
         SdrContourTextPrimitive2D::SdrContourTextPrimitive2D(
             const SdrText& rSdrText,
+            const OutlinerParaObject& rOutlinerParaObject,
             const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon,
             const ::basegfx::B2DHomMatrix& rObjectTransform)
-        :   SdrTextPrimitive2D(rSdrText),
+        :   SdrTextPrimitive2D(rSdrText, rOutlinerParaObject),
             maUnitPolyPolygon(rUnitPolyPolygon),
             maObjectTransform(rObjectTransform)
         {
@@ -177,7 +175,7 @@ namespace drawinglayer
 
         SdrTextPrimitive2D* SdrContourTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
         {
-            return new SdrContourTextPrimitive2D(getSdrText(), maUnitPolyPolygon, rTransform * maObjectTransform);
+            return new SdrContourTextPrimitive2D(getSdrText(), getOutlinerParaObject(), maUnitPolyPolygon, rTransform * maObjectTransform);
         }
 
         // provide unique ID
@@ -208,8 +206,9 @@ namespace drawinglayer
 
         SdrPathTextPrimitive2D::SdrPathTextPrimitive2D(
             const SdrText& rSdrText,
+            const OutlinerParaObject& rOutlinerParaObject,
             const ::basegfx::B2DPolyPolygon& rPathPolyPolygon)
-        :   SdrTextPrimitive2D(rSdrText),
+        :   SdrTextPrimitive2D(rSdrText, rOutlinerParaObject),
             maPathPolyPolygon(rPathPolyPolygon)
         {
         }
@@ -230,7 +229,7 @@ namespace drawinglayer
         {
             ::basegfx::B2DPolyPolygon aNewPolyPolygon(maPathPolyPolygon);
             aNewPolyPolygon.transform(rTransform);
-            return new SdrPathTextPrimitive2D(getSdrText(), aNewPolyPolygon);
+            return new SdrPathTextPrimitive2D(getSdrText(), getOutlinerParaObject(), aNewPolyPolygon);
         }
 
         // provide unique ID
@@ -261,11 +260,12 @@ namespace drawinglayer
 
         SdrBlockTextPrimitive2D::SdrBlockTextPrimitive2D(
             const SdrText& rSdrText,
+            const OutlinerParaObject& rOutlinerParaObject,
             const ::basegfx::B2DHomMatrix& rTextRangeTransform,
             bool bUnlimitedPage,
             bool bCellText,
             bool bWordWrap)
-        :   SdrTextPrimitive2D(rSdrText),
+        :   SdrTextPrimitive2D(rSdrText, rOutlinerParaObject),
             maTextRangeTransform(rTextRangeTransform),
             mbUnlimitedPage(bUnlimitedPage),
             mbCellText(bCellText),
@@ -290,7 +290,7 @@ namespace drawinglayer
 
         SdrTextPrimitive2D* SdrBlockTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
         {
-            return new SdrBlockTextPrimitive2D(getSdrText(), rTransform * getTextRangeTransform(), getUnlimitedPage(), getCellText(), getWordWrap());
+            return new SdrBlockTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform(), getUnlimitedPage(), getCellText(), getWordWrap());
         }
 
         // provide unique ID
@@ -321,8 +321,9 @@ namespace drawinglayer
 
         SdrStretchTextPrimitive2D::SdrStretchTextPrimitive2D(
             const SdrText& rSdrText,
+            const OutlinerParaObject& rOutlinerParaObject,
             const ::basegfx::B2DHomMatrix& rTextRangeTransform)
-        :   SdrTextPrimitive2D(rSdrText),
+        :   SdrTextPrimitive2D(rSdrText, rOutlinerParaObject),
             maTextRangeTransform(rTextRangeTransform)
         {
         }
@@ -341,7 +342,7 @@ namespace drawinglayer
 
         SdrTextPrimitive2D* SdrStretchTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
         {
-            return new SdrStretchTextPrimitive2D(getSdrText(), rTransform * maTextRangeTransform);
+            return new SdrStretchTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * maTextRangeTransform);
         }
 
         // provide unique ID

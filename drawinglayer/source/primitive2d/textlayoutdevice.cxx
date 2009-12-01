@@ -325,7 +325,8 @@ namespace drawinglayer
             aRetval.SetOutline(rFontAttributes.getOutline());
 
 #ifdef WIN32
-            if(nWidth != nHeight)
+            // #100424# use higher precision
+            if(!basegfx::fTools::equal(fFontScaleX, fFontScaleY))
             {
                 // #i92757#
                 // Removed the relative calculation with GetFontMetric() usage again. On

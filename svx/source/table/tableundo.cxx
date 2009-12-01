@@ -132,7 +132,7 @@ void CellUndo::setDataToCell( const Data& rData )
         mxCell->mpProperties = 0;
 
     if( rData.mpOutlinerParaObject )
-        mxCell->SetOutlinerParaObject( rData.mpOutlinerParaObject->Clone() );
+        mxCell->SetOutlinerParaObject( new OutlinerParaObject(*rData.mpOutlinerParaObject) );
     else
         mxCell->RemoveOutlinerParaObject();
 
@@ -155,7 +155,7 @@ void CellUndo::getDataFromCell( Data& rData )
             rData.mpProperties = mxCell->CloneProperties( *mxObjRef.get(), *mxCell.get());
 
         if( mxCell->GetOutlinerParaObject() )
-            rData.mpOutlinerParaObject = mxCell->GetOutlinerParaObject()->Clone();
+            rData.mpOutlinerParaObject = new OutlinerParaObject(*mxCell->GetOutlinerParaObject());
         else
             rData.mpOutlinerParaObject =  0;
 

@@ -93,6 +93,8 @@
 // #95114#
 #include <vcl/svapp.hxx>
 #include <svx/sdr/properties/properties.hxx>
+#include <svx/eeitem.hxx>
+#include <svtools/itemset.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -346,11 +348,11 @@ SdrModel::~SdrModel()
     {
         // Pools loeschen, falls es meine sind
         SfxItemPool* pOutlPool=pItemPool->GetSecondaryPool();
-        delete pItemPool;
+        SfxItemPool::Free(pItemPool);
         // Der OutlinerPool muss nach dem ItemPool plattgemacht werden, da der
         // ItemPool SetItems enthaelt die ihrerseits Items des OutlinerPools
         // referenzieren (Joe)
-        delete pOutlPool;
+        SfxItemPool::Free(pOutlPool);
     }
 
     if( mpForbiddenCharactersTable )

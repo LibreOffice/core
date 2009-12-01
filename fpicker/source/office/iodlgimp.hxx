@@ -57,10 +57,6 @@ class SvUShorts;
 #define FILEDIALOG_DEF_TIMEOUT      250
 
 //*****************************************************************************
-
-String GetRegularExpression_Impl( const String& rFilter );
-
-//*****************************************************************************
 // SvtFileDialogFilter_Impl
 //*****************************************************************************
 
@@ -200,6 +196,8 @@ private:
     const SvtFileDialogFilter_Impl* _pCurFilter;
     String                          m_sCurrentFilterDisplayName;    // may differ from _pCurFilter->GetName in case it is a cached entry
 
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > _aBlackList;
+
 public:
     SvtFileDialogFilterList_Impl*   _pFilter;
     SvtFileDialogFilter_Impl*       _pUserFilter;
@@ -260,6 +258,9 @@ public:
                             SvtExpFileDlg_Impl( WinBits nBits );
                             ~SvtExpFileDlg_Impl();
 
+
+    inline void             SetBlackList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList ) { _aBlackList = rBlackList; }
+    inline const ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetBlackList() const { return _aBlackList; }
     void                    SetStandardDir( const String& _rDir );
     inline const String&    GetStandardDir() const          { return _aStdDir; }
     inline void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( FALSE ); }

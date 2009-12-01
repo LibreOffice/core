@@ -97,7 +97,11 @@ void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL)
     {
         // escape every non alpha numeric characters (excluding a few "known good") by prepending a '\'
         sal_Char c = rURL[n];
-        if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )  && c != '/' && c != '.' )
+        if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )
+#ifdef OS2 // YD we don't need to escape ':', '-', '\\', '_'
+        && c != ':' && c != '-' && c != '\\' && c != '_'
+#endif
+        && c != '/' && c != '.' )
             rBuffer.append( '\\' );
 
         rBuffer.append( c );

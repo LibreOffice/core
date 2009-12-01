@@ -55,6 +55,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/oooimprovement/XCoreController.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <com/sun/star/awt/XDialogProvider.hpp>
 #include <com/sun/star/awt/XDialogProvider2.hpp>
@@ -1892,18 +1893,15 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
         for ( i = 1; i < nEnd; ++i )
         {
-            bool bImprovePage = false;
+            String sNewTitle = rGeneralArray.GetString(i);
             nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 
             // Disable Online Update page if service not installed
-            if( RID_SVXPAGE_ONLINEUPDATE == nPageId || RID_SVXPAGE_IMPROVEMENT == nPageId )
+            if( RID_SVXPAGE_ONLINEUPDATE == nPageId )
             {
-                bImprovePage = ( RID_SVXPAGE_IMPROVEMENT == nPageId );
-                ::rtl::OUString sService = bImprovePage ?
-                    C2U("com.sun.star.oooimprovement.CoreController") :
-                    C2U("com.sun.star.setup.UpdateCheck");
+                const ::rtl::OUString sService = C2U("com.sun.star.setup.UpdateCheck");
 
                 try
                 {
@@ -1917,33 +1915,50 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 {
                     continue;
                 }
-
-                if ( bImprovePage )
-                {
-                    SvxEmptyPage* pTempPage = new SvxEmptyPage( this );
-                    sPageTitle = pTempPage->GetText();
-                    delete pTempPage;
-                    xub_StrLen nPos = sPageTitle.Search( rGeneralArray.GetString(0) );
-                    if ( nPos != STRING_NOTFOUND )
-                    {
-                        xub_StrLen nLen = rGeneralArray.GetString(0).Len();
-                        if ( sPageTitle.GetChar( nPos + nLen ) == ' ' )
-                            nLen++;
-                        else if ( nPos + nLen == sPageTitle.Len() &&
-                                    sPageTitle.GetChar( nPos + nLen ) == ' ' )
-                        {
-                            nPos++;
-                            nLen++;
-                        }
-                        sPageTitle.Erase( nPos, nLen );
-                    }
-                }
             }
-
+            // Disable OOoImprovement page if not enabled
+            if( RID_SVXPAGE_IMPROVEMENT == nPageId )
+            {
+                continue;
+            }
             if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
             {
-                String sNewTitle =
-                    ( bImprovePage && sPageTitle.Len() > 0 ) ? sPageTitle : rGeneralArray.GetString(i);
+                AddTabPage( nPageId, sNewTitle, nGroup );
+            }
+        }
+        // private iteration hack for Improvement Program
+        // hack for OOo 3.1
+        // should not be in found in any later release
+        for(bool bOnce = false; bOnce==false; bOnce=true)
+        {
+            String sNewTitle = C2U("Improvement Program");
+            {
+                SvxImprovementPage aTempTabPage(this);
+                sNewTitle = aTempTabPage.GetTitleText();
+            }
+            nPageId = RID_SVXPAGE_IMPROVEMENT;
+            if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                continue;
+            // Disable OOoImprovement page if not enabled
+            {
+                const ::rtl::OUString sService = C2U("com.sun.star.oooimprovement.CoreController");
+                try
+                {
+                    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+                    Reference < ::com::sun::star::oooimprovement::XCoreController > xService( xFactory->createInstance( sService ), UNO_QUERY );
+
+                    if( ! xService.is() )
+                        continue;
+                    if( ! xService->showBuiltinOptionsPage(1))
+                        continue;
+                }
+                catch ( ::com::sun::star::loader::CannotActivateFactoryException& )
+                {
+                    continue;
+                }
+            }
+            if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
+            {
                 AddTabPage( nPageId, sNewTitle, nGroup );
             }
         }

@@ -909,7 +909,7 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
     }
     if (sDescription.getLength())
         return sDescription;
-    else if(m_oldDescription.getLength() == 0)
+    else if(m_oldDescription.getLength())
         return m_oldDescription;
     else
         return OUString();

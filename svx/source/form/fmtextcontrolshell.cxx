@@ -670,28 +670,28 @@ namespace svx
     //------------------------------------------------------------------------
     void FmTextControlShell::executeAttributeDialog( AttributeSet _eSet, SfxRequest& _rReq )
     {
-        ::std::auto_ptr< SfxItemPool > pPool( EditEngine::CreatePool() );
-        pPool->FreezeIdRanges();
-        SfxItemSet aPureItems( *pPool );
-
         const SvxFontListItem* pFontList = PTR_CAST( SvxFontListItem, m_pViewFrame->GetObjectShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
         DBG_ASSERT( pFontList, "FmTextControlShell::executeAttributeDialog: no font list item!" );
         if ( !pFontList )
             return;
 
+        SfxItemPool* pPool = EditEngine::CreatePool();
+        pPool->FreezeIdRanges();
+        ::std::auto_ptr< SfxItemSet > pPureItems( new SfxItemSet( *pPool ) );
+
         // put the current states of the items into the set
-        SfxAllItemSet aCurrentItems( aPureItems );
-        transferFeatureStatesToItemSet( m_aControlFeatures, aCurrentItems );
+        ::std::auto_ptr< SfxAllItemSet > pCurrentItems( new SfxAllItemSet( *pPureItems ) );
+        transferFeatureStatesToItemSet( m_aControlFeatures, *pCurrentItems );
 
         // additional items, which we are not responsible for at the SfxShell level,
         // but which need to be forwarded to the dialog, anyway
         ControlFeatures aAdditionalFestures;
         fillFeatureDispatchers( m_xActiveControl, pDialogSlots, aAdditionalFestures );
-        transferFeatureStatesToItemSet( aAdditionalFestures, aCurrentItems, true );
+        transferFeatureStatesToItemSet( aAdditionalFestures, *pCurrentItems, true );
 
         ::std::auto_ptr< SfxTabDialog > pDialog ( _eSet == eCharAttribs
-                                                ? static_cast< SfxTabDialog* >( new TextControlCharAttribDialog( NULL, aCurrentItems, *pFontList ) )
-                                                : static_cast< SfxTabDialog* >( new TextControlParaAttribDialog( NULL, aCurrentItems ) ) );
+                                                ? static_cast< SfxTabDialog* >( new TextControlCharAttribDialog( NULL, *pCurrentItems, *pFontList ) )
+                                                : static_cast< SfxTabDialog* >( new TextControlParaAttribDialog( NULL, *pCurrentItems ) ) );
         if ( RET_OK == pDialog->Execute() )
         {
             const SfxItemSet& rModifiedItems = *pDialog->GetOutputItemSet();
@@ -728,9 +728,9 @@ namespace svx
                         Sequence< PropertyValue > aArgs;
                         // temporarily put the modified item into a "clean" set,
                         // and let TransformItems calc the respective UNO parameters
-                        aPureItems.Put( *pModifiedItem );
-                        TransformItems( nSlotForItemSet, aPureItems, aArgs );
-                        aPureItems.ClearItem( nWhich );
+                        pPureItems->Put( *pModifiedItem );
+                        TransformItems( nSlotForItemSet, *pPureItems, aArgs );
+                        pPureItems->ClearItem( nWhich );
 
                         if  (   ( nSlotForItemSet == SID_ATTR_PARA_HANGPUNCTUATION )
                             ||  ( nSlotForItemSet == SID_ATTR_PARA_FORBIDDEN_RULES )
@@ -774,6 +774,11 @@ namespace svx
             }
             _rReq.Done( rModifiedItems );
         }
+
+        pDialog.reset();
+        pCurrentItems.reset();
+        pPureItems.reset();
+        SfxItemPool::Free(pPool);
     }
 
     //------------------------------------------------------------------------

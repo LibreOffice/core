@@ -186,7 +186,7 @@ namespace drawinglayer
             if(bWaveLine)
             {
                 eLineJoin = basegfx::B2DLINEJOIN_ROUND;
-                fLineHeight *= 0.5;
+                fLineHeight *= 0.25;
             }
 
             // prepare Line and Stroke Attributes
@@ -215,7 +215,7 @@ namespace drawinglayer
 
             if(bWaveLine)
             {
-                double fWaveWidth(4.0 * fLineHeight);
+                double fWaveWidth(10.6 * fLineHeight);
 
                 if(FONT_UNDERLINE_SMALLWAVE == eLineStyle)
                 {
@@ -227,7 +227,7 @@ namespace drawinglayer
                     fWaveWidth *= 2.0;
                 }
 
-                aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aLine, aLineAttribute, aStrokeAttribute, fWaveWidth, 0.5 * fWaveWidth));
+                aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aLine, aLineAttribute, aStrokeAttribute, fWaveWidth, fWaveWidth * 0.5));
             }
             else
             {
@@ -241,7 +241,13 @@ namespace drawinglayer
             {
                 // double line, create 2nd primitive with offset using TransformPrimitive based on
                 // already created NewPrimitive
-                const double fLineDist((bWaveLine ? 3.0 : 2.0) * fLineHeight);
+                double fLineDist(2.3 * fLineHeight);
+
+                if(bWaveLine)
+                {
+                    fLineDist = 6.3 * fLineHeight;
+                }
+
                 basegfx::B2DHomMatrix aTransform;
 
                 // move base point of text to 0.0 and de-rotate
@@ -482,6 +488,16 @@ namespace drawinglayer
                 // init word iterator, get first word and truncate to possibilities
                 ::com::sun::star::i18n::Boundary aNextWordBoundary(xLocalBreakIterator->getWordBoundary(
                     getText(), getTextPosition(), getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True));
+
+                if(aNextWordBoundary.endPos == getTextPosition() && getTextLength() > 0)
+                {
+                    // #i96474#
+                    // a word before was found (this can happen when search starts on a whitespace and a word
+                    // in front of it exists), force to look one position further
+                    aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
+                        getText(), getTextPosition() + 1, getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
+                }
+
                 impCorrectTextBoundary(aNextWordBoundary);
 
                 // prepare new font attributes WITHOUT outline
@@ -789,6 +805,33 @@ namespace drawinglayer
             }
 
             return false;
+        }
+
+        // #i96475#
+        // Added missing implementation. Decorations may (will) stick out of the text's
+        // inking area, so add them if needed
+        basegfx::B2DRange TextDecoratedPortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            const bool bDecoratedIsNeeded(
+                FONT_UNDERLINE_NONE != getFontOverline()
+             || FONT_UNDERLINE_NONE != getFontUnderline()
+             || FONT_STRIKEOUT_NONE != getFontStrikeout()
+             || FONT_EMPHASISMARK_NONE != getFontEmphasisMark()
+             || FONT_RELIEF_NONE != getFontRelief()
+             || getShadow());
+
+            if(bDecoratedIsNeeded)
+            {
+                // decoration is used, fallback to BasePrimitive2D::getB2DRange which uses
+                // the own local decomposition for computation and thus creates all necessary
+                // geometric objects
+                return BasePrimitive2D::getB2DRange(rViewInformation);
+            }
+            else
+            {
+                // no relevant decoration used, fallback to TextSimplePortionPrimitive2D::getB2DRange
+                return TextSimplePortionPrimitive2D::getB2DRange(rViewInformation);
+            }
         }
 
         // provide unique ID

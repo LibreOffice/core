@@ -66,6 +66,7 @@
 #include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/metric.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -158,9 +159,60 @@ namespace drawinglayer
 
                 if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
                 {
-                    // prepare everything that is not sheared and mirrored
+                    // #i96581# Get the font forced without FontStretching (use FontHeight as FontWidth)
                     Font aFont(primitive2d::getVclFontFromFontAttributes(
-                        rTextCandidate.getFontAttributes(), aScale.getX(), aScale.getY(), fRotate, *mpOutputDevice));
+                        rTextCandidate.getFontAttributes(),
+
+                        // #i100373# FontScaling
+                        //
+                        // There are two different definitions for unscaled fonts, (1) 0==width and
+                        // (2) height==width where (2) is the more modern one supported on all non-WIN32
+                        // systems and (1) is the old one coming from WIN16-VCL definitions where
+                        // that ominous FontWidth (available over FontMetric) is involved. While
+                        // WIN32 only supports (1), all other systems support (2). When on WIN32, the
+                        // support for (1) is ensured inside getVclFontFromFontAttributes.
+                        //
+                        // The former usage of (2) leads to problems when it is used on non-WIN32 systems
+                        // and exported to MetaFile FontActions where the scale is taken over unseen. When
+                        // such a MetaFile is imported on a WIN32-System supporting (1), all fonts are
+                        // seen as scaled an look wrong.
+                        //
+                        // The simplest and fastest solution is to fallback to (1) independent from the
+                        // system we are running on.
+                        //
+                        // The best solution would be a system-independent Y-value just expressing the
+                        // font scaling, e.g. when (2) is used and width == height, use 1.0 as Y-Value,
+                        // which would also solve the involved ominous FontWidth value for WIN32-systems.
+                        // This is a region which needs redesign urgently.
+                        //
+                        0, // aScale.getY(),
+
+                        aScale.getY(),
+                        fRotate,
+                        *mpOutputDevice));
+
+                    if(!basegfx::fTools::equal(aScale.getX(), aScale.getY()))
+                    {
+                        // #100424# We have a hint on FontScaling here. To decide a look
+                        // at the pure font's scale is needed, since e.g. SC uses unequally scaled
+                        // MapModes (was: #i96581#, but use available full precision from primitive
+                        // now). aTranslate and fShearX can be reused since no longer needed.
+                        basegfx::B2DVector aFontScale;
+                        double fFontRotate;
+                        rTextCandidate.getTextTransform().decompose(aFontScale, aTranslate, fFontRotate, fShearX);
+
+                        if(!basegfx::fTools::equal(aFontScale.getX(), aFontScale.getY()))
+                        {
+                            // indeed a FontScaling. Set at Font. Use the combined scale
+                            // and rotate here
+                            aFont = primitive2d::getVclFontFromFontAttributes(
+                                rTextCandidate.getFontAttributes(),
+                                aScale.getX(),
+                                aScale.getY(),
+                                fRotate,
+                                *mpOutputDevice);
+                        }
+                    }
 
                     // handle additional font attributes
                     const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
@@ -317,7 +369,7 @@ namespace drawinglayer
         }
 
         // direct draw of hairline
-        void VclProcessor2D::RenderPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate)
+        void VclProcessor2D::RenderPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate, bool bPixelBased)
         {
             const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
             mpOutputDevice->SetLineColor(Color(aHairlineColor));
@@ -325,6 +377,17 @@ namespace drawinglayer
 
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
+
+            if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
+            {
+                // #i98289#
+                // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
+                // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
+                // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
+                // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
+                aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
+            }
+
             mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
         }
 
@@ -623,18 +686,10 @@ namespace drawinglayer
             // units e.g. when creating a new MetaFile, but since much huger value ranges are used
             // there typically will be okay for this compromize.
             Rectangle aDestRectView(
+                // !!CAUTION!! Here, ceil and floor are exchanged BY PURPOSE, do NOT copy when
+                // looking for a standard conversion to rectangle (!)
                 (sal_Int32)ceil(aOutlineRange.getMinX()), (sal_Int32)ceil(aOutlineRange.getMinY()),
                 (sal_Int32)floor(aOutlineRange.getMaxX()), (sal_Int32)floor(aOutlineRange.getMaxY()));
-
-            if(aDestRectView.Right() > aDestRectView.Left())
-            {
-                aDestRectView.Right()--;
-            }
-
-            if(aDestRectView.Bottom() > aDestRectView.Top())
-            {
-                aDestRectView.Bottom()--;
-            }
 
             // get metafile (copy it)
             GDIMetaFile aMetaFile;
@@ -657,9 +712,30 @@ namespace drawinglayer
                 aMetaFile.Rotate((sal_uInt16)(fRotation));
             }
 
-            // paint it
-            aMetaFile.WindStart();
-            aMetaFile.Play(mpOutputDevice, aDestRectView.TopLeft(), aDestRectView.GetSize());
+            // Prepare target output size
+            Size aDestSize(aDestRectView.GetSize());
+
+            if(aDestSize.getWidth() && aDestSize.getHeight())
+            {
+                // Get preferred Metafile output size. When it's very equal to the output size, it's probably
+                // a rounding error somewhere, so correct it to get a 1:1 output without single pixel scalings
+                // of the Metafile (esp. for contaned Bitmaps, e.g 3D charts)
+                const Size aPrefSize(mpOutputDevice->LogicToPixel(aMetaFile.GetPrefSize(), aMetaFile.GetPrefMapMode()));
+
+                if(aPrefSize.getWidth() && (aPrefSize.getWidth() - 1 == aDestSize.getWidth() || aPrefSize.getWidth() + 1 == aDestSize.getWidth()))
+                {
+                    aDestSize.setWidth(aPrefSize.getWidth());
+                }
+
+                if(aPrefSize.getHeight() && (aPrefSize.getHeight() - 1 == aDestSize.getHeight() || aPrefSize.getHeight() + 1 == aDestSize.getHeight()))
+                {
+                    aDestSize.setHeight(aPrefSize.getHeight());
+                }
+
+                // paint it
+                aMetaFile.WindStart();
+                aMetaFile.Play(mpOutputDevice, aDestRectView.TopLeft(), aDestSize);
+            }
         }
 
         // mask group. Force output to VDev and create mask from given mask
