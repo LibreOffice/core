@@ -1,6 +1,8 @@
 #ifndef _SD_ANIMATIONS_HXX_
 #define _SD_ANIMATIONS_HXX_
 
+#include <sddllapi.h>
+
 namespace sd
 {
 
@@ -21,7 +23,7 @@ typedef std::list< AfterEffectNode > AfterEffectNodeList;
 
 /** inserts the animation node in the given AfterEffectNode at the correct position
     in the timing hierarchie of its master */
-void stl_process_after_effect_node_func(AfterEffectNode& rNode);
+SD_DLLPUBLIC void stl_process_after_effect_node_func(AfterEffectNode& rNode);
 
 } // namespace sd;
 

@@ -63,6 +63,7 @@
 #include <vcl/image.hxx>
 #include <svtools/languageoptions.hxx>
 #include <sfx2/app.hxx>
+#include "taskpane/TitledControl.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <comphelper/processfactory.hxx>
@@ -259,7 +260,9 @@ LayoutMenu::LayoutMenu (
         | ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
         | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
         | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | ::sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+        | ::sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED
+        | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
+        | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
 
     SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
@@ -413,6 +416,74 @@ sal_Int32 LayoutMenu::GetMinimumWidth (void)
 bool LayoutMenu::IsResizable (void)
 {
     return true;
+}
+
+
+
+
+void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
+{
+    bool bIsEnabled (false);
+
+    ::boost::shared_ptr<ViewShell> pMainViewShell (mrBase.GetMainViewShell());
+    if (pMainViewShell)
+    {
+        switch (pMainViewShell->GetShellType())
+        {
+            case ViewShell::ST_NONE:
+            case ViewShell::ST_OUTLINE:
+            case ViewShell::ST_PRESENTATION:
+            case ViewShell::ST_TASK_PANE:
+                // The complete task pane is disabled for these values or
+                // not even visible.  Disabling the LayoutMenu would be
+                // logical but unnecessary.  The main disadvantage is that
+                // after re-enabling it (typically) another panel is
+                // expanded.
+                bIsEnabled = true;
+                break;
+
+            case ViewShell::ST_DRAW:
+            case ViewShell::ST_IMPRESS:
+            {
+                switch (eMode)
+                {
+                    case MM_UNKNOWN:
+                    {
+                        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                            ::boost::dynamic_pointer_cast<DrawViewShell>(pMainViewShell));
+                        if (pDrawViewShell)
+                            bIsEnabled = pDrawViewShell->GetEditMode() != EM_MASTERPAGE;
+                        break;
+                    }
+                    case MM_NORMAL:
+                        bIsEnabled = true;
+                        break;
+
+                    case MM_MASTER:
+                        bIsEnabled = false;
+                        break;
+                }
+                break;
+            }
+
+            case ViewShell::ST_HANDOUT:
+            case ViewShell::ST_NOTES:
+            case ViewShell::ST_SLIDE_SORTER:
+            default:
+                bIsEnabled = true;
+                break;
+        }
+
+        TreeNode* pParentNode = GetParentNode();
+        if (pParentNode != NULL)
+        {
+            TitledControl* pGrandParentNode
+                = dynamic_cast<TitledControl*>(pParentNode->GetParentNode());
+            if (pGrandParentNode != NULL)
+                pGrandParentNode->SetEnabledState(bIsEnabled);
+        }
+
+    }
 }
 
 
@@ -907,12 +978,14 @@ void LayoutMenu::UpdateSelection (void)
         // Find the entry of the menu for to the layout.
         USHORT nItemCount (GetItemCount());
         for (USHORT nId=1; nId<=nItemCount; nId++)
+        {
             if (*static_cast<AutoLayout*>(GetItemData(nId)) == aLayout)
             {
                 SelectItem(nId);
                 bItemSelected = true;
                 break;
             }
+        }
     }
     while (false);
 
@@ -935,6 +1008,7 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
 
         case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
             mbIsMainViewChangePending = true;
+            UpdateEnabledState(MM_UNKNOWN);
             break;
 
         case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
@@ -947,6 +1021,14 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
                 mbIsMainViewChangePending = false;
                 InvalidateContent();
             }
+            break;
+
+        case ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
+            UpdateEnabledState(MM_NORMAL);
+            break;
+
+        case ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
+            UpdateEnabledState(MM_MASTER);
             break;
 
         default:

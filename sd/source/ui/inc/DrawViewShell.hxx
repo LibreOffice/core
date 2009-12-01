@@ -59,6 +59,7 @@ class DrawView;
 class LayerTabBar;
 class Ruler;
 class SdUnoDrawView;
+class AnnotationManager;
 
 #define CHECK_RANGE(nMin, nValue, nMax) ((nValue >= nMin) && (nValue <= nMax))
 
@@ -231,6 +232,9 @@ public:
     void            AttrExec (SfxRequest& rReq);
     void            AttrState (SfxItemSet& rSet);
 
+    void            ExecuteAnnotation (SfxRequest& rRequest);
+    void            GetAnnotationState (SfxItemSet& rItemSet);
+
     void StartRulerDrag (
         const Ruler& rRuler,
         const MouseEvent& rMEvt);
@@ -391,7 +395,6 @@ protected:
 
     static BOOL     mbPipette;
 
-
                     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
                     DECL_LINK( CloseHdl, Timer* pTimer );
                     DECL_LINK( TabSplitHdl, TabBar * );
@@ -494,6 +497,8 @@ private:
         const Point& rMouseLocation);
 
     using ViewShell::Notify;
+
+    ::std::auto_ptr< AnnotationManager > mpAnnotationManager;
 };
 
 

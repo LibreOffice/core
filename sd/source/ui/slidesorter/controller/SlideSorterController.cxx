@@ -603,11 +603,8 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
 
             case VCLEVENT_WINDOW_GETFOCUS:
-                // Show focus but only when the focus was not set to the
-                // window as a result of a mouse click.
                 if (pActiveWindow != NULL && pWindow == pActiveWindow)
-                    if (pWindow->GetPointerState().mnState==0)
-                        GetFocusManager().ShowFocus();
+                    GetFocusManager().ShowFocus();
                 break;
 
             case VCLEVENT_WINDOW_LOSEFOCUS:

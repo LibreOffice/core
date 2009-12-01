@@ -502,6 +502,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
     if ( !IsInputLocked() )
     {
+        if( GetView() &&GetView()->getSmartTags().Command(rCEvt) )
+            return;
+
         const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase()));
 
         if( rCEvt.GetCommand() == COMMAND_PASTESELECTION && !bNativeShow )

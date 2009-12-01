@@ -237,6 +237,9 @@
 #define BMP_FOIL_27                         RID_SD_START+336
 #define BMP_FOIL_27_H                       RID_SD_START+337
 
+#define BMP_COMMENTS_INDICATOR              RID_SD_START+338
+#define BMP_COMMENTS_INDICATOR_H            RID_SD_START+339
+
 // -----------------------------------------------------------------------------
 
 #define IMG_PIPETTE_H                       RID_APP_START+21

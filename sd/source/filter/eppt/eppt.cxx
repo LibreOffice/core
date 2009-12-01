@@ -50,6 +50,11 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/view/PaperFormat.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <com/sun/star/office/XAnnotationEnumeration.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <tools/zcodec.hxx>
 #include <svx/svxenum.hxx>
 #include <sot/storinfo.hxx>
@@ -402,17 +407,17 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, ::com::sun::star
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "HeaderText" ) ), sal_True ) )
         {
             if ( aAny >>= aString )
-                ImplWriteCString( rStrm, aString, 1 );
+                PPTWriter::WriteCString( rStrm, aString, 1 );
         }
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FooterText" ) ), sal_True ) )
         {
             if ( aAny >>= aString )
-                ImplWriteCString( rStrm, aString, 2 );
+                PPTWriter::WriteCString( rStrm, aString, 2 );
         }
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "DateTimeText" ) ), sal_True ) )
         {
             if ( aAny >>= aString )
-                ImplWriteCString( rStrm, aString, 0 );
+                PPTWriter::WriteCString( rStrm, aString, 0 );
         }
     }
 }
@@ -1206,6 +1211,93 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
 
 // ---------------------------------------------------------------------------------------------
 
+static rtl::OUString getInitials( const rtl::OUString& rName )
+{
+    rtl::OUString sInitials;
+
+    const sal_Unicode * pStr = rName.getStr();
+    sal_Int32 nLength = rName.getLength();
+
+    while( nLength )
+    {
+        // skip whitespace
+        while( nLength && (*pStr <= ' ') )
+        {
+            nLength--; pStr++;
+        }
+
+        // take letter
+        if( nLength )
+        {
+            sInitials += rtl::OUString( *pStr );
+            nLength--; pStr++;
+        }
+
+        // skip letters until whitespace
+        while( nLength && (*pStr > ' ') )
+        {
+            nLength--; pStr++;
+        }
+    }
+
+    return sInitials;
+}
+
+void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStream& rBinaryTagData10Atom )
+{
+    try
+    {
+        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( xPage, uno::UNO_QUERY_THROW );
+        uno::Reference< office::XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
+
+        sal_Int32 nIndex = 1;
+
+        while( xAnnotationEnumeration->hasMoreElements() )
+        {
+            EscherExContainer aComment10( rBinaryTagData10Atom, EPP_Comment10 );
+            {
+                uno::Reference< office::XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement() );
+
+                geometry::RealPoint2D aRealPoint2D( xAnnotation->getPosition() );
+                MapMode aMapDest( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) );
+                Point aPoint( OutputDevice::LogicToLogic( Point( static_cast< sal_Int32 >( aRealPoint2D.X * 100.0 ),
+                    static_cast< sal_Int32 >( aRealPoint2D.Y * 100.0 ) ), MAP_100TH_MM, aMapDest ) );
+
+                rtl::OUString sAuthor( xAnnotation->getAuthor() );
+                uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
+                rtl::OUString sText( xText->getString() );
+                rtl::OUString sInitials( getInitials( sAuthor ) );
+                util::DateTime aDateTime( xAnnotation->getDateTime() );
+                if ( sAuthor.getLength() )
+                    PPTWriter::WriteCString( rBinaryTagData10Atom, sAuthor, 0 );
+                if ( sText.getLength() )
+                    PPTWriter::WriteCString( rBinaryTagData10Atom, sText, 1 );
+                if ( sInitials.getLength() )
+                    PPTWriter::WriteCString( rBinaryTagData10Atom, sInitials, 2 );
+
+                sal_Int16 nMilliSeconds = aDateTime.HundredthSeconds * 10;
+                EscherExAtom aCommentAtom10( rBinaryTagData10Atom, EPP_CommentAtom10 );
+                rBinaryTagData10Atom << nIndex++
+                                     << aDateTime.Year
+                                     << aDateTime.Month
+                                     << aDateTime.Day   // todo: day of week
+                                     << aDateTime.Day
+                                     << aDateTime.Hours
+                                     << aDateTime.Minutes
+                                     << aDateTime.Seconds
+                                     << nMilliSeconds
+                                     << static_cast< sal_Int32 >( aPoint.X() )
+                                     << static_cast< sal_Int32 >( aPoint.Y() );
+            }
+        }
+    }
+    catch ( uno::Exception& )
+    {
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+
 sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
 {
     ::com::sun::star::uno::Any aAny;
@@ -1567,6 +1659,49 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
 
+    SvMemoryStream aBinaryTagData10Atom;
+    ImplExportComments( mXDrawPage, aBinaryTagData10Atom );
+    if ( mbUseNewAnimations )
+    {
+        SvMemoryStream amsofbtAnimGroup;
+        ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
+        aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
+        sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
+        if ( nmsofbtAnimGroupSize )
+        {
+            {
+                EscherExAtom aMagic2( aBinaryTagData10Atom, 0x2eeb );
+                aBinaryTagData10Atom << (sal_uInt32)0x01c45df9
+                                     << (sal_uInt32)0xe1471b30;
+            }
+            {
+                EscherExAtom aMagic( aBinaryTagData10Atom, 0x2b00 );
+                aBinaryTagData10Atom << (sal_uInt32)0;
+            }
+            aBinaryTagData10Atom.Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
+            {
+                EscherExContainer aMagic2( aBinaryTagData10Atom, 0x2b02 );
+            }
+        }
+    }
+    if ( aBinaryTagData10Atom.Tell() )
+    {
+        EscherExContainer aProgTags     ( *mpStrm, EPP_ProgTags );
+        EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
+        {
+            EscherExAtom aCString( *mpStrm, EPP_CString );
+            *mpStrm << (sal_uInt32)0x5f005f
+                    << (sal_uInt32)0x50005f
+                    << (sal_uInt32)0x540050
+                    << (sal_uInt16)0x31
+                    << (sal_uInt16)0x30;
+        }
+        {
+            EscherExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
+            mpStrm->Write( aBinaryTagData10Atom.GetData(), aBinaryTagData10Atom.Tell() );
+        }
+    }
+/*
     if ( mbUseNewAnimations )
     {
         SvMemoryStream amsofbtAnimGroup;
@@ -1605,6 +1740,7 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
             }
         }
     }
+*/
     mpPptEscherEx->CloseContainer();    // EPP_Slide
     return TRUE;
 };
@@ -1720,18 +1856,6 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
     aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );
     aPropOpt.Commit( *mpStrm );
     mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
-}
-
-void PPTWriter::ImplWriteCString( SvStream& rSt, const String& rString, sal_uInt32 nInstance )
-{
-    sal_uInt32 i, nLen = rString.Len();
-    if ( nLen )
-    {
-        rSt << (sal_uInt32)( ( nInstance << 4 ) | ( EPP_CString << 16 ) )
-            << (sal_uInt32)( nLen << 1 );
-        for ( i = 0; i < nLen; i++ )
-            rSt << rString.GetChar( (sal_uInt16)i );
-    }
 }
 
 void PPTWriter::ImplWriteVBA( SvMemoryStream* pVBA )

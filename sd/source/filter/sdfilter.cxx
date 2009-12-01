@@ -32,10 +32,10 @@
 #include "precompiled_sd.hxx"
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 
+#include <memory>
+
 #include <tools/debug.hxx>
-#include <osl/file.hxx>
 #include <osl/module.hxx>
-#include <svtools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
@@ -90,22 +90,13 @@ SdFilter::~SdFilter()
 
 // -----------------------------------------------------------------------------
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 ::osl::Module* SdFilter::OpenLibrary( const ::rtl::OUString& rLibraryName ) const
 {
-    ::rtl::OUString aDest;
-    ::rtl::OUString aNormalizedPath;
-    ::osl::Module*  pRet;
-
-    if ( ::osl::FileBase::getFileURLFromSystemPath( SvtPathOptions().GetModulePath(), aDest ) != ::osl::FileBase::E_None )
-        aDest = SvtPathOptions().GetModulePath();
-    aDest += ::rtl::OUString( sal_Unicode( '/' ) );
-    aDest += ::rtl::OUString( ImplGetFullLibraryName( rLibraryName ) );
-    ::osl::FileBase::getSystemPathFromFileURL( aDest, aNormalizedPath );
-
-    if( !( pRet = new ::osl::Module( aNormalizedPath ) )->is() )
-        delete pRet, pRet = NULL;
-
-    return pRet;
+    std::auto_ptr< osl::Module > mod(new osl::Module);
+    return mod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName))
+        ? mod.release() : 0;
 }
 
 // -----------------------------------------------------------------------------

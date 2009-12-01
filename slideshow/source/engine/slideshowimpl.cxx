@@ -1668,7 +1668,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
         // schedule a slide end event, with automatic mode's
         // delay
         aNotificationEvents = makeInterruptableDelay(
-            boost::bind( &SlideShowImpl::notifySlideEnded, this ),
+            boost::bind<void>( boost::mem_fn(&SlideShowImpl::notifySlideEnded), this ),
             maEventMultiplexer.getAutomaticTimeout() );
     }
     else
@@ -1693,7 +1693,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             bHasAutomaticNextSlide )
         {
             aNotificationEvents = makeInterruptableDelay(
-                boost::bind( &SlideShowImpl::notifySlideEnded, this ),
+                boost::bind<void>( boost::mem_fn(&SlideShowImpl::notifySlideEnded), this ),
                 nAutomaticNextSlideTimeout);
 
             // TODO(F2): Provide a mechanism to let the user override
@@ -1709,8 +1709,8 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             // generate interruptable event here, there's no
             // timeout involved.
             aNotificationEvents.mpImmediateEvent =
-                makeEvent( boost::bind(
-                               &SlideShowImpl::notifySlideEnded, this ) );
+                makeEvent( boost::bind<void>(
+                    boost::mem_fn(&SlideShowImpl::notifySlideEnded), this ) );
         }
     }
 

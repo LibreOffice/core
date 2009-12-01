@@ -55,6 +55,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
     $(SRS)$/uitable.srs			\
+    $(SRS)$/uiannotations.srs	\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
@@ -65,6 +66,7 @@ SHL1IMPLIB= sdi
 
 # dynamic libraries
 SHL1STDLIBS+= \
+    $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(BASICLIB) \
@@ -118,10 +120,13 @@ LIB3FILES=      \
             $(SLB)$/dlg.lib			\
             $(SLB)$/core.lib		\
             $(SLB)$/undo.lib		\
+            $(SLB)$/annotations.lib	\
+            $(SLB)$/text.lib		\
             $(SLB)$/helper.lib		\
             $(SLB)$/xml.lib			\
             $(SLB)$/cgm.lib			\
             $(SLB)$/uitable.lib		\
+            $(SLB)$/uiannotations.lib\
             $(SLB)$/grf.lib
 
 LIB5TARGET=$(SLB)$/sdraw3_2.lib
@@ -129,7 +134,6 @@ LIB5FILES=      \
             $(SLB)$/html.lib		\
             $(SLB)$/filter.lib		\
             $(SLB)$/unoidl.lib		\
-            $(SLB)$/ppt.lib 		\
             $(SLB)$/animui.lib		\
             $(SLB)$/accessibility.lib	\
             $(SLB)$/toolpanel.lib		\
@@ -161,7 +165,7 @@ DEF2NAME=		$(SHL2TARGET)
 
 SHL2STDLIBS= \
             $(SFX2LIB) \
-            $(SVXLIB) \
+            $(SVXCORELIB) \
             $(SVTOOLLIB) \
             $(SVLLIB) \
             $(VCLLIB) \
@@ -193,6 +197,7 @@ LIB4FILES=	\
 
 SHL4STDLIBS= \
     $(ISDLIB) \
+    $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(BASEGFXLIB) \
@@ -227,9 +232,39 @@ SHL4OBJS += $(SLO)$/pchname.obj \
 # $(ISDLIB) is build in SHL1TARGET
 .IF "$(GUI)" == "UNX"
 SHL4DEPN=$(SHL1TARGETN)
+SHL5DEPN=$(SHL1TARGETN)
 .ELSE
 SHL4DEPN=$(SHL1IMPLIBN)
+SHL5DEPN=$(SHL1IMPLIBN)
 .ENDIF
+
+# ppt import/export library
+SHL5TARGET    = sdfilt$(DLLPOSTFIX)
+SHL5IMPLIB    = sdfilti
+SHL5VERSIONMAP= sdfilt.map
+SHL5DEF       = $(MISC)$/$(SHL5TARGET).def
+SHL5LIBS      = $(SLB)$/ppt.lib $(SLB)$/eppt.lib
+
+DEF5NAME=$(SHL5TARGET)
+
+SHL5STDLIBS = $(ISDLIB) \
+              $(SVXCORELIB)       \
+              $(SVXMSFILTERLIB)   \
+              $(SFX2LIB)          \
+              $(SVTOOLLIB)        \
+              $(SOTLIB)           \
+              $(GOODIESLIB)       \
+              $(VCLLIB)           \
+              $(SVLLIB)           \
+              $(SOTLIB)           \
+              $(UNOTOOLSLIB)      \
+              $(TOOLSLIB)         \
+              $(UCBHELPERLIB)     \
+              $(CPPUHELPERLIB)    \
+              $(CPPULIB)          \
+              $(SALLIB)           \
+              $(COMPHELPERLIB)    \
+              $(I18NISOLANGLIB)
 
 # --- Targets -------------------------------------------------------------
 

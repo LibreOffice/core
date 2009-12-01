@@ -503,32 +503,7 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 }
                 break;
 
-            case SFX_EVENT_CREATEDOC:
-                //                mpPaneManager->InitPanes();
-                break;
-
-            case SFX_EVENT_ACTIVATEDOC:
-                break;
-
-            case SFX_EVENT_STARTAPP:
-            case SFX_EVENT_CLOSEAPP:
-            case SFX_EVENT_CLOSEDOC:
-            case SFX_EVENT_SAVEDOC:
-            case SFX_EVENT_SAVEASDOC:
-            case SFX_EVENT_DEACTIVATEDOC:
-            case SFX_EVENT_PRINTDOC:
-            case SFX_EVENT_ONERROR:
-            case SFX_EVENT_LOADFINISHED:
-            case SFX_EVENT_SAVEFINISHED:
-            case SFX_EVENT_MODIFYCHANGED:
-            case SFX_EVENT_PREPARECLOSEDOC:
-            case SFX_EVENT_NEWMESSAGE:
-            case SFX_EVENT_TOGGLEFULLSCREENMODE:
-            case SFX_EVENT_SAVEDOCDONE:
-            case SFX_EVENT_SAVEASDOCDONE:
-            case SFX_EVENT_MOUSEOVER_OBJECT:
-            case SFX_EVENT_MOUSECLICK_OBJECT:
-            case SFX_EVENT_MOUSEOUT_OBJECT:
+            default:
                 break;
         }
     }

@@ -244,7 +244,7 @@ SdFilterDetect::~SdFilterDetect()
                 {
                     // PowerPoint needs to be detected via StreamName, all other storage based formats are our own and can
                     // be detected by the ClipboardId, so except for the PPT filter all filters must have a ClipboardId set
-                    uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
+                    uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
 
                     //TODO/LATER: move error handling to central place! (maybe even complete own filters)
                     if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )

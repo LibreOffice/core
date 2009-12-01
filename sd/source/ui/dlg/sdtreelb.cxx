@@ -86,7 +86,13 @@ public:
 };
 
 
-BOOL SdPageObjsTLB::bIsInDrag = FALSE;
+BOOL SD_DLLPRIVATE SdPageObjsTLB::bIsInDrag = FALSE;
+
+BOOL SdPageObjsTLB::IsInDrag()
+{
+    return bIsInDrag;
+}
+
 sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = SAL_MAX_UINT32;
 
 // -----------------------------------------

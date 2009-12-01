@@ -143,6 +143,7 @@ hidspecial HID_SD_ALL_MASTERS           { HelpId = HID_SD_ALL_MASTERS; };
 hidspecial HID_SD_SLIDE_LAYOUTS         { HelpId = HID_SD_SLIDE_LAYOUTS; };
 hidspecial HID_SD_CUSTOM_ANIMATIONS     { HelpId = HID_SD_CUSTOM_ANIMATIONS; };
 hidspecial HID_SD_SLIDE_TRANSITIONS     { HelpId = HID_SD_SLIDE_TRANSITIONS; };
+hidspecial HID_SD_ANNOTATIONS           { HelpId = HID_SD_ANNOTATIONS; };
 
 hidspecial HID_SD_CUSTOMANIMATIONPANE_PB_ADD_EFFECT    { HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_ADD_EFFECT; };
 hidspecial HID_SD_CUSTOMANIMATIONPANE_PB_CHANGE_EFFECT { HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_CHANGE_EFFECT; };
@@ -204,3 +205,5 @@ hidspecial HID_SD_RULER_HORIZONTAL                              { HelpId = HID_S
 hidspecial HID_SD_RULER_VERTICAL                                { HelpId = HID_SD_RULER_VERTICAL; };
 
 hidspecial HID_SD_TABLE_DESIGN                                  { HelpId = HID_SD_TABLE_DESIGN; };
+hidspecial HID_SD_ANNOTATIONS                                   { HelpId = HID_SD_ANNOTATIONS; };
+
