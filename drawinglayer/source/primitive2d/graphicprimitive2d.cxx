@@ -58,11 +58,14 @@
 //////////////////////////////////////////////////////////////////////////////
 // includes for testing MetafilePrimitive2D::create2DDecomposition
 
-#ifdef DBG_UTIL
+// this switch defines if the test code is included or not
+#undef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+
+#ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
 #include <vcl/gradient.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/lineinfo.hxx>
-#endif // DBG_UTIL
+#endif // USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -220,7 +223,13 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&
+#ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+            rViewInformation
+#else
+            /*rViewInformation*/
+#endif // USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+            ) const
         {
             Primitive2DSequence aRetval;
 
@@ -302,14 +311,14 @@ namespace drawinglayer
 
                     case GRAPHIC_GDIMETAFILE :
                     {
-#ifdef DBG_UTIL
+#ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
                         static bool bDoTest(false);
 
                         if(bDoTest)
                         {
                             // All this is/was test code for testing MetafilePrimitive2D::create2DDecomposition
                             // extensively. It may be needed again when diverse actions need debugging, so i leave
-                            // it in here, but take it out using DBG_UTIL.
+                            // it in here, but take it out using USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE.
                             // Use it by compiling with the code, insert any DrawObject, convert to Metafile. The
                             // debugger will then stop here (when breakpoint set, of course). You may enter single
                             // parts of actions and/or change to true what You want to check.
@@ -740,7 +749,7 @@ namespace drawinglayer
                         }
                         else
                         {
-#endif // DBG_UTIL
+#endif // USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
                             // create MetafilePrimitive2D
                             const Graphic aGraphic(getGraphicObject().GetGraphic());
                             const GDIMetaFile& rMetafile = aTransformedGraphic.GetGDIMetaFile();
@@ -773,9 +782,9 @@ namespace drawinglayer
                                         basegfx::B2DPolyPolygon(aMaskPolygon),
                                         aChildContent));
                             }
-#ifdef DBG_UTIL
+#ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
                         }
-#endif // DBG_UTIL
+#endif // USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
 
                         break;
                     }
