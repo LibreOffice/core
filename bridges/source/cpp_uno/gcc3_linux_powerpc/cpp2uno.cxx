@@ -164,11 +164,11 @@ static typelib_TypeClass cpp2uno_call(
 
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-             if (ng < 7) {
-                if (ng & 1) {
-                  ng++;
-                  gpreg++;
-                }
+             if (ng & 1) {
+                ng++;
+                gpreg++;
+             }
+             if (ng < 8) {
                 pCppArgs[nPos] = gpreg;
                 pUnoArgs[nPos] = gpreg;
                 ng += 2;
