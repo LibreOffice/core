@@ -417,13 +417,13 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
     ' only if the type is 1 OR 3 then the File Save dialog appear
     ' just kept here for compatibility reasons - has to get removed around july 2007
     if (iTypeOfCall = 1 OR iTypeOfCall = 3) then
-        kontext "ExportAsPDFDlg"
-        if ExportAsPDFDlg.exists(5) then
+        kontext "ExportierenDlg"
+        if ExportierenDlg.exists(5) then
             try
                 Dateityp.Select sPDF
             catch
                 Warnlog "Unable to select filter: '" + sPDF + "'"
-                ExportAsPDFDlg.Cancel
+                ExportierenDlg.Cancel
                 hExportAsPDFmulti = FALSE
                 exit function
             endcatch
@@ -459,7 +459,7 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
                 wEnd
             endif
         else
-            'ExportAsPDFDlg.Cancel
+            'ExportierenDlg.Cancel
         end if
 
         ' if file exists, there is a message...
@@ -471,8 +471,8 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
                     messagebox.Yes
                 else
                     messagebox.No
-                    kontext "ExportAsPDFDlg"
-                    ExportAsPDFDlg.Cancel
+                    kontext "ExportierenDlg"
+                    ExportierenDlg.Cancel
                     hExportAsPDFmulti = FALSE
                 end if
             end if

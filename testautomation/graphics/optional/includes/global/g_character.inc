@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@
 ' #1 tGetFormatCharacter
 '*
 '\*******************************************************************
-
 testcase tFormatCharacter
+
    dim sTemp as string
    dim iTemp as integer
 
@@ -83,9 +83,11 @@ testcase tFormatCharacter
       TabFontPosition.OK
    '/// close application ///'
    Call hCloseDocument
-endcase
-
+   
+endcase 'tFormatCharacter
+'---------------------------------------------------------
 testcase tDialogCharacter
+
     Dim i as integer
     Dim y as integer
     Dim z as integer
@@ -363,9 +365,11 @@ testcase tDialogCharacter
 
     Printlog "DialogCharacter Ends"
     Call hCloseDocument
-endcase
-
+    
+endcase 'tDialogCharacter
+'--------------------------------------------------------
 testcase tSetFormatCharacter
+
     if iSprache = 48 then
         qaerrorlog "Test not adapted to polish, 48."
         goto endsub
@@ -563,9 +567,11 @@ testcase tSetFormatCharacter
         '/// close application ///'
         Call hCloseDocument
     endif
-endcase
-
+    
+endcase 'tSetFormatCharacter
+'--------------------------------------------------------
 testcase tGetFormatCharacter
+
     qaerrorlog "tGetFormatCharacter outcommented due to too many qaerrorlogs"
     goto endsub
     Dim i as integer
@@ -711,6 +717,4 @@ testcase tGetFormatCharacter
 
     '/// close application ///'
     Call hCloseDocument
-endcase
-
-
+endcase 'tGetFormatCharacter

@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : CROSS-APPLICATIONS CLIPBOARD TEST (Writer)
 '*
@@ -83,13 +83,13 @@ testcase HTMLToWRITERText
     printlog "  Paste 'Text' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
         printlog "  Write Clipboard format under pasted content "
-        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_writer_text.odt", "writer8")
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
         printlog "  Save document as ..\user\work\html_to_writer_text.odt"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_writer_text.odt", "writer8")
         Wait 500
-        Call hCloseDocument
         printlog "  Close saved document "
+        Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
         if hFileOpen (gOfficepath + "user\work\html_to_writer_text.odt",true) = false then
@@ -101,8 +101,8 @@ testcase HTMLToWRITERText
                     Warnlog "Unable to remove checkbox: " + Active.Gettext
                     Active.ok
                 endcatch
-            endif
-        endif                    
+            end if
+        end if
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -166,8 +166,8 @@ testcase HTMLToWRITERField
                         Warnlog "Unable to remove checkbox: " + Active.Gettext
                         Active.ok
                     endcatch
-                endif
-            endif            
+                end if
+            end if
             Wait 500
             printlog "  Close saved document "
             Call hCloseDocument
@@ -230,8 +230,8 @@ testcase HTMLToWRITERTable
                     Warnlog "Unable to remove checkbox: " + Active.Gettext
                     Active.ok
                 endcatch
-            endif
-        endif        
+            end if
+        end if
         printlog "  Reopen saved document "
         Wait 500
         printlog "  Close saved document "

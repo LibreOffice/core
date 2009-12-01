@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,25 +40,25 @@
 sub main
     Printlog "------------------- Impress Tables Test -------------------------"
     call hStatusIn ("Graphics","i_tables.bas")
-    
+
     use "graphics\optional\includes\global\g_tables.inc"
-    
+
     PrintLog "-------------------------" + gApplication + "-------------------"
-    
+
     call tiInsertTableUsingMenu
-    call tiInsertTableUsingButton 
+    call tiInsertTableUsingButton
     call tiInsertTableUsingToolbarbutton
-    call tiTableObjectBar 
+    call tiTableObjectBar
     gApplication = "DRAW"
-    
+
     PrintLog "-------------------------" + gApplication + "-------------------"
-    
+
     call tiInsertTableUsingMenu
-    call tiInsertTableUsingButton 
-    call tiTableObjectBar 
-    
+    call tiInsertTableUsingButton
+    call tiTableObjectBar
+
     call hStatusOut
-    
+
 end sub
 
 '----------------------------------------------

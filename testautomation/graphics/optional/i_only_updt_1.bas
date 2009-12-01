@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -44,15 +44,15 @@ sub main
     Printlog " -------------------- Impress-Only-Required-Test -----------------------------"
     Call hStatusIn ( "Graphics","i_only_updt_1.bas")
 
-   use "graphics\tools\id_tools.inc"
-   use "graphics\tools\id_tools_2.inc"
-   use "graphics\required\includes\global\id_002.inc"                        'Edit
-   use "graphics\required\includes\global\id_003.inc"                        'View
-   use "graphics\required\includes\global\id_004.inc"                        'Insert
-   use "graphics\required\includes\global\id_005.inc"                        'Format
-   use "graphics\required\includes\global\id_006.inc"                        'Tools
-   use "graphics\required\includes\impress\im_003_.inc"                   'Ansicht
-   use "graphics\required\includes\impress\im_004_.inc"                   'Einfuegen
+    use "graphics\tools\id_tools.inc"
+    use "graphics\tools\id_tools_2.inc"
+    use "graphics\required\includes\global\id_002.inc"                        'Edit
+    use "graphics\required\includes\global\id_003.inc"                        'View
+    use "graphics\required\includes\global\id_004.inc"                        'Insert
+    use "graphics\required\includes\global\id_005.inc"                        'Format
+    use "graphics\required\includes\global\id_006.inc"                        'Tools
+    use "graphics\required\includes\impress\im_003_.inc"                   'Ansicht
+    use "graphics\required\includes\impress\im_004_.inc"                   'Einfuegen
 
     if hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () ) = FALSE then
         qaErrorLog "Locales doesn't exist in file : "+gTesttoolPath + "graphics\tools\locale_1.txt"            ' this is needed for spellchecking.
@@ -66,18 +66,18 @@ sub main
     call id_005
     call id_006
 
-  Call hStatusOut
+    Call hStatusOut
 end sub
 
 '----------------------------------------------
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   use "global\required\includes\g_option.inc"
-   use "global\required\includes\g_customize.inc"
-   use "global\required\includes\g_001.inc"
-   use "global\required\includes\g_009.inc"
-   gApplication   = "IMPRESS"
-      Call GetUseFiles()
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    use "global\required\includes\g_option.inc"
+    use "global\required\includes\g_customize.inc"
+    use "global\required\includes\g_001.inc"
+    use "global\required\includes\g_009.inc"
+    gApplication   = "IMPRESS"
+    Call GetUseFiles()
 end sub
 

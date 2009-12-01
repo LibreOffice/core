@@ -110,6 +110,11 @@ public class RunTests
 							"Original message: " + fl.Message + "\n\n FusionLog: \n" + fl.FusionLog );
 						return -1;
 					}
+
+                    if (e.InnerException != null)
+                    {
+                        Console.WriteLine(e.InnerException);
+                    }
 				}
 				Console.WriteLine("#Unexpected Exception");
 				Console.WriteLine(e.Message);

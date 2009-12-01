@@ -1,7 +1,0 @@
-CALC=Preglednica OpenOffice.org 2.3
-CHART=Grafikon OpenOffice.org 2.3
-DRAW=Risba OpenOffice.org 2.3
-IMPRESS=Predstavitev OpenOffice.org 2.3
-MATH=Formula OpenOffice.org 2.3
-WRITER=Besedilo OpenOffice.org 2.3
-OTHER=Dodatni predmeti

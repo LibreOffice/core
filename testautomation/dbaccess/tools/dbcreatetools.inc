@@ -91,7 +91,7 @@ function fCreateMySQL_ODBC_Datasource(sFileName, sOdbcDSN, sUser,optional sRegis
     Kontext "DatabaseWizard"    
         ConnectToDatabase.Check
         sleep(1)        
-        DatabaseType.select getIdForDatabaseType("MySQLODBC")
+        DatabaseType.select( hGetDatabaseDisplayName( "sdbc:mysql:odbc:*" ) )
         sleep(1)
         NextBtn.Click
         sleep(1)
@@ -182,7 +182,7 @@ function fCreateMySQL_JDBC_Datasource(sFileName,sDatabaseName,sHost,sPort,sUser,
     Kontext "DatabaseWizard"    
         ConnectToDatabase.Check
         sleep(1)        
-        DatabaseType.select getIdForDatabaseType("MySQLJDBC") - 1
+        DatabaseType.select( hGetDatabaseDisplayName( "sdbc:mysql:jdbc:*" ) )
         sleep(1)
         NextBtn.Click
         sleep(1)
@@ -271,7 +271,7 @@ function  fCreateAdabasDatasource(sFileName,sURL,sUser, optional sRegister) as b
         Kontext "DatabaseWizard"    
             ConnectToDatabase.Check
             sleep(1)        
-            DatabaseType.select getIdForDatabaseType("AdabasD") - 1
+            DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:adabas:*" ) )
             sleep(1)
             NextBtn.Click
             sleep(1)        
@@ -369,7 +369,7 @@ function  fCreateLocalAdabasDatasource(sFileName,sDatabaseName,sSuperUser,sSuper
         Kontext "DatabaseWizard"    
             ConnectToDatabase.Check
             sleep(1)        
-            DatabaseType.select getIdForDatabaseType("AdabasD")
+            DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:adabas:*" ) )
             sleep(1)
             NextBtn.Click
             sleep(1)
@@ -647,7 +647,7 @@ function  fCreateDbaseDatasource(sFileName,sURL, optional sRegister) as boolean
     Kontext "DatabaseWizard"    
         ConnectToDatabase.Check
         sleep(1)        
-        DatabaseType.select getIdForDatabaseType("dBase", DatabaseType) - 1
+        DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:dbase:*" ) )
         sleep(1)
         NextBtn.Click
         sleep(1)
@@ -715,7 +715,7 @@ function fCreateADODatasource(sFileName,sURL,optional sRegister) as boolean
     Kontext "DatabaseWizard"    
         ConnectToDatabase.Check
         sleep(1)        
-        DatabaseType.select getIdForDatabaseType("ADO", DatabaseType)
+        DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:ado:*" ) )
         sleep(1)
         NextBtn.Click
         sleep(1)
@@ -784,7 +784,7 @@ function fCreateTextDatasource(sFileName,sURL, optional sRegister) as boolean
     Kontext "DatabaseWizard"    
         ConnectToDatabase.Check
         sleep(1)        
-        DatabaseType.select getIdForDatabaseType("Text", DatabaseType) - 1
+        DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:flat:*" ) )
         sleep(1)
         NextBtn.Click
         sleep(1)
@@ -859,7 +859,7 @@ function fCreateSpreadsheetDatasource(sFileName,sURL, optional sRegister) as boo
     Kontext "DatabaseWizard"    
         ConnectToDatabase.Check
         sleep(1)        
-        DatabaseType.Select (getIdForDatabaseType("CALC", DatabaseType) - 1) ' -1 because in the wizard there is on datasource less because of mysql
+        DatabaseType.Select (hGetDatabaseDisplayName( "sdbc:calc:*" ))
         sleep(1)
         NextBtn.Click
         sleep(1)
@@ -936,7 +936,7 @@ function fCreateLDAPAddressbookDatasource(sFileName,sHostName,sBaseDN,sPortNr,op
         Kontext "DatabaseWizard"    
             ConnectToDatabase.Check
             sleep(1)        
-            DatabaseType.select getIdForDatabaseType("LDAP", DatabaseType)
+            DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:address:ldap:*" ) )
             sleep(1)
             NextBtn.Click
             sleep(1)
@@ -1011,7 +1011,7 @@ function fCreateEvolutionAddressbookDatasource(sFileName, optional sRegister) as
         Kontext "DatabaseWizard"    
             ConnectToDatabase.Check
             sleep(1)        
-            DatabaseType.select getIdForDatabaseType("Evolution", DatabaseType)
+            DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:address:evolution:ldap" ) )
             sleep(1)
             NextBtn.Click
             sleep(1)
@@ -1083,7 +1083,7 @@ function fCreateKDEAddressbookDatasource(sFileName , optional sRegister) as bool
         Kontext "DatabaseWizard"    
             ConnectToDatabase.Check
             sleep(1)        
-            DatabaseType.select getIdForDatabaseType("KDE", DatabaseType)
+            DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:address:kab" ) )
             sleep(1)
             NextBtn.Click
             sleep(1)
@@ -1155,7 +1155,7 @@ function fCreateWindowsAddressbookDatasource(sFileName , optional sRegister) as 
         Kontext "DatabaseWizard"    
             ConnectToDatabase.Check
             sleep(1)        
-            DatabaseType.select getIdForDatabaseType("Windows", DatabaseType)
+            DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:address:outlookexp" ) )
             sleep(1)
             NextBtn.Click
             sleep(1)
@@ -1227,7 +1227,7 @@ function fCreateOutlookAddressbookDatasource(sFileName, optional sRegister) as b
         Kontext "DatabaseWizard"    
             ConnectToDatabase.Check
             sleep(1)        
-            DatabaseType.select getIdForDatabaseType("Outlook", DatabaseType)
+            DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:address:outlook" ) )
             sleep(1)
             NextBtn.Click
             sleep(1)
@@ -1299,7 +1299,7 @@ function fCreateMozillaAddressbookDatasource(sFileName, optional sRegister) as b
         Kontext "DatabaseWizard"    
             ConnectToDatabase.Check
             sleep(1)        
-            DatabaseType.select getIdForDatabaseType("Mozilla", DatabaseType) - 1
+            DatabaseType.select ( hGetDatabaseDisplayName( "sdbc:address:mozilla:" ) )
             sleep(1)
             NextBtn.Click
             sleep(1)
@@ -1460,92 +1460,135 @@ function fSetJDBCDriverFiles(sClassPath) as boolean
     
 end function
 '-------------------------------------------------------------------------
-function getIdForDatabaseType(sType as String ) as Integer
-    '/// get the index of the database type in the database type list box
-    '///+ in the connection type dialog     
-    '/// <u>parameter:</u>    
-    '/// <b>sType:</b> The name of the database type in english 
+private const VERBOSE = false
 
-    dim ii as integer
+function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
 
-    if (sType = "AdabasD") then        
-        ii = 4        
-    elseif (sType = "dBase") then
-        if gPlatform = "osx" then        
-         ii = 5
-        else    
-         ii = 6
-        endif
-    elseif (sType = "Access") then    
-        ii = 0
-    elseif (sType = "Evolution") then        
-        ii = 13
-    elseif (sType = "JDBC") then
-        if gPlatform = "osx" then        
-         ii = 7
-        else
-         ii = 8
-        endif
-    elseif (sType = "LDAP") then             
-        if gPlatGroup = "w95" then        
-         ii = 12        
-        else      
-         ii = 11
-        endif  
-    elseif (sType = "Mozilla") then   
-        if gPlatGroup = "w95" then        
-         ii = 11
-        elseif gPlatform = "osx" then        
-         ii = 9
-        else      
-         ii = 10
-        endif
-    elseif (sType = "MySQLJDBC") then        
-        ii = 2
-    elseif (sType = "MySQLODBC") then
-        ii = 1                    
-    elseif (sType = "ODBC") then
-        if gPlatform = "osx" then        
-         ii = 8
-        else
-         ii = 9
-        endif
-    elseif (sType = "OracleJDBC") then        
-        ii = 3                    
-    elseif (sType = "CALC") then        
-        if gPlatform = "osx" then        
-         ii = 4
-        else
-         ii = 5
-        endif
-    elseif (sType = "Text") then
-        if gPlatform = "osx" then        
-         ii = 6
-        else
-         ii = 7
-        endif 
-    elseif (sType = "ADO") then
-        ii = 9 ' only 9 because on windows +1 is added at the end
-    elseif (sType = "Windows") then ' windows addressbook
-        ii = 14 ' only 14 because on windows +1 is added at the end    
-    elseif (sType = "KDE") then
-        ii = 12
+    ' This function returns the number of currently installed database drivers.
+    ' Additionally it fills a given list (which should be large enough to hold
+    ' the names of all installed drivers) with the names and makes the list 
+    ' compatible to the listfunctions (which places the list size in element 0)
+    ' The list is platform dependent and might be locale dependent
+    ' Note that some drivers (like e.g. HSQL Database Engine) do *not* show up
+    ' in the Database Wizards listbox!
+
+    dim oUnoOfficeConnection as object
+    dim oUnoConfigurationAccess as object
+    dim aPropertyValue(1) as new com.sun.star.beans.PropertyValue
+    dim xViewRoot as object
+    dim aElements() as string
+    dim iCurrentDriver as integer
+    dim iDriverCount as integer
+
+    const CFN = "global::tools::includes::optional::t_database.inc::hGetInstalledDatabaseDrivers(): "
+    
+    ' Path to the node, searches all files below "Drivers" for "Installed" 
+    aPropertyValue( 0 ).Name  = "nodepath"
+    aPropertyValue( 0 ).Value = "org.openoffice.Office.DataAccess.Drivers/Installed"
+    
+    ' Connect to remote UNO
+    oUnoOfficeConnection = hGetUnoService( TRUE )
+    
+    if ( isNull( oUnoOfficeConnection )) then
+        warnlog( CFN & "Failed to establish UNO connection, hGetUnoService failed" )
+        hGetInstalledDatabaseDrivers() = 0
     else
-        ii = 0
-    endif
-
-    ' when windows then +1 because the first entry 'MS Access' is only available under windows
-    if gPlatGroup = "w95" then        
-            ii = ii + 1    
-    ' when x86 then -1 because the Adabas entry on the 4. position is missing
-    elseif gPlatForm = "x86" then        
-        if ii > 3 then
-            ii = ii - 1
-        endif
+        ' Get a configuration provider
+        oUnoConfigurationAccess = oUnoOfficeConnection.createInstance( "com.sun.star.configuration.ConfigurationProvider" )
+        
+        ' Get access
+        xViewRoot = oUnoConfigurationAccess.createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aPropertyValue() )
+        aElements() = xViewRoot.getElementNames()
+        
+        iDriverCount = ubound( aElements() )
+        dbDriverList( 0 ) = iDriverCount
+        for iCurrentDriver = 1 to iDriverCount
+            dbDriverList( iCurrentDriver ) = xViewRoot.getByName( aElements( iCurrentDriver ) ).getByName( "DriverTypeDisplayName" )
+        next iCurrentDriver
+        
     endif
     
-    getIdForDatabaseType = ii
+    if ( VERBOSE ) then 
+        printlog( CFN & "Returning " & iDriverCount & " drivers" )
+    endif
+    hGetInstalledDatabaseDrivers() = iDriverCount
     
 end function
 
+'*******************************************************************************
+
+function hGetDatabaseDisplayName( dbDriverURL as string ) as string
+
+    ' The xcu files (based on dev300m47) hold following driver definitions
+    ' which are used as parameter to this function. You get a plain text 
+    ' localized driver name as returnvalue which can be used directly to select
+    ' a driver in the Database Wizard.
+    
+    ' adabas.xcu:  "sdbc:adabas:*"
+    ' calc.xcu:    "sdbc:calc:*"
+    ' dbase.xcu:   "sdbc:dbase:*"
+    ' evoab.xcu:   "sdbc:address:evolution:ldap"
+    ' evoab.xcu:   "sdbc:address:evolution:groupwise"
+    ' flat.xcu:    "sdbc:flat:*"
+    ' ado.xcu:     "sdbc:ado:*"
+    ' hsqldb.xcu:  "sdbc:embedded:hsqldb"
+    ' kab.xcu:     "sdbc:address:kab"
+    ' mozab.xcu:   "sdbc:address:outlook"
+    ' mozab.xcu:   "sdbc:address:outlookexp"
+    ' mozab.xcu:   "sdbc:address:mozilla:"
+    ' mozab.xcu:   "sdbc:address:thunderbird:"
+    ' mozab.xcu:   "sdbc:address:ldap:*"
+    ' mysql.xcu:   "sdbc:mysql:jdbc:*"
+    ' mysql.xcu:   "sdbc:mysql:odbc:*"
+    ' odbc.xcu:    "sdbc:odbc:*"
+    ' jdbc.xcu:    "jdbc:*"
+    ' jdbc.xcu:    "jdbc:oracle:thin:*"
+    ' mysql.xcu:   "sdbc:mysql:jdbc:*"
+
+    
+    ' Note that some drivers (like e.g. HSQL Database Engine) do *not* show up
+    ' in the Database Wizards listbox!
+    
+
+    dim oUnoOfficeConnection as object
+    dim oUnoConfigurationAccess as object
+    dim aPropertyValue(1) as new com.sun.star.beans.PropertyValue
+    dim oConfig as object
+    dim oDriver as object
+    dim sDatabaseName as string
+ 
+    const CFN = "global::tools::includes::optional::t_database.inc::hGetDatabaseDisplayName(): "
+    
+    ' Path to the node, searches all files below "Drivers" for "Installed" 
+    aPropertyValue( 0 ).Name  = "nodepath"
+    aPropertyValue( 0 ).Value = "org.openoffice.Office.DataAccess.Drivers/Installed/"
+    
+    ' Connect to remote UNO
+    oUnoOfficeConnection = hGetUnoService( TRUE )
+    
+    if ( isNull( oUnoOfficeConnection )) then
+        warnlog( CFN & "Failed to establish UNO connection, hGetUnoService failed" )
+        sDatabaseName = ""
+    else
+        ' Get a configuration provider
+        oUnoConfigurationAccess = oUnoOfficeConnection.createInstance( "com.sun.star.configuration.ConfigurationProvider" )
+        
+        ' Get access
+        oConfig = oUnoConfigurationAccess.createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aPropertyValue() )
+        try
+            oDriver = oConfig.getByName( dbDriverURL )
+            sDatabaseName = oDriver.getByName( "DriverTypeDisplayName" )
+        catch
+            warnlog( CFN & "Invalid driver or driver unsupported on this platform" )
+            sDatabaseName ""
+        endcatch
+        
+    endif
+    
+    if ( VERBOSE ) then 
+        printlog( CFN & "Database display string: " & sDatabaseName )
+    endif
+    hGetDataBaseDisplayName() = sDatabaseName
+    
+end function
 

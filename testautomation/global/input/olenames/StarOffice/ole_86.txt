@@ -1,7 +1,0 @@
-sc=StarSuite 7 工作表
-sh=StarSuite 7 图表
-sd=StarSuite 7 绘图
-si=StarSuite 7 演示文稿
-sm=StarSuite 7 公式
-sw=StarSuite 7 文本文档
-ot=其他的对象

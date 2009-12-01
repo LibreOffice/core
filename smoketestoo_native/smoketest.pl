@@ -36,6 +36,8 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # smoketest - do the smoketest
 #
 
+use lib ("$ENV{SOLARENV}/bin/modules");
+
 use File::Basename;
 use File::Path;
 use File::Copy;
@@ -47,12 +49,12 @@ use Getopt::Long;
 #                       #
 #########################
 $is_debug = 0;           # run without executing commands
-$is_command_infos = 1;   # print command details before exec
+$is_command_infos = 0;   # print command details before exec
 $is_protocol_test = 0;
 $is_remove_on_error = 0;
 $is_remove_at_end = 1;
 $is_do_deinstall = 0;
-$is_admin_installation = 1;
+$is_without_msiexec = 1;
 $is_oo = 1;
 
 $gui = $ENV{GUI};
@@ -165,12 +167,17 @@ elsif ($gui eq $cygwin) {
     $bootstrapiniTemp = $bootstrapini . "_";
     $CygwinLineends = $/;
     $WinLineends = "\r\n";
-    &SetWinLineends();
     $packpackage = "msi";
     $installpath_without =~ s/\\/\//g;
 }
 else {
     print_error ("not supported system\n",1);
+}
+
+if ($is_without_msiexec) {
+    require installer::windows::admin; import installer::windows::admin;
+    $installer::globals::logfilename = $ENV{DMAKE_WORK_DIR} . $PathSeparator . $ENV{OUTPATH} . $ENV{PROEXT} . $PathSeparator . "misc" . $PathSeparator . "installer.log";
+    $installer::globals::exithandler = \&install_error;
 }
 
 if ($is_oo) {
@@ -195,7 +202,8 @@ else {
             'can not patch bottstrapini',
             'msiexec failed. Maybe you have got an installed version',
             'deinstallation is incomplete',
-            'this packformat is not supported for this environment'
+            'this packformat is not supported for this environment',
+            'can not set execute permission'
 );
 
 my $show_NoMessage = 0;
@@ -214,6 +222,7 @@ my $error_patchBootstrap = 10;
 my $error_msiexec = 11;
 my $error_deinst = 12;
 my $error_packformat = 13;
+my $error_permission = 14;
 
 my $command_normal = 0;
 my $command_withoutErrorcheck = 1;
@@ -528,6 +537,10 @@ sub doTest {
 #   execute_Command ($Command, $error_deinstall, $show_NoMessage, $command_normal);
 }
 
+sub install_error {
+    print_error ($error_messages[$error_setup], $error_setup);
+}
+
 sub doInstall {
     my ($installsetpath, $dest_installdir) = @_;
     my ($DirArray, $mask, $file, $Command, $optdir, $rpmdir, $system, $mach, $basedir, $output_ref, $olddir, $newdir);
@@ -557,51 +570,43 @@ sub doInstall {
                     print_error ("Installationset in $installsetpath is incomplete", 2);
         }
         foreach $file (@DirArray) {
-            if ($gui eq $cygwin) {
-                my $convertinstallset = ConvertCygwinToWin_Shell("$installsetpath$file");
-                my $convertdestdir = ConvertCygwinToWin_Shell($dest_installdir);
-                $_inst_cmd=$ENV{SMOKETEST_SOINSTCMD};
-                if ( defined($_inst_cmd) ) {
-                    $Command = $_inst_cmd . " $convertinstallset -qn TARGETDIR=$convertdestdir";
+            if ($is_without_msiexec) {
+                if ($is_debug) {
+                    print "Debugmode: no installation from $installsetpath\n";
                 }
                 else {
-                    if ($is_admin_installation) {
+                    createPath ($dest_installdir, $error_setup);
+                    installer::windows::admin::make_admin_install ($installsetpath . $file, $dest_installdir);
+                    if ($gui eq $cygwin) {
+                        $Command = "find $dest_installdir \\( -name \"installhelper\" -prune -o -name \"*.exe\" -o -name \"*.dll\" -o -name \"*.manifest\" -o -name \"*.bin\" -o -name \"*.jar\" \\) -exec chmod a+x {} \\;";
+                        execute_Command ($Command, $error_permission, $show_Message,  $command_normal);
+                    }
+                }
+            }
+            else
+            {
+                if ($gui eq $cygwin) {
+                    my $convertinstallset = ConvertCygwinToWin_Shell("$installsetpath$file");
+                    my $convertdestdir = ConvertCygwinToWin_Shell($dest_installdir);
+                    $_inst_cmd=$ENV{SMOKETEST_SOINSTCMD};
+                    if ( defined($_inst_cmd) ) {
+                        $Command = $_inst_cmd . " $convertinstallset -qn TARGETDIR=$convertdestdir";
+                    }
+                    else {
                         $Command = "msiexec.exe /a $convertinstallset -qn TARGETDIR=$convertdestdir ALLUSERS=2";
                     }
-                    else {
-                        $Command = "msiexec.exe -i $convertinstallset -qn INSTALLLOCATION=$convertdestdir";
-                    }
-                }
-            }
-            else {
-                $_inst_cmd=$ENV{SMOKETEST_SOINSTCMD};
-                if ( defined($_inst_cmd) ) {
-                    $Command = $_inst_cmd . " $installsetpath$file -qn TARGETDIR=$dest_installdir";
                 }
                 else {
-                    if ($is_admin_installation)
-                    {
+                    $_inst_cmd=$ENV{SMOKETEST_SOINSTCMD};
+                    if ( defined($_inst_cmd) ) {
+                        $Command = $_inst_cmd . " $installsetpath$file -qn TARGETDIR=$dest_installdir";
+                    }
+                    else {
                         $Command = "msiexec.exe /a $installsetpath$file -qn TARGETDIR=$dest_installdir ALLUSERS=2";
                     }
-                    else {
-                        $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
-                    }
                 }
+                execute_Command ($Command, $error_msiexec, $show_Message,  $command_normal);
             }
-            if (!$is_oo and !$is_admin_installation) {
-                if ($gui eq $cygwin) {
-                    my $convertdata = ConvertCygwinToWin_Shell($DATA);
-                    $Command .= " TRANSFORMS=$convertdata" . "staroffice.mst";
-                }
-                else {
-                    $Command .= " TRANSFORMS=$DATA" . "staroffice.mst";
-                }
-            }
-            execute_Command ($Command, $error_msiexec, $show_Message,  $command_normal);
-        }
-        if (!$is_admin_installation) {
-            $Command = "$COPY_FILE \"$installsetpath" . "setup.ini" . "\" \"$dest_installdir\"";
-            execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
         }
         $basedir = $dest_installdir;
     }
@@ -844,12 +849,7 @@ sub getInstset {
         return ($NEWINSTSET, $INSTSET);
     }
     if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP)) {
-        my $last_lineend = $/;
-        if ($gui eq $cygwin) {
-            &SetCygwinLineends();
-        }
         ($NEWINSTSET, $INSTSET) = getSetFromServer();
-        $/ = $last_lineend;
     }
     else {
         $InstDir="";
@@ -899,44 +899,6 @@ sub isLocalEnv {
     return $returnvalue;
 }
 
-sub get_milestoneAndBuildID {
-    my ( $ws, $pf ) = @_;
-    my ($milestone, $buildid, $upd, $path, $updext);
-
-    if ( $ws =~ /^\D+(\d+)$/) {
-        $upd = $1;
-    }
-
-    if (defined ($ENV{UPDMINOREXT})) {
-        $updext = $ENV{UPDMINOREXT};
-    }
-    else {
-        $updext = "";
-    }
-
-    $path = "$ENV{SOLARVER}$PathSeparator$pf$PathSeparator" . "inc$updext$PathSeparator$upd" . "minor.mk";
-    print "$path\n" if $is_debug;
-    if ( !open(MINORMK,$path) ) {
-        print "FATAL: can't open $path\n";
-        return (0,0);
-    }
-
-    if (!eof(MINORMK)) {
-        while (<MINORMK>) {
-            chomp;
-            if ( /LAST_MINOR=(\w+)/ ) {
-                $milestone = $1;
-            }
-            elsif ( /BUILD=(\d+)/ ) {
-                $buildid = $1;
-            }
-        }
-
-        close(MINORMK);
-    }
-    return ($milestone, $buildid);
-}
-
 sub get_productcode {
     my ( $installpath ) = @_;
     my ($path, $productcode);
@@ -977,13 +939,11 @@ sub getSetFromServer {
     my $workspace = $ENV{WORK_STAMP};
     my $platform  = $ENV{INPATH};
     my $latestset;
-    my (@DirArray, $mask, $buildid);
+    my (@DirArray, $mask);
     $SetupFullPath = $PORDUCT;
     if ( ! ( $workspace && $platform ) ) {
         print_error ( "Error: environment not set correctly.", 1);
     }
-    # get latest broadcastet milestone and pack number
-    ($milestone, $buildid) = get_milestoneAndBuildID( $workspace, $platform );
     if (!defined($milestone)) {
             print_error ("Milestone ist not defined!", 2);
     }

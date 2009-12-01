@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@
 '\*************************************************************************************
 
 testcase tiFormatArea
-   Dim i
-   Dim Zaehler
-   dim Entf$
+    Dim i
+    Dim Zaehler
+    dim Entf$
 
    hNewDocument            '/// New impress document ///'
    hRechteckErstellen (20,20,60,60)         '/// create rectangle ///'
@@ -94,8 +94,9 @@ testcase tiFormatArea
    TabSchatten.Cancel
 
    hCloseDocument              '/// close document ///'
-endcase
-
+    
+endcase 'tiFormatArea
+'--------------------------------------------------------
 testcase tdFormatArea1
 
 Dim i
@@ -408,5 +409,5 @@ FormatArea
 
  Call hCloseDocument          '/// close document ///'
 
-endcase
+endcase 'tdFormatArea1
 

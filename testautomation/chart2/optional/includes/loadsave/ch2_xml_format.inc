@@ -31,7 +31,7 @@
 '*
 '/***********************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Verify the Chart2 XML file format
 '*
@@ -230,7 +230,7 @@ testcase tCompareXMLFormatLoad
     if SAXGetAttributeValue("table:cell-range-address") = "Sheet1.A1:B2" then
         printlog "The cell range for chart:plot-area is correct"
     else 
-        warnlog "The cell range is not Sheet1.A1:Sheet1.B2, it is " & SaxGetAttributeValue("table:cell-range-address")
+        warnlog "#i100780#: The cell range is not Sheet1.A1:B2, it is " & SaxGetAttributeValue("table:cell-range-address")
     endif    
     printlog "Seek for chart:series"
     printlog "               |-chart:series"
@@ -241,7 +241,7 @@ testcase tCompareXMLFormatLoad
     if SAXGetAttributeValue("chart:values-cell-range-address") = "Sheet1.A1:A2" then
         printlog "The cell range for chart:series is correct"
     else 
-        warnlog "The cell range is not Sheet1.A1:Sheet1.A2, it is " & SaxGetAttributeValue("chart:values-cell-range-address")
+        warnlog "#i100780#: The cell range is not Sheet1.A1:A2, it is " & SaxGetAttributeValue("chart:values-cell-range-address")
     endif
     ' DEBUG: printlog "I'm here: " & SAXGetElementName   
     '/// Close the XML editor.

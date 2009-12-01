@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,6 @@
 ' #1 tSaveLoadLayoutChart
 ' #1 tSaveLoadLayoutSpreadsheet
 '\*************************************************************************************
-
 testcase tFileOpenSaveEtc
    Dim Dokument$
    Dim Dokument2$
@@ -177,177 +176,170 @@ testcase tFileOpenSaveEtc
    endcatch
    sleep 5
    FileClose								'/// Close document ///'
-endcase
-
-'********************************************************************************************
-
+   
+endcase 'tFileOpenSaveEtc
+'--------------------------------------------------------
 testcase tFileProperties
+
     qaerrorlog "#i88163#, File/properties/user defined fields get mixed up."
     goto endsub
-   Call hNewDocument
-   Call hTextrahmenErstellen ("This is a document to test the Menupoint in File/Properties",30,30,60,40)
+    Call hNewDocument
+    Call hTextrahmenErstellen ("This is a document to test the Menupoint in File/Properties",30,30,60,40)
 
-    if (gApplication = "IMPRESS") then 
+    if (gApplication = "IMPRESS") then
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
     end if
 
-   FileProperties
+    FileProperties
 
-   Kontext
-   active.SetPage TabDokumentinfo
-   Kontext "TabDokumentinfo"
-   Titel.SetText "Properties"
-   Thema.SetText "Documentproperties"
-   Schluesselworte.SetText "None"
+    Kontext
+    active.SetPage TabDokumentinfo
+    Kontext "TabDokumentinfo"
+    Titel.SetText "Properties"
+    Thema.SetText "Documentproperties"
+    Schluesselworte.SetText "None"
 
-   qaerrorlog "#i95523#"
-   'Kontext
-   'active.SetPage TabBenutzer
-   'Kontext "TabBenutzer"
-   'Info2.SetText "Thorsten Peters"
+    qaerrorlog "#i95523#"
+    'Kontext
+    'active.SetPage TabBenutzer
+    'Kontext "TabBenutzer"
+    'Info2.SetText "Thorsten Peters"
 
-   'Infofelder.Click
-   'Kontext "InfonamenBearbeiten"
-   'Namen2.SetText "Name"
-   'InfonamenBearbeiten.OK
-   'sleep 2
-   Kontext
-   active.SetPage TabInternet
-   Kontext "TabInternet"
-   RefreshThisDocument.Check
+    'Infofelder.Click
+    'Kontext "InfonamenBearbeiten"
+    'Namen2.SetText "Name"
+    'InfonamenBearbeiten.OK
+    'sleep 2
+    Kontext
+    active.SetPage TabInternet
+    Kontext "TabInternet"
+    RefreshThisDocument.Check
 
-   TabInternet.OK
+    TabInternet.OK
 
-   hFileSaveAsKill ConvertPath (gOfficePath + "user\work\eigen." & ExtensionString)
+    hFileSaveAsKill ConvertPath (gOfficePath + "user\work\eigen." & ExtensionString)
 
-   FileClose
-   Kontext "Active"
+    FileClose
+    Kontext "Active"
     if Active.Exists(2) then Active.Yes
 
-   PrintLog "- File / Properties  compare"
-   Sleep 2
-   hFileOpen ConvertPath (gOfficePath + "user\work\eigen." + ExtensionString) 
+        PrintLog "- File / Properties  compare"
+        Sleep 2
+        hFileOpen ConvertPath (gOfficePath + "user\work\eigen." + ExtensionString)
 
-   ' check if the document is writable
-   if fIsDocumentWritable = false then
-      ' make the document writable and check if it's succesfull
-      if fMakeDocumentWritable = false then
-         warnlog "The document can't be make writeable. Test stopped."
-         goto endsub
-      endif
-   endif
-   FileProperties
-   Kontext
-   active.SetPage TabDokumentinfo
-   Kontext "TabDokumentinfo"
-   if Titel.GetText <> "Properties" then Warnlog "Description / Titel is wrong"
-   if Thema.GetText <> "Documentproperties" then Warnlog "Description / Thema is wrong"
-   if Schluesselworte.GetText <> "None" then Warnlog "Description / Keywords is wrong"
+        ' check if the document is writable
+        if fIsDocumentWritable = false then
+            ' make the document writable and check if it's succesfull
+            if fMakeDocumentWritable = false then
+                warnlog "The document can't be make writeable. Test stopped."
+                goto endsub
+            endif
+        endif
+        FileProperties
+        Kontext
+        active.SetPage TabDokumentinfo
+        Kontext "TabDokumentinfo"
+        if Titel.GetText <> "Properties" then Warnlog "Description / Titel is wrong"
+            if Thema.GetText <> "Documentproperties" then Warnlog "Description / Thema is wrong"
+                if Schluesselworte.GetText <> "None" then Warnlog "Description / Keywords is wrong"
 
-   qaerrorlog "#i95523#"
-   'Kontext
-   'active.SetPage TabBenutzer
-   'Kontext "TabBenutzer"
-   'if Info2.GetText <> "Thorsten Peters" then Warnlog "User Defined / Info2 is wrong"
+                    qaerrorlog "#i95523#"
+                    'Kontext
+                    'active.SetPage TabBenutzer
+                    'Kontext "TabBenutzer"
+                    'if Info2.GetText <> "Thorsten Peters" then Warnlog "User Defined / Info2 is wrong"
 
-   'Infofelder.Click
-   'sleep 2
-   'Kontext "InfonamenBearbeiten"
-   'if Namen2.GetText <> "Name" then Warnlog "Edit Field Names / Info2 is wrong"
-   'InfonamenBearbeiten.OK
+                    'Infofelder.Click
+                    'sleep 2
+                    'Kontext "InfonamenBearbeiten"
+                    'if Namen2.GetText <> "Name" then Warnlog "Edit Field Names / Info2 is wrong"
+                    'InfonamenBearbeiten.OK
 
-   Kontext
-   active.SetPage TabInternet
-   Kontext "TabInternet"
-   if RefreshThisDocument.IsChecked = FALSE then Warnlog "Internet / 'Refresh this document' is not checked"
+                    Kontext
+                    active.SetPage TabInternet
+                    Kontext "TabInternet"
+                    if RefreshThisDocument.IsChecked = FALSE then Warnlog "Internet / 'Refresh this document' is not checked"
 
-   TabInternet.Close
+                        TabInternet.Close
 
-   Call hCloseDocument
+                        Call hCloseDocument
 endcase
 
 '********************************************************************************************
 
 testcase tFilePassword52
-'/// load files with password from version 5.2 ///'
-   Dim Datei$
-   dim i as integer
-   dim x as integer
-   dim y as integer
-   dim sExt() as string
+    Dim Datei$
+    dim i as integer
+    dim x as integer
+    dim y as integer
+    dim sExt() as string
 
-   sExt = array("d","a")
-'   passwo52.sd d-preas a-draw
-   for i = 0 to 1
-      Datei$ = ConvertPath ( gTesttoolPath + "graphics\required\input\passwo52.sd"+sExt(i) )
-      '/// open document graphics\\required\\input\\passwo52.sd? ///'
-      hFileOpen(Datei$)
-      sleep 2
-      Kontext "passwordFileOpen"
-      '/// password dialog has to came up ! ELSE: error! ///'
-      if passwordFileOpen.exists(5) then
-         '/// type password: "12345" -> RIGHT ///'
-         PasswortName.SetText "12345"
-         passwordFileOpen.OK
-         Printlog "Ok, password dialog came up :-) for file : '" + datei$ + "'"
-      else
-         Warnlog "No password dialog came up :-( for file : '" + datei$ + "'"
-      endif
-      Kontext "Messagebox"
-      if Messagebox.Exists(2) then
-         Warnlog "messagebox ?: '" + Messagebox.GetText + "'"
-      endif
-      '/// close document ///'
-      hCloseDocument
-   next i
+    sExt = array("d","a")
+    '   passwo52.sd d-preas a-draw
+    for i = 0 to 1
+        Datei$ = ConvertPath ( gTesttoolPath + "graphics\required\input\passwo52.sd"+sExt(i) )
+        hFileOpen(Datei$)
+        sleep 2
+        Kontext "passwordFileOpen"
+        if passwordFileOpen.exists(5) then
+            PasswortName.SetText "12345"
+            passwordFileOpen.OK
+            Printlog "Ok, password dialog came up :-) for file : '" + datei$ + "'"
+        else
+            Warnlog "No password dialog came up :-( for file : '" + datei$ + "'"
+        endif
+        Kontext "Messagebox"
+        if Messagebox.Exists(2) then
+            Warnlog "messagebox ?: '" + Messagebox.GetText + "'"
+        endif
+        hCloseDocument
+    next i
 endcase
 
 '********************************************************************************************
 
 testcase tFileOpenImport
-'/// tries to load a document of type 'ComputerGraphicsMetafile'; gets loaded as impress document. ///'
-dim q as integer
-   call hNewDocument
-   FileOpen
-      Kontext "OeffnenDlg"
-'///       Dateiname.SetText (gTesttoolpath + "graphics\required\input\imsusmap.cgm") ///'
-     Dateiname.SetText (ConvertPath (gTesttoolpath + "graphics\required\input\imsusmap.cgm"))
-      Oeffnen.Click
-   Sleep 2
-   ' check if the document is writable
-   if fIsDocumentWritable = false then
-      ' make the document writable and check if it's succesfull
-      if fMakeDocumentWritable = false then
-         warnlog "The document can't be make writeable. Test stopped."
-         goto endsub
-      endif
-   endif
-   kontext "DocumentImpress"
-   if DocumentImpress.exists(5) then
-       DocumentImpress.TypeKeys ("<Tab>")
-   else
-       warnlog "Not loaded in impress"
-   endif
-   try
-      ContextPositionAndSize
-      kontext
-      messagebox.setpage TabPositionAndSize
-      sleep 1
-      TabPositionAndSize.Close
-   catch
-      warnlog "Documents of Type 'ComputerGraphicsMetafile' can't get loaded :-("
-   endcatch
-   Call hCloseDocument
-   if (gApplication="DRAW") then
-       Call hCloseDocument
-   endif
+    dim q as integer
+    call hNewDocument
+    FileOpen
+    Kontext "OeffnenDlg"
+    Dateiname.SetText (ConvertPath (gTesttoolpath + "graphics\required\input\imsusmap.cgm"))
+    Oeffnen.Click
+    Sleep 2
+    ' check if the document is writable
+    if fIsDocumentWritable = false then
+        ' make the document writable and check if it's succesfull
+        if fMakeDocumentWritable = false then
+            warnlog "The document can't be make writeable. Test stopped."
+            goto endsub
+        endif
+    endif
+    kontext "DocumentImpress"
+    if DocumentImpress.exists(5) then
+        DocumentImpress.TypeKeys ("<Tab>")
+    else
+        warnlog "Not loaded in impress"
+    endif
+    try
+        ContextPositionAndSize
+        kontext
+        messagebox.setpage TabPositionAndSize
+        sleep 1
+        TabPositionAndSize.Close
+    catch
+        warnlog "Documents of Type 'ComputerGraphicsMetafile' can't get loaded :-("
+    endcatch
+    Call hCloseDocument
+    if (gApplication="DRAW") then
+        Call hCloseDocument
+    endif
 endcase
 
 '********************************************************************************************
-
 testcase tTestDXF255CharBug
+
 '/// tries to load a DXF-document which has a string-leght of 255 characters. ///'
 dim q as integer
    call hNewDocument
@@ -392,11 +384,11 @@ dim q as integer
       warnlog "DXF-Document could not be loaded :-("
    endcatch
    Call hCloseDocument
-endcase
-
+   
+endcase 'tTestDXF255CharBug
 '********************************************************************************************
-
 testcase tDeletedTemplate
+
     dim i as integer
     dim Dokument1$
     dim Dokument2$
@@ -500,8 +492,7 @@ testcase tDeletedTemplate
         warnlog "Could not delete the file: " + Dokument2$
     endcatch
 
-endcase
-
+endcase 'tDeletedTemplate
 '****************************************************************************************************
 
 testcase tSaveLoadLayoutEmpty
@@ -509,41 +500,31 @@ testcase tSaveLoadLayoutEmpty
 
     NewFileDir = ConvertPath (gOfficePath + "user\work\LayoutTest\")
 
-    '/// Create New folder in the Work-directory ///'
     printlog "   Will try to create the directory: " + NewFileDir
     app.mkdir NewFileDir
 
-    '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
-    '/// Make new Presentation ///'
     gApplication = "IMPRESS"
     Call hNewDocument
 
-    '/// Choose and Insert an empty Layout. ///'
     printlog "Choose and Insert an empty Layout."
     FormatModifyPage
     sleep 1
     kontext "Tasks"
-       LayoutsPreview.TypeKeys "<HOME>"
-       kontext "Pagelayout_UndoDeleteWarning"
-       if Pagelayout_UndoDeleteWarning.exists then
-       Pagelayout_UndoDeleteWarning.ok
+    LayoutsPreview.TypeKeys "<HOME>"
+    kontext "Pagelayout_UndoDeleteWarning"
+    if Pagelayout_UndoDeleteWarning.exists then
+        Pagelayout_UndoDeleteWarning.ok
     endif
     kontext "Tasks"
-    '/// Press "Enter" to use the layout on the current slide ///'
     LayoutsPreview.TypeKeys "<RETURN>"
     sleep (5)
 
-    '/// Save the document in different formats... ///'
-    '/// Close the file. ///'
-    '/// Load the different files. ///'
-    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below. 
+    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below.
 
-    '/// Delete the different files. ///'
     printlog "   Will try to delete the directory: " + NewFileDir
     app.rmDir NewFileDir
 
-    '/// End the test ///'
 endcase 'tSaveLoadLayoutEmpty
 
 '****************************************************************************************************
@@ -555,57 +536,47 @@ testcase tSaveLoadLayoutOLE
 
     NewFileDir = ConvertPath (gOfficePath + "user\work\LayoutTest\")
 
-    '/// Create New folder in the Work-directory ///'
     printlog "   Will try to create the directory: " + NewFileDir
     app.mkdir NewFileDir
 
-    '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
-    '/// Make new Presentation ///'
     gApplication = "IMPRESS"
     Call hNewDocument
 
-    '/// Choose and Insert an Layout with an OLE. ///'
     printlog "Choose and Insert an Layout with an OLE."
     FormatModifyPage
     sleep 1
     kontext "Tasks"
-       LayoutsPreview.TypeKeys "<HOME>"
+    LayoutsPreview.TypeKeys "<HOME>"
     kontext "Pagelayout_UndoDeleteWarning"
     if Pagelayout_UndoDeleteWarning.exists then
-       Pagelayout_UndoDeleteWarning.ok
+        Pagelayout_UndoDeleteWarning.ok
     endif
     kontext "Tasks"
-       '/// select the OLE placeholder and activate it with [Return] ///'
-       LayoutsPreview.TypeKeys ("<RIGHT>",12)
-       sleep (1)
-       LayoutsPreview.TypeKeys ("<Return>")
-       sleep (1)
-       hTypeKeys ("<TAB><TAB><TAB>")
-       hTypeKeys ("<Return>")
-       try
-          sleep (2)
-          kontext "OLEObjektInsert"
-          sleep (1)
-          OLEObjektInsert.Cancel
-          Printlog "Inserted a layout with an 'Insert OLE-Object'-frame. Correct."
-       catch
-          warnlog "Ole wasn't selected :-("
-	  CALL hCloseDocument
-	  Goto Endsub
-       endcatch
+    LayoutsPreview.TypeKeys ("<RIGHT>",12)
+    sleep (1)
+    LayoutsPreview.TypeKeys ("<Return>")
+    sleep (1)
+    hTypeKeys ("<TAB><TAB><TAB>")
+    hTypeKeys ("<Return>")
+    try
+        sleep (2)
+        kontext "OLEObjektInsert"
+        sleep (1)
+        OLEObjektInsert.Cancel
+        Printlog "Inserted a layout with an 'Insert OLE-Object'-frame. Correct."
+    catch
+        warnlog "Ole wasn't selected :-("
+        CALL hCloseDocument
+        Goto Endsub
+    endcatch
     sleep (5)
 
-    '/// Save the document in different formats... ///'
-    '/// Close the file. ///'
-    '/// Load the different files. ///'
-    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below. 
+    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below.
 
-    '/// Delete the different files. ///'
     printlog "   Will try to delete the directory: " + NewFileDir
     app.rmDir ConvertPath (gOfficePath + "user\work\LayoutTest\")' NewFileDir
 
-    '/// End the test ///'
 endcase 'tSaveLoadLayoutOLE
 
 '****************************************************************************************************
@@ -617,48 +588,38 @@ testcase tSaveLoadLayoutText
 
     NewFileDir = ConvertPath (gOfficePath + "user\work\LayoutTest\")
 
-    '/// Create New folder in the Work-directory ///'
     printlog "   Will try to create the directory: " + NewFileDir
     app.mkdir NewFileDir
 
-    '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
-    '/// Make new Presentation ///'
     gApplication = "IMPRESS"
     Call hNewDocument
 
-    '/// Choose and Insert an Layout with a Text-field. ///'
     printlog "Choose and Insert an Layout with a Text-field."
     FormatModifyPage
     sleep 1
     kontext "Tasks"
-       LayoutsPreview.TypeKeys "<HOME>"
-       kontext "Pagelayout_UndoDeleteWarning"
-       if Pagelayout_UndoDeleteWarning.exists then
-       Pagelayout_UndoDeleteWarning.ok
+    LayoutsPreview.TypeKeys "<HOME>"
+    kontext "Pagelayout_UndoDeleteWarning"
+    if Pagelayout_UndoDeleteWarning.exists then
+        Pagelayout_UndoDeleteWarning.ok
     endif
     kontext "Tasks"
-       '/// select the Text placeholder and activate it with [Return] ///'
-       LayoutsPreview.TypeKeys ("<RIGHT>")
-       sleep (1)
-       LayoutsPreview.TypeKeys ("<Return>")
-       sleep (1)
-       hTypeKeys ("<TAB><TAB><TAB>")
-       hTypeKeys ("<Return>")
-       hTypeKeys ("<ESCAPE>")
-'       LayoutsPreview.TypeKeys "<RETURN>"
+    LayoutsPreview.TypeKeys ("<RIGHT>")
+    sleep (1)
+    LayoutsPreview.TypeKeys ("<Return>")
+    sleep (1)
+    hTypeKeys ("<TAB><TAB><TAB>")
+    hTypeKeys ("<Return>")
+    hTypeKeys ("<ESCAPE>")
+    '       LayoutsPreview.TypeKeys "<RETURN>"
     sleep (5)
 
-    '/// Save the document in different formats... ///'
-    '/// Close the file. ///'
-    '/// Load the different files. ///'
-    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below. 
+    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below.
 
-    '/// Delete the different files. ///'
     printlog "   Will try to delete the directory: " + NewFileDir
     app.rmDir ConvertPath (gOfficePath + "user\work\LayoutTest\")' NewFileDir
 
-    '/// End the test ///'
 endcase 'tSaveLoadLayoutText
 
 '****************************************************************************************************
@@ -670,47 +631,37 @@ testcase tSaveLoadLayoutOutline
 
     NewFileDir = ConvertPath (gOfficePath + "user\work\LayoutTest\")
 
-    '/// Create New folder in the Work-directory ///'
     printlog "   Will try to create the directory: " + NewFileDir
     app.mkdir NewFileDir
 
-    '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
-    '/// Make new Presentation ///'
     gApplication = "IMPRESS"
     Call hNewDocument
 
-    '/// Choose and Insert an Layout with a Outline-field. ///'
     printlog "Choose and Insert an Layout with a Outline-field."
     FormatModifyPage
     sleep 1
     kontext "Tasks"
-       LayoutsPreview.TypeKeys "<HOME>"
-       kontext "Pagelayout_UndoDeleteWarning"
-       if Pagelayout_UndoDeleteWarning.exists then
-       Pagelayout_UndoDeleteWarning.ok
+    LayoutsPreview.TypeKeys "<HOME>"
+    kontext "Pagelayout_UndoDeleteWarning"
+    if Pagelayout_UndoDeleteWarning.exists then
+        Pagelayout_UndoDeleteWarning.ok
     endif
     kontext "Tasks"
-       '/// select the Outline placeholder and activate it with [Return] ///'
-       LayoutsPreview.TypeKeys ("<RIGHT>",3)
-       sleep (1)
-       LayoutsPreview.TypeKeys ("<Return>")
-       sleep (1)
-       hTypeKeys ("<TAB><TAB><TAB>")
-       hTypeKeys ("<Return>")
-       hTypeKeys ("<ESCAPE>")
+    LayoutsPreview.TypeKeys ("<RIGHT>",3)
+    sleep (1)
+    LayoutsPreview.TypeKeys ("<Return>")
+    sleep (1)
+    hTypeKeys ("<TAB><TAB><TAB>")
+    hTypeKeys ("<Return>")
+    hTypeKeys ("<ESCAPE>")
     sleep (5)
 
-    '/// Save the document in different formats... ///'
-    '/// Close the file. ///'
-    '/// Load the different files. ///'
-    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below. 
+    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below.
 
-    '/// Delete the different files. ///'
     printlog "   Will try to delete the directory: " + NewFileDir
     app.rmDir ConvertPath (gOfficePath + "user\work\LayoutTest\")' NewFileDir
 
-    '/// End the test ///'
 endcase 'tSaveLoadLayoutOutline
 
 '****************************************************************************************************
@@ -722,47 +673,37 @@ testcase tSaveLoadLayoutPicture
 
     NewFileDir = ConvertPath (gOfficePath + "user\work\LayoutTest\")
 
-    '/// Create New folder in the Work-directory ///'
     printlog "   Will try to create the directory: " + NewFileDir
     app.mkdir NewFileDir
 
-    '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
-    '/// Make new Presentation ///'
     gApplication = "IMPRESS"
     Call hNewDocument
 
-    '/// Choose and Insert an Layout with a Graphic-field. ///'
     printlog "Choose and Insert an Layout with a Graphic-field."
     FormatModifyPage
     sleep 1
     kontext "Tasks"
-       LayoutsPreview.TypeKeys "<HOME>"
-       kontext "Pagelayout_UndoDeleteWarning"
-       if Pagelayout_UndoDeleteWarning.exists then
-       Pagelayout_UndoDeleteWarning.ok
+    LayoutsPreview.TypeKeys "<HOME>"
+    kontext "Pagelayout_UndoDeleteWarning"
+    if Pagelayout_UndoDeleteWarning.exists then
+        Pagelayout_UndoDeleteWarning.ok
     endif
     kontext "Tasks"
-       '/// select the Picture placeholder and activate it with [Return] ///'
-       LayoutsPreview.TypeKeys ("<RIGHT>",8)
-       sleep (1)
-       LayoutsPreview.TypeKeys ("<Return>")
-       sleep (1)
-       hTypeKeys ("<TAB><TAB><TAB>")
-       hTypeKeys ("<Return>")
-       hTypeKeys ("<ESCAPE>")
-       sleep (5)
+    LayoutsPreview.TypeKeys ("<RIGHT>",8)
+    sleep (1)
+    LayoutsPreview.TypeKeys ("<Return>")
+    sleep (1)
+    hTypeKeys ("<TAB><TAB><TAB>")
+    hTypeKeys ("<Return>")
+    hTypeKeys ("<ESCAPE>")
+    sleep (5)
 
-    '/// Save the document in different formats... ///'
-    '/// Close the file. ///'
-    '/// Load the different files. ///'
-    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below. 
+    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below.
 
-    '/// Delete the different files. ///'
     printlog "   Will try to delete the directory: " + NewFileDir
     app.rmDir ConvertPath (gOfficePath + "user\work\LayoutTest\")' NewFileDir
 
-    '/// End the test ///'
 endcase 'tSaveLoadLayoutPicture
 
 '****************************************************************************************************
@@ -774,47 +715,37 @@ testcase tSaveLoadLayoutChart
 
     NewFileDir = ConvertPath (gOfficePath + "user\work\LayoutTest\")
 
-    '/// Create New folder in the Work-directory ///'
     printlog "   Will try to create the directory: " + NewFileDir
     app.mkdir NewFileDir
 
-    '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
-    '/// Make new Presentation ///'
     gApplication = "IMPRESS"
     Call hNewDocument
 
-    '/// Choose and Insert an Layout with a Chart-field. ///'
     printlog "Choose and Insert an Layout with a Chart-field."
     FormatModifyPage
     sleep 1
     kontext "Tasks"
-       LayoutsPreview.TypeKeys "<HOME>"
-       kontext "Pagelayout_UndoDeleteWarning"
-       if Pagelayout_UndoDeleteWarning.exists then
-       Pagelayout_UndoDeleteWarning.ok
+    LayoutsPreview.TypeKeys "<HOME>"
+    kontext "Pagelayout_UndoDeleteWarning"
+    if Pagelayout_UndoDeleteWarning.exists then
+        Pagelayout_UndoDeleteWarning.ok
     endif
     kontext "Tasks"
-       '/// select the Chart placeholder and activate it with [Return] ///'
-       LayoutsPreview.TypeKeys ("<RIGHT>",6)
-       sleep (1)
-       LayoutsPreview.TypeKeys ("<Return>")
-       sleep (1)
-       hTypeKeys ("<TAB><TAB><TAB>")
-       hTypeKeys ("<Return>")
-       hTypeKeys ("<ESCAPE>")
-       sleep (5)
+    LayoutsPreview.TypeKeys ("<RIGHT>",6)
+    sleep (1)
+    LayoutsPreview.TypeKeys ("<Return>")
+    sleep (1)
+    hTypeKeys ("<TAB><TAB><TAB>")
+    hTypeKeys ("<Return>")
+    hTypeKeys ("<ESCAPE>")
+    sleep (5)
 
-    '/// Save the document in different formats... ///'
-    '/// Close the file. ///'
-    '/// Load the different files. ///'
-    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below. 
+    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below.
 
-    '/// Delete the different files. ///'
     printlog "   Will try to delete the directory: " + NewFileDir
     app.rmDir ConvertPath (gOfficePath + "user\work\LayoutTest\")' NewFileDir
 
-    '/// End the test ///'
 endcase 'tSaveLoadLayoutChart
 
 '****************************************************************************************************
@@ -826,47 +757,37 @@ testcase tSaveLoadLayoutSpreadsheet
 
     NewFileDir = ConvertPath (gOfficePath + "user\work\LayoutTest\")
 
-    '/// Create New folder in the Work-directory ///'
     printlog "   Will try to create the directory: " + NewFileDir
     app.mkdir NewFileDir
 
-    '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
-    '/// Make new Presentation ///'
     gApplication = "IMPRESS"
     Call hNewDocument
 
-    '/// Choose and Insert an Layout with a Spreadsheet-field. ///'
     printlog "Choose and Insert an Layout with a Spreadsheet-field."
     FormatModifyPage
     sleep 1
     kontext "Tasks"
-       LayoutsPreview.TypeKeys "<HOME>"
-       kontext "Pagelayout_UndoDeleteWarning"
-       if Pagelayout_UndoDeleteWarning.exists then
-       Pagelayout_UndoDeleteWarning.ok
+    LayoutsPreview.TypeKeys "<HOME>"
+    kontext "Pagelayout_UndoDeleteWarning"
+    if Pagelayout_UndoDeleteWarning.exists then
+        Pagelayout_UndoDeleteWarning.ok
     endif
     kontext "Tasks"
-       '/// select the Spreadsheet placeholder and activate it with [Return] ///'
-       LayoutsPreview.TypeKeys ("<RIGHT>",7)
-       sleep (1)
-       LayoutsPreview.TypeKeys ("<Return>")
-       sleep (1)
-       hTypeKeys ("<TAB><TAB><TAB>")
-       hTypeKeys ("<Return>")
-       hTypeKeys ("<ESCAPE>")
-       sleep (5)
+    LayoutsPreview.TypeKeys ("<RIGHT>",7)
+    sleep (1)
+    LayoutsPreview.TypeKeys ("<Return>")
+    sleep (1)
+    hTypeKeys ("<TAB><TAB><TAB>")
+    hTypeKeys ("<Return>")
+    hTypeKeys ("<ESCAPE>")
+    sleep (5)
 
-    '/// Save the document in different formats... ///'
-    '/// Close the file. ///'
-    '/// Load the different files. ///'
-    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below. 
+    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below.
 
-    '/// Delete the different files. ///'
     printlog "   Will try to delete the directory: " + NewFileDir
     app.rmDir ConvertPath (gOfficePath + "user\work\LayoutTest\")' NewFileDir
 
-    '/// End the test ///'
 endcase 'tSaveLoadLayoutSpreadsheet
 
 '****************************************************************************************************

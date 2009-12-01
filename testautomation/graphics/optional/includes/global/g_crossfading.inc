@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,16 +40,16 @@
 '\*************************************************************************************
 
 testcase tCrossfading
- dim X as integer
- dim Z as integer
- dim Y as integer
- dim I as integer
- dim CheckX as integer
- dim FirstX as integer
- dim CounterForX as integer
- dim anothercounter as integer
+    dim X as integer
+    dim Z as integer
+    dim Y as integer
+    dim I as integer
+    dim CheckX as integer
+    dim FirstX as integer
+    dim CounterForX as integer
+    dim anothercounter as integer
 
- Call hNewDocument						                '/// New Impress document ///'
+    Call hNewDocument						                '/// New Impress document ///'
     gMouseClick 50,50
    sleep 1
     Call hRechteckErstellen ( 5, 5, 20, 30 )			'/// Create rectangle ///'
@@ -60,27 +60,27 @@ testcase tCrossfading
    sleep 1
     EditCrossFading                                     '/// Choose Edit / CrossFading ///'
     kontext "Ueberblenden"
-X = Schritte.GetText									' /// Get counter-value and save it in X ///'
-printlog "Steps before we start the test: " + X
-printlog "Schritte.GetText= " + Schritte.GetText
+    X = Schritte.GetText									' /// Get counter-value and save it in X ///'
+    printlog "Steps before we start the test: " + X
+    printlog "Schritte.GetText= " + Schritte.GetText
+    
+    Schritte.ToMin
+    if Schritte.GetText <> "1" then qaerrorlog "Could not change the step-number to 1."
 
-Schritte.ToMin
-if Schritte.GetText <> "1" then qaerrorlog "Could not change the step-number to 1."
-
-   for I = 2 to 10										' /// How many steps do you want? ///'
-      Schritte.More 1
-      if Schritte.GetText <> I then qaerrorlog "Could not change the step-number to" + I
-      Ueberblenden.OK
-      sleep 1
-         try
-FormatUngroupDraw							'/// open context menu and ungroup objects ///'
-         catch
-            qaerrorlog "Could not ungroup objects"
-         endcatch
-      sleep 1
-      hTypeKeys "<TAB>"								'/// Should make the first object active ///'
-
-'/// Get position and dimensions of elements ///'
+    for I = 2 to 10										' /// How many steps do you want? ///'
+        Schritte.More 1
+            if Schritte.GetText <> I then qaerrorlog "Could not change the step-number to" + I
+                Ueberblenden.OK
+                sleep 1
+    try
+    FormatUngroupDraw							'/// open context menu and ungroup objects ///'
+    catch
+    qaerrorlog "Could not ungroup objects"
+    endcatch
+    sleep 1
+    hTypeKeys "<TAB>"								'/// Should make the first object active ///'
+    
+    '/// Get position and dimensions of elements ///'
       try
          ContextPositionAndSize
       catch
@@ -140,133 +140,133 @@ anothercounter = I+2										'/// How many objects we have on the screen ///'
     sleep 1
       EditCrossFading                                     		'/// Choose Edit / CrossFading ///'
       sleep 2
-      kontext "Ueberblenden"
-   next I
+        kontext "Ueberblenden"
+    next I
 
-'/// And now we're gonna check if we can separate the object into it's parts ///'
-'/// And check if the numbers of steps / objects is correct ///'
+    '/// And now we're gonna check if we can separate the object into it's parts ///'
+    '/// And check if the numbers of steps / objects is correct ///'
 
-Schritte.ToMin                                            '/// Select minimum value for number of steps ///'
-for Z = 1 to X -1
-Schritte.More                                             '/// Raise the value for number of steps with one ///'
-next Z
-printlog "Value has been restored to: " + Schritte.GetText
-printlog "X is now: " + X
-   Attributierung.UnCheck
-      Ueberblenden.OK
-      sleep 1
-      Kontext "DocumentDraw"
-      EditSelectAll							              '/// Select all ///'
-      EditDelete                                          '/// Delete all ///'
-   sleep 1
-      Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
+    Schritte.ToMin                                            '/// Select minimum value for number of steps ///'
+    for Z = 1 to X -1
+    Schritte.More                                             '/// Raise the value for number of steps with one ///'
+    next Z
+    printlog "Value has been restored to: " + Schritte.GetText
+    printlog "X is now: " + X
+    Attributierung.UnCheck
+    Ueberblenden.OK
+    sleep 1
+    Kontext "DocumentDraw"
+    EditSelectAll							              '/// Select all ///'
+    EditDelete                                          '/// Delete all ///'
+    sleep 1
+    Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
     gMouseClick 90,90
-      Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// Create second rectangle ///'
-      EditSelectAll							              '/// Select all ///'
-   sleep 1
-      EditCrossFading                                     '/// Choose Edit / CrossFading ///'
-      Kontext "Ueberblenden"
-      if Attributierung.IsChecked = TRUE then qaerrorlog "Attributierung /    was NOT unchecked."
-   GleicheOrientierung.UnCheck							  '/// Uncheck "same orienation" ///'   -????
-      Ueberblenden.OK									  '/// Close CrossFading-window with "OK" ///'
-      sleep 1
-      Kontext "DocumentDraw"
-      EditSelectAll							              '/// Select all ///'
-      EditDelete                                          '/// Delete all ///'
-   sleep 1
-      Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
+    Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// Create second rectangle ///'
+    EditSelectAll							              '/// Select all ///'
+    sleep 1
+    EditCrossFading                                     '/// Choose Edit / CrossFading ///'
+    Kontext "Ueberblenden"
+    if Attributierung.IsChecked = TRUE then qaerrorlog "Attributierung /    was NOT unchecked."
+    GleicheOrientierung.UnCheck							  '/// Uncheck "same orienation" ///'   -????
+    Ueberblenden.OK									  '/// Close CrossFading-window with "OK" ///'
+    sleep 1
+    Kontext "DocumentDraw"
+    EditSelectAll							              '/// Select all ///'
+    EditDelete                                          '/// Delete all ///'
+    sleep 1
+    Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
     gMouseClick 90,90
-      Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// create rectangle ///'
-      EditSelectAll							              '/// Select all ///'
-   sleep 1
-      EditCrossFading                                     '/// Choose Edit / CrossFading ///'
-      Kontext "Ueberblenden"
-      if GleicheOrientierung.IsChecked = TRUE then qaerrorlog "GleicheOrientierung /    was NOT unchecked."
-   Attributierung.Check							          '/// Check "Attributing" ///'  - ???
-      Ueberblenden.OK									  '/// Close CrossFading-window with "OK" ///'
-      sleep 1
-      Kontext "DocumentDraw"
-      EditSelectAll							              '/// Select all ///'
-   sleep 1
-      EditDelete                                          '/// Delete all ///'
-   sleep 1
-      Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
+    Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// create rectangle ///'
+    EditSelectAll							              '/// Select all ///'
+    sleep 1
+    EditCrossFading                                     '/// Choose Edit / CrossFading ///'
+    Kontext "Ueberblenden"
+    if GleicheOrientierung.IsChecked = TRUE then qaerrorlog "GleicheOrientierung /    was NOT unchecked."
+    Attributierung.Check							          '/// Check "Attributing" ///'  - ???
+    Ueberblenden.OK									  '/// Close CrossFading-window with "OK" ///'
+    sleep 1
+    Kontext "DocumentDraw"
+    EditSelectAll							              '/// Select all ///'
+    sleep 1
+    EditDelete                                          '/// Delete all ///'
+    sleep 1
+    Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
     gMouseClick 90,90
-      Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// Create second rectangle ///'
-      EditSelectAll							              '/// Select all ///'
-   sleep 1
-      EditCrossFading                                     '/// Choose Edit / CrossFading ///'
-      Kontext "Ueberblenden"
-      if Attributierung.IsChecked = FALSE then qaerrorlog "Attributierung /    was NOT checked again."
-   GleicheOrientierung.UnCheck							  '/// Check "same orientation" ///'   -????
-      Ueberblenden.OK
-      sleep 1
-      Kontext "DocumentDraw"
-      EditSelectAll										  '/// Select all ///'
-      EditDelete										  '/// Delete all ///'
-   sleep 1
-      Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
+    Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// Create second rectangle ///'
+    EditSelectAll							              '/// Select all ///'
+    sleep 1
+    EditCrossFading                                     '/// Choose Edit / CrossFading ///'
+    Kontext "Ueberblenden"
+    if Attributierung.IsChecked = FALSE then qaerrorlog "Attributierung /    was NOT checked again."
+    GleicheOrientierung.UnCheck							  '/// Check "same orientation" ///'   -????
+    Ueberblenden.OK
+    sleep 1
+    Kontext "DocumentDraw"
+    EditSelectAll										  '/// Select all ///'
+    EditDelete										  '/// Delete all ///'
+    sleep 1
+    Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
     gMouseClick 90,90
-      Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// create rectangle ///'
-      EditSelectAll				   						  '/// Select all ///'
-   sleep 1
-      EditCrossFading                                     '/// Choose Edit / CrossFading ///'
-      Kontext "Ueberblenden"
-      if GleicheOrientierung.IsChecked = TRUE then qaerrorlog "GleicheOrientierung /    was NOT checked again."
-   GleicheOrientierung.Check							  '/// Check "same orientation" ///'   -????
-      Ueberblenden.OK									  '/// Close CrossFading-window with "OK" ///'
-      sleep 1
-      Kontext "DocumentDraw"
-      EditSelectAll			  							  '/// Select all ///'
-      EditDelete										  '/// Delete all ///'
-      Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
+    Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// create rectangle ///'
+    EditSelectAll				   						  '/// Select all ///'
+    sleep 1
+    EditCrossFading                                     '/// Choose Edit / CrossFading ///'
+    Kontext "Ueberblenden"
+    if GleicheOrientierung.IsChecked = TRUE then qaerrorlog "GleicheOrientierung /    was NOT checked again."
+    GleicheOrientierung.Check							  '/// Check "same orientation" ///'   -????
+    Ueberblenden.OK									  '/// Close CrossFading-window with "OK" ///'
+    sleep 1
+    Kontext "DocumentDraw"
+    EditSelectAll			  							  '/// Select all ///'
+    EditDelete										  '/// Delete all ///'
+    Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
     gMouseClick 90,90
-      Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// create rectangle ///'
-      EditSelectAll										  '/// Select all ///'
-   sleep 1
-      EditCrossFading                                     '/// Choose Edit / CrossFading ///'
-      Kontext "Ueberblenden"
-      if GleicheOrientierung.IsChecked = FALSE then qaerrorlog "GleicheOrientierung /    was NOT checked again."
-   GleicheOrientierung.Check							  '/// Check "same orientation" ///'   -????
-      Ueberblenden.OK									  '/// Close CrossFading-window with "OK" ///'
-      sleep 1
-
-   Kontext "DocumentDraw"                                 '/// EditCrossFading should not be enabled if more than two objects is selected. ///'
-      EditSelectAll										  '/// Select all ///'
-      EditDelete                                          '/// Delete all ///'
-
-   sleep 1
-      Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
+    Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// create rectangle ///'
+    EditSelectAll										  '/// Select all ///'
+    sleep 1
+    EditCrossFading                                     '/// Choose Edit / CrossFading ///'
+    Kontext "Ueberblenden"
+    if GleicheOrientierung.IsChecked = FALSE then qaerrorlog "GleicheOrientierung /    was NOT checked again."
+    GleicheOrientierung.Check							  '/// Check "same orientation" ///'   -????
+    Ueberblenden.OK									  '/// Close CrossFading-window with "OK" ///'
+    sleep 1
+    
+    Kontext "DocumentDraw"                                 '/// EditCrossFading should not be enabled if more than two objects is selected. ///'
+    EditSelectAll										  '/// Select all ///'
+    EditDelete                                          '/// Delete all ///'
+    
+    sleep 1
+    Call hRechteckErstellen ( 5, 5, 20, 30 )			  '/// Create rectangle ///'
     gMouseClick 90,90
-      Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// Create second rectangle ///'
+    Call hRechteckErstellen ( 30, 30, 70, 70 )		  '/// Create second rectangle ///'
     gMouseClick 90,90
-      Call hRechteckErstellen ( 20, 20, 50, 50 )		  '/// Create third rectangle ///'
-   sleep 1
-      EditSelectAll										  '/// Select all ///'
-   sleep 1
-try
-      EditCrossFading                                     '/// Choose Edit / CrossFading ///'
-      sleep 2
-   If active = "Ueberblenden" then
-      qaerrorlog "CrossFading should NOT be selectable since more than two objects is selected."
-      kontext "Ueberblenden"
-      Ueberblenden.CANCEL								  '/// Close CrossFading-window with "CANCEL" ///'
-   endif
-   sleep 2
- Kontext "DocumentDraw"
-catch
-      printlog "CrossFading could not be selected when more than two objects selected: Correct."
-endcatch
+    Call hRechteckErstellen ( 20, 20, 50, 50 )		  '/// Create third rectangle ///'
+    sleep 1
+    EditSelectAll										  '/// Select all ///'
+    sleep 1
+    try
+        EditCrossFading                                     '/// Choose Edit / CrossFading ///'
+        sleep 2
+        If active = "Ueberblenden" then
+        qaerrorlog "CrossFading should NOT be selectable since more than two objects is selected."
+        kontext "Ueberblenden"
+        Ueberblenden.CANCEL								  '/// Close CrossFading-window with "CANCEL" ///'
+        endif
+        sleep 2
+        Kontext "DocumentDraw"
+    catch
+        printlog "CrossFading could not be selected when more than two objects selected: Correct."
+    endcatch
 
-try
-   EditSelectAll										  '/// Select all ///'
-   EditDelete                                          '/// Delete all ///'
-catch
-   warnlog "Could not select and delete all objects."
-endcatch
+    try
+       EditSelectAll										  '/// Select all ///'
+       EditDelete                                          '/// Delete all ///'
+    catch
+       warnlog "Could not select and delete all objects."
+    endcatch
 
-printlog "End of test"
+    printlog "End of test"
 
- Call hCloseDocument						              '/// Close document ///'
-endcase
-
+    Call hCloseDocument						              '/// Close document ///'
+ 
+endcase 'tCrossfading

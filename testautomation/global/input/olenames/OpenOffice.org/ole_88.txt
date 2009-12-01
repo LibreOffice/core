@@ -1,7 +1,0 @@
-CALC=OpenOffice.org 2.3 工作表文件
-CHART=OpenOffice.org 2.3 圖表
-DRAW=OpenOffice.org 2.3 繪圖
-IMPRESS=OpenOffice.org 2.3 簡報
-MATH=OpenOffice.org 2.3 公式
-WRITER=OpenOffice.org 2.3 文字
-OTHER=其他的物件

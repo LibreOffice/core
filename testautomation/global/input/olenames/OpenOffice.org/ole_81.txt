@@ -1,7 +1,0 @@
-CALC=OpenOffice.org 2.3 の表計算ドキュメント
-CHART=OpenOffice.org 2.3 のグラフ
-DRAW=OpenOffice.org 2.3 の図形描画
-IMPRESS=OpenOffice.org 2.3 のプレゼンテーション
-MATH=OpenOffice.org 2.3 の数式
-WRITER=OpenOffice.org 2.3 のテキスト
-OTHER=その他のオブジェクト

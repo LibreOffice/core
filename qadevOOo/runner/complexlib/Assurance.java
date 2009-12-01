@@ -44,6 +44,8 @@ import java.lang.reflect.Method;
  */
 public class Assurance
 {
+    public static final boolean CONTINUE = true;
+
     /** State of the current test method **/
     protected boolean state = true;
 

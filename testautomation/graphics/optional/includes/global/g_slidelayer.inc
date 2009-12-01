@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -42,74 +42,57 @@
 '\*************************************************************************************
 
 testcase tInsertSlide
-   '/// open application ///'
-   Call  hNewDocument
-   '/// Insert->Slide ///'
-   InsertSlide
-   sleep 2
-   hTypekeys "<Pagedown>"
-   sleep 2
-   try
-      '/// Edit->Delete Slide ///'
-      EditDeleteSlide
-      PrintLog "Slide 2 deleted"
-   catch
-      sleep 2
-      WarnLog "No slide was inserted"
-   endcatch
-   '/// close application ///'
-   hCloseDocument
+    Call  hNewDocument
+    InsertSlide
+    sleep 2
+    hTypekeys "<Pagedown>"
+    sleep 2
+    try
+        EditDeleteSlide
+        PrintLog "Slide 2 deleted"
+    catch
+        sleep 2
+        WarnLog "No slide was inserted"
+    endcatch
+    hCloseDocument
 endcase
 
 testcase tInsertDuplicateSlide
-   '/// open application ///'
-   Call  hNewDocument
-   sleep 2
-   '/// create rectangle ///'
-   hRechteckErstellen ( 10, 10, 50, 50 )
-   sleep 2
-   '/// Insert->Duplicate Slide ///'
-   InsertDuplicateSlide
-   try
-      '/// Edit->Select All ///'
-      EditSelectAll
-      sleep 2
-      '/// delete the object with a keystroke: [Delete] ///'
-      hTypeKeys "<DELETE>"
-      PrintLog "Slide duplicated"
-   catch
-      Warnlog " Slide not duplicated"
-   endcatch
-   try
-      '/// Edit->Delete Slide ///'
-      EditDeleteSlide
-   catch
-      WarnLog "Error when deleting. Slide is not duplicated ??"
-   endcatch
-   '/// close application ///'
-   hCloseDocument
+    Call  hNewDocument
+    sleep 2
+    hRechteckErstellen ( 10, 10, 50, 50 )
+    sleep 2
+    InsertDuplicateSlide
+    try
+        EditSelectAll
+        sleep 2
+        hTypeKeys "<DELETE>"
+        PrintLog "Slide duplicated"
+    catch
+        Warnlog " Slide not duplicated"
+    endcatch
+    try
+        EditDeleteSlide
+    catch
+        WarnLog "Error when deleting. Slide is not duplicated ??"
+    endcatch
+    hCloseDocument
 endcase
 
 testcase tInsertLayer
-   '/// open application ///'
-   Call hNewDocument
-   sleep 2
-   '/// View->Layer ///'
-   ViewLayer
-   '/// Edit->Layer->Insert ///'
-   InsertLayer
-   Kontext "EbeneEinfuegenDlg"
-   '/// leave dialog with OK ///'
-   EbeneEinfuegenDlg.OK
-   sleep 2
-   try
-      '/// Edit->Layer->Delete ///'
-      EditDeleteLayer
-      Kontext "Active"
-      Active.Yes
-   catch
-      WarnLog "There is no avaiable additional layer to delete"
-   endcatch
-   '/// close application ///'
-   hCloseDocument
+    Call hNewDocument
+    sleep 2
+    ViewLayer
+    InsertLayer
+    Kontext "EbeneEinfuegenDlg"
+    EbeneEinfuegenDlg.OK
+    sleep 2
+    try
+        EditDeleteLayer
+        Kontext "Active"
+        Active.Yes
+    catch
+        WarnLog "There is no avaiable additional layer to delete"
+    endcatch
+    hCloseDocument
 endcase

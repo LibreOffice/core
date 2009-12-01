@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,6 @@ sub main
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_insert.inc"
 
-    GetOLEDefaultNames
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
 
     PrintLog "-------------------------" + gApplication + "-------------------"
@@ -71,8 +70,8 @@ sub main
 
     Call tInsertFloatingFrame
     Call tInsertFields
-QaErrorLog "#79794 - tdInsertObjectOleObjects outcommented due to bug."
-'    Call tdInsertObjectOleObjects
+    QaErrorLog "#79794 - tdInsertObjectOleObjects outcommented due to bug."
+    '    Call tdInsertObjectOleObjects
 
     Printlog "Disabled SnappPointLine test, because of unpredictable mouse moves (07/2002 TBO)"
     'Call tdInsertSnappoint_Line
@@ -86,15 +85,15 @@ QaErrorLog "#79794 - tdInsertObjectOleObjects outcommented due to bug."
     Call tInsertObjectPlugIn               ' Doesn't exist in the VCL
     Call tInsertObjectApplet
     Call tInsertObjectFormula              ' Is in the VCL in InsertObjectOLEObject
-'    Call tInsertChart
+    '    Call tInsertChart
     Call tdInsertFile
 
     Call hStatusOut
 end sub
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   gApplication = "IMPRESS"
-   Call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    gApplication = "IMPRESS"
+    Call GetUseFiles
 end sub

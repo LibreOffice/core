@@ -85,8 +85,8 @@ endcase
 '-------------------------------------------------------------------------
 testcase tOpenUTF8File(sFilename as string)
     
-    '/// copy the file TesttoolPath + dbaccess/optional/input/text_datasource/text_Database.txt" to your local wotk directory
-    printlog "copy the file TesttoolPath + dbaccess/optional/input/text_datasource/text_Database.txt to your local wotk directory"
+    '/// copy the file TesttoolPath + dbaccess/optional/input/text_datasource/text_database.txt" to your local wotk directory
+    printlog "copy the file TesttoolPath + dbaccess/optional/input/text_datasource/text_database.txt to your local wotk directory"
     app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/text_datasource/text_database.txt"),gOfficePath + ConvertPath("user/work/text_database.txt")
 
     '/// open the text database create in the bas file
@@ -131,7 +131,7 @@ testcase tOpenUTF8File(sFilename as string)
         
     '/// open the table text_database
     printlog "open the table text_Database"    
-    call fOpenTable("text_Database")
+    call fOpenTable("text_database")
     
     '/// check if the first row contains the string öäü
     printlog "check if the first row contains the string öäü"

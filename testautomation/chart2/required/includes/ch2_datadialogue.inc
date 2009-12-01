@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* Owner : helge.delfs@sun.com
+'* Owner : oliver.craemer@sun.com
 '*
 '* short description : Resource-test for the Chart Data Dialogue.
 '*

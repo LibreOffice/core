@@ -187,7 +187,8 @@ testcase tAlienAttributes
                             warnlog "Hidden attributes (in a cell style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
                         end if
                         if c = 2 or c = 3 then 
-                            warnlog "Hidden attributes (in a paragraph style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
+'                            warnlog "Hidden attributes (in a paragraph style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
+							warnlog "#i100879# : Hidden attributes (in a paragraph style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
                         end if
                         if c = 4 or c = 5 then 
                             warnlog "Hidden attributes (in a text style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"

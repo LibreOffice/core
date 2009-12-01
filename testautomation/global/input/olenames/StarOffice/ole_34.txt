@@ -1,7 +1,0 @@
-CALC=StarOffice 9 Hoja de cálculo
-CHART=StarOffice 9 Gráfico
-DRAW=StarOffice 9 Dibujo
-IMPRESS=StarOffice 9 Presentación
-MATH=StarOffice 9 Fórmula
-WRITER=StarOffice 9 Texto
-OTHER=Otros objetos

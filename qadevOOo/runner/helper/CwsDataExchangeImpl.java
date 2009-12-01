@@ -1,5 +1,5 @@
 /*
-*************************************************************************
+ *************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -43,7 +43,8 @@ import util.utils;
  * Implementaion of the interface CwsDataExchange
  * @see share.CwsDataExchange
  */
-public class CwsDataExchangeImpl implements CwsDataExchange {
+public class CwsDataExchangeImpl implements CwsDataExchange
+{
 
     private final String cwsName;
     private final TestParameters param;
@@ -51,7 +52,8 @@ public class CwsDataExchangeImpl implements CwsDataExchange {
     private final BuildEnvTools bet;
     private final boolean mDebug;
 
-    public CwsDataExchangeImpl(String cwsName, TestParameters param, LogWriter log) throws ParameterNotFoundException {
+    public CwsDataExchangeImpl(String cwsName, TestParameters param, LogWriter log) throws ParameterNotFoundException
+    {
         this.cwsName = cwsName;
         this.param = param;
         this.log = log;
@@ -59,15 +61,22 @@ public class CwsDataExchangeImpl implements CwsDataExchange {
         mDebug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
     }
 
-    public ArrayList getModules() {
+    public ArrayList getModules()
+    {
         // the cwstouched command send its version information to StdErr.
         // A piping from StdErr to SdtOut the tcsh does not support.
         // To find the output easily the echo command is used
-        final String[] commands = {"echo cwstouched starts here", "cwstouched", "echo cwstouched ends here"};
+        final String[] commands =
+        {
+            "echo cwstouched starts here",
+            "cwstouched",
+            "echo cwstouched ends here"
+        };
 
         final ProcessHandler procHdl = bet.runCommandsInEnvironmentShell(commands, null, 20000);
 
-        if (mDebug) {
+        if (mDebug)
+        {
             log.println("---> Output of getModules:");
             log.println(procHdl.getOutputText());
             log.println("<--- Output of getModules");
@@ -79,33 +88,44 @@ public class CwsDataExchangeImpl implements CwsDataExchange {
         final String[] outs = procHdl.getOutputText().split("\n");
 
         final ArrayList<String> moduleNames = new ArrayList<String>();
-        boolean start = false;
-        for (int i = 0; i < outs.length; i++) {
+        boolean bStart = false;
+        for (int i = 0; i < outs.length; i++)
+        {
             final String line = outs[i];
-            if (line.startsWith("cwstouched ends here")) {
-                start = false;
+            if (line.startsWith("cwstouched starts here"))
+            {
+                bStart = true;
+                continue;
             }
-            if (start && line.length() > 1) {
+            if (line.startsWith("cwstouched ends here"))
+            {
+                bStart = false;
+                continue;
+            }
+            if (bStart && line.length() > 1)
+            {
                 moduleNames.add(line);
-            }
-            if (line.startsWith("cwstouched starts here")) {
-                start = true;
             }
         }
 
         return moduleNames;
     }
 
-    public void setUnoApiCwsStatus(boolean status) {
+    public void setUnoApiCwsStatus(boolean status)
+    {
 
         FileWriter out = null;
         String statusFile = null;
-        try {
+        try
+        {
 
             final String stat = status ? ".PASSED.OK" : ".PASSED.FAILED";
 
-            statusFile = utils.getUsersTempDir() + System.getProperty("file.separator") + "UnoApiCwsStatus." +
-                (String) param.get(PropertyName.VERSION) + "_" + param.get(PropertyName.OPERATING_SYSTEM) + stat + ".txt";
+            statusFile = utils.getUsersTempDir() +
+                    System.getProperty("file.separator") +
+                    "UnoApiCwsStatus." +
+                    (String) param.get(PropertyName.VERSION) +
+                    "_" + param.get(PropertyName.OPERATING_SYSTEM) + stat + ".txt";
 
             out = new FileWriter(statusFile);
 
@@ -113,16 +133,26 @@ public class CwsDataExchangeImpl implements CwsDataExchange {
             out.flush();
             out.close();
 
-            final String[] commands = {"cwsattach " + statusFile};
+            final String[] commands =
+            {
+                "cwsattach " + statusFile
+            };
 
             bet.runCommandsInEnvironmentShell(commands, null, 5000);
 
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             System.out.println("ERROR: could not attach file '" + statusFile + "' to cws\n" + ex.toString());
-        } finally {
-            try {
+        }
+        finally
+        {
+            try
+            {
                 out.close();
-            } catch (IOException ex) {
+            }
+            catch (IOException ex)
+            {
                 ex.printStackTrace();
             }
         }

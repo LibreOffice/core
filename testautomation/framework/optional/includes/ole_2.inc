@@ -48,7 +48,7 @@ testcase tCheckTheOLEObjectDialog
    Dim iCount, sCount as Integer
    
    call ClosePresentationfloat()
-   call GetOLEDefaultNames()
+   GetOLEDefaultNames()
 
    for i=1 to 5
    
@@ -72,11 +72,12 @@ testcase tCheckTheOLEObjectDialog
       Kontext "OLEObjektEinfuegen"
       if ( not OLEObjektEinfuegen.exists() ) then
         warnlog( "cannot access the OLE object dialog" )
+        goto endsub
       endif
       
       '///+select 'create new'
       NeuErstellen.Check
-      Sleep (1)
+      WaitSlot()
       
       '///+check all names in the list with a comparison list in [TesttoolPath]\global\input\olenames\ole_[lang-code].txt
       for j=1 to ObjektTyp.GetItemCount
@@ -115,7 +116,7 @@ testcase tCheckTheOLEObjectDialog
                             ListAppend ( lListSoll (), gOLEMath )
       end select
       
-      if gPlatgroup = "w95" then 
+      if ( gPlatgroup = "w95" ) then 
          ListAppend ( lListSoll (), gOLEOthers )
          endif
          

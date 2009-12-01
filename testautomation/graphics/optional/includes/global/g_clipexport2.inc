@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -44,33 +44,30 @@
 ' #1 MakeCurveObject            :Inserts Curve Object if not Writer or Calc
 ' #1 MakeLineObject             :Inserts line object if not writer or calc
 ' #1 MakeConnectorObject        :Inserts Connector object if not wirter or calc
-' #1 MakeFormattedTextLine      :Insert a formatted text line 
+' #1 MakeFormattedTextLine      :Insert a formatted text line
 ' #1 Formfunctions              :Inserts a push button
 ' #1 Objectplugin               :Inserting a Plugin
 '*
 '\*******************************************************************
 
 sub MakeTextSquare
-    '/// Inserts a text frame with content
 
     printlog "---------   Testing: TextSquare   ---------"
     Call hTextRahmenErstellen ("This is a text-frame",15,20,40,30)
     gMouseClick 10,10
     SetKontextApplication
-   
+
 end sub
 '-------------------------------------------------------------------------------
 sub MakeRectangle
-    '/// Inserts a Rectangle
 
     printlog "we run rectangle"
     Call hRechteckErstellen (15,15,30,30)
-   
+
 end sub
 
 '-------------------------------------------------------------------------------
 sub MakeCircle
-    '/// Inserts a circle if not Writer or Calc
 
     printlog "Create Circle"
     if gApplication = "WRITER" then
@@ -89,12 +86,11 @@ sub MakeCircle
     gMouseMove (15,15,30,30)
     gMouseUp (30,30)
     sleep 1
-    
+
 end sub
 
 '-------------------------------------------------------------------------------
 sub Make3dObject
-'///Inserts a 3DObject if not Writer or Calc
 
     printlog "Create 3dObject"
     if (Ucase(gApplication) = "CALC") then
@@ -113,14 +109,13 @@ sub Make3dObject
         Kontext "ThreeDObjectsbar"
         sleep 1
         Wuerfel.click
-        gMouseDown (15,15)         
+        gMouseDown (15,15)
         gMouseMove (15,15,35,35)
         gMouseUp (35,35)
         Kontext "ThreeDObjectsbar"
         ThreeDObjectsbar.close
     else
         if (gApplication = "DRAW") then
-            Toolbar.OpenContextMenu           '/// enable 3d-object-button in menubar
             sleep 1
             hMenuselectNr (1)
             sleep 1
@@ -131,21 +126,19 @@ sub Make3dObject
             sleep 1
             Wuerfel.click
             sleep 1
-            gMouseDown (15,15)         
+            gMouseDown (15,15)
             gMouseMove (15,15,35,35)
             gMouseUp (35,35)
             Kontext "ThreeDObjectsbar"
             ThreeDObjectsbar.close
             sleep 2
             kontext "Toolbar"
-            Toolbar.OpenContextMenu           '/// resetting the toolbar on the left ///'
             sleep 1
             hMenuselectNr (1)
             sleep 1
             hMenuItemUnCheck (11)
             sleep 1
         else
-            Toolbar.OpenContextMenu           '/// enable 3d-object-button in menubar
             sleep 1
             hMenuselectNr (1)
             sleep 1
@@ -156,14 +149,13 @@ sub Make3dObject
             sleep 1
             Wuerfel.click
             sleep 1
-            gMouseDown (15,15)         
+            gMouseDown (15,15)
             gMouseMove (15,15,35,35)
             gMouseUp (35,35)
             Kontext "ThreeDObjectsbar"
             ThreeDObjectsbar.close
             sleep 2
             kontext "Toolbar"
-            Toolbar.OpenContextMenu           '/// resetting the toolbar on the left ///'
             sleep 1
             hMenuselectNr (1)
             sleep 1
@@ -171,12 +163,11 @@ sub Make3dObject
             sleep 1
         endif
     end if
-      
+
 end sub
 
 '-------------------------------------------------------------------------------
 sub MakeCurveObject
-    '///Inserts Curve Object if not Writer or Calc
 
     if (Ucase(gApplication) = "WRITER") then
         warnlog "Cant make circle in this application"
@@ -184,12 +175,11 @@ sub MakeCurveObject
     end if
     if (Ucase(gApplication) = "CALC") then
         warnlog "Cant make circle in this application"
-    goto endsub
+        goto endsub
     end if
 
     printlog "we run Curve-object"
     kontext "Toolbar"
-    '/// enable Curves-button in menubar
     Toolbar.OpenContextMenu
     sleep 1
     hMenuselectNr (1)
@@ -198,26 +188,24 @@ sub MakeCurveObject
     sleep 1
     Kurven.Click
     sleep 1
-    gMouseDown (10,25)         
+    gMouseDown (10,25)
     gMouseMove (10,25,30,35)
     gMouseUp (30,35)
     gMouseClick 90,90
     sleep 1
     kontext "Toolbar"
-    '/// reset Curves-button in menubar
     Toolbar.OpenContextMenu
     sleep 1
     hMenuselectNr (1)
     sleep 1
     hMenuItemUnCheck (7)
     sleep 1
-    
+
 end sub
 
 '-------------------------------------------------------------------------------
 sub MakeLineObject
-    '///Inserts line object if not writer or calc
-    
+
     if gApplication = "WRITER" then
         warnlog "Currently no support for line-object in this application"
         goto endsub
@@ -227,7 +215,6 @@ sub MakeLineObject
         goto endsub
     end if
     printlog "we run Line-object"
-    '/// Insert Line ///
     sleep 1
     Kontext "Toolbar"
     Linien.TearOff
@@ -242,13 +229,12 @@ sub MakeLineObject
     sleep 1
     Kontext "Arrowshapes"
     Arrowshapes.Close
-    
+
 end sub
 
 '-------------------------------------------------------------------------------
 sub MakeConnectorObject
-    '/// Inserts Connector object if not wirter or calc
-    
+
     if gApplication = "WRITER" then
         warnlog "Cant make connector in this application"
         goto endsub
@@ -258,7 +244,6 @@ sub MakeConnectorObject
         goto endsub
     end if
     printlog "we run Connector-object"
-    '/// Insert Connector ///
     if gApplication = "DRAW" then
         sleep 1
         kontext "Toolbar"
@@ -288,21 +273,19 @@ sub MakeConnectorObject
         gMouseMove (10,17,30,37)
         gMouseUp (30,37)
     end if
-    
+
 end sub
 
 '-------------------------------------------------------------------------------
 sub MakeFormattedTextLine
-    '///Insert a formatted text line 
 
     dim Zufall, iWaitIndex as integer
-    '/// Write a text, make it Bold, Italic and make it size 33. ///'
     Kontext "TextObjectbar"
     if TextObjectbar.Exists then
-       printlog "   TextObjectbar.Exists = " + TextObjectbar.Exists
+        printlog "   TextObjectbar.Exists = " + TextObjectbar.Exists
     else
-       ViewToolbarsTextFormatting
-       sleep (2)
+        ViewToolbarsTextFormatting
+        sleep (2)
     end if
 
     hTypeKeys "This is a text which we will format in some different ways."
@@ -313,54 +296,44 @@ sub MakeFormattedTextLine
     Zufall=((20*Rnd)+1)
     'Schriftart.GetItemcount
     Text1 = Schriftart.GetSelText
-    '/// Select any Font you like in the listbox 'Font' on 'Object Toolbar' ///'
     Printlog "   -Font: '" + Schriftart.GetSelText + "' selected."
 
     Kontext "TextObjectbar"
     sleep (2)
     Printlog "   - Change size of Font"
-    '/// Select any Font you like in the listbox 'Size' on 'Object Toolbar' ///'
     Schriftgroesse.Select (Zufall)
     Printlog "   - Fontsize set to '" + Schriftgroesse.GetSelText + "'."
     Text2 = Schriftgroesse.GetSelText
     Kontext "TextObjectbar"
-    '/// Click button 'Bold' ///'
     Fett.Click
     sleep (2)
     Printlog "   - Font attribute set to bold."
     Text4 = Fett.GetState(2)
-    
+
     Kontext "TextObjectbar"
-    '/// Click button 'Italic' ///'
     Kursiv.Click
     sleep (2)
     Printlog "   - Font attribute set to cursive."
     Text5 = Kursiv.GetState(2)
-    
+
     Kontext "TextObjectbar"
-    '/// Click button 'Underline' ///'
     Unterstrichen.Click
     sleep (2)
     Printlog "   - Font attribute set to underlined."
     Text6 = Unterstrichen.GetState(2)
-    
+
     Kontext "TextObjectbar"
-    '/// Click button 'Justified' ///'
     Blocksatz.Click
     sleep (2)
     Printlog "   - Text set to Justified."
     Text7 = Blocksatz.GetState(2)
-    
+
     SetKontextApplication
-    
+
 end sub 'MakeFormattedTextLine
 
 '--------------------------------------------------------------------------------------------------------
 sub Formfunctions
-    '///Inserts a push button
-    '/// to enable this function, i have to insert the button for forms in the left toolbar (it isn't there by default :-() ///'
-    '///+ this is done via the context menue of the toolbar ///'
-    '///+ Tear Off 'Form functions' ///'
     gMouseMove2 (50, 20)
     if (Ucase(gApplication) = "IMPRESS") then
         kontext "Toolbar"
@@ -386,34 +359,26 @@ sub Formfunctions
     printlog "  enabled 'forms' button and clicked it"
     sleep 1
     kontext "FormControls"
-    '///+ click button 'Design mode' to enable it ///'
     if (Pushbutton.IsEnabled = FALSE) then
         DesigneModus.click            ' use forms menue, go into design mode
     endif
-    '///+ click button 'Push button' and insert the control ///'
     Pushbutton.Click              ' use a pushbutton
     Sleep 1
     gMouseDown (50,20)
     gMouseMove (50, 20,70, 40)' create a pushbutton
     gMouseUp (70,40)
 
-    '///+ now i can call both slots :-) and begin to test what I want  :-) ///'
-    '/// Format->Control ///'
     FormatControl
     Kontext "ControlPropertiesDialog"
     sleep 1
-    '/// close dialog 'Properties Button' ///'
     ControlPropertiesDialog.Close
-    '/// format->form ///'
     formatform
     Kontext "ControlPropertiesDialog"
     sleep 1
-    '/// close dialog 'Form Properties' ///'
     ControlPropertiesDialog.Close
 
     sleep 5 ' needed, otherwise the context menue will get closed...
 
-    '/// resetting the toolbar on the left ///'
     if (Ucase(gApplication) = "IMPRESS") then
         kontext "Toolbar"
         Toolbar.OpenContextMenu ' disable forms button in menuebar
@@ -429,13 +394,10 @@ end sub
 
 '--------------------------------------------------------------------------------------------------------
 sub Objectplugin
-'///Inserting a Plugin
 
     printlog "Insert Object-plugin"
-    '/// open application ///'
     'Call hNewDocument
 
-    '/// Insert->Object->Plugin ///'
     InsertObjectPlugin
     Kontext "PlugInEinfuegen"
     'DialogTest ( PlugInEinfuegen)
@@ -450,7 +412,6 @@ sub Objectplugin
     sleep 5
     Kontext "PlugInEinfuegen"
     if PlugInEinfuegen.exists then
-        '/// insert a '.mov' file : "graphics\required\input\sample.mov" ///'
         DateiUrl.SetText (ConvertPath ( gTesttoolpath + "graphics\required\input\sample.mov" ))
         printlog "Type something into the option field"
         'Optionen               so3:MultiLineEdit:MD_INSERT_OBJECT_PLUGIN:ED_PLUGINS_OPTIONS

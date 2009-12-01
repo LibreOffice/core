@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of the insert graphic function - 4
 '*
@@ -53,9 +53,15 @@
 '\***********************************************************************
 
 testcase tInsertGraphic_31
+Warnlog "#i102752# - tInsertGraphic_31 outcommented due to bug."
+goto endsub
 
-  Dim iLeft , iRight  , iCenterHorizontal as Integer
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iLeft as Integer
+  Dim iRight as Integer
+  Dim iCenterHorizontal as Integer
+  Dim iTop as Integer
+  Dim iBottom as Integer
+  Dim iCenterVertical as Integer
 
   iLeft = 1 : iRight  = 2  : iCenterHorizontal = 3
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
@@ -175,9 +181,15 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_32
+Warnlog "#i102752# - tInsertGraphic_32 outcommented due to bug."
+goto endsub
 
-  Dim iLeft , iRight  , iCenterHorizontal as Integer
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iLeft as Integer
+  Dim iRight as Integer
+  Dim iCenterHorizontal as Integer
+  Dim iTop as Integer
+  Dim iBottom as Integer
+  Dim iCenterVertical as Integer
 
   iLeft = 1 : iRight  = 2  : iCenterHorizontal = 3
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
@@ -287,9 +299,15 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_33
+Warnlog "#i102752# - tInsertGraphic_33 outcommented due to bug."
+goto endsub
 
-    Dim iLeft , iRight  , iCenterHorizontal as Integer
-    Dim iTop  , iBottom , iCenterVertical   as Integer
+    Dim iLeft as Integer
+    Dim iRight as Integer
+    Dim iCenterHorizontal as Integer
+    Dim iTop as Integer
+    Dim iBottom as Integer
+    Dim iCenterVertical as Integer
     
     iLeft = 1 : iRight  = 2  : iCenterHorizontal = 3
     iTop  = 1 : iBottom = 2  : iCenterVertical   = 4
@@ -409,8 +427,12 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_34
+Warnlog "#i102752# - tInsertGraphic_34 outcommented due to bug."
+goto endsub
 
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iTop as Integer
+  Dim iBottom as Integer
+  Dim iCenterVertical as Integer
 
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
 
@@ -589,8 +611,10 @@ endcase
 
 testcase tInsertGraphic_36
 
-  Dim sOriginalWidth , sOriginalHeight  as String
-  Dim sNewWidth      , sNewHeight       as String
+  Dim sOriginalWidth as String
+  Dim sOriginalHeight as String
+  Dim sNewWidth as String
+  Dim sNewHeight as String
 
   sNewWidth  = "7"+ gSeperator + "00" + gMeasurementUnit
   sNewHeight = "5"+ gSeperator + "00" + gMeasurementUnit
@@ -637,8 +661,10 @@ endcase
 
 testcase tInsertGraphic_37
 
-  Dim sWidth     , sHeight     as String
-  Dim sNewWidth  , sNewHeight  as String
+  Dim sWidth as String
+  Dim sHeight as String
+  Dim sNewWidth as String
+  Dim sNewHeight as String
 
   sWidth  = "4"+ gSeperator + "00" + gMeasurementUnit
   sHeight = "3"+ gSeperator + "00" + gMeasurementUnit
@@ -683,7 +709,7 @@ endcase
 
 testcase tInsertGraphic_38
 
-    Dim sGraphicName       as String
+    Dim sGraphicName as String
     Dim sNavActualItemName as string
 
     sGraphicName = "TEST1"
@@ -722,7 +748,8 @@ endcase
 
 testcase tInsertGraphic_39
 
-  Dim sHorizontalBy , sVerticalBy as String
+  Dim sHorizontalBy as String
+  Dim sVerticalBy as String
 
   PrintLog "- Test checkbox 'Position' in protect area"
  '/// Test checkbox 'Position' in protect area
@@ -765,7 +792,8 @@ endcase
 
 testcase tInsertGraphic_40
     
-    Dim sHorizontalBy , sVerticalBy as String
+    Dim sHorizontalBy as String
+    Dim sVerticalBy as String
     
     PrintLog "- Test checkbox 'Print' in Property area"
     '/// Test checkbox 'Print' in Property area

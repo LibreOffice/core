@@ -374,6 +374,10 @@ function sExtensionCLI(sCommand as string, sExtensionName as string, optional sE
     dim sUnoPkg as string
     dim i, a, b as integer
     dim args as string
+    Dim sFile as string
+    Dim sEnv as string
+    Dim sContent(5) as string
+    Dim sPlatformProgramPath as string
     
     if isMissing(sExtensionPath) then
         sLokalExtensionPath = ""
@@ -388,14 +392,27 @@ function sExtensionCLI(sCommand as string, sExtensionName as string, optional sE
         b = inStr(a-12, sAppExe, "soffice")
         sUnoPkg = left(sAppExe, b-1) + "unopkg" + mid(sAppExe, b+len("soffice"))
         'printlog sUnoPkg
-        sUnoPkg = convertToUrl(sUnoPkg)
-        'printlog sUnoPkg
+        'sUnoPkg = convertToUrl(sUnoPkg)
     else
         qaErrorLog ("Need to think about another solution..." + sAppExe)
     endif
     args = sCommand+" "+sLokalExtensionPath + sExtensionName
     printlog "Executing: "+sUnopkg+" "+args
-    shell(sUnoPkg,2,args)
+    if gPlatGroup <> "unx" then
+        shell(sUnoPkg,2,args)
+    else
+        sFile = ConvertPath (gOfficePath + "user/work/uno.sh")
+        if gPlatform = lcase("osx") then
+            sPlatformProgramPath = "MacOS"
+        else
+            sPlatformProgramPath = "program"
+        end if
+        sEnv = convertToURL(convertPath(gNetzOfficePath + sPlatformProgramPath + "/fundamentalrc")
+        listAppend(sContent(), "export URE_BOOTSTRAP=" + sEnv) 
+        listAppend(sContent(), sUnoPkg + " " + args)
+        listWrite(sContent(), sFile)
+        shell("bash",1,sFile)
+    endif
 end function
 
 '*******************************************************************************

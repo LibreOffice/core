@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 ' #1 tiShaddow
 '*
 '\*******************************************************************
-
 testcase tiShaddow
+
    dim sFilter as string
    dim i as integer
    dim t as integer
@@ -514,4 +514,5 @@ testcase tiShaddow
    '/// Close application ///'
    Call hCloseDocument
    Printlog "Finished Shaddow-test for " + gApplication
+   
 endcase ' tiShaddow

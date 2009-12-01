@@ -4,9 +4,9 @@
 '*
 '*  $RCSfile: run_tests.vbs,v $
 '*
-'*  $Revision: 1.2 $
+'*  $Revision: 1.1 $
 '*
-'*  last change: $Author: andreschnabel $ $Date: 2008/09/05 16:56:20 $
+'*  last change: $Author: andreschnabel $ $Date: 2008/04/05 09:02:23 $
 '*
 '*  The Contents of this file are made available subject to
 '*  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,11 @@
 
 
 ' set location of testscripts (the 'qatesttool' directory)
-sLocation = "o:\qa\cvs\qa\qatesttool"
+sLocation = "c:\testautomation\"
 
 ' set location of TestTool
 ' (full path including executable 'testtool.exe')
-sTestTool = "O:\qa\qatesttool\win32\testtool.exe"
+sTestTool = "c:\Testtool\testtool.exe"
 
 
 '------------------------------------------------------------------------
@@ -83,8 +83,7 @@ End If
 
 '--- set location of close-office file
 ' (see cvs)
-sExitOfficeBas = sLocation & "global\tools\closeoffice.bas"
-sResetOfficeBas = sLocation & "global\tools\resetoffice.bas"
+sExitOfficeBas = sLocation & "global\tools\resetoffice.bas"
 
 '--- if sTestTool is not set manuall try to get the location form testtoolrc
 If not oFSO.FileExists(sTestTool) Then
@@ -121,10 +120,16 @@ i = 0
 '--- Main loop
 While Not oStdIn.AtEndOfStream
 
-    'WScript.echo "Running soffices' processes: "
+    WScript.echo "Running soffices' processes: "
     '# kill office, if exists
-    '`$KILLOFFICEALL`        
-    WshShell.Run "taskkill /F /IM soffice.exe /IM soffice.bin", 1, true 
+    '`$KILLOFFICEALL`
+    ' *************-> have this line modified, because an error in 
+    ' *************-> testtool.exe. (the soffice processes are not
+    ' *************-> killed in resetoffice.bas) 
+    ' *************-> 2009/07/06
+    ' *************-> wolfgang pechlaner (wope@openoffice.org)       
+    WshShell.Run "tskill soffice", 1, true
+    WScript.Sleep 1000 
 
     sTestCase = oStdIn.ReadLine
 
@@ -132,15 +137,16 @@ While Not oStdIn.AtEndOfStream
     WScript.Echo "****************************************************"
     WScript.Echo "running " & sTestCase
     sTest = sLocation & sTestCase
+    WScript.echo "*** -> " & sTest
 
     If not oFSO.FileExists( sTest ) Then
         WScript.Echo " Could not run " & sTest 
         WScript.Echo " File not found"
     Else
         ' first run is the real test ...
-        Set oExec = WshShell.Exec("""" & sTestTool & """ -run """ & sTest & """" )
+        Set oExec = WshShell.Exec("""" & sTestTool & """ & -run & """ & sTest & """" )
         WScript.Sleep 1000
-
+        
         If oExec.Status = 0 Then
             WScript.Echo " Successfully started"
         Else
@@ -153,9 +159,6 @@ While Not oStdIn.AtEndOfStream
             i = i+1
         Wend
     End If
-    'run the office reset script!
-    WScript.Echo " trying to reset office environment"
-    WshShell.Run """" & sTestTool & """ -run """ & sResetOfficeBas & """", 1, true 
     'run the office exit script!
     WScript.Echo " trying to kill the previous office process"
     WshShell.Run """" & sTestTool & """ -run """ & sExitOfficeBas & """", 1, true 

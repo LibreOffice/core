@@ -222,15 +222,15 @@ testcase tGroupBoxWithDatasource
 	
     Kontext "FormularNavigator"
      sleep(1)     
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     'Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<HOME>" , true
+     Liste.TypeKeys "<HOME>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true     
+     Liste.TypeKeys "<DOWN>" , true     
      sleep(1)
      Liste.OpenContextmenu
   	 sleep(2)
@@ -260,17 +260,17 @@ testcase tGroupBoxWithDatasource
    	 sleep(2)        
     
     Kontext "FormularNavigator"
-     FormularNavigator.TypeKeys "<DOWN>" , true ' this is needed , I don't know why
+     'Liste.TypeKeys "<DOWN>" , true ' this is needed , I don't know why
      sleep(1)
-     FormularNavigator.TypeKeys "<HOME>" , true
+     Liste.TypeKeys "<HOME>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
      Liste.OpenContextmenu
   	 sleep(2)
@@ -297,19 +297,19 @@ testcase tGroupBoxWithDatasource
    	 sleep(2)
     
     Kontext "FormularNavigator"
-     FormularNavigator.TypeKeys "<DOWN>" , true ' this is needed , I don't know why
+     'Liste.TypeKeys "<DOWN>" , true ' this is needed , I don't know why
      sleep(1)
-     FormularNavigator.TypeKeys "<HOME>" , true
+     Liste.TypeKeys "<HOME>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true
+     Liste.TypeKeys "<DOWN>" , true
      sleep(1)
-     FormularNavigator.TypeKeys "<DOWN>" , true     
+     Liste.TypeKeys "<DOWN>" , true     
      sleep(1)
      Liste.OpenContextmenu
   	 sleep(2)
@@ -392,9 +392,6 @@ endcase
 '--------------------------------------------------------------------
 
 testcase tGroupBoxWithoutDatasource
-
-	warnlog "#102082# CTRL + C ddoes not work anymore in control properties dialog"
-	goto endsub
 
     '/// open a textdocument
     printlog "open a textdocument"
@@ -538,12 +535,8 @@ testcase tGroupBoxWithoutDatasource
   	Kontext "ControlPropertiesTabControl"
    	ControlPropertiesTabControl.SetPage TabGeneralControl
    	sleep (2)
-  	Kontext "TabGeneralControl"
-     TabGeneralControl.mouseDown(1,1)
-     TabGeneralControl.mouseUp(1,1)
-	 TabGeneralControl.TypeKeys "<TAB>" , true
-     TabGeneralControl.TypeKeys "<MOD1 C>" , true     
-     if getClipboard <> "Group 123" then
+  	Kontext "TabGeneralControl"          
+     if Label.getText() <> "Group 123" then
 		 warnlog "The label of the groupbox is not right." + getClipboard
 	 end if
 	 sleep (2)

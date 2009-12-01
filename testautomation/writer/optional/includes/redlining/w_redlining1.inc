@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of the Redlinig function - 1
 '*
@@ -58,10 +58,14 @@
 
 testcase tRedlining_1
 
-  Dim iInsertionAttr   , iInsertionColor    as Integer
-  Dim iDeletionAttr    , iDeletionColor     as Integer
-  Dim iChangedAttr     , iChangedColor      as Integer
-  Dim iLineChangedMark , iLineChangedColor  as Integer
+  Dim iInsertionAttr as Integer
+  Dim iInsertionColor as Integer
+  Dim iDeletionAttr as Integer
+  Dim iDeletionColor as Integer
+  Dim iChangedAttr as Integer
+  Dim iChangedColor as Integer
+  Dim iLineChangedMark as Integer
+  Dim iLineChangedColor as Integer
 
   iInsertionAttr   = 4  :  iInsertionColor   = 2
   iDeletionAttr    = 4  :  iDeletionColor    = 2
@@ -278,7 +282,8 @@ endcase
 
 testcase tRedlining_5
 
-    Dim j , iAll as Integer
+    Dim j as Integer
+    Dim iAll as Integer
 
     '/// Test Inserted text : from Autotext
     printlog "Inserted text : from Autotext"
@@ -518,6 +523,9 @@ endcase
 
 testcase tRedlining_8
 
+    warnlog "#i102093# - Crash with Edit-Change-Record."
+    goto endsub
+
   '/// Test searched and replaced text
   printlog "searched and replaced text"
 
@@ -737,7 +745,6 @@ testcase tRedlining_9
 	
 	'/// Close the document
 	Call hCloseDocument
-
 endcase
 
 '----------------------------------------------------------------------------
@@ -796,7 +803,6 @@ testcase tRedlining_10
 
    '/// Close the document
    Call hCloseDocument
-
 endcase
 
 '----------------------------------------------------------------------------
@@ -857,7 +863,6 @@ testcase tRedlining_11
 
    '/// Close the document
    Call hCloseDocument
-
 endcase
 
 '----------------------------------------------------------------------------
@@ -914,7 +919,6 @@ testcase tRedlining_12
 
    '/// Close the document
    Call hCloseDocument
-
 endcase
 
 '----------------------------------------------------------------------------
@@ -1135,7 +1139,7 @@ testcase tRedlining_16
    EditChangesRecord
 
    Call wTypeKeys "<Up><End>"
-   Call wTypeKeys "<Shift Down>"
+   Call wTypeKeys "<Shift Down Right>"
    '/// Cut the selection
    EditCut
 
@@ -1230,8 +1234,9 @@ testcase tRedlining_16
    if iComparison1$ <> Vorlage.GetSelText then Warnlog "The paragraph is moved incorrect after accepting the changes - 3rd line"
    TabNumerierungAbsatz.Cancel
 
-   '/// Close the document
-   Call hCloseDocument
-
+    PrintLog "Close active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 

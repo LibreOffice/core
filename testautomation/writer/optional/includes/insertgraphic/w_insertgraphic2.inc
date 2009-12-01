@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of the insert graphic function - 2
 '*
@@ -50,8 +50,11 @@
 
 testcase tInsertGraphic_13
 
-  Dim sGraphicName1, sGraphicName2, sGraphicName3 as String
-  Dim sWidth , sHeight                            as String
+  Dim sGraphicName1 as String
+  Dim sGraphicName2 as String
+  Dim sGraphicName3 as String
+  Dim sWidth as String
+  Dim sHeight as String
 
   sGraphicName1 = "TEST1"
   sGraphicName2 = "TEST2"
@@ -161,8 +164,11 @@ endcase
 
 testcase tInsertGraphic_14
 
-  Dim sGraphicName1, sGraphicName2, sGraphicName3 as String
-  Dim sWidth , sHeight                            as String
+  Dim sGraphicName1 as String
+  Dim sGraphicName2 as String
+  Dim sGraphicName3 as String
+  Dim sWidth as String
+  Dim sHeight as String
 
   sGraphicName1 = "TEST1"
   sGraphicName2 = "TEST2"
@@ -272,8 +278,11 @@ endcase
 
 testcase tInsertGraphic_15
 
-  Dim sGraphicName1, sGraphicName2, sGraphicName3 as String
-  Dim sWidth , sHeight                            as String
+  Dim sGraphicName1 as String
+  Dim sGraphicName2 as String
+  Dim sGraphicName3 as String
+  Dim sWidth as String
+  Dim sHeight as String
 
   sGraphicName1 = "TEST1"
   sGraphicName2 = "TEST2"
@@ -387,8 +396,11 @@ endcase
 
 testcase tInsertGraphic_16
 
-  Dim sGraphicName1, sGraphicName2, sGraphicName3 as String
-  Dim sWidth , sHeight                            as String
+  Dim sGraphicName1 as String
+  Dim sGraphicName2 as String
+  Dim sGraphicName3 as String
+  Dim sWidth as String
+  Dim sHeight as String
 
   sGraphicName1 = "TEST1"
   sGraphicName2 = "TEST2"
@@ -502,8 +514,11 @@ endcase
 
 testcase tInsertGraphic_17
 
-  Dim sGraphicName1, sGraphicName2, sGraphicName3 as String
-  Dim sWidth , sHeight                            as String
+  Dim sGraphicName1 as String
+  Dim sGraphicName2 as String
+  Dim sGraphicName3 as String
+  Dim sWidth as String
+  Dim sHeight as String
 
   sGraphicName1 = "TEST1"
   sGraphicName2 = "TEST2"
@@ -616,8 +631,11 @@ endcase
 
 testcase tInsertGraphic_18
 
-  Dim sGraphicName1, sGraphicName2, sGraphicName3 as String
-  Dim sWidth , sHeight                            as String
+  Dim sGraphicName1 as String
+  Dim sGraphicName2 as String
+  Dim sGraphicName3 as String
+  Dim sWidth as String
+  Dim sHeight as String
 
   sGraphicName1 = "TEST1"
   sGraphicName2 = "TEST2"
@@ -730,8 +748,11 @@ endcase
 
 testcase tInsertGraphic_19
 
-  Dim sGraphicName1, sGraphicName2, sGraphicName3 as String
-  Dim sWidth , sHeight                            as String
+  Dim sGraphicName1 as String
+  Dim sGraphicName2 as String
+  Dim sGraphicName3 as String
+  Dim sWidth as String
+  Dim sHeight as String
 
   sGraphicName1 = "TEST1"
   sGraphicName2 = "TEST2"
@@ -848,8 +869,11 @@ endcase
 
 testcase tInsertGraphic_20
 
-  Dim sGraphicName1, sGraphicName2, sGraphicName3 as String
-  Dim sWidth , sHeight                            as String
+  Dim sGraphicName1 as String
+  Dim sGraphicName2 as String
+  Dim sGraphicName3 as String
+  Dim sWidth as String
+  Dim sHeight as String
 
   sGraphicName1 = "TEST1"
   sGraphicName2 = "TEST2"

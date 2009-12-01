@@ -31,7 +31,7 @@
 '*
 '/***********************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Updatetest for Flexible Source Range Selection in Writer
 '*

@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.coms
+'* owner : helge.delfs@sun.coms
 '*
 '* short description : HTML-Options-Test
 '*

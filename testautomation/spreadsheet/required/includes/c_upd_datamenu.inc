@@ -194,6 +194,23 @@ testcase tDataSort
     '/// Close 'Sort' dialog with 'Cancel
     printlog " Close 'Sort' dialog with 'Cancel"
     TabSortierenOptionen.Cancel
+	printlog " Select cell B3"
+	Kontext ( "DocumentCalc" )
+	fCalcSelectRange ( "B3" )
+	printlog " Fill cells B3:B8 with numbers 1-6"
+    DocumentCalc.TypeKeys "1<RETURN>2<RETURN>3<RETURN>4<RETURN>5<RETURN>6"
+	printlog " Select cell C3"
+	fCalcSelectRange ( "C3" )
+	printlog " Fill cells C3:C8 with numbers 7-2"
+    DocumentCalc.TypeKeys "7<RETURN>6<RETURN>5<RETURN>4<RETURN>3<RETURN>2"
+	printlog " Select cells B5:B6"
+	fCalcSelectRange ( "B5:B6" )
+	printlog " Open Data Sort"
+	DataSort
+	Kontext ( "SortRange" )
+	printlog " SortRange dialog has opened"
+	printlog " Cancel Sort Range dialog"
+	SortRange.Cancel
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
@@ -940,10 +957,16 @@ testcase tDataDataPilot
     Datenfeld.Cancel
     sleep 2
     Kontext "Datenpilot"
-    '/// Select second item (Sum – 2001) in 'Data Fields' by 3 <TAB>
-    printlog " Select second item (Sum – 2001) in 'Data Fields' by 3 <TAB>"
-    Datenpilot.TypeKeys "<TAB><TAB><TAB>",TRUE
-    Sleep 3
+	printlog " Close 'DataPilot' dialog with 'Cancel'"
+    Datenpilot.Cancel
+	printlog " Reopen 'DataPilot' dialog by 'Data – Datapilot – Start'"
+    DataDataPilotStart
+    sleep 1
+    Kontext "Datenpilot"
+    '/// Select item (Sum – 2001) in 'Data Fields' by 8 <TAB>
+    printlog " Select item (Sum – 2001) in 'Data Fields' by 8 <TAB>"
+    Datenpilot.TypeKeys "<TAB><TAB><TAB><TAB><TAB><TAB><TAB><TAB>",TRUE
+    Sleep 1
     '/// Click on 'Options' button to open 'Data Filed' dialog
     printlog " Click on 'Options' button to open 'Data Filed' dialog"
     If Optionen.IsEnabled Then
@@ -954,7 +977,7 @@ testcase tDataDataPilot
         Call hCloseDocument
         goto endsub
     end if
-	sleep 3
+	sleep 1
     Kontext "DataFieldsFunctionDlg"
     '/// Click on 'More' button
     printlog " Click on 'More' button"

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -344,8 +344,8 @@ testcase tHtmlExport
    Call hCloseDocument
    Printlog "used file name: '" + sFile + "'"
    ' TBOTODO CHECK files contenet !
+   
 endcase 'tHtmlExport
-
 '-------------------------------------------------------------------------------
 testcase tHtmlExport_Webcast
 
@@ -752,4 +752,4 @@ testcase tHtmlExport_Webcast
    Call hCloseDocument
 
    ' TBO: TODO FILECHECK IF EXISTS
-endcase
+endcase 'tHtmlExport_Webcast

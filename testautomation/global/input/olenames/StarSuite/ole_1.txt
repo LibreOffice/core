@@ -1,7 +1,0 @@
-CALC=StarSuite 9 Spreadsheet
-CHART=StarSuite 9 Chart
-DRAW=StarSuite 9 Drawing
-IMPRESS=StarSuite 9 Presentation
-MATH=StarSuite 9 Formula
-WRITER=StarSuite 9 Text
-OTHER=Further objects

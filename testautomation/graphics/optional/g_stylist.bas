@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,6 @@ public glLocale (15*20) as string
 sub main
     PrintLog "------------------------- Stylist Test -------------------"
     Call hStatusIn ( "Graphics","g_stylist.bas" )
-    GetOLEDefaultNames
 
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
@@ -60,24 +59,24 @@ sub main
     Call tFormatStylistDocuments
     Call tFormatStylistTemplatesUse
     Call tFormatStylistTemplateCreate
-if iSprache <> "82" then
-    Call tFormatStylistTemplateSelect
-    Call tFormatStylistTemplateNew
-else
-   qaerrorlog "#i65490# - Deactivated tFormatStylistTemplateSelect, tFormatStylistTemplateNew due to bug."
-endif
+    if iSprache <> "82" then
+        Call tFormatStylistTemplateSelect
+        Call tFormatStylistTemplateNew
+    else
+        qaerrorlog "#i65490# - Deactivated tFormatStylistTemplateSelect, tFormatStylistTemplateNew due to bug."
+    endif
     call tiFormatStylist
     call tFormatStylist
 
-if iSprache <> "81" then
-   if iSprache <> "82" then
-      Call tFormatStylistBackground
-   else
-      qaerrorlog "#i65534# - Deactivated tFormatStylistBackground due to bug under Korean."
-   endif
-else
-   qaerrorlog "Deactivated tFormatStylistBackground due to string-name-difficulties."
-endif
+    if iSprache <> "81" then
+        if iSprache <> "82" then
+            Call tFormatStylistBackground
+        else
+            qaerrorlog "#i65534# - Deactivated tFormatStylistBackground due to bug under Korean."
+        endif
+    else
+        qaerrorlog "Deactivated tFormatStylistBackground due to string-name-difficulties."
+    endif
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
@@ -85,13 +84,13 @@ endif
     Call tFormatStylistFlyer
     Call tFormatStylistDocuments
     Call tFormatStylistTemplatesUse
-'    Call tFormatStylistTemplateCreate
-if iSprache <> "82" then
-    Call tFormatStylistTemplateSelect
-    Call tFormatStylistTemplateNew
-else
-   qaerrorlog "#i65490# - Deactivated tFormatStylistTemplateSelect, tFormatStylistTemplateNew due to bug."
-endif
+    '    Call tFormatStylistTemplateCreate
+    if iSprache <> "82" then
+        Call tFormatStylistTemplateSelect
+        Call tFormatStylistTemplateNew
+    else
+        qaerrorlog "#i65490# - Deactivated tFormatStylistTemplateSelect, tFormatStylistTemplateNew due to bug."
+    endif
     call tiFormatStylist
     call tFormatStylist
 

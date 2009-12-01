@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@
 
 'Variables:
 
-    dim iItemCount AS integer           'Count variable for combobox
-    dim iItemIndex AS integer           'Counter for/next
-    
+dim iItemCount AS integer           'Count variable for combobox
+dim iItemIndex AS integer           'Counter for/next
+
 '-------------------------------------------------------------------------------
 
 testcase tiInsertTableUsingMenu
@@ -58,7 +58,7 @@ testcase tiInsertTableUsingMenu
     DocumentImpress.UseMenu
     hMenuSelectNr(4)
     hMenuSelectNr(13)
-    
+
     printlog "Checking if insert Table dialog comes up."
     Kontext "InsertTableImpress"
     if InsertTableImpress.Exists then
@@ -66,14 +66,14 @@ testcase tiInsertTableUsingMenu
     else
         warnlog "InsertTableDialog did not come up!"
     endif
-    
+
     printlog "Checking for availability of column and row boxes."
     if NumberOfColumns.IsEnabled AND NumberOfRows.IsEnabled then
         printlog "Columns and rows boxes available."
     else
         warnlog "One or both spinboxes not active!"
     endif
-    
+
     printlog "Checking max and min for Columns."
     NumberOfColumns.ToMax
     if NumberOfColumns.GetText = "75" then
@@ -81,35 +81,35 @@ testcase tiInsertTableUsingMenu
     else
         warnlog "Max Columns cannot be reached!"
     endif
-    
+
     NumberOfColumns.ToMin
     if NumberOfColumns.GetText ="1" then
         printlog "Min is 1 column."
     else
         warnlog "Min column is wrong!"
     endif
-    
-        printlog "Checking max and min for Rows."
+
+    printlog "Checking max and min for Rows."
     NumberOfRows.ToMax
     if NumberOfRows.GetText = "75" then
         printlog "Max is 75 Rows."
     else
         warnlog "Max Rows cannot be reached!"
     endif
-    
+
     NumberOfRows.ToMin
     if NumberOfRows.GetText ="1" then
         printlog "Min is 1 Row."
     else
         warnlog "Min Row is wrong!"
     endif
-    
+
     printlog "Inserting Table now, 5 columns ,2 rows."
     NumberOfColumns.SetText "5"
     NumberOfRows.SetText "2"
     InsertTableImpress.OK
     Kontext "DocumentImpress"
-    
+
     printlog "Checking if table is inserted."
     Kontext "TableObjectbar"
     if TableObjectbar.Exists(1) then
@@ -118,10 +118,10 @@ testcase tiInsertTableUsingMenu
         warnlog " TableObjectBar not up !"
     endif
     TableObjectbar.Close
-    
+
     printlog " Close document."
     Call hCloseDocument
-    
+
 endcase 'tiInsertTableUsingMenu
 
 '-------------------------------------------------------------------------------
@@ -132,15 +132,15 @@ testcase tiInsertTableUsingButton
     Call hNewDocument
     printlog "Open New Document."
     kontext "Standardbar"
-    
+
     printlog "Checking if button is available."
-    try 
+    try
         Table.Click
     catch
         warnlog "Table button in standardbar is not available!"
     endcatch
     printlog "Clicking on insert table button in standardbar."
-    
+
     printlog " Checking if insert Table dialog comes up."
     Kontext "InsertTableImpress"
     if InsertTableImpress.Exists then
@@ -150,7 +150,7 @@ testcase tiInsertTableUsingButton
     endif
     printlog "Inserting Table by clicking OK."
     InsertTableImpress.OK
-    
+
     printlog "Checking if table is inserted."
     Kontext "TableObjectbar"
     if TableObjectbar.Exists(1) then
@@ -161,12 +161,12 @@ testcase tiInsertTableUsingButton
     TableObjectbar.Close
     printlog " Close document."
     Call hCloseDocument
-    
+
 endcase 'tiInsertTableUsingButton
-    
+
 '-------------------------------------------------------------------------------
 testcase tiInsertTableUsingToolbarbutton
-    
+
     printlog " Inserting table using the button in table toolbar."
     Call hNewDocument
     printlog "Clicking on button in toolbar."
@@ -178,7 +178,7 @@ testcase tiInsertTableUsingToolbarbutton
         warnlog "TableObjectBar not up!"
     endif
     Table.Click
-    
+
     printlog " Checking if insert Table dialog comes up."
     Kontext "InsertTableImpress"
     if InsertTableImpress.Exists then
@@ -186,10 +186,10 @@ testcase tiInsertTableUsingToolbarbutton
     else
         warnlog "InsertTableDialog did not come up!"
     endif
-    
+
     printlog "Inserting Table..."
     InsertTableImpress.OK
-    
+
     printlog " Checking if dialog comes up."
     Kontext "TableObjectbar"
     if TableObjectbar.Exists(1) then
@@ -198,30 +198,30 @@ testcase tiInsertTableUsingToolbarbutton
         warnlog " Table Dialog did not came up!"
     endif
     TableObjectbar.Close
-    
+
     printlog " Close document."
     Call hCloseDocument
-    
+
 endcase 'tiInsertTableUsingToolbarbutton
 
 '-------------------------------------------------------------------------------
-testcase tiTableObjectBar 
+testcase tiTableObjectBar
 
     printlog "Testing TableObjectBar."
     Call hNewDocument
     kontext "Standardbar"
-    
+
     printlog "Checking if button is available."
-    try 
+    try
         Table.Click
     catch
         warnlog "Table button in standardbar is not available!"
     endcatch
-    
+
     Kontext "InsertTableImpress"
     printlog "Inserting table."
     InsertTableImpress.OK
-    
+
     Kontext "DocumentImpress"
     printlog "Selecting table for geeting the TableObjectBar."
     DocumentImpress.TypeKeys "<MOD1 A>"
@@ -233,7 +233,7 @@ testcase tiTableObjectBar
     else
         warnlog "Table bar is not up!"
     endif
-        
+
     printlog "Checking LinienStil."
     LinienStil.TearOff
     Kontext "TB_Umrandungsstil"
@@ -245,12 +245,12 @@ testcase tiTableObjectBar
         warnlog "LineStyleBox is not up!"
     endif
     Kontext "TableObjectBar"
-    
+
     TableObjectBar.Close
     Kontext "DocumentImpress"
     Call hToolbarSelect ("Table", true)
     Kontext "TableObjectBar"
-    
+
     printlog "Checking LineColorOfTheBorder."
     LineColorOfTheBorder.TearOff
     Kontext "TB_Farbe"
@@ -261,12 +261,12 @@ testcase tiTableObjectBar
     else
         warnlog "LineColorOfTheBorder is not up!"
     endif
-    Kontext "TableObjectBar"    
+    Kontext "TableObjectBar"
     TableObjectBar.Close
     Kontext "DocumentImpress"
     Call hToolbarSelect ("Table", true)
     Kontext "TableObjectBar"
-    
+
     printlog "Checking Borderstyle."
     Umrandung.TearOff
     Kontext "TB_Umrandung"
@@ -277,7 +277,7 @@ testcase tiTableObjectBar
         warnlog "BordersTB is not up!"
     endif
     Kontext "DocumentImpress"
-    
+
     printlog "Checking merge cells."
     printlog "Inserting something into cell and select."
     DocumentImpress.TypeKeys ("a")
@@ -285,7 +285,7 @@ testcase tiTableObjectBar
     Kontext "TableObjectBar"
     ZellenVerbinden.Click
     printlog "Cells merged."
-    
+
     printlog "Checking split cells."
     ZelleTeilen.Click
     printlog "Cells split."
@@ -310,27 +310,27 @@ testcase tiTableObjectBar
     'Kontext "TableObjectBar"
     'Optimieren.TearOff
     'OptimizeTablebar.Close
-    
+
     printlog "Checking Alignment."
     Kontext "TableObjectBar"
     Top.Click
     CenterVertical.Click
     Bottom.Click
     printlog "Alignment buttons checked."
-    
+
     printlog "Checking inserting and deleting of columns and rows."
     ZeileEinfuegen.Click
     printlog "Row inserted."
-    
+
     Zeileloeschen.Click
     printlog "Row deleted."
-    
+
     SpalteEinfuegen.Click
     printlog "Column inserted."
-    
+
     Spalteloeschen.Click
-    printlog "Column deleted."    
-    
+    printlog "Column deleted."
+
     printlog "Checking table design button 'ToDo:needs some further examination here!"
     tabledesign.Click
     kontext "Tasks"
@@ -340,7 +340,7 @@ testcase tiTableObjectBar
     else
         printlog "Task Pane visible."
     endif
-    
+
     printlog "Checking Properties button."
     Kontext "TableObjectBar"
     TableProperties.Click
@@ -352,37 +352,37 @@ testcase tiTableObjectBar
         printlog "Tabpage Font is up."
     endif
     kontext "TabFont"
-    
+
     printlog "Checking Fonts Box."
     iItemCount = Font.GetItemCount
     printlog "Fontbox has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount
         Font.Select(iItemIndex)
     next iItemIndex
-    
+
     printlog "Checking style box."
     iItemCount = Style.GetItemCount
     printlog "Stylebox has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount
         Style.Select(iItemIndex)
     next iItemIndex
-    
-        printlog "Checking size box."
+
+    printlog "Checking size box."
     iItemCount = Size.GetItemCount
     printlog "Sizebox has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount
         Size.Select(iItemIndex)
     next iItemIndex
-    
+
     printlog "Checking language box."
     iItemCount = Language.GetItemCount
     printlog "Language box has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount
         Language.Select(iItemIndex)
     next iItemIndex
-    
+
     '------------Next Tab-----------------
-    
+
     printlog "Checking Tabpage FontEffects."
     Kontext
     active.SetPage TabFontEffects
@@ -392,32 +392,32 @@ testcase tiTableObjectBar
         printlog "Tabpage FontEffects is up."
     endif
     kontext "TabFontEffects"
-    
+
     printlog "Checking Underlining box."
     iItemCount = Underline.GetItemCount
     printlog "Underlining has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount
         Underline.Select(iItemIndex)
     next iItemIndex
-    
+
     printlog "Checking StrikeThrough box."
     iItemCount = StrikeThrough.GetItemCount
     printlog "StrikeThrough has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount
         StrikeThrough.Select(iItemIndex)
     next iItemIndex
-    
+
     printlog "Checking individual words."
     IndividualWords.Check
     printlog "Individual words checked."
-    
+
     printlog "Checking Color box."
     iItemCount = Color.GetItemCount
     printlog "Font color has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount
         Color.Select(iItemIndex)
     next iItemIndex
-    
+
     printlog "Checking Relief."
     iItemCount = Relief.GetItemCount
     printlog "Relief has " & iItemCount & " entries."
@@ -425,15 +425,15 @@ testcase tiTableObjectBar
         Relief.Select(iItemIndex)
     next iItemIndex
     Relief.Select(1) 'setting back Relief, otherwise Outline is greyed out
-    
+
     printlog "Checking Outline and Shadow."
     Outline.Check
     printlog "Outline checked."
     Shadow.Check
     printlog "Shadow checked."
-    
+
     '------------Next Tab-----------------
-    
+
     printlog "Checking Tabpage Borders."
     Kontext
     active.SetPage TabUmrandung
@@ -449,30 +449,30 @@ testcase tiTableObjectBar
     for iItemIndex = 1 to iItemCount
         Stil.Select(iItemIndex)
     next iItemIndex
-    
+
     printlog "Checking Color."
     iItemCount = StilFarbe.GetItemCount
     printlog "Color has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount
         StilFarbe.Select(iItemIndex)
     next iItemIndex
-    
+
     printlog "Un-Checking Synchronize."
     Synchronisieren.UnCheck
     printlog "Synchronize unchecked."
-    
+
     printlog "Checking Left."
     Links.ToMax
     printlog "Maximum Left is " & Links.GetText & "."
     Links.ToMin
     printlog "Minimum Left is " & Links.GetText & "."
-    
+
     printlog "Checking Right."
     Rechts.ToMax
     printlog "Maximum Right is " & Rechts.GetText & "."
     Rechts.ToMin
     printlog "Minimum Right is " & Rechts.GetText & "."
-    
+
     printlog "Checking Top."
     Oben.ToMax
     printlog "Maximum Top is " & Oben.GetText & "."
@@ -484,9 +484,9 @@ testcase tiTableObjectBar
     printlog "Maximum Bottom is " & Unten.GetText & "."
     Unten.ToMin
     printlog "Minimum Bottom is " & Unten.GetText & "."
-    
+
     '------------Next Tab-----------------
-    
+
     printlog "Checking Tabpage Background."
     Kontext
     active.SetPage TabArea
@@ -496,7 +496,7 @@ testcase tiTableObjectBar
         printlog "Tabpage Area is up."
     endif
     kontext "TabArea"
-    
+
     iItemCount = FillOptions.GetItemCount
     for iItemIndex = 2 to iItemCount
         FillOptions.Select(iItemIndex)
@@ -505,10 +505,10 @@ testcase tiTableObjectBar
     TabArea.Cancel
     printlog "Format Cells dialog closed."
     printlog "Toolbar tested."
-        
+
     printlog " Closing doc."
     hCloseDocument
-    
-endcase 'tiTableObjectBar 
+
+endcase 'tiTableObjectBar
 
 '-------------------------------------------------------------------------------

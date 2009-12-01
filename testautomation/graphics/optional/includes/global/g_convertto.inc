@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -166,9 +166,11 @@ testcase tiModifyConvertToPolygon
     ExtrasOptionenDlg.OK
     '-----------------------------------------------
    Call hCloseDocument
-endcase
-
+   
+endcase 'tiModifyConvertToPolygon
+'--------------------------------------------------------
 testcase tdContextConvertIntoBitmap
+
   Call hNewDocument									'/// new document  ///'
   sleep 3
   InsertGraphicsFromFile								'/// insert graphic  ///'
@@ -203,9 +205,11 @@ testcase tdContextConvertIntoBitmap
    endcatch
  sleep 2
   Call hCloseDocument									 '/// close document  ///'
-endcase
-
+  
+endcase 'tdContextConvertIntoBitmap
+'--------------------------------------------------------
 testcase tiAendernUmwandelnInKurve
+
     Printlog "  ----- ContextConvertIntoCurve testen"
 
  Call hNewDocument							'/// New impress document///'
@@ -230,9 +234,11 @@ testcase tiAendernUmwandelnInKurve
      endcatch
 
  Call hCloseDocument								'/// close document ///'
-endcase
-
+ 
+endcase 'tiAendernUmwandelnInKurve
+'--------------------------------------------------------
 testcase tiAendernUmwandelnInPolygonGrafik
+
     Printlog "- Context/ConvertIntoPolygon"
 
  Call hNewDocument									'/// new document ///'
@@ -275,9 +281,11 @@ testcase tiAendernUmwandelnInPolygonGrafik
    UmwandelnInPolygon.OK								'/// close dialog ///'
    sleep 5
   Call hCloseDocument									'/// close document  ///'
-endcase
-
+  
+endcase 'tiAendernUmwandelnInPolygonGrafik
+'--------------------------------------------------------
 testcase tiAendernUmwandelnIn3D
+
     Printlog "- Convert into 3D"
  Call hNewDocument
  sleep 1								'/// new impress document ///'
@@ -293,9 +301,11 @@ testcase tiAendernUmwandelnIn3D
      Warnlog "- Convert into 3D does not work"
    endcatch
  Call hCloseDocument									'/// close document '///
-endcase
-
+ 
+endcase 'tiAendernUmwandelnIn3D
+'--------------------------------------------------------
 testcase tiAendernUmwandelnIn3DRotationskoerper
+
     Printlog "- ConvertInto3DRotationobject"
   Dim PosX
   Dim PosY
@@ -323,37 +333,40 @@ testcase tiAendernUmwandelnIn3DRotationskoerper
   TabPositionAndSize.OK
   sleep 1
  Call hCloseDocument									'/// close document ///'
-endcase
-
+ 
+endcase 'tiAendernUmwandelnIn3DRotationskoerper
+'--------------------------------------------------------
 testcase tiAendernUmwandelnInMetaFile
-    Printlog "- ConvertIntoMetaFile"
 
-  Call hNewDocument									'/// new document ///'
-  sleep 3
-  InsertGraphicsFromFile								'/// insert graphic  ///'
-  sleep 1
-   kontext "Active"
-   sleep 1
+    Printlog "- ConvertIntoMetaFile"
+    
+    Call hNewDocument									'/// new document ///'
+    sleep 3
+    InsertGraphicsFromFile								'/// insert graphic  ///'
+    sleep 1
+    kontext "Active"
+    sleep 1
     if Active.Exists Then
        Active.OK
     end if
     sleep 1
-  Kontext "GrafikEinfuegenDlg"
-  sleep 2
-'///  uses input\\impress\\grafik\\desp.gif") ///
-  Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\purzel.gif")
-  sleep 2
-  Oeffnen.Click
-  sleep 5
-  Kontext "DocumentImpress"
-   try
+    Kontext "GrafikEinfuegenDlg"
+    sleep 2
+    '///  uses input\\impress\\grafik\\desp.gif") ///
+    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\purzel.gif")
+    sleep 2
+    Oeffnen.Click
+    sleep 5
+    Kontext "DocumentImpress"
+    try
         ContextConvertIntoMetafile							'/// convert bitmap into metafile  ///'
         sleep 2
         Printlog "- Convert into Metafile does work"
-   catch
+    catch
         Warnlog "- Convert into Metafile does not work"
-   endcatch
-  sleep 2
-  Call hCloseDocument									'/// close document  ///'
-endcase
+    endcatch
+    sleep 2
+    Call hCloseDocument									'/// close document  ///'
+    
+endcase 'tiAendernUmwandelnInMetaFile
 

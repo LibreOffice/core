@@ -1,7 +1,0 @@
-CALC=StarOffice 9-munkafüzet
-CHART=StarOffice 9-diagram
-DRAW=StarOffice 9-rajz
-IMPRESS=StarOffice 9-bemutató
-MATH=StarOffice 9-képlet
-WRITER=StarOffice 9-szöveg
-OTHER=További objektumok

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test the functionality of Paragraph Formatting - 2
 '*
@@ -63,6 +63,9 @@
 '\***********************************************************************
 
 testcase tParagraphAlignment1
+Warnlog "#i102752# - tParagraphAlignment1 outcommented due to bug."
+goto endsub
+
 
   Dim sTestFile as String
   Dim sPositionX as String
@@ -111,6 +114,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment2
+Warnlog "#i102752# - tParagraphAlignment2 outcommented due to bug."
+goto endsub
 
   Dim sTestFile as String
   Dim sPositionX as String
@@ -150,6 +155,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment3
+Warnlog "#i102752# - tParagraphAlignment3 outcommented due to bug."
+goto endsub
 
   Dim sTestFile as String
 
@@ -187,6 +194,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment4
+Warnlog "#i102752# - tParagraphAlignment4 outcommented due to bug."
+goto endsub
 
   Dim sTestFile as String
   Dim sPositionX1 as String
@@ -258,6 +267,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment5
+Warnlog "#i102752# - tParagraphAlignment5 outcommented due to bug."
+goto endsub
 
   Dim sTestFile as String
 
@@ -297,6 +308,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment6
+Warnlog "#i102752# - tParagraphAlignment6 outcommented due to bug."
+goto endsub
 
   Dim sTestFile as String
   Dim sPositionX1 as String
@@ -367,6 +380,9 @@ endcase
 '--------------------------------------------------------------------------
 
 testcase tParagraphAlignment7
+Warnlog "#i102752# - tParagraphAlignment7 outcommented due to bug."
+goto endsub
+
   Dim sTestFile as String
   Dim sPositionX as String
 
@@ -426,6 +442,8 @@ endcase
 '--------------------------------------------------------------------------
 
 testcase tParagraphAlignment8
+Warnlog "#i102752# - tParagraphAlignment8 outcommented due to bug."
+goto endsub
 
   Dim bAsianLanguage as Boolean
   Dim sTestFile as String
@@ -497,6 +515,8 @@ endcase
 '--------------------------------------------------------------------------
 
 testcase tParagraphAlignment9
+Warnlog "#i102752# - tParagraphAlignment9 outcommented due to bug."
+goto endsub
 
   Dim bAsianLanguage as Boolean
   Dim sTestFile as String

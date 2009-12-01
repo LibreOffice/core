@@ -1,7 +1,0 @@
-CALC=Planilha do BrOffice.org 2.2
-CHART=Gráfico do BrOffice.org 2.2
-DRAW=Desenho do BrOffice.org 2.2
-IMPRESS=Apresentação do BrOffice.org 2.2
-MATH=Fórmula do BrOffice.org 2.2
-WRITER=Texto do BrOffice.org 2.2
-OTHER=

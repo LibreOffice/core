@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,6 @@
 '\*************************************************************************************
 
 '   sDatei = gTesttoolPath + "graphics\required\input\leer.sx"+left(gApplication,1)
-'  Call hDateiOeffnen ConvertPath (gTesttoolPath + "graphics\required\input\frame1.htm")	'/// Load html document ///'
 '   sDatei = gTesttoolPath + "graphics\required\input\leer.sx"+left(gApplication,1)
 '      Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
 
@@ -102,9 +101,11 @@ testcase tEditDuplicate
    Next Zaehler
   sleep 2
  Call hCloseDocument						'/// Close document ///'
-endcase
-
+ 
+endcase 'tEditDuplicate
+'---------------------------------------------------------
 testcase tEditFields
+
  Call hNewDocument
   sleep 3
   InsertFieldsDateFix						'/// Insert Date-Fix ///'
@@ -138,9 +139,11 @@ testcase tEditFields
   sleep 2
  Call hCloseDocument						'/// close document ///'
   sleep 2
-endcase
-
+  
+endcase 'tEditFields
+'--------------------------------------------------------
 testcase tEditDeleteSlide
+
  dim Ueber_Text_1 as string
  dim Ueber_Text_2 as string
  dim Ueber_Text_3 as string
@@ -167,9 +170,11 @@ testcase tEditDeleteSlide
   call Position_Vergleichen (Ueber_Text_1,Ueber_Text_2,Ueber_Text_3)					'/// compare position of rectange ///'
   sleep 1
  Call hCloseDocument						'/// close document ///'
-endcase
-
+ 
+endcase 'tEditDeleteSlide
+'--------------------------------------------------------
 testcase tEditLinks
+
  Call  hNewDocument						'/// New document ///'
   InsertGraphicsFromFile					'/// insert graphic (sample.bmp) ///'
   Kontext "GrafikEinfuegenDlg"
@@ -201,9 +206,11 @@ testcase tEditLinks
     printlog "OK   Link broken"
   endcatch
  Call hCloseDocument						'/// close document ///'
-endcase
-
+ 
+endcase 'tEditLinks
+'---------------------------------------------------------
 testcase tdEditDeleteLayer
+
  dim Ueber_Text_1 as string
  dim Ueber_Text_2 as string
  dim Ueber_Text_3 as string
@@ -234,9 +241,11 @@ testcase tdEditDeleteLayer
   Call Position_Vergleichen (Ueber_Text_1,Ueber_Text_2,Ueber_Text_3)
   sleep 1
  Call hCloseDocument                   '/// close document ///'
-endcase
-
+ 
+endcase 'tdEditDeleteLayer
+'--------------------------------------------------------
 testcase tEditObjectEdit
+
  Dim Schrieb  as string
 
   Schrieb = gOLEWriter
@@ -277,4 +286,4 @@ testcase tEditObjectEdit
       sleep 1
      Call hCloseDocument                     '/// close document ///'
   endif
-endcase
+endcase 'tEditObjectEdit

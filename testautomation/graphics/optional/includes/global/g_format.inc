@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,6 @@
 ' #1 tdFormatTemplates
 ' #1 tiFormatAufzaehlungszeichen
 '\******************************************************************
-
 testcase tiFormatText
     Dim a as string
     Dim b as string
@@ -254,8 +253,8 @@ testcase tiFormatText
         next n
         TabLauftext.OK
     Call hCloseDocument
+    
 endcase 'tiFormatText
-
 '-------------------------------------------------------------------------------
 testcase tdFormatLayer
 
@@ -314,8 +313,8 @@ testcase tdFormatLayer
 
     '/// close application ///'
     Call hCloseDocument
+    
 endcase 'tdFormatLayer
-
 '-------------------------------------------------------------------------------
 testcase tdFormatConnector
 
@@ -442,8 +441,8 @@ testcase tdFormatConnector
         next i
     Verbinder.OK
     Call hCloseDocument
+    
 endcase 'tdFormatConnector
-
 '-------------------------------------------------------------------------------
 testcase tiFormatPositionAndSize
 
@@ -526,6 +525,7 @@ printlog "New impress doc"
         WaitSlot (1000)
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
+        KeepRatio.UnCheck
         printlog "set width to 10"
         WaitSlot (1000)
         Width.SetText "10"
@@ -688,8 +688,8 @@ printlog "New impress doc"
         if Winkel.GetText =w Then PrintLog "  Object rotated over 45°"
         TabSchraegstellen.OK
     Call hCloseDocument
+    
 endcase 'tiFormatPositionAndSize
-
 '-------------------------------------------------------------------------------
 testcase tiFormat3D_Effekte
 
@@ -737,7 +737,7 @@ testcase tiFormat3D_Effekte
         endcatch
         Zuweisen.Click                            '/// assign perspective ///'
         Kontext "DocumentImpress"
-        gMouseClick 40,40
+       hTypeKeys "<MOD1 A>"
         ContextPositionAndSize                        '/// check position and size ///'
             Kontext
             Active.SetPage TabPositionAndSize
@@ -1003,10 +1003,11 @@ testcase tiFormat3D_Effekte
     printlog "close document"
     Drei_D_Effekte.Close
     Call hCloseDocument
+    
 endcase 'tiFormat3D_Effekte
-
 '------------------------------------------------------------------
 testcase tdFormatTemplates
+
     qaerrorlog "Not yet ready."
     goto endsub
 
@@ -1185,7 +1186,6 @@ testcase tdFormatTemplates
      Call hCloseDocument                '/// close document ///'
 
 endcase 'tdFormatTemplates
-
 '-------------------------------------------------------------------------------
 testcase tiFormatAufzaehlungszeichen
     

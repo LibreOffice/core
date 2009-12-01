@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -42,43 +42,36 @@
 
 testcase tiWindowNewWindow
 
-    '/// open application ///'
     Call  hNewDocument
-    '/// create rectangle ///'
     Call hRechteckErstellen ( 10, 10, 20, 40 )
-    '/// Window->New Window ///'
     WindowNewWindow
     WaitSlot (2000)
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tidWindow123
     goto endsub '' testing TBO: 29.03.2002
     dim iMenues as integer
-    '/// open application ///'
     Call  hNewDocument
-    '/// create rectangle ///'
     Call hRechteckErstellen ( 10, 10, 20, 40 )
 
     Kontext "DocumentImpress"
-        DocumentImpress.UseMenu
-        iMenues = MenuGetItemCount
-        warnlog "---- Number of Main menus: " & iMenues
-        MenuSelect(Menugetitemid(8))
-        sleep 1
-        iMenues = MenuGetItemCount
-        printlog "---- Number of Main menus: " & iMenues
-        '     MenuSelect(Menugetitemid(14))
-        sleep 1
-        i=1
-        printlog "count: " + i + "; of submenu: " + MenuGetItemCount + "; SID: " + MenuGetItemId (i) + "; Text: " + MenuGetItemText (Menugetitemid(i)) + "; Command: " + MenuGetItemCommand(Menugetitemid(i)) + "; Seperator?: " + MenuIsSeperator(i) + "; Enabled: " + MenuIsItemEnabled(Menugetitemid(i)) + "; Checked: " + MenuIsItemChecked(Menugetitemid(i)) + ";"
-        i=2
-        printlog "count: " + i + "; of submenu: " + MenuGetItemCount + "; SID: " + MenuGetItemId (i) + "; Text: " + MenuGetItemText (Menugetitemid(i)) + "; Command: " + MenuGetItemCommand(Menugetitemid(i)) + "; Seperator?: " + MenuIsSeperator(i) + "; Enabled: " + MenuIsItemEnabled(Menugetitemid(i)) + "; Checked: " + MenuIsItemChecked(Menugetitemid(i)) + ";"
-        warnlog "Dynamic entries not accessible ? :-((((("
-        '   i=3
-        '   printlog "count: " + i + "; of submenue: " + MenuGetItemCount + "; SID: " + MenuGetItemId (i) + "; Text: " + MenuGetItemText (Menugetitemid(i)) + "; Command: " + MenuGetItemCommand(Menugetitemid(i)) + "; Seperator?: " + MenuIsSeperator(i) + "; Enabled: " + MenuIsItemEnabled(Menugetitemid(i)) + "; Checked: " + MenuIsItemChecked(Menugetitemid(i)) + ";"
-    '/// close application ///'
+    DocumentImpress.UseMenu
+    iMenues = MenuGetItemCount
+    warnlog "---- Number of Main menus: " & iMenues
+    MenuSelect(Menugetitemid(8))
+    sleep 1
+    iMenues = MenuGetItemCount
+    printlog "---- Number of Main menus: " & iMenues
+    '     MenuSelect(Menugetitemid(14))
+    sleep 1
+    i=1
+    printlog "count: " + i + "; of submenu: " + MenuGetItemCount + "; SID: " + MenuGetItemId (i) + "; Text: " + MenuGetItemText (Menugetitemid(i)) + "; Command: " + MenuGetItemCommand(Menugetitemid(i)) + "; Seperator?: " + MenuIsSeperator(i) + "; Enabled: " + MenuIsItemEnabled(Menugetitemid(i)) + "; Checked: " + MenuIsItemChecked(Menugetitemid(i)) + ";"
+    i=2
+    printlog "count: " + i + "; of submenu: " + MenuGetItemCount + "; SID: " + MenuGetItemId (i) + "; Text: " + MenuGetItemText (Menugetitemid(i)) + "; Command: " + MenuGetItemCommand(Menugetitemid(i)) + "; Seperator?: " + MenuIsSeperator(i) + "; Enabled: " + MenuIsItemEnabled(Menugetitemid(i)) + "; Checked: " + MenuIsItemChecked(Menugetitemid(i)) + ";"
+    warnlog "Dynamic entries not accessible ? :-((((("
+    '   i=3
+    '   printlog "count: " + i + "; of submenue: " + MenuGetItemCount + "; SID: " + MenuGetItemId (i) + "; Text: " + MenuGetItemText (Menugetitemid(i)) + "; Command: " + MenuGetItemCommand(Menugetitemid(i)) + "; Seperator?: " + MenuIsSeperator(i) + "; Enabled: " + MenuIsItemEnabled(Menugetitemid(i)) + "; Checked: " + MenuIsItemChecked(Menugetitemid(i)) + ";"
     Call hCloseDocument
 endcase
 

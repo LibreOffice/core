@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test the functionality of Page Formatting / Page Styles - 1
 '*
@@ -92,9 +92,9 @@ endcase
 
 testcase tFormatPage_2
 
-  	Dim sTestString as String
+  	Dim sTestString   as String
 	Dim iRepectLength as Integer
-	Dim iFormat as Integer
+	Dim iFormat       as Integer
 
 	sTestString   =  "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ"
 	iRepectLength =  26
@@ -137,7 +137,7 @@ testcase tFormatPage_3
 	
 	Call hNewDocument
 
-	Call wOptionenUndo( "Grundschriften" )
+	Call wOptionsUndo( "Grundschriften" )
 	
 	'/// Input a long test string
 	Call wTypeKeys "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ"
@@ -170,7 +170,7 @@ endcase
 testcase tFormatPage_4
 
 	Dim iFormat as Integer
-	Dim sWidth as String
+	Dim sWidth  as String
     Dim sHeight as String
 	
 	iFormat = 2   'A4 paper
@@ -225,9 +225,8 @@ endcase
 testcase tFormatPage_5
 
 	Dim iFormat as Integer
-	Dim sWidth as String
-    Dim sHeight as String
-	Dim sLeft as String  , sRight as String   , sUp as String  , sBottom as String  ' set page size
+	Dim sWidth  as String , sHeight as String
+	Dim sLeft   as String , sRight as String   , sUp as String  , sBottom as String  ' set page size
 	Dim sLeft1 as String  , sRight1 as String  ,  sUp1 as String  , sBottom1 as String  ' get page size
 	
 	iFormat    = 2   'A4 paper
@@ -446,14 +445,12 @@ testcase tFormatPage_7
 	TabSeite.Cancel
 	
 	Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_8
-    
-    Dim RecheckCTLSupport as string 
+    Dim RecheckCTLSupport   as string
     Dim RecheckAsianSupport as string
     RecheckCTLSupport = gCTLSup
     RecheckAsianSupport = gAsianSup
@@ -463,7 +460,7 @@ testcase tFormatPage_8
             printlog "No test with asian lovale, because checkbox 'Asian language support' is disabled by default!"
             goto endsub
     end select
-    
+
     PrintLog "- Check Listbox Text Direction when Asian language support is enabled"
     '/// Check Listbox Text Direction when Asian language support is enabled
 
@@ -472,8 +469,8 @@ testcase tFormatPage_8
    '/// Set CTL unable
     Call ActiveDeactivateCTLSupport(FALSE)
     '/// Enable Asian Support
-    Call ActiveDeactivateAsianSupport(TRUE)    
-   '/// - the Listbox Text Direction should be visible when Asian language support is enabled   
+    Call ActiveDeactivateAsianSupport(TRUE)
+   '/// - the Listbox Text Direction should be visible when Asian language support is enabled
     Call fFormatPageWriter("TabSeite")
     if Not Textfluss.IsVisible then
         Warnlog "Listbox 'Text Direction' isn't visible though asian support is enabled"
@@ -481,13 +478,13 @@ testcase tFormatPage_8
     TabSeite.Cancel
 
     '/// Disable Asian Support
-    Call ActiveDeactivateAsianSupport(FALSE)    
+    Call ActiveDeactivateAsianSupport(FALSE)
     '/// - the Listbox Text Direction should be invisible when Asian language support is unabled
     Call fFormatPageWriter("TabSeite")
     if Textfluss.IsVisible then
         Warnlog "Listbox 'Text Direction' is visible though asian support is disabled"
     end if
-    TabSeite.Cancel    
+    TabSeite.Cancel
     
     if RecheckCTLSupport = True then
         Call ActiveDeactivateCTLSupport(TRUE)
@@ -499,7 +496,7 @@ testcase tFormatPage_8
     else
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
+
     Call hCloseDocument
 
 endcase
@@ -515,28 +512,29 @@ testcase tFormatPage_9
 
     PrintLog "- Check Listbox Text Direction when CTL is enabled"
     '/// Check Listbox Text Direction when CTL is enabled
-    
-    Call hNewDocument        
+
+    Call hNewDocument
+
     '/// Set CTL enabled
     Call ActiveDeactivateAsianSupport(FALSE)
-    Call ActiveDeactivateCTLSupport(TRUE)    
+    Call ActiveDeactivateCTLSupport(TRUE)
     '/// Check if 'Text direction' appears
     Call fFormatPageWriter("TabSeite")
     if Textfluss.IsVisible = False then
         Warnlog "Right to Left (horizontal) should appear when CTL is checked!"
     end if
     TabSeite.Cancel
-    
+
     '/// Set CTL unable
     Call ActiveDeactivateCTLSupport(FALSE)
-    
+
     '/// Check if 'Text direction' appears
     Call fFormatPageWriter("TabSeite")
     if Textfluss.IsVisible = TRUE then
         Warnlog "Left to Right (horizontal) appears though CTL is disabled"
     end if
     TabSeite.Cancel
-    
+
     if RecheckCTLSupport = True then
         Call ActiveDeactivateCTLSupport(TRUE)
     else
@@ -547,16 +545,15 @@ testcase tFormatPage_9
     else
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
-    Call hCloseDocument
 
+    Call hCloseDocument
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_10
 
-    Dim RecheckCTLSupport as string
+    Dim RecheckCTLSupport   as string
     Dim RecheckAsianSupport as string
     RecheckCTLSupport = gCTLSup
     RecheckAsianSupport = gAsianSup
@@ -589,16 +586,17 @@ testcase tFormatPage_10
     end if
     
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_11
+Warnlog "#i102752# - tFormatPage_11 outcommented due to bug."
+goto endsub
 
-    Dim sTestFile as String
+    Dim sTestFile    as String
     Dim sMarginsLeft as String
-    Dim iPageLayout as Integer
+    Dim iPageLayout  as Integer
 
     sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\pageLayout.sxw")
     sMarginsLeft = "10" + gSeperator + "00" + gMeasurementUnit
@@ -654,10 +652,13 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_12
+Warnlog "#i102752# - tFormatPage_12 outcommented due to bug."
+goto endsub
 
-    Dim sTestFile as String
-    Dim sMarginsLeft as String  ,  sMarginsRight as String
-    Dim iPageLayout as Integer
+    Dim sTestFile    as String
+    Dim sMarginsLeft as String
+    Dim sMarginsRight as String
+    Dim iPageLayout  as Integer
 
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\pageLayout.sxw")
     sMarginsLeft  = "10" + gSeperator + "00" + gMeasurementUnit
@@ -715,9 +716,12 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_13
+Warnlog "#i102752# - tFormatPage_13 outcommented due to bug."
+goto endsub
 
     Dim sTestFile as String
-    Dim sPage1 as String , sPage2 as String
+    Dim sPage1 as String
+    Dim sPage2 as String
     Dim iPageLayout as Integer
 
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\pageLayout.sxw")
@@ -765,16 +769,16 @@ testcase tFormatPage_13
      fCloseNavigator
      Wait 500
 
-	 Call hCloseDocument
+    Call hCloseDocument
 
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_14
-
     Dim sTestFile as String
-    Dim sPage1 as String  ,  sPage2 as String
+    Dim sPage1 as String
+    Dim sPage2 as String
     Dim iPageLayout as Integer
 
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\pageLayout.sxw")
@@ -822,16 +826,18 @@ testcase tFormatPage_14
      fCloseNavigator
      Wait 500
 
-   Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_15
+    Dim sType as String
+    Dim sFormat as String
 
-    Dim sType as String  ,  sFormat as String
-    
     Select case iSprache
         case 01:    sType   = "Page"
                     sFormat = "As Page Style"
@@ -877,7 +883,6 @@ testcase tFormatPage_15
         warnlog "the format setting should be " & sFormat & " but get " &Formatliste.GetSelText
     end if
     TabDokumentFeldbefehle.Close
-    
+
     Call hCloseDocument
-    
 endcase

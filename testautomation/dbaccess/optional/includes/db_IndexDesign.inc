@@ -76,7 +76,7 @@ function tIndex(sFileName as String, sTableName as String)
         if ( not DatabaseIndexes.exists(3) ) then
             warnlog "The index design doesn't exists"
         endif
-        IndexList.select 2
+        IndexList.select 1
         DropIndex.Click
     Kontext "MessageBox"
         MessageBox.Yes

@@ -1,8 +1,0 @@
-sc=StarSuite 7 表計算
-sh=StarSuite 7 グラフ
-sd=StarSuite 7 図形描画
-si=StarSuite 7 プレゼンテーション
-sm=StarSuite 7 数式
-sw=StarSuite 7 文書
-ot=その他のオブジェクト
-

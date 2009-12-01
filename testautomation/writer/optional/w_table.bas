@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Writer Table test
 '*
@@ -95,7 +95,7 @@ sub LoadIncludeFiles
 end sub
 
 sub TableConfiguration
-    Call wOptionenUndo("Tabelle")
+    Call wOptionsUndo("Tabelle")
     Call hNewDocument
     if iSprache = iSystemSprache then
             printlog "Systemlocale matches UI-language"
@@ -127,7 +127,7 @@ sub TableConfiguration
 
     mUnit = fSetMeasurementToCM()
     ToolsOptions
-    Call hToolsOptions ("WRITER","GENERAL")
+    Call hToolsOptions ("Writer","GENERAL")
     cDecSep = GetDecimalSeperator(Tabulatorenabstand.GetText)
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok

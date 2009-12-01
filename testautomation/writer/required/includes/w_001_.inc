@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :  Required-Testcases for the File-menu.
 '*
@@ -61,6 +61,9 @@ end sub
 
 testcase tFileNewLabels
 
+Warnlog "#i102218# - tFileNewLabels outcommented due to bug."
+goto endsub
+
     Dim iSheetFormat as integer
     Dim iBrandIndex as integer
     Dim iType as integer
@@ -89,7 +92,7 @@ testcase tFileNewLabels
         PrintLog "Check number of brands and types (see #i44801# for details)"
         
         For iSheetFormat = 1 to 2
-        
+            
             Select Case( iSheetFormat )
             Case 1
                 Endlos.Check
@@ -172,17 +175,17 @@ testcase tFileNewLabels
 
         Kontext "SaveLabelFormat"
         if ( SaveLabelFormat.exists( 1 ) ) then
-        
+            
             Call DialogTest (SaveLabelFormat)
             
             PrintLog "Close dialog 'Save Label Format'"
             SaveLabelFormat.Cancel
         else
             warnlog( "Dialog <SaveLabelFormat> is not available" )
-        endif
+        end if
         
         Kontext "TabFormatEtiketten"
-
+        
         PrintLog "Switch to Tabpage 'Options'"
         Kontext
         active.SetPage TabDruckerEtiketten
@@ -192,7 +195,6 @@ testcase tFileNewLabels
             Call DialogTest (TabDruckerEtiketten)
 
             if ( gPlatgroup = "w95" or gPlatgroup = "wnt" ) then
-
                 PrintLog "Click printer setup for Windows"
                 Einrichten.Click
 
@@ -202,10 +204,10 @@ testcase tFileNewLabels
                     DruckerEinrichten.Cancel
                 else
                     Warnlog "No Default Printer defined for the system, set one!"
-                endif
+                end if
             else
                 printlog( "No printer setup for UNIX like OS" )
-            endif
+            end if
 
             PrintLog "Check checkbox 'Synchronize contents'"
             Kontext "TabDruckerEtiketten"
@@ -225,7 +227,7 @@ testcase tFileNewLabels
                     Warnlog "Once Document has been opened, office asks to save it! BugID 89702"
                     Active.Cancel
                 endcatch
-            endif
+            end if
 
             PrintLog "Check if dialog 'Synchronize Labels' is up"
             Kontext "EtikettenSynchronisieren"
@@ -235,13 +237,13 @@ testcase tFileNewLabels
                 WaitSlot()
             else
                 Warnlog " Dialog to synchronize labels not up!"
-            endif
+            end if
         else
             warnlog( "Tabpage <TabDruckerEtiketten> is not available" )
-        endif
+        end if
     else
         warnlog( "hCreateLabels() failed" )
-    endif
+    end if
 
     PrintLog "Close active document"
     Call hCloseDocument
@@ -250,6 +252,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFileNewBusinessCards
+
+Warnlog "#i102218# - tFileNewBusinessCards outcommented due to bug."
+goto endsub
 
     Dim iFormat as integer
     Dim iBrand as integer
@@ -356,13 +361,13 @@ testcase tFileNewBusinessCards
             Active.Setpage TabVisitenkarten
         else
             warnlog( "Dialog <TabEtiketteMedium> not available" )
-        endif
+        end if
 
         Kontext "Active"
         if ( Active.GetRT = 304 ) then
             Warnlog( "UNexpected messagebox: " & Active.GetText() )
             Active.Ok
-        endif
+        end if
 
         Kontext "TabVisitenkarten"
         for iWait = 1 to 100
@@ -371,7 +376,7 @@ testcase tFileNewBusinessCards
                 iWait = 101
             else
                 wait( 100 )
-            endif
+            end if
         next iWait
 
         PrintLog "Switch to Tabpage 'Private'"
@@ -417,7 +422,7 @@ testcase tFileNewBusinessCards
             DruckerEinrichten.Cancel
         else
             Warnlog "No Default Printer configured for this system. Set one!"
-        endif
+        end if
 
         Kontext "TabZusaetzeEtiketten"
         PrintLog "Switch to Tabpage 'Options'"
@@ -435,7 +440,7 @@ testcase tFileNewBusinessCards
                 Active.Cancel
                 Warnlog "Once Document has been opened, office asks to save it! BugID 89702"
             endcatch
-        endif
+        end if
 
         PrintLog "Check i dialog 'Syncronize Labels' is up"
         Kontext "EtikettenSynchronisieren"
@@ -444,13 +449,13 @@ testcase tFileNewBusinessCards
             Synchronisieren.Click
         else
             Warnlog "Dialog to synchronize Business Cards not up!"
-        endif
+        end if
 
         PrintLog "Close active document"
         Call hCloseDocument
     else
         warnlog( "Failed to create business cards" )
-    endif
+    end if
     
 endcase
 
@@ -495,21 +500,21 @@ testcase tFileOpen
                         NeuerOrdner.Cancel
                     else
                         warnlog( "Dialog <NeuerOrdner> not available" )
-                    endif
+                    end if
                 else
                     Warnlog( "New Folder button disabled" )
-                endif
+                end if
             else
                 Warnlog( "New Folder button not visible" )
-            endif
+            end if
         else
             Warnlog( "New Folder button missing on dialog" )
-        endif
+        end if
         Kontext "OeffnenDlg"
         OeffnenDlg.Cancel
     else
         warnlog( "File Open dialog is not available" )
-    endif
+    end if
     PrintLog "Close File-Open-dialog with 'Cancel'"
 endcase
 
@@ -534,7 +539,7 @@ testcase tFileClose
         Active.Cancel
     else
         Warnlog( "No warning for modified document" )
-    endif    
+    end if    
 
     PrintLog "again File / Close"
     hUseAsyncSlot( "FileClose" )
@@ -545,7 +550,7 @@ testcase tFileClose
         Active.Yes()
     else
         warnlog( "No warning for modified document" )
-    endif
+    end if
 
     PrintLog "Click 'Cancel' in File-Save-Dialog"
     Kontext "SpeichernDlg"
@@ -558,8 +563,8 @@ testcase tFileClose
             Active.Ok()
         else
             Warnlog( "File Save dialog not displayed, messagebox came up instead" )
-        endif
-    endif
+        end if
+    end if
 
     PrintLog "Choose File / Close again"
     hUseAsyncSlot( "FileClose" )
@@ -570,7 +575,7 @@ testcase tFileClose
         Active.No
     else
         warnlog( "Expected messagebox missing" )
-    endif
+    end if
     
 endcase
 
@@ -622,22 +627,22 @@ testcase tFileSave
                         NeuerOrdner.Cancel
                     else
                         warnlog( "Dialog <NeuerOrdner> not available" )
-                    endif
+                    end if
                 else
                     Warnlog( "New Folder button disabled" )
-                endif
+                end if
             else
                 Warnlog( "New Folder button not visible" )
-            endif
+            end if
         else
             Warnlog( "New Folder button missing on dialog" )
-        endif
+        end if
         
         Kontext "SpeichernDlg"
         SpeichernDlg.cancel()
     else
         warnlog( "File Save dialog is not available" )
-    endif
+    end if
 
     PrintLog "Close active document"
     Call hCloseDocument
@@ -670,7 +675,7 @@ testcase tFileSaveAll
         SpeichernDlg.Cancel
     else
         warnlog( "First File Save dialog is not available" )
-    endif
+    end if
     
     PrintLog "Cancel 2. upcoming Filedialog"    
     Kontext "SpeichernDlg"
@@ -678,13 +683,13 @@ testcase tFileSaveAll
         SpeichernDlg.Cancel
     else
         warnlog( "Second File Save dialog is not available" )
-    endif
+    end if
 
     Kontext "SpeichernDlg"
     if ( SpeichernDlg.exists( 1 ) ) then
         warnlog( "Third, unexpected File Save dialog open" )
         SpeichernDlg.cancel()
-    endif
+    end if
 
     PrintLog "Close documents"
     hFileCloseAll()
@@ -735,22 +740,22 @@ testcase tFileSaveAs
                         NeuerOrdner.Cancel
                     else
                         warnlog( "Dialog <NeuerOrdner> not available" )
-                    endif
+                    end if
                 else
                     Warnlog( "New Folder button disabled" )
-                endif
+                end if
             else
                 Warnlog( "New Folder button not visible" )
-            endif
+            end if
         else
             Warnlog( "New Folder button missing on dialog" )
-        endif
+        end if
         
         Kontext "SpeichernDlg"
         SpeichernDlg.Cancel
     else
         warnlog( "File Save dialog is not available" )
-    endif
+    end if
 
     PrintLog "Close active document"
     Call hCloseDocument
@@ -789,7 +794,7 @@ testcase tFileSaveAsExport
 
     if ( hFileCloseAll() > 1 ) then
         QAErrorlog "More than 1 document had to be closed!"
-    endif
+    end if
 
     PrintLog "Close document"
     Call hCloseDocument
@@ -838,11 +843,11 @@ testcase tFileSaveWithPassword
             else
                 warnlog( "FATAL: Password checkbox is not enabled" )
                 goto endsub
-            endif
+            end if
         else
             warnlog( "FATAL: Password checkbox does not exist" )
             goto endsub
-        endif
+        end if
 
         PrintLog "Save the document"
         Dateiname.SetText( sFilePath )
@@ -853,7 +858,7 @@ testcase tFileSaveWithPassword
         if ( Active.Exists (1) ) then 
             warnlog( "Unexpected messagebox: " & Active.getText() )
             Active.Yes
-        endif
+        end if
 
         PrintLog "Password dialog has to come up"
         Kontext "PasswordFileSave"
@@ -867,7 +872,7 @@ testcase tFileSaveWithPassword
             PasswordFileSave.OK
         else
             Warnlog "- Password-Dialog not up !"
-        endif
+        end if
 
         Kontext "Active"
         PrintLog "A messagebox has to come up, warns of wrong confirmation"
@@ -875,7 +880,7 @@ testcase tFileSaveWithPassword
             Active.OK
         else
             Warnlog "Able to save document with wrong password"
-        endif
+        end if
 
         Kontext "PasswordFileSave"
         if ( PasswordFileSave.Exists() ) then
@@ -885,10 +890,10 @@ testcase tFileSaveWithPassword
             PasswordFileSave.OK
         else
             Warnlog "- Password-Dialog not up !"
-        endif
+        end if
     else
         warnlog( "Dialog <SpeichernDlg> not available" )
-    endif
+    end if
 
 
     PrintLog "Close the document"
@@ -904,7 +909,7 @@ testcase tFileSaveWithPassword
         PasswordFileOpen.OK()
     else
         Warnlog "- Password-Dialog not up or Document couldn't be loaded!"
-    endif
+    end if
 
     PrintLog "A messagebox has to come up, warns of wrong password"
     Kontext "Active"
@@ -913,13 +918,13 @@ testcase tFileSaveWithPassword
         Active.OK()
     else
         Warnlog "Able to load document with wrong password"
-    endif
+    end if
 
     Kontext "PasswordFileOpen"
     PrintLog "Cancel Password dialog (not loading the document"
     if ( PasswordFileOpen.Exists( 1 ) ) then
         PasswordFileOpen.Cancel()
-    endif
+    end if
 
     PrintLog "File / Open again your previous saved document"
     hFileOpen( sFilePath )
@@ -931,7 +936,7 @@ testcase tFileSaveWithPassword
         PasswordFileOpen.OK()
     else
         Warnlog "- Password-Dialog not up!"
-    endif
+    end if
     
     ' Rename document, the old one is now obsolete    
     sFilePath = ConvertPath ( gOfficePath + "user\work\" + sFileName2 )
@@ -951,7 +956,7 @@ testcase tFileSaveWithPassword
             else
                 Warnlog "#i36015#Checkbox 'Save with password' is not checked in file-dialog !"
                 Passwort.Check
-            endif
+            end if
             SpeichernDlg.Cancel
         else
             Dateiname.SetText( sFilePath )
@@ -962,7 +967,7 @@ testcase tFileSaveWithPassword
             if ( Active.Exists( 2 ) ) then 
                 printlog( "Messagebox: " & Active.getText() )
                 Active.Yes()
-            endif
+            end if
             
             PrintLog "Click on 'Save' in file open dialog"
             Kontext "PasswordFileSave"
@@ -984,14 +989,14 @@ testcase tFileSaveWithPassword
                     PasswordFileOpen.OK
                 else
                     warnlog( "Password dialog did not open" )
-                endif
+                end if
             else
                 Warnlog "Passworddialog is not coming up on saving document"
-            endif
-        endif
+            end if
+        end if
     else
         warnlog( "Dialog <SpeichernDlg> not available" )
-    endif
+    end if
     PrintLog "Close active document"
     Call hCloseDocument
 endcase
@@ -1031,7 +1036,7 @@ testcase tFileReload
     if MessageBox.Exists (1) then
         WarnLog "Messagebox after saving and closing : " + MessageBox.GetText
         MessageBox.Yes
-    endif
+    end if
     Wait (500)
 
     PrintLog "Open previous saved document"

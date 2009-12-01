@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 ' #1 t_Introduction         ' Description
 ' #1 t_Interoperability     ' Description
 ' #1 t_DrawingEngine        ' Description
-' 
+'
 '*
 '\***********************************************************************
 testcase t_Introduction
@@ -186,7 +186,6 @@ testcase t_Introduction
     
 endcase 't_Introduction
 '--------------------------------------------------------------------
-
 testcase t_Interoperability
 
     Dim sTemplatename as string
@@ -381,13 +380,12 @@ testcase t_Interoperability
         
 endcase 't_Interoperability
 '--------------------------------------------------------------------
-
 testcase t_DrawingEngine
 
-Dim sGroupPosition as string
-Dim sObjectPosition as string
-
-gApplication   = "DRAW"
+    Dim sGroupPosition as string
+    Dim sObjectPosition as string
+    
+    gApplication   = "DRAW"
     
     '///Open a drawing
     printlog "Open a drawing"

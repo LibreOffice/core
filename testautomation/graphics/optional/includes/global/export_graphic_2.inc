@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -35,240 +35,216 @@
 '*
 '* short description : Graphics Export B-tests. (the usual suspects)
 '*
-'************************************************************************
-'Neu
-' #1 tPNG
-' #1 tSVM
-' #1 tPDF
-' #1 tPDF_Creator
-' #1 tSVG
-' #1 tBMP
-' #1 tEMF
-' #1 tMET
-' #1 tSWF
-' #1 tWMF
-'*
 '\******************************************************************************
 testcase tPNG
 
-   dim x as integer
-   dim i as integer
-   dim iWaitIndex as integer
-   dim sFilter as string
-   dim sExt as string
+    dim x as integer
+    dim i as integer
+    dim iWaitIndex as integer
+    dim sFilter as string
+    dim sExt as string
 
-   sFilter = "PNG - Portable Network Graphic (.png)"
-   sExt = ".png"
+    sFilter = "PNG - Portable Network Graphic (.png)"
+    sExt = ".png"
 
-   '/// open the document
-   hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString  ))
+    hFileOpen( gTesttoolPath & "graphics\required\input\graphicexport." & ExtensionString )
 
-   '/// save it ///'
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "PNGOptionen"
-      if PNGOptionen.Exists (2) then
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "PNGOptionen"
+        if PNGOptionen.Exists (2) then
             Kompression.ToMax
             Interlaced.UnCheck
-         PNGOptionen.OK
-         iWaitIndex = 0
-         do while PNGOptionen.Exists AND iWaitIndex < 30
-            sleep (1)
-            iWaitIndex = iWaitIndex + 1
-         loop
-      endif
-      if ( dir(OutputGrafikTBO+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
-   endif
+            PNGOptionen.OK
+            iWaitIndex = 0
+            do while PNGOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO+sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+    endif
 
-   call hCloseDocument
+    call hCloseDocument
+endcase 'tPNG
 
-endcase
 '-------------------------------------------------------------------------------
 testcase tSVM
 
-   dim x as integer
-   dim i as integer
-   dim sFilter as string
-   dim sExt as string
-   dim bTemp as boolean
-   dim sX as string
-   dim sY as string
-   dim sx1 as string
-   dim sX2 as string
-   dim sY2 as string
-   dim sDocument as string
+    dim x as integer
+    dim i as integer
+    dim sFilter as string
+    dim sExt as string
+    dim bTemp as boolean
+    dim sX as string
+    dim sY as string
+    dim sx1 as string
+    dim sX2 as string
+    dim sY2 as string
+    dim sDocument as string
 
-   sFilter = "SVM - StarView Metafile (.svm)"
-   sExt = ".svm"
+    sFilter = "SVM - StarView Metafile (.svm)"
+    sExt = ".svm"
 
-   '/// open the document
-   sDocument = ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport." + ExtensionString)
-   hFileOpen sDocument
+    sDocument = ConvertPath ( gTesttoolPath & "graphics\required\input\graphicexport." & ExtensionString)
+    hFileOpen sDocument
 
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-      '/// check if all properties have the right count, and depend on each other ///'
-         Original.Check
-            if Breite.IsEnabled then warnlog " :-("
-            if Hoehe.IsEnabled then warnlog " :-("
-         Groesse.Check
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Original.Check
+            if Breite.IsEnabled then
+                warnlog " :-("
+            endif
+            if Hoehe.IsEnabled then
+                warnlog " :-("
+            endif
+            Groesse.Check
             Breite.More
             Hoehe.Less
-         '/// leave dialog with cancel -> there has to be no file created! ///'
-         SVMOptionen.Cancel
-         sleep 5
-         if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
-            Printlog "ok :-)"
-         else
-            warnlog "dialog was canceled, but file got saved, too :-(  - i35177"
-         endif
-      else
-         Warnlog "No  '" + sFilter + "' -Dialog!"
-         i=5
-      end if
-      sleep 2
-      Kontext "Active"
-      if Active.Exists(2) then
-         Warnlog " '" + sFilter + "'  has a problem"
-         Active.OK
-      end if
-   end if
-   Printlog "'/// now save it realy and load the file afterwards ///'"
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Groesse.Check
+            SVMOptionen.Cancel
+            sleep 5
+            if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
+                Printlog "ok :-)"
+            else
+                warnlog "dialog was canceled, but file got saved, too :-(  - i35177"
+            endif
+        else
+            Warnlog "No  '" & sFilter & "' -Dialog!"
+            i=5
+        end if
+        sleep 2
+        Kontext "Active"
+        if Active.Exists(2) then
+            Warnlog " '" & sFilter & "'  has a problem"
+            Active.OK
+        end if
+    end if
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Groesse.Check
             Breite.Less
             Hoehe.More
-         SVMOptionen.OK
-         sleep 5
-      endif
-      if ( dir(OutputGrafikTBO+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
-   endif
-   hCloseDocument ()
-   Printlog "'/// now save a SELECTION in ORIGINAL SIZE and load the file afterwards ///'"
-   hFileOpen (sDocument)
-   sleep (10)
+            SVMOptionen.OK
+            sleep 5
+        endif
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO+sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+    endif
+    hCloseDocument ()
+    hFileOpen (sDocument)
+    sleep (10)
 
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
+    sMakeReadOnlyDocumentEditable
+
+    hTypeKeys ("<escape><tab>")
+    fGetSizeXY sx1, sY, TRUE
+    if hCallExport (OutputGrafikTBO & "1" , sFilter, TRUE ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Original.Check
+            SVMOptionen.OK
+            sleep 5
+        endif
+        if ( dir(OutputGrafikTBO & "1" & sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO & "1" & sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO & "1" & sExt )
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
         endif
     endif
-
-   hTypeKeys ("<escape><tab>")
-   fGetSizeXY sx1, sY, TRUE
-   if hCallExport (OutputGrafikTBO + "1" , sFilter, TRUE ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Original.Check
-         SVMOptionen.OK
-         sleep 5
-      endif
-      if ( dir(OutputGrafikTBO + "1"+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "1"+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO + "1"+sExt )
-      bTemp = FALSE
-      fGetSizeXY sx1, sY, bTemp
-      if (bTemp = FALSE) then
-         warnlog "Selected original size NOT OK :-("
-      endif
-   endif
-   hCloseDocument ()
-   Printlog "'/// now CREATE a rectangle, select it, save it in SIZE and load the file afterwards ///'"
-   hNewDocument()
-   hRechteckErstellen ( 10, 10, 30, 40 )
-   if hCallExport (OutputGrafikTBO + "2" , sFilter, TRUE ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Groesse.Check
+    hCloseDocument ()
+    hNewDocument()
+    hRechteckErstellen ( 10, 10, 30, 40 )
+    if hCallExport (OutputGrafikTBO & "2" , sFilter, TRUE ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Groesse.Check
             Breite.SetText "9"
             Hoehe.SetText "9"
             Groesse.Check 'Check to make settings go throught
             sx1 = Breite.GetText
             sY = Hoehe.GetText
-         SVMOptionen.OK
-         sleep 5
-      endif
-      if ( dir(OutputGrafikTBO + "2"+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "2"+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hFileOpen (OutputGrafikTBO + "2"+sExt)
-      kontext "Filterauswahl"
-      if Filterauswahl.exists then
-         Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
-         Filterauswahl.Cancel
-         goto endsub
-      endif
-      kontext "DocumentDraw"
-      DocumentDraw.TypeKeys ("<escape><tab>")
-      ContextOriginalSize
-      bTemp = FALSE
-      fGetSizeXY sx1, sY, bTemp
-      if (bTemp = FALSE) then
-         warnlog "Selected original size NOT OK :-("
-      endif
-   endif
-   if hCallExport (OutputGrafikTBO + "3" , sFilter, TRUE ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Groesse.Check
+            SVMOptionen.OK
+            sleep 5
+        endif
+        if ( dir(OutputGrafikTBO & "2" & sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO & "2" & sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hFileOpen (OutputGrafikTBO & "2" & sExt)
+        kontext "Filterauswahl"
+        if Filterauswahl.exists then
+            Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
+            Filterauswahl.Cancel
+            goto endsub
+        endif
+        kontext "DocumentDraw"
+        DocumentDraw.TypeKeys ("<escape><tab>")
+        ContextOriginalSize
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
+        endif
+    endif
+    if hCallExport (OutputGrafikTBO & "3" , sFilter, TRUE ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Groesse.Check
             sX2 = Breite.GetText
             if (LiberalMeasurement(sx1, sX2)) <> TRUE then
-               if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
-                  Printlog "Width was ok. Expected: " + sx1 + "' was: '" + sX2 + "'"
-               else
-                  warnLog "Width is different expected: '" + sx1 + "' is: '" + sX2 + "'"
-               endif
+                if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
+                    Printlog "Width was ok. Expected: " & sx1 & "' was: '" & sX2 & "'"
+                else
+                    warnLog "Width is different expected: '" & sx1 & "' is: '" & sX2 & "'"
+                endif
             endif
             sY2 = Hoehe.GetText
             if (LiberalMeasurement(sY, sY2)) <> TRUE then
-               if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
-                  Printlog "Height was ok. Expected: " + sY + "' was: '" + sY2 + "'"
-               else
-                  warnLog "Height is different expected: '" + sY + "' is: '" + sY2 + "'"
-               endif
+                if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
+                    Printlog "Height was ok. Expected: " & sY & "' was: '" & sY2 & "'"
+                else
+                    warnLog "Height is different expected: '" & sY & "' is: '" & sY2 & "'"
+                endif
             endif
-         SVMOptionen.Cancel
-         sleep 5
-       endif
-   endif
+            SVMOptionen.Cancel
+            sleep 5
+        endif
+    endif
 
-   call hCloseDocument
-
-endcase
+    call hCloseDocument
+    
+endcase 'tSVM
 '-------------------------------------------------------------------------------
 testcase tPDF
 
@@ -493,8 +469,8 @@ testcase tPDF
     endif
 
     call hCloseDocument()
+endcase 'tPDF
 
-endcase
 '-------------------------------------------------------------------------------
 testcase tPDF_Creator
 
@@ -613,39 +589,36 @@ testcase tPDF_Creator
     call hCloseDocument
     call hCloseDocument
 
-endcase
+endcase 'tPDF_Creator
 '-------------------------------------------------------------------------------
 testcase tSVG
 
-   dim x as integer
-   dim i as integer
-   dim sFilter as string
-   dim sExt as string
-   dim bTemp as boolean
-   dim sTemp as string
-   dim sTextFilter as string
-   dim sExtension() as string
-   dim sTextFiltername as string
+    dim x as integer
+    dim i as integer
+    dim sFilter as string
+    dim sExt as string
+    dim bTemp as boolean
+    dim sTemp as string
+    dim sTextFilter as string
+    dim sExtension() as string
+    dim sTextFiltername as string
 
-   sFilter = "SVG - Scalable Vector Graphics (.svg)"
-   sExt = ".svg"
+    sFilter = "SVG - Scalable Vector Graphics (.svg)"
+    sExt = ".svg"
 
-   '/// open the document
-   hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString ))
+    hFileOpen ( gTesttoolPath & "graphics\required\input\graphicexport." & ExtensionString )
 
-    '/// save it ///'
     '------------------------\
     if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
         '------------------------\
         if ( dir(OutputGrafikTBO+sExt) <> "") then
-            Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO+sExt & "'"
             '------------------------\
             if (iSprache <> 82) then
                 hCloseDocument ()
                 sleep 5
-                '/// load file in writer as text ///'
                 sTextFilter = "Text"
-                
+
                 hFileOpenWithFilter (OutputGrafikTBO+sExt, sTextFiltername, FALSE)
                 printlog "if dialog 'AsciiFilterOptionen' comes up, say OK"
                 Kontext "AsciiFilterOptionen"
@@ -659,7 +632,7 @@ testcase tSVG
                 sTemp = gApplication
                 gApplication = "WRITER"
                 sleep 5 ' wait for document to be loaded
-                bTemp = hFindeImDokument ("<!DOCTYPE svg PUBLIC "+chr(34)+ "-//W3C//DTD SVG 1.1//EN"+chr(34)+" "+chr(34)+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"+chr(34)+">",true)
+                bTemp = hFindeImDokument ("<!DOCTYPE svg PUBLIC " & chr(34)& "-//W3C//DTD SVG 1.1//EN" & chr(34)&" " & chr(34)&"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" & chr(34)&">",true)
                 '-------------------------------\
                 if (bTemp = TRUE) then
                     Printlog "OK"
@@ -672,7 +645,7 @@ testcase tSVG
                 qaerrorlog "disabled for 82: #111017#"
             endif
             '--------------------------/
-            else
+        else
             warnlog "File didn't get saved :-("
         endif
         '------------------------/
@@ -680,8 +653,8 @@ testcase tSVG
     '------------------------/
 
     call hCloseDocument
+endcase 'tSVG
 
-endcase
 '-------------------------------------------------------------------------------
 testcase tBMP
 qaerrorlog
@@ -899,211 +872,205 @@ endcase
 '-------------------------------------------------------------------------------
 testcase tEMF
 
-   dim x as integer
-   dim i as integer
-   dim sFilter as string
-   dim sExt as string
-   dim bTemp as boolean
-   dim sX as string
-   dim sY as string
-   dim sx1 as string
-   dim sX2 as string
-   dim sY2 as string
-   dim sDocument as string
+    dim x as integer
+    dim i as integer
+    dim sFilter as string
+    dim sExt as string
+    dim bTemp as boolean
+    dim sX as string
+    dim sY as string
+    dim sx1 as string
+    dim sX2 as string
+    dim sY2 as string
+    dim sDocument as string
 
-   sFilter = "EMF - Enhanced Metafile (.emf)"
-   sExt = ".emf"
+    sFilter = "EMF - Enhanced Metafile (.emf)"
+    sExt = ".emf"
 
-   '/// open the document
-   sDocument = ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
-   hFileOpen sDocument
+    sDocument = gTesttoolPath & "graphics\required\input\graphicexport." & ExtensionString
+    hFileOpen sDocument
 
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-      '/// check if all properties have the right count, and depend on each other ///'
-         Original.Check
-            if Breite.IsEnabled then warnlog " :-("
-            if Hoehe.IsEnabled then warnlog " :-("
-         Groesse.Check
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Original.Check
+            if Breite.IsEnabled then
+                warnlog " :-("
+            endif
+            if Hoehe.IsEnabled then
+                warnlog " :-("
+            endif
+            Groesse.Check
             Breite.More
             Hoehe.Less
-         '/// leave dialog with cancel -> there has to be no file created! ///'
-         SVMOptionen.Cancel
-         sleep 5
-         if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
-            Printlog "ok :-)"
-         else
-            warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
-         endif
-      else
-         Warnlog "No  '" + sFilter + "' -Dialog!"
-         i=5
-      end if
-      sleep 2
-      Kontext "Active"
-      if Active.Exists(2) then
-         Warnlog " '" + sFilter + "'  has a problem"
-         Active.OK
-      end if
-   end if
-   Printlog "'/// now save it realy and load the file afterwards ///'"
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Groesse.Check
+            SVMOptionen.Cancel
+            sleep 5
+            if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
+                Printlog "ok :-)"
+            else
+                warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
+            endif
+        else
+            Warnlog "No  '" & sFilter & "' -Dialog!"
+            i=5
+        end if
+        sleep 2
+        Kontext "Active"
+        if Active.Exists(2) then
+            Warnlog " '" & sFilter & "'  has a problem"
+            Active.OK
+        end if
+    end if
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Groesse.Check
             Breite.Less
             Hoehe.More
-         SVMOptionen.OK
-         sleep 5
-      endif
-      if ( dir(OutputGrafikTBO+sExt) <> "") then
-         Printlog "Ok :-) saved as: '" + OutputGrafikTBO+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
-   endif
-   hCloseDocument ()
-   Printlog "'/// now save a SELECTION in ORIGINAL SIZE and load the file afterwards ///'"
-   hFileOpen (sDocument)
-   kontext "Filterauswahl"
-   if Filterauswahl.Exists(10) then
-      Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
-      Filterauswahl.Cancel
-      goto endsub
-   endif
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
+            SVMOptionen.OK
+            sleep 5
+        endif
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) saved as: '" & OutputGrafikTBO+sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+    endif
+    hCloseDocument ()
+    hFileOpen (sDocument)
+    kontext "Filterauswahl"
+    if Filterauswahl.Exists(10) then
+        Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
+        Filterauswahl.Cancel
+        goto endsub
+    endif
+   printlog "making doc editable if it is readonly"
+   sMakeReadOnlyDocumentEditable
+
+    hTypeKeys ("<escape><tab>")
+    fGetSizeXY sx1, sY, TRUE
+    if hCallExport (OutputGrafikTBO & "1" , sFilter, TRUE ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Original.Check
+            SVMOptionen.OK
+            sleep 5
+        endif
+        if ( dir(OutputGrafikTBO & "1" & sExt) <> "") then
+            Printlog "Ok :-) saved as: '" & OutputGrafikTBO & "1" & sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO & "1" & sExt )
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
         endif
     endif
-
-   hTypeKeys ("<escape><tab>")
-   fGetSizeXY sx1, sY, TRUE
-   if hCallExport (OutputGrafikTBO + "1" , sFilter, TRUE ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Original.Check
-         SVMOptionen.OK
-         sleep 5
-      endif
-      if ( dir(OutputGrafikTBO + "1"+sExt) <> "") then
-         Printlog "Ok :-) saved as: '" + OutputGrafikTBO + "1"+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO + "1"+sExt )
-      bTemp = FALSE
-      fGetSizeXY sx1, sY, bTemp
-      if (bTemp = FALSE) then
-         warnlog "Selected original size NOT OK :-("
-      endif
-   endif
-   hCloseDocument ()
-   Printlog "'/// now CREATE a rectangle, select it, save it in SIZE and load the file afterwards ///'"
-   hNewDocument()
-   hRechteckErstellen ( 10, 10, 30, 40 )
-   if hCallExport (OutputGrafikTBO + "2" , sFilter, TRUE ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Groesse.Check
+    hCloseDocument ()
+    hNewDocument()
+    hRechteckErstellen ( 10, 10, 30, 40 )
+    if hCallExport (OutputGrafikTBO & "2" , sFilter, TRUE ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Groesse.Check
             Breite.SetText "9"
             Hoehe.SetText "9"
             Groesse.Check   'Press "Size" one more time to make the change go through"
             sx1 = Breite.GetText
             sY = Hoehe.GetText
-         SVMOptionen.OK
-         sleep 5
-      endif
-      if ( dir(OutputGrafikTBO + "2"+sExt) <> "") then
-         Printlog "Ok :-) saved as: '" + OutputGrafikTBO + "2"+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hFileOpen (OutputGrafikTBO + "2"+sExt)
-         kontext "DocumentDraw"
-         DocumentDraw.TypeKeys ("<escape><tab>")
-         ContextOriginalSize
-         bTemp = FALSE
-         fGetSizeXY sx1, sY, bTemp
-         if (bTemp = FALSE) then
+            SVMOptionen.OK
+            sleep 5
+        endif
+        if ( dir(OutputGrafikTBO & "2" & sExt) <> "") then
+            Printlog "Ok :-) saved as: '" & OutputGrafikTBO & "2" & sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hFileOpen (OutputGrafikTBO & "2" & sExt)
+        kontext "DocumentDraw"
+        DocumentDraw.TypeKeys ("<escape><tab>")
+        ContextOriginalSize
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
             warnlog "Selected original size NOT OK :-("
-         endif
+        endif
 
-         if hCallExport (OutputGrafikTBO + "3" , sFilter, TRUE ) = TRUE then
+        if hCallExport (OutputGrafikTBO & "3" , sFilter, TRUE ) = TRUE then
             Kontext "SVMOptionen"
             if SVMOptionen.Exists (2) then
-               Groesse.Check
-               sX2 = Breite.GetText
-               if (LiberalMeasurement(sx1, sX2)) <> TRUE then
-                  if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
-                     Printlog "Width was ok. Expected: " + sx1 + "' was: '" + sX2 + "'"
-                  else
-                     warnLog "Width is different expected: '" + sx1 + "' is: '" + sX2 + "'"
-                  endif
-               endif
-               sY2 = Hoehe.GetText
-               if (LiberalMeasurement(sY, sY2)) <> TRUE then
-                  if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
-                     Printlog "Height was ok. Expected: " + sY + "' was: '" + sY2 + "'"
-                  else
-                     warnLog "Height is different expected: '" + sY + "' is: '" + sY2 + "'"
-                  endif
-               endif
-               SVMOptionen.Cancel
-               sleep 5
+                Groesse.Check
+                sX2 = Breite.GetText
+                if (LiberalMeasurement(sx1, sX2)) <> TRUE then
+                    if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
+                        Printlog "Width was ok. Expected: " & sx1 & "' was: '" & sX2 & "'"
+                    else
+                        warnLog "Width is different expected: '" & sx1 & "' is: '" & sX2 & "'"
+                    endif
+                endif
+                sY2 = Hoehe.GetText
+                if (LiberalMeasurement(sY, sY2)) <> TRUE then
+                    if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
+                        Printlog "Height was ok. Expected: " & sY & "' was: '" & sY2 & "'"
+                    else
+                        warnLog "Height is different expected: '" & sY & "' is: '" & sY2 & "'"
+                    endif
+                endif
+                SVMOptionen.Cancel
+                sleep 5
             endif
-         endif
-      endif
+        endif
+    endif
 
-   call hCloseDocument
+    call hCloseDocument
+endcase 'tEMF
 
-endcase
 '-------------------------------------------------------------------------------
 testcase tMET
 
-   dim x as integer
-   dim i as integer
-   dim iWaitIndex as integer
-   dim sFilter, sExt as string
-   dim bTemp as boolean
-   dim sX as string
-   dim sY as string
-   dim sx1 as string
-   dim sX2 as string
-   dim sY2 as string
-   dim sTemp as string
-   dim sDocument as string
+    dim x as integer
+    dim i as integer
+    dim iWaitIndex as integer
+    dim sFilter, sExt as string
+    dim bTemp as boolean
+    dim sX as string
+    dim sY as string
+    dim sx1 as string
+    dim sX2 as string
+    dim sY2 as string
+    dim sTemp as string
+    dim sDocument as string
 
-   sFilter = "MET - OS/2 Metafile (.met)"
-   sExt = ".met"
+    sFilter = "MET - OS/2 Metafile (.met)"
+    sExt = ".met"
 
-   '/// open the document
-   sDocument = ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
-   hFileOpen sDocument
+    sDocument = gTesttoolPath & "graphics\required\input\graphicexport." & ExtensionString
+    hFileOpen sDocument
 
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "METOptionen"
-      if METOptionen.Exists (2) then
-      '/// check if all properties have the right count, and depend on each other ///'
-         Original.Check
-            if Breite.IsEnabled then warnlog " :-("
-            if Hoehe.IsEnabled then warnlog " :-("
-         Groesse.Check
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "METOptionen"
+        if METOptionen.Exists (2) then
+            Original.Check
+            if Breite.IsEnabled then
+                warnlog " :-("
+            endif
+            if Hoehe.IsEnabled then
+                warnlog " :-("
+            endif
+            Groesse.Check
             sTemp = Breite.getText
             Breite.More
             if (sTemp = Breite.getText) then
@@ -1116,30 +1083,28 @@ testcase tMET
             if (sTemp = Hoehe.getText) then
                 warnlog "Height didn't change on pressing button 'Less'"
             endif
-         '/// leave dialog with cancel -> there has to be no file created! ///'
-         METOptionen.Cancel
-         sleep 5
-         if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
-            Printlog "ok :-)"
-         else
-            warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
-         endif
-      else
-         Warnlog "No  '" + sFilter + "' -Dialog!"
-         i=5
-      end if
-      sleep 2
-      Kontext "Active"
-      if Active.Exists(2) then
-         Warnlog " '" + sFilter + "'  has a problem"
-         Active.OK
-      end if
-   end if
-   Printlog "'/// now save it realy and load the file afterwards ///'"
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "METOptionen"
-      if METOptionen.Exists (2) then
-         Groesse.Check
+            METOptionen.Cancel
+            sleep 5
+            if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
+                Printlog "ok :-)"
+            else
+                warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
+            endif
+        else
+            Warnlog "No  '" & sFilter & "' -Dialog!"
+            i=5
+        end if
+        sleep 2
+        Kontext "Active"
+        if Active.Exists(2) then
+            Warnlog " '" & sFilter & "'  has a problem"
+            Active.OK
+        end if
+    end if
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "METOptionen"
+        if METOptionen.Exists (2) then
+            Groesse.Check
             sTemp = Breite.getText
             Breite.Less
             if (sTemp = Breite.getText) then
@@ -1152,342 +1117,324 @@ testcase tMET
                 Breite.setText "10"
                 Hoehe.setText "10"
             endif
-         METOptionen.OK
-         iWaitIndex = 0
-         do while METOptionen.Exists AND iWaitIndex < 30
-         sleep (1)
-         iWaitIndex = iWaitIndex + 1
-         loop
-      endif
-      if ( dir(OutputGrafikTBO+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
-   endif
-   hCloseDocument ()
-   Printlog "'/// now save a SELECTION in ORIGINAL SIZE and load the file afterwards ///'"
-   hFileOpen (sDocument)
-   sleep (10)
+            METOptionen.OK
+            iWaitIndex = 0
+            do while METOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO+sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+    endif
+    hCloseDocument ()
+    hFileOpen (sDocument)
+    sleep (10)
+   
+    printlog "making doc editable if it is readonly"
+    sMakeReadOnlyDocumentEditable
 
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
+    hTypeKeys ("<escape><tab>")
+    fGetSizeXY sx1, sY, TRUE
+    if hCallExport (OutputGrafikTBO & "1" , sFilter, TRUE ) = TRUE then
+        Kontext "METOptionen"
+        if METOptionen.Exists (2) then
+            Original.Check
+            METOptionen.OK
+            iWaitIndex = 0
+            do while METOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        if ( dir(OutputGrafikTBO & "1" & sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO & "1" & sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO & "1" & sExt )
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
         endif
     endif
-
-   hTypeKeys ("<escape><tab>")
-   fGetSizeXY sx1, sY, TRUE
-   if hCallExport (OutputGrafikTBO + "1" , sFilter, TRUE ) = TRUE then
-      Kontext "METOptionen"
-      if METOptionen.Exists (2) then
-         Original.Check
-         METOptionen.OK
-         iWaitIndex = 0
-         do while METOptionen.Exists AND iWaitIndex < 30
-         sleep (1)
-         iWaitIndex = iWaitIndex + 1
-         loop
-      endif
-      if ( dir(OutputGrafikTBO + "1"+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "1"+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO + "1"+sExt )
-      bTemp = FALSE
-      fGetSizeXY sx1, sY, bTemp
-      if (bTemp = FALSE) then
-         warnlog "Selected original size NOT OK :-("
-      endif
-   endif
-   hCloseDocument ()
-   Printlog "'/// now CREATE a rectangle, select it, save it in SIZE and load the file afterwards ///'"
-   hNewDocument()
-   hRechteckErstellen ( 10, 10, 30, 40 )
-   if hCallExport (OutputGrafikTBO + "2" , sFilter, TRUE ) = TRUE then
-      Kontext "METOptionen"
-      if METOptionen.Exists (2) then
-         Groesse.Check
+    hCloseDocument ()
+    hNewDocument()
+    hRechteckErstellen ( 10, 10, 30, 40 )
+    if hCallExport (OutputGrafikTBO & "2" , sFilter, TRUE ) = TRUE then
+        Kontext "METOptionen"
+        if METOptionen.Exists (2) then
+            Groesse.Check
             Breite.SetText "9"
             Hoehe.SetText "9"
             Groesse.Check  ' Click "Size" one more time to make the changes go through.
             sx1 = Breite.GetText
             sY = Hoehe.GetText
-         METOptionen.OK
-         iWaitIndex = 0
-         do while METOptionen.Exists AND iWaitIndex < 30
-         sleep (1)
-         iWaitIndex = iWaitIndex + 1
-         loop
-      endif
-      if ( dir(OutputGrafikTBO + "2"+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "2"+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hFileOpen (OutputGrafikTBO + "2"+sExt)
-      kontext "DocumentDraw"
-      DocumentDraw.TypeKeys ("<escape><tab>")
-      ContextOriginalSize
-      bTemp = FALSE
-      fGetSizeXY sx1, sY, bTemp
-      if (bTemp = FALSE) then
-         warnlog "Selected original size NOT OK :-("
-      endif
-   endif
-   if hCallExport (OutputGrafikTBO + "3" , sFilter, TRUE ) = TRUE then
-      Kontext "METOptionen"
-      if METOptionen.Exists (2) then
-         Groesse.Check
+            METOptionen.OK
+            iWaitIndex = 0
+            do while METOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        if ( dir(OutputGrafikTBO & "2" & sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO & "2" & sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hFileOpen (OutputGrafikTBO & "2" & sExt)
+        kontext "DocumentDraw"
+        DocumentDraw.TypeKeys ("<escape><tab>")
+        ContextOriginalSize
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
+        endif
+    endif
+    if hCallExport (OutputGrafikTBO & "3" , sFilter, TRUE ) = TRUE then
+        Kontext "METOptionen"
+        if METOptionen.Exists (2) then
+            Groesse.Check
             sX2 = Breite.GetText
             if (LiberalMeasurement(sx1, sX2)) <> TRUE then
-               if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
-                  Printlog "Width was ok. Expected: " + sx1 + "' was: '" + sX2 + "'"
-               else
-                  warnLog "Width is different expected: '" + sx1 + "' is: '" + sX2 + "'"
-               endif
+                if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
+                    Printlog "Width was ok. Expected: " & sx1 & "' was: '" & sX2 & "'"
+                else
+                    warnLog "Width is different expected: '" & sx1 & "' is: '" & sX2 & "'"
+                endif
             endif
             sY2 = Hoehe.GetText
             if (LiberalMeasurement(sY, sY2)) <> TRUE then
-               if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
-                  Printlog "Height was ok. Expected: " + sY + "' was: '" + sY2 + "'"
-               else
-                  warnLog "Height is different expected: '" + sY + "' is: '" + sY2 + "'"
-               endif
+                if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
+                    Printlog "Height was ok. Expected: " & sY & "' was: '" & sY2 & "'"
+                else
+                    warnLog "Height is different expected: '" & sY & "' is: '" & sY2 & "'"
+                endif
             endif
-         METOptionen.Cancel
-         sleep 5
-       endif
-   endif
-
-   call hCloseDocument
-
-endcase
-'-------------------------------------------------------------------------------
-testcase tSWF
-
-   dim sFilter as string
-   dim sExt as string
-   dim x as integer
-   dim i as integer
-
-   sFilter = "Macromedia Flash (SWF) (.swf)"
-   sExt = ".swf"
-
-   '/// open the document
-   hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString ))
-
-   '/// save it ///'
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      if ( dir(OutputGrafikTBO+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
-         sleep 5
-      else
-         warnlog "File didn't get saved :-("
-      endif
-   endif
-
-   call hCloseDocument
-
-endcase
-'------------------------------------------------------------------------------
-testcase tWMF
-
-   dim x as integer
-   dim i as integer
-   dim iWaitIndex as integer
-   dim sFilter as string
-   dim sExt as string
-   dim bTemp as boolean
-   dim sX as string
-   dim sY as string
-   dim sx1 as string
-   dim sX2 as string
-   dim sY2 as string
-   dim sDocument as string
-
-   sFilter = "WMF - Windows Metafile (.wmf)"
-   sExt = ".wmf"
-
-   '/// open the document
-   sDocument = ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport."+ExtensionString)
-   hFileOpen sDocument
-
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-      '/// check if all properties have the right count, and depend on each other ///'
-         Original.Check
-            if Breite.IsEnabled then warnlog " :-("
-            if Hoehe.IsEnabled then warnlog " :-("
-         Groesse.Check
-            Breite.More
-            Hoehe.Less
-         '/// leave dialog with cancel -> there has to be no file created! ///'
-         SVMOptionen.Cancel
-         sleep 5
-         if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
-            Printlog "ok :-)"
-         else
-            warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
-         endif
-      else
-         Warnlog "No  '" + sFilter + "' -Dialog!"
-         i=5
-      end if
-      sleep 2
-      Kontext "Active"
-      if Active.Exists(2) then
-         Warnlog " '" + sFilter + "'  has a problem"
-         Active.OK
-      end if
-   end if
-   Printlog "'/// now save it realy and load the file afterwards ///'"
-   if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Groesse.Check
-            Breite.Less
-            Hoehe.More
-         SVMOptionen.OK
-         iWaitIndex = 0
-         do while SVMOptionen.Exists AND iWaitIndex < 30
-         sleep (1)
-         iWaitIndex = iWaitIndex + 1
-         loop
-      endif
-      if ( dir(OutputGrafikTBO+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
-   endif
-   hCloseDocument ()
-   Printlog "'/// now save a SELECTION in ORIGINAL SIZE and load the file afterwards ///'"
-   hFileOpen (sDocument)
-   sleep (10)
-
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
+            METOptionen.Cancel
+            sleep 5
         endif
     endif
 
-   hTypeKeys ("<escape><tab>")
-   fGetSizeXY sx1, sY, TRUE
-   if hCallExport (OutputGrafikTBO + "1" , sFilter, TRUE ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Original.Check
-         SVMOptionen.OK
-         iWaitIndex = 0
-         do while SVMOptionen.Exists AND iWaitIndex < 30
-         sleep (1)
-         iWaitIndex = iWaitIndex + 1
-         loop
-      endif
-      if ( dir(OutputGrafikTBO + "1"+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "1"+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hNewDocument()
-      sleep 5
-      Call hGrafikEinfuegen ( OutputGrafikTBO + "1"+sExt )
-      bTemp = FALSE
-      fGetSizeXY sx1, sY, bTemp
-      if (bTemp = FALSE) then
-         warnlog "Selected original size NOT OK :-("
-      endif
-   endif
-   hCloseDocument ()
-   Printlog "'/// now CREATE a rectangle, select it, save it in SIZE and load the file afterwards ///'"
-   hNewDocument()
-   hRechteckErstellen ( 10, 10, 30, 40 )
-   if hCallExport (OutputGrafikTBO + "2" , sFilter, TRUE ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Groesse.Check
+    call hCloseDocument
+endcase 'tMET
+
+'-------------------------------------------------------------------------------
+testcase tSWF
+
+    dim sFilter as string
+    dim sExt as string
+    dim x as integer
+    dim i as integer
+
+    sFilter = "Macromedia Flash (SWF) (.swf)"
+    sExt = ".swf"
+
+    hFileOpen( gTesttoolPath & "graphics\required\input\graphicexport." & ExtensionString )
+
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO+sExt & "'"
+            sleep 5
+        else
+            warnlog "File didn't get saved :-("
+        endif
+    endif
+
+    call hCloseDocument
+endcase 'tSWF
+
+'------------------------------------------------------------------------------
+testcase tWMF
+
+    dim x as integer
+    dim i as integer
+    dim iWaitIndex as integer
+    dim sFilter as string
+    dim sExt as string
+    dim bTemp as boolean
+    dim sX as string
+    dim sY as string
+    dim sx1 as string
+    dim sX2 as string
+    dim sY2 as string
+    dim sDocument as string
+
+    sFilter = "WMF - Windows Metafile (.wmf)"
+    sExt = ".wmf"
+
+    sDocument = gTesttoolPath & "graphics\required\input\graphicexport." & ExtensionString
+    hFileOpen sDocument
+
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Original.Check
+            if Breite.IsEnabled then
+                warnlog " :-("
+            endif
+            if Hoehe.IsEnabled then
+                warnlog " :-("
+            endif
+            Groesse.Check
+            Breite.More
+            Hoehe.Less
+            SVMOptionen.Cancel
+            sleep 5
+            if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
+                Printlog "ok :-)"
+            else
+                warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
+            endif
+        else
+            Warnlog "No  '" & sFilter & "' -Dialog!"
+            i=5
+        end if
+        sleep 2
+        Kontext "Active"
+        if Active.Exists(2) then
+            Warnlog " '" & sFilter & "'  has a problem"
+            Active.OK
+        end if
+    end if
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Groesse.Check
+            Breite.Less
+            Hoehe.More
+            SVMOptionen.OK
+            iWaitIndex = 0
+            do while SVMOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO+sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+    endif
+    hCloseDocument ()
+    hFileOpen (sDocument)
+    sleep (10)
+   
+    printlog "making doc editable if it is readonly"
+    sMakeReadOnlyDocumentEditable
+
+    hTypeKeys ("<escape><tab>")
+    fGetSizeXY sx1, sY, TRUE
+    if hCallExport (OutputGrafikTBO & "1" , sFilter, TRUE ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Original.Check
+            SVMOptionen.OK
+            iWaitIndex = 0
+            do while SVMOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        if ( dir(OutputGrafikTBO & "1" & sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO & "1" & sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO & "1" & sExt )
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
+        endif
+    endif
+    hCloseDocument ()
+    hNewDocument()
+    hRechteckErstellen ( 10, 10, 30, 40 )
+    if hCallExport (OutputGrafikTBO & "2" , sFilter, TRUE ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Groesse.Check
             Breite.SetText "9"
             Hoehe.SetText "9"
             Groesse.Check 'Check "Size" to make changes really go through.
             sx1 = Breite.GetText
             sY = Hoehe.GetText
-         SVMOptionen.OK
-         iWaitIndex = 0
-         do while SVMOptionen.Exists AND iWaitIndex < 30
-         sleep (1)
-         iWaitIndex = iWaitIndex + 1
-         loop
-      endif
-      if ( dir(OutputGrafikTBO + "2"+sExt) <> "") then
-         Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "2"+sExt + "'"
-      else
-         warnlog "File didn't get saved :-("
-      endif
-      hCloseDocument ()
-      sleep 5
-      hFileOpen (OutputGrafikTBO + "2"+sExt)
-      kontext "DocumentDraw"
-      DocumentDraw.TypeKeys ("<escape><tab>")
-      ContextOriginalSize
-      bTemp = FALSE
-      fGetSizeXY sx1, sY, bTemp
-      if (bTemp = FALSE) then
-         warnlog "Selected original size NOT OK :-("
-      endif
-   endif
-   if hCallExport (OutputGrafikTBO + "3" , sFilter, TRUE ) = TRUE then
-      Kontext "SVMOptionen"
-      if SVMOptionen.Exists (2) then
-         Groesse.Check
+            SVMOptionen.OK
+            iWaitIndex = 0
+            do while SVMOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        if ( dir(OutputGrafikTBO & "2" & sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" & OutputGrafikTBO & "2" & sExt & "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hFileOpen (OutputGrafikTBO & "2" & sExt)
+        kontext "DocumentDraw"
+        DocumentDraw.TypeKeys ("<escape><tab>")
+        ContextOriginalSize
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
+        endif
+    endif
+    if hCallExport (OutputGrafikTBO & "3" , sFilter, TRUE ) = TRUE then
+        Kontext "SVMOptionen"
+        if SVMOptionen.Exists (2) then
+            Groesse.Check
             sX2 = Breite.GetText
             if (LiberalMeasurement(sx1, sX2)) <> TRUE then
-               if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
-                  Printlog "Width was ok. Expected: " + sx1 + "' was: '" + sX2 + "'"
-               else
-                  warnLog "Width is different expected: '" + sx1 + "' is: '" + sX2 + "'"
-               endif
+                if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
+                    Printlog "Width was ok. Expected: " & sx1 & "' was: '" & sX2 & "'"
+                else
+                    warnLog "Width is different expected: '" & sx1 & "' is: '" & sX2 & "'"
+                endif
             endif
             sY2 = Hoehe.GetText
             if (LiberalMeasurement(sY, sY2)) <> TRUE then
-               if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
-                  Printlog "Height was ok. Expected: " + sY + "' was: '" + sY2 + "'"
-               else
-                  warnLog "Height is different expected: '" + sY + "' is: '" + sY2 + "'"
-               endif
+                if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
+                    Printlog "Height was ok. Expected: " & sY & "' was: '" & sY2 & "'"
+                else
+                    warnLog "Height is different expected: '" & sY & "' is: '" & sY2 & "'"
+                endif
             endif
-         SVMOptionen.Cancel
-         sleep 5
-       endif
-   endif
+            SVMOptionen.Cancel
+            sleep 5
+        endif
+    endif
 
-   call hCloseDocument
+    call hCloseDocument
+endcase 'tWMF
 
-endcase
 '-------------------------------------------------------------------------

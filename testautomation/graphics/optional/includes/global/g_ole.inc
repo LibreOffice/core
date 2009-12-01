@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -231,10 +231,9 @@ testcase tOLE_Copy
     
     printlog "Close Context menu. Then close the Document"
     Call hCloseDocument
+    
 endcase 'tOLE_Copy
-
 '-----------------------------------------------------------------------------------------------------------'
-
 testcase tOLE_SaveLoad
 
     printlog "Test to see if an OLE can be inserted, saved and loaded correctly."
@@ -333,7 +332,6 @@ testcase tOLE_SaveLoad
     'endcase 'tOLE_DragDrop
 
 endcase ' tOLE_Save
-
 '-------------------------------------------------------------------------------
 testcase tiOpenOLECrash
 
@@ -453,4 +451,4 @@ testcase tiOpenOLECrash
     
     printlog "11. Click on the X to close the window while the OLE-object still in Edit-mode."
     Call hCloseDocument
-endcase
+endcase 'tiOpenOLECrash

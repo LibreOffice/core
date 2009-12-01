@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Fields - L10N test
 '*
@@ -44,6 +44,8 @@ sub w_fields7
     Call tL10N_3             'L10N test - time
 
 end sub
+
+'-----------------------------------------------------------------
 
 testcase tL10N_1
 
@@ -163,7 +165,7 @@ testcase tL10N_1
         if sAsiancbChecked = true then Aktivieren.IsChecked
     end if
     
-    if sCTLcb = true then    
+    if sCTLcb = true then
         if sCTLcbChecked = true then ComplexScriptEnabled.IsChecked
     end if
 

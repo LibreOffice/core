@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 ' #1 tiFormatLine
 ' #1 tLineConnect
 '\*************************************************************************************
-
 testcase tiFormatLine
+
     Dim ZaehlerStil
     Dim ZaehlerFarbe
     Dim ZaehlerTransp
@@ -318,8 +318,8 @@ testcase tiFormatLine
     
    ' FormatLine.Cancel
     Call hCloseDocument          '/// close document ///'
+    
 endcase 'tiFormatLine
-
 '-------------------------------------------------------------------------------'
 testcase tLineConnect
 
@@ -528,6 +528,6 @@ testcase tLineConnect
     '/// Close the document ///'
     hCloseDocument
     '/// Endcase ///'
+    
 endcase 'tiLineConnect
-
 '-------------------------------------------------------------------------------'

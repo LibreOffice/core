@@ -1,7 +1,0 @@
-CALC=StarSuite 9 の表計算ドキュメント
-CHART=StarSuite 9 のグラフ
-DRAW=StarSuite 9 の図形描画
-IMPRESS=StarSuite 9 のプレゼンテーション
-MATH=StarSuite 9 の数式
-WRITER=StarSuite 9 のテキスト
-OTHER=その他のオブジェクト

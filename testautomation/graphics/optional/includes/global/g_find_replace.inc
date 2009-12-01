@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,6 @@
 ' #1 tiEditSearchAndReplaceBUGS
 '*
 '\**********************************************************************************
-
 testcase tiEditSearchAndReplace
    '/// This test tests the 'Search and Replace' -dialogue. ///'
    Dim sFile  'as string
@@ -261,9 +260,11 @@ testcase tiEditSearchAndReplace
     sleep 2
   '/// Close document ///'
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiEditSearchAndReplace
+'--------------------------------------------------------
 testcase tiEditSearchAndReplaceBUGS
+
 '/// inspired by bugs: 101974, 101975, 101976 ///'
    dim i as integer
    dim bTemp as boolean
@@ -363,4 +364,5 @@ testcase tiEditSearchAndReplaceBUGS
    FindAndReplace.cancel
    '/// close application ///'
    Call hCloseDocument
-endcase
+   
+endcase 'tiEditSearchAndReplaceBUGS

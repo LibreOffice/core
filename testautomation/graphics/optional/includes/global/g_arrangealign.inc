@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -111,8 +111,8 @@ testcase tiDatei_Fuer_Anordnen_Erstellen
    '///+ has to be from bottom to top: cubicel, rectangel, donut ///'
     sPrintCheckOrder (TRUE)
     call hCloseDocument									'/// close document  ///'
-endcase
-
+    
+endcase 'tiDatei_Fuer_Anordnen_Erstellen
 '-------------------------------------------------------------------------------
 testcase tdContextSendBackward
 
@@ -142,8 +142,8 @@ testcase tdContextSendBackward
       Call hCloseDocument
    endif
    sleep 2
-endcase
-
+   
+endcase 'tdContextSendBackward
 '-------------------------------------------------------------------------------
 testcase tdContextBringForward
 
@@ -170,8 +170,8 @@ testcase tdContextBringForward
       '/// close document ///'
       Call hCloseDocument
    endif
-endcase
-
+   
+endcase 'tdContextBringForward
 '-------------------------------------------------------------------------------
 testcase tdContextSendToBack
 
@@ -198,8 +198,8 @@ testcase tdContextSendToBack
       '/// close document ///'
      Call hCloseDocument
    endif
-endcase
-
+   
+endcase 'tdContextSendToBack
 '-------------------------------------------------------------------------------
 testcase tdContextBringToFront
 
@@ -225,8 +225,8 @@ testcase tdContextBringToFront
       '/// close document ///'
      Call hCloseDocument
    endif
-endcase
-
+   
+endcase 'tdContextBringToFront
 '-------------------------------------------------------------------------------
 testcase tdContextInFrontOfObject
 
@@ -253,8 +253,8 @@ testcase tdContextInFrontOfObject
       '/// close document ///'
       Call hCloseDocument
    endif
-endcase
-
+   
+endcase 'tdContextInFrontOfObject
 '-------------------------------------------------------------------------------
 testcase tdContextBehindObject
 
@@ -282,8 +282,8 @@ testcase tdContextBehindObject
       '/// close document ///'
       Call hCloseDocument
    endif
-endcase
-
+   
+endcase 'tdContextBehindObject
 '-------------------------------------------------------------------------------
 testcase tdContextReverse
 
@@ -317,6 +317,7 @@ testcase tdContextReverse
       '/// close document ///'
       Call hCloseDocument									'/// close document  ///'
    endif
-endcase
-
+   
+endcase 'tdContextReverse
 '-------------------------------------------------------------------------------
+

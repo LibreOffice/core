@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,10 @@ sub main
     use "graphics\optional\includes\impress\i_slideshow2.inc"
     use "graphics\optional\includes\impress\i_slideshow3.inc"
 
-    GetOLEDefaultNames
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
-    if glLocale (2) = "" then warnlog "Add 'slide' to FILE  /input/impress/locale_1.txt (take string from below)!!!"
+    if glLocale (2) = "" then
+        warnlog "Add 'slide' to FILE  /input/impress/locale_1.txt (take string from below)!!!"
+    endif
 
     '/// LOCALE Slide - 2 ///'
     S1 = glLocale (2) + " 1"

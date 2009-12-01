@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ global Document as string
 
 sub main
     Printlog "--------------------- Graphics Export Test ------------------- "
-    Call hStatusIn ( "Graphics","g_savepictureas.bas", "Save Picture As -Test" )
+    Call hStatusIn ( "Graphics","g_savepictureas.bas" )
 
     use "graphics\tools\id_tools.inc"
     use "graphics\optional\includes\global\g_savepictureas.inc"
@@ -51,7 +51,7 @@ sub main
     Call tContextSaveAsPicture
     Call tContextSavePictureLinkAsPicture
     Call Mnemonickey
-    
+
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tContextSaveAsPicture

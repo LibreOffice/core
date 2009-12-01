@@ -39,40 +39,23 @@
 
 testcase tUpdtCustomize( cApp as string )
 
-	'///<h1>Update test for the Tools/Customize Dialog</h1>
-	'///<ul>
-    const CANCEL_BUTTON = 1
-    dim brc as boolean
-    
-    '///+<li>Open a new document (abort test on failure)</li>
-    brc = hCreateDocument()
-    if ( not brc ) then
-        warnlog( "Abort: Failed to create requested document: " & gApplication )
-        goto endsub
+    printlog( "Tools/Customize dialog" )
+    const CLOSE_METHOD = 1 ' 1 = Cancel button
+
+    if ( hCreateDocument() ) then    
+        if ( hToolsCustomizeOpen() ) then
+            hUpdtToolsCustomizeKeyboard()
+            hUpdtToolsCustomizeMenu()
+            hUpdtToolsCustomizeToolbars()
+            hUpdtToolsCustomizeEvents()
+            hToolsCustomizeClose( CLOSE_METHOD )
+        else
+            warnlog( "Tools/Customize dialog did not open" )
+        endif
+        hDestroyDocument
+    else
+        warnlog( "Failed to create initial document" )
     endif
-    
-    '///+<li>Open Tools Customize</li>
-    brc = hToolsCustomizeOpen()
-    
-    '///+<li>Look at the Keyboard-Tabpage</li>
-    hUpdtToolsCustomizeKeyboard()
-    
-    '///+<li>Look at the Menu-Tabpage</li>
-    hUpdtToolsCustomizeMenu()
-    
-    '///+<li>Look at the Toolbars-Tabpage</li>
-    hUpdtToolsCustomizeToolbars()
-    
-    '///+<li>Look at the Events-Tabpage</li>
-    hUpdtToolsCustomizeEvents()
-    
-    '///+<li>Close Tools Customize</li>
-    brc = hToolsCustomizeClose( CANCEL_BUTTON )
-    
-    '///+<li>Close the document</li>
-    brc = hDestroyDocument
-    
-    '///</ul>
     
 endcase
 
@@ -142,7 +125,7 @@ function hUpdtToolsCustomizeMenu()
     '///+<li>Click the Menu List-Button</li>
     printlog( CFN & "Click the menu listbutton" )
     kontext "TabCustomizeMenu"
-    MenuBtn.click()
+    hOpenMenuButton( MenuBtn ) ' MenuBtn.OpenMenu()
     
     '///+<li>Select the first entry (Move...) to open the Menu Organiser</li>
     printlog( CFN & "Select Move..." )
@@ -165,7 +148,7 @@ function hUpdtToolsCustomizeMenu()
     '///+<li>Click the Menu List-Button</li>
     printlog( CFN & "Click the menu listbutton" )
     kontext "TabCustomizeMenu"
-    MenuBtn.click()
+    hOpenMenuButton( MenuBtn ) ' MenuBtn.OpenMenu()
     
     '///+<li>Select the second entry (Rename...) to open the Rename dialog</li>
     printlog( CFN & "Select Rename..." )
@@ -179,7 +162,7 @@ function hUpdtToolsCustomizeMenu()
     '///+<li>Click the Menu List-Button</li>
     printlog( CFN & "Click the menu listbutton" )
     kontext "TabCustomizeMenu"
-    MenuBtn.click()
+    hOpenMenuButton( MenuBtn ) ' MenuBtn.OpenMenu()
     
     '///+<li>Select the third entry (Delete) to delete the new menu<br>
     '///+Note that there will be no warning as the menu is empty</li>
@@ -361,8 +344,9 @@ function hUpdtToolsCustomizeToolbars()
     '///+<li>Access the &quot;Toolbar&quot;-Button and rename the toolbar</li>
     printlog( CFN & "Rename the toolbar via Toolbar-Button" )
     kontext "TabCustomizeToolbars"
-    MenuBtn.click()
-    waitslot
+    hOpenMenuButton( MenuBtn ) ' MenuBtn.OpenMenu()
+    
+    printlog( "Select rename" )
     hMenuSelectNr( 1 )
     
     '///+<li>Cancel the renaming-dialog</li>
@@ -379,8 +363,9 @@ function hUpdtToolsCustomizeToolbars()
     '///+Note that there will be no deletion warning</li>
     printlog( CFN & "Delete the toolbar via Toolbar-Button" )
     kontext "TabCustomizeToolbars"
-    MenuBtn.click()
-    waitslot
+    hOpenMenuButton( MenuBtn ) ' MenuBtn.OpenMenu()
+    
+    printlog( "Select delete" )
     hMenuSelectNr( 2 )
        
     '///+<li>Click the &quot;Add Commands...&quot; button</li>
@@ -399,7 +384,6 @@ function hUpdtToolsCustomizeToolbars()
     endif
     
     '///+<li>Click &quot;Down&quot;</li>
-    WaitSlot()
     printlog( CFN & "Down..." )
     if ( BtnDown.isEnabled() ) then
         BtnDown.click()
@@ -846,4 +830,91 @@ function hToolsCustomizeTestSaveIn( iItems as integer ) as boolean
 
 end function
 
+'*******************************************************************************
 
+function hOpenMenuButton( oControl as object ) as integer
+
+    ' This function is very evil.
+    ' It was written to hopefully workaround the infamous menubutton which is a button 
+    ' that - when clicked - opens a menu. This feature is shaky and depends on 
+    ' a lot of factors. There is a simple working implemantation in t_menu.inc 
+    ' which has the drawback of being absolutely slow, costing the tools_customize
+    ' test a lot of time waiting for the control (30% of testtime spent waiting).
+    ' This approach tries to be dynamic: Machines that can do it the fast way
+    ' use it automatically, machines that are too slow get two retries with the 
+    ' slower approach.
+    ' The menubutton is one of the last remaining places where none of the
+    ' speed optmizations and enhancements apply, so neither WaitSlot() nor 
+    ' synchronous slot execution help here.
+
+    dim iClick as integer
+    dim bUseSlowMethod as boolean : bUseSlowMethod = false
+    
+    const CFN = "hOpenMenuButton: "
+    
+    hOpenMenuButton() = -1 ' this is the general failure returnvalue
+    
+    for iClick = 1 to 3
+    
+        if ( bUseSlowMethod ) then 
+            wait( 1000 )
+            oControl.OpenMenu()
+            wait( 3000 )
+        else
+            oControl.click()
+        endif
+            
+        try
+            hOpenMenuButton() = MenuGetItemCount
+            printlog( CFN & "Success on " & iClick & ". attempt" )
+            exit function
+        catch
+            qaerrorlog( CFN & "#i96753 - Failed to retrieve itemcount from Menu-/Command-button" )
+            bUseSlowMethod = true
+        endcatch
+        
+    next iClick
+    
+end function
+
+'*******************************************************************************
+
+function hClickCommandButton( iItemToClick as integer ) as boolean
+
+    const CFN = "hClickCommandButton::"
+    printlog( CFN & "Enter" )
+    
+    dim brc as boolean 'a multi purpose boolean returnvalue
+    dim iMenuItems as integer
+
+    iMenuItems = hOpenMenuButton( Command )
+    
+    ' exit on error
+    if ( iMenuItems < 0 ) then
+        warnlog( CFN & "Menu apparently not open, giving up." )
+    	hClickCommandButton() = false
+    	exit function
+    endif        
+    
+    hMenuSelectNr( iItemToClick ) 
+    wait( 500 )
+    ' check for the rename dialog (menu)
+    kontext "CustomizeMenuReName"
+    if ( CustomizeMenuReName.exists() ) then
+    	printlog( CFN & "Opened dialog: Rename Menu" )
+    	hClickCommandButton() = true
+    	exit function
+    endif
+    
+    ' check for the rename dialog (toolbar)    
+    kontext "CustomizeToolbarsRename"
+    if ( CustomizeToolbarsRename.exists() ) then
+    	printlog( CFN & "Opened dialog: Rename Toolbar" )
+    	hClickCommandButton() = true
+    	exit function
+    endif
+
+    printlog( CFN & "Exit" )
+    hClickCommandButton() = true
+
+end function

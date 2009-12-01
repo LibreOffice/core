@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Functional-Tests for Tools-Options-Writer -View & Grid
 '*
@@ -76,7 +76,7 @@ testcase tToolsOptionsWriterView1
     option_value(6) = HorizontalesLineal.IsChecked
     option_value(7) = VertikalesLineal.IsChecked
     option_value(8) = WeichesScrollen.IsChecked
-    
+
     measurement_unit(2) = HorizontalesLinealMasseinheit.GetSelIndex
     measurement_unit(3) = VertikalesLinealMasseinheit.GetSelIndex
 
@@ -153,7 +153,8 @@ testcase tToolsOptionsWriterView1
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     '/// restore default values
-    Call wOptionenUndo( "View" )
+    Call wOptionsUndo( "All" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -190,8 +191,8 @@ testcase tToolsOptionsWriterView2
     '/// - uncheck all checkboxes
     Hilfslinien.UnCheck
     FarbigeHandles.UnCheck
-    GrosseHandles.UnCheck   
-    
+    GrosseHandles.UnCheck
+
     HorizontaleBildlaufleiste.UnCheck
     VertikaleBildlaufleiste.UnCheck
     Lineal.Check
@@ -245,9 +246,10 @@ testcase tToolsOptionsWriterView2
     if ( VertikalesLinealMasseinheit.GetSelIndex <> 1 ) then WarnLog "VertikalesLinealMasseinheit   is not item 1"
 
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values 
-    Call wOptionenUndo( "View" )
+    ExtrasOptionenDlg.OK
+    '/// restore default values
+    Call wOptionsUndo( "All" )
+
     '/// close writer document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -260,6 +262,7 @@ testcase tToolsOptionsWriterView3
     dim option_value(11) as boolean
     dim measurement_unit(3) as integer
     dim iTemp(3) as integer
+
     '/// new writer document
     Call hNewDocument
 
@@ -299,8 +302,8 @@ testcase tToolsOptionsWriterView3
 
     '/// close options dialog
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK    
-    
+    ExtrasOptionenDlg.OK
+
     ViewTextBoundaries
     ViewRuler
 
@@ -308,7 +311,7 @@ testcase tToolsOptionsWriterView3
     Call wOfficeRestart
     '///- Tools/Options/Writer: View
     ToolsOptions
-    Call hToolsOptions ( "WRITER" , "VIEW" )  
+    Call hToolsOptions ( "WRITER" , "VIEW" )
     
     '/// - check if all checked
     if Hilfslinien.IsChecked = false     then WarnLog "Hilfslinien o"
@@ -325,9 +328,10 @@ testcase tToolsOptionsWriterView3
     if ( VertikalesLinealMasseinheit.GetSelIndex <> iTemp(3) ) then WarnLog "VertikalesLinealMasseinheit   is not item " + iTemp(3) + " it's: " + VertikalesLinealMasseinheit.GetSelIndex
 
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values 
-    Call wOptionenUndo( "View" )
+    ExtrasOptionenDlg.OK
+    '/// restore default values
+    Call wOptionsUndo( "All" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -348,8 +352,8 @@ testcase tToolsOptionsWriterView4
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "VIEW" )
 
-    '/// remember all values 
-    printlog "- remember all values"    
+    '/// remember all values
+    printlog "- remember all values"
     option_value(1) = Hilfslinien.IsChecked
     option_value(2) = FarbigeHandles.IsChecked
     option_value(3) = GrosseHandles.IsChecked
@@ -366,7 +370,7 @@ testcase tToolsOptionsWriterView4
     '/// close options dialog
     printlog "- close options dialog"
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK    
+    ExtrasOptionenDlg.OK
     
     '/// Insert a table
     printlog "- insert a table"
@@ -410,10 +414,11 @@ testcase tToolsOptionsWriterView4
     GrosseHandles.UnCheck
 
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values 
+    ExtrasOptionenDlg.OK
+    '/// restore default values
     printlog "- set defaultsvalues in options"
-    Call wOptionenUndo( "View" )
+    Call wOptionsUndo( "All" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -454,7 +459,7 @@ testcase tToolsOptionsWriterView5
 
     printlog ("'/// - SO quit - start ///")
 
-    wOfficeRestart
+    CALL wOfficeRestart
 
     printlog ("'/// - checking states ///")
     ToolsOptions
@@ -467,10 +472,11 @@ testcase tToolsOptionsWriterView5
     if ( option_value(5) = Notizen.IsChecked  ) then  WarnLog "Notizen state changed"
 
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values 
+    ExtrasOptionenDlg.OK
+    '/// restore default values
     printlog "- set defaultsvalues in options"
-    Call wOptionenUndo( "View" )
+    Call wOptionsUndo( "All" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -511,7 +517,7 @@ testcase tToolsOptionsWriterView6
 
     printlog ("'/// - SO quit - start ///")
 
-    wOfficeRestart
+    CALL wOfficeRestart
 
     printlog ("'/// - checking states ///")
     ToolsOptions
@@ -521,13 +527,21 @@ testcase tToolsOptionsWriterView6
     if Tabellen.IsChecked then WarnLog "Tabellen x"
     if Zeichnungen.IsChecked then WarnLog "Zeichnungen x"
     if Feldname.IsChecked then  WarnLog "Feldname x"
-    if Notizen.IsChecked then  WarnLog "Notizen x"    
+    if Notizen.IsChecked then  WarnLog "Notizen x"
+    
+    printlog ("'/// - restore states ///")
+    if ( option_value(1) = TRUE ) Then  GrafikenUndObjekte.Check Else GrafikenUndObjekte.UnCheck
+    if ( option_value(2) = TRUE ) Then  Tabellen.Check Else Tabellen.UnCheck
+    if ( option_value(3) = TRUE ) Then  Zeichnungen.Check Else Zeichnungen.UnCheck
+    if ( option_value(4) = TRUE ) Then  Feldname.Check Else Feldname.UnCheck
+    if ( option_value(5) = TRUE ) Then  Notizen.Check Else Notizen.UnCheck
 
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values 
+    ExtrasOptionenDlg.OK
+    '/// restore default values
     printlog "- set defaultsvalues in options"
-    Call wOptionenUndo( "View" )
+    Call wOptionsUndo( "All" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -556,35 +570,37 @@ testcase tToolsOptionsWriterView7
     option_value(5) = Notizen.IsChecked
 
     printlog ("'/// - all Check -> x ///")
-    
+
     GrafikenUndObjekte.Check
     Tabellen.Check
     Zeichnungen.Check
     Feldname.Check
     Notizen.Check
-    
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
     printlog ("'/// - SO quit - start ///")
 
-    wOfficeRestart
+    CALL wOfficeRestart
 
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
     hToolsOptions ( "WRITER" , "VIEW" )
-    
+
     if true <> GrafikenUndObjekte.IsChecked then WarnLog "GrafikenUndObjekte o"
     if true <> Tabellen.IsChecked then WarnLog "Tabellen."
     if true <> Zeichnungen.IsChecked then WarnLog "Zeichnungen o"
     if true <> Feldname.IsChecked then  WarnLog "Feldname o"
     if true <> Notizen.IsChecked then  WarnLog "Notizen o"
-    
+
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values 
-    printlog "- set defaultsvalues in options"
-    Call wOptionenUndo( "View" )
+    ExtrasOptionenDlg.OK
+
+    '/// restore default values
+'    printlog "- set defaultsvalues in options"
+'    Call wOptionsUndo( "All" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -668,7 +684,8 @@ testcase tToolsOptionsWriterGrid1
     ExtrasOptionenDlg.OK        
     '/// restore default values 
     printlog "- set defaultsvalues in options"
-    Call wOptionenUndo( "Grid" )
+    Call wOptionsUndo( "Grid" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -682,9 +699,9 @@ testcase tToolsOptionsWriterGrid2
     dim sMetricField(4) as string      ' MetricField
     dim sTempMetricField(4) as string
 
-    '/// new writer document 
+    '/// new writer document
     Call hNewDocument
-    '/// Tools/Options/Writer: Grid    
+    '/// Tools/Options/Writer: Grid
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "GRID" )
 
@@ -697,7 +714,6 @@ testcase tToolsOptionsWriterGrid2
     sMetricField(2) = RasterAufloesungYAchse.GetText
     sMetricField(3) = RasterUnterteilungXAchse.GetText
     sMetricField(4) = RasterUnterteilungYAchse.GetText
-
 
     printlog "- uncheck all checkboxes and set metric fields to min"
     '/// - uncheck all checkboxes and set metric fields to min
@@ -712,7 +728,7 @@ testcase tToolsOptionsWriterGrid2
     sTempMetricField(1) = RasterAufloesungXAchse.GetText
     sTempMetricField(2) = RasterAufloesungYAchse.GetText
     sTempMetricField(3) = RasterUnterteilungXAchse.GetText
-    sTempMetricField(4) = RasterUnterteilungYAchse.GetText    
+    sTempMetricField(4) = RasterUnterteilungYAchse.GetText
 
     RasterAufloesungXAchse.More
     RasterAufloesungYAchse.More
@@ -725,7 +741,7 @@ testcase tToolsOptionsWriterGrid2
     sTempMetricField(1) = RasterAufloesungXAchse.GetText
     sTempMetricField(2) = RasterAufloesungYAchse.GetText
     sTempMetricField(3) = RasterUnterteilungXAchse.GetText
-    sTempMetricField(4) = RasterUnterteilungYAchse.GetText   
+    sTempMetricField(4) = RasterUnterteilungYAchse.GetText
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -748,10 +764,11 @@ testcase tToolsOptionsWriterGrid2
     if ( RasterUnterteilungYAchse.GetText <> sTempMetricField(4) ) then WarnLog "RasterUnterteilungYAchse is not min."
 
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values 
+    ExtrasOptionenDlg.OK
+    '/// restore default values
     printlog "- set defaultsvalues in options"
-    Call wOptionenUndo( "Grid" )
+    Call wOptionsUndo( "Grid" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -770,7 +787,7 @@ testcase tToolsOptionsWriterGrid3
     printlog "'///- Tools/Options/Writer: Grid ///"
     '/// Tools/Options/Writer: Grid
     printlog ("'/// - save states ///")
-    '/// remember values    
+    '/// remember values
 
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "GRID" )
@@ -797,7 +814,7 @@ testcase tToolsOptionsWriterGrid3
     RasterUnterteilungXAchse.ToMax
     wait 500
     sTempMetricField(3) = RasterUnterteilungXAchse.GetText
-    if RasterUnterteilungYAchse.GetText <> sTempMetricField(3) then Warnlog "Y-axis sub. differs from X-axis"        
+    if RasterUnterteilungYAchse.GetText <> sTempMetricField(3) then Warnlog "Y-axis sub. differs from X-axis"
     sTempMetricField(2) = RasterAufloesungYAchse.GetText
     sTempMetricField(4) = RasterUnterteilungYAchse.GetText
     
@@ -820,10 +837,11 @@ testcase tToolsOptionsWriterGrid3
     if ( RasterUnterteilungYAchse.GetText <> sTempMetricField(4) ) then WarnLog "RasterUnterteilungYAchse is not max."
 
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values 
+    ExtrasOptionenDlg.OK
+    '/// restore default values
     printlog "- set defaultsvalues in options"
-    Call wOptionenUndo( "Grid" )
+    Call wOptionsUndo( "Grid" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -920,14 +938,16 @@ testcase tToolsOptionsWriterGrid4
     TabType.Cancel
 
     Call hCloseDocument
-    Sleep 2
     Call hNewDocument
 
     '/// restore default values 
     printlog "- set defaultsvalues in options"
-    Call wOptionenUndo( "Grid" )
+    Call wOptionsUndo( "Grid" )
+
     '/// close document
     Do Until GetDocumentCount = 0
         Call hCloseDocument
     Loop
 endcase
+
+'------------------------------------------------------------------------------

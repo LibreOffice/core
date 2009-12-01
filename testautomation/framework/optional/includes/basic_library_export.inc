@@ -163,15 +163,20 @@ testcase tBasicLibraryExport
         
     printlog( "Close the macro/libraries organizer" )
     kontext "TabBibliotheken"
-    TabBibliotheken.cancel()
-    
-    printlog( "Cancel macro organizer" )
-    kontext "Makro"
-    Makro.cancel()
-    
-    while( getDocumentCount > 0 ) 
-        hDestroyDocument()
-    wend
+    if ( TabBibliotheken.exists( 1 ) ) then
+        TabBibliotheken.cancel()
+        
+        printlog( "Cancel macro organizer" )
+        kontext "Makro"
+        Makro.cancel()
+        
+        while( getDocumentCount > 0 ) 
+            hDestroyDocument()
+        wend
+    else
+        warnlog( "Dialog <TabBibliotheken> could not be accessed" )
+        call exitRestartTheOffice()
+    endif
     
 endcase
 

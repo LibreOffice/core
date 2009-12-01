@@ -245,7 +245,7 @@ sub OLESetFocus()
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDown( 50 , 50 , 1 )
         DocumentMasterDoc.MouseUp( 50 , 50 , 1 )
-        EditObjectEdit
+        hUseAsyncSlot( "EditObjectEdit" )
         sleep( ICWAIT )
             case else
     warnlog( "Invalid gApplication: " & gApplication )
@@ -269,8 +269,7 @@ sub OLESetFocus2()
             active.SetPage TabType
             Kontext "TabType"
             TabType.Cancel()
-            sleep( ICWAIT )
-            EditObjectEdit
+            hUseAsyncSlot( "EditObjectEdit" )
         catch
             warnlog "Can't activate object"
         endcatch
@@ -314,8 +313,7 @@ sub OLESetFocus2()
             Active.SetPage TabType
             Kontext "TabType"
             TabType.Cancel
-            Sleep ( ICWAIT )
-            EditObjectEdit
+            hUseAsyncSlot( "EditObjectEdit" )
         catch
             qaerrorlog( "The object is not selected after reload." )
         endcatch
@@ -345,8 +343,7 @@ sub OLESetFocus3()
             active.SetPage TabType
             Kontext "TabType"
             TabType.Cancel
-            sleep( ICWAIT )
-            EditObjectEdit
+            hUseAsyncSlot( "EditObjectEdit" )
         catch
             warnlog "Can't activate object"
         endcatch
@@ -374,8 +371,7 @@ sub OLESetFocus3()
             active.SetPage( TabType )
             Kontext "TabType"
             TabType.Cancel()
-            sleep( ICWAIT )
-            EditObjectEdit
+            hUseAsyncSlot( "EditObjectEdit" )
         catch
             qaerrorlog( "The object is not selected after reload." )
         endcatch

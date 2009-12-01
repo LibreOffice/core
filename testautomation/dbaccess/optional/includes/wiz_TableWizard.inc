@@ -395,22 +395,22 @@ testcase tCreateAllTables
     call fOpendatabase(ConvertPath(gOfficePath + "user/work/TT_hsqldb.odb"))
     sleep(5)  
 
-    '/// check if tehre are 22 items in the business categoriy 
+    '/// check if there are 22 items in the business categoriy 
     if not fStartTableWizard() then
         warnlog "The table wizard doesn't start. TEST STOPPED"
         goto endsub
     endif    
 
-        Kontext "TableWizard"
-        dim iCount as integer
-        iCount = Tables.GetItemCount
-        if(iCount <> 22 ) then
-            warnlog "#102019# there are not 22 table in the category business. There are " + iCount
-            CancelBtn.Click
-            call fCloseDatabase()
-            goto endsub
-        endif
-        CancelBtn.Click        
+    Kontext "TableWizard"
+    dim iCount as integer
+    iCount = Tables.GetItemCount
+    if(iCount <> 22 ) then
+        warnlog "#102019# there are not 22 table in the category business. There are " + iCount
+        CancelBtn.Click
+        call fCloseDatabase()
+        goto endsub
+    endif
+    CancelBtn.Click        
     
     for i = 1 to 22
 
@@ -448,7 +448,12 @@ testcase tCreateAllTables
     
     '/// now create all tables from the personal tables
     printlog "now create all tables from the personal tables"
-
+    
+    if not fStartTableWizard() then
+        warnlog "The table wizard doesn't start. TEST STOPPED"
+        goto endsub
+    endif  
+    
     Kontext "TableWizard"            
         Personal.Check 
         iCount = Tables.GetItemCount
