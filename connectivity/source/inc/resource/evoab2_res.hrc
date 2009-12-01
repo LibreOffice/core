@@ -38,7 +38,8 @@
 // = the calc driver's resource strings
 // ============================================================================
 
-#define STR_USE_WHERE_CRIT     ( STR_EVOAB2_BASE +    0 )
+#define STR_CANNOT_OPEN_BOOK    ( STR_EVOAB2_BASE +    0 )
+#define STR_SORT_BY_COL_ONLY    ( STR_EVOAB2_BASE +    1 )
 
 #endif // CONNECTIVITY_RESOURCE_CALC_HRC
 

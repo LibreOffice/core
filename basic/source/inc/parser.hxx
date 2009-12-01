@@ -143,22 +143,6 @@ public:
     void While();                   // WHILE/WEND
     void With();                    // WITH
     void Write();                   // WRITE
-
-    // JavaScript-Parsing
-    void OpenJavaBlock( SbiToken, SbiExprNode* = NULL );    // Block oeffnen
-    void CloseJavaBlock();                                  // Block aufloesen
-    void JavaStmntBlock( SbiToken );    // Statement-Block abarbeiten
-    void JavaBreak();
-    void JavaContinue();
-    void JavaFor();
-    void JavaFunction();
-    void JavaIf();
-    void JavaNew();
-    void JavaReturn();
-    void JavaThis();
-    void JavaVar();
-    void JavaWhile();
-    void JavaWith();
 };
 
 

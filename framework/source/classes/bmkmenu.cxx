@@ -175,14 +175,15 @@ void BmkMenu::Initialize()
         aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_NEWMENU );
     else if ( m_nType == BmkMenu::BMK_WIZARDMENU )
         aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_WIZARDMENU );
-    BOOL bShowMenuImages = SvtMenuOptions().IsMenuIconsEnabled();
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    BOOL bShowMenuImages = rSettings.GetUseImagesInMenus();
 
     ::rtl::OUString aTitle;
     ::rtl::OUString aURL;
     ::rtl::OUString aTargetFrame;
     ::rtl::OUString aImageId;
 
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     BOOL bIsHiContrastMode = rSettings.GetMenuColor().IsDark();
 
     UINT32 i, nCount = aDynamicMenuEntries.getLength();

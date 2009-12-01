@@ -36,7 +36,7 @@
 #endif
 #include <vcl/virdev.hxx>
 #include "svx/svxdllapi.h"
-
+#include <layout/layout.hxx>
 
 // ============================================================================
 
@@ -113,6 +113,26 @@ protected:
                                     const Image& rExpImg,
                                     SvLBoxButtonKind eButtonKind );
 };
+
+#if ENABLE_LAYOUT
+
+namespace layout
+{
+class SvxFontListBoxImpl;
+class SVX_DLLPUBLIC SvxFontListBox : public ListBox
+{
+    /*DECL_GET_IMPL( SvxFontListBox );
+    DECL_CONSTRUCTORS( SvxFontListBox, ListBox, WB_BORDER );
+    DECL_GET_WINDOW (SvxFontListBox);*/
+
+public:
+    SvxFontListBox( Context*, const char* );
+    ~SvxFontListBox ();
+    sal_uInt16 InsertFontEntry (String const& entry, Font const& font, Color const* color=0);
+};
+};
+
+#endif
 
 
 // ============================================================================

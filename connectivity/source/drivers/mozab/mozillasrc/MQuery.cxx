@@ -127,7 +127,7 @@ MQuery::~MQuery()
 void MQuery::construct()
 {
      // Set default values. (For now just as a reminder).
-    m_aErrorOccurred  = sal_False;
+    m_aError.reset();
     m_bQuerySubDirs   = sal_True;       // LDAP Queryies require this to be set!
     m_nMaxNrOfReturns = -1; // Unlimited number of returns.
 
@@ -459,7 +459,7 @@ sal_Int32 MQuery::commitRow(const sal_Int32 rowIndex)
     args.arg2 = (void*)&rowIndex;
     args.arg3 = (void*)m_aQueryDirectory->directory;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
-    setError( m_aQueryHelper->getErrorResourceId() );
+    m_aError = m_aQueryHelper->getError();
     return rv;
 }
 
@@ -476,7 +476,7 @@ sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
     args.arg2 = (void*)&rowIndex;
     args.arg3 = (void*)m_aQueryDirectory->directory;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
-    setError( m_aQueryHelper->getErrorResourceId() );
+    m_aError = m_aQueryHelper->getError();
     return rv;
 
 }
@@ -623,7 +623,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     // Execute the query.
     OSL_TRACE( "****** calling DoQuery\n");
 
-    m_aErrorOccurred = sal_False;
+    m_aError.reset();
 
     m_aQueryHelper->reset();
 
@@ -679,7 +679,7 @@ MQuery::getRealRowCount()
 sal_Bool
 MQuery::queryComplete( void )
 {
-    return( m_aErrorOccurred || m_aQueryHelper->queryComplete() );
+    return( hadError() || m_aQueryHelper->queryComplete() );
 }
 
 sal_Bool
@@ -687,8 +687,7 @@ MQuery::waitForQueryComplete( void )
 {
     if( m_aQueryHelper->waitForQueryComplete( ) )
         return sal_True;
-    setError( m_aQueryHelper->getErrorResourceId() );
-    m_aErrorOccurred = sal_True;
+    m_aError = m_aQueryHelper->getError();
     return( sal_False );
 }
 
@@ -699,8 +698,7 @@ MQuery::checkRowAvailable( sal_Int32 nDBRow )
 {
     while( !queryComplete() && m_aQueryHelper->getRealCount() <= (sal_uInt32)nDBRow )
         if ( !m_aQueryHelper->waitForRow( nDBRow ) ) {
-            m_aErrorOccurred = sal_True;
-            setError( m_aQueryHelper->getErrorResourceId() );
+            m_aError = m_aQueryHelper->getError();
             return( sal_False );
         }
 
@@ -715,8 +713,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
     if (xResEntry == NULL )
     {
-        m_aErrorOccurred = sal_True;
-        setError( m_aQueryHelper->getErrorResourceId() );
+        const_cast< MQuery* >( this )->m_aError = m_aQueryHelper->getError();
         return sal_False;
     }
     switch ( nType )
@@ -741,8 +738,7 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
     if (xResEntry == NULL )
     {
-        m_aErrorOccurred = sal_True;
-        setError( m_aQueryHelper->getErrorResourceId() );
+        const_cast< MQuery* >( this )->m_aError = m_aQueryHelper->getError();
         rValue.setNull();
         return sal_False;
     }
@@ -768,8 +764,7 @@ MQuery::getRowStates(sal_Int32 nDBRow)
     OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
     if (xResEntry == NULL )
     {
-        m_aErrorOccurred = sal_True;
-        setError( m_aQueryHelper->getErrorResourceId() );
+        m_aError = m_aQueryHelper->getError();
         return RowStates_Error;
     }
     return xResEntry->getRowStates();
@@ -782,8 +777,7 @@ MQuery::setRowStates(sal_Int32 nDBRow,sal_Int32 aState)
     OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
     if (xResEntry == NULL )
     {
-        m_aErrorOccurred = sal_True;
-        setError( m_aQueryHelper->getErrorResourceId() );
+        m_aError = m_aQueryHelper->getError();
         return sal_False;
     }
     return xResEntry->setRowStates(aState);
@@ -799,7 +793,7 @@ MQuery::resyncRow(sal_Int32 nDBRow)
     args.arg1 = (void*)m_aQueryHelper;
     args.arg2 = (void*)&nDBRow;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
-    setError( m_aQueryHelper->getErrorResourceId() );
+    m_aError = m_aQueryHelper->getError();
     return NS_SUCCEEDED( rv ) ? sal_True : sal_False;
 }
 
@@ -815,7 +809,7 @@ MQuery::createNewCard()
     args.arg2 = (void*)&nNumber;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
 
-    setError( m_aQueryHelper->getErrorResourceId() );
+    m_aError = m_aQueryHelper->getError();
     NS_ENSURE_SUCCESS(rv,0);
     return nNumber;
 }

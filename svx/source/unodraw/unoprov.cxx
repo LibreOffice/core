@@ -64,9 +64,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
 using ::com::sun::star::drawing::TextVerticalAdjust;
 
-SfxItemPropertyMap* ImplGetSvxShapePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxShapePropertyMap()
 {
-    static SfxItemPropertyMap aShapePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aShapePropertyMap_Impl[] =
     {
         EDGERADIUS_PROPERTIES
         FILL_PROPERTIES
@@ -89,9 +89,9 @@ SfxItemPropertyMap* ImplGetSvxShapePropertyMap()
     return aShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxTextShapePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxTextShapePropertyMap()
 {
-    static SfxItemPropertyMap aTextShapePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aTextShapePropertyMap_Impl[] =
     {
         EDGERADIUS_PROPERTIES
         FILL_PROPERTIES
@@ -114,9 +114,9 @@ SfxItemPropertyMap* ImplGetSvxTextShapePropertyMap()
     return aTextShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxConnectorPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxConnectorPropertyMap()
 {
-    static SfxItemPropertyMap aConnectorPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aConnectorPropertyMap_Impl[] =
     {
         SPECIAL_CONNECTOR_PROPERTIES
         EDGERADIUS_PROPERTIES
@@ -139,9 +139,9 @@ SfxItemPropertyMap* ImplGetSvxConnectorPropertyMap()
     return aConnectorPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxDimensioningPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxDimensioningPropertyMap()
 {
-    static SfxItemPropertyMap aDimensioningPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aDimensioningPropertyMap_Impl[] =
     {
         SPECIAL_DIMENSIONING_PROPERTIES
         EDGERADIUS_PROPERTIES
@@ -164,9 +164,9 @@ SfxItemPropertyMap* ImplGetSvxDimensioningPropertyMap()
     return aDimensioningPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxCirclePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxCirclePropertyMap()
 {
-    static SfxItemPropertyMap aCirclePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aCirclePropertyMap_Impl[] =
     {
         SPECIAL_CIRCLE_PROPERTIES
         EDGERADIUS_PROPERTIES
@@ -190,9 +190,9 @@ SfxItemPropertyMap* ImplGetSvxCirclePropertyMap()
     return aCirclePropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxPolyPolygonPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxPolyPolygonPropertyMap()
 {
-    static SfxItemPropertyMap aPolyPolygonPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aPolyPolygonPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("Geometry"), OWN_ATTR_BASE_GEOMETRY, SEQTYPE(::getCppuType((const ::com::sun::star::drawing::PointSequenceSequence*)0)), 0, 0 },
         SPECIAL_POLYGON_PROPERTIES
@@ -217,9 +217,9 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonPropertyMap()
     return aPolyPolygonPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxPolyPolygonBezierPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxPolyPolygonBezierPropertyMap()
 {
-    static SfxItemPropertyMap aPolyPolygonBezierPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aPolyPolygonBezierPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("Geometry"), OWN_ATTR_BASE_GEOMETRY, &::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0), 0, 0 },
         SPECIAL_POLYGON_PROPERTIES
@@ -244,9 +244,9 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonBezierPropertyMap()
     return aPolyPolygonBezierPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxGraphicObjectPropertyMap()
 {
-    static SfxItemPropertyMap aGraphicObjectPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aGraphicObjectPropertyMap_Impl[] =
     {
         SPECIAL_GRAPHOBJ_PROPERTIES
 
@@ -273,9 +273,9 @@ SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
     return aGraphicObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvx3DSceneObjectPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvx3DSceneObjectPropertyMap()
 {
-    static SfxItemPropertyMap a3DSceneObjectPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry a3DSceneObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DSCENEOBJECT_PROPERTIES
         FILL_PROPERTIES
@@ -292,9 +292,9 @@ SfxItemPropertyMap* ImplGetSvx3DSceneObjectPropertyMap()
     return a3DSceneObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvx3DCubeObjectPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvx3DCubeObjectPropertyMap()
 {
-    static SfxItemPropertyMap a3DCubeObjectPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry a3DCubeObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DCUBEOBJECT_PROPERTIES
         MISC_3D_OBJ_PROPERTIES
@@ -314,9 +314,9 @@ SfxItemPropertyMap* ImplGetSvx3DCubeObjectPropertyMap()
     return a3DCubeObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvx3DSphereObjectPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvx3DSphereObjectPropertyMap()
 {
-    static SfxItemPropertyMap a3DSphereObjectPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry a3DSphereObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DSPHEREOBJECT_PROPERTIES
         MISC_3D_OBJ_PROPERTIES
@@ -335,9 +335,9 @@ SfxItemPropertyMap* ImplGetSvx3DSphereObjectPropertyMap()
     return a3DSphereObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvx3DLatheObjectPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvx3DLatheObjectPropertyMap()
 {
-    static SfxItemPropertyMap a3DLatheObjectPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry a3DLatheObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DLATHEOBJECT_PROPERTIES
 
@@ -362,9 +362,9 @@ SfxItemPropertyMap* ImplGetSvx3DLatheObjectPropertyMap()
     return a3DLatheObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvx3DExtrudeObjectPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvx3DExtrudeObjectPropertyMap()
 {
-    static SfxItemPropertyMap a3DExtrudeObjectPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry a3DExtrudeObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DEXTRUDEOBJECT_PROPERTIES
 
@@ -389,9 +389,9 @@ SfxItemPropertyMap* ImplGetSvx3DExtrudeObjectPropertyMap()
     return a3DExtrudeObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvx3DPolygonObjectPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvx3DPolygonObjectPropertyMap()
 {
-    static SfxItemPropertyMap a3DPolygonObjectPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry a3DPolygonObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DPOLYGONOBJECT_PROPERTIES
         MISC_3D_OBJ_PROPERTIES
@@ -411,9 +411,9 @@ SfxItemPropertyMap* ImplGetSvx3DPolygonObjectPropertyMap()
     return a3DPolygonObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxAllPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxAllPropertyMap()
 {
-    static SfxItemPropertyMap aAllPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aAllPropertyMap_Impl[] =
     {
         SHADOW_PROPERTIES
         LINE_PROPERTIES
@@ -455,9 +455,9 @@ SfxItemPropertyMap* ImplGetSvxAllPropertyMap()
     return aAllPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxGroupPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxGroupPropertyMap()
 {
-    static SfxItemPropertyMap aGroupPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aGroupPropertyMap_Impl[] =
     {
         SHAPE_DESCRIPTOR_PROPERTIES
         MISC_OBJ_PROPERTIES
@@ -469,9 +469,9 @@ SfxItemPropertyMap* ImplGetSvxGroupPropertyMap()
     return aGroupPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxOle2PropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxOle2PropertyMap()
 {
-    static SfxItemPropertyMap aOle2PropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aOle2PropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("Transformation"),           OWN_ATTR_TRANSFORMATION     , &::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 }, \
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_ZORDER),   OWN_ATTR_ZORDER             , &::getCppuType((const sal_Int32*)0),      0,      0},
@@ -504,9 +504,9 @@ SfxItemPropertyMap* ImplGetSvxOle2PropertyMap()
     return aOle2PropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxPluginPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxPluginPropertyMap()
 {
-    static SfxItemPropertyMap aPluginPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aPluginPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("PluginMimeType"),           OWN_ATTR_PLUGIN_MIMETYPE    , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
         { MAP_CHAR_LEN("PluginURL"),                OWN_ATTR_PLUGIN_URL         , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
@@ -535,10 +535,10 @@ SfxItemPropertyMap* ImplGetSvxPluginPropertyMap()
     return aPluginPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxFramePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxFramePropertyMap()
 {
     //TODO/LATER: new properties for ScrollingMode and DefaultBorder
-    static SfxItemPropertyMap aFramePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aFramePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("FrameURL"),                 OWN_ATTR_FRAME_URL          , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
         { MAP_CHAR_LEN("FrameName"),                OWN_ATTR_FRAME_NAME         , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
@@ -570,9 +570,9 @@ SfxItemPropertyMap* ImplGetSvxFramePropertyMap()
     return aFramePropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxAppletPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxAppletPropertyMap()
 {
-    static SfxItemPropertyMap aAppletPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aAppletPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("AppletCodeBase"),           OWN_ATTR_APPLET_CODEBASE    , &::getCppuType(( const ::rtl::OUString*)0), 0, 0},
         { MAP_CHAR_LEN("AppletName"),               OWN_ATTR_APPLET_NAME        , &::getCppuType(( const ::rtl::OUString*)0), 0, 0},
@@ -604,9 +604,9 @@ SfxItemPropertyMap* ImplGetSvxAppletPropertyMap()
     return aAppletPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxControlShapePropertyMap()
 {
-    static SfxItemPropertyMap aControlPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aControlPropertyMap_Impl[] =
     {
         // the following properties are mapped to the XControl Model of this shape
         { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTNAME),        0,  &::getCppuType((const ::rtl::OUString*)0),  0, 0 },
@@ -655,9 +655,9 @@ SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap()
     return aControlPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxPageShapePropertyMap()
 {
-    static SfxItemPropertyMap aPageShapePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aPageShapePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("PageNumber"),               OWN_ATTR_PAGE_NUMBER        , &::getCppuType((const sal_Int32*)0),      0, 0},
         { MAP_CHAR_LEN("Transformation"),           OWN_ATTR_TRANSFORMATION     , &::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 }, \
@@ -679,9 +679,9 @@ SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap()
     return aPageShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxCaptionPropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxCaptionPropertyMap()
 {
-    static SfxItemPropertyMap aCaptionPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aCaptionPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("CaptionPoint"),             OWN_ATTR_CAPTION_POINT,     &::getCppuType((const com::sun::star::awt::Point*)0),   0, 0 },
         { MAP_CHAR_LEN("CaptionType"),              SDRATTR_CAPTIONTYPE,        &::getCppuType((const sal_Int16*)0), 0, 0},
@@ -714,9 +714,9 @@ SfxItemPropertyMap* ImplGetSvxCaptionPropertyMap()
     return aCaptionPropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxCustomShapePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxCustomShapePropertyMap()
 {
-    static SfxItemPropertyMap aCustomShapePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aCustomShapePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("CustomShapeEngine"),            SDRATTR_CUSTOMSHAPE_ENGINE,         &::getCppuType((const ::rtl::OUString*)0),  0, 0 },
         { MAP_CHAR_LEN("CustomShapeData"),          SDRATTR_CUSTOMSHAPE_DATA,               &::getCppuType((const ::rtl::OUString*)0),  0, 0 },
@@ -739,9 +739,9 @@ SfxItemPropertyMap* ImplGetSvxCustomShapePropertyMap()
     return aCustomShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxMediaShapePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxMediaShapePropertyMap()
 {
-    static SfxItemPropertyMap aMediaShapePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aMediaShapePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_ZORDER), OWN_ATTR_ZORDER, &::getCppuType((const sal_Int32*)0), 0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID), SDRATTR_LAYERID, &::getCppuType((const sal_Int16*)0), 0, 0},
@@ -768,9 +768,9 @@ SfxItemPropertyMap* ImplGetSvxMediaShapePropertyMap()
     return aMediaShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMap* ImplGetSvxTableShapePropertyMap()
+SfxItemPropertyMapEntry* ImplGetSvxTableShapePropertyMap()
 {
-    static SfxItemPropertyMap aTableShapePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aTableShapePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_ZORDER),       OWN_ATTR_ZORDER, &::getCppuType((const sal_Int32*)0), 0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID),      SDRATTR_LAYERID, &::getCppuType((const sal_Int16*)0), 0,    0},
@@ -931,8 +931,8 @@ int
 #endif
 Svx_CompareMap(const void* pSmaller, const void* pBigger )
 {
-    int nDiff = strcmp( ((const SfxItemPropertyMap*)pSmaller)->pName,
-                        ((const SfxItemPropertyMap*)pBigger)->pName );
+    int nDiff = strcmp( ((const SfxItemPropertyMapEntry*)pSmaller)->pName,
+                        ((const SfxItemPropertyMapEntry*)pBigger)->pName );
     return nDiff;
 }
 
@@ -940,22 +940,32 @@ Svx_CompareMap(const void* pSmaller, const void* pBigger )
 
 SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
-    for(UINT16 i=0;i<SVXMAP_END;aMapArr[i++]=NULL) ;
+    for(UINT16 i=0;i<SVXMAP_END; i++)
+    {
+        aSetArr[i] = 0;
+        aMapArr[i] = 0;
+    }
+}
+
+SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
+{
+    for(UINT16 i=0;i<SVXMAP_END; i++)
+        delete aSetArr[i];
 }
 
 // ---------------------------------------------------------------------
 
-void SvxUnoPropertyMapProvider::Sort(USHORT nId)
+/*void SvxUnoPropertyMapProvider::Sort(USHORT nId)
 {
-    SfxItemPropertyMap* pTemp = aMapArr[nId];
+    SfxItemPropertyMapEntry* pTemp = aMapArr[nId];
     UINT16 i = 0;
     while(pTemp[i].pName) { i++; }
-    qsort(aMapArr[nId], i, sizeof(SfxItemPropertyMap), Svx_CompareMap);
-}
+    qsort(aMapArr[nId], i, sizeof(SfxItemPropertyMapEntry), Svx_CompareMap);
+}*/
 
 // ---------------------------------------------------------------------
 
-SfxItemPropertyMap* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
+const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
 {
     DBG_ASSERT(nPropertyId < SVXMAP_END, "Id ?" );
     if(!aMapArr[nPropertyId]) {
@@ -985,13 +995,20 @@ SfxItemPropertyMap* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
             case SVXMAP_CUSTOMSHAPE: aMapArr[SVXMAP_CUSTOMSHAPE]=ImplGetSvxCustomShapePropertyMap(); break;
             case SVXMAP_MEDIA: aMapArr[SVXMAP_MEDIA]=ImplGetSvxMediaShapePropertyMap(); break;
             case SVXMAP_TABLE: aMapArr[SVXMAP_TABLE]=ImplGetSvxTableShapePropertyMap(); break;
+            case SVXMAP_PAGE: aMapArr[SVXMAP_PAGE] = ImplGetSvxPageShapePropertyMap(); break;
 
             default:
                 DBG_ERROR( "Unknown property map for SvxUnoPropertyMapProvider!" );
         }
-        Sort(nPropertyId);
+//      Sort(nPropertyId);
     }
     return aMapArr[nPropertyId];
+}
+const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(UINT16 nPropertyId)
+{
+    if( !aSetArr[nPropertyId] )
+        aSetArr[nPropertyId] = new SvxItemPropertySet( GetMap( nPropertyId ) );
+    return aSetArr[nPropertyId];
 }
 
 // #####################################################################
@@ -1219,20 +1236,20 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
     return TRUE;
 }
 
-sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName )
+/*sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName )
 {
     sal_Int16 nWhich = 0;
 
-    const SfxItemPropertyMap* pMap = aSvxMapProvider.GetMap( SVXMAP_SHAPE );
+    const SfxItemPropertyMapEntry* pMap = aSvxMapProvider.GetMap( SVXMAP_SHAPE );
     if( pMap )
     {
-        const SfxItemPropertyMap* pFound = SfxItemPropertyMap::GetByName( pMap, rPropName );
+        const SfxItemPropertyMapEntry* pFound = SfxItemPropertyMapEntry::getByName( pMap, rPropName );
         if( pFound )
             nWhich = pFound->nWID;
     }
 
     return nWhich;
-}
+} */
 
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
 {

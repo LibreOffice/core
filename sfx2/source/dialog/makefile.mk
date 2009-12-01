@@ -41,8 +41,6 @@ TARGET=dialog
 # --- Files --------------------------------------------------------------
 
 EXCEPTIONSFILES=\
-        $(SLO)$/acccfg.obj			\
-        $(SLO)$/cfg.obj				\
         $(SLO)$/filedlghelper.obj	\
         $(SLO)$/filtergrouping.obj	\
         $(SLO)$/itemconnect.obj     \
@@ -60,7 +58,6 @@ SLOFILES =\
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/intro.obj			\
-        $(SLO)$/macropg.obj         \
         $(SLO)$/mgetempl.obj		\
         $(SLO)$/navigat.obj			\
         $(SLO)$/newstyle.obj		\
@@ -81,12 +78,10 @@ SRS1NAME=$(TARGET)
 SRC1FILES =\
         recfloat.src		\
         alienwarn.src       \
-        cfg.src				\
         dialog.src			\
         dinfdlg.src			\
         dinfedt.src			\
         filedlghelper.src	\
-        macropg.src			\
         mailwindow.src		\
         mgetempl.src		\
         newstyle.src		\

@@ -38,9 +38,11 @@
 #endif
 #include <svtools/svarray.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/types.h>
 
 #include <vector>
-
+#include <list>
+#include <hash_map>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -147,8 +149,123 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
+using namespace ::xmloff;
 using namespace ::xmloff::token;
 
+namespace
+{
+    class TextContentSet
+    {
+        public:
+            typedef Reference<XTextContent> text_content_ref_t;
+            typedef list<text_content_ref_t> contents_t;
+            typedef back_insert_iterator<contents_t> inserter_t;
+            typedef contents_t::const_iterator const_iterator_t;
+
+            inserter_t getInserter()
+                { return back_insert_iterator<contents_t>(m_vTextContents); };
+            const_iterator_t getBegin() const
+                { return m_vTextContents.begin(); };
+            const_iterator_t getEnd() const
+                { return m_vTextContents.end(); };
+
+        private:
+            contents_t m_vTextContents;
+    };
+
+    struct FrameRefHash
+        : public unary_function<Reference<XTextFrame>, size_t>
+    {
+        size_t operator()(const Reference<XTextFrame> xFrame) const
+            { return sal::static_int_cast<size_t>(reinterpret_cast<sal_uIntPtr>(xFrame.get())); }
+    };
+
+    static bool lcl_TextContentsUnfiltered(const Reference<XTextContent>&)
+        { return true; };
+
+    static bool lcl_ShapeFilter(const Reference<XTextContent>& xTxtContent)
+    {
+        static const OUString sTextFrameService = OUString::createFromAscii("com.sun.star.text.TextFrame");
+        static const OUString sTextGraphicService = OUString::createFromAscii("com.sun.star.text.TextGraphicObject");
+        static const OUString sTextEmbeddedService = OUString::createFromAscii("com.sun.star.text.TextEmbeddedObject");
+        Reference<XShape> xShape(xTxtContent, UNO_QUERY);
+        if(!xShape.is())
+            return false;
+        Reference<XServiceInfo> xServiceInfo(xTxtContent, UNO_QUERY);
+        if(xServiceInfo->supportsService(sTextFrameService) ||
+            xServiceInfo->supportsService(sTextGraphicService) ||
+            xServiceInfo->supportsService(sTextEmbeddedService) )
+            return false;
+        return true;
+    };
+
+    class BoundFrames
+    {
+        public:
+            typedef bool (*filter_t)(const Reference<XTextContent>&);
+            BoundFrames(
+                const Reference<XEnumerationAccess> xEnumAccess,
+                const filter_t& rFilter)
+                : m_xEnumAccess(xEnumAccess)
+            {
+                Fill(rFilter);
+            };
+            BoundFrames()
+                {};
+            const TextContentSet* GetPageBoundContents() const
+                { return &m_vPageBounds; };
+            const TextContentSet* GetFrameBoundContents(const Reference<XTextFrame>& rParentFrame) const
+            {
+                framebound_map_t::const_iterator it = m_vFrameBoundsOf.find(rParentFrame);
+                if(it == m_vFrameBoundsOf.end())
+                    return NULL;
+                return &(it->second);
+            };
+            Reference<XEnumeration> createEnumeration() const
+            {
+                if(!m_xEnumAccess.is())
+                    return Reference<XEnumeration>();
+                return m_xEnumAccess->createEnumeration();
+            };
+
+        private:
+            typedef hash_map<
+                Reference<XTextFrame>,
+                TextContentSet,
+                FrameRefHash> framebound_map_t;
+            TextContentSet m_vPageBounds;
+            framebound_map_t m_vFrameBoundsOf;
+            const Reference<XEnumerationAccess> m_xEnumAccess;
+            void Fill(const filter_t& rFilter);
+            static const OUString our_sAnchorType;
+            static const OUString our_sAnchorFrame;
+    };
+    const OUString BoundFrames::our_sAnchorType = OUString::createFromAscii("AnchorType");
+    const OUString BoundFrames::our_sAnchorFrame = OUString::createFromAscii("AnchorFrame");
+
+}
+
+namespace xmloff
+{
+    class BoundFrameSets
+    {
+        public:
+            BoundFrameSets(const Reference<XInterface> xModel);
+            const BoundFrames* GetTexts() const
+                { return m_pTexts.get(); };
+            const BoundFrames* GetGraphics() const
+                { return m_pGraphics.get(); };
+            const BoundFrames* GetEmbeddeds() const
+                { return m_pEmbeddeds.get(); };
+            const BoundFrames* GetShapes() const
+                { return m_pShapes.get(); };
+        private:
+            auto_ptr<BoundFrames> m_pTexts;
+            auto_ptr<BoundFrames> m_pGraphics;
+            auto_ptr<BoundFrames> m_pEmbeddeds;
+            auto_ptr<BoundFrames> m_pShapes;
+    };
+}
 
 typedef OUString *OUStringPtr;
 SV_DECL_PTRARR_DEL( OUStrings_Impl, OUStringPtr, 20, 10 )
@@ -221,6 +338,66 @@ enum eParagraphPropertyNamesEnum
     TEXT_SECTION = 5
 };
 
+void BoundFrames::Fill(const filter_t& rFilter)
+{
+    if(!m_xEnumAccess.is())
+        return;
+    const Reference< XEnumeration > xEnum = m_xEnumAccess->createEnumeration();
+    if(!xEnum.is())
+        return;
+    while(xEnum->hasMoreElements())
+    {
+        Reference<XPropertySet> xPropSet(xEnum->nextElement(), UNO_QUERY);
+        Reference<XTextContent> xTextContent(xPropSet, UNO_QUERY);
+        if(!xPropSet.is() || !xTextContent.is())
+            continue;
+        TextContentAnchorType eAnchor;
+        xPropSet->getPropertyValue(our_sAnchorType) >>= eAnchor;
+        if(TextContentAnchorType_AT_PAGE != eAnchor && TextContentAnchorType_AT_FRAME != eAnchor)
+            continue;
+        if(!rFilter(xTextContent))
+            continue;
+
+        TextContentSet::inserter_t pInserter = m_vPageBounds.getInserter();
+        if(TextContentAnchorType_AT_FRAME == eAnchor)
+        {
+            Reference<XTextFrame> xAnchorTxtFrame(
+                xPropSet->getPropertyValue(our_sAnchorFrame),
+                uno::UNO_QUERY);
+            pInserter = m_vFrameBoundsOf[xAnchorTxtFrame].getInserter();
+        }
+        *pInserter++ = xTextContent;
+    }
+}
+
+BoundFrameSets::BoundFrameSets(const Reference<XInterface> xModel)
+    : m_pTexts(new BoundFrames())
+    , m_pGraphics(new BoundFrames())
+    , m_pEmbeddeds(new BoundFrames())
+    , m_pShapes(new BoundFrames())
+{
+    const Reference<XTextFramesSupplier> xTFS(xModel, UNO_QUERY);
+    const Reference<XTextGraphicObjectsSupplier> xGOS(xModel, UNO_QUERY);
+    const Reference<XTextEmbeddedObjectsSupplier> xEOS(xModel, UNO_QUERY);
+    const Reference<XDrawPageSupplier> xDPS(xModel, UNO_QUERY);
+    if(xTFS.is())
+        m_pTexts = auto_ptr<BoundFrames>(new BoundFrames(
+            Reference<XEnumerationAccess>(xTFS->getTextFrames(), UNO_QUERY),
+            &lcl_TextContentsUnfiltered));
+    if(xGOS.is())
+        m_pGraphics = auto_ptr<BoundFrames>(new BoundFrames(
+            Reference<XEnumerationAccess>(xGOS->getGraphicObjects(), UNO_QUERY),
+            &lcl_TextContentsUnfiltered));
+    if(xEOS.is())
+        m_pEmbeddeds = auto_ptr<BoundFrames>(new BoundFrames(
+            Reference<XEnumerationAccess>(xEOS->getEmbeddedObjects(), UNO_QUERY),
+            &lcl_TextContentsUnfiltered));
+    if(xDPS.is())
+        m_pShapes = auto_ptr<BoundFrames>(new BoundFrames(
+            Reference<XEnumerationAccess>(xDPS->getDrawPage(), UNO_QUERY),
+            &lcl_ShapeFilter));
+};
+
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
                                   const XMLPropertyState** ppAddStates, bool bDontSeek )
@@ -258,7 +435,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
     }
 
-    if( xPropStates.size() > 0L )
+    if( !xPropStates.empty() )
     {
         Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
         OUString sParent, sCondParent;
@@ -432,7 +609,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
     }
 
-    if( xPropStates.size() > 0L )
+    if( !xPropStates.empty() )
     {
         OUString sParent, sCondParent;
         switch( nFamily )
@@ -931,15 +1108,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
         ) :
     XMLStyleExport( rExp, OUString(), &rASP ),
     rAutoStylePool( rASP ),
-
-    pPageTextFrameIdxs( 0 ),
-    pPageGraphicIdxs( 0 ),
-    pPageEmbeddedIdxs( 0 ),
-    pPageShapeIdxs( 0 ),
-    pFrameTextFrameIdxs( 0 ),
-    pFrameGraphicIdxs( 0 ),
-    pFrameEmbeddedIdxs( 0 ),
-    pFrameShapeIdxs( 0 ),
+    pBoundFrameSets(new BoundFrameSets(GetExport().GetModel())),
     pFieldExport( 0 ),
     pListElements( 0 ),
     // --> OD 2008-05-07 #refactorlists# - no longer needed
@@ -1124,14 +1293,6 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
 //    delete pExportedLists;
     // <--
     delete pListAutoPool;
-    delete pPageTextFrameIdxs;
-    delete pPageGraphicIdxs;
-    delete pPageEmbeddedIdxs;
-    delete pPageShapeIdxs;
-    delete pFrameTextFrameIdxs;
-    delete pFrameGraphicIdxs;
-    delete pFrameEmbeddedIdxs;
-    delete pFrameShapeIdxs;
 #ifndef PRODUCT
     txtparae_bContainsIllegalCharacters = sal_False;
 #endif
@@ -1175,207 +1336,29 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaDefaultExtPropMappe
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 
-void XMLTextParagraphExport::collectFrames()
-{
-    collectFrames( sal_False );
-}
-
-void XMLTextParagraphExport::collectFrames( sal_Bool bBoundToFrameOnly )
-{
-    Reference < XTextFramesSupplier > xTFS( GetExport().GetModel(), UNO_QUERY );
-    if( xTFS.is() )
-    {
-        xTextFrames.set( xTFS->getTextFrames(), uno::UNO_QUERY);
-        sal_Int32 nCount =  xTextFrames->getCount();
-        for( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            Reference < XPropertySet > xPropSet( xTextFrames->getByIndex( i ), UNO_QUERY );
-
-            TextContentAnchorType eAnchor;
-            xPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
-
-            switch( eAnchor )
-            {
-            case TextContentAnchorType_AT_PAGE:
-                if( !bBoundToFrameOnly )
-                {
-                    if( !pPageTextFrameIdxs )
-                        pPageTextFrameIdxs = new SvLongs;
-                    pPageTextFrameIdxs->Insert( i, pPageTextFrameIdxs->Count() );
-                }
-                break;
-            case TextContentAnchorType_AT_FRAME:
-                if( !pFrameTextFrameIdxs )
-                    pFrameTextFrameIdxs = new SvLongs;
-                pFrameTextFrameIdxs->Insert( i, pFrameTextFrameIdxs->Count() );
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    Reference < XTextGraphicObjectsSupplier > xTGOS( GetExport().GetModel(),
-                                                    UNO_QUERY );
-    if( xTGOS.is() )
-    {
-        xGraphics.set( xTGOS->getGraphicObjects(),
-                                                  UNO_QUERY );
-        sal_Int32 nCount =  xGraphics->getCount();
-        for( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            Reference < XPropertySet > xPropSet( xGraphics->getByIndex( i ), UNO_QUERY );
-
-            TextContentAnchorType eAnchor;
-            xPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
-
-            switch( eAnchor )
-            {
-            case TextContentAnchorType_AT_PAGE:
-                if( !bBoundToFrameOnly )
-                {
-                    if( !pPageGraphicIdxs )
-                        pPageGraphicIdxs = new SvLongs;
-                    pPageGraphicIdxs->Insert( i, pPageGraphicIdxs->Count() );
-                }
-                break;
-            case TextContentAnchorType_AT_FRAME:
-                if( !pFrameGraphicIdxs )
-                    pFrameGraphicIdxs = new SvLongs;
-                pFrameGraphicIdxs->Insert( i, pFrameGraphicIdxs->Count() );
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    Reference < XTextEmbeddedObjectsSupplier > xTEOS( GetExport().GetModel(),
-                                                    UNO_QUERY );
-    if( xTEOS.is() )
-    {
-        xEmbeddeds = Reference < XIndexAccess >( xTEOS->getEmbeddedObjects(),
-                                                  UNO_QUERY );
-        sal_Int32 nCount =  xEmbeddeds->getCount();
-        for( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            Reference < XPropertySet > xPropSet( xEmbeddeds->getByIndex( i ), UNO_QUERY );
-
-            TextContentAnchorType eAnchor;
-            xPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
-
-            switch( eAnchor )
-            {
-            case TextContentAnchorType_AT_PAGE:
-                if( !bBoundToFrameOnly )
-                {
-                    if( !pPageEmbeddedIdxs )
-                        pPageEmbeddedIdxs = new SvLongs;
-                    pPageEmbeddedIdxs->Insert( i, pPageEmbeddedIdxs->Count() );
-                }
-                break;
-            case TextContentAnchorType_AT_FRAME:
-                if( !pFrameEmbeddedIdxs )
-                    pFrameEmbeddedIdxs = new SvLongs;
-                pFrameEmbeddedIdxs->Insert( i, pFrameEmbeddedIdxs->Count() );
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    Reference < XDrawPageSupplier > xDPS( GetExport().GetModel(),
-                                                    UNO_QUERY );
-    if( xDPS.is() )
-    {
-        xShapes = Reference < XIndexAccess >( xDPS->getDrawPage(),
-                                                  UNO_QUERY );
-        sal_Int32 nCount =  xShapes->getCount();
-        for( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            Reference < XShape > xShape(xShapes->getByIndex( i ), uno::UNO_QUERY);
-            if( !xShape.is() )
-                continue;
-
-            Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
-
-            TextContentAnchorType eAnchor;
-            xPropSet->getPropertyValue( sAnchorType ) >>= eAnchor;
-
-            if( (TextContentAnchorType_AT_PAGE != eAnchor &&
-                 TextContentAnchorType_AT_FRAME != eAnchor) ||
-                 (TextContentAnchorType_AT_PAGE == eAnchor &&
-                 bBoundToFrameOnly ) )
-                continue;
-
-            Reference<XServiceInfo> xServiceInfo( xShape,
-                                                  UNO_QUERY );
-            if( xServiceInfo->supportsService( sTextFrameService ) ||
-                  xServiceInfo->supportsService( sTextGraphicService ) ||
-                xServiceInfo->supportsService( sTextEmbeddedService ) )
-                continue;
-
-            if( TextContentAnchorType_AT_PAGE == eAnchor )
-            {
-                if( !pPageShapeIdxs )
-                    pPageShapeIdxs = new SvLongs;
-                pPageShapeIdxs->Insert( i, pPageShapeIdxs->Count() );
-            }
-            else
-            {
-                if( !pFrameShapeIdxs )
-                    pFrameShapeIdxs = new SvLongs;
-                pFrameShapeIdxs->Insert( i, pFrameShapeIdxs->Count() );
-            }
-        }
-    }
-}
-
 void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
                                                sal_Bool bIsProgress )
 {
-    if( pPageTextFrameIdxs )
-    {
-        for( sal_uInt16 i = 0; i < pPageTextFrameIdxs->Count(); i++ )
-        {
-            Reference < XTextContent > xTxtCntnt( xTextFrames->getByIndex( (*pPageTextFrameIdxs)[i] ), UNO_QUERY );
-            exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, sal_True );
-        }
-    }
-    if( pPageGraphicIdxs )
-    {
-        for( sal_uInt16 i = 0; i < pPageGraphicIdxs->Count(); i++ )
-        {
-            Reference < XTextContent > xTxtCntnt(xGraphics->getByIndex( (*pPageGraphicIdxs)[i] ), uno::UNO_QUERY);
-            exportTextGraphic( xTxtCntnt, bAutoStyles );
-        }
-    }
-    if( pPageEmbeddedIdxs )
-    {
-        for( sal_uInt16 i = 0; i < pPageEmbeddedIdxs->Count(); i++ )
-        {
-            Reference < XTextContent > xTxtCntnt(xEmbeddeds->getByIndex( (*pPageEmbeddedIdxs)[i] ), uno::UNO_QUERY);
-            exportTextEmbedded( xTxtCntnt, bAutoStyles );
-        }
-    }
-    if( pPageShapeIdxs )
-    {
-        for( sal_uInt16 i = 0; i < pPageShapeIdxs->Count(); i++ )
-        {
-            Reference < XTextContent > xTxtCntnt( xShapes->getByIndex( (*pPageShapeIdxs)[i] ), UNO_QUERY );
-            exportShape( xTxtCntnt, bAutoStyles );
-        }
-    }
-}
-
-sal_Bool lcl_txtpara_isFrameAnchor(
-        const Reference < XPropertySet > rPropSet,
-        const Reference < XTextFrame >& rParentTxtFrame )
-{
-    Reference < XTextFrame > xAnchorTxtFrame(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame") ) ), uno::UNO_QUERY);
-
-    return xAnchorTxtFrame == rParentTxtFrame;
+    const TextContentSet* const pTexts = pBoundFrameSets->GetTexts()->GetPageBoundContents();
+    const TextContentSet* const pGraphics = pBoundFrameSets->GetGraphics()->GetPageBoundContents();
+    const TextContentSet* const pEmbeddeds = pBoundFrameSets->GetEmbeddeds()->GetPageBoundContents();
+    const TextContentSet* const pShapes = pBoundFrameSets->GetShapes()->GetPageBoundContents();
+    for(TextContentSet::const_iterator_t it = pTexts->getBegin();
+        it != pTexts->getEnd();
+        ++it)
+        exportTextFrame(*it, bAutoStyles, bIsProgress, sal_True);
+    for(TextContentSet::const_iterator_t it = pGraphics->getBegin();
+        it != pGraphics->getEnd();
+        ++it)
+        exportTextGraphic(*it, bAutoStyles);
+    for(TextContentSet::const_iterator_t it = pEmbeddeds->getBegin();
+        it != pEmbeddeds->getEnd();
+        ++it)
+        exportTextEmbedded(*it, bAutoStyles);
+    for(TextContentSet::const_iterator_t it = pShapes->getBegin();
+        it != pShapes->getEnd();
+        ++it)
+        exportShape(*it, bAutoStyles);
 }
 
 void XMLTextParagraphExport::exportFrameFrames(
@@ -1383,97 +1366,30 @@ void XMLTextParagraphExport::exportFrameFrames(
         sal_Bool bIsProgress,
         const Reference < XTextFrame > *pParentTxtFrame )
 {
-    if( pFrameTextFrameIdxs && pFrameTextFrameIdxs->Count() )
-    {
-        sal_uInt16 i = 0;
-        while( i < pFrameTextFrameIdxs->Count() )
-        {
-            Reference < XPropertySet > xPropSet( xTextFrames->getByIndex( (*pFrameTextFrameIdxs)[i] ), UNO_QUERY );
-            if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
-            {
-                if( !bAutoStyles )
-                    pFrameTextFrameIdxs->Remove( i );
-                sal_uInt16 nOldCount = pFrameTextFrameIdxs->Count();
-                Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
-                exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, sal_True );
-                if( bAutoStyles )
-                    i++;
-                else if( pFrameTextFrameIdxs->Count() != nOldCount )
-                    i = 0;
-            }
-            else
-                i++;
-        }
-    }
-    if( pFrameGraphicIdxs && pFrameGraphicIdxs->Count() )
-    {
-        Any aAny;
-        sal_uInt16 i = 0;
-        while( i < pFrameGraphicIdxs->Count() )
-        {
-            Reference < XPropertySet > xPropSet( xGraphics->getByIndex( (*pFrameGraphicIdxs)[i] ), UNO_QUERY );
-            if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
-            {
-                if( !bAutoStyles )
-                    pFrameGraphicIdxs->Remove( i );
-                sal_uInt16 nOldCount = pFrameGraphicIdxs->Count();
-                Reference < XTextContent > xTxtCntnt(xPropSet, uno::UNO_QUERY);
-                exportTextGraphic( xTxtCntnt, bAutoStyles );
-                if( bAutoStyles )
-                    i++;
-                else if( pFrameGraphicIdxs->Count() != nOldCount )
-                    i = 0;
-            }
-            else
-                i++;
-        }
-    }
-    if( pFrameEmbeddedIdxs && pFrameEmbeddedIdxs->Count() )
-    {
-        Any aAny;
-        sal_uInt16 i = 0;
-        while( i < pFrameEmbeddedIdxs->Count() )
-        {
-            Reference < XPropertySet > xPropSet( xEmbeddeds->getByIndex( (*pFrameEmbeddedIdxs)[i] ), UNO_QUERY );
-            if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
-            {
-                if( !bAutoStyles )
-                    pFrameEmbeddedIdxs->Remove( i );
-                sal_uInt16 nOldCount = pFrameEmbeddedIdxs->Count();
-                Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
-                exportTextEmbedded( xTxtCntnt, bAutoStyles );
-                if( bAutoStyles )
-                    i++;
-                else if( pFrameEmbeddedIdxs->Count() != nOldCount )
-                    i = 0;
-            }
-            else
-                i++;
-        }
-    }
-    if( pFrameShapeIdxs && pFrameShapeIdxs->Count() )
-    {
-        Any aAny;
-        sal_uInt16 i = 0;
-        while( i < pFrameShapeIdxs->Count() )
-        {
-            Reference < XPropertySet > xPropSet( xShapes->getByIndex( (*pFrameShapeIdxs)[i] ), UNO_QUERY );
-            if( lcl_txtpara_isFrameAnchor( xPropSet, *pParentTxtFrame ) )
-            {
-                if( !bAutoStyles )
-                    pFrameShapeIdxs->Remove( i );
-                sal_uInt16 nOldCount = pFrameShapeIdxs->Count();
-                Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
-                exportShape( xTxtCntnt, bAutoStyles );
-                if( bAutoStyles )
-                    i++;
-                else if( pFrameShapeIdxs->Count() != nOldCount )
-                    i = 0;
-            }
-            else
-                i++;
-        }
-    }
+    const TextContentSet* const pTexts = pBoundFrameSets->GetTexts()->GetFrameBoundContents(*pParentTxtFrame);
+    if(pTexts)
+        for(TextContentSet::const_iterator_t it = pTexts->getBegin();
+            it != pTexts->getEnd();
+            ++it)
+            exportTextFrame(*it, bAutoStyles, bIsProgress, sal_True);
+    const TextContentSet* const pGraphics = pBoundFrameSets->GetGraphics()->GetFrameBoundContents(*pParentTxtFrame);
+    if(pGraphics)
+        for(TextContentSet::const_iterator_t it = pGraphics->getBegin();
+            it != pGraphics->getEnd();
+            ++it)
+            exportTextGraphic(*it, bAutoStyles);
+    const TextContentSet* const pEmbeddeds = pBoundFrameSets->GetEmbeddeds()->GetFrameBoundContents(*pParentTxtFrame);
+    if(pEmbeddeds)
+        for(TextContentSet::const_iterator_t it = pEmbeddeds->getBegin();
+            it != pEmbeddeds->getEnd();
+            ++it)
+            exportTextEmbedded(*it, bAutoStyles);
+    const TextContentSet* const pShapes = pBoundFrameSets->GetShapes()->GetFrameBoundContents(*pParentTxtFrame);
+    if(pShapes)
+        for(TextContentSet::const_iterator_t it = pShapes->getBegin();
+            it != pShapes->getEnd();
+            ++it)
+            exportShape(*it, bAutoStyles);
 }
 
 // bookmarks, reference marks (and TOC marks) are the same except for the
@@ -1562,62 +1478,50 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
     }
 
     // Export text frames:
-    sal_Int32 nCount = 0;
-    if ( xTextFrames.is() )
-    {
-        nCount = xTextFrames->getCount();
-        for( sal_Int32 i = 0; i < nCount; ++i )
+    Reference<XEnumeration> xTextFramesEnum = pBoundFrameSets->GetTexts()->createEnumeration();
+    if(xTextFramesEnum.is())
+        while(xTextFramesEnum->hasMoreElements())
         {
-            Any aAny = xTextFrames->getByIndex( i );
-            Reference < XTextContent > xTxtCntnt( aAny, UNO_QUERY );
-            if ( xTxtCntnt.is() )
-                exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, bExportContent, 0 );
+            Reference<XTextContent> xTxtCntnt(xTextFramesEnum->nextElement(), UNO_QUERY);
+            if(xTxtCntnt.is())
+                exportTextFrame(xTxtCntnt, bAutoStyles, bIsProgress, bExportContent, 0);
         }
-    }
 
     // Export graphic objects:
-    if ( xGraphics.is() )
-    {
-        nCount = xGraphics->getCount();
-        for( sal_Int32 i = 0; i < nCount; ++i )
+    Reference<XEnumeration> xGraphicsEnum = pBoundFrameSets->GetGraphics()->createEnumeration();
+    if(xGraphicsEnum.is())
+        while(xGraphicsEnum->hasMoreElements())
         {
-            Any aAny = xGraphics->getByIndex( i );
-            Reference < XTextContent > xTxtCntnt( aAny, UNO_QUERY );
-            if ( xTxtCntnt.is() )
-                exportTextGraphic( xTxtCntnt, sal_True, 0 );
+            Reference<XTextContent> xTxtCntnt(xGraphicsEnum->nextElement(), UNO_QUERY);
+            if(xTxtCntnt.is())
+                exportTextGraphic(xTxtCntnt, true, 0);
         }
-    }
 
     // Export embedded objects:
-    if ( xEmbeddeds.is() )
-    {
-        nCount = xEmbeddeds->getCount();
-        for( sal_Int32 i = 0; i < nCount; ++i )
+    Reference<XEnumeration> xEmbeddedsEnum = pBoundFrameSets->GetEmbeddeds()->createEnumeration();
+    if(xEmbeddedsEnum.is())
+        while(xEmbeddedsEnum->hasMoreElements())
         {
-            Any aAny = xEmbeddeds->getByIndex( i );
-            Reference < XTextContent > xTxtCntnt( aAny, UNO_QUERY );
-            if ( xTxtCntnt.is() )
-                exportTextEmbedded( xTxtCntnt, sal_True, 0 );
+            Reference<XTextContent> xTxtCntnt(xEmbeddedsEnum->nextElement(), UNO_QUERY);
+            if(xTxtCntnt.is())
+                exportTextEmbedded(xTxtCntnt, true, 0);
         }
-    }
 
     // Export shapes:
-    if ( xShapes.is() )
-    {
-        nCount = xShapes->getCount();
-        for( sal_Int32 i = 0; i < nCount; ++i )
+    Reference<XEnumeration> xShapesEnum = pBoundFrameSets->GetShapes()->createEnumeration();
+    if(xShapesEnum.is())
+        while(xShapesEnum->hasMoreElements())
         {
-            Any aAny( xShapes->getByIndex( i ) );
-            Reference < XTextContent > xTxtCntnt( aAny, UNO_QUERY );
-            if ( xTxtCntnt.is() )
+            Reference<XTextContent> xTxtCntnt(xShapesEnum->nextElement(), UNO_QUERY);
+            if(xTxtCntnt.is())
             {
-                Reference<XServiceInfo> xServiceInfo( xTxtCntnt, UNO_QUERY );
-                if( xServiceInfo->supportsService( sShapeService ) )
-                       exportShape( xTxtCntnt, sal_True, 0 );
+                Reference<XServiceInfo> xServiceInfo(xTxtCntnt, UNO_QUERY);
+                if( xServiceInfo->supportsService(sShapeService))
+                    exportShape(xTxtCntnt, true, 0);
             }
         }
-    }
 
+    sal_Int32 nCount;
     // AutoStyles for sections
     Reference< XTextSectionsSupplier > xSectionsSupp( GetExport().GetModel(), UNO_QUERY );
     if ( xSectionsSupp.is() )
@@ -2739,7 +2643,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                 {
                     Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
                     Reference < XText > xTxt(xTxtFrame->getText());
-                    collectFramesBoundToFrameAutoStyles( xTxtFrame, bIsProgress );
+                    exportFrameFrames( sal_True, bIsProgress, &xTxtFrame );
                     exportText( xTxt, bAutoStyles, bIsProgress, sal_True );
                 }
             }
@@ -3745,8 +3649,10 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
     }
     DBG_ASSERT( pSectionExport != NULL, "We need the section export." );
 
-    sal_Int32 nShapes = xShapes->getCount();
-    for( sal_Int32 i = 0; i < nShapes; i++ )
+    Reference<XEnumeration> xShapesEnum = pBoundFrameSets->GetShapes()->createEnumeration();
+    if(!xShapesEnum.is())
+        return;
+    while( xShapesEnum->hasMoreElements() )
     {
         // now we need to check
         // 1) if this is a control shape, and
@@ -3754,7 +3660,7 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
         // if both answers are 'yes', notify the form layer export
 
         // we join accessing the shape and testing for control
-        Reference<XControlShape> xControlShape(xShapes->getByIndex( i ), uno::UNO_QUERY);
+        Reference<XControlShape> xControlShape(xShapesEnum->nextElement(), UNO_QUERY);
         if( xControlShape.is() )
         {
             //            Reference<XPropertySet> xPropSet( xControlShape, UNO_QUERY );
@@ -3810,7 +3716,7 @@ void XMLTextParagraphExport::PopTextListsHelper()
     delete mpTextListsHelper;
     mpTextListsHelper = 0;
     maTextListsHelperStack.pop_back();
-    if ( maTextListsHelperStack.size() > 0 )
+    if ( !maTextListsHelperStack.empty() )
     {
         mpTextListsHelper = maTextListsHelperStack.back();
     }

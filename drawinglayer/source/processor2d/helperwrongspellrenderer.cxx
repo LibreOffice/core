@@ -81,13 +81,17 @@ namespace drawinglayer
                 nWaveStyle = WAVE_SMALL;
             }
 
+            // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
+            // e.g. when used with mask/transparence buffer device
+            const Point aOrigin(rOutputDevice.GetMapMode().GetOrigin());
+
             const basegfx::BColor aProcessedColor(rBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
             const bool bMapModeEnabledState(rOutputDevice.IsMapModeEnabled());
 
             rOutputDevice.EnableMapMode(false);
             rOutputDevice.SetLineColor(Color(aProcessedColor));
             rOutputDevice.SetFillColor();
-            rOutputDevice.DrawWaveLine(aVclStart, aVclStop, nWaveStyle);
+            rOutputDevice.DrawWaveLine(aOrigin + aVclStart, aOrigin + aVclStop, nWaveStyle);
             rOutputDevice.EnableMapMode(bMapModeEnabledState);
         }
 

@@ -243,7 +243,9 @@ namespace configmgr
 
             bool isValidValueNode(ValueRef const & value);
 
+#if OSL_DEBUG_LEVEL > 0
             bool isValidAnyNode(AnyNodeRef const & node);
+#endif
 
             /// checks whether the node has any element nodes (of its own)
             bool hasElements(NodeRef const & node);

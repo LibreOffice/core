@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabdlg.hxx,v $
- * $Revision: 1.4.104.1 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +34,17 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <vcl/tabdlg.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
+
+#if ENABLE_LAYOUT
+#include <layout/layout.hxx>
+namespace layout { class SfxTabDialog; class SfxTabDialogController; }
+#endif /* ENABLE_LAYOUT */
 
 class SfxPoolItem;
 class SfxTabDialog;
@@ -49,16 +52,27 @@ class SfxViewFrame;
 class SfxTabPage;
 class SfxBindings;
 
-// typedefs --------------------------------------------------------------
+#ifndef ENABLE_LAYOUT_SFX_TABDIALOG
+#define ENABLE_LAYOUT_SFX_TABDIALOG 0
+#define NAMESPACE_LAYOUT_SFX_TABDIALOG
+#define END_NAMESPACE_LAYOUT_SFX_TABDIALOG
+#define LAYOUT_NS_SFX_TABDIALOG
+#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG*/
 
 typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
 typedef USHORT*     (*GetTabPageRanges)(); // liefert internationale Which-Wert
-
-struct TabDlg_Impl;
 struct TabPageImpl;
 class SfxUs_Impl;
 
-// class SfxTabDialog ----------------------------------------------------
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+#include <layout/layout-pre.hxx>
+#undef SfxTabDialog
+#undef SfxTabPage
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
+
+NAMESPACE_LAYOUT_SFX_TABDIALOG
+
+struct TabDlg_Impl;
 
 #define ID_TABCONTROL   1
 #define RET_USER        100
@@ -128,7 +142,7 @@ protected:
         handles the item sets to copy.
         @return TRUE if it is allowed to leave the current page, FALSE otherwise
     */
-    BOOL            PrepareLeaveCurrentPage();
+    bool PrepareLeaveCurrentPage();
 
 public:
     SfxTabDialog( Window* pParent, const ResId &rResId, USHORT nSetId, SfxBindings& rBindings,
@@ -181,7 +195,7 @@ public:
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
     const SfxItemSet*   GetOutputItemSet( USHORT nId ) const;
     int                 FillOutputItemSet();
-    BOOL            IsFormat() const { return bFmt; }
+    BOOL IsFormat() const { return bFmt; }
 
     const OKButton&     GetOKButton() const { return aOKBtn; }
     OKButton&           GetOKButton() { return aOKBtn; }
@@ -203,7 +217,11 @@ public:
     void                StartExecuteModal( const Link& rEndDialogHdl );
     void                Start( BOOL bShow = TRUE );
 
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
+#else /* ENABLE_LAYOUT_SFX_TABDIALOG */
+    SfxItemSet* GetExampleSet() const { return 0; }
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
     SfxViewFrame*       GetViewFrame() const { return pFrame; }
 
     void                EnableApplyButton(BOOL bEnable = TRUE);
@@ -217,13 +235,22 @@ public:
 //#endif
 };
 
-// class SfxTabPage ------------------------------------------------------
+END_NAMESPACE_LAYOUT_SFX_TABDIALOG
+
+#if ENABLE_LAYOUT_SFX_TABDIALOG
+#include <layout/layout-post.hxx>
+#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
+
+#if !ENABLE_LAYOUT_SFX_TABDIALOG
 
 namespace sfx { class ItemConnectionBase; }
 
 class SFX2_DLLPUBLIC SfxTabPage: public TabPage
 {
 friend class SfxTabDialog;
+    #if ENABLE_LAYOUT
+     friend class layout::SfxTabDialog;
+    #endif
 
 private:
     const SfxItemSet*   pSet;
@@ -287,6 +314,8 @@ public:
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrame();
 };
+
+#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
 
 #endif
 

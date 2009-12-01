@@ -29,11 +29,7 @@
  ************************************************************************/
 package com.sun.star.script.framework.io;
 import java.io.*;
-import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
-import com.sun.star.io.XStream;
-import com.sun.star.util.XModifiable;
-import com.sun.star.script.framework.log.*;
 
 
 public class XOutputStreamWrapper extends OutputStream {

@@ -41,11 +41,11 @@
 #include <basic/sbdef.hxx>
 #include <basic/sberrors.hxx>
 
-class SbModule;                     // fertiges Modul
-class SbiInstance;                  // Laufzeit-Instanz
-class SbiRuntime;                   // aktuell laufende Prozedur
-class SbiImage;                     // compiliertes Image
-class BasicLibInfo;                 // Infoblock fuer Basic-Manager
+class SbModule;                     // completed module
+class SbiInstance;                  // runtime instance
+class SbiRuntime;                   // currently running procedure
+class SbiImage;                     // compiled image
+class BasicLibInfo;                 // info block for basic manager
 class SbiBreakpoints;
 class SbTextPortions;
 class SbMethod;
@@ -56,23 +56,24 @@ class StarBASICImpl;
 class StarBASIC : public SbxObject
 {
     friend class SbiScanner;
-    friend class SbiExpression;         // Zugriff auf RTL
+    friend class SbiExpression; // Access to RTL
     friend class SbiInstance;
     friend class SbiRuntime;
 
     StarBASICImpl*  mpStarBASICImpl;
 
-    SbxArrayRef     pModules;           // Liste aller Module
+    SbxArrayRef     pModules;               // List of all modules
     SbxObjectRef    pRtl;               // Runtime Library
-    SbxArrayRef     xUnoListeners;      // Listener handled by CreateUnoListener
-                                        // Handler-Support:
-    Link            aErrorHdl;          // Fehlerbehandlung
-    Link            aBreakHdl;          // Breakpoint-Handler
-    BOOL            bNoRtl;             // TRUE: RTL nicht durchsuchen
-    BOOL            bBreak;             // TRUE: Break, sonst Step
+    SbxArrayRef     xUnoListeners;          // Listener handled by CreateUnoListener
+
+   // Handler-Support:
+    Link            aErrorHdl;              // Error handler
+    Link            aBreakHdl;              // Breakpoint handler
+    BOOL            bNoRtl;                 // if TRUE: do not search RTL
+    BOOL            bBreak;                 // if TRUE: Break, otherwise Step
     BOOL            bDocBasic;
-    BasicLibInfo*   pLibInfo;           // Infoblock fuer Basic-Manager
-    SbLanguageMode  eLanguageMode;      // LanguageMode des Basic-Objekts
+    BasicLibInfo*   pLibInfo;           // Info block for basic manager
+    SbLanguageMode  eLanguageMode;      // LanguageMode of the basic object
 protected:
     BOOL            CError( SbError, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
 private:
@@ -96,8 +97,8 @@ public:
 
     StarBASIC( StarBASIC* pParent = NULL, BOOL bIsDocBasic = FALSE );
 
-    // #51727 SetModified ueberladen, damit der Modified-
-    // Zustand nicht an den Parent weitergegeben wird.
+    // #51727 SetModified overridden so that the Modfied-State is
+        // not delivered to Parent.
     virtual void SetModified( BOOL );
 
     void* operator  new( size_t );
@@ -122,7 +123,7 @@ public:
     static void     FatalError( SbError );
     static BOOL     IsRunning();
     static SbError  GetErrBasic();
-    // #66536 Zusatz-Message fuer RTL-Funktion Error zugreifbar machen
+    // #66536 make additional message accessible by RTL function Error
     static String   GetErrorMsg();
     static xub_StrLen GetErl();
     // Highlighting
@@ -134,24 +135,24 @@ public:
     SbxArray*       GetModules() { return pModules; }
     SbxObject*      GetRtl()     { return pRtl;     }
     SbModule*       FindModule( const String& );
-    // Init-Code aller Module ausfuehren (auch in inserteten Doc-Basics)
+    // Run init code of all modules (including the inserted Doc-Basics)
     void            InitAllModules( StarBASIC* pBasicNotToInit = NULL );
     void            DeInitAllModules( void );
     void            ClearAllModuleVars( void );
     void            ActivateObject( const String*, BOOL );
     BOOL            LoadOldModules( SvStream& );
 
-    // #43011 Fuer das TestTool, um globale Variablen loeschen zu koennen
+    // #43011 For TestTool; deletes global vars
     void            ClearGlobalVars( void );
 
-    // Abfragen fuer den Error-Handler und den Break-Handler:
+    // Calls for error and break handler
     static USHORT   GetLine();
     static USHORT   GetCol1();
     static USHORT   GetCol2();
     static void     SetErrorData( SbError nCode, USHORT nLine,
                                   USHORT nCol1, USHORT nCol2 );
 
-    // Spezifisch fuer den Error-Handler:
+    // Specific to error handler
     static void     MakeErrorText( SbError, const String& aMsg );
     static const    String& GetErrorText();
     static SbError  GetErrorCode();
@@ -160,12 +161,12 @@ public:
     static SbError  GetSfxFromVBError( USHORT nError );
     static void     SetGlobalLanguageMode( SbLanguageMode eLangMode );
     static SbLanguageMode GetGlobalLanguageMode();
-    // Lokale Einstellung
+    // Local settings
     void SetLanguageMode( SbLanguageMode eLangMode )
         { eLanguageMode = eLangMode; }
     SbLanguageMode GetLanguageMode();
 
-    // Spezifisch fuer den Break-Handler:
+    // Specific for break handler
     BOOL            IsBreak() const             { return bBreak; }
 
     static Link     GetGlobalErrorHdl();
@@ -186,7 +187,7 @@ public:
     static SbMethod* GetActiveMethod( USHORT nLevel = 0 );
     static SbModule* GetActiveModule();
 
-    // #60175 TRUE: SFX-Resource wird bei Basic-Fehlern nicht angezogen
+    // #60175 TRUE: SFX-Resource is not displayed on basic errors
     static void StaticSuppressSfxResource( BOOL bSuppress );
 
     // #91147 TRUE: Reschedule is enabled (default>, FALSE: No reschedule

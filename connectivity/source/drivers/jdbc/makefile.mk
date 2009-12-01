@@ -60,7 +60,6 @@ SLOFILES=\
         $(SLO)$/ConnectionLog.obj                   \
         $(SLO)$/DatabaseMetaData.obj				\
         $(SLO)$/Date.obj							\
-        $(SLO)$/DriverManager.obj					\
         $(SLO)$/DriverPropertyInfo.obj				\
         $(SLO)$/Exception.obj						\
         $(SLO)$/InputStream.obj						\

@@ -67,20 +67,27 @@ void PluginWindow_Impl::Resize()
 
 #define PROPERTY_UNBOUND 0
 
-SfxItemPropertyMap aPluginPropertyMap_Impl[] =
+#define WID_COMMANDS    1
+#define WID_MIMETYPE    2
+#define WID_URL         3
+const SfxItemPropertyMapEntry* lcl_GetPluginPropertyMap_Impl()
 {
-    { "PluginCommands", 14, 1, &::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), PROPERTY_UNBOUND, 0},
-    { "PluginMimeType", 14, 2, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "PluginURL",       9, 3, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    {0,0,0,0,0,0}
-};
+    static SfxItemPropertyMapEntry aPluginPropertyMap_Impl[] =
+    {
+        { MAP_CHAR_LEN("PluginCommands"), WID_COMMANDS, &::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), PROPERTY_UNBOUND, 0},
+        { MAP_CHAR_LEN("PluginMimeType"), WID_MIMETYPE, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("PluginURL"),      WID_URL     , &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        {0,0,0,0,0,0}
+    };
+    return aPluginPropertyMap_Impl;
+}
 
 SFX_IMPL_XSERVICEINFO( PluginObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.PluginObject" )
 SFX_IMPL_SINGLEFACTORY( PluginObject );
 
 PluginObject::PluginObject( const uno::Reference < lang::XMultiServiceFactory >& rFact )
     : mxFact( rFact )
-    , maPropSet( aPluginPropertyMap_Impl )
+    , maPropMap( lcl_GetPluginPropertyMap_Impl() )
 {
 }
 
@@ -194,7 +201,8 @@ void SAL_CALL PluginObject::disposing( const com::sun::star::lang::EventObject& 
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PluginObject::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return maPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( &maPropMap );
+    return xInfo;
 }
 
 void SAL_CALL PluginObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const uno::Any& aAny)

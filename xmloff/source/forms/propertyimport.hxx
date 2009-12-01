@@ -36,6 +36,7 @@
 #include <vos/ref.hxx>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include "layerimport.hxx"
 
 namespace com { namespace sun { namespace star { namespace util {
     struct Time;
@@ -64,7 +65,7 @@ namespace xmloff
         static ::com::sun::star::uno::Type xmlTypeToUnoType( const ::rtl::OUString& _rType );
     };
 
-    class IFormsImportContext;
+    class OFormLayerXMLImport_Impl;
     //=====================================================================
     //= OPropertyImport
     //=====================================================================
@@ -87,7 +88,7 @@ namespace xmloff
         DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringSet );
         StringSet                   m_aEncounteredAttributes;
 
-        IFormsImportContext&        m_rContext;
+        OFormLayerXMLImport_Impl&       m_rContext;
 
         sal_Bool                    m_bTrackAttributes;
 
@@ -96,7 +97,7 @@ namespace xmloff
         // style properties) can be done in our own EndElement instead of letting derived classes do this.
 
     public:
-        OPropertyImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName);
+        OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName);
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,

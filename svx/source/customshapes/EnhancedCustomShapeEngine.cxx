@@ -188,8 +188,13 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
 
             // get the text bounds and set at text object
             Rectangle aTextBounds = pCustoObj->GetSnapRect();
-            if( pCustoObj->GetTextBounds( aTextBounds ) )
-                pTextObj->SetSnapRect( aTextBounds );
+            SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
+            if ( pSdrObjCustomShape )
+            {
+                EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
+                aTextBounds = aCustomShape2d.GetTextRect();
+            }
+            pTextObj->SetSnapRect( aTextBounds );
 
             // if rotated, copy GeoStat, too.
             const GeoStat& rSourceGeo = pCustoObj->GetGeoStat();

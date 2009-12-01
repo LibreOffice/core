@@ -47,7 +47,7 @@ namespace connectivity
                     -> 'HEJ'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Upper : public OUnaryOperator
+        class OOp_Upper : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -61,7 +61,7 @@ namespace connectivity
                     -> 'quadratically'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Lower : public OUnaryOperator
+        class OOp_Lower : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -78,7 +78,7 @@ namespace connectivity
                 -> 100
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Ascii : public OUnaryOperator
+        class OOp_Ascii : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -96,7 +96,7 @@ namespace connectivity
                     -> 4
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_CharLength : public OUnaryOperator
+        class OOp_CharLength : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -111,7 +111,7 @@ namespace connectivity
                 -> 'MMM'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Char : public ONthOperator
+        class OOp_Char : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -128,7 +128,7 @@ namespace connectivity
                 -> '14.3'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Concat : public ONthOperator
+        class OOp_Concat : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -149,7 +149,7 @@ namespace connectivity
                 -> 7
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Locate : public ONthOperator
+        class OOp_Locate : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -171,7 +171,7 @@ namespace connectivity
                     -> 'ratica'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_SubString : public ONthOperator
+        class OOp_SubString : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -184,7 +184,7 @@ namespace connectivity
                 -> 'barbar'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_LTrim : public OUnaryOperator
+        class OOp_LTrim : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -197,7 +197,7 @@ namespace connectivity
                 -> 'barbar'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_RTrim : public OUnaryOperator
+        class OOp_RTrim : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -210,7 +210,7 @@ namespace connectivity
                 -> '      '
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Space : public OUnaryOperator
+        class OOp_Space : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -223,7 +223,7 @@ namespace connectivity
                 -> 'WwWwWw.OOo.com'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Replace : public ONthOperator
+        class OOp_Replace : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -236,7 +236,7 @@ namespace connectivity
                 -> 'OOoOOoOOo'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Repeat : public OBinaryOperator
+        class OOp_Repeat : public OBinaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;
@@ -249,7 +249,7 @@ namespace connectivity
                 -> 'QuWhattic'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Insert : public ONthOperator
+        class OOp_Insert : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -262,7 +262,7 @@ namespace connectivity
                 -> 'fooba'
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Left : public OBinaryOperator
+        class OOp_Left : public OBinaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;
@@ -274,7 +274,7 @@ namespace connectivity
             > SELECT RIGHT('foobarbar', 4);
                 -> 'rbar'
         */
-        class OOO_DLLPUBLIC_FILE OOp_Right : public OBinaryOperator
+        class OOp_Right : public OBinaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;

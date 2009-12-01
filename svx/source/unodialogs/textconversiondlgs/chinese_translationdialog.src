@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "chinese_translationdialog.hrc"
+#include "chinese_direction.hrc"
 
 #ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>

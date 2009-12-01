@@ -32,6 +32,7 @@
 #define _SVX_XFLBMSLI_HXX
 
 #include <svtools/eitem.hxx>
+#include "svx/svxdllapi.h"
 
 /*************************************************************************
 |*
@@ -39,7 +40,7 @@
 |*
 \************************************************************************/
 
-class XFillBmpSizeLogItem : public SfxBoolItem
+class SVX_DLLPUBLIC XFillBmpSizeLogItem : public SfxBoolItem
 {
 public:
                             TYPEINFO();

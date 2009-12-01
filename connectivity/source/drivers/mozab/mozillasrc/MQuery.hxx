@@ -156,7 +156,7 @@ namespace connectivity
         };
 
 
-        class MQuery : public ErrorResourceAccess
+        class MQuery
         {
             /*
              * A query resultset with a maximum limit of
@@ -211,9 +211,11 @@ namespace connectivity
             sal_Bool                        m_bQuerySubDirs;
             MQueryExpression                m_aExpr;
             const OColumnAlias&             m_rColumnAlias;
-            mutable sal_Bool                m_aErrorOccurred;
-            ::com::sun::star::mozilla::MozillaProductType m_Product;
-            ::rtl::OUString                               m_Profile;
+            ::com::sun::star::mozilla::MozillaProductType
+                                            m_Product;
+            ::rtl::OUString                 m_Profile;
+            ErrorDescriptor                 m_aError;
+
             void construct();
         protected:
             ::osl::Mutex                    m_aMutex;
@@ -270,8 +272,8 @@ namespace connectivity
             sal_Int32                       getRowStates(sal_Int32 nDBRow);
             sal_Bool                        setRowStates(sal_Int32 nDBRow,sal_Int32 aState);
 
-            sal_Bool                        errorOccurred() const
-                                            { return m_aErrorOccurred; };
+            bool                            hadError() const { return m_aError.is(); }
+            inline const ErrorDescriptor&   getError() const { return m_aError; }
 
         public:
 //          MQuery();

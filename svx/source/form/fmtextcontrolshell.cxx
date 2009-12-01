@@ -115,7 +115,6 @@ namespace svx
         SID_ATTR_CHAR_CONTOUR,
         SID_ATTR_CHAR_STRIKEOUT,
         SID_ATTR_CHAR_UNDERLINE,
-        SID_ATTR_CHAR_OVERLINE,
         SID_ATTR_CHAR_FONTHEIGHT,
         SID_ATTR_CHAR_COLOR,
         SID_ATTR_CHAR_KERNING,
@@ -133,6 +132,7 @@ namespace svx
         SID_ATTR_LRSPACE,           /* 48 */
         SID_ATTR_ULSPACE,           /* 49 */
         SID_ATTR_CHAR_AUTOKERN,
+        SID_ATTR_CHAR_OVERLINE,
         SID_SET_SUPER_SCRIPT,
         SID_SET_SUB_SCRIPT,
         SID_CHAR_DLG,

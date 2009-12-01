@@ -40,7 +40,7 @@ class UniString;
 
 class SbxFactory
 {
-    BOOL bHandleLast;   // TRUE: Factory soll zuletzt gefragt werden, da teuer
+    BOOL bHandleLast;   // TRUE: Factory is asked at last because of its expensiveness
 public:
     SbxFactory( BOOL bLast=FALSE )  { bHandleLast = bLast; }
     BOOL IsHandleLast( void )       { return bHandleLast; }

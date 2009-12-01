@@ -249,24 +249,6 @@ bool CacheLoadingAccess::findPendingChangedModules( std::vector< rtl::OUString >
     return !_rPendingList.empty();
 }
 
-// -----------------------------------------------------------------------------
-void CacheLoadingAccess::clearData(std::vector< rtl::Reference<CacheLine> >& _rList) SAL_THROW(())
-{
-    CFG_TRACE_INFO("Tree Info: Removing all module trees for cleanup" );
-
-    ExtendedCacheData::ModuleList& rModules = this->m_aData.accessModuleList();
-
-    for(ExtendedCacheData::ModuleList::iterator it = rModules.begin();
-        it != rModules.end();
-        ++it)
-    {
-        if (it->second.is())
-            _rList.push_back(it->second);
-    }
-
-    rModules.clear();
-    m_aDeadModules.clear();
-}
 // -------------------------------------------------------------------------
 
 TimeStamp CacheLoadingAccess::collectDisposeList(std::vector< rtl::Reference<CacheLine> > & _rList, TimeStamp const & _aLimitTime, TimeInterval const & _aDelay)

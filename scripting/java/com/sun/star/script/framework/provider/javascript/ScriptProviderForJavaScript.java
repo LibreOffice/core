@@ -29,7 +29,6 @@
 ************************************************************************/
 package com.sun.star.script.framework.provider.javascript;
 
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -37,31 +36,14 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.frame.XModel;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.Any;
-import com.sun.star.beans.XPropertySet;
 
 import com.sun.star.document.XScriptInvocationContext;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.reflection.InvocationTargetException;
-import com.sun.star.script.CannotConvertException;
 
-import java.io.*;
-import java.util.Vector;
-import java.util.Map;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.sun.star.script.provider.XScriptProvider;
 import com.sun.star.script.provider.XScript;
-import com.sun.star.script.provider.XScriptContext;
 
-import com.sun.star.script.provider.ScriptErrorRaisedException;
 import com.sun.star.script.provider.ScriptExceptionRaisedException;
 import com.sun.star.script.provider.ScriptFrameworkErrorException;
 import com.sun.star.script.provider.ScriptFrameworkErrorType;
@@ -72,13 +54,11 @@ import com.sun.star.script.framework.provider.ClassLoaderFactory;
 import com.sun.star.script.framework.provider.ScriptProvider;
 import com.sun.star.script.framework.provider.ScriptEditor;
 import com.sun.star.script.framework.container.ScriptMetaData;
-import com.sun.star.script.framework.log.*;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.JavaScriptException;
-import org.mozilla.javascript.EcmaError;
 
 public class ScriptProviderForJavaScript
 {

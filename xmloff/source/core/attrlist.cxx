@@ -120,11 +120,7 @@ SvXMLAttributeList::SvXMLAttributeList( const uno::Reference<
 
 OUString SAL_CALL SvXMLAttributeList::getNameByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
-            < m_pImpl->vecAttribute.size() ) {
-        return m_pImpl->vecAttribute[i].sName;
-    }
-    return OUString();
+    return ( static_cast< SvXMLAttributeList_Impl::size_type >( i ) < m_pImpl->vecAttribute.size() ) ? m_pImpl->vecAttribute[i].sName : OUString();
 }
 
 
@@ -135,12 +131,7 @@ OUString SAL_CALL SvXMLAttributeList::getTypeByIndex(sal_Int16) throw( ::com::su
 
 OUString SAL_CALL  SvXMLAttributeList::getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
-            < m_pImpl->vecAttribute.size() ) {
-        return m_pImpl->vecAttribute[i].sValue;
-    }
-    return OUString();
-
+    return ( static_cast< SvXMLAttributeList_Impl::size_type >( i ) < m_pImpl->vecAttribute.size() ) ? m_pImpl->vecAttribute[i].sValue : OUString();
 }
 
 OUString SAL_CALL SvXMLAttributeList::getTypeByName( const OUString& ) throw( ::com::sun::star::uno::RuntimeException )

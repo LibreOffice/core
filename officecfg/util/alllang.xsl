@@ -101,7 +101,7 @@
 	</xsl:template>
 
 	<xsl:template match="value" mode="locale">
-		<xsl:if test="@xml:lang = $locale">
+		<xsl:if test="@xml:lang=$locale and not(@install:module)">
 			<xsl:copy>
 				<xsl:apply-templates select = "@*" mode="locale"/>
 				<xsl:value-of select="."/>
@@ -198,7 +198,7 @@
 		<xsl:param name = "context"/>
 		<xsl:param name = "component-schema"/>
 
-        <xsl:variable name="applicable-values" select="descendant::value[not (@xml:lang) or (@xml:lang=$fallback-locale)]"/>
+        <xsl:variable name="applicable-values" select="descendant::value[not (@xml:lang) or (@xml:lang=$fallback-locale) or (@install:module=$module)]"/>
         <xsl:variable name="substantive-nodes" select="descendant-or-self::*[(@oor:finalized='true') or (@oor:mandatory='true') or (@oor:op!='modify')]"/>
 
         <xsl:choose>
@@ -245,13 +245,13 @@
 					<xsl:apply-templates select = "value"/>
 				</xsl:copy>
 			</xsl:when>
-			<xsl:when test="value[not (@xml:lang)]">
+			<xsl:when test="value[not (@xml:lang) or @install:module]">
                 <xsl:if test="value[not(@install:module) or @install:module=$module]">
                     <!-- copy locale independent values only, if the values differ -->
                     <xsl:variable name="isRedundant">
                         <xsl:call-template name="isRedundant">
                             <xsl:with-param name="schemaval"  select="$context/value"/>
-                            <xsl:with-param name="dataval" select="value[not (@xml:lang) and (not(@install:module) or @install:module=$module)]"/>
+                            <xsl:with-param name="dataval" select="value[(not(@xml:lang) or @install:module) and (not(@install:module) or @install:module=$module)]"/>
                         </xsl:call-template>
                     </xsl:variable>
                     <xsl:if test="$isRedundant ='false'">
@@ -273,7 +273,7 @@
 
 	<xsl:template match="value">
 		<xsl:choose>
-            <xsl:when test="@xml:lang"/>
+            <xsl:when test="@xml:lang and not(@install:module)"/>
             <xsl:when test="$module and not(ancestor-or-self::*/@install:module=$module)"/>
             <xsl:when test="not($module) and ancestor-or-self::*/@install:module"/>
             <xsl:otherwise>
@@ -286,7 +286,7 @@
 	</xsl:template>
 
 	<xsl:template match="value" mode="fallback-locale">
-		<xsl:if test="@xml:lang = $fallback-locale">
+		<xsl:if test="@xml:lang=$fallback-locale and not(@install:module)">
             <xsl:copy>
                 <xsl:apply-templates select = "@*"/>
                 <xsl:value-of select="."/>

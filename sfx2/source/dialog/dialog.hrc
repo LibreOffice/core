@@ -61,51 +61,11 @@
 #define STR_DELETE_STYLE                ( RC_DIALOG_BEGIN + 18)
 #define STR_DELETE_STYLE_USED           ( RC_DIALOG_BEGIN + 20)
 
-#define BMP_COLLAPSED                   ( RC_DIALOG_BEGIN + 18)
-#define BMP_EXPANDED                    ( RC_DIALOG_BEGIN + 19)
-#define TP_CONFIG_ACCEL                 ( RC_DIALOG_BEGIN + 20)
-//#define TP_CONFIG_MENU                  ( RC_DIALOG_BEGIN + 21)
-//#define TP_CONFIG_STATBAR               ( RC_DIALOG_BEGIN + 22)
-//#define TP_CONFIG_OBJECTBAR             ( RC_DIALOG_BEGIN + 31)
-//#define TP_CONFIG_EVENT                 ( RC_DIALOG_BEGIN + 32)
-//#define DLG_CONFIG                      ( RC_DIALOG_BEGIN + 23)
-
-#define IBX_MNUCFG_ALREADY_INCLUDED     ( RC_DIALOG_BEGIN + 24)
-#define QBX_MNUCFG_UNDEFINED_FUNCTIONS  ( RC_DIALOG_BEGIN + 25)
-#define QBX_MNUCFG_POPUP_FUNCTIONS      ( RC_DIALOG_BEGIN + 26)
-
-#define STR_NEW                         ( RC_DIALOG_BEGIN + 27)
-#define STR_OPEN                        ( RC_DIALOG_BEGIN + 28)
-#define STR_SAVE                        ( RC_DIALOG_BEGIN + 29)
-#define STR_SAVEAS                      ( RC_DIALOG_BEGIN + 30)
-#define STR_PRINT                       ( RC_DIALOG_BEGIN + 32)
-#define STR_QUIT                        ( RC_DIALOG_BEGIN + 33)
-#define STR_CUT                         ( RC_DIALOG_BEGIN + 34)
-#define STR_COPY                        ( RC_DIALOG_BEGIN + 35)
-#define STR_PASTE                       ( RC_DIALOG_BEGIN + 36)
-#define STR_DELETE                      ( RC_DIALOG_BEGIN + 39)
-#define STR_FIND                        ( RC_DIALOG_BEGIN + 41)
-#define STR_FINDBACKWARD                ( RC_DIALOG_BEGIN + 42)
-#define STR_PROPERTIES                  ( RC_DIALOG_BEGIN + 43)
-#define STR_FRONT                       ( RC_DIALOG_BEGIN + 44)
-#define STR_BASICMACROS                 ( RC_DIALOG_BEGIN + 45)
-#define STR_MENU                        ( RC_DIALOG_BEGIN + 46)
-#define STR_DLG_MACROS                      ( RC_DIALOG_BEGIN + 47)
-
 #define LOGO_IMAGELIST                  ( RC_DIALOG_BEGIN + 45)
 #define MN_CONTEXT_TEMPLDLG             ( RC_DIALOG_BEGIN + 46)
 
 #define MSG_LAYOUT_NOT_LOADING          ( RC_DIALOG_BEGIN + 49)
 #define ACC_LAYOUT_NOT_LOADING          ( RC_DIALOG_BEGIN + 50)
-
-#define STR_LOADMENUCONFIG              ( RC_DIALOG_BEGIN + 53)
-#define STR_SAVEMENUCONFIG              ( RC_DIALOG_BEGIN + 54)
-
-#define STR_LOADACCELCONFIG             ( RC_DIALOG_BEGIN + 55)
-#define STR_SAVEACCELCONFIG             ( RC_DIALOG_BEGIN + 56)
-
-#define STR_LOADSTATBARCONFIG           ( RC_DIALOG_BEGIN + 57)
-#define STR_SAVESTATBARCONFIG           ( RC_DIALOG_BEGIN + 58)
 
 #define MSG_ERR_CANT_EDIT_OLD_FORMAT    ( RC_DIALOG_BEGIN + 60 )
 #define MSG_ERR_CANT_EDIT_OPEN_DOCS     ( RC_DIALOG_BEGIN + 61 )
@@ -120,8 +80,6 @@
 
 #define STR_INTERNET                    ( RC_DIALOG_BEGIN + 65 )
 #define RID_AUTOHIDE                    ( RC_DIALOG_BEGIN + 66 )
-
-#define RID_SFX_TP_MACROASSIGN          ( RC_DIALOG_BEGIN + 67 )
 
 #define DLG_ONLINE_REGISTER             ( RC_DIALOG_BEGIN + 68 )
 #define DLG_VERSIONS                    ( RC_DIALOG_BEGIN + 69 )
@@ -140,14 +98,6 @@
 
 #define RID_ERRBOX_MAIL_CONFIG          ( RC_DIALOG_BEGIN + 92 )
 
-#define STR_TOOLBAR_SEPARATOR           ( RC_DIALOG_BEGIN + 93 )
-#define STR_TOOLBAR_SPACE               ( RC_DIALOG_BEGIN + 94 )
-
-#define STR_BASICNAME                   ( RC_DIALOG_BEGIN + 96 )
-
-#define BMP_COLLAPSED_HC                ( RC_DIALOG_BEGIN + 97 )
-#define BMP_EXPANDED_HC                 ( RC_DIALOG_BEGIN + 98 )
-
 #define IMG_LST_STYLE_DESIGNER_HC       ( RC_DIALOG_BEGIN + 99 )
 
 // 100-106 in tbxcust.hrc
@@ -156,17 +106,6 @@
 
 #define RID_DLG_SEARCH                  ( RC_DIALOG_BEGIN + 109 )
 
-#define IMG_HARDDISK                    ( RC_DIALOG_BEGIN + 110 )
-#define IMG_HARDDISK_HC                 ( RC_DIALOG_BEGIN + 111 )
-#define STR_PRODMACROS                  ( RC_DIALOG_BEGIN + 112 )
-#define STR_MYMACROS                    ( RC_DIALOG_BEGIN + 113 )
-#define IMG_LIB                         ( RC_DIALOG_BEGIN + 114 )
-#define IMG_LIB_HC                      ( RC_DIALOG_BEGIN + 115 )
-#define IMG_MACRO                       ( RC_DIALOG_BEGIN + 116 )
-#define IMG_MACRO_HC                    ( RC_DIALOG_BEGIN + 117 )
-#define IMG_DOC                         ( RC_DIALOG_BEGIN + 118 )
-#define IMG_DOC_HC                      ( RC_DIALOG_BEGIN + 119 )
-#define STR_GROUP_STYLES                ( RC_DIALOG_BEGIN + 110 )
 #define STR_PDF_EXPORT_SEND             ( RC_DIALOG_BEGIN + 120 )
 #define STR_RECHECK_DOCUMENT            ( RC_DIALOG_BEGIN + 121 )
 #define IMG_INFO                        ( RC_DIALOG_BEGIN + 122 )

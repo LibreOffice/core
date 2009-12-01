@@ -2967,6 +2967,7 @@ namespace xmloff { namespace token {
         TOKEN( "percentage-data-style-name",      XML_PERCENTAGE_DATA_STYLE_NAME ),
         TOKEN( "value-and-percentage",            XML_VALUE_AND_PERCENTAGE ),
         TOKEN( "group-bars-per-axis",             XML_GROUP_BARS_PER_AXIS ),
+        TOKEN( "include-hidden-cells",            XML_INCLUDE_HIDDEN_CELLS ),
         TOKEN( "auto-position",                   XML_AUTOMATIC_POSITION ),
         TOKEN( "auto-size",                       XML_AUTOMATIC_SIZE ),
         TOKEN( "reverse-direction",               XML_REVERSE_DIRECTION ),
@@ -3072,6 +3073,11 @@ namespace xmloff { namespace token {
         TOKEN( "at-labels",             XML_AT_LABELS ),
         TOKEN( "at-axis",               XML_AT_AXIS ),
         TOKEN( "at-labels-and-axis",    XML_AT_LABELS_AND_AXIS ),
+
+        TOKEN( "mathvariant",           XML_MATHVARIANT ),
+        TOKEN( "mathsize",              XML_MATHSIZE ),
+        TOKEN( "mathweight",            XML_MATHWEIGHT ),
+        TOKEN( "mathcolor",             XML_MATHCOLOR ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

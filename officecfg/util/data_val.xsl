@@ -201,12 +201,10 @@
                 <xsl:call-template name="collectPath"/>
             </xsl:variable>
             <xsl:variable name = "module" select="@install:module"/>
+            <xsl:variable name = "lang" select="@xml:lang"/>
 
-            <xsl:if test="@oor:lang">
-                <xsl:message terminate="yes">ERROR: Value in property '<xsl:value-of select="$path"/>' has module and locale!</xsl:message>
-            </xsl:if>
-            <xsl:if test="following-sibling::value[@install:module=$module]">
-                <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has multiple values for module <xsl:value-of select="$module"/>!</xsl:message>
+            <xsl:if test="following-sibling::value[@install:module=$module and @xml:lang=$lang]">
+                <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has multiple values for module <xsl:value-of select="$module"/> and locale <xsl:value-of select="$lang"/>!</xsl:message>
             </xsl:if>
             <xsl:if test="../value[not(@install:module)]">
                 <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has values both with and without module. This is currently not supported. Please contact jb@openoffice.org, if you need this!</xsl:message>

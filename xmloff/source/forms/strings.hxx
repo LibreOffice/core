@@ -47,6 +47,7 @@ namespace xmloff
         const sal_Char* ascii;
         sal_Int32       length;
 
+        inline  operator const ConstAsciiString* () const { return this; }
         inline const ::rtl::OUString* operator& () const;
         inline  operator const ::rtl::OUString& () const { return *(&(*this)); }
         inline  operator const sal_Char* () const { return ascii; }

@@ -46,7 +46,7 @@ namespace connectivity
         class OSQLAnalyzer;
         typedef::std::vector<OCode*> OCodeList;
 
-        class OOO_DLLPUBLIC_FILE OPredicateCompiler : public ::vos::OReference
+        class OPredicateCompiler : public ::vos::OReference
         {
             friend class OPredicateInterpreter;
             friend class OSQLAnalyzer;
@@ -92,7 +92,7 @@ namespace connectivity
         };
 
 
-        class OOO_DLLPUBLIC_FILE OPredicateInterpreter :
+        class OPredicateInterpreter :
             public ::vos::OReference
         {
             OCodeStack          m_aStack;

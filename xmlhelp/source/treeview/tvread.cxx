@@ -55,6 +55,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
+#include <comphelper/locale.hxx>
 
 namespace treeview {
 
@@ -967,13 +968,11 @@ void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
 
 static rtl::OUString aSlash( rtl::OUString::createFromAscii( "/" ) );
 static rtl::OUString aHelpFilesBaseName( rtl::OUString::createFromAscii( "help" ) );
-static rtl::OUString aEnglishFallbackLang( rtl::OUString::createFromAscii( "en" ) );
 static rtl::OUString aHelpMediaType( rtl::OUString::createFromAscii( "application/vnd.sun.star.help" ) );
 
 ExtensionIteratorBase::ExtensionIteratorBase( const rtl::OUString& aLanguage )
         : m_eState( USER_EXTENSIONS )
         , m_aLanguage( aLanguage )
-        , m_aCorrectedLanguage( aLanguage )
 {
     init();
 }
@@ -1119,6 +1118,44 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     return xHelpPackage;
 }
 
+inline bool isLetter( sal_Unicode c )
+{
+    bool bLetter = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
+    return bLetter;
+}
+
+void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage )
+{
+    rv.clear();
+    rtl::OUString aExtensionPath = xPackage->getURL();
+    Sequence< rtl::OUString > aEntrySeq = m_xSFA->getFolderContents( aExtensionPath, true );
+
+    const rtl::OUString* pSeq = aEntrySeq.getConstArray();
+    sal_Int32 nCount = aEntrySeq.getLength();
+    for( sal_Int32 i = 0 ; i < nCount ; ++i )
+    {
+        rtl::OUString aEntry = pSeq[i];
+        if( m_xSFA->isFolder( aEntry ) )
+        {
+            sal_Int32 nLastSlash = aEntry.lastIndexOf( '/' );
+            if( nLastSlash != -1 )
+            {
+                rtl::OUString aPureEntry = aEntry.copy( nLastSlash + 1 );
+
+                // Check language sceme
+                int nLen = aPureEntry.getLength();
+                const sal_Unicode* pc = aPureEntry.getStr();
+                bool bStartCanBeLanguage = ( nLen >= 2 && isLetter( pc[0] ) && isLetter( pc[1] ) );
+                bool bIsLanguage = bStartCanBeLanguage &&
+                    ( nLen == 2 || (nLen == 5 && pc[2] == '-' && isLetter( pc[3] ) && isLetter( pc[4] )) );
+                if( bIsLanguage )
+                    rv.push_back( aPureEntry );
+            }
+        }
+    }
+}
+
 
 //===================================================================
 // class TreeFileIterator
@@ -1212,7 +1249,7 @@ rtl::OUString TreeFileIterator::implGetTreeFileFromPackage
     ( sal_Int32& rnFileSize, Reference< deployment::XPackage > xPackage )
 {
     rtl::OUString aRetFile;
-    rtl::OUString aLanguage = m_aCorrectedLanguage;
+    rtl::OUString aLanguage = m_aLanguage;
     for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
     {
         rtl::OUStringBuffer aStrBuf;
@@ -1228,9 +1265,18 @@ rtl::OUString TreeFileIterator::implGetTreeFileFromPackage
         {
             if( m_xSFA->exists( aRetFile ) )
                 break;
-            if( m_aCorrectedLanguage.equals( aEnglishFallbackLang ) )
-                break;
-            aLanguage = aEnglishFallbackLang;
+
+            ::std::vector< ::rtl::OUString > av;
+            implGetLanguageVectorFromPackage( av, xPackage );
+            ::std::vector< ::rtl::OUString >::const_iterator pFound = av.end();
+            try
+            {
+                pFound = ::comphelper::Locale::getFallback( av, m_aLanguage );
+            }
+            catch( ::comphelper::Locale::MalFormedLocaleException& )
+            {}
+            if( pFound != av.end() )
+                aLanguage = *pFound;
         }
     }
 

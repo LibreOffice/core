@@ -196,7 +196,7 @@ void XMLIndexTemplateContext::EndElement()
 {
     if (bOutlineLevelOK)
     {
-        sal_Int32 nCount = aValueVector.size();
+        const sal_Int32 nCount = aValueVector.size();
         Sequence<PropertyValues> aValueSequence(nCount);
         for(sal_Int32 i = 0; i<nCount; i++)
         {

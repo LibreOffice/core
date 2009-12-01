@@ -689,8 +689,11 @@ class ContainerRecReader
             sal_uInt32 nTipBufSize = lclGetBufferSize( nTipLen );
             if( nTipBufSize > 0 )
             {
+                std::auto_ptr< sal_Char > pTipName;
+                pTipName.reset( new sal_Char[ nTipBufSize ] );
                 ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                pS->SeekRel( nTipBufSize );
+                pS->Read( pTipName.get(), nTipBufSize );
+                rec.controlTip = lclCreateOUString( pTipName.get(), nTipLen );
             }
             // control id
             sal_uInt32 nCntrlIdSize = lclGetBufferSize( nCntrlIdLen );
@@ -1200,6 +1203,8 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
     xPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
     aTmp <<= sal_Int32((nHeight * 2) / 100);
     xPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
+    if ( msToolTip.Len() > 0 )
+        xPropSet->setPropertyValue(WW8_ASCII2STR("HelpText"), uno::Any(OUString(msToolTip)));
 
     if ( mnStep )
     {
@@ -3596,6 +3601,7 @@ void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream*
         }
 
         pControl->sName = rec.cName;
+        pControl->msToolTip = rec.controlTip;
         // Position of controls is relative to the container
         pControl->mnTop = rec.nTop + mnTop;
         pControl->mnLeft = rec.nLeft + mnLeft;

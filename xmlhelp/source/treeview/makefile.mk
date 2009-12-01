@@ -62,8 +62,6 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)         \
     $(EXPATASCII3RDLIB)      \
     $(SALLIB)  \
-    $(VOSLIB) \
-    $(UCBHELPERLIB) \
     $(UNOTOOLSLIB)
 SHL1VERSIONMAP=	$(TARGET).map
 

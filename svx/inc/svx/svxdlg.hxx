@@ -63,6 +63,8 @@ class Graphic;
 class SdrObject;
 namespace svx{ class SpellDialogChildWindow;}
 
+#define EMPTY_FRAME_REF com::sun::star::uno::Reference < com::sun::star::frame::XFrame >()
+
 //#define SVX_DIALOGFACTORY_CLASSID 0xf8e5fd97, 0x49e2, 0x4ae5, 0xac, 0x31, 0x4, 0xcb, 0xf7, 0xf3, 0xcf, 0x69
 class AbstractSvxDistributeDialog :public VclAbstractDialog  //add for SvxDistributeDialog
 {
@@ -175,22 +177,6 @@ public:
     virtual void    Hide( USHORT nFlags = 0 ) = 0;
     virtual BOOL    IsVisible() const = 0;
     virtual void    Invalidate( USHORT nFlags = 0 ) = 0;
-};
-
-class AbstractSvxCharacterMap :public VclAbstractDialog  //add for SvxCharacterMap
-{
-public:
-     virtual void      SetText( const XubString& rStr )=0;  //From class Window
-     virtual void            DisableFontSelection()=0;
-
-    virtual const Font&     GetCharFont() const =0;
-    virtual void            SetCharFont( const Font& rFont )=0;
-    virtual void            SetFont( const Font& rFont ) =0;
-
-    virtual void            SetChar( sal_Unicode c )=0;
-    virtual sal_Unicode     GetChar() const=0;
-
-    virtual String          GetCharacters() const=0;
 };
 
 class AbstractSvxSearchFormatDialog : public SfxAbstractTabDialog   //for SvxSearchFormatDialog
@@ -421,13 +407,9 @@ public:
     virtual AbstractURLDlg * CreateURLDialog( Window* pParent,
                                             const String& rURL, const String& rAltText, const String& rDescription,
                                             const String& rTarget, const String& rName,
-                                            TargetList& rTargetList,
-                                            sal_uInt32 nResId) = 0;
+                                            TargetList& rTargetList ) = 0;
     virtual AbstractSvxHlinkDlgMarkWnd* CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId ) =0; //add for SvxHlinkDlgMarkWnd
 
-    virtual AbstractSvxCharacterMap * CreateSvxCharacterMap( Window* pParent,  //add for SvxCharacterMap
-                                                            sal_uInt32 nResId,
-                                                            BOOL bOne = TRUE ) = 0;
     virtual SfxAbstractTabDialog* CreateTabItemDialog( Window* pParent, //add for SvxSearchFormatDialog
                                             const SfxItemSet& rSet,
                                             sal_uInt32 nResId) = 0;
@@ -518,9 +500,15 @@ public:
                                                                  sal_uInt32 nResId,
                                                                  const SdrObject* pObj = NULL,
                                                                 BOOL bHasObj = TRUE )=0;
-    virtual AbstractSfxSingleTabDialog*     CreateSfxSingleTabDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
+    virtual VclAbstractDialog*              CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
+    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,
+                                                                        sal_uInt32 nResId
+                                                                        )=0;
+    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
+                                                                        const SfxItemSet& rAttr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         )=0;
     virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent, //add for SvxPostItDialog

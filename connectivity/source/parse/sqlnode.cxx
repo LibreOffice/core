@@ -75,6 +75,8 @@
 #include <boost/bind.hpp>
 #include <algorithm>
 #include <functional>
+#include <rtl/logfile.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
@@ -198,6 +200,7 @@ SQLParseNodeParameter::~SQLParseNodeParameter()
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::convertDateString" );
     Date aDate = DBTypeConversion::toDate(rString);
     Reference< XNumberFormatsSupplier > xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
     Reference< XNumberFormatTypes >     xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
@@ -210,6 +213,7 @@ SQLParseNodeParameter::~SQLParseNodeParameter()
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::convertDateTimeString" );
     DateTime aDate = DBTypeConversion::toDateTime(rString);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
     Reference< XNumberFormatTypes >  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
@@ -222,6 +226,7 @@ SQLParseNodeParameter::~SQLParseNodeParameter()
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::convertTimeString" );
     Time aTime = DBTypeConversion::toTime(rString);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
 
@@ -239,6 +244,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                                    sal_Bool _bIntl,
                                    sal_Bool _bQuote) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseNodeToStr" );
 
     parseNodeToStr(
         rString, _rxConnection, NULL, NULL,
@@ -254,6 +260,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
                                               sal_Char _cDec,
                                               const IParseContext* pContext ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseNodeToPredicateStr" );
 
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
@@ -270,6 +277,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
                                               sal_Char _cDec,
                                               const IParseContext* pContext ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseNodeToPredicateStr" );
 
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
@@ -290,6 +298,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                       bool _bPredicate,
                       bool _bSubstitute) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseNodeToStr" );
 
     OSL_ENSURE( _rxConnection.is(), "OSQLParseNode::parseNodeToStr: invalid connection!" );
 
@@ -317,6 +326,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
 bool OSQLParseNode::parseNodeToExecutableStatement( ::rtl::OUString& _out_rString, const Reference< XConnection >& _rxConnection,
     OSQLParser& _rParser, ::com::sun::star::sdbc::SQLException* _pErrorHolder ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseNodeToExecutableStatement" );
     OSL_PRECOND( _rxConnection.is(), "OSQLParseNode::parseNodeToExecutableStatement: invalid connection!" );
     SQLParseNodeParameter aParseParam( _rxConnection,
         NULL, NULL, OParseContext::getDefaultLocale(), NULL, false, true, '.', false, true );
@@ -358,6 +368,7 @@ namespace
 //-----------------------------------------------------------------------------
 void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::getTableRange" );
     if ( isToken() )
     {
         parseLeaf(rString,rParam);
@@ -376,17 +387,17 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
         if(rString.getLength())
             rString += ::rtl::OUString::createFromAscii(" ");
         if (nCount == 1)    // ?
-            m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
+            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
         else if (nCount == 2)   // :Name
         {
-            m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
-            rString += m_aChilds[1]->m_aNodeValue;
+            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
+            rString += m_aChildren[1]->m_aNodeValue;
         }                   // [Name]
         else
         {
-            m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
-            rString += m_aChilds[1]->m_aNodeValue;
-            rString += m_aChilds[2]->m_aNodeValue;
+            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
+            rString += m_aChildren[1]->m_aNodeValue;
+            rString += m_aChildren[2]->m_aNodeValue;
         }
         bHandled = true;
     }
@@ -433,13 +444,13 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
             SQLParseNodeParameter aNewParam(rParam);
             aNewParam.bQuote = ( SQL_ISRULE(this,length_exp)    || SQL_ISRULE(this,char_value_fct) );
 
-            m_aChilds[0]->impl_parseNodeToString_throw( rString, aNewParam );
+            m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam );
             aNewParam.bQuote = rParam.bQuote;
             //aNewParam.bPredicate = sal_False; // disable [ ] around names // look at i73215
             ::rtl::OUString aStringPara;
             for (sal_uInt32 i=1; i<nCount; i++)
             {
-                const OSQLParseNode * pSubTree = m_aChilds[i];
+                const OSQLParseNode * pSubTree = m_aChildren[i];
                 if (pSubTree)
                 {
                     pSubTree->impl_parseNodeToString_throw( aStringPara, aNewParam );
@@ -463,8 +474,8 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 
     if ( !bHandled )
     {
-        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
-            i != m_aChilds.end();)
+        for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
+            i != m_aChildren.end();)
         {
             const OSQLParseNode* pSubTree = *i;
             if ( !pSubTree )
@@ -498,7 +509,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 
                 if(pSubTree->count())
                 {
-                    const OSQLParseNode* pCol = pSubTree->m_aChilds[pSubTree->count()-1];
+                    const OSQLParseNode* pCol = pSubTree->m_aChildren[pSubTree->count()-1];
                     if  (   (   SQL_ISRULE(pCol,column_val)
                             &&  pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
                             )
@@ -514,7 +525,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
                     if (SQL_ISRULE(this, comparison_predicate))
                     {
                         ++i;
-                        if(i != m_aChilds.end())
+                        if(i != m_aChildren.end())
                         {
                             pSubTree = *i;
                             if (pSubTree && pSubTree->getNodeType() == SQL_NODE_EQUAL)
@@ -530,7 +541,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
                     i++;
 
                     // bei den CommaListen zwischen alle Subtrees Commas setzen
-                    if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChilds.end()))
+                    if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChildren.end()))
                         rString += ::rtl::OUString::createFromAscii(",");
                 }
             }
@@ -540,7 +551,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
                 i++;
 
                 // bei den CommaListen zwischen alle Subtrees Commas setzen
-                if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChilds.end()))
+                if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChildren.end()))
                 {
                     if (SQL_ISRULE(this,value_exp_commalist) && rParam.bPredicate)
                         rString += ::rtl::OUString::createFromAscii(";");
@@ -555,6 +566,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 //-----------------------------------------------------------------------------
 bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseTableNameNodeToString_throw" );
     // is the table_name part of a table_ref?
     OSL_ENSURE( getParent(), "OSQLParseNode::impl_parseTableNameNodeToString_throw: table_name without parent?" );
     if ( !getParent() || ( getParent()->getKnownRuleID() != table_ref ) )
@@ -653,16 +665,18 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rStr
 //-----------------------------------------------------------------------------
 void OSQLParseNode::impl_parseTableRangeNodeToString_throw(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseTableRangeNodeToString_throw" );
     OSL_PRECOND(  ( count() == 2 ) || ( count() == 3 ) || ( count() == 5 ) ,"Illegal count");
 
     // rString += ::rtl::OUString::createFromAscii(" ");
-    ::std::for_each(m_aChilds.begin(),m_aChilds.end(),
+    ::std::for_each(m_aChildren.begin(),m_aChildren.end(),
         boost::bind( &OSQLParseNode::impl_parseNodeToString_throw, _1, boost::ref( rString ), boost::cref( rParam ) ));
 }
 
 //-----------------------------------------------------------------------------
 void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseLikeNodeToString_throw" );
     OSL_ENSURE(count() >= 4,"count != 5: Prepare for GPF");
 
     const OSQLParseNode* pEscNode = NULL;
@@ -688,9 +702,9 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, 
         {
             OSL_ENSURE( false, "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occured!" );
         }
-        if ( !m_aChilds[0]->isLeaf() )
+        if ( !m_aChildren[0]->isLeaf() )
         {
-            const OSQLParseNode* pCol = m_aChilds[0]->getChild(m_aChilds[0]->count()-1);
+            const OSQLParseNode* pCol = m_aChildren[0]->getChild(m_aChildren[0]->count()-1);
             if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
                 pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName) )
                 bAddName = sal_False;
@@ -698,15 +712,15 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, 
     }
 
     if (bAddName)
-        m_aChilds[0]->impl_parseNodeToString_throw( rString, aNewParam );
+        m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam );
 
-    m_aChilds[1]->impl_parseNodeToString_throw( rString, aNewParam );
+    m_aChildren[1]->impl_parseNodeToString_throw( rString, aNewParam );
     if(count() == 5)
-        m_aChilds[2]->impl_parseNodeToString_throw( rString, aNewParam );
+        m_aChildren[2]->impl_parseNodeToString_throw( rString, aNewParam );
 
-    sal_Int32 nCurentPos = m_aChilds.size()-2;
-    pParaNode = m_aChilds[nCurentPos];
-    pEscNode = m_aChilds[nCurentPos+1];
+    sal_Int32 nCurentPos = m_aChildren.size()-2;
+    pParaNode = m_aChildren[nCurentPos];
+    pEscNode = m_aChildren[nCurentPos+1];
 
     if (pParaNode->isToken())
     {
@@ -727,6 +741,7 @@ sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
                                             ::rtl::OUString &_rSchema,
                                             ::rtl::OUString &_rTable)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::getTableComponents" );
     OSL_ENSURE(_pTableNode,"Wrong use of getTableComponents! _pTableNode is not allowed to be null!");
     if(_pTableNode)
     {
@@ -1241,18 +1256,12 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         rErrorMessage = m_sErrorMessage;
 
         // clear the garbage collector
-        while (!s_pGarbageCollector->empty())
-        {
-            OSQLParseNode* pNode = *s_pGarbageCollector->begin();
-            while (pNode->getParent())
-                pNode = pNode->getParent();
-            delete pNode;
-        }
+        (*s_pGarbageCollector)->clearAndDelete();
         return NULL;
     }
     else
     {
-        s_pGarbageCollector->clear();
+        (*s_pGarbageCollector)->clear();
 
         m_sFieldName= ::rtl::OUString();
         m_xField = NULL;
@@ -1295,7 +1304,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
     {
         s_pScanner = new OSQLScanner();
         s_pScanner->setScanner();
-        s_pGarbageCollector = new OSQLParseNodes();
+        s_pGarbageCollector = new OSQLParseNodesGarbageCollector();
 
         if(!s_xLocaleData.is())
             s_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
@@ -1447,6 +1456,7 @@ OSQLParser::~OSQLParser()
 // -----------------------------------------------------------------------------
 void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::substituteParameterNames" );
     sal_Int32 nCount = _pNode->count();
     for(sal_Int32 i=0;i < nCount;++i)
     {
@@ -1541,6 +1551,7 @@ OSQLParseNode::OSQLParseNode(const sal_Char * pNewValue,
         ,m_eNodeType(eNewNodeType)
         ,m_nNodeID(nNewNodeID)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::OSQLParseNode" );
 
     OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
@@ -1553,6 +1564,7 @@ OSQLParseNode::OSQLParseNode(const ::rtl::OString &_rNewValue,
         ,m_eNodeType(eNewNodeType)
         ,m_nNodeID(nNewNodeID)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::OSQLParseNode" );
 
     OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
@@ -1565,6 +1577,7 @@ OSQLParseNode::OSQLParseNode(const sal_Unicode * pNewValue,
         ,m_eNodeType(eNewNodeType)
         ,m_nNodeID(nNewNodeID)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::OSQLParseNode" );
 
     OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
@@ -1577,12 +1590,14 @@ OSQLParseNode::OSQLParseNode(const ::rtl::OUString &_rNewValue,
         ,m_eNodeType(eNewNodeType)
         ,m_nNodeID(nNewNodeID)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::OSQLParseNode" );
 
     OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const OSQLParseNode& rParseNode)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::OSQLParseNode" );
 
     // klemm den getParent auf NULL
     m_pParent = NULL;
@@ -1600,8 +1615,8 @@ OSQLParseNode::OSQLParseNode(const OSQLParseNode& rParseNode)
     // Zeigers wieder eingehangen.
 
     // wenn kein Blatt, dann SubTrees bearbeiten
-    for (OSQLParseNodes::const_iterator i = rParseNode.m_aChilds.begin();
-         i != rParseNode.m_aChilds.end(); i++)
+    for (OSQLParseNodes::const_iterator i = rParseNode.m_aChildren.begin();
+         i != rParseNode.m_aChildren.end(); i++)
         append(new OSQLParseNode(**i));
 }
 // -----------------------------------------------------------------------------
@@ -1615,14 +1630,14 @@ OSQLParseNode& OSQLParseNode::operator=(const OSQLParseNode& rParseNode)
         m_eNodeType  = rParseNode.m_eNodeType;
         m_nNodeID    = rParseNode.m_nNodeID;
 
-        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
-            i != m_aChilds.end(); i++)
+        for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
+            i != m_aChildren.end(); i++)
             delete *i;
 
-        m_aChilds.clear();
+        m_aChildren.clear();
 
-        for (OSQLParseNodes::const_iterator j = rParseNode.m_aChilds.begin();
-             j != rParseNode.m_aChilds.end(); j++)
+        for (OSQLParseNodes::const_iterator j = rParseNode.m_aChildren.begin();
+             j != rParseNode.m_aChildren.end(); j++)
             append(new OSQLParseNode(**j));
     }
     return *this;
@@ -1650,34 +1665,36 @@ sal_Bool OSQLParseNode::operator==(OSQLParseNode& rParseNode) const
 //-----------------------------------------------------------------------------
 OSQLParseNode::~OSQLParseNode()
 {
-    for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
-         i != m_aChilds.end(); i++)
+    for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
+         i != m_aChildren.end(); i++)
         delete *i;
-    m_aChilds.clear();
+    m_aChildren.clear();
 }
 
 //-----------------------------------------------------------------------------
 void OSQLParseNode::append(OSQLParseNode* pNewNode)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::append" );
 
     OSL_ENSURE(pNewNode != NULL, "OSQLParseNode: ungueltiger NewSubTree");
     OSL_ENSURE(pNewNode->getParent() == NULL, "OSQLParseNode: Knoten ist kein Waise");
-    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewNode) == m_aChilds.end(),
+    OSL_ENSURE(::std::find(m_aChildren.begin(), m_aChildren.end(), pNewNode) == m_aChildren.end(),
             "OSQLParseNode::append() Node already element of parent");
 
     // stelle Verbindung zum getParent her:
     pNewNode->setParent( this );
     // und haenge den SubTree hinten an
-    m_aChilds.push_back(pNewNode);
+    m_aChildren.push_back(pNewNode);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::addDateValue" );
     // special display for date/time values
-    if (SQL_ISRULE(this,set_fct_spec) && SQL_ISPUNCTUATION(m_aChilds[0],"{"))
+    if (SQL_ISRULE(this,set_fct_spec) && SQL_ISPUNCTUATION(m_aChildren[0],"{"))
     {
-        const OSQLParseNode* pODBCNode = m_aChilds[1];
-        const OSQLParseNode* pODBCNodeChild = pODBCNode->m_aChilds[0];
+        const OSQLParseNode* pODBCNode = m_aChildren[1];
+        const OSQLParseNode* pODBCNodeChild = pODBCNode->m_aChildren[0];
 
         if (pODBCNodeChild->getNodeType() == SQL_NODE_KEYWORD && (
             SQL_ISTOKEN(pODBCNodeChild, D) ||
@@ -1712,7 +1729,7 @@ sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNod
             if (rString.getLength())
                 rString += ::rtl::OUString::createFromAscii(" ");
             rString += suQuote;
-            const ::rtl::OUString sTokenValue = pODBCNode->m_aChilds[1]->getTokenValue();
+            const ::rtl::OUString sTokenValue = pODBCNode->m_aChildren[1]->getTokenValue();
             if (SQL_ISTOKEN(pODBCNodeChild, D))
             {
                 rString += rParam.bPredicate ? convertDateString(rParam, sTokenValue) : sTokenValue;
@@ -1734,6 +1751,7 @@ sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNod
 // -----------------------------------------------------------------------------
 void OSQLParseNode::replaceNodeValue(const ::rtl::OUString& rTableAlias,const ::rtl::OUString& rColumnName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::replaceNodeValue" );
     for (sal_uInt32 i=0;i<count();++i)
     {
         if (SQL_ISRULE(this,column_ref) && count() == 1 && getChild(0)->getTokenValue() == rColumnName)
@@ -1750,13 +1768,14 @@ void OSQLParseNode::replaceNodeValue(const ::rtl::OUString& rTableAlias,const ::
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::getByRule(OSQLParseNode::Rule eRule) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::getByRule" );
     OSQLParseNode* pRetNode = 0;
     if (isRule() && OSQLParser::RuleID(eRule) == getRuleID())
         pRetNode = (OSQLParseNode*)this;
     else
     {
-        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
-            !pRetNode && i != m_aChilds.end(); i++)
+        for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
+            !pRetNode && i != m_aChildren.end(); i++)
             pRetNode = (*i)->getByRule(eRule);
     }
     return pRetNode;
@@ -1782,6 +1801,7 @@ OSQLParseNode* MakeORNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
 //-----------------------------------------------------------------------------
 void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::disjunctiveNormalForm" );
     if(!pSearchCondition) // no where condition at entry point
         return;
 
@@ -1858,6 +1878,7 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
 //-----------------------------------------------------------------------------
 void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_Bool bNegate)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::negateSearchCondition" );
     if(!pSearchCondition) // no where condition at entry point
         return;
     // '(' search_condition ')'
@@ -1912,7 +1933,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
         OSQLParseNode *pNot = pSearchCondition->removeAt((sal_uInt32)0);
         delete pNot;
         OSQLParseNode *pBooleanTest = pSearchCondition->removeAt((sal_uInt32)0);
-        pBooleanTest->setParent(NULL);
+        // TODO is this needed // pBooleanTest->setParent(NULL);
         replaceAndReset(pSearchCondition,pBooleanTest);
 
         if (!bNegate)
@@ -1981,7 +2002,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
     else if(bNegate && (SQL_ISRULE(pSearchCondition,like_predicate)))
     {
         OSQLParseNode* pCheckForNOT = pSearchCondition->getChild( 1 );
-        if ( pCheckForNOT->getNodeType() == SQL_TOKEN_NOT )
+        if ( SQL_ISTOKEN(pCheckForNOT,NOT) )
             delete pSearchCondition->removeAt( 1 );
         else
         {
@@ -1993,6 +2014,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
 //-----------------------------------------------------------------------------
 void OSQLParseNode::eraseBraces(OSQLParseNode*& pSearchCondition)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::eraseBraces" );
     if (pSearchCondition && (SQL_ISRULE(pSearchCondition,boolean_primary) || (pSearchCondition->count() == 3 && SQL_ISPUNCTUATION(pSearchCondition->getChild(0),"(") &&
          SQL_ISPUNCTUATION(pSearchCondition->getChild(2),")"))))
     {
@@ -2011,6 +2033,7 @@ void OSQLParseNode::eraseBraces(OSQLParseNode*& pSearchCondition)
 //-----------------------------------------------------------------------------
 void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::absorptions" );
     if(!pSearchCondition) // no where condition at entry point
         return;
 
@@ -2108,6 +2131,7 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
 //-----------------------------------------------------------------------------
 void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::compress" );
     if(!pSearchCondition) // no where condition at entry point
         return;
 
@@ -2209,88 +2233,128 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
         }
     }
 }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 // -----------------------------------------------------------------------------
-void OSQLParseNode::showParseTree(::rtl::OUString& rString, sal_uInt32 nLevel)
+void OSQLParseNode::showParseTree( ::rtl::OUString& rString ) const
 {
+    ::rtl::OUStringBuffer aBuf;
+    showParseTree( aBuf, 0 );
+    rString = aBuf.makeStringAndClear();
+}
 
-    if (!isToken())
+// -----------------------------------------------------------------------------
+void OSQLParseNode::showParseTree( ::rtl::OUStringBuffer& _inout_rBuffer, sal_uInt32 nLevel ) const
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::showParseTree" );
+
+    for ( sal_uInt32 j=0; j<nLevel; ++j)
+        _inout_rBuffer.appendAscii( "  " );
+
+    if ( !isToken() )
     {
-        for (sal_uInt32 j=0; j<nLevel; j++) {rString+= ::rtl::OUString::createFromAscii("\t");};
         // Regelnamen als rule: ...
-        rString+= ::rtl::OUString::createFromAscii("RULE_ID:\t ");
-        rString += ::rtl::OUString::valueOf( (sal_Int32)getRuleID());
-        rString+= ::rtl::OUString::createFromAscii("(");
-        rString += OSQLParser::RuleIDToStr(getRuleID());
-        rString+= ::rtl::OUString::createFromAscii(")");
-        rString+= ::rtl::OUString::createFromAscii("\n");
+        _inout_rBuffer.appendAscii( "RULE_ID: " );
+        _inout_rBuffer.append( (sal_Int32)getRuleID() );
+        _inout_rBuffer.append( sal_Unicode( '(' ) );
+        _inout_rBuffer.append( OSQLParser::RuleIDToStr( getRuleID() ) );
+        _inout_rBuffer.append( sal_Unicode( ')' ) );
+        _inout_rBuffer.append( sal_Unicode( '\n' ) );
 
         // hol dir den ersten Subtree
-        for (OSQLParseNodes::const_iterator i = m_aChilds.begin();
-            i != m_aChilds.end(); i++)
-            (*i)->showParseTree(rString, nLevel+1);
+        for (   OSQLParseNodes::const_iterator i = m_aChildren.begin();
+                i != m_aChildren.end();
+                ++i
+             )
+            (*i)->showParseTree( _inout_rBuffer, nLevel+1 );
     }
     else
     {
         // ein Token gefunden
-        // tabs fuer das Einruecken entsprechend nLevel
-        for (sal_uInt32 j=0; j<nLevel; j++) {rString+= ::rtl::OUString::createFromAscii("\t");};
-
-        switch (m_eNodeType) {
+        switch (m_eNodeType)
+        {
 
         case SQL_NODE_KEYWORD:
-            {rString+= ::rtl::OUString::createFromAscii("SQL_KEYWORD:\t");
-            ::rtl::OString sT = OSQLParser::TokenIDToStr(getTokenID());
-            rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
-            rString+= ::rtl::OUString::createFromAscii("\n");
-            break;}
+            _inout_rBuffer.appendAscii( "SQL_KEYWORD: " );
+            _inout_rBuffer.append( ::rtl::OStringToOUString( OSQLParser::TokenIDToStr( getTokenID() ), RTL_TEXTENCODING_UTF8 ) );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_COMPARISON:
-            {rString+= ::rtl::OUString::createFromAscii("SQL_COMPARISON:\t");
-            rString += m_aNodeValue;    // haenge Nodevalue an
-            rString+= ::rtl::OUString::createFromAscii("\n");       // und beginne neu Zeile
-            break;}
+            _inout_rBuffer.appendAscii( "SQL_COMPARISON: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_NAME:
-            {rString+= ::rtl::OUString::createFromAscii("SQL_NAME:\t");
-             rString+= ::rtl::OUString::createFromAscii("\"");
-             rString += m_aNodeValue;
-             rString+= ::rtl::OUString::createFromAscii("\"");
-             rString+= ::rtl::OUString::createFromAscii("\n");
-             break;}
+            _inout_rBuffer.appendAscii( "SQL_NAME: " );
+            _inout_rBuffer.append( sal_Unicode( '"' ) );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '"' ) );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+             break;
 
         case SQL_NODE_STRING:
-            {rString += ::rtl::OUString::createFromAscii("SQL_STRING:\t'");
-             rString += m_aNodeValue;
-             rString += ::rtl::OUString::createFromAscii("'\n");
-             break;}
+            _inout_rBuffer.appendAscii( "SQL_STRING: " );
+            _inout_rBuffer.append( sal_Unicode( '\'' ) );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\'' ) );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_INTNUM:
-            {rString += ::rtl::OUString::createFromAscii("SQL_INTNUM:\t");
-             rString += m_aNodeValue;
-             rString += ::rtl::OUString::createFromAscii("\n");
-             break;}
+            _inout_rBuffer.appendAscii( "SQL_INTNUM: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_APPROXNUM:
-            {rString += ::rtl::OUString::createFromAscii("SQL_APPROXNUM:\t");
-             rString += m_aNodeValue;
-             rString += ::rtl::OUString::createFromAscii("\n");
-             break;}
+            _inout_rBuffer.appendAscii( "SQL_APPROXNUM: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+             break;
 
         case SQL_NODE_PUNCTUATION:
-            {rString += ::rtl::OUString::createFromAscii("SQL_PUNCTUATION:\t");
-            rString += m_aNodeValue;    // haenge Nodevalue an
-            rString += ::rtl::OUString::createFromAscii("\n");      // und beginne neu Zeile
-            break;}
+            _inout_rBuffer.appendAscii( "SQL_PUNCTUATION: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_AMMSC:
-            {rString += ::rtl::OUString::createFromAscii("SQL_AMMSC:\t");
-            rString += m_aNodeValue;    // haenge Nodevalue an
-            rString += ::rtl::OUString::createFromAscii("\n");      // und beginne neu Zeile
-            break;}
+            _inout_rBuffer.appendAscii( "SQL_AMMSC: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
+
+        case SQL_NODE_EQUAL:
+        case SQL_NODE_LESS:
+        case SQL_NODE_GREAT:
+        case SQL_NODE_LESSEQ:
+        case SQL_NODE_GREATEQ:
+        case SQL_NODE_NOTEQUAL:
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
+
+        case SQL_NODE_ACCESS_DATE:
+            _inout_rBuffer.appendAscii( "SQL_ACCESS_DATE: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
+
+        case SQL_NODE_DATE:
+            _inout_rBuffer.appendAscii( "SQL_DATE: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
+
+        case SQL_NODE_CONCAT:
+            _inout_rBuffer.appendAscii( "||" );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         default:
-            OSL_ASSERT("OSQLParser::ShowParseTree: unzulaessiger NodeType");
+            OSL_TRACE( "-- %i", int( m_eNodeType ) );
+            OSL_ENSURE( false, "OSQLParser::ShowParseTree: unzulaessiger NodeType" );
         }
     }
 }
@@ -2300,38 +2364,41 @@ void OSQLParseNode::showParseTree(::rtl::OUString& rString, sal_uInt32 nLevel)
 //-----------------------------------------------------------------------------
 void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::insert" );
     OSL_ENSURE(pNewSubTree != NULL, "OSQLParseNode: ungueltiger NewSubTree");
     OSL_ENSURE(pNewSubTree->getParent() == NULL, "OSQLParseNode: Knoten ist kein Waise");
 
     // stelle Verbindung zum getParent her:
     pNewSubTree->setParent( this );
-    m_aChilds.insert(m_aChilds.begin() + nPos, pNewSubTree);
+    m_aChildren.insert(m_aChildren.begin() + nPos, pNewSubTree);
 }
 
 // removeAt-Methoden
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
 {
-    OSL_ENSURE(nPos < m_aChilds.size(),"Illegal position for removeAt");
-    OSQLParseNodes::iterator aPos(m_aChilds.begin() + nPos);
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::removeAt" );
+    OSL_ENSURE(nPos < m_aChildren.size(),"Illegal position for removeAt");
+    OSQLParseNodes::iterator aPos(m_aChildren.begin() + nPos);
     OSQLParseNode* pNode = *aPos;
 
     // setze den getParent des removeten auf NULL
     pNode->setParent( NULL );
 
-    m_aChilds.erase(aPos);
+    m_aChildren.erase(aPos);
     return pNode;
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::remove(OSQLParseNode* pSubTree)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::remove" );
     OSL_ENSURE(pSubTree != NULL, "OSQLParseNode: ungueltiger SubTree");
-    OSQLParseNodes::iterator aPos = ::std::find(m_aChilds.begin(), m_aChilds.end(), pSubTree);
-    if (aPos != m_aChilds.end())
+    OSQLParseNodes::iterator aPos = ::std::find(m_aChildren.begin(), m_aChildren.end(), pSubTree);
+    if (aPos != m_aChildren.end())
     {
         // setze den getParent des removeten auf NULL
         pSubTree->setParent( NULL );
-        m_aChilds.erase(aPos);
+        m_aChildren.erase(aPos);
         return pSubTree;
     }
     else
@@ -2342,40 +2409,43 @@ OSQLParseNode* OSQLParseNode::remove(OSQLParseNode* pSubTree)
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::replaceAt(sal_uInt32 nPos, OSQLParseNode* pNewSubNode)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::replaceAt" );
     OSL_ENSURE(pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
     OSL_ENSURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
-    OSL_ENSURE(nPos < m_aChilds.size(), "OSQLParseNode: invalid position");
-    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewSubNode) == m_aChilds.end(),
+    OSL_ENSURE(nPos < m_aChildren.size(), "OSQLParseNode: invalid position");
+    OSL_ENSURE(::std::find(m_aChildren.begin(), m_aChildren.end(), pNewSubNode) == m_aChildren.end(),
             "OSQLParseNode::Replace() Node already element of parent");
 
-    OSQLParseNode* pOldSubNode = m_aChilds[nPos];
+    OSQLParseNode* pOldSubNode = m_aChildren[nPos];
 
     // stelle Verbindung zum getParent her:
     pNewSubNode->setParent( this );
     pOldSubNode->setParent( NULL );
 
-    m_aChilds[nPos] = pNewSubNode;
+    m_aChildren[nPos] = pNewSubNode;
     return pOldSubNode;
 }
 
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::replace (OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::replace " );
     OSL_ENSURE(pOldSubNode != NULL && pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
     OSL_ENSURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
-    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pOldSubNode) != m_aChilds.end(),
+    OSL_ENSURE(::std::find(m_aChildren.begin(), m_aChildren.end(), pOldSubNode) != m_aChildren.end(),
             "OSQLParseNode::Replace() Node not element of parent");
-    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewSubNode) == m_aChilds.end(),
+    OSL_ENSURE(::std::find(m_aChildren.begin(), m_aChildren.end(), pNewSubNode) == m_aChildren.end(),
             "OSQLParseNode::Replace() Node already element of parent");
 
     pOldSubNode->setParent( NULL );
     pNewSubNode->setParent( this );
-    ::std::replace(m_aChilds.begin(), m_aChilds.end(), pOldSubNode, pNewSubNode);
+    ::std::replace(m_aChildren.begin(), m_aChildren.end(), pOldSubNode, pNewSubNode);
     return pOldSubNode;
 }
 // -----------------------------------------------------------------------------
 void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParameter& rParam) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseLeaf" );
     // ein Blatt ist gefunden
     // Inhalt dem Ausgabestring anfuegen
     switch (m_eNodeType)
@@ -2568,6 +2638,7 @@ OSQLParseNode::Rule OSQLParseNode::getKnownRuleID() const
 // -----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::getTableRange(const OSQLParseNode* _pTableRef)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::getTableRange" );
     OSL_ENSURE(_pTableRef && _pTableRef->count() > 1 && _pTableRef->getKnownRuleID() == OSQLParseNode::table_ref,"Invalid node give, only table ref is allowed!");
     const sal_uInt32 nCount = _pTableRef->count();
     ::rtl::OUString sTableRange;
@@ -2583,5 +2654,55 @@ OSQLParseNode::Rule OSQLParseNode::getKnownRuleID() const
 
     return sTableRange;
 }
-
+// -----------------------------------------------------------------------------
+OSQLParseNodesContainer::OSQLParseNodesContainer()
+{
+}
+// -----------------------------------------------------------------------------
+OSQLParseNodesContainer::~OSQLParseNodesContainer()
+{
+}
+// -----------------------------------------------------------------------------
+void OSQLParseNodesContainer::push_back(OSQLParseNode* _pNode)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    m_aNodes.push_back(_pNode);
+}
+// -----------------------------------------------------------------------------
+void OSQLParseNodesContainer::erase(OSQLParseNode* _pNode)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if ( !m_aNodes.empty() )
+    {
+        ::std::vector< OSQLParseNode* >::iterator aFind = ::std::find(m_aNodes.begin(), m_aNodes.end(),_pNode);
+        if ( aFind != m_aNodes.end() )
+            m_aNodes.erase(aFind);
+    }
+}
+// -----------------------------------------------------------------------------
+bool OSQLParseNodesContainer::empty() const
+{
+    return m_aNodes.empty();
+}
+// -----------------------------------------------------------------------------
+void OSQLParseNodesContainer::clear()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    m_aNodes.clear();
+}
+// -----------------------------------------------------------------------------
+void OSQLParseNodesContainer::clearAndDelete()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    // clear the garbage collector
+    while ( !m_aNodes.empty() )
+    {
+        OSQLParseNode* pNode = m_aNodes[0];
+        while ( pNode->getParent() )
+        {
+            pNode = pNode->getParent();
+        }
+        delete pNode;
+    }
+}
 }   // namespace connectivity

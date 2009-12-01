@@ -38,6 +38,7 @@
 #include <connectivity/FValue.hxx>
 #include <tools/debug.hxx>
 #include "TKeyValue.hxx"
+#include <rtl/logfile.hxx>
 
 using namespace connectivity;
 using namespace connectivity::file;
@@ -85,19 +86,9 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OResultSet::isCount() const
-{
-    return (m_pParseTree &&
-            m_pParseTree->count() > 2                                                       &&
-            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)                      &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)               &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct) &&
-            m_pParseTree->getChild(2)->getChild(0)->getChild(0)->count() == 4
-            );
-}
-// -----------------------------------------------------------------------------
 void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::scanParameter" );
     DBG_ASSERT(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
     // Parameter Name-Regel gefunden?
@@ -118,6 +109,7 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
 // -----------------------------------------------------------------------------
 OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::GetOrderbyKeyValue" );
     UINT32 nBookmarkValue = Abs((sal_Int32)(_rRow->get())[0]->getValue());
 
     OKeyValue* pKeyValue = OKeyValue::createKeyValue((UINT32)nBookmarkValue);

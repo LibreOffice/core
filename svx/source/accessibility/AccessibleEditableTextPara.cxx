@@ -93,10 +93,10 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility
 {
 
-    const SfxItemPropertyMap* ImplGetSvxCharAndParaPropertiesMap()
+    const SvxItemPropertySet* ImplGetSvxCharAndParaPropertiesSet()
     {
         // PropertyMap for character and paragraph properties
-        static const SfxItemPropertyMap aPropMap[] =
+        static const SfxItemPropertyMapEntry aPropMap[] =
         {
             SVX_UNOEDIT_CHAR_PROPERTIES,
             SVX_UNOEDIT_PARA_PROPERTIES,
@@ -105,8 +105,8 @@ namespace accessibility
             {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
             {0,0,0,0,0,0}
         };
-
-        return aPropMap;
+        static SvxItemPropertySet aPropSet( aPropMap );
+        return &aPropSet;
     }
 
 
@@ -1885,8 +1885,8 @@ namespace accessibility
             SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
                                                    0 == nStartIndex &&
                                                    rCacheTF.GetTextLen(nPara) == nEndIndex ?
-                                                   ImplGetSvxUnoOutlinerTextCursorPropertyMap() :
-                                                   ImplGetSvxTextPortionPropertyMap() );
+                                                   ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() :
+                                                   ImplGetSvxTextPortionSvxPropertySet() );
 
             aPropSet.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
 
@@ -1950,7 +1950,7 @@ namespace accessibility
         // get XPropertySetInfo for paragraph attributes and
         // character attributes that span all the paragraphs text.
         SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
-                ImplGetSvxCharAndParaPropertiesMap() );
+                ImplGetSvxCharAndParaPropertiesSet() );
         aPropSet.SetSelection( MakeSelection( 0, GetTextLen() ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
         if (!xPropSetInfo.is())
@@ -2049,7 +2049,7 @@ namespace accessibility
         CheckIndex(nIndex);
 
         SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
-                                               ImplGetSvxCharAndParaPropertiesMap() );
+                                               ImplGetSvxCharAndParaPropertiesSet() );
         aPropSet.SetSelection( MakeSelection( nIndex ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
         if (!xPropSetInfo.is())

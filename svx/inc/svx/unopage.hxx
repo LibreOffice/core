@@ -49,7 +49,7 @@
 #include "svx/svxdllapi.h"
 
 #include <cppuhelper/implbase5.hxx>
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <svx/unoprov.hxx>
 

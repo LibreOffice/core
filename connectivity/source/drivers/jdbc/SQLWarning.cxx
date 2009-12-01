@@ -41,25 +41,11 @@ jclass java_sql_SQLWarning_BASE::theClass = 0;
 java_sql_SQLWarning_BASE::~java_sql_SQLWarning_BASE()
 {}
 
-jclass java_sql_SQLWarning_BASE::getMyClass()
+jclass java_sql_SQLWarning_BASE::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass( "java/sql/SQLWarning" );
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/sql/SQLWarning");
     return theClass;
-}
-
-void java_sql_SQLWarning_BASE::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 

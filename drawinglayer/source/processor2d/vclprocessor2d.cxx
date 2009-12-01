@@ -220,6 +220,10 @@ namespace drawinglayer
 
                     if( pTCPP != NULL )
                     {
+                        // set the color of text decorations
+                        const basegfx::BColor aTextlineColor = maBColorModifierStack.getModifiedColor(pTCPP->getTextlineColor());
+                        mpOutputDevice->SetTextLineColor( Color(aTextlineColor) );
+
                         // set Overline attribute
                         FontUnderline eFontOverline = mapTextLineStyle( pTCPP->getFontOverline() );
                         if( eFontOverline != UNDERLINE_NONE )
@@ -1014,8 +1018,10 @@ namespace drawinglayer
             {
                 const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(fLineWidth, 0.0));
                 const double fDiscreteLineWidth(aDiscreteUnit.getLength());
+                const bool bAntiAliased(getOptionsDrawinglayer().IsAntiAliasing());
+                const double fAllowedUpperBound(bAntiAliased ? 3.0 : 2.5);
 
-                if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.5))
+                if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, fAllowedUpperBound))
                 {
                     // force to hairline
                     const attribute::StrokeAttribute& rStrokeAttribute = rPolygonStrokeCandidate.getStrokeAttribute();
@@ -1044,43 +1050,117 @@ namespace drawinglayer
                     {
                         aHairlinePolyPolygon.transform(maCurrentTransformation);
 
-                        if(basegfx::fTools::more(fDiscreteLineWidth, 1.5))
+                        if(bAntiAliased)
                         {
-                            // line width is in range ]1.5 .. 2.5], use four hairlines
-                            // drawn in a square
-                            basegfx::B2DHomMatrix aMat;
-
                             for(sal_uInt32 a(0); a < nCount; a++)
                             {
                                 basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
-                                aMat.set(0, 2, 1.0);
-                                aMat.set(1, 2, 0.0);
-                                aCandidate.transform(aMat);
+                                if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 1.0))
+                                {
+                                    // line in range ]0.0 .. 1.0[
+                                    // paint as simple hairline
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                }
+                                else if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.0))
+                                {
+                                    // line in range [1.0 .. 2.0[
+                                    // paint as 2x2 with dynamic line distance
+                                    basegfx::B2DHomMatrix aMat;
+                                    const double fDistance(fDiscreteLineWidth - 1.0);
+                                    const double fHalfDistance(fDistance * 0.5);
 
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                    aMat.set(0, 2, -fHalfDistance);
+                                    aMat.set(1, 2, -fHalfDistance);
+                                    aCandidate.transform(aMat);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
-                                aMat.set(0, 2, 0.0);
-                                aMat.set(1, 2, 1.0);
-                                aCandidate.transform(aMat);
+                                    aMat.set(0, 2, fDistance);
+                                    aMat.set(1, 2, 0.0);
+                                    aCandidate.transform(aMat);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                    aMat.set(0, 2, 0.0);
+                                    aMat.set(1, 2, fDistance);
+                                    aCandidate.transform(aMat);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
-                                aMat.set(0, 2, -1.0);
-                                aMat.set(1, 2, 0.0);
-                                aCandidate.transform(aMat);
+                                    aMat.set(0, 2, -fDistance);
+                                    aMat.set(1, 2, 0.0);
+                                    aCandidate.transform(aMat);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                }
+                                else
+                                {
+                                    // line in range [2.0 .. 3.0]
+                                    // paint as cross in a 3x3  with dynamic line distance
+                                    basegfx::B2DHomMatrix aMat;
+                                    const double fDistance((fDiscreteLineWidth - 1.0) * 0.5);
 
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                    aMat.set(0, 2, -fDistance);
+                                    aMat.set(1, 2, 0.0);
+                                    aCandidate.transform(aMat);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                    aMat.set(0, 2, fDistance);
+                                    aMat.set(1, 2, -fDistance);
+                                    aCandidate.transform(aMat);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                    aMat.set(0, 2, fDistance);
+                                    aMat.set(1, 2, fDistance);
+                                    aCandidate.transform(aMat);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                    aMat.set(0, 2, -fDistance);
+                                    aMat.set(1, 2, fDistance);
+                                    aCandidate.transform(aMat);
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                }
                             }
                         }
                         else
                         {
-                            for(sal_uInt32 a(0); a < nCount; a++)
+                            if(basegfx::fTools::more(fDiscreteLineWidth, 1.5))
                             {
-                                // draw the basic hairline polygon
-                                const basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
-                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                // line width is in range ]1.5 .. 2.5], use four hairlines
+                                // drawn in a square
+                                basegfx::B2DHomMatrix aMat;
+
+                                for(sal_uInt32 a(0); a < nCount; a++)
+                                {
+                                    basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                    aMat.set(0, 2, 1.0);
+                                    aMat.set(1, 2, 0.0);
+                                    aCandidate.transform(aMat);
+
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                    aMat.set(0, 2, 0.0);
+                                    aMat.set(1, 2, 1.0);
+                                    aCandidate.transform(aMat);
+
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                    aMat.set(0, 2, -1.0);
+                                    aMat.set(1, 2, 0.0);
+                                    aCandidate.transform(aMat);
+
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                }
+                            }
+                            else
+                            {
+                                for(sal_uInt32 a(0); a < nCount; a++)
+                                {
+                                    // draw the basic hairline polygon
+                                    const basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
+                                    mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                                }
                             }
                         }
                     }
@@ -1091,8 +1171,15 @@ namespace drawinglayer
 
             if(!bDone)
             {
+                // remeber that we enter a PolygonStrokePrimitive2D decomposition,
+                // used for AA thick line drawing
+                mnPolygonStrokePrimitive2D++;
+
                 // line width is big enough for standard filled polygon visualisation or zero
                 process(rPolygonStrokeCandidate.get2DDecomposition(getViewInformation2D()));
+
+                // leave PolygonStrokePrimitive2D
+                mnPolygonStrokePrimitive2D--;
             }
         }
 

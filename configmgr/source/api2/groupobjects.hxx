@@ -129,10 +129,6 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementGroupInfo(rtl::Reference< configuration::Tree > const& aTree, configapi::ApiTreeImpl& rParentTree)
-        : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
-        {
-        }
         OSetElementGroupInfo(rtl::Reference< configuration::Tree > const& aTree, configapi::ApiProvider& rProvider, configapi::ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {
@@ -167,10 +163,6 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementGroupUpdate(rtl::Reference< configuration::Tree > const& aTree, configapi::ApiTreeImpl& rParentTree)
-        : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
-        {
-        }
         OSetElementGroupUpdate(rtl::Reference< configuration::Tree > const& aTree, configapi::ApiProvider& rProvider, configapi::ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {

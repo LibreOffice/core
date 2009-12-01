@@ -98,19 +98,21 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
         {
             CellPos aPos( rPos );
 
-            sal_Int32 nRowSpan = xCell->getRowSpan()-1;
-            do
+            sal_Int32 nRowCount = getRowCount();
+            sal_Int32 nRowSpan = std::max( xCell->getRowSpan(), (sal_Int32)1 );
+            while( nRowSpan && (aPos.mnRow < nRowCount) )
             {
                 height += maRows[aPos.mnRow++].mnSize;
+                nRowSpan--;
             }
-            while( nRowSpan-- );
 
-            sal_Int32 nColSpan = xCell->getColumnSpan()-1;
-            do
+            sal_Int32 nColCount = getColumnCount();
+            sal_Int32 nColSpan = std::max( xCell->getColumnSpan(), (sal_Int32)1 );
+            while( nColSpan && (aPos.mnCol < nColCount ) )
             {
                 width += maColumns[aPos.mnCol++].mnSize;
+                nColSpan--;
             }
-            while( nColSpan-- );
         }
     }
     catch( Exception& )
@@ -127,7 +129,7 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
     try
     {
         CellRef xCell( getCell( rPos ) );
-        if( xCell.is() && !xCell->isMerged() )
+        if( xCell.is() && !xCell->isMerged() && isValid(rPos) )
         {
             const basegfx::B2ITuple aCellSize( getCellSize( rPos ) );
 
@@ -149,7 +151,7 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
 
 sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow )
 {
-    if( (nRow >= 0) && (nRow < getRowCount()) )
+    if( isValidRow(nRow) )
         return maRows[nRow].mnSize;
     else
         return 0;
@@ -159,18 +161,21 @@ sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow )
 
 void TableLayouter::setRowHeight( sal_Int32 nRow, sal_Int32 nHeight )
 {
-    const sal_Int32 nCount = getRowCount();
-
-    DBG_ASSERT( (nRow >= 0) && (nRow < nCount), "TableLayouter::setRowHeight(), row out of range!" );
-    if( (nRow >= 0) && (nRow < nCount) && (nHeight != maRows[nRow].mnSize) )
+    if( isValidRow(nRow) )
+    {
         maRows[nRow].mnSize = nHeight;
+    }
+    else
+    {
+        DBG_ERROR( "TableLayouter::setRowHeight(), row out of range!" );
+    }
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn )
 {
-    if( (nColumn >= 0) && (nColumn < getColumnCount()) )
+    if( isValidColumn(nColumn) )
         return maColumns[nColumn].mnSize;
     else
         return 0;
@@ -180,11 +185,10 @@ sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn )
 
 void TableLayouter::setColumnWidth( sal_Int32 nColumn, sal_Int32 nWidth )
 {
-    const sal_Int32 nCount = getColumnCount();
-
-    DBG_ASSERT( (nColumn >= 0) && (nColumn < nCount), "TableLayouter::setColumnWidth(), column out of range!" );
-    if( (nColumn >= 0) && (nColumn < nCount) )
+    if( isValidColumn(nColumn) )
         maColumns[nColumn].mnSize = nWidth;
+    else
+        DBG_ERROR( "TableLayouter::setColumnWidth(), column out of range!" );
 }
 
 // -----------------------------------------------------------------------------
@@ -1149,7 +1153,7 @@ void TableLayouter::SetWritingMode( com::sun::star::text::WritingMode eWritingMo
 
 sal_Int32 TableLayouter::getColumnStart( sal_Int32 nColumn ) const
 {
-    if( (nColumn >= 0) && (nColumn < getColumnCount()) )
+    if( isValidColumn(nColumn) )
         return maColumns[nColumn].mnPos;
     else
         return 0;
@@ -1159,7 +1163,7 @@ sal_Int32 TableLayouter::getColumnStart( sal_Int32 nColumn ) const
 
 sal_Int32 TableLayouter::getRowStart( sal_Int32 nRow ) const
 {
-    if( (nRow >= 0) && (nRow < getRowCount()) )
+    if( isValidRow(nRow) )
         return maRows[nRow].mnPos;
     else
         return 0;

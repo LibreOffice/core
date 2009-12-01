@@ -94,6 +94,7 @@
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/logfile.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -181,6 +182,7 @@ ColumnInfoCache::ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSup
     :m_aColumns()
     ,m_bControlsInitialized( false )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "ColumnInfoCache::ColumnInfoCache" );
     try
     {
         m_aColumns.clear();
@@ -236,6 +238,7 @@ namespace
 //------------------------------------------------------------------------------
 void ColumnInfoCache::deinitializeControls()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "ColumnInfoCache::deinitializeControls" );
     for (   ColumnInfos::iterator col = m_aColumns.begin();
             col != m_aColumns.end();
             ++col
@@ -248,6 +251,7 @@ void ColumnInfoCache::deinitializeControls()
 //------------------------------------------------------------------------------
 void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > >& _rControls )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "ColumnInfoCache::initializeControls" );
     try
     {
         // for every of our known columns, find the controls which are bound to this column
@@ -330,6 +334,7 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
 //------------------------------------------------------------------------------
 const ColumnInfo& ColumnInfoCache::getColumnInfo( size_t _pos )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "ColumnInfoCache::getColumnInfo" );
     if ( _pos >= m_aColumns.size() )
         throw IndexOutOfBoundsException();
 
@@ -510,6 +515,7 @@ FmXFormController::FmXFormController(const Reference< XMultiServiceFactory > & _
                   ,m_bDetachEvents(sal_True)
                   ,m_bAttemptedHandlerCreation( false )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::FmXFormController" );
     DBG_CTOR( FmXFormController, NULL );
 
     ::comphelper::increment(m_refCount);
@@ -570,18 +576,21 @@ FmXFormController::~FmXFormController()
 // -----------------------------------------------------------------------------
 void SAL_CALL FmXFormController::acquire() throw ()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::acquire" );
     FmXFormController_BASE::acquire();
 }
 
 // -----------------------------------------------------------------------------
 void SAL_CALL FmXFormController::release() throw ()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::release" );
     FmXFormController_BASE::release();
 }
 
 //------------------------------------------------------------------
 Any SAL_CALL FmXFormController::queryInterface( const Type& _rType ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::queryInterface" );
     Any aRet = FmXFormController_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
         aRet = OPropertySetHelper::queryInterface( _rType );
@@ -593,6 +602,7 @@ Any SAL_CALL FmXFormController::queryInterface( const Type& _rType ) throw(Runti
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL FmXFormController::getImplementationId() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getImplementationId" );
     static ::cppu::OImplementationId* pId = NULL;
     if  ( !pId )
     {
@@ -609,6 +619,7 @@ Sequence< sal_Int8 > SAL_CALL FmXFormController::getImplementationId() throw( Ru
 //------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL FmXFormController::getTypes(  ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getTypes" );
     return comphelper::concatSequences(
         FmXFormController_BASE::getTypes(),
         ::cppu::OPropertySetHelper::getTypes()
@@ -619,6 +630,7 @@ Sequence< Type > SAL_CALL FmXFormController::getTypes(  ) throw(RuntimeException
 // XUnoTunnel
 Sequence< sal_Int8 > FmXFormController::getUnoTunnelImplementationId()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getUnoTunnelImplementationId" );
     static ::cppu::OImplementationId * pId = NULL;
     if ( !pId )
     {
@@ -634,6 +646,7 @@ Sequence< sal_Int8 > FmXFormController::getUnoTunnelImplementationId()
 //------------------------------------------------------------------------------
 FmXFormController* FmXFormController::getImplementation( const Reference< XInterface >& _rxComponent )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getImplementation" );
     Reference< XUnoTunnel > xTunnel( _rxComponent, UNO_QUERY );
     if ( xTunnel.is() )
         return reinterpret_cast< FmXFormController* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
@@ -642,6 +655,7 @@ FmXFormController* FmXFormController::getImplementation( const Reference< XInter
 //------------------------------------------------------------------------------
 sal_Int64 SAL_CALL FmXFormController::getSomething(Sequence<sal_Int8> const& rId)throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getSomething" );
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast< sal_Int64 >( this );
 
@@ -652,6 +666,7 @@ sal_Int64 SAL_CALL FmXFormController::getSomething(Sequence<sal_Int8> const& rId
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::supportsService(const ::rtl::OUString& ServiceName) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::supportsService" );
     Sequence< ::rtl::OUString> aSNL(getSupportedServiceNames());
     const ::rtl::OUString * pArray = aSNL.getConstArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
@@ -663,12 +678,14 @@ sal_Bool SAL_CALL FmXFormController::supportsService(const ::rtl::OUString& Serv
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FmXFormController::getImplementationName() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getImplementationName" );
     return ::rtl::OUString::createFromAscii("com.sun.star.form.FmXFormController");
 }
 
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> SAL_CALL FmXFormController::getSupportedServiceNames(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getSupportedServiceNames" );
     // service names which are supported only, but cannot be used to created an
     // instance at a service factory
     Sequence< ::rtl::OUString > aNonCreatableServiceNames( 1 );
@@ -682,12 +699,14 @@ Sequence< ::rtl::OUString> SAL_CALL FmXFormController::getSupportedServiceNames(
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveReset(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::approveReset" );
     return sal_True;
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::resetted(const EventObject& rEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::resetted" );
     ::osl::MutexGuard aGuard(m_aMutex);
     if (getCurrentControl().is() &&  (getCurrentControl()->getModel() == rEvent.Source))
         m_bModified = sal_False;
@@ -696,6 +715,7 @@ void SAL_CALL FmXFormController::resetted(const EventObject& rEvent) throw( Runt
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> FmXFormController::getSupportedServiceNames_Static(void)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getSupportedServiceNames_Static" );
     static Sequence< ::rtl::OUString> aServices;
     if (!aServices.getLength())
     {
@@ -709,6 +729,7 @@ Sequence< ::rtl::OUString> FmXFormController::getSupportedServiceNames_Static(vo
 //------------------------------------------------------------------------------
 void FmXFormController::setCurrentFilterPosition( sal_Int32 nPos )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::setCurrentFilterPosition" );
     DBG_ASSERT(nPos < (sal_Int32)m_aFilters.size(), "Invalid Position");
 
     if (nPos != m_nCurrentFilterPosition)
@@ -722,29 +743,34 @@ void FmXFormController::setCurrentFilterPosition( sal_Int32 nPos )
 
         if ( nPos != -1 )
         {
-            // set the text for all filters
-            OSL_ENSURE( ( m_aFilters.size() > (size_t)m_nCurrentFilterPosition ) && ( m_nCurrentFilterPosition >= 0 ),
-                "FmXFormController::setCurrentFilterPosition: m_nCurrentFilterPosition too big" );
-
-            if ( ( m_nCurrentFilterPosition >= 0 ) && ( (size_t)m_nCurrentFilterPosition < m_aFilters.size() ) )
-            {
-                FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
-                for (FmFilterRow::const_iterator iter2 = rRow.begin();
-                    iter2 != rRow.end(); iter2++)
-                {
-                    (*iter2).first->setText((*iter2).second);
-                }
-            }
+            impl_setTextOnAllFilter_throw();
         }
     }
 }
+// -----------------------------------------------------------------------------
+void FmXFormController::impl_setTextOnAllFilter_throw()
+{
+    // set the text for all filters
+    OSL_ENSURE( ( m_aFilters.size() > (size_t)m_nCurrentFilterPosition ) && ( m_nCurrentFilterPosition >= 0 ),
+        "FmXFormController::setCurrentFilterPosition: m_nCurrentFilterPosition too big" );
 
+    if ( ( m_nCurrentFilterPosition >= 0 ) && ( (size_t)m_nCurrentFilterPosition < m_aFilters.size() ) )
+    {
+        FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
+        for (FmFilterRow::const_iterator iter2 = rRow.begin();
+            iter2 != rRow.end(); iter2++)
+        {
+            (*iter2).first->setText((*iter2).second);
+        }
+    } // if ( ( m_nCurrentFilterPosition >= 0 ) && ( (size_t)m_nCurrentFilterPosition < m_aFilters.size() ) )
+}
 // OPropertySetHelper
 //------------------------------------------------------------------------------
 sal_Bool FmXFormController::convertFastPropertyValue( Any & /*rConvertedValue*/, Any & /*rOldValue*/,
                                             sal_Int32 /*nHandle*/, const Any& /*rValue*/ )
                 throw( IllegalArgumentException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::convertFastPropertyValue" );
     return sal_False;
 }
 
@@ -752,11 +778,13 @@ sal_Bool FmXFormController::convertFastPropertyValue( Any & /*rConvertedValue*/,
 void FmXFormController::setFastPropertyValue_NoBroadcast( sal_Int32 /*nHandle*/, const Any& /*rValue*/ )
                          throw( Exception )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::setFastPropertyValue_NoBroadcast" );
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getFastPropertyValue" );
     switch (nHandle)
     {
         case FM_ATTR_FILTER:
@@ -826,6 +854,7 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
 //------------------------------------------------------------------------------
 Reference< XPropertySetInfo >  FmXFormController::getPropertySetInfo() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getPropertySetInfo" );
     static Reference< XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
@@ -844,6 +873,7 @@ void FmXFormController::fillProperties(
         Sequence< Property >& /* [out] */ /*_rAggregateProps*/
         ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::fillProperties" );
     _rProps.realloc(2);
     sal_Int32 nPos = 0;
     Property* pDesc = _rProps.getArray();
@@ -854,6 +884,7 @@ void FmXFormController::fillProperties(
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& FmXFormController::getInfoHelper()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getInfoHelper" );
     return *getArrayHelper();
 }
 
@@ -861,6 +892,7 @@ void FmXFormController::fillProperties(
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::hasElements(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::hasElements" );
 ::osl::MutexGuard aGuard( m_aMutex );
     return !m_aChilds.empty();
 }
@@ -868,6 +900,7 @@ sal_Bool SAL_CALL FmXFormController::hasElements(void) throw( RuntimeException )
 //------------------------------------------------------------------------------
 Type SAL_CALL  FmXFormController::getElementType(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getElementType" );
     return ::getCppuType((const Reference< XFormController>*)0);
 
 }
@@ -876,6 +909,7 @@ Type SAL_CALL  FmXFormController::getElementType(void) throw( RuntimeException )
 //------------------------------------------------------------------------------
 Reference< XEnumeration > SAL_CALL  FmXFormController::createEnumeration(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::createEnumeration" );
     ::osl::MutexGuard aGuard( m_aMutex );
     return new ::comphelper::OEnumerationByIndex(this);
 }
@@ -884,6 +918,7 @@ Reference< XEnumeration > SAL_CALL  FmXFormController::createEnumeration(void) t
 //------------------------------------------------------------------------------
 sal_Int32 SAL_CALL FmXFormController::getCount(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getCount" );
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_aChilds.size();
 }
@@ -891,6 +926,7 @@ sal_Int32 SAL_CALL FmXFormController::getCount(void) throw( RuntimeException )
 //------------------------------------------------------------------------------
 Any SAL_CALL FmXFormController::getByIndex(sal_Int32 Index) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getByIndex" );
     ::osl::MutexGuard aGuard( m_aMutex );
     if (Index < 0 ||
         Index >= (sal_Int32)m_aChilds.size())
@@ -903,6 +939,7 @@ Any SAL_CALL FmXFormController::getByIndex(sal_Int32 Index) throw( IndexOutOfBou
 //-----------------------------------------------------------------------------
 void FmXFormController::addChild(FmXFormController* pChild)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addChild" );
     Reference< XFormController >  xController(pChild);
     m_aChilds.push_back(xController);
     pChild->setParent(static_cast< XFormController* >(this));
@@ -928,6 +965,7 @@ void FmXFormController::addChild(FmXFormController* pChild)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::disposing(const EventObject& e) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::disposing" );
     // Ist der Container disposed worden
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XControlContainer >  xContainer(e.Source, UNO_QUERY);
@@ -951,6 +989,7 @@ void SAL_CALL FmXFormController::disposing(const EventObject& e) throw( RuntimeE
 //-----------------------------------------------------------------------------
 void FmXFormController::disposeAllFeaturesAndDispatchers() SAL_THROW(())
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::disposeAllFeaturesAndDispatchers" );
     for ( DispatcherContainer::iterator aDispatcher = m_aFeatureDispatchers.begin();
           aDispatcher != m_aFeatureDispatchers.end();
           ++aDispatcher
@@ -972,6 +1011,7 @@ void FmXFormController::disposeAllFeaturesAndDispatchers() SAL_THROW(())
 //-----------------------------------------------------------------------------
 void FmXFormController::disposing(void)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::disposing" );
     EventObject aEvt(static_cast< XFormController* >(this));
 
     // if we're still active, simulate a "deactivated" event
@@ -1054,6 +1094,7 @@ namespace
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::propertyChange" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if ( evt.PropertyName == FM_PROP_BOUNDFIELD )
     {
@@ -1121,6 +1162,7 @@ void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) 
 //------------------------------------------------------------------------------
 bool FmXFormController::replaceControl( const Reference< XControl >& _rxExistentControl, const Reference< XControl >& _rxNewControl )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::replaceControl" );
     bool bSuccess = false;
     try
     {
@@ -1182,6 +1224,7 @@ bool FmXFormController::replaceControl( const Reference< XControl >& _rxExistent
 //------------------------------------------------------------------------------
 void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::toggleAutoFields" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
 
@@ -1265,6 +1308,7 @@ IMPL_LINK(FmXFormController, OnToggleAutoFields, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::textChanged(const TextEvent& e) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::textChanged" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if (m_bFiltering)
     {
@@ -1292,23 +1336,24 @@ void SAL_CALL FmXFormController::textChanged(const TextEvent& e) throw( RuntimeE
             }
         }
     }
-    else if (!m_bModified)
-        onModify( e.Source );
+    else
+        impl_onModify();
 }
 
 // XItemListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormController::itemStateChanged(const ItemEvent& rEvent) throw( RuntimeException )
+void SAL_CALL FmXFormController::itemStateChanged(const ItemEvent& /*rEvent*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::itemStateChanged" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
-    if (!m_bModified)
-        onModify( rEvent.Source );
+    impl_onModify();
 }
 
 // XModificationBroadcaster
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addModifyListener(const Reference< XModifyListener > & l) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addModifyListener" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aModifyListeners.addInterface( l );
 }
@@ -1316,39 +1361,50 @@ void SAL_CALL FmXFormController::addModifyListener(const Reference< XModifyListe
 //------------------------------------------------------------------------------
 void FmXFormController::removeModifyListener(const Reference< XModifyListener > & l) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeModifyListener" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aModifyListeners.removeInterface( l );
 }
 
 // XModificationListener
 //------------------------------------------------------------------------------
-void FmXFormController::modified(const EventObject& rEvent) throw( RuntimeException )
+void FmXFormController::modified( const EventObject& _rEvent ) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::modified" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
-    if (!m_bModified)
-        onModify( rEvent.Source );
+
+    try
+    {
+        if ( _rEvent.Source != m_xActiveControl )
+        {   // let this control grab the focus
+            // (this case may happen if somebody moves the scroll wheel of the mouse over a control
+            // which does not have the focus)
+            // 85511 - 29.05.2001 - frank.schoenheit@germany.sun.com
+            //
+            // also, it happens when an image control gets a new image by double-clicking it
+            // #i88458# / 2009-01-12 / frank.schoenheit@sun.com
+            Reference< XWindow > xControlWindow( _rEvent.Source, UNO_QUERY_THROW );
+            xControlWindow->setFocus();
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    impl_onModify();
 }
 
 //------------------------------------------------------------------------------
-void FmXFormController::onModify( const Reference< XInterface >& _rxControl )
+void FmXFormController::impl_onModify()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::onModify" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
-    if (!m_bModified)
+
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        m_bModified = sal_True;
-
-    }
-
-    Reference< XControl > xSourceControl(_rxControl, UNO_QUERY);
-    if  (xSourceControl.get() != m_xCurrentControl.get())
-    {   // let this control grab the focus
-        // (this case may happen if somebody moves the scroll wheel of the mouse over a control
-        // which does not have the focus)
-        // 85511 - 29.05.2001 - frank.schoenheit@germany.sun.com
-        Reference< XWindow > xControlWindow(_rxControl, UNO_QUERY);
-        if (xControlWindow.is())
-            xControlWindow->setFocus();
+        if ( !m_bModified )
+            m_bModified = sal_True;
     }
 
     EventObject aEvt(static_cast<cppu::OWeakObject*>(this));
@@ -1358,6 +1414,7 @@ void FmXFormController::onModify( const Reference< XInterface >& _rxControl )
 //------------------------------------------------------------------------------
 sal_Bool FmXFormController::determineLockState() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::determineLockState" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // a.) in filter mode we are always locked
     // b.) if we have no valid model or our model (a result set) is not alive -> we're locked
@@ -1375,6 +1432,7 @@ sal_Bool FmXFormController::determineLockState() const
 //------------------------------------------------------------------------------
 void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::focusGained" );
     TRACE_RANGE( "FmXFormController::focusGained" );
 
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
@@ -1523,6 +1581,7 @@ IMPL_LINK( FmXFormController, OnDeactivated, void*, /**/ )
 //------------------------------------------------------------------------------
 void FmXFormController::focusLost(const FocusEvent& e) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::focusLost" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     m_pControlBorderManager->focusLost( e.Source );
@@ -1540,30 +1599,35 @@ void FmXFormController::focusLost(const FocusEvent& e) throw( RuntimeException )
 //--------------------------------------------------------------------
 void SAL_CALL FmXFormController::mousePressed( const awt::MouseEvent& /*_rEvent*/ ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::mousePressed" );
     // not interested in
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL FmXFormController::mouseReleased( const awt::MouseEvent& /*_rEvent*/ ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::mouseReleased" );
     // not interested in
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL FmXFormController::mouseEntered( const awt::MouseEvent& _rEvent ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::mouseEntered" );
     m_pControlBorderManager->mouseEntered( _rEvent.Source );
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL FmXFormController::mouseExited( const awt::MouseEvent& _rEvent ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::mouseExited" );
     m_pControlBorderManager->mouseExited( _rEvent.Source );
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL FmXFormController::componentValidityChanged( const EventObject& _rSource ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::componentValidityChanged" );
     Reference< XControl > xControl( findControl( m_aControls, Reference< XControlModel >( _rSource.Source, UNO_QUERY ), sal_False, sal_False ) );
     Reference< XValidatableFormComponent > xValidatable( _rSource.Source, UNO_QUERY );
 
@@ -1576,6 +1640,7 @@ void SAL_CALL FmXFormController::componentValidityChanged( const EventObject& _r
 //--------------------------------------------------------------------
 void FmXFormController::setModel(const Reference< XTabControllerModel > & Model) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::setModel" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::setModel : invalid aggregate !");
@@ -1681,6 +1746,7 @@ void FmXFormController::setModel(const Reference< XTabControllerModel > & Model)
 //------------------------------------------------------------------------------
 Reference< XTabControllerModel >  FmXFormController::getModel() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getModel" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::getModel : invalid aggregate !");
     if (!m_xTabController.is())
@@ -1691,6 +1757,7 @@ Reference< XTabControllerModel >  FmXFormController::getModel() throw( RuntimeEx
 //------------------------------------------------------------------------------
 void FmXFormController::addToEventAttacher(const Reference< XControl > & xControl)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addToEventAttacher" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     OSL_ENSURE( xControl.is(), "FmXFormController::addToEventAttacher: invalid control - how did you reach this?" );
     if ( !xControl.is() )
@@ -1719,6 +1786,7 @@ void FmXFormController::addToEventAttacher(const Reference< XControl > & xContro
 //------------------------------------------------------------------------------
 void FmXFormController::removeFromEventAttacher(const Reference< XControl > & xControl)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeFromEventAttacher" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     OSL_ENSURE( xControl.is(), "FmXFormController::removeFromEventAttacher: invalid control - how did you reach this?" );
     if ( !xControl.is() )
@@ -1747,6 +1815,7 @@ void FmXFormController::removeFromEventAttacher(const Reference< XControl > & xC
 //------------------------------------------------------------------------------
 void FmXFormController::setContainer(const Reference< XControlContainer > & xContainer) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::setContainer" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Reference< XTabControllerModel >  xTabModel(getModel());
     DBG_ASSERT(xTabModel.is() || !xContainer.is(), "No Model defined");
@@ -1835,6 +1904,7 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
 //------------------------------------------------------------------------------
 Reference< XControlContainer >  FmXFormController::getContainer() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getContainer" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::getContainer : invalid aggregate !");
@@ -1846,6 +1916,7 @@ Reference< XControlContainer >  FmXFormController::getContainer() throw( Runtime
 //------------------------------------------------------------------------------
 Sequence< Reference< XControl > > FmXFormController::getControls(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getControls" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_bControlsSorted)
@@ -1885,6 +1956,7 @@ Sequence< Reference< XControl > > FmXFormController::getControls(void) throw( Ru
 //------------------------------------------------------------------------------
 void FmXFormController::autoTabOrder() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::autoTabOrder" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::autoTabOrder : invalid aggregate !");
@@ -1895,6 +1967,7 @@ void FmXFormController::autoTabOrder() throw( RuntimeException )
 //------------------------------------------------------------------------------
 void FmXFormController::activateTabOrder() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::activateTabOrder" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::activateTabOrder : invalid aggregate !");
@@ -1905,6 +1978,7 @@ void FmXFormController::activateTabOrder() throw( RuntimeException )
 //------------------------------------------------------------------------------
 void FmXFormController::setControlLock(const Reference< XControl > & xControl)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::setControlLock" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     sal_Bool bLocked = isLocked();
 
@@ -1958,6 +2032,7 @@ void FmXFormController::setControlLock(const Reference< XControl > & xControl)
 //------------------------------------------------------------------------------
 void FmXFormController::setLocks()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::setLocks" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // alle Controls, die mit einer Datenquelle verbunden sind locken/unlocken
     const Reference< XControl >* pControls = m_aControls.getConstArray();
@@ -1980,9 +2055,7 @@ namespace
         }
         else if ( _rxControl.is() )
         {
-            xBound = Reference< XBoundComponent >( _rxControl->getModel(), UNO_QUERY );
-
-            Reference< XPropertySet > xModelProps( xBound, UNO_QUERY );
+            Reference< XPropertySet > xModelProps( _rxControl->getModel(), UNO_QUERY );
             if ( xModelProps.is() && ::comphelper::hasProperty( FM_PROP_BOUNDFIELD, xModelProps ) )
             {
                 Reference< XPropertySet > xField;
@@ -2001,6 +2074,7 @@ namespace
 //------------------------------------------------------------------------------
 void FmXFormController::startControlModifyListening(const Reference< XControl > & xControl)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::startControlModifyListening" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     bool bModifyListening = lcl_shouldListenForModifications( xControl, this );
@@ -2050,6 +2124,7 @@ void FmXFormController::startControlModifyListening(const Reference< XControl > 
 //------------------------------------------------------------------------------
 void FmXFormController::stopControlModifyListening(const Reference< XControl > & xControl)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::stopControlModifyListening" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     bool bModifyListening = lcl_shouldListenForModifications( xControl, NULL );
@@ -2098,6 +2173,7 @@ void FmXFormController::stopControlModifyListening(const Reference< XControl > &
 //------------------------------------------------------------------------------
 void FmXFormController::startListening()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::startListening" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_bModified  = sal_False;
 
@@ -2111,6 +2187,7 @@ void FmXFormController::startListening()
 //------------------------------------------------------------------------------
 void FmXFormController::stopListening()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::stopListening" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_bModified  = sal_False;
 
@@ -2125,6 +2202,7 @@ void FmXFormController::stopListening()
 //------------------------------------------------------------------------------
 Reference< XControl >  FmXFormController::findControl(Sequence< Reference< XControl > >& _rControls, const Reference< XControlModel > & xCtrlModel ,sal_Bool _bRemove,sal_Bool _bOverWrite) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::findControl" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     DBG_ASSERT( xCtrlModel.is(), "findControl - welches ?!" );
 
@@ -2152,6 +2230,7 @@ Reference< XControl >  FmXFormController::findControl(Sequence< Reference< XCont
 //------------------------------------------------------------------------------
 void FmXFormController::implControlInserted( const Reference< XControl>& _rxControl, bool _bAddToEventAttacher )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::implControlInserted" );
     Reference< XWindow > xWindow( _rxControl, UNO_QUERY );
     if ( xWindow.is() )
     {
@@ -2191,6 +2270,7 @@ void FmXFormController::implControlInserted( const Reference< XControl>& _rxCont
 //------------------------------------------------------------------------------
 void FmXFormController::implControlRemoved( const Reference< XControl>& _rxControl, bool _bRemoveFromEventAttacher )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::implControlRemoved" );
     Reference< XWindow > xWindow( _rxControl, UNO_QUERY );
     if ( xWindow.is() )
     {
@@ -2222,6 +2302,7 @@ void FmXFormController::implControlRemoved( const Reference< XControl>& _rxContr
 //------------------------------------------------------------------------------
 void FmXFormController::implSetCurrentControl( const Reference< XControl >& _rxControl )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::implSetCurrentControl" );
     if ( m_xCurrentControl.get() == _rxControl.get() )
         return;
 
@@ -2239,6 +2320,7 @@ void FmXFormController::implSetCurrentControl( const Reference< XControl >& _rxC
 //------------------------------------------------------------------------------
 void FmXFormController::insertControl(const Reference< XControl > & xControl)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::insertControl" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_bControlsSorted = sal_False;
     m_aControls.realloc(m_aControls.getLength() + 1);
@@ -2259,6 +2341,7 @@ void FmXFormController::insertControl(const Reference< XControl > & xControl)
 //------------------------------------------------------------------------------
 void FmXFormController::removeControl(const Reference< XControl > & xControl)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeControl" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     const Reference< XControl >* pControls = m_aControls.getConstArray();
     const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
@@ -2289,6 +2372,7 @@ void FmXFormController::removeControl(const Reference< XControl > & xControl)
 //------------------------------------------------------------------------------
 void FmXFormController::loaded(const EventObject& rEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::loaded" );
     OSL_ENSURE( rEvent.Source == m_xModelAsIndex, "FmXFormController::loaded: where did this come from?" );
 
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
@@ -2345,6 +2429,7 @@ void FmXFormController::loaded(const EventObject& rEvent) throw( RuntimeExceptio
 //------------------------------------------------------------------------------
 void FmXFormController::updateAllDispatchers() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::updateAllDispatchers" );
     ::std::for_each(
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
@@ -2376,6 +2461,7 @@ IMPL_LINK(FmXFormController, OnLoad, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 void FmXFormController::unloaded(const EventObject& /*rEvent*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::unloaded" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     updateAllDispatchers();
 }
@@ -2383,6 +2469,7 @@ void FmXFormController::unloaded(const EventObject& /*rEvent*/) throw( RuntimeEx
 //------------------------------------------------------------------------------
 void FmXFormController::reloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::reloading" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     // do the same like in unloading
@@ -2394,6 +2481,7 @@ void FmXFormController::reloading(const EventObject& /*aEvent*/) throw( RuntimeE
 //------------------------------------------------------------------------------
 void FmXFormController::reloaded(const EventObject& aEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::reloaded" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     loaded(aEvent);
 }
@@ -2401,6 +2489,7 @@ void FmXFormController::reloaded(const EventObject& aEvent) throw( RuntimeExcept
 //------------------------------------------------------------------------------
 void FmXFormController::unloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::unloading" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     unload();
 }
@@ -2408,6 +2497,7 @@ void FmXFormController::unloading(const EventObject& /*aEvent*/) throw( RuntimeE
 //------------------------------------------------------------------------------
 void FmXFormController::unload() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::unload" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -2437,6 +2527,7 @@ void FmXFormController::unload() throw( RuntimeException )
 // -----------------------------------------------------------------------------
 void FmXFormController::removeBoundFieldListener()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeBoundFieldListener" );
     const Reference< XControl >* pControls = m_aControls.getConstArray();
     const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
     while ( pControls != pControlsEnd )
@@ -2450,6 +2541,7 @@ void FmXFormController::removeBoundFieldListener()
 //------------------------------------------------------------------------------
 void FmXFormController::startFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::startFormListening" );
     try
     {
         if ( m_bCanInsert || m_bCanUpdate )   // form can be modified
@@ -2484,6 +2576,7 @@ void FmXFormController::startFormListening( const Reference< XPropertySet >& _rx
 //------------------------------------------------------------------------------
 void FmXFormController::stopFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::stopFormListening" );
     try
     {
         if ( m_bCanInsert || m_bCanUpdate )
@@ -2517,6 +2610,7 @@ void FmXFormController::stopFormListening( const Reference< XPropertySet >& _rxF
 //------------------------------------------------------------------------------
 void FmXFormController::cursorMoved(const EventObject& /*event*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::cursorMoved" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // toggle the locking ?
     if (m_bLocked != determineLockState())
@@ -2537,11 +2631,13 @@ void FmXFormController::cursorMoved(const EventObject& /*event*/) throw( Runtime
 //------------------------------------------------------------------------------
 void FmXFormController::rowChanged(const EventObject& /*event*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::rowChanged" );
     // not interested in ...
 }
 //------------------------------------------------------------------------------
 void FmXFormController::rowSetChanged(const EventObject& /*event*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::rowSetChanged" );
     // not interested in ...
 }
 
@@ -2550,6 +2646,7 @@ void FmXFormController::rowSetChanged(const EventObject& /*event*/) throw( Runti
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::elementInserted" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Reference< XControl >  xControl;
     evt.Element >>= xControl;
@@ -2596,6 +2693,7 @@ void SAL_CALL FmXFormController::elementInserted(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::elementReplaced" );
     // simulate an elementRemoved
     ContainerEvent aRemoveEvent( evt );
     aRemoveEvent.Element = evt.ReplacedElement;
@@ -2611,6 +2709,7 @@ void SAL_CALL FmXFormController::elementReplaced(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::elementRemoved(const ContainerEvent& evt) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::elementRemoved" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -2638,6 +2737,7 @@ void SAL_CALL FmXFormController::elementRemoved(const ContainerEvent& evt) throw
 //------------------------------------------------------------------------------
 Reference< XControl >  FmXFormController::isInList(const Reference< XWindowPeer > & xPeer) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::isInList" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     const Reference< XControl >* pControls = m_aControls.getConstArray();
 
@@ -2657,6 +2757,7 @@ Reference< XControl >  FmXFormController::isInList(const Reference< XWindowPeer 
 //------------------------------------------------------------------------------
 void FmXFormController::activateFirst() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::activateFirst" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::activateFirst : invalid aggregate !");
@@ -2667,6 +2768,7 @@ void FmXFormController::activateFirst() throw( RuntimeException )
 //------------------------------------------------------------------------------
 void FmXFormController::activateLast() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::activateLast" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::activateLast : invalid aggregate !");
@@ -2678,6 +2780,7 @@ void FmXFormController::activateLast() throw( RuntimeException )
 //------------------------------------------------------------------------------
 Reference< XControl> SAL_CALL FmXFormController::getCurrentControl(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getCurrentControl" );
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_xCurrentControl;
 }
@@ -2685,6 +2788,7 @@ Reference< XControl> SAL_CALL FmXFormController::getCurrentControl(void) throw( 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addActivateListener(const Reference< XFormControllerListener > & l) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addActivateListener" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aActivateListeners.addInterface(l);
@@ -2692,6 +2796,7 @@ void SAL_CALL FmXFormController::addActivateListener(const Reference< XFormContr
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeActivateListener(const Reference< XFormControllerListener > & l) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeActivateListener" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aActivateListeners.removeInterface(l);
@@ -2700,6 +2805,7 @@ void SAL_CALL FmXFormController::removeActivateListener(const Reference< XFormCo
 //------------------------------------------------------------------------------
 void FmXFormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::setFilter" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // create the composer
     Reference< XRowSet > xForm(m_xModelAsIndex, UNO_QUERY);
@@ -2876,6 +2982,7 @@ void FmXFormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 //------------------------------------------------------------------------------
 void FmXFormController::startFiltering()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::startFiltering" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     OStaticDataAccessTools aStaticTools;
@@ -3013,18 +3120,7 @@ void FmXFormController::startFiltering()
     if ( xSet.is() )
         stopFormListening( xSet, sal_True );
 
-    // set the text for all filters
-    OSL_ENSURE( ( m_aFilters.size() > (size_t)m_nCurrentFilterPosition ) && ( m_nCurrentFilterPosition >= 0 ),
-        "FmXFormController::startFiltering: m_nCurrentFilterPosition too big" );
-    if ( ( m_nCurrentFilterPosition >= 0 ) && ( (size_t)m_nCurrentFilterPosition < m_aFilters.size() ) )
-    {
-        FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
-        for (FmFilterRow::const_iterator iter2 = rRow.begin();
-            iter2 != rRow.end(); iter2++)
-        {
-            (*iter2).first->setText((*iter2).second);
-        }
-    }
+    impl_setTextOnAllFilter_throw();
 
     // lock all controls which are not used for filtering
     m_bLocked = determineLockState();
@@ -3035,6 +3131,7 @@ void FmXFormController::startFiltering()
 //------------------------------------------------------------------------------
 void FmXFormController::stopFiltering()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::stopFiltering" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     if ( !m_bFiltering ) // #104693# OJ
     {   // nothing to do
@@ -3127,6 +3224,7 @@ void FmXFormController::stopFiltering()
 //------------------------------------------------------------------------------
 void FmXFormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportException, RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::setMode" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
@@ -3155,6 +3253,7 @@ void FmXFormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExc
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FmXFormController::getMode(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getMode" );
 ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     return m_aMode;
@@ -3163,6 +3262,7 @@ void FmXFormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExc
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL FmXFormController::getSupportedModes(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getSupportedModes" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     static Sequence< ::rtl::OUString > aModes;
     if (!aModes.getLength())
@@ -3178,6 +3278,7 @@ Sequence< ::rtl::OUString > SAL_CALL FmXFormController::getSupportedModes(void) 
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::supportsMode(const ::rtl::OUString& Mode) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::supportsMode" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Sequence< ::rtl::OUString > aModes(getSupportedModes());
     const ::rtl::OUString* pModes = aModes.getConstArray();
@@ -3192,6 +3293,7 @@ sal_Bool SAL_CALL FmXFormController::supportsMode(const ::rtl::OUString& Mode) t
 //------------------------------------------------------------------------------
 Window* FmXFormController::getDialogParentWindow()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::getDialogParentWindow" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Window* pParent = m_pWindow;
     if ( !pParent )
@@ -3212,6 +3314,7 @@ Window* FmXFormController::getDialogParentWindow()
 //------------------------------------------------------------------------------
 bool FmXFormController::checkFormComponentValidity( ::rtl::OUString& /* [out] */ _rFirstInvalidityExplanation, Reference< XControlModel >& /* [out] */ _rxFirstInvalidModel ) SAL_THROW(())
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::checkFormComponentValidity" );
     try
     {
         Reference< XEnumerationAccess > xControlEnumAcc( getModel(), UNO_QUERY );
@@ -3254,6 +3357,7 @@ bool FmXFormController::checkFormComponentValidity( ::rtl::OUString& /* [out] */
 //------------------------------------------------------------------------------
 Reference< XControl > FmXFormController::locateControl( const Reference< XControlModel >& _rxModel ) SAL_THROW(())
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::locateControl" );
     try
     {
         Sequence< Reference< XControl > > aControls( getControls() );
@@ -3343,6 +3447,7 @@ namespace
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& _rEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::approveRowChange" );
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
@@ -3428,6 +3533,7 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& _rEv
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveCursorMove(const EventObject& event) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::approveCursorMove" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
@@ -3444,6 +3550,7 @@ sal_Bool SAL_CALL FmXFormController::approveCursorMove(const EventObject& event)
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveRowSetChange(const EventObject& event) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::approveRowSetChange" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
@@ -3461,6 +3568,7 @@ sal_Bool SAL_CALL FmXFormController::approveRowSetChange(const EventObject& even
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addRowSetApproveListener(const Reference< XRowSetApproveListener > & _rxListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addRowSetApproveListener" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aRowSetApproveListeners.addInterface(_rxListener);
@@ -3469,6 +3577,7 @@ void SAL_CALL FmXFormController::addRowSetApproveListener(const Reference< XRowS
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeRowSetApproveListener(const Reference< XRowSetApproveListener > & _rxListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeRowSetApproveListener" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aRowSetApproveListeners.removeInterface(_rxListener);
@@ -3478,6 +3587,7 @@ void SAL_CALL FmXFormController::removeRowSetApproveListener(const Reference< XR
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::errorOccured(const SQLErrorEvent& aEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::errorOccured" );
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
@@ -3499,6 +3609,7 @@ void SAL_CALL FmXFormController::errorOccured(const SQLErrorEvent& aEvent) throw
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addSQLErrorListener(const Reference< XSQLErrorListener > & aListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addSQLErrorListener" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aErrorListeners.addInterface(aListener);
@@ -3507,6 +3618,7 @@ void SAL_CALL FmXFormController::addSQLErrorListener(const Reference< XSQLErrorL
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeSQLErrorListener(const Reference< XSQLErrorListener > & aListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeSQLErrorListener" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aErrorListeners.removeInterface(aListener);
@@ -3516,6 +3628,7 @@ void SAL_CALL FmXFormController::removeSQLErrorListener(const Reference< XSQLErr
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addDatabaseParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addDatabaseParameterListener" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aParameterListeners.addInterface(aListener);
 }
@@ -3523,6 +3636,7 @@ void SAL_CALL FmXFormController::addDatabaseParameterListener(const Reference< X
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeDatabaseParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeDatabaseParameterListener" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aParameterListeners.removeInterface(aListener);
 }
@@ -3531,12 +3645,14 @@ void SAL_CALL FmXFormController::removeDatabaseParameterListener(const Reference
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addParameterListener" );
     FmXFormController::addDatabaseParameterListener( aListener );
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeParameterListener" );
     FmXFormController::removeDatabaseParameterListener( aListener );
 }
 
@@ -3544,6 +3660,7 @@ void SAL_CALL FmXFormController::removeParameterListener(const Reference< XDatab
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveParameter(const DatabaseParameterEvent& aEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::approveParameter" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aParameterListeners);
@@ -3623,6 +3740,7 @@ sal_Bool SAL_CALL FmXFormController::approveParameter(const DatabaseParameterEve
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addConfirmDeleteListener(const Reference< XConfirmDeleteListener > & aListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addConfirmDeleteListener" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aDeleteListeners.addInterface(aListener);
 }
@@ -3630,6 +3748,7 @@ void SAL_CALL FmXFormController::addConfirmDeleteListener(const Reference< XConf
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeConfirmDeleteListener(const Reference< XConfirmDeleteListener > & aListener) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeConfirmDeleteListener" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     m_aDeleteListeners.removeInterface(aListener);
 }
@@ -3638,6 +3757,7 @@ void SAL_CALL FmXFormController::removeConfirmDeleteListener(const Reference< XC
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::confirmDelete(const RowChangeEvent& aEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::confirmDelete" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aDeleteListeners);
@@ -3668,6 +3788,7 @@ sal_Bool SAL_CALL FmXFormController::confirmDelete(const RowChangeEvent& aEvent)
 //------------------------------------------------------------------------------
 void FmXFormController::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::invalidateFeatures" );
     ::osl::MutexGuard aGuard( m_aMutex );
     // for now, just copy the ids of the features, because ....
     ::std::copy( _rFeatures.begin(), _rFeatures.end(),
@@ -3685,6 +3806,7 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 /*_nId*/, const URL& aURL
                                             const ::rtl::OUString& /*aTargetFrameName*/, sal_Int32 /*nSearchFlags*/)
                                             throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::interceptedQueryDispatch" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     Reference< XDispatch >  xReturn;
     // dispatches handled by ourself
@@ -3723,6 +3845,7 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 /*_nId*/, const URL& aURL
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArgs ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::dispatch" );
     if ( _rArgs.getLength() != 1 )
     {
         DBG_ERROR( "FmXFormController::dispatch: no arguments -> no dispatch!" );
@@ -3751,6 +3874,7 @@ void SAL_CALL FmXFormController::dispatch( const URL& _rURL, const Sequence< Pro
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addStatusListener( const Reference< XStatusListener >& _rxListener, const URL& _rURL ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::addStatusListener" );
     if (_rURL.Complete == FMURL_CONFIRM_DELETION)
     {
         if (_rxListener.is())
@@ -3769,6 +3893,7 @@ void SAL_CALL FmXFormController::addStatusListener( const Reference< XStatusList
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeStatusListener( const Reference< XStatusListener >& /*_rxListener*/, const URL& _rURL ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::removeStatusListener" );
     (void)_rURL;
     OSL_ENSURE(_rURL.Complete == FMURL_CONFIRM_DELETION, "FmXFormController::removeStatusListener: invalid (unsupported) URL!");
     // we never really added the listener, so we don't need to remove it
@@ -3777,6 +3902,7 @@ void SAL_CALL FmXFormController::removeStatusListener( const Reference< XStatusL
 //------------------------------------------------------------------------------
 Reference< XDispatchProviderInterceptor >  FmXFormController::createInterceptor(const Reference< XDispatchProviderInterception > & _xInterception)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::createInterceptor" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
 #ifdef DBG_UTIL
     // check if we already have a interceptor for the given object
@@ -3801,6 +3927,7 @@ Reference< XDispatchProviderInterceptor >  FmXFormController::createInterceptor(
 //------------------------------------------------------------------------------
 bool FmXFormController::ensureInteractionHandler()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::ensureInteractionHandler" );
     if ( m_xInteractionHandler.is() )
         return true;
     if ( m_bAttemptedHandlerCreation )
@@ -3817,6 +3944,7 @@ bool FmXFormController::ensureInteractionHandler()
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::handle( const Reference< XInteractionRequest >& _rRequest ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::handle" );
     if ( !ensureInteractionHandler() )
         return;
     m_xInteractionHandler->handle( _rRequest );
@@ -3825,6 +3953,7 @@ void SAL_CALL FmXFormController::handle( const Reference< XInteractionRequest >&
 //------------------------------------------------------------------------------
 void FmXFormController::deleteInterceptor(const Reference< XDispatchProviderInterception > & _xInterception)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::deleteInterceptor" );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
     // search the interceptor responsible for the given object
     InterceptorsIterator aIter;
@@ -3853,6 +3982,7 @@ void FmXFormController::deleteInterceptor(const Reference< XDispatchProviderInte
 //--------------------------------------------------------------------
 void SAL_CALL FmXFormController::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::initialize" );
     DBG_ASSERT( !m_xInteractionHandler.is(), "FmXFormController::initialize: already initialized!" );
         // currently, we only initialize our interaction handler here, so it's sufficient to assert this
 
@@ -3863,6 +3993,7 @@ void SAL_CALL FmXFormController::initialize( const Sequence< Any >& aArguments )
 //--------------------------------------------------------------------
 void FmXFormController::implInvalidateCurrentControlDependentFeatures()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::implInvalidateCurrentControlDependentFeatures" );
     ::std::vector< sal_Int32 > aCurrentControlDependentFeatures;
 
     aCurrentControlDependentFeatures.push_back( SID_FM_SORTUP );
@@ -3878,5 +4009,6 @@ void FmXFormController::implInvalidateCurrentControlDependentFeatures()
 //--------------------------------------------------------------------
 void SAL_CALL FmXFormController::columnChanged( const EventObject& /*_event*/ ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormController::columnChanged" );
     implInvalidateCurrentControlDependentFeatures();
 }

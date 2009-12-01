@@ -83,8 +83,7 @@ SHL1STDLIBS= \
         $(SVLLIB)		\
         $(SALLIB)		\
         $(UNOTOOLSLIB)	\
-        $(BASEGFXLIB)	\
-        $(SALHELPERLIB)
+        $(BASEGFXLIB)
 
 # SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "(OS)"=="SCO"

@@ -46,14 +46,14 @@ class SbxObject : public SbxVariable, public SfxListener
     SbxObjectImpl* mpSbxObjectImpl; // Impl data
 
     SbxArray* FindVar( SbxVariable*, USHORT& );
-    // AB 23.3.1997, Spezial-Methode fuer VCPtrRemove (s.u.)
+    // AB 23.3.1997, special method for VCPtrRemove (see below)
     SbxArray* VCPtrFindVar( SbxVariable*, USHORT& );
 protected:
-    SbxArrayRef  pMethods;          // Methoden
-    SbxArrayRef  pProps;            // Properties
-    SbxArrayRef  pObjs;             // Objekte
-    SbxProperty* pDfltProp;         // Default-Property
-    String       aClassName;        // Klassenname
+    SbxArrayRef  pMethods;                  // Methods
+    SbxArrayRef  pProps;                    // Properties
+    SbxArrayRef  pObjs;                     // Objects
+    SbxProperty* pDfltProp;                 // Default-Property
+    String       aClassName;                // Classname
     String       aDfltPropName;
     virtual BOOL LoadData( SvStream&, USHORT );
     virtual BOOL StoreData( SvStream& ) const;
@@ -77,34 +77,34 @@ public:
     SbxProperty* GetDfltProperty();
     void SetDfltProperty( const String& r );
     void SetDfltProperty( SbxProperty* );
-    // Suchen eines Elements
+    // Search for an element
     virtual SbxVariable* FindUserData( UINT32 nUserData );
     virtual SbxVariable* Find( const String&, SbxClassType );
     SbxVariable* FindQualified( const String&, SbxClassType );
-    // Quick-Call-Interface fuer Methoden
+    // Quick-Call-Interface for Methods
     virtual BOOL Call( const String&, SbxArray* = NULL );
-    // Execution von DDE-Kommandos
+    // Execution of DDE-Commands
     SbxVariable* Execute( const String& );
-    // Elemente verwalten
+    // Manage elements
     virtual BOOL GetAll( SbxClassType ) { return TRUE; }
     SbxVariable* Make( const String&, SbxClassType, SbxDataType );
     virtual SbxObject* MakeObject( const String&, const String& );
     virtual void Insert( SbxVariable* );
-    // AB 23.4.1997, Optimierung, Einfuegen ohne Ueberpruefung auf doppelte
-    // Eintraege und ohne Broadcasts, wird nur in SO2/auto.cxx genutzt
+    // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and
+    // without Broadcasts, only used in SO2/auto.cxx
     void QuickInsert( SbxVariable* );
-    // AB 23.3.1997, Spezial-Methode, gleichnamige Controls zulassen
+    // AB 23.3.1997, Special-Method, allow corresponding controls
     void VCPtrInsert( SbxVariable* );
     virtual void Remove( const String&, SbxClassType );
     virtual void Remove( SbxVariable* );
-    // AB 23.3.1997, Loeschen per Pointer fuer Controls (doppelte Namen!)
+    // AB 23.3.1997, deletion per pointer for controls (duplicate names!)
     void VCPtrRemove( SbxVariable* );
     void SetPos( SbxVariable*, USHORT );
 
-    // Makro-Recording
+    // Macro-Recording
     virtual String GenerateSource( const String &rLinePrefix,
                                    const SbxObject *pRelativeTo );
-    // Direktzugriff auf die Arrays
+    // Direct access on arrays
     SbxArray* GetMethods()      { return pMethods;  }
     SbxArray* GetProperties()   { return pProps;    }
     SbxArray* GetObjects()      { return pObjs;     }

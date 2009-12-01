@@ -134,9 +134,6 @@ namespace configmgr
                                         TimeStamp const & _aLimitTime,
                                         TimeInterval const & _aDelay);
 
-        /// clear the contained tree, return all remaining modules
-        void clearData( std::vector< rtl::Reference<CacheLine> >& _rDisposeList) SAL_THROW(());
-
     // stuff that is particular for CacheLoadingAccess
         /** add the given subtree at the given location,
             return the tree that is then pertinent and clientAcquire() it once

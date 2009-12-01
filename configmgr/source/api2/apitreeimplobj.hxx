@@ -100,7 +100,6 @@ namespace configmgr
             uno::XInterface*        m_pInstance;
 
         public:
-            explicit ApiTreeImpl(uno::XInterface* pInstance, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl& rParentTree);
             explicit ApiTreeImpl(uno::XInterface* pInstance, ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl* pParentTree);
             explicit ApiTreeImpl(uno::XInterface* _pInstance, ApiProvider& _rProvider, rtl::Reference< configuration::Tree > const& _aTree, configuration::DefaultProvider const & _aDefaultProvider);
             ~ApiTreeImpl();

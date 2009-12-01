@@ -505,7 +505,10 @@ namespace drawinglayer
                     }
                     else
                     {
-                        bInEditMode = false;
+                        // #i100537#
+                        // GetEditOutlinerParaObject() returning no object does not mean that
+                        // text edit mode is not active. Do not reset the flag here
+                        // bInEditMode = false;
                     }
                 }
 

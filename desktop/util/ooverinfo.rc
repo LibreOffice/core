@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ooverinfo.rc,v $
- * $Revision: 1.12 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,55 +25,14 @@
  *
  *************************************************************************/
 
-#define VERSION			2
-#define SUBVERSION		3
-//#define VERVARIANT		0
-// .0 + VER_CONCEPT
-// .100 + VER_ALPHA
-// .200 + VER_BETA
-// .300 + VER_GAMMA
-// .500 + VER_FINAL
-//#define VER_CONCEPT		0
-//#define VER_BETA		6
-#define VER_FINAL		0
-
-#define VER_DAY			1
-#define VER_MONTH		9
-#define VER_YEAR		07
-
-// -----------------------------------------------------------------------
-
 #if !defined(ENGLISH)
 #define LG_D 					// generate always german version
 #endif
 
-#define VER_FIRSTYEAR	00
+#define VER_FIRSTYEAR	2000
 
 #include <windows.h>
-#include "verinfo.hrc"
-
-#ifdef WIN32
-#define FOR_WIN_X " (32 Bit)"
-#else
-#define FOR_WIN_X ""
-#endif
-
-// -----------------------------------------------------------------------
-// 				language/character set specification table
-// -----------------------------------------------------------------------
-
-RCD_LANGUAGE rcdata
-{
-#ifdef LG_D
-	"040704B0", 	// Germany -> Unicode
-	"040704E4", 	// Germany -> Windows, Multilingual
-#else
-	"040904B0", 	// Germany -> Unicode
-	"040904E4", 	// USA -> Windows, Multilingual
-#endif
-	"04090000", 	// USA -> 7-Bit-ASCII
-	0				// end of table
-}
+#include "version.hrc"
 
 // -----------------------------------------------------------------------
 // 				version information
@@ -139,13 +95,6 @@ VS_VERSION_INFO versioninfo
 #endif
 		}
 	}
-
-// version binary entry
-VS_VERSION_INFO rcdata
-{
-	0xF0, "sw", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
-	VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-};
 
 
 2 ICON "icons\\ooo3_writer_doc.ico"

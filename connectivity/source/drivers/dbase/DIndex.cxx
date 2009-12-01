@@ -52,6 +52,7 @@
 #include "diagnose_ex.h"
 #include <comphelper/types.hxx>
 #include "resource/dbase_res.hrc"
+#include <unotools/sharedunocomponent.hxx>
 
 using namespace ::comphelper;
 // -------------------------------------------------------------------------
@@ -69,7 +70,7 @@ using namespace com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 // -------------------------------------------------------------------------
-ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
+ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers()*/)
     ,m_pFileStream(NULL)
     ,m_nCurNode(NODE_NOTFOUND)
     ,m_pTable(_pTable)
@@ -82,7 +83,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const ::rtl::OUString& _rName)
-    :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True) // _pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers()
     ,m_pFileStream(NULL)
     ,m_aHeader(_rHeader)
     ,m_nCurNode(NODE_NOTFOUND)
@@ -163,7 +164,7 @@ sal_Bool ODbaseIndex::openIndexFile()
             if(m_pFileStream)
             {
                 m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-                m_pFileStream->SetBufferSize(512);
+                m_pFileStream->SetBufferSize(PAGE_SIZE);
                 (*m_pFileStream) >> *this;
             }
         }
@@ -342,9 +343,9 @@ ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, BOOL b
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
 
     ONDXPage* pPage;
-    if (m_aCollector.size())
+    if ( !m_aCollector.empty() )
     {
-        pPage = *(m_aCollector.end() - 1);
+        pPage = *(m_aCollector.rbegin());
         m_aCollector.pop_back();
         pPage->SetPagePos(nPagePos);
         pPage->SetParent(pParent);
@@ -362,7 +363,7 @@ ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, BOOL b
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
-    rStream.Read(&rIndex.m_aHeader,512);
+    rStream.Read(&rIndex.m_aHeader,PAGE_SIZE);
 
 /* OJ: no longer needed
     // Text convertierung
@@ -384,7 +385,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     //  aText.Convert(m_pTable->getConnection()->getTextEncoding(), rIndex.m_pTable->getConnection()->GetCharacterSet());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
 */
-    OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,512), 512, "Write not successful: Wrong header size for dbase index!");
+    OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,PAGE_SIZE), PAGE_SIZE, "Write not successful: Wrong header size for dbase index!");
     return rStream;
 }
 // -------------------------------------------------------------------------
@@ -480,11 +481,18 @@ BOOL ODbaseIndex::DropImpl()
     return TRUE;
 }
 // -------------------------------------------------------------------------
+void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::rtl::OUString& _sFile)
+{
+    closeImpl();
+    if(UCBContentHelper::Exists(_sFile))
+        UCBContentHelper::Kill(_sFile);
+    m_pTable->getConnection()->throwGenericSQLException(_nErrorId,*this);
+}
 //------------------------------------------------------------------
 BOOL ODbaseIndex::CreateImpl()
 {
     // Anlegen des Index
-    ::rtl::OUString sFile = getCompletePath();
+    const ::rtl::OUString sFile = getCompletePath();
     if(UCBContentHelper::Exists(sFile))
     {
         const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
@@ -525,20 +533,20 @@ BOOL ODbaseIndex::CreateImpl()
     }
 
     m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-    m_pFileStream->SetBufferSize(512);
+    m_pFileStream->SetBufferSize(PAGE_SIZE);
     m_pFileStream->SetFiller('\0');
 
     // Zunaechst muss das Ergebnis sortiert sein
-    Reference<XStatement> xStmt;
-    Reference<XResultSet> xSet;
+    utl::SharedUNOComponent<XStatement> xStmt;
+    utl::SharedUNOComponent<XResultSet> xSet;
     String aName;
     try
     {
-        xStmt = m_pTable->getConnection()->createStatement();
+        xStmt.set( m_pTable->getConnection()->createStatement(), UNO_SET_THROW);
 
         aName = getString(xCol->getFastPropertyValue(PROPERTY_ID_NAME));
 
-        String aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
+        const String aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
         String aStatement;
         aStatement.AssignAscii("SELECT ");
         aStatement += aQuote;
@@ -561,38 +569,35 @@ BOOL ODbaseIndex::CreateImpl()
 //          aStatement += aQuote;
 //      }
 
-        xSet = xStmt->executeQuery(aStatement);
+        xSet.set( xStmt->executeQuery(aStatement),UNO_SET_THROW );
     }
     catch(const Exception& )
     {
-        closeImpl();
-        if(UCBContentHelper::Exists(sFile))
-            UCBContentHelper::Kill(sFile);
-        m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_CREATE_INDEX,*this);
+        impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX,sFile);
     }
     if (!xSet.is())
     {
-
-        closeImpl();
-        if(UCBContentHelper::Exists(sFile))
-            UCBContentHelper::Kill(sFile);
-        m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_CREATE_INDEX,*this);
+        impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX,sFile);
     }
 
     // Setzen der Headerinfo
     memset(&m_aHeader,0,sizeof(m_aHeader));
-    m_pFileStream->SetStreamSize(512);
-
     sal_Int32 nType = 0;
     ::vos::ORef<OSQLColumns> aCols = m_pTable->getTableColumns();
-
-    Reference< XPropertySet > xTableCol(*find(aCols->get().begin(),aCols->get().end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
+    const Reference< XPropertySet > xTableCol(*find(aCols->get().begin(),aCols->get().end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
 
     xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
     m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
-    m_aHeader.db_maxkeys = (512 - 8) / (8 + m_aHeader.db_keylen);
+    m_aHeader.db_keylen = (( m_aHeader.db_keylen - 1) / 4 + 1) * 4;
+    m_aHeader.db_maxkeys = (PAGE_SIZE - 4) / (8 + m_aHeader.db_keylen);
+    if ( m_aHeader.db_maxkeys < 3 )
+    {
+        impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX_KEYSIZE,sFile);
+    }
+
+    m_pFileStream->SetStreamSize(PAGE_SIZE);
 
     ByteString aCol(aName,m_pTable->getConnection()->getTextEncoding());
     strncpy(m_aHeader.db_name,aCol.GetBuffer(),std::min((USHORT)sizeof(m_aHeader.db_name), aCol.Len()));
@@ -640,12 +645,7 @@ BOOL ODbaseIndex::CreateImpl()
                 aKey.setValue(aValue);
                 if (aKey == (*m_aCurLeaf)[m_nCurNode].GetKey())
                 {
-                    ::comphelper::disposeComponent(xSet);
-                    ::comphelper::disposeComponent(xStmt);
-                    closeImpl();
-                    if(UCBContentHelper::Exists(sFile))
-                        UCBContentHelper::Kill(sFile);
-                    m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE,*this);
+                    impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE,sFile);
                 }
             }
             aInsertKey.setValue(aValue);
@@ -656,16 +656,10 @@ BOOL ODbaseIndex::CreateImpl()
                 break;
         }
     }
-    xRow = NULL;
-    ::comphelper::disposeComponent(xSet);
-    ::comphelper::disposeComponent(xStmt);
 
     if(nRowsLeft)
     {
-        closeImpl();
-        if(UCBContentHelper::Exists(sFile))
-            UCBContentHelper::Kill(sFile);
-        m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_CREATE_INDEX,*this);
+        impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX,sFile);
     }
     Release();
     createINFEntry();

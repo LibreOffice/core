@@ -283,17 +283,17 @@ namespace basic
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_PRECOND( getApplicationBasicManager( false ) == NULL, "ImplRepository::impl_createApplicationBasicManager: there already is one!" );
 
-        // Directory bestimmen
+        // Determine Directory
         SvtPathOptions aPathCFG;
         String aAppBasicDir( aPathCFG.GetBasicPath() );
         if ( !aAppBasicDir.Len() )
             aPathCFG.SetBasicPath( String::CreateFromAscii("$(prog)") );
 
-        // #58293# soffice.new nur im User-Dir suchen => erstes Verzeichnis
+        // #58293# soffice.new search only in user dir => first dir
         String aAppFirstBasicDir = aAppBasicDir.GetToken(1);
 
-        // Basic erzeugen und laden
-        // MT: #47347# AppBasicDir ist jetzt ein PATH!
+        // Create basic and load it
+        // MT: #47347# AppBasicDir is now a PATH
         INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(progurl)") ) );
         aAppBasic.insertName( Application::GetAppName() );
 

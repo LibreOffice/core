@@ -36,7 +36,6 @@ import com.sun.star.script.framework.io.XInputStreamWrapper;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 import java.io.OutputStream;
 import java.io.InputStream;
 
@@ -44,41 +43,10 @@ import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.uno.UnoRuntime;
 
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XComponent;
-
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
 
-
-import com.sun.star.uno.Type;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Any;
-
-import com.sun.star.ucb.Command;
-import com.sun.star.ucb.XContentProvider;
-import com.sun.star.ucb.XContent;
-import com.sun.star.ucb.XCommandProcessor;
-import com.sun.star.ucb.XContentIdentifier;
-import com.sun.star.ucb.XContentIdentifierFactory;
-import com.sun.star.ucb.XSimpleFileAccess;
-
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.Property;
-
-import com.sun.star.sdbc.XRow;
-
 import com.sun.star.deployment.XPackage;
-import com.sun.star.deployment.XPackageManager;
-import com.sun.star.deployment.XPackageManagerFactory;
-
-import com.sun.star.uno.XComponentContext;
-
-import com.sun.star.lang.XMultiComponentFactory;
-
-import com.sun.star.script.provider.XScriptContext;
 
 public class UnoPkgContainer extends ParcelContainer
 {

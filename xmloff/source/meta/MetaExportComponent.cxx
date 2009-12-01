@@ -158,10 +158,11 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                 GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_OFFICE ),
                 GetNamespaceMap().GetNameByKey( XML_NAMESPACE_OFFICE ) );
 #else
-        sal_uInt16 nPos = GetNamespaceMap().GetFirstKey();
+        const SvXMLNamespaceMap& rMap = GetNamespaceMap();
+        sal_uInt16 nPos = rMap.GetFirstKey();
         while( USHRT_MAX != nPos )
         {
-            GetAttrList().AddAttribute( GetNamespaceMap().GetAttrNameByKey( nPos ), GetNamespaceMap().GetNameByKey( nPos ) );
+            GetAttrList().AddAttribute( rMap.GetAttrNameByKey( nPos ), rMap.GetNameByKey( nPos ) );
             nPos = GetNamespaceMap().GetNextKey( nPos );
         }
 #endif

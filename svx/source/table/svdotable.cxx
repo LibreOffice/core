@@ -2106,7 +2106,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 {
     if(rOutl.IsModified())
     {
-        if( GetModel() )
+        if( GetModel() && GetModel()->IsUndoEnabled() )
             GetModel()->AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*this) );
 
         OutlinerParaObject* pNewText = 0;
@@ -2676,7 +2676,7 @@ Pointer SdrTableObj::GetCreatePointer() const
 
 void SdrTableObj::createCell( CellRef& xNewCell )
 {
-    xNewCell.set( new Cell( *this, 0 ) );
+    xNewCell = Cell::create( *this, 0 );
 }
 
 // --------------------------------------------------------------------

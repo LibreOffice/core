@@ -70,29 +70,38 @@ public:
 
 class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
 {
-    sal_uInt32          nUniqId;
-    String              aExtraData;
-    Timer               aTimer;
+    sal_uInt32              nUniqId;
+    String                  aExtraData;
+    Timer                   aTimer;
+    const SfxItemSet*       pInputSet;
+    SfxItemSet*             pOutputSet;
 
+private:
     SAL_DLLPRIVATE SfxModalDialog(SfxModalDialog &); // not defined
     SAL_DLLPRIVATE void operator =(SfxModalDialog &); // not defined
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( TimerHdl_Impl, Timer* );
-//#endif
 
     SAL_DLLPRIVATE void SetDialogData_Impl();
     SAL_DLLPRIVATE void GetDialogData_Impl();
     SAL_DLLPRIVATE void init();
 
 protected:
-    SfxModalDialog(Window *pParent, const ResId &);
-    SfxModalDialog(Window* pParent, sal_uInt32 nUniqueId,
-                   WinBits nWinStyle = WB_STDMODAL);
-    ~SfxModalDialog();
+    SfxModalDialog(Window *pParent, const ResId& );
+    SfxModalDialog(Window* pParent, sal_uInt32 nUniqueId, WinBits nWinStyle = WB_STDMODAL );
 
-    String&     GetExtraData()      { return aExtraData; }
-    sal_uInt32  GetUniqId() const   { return nUniqId; }
+    String&             GetExtraData()      { return aExtraData; }
+    sal_uInt32          GetUniqId() const   { return nUniqId; }
+    SfxItemSet*         GetItemSet()        { return pOutputSet; }
+    void                CreateOutputItemSet( SfxItemPool& rPool );
+    void                CreateOutputItemSet( const SfxItemSet& rInput );
+    void                SetInputSet( const SfxItemSet* pInSet ) { pInputSet = pInSet; }
+    SfxItemSet*         GetOutputSetImpl() { return pOutputSet; }
+
+public:
+    ~SfxModalDialog();
+    const SfxItemSet*   GetOutputItemSet() const { return pOutputSet; }
+    const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
 };
 
 // class SfxModelessDialog --------------------------------------------------
@@ -195,14 +204,12 @@ public:
     virtual             ~SfxSingleTabDialog();
 
     void                SetPage( TabPage* pNewPage );
-    void                SetTabPage( SfxTabPage* pTabPage,
-                                    GetTabPageRanges pRangesFunc = 0 );
+    void                SetTabPage( SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0 );
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
     const USHORT*       GetInputRanges( const SfxItemPool& rPool );
-    void                SetInputSet( const SfxItemSet* pInSet )
-                            { pOptions = pInSet; }
-    const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
+//  void                SetInputSet( const SfxItemSet* pInSet ) { pOptions = pInSet; }
+//  const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
     OKButton*           GetOKButton() const { return pOKBtn; }
     CancelButton*       GetCancelButton() const { return pCancelBtn; }
     void                SetInfoLink( const Link& rLink );
@@ -216,8 +223,8 @@ private:
     HelpButton*         pHelpBtn;
 
     SingleTabDlgImpl*   pImpl;
-    const SfxItemSet*   pOptions;
-    SfxItemSet*         pOutSet;
+//  const SfxItemSet*   pOptions;
+//  SfxItemSet*         pOutSet;
 
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
 };

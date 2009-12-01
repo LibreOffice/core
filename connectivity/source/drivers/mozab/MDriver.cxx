@@ -304,9 +304,9 @@ bool MozabDriver::ensureInit()
 
     const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SVLIBRARY( "mozabdrv" ));
 
-    // load the dbtools library
+    // load the mozabdrv library
     m_hModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);
-    OSL_ENSURE(NULL != m_hModule, "MozabDriver::ensureInit: could not load the dbtools library!");
+    OSL_ENSURE(NULL != m_hModule, "MozabDriver::ensureInit: could not load the mozabdrv library!");
     if ( !m_hModule )
         return false;
 

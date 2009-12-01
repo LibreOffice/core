@@ -324,6 +324,8 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\unopage.hxx %_DEST%\inc%_EXT%\svx\unopage.hxx
 ..\inc\svx\unoprnms.hxx %_DEST%\inc%_EXT%\svx\unoprnms.hxx
 ..\inc\svx\unoshape.hxx %_DEST%\inc%_EXT%\svx\unoshape.hxx
+..\inc\svx\shapepropertynotifier.hxx %_DEST%\inc%_EXT%\svx\shapepropertynotifier.hxx
+..\inc\svx\shapeproperty.hxx %_DEST%\inc%_EXT%\svx\shapeproperty.hxx
 ..\inc\unoshcol.hxx %_DEST%\inc%_EXT%\svx\unoshcol.hxx
 ..\inc\svx\unoipset.hxx %_DEST%\inc%_EXT%\svx\unoipset.hxx
 ..\inc\svx\unoprov.hxx %_DEST%\inc%_EXT%\svx\unoprov.hxx

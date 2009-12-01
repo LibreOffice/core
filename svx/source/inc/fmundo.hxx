@@ -119,6 +119,8 @@ public:
     virtual void Undo();
     virtual void Redo();
 
+    static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElem );
+
 protected:
     void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
     void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
@@ -140,6 +142,8 @@ public:
     virtual void Redo() { Undo(); }
 
     virtual String          GetComment() const;
+
+    static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced );
 };
 
 //========================================================================

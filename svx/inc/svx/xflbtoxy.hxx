@@ -32,6 +32,7 @@
 #define _SVX_XFLBTOXY_HXX
 
 #include <svtools/intitem.hxx>
+#include "svx/svxdllapi.h"
 
 /*************************************************************************
 |*
@@ -39,7 +40,7 @@
 |*
 \************************************************************************/
 
-class XFillBmpTileOffsetXItem : public SfxUInt16Item
+class SVX_DLLPUBLIC XFillBmpTileOffsetXItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();
@@ -62,7 +63,7 @@ public:
 |*
 \************************************************************************/
 
-class XFillBmpTileOffsetYItem : public SfxUInt16Item
+class SVX_DLLPUBLIC XFillBmpTileOffsetYItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();

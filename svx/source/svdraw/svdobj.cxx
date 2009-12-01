@@ -126,6 +126,7 @@
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <svx/polysc3d.hxx>
 #include "svx/svdotable.hxx"
+#include "svx/shapepropertynotifier.hxx"
 
 using namespace ::com::sun::star;
 
@@ -430,17 +431,18 @@ DBG_NAME(SdrObject);
 TYPEINIT1(SdrObject,SfxListener);
 
 SdrObject::SdrObject()
-:   mpProperties(0L),
-    mpViewContact(0L),
-    pObjList(NULL),
-    pPage(NULL),
-    pModel(NULL),
-    pUserCall(NULL),
-    pPlusData(NULL),
-    nOrdNum(0),
-    mnNavigationPosition(SAL_MAX_UINT32),
-    mnLayerID(0),
-    mpSvxShape(0)
+    :mpProperties(0L)
+    ,mpViewContact(0L)
+    ,pObjList(NULL)
+    ,pPage(NULL)
+    ,pModel(NULL)
+    ,pUserCall(NULL)
+    ,pPlusData(NULL)
+    ,nOrdNum(0)
+    ,mnNavigationPosition(SAL_MAX_UINT32)
+    ,mnLayerID(0)
+    ,mpSvxShape( NULL )
+    ,maWeakUnoShape()
 {
     DBG_CTOR(SdrObject,NULL);
     bVirtObj         =FALSE;
@@ -488,13 +490,12 @@ SdrObject::~SdrObject()
 
     try
     {
-        uno::Reference< uno::XInterface > xShape;
-        SvxShape* pSvxShape = getSvxShape( xShape );
+        SvxShape* pSvxShape = getSvxShape();
         if ( pSvxShape )
         {
             OSL_ENSURE(!pSvxShape->HasSdrObjectOwnership(),"Please check where this call come from and replace it with SdrObject::Free");
             pSvxShape->InvalidateSdrObject();
-            uno::Reference< lang::XComponent > xShapeComp( xShape, uno::UNO_QUERY_THROW );
+            uno::Reference< lang::XComponent > xShapeComp( getWeakUnoShape(), uno::UNO_QUERY_THROW );
             xShapeComp->dispose();
         }
     }
@@ -528,8 +529,7 @@ void SdrObject::Free( SdrObject*& _rpObject )
         // nothing to do
         return;
 
-    uno::Reference< uno::XInterface > xShape;
-    SvxShape* pShape = pObject->getSvxShape( xShape );
+    SvxShape* pShape = pObject->getSvxShape();
     if ( pShape && pShape->HasSdrObjectOwnership() )
         // only the shape is allowed to delete me, and will reset the ownership before doing so
         return;
@@ -566,8 +566,7 @@ void SdrObject::SetModel(SdrModel* pNewModel)
     // update listeners at possible api wrapper object
     if( pModel != pNewModel )
     {
-        uno::Reference< uno::XInterface > xShapeGuard;
-        SvxShape* pShape = getSvxShape( xShapeGuard );
+        SvxShape* pShape = getSvxShape();
         if( pShape )
             pShape->ChangeModel( pNewModel );
     }
@@ -2770,15 +2769,18 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
             pGroup = NULL;
     }
 
-    if( eUserCall == SDRUSERCALL_CHGATTR )
+    // notify our UNO shape listeners
+    switch ( eUserCall )
     {
-        if( pModel && pModel->IsAllowShapePropertyChangeListener() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShapeGuard;
-            SvxShape* pShape = const_cast< SdrObject* >(this)->getSvxShape( xShapeGuard );
-            if( pShape )
-                pShape->onUserCall( eUserCall, rBoundRect );
-        }
+    case SDRUSERCALL_RESIZE:
+        notifyShapePropertyChange( ::svx::eShapeSize );
+        // fall through - RESIZE might also imply a change of the position
+    case SDRUSERCALL_MOVEONLY:
+        notifyShapePropertyChange( ::svx::eShapePosition );
+        break;
+    default:
+        // not interested in
+        break;
     }
 }
 
@@ -2844,30 +2846,26 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
     return bRet;
 }
 
-void SdrObject::setUnoShape(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape,
-    SdrObject::GrantXShapeAccess /*aGrant*/
-)
+void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUnoShape )
 {
-    mxUnoShape = _rxUnoShape;
-    mpSvxShape = 0;
+    maWeakUnoShape = _rxUnoShape;
+    mpSvxShape = SvxShape::getImplementation( _rxUnoShape );
+    OSL_ENSURE( mpSvxShape || !_rxUnoShape.is(),
+        "SdrObject::setUnoShape: not sure it's a good idea to have an XShape which is not implemented by SvxShape ..." );
 }
 
 /** only for internal use! */
-SvxShape* SdrObject::getSvxShape( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xShapeGuard )
+SvxShape* SdrObject::getSvxShape() const
 {
-    xShapeGuard = xShapeGuard.query( mxUnoShape );
-    if( xShapeGuard.is() )
-    {
-        if( !mpSvxShape )
-        {
-            mpSvxShape = SvxShape::getImplementation( xShapeGuard );
-        }
-    }
-    else if( mpSvxShape )
-    {
-        mpSvxShape = NULL;
-    }
+    DBG_TESTSOLARMUTEX();
+        // retrieving the impl pointer and subsequently using it is not thread-safe, of course, so it needs to be
+        // guarded by the SolarMutex
+
+#if OSL_DEBUG_LEVE > 0
+    uno::Reference< uno::XInterface > xShape( maWeakUnoShape );
+    OSL_ENSURE( !( !xShapeGuard.is() && mpSvxShape ),
+        "SdrObject::getSvxShape: still having IMPL-Pointer to dead object!" );
+#endif
 
     return mpSvxShape;
 }
@@ -2875,12 +2873,12 @@ SvxShape* SdrObject::getSvxShape( ::com::sun::star::uno::Reference< ::com::sun::
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SdrObject::getUnoShape()
 {
     // try weak reference first
-    uno::Reference< uno::XInterface > xShape( mxUnoShape );
+    uno::Reference< uno::XInterface > xShape( getWeakUnoShape() );
     if( !xShape.is() )
     {
+        OSL_ENSURE( mpSvxShape == NULL, "SdrObject::getUnoShape: XShape already dead, but still an IMPL pointer!" );
         if ( pPage )
         {
-            mpSvxShape = 0;
             uno::Reference< uno::XInterface > xPage( pPage->getUnoPage() );
             if( xPage.is() )
             {
@@ -2888,18 +2886,37 @@ SvxShape* SdrObject::getSvxShape( ::com::sun::star::uno::Reference< ::com::sun::
                 if( pDrawPage )
                 {
                     // create one
-                    mxUnoShape = xShape = pDrawPage->_CreateShape( this );
+                    xShape = pDrawPage->_CreateShape( this );
+                    impl_setUnoShape( xShape );
                 }
             }
         }
         else
         {
             mpSvxShape = SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this, NULL );
-            mxUnoShape = xShape = static_cast< ::cppu::OWeakObject* >( mpSvxShape );
+            maWeakUnoShape = xShape = static_cast< ::cppu::OWeakObject* >( mpSvxShape );
         }
     }
 
     return xShape;
+}
+
+::svx::PropertyChangeNotifier& SdrObject::getShapePropertyChangeNotifier()
+{
+    DBG_TESTSOLARMUTEX();
+
+    SvxShape* pSvxShape = getSvxShape();
+    ENSURE_OR_THROW( pSvxShape, "no SvxShape, yet!" );
+    return pSvxShape->getShapePropertyChangeNotifier();
+}
+
+void SdrObject::notifyShapePropertyChange( const ::svx::ShapeProperty _eProperty ) const
+{
+    DBG_TESTSOLARMUTEX();
+
+    SvxShape* pSvxShape = const_cast< SdrObject* >( this )->getSvxShape();
+    if ( pSvxShape )
+        return pSvxShape->getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
