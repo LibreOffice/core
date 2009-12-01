@@ -279,10 +279,11 @@ namespace dbaui
         {
             ::svx::ODataAccessDescriptor aDesc;
             aDesc.setDataSource(m_sDataSourceName);
-            if ( _nCommandType != -1 )
+            if ( _rObjectName.getLength() && ( _nCommandType != -1 ) )
+            {
                 aDesc[::svx::daCommandType] <<= _nCommandType;
-            if ( _rObjectName.getLength() )
                 aDesc[::svx::daCommand] <<= _rObjectName;
+            }
             if ( m_xConnection.is() )
                 aDesc[::svx::daConnection] <<= m_xConnection;
 
