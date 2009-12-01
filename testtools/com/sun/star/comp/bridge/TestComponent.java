@@ -495,6 +495,10 @@ public class TestComponent {
             return i_Struct;
         }
 
+        public int testPPCAlignment( long l1, long l2, int i1, long l3, int i2 ) throws com.sun.star.uno.RuntimeException {
+            return i2;
+        }
+
         // Attributes
         public boolean getBool() throws com.sun.star.uno.RuntimeException {
             return _bool;
