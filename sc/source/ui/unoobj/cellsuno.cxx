@@ -1170,8 +1170,8 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 }
 
 BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
-                        const uno::Sequence< uno::Sequence<rtl::OUString> >& aData,
-                        const formula::FormulaGrammar::Grammar eGrammar )
+        const uno::Sequence< uno::Sequence<rtl::OUString> >& aData,
+        const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
 //  BOOL bApi = TRUE;
 
@@ -1226,7 +1226,7 @@ BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
             {
                 String aText(pColArr[nCol]);
                 ScAddress aPos( nDocCol, nDocRow, nTab );
-                ScBaseCell* pNewCell = aFunc.InterpretEnglishString( aPos, aText, eGrammar );
+                ScBaseCell* pNewCell = aFunc.InterpretEnglishString( aPos, aText, rFormulaNmsp, eGrammar );
                 pDoc->PutCell( aPos, pNewCell );
 
                 ++nDocCol;
@@ -5052,15 +5052,14 @@ rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeExcep
     return aFormula;
 }
 
-void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& aFormula,
-        const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
+void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& rFormula,
+        const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
 {
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
     {
-        String aString(aFormula);
         ScDocFunc aFunc(*pDocSh);
-        if ( aString.Len() )
+        if ( rFormula.getLength() )
         {
             if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
             {
@@ -5068,7 +5067,7 @@ void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& aFormula,
                 throw uno::RuntimeException();
             }
 
-            aFunc.EnterMatrix( aRange, NULL, NULL, aString, TRUE, TRUE, eGrammar );
+            aFunc.EnterMatrix( aRange, NULL, NULL, rFormula, TRUE, TRUE, rFormulaNmsp, eGrammar );
         }
         else
         {
@@ -5086,14 +5085,14 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const rtl::OUString& aFormula )
 {
     ScUnoGuard aGuard;
     // GRAM_PODF_A1 for API compatibility.
-    SetArrayFormula_Impl( aFormula,formula::FormulaGrammar::GRAM_PODF_A1);
+    SetArrayFormula_Impl( aFormula, ::rtl::OUString(), formula::FormulaGrammar::GRAM_PODF_A1);
 }
 
-void ScCellRangeObj::SetArrayFormulaWithGrammar( const rtl::OUString& aFormula,
-        const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
+void ScCellRangeObj::SetArrayFormulaWithGrammar( const rtl::OUString& rFormula,
+        const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    SetArrayFormula_Impl( aFormula, eGrammar);
+    SetArrayFormula_Impl( rFormula, rFormulaNmsp, eGrammar);
 }
 
 // XArrayFormulaTokens
@@ -5153,7 +5152,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
             // Actually GRAM_PODF_A1 is a don't-care here because of the token
             // array being set, it fits with other API compatibility grammars
             // though.
-            aFunc.EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_STRING, TRUE, TRUE,formula::FormulaGrammar::GRAM_PODF_A1 );
+            aFunc.EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_STRING, TRUE, TRUE, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
         }
         else
         {
@@ -5269,7 +5268,7 @@ void SAL_CALL ScCellRangeObj::setFormulaArray(
     if (pDocSh)
     {
         // GRAM_PODF_A1 for API compatibility.
-        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray,formula::FormulaGrammar::GRAM_PODF_A1 );
+        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
     }
 
     if (!bDone)
@@ -5439,7 +5438,7 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
     if ( pDocSh && nSourceCount )
     {
         ScRange aSourceRange(aRange);
-        SCCOLROW nCount = 0;                    // "Dest-Count"
+        SCsCOLROW nCount = 0;                   // "Dest-Count"
         FillDir eDir = FILL_TO_BOTTOM;
         BOOL bError = FALSE;
         switch (nFillDirection)
@@ -5467,7 +5466,7 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
             default:
                 bError = TRUE;
         }
-        if (nCount > MAXROW)        // Ueberlauf
+        if (nCount < 0 || nCount > MAXROW)      // overflow
             bError = TRUE;
 
         if (!bError)
@@ -5633,7 +5632,15 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
 
     ScDocShell* pDocSh = GetDocShell();
     ScFilterDescriptor aImpl(pDocSh);
-    aImpl.setFilterFields( xDescriptor->getFilterFields() );
+    uno::Reference< sheet::XSheetFilterDescriptor2 > xDescriptor2( xDescriptor, uno::UNO_QUERY );
+    if ( xDescriptor2.is() )
+    {
+        aImpl.setFilterFields2( xDescriptor2->getFilterFields2() );
+    }
+    else
+    {
+        aImpl.setFilterFields( xDescriptor->getFilterFields() );
+    }
     //  Rest sind jetzt Properties...
 
     uno::Reference<beans::XPropertySet> xPropSet( xDescriptor, uno::UNO_QUERY );
@@ -6198,7 +6205,7 @@ void ScCellObj::SetString_Impl(const String& rString, BOOL bInterpret, BOOL bEng
     {
         ScDocFunc aFunc(*pDocSh);
         // GRAM_PODF_A1 for API compatibility.
-        (void)aFunc.SetCellText( aCellPos, rString, bInterpret, bEnglish, TRUE,formula::FormulaGrammar::GRAM_PODF_A1 );
+        (void)aFunc.SetCellText( aCellPos, rString, bInterpret, bEnglish, TRUE, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
     }
 }
 
@@ -6246,13 +6253,13 @@ void ScCellObj::SetFormulaResultDouble( double fResult )
 }
 
 void ScCellObj::SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
-                                        const formula::FormulaGrammar::Grammar eGrammar )
+        const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
         ScDocFunc aFunc(*pDocSh);
-        aFunc.SetCellText( aCellPos, String( rFormula), TRUE, TRUE, TRUE, eGrammar);
+        aFunc.SetCellText( aCellPos, rFormula, TRUE, TRUE, TRUE, rFormulaNmsp, eGrammar);
     }
 }
 

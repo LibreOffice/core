@@ -72,6 +72,9 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "rangeutl.hxx"
+#include "tokenarray.hxx"
+#include "token.hxx"
+#include "compiler.hxx"
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
 #include "xistream.hxx"
@@ -79,9 +82,6 @@
 #include "xistyle.hxx"
 #include "xipage.hxx"
 #include "xiview.hxx"
-#include "tokenarray.hxx"
-#include "token.hxx"
-#include "compiler.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -643,8 +643,11 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
 // ----------------------------------------------------------------------------
 
 XclImpChSourceLink::XclImpChSourceLink( const XclImpChRoot& rRoot ) :
-    XclImpChRoot( rRoot ),
-    mpTokenArray(static_cast<ScTokenArray*>(NULL))
+    XclImpChRoot( rRoot )
+{
+}
+
+XclImpChSourceLink::~XclImpChSourceLink()
 {
 }
 
@@ -655,18 +658,16 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
             >> maData.mnFlags
             >> maData.mnNumFmtIdx;
 
+    mxTokenArray.reset();
     if( GetLinkType() == EXC_CHSRCLINK_WORKSHEET )
     {
         // read token array
         XclTokenArray aXclTokArr;
         rStrm >> aXclTokArr;
 
-        // convert xcl formula tokens to Calc's.
-        const ScTokenArray* pTokenArray =
-            GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_CHART, aXclTokArr);
-
-        if (pTokenArray)
-            mpTokenArray.reset(pTokenArray->Clone());
+        // convert BIFF formula tokens to Calc token array
+        if( const ScTokenArray* pTokens = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CHART, aXclTokArr ) )
+            mxTokenArray.reset( pTokens->Clone() );
     }
 
     // try to read a following CHSTRING record
@@ -693,38 +694,37 @@ void XclImpChSourceLink::SetTextFormats( const XclFormatRunVec& rFormats )
 
 sal_uInt16 XclImpChSourceLink::GetCellCount() const
 {
-    using namespace ::formula;
-
     sal_uInt32 nCellCount = 0;
-    mpTokenArray->Reset();
-    for (const FormulaToken* p = mpTokenArray->First(); p; p = mpTokenArray->Next())
+    if( mxTokenArray.is() )
     {
-        switch (p->GetType())
+        mxTokenArray->Reset();
+        for( const FormulaToken* pToken = mxTokenArray->First(); pToken; pToken = mxTokenArray->Next() )
         {
-            case svSingleRef:
-            case svExternalSingleRef:
-                // single cell
-                ++nCellCount;
-            break;
-            case svDoubleRef:
-            case svExternalDoubleRef:
+            switch( pToken->GetType() )
             {
-                // cell range
-                const ScComplexRefData& rData = static_cast<const ScToken*>(p)->GetDoubleRef();
-                const ScSingleRefData& s = rData.Ref1;
-                const ScSingleRefData& e = rData.Ref2;
-                SCsTAB nTab = e.nTab - s.nTab;
-                SCsCOL nCol = e.nCol - s.nCol;
-                SCsROW nRow = e.nRow - s.nRow;
-                nCellCount += static_cast<sal_uInt32>(nCol+1) *
-                              static_cast<sal_uInt32>(nRow+1) *
-                              static_cast<sal_uInt32>(nTab+1);
+                case ::formula::svSingleRef:
+                case ::formula::svExternalSingleRef:
+                    // single cell
+                    ++nCellCount;
+                break;
+                case ::formula::svDoubleRef:
+                case ::formula::svExternalDoubleRef:
+                {
+                    // cell range
+                    const ScComplexRefData& rComplexRef = static_cast< const ScToken* >( pToken )->GetDoubleRef();
+                    const ScSingleRefData& rRef1 = rComplexRef.Ref1;
+                    const ScSingleRefData& rRef2 = rComplexRef.Ref2;
+                    sal_uInt32 nTabs = static_cast< sal_uInt32 >( rRef2.nTab - rRef1.nTab + 1 );
+                    sal_uInt32 nCols = static_cast< sal_uInt32 >( rRef2.nCol - rRef1.nCol + 1 );
+                    sal_uInt32 nRows = static_cast< sal_uInt32 >( rRef2.nRow - rRef1.nRow + 1 );
+                    nCellCount += nCols * nRows * nTabs;
+                }
+                break;
+                default: ;
             }
-            break;
-            default: ;
         }
     }
-    return limit_cast<sal_uInt16>(nCellCount);
+    return limit_cast< sal_uInt16 >( nCellCount );
 }
 
 void XclImpChSourceLink::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const
@@ -743,25 +743,23 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
 {
     Reference< XDataSequence > xDataSeq;
     Reference< XDataProvider > xDataProv = GetDataProvider();
-    if( xDataProv.is() )
+    if( xDataProv.is() && mxTokenArray.is() )
     {
-        if (mpTokenArray)
+        ScCompiler aComp( GetDocPtr(), ScAddress(), *mxTokenArray );
+        aComp.SetGrammar( ::formula::FormulaGrammar::GRAM_ENGLISH );
+        OUStringBuffer aRangeRep;
+        aComp.CreateStringFromTokenArray( aRangeRep );
+        try
         {
-            ScCompiler aComp(GetDocPtr(), ScAddress(), *mpTokenArray);
-            aComp.SetGrammar(::formula::FormulaGrammar::GRAM_ENGLISH);
-            OUStringBuffer aBuf;
-            aComp.CreateStringFromTokenArray(aBuf);
-            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation(
-                aBuf.makeStringAndClear());
+            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aRangeRep.makeStringAndClear() );
+            // set sequence role
+            ScfPropertySet aSeqProp( xDataSeq );
+            aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
         }
-        else
+        catch( Exception& )
         {
 //            DBG_ERRORFILE( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
         }
-
-        // set sequence role
-        ScfPropertySet aSeqProp( xDataSeq );
-        aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
     }
     return xDataSeq;
 }
@@ -1787,6 +1785,14 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
                     CreateCategSequence( EXC_CHPROP_ROLE_XVALUES );
                 if( xXValueSeq.is() )
                     aLabeledSeqVec.push_back( xXValueSeq );
+                // add size values of bubble charts
+                if( rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES )
+                {
+                    Reference< XLabeledDataSequence > xSizeValueSeq =
+                        lclCreateLabeledDataSequence( mxBubbleLink, EXC_CHPROP_ROLE_SIZEVALUES, mxTitleLink.get() );
+                    if( xSizeValueSeq.is() )
+                        aLabeledSeqVec.push_back( xSizeValueSeq );
+                }
             }
             // attach labeled data sequences to series
             if( !aLabeledSeqVec.empty() )

@@ -44,6 +44,7 @@
 #include <svx/linkmgr.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/unolingu.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1046,6 +1047,18 @@ void ScDocument::UpdateExternalRefLinks()
         TrackFormulas();
         pShell->Broadcast( SfxSimpleHint(FID_DATACHANGED) );
         ResetChanged( ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB) );
+
+        // #i101960# set document modified, as in TrackTimeHdl for DDE links
+        if (!pShell->IsModified())
+        {
+            pShell->SetModified( TRUE );
+            SfxBindings* pBindings = GetViewBindings();
+            if (pBindings)
+            {
+                pBindings->Invalidate( SID_SAVEDOC );
+                pBindings->Invalidate( SID_DOC_MODIFIED );
+            }
+        }
     }
 }
 

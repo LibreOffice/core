@@ -1051,7 +1051,7 @@ void lcl_SeperateOneRowRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& 
     }
 
     vector<ScSharedTokenRef> aTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     return !aTokens.empty();
 }
 
@@ -1445,7 +1445,7 @@ ScChart2DataProvider::createDataSource(
     }
 
     vector<ScSharedTokenRef> aRefTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         // Invalid range representation.  Bail out.
         throw lang::IllegalArgumentException();
@@ -2180,7 +2180,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         return false;
 
     vector<ScSharedTokenRef> aTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     return !aTokens.empty();
 }
 
@@ -2196,6 +2196,12 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     DBG_ASSERT( m_pDocument, "No Document -> no createDataSequenceByRangeRepresentation" );
     if(!m_pDocument || (aRangeRepresentation.getLength() == 0))
         return xResult;
+
+    // Note: the range representation must be in Calc A1 format.  The import
+    // filters use this method to pass data ranges, and they have no idea what
+    // the current formula syntax is.  In the future we should add another
+    // method to allow the client code to directly pass tokens representing
+    // ranges.
 
     vector<ScSharedTokenRef> aRefTokens;
     ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument);
@@ -2242,7 +2248,7 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUStr
         return aRet;
 
     vector<ScSharedTokenRef> aRefTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, sRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, sRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         throw lang::IllegalArgumentException();
 
@@ -2483,7 +2489,7 @@ void ScChart2DataProvider::detectRangesFromDataSource(vector<ScSharedTokenRef>& 
     {
         const OUString& rRangeRep = *itr;
         vector<ScSharedTokenRef> aTokens;
-        ScRefTokenHelper::compileRangeRepresentation(aTokens, rRangeRep, m_pDocument);
+        ScRefTokenHelper::compileRangeRepresentation(aTokens, rRangeRep, m_pDocument, m_pDocument->GetGrammar());
 
         CollectRefTokens func;
         func = for_each(aTokens.begin(), aTokens.end(), func);

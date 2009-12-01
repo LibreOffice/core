@@ -102,7 +102,7 @@ FltError ExportBiff5::Write()
         SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg, bWriteBasicCode, bWriteBasicStrg );
         ULONG nErr = aBasicImport.SaveOrDelMSVBAStorage( TRUE, EXC_STORAGE_VBA_PROJECT );
         if( nErr != ERRCODE_NONE )
-            pDocShell->SetError( nErr );
+            pDocShell->SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
@@ -191,7 +191,7 @@ FltError ExportXml2007::Write()
         SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg, bWriteBasicCode, bWriteBasicStrg );
         ULONG nErr = aBasicImport.SaveOrDelMSVBAStorage( TRUE, EXC_STORAGE_VBA_PROJECT );
         if( nErr != ERRCODE_NONE )
-            pDocShell->SetError( nErr );
+            pDocShell->SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc

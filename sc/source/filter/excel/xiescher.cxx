@@ -1653,23 +1653,19 @@ void XclImpNoteObj::SetNoteData( const ScAddress& rScPos, sal_uInt16 nNoteFlags 
 
 void XclImpNoteObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( &rSdrObj );
-    if( pTextObj && maScPos.IsValid() )
+    // create formatted text
+    XclImpTextObj::DoPreProcessSdrObj( rDffConv, rSdrObj );
+    OutlinerParaObject* pOutlinerObj = rSdrObj.GetOutlinerParaObject();
+    if( maScPos.IsValid() && pOutlinerObj )
     {
-        if( ScPostIt* pNote = GetDoc().GetOrCreateNote( maScPos ) )
-        {
-            if( SdrCaptionObj* pCaption = pNote->GetCaption() )
-            {
-                // create formatted text
-                XclImpTextObj::DoPreProcessSdrObj( rDffConv, *pCaption );
-                // set textbox rectangle from imported object
-                pCaption->NbcSetLogicRect( pTextObj->GetLogicRect() );
-                // copy all items from imported object (resets shadow items)
-                pNote->SetCaptionItems( pTextObj->GetMergedItemSet() );
-                // move caption to correct layer (visible/hidden)
-                pNote->ShowCaption( ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE ) );
-            }
-        }
+        // create cell note with all data from drawing object
+        ScNoteUtil::CreateNoteFromObjectData(
+            GetDoc(), maScPos,
+            rSdrObj.GetMergedItemSet().Clone(),             // new object on heap expected
+            new OutlinerParaObject( *pOutlinerObj ),        // new object on heap expected
+            rSdrObj.GetLogicRect(),
+            ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE ),
+            false );
     }
 }
 
@@ -1711,7 +1707,7 @@ void XclImpControlHelper::ProcessControl( const XclImpDrawObjBase& rDrawObj ) co
     aPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), rDrawObj.GetObjName() );
 
     // control visible and printable?
-//    aPropSet.SetBoolProperty( CREATE_OUSTRING( "EnableVisible" ), rDrawObj.IsVisible() );     // waiting for #i88878#
+    aPropSet.SetBoolProperty( CREATE_OUSTRING( "EnableVisible" ), rDrawObj.IsVisible() );
     aPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), rDrawObj.IsPrintable() );
 
     // sheet links
@@ -3905,7 +3901,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
                 nTotalLen = 0;
             }
         }
-        ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText, false );
+        ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText, false, false );
     }
 }
 

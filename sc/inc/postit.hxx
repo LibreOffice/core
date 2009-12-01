@@ -31,30 +31,42 @@
 #ifndef SC_POSTIT_HXX
 #define SC_POSTIT_HXX
 
+#include <boost/shared_ptr.hpp>
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include "address.hxx"
 #include "scdllapi.h"
 
 class EditTextObject;
+class OutlinerParaObject;
 class SdrCaptionObj;
 class SdrPage;
 class SfxItemSet;
 class ScDocument;
+struct ScCaptionInitData;
 
 // ============================================================================
 
+/** Internal data for a cell annotation. */
 struct SC_DLLPUBLIC ScNoteData
 {
-    String              maDate;             /// Creation date of the note.
-    String              maAuthor;           /// Author of the note.
+    typedef ::boost::shared_ptr< ScCaptionInitData > ScCaptionInitDataRef;
+
+    ::rtl::OUString     maDate;             /// Creation date of the note.
+    ::rtl::OUString     maAuthor;           /// Author of the note.
+    ScCaptionInitDataRef mxInitData;        /// Initial data for invisible notes without SdrObject.
     SdrCaptionObj*      mpCaption;          /// Drawing object representing the cell note.
     bool                mbShown;            /// True = note is visible.
 
     explicit            ScNoteData( bool bShown = false );
+                        ~ScNoteData();
 };
 
 // ============================================================================
 
+/** An additional class held by an ScBaseCell instance containing all
+    information for a cell annotation.
+ */
 class SC_DLLPUBLIC ScPostIt
 {
 public:
@@ -65,76 +77,98 @@ public:
     /** Copy constructor. Clones the note and its caption to a new document. */
     explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNote );
 
-    /** Creates a note from the passed note data with existing caption object. */
-    explicit            ScPostIt( ScDocument& rDoc, const ScNoteData& rNoteData );
+    /** Creates a note from the passed note data with existing caption object.
+
+        @param bAlwaysCreateCaption  Instead of a pointer to an existing
+            caption object, the passed note data structure may contain a
+            reference to an ScCaptionInitData structure containing information
+            about how to construct a missing caption object. If TRUE is passed,
+            the caption drawing object will be created immediately from that
+            data. If FALSE is passed and the note is not visible, it will
+            continue to cache that data until the caption object is requested.
+     */
+    explicit            ScPostIt(
+                            ScDocument& rDoc, const ScAddress& rPos,
+                            const ScNoteData& rNoteData, bool bAlwaysCreateCaption );
 
     /** Removes the caption object from drawing layer, if this note is its owner. */
                         ~ScPostIt();
 
-    /** Returns the data struct containing note settings. */
+    /** Clones this note and its caption object, if specified.
+
+        @param bCloneCaption  If TRUE is passed, clones the caption object and
+            inserts it into the drawing layer of the destination document. If
+            FALSE is passed, the cloned note will refer to the old caption
+            object (used e.g. in Undo documents to restore the pointer to the
+            existing caption object).
+     */
+    ScPostIt*           Clone(
+                            const ScAddress& rOwnPos,
+                            ScDocument& rDestDoc, const ScAddress& rDestPos,
+                            bool bCloneCaption ) const;
+
+    /** Returns the data struct containing all note settings. */
     inline const ScNoteData& GetNoteData() const { return maNoteData; }
 
     /** Returns the creation date of this note. */
-    inline const String& GetDate() const { return maNoteData.maDate; }
+    inline const ::rtl::OUString& GetDate() const { return maNoteData.maDate; }
     /** Sets a new creation date for this note. */
-    inline void         SetDate( const String& rDate ) { maNoteData.maDate = rDate; }
+    inline void         SetDate( const ::rtl::OUString& rDate ) { maNoteData.maDate = rDate; }
 
     /** Returns the author date of this note. */
-    inline const String& GetAuthor() const { return maNoteData.maAuthor; }
+    inline const ::rtl::OUString& GetAuthor() const { return maNoteData.maAuthor; }
     /** Sets a new author date for this note. */
-    inline void         SetAuthor( const String& rAuthor ) { maNoteData.maAuthor = rAuthor; }
+    inline void         SetAuthor( const ::rtl::OUString& rAuthor ) { maNoteData.maAuthor = rAuthor; }
 
     /** Sets date and author from system settings. */
     void                AutoStamp();
 
+    /** Returns the pointer to the current outliner object, or null. */
+    const OutlinerParaObject* GetOutlinerObject() const;
     /** Returns the pointer to the current edit text object, or null. */
     const EditTextObject* GetEditTextObject() const;
+
     /** Returns the caption text of this note. */
-    String              GetText() const;
+    ::rtl::OUString     GetText() const;
     /** Returns true, if the caption text of this note contains line breaks. */
     bool                HasMultiLineText() const;
     /** Changes the caption text of this note. All text formatting will be lost. */
-    void                SetText( const String& rText );
+    void                SetText( const ScAddress& rPos, const ::rtl::OUString& rText );
 
-    /** Returns the note caption object. */
+    /** Returns an existing note caption object. returns null, if the note
+        contains initial caption data needed to construct a caption object. */
     inline SdrCaptionObj* GetCaption() const { return maNoteData.mpCaption; }
-    /** Returns and forgets the note caption object. */
-    inline SdrCaptionObj* ForgetCaption() { SdrCaptionObj* pCapt = maNoteData.mpCaption; maNoteData.mpCaption = 0; return pCapt; }
+    /** Returns the caption object of this note. Creates the caption object, if
+        the note contains initial caption data instead of the caption. */
+    SdrCaptionObj*      GetOrCreateCaption( const ScAddress& rPos ) const;
+    /** Forgets the pointer to the note caption object. */
+    void                ForgetCaption();
 
     /** Shows or hides the note caption object. */
-    void                ShowCaption( bool bShow = true );
-    /** Hides the note caption object. */
-    inline void         HideCaption() { ShowCaption( false ); }
+    void                ShowCaption( const ScAddress& rPos, bool bShow = true );
     /** Returns true, if the caption object is visible. */
     inline bool         IsCaptionShown() const { return maNoteData.mbShown; }
 
     /** Shows or hides the caption temporarily (does not change internal visibility state). */
-    void                ShowCaptionTemp( bool bShow = true );
-    /** Hides caption if it has been shown temporarily (does not change internal visibility state). */
-    inline void         HideCaptionTemp() { ShowCaptionTemp( false ); }
+    void                ShowCaptionTemp( const ScAddress& rPos, bool bShow = true );
 
     /** Updates caption position according to position of the passed cell. */
     void                UpdateCaptionPos( const ScAddress& rPos );
-
-    /** Sets caption itemset to default items. */
-    void                SetCaptionDefaultItems();
-    /** Updates caption itemset according to the passed item set while removing shadow items. */
-    void                SetCaptionItems( const SfxItemSet& rItemSet );
 
 private:
                         ScPostIt( const ScPostIt& );
     ScPostIt&           operator=( const ScPostIt& );
 
+    /** Creates the caption object from initial caption data if existing. */
+    void                CreateCaptionFromInitData( const ScAddress& rPos ) const;
     /** Creates a new caption object at the passed cell position, clones passed existing caption. */
     void                CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCaption = 0 );
     /** Removes the caption object from the drawing layer, if this note is its owner. */
     void                RemoveCaption();
-    /** Updates caption visibility. */
-    void                UpdateCaptionLayer( bool bShow );
 
 private:
     ScDocument&         mrDoc;              /// Parent document containing the note.
-    ScNoteData          maNoteData;         /// Note data with pointer to caption object.
+    mutable ScNoteData  maNoteData;         /// Note data with pointer to caption object.
 };
 
 // ============================================================================
@@ -142,24 +176,89 @@ private:
 class SC_DLLPUBLIC ScNoteUtil
 {
 public:
-    /** Clones the note and its caption object, if specified.
-        @param bCloneCaption  True = clones the caption object and inserts it
-            into the drawing layer of the destination document. False = the
-            cloned note will refer to the old caption object. */
-    static ScPostIt*    CloneNote( ScDocument& rDoc, const ScAddress& rPos,
-                            const ScPostIt& rNote, bool bCloneCaption );
-
     /** Tries to update the position of note caption objects in the specified range. */
     static void         UpdateCaptionPositions( ScDocument& rDoc, const ScRange& rRange );
 
     /** Creates and returns a caption object for a temporary caption. */
     static SdrCaptionObj* CreateTempCaption( ScDocument& rDoc, const ScAddress& rPos,
-                            SdrPage& rPage, const String& rUserText,
+                            SdrPage& rDrawPage, const ::rtl::OUString& rUserText,
                             const Rectangle& rVisRect, bool bTailFront );
 
-    /** Creates a cell note based on the passed string and inserts it into the document. */
-    static ScPostIt*    CreateNoteFromString( ScDocument& rDoc, const ScAddress& rPos,
-                            const String& rNoteText, bool bShown );
+    /** Creates a cell note using the passed caption drawing object.
+
+        This function is used in import filters to reuse the imported drawing
+        object as note caption object.
+
+        @param rCaption  The drawing object for the cell note. This object MUST
+            be inserted into the document at the correct drawing page already.
+
+        @return  Pointer to the new cell note object if insertion was
+            successful (i.e. the passed cell position was valid), null
+            otherwise. The Calc document is the owner of the note object. The
+            passed item set and outliner object are deleted automatically if
+            creation of the note was not successful.
+     */
+    static ScPostIt*    CreateNoteFromCaption(
+                            ScDocument& rDoc, const ScAddress& rPos,
+                            SdrCaptionObj& rCaption, bool bShown );
+
+    /** Creates a cell note based on the passed caption object data.
+
+        This function is used in import filters to use an existing imported
+        item set and outliner object to create a note caption object. For
+        performance reasons, it is possible to specify that the caption drawing
+        object for the cell note is not created yet but the note caches the
+        passed data needed to create the caption object on demand (see
+        parameter bAlwaysCreateCaption).
+
+        @param pItemSet  Pointer to an item set on heap memory containing all
+            formatting attributes of the caption object. This function takes
+            ownership of the passed item set.
+
+        @param pOutlinerObj  Pointer to an outliner object on heap memory
+            containing (formatted) text for the caption object. This function
+            takes ownership of the passed outliner object.
+
+        @param rCaptionRect  The absolute position and size of the caption
+            object. The rectangle may be empty, in this case the default
+            position and size is used.
+
+        @param bAlwaysCreateCaption  If TRUE is passed, the caption drawing
+            object will be created immediately. If FALSE is passed, the caption
+            drawing object will not be created if the note is not visible
+            (bShown = FALSE), but the cell note will cache the passed data.
+            MUST be set to FALSE outside of import filter implementations!
+
+        @return  Pointer to the new cell note object if insertion was
+            successful (i.e. the passed cell position was valid), null
+            otherwise. The Calc document is the owner of the note object.
+     */
+    static ScPostIt*    CreateNoteFromObjectData(
+                            ScDocument& rDoc, const ScAddress& rPos,
+                            SfxItemSet* pItemSet, OutlinerParaObject* pOutlinerObj,
+                            const Rectangle& rCaptionRect, bool bShown,
+                            bool bAlwaysCreateCaption );
+
+    /** Creates a cell note based on the passed string and inserts it into the
+        document.
+
+        @param rNoteText  The text used to create the note caption object. Must
+            not be empty.
+
+        @param bAlwaysCreateCaption  If TRUE is passed, the caption drawing
+            object will be created immediately. If FALSE is passed, the caption
+            drawing object will not be created if the note is not visible
+            (bShown = FALSE), but the cell note will cache the passed data.
+            MUST be set to FALSE outside of import filter implementations!
+
+        @return  Pointer to the new cell note object if insertion was
+            successful (i.e. the passed cell position was valid), null
+            otherwise. The Calc document is the owner of the note object.
+     */
+    static ScPostIt*    CreateNoteFromString(
+                            ScDocument& rDoc, const ScAddress& rPos,
+                            const ::rtl::OUString& rNoteText, bool bShown,
+                            bool bAlwaysCreateCaption );
 };
 
 // ============================================================================

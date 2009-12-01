@@ -862,6 +862,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     m_aChartTypeDialogControllerList.push_back(new AreaChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new LineChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new XYChartDialogController() );
+    m_aChartTypeDialogControllerList.push_back(new BubbleChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new NetChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new CombiColumnLineChartDialogController() );

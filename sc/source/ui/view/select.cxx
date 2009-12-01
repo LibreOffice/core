@@ -47,6 +47,7 @@
 //#include "dataobj.hxx"
 #include "transobj.hxx"
 #include "docsh.hxx"
+#include "tabprotection.hxx"
 
 extern USHORT nScFillModeMouseModifier;             // global.cxx
 
@@ -322,6 +323,26 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
 {
     ScTabView* pView = pViewData->GetView();
     SCTAB nTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
+
+    if ( pDoc->IsTabProtected(nTab) )
+    {
+        if (nPosX < 0 || nPosY < 0)
+            return false;
+
+        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        bool bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bool bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+        if ( bSkipProtected && bSkipUnprotected )
+            return FALSE;
+
+        bool bCellProtected = pDoc->HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HASATTR_PROTECTED);
+        if ( (bCellProtected && bSkipProtected) || (!bCellProtected && bSkipUnprotected) )
+            // Don't select this cell!
+            return FALSE;
+    }
+
     ScModule* pScMod = SC_MOD();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     bool bRefMode = ( pViewShell ? pViewShell->IsRefInputMode() : false );
@@ -375,7 +396,6 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
 
         ScRange aDelRange;
         BOOL bOldDelMark = pViewData->GetDelMark( aDelRange );
-        ScDocument* pDoc = pViewData->GetDocument();
 
         if ( nPosX+1 >= (SCsCOL) nStartX && nPosX <= (SCsCOL) nEndX &&
              nPosY+1 >= (SCsROW) nStartY && nPosY <= (SCsROW) nEndY &&
@@ -511,7 +531,6 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
         BYTE nMode = pViewData->GetFillMode();
         if ( nMode == SC_FILL_EMBED_LT || nMode == SC_FILL_EMBED_RB )
         {
-            ScDocument* pDoc = pViewData->GetDocument();
             DBG_ASSERT( pDoc->IsEmbedded(), "!pDoc->IsEmbedded()" );
             ScRange aRange;
             pDoc->GetEmbedded( aRange);

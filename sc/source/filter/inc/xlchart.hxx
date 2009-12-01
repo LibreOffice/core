@@ -157,6 +157,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_ROLE_CLOSEVALUES         CREATE_OUSTRING( "values-last" )
 #define EXC_CHPROP_ROLE_LOWVALUES           CREATE_OUSTRING( "values-min" )
 #define EXC_CHPROP_ROLE_HIGHVALUES          CREATE_OUSTRING( "values-max" )
+#define EXC_CHPROP_ROLE_SIZEVALUES          CREATE_OUSTRING( "values-size" )
 
 // Constants and Enumerations =================================================
 

@@ -40,6 +40,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
@@ -77,6 +78,8 @@
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
+#include "tabprotection.hxx"
+#include "formulaparserpool.hxx"
 
 #include <memory>
 
@@ -505,6 +508,13 @@ void ScDocument::MarkUsedExternalReferences()
     }
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
+}
+
+ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
+{
+    if( !mxFormulaParserPool.get() )
+        mxFormulaParserPool.reset( new ScFormulaParserPool( *this ) );
+    return *mxFormulaParserPool;
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )
@@ -1701,28 +1711,28 @@ void ScDocument::SnapVisArea( Rectangle& rRect ) const
         ScDrawLayer::MirrorRectRTL( rRect );        // back to real rectangle
 }
 
-void ScDocument::SetDocProtection( BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
+ScDocProtection* ScDocument::GetDocProtection() const
 {
-    bProtected = bProtect;
-    aProtectPass = rPasswd;
+    return pDocProtection.get();
 }
 
-void ScDocument::SetTabProtection( SCTAB nTab, BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
+void ScDocument::SetDocProtection(const ScDocProtection* pProtect)
 {
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            pTab[nTab]->SetProtection( bProtect, rPasswd );
+    if (pProtect)
+        pDocProtection.reset(new ScDocProtection(*pProtect));
+    else
+        pDocProtection.reset(NULL);
 }
 
 BOOL ScDocument::IsDocProtected() const
 {
-    return bProtected;
+    return pDocProtection.get() && pDocProtection->isProtected();
 }
 
 BOOL ScDocument::IsDocEditable() const
 {
     // import into read-only document is possible
-    return !bProtected && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
+    return !IsDocProtected() && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
 }
 
 BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
@@ -1734,18 +1744,28 @@ BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
     return FALSE;
 }
 
-const uno::Sequence<sal_Int8>& ScDocument::GetDocPassword() const
-{
-    return aProtectPass;
-}
-
-const uno::Sequence<sal_Int8>& ScDocument::GetTabPassword( SCTAB nTab ) const
+ScTableProtection* ScDocument::GetTabProtection( SCTAB nTab ) const
 {
     if (VALIDTAB(nTab) && pTab[nTab])
-        return pTab[nTab]->GetPassword();
+        return pTab[nTab]->GetProtection();
 
-    DBG_ERROR("Falsche Tabellennummer");
-    return aProtectPass;
+    return NULL;
+}
+
+void ScDocument::SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect)
+{
+    if (!ValidTab(nTab))
+        return;
+
+    pTab[nTab]->SetProtection(pProtect);
+}
+
+void ScDocument::CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest)
+{
+    if (!ValidTab(nTabSrc) || !ValidTab(nTabDest))
+        return;
+
+    pTab[nTabDest]->SetProtection( pTab[nTabSrc]->GetProtection() );
 }
 
 const ScDocOptions& ScDocument::GetDocOptions() const

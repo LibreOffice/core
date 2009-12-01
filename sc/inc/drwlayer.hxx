@@ -115,11 +115,7 @@ private:
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCsCOL nDx,SCsROW nDy );
 
-    void            RecalcPos( SdrObject* pObj,
-                        const ScDrawObjData& rData,
-                        const ScAddress& rOldStart,
-                        const ScAddress& rOldEnd,
-                        bool bNegativePage );
+    void            RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage );
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );

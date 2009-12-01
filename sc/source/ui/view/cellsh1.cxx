@@ -103,6 +103,7 @@
 #include "dpsave.hxx"
 #include "dpgroup.hxx"      // for ScDPNumGroupInfo
 #include "spellparam.hxx"
+#include "postit.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx" //CHINA001
@@ -1708,32 +1709,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_TOGGLE_REL:
-            {
-                BOOL bOk = FALSE;
-                SCCOL nCol = GetViewData()->GetCurX();
-                SCROW nRow = GetViewData()->GetCurY();
-                SCTAB nTab = GetViewData()->GetTabNo();
-                ScDocument* pDoc = GetViewData()->GetDocument();
-                CellType eType;
-                pDoc->GetCellType( nCol, nRow, nTab, eType );
-                if (eType == CELLTYPE_FORMULA)
-                {
-                    String aOld;
-                    pDoc->GetFormula( nCol, nRow, nTab, aOld );
-                    xub_StrLen nLen = aOld.Len();
-                    ScRefFinder aFinder( aOld, pDoc );
-                    aFinder.ToggleRel( 0, nLen );
-                    if (aFinder.GetFound())
-                    {
-                        String aNew = aFinder.GetText();
-                        pTabViewShell->EnterData( nCol, nRow, nTab, aNew );
-                        pTabViewShell->UpdateInputHandler();
-                        bOk = TRUE;
-                    }
-                }
-                if (!bOk)
-                    pTabViewShell->ErrorMessage(STR_ERR_NOREF);
-            }
+            pTabViewShell->DoRefConversion();
             break;
 
         case SID_DEC_INDENT:

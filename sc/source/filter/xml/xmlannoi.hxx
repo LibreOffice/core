@@ -30,6 +30,7 @@
 #ifndef SC_XMLANNOI_HXX
 #define SC_XMLANNOI_HXX
 
+#include <memory>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -39,30 +40,31 @@
 class ScXMLImport;
 class ScXMLTableRowCellContext;
 
+struct ScXMLAnnotationData
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        mxShape;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+                        mxShapes;
+    ::rtl::OUString     maAuthor;
+    ::rtl::OUString     maCreateDate;
+    ::rtl::OUString     maSimpleText;
+    bool                mbUseShapePos;
+    bool                mbShown;
+
+    explicit            ScXMLAnnotationData();
+                        ~ScXMLAnnotationData();
+};
+
 class ScXMLAnnotationContext : public SvXMLImportContext
 {
-    rtl::OUStringBuffer sOUText;
-    rtl::OUStringBuffer sAuthorBuffer;
-    rtl::OUStringBuffer sCreateDateBuffer;
-    rtl::OUStringBuffer sCreateDateStringBuffer;
-    sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
-    sal_Bool        bHasTextP;
-    sal_Bool        bHasPos;
-    ScXMLTableRowCellContext*   pCellContext;
-    SvXMLImportContext*         pShapeContext;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes;
-
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
 public:
 
     ScXMLAnnotationContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLAnnotationData& rAnnotationData,
                         ScXMLTableRowCellContext* pCellContext);
 
     virtual ~ScXMLAnnotationContext();
@@ -78,8 +80,23 @@ public:
 
     virtual void EndElement();
 
-    void SetShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTempShape,
-        const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xTempShapes) { xShape.set(xTempShape); xShapes.set(xTempShapes); }
+    void SetShape(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+
+private:
+    ScXMLAnnotationData& mrAnnotationData;
+    rtl::OUStringBuffer maTextBuffer;
+    rtl::OUStringBuffer maAuthorBuffer;
+    rtl::OUStringBuffer maCreateDateBuffer;
+    rtl::OUStringBuffer maCreateDateStringBuffer;
+    sal_Int32           nParagraphCount;
+    sal_Bool            bHasTextP;
+    ScXMLTableRowCellContext* pCellContext;
+    SvXMLImportContext* pShapeContext;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 };
 
 

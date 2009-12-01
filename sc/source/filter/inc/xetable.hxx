@@ -1088,7 +1088,5 @@ private:
     XclExpDvalRef       mxDval;             /// Data validation with DVAL and DV records.
 };
 
-// ============================================================================
-
 #endif
 

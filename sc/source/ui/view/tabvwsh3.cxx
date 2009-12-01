@@ -75,6 +75,8 @@
 #include "autofmt.hxx"
 #include "dwfunctr.hxx"
 #include "shtabdlg.hxx"
+#include "tabprotection.hxx"
+#include "protectiondlg.hxx"
 
 #include <svtools/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
@@ -84,6 +86,10 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+
+#include <memory>
+
+using ::std::auto_ptr;
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 #define IS_AVAILABLE(WhichId,ppItem) \
@@ -985,14 +991,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        case SID_STATUS_DOCPOS:
-            {
-                //! Navigator an-/ausschalten (wie im Writer) ???
-                //!GetViewData()->GetDispatcher().Execute( SID_NAVIGATOR,
-                //!                       SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
-            }
-            break;
-
         case FID_PROTECT_DOC:
             {
                 ScDocument*         pDoc = GetViewData()->GetDocument();
@@ -1009,12 +1007,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                if (pDoc->IsDocProtected())
+                ScDocProtection* pProtect = pDoc->GetDocProtection();
+                if (pProtect && pProtect->isProtected())
                 {
                     BOOL    bCancel = FALSE;
                     String  aPassword;
 
-                    if (pDoc->GetDocPassword().getLength())
+                    if (pProtect->isProtectedWithPass())
                     {
                         String  aText( ScResId(SCSTR_PASSWORD) );
 
@@ -1064,89 +1063,164 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
 
         case FID_PROTECT_TABLE:
-            {
-                ScDocument*         pDoc = GetViewData()->GetDocument();
-                SCTAB               nTab = GetViewData()->GetTabNo();
-                SfxPasswordDialog*  pDlg;
-                String              aPassword;
-                BOOL                bCancel = FALSE;
-                BOOL                bOldProtection = pDoc->IsTabProtected(nTab);
-                BOOL                bNewProtection = ! bOldProtection;
+        {
+            ScDocument* pDoc = GetViewData()->GetDocument();
+            SCTAB       nTab = GetViewData()->GetTabNo();
+            bool        bOldProtection = pDoc->IsTabProtected(nTab);
 
-                if( pReqArgs )
+#if ENABLE_SHEET_PROTECTION
+
+            if( pReqArgs )
+            {
+                const SfxPoolItem* pItem;
+                bool bNewProtection = !bOldProtection;
+                if( IS_AVAILABLE( FID_PROTECT_TABLE, &pItem ) )
+                    bNewProtection = ((const SfxBoolItem*)pItem)->GetValue();
+                if( bNewProtection == bOldProtection )
                 {
-                    const SfxPoolItem* pItem;
-                    if( IS_AVAILABLE( FID_PROTECT_TABLE, &pItem ) )
-                        bNewProtection = ((const SfxBoolItem*)pItem)->GetValue();
-                    if( bNewProtection == bOldProtection )
+                    rReq.Ignore();
+                    break;
+                }
+            }
+
+            if (bOldProtection)
+            {
+                // Unprotect a protected sheet.
+
+                ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+                if (pProtect && pProtect->isProtectedWithPass())
+                {
+                    String aText( ScResId(SCSTR_PASSWORDOPT) );
+                    auto_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
+                    pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
+                    pDlg->SetMinLen( 0 );
+                    pDlg->SetHelpId( FID_PROTECT_TABLE );
+                    pDlg->SetEditHelpId( HID_PASSWD_TABLE );
+
+                    if (pDlg->Execute() == RET_OK)
                     {
-                        rReq.Ignore();
-                        break;
+                        String aPassword = pDlg->GetPassword();
+                        Unprotect(nTab, aPassword);
                     }
                 }
+                else
+                    // this sheet is not password-protected.
+                    Unprotect(nTab, String());
 
-                    if ( bOldProtection)
-                    {
-                        if (pDoc->GetTabPassword(nTab).getLength())
-                        {
-                            String  aText( ScResId(SCSTR_PASSWORD) );
-
-                            pDlg = new SfxPasswordDialog( GetDialogParent(), &aText );
-                            pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
-                            pDlg->SetMinLen( 0 );
-                            pDlg->SetHelpId( FID_PROTECT_TABLE );
-                            pDlg->SetEditHelpId( HID_PASSWD_TABLE );
-
-                            if (pDlg->Execute() == RET_OK)
-                                aPassword = pDlg->GetPassword();
-                            else
-                                bCancel = TRUE;
-
-                            delete pDlg;
-                        }
-                    }
-                    else
-                    {
-                        String aText( ScResId(SCSTR_PASSWORDOPT) );
-
-                        pDlg = new SfxPasswordDialog( GetDialogParent(), &aText );
-                        pDlg->SetText( ScResId(SCSTR_PROTECTTAB) );
-                        pDlg->SetMinLen( 0 );
-                        pDlg->SetHelpId( FID_PROTECT_TABLE );
-                        pDlg->SetEditHelpId( HID_PASSWD_TABLE );
-                        pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
-
-                        if (pDlg->Execute() == RET_OK)
-                            aPassword = pDlg->GetPassword();
-                        else
-                            bCancel = TRUE;
-
-                        delete pDlg;
-                    }
-
-                if( !bCancel )
+                if (!pReqArgs)
                 {
-                    if ( bOldProtection )
-                        Unprotect( nTab, aPassword );
-                    else
-                    {
-                        pScMod->InputEnterHandler();
+                    rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, false) );
+                    rReq.Done();
+                }
+            }
+            else
+            {
+                // Protect a current sheet.
 
-                        Protect( nTab, aPassword );
-                    }
+                auto_ptr<ScTableProtectionDlg> pDlg(new ScTableProtectionDlg(GetDialogParent()));
 
-                    if( !pReqArgs )
+                ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+                if (pProtect)
+                    pDlg->SetDialogData(*pProtect);
+
+                if (pDlg->Execute() == RET_OK)
+                {
+                    pScMod->InputEnterHandler();
+
+                    ScTableProtection aNewProtect;
+                    pDlg->WriteData(aNewProtect);
+                    ProtectSheet(nTab, aNewProtect);
+                    if (!pReqArgs)
                     {
-                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_TABLE, bNewProtection ) );
+                        rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, true) );
                         rReq.Done();
                     }
                 }
-
-                TabChanged();
-                UpdateInputHandler(TRUE);   // damit sofort wieder eingegeben werden kann
-                SelectionChanged();
             }
-            break;
+#else
+            auto_ptr<SfxPasswordDialog> pDlg;
+            String              aPassword;
+            BOOL                bCancel = FALSE;
+            bool                bNewProtection = ! bOldProtection;
+
+            if( pReqArgs )
+            {
+                const SfxPoolItem* pItem;
+                if( IS_AVAILABLE( FID_PROTECT_TABLE, &pItem ) )
+                    bNewProtection = ((const SfxBoolItem*)pItem)->GetValue();
+                if( bNewProtection == bOldProtection )
+                {
+                    rReq.Ignore();
+                    break;
+                }
+            }
+
+            if ( bOldProtection)
+            {
+                // Unprotect a protected sheet.
+
+                ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+                if (pProtect && pProtect->isProtectedWithPass())
+                {
+                    String aText( ScResId(SCSTR_PASSWORDOPT) );
+                    pDlg.reset(new SfxPasswordDialog(GetDialogParent(), &aText));
+                    pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
+                    pDlg->SetMinLen( 0 );
+                    pDlg->SetHelpId( FID_PROTECT_TABLE );
+                    pDlg->SetEditHelpId( HID_PASSWD_TABLE );
+
+                    if (pDlg->Execute() == RET_OK)
+                        aPassword = pDlg->GetPassword();
+                    else
+                        bCancel = TRUE;
+                }
+
+                if (!pReqArgs)
+                {
+                    rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, false) );
+                    rReq.Done();
+                }
+            }
+            else
+            {
+                String aText( ScResId(SCSTR_PASSWORDOPT) );
+
+                pDlg.reset(new SfxPasswordDialog(GetDialogParent(), &aText));
+                pDlg->SetText( ScResId(SCSTR_PROTECTTAB) );
+                pDlg->SetMinLen( 0 );
+                pDlg->SetHelpId( FID_PROTECT_TABLE );
+                pDlg->SetEditHelpId( HID_PASSWD_TABLE );
+                pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
+
+                if (pDlg->Execute() == RET_OK)
+                    aPassword = pDlg->GetPassword();
+                else
+                    bCancel = TRUE;
+            }
+
+            if( !bCancel )
+            {
+                if ( bOldProtection )
+                    Unprotect( nTab, aPassword );
+                else
+                {
+                    pScMod->InputEnterHandler();
+
+                    Protect( nTab, aPassword );
+                }
+
+                if( !pReqArgs )
+                {
+                    rReq.AppendItem( SfxBoolItem( FID_PROTECT_TABLE, bNewProtection ) );
+                    rReq.Done();
+                }
+            }
+#endif
+            TabChanged();
+            UpdateInputHandler(true);   // damit sofort wieder eingegeben werden kann
+            SelectionChanged();
+        }
+        break;
 
         case SID_OPT_LOCALE_CHANGED :
             {   // locale changed, SYSTEM number formats changed => repaint cell contents

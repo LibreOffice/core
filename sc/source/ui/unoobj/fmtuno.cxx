@@ -42,7 +42,6 @@
 
 #include "fmtuno.hxx"
 #include "miscuno.hxx"
-#include "conditio.hxx"
 #include "validat.hxx"
 #include "document.hxx"
 #include "unoguard.hxx"
@@ -51,7 +50,8 @@
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
 
-using namespace com::sun::star;
+using namespace ::com::sun::star;
+using namespace ::formula;
 
 //------------------------------------------------------------------------
 
@@ -130,12 +130,17 @@ ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  ScTableConditionalFormat::ScTableConditionalFormat()
-//UNUSED2008-05  {
-//UNUSED2008-05  }
+ScCondFormatEntryItem::ScCondFormatEntryItem() :
+    meGrammar1( FormulaGrammar::GRAM_UNSPECIFIED ),
+    meGrammar2( FormulaGrammar::GRAM_UNSPECIFIED ),
+    meMode( SC_COND_NONE )
+{
+}
 
-ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
-                                                    const formula::FormulaGrammar::Grammar eGrammar)
+//------------------------------------------------------------------------
+
+ScTableConditionalFormat::ScTableConditionalFormat(
+        ScDocument* pDoc, ULONG nKey, FormulaGrammar::Grammar eGrammar)
 {
     //  Eintrag aus dem Dokument lesen...
 
@@ -156,11 +161,11 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                 {
                     ScCondFormatEntryItem aItem;
                     const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
-                    aItem.mnMode = sal::static_int_cast<USHORT>(pFormatEntry->GetOperation());
+                    aItem.meMode = pFormatEntry->GetOperation();
                     aItem.maPos = pFormatEntry->GetValidSrcPos();
                     aItem.maExpr1 = pFormatEntry->GetExpression(aItem.maPos, 0, 0, eGrammar);
                     aItem.maExpr2 = pFormatEntry->GetExpression(aItem.maPos, 1, 0, eGrammar);
-                    aItem.meGrammar = eGrammar;
+                    aItem.meGrammar1 = aItem.meGrammar2 = eGrammar;
                     aItem.maStyle = pFormatEntry->GetStyle();
 
                     AddEntry_Impl(aItem);
@@ -170,8 +175,20 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
     }
 }
 
+namespace {
+
+FormulaGrammar::Grammar lclResolveGrammar( FormulaGrammar::Grammar eExtGrammar, FormulaGrammar::Grammar eIntGrammar )
+{
+    if( eExtGrammar != FormulaGrammar::GRAM_UNSPECIFIED )
+        return eExtGrammar;
+    OSL_ENSURE( eIntGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "lclResolveGrammar - unspecified grammar, using GRAM_PODF_A1" );
+    return (eIntGrammar == FormulaGrammar::GRAM_UNSPECIFIED) ? FormulaGrammar::GRAM_PODF_A1 : eIntGrammar;
+}
+
+} // namespace
+
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
-                                            ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar ) const
+        ScDocument* pDoc, FormulaGrammar::Grammar eGrammar) const
 {
     //  ScConditionalFormat = Core-Struktur, muss leer sein
 
@@ -185,15 +202,12 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
 
         ScCondFormatEntryItem aData;
         pEntry->GetData(aData);
-        if (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED)
-            eGrammar = aData.meGrammar;
-        if (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED)
-        {
-            DBG_ERRORFILE("FillFormat: unspecified grammar, using GRAM_PODF_A1");
-            eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
-        }
-        ScCondFormatEntry aCoreEntry( static_cast<ScConditionMode>(aData.mnMode),
-            aData.maExpr1, aData.maExpr2, pDoc, aData.maPos, aData.maStyle, eGrammar );
+
+        FormulaGrammar::Grammar eGrammar1 = lclResolveGrammar( eGrammar, aData.meGrammar1 );
+        FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, aData.meGrammar2 );
+
+        ScCondFormatEntry aCoreEntry( aData.meMode, aData.maExpr1, aData.maExpr2,
+            pDoc, aData.maPos, aData.maStyle, aData.maExprNmsp1, aData.maExprNmsp2, eGrammar1, eGrammar2 );
 
         if ( aData.maPosStr.Len() )
             aCoreEntry.SetSrcString( aData.maPosStr );
@@ -248,69 +262,86 @@ void SAL_CALL ScTableConditionalFormat::addNew(
 {
     ScUnoGuard aGuard;
     ScCondFormatEntryItem aEntry;
-    aEntry.mnMode = sal::static_int_cast<USHORT>(SC_COND_NONE);
+    aEntry.meMode = SC_COND_NONE;
 
     const beans::PropertyValue* pPropArray = aConditionalEntry.getConstArray();
     long nPropCount = aConditionalEntry.getLength();
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        String aPropName(rProp.Name);
 
-        if ( aPropName.EqualsAscii( SC_UNONAME_OPERATOR ) )
+        if ( rProp.Name.equalsAscii( SC_UNONAME_OPERATOR ) )
         {
             sheet::ConditionOperator eOper = (sheet::ConditionOperator)
                             ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-            aEntry.mnMode = sal::static_int_cast<USHORT>(lcl_ConditionOperatorToMode( eOper ));
+            aEntry.meMode = lcl_ConditionOperatorToMode( eOper );
         }
-        else if ( aPropName.EqualsAscii( SC_UNONAME_FORMULA1 ) )
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_FORMULA1 ) )
         {
             rtl::OUString aStrVal;
             uno::Sequence<sheet::FormulaToken> aTokens;
             if ( rProp.Value >>= aStrVal )
-                aEntry.maExpr1 = String( aStrVal );
+                aEntry.maExpr1 = aStrVal;
             else if ( rProp.Value >>= aTokens )
             {
                 aEntry.maExpr1.Erase();
                 aEntry.maTokens1 = aTokens;
             }
         }
-        else if ( aPropName.EqualsAscii( SC_UNONAME_FORMULA2 ) )
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_FORMULA2 ) )
         {
             rtl::OUString aStrVal;
             uno::Sequence<sheet::FormulaToken> aTokens;
             if ( rProp.Value >>= aStrVal )
-                aEntry.maExpr2 = String( aStrVal );
+                aEntry.maExpr2 = aStrVal;
             else if ( rProp.Value >>= aTokens )
             {
                 aEntry.maExpr2.Erase();
                 aEntry.maTokens2 = aTokens;
             }
         }
-        else if ( aPropName.EqualsAscii( SC_UNONAME_SOURCEPOS ) )
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_SOURCEPOS ) )
         {
             table::CellAddress aAddress;
             if ( rProp.Value >>= aAddress )
                 aEntry.maPos = ScAddress( (SCCOL)aAddress.Column, (SCROW)aAddress.Row, aAddress.Sheet );
         }
-        else if ( aPropName.EqualsAscii( SC_UNONAME_SOURCESTR ) )
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_SOURCESTR ) )
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maPosStr = String( aStrVal );
         }
-        else if ( aPropName.EqualsAscii( SC_UNONAME_STYLENAME ) )
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_STYLENAME ) )
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName(
                                                 aStrVal, SFX_STYLE_FAMILY_PARA );
         }
-        else if ( aPropName.EqualsAscii( SC_UNONAME_GRAMMAR ) )
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_FORMULANMSP1 ) )
+        {
+            rtl::OUString aStrVal;
+            if ( rProp.Value >>= aStrVal )
+                aEntry.maExprNmsp1 = aStrVal;
+        }
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_FORMULANMSP2 ) )
+        {
+            rtl::OUString aStrVal;
+            if ( rProp.Value >>= aStrVal )
+                aEntry.maExprNmsp2 = aStrVal;
+        }
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_GRAMMAR1 ) )
         {
             sal_Int32 nVal = 0;
             if ( rProp.Value >>= nVal )
-                aEntry.meGrammar = static_cast<formula::FormulaGrammar::Grammar>(nVal);
+                aEntry.meGrammar1 = static_cast< FormulaGrammar::Grammar >( nVal );
+        }
+        else if ( rProp.Name.equalsAscii( SC_UNONAME_GRAMMAR2 ) )
+        {
+            sal_Int32 nVal = 0;
+            if ( rProp.Value >>= nVal )
+                aEntry.meGrammar2 = static_cast< FormulaGrammar::Grammar >( nVal );
         }
         else
         {
@@ -523,14 +554,14 @@ sheet::ConditionOperator SAL_CALL ScTableConditionalEntry::getOperator()
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return lcl_ConditionModeToOperator( static_cast<ScConditionMode>(aData.mnMode) );
+    return lcl_ConditionModeToOperator( aData.meMode );
 }
 
 void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOperator )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aData.mnMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
+    aData.meMode = lcl_ConditionOperatorToMode( nOperator );
     if (pParent)
         pParent->DataChanged();
 }
@@ -619,7 +650,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
             aSrcPos = pData->GetValidSrcPos();  // #b4974740# valid pos for expressions
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, eGrammar );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, eGrammar );
-            meGrammar = eGrammar;
+            meGrammar1 = meGrammar2 = eGrammar;
             nValMode = sal::static_int_cast<USHORT>( pData->GetDataMode() );
             bIgnoreBlank = pData->IsIgnoreBlank();
             nShowList = pData->GetListType();
@@ -647,18 +678,14 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
 {
     //  ScValidationData = Core-Struktur
 
-    if (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED)
-        eGrammar = meGrammar;
-    if (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED)
-    {
-        DBG_ERRORFILE("CreateValidationData: unspecified grammar, using GRAM_PODF_A1");
-        eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
-    }
+    FormulaGrammar::Grammar eGrammar1 = lclResolveGrammar( eGrammar, meGrammar1 );
+    FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, meGrammar2 );
 
     ScValidationData* pRet = new ScValidationData( (ScValidationMode)nValMode,
                                                    (ScConditionMode)nMode,
                                                    aExpr1, aExpr2, pDoc, aSrcPos,
-                                                   eGrammar );
+                                                   maExprNmsp1, maExprNmsp2,
+                                                   eGrammar1, eGrammar2 );
     pRet->SetIgnoreBlank(bIgnoreBlank);
     pRet->SetListType(nShowList);
 
@@ -702,7 +729,9 @@ void ScTableValidationObj::ClearData_Impl()
     aSrcPos.Set(0,0,0);
     aExpr1.Erase();
     aExpr2.Erase();
-    meGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED;  // will be overriden when needed
+    maExprNmsp1.Erase();
+    maExprNmsp2.Erase();
+    meGrammar1 = meGrammar2 = FormulaGrammar::GRAM_UNSPECIFIED;  // will be overriden when needed
     aInputTitle.Erase();
     aInputMessage.Erase();
     aErrorTitle.Erase();
@@ -905,13 +934,37 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
         if ( aValue >>= aStrVal )
             aPosString = String( aStrVal );
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_GRAMMAR ) )
+    else if ( aString.EqualsAscii( SC_UNONAME_FORMULANMSP1 ) )
+    {
+        // internal - only for XML filter, not in PropertySetInfo, only set
+
+        rtl::OUString aStrVal;
+        if ( aValue >>= aStrVal )
+            maExprNmsp1 = aStrVal;
+    }
+    else if ( aString.EqualsAscii( SC_UNONAME_FORMULANMSP2 ) )
+    {
+        // internal - only for XML filter, not in PropertySetInfo, only set
+
+        rtl::OUString aStrVal;
+        if ( aValue >>= aStrVal )
+            maExprNmsp2 = aStrVal;
+    }
+    else if ( aString.EqualsAscii( SC_UNONAME_GRAMMAR1 ) )
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
         sal_Int32 nVal = 0;
         if ( aValue >>= nVal )
-            meGrammar = static_cast<formula::FormulaGrammar::Grammar>(nVal);
+            meGrammar1 = static_cast< FormulaGrammar::Grammar >(nVal);
+    }
+    else if ( aString.EqualsAscii( SC_UNONAME_GRAMMAR2 ) )
+    {
+        // internal - only for XML filter, not in PropertySetInfo, only set
+
+        sal_Int32 nVal = 0;
+        if ( aValue >>= nVal )
+            meGrammar2 = static_cast< FormulaGrammar::Grammar >(nVal);
     }
 
     DataChanged();

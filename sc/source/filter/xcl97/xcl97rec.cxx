@@ -79,6 +79,7 @@
 #include "scextopt.hxx"
 #include "docoptio.hxx"
 #include "patattr.hxx"
+#include "tabprotection.hxx"
 
 #include <oox/core/tokens.hxx>
 
@@ -716,6 +717,7 @@ ExcBof8_Base::ExcBof8_Base()
 
 void ExcBof8_Base::SaveCont( XclExpStream& rStrm )
 {
+    rStrm.DisableEncryption();
     rStrm   << nVers << nDocType << nRupBuild << nRupYear
             << nFileHistory << nLowestBiffVer;
 }
@@ -775,7 +777,10 @@ void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 {
     nOwnPos = rStrm.GetSvStreamPos();
     // write dummy position, real position comes later
-    rStrm << sal_uInt32( 0 ) << nGrbit << GetName();
+    rStrm.DisableEncryption();
+    rStrm << sal_uInt32(0);
+    rStrm.EnableEncryption();
+    rStrm << nGrbit << GetName();
 }
 
 
@@ -1083,33 +1088,73 @@ sal_Size ExcEScenarioManager::GetLen() const
     return 8;
 }
 
+// ============================================================================
 
-
-// ---- class XclProtection ------------------------------------------
-
-const BYTE      XclProtection::pMyData[] =
+struct XclExpTabProtectOption
 {
-    0x12, 0x00, 0x02, 0x00, 0x01, 0x00,         // PROTECT
-    0xDD, 0x00, 0x02, 0x00, 0x01, 0x00,         // SCENPROTECT
-    0x63, 0x00, 0x02, 0x00, 0x01, 0x00          // OBJPROTECT
+    ScTableProtection::Option   eOption;
+    sal_uInt16                  nMask;
 };
-const sal_Size XclProtection::nMyLen = sizeof( XclProtection::pMyData );
 
-sal_Size XclProtection::GetLen( void ) const
+XclExpSheetProtectOptions::XclExpSheetProtectOptions( const XclExpRoot& rRoot, SCTAB nTab ) :
+    XclExpRecord( 0x0867, 23 )
 {
-    return nMyLen;
+    static const XclExpTabProtectOption aTable[] =
+    {
+        { ScTableProtection::OBJECTS,               0x0001 },
+        { ScTableProtection::SCENARIOS,             0x0002 },
+        { ScTableProtection::FORMAT_CELLS,          0x0004 },
+        { ScTableProtection::FORMAT_COLUMNS,        0x0008 },
+        { ScTableProtection::FORMAT_ROWS,           0x0010 },
+        { ScTableProtection::INSERT_COLUMNS,        0x0020 },
+        { ScTableProtection::INSERT_ROWS,           0x0040 },
+        { ScTableProtection::INSERT_HYPERLINKS,     0x0080 },
+
+        { ScTableProtection::DELETE_COLUMNS,        0x0100 },
+        { ScTableProtection::DELETE_ROWS,           0x0200 },
+        { ScTableProtection::SELECT_LOCKED_CELLS,   0x0400 },
+        { ScTableProtection::SORT,                  0x0800 },
+        { ScTableProtection::AUTOFILTER,            0x1000 },
+        { ScTableProtection::PIVOT_TABLES,          0x2000 },
+        { ScTableProtection::SELECT_UNLOCKED_CELLS, 0x4000 },
+
+        { ScTableProtection::NONE,                  0x0000 }
+    };
+
+    mnOptions = 0x0000;
+    ScTableProtection* pProtect = rRoot.GetDoc().GetTabProtection(nTab);
+    if (!pProtect)
+        return;
+
+    for (int i = 0; aTable[i].nMask != 0x0000; ++i)
+    {
+        if ( pProtect->isOptionEnabled(aTable[i].eOption) )
+            mnOptions |= aTable[i].nMask;
+    }
 }
 
-
-const BYTE* XclProtection::GetData( void ) const
+void XclExpSheetProtectOptions::WriteBody( XclExpStream& rStrm )
 {
-    return pMyData;
+    sal_uInt16 nBytes = 0x0867;
+    rStrm << nBytes;
+
+    sal_uChar nZero = 0x00;
+    for (int i = 0; i < 9; ++i)
+        rStrm << nZero;
+
+    nBytes = 0x0200;
+    rStrm << nBytes;
+    nBytes = 0x0100;
+    rStrm << nBytes;
+    nBytes = 0xFFFF;
+    rStrm << nBytes << nBytes;
+
+    rStrm << mnOptions;
+    nBytes = 0;
+    rStrm << nBytes;
 }
 
-
-
-
-
+// ============================================================================
 
 
 
@@ -1214,8 +1259,253 @@ void XclDelta::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
+// ============================================================================
+
+XclExpFilePass::XclExpFilePass( const XclExpRoot& rRoot ) :
+    XclExpRecord(0x002F, 54),
+    mrRoot(rRoot)
+{
+}
+
+XclExpFilePass::~XclExpFilePass()
+{
+}
+
+void XclExpFilePass::WriteBody( XclExpStream& rStrm )
+{
+    static const sal_uInt8 nDocId[] = {
+        0x17, 0xf7, 0x01, 0x08, 0xea, 0xad, 0x30, 0x5c,
+        0x1a, 0x95, 0xa5, 0x75, 0xd6, 0x79, 0xcd, 0x8d };
 
 
+    static const sal_uInt8 nSalt[] = {
+        0xa4, 0x5b, 0xf7, 0xe9, 0x9f, 0x55, 0x21, 0xc5,
+        0xc5, 0x56, 0xa8, 0x0d, 0x39, 0x05, 0x3a, 0xb4 };
+
+    // 0x0000 - neither standard nor strong encryption
+    // 0x0001 - standard or strong encryption
+    rStrm << static_cast<sal_uInt16>(0x0001);
+
+    // 0x0000 - non standard encryption
+    // 0x0001 - standard encryption
+    sal_uInt16 nStdEnc = 0x0001;
+    rStrm << nStdEnc << nStdEnc;
+
+    sal_uInt8 nSaltHash[16];
+    XclExpEncrypterRef xEnc( new XclExpBiff8Encrypter(mrRoot, nDocId, nSalt) );
+    xEnc->GetSaltDigest(nSaltHash);
+
+    rStrm.Write(nDocId, 16);
+    rStrm.Write(nSalt, 16);
+    rStrm.Write(nSaltHash, 16);
+
+    rStrm.SetEncrypter(xEnc);
+}
+
+// ============================================================================
+
+XclExpFnGroupCount::XclExpFnGroupCount() :
+    XclExpRecord(0x009C, 2)
+{
+}
+
+XclExpFnGroupCount::~XclExpFnGroupCount()
+{
+}
+
+void XclExpFnGroupCount::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast<sal_uInt16>(14);
+}
+
+// ============================================================================
+
+XclExpInterfaceHdr::XclExpInterfaceHdr() :
+    XclExpRecord(0x00E1, 2)
+{
+}
+
+XclExpInterfaceHdr::~XclExpInterfaceHdr()
+{
+}
+
+void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
+{
+    // The value must be the same value as the CODEPAGE record.
+    rStrm.DisableEncryption();
+    rStrm << static_cast<sal_uInt16>(0x04B0);
+}
+
+// ============================================================================
+
+XclExpInterfaceEnd::XclExpInterfaceEnd() :
+    XclExpRecord(0x00E2, 0)
+{
+}
+
+XclExpInterfaceEnd::~XclExpInterfaceEnd()
+{
+}
+
+void XclExpInterfaceEnd::WriteBody( XclExpStream& /*rStrm*/ )
+{
+}
+
+// ============================================================================
+
+XclExpMMS::XclExpMMS() :
+    XclExpRecord(0x00C1, 2)
+{
+}
+
+XclExpMMS::~XclExpMMS()
+{
+}
+
+void XclExpMMS::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast<sal_uInt16>(0x0000);
+}
+
+// ============================================================================
+
+XclExpWriteAccess::XclExpWriteAccess() :
+    XclExpRecord(0x005C, 112)
+{
+}
+
+XclExpWriteAccess::~XclExpWriteAccess()
+{
+}
+
+void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
+{
+    static const sal_uInt8 aData[] = {
+        0x04, 0x00, 0x00,  'C',  'a',  'l',  'c', 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+
+    sal_Size nDataSize = sizeof(aData);
+    for (sal_Size i = 0; i < nDataSize; ++i)
+        rStrm << aData[i];
+}
+
+// ============================================================================
+
+XclExpCodePage::XclExpCodePage() :
+    XclExpRecord(0x0042, 2)
+{
+}
+
+XclExpCodePage::~XclExpCodePage()
+{
+}
+
+void XclExpCodePage::WriteBody( XclExpStream& rStrm )
+{
+    // 0x04B0 : UTF-16 (BIFF8)
+    rStrm << static_cast<sal_uInt16>(0x04B0);
+}
+
+// ============================================================================
+
+XclExpDSF::XclExpDSF() :
+    XclExpRecord(0x0161, 2)
+{
+}
+
+XclExpDSF::~XclExpDSF()
+{
+}
+
+void XclExpDSF::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast<sal_uInt16>(0x0000);
+}
+
+// ============================================================================
+
+XclExpProt4Rev::XclExpProt4Rev() :
+    XclExpRecord(0x01AF, 2)
+{
+}
+
+XclExpProt4Rev::~XclExpProt4Rev()
+{
+}
+
+void XclExpProt4Rev::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast<sal_uInt16>(0x0000);
+}
+
+// ============================================================================
+
+XclExpProt4RevPass::XclExpProt4RevPass() :
+    XclExpRecord(0x01BC, 2)
+{
+}
+
+XclExpProt4RevPass::~XclExpProt4RevPass()
+{
+}
+
+void XclExpProt4RevPass::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast<sal_uInt16>(0x0000);
+}
+
+// ============================================================================
+
+XclExpExcel9File::XclExpExcel9File() :
+    XclExpRecord(0x01C0, 0)
+{
+}
+
+XclExpExcel9File::~XclExpExcel9File()
+{
+}
+
+void XclExpExcel9File::WriteBody( XclExpStream& /*rStrm*/ )
+{
+}
+
+// ============================================================================
+
+static const sal_uInt8 nDataRecalcId[] = {
+    0xC1, 0x01, 0x00, 0x00, 0x54, 0x8D, 0x01, 0x00
+};
+
+XclExpRecalcId::XclExpRecalcId() :
+    XclExpDummyRecord(0x01C1, nDataRecalcId, sizeof(nDataRecalcId))
+{
+}
+
+// ============================================================================
+
+static const sal_uInt8 nDataBookExt[] = {
+    0x63, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x02
+};
+
+XclExpBookExt::XclExpBookExt() :
+    XclExpDummyRecord(0x0863, nDataBookExt, sizeof(nDataBookExt))
+{
+}
+
+// ============================================================================
 
 XclRefmode::XclRefmode( const ScDocument& rDoc ) :
     XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != formula::FormulaGrammar::CONV_XL_R1C1 )

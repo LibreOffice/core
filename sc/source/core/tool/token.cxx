@@ -1821,8 +1821,11 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
             case svSingleRef :
             {
                 ScSingleRefData& rRef1 = static_cast<ScToken*>(pCode[j])->GetSingleRef();
+                if ( rRef1.IsFlag3D() )
+                {
                     rRef1.CalcAbsIfRel( rOldPos );
                     rRef1.CalcRelFromAbs( rNewPos );
+                }
             }
             break;
             default:

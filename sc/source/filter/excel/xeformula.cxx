@@ -619,7 +619,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
             DBG_ASSERT( mbOk, "XclExpFmlaCompImpl::Init - missing cell address" );
             // clone the passed token array, convert references relative to current cell position
             mxOwnScTokArr.reset( rScTokArr.Clone() );
-            ScCompiler::MoveRelWrap( *mxOwnScTokArr, GetDocPtr(), *pScBasePos );
+            ScCompiler::MoveRelWrap( *mxOwnScTokArr, GetDocPtr(), *pScBasePos, MAXCOL, MAXROW );
             // don't remember pScBasePos in mpScBasePos, shared formulas use real relative refs
         break;
         default:;

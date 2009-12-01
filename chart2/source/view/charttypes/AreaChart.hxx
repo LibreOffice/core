@@ -104,8 +104,6 @@ private: //methods
                 , ::com::sun::star::drawing::PolyPolygonShape3D* pSeriesPoly
                 , PlottingPositionHelper* pPosHelper );
 
-    void    impl_maybeReplaceNanWithZero( double& rfValue );
-
 private: //member
     PlottingPositionHelper*             m_pMainPosHelper;
 
@@ -117,14 +115,6 @@ private: //member
     bool                                m_bExpandIfValuesCloseToBorder; // e.g. false for net charts
     sal_Int32                           m_nKeepAspectRatio; //0->no 1->yes other value->automatic
     ::com::sun::star::drawing::Direction3D m_aGivenAspectRatio; //only used if nKeepAspectRatio==1
-
-    enum tNanHandling
-    {
-        NAN_AS_ZERO,
-        NAN_AS_GAP,
-        NAN_AS_INTERPOLATED
-    };
-    tNanHandling    m_eNanHandling;
 
     //Properties for splines:
     ::com::sun::star::chart2::CurveStyle    m_eCurveStyle;

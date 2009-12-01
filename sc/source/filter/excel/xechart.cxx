@@ -815,10 +815,11 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > x
     if( !xDataSeq.is() )
         return nDefCount;
 
-    // compile the range representation string into token array
+    // Compile the range representation string into token array.  Note that the
+    // source range text depends on the current grammar.
     OUString aRangeRepr = xDataSeq->getSourceRangeRepresentation();
     ScCompiler aComp( GetDocPtr(), ScAddress() );
-    aComp.SetGrammar( FormulaGrammar::GRAM_ENGLISH );
+    aComp.SetGrammar( GetDocPtr()->GetGrammar() );
     ScTokenArray* pArray = aComp.CompileString( aRangeRepr );
     if( !pArray )
         return nDefCount;
@@ -1714,7 +1715,7 @@ bool XclExpChSeries::ConvertDataSeries(
     Reference< XDataSource > xDataSource( xDataSeries, UNO_QUERY );
     if( xDataSource.is() )
     {
-        Reference< XDataSequence > xYValueSeq, xTitleSeq, xXValueSeq;
+        Reference< XDataSequence > xYValueSeq, xTitleSeq, xXValueSeq, xBubbleSeq;
 
         // find first sequence with role 'values-y'
         Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
@@ -1730,11 +1731,17 @@ bool XclExpChSeries::ConvertDataSeries(
                 if( !xYValueSeq.is() && (aRole == EXC_CHPROP_ROLE_YVALUES) )
                 {
                     xYValueSeq = xTmpValueSeq;
-                    xTitleSeq = (*pIt)->getLabel();     // ignore role of label sequence
+                    if( !xTitleSeq.is() )
+                        xTitleSeq = (*pIt)->getLabel(); // ignore role of label sequence
                 }
                 else if( !xXValueSeq.is() && !rTypeInfo.mbCategoryAxis && (aRole == EXC_CHPROP_ROLE_XVALUES) )
                 {
                     xXValueSeq = xTmpValueSeq;
+                }
+                else if( !xBubbleSeq.is() && (rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES) && (aRole == EXC_CHPROP_ROLE_SIZEVALUES) )
+                {
+                    xBubbleSeq = xTmpValueSeq;
+                    xTitleSeq = (*pIt)->getLabel();     // ignore role of label sequence
                 }
             }
         }
@@ -1751,6 +1758,10 @@ bool XclExpChSeries::ConvertDataSeries(
 
             // X values of XY charts
             maData.mnCategCount = mxCategLink->ConvertDataSequence( xXValueSeq, false, maData.mnValueCount );
+
+            // size values of bubble charts
+            if( mxBubbleLink.is() )
+                mxBubbleLink->ConvertDataSequence( xBubbleSeq, false, maData.mnValueCount );
 
             // series formatting
             XclChDataPointPos aPointPos( mnSeriesIdx );

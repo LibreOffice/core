@@ -84,6 +84,7 @@
 #include "xiview.hxx"
 #include "xilink.hxx"
 #include "xiescher.hxx"
+#include "xicontent.hxx"
 
 #include "excimp8.hxx"
 #include "excform.hxx"
@@ -418,14 +419,12 @@ void ImportExcel::Eof( void )
 }
 
 
-BOOL ImportExcel::Password( void )
+void ImportExcel::SheetPassword( void )
 {
-    // POST: return = TRUE, wenn Password <> 0
-    UINT16 nPasswd;
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
 
-    aIn >> nPasswd;
-
-    return nPasswd != 0x0000;
+    GetRoot().GetSheetProtectBuffer().ReadPasswordHash( aIn, GetCurrScTab() );
 }
 
 
@@ -436,6 +435,15 @@ void ImportExcel::Externsheet( void )
     String aEncodedUrl( aIn.ReadByteString( false ) );
     XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSameWorkBook, *pExcRoot->pIR, aEncodedUrl );
     mnLastRefIdx = pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
+}
+
+
+void ImportExcel:: WinProtection( void )
+{
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
+
+    GetRoot().GetDocProtectBuffer().ReadWinProtect( aIn );
 }
 
 
@@ -570,27 +578,33 @@ void ImportExcel::Defrowheight2( void )
 }
 
 
-void ImportExcel::Protect( void )
+void ImportExcel::SheetProtect( void )
 {
-    if( aIn.ReaduInt16() )
-    {
-        uno::Sequence<sal_Int8> aEmptyPass;
-        GetDoc().SetTabProtection( GetCurrScTab(), TRUE, aEmptyPass );
-    }
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
+
+    GetRoot().GetSheetProtectBuffer().ReadProtect( aIn, GetCurrScTab() );
 }
 
 void ImportExcel::DocProtect( void )
 {
-    if( aIn.ReaduInt16() )
-    {
-        uno::Sequence<sal_Int8> aEmptyPass;
-        GetDoc().SetDocProtection( TRUE, aEmptyPass );
-    }
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
+
+    GetRoot().GetDocProtectBuffer().ReadDocProtect( aIn );
 }
 
+void ImportExcel::DocPasssword( void )
+{
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
+
+    GetRoot().GetDocProtectBuffer().ReadPasswordHash( aIn );
+}
 
 void ImportExcel::Codepage( void )
 {
+    maStrm.EnableDecryption();
     SetCodePage( maStrm.ReaduInt16() );
 }
 

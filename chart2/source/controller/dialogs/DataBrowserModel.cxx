@@ -41,6 +41,8 @@
 #include "macros.hxx"
 #include "StatisticsHelper.hxx"
 #include "ContainerHelper.hxx"
+#include "ChartTypeHelper.hxx"
+#include "chartview/ExplicitValueProvider.hxx"
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -329,6 +331,8 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         Reference< chart2::XDataSeries > xSeries;
         if( static_cast< tDataColumnVector::size_type >( nAfterColumnIndex ) <= m_aColumns.size())
             xSeries.set( m_aColumns[nAfterColumnIndex].m_xDataSeries );
+
+        sal_Int32 nSeriesNumberFormat = 0;
         if( xSeries.is())
         {
             xChartType.set( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ));
@@ -337,6 +341,10 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                                 lcl_DataSeriesOfHeaderMatches( xSeries )));
             if( aIt != m_aHeaders.end())
                 nStartCol = aIt->m_nEndColumn;
+
+            Reference< beans::XPropertySet > xSeriesProps( xSeries, uno::UNO_QUERY );
+            if( xSeriesProps.is() )
+                xSeriesProps->getPropertyValue( C2U( "NumberFormat" )) >>= nSeriesNumberFormat;
         }
         else
         {
@@ -404,6 +412,14 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                         }
                     }
                 }
+                if( nSeriesNumberFormat != 0 )
+                {
+                    //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immidiately
+                    Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
+                    if( xNewSeriesProps.is() )
+                        xNewSeriesProps->setPropertyValue( C2U( "NumberFormat" ), uno::makeAny( nSeriesNumberFormat ) );
+                }
+
                 updateFromModel();
             }
         }
@@ -724,11 +740,15 @@ void DataBrowserModel::updateFromModel()
     {
         Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+        sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( 0, aCooSysSeq[nCooSysIdx], 0, 0 );
+
         for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
         {
             Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nCTIdx], uno::UNO_QUERY );
             if( xSeriesCnt.is())
             {
+                rtl::OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( aChartTypes[nCTIdx] );
+
                 Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
                 lcl_tSharedSeqVec aSharedSequences( lcl_getSharedSequences( aSeries ));
                 for( lcl_tSharedSeqVec::const_iterator aIt( aSharedSequences.begin());
@@ -741,16 +761,15 @@ void DataBrowserModel::updateFromModel()
                     // as the sequences are shared it should be ok to take the first series
                     // @todo: dimension index 0 for x-values used here. This is just a guess.
                     // Also, the axis index is 0, as there is usually only one x-axis
-                    aSharedSequence.m_nNumberFormatKey =
-                        DataSeriesHelper::getNumberFormatKeyFromAxis(
-                            aSeries[0], aCooSysSeq[nCooSysIdx], 0, 0 );
+                    aSharedSequence.m_nNumberFormatKey = nXAxisNumberFormat;
                     m_aColumns.push_back( aSharedSequence );
                     ++nHeaderStart;
                 }
                 for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeries.getLength(); ++nSeriesIdx )
                 {
                     tDataColumnVector::size_type nStartColIndex = m_aColumns.size();
-                    Reference< chart2::data::XDataSource > xSource( aSeries[nSeriesIdx], uno::UNO_QUERY );
+                    Reference< chart2::XDataSeries > xSeries( aSeries[nSeriesIdx] );
+                    Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
                     if( xSource.is())
                     {
                         Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqs( xSource->getDataSequences());
@@ -768,9 +787,14 @@ void DataBrowserModel::updateFromModel()
                         {
                             sal_Int32 nSequenceNumberFormatKey = nYAxisNumberFormatKey;
                             OUString aRole = lcl_getRole( aLSeqs[nSeqIdx] );
-                            if( aRole.equals( C2U( "values-x" ) ) )
-                                nSequenceNumberFormatKey = DataSeriesHelper::getNumberFormatKeyFromAxis(
-                                    aSeries[nSeriesIdx], aCooSysSeq[nCooSysIdx], 0, 0 );
+
+                            if( aRole.equals( aRoleForDataLabelNumberFormat ) )
+                            {
+                                nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
+                                    Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ), xSeries, -1, xDiagram );
+                            }
+                            else if( aRole.equals( C2U( "values-x" ) ) )
+                                nSequenceNumberFormatKey = nXAxisNumberFormat;
 
                             if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                              lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())

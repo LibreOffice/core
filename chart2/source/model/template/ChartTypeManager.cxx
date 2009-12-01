@@ -45,6 +45,7 @@
 #include "ScatterChartTypeTemplate.hxx"
 #include "StockChartTypeTemplate.hxx"
 #include "NetChartTypeTemplate.hxx"
+#include "BubbleChartTypeTemplate.hxx"
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -131,6 +132,7 @@ enum TemplateId
     TEMPLATE_STOCKOPENLOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMELOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE,
+    TEMPLATE_BUBBLE,
 //    TEMPLATE_SURFACE,
 //     TEMPLATE_ADDIN,
     TEMPLATE_NOT_FOUND = 0xffff
@@ -202,6 +204,7 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         ( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ),          TEMPLATE_STOCKOPENLOWHIGHCLOSE )
         ( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ),        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE )
         ( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ),    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE )
+        ( C2U( "com.sun.star.chart2.template.Bubble" ),                         TEMPLATE_BUBBLE )
 //      ( C2U( "com.sun.star.chart2.template.Surface" ),                        TEMPLATE_SURFACE )
 //      ( C2U( "com.sun.star.chart2.template.Addin" ),                          TEMPLATE_ADDIN )
         );
@@ -516,6 +519,11 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             case TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE:
                 xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
                     StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE, true ));
+                break;
+
+            //BubbleChart
+            case TEMPLATE_BUBBLE:
+                xTemplate.set( new BubbleChartTypeTemplate( m_xContext, aServiceSpecifier ));
                 break;
 
 //            case TEMPLATE_SURFACE:

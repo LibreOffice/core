@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -94,13 +95,13 @@ public:
     SAL_DLLPRIVATE static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
-    static sal_Int32 getExplicitNumberFormatKeyForLabel(
+    static sal_Int32 getExplicitNumberFormatKeyForDataLabel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries
             , sal_Int32 nPointIndex /*-1 for whole series*/
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAttachedAxisProps );
+            , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
 
-    static sal_Int32 getExplicitPercentageNumberFormatKeyForLabel(
+    static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
             , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 };
