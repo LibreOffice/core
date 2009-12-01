@@ -152,6 +152,7 @@ SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, ViewShell *pSh ) :
                  || UNDERLINE_NONE != aFont.GetOverline()
                  || STRIKEOUT_NONE != aFont.GetStrikeout() )
                  && !aFont.IsWordLineMode();
+    aFont.SetLanguage(rFont.GetLanguage());
 }
 
 SwFntObj::~SwFntObj()
@@ -2424,7 +2425,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     // skip character cells for complex scripts
     if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
-         pBreakIt->xBreak.is() )
+         pBreakIt->GetBreakIter().is() )
     {
         aLang = rInf.GetFont()->GetLanguage();
         bSkipCell = sal_True;
@@ -2440,7 +2441,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
         if ( bSkipCell )
         {
-            nIdx = (xub_StrLen)pBreakIt->xBreak->nextCharacters( rInf.GetText(),
+            nIdx = (xub_StrLen)pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
                         nIdx, pBreakIt->GetLocale( aLang ), nItrMode, 1, nDone );
             if ( nIdx <= nLastIdx )
                 break;
@@ -2703,13 +2704,13 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             const XubString aSnippet( rInf.GetText(), rInf.GetIdx(), nLn );
             aTmpText = aSub[nActual].CalcCaseMap( aSnippet );
             const bool bTitle = SVX_CASEMAP_TITEL == aSub[nActual].GetCaseMap() &&
-                                pBreakIt->xBreak.is();
+                                pBreakIt->GetBreakIter().is();
 
             // Uaaaaahhhh!!! In title case mode, we would get wrong results
             if ( bTitle && nLn )
             {
                 // check if rInf.GetIdx() is begin of word
-                if ( !pBreakIt->xBreak->isBeginWord(
+                if ( !pBreakIt->GetBreakIter()->isBeginWord(
                      rInf.GetText(), rInf.GetIdx(),
                      pBreakIt->GetLocale( aSub[nActual].GetLanguage() ),
                      i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )

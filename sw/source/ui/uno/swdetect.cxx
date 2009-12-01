@@ -217,7 +217,7 @@ SwFilterDetect::~SwFilterDetect()
             BOOL bIsStorage = aMedium.IsStorage();
             if ( bIsStorage )
             {
-                uno::Reference< embed::XStorage > xStorage = aMedium.GetStorage();
+                uno::Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium

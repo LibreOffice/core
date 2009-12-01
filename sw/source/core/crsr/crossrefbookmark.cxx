@@ -75,11 +75,6 @@ namespace sw { namespace mark
         return *static_cast<SwPosition*>(NULL);
     }
 
-    bool CrossRefBookmark::IsLegalName(const ::rtl::OUString& rName)
-    {
-        return CrossRefNumItemBookmark::IsLegalName(rName) || CrossRefHeadingBookmark::IsLegalName(rName);
-    }
-
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
         const KeyCode& rCode,
         const OUString& rName,

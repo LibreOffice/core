@@ -307,7 +307,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         pDoc->GetNodes().Delete( aIdx, 1 );
 
                     // alle Flys in dem Bereich
-                    _CopyFlyInFly( aRg, 0, aIdx );
+                    CopyFlyInFlyImpl( aRg, 0, aIdx );
 
 
                     // und noch alle Bookmarks
@@ -653,7 +653,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         pDoc->GetNodes().Delete( aIdx, 1 );
 
                     // alle Flys in dem Bereich
-                    _CopyFlyInFly( aRg, 0, aIdx );
+                    CopyFlyInFlyImpl( aRg, 0, aIdx );
 
 
                     // und noch alle Bookmarks

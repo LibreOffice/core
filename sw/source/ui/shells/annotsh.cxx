@@ -347,7 +347,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
                 case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
             }
-            pOLV->InsertText( String(cIns), TRUE );
+            pOLV->InsertText( String(cIns));
             rReq.Done();
             break;
         }
@@ -799,16 +799,18 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
     switch (nSlot)
     {
         case SID_CUT:
-            pOLV->Cut();
+            if ( (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED) && pOLV->HasSelection() )
+                pOLV->Cut();
             break;
         case SID_COPY:
-            pOLV->Copy();
+            if( pOLV->HasSelection() )
+                pOLV->Copy();
             break;
         case SID_PASTE:
             if (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED)
                 pOLV->Paste();
             break;
-        case FN_PASTESPECIAL:
+        case SID_PASTE_SPECIAL:
         {
             if (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED)
             {
@@ -886,7 +888,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                 break;
             }
             case SID_PASTE:
-            case FN_PASTESPECIAL:
+            case SID_PASTE_SPECIAL:
                 {
                     if( !bPastePossible )
                         rSet.DisableItem( nWhich );
@@ -1380,6 +1382,8 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
         }
     }
 
+    rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+
     if (rView.GetPostItMgr()->GetActivePostIt())
         rView.GetPostItMgr()->GetActivePostIt()->ResizeIfNeccessary(aOldHeight,rView.GetPostItMgr()->GetActivePostIt()->GetPostItTextHeight());
 }
@@ -1595,7 +1599,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         aFontSet.Set( aOldSet );
 
         // String einfuegen
-        pOLV->InsertText( sSym, TRUE );
+        pOLV->InsertText( sSym);
 
         // attributieren (Font setzen)
         SfxItemSet aSetFont( *aFontSet.GetPool(), aFontSet.GetRanges() );

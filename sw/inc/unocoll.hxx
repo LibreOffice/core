@@ -163,11 +163,11 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY               73
 #define SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS        74
 #define SW_SERVICE_FIELDTYPE_DROPDOWN                   75
-#define SW_SERVICE_FIELDTYPE_DUMMY_4                    76
-#define SW_SERVICE_FIELDTYPE_DUMMY_5                    77
-#define SW_SERVICE_FIELDTYPE_DUMMY_6                    78
-#define SW_SERVICE_FIELDTYPE_DUMMY_7                    79
-#define SW_SERVICE_FIELDTYPE_DUMMY_8                    80
+#define SW_SERVICE_FIELDTYPE_METAFIELD                  76
+#define SW_SERVICE_FIELDTYPE_DUMMY_4                    77
+#define SW_SERVICE_FIELDTYPE_DUMMY_5                    78
+#define SW_SERVICE_FIELDTYPE_DUMMY_6                    79
+#define SW_SERVICE_FIELDTYPE_DUMMY_7                    80
 #define SW_SERVICE_FIELDMASTER_USER                     81
 #define SW_SERVICE_FIELDMASTER_DDE                      82
 #define SW_SERVICE_FIELDMASTER_SET_EXP                  83
@@ -196,8 +196,9 @@ class SwUnoCollection
 #define SW_SERVICE_CHART2_DATA_PROVIDER                 106
 #define SW_SERVICE_TYPE_FIELDMARK                       107
 #define SW_SERVICE_TYPE_FORMFIELDMARK                   108
+#define SW_SERVICE_TYPE_META                            109
 
-#define SW_SERVICE_LAST                 SW_SERVICE_TYPE_FORMFIELDMARK
+#define SW_SERVICE_LAST                 SW_SERVICE_TYPE_META
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 

@@ -110,7 +110,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
     if ( pScriptInfo->GetInvalidity() != STRING_LEN )
          pScriptInfo->InitScriptInfo( rTxtNode, bRTL );
 
-    if ( pBreakIt->xBreak.is() )
+    if ( pBreakIt->GetBreakIter().is() )
     {
         pFnt->SetActual( SwScriptInfo::WhichFont( 0, 0, pScriptInfo ) );
 
@@ -263,7 +263,8 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                         pSet->ClearItem();
                     else
                     {
-                        SwAttrPool& rPool = (SwAttrPool& )rDoc.GetAttrPool();
+                        SwAttrPool& rPool =
+                            const_cast<SwDoc&>(rDoc).GetAttrPool();
                         pSet = new SfxItemSet(rPool, RES_CHRATR_BEGIN, RES_CHRATR_END-1);
                     }
 
@@ -279,7 +280,9 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                         if( ( nWhich < RES_CHRATR_END ) &&
                             ( SFX_ITEM_SET == pSet->GetItemState( nWhich, sal_True, &pItem ) ) )
                         {
-                            SwTxtAttr* pAttr = ((SwTxtNode&)rNd).MakeRedlineTxtAttr( *pItem );
+                            SwTxtAttr* pAttr = MakeRedlineTxtAttr(
+                                const_cast<SwDoc&>(rDoc),
+                                *const_cast<SfxPoolItem*>(pItem) );
                             pAttr->SetPriorityAttr( sal_True );
                             aHints.C40_INSERT( SwTxtAttr, pAttr, aHints.Count());
                             rAttrHandler.PushAndChg( *pAttr, rFnt );
@@ -352,7 +355,7 @@ void SwRedlineItr::_Clear( SwFont* pFnt )
             rAttrHandler.PopAndChg( *pPos, *pFnt );
         else
             rAttrHandler.Pop( *pPos );
-        delete pPos;
+        SwTxtAttr::Destroy(pPos, const_cast<SwDoc&>(rDoc).GetAttrPool() );
     }
     if( pFnt )
         pFnt->SetNoCol( sal_False );

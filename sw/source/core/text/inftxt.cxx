@@ -1277,7 +1277,8 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
             case POR_URL:
             case POR_HIDDEN:
             case POR_TOX:
-            case POR_REF :
+            case POR_REF:
+            case POR_META:
             case POR_CONTROLCHAR:
                 if ( !GetOpt().IsPagePreview() &&
                      !GetOpt().IsReadonly() &&

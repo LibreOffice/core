@@ -69,7 +69,9 @@ EXCEPTIONSFILES = \
         $(SLO)$/writerwordglue.obj \
         $(SLO)$/ww8scan.obj \
         $(SLO)$/WW8TableInfo.obj \
-        $(SLO)$/WW8FFData.obj
+        $(SLO)$/WW8FFData.obj \
+        $(SLO)$/WW8Sttbf.obj \
+        $(SLO)$/WW8FibData.obj
 
 
 SLOFILES =	\
@@ -96,7 +98,9 @@ SLOFILES =	\
         $(SLO)$/writerhelper.obj \
         $(SLO)$/writerwordglue.obj \
         $(SLO)$/WW8TableInfo.obj \
-        $(SLO)$/WW8FFData.obj
+        $(SLO)$/WW8FFData.obj \
+        $(SLO)$/WW8Sttbf.obj \
+        $(SLO)$/WW8FibData.obj
 
 
 # --- Tagets -------------------------------------------------------

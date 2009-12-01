@@ -395,8 +395,10 @@ void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
     if ( pTextView )
     {
         pTextView->MouseButtonUp( rEvt );
-        ((SwSrcEditWindow*)GetParent())->GetSrcView()->GetViewFrame()->
-                        GetBindings().Invalidate( SID_TABLE_CELL );
+        SfxBindings& rBindings = ((SwSrcEditWindow*)GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
+        rBindings.Invalidate( SID_TABLE_CELL );
+        rBindings.Invalidate( SID_CUT );
+        rBindings.Invalidate( SID_COPY );
     }
 }
 
@@ -459,6 +461,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     if(bChange)
         bDone = pTextView->KeyInput( rKEvt );
 
+    SfxBindings& rBindings = ((SwSrcEditWindow*)GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
     if ( !bDone )
     {
         if ( !SfxViewShell::Current()->KeyInput( rKEvt ) )
@@ -466,7 +469,6 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     }
     else
     {
-        SfxBindings& rBindings = ((SwSrcEditWindow*)GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_TABLE_CELL );
         if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
             rBindings.Update( SID_BASICIDE_STAT_POS );
@@ -478,6 +480,10 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
         if( rKEvt.GetKeyCode().GetCode() == KEY_INSERT )
             rBindings.Invalidate( SID_ATTR_INSERT );
     }
+
+    rBindings.Invalidate( SID_CUT );
+    rBindings.Invalidate( SID_COPY );
+
     SwDocShell* pDocShell = pSrcEditWin->GetSrcView()->GetDocShell();
     if(pSrcEditWin->GetTextEngine()->IsModified())
     {

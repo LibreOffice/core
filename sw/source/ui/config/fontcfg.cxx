@@ -33,10 +33,12 @@
 
 
 #include <fontcfg.hxx>
+#include <i18npool/mslangid.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/lingucfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <swtypes.hxx>
 
 #include <unomid.h>
@@ -116,9 +118,10 @@ SwStdFontConfig::SwStdFontConfig() :
 
     SvtLinguConfig().GetOptions( aLinguOpt );
 
-    sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
-                eCJK = aLinguOpt.nDefaultLanguage_CJK,
-                eCTL = aLinguOpt.nDefaultLanguage_CTL;
+    sal_Int16   eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
+                eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
+                eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
+
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
     {
         sDefaultFonts[i] = GetDefaultFor(i,
@@ -163,9 +166,10 @@ void    SwStdFontConfig::Commit()
 
     SvtLinguConfig().GetOptions( aLinguOpt );
 
-    sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
-                eCJK = aLinguOpt.nDefaultLanguage_CJK,
-                eCTL = aLinguOpt.nDefaultLanguage_CTL;
+    sal_Int16   eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
+                eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
+                eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
+
     for(sal_uInt16 nProp = 0;
         nProp < sal::static_int_cast< sal_uInt16, sal_Int32 >( aNames.getLength() );
             nProp++)
@@ -198,9 +202,10 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 
     SvtLinguConfig().GetOptions( aLinguOpt );
 
-    sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
-                eCJK = aLinguOpt.nDefaultLanguage_CJK,
-                eCTL = aLinguOpt.nDefaultLanguage_CTL;
+    sal_Int16   eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
+                eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
+                eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
+
     String sDefFont(GetDefaultFor(FONT_STANDARD, eWestern));
     String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eCJK));
     String sDefFontCTL(GetDefaultFor(FONT_STANDARD_CTL, eCTL));
@@ -320,9 +325,11 @@ void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
     {
         SvtLinguOptions aLinguOpt;
         SvtLinguConfig().GetOptions( aLinguOpt );
-        sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
-                    eCJK = aLinguOpt.nDefaultLanguage_CJK,
-                    eCTL = aLinguOpt.nDefaultLanguage_CTL;
+
+        sal_Int16 eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
+                  eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
+                  eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
+
         // #i92090# default height value sets back to -1
         const sal_Int32 nDefaultHeight = GetDefaultHeightFor(nFontType, lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL));
         const bool bIsDefaultHeight = nHeight == nDefaultHeight;

@@ -626,7 +626,6 @@
 #include "svtools/ctloptions.hxx"
 #include "svtools/ctrlbox.hxx"
 #include "svtools/ctrltool.hxx"
-#include "svtools/docpasswdrequest.hxx"
 #include "svtools/editbrowsebox.hxx"
 #include "svtools/ehdl.hxx"
 #include "svtools/eitem.hxx"

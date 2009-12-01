@@ -42,6 +42,9 @@
 #include <ndnotxt.hxx>
 #include <flyfrm.hxx>
 #include <cntfrm.hxx>
+// --> OD 2009-07-14 #i73249#
+#include <hints.hxx>
+// <--
 #include "accnotextframe.hxx"
 
 using namespace ::com::sun::star;
@@ -67,13 +70,25 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         sal_Int16 nInitRole,
         const SwFlyFrm* pFlyFrm  ) :
     SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrm ),
-    aDepend( this, const_cast < SwNoTxtNode * >( GetNoTxtNode() ) )
+    aDepend( this, const_cast < SwNoTxtNode * >( GetNoTxtNode() ) ),
+    msTitle(),
+    msDesc()
 {
-    const SwNoTxtNode *pNd = GetNoTxtNode();
+    const SwNoTxtNode* pNd = GetNoTxtNode();
+    // --> OD 2009-07-14 #i73249#
+    // consider new attributes Title and Description
     if( pNd )
-        sDesc = OUString( pNd->GetAlternateText() );
-    if( !sDesc.getLength() )
-        sDesc = GetName();
+    {
+        msTitle = pNd->GetTitle();
+
+        msDesc = pNd->GetDescription();
+        if ( msDesc.getLength() == 0 &&
+             msTitle != GetName() )
+        {
+            msDesc = msTitle;
+        }
+    }
+    // <--
 }
 
 SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
@@ -82,36 +97,70 @@ SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
 
 void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
-    SwAccessibleFrameBase::Modify( pOld, pNew );
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    // --> OD 2009-07-14 #i73249#
+    // suppress handling of RES_NAME_CHANGED in case that attribute Title is
+    // used as the accessible name.
+    if ( nWhich != RES_NAME_CHANGED ||
+         msTitle.getLength() == 0 )
+    {
+        SwAccessibleFrameBase::Modify( pOld, pNew );
+    }
 
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
     const SwNoTxtNode *pNd = GetNoTxtNode();
     ASSERT( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
     {
-    case RES_NAME_CHANGED:
-        if( pNd->GetAlternateText().Len() )
-            break;
-    case RES_ALT_TEXT_CHANGED:
-        if( pNd && GetFrm() )
+        // --> OD 2009-07-14 #i73249#
+        case RES_TITLE_CHANGED:
         {
-            OUString sOldDesc( sDesc );
-
-            const String& rDesc = pNd->GetAlternateText();
-            sDesc = rDesc;
-            if( !sDesc.getLength() )
-                sDesc = GetName();
-
-            if( sDesc != sOldDesc )
+            const String& sOldTitle(
+                        dynamic_cast<SwStringMsgPoolItem*>(pOld)->GetString() );
+            const String& sNewTitle(
+                        dynamic_cast<SwStringMsgPoolItem*>(pNew)->GetString() );
+            if ( sOldTitle == sNewTitle )
             {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-                aEvent.OldValue <<= sOldDesc;
-                aEvent.NewValue <<= sDesc;
-                FireAccessibleEvent( aEvent );
+                break;
+            }
+            msTitle = sNewTitle;
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
+            aEvent.OldValue <<= OUString( sOldTitle );
+            aEvent.NewValue <<= msTitle;
+            FireAccessibleEvent( aEvent );
+
+            if ( pNd->GetDescription().Len() != 0 )
+            {
+                break;
+            }
+        }
+        // intentional no break here
+        case RES_DESCRIPTION_CHANGED:
+        {
+            if ( pNd && GetFrm() )
+            {
+                const OUString sOldDesc( msDesc );
+
+                const String& rDesc = pNd->GetDescription();
+                msDesc = rDesc;
+                if ( msDesc.getLength() == 0 &&
+                     msTitle != GetName() )
+                {
+                    msDesc = msTitle;
+                }
+
+                if ( msDesc != sOldDesc )
+                {
+                    AccessibleEventObject aEvent;
+                    aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
+                    aEvent.OldValue <<= sOldDesc;
+                    aEvent.NewValue <<= msDesc;
+                    FireAccessibleEvent( aEvent );
+                }
             }
         }
         break;
+        // <--
         /*
     case RES_OBJECTDYING:
         if( aDepend.GetRegisteredIn() ==
@@ -138,6 +187,23 @@ void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
     SwAccessibleFrameBase::Dispose( bRecursive );
 }
 
+// --> OD 2009-07-14 #i73249#
+OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
+        throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext )
+
+    if ( msTitle.getLength() != 0 )
+    {
+        return msTitle;
+    }
+
+    return SwAccessibleFrameBase::getAccessibleName();
+}
+// <--
+
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
@@ -145,7 +211,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    return sDesc;
+    return msDesc;
 }
 
 

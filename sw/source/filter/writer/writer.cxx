@@ -223,7 +223,7 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 
 
 SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
-                        BOOL bNodesArray ) const
+                        BOOL bNodesArray )
 {
     SwNodes* pNds = bNodesArray ? &rDoc.GetNodes() : (SwNodes*)rDoc.GetUndoNds();
 
@@ -231,7 +231,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
     if( !pCNode && 0 == ( pCNode = pNds->GoNext( &aStt )) )
     {
-        ASSERT( !this, "An StartPos kein ContentNode mehr" );
+        ASSERT( false, "An StartPos kein ContentNode mehr" );
     }
 
     SwPaM* pNew = new SwPaM( aStt );
@@ -240,7 +240,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
     if( 0 == (pCNode = aStt.GetNode().GetCntntNode()) &&
         0 == (pCNode = pNds->GoPrevious( &aStt )) )
     {
-        ASSERT( !this, "An StartPos kein ContentNode mehr" );
+        ASSERT( false, "An StartPos kein ContentNode mehr" );
     }
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
@@ -340,10 +340,6 @@ ULONG Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
     // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
     // The microsoft format can write to storage but the storage will be based on the stream.
     return Write( rPam, *rMed.GetOutStream(), pFileName );
-
-    // return IsStgWriter()
-    //            ? Write( rPam, rMed.GetStorage(), pFileName )
-    //          : Write( rPam, *rMed.GetOutStream(), pFileName );
 }
 
 ULONG Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )

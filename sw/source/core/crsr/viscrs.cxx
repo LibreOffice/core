@@ -59,19 +59,10 @@
 #include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
 #endif
 
-// #i75172#
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vcl/hatch.hxx>
-
-#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <vcl/svapp.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
 
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
@@ -524,106 +515,6 @@ void SwVisCrsr::_SetPosAndShow()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #i75172#
-
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlaySwSelPaintRects : public OverlayObject
-        {
-            // geometry
-            std::vector< basegfx::B2DRange >        maRanges;
-            SwOverlayType                           mePaintType;
-
-            // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
-
-        public:
-            OverlaySwSelPaintRects(Color aBaseColor, const std::vector< basegfx::B2DRange >& rRanges, SwOverlayType eType);
-            virtual ~OverlaySwSelPaintRects();
-
-            // data access
-            const std::vector< basegfx::B2DRange >& getB2DRanges() const { return maRanges; }
-            void setB2DRanges(const std::vector< basegfx::B2DRange >& rNew);
-        };
-
-        drawinglayer::primitive2d::Primitive2DSequence OverlaySwSelPaintRects::createOverlayObjectPrimitive2DSequence()
-        {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
-            const sal_uInt32 nCount(maRanges.size());
-
-            if(nCount)
-            {
-                const basegfx::BColor aRGBColor(getBaseColor().getBColor());
-                aRetval.realloc(nCount);
-
-                // create primitives for all ranges
-                for(sal_uInt32 a(0); a < nCount; a++)
-                {
-                    const basegfx::B2DRange& rRange(maRanges[a]);
-                    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
-
-                    aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
-                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                            basegfx::B2DPolyPolygon(aPolygon),
-                            aRGBColor));
-                }
-
-
-                if( mePaintType == SW_OVERLAY_TRANSPARENT)
-                {
-                    // embed in 50% transparent paint
-                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedAlpha(
-                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
-                            aRetval,
-                            0.5));
-
-                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlpha, 1);
-                }
-                else // SW_OVERLAY_INVERT
-                {
-                    // embed in invert primitive
-                    const drawinglayer::primitive2d::Primitive2DReference aInvert(
-                        new drawinglayer::primitive2d::InvertPrimitive2D(
-                            aRetval));
-
-                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aInvert, 1);
-                }
-            }
-
-            return aRetval;
-        }
-
-        OverlaySwSelPaintRects::OverlaySwSelPaintRects(Color aBaseColor, const std::vector< basegfx::B2DRange >& rRanges, SwOverlayType eType)
-        :   OverlayObject(aBaseColor),
-            maRanges(rRanges),
-            mePaintType(eType)
-        {
-            // no AA for selection overlays
-            allowAntiAliase(false);
-        }
-
-        OverlaySwSelPaintRects::~OverlaySwSelPaintRects()
-        {
-            if(getOverlayManager())
-            {
-                getOverlayManager()->remove(*this);
-            }
-        }
-
-        void OverlaySwSelPaintRects::setB2DRanges(const std::vector< basegfx::B2DRange >& rNew)
-        {
-            if(rNew != maRanges)
-            {
-                maRanges = rNew;
-                objectChange();
-            }
-        }
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
 :   SwRects( 0 ),
@@ -671,8 +562,11 @@ void SwSelPaintRects::Show()
 
     if(pView && pView->PaintWindowCount())
     {
+        // reset rects
         SwRects::Remove( 0, SwRects::Count() );
         FillRects();
+
+        // get new rects
         std::vector< basegfx::B2DRange > aNewRanges;
 
         for(sal_uInt16 a(0); a < Count(); a++)
@@ -689,7 +583,7 @@ void SwSelPaintRects::Show()
         {
             if(aNewRanges.size())
             {
-                static_cast< sdr::overlay::OverlaySwSelPaintRects* >(mpCursorOverlay)->setB2DRanges(aNewRanges);
+                static_cast< sdr::overlay::OverlaySelection* >(mpCursorOverlay)->setRanges(aNewRanges);
             }
             else
             {
@@ -704,20 +598,34 @@ void SwSelPaintRects::Show()
 
             if(pTargetOverlay)
             {
-                Color aHighlight(COL_BLACK);
-                const OutputDevice *pOut = GetShell()->GetOut();
+                // #i97672# get the system's hilight color and limit it to the maximum
+                // allowed luminance. This is needed to react on too bright hilight colors
+                // which would otherwise vive a bad visualisation
+                const OutputDevice *pOut = Application::GetDefaultDevice();
+                Color aHighlight(pOut->GetSettings().GetStyleSettings().GetHighlightColor());
+                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                const basegfx::BColor aSelection(aHighlight.getBColor());
+                const double fLuminance(aSelection.luminance());
+                const double fMaxLum(aSvtOptionsDrawinglayer.GetSelectionMaximumLuminancePercent() / 100.0);
 
-                if(pOut)
+                if(fLuminance > fMaxLum)
                 {
-                    aHighlight = pOut->GetSettings().GetStyleSettings().GetHighlightColor();
+                    const double fFactor(fMaxLum / fLuminance);
+                    const basegfx::BColor aNewSelection(
+                        aSelection.getRed() * fFactor,
+                        aSelection.getGreen() * fFactor,
+                        aSelection.getBlue() * fFactor);
+
+                    aHighlight = Color(aNewSelection);
                 }
 
-                SwOverlayType aType(GetShell()->getSwOverlayType());
-#ifdef DBG_UTIL
-                static bool bChange(false);
-                if(bChange) aType = (SW_OVERLAY_INVERT == aType) ? SW_OVERLAY_TRANSPARENT : SW_OVERLAY_INVERT;
-#endif
-                mpCursorOverlay = new sdr::overlay::OverlaySwSelPaintRects(aHighlight, aNewRanges, aType);
+                // create correct selection
+                mpCursorOverlay = new sdr::overlay::OverlaySelection(
+                    sdr::overlay::OVERLAY_TRANSPARENT,
+                    aHighlight,
+                    aNewRanges,
+                    true);
+
                 pTargetOverlay->add(*mpCursorOverlay);
             }
         }

@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/urihelper.hxx>
@@ -281,7 +282,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
         if ( pSh->GetWin() && !pSh->IsPreView() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
-            String aTxt( pNd->GetAlternateText() );
+            String aTxt( pNd->GetTitle() );
             if ( !aTxt.Len() && pNd->IsGrfNode() )
                 GetRealURL( *(SwGrfNode*)pNd, aTxt );
             if( !aTxt.Len() )
@@ -906,7 +907,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     pGrfNd->TriggerAsyncRetrieveInputStream();
                     // <--
                 }
-                String aTxt( pGrfNd->GetAlternateText() );
+                String aTxt( pGrfNd->GetTitle() );
                 if ( !aTxt.Len() )
                     GetRealURL( *pGrfNd, aTxt );
                 ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, FALSE );
@@ -971,7 +972,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 ((SwNoTxtFrm*)this)->nWeight = -1;
                 String aText;
                 if ( !nResId &&
-                    !(aText = pGrfNd->GetAlternateText()).Len() &&
+                     !(aText = pGrfNd->GetTitle()).Len() &&
                      (!GetRealURL( *pGrfNd, aText ) || !aText.Len()))
                 {
                     nResId = STR_COMCORE_READERROR;
@@ -1027,8 +1028,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         //TODO/LATER: is it a problem that the JopSetup isn't used?
         //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
 
+        // get hi-contrast image, but never for printing
         Graphic* pGraphic = NULL;
-           if ( pOut && ( pOut->GetDrawMode() & DRAWMODE_SETTINGSFILL ) )
+        if (pOut && !bPrn && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             pGraphic = pOLENd->GetHCGraphic();
 
         // when it is not possible to get HC-representation, the original image should be used

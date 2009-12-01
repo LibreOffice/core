@@ -2062,6 +2062,10 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
             pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
         }
+        // --> OD 2009-08-20 #i92511#
+        // cache for object rectangle inclusive spaces has to be invalidated.
+        pAnchoredObj->InvalidateObjRectWithSpaces();
+        // <--
     }
 }
 

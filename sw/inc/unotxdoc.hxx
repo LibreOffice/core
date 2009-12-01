@@ -168,7 +168,7 @@ typedef cppu::WeakImplHelper32
 >
 SwXTextDocumentBaseClass;
 
-class SwXTextDocument : public SwXTextDocumentBaseClass,
+class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel
 {
@@ -243,7 +243,7 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    SW_DLLPUBLIC static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

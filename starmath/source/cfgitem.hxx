@@ -188,8 +188,6 @@ public:
     SmSymSetManager &   GetSymSetManager();
     void                GetSymbols( std::vector< SmSym > &rSymbols ) const;
     void                SetSymbols( const std::vector< SmSym > &rNewSymbols );
-    USHORT              GetSymbolCount() const;
-    const SmSym *       GetSymbol( USHORT nIndex ) const;
 
     const SmFormat &    GetStandardFormat() const;
     void                SetStandardFormat( const SmFormat &rFormat, BOOL bSaveFontFormatList = FALSE );

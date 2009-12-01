@@ -1414,7 +1414,10 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                         if( pSrcDoc != pDoc ||
                             pCpyPam->Start()->nNode > rInsPos ||
                             rInsPos >= pCpyPam->End()->nNode )
-                            pSrcDoc->Copy( *pCpyPam, *pPam->GetPoint(), false );
+                        {
+                            pSrcDoc->CopyRange( *pCpyPam, *pPam->GetPoint(),
+                                    false );
+                        }
                         delete pCpyPam;
                     }
                     if( pCpyRg && pSrcDoc == pDoc &&

@@ -353,6 +353,13 @@ public:
     const Graphic *GetGrfAtPos( const Point &rDocPos,
                                 String &rName, BOOL &rbLink ) const;
 
+    // --> OD 2009-07-13 #i73249#
+    const String GetObjTitle() const;
+    void SetObjTitle( const String& rTitle );
+    const String GetObjDescription() const;
+    void SetObjDescription( const String& rDescription );
+    // <--
+
 //SS fuer Rahmen --------------------------------------------
 
     BOOL IsFrmSelected() const;

@@ -144,18 +144,36 @@ public:
     void DeleteAndDestroy(Entries::size_type nCnt);
 };
 
+class SwFltAnchorClient;
+
 class SW_DLLPUBLIC SwFltAnchor : public SfxPoolItem
 {
     SwFrmFmt* pFrmFmt;
+    SwFltAnchorClient * pClient;
+
 public:
     SwFltAnchor(SwFrmFmt* pFlyFmt);
     SwFltAnchor(const SwFltAnchor&);
+    virtual ~SwFltAnchor();
+
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    const SwFrmFmt* GetFrmFmt() const       { return pFrmFmt; }
-          SwFrmFmt* GetFrmFmt()             { return pFrmFmt; }
+    void SetFrmFmt(SwFrmFmt * _pFrmFmt);
+    const SwFrmFmt* GetFrmFmt() const;
+          SwFrmFmt* GetFrmFmt();
 };
+
+class SwFltAnchorClient : public SwClient
+{
+    SwFltAnchor * m_pFltAnchor;
+
+public:
+    SwFltAnchorClient(SwFltAnchor * pFltAnchor);
+
+    virtual void Modify (SfxPoolItem *pOld, SfxPoolItem *pNew);
+};
+
 
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
 {

@@ -181,8 +181,6 @@ class PostItTxt : public Window
         virtual void    DataChanged( const DataChangedEvent& aData);
         virtual void    LoseFocus();
         virtual void    RequestHelp(const HelpEvent &rEvt);
-
-        // reconversion /*i94374*/
         virtual XubString GetSurroundingText() const;
         virtual Selection GetSurroundingTextSelection() const;
 
@@ -229,6 +227,7 @@ class SwMarginWin : public Window
         long            mPageBorder;
         SwPostItBits    nFlags;
         bool            mbMouseOverButton;
+
     protected:
         bool            mbReadonly;
         PopupMenu*      mpButtonPopup;
@@ -241,7 +240,8 @@ class SwMarginWin : public Window
         virtual void    Paint( const Rectangle& rRect);
         virtual void    GetFocus();
 
-        void            SetSizePixel( const Size& rNewSize );
+        void        SetSizePixel( const Size& rNewSize );
+        SfxItemSet  DefaultItem();
 
         DECL_LINK(ModifyHdl, void*);
         DECL_LINK(ScrollHdl, ScrollBar*);
@@ -289,8 +289,8 @@ class SwMarginWin : public Window
 
         void            ExecuteCommand(USHORT nSlot);
         void            InitControls();
-        void            HidePostIt();
-        void            DoResize();
+            void            HidePostIt();
+        void                DoResize();
         void            ResizeIfNeccessary(long aOldHeight, long aNewHeight);
         void            SetScrollbar();
 

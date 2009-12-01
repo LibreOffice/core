@@ -315,12 +315,12 @@ String STR_POSTIT_YESTERDAY
 
 String STR_DELETE_ALL_NOTES
 {
-    Text [ en-US ] = "All Notes" ;
+    Text [ en-US ] = "All Comments" ;
 };
 
 String STR_DELETE_AUTHOR_NOTES
 {
-    Text [ en-US ] = "Notes by " ;
+    Text [ en-US ] = "Comments by " ;
 };
 
 String STR_NODATE

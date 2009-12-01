@@ -330,7 +330,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     }
     else
     {
-        rDoc.GetNodes().Move( rPaM, aPos, rNds, FALSE );
+        rDoc.GetNodes().MoveRange( rPaM, aPos, rNds );
 
         SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
         if( pTxtNd )        // fuege einen Trenner fuer die Attribute ein !
@@ -350,7 +350,10 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
                 ++aPos.nContent;
             }
             else
-                pTxtNd->Insert( ' ', aPos.nContent, INS_NOHINTEXPAND);
+            {
+                pTxtNd->InsertText( sal_Unicode(' '), aPos.nContent,
+                        IDocumentContentOperations::INS_NOHINTEXPAND );
+            }
         }
     }
     if( pEndNdIdx )
@@ -404,7 +407,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
         if( pTxtNd->GetTxt().Len() )
         {
             GoInCntnt( aPaM, fnMoveBackward );
-            pTxtNd->Erase( aPaM.GetPoint()->nContent, 1 );
+            pTxtNd->EraseText( aPaM.GetPoint()->nContent, 1 );
         }
 
         aPaM.SetMark();
@@ -413,7 +416,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
 
         _SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.nContent.GetIndex() );
 
-        rNds.Move( aPaM, rInsPos, rDoc.GetNodes() );
+        rNds.MoveRange( aPaM, rInsPos, rDoc.GetNodes() );
 
         // noch den letzen Node loeschen.
         if( !aPaM.GetPoint()->nContent.GetIndex() ||
@@ -537,11 +540,12 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 SwTxtNode* pTxtNd = (SwTxtNode*)pFtnNd;
                 if( !pHistory )
                     pHistory = new SwHistory;
-                SwTxtAttr* pFtnHnt = pTxtNd->GetTxtAttr( nFtnSttIdx );
+                SwTxtAttr* const pFtnHnt =
+                    pTxtNd->GetTxtAttrForCharAt( nFtnSttIdx );
                 ASSERT( pFtnHnt, "kein FtnAttribut" );
                 SwIndex aIdx( pTxtNd, nFtnSttIdx );
                 pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), false );
-                pTxtNd->Erase( aIdx, 1 );
+                pTxtNd->EraseText( aIdx, 1 );
             }
 
             while( nPos-- && ( pFtnNd = &( pSrch = rFtnArr[ nPos ] )->
@@ -560,11 +564,12 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 SwTxtNode* pTxtNd = (SwTxtNode*)pFtnNd;
                 if( !pHistory )
                     pHistory = new SwHistory;
-                SwTxtAttr* pFtnHnt = pTxtNd->GetTxtAttr( nFtnSttIdx );
+                SwTxtAttr* const pFtnHnt =
+                    pTxtNd->GetTxtAttrForCharAt( nFtnSttIdx );
                 ASSERT( pFtnHnt, "kein FtnAttribut" );
                 SwIndex aIdx( pTxtNd, nFtnSttIdx );
                 pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), false );
-                pTxtNd->Erase( aIdx, 1 );
+                pTxtNd->EraseText( aIdx, 1 );
             }
         }
     }
@@ -598,7 +603,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         if( !pHistory )
                             pHistory = new SwHistory;
                         SwTxtNode* pTxtNd = pDoc->GetNodes()[ pAPos->nNode]->GetTxtNode();
-                        SwTxtAttr* pFlyHnt = pTxtNd->GetTxtAttr( pAPos->nContent.GetIndex());
+                        SwTxtAttr* const pFlyHnt = pTxtNd->GetTxtAttrForCharAt(
+                            pAPos->nContent.GetIndex());
                         ASSERT( pFlyHnt, "kein FlyAttribut" );
                         pHistory->Add( pFlyHnt, 0, false );
                         // n wieder zurueck, damit nicht ein Format uebesprungen wird !
@@ -734,28 +740,43 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 }
                 else
                 {
-                    bool bMaybe = false;
-                    if( *pStt <= pBkmk->GetMarkPos() && pBkmk->GetMarkPos() <= *pEnd )
+                    // --> OD 2009-08-06 #i92125#
+                    bool bKeepCrossRefBkmk( false );
                     {
-                        if( pBkmk->GetMarkPos() == *pEnd ||
-                            ( *pStt == pBkmk->GetMarkPos() && pBkmk->IsExpanded() ) )
-                            bMaybe = true;
-                        else
-                            bSavePos = true;
-                    }
-                    if( pBkmk->IsExpanded() &&
-                        *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
-                    {
-                        if( bSavePos || bSaveOtherPos ||
-                            ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
+                        if ( rMark.nNode == rPoint.nNode &&
+                             ( IDocumentMarkAccess::GetType(*pBkmk) ==
+                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK ||
+                               IDocumentMarkAccess::GetType(*pBkmk) ==
+                                IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
                         {
-                            if( bMaybe )
-                                bSavePos = true;
-                            bSaveOtherPos = true;
+                            bKeepCrossRefBkmk = true;
                         }
                     }
-                    // delete cross-reference bookmark at <pStt>, if only part of
-                    // <pEnd> text node content is deleted.
+                    if ( !bKeepCrossRefBkmk )
+                    {
+                        bool bMaybe = false;
+                        if ( *pStt <= pBkmk->GetMarkPos() && pBkmk->GetMarkPos() <= *pEnd )
+                        {
+                            if( pBkmk->GetMarkPos() == *pEnd ||
+                                ( *pStt == pBkmk->GetMarkPos() && pBkmk->IsExpanded() ) )
+                                bMaybe = true;
+                            else
+                                bSavePos = true;
+                        }
+                        if( pBkmk->IsExpanded() &&
+                            *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
+                        {
+                            if( bSavePos || bSaveOtherPos ||
+                                ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
+                            {
+                                if( bMaybe )
+                                    bSavePos = true;
+                                bSaveOtherPos = true;
+                            }
+                        }
+                    }
+                    // <--
+
                     // --> OD 2007-10-17 #i81002#
                     const bool bDifferentTxtNodesAtMarkAndPoint(
                                         rMark.nNode != rPoint.nNode &&
@@ -765,6 +786,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     if( !bSavePos && !bSaveOtherPos && bDifferentTxtNodesAtMarkAndPoint &&
                         dynamic_cast< const ::sw::mark::CrossRefBookmark* >(pBkmk))
                     {
+                        // delete cross-reference bookmark at <pStt>, if only part of
+                        // <pEnd> text node content is deleted.
                         if( pStt->nNode == pBkmk->GetMarkPos().nNode &&
                             pEnd->nContent.GetIndex() !=
                                 pEnd->nNode.GetNode().GetTxtNode()->Len() )

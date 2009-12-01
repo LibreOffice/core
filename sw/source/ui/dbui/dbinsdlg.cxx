@@ -1131,7 +1131,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             for( n = 0; n < nCols; ++n )
             {
                 if( aRbHeadlColnms.IsChecked() )
-                    rSh.SwEditShell::Insert( aColFlds[ n ]->sColumn );
+                {
+                    rSh.SwEditShell::Insert2( aColFlds[ n ]->sColumn );
+                }
                 rSh.GoNextCell();
             }
         }
@@ -1227,7 +1229,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     {
                         rtl::OUString sVal =  xColumn->getString();
                         if(!xColumn->wasNull())
-                            rSh.SwEditShell::Insert( sVal );
+                        {
+                            rSh.SwEditShell::Insert2( sVal );
+                        }
                     }
                 }
                 catch(Exception&

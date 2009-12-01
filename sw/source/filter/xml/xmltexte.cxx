@@ -464,8 +464,6 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         aAny = rPropSet->getPropertyValue( sFrameStyleName );
         aAny >>= sStyle;
     }
-    // svg:desc
-    exportAlternativeText( rPropSet, rPropSetInfo );
 
     const XMLPropertyState *aStates[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     switch( nType )
@@ -766,6 +764,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
     // Lastly the stuff common to each of Applet/Plugin/Floating Frame
     exportEvents( rPropSet );
-    exportAlternativeText( rPropSet, rPropSetInfo );
+    // --> OD 2009-07-22 #i73249#
+    exportTitleAndDescription( rPropSet, rPropSetInfo );
+    // <--
     exportContour( rPropSet, rPropSetInfo );
 }

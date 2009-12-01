@@ -183,7 +183,7 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                 SwDontExpandItem aACD;
                 aACD.SaveDontExpandItems( rInsPos );
 
-                pGDoc->Copy( aCpyPam, rInsPos, false );
+                pGDoc->CopyRange( aCpyPam, rInsPos, false );
 
                 aACD.RestoreDontExpandItems( rInsPos );
                 if( pShell )

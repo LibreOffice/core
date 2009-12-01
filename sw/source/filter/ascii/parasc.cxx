@@ -261,7 +261,7 @@ ULONG SwASCIIParser::CallParser()
 
                 // !!!!!
                 ASSERT( !this, "Have to change - hard attr. to para. style" );
-                pDoc->Insert( *pInsPam, *pItemSet, 0 );
+                pDoc->InsertItemSet( *pInsPam, *pItemSet, 0 );
             }
         }
         delete pItemSet, pItemSet = 0;
@@ -467,7 +467,7 @@ ULONG SwASCIIParser::ReadChars()
                             InsertText( String( pLastStt ));
                         }
                         pDoc->SplitNode( *pPam->GetPoint(), false );
-                        pDoc->Insert( *pPam, SvxFmtBreakItem(
+                        pDoc->InsertPoolItem( *pPam, SvxFmtBreakItem(
                                     SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0);
                         pLastStt = pStt;
                         nLineLen = 0;
@@ -528,7 +528,7 @@ ULONG SwASCIIParser::ReadChars()
 
 void SwASCIIParser::InsertText( const String& rStr )
 {
-    pDoc->Insert( *pPam, rStr, true );
+    pDoc->InsertString( *pPam, rStr );
     if( pItemSet && pBreakIt && nScript != ( SCRIPTTYPE_LATIN |
                                              SCRIPTTYPE_ASIAN |
                                              SCRIPTTYPE_COMPLEX ) )

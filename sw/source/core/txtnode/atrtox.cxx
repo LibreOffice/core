@@ -50,7 +50,10 @@ SwTxtTOXMark::SwTxtTOXMark( SwTOXMark& rAttr,
         m_nEnd = *pEnd;
         m_pEnd = & m_nEnd;
     }
-    SetDontMergeAttr( true );
+    else
+    {
+        SetHasDummyChar(true);
+    }
     SetDontMoveAttr( true );
     SetOverlapAllowedAttr( true );
 }

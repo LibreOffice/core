@@ -49,6 +49,7 @@
 #include <swundo.hxx>
 
 #include <IMark.hxx>
+#include <IDocumentContentOperations.hxx>
 // --> OD 2006-11-01 #130889#
 #include <vector>
 // <--
@@ -362,6 +363,8 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     BOOL bIsWordDelim : 1;
     BOOL bIsAppend : 1;
 
+    const IDocumentContentOperations::InsertFlags m_nInsertFlags;
+
     friend class SwDoc;     // eigentlich nur SwDoc::Insert( String )
     BOOL CanGrouping( sal_Unicode cIns );
     BOOL CanGrouping( const SwPosition& rPos );
@@ -373,6 +376,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 
 public:
     SwUndoInsert( const SwNodeIndex& rNode, xub_StrLen nCntnt, xub_StrLen nLen,
+                  const IDocumentContentOperations::InsertFlags nInsertFlags,
                   BOOL bWDelim = TRUE );
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();
@@ -572,13 +576,13 @@ class SwUndoAttr : public SwUndo, private SwUndRng
     ::std::auto_ptr<SwRedlineData> m_pRedlineData;  // Redlining
     ::std::auto_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     ULONG m_nNodeIndex;                             // Offset: for Redlining
-    const USHORT m_nInsertFlags;                    // insert flags
+    const SetAttrMode m_nInsertFlags;               // insert flags
 
     void RemoveIdx( SwDoc& rDoc );
 
 public:
-    SwUndoAttr( const SwPaM&, const SfxItemSet&, USHORT nFlags = 0  );
-    SwUndoAttr( const SwPaM&, const SfxPoolItem&, USHORT nFlags = 0 );
+    SwUndoAttr( const SwPaM&, const SfxItemSet &, const SetAttrMode nFlags );
+    SwUndoAttr( const SwPaM&, const SfxPoolItem&, const SetAttrMode nFlags );
     virtual ~SwUndoAttr();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );

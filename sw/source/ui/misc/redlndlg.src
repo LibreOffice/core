@@ -64,7 +64,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
 {
     HelpID = HID_REDLINE_AUTOFMT_ACCEPT ;
     REDLNDLG
-    Text [ en-US ] = "Accept or Reject AutoFormat Changes";
+    Text [ en-US ] = "Accept or Reject AutoCorrect Changes";
 };
 
 Menu MN_REDLINE_POPUP

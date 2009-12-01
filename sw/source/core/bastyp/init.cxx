@@ -46,9 +46,7 @@
 #include <svx/shaditem.hxx>
 #include <svx/prntitem.hxx>
 #include <svx/brkitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/langitem.hxx>
 #include <svx/wrlmitem.hxx>
 #include <svx/kernitem.hxx>
@@ -62,13 +60,9 @@
 #include <svx/lspcitem.hxx>
 #include <svx/blnkitem.hxx>
 #include <svx/akrnitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
-#endif
 #include <svx/twolinesitem.hxx>
-#ifndef _SVX_SCRIPSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
-#endif
 #include <svx/hngpnctitem.hxx>
 #include <svx/cmapitem.hxx>
 #include <svx/charscaleitem.hxx>
@@ -94,7 +88,6 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <svx/acorrcfg.hxx>
 #include <vcl/svapp.hxx>
-#include <fmthbsh.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -116,9 +109,7 @@
 #include <fmtautofmt.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtcnct.hxx>
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
 #include <fmtftntx.hxx>
 #include <fmtruby.hxx>
 #include <fmtautofmt.hxx>
@@ -137,9 +128,7 @@
 #include <doc.hxx>
 #include <acmplwrd.hxx>
 #include <fmtclbl.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <breakit.hxx>
 #include <checkit.hxx>
 #include <swcalwrp.hxx>
@@ -149,6 +138,9 @@
 #include <fmtfollowtextflow.hxx>
 // OD 2004-05-05 #i28701#
 #include <fmtwrapinfluenceonobjpos.hxx>
+
+#include <fmtmeta.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -319,22 +311,22 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
-    { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
+    { 0, 0 },                                           // RES_TXTATR_META
+    { 0, 0 },                                           // RES_TXTATR_METAFIELD
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
+    { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
     { 0, 0 },                                           // RES_TXTATR_CHARFMT
+    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5
-    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY6,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY7,
 
     { 0, 0 },                                           // RES_TXTATR_FIELD
     { 0, 0 },                                           // RES_TXTATR_FLYCNT
     { 0, 0 },                                           // RES_TXTATR_FTN
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_SOFTHYPH
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_HARDBLANK
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY4
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY2
 
@@ -467,14 +459,18 @@ SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
 SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
-SwCalendarWrapper* pCalendarWrapper = 0;
+
 CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
 ::utl::TransliterationWrapper* pTransWrp = 0;
 
 /******************************************************************************
  *  void _InitCore()
  ******************************************************************************/
-
+salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
+{
+    static salhelper::SingletonRef<SwCalendarWrapper> aCalendarWrapper;
+    return &aCalendarWrapper;
+}
 void _InitCore()
 {
     SfxPoolItem* pItem;
@@ -540,19 +536,19 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] = new SwFmtCharFmt( 0 );
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] = new SwFmtRuby( aEmptyStr );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
+    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_META);
+    aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
 
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] = new SwFmtFld;
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] = new SwFmtFlyCnt( 0 );
     aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] = new SwFmtFtn;
-    aAttrTab[ RES_TXTATR_SOFTHYPH- POOLATTR_BEGIN ] = new SwFmtSoftHyph;
-    aAttrTab[ RES_TXTATR_HARDBLANK- POOLATTR_BEGIN ] = new SwFmtHardBlank( ' ', FALSE );
 
 // TextAttr - Dummies
+    aAttrTab[ RES_TXTATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY4 );
+    aAttrTab[ RES_TXTATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY3 );
     aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY1 );
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY2 );
     aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY5 );
-    aAttrTab[ RES_TXTATR_DUMMY6 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY6 );
-    aAttrTab[ RES_TXTATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY7 );
 // TextAttr - Dummies
 
     aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] = new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
@@ -740,9 +736,9 @@ void _InitCore()
 
     SwBreakIt::_Create( xMSF );
     pCheckIt = NULL;
-    pAppCharClass = new CharClass(
-        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
-    pCalendarWrapper = new SwCalendarWrapper( xMSF );
+    /*pAppCharClass = new CharClass(
+        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));*/
+    //pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
     _TextInit();
@@ -773,7 +769,6 @@ void _FinitCore()
     SwBreakIt::_Delete();
     delete pCheckIt;
     delete pAppCharClass;
-    delete pCalendarWrapper;
     delete pCollator;
     delete pCaseCollator;
 
@@ -856,15 +851,14 @@ void _FinitCore()
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 CharClass& GetAppCharClass()
 {
+    if ( !pAppCharClass )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        pAppCharClass = new CharClass(
+            xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
+    }
     return *pAppCharClass;
 }
-
-LocaleDataWrapper& GetAppLocaleData()
-{
-    SvtSysLocale aSysLocale;
-    return (LocaleDataWrapper&)aSysLocale.GetLocaleData();
-}
-
 
 void SwCalendarWrapper::LoadDefaultCalendar( USHORT eLang )
 {

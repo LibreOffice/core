@@ -223,7 +223,7 @@ void SwTOXSortTabBase::FillText( SwTxtNode& rNd, const SwIndex& rInsPos,
 
     GetTxt( sMyTxt, sMyTxtReading );
 
-    rNd.Insert( sMyTxt, rInsPos );
+    rNd.InsertText( sMyTxt, rInsPos );
 }
 
 BOOL SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
@@ -459,7 +459,7 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) cons
     else
         GetTxt( sTmp, sTmpReading );
 
-    rNd.Insert( sTmp, rInsPos );
+    rNd.InsertText( sTmp, rInsPos );
 }
 
 
@@ -582,7 +582,7 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) co
     {
         String sTmp, sTmpReading;
         GetTxt( sTmp, sTmpReading );
-        rNd.Insert( sTmp, rInsPos );
+        rNd.InsertText( sTmp, rInsPos );
     }
 }
 
@@ -684,7 +684,7 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
         String sTmp, sTmpReading;
         GetTxt( sTmp, sTmpReading );
         sTmp.SearchAndReplaceAll('\t', ' ');
-        rNd.Insert( sTmp, rInsPos );
+        rNd.InsertText( sTmp, rInsPos );
     }
 }
 
@@ -718,40 +718,49 @@ String SwTOXPara::GetURL() const
         {
             const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
 
-            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
-            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
-            {
-                aTxt = '#';
-                const SwNumRule * pRule = pTxtNd->GetNumRule();
-                if( pRule )
-                {
-                    // dann noch die rel. Nummer davor setzen
-                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetActualListLevel());
-                    if(nCurrLevel <= MAXLEVEL)
-                    {
-                        // --> OD 2005-11-02 #i51089 - TUNING#
-                        if ( pTxtNd->GetNum() )
-                        {
-                            SwNumberTree::tNumberVector aNumVector =
-                                pTxtNd->GetNumberVector();
+            // --> OD 2009-08-05 #i103265#
+//            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
+//            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
+//            {
+//                aTxt = '#';
+//                const SwNumRule * pRule = pTxtNd->GetNumRule();
+//                if( pRule )
+//                {
+//                    // dann noch die rel. Nummer davor setzen
+//                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetActualListLevel());
+//                    if(nCurrLevel <= MAXLEVEL)
+//                    {
+//                        // --> OD 2005-11-02 #i51089 - TUNING#
+//                        if ( pTxtNd->GetNum() )
+//                        {
+//                            SwNumberTree::tNumberVector aNumVector =
+//                                pTxtNd->GetNumberVector();
 
-                            for( USHORT n = 0; n <= nCurrLevel; ++n )
-                            {
-                                int nNum = aNumVector[ n ];
-                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
-                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
-                            }
-                        }
-                        else
-                        {
-                            ASSERT( false,
-                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
-                        }
-                    }
-                }
-                aTxt += pTxtNd->GetExpandTxt();
-                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
-            }
+//                            for( USHORT n = 0; n <= nCurrLevel; ++n )
+//                            {
+//                                int nNum = aNumVector[ n ];
+//                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
+//                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
+//                            }
+//                        }
+//                        else
+//                        {
+//                            ASSERT( false,
+//                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
+//                        }
+//                    }
+//                }
+//                aTxt += pTxtNd->GetExpandTxt();
+//                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
+//            }
+            SwDoc* pDoc = const_cast<SwDoc*>( pTxtNd->GetDoc() );
+            ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(
+                                *(pTxtNd),
+                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK);
+            aTxt = '#';
+            const String aMarkName( pMark->GetName() );
+            aTxt += aMarkName;
+            // <--
         }
         break;
 
@@ -895,7 +904,7 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
     }
     else
         sText = (pField->GetFieldText((ToxAuthorityField) nAuthField));
-    rNd.Insert( sText, rInsPos );
+    rNd.InsertText( sText, rInsPos );
 }
 /* -----------------14.10.99 09:35-------------------
 
@@ -943,4 +952,3 @@ BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
     }
     return bRet;
 }
-

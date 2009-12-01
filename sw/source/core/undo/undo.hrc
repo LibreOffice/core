@@ -153,9 +153,11 @@
 #define STR_UNDO_ROW_DELETE                 (CORE_REPEAT_END      +64)
 #define STR_UNDO_PAGEDESC_RENAME            (CORE_REPEAT_END      +65)
 #define STR_NUMDOWN                         (CORE_REPEAT_END      +66)
+#define STR_UNDO_FLYFRMFMT_TITLE                (CORE_REPEAT_END      +67)
+#define STR_UNDO_FLYFRMFMT_DESCRITPTION         (CORE_REPEAT_END      +68)
 
 // !!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!
-#define CORE_UNDO_END           STR_NUMDOWN// !!!! umsetzen !!!
+#define CORE_UNDO_END           STR_UNDO_FLYFRMFMT_DESCRITPTION// !!!! umsetzen !!!
 
 // UI-Undo Klammerungen
 #define UI_UNDO_BEGIN                   (CORE_UNDO_END + 1)

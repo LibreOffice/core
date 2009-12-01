@@ -461,7 +461,7 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
         if (pProps->aPassword.getLength() > 0)
             aSect.SetPasswd(pProps->aPassword);
 
-        pRet = pDoc->Insert( aPam, aSect, aSet.Count() ? &aSet : 0 );
+        pRet = pDoc->InsertSwSection( aPam, aSect, aSet.Count() ? &aSet : 0 );
         // now create the client
         m_refCount++;
         // keep block to remove Reference before the refcount is decremented

@@ -47,6 +47,7 @@
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
 #include <frame.hxx>
+#include <fmtmeta.hxx>
 
 #include <docsh.hxx>
 #include <svtools/smplhint.hxx>
@@ -288,7 +289,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                 SwTxtNode* pTxtNd = pCNd->GetTxtNode();
                 if( pTxtNd )
                 {
-                    const SwpHints* pHts = pTxtNd->GetpSwpHints();
+                    SwpHints * const pHts = pTxtNd->GetpSwpHints();
                     // setze die OultineNodes im neuen Nodes-Array
                     //if( bInsOutlineIdx && NO_NUMBERING != //#outline level,removed by zhaojianwei
                     //  pTxtNd->GetTxtColl()->GetOutlineLevel() )
@@ -306,16 +307,17 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
                     {
-                        const SwTxtAttr* pAttr;
                         int bToUndo = &pDestDoc->GetNodes() != &rNds;
                         for( USHORT i = pHts->Count(); i; )
                         {
                             USHORT nDelMsg = 0;
-                            switch( (pAttr = (*pHts)[ --i ])->Which() )
+                            SwTxtAttr * const pAttr = pHts->GetTextHint( --i );
+                            switch ( pAttr->Which() )
                             {
                             case RES_TXTATR_FIELD:
                                 {
-                                    SwTxtFld* pTxtFld = (SwTxtFld*)pAttr;
+                                    SwTxtFld* pTxtFld =
+                                        static_cast<SwTxtFld*>(pAttr);
                                     rNds.GetDoc()->InsDelFldInFldLst( !bToUndo, *pTxtFld );
 
                                     const SwFieldType* pTyp = pTxtFld->GetFld().GetFld()->GetTyp();
@@ -344,6 +346,15 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
 
                             case RES_TXTATR_REFMARK:
                                 nDelMsg = RES_REFMARK_DELETED;
+                                break;
+
+                            case RES_TXTATR_META:
+                            case RES_TXTATR_METAFIELD:
+                                static_cast<SwFmtMeta&>(pAttr->GetAttr())
+                                    .NotifyRemoval();
+                                break;
+
+                            default:
                                 break;
                             }
                             if( nDelMsg && bToUndo )
@@ -1762,10 +1773,10 @@ USHORT HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
 |*    Letzte Aenderung  JP 09.07.92
 |*
 *************************************************************************/
-void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
-                    BOOL )
+void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 {
-    SwPosition *pStt = (SwPosition*)rPam.Start(), *pEnd = (SwPosition*)rPam.End();
+    SwPosition * const pStt = rPam.Start();
+    SwPosition * const pEnd = rPam.End();
 
     if( !rPam.HasMark() || *pStt >= *pEnd )
         return;
@@ -1775,10 +1786,9 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
 
     SwNodeIndex aEndIdx( pEnd->nNode );
     SwNodeIndex aSttIdx( pStt->nNode );
-    SwTxtNode* pSrcNd = (*this)[ aSttIdx ]->GetTxtNode();
+    SwTxtNode* const pSrcNd = (*this)[ aSttIdx ]->GetTxtNode();
     SwTxtNode* pDestNd = rNodes[ rPos.nNode ]->GetTxtNode();
     BOOL bSplitDestNd = TRUE;
-    BOOL bSttTxtNd = 0 != pSrcNd;
     BOOL bCopyCollFmt = pDestNd && !pDestNd->GetTxt().Len();
 
     if( pSrcNd )
@@ -1792,67 +1802,74 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
             rPos.nContent.Assign( pDestNd, 0 );
             bCopyCollFmt = TRUE;
         }
-/*!NOSPLIT      bSplitDestNd = !bSplitNd &&
-                        ( pDestNd->Len() > rPos.nContent.GetIndex() ||
-                        !aEndIdx.GetNode().IsTxtNode() );
-*/
-//      ASSERT( bSplitNd, "Move mit bSplitNode = FALSE" );
         bSplitDestNd = pDestNd->Len() > rPos.nContent.GetIndex() ||
                         pEnd->nNode.GetNode().IsTxtNode();
 
         // verschiebe jetzt noch den Inhalt in den neuen Node
         BOOL bOneNd = pStt->nNode == pEnd->nNode;
-        xub_StrLen nLen = ( bOneNd ? pEnd->nContent.GetIndex() : pSrcNd->Len() )
-                        - pStt->nContent.GetIndex();
+        const xub_StrLen nLen =
+                ( (bOneNd) ? pEnd->nContent.GetIndex() : pSrcNd->Len() )
+                - pStt->nContent.GetIndex();
 
         if( !pEnd->nNode.GetNode().IsCntntNode() )
         {
             bOneNd = TRUE;
-            ULONG nSttNdIdx = pStt->nNode.GetIndex() + 1,
-                    nEndNdIdx = pEnd->nNode.GetIndex();
+            ULONG nSttNdIdx = pStt->nNode.GetIndex() + 1;
+            const ULONG nEndNdIdx = pEnd->nNode.GetIndex();
             for( ; nSttNdIdx < nEndNdIdx; ++nSttNdIdx )
+            {
                 if( (*this)[ nSttNdIdx ]->IsCntntNode() )
                 {
                     bOneNd = FALSE;
                     break;
                 }
+            }
         }
 
         // das kopieren / setzen der Vorlagen darf erst nach
         // dem Splitten erfolgen
-//!NOSPLIT      if( !bOneNd && ( bSplitNd || bSplitDestNd ))
         if( !bOneNd && bSplitDestNd )
         {
             if( !rPos.nContent.GetIndex() )
+            {
                 bCopyCollFmt = TRUE;
+            }
             if( rNodes.IsDocNodes() )
             {
-                SwDoc* pInsDoc = pDestNd->GetDoc();
-                BOOL bIsUndo = pInsDoc->DoesUndo();
-                pInsDoc->DoUndo( FALSE );
+                SwDoc* const pInsDoc = pDestNd->GetDoc();
+                const bool bIsUndo = pInsDoc->DoesUndo();
+                pInsDoc->DoUndo( false );
                 pInsDoc->SplitNode( rPos, false );
                 pInsDoc->DoUndo( bIsUndo );
             }
             else
+            {
                 pDestNd->SplitCntntNode( rPos );
+            }
 
             if( rPos.nNode == aEndIdx )
+            {
                 aEndIdx--;
+            }
             bSplitDestNd = TRUE;
 
             pDestNd = rNodes[ rPos.nNode.GetIndex() - 1 ]->GetTxtNode();
             if( nLen )
-                pSrcNd->Cut( pDestNd, SwIndex( pDestNd, pDestNd->Len()),
+            {
+                pSrcNd->CutText( pDestNd, SwIndex( pDestNd, pDestNd->Len()),
                             pStt->nContent, nLen );
+            }
         }
-        else if( nLen )
-            pSrcNd->Cut( pDestNd, rPos.nContent, pStt->nContent, nLen );
+        else if ( nLen )
+        {
+            pSrcNd->CutText( pDestNd, rPos.nContent, pStt->nContent, nLen );
+        }
 
         if( bCopyCollFmt )
         {
-            SwDoc* pInsDoc = pDestNd->GetDoc();
-            BOOL bIsUndo = pInsDoc->DoesUndo();
-            pInsDoc->DoUndo( FALSE );
+            SwDoc* const pInsDoc = pDestNd->GetDoc();
+            const bool bIsUndo = pInsDoc->DoesUndo();
+            pInsDoc->DoUndo( false );
             pSrcNd->CopyCollFmt( *pDestNd );
             pInsDoc->DoUndo( bIsUndo );
             bCopyCollFmt = FALSE;
@@ -1865,7 +1882,8 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
             // wird aufgehoben !
             pEnd->nContent = pStt->nContent;
             rPam.DeleteMark();
-            GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0, rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
+            GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0,
+                rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
             return;
         }
 
@@ -1875,106 +1893,117 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
     {
         if( rPos.nContent.GetIndex() )
         {
-//!NOSPLIT          if( !bSplitNd && rPos.nContent.GetIndex() == pDestNd->Len() )
             if( rPos.nContent.GetIndex() == pDestNd->Len() )
+            {
                 rPos.nNode++;
+            }
             else if( rPos.nContent.GetIndex() )
             {
                 // falls im EndNode gesplittet wird, dann muss der EndIdx
                 // korrigiert werden !!
-                BOOL bCorrEnde = aEndIdx == rPos.nNode;
+                const bool bCorrEnd = aEndIdx == rPos.nNode;
                 // es wird kein Text an den TextNode angehaengt, also splitte ihn
 
                 if( rNodes.IsDocNodes() )
                 {
-                    SwDoc* pInsDoc = pDestNd->GetDoc();
-                    BOOL bIsUndo = pInsDoc->DoesUndo();
-                    pInsDoc->DoUndo( FALSE );
+                    SwDoc* const pInsDoc = pDestNd->GetDoc();
+                    const bool bIsUndo = pInsDoc->DoesUndo();
+                    pInsDoc->DoUndo( false );
                     pInsDoc->SplitNode( rPos, false );
                     pInsDoc->DoUndo( bIsUndo );
                 }
                 else
+                {
                     pDestNd->SplitCntntNode( rPos );
+                }
 
                 pDestNd = rPos.nNode.GetNode().GetTxtNode();
 
-                if( bCorrEnde )
+                if ( bCorrEnd )
+                {
                     aEndIdx--;
+                }
             }
         }
         // am Ende steht noch ein leerer Text Node herum.
         bSplitDestNd = TRUE;
     }
 
-    pSrcNd = (*this)[ aEndIdx ]->GetTxtNode();
-    if( pSrcNd )
+    SwTxtNode* const pEndSrcNd = (*this)[ aEndIdx ]->GetTxtNode();
+    if ( pEndSrcNd )
     {
-//      if( pEnd->nContent.GetIndex() ? TRUE : aEndIdx != pStt->nNode )
         {
             // am Bereichsende entsteht ein neuer TextNode
             if( !bSplitDestNd )
             {
                 if( rPos.nNode < rNodes.GetEndOfContent().GetIndex() )
+                {
                     rPos.nNode++;
+                }
 
-                pDestNd = rNodes.MakeTxtNode( rPos.nNode, pSrcNd->GetTxtColl() );
+                pDestNd =
+                    rNodes.MakeTxtNode( rPos.nNode, pEndSrcNd->GetTxtColl() );
                 rPos.nNode--;
                 rPos.nContent.Assign( pDestNd, 0 );
             }
             else
+            {
                 pDestNd = rNodes[ rPos.nNode ]->GetTxtNode();
+            }
 
             if( pDestNd && pEnd->nContent.GetIndex() )
             {
                 // verschiebe jetzt noch den Inhalt in den neuen Node
-                SwIndex aIdx( pSrcNd, 0 );
-                pSrcNd->Cut( pDestNd, rPos.nContent, aIdx,
+                SwIndex aIdx( pEndSrcNd, 0 );
+                pEndSrcNd->CutText( pDestNd, rPos.nContent, aIdx,
                                 pEnd->nContent.GetIndex());
             }
 
             if( bCopyCollFmt )
             {
-                SwDoc* pInsDoc = pDestNd->GetDoc();
-                BOOL bIsUndo = pInsDoc->DoesUndo();
-                pInsDoc->DoUndo( FALSE );
-                pSrcNd->CopyCollFmt( *pDestNd );
+                SwDoc* const pInsDoc = pDestNd->GetDoc();
+                const bool bIsUndo = pInsDoc->DoesUndo();
+                pInsDoc->DoUndo( false );
+                pEndSrcNd->CopyCollFmt( *pDestNd );
                 pInsDoc->DoUndo( bIsUndo );
             }
         }
     }
     else
     {
-        if( bSttTxtNd && aEndIdx.GetNode().IsCntntNode() )
+        if ( pSrcNd && aEndIdx.GetNode().IsCntntNode() )
+        {
             aEndIdx++;
-//!NOSPLIT
+        }
         if( !bSplitDestNd )
         {
             rPos.nNode++;
             rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), 0 );
         }
-//!NOSPLIT
     }
 
     if( aEndIdx != aSttIdx )
     {
         // verschiebe jetzt die Nodes in das NodesArary
-        SwNodeIndex aPrvIdx( rPos.nNode, -1 );
-        ULONG nSttDiff = aSttIdx.GetIndex() - pStt->nNode.GetIndex();
+        const ULONG nSttDiff = aSttIdx.GetIndex() - pStt->nNode.GetIndex();
         SwNodeRange aRg( aSttIdx, aEndIdx );
         _MoveNodes( aRg, rNodes, rPos.nNode );
         // falls ins gleiche Nodes-Array verschoben wurde, stehen die
         // Indizies jetzt auch an der neuen Position !!!!
         // (also alles wieder umsetzen)
         if( &rNodes == this )
+        {
             pStt->nNode = aRg.aEnd.GetIndex() - nSttDiff;
+        }
     }
 
     // falls der Start-Node verschoben wurde, in dem der Cursor stand, so
     // muss der Content im akt. Content angemeldet werden !!!
-    if( &pStt->nNode.GetNode() == &GetEndOfContent() &&
-        !GoPrevious( &pStt->nNode ))
+    if ( &pStt->nNode.GetNode() == &GetEndOfContent() )
     {
-        ASSERT( FALSE, "Move() - kein ContentNode mehr vorhanden" );
+        const bool bSuccess = GoPrevious( &pStt->nNode );
+        ASSERT( bSuccess, "Move() - no ContentNode here" );
+        (void) bSuccess;
     }
     pStt->nContent.Assign( (*this)[ pStt->nNode ]->GetCntntNode(),
                             pStt->nContent.GetIndex() );
@@ -1983,7 +2012,8 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
     // wird aufgehoben !
     *pEnd = *pStt;
     rPam.DeleteMark();
-    GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0, rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
+    GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0,
+                rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
 }
 
 

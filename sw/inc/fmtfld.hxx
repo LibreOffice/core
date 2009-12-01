@@ -39,6 +39,7 @@
 
 class SwField;
 class SwTxtFld;
+class SwView;
 
 // ATT_FLD ***********************************
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
@@ -103,16 +104,19 @@ class SW_DLLPUBLIC SwFmtFldHint : public SfxHint
 
     const SwFmtFld* pFld;
     sal_Int16 nWhich;
+    const SwView* pView;
 
 public:
-    SwFmtFldHint( const SwFmtFld* p, sal_Int16 n )
+    SwFmtFldHint( const SwFmtFld* p, sal_Int16 n, const SwView* pV = 0)
         : pFld(p)
         , nWhich(n)
+        , pView(pV)
     {}
 
     TYPEINFO();
     const SwFmtFld* GetField() const { return pFld; }
     sal_Int16 Which() const { return nWhich; }
+    const SwView* GetView() const { return pView; }
 };
 
 #endif

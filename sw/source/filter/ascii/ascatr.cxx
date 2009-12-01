@@ -88,20 +88,16 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-        USHORT i;
-        xub_StrLen nPos;
-        const xub_StrLen * pPos;
-
 // kann noch optimiert werden, wenn ausgenutzt wird, dass die TxtAttrs
 // nach der Anfangsposition geordnet sind. Dann muessten
 // allerdings noch 2 Indices gemerkt werden
-        for( i = 0; i < pTxtAttrs->Count(); i++ )
+        for ( USHORT i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            nPos = *pHt->GetStart();    // gibt erstes Attr-Zeichen
-            pPos = pHt->GetEnd();
-            if( !pPos )
+            if (pHt->HasDummyChar())
             {
+                xub_StrLen nPos = *pHt->GetStart();
+
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
 
@@ -124,8 +120,7 @@ BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
         for( i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            const xub_StrLen * pEnd = pHt->GetEnd();
-            if( !pEnd && nSwPos == *pHt->GetStart() )
+            if ( pHt->HasDummyChar() && nSwPos == *pHt->GetStart() )
             {
                 bRet = TRUE;
                 String sOut;
@@ -133,10 +128,6 @@ BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                 {
                 case RES_TXTATR_FIELD:
                     sOut = ((SwTxtFld*)pHt)->GetFld().GetFld()->Expand();
-                    break;
-
-                case RES_TXTATR_HARDBLANK:
-                    sOut = ((SwTxtHardBlank*)pHt)->GetChar();
                     break;
 
                 case RES_TXTATR_FTN:

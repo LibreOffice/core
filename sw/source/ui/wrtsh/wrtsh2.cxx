@@ -93,10 +93,13 @@ void SwWrtShell::Insert(SwField &rFld)
 
     StartUndo(UNDO_INSERT, &aRewriter);
 
+    bool bDeleted = false;
     if( HasSelection() )
-        DelRight();
+    {
+        bDeleted = DelRight() != 0;
+    }
 
-    SwEditShell::Insert(rFld);
+    SwEditShell::Insert2(rFld, bDeleted);
     EndUndo(UNDO_INSERT);
     EndAllAction();
 }

@@ -668,8 +668,8 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
 
     // now ask the Break-Iterator for the word
     DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-    DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
-    if( pBreakIt->xBreak.is() )
+    DBG_ASSERT( pBreakIt->GetBreakIter().is(), "No break-iterator." );
+    if( pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
         USHORT nModelPos = GetPortionData().GetModelPosition( nPos );
@@ -681,7 +681,7 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
         const USHORT nWordType = WordType::ANY_WORD;
 
         // get word boundary, as the Break-Iterator sees fit.
-        rBound = pBreakIt->xBreak->getWordBoundary(
+        rBound = pBreakIt->GetBreakIter()->getWordBoundary(
             rText, nPos, aLocale, nWordType, sal_True );
 
         // It's a word if the first character is an alpha-numeric character.
@@ -748,8 +748,8 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
     // ask the Break-Iterator for the glyph by moving one cell
     // forward, and then one cell back
     DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-    DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
-    if( pBreakIt->xBreak.is() )
+    DBG_ASSERT( pBreakIt->GetBreakIter().is(), "No break-iterator." );
+    if( pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
         USHORT nModelPos = GetPortionData().GetModelPosition( nPos );
@@ -759,9 +759,9 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
         // get word boundary, as the Break-Iterator sees fit.
         const USHORT nIterMode = CharacterIteratorMode::SKIPCELL;
         sal_Int32 nDone = 0;
-        rBound.endPos = pBreakIt->xBreak->nextCharacters(
+        rBound.endPos = pBreakIt->GetBreakIter()->nextCharacters(
              rText, nPos, aLocale, nIterMode, 1, nDone );
-        rBound.startPos = pBreakIt->xBreak->previousCharacters(
+        rBound.startPos = pBreakIt->GetBreakIter()->previousCharacters(
              rText, rBound.endPos, aLocale, nIterMode, 1, nDone );
 
         DBG_ASSERT( rBound.startPos <= nPos, "start pos too high" );

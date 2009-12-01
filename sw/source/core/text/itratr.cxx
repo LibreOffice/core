@@ -45,7 +45,6 @@
 #include <fmtflcnt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
@@ -126,19 +125,7 @@ SwAttrIter::~SwAttrIter()
 
 SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
 {
-    if ( pHints )
-    {
-        for ( USHORT i = 0; i < pHints->Count(); ++i )
-        {
-            SwTxtAttr *pPos = pHints->GetTextHint(i);
-            xub_StrLen nStart = *pPos->GetStart();
-            if( nPosition < nStart )
-                return 0;
-            if( nPosition == nStart && !pPos->GetEnd() )
-                return pPos;
-        }
-    }
-    return 0;
+    return (m_pTxtNode) ? m_pTxtNode->GetTxtAttrForCharAt(nPosition) : 0;
 }
 
 /*************************************************************************
@@ -400,10 +387,10 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
         xub_StrLen nStop = nIdx;
         sal_Bool bClear;
         LanguageType eLang = pFnt->GetLanguage();
-        if( pBreakIt->xBreak.is() )
+        if( pBreakIt->GetBreakIter().is() )
         {
             bClear = CH_BLANK == rTxt.GetChar( nStop );
-            Boundary aBndry( pBreakIt->xBreak->getWordBoundary( rTxt, nIdx,
+            Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary( rTxt, nIdx,
                              pBreakIt->GetLocale( eLang ),
                              WordType::DICTIONARY_WORD, TRUE ) );
             nStop = (xub_StrLen)aBndry.endPos;
@@ -870,7 +857,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
     if ( nStt == nEnd )
     {
-        if ( !pBreakIt->xBreak.is() )
+        if ( !pBreakIt->GetBreakIter().is() )
             return 100;
 
         SwScriptInfo aScriptInfo;
@@ -878,7 +865,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         aIter.SeekAndChgAttrIter( nStt, pOut );
 
         Boundary aBound =
-            pBreakIt->xBreak->getWordBoundary( GetTxt(), nStt,
+            pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), nStt,
             pBreakIt->GetLocale( aIter.GetFnt()->GetLanguage() ),
             WordType::DICTIONARY_WORD, sal_True );
 

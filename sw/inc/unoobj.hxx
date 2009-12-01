@@ -30,8 +30,10 @@
  ************************************************************************/
 #ifndef _UNOOBJ_HXX
 #define _UNOOBJ_HXX
+
 #include <unoevtlstnr.hxx>
 #include <unobaseclass.hxx>
+#include <unocrsr.hxx>
 #include <svtools/itemprop.hxx>
 #include <svtools/svarray.hxx>
 #include <frmfmt.hxx>
@@ -92,12 +94,28 @@
 #include <IDocumentMarkAccess.hxx>
 #include <sfx2/Metadatable.hxx>
 
+#include <deque>
+#include <boost/shared_ptr.hpp>
 
-class SwUnoCrsr;
-class SwCursor;
+
 class SwFmtFtn;
 class SwFmtRefMark;
 class GetCurTxtFmtColl;
+
+
+struct FrameDependSortListEntry {
+    xub_StrLen nIndex;
+    sal_uInt32 nOrder;
+    ::boost::shared_ptr<SwDepend> pFrameDepend;
+    FrameDependSortListEntry (xub_StrLen const i_nIndex,
+                sal_uInt32 const i_nOrder, SwDepend * const i_pDepend)
+        : nIndex(i_nIndex), nOrder(i_nOrder), pFrameDepend(i_pDepend) { }
+};
+typedef ::std::deque< FrameDependSortListEntry >
+    FrameDependSortList_t;
+
+typedef ::std::deque< ::boost::shared_ptr<SwDepend> >
+    FrameDependList_t;
 
 /* -----------------29.04.98 07:35-------------------
  *
@@ -114,36 +132,21 @@ enum CursorType
     CURSOR_REDLINE,
     CURSOR_ALL,          // fuer Search&Replace
     CURSOR_SELECTION,    // create a paragraph enumeration from a text range or cursor
-    CURSOR_SELECTION_IN_TABLE
+    CURSOR_SELECTION_IN_TABLE,
+    CURSOR_META,         // meta/meta-field
 };
-
-/* -----------------29.04.98 07:35-------------------
- *
- * --------------------------------------------------*/
-#define PUNOPAM (_pStartCrsr)
-
-#define FOREACHUNOPAM_START(pCrsr) \
-    {\
-        SwPaM *_pStartCrsr = pCrsr, *__pStartCrsr = _pStartCrsr; \
-        do {
-
-#define FOREACHUNOPAM_END() \
-        } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr ); \
-    }
 
 
 /* -----------------26.06.98 16:18-------------------
  *
  * --------------------------------------------------*/
 
-SV_DECL_PTRARR(SwDependArr, SwDepend*, 2, 2)
-
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
 ::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
 
 // OD 2004-05-07 #i28701# - adjust 4th parameter
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
-                         SwDependArr& rFrameArr,
+                         FrameDependSortList_t & rFrames,
                          const bool _bAtCharAnchoredObjs );
 
 /* -----------------29.04.98 07:35-------------------
@@ -212,8 +215,13 @@ class SwXText : public ::com::sun::star::lang::XTypeProvider,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & CharacterAndParagraphProperties )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-protected:
+    virtual void PrepareForAttach( ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextRange > & xRange,
+            const SwXTextRange* const pRange, const SwPaM * const pPam);
+
+public: /*not protected because C++ is retarded*/
     virtual const SwStartNode *GetStartNode() const;
+
 public:
                 SwXText(SwDoc* pDc, CursorType eType);
     virtual     ~SwXText();
@@ -293,6 +301,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
     INT16   ComparePositions(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>& xPos1, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>& xPos2) throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException);
     BOOL    CheckForOwnMember(const SwXTextRange* pRange1, const OTextCursorHelper* pCursor1)throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual bool CheckForOwnMemberMeta(const SwXTextRange* const pRange,
+            const SwPaM* const pPam, bool bAbsorb)
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
     //
     void            Invalidate() {bObjectValid = sal_False;}
     BOOL            IsValid()const {return bObjectValid;}
@@ -345,8 +357,6 @@ class SwXTextCursor : public SwXTextCursor_Base,
     bool mbRemoveUserEvent;
     // <--
 
-    void    DeleteAndInsert(const String& rText);
-
     DECL_STATIC_LINK( SwXTextCursor, RemoveCursor_Impl,
                       ::com::sun::star::uno::Reference<
                       ::com::sun::star::uno::XInterface>* );
@@ -354,6 +364,7 @@ class SwXTextCursor : public SwXTextCursor_Base,
 protected:
     virtual ~SwXTextCursor();
 public:
+    void    DeleteAndInsert(const String& rText, const bool bForceExpandHints);
     SwXTextCursor(::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, const SwPosition& rPos,
                     CursorType eSet, SwDoc* pDoc, const SwPosition* pMark = 0);
     SwXTextCursor(::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, SwUnoCrsr* pSourceCrsr, CursorType eSet = CURSOR_ALL);
@@ -506,6 +517,8 @@ public:
     // --> FME 2006-03-07 #126177#
     void DoNotRemoveUserEvent() { mbRemoveUserEvent = false; }
     // <--
+
+    bool IsAtEndOfMeta() const;
 };
 /*-----------------20.03.98 07:47-------------------
 
@@ -557,18 +570,19 @@ public:
 };
 */
 
-typedef cppu::WeakImplHelper5
+typedef ::cppu::ImplInheritanceHelper5
 <
+    ::sfx2::MetadatableMixin,
     ::com::sun::star::text::XTextContent,
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::container::XNamed,
     ::com::sun::star::lang::XUnoTunnel
 >
-SwRefMarkBaseClass;
+SwBookmarkBaseClass;
 
 class SwXBookmark
-    : public SwRefMarkBaseClass
+    : public SwBookmarkBaseClass
     , private SwClient
 {
     private:
@@ -634,7 +648,14 @@ class SwXBookmark
         //SwClient
         virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
+        // MetadatableMixin
+        virtual ::sfx2::Metadatable* GetCoreObject();
+        virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > GetModel();
+
         const ::sw::mark::IMark* GetBookmark() const
+            { return m_pRegisteredBookmark; }
+              ::sw::mark::IMark* GetBookmark()
             { return m_pRegisteredBookmark; }
         SwDoc* GetDoc()
             { return m_pDoc; }
@@ -740,7 +761,8 @@ class SW_DLLPUBLIC SwXTextRange : public cppu::WeakImplHelper8
 
     void    _CreateNewBookmark(SwPaM& rPam);
     //TODO: new exception type for protected content
-    void    DeleteAndInsert(const String& rText) throw( ::com::sun::star::uno::RuntimeException );
+    void    DeleteAndInsert(const String& rText, const bool bForceExpandHints)
+        throw( ::com::sun::star::uno::RuntimeException );
 protected:
     virtual ~SwXTextRange();
 
@@ -1277,79 +1299,39 @@ class SwXParaFrameEnumeration : public cppu::WeakImplHelper2
 >,
     public SwClient
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >  xNextObject;  //hasMoreElements legt das Objekt schon an
-    SwDependArr     aFrameArr;      //wird im Ctor gefuellt
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
+        m_xNextObject;    // created by hasMoreElements
+    FrameDependList_t m_Frames;
 
-    SwUnoCrsr*      GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
-    BOOL            CreateNextObject();
-    void            FillFrame(SwUnoCrsr& rUnoCrsr);
+    SwUnoCrsr*          GetCursor() const
+    {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
 
 public:
     SwXParaFrameEnumeration(const SwPaM& rPaM,
         sal_uInt8 nParaFrameMode, SwFrmFmt* pFmt = 0);
     ~SwXParaFrameEnumeration();
 
-    //XEnumeration
-    virtual BOOL SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement(void) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
+    // XEnumeration
+    virtual sal_Bool SAL_CALL hasMoreElements()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
+        throw( ::com::sun::star::container::NoSuchElementException,
+               ::com::sun::star::lang::WrappedTargetException,
+               ::com::sun::star::uno::RuntimeException );
 
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+    // XServiceInfo
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        getSupportedServiceNames()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
     virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
-/* -----------------29.05.98 14:42-------------------
- *
- * --------------------------------------------------*/
 
-class SwXTextPortionEnumeration : public cppu::WeakImplHelper3
-<
-    ::com::sun::star::container::XEnumeration,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XUnoTunnel
->,
-    public SwClient
-{
-    XTextRangeArr       aPortionArr;    //all portions are created in the ctor
-    SwDependArr         aFrameArr;      //wird im Ctor gefuellt - mit am Zeichen gebundenen Rahmen
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >           xParent;
-    BOOL                bAtEnd;
-    BOOL                bFirstPortion;
-
-    const sal_Int32     nStartPos;
-    const sal_Int32     nEndPos;
-
-    SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
-    SwXTextPortionEnumeration();
-    void                CreatePortions();
-protected:
-    virtual ~SwXTextPortionEnumeration();
-public:
-    SwXTextPortionEnumeration(SwPaM& rParaCrsr,
-            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
-            sal_Int32 nStart, sal_Int32 nEnd );
-
-
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
-    //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XEnumeration
-    virtual BOOL SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement(void) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-    //SwClient
-    virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-};
 
 /* -----------------29.09.98 09:01-------------------
  *
@@ -1437,6 +1419,16 @@ public:
 /* -----------------27.08.98 15:11-------------------
  *
  * --------------------------------------------------*/
+typedef ::cppu::WeakImplHelper5
+<
+    ::com::sun::star::text::XTextContent,
+    ::com::sun::star::beans::XPropertySet,
+    ::com::sun::star::lang::XServiceInfo,
+    ::com::sun::star::container::XNamed,
+    ::com::sun::star::lang::XUnoTunnel
+>
+SwRefMarkBaseClass;
+
 class SwXReferenceMark : public SwRefMarkBaseClass,
     public SwClient
 {
@@ -1447,7 +1439,7 @@ class SwXReferenceMark : public SwRefMarkBaseClass,
     BOOL                        m_bIsDescriptor;
 
     BOOL    IsValid() const {return 0 != GetRegisteredIn();}
-    void    InsertRefMark( SwPaM& rPam );
+    void    InsertRefMark( SwPaM& rPam, SwXTextCursor * pCursor );
 public:
     SwXReferenceMark(SwDoc* pDoc, const SwFmtRefMark* pMark);
     ~SwXReferenceMark();

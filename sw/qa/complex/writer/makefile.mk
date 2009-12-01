@@ -41,7 +41,7 @@ PACKAGE = complex$/writer
 #----- compile .java files -----------------------------------------
 
 JARFILES = mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = CheckIndexedPropertyValues.java CheckNamedPropertyValues.java CheckCrossReferences.java CheckBookmarks.java CheckFlies.java
+JAVAFILES       = CheckIndexedPropertyValues.java CheckNamedPropertyValues.java CheckCrossReferences.java CheckBookmarks.java CheckFlies.java TextPortionEnumerationTest.java
 JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
@@ -85,7 +85,9 @@ run: \
     CheckCrossReferences \
     CheckIndexedPropertyValues \
     CheckNamedPropertyValues \
-    CheckFlies
+    CheckFlies \
+    TextPortionEnumerationTest \
+
 
 RUN: run
 
@@ -104,4 +106,7 @@ CheckBookmarks:
 
 CheckFlies:
     +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) -tdoc $(PWD)$/testdocuments $(CT_PACKAGE).CheckFlies
+
+TextPortionEnumerationTest:
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) -tdoc $(PWD)$/testdocuments $(CT_PACKAGE).TextPortionEnumerationTest
 

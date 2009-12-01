@@ -488,9 +488,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1,
                 RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END-1,
                 RES_PARATR_BEGIN, RES_PARATR_END-1,
-                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                 RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                 0
             };
@@ -1044,7 +1045,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // --> OD 2008-03-18 #refactorlists#
             String sContinuedListId;
             const SwNumRule* pRule =
-                rWrtSh.SearchNumRule( FALSE, TRUE, FALSE, -1, sContinuedListId );
+                rWrtSh.SearchNumRule( false, true, false, -1, sContinuedListId );
+            // --> OD 2009-08-26 #i86492#
+            // Search also for bullet list
+            if ( !pRule )
+            {
+                pRule = rWrtSh.SearchNumRule( false, false, false, -1, sContinuedListId );
+            }
+            // <--
             if ( pRule )
             {
                 rWrtSh.SetCurNumRule( *pRule, false, sContinuedListId );
@@ -1623,14 +1631,23 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case FN_NUM_CONTINUE:
             {
-                if ( rSh.GetCurNumRule() )
-                    rSet.DisableItem(nWhich);
-                else
+                // --> OD 2009-08-26 #i86492#
+                // Allow continuation of previous list, even if at current cursor
+                // a list is active.
+//                if ( rSh.GetCurNumRule() )
+//                    rSet.DisableItem(nWhich);
+//                else
+                // <--
                 {
-                    // --> OD 2008-03-18 #refactorlists#
+                    // --> OD 2009-08-26 #i86492#
+                    // Search also for bullet list
                     String aDummy;
                     const SwNumRule* pRule =
-                            rSh.SearchNumRule( FALSE, TRUE, FALSE, -1, aDummy );
+                            rSh.SearchNumRule( false, true, false, -1, aDummy );
+                    if ( !pRule )
+                    {
+                        pRule = rSh.SearchNumRule( false, false, false, -1, aDummy );
+                    }
                     // <--
                     if ( !pRule )
                         rSet.DisableItem(nWhich);

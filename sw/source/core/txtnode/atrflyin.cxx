@@ -74,6 +74,7 @@ SwTxtFlyCnt::SwTxtFlyCnt( SwFmtFlyCnt& rAttr, xub_StrLen nStartPos )
     : SwTxtAttr( rAttr, nStartPos )
 {
     rAttr.pTxtAttr = this;
+    SetHasDummyChar(true);
 }
 
 

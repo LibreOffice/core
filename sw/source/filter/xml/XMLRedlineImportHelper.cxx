@@ -646,7 +646,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // delete 'deleted' redlines and forget about the whole thing
         if (nsRedlineType_t::REDLINE_DELETE == pRedlineInfo->eType)
         {
-            pDoc->Delete(aPaM);
+            pDoc->DeleteRange(aPaM);
             // And what about the "deleted nodes"?
             // They have to be deleted as well (#i80689)!
             if( bIgnoreRedlines && pRedlineInfo->pContentIndex != NULL )
@@ -657,7 +657,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
                 {
                     SwNodeIndex aEnd( *pEnd, 1 );
                     SwPaM aDel( aIdx, aEnd );
-                    pDoc->Delete(aDel);
+                    pDoc->DeleteRange(aDel);
                 }
             }
         }

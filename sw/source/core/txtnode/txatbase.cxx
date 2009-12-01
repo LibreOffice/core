@@ -37,17 +37,18 @@
 #include <fmtfld.hxx>
 #include <docufld.hxx>
 
-SwTxtAttr::SwTxtAttr( const SfxPoolItem& rAttr, xub_StrLen nStart )
+SwTxtAttr::SwTxtAttr( SfxPoolItem& rAttr, xub_StrLen nStart )
     : m_pAttr( &rAttr )
     , m_nStart( nStart )
     , m_bDontExpand( false )
     , m_bLockExpandFlag( false )
-    , m_bDontMergeAttr( false )
     , m_bDontMoveAttr( false )
     , m_bCharFmtAttr( false )
     , m_bOverlapAllowedAttr( false )
     , m_bPriorityAttr( false )
     , m_bDontExpandStart( false )
+    , m_bNesting( false )
+    , m_bHasDummyChar( false )
 {
 }
 
@@ -60,11 +61,12 @@ xub_StrLen* SwTxtAttr::GetEnd()
     return 0;
 }
 
-// RemoveFromPool must be called before destructor!
-void SwTxtAttr::RemoveFromPool( SfxItemPool& rPool )
+void SwTxtAttr::Destroy( SwTxtAttr * pToDestroy, SfxItemPool& rPool )
 {
-    rPool.Remove( GetAttr() );
-    m_pAttr = 0;
+    if (!pToDestroy) return;
+    SfxPoolItem * const pAttr = pToDestroy->m_pAttr;
+    delete pToDestroy;
+    rPool.Remove( *pAttr );
 }
 
 int SwTxtAttr::operator==( const SwTxtAttr& rAttr ) const
@@ -72,7 +74,7 @@ int SwTxtAttr::operator==( const SwTxtAttr& rAttr ) const
     return GetAttr() == rAttr.GetAttr();
 }
 
-SwTxtAttrEnd::SwTxtAttrEnd( const SfxPoolItem& rAttr,
+SwTxtAttrEnd::SwTxtAttrEnd( SfxPoolItem& rAttr,
         xub_StrLen nStart, xub_StrLen nEnd ) :
     SwTxtAttr( rAttr, nStart ), m_nEnd( nEnd )
 {

@@ -1462,7 +1462,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             if( pUndo )
                 pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
             else
-                pDoc->Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_MOVEDEFAULT );
+            {
+                pDoc->MoveNodeRange( aRg, rInsPosNd,
+                    IDocumentContentOperations::DOC_MOVEDEFAULT );
+            }
             // wo steht jetzt aInsPos ??
 
             if( bCalcWidth )

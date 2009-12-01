@@ -229,7 +229,7 @@ inline const String& SwFldMgr::GetCurFldPar1() const
 inline const String& SwFldMgr::GetCurFldPar2() const
     { return aCurPar2; }
 
-inline ULONG   SwFldMgr::GetCurFldFmt() const
+inline ULONG SwFldMgr::GetCurFldFmt() const
     { return nCurFmt; }
 
 

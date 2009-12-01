@@ -699,7 +699,7 @@ void SwXMLTableCellContext_Impl::EndElement()
                     SwPaM aSrcPaM( *pSrcPaM->GetPoint(),
                                    *pSrcPaM->GetMark() );
                     SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
-                    pDoc->Copy( aSrcPaM, aDstPos, false );
+                    pDoc->CopyRange( aSrcPaM, aDstPos, false );
 
                     nColRepeat--;
                 }

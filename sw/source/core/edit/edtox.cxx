@@ -82,10 +82,13 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
         if( bInsAtPos )
         {
             SwPaM aTmp( *pStt );
-            GetDoc()->Insert( aTmp, rMark, 0 );
+            GetDoc()->InsertPoolItem( aTmp, rMark, 0 );
         }
         else if( *pEnd != *pStt )
-            GetDoc()->Insert( *PCURCRSR, rMark, nsSetAttrMode::SETATTR_DONTEXPAND );
+        {
+            GetDoc()->InsertPoolItem( *PCURCRSR, rMark,
+                    nsSetAttrMode::SETATTR_DONTEXPAND );
+        }
 
     FOREACHPAM_END()
     EndAllAction();
@@ -98,7 +101,7 @@ void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    pDoc->Delete( pMark );
+    pDoc->DeleteTOXMark( pMark );
 
     EndAllAction();
 }

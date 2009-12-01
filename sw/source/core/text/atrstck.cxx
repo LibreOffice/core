@@ -128,16 +128,16 @@ const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
     35, // RES_CHRATR_OVERLINE,                  // 38
      0, // RES_CHRATR_DUMMY1,                    // 39
      0, // RES_CHRATR_DUMMY2,                    // 40
-     0, // RES_TXTATR_AUTOFMT,                   // 41
-     0, // RES_TXTATR_INETFMT                    // 42
-    36, // RES_TXTATR_REFMARK,                   // 43
-    37, // RES_TXTATR_TOXMARK,                   // 44
-     0, // RES_TXTATR_CHARFMT,                   // 45
-     0, // RES_TXTATR_DUMMY5                     // 46
-    38, // RES_TXTATR_CJK_RUBY,                  // 47
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 48
-     0, // RES_TXTATR_DUMMY6,                    // 49
-     0  // RES_TXTATR_DUMMY7,                    // 50
+    36, // RES_TXTATR_REFMARK,                   // 41
+    37, // RES_TXTATR_TOXMARK,                   // 42
+    38, // RES_TXTATR_META,                      // 43
+    38, // RES_TXTATR_METAFIELD,                 // 44
+     0, // RES_TXTATR_AUTOFMT,                   // 45
+     0, // RES_TXTATR_INETFMT                    // 46
+     0, // RES_TXTATR_CHARFMT,                   // 47
+    39, // RES_TXTATR_CJK_RUBY,                  // 48
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 49
+     0, // RES_TXTATR_DUMMY5                     // 50
 };
 
 /*************************************************************************
@@ -650,6 +650,10 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
         rFnt.GetRef()--;
     else if ( RES_TXTATR_TOXMARK == nAttr )
         rFnt.GetTox()--;
+    else if ( (RES_TXTATR_META == nAttr) || (RES_TXTATR_METAFIELD == nAttr) )
+    {
+        rFnt.GetMeta()--;
+    }
     else if ( RES_TXTATR_CJK_RUBY == nAttr )
     {
         // ruby stack has no more attributes
@@ -927,6 +931,13 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                 rFnt.GetTox()++;
             else
                 rFnt.GetTox()--;
+            break;
+        case RES_TXTATR_META:
+        case RES_TXTATR_METAFIELD:
+            if ( bPush )
+                rFnt.GetMeta()++;
+            else
+                rFnt.GetMeta()--;
             break;
     }
 }

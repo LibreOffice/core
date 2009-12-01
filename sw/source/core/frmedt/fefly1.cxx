@@ -2068,3 +2068,99 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
 
     EndAction();
 }
+
+// --> OD 2009-07-13 #i73249#
+const String SwFEShell::GetObjTitle() const
+{
+    String aTitle;
+
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            const SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            const SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                aTitle = dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjTitle();
+            }
+            else
+            {
+                aTitle = pObj->GetTitle();
+            }
+        }
+    }
+
+    return aTitle;
+}
+
+void SwFEShell::SetObjTitle( const String& rTitle )
+{
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                GetDoc()->SetFlyFrmTitle( *(dynamic_cast<SwFlyFrmFmt*>(pFmt)),
+                                          rTitle );
+            }
+            else
+            {
+                pObj->SetTitle( rTitle );
+            }
+        }
+    }
+}
+
+const String SwFEShell::GetObjDescription() const
+{
+    String aDescription;
+
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            const SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            const SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                aDescription = dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjDescription();
+            }
+            else
+            {
+                aDescription = pObj->GetDescription();
+            }
+        }
+    }
+
+    return aDescription;
+}
+
+void SwFEShell::SetObjDescription( const String& rDescription )
+{
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                GetDoc()->SetFlyFrmDescription( *(dynamic_cast<SwFlyFrmFmt*>(pFmt)),
+                                                rDescription );
+            }
+            else
+            {
+                pObj->SetDescription( rDescription );
+            }
+        }
+    }
+}
+// <--

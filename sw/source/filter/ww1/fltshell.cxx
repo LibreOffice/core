@@ -33,6 +33,7 @@
 
 #include <ctype.h>
 #include <hintids.hxx>
+#include <hints.hxx>
 
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
@@ -175,7 +176,6 @@ BOOL SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck )
     else
         return TRUE;
 }
-
 
 SwFltControlStack::SwFltControlStack(SwDoc* pDo, ULONG nFieldFl)
     : nFieldFlags(nFieldFl), pDoc(pDo), bIsEndStack(false)
@@ -427,16 +427,20 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
     {
     case RES_FLTR_ANCHOR:
         {
-            MakePoint(pEntry, pDoc, aRegion);
             SwFrmFmt* pFmt = ((SwFltAnchor*)pEntry->pAttr)->GetFrmFmt();
-            SwFmtAnchor aAnchor(pFmt->GetAnchor());
-            aAnchor.SetAnchor(aRegion.GetPoint());
-            pFmt->SetFmtAttr(aAnchor);
-                    // Damit die Frames bei Einfuegen in existierendes Doc
-                    //  erzeugt werden (erst nach Setzen des Ankers!):
-            if(pDoc->GetRootFrm()
-                && FLY_AT_CNTNT == pFmt->GetAnchor().GetAnchorId()){
-                pFmt->MakeFrms();
+            if (pFmt != NULL)
+            {
+                MakePoint(pEntry, pDoc, aRegion);
+                SwFmtAnchor aAnchor(pFmt->GetAnchor());
+                aAnchor.SetAnchor(aRegion.GetPoint());
+                pFmt->SetFmtAttr(aAnchor);
+                // Damit die Frames bei Einfuegen in existierendes Doc
+                //  erzeugt werden (erst nach Setzen des Ankers!):
+                if(pDoc->GetRootFrm()
+                   && FLY_AT_CNTNT == pFmt->GetAnchor().GetAnchorId())
+                {
+                    pFmt->MakeFrms();
+                }
             }
         }
         break;
@@ -488,7 +492,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 {
                             // XRefs und Bookmarks sind bereits geUpcased
                     MakeBookRegionOrPoint(pEntry, pDoc, aRegion, TRUE);
-                    pDoc->Insert(aRegion, SwFmtRefMark(rName), 0);
+                    pDoc->InsertPoolItem(aRegion, SwFmtRefMark(rName), 0);
                 }
                 else if( !pB->IsOnlyRef() )
                 {
@@ -502,7 +506,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                                         pB->GetValSys());
                     aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
                     MakePoint(pEntry, pDoc, aRegion);
-                    pDoc->Insert(aRegion, SwFmtFld(aFld), 0);
+                    pDoc->InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
                     MoveAttrs( *(aRegion.GetPoint()) );
                 }
             }
@@ -560,8 +564,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     case RES_FLTR_SECTION:
         MakePoint(pEntry, pDoc, aRegion);   // bislang immer Point==Mark
-        pDoc->Insert(aRegion, *((SwFltSection*)pEntry->pAttr)->GetSection(),
-                     0, FALSE);
+        pDoc->InsertSwSection(aRegion,
+                *(static_cast<SwFltSection*>(pEntry->pAttr))->GetSection(),
+                0, false);
         delete(((SwFltSection*)pEntry->pAttr)->GetSection());
         break;
     case RES_FLTR_REDLINE:
@@ -598,7 +603,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     default:
         if (pEntry->MakeRegion(pDoc, aRegion, FALSE))
-            pDoc->Insert(aRegion, *pEntry->pAttr, 0);
+        {
+            pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0);
+        }
         break;
     }
 }
@@ -728,11 +735,35 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
 SwFltAnchor::SwFltAnchor(SwFrmFmt* pFmt) :
     SfxPoolItem(RES_FLTR_ANCHOR), pFrmFmt(pFmt)
 {
+    pClient = new SwFltAnchorClient(this);
+    pFrmFmt->Add(pClient);
 }
 
 SwFltAnchor::SwFltAnchor(const SwFltAnchor& rCpy) :
     SfxPoolItem(RES_FLTR_ANCHOR), pFrmFmt(rCpy.pFrmFmt)
 {
+    pClient = new SwFltAnchorClient(this);
+    pFrmFmt->Add(pClient);
+}
+
+SwFltAnchor::~SwFltAnchor()
+{
+    delete pClient;
+}
+
+void SwFltAnchor::SetFrmFmt(SwFrmFmt * _pFrmFmt)
+{
+    pFrmFmt = _pFrmFmt;
+}
+
+const SwFrmFmt * SwFltAnchor::GetFrmFmt() const
+{
+    return pFrmFmt;
+}
+
+SwFrmFmt * SwFltAnchor::GetFrmFmt()
+{
+    return pFrmFmt;
 }
 
 int SwFltAnchor::operator==(const SfxPoolItem& rItem) const
@@ -743,6 +774,29 @@ int SwFltAnchor::operator==(const SfxPoolItem& rItem) const
 SfxPoolItem* __EXPORT SwFltAnchor::Clone(SfxItemPool*) const
 {
     return new SwFltAnchor(*this);
+}
+
+// SwFltAnchorClient
+
+SwFltAnchorClient::SwFltAnchorClient(SwFltAnchor * pFltAnchor)
+: m_pFltAnchor(pFltAnchor)
+{
+}
+
+void  SwFltAnchorClient::Modify(SfxPoolItem *, SfxPoolItem * pNew)
+{
+    if (pNew->Which() == RES_FMT_CHG)
+    {
+        SwFmtChg * pFmtChg = dynamic_cast<SwFmtChg *> (pNew);
+
+        if (pFmtChg != NULL)
+        {
+            SwFrmFmt * pFrmFmt = dynamic_cast<SwFrmFmt *> (pFmtChg->pChangedFmt);
+
+            if (pFrmFmt != NULL)
+                m_pFltAnchor->SetFrmFmt(pFrmFmt);
+        }
+    }
 }
 
 //------ hier stehen die Methoden von SwFltRedline -----------
@@ -955,7 +1009,7 @@ SwFltShell::~SwFltShell()
 SwFltShell& SwFltShell::operator << ( const String& rStr )
 {
     ASSERT(eSubMode != Style, "char insert while in style-mode");
-    GetDoc().Insert( *pPaM, rStr, true );
+    GetDoc().InsertString( *pPaM, rStr );
     return *this;
 }
 
@@ -992,7 +1046,7 @@ String SwFltShell::QuoteStr( const String& rIn )
 SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
 {
     ASSERT( eSubMode != Style, "char insert while in style-mode");
-    GetDoc().Insert( *pPaM, c );
+    GetDoc().InsertString( *pPaM, c );
     return *this;
 }
 
@@ -1009,7 +1063,7 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
     SwSetExpField aFld( (SwSetExpFieldType*)pFT,
                         String::CreateFromAscii( pErr ));
     //, VVF_INVISIBLE
-    GetDoc().Insert(*pPaM, SwFmtFld(aFld), 0);
+    GetDoc().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     return *this;
 }
 
@@ -1028,7 +1082,8 @@ void SwFltShell::NextParagraph()
 void SwFltShell::NextPage()
 {
     NextParagraph();
-    GetDoc().Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+    GetDoc().InsertPoolItem(*pPaM,
+        SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
 }
 
 SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
@@ -1119,7 +1174,7 @@ SwFltShell& SwFltShell::EndItem( USHORT nAttrId )
 
 SwFltShell& SwFltShell::operator << (const SwField& rField)
 {
-    GetDoc().Insert(*pPaM, SwFmtFld(rField), 0);
+    GetDoc().InsertPoolItem(*pPaM, SwFmtFld(rField), 0);
     return *this;
 }
 
@@ -1880,7 +1935,7 @@ void SwFltShell::BeginFootnote()
 //  Fussnoten im PMW uebernommen werden
 
     SwFmtFtn aFtn;
-    GetDoc().Insert(*pPaM, aFtn, 0);
+    GetDoc().InsertPoolItem(*pPaM, aFtn, 0);
     ASSERT(pSavedPos == NULL, "SwFltShell");
     pSavedPos = new SwPosition(*pPaM->GetPoint());
     pPaM->Move(fnMoveBackward, fnGoCntnt);
@@ -1980,7 +2035,9 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
         pNewPD->SetFollow(pNewPD);
     }
     else
-        GetDoc().Insert( *pPaM, SwFmtPageDesc( pNewPD ), 0 );
+    {
+        GetDoc().InsertPoolItem( *pPaM, SwFmtPageDesc( pNewPD ), 0 );
+    }
     pNewPD->WriteUseOn( // alle Seiten
      (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE));
     return pNewPD;

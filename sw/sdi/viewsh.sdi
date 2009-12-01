@@ -158,9 +158,17 @@ shell SwView : SfxViewShell
 interface TextPrintPreview : View
 [ uuid = "1622A480-111A-101D-9757-6E74207A7520" ]
 {
+    SID_BROWSER_MODE
+    [
+        StateMethod = GetState;
+    ]
+    FN_PRINT_LAYOUT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
     FN_REFRESH_VIEW // status(final|play)
     [
-        ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
     FN_CHAR_LEFT // status(final|play)

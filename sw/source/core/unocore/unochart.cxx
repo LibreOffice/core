@@ -2061,6 +2061,7 @@ SwChartDataSequence::SwChartDataSequence(
     // which is required for some functions
     SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
     DBG_ASSERT(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
+    (void) pUnoTblCrsr;
 #endif
 }
 
@@ -2111,6 +2112,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     // which is required for some functions
     SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
     DBG_ASSERT(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
+    (void) pUnoTblCrsr;
 #endif
 }
 

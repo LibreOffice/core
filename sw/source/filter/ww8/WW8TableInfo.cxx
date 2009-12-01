@@ -190,7 +190,9 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
     }
 
 #ifdef DEBUG
-    sResult += dbg_out(*mpNode);
+//!! does not compile with debug=t -> unresolved external (dbg_out),
+//!! sommeone who knows what he wants to get should fix this
+//    sResult += dbg_out(*mpNode);
 #endif
 
     sResult +="</tableNodeInfo>";
@@ -557,8 +559,7 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
 
     if (pNodeInfo.get() == NULL)
     {
-        pNodeInfo = WW8TableNodeInfo::Pointer_t
-        (new WW8TableNodeInfo(pNode));
+        pNodeInfo = WW8TableNodeInfo::Pointer_t(new WW8TableNodeInfo(pNode));
         mMap.insert(Map_t::value_type(pNode, pNodeInfo));
     }
 

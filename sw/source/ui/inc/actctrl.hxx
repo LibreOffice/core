@@ -66,10 +66,8 @@ protected:
     virtual void        Modify();
 
 public:
-    NoSpaceEdit( Window* pParent, const ResId& rResId)
-        : Edit(pParent, rResId),
-        sForbiddenChars(String::CreateFromAscii(" "))
-    {}
+    NoSpaceEdit( Window* pParent, const ResId& rResId);
+    virtual ~NoSpaceEdit();
     void            SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
     const String&   GetForbiddenChars(){return sForbiddenChars;}
 };

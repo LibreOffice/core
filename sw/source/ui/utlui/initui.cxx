@@ -54,6 +54,7 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
+#include <svtools/syslocale.hxx>
 
 #include <unomid.h>
 
@@ -261,7 +262,7 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
             p->SearchAndReplace(C2S("%1"), C2S(",,"));
             p->SearchAndReplace(C2S("%2"), C2S("''"));
 #else
-            LocaleDataWrapper& rLclD = GetAppLocaleData();
+            const LocaleDataWrapper& rLclD = SvtSysLocale().GetLocaleData();
             //unter richtigen Betriebssystemen funktioniert es auch so
             p->SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStart());
             p->SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEnd());

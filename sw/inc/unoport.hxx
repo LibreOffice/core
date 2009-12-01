@@ -29,27 +29,41 @@
  ************************************************************************/
 #ifndef _UNOPORT_HXX
 #define _UNOPORT_HXX
+
+#include <unocrsr.hxx>
 #include <unoevtlstnr.hxx>
 #include <calbck.hxx>
-#include <cppuhelper/implbase6.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase8.hxx>
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <svtools/itemprop.hxx>
+
+#include <memory>
+#include <deque>
+
 
 class SwFmtFld;
 class SwFrmFmt;
-class SwUnoCrsr;
 class SwTxtRuby;
+
+
+typedef ::std::deque<
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > >
+    TextRangeList_t;
+
+
 /* -----------------29.05.98 14:42-------------------
  *
  * --------------------------------------------------*/
@@ -59,7 +73,7 @@ enum SwTextPortionType
     PORTION_FIELD,
     PORTION_FRAME,
     PORTION_FOOTNOTE,
-    PORTION_CONTROL_CHAR,
+// obsolete!    PORTION_CONTROL_CHAR,
     PORTION_REFMARK_START,
     PORTION_REFMARK_END,
     PORTION_TOXMARK_START,
@@ -71,20 +85,19 @@ enum SwTextPortionType
     PORTION_RUBY_START,
     PORTION_RUBY_END,
     PORTION_SOFT_PAGEBREAK,
+    PORTION_META,
     PORTION_FIELD_START,
     PORTION_FIELD_END,
     PORTION_FIELD_START_END
 };
 
-class SwXRubyPortion;
 
-class SwXTextPortion : public cppu::WeakImplHelper9
+class SwXTextPortion : public cppu::WeakImplHelper8
 <
     ::com::sun::star::beans::XTolerantMultiPropertySet,
     ::com::sun::star::beans::XMultiPropertySet,
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::text::XTextRange,
-    ::com::sun::star::text::XTextField,
     ::com::sun::star::beans::XPropertyState,
     ::com::sun::star::container::XContentEnumerationAccess,
     ::com::sun::star::lang::XUnoTunnel,
@@ -92,29 +105,39 @@ class SwXTextPortion : public cppu::WeakImplHelper9
 >,
     public SwClient
 {
-    friend class SwXRubyPortion;
-    SwEventListenerContainer    aLstnrCntnr;
-    const SfxItemPropertySet*  m_pPropSet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >                   xParentText;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xRefMark;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xTOXMark;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xBookmark;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xFootnote;
-    ::com::sun::star::uno::Any* pRubyText;
-    ::com::sun::star::uno::Any* pRubyStyle;
-    ::com::sun::star::uno::Any* pRubyAdjust;
-    ::com::sun::star::uno::Any* pRubyIsAbove;
+private:
 
-    const SwFmtFld*             pFmtFld;
-    SwDepend                    aFrameDepend;
-    SwFrmFmt*                   pFrameFmt;
-    SwTextPortionType           ePortionType;
-    sal_Int16                   nControlChar;
+    SwEventListenerContainer    m_ListenerContainer;
+    const SfxItemPropertySet *  m_pPropSet;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+        m_xParentText;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
+        m_xRefMark;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
+        m_xTOXMark;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
+        m_xBookmark;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote >
+        m_xFootnote;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >
+        m_xTextField;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
+        m_xMeta;
+    ::std::auto_ptr< ::com::sun::star::uno::Any > m_pRubyText;
+    ::std::auto_ptr< ::com::sun::star::uno::Any > m_pRubyStyle;
+    ::std::auto_ptr< ::com::sun::star::uno::Any > m_pRubyAdjust;
+    ::std::auto_ptr< ::com::sun::star::uno::Any > m_pRubyIsAbove;
 
-    BOOL                        bIsCollapsed;
+    const SwDepend              m_FrameDepend;
+    SwFrmFmt *                  m_pFrameFmt;
+    const SwTextPortionType     m_ePortionType;
 
-    SwFmtFld*           GetFldFmt(BOOL bInit = sal_False);
+    bool                        m_bIsCollapsed;
+
+    SwFmtFld * GetFldFmt(bool bInit = false);
+
 protected:
+
     //SfxItemPropertySet& GetPropSet() { return aPropSet; }
 
     void SAL_CALL SetPropertyValues_Impl(
@@ -140,16 +163,23 @@ protected:
         sal_Bool bDirectValuesOnly ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual ~SwXTextPortion();
+
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwFrmFmt& rFmt );
 
+    // for Ruby
+    SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
+        SwTxtRuby const& rAttr,
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+            const& xParent,
+        sal_Bool bIsEnd );
 
     //XTextRange
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  SAL_CALL getText(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL  getStart(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL   getEnd(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual rtl::OUString SAL_CALL  getString(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  SAL_CALL getText() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL  getStart() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL   getEnd() throw( ::com::sun::star::uno::RuntimeException );
+    virtual rtl::OUString SAL_CALL  getString() throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL  setString(const rtl::OUString& aString) throw( ::com::sun::star::uno::RuntimeException );
 
     //XTolerantMultiPropertySet
@@ -180,15 +210,12 @@ public:
     virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    //XTextField
-    virtual rtl::OUString SAL_CALL getPresentation(BOOL bShowCommand) throw( ::com::sun::star::uno::RuntimeException );
-
     //XTextContent
     virtual void SAL_CALL attach(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL getAnchor(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //XComponent
-    virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -197,48 +224,105 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     //XContentEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createContentEnumeration(const rtl::OUString& aServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
     virtual void                Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-    void                SetRefMark( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >  xMark)
-                            {xRefMark = xMark;}
+    void SetRefMark( ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextContent >  xMark)
+    { m_xRefMark = xMark; }
 
-    void                SetTOXMark( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >  xMark)
-                            {xTOXMark = xMark;}
+    void SetTOXMark( ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextContent >  xMark)
+    { m_xTOXMark = xMark; }
 
-    void                SetBookmark( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >  xMark)
-                            {xBookmark = xMark;}
+    void SetBookmark( ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextContent >  xMark)
+    { m_xBookmark = xMark; }
 
-    void                SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >  xMark)
-                            {xFootnote = xMark;}
+    void SetFootnote( ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XFootnote > xNote)
+    { m_xFootnote = xNote; }
 
-    void                SetControlChar(sal_Int16 nSet) {nControlChar = nSet;}
+    void SetTextField( ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextField> xField)
+    { m_xTextField = xField; }
 
-    BOOL                IsCollapsed() const { return bIsCollapsed;}
-    void                SetCollapsed(BOOL bSet) { bIsCollapsed = bSet;}
+    void SetMeta( ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextContent >  xMeta)
+    { m_xMeta = xMeta; }
 
-    SwTextPortionType   GetTextPortionType() const {return ePortionType;}
+    bool IsCollapsed() const { return m_bIsCollapsed; }
+    void SetCollapsed(bool bSet)        { m_bIsCollapsed = bSet;}
 
-    SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
+    SwTextPortionType GetTextPortionType() const { return m_ePortionType; }
+
+    SwUnoCrsr* GetCursor() const
+    {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
 };
-/* -----------------------------19.02.01 10:46--------------------------------
 
- ---------------------------------------------------------------------------*/
-class SwXRubyPortion : public SwXTextPortion
+/* -----------------29.05.98 14:42-------------------
+ *
+ * --------------------------------------------------*/
+class SwXTextPortionEnumeration
+    : public ::cppu::WeakImplHelper3
+        < ::com::sun::star::container::XEnumeration
+        , ::com::sun::star::lang::XServiceInfo
+        , ::com::sun::star::lang::XUnoTunnel
+        >
+   , public SwClient
 {
+    TextRangeList_t m_Portions; // contains all portions, filled by ctor
+
+    SwUnoCrsr*          GetCursor() const
+    {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
+
+protected:
+    virtual ~SwXTextPortionEnumeration();
+
 public:
-    SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
-                    SwTxtRuby& rAttr,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent,
-                    sal_Bool bEnd   );
-    ~SwXRubyPortion();
+    SwXTextPortionEnumeration(SwPaM& rParaCrsr,
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+                const & xParent,
+            const sal_Int32 nStart, const sal_Int32 nEnd );
+
+    SwXTextPortionEnumeration(SwPaM& rParaCrsr,
+        TextRangeList_t const & rPortions );
+
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+
+    //XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething(
+            const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+        throw(::com::sun::star::uno::RuntimeException);
+
+    //XEnumeration
+    virtual sal_Bool SAL_CALL hasMoreElements()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
+        throw( ::com::sun::star::container::NoSuchElementException,
+               ::com::sun::star::lang::WrappedTargetException,
+               ::com::sun::star::uno::RuntimeException );
+
+    //XServiceInfo
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        getSupportedServiceNames()
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    //SwClient
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
+
 #endif

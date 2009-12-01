@@ -136,7 +136,7 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
                 ::comphelper::getProcessServiceFactory(),
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "/org.openoffice.Office.DataAccess/ApplicationIntegration/InstalledFeatures/Writer" ) ),
+                        "/org.openoffice.Office.DataAccess/Policies/Features/Writer" ) ),
                 -1,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 

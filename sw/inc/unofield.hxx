@@ -43,7 +43,6 @@ class SwDoc;
 class SwFmtFld;
 class SwField;
 class SwSetExpField;
-class String;
 class SwTextAPIObject;
 
 /* -----------------04.12.98 12:49-------------------
@@ -206,15 +205,13 @@ public:
     const SwField*      GetField() const;
     const SwFmtFld*     GetFldFmt(){return GetField() ? pFmtFld : 0; };
 
-    // #111840#
-    /**
-       Returns position of this field.
-
-       @return position of this field
-     */
-    SwPosition * GetPosition();
     void Invalidate();
 };
+
+/// @return a SwXTextField, either an already existing one or a new one
+SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
+
+
 /* -----------------21.12.98 10:26-------------------
  *
  * --------------------------------------------------*/

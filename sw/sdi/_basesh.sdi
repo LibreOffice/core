@@ -95,7 +95,6 @@ interface BaseTextSelection
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -103,7 +102,6 @@ interface BaseTextSelection
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile;
     ]
 
     SID_PASTE  // status(final|play)
@@ -127,7 +125,7 @@ interface BaseTextSelection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_PASTESPECIAL  // status(final|play)
+    SID_PASTE_SPECIAL  // status(final|play)
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;

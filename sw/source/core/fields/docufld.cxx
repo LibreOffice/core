@@ -66,6 +66,7 @@
 #endif
 #include <svtools/urihelper.hxx>
 #include <svtools/useroptions.hxx>
+#include <svtools/syslocale.hxx>
 
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
@@ -931,10 +932,11 @@ SwFieldType* SwDocInfoFieldType::Copy() const
 }
 
 void lcl_GetLocalDataWrapper( ULONG nLang,
-                              LocaleDataWrapper **ppAppLocalData,
-                              LocaleDataWrapper **ppLocalData )
+                              const LocaleDataWrapper **ppAppLocalData,
+                              const LocaleDataWrapper **ppLocalData )
 {
-    *ppAppLocalData = &GetAppLocaleData();
+    SvtSysLocale aLocale;
+    *ppAppLocalData = &aLocale.GetLocaleData();
     *ppLocalData = *ppAppLocalData;
     if( nLang != SvxLocaleToLanguage( (*ppLocalData)->getLocale() ) )
         *ppLocalData = new LocaleDataWrapper(
@@ -949,7 +951,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                                     sal_uInt16 nLang, const String& rName ) const
 {
     String aStr;
-    LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
+    const LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
     SwDocShell *pDocShell(GetDoc()->GetDocShell());
     DBG_ASSERT(pDocShell, "no SwDocShell");
     if (!pDocShell) { return aStr; }

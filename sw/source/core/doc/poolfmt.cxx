@@ -1719,7 +1719,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
             const USHORT* pArr = MEASURE_METRIC ==
-                                GetAppLocaleData().getMeasurementSystemEnum()
+                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -1773,7 +1773,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                 };
 
             const USHORT* pArr = MEASURE_METRIC ==
-                                GetAppLocaleData().getMeasurementSystemEnum()
+                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -1876,7 +1876,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
             const USHORT* pArr = MEASURE_METRIC ==
-                                GetAppLocaleData().getMeasurementSystemEnum()
+                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -1930,7 +1930,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                     347, 1194
                 };
             const USHORT* pArr0to2 = MEASURE_METRIC ==
-                            GetAppLocaleData().getMeasurementSystemEnum()
+                            SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                 ? aAbsSpace0to2
                                 : aAbsSpaceInch0to2;
 #else
@@ -2070,7 +2070,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
             const USHORT* pArr = MEASURE_METRIC ==
-                                GetAppLocaleData().getMeasurementSystemEnum()
+                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -2131,7 +2131,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                     170, 340, 510, 680, 850, 1020, 1191, 1361, 1531, 1701
                 };
             const USHORT* pArr = MEASURE_METRIC ==
-                                GetAppLocaleData().getMeasurementSystemEnum()
+                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -2236,7 +2236,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
             const USHORT* pArr = MEASURE_METRIC ==
-                                GetAppLocaleData().getMeasurementSystemEnum()
+                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -2303,7 +2303,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
             const USHORT* pArr = MEASURE_METRIC ==
-                                GetAppLocaleData().getMeasurementSystemEnum()
+                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else

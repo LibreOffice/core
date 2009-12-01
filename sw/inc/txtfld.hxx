@@ -64,7 +64,7 @@ public:
 
        @return position of this field. Has to be deleted explicitly.
     */
-    SwPosition * GetPosition() const;
+//    SwPosition * GetPosition() const;
 };
 
 inline SwTxtNode& SwTxtFld::GetTxtNode() const

@@ -614,8 +614,6 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                             sCondition += String(rFemaleGenderValue);
                             sCondition.AppendAscii("\" OR NOT ");
                             sCondition += String(sNameColumnBase);
-                            sHideParagraphsExpression += '!';
-                            sHideParagraphsExpression += sNameColumnBase;
                         break;
                         case  SwMailMergeConfigItem::NEUTRAL:
                             sCondition = sNameColumnBase;

@@ -351,7 +351,7 @@ void SwHTMLParser::NewDivision( int nToken )
             aItemSet.ClearItem( RES_FRAMEDIR );
         }
 
-        pDoc->Insert( *pPam, aSection, &aFrmItemSet, sal_False );
+        pDoc->InsertSwSection( *pPam, aSection, &aFrmItemSet, false );
 
         // ggfs. einen Bereich anspringen
         if( JUMPTO_REGION == eJumpTo && aName == sJmpMark )
@@ -746,7 +746,7 @@ void SwHTMLParser::NewMultiCol()
             aFrmItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_FRAMEDIR );
         }
-        pDoc->Insert( *pPam, aSection, &aFrmItemSet, sal_False );
+        pDoc->InsertSwSection( *pPam, aSection, &aFrmItemSet, false );
 
         // Jump to section, if this is requested.
         if( JUMPTO_REGION == eJumpTo && aName == sJmpMark )

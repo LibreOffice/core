@@ -70,7 +70,6 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <fmtpdsc.hxx>
 #ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
@@ -245,6 +244,7 @@ void SwWrtShell::Insert( const String &rStr )
 
     BOOL bStarted = FALSE, bHasSel = HasSelection(),
         bCallIns = bIns /*|| bHasSel*/;
+    bool bDeleted = false;
 
     if( bHasSel || ( !bIns && SelectHiddenRange() ) )
     {
@@ -268,7 +268,7 @@ void SwWrtShell::Insert( const String &rStr )
 
         StartUndo(UNDO_REPLACE, &aRewriter);
         bStarted = TRUE;
-        DelRight();
+        bDeleted = DelRight() != 0;
     }
 
     /*
@@ -283,7 +283,8 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
     }
     else
 */
-        bCallIns ? SwEditShell::Insert( rStr ) : SwEditShell::Overwrite( rStr );
+    bCallIns ?
+        SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
 
 
     if( bStarted )
@@ -1103,7 +1104,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                     pDoc->FindNumRulePtr(pColl->GetNumRule( FALSE ).GetValue());
             if ( !pDirectCollRule )
             {
-                pCollRule = 0L;
+                pCollRule = 0;
             }
         }
         // --> OD 2006-11-20 #i71764#
@@ -1141,12 +1142,9 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 {
                     // check, if numbering of the outline level of the pararaph
                     // style is active. If not, activate this outline level.
-                    //nActivateOutlineLvl = pColl->GetOutlineLevel();       //#outline level,zhaojianwei
-                    //ASSERT( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL,
                     nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
                     ASSERT( pColl->IsAssignedToListLevelOfOutlineStyle(),   //<-end,zhaojianwei
                             "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
-                    //if ( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL &&    //#outline level,zhaojianwei
                     if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&        //<-end,zhaojianwei
                          pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
                             == SVX_NUM_NUMBER_NONE )
@@ -1162,31 +1160,40 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 }
                 else
                 {
+                    // --> OD 2009-08-27 #i101234#
                     // activate outline numbering, because from the precondition
                     // it's known, that <SwEdit::HasNumber()> == FALSE
                     bActivateOutlineRule = true;
-                    //nActivateOutlineLvl = pColl->GetOutlineLevel();       //#outline level,zhaojianwei
                     nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
                 }
             }
             else if ( !pNumRule )
             {
-                // activate outline numbering, because from the precondition
-                // it's known, that <SwEdit::HasNumber()> == FALSE
-                bActivateOutlineRule = true;
-                //nActivateOutlineLvl = pColl->GetOutlineLevel();   //#outline level,zhaojianwei
+                // --> OD 2009-08-27 #i101234#
+                // Check, if corresponding list level of the outline numbering
+                // has already a numbering format set.
                 nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei,need further consideration
+                if ( pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
+                                == SVX_NUM_NUMBER_NONE )
+                {
+                    // activate outline numbering, because from the precondition
+                    // it's known, that <SwEdit::HasNumber()> == FALSE
+                    bActivateOutlineRule = true;
+                }
+                else
+                {
+                    // turning on outline numbering at current cursor position
+                    bContinueFoundNumRule = true;
+                }
+                // <--
             }
             else
             {
                 // check, if numbering of the outline level of the pararaph
                 // style is active. If not, activate this outline level.
-                //nActivateOutlineLvl = pColl->GetOutlineLevel();
                 nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//#outline level,zhaojianwei
-                //ASSERT( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL,
                 ASSERT( pColl->IsAssignedToListLevelOfOutlineStyle(),//#outline level,zhaojianwei
                         "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
-                //if ( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL &&
                 if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&//#outline level,zhaojianwei
                      pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
                         == SVX_NUM_NUMBER_NONE )
@@ -1212,12 +1219,12 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
     {
         if ( !pNumRule->IsAutoRule() )
         {
-            pNumRule = 0L;
+            pNumRule = 0;
         }
         else if ( pNumRule == GetDoc()->GetOutlineNumRule() &&
                   !bActivateOutlineRule && !bContinueFoundNumRule )
         {
-            pNumRule = 0L;
+            pNumRule = 0;
         }
     }
     // <--
@@ -1229,7 +1236,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
     if ( !pNumRule )
     {
         pNumRule = GetDoc()->SearchNumRule( *GetCrsr()->GetPoint(),
-                                            FALSE, bNum, FALSE, 0,
+                                            false, bNum, false, 0,
                                             sContinuedListId );
         bContinueFoundNumRule = pNumRule != 0;
     }
@@ -1290,11 +1297,12 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
     }
     else
     {
+        // --> OD 2009-08-27 #i95907#
+        const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
+                                    numfunc::GetDefaultPositionAndSpaceMode() );
         // --> OD 2008-02-11 #newlistlevelattrs#
-        SwNumRule aNumRule( GetUniqueNumRuleName(),
-                            // --> OD 2008-06-06 #i89178#
-                            numfunc::GetDefaultPositionAndSpaceMode() );
-                            // <--
+        SwNumRule aNumRule( GetUniqueNumRuleName(), ePosAndSpaceMode );
+        // <--
         // <--
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
@@ -1315,9 +1323,10 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             pChrFmt = GetCharFmtFromPool( RES_POOLCHR_BUL_LEVEL );
         }
 
-        SwTxtNode * pTxtNode =
-            GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
-        USHORT nWidthOfTabs = pTxtNode->GetWidthOfLeadingTabs();
+        const SwTxtNode* pTxtNode = GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+        const SwTwips nWidthOfTabs = pTxtNode
+                                     ? pTxtNode->GetWidthOfLeadingTabs()
+                                     : 0;
         GetDoc()->RemoveLeadingWhiteSpace( *GetCrsr()->GetPoint() );
 
         const bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
@@ -1339,16 +1348,21 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             }
 
-            if(bHtml && nLvl)
+            // --> OD 2009-08-26 #i95907#
+            if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                // 1/2" fuer HTML
-                aFmt.SetLSpace(720);
-                aFmt.SetAbsLSpace(nLvl * 720);
+                if(bHtml && nLvl)
+                {
+                    // 1/2" fuer HTML
+                    aFmt.SetLSpace(720);
+                    aFmt.SetAbsLSpace(nLvl * 720);
+                }
+                else if ( nWidthOfTabs > 0 )
+                {
+                    aFmt.SetAbsLSpace(nWidthOfTabs + nLvl * 720);
+                }
             }
-            else if ( nWidthOfTabs > 0 )
-            {
-                aFmt.SetAbsLSpace(nWidthOfTabs + nLvl * 720);
-            }
+            // <--
 
             // --> FME 2005-01-21 #i38904#  Default alignment for
             // numbering/bullet should be rtl in rtl paragraph:
@@ -1361,6 +1375,21 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             aNumRule.Set( nLvl, aFmt );
         }
 
+        // --> OD 2009-08-26 #i95907#
+        if ( pTxtNode &&
+             ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            short nTxtNodeFirstLineOffset( 0 );
+            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
+            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
+                                           nTxtNodeFirstLineOffset;
+            if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
+            {
+                const SwTwips nIndentChange = nTxtNodeIndent + nWidthOfTabs;
+                aNumRule.ChangeIndent( nIndentChange );
+            }
+        }
+        // <--
         // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
         // --> OD 2008-03-17 #refactorlists#

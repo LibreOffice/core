@@ -825,9 +825,9 @@ USHORT SwEditShell::GetNodeNumStart() const
 
   -----------------------------------------------------------------------*/
 // --> OD 2008-03-18 #refactorlists#
-const SwNumRule * SwEditShell::SearchNumRule( BOOL bForward,
-                                              BOOL bNum,
-                                              BOOL bOutline,
+const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
+                                              const bool bNum,
+                                              const bool bOutline,
                                               int nNonEmptyAllowed,
                                               String& sListId )
 {

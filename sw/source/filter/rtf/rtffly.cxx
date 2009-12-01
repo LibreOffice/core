@@ -263,20 +263,26 @@ void SwRTFParser::SetFlysInDoc()
                 pSttNd->GetIndex() + 1 == pEndNd->GetIndex()
                 && pSttNd->GetTxt().Len()>0 /* #i38227# leave drop caps with no content as fly frames */ )
             {
+                ULONG nPos = pSttNd->GetIndex();
+                SwDoc * pDoc1 = pSttNd->GetDoc();
+
                 BOOL bJoined;
                 {
-                    SwPaM aTmp( *pEndNd, 0, *pSttNd, pSttNd->GetTxt().Len() );
-                    bJoined = pDoc->DeleteAndJoin( aTmp );
+                    SwPaM aTmp( *pSttNd, pSttNd->GetTxt().Len(), *pEndNd, 0 );
+                    bJoined = pDoc1->DeleteAndJoin( aTmp );
                 }
-                if( bJoined )
+
+                SwTxtNode * pNd = (pDoc1->GetNodes()[nPos])->GetTxtNode();
+
+                if( bJoined && pNd != NULL)
                 {
                     SwFmtDrop aDropCap;
                     aDropCap.GetLines() = (BYTE)pFlySave->nDropLines;
                     aDropCap.GetChars() = 1;
 
                     SwIndex aIdx( pEndNd );
-                    pEndNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
-                    pEndNd->SetAttr( aDropCap );
+                    pNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
+                    pNd->SetAttr( aDropCap );
                 }
                 delete pFlySave;
                 continue;
@@ -390,7 +396,8 @@ void SwRTFParser::SetFlysInDoc()
                 }
             }
             aTmpIdx = *pSttNd->EndOfSectionNode();
-            pDoc->Move( aRg, aTmpIdx, IDocumentContentOperations::DOC_MOVEDEFAULT );
+            pDoc->MoveNodeRange( aRg, aTmpIdx,
+                IDocumentContentOperations::DOC_MOVEDEFAULT );
         }
 
         // patch from cmc for #i52542#
@@ -1168,7 +1175,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         {
 
             SwTxtNode* pTxtNd = pFlySave->nSttNd.GetNode().GetTxtNode();
-            SwTxtFlyCnt* pFlyCnt;
+            SwTxtFlyCnt* pFlyCnt = 0;
             if( 1 == pTxtNd->GetTxt().Len() &&
                 0 != ( pFlyCnt = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr(
                                                 0, RES_TXTATR_FLYCNT )) &&
@@ -1226,7 +1233,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                                 (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
 
                     SwNodeIndex aTmp( pFlySave->nSttNd, +1 );
-                    pDoc->Move( aRg, aTmp, IDocumentContentOperations::DOC_MOVEDEFAULT );
+                    pDoc->MoveNodeRange( aRg, aTmp,
+                            IDocumentContentOperations::DOC_MOVEDEFAULT );
 
                     // now delete the redundant txtnode
                     pDoc->GetNodes().Delete( pFlySave->nSttNd, 1 );

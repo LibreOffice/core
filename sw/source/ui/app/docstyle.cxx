@@ -37,6 +37,7 @@
 #include <hintids.hxx>
 #include <svtools/itemiter.hxx>
 #include <svtools/eitem.hxx>
+#include <svtools/syslocale.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/numitem.hxx>
 // --> OD 2008-02-13 #newlistlevelattrs#
@@ -609,7 +610,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
 {
     IntlWrapper aIntlWrapper(
         ::comphelper::getProcessServiceFactory(),
-        GetAppLocaleData().getLocale());
+        SvtSysLocale().GetLocaleData().getLocale());
 
     String sPlus(String::CreateFromAscii(" + "));
     if ( SFX_STYLE_FAMILY_PAGE == nFamily )

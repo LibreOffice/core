@@ -142,10 +142,13 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
 
 // #111827#
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
-                            xub_StrLen nL, BOOL bWDelim )
+            xub_StrLen nL,
+            const IDocumentContentOperations::InsertFlags nInsertFlags,
+            BOOL bWDelim )
     : SwUndo(UNDO_TYPING), pPos( 0 ), pTxt( 0 ), pRedlData( 0 ),
         nNode( rNd.GetIndex() ), nCntnt(nCnt), nLen(nL),
         bIsWordDelim( bWDelim ), bIsAppend( FALSE )
+    , m_nInsertFlags(nInsertFlags)
 {
     Init(rNd);
 }
@@ -155,6 +158,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     : SwUndo(UNDO_SPLITNODE), pPos( 0 ), pTxt( 0 ),
         pRedlData( 0 ), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
         bIsWordDelim( FALSE ), bIsAppend( TRUE )
+    , m_nInsertFlags(IDocumentContentOperations::INS_EMPTYEXPAND)
 {
     Init(rNd);
 }
@@ -247,7 +251,7 @@ SwUndoInsert::~SwUndoInsert()
         {
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
             ASSERT( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
-            pTxtNd->Erase( pPos->nContent );
+            pTxtNd->EraseText( pPos->nContent );
             pPos->nNode++;
         }
         pPos->nContent.Assign( 0, 0 );
@@ -295,15 +299,15 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
 
             aPaM.SetMark();
 
-            if( pCNd->IsTxtNode() )     // Text !!
+            SwTxtNode * const pTxtNode( pCNd->GetTxtNode() );
+            if ( pTxtNode )
             {
                 aPaM.GetPoint()->nContent -= nLen;
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                     pTmpDoc->DeleteRedline( aPaM, true, USHRT_MAX );
                 RemoveIdxFromRange( aPaM, FALSE );
-                pTxt = new String( ((SwTxtNode*)pCNd)->GetTxt().Copy(
-                                            nCntnt-nLen, nLen ) );
-                ((SwTxtNode*)pCNd)->Erase( aPaM.GetPoint()->nContent, nLen );
+                pTxt = new String( pTxtNode->GetTxt().Copy(nCntnt-nLen, nLen) );
+                pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
             }
             else                // ansonsten Grafik/OLE/Text/...
             {
@@ -379,9 +383,10 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
 
             if( pTxt )
             {
-                ASSERT( pCNd->IsTxtNode(), "wo ist mein Textnode ??" );
-                ((SwTxtNode*)pCNd)->Insert( *pTxt, pPam->GetMark()->nContent,
-                                            INS_EMPTYEXPAND );
+                SwTxtNode *const pTxtNode = pCNd->GetTxtNode();
+                ASSERT( pTxtNode, "where is my textnode ?" );
+                pTxtNode->InsertText( *pTxt, pPam->GetMark()->nContent,
+                      m_nInsertFlags );
                 DELETEZ( pTxt );
             }
             else
@@ -445,7 +450,8 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             String aTxt( ((SwTxtNode*)pCNd)->GetTxt() );
             BOOL bGroupUndo = rDoc.DoesGroupUndo();
             rDoc.DoGroupUndo( FALSE );
-            rDoc.Insert( *rUndoIter.pAktPam, aTxt.Copy( nCntnt - nLen, nLen ), true);
+            rDoc.InsertString( *rUndoIter.pAktPam,
+                aTxt.Copy( nCntnt - nLen, nLen ) );
             rDoc.DoGroupUndo( bGroupUndo );
         }
         break;
@@ -712,7 +718,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     SwIndex aIdx( pNd, m_nSttCnt );
     if( m_nSttNd == m_nEndNd )
     {
-        pNd->Erase( aIdx, m_sIns.Len() );
+        pNd->EraseText( aIdx, m_sIns.Len() );
     }
     else
     {
@@ -741,7 +747,9 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     }
 
     if( m_sOld.Len() )
-        pNd->Insert( m_sOld, aIdx );
+    {
+        pNd->InsertText( m_sOld, aIdx );
+    }
 
     if( pHistory )
     {
@@ -813,7 +821,7 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
             delete pHistory, pHistory = 0;
     }
 
-    rDoc.Replace( rPam, m_sIns, m_bRegExp );
+    rDoc.ReplaceRange( rPam, m_sIns, m_bRegExp );
     rPam.DeleteMark();
     rDoc.DoUndo( bUndo );
 }

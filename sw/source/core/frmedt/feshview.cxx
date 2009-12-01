@@ -34,7 +34,6 @@
 #include "hintids.hxx"
 
 #ifdef WIN
-#define NEEDED_BY_FESHVIEW
 #define _FESHVIEW_ONLY_INLINE_NEEDED
 #endif
 
@@ -1874,7 +1873,8 @@ BOOL SwFEShell::ImpEndCreate()
         {
             ASSERT( aAnch.GetAnchorId() == FLY_IN_CNTNT, "wrong AnchorType" );
             SwTxtNode *pNd = aAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
-            pNd->InsertItem( SwFmtFlyCnt( pFmt ),
+            SwFmtFlyCnt aFmt( pFmt );
+            pNd->InsertItem(aFmt,
                             aAnch.GetCntntAnchor()->nContent.GetIndex(), 0 );
             SwFmtVertOrient aVertical( pFmt->GetVertOrient() );
             aVertical.SetVertOrient( text::VertOrientation::LINE_CENTER );

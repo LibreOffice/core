@@ -60,7 +60,7 @@
 #include <svx/lrspitem.hxx>
 #include <svtools/itemset.hxx>
 #include <svx/fontitem.hxx>
-
+#include <sfx2/viewfrm.hxx>
 
 #include "edit.hxx"
 #include "view.hxx"
@@ -163,6 +163,13 @@ SmEditWindow::~SmEditWindow()
     delete pScrollBox;
 }
 
+void SmEditWindow::InvalidateSlots()
+{
+    SfxBindings& rBind = GetView()->GetViewFrame()->GetBindings();
+    rBind.Invalidate(SID_COPY);
+    rBind.Invalidate(SID_CUT);
+    rBind.Invalidate(SID_DELETE);
+}
 
 SmViewShell * SmEditWindow::GetView()
 {
@@ -317,6 +324,7 @@ void SmEditWindow::MouseButtonUp(const MouseEvent &rEvt)
 
     // ggf FormulaCursor neu positionieren
     CursorMoveTimerHdl(&aCursorMoveTimer);
+    InvalidateSlots();
 }
 
 void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
@@ -460,6 +468,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 
             aModifyTimer.Start();
         }
+
+        InvalidateSlots();
     }
 }
 
@@ -855,6 +865,7 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
     DBG_ASSERT( pEditView, "NULL pointer" );
     if (pEditView)
         pEditView->SetSelection(rSel);
+    InvalidateSlots();
 }
 
 BOOL SmEditWindow::IsEmpty() const

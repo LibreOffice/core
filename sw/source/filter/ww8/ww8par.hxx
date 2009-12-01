@@ -54,12 +54,11 @@
 #include <utility>
 #endif
 
-#ifndef SW_TRACER
 #include "tracer.hxx"
-#endif
 #include "ww8struc.hxx"     // WW8_BRC
 #include "ww8scan.hxx"  // WW8Fib
 #include "ww8glsy.hxx"
+#include "wrtww8.hxx"
 #include "../inc/msfilter.hxx"
 
 class SwDoc;
@@ -576,7 +575,7 @@ public:
         const ::com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference <
         com::sun::star::drawing::XShape > *pShape,BOOL bFloatingCtrl);
-    bool ExportControl(Writer &rWrt, const SdrObject *pObj);
+    bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
 };
 
 class SwMSDffManager : public SvxMSDffManager
@@ -934,6 +933,7 @@ private:
      Stack of textencoding being used as we progress through the document text
     */
     std::stack<rtl_TextEncoding> maFontSrcCharSets;
+    std::stack<rtl_TextEncoding> maFontSrcCJKCharSets;
 
     /*
      Winword numbering gets imported as SwNumRules, there is a problem that
@@ -1174,6 +1174,7 @@ private:
         rtl_TextEncoding&);
     bool SetNewFontAttr(USHORT nFCode, bool bSetEnums, USHORT nWhich);
     void ResetCharSetVars();
+    void ResetCJKCharSetVars();
 
     const SfxPoolItem* GetFmtAttr( USHORT nWhich );
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
@@ -1616,6 +1617,7 @@ public:     // eigentlich private, geht aber leider nur public
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
+    CharSet GetCurrentCJKCharSet();
 
     void PostProcessAttrs();
 };

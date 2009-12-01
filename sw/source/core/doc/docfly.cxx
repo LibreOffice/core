@@ -68,6 +68,10 @@
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
 
+// --> OD 2009-07-20 #i73249#
+#include <undoflystrattr.hxx>
+// <--
+
 extern USHORT GetHtmlMode( const SwDocShell* );
 
 
@@ -270,18 +274,17 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
         SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
         ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const xub_StrLen nIdx = pPos->nContent.GetIndex();
-        SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
-#ifndef PRODUCT
+        SwTxtAttr * const  pHnt =
+            pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
         ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == &rFmt,
                     "Wrong TxtFlyCnt-Hint." );
-#endif
-        ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+        const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
         //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
         //werden.
-        pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+        pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
     }
 
     //Endlich kann das Attribut gesetzt werden. Es muss das erste Attribut
@@ -301,8 +304,8 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             SwTxtNode *pNd = pPos->nNode.GetNode().GetTxtNode();
             ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
 
-            pNd->InsertItem( SwFmtFlyCnt( (SwFlyFrmFmt*)&rFmt ),
-                                       pPos->nContent.GetIndex(), 0 );
+            SwFmtFlyCnt aFmt( static_cast<SwFlyFrmFmt*>(&rFmt) );
+            pNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
         }
 
         if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, FALSE, &pItem ))
@@ -469,6 +472,61 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
 }
 
+// --> OD 2009-07-20 #i73249#
+void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
+                            const String& sNewTitle )
+{
+    if ( rFlyFrmFmt.GetObjTitle() == sNewTitle )
+    {
+        return;
+    }
+
+    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
+    SetNoDrawUndoObj( true );
+
+    if ( DoesUndo() )
+    {
+        ClearRedo();
+        AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
+                                          UNDO_FLYFRMFMT_TITLE,
+                                          rFlyFrmFmt.GetObjTitle(),
+                                          sNewTitle ) );
+    }
+
+    rFlyFrmFmt.SetObjTitle( sNewTitle, true );
+
+    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
+
+    SetModified();
+}
+
+void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
+                                  const String& sNewDescription )
+{
+    if ( rFlyFrmFmt.GetObjDescription() == sNewDescription )
+    {
+        return;
+    }
+
+    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
+    SetNoDrawUndoObj( true );
+
+    if ( DoesUndo() )
+    {
+        ClearRedo();
+        AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
+                                          UNDO_FLYFRMFMT_DESCRIPTION,
+                                          rFlyFrmFmt.GetObjDescription(),
+                                          sNewDescription ) );
+    }
+
+    rFlyFrmFmt.SetObjDescription( sNewDescription, true );
+
+    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
+
+    SetModified();
+}
+// <--
 
 /***************************************************************************
  *  Methode     :   BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
@@ -771,10 +829,10 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // 'center to baseline'
                     SetAttr( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ), *pContact->GetFmt() );
                     SwTxtNode *pNd = aPos.nNode.GetNode().GetTxtNode();
-                    ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
+                    ASSERT( pNd, "Cursor not positioned at TxtNode." );
 
-                    pNd->InsertItem( SwFmtFlyCnt( pContact->GetFmt() ),
-                                    aPos.nContent.GetIndex(), 0 );
+                    SwFmtFlyCnt aFmt( pContact->GetFmt() );
+                    pNd->InsertItem( aFmt, aPos.nContent.GetIndex(), 0 );
                 }
                 break;
             default:
@@ -821,12 +879,13 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 SwTxtNode* pTxtNode( pOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
                 ASSERT( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
                 ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-                SwTxtAttr* pHnt = pTxtNode->GetTxtAttr( nIndx, RES_TXTATR_FLYCNT );
-                ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+                SwTxtAttr * const pHnt =
+                    pTxtNode->GetTxtAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );
+                const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
                 //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
                 //werden.
-                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIndx, nIndx );
+                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIndx, nIndx );
                 delete pOldAsCharAnchorPos;
             }
             // <--

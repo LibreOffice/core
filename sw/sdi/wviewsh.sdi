@@ -144,7 +144,6 @@ interface WebSourceView : View
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Volatile;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -152,7 +151,6 @@ interface WebSourceView : View
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Volatile;
     ]
 
     SID_PASTE  // status(final|play)
@@ -186,6 +184,14 @@ interface WebSourceView : View
     SID_DIRECTEXPORTDOCASPDF
     [
         StateMethod = GetState ;
+    ]
+    SID_BROWSER_MODE
+    [
+        StateMethod = GetState;
+    ]
+    FN_PRINT_LAYOUT
+    [
+        StateMethod = GetState;
     ]
 }
 

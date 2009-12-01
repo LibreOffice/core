@@ -47,6 +47,8 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
+#include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <fmtornt.hxx>
 #include <fmtfld.hxx>
@@ -251,7 +253,7 @@ void SwHTMLParser::AddScriptSource()
     }
 }
 
-void SwHTMLParser::InsertBasicDocEvent( USHORT nEvent, const String& rName,
+void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rName,
                                         ScriptType eScrType,
                                         const String& rScrType )
 {
@@ -270,8 +272,10 @@ void SwHTMLParser::InsertBasicDocEvent( USHORT nEvent, const String& rName,
     if( EXTENDED_STYPE == eScrType )
         sScriptType = rScrType;
 
+    rtl::OUString aEventName;
+
     SfxEventConfiguration* pECfg = SFX_APP()->GetEventConfig();
-    pECfg->ConfigureEvent( nEvent, SvxMacro( sEvent, sScriptType, eScrType ),
+    pECfg->ConfigureEvent( aEvent, SvxMacro( sEvent, sScriptType, eScrType ),
                            pDocSh );
 }
 
@@ -338,6 +342,10 @@ void SwHTMLWriter::OutBasic()
     SFX_APP()->LeaveBasicCall();
 }
 
+static const char* aEventNames[] =
+{
+    "OnLoad", "OnPrepareUnload", "OnFocus", "OnUnfocus"
+};
 
 void SwHTMLWriter::OutBasicBodyEvents()
 {
@@ -345,14 +353,19 @@ void SwHTMLWriter::OutBasicBodyEvents()
     if( !pDocSh )
         return;
 
-    SfxEventConfiguration* pECfg = SFX_APP()->GetEventConfig();
-    ASSERT( pECfg, "Wo ist die Event-Konfiguration?" );
-    if( !pECfg )
-        return;
+    SvxMacroTableDtor *pDocTable = new SvxMacroTableDtor;
 
-    SvxMacroTableDtor *pMacTable = pECfg->GetDocEventTable( pDocSh );
-    if( pMacTable && pMacTable->Count() )
-        HTMLOutFuncs::Out_Events( Strm(), *pMacTable, aBodyEventTable,
+    uno::Reference< document::XEventsSupplier > xSup( pDocSh->GetModel(), uno::UNO_QUERY );
+    uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
+    for ( sal_Int32 i=0; i<4; i++ )
+    {
+        SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( ::rtl::OUString::createFromAscii(aEventNames[i]) ), pDocSh, TRUE );
+        if ( pMacro )
+            pDocTable->Insert( aBodyEventTable[i].nEvent, pMacro );
+    }
+
+    if( pDocTable && pDocTable->Count() )
+        HTMLOutFuncs::Out_Events( Strm(), *pDocTable, aBodyEventTable,
                                   bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
 }
 

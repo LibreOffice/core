@@ -1297,20 +1297,25 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                                 SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                                 ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                                 const xub_StrLen nIdx = pPos->nContent.GetIndex();
-                                SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
+                                SwTxtAttr * const pHnt =
+                                    pTxtNode->GetTxtAttrForCharAt(
+                                        nIdx, RES_TXTATR_FLYCNT );
                                 DBG_ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                                             "Missing FlyInCnt-Hint." );
                                 DBG_ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFmt,
                                             "Wrong TxtFlyCnt-Hint." );
-                                ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+                                const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt())
+                                    .SetFlyFmt();
 
                                 //The connection is removed now the attribute can be deleted.
-                                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                                pTxtNode->DeleteAttributes(
+                                    RES_TXTATR_FLYCNT, nIdx );
                                 //create a new one
                                 SwTxtNode *pNd = pInternalPam->GetNode()->GetTxtNode();
-                                DBG_ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
-                                pNd->InsertItem( SwFmtFlyCnt( pFmt ),
-                                                pInternalPam->GetPoint()->nContent.GetIndex(), 0 );
+                                DBG_ASSERT( pNd, "Cursor not at TxtNode." );
+                                SwFmtFlyCnt aFmt( pFmt );
+                                pNd->InsertItem(aFmt, pInternalPam->GetPoint()
+                                        ->nContent.GetIndex(), 0 );
                             }
                             else
                             {
@@ -1379,15 +1384,18 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                             ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                             const xub_StrLen nIdx = pPos->nContent.GetIndex();
-                            SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
+                            SwTxtAttr * const pHnt =
+                                pTxtNode->GetTxtAttrForCharAt(
+                                    nIdx, RES_TXTATR_FLYCNT );
                             DBG_ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                                         "Missing FlyInCnt-Hint." );
                             DBG_ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFlyFmt,
                                         "Wrong TxtFlyCnt-Hint." );
-                            ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+                            const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt())
+                                .SetFlyFmt();
 
                             //The connection is removed now the attribute can be deleted.
-                            pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                            pTxtNode->DeleteAttributes(RES_TXTATR_FLYCNT, nIdx);
                         }
                         else if( text::TextContentAnchorType_AT_PAGE != eNewAnchor &&
                                 FLY_PAGE == eOldAnchorId )
@@ -1418,8 +1426,9 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                                 //the RES_TXTATR_FLYCNT needs to be added now
                                 SwTxtNode *pNd = aPam.GetNode()->GetTxtNode();
                                 DBG_ASSERT( pNd, "Crsr is not in a TxtNode." );
-                                pNd->InsertItem( SwFmtFlyCnt( pFlyFmt ),
-                                                aPam.GetPoint()->nContent.GetIndex(), 0 );
+                                SwFmtFlyCnt aFmt( pFlyFmt );
+                                pNd->InsertItem(aFmt,
+                                    aPam.GetPoint()->nContent.GetIndex(), 0 );
                                 //aPam.GetPoint()->nContent--;
 
                             }
@@ -2124,8 +2133,10 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
             pDoc = pText->GetDoc();
         else if (!pDoc && pCursor)
             pDoc = pCursor->GetDoc();
-        else if ( !pDoc && pPortion && pPortion->GetCrsr() )
-            pDoc = pPortion->GetCrsr()->GetDoc();
+        else if ( !pDoc && pPortion && pPortion->GetCursor() )
+        {
+            pDoc = pPortion->GetCursor()->GetDoc();
+        }
 
     }
 
@@ -2213,7 +2224,7 @@ void SwXShape::dispose(void) throw( uno::RuntimeException )
                 const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
                 SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
                 const xub_StrLen nIdx = rPos.nContent.GetIndex();
-                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
             }
             else
                 pFmt->GetDoc()->DelLayoutFmt( pFmt );

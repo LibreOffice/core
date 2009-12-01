@@ -1405,8 +1405,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     if( rKeyCode.GetFullCode() == (KEY_A | KEY_MOD1 |KEY_SHIFT)
         && rSh.HasDrawView() &&
         (0 != (nLclSelectionType = rSh.GetSelectionType()) &&
-        ((nLclSelectionType & nsSelectionType::SEL_FRM) ||
-        ((nLclSelectionType & nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM) &&
+        ((nLclSelectionType & (nsSelectionType::SEL_FRM|nsSelectionType::SEL_GRF)) ||
+        ((nLclSelectionType & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM)) &&
                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1))))
     {
         SdrHdlList& rHdlList = (SdrHdlList&)rSh.GetDrawView()->GetHdlList();
@@ -5568,11 +5568,12 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
 
 void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 {
-    pCalendarWrapper->LoadDefaultCalendar( rSh.GetCurLang() );
+    salhelper::SingletonRef<SwCalendarWrapper>* pCalendar = s_getCalendarWrapper();
+    (*pCalendar)->LoadDefaultCalendar( rSh.GetCurLang() );
 
     {
         uno::Sequence< i18n::CalendarItem > aNames(
-                                            pCalendarWrapper->getMonths() );
+                                            (*pCalendar)->getMonths() );
         for( int n = 0; n < 2; ++n )
         {
             for( long nPos = 0, nEnd = aNames.getLength(); nPos < nEnd; ++nPos )
@@ -5592,7 +5593,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
                 }
             }
             if( !n )                    // get data for the second loop
-                aNames = pCalendarWrapper->getDays();
+                aNames = (*pCalendar)->getDays();
         }
     }
 

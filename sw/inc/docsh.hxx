@@ -151,6 +151,8 @@ public:
 
     static SfxInterface *_GetInterface() { return GetStaticInterface(); }
 
+    static rtl::OUString GetEventName( sal_Int32 nId );
+
     //Das Doc wird fuer SO-Datenaustausch benoetigt!
     SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, sal_Bool _bScriptingSupport = sal_True );
     SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );

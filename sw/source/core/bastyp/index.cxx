@@ -328,10 +328,10 @@ SwIndexReg::~SwIndexReg()
 
 
 
-void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
-                         BOOL /* argument is only used in derived class*/ )
+void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
+    const bool bNeg, const bool /* argument is only used in derived class*/ )
 {
-    SwIndex* pStt = (SwIndex*)&rIdx;
+    SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
     xub_StrLen nNewVal = rIdx.nIndex;
     if( bNeg )
     {

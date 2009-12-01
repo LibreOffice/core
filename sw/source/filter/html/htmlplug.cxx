@@ -491,7 +491,7 @@ void SwHTMLParser::InsertEmbed()
     SwNoTxtNode *pNoTxtNd =
         pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                           ->GetIndex()+1 ]->GetNoTxtNode();
-    pNoTxtNd->SetAlternateText( aAlt );
+    pNoTxtNd->SetTitle( aAlt );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     if( !bHidden )
@@ -665,7 +665,7 @@ void SwHTMLParser::EndObject()
         SwNoTxtNode *pNoTxtNd =
             pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                               ->GetIndex()+1 ]->GetNoTxtNode();
-        pNoTxtNd->SetAlternateText( pAppletImpl->GetAltText() );
+        pNoTxtNd->SetTitle( pAppletImpl->GetAltText() );
 
         // Ggf Frames anlegen und auto-geb. Rahmen registrieren
         RegisterFlyFrm( pFlyFmt );
@@ -798,7 +798,7 @@ void SwHTMLParser::EndApplet()
     SwNoTxtNode *pNoTxtNd =
         pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                           ->GetIndex()+1 ]->GetNoTxtNode();
-    pNoTxtNd->SetAlternateText( pAppletImpl->GetAltText() );
+    pNoTxtNd->SetTitle( pAppletImpl->GetAltText() );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
@@ -975,7 +975,7 @@ void SwHTMLParser::InsertFloatingFrame()
     SwNoTxtNode *pNoTxtNd =
         pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                           ->GetIndex()+1 ]->GetNoTxtNode();
-    pNoTxtNd->SetAlternateText( aAlt );
+    pNoTxtNd->SetTitle( aAlt );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
@@ -1254,7 +1254,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         nFrmOpts |= HTML_FRMOPTS_OLE_CSS1;
-    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, pOLENd->GetAlternateText(),
+    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, pOLENd->GetTitle(),
                                aEndTags, nFrmOpts );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmOpts );
@@ -1398,7 +1398,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         ULONG nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                   : HTML_FRMOPTS_GENIMG;
         OutHTML_Image( rWrt, rFrmFmt, aGrfNm,
-                       pOLENd->GetAlternateText(), pOLENd->GetTwipSize(),
+                       pOLENd->GetTitle(), pOLENd->GetTwipSize(),
                        nFlags, pMarkToOLE );
     }
 

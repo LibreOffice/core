@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: insrc.hrc,v $
- * $Revision: 1.4 $
+ * $RCSfile: SwUndoPageDesc.hxx,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,17 +27,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define FT_COUNT    1
-#define ED_COUNT    2
-#define FL_INS          3
+#ifndef _UNDO_FLY_STR_ATTR_HXX
+#define _UNDO_FLY_STR_ATTR_HXX
 
-#define CB_POS_BEFORE   10
-#define CB_POS_AFTER    11
-#define FL_POS                  12
+#include <undobj.hxx>
+#include <swundo.hxx>
 
-#define STR_ROW         20
-#define STR_COL         21
+class SwFlyFrmFmt;
+class String;
 
-#define BT_OK       100
-#define BT_CANCEL   101
-#define BT_HELP     102
+class SwUndoFlyStrAttr : public SwUndo
+{
+    public:
+        SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
+                          const SwUndoId eUndoId,
+                          const String& sOldStr,
+                          const String& sNewStr );
+        virtual ~SwUndoFlyStrAttr();
+
+        virtual void Undo( SwUndoIter & rIt );
+        virtual void Redo( SwUndoIter & rIt );
+        virtual void Repeat( SwUndoIter & rIt );
+
+        virtual SwRewriter GetRewriter() const;
+
+    private:
+        SwFlyFrmFmt& mrFlyFrmFmt;
+        const String msOldStr;
+        const String msNewStr;
+};
+
+#endif // _UNDO_FLY_STR_ATTR_HXX

@@ -120,7 +120,7 @@ void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
     if (pView)
         eCurLanguage = pView->GetWrtShell().GetCurLang();
     else
-        eCurLanguage = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
+        eCurLanguage = SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
 
     if (bUsrFmts == FALSE)
        {

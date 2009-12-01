@@ -301,11 +301,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             if ( rSh.HasSelection() )
             {
                 SwTransferable* pTransfer = new SwTransferable( rSh );
-/*??*/          uno::Reference<
-                    datatransfer::XTransferable > xRef(
-                                                                pTransfer );
+/*??*/          uno::Reference< datatransfer::XTransferable > xRef( pTransfer );
 
-                if ( nId == SID_CUT )
+                if ( nId == SID_CUT && !rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) )
                     pTransfer->Cut();
                 else
                 {
@@ -405,7 +403,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             break;
 
-        case FN_PASTESPECIAL:
+        case SID_PASTE_SPECIAL:
             {
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
@@ -481,10 +479,10 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                 rSet.DisableItem( SID_PASTE );
             break;
 
-        case FN_PASTESPECIAL:
+        case SID_PASTE_SPECIAL:
             if( !GetView().IsPasteSpecialAllowed() )
             {
-                rSet.DisableItem( FN_PASTESPECIAL );
+                rSet.DisableItem( SID_PASTE_SPECIAL );
                 rSet.DisableItem( SID_PASTE_UNFORMATTED );
             }
             break;
@@ -539,6 +537,8 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
         default:
             DBG_ERROR("falscher Dispatcher");
     }
+
+    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
 }
 
 /*--------------------------------------------------------------------

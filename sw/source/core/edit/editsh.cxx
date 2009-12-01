@@ -86,10 +86,9 @@ void SwEditShell::Insert( sal_Unicode c, BOOL bOnlyCurrCrsr )
     StartAllAction();
     FOREACHPAM_START(this)
 
-        if( !GetDoc()->Insert(*PCURCRSR, c) )
-        {
-            ASSERT( FALSE, "Doc->Insert(c) failed." )
-        }
+        const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, c);
+        ASSERT( bSuccess, "Doc->Insert() failed." );
+        (void) bSuccess;
 
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
         if( bOnlyCurrCrsr )
@@ -106,17 +105,24 @@ void SwEditShell::Insert( sal_Unicode c, BOOL bOnlyCurrCrsr )
  ******************************************************************************/
 
 
-void SwEditShell::Insert(const String &rStr)
+void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
 {
     StartAllAction();
     {
+        const enum IDocumentContentOperations::InsertFlags nInsertFlags =
+            (bForceExpandHints)
+            ? static_cast<IDocumentContentOperations::InsertFlags>(
+                    IDocumentContentOperations::INS_FORCEHINTEXPAND |
+                    IDocumentContentOperations::INS_EMPTYEXPAND)
+            : IDocumentContentOperations::INS_EMPTYEXPAND;
+
         SwPaM *_pStartCrsr = getShellCrsr( true ), *__pStartCrsr = _pStartCrsr;
         do {
             //OPT: GetSystemCharSet
-            if( !GetDoc()->Insert( *_pStartCrsr, rStr, true ) )
-            {
-                ASSERT( FALSE, "Doc->Insert(Str) failed." )
-            }
+            const bool bSuccess =
+                GetDoc()->InsertString(*_pStartCrsr, rStr, nInsertFlags);
+            ASSERT( bSuccess, "Doc->Insert() failed." );
+            (void) bSuccess;
 
             SaveTblBoxCntnt( _pStartCrsr->GetPoint() );
 
@@ -383,27 +389,27 @@ void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
 
 
 // alternativen Text abfragen/setzen
-const String& SwEditShell::GetAlternateText() const
-{
-    SwPaM* pCrsr = GetCrsr();
-    const SwNoTxtNode* pNd;
-    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-        return pNd->GetAlternateText();
+//const String& SwEditShell::GetAlternateText() const
+//{
+//    SwPaM* pCrsr = GetCrsr();
+//    const SwNoTxtNode* pNd;
+//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
+//        return pNd->GetAlternateText();
 
-    return aEmptyStr;
-}
+//    return aEmptyStr;
+//}
 
 
-void SwEditShell::SetAlternateText( const String& rTxt )
-{
-    SwPaM* pCrsr = GetCrsr();
-    SwNoTxtNode* pNd;
-    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-    {
-        pNd->SetAlternateText( rTxt, sal_True );
-        GetDoc()->SetModified();
-    }
-}
+//void SwEditShell::SetAlternateText( const String& rTxt )
+//{
+//    SwPaM* pCrsr = GetCrsr();
+//    SwNoTxtNode* pNd;
+//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
+//    {
+//        pNd->SetAlternateText( rTxt, sal_True );
+//        GetDoc()->SetModified();
+//    }
+//}
 
 
 const PolyPolygon *SwEditShell::GetGraphicPolygon() const
@@ -778,7 +784,7 @@ BOOL SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL 
 
         if( bInsTxt )
         {
-            Insert( rStr );
+            Insert2( rStr );
             SetMark();
             ExtendSelection( FALSE, rStr.Len() );
         }

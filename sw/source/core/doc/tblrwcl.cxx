@@ -360,11 +360,18 @@ BOOL lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
             SwTableBoxFmt* pNewFmt = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
 
             // suche die selektierten Boxen in der Line:
-            _FndLine* pCmpLine;
+            _FndLine* pCmpLine = NULL;
             SwFmtFrmSize aFrmSz( pNewFmt->GetFrmSize() );
-            if( pBox->GetTabLines().Count() &&
-                ( pCmpLine = rpFndBox->GetLines()[ 0 ])->GetBoxes().Count()
-                    != pCmpLine->GetLine()->GetTabBoxes().Count() )
+
+            bool bDiffCount = false;
+            if( pBox->GetTabLines().Count() )
+            {
+                pCmpLine = rpFndBox->GetLines()[ 0 ];
+                if ( pCmpLine->GetBoxes().Count() != pCmpLine->GetLine()->GetTabBoxes().Count() )
+                    bDiffCount = true;
+            }
+
+            if( bDiffCount )
             {
                 // die erste Line sollte reichen
                 _FndBoxes& rFndBoxes = pCmpLine->GetBoxes();

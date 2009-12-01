@@ -782,7 +782,7 @@ private:
     void AddScriptSource();
 
     // ein Event in die SFX-Konfiguation eintragen (htmlbas.cxx)
-    void InsertBasicDocEvent( sal_uInt16 nEvent, const String& rName,
+    void InsertBasicDocEvent( rtl::OUString aEventName, const String& rName,
                               ScriptType eScrType, const String& rScrType );
 
     // ein Event an ein VC-Control anhaengen (htmlform.cxx)

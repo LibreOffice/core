@@ -1000,14 +1000,14 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     }
 
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
-    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, pObjSh));
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
     rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
     SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
     SfxBoolItem aMergeSilent(SID_SILENT, sal_False);
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
     pDis->Execute(SID_PRINTDOCDIRECT,
             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMergeSilent, 0L);
-    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, pObjSh));
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
     pTargetView->SetMailMergeConfigItem(0, 0, sal_False);
     m_pWizard->enableButtons(WZB_CANCEL, sal_True);

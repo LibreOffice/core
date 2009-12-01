@@ -99,6 +99,7 @@ class SmEditWindow : public Window, public DropTargetHelper
     Rectangle   AdjustScrollBars();
     void        SetScrollBarRanges();
     void        InitScrollBars();
+    void        InvalidateSlots();
 
 public:
     SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin );

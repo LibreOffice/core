@@ -79,6 +79,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/mmaddressblockpage.obj \
         $(SLO)$/mmconfigitem.obj \
         $(SLO)$/mmlayoutpage.obj \
+        $(SLO)$/mmgreetingspage.obj \
         $(SLO)$/mmoutputpage.obj
 
 SLOFILES =  \

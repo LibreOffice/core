@@ -2721,14 +2721,11 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
     {
         if (DoesUndo())
         {
-            SwPosition * pPos =
-                pDstTxtFld->GetPosition();
+            SwPosition aPosition( pDstTxtFld->GetTxtNode() );
+            aPosition.nContent = *pDstTxtFld->GetStart();
 
-            ASSERT(pPos, "SwTxtFld not in its SwTxtNode?");
-
-            AppendUndo(new SwUndoFieldFromDoc(*pPos, *pDstFld, rSrcFld,
+            AppendUndo(new SwUndoFieldFromDoc(aPosition, *pDstFld, rSrcFld,
                                               pMsgHnt, bUpdateFlds));
-            delete pPos;
         }
 
         // Das gefundene Feld wird angepasst ...

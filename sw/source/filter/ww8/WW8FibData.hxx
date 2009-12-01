@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: insrc.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile:$
+ * $Revision:$
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,59 +27,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _INSRC_HXX
-#define _INSRC_HXX
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+#ifndef INCLUDED_WW8_FIB_DATA_HXX
+#define INCLUDED_WW8_FIB_DATA_HXX
+#include <IDocumentExternalData.hxx>
 
-#include <svx/stddlg.hxx>
-
-#ifndef _FIXED_HXX //autogen
-#include <vcl/fixed.hxx>
-#endif
-
-#ifndef _FIELD_HXX //autogen
-#include <vcl/field.hxx>
-#endif
-
-#ifndef _BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-#include <tools/string.hxx>
-
-#ifndef _BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-
-class SwView;
-class SwInsRowColDlg : public SvxStandardDialog
+namespace ww8
 {
-    FixedText       aCount;
-    NumericField    aCountEdit;
-    FixedLine        aInsFL;
-
-    RadioButton     aBeforeBtn;
-    RadioButton     aAfterBtn;
-    FixedLine        aPosFL;
-
-    String          aRow;
-    String          aCol;
-
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-
-    SwView&         rView;
-    BOOL            bColumn;
-
-protected:
-    virtual void Apply();
+class WW8FibData : public ::sw::ExternalData
+{
+    bool m_bReadOnlyRecommended;
+    bool m_bWriteReservation;
 
 public:
-    SwInsRowColDlg( SwView& rView, BOOL bCol );
+    WW8FibData();
+    virtual ~WW8FibData();
+
+    void setReadOnlyRecommended(bool bReadOnlyRecommended);
+    void setWriteReservation(bool bWriteReservation);
+
+    bool getReadOnlyRecommended() const;
+    bool getWriteReservation() const;
 };
+}
 
-#endif
-
+#endif // INCLUDED_WW8_FIB_DATA_HXX

@@ -452,17 +452,21 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     }
 
     // and fields
-    const SwTxtAttr* pTFld;
-    if( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) &&
-        0 != ( pTFld = rTNd.GetTxtAttr( nPos ) ) )
+    if ( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) )
     {
-        bRet = TRUE;                    // all other then fields can be
-                                        // defined as weak-script ?
-        const SwField* pFld;
-        if( RES_TXTATR_FIELD == pTFld->Which() &&
-            0 != (pFld = pTFld->GetFld().GetFld() ) )
+        const SwTxtAttr* const pAttr = rTNd.GetTxtAttrForCharAt( nPos );
+        if (pAttr)
         {
-            sExp += pFld->Expand();
+            bRet = TRUE; // all other than fields can be
+                         // defined as weak-script ?
+            if ( RES_TXTATR_FIELD == pAttr->Which() )
+            {
+                const SwField* const pFld = pAttr->GetFld().GetFld();
+                if (pFld)
+                {
+                    sExp += pFld->Expand();
+                }
+            }
         }
     }
 
@@ -474,14 +478,14 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         {
             USHORT nScript;
             for( n = 0; n < nEnd; n = (xub_StrLen)
-                    pBreakIt->xBreak->endOfScript( sExp, n, nScript ))
+                    pBreakIt->GetBreakIter()->endOfScript( sExp, n, nScript ))
             {
-                nScript = pBreakIt->xBreak->getScriptType( sExp, n );
+                nScript = pBreakIt->GetBreakIter()->getScriptType( sExp, n );
                 rScrpt |= lcl_SetScriptFlags( nScript );
             }
         }
         else
-            rScrpt |= lcl_SetScriptFlags( pBreakIt->xBreak->
+            rScrpt |= lcl_SetScriptFlags( pBreakIt->GetBreakIter()->
                                         getScriptType( sExp, nEnd-1 ));
     }
 
@@ -493,7 +497,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 USHORT SwEditShell::GetScriptType() const
 {
     USHORT nRet = 0;
-    if( pBreakIt->xBreak.is() )
+    //if( pBreakIt->GetBreakIter().is() )
     {
         FOREACHPAM_START(this)
 
@@ -525,7 +529,7 @@ USHORT SwEditShell::GetScriptType() const
                     {
                         nScript = pScriptInfo ?
                                   pScriptInfo->ScriptType( nPos ) :
-                                  pBreakIt->xBreak->getScriptType( pTNd->GetTxt(), nPos );
+                                  pBreakIt->GetBreakIter()->getScriptType( pTNd->GetTxt(), nPos );
                     }
                     else
                         nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
@@ -534,7 +538,7 @@ USHORT SwEditShell::GetScriptType() const
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
-            else
+            else if ( pBreakIt->GetBreakIter().is() )
             {
                 ULONG nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
@@ -563,7 +567,7 @@ USHORT SwEditShell::GetScriptType() const
                         {
                             nScript = pScriptInfo ?
                                       pScriptInfo->ScriptType( nChg ) :
-                                      pBreakIt->xBreak->getScriptType(
+                                      pBreakIt->GetBreakIter()->getScriptType(
                                                                 rTxt, nChg );
 
                             if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, TRUE,
@@ -578,7 +582,7 @@ USHORT SwEditShell::GetScriptType() const
 
                             nChg = pScriptInfo ?
                                    pScriptInfo->NextScriptChg( nChg ) :
-                                   (xub_StrLen)pBreakIt->xBreak->endOfScript(
+                                   (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
                                                     rTxt, nChg, nScript );
 
                             nFldPos = rTxt.Search(

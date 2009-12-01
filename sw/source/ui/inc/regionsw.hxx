@@ -33,35 +33,23 @@
 #include <hintids.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/svtreebx.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/brshitem.hxx>
 
-#ifndef _CONDEDIT_HXX
 #include <condedit.hxx>
-#endif
 #include <section.hxx>
 #include <fmtclds.hxx>
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
 #include <numberingtypelistbox.hxx>
-#include "svx/frmdiritem.hxx"
+#include <svx/frmdiritem.hxx>
 #include <vcl/image.hxx>
 #include <svx/paraprev.hxx>
 #include <svx/lrspitem.hxx>
@@ -179,6 +167,7 @@ class SwEditRegionDlg : public SfxModalDialog
     PushButton      aFilePB;
     FixedText       aSubRegionFT;
     ComboBox        aSubRegionED;
+    bool            bSubRegionsFilled;
 
     FixedLine       aProtectFL;
     TriStateBox     aProtectCB;
@@ -239,6 +228,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( FileNameHdl, Edit* );
     DECL_LINK( DDEHdl, CheckBox* );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK( SubRegionEventHdl, VclWindowEvent * );
 
     BOOL CheckPasswd(CheckBox* pBox = 0);
 
@@ -307,8 +297,6 @@ class SwInsertSectionTabPage : public SfxTabPage
     DECL_LINK( FileSearchHdl, PushButton* );
     DECL_LINK( DDEHdl, CheckBox* );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
-
-    void            FillList(  const SwSectionFmt* pFmt = 0 );
 
 public:
     SwInsertSectionTabPage(Window *pParent, const SfxItemSet &rAttrSet);

@@ -1233,7 +1233,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (nPageCnt != nCnt)   // Basic benachrichtigen
                 {
                     nPageCnt = nCnt;
-                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, GetViewFrame()->GetObjectShell()), FALSE);
+                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), FALSE);
                 }
             }
             break;

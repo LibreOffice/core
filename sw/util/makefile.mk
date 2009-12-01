@@ -102,6 +102,7 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
 # dynamic libraries
 SHL1STDLIBS+= \
     $(LNGLIB) \
+    $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(XMLOFFLIB) \
@@ -179,6 +180,7 @@ DEF3NAME=       $(SHL3TARGET)
 
 SHL3STDLIBS= \
         $(ISWLIB) \
+            $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
@@ -188,6 +190,7 @@ SHL3STDLIBS= \
             $(SVLLIB) \
             $(UNOTOOLSLIB) \
             $(TOOLSLIB) \
+            $(I18NISOLANGLIB) \
             $(COMPHELPERLIB) \
             $(UCBHELPERLIB)	\
             $(CPPUHELPERLIB)	\
@@ -317,7 +320,8 @@ DEF4NAME=$(SHL4TARGET)
 
 SHL4STDLIBS= \
     $(ISWLIB) \
-    $(SVXLIB) \
+    $(SVXCORELIB) \
+    $(SVXMSFILTERLIB) \
     $(SFXLIB) \
     $(GOODIESLIB) \
     $(BASEGFXLIB) \
