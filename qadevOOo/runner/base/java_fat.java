@@ -338,11 +338,11 @@ public class java_fat implements TestBase
                 }
                 catch (Exception e)
                 {
-                    System.out.println("couldn't cleanup");
+                    System.err.println( "couldn't cleanup:" + e.toString() );
                 }
                 catch (java.lang.NoClassDefFoundError e)
                 {
-                    System.out.println("couldn't cleanup");
+                    System.err.println( "couldn't cleanup:" + e.toString() );
                 }
 
                 sumIt.summarizeUp(entry);

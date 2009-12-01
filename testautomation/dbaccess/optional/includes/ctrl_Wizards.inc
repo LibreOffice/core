@@ -581,7 +581,7 @@ testcase tListBox
 
     Kontext "FormControls"
     Listbox.Click
-    call hDrawingWithSelection ( 50, 20, 60, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 25 )
     sleep(3)
     Kontext "AutoPilotListComboBox"
     AutoPilotListComboBox.MouseDown(10,10)

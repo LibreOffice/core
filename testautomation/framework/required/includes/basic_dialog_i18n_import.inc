@@ -82,7 +82,7 @@ testcase tBasicDialogI18nImport
                 
                 printlog( "Accept with yes" )
                 Active.Yes()
-                
+                sleep(1)
                 Kontext "TranslationBar"
                 if ( TranslationBar.exists() ) then
                 
