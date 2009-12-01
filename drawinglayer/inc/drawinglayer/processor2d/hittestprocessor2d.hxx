@@ -43,6 +43,7 @@
 
 namespace basegfx { class B2DPolygon; }
 namespace basegfx { class B2DPolyPolygon; }
+namespace drawinglayer { namespace primitive2d { class ScenePrimitive2D; }}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -80,6 +81,7 @@ namespace drawinglayer
             bool checkFillHitWithTolerance(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 double fDiscreteHitTolerance);
+            void check3DHit(const primitive2d::ScenePrimitive2D& rCandidate);
 
         public:
             HitTestProcessor2D(

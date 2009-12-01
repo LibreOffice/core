@@ -332,12 +332,13 @@ struct CffLocal
     int     mnLocalSubrBase;
     int     mnLocalSubrCount;
     int     mnLocalSubrBias;
-    int     mnNominalWidth;
-    int     mnDefaultWidth;
+
+    ValType maNominalWidth;
+    ValType maDefaultWidth;
 
     // ATM hinting related values
-    int         mnStemStdHW;
-    int         mnStemStdVW;
+    ValType     maStemStdHW;
+    ValType     maStemStdVW;
     ValVector   maStemSnapH;
     ValVector   maStemSnapV;
     ValVector   maBlueValues;
@@ -461,10 +462,10 @@ public: // TODO: is public really needed?
     void    getHintPair( int nIndex, ValType* nMin, ValType* nEnd) const;
 
     // accessing other charstring specifics
-    bool    hasCharWidth( void) const { return (mnCharWidth != -1);}
-    int     getCharWidth( void) const { return mnCharWidth;}
-    void    setNominalWidth( int nWidth) { mpCffLocal->mnNominalWidth = nWidth;}
-    void    setDefaultWidth( int nWidth) { mpCffLocal->mnDefaultWidth = nWidth;}
+    bool    hasCharWidth( void) const { return (maCharWidth > 0);}
+    ValType getCharWidth( void) const { return maCharWidth;}
+    void    setNominalWidth( ValType aWidth) { mpCffLocal->maNominalWidth = aWidth;}
+    void    setDefaultWidth( ValType aWidth) { mpCffLocal->maDefaultWidth = aWidth;}
     void    updateWidth( bool bUseFirstVal);
 
 private:
@@ -477,7 +478,7 @@ private:
     int mnHorzHintSize;
     ValType mnHintStack[ NMAXHINTS];
 
-    int mnCharWidth;
+    ValType maCharWidth;
 };
 
 // --------------------------------------------------------------------
@@ -488,7 +489,7 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
 ,   mnStackIdx(0)
 ,   mnHintSize(0)
 ,   mnHorzHintSize(0)
-,   mnCharWidth(-1)
+,   maCharWidth(-1)
 {
 //  setCharStringType( 1);
     // TODO: new CffLocal[ mnFDAryCount];
@@ -542,13 +543,13 @@ inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
         return;
 #endif
     if( bUseFirstVal) {
-        mnCharWidth = static_cast<int>(mpCffLocal->mnNominalWidth + mnValStack[0]);
+        maCharWidth = mpCffLocal->maNominalWidth + mnValStack[0];
         // remove bottom stack entry
         --mnStackIdx;
         for( int i = 0; i < mnStackIdx; ++i)
             mnValStack[ i] = mnValStack[ i+1];
     } else {
-        mnCharWidth = mpCffLocal->mnDefaultWidth;
+        maCharWidth = mpCffLocal->maDefaultWidth;
     }
 }
 
@@ -615,7 +616,7 @@ void CffSubsetterContext::readCharString( const U8* pTypeOps, int nTypeLen)
     mnStackIdx = 0;
     mnHintSize = 0;
     mnHorzHintSize = 0;
-    mnCharWidth = -1;
+    maCharWidth = -1;
 
     assert( nTypeLen >= 0);
 //  assert( nEnd <= getLength());
@@ -659,14 +660,14 @@ void CffSubsetterContext::readDictOp( void)
             nVal = popVal();
             nInt = static_cast<int>(nVal);
             switch( nOpId) {
-            case  10: mpCffLocal->mnStemStdHW = nInt;  break;   // "StdHW"
-            case  11: mpCffLocal->mnStemStdVW = nInt; break;    // "StdVW"
+            case  10: mpCffLocal->maStemStdHW = nVal; break;    // "StdHW"
+            case  11: mpCffLocal->maStemStdVW = nVal; break;    // "StdVW"
             case  15: mnCharsetBase = nInt; break;              // "charset"
             case  16: mnEncodingBase = nInt; break;             // "nEncoding"
             case  17: mnCharStrBase = nInt; break;              // "nCharStrings"
             case  19: mpCffLocal->mnLocalSubrOffs = nInt; break;// "nSubrs"
-            case  20: setDefaultWidth( nInt ); break;           // "defaultWidthX"
-            case  21: setNominalWidth( nInt ); break;           // "nominalWidthX"
+            case  20: setDefaultWidth( nVal ); break;           // "defaultWidthX"
+            case  21: setNominalWidth( nVal ); break;           // "nominalWidthX"
             case 909: mpCffLocal->mfBlueScale = nVal; break;    // "BlueScale"
             case 910: mpCffLocal->mfBlueShift = nVal; break;    // "BlueShift"
             case 911: mpCffLocal->mfBlueFuzz = nVal; break;     // "BlueFuzz"
@@ -1477,7 +1478,7 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
 mbSawError = false;
 mbNeedClose = false;
 mbIgnoreHints = false;
-mnHintSize=mnHorzHintSize=mnStackIdx=0; mnCharWidth=-1;//#######
+mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
 mnCntrMask = 0;
     while( mpReadPtr < mpReadEnd)
         convertOneTypeOp();
@@ -1673,10 +1674,10 @@ CffLocal::CffLocal( void)
 ,   mnLocalSubrBase( 0)
 ,   mnLocalSubrCount( 0)
 ,   mnLocalSubrBias( 0)
-,   mnNominalWidth( 0)
-,   mnDefaultWidth( 0)
-,   mnStemStdHW( 0)
-,   mnStemStdVW( 0)
+,   maNominalWidth( 0)
+,   maDefaultWidth( 0)
+,   maStemStdHW( 0)
+,   maStemStdVW( 0)
 ,   mfBlueScale( 0.0)
 ,   mfBlueShift( 0.0)
 ,   mfBlueFuzz( 0.0)
@@ -2296,8 +2297,8 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     nPrivEntryCount += (mpCffLocal->mfBlueShift != 0.0);
     nPrivEntryCount += (mpCffLocal->mfBlueFuzz != 0.0);
     // emit stem hints only if non-default values
-    nPrivEntryCount += (mpCffLocal->mnStemStdHW != 0);
-    nPrivEntryCount += (mpCffLocal->mnStemStdVW != 0);
+    nPrivEntryCount += (mpCffLocal->maStemStdHW != 0);
+    nPrivEntryCount += (mpCffLocal->maStemStdVW != 0);
     nPrivEntryCount += !mpCffLocal->maStemSnapH.empty();
     nPrivEntryCount += !mpCffLocal->maStemSnapV.empty();
     // emit other hints only if non-default values
@@ -2337,10 +2338,10 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += sprintf( pOut, "/BlueFuzz %.1f def\n", mpCffLocal->mfBlueFuzz);
 
     // emit stem hint related privdict entries
-    if( mpCffLocal->mnStemStdHW)
-        pOut += sprintf( pOut, "/StdHW [%d] def\n", mpCffLocal->mnStemStdHW);
-    if( mpCffLocal->mnStemStdVW)
-        pOut += sprintf( pOut, "/StdVW [%d] def\n", mpCffLocal->mnStemStdVW);
+    if( mpCffLocal->maStemStdHW)
+        pOut += sprintf( pOut, "/StdHW [%g] def\n", mpCffLocal->maStemStdHW);
+    if( mpCffLocal->maStemStdVW)
+        pOut += sprintf( pOut, "/StdVW [%g] def\n", mpCffLocal->maStemStdVW);
     rEmitter.emitValVector( "/StemSnapH [", "]ND\n", mpCffLocal->maStemSnapH);
     rEmitter.emitValVector( "/StemSnapV [", "]ND\n", mpCffLocal->maStemSnapV);
 
@@ -2413,8 +2414,12 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += sprintf( pOut, " ND\n");
         rEmitter.emitAllCrypted();
         // provide individual glyphwidths if requested
-        if( pGlyphWidths )
-            pGlyphWidths[i] = getCharWidth();
+        if( pGlyphWidths ) {
+            ValType aCharWidth = getCharWidth();
+            if( maFontMatrix.size() >= 4)
+                aCharWidth *= 1000.0F * maFontMatrix[0];
+            pGlyphWidths[i] = static_cast<GlyphWidth>(aCharWidth);
+        }
     }
     pOut += sprintf( pOut, "end end\nreadonly put\nput\n");
     pOut += sprintf( pOut, "dup/FontName get exch definefont pop\n");
@@ -2446,8 +2451,17 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 
     // provide details to the subset requesters, TODO: move into own method?
     // note: Top and Bottom are flipped between Type1 and VCL
-    rFSInfo.m_aFontBBox = Rectangle( Point( static_cast<long>(maFontBBox[0]), static_cast<long>(maFontBBox[1]) ),
-                                     Point( static_cast<long>(maFontBBox[2]), static_cast<long>(maFontBBox[3]) ) );
+    // note: the rest of VCL expects the details below to be scaled like for an emUnits==1000 font
+    ValType fXFactor = 1.0;
+    ValType fYFactor = 1.0;
+    if( maFontMatrix.size() >= 4) {
+        fXFactor = 1000.0F * maFontMatrix[0];
+        fYFactor = 1000.0F * maFontMatrix[3];
+    }
+    rFSInfo.m_aFontBBox = Rectangle( Point( static_cast<long>(maFontBBox[0] * fXFactor),
+                                        static_cast<long>(maFontBBox[1] * fYFactor) ),
+                                    Point( static_cast<long>(maFontBBox[2] * fXFactor),
+                                        static_cast<long>(maFontBBox[3] * fYFactor) ) );
     // PDF-Spec says the values below mean the ink bounds!
     // TODO: use better approximations for these ink bounds
     rFSInfo.m_nAscent  = +rFSInfo.m_aFontBBox.Bottom(); // for capital letters

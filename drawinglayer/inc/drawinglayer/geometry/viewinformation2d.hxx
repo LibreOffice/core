@@ -149,6 +149,13 @@ namespace drawinglayer
             /// On-demand prepared Viewport in discrete units for convenience
             const basegfx::B2DRange& getDiscreteViewport() const;
 
+            /** support reduced DisplayQuality, PropertyName is 'ReducedDisplayQuality'. This
+                is used e.g. to allow to lower display quality for OverlayPrimitives and
+                may lead to simpler decompositions in the local create2DDecomposition
+                implementations of the primitives
+             */
+            bool getReducedDisplayQuality() const;
+
             /** Get the uno::Sequence< beans::PropertyValue > which contains all ViewInformation
 
                 Use this call if You need to extract all contained ViewInformation. The ones

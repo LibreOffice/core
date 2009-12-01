@@ -2390,9 +2390,9 @@ void ScDocShell::SetDrawModified( BOOL bIsModified /* = TRUE */ )
 
     SetModified( bIsModified );
 
+    SfxBindings* pBindings = GetViewBindings();
     if (bUpdate)
     {
-        SfxBindings* pBindings = GetViewBindings();
         if (pBindings)
         {
             pBindings->Invalidate( SID_SAVEDOC );
@@ -2402,6 +2402,16 @@ void ScDocShell::SetDrawModified( BOOL bIsModified /* = TRUE */ )
 
     if (bIsModified)
     {
+        if (pBindings)
+        {
+            // #i105960# Undo etc used to be volatile.
+            // They always have to be invalidated, including drawing layer or row height changes
+            // (but not while pPaintLockData is set).
+            pBindings->Invalidate( SID_UNDO );
+            pBindings->Invalidate( SID_REDO );
+            pBindings->Invalidate( SID_REPEAT );
+        }
+
         if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
         {
             aDocument.UpdateChartListenerCollection();

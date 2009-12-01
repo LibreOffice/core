@@ -39,35 +39,29 @@
 
     @author OD
 */
-SwThreadManager* SwThreadManager::mpThreadManager = 0;
-osl::Mutex* SwThreadManager::mpGetManagerMutex = new osl::Mutex();
+bool SwThreadManager::mbThreadManagerInstantiated = false;
 
 SwThreadManager::SwThreadManager()
     : mpThreadManagerImpl( new ThreadManager( SwThreadJoiner::GetThreadJoiner() ) )
 {
     mpThreadManagerImpl->Init();
+    mbThreadManagerInstantiated = true;
 }
 
 SwThreadManager::~SwThreadManager()
 {
-    delete mpThreadManagerImpl;
 }
+
+struct InitInstance : public rtl::Static<SwThreadManager, InitInstance> {};
 
 SwThreadManager& SwThreadManager::GetThreadManager()
 {
-    osl::MutexGuard aGuard(*mpGetManagerMutex);
-
-    if ( mpThreadManager == 0 )
-    {
-        mpThreadManager = new SwThreadManager();
-    }
-
-    return *mpThreadManager;
+    return InitInstance::get();
 }
 
 bool SwThreadManager::ExistsThreadManager()
 {
-    return (mpThreadManager != 0);
+    return mbThreadManagerInstantiated;
 }
 
 oslInterlockedCount SwThreadManager::AddThread( const rtl::Reference< ObservableThread >& rThread )

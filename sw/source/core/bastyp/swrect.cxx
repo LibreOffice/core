@@ -53,13 +53,12 @@
 
 
 SwRect::SwRect( const Rectangle &rRect ) :
-    nX( rRect.Left() ),
-    nY( rRect.Top() )
+    m_Point( rRect.Left(), rRect.Top() )
 {
-    nWidth  = rRect.Right() == RECT_EMPTY ? 0 :
-                            rRect.Right()  - rRect.Left() +1;
-    nHeight = rRect.Bottom() == RECT_EMPTY ? 0 :
-                            rRect.Bottom() - rRect.Top() + 1;
+    m_Size.setWidth(rRect.Right() == RECT_EMPTY ? 0 :
+                            rRect.Right()  - rRect.Left() +1);
+    m_Size.setHeight(rRect.Bottom() == RECT_EMPTY ? 0 :
+                            rRect.Bottom() - rRect.Top() + 1);
 }
 
 /*************************************************************************
@@ -139,7 +138,7 @@ SwRect& SwRect::Intersection( const SwRect& rRect )
     }
     else
         //Def.: Bei einer leeren Intersection wird nur die SSize genullt.
-        nHeight = nWidth = 0;
+        SSize(0, 0);
 
     return *this;
 }
@@ -239,76 +238,88 @@ BOOL SwRect::IsOver( const SwRect& rRect ) const
 
 void SwRect::Justify()
 {
-    if ( nHeight < 0 )
+    if ( m_Size.getHeight() < 0 )
     {
-        nY = nY + nHeight + 1;
-        nHeight = -nHeight;
+        m_Point.Y() += m_Size.getHeight() + 1;
+        m_Size.setHeight(-m_Size.getHeight());
     }
-    if ( nWidth < 0 )
+    if ( m_Size.getWidth() < 0 )
     {
-        nX = nX + nWidth + 1;
-        nWidth = -nWidth;
+        m_Point.Y() += m_Size.getWidth() + 1;
+        m_Size.setWidth(-m_Size.getWidth());
     }
 }
 
 
 // Similiar to the inline methods, but we need the function pointers
 
-void SwRect::_Width( const long nNew ) { nWidth = nNew; }
-void SwRect::_Height( const long nNew ) { nHeight = nNew; }
-void SwRect::_Left( const long nLeft ){ nWidth += nX - nLeft; nX = nLeft; }
-void SwRect::_Right( const long nRight ){ nWidth = nRight - nX; }
-void SwRect::_Top( const long nTop ){ nHeight += nY - nTop; nY = nTop; }
-void SwRect::_Bottom( const long nBottom ){ nHeight = nBottom - nY; }
+void SwRect::_Width( const long nNew ) { m_Size.setWidth(nNew); }
+void SwRect::_Height( const long nNew ) { m_Size.setHeight(nNew); }
+void SwRect::_Left( const long nLeft ){ m_Size.Width() += m_Point.getX() - nLeft; m_Point.setX(nLeft); }
+void SwRect::_Right( const long nRight ){ m_Size.setWidth(nRight - m_Point.getX()); }
+void SwRect::_Top( const long nTop ){ m_Size.Height() += m_Point.getY() - nTop; m_Point.setY(nTop); }
+void SwRect::_Bottom( const long nBottom ){ m_Size.setHeight(nBottom - m_Point.getY()); }
 
-long SwRect::_Width() const{ return nWidth; }
-long SwRect::_Height() const{ return nHeight; }
-long SwRect::_Left() const{ return nX; }
-long SwRect::_Right() const{ return nX + nWidth; }
-long SwRect::_Top() const{ return nY; }
-long SwRect::_Bottom() const{ return nY + nHeight; }
+long SwRect::_Width() const{ return m_Size.getWidth(); }
+long SwRect::_Height() const{ return m_Size.getHeight(); }
+long SwRect::_Left() const{ return m_Point.getX(); }
+long SwRect::_Right() const{ return m_Point.getX() + m_Size.getWidth(); }
+long SwRect::_Top() const{ return m_Point.getY(); }
+long SwRect::_Bottom() const{ return m_Point.getY() + m_Size.getHeight(); }
 
-void SwRect::AddWidth( const long nAdd ) { nWidth += nAdd; }
-void SwRect::AddHeight( const long nAdd ) { nHeight += nAdd; }
-void SwRect::SubLeft( const long nSub ){ nWidth += nSub; nX -= nSub; }
-void SwRect::AddRight( const long nAdd ){ nWidth += nAdd; }
-void SwRect::SubTop( const long nSub ){ nHeight += nSub; nY -= nSub; }
-void SwRect::AddBottom( const long nAdd ){ nHeight += nAdd; }
-void SwRect::SetPosX( const long nNew ){ nX = nNew; }
-void SwRect::SetPosY( const long nNew ){ nY = nNew; }
+void SwRect::AddWidth( const long nAdd ) { m_Size.Width() += nAdd; }
+void SwRect::AddHeight( const long nAdd ) { m_Size.Height() += nAdd; }
+void SwRect::SubLeft( const long nSub ){ m_Size.Width() += nSub; m_Point.X() -= nSub; }
+void SwRect::AddRight( const long nAdd ){ m_Size.Width() += nAdd; }
+void SwRect::SubTop( const long nSub ){ m_Size.Height() += nSub; m_Point.Y() -= nSub; }
+void SwRect::AddBottom( const long nAdd ){ m_Size.Height() += nAdd; }
+void SwRect::SetPosX( const long nNew ){ m_Point.setX(nNew); }
+void SwRect::SetPosY( const long nNew ){ m_Point.setY(nNew); }
 const Size  SwRect::_Size() const { return SSize(); }
-const Size  SwRect::SwappedSize() const { return Size( nHeight, nWidth ); }
+const Size  SwRect::SwappedSize() const { return Size( m_Size.getHeight(), m_Size.getWidth() ); }
 const Point SwRect::TopLeft() const { return Pos(); }
-const Point SwRect::TopRight() const { return Point( nX + nWidth, nY ); }
-const Point SwRect::BottomLeft() const { return Point( nX, nY + nHeight ); }
+const Point SwRect::TopRight() const { return Point( m_Point.getX() + m_Size.getWidth(), m_Point.getY() ); }
+const Point SwRect::BottomLeft() const { return Point( m_Point.getX(), m_Point.getY() + m_Size.getHeight() ); }
 const Point SwRect::BottomRight() const
-    { return Point( nX + nWidth, nY + nHeight ); }
-long SwRect::GetLeftDistance( long nLimit ) const { return nX - nLimit; }
-long SwRect::GetBottomDistance( long nLim ) const { return nLim - nY - nHeight;}
-long SwRect::GetTopDistance( long nLimit ) const { return nY - nLimit; }
-long SwRect::GetRightDistance( long nLim ) const { return nLim - nX - nWidth; }
+    { return Point( m_Point.getX() + m_Size.getWidth(), m_Point.getY() + m_Size.getHeight() ); }
+long SwRect::GetLeftDistance( long nLimit ) const { return m_Point.getX() - nLimit; }
+long SwRect::GetBottomDistance( long nLim ) const { return nLim - m_Point.getY() - m_Size.getHeight();}
+long SwRect::GetTopDistance( long nLimit ) const { return m_Point.getY() - nLimit; }
+long SwRect::GetRightDistance( long nLim ) const { return nLim - m_Point.getX() - m_Size.getWidth(); }
 BOOL SwRect::OverStepLeft( long nLimit ) const
-    { return nLimit > nX && nX + nWidth > nLimit; }
+    { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
 BOOL SwRect::OverStepBottom( long nLimit ) const
-    { return nLimit > nY && nY + nHeight > nLimit; }
+    { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
 BOOL SwRect::OverStepTop( long nLimit ) const
-    { return nLimit > nY && nY + nHeight > nLimit; }
+    { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
 BOOL SwRect::OverStepRight( long nLimit ) const
-    { return nLimit > nX && nX + nWidth > nLimit; }
+    { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
 void SwRect::SetLeftAndWidth( long nLeft, long nNew )
-    { nX = nLeft; nWidth = nNew; }
+{
+    m_Point.setX(nLeft);
+    m_Size.setWidth(nNew);
+}
 void SwRect::SetTopAndHeight( long nTop, long nNew )
-    { nY = nTop; nHeight = nNew; }
+{
+    m_Point.setY(nTop);
+    m_Size.setHeight(nNew);
+}
 void SwRect::SetRightAndWidth( long nRight, long nNew )
-    { nX = nRight - nNew; nWidth = nNew; }
+{
+    m_Point.setX(nRight - nNew);
+    m_Size.setWidth(nNew);
+}
 void SwRect::SetBottomAndHeight( long nBottom, long nNew )
-    { nY = nBottom - nNew; nHeight = nNew; }
+{
+    m_Point.setY(nBottom - nNew);
+    m_Size.setHeight(nNew);
+}
 void SwRect::SetUpperLeftCorner(  const Point& rNew )
-    { nX = rNew.nA; nY = rNew.nB; }
+    { m_Point = rNew; }
 void SwRect::SetUpperRightCorner(  const Point& rNew )
-    { nX = rNew.nA - nWidth; nY = rNew.nB; }
+    { m_Point = Point(rNew.nA - m_Size.getWidth(), rNew.nB); }
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
-    { nX = rNew.nA; nY = rNew.nB - nHeight; }
+    { m_Point = Point(rNew.nA, rNew.nB - m_Size.getHeight()); }
 
 #ifndef PRODUCT
 /*************************************************************************

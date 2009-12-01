@@ -73,6 +73,8 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
     INetURLObject aURL(sURL);
     if (INET_PROT_FILE == aURL.GetProtocol())
     {
+        // all the URLs are handled by office in UTF-8
+        // so the Gnome FP related URLs should be converted accordingly
         gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
         if ( pEncodedFileName )
         {
@@ -94,12 +96,19 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
 
 rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
 {
+    // all the URLs are handled by office in UTF-8 ( and encoded with "%xx" codes based on UTF-8 )
+    // so the Gnome FP related URLs should be converted accordingly
     OString sURL = OUStringToOString(rURL, RTL_TEXTENCODING_UTF8);
     INetURLObject aURL(rURL);
     if (INET_PROT_FILE == aURL.GetProtocol())
     {
-        rtl::OUString sOUURL = aURL.getExternalURL(INetURLObject::DECODE_WITH_CHARSET, osl_getThreadTextEncoding());
-        sURL = OUStringToOString( sOUURL, osl_getThreadTextEncoding());
+        OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiServiceFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator"))), UNO_QUERY_THROW)->translateToExternal( rURL );
+
+        if( aNewURL.getLength() )
+        {
+            // At this point the URL should contain ascii characters only actually
+            sURL = OUStringToOString( aNewURL, osl_getThreadTextEncoding() );
+        }
     }
     return sURL;
 }

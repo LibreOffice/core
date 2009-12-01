@@ -137,6 +137,8 @@ void BorderHandler::sprm(Sprm & rSprm)
                 pProperties->resolve(*this);
             ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
                                    m_aBorderLines[rSprm.getId() - NS_ooxml::LN_CT_TblBorders_top], m_bOOXML );
+
+            m_aFilledLines[ rSprm.getId( ) - NS_ooxml::LN_CT_TblBorders_top] = true;
         }
         break;
         default:;
@@ -161,7 +163,11 @@ PropertyMapPtr  BorderHandler::getProperties()
     if( m_bOOXML || m_nCurrentBorderPosition )
     {
         for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
-            pPropertyMap->Insert( aPropNames[nProp], false, uno::makeAny( m_aBorderLines[nProp] ) );
+        {
+            if ( m_aFilledLines[nProp] ) {
+                pPropertyMap->Insert( aPropNames[nProp], false, uno::makeAny( m_aBorderLines[nProp] ) );
+            }
+        }
     }
     return pPropertyMap;
 }

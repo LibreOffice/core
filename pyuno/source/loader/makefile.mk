@@ -42,7 +42,7 @@ DLLPRE =
 
 #-------------------------------------------------------------------
 
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
+.IF "$(OS)$(COMEX)" == "SOLARIS4"
 # no -Bdirect for SunWS CC
 DIRECT = $(LINKFLAGSDEFS)
 .ENDIF

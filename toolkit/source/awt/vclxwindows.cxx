@@ -408,6 +408,7 @@ void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -817,6 +818,7 @@ void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -1116,6 +1118,7 @@ void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -1540,6 +1543,7 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
@@ -2759,6 +2763,7 @@ void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -3762,6 +3767,7 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     // no, don't call VCLXEdit here - it has properties which we do *not* want to have at at combo box

@@ -103,8 +103,12 @@ namespace awt {
 
 typedef std::vector< Rectangle > MetricVector;
 
-namespace vcl { class PDFWriterImpl; }
-namespace vcl { class ExtOutDevData; }
+namespace vcl
+{
+    class PDFWriterImpl;
+    class ExtOutDevData;
+    class ITextLayout;
+}
 
 #define OUTDEV_BUFFER_SIZE  128
 
@@ -431,9 +435,13 @@ public:
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
 
     SAL_DLLPRIVATE long         ImplGetTextWidth( const SalLayout& ) const;
-    SAL_DLLPRIVATE void         ImplDrawText( const Rectangle& rRect,
+    static
+    SAL_DLLPRIVATE XubString    ImplGetEllipsisString( const OutputDevice& rTargetDevice, const XubString& rStr,
+                                                       long nMaxWidth, USHORT nStyle, const ::vcl::ITextLayout& _rLayout );
+    static
+    SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const String& rOrigStr, USHORT nStyle,
-                                              MetricVector* pVector, String* pDisplayText );
+                                              MetricVector* pVector, String* pDisplayText, ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, BOOL bWordLine, BOOL bUnderlineAbove );
     SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
@@ -456,7 +464,8 @@ public:
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, BOOL bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, USHORT nStyle ) const;
+    static
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, USHORT nStyle, const ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
@@ -649,10 +658,12 @@ public:
                                             GDIMetaFile&     rMtf );
     void                DrawText( const Rectangle& rRect,
                                   const XubString& rStr, USHORT nStyle = 0,
-                                  MetricVector* pVector = NULL, String* pDisplayText = NULL );
+                                  MetricVector* pVector = NULL, String* pDisplayText = NULL,
+                                  ::vcl::ITextLayout* _pTextLayout = NULL );
     Rectangle           GetTextRect( const Rectangle& rRect,
                                      const XubString& rStr, USHORT nStyle = TEXT_DRAW_WORDBREAK,
-                                     TextRectInfo* pInfo = NULL ) const;
+                                     TextRectInfo* pInfo = NULL,
+                                     const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
     XubString           GetEllipsisString( const XubString& rStr, long nMaxWidth,
                                            USHORT nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
     void                DrawCtrlText( const Point& rPos, const XubString& rStr,

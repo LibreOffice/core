@@ -50,8 +50,17 @@ DOLLAR_SIGN=\$$
 DOLLAR_SIGN=$$
 .ENDIF
 
-#these are temporary
-PYTHON=$(WRAPCMD) python
+.IF "$(SYSTEM_PYTHON)"!="YES"
+PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
+.ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
+PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) python
+.ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
+.IF "$(GUI)"=="WNT"
+PYTHONPATH:=$(SOLARLIBDIR)$/pyuno;$(PWD);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
+.ELSE                   # "$(GUI)"=="WNT"
+PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
+.ENDIF                  # "$(GUI)"=="WNT"
+.EXPORT: PYTHONPATH
 
 .IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
 .IF "$(USE_SHELL)"=="bash"
@@ -111,7 +120,7 @@ doc .PHONY:
     @echo start test with  dmake runtest
 
 runtest : ALL
-    cd $(DLLDEST) && $(TEST_ENV) && python main.py
+    cd $(DLLDEST) && $(TEST_ENV) && $(PYTHON) main.py
     cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
             -l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c vnd.openoffice.pymodule:$(i))
     cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \

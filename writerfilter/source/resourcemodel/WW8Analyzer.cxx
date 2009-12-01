@@ -168,6 +168,14 @@ void WW8Analyzer::info(const string & /*info*/)
 {
 }
 
+void WW8Analyzer::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+{
+}
+
+void WW8Analyzer::endShape( )
+{
+}
+
 void WW8Analyzer::dumpStats(ostream & o) const
 {
     {

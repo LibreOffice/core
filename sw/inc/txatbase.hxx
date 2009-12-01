@@ -121,7 +121,6 @@ public:
     inline const SwTOXMark              &GetTOXMark() const;
     inline const SwFmtRefMark           &GetRefMark() const;
     inline const SwFmtINetFmt           &GetINetFmt() const;
-    inline const SvXMLAttrContainerItem &GetXMLAttrContainer() const;
     inline const SwFmtRuby              &GetRuby() const;
     inline const SwFmtMeta              &GetMeta() const;
 
@@ -228,13 +227,6 @@ inline const SwFmtINetFmt& SwTxtAttr::GetINetFmt() const
     ASSERT( m_pAttr && m_pAttr->Which() == RES_TXTATR_INETFMT,
         "Wrong attribute" );
     return (const SwFmtINetFmt&)(*m_pAttr);
-}
-
-inline const SvXMLAttrContainerItem& SwTxtAttr::GetXMLAttrContainer() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_UNKNOWNATR_CONTAINER,
-        "Wrong attribute" );
-    return (const SvXMLAttrContainerItem&)(*m_pAttr);
 }
 
 inline const SwFmtRuby& SwTxtAttr::GetRuby() const

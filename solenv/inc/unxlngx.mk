@@ -33,7 +33,6 @@
 
 .INCLUDE : unxlng.mk
 CDEFS+=-DX86_64
-CFLAGSCXX+=-fno-use-cxa-atexit
 MODULES_WITH_WARNINGS+=\
     svx
 DLLPOSTFIX=lx

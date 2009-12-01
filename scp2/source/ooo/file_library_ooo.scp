@@ -1561,6 +1561,9 @@ End
 
 #ifndef DISABLE_NEON
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpdav1,ucpdav1)
+ #ifndef SYSTEM_NEON
+   SPECIAL_LIB_FILE(gid_File_Lib_Neon,neon)
+ #endif
 #endif
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpfile1,ucpfile1)

@@ -1032,9 +1032,11 @@ void makeRedline( SwPaM& rPaM,
     }
 
     SwRedline* pRedline = new SwRedline( aRedlineData, rPaM );
+    RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
+
     pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
     bool bRet = pRedlineAccess->AppendRedline( pRedline, false );
-    pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_NONE);
+    pRedlineAccess->SetRedlineMode_intern( nPrevMode );
     if( !bRet )
         throw lang::IllegalArgumentException();
 }

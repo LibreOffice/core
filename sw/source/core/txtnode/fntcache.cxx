@@ -386,7 +386,9 @@ USHORT SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             long nTmpPrtHeight = (USHORT)aOutMet.GetAscent() + aOutMet.GetDescent();
             (void) nTmpPrtHeight;
-            ASSERT( nTmpPrtHeight == nPrtHeight, "GetTextHeight != Ascent + Descent" )
+            // #i106098#: do not compare with == here due to rounding error
+            ASSERT( abs(nTmpPrtHeight - nPrtHeight) < 3,
+                    "GetTextHeight != Ascent + Descent" );
 #endif
 
             ((OutputDevice&)rRefDev).SetFont( aOldFnt );

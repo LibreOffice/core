@@ -4288,7 +4288,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
 
                 Edit *pMyEd = new Edit(pDlg,WB_CENTER | WB_BORDER );
                 pMyEd->SetSizePixel(Size(100,30));
-                pDlg->SetText(CUniString("Schließen"));
+                pDlg->SetText(UniString("Schließen", RTL_TEXTENCODING_ISO_8859_1));
                 pDlg->Show();
                 pMyEd->Show();
                 ULONG nTime = Time().GetTime();

@@ -1,4 +1,4 @@
 ..\%__SRC%\lib\libwpft*.so %_DEST%\lib%_EXT%
-..\%__SRC%\bin\wpft*.dll %_DEST%\lib%_EXT%
+..\%__SRC%\bin\wpft*.dll %_DEST%\bin%_EXT%
 ..\%__SRC%\bin\wpftgo.dll %_DEST%\bin%_EXT%\wpftgo.dll
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib

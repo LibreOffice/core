@@ -46,6 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES= \
         $(SLO)$/baseprocessor3d.obj		\
+        $(SLO)$/cutfindprocessor3d.obj	\
         $(SLO)$/defaultprocessor3d.obj	\
         $(SLO)$/shadow3dextractor.obj	\
         $(SLO)$/geometry2dextractor.obj	\

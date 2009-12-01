@@ -50,6 +50,12 @@ SLOFILES=	\
             $(EXCEPTIONSFILES) \
             $(SLO)$/levdis.obj
 
+# on unxsoli, no optimization for textsearch because of i105945
+.IF "$(OS)$(COM)$(CPUNAME)"=="SOLARISC52INTEL"
+EXCEPTIONSNOOPTFILES= \
+        $(SLO)$/textsearch.obj
+.ENDIF
+
 SHL1TARGET= $(TARGET)
 SHL1OBJS=	$(SLOFILES)
 

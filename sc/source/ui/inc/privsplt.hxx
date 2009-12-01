@@ -54,6 +54,7 @@ class ScPrivatSplit : public Control
         short               nDeltaX;
         short               nDeltaY;
 
+        using Control::ImplInitSettings;
         void                ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
 
 

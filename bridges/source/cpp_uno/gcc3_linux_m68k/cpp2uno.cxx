@@ -256,7 +256,7 @@ namespace
                     // destroy temp uno return
                     uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
                 }
-                // complex return ptr is set to eax
+                // complex return ptr is set to return reg
                 *(void **)pRegisterReturn = pCppReturn;
             }
             if (pReturnTypeDescr)

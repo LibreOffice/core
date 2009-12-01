@@ -113,6 +113,11 @@ namespace sdr
                     new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
                         GetOle2Obj(),
                         aObjectMatrix,
+
+                        // #i104867# add GraphicVersion number to be able to check for
+                        // content change in the primitive later
+                        GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion(),
+
                         bHighContrast));
 
                 // create primitive. Use Ole2 primitive here. Prepare attribute settings, will be used soon anyways.

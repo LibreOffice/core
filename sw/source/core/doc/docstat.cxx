@@ -45,10 +45,10 @@ SwDocStat::SwDocStat() :
     nOLE(0),
     nPage(1),
     nPara(1),
+    nAllPara(1),
     nWord(0),
     nChar(0),
-    bModified(TRUE),
-    pInternStat(0)
+    bModified(TRUE)
 {}
 
 /************************************************************************
@@ -62,9 +62,9 @@ void SwDocStat::Reset()
     nOLE    = 0;
     nPage   = 1;
     nPara   = 1;
+    nAllPara= 1;
     nWord   = 0;
     nChar   = 0;
     bModified = TRUE;
-    pInternStat = 0;
 }
 

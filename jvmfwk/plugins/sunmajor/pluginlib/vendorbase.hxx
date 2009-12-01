@@ -70,9 +70,11 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "ia64"
 #elif defined M68K
 #define JFW_PLUGIN_ARCH "m68k"
-#else // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K
+#elif defined HPPA
+#define JFW_PLUGIN_ARCH "parisc"
+#else // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K, HPPA
 #error unknown plattform
-#endif // SPARC, INTEL, POWERPC, MIPS, ARM
+#endif // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K, HPPA
 
 
 class MalformedVersionException

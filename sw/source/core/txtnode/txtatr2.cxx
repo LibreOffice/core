@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <sfx2/objsh.hxx>
@@ -52,13 +51,6 @@
 TYPEINIT1(SwTxtINetFmt,SwClient);
 TYPEINIT1(SwTxtRuby,SwClient);
 
-// ATT_XMLCONTAINERITEM ******************************
-
-SwTxtXMLAttrContainer::SwTxtXMLAttrContainer(
-                            SvXMLAttrContainerItem& rAttr,
-                            xub_StrLen nStt, xub_StrLen nEnde )
-    : SwTxtAttrEnd( rAttr, nStt, nEnde )
-{}
 
 /*************************************************************************
  *                      class SwTxtCharFmt

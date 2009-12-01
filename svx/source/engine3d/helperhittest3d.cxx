@@ -36,18 +36,10 @@
 #include <svx/svdpage.hxx>
 #include <svx/scene3d.hxx>
 #include <svditer.hxx>
-#include <drawinglayer/processor3d/baseprocessor3d.hxx>
-#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#include <drawinglayer/primitive3d/transformprimitive3d.hxx>
-#include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
-#include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
+#include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <basegfx/polygon/b3dpolygontools.hxx>
-#include <basegfx/polygon/b3dpolypolygontools.hxx>
-#include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -80,176 +72,13 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
-{
-    namespace processor3d
-    {
-        class CutFindProcessor : public BaseProcessor3D
-        {
-        private:
-            // the start and stop point for the cut vector
-            basegfx::B3DPoint                       maFront;
-            basegfx::B3DPoint                       maBack;
-
-            // the found cut points
-            ::std::vector< basegfx::B3DPoint >      maResult;
-
-            // #i102956# the transformation change from TransformPrimitive3D processings
-            // needs to be remembered to be able to transform found cuts to the
-            // basic coordinate system the processor starts with
-            basegfx::B3DHomMatrix                   maCombinedTransform;
-
-            // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BasePrimitive3D-based.
-            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
-
-        public:
-            CutFindProcessor(const geometry::ViewInformation3D& rViewInformation,
-                const basegfx::B3DPoint& rFront,
-                const basegfx::B3DPoint& rBack)
-            :   BaseProcessor3D(rViewInformation),
-                maFront(rFront),
-                maBack(rBack),
-                maResult(),
-                maCombinedTransform()
-            {}
-
-            // data access
-            const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
-        };
-
-        void CutFindProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
-        {
-            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
-            switch(rCandidate.getPrimitiveID())
-            {
-                case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
-                {
-                    // transform group.
-                    const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(rCandidate);
-
-                    // remember old and transform front, back to object coordinates
-                    const basegfx::B3DPoint aLastFront(maFront);
-                    const basegfx::B3DPoint aLastBack(maBack);
-                    basegfx::B3DHomMatrix aInverseTrans(rPrimitive.getTransformation());
-                    aInverseTrans.invert();
-                    maFront *= aInverseTrans;
-                    maBack *= aInverseTrans;
-
-                    // remember current and create new transformation; add new object transform from right side
-                    const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
-                    const geometry::ViewInformation3D aNewViewInformation3D(
-                        aLastViewInformation3D.getObjectTransformation() * rPrimitive.getTransformation(),
-                        aLastViewInformation3D.getOrientation(),
-                        aLastViewInformation3D.getProjection(),
-                        aLastViewInformation3D.getDeviceToView(),
-                        aLastViewInformation3D.getViewTime(),
-                        aLastViewInformation3D.getExtendedInformationSequence());
-                    updateViewInformation(aNewViewInformation3D);
-
-                    // #i102956# remember needed back-transform for found cuts (combine from right side)
-                    const basegfx::B3DHomMatrix aLastCombinedTransform(maCombinedTransform);
-                    maCombinedTransform = maCombinedTransform * rPrimitive.getTransformation();
-
-                    // let break down
-                    process(rPrimitive.getChildren());
-
-                    // restore transformations and front, back
-                    maCombinedTransform = aLastCombinedTransform;
-                    updateViewInformation(aLastViewInformation3D);
-                    maFront = aLastFront;
-                    maBack = aLastBack;
-                    break;
-                }
-                case PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D :
-                {
-                    // PolygonHairlinePrimitive3D, not used for hit test with planes, ignore. This
-                    // means that also thick line expansion will not be hit-tested as
-                    // PolyPolygonMaterialPrimitive3D
-                    break;
-                }
-                case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
-                {
-                    // #i97321#
-                    // For HatchTexturePrimitive3D, do not use the decomposition since it will produce
-                    // clipped hatch lines in 3D. It can be used when the hatch also has a filling, but for
-                    // simplicity, just use the children which are the PolyPolygonMaterialPrimitive3D
-                    // which define the hatched areas anyways; for HitTest this is more than adequate
-                    const primitive3d::HatchTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::HatchTexturePrimitive3D& >(rCandidate);
-                    process(rPrimitive.getChildren());
-                    break;
-                }
-                case PRIMITIVE3D_ID_HITTESTPRIMITIVE3D :
-                {
-                    // HitTestPrimitive3D, force usage due to we are doing a hit test and this
-                    // primitive only gets generated on 3d objects without fill, exactly for this
-                    // purpose
-                    const primitive3d::HitTestPrimitive3D& rPrimitive = static_cast< const primitive3d::HitTestPrimitive3D& >(rCandidate);
-                    process(rPrimitive.getChildren());
-                    break;
-                }
-                case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
-                {
-                    // PolyPolygonMaterialPrimitive3D
-                    const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(rCandidate);
-
-                    if(!maFront.equal(maBack))
-                    {
-                           const basegfx::B3DPolyPolygon& rPolyPolygon = rPrimitive.getB3DPolyPolygon();
-                        const sal_uInt32 nPolyCount(rPolyPolygon.count());
-
-                        if(nPolyCount)
-                        {
-                               const basegfx::B3DPolygon aPolygon(rPolyPolygon.getB3DPolygon(0));
-                            const sal_uInt32 nPointCount(aPolygon.count());
-
-                            if(nPointCount > 2)
-                            {
-                                const basegfx::B3DVector aPlaneNormal(aPolygon.getNormal());
-
-                                if(!aPlaneNormal.equalZero())
-                                {
-                                    const basegfx::B3DPoint aPointOnPlane(aPolygon.getB3DPoint(0));
-                                    double fCut(0.0);
-
-                                    if(basegfx::tools::getCutBetweenLineAndPlane(aPlaneNormal, aPointOnPlane, maFront, maBack, fCut))
-                                    {
-                                        const basegfx::B3DPoint aCutPoint(basegfx::interpolate(maFront, maBack, fCut));
-
-                                        if(basegfx::tools::isInside(rPolyPolygon, aCutPoint, false))
-                                        {
-                                            // #i102956# add result. Do not forget to do this in the coordinate
-                                            // system the processor get started with, so use the collected
-                                            // combined transformation from processed TransformPrimitive3D's
-                                            maResult.push_back(maCombinedTransform * aCutPoint);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    break;
-                }
-                default :
-                {
-                    // process recursively
-                    process(rCandidate.get3DDecomposition(getViewInformation3D()));
-                    break;
-                }
-            }
-        }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
 void getAllHit3DObjectWithRelativePoint(
     const basegfx::B3DPoint& rFront,
     const basegfx::B3DPoint& rBack,
     const E3dCompoundObject& rObject,
     const drawinglayer::geometry::ViewInformation3D& rObjectViewInformation3D,
-    ::std::vector< basegfx::B3DPoint >& o_rResult)
+    ::std::vector< basegfx::B3DPoint >& o_rResult,
+    bool bAnyHit)
 {
     o_rResult.clear();
 
@@ -271,7 +100,7 @@ void getAllHit3DObjectWithRelativePoint(
                 if(aObjectRange.overlaps(aFrontBackRange))
                 {
                     // bound volumes hit, geometric cut tests needed
-                    drawinglayer::processor3d::CutFindProcessor aCutFindProcessor(rObjectViewInformation3D, rFront, rBack);
+                    drawinglayer::processor3d::CutFindProcessor aCutFindProcessor(rObjectViewInformation3D, rFront, rBack, bAnyHit);
                     aCutFindProcessor.process(aPrimitives);
                     o_rResult = aCutFindProcessor.getCutPoints();
                 }
@@ -388,7 +217,7 @@ SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
                     {
                         // get all hit points with object
                         ::std::vector< basegfx::B3DPoint > aHitsWithObject;
-                        getAllHit3DObjectWithRelativePoint(aFront, aBack, *pCandidate, aViewInfo3D, aHitsWithObject);
+                        getAllHit3DObjectWithRelativePoint(aFront, aBack, *pCandidate, aViewInfo3D, aHitsWithObject, false);
 
                         for(sal_uInt32 a(0); a < aHitsWithObject.size(); a++)
                         {
@@ -452,7 +281,7 @@ bool checkHitSingle3DObject(
             {
                 // get all hit points with object
                 ::std::vector< basegfx::B3DPoint > aHitsWithObject;
-                getAllHit3DObjectWithRelativePoint(aFront, aBack, rCandidate, aViewInfo3D, aHitsWithObject);
+                getAllHit3DObjectWithRelativePoint(aFront, aBack, rCandidate, aViewInfo3D, aHitsWithObject, true);
 
                 if(aHitsWithObject.size())
                 {

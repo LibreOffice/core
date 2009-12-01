@@ -719,10 +719,6 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
                     aResult.Result = beans::TolerantPropertySetResultType::SUCCESS;
                     aResultVector.push_back( aResult );
                 }
-                // this assertion should never occur!
-                DBG_ASSERT( !aResultVector.size() ||  aResult.Result != beans::TolerantPropertySetResultType::UNKNOWN_FAILURE,
-                        "unknown failure while retrieving property" );
-
             }
         }
         catch (beans::UnknownPropertyException &)

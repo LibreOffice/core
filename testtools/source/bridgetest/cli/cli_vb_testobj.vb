@@ -200,7 +200,7 @@ Public Class VBBridgeTestObject
         
         Return m_testDataElements
     End Function
-    
+
     ' Attributes ---------------------------------------------------------
     Public Overridable Property Bool As Boolean _
         Implements XBridgeTest2.Bool

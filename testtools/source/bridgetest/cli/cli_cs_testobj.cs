@@ -227,6 +227,26 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         return _testDataElements;
     }
 
+    public SmallStruct echoSmallStruct(/*[in]*/SmallStruct arg)
+    {
+        return arg;
+    }
+
+    public MediumStruct echoMediumStruct(/*[in]*/MediumStruct arg)
+    {
+        return arg;
+    }
+
+    public BigStruct echoBigStruct(/*[in]*/BigStruct arg)
+    {
+        return arg;
+    }
+
+    public AllFloats echoAllFloats(/*[in]*/AllFloats arg)
+    {
+        return arg;
+    }
+
     // Attributes
     public bool Bool
     {

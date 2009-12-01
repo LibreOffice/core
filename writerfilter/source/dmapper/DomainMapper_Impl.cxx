@@ -36,6 +36,8 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
@@ -55,6 +57,7 @@
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
@@ -69,12 +72,17 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
+
+#include <tools/string.hxx>
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/util.hxx>
 #endif
 #include <ooxml/OOXMLFastTokens.hxx>
 
+#if DEBUG
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 #include <map>
 
@@ -393,6 +401,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
+        m_bIsInShape( false ),
+        m_bShapeContextAdded( false ),
         m_TableManager( eDocumentType == DOCUMENT_OOXML ),
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
@@ -401,7 +411,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( true ),
         m_bIsCustomFtnMark( false ),
-        n_CurrentRedlineToken( ooxml::OOXML_mod )
+        m_bIsParaChange( false )
 {
     GetBodyText();
     uno::Reference< text::XTextAppend > xBodyTextAppend = uno::Reference< text::XTextAppend >( m_xBodyText, uno::UNO_QUERY );
@@ -685,13 +695,13 @@ uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
   -----------------------------------------------------------------------*/
 uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
 {
-    const StyleSheetEntry* pEntry = 0;
+    StyleSheetEntryPtr pEntry;
     if( m_bInStyleSheetImport )
         pEntry = GetStyleSheetTable()->FindParentStyleSheet(::rtl::OUString());
     else
         pEntry =
                 GetStyleSheetTable()->FindStyleSheetByISTD(GetCurrentParaStyleId());
-    while(pEntry)
+    while(pEntry.get( ) )
     {
         //is there a tab stop set?
         if(pEntry->pProperties)
@@ -725,10 +735,10 @@ void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
     switch (deferredBreakType)
     {
     case COLUMN_BREAK:
-        m_bIsColumnBreakDeferred = true;
+            m_bIsColumnBreakDeferred = true;
         break;
     case PAGE_BREAK:
-        m_bIsPageBreakDeferred = true;
+            m_bIsPageBreakDeferred = true;
         break;
     default:
         return;
@@ -831,11 +841,15 @@ void lcl_AddRangeAndStyle(
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-//define some default frame width - 10cm ATM
-#define DEFAULT_FRAME_MIN_WIDTH 10000
+//define some default frame width - 0cm ATM: this allow the frame to be wrapped around the text
+#define DEFAULT_FRAME_MIN_WIDTH 0
 
 void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
+#if DEBUG
+    clog << "finishParagraph" << endl;
+#endif
+
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend >  xTextAppend = rAppendContext.xTextAppend;
@@ -903,11 +917,11 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     try
                        {
                             //
-                           const StyleSheetEntry* pParaStyle =
+                            StyleSheetEntryPtr pParaStyle =
                                 m_pStyleSheetTable->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
 
                             uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 15: 0);
-                            if(pParaStyle)
+                            if ( pParaStyle.get( ) )
                             {
                                 const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
                                 beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
@@ -1045,14 +1059,34 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 uno::Reference< text::XTextRange > xTextRange =
                     xTextAppend->finishParagraph( aProperties );
                 m_TableManager.handle(xTextRange);
-            }
-            else
-            {
 
+                // Set the anchor of the objects to the created paragraph
+                while ( m_aAnchoredStack.size( ) > 0 && !m_bIsInShape )
+                {
+                    uno::Reference< text::XTextContent > xObj = m_aAnchoredStack.top( );
+                    try
+                    {
+#if DEBUG
+                        rtl::OUString sText( xTextRange->getString( ) );
+#endif
+                        xObj->attach( xTextRange );
+                    }
+                    catch ( uno::RuntimeException& )
+                    {
+                        // this is normal: the shape is already attached
+                    }
+                    m_aAnchoredStack.pop( );
+                }
+
+                // Get the end of paragraph character inserted
+                uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
+                xCur->gotoEnd( false );
+                xCur->goLeft( 1 , true );
+                uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
+                CheckParaRedline( xParaEnd );
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
-
         }
         catch(const lang::IllegalArgumentException& rIllegal)
         {
@@ -1062,7 +1096,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
         catch(const uno::Exception& rEx)
         {
             (void)rEx;
-            OSL_ENSURE( false, "ArgumentException in DomainMapper_Impl::finishParagraph" );
+            //OSL_ENSURE( false, "ArgumentException in DomainMapper_Impl::finishParagraph" );
         }
     }
 }
@@ -1099,35 +1133,7 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
             uno::Reference< text::XTextRange > xTextRange =
                 xTextAppend->appendTextPortion
                 (rString, pPropertyMap->GetPropertyValues());
-            if( m_CurrentRedlineDate.getLength() )
-            {
-                try
-                {
-                    ::rtl::OUString sType;
-                    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-                    switch(n_CurrentRedlineToken & 0xffff)
-                    {
-                        case ooxml::OOXML_mod : sType = rPropNameSupplier.GetName( PROP_FORMAT ); break;
-                        case ooxml::OOXML_ins : sType = rPropNameSupplier.GetName( PROP_INSERT ); break;
-                        case ooxml::OOXML_del : sType = rPropNameSupplier.GetName( PROP_DELETE ); break;
-                    }
-                    uno::Reference< text::XRedline > xRedline( xTextRange, uno::UNO_QUERY_THROW );
-                    beans::PropertyValues aRedlineProperties( 2 );
-                    beans::PropertyValue* pRedlineProperties = aRedlineProperties.getArray();
-                    pRedlineProperties[0].Name = rPropNameSupplier.GetName( PROP_REDLINE_AUTHOR );
-                    pRedlineProperties[0].Value <<= m_CurrentRedlineAuthor;
-                    pRedlineProperties[1].Name = rPropNameSupplier.GetName( PROP_REDLINE_DATE_TIME );
-                    pRedlineProperties[1].Value <<= lcl_DateStringToDateTime( m_CurrentRedlineDate );
-                    xRedline->makeRedline( sType, aRedlineProperties);
-
-                }
-                catch( const uno::Exception& rEx )
-                {
-                    (void)rEx;
-                    OSL_ENSURE( false, "Exception in makeRedline" );
-                }
-                ResetRedlineProperties();
-            }
+            CheckRedline( xTextRange );
 
             //m_TableManager.handle(xTextRange);
         }
@@ -1167,6 +1173,7 @@ void DomainMapper_Impl::appendTextContent(
         }
     }
 }
+
 /*-- 24.04.2008 08:38:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1368,14 +1375,97 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
             aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pTopContext->GetFootnoteFontName()  ));
             aFontProperties = aFontProps->GetPropertyValues();
         }
-
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
         m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ));
+
+        // Redlines for the footnote anchor
+        CheckRedline( xFootnote->getAnchor( ) );
     }
     catch( uno::Exception& )
     {
         OSL_ENSURE( false, "exception in PushFootOrEndnote" );
     }
+}
+
+void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange, RedlineParamsPtr& pRedline )
+{
+    if ( pRedline.get( ) )
+    {
+#if DEBUG
+        clog << "REDLINE: Writing redline: " << pRedline->m_nId << endl;
+#endif
+        try
+        {
+            ::rtl::OUString sType;
+            PropertyNameSupplier & rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier(  );
+            switch ( pRedline->m_nToken & 0xffff )
+            {
+            case ooxml::OOXML_mod:
+                sType = rPropNameSupplier.GetName( PROP_FORMAT );
+                break;
+            case ooxml::OOXML_ins:
+                sType = rPropNameSupplier.GetName( PROP_INSERT );
+                break;
+            case ooxml::OOXML_del:
+                sType = rPropNameSupplier.GetName( PROP_DELETE );
+                break;
+            }
+            uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
+            beans::PropertyValues aRedlineProperties( 2 );
+            beans::PropertyValue * pRedlineProperties = aRedlineProperties.getArray(  );
+            pRedlineProperties[0].Name = rPropNameSupplier.GetName( PROP_REDLINE_AUTHOR );
+            pRedlineProperties[0].Value <<= pRedline->m_sAuthor;
+            pRedlineProperties[1].Name = rPropNameSupplier.GetName( PROP_REDLINE_DATE_TIME );
+            pRedlineProperties[1].Value <<= lcl_DateStringToDateTime( pRedline->m_sDate );
+
+            xRedline->makeRedline( sType, aRedlineProperties );
+        }
+        catch( const uno::Exception & rEx )
+        {
+#if DEBUG
+            clog << "REDLINE: error - " << rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+#endif
+            ( void ) rEx;
+            OSL_ENSURE( false, "Exception in makeRedline" );
+        }
+    }
+}
+
+void DomainMapper_Impl::CheckParaRedline( uno::Reference< text::XTextRange > xRange )
+{
+    if ( m_pParaRedline.get( ) )
+    {
+        CreateRedline( xRange, m_pParaRedline );
+        ResetParaRedline( );
+    }
+}
+
+void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > xRange )
+{
+    vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.begin( );
+    vector< RedlineParamsPtr > aCleaned;
+    for (; pIt != m_aRedlines.end( ); pIt++ )
+    {
+        CreateRedline( xRange, *pIt );
+
+        // Adding the non-mod redlines to the temporary vector
+        if ( pIt->get( ) && ( ( *pIt )->m_nToken & 0xffff ) != ooxml::OOXML_mod )
+        {
+            aCleaned.push_back( *pIt );
+        }
+    }
+
+    m_aRedlines.swap( aCleaned );
+}
+
+void DomainMapper_Impl::StartParaChange( )
+{
+    m_bIsParaChange = true;
+}
+
+void DomainMapper_Impl::EndParaChange( )
+{
+    m_bIsParaChange = false;
 }
 
 /*-- 22.12.2008 13:45:15---------------------------------------------------
@@ -1416,57 +1506,58 @@ void DomainMapper_Impl::PopAnnotation()
     m_xAnnotationField.clear();
 
 }
-/*-- 20.03.2008 09:01:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void DomainMapper_Impl::PushShapeContext()
+void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
 {
+#if DEBUG
+    clog << "PushShapeContext" << endl;
+#endif
+    m_bIsInShape = true;
     try
     {
-        uno::Reference< text::XText > xTemporaryShape( GetTextFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape") )),
-                uno::UNO_QUERY_THROW );
-        uno::Reference< text::XTextAppend > xShapeAppend( xTemporaryShape, uno::UNO_QUERY );
-        //insert into the document
-        uno::Reference< text::XTextContent > xShapeContent( xTemporaryShape, uno::UNO_QUERY_THROW );
-        xShapeContent->attach( GetBodyText()->getStart() );
-        m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xShapeAppend, uno::UNO_QUERY_THROW ));
+        // Add the shape to the text append stack
+        m_aTextAppendStack.push( uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ) );
+        m_bShapeContextAdded = true;
+
+        // Add the shape to the anchored objects stack
+        uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
+        m_aAnchoredStack.push( xTxtContent );
+
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+        uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+        xProps->setPropertyValue(
+                rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ),
+                uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
+        xProps->setPropertyValue(
+                rPropNameSupplier.GetName( PROP_OPAQUE ),
+                uno::makeAny( true ) );
     }
-    catch( uno::Exception& )
+    catch ( const uno::Exception& e )
     {
-        OSL_ENSURE( false, "exception in DomainMapper_Impl::PushShapeContext" );
+#if DEBUG
+        clog << "Exception when adding shape: ";
+        clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( );
+        clog << endl;
+#endif
     }
 }
+
 /*-- 20.03.2008 09:01:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopShapeContext()
 {
-    m_xTemporaryShape = uno::Reference< drawing::XShape >( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
-    m_aTextAppendStack.pop();
-}
-/*-- 20.03.2008 12:31:58---------------------------------------------------
+#if DEBUG
+        clog << "PopShapeContext" << endl;
+#endif
 
-  -----------------------------------------------------------------------*/
-void DomainMapper_Impl::CopyTemporaryShapeText( uno::Reference< drawing::XShape > xShape )
-{
-    uno::Reference< text::XTextCopy >xShapeText( xShape, uno::UNO_QUERY );
-    uno::Reference< text::XTextCopy >xTempShapeText( m_xTemporaryShape, uno::UNO_QUERY );
-    if( xShapeText.is() && xTempShapeText.is() )
+    if ( m_bShapeContextAdded )
     {
-        xShapeText->copyText( xTempShapeText );
+        m_aTextAppendStack.pop();
+        m_bShapeContextAdded = false;
     }
-    try
-    {
-        uno::Reference< lang::XComponent >xTemp( m_xTemporaryShape, uno::UNO_QUERY );
-        if( xTemp.is() )
-            xTemp->dispose();
-    }
-    catch( const uno::Exception& )
-    {
-    }
-    m_xTemporaryShape = uno::Reference< drawing::XShape >();
-
+    m_bIsInShape = false;
 }
 /*-- 12.09.2006 08:07:55---------------------------------------------------
 
@@ -2952,6 +3043,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         bool bHyperlinks = false;
                         bool bFromOutline = false;
                         bool bFromEntries = false;
+                        sal_Int16 nMaxLevel = 10;
                         ::rtl::OUString sTemplate;
                         ::rtl::OUString sChapterNoSeparator;
     //                  \a Builds a table of figures but does not include the captions's label and number
@@ -3001,6 +3093,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if( lcl_FindInCommand( pContext->GetCommand(), 'o', sValue ))
                         {
                             bFromOutline = true;
+                            UniString sParam( sValue );
+                            xub_StrLen nIndex = 0;
+                            sParam.GetToken( 0, '-', nIndex );
+                            nMaxLevel = sal_Int16( sParam.Copy( nIndex ).ToInt32( ) );
                         }
     //                  \p Defines the separator between the table entry and its page number
                         if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
@@ -3048,6 +3144,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(::rtl::OUString()));
                         if( !bTableOfFigures )
                         {
+                            xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
                             xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
                             xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
                             if( sTemplate.getLength() )
@@ -3531,14 +3628,98 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
     }
     return bRet;
 }
+
+void DomainMapper_Impl::AddNewRedline(  )
+{
+    RedlineParamsPtr pNew( new RedlineParams );
+    pNew->m_nToken = ooxml::OOXML_mod;
+    if ( !m_bIsParaChange )
+    {
+#if DEBUG
+    clog << "REDLINE: Adding a new redline to stack" << endl;
+#endif
+        m_aRedlines.push_back( pNew );
+    }
+    else
+    {
+#if DEBUG
+    clog << "REDLINE: Setting a new paragraph redline" << endl;
+#endif
+        m_pParaRedline.swap( pNew );
+    }
+}
+
+RedlineParamsPtr DomainMapper_Impl::GetTopRedline(  )
+{
+    RedlineParamsPtr pResult;
+    if ( !m_bIsParaChange && m_aRedlines.size(  ) > 0 )
+        pResult = m_aRedlines.back(  );
+    else if ( m_bIsParaChange )
+        pResult = m_pParaRedline;
+    return pResult;
+}
+
+sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  )
+{
+    sal_Int32 nToken = 0;
+    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+    if ( pCurrent.get(  ) )
+        nToken = pCurrent->m_nToken;
+    return nToken;
+}
+
+void DomainMapper_Impl::SetCurrentRedlineAuthor( rtl::OUString sAuthor )
+{
+    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+    if ( pCurrent.get(  ) )
+        pCurrent->m_sAuthor = sAuthor;
+}
+
+void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
+{
+    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+    if ( pCurrent.get(  ) )
+        pCurrent->m_sDate = sDate;
+}
+
+void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
+{
+    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+    if ( pCurrent.get(  ) )
+        pCurrent->m_nId = sId;
+}
+
+void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
+{
+    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+    if ( pCurrent.get(  ) )
+        pCurrent->m_nToken = nToken;
+}
+
 /*-- 19.03.2008 11:35:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper_Impl::ResetRedlineProperties()
+void DomainMapper_Impl::RemoveCurrentRedline( )
 {
-    m_CurrentRedlineAuthor = m_CurrentRedlineDate = m_CurrentRedlineId = ::rtl::OUString();
-    n_CurrentRedlineToken = ooxml::OOXML_mod;
+    if ( m_aRedlines.size( ) > 0 )
+    {
+#if DEBUG
+        clog << "REDLINE: Removing back redline" << endl;
+#endif
+        m_aRedlines.pop_back( );
+    }
 }
 
+void DomainMapper_Impl::ResetParaRedline( )
+{
+    if ( m_pParaRedline.get( ) )
+    {
+#if DEBUG
+        clog << "REDLINE: Cleaning the para redline" << endl;
+#endif
+        RedlineParamsPtr pEmpty;
+        m_pParaRedline.swap( pEmpty );
+    }
+}
 
 }}

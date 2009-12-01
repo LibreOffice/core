@@ -369,6 +369,7 @@ public:
     void            SetReadOnly( BOOL bReadOnly )   { mbReadOnly = bReadOnly; }
     BOOL            IsReadOnly() const              { return mbReadOnly; }
 
+    using Control::ImplInitSettings;
     void            ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     USHORT          ImplGetTextStyle() const;
 

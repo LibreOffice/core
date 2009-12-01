@@ -66,6 +66,8 @@
 #include <memory>
 #include <stdlib.h>
 
+#include <iostream>
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -1827,19 +1829,11 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
              */
             if(aStartCellPam.Start()->nNode < aEndCellPam.End()->nNode)
             {
-                const SwNode& rStartNode = aStartCellPam.Start()->nNode.GetNode();
-                if(!rStartNode.IsTxtNode() ||
-                        !aEndCellPam.End()->nNode.GetNode().IsTxtNode())
-                {
-                    //start and end of the cell must be on a SwTxtNode
-                    bExcept = true;
-                    break;
-                }
                 // increment on each StartNode and decrement on each EndNode
                 // we must reach zero at the end and must not go below zero
                 long nOpenNodeBlock = 0;
                 SwNodeIndex aCellIndex = aStartCellPam.Start()->nNode;
-                while( ++aCellIndex < aEndCellPam.End()->nNode.GetIndex())
+                while( aCellIndex < aEndCellPam.End()->nNode.GetIndex())
                 {
                     if( aCellIndex.GetNode().IsStartNode() )
                         ++nOpenNodeBlock;
@@ -1850,6 +1844,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                         bExcept = true;
                         break;
                     }
+                    ++aCellIndex;
                 }
                 if( nOpenNodeBlock != 0)
                 {
@@ -1895,7 +1890,9 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                     //node border anyway
                 }
                 else
+                {
                     bExcept = true;
+                }
             }
            //now check if there's a need to insert another paragraph break
             if( aEndCellPam.End()->nContent.GetIndex() < aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len())
@@ -1952,7 +1949,22 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
         const beans::PropertyValue* pTableProperties = rTableProperties.getConstArray();
         sal_Int32 nProperty = 0;
         for( ; nProperty < rTableProperties.getLength(); ++nProperty)
-            xPrSet->setPropertyValue( pTableProperties[nProperty].Name, pTableProperties[nProperty].Value );
+        {
+            try
+            {
+                xPrSet->setPropertyValue( pTableProperties[nProperty].Name, pTableProperties[nProperty].Value );
+            }
+            catch ( const uno::Exception e )
+            {
+#if DEBUG
+                std::clog << "Exception when setting property: ";
+                std::clog << rtl::OUStringToOString( pTableProperties[nProperty].Name, RTL_TEXTENCODING_UTF8 ).getStr( );
+                std::clog << ". Message: ";
+                std::clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( );
+                std::clog << std::endl;
+#endif
+            }
+        }
 
         //apply row properties
         uno::Reference< table::XTableRows >  xRows = xRet->getRows();
@@ -2009,6 +2021,7 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
 //--<
 #endif
 
+
         //apply cell properties
         for( nRow = 0; nRow < rCellProperties.getLength(); ++nRow)
         {
@@ -2021,7 +2034,8 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                 uno::Reference< beans::XPropertySet > xCell( pTextTable->getCellByPosition(nCell, nRow), uno::UNO_QUERY );
                 for( nProperty = 0; nProperty < nCellProperties; ++nProperty)
                 {
-                    if(aCellProperties[nProperty].Name.equalsAsciiL(
+                    const OUString& rName = aCellProperties[nProperty].Name;
+                    if( rName.equalsAsciiL(
                                 RTL_CONSTASCII_STRINGPARAM ( "VerticalMerge")))
                     {
                         //determine left border position
@@ -2085,7 +2099,23 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                         }
                     }
                     else
-                        xCell->setPropertyValue(aCellProperties[nProperty].Name, aCellProperties[nProperty].Value);
+                    {
+                        try
+                        {
+                            xCell->setPropertyValue(rName, aCellProperties[nProperty].Value);
+                        }
+                        catch ( const uno::Exception e )
+                        {
+                            // Apply the paragraph and char properties to the cell's content
+                            uno::Reference< text::XText > xCellText( xCell, uno::UNO_QUERY );
+                            uno::Reference< text::XTextCursor > xCellCurs = xCellText->createTextCursor( );
+                            xCellCurs->gotoStart( false );
+                            xCellCurs->gotoEnd( true );
+
+                            uno::Reference< beans::XPropertySet > xCellTextProps( xCellCurs, uno::UNO_QUERY );
+                            xCellTextProps->setPropertyValue( rName, aCellProperties[nProperty].Value );
+                        }
+                    }
                 }
             }
         }

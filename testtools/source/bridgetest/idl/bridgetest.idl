@@ -72,6 +72,48 @@ struct TestSimple
     TestEnum                   Enum;
 };
 /**
+ * equal to max size returned in registers on x86_64
+ */
+struct SmallStruct
+{
+    hyper                      a;
+    hyper                      b;
+};
+/**
+ * equal to max size returned in registers on ia64
+ */
+struct MediumStruct
+{
+    hyper                      a;
+    hyper                      b;
+    hyper                      c;
+    hyper                      d;
+};
+/**
+ * bigger than max size returned in registers on ia64
+ */
+struct BigStruct
+{
+    hyper                      a;
+    hyper                      b;
+    hyper                      c;
+    hyper                      d;
+    hyper                      e;
+    hyper                      f;
+    hyper                      g;
+    hyper                      h;
+};
+/**
+ * all floats, ia64 handles them specially
+ */
+struct AllFloats
+{
+    float                      a;
+    float                      b;
+    float                      c;
+    float                      d;
+};
+/**
  * complex types adding string, inteface, any
  */
 struct TestElement : TestSimple
@@ -206,6 +248,26 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
                         [out] com::sun::star::uno::XInterface xInterface, [out] any aAny,
                         [out] sequence< TestElement > aSequence,
                         [out] TestData aStruct );
+
+    /**
+     * register return test 1
+     */
+    SmallStruct echoSmallStruct( [in] SmallStruct aStruct );
+
+    /**
+     * register return test 2
+     */
+    MediumStruct echoMediumStruct( [in] MediumStruct aStruct );
+
+    /**
+     * register return test 3
+     */
+    BigStruct echoBigStruct( [in] BigStruct aStruct );
+
+    /**
+     * register return test 4
+     */
+    AllFloats echoAllFloats( [in] AllFloats aStruct );
 
     [attribute] boolean                  Bool;
     [attribute] byte                     Byte;

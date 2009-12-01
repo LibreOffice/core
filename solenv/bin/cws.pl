@@ -59,9 +59,11 @@ use Cws;
 
 #### globals ####
 
-# TODO: replace dummy vales with actual SVN->hg migration milestones
+# TODO: replace dummy vales with actual SVN->hg and source_config migration milestones
 my $dev300_migration_milestone = 'm64';
+my $dev300_source_config_milestone = 'm65';
 my $ooo320_migration_milestone = 'm999';
+my $ooo320_source_config_milestone = 'm999';
 
 # valid command with possible abbreviations
 my @valid_commands = (
@@ -101,6 +103,9 @@ for (@valid_commands) {
 
 #  set by --debug switch
 my $debug = 0;
+#  set by --profile switch
+my $profile = 0;
+
 
 #### main ####
 
@@ -126,6 +131,7 @@ sub parse_command_line
                                              'migration',
                                              'childworkspace|child|c=s',
                                              'debug',
+                                             'profile',
                                              'commit|C',
                                              'switch|s',
                                              'platforms|p=s',
@@ -193,6 +199,10 @@ sub verify_options
     foreach (keys %{$options_ref}) {
         if ( /debug/ ) {
             $debug = 1;
+            next;
+        }
+        if ( /profile/ ) {
+            $profile = 1;
             next;
         }
         if (!exists $valid_command_options_hash{$_}) {
@@ -576,7 +586,7 @@ sub hg_local_clone_repository
         hg_strip($dest, $revision);
     }
     my $t2 = Benchmark->new();
-    print_time_elapsed($t1, $t2);
+    print_time_elapsed($t1, $t2) if $profile;
 }
 
 sub hg_lan_clone_repository
@@ -589,7 +599,7 @@ sub hg_lan_clone_repository
     print_message("... clone LAN repository '$lan_source' to '$dest'");
     hg_clone($lan_source, $dest, "-U -r $milestone_tag");
     my $t2 = Benchmark->new();
-    print_time_elapsed($t1, $t2);
+    print_time_elapsed($t1, $t2) if $profile;
 }
 
 sub hg_remote_pull_repository
@@ -601,7 +611,7 @@ sub hg_remote_pull_repository
     print_message("... pull from REMOTE repository '$remote_source' to '$dest'");
     hg_pull($dest, $remote_source);
     my $t2 = Benchmark->new();
-    print_time_elapsed($t1, $t2);
+    print_time_elapsed($t1, $t2) if $profile;
 }
 
 sub hg_update_repository
@@ -612,7 +622,7 @@ sub hg_update_repository
     print_message("... update repository '$dest'");
     hg_update($dest);
     my $t2 = Benchmark->new();
-    print_time_elapsed($t1, $t2);
+    print_time_elapsed($t1, $t2) if $profile;
 }
 
 # Check if clone source and destination are on the same filesystem,
@@ -1312,10 +1322,11 @@ sub relink_workspace {
 
 sub update_solver
 {
-    my $platform   = shift;
-    my $source     = shift;
-    my $solver     = shift;
-    my $milestone  = shift;
+    my $platform      = shift;
+    my $source        = shift;
+    my $solver        = shift;
+    my $milestone     = shift;
+    my $source_config = shift;
 
     my @zip_sub_dirs = ('bin', 'doc', 'idl', 'inc', 'lib', 'par', 'pck', 'pdb', 'pus', 'rdb', 'res', 'xml', 'sdf');
 
@@ -1344,6 +1355,7 @@ sub update_solver
     my $nzips = @zips;
     print_message("... unzipping $nzips zip archives for platform '$platform'");
 
+
     foreach(@zips) {
         my $zip = Archive::Zip->new();
         unless ( $zip->read( "$platform_source/$_" ) == AZ_OK ) {
@@ -1351,7 +1363,8 @@ sub update_solver
         }
         # TODO: check for erorrs
         foreach (@zip_sub_dirs) {
-            unless ( $zip->extractTree($_, "$platform_solver/$_.$milestone") == AZ_OK ) {
+            my $extract_destination = $source_config ? "$platform_solver/$_" : "$platform_solver/$_.$milestone";
+            unless ( $zip->extractTree($_, $extract_destination) == AZ_OK ) {
                 print_error("Can't extract stream from zip file '$platform_source/$_': $!.", 44);
             }
         }
@@ -1453,9 +1466,38 @@ sub get_scm_for_milestone
         }
     }
     else {
-        $scm = 'SVN'
+        $scm = 'SVN';
     }
     return $scm;
+}
+
+# TODO: special provisions for "source_config" migration, remove this
+# some time after migration
+sub get_source_config_for_milestone
+{
+    my $masterws = shift;
+    my $milestone = shift;
+
+    my $milestone_sequence_number = extract_milestone_sequence_number($milestone);
+    my $dev300_migration_sequence_number = extract_milestone_sequence_number($dev300_source_config_milestone);
+    my $ooo320_migration_sequence_number = extract_milestone_sequence_number($ooo320_source_config_milestone);
+
+    my $source_config = 0;
+
+    if ( $masterws eq 'DEV300' ) {
+        if ( $milestone_sequence_number >= $dev300_migration_sequence_number ) {
+            $source_config = 1;
+        }
+    }
+    elsif ( $masterws eq 'OOO320' ) {
+        if ( $milestone_sequence_number >= $ooo320_migration_sequence_number ) {
+            $source_config = '1';
+        }
+    }
+    else {
+        $source_config = 0;
+    }
+    return $source_config;
 }
 
 sub extract_milestone_sequence_number
@@ -2264,11 +2306,24 @@ sub do_fetch
                     hg_clone_repository('ooo', $cws, "$work_master/ooo", $clone_milestone_only);
                     hg_clone_repository('so', $cws, "$work_master/sun", $clone_milestone_only);
                 }
-                my $linkdir = "$work_master/src.$milestone";
-                if ( !mkdir($linkdir) ) {
-                    print_error("Can't create directory '$linkdir': $!.", 8);
+                if ( get_source_config_for_milestone($masterws, $milestone) ) {
+                    # write source_config file
+                    my $source_config_file = "$work_master/source_config";
+                    if ( !open(SOURCE_CONFIG, ">$source_config_file") ) {
+                        print_error("Can't create source_config file '$source_config_file': $!.", 8);
+                    }
+                    print SOURCE_CONFIG "[repositories]\n";
+                    print SOURCE_CONFIG "ooo=active\n";
+                    print SOURCE_CONFIG "sun=active\n";
+                    close(SOURCE_CONFIG);
                 }
-                relink_workspace($linkdir);
+                else {
+                    my $linkdir = "$work_master/src.$milestone";
+                    if ( !mkdir($linkdir) ) {
+                        print_error("Can't create directory '$linkdir': $!.", 8);
+                    }
+                    relink_workspace($linkdir);
+                }
             }
             else {
                 if ( $scm eq 'SVN' ) {
@@ -2294,12 +2349,13 @@ sub do_fetch
                 print_error("Can't create directory '$solver': $!.", 8);
             }
         }
+        my $source_config = get_source_config_for_milestone($masterws, $milestone);
         foreach(@platforms) {
             my $time_solver_start = Benchmark->new();
             print_message("... copying platform solver '$_'.");
-            update_solver($_, $prebuild_dir, $solver, $milestone);
+            update_solver($_, $prebuild_dir, $solver, $milestone, $source_config);
             my $time_solver_stop = Benchmark->new();
-            print_time_elapsed($time_solver_start, $time_solver_stop);
+            print_time_elapsed($time_solver_start, $time_solver_stop) if $profile;
         }
     }
     my $time_fetch_stop = Benchmark->new();

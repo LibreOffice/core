@@ -78,6 +78,8 @@ public:
 //                      writerfilter::Reference<Properties>::Pointer_t ref);
 
     sal_uInt32          size() const;
+    rtl::OUString GetStyleName( sal_Int32 nListId );
+    void CreateNumberingRules( );
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >
             GetNumberingRules(sal_Int32 nListId);
 

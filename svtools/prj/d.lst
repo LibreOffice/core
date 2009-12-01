@@ -210,9 +210,6 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\instrm.hxx %_DEST%\inc%_EXT%\svtools\instrm.hxx
 ..\inc\outstrm.hxx %_DEST%\inc%_EXT%\svtools\outstrm.hxx
 
-..\inc\svtools\section.hxx %_DEST%\inc%_EXT%\svtools\section.hxx
-..\inc\sectctr.hxx %_DEST%\inc%_EXT%\svtools\sectctr.hxx
-..\inc\privsplt.hxx %_DEST%\inc%_EXT%\svtools\privsplt.hxx
 ..\inc\expander.hxx %_DEST%\inc%_EXT%\svtools\expander.hxx
 ..\source\svsql\converter.hxx %_DEST%\inc%_EXT%\svtools\converter.hxx
 

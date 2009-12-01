@@ -163,12 +163,12 @@ void setupMethodStubs( functor_vector_type& res )
                    xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                    MetricVector* pVector = NULL, String* pDisplayText = NULL );
     */
-    add(res,
-        "DrawText",
-        boost::bind(
-            &OutputDevice::DrawText,
-            _1,
-            aPt1, aString, (USHORT)0, aString.Len(), (MetricVector*)0, (String*)0 ));
+//    add(res,
+//        "DrawText",
+//        boost::bind(
+//            &OutputDevice::DrawText,
+//            _1,
+//            aPt1, aString, (USHORT)0, aString.Len(), (MetricVector*)0, (String*)0, (vcl::ITextLayout*)0 ));
 
     /* void DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,
