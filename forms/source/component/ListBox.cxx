@@ -1037,10 +1037,10 @@ namespace frm
 
         Sequence< sal_Int16 > aSelectionIndicies;
 
-        // Bei NULL-Eintraegen Selektion aufheben!
         ORowSetValue aCurrentValue;
-        aCurrentValue.fill( xBoundField->getPropertyValue( PROPERTY_VALUE ) );
+        aCurrentValue.fill( getFieldType(), m_xColumn );
 
+        // reset selection for NULL values
         if ( aCurrentValue.isNull() )
         {
             if ( m_nNULLPos != -1 )
@@ -1085,6 +1085,13 @@ namespace frm
         }
 
         return aValue;
+    }
+
+    //--------------------------------------------------------------------
+    void OListBoxModel::resetNoBroadcast()
+    {
+        OBoundControlModel::resetNoBroadcast();
+        m_aSaveValue.setNull();
     }
 
     //--------------------------------------------------------------------
