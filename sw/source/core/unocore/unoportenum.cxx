@@ -831,7 +831,6 @@ lcl_ExportHints(
                 case RES_TXTATR_AUTOFMT:
                 case RES_TXTATR_INETFMT:
                 case RES_TXTATR_CHARFMT:
-                case RES_TXTATR_UNKNOWN_CONTAINER:
                 break; // these are handled as properties of a "Text" portion
                 default:
                     DBG_ERROR("unknown attribute");
