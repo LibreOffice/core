@@ -127,7 +127,7 @@ extern VendorSupportMapEntry gVendorMap[];
 
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
-rtl::OUString decodeOutput(const rtl::OString& s);
+bool decodeOutput(const rtl::OString& s, rtl::OUString* out);
 
 
 
@@ -452,7 +452,9 @@ bool getJavaProps(const OUString & exePath,
             break;
         JFW_TRACE2(OString("[Java framework] line:\" ")
                + aLine + OString(" \".\n"));
-        OUString sLine = decodeOutput(aLine);
+        OUString sLine;
+        if (!decodeOutput(aLine, &sLine))
+            continue;
         JFW_TRACE2(OString("[Java framework] line:\" ")
                + OString( CHAR_POINTER(sLine)) + OString(" \".\n"));
         sLine = sLine.trim();
@@ -486,8 +488,9 @@ bool getJavaProps(const OUString & exePath,
     readable strings. The strings are encoded as integer values separated
     by spaces.
  */
-rtl::OUString decodeOutput(const rtl::OString& s)
+bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
 {
+    OSL_ASSERT(out != 0);
     OUStringBuffer buff(512);
     sal_Int32 nIndex = 0;
     do
@@ -495,14 +498,19 @@ rtl::OUString decodeOutput(const rtl::OString& s)
         OString aToken = s.getToken( 0, ' ', nIndex );
         if (aToken.getLength())
         {
+            for (sal_Int32 i = 0; i < aToken.getLength(); ++i)
+            {
+                if (aToken[i] < '0' || aToken[i] > '9')
+                    return false;
+            }
             sal_Unicode value = (sal_Unicode)(aToken.toInt32());
             buff.append(value);
         }
     } while (nIndex >= 0);
 
-    OUString sDecoded(buff.makeStringAndClear());
-    JFW_TRACE2(sDecoded);
-    return sDecoded;
+    *out = buff.makeStringAndClear();
+    JFW_TRACE2(*out);
+    return true;
 }
 
 

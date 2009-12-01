@@ -49,16 +49,11 @@ using namespace ::rtl;
 
 typedef ::std::vector< ::rtl::OString > OSVector;
 
-typedef ::std::pair< ::rtl::OString, OSVector > DataPair;
-
-typedef ::std::vector< DataPair > DataVector;
-
 struct CompDescriptor {
     OString sImplementationName;
     OString sComponentName;
     OString sLoaderName;
     OSVector vSupportedServices;
-    DataVector vData;
 };
 
 typedef ::std::vector< CompDescriptor > CDescrVector;
@@ -147,28 +142,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         OString sToken(sTmp);
         if (sTmp.pData->buffer[sTmp.getLength()-1] == '\x0D')
             sToken = sTmp.copy(0, sTmp.getLength()-1);
-
-        if (sToken.indexOf("[Data]") >= 0) {
-            do {
-                OString sTmp2 = sDescr.getToken(0, '\x0A', nTokenIndex);
-                OString sToken2(sTmp2);
-                if (sTmp2.pData->buffer[sTmp2.getLength()-1] == '\x0D')
-                    sToken2 = sTmp2.copy(0, sTmp2.getLength()-1);
-
-                if ((sToken2.getLength() > 0) && (sToken2.pData->buffer[0] != '[')) {
-                    OString dataKey(sToken2.copy(0, sToken2.indexOf('=')));
-                    OString sValues(sToken2.copy(sToken2.indexOf('=')+1));
-                    sal_Int32 nVIndex = 0;
-                    OSVector vValues;
-                    do {
-                        OString sValue = sValues.getToken(0, ';', nVIndex);
-                        vValues.push_back(sValue);
-                    } while (nVIndex >= 0 );
-                    descr.vData.push_back(DataPair(dataKey, vValues));
-                } else
-                    break;
-            } while (nTokenIndex >= 0 );
-        }
         if ( sToken.indexOf("[ComponentDescriptor]") >= 0) {
             if (bFirst)
                 bFirst = false;
@@ -246,41 +219,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         key.createKey(usKeyName, subKey);
         subKey.setValue(OUString(), RG_VALUETYPE_STRING,
                         (sal_Char*)sCompName.getStr(), sCompName.getLength()+1);
-
-        if ((*comp_iter).vData.size() > 0) {
-            usKeyName = OUSTR("DATA");
-            RegistryKey dataKey, valueKey;
-            key.createKey(usKeyName, dataKey);
-
-            DataVector::const_iterator data_iter = ((*comp_iter).vData).begin();
-            do {
-                OUString sDataKey(OSToOUS((*data_iter).first));
-                dataKey.createKey(sDataKey, valueKey);
-
-                OSVector::const_iterator value_iter = ((*data_iter).second).begin();
-                int vlen = (*data_iter).second.size();
-                sal_Char** pValueList = (sal_Char**)rtl_allocateZeroMemory(
-                    vlen * sizeof(sal_Char*));
-                int i = 0;
-                do {
-                    pValueList[i] = (sal_Char*)rtl_allocateZeroMemory(
-                        (*value_iter).getLength()+1 * sizeof(sal_Char));
-                    rtl_copyMemory(pValueList[i], (sal_Char*)(*value_iter).getStr(),
-                               (*value_iter).getLength()+1);
-                    i++;
-                    value_iter++;
-                } while (value_iter != (*data_iter).second.end());
-
-                valueKey.setStringListValue(OUString(), pValueList, vlen);
-
-                // free memory
-                for (i=0; i<vlen; i++)
-                    rtl_freeMemory(pValueList[i]);
-                rtl_freeMemory(pValueList);
-
-                data_iter++;
-            } while (data_iter != (*comp_iter).vData.end());
-        }
 
         usKeyName = OUSTR("UNO/SERVICES");
         key.createKey(usKeyName, subKey);

@@ -814,6 +814,14 @@ oslFileError SAL_CALL osl_getFileSize( oslFileHandle Handle, sal_uInt64 *pSize )
  */
 #define osl_File_MapFlag_RandomAccess ((sal_uInt32)(0x1))
 
+/** Map flag denoting that the mapped address space will be accessed by the
+    process soon (and it is advantageous for the operating system to already
+    start paging in the data).
+
+    @since UDK 3.2.12
+ */
+#define osl_File_MapFlag_WillNeed ((sal_uInt32)(0x2))
+
 /** Map a shared file into memory.
 
     @since UDK 3.2.10
