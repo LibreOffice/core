@@ -196,9 +196,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 //rSet.DisableItem( SID_ATTRIBUTES_AREA ); // wieder raus!
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
             }
-            if( !pObj->ISA( SdrPathObj ) &&
-                !aInfoRec.bCanConvToPath ||
-                pObj->ISA( SdrObjGroup ) ) // Solange es JOE fehlerhaft behandelt!
+            if( (!pObj->ISA( SdrPathObj ) && !aInfoRec.bCanConvToPath) || pObj->ISA( SdrObjGroup ) ) // Solange es JOE fehlerhaft behandelt!
             { // JOE: Ein Gruppenobjekt kann eben u.U. in ein PathObj gewandelt werden
                 rSet.DisableItem( SID_LINEEND_POLYGON );
             }

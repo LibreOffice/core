@@ -1076,7 +1076,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
     // No selection.  Is there an insertion indicator?
     else if (mrSlideSorter.GetView().GetOverlay()
-        .GetInsertionIndicatorOverlay().IsShowing())
+        .GetInsertionIndicatorOverlay().isVisible())
     {
         // Select the page before the insertion indicator.
         nInsertionIndex = mrSlideSorter.GetView().GetOverlay()

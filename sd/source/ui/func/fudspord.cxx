@@ -116,7 +116,7 @@ BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
     SdrPageView* pPV;
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( mpView->PickObj(aPnt, pPickObj, pPV) )
+    if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), pPickObj, pPV) )
     {
         if (mpRefObj != pPickObj)
         {
@@ -153,7 +153,7 @@ BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
     SdrPageView* pPV = NULL;
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( mpView->PickObj(aPnt, mpRefObj, pPV) )
+    if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), mpRefObj, pPV) )
     {
         if (nSlotId == SID_BEFORE_OBJ)
         {

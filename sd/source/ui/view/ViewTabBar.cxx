@@ -442,7 +442,7 @@ bool ViewTabBar::ActivatePage (void)
         {
             xView = Reference<XView>(xConfigurationController->getResource(
                 ResourceId::create(
-                    comphelper_getProcessComponentContext(),
+                    ::comphelper::getProcessComponentContext(),
                     FrameworkHelper::msCenterPaneURL)),
                 UNO_QUERY);
         }

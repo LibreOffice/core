@@ -658,7 +658,16 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     UnlockInput();
                                 }
                                 else
-                                    nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                {
+                                    if( (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+                                    {
+                                        nSdResId = RID_DRAW_TABLEOBJ_INSIDE_POPUP;
+                                    }
+                                    else
+                                    {
+                                        nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                    }
+                                }
                             }
                         }
                         else

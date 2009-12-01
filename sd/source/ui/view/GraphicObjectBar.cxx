@@ -39,14 +39,10 @@
 #include <svtools/itempool.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/basedlgs.hxx>
-#ifndef _SVDOPATH_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
 #include <svx/grfflt.hxx>
 #include <svtools/aeitem.hxx>
 #include <svx/grafctrl.hxx>
@@ -71,8 +67,6 @@ using namespace sd;
 
 namespace sd {
 
-
-SFX_DECL_TYPE( 13 );
 
 
 // -----------------------

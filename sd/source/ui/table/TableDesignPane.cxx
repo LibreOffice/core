@@ -127,7 +127,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     mxControls[CT_TABLE_STYLES].reset( pValueSet );
     if( !mbModal )
     {
-        pValueSet->SetStyle( pValueSet->GetStyle() & ~(WB_ITEMBORDER|WB_BORDER) | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_NOBORDER );
+        pValueSet->SetStyle( (pValueSet->GetStyle() & ~(WB_ITEMBORDER|WB_BORDER)) | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_NOBORDER );
         pValueSet->SetColor();
         pValueSet->SetExtraSpacing(8);
     }

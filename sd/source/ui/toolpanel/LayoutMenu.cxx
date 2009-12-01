@@ -241,8 +241,7 @@ LayoutMenu::LayoutMenu (
       mbIsMainViewChangePending(false)
 {
     SetStyle (
-        GetStyle()
-        & ~(WB_ITEMBORDER)
+        ( GetStyle()  & ~(WB_ITEMBORDER) )
         | WB_TABSTOP
         | WB_NO_DIRECTSELECT
         );
@@ -752,7 +751,7 @@ void LayoutMenu::Fill (void)
         Reference<XControllerManager> xControllerManager (
             Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY_THROW);
         Reference<XResourceId> xPaneId (ResourceId::create(
-            comphelper_getProcessComponentContext(),
+            ::comphelper::getProcessComponentContext(),
             FrameworkHelper::msCenterPaneURL));
         Reference<XView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
         if (xView.is())

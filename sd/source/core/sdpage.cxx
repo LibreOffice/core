@@ -2834,7 +2834,7 @@ bool SdPage::checkVisibility(
         return false;
 
     const SdrPage* pVisualizedPage = GetSdrPageFromXDrawPage(rOriginal.GetObjectContact().getViewInformation2D().getVisualizedPage());
-    const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter());
+    const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter() || rOriginal.GetObjectContact().isOutputToPDFFile());
     const SdrPageView* pPageView = rOriginal.GetObjectContact().TryToGetSdrPageView();
     const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
 

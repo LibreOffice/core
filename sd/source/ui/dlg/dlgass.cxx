@@ -304,6 +304,9 @@ public:
     OKButton            maFinishButton;
     SdDocPreviewWin     maPreview;
 
+    String              maCreateStr;
+    String              maOpenStr;
+
     // Seite 1
     FixedBitmap*        mpPage1FB;
     FixedLine*          mpPage1ArtFL;
@@ -382,7 +385,9 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     maLastPageButton(pWindow,SdResId(BUT_LAST)),
     maNextPageButton(pWindow,SdResId(BUT_NEXT)),
     maFinishButton(pWindow,SdResId(BUT_FINISH)),
-    maPreview(pWindow,SdResId(CT_PREVIEW))
+    maPreview(pWindow,SdResId(CT_PREVIEW)),
+    maCreateStr(SdResId(STR_CREATE)),
+    maOpenStr(SdResId(STR_OPEN))
 {
     maPageListFile += sal_Unicode('?'),
     mbRecentDocumentsReady = FALSE;
@@ -968,6 +973,11 @@ void AssistentDlgImpl::SetStartType( StartType eType )
     mpPage1TemplateLB->Show(eType == ST_TEMPLATE);
     mpPage1OpenLB->Show(eType == ST_OPEN);
     mpPage1OpenPB->Show(eType == ST_OPEN);
+
+    if (eType == ST_OPEN)
+        maFinishButton.SetText(maOpenStr);
+    else
+        maFinishButton.SetText(maCreateStr);
 }
 
 StartType AssistentDlgImpl::GetStartType()

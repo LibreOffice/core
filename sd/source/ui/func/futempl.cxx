@@ -337,18 +337,18 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if (aName == String(SdResId(STR_PSEUDOSHEET_TITLE)))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_TITLE;
                     }
                     else if (aName == String(SdResId(STR_PSEUDOSHEET_SUBTITLE)))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_SUBTITLE;
                     }
                     else if (aName ==
                              String(SdResId(STR_PSEUDOSHEET_BACKGROUND)))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_2;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND;
                         ePO    = PO_BACKGROUND;
                     }
                     else if (aName ==
@@ -360,13 +360,13 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     else if (aName ==
                              String(SdResId(STR_PSEUDOSHEET_NOTES)))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_NOTES;
                     }
                     else if(aName.Search(String(SdResId(STR_PSEUDOSHEET_OUTLINE))) !=
                             STRING_NOTFOUND)
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
 
                         String aOutlineStr((SdResId(STR_PSEUDOSHEET_OUTLINE)));
                         // die Nummer ermitteln; ein Leerzeichen zwischen
@@ -696,9 +696,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
-            if (mpView->AreObjectsMarked() &&
-                mpView->GetMarkedObjectList().GetMarkCount() == 1 ||
-                mpView->ISA(OutlineView))
+            if ((mpView->AreObjectsMarked() && mpView->GetMarkedObjectList().GetMarkCount() == 1) ||
+                 mpView->ISA(OutlineView))
             {
                 pStyleSheet = mpView->GetStyleSheet();
 

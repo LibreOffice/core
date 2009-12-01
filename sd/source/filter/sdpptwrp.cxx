@@ -108,7 +108,7 @@ sal_Bool SdPPTFilter::Import()
             aConfigData[ 0 ] = aPropValue;
 
             if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
-                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT );
+                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             else
             {
                 MSFilterTracer aTracer( aTraceConfigPath, &aConfigData );
@@ -116,7 +116,7 @@ sal_Bool SdPPTFilter::Import()
 
                 SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium, &aTracer );
                 if ( ( bRet = pImport->Import() ) == sal_False )
-                    mrMedium.SetError( SVSTREAM_WRONGVERSION );
+                    mrMedium.SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
                 aTracer.EndTracing();
                 delete pImport;

@@ -90,11 +90,9 @@ PageObjectViewObjectContact::PageObjectViewObjectContact (
     const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : ViewObjectContactOfPageObj(rObjectContact, rViewContact),
       mbInDestructor(false),
-      mbIsBackgroundColorUpdatePending(true),
       mxCurrentPageContents(),
       mpCache(rpCache),
-      mpProperties(rpProperties),
-      maBackgroundColor()
+      mpProperties(rpProperties)
 {
     SharedPageDescriptor pDescriptor (GetPageDescriptor());
     OSL_ASSERT(pDescriptor.get()!=NULL);
@@ -1139,71 +1137,128 @@ void PageObjectViewObjectContact::ActionChanged (void)
             GetPage());
     }
 
-    mbIsBackgroundColorUpdatePending = true;
-
     // call parent
     ViewObjectContactOfPageObj::ActionChanged();
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// helper MouseOverEffectPrimitive
+//
+// Used to allow view-dependent primitive definition. For that purpose, the
+// initially created primitive (here: in createMouseOverEffectPrimitive2DSequence())
+// always has to be view-independent, but the decomposition is made view-dependent.
+// Very simple primitive which just remembers the discrete data and applies
+// it at decomposition time.
 
-
-
-void PageObjectViewObjectContact::PaintMouseOverEffect (
-    OutputDevice& rDevice,
-    bool bVisible) const
+class MouseOverEffectPrimitive : public drawinglayer::primitive2d::BasePrimitive2D
 {
-    // When the selection frame is painted the mouse over frame is not
-    // visible and does not have to be painted.
-    if (GetPageDescriptor()->IsSelected())
-        if (mpProperties.get()!=NULL && mpProperties->IsShowSelection())
-            return;
+private:
+    basegfx::B2DRange           maLogicRange;
+    sal_uInt32                  mnDiscreteOffset;
+    sal_uInt32                  mnDiscreteWidth;
+    basegfx::BColor             maRGBColor;
 
-    ULONG nPreviousDrawMode = rDevice.GetDrawMode();
-    rDevice.SetDrawMode (DRAWMODE_DEFAULT);
-    Rectangle aInner (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
-    rDevice.EnableMapMode (FALSE);
+protected:
+    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
-    Color aSelectionColor (GetColor(rDevice, CS_SELECTION));
-    Color aBackgroundColor (GetColor(rDevice, CS_BACKGROUND));
-    Color aFrameColor (bVisible ? aSelectionColor : aBackgroundColor);
-    Color aCornerColor (aBackgroundColor);
+public:
+    MouseOverEffectPrimitive(
+        const basegfx::B2DRange& rLogicRange,
+        sal_uInt32 nDiscreteOffset,
+        sal_uInt32 nDiscreteWidth,
+        const basegfx::BColor& rRGBColor)
+    :   drawinglayer::primitive2d::BasePrimitive2D(),
+        maLogicRange(rLogicRange),
+        mnDiscreteOffset(nDiscreteOffset),
+        mnDiscreteWidth(nDiscreteWidth),
+        maRGBColor(rRGBColor)
+    {}
 
-    rDevice.SetFillColor ();
-    rDevice.SetLineColor (aFrameColor);
+    // data access
+    const basegfx::B2DRange& getLogicRange() const { return maLogicRange; }
+    sal_uInt32 getDiscreteOffset() const { return mnDiscreteOffset; }
+    sal_uInt32 getDiscreteWidth() const { return mnDiscreteWidth; }
+    const basegfx::BColor& getRGBColor() const { return maRGBColor; }
 
-    // Paint the frame.
-    for (int nOffset=mnMouseOverEffectOffset;
-         nOffset<mnMouseOverEffectOffset+mnMouseOverEffectThickness;
-         nOffset++)
+    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
+
+    DeclPrimitrive2DIDBlock()
+};
+
+drawinglayer::primitive2d::Primitive2DSequence MouseOverEffectPrimitive::createLocalDecomposition(
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
+{
+    // get logic sizes in object coordinate system
+    const double fDiscreteWidth((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+    const double fOffset(fDiscreteWidth * getDiscreteOffset());
+    const double fWidth(fDiscreteWidth * getDiscreteWidth());
+
+    // create range (one pixel less to get a good fitting)
+    basegfx::B2DRange aRange(
+        getLogicRange().getMinimum(),
+        getLogicRange().getMaximum() - basegfx::B2DTuple(fDiscreteWidth, fDiscreteWidth));
+
+    // grow range
+    aRange.grow(fOffset - (fWidth * 0.5));
+
+    // create fat line with parameters. The formerly hand-painted edge
+    // roundings will now be done using rounded edges of this fat line
+    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRange));
+    const drawinglayer::attribute::LineAttribute aLineAttribute(getRGBColor(), fWidth);
+    const drawinglayer::primitive2d::Primitive2DReference xReference(
+        new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
+            aPolygon,
+            aLineAttribute));
+
+    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+}
+
+bool MouseOverEffectPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
+{
+    if(drawinglayer::primitive2d::BasePrimitive2D::operator==(rPrimitive))
     {
-        Rectangle aFrame (aInner);
-        aFrame.Left() -= nOffset;
-        aFrame.Top() -= nOffset;
-        aFrame.Right() += nOffset;
-        aFrame.Bottom() += nOffset;
-        rDevice.DrawRect (rDevice.PixelToLogic(aFrame));
+        const MouseOverEffectPrimitive& rCompare = static_cast< const MouseOverEffectPrimitive& >(rPrimitive);
+
+        return (getLogicRange() == rCompare.getLogicRange()
+            && getDiscreteOffset() == rCompare.getDiscreteOffset()
+            && getDiscreteWidth() == rCompare.getDiscreteWidth()
+            && getRGBColor() == rCompare.getRGBColor());
     }
 
-    // Paint the four corner pixels in backround color for a rounded effect.
-    int nFrameWidth (mnMouseOverEffectOffset
-        + mnMouseOverEffectThickness - 1);
-    Rectangle aOuter (aInner);
-    aOuter.Left() -= nFrameWidth;
-    aOuter.Top() -= nFrameWidth;
-    aOuter.Right() += nFrameWidth;
-    aOuter.Bottom() += nFrameWidth;
-    Point aCorner (aOuter.TopLeft());
+    return false;
+}
 
-    rDevice.DrawPixel (aCorner, aCornerColor);
-    aCorner = aOuter.TopRight();
-    rDevice.DrawPixel (aCorner, aCornerColor);
-    aCorner = aOuter.BottomLeft();
-    rDevice.DrawPixel (aCorner, aCornerColor);
-    aCorner = aOuter.BottomRight();
-    rDevice.DrawPixel (aCorner, aCornerColor);
+ImplPrimitrive2DIDBlock(MouseOverEffectPrimitive, PRIMITIVE2D_ID_SDMOUSEOVEREFFECTPRIMITIVE)
 
-    rDevice.EnableMapMode (TRUE);
-    rDevice.SetDrawMode(nPreviousDrawMode);
+//////////////////////////////////////////////////////////////////////////////
+
+drawinglayer::primitive2d::Primitive2DSequence PageObjectViewObjectContact::createMouseOverEffectPrimitive2DSequence()
+{
+    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+
+    if(GetPageDescriptor()->IsSelected() && mpProperties.get() && mpProperties->IsShowSelection())
+    {
+        // When the selection frame is visualized the mouse over frame is not
+        // visible and does not have to be created.
+    }
+    else
+    {
+        const PageObjectViewContact& rPaObVOC(static_cast<PageObjectViewContact&>(GetViewContact()));
+        const Rectangle aBoundingBox(rPaObVOC.GetPageObject().GetLastBoundRect());
+        const basegfx::B2DRange aLogicRange(aBoundingBox.Left(), aBoundingBox.Top(), aBoundingBox.Right(), aBoundingBox.Bottom());
+        const basegfx::BColor aSelectionColor(mpProperties->GetSelectionColor().getBColor());
+        const drawinglayer::primitive2d::Primitive2DReference aReference(
+            new MouseOverEffectPrimitive(
+                aLogicRange,
+                mnMouseOverEffectOffset,
+                mnMouseOverEffectThickness,
+                aSelectionColor));
+
+        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+    }
+
+    return aRetval;
 }
 
 
@@ -1293,54 +1348,6 @@ model::SharedPageDescriptor
     PageObject& rPageObject (
         static_cast<PageObject&>(rViewContact.GetPageObject()));
     return rPageObject.GetDescriptor();
-}
-
-
-
-
-
-Color PageObjectViewObjectContact::GetColor (
-    const OutputDevice& rDevice,
-    const ColorSpec eSpec,
-    const double nOpacity) const
-{
-    (void)rDevice;
-    if (mbIsBackgroundColorUpdatePending)
-    {
-        mbIsBackgroundColorUpdatePending = false;
-        maBackgroundColor = mpProperties->GetBackgroundColor();
-    }
-
-    Color aColor;
-
-    switch (eSpec)
-    {
-        case CS_SELECTION:
-            aColor = mpProperties->GetSelectionColor();
-            break;
-
-        case CS_BACKGROUND:
-            if (mpProperties.get()!=NULL
-                && mpProperties->IsHighlightCurrentSlide()
-                && GetPageDescriptor()->IsCurrentPage())
-            {
-                aColor = mpProperties->GetHighlightColor();
-            }
-            else
-                aColor = maBackgroundColor;
-            break;
-
-        case CS_WINDOW:
-            aColor = maBackgroundColor;
-            break;
-
-        case CS_TEXT:
-        default:
-            aColor = mpProperties->GetTextColor();
-            break;
-    }
-    aColor.Merge(maBackgroundColor, BYTE(255*(nOpacity) + 0.5));
-    return aColor;
 }
 
 

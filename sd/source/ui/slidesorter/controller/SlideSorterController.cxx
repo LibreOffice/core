@@ -431,7 +431,7 @@ bool SlideSorterController::Command (
                 // would take place.
                 mrView.GetOverlay().GetInsertionIndicatorOverlay().SetPosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()));
-                mrView.GetOverlay().GetInsertionIndicatorOverlay().Show();
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().setVisible(true);
             }
 
             pWindow->ReleaseMouse();
@@ -477,7 +477,7 @@ bool SlideSorterController::Command (
                 // finds the right place to insert a new slide.
                 GetSelectionManager()->SetInsertionPosition(
                     mrView.GetOverlay().GetInsertionIndicatorOverlay().GetInsertionPageIndex());
-                mrView.GetOverlay().GetInsertionIndicatorOverlay().Hide();
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().setVisible(false);
             }
             bEventHasBeenHandled = true;
         }

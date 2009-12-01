@@ -565,7 +565,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 BOOL        bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
 
                 // check handle insert
-                if( !nRet && ( bXFillExchange && ( SDRDRAG_GRADIENT == GetDragMode() ) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) ) )
+                if( !nRet && ( (bXFillExchange && ( SDRDRAG_GRADIENT == GetDragMode() )) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) ) )
                 {
                     const SdrHdlList& rHdlList = GetHdlList();
 
@@ -584,19 +584,8 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                             {
                                 static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_NORMAL );
                             }
-
-                            //OLMconst B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
-                            //OLMif( rIAOGroup.IsHit( rEvt.maPosPixel ) )
-                            //OLM{
-                            //OLM    nRet = nDropAction;
-                            //OLM    static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_SELECTED );
-                            //OLM}
-                            //OLMelse
-                            //OLM    static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_NORMAL );
                         }
                     }
-
-                    //OLMRefreshAllIAOManagers();
                 }
 
                 // check object insert
@@ -606,7 +595,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     SdrPageView*    pPageView = NULL;
                     ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
                     Point           aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
-                    const BOOL      bHasPickObj = PickObj( aPos, pPickObj, pPageView );
+                    const BOOL      bHasPickObj = PickObj( aPos, getHitTolLog(), pPickObj, pPageView );
                     BOOL            bIsPresTarget = FALSE;
 
                     if( bHasPickObj && pPickObj && ( pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall() ) )
@@ -732,7 +721,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                 aPos = pTargetWindow->PixelToLogic( rEvt.maPosPixel );
 
             // handle insert?
-            if( !nRet && ( SDRDRAG_GRADIENT == GetDragMode() ) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) && aDataHelper.HasFormat( SOT_FORMATSTR_ID_XFA ) )
+            if( (!nRet && ( SDRDRAG_GRADIENT == GetDragMode() )) || (( SDRDRAG_TRANSPARENCE == GetDragMode() ) && aDataHelper.HasFormat( SOT_FORMATSTR_ID_XFA )) )
             {
                 const SdrHdlList& rHdlList = GetHdlList();
 
@@ -756,20 +745,6 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 nRet = nDropAction;
                             }
                         }
-
-                        //OLMconst B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
-                        //OLMif( rIAOGroup.IsHit( rEvt.maPosPixel ) )
-                        //OLM{
-                        //OLM   SotStorageStreamRef xStm;
-                        //OLM   if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_XFA, xStm ) && xStm.Is() )
-                        //OLM    {
-                        //OLM        XFillExchangeData aFillData( XFillAttrSetItem( &pDoc->GetPool() ) );
-                        //OLM       *xStm >> aFillData;
-                        //OLM        const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetValue() );
-                        //OLM       static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, TRUE );
-                        //OLM        nRet = nDropAction;
-                        //OLM    }
-                        //OLM}
                     }
                 }
             }
@@ -805,7 +780,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                         SdrObject*      pPickObj = NULL;
                         SdrPageView*    pPageView = NULL;
 
-                        if( PickObj( aPos, pPickObj, pPageView ) )
+                        if( PickObj( aPos, getHitTolLog(), pPickObj, pPageView ) )
                         {
                             // insert as clip action => jump
                             rtl::OUString       aBookmark( aINetBookmark.GetURL() );

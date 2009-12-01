@@ -406,7 +406,16 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     String aType( xShape->getShapeType() );
     const String aPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.") );
     if(aType.CompareTo( aPrefix, aPrefix.Len() ) != 0)
-        return SvxFmDrawPage::_CreateSdrObject( xShape );
+    {
+        SdrObject* pObj = SvxFmDrawPage::_CreateSdrObject( xShape );
+        if( pObj && ( (pObj->GetObjInventor() != SdrInventor) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
+        {
+            SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+            if( pDoc )
+                pObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), sal_True );
+        }
+        return pObj;
+    }
 
     aType = aType.Copy( aPrefix.Len() );
 

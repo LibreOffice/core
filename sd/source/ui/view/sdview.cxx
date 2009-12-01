@@ -793,7 +793,7 @@ sal_Bool View::SdrBeginTextEdit(
             Color aBackground;
             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_TABLE )
             {
-                aBackground = ImpGetTextEditBackgroundColor();
+                aBackground = GetTextEditBackgroundColor(*this);
             }
             else
             {

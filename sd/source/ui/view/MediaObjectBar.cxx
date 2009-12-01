@@ -61,8 +61,6 @@ using namespace sd;
 
 namespace sd {
 
-SFX_DECL_TYPE( 13 );
-
 // ------------------
 // - MediaObjectBar -
 // ------------------
