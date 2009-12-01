@@ -31,8 +31,6 @@
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 import java.util.HashMap;
 
-import org.openoffice.xmerge.util.Debug;
-
 /**
   * A lookup table containing information about operands
   */

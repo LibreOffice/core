@@ -32,9 +32,8 @@ package org.openoffice.xmerge.converter.dom;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.BufferedInputStream;
+import java.io.StringWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 
@@ -42,11 +41,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.dom.DOMSource;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import org.openoffice.xmerge.util.Resources;
 import org.openoffice.xmerge.util.Debug;
@@ -64,9 +67,6 @@ public class DOMDocument
 
     /** DOM <code>Document</code> of content.xml. */
     private Document contentDoc = null;
-
-    /** DOM <code>Document</code> of content.xml. */
-    private Document styleDoc = null;
 
     private String documentName = null;
     private String fileName = null;
@@ -259,6 +259,8 @@ public class DOMDocument
 
         String domImpl = doc.getClass().getName();
 
+        System.err.println("type b " + domImpl);
+
         /*
          * We may have multiple XML parsers in the Classpath.
          * Depending on which one is first, the actual type of
@@ -331,7 +333,19 @@ public class DOMDocument
             }
             else {
                 // We dont have another parser
-                throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+                try {
+                        DOMSource domSource = new DOMSource(doc);
+                        StringWriter writer = new StringWriter();
+                        StreamResult result = new StreamResult(writer);
+                        TransformerFactory tf = TransformerFactory.newInstance();
+                        Transformer transformer = tf.newTransformer();
+                        transformer.transform(domSource, result);
+                        return writer.toString().getBytes();
+                    }
+                catch (Exception e) {
+                    // We don't have another parser
+                    throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+                }
             }
         }
         catch (ClassNotFoundException cnfe) {

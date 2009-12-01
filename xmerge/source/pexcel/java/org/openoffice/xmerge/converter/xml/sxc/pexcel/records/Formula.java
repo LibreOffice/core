@@ -30,15 +30,9 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
-import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
-import java.util.Vector;
-import java.util.Enumeration;
-import java.util.Calendar;
-import java.util.Date;
-import java.text.DateFormat;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;

@@ -35,13 +35,11 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.InputStreamReader;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
@@ -59,7 +57,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
 
 import org.openoffice.xmerge.util.Resources;
 import org.openoffice.xmerge.util.Debug;
@@ -872,6 +873,7 @@ public abstract class OfficeDocument
          * doc may vary.  Need a way to find out which API is being
          * used and use an appropriate serialization method.
          */
+
         try {
             // First of all try for JAXP 1.0
             if (domImpl.equals("com.sun.xml.tree.XmlDocument")) {
@@ -942,8 +944,19 @@ public abstract class OfficeDocument
                 meth.invoke(serializer, new Object [] { doc, baos } );
             }
             else {
-                // We don't have another parser
-                throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+        try {
+            DOMSource domSource = new DOMSource(doc);
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.transform(domSource, result);
+            return writer.toString().getBytes();
+            }
+                catch (Exception e) {
+                    // We don't have another parser
+                    throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+                }
             }
         }
         catch (ClassNotFoundException cnfe) {

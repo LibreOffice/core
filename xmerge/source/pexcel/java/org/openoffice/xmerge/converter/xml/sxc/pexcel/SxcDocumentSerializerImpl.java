@@ -30,22 +30,16 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 
-import java.awt.Color;
-
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
 
 import java.io.IOException;
 
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
-import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializer;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
-import org.openoffice.xmerge.converter.xml.StyleCatalog;
 
 /**
  *  <p>Pocket Excel implementation of <code>SxcDocumentDeserializer</code>

@@ -36,11 +36,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
-import java.util.Enumeration;
-import java.util.Properties;
 
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
@@ -48,7 +45,6 @@ import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentSerializer;
 import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
-import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
@@ -58,7 +54,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
@@ -69,8 +64,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 // Imported java classes
 import java.io.FileNotFoundException;
-import java.io.File;
-import java.net.URI;
 
 /**
  *  <p>Xslt implementation of

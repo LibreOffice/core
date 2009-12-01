@@ -31,7 +31,6 @@
 package org.openoffice.xmerge.merger.diff;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.Element;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 

@@ -30,13 +30,7 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Stack;
-import java.util.LinkedList;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
@@ -44,9 +38,7 @@ import java.util.NoSuchElementException;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
-import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;

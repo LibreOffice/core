@@ -33,8 +33,6 @@ package org.openoffice.xmerge.converter.xml.sxc;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.openoffice.xmerge.util.IntArrayList;
-
 /**
  *  <p>This class is a abstract class for encoding an SXC into an
  *  alternative spreadsheet format.</p>

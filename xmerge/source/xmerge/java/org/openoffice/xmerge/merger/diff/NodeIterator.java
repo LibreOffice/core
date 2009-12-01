@@ -33,11 +33,9 @@ package org.openoffice.xmerge.merger.diff;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
 
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.merger.Iterator;
-import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.Resources;
 

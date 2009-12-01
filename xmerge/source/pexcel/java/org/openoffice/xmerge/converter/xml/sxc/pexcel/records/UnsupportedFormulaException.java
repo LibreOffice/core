@@ -32,8 +32,6 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
 import java.lang.Exception;
 
-import org.openoffice.xmerge.util.Debug;
-
 /**
  * At the moment any functions within a formula will result in this exception
  * being thrown.

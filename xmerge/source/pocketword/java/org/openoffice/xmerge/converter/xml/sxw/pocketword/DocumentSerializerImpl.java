@@ -33,7 +33,6 @@ package org.openoffice.xmerge.converter.xml.sxw.pocketword;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
 
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
@@ -47,8 +46,6 @@ import org.openoffice.xmerge.converter.xml.ParaStyle;
 import org.openoffice.xmerge.converter.xml.TextStyle;
 import org.openoffice.xmerge.converter.xml.StyleCatalog;
 
-import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 

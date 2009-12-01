@@ -66,7 +66,7 @@ public:
     /// Return the page number
     sal_uInt32 get() const { return mnPageNumber; }
 
-    virtual void dump(OutputWithDepth<string> & output) const;
+    virtual void dump(OutputWithDepth<string> & out) const;
 };
 
 /**

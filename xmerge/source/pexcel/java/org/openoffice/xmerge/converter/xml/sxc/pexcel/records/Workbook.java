@@ -42,7 +42,6 @@ import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
 import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 

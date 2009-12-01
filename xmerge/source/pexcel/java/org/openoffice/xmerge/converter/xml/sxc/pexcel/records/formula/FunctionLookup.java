@@ -30,8 +30,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-import org.openoffice.xmerge.util.Debug;
-
 import java.util.HashMap;
 
 public class FunctionLookup extends SymbolLookup {

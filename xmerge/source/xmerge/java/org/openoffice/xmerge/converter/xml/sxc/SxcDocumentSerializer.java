@@ -48,7 +48,6 @@ import org.openoffice.xmerge.DocumentSerializer;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
-import org.openoffice.xmerge.converter.xml.ParaStyle;
 import org.openoffice.xmerge.converter.xml.sxc.CellStyle;
 import org.openoffice.xmerge.converter.xml.StyleCatalog;
 

@@ -36,7 +36,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 
 import org.openoffice.xmerge.ConverterCapabilities;
-import org.openoffice.xmerge.merger.diff.CellNodeIterator;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 

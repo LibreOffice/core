@@ -237,7 +237,7 @@ void T602ImportFilter::inschr(unsigned char ch)
         return;
     }
 
-    if(pst.wasspace > 0)
+    if(pst.wasspace > 0) {
         if(ini.reformatpars) {
             if(!pst.wasfdash)
                 inschrdef(' ');
@@ -249,10 +249,11 @@ void T602ImportFilter::inschr(unsigned char ch)
             _Start("text:s");
             _End("text:s");
         }
+    }
 
-        pst.wasspace = 0;
-        setfnt(chngul,true);
-        inschrdef(ch);
+    pst.wasspace = 0;
+    setfnt(chngul,true);
+    inschrdef(ch);
 }
 
 sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )

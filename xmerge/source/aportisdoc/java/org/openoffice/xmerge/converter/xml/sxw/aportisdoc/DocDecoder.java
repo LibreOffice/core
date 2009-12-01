@@ -33,9 +33,6 @@ package org.openoffice.xmerge.converter.xml.sxw.aportisdoc;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.ArrayList;
 
 import org.openoffice.xmerge.converter.palm.Record;
 import org.openoffice.xmerge.util.Resources;
