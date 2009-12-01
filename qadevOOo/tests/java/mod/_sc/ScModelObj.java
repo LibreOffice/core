@@ -29,7 +29,6 @@
  ************************************************************************/
 package mod._sc;
 
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
@@ -43,9 +42,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.view.PrintJobEvent;
-import com.sun.star.view.PrintableState;
-import com.sun.star.view.XPrintable;
 import com.sun.star.view.XSelectionSupplier;
 import ifc.view._XPrintJobBroadcaster;
 import java.io.File;

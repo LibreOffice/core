@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import convwatch.EnhancedComplexTestCase;
 import convwatch.PRNCompare;
 import convwatch.GraphicalTestArguments;
-import lib.TestParameters;
 import helper.URLHelper;
 import convwatch.OfficePrint;
 import java.io.File;

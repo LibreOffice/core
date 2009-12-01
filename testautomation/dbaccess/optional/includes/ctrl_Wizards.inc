@@ -83,7 +83,7 @@ testcase tGroupBoxWithDatasource
    	 sleep(2)
    	 hMenuSelectNr (1)
    	 sleep(3)
-   	 Liste.TypeKeys "<DOWN>"
+   	 Liste.TypeKeys "<RETURN>",true
   	 sleep(3)
    	 Liste.OpenContextmenu
   	 sleep(2)
@@ -96,7 +96,7 @@ testcase tGroupBoxWithDatasource
    	 '/// set the datasource TT
      printlog "set the datasource TT"
      DataSource.setText(sDSName)
-	 TabDataForm.TypeKeys "<RETURN>" , true
+	 DataSource.TypeKeys "<RETURN>" , true
      '/// insert password 'testtool' into login dialog
      printlog "insert password 'testtool' into login dialog"
      Kontext "LoginDialog"
@@ -118,9 +118,8 @@ testcase tGroupBoxWithDatasource
     Kontext "TabDataForm"         
     '/// set the table TT_Control
      printlog "set the table TT_Control"    
-	 Content.setText("TT_Control")     
- 	 'WORKAROUND: for bug 106538
-     TabDataForm.TypeKeys "<RETURN>" , true       
+	 Content.setText("TT_Control")
+     Content.TypeKeys "<RETURN>" , true       
   	Kontext "ControlPropertiesDialog"
    	 ControlPropertiesDialog.Close
    	sleep(3)
@@ -245,8 +244,7 @@ testcase tGroupBoxWithDatasource
      TabGeneralControl.TypeKeys "<TAB>" , true 'this tab is importent, I don't not why but it is.
      sleep(1)
      HelpURL.setText "HID:123456"
-     sleep(1)
-     TabGeneralControl.TypeKeys "<RETURN>"
+     HelpURL.TypeKeys "<RETURN>",true
      sleep(1)
     Kontext "ControlPropertiesDialog" 
      ControlPropertiesDialog.close
@@ -283,8 +281,7 @@ testcase tGroupBoxWithDatasource
 	 TabGeneralControl.TypeKeys "<TAB>" , true 'this tab is importent, I don't not why but it is.
      sleep(1)
      HelpURL.setText "HID:1234567"
-     sleep(1)
-     TabGeneralControl.TypeKeys "<RETURN>"     
+     HelpURL.TypeKeys "<RETURN>", true
      sleep(1)
     Kontext "ControlPropertiesDialog" 
      ControlPropertiesDialog.close
@@ -320,11 +317,9 @@ testcase tGroupBoxWithDatasource
    	 sleep(5)
      
     Kontext "TabGeneralControl"
-     TabGeneralControl.TypeKeys "<TAB>" , true ' this tab is importent, I don't not why but it is.
-     'sleep(1)
-     HelpURL.setText "HID:12345678"
-     'sleep(1)
-     TabGeneralControl.TypeKeys "<RETURN>"
+     TabGeneralControl.TypeKeys "<TAB>" , true ' this tab is importent, I don't not why but it is.     
+     HelpURL.setText "HID:12345678"     
+     HelpURL.TypeKeys "<RETURN>", true
      sleep(1)
     Kontext "ControlPropertiesDialog" 
      ControlPropertiesDialog.close     
@@ -397,6 +392,9 @@ endcase
 '--------------------------------------------------------------------
 
 testcase tGroupBoxWithoutDatasource
+
+	warnlog "#102082# CTRL + C ddoes not work anymore in control properties dialog"
+	goto endsub
 
     '/// open a textdocument
     printlog "open a textdocument"
@@ -541,6 +539,8 @@ testcase tGroupBoxWithoutDatasource
    	ControlPropertiesTabControl.SetPage TabGeneralControl
    	sleep (2)
   	Kontext "TabGeneralControl"
+     TabGeneralControl.mouseDown(1,1)
+     TabGeneralControl.mouseUp(1,1)
 	 TabGeneralControl.TypeKeys "<TAB>" , true
      TabGeneralControl.TypeKeys "<MOD1 C>" , true     
      if getClipboard <> "Group 123" then

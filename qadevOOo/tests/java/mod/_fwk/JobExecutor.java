@@ -41,7 +41,6 @@ import util.utils;
 
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.comp.helper.RegistryServiceFactory;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
@@ -51,7 +50,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.task.XJob;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;

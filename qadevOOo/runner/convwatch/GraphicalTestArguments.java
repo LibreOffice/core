@@ -33,7 +33,6 @@ package convwatch;
 import com.sun.star.lang.XMultiServiceFactory;
 import lib.TestParameters;
 import java.io.File;
-import java.io.FileFilter;
 
 import com.sun.star.container.XNameAccess;
 import com.sun.star.uno.UnoRuntime;

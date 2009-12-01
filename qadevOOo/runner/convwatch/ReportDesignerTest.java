@@ -56,7 +56,6 @@ import com.sun.star.lang.XServiceInfo;
 // import util.DesktopTools;
 // import util.dbg;
 import complexlib.ComplexTestCase;
-import util.utils;
 import helper.OfficeProvider;
 import helper.URLHelper;
 import helper.OfficeWatcher;

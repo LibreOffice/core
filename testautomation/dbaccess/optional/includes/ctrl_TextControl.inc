@@ -161,6 +161,9 @@ testcase tRichTextControl
 	hFileOpen ( gOfficePath + ConvertPath("user/work/TT_RichTextBox.odt"))
     Kontext "DocumentWriter"
         DocumentWriter.TypeKeys "<MOD1 F5>" , true
+        qaerrorlog "workaround for issue 102010"
+        DocumentWriter.TypeKeys "<RIGHT>" , true
+        DocumentWriter.TypeKeys "<LEFT>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
@@ -168,7 +171,7 @@ testcase tRichTextControl
         sleep(1)
         'printlog "getClipboard = " + getClipboard
         if ( getClipboard <> "this is a blind text" ) then
-            warnlog "The text in the control is not saved"
+            warnlog "The text in the control is not saved (" + getClipboard() + ")"
         end if
         DocumentWriter.TypeKeys "<END>" , true        
         sleep(1)
@@ -255,7 +258,10 @@ testcase tRichTextControlDraw
     Kontext "DocumentDraw"
         DocumentDraw.TypeKeys "<MOD1 F5>" , true
         sleep(1)
-	DocumentDraw.TypeKeys "<MOD1 F5>" , true
+	    DocumentDraw.TypeKeys "<MOD1 F5>" , true
+	    qaerrorlog "workaround for issue 102010"
+	    DocumentDraw.TypeKeys "<RIGHT>" , true
+        DocumentDraw.TypeKeys "<LEFT>" , true
         sleep(1)
         DocumentDraw.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)

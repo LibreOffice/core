@@ -29,13 +29,9 @@
  ************************************************************************/
 package ifc.sheet;
 
-import com.sun.star.awt.Point;
-import com.sun.star.awt.Size;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageSupplier;
-import com.sun.star.drawing.XDrawPages;
-import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.sheet.ValidationType;
 import com.sun.star.sheet.XSheetAuditing;

@@ -40,8 +40,7 @@ import lib.TestParameters;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
-import util.utils;
+
 /**
 * Test for object that implements the following interfaces :
 * <ul>

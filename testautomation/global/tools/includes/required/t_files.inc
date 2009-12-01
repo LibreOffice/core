@@ -38,6 +38,7 @@
 '\******************************************************************************
 
 private const C_INFO = TRUE ' Set this to TRUE to increase verbosity of some functions
+private const VERBOSE = true
 
 function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     '/// hGrafikEinfuegen hGraphicInsert
@@ -798,7 +799,7 @@ function hFileSave() as boolean
     const CFN = "global::tools::inc::t_files.inc::hFileSave():"
     hFileSave() = FALSE
     if ( C_INFO ) then printlog( CFN & "Save file." )
-    FileSave
+    FileSave( "SynchronMode", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSave() = TRUE
 
 end function

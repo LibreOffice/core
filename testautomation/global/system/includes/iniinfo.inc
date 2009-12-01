@@ -402,6 +402,8 @@ sub GetLanguageInformation
          case "no_no", "no-no", "no" : iSprache = 47        ' Norwegian
          case "pl_pl", "pl-pl", "pl" : iSprache = 48        ' Polish
          case "de_de", "de-de", "de" : iSprache = 49        ' German
+		 case "sr_rs", "sr-rs", "sr" : iSprache = 51        ' Serbian (Cyrillic)
+         case "sh_rs", "sh-rs", "sh" : iSprache = 52        ' Serbian (Latin)		 
          case "pt_br", "pt-br", "br" : iSprache = 55        ' Portuguese (Brazil)
          case "th_th", "th-th", "th" : iSprache = 66        ' Thai
          case "ja_jp", "ja-jp", "ja" : iSprache = 81        ' Japanese
@@ -459,11 +461,13 @@ function ConvertLanguage ( Sprache as String ) as Integer
       case "finisch", "finnish"                             : ConvertLanguage = 35
       case "hungaria", "ungarisch"                          : ConvertLanguage = 36
       case "italienisch", "italian"                         : ConvertLanguage = 39
+	  case "slowak", "slovakisch"                           : ConvertLanguage = 43	  
       case "daenisch", "danish"                             : ConvertLanguage = 45
       case "schwedisch", "swedish"                          : ConvertLanguage = 46
       case "norwegian", "norwegisch"                        : ConvertLanguage = 47
-      case "polnisch", "polish"                             : ConvertLanguage = 48
-      case "slowak", "slovakisch"                           : ConvertLanguage = 51
+      case "polnisch", "polish"                             : ConvertLanguage = 48      
+	  case "serbisch kyrillisch", "serbian cyrillic"        : ConvertLanguage = 51
+	  case "serbisch latein", "serbian latin"               : ConvertLanguage = 52	  
       case "japanisch", "japanese"                          : ConvertLanguage = 81
       case "koreanisch", "korean"                           : ConvertLanguage = 82
       case "vietnamesisch", "vietnamese"                    : ConvertLanguage = 84
@@ -500,6 +504,8 @@ function GetLanguageText ( iLan ) as String
       case 47   : GetLanguageText = "Norwegian"
       case 48   : GetLanguageText = "Polnish"
       case 49   : GetLanguageText = "German"
+      case 51   : GetlanguageText = "Serbian (Cyrillic)"
+      case 52   : GetlanguageText = "Serbian (Latin)"	  
       case 55   : GetLanguageText = "Portuguese (Brazil)"
       case 66   : GetLanguageText = "Thai"
       case 81   : GetLanguageText = "Japanese"
@@ -542,6 +548,8 @@ function ConvertLanguage2 ( sSprache as String, optional bExact ) as Integer
          case "no_no", "no-no", "no" : ConvertLanguage2 = 47        ' Norwegian
          case "pl_pl", "pl-pl", "pl" : ConvertLanguage2 = 48        ' Polish
          case "de_de", "de-de", "de" : ConvertLanguage2 = 49        ' German
+         case "sr_rs", "sr_rs", "sr" : ConvertLanguage2 = 51        ' Serbian (Cyrillic)
+         case "sh_rs", "sh_rs", "sh" : ConvertLanguage2 = 52        ' Serbian (Latin)		 
          case "pt_br", "pt-br", "br" : ConvertLanguage2 = 55        ' Portuguese (Brazil)
          case "th_th", "th-th", "th" : ConvertLanguage2 = 66        ' Thai
          case "ja_jp", "ja-jp", "ja" : ConvertLanguage2 = 81        ' Japanese
@@ -596,6 +604,8 @@ function ConvertCodeToLanguage ( sSprache as String ) as Integer
          case "1045" : ConvertCodeToLanguage = 48        ' Polish
          case "1031" : ConvertCodeToLanguage = 49        ' German
          case "    " : ConvertCodeToLanguage = 55        ' Portuguese (Brazil)
+         case "3098" : ConvertCodeToLanguage = 51        ' Serbian (Cyriliic)
+         case "2074" : ConvertCodeToLanguage = 52        ' Serbian (Latin)		 
          case "    " : ConvertCodeToLanguage = 66        ' Thai
          case "1041" : ConvertCodeToLanguage = 81        ' Japanese
          case "1042" : ConvertCodeToLanguage = 82        ' Korean

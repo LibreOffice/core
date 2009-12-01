@@ -30,9 +30,6 @@
 
 package convwatch;
 
-import java.io.File;
-import java.io.FileWriter;
-
 public class StatusHelper
 {
     final static public int DIFF_NOT_REALLY_INITIALISED =            1;

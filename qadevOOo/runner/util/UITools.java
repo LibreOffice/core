@@ -36,8 +36,6 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.XInterface;
 import com.sun.star.accessibility.XAccessible;
@@ -50,16 +48,13 @@ import com.sun.star.accessibility.XAccessibleEditableText;
 import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleValue;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.io.PrintWriter;
 import java.util.Vector;
-import share.LogWriter;
 import util.AccessibilityTools;
 
-import util.DesktopTools;
 
 /**
  * This class supports some functions to handle easily accessible objects

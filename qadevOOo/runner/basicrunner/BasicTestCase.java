@@ -33,32 +33,12 @@ import lib.TestCase;
 import lib.TestParameters;
 import lib.TestEnvironment;
 import share.DescEntry;
-import util.SOfficeFactory;
 import share.LogWriter;
-import stats.SimpleLogWriter;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XDocumentInfoSupplier;
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.UnoRuntime;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.FileReader;
 import java.io.PrintWriter;
 
-import java.util.Vector;
-
-import com.sun.star.uno.XInterface;
 import com.sun.star.beans.PropertyValue;
 
 

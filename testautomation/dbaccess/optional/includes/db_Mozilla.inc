@@ -45,7 +45,9 @@ sub db_Mozilla
         
         tQueryAddressbook(gOfficePath + ConvertPath("user/work/TT_Mozilla.odb"))
         tSortAddressbook(gOfficePath + ConvertPath("user/work/TT_Mozilla.odb"))
-        
+	else
+        tQueryAddressbook("")
+        tSortAddressbook("")
     endif
     
 end sub

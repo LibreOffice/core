@@ -535,6 +535,7 @@ testcase tCreateSubForms
      TabDataForm.TypeKeys("<RETURN>")
      sleep(1)
   	Kontext "FormPropertiesDialog"
+     sleep(1)
    	 FormPropertiesDialog.Close
    	sleep(3)
   	Kontext "FormularNavigator"

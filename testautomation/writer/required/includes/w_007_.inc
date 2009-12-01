@@ -80,18 +80,18 @@ testcase tToolsSpellcheck
     Dim IsWriteable as boolean
 
     ' As long as OOo has no modules for that, disabled
-    if gOOO = True then
+    if ( gOOO ) then
         printlog "No spellchecking in OOo"
         goto endsub
     end if
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if hFileExists ( TheFile ) <> TRUE then
+    if ( not hFileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
-    call hFileOpen (TheFile,false)
+    hFileOpen ( TheFile )
     Call sMakeReadOnlyDocumentEditable
 
     printlog " Insert some faulty text"
@@ -125,9 +125,9 @@ testcase tToolsSpellcheck
     ToolsSpellcheckWriter
 
     printlog " Tools / Spellcheck / Check"
-    WaitSlot (500)
+
     Kontext "Active"
-    if Active.Exists then
+    if ( Active.Exists( 1 ) ) then
         if Active.GetRT = 304 then
             try
                 Active.Yes  ' Start from beginning ?
@@ -145,14 +145,18 @@ testcase tToolsSpellcheck
             endcatch
         end if
     end if
+
     printlog " Spellcheck dialog has to come up"
     Kontext "Spellcheck"
     DialogTest ( Spellcheck )
+
     printlog " Click 'Options'"
     SpellcheckOptions.Click
     Wait 500
+
     kontext "TabLinguistik"
     DialogTest ( TabLinguistik )
+
     printlog " Step through all options in list and if 'Edit' is enabled click 'Edit'"
     for i = 1 to 12
         kontext "TabLinguistik"
@@ -165,9 +169,11 @@ testcase tToolsSpellcheck
             SilbentrennungOptionen.Cancel
         end if
     next i
+
     printlog " Click 'New' in Options dialog"
     Neu.Click
     wait 500
+
     Kontext "BenutzerwoerterbuchAnlegen"
     Call DialogTest ( BenutzerwoerterbuchAnlegen )
     BenutzerwoerterbuchAnlegen.Close
@@ -196,10 +202,12 @@ testcase tToolsSpellcheck
     else
         Warnlog "All dictionarys are write protected!"
     end if
+
     printlog " Close 'Options' dialog"
     Kontext "TabLinguistik"
     TabLinguistik.Close
     wait 500
+
     Kontext "Spellcheck"
     Spellcheck.Close
     printlog " Close 'Spellcheck' dialog"
@@ -243,11 +251,11 @@ testcase tToolsThesaurus
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if hFileExists ( TheFile ) <> TRUE then
+    if ( not hFileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
-    call hFileOpen (TheFile,false)
+    call hFileOpen( TheFile )
     Call sMakeReadOnlyDocumentEditable
 
     printlog " Insert some faulty text"
@@ -338,14 +346,14 @@ testcase tToolsHyphenation
         LingFile = str$(iSprache) + "-hyph.dat"
     end select
 
-    if hFileExists(DieDatei) = False then
+    if ( not hFileExists( DieDatei ) ) then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
 
     Select Case gApplication
     Case "WRITER"
-        Call hFileOpen ( DieDatei )
+        hFileOpen( DieDatei )
 
     Case "MASTERDOCUMENT"
         if wInsertDocumentinMasterDoc(DieDatei) = False then
@@ -354,7 +362,7 @@ testcase tToolsHyphenation
         else
             Call hNewDocument
             printlog " Open new document"
-            EditPaste
+            hUseAsyncSlot( "EditPaste" )
         end if
 
     Case "HTML"
@@ -367,25 +375,25 @@ testcase tToolsHyphenation
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")
 
-    ToolsLanguageHyphenate
+    hUseAsyncSlot( "ToolsLanguageHyphenate" )
     printlog " Tools / Hyphenate"
     Kontext "Active"
     try
         Active.Yes
     catch
     endcatch
-    if Active.Exists then
+    if ( Active.Exists( 1 ) )then
         if Active.GetRT = 304 then
             Active.Ok
             ' Force pagesize change to bringup Hyphenation-dialog
-            FormatPageWriter
+            hUseAsyncSlot( "FormatPageWriter" )
             Kontext
             active.SetPage TabSeite
             Kontext "TabSeite"
             Breite.Settext "15"
             TabSeite.Ok
-            Sleep 1
-            ToolsLanguageHyphenate
+
+            hUseAsyncSlot( "ToolsLanguageHyphenate" )
         end if
     end if
 
@@ -420,7 +428,7 @@ testcase tToolsWordCount
     ToolsWordCount
     printlog " If if dialog has been opened"
     Kontext "WordCount"
-    if WordCount.Exists then
+    if ( WordCount.Exists( 1 ) ) then
         Call DialogTest ( WordCount )
         printlog " Close dialog 'WordCount'"
         WordCount.Close
@@ -934,36 +942,36 @@ testcase tToolsUpdate
     
     Kontext
     Active.Setpage TabVerzeichnisseVerzeichnis
+
     printlog " Close upcoming Index dialog"
     Kontext "TabVerzeichnisseVerzeichnis"
     TabVerzeichnisseVerzeichnis.OK
-    Sleep 1
+
     printlog " Tools / Update / All Indexes"
-    ToolsUpdateAllIndexes
-    WaitSlot (1000)
+    hUseAsyncSlot( "ToolsUpdateAllIndexes" )
+
     printlog " Tools / Update / Current Index"
     ToolsUpdateCurrentIndex
 
     printlog "  - Update Fields"
     Call wTypeKeys ("<Up><Home><Tab>")
-    printlog " Insert / Fields / Author"
 
+    printlog " Insert / Fields / Author"
     InsertFieldsAuthor
+
     printlog " Insert / Fields / Time"
     InsertFieldsTime
-    WaitSlot (1000)
-    ToolsUpdateFields
+
     printlog " Tools / Update / Fields"
+    hUseAsyncSlot( "ToolsUpdateFields" )
+    
 
     printlog "  - Update links"
     printlog " Insert a graphic from file"
     Call hGrafikVerknuepftEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-    try
-        printlog " Tools / Update / Links"
-        ToolsUpdateLinks
-    catch
+    if ( hUseAsyncSlot( "ToolsUpdateLinks" ) = -1 ) then
         Warnlog "Links can't be updated!"
-    endcatch
+    endif
 
     printlog "  - Update / Reformat Pages  with  Tools / Page formatting"
     ToolsPageFormatting
@@ -972,9 +980,7 @@ testcase tToolsUpdate
     ToolsUpdateUpdateAll
 
     printlog " Close all active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
 endcase
 
 ' -------------------------------------------
@@ -1053,9 +1059,7 @@ testcase tToolsHangulHanjaConversion
     end if
 
     printlog " Close all active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
 endcase
 
 ' -------------------------------------------
@@ -1140,22 +1144,20 @@ testcase tHtmlDocToolsHangulHanjaConversion
     bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
 
     printlog " Open the test file"
-    Call hFileOpen (sTestFile)
+    hFileOpen (sTestFile)
     Call sMakeReadOnlyDocumentEditable
     Call wTypeKeys("<MOD1 Home>")
 
     printlog " Tools / HangulHanjaConversion"
-    try
-        ToolsLanguageHangulHanjaConversion
-    catch
+    if ( hUseAsyncSlot( "ToolsLanguageHangulHanjaConversion" ) = -1 ) then
         Warnlog "- Format / HangulHanjaConversion is disabled or hidden!"
         bAsianLanguage = ActiveDeactivateAsianSupport(False)
         Call hCloseDocument
         goto endsub
-    endcatch
+    endif
 
     Kontext "HangulHanjaConversion"
-    if HangulHanjaConversion.Exists then
+    if ( HangulHanjaConversion.Exists( 1 ) ) then
         Call DialogTest ( HangulHanjaConversion )
     else
         Warnlog "- Format / HangulHanjaConversion doesn't work. Dialog is not up"
@@ -1205,7 +1207,9 @@ testcase tMasterDocToolsHyphenation
     Dim LingFile as string
 
     gApplication = "MASTERDOCUMENT"
+    
     PrintLog "- Tools / Hyphenation"
+    
     ' As long as OOo has no modules for that, disabled
     if ( gOOO ) then
         printlog "No hyphenation in OOo"
@@ -1258,10 +1262,19 @@ testcase tMasterDocToolsHyphenation
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")
 
-    ToolsLanguageHyphenate
+    
     printlog " Tools / Hyphenate"
+    hUseAsyncSlot( "ToolsLanguageHyphenate" )
     
     ' This is probably a workaround to make the hyphenation dialog work in any case.
+    
+    ' We really only know of three possible dialogs (in order of appearance):
+    ' 1: Continue checking at the beginning of the document (Yes/No)
+    ' 2: Hyphenation for language not installed (Ok)
+    ' 3: Hyphenation completed (Ok)
+    
+    ' I have not changed the code, only beautified it a little but i feel the outcome of
+    ' this test is somewhat random.
     Kontext "Active"
     if ( Active.exists( 1 ) ) then
     
@@ -1275,27 +1288,27 @@ testcase tMasterDocToolsHyphenation
             printlog( "<YES> failed... (Whatever that means)" )
         endcatch
         
-        
         if ( Active.Exists() ) then
             printlog( "Messagebx: " & Active.getText() )
             if ( Active.GetRT() = 304 ) then
                 Active.Ok
                 ' Force pagesize change to bringup Hyphenation-dialog
-                FormatPageWriter
+                hUseAsyncSlot( "FormatPageWriter" )
+                
                 Kontext
                 active.SetPage TabSeite
+                
                 Kontext "TabSeite"
                 Breite.Settext "15"
                 TabSeite.Ok
-                WaitSlot()
-                ToolsLanguageHyphenate
+                hUseAsyncSlot( "ToolsLanguageHyphenate" )
             end if
         end if
     endif
 
     Kontext "Silbentrennung"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if ( Silbentrennung.Exists( 2 ) ) then
+    if ( Silbentrennung.Exists() ) then
         Call DialogTest ( Silbentrennung )
         Silbentrennung.Cancel
     else

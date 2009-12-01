@@ -35,11 +35,7 @@ import lib.MultiPropertyTest;
 import com.sun.star.awt.XBitmap;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.drawing.GraphicObjectShape</code>

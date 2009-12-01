@@ -55,7 +55,7 @@ testcase tAllNew
         gApplication = "WRITER"
         printlog "  - " +  gApplication
         
-        Call hNewDocument (TRUE)
+        hNewDocument()
         
         Kontext "DocumentWriter"
         DocumentWriter.TypeKeys "This is a Writer-document!"
@@ -65,7 +65,7 @@ testcase tAllNew
                 "Please check if a Writer document will be opened!")
             end if
         end if
-        Call hCloseDocument (TRUE)
+        hCloseDocument()
     catch
         Exceptlog
         ResetApplication
@@ -79,7 +79,7 @@ testcase tAllNew
         gApplication = "CALC"
         printlog "  - " +  gApplication
         
-        Call hNewDocument (TRUE)
+        hNewDocument
         Kontext "DocumentCalc"
         DocumentCalc.TypeKeys "This is a Calc-document!"
         
@@ -89,7 +89,7 @@ testcase tAllNew
                 "Please check if a Calc document will be opened!")
             end if
         end if
-        Call hCloseDocument (TRUE)
+        hCloseDocument
     catch
         Exceptlog
         ResetApplication
@@ -103,7 +103,7 @@ testcase tAllNew
         gApplication = "IMPRESS"
         printlog "  - " +  gApplication
         
-        Call hNewDocument (TRUE)
+        hNewDocument()
         sleep(3)
         InsertDuplicateSlide
         sleep(2)
@@ -113,7 +113,7 @@ testcase tAllNew
                 "Please check if an Impress document will be opened!")
             end if
         end if
-        Call hCloseDocument (TRUE)
+        hCloseDocument()
     catch
         Exceptlog
         ResetApplication
@@ -126,14 +126,14 @@ testcase tAllNew
     try
         gApplication = "DRAW"
         printlog "  - " +  gApplication
-        Call hNewDocument (TRUE)
+        hNewDocument()
         InsertSlide
         if gUseSysDlg = FALSE then
             if fDocumentCheck (gDrawFilter) = FALSE then
                 warnlog("The filter name (saving) is not correct! Please check if a Draw document will be opened!")
             end if
         end if
-        Call hCloseDocument (TRUE)
+        hCloseDocument()
     catch
         Exceptlog
         ResetApplication
@@ -142,7 +142,7 @@ testcase tAllNew
         gApplication = "HTML"
         printlog "  - " +  gApplication
         '///+<ul><li>Create a new HTML document</li>
-        Call hNewDocument (TRUE)
+        hNewDocument()
         Kontext "DocumentWriter"
         '///+<li>Type some text</li>
         DocumentWriter.TypeKeys "This is a HTML-Document!"
@@ -153,7 +153,7 @@ testcase tAllNew
             end if
         end if
         '///+<li>Close the document window without saving it</li></ul>
-        Call hCloseDocument (TRUE)
+        hCloseDocument()
     catch
         Exceptlog
         ResetApplication
@@ -166,14 +166,14 @@ testcase tAllNew
     try
         gApplication = "MATH"
         printlog "  - " +  gApplication
-        Call hNewDocument (TRUE)
+        hNewDocument()
         Call SchreibenInMathDok("a over b")
         if gUseSysDlg = FALSE then
             if fDocumentCheck (gMathFilter) = FALSE then
                 warnlog("The filter name (saving) is not correct! Please check if a Math document will be opened!")
             end if
         end if
-        Call hCloseDocument (TRUE)
+        hCloseDocument
     catch
         Exceptlog
         ResetApplication
@@ -187,7 +187,7 @@ testcase tAllNew
     try
         gApplication = "MASTERDOCUMENT"
         printlog "  - " +  gApplication
-        Call hNewDocument (TRUE)
+        hNewDocument()
         Kontext "DocumentWriter"
         DocumentWriter.TypeKeys "This is a master document!"
         if gUseSysDlg = FALSE then
@@ -199,7 +199,7 @@ testcase tAllNew
         if Navigator.Exists(5) then
             Navigator.Close
         end if
-        Call hCloseDocument (TRUE)
+        hCloseDocument()
     catch
         Exceptlog
         ResetApplication

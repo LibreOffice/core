@@ -35,7 +35,6 @@ package ifc.sheet;
 import java.util.ArrayList;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.IllegalArgumentException;
@@ -45,7 +44,6 @@ import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellCursor;
 import com.sun.star.table.XCellRange;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 

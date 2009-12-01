@@ -31,8 +31,6 @@ package ifc.form.submission;
 
 import com.sun.star.form.submission.XSubmission;
 import com.sun.star.form.submission.XSubmissionVetoListener;
-import com.sun.star.task.XInteractionHandler;
-import com.sun.star.uno.UnoRuntime;
 
 import lib.MultiMethodTest;
 

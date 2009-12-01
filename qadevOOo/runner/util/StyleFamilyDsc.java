@@ -33,8 +33,7 @@ package util;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.style.*;
-import com.sun.star.awt.*;
+
 /**
  * the class StyleFamilyDsc
  */

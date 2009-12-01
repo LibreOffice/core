@@ -47,7 +47,7 @@ use Getopt::Long;
 #                       #
 #########################
 $is_debug = 0;           # run without executing commands
-$is_command_infos = 0;   # print command details before exec
+$is_command_infos = 1;   # print command details before exec
 $is_protocol_test = 0;
 $is_remove_on_error = 0;
 $is_remove_at_end = 1;
@@ -117,6 +117,7 @@ if ($gui eq "WNT") {
     $bootstrapini = "bootstrap.ini";
     $bootstrapiniTemp = $bootstrapini . "_";
     $packpackage = "msi";
+    $installpath_without =~ s/\//\\/g;
 }
 elsif ($gui eq "UNX") {
     $is_do_deinstall = 0;
@@ -166,6 +167,7 @@ elsif ($gui eq $cygwin) {
     $WinLineends = "\r\n";
     &SetWinLineends();
     $packpackage = "msi";
+    $installpath_without =~ s/\\/\//g;
 }
 else {
     print_error ("not supported system\n",1);
@@ -238,12 +240,6 @@ $WORK_STAMP_LC=$ENV{WORK_STAMP};
 $WORK_STAMP_LC =~ tr/A-Z/a-z/;
 $ENV{DBGSV_INIT} = $DATA . "dbgsv.ini";
 $ExtensionDir = $ENV{DMAKE_WORK_DIR} . $PathSeparator . $ENV{OUTPATH} . $ENV{PROEXT} . $PathSeparator . "bin" . $PathSeparator;
-if (defined($ENV{INSTALLPATH_SMOKETEST})) {
-    $installpath_without = $ENV{INSTALLPATH_SMOKETEST};
-}
-else {
-    $installpath_without = $temp_path;
-}
 
 if (defined($vcsid)) {
     $installpath_without .= $PathSeparator . $vcsid;
@@ -271,6 +267,9 @@ if ($opt_nr)  {
 }
 if ( $ARGV[0] ) {
     $milestone = $ARGV[0];
+}
+if ( $ARGV[1] ) {
+    $buildid = $ARGV[1];
 }
 
 
@@ -480,7 +479,7 @@ sub doTest {
 
     # patch config (error 3)
 
-    $Command = "$PERL config.pl \"$basisdir \" \"$branddir \" \"$userinstallpath \" \"$DATA \"";
+    $Command = "$PERL config.pl \"$basisdir \" \"$branddir \" \"$userinstallpath \" \"$DATA \" \"$buildid\"";
     execute_Command ($Command, $error_patchConfig, $show_Message, $command_normal );
 
     # copy basicscripts (error 9)
@@ -678,7 +677,16 @@ sub doInstall {
                 $rpmdir = "$dest_installdir" . "rpm" . $PathSeparator;
                 createPath ($optdir, $error_setup);
                 createPath ($rpmdir, $error_setup);
-                $Command = "rpm --initdb --dbpath $rpmdir";
+                my $ld_library_backup = $ENV{LD_LIBRARY_PATH};
+                if ( defined $ENV{SYSBASE}) {
+                    my $sysbase=$ENV{SYSBASE};
+                    if ( "$ld_library_backup" eq "" ) {
+                        $ENV{LD_LIBRARY_PATH} = "$sysbase/usr/lib";
+                    } else {
+                        $ENV{LD_LIBRARY_PATH} = "$ld_library_backup:$sysbase/lib";
+                    }
+                }
+                $Command = "rpm --initdb --define \"_dbpath $rpmdir\"";
                 execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
                 $mask = "\\.rpm\$";
                 getSubFiles ("$installsetpath", \@DirArray, $mask);
@@ -689,9 +697,10 @@ sub doInstall {
                     if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
                         next;
                     }
-                    $Command = "rpm --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt --dbpath $rpmdir $installsetpath$file";
+                    $Command = "rpm --define \"_dbpath $rpmdir\" --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt $installsetpath$file";
                     execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
                 }
+                $ENV{LD_LIBRARY_PATH}=$ld_library_backup;
             }
         }
         elsif ( (defined($system)) && ($system eq "SunOS") ) {
@@ -834,8 +843,13 @@ sub getInstset {
         ($NEWINSTSET, $INSTSET, $sufix) = fileparse ($smoketest_install);
         return ($NEWINSTSET, $INSTSET);
     }
-    if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP) and ($gui ne $cygwin)) {
+    if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP)) {
+        my $last_lineend = $/;
+        if ($gui eq $cygwin) {
+            &SetCygwinLineends();
+        }
         ($NEWINSTSET, $INSTSET) = getSetFromServer();
+        $/ = $last_lineend;
     }
     else {
         $InstDir="";
@@ -1092,10 +1106,11 @@ sub ConvertCygwinToWin_Shell {
 sub ConvertCygwinToWin {
     my ($cygwinpath) = @_;
     my ($winpath);
+    my ($last_lineends) = $/;
     SetCygwinLineends();
     $winpath=`cygpath --windows $cygwinpath`;
     chomp($winpath);
-    SetWinLineends();
+    $/ = $last_lineends;
     return ($winpath);
 }
 

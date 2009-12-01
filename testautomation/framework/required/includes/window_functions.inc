@@ -226,11 +226,11 @@ sub sAllWindowTitle
 
     '///+<li>writer</li>
     gApplication = "WRITER"
-    call tCheckWindowTitle("swriter","WRITER")
+    call tCheckWindowTitle("swriter","Writer")
 
     '///+<li>MasterDoc</li>
     gApplication = "MASTERDOCUMENT"
-    call tCheckWindowTitle("sglobal","WRITER")
+    call tCheckWindowTitle("sglobal","Writer")
 
     '///+<li>HTML document</li>
     gApplication = "HTML"
@@ -238,19 +238,19 @@ sub sAllWindowTitle
 
     '///+<li>Calc</li>
     gApplication = "CALC"
-    call tCheckWindowTitle("scalc","CALC")
+    call tCheckWindowTitle("scalc","Calc")
 
     '///+<li>Impress</li>
     gApplication = "IMPRESS"
-    call tCheckWindowTitle("simpress","IMPRESS")
+    call tCheckWindowTitle("simpress","Impress")
 
     '///+<li>Draw</li>
     gApplication = "DRAW"
-    call tCheckWindowTitle("sdraw","DRAW")
+    call tCheckWindowTitle("sdraw","Draw")
 
     '///+<li>Math</li>
     gApplication = "MATH"
-    call tCheckWindowTitle("smath","MATH")
+    call tCheckWindowTitle("smath","Math")
 
     qaerrorlog( "Excluded BASE and BACKINGWINDOW" )
 

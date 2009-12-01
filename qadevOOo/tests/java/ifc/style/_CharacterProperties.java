@@ -38,7 +38,6 @@ import com.sun.star.xml.AttributeData;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest.PropertyTester;
 
 import util.ValueChanger;
 import util.utils;

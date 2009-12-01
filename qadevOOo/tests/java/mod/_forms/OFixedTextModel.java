@@ -31,21 +31,8 @@ package mod._forms;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
-import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.DrawTools;
-import util.FormTools;
-import util.SOfficeFactory;
-
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
 
 
 /**

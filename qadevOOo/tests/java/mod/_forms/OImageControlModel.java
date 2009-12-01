@@ -32,23 +32,9 @@ package mod._forms;
 import com.sun.star.beans.NamedValue;
 import java.io.PrintWriter;
 
-import lib.StatusException;
-import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.DBTools;
-import util.FormTools;
-import util.WriterTools;
-
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.form.XLoadable;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
 
 
 /**

@@ -30,8 +30,6 @@
 
 package ifc.ui;
 
-import com.sun.star.awt.XPopupMenu;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.ui.ConfigurationEvent;
 import com.sun.star.ui.XUIConfigurationListener;
 import lib.MultiMethodTest;

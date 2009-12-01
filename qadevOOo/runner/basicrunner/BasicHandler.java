@@ -30,17 +30,13 @@
 package basicrunner;
 
 
-import com.sun.star.awt.XTextComponent;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.connection.ConnectionSetupException;
 import com.sun.star.container.ContainerEvent;
-import com.sun.star.container.ElementExistException;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XContainer;
 import com.sun.star.container.XContainerListener;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.container.XSet;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.WrappedTargetException;
@@ -52,7 +48,6 @@ import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XChangesBatch;
-import com.sun.star.util.XSortable;
 import java.util.Hashtable;
 import lib.TestParameters;
 

@@ -29,11 +29,9 @@
  ************************************************************************/
 package util;
 
-import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
@@ -43,12 +41,9 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XLibraryContainer;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.util.*;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-
-import java.util.Vector;
 
 
 

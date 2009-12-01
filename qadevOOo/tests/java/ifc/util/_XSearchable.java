@@ -34,7 +34,6 @@ import lib.MultiMethodTest;
 
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.table.XCell;
-import com.sun.star.uno.XInterface;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XSearchable;
 

@@ -34,9 +34,7 @@ import convwatch.ImageHelper;
 import java.io.File;
 import java.awt.image.RenderedImage;
 import java.awt.image.BufferedImage;
-import java.awt.Image;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 // -----------------------------------------------------------------------------
 class Rect

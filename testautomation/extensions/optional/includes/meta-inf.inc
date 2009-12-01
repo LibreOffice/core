@@ -38,58 +38,52 @@
 '\******************************************************************************
 
 testcase tLowerCaseMetaInf
-
-    '///<h3>Case sensitive META-INF in packages</h3>
-    '///<ul>
     
+    printlog( "The filename <META-INF> in lowercase letters may prevent installation" )
+
     dim cExtensionName as string
         cExtensionName = "lowercasemetainf.oxt"
     
     dim cExtensionPath as string
         cExtensionPath = gTesttoolPath & "extensions\optional\input\errors\"
         cExtensionPath = cExtensionPath & cExtensionName
-        cExtensionPath = convertpath( cExtensionPath )
 
     dim irc as integer
-        
-    '///+<li>Create a new document</li>
-    hCreateDocument()
     
-    '///+<li>Add the problematic extension</li>
-    irc = hExtensionAddGUI( cExtensionPath, "" )
+    printlog( "Install extension: " & cExtensionPath )
+    irc = hExtensionAddGUI( cExtensionPath, "AcceptLicense" )
 
-    ' the extension comes with a german license only and will trigger
-    ' a localized license warning on any other language
-    if ( irc = 4 ) then
-        if ( iSprache <> 49 ) then
+    if ( irc > 0 ) then
+    
+        printlog( "Check for unexpected messagebox" )
+        kontext "Active"
+        if ( Active.exists( 3 ) ) then
+            warnlog( "Extension should install after license has been displayed" )
+            printlog( Active.getText() )
+            
+            printlog( "Trying to end test gracefully" )
+            Active.ok()
 
-            printlog( "This test only works with german ui-language" )
-            kontext "active"
-            if ( active.exists() ) then
-                active.ok()
-               
-                kontext "PackageManager"
-                PackageManager.ok()
+            printlog( "Close Extension Manager" )
+            kontext "PackageManager"
+            if ( PackageManager.exists( 3 ) ) then
+                PackageManager.close()
             else
-                warnlog( "Unexpected active" )
+                warnlog( "Cannot access Extension Manager" )
             endif
-        else
-            kontext "active"
-            if ( active.exists() ) then
-                warnlog( "Unexpected active" ) 
-            endif
-        endif
-    endif
 
-    '///+<li>Remove the problematic extension</li>
-    if ( irc = 0 ) then
+        else
+            printlog( "No messagebox, good." )
+        endif
+        
+        printlog( "Remove extension" )
         hExtensionRemoveGUI( cExtensionName )
+        
+    else
+    
+        warnlog( "The extension was not installed" )
+        
     endif
-    
-    '///+<li>Close the document</li>
-    hDestroyDocument()
-    
-    '///</ul>
 
 endcase
 

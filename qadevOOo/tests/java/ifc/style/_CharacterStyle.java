@@ -30,11 +30,7 @@
 
 package ifc.style;
 
-import com.sun.star.beans.XPropertySet;
 import lib.MultiPropertyTest;
-
-import util.ValueChanger;
-import util.utils;
 
 
 /**

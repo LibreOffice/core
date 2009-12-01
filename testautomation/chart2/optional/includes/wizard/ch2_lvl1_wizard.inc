@@ -564,11 +564,7 @@ testcase tCreateNewLineChart
             warnlog "Data range wasn't correctly preserved after save and reload: $A$19"
         endif
         if instr ( sControlString , "$B$1:$C$13" ) = 0 Then
-            if (gPlatform = "osx") then
-                qaerrorlog "Data range wasn't correctly preserved after save and reload: $B$1:$C$13"
-            else
-                warnlog "Data range wasn't correctly preserved after save and reload: $B$1:$C$13"
-            endif
+           QAErrorlog "#i100780#Data range wasn't correctly preserved after save and reload: $B$1:$C$13"
         endif
         if instr ( sControlString , "$E$1:$F$13" ) = 0 Then
             warnlog "Data range wasn't correctly preserved after save and reload: $E$1:$F$13"

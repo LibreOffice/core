@@ -525,6 +525,14 @@ testcase tFormatConditionalFormatting
     if Zellvorlage1.GetItemCount < 1 then
         warnlog "The 'Cell style' listbox is empty"
     end if
+	printlog " Click on NewStyle button"
+	NewStyle1.Click
+	Kontext
+    active.SetPage TabVerwalten
+	printlog " Close Style dialog"
+    Kontext "TabVerwalten"
+	TabVerwalten.Close
+	Kontext "BedingteFormatierung"
     '/// Check 'Condition 2'
     printlog " Check 'Condition 2'"
     Bedingung2.Check

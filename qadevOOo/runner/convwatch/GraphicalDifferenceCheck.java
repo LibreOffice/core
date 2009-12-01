@@ -32,7 +32,6 @@ package convwatch;
 
 import convwatch.GraphicalTestArguments;
 import convwatch.OfficePrint;
-import convwatch.ConvWatch;
 import convwatch.ConvWatchCancelException;
 import convwatch.FileHelper;
 import java.io.File;
@@ -43,7 +42,6 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
-import share.LogWriter;
 
 public class GraphicalDifferenceCheck
 {

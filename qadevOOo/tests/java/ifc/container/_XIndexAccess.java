@@ -30,7 +30,6 @@
 
 package ifc.container;
 
-import com.sun.star.uno.XInterface;
 import lib.MultiMethodTest;
 
 import com.sun.star.container.XIndexAccess;

@@ -32,13 +32,10 @@ package ifc.frame;
 
 import com.sun.star.awt.Point;
 import com.sun.star.frame.XFrame;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XLayoutManager;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
-import com.sun.star.awt.XWindow;
 import com.sun.star.ui.DockingArea;
-import com.sun.star.ui.XDockingAreaAcceptor;
 import com.sun.star.ui.XUIElement;
 import lib.MultiMethodTest;
 import util.utils;

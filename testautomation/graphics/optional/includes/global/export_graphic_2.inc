@@ -468,21 +468,25 @@ testcase tPDF
     ' Check if the file size is the same when exporting via toolbar and file/export
     ' if the size different then the options are not used when exporting via the toolbar
     if (iFileSize(1) <> iFileSize(2)) then
-        Warnlog ("Diffrence in filesize for file 1 and 2")
+        qaerrorlog "i100919: pdf export: different file size when exporting with file/export or button"
+        'Warnlog ("Diffrence in filesize for file 1 and 2")
     endif
     ' print optimized
     if (iFileSize(5) <> iFileSize(6)) then
-        Warnlog ("Diffrence in filesize for file 5 and 6")
+        qaerrorlog "i100919: pdf export: different file size when exporting with file/export or button"
+        'Warnlog ("Difference in filesize for file 5 and 6")
     endif
     ' press optimized
     if (iFileSize(9) <> iFileSize(10)) then
-        Warnlog ("Diffrence in filesize for file 9 and 10")
+        qaerrorlog "i100919: pdf export: different file size when exporting with file/export or button"
+        'Warnlog ("Difference in filesize for file 9 and 10")
     endif
 
     
 
     if (iFileSize(1) > iFileSize(5)) then
-        Warnlog ("Filesize for file 1 is greater then for file 5. The compression level doesn't work.")
+    qaerrorlog "i100919: pdf export: different file size when exporting with file/export or button"
+        'Warnlog ("Filesize for file 1 is greater then for file 5. The compression level doesn't work.")
     endif
     if (iFileSize(5) > iFileSize(9)) then
         Warnlog ("Filesize for file 5 is greater then for file 9. The compression level doesn't work.")

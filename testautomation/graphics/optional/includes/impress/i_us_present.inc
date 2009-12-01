@@ -589,8 +589,12 @@ testcase i_us_presentation6
     '/// 9. Q&A Slide ///'
     InsertSlide 'No 6
     WaitSlot (1000)
-    DocumentImpress.TypeKeys "Q&A<TAB>"
+    kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<TAB>"
+    DocumentImpress.TypeKeys "<RETURN>"
+    DocumentImpress.TypeKeys "Q&A"
     WaitSlot (1000)
+    kontext "DocumentImpress"
     DocumentImpress.TypeKeys "<SHIFT HOME>"
     Kontext "TextObjectbar"
         if TextObjectbar.Exists = FALSE then
@@ -598,7 +602,7 @@ testcase i_us_presentation6
         end if
         WaitSlot (2000)
         Printlog "- Change size of font"
-        Schriftgroesse.Select (25)
+        Schriftgroesse.Select "26"
         Schriftgroesse.TypeKeys "<RETURN>"
         Fett.Click
     kontext "DocumentImpress"

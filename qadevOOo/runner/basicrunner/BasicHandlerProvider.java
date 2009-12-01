@@ -34,7 +34,6 @@ import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.connection.ConnectionSetupException;
 import lib.TestParameters;
 import share.LogWriter;

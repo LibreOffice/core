@@ -86,9 +86,14 @@ testcase tFormatObjectProperties
         Active.SetPage TabDataSeriesLabels
         '/// Check if tab page series labels exists
         Kontext "TabDataSeriesLabels"
-        call DialogTest ( TabDataSeriesLabels )        
+        call DialogTest ( TabDataSeriesLabels )
+        '/// Check if tab page data series options exists
+        Kontext
+		Active.SetPage TabDataSeriesOptions
+        Kontext "TabDataSeriesOptions"
+        call DialogTest ( TabDataSeriesOptions )        
         '/// Close dialog with Cancel-button
-        TabDataSeriesLabels.Cancel
+        TabDataSeriesOptions.Cancel
         '/// Close document
         Kontext "DocumentCalc"
         DocumentCalc.TypeKeys "<Escape>"

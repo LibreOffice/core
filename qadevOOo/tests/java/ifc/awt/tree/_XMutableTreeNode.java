@@ -31,9 +31,6 @@
 package ifc.awt.tree;
 
 import com.sun.star.awt.tree.XMutableTreeNode;
-import com.sun.star.awt.tree.XTreeNode;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;

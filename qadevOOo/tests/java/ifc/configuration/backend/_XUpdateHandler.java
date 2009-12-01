@@ -30,7 +30,6 @@
 package ifc.configuration.backend;
 
 import com.sun.star.configuration.backend.TemplateIdentifier;
-import com.sun.star.configuration.backend.XLayerHandler;
 import com.sun.star.configuration.backend.XUpdateHandler;
 import com.sun.star.uno.Type;
 

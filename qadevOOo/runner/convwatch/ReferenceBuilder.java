@@ -31,7 +31,6 @@
 package convwatch;
 
 // imports
-import java.util.Enumeration;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ import java.util.ArrayList;
 import com.sun.star.lang.XMultiServiceFactory;
 
 import convwatch.DirectoryHelper;
-import convwatch.OfficePrint;
 import convwatch.ConvWatchException;
 import convwatch.EnhancedComplexTestCase;
 import convwatch.PropertyName;

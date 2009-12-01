@@ -35,7 +35,6 @@ import stats.InternalLogWriter;
 import lib.TestParameters;
 import util.DynamicClassLoader;
 import base.TestBase;
-import helper.AppProvider;
 import helper.ClParser;
 import helper.CfgParser;
 import com.sun.star.beans.XPropertyAccess;

@@ -31,7 +31,6 @@
 package convwatch;
 
 // imports
-import java.util.Enumeration;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;

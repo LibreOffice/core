@@ -41,14 +41,11 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XIndexContainer;
 import com.sun.star.form.XFormsSupplier;
 import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 

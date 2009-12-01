@@ -29,7 +29,6 @@
  ************************************************************************/
 package mod._cfgmgr2;
 
-import com.sun.star.beans.Property;
 import java.io.PrintWriter;
 
 import lib.TestCase;
@@ -39,7 +38,6 @@ import util.utils;
 
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;

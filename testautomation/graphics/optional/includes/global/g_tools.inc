@@ -129,6 +129,7 @@ hToolsOptions("LANGUAGESETTINGS","Languages")
 Westlich.Select 32
 Kontext "ExtrasOptionenDlg"
 ExtrasOptionenDlg.OK
+sleep 1
   '------------------------
   try
      ExtrasThesaurusDraw							'/// Thesaurus with only 1 word ///'

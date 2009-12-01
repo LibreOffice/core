@@ -32,20 +32,11 @@ package helper;
 
 // __________ Imports __________
 
-// structs, const, ...
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.util.URL;
-
 // exceptions
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
 import java.net.MalformedURLException;
 
 // interfaces
 import com.sun.star.util.XURLTransformer;
-
-// helper
-import com.sun.star.uno.UnoRuntime;
 
 // others
 import java.io.File;

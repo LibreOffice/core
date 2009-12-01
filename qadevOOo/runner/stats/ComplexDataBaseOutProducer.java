@@ -30,7 +30,6 @@
 package stats;
 
 import share.LogWriter;
-import share.DescEntry;
 import java.text.DecimalFormat;
 import java.util.Hashtable;
 import java.util.Calendar;

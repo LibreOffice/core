@@ -36,9 +36,7 @@ import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
-import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -48,7 +46,7 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.utils;
+
 
 /**
 * Test for object which is represented by service

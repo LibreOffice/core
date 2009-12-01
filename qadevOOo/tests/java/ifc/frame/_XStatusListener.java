@@ -30,10 +30,8 @@
 
 package ifc.frame;
 
-import com.sun.star.awt.XPopupMenu;
 import com.sun.star.frame.FeatureStateEvent;
 import com.sun.star.frame.XStatusListener;
-import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 
 public class _XStatusListener extends MultiMethodTest {

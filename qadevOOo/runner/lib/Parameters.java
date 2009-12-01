@@ -43,7 +43,6 @@ import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.Type;
 
 /**

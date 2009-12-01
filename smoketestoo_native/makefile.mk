@@ -48,11 +48,11 @@ ALLTAR : make_test
 
 make_test:
 .IF $(NOREMOVE)
-    @$(PERL) smoketest.pl -nr $(LAST_MINOR)
+    @$(PERL) smoketest.pl -nr $(LAST_MINOR) $(BUILD)
 .ELSE
-    @$(PERL) smoketest.pl $(LAST_MINOR)
+    @$(PERL) smoketest.pl $(LAST_MINOR) $(BUILD)
 .ENDIF
 
 noremove:
-    @$(PERL) smoketest.pl -nr $(LAST_MINOR)
+    @$(PERL) smoketest.pl -nr $(LAST_MINOR) $(BUILD)
 

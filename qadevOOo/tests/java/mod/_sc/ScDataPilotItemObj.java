@@ -31,17 +31,14 @@ package mod._sc;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.DataPilotFieldOrientation;
-import com.sun.star.sheet.TableFilterField;
 import com.sun.star.sheet.XDataPilotDescriptor;
 import com.sun.star.sheet.XDataPilotField;
 import com.sun.star.sheet.XDataPilotTables;
 import com.sun.star.sheet.XDataPilotTablesSupplier;
-import com.sun.star.sheet.XSheetFilterDescriptor;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;

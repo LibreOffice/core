@@ -35,22 +35,11 @@ import java.io.PrintWriter;
 
 import lib.TestParameters;
 import lib.TestCase;
-import lib.Status;
 import lib.MultiMethodTest;
 import lib.TestEnvironment;
 import util.DynamicClassLoader;
 
-import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.connection.XConnector;
-import com.sun.star.connection.XConnection;
-
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.uno.XComponentContext;
 
 import share.DescEntry;
 import share.DescGetter;
@@ -59,7 +48,6 @@ import base.TestBase;
 
 import share.LogWriter;
 import stats.Summarizer;
-import util.SOfficeFactory;
 
 /**
  * this class handles tests written in java and running on a fat Office

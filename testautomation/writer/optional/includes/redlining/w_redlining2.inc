@@ -443,14 +443,21 @@ testcase tAcceptReject_6
    Autor.Check
    Sleep 2
    '/// + Select Author2
-   AutoListe.Select 2
-   Sleep 2
-   '/// + Select tabpage 'List' ///
-   TabControl.SetPage TabListe
-   Sleep 2
-   '/// + Select 'Accept All'///
-   AlleAkzeptieren.Click
-   Sleep 2
+   	try
+   		AutoListe.Select 2
+    catch
+    	QAErrorlog "#i99937#Change of author (User name) disregarded when changed during Office session"
+		Redlining.Close
+		Call hCloseDocument
+		goto endsub
+	endcatch
+	Sleep 2
+	'/// + Select tabpage 'List' ///
+	TabControl.SetPage TabListe
+	Sleep 2
+	'/// + Select 'Accept All'///
+	AlleAkzeptieren.Click
+	Sleep 2
 
    '/// + Close Redlining dialog
    Redlining.Close

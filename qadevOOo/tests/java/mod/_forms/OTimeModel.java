@@ -30,7 +30,6 @@
 package mod._forms;
 
 import com.sun.star.beans.NamedValue;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.form.XBoundComponent;
 import com.sun.star.form.XLoadable;

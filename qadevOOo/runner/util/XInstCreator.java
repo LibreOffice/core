@@ -30,8 +30,6 @@
 
 package util;
 
-import util.InstDescr;
-import java.util.Hashtable;
 import com.sun.star.uno.XInterface;
 import com.sun.star.container.XIndexAccess;
 

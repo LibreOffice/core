@@ -30,12 +30,8 @@
 
 package ifc.frame;
 
-import com.sun.star.awt.XPopupMenu;
 import com.sun.star.frame.FrameActionEvent;
 import com.sun.star.frame.XFrameActionListener;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.ui.ConfigurationEvent;
-import com.sun.star.ui.XUIConfigurationListener;
 import lib.MultiMethodTest;
 
 public class _XFrameActionListener extends MultiMethodTest {

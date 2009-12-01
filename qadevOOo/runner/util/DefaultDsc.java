@@ -33,8 +33,7 @@ package util;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.form.*;
-import com.sun.star.awt.*;
+
 /**
  * Defaultdescriptor:
  * This descriptor is useful for instances in default values.

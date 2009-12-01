@@ -30,20 +30,13 @@
 
 package ifc.container;
 
-import java.io.PrintWriter;
-
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 
-import com.sun.star.awt.XControl;
-import com.sun.star.awt.XControlContainer;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.container.XContainerQuery;
 import com.sun.star.container.XEnumeration;
-import com.sun.star.lang.EventObject;
-import com.sun.star.uno.UnoRuntime;
-import java.util.Enumeration;
 
 
 /**

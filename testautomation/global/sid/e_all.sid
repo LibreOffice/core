@@ -62,6 +62,7 @@ EditRedo SID_REDO
 EditRepeat SID_REPEAT
 EditCut SID_CUT
 EditCopy .uno:Copy
+EditDoc .uno:EditDoc
 EditPaste SID_PASTE
 EditDelete SID_DELETE
 EditSelectAll SID_SELECTALL
@@ -305,7 +306,7 @@ InsertRLM .uno:InsertLRM
 
 ' **** Writer
 InsertManualBreak FN_INSERT_BREAK_DLG
-InsertSpecialCharacterWriter FN_INSERT_SYMBOL
+InsertSpecialCharacterWriter .uno:InsertSymbol
 InsertObjectFormulaWriter FN_INSERT_SMA
 InsertTableWriter FN_INSERT_TABLE
 InsertFileWriter SID_INSERTDOC
@@ -360,10 +361,10 @@ InsertSheetFromFile FID_INS_TABLE_EXT
 ' **** Draw
 InsertPage .uno:InsertPage
 InsertAVMedia .uno:InsertAVMedia
-InsertBullet .uno:Bullet
+InsertBullet .uno:InsertSymbol
 InsertCapturePoint .uno:CapturePoint
 InsertDuplicatePage .uno:DuplicatePage
-InsertSpecialCharacterDraw SID_BULLET
+InsertSpecialCharacterDraw .uno:InsertSymbol
 InsertGraficsDraw SID_INSERT_IMAGE
 InsertGraphicMenu .uno:GraphicMenu
 InsertObjectFormulaDraw SID_INSERT_MATH
@@ -383,6 +384,7 @@ InsertFieldsTimeFix SID_INSERT_FLD_TIME_FIX
 InsertFieldsTimeVariable SID_INSERT_FLD_TIME_VAR
 InsertFieldsAuthorDraw SID_INSERT_FLD_AUTHOR
 InsertFieldsPageNumberDraw SID_INSERT_FLD_PAGE
+InsertFieldsPageCountDraw .uno:InsertPagesField
 InsertFieldsFileName SID_INSERT_FLD_FILE
 InsertHyperlinkDialog .uno:HyperlinkDialog
 InsertScanSelectSource SID_TWAIN_SELECT

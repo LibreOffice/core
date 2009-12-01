@@ -29,7 +29,6 @@
  ************************************************************************/
 package mod._svx;
 
-import com.sun.star.beans.Property;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;

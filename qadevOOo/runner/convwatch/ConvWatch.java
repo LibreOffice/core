@@ -30,8 +30,6 @@
 
 package convwatch;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import complexlib.ComplexTestCase;
 import convwatch.ConvWatchException;
 import convwatch.ConvWatchCancelException;
 import convwatch.FileHelper;

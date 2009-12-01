@@ -10,7 +10,8 @@
 5=MATH
 6=MASTERDOCUMENT
 7=HTML
-8=INSIGHT
+8=DATABASE
+9=CHART
 
 
 [application_names]
@@ -22,7 +23,8 @@ DRAW=Drawing document
 MATH=Formula document
 MASTERDOCUMENT=Master document
 HTML=HTML document
-INSIGHT=Database
+DATABASE=Database
+CHART=Chart
 
 
 [DocumentKontext]
@@ -34,5 +36,5 @@ DRAW=DocumentDraw
 MATH=DocumentMath
 MASTERDOCUMENT=DocumentWriter
 HTML=DocumentWriter
-INSIGHT=
-
+DATABASE=Database
+CHART=<not defined>

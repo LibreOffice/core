@@ -30,7 +30,6 @@
 
 package util;
 
-import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.PolygonFlags;
@@ -42,8 +41,6 @@ import java.lang.reflect.Modifier ;
 import java.lang.reflect.Array ;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.beans.PropertyValue;
-
 
 
 public class ValueChanger {

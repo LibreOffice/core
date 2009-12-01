@@ -35,8 +35,6 @@ package graphical;
 import complexlib.ComplexTestCase;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 /**

@@ -31,11 +31,7 @@ package ifc.document;
 
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
-import com.sun.star.i18n.ForbiddenCharacters;
 import com.sun.star.i18n.XForbiddenCharacters;
-import com.sun.star.i18n.XLocaleData;
-import com.sun.star.lang.Locale;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import java.lang.reflect.Method;
 

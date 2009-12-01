@@ -34,12 +34,7 @@ import util.DynamicClassLoader;
 import share.DescEntry;
 import share.DescGetter;
 import share.ComplexTest;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.lang.reflect.Method;
-import java.util.StringTokenizer;
 import java.util.Vector;
-import lib.TestParameters;
 import share.LogWriter;
 
 /**

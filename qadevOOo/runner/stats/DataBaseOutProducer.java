@@ -32,15 +32,7 @@ package stats;
 import share.LogWriter;
 import share.DescEntry;
 
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.Vector;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.StringTokenizer;
 
 /**
  *

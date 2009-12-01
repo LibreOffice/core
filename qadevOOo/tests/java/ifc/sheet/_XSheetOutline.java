@@ -29,7 +29,6 @@
  ************************************************************************/
 package ifc.sheet;
 
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.sheet.XCellRangesQuery;
 import com.sun.star.sheet.XSheetCellRanges;
 import lib.MultiMethodTest;

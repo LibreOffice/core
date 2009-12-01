@@ -30,7 +30,6 @@
 
 package ifc.document;
 
-import com.sun.star.beans.XPropertySet;
 import lib.MultiMethodTest;
 
 import com.sun.star.document.XEventBroadcaster;
@@ -38,7 +37,6 @@ import com.sun.star.document.XEventListener;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
-import lib.StatusException;
 
 public class _XEventBroadcaster extends MultiMethodTest {
 

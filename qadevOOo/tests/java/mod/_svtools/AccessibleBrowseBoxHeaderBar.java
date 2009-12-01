@@ -29,9 +29,6 @@
  ************************************************************************/
 package mod._svtools;
 
-import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 import com.sun.star.view.XSelectionSupplier;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
@@ -58,7 +55,6 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;

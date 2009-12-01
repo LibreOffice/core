@@ -231,7 +231,7 @@ EinfuegenObjektVideo SID_INSERT_VIDEO
 EinfuegenFrame SID_INSERT_FLOATINGFRAME
 
 ' **** Writer
-EinfuegenSonderzeichenWriter FN_INSERT_SYMBOL
+EinfuegenSonderzeichenWriter .uno:InsertSymbol
 EinfuegenFormelWriter FN_INSERT_SMA
 EinfuegenTabelleWriter FN_INSERT_TABLE
 EinfuegenDateiWriter SID_INSERTDOC
@@ -282,7 +282,7 @@ EinfuegenNotizCalc SID_INSERT_POSTIT
 EinfuegenExterneDatenQuelle SID_EXTERNAL_SOURCE
 
 ' **** Einfuegenmenue : Draw
-EinfuegenSonderzeichenDraw SID_BULLET
+EinfuegenSonderzeichenDraw .uno:InsertSymbol
 EinfuegenGrafikAusBildbearbeitungDraw SID_INSERT_IMAGE
 EinfuegenFormelDraw SID_INSERT_MATH
 EinfuegenTabelleDraw SID_ATTR_TABLE

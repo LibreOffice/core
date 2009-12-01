@@ -43,7 +43,6 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.XReportDocumentsSupplier;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;

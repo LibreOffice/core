@@ -32,7 +32,6 @@ package convwatch;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 import helper.OSHelper;
 

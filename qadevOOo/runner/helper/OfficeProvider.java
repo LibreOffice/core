@@ -46,8 +46,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lib.TestParameters;
 
 import share.DescEntry;

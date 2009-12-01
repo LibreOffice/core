@@ -34,7 +34,6 @@ import com.sun.star.i18n.XExtendedIndexEntrySupplier;
 import com.sun.star.lang.Locale;
 
 import java.util.HashMap;
-import java.util.Vector;
 
 import lib.MultiMethodTest;
 

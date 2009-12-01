@@ -44,193 +44,193 @@
 testcase tOLE_Copy
     qaerrorlog "not running due to reconstruction"
     goto endsub
-   '/// Test to see if three different OLEs can be copied and identified correctly. ///'
-
-   dim writerfilename1 as string
-   writerfilename1 = ConvertPath (gTesttoolPath + "graphics\required\input\oletest.odg")
-
-   '/// Open draw-file ///'
-   FileOpen
-   Kontext "OeffnenDlg"
-   sleep 1
-   Dateiname.SetText (writerfilename1)
-   Oeffnen.Click
-   Sleep 3
-
-   '/// When messagebox about "Update all links" shows up - press yes. ///'
-   kontext "Messagebox"
-   if Messagebox.exists then
-      Messagebox.Yes
-   endif
-
-   sleep 3
-   gApplication = "DRAW"
-   '/// Select first object. Use EditCopy to copy it to the clipboard ///'
-   sleep 1
-   kontext "DocumentDraw"
-   DocumentDraw.mousedown (10,10)
-   DocumentDraw.mouseup (10,10)
-   sleep 1
-   DocumentDraw.Typekeys "<TAB>"
-   EditCopy
-
-   '/// Close document. Open new Impress-Document. Paste the OLE-Object. ///'
-   Call hCloseDocument
-   gApplication = "IMPRESS"
-   Call hNewDocument
-   EditPaste
-
-   '/// Select object and check via the Context-menu what it has been opened as. ///'
-   sleep 1
-   Kontext "DocumentImpress"
-   hTypekeys "<MOD1> A"
-   hTypekeys "<RETURN>"
-   hOpenContextMenu
-
-   '/// Count the number of entries. If 5 (including a menuseparator), then its a spreadsheet ///'
+    printlog "Test to see if three different OLEs can be copied and identified correctly."
+    
+    dim writerfilename1 as string
+    writerfilename1 = ConvertPath (gTesttoolPath + "graphics\required\input\oletest.odg")
+    
+    printlog "Open draw-file" & writerfilename1
+    FileOpen
+    Kontext "OeffnenDlg"
+    sleep 1
+    Dateiname.SetText (writerfilename1)
+    Oeffnen.Click
+    Sleep 3
+    
+    printlog "When messagebox about Update all links shows up - press yes."
+    kontext "Messagebox"
+    if Messagebox.exists then
+    Messagebox.Yes
+    endif
+    
+    sleep 3
+    gApplication = "DRAW"
+    printlog "Select first object. Use EditCopy to copy it to the clipboard"
+    sleep 1
+    kontext "DocumentDraw"
+    DocumentDraw.mousedown (10,10)
+    DocumentDraw.mouseup (10,10)
+    sleep 1
+    DocumentDraw.Typekeys "<TAB>"
+    EditCopy
+    
+    printlog "Close document. Open new Impress-Document. Paste the OLE-Object."
+    Call hCloseDocument
+    gApplication = "IMPRESS"
+    Call hNewDocument
+    EditPaste
+    
+    printlog "Select object and check via the Context-menu what it has been opened as."
+    sleep 1
+    Kontext "DocumentImpress"
+    hTypekeys "<MOD1> A"
+    hTypekeys "<RETURN>"
+    hOpenContextMenu
+    
+    printlog "Count the number of entries. If 5 (including a menuseparator), then its a spreadsheet"
     if MenuGetItemCount <> 5 then
-       Warnlog "This doesn't seem to be recognized as a Metafile. It has " + MenuGetItemCount + " entries."
+        Warnlog "This doesn't seem to be recognized as a Metafile. It has " + MenuGetItemCount + " entries."
     end if
 
-   '/// Close Context menu. Then check if a Edit-line for the Cells is visible. ///'
-   sleep 3
-   MenuSelect (1)  'Default
+    printlog "Close Context menu. Then check if a Edit-line for the Cells is visible."
+    sleep 3
+    MenuSelect (1)  'Default
+    
+    Kontext "RechenleisteCalc"
+    if RechenleisteCalc.Exists then
+        Printlog "This is a spreadsheet-Document. Good"
+    endif
+    
+    Kontext "DocumentImpress"
+    printlog "Click outside the OLE to deactivate it. Then close the Document "
+    DocumentImpress.mousedown (10,10)
+    DocumentImpress.mouseup (10,10)
+    sleep 3
+    Call hCloseDocument
+    
+    printlog "Open Draw-file "
+    FileOpen
+    Kontext "OeffnenDlg"
+    sleep 1
+    Dateiname.SetText (writerfilename1)
+    Oeffnen.Click
+    Sleep 3
+    
+    printlog " When messagebox about Update all links shows up - press yes."
+    kontext "Messagebox"
+    if Messagebox.exists then
+        Messagebox.Yes
+    endif
+    sleep 3
+    
+    printlog "Select second object. Use EditCopy to copy it to the clipboard."
+    gApplication = "DRAW"
+    sleep 1
+    kontext "DocumentDraw"
+    DocumentDraw.mousedown (10,10)
+    DocumentDraw.mouseup (10,10)
+    sleep 1
+    DocumentDraw.Typekeys "<TAB><TAB>"
+    EditCopy
+    
+    printlog "Close document. Open new Impress-Document. Paste the OLE-Object."
+    sleep 1
+    DocumentDraw.mousedown (10,10)
+    DocumentDraw.mouseup (10,10)
+    sleep 1
+    Call hCloseDocument
+    
+    gApplication = "IMPRESS"
+    Call hNewDocument
+    EditPaste
+    
+    printlog "Select the object, and check via the Context-menu what it has been opened as."
+    sleep 1
+    Kontext "DocumentImpress"
+    hTypekeys "<MOD1> A"
+    hTypekeys "<RETURN>"
+    hOpenContextMenu
 
-   Kontext "RechenleisteCalc"
-   if RechenleisteCalc.Exists then
-      Printlog "This is a spreadsheet-Document. Good"
-   endif
-
-   Kontext "DocumentImpress"
-   '/// Click outside the OLE to deactivate it. Then close the Document ///'
-   DocumentImpress.mousedown (10,10)
-   DocumentImpress.mouseup (10,10)
-   sleep 3
-   Call hCloseDocument
-
-   '/// Open Draw-file ///'
-   FileOpen
-   Kontext "OeffnenDlg"
-   sleep 1
-   Dateiname.SetText (writerfilename1)
-   Oeffnen.Click
-   Sleep 3
-
-   '/// When messagebox about "Update all links" shows up - press yes. ///'
-   kontext "Messagebox"
-   if Messagebox.exists then
-      Messagebox.Yes
-   endif
-   sleep 3
-
-   '/// Select second object. Use EditCopy to copy it to the clipboard ///'
-   gApplication = "DRAW"
-   sleep 1
-   kontext "DocumentDraw"
-   DocumentDraw.mousedown (10,10)
-   DocumentDraw.mouseup (10,10)
-   sleep 1
-   DocumentDraw.Typekeys "<TAB><TAB>"
-   EditCopy
-
-   '/// Close document. Open new Impress-Document. Paste the OLE-Object. ///'
-   sleep 1
-   DocumentDraw.mousedown (10,10)
-   DocumentDraw.mouseup (10,10)
-   sleep 1
-   Call hCloseDocument
-
-   gApplication = "IMPRESS"
-   Call hNewDocument
-   EditPaste
-
-   '/// Select the object, and check via the Context-menu what it has been opened as. ///'
-   sleep 1
-   Kontext "DocumentImpress"
-   hTypekeys "<MOD1> A"
-   hTypekeys "<RETURN>"
-   hOpenContextMenu
-
-   '/// Count the number of entries. If 5 (including a menuseparator), then its a spreadsheet ///'
+    printlog "Count the number of entries. If 5 (including a menuseparator), then its a spreadsheet"
     if MenuGetItemCount <> 5 then
-       Warnlog "This doesn't seem to be recognized as a Metafile. It has " + MenuGetItemCount + " entries."
+        Warnlog "This doesn't seem to be recognized as a Metafile. It has " + MenuGetItemCount + " entries."
     end if
+    
+    printlog "Close Context menu. Then check if a Edit-line for the Cells is visible."
+    sleep 3
+    MenuSelect (1)  'Default
+    
+    Kontext "RechenleisteCalc"
+    if RechenleisteCalc.Exists then
+        Printlog "This is a spreadsheet-Document. Good"
+    endif
+    
+    kontext "DocumentImpress"
+    sleep 1
+    DocumentImpress.mousedown (10,10)
+    DocumentImpress.mouseup (10,10)
+    sleep 1
+    
+    printlog "Close document"
+    Call hCloseDocument
+    
+    printlog "Open draw-file"
+    FileOpen
+    Kontext "OeffnenDlg"
+    sleep 1
+    Dateiname.SetText (writerfilename1)
+    Oeffnen.Click
+    Sleep 3
+    kontext "Messagebox"
+    printlog "When messagebox about Update all links shows up - press yes."
+    if Messagebox.exists then
+        Messagebox.Yes
+    endif
+    sleep 3
+    
+    printlog "Select third object. Use EditCopy to copy it to the clipboard."
+    gApplication = "DRAW"
+    sleep 1
+    kontext "DocumentDraw"
+    DocumentDraw.mousedown (10,10)
+    DocumentDraw.mouseup (10,10)
+    sleep 1
+    DocumentDraw.Typekeys "<TAB><TAB><TAB>"
+    EditCopy
+    
+    printlog "Close the Document. Open new Impress-Document. Paste the OLE-Object."
+    sleep 1
+    DocumentDraw.mousedown (10,10)
+    DocumentDraw.mouseup (10,10)
+    sleep 1
+    Call hCloseDocument
 
-   '/// Close Context menu. Then check if a Edit-line for the Cells is visible. ///'
-   sleep 3
-   MenuSelect (1)  'Default
-
-   Kontext "RechenleisteCalc"
-   if RechenleisteCalc.Exists then
-      Printlog "This is a spreadsheet-Document. Good"
-   endif
-
-   kontext "DocumentImpress"
-   sleep 1
-   DocumentImpress.mousedown (10,10)
-   DocumentImpress.mouseup (10,10)
-   sleep 1
-
-   '/// Close document ///'
-   Call hCloseDocument
-
-   '/// Open draw-file ///'
-   FileOpen
-   Kontext "OeffnenDlg"
-   sleep 1
-   Dateiname.SetText (writerfilename1)
-   Oeffnen.Click
-   Sleep 3
-   kontext "Messagebox"
-   '/// When messagebox about "Update all links" shows up - press yes. ///'
-   if Messagebox.exists then
-      Messagebox.Yes
-   endif
-   sleep 3
-
-   '/// Select third object. Use EditCopy to copy it to the clipboard ///'
-   gApplication = "DRAW"
-   sleep 1
-   kontext "DocumentDraw"
-   DocumentDraw.mousedown (10,10)
-   DocumentDraw.mouseup (10,10)
-   sleep 1
-   DocumentDraw.Typekeys "<TAB><TAB><TAB>"
-   EditCopy
-
-   '/// Close the Document. Open new Impress-Document. Paste the OLE-Object. ///'
-   sleep 1
-   DocumentDraw.mousedown (10,10)
-   DocumentDraw.mouseup (10,10)
-   sleep 1
-   Call hCloseDocument
-
-   gApplication = "IMPRESS"
-   Call hNewDocument
-   EditPaste
-
-   '/// Select the object, and check via the Context-menu what it has been opened as. ///'
-   Kontext "DocumentImpress"
-   hTypekeys "<MOD1> A"
-   hTypekeys "<RETURN>"
-   hOpenContextMenu
-
-   '/// Count the number of entries. If 5 (including a menuseparator), then its a spreadsheet ///'
+    gApplication = "IMPRESS"
+    Call hNewDocument
+    EditPaste
+    
+    printlog "Select the object, and check via the Context-menu what it has been opened as."
+    Kontext "DocumentImpress"
+    hTypekeys "<MOD1> A"
+    hTypekeys "<RETURN>"
+    hOpenContextMenu
+    
+    printlog "Count the number of entries. If 5 (including a menuseparator), then its a spreadsheet"
     if MenuGetItemCount <> 5 then
-       Warnlog "This doesn't seem to be recognized as a Metafile. It has " + MenuGetItemCount + " entries."
+        Warnlog "This doesn't seem to be recognized as a Metafile. It has " + MenuGetItemCount + " entries."
     end if
-
-   '/// Close Context menu. Then check if a Edit-line for the Cells is visible. ///'
-   sleep 3
-   MenuSelect (1)  'Default
-
-   Kontext "RechenleisteCalc"
-   if RechenleisteCalc.Exists then
-      Printlog "This is a spreadsheet-Document. Good"
-   endif
-
-   '/// Close Context menu. Then close the Document ///'
-   Call hCloseDocument
+    
+    printlog "Close Context menu. Then check if a Edit-line for the Cells is visible."
+    sleep 3
+    MenuSelect (1)  'Default
+    
+    Kontext "RechenleisteCalc"
+    if RechenleisteCalc.Exists then
+        Printlog "This is a spreadsheet-Document. Good"
+    endif
+    
+    printlog "Close Context menu. Then close the Document"
+    Call hCloseDocument
 endcase 'tOLE_Copy
 
 '-----------------------------------------------------------------------------------------------------------'
@@ -241,7 +241,7 @@ testcase tOLE_SaveLoad
     dim filename as string
     dim filetype as string
     dim filetype2 as string
-   
+    
     if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
@@ -254,13 +254,13 @@ testcase tOLE_SaveLoad
     printlog "Insert->Object->OLE Object..."
     InsertObjectOLEObject
     Kontext "OLEObjektInsert"
-
+    
     printlog "Choose create new. Select Writer."
     Objekttyp.Select 5
-
+    
     printlog "Click OK to close dialog and insert OLE."
     OLEObjektInsert.OK
-
+    
     printlog "Deselect object."
     sleep 1
     kontext "DocumentImpress"
@@ -285,7 +285,7 @@ testcase tOLE_SaveLoad
     Dateiname.Settext (filename)
     printlog "Saving as: " & filename
     Speichern.Click
-
+    
     printlog "If the file already exists - press yes to overwrite it."
     Sleep 3
     kontext "Messagebox"
@@ -328,8 +328,8 @@ testcase tOLE_SaveLoad
 
     'FHA TODO
     'testcase tOLE_DragDrop
-    '/// Create OLE, drag n drop within the document. ///'
-    '/// If Impress, drag and drop from document to another slide. ///'
+    printlog " Create OLE, drag n drop within the document. "
+    printlog " If Impress, drag and drop from document to another slide. "
     'endcase 'tOLE_DragDrop
 
 endcase ' tOLE_Save
@@ -337,123 +337,120 @@ endcase ' tOLE_Save
 '-------------------------------------------------------------------------------
 testcase tiOpenOLECrash
 
-   dim sFileodp as string
-   dim oFile as string
-   dim i as integer
-   '/// Testing for bug nr: i70019 ///'
-
-   '/// Open Application ///'
-   Call hNewDocument
-   sleep 1
-   '/// 1. Open file: generic_de.ppt ///'
-   FileOpen
-      sleep 1
-      Kontext "OeffnenDlg"
-      '/// Use file: "graphics\\optional\\input\\generic_de.ppt" ///'
-      oFile = ConvertPath (gTesttoolPath + "graphics\required\input\generic_de.ppt")
-      Printlog "file:    '" + oFile + "'"
-      Dateiname.SetText (oFile)
-      '/// 2. Save this document as an *.odp -file. ///'
-      Oeffnen.Click
-      kontext "DocumentImpress"
-      i = 0
-      do while (i < 20)
-         try
+    dim sFileodp as string
+    dim oFile as string
+    dim i as integer
+    printlog "Testing for bug nr: i70019"
+    
+    printlog "Open Application"
+    Call hNewDocument
+    sleep 1
+    printlog "1. Open file: generic_de.ppt"
+    FileOpen
+    sleep 1
+    Kontext "OeffnenDlg"
+    printlog " Use file: graphics\\optional\\input\\generic_de.ppt "
+    oFile = ConvertPath (gTesttoolPath + "graphics\required\input\generic_de.ppt")
+    Printlog "file:    '" + oFile + "'"
+    Dateiname.SetText (oFile)
+    printlog "2. Save this document as an *.odp -file."
+    Oeffnen.Click
+    kontext "DocumentImpress"
+    i = 0
+    do while (i < 20)
+        try
             ApplicationBusy
-         catch
+        catch
             sleep (1)
             i = i + 1
-         endcatch
-      loop
-      if DocumentImpress.StatusIsProgress AND i > 19 then
-         warnlog "   Took over 20 seconds to load the document Document. Stalled?"
-      endif
-
-      FileSaveAs
-         Kontext "SpeichernDlg"
-         sFileodp = (ConvertPath(gOfficePath + "user\work\generic_de"))
-         Dateiname.SetText (sFileodp)
-         Dateityp.Select (1)
-         Speichern.Click
-         Kontext "Messagebox"
-         if Messagebox.Exists(2) then
-            Messagebox.Yes
-            Kontext "AlienWarning"
-            if AlienWarning.Exists(2) then
-               Warnlog "Should not be any alienwarning when saving in our own format!"
-               AlienWarning.OK
-            end if
-            printlog "Saved as: " + sFileodp
-         end if
-      Sleep 3
-      kontext "DocumentImpress"
-      '/// 3. Close Impress. ///'
-      Call hCloseDocument
-
-      '/// 4. Reopen the *.odp file again ///'
-      FileOpen
-         Kontext "OeffnenDlg"
-         Dateiname.SetText (sFileodp + ".odp")
-         Oeffnen.Click
-      kontext
-      if Active.exists (5) then
-         Printlog "ACTIVE: "+active.gettext
-         Active.ok
-         Warnlog "failed to open file? :-("
-      end if
-
-      i = 0
-      do while (i < 20)
-         try
+        endcatch
+    loop
+    if DocumentImpress.StatusIsProgress AND i > 19 then
+        warnlog "   Took over 20 seconds to load the document Document. Stalled?"
+    endif
+    
+    FileSaveAs
+    Kontext "SpeichernDlg"
+    sFileodp = (ConvertPath(gOfficePath + "user\work\generic_de"))
+    Dateiname.SetText (sFileodp)
+    Dateityp.Select (1)
+    Speichern.Click
+    Kontext "Messagebox"
+    if Messagebox.Exists(2) then
+        Messagebox.Yes
+        Kontext "AlienWarning"
+    if AlienWarning.Exists(2) then
+        Warnlog "Should not be any alienwarning when saving in our own format!"
+        AlienWarning.OK
+    end if
+    printlog "Saved as: " + sFileodp
+    end if
+    Sleep 3
+    kontext "DocumentImpress"
+    printlog "3. Close Impress."
+    Call hCloseDocument
+    
+    printlog "4.Reopen the *.odp file again"
+    FileOpen
+    Kontext "OeffnenDlg"
+    Dateiname.SetText (sFileodp + ".odp")
+    Oeffnen.Click
+    kontext
+    if Active.exists (5) then
+        Printlog "ACTIVE: "+active.gettext
+        Active.ok
+        Warnlog "failed to open file? :-("
+    end if
+    
+    i = 0
+    do while (i < 20)
+        try
             ApplicationBusy
-         catch
+        catch
             sleep (1)
             i = i + 1
-         endcatch
-      loop
-      if DocumentImpress.StatusIsProgress AND i > 19 then
-         warnlog "   Took over 20 seconds to load the document Document. Stalled?"
-      endif
+        endcatch
+    loop
+    if DocumentImpress.StatusIsProgress AND i > 19 then
+    warnlog "Took over 20 seconds to load the document Document. Stalled?"
+    endif
+    
+    printlog "5. Right-click on the second slide and click on New slide. "
+    Kontext "Slides"
+    SlidesControl.TypeKeys "<PAGEDOWN>" 'Goto second slide. (and get the focus right)
+    SlidesControl.TypeKeys "<SHIFT F10>"  'OpenContextMenu (True)  'Open Context-menu
+    hMenuSelectNr (1) 'New Slide
 
-      '/// 5. Right-click on the second slide and click on "New slide". ///'
-      Kontext "Slides"
-         SlidesControl.TypeKeys "<PAGEDOWN>" 'Goto second slide. (and get the focus right)
-         SlidesControl.TypeKeys "<SHIFT F10>"  'OpenContextMenu (True)  'Open Context-menu
-         hMenuSelectNr (1) 'New Slide
-
-      '/// 6. Change the title-(the text was "F�r den TCM-Test", but this should irrelevant... ;) ). ///'
-      hTypeKeys "<TAB>" 'To select the title.
-      hTypeKeys "F�r den TCM-Test" 'To enter text
-      '/// 7. Clicked two times on the "Click twice to insert object" ///'
-      hTypeKeys "<ESCAPE>"
-      gMouseClick 1,1
-      hTypeKeys "<TAB><TAB>" '(to select the second object)
-      hTypeKeys "<RETURN>"
-         sleep (2)
-
-         '/// 8. Choose "OpenOffice.org 2.0 Formular" ///'
-         Kontext "OLEObjektInsert"
-         Objekttyp.Select (4)
-         sleep (2)
-         PrintLog "    Objeckt: " + Objekttyp.GetSelText + "  will be inserted."
-         '/// Leave dialog 'Insert OLE Object' with OK ///'
-         OLEObjektInsert.OK
-      sleep (2)
-
-      kontext "CommandsMath"
-         Commands.TypeKeys "A over B + FACT 6 = x"
-
-      ''/// Leave edit mode by typing key [Escape] ///'
-      'Comment: If I do this, the bug wont occur...
-      'hTypeKeys "<ESCAPE>"
-
-      '/// 10. Click on the "Save" button. ///'
-      kontext "Standardbar"
-      Speichern.Click
-
-      '/// 11. Click on the "X" to close the window while the OLE-object still in Edit-mode. ///'
-      Call hCloseDocument
+    printlog "6. Change the title-(the text was F�r den TCM-Test, but this should irrelevant... ;) )."
+    hTypeKeys "<TAB>" 'To select the title.
+    hTypeKeys "Fuer den TCM-Test" 'To enter text
+    printlog " 7. Clicked two times on the Click twice to insert object "
+    hTypeKeys "<ESCAPE>"
+    gMouseClick 1,1
+    hTypeKeys "<TAB><TAB>" '(to select the second object)
+    hTypeKeys "<RETURN>"
+    sleep (2)
+    
+    printlog "8. Choose OpenOffice.org 2.0 Formular"
+    Kontext "OLEObjektInsert"
+    Objekttyp.Select (3)
+    sleep (2)
+    PrintLog "    Object: " + Objekttyp.GetSelText + "  will be inserted."
+    printlog "Leave dialog 'Insert OLE Object' with OK"
+    OLEObjektInsert.OK
+    sleep (2)
+    
+    kontext "CommandsMath"
+    Commands.TypeKeys "A over B + FACT 6 = x"
+    
+    'printlog " Leave edit mode by typing key [Escape] "
+    'Comment: If I do this, the bug wont occur...
+    'hTypeKeys "<ESCAPE>"
+    
+    printlog "10. Click on the Save button."
+    kontext "Standardbar"
+    Speichern.Click
+    
+    printlog "11. Click on the X to close the window while the OLE-object still in Edit-mode."
+    Call hCloseDocument
 endcase
-
-'-----------------oooo-----------------oooo-----------------oooo-----------------
-

@@ -30,8 +30,6 @@
 
 package mod._cfgmgr2;
 
-import com.sun.star.configuration.backend.XLayer;
-import com.sun.star.configuration.backend.XLayerHandler;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -40,8 +38,6 @@ import java.io.PrintWriter;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.XLayerHandlerImpl;
-import util.XLayerImpl;
 
 public class SingleBackendAdapter extends TestCase {
 

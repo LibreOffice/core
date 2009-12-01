@@ -30,16 +30,12 @@
 package helper;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.container.XHierarchicalName;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.XInterface;
 
 /**
  * Read configuration settings.

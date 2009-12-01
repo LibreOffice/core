@@ -61,7 +61,6 @@ import lib.StatusException;
 import util.SOfficeFactory;
 import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdbc.XDataSource;
-import com.sun.star.ucb.XSimpleFileAccess;
 
 public class OQueryDesign extends TestCase {
 

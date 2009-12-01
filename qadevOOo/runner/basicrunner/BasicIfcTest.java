@@ -32,24 +32,13 @@ package basicrunner;
 import lib.TestResult;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import lib.Status;
 import share.DescEntry;
 import share.LogWriter;
 
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.container.NoSuchElementException;
-
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.PropertyValue;
 
-
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * The BASIC interface test

@@ -30,18 +30,9 @@
 
 package mod._fwk;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.embed.XTransactedObject;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
-import ifc.ui._XUIConfiguration;
 import java.io.PrintWriter;
-import com.sun.star.lang.EventObject;
-import com.sun.star.ui.ConfigurationEvent;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;

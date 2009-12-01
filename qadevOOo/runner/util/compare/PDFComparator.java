@@ -30,11 +30,9 @@
 
 package util.compare;
 
-import java.io.IOException;
 import util.compare.DocComparator;
 import lib.TestParameters;
 import util.compare.GraphicalComparator;
-import convwatch.PropertyName;
 
 class PDFComparator extends GraphicalComparator implements DocComparator
 {

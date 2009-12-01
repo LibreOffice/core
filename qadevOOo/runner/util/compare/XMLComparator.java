@@ -30,9 +30,9 @@
 
 package util.compare;
 
-import java.io.IOException;
-import util.compare.DocComparator;
-import lib.TestParameters;
+//import java.io.IOException;
+//import util.compare.DocComparator;
+//import lib.TestParameters;
 
 /**
  * This Interface isn't ready yet.

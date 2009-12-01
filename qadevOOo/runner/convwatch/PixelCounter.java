@@ -32,7 +32,6 @@ package convwatch;
 
 // import java.awt.Image;
 import convwatch.ImageHelper;
-import java.io.IOException;
 
 // -----------------------------------------------------------------------------
 abstract class CountPixel

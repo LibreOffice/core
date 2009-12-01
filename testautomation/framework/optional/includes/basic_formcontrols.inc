@@ -121,6 +121,80 @@ testcase tAllControlsOnDialog( cMajor as string )
         '///+<li>close the BASIC-IDE</li>
         hCloseBasicIde()
         
+        
+        printlog( "" )
+        printlog( "Test case 1: Verify that settings survive a close and reopen of the BASIC IDE" )
+        
+        ToolsMacro_uno
+        kontext "Makro"
+        irc = hSelectNodeByName( MakroAus , CMODULE )
+        if ( irc = 0 ) then
+            qaerrorlog( "Searching node by name failed. Using fallback" )
+            hSelectTheLastnode( MakroAus )
+        else
+            printlog( "The node was found. Good." )
+        endif
+        
+        brc = hIsMacroEditButtonEnabled()
+        if ( not brc ) then
+            warnlog( "Edit-Button is not enabled, the test cannot continue" )
+            kontext "Makro"
+            Makro.cancel()
+            brc = hDestroyDocument()
+            goto endsub
+        endif
+            
+        '///+<li>Click 'Edit' to edit the module</li>
+        printlog( "Edit the module" )
+        Bearbeiten.Click()
+        if ( WaitSlot <> WSFinished ) then
+            warnlog( "Slot not finished after 1 second" )
+        endif
+
+        kontext "BasicIDE"
+        '///+<li>Find the dialog we created before</li>
+        ' try to find our dialog again by stepping through the tabbar
+        bOpen = hFindFirstDialog()
+        if ( not bOpen ) then
+            warnlog( "Could access dialog, aborting test" )
+            hCloseBasicIde()
+            brc = hDestroyDocument()
+            goto endsub
+        endif
+
+        '///+<li>Open the macro controls float</li>
+        ' if the dialog is open, open the macro controls toolbar as well,
+        ' we need access to the "properties" button
+        bOpen = hShowMacroControls()
+        if ( not bOpen ) then
+            warnlog( "Could not open macro controls, aborting" )
+            hCloseBasicIde()
+            brc = hDestroyDocument()
+            goto endsub
+        endif
+        
+        '///+<li>Select every control, open its properties and verify its name, close properties</li>
+        for iCurrentControl = 1 to ICONTROLCOUNT
+
+            if ( instr( gtSysName, "Solaris" ) > 0 ) then
+                qaerrorlog( "Skipping frame control on Solaris" )
+            else
+                hSelectControl( iCurrentControl )
+                hOpenPropertyBrowser()
+                sCurrentControl = lsControlNames( iCurrentControl )
+                hPBGetControlName( sCurrentControl )
+                hClosePropertyBrowser()
+            endif
+            
+        next iCurrentControl
+        
+        ' we need to delete the list-content otherwise we run into index-problems
+        ListAllDelete( lsControlNames() )
+       
+        '///+<li>Cleanup: Close the BASIC-IDE</li>
+        printlog( "Close the BASIC IDE" )
+        hCloseBasicIde()        
+        
         if ( getDocumentCount <> 1 ) then
             warnlog( "Number of open documents is incorrect, expected one only" )
         endif 
@@ -133,6 +207,9 @@ testcase tAllControlsOnDialog( cMajor as string )
         '///+<li>close the document</li>
         '///</ul>
         brc = hDestroyDocument()
+
+        printlog( "" ) 
+        printlog( "Test case 2: Verify that all items keep their names after close and reload of the document" )
         
         '///<b>check all controls in the saved document</b>
         printlog "Open the file again"

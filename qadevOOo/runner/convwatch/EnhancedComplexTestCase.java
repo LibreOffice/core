@@ -32,7 +32,6 @@ package convwatch;
 
 import complexlib.ComplexTestCase;
 import helper.ProcessHandler;
-import java.io.File;
 import convwatch.GraphicalTestArguments;
 
 /**

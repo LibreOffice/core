@@ -38,26 +38,26 @@
 '\***********************************************************************
 
 sub topten
+
     gApplication = "WRITER"
-    printlog( "** " + gApplication )
     call Top_ten_test
+    
     gApplication = "CALC"
-    printlog( "** " + gApplication )
     call Top_ten_test
+    
     gApplication = "IMPRESS"
-    printlog( "** " + gApplication )
     call Top_ten_test
+    
     gApplication = "DRAW"
-    printlog( "** " + gApplication )
     call Top_ten_test
+    
     gApplication = "MATH"
-    printlog( "** " + gApplication )
     call Top_ten_test
+    
     gApplication = "HTML"
-    printlog( "** " + gApplication )
     call Top_ten_test
+    
     gApplication = "MASTERDOCUMENT"
-    printlog( "** " + gApplication )
     call Top_ten_test
 
 end sub
@@ -65,168 +65,164 @@ end sub
 '*******************************************************************************
 
 testcase Top_ten_test
-    '///Top-Ten-Test
-    '///<ul><li>open all document types</li>
-    '///+<li>insert a text or a rectangle (Draw/Impress)</li>
-    '///+<li>cut - paste / copy - paste</li>
-    '///+<li>save as default-format (6.0format (XML))</li>
-    '///+<li>save as 5.2-format</li>
-    '///+<li>close the doc</li>
-    '///+<li>load the 8.0-doc, change it, save this changes and close the doc</li>
-    '///+<li>load the 5.2-doc, change it, save this changes and close the doc</li></ul>
-    
-    dim rootdir as string
-    dim vExtension(10) as string
-    dim DokName1 as String
-    dim DokName2 as String
-    dim sFilter1 as string
-    dim sFilter2 as String
-    Dim i as Integer
-    dim bExport as boolean
+    dim sUserWorkDirectory as string
+    dim sFilename_native as String
+    dim sFilename_export as String
+    dim sFilter_native as string
+    dim sFilter_export as String
+    dim bExportFile as boolean
 
-    rootdir = gOfficePath + "user\work\"
-    bExport = true
+    sUserWorkDirectory = gOfficePath & "user\work\"
+    bExportFile = true
     
-    ' set the filenames and their filters
-    if gApplication = "HTML" then
-        'hGetFilternameExtension is able to read more than one extension entry
-        vExtension() = hGetFilternameExtension("writer_web_HTML")
-        DokName1 = "ls_test" & "." & vExtension(0) 
-        Dokname2 = Dokname1        
+    printlog( "Current document type: " & gApplication )
+    
+    ' set the filenames and their filters. HTML is not exported
+    if ( gApplication = "HTML" ) then
+        sFilename_native = "ls_test.html"
+        sFilename_export = "ls_test.htm"  
+        bExportFile      = FALSE      
     else
-        DokName1 = "ls_test" & hGetSuffix( "current" )
-        DokName2 = "ls_test" & hGetSuffix( "569" )
+        sFilename_native = "ls_test" & hGetSuffix( "current" )
+        sFilename_export = "ls_test" & hGetSuffix( "569" )
     endif
     
-    printlog( " * File (current): " & DokName1 )
-    printlog( " * File (src569).: " & DokName2 )
+    printlog( "File (current): " & sFilename_native )
+    printlog( "File (src569).: " & sFilename_export )
     
+    ' Delete the workfiles, they might have been left over by prior incomplete testrun
+    hDeleteFile( sUserWorkDirectory & sFilename_native )
+    hDeleteFile( sUserWorkDirectory & sFilename_export )
+    
+    ' Set the API filternames for the current application (native XML format)
     select case gApplication
-    case "WRITER"     : sFilter1 = "writer8"
-    case "CALC"       : sFilter1 = "calc8"
-    case "DRAW"       : sFilter1 = "draw8"
-    case "IMPRESS"    : sFilter1 = "impress8"
-    case "MATH"       : sFilter1 = "math8"
-    case "MASTERDOCUMENT"  : sFilter1 = "writerglobal8"
-    case "HTML"       : sFilter1 = "HTML" : bExport = FALSE
-    case else         : warnlog "Invalid gApplication: " & gApplication 
+    case "WRITER"          : sFilter_native = "writer8"
+    case "CALC"            : sFilter_native = "calc8"
+    case "DRAW"            : sFilter_native = "draw8"
+    case "IMPRESS"         : sFilter_native = "impress8"
+    case "MATH"            : sFilter_native = "math8"
+    case "MASTERDOCUMENT"  : sFilter_native = "writerglobal8"
+    case "HTML"            : sFilter_native = "HTML"
+    case else              : warnlog "Invalid gApplication: " & gApplication 
     end select
 
-    printlog( "- create a new document" )
+    printlog( "Create a new document" )
     call hNewDocument
-    printlog( "- clipboard" )
-    call CutCopyPaste
-    printlog( "- saving => default-fileformat" )
-    call hFileSaveAsKill ( rootdir & DokName1 )
-    if ( gApplication  = "IMPRESS" ) then sleep( 2 )
-
-    if bExport then
     
-        ' hFileSaveAsWithFilterKill needs the API filtername. Hardcoded for speed.
+    printlog( "Clipboard" )
+    call CutCopyPaste
+    
+    printlog( "Save (default-fileformat): " & sFilename_native )
+    call hFileSaveAsKill ( sUserWorkDirectory & sFilename_native )
+    
+    if ( bExportFile ) then
+    
+        ' Set the API filternames for the current application (StarOffice 5.2 binary format)
         select case gApplication
-        case "WRITER"     : sFilter2 = "StarWriter 5.0"
-        case "CALC"       : sFilter2 = "StarCalc 5.0"
-        case "DRAW"       : sFilter2 = "StarDraw 5.0"
-        case "IMPRESS"    : sFilter2 = "StarImpress 5.0"
-        case "MATH"       : sFilter2 = "StarMath 5.0"
-        case "MASTERDOCUMENT"  : sFilter2 = "StarWriter 5.0/GlobalDocument"
-        case else         : warnlog "Invalid gApplication: " & gApplication 
+        case "WRITER"          : sFilter_export = "StarWriter 5.0"
+        case "CALC"            : sFilter_export = "StarCalc 5.0"
+        case "DRAW"            : sFilter_export = "StarDraw 5.0"
+        case "IMPRESS"         : sFilter_export = "StarImpress 5.0"
+        case "MATH"            : sFilter_export = "StarMath 5.0"
+        case "MASTERDOCUMENT"  : sFilter_export = "StarWriter 5.0/GlobalDocument"
+        case else              : warnlog "Invalid gApplication: " & gApplication 
         end select
         
-        printlog "- saving => 5.2-fileformat"
-        hFileSaveAsWithFilterKill( rootdir & DokName2 , sFilter2 )
+        printlog( "Save (5.2-fileformat): " & sFilename_export )
+        hFileSaveAsWithFilterKill( sUserWorkDirectory & sFilename_export , sFilter_export )
 
-        printlog "- close"
+        printlog( "Close" )
         FileClose
 
+        ' There should be no alien warning
         kontext "active"
-        If active.exists(5) then
-            warnlog "Unexpected messagebox: '" + active.getText + "'"
+        If ( active.exists( 1 ) ) then
+            warnlog( "Unexpected messagebox: '" & active.getText & "'" )
             Active.Yes
         else
-            printlog "- no more alien warning on closing the document. Good."
-        end if
+            printlog( "No more alien warning on closing the document. Good." )
+        endif
     else
         FileClose
 
         kontext "active"
-        if Active.Exists(5) then
-            warnlog "Unexpected Active after saving: '" + active.gettext + "'"
+        if ( Active.Exists( 1 ) ) then
+            warnlog( "Unexpected Active after saving: '" & active.getText & "'" )
             try
-                Active.Yes
+                Active.Yes()
             catch
-                Active.No
+                Active.No()
             endcatch
-        end if
-    end if
+        endif
+    endif
 
-    printlog "- loading => default-fileformat"
-    call hFileOpen (rootdir & DokName1)
+    printlog( "Load (default-fileformat): " & sFilename_native )
+    call hFileOpen( sUserWorkDirectory & sFilename_native )
 
-    if bExport then
-        printlog "  - change the doc"
+    if ( bExportFile ) then
+        printlog( "Change the document" )
         hChangeDoc()
-        printlog "  - save"
+        printlog( "Save" )
         hFileSave()
     endif
 
-    printlog "  - close"
-    call hCloseDocument
+    printlog( "Close" )
+    FileClose
 
-    if bExport then
-        printlog "- loading => 5.2-fileformat"
-        call hFileOpen (rootdir & DokName2)
-        if (ucase(gApplication) = "MATH" AND iSprache = 84 AND gPlatform="lin") then
+    if ( bExportFile ) then
+    
+        printlog( "Load (5.2-fileformat): " & sFilename_export )
+        call hFileOpen (sUserWorkDirectory & sFilename_export)
+        
+        if ( gApplication = "MATH" AND iSprache = 84 AND gPlatform="lin" ) then
             try
                 kontext "DocumentMath"
                 DocumentMath.MouseDown(50,50)
                 DocumentMath.MouseUp(50,50)
-                qaErrorLog "Use workaround focus problem for math and language vi/84"
+                qaErrorLog( "Use workaround focus problem for math and language vi/84" )
                 ' Needed by AndreSchnabel, not manual reproduceable, only with TestTool
             catch
-                qaErrorLog "Workaround focus problem failed."
+                qaErrorLog( "Workaround focus problem failed." )
             endcatch
-        end if
-        printlog "  - change the doc"
+        endif
+        
+        ' Modify the export document to trigger the alien warning on next save
+        printlog( "Change the document" )
         hChangeDoc()
-        printlog "  - save"
-        hFileSave()
+        
+        printlog( "Save" )
+        FileSave
 
         Kontext "AlienWarning"
-        if AlienWarning.exists() then ' was 5 secs.
-            printlog "- alien warning came up. Good."
-            AlienWarning.OK
-            hFileWait() 
+        if ( AlienWarning.exists( 3 ) ) then
+            printlog( "Closing expected alien warning. Good." )
+            AlienWarning.OK()
         else
-            if (gBuild > 8870) then '8871 is CWS alienwarning integrated SRC680m77
-                warnlog "- alien warning didn't came up."
-            endif
+            warnlog( "Alien warning is missing" )
         endif
 
         kontext "active"
-        if Active.Exists(5) then
-            if (gBuild > 8870) then '8871 is CWS alienwarning integrated SRC680m77
-                warnlog  "Unexpected messagebox: '" + active.gettext + "'"
-            else
-                printlog "  - alien warning for change to current filter. Good. '" + active.gettext + "'"
-            endif
+        if ( Active.Exists( 3 ) ) then
+            warnlog(  "Unexpected messagebox: '" & active.getText & "'" )
             Active.yes
-        end if
+        else
+            printlog( "No unexpected messages on save. Good." )
+        endif
 
-        printlog "  - close"
+        printlog( "Close" )
         FileClose
 
         kontext "active"
-        if Active.Exists(5) then
-            warnlog  "Unexpected messagebox: '" + active.gettext + "'"
-            Active.Yes
+        if ( Active.Exists() ) then
+            warnlog( "Unexpected messagebox: '" & active.getText & "'" )
+            Active.Yes()
         else
-            printlog "- no more alien warning on closing the document. Good."
-        end if
-    end if
+            printlog( "No more alien warning to close. Good." )
+        endif
+    endif
     
-    if ( FileExists( rootdir & DokName1 ) ) then kill( rootdir & DokName1 )
-    if ( FileExists( rootdir & DokName2 ) ) then kill( rootdir & DokName2 )
+    hDeleteFile( sUserWorkDirectory & sFilename_native )
+    hDeleteFile( sUserWorkDirectory & sFilename_export )
     
 endcase
 
@@ -305,7 +301,7 @@ sub CutCopyPaste
             printlog( "   paste" )
             DocumentImpress.TypeKeys "<Mod1 v>"
             Wait( 500 )
-            printlog( "   copy"
+            printlog( "   copy" )
             gMouseClick ( 1, 1 )
             DocumentImpress.TypeKeys sSelectAll
             DocumentImpress.TypeKeys "<Mod1 c>"
@@ -315,21 +311,16 @@ sub CutCopyPaste
             DocumentImpress.TypeKeys "<Mod1 v>"
         case "MATH"   : SchreibenInMathdok "a over b"
             printlog( "   cut" )
-            EditSelectAllMath
-            WaitSlot()
-            EditCut
-            WaitSlot()
+            hUseAsyncSlot( "EditSelectAllMath" )
+            hUseAsyncSlot( "EditCut" )
             printlog( "   paste" )
-            EditPaste
-            WaitSlot()
+            hUseAsyncSlot( "EditPaste" )
             printlog( "   copy" )
-            EditSelectAllMath
-            WaitSlot()
-            EditCopy
-            WaitSlot()
+            hUseAsyncSlot( "EditSelectAllMath" )
+            hUseAsyncSlot( "EditCopy" )
             printlog( "   paste" )
-            EditPaste
-            WaitSlot()
+            hUseAsyncSlot( "EditPaste" )
+
     end select
 end sub
 
