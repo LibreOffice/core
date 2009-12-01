@@ -143,7 +143,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
     uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
-    bool bHasSeriesProperties = (OBJECTTYPE_DATA_SERIES==m_eObjectType || OBJECTTYPE_DATA_LABELS==m_eObjectType);
+    bool bHasSeriesProperties = (OBJECTTYPE_DATA_SERIES==m_eObjectType);
     bool bHasDataPointproperties = (OBJECTTYPE_DATA_POINT==m_eObjectType);
 
     if( bHasSeriesProperties || bHasDataPointproperties )
@@ -222,14 +222,37 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         {
             m_aLocalizedName = ObjectNameProvider::getAxisName( m_aObjectCID, xChartModel );
         }
+        else if( !m_bAffectsMultipleObjects && ( OBJECTTYPE_GRID == m_eObjectType || OBJECTTYPE_SUBGRID == m_eObjectType ) )
+        {
+            m_aLocalizedName = ObjectNameProvider::getGridName( m_aObjectCID, xChartModel );
+        }
+        else if( !m_bAffectsMultipleObjects && OBJECTTYPE_TITLE == m_eObjectType )
+        {
+            m_aLocalizedName = ObjectNameProvider::getTitleName( m_aObjectCID, xChartModel );
+        }
         else
         {
-            ObjectType eType = m_eObjectType;
-            if( OBJECTTYPE_DATA_LABEL == eType )
-                 eType = OBJECTTYPE_DATA_POINT;
-            else if( OBJECTTYPE_DATA_LABELS == eType )
-                eType = OBJECTTYPE_DATA_SERIES;
-            m_aLocalizedName = ObjectNameProvider::getName(eType,m_bAffectsMultipleObjects);
+            switch( m_eObjectType )
+            {
+                case OBJECTTYPE_DATA_POINT:
+                case OBJECTTYPE_DATA_LABEL:
+                case OBJECTTYPE_DATA_LABELS:
+                case OBJECTTYPE_DATA_ERRORS:
+                case OBJECTTYPE_DATA_ERRORS_X:
+                case OBJECTTYPE_DATA_ERRORS_Y:
+                case OBJECTTYPE_DATA_ERRORS_Z:
+                case OBJECTTYPE_DATA_AVERAGE_LINE:
+                case OBJECTTYPE_DATA_CURVE:
+                case OBJECTTYPE_DATA_CURVE_EQUATION:
+                    if( m_bAffectsMultipleObjects )
+                        m_aLocalizedName = ObjectNameProvider::getName_ObjectForAllSeries( m_eObjectType );
+                    else
+                        m_aLocalizedName = ObjectNameProvider::getName_ObjectForSeries( m_eObjectType, m_aObjectCID, m_xChartDocument );
+                    break;
+                default:
+                    m_aLocalizedName = ObjectNameProvider::getName(m_eObjectType,m_bAffectsMultipleObjects);
+                    break;
+            }
         }
     }
 }
@@ -355,7 +378,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_BORDER)));
             AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_FONT)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(TP_ALIGNMENT, String(SchResId(STR_PAGE_ALIGNMENT)), SchAlignmentTabPage::Create, NULL);
             if( aCJKOptions.IsAsianTypographyEnabled() )
@@ -366,7 +389,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_BORDER)));
             AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_FONT)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(TP_LEGEND_POS, String(SchResId(STR_PAGE_POSITION)), SchLegendPosTabPage::Create, NULL);
             if( aCJKOptions.IsAsianTypographyEnabled() )
@@ -375,27 +398,30 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
 
         case OBJECTTYPE_DATA_SERIES:
         case OBJECTTYPE_DATA_POINT:
-        case OBJECTTYPE_DATA_LABEL:
-        case OBJECTTYPE_DATA_LABELS:
-            AddTabPage(RID_SVXPAGE_LINE, String(SchResId( m_pParameter->HasAreaProperties() ? STR_PAGE_BORDER : STR_PAGE_LINE )));
+            if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() || m_pParameter->ProvidesMissingValueTreatments() )
+                AddTabPage(TP_OPTIONS, String(SchResId(STR_PAGE_OPTIONS)),SchOptionTabPage::Create, NULL);
+            if( m_pParameter->ProvidesStartingAngle())
+                AddTabPage(TP_POLAROPTIONS, String(SchResId(STR_PAGE_OPTIONS)),PolarOptionsTabPage::Create, NULL);
+
+            if( m_pParameter->HasGeometryProperties() )
+                AddTabPage(TP_LAYOUT, String(SchResId(STR_PAGE_LAYOUT)),SchLayoutTabPage::Create, NULL);
+
             if(m_pParameter->HasAreaProperties())
             {
                 AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
                 AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
             }
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId( m_pParameter->HasAreaProperties() ? STR_PAGE_BORDER : STR_PAGE_LINE )));
+            break;
+
+        case OBJECTTYPE_DATA_LABEL:
+        case OBJECTTYPE_DATA_LABELS:
+            AddTabPage(TP_DATA_DESCR, String(SchResId(STR_OBJECT_DATALABELS)), DataLabelsTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_FONT)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             if( aCJKOptions.IsAsianTypographyEnabled() )
                 AddTabPage(RID_SVXPAGE_PARA_ASIAN, String(SchResId(STR_PAGE_ASIAN)));
-            AddTabPage(TP_DATA_DESCR, String(SchResId(STR_OBJECT_DATALABELS)), DataLabelsTabPage::Create, NULL);
-//             if( m_pParameter->HasStatisticProperties() )
-//                 AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
-            if( m_pParameter->HasGeometryProperties() )
-                AddTabPage(TP_LAYOUT, String(SchResId(STR_PAGE_LAYOUT)),SchLayoutTabPage::Create, NULL);
-            if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() || m_pParameter->ProvidesMissingValueTreatments() )
-                AddTabPage(TP_OPTIONS, String(SchResId(STR_PAGE_OPTIONS)),SchOptionTabPage::Create, NULL);
-            if( m_pParameter->ProvidesStartingAngle())
-                AddTabPage(TP_POLAROPTIONS, String(SchResId(STR_PAGE_OPTIONS)),PolarOptionsTabPage::Create, NULL);
+
             break;
 
         case OBJECTTYPE_AXIS:
@@ -409,7 +435,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
             if( m_pParameter->HasNumberProperties() )
                 AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_FONT)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             if( aCJKOptions.IsAsianTypographyEnabled() )
                 AddTabPage(RID_SVXPAGE_PARA_ASIAN, String(SchResId(STR_PAGE_ASIAN)));
@@ -456,7 +482,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_BORDER)));
             AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_FONT)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
             if( SvtLanguageOptions().IsCTLFontEnabled() )

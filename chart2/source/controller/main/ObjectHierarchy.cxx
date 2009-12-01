@@ -41,6 +41,8 @@
 #include "macros.hxx"
 #include "LineProperties.hxx"
 #include "ChartTypeHelper.hxx"
+#include "DataSeriesHelper.hxx"
+#include "LegendHelper.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 
 #include <map>
@@ -111,6 +113,18 @@ void lcl_getChildOIDs(
     }
 }
 
+void lcl_addAxisTitle( const Reference< XAxis >& xAxis, ::chart::ObjectHierarchy::tChildContainer& rContainer, const Reference< frame::XModel >& xChartModel )
+{
+    Reference< XTitled > xAxisTitled( xAxis, uno::UNO_QUERY );
+    if( xAxisTitled.is())
+    {
+        Reference< XTitle > xAxisTitle( xAxisTitled->getTitleObject());
+        if( xAxisTitle.is())
+            rContainer.push_back(
+                ::chart::ObjectIdentifier( ::chart::ObjectIdentifier::createClassifiedIdentifierForObject( xAxisTitle, xChartModel ) ) );
+    }
+}
+
 } // anonymous namespace
 
 namespace chart
@@ -125,9 +139,9 @@ public:
     explicit ImplObjectHierarchy(
         const Reference< XChartDocument >& xChartDocument,
         ExplicitValueProvider* pExplicitValueProvider,
-        bool bFlattenDiagram );
+        bool bFlattenDiagram, bool bOrderingForElementSelector );
 
-    bool                               hasChildren( const ObjectHierarchy::tOID& rParent );
+    bool                              hasChildren( const ObjectHierarchy::tOID& rParent );
     ObjectHierarchy::tChildContainer  getChildren( const ObjectHierarchy::tOID& rParent );
     ObjectHierarchy::tChildContainer  getSiblings( const ObjectHierarchy::tOID& rNode );
 
@@ -135,14 +149,26 @@ public:
 
 private:
     void createTree( const Reference< XChartDocument > & xChartDocument );
+    void createAxesTree(
+        ObjectHierarchy::tChildContainer & rContainer,
+        const Reference< XChartDocument > & xChartDoc,
+        const Reference< XDiagram > & xDiagram  );
     void createDiagramTree(
         ObjectHierarchy::tChildContainer& rContainer,
         const Reference< XChartDocument >& xChartDoc,
         const Reference< XDiagram >& xDiagram );
     void createDataSeriesTree(
-        ObjectHierarchy::tChildContainer& rOutDiagramSubContainer,
-        const Reference< XCoordinateSystemContainer >& xCooSysCnt );
+        ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
+        const Reference< XDiagram > & xDiagram );
+    void createWallAndFloor(
+        ObjectHierarchy::tChildContainer & rContainer,
+        const Reference< XDiagram > & xDiagram );
+    void createLegendTree(
+        ObjectHierarchy::tChildContainer & rContainer,
+        const Reference< XChartDocument > & xChartDoc,
+        const Reference< XDiagram > & xDiagram  );
     void createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer );
+
     ObjectHierarchy::tOID getParentImpl(
         const ObjectHierarchy::tOID& rParentOID,
         const ObjectHierarchy::tOID& rOID );
@@ -152,14 +178,17 @@ private:
     tChildMap m_aChildMap;
     ExplicitValueProvider* m_pExplicitValueProvider;
     bool m_bFlattenDiagram;
+    bool m_bOrderingForElementSelector;
 };
 
 ImplObjectHierarchy::ImplObjectHierarchy(
     const Reference< XChartDocument >& xChartDocument,
     ExplicitValueProvider* pExplicitValueProvider,
-    bool bFlattenDiagram ) :
+    bool bFlattenDiagram,
+    bool bOrderingForElementSelector ) :
         m_pExplicitValueProvider( pExplicitValueProvider ),
-        m_bFlattenDiagram( bFlattenDiagram )
+        m_bFlattenDiagram( bFlattenDiagram ),
+        m_bOrderingForElementSelector( bOrderingForElementSelector )
 {
     createTree( xChartDocument );
     // don't remember this helper to avoid access after lifetime
@@ -173,9 +202,20 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
 
     //@todo: change ObjectIdentifier to take an XChartDocument rather than XModel
     Reference< frame::XModel > xModel( xChartDocument, uno::UNO_QUERY );
+    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDocument ) );
+    ObjectHierarchy::tOID aDiaOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram, xModel ) ) );
     ObjectHierarchy::tChildContainer aTopLevelContainer;
 
     // First Level
+
+    // Chart Area
+    if( m_bOrderingForElementSelector )
+    {
+        aTopLevelContainer.push_back( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
+        aTopLevelContainer.push_back( aDiaOID );
+        createWallAndFloor( aTopLevelContainer, xDiagram );
+        createLegendTree( aTopLevelContainer, xChartDocument, xDiagram  );
+    }
 
     // Main Title
     Reference< XTitled > xDocTitled( xChartDocument, uno::UNO_QUERY );
@@ -187,7 +227,6 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
                 ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xMainTitle, xModel ) ) );
     }
 
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDocument ));
     if( xDiagram.is())
     {
         // Sub Title.  Note: This is interpreted of being top level
@@ -200,24 +239,17 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
                     ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xSubTitle, xModel ) ) );
         }
 
-        // Axis Titles. Note: These are interpreted of being top level
-        Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-        for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
+        if( !m_bOrderingForElementSelector )
         {
-            Reference< XTitled > xAxisTitled( aAxes[i], uno::UNO_QUERY );
-            if( xAxisTitled.is())
-            {
-                Reference< XTitle > xAxisTitle( xAxisTitled->getTitleObject());
-                if( xAxisTitle.is())
-                    aTopLevelContainer.push_back(
-                        ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xAxisTitle, xModel ) ) );
-            }
+            // Axis Titles. Note: These are interpreted of being top level
+            Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
+            for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
+                lcl_addAxisTitle( aAxes[i], aTopLevelContainer, xModel );
+
+            // Diagram
+            aTopLevelContainer.push_back( aDiaOID );
         }
 
-        // Diagram
-        ObjectHierarchy::tOID aDiaOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram, xModel ) ) );
-        OSL_ASSERT( aDiaOID.getObjectCID().getLength() );
-        aTopLevelContainer.push_back( aDiaOID );
         if( m_bFlattenDiagram )
             createDiagramTree( aTopLevelContainer, xChartDocument, xDiagram );
         else
@@ -228,63 +260,62 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
                 m_aChildMap[ aDiaOID ] = aSubContainer;
         }
 
-        // Legend. Note: This is interpreted of being top level
-        Reference< XLegend > xLegend( xDiagram->getLegend());
-        if( xLegend.is())
-        {
-            Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY );
-            bool bShow = false;
-            if( xLegendProp.is() &&
-                (xLegendProp->getPropertyValue( C2U("Show")) >>= bShow) &&
-                bShow )
-            {
-                ObjectHierarchy::tOID aLegendOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, xModel ) ) );
-                aTopLevelContainer.push_back( aLegendOID );
-
-                // iterate over child shapes of legend and search for matching OIDs
-                if( m_pExplicitValueProvider )
-                {
-                    Reference< container::XIndexAccess > xLegendShapeContainer(
-                        m_pExplicitValueProvider->getShapeForCID( aLegendOID.getObjectCID() ), uno::UNO_QUERY );
-                    ObjectHierarchy::tChildContainer aLegendEntryOIDs;
-                    lcl_getChildOIDs( aLegendEntryOIDs, xLegendShapeContainer );
-
-                    m_aChildMap[ aLegendOID ] = aLegendEntryOIDs;
-                }
-            }
-        }
+        if( !m_bOrderingForElementSelector )
+            createLegendTree( aTopLevelContainer, xChartDocument, xDiagram  );
     }
 
     // #i12587# support for shapes in chart
-    createAdditionalShapesTree( aTopLevelContainer );
+    if ( !m_bOrderingForElementSelector )
+    {
+        createAdditionalShapesTree( aTopLevelContainer );
+    }
 
     // Chart Area
-    aTopLevelContainer.push_back(
-        ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
+    if( !m_bOrderingForElementSelector )
+        aTopLevelContainer.push_back(
+            ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
 
     if( ! aTopLevelContainer.empty())
         m_aChildMap[ ObjectHierarchy::getRootNodeOID() ] = aTopLevelContainer;
 }
 
-void ImplObjectHierarchy::createDiagramTree(
-    ObjectHierarchy::tChildContainer& rContainer,
-    const Reference< XChartDocument >& xChartDoc,
-    const Reference< XDiagram >& xDiagram )
+void ImplObjectHierarchy::createLegendTree(
+    ObjectHierarchy::tChildContainer & rContainer,
+    const Reference< XChartDocument > & xChartDoc,
+    const Reference< XDiagram > & xDiagram  )
 {
-    // Data Series
-    Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-    createDataSeriesTree( rContainer, xCooSysCnt );
+    if( xDiagram.is() && LegendHelper::hasLegend( xDiagram ) )
+    {
+        ObjectHierarchy::tOID aLegendOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram->getLegend(), Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ) ) ) );
+        rContainer.push_back( aLegendOID );
 
-    // Axes
+        // iterate over child shapes of legend and search for matching CIDs
+        if( m_pExplicitValueProvider )
+        {
+            Reference< container::XIndexAccess > xLegendShapeContainer(
+                m_pExplicitValueProvider->getShapeForCID( aLegendOID.getObjectCID() ), uno::UNO_QUERY );
+            ObjectHierarchy::tChildContainer aLegendEntryOIDs;
+            lcl_getChildOIDs( aLegendEntryOIDs, xLegendShapeContainer );
+
+            m_aChildMap[ aLegendOID ] = aLegendEntryOIDs;
+        }
+    }
+}
+
+void ImplObjectHierarchy::createAxesTree(
+    ObjectHierarchy::tChildContainer & rContainer,
+    const Reference< XChartDocument > & xChartDoc,
+    const Reference< XDiagram > & xDiagram  )
+{
+    Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
     uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     bool bSupportsAxesGrids = ChartTypeHelper::isSupportingMainAxis( xChartType, nDimensionCount, 0 );
-    bool bIsThreeD = ( nDimensionCount == 3 );
-    bool bHasWall = DiagramHelper::isSupportingFloorAndWall( xDiagram );
     if( bSupportsAxesGrids )
     {
         Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
-        ::std::transform( aAxes.getConstArray(), aAxes.getConstArray() + aAxes.getLength(),
+        if( !m_bOrderingForElementSelector )
+            ::std::transform( aAxes.getConstArray(), aAxes.getConstArray() + aAxes.getLength(),
                           ::std::back_inserter( rContainer ),
                           lcl_ObjectToOID( xChartDoc ));
 
@@ -298,12 +329,30 @@ void ImplObjectHierarchy::createDiagramTree(
             if(!xAxis.is())
                 continue;
 
+            sal_Int32 nCooSysIndex = 0;
+            sal_Int32 nDimensionIndex = 0;
+            sal_Int32 nAxisIndex = 0;
+            AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex );
+            if( nAxisIndex>0 && !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, nDimensionIndex ) )
+                continue;
+
+            if( m_bOrderingForElementSelector )
+            {
+                // axis
+                if( AxisHelper::isAxisVisible( xAxis ) )
+                    rContainer.push_back(
+                        ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel ) ) );
+
+                // axis title
+                lcl_addAxisTitle( aAxes[nA], rContainer, xChartModel );
+            }
+
             Reference< beans::XPropertySet > xGridProperties( xAxis->getGridProperties() );
             if( AxisHelper::isGridVisible( xGridProperties ) )
             {
                 //main grid
                 rContainer.push_back(
-                    ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel ) ) );
+                    ObjectIdentifier( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel ) ) ) );
             }
 
             Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );;
@@ -315,36 +364,61 @@ void ImplObjectHierarchy::createDiagramTree(
                 {
                     //sub grid
                     rContainer.push_back(
-                        ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGrid ) ) );
+                        ObjectIdentifier( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGrid ) ) ) );
                 }
             }
         }
     }
+}
 
-    // Wall
-    if( bHasWall )
+void ImplObjectHierarchy::createWallAndFloor(
+    ObjectHierarchy::tChildContainer & rContainer,
+    const Reference< XDiagram > & xDiagram )
+{
+    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+    bool bIsThreeD = ( nDimensionCount == 3 );
+    bool bHasWall = DiagramHelper::isSupportingFloorAndWall( xDiagram );
+    if( bHasWall && bIsThreeD )
     {
         rContainer.push_back(
             ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString() ) ) );
-    }
 
-    // Floor
-    if( bHasWall && bIsThreeD )
-    {
         Reference< beans::XPropertySet > xFloor( xDiagram->getFloor());
         if( xFloor.is())
             rContainer.push_back(
                 ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, rtl::OUString() ) ) );
     }
+
+}
+
+void ImplObjectHierarchy::createDiagramTree(
+    ObjectHierarchy::tChildContainer & rContainer,
+    const Reference< XChartDocument > & xChartDoc,
+    const Reference< XDiagram > & xDiagram )
+{
+    if( !m_bOrderingForElementSelector )
+    {
+        createDataSeriesTree( rContainer, xDiagram );
+        createAxesTree( rContainer, xChartDoc, xDiagram  );
+        createWallAndFloor( rContainer, xDiagram );
+    }
+    else
+    {
+        createAxesTree( rContainer, xChartDoc, xDiagram  );
+        createDataSeriesTree( rContainer, xDiagram );
+    }
 }
 
 void ImplObjectHierarchy::createDataSeriesTree(
-    ObjectHierarchy::tChildContainer& rOutDiagramSubContainer,
-    const Reference< XCoordinateSystemContainer >& xCooSysCnt )
+    ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
+    const Reference< XDiagram > & xDiagram )
 {
+    Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
+
     try
     {
         sal_Int32 nDiagramIndex = 0;
+        sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
         Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
         for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
@@ -353,10 +427,11 @@ void ImplObjectHierarchy::createDataSeriesTree(
             Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
             for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypeSeq.getLength(); ++nCTIdx )
             {
-                Reference< XDataSeriesContainer > xDSCnt( aChartTypeSeq[nCTIdx], uno::UNO_QUERY_THROW );
+                Reference< XChartType > xChartType( aChartTypeSeq[nCTIdx] );
+                Reference< XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY_THROW );
                 Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
                 const sal_Int32 nNumberOfSeries =
-                    ChartTypeHelper::getNumberOfDisplayedSeries( aChartTypeSeq[nCTIdx], aSeriesSeq.getLength());
+                    ChartTypeHelper::getNumberOfDisplayedSeries( xChartType, aSeriesSeq.getLength());
 
                 for( sal_Int32 nSeriesIdx=0; nSeriesIdx<nNumberOfSeries; ++nSeriesIdx )
                 {
@@ -369,41 +444,49 @@ void ImplObjectHierarchy::createDataSeriesTree(
 
                     ObjectHierarchy::tChildContainer aSeriesSubContainer;
 
-                    // Statistics
-                    Reference< chart2::XRegressionCurveContainer > xCurveCnt( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
-                    if( xCurveCnt.is())
+                    Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
+
+                    // data lablels
+                    if( DataSeriesHelper::hasDataLabelsAtSeries( xSeries ) )
                     {
-                        Sequence< Reference< chart2::XRegressionCurve > > aCurves( xCurveCnt->getRegressionCurves());
-                        for( sal_Int32 nCurveIdx=0; nCurveIdx<aCurves.getLength(); ++nCurveIdx )
+                        rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
+                        aChildParticle+=(C2U("="));
+                        aSeriesSubContainer.push_back(
+                                    ObjectIdetnifier( ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle ) ) );
+                    }
+
+                    // Statistics
+                    if( ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount ) )
+                    {
+                        Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
+                        if( xCurveCnt.is())
                         {
-                            bool bIsAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[nCurveIdx] );
-                            aSeriesSubContainer.push_back(
-                                ObjectIdentifier( ObjectIdentifier::createDataCurveCID( aSeriesParticle, nCurveIdx, bIsAverageLine ) ) );
-                            Reference< beans::XPropertySet > xEqProp( aCurves[nCurveIdx]->getEquationProperties());
-                            bool bShowEq = false;
-                            bool bShowCoeff = false;
-                            if( xEqProp.is() &&
-                                ( (xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq) ||
-                                  (xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoeff) ) &&
-                                ( bShowEq || bShowCoeff ) )
+                            Sequence< Reference< chart2::XRegressionCurve > > aCurves( xCurveCnt->getRegressionCurves());
+                            for( sal_Int32 nCurveIdx=0; nCurveIdx<aCurves.getLength(); ++nCurveIdx )
                             {
+                                bool bIsAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[nCurveIdx] );
                                 aSeriesSubContainer.push_back(
-                                    ObjectIdentifier( ObjectIdentifier::createDataCurveEquationCID( aSeriesParticle, nCurveIdx ) ) );
+                                    ObjectIdentifier( ObjectIdentifier::createDataCurveCID( aSeriesParticle, nCurveIdx, bIsAverageLine ) ) );
+                                if( RegressionCurveHelper::hasEquation( aCurves[nCurveIdx] ) )
+                                {
+                                    aSeriesSubContainer.push_back(
+                                        ObjectIdentifier( ObjectIdentifier::createDataCurveEquationCID( aSeriesParticle, nCurveIdx ) ) );
+                                }
                             }
-                        }
-                        Reference< beans::XPropertySet > xSeriesProp( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
-                        Reference< beans::XPropertySet > xErrorBarProp;
-                        if( xSeriesProp.is() &&
-                            (xSeriesProp->getPropertyValue( C2U("ErrorBarY")) >>= xErrorBarProp) &&
-                            xErrorBarProp.is())
-                        {
-                            sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
-                            if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= nStyle ) &&
-                                ( nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE ) )
+                            Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
+                            Reference< beans::XPropertySet > xErrorBarProp;
+                            if( xSeriesProp.is() &&
+                                (xSeriesProp->getPropertyValue( C2U("ErrorBarY")) >>= xErrorBarProp) &&
+                                xErrorBarProp.is())
                             {
-                                aSeriesSubContainer.push_back(
-                                    ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierWithParent(
-                                        OBJECTTYPE_DATA_ERRORS, OUString(), aSeriesParticle ) ) );
+                                sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+                                if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= nStyle ) &&
+                                    ( nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE ) )
+                                {
+                                    aSeriesSubContainer.push_back(
+                                        ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierWithParent(
+                                            OBJECTTYPE_DATA_ERRORS, OUString(), aSeriesParticle ) ) );
+                                }
                             }
                         }
                     }
@@ -535,8 +618,9 @@ ObjectHierarchy::tOID ImplObjectHierarchy::getParent(
 ObjectHierarchy::ObjectHierarchy(
     const Reference< XChartDocument > & xChartDocument,
     ExplicitValueProvider * pExplicitValueProvider /* = 0 */,
-    bool bFlattenDiagram /* = false */ ) :
-        m_apImpl( new impl::ImplObjectHierarchy( xChartDocument, pExplicitValueProvider, bFlattenDiagram ))
+    bool bFlattenDiagram /* = false */,
+    bool bOrderingForElementSelector /* = false */) :
+        m_apImpl( new impl::ImplObjectHierarchy( xChartDocument, pExplicitValueProvider, bFlattenDiagram, bOrderingForElementSelector ))
 {}
 
 ObjectHierarchy::~ObjectHierarchy()

@@ -151,6 +151,10 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
 
+    static void removeEquations(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
     /** adds the given regression curve if there was none before. If there are
         regression curves, the first one is replaced by the one given by the
         type. All remaining curves are remnoved.
@@ -222,6 +226,10 @@ public:
     static sal_Int32 getRegressionCurveIndex(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xContainer,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve > & xCurve );
+
+    static bool hasEquation(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve > & xCurve );
 

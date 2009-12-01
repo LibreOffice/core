@@ -64,7 +64,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDocument,
         ExplicitValueProvider * pExplicitValueProvider = 0,
-        bool bFlattenDiagram = false );
+        bool bFlattenDiagram = false,
+        bool bOrderingForElementSelector = false );
     ~ObjectHierarchy();
 
     static tOID      getRootNodeOID();

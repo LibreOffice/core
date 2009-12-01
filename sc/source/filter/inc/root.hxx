@@ -64,7 +64,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 {
     BiffTyp             eDateiTyp;              // feine Differenzierung
     ExtSheetBuffer*     pExtSheetBuff;
-    NameBuffer*         pTabNameBuff;
     ShrfmlaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;

@@ -202,6 +202,19 @@ DataSourceDialog::~DataSourceDialog()
     delete m_pTabControl;
 }
 
+short DataSourceDialog::Execute()
+{
+    short nResult = TabDialog::Execute();
+    if( nResult == RET_OK )
+    {
+        if( m_pRangeChooserTabePage )
+            m_pRangeChooserTabePage->commitPage();
+        if( m_pDataSourceTabPage )
+            m_pDataSourceTabPage->commitPage();
+    }
+    return nResult;
+}
+
 void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 {
     if( pTabPage == m_pRangeChooserTabePage )

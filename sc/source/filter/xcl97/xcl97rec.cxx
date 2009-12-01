@@ -66,7 +66,6 @@
 #include <svx/eeitem.hxx>
 #include <svx/msoleexp.hxx>
 
-#include <svtools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <stdio.h>
@@ -884,15 +883,14 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm )
 
 
 
-XclExpString ExcEScenario::sUsername;
-
-ExcEScenario::ExcEScenario( ScDocument& rDoc, SCTAB nTab )
+ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 {
     String  sTmpName;
     String  sTmpComm;
     Color   aDummyCol;
     USHORT  nFlags;
 
+    ScDocument& rDoc = rRoot.GetDoc();
     rDoc.GetName( nTab, sTmpName );
     sName.Assign( sTmpName, EXC_STR_8BITLENGTH );
     nRecLen = 8 + sName.GetBufferSize();
@@ -903,14 +901,8 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, SCTAB nTab )
         nRecLen += sComment.GetSize();
     nProtected = (nFlags & SC_SCENARIO_PROTECT) ? 1 : 0;
 
-    if( !sUsername.Len() )
-    {
-        SvtUserOptions aUserOpt;
-        sUsername.Assign( aUserOpt.GetLastName(), EXC_STR_DEFAULT, 255 );
-    }
-    if( !sUsername.Len() )
-        sUsername.Assign( String::CreateFromAscii( "SC" ) );
-    nRecLen += sUsername.GetSize();
+    sUserName.Assign( rRoot.GetUserName(), EXC_STR_DEFAULT, 255 );
+    nRecLen += sUserName.GetSize();
 
     const ScRangeList* pRList = rDoc.GetScenarioRanges( nTab );
     if( !pRList )
@@ -969,11 +961,11 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
             << (UINT8) 0                    // fHidden
             << (UINT8) sName.Len()          // length of scen name
             << (UINT8) sComment.Len()       // length of comment
-            << (UINT8) sUsername.Len();     // length of user name
+            << (UINT8) sUserName.Len();     // length of user name
     sName.WriteFlagField( rStrm );
     sName.WriteBuffer( rStrm );
 
-    rStrm << sUsername;
+    rStrm << sUserName;
 
     if( sComment.Len() )
         rStrm << sComment;
@@ -1005,7 +997,7 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
             XML_locked,     XclXmlUtils::ToPsz( nProtected ),
             // OOXTODO: XML_hidden,
             XML_count,      OString::valueOf( (sal_Int32) List::Count() ).getStr(),
-            XML_user,       XESTRING_TO_PSZ( sUsername ),
+            XML_user,       XESTRING_TO_PSZ( sUserName ),
             XML_comment,    XESTRING_TO_PSZ( sComment ),
             FSEND );
 
@@ -1018,9 +1010,10 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
 
 
 
-ExcEScenarioManager::ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab ) :
+ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) :
         nActive( 0 )
 {
+    ScDocument& rDoc = rRoot.GetDoc();
     if( rDoc.IsScenario( nTab ) )
         return;
 
@@ -1029,7 +1022,7 @@ ExcEScenarioManager::ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab ) :
 
     while( rDoc.IsScenario( nNewTab ) )
     {
-        Append( new ExcEScenario( rDoc, nNewTab ) );
+        Append( new ExcEScenario( rRoot, nNewTab ) );
 
         if( rDoc.IsActiveScenario( nNewTab ) )
             nActive = static_cast<sal_uInt16>(nNewTab - nFirstTab);
@@ -1304,67 +1297,15 @@ void XclExpFilePass::WriteBody( XclExpStream& rStrm )
 
 // ============================================================================
 
-XclExpFnGroupCount::XclExpFnGroupCount() :
-    XclExpRecord(0x009C, 2)
-{
-}
-
-XclExpFnGroupCount::~XclExpFnGroupCount()
-{
-}
-
-void XclExpFnGroupCount::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << static_cast<sal_uInt16>(14);
-}
-
-// ============================================================================
-
-XclExpInterfaceHdr::XclExpInterfaceHdr() :
-    XclExpRecord(0x00E1, 2)
-{
-}
-
-XclExpInterfaceHdr::~XclExpInterfaceHdr()
+XclExpInterfaceHdr::XclExpInterfaceHdr( sal_uInt16 nCodePage ) :
+    XclExpUInt16Record( EXC_ID_INTERFACEHDR, nCodePage )
 {
 }
 
 void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
 {
-    // The value must be the same value as the CODEPAGE record.
     rStrm.DisableEncryption();
-    rStrm << static_cast<sal_uInt16>(0x04B0);
-}
-
-// ============================================================================
-
-XclExpInterfaceEnd::XclExpInterfaceEnd() :
-    XclExpRecord(0x00E2, 0)
-{
-}
-
-XclExpInterfaceEnd::~XclExpInterfaceEnd()
-{
-}
-
-void XclExpInterfaceEnd::WriteBody( XclExpStream& /*rStrm*/ )
-{
-}
-
-// ============================================================================
-
-XclExpMMS::XclExpMMS() :
-    XclExpRecord(0x00C1, 2)
-{
-}
-
-XclExpMMS::~XclExpMMS()
-{
-}
-
-void XclExpMMS::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << static_cast<sal_uInt16>(0x0000);
+    rStrm << GetValue();
 }
 
 // ============================================================================
@@ -1403,35 +1344,25 @@ void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
 
 // ============================================================================
 
-XclExpCodePage::XclExpCodePage() :
-    XclExpRecord(0x0042, 2)
+XclExpFileSharing::XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash ) :
+    XclExpRecord( EXC_ID_FILESHARING ),
+    mnPasswordHash( nPasswordHash )
 {
+    if( rRoot.GetBiff() <= EXC_BIFF5 )
+        maUserName.AssignByte( rRoot.GetUserName(), rRoot.GetTextEncoding(), EXC_STR_8BITLENGTH );
+    else
+        maUserName.Assign( rRoot.GetUserName() );
 }
 
-XclExpCodePage::~XclExpCodePage()
+void XclExpFileSharing::Save( XclExpStream& rStrm )
 {
+    if( mnPasswordHash != 0 )
+        XclExpRecord::Save( rStrm );
 }
 
-void XclExpCodePage::WriteBody( XclExpStream& rStrm )
+void XclExpFileSharing::WriteBody( XclExpStream& rStrm )
 {
-    // 0x04B0 : UTF-16 (BIFF8)
-    rStrm << static_cast<sal_uInt16>(0x04B0);
-}
-
-// ============================================================================
-
-XclExpDSF::XclExpDSF() :
-    XclExpRecord(0x0161, 2)
-{
-}
-
-XclExpDSF::~XclExpDSF()
-{
-}
-
-void XclExpDSF::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << static_cast<sal_uInt16>(0x0000);
+    rStrm << sal_uInt16( 0 ) << mnPasswordHash << maUserName;
 }
 
 // ============================================================================
@@ -1464,21 +1395,6 @@ XclExpProt4RevPass::~XclExpProt4RevPass()
 void XclExpProt4RevPass::WriteBody( XclExpStream& rStrm )
 {
     rStrm << static_cast<sal_uInt16>(0x0000);
-}
-
-// ============================================================================
-
-XclExpExcel9File::XclExpExcel9File() :
-    XclExpRecord(0x01C0, 0)
-{
-}
-
-XclExpExcel9File::~XclExpExcel9File()
-{
-}
-
-void XclExpExcel9File::WriteBody( XclExpStream& /*rStrm*/ )
-{
 }
 
 // ============================================================================

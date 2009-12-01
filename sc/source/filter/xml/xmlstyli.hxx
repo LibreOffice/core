@@ -40,8 +40,11 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include <xmloff/XMLTextMasterStylesContext.hxx>
+#include <xmloff/txtstyli.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include "xmlimprt.hxx"
+
+class ScSheetSaveData;
 
 class ScXMLCellImportPropertyMapper : public SvXMLImportPropertyMapper
 {
@@ -101,6 +104,7 @@ class XMLTableStyleContext : public XMLPropStyleContext
     std::vector<ScXMLMapContent>    aMaps;
     com::sun::star::uno::Any    aConditionalFormat;
     sal_Int32                   nNumberFormat;
+    sal_Int32                   nLastSheet;
     sal_Bool                    bConditionalFormatCreated;
     sal_Bool                    bParentSet;
 
@@ -157,6 +161,9 @@ public:
     XMLPropertyState* FindProperty(const sal_Int16 nContextID);
 
     sal_Int32 GetNumberFormat();// { return nNumberFormat; }
+
+    sal_Int32 GetLastSheet() const       { return nLastSheet; }
+    void SetLastSheet(sal_Int32 nNew)    { nLastSheet = nNew; }
 
 private:
     using XMLPropStyleContext::SetStyle;
@@ -297,6 +304,29 @@ public:
 
     virtual void Finish( sal_Bool bOverwrite );
 };
+
+class ScCellTextStyleContext : public XMLTextStyleContext
+{
+    sal_Int32   nLastSheet;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+    ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+            sal_Bool bDefaultStyle = sal_False );
+    virtual ~ScCellTextStyleContext();
+
+    // overload FillPropertySet to store style information
+    virtual void FillPropertySet(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > & rPropSet );
+};
+
 
 #endif
 

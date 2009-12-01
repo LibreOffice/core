@@ -1726,6 +1726,11 @@ bool VSeriesPlotter::PointsWereSkipped() const
     return m_bPointsWereSkipped;
 }
 
+bool VSeriesPlotter::WantToPlotInFrontOfAxisLine()
+{
+    return ChartTypeHelper::isSeriesInFrontOfAxisLine( m_xChartTypeModel );
+}
+
 Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
               LegendExpansion eLegendExpansion
             , const Reference< beans::XPropertySet >& xTextProperties
@@ -2070,6 +2075,8 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new PieChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true,new PolarPlottingPositionHelper(),true,true,false,1,drawing::Direction3D(1,1,1) );
+    else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,false,new PolarPlottingPositionHelper(),true,true,false,1,drawing::Direction3D(1,1,1) );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
         pRet = new CandleStickChart(xChartTypeModel,nDimensionCount);
     else

@@ -35,6 +35,7 @@
 #include "global.hxx"
 #include "compressedarray.hxx"
 #include "address.hxx"
+#include "rangenam.hxx"
 #include <tools/solar.h>
 
 #include <set>
@@ -58,8 +59,6 @@ class ScBaseCell;
 class ScDocument;
 class ScFormulaCell;
 class ScMarkData;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 class ScPatternAttr;
 class ScStyleSheet;
 class SvtBroadcaster;
@@ -98,8 +97,6 @@ struct ColEntry
     ScBaseCell* pCell;
 };
 
-
-class ScIndexMap;
 
 class ScColumn
 {
@@ -146,8 +143,8 @@ public:
     void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
 
-    BOOL        HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-                            BOOL bLeft, BOOL bRight ) const;
+//UNUSED2009-05 BOOL        HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
+//UNUSED2009-05             BOOL bLeft, BOOL bRight ) const;
     BOOL        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
@@ -164,7 +161,7 @@ public:
     SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
     BOOL        HasDataAt(SCROW nRow) const;
     BOOL        HasVisibleDataAt(SCROW nRow) const;
-    SCROW       GetFirstDataPos() const;
+//UNUSED2009-05 SCROW       GetFirstDataPos() const;
     SCROW       GetLastDataPos() const;
     SCROW       GetLastVisDataPos(BOOL bNotes) const;               // ohne Broadcaster
     SCROW       GetFirstVisDataPos(BOOL bNotes) const;
@@ -258,7 +255,7 @@ public:
 
     BOOL        HasStringData( SCROW nRow ) const;
     BOOL        HasValueData( SCROW nRow ) const;
-    USHORT      GetErrorData( SCROW nRow) const;
+//UNUSED2009-05 USHORT      GetErrorData( SCROW nRow) const;
     BOOL        HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
 
     /** Returns the pointer to a cell note object at the passed row. */
@@ -299,7 +296,7 @@ public:
     void        SetTabNo(SCTAB nNewTab);
     BOOL        IsRangeNameInUse(SCROW nRow1, SCROW nRow2, USHORT nIndex) const;
     void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<USHORT>& rIndexes) const;
-    void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScIndexMap& rMap );
+    void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScRangeData::IndexMap& rMap );
 
     const SfxPoolItem*      GetAttr( SCROW nRow, USHORT nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;

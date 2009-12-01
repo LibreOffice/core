@@ -1191,23 +1191,23 @@ BOOL ScMarkedDataIter::Next( SCSIZE& rIndex )
     return TRUE;
 }
 
-USHORT ScColumn::GetErrorData( SCROW nRow ) const
-{
-    SCSIZE  nIndex;
-    if (Search(nRow, nIndex))
-    {
-        ScBaseCell* pCell = pItems[nIndex].pCell;
-        switch (pCell->GetCellType())
-        {
-            case CELLTYPE_FORMULA :
-                return ((ScFormulaCell*)pCell)->GetErrCode();
-//            break;
-            default:
-            return 0;
-        }
-    }
-    return 0;
-}
+//UNUSED2009-05 USHORT ScColumn::GetErrorData( SCROW nRow ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     SCSIZE  nIndex;
+//UNUSED2009-05     if (Search(nRow, nIndex))
+//UNUSED2009-05     {
+//UNUSED2009-05         ScBaseCell* pCell = pItems[nIndex].pCell;
+//UNUSED2009-05         switch (pCell->GetCellType())
+//UNUSED2009-05         {
+//UNUSED2009-05             case CELLTYPE_FORMULA :
+//UNUSED2009-05                 return ((ScFormulaCell*)pCell)->GetErrCode();
+//UNUSED2009-05 //            break;
+//UNUSED2009-05             default:
+//UNUSED2009-05             return 0;
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return 0;
+//UNUSED2009-05 }
 
 //------------
 
@@ -1376,13 +1376,13 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
     return nLines;
 }
 
-SCROW ScColumn::GetFirstDataPos() const
-{
-    if (nCount)
-        return pItems[0].nRow;
-    else
-        return 0;
-}
+//UNUSED2009-05 SCROW ScColumn::GetFirstDataPos() const
+//UNUSED2009-05 {
+//UNUSED2009-05     if (nCount)
+//UNUSED2009-05         return pItems[0].nRow;
+//UNUSED2009-05     else
+//UNUSED2009-05         return 0;
+//UNUSED2009-05 }
 
 SCROW ScColumn::GetLastDataPos() const
 {

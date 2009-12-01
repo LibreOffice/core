@@ -57,6 +57,7 @@ public:
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
+    virtual void Characters( const ::rtl::OUString& rChars );
 };
 
 #endif

@@ -653,36 +653,36 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
-
-XclExpErrorCell::XclExpErrorCell(
-        const XclExpRoot rRoot, const XclAddress& rXclPos,
-        const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
-    // #i41210# always use latin script for error cells
-    XclExpSingleCellBase( rRoot, EXC_ID3_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
-    mnErrCode( nErrCode )
-{
-}
-
-void XclExpErrorCell::SaveXml( XclExpXmlStream& rStrm )
-{
-    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
-            XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
-            XML_t,      "e",
-            // OOXTODO: XML_cm, XML_vm, XML_ph
-            FSEND );
-    rWorksheet->startElement( XML_v, FSEND );
-    rWorksheet->write( (sal_Int32) mnErrCode );
-    rWorksheet->endElement( XML_v );
-    rWorksheet->endElement( XML_c );
-}
-
-void XclExpErrorCell::WriteContents( XclExpStream& rStrm )
-{
-    rStrm << mnErrCode << EXC_BOOLERR_ERROR;
-}
+//UNUSED2009-05 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
+//UNUSED2009-05
+//UNUSED2009-05 XclExpErrorCell::XclExpErrorCell(
+//UNUSED2009-05         const XclExpRoot rRoot, const XclAddress& rXclPos,
+//UNUSED2009-05         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
+//UNUSED2009-05     // #i41210# always use latin script for error cells
+//UNUSED2009-05     XclExpSingleCellBase( rRoot, EXC_ID3_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
+//UNUSED2009-05     mnErrCode( nErrCode )
+//UNUSED2009-05 {
+//UNUSED2009-05 }
+//UNUSED2009-05
+//UNUSED2009-05 void XclExpErrorCell::SaveXml( XclExpXmlStream& rStrm )
+//UNUSED2009-05 {
+//UNUSED2009-05     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+//UNUSED2009-05     rWorksheet->startElement( XML_c,
+//UNUSED2009-05             XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+//UNUSED2009-05             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
+//UNUSED2009-05             XML_t,      "e",
+//UNUSED2009-05             // OOXTODO: XML_cm, XML_vm, XML_ph
+//UNUSED2009-05             FSEND );
+//UNUSED2009-05     rWorksheet->startElement( XML_v, FSEND );
+//UNUSED2009-05     rWorksheet->write( (sal_Int32) mnErrCode );
+//UNUSED2009-05     rWorksheet->endElement( XML_v );
+//UNUSED2009-05     rWorksheet->endElement( XML_c );
+//UNUSED2009-05 }
+//UNUSED2009-05
+//UNUSED2009-05 void XclExpErrorCell::WriteContents( XclExpStream& rStrm )
+//UNUSED2009-05 {
+//UNUSED2009-05     rStrm << mnErrCode << EXC_BOOLERR_ERROR;
+//UNUSED2009-05 }
 
 // ----------------------------------------------------------------------------
 

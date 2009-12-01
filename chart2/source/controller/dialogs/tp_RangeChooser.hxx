@@ -70,10 +70,16 @@ virtual ~RangeChooserTabPage();
     virtual void listeningFinished( const ::rtl::OUString & rNewRange );
     virtual void disposingRangeSelection();
 
+    void commitPage();
+
 protected: //methods
 
     //OWizardPage
     virtual void ActivatePage();
+    virtual sal_Bool commitPage( CommitPageReason eReason );
+
+    //TabPage
+    virtual void DeactivatePage();
 
     void initControlsFromModel();
     void changeDialogModelAccordingToControls();

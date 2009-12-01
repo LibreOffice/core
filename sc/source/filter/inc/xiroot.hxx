@@ -118,9 +118,6 @@ struct XclImpRootData : public XclRootData
     XclImpTabProtectRef mxTabProtect;       /// Sheet protection options for current sheet.
     XclImpDocProtectRef mxDocProtect;       /// Document protection options.
 
-    String              maPassw;            /// Entered password for stream decryption.
-    bool                mbPassQueried;      /// true = Password already querried.
-
     bool                mbHasCodePage;      /// true = CODEPAGE record exists.
 
     explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
@@ -207,9 +204,6 @@ public:
 
     /** Returns the Calc add-in function name for an Excel function name. */
     String              GetScAddInName( const String& rXclName ) const;
-
-    /** Queries a password from the user and returns it (empty string -> input cancelled). */
-    const String&       QueryPassword() const;
 
 private:
     mutable XclImpRootData& mrImpData;      /// Reference to the global import data struct.

@@ -240,11 +240,11 @@ BOOL ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
 }
 
 
-BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-                            BOOL bLeft, BOOL bRight ) const
-{
-    return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
-}
+//UNUSED2009-05 BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
+//UNUSED2009-05                             BOOL bLeft, BOOL bRight ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
+//UNUSED2009-05 }
 
 
 BOOL ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
@@ -1874,7 +1874,7 @@ void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<USHORT>& r
 }
 
 void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
-                                     const ScIndexMap& rMap )
+                                     const ScRangeData::IndexMap& rMap )
 {
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
@@ -1890,7 +1890,6 @@ void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
             }
         }
 }
-
 
 void ScColumn::SetDirtyVar()
 {

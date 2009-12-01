@@ -96,7 +96,7 @@ ScCollection::~ScCollection()
 }
 
 //------------------------------------------------------------------------
-
+USHORT ScCollection::GetCount() const { return nCount; }
 void ScCollection::AtFree(USHORT nIndex)
 {
     if ((pItems) && (nIndex < nCount))
@@ -334,38 +334,6 @@ ScDataObject*   ScStrCollection::Clone() const
 }
 
 //------------------------------------------------------------------------
-
-void ScStrCollection::Load( SvStream& rStream )
-{
-    ScReadHeader aHdr( rStream );
-    lcl_DeleteScDataObjects( pItems, nCount );
-    BOOL bDups;
-    rStream >> bDups;
-    SetDups( bDups );
-    rStream >> nCount >> nLimit >> nDelta;
-    pItems = new ScDataObject*[nLimit];
-    String aStr;
-    rtl_TextEncoding eSet = rStream.GetStreamCharSet();
-    for ( USHORT i=0; i<nCount; i++ )
-    {
-        rStream.ReadByteString( aStr, eSet );
-        pItems[i] = new StrData( aStr );
-    }
-}
-
-void ScStrCollection::Store( SvStream& rStream ) const
-{
-    ScWriteHeader aHdr( rStream );
-    BOOL bDups = IsDups();
-    rStream << bDups << nCount << nLimit << nDelta;
-    rtl_TextEncoding eSet = rStream.GetStreamCharSet();
-    for ( USHORT i=0; i<nCount; i++ )
-    {
-        rStream.WriteByteString( ((StrData*)pItems[i])->GetString(), eSet );
-    }
-}
-
-//------------------------------------------------------------------------
 // TypedScStrCollection
 //------------------------------------------------------------------------
 
@@ -391,7 +359,8 @@ ScDataObject*   TypedStrData::Clone() const
 {
     return new TypedStrData(*this);
 }
-
+TypedScStrCollection::~TypedScStrCollection()
+{}
 ScDataObject* TypedScStrCollection::Clone() const
 {
     return new TypedScStrCollection(*this);
@@ -428,10 +397,10 @@ short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) 
             // Strings vergleichen:
             //---------------------
             if ( bCaseSensitive )
-                nResult = (short) ScGlobal::pCaseTransliteration->compareString(
+                nResult = (short) ScGlobal::GetCaseTransliteration()->compareString(
                     rData1.aStrValue, rData2.aStrValue );
             else
-                nResult = (short) ScGlobal::pTransliteration->compareString(
+                nResult = (short) ScGlobal::GetpTransliteration()->compareString(
                     rData1.aStrValue, rData2.aStrValue );
         }
     }
@@ -467,12 +436,12 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
             TypedStrData* pData = (TypedStrData*) pItems[i];
             if (pData->nStrType)
             {
-                if ( ScGlobal::pTransliteration->isMatch( rStart, pData->aStrValue ) )
+                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->aStrValue ) )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
-                            !ScGlobal::pTransliteration->isEqual(
+                            !ScGlobal::GetpTransliteration()->isEqual(
                             pData->aStrValue, aOldResult ) )
                     {
                         rResult = pData->aStrValue;
@@ -495,12 +464,12 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
             TypedStrData* pData = (TypedStrData*) pItems[i];
             if (pData->nStrType)
             {
-                if ( ScGlobal::pTransliteration->isMatch( rStart, pData->aStrValue ) )
+                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->aStrValue ) )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
-                            !ScGlobal::pTransliteration->isEqual(
+                            !ScGlobal::GetpTransliteration()->isEqual(
                             pData->aStrValue, aOldResult ) )
                     {
                         rResult = pData->aStrValue;
@@ -523,7 +492,7 @@ BOOL TypedScStrCollection::GetExactMatch( String& rString ) const
     for (USHORT i=0; i<nCount; i++)
     {
         TypedStrData* pData = (TypedStrData*) pItems[i];
-        if ( pData->nStrType && ScGlobal::pTransliteration->isEqual(
+        if ( pData->nStrType && ScGlobal::GetpTransliteration()->isEqual(
                 pData->aStrValue, rString ) )
         {
             rString = pData->aStrValue;                         // String anpassen

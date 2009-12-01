@@ -950,9 +950,18 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
 
 ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nFileId, const String& rTabName, bool bCreateNew, size_t* pnIndex)
 {
+    // In API, the index is transported as cached sheet ID of type sal_Int32 in
+    // sheet::SingleReference.Sheet or sheet::ComplexReference.Reference1.Sheet
+    // in a sheet::FormulaToken, choose a sensible value for N/A. Effectively
+    // being 0xffffffff
+    const size_t nNotAvailable = static_cast<size_t>( static_cast<sal_Int32>( -1));
+
     DocItem* pDoc = getDocItem(nFileId);
     if (!pDoc)
+    {
+        if (pnIndex) *pnIndex = nNotAvailable;
         return TableTypeRef();
+    }
 
     DocItem& rDoc = *pDoc;
 
@@ -966,7 +975,10 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     }
 
     if (!bCreateNew)
+    {
+        if (pnIndex) *pnIndex = nNotAvailable;
         return TableTypeRef();
+    }
 
     // Specified table doesn't exist yet.  Create one.
     nIndex = rDoc.maTables.size();
@@ -1045,7 +1057,7 @@ void ScExternalRefLink::DataChanged(const String& /*rMimeType*/, const Any& /*rV
     else
     {
         // The source document has changed.
-        pMgr->switchSrcFile(mnFileId, aFile);
+        pMgr->switchSrcFile(mnFileId, aFile, aFilter);
         maFilterName = aFilter;
     }
 }
@@ -1891,24 +1903,17 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     if (!pFileData)
         return NULL;
 
+    // Always load the document by using the path created from the relative
+    // path.  If the referenced document is not there, simply exit.  The
+    // original file name should be used only when the relative path is not
+    // given.
     String aFile = pFileData->maFileName;
+    maybeCreateRealFileName(nFileId);
+    if (pFileData->maRealFileName.Len())
+        aFile = pFileData->maRealFileName;
+
     if (!isFileLoadable(aFile))
-    {
-        // The original file path is not loadable.  Try the relative path.
-        // Note that the path is relative to the content.xml substream which
-        // is one-level higher than the file itself.
-
-        if (!pFileData->maRelativeName.Len())
-            return NULL;
-
-        INetURLObject aBaseURL(getOwnDocumentName());
-        aBaseURL.insertName(OUString::createFromAscii("content.xml"));
-        bool bWasAbs = false;
-        aFile = aBaseURL.smartRel2Abs(pFileData->maRelativeName, bWasAbs).GetMainURL(INetURLObject::NO_DECODE);
-        if (!isFileLoadable(aFile))
-            // Ok, I've tried both paths but no success.  Bail out.
-            return NULL;
-    }
+        return NULL;
 
     String aOptions;
     ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
@@ -1960,6 +1965,9 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
 
 bool ScExternalRefManager::isFileLoadable(const String& rFile) const
 {
+    if (!rFile.Len())
+        return false;
+
     if (isOwnDocument(rFile))
         return false;
 
@@ -1992,6 +2000,32 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
     pLink->SetDoReferesh(true);
 
     maLinkedDocs.insert(LinkedDocMap::value_type(nFileId, true));
+}
+
+void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const String& rOwnDocName)
+{
+    if (!maRelativeName.Len())
+        // No relative path given.  Nothing to do.
+        return;
+
+    if (maRealFileName.Len())
+        // Real file name already created.  Nothing to do.
+        return;
+
+    // Formulate the absolute file path from the relative path.
+    const String& rRelPath = maRelativeName;
+    INetURLObject aBaseURL(rOwnDocName);
+    aBaseURL.insertName(OUString::createFromAscii("content.xml"));
+    bool bWasAbs = false;
+    maRealFileName = aBaseURL.smartRel2Abs(rRelPath, bWasAbs).GetMainURL(INetURLObject::NO_DECODE);
+}
+
+void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
+{
+    if (nFileId >= maSrcFiles.size())
+        return;
+
+    maSrcFiles[nFileId].maybeCreateRealFileName(getOwnDocumentName());
 }
 
 bool ScExternalRefManager::compileTokensByCell(const ScAddress& rCell)
@@ -2064,12 +2098,20 @@ sal_uInt16 ScExternalRefManager::getExternalFileId(const String& rFile)
     return static_cast<sal_uInt16>(maSrcFiles.size() - 1);
 }
 
-const String* ScExternalRefManager::getExternalFileName(sal_uInt16 nFileId) const
+const String* ScExternalRefManager::getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal)
 {
     if (nFileId >= maSrcFiles.size())
         return NULL;
 
-    return &maSrcFiles[nFileId].maFileName;
+    if (bForceOriginal)
+        return &maSrcFiles[nFileId].maFileName;
+
+    maybeCreateRealFileName(nFileId);
+
+    if (maSrcFiles[nFileId].maRealFileName.Len())
+        return &maSrcFiles[nFileId].maRealFileName;
+    else
+        return &maSrcFiles[nFileId].maFileName;
 }
 
 bool ScExternalRefManager::hasExternalFile(sal_uInt16 nFileId) const
@@ -2138,10 +2180,17 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
     notifyAllLinkListeners(nFileId, LINK_BROKEN);
 }
 
-void ScExternalRefManager::switchSrcFile(sal_uInt16 nFileId, const String& rNewFile)
+void ScExternalRefManager::switchSrcFile(sal_uInt16 nFileId, const String& rNewFile, const String& rNewFilter)
 {
     maSrcFiles[nFileId].maFileName = rNewFile;
     maSrcFiles[nFileId].maRelativeName.Erase();
+    maSrcFiles[nFileId].maRealFileName.Erase();
+    if (!maSrcFiles[nFileId].maFilterName.Equals(rNewFilter))
+    {
+        // Filter type has changed.
+        maSrcFiles[nFileId].maFilterName = rNewFilter;
+        maSrcFiles[nFileId].maFilterOptions.Erase();
+    }
     refreshNames(nFileId);
 }
 
@@ -2175,19 +2224,18 @@ bool ScExternalRefManager::hasExternalData() const
     return !maSrcFiles.empty();
 }
 
-void ScExternalRefManager::resetSrcFileData()
+void ScExternalRefManager::resetSrcFileData(const String& rBaseFileUrl)
 {
-    INetURLObject aBaseURL(getOwnDocumentName());
-    aBaseURL.insertName(OUString::createFromAscii("content.xml"));
-    String aBaseUrlStr = aBaseURL.GetMainURL(INetURLObject::NO_DECODE);
     for (vector<SrcFileData>::iterator itr = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
           itr != itrEnd; ++itr)
     {
-        if (!itr->maRelativeName.Len())
-        {
-            itr->maRelativeName = URIHelper::simpleNormalizedMakeRelative(
-                aBaseUrlStr, itr->maFileName);
-        }
+        // Re-generate relative file name from the absolute file name.
+        String aAbsName = itr->maRealFileName;
+        if (!aAbsName.Len())
+            aAbsName = itr->maFileName;
+
+        itr->maRelativeName = URIHelper::simpleNormalizedMakeRelative(
+            rBaseFileUrl, aAbsName);
     }
 }
 

@@ -786,7 +786,7 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
     String aUpVal2( aStrVal2 );
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
-        if ( ScGlobal::pCollator->compareString( aUpVal1, aUpVal2 )
+        if ( ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 )
                 == COMPARE_GREATER )
         {
             //  richtige Reihenfolge fuer Wertebereich
@@ -797,16 +797,16 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
     switch ( eOp )
     {
         case SC_COND_EQUAL:
-            bValid = (ScGlobal::pCollator->compareString(
+            bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) == COMPARE_EQUAL);
         break;
         case SC_COND_NOTEQUAL:
-            bValid = (ScGlobal::pCollator->compareString(
+            bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) != COMPARE_EQUAL);
         break;
         default:
         {
-            sal_Int32 nCompare = ScGlobal::pCollator->compareString(
+            sal_Int32 nCompare = ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 );
             switch ( eOp )
             {
@@ -826,7 +826,7 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
                 case SC_COND_NOTBETWEEN:
                     //  Test auf NOTBETWEEN:
                     bValid = ( nCompare == COMPARE_LESS ||
-                        ScGlobal::pCollator->compareString( rArg,
+                        ScGlobal::GetCollator()->compareString( rArg,
                         aUpVal2 ) == COMPARE_GREATER );
                     if ( eOp == SC_COND_BETWEEN )
                         bValid = !bValid;
@@ -1552,13 +1552,6 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
     DBG_ERROR("ScConditionalFormatList: Eintrag nicht gefunden");
     return NULL;
 }
-
-//UNUSED2008-05  void ScConditionalFormatList::ResetUsed()
-//UNUSED2008-05  {
-//UNUSED2008-05      USHORT nCount = Count();
-//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
-//UNUSED2008-05          (*this)[i]->SetUsed(FALSE);
-//UNUSED2008-05  }
 
 void ScConditionalFormatList::CompileAll()
 {

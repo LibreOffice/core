@@ -52,7 +52,6 @@
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
-    mbPassQueried( false ),
     mbHasCodePage( false )
 {
 }
@@ -274,17 +273,6 @@ String XclImpRoot::GetScAddInName( const String& rXclName ) const
     if( ScGlobal::GetAddInCollection()->GetCalcName( rXclName, aScName ) )
         return aScName;
     return rXclName;
-}
-
-const String& XclImpRoot::QueryPassword() const
-{
-    if( !mrImpData.mbPassQueried )
-    {
-        mrImpData.maPassw = ScfApiHelper::QueryPasswordForMedium( GetMedium() );
-        // set to true, even if dialog has been cancelled (never ask twice)
-        mrImpData.mbPassQueried = true;
-    }
-    return mrImpData.maPassw;
 }
 
 // ============================================================================

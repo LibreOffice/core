@@ -167,8 +167,8 @@ public:
         @return  The corresponding text encoding or RTL_TEXTENCODING_DONTKNOW. */
     static rtl_TextEncoding GetTextEncoding( sal_uInt16 nCodePage );
 
-//UNUSED2008-05  /** Returns an Excel code page from a text encoding. */
-//UNUSED2008-05  static sal_uInt16   GetXclCodePage( rtl_TextEncoding eTextEnc );
+    /** Returns an Excel code page from a text encoding. */
+    static sal_uInt16   GetXclCodePage( rtl_TextEncoding eTextEnc );
 
     // font names -------------------------------------------------------------
 
@@ -194,9 +194,12 @@ public:
 
     /** Returns the specified built-in cell style name.
         @param nStyleId  The identifier of the built-in style.
+        @param rName  Default name for unknown styles.
         @param nLevel  The zero-based outline level for RowLevel and ColLevel styles.
         @return  The style name or an empty string, if the parameters are not valid. */
-    static String       GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel );
+    static String       GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, sal_uInt8 nLevel );
+    /** Returns the passed style name with a special built-in prefix. */
+    static String       GetBuiltInStyleName( const String& rStyleName );
     /** Returns true, if the passed string is a name of an Excel built-in style.
         @param pnStyleId  If not 0, the found style identifier will be returned here.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
@@ -230,8 +233,10 @@ public:
     // ------------------------------------------------------------------------
 private:
     static const String maDefNamePrefix;        /// Prefix for built-in defined names.
-    static const String maStyleNamePrefix;      /// Prefix for built-in cell style names.
-    static const String maCFStyleNamePrefix;    /// Prefix for cond. formatting style names.
+    static const String maStyleNamePrefix1;     /// Prefix for built-in cell style names.
+    static const String maStyleNamePrefix2;     /// Prefix for built-in cell style names from OOX filter.
+    static const String maCFStyleNamePrefix1;   /// Prefix for cond. formatting style names.
+    static const String maCFStyleNamePrefix2;   /// Prefix for cond. formatting style names from OOX filter.
 };
 
 // read/write colors ----------------------------------------------------------

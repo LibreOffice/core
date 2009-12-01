@@ -350,7 +350,7 @@ private:
     sal_Size                    nRecLen;
     XclExpString                sName;
     XclExpString                sComment;
-    static XclExpString         sUsername;
+    XclExpString                sUserName;
     UINT8                       nProtected;
 
     inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
@@ -362,7 +362,7 @@ private:
 
 protected:
 public:
-                                ExcEScenario( ScDocument& rDoc, SCTAB nTab );
+                                ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenario();
 
     virtual UINT16              GetNum() const;
@@ -388,7 +388,7 @@ private:
 
 protected:
 public:
-                                ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab );
+                                ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenarioManager();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -496,53 +496,14 @@ private:
 
 // ============================================================================
 
-class XclExpFnGroupCount : public XclExpRecord
-{
-public:
-    explicit XclExpFnGroupCount();
-    virtual ~XclExpFnGroupCount();
-
-private:
-    virtual void WriteBody( XclExpStream& rStrm );
-};
-
-// ============================================================================
-
 /** Beginning of User Interface Records */
-class XclExpInterfaceHdr : public XclExpRecord
+class XclExpInterfaceHdr : public XclExpUInt16Record
 {
 public:
-    explicit XclExpInterfaceHdr();
-    virtual ~XclExpInterfaceHdr();
+    explicit            XclExpInterfaceHdr( sal_uInt16 nCodePage );
 
 private:
-    virtual void WriteBody( XclExpStream& rStrm );
-};
-
-// ============================================================================
-
-/** Beginning of User Interface Records */
-class XclExpInterfaceEnd : public XclExpRecord
-{
-public:
-    explicit XclExpInterfaceEnd();
-    virtual ~XclExpInterfaceEnd();
-
-private:
-    virtual void WriteBody( XclExpStream& rStrm );
-};
-
-// ============================================================================
-
-/** ADDMENU/DELMENU Record Group Count */
-class XclExpMMS : public XclExpRecord
-{
-public:
-    explicit XclExpMMS();
-    virtual ~XclExpMMS();
-
-private:
-    virtual void WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm );
 };
 
 // ============================================================================
@@ -561,26 +522,19 @@ private:
 
 // ============================================================================
 
-class XclExpCodePage : public XclExpRecord
+class XclExpFileSharing : public XclExpRecord
 {
 public:
-    explicit XclExpCodePage();
-    virtual ~XclExpCodePage();
+    explicit            XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash );
+
+    virtual void        Save( XclExpStream& rStrm );
 
 private:
-    virtual void WriteBody( XclExpStream& rStrm );
-};
-
-// ============================================================================
-
-class XclExpDSF : public XclExpRecord
-{
-public:
-    explicit XclExpDSF();
-    virtual ~XclExpDSF();
+    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    virtual void WriteBody( XclExpStream& rStrm );
+    XclExpString        maUserName;
+    sal_uInt16          mnPasswordHash;
 };
 
 // ============================================================================
@@ -602,19 +556,6 @@ class XclExpProt4RevPass : public XclExpRecord
 public:
     explicit XclExpProt4RevPass();
     virtual ~XclExpProt4RevPass();
-
-private:
-    virtual void WriteBody( XclExpStream& rStrm );
-};
-
-// ============================================================================
-
-/** What's this record for?  It is a zero-byte record. */
-class XclExpExcel9File : public XclExpRecord
-{
-public:
-    explicit XclExpExcel9File();
-    virtual ~XclExpExcel9File();
 
 private:
     virtual void WriteBody( XclExpStream& rStrm );

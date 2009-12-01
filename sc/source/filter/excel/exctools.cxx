@@ -68,7 +68,6 @@ RootData::RootData( void )
 {
     eDateiTyp = BiffX;
     pExtSheetBuff = NULL;
-    pTabNameBuff = NULL;
     pShrfmlaBuff = NULL;
     pExtNameBuff = NULL;
     pFmlaConverter = NULL;
@@ -87,7 +86,6 @@ RootData::RootData( void )
 RootData::~RootData()
 {
     delete pExtSheetBuff;
-    delete pTabNameBuff;
     delete pShrfmlaBuff;
     delete pExtNameBuff;
     delete pAutoFilterBuffer;

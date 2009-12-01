@@ -610,26 +610,50 @@ private:
     void SAL_CALL       executeDispatch_ObjectProperties();
     void SAL_CALL       executeDispatch_FormatObject( const ::rtl::OUString& rDispatchCommand );
     void SAL_CALL       executeDlg_ObjectProperties( const ::rtl::OUString& rObjectCID );
+    bool                executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl::OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso );
 
     void SAL_CALL       executeDispatch_ChartType();
 
-    void SAL_CALL       executeDispatch_InsertTitle();
-    void SAL_CALL       executeDispatch_InsertLegend();
-    void SAL_CALL       executeDispatch_InsertDataLabel();
-    void SAL_CALL       executeDispatch_InsertAxis();
-    void SAL_CALL       executeDispatch_InsertGrid();
-//     void SAL_CALL       executeDispatch_InsertStatistic();
-    void SAL_CALL       executeDispatch_InsertYErrorbars();
-    void SAL_CALL       executeDispatch_InsertTrendlines();
-    void SAL_CALL       executeDispatch_InsertMeanValue();
-    void SAL_CALL       executeDispatch_InsertMeanValues();
-    void SAL_CALL       executeDispatch_InsertTrendline();
-    void SAL_CALL       executeDispatch_InsertTrendlineEquation();
-    void SAL_CALL       executeDispatch_InsertYErrorbar();
+    void                executeDispatch_InsertTitles();
+    void                executeDispatch_InsertLegend();
+    void                executeDispatch_DeleteLegend();
+    void                executeDispatch_OpenLegendDialog();
+    void                executeDispatch_InsertAxes();
+    void                executeDispatch_InsertGrid();
 
-    void SAL_CALL       executeDispatch_DeleteMeanValue();
-    void SAL_CALL       executeDispatch_DeleteTrendline();
-    void SAL_CALL       executeDispatch_DeleteYErrorbar();
+    void                executeDispatch_InsertMenu_DataLabels();
+    void                executeDispatch_InsertMenu_YErrorBars();
+    void                executeDispatch_InsertMenu_Trendlines();
+    void                executeDispatch_InsertMenu_MeanValues();
+
+    void                executeDispatch_InsertMeanValue();
+    void                executeDispatch_InsertTrendline();
+    void                executeDispatch_InsertTrendlineEquation( bool bInsertR2=false );
+    void                executeDispatch_InsertYErrorBars();
+
+    void                executeDispatch_InsertR2Value();
+    void                executeDispatch_DeleteR2Value();
+
+    void                executeDispatch_DeleteMeanValue();
+    void                executeDispatch_DeleteTrendline();
+    void                executeDispatch_DeleteTrendlineEquation();
+    void                executeDispatch_DeleteYErrorBars();
+
+    void                executeDispatch_InsertDataLabels();
+    void                executeDispatch_InsertDataLabel();
+    void                executeDispatch_DeleteDataLabels();
+    void                executeDispatch_DeleteDataLabel();
+
+    void                executeDispatch_ResetAllDataPoints();
+    void                executeDispatch_ResetDataPoint();
+
+    void                executeDispatch_InsertAxis();
+    void                executeDispatch_InsertAxisTitle();
+    void                executeDispatch_InsertMajorGrid();
+    void                executeDispatch_InsertMinorGrid();
+    void                executeDispatch_DeleteAxis();
+    void                executeDispatch_DeleteMajorGrid();
+    void                executeDispatch_DeleteMinorGrid();
 
     void SAL_CALL       executeDispatch_InsertSpecialCharacter();
     void SAL_CALL       executeDispatch_EditText( const Point* pMousePixel = NULL );

@@ -42,6 +42,7 @@
 #include "document.hxx"
 #include "docuno.hxx"
 #include "olinetab.hxx"
+#include "sheetdata.hxx"
 #include "unonames.hxx"
 
 #include <xmloff/xmltkmap.hxx>
@@ -145,7 +146,7 @@ SvXMLImportContext *ScXMLTableColContext::CreateChildContext( USHORT nPrefix,
 void ScXMLTableColContext::EndElement()
 {
     ScXMLImport& rXMLImport = GetScImport();
-    //sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+    sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentColumn = rXMLImport.GetTables().GetCurrentColumn();
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(xSheet.is())
@@ -169,7 +170,16 @@ void ScXMLTableColContext::EndElement()
                         XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                             XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, sal_True);
                         if (pStyle)
+                        {
                             pStyle->FillPropertySet(xColumnProperties);
+
+                            if ( nSheet != pStyle->GetLastSheet() )
+                            {
+                                ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
+                                pSheetData->AddColumnStyle( sStyleName, ScAddress( (SCCOL)nCurrentColumn, 0, (SCTAB)nSheet ) );
+                                pStyle->SetLastSheet(nSheet);
+                            }
+                        }
                     }
                 }
                 rtl::OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));

@@ -110,9 +110,11 @@ private: //member
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
     bool                                m_bSymbol;
+    bool                                m_bIsPolarCooSys;//used e.g. for net chart (the data labels need to be placed different)
     bool                                m_bConnectLastToFirstPoint;//used e.g. for net chart
     bool                                m_bAddOneToXMax;//used e.g. for net chart (the angle axis needs a different autoscaling)
     bool                                m_bExpandIfValuesCloseToBorder; // e.g. false for net charts
+
     sal_Int32                           m_nKeepAspectRatio; //0->no 1->yes other value->automatic
     ::com::sun::star::drawing::Direction3D m_aGivenAspectRatio; //only used if nKeepAspectRatio==1
 

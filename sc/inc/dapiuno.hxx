@@ -72,9 +72,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 class ScDocShell;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivot;
-#endif
 class ScDPSaveDimension;
 class ScDPSaveGroupDimension;
 class ScDPSaveNumGroupDimension;

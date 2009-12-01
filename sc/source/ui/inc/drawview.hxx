@@ -143,7 +143,7 @@ public:
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
     SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
-    void                    CaptionTextDirection(USHORT nSlot);
+//UNUSED2009-05 void                    CaptionTextDirection(USHORT nSlot);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 
