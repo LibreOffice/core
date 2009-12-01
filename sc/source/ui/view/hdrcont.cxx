@@ -47,6 +47,7 @@
 #include "scmod.hxx"        // Optionen
 #include "inputopt.hxx"     // Optionen
 #include "gridmerg.hxx"
+#include "document.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -655,6 +656,39 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
     return nHitNo;
 }
 
+bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
+{
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (!pViewSh)
+        return false;
+
+    ScViewData* pViewData = pViewSh->GetViewData();
+    USHORT nTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
+    const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+    bool bSelectAllowed = true;
+    if ( pProtect && pProtect->isProtected() )
+    {
+        // This sheet is protected.  Check if a context menu is allowed on this cell.
+        bool bCellsProtected = false;
+        if (bVertical)
+            // row header
+            bCellsProtected = pDoc->HasAttrib(0, nPos, nTab, MAXCOL, nPos, nTab, HASATTR_PROTECTED);
+        else
+            // column header
+            bCellsProtected = pDoc->HasAttrib(nPos, 0, nTab, nPos, MAXROW, nTab, HASATTR_PROTECTED);
+
+        bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+        if (bCellsProtected)
+            bSelectAllowed = bSelProtected;
+        else
+            bSelectAllowed = bSelUnprotected;
+    }
+    return bSelectAllowed;
+}
+
 void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (IsDisabled())
@@ -665,6 +699,8 @@ void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
 
     BOOL bFound;
     SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
+    if (!IsSelectionAllowed(nHitNo))
+        return;
 
     if ( bFound && rMEvt.IsLeft() && ResizeAllowed() )
     {
@@ -848,8 +884,11 @@ void __EXPORT ScHeaderControl::Command( const CommandEvent& rCEvt )
                 MouseEvent aMEvt( rCEvt.GetMousePosPixel() );
                 BOOL bBorder;
                 SCCOLROW nPos = GetMousePos( aMEvt, bBorder );
-                USHORT nTab = pViewData->GetTabNo();
+                if (!IsSelectionAllowed(nPos))
+                    // Selecting this cell is not allowed, neither is context menu.
+                    return;
 
+                SCTAB nTab = pViewData->GetTabNo();
                 ScRange aNewRange;
                 if ( bVertical )
                     aNewRange = ScRange( 0, sal::static_int_cast<SCROW>(nPos), nTab,
