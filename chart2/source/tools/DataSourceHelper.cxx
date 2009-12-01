@@ -517,6 +517,19 @@ Sequence< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(
     return aResult;
 }
 
+OUString DataSourceHelper::getRangeFromValues(
+    const Reference< data::XLabeledDataSequence > & xLSeq )
+{
+    OUString aResult;
+    if( xLSeq.is() )
+    {
+        Reference< data::XDataSequence > xValues( xLSeq->getValues() );
+        if( xValues.is() )
+            aResult = xValues->getSourceRangeRepresentation();
+    }
+    return aResult;
+}
+
 Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference< data::XDataSource > & xSource )
 {
     ::std::vector< OUString > aResult;

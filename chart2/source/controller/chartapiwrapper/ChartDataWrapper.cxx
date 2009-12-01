@@ -493,7 +493,7 @@ void ChartDataWrapper::refreshData()
         // categories
         uno::Sequence< ::rtl::OUString > & rSequence =
                 bUseColumns ? m_aRowDescriptions : m_aColumnDescriptions;
-        rSequence = DiagramHelper::generateAutomaticCategories( xChartDoc );
+        rSequence = DiagramHelper::getExplicitSimpleCategories( xChartDoc );
     }
 }
 

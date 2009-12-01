@@ -35,9 +35,9 @@
 #include "LabelAlignment.hxx"
 #include "MinimumAndMaximumSupplier.hxx"
 #include "LegendEntryProvider.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 #include <com/sun/star/chart2/LegendSymbolStyle.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 
 
@@ -278,8 +278,7 @@ public:
     void setColorScheme( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::chart2::XColorScheme >& xColorScheme );
 
-    void setExplicitCategoriesProvider( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::data::XTextualDataSequence >& xExplicitCategoriesProvider );
+    void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
     //get series names for the z axis labels
     ::com::sun::star::uno::Sequence< rtl::OUString > getSeriesNames() const;
@@ -434,8 +433,7 @@ protected: //member
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XColorScheme >    m_xColorScheme;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XTextualDataSequence >    m_xExplicitCategoriesProvider;
+    ExplicitCategoriesProvider*    m_pExplicitCategoriesProvider;
 
     //better performance for big data
     ::com::sun::star::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;

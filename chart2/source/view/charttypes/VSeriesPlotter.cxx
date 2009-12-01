@@ -159,7 +159,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_aZSlots()
         , m_bCategoryXAxis(bCategoryXAxis)
         , m_xColorScheme()
-        , m_xExplicitCategoriesProvider()
+        , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
 {
     DBG_ASSERT(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
@@ -480,9 +480,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         {
             if(pLabel->ShowCategoryName)
             {
-                if( m_xExplicitCategoriesProvider.is() )
+                if( m_pExplicitCategoriesProvider )
                 {
-                    Sequence< OUString > aCategories( m_xExplicitCategoriesProvider->getTextualData() );
+                    Sequence< OUString > aCategories( m_pExplicitCategoriesProvider->getTextualData() );
                     if( nPointIndex >= 0 && nPointIndex < aCategories.getLength() )
                     {
                         aText.append( aCategories[nPointIndex] );
@@ -1356,9 +1356,9 @@ void VSeriesPlotter::setColorScheme( const uno::Reference< XColorScheme >& xColo
     m_xColorScheme = xColorScheme;
 }
 
-void VSeriesPlotter::setExplicitCategoriesProvider( const uno::Reference< data::XTextualDataSequence >& xExplicitCategoriesProvider )
+void VSeriesPlotter::setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider )
 {
-    m_xExplicitCategoriesProvider = xExplicitCategoriesProvider;
+    m_pExplicitCategoriesProvider = pExplicitCategoriesProvider;
 }
 
 sal_Int32 VDataSeriesGroup::getPointCount() const
@@ -1929,8 +1929,8 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
         if( bVaryColorsByPoint )
         {
             Sequence< OUString > aCategoryNames;
-            if( m_xExplicitCategoriesProvider.is() )
-                aCategoryNames = m_xExplicitCategoriesProvider->getTextualData();
+            if( m_pExplicitCategoriesProvider )
+                aCategoryNames = m_pExplicitCategoriesProvider->getTextualData();
 
             for( sal_Int32 nIdx=0; nIdx<aCategoryNames.getLength(); ++nIdx )
             {

@@ -152,6 +152,10 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XLabeledDataSequence > & xLSeq );
 
+        SAL_DLLPRIVATE static ::rtl::OUString getRangeFromValues(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::data::XLabeledDataSequence > & xLSeq );
+
         SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< ::rtl::OUString > getRangesFromDataSource(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XDataSource > & xSource );

@@ -79,6 +79,10 @@ public:
             ::com::sun::star::chart2::XDiagram >
         findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
 
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystem >
+        getFirstCoordinateSystem( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+
     SAL_DLLPRIVATE static ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > > getDataSeries(
             const ::com::sun::star::uno::Reference<

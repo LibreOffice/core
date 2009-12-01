@@ -425,6 +425,8 @@ VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysL
             rtl::OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, xChartModel ) );
             pVCooSys->setParticle(aCooSysParticle);
 
+            pVCooSys->setExplicitCategoriesProvider( new ExplicitCategoriesProvider(xCooSys,xChartModel) );
+
             rVCooSysList.push_back( pVCooSys );
         }
     }

@@ -41,14 +41,14 @@
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider :
-        public ::cppu::WeakImplHelper1<
-        ::com::sun::star::chart2::data::XTextualDataSequence
-        >
+class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
 {
 public:
     ExplicitCategoriesProvider( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel );
+                        ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
+                       , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::frame::XModel >& xChartModel
+                       );
     SAL_DLLPRIVATE virtual ~ExplicitCategoriesProvider();
 
     //XTextualDataSequence
@@ -56,9 +56,14 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     static ::rtl::OUString getCategoryByIndex(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel,
-        sal_Int32 nIndex );
+          const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel >& xChartModel
+        , sal_Int32 nIndex );
+
+    bool hasComplexCategories() const;
+    sal_Int32 getCategoryLevelCount() const;
 
 private: //member
     ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aExplicitCategories;
@@ -67,7 +72,9 @@ private: //member
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::chart2::XCoordinateSystem > m_xCooSysModel;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence> m_xCategories;
+        ::com::sun::star::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
 };
 
 } //  namespace chart

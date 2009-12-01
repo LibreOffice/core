@@ -34,6 +34,10 @@
 #include "ExplicitCategoriesProvider.hxx"
 #include "DiagramHelper.hxx"
 #include "CommonConverters.hxx"
+#include "DataSourceHelper.hxx"
+#include "ChartModelHelper.hxx"
+#include "ContainerHelper.hxx"
+#include "macros.hxx"
 
 //.............................................................................
 namespace chart
@@ -46,16 +50,78 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using rtl::OUString;
 
-ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2::XCoordinateSystem >& xCooSysModel )
+ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2::XCoordinateSystem >& xCooSysModel
+                                                       , const uno::Reference< frame::XModel >& xChartModel )
     : m_bDirty(true)
     , m_xCooSysModel( xCooSysModel )
-    , m_xCategories()
+    , m_xOriginalCategories()
 {
     if( xCooSysModel.is() )
     {
         uno::Reference< XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );
         if( xAxis.is() )
-            m_xCategories = xAxis->getScaleData().Categories;
+            m_xOriginalCategories = xAxis->getScaleData().Categories;
+    }
+
+    if( m_xOriginalCategories.is() )
+    {
+        Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
+        if( xChartDoc.is() )
+        {
+            uno::Reference< data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
+
+            if( xDataProvider.is() && !xChartDoc->hasInternalDataProvider() )
+            {
+                OUString aCatgoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
+                const bool bFirstCellAsLabel = false;
+                const bool bHasCategories = false;
+                const uno::Sequence< sal_Int32 > aSequenceMapping;
+
+                uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
+                     DataSourceHelper::createArguments( aCatgoriesRange, aSequenceMapping, true /*bUseColumns*/
+                        , bFirstCellAsLabel, bHasCategories ) ) );
+
+                uno::Reference< data::XDataSource > xRowCategoriesSource( xDataProvider->createDataSource(
+                     DataSourceHelper::createArguments( aCatgoriesRange, aSequenceMapping, false /*bUseColumns*/
+                        , bFirstCellAsLabel, bHasCategories ) ) );
+
+                if( xColumnCategoriesSource.is() &&  xRowCategoriesSource.is() )
+                {
+                    Sequence< Reference< data::XLabeledDataSequence> > aColumns = xColumnCategoriesSource->getDataSequences();
+                    Sequence< Reference< data::XLabeledDataSequence> > aRows = xRowCategoriesSource->getDataSequences();
+                        //m_aSplitCategoriesList;
+
+                    sal_Int32 nColumnCount = aColumns.getLength();
+                    sal_Int32 nRowCount = aRows.getLength();
+                    if( nColumnCount>1 && nRowCount>1 )
+                    {
+                        //we have complex categories
+                        //->split them in the direction of the first series
+                        //detect whether the first series is a row or a column
+                        bool bSeriesUsesColumns = true;
+                        ::std::vector< Reference< XDataSeries > > aSeries( ChartModelHelper::getDataSeries( xChartModel ) );
+                        if( !aSeries.empty() )
+                        {
+                            uno::Reference< data::XDataSource > xSeriesSource( aSeries.front(), uno::UNO_QUERY );
+                            ::rtl::OUString aStringDummy;
+                            bool bDummy;
+                            uno::Sequence< sal_Int32 > aSeqDummy;
+                            DataSourceHelper::readArguments( xDataProvider->detectArguments( xSeriesSource),
+                                           aStringDummy, aSeqDummy, bSeriesUsesColumns, bDummy, bDummy );
+                        }
+                        if( bSeriesUsesColumns )
+                            m_aSplitCategoriesList=aColumns;
+                        else
+                            m_aSplitCategoriesList=aRows;
+                    }
+                }
+            }
+        }
+        if( !m_aSplitCategoriesList.getLength() )
+        {
+            m_aSplitCategoriesList.realloc(1);
+            m_aSplitCategoriesList[0]=m_xOriginalCategories;
+        }
     }
 }
 
@@ -63,15 +129,203 @@ ExplicitCategoriesProvider::~ExplicitCategoriesProvider()
 {
 }
 
+bool ExplicitCategoriesProvider::hasComplexCategories() const
+{
+    return m_aSplitCategoriesList.getLength() > 1;
+}
+
+sal_Int32 ExplicitCategoriesProvider::getCategoryLevelCount() const
+{
+    sal_Int32 nCount = m_aSplitCategoriesList.getLength();
+    if(!nCount)
+        nCount = 1;
+    return nCount;
+}
+
+struct ComplexCategory
+{
+    OUString Text;
+    sal_Int32 Count;
+
+    ComplexCategory( const OUString& rText, sal_Int32 nCount ) : Text( rText ), Count (nCount)
+    {}
+};
+
+std::vector<sal_Int32> lcl_getLimitingBorders( const std::vector< ComplexCategory >& rComplexCategories )
+{
+    std::vector<sal_Int32> aLimitingBorders;
+    std::vector< ComplexCategory >::const_iterator aIt( rComplexCategories.begin() );
+    std::vector< ComplexCategory >::const_iterator aEnd( rComplexCategories.end() );
+    sal_Int32 nBorderIndex = 0; /*border below the index*/
+    for( ; aIt != aEnd; ++aIt )
+    {
+        ComplexCategory aComplexCategory(*aIt);
+        nBorderIndex += aComplexCategory.Count;
+        aLimitingBorders.push_back(nBorderIndex);
+    }
+    return aLimitingBorders;
+}
+
+std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
+    const uno::Reference< data::XDataSequence >& xDataSequence
+    , const std::vector<sal_Int32>& rLimitingBorders )
+{
+    std::vector< ComplexCategory > aResult;
+    OSL_ASSERT( xDataSequence.is());
+    if(!xDataSequence.is())
+        return aResult;
+
+    uno::Sequence< rtl::OUString > aStrings;
+    uno::Reference< data::XTextualDataSequence > xTextualDataSequence( xDataSequence, uno::UNO_QUERY );
+    if( xTextualDataSequence.is() )
+    {
+        aStrings = xTextualDataSequence->getTextualData();
+    }
+    else
+    {
+        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
+        aStrings.realloc(aValues.getLength());
+
+        for(sal_Int32 nN=aValues.getLength();nN--;)
+            aValues[nN] >>= aStrings[nN];
+    }
+    sal_Int32 nMaxCount = aStrings.getLength();
+    OUString aPrevious;
+    sal_Int32 nCurrentCount=0;
+    for( sal_Int32 nN=0; nN<nMaxCount; nN++ )
+    {
+        OUString aCurrent = aStrings[nN];
+        if( ::std::find( rLimitingBorders.begin(), rLimitingBorders.end(), nN ) != rLimitingBorders.end() )
+        {
+            aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
+            nCurrentCount=1;
+            aPrevious = aCurrent;
+        }
+        else
+        {
+            if( aCurrent.getLength() && aPrevious != aCurrent )
+            {
+                if( aPrevious.getLength() )
+                {
+                    aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
+                    nCurrentCount=1;
+                }
+                else
+                    nCurrentCount++;
+                aPrevious = aCurrent;
+            }
+            else
+                nCurrentCount++;
+        }
+    }
+    if( nCurrentCount )
+        aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
+
+    return aResult;
+}
+
+sal_Int32 lcl_getCategoryCount( std::vector< ComplexCategory >& rComplexCategories )
+{
+    sal_Int32 nCount = 0;
+    std::vector< ComplexCategory >::iterator aIt( rComplexCategories.begin() );
+    std::vector< ComplexCategory >::const_iterator aEnd( rComplexCategories.end() );
+    for( ; aIt != aEnd; ++aIt )
+        nCount+=aIt->Count;
+    return nCount;
+}
+
 //XTextualDataSequence
 Sequence< ::rtl::OUString > SAL_CALL ExplicitCategoriesProvider::getTextualData() throw( uno::RuntimeException)
 {
     if( m_bDirty )
     {
-        if( m_xCategories.is() )
-            m_aExplicitCategories = DataSequenceToStringSequence(m_xCategories->getValues());
+        if( m_xOriginalCategories.is() )
+        {
+            if( !hasComplexCategories() )
+                m_aExplicitCategories = DataSequenceToStringSequence(m_xOriginalCategories->getValues());
+            else
+            {
+                std::vector< std::vector< ComplexCategory > > aComplexCats;//not one per index
+
+                //std::vector< std::vector< rtl::OUString > > aCats;
+                sal_Int32 nLCount = m_aSplitCategoriesList.getLength();
+                for( sal_Int32 nL = 0; nL < nLCount; nL++ )
+                {
+                    Reference< data::XLabeledDataSequence > xLabeledDataSequence( m_aSplitCategoriesList[nL] );
+                    if(xLabeledDataSequence.is())
+                    {
+                        std::vector<sal_Int32> aLimitingBorders;
+                        if(nL>0)
+                            aLimitingBorders = lcl_getLimitingBorders( aComplexCats.back() );
+                        aComplexCats.push_back( lcl_DataSequenceToComplexCategoryVector( xLabeledDataSequence->getValues(), aLimitingBorders ) );
+                        //aCats.push_back( ContainerHelper::SequenceToVector( DataSequenceToStringSequence(xLabeledDataSequence->getValues() ) ) );
+                    }
+                }
+
+                std::vector< std::vector< ComplexCategory > >::iterator aOuterIt( aComplexCats.begin() );
+                std::vector< std::vector< ComplexCategory > >::const_iterator aOuterEnd( aComplexCats.end() );
+
+                //ensure that the category count is the same on each level
+                sal_Int32 nMaxCategoryCount = 0;
+                {
+                    for( aOuterIt=aComplexCats.begin(); aOuterIt != aOuterEnd; ++aOuterIt )
+                    {
+                        sal_Int32 nCurrentCount = lcl_getCategoryCount( *aOuterIt );
+                        nMaxCategoryCount = std::max( nCurrentCount, nMaxCategoryCount );
+                    }
+                    for( aOuterIt=aComplexCats.begin(); aOuterIt != aOuterEnd; ++aOuterIt )
+                    {
+                        sal_Int32 nCurrentCount = lcl_getCategoryCount( *aOuterIt );
+                        if( nCurrentCount< nMaxCategoryCount )
+                        {
+                            ComplexCategory& rComplexCategory = aOuterIt->back();
+                            rComplexCategory.Count += (nMaxCategoryCount-nCurrentCount);
+                        }
+                    }
+                }
+
+                //create a list with an element for every index
+                std::vector< std::vector< ComplexCategory > > aComplexCatsPerIndex;
+                for( aOuterIt=aComplexCats.begin() ; aOuterIt != aOuterEnd; ++aOuterIt )
+                {
+                    std::vector< ComplexCategory > aSingleLevel;
+                    std::vector< ComplexCategory >::iterator aIt( aOuterIt->begin() );
+                    std::vector< ComplexCategory >::const_iterator aEnd( aOuterIt->end() );
+                    for( ; aIt != aEnd; ++aIt )
+                    {
+                        ComplexCategory aComplexCategory( *aIt );
+                        sal_Int32 nCount = aComplexCategory.Count;
+                        while( nCount-- )
+                            aSingleLevel.push_back(aComplexCategory);
+                    }
+                    aComplexCatsPerIndex.push_back( aSingleLevel );
+                }
+
+                if(nMaxCategoryCount)
+                {
+                    m_aExplicitCategories.realloc(nMaxCategoryCount);
+                    aOuterEnd = aComplexCatsPerIndex.end();
+                    OUString aSpace(C2U(" "));
+                    for(sal_Int32 nN=0; nN<nMaxCategoryCount; nN++)
+                    {
+                        OUString aText;
+                        for( aOuterIt=aComplexCatsPerIndex.begin() ; aOuterIt != aOuterEnd; ++aOuterIt )
+                        {
+                            OUString aAddText = (*aOuterIt)[nN].Text;
+                            if( aAddText.getLength() )
+                            {
+                                if(aText.getLength())
+                                    aText += aSpace;
+                                aText += aAddText;
+                            }
+                        }
+                        m_aExplicitCategories[nN]=aText;
+                    }
+                }
+            }
+        }
         if(!m_aExplicitCategories.getLength())
-            m_aExplicitCategories = DiagramHelper::generateAutomaticCategories( uno::Reference< chart2::XCoordinateSystem >( m_xCooSysModel.get(), uno::UNO_QUERY ) );
+            m_aExplicitCategories = DiagramHelper::generateAutomaticCategoriesFromCooSys( m_xCooSysModel );
         m_bDirty = false;
     }
     return m_aExplicitCategories;
@@ -79,18 +333,16 @@ Sequence< ::rtl::OUString > SAL_CALL ExplicitCategoriesProvider::getTextualData(
 
 // static
 OUString ExplicitCategoriesProvider::getCategoryByIndex(
-        const Reference< XCoordinateSystem >& xCooSysModel,
-        sal_Int32 nIndex )
+          const Reference< XCoordinateSystem >& xCooSysModel
+        , const uno::Reference< frame::XModel >& xChartModel
+        , sal_Int32 nIndex )
 {
     if( xCooSysModel.is())
     {
-        Reference< XTextualDataSequence > xTemp( new ExplicitCategoriesProvider( xCooSysModel ));
-        if( xTemp.is())
-        {
-            Sequence< OUString > aCategories( xTemp->getTextualData());
-            if( nIndex < aCategories.getLength())
-                return aCategories[ nIndex ];
-        }
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSysModel, xChartModel );
+        Sequence< OUString > aCategories( aExplicitCategoriesProvider.getTextualData());
+        if( nIndex < aCategories.getLength())
+            return aCategories[ nIndex ];
     }
     return OUString();
 }

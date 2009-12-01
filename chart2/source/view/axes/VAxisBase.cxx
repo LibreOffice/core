@@ -82,19 +82,25 @@ void SAL_CALL VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::S
     if( !m_aAxisProperties.m_bDisplayLabels )
         return;
 
-    if( AxisType::CATEGORY==m_aAxisProperties.m_nAxisType
-        || AxisType::SERIES==m_aAxisProperties.m_nAxisType )
+    if( AxisType::SERIES==m_aAxisProperties.m_nAxisType )
     {
         if( m_aAxisProperties.m_xAxisTextProvider.is() )
             m_aTextLabels = m_aAxisProperties.m_xAxisTextProvider->getTextualData();
 
         m_bUseTextLabels = true;
-        if( m_aTextLabels.getLength() == 1 && AxisType::SERIES==m_aAxisProperties.m_nAxisType )
+        if( m_aTextLabels.getLength() == 1 )
         {
             //don't show a single series name
             m_aAxisProperties.m_bDisplayLabels = false;
             return;
         }
+    }
+    else if( AxisType::CATEGORY==m_aAxisProperties.m_nAxisType )
+    {
+        if( m_aAxisProperties.m_pExplicitCategoriesProvider )
+            m_aTextLabels = m_aAxisProperties.m_pExplicitCategoriesProvider->getTextualData();
+
+        m_bUseTextLabels = true;
     }
 
     m_aAxisLabelProperties.nNumberFormatKey = m_aAxisProperties.m_nNumberFormatKey;

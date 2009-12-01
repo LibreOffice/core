@@ -161,7 +161,7 @@ TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
 //--------------------------------------------------------------------------
 
 AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
-                              , const uno::Reference< data::XTextualDataSequence >& xAxisTextProvider )
+                              , ExplicitCategoriesProvider* pExplicitCategoriesProvider )
     : m_xAxisModel(xAxisModel)
     , m_nDimensionIndex(0)
     , m_bIsMainAxis(true)
@@ -186,7 +186,8 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_aLineProperties()
     //for category axes
     , m_nAxisType(AxisType::REALNUMBER)
-    , m_xAxisTextProvider(xAxisTextProvider)
+    , m_pExplicitCategoriesProvider(pExplicitCategoriesProvider)
+    , m_xAxisTextProvider(0)
     , m_bTickmarksAtIndicatedValue(false)
 {
 }
@@ -216,6 +217,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_aLineProperties( rAxisProperties.m_aLineProperties )
     //for category axes
     , m_nAxisType( rAxisProperties.m_nAxisType )
+    , m_pExplicitCategoriesProvider( rAxisProperties.m_pExplicitCategoriesProvider )
     , m_xAxisTextProvider( rAxisProperties.m_xAxisTextProvider )
     , m_bTickmarksAtIndicatedValue( rAxisProperties.m_bTickmarksAtIndicatedValue )
 {

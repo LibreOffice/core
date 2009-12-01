@@ -115,6 +115,20 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
     return NULL;
 }
 
+//static
+uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
+{
+    uno::Reference< XCoordinateSystem > XCooSys;
+    uno::Reference< XCoordinateSystemContainer > xCooSysCnt( ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY );
+    if( xCooSysCnt.is() )
+    {
+        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+        if( aCooSysSeq.getLength() )
+            XCooSys = aCooSysSeq[0];
+    }
+    return XCooSys;
+}
+
 // static
 ::std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
     const uno::Reference< XChartDocument > & xChartDoc )

@@ -207,7 +207,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     ScaleData aScale( xCrossingMainAxis->getScaleData() );
                     m_bIsCrossingAxisIsCategoryAxis = ( chart2::AxisType::CATEGORY == aScale.AxisType  );
                     if( m_bIsCrossingAxisIsCategoryAxis )
-                        m_aCategories = DiagramHelper::generateAutomaticCategories( Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY) );
+                        m_aCategories = DiagramHelper::getExplicitSimpleCategories( Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY) );
                 }
             }
         }

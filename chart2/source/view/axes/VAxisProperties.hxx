@@ -33,6 +33,7 @@
 #include "TickmarkProperties.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "LabelAlignment.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
@@ -137,6 +138,7 @@ struct AxisProperties
 
     //for category axes ->
     sal_Int32                                        m_nAxisType;//REALNUMBER, CATEGORY etc. type ::com::sun::star::chart2::AxisType
+    ExplicitCategoriesProvider* m_pExplicitCategoriesProvider;/*no ownership here*/
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XTextualDataSequence >
                                                     m_xAxisTextProvider; //for categries or series names
@@ -147,8 +149,7 @@ struct AxisProperties
     //methods:
 
     AxisProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxisModel
-                  , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::data::XTextualDataSequence >& xAxisTextProvider );
+                  , ExplicitCategoriesProvider* pExplicitCategoriesProvider );
     AxisProperties( const AxisProperties& rAxisProperties );
     virtual ~AxisProperties();
     virtual void init(bool bCartesian=false);//init from model data (m_xAxisModel)

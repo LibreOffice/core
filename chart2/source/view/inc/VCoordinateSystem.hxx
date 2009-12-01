@@ -33,11 +33,11 @@
 #include "MinimumAndMaximumSupplier.hxx"
 #include "ScaleAutomatism.hxx"
 #include "ThreeDHelper.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 
 #include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -53,8 +53,6 @@
 namespace chart
 {
 //.............................................................................
-
-class ExplicitCategoriesProvider;
 
 //-----------------------------------------------------------------------------
 /**
@@ -90,7 +88,9 @@ public:
 
     ::com::sun::star::chart2::ExplicitScaleData getExplicitScale( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
     ::com::sun::star::chart2::ExplicitIncrementData getExplicitIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XTextualDataSequence > getExplicitCategoriesProvider();
+
+    void setExplicitCategoriesProvider( ExplicitCategoriesProvider* /*takes ownership*/ );
+    ExplicitCategoriesProvider* getExplicitCategoriesProvider();
 
     // returns a coplete scale set for a given dimension and index; for example if nDimensionIndex==1 and nAxisIndex==2 you get returned the secondary x axis, main y axis and main z axis
     ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitScaleData > getExplicitScales( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
@@ -206,8 +206,7 @@ private:
     tFullExplicitScaleMap       m_aSecondaryExplicitScales;
     tFullExplicitIncrementMap   m_aSecondaryExplicitIncrements;
 
-    comphelper::ImplementationReference< ExplicitCategoriesProvider, ::com::sun::star::chart2::data::XTextualDataSequence >
-                                m_aExplicitCategoriesProvider;
+    ::std::auto_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
 };
 
 //.............................................................................

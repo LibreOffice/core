@@ -97,7 +97,7 @@ VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCoo
     , m_aMergedMinimumAndMaximumSupplier()
     , m_aExplicitScales(3)
     , m_aExplicitIncrements(3)
-    , m_aExplicitCategoriesProvider( new ExplicitCategoriesProvider( m_xCooSysModel ) )
+    , m_apExplicitCategoriesProvider(NULL)
 {
     if( !m_xCooSysModel.is() || m_xCooSysModel->getDimension()<3 )
     {
@@ -264,10 +264,14 @@ void VCoordinateSystem::impl_adjustDimensionAndIndex( sal_Int32& rDimensionIndex
         rAxisIndex = 0;
 }
 
-
-Reference< data::XTextualDataSequence > VCoordinateSystem::getExplicitCategoriesProvider()
+void VCoordinateSystem::setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider /*takes ownership*/ )
 {
-    return m_aExplicitCategoriesProvider.getRef();
+    m_apExplicitCategoriesProvider = ::std::auto_ptr< ExplicitCategoriesProvider >(pExplicitCategoriesProvider);
+}
+
+ExplicitCategoriesProvider* VCoordinateSystem::getExplicitCategoriesProvider()
+{
+    return m_apExplicitCategoriesProvider.get();
 }
 
 Sequence< ExplicitScaleData > VCoordinateSystem::getExplicitScales( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const

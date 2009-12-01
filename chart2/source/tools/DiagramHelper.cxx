@@ -38,7 +38,9 @@
 #include "AxisHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "ChartTypeHelper.hxx"
+#include "ChartModelHelper.hxx"
 #include "CommonConverters.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 #include "servicenames_charttypes.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -958,8 +960,7 @@ Reference< data::XLabeledDataSequence >
     return xResult;
 }
 
-//static
-void DiagramHelper::generateAutomaticCategoriesFromChartType(
+void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< rtl::OUString >& rRet,
             const Reference< XChartType >& xChartType )
 {
@@ -989,40 +990,7 @@ void DiagramHelper::generateAutomaticCategoriesFromChartType(
     }
 }
 
-//static
-Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
-            const Reference< XChartDocument >& xChartDoc )
-{
-    Sequence< rtl::OUString > aRet;
-    if(xChartDoc.is())
-    {
-        uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram() );
-        if(xDia.is())
-        {
-            Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDia ) );
-            if( xCategories.is() )
-                aRet = DataSequenceToStringSequence(xCategories->getValues());
-            if( !aRet.getLength() )
-            {
-                if( !aRet.getLength() )
-                {
-                    Reference< XCoordinateSystemContainer > xCooSysCnt( xDia, uno::UNO_QUERY );
-                    if( xCooSysCnt.is() )
-                    {
-                        Sequence< Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-                        if( aCooSysSeq.getLength() )
-                            aRet = DiagramHelper::generateAutomaticCategories( aCooSysSeq[0] );
-                    }
-                }
-            }
-        }
-    }
-    return aRet;
-}
-
-//static
-Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
-            const Reference< XCoordinateSystem > & xCooSys )
+Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const Reference< XCoordinateSystem > & xCooSys )
 {
     Sequence< rtl::OUString > aRet;
 
@@ -1032,9 +1000,32 @@ Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
         Sequence< Reference< XChartType > > aChartTypes( xTypeCntr->getChartTypes() );
         for( sal_Int32 nN=0; nN<aChartTypes.getLength(); nN++ )
         {
-            DiagramHelper::generateAutomaticCategoriesFromChartType( aRet, aChartTypes[nN] );
+            lcl_generateAutomaticCategoriesFromChartType( aRet, aChartTypes[nN] );
             if( aRet.getLength() )
                 return aRet;
+        }
+    }
+    return aRet;
+}
+
+//static
+Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
+            const Reference< XChartDocument >& xChartDoc )
+{
+    Sequence< rtl::OUString > aRet;
+    uno::Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram() );
+        uno::Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        if(xDia.is())
+        {
+            Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDia ) );
+            if( xCategories.is() )
+            {
+                ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+                aRet = aExplicitCategoriesProvider.getTextualData();
+            }
         }
     }
     return aRet;
