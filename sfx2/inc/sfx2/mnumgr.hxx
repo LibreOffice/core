@@ -120,12 +120,20 @@ public:
                         SfxPopupMenuManager( PopupMenu*, SfxBindings& );
                         ~SfxPopupMenuManager();
     static void         ExecutePopup( const ResId&, SfxViewFrame* pViewFrame, const Point& rPoint, Window* pWindow );
+    // @deprecated!!
+    // Don't use this method any longer. The whole class will be removed in the future.
+    // Changing code which relies on Popup would need much more effort.
+    // Please contact cd@openoffice.org if you have questions or need help
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
     USHORT              Execute( const Point& rPos, Window *pWindow );
     USHORT              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
     USHORT              Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1 ... );
 
+    // @deprecated (start)!!
+    // Don't use these methods any longer. The whole class will be removed in the future.
+    // Changing code which relies on these methods would need much more effort!
+    // Please contact cd@openoffice.org if you have questions or need help
     void                StartInsert();
     void                EndInsert();
     void                CheckItem( USHORT, BOOL );
@@ -133,6 +141,8 @@ public:
     void                InsertItem( USHORT, const String&, MenuItemBits,
                                 USHORT nPos = MENU_APPEND );
     void                InsertSeparator( USHORT nPos = MENU_APPEND );
+    // @deprecated (end)
+
     void                RemoveDisabledEntries();
     void                AddClipboardFunctions();
     Menu*                   GetSVMenu();
