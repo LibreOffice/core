@@ -88,7 +88,7 @@
 #include <dcontact.hxx>
 #include <redline.hxx>
 #include <doctxm.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <scriptinfo.hxx>
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -1033,14 +1033,17 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                 }
             }
 
-        const SwBookmarks& rBkmk = getIDocumentBookmarkAccess()->getBookmarks();
-        for( USHORT i = 0; i < rBkmk.Count(); ++i )
+        const IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
+        for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+            ppMark != pMarkAccess->getMarksEnd();
+            ppMark++)
         {
             // Bookmarks must never grow to either side, when
             // editing (directly) to the left or right (#i29942#)!
             // And a bookmark with same start and end must remain
             // to the left of the inserted text (used in XML import).
-            const SwPosition* pEnd = rBkmk[i]->BookmarkEnd();
+            const ::sw::mark::IMark* const pMark = ppMark->get();
+            const SwPosition* pEnd = &pMark->GetMarkEnd();
             pIdx = (SwIndex*)&pEnd->nContent;
             if( this == &pEnd->nNode.GetNode() &&
                 aPos.GetIndex() == pIdx->GetIndex() )

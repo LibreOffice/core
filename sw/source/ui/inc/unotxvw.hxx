@@ -76,8 +76,8 @@ class SwXTextView :
 {
     SelectionChangeListenerArr aSelChangedListeners;
 
-    SwView*                     pView;
-    const SfxItemPropertyMap*   pMap;   // property map for SwXTextView properties
+    SwView*                     m_pView;
+    const SfxItemPropertySet*   m_pPropSet;   // property map for SwXTextView properties
                                         // (not related to pxViewSettings!)
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *         pxViewSettings;
@@ -155,7 +155,7 @@ public:
     void                    NotifySelChanged();
     void                    NotifyDBChanged();
 
-    SwView*                 GetView() {return pView;}
+    SwView*                 GetView() {return m_pView;}
     void                    Invalidate();
 
     // temporary document used for PDF export of selections/multi-selections
@@ -181,8 +181,8 @@ class SwXTextViewCursor : public SwXTextViewCursor_Base,
 public SwClient,
 public OTextCursorHelper
 {
-    SwView*             pView;
-    SfxItemPropertySet  aPropSet;
+    SwView*                         m_pView;
+    const SfxItemPropertySet*       m_pPropSet;
 protected:
     sal_Bool    IsTextSelection( sal_Bool bAllowTables = sal_True ) const;
     virtual     ~SwXTextViewCursor();
@@ -264,7 +264,7 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
-    void    Invalidate(){pView = 0;}
+    void    Invalidate(){m_pView = 0;}
 
     // ITextCursorHelper
     virtual const SwPaM*        GetPaM() const;

@@ -61,7 +61,7 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <uitool.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <section.hxx>
 #include <docary.hxx>
 #include <doc.hxx>                      // fuers SwSectionFmt-Array
@@ -1588,9 +1588,7 @@ SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
     delete m_pDocInserter;
 }
-/* -----------------21.05.99 12:58-------------------
- *
- * --------------------------------------------------*/
+
 void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     m_pWrtSh = &rSh;
@@ -1606,12 +1604,14 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     }
 
     FillList();
-    USHORT nCnt = m_pWrtSh->GetBookmarkCnt();
-    for( USHORT i = 0; i < nCnt; ++i )
+    IDocumentMarkAccess* const pMarkAccess = m_pWrtSh->getIDocumentMarkAccess();
+    for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+        ppMark != pMarkAccess->getMarksEnd();
+        ppMark++)
     {
-        SwBookmark& rBm = m_pWrtSh->GetBookmark( i );
-        if( rBm.GetOtherBookmarkPos() )
-            aSubRegionED.InsertEntry( rBm.GetName() );
+        const ::sw::mark::IMark* pBkmk = ppMark->get();
+        if( pBkmk->IsExpanded() )
+            aSubRegionED.InsertEntry( pBkmk->GetName() );
     }
 
     SwSection* pSect = ((SwInsertSectionTabDialog*)GetTabDialog())->GetSection();

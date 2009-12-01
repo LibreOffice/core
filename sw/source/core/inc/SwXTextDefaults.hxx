@@ -47,8 +47,8 @@ class SwXTextDefaults :  public cppu::WeakImplHelper3
                             com::sun::star::lang::XServiceInfo
                         >
 {
-    SfxItemPropertySet  aPropSet;
-    SwDoc * pDoc;
+    const SfxItemPropertySet*   m_pPropSet;
+    SwDoc *                     m_pDoc;
 public:
     SwXTextDefaults ( SwDoc * pNewDoc );
     ~SwXTextDefaults ();

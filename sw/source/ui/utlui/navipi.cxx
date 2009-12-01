@@ -60,7 +60,7 @@
 #include <docsh.hxx>
 #endif
 #include <actctrl.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <navipi.hxx>
 #include <content.hxx>
 #include <workctrl.hxx>
@@ -85,8 +85,6 @@
 
 #include <unomid.h>
 
-
-static const sal_Unicode cPrefix = '_';
 
 #define PAGE_CHANGE_TIMEOUT 1000 //Timeout fuer Seitenwechsel
 
@@ -156,16 +154,6 @@ void SwNavigationPI::MoveOutline(USHORT nSource, USHORT nTarget,
         FillBox();
     }
 
-}
-/*------------------------------------------------------------------------
- Beschreibung:  Erzeugen des automatischen Namens des unbenannten Merkers
-------------------------------------------------------------------------*/
-
-inline String &MakeAutoName(String &rToChange, USHORT i)
-{
-    rToChange = cPrefix;
-    rToChange += String::CreateFromInt32( i );
-    return rToChange;
 }
 
 
@@ -606,40 +594,30 @@ BOOL SwNavigationPI::Close()
 void SwNavigationPI::MakeMark()
 {
     SwView *pView = GetCreateView();
-    if (!pView)
-        return;
+    if (!pView) return;
     SwWrtShell &rSh = pView->GetWrtShell();
+    IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
 
-    const USHORT nBookCnt = rSh.GetBookmarkCnt();
-    USHORT nMarkCount = 0;
-    USHORT nFirstFound = MAX_MARKS;
-    for (USHORT nCount = 0; nCount < nBookCnt; ++nCount)
-    {
-        SwBookmark& rBkmk = rSh.GetBookmark( nCount );
-        if( rBkmk.IsMark() )
-        {
-            String aBookmark( rBkmk.GetName() );
-            aBookmark.Erase(0, 1);
-            nFirstFound = Min(nFirstFound, (USHORT)aBookmark.ToInt32());
-            ++nMarkCount;
-        }
-    }
-        // maximale Anzahl Bookmarks vergeben
-    if (nAutoMarkIdx == MAX_MARKS)
-        nAutoMarkIdx = 1;
-        // erster freier neu vergeben
-    else if (nFirstFound != MAX_MARKS)
-        nAutoMarkIdx = Max(USHORT(1), USHORT(nFirstFound - 1));
-    else
-        ++nAutoMarkIdx;
+    // collect and sort navigator reminder names
+    ::std::vector< ::rtl::OUString > vNavMarkNames;
+    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+        ppMark != pMarkAccess->getMarksEnd();
+        ppMark++)
+        if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::NAVIGATOR_REMINDER )
+            vNavMarkNames.push_back(ppMark->get()->GetName());
+    ::std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
 
-    String aMark;
-    MakeAutoName(aMark,nAutoMarkIdx);
-    if (nMarkCount >= MAX_MARKS)
-        rSh.DelBookmark( aMark );
+    // we are maxed out and delete one
+    // nAutoMarkIdx rotates through the available MarkNames
+    // this assumes that IDocumentMarkAccess generates Names in ascending order
+    if(vNavMarkNames.size() == MAX_MARKS)
+        pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[nAutoMarkIdx]));
 
-    rSh.SetBookmark(KeyCode(), aMark, aEmptyStr, IDocumentBookmarkAccess::MARK);
-    SwView::SetActMark( static_cast<BYTE>(nAutoMarkIdx) );
+    rSh.SetBookmark(KeyCode(), ::rtl::OUString(), ::rtl::OUString(), IDocumentMarkAccess::NAVIGATOR_REMINDER);
+    SwView::SetActMark( nAutoMarkIdx );
+
+    if(++nAutoMarkIdx == MAX_MARKS)
+        nAutoMarkIdx = 0;
 }
 
 /*------------------------------------------------------------------------
@@ -806,8 +784,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     rBindings(*_pBindings),
 
     nWishWidth(0),
-    nActMark(0),
-    nAutoMarkIdx(0),
+    nAutoMarkIdx(1),
     nRegionMode(REGION_MODE_NONE),
 
     bSmallMode(FALSE),

@@ -240,9 +240,9 @@ void SwHTMLParser::NewDivision( int nToken )
              ('d' == aId.GetChar(1) || 'D' == aId.GetChar(1) ) )
     {
         sal_Bool bEndNote = sal_False, bFootNote = sal_False;
-        if( aId.CompareIgnoreCaseToAscii( sHTML_sdendnote, 9 ) == COMPARE_EQUAL )
+        if( aId.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_sdendnote, 9 ) == COMPARE_EQUAL )
             bEndNote = sal_True;
-        else if( aId.CompareIgnoreCaseToAscii( sHTML_sdfootnote, 10 ) == COMPARE_EQUAL )
+        else if( aId.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote, 10 ) == COMPARE_EQUAL )
             bFootNote = sal_True;
         if( bFootNote || bEndNote )
         {

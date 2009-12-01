@@ -768,6 +768,8 @@ bool SwMailMergeDlg::ExecQryShell()
         }
         else
         {
+            //#i97667# reset column name - otherwise it's remembered from the last run
+            pMgr->SetEMailColumn(::rtl::OUString());
             //start save as dialog
             String sFilter;
             sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);

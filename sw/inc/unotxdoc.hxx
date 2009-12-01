@@ -175,7 +175,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     ActionContextArr        aActionArr;
     SwRefreshListenerContainer  aRefreshCont;
 
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet* pPropSet;
 
     SwDocShell*             pDocShell;
     sal_Bool                    bObjectValid;
@@ -474,7 +474,7 @@ class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper4
 >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xRealAccess;
-    SfxItemPropertySet                                                              aPropSet;
+    const SfxItemPropertySet*                                                       pPropSet;
     const String                                                                    sLinkSuffix;
     const String                                                                    sLinkDisplayName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       xDoc;
@@ -524,8 +524,8 @@ class SwXOutlineTarget : public cppu::WeakImplHelper2
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    SfxItemPropertySet      aPropSet;
-    String                  sOutlineText;
+    const SfxItemPropertySet*   pPropSet;
+    String                      sOutlineText;
 
 public:
     SwXOutlineTarget(const String& rOutlineText);

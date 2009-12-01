@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 // --> OD 2007-10-23 #i81002#
 #include <crossrefbookmark.hxx>
 // <--
@@ -54,14 +54,117 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <set>
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
+#include <boost/bind.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using ::rtl::OUString;
 using namespace ::std;
+
+namespace
+{
+    static const BYTE BKM_TYPE_START = 0;
+    static const BYTE BKM_TYPE_END = 1;
+    static const BYTE BKM_TYPE_START_END = 2;
+
+    struct SwXBookmarkPortion_Impl
+    {
+        Reference<XTextContent>     xBookmark;
+        BYTE                        nBkmType;
+        const SwPosition            aPosition;
+
+        SwXBookmarkPortion_Impl( SwXBookmark* pXMark, BYTE nType, const SwPosition &rPosition )
+        : xBookmark ( pXMark )
+        , nBkmType  ( nType )
+        , aPosition ( rPosition )
+        {
+        }
+        ULONG getIndex ()
+        {
+            return aPosition.nContent.GetIndex();
+        }
+    };
+    typedef boost::shared_ptr < SwXBookmarkPortion_Impl > SwXBookmarkPortion_ImplSharedPtr;
+    struct BookmarkCompareStruct
+    {
+        bool operator () ( const SwXBookmarkPortion_ImplSharedPtr &r1,
+                           const SwXBookmarkPortion_ImplSharedPtr &r2 )
+        {
+            // #i16896# for bookmark portions at the same position, the start should
+            // always precede the end. Hence compare positions, and use bookmark type
+            // as tie-breaker for same position.
+            // return ( r1->nIndex   == r2->nIndex )
+            //   ? ( r1->nBkmType <  r2->nBkmType )
+            //   : ( r1->nIndex   <  r2->nIndex );
+
+            // MTG: 25/11/05: Note that the above code does not correctly handle
+            // the case when one bookmark ends, and another begins in the same
+            // position. When this occurs, the above code will return the
+            // the start of the 2nd bookmark BEFORE the end of the first bookmark
+            // See bug #i58438# for more details. The below code is correct and
+            // fixes both #i58438 and #i16896#
+            return r1->aPosition < r2->aPosition;
+        }
+    };
+    typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
+
+
+    static void lcl_FillBookmarkArray(SwDoc& rDoc, SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_ImplList& rBkmArr)
+    {
+        IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
+        if(!pMarkAccess->getBookmarksCount())
+            return;
+
+        // no need to consider marks starting after aEndOfPara
+        SwPosition aEndOfPara(*rUnoCrsr.GetPoint());
+        aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTxtNode()->Len();
+        const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
+            pMarkAccess->getBookmarksBegin(),
+            pMarkAccess->getBookmarksEnd(),
+            aEndOfPara,
+            bind(&::sw::mark::IMark::StartsAfter, _2, _1)); // finds the first that starts after
+
+        // search for all bookmarks that start or end in this paragraph
+        const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
+        for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+            ppMark != pCandidatesEnd;
+            ++ppMark)
+        {
+            ::sw::mark::IMark* const pBkmk = ppMark->get();
+            bool hasOther = pBkmk->IsExpanded();
+
+            const SwPosition& rStartPos = pBkmk->GetMarkStart();
+            if(rStartPos.nNode == nOwnNode)
+            {
+                const BYTE nType = hasOther ? BKM_TYPE_START : BKM_TYPE_START_END;
+                rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
+                    new SwXBookmarkPortion_Impl ( SwXBookmarks::GetObject(*pBkmk, &rDoc ), nType, rStartPos)));
+            }
+
+            const SwPosition& rEndPos = pBkmk->GetMarkEnd();
+            if(rEndPos.nNode == nOwnNode)
+            {
+                auto_ptr<SwPosition> pCrossRefEndPos;
+                const SwPosition* pEndPos = NULL;
+                if(hasOther)
+                    pEndPos = &rEndPos;
+                else if(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk))
+                {
+                    // Crossrefbookmarks only remember the start position but have to span the whole paragraph
+                    pCrossRefEndPos = auto_ptr<SwPosition>(new SwPosition(rEndPos));
+                    pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTxtNode()->Len();
+                    pEndPos = pCrossRefEndPos.get();
+                }
+                if(pEndPos)
+                    rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
+                        new SwXBookmarkPortion_Impl ( SwXBookmarks::GetObject(*pBkmk, &rDoc ), BKM_TYPE_END, *pEndPos)));
+            }
+        }
+    }
+}
+
 /******************************************************************
  *  SwXTextPortionEnumeration
  ******************************************************************/
@@ -246,51 +349,6 @@ void lcl_InsertTOXMarkPortion(
         pPortion->SetTOXMark(xContent);
     }
 }
-//-----------------------------------------------------------------------------
-#define BKM_TYPE_START          0
-#define BKM_TYPE_END            1
-#define BKM_TYPE_START_END      2
-struct SwXBookmarkPortion_Impl
-{
-    Reference<XTextContent>     xBookmark;
-    BYTE                        nBkmType;
-    const SwPosition            aPosition;
-
-    SwXBookmarkPortion_Impl( SwXBookmark* pXMark, BYTE nType, const SwPosition &rPosition )
-    : xBookmark ( pXMark )
-    , nBkmType  ( nType )
-    , aPosition ( rPosition )
-    {
-    }
-    ULONG getIndex ()
-    {
-        return aPosition.nContent.GetIndex();
-    }
-};
-
-typedef boost::shared_ptr < SwXBookmarkPortion_Impl > SwXBookmarkPortion_ImplSharedPtr;
-struct BookmarkCompareStruct
-{
-    bool operator () ( const SwXBookmarkPortion_ImplSharedPtr &r1,
-                       const SwXBookmarkPortion_ImplSharedPtr &r2 )
-    {
-        // #i16896# for bookmark portions at the same position, the start should
-        // always precede the end. Hence compare positions, and use bookmark type
-        // as tie-breaker for same position.
-        // return ( r1->nIndex   == r2->nIndex )
-        //   ? ( r1->nBkmType <  r2->nBkmType )
-        //   : ( r1->nIndex   <  r2->nIndex );
-
-        // MTG: 25/11/05: Note that the above code does not correctly handle
-        // the case when one bookmark ends, and another begins in the same
-        // position. When this occurs, the above code will return the
-        // the start of the 2nd bookmark BEFORE the end of the first bookmark
-        // See bug #i58438# for more details. The below code is correct and
-        // fixes both #i58438 and #i16896#
-        return r1->aPosition < r2->aPosition;
-    }
-};
-typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
 
 //-----------------------------------------------------------------------------
 void lcl_ExportBookmark(
@@ -641,79 +699,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
     }
     return xRef;
 }
-//-----------------------------------------------------------------------------
-void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_ImplList& rBkmArr )
-{
-    const SwBookmarks& rMarks = rDoc.getBookmarks();
-    sal_uInt16 nArrLen = rMarks.Count();
-    if ( nArrLen > 0 )
-    {
-        const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
-        //search for all bookmarks that start or end in this paragraph
-        for( sal_uInt16 n = 0; n < nArrLen; ++n )
-        {
-            SwBookmark* pMark = rMarks.GetObject( n );
-            /*
-            if (pMark!=NULL && pMark->GetName().CompareToAscii(FIELD_BOOKMARK_PREFIX, strlen(FIELD_BOOKMARK_PREFIX))==0) {
-                continue;
-            }
 
-            if (pMark!=NULL && pMark->GetName().CompareToAscii(FIELD_FORM_BOOKMARK_PREFIX, strlen(FIELD_FORM_BOOKMARK_PREFIX))==0) {
-                continue;
-            }
-            */
-            if (pMark!=NULL && pMark->IsFormFieldMark())
-            {
-                continue;
-            }
-
-            // --> OD 2007-10-23 #i81002#
-            if ( !pMark->IsBookMark() &&
-                 !dynamic_cast<SwCrossRefBookmark*>(pMark) )
-                continue;
-
-            const SwPosition& rPos1 = pMark->GetBookmarkPos();
-            // --> OD 2007-10-23 #i81002#
-//            const SwPosition* pPos2 = pMark->GetOtherBookmarkPos();
-            const SwPosition* pPos2( 0 );
-            SwPosition* pCrossRefBkmkPos2( 0 );
-            if ( dynamic_cast<SwCrossRefBookmark*>(pMark) )
-            {
-                pCrossRefBkmkPos2 = new SwPosition( pMark->GetBookmarkPos() );
-                pCrossRefBkmkPos2->nContent =
-                        pCrossRefBkmkPos2->nNode.GetNode().GetTxtNode()->Len();
-                pPos2 = pCrossRefBkmkPos2;
-            }
-            else
-            {
-                pPos2 = pMark->GetOtherBookmarkPos();
-            }
-            // <--
-            BOOL bBackward = pPos2 ? rPos1 > *pPos2: FALSE;
-            if(rPos1.nNode == nOwnNode)
-            {
-                BYTE nType = bBackward ? BKM_TYPE_END : BKM_TYPE_START;
-                if(!pPos2)
-                {
-                    nType = BKM_TYPE_START_END;
-                }
-
-                rBkmArr.insert ( SwXBookmarkPortion_ImplSharedPtr (
-                    new SwXBookmarkPortion_Impl ( SwXBookmarks::GetObject( *pMark, &rDoc ), nType, rPos1 )));
-
-            }
-            if(pPos2 && pPos2->nNode == nOwnNode)
-            {
-                BYTE nType = bBackward ? BKM_TYPE_START : BKM_TYPE_END;
-                rBkmArr.insert( SwXBookmarkPortion_ImplSharedPtr (
-                    new SwXBookmarkPortion_Impl( SwXBookmarks::GetObject( *pMark, &rDoc ), nType, *pPos2 ) ) );
-            }
-            // --> OD 2007-10-23 #i81002#
-            delete pCrossRefBkmkPos2;
-            // <--
-        }
-    }
-}
 //-----------------------------------------------------------------------------
 void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortion_ImplList& rRedArr )
 {
@@ -960,7 +946,6 @@ void SwXTextPortionEnumeration::CreatePortions()
                                 aRedArr,
                                 aBreakArr,
                                 nEndPos);
-
                         }
                         else if(USHRT_MAX != nFirstFrameIndex)
                         {
@@ -1029,40 +1014,40 @@ void SwXTextPortionEnumeration::CreatePortions()
                         }
                         if (start+1==end && pTxtNode->GetTxt().GetChar(start)==CH_TXT_ATR_FIELDSTART)
                         {
-                            SwBookmark* pFieldmark=NULL;
+                            ::sw::mark::IFieldmark* pFieldmark = NULL;
                             if (pDoc && pUnoCrsr->GetPoint())
-                                pFieldmark=pDoc->getFieldBookmarkFor(*pUnoCrsr->GetPoint());
-                            SwXTextPortion* pPortion=NULL;
-                            xRef = (pPortion=new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD_START));
+                                pFieldmark = pDoc->getIDocumentMarkAccess()->getFieldmarkFor(*pUnoCrsr->GetPoint());
+                            SwXTextPortion* pPortion = NULL;
+                            xRef = (pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD_START));
                             if (pPortion && pFieldmark && pDoc)
-                                pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+                                    pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
                         }
                         else if (start+1==end && pTxtNode->GetTxt().GetChar(start)==CH_TXT_ATR_FIELDEND)
                         {
-                            SwBookmark* pFieldmark=NULL;
+                            ::sw::mark::IFieldmark* pFieldmark = NULL;
                             if (pDoc && pUnoCrsr->GetPoint())
                             {
                                 SwPosition aPos(*pUnoCrsr->GetPoint());
-                                aPos.nContent=markerPos;
-                                pFieldmark=pDoc->getFieldBookmarkFor(aPos);
+                                aPos.nContent = markerPos;
+                                pFieldmark = pDoc->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
                             }
-                            SwXTextPortion* pPortion=NULL;
+                            SwXTextPortion* pPortion = NULL;
                             xRef = (pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD_END));
                             if (pPortion && pFieldmark && pDoc)
                                 pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
                         }
                         else if (start+1==end && pTxtNode->GetTxt().GetChar(start)==CH_TXT_ATR_FORMELEMENT)
                         {
-                            SwFieldBookmark* pFieldmark=NULL;
+                            ::sw::mark::IFieldmark* pFieldmark = NULL;
                             if (pDoc && pUnoCrsr->GetPoint())
                             {
                                 SwPosition aPos(*pUnoCrsr->GetPoint());
                                 aPos.nContent=markerPos;
-                                pFieldmark=pDoc->getFormFieldBookmarkFor(aPos);
+                                pFieldmark = pDoc->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
                             }
                             SwXTextPortion* pPortion=NULL;
                             xRef = (pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD_START_END));
-                            if (pPortion && pFieldmark && pDoc)
+                            if(pPortion && pFieldmark && pDoc)
                                 pPortion->SetBookmark(new SwXFieldmark(true, pFieldmark, pDoc));
                         }
                         else

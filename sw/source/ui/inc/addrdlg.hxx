@@ -36,7 +36,7 @@ class SwAddrDlg : public SfxSingleTabDialog
 {
 public:
 
-     SwAddrDlg( Window* pParent, SfxItemSet& rSet );
+     SwAddrDlg( Window* pParent, const SfxItemSet& rSet );
     ~SwAddrDlg();
 };
 

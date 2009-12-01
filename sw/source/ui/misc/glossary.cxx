@@ -643,7 +643,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         break;
         case FN_GL_MACRO:
         {
-            SfxItemSet aSet( pSh->GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO );
+            SfxItemSet aSet( pSh->GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
 
             SvxMacro aStart(aEmptyStr, aEmptyStr, STARBASIC);
             SvxMacro aEnd(aEmptyStr, aEmptyStr, STARBASIC);
@@ -656,19 +656,22 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 aItem.SetMacro( SW_EVENT_END_INS_GLOSSARY, aEnd );
 
             aSet.Put( aItem );
+            aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_TEXTBAUST ) );
 
             const SfxPoolItem* pItem;
-            SwMacroAssignDlg aMacDlg( this, aSet, *pSh, MACASSGN_TEXTBAUST );
-            if( RET_OK == aMacDlg.Execute() &&
-                SFX_ITEM_SET == aMacDlg.GetOutputItemSet()->GetItemState(
-                    RES_FRMMACRO, sal_False, &pItem ))
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( this, aSet,
+                pSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), SID_EVENTCONFIG );
+            if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
+                SFX_ITEM_SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, sal_False, &pItem ) )
             {
                 const SvxMacroTableDtor& rTbl = ((SvxMacroItem*)pItem)->GetMacroTable();
-
                 pGlossaryHdl->SetMacros( aShortNameEdit.GetText(),
                                             rTbl.Get( SW_EVENT_START_INS_GLOSSARY ),
                                             rTbl.Get( SW_EVENT_END_INS_GLOSSARY ) );
             }
+
+            delete pMacroDlg;
         }
         break;
 

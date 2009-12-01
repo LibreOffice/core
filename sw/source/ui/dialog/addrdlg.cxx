@@ -44,7 +44,7 @@ Ctor
 ****************************************************************************/
 
 
-SwAddrDlg::SwAddrDlg(Window* pParent, SfxItemSet& rSet ) :
+SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet ) :
 
     SfxSingleTabDialog(pParent, rSet, 0)
 

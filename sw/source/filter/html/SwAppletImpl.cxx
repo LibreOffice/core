@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <SwAppletImpl.hxx>
+#include <svtools/htmlkywd.hxx>
 #include <svtools/urihelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -42,14 +43,13 @@
 
 using namespace com::sun::star;
 
-/* Some MIB magic...*/
+namespace {
 
-//sal_Char SVT_DLLPUBLIC const SVTOOLS_CONSTASCII_DEF( sHTML_O_archive, "ARCHIVE" );
+static char const sHTML_O_archive[] = "ARCHIVE";
+static char const sHTML_O_Archives[] = "ARCHIVES";
+static char const sHTML_O_Object[] = "OBJECT";
 
-sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_Hidden, "HIDDEN" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_Hidden_False, "FALSE" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_Archives, "ARCHIVES" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_Object, "OBJECT" );
+}
 
 USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
 {
@@ -59,8 +59,8 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
     {
     case 'A':
     case 'a':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_align ) ||
-            rName.EqualsIgnoreCaseAscii( sHTML_O_alt ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_align ) ||
+            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_alt ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         else if( bApplet &&
                  (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
@@ -69,32 +69,32 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
         break;
     case 'C':
     case 'c':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_class ) ||
-            (bApplet && (rName.EqualsIgnoreCaseAscii( sHTML_O_code ) ||
-                         rName.EqualsIgnoreCaseAscii( sHTML_O_codebase ))) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_class ) ||
+            (bApplet && (rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) ||
+                         rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'H':
     case 'h':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_height ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_height ) )
             nType = SWHTML_OPTTYPE_SIZE;
-        else if( rName.EqualsIgnoreCaseAscii( sHTML_O_hspace ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Hidden )) )
+        else if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
+            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'I':
     case 'i':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_id ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_id ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'M':
     case 'm':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_mayscript ) )
+        if( bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'N':
     case 'n':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_name ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'O':
@@ -104,23 +104,23 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
         break;
     case 'S':
     case 's':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_style ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_src )) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_style ) ||
+            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_src )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'T':
     case 't':
-        if( !bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_type ) )
+        if( !bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_type ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'V':
     case 'v':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_vspace ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'W':
     case 'w':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_width ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_width ) )
             nType = SWHTML_OPTTYPE_SIZE;
         break;
     }
@@ -171,13 +171,13 @@ sal_Bool SwApplet_Impl::CreateApplet( const String& rBaseURL )
     {
         const SvCommand& rArg = aCommandList[i];
         const String& rName = rArg.GetCommand();
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_code ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) )
             aCode = rArg.GetArgument();
-        else if( rName.EqualsIgnoreCaseAscii( sHTML_O_codebase ) )
+        else if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ) )
             aCodeBase = INetURLObject::GetAbsURL( rBaseURL, rArg.GetArgument() );
-        else if( rName.EqualsIgnoreCaseAscii( sHTML_O_name ) )
+        else if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
             aName = rArg.GetArgument();
-        else if( rName.EqualsIgnoreCaseAscii( sHTML_O_mayscript ) )
+        else if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
             bMayScript = sal_True;
     }
 

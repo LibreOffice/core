@@ -674,7 +674,7 @@ void SwView::_CheckReadonlyState()
             SID_REDO,                   SID_REPEAT,                 SID_PASTE,
             FN_PASTESPECIAL,            SID_SBA_BRW_INSERT,
             SID_BACKGROUND_COLOR,       FN_INSERT_BOOKMARK,
-            FN_INSERT_SYMBOL,           FN_INSERT_SOFT_HYPHEN,
+            SID_CHARMAP,                FN_INSERT_SOFT_HYPHEN,
             FN_INSERT_HARDHYPHEN,       FN_INSERT_HARD_SPACE,       FN_INSERT_BREAK,
             FN_INSERT_LINEBREAK,        FN_INSERT_COLUMN_BREAK,     FN_INSERT_BREAK_DLG,
             FN_DELETE_SENT,             FN_DELETE_BACK_SENT,        FN_DELETE_WORD,

@@ -94,7 +94,7 @@
 #include "ww8par.hxx"
 #include "ww8par2.hxx"  // wg. Listen-Attributen in Styles
 
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <svtools/fltrcfg.hxx>
 
 #include <stdio.h>
@@ -103,10 +103,12 @@ using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
 
-WW8NewFieldCtx::WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString _sBookmarkName, ::rtl::OUString _sBookmarkType)
-: maPtNode(aStartPos.nNode), mnPtCntnt(aStartPos.nContent.GetIndex()),
-  sBookmarkName(_sBookmarkName),
-  sBookmarkType(_sBookmarkType), mpPaM(NULL)
+WW8NewFieldCtx::WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType)
+    : maPtNode(aStartPos.nNode)
+    , mnPtCntnt(aStartPos.nContent.GetIndex())
+    , msBookmarkName(sBookmarkName)
+    , msMarkType(sMarkType)
+    , mpPaM(NULL)
 {
 }
 
@@ -118,12 +120,12 @@ WW8NewFieldCtx::~WW8NewFieldCtx()
 
 ::rtl::OUString WW8NewFieldCtx::GetBookmarkName()
 {
-    return sBookmarkName;
+    return msBookmarkName;
 }
 
-::rtl::OUString WW8NewFieldCtx::GetBookmarkType()
+::rtl::OUString WW8NewFieldCtx::GetMarkType()
 {
-    return sBookmarkType;
+    return msMarkType;
 }
 
 void WW8NewFieldCtx::AddParam(::rtl::OUString name, ::rtl::OUString value)
@@ -131,17 +133,26 @@ void WW8NewFieldCtx::AddParam(::rtl::OUString name, ::rtl::OUString value)
     maParams.push_back( Param_t(name, value) );
 }
 
-void WW8NewFieldCtx::SetCurrentFieldParamsTo(SwFieldBookmark &rFieldBookmark)
+void WW8NewFieldCtx::SetCurrentFieldParamsTo(::sw::mark::IFieldmark* pFieldmark)
 {
-    for(Params_t::iterator i=maParams.begin();i!=maParams.end();i++) {
+    for(Params_t::iterator i=maParams.begin();i!=maParams.end();i++)
+    {
         ::rtl::OUString aName=i->first;
         ::rtl::OUString aValue=i->second;
-        if (aName.compareToAscii("Description")==0) {
-            rFieldBookmark.SetFFHelpText(aValue);
-        } else if (aName.compareToAscii("Name")==0) {
-            rFieldBookmark.SetFFName(aValue);
-        } else if (aName.compareToAscii("Result")==0) {
-            rFieldBookmark.SetFFRes( aValue.toInt32() );
+        if(aName.compareToAscii("Description")==0)
+        {
+            pFieldmark->SetFieldHelptext(aValue);
+        }
+        else if(aName.compareToAscii("Name")==0)
+        {
+            pFieldmark->SetFieldname(aValue);
+        }
+        else if(aName.compareToAscii("Result")==0)
+        {
+            ::sw::mark::ICheckboxFieldmark* pAsCheckbox =
+                dynamic_cast< ::sw::mark::ICheckboxFieldmark* >(pFieldmark);
+            if(pAsCheckbox)
+                pAsCheckbox->SetChecked(aValue.toInt32()==0);
         }
     }
 }
@@ -269,12 +280,17 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
     }
 
     if (aBookmarkName.Len()>0) {
-        SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeBookmark(*pPaM, KeyCode(), aBookmarkName, String(), IDocumentBookmarkAccess::FORM_FIELDMARK_NO_TEXT);
-        ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
-        if (pFieldmark!=NULL) {
-            pFieldmark->SetFieldType(1); // 0==Checkbox
-            pFieldmark->SetFFName(aFormula.sTitle);
-            pFieldmark->SetFFHelpText(aFormula.sToolTip);
+        ::sw::mark::ICheckboxFieldmark* pFieldmark =
+            dynamic_cast< ::sw::mark::ICheckboxFieldmark*>(rDoc.getIDocumentMarkAccess()->makeMark(
+                *pPaM,
+                aBookmarkName,
+                IDocumentMarkAccess::CHECKBOX_FIELDMARK));
+        OSL_ENSURE(pFieldmark,
+            "hmmm; why was the bookmark not created?");
+        if(pFieldmark)
+        {
+            pFieldmark->SetFieldname(aFormula.sTitle);
+            pFieldmark->SetFieldHelptext(aFormula.sToolTip);
             pFieldmark->SetChecked(aFormula.nChecked!=0);
             // set field data here...
         }

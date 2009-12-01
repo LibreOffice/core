@@ -75,9 +75,7 @@
 #include <chpfld.hxx>
 #include <flddropdown.hxx>
 #include <poolfmt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <pagedesc.hxx>
 #include <docary.hxx>
 #include <reffld.hxx>
@@ -297,23 +295,18 @@ sal_uInt16 lcl_GetPropMapIdForFieldType( USHORT nWhich )
 }
 
 
-BYTE GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
+USHORT GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
 {
     USHORT nId = lcl_GetPropMapIdForFieldType( rTyp.Which() );
-    const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap( nId );
-    if( !pMap )
+    const SfxItemPropertySet* pSet = aSwMapProvider.GetPropertySet( nId );
+    if( !pSet )
         nId = USHRT_MAX;
     else
     {
-        nId = USHRT_MAX;    // in case of property not found
-        for( ; pMap->pName; ++pMap )
-            if( rProperty.equalsAsciiL( pMap->pName, pMap->nNameLen ) )
-            {
-                nId = pMap->nWID;
-                break;
-            }
+        const SfxItemPropertySimpleEntry* pEntry = pSet->getPropertyMap()->getByName(rProperty);
+        nId = pEntry ? pEntry->nWID : USHRT_MAX;
     }
-    return (BYTE)nId;
+    return nId;
 }
 
 USHORT lcl_GetPropertyMapOfService( USHORT nServiceId )
@@ -531,9 +524,9 @@ uno::Reference< beans::XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(vo
                                             throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(
-                        aSwMapProvider.GetPropertyMap(
-                                lcl_GetPropMapIdForFieldType( nResTypeId ) ));
+    uno::Reference< beans::XPropertySetInfo >  aRef =
+                        aSwMapProvider.GetPropertySet(
+                                lcl_GetPropMapIdForFieldType( nResTypeId ) )->getPropertySetInfo();
     return aRef;
 }
 /*-- 14.12.98 11:08:35---------------------------------------------------
@@ -577,8 +570,8 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
             // We just call PutValue (empty string is allowed).
             // Thus the last property set will be used as Data Source.
 
-            BYTE nMId = GetFieldTypeMId( rPropertyName, *pType  );
-            if( UCHAR_MAX != nMId )
+            USHORT nMId = GetFieldTypeMId( rPropertyName, *pType  );
+            if( USHRT_MAX != nMId )
                 pType->PutValue( rValue, nMId );
             else
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -815,8 +808,8 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         else if(pType)
         {
             //TODO: Properties fuer die uebrigen Feldtypen einbauen
-            BYTE nMId = GetFieldTypeMId( rPropertyName, *pType );
-            if( UCHAR_MAX != nMId )
+            USHORT nMId = GetFieldTypeMId( rPropertyName, *pType );
+            if( USHRT_MAX != nMId )
             {
                 pType->QueryValue( aRet, nMId );
 
@@ -1926,13 +1919,13 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextField::getPropertySetInfo(void
     uno::Reference< beans::XPropertySetInfo >  aRef;
     if(m_nServiceId != USHRT_MAX)
     {
-        const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(
+        const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(
                         lcl_GetPropertyMapOfService( m_nServiceId ));
-        uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(pMap);
+        uno::Reference< beans::XPropertySetInfo >  xInfo = pPropSet->getPropertySetInfo();
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         aRef = new SfxExtItemPropertySetInfo(
-            aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
+            aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
             aPropSeq );
     }
     else
@@ -1948,13 +1941,13 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
     SwField* pField = (SwField*)GetField();
-    const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(
+    const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                                 lcl_GetPropertyMapOfService( m_nServiceId));
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
+    const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap()->getByName(rPropertyName);
 
-    if (!pMap)
+    if (!pEntry)
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+    if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
         throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     if(pField)
@@ -1981,25 +1974,38 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
                 SwPosition * pPos = GetPosition();
 
                 ASSERT(pPos, "no position");
-                pDoc->PutValueToField( *pPos, rValue, pMap->nWID);
+                pDoc->PutValueToField( *pPos, rValue, pEntry->nWID);
 
                 delete pPos;
             }
             // <- #111840#
         }
-        pField->PutValue( rValue, pMap->nWID );
+        pField->PutValue( rValue, pEntry->nWID );
+
+    //#i100374# notify SwPostIt about new field content
+    if (RES_POSTITFLD== nWhich && pFmtFld)
+    {
+        const_cast<SwFmtFld*>(pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
+    }
+
         //#114571# changes of the expanded string have to be notified
         //#to the SwTxtFld
         if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
         {
             pFmtFld->GetTxtFld()->Expand();
         }
+
+    //#i100374# changing a document field should set the modify flag
+    SwDoc* pDoc = GetDoc();
+    if (pDoc)
+        pDoc->SetModified();
+
     }
     else if(m_pProps)
     {
         String* pStr = 0;
         BOOL* pBool = 0;
-        switch(pMap->nWID)
+        switch(pEntry->nWID)
         {
         case FIELD_PROP_PAR1:
             pStr = &m_pProps->sPar1;
@@ -2049,7 +2055,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             {
                  sal_Int16 nVal = 0;
                 rValue >>= nVal;
-                if( FIELD_PROP_USHORT1 == pMap->nWID)
+                if( FIELD_PROP_USHORT1 == pEntry->nWID)
                     m_pProps->nUSHORT1 = nVal;
                 else
                     m_pProps->nUSHORT2 = nVal;
@@ -2098,18 +2104,18 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
     vos::OGuard  aGuard(Application::GetSolarMutex());
     uno::Any aRet;
     const SwField* pField = GetField();
-    const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(
+    const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                                 lcl_GetPropertyMapOfService( m_nServiceId));
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-    if(!pMap )
+    const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap()->getByName(rPropertyName);
+    if(!pEntry )
     {
-        _pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS);
-        pMap = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
+        const SfxItemPropertySet* _pParaPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH_EXTENSIONS);
+        pEntry = _pParaPropSet->getPropertyMap()->getByName(rPropertyName);
     }
-    if (!pMap)
+    if (!pEntry)
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    switch( pMap->nWID )
+    switch( pEntry->nWID )
     {
     case FN_UNO_TEXT_WRAP:
         aRet <<= text::WrapTextMode_NONE;
@@ -2129,8 +2135,8 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
     default:
         if( pField )
         {
-            if (FIELD_PROP_IS_FIELD_USED      == pMap->nWID ||
-                FIELD_PROP_IS_FIELD_DISPLAYED == pMap->nWID)
+            if (FIELD_PROP_IS_FIELD_USED      == pEntry->nWID ||
+                FIELD_PROP_IS_FIELD_DISPLAYED == pEntry->nWID)
             {
                 sal_Bool bIsFieldUsed       = sal_False;
                 sal_Bool bIsFieldDisplayed  = sal_False;
@@ -2185,16 +2191,16 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                     bIsFieldUsed       = bFrame || bHidden;
                     bIsFieldDisplayed  = bIsFieldUsed && !bHidden;
                 }
-                sal_Bool bRetVal = (FIELD_PROP_IS_FIELD_USED == pMap->nWID) ?
+                sal_Bool bRetVal = (FIELD_PROP_IS_FIELD_USED == pEntry->nWID) ?
                                             bIsFieldUsed : bIsFieldDisplayed;
                 aRet.setValue( &bRetVal, ::getCppuBooleanType() );
             }
             else
-                pField->QueryValue( aRet, pMap->nWID );
+                pField->QueryValue( aRet, pEntry->nWID );
         }
         else if( m_pProps )     // currently just a descriptor...
         {
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
             case FIELD_PROP_TEXT:
                 {

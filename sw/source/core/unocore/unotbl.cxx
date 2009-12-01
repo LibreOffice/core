@@ -69,6 +69,7 @@
 #include <redline.hxx>
 #include <unoredline.hxx>
 #include <unoprnms.hxx>
+#include <unocrsrhelper.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
@@ -149,11 +150,11 @@ sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLi
 /* -----------------11.12.98 14:22-------------------
  *
  * --------------------------------------------------*/
-void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, const uno::Any& aValue)
+void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue)
     throw (lang::IllegalArgumentException)
 {
     //Sonderbehandlung fuer "Nicht-Items"
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case  FN_TABLE_HEADLINE_REPEAT:
         case  FN_TABLE_HEADLINE_COUNT:
@@ -161,7 +162,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
             SwTable* pTable = SwTable::FindTable( pFmt );
             {
                 UnoActionContext aAction(pFmt->GetDoc());
-                if( pMap->nWID == FN_TABLE_HEADLINE_REPEAT)
+                if( pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
                 {
                     sal_Bool bVal = *(sal_Bool*)aValue.getValue();
                     pFmt->GetDoc()->SetRowsToRepeat( *pTable, bVal ? 1 : 0 );
@@ -182,20 +183,20 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
         {
             sal_Int32 nWidth = 0;
             SwFmtFrmSize aSz( pFmt->GetFrmSize() );
-            if(FN_TABLE_WIDTH == pMap->nWID)
+            if(FN_TABLE_WIDTH == pEntry->nWID)
             {
                 aValue >>= nWidth;
                 aSz.SetWidthPercent(0);
                 aSz.SetWidth ( MM100_TO_TWIP ( nWidth ) );
             }
-            else if(FN_TABLE_RELATIVE_WIDTH == pMap->nWID)
+            else if(FN_TABLE_RELATIVE_WIDTH == pEntry->nWID)
             {
                 sal_Int16 nSet = 0;
                 aValue >>= nSet;
                 if(nSet && nSet <=100)
                     aSz.SetWidthPercent( (BYTE)nSet );
             }
-            else if(FN_TABLE_IS_RELATIVE_WIDTH == pMap->nWID)
+            else if(FN_TABLE_IS_RELATIVE_WIDTH == pEntry->nWID)
             {
                 sal_Bool bPercent = *(sal_Bool*)aValue.getValue();
                 if(!bPercent)
@@ -233,17 +234,17 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
 /* -----------------27.04.98 08:50-------------------
  *
  * --------------------------------------------------*/
-uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
+uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry )
 {
     uno::Any aRet;
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case  FN_TABLE_HEADLINE_REPEAT:
         case  FN_TABLE_HEADLINE_COUNT:
         {
             SwTable* pTable = SwTable::FindTable( pFmt );
             USHORT nRepeat = pTable->GetRowsToRepeat();
-            if(pMap->nWID == FN_TABLE_HEADLINE_REPEAT)
+            if(pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
             {
                 BOOL bTemp = nRepeat > 0;
                 aRet.setValue(&bTemp, ::getCppuBooleanType());
@@ -257,9 +258,9 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
         case  FN_TABLE_RELATIVE_WIDTH:
         {
             const SwFmtFrmSize& rSz = pFmt->GetFrmSize();
-            if(FN_TABLE_WIDTH == pMap->nWID)
+            if(FN_TABLE_WIDTH == pEntry->nWID)
                 rSz.QueryValue(aRet, MID_FRMSIZE_WIDTH|CONVERT_TWIPS);
-            else if(FN_TABLE_RELATIVE_WIDTH == pMap->nWID)
+            else if(FN_TABLE_RELATIVE_WIDTH == pEntry->nWID)
                 rSz.QueryValue(aRet, MID_FRMSIZE_REL_WIDTH);
             else
             {
@@ -308,7 +309,7 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
         {
             SwTable* pTable = SwTable::FindTable( pFmt );
             SwNode* pTblNode = pTable->GetTableNode();
-            if(FN_UNO_REDLINE_NODE_END == pMap->nWID)
+            if(FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                 pTblNode = pTblNode->EndOfSectionNode();
             const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
             for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
@@ -760,45 +761,6 @@ void lcl_setValue( SwXCell &rCell, double nVal )
         pDoc->UpdateTblFlds( &aTblUpdate );
     }
 }
-
-/******************************************************************************
- *
- ******************************************************************************/
-
-const SfxItemPropertyMap* GetTableDescPropertyMap()
-{
-    static SfxItemPropertyMap aTableDescPropertyMap_Impl[] =
-    {
-        { SW_PROP_NAME(UNO_NAME_BACK_COLOR )         ,  RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE,MID_BACK_COLOR         },
-        { SW_PROP_NAME(UNO_NAME_BREAK_TYPE),            RES_BREAK,              &::getCppuType((const style::BreakType*)0),         PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL      ),         RES_BACKGROUND,         &::getCppuType((const OUString*)0), PROPERTY_NONE ,MID_GRAPHIC_URL    },
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER  ),      RES_BACKGROUND,         &::getCppuType((const OUString*)0), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_LOCATION)    ,      RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-        { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_L_MARGIN},
-        { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN},
-        { SW_PROP_NAME(UNO_NAME_HORI_ORIENT  ),         RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },
-        { SW_PROP_NAME(UNO_NAME_KEEP_TOGETHER),         RES_KEEP,               &::getBooleanCppuType()  ,  PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_SPLIT    ),             RES_LAYOUT_SPLIT,       &::getBooleanCppuType()  ,  PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_NUMBER_OFFSET),    RES_PAGEDESC,           &::getCppuType((const sal_Int16*)0),        PROPERTY_NONE, MID_PAGEDESC_PAGENUMOFFSET},
-        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),           0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),        FN_TABLE_RELATIVE_WIDTH,&::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE, 0    },
-        { SW_PROP_NAME(UNO_NAME_REPEAT_HEADLINE) ,      FN_TABLE_HEADLINE_REPEAT,&::getBooleanCppuType(),       PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),         RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_IS_WIDTH_RELATIVE),     FN_TABLE_IS_RELATIVE_WIDTH,  &::getBooleanCppuType()  ,     PROPERTY_NONE, 0 },
-        { SW_PROP_NAME(UNO_NAME_TABLE_NAME),          0,                      &::getCppuType((const OUString*)0),       PROPERTY_NONE, 0 },
-        { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),            RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),         RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT),  RES_BACKGROUND,     &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
-        { SW_PROP_NAME(UNO_NAME_WIDTH),                 FN_TABLE_WIDTH,         &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_CHART_ROW_AS_LABEL),        FN_UNO_RANGE_ROW_LABEL,         &::getBooleanCppuType(),            PROPERTY_NONE,  0},
-        { SW_PROP_NAME(UNO_NAME_CHART_COLUMN_AS_LABEL),     FN_UNO_RANGE_COL_LABEL,         &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_TABLE_BORDER),          FN_UNO_TABLE_BORDER,            &::getCppuType((const table::TableBorder*)0),   beans::PropertyAttribute::MAYBEVOID, CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_TABLE_BORDER_DISTANCES), FN_UNO_TABLE_BORDER_DISTANCES, &::getCppuType((const table::TableBorderDistances*)0),   beans::PropertyAttribute::MAYBEVOID, CONVERT_TWIPS },
-        {0,0,0,0,0,0}
-    };
-    #define TABLE_PROP_COUNT 25
-    return aTableDescPropertyMap_Impl;
-}
 /******************************************************************
  * SwXCell
  ******************************************************************/
@@ -809,7 +771,7 @@ TYPEINIT1(SwXCell, SwClient);
 SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, sal_uInt16 nPos ) :
     SwXText(pTblFmt->GetDoc(), CURSOR_TBLTEXT),
     SwClient(pTblFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_CELL)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
     pBox(pBx),
     pStartNode(0),
     nFndPos(nPos)
@@ -821,7 +783,7 @@ SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, sal_uInt16 nPos ) :
 SwXCell::SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode) :
     SwXText(pTblFmt->GetDoc(), CURSOR_TBLTEXT),
     SwClient(pTblFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_CELL)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
     pBox(0),
     pStartNode(&rStartNode),
     nFndPos(USHRT_MAX)
@@ -1120,7 +1082,7 @@ uno::Reference< text::XTextCursor >  SwXCell::createTextCursorByRange(const uno:
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXCell::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.12.98 10:56:34---------------------------------------------------
@@ -1132,15 +1094,15 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(IsValid())
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
-        if( !pMap )
+        const SfxItemPropertySimpleEntry* pEntry =
+            m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        if( !pEntry )
         {
             beans::UnknownPropertyException aEx;
             aEx.Message = rPropertyName;
             throw( aEx );
         }
-        if( pMap->nWID == FN_UNO_CELL_ROW_SPAN )
+        if( pEntry->nWID == FN_UNO_CELL_ROW_SPAN )
         {
             sal_Int32 nRowSpan = 0;
             if( aValue >>= nRowSpan )
@@ -1150,7 +1112,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         {
             SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
             SwAttrSet aSet(pBoxFmt->GetAttrSet());
-            aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
+            m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
             pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
         }
     }
@@ -1165,15 +1127,15 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if(IsValid())
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
-        if( !pMap )
+        const SfxItemPropertySimpleEntry* pEntry =
+                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        if( !pEntry )
         {
             beans::UnknownPropertyException aEx;
             aEx.Message = rPropertyName;
             throw( aEx );
         }
-        switch( pMap->nWID )
+        switch( pEntry->nWID )
         {
             case FN_UNO_CELL_ROW_SPAN:
                 aRet <<= pBox->getRowSpan();
@@ -1207,7 +1169,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             {
                 const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
                 const SwAttrSet& rSet = pBoxFmt->GetAttrSet();
-                aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+                m_pPropSet->getPropertyValue(rPropertyName, rSet, aRet);
             }
         }
     }
@@ -1405,7 +1367,7 @@ TYPEINIT1(SwXTextTableRow, SwClient);
   -----------------------------------------------------------------------*/
 SwXTextTableRow::SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLn) :
     SwClient(pFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE_ROW)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_ROW)),
     pLine(pLn)
 {
 
@@ -1422,7 +1384,7 @@ SwXTextTableRow::~SwXTextTableRow()
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXTextTableRow::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.12.98 12:04:46---------------------------------------------------
@@ -1440,21 +1402,21 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
         SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
         if(pLn)
         {
-            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
+            const SfxItemPropertySimpleEntry* pEntry =
+                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
             SwDoc* pDoc = pFmt->GetDoc();
-            if (!pMap)
+            if (!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case FN_UNO_ROW_HEIGHT:
                 case FN_UNO_ROW_AUTO_HEIGHT:
                 {
                     SwFmtFrmSize aFrmSize(pLn->GetFrmFmt()->GetFrmSize());
-                    if(FN_UNO_ROW_AUTO_HEIGHT== pMap->nWID)
+                    if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                     {
                         sal_Bool bSet = *(sal_Bool*)aValue.getValue();
                         aFrmSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
@@ -1481,7 +1443,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
                 {
                     SwFrmFmt* pLnFmt = pLn->ClaimFrmFmt();
                     SwAttrSet aSet(pLnFmt->GetAttrSet());
-                    aPropSet.setPropertyValue(*pMap, aValue, aSet);
+                    m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
                     pDoc->SetAttr(aSet, *pLnFmt);
                 }
             }
@@ -1502,18 +1464,18 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
         SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
         if(pLn)
         {
-            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
-            if (!pMap)
+            const SfxItemPropertySimpleEntry* pEntry =
+                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+            if (!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case FN_UNO_ROW_HEIGHT:
                 case FN_UNO_ROW_AUTO_HEIGHT:
                 {
                     const SwFmtFrmSize& rSize = pLn->GetFrmFmt()->GetFrmSize();
-                    if(FN_UNO_ROW_AUTO_HEIGHT== pMap->nWID)
+                    if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                     {
                         BOOL bTmp =  ATT_VAR_SIZE == rSize.GetHeightSizeType();
                         aRet.setValue(&bTmp, ::getCppuBooleanType());
@@ -1530,7 +1492,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
                 default:
                 {
                     const SwAttrSet& rSet = pLn->GetFrmFmt()->GetAttrSet();
-                    aRet = aPropSet.getPropertyValue(*pMap, rSet);
+                    m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
                 }
             }
         }
@@ -1630,7 +1592,7 @@ uno::Sequence< OUString > SwXTextTableCursor::getSupportedServiceNames(void) thr
 SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox) :
     SwClient(pFmt),
     aCrsrDepend(this, 0),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE_CURSOR))
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
     SwDoc* pDoc = pFmt->GetDoc();
     const SwStartNode* pSttNd = pBox->GetSttNd();
@@ -1647,7 +1609,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox) :
 SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor* pTableSelection) :
     SwClient(&rTableFmt),
     aCrsrDepend(this, 0),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE_CURSOR))
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
     SwUnoCrsr* pUnoCrsr = pTableSelection->GetDoc()->CreateUnoCrsr(*pTableSelection->GetPoint(), sal_True);
     if(pTableSelection->HasMark())
@@ -1888,13 +1850,13 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal) th
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXTextTableCursor::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.12.98 12:16:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-extern sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
+extern sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertySimpleEntry* pEntry,
             SwPaM& rPam,
             SfxItemSet& rSet,
             const uno::Any& aValue ) throw (lang::IllegalArgumentException);
@@ -1916,21 +1878,21 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                    aPropSet.getPropertyMap(), rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry* pEntry =
+                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        if(pEntry)
         {
-            if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             pTblCrsr->MakeBoxSels();
             SwDoc* pDoc = pUnoCrsr->GetDoc();
-            switch(pMap->nWID )
+            switch(pEntry->nWID )
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush( RES_BACKGROUND );
                     pDoc->GetBoxAttr( *pUnoCrsr, aBrush );
-                    aBrush.PutValue(aValue, pMap->nMemberId);
+                    aBrush.PutValue(aValue, pEntry->nMemberId);
                     pDoc->SetBoxAttr( *pUnoCrsr, aBrush );
 
                 }
@@ -1947,11 +1909,11 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                 break;
                 default:
                 {
-                    SfxItemSet aItemSet( pDoc->GetAttrPool(), pMap->nWID, pMap->nWID );
+                    SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
                     SwXTextCursor::GetCrsrAttr( pTblCrsr->GetSelRing(), aItemSet );
 
-                    if(!lcl_setCrsrPropertyValue( pMap, pTblCrsr->GetSelRing(), aItemSet, aValue ))
-                        aPropSet.setPropertyValue( *pMap, aValue, aItemSet );
+                    if(!lcl_setCrsrPropertyValue( pEntry, pTblCrsr->GetSelRing(), aItemSet, aValue ))
+                        m_pPropSet->setPropertyValue( *pEntry, aValue, aItemSet );
                     SwXTextCursor::SetCrsrAttr( pTblCrsr->GetSelRing(), aItemSet, CRSR_ATTR_MODE_TABLE );
                 }
             }
@@ -1975,18 +1937,18 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                    aPropSet.getPropertyMap(), rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry* pEntry =
+                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        if(pEntry)
         {
             pTblCrsr->MakeBoxSels();
-            switch(pMap->nWID )
+            switch(pEntry->nWID )
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush( RES_BACKGROUND );
                     if(pTblCrsr->GetDoc()->GetBoxAttr( *pUnoCrsr, aBrush ))
-                        aBrush.QueryValue(aRet, pMap->nMemberId);
+                        aBrush.QueryValue(aRet, pEntry->nMemberId);
 
                 }
                 break;
@@ -2011,7 +1973,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                         0L);
                     // erstmal die Attribute des Cursors
                     SwXTextCursor::GetCrsrAttr(pTblCrsr->GetSelRing(), aSet);
-                    aRet = aPropSet.getPropertyValue(*pMap, aSet);
+                    m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
                 }
             }
         }
@@ -2064,85 +2026,43 @@ void SwXTextTableCursor::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 
 class SwTableProperties_Impl
 {
-    const SfxItemPropertyMap*   _pMap;
-    uno::Any*                   pAnyArr[TABLE_PROP_COUNT];
-    sal_uInt16                      nArrLen;
-
+    SwUnoCursorHelper::SwAnyMapHelper aAnyMap;
 public:
-    SwTableProperties_Impl(const SfxItemPropertyMap* pMap);
+    SwTableProperties_Impl();
     ~SwTableProperties_Impl();
 
-    sal_Bool    SetProperty(const char* pName , uno::Any aVal);
-    sal_Bool    GetProperty(const char* pName, uno::Any*& rpAny);
+    void        SetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any& aVal);
+    sal_Bool    GetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any*& rpAny);
 
-    sal_Bool    SetProperty(USHORT nId , uno::Any aVal)
-    {   return SetProperty(SW_PROP_NAME_STR( nId ), aVal); }
-    sal_Bool    GetProperty(USHORT nId, uno::Any*& rpAny)
-    {   return GetProperty(SW_PROP_NAME_STR( nId ), rpAny); }
-
-    const SfxItemPropertyMap*   GetMap() const {return _pMap;}
-    void                        ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
+    void        ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
 };
 
 /* -----------------22.06.98 09:43-------------------
  *
  * --------------------------------------------------*/
-SwTableProperties_Impl::SwTableProperties_Impl(const SfxItemPropertyMap* pMap) :
-    _pMap(pMap),
-    nArrLen(TABLE_PROP_COUNT)
+SwTableProperties_Impl::SwTableProperties_Impl()
 {
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
-        pAnyArr[i] = 0;
 }
 /* -----------------22.06.98 09:51-------------------
  *
  * --------------------------------------------------*/
 SwTableProperties_Impl::~SwTableProperties_Impl()
 {
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
-        delete pAnyArr[i];
 }
 /* -----------------22.06.98 09:51-------------------
  *
  * --------------------------------------------------*/
-sal_Bool SwTableProperties_Impl::SetProperty(const char* pName, uno::Any aVal)
+void SwTableProperties_Impl::SetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any& rVal)
 {
-    sal_uInt16 nPos = 0;
-    const SfxItemPropertyMap* pTemp = _pMap;
-    String aName(C2S( pName ));
-    while( pTemp->pName )
-    {
-        if( aName.EqualsAscii(pTemp->pName))
-            break;
-        ++nPos;
-        ++pTemp;
-    }
-    if(nPos < nArrLen)
-    {
-        delete pAnyArr[nPos];
-        pAnyArr[nPos] = new uno::Any(aVal);
-    }
-    return nPos < nArrLen;
+    aAnyMap.SetValue( nWhichId, nMemberId, rVal );
 }
 /* -----------------22.06.98 09:51-------------------
  *
  * --------------------------------------------------*/
 
-sal_Bool SwTableProperties_Impl::GetProperty(const char* pName, uno::Any*& rpAny )
+sal_Bool SwTableProperties_Impl::GetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any*& rpAny )
 {
-    sal_uInt16 nPos = 0;
-    const SfxItemPropertyMap* pTemp = _pMap;
-    String aName(C2S(pName));
-    while( pTemp->pName )
-    {
-        if(aName.EqualsAscii(pTemp->pName))
-            break;
-        ++nPos;
-        ++pTemp;
-    }
-    if(nPos < nArrLen)
-        rpAny = pAnyArr[nPos];
-    return rpAny && nPos < nArrLen;
+    return aAnyMap.FillValue( nWhichId, nMemberId, rpAny );
 }
 /* -----------------13.01.99 15:42-------------------
  *
@@ -2160,24 +2080,24 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         RES_PAGEDESC,       RES_PAGEDESC,
         0
         );
-    uno::Any* pRepHead;
+    const uno::Any* pRepHead;
     const SwFrmFmt &rFrmFmt = *rTbl.GetFrmFmt();
-    if(GetProperty(UNO_NAME_REPEAT_HEADLINE, pRepHead ))
+    if(GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff, pRepHead ))
     {
         sal_Bool bVal = *(sal_Bool*)pRepHead->getValue();
         ((SwTable&)rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO MULTIHEADER
     }
 
-    uno::Any* pBackColor    = 0;
-    GetProperty(UNO_NAME_BACK_COLOR, pBackColor );
-    uno::Any* pBackTrans    = 0;
-    GetProperty(UNO_NAME_BACK_TRANSPARENT, pBackTrans );
-    uno::Any* pGrLoc        = 0;
-    GetProperty(UNO_NAME_GRAPHIC_LOCATION, pGrLoc   );
-    uno::Any* pGrURL        = 0;
-    GetProperty(UNO_NAME_GRAPHIC_URL, pGrURL     );
-    uno::Any* pGrFilter     = 0;
-    GetProperty(UNO_NAME_GRAPHIC_FILTER, pGrFilter     );
+    const uno::Any* pBackColor   = 0;
+    GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pBackColor );
+    const uno::Any* pBackTrans  = 0;
+    GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pBackTrans );
+    const uno::Any* pGrLoc      = 0;
+    GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc    );
+    const uno::Any* pGrURL      = 0;
+    GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
+    const uno::Any* pGrFilter   = 0;
+    GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
 
     if(pBackColor||pBackTrans||pGrURL||pGrFilter||pGrLoc)
     {
@@ -2196,8 +2116,8 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     }
 
     sal_Bool bPutBreak = sal_True;
-    uno::Any* pPage;
-    if(GetProperty(UNO_NAME_PAGE_STYLE_NAME, pPage))
+    const uno::Any* pPage;
+    if(GetProperty(FN_UNO_PAGE_STYLE, 0, pPage) || GetProperty(RES_PAGEDESC, 0xff, pPage))
     {
         OUString uTmp;
         (*pPage) >>= uTmp;
@@ -2209,8 +2129,8 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
             if(pDesc)
             {
                 SwFmtPageDesc aDesc( pDesc );
-                uno::Any* pPgNo;
-                if(GetProperty(UNO_NAME_PAGE_NUMBER_OFFSET, pPgNo ))
+                const uno::Any* pPgNo;
+                if(GetProperty(RES_PAGEDESC, MID_PAGEDESC_PAGENUMOFFSET, pPgNo ))
                 {
                     INT16 nTmp = 0;
                     (*pPgNo) >>= nTmp;
@@ -2222,22 +2142,22 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 
         }
     }
-    uno::Any* pBreak;
-    if(bPutBreak && GetProperty(UNO_NAME_BREAK_TYPE, pBreak))
+    const uno::Any* pBreak;
+    if(bPutBreak && GetProperty(RES_BREAK, 0, pBreak))
     {
         SvxFmtBreakItem aBreak ( rFrmFmt.GetBreak() );
         aBreak.PutValue(*pBreak, 0);
         aSet.Put(aBreak);
     }
-    uno::Any* pShadow;
-    if(GetProperty(UNO_NAME_SHADOW_FORMAT, pShadow))
+    const uno::Any* pShadow;
+    if(GetProperty(RES_SHADOW, 0, pShadow))
     {
         SvxShadowItem aShd ( rFrmFmt.GetShadow() );
         aShd.PutValue(*pShadow, CONVERT_TWIPS);
         aSet.Put(aShd);
     }
-    uno::Any* pKeep;
-    if(GetProperty(UNO_NAME_KEEP_TOGETHER, pKeep))
+    const uno::Any* pKeep;
+    if(GetProperty(RES_KEEP, 0, pKeep))
     {
         SvxFmtKeepItem aKeep( rFrmFmt.GetKeep() );
         aKeep.PutValue(*pKeep, 0);
@@ -2245,8 +2165,8 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     }
 
     sal_Bool bFullAlign = sal_True;
-    uno::Any* pHOrient;
-    if(GetProperty(UNO_NAME_HORI_ORIENT, pHOrient))
+    const uno::Any* pHOrient;
+    if(GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHOrient))
     {
         SwFmtHoriOrient aOrient ( rFrmFmt.GetHoriOrient() );
         ((SfxPoolItem&)aOrient).PutValue(*pHOrient, MID_HORIORIENT_ORIENT|CONVERT_TWIPS);
@@ -2255,12 +2175,12 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     }
 
 
-    uno::Any* pSzRel        = 0;
-    GetProperty(UNO_NAME_IS_WIDTH_RELATIVE, pSzRel  );
-    uno::Any* pRelWidth     = 0;
-    GetProperty(UNO_NAME_RELATIVE_WIDTH, pRelWidth);
-    uno::Any* pWidth        = 0;
-    GetProperty(UNO_NAME_WIDTH, pWidth  );
+    const uno::Any* pSzRel       = 0;
+    GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel  );
+    const uno::Any* pRelWidth   = 0;
+    GetProperty(FN_TABLE_RELATIVE_WIDTH, 0xff, pRelWidth);
+    const uno::Any* pWidth      = 0;
+    GetProperty(FN_TABLE_WIDTH, 0xff, pWidth  );
 
     sal_Bool bPutSize = pWidth != 0;
     SwFmtFrmSize aSz( ATT_VAR_SIZE);
@@ -2281,10 +2201,10 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
             aSz.SetWidth(MINLAY);
         aSet.Put(aSz);
     }
-    uno::Any* pL        = 0;
-    GetProperty(UNO_NAME_LEFT_MARGIN, pL);
-    uno::Any* pR        = 0;
-    GetProperty(UNO_NAME_RIGHT_MARGIN, pR);
+    const uno::Any* pL      = 0;
+    GetProperty(RES_LR_SPACE, MID_L_MARGIN|CONVERT_TWIPS, pL);
+    const uno::Any* pR      = 0;
+    GetProperty(RES_LR_SPACE, MID_R_MARGIN|CONVERT_TWIPS, pR);
     if(pL||pR)
     {
         SvxLRSpaceItem aLR ( rFrmFmt.GetLRSpace() );
@@ -2294,10 +2214,10 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
             ((SfxPoolItem&)aLR).PutValue(*pR, MID_R_MARGIN|CONVERT_TWIPS);
         aSet.Put(aLR);
     }
-    uno::Any* pU        = 0;
-    GetProperty(UNO_NAME_TOP_MARGIN, pU);
-    uno::Any* pLo   = 0;
-    GetProperty(UNO_NAME_BOTTOM_MARGIN, pLo);
+    const uno::Any* pU      = 0;
+    GetProperty(RES_UL_SPACE, MID_UP_MARGIN|CONVERT_TWIPS, pU);
+    const uno::Any* pLo     = 0;
+    GetProperty(RES_UL_SPACE, MID_LO_MARGIN|CONVERT_TWIPS, pLo);
     if(pU||pLo)
     {
         SvxULSpaceItem aUL ( rFrmFmt.GetULSpace() );
@@ -2307,8 +2227,8 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
             ((SfxPoolItem&)aUL).PutValue(*pLo, MID_LO_MARGIN|CONVERT_TWIPS);
         aSet.Put(aUL);
     }
-    uno::Any* pSplit;
-    if(GetProperty(UNO_NAME_SPLIT, pSplit ))
+    const::uno::Any* pSplit;
+    if(GetProperty(RES_LAYOUT_SPLIT, 0, pSplit ))
     {
         sal_Bool bTmp = *(sal_Bool*)pSplit->getValue();
         SwFmtLayoutSplit aSp(bTmp);
@@ -2369,9 +2289,8 @@ TYPEINIT1(SwXTextTable, SwClient)
 SwXTextTable::SwXTextTable() :
     aLstnrCntnr( (text::XTextTable*)this),
     aChartLstnrCntnr( (text::XTextTable*)this),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
-    pTableProps(new SwTableProperties_Impl(GetTableDescPropertyMap())),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
+    pTableProps(new SwTableProperties_Impl),
     bIsDescriptor(sal_True),
     nRows(2),
     nColumns(2),
@@ -2387,8 +2306,7 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
     SwClient( &rFrmFmt ),
     aLstnrCntnr( (text::XTextTable*)this),
     aChartLstnrCntnr( (text::XTextTable*)this),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
     pTableProps(0),
     bIsDescriptor(sal_False),
     nRows(0),
@@ -2607,8 +2525,8 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                     pDoc->SetTableName( *pTblFmt, sTmpNameIndex);
                 }
 
-                uno::Any* pName;
-                if(pTableProps->GetProperty(UNO_NAME_TABLE_NAME, pName))
+                const::uno::Any* pName;
+                if(pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0, pName))
                 {
                     OUString sTmp;
                     (*pName) >>= sTmp;
@@ -3312,7 +3230,7 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXTextTable::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.12.98 12:42:50---------------------------------------------------
@@ -3327,23 +3245,30 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
     SwFrmFmt* pFmt = GetFrmFmt();
     if(!aValue.hasValue())
         throw lang::IllegalArgumentException();
+    const SfxItemPropertySimpleEntry* pEntry =
+                                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+    if( !pEntry )
+        throw lang::IllegalArgumentException();
     if(pFmt)
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    _pMap, rPropertyName);
-        if (!pMap)
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-        if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+        if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-        if(0xFF == pMap->nMemberId)
+        if(0xFF == pEntry->nMemberId)
         {
-            lcl_SetSpecialProperty(pFmt, pMap, aValue);
+            lcl_SetSpecialProperty(pFmt, pEntry, aValue);
         }
         else
         {
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
+                case UNO_NAME_TABLE_NAME :
+                {
+                    ::rtl::OUString sName;
+                    aValue >>= sName;
+                    setName( sName );
+                }
+                break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
@@ -3506,7 +3431,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                 default:
                 {
                     SwAttrSet aSet(pFmt->GetAttrSet());
-                    aPropSet.setPropertyValue(*pMap, aValue, aSet);
+                    m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
                     pFmt->GetDoc()->SetAttr(aSet, *pFmt);
                 }
             }
@@ -3515,10 +3440,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
     else if(bIsDescriptor)
     {
         String aPropertyName(rPropertyName);
-        if(!pTableProps->SetProperty(
-             ByteString( aPropertyName, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
-            aValue))
-            throw lang::IllegalArgumentException();
+        pTableProps->SetProperty( pEntry->nWID, pEntry->nMemberId, aValue);
     }
     else
         throw uno::RuntimeException();
@@ -3531,25 +3453,30 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
     SwFrmFmt* pFmt = GetFrmFmt();
+    const SfxItemPropertySimpleEntry* pEntry =
+                                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     if(pFmt)
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    _pMap, rPropertyName);
-        if (!pMap)
+        if (!pEntry)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-        if(0xFF == pMap->nMemberId)
+        if(0xFF == pEntry->nMemberId)
         {
-            aRet = lcl_GetSpecialProperty(pFmt, pMap );
+            aRet = lcl_GetSpecialProperty(pFmt, pEntry );
         }
         else
         {
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
+                case UNO_NAME_TABLE_NAME:
+                {
+                    aRet <<= getName();
+                }
+                break;
                 case  FN_UNO_ANCHOR_TYPES:
                 case  FN_UNO_TEXT_WRAP:
                 case  FN_UNO_ANCHOR_TYPE:
-                    SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pMap->nWID);
+                    SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pEntry->nWID);
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
@@ -3714,17 +3641,16 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                 default:
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
-                    aRet = aPropSet.getPropertyValue(*pMap, rSet);
+                    m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
                 }
             }
         }
     }
     else if(bIsDescriptor)
     {
-        uno::Any* pAny = 0;
+        const uno::Any* pAny = 0;
         String aPropertyName(rPropertyName);
-        if(!pTableProps->GetProperty(ByteString(aPropertyName, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
-                                                                                                pAny))
+        if(!pTableProps->GetProperty(pEntry->nWID, pEntry->nMemberId, pAny))
             throw lang::IllegalArgumentException();
         else if(pAny)
             aRet = *pAny;
@@ -4004,9 +3930,8 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
     aCursorDepend(this, pCrsr),
     aChartLstnrCntnr((cppu::OWeakObject*)this),
     aRgDesc(rDesc),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_RANGE)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_RANGE)),
     pTblCrsr(pCrsr),
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_RANGE)),
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False)
 {
@@ -4127,7 +4052,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUSt
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXCellRange::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.12.98 14:27:35---------------------------------------------------
@@ -4144,11 +4069,11 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
     {
         /* ASK OLIVER
         lcl_FormatTable(pFmt);*/
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                    _pMap, rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry* pEntry =
+                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        if(pEntry)
         {
-            if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
             SwDoc* pDoc = pTblCrsr->GetDoc();
@@ -4158,13 +4083,13 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
             }
             SwUnoTableCrsr* pCrsr = *pTblCrsr;
             pCrsr->MakeBoxSels();
-            switch(pMap->nWID )
+            switch(pEntry->nWID )
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush( RES_BACKGROUND );
                     pDoc->GetBoxAttr( *pTblCrsr, aBrush );
-                    ((SfxPoolItem&)aBrush).PutValue(aValue, pMap->nMemberId);
+                    ((SfxPoolItem&)aBrush).PutValue(aValue, pEntry->nMemberId);
                     pDoc->SetBoxAttr( *pTblCrsr, aBrush );
 
                 }
@@ -4178,7 +4103,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                     aBoxInfo.SetValid(0xff, FALSE);
                     BYTE nValid = 0;
-                    switch(pMap->nMemberId & ~CONVERT_TWIPS)
+                    switch(pEntry->nMemberId & ~CONVERT_TWIPS)
                     {
                         case  LEFT_BORDER :             nValid = VALID_LEFT; break;
                         case  RIGHT_BORDER:             nValid = VALID_RIGHT; break;
@@ -4199,7 +4124,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
 
                     aSet.Put(aBoxInfo);
                     SvxBoxItem aBoxItem((const SvxBoxItem&)aSet.Get(RES_BOX));
-                    ((SfxPoolItem&)aBoxItem).PutValue(aValue, pMap->nMemberId);
+                    ((SfxPoolItem&)aBoxItem).PutValue(aValue, pEntry->nMemberId);
                     aSet.Put(aBoxItem);
                     pDoc->SetTabBorders( *pTblCrsr, aSet );
                 }
@@ -4233,11 +4158,11 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                 break;
                 default:
                 {
-                    SfxItemSet aItemSet( pDoc->GetAttrPool(), pMap->nWID, pMap->nWID );
+                    SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
                     SwXTextCursor::GetCrsrAttr( pCrsr->GetSelRing(), aItemSet );
 
-                    if(!lcl_setCrsrPropertyValue( pMap, pCrsr->GetSelRing(), aItemSet, aValue ))
-                        aPropSet.setPropertyValue(*pMap, aValue, aItemSet );
+                    if(!lcl_setCrsrPropertyValue( pEntry, pCrsr->GetSelRing(), aItemSet, aValue ))
+                        m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet );
                     SwXTextCursor::SetCrsrAttr(pCrsr->GetSelRing(), aItemSet, CRSR_ATTR_MODE_TABLE );
                 }
             }
@@ -4258,17 +4183,17 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
     {
         /* ASK OLIVER
         lcl_FormatTable(pFmt);*/
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                    _pMap, rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry* pEntry =
+                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        if(pEntry)
         {
-            switch(pMap->nWID )
+            switch(pEntry->nWID )
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush( RES_BACKGROUND );
                     if(pTblCrsr->GetDoc()->GetBoxAttr( *pTblCrsr, aBrush ))
-                        aBrush.QueryValue(aRet, pMap->nMemberId);
+                        aBrush.QueryValue(aRet, pEntry->nMemberId);
 
                 }
                 break;
@@ -4282,7 +4207,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                     aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
                     pDoc->GetTabBorders(*pTblCrsr, aSet);
                     const SvxBoxItem& rBoxItem = ((const SvxBoxItem&)aSet.Get(RES_BOX));
-                    rBoxItem.QueryValue(aRet, pMap->nMemberId);
+                    rBoxItem.QueryValue(aRet, pEntry->nMemberId);
                 }
                 break;
                 case RES_BOXATR_FORMAT:
@@ -4320,7 +4245,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                     // erstmal die Attribute des Cursors
                     SwUnoTableCrsr* pCrsr = *pTblCrsr;
                     SwXTextCursor::GetCrsrAttr(pCrsr->GetSelRing(), aSet);
-                    aRet = aPropSet.getPropertyValue(*pMap, aSet);
+                    m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
                 }
             }
         }

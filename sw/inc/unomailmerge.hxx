@@ -109,7 +109,7 @@ class SwXMailMerge :
     OPropertyListenerContainerHelper    aPropListeners;
 
     //SfxItemPropertySet          aPropSet;
-    const SfxItemPropertyMap*   pMap;
+    const SfxItemPropertySet*   pPropSet;
 
     SfxObjectShellRef xDocSh;   // the document
 

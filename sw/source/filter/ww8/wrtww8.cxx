@@ -77,7 +77,7 @@
 #include <shellio.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <swtable.hxx>
 #include <wrtww8.hxx>
 #include <ww8par.hxx>
@@ -100,7 +100,7 @@
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 
-#include <IDocumentBookmarkAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -176,7 +176,7 @@ class WW8_WrtBookmarks
 {
 private:
     SvULongs aSttCps, aEndCps;      // Array of Start- and End CPs
-    SvBools aFieldBookmarks;       // If the bookmark is in a field result
+    SvBools aFieldMarks;       // If the bookmark is in a field result
     std::vector<String> maSwBkmkNms;    // Array of Sw - Bookmarknames
     typedef std::vector<String>::iterator myIter;
 
@@ -189,9 +189,9 @@ public:
     WW8_WrtBookmarks();
     ~WW8_WrtBookmarks();
 
-    void Append( WW8_CP nStartCp, const String& rNm, const SwBookmark* pBkmk=NULL );
+    void Append( WW8_CP nStartCp, const String& rNm, const ::sw::mark::IMark* pBkmk=NULL );
     void Write( SwWW8Writer& rWrt );
-    void MoveFieldBookmarks(ULONG nFrom,ULONG nTo);
+    void MoveFieldMarks(ULONG nFrom,ULONG nTo);
 
 //  String GetWWBkmkName( const String& rName ) const;
 };
@@ -1228,7 +1228,7 @@ WW8_WrtBookmarks::~WW8_WrtBookmarks()
 {
 }
 
-void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const SwBookmark* )
+void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const ::sw::mark::IMark* )
 {
     USHORT nPos = GetPos( rNm );
     if( USHRT_MAX == nPos )
@@ -1246,7 +1246,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const SwBook
 
         aSttCps.Insert(nStartCp, nPos);
         aEndCps.Insert(nStartCp, nPos);
-        aFieldBookmarks.Insert(BOOL(false), nPos);
+        aFieldMarks.Insert(BOOL(false), nPos);
         maSwBkmkNms.insert(aIter, rNm);
     }
     else
@@ -1257,7 +1257,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const SwBook
         //If this bookmark was around a field in writer, then we want to move
         //it to the field result in word. The end is therefore one cp
         //backwards from the 0x15 end mark that was inserted.
-        if (aFieldBookmarks[nPos])
+        if (aFieldMarks[nPos])
             --nStartCp;
 
         aEndCps.Replace( nStartCp, nPos );
@@ -1330,7 +1330,7 @@ USHORT WW8_WrtBookmarks::GetPos( const String& rNm )
     return nRet;
 }
 
-void WW8_WrtBookmarks::MoveFieldBookmarks(ULONG nFrom, ULONG nTo)
+void WW8_WrtBookmarks::MoveFieldMarks(ULONG nFrom, ULONG nTo)
 {
     for (USHORT nI=0;nI<aSttCps.Count();++nI)
     {
@@ -1339,7 +1339,7 @@ void WW8_WrtBookmarks::MoveFieldBookmarks(ULONG nFrom, ULONG nTo)
             aSttCps[nI] = nTo;
             if (aEndCps[nI] == nFrom)
             {
-                aFieldBookmarks[nI] = true;
+                aFieldMarks[nI] = true;
                 aEndCps[nI] = nTo;
             }
         }
@@ -1347,7 +1347,7 @@ void WW8_WrtBookmarks::MoveFieldBookmarks(ULONG nFrom, ULONG nTo)
 }
 
 void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
-                                    xub_StrLen nAktPos, xub_StrLen nLen )
+    xub_StrLen nAktPos, xub_StrLen nLen )
 {
     SvPtrarr aArr( 8, 8 );
     USHORT nCntnt;
@@ -1357,19 +1357,19 @@ void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
         ULONG nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
         for( USHORT n = 0; n < aArr.Count(); ++n )
         {
-            const SwBookmark& rBkmk = *(SwBookmark*)aArr[ n ];
-
-            if (rBkmk.IsFormFieldMark()) {
+            ::sw::mark::IMark& rBkmk = *(::sw::mark::IMark*)aArr[ n ];
+            if(dynamic_cast< ::sw::mark::IFieldmark *>(&rBkmk))
                 continue;
-            }
 
-            const SwPosition* pPos = &rBkmk.GetBookmarkPos(),
-                            * pOPos = rBkmk.GetOtherBookmarkPos();
+            const SwPosition* pPos = &rBkmk.GetMarkPos();
+            const SwPosition* pOPos = 0;
+            if(rBkmk.IsExpanded())
+                pOPos = &rBkmk.GetOtherMarkPos();
             if( pOPos && pOPos->nNode == pPos->nNode &&
                 pOPos->nContent < pPos->nContent )
             {
-                pOPos = pPos;
-                pPos = rBkmk.GetOtherBookmarkPos();
+                pPos = pOPos;
+                pOPos = &rBkmk.GetMarkPos();
             }
 
             if( !pOPos || ( nNd == pPos->nNode.GetIndex() &&
@@ -1390,15 +1390,15 @@ void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
     }
 }
 
-void SwWW8Writer::MoveFieldBookmarks(ULONG nFrom, ULONG nTo)
+void SwWW8Writer::MoveFieldMarks(ULONG nFrom, ULONG nTo)
 {
-    pBkmks->MoveFieldBookmarks(nFrom, nTo);
+    pBkmks->MoveFieldMarks(nFrom, nTo);
 }
 
-void SwWW8Writer::AppendBookmark( const String& rName, USHORT nOffset )
+void SwWW8Writer::AppendBookmark(const String& rName, USHORT nOffset)
 {
-    ULONG nSttCP = Fc2Cp( Strm().Tell() ) + nOffset;
-    pBkmks->Append( nSttCP, rName );
+    ULONG nSttCP = Fc2Cp(Strm().Tell()) + nOffset;
+    pBkmks->Append(nSttCP, rName);
 }
 
 
@@ -2383,7 +2383,15 @@ void SwWW8Writer::WriteText()
         if( pNd == &pNd->GetNodes().GetEndOfContent() )
             break;
 
-        ULONG nPos = pCurPam->GetPoint()->nNode++;  // Bewegen
+        SwNode * pCurrentNode = &pCurPam->GetPoint()->nNode.GetNode();
+        const SwNode * pNextNode = mpTableInfo->getNextNode(pCurrentNode);
+
+        if (pNextNode != NULL)
+            pCurPam->GetPoint()->nNode = SwNodeIndex(*pNextNode);
+        else
+            pCurPam->GetPoint()->nNode++;
+
+        ULONG nPos = pCurPam->GetPoint()->nNode.GetIndex();
         ::SetProgressState( nPos, pCurPam->GetDoc()->GetDocShell() );   // Wie weit ?
     }
 
@@ -3177,19 +3185,25 @@ void WW8SHDLong::Write(SwWW8Writer & rWriter)
     rWriter.InsUInt16(m_ipat);
 }
 
-void SwWW8Writer::WriteFormData(SwFieldBookmark &rFieldmark)
+void SwWW8Writer::WriteFormData(const ::sw::mark::IFieldmark& rFieldmark)
 {
     ASSERT(bWrtWW8, "No 95 export yet");
     if (!bWrtWW8) return;
 
-    int type=rFieldmark.GetFieldType();
-    const String ffname=rFieldmark.GetFFName();
+    const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
+    const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >(pFieldmark);
+
+    int type=0; // TextFieldmark
+    if(pAsCheckbox) type=1;
+
+    const ::rtl::OUString ffname = rFieldmark.GetFieldname();
 
     ULONG nDataStt = pDataStrm->Tell();
-    pChpPlc->AppendFkpEntry( Strm().Tell() );
+    pChpPlc->AppendFkpEntry(Strm().Tell());
 
-    WriteChar( 0x01 );
-    static BYTE aArr1[] = {
+    WriteChar(0x01);
+    static BYTE aArr1[] =
+    {
         0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
 
         0x06, 0x08, 0x01,       // sprmCFData
@@ -3197,10 +3211,9 @@ void SwWW8Writer::WriteFormData(SwFieldBookmark &rFieldmark)
         0x02, 0x08, 0x01        // sprmCFFldVanish
     };
     BYTE* pDataAdr = aArr1 + 2;
-    Set_UInt32( pDataAdr, nDataStt );
+    Set_UInt32(pDataAdr, nDataStt);
 
-    pChpPlc->AppendFkpEntry(Strm().Tell(),
-                sizeof( aArr1 ), aArr1 );
+    pChpPlc->AppendFkpEntry(Strm().Tell(), sizeof(aArr1), aArr1);
 
     sal_uInt8 aFldHeader[] =
     {
@@ -3209,15 +3222,17 @@ void SwWW8Writer::WriteFormData(SwFieldBookmark &rFieldmark)
     };
 
     aFldHeader[4] |= (type & 0x03);
-    int ffres=rFieldmark.GetFFRes();
+    int ffres=0; // rFieldmark.GetFFRes();
+    if(pAsCheckbox && pAsCheckbox->IsChecked())
+        ffres=1;
     aFldHeader[4] |= ((ffres<<2) & 0x7C);
 
-    const String ffdeftext;
-    const String ffformat;
-    const String ffhelptext;
-    const String ffstattext;
-    const String ffentrymcr;
-    const String ffexitmcr;
+    const ::rtl::OUString ffdeftext;
+    const ::rtl::OUString ffformat;
+    const ::rtl::OUString ffhelptext;
+    const ::rtl::OUString ffstattext;
+    const ::rtl::OUString ffentrymcr;
+    const ::rtl::OUString ffexitmcr;
 
     const sal_uInt8 aFldData[] =
     {
@@ -3231,43 +3246,45 @@ void SwWW8Writer::WriteFormData(SwFieldBookmark &rFieldmark)
     };
     int slen=sizeof(aFldData)
         +sizeof(aFldHeader)
-        +2*ffname.Len()+4
-        +2*ffdeftext.Len()+4
-        +2*ffformat.Len()+4
-        +2*ffhelptext.Len()+4
-        +2*ffstattext.Len()+4
-        +2*ffentrymcr.Len()+4
-        +2*ffexitmcr.Len()+4;
+        +2*ffname.getLength()+4
+        +2*ffdeftext.getLength()+4
+        +2*ffformat.getLength()+4
+        +2*ffhelptext.getLength()+4
+        +2*ffstattext.getLength()+4
+        +2*ffentrymcr.getLength()+4
+        +2*ffexitmcr.getLength()+4;
 #ifdef OSL_BIGENDIAN
     slen=SWAPLONG(slen);
 #endif // OSL_BIGENDIAN
     *((sal_uInt32 *)aFldData)=slen;
-    int len=sizeof(aFldData) ;
-    assert(len==0x44);
-    pDataStrm->Write( aFldData, len);
+    int len=sizeof(aFldData);
+    OSL_ENSURE(len==0x44,
+        "SwWW8Writer::WriteFormData(..)"
+        " - wrong aFldData length");
+    pDataStrm->Write(aFldData, len);
 
     len=sizeof(aFldHeader);
-    assert(len==8);
-    pDataStrm->Write( aFldHeader, len);
+    OSL_ENSURE(len==8,
+        "SwWW8Writer::WriteFormData(..)"
+        " - wrong aFldHeader length");
+    pDataStrm->Write(aFldHeader, len);
 
-    WriteString_xstz( *pDataStrm, ffname, true); // Form field name
+    WriteString_xstz(*pDataStrm, ffname, true); // Form field name
 
-    if (type==0) {
-        WriteString_xstz( *pDataStrm, ffdeftext, true);
-    } else {
+    if (type==0)
+        WriteString_xstz(*pDataStrm, ffdeftext, true);
+    else
         pDataStrm->WriteNumber((sal_uInt16)0);
-    }
-    WriteString_xstz( *pDataStrm, ffformat, true);
-    WriteString_xstz( *pDataStrm, ffhelptext, true);
-    WriteString_xstz( *pDataStrm, ffstattext, true);
-    WriteString_xstz( *pDataStrm, ffentrymcr, true);
-    WriteString_xstz( *pDataStrm, ffexitmcr, true);
-    if (type==2) {
-        // 0xFF, 0xFF
-        // sal_uInt32 number of strings
-        // (sal_uInt16 len; sal_uInt16 unicode char[len])*num of strings
-    }
-
+    WriteString_xstz(*pDataStrm, String(ffformat), true);
+    WriteString_xstz(*pDataStrm, String(ffhelptext), true);
+    WriteString_xstz(*pDataStrm, String(ffstattext), true);
+    WriteString_xstz(*pDataStrm, String(ffentrymcr), true);
+    WriteString_xstz(*pDataStrm, String(ffexitmcr), true);
+//    if (type==2) {
+//        // 0xFF, 0xFF
+//        // sal_uInt32 number of strings
+//        // (sal_uInt16 len; sal_uInt16 unicode char[len])*num of strings
+//    }
 }
 
 void SwWW8Writer::OutWW8_TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner)

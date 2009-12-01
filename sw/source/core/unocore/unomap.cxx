@@ -83,11 +83,9 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
 {
     for( sal_uInt16 i = 0; i < PROPERTY_MAP_END; i++ )
     {
-        aMapArr[i] = 0;
+        aMapEntriesArr[i] = 0;
+        aPropertySetArr[i] = 0;
     }
-    pCharStyleMap   = pParaStyleMap = pFrameStyleMap =
-    pPageStyleMap   = pNumStyleMap  = pConditionalParaStyleMap =
-    pCharAutoStyleMap = pRubyAutoStyleMap = pParaAutoStyleMap = 0;
 }
 
 /* -----------------19.02.99 08:31-------------------
@@ -95,117 +93,7 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
  * --------------------------------------------------*/
 SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 {
-    delete pCharStyleMap;
-    delete pParaStyleMap;
-    delete pFrameStyleMap;
-    delete pPageStyleMap;
-    delete pNumStyleMap;
-    delete pConditionalParaStyleMap;
-    delete pCharAutoStyleMap;
-    delete pRubyAutoStyleMap;
-    delete pParaAutoStyleMap;
 }
-/* -----------------19.02.99 08:31-------------------
- *
- * --------------------------------------------------*/
-SfxItemPropertySet& SwUnoPropertyMapProvider::GetPropertySet(sal_Int8 nPropSetId)
-{
-    SfxItemPropertySet** ppMap = 0;
-    sal_uInt16 nPropertyId = 0xFFFF;
-    switch(nPropSetId)
-    {
-    case PROPERTY_SET_CHAR_STYLE:
-        ppMap = &pCharStyleMap;
-        nPropertyId = PROPERTY_MAP_CHAR_STYLE;
-        break;
-    case PROPERTY_SET_PARA_STYLE:
-        ppMap = &pParaStyleMap;
-        nPropertyId = PROPERTY_MAP_PARA_STYLE;
-        break;
-    case PROPERTY_SET_FRAME_STYLE:
-        ppMap = &pFrameStyleMap;
-        nPropertyId = PROPERTY_MAP_FRAME_STYLE;
-        break;
-    case PROPERTY_SET_PAGE_STYLE:
-        ppMap = &pPageStyleMap;
-        nPropertyId = PROPERTY_MAP_PAGE_STYLE;
-        break;
-    case PROPERTY_SET_NUM_STYLE:
-        ppMap = &pNumStyleMap;
-        nPropertyId = PROPERTY_MAP_NUM_STYLE;
-        break;
-    case PROPERTY_SET_CONDITIONAL_PARA_STYLE:
-        ppMap = &pConditionalParaStyleMap;
-        nPropertyId = PROPERTY_MAP_CONDITIONAL_PARA_STYLE;
-        break;
-    case PROPERTY_SET_CHAR_AUTO_STYLE:
-        ppMap = &pCharAutoStyleMap;
-        nPropertyId = PROPERTY_MAP_CHAR_AUTO_STYLE;
-        break;
-    case PROPERTY_SET_RUBY_AUTO_STYLE:
-        ppMap = &pRubyAutoStyleMap;
-        nPropertyId = PROPERTY_MAP_RUBY_AUTO_STYLE;
-        break;
-    case PROPERTY_SET_PARA_AUTO_STYLE:
-        ppMap = &pParaAutoStyleMap;
-        nPropertyId = PROPERTY_MAP_PARA_AUTO_STYLE;
-        break;
-    default:
-        DBG_ERROR( "unexpected property set id" );
-    }
-
-    SfxItemPropertySet* pRet;
-    if( ppMap )
-    {
-        if( !*ppMap )
-            *ppMap = new SwItemPropertySet( GetPropertyMap( nPropertyId ));
-        pRet = *ppMap;
-    }
-    else
-        pRet = 0;
-    return *pRet;
-}
-/* -----------------25.06.98 07:19-------------------
- *
- * --------------------------------------------------*/
-EXTERN_C
-#if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))
-int _stdcall
-#else
-#ifdef WNT
-int _cdecl
-#else
-int
-#endif
-#endif
-lcl_CompareMap(const void* pSmaller, const void* pBigger )
-{
-    int nDiff = strcmp( ((const SfxItemPropertyMap*)pSmaller)->pName,
-                        ((const SfxItemPropertyMap*)pBigger)->pName );
-    return nDiff;
-
-}
-/* -----------------24.06.98 18:12-------------------
- *
- * --------------------------------------------------*/
-void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
-{
-    SfxItemPropertyMap* p = aMapArr[nId];
-    sal_uInt16 i = 0;
-    for( ; p->pName; ++p, ++i )
-    {
-        // set the name
-        const SwPropNameLen& rPropNm = GetPropName( (USHORT)(long)p->pName );
-        p->pName = rPropNm.pName;
-        p->nNameLen = rPropNm.nNameLen;
-        // get the cppu type from the comphelper
-        CppuTypes nTyp = (CppuTypes) (long) p->pType;
-        GenerateCppuType( nTyp, p->pType );
-        DBG_ASSERT( nTyp != (CppuTypes) (long) p->pType, "unknown type" );
-    }
-    qsort( aMapArr[nId], i, sizeof(SfxItemPropertyMap), lcl_CompareMap );
-}
-
 
 #define _STANDARD_FONT_PROPERTIES \
     { SW_PROP_NMID(UNO_NAME_CHAR_HEIGHT), RES_CHRATR_FONTSIZE  ,  CPPU_E2T(CPPUTYPE_FLOAT),         PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},      \
@@ -607,26 +495,26 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
                     { SW_PROP_NMID(UNO_NAME_IS_FIELD_DISPLAYED), FIELD_PROP_IS_FIELD_DISPLAYED, CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::READONLY, 0},\
 
 
-const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nPropertyId)
+const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
     DBG_ASSERT(nPropertyId < PROPERTY_MAP_END, "Id ?" );
-    if( !aMapArr[ nPropertyId ] )
+    if( !aMapEntriesArr[ nPropertyId ] )
     {
         switch(nPropertyId)
         {
             case PROPERTY_MAP_TEXT_CURSOR:
             {
-                static SfxItemPropertyMap aCharAndParaMap_Impl[] =
+                static SfxItemPropertyMapEntry aCharAndParaMap_Impl[] =
                 {
                     COMPLETE_TEXT_CURSOR_MAP
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aCharAndParaMap_Impl;
+                aMapEntriesArr[nPropertyId] = aCharAndParaMap_Impl;
             }
             break;
             case PROPERTY_MAP_PARAGRAPH:
             {
-                static SfxItemPropertyMap aParagraphMap_Impl[] =
+                static SfxItemPropertyMapEntry aParagraphMap_Impl[] =
                 {
                     COMMON_CRSR_PARA_PROPERTIES_2
                     TABSTOPS_MAP_ENTRY
@@ -635,12 +523,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAMES), FN_UNO_CHARFMT_SEQUENCE,  CPPU_E2T(CPPUTYPE_OUSTRINGS),     PropertyAttribute::MAYBEVOID,     0},\
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aParagraphMap_Impl;
+                aMapEntriesArr[nPropertyId] = aParagraphMap_Impl;
             }
             break;
             case PROPERTY_MAP_PARA_AUTO_STYLE :
             {
-                static SfxItemPropertyMap aAutoParaStyleMap [] =
+                static SfxItemPropertyMapEntry aAutoParaStyleMap [] =
                 {
                     { SW_PROP_NMID(UNO_NAME_PARA_STYLE_NAME), RES_FRMATR_STYLE_NAME,        CPPU_E2T(CPPUTYPE_OUSTRING),                PropertyAttribute::MAYBEVOID,     0},                                                       \
                     { SW_PROP_NMID(UNO_NAME_PAGE_STYLE_NAME), FN_UNO_PAGE_STYLE,        CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
@@ -662,12 +550,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_PARA_AUTO_STYLE_NAME), RES_AUTO_STYLE,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aAutoParaStyleMap;
+                aMapEntriesArr[nPropertyId] = aAutoParaStyleMap;
             }
             break;
             case PROPERTY_MAP_CHAR_STYLE :
             {
-                static SfxItemPropertyMap aCharStyleMap [] =
+                static SfxItemPropertyMapEntry aCharStyleMap   [] =
                 {
                     { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_KERNING), RES_CHRATR_AUTOKERN  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_CHAR_BACK_TRANSPARENT), RES_CHRATR_BACKGROUND,  CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
@@ -708,13 +596,13 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE,      MID_RELIEF },
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aCharStyleMap;
+                aMapEntriesArr[nPropertyId] = aCharStyleMap;
             }
             break;
             case PROPERTY_MAP_CHAR_AUTO_STYLE :
             {
                 // same as PROPERTY_MAP_TEXTPORTION_EXTENSIONS
-                static SfxItemPropertyMap aAutoCharStyleMap [] =
+                static SfxItemPropertyMapEntry aAutoCharStyleMap   [] =
                 {
                     { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_KERNING), RES_CHRATR_AUTOKERN  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_CHAR_BACK_TRANSPARENT), RES_CHRATR_BACKGROUND,  CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
@@ -756,44 +644,44 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_STYLE_NAME), RES_TXTATR_AUTOFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aAutoCharStyleMap;
+                aMapEntriesArr[nPropertyId] = aAutoCharStyleMap;
             }
             break;
             case PROPERTY_MAP_RUBY_AUTO_STYLE :
             {
-                static SfxItemPropertyMap aAutoRubyStyleMap [] =
+                static SfxItemPropertyMapEntry aAutoRubyStyleMap [] =
                 {
                     { SW_PROP_NMID(UNO_NAME_RUBY_ADJUST), RES_TXTATR_CJK_RUBY,  CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },
                     { SW_PROP_NMID(UNO_NAME_RUBY_IS_ABOVE), RES_TXTATR_CJK_RUBY,    CPPU_E2T(CPPUTYPE_BOOLEAN),  PropertyAttribute::MAYBEVOID,     MID_RUBY_ABOVE },
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aAutoRubyStyleMap;
+                aMapEntriesArr[nPropertyId] = aAutoRubyStyleMap;
             }
             break;
             case PROPERTY_MAP_PARA_STYLE :
             {
-                static SfxItemPropertyMap aParaStyleMap [] =
+                static SfxItemPropertyMapEntry aParaStyleMap [] =
                 {
                     COMMON_PARA_STYLE_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aParaStyleMap;
+                aMapEntriesArr[nPropertyId] = aParaStyleMap;
             }
             break;
             case PROPERTY_MAP_CONDITIONAL_PARA_STYLE :
             {
-                static SfxItemPropertyMap aParaStyleMap [] =
+                static SfxItemPropertyMapEntry aParaStyleMap [] =
                 {
                     COMMON_PARA_STYLE_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_PARA_STYLE_CONDITIONS), FN_UNO_PARA_STYLE_CONDITIONS, CPPU_E2T(CPPUTYPE_SEQNAMEDVALUE), PropertyAttribute::MAYBEVOID, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aParaStyleMap;
+                aMapEntriesArr[nPropertyId] = aParaStyleMap;
             }
             break;
             case PROPERTY_MAP_FRAME_STYLE:
             {
-                static SfxItemPropertyMap aFrameStyleMap   [] =
+                static SfxItemPropertyMapEntry aFrameStyleMap   [] =
                 {
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
@@ -870,12 +758,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aFrameStyleMap;
+                aMapEntriesArr[nPropertyId] = aFrameStyleMap;
             }
             break;
             case PROPERTY_MAP_PAGE_STYLE :
             {
-                static SfxItemPropertyMap aPageStyleMap [] =
+                static SfxItemPropertyMapEntry aPageStyleMap   [] =
                 {
                     { SW_PROP_NMID(UNO_NAME_BACK_COLOR), RES_BACKGROUND,            CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
                 //  { SW_PROP_NMID(UNO_NAME_GRAPHIC), RES_BACKGROUND,       &,                              PROPERTY_NONE, MID_GRAPHIC
@@ -991,24 +879,24 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_GRID_STANDARD_PAGE_MODE), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_STANDARD_MODE},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aPageStyleMap;
+                aMapEntriesArr[nPropertyId] = aPageStyleMap;
             }
             break;
             case PROPERTY_MAP_NUM_STYLE  :
             {
-                static SfxItemPropertyMap aNumStyleMap      [] =
+                static SfxItemPropertyMapEntry aNumStyleMap        [] =
                 {
                     { SW_PROP_NMID(UNO_NAME_NUMBERING_RULES), FN_UNO_NUM_RULES, CPPU_E2T(CPPUTYPE_REFIDXREPL), PROPERTY_NONE, CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_IS_PHYSICAL), FN_UNO_IS_PHYSICAL,     CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_DISPLAY_NAME), FN_UNO_DISPLAY_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aNumStyleMap;
+                aMapEntriesArr[nPropertyId] = aNumStyleMap;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE :
             {
-                static SfxItemPropertyMap aTablePropertyMap_Impl[] =
+                static SfxItemPropertyMapEntry aTablePropertyMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_BACK_COLOR), RES_BACKGROUND,        CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE,MID_BACK_COLOR         },
                     { SW_PROP_NMID(UNO_NAME_BREAK_TYPE), RES_BREAK,                 CPPU_E2T(CPPUTYPE_BREAK),       PROPERTY_NONE, 0},
@@ -1042,6 +930,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_TEXT_SECTION), FN_UNO_TEXT_SECTION, CPPU_E2T(CPPUTYPE_REFTEXTSECTION),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
+                    { SW_PROP_NMID(UNO_NAME_TABLE_NAME),   FN_UNO_TABLE_NAME,   CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0 },
+                     { SW_PROP_NMID(UNO_NAME_PAGE_STYLE_NAME), RES_PAGEDESC, CPPU_E2T(CPPUTYPE_OUSTRING),         PROPERTY_NONE, 0},
                     // --> collapsing borders DVO, FME 2005-05-27 #i29550#
                     { SW_PROP_NMID(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     // <-- collapsing
@@ -1049,12 +939,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {0,0,0,0,0,0}
                 };
 
-                aMapArr[nPropertyId] = aTablePropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTablePropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TABLE_CELL :
             {
-                static SfxItemPropertyMap aCellMap_Impl[] =
+                static SfxItemPropertyMapEntry aCellMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_BACK_COLOR), RES_BACKGROUND,    CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE , MID_BACK_COLOR       },
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
@@ -1081,12 +971,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aCellMap_Impl;
+                aMapEntriesArr[nPropertyId] = aCellMap_Impl;
             }
             break;
             case PROPERTY_MAP_TABLE_RANGE:
             {
-                static SfxItemPropertyMap aRangePropertyMap_Impl[] =
+                static SfxItemPropertyMapEntry aRangePropertyMap_Impl[] =
                 {
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01
                     TABSTOPS_MAP_ENTRY
@@ -1113,12 +1003,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
 
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aRangePropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aRangePropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_SECTION:
             {
-                static SfxItemPropertyMap aSectionPropertyMap_Impl[] =
+                static SfxItemPropertyMapEntry aSectionPropertyMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_CONDITION), WID_SECT_CONDITION, CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_DDE_COMMAND_FILE), WID_SECT_DDE_TYPE, CPPU_E2T(CPPUTYPE_OUSTRING)  ,        PROPERTY_NONE,     0},
@@ -1168,12 +1058,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     /* <- #1097001# */
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aSectionPropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aSectionPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_SEARCH:
             {
-                static SfxItemPropertyMap aSearchPropertyMap_Impl[] =
+                static SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_SEARCH_ALL), WID_SEARCH_ALL,        CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_SEARCH_BACKWARDS), WID_BACKWARDS,           CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
@@ -1189,12 +1079,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_SEARCH_WORDS), WID_WORDS,               CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aSearchPropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aSearchPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_FRAME:
             {
-                static SfxItemPropertyMap aFramePropertyMap_Impl[] =
+                static SfxItemPropertyMapEntry aFramePropertyMap_Impl[] =
                 {
                     COMMON_FRAME_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
@@ -1215,12 +1105,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aFramePropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aFramePropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_GRAPHIC:
             {
-                static SfxItemPropertyMap aGraphicPropertyMap_Impl[] =
+                static SfxItemPropertyMapEntry aGraphicPropertyMap_Impl[] =
                 {
                     COMMON_FRAME_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_SURROUND_CONTOUR), RES_SURROUND,            CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE, MID_SURROUND_CONTOUR         },
@@ -1249,12 +1139,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_COLOR_MODE), RES_GRFATR_DRAWMODE,    CPPU_E2T(CPPUTYPE_COLORMODE),      0,   0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aGraphicPropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aGraphicPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_EMBEDDED_OBJECT:
             {
-                static SfxItemPropertyMap aEmbeddedPropertyMap_Impl[] =
+                static SfxItemPropertyMapEntry aEmbeddedPropertyMap_Impl[] =
                 {
                     COMMON_FRAME_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_SURROUND_CONTOUR), RES_SURROUND, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_SURROUND_CONTOUR },
@@ -1271,12 +1161,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_SHAPE:
             {
-                static SfxItemPropertyMap aShapeMap_Impl[] =
+                static SfxItemPropertyMapEntry aShapeMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_ANCHOR_PAGENUM      },
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_ANCHOR_ANCHORTYPE},
@@ -1329,12 +1219,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     // <--
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aShapeMap_Impl;
+                aMapEntriesArr[nPropertyId] = aShapeMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_MARK:
             {
-                static SfxItemPropertyMap aIdxMarkMap_Impl[] =
+                static SfxItemPropertyMapEntry aIdxMarkMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), WID_ALT_TEXT,        CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_PRIMARY_KEY), WID_PRIMARY_KEY,  CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
@@ -1346,24 +1236,24 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aIdxMarkMap_Impl;
+                aMapEntriesArr[nPropertyId] = aIdxMarkMap_Impl;
             }
             break;
             case PROPERTY_MAP_CNTIDX_MARK:
             {
-                static SfxItemPropertyMap aCntntMarkMap_Impl[] =
+                static SfxItemPropertyMapEntry aCntntMarkMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), WID_ALT_TEXT,        CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_LEVEL), WID_LEVEL        ,  CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,     0},
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aCntntMarkMap_Impl;
+                aMapEntriesArr[nPropertyId] = aCntntMarkMap_Impl;
             }
             break;
             case PROPERTY_MAP_USER_MARK:
             {
-                static SfxItemPropertyMap aUserMarkMap_Impl[] =
+                static SfxItemPropertyMapEntry aUserMarkMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), WID_ALT_TEXT,        CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_LEVEL        ),   WID_LEVEL        ,    CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,     0},
@@ -1371,12 +1261,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aUserMarkMap_Impl;
+                aMapEntriesArr[nPropertyId] = aUserMarkMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_IDX:
             {
-                static SfxItemPropertyMap aTOXIndexMap_Impl[] =
+                static SfxItemPropertyMapEntry aTOXIndexMap_Impl[] =
                 {
                     _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
@@ -1409,12 +1299,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},\
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTOXIndexMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTOXIndexMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_CNTNT:
             {
-                static SfxItemPropertyMap aTOXContentMap_Impl[] =
+                static SfxItemPropertyMapEntry aTOXContentMap_Impl[] =
                 {
                     _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NMID(UNO_NAME_LEVEL), WID_LEVEL                               ,  CPPU_E2T(CPPUTYPE_INT16)  , PROPERTY_NONE,     0},
@@ -1449,12 +1339,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_DOCUMENT_INDEX_MARKS), WID_INDEX_MARKS, CPPU_E2T(CPPUTYPE_DOCIDXMRK),           PropertyAttribute::READONLY ,0       },
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTOXContentMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTOXContentMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_USER:
             {
-                static SfxItemPropertyMap aTOXUserMap_Impl[] =
+                static SfxItemPropertyMapEntry aTOXUserMap_Impl[] =
                 {
                     _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_MARKS), WID_CREATE_FROM_MARKS                   ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
@@ -1491,12 +1381,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_USER_INDEX_NAME), WID_USER_IDX_NAME,    CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTOXUserMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTOXUserMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_TABLES:
             {
-                static SfxItemPropertyMap aTOXTablesMap_Impl[] =
+                static SfxItemPropertyMapEntry aTOXTablesMap_Impl[] =
                 {
                     _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
@@ -1516,12 +1406,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTOXTablesMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTOXTablesMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_OBJECTS:
             {
-                static SfxItemPropertyMap aTOXObjectsMap_Impl[] =
+                static SfxItemPropertyMapEntry aTOXObjectsMap_Impl[] =
                 {
                     _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
@@ -1544,12 +1434,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTOXObjectsMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTOXObjectsMap_Impl;
             }
             break;
             case PROPERTY_MAP_INDEX_ILLUSTRATIONS:
             {
-                static SfxItemPropertyMap aTOXIllustrationsMap_Impl[] =
+                static SfxItemPropertyMapEntry aTOXIllustrationsMap_Impl[] =
                 {
                     _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NMID(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
@@ -1570,12 +1460,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTOXIllustrationsMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTOXIllustrationsMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE_ROW:
             {
-                static SfxItemPropertyMap aTableRowPropertyMap_Impl[] =
+                static SfxItemPropertyMapEntry aTableRowPropertyMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_BACK_COLOR), RES_BACKGROUND, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE ,MID_BACK_COLOR         },
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
@@ -1593,13 +1483,13 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {0,0,0,0,0,0}
                 };
 
-                aMapArr[nPropertyId] = (SfxItemPropertyMap*)aTableRowPropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = (SfxItemPropertyMapEntry*)aTableRowPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE_CURSOR:
             {
                 // das PropertySet entspricht dem Range ohne Chart-Properties
-                static SfxItemPropertyMap aTableCursorPropertyMap_Impl [] =
+                static SfxItemPropertyMapEntry aTableCursorPropertyMap_Impl [] =
                 {
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01
                     TABSTOPS_MAP_ENTRY
@@ -1628,34 +1518,34 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_VERT_ORIENT), RES_VERT_ORIENT,      CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTableCursorPropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTableCursorPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_BOOKMARK:
             {
-                static SfxItemPropertyMap aBookmarkPropertyMap_Impl [] =
+                static SfxItemPropertyMapEntry aBookmarkPropertyMap_Impl [] =
                 {
                     { SW_PROP_NMID(UNO_LINK_DISPLAY_NAME), FN_PARAM_LINK_DISPLAY_NAME,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0xff},
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aBookmarkPropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aBookmarkPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_PARAGRAPH_EXTENSIONS:
             {
-                static SfxItemPropertyMap aParagraphExtensionsMap_Impl[] =
+                static SfxItemPropertyMapEntry aParagraphExtensionsMap_Impl[] =
                 {
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0,0}
                 };
 
-                aMapArr[nPropertyId] = aParagraphExtensionsMap_Impl;
+                aMapEntriesArr[nPropertyId] = aParagraphExtensionsMap_Impl;
             }
             break;
             case PROPERTY_MAP_BIBLIOGRAPHY :
             {
-                static SfxItemPropertyMap aBibliographyMap_Impl[] =
+                static SfxItemPropertyMapEntry aBibliographyMap_Impl[] =
                 {
                     _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NMID(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,     0},
@@ -1672,12 +1562,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},\
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aBibliographyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aBibliographyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_DOCUMENT:
             {
-                static SfxItemPropertyMap aDocMap_Impl[] =
+                static SfxItemPropertyMapEntry aDocMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_BASIC_LIBRARIES), WID_DOC_BASIC_LIBRARIES,  CPPU_E2T(CPPUTYPE_REFLIBCONTAINER), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_NAME), RES_CHRATR_FONT,       CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
@@ -1720,34 +1610,34 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     // <--
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocMap_Impl;
+                aMapEntriesArr[nPropertyId] = aDocMap_Impl;
             }
             break;
             case PROPERTY_MAP_LINK_TARGET:
             {
-                static SfxItemPropertyMap aLinkTargetMap_Impl[] =
+                static SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_LINK_DISPLAY_BITMAP), 0,     CPPU_E2T(CPPUTYPE_REFBITMAP), PropertyAttribute::READONLY, 0xff},
                     { SW_PROP_NMID(UNO_LINK_DISPLAY_NAME), 0,   CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0xff},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aLinkTargetMap_Impl;
+                aMapEntriesArr[nPropertyId] = aLinkTargetMap_Impl;
             }
             break;
             case PROPERTY_MAP_AUTO_TEXT_GROUP :
             {
-                static SfxItemPropertyMap aAutoTextGroupMap_Impl[] =
+                static SfxItemPropertyMapEntry aAutoTextGroupMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_FILE_PATH), WID_GROUP_PATH,     CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE,   PropertyAttribute::READONLY},
                     { SW_PROP_NMID(UNO_NAME_TITLE), WID_GROUP_TITLE, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE,   0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aAutoTextGroupMap_Impl;
+                aMapEntriesArr[nPropertyId] = aAutoTextGroupMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXTPORTION_EXTENSIONS:
             {
-                static SfxItemPropertyMap aTextPortionExtensionMap_Impl[] =
+                static SfxItemPropertyMapEntry aTextPortionExtensionMap_Impl[] =
                 {
                     COMPLETE_TEXT_CURSOR_MAP
                     {SW_PROP_NMID(UNO_NAME_BOOKMARK), FN_UNO_BOOKMARK, CPPU_E2T(CPPUTYPE_REFTEXTCNTNT),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
@@ -1758,24 +1648,24 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, CPPU_E2T(CPPUTYPE_OUSTRING),                        PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTextPortionExtensionMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTextPortionExtensionMap_Impl;
             }
             break;
             case PROPERTY_MAP_FOOTNOTE:
             {
-                static SfxItemPropertyMap aFootnoteMap_Impl[] =
+                static SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_REFERENCE_ID), 0, CPPU_E2T(CPPUTYPE_INT16),PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID, 0},
                     COMMON_TEXT_CONTENT_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aFootnoteMap_Impl;
+                aMapEntriesArr[nPropertyId] = aFootnoteMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_COLUMS :
             {
-                static SfxItemPropertyMap aTextColumns_Impl[] =
+                static SfxItemPropertyMapEntry aTextColumns_Impl[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_IS_AUTOMATIC), WID_TXTCOL_IS_AUTOMATIC, CPPU_E2T(CPPUTYPE_BOOLEAN),PropertyAttribute::READONLY, 0},
                     {SW_PROP_NMID(UNO_NAME_AUTOMATIC_DISTANCE), WID_TXTCOL_AUTO_DISTANCE, CPPU_E2T(CPPUTYPE_INT32),PROPERTY_NONE, 0},
@@ -1786,12 +1676,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_SEPARATOR_LINE_IS_ON), WID_TXTCOL_LINE_IS_ON, CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,  0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTextColumns_Impl;
+                aMapEntriesArr[nPropertyId] = aTextColumns_Impl;
             }
             break;
             case PROPERTY_MAP_REDLINE :
             {
-                static SfxItemPropertyMap aRedlineMap_Impl[] =
+                static SfxItemPropertyMapEntry aRedlineMap_Impl[] =
                 {
                     _REDLINE_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
@@ -1799,12 +1689,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_REDLINE_END), 0, CPPU_E2T(CPPUTYPE_REFINTERFACE),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aRedlineMap_Impl;
+                aMapEntriesArr[nPropertyId] = aRedlineMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_DEFAULT :
             {
-                static SfxItemPropertyMap aTextDefaultMap_Impl[] =
+                static SfxItemPropertyMapEntry aTextDefaultMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_TAB_STOP_DISTANCE), RES_PARATR_TABSTOP,     CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, MID_STD_TAB | CONVERT_TWIPS},
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
@@ -1820,8 +1710,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_GRID_STANDARD_PAGE_MODE), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_STANDARD_MODE},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTextDefaultMap_Impl;
-                for( SfxItemPropertyMap * pMap = aTextDefaultMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTextDefaultMap_Impl;
+                for( SfxItemPropertyMapEntry * pMap = aTextDefaultMap_Impl;
                         pMap->pName; ++pMap )
                 {
                     // UNO_NAME_PAGE_DESC_NAME should keep its MAYBEVOID flag
@@ -1832,7 +1722,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             break;
             case PROPERTY_MAP_REDLINE_PORTION :
             {
-                static SfxItemPropertyMap aRedlinePortionMap_Impl[] =
+                static SfxItemPropertyMapEntry aRedlinePortionMap_Impl[] =
                 {
                     COMPLETE_TEXT_CURSOR_MAP
                     {SW_PROP_NMID(UNO_NAME_BOOKMARK), FN_UNO_BOOKMARK, CPPU_E2T(CPPUTYPE_REFTEXTCNTNT),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
@@ -1843,12 +1733,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, CPPU_E2T(CPPUTYPE_OUSTRING),                        PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aRedlinePortionMap_Impl;
+                aMapEntriesArr[nPropertyId] = aRedlinePortionMap_Impl;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_DATETIME:
             {
-                static SfxItemPropertyMap aDateTimeFieldPropMap[] =
+                static SfxItemPropertyMapEntry aDateTimeFieldPropMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_ADJUST), FIELD_PROP_SUBTYPE,     CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
                     {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE), FIELD_PROP_DATE_TIME,  CPPU_E2T(CPPUTYPE_DATETIME), PROPERTY_NONE, 0},
@@ -1859,12 +1749,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDateTimeFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDateTimeFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_USER     :
             {
-                static SfxItemPropertyMap aUserFieldPropMap[] =
+                static SfxItemPropertyMapEntry aUserFieldPropMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL2,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
                     {SW_PROP_NMID(UNO_NAME_IS_VISIBLE),     FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
@@ -1874,12 +1764,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {0,0,0,0,0,0}
                 };
 
-                aMapArr[nPropertyId] = aUserFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aUserFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_SET_EXP  :
             {
-                static SfxItemPropertyMap aSetExpFieldPropMap       [] =
+                static SfxItemPropertyMapEntry aSetExpFieldPropMap     [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -1900,12 +1790,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aSetExpFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aSetExpFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_GET_EXP  :
             {
-                static SfxItemPropertyMap aGetExpFieldPropMap       [] =
+                static SfxItemPropertyMapEntry aGetExpFieldPropMap     [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -1918,12 +1808,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aGetExpFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aGetExpFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_FILE_NAME:
             {
-                static SfxItemPropertyMap aFileNameFieldPropMap [] =
+                static SfxItemPropertyMapEntry aFileNameFieldPropMap   [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
@@ -1931,12 +1821,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aFileNameFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aFileNameFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_PAGE_NUM :
             {
-                static SfxItemPropertyMap aPageNumFieldPropMap      [] =
+                static SfxItemPropertyMapEntry aPageNumFieldPropMap        [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     {SW_PROP_NMID(UNO_NAME_OFFSET),             FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),  PROPERTY_NONE,   0},
@@ -1945,12 +1835,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aPageNumFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aPageNumFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_AUTHOR   :
             {
-                static SfxItemPropertyMap aAuthorFieldPropMap       [] =
+                static SfxItemPropertyMapEntry aAuthorFieldPropMap     [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -1959,24 +1849,24 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aAuthorFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aAuthorFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_CHAPTER  :
             {
-                static SfxItemPropertyMap aChapterFieldPropMap      [] =
+                static SfxItemPropertyMapEntry aChapterFieldPropMap        [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CHAPTER_FORMAT),FIELD_PROP_USHORT1,  CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_LEVEL        ),FIELD_PROP_BYTE1,         CPPU_E2T(CPPUTYPE_INT8),    PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aChapterFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aChapterFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_GET_REFERENCE          :
             {
-                static SfxItemPropertyMap aGetRefFieldPropMap       [] =
+                static SfxItemPropertyMapEntry aGetRefFieldPropMap     [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_REFERENCE_FIELD_PART),FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),  PROPERTY_NONE,  0},
@@ -1986,12 +1876,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aGetRefFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aGetRefFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT      :
             {
-                static SfxItemPropertyMap aConditionedTxtFieldPropMap   [] =
+                static SfxItemPropertyMapEntry aConditionedTxtFieldPropMap [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_FALSE_CONTENT),  FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
@@ -2001,12 +1891,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aConditionedTxtFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aConditionedTxtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_TEXT :
             {
-                static SfxItemPropertyMap aHiddenTxtFieldPropMap    [] =
+                static SfxItemPropertyMapEntry aHiddenTxtFieldPropMap  [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CONTENT) ,       FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
@@ -2015,12 +1905,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aHiddenTxtFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aHiddenTxtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_ANNOTATION            :
             {
-                static SfxItemPropertyMap aAnnotationFieldPropMap   [] =
+                static SfxItemPropertyMapEntry aAnnotationFieldPropMap [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
@@ -2030,12 +1920,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aAnnotationFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aAnnotationFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_INPUT:
             {
-                static SfxItemPropertyMap aInputFieldPropMap        [] =
+                static SfxItemPropertyMapEntry aInputFieldPropMap      [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_HINT),       FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
@@ -2044,12 +1934,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aInputFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aInputFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_MACRO                 :
             {
-                static SfxItemPropertyMap aMacroFieldPropMap        [] =
+                static SfxItemPropertyMapEntry aMacroFieldPropMap      [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_HINT), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_MACRO_NAME),FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
@@ -2058,22 +1948,22 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aMacroFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aMacroFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DDE                   :
             {
-                static SfxItemPropertyMap aDDEFieldPropMap          [] =
+                static SfxItemPropertyMapEntry aDDEFieldPropMap            [] =
                 {
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDDEFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDDEFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DROPDOWN :
             {
-                static SfxItemPropertyMap aDropDownMap          [] =
+                static SfxItemPropertyMapEntry aDropDownMap            [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_ITEMS), FIELD_PROP_STRINGS, CPPU_E2T(CPPUTYPE_OUSTRINGS), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_SELITEM), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
@@ -2083,24 +1973,24 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDropDownMap;
+                aMapEntriesArr[nPropertyId] = aDropDownMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_PARA           :
             {
-                static SfxItemPropertyMap aHiddenParaFieldPropMap   [] =
+                static SfxItemPropertyMapEntry aHiddenParaFieldPropMap [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONDITION),FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_IS_HIDDEN) ,  FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aHiddenParaFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aHiddenParaFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOC_INFO              :
             {
-                static SfxItemPropertyMap aDocInfoFieldPropMap      [] =
+                static SfxItemPropertyMapEntry aDocInfoFieldPropMap        [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_INFO_FORMAT),    FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
@@ -2108,23 +1998,23 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocInfoFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDocInfoFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_TEMPLATE_NAME         :
             {
-                static SfxItemPropertyMap aTmplNameFieldPropMap [] =
+                static SfxItemPropertyMapEntry aTmplNameFieldPropMap   [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTmplNameFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aTmplNameFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_USER_EXT              :
             {
-                static SfxItemPropertyMap aUsrExtFieldPropMap       [] =
+                static SfxItemPropertyMapEntry aUsrExtFieldPropMap     [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -2133,36 +2023,36 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId]= aUsrExtFieldPropMap;
+                aMapEntriesArr[nPropertyId]= aUsrExtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_REF_PAGE_SET          :
             {
-                static SfxItemPropertyMap aRefPgSetFieldPropMap [] =
+                static SfxItemPropertyMapEntry aRefPgSetFieldPropMap   [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_OFFSET),     FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,  0},
                     {SW_PROP_NMID(UNO_NAME_ON),     FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aRefPgSetFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aRefPgSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_REF_PAGE_GET          :
             {
-                static SfxItemPropertyMap aRefPgGetFieldPropMap [] =
+                static SfxItemPropertyMapEntry aRefPgGetFieldPropMap   [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aRefPgGetFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aRefPgGetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_JUMP_EDIT             :
             {
-                static SfxItemPropertyMap aJumpEdtFieldPropMap      [] =
+                static SfxItemPropertyMapEntry aJumpEdtFieldPropMap        [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_HINT),               FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_PLACEHOLDER),        FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
@@ -2170,12 +2060,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aJumpEdtFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aJumpEdtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_SCRIPT                :
             {
-                static SfxItemPropertyMap aScriptFieldPropMap       [] =
+                static SfxItemPropertyMapEntry aScriptFieldPropMap     [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),        FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_SCRIPT_TYPE),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
@@ -2183,12 +2073,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aScriptFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aScriptFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET     :
             {
-                static SfxItemPropertyMap aDBNextSetFieldPropMap    [] =
+                static SfxItemPropertyMapEntry aDBNextSetFieldPropMap  [] =
                 {
                     // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
@@ -2202,12 +2092,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDBNextSetFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDBNextSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NUM_SET      :
             {
-                static SfxItemPropertyMap aDBNumSetFieldPropMap [] =
+                static SfxItemPropertyMapEntry aDBNumSetFieldPropMap   [] =
                 {
                     // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
@@ -2222,12 +2112,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDBNumSetFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDBNumSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_SET_NUM      :
             {
-                static SfxItemPropertyMap aDBSetNumFieldPropMap [] =
+                static SfxItemPropertyMapEntry aDBSetNumFieldPropMap   [] =
                 {
                     // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
@@ -2243,12 +2133,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDBSetNumFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDBSetNumFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE              :
             {
-                static SfxItemPropertyMap aDBFieldPropMap           [] =
+                static SfxItemPropertyMapEntry aDBFieldPropMap         [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -2259,12 +2149,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDBFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDBFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NAME         :
             {
-                static SfxItemPropertyMap aDBNameFieldPropMap       [] =
+                static SfxItemPropertyMapEntry aDBNameFieldPropMap     [] =
                 {
                     // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
@@ -2278,24 +2168,24 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDBNameFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDBNameFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCSTAT:
             {
-                static SfxItemPropertyMap aDocstatFieldPropMap      [] =
+                static SfxItemPropertyMapEntry aDocstatFieldPropMap        [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                 //  {UNO_NAME_STATISTIC_TYPE_ID,FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,  0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocstatFieldPropMap;
+                aMapEntriesArr[nPropertyId] = aDocstatFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR:
             {
-                static SfxItemPropertyMap aDocInfoAuthorPropMap         [] =
+                static SfxItemPropertyMapEntry aDocInfoAuthorPropMap           [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -2303,12 +2193,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocInfoAuthorPropMap;
+                aMapEntriesArr[nPropertyId] = aDocInfoAuthorPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME:
             {
-                static SfxItemPropertyMap aDocInfoDateTimePropMap           [] =
+                static SfxItemPropertyMapEntry aDocInfoDateTimePropMap         [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PropertyAttribute::READONLY, 0},
@@ -2318,12 +2208,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocInfoDateTimePropMap;
+                aMapEntriesArr[nPropertyId] = aDocInfoDateTimePropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME     :
             {
-                static SfxItemPropertyMap aDocInfoEditTimePropMap           [] =
+                static SfxItemPropertyMapEntry aDocInfoEditTimePropMap         [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PropertyAttribute::READONLY, 0},
@@ -2333,12 +2223,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocInfoEditTimePropMap;
+                aMapEntriesArr[nPropertyId] = aDocInfoEditTimePropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_MISC:
             {
-                static SfxItemPropertyMap aDocInfoStringContentPropMap          [] =
+                static SfxItemPropertyMapEntry aDocInfoStringContentPropMap            [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -2346,12 +2236,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocInfoStringContentPropMap;
+                aMapEntriesArr[nPropertyId] = aDocInfoStringContentPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM:
             {
-                static SfxItemPropertyMap aDocInfoCustomPropMap         [] =
+                static SfxItemPropertyMapEntry aDocInfoCustomPropMap           [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_NAME),   FIELD_PROP_PAR4,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -2359,12 +2249,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocInfoCustomPropMap;
+                aMapEntriesArr[nPropertyId] = aDocInfoCustomPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_REVISION          :
             {
-                static SfxItemPropertyMap aDocInfoRevisionPropMap   [] =
+                static SfxItemPropertyMapEntry aDocInfoRevisionPropMap [] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_REVISION),   FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
@@ -2372,23 +2262,23 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDocInfoRevisionPropMap;
+                aMapEntriesArr[nPropertyId] = aDocInfoRevisionPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS:
             {
-                static SfxItemPropertyMap aCombinedCharactersPropMap[] =
+                static SfxItemPropertyMapEntry aCombinedCharactersPropMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aCombinedCharactersPropMap;
+                aMapEntriesArr[nPropertyId] = aCombinedCharactersPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_TABLE_FORMULA:
             {
-                static SfxItemPropertyMap aTableFormulaPropMap[] =
+                static SfxItemPropertyMapEntry aTableFormulaPropMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CONTENT), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
@@ -2397,22 +2287,22 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTableFormulaPropMap;
+                aMapEntriesArr[nPropertyId] = aTableFormulaPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DUMMY_0:
             {
-                static SfxItemPropertyMap aEmptyPropMap         [] =
+                static SfxItemPropertyMapEntry aEmptyPropMap           [] =
                 {
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aEmptyPropMap;
+                aMapEntriesArr[nPropertyId] = aEmptyPropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_USER :
             {
-                static SfxItemPropertyMap aUserFieldTypePropMap[] =
+                static SfxItemPropertyMapEntry aUserFieldTypePropMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
                     {SW_PROP_NMID(UNO_NAME_IS_EXPRESSION),      FIELD_PROP_BOOL1,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
@@ -2422,12 +2312,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aUserFieldTypePropMap;
+                aMapEntriesArr[nPropertyId] = aUserFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DDE       :
             {
-                static SfxItemPropertyMap aDDEFieldTypePropMap[] =
+                static SfxItemPropertyMapEntry aDDEFieldTypePropMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_DDE_COMMAND_ELEMENT ), FIELD_PROP_PAR2,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DDE_COMMAND_FILE    ), FIELD_PROP_PAR4,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
@@ -2439,12 +2329,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR5,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDDEFieldTypePropMap;
+                aMapEntriesArr[nPropertyId] = aDDEFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_SET_EXP     :
             {
-                static SfxItemPropertyMap aSetExpFieldTypePropMap[] =
+                static SfxItemPropertyMapEntry aSetExpFieldTypePropMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_CHAPTER_NUMBERING_LEVEL),FIELD_PROP_SHORT1,  CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
@@ -2454,12 +2344,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aSetExpFieldTypePropMap;
+                aMapEntriesArr[nPropertyId] = aSetExpFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DATABASE    :
             {
-                static SfxItemPropertyMap aDBFieldTypePropMap           [] =
+                static SfxItemPropertyMapEntry aDBFieldTypePropMap         [] =
                 {
                     // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
@@ -2475,35 +2365,35 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aDBFieldTypePropMap;
+                aMapEntriesArr[nPropertyId] = aDBFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DUMMY0      :
             {
-                static SfxItemPropertyMap aStandardFieldMasterMap[] =
+                static SfxItemPropertyMapEntry aStandardFieldMasterMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
                     {SW_PROP_NMID(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aStandardFieldMasterMap;
+                aMapEntriesArr[nPropertyId] = aStandardFieldMasterMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY:
             {
-                static SfxItemPropertyMap aBibliographyFieldMap[] =
+                static SfxItemPropertyMapEntry aBibliographyFieldMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_FIELDS  )    , FIELD_PROP_PROP_SEQ, CPPU_E2T(CPPUTYPE_PROPERTYVALUE),PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aBibliographyFieldMap;
+                aMapEntriesArr[nPropertyId] = aBibliographyFieldMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY:
             {
-                static SfxItemPropertyMap aBibliographyFieldMasterMap[] =
+                static SfxItemPropertyMapEntry aBibliographyFieldMasterMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_BRACKET_BEFORE     ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),               PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_BRACKET_AFTER      ) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),               PROPERTY_NONE, 0},
@@ -2515,22 +2405,22 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR4,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aBibliographyFieldMasterMap;
+                aMapEntriesArr[nPropertyId] = aBibliographyFieldMasterMap;
             }
             break;
             case PROPERTY_MAP_TEXT :
             {
-                static SfxItemPropertyMap aTextMap[] =
+                static SfxItemPropertyMapEntry aTextMap[] =
                 {
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aTextMap;
+                aMapEntriesArr[nPropertyId] = aTextMap;
             }
             break;
             case PROPERTY_MAP_MAILMERGE :
             {
-                static SfxItemPropertyMap aMailMergeMap[] =
+                static SfxItemPropertyMapEntry aMailMergeMap[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_SELECTION),             WID_SELECTION,              CPPU_E2T(CPPUTYPE_SEQANY),      PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_RESULT_SET),            WID_RESULT_SET,             CPPU_E2T(CPPUTYPE_REFRESULTSET), PROPERTY_NONE, 0},
@@ -2565,12 +2455,12 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_OUT_SERVER_PASSWORD),    WID_OUT_SERVER_PASSWORD,    CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aMailMergeMap;
+                aMapEntriesArr[nPropertyId] = aMailMergeMap;
             }
             break;
             case PROPERTY_MAP_TEXT_VIEW :
             {
-                static SfxItemPropertyMap pTextViewMap[] =
+                static SfxItemPropertyMapEntry pTextViewMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_PAGE_COUNT),             WID_PAGE_COUNT,             CPPU_E2T(CPPUTYPE_INT32),   PropertyAttribute::READONLY, 0},
                     {SW_PROP_NMID(UNO_NAME_LINE_COUNT),             WID_LINE_COUNT,             CPPU_E2T(CPPUTYPE_INT32),   PropertyAttribute::READONLY, 0},
@@ -2578,27 +2468,631 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_IS_HIDE_SPELL_MARKS),    WID_IS_HIDE_SPELL_MARKS,    CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},  // deprecated #i91949
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = pTextViewMap;
+                aMapEntriesArr[nPropertyId] = pTextViewMap;
             }
             break;
             case PROPERTY_MAP_CHART2_DATA_SEQUENCE :
             {
-                static SfxItemPropertyMap aChart2DataSequenceMap[] =
+                static SfxItemPropertyMapEntry aChart2DataSequenceMap[] =
                 {
                     {SW_PROP_NMID(UNO_NAME_ROLE), 0, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0 },
                     {0,0,0,0,0,0}
                 };
-                aMapArr[nPropertyId] = aChart2DataSequenceMap;
+                aMapEntriesArr[nPropertyId] = aChart2DataSequenceMap;
             }
             break;
 
             default:
                 DBG_ERROR( "unexpected property map ID" );
         }
-        Sort(nPropertyId);
+        //fill the character pointers and types into the arrays
+        SfxItemPropertyMapEntry* p = aMapEntriesArr[nPropertyId];
+        sal_uInt16 i = 0;
+        for( ; p->pName; ++p, ++i )
+        {
+            // set the name
+            const SwPropNameLen& rPropNm = GetPropName( (USHORT)(long)p->pName );
+            p->pName = rPropNm.pName;
+            p->nNameLen = rPropNm.nNameLen;
+            // get the cppu type from the comphelper
+            CppuTypes nTyp = (CppuTypes) (long) p->pType;
+            GenerateCppuType( nTyp, p->pType );
+            DBG_ASSERT( nTyp != (CppuTypes) (long) p->pType, "unknown type" );
+        }
     }
-    return aMapArr[nPropertyId];
+    return aMapEntriesArr[nPropertyId];
 }
+/*-- 17.02.2009 15:29:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 nPropertyId)
+{
+    if( !aPropertySetArr[nPropertyId] )
+    {
+        const SfxItemPropertyMapEntry* pEntries = GetPropertyMapEntries(nPropertyId);
+        switch( nPropertyId )
+        {
+            case PROPERTY_MAP_TEXT_CURSOR:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_CURSOR(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_CURSOR;
+            }
+            break;
+            case PROPERTY_MAP_CHAR_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_CHAR_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHAR_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_PARA_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_PARA_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARA_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_FRAME_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FRAME_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FRAME_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_PAGE_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_PAGE_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PAGE_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_NUM_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_NUM_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_NUM_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_SECTION:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_SECTION(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_SECTION;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_TABLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_TABLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE;
+            }
+            break;
+            case PROPERTY_MAP_TABLE_CELL:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TABLE_CELL(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TABLE_CELL;
+            }
+            break;
+            case PROPERTY_MAP_TABLE_RANGE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TABLE_RANGE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TABLE_RANGE;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_SEARCH:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_SEARCH(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SEARCH;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_FRAME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_FRAME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_FRAME;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_GRAPHIC:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_GRAPHIC(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_GRAPHIC;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_SHAPE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_SHAPE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SHAPE;
+            }
+            break;
+            case PROPERTY_MAP_INDEX_USER:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_INDEX_USER(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_USER;
+            }
+            break;
+            case PROPERTY_MAP_INDEX_CNTNT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_INDEX_CNTNT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_CNTNT;
+            }
+            break;
+            case PROPERTY_MAP_INDEX_IDX:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_INDEX_IDX(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_IDX;
+            }
+            break;
+            case PROPERTY_MAP_USER_MARK:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_USER_MARK(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_USER_MARK;
+            }
+            break;
+            case PROPERTY_MAP_CNTIDX_MARK:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_CNTIDX_MARK(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CNTIDX_MARK;
+            }
+            break;
+            case PROPERTY_MAP_INDEX_MARK:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_INDEX_MARK(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_MARK;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_TABLE_ROW:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_TABLE_ROW(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE_ROW;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_SHAPE_DESCRIPTOR:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_SHAPE_DESCRIPTOR(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_SHAPE_DESCRIPTOR;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_TABLE_CURSOR:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_TABLE_CURSOR(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_TABLE_CURSOR;
+            }
+            break;
+            case PROPERTY_MAP_BOOKMARK:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_BOOKMARK(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_BOOKMARK;
+            }
+            break;
+            case PROPERTY_MAP_PARAGRAPH_EXTENSIONS:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_PARAGRAPH_EXTENSIONS(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARAGRAPH_EXTENSIONS;
+            }
+            break;
+            case PROPERTY_MAP_INDEX_ILLUSTRATIONS:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_INDEX_ILLUSTRATIONS(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_ILLUSTRATIONS;
+            }
+            break;
+            case PROPERTY_MAP_INDEX_OBJECTS:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_INDEX_OBJECTS(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_OBJECTS;
+            }
+            break;
+            case PROPERTY_MAP_INDEX_TABLES:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_INDEX_TABLES(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_INDEX_TABLES;
+            }
+            break;
+            case PROPERTY_MAP_BIBLIOGRAPHY           :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_BIBLIOGRAPHY(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_BIBLIOGRAPHY;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_DOCUMENT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_DOCUMENT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_DOCUMENT;
+            }
+            break;
+            case PROPERTY_MAP_LINK_TARGET            :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_LINK_TARGET(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_LINK_TARGET;
+            }
+            break;
+            case PROPERTY_MAP_AUTO_TEXT_GROUP        :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_AUTO_TEXT_GROUP(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_AUTO_TEXT_GROUP;
+            }
+            break;
+            case PROPERTY_MAP_TEXTPORTION_EXTENSIONS :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXTPORTION_EXTENSIONS(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXTPORTION_EXTENSIONS;
+            }
+            break;
+            case PROPERTY_MAP_FOOTNOTE               :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FOOTNOTE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FOOTNOTE;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_COLUMS            :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_COLUMS(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_COLUMS;
+            }
+            break;
+            case PROPERTY_MAP_PARAGRAPH              :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_PARAGRAPH(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARAGRAPH;
+            }
+            break;
+            case PROPERTY_MAP_EMBEDDED_OBJECT        :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_EMBEDDED_OBJECT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_EMBEDDED_OBJECT;
+            }
+            break;
+            case PROPERTY_MAP_REDLINE                :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_REDLINE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_REDLINE;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_DEFAULT           :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_DEFAULT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_DEFAULT;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DATETIME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATETIME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATETIME;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_USER:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_USER(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_USER;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_SET_EXP:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_SET_EXP(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_SET_EXP;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_GET_EXP:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_GET_EXP(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_GET_EXP;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_FILE_NAME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_FILE_NAME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_FILE_NAME;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_PAGE_NUM:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_PAGE_NUM(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_PAGE_NUM;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_AUTHOR:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_AUTHOR(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_AUTHOR;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_CHAPTER:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_CHAPTER(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_CHAPTER;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_GET_REFERENCE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_GET_REFERENCE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_GET_REFERENCE;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_CONDITIONED_TEXT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_CONDITIONED_TEXT;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_HIDDEN_TEXT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_HIDDEN_TEXT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_HIDDEN_TEXT;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_ANNOTATION :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_ANNOTATION(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_ANNOTATION;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_INPUT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_INPUT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_INPUT;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_MACRO:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_MACRO(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_MACRO;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DDE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DDE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DDE;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_HIDDEN_PARA:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_HIDDEN_PARA(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_HIDDEN_PARA;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOC_INFO :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOC_INFO(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOC_INFO;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_TEMPLATE_NAME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_TEMPLATE_NAME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_TEMPLATE_NAME;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_USER_EXT :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_USER_EXT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_USER_EXT;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_REF_PAGE_SET:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_REF_PAGE_SET(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_REF_PAGE_SET;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_REF_PAGE_GET:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_REF_PAGE_GET(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_REF_PAGE_GET;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_JUMP_EDIT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_JUMP_EDIT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_JUMP_EDIT;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_SCRIPT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_SCRIPT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_SCRIPT;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DATABASE_NUM_SET:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE_NUM_SET(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NUM_SET;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DATABASE_SET_NUM:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE_SET_NUM(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_SET_NUM;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DATABASE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DATABASE_NAME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DATABASE_NAME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DATABASE_NAME;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCSTAT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCSTAT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCSTAT;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_MISC :
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_MISC(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_MISC;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_REVISION:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_REVISION(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_REVISION;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DUMMY_0:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DUMMY_0(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DUMMY_0;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_TABLE_FORMULA:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_TABLE_FORMULA(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_TABLE_FORMULA;
+            }
+            break;
+            case PROPERTY_MAP_FLDMSTR_USER:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_USER(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_USER;
+            }
+            break;
+            case PROPERTY_MAP_FLDMSTR_DDE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_DDE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DDE;
+            }
+            break;
+            case PROPERTY_MAP_FLDMSTR_SET_EXP:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_SET_EXP(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_SET_EXP;
+            }
+            break;
+            case PROPERTY_MAP_FLDMSTR_DATABASE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_DATABASE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DATABASE;
+            }
+            break;
+            case PROPERTY_MAP_FLDMSTR_DUMMY0:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_DUMMY0(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_DUMMY0;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_BIBLIOGRAPHY(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_BIBLIOGRAPHY;
+            }
+            break;
+            case PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY;
+            }
+            break;
+            case PROPERTY_MAP_TEXT:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT;
+            }
+            break;
+            case PROPERTY_MAP_REDLINE_PORTION:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_REDLINE_PORTION(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_REDLINE_PORTION;
+            }
+            break;
+            case PROPERTY_MAP_MAILMERGE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_MAILMERGE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_MAILMERGE;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DROPDOWN:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DROPDOWN(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DROPDOWN;
+            }
+            break;
+            case PROPERTY_MAP_CHART2_DATA_SEQUENCE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_CHART2_DATA_SEQUENCE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHART2_DATA_SEQUENCE;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_VIEW:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_TEXT_VIEW(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TEXT_VIEW;
+            }
+            break;
+            case PROPERTY_MAP_CONDITIONAL_PARA_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_CONDITIONAL_PARA_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CONDITIONAL_PARA_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_CHAR_AUTO_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_CHAR_AUTO_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CHAR_AUTO_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_RUBY_AUTO_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_RUBY_AUTO_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_RUBY_AUTO_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_PARA_AUTO_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_PARA_AUTO_STYLE(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_PARA_AUTO_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM;
+            }
+            break;
+        }
+    }
+    return aPropertySetArr[nPropertyId];
+}
+
 /* -----------------04.07.98 11:42-------------------
  *
  * --------------------------------------------------*/
@@ -2612,3 +3106,4 @@ sal_Bool SwItemPropertySet::FillItem(SfxItemSet& /*rSet*/, sal_uInt16 /*nWhich*/
     }*/
     return bRet;
 }
+

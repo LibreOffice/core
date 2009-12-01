@@ -117,6 +117,7 @@ class SfxItemSet;
 class _ReadFieldParams;
 class wwZOrderer;
 class OutlinerParaObject;
+
 namespace com{namespace sun {namespace star{
     namespace beans{ class XPropertySet;}
     namespace form { class XFormComponent;}
@@ -382,24 +383,23 @@ class WW8NewFieldCtx
 private:
     SwNodeIndex maPtNode;
     xub_StrLen mnPtCntnt;
-    ::rtl::OUString sBookmarkName;
-    ::rtl::OUString sBookmarkType;
+    ::rtl::OUString msBookmarkName;
+    ::rtl::OUString msMarkType;
     typedef ::std::pair< ::rtl::OUString, ::rtl::OUString> Param_t;
     typedef ::std::vector< Param_t > Params_t;
     Params_t maParams;
   SwPaM * mpPaM;
 
 public:
-    WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sBookmarkType);
+    WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType);
     ~WW8NewFieldCtx();
 
     SwNodeIndex GetPtNode() { return maPtNode; };
     xub_StrLen GetPtCntnt() { return mnPtCntnt; };
     ::rtl::OUString GetBookmarkName();
-    ::rtl::OUString GetBookmarkType();
+    ::rtl::OUString GetMarkType();
     void AddParam(::rtl::OUString name, ::rtl::OUString value);
-    void SetCurrentFieldParamsTo(SwFieldBookmark &rFieldBookmark);
-
+    void SetCurrentFieldParamsTo(::sw::mark::IFieldmark* pFieldmark);
 };
 
 

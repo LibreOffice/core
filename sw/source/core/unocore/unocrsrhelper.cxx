@@ -103,7 +103,7 @@ namespace SwUnoCursorHelper
 /* -----------------16.09.98 12:27-------------------
  *  Lesen spezieller Properties am Cursor
  * --------------------------------------------------*/
-sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
+sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , Any *pAny
                                         , PropertyState& eState
@@ -113,7 +113,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
 //    PropertyState_DEFAULT_VALUE
 //    PropertyState_AMBIGUOUS_VALUE
     sal_Bool bDone = sal_True;
-    switch(pMap->nWID)
+    switch(rEntry.nWID)
     {
         // --> OD 2008-11-26 #158694#
         case FN_UNO_PARA_CONT_PREV_SUBTREE:
@@ -190,10 +190,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         {
             SwFmtColl* pFmt = 0;
             if(pNode)
-                pFmt = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == pMap->nWID
+                pFmt = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID
                             ? pNode->GetFmtColl() : &pNode->GetAnyFmtColl();
             else
-                pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FN_UNO_PARA_CONDITIONAL_STYLE_NAME == pMap->nWID);
+                pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID);
             if(pFmt)
             {
                 if( pAny )
@@ -241,21 +241,21 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             {
                 if( pAny )
                 {
-                    if(pMap->nWID == FN_UNO_NUM_LEVEL)
+                    if(rEntry.nWID == FN_UNO_NUM_LEVEL)
                         *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
-                    else if(pMap->nWID == FN_UNO_IS_NUMBER)
+                    else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                     {
                         BOOL bIsNumber = pTxtNd->IsCountedInList();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
                     // --> OD 2008-07-14 #i91601#
-                    else if ( pMap->nWID == FN_UNO_LIST_ID )
+                    else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
                         const String sListId = pTxtNd->GetListId();
                         *pAny <<= OUString(sListId);
                     }
                     // <--
-                    else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                    else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
                         BOOL bIsRestart = pTxtNd->IsListRestart();
                         pAny->setValue(&bIsRestart, ::getBooleanCppuType());
@@ -269,17 +269,17 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 if( pAny )
                 {
                     // #i30838# set default values for default properties
-                    if(pMap->nWID == FN_UNO_NUM_LEVEL)
+                    if(rEntry.nWID == FN_UNO_NUM_LEVEL)
                         *pAny <<= static_cast<sal_Int16>( 0 );
-                    else if(pMap->nWID == FN_UNO_IS_NUMBER)
+                    else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                         *pAny <<= false;
                     // --> OD 2008-07-14 #i91601#
-                    else if ( pMap->nWID == FN_UNO_LIST_ID )
+                    else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
                         *pAny <<= OUString();
                     }
                     // <--
-                    else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                    else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                         *pAny <<= false;
                 }
             }
@@ -385,7 +385,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                     const SwTableNode* pTblNode = pSttNode->FindTableNode();
                     SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
                     //SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
-                    if(FN_UNO_TEXT_TABLE == pMap->nWID)
+                    if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {
                         uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
                         pAny->setValue(&xTable, ::getCppuType((uno::Reference<XTextTable>*)0));
@@ -443,7 +443,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             if(pTxtAttr)
             {
                 const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
-                if(rFtn.IsEndNote() == (FN_UNO_ENDNOTE == pMap->nWID))
+                if(rFtn.IsEndNote() == (FN_UNO_ENDNOTE == rEntry.nWID))
                 {
                     if( pAny )
                     {
@@ -527,8 +527,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                     }
 
                 }
-                if(aCharStyles.getLength())
-                    eNewState = PropertyState_DIRECT_VALUE;
+                eNewState =
+                    aCharStyles.getLength() ?
+                        PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;;
                 if(pAny)
                     (*pAny) <<= aCharStyles;
             }
@@ -726,10 +727,10 @@ void GetCurPageStyle(SwPaM& rPaM, String &rString)
 /* -----------------30.03.99 10:52-------------------
  * spezielle Properties am Cursor zuruecksetzen
  * --------------------------------------------------*/
-void resetCrsrPropertyValue(const SfxItemPropertyMap* pMap, SwPaM& rPam)
+void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)
 {
     SwDoc* pDoc = rPam.GetDoc();
-    switch(pMap->nWID)
+    switch(rEntry.nWID)
     {
         case FN_UNO_PARA_STYLE :
 //          lcl_SetTxtFmtColl(aValue, pUnoCrsr);
@@ -1024,6 +1025,48 @@ void makeRedline( SwPaM& rPaM,
     pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_NONE);
     if( !bRet )
         throw lang::IllegalArgumentException();
+}
+
+/*-- 19.02.2009 09:27:26---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwAnyMapHelper::~SwAnyMapHelper()
+{
+    AnyMapHelper_t::iterator aIt = begin();
+    while( aIt != end() )
+    {
+        delete ( aIt->second );
+        ++aIt;
+    }
+}
+/*-- 19.02.2009 09:27:26---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAnyMapHelper::SetValue( USHORT nWhichId, USHORT nMemberId, const uno::Any& rAny )
+{
+    sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
+    AnyMapHelper_t::iterator aIt = find( nKey );
+    if( aIt != end() )
+    {
+        *(aIt->second) = rAny;
+    }
+    else
+        insert( value_type(nKey, new uno::Any( rAny )) );
+}
+/*-- 19.02.2009 09:27:26---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool    SwAnyMapHelper::FillValue( USHORT nWhichId, USHORT nMemberId, const uno::Any*& pAny )
+{
+    bool bRet = false;
+    sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
+    AnyMapHelper_t::iterator aIt = find( nKey );
+    if( aIt != end() )
+    {
+        pAny = aIt->second;
+        bRet = true;
+    }
+    return bRet;
 }
 
 }//namespace SwUnoCursorHelper

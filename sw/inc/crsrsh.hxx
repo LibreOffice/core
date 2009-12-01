@@ -44,7 +44,7 @@
 #include <viscrs.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>
-#include <IDocumentBookmarkAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 
 
 // einige Forward Deklarationen
@@ -52,8 +52,6 @@
 class KeyCode;
 class SfxItemSet;
 class SfxPoolItem;
-class SwBookmark;
-class SwFieldBookmark;
 class SwCntntFrm;
 class SwCrsrShell;
 class SwCursor;
@@ -583,28 +581,22 @@ public:
     // gehe zur vorherigen Selection
     BOOL GoPrevCrsr();
 
-    // am CurCrsr.SPoint
-    BOOL SetBookmark( const KeyCode&, const String& rName,
-                const String& rShortName, IDocumentBookmarkAccess::BookmarkType eMark = IDocumentBookmarkAccess::BOOKMARK);
-    BOOL GotoBookmark( USHORT );    // setzt CurCrsr.SPoint
-    BOOL GotoBookmark( USHORT nPos, BOOL bAtStart ); //
-    BOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
-    BOOL GoPrevBookmark();
-    USHORT GetBookmarkCnt(BOOL bBkmrk = FALSE) const;
-    SwBookmark& GetBookmark( USHORT, BOOL bBkmrk = FALSE );
-    void DelBookmark( USHORT );
-    void DelBookmark( const String& rName );
-    USHORT FindBookmark( const String& rName );
-        // erzeugt einen eindeutigen Namen. Der Name selbst muss vorgegeben
-        // werden, es wird dann bei gleichen Namen nur durchnumeriert.
-    void MakeUniqueBookmarkName( String& rNm );
+    // at CurCrsr.SPoint
+    ::sw::mark::IMark* SetBookmark(
+        const KeyCode&,
+        const ::rtl::OUString& rName,
+        const ::rtl::OUString& rShortName,
+        IDocumentMarkAccess::MarkType eMark = IDocumentMarkAccess::BOOKMARK);
+    bool GotoMark( const ::sw::mark::IMark* const pMark );    // sets CurCrsr.SPoint
+    bool GotoMark( const ::sw::mark::IMark* const pMark, bool bAtStart );
+    bool GoNextBookmark(); // true, if there was one
+    bool GoPrevBookmark();
 
-        bool IsFormProtected();
-        SwBookmark* IsInFieldBookmark();
-        SwFieldBookmark* IsInFormFieldBookmark();
-        SwBookmark* GetNextFieldBookmark();
-        SwBookmark* GetPrevFieldBookmark();
-        bool GotoFieldBookmark(SwBookmark *pBkmk);
+    bool IsFormProtected();
+    ::sw::mark::IFieldmark* GetCurrentFieldmark();
+    ::sw::mark::IFieldmark* GetFieldmarkAfter();
+    ::sw::mark::IFieldmark* GetFieldmarkBefore();
+    bool GotoFieldmark( const ::sw::mark::IFieldmark* const pMark );
 
     // aktualisiere den Crsrs, d.H. setze ihn wieder in den Content.
     // Das sollte nur aufgerufen werden, wenn der Cursor z.B. beim

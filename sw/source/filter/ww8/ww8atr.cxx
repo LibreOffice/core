@@ -2520,12 +2520,12 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             /*
             Is there a bookmark at the start position of this field, if so
             move it to the 0x14 of the result of the field.  This is what word
-            does. MoveFieldBookmarks moves any bookmarks at this position to
+            does. MoveFieldMarks moves any bookmarks at this position to
             the beginning of the field result, and marks the bookmark as a
             fieldbookmark which is to be ended before the field end mark
             instead of after it like a normal bookmark.
             */
-            rWW8Wrt.MoveFieldBookmarks(nFrom,rWW8Wrt.Fc2Cp(rWrt.Strm().Tell()));
+            rWW8Wrt.MoveFieldMarks(nFrom,rWW8Wrt.Fc2Cp(rWrt.Strm().Tell()));
 
             if (rVar.Len())
             {

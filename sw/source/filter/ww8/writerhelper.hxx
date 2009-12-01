@@ -974,31 +974,6 @@ namespace sw
             DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc);
         };
 
-        /** Get the Outliner Object from a SdrTextObj that contains the visible
-            text
-
-            A SdrTextObj contains an object which describes its text, but
-            frustratingly if the object is being actively edited this new text
-            outliner object is stored seperately from the previous preedit
-            outliner. So objects being edited have to be handled differently
-            from those that are not to return the currently being edited
-            outliner if its exists, and the normal outliner if not. This method
-            just gives me the text outliner that contains the visible text,
-            which is all anyone could really care about.
-
-            See OpenOffice.org issue 13885
-            (http://www.openoffice.org/issues/show_bug.cgi?id=13885)
-
-            @param SdrTextObj
-            The SdrTextObj from which we want to get the text content.
-
-            @return the OutlinerParaObject that describes the user visible text
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        const OutlinerParaObject* GetOutlinerParaObject(const SdrTextObj &rObj);
-
 #ifdef DEBUGDUMP
         /** Create a SvStream to dump data to during debugging
 

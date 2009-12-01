@@ -54,7 +54,6 @@
 #include <svx/frmdiritem.hxx>
 #include "paratr.hxx"
 
-
 #include <fmtinfmt.hxx>
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -564,7 +563,8 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(), aSet,DLG_SWDROPCAPS );
+                SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
+                    rSh.GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), DLG_SWDROPCAPS );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if (pDlg->Execute() == RET_OK)
                 {

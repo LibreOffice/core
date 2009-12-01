@@ -156,7 +156,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG );
+                        SfxAbstractDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
                         pDlg->Execute();
                         delete pDlg;

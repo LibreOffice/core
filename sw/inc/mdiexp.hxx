@@ -32,6 +32,7 @@
 
 #include <tools/solar.h>
 #include <tblenum.hxx>
+#include <layout/layout.hxx>
 #include <swdllapi.h>
 
 class UniString;
@@ -63,7 +64,7 @@ void RescheduleProgress( SwDocShell *pDocShell );
 
 void EnableCmdInterface(BOOL bEnable = TRUE);
 
-Dialog* GetSearchDialog();
+LAYOUT_NS Dialog* GetSearchDialog();
 
 void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect );
 

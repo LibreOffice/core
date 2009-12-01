@@ -30,7 +30,7 @@
 #ifndef _MACASSGN_HXX
 #define _MACASSGN_HXX
 
-#include <sfx2/macropg.hxx>
+#include <sfx2/evntconf.hxx>
 
 class SwWrtShell;
 class SvxMacroItem;
@@ -45,24 +45,13 @@ enum DlgEventType
     MACASSGN_ALLFRM
 };
 
-class SwMacroAssignDlg : public SfxMacroAssignDlg
+class SwMacroAssignDlg
 {
 public:
-    SwMacroAssignDlg(
-        Window* pParent,
-        SfxItemSet& rSet,
-        const SwWrtShell& rSh,
-        DlgEventType eType
-    );
-    virtual ~SwMacroAssignDlg();
-
-    static void AddEvents( SfxMacroTabPage& rPg, DlgEventType eType );
+    static SfxEventNamesItem AddEvents( DlgEventType eType );
     static BOOL INetFmtDlg( Window* pParent, SwWrtShell& rSh,
                             SvxMacroItem*& rpINetItem );
 };
-
-
-
 
 #endif
 

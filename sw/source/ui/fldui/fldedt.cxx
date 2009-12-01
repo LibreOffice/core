@@ -409,7 +409,9 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aSet, RC_DLG_ADDR );
+    SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aSet,
+        pSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface(),
+        RC_DLG_ADDR );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
     if(RET_OK == pDlg->Execute())
     {

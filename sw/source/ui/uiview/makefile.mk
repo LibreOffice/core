@@ -54,7 +54,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/uivwimp.obj \
         $(SLO)$/view.obj \
         $(SLO)$/view2.obj \
-        $(SLO)$/viewling.obj
+        $(SLO)$/viewling.obj \
+        $(SLO)$/viewmdi.obj \
 
 SLOFILES =  \
         $(SLO)$/view0.obj \

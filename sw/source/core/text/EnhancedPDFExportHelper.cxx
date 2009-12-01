@@ -86,7 +86,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <itrpaint.hxx>
 #include "i18npool/mslangid.hxx"
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <SwNodeNum.hxx>
 
 #include <stack>
@@ -2053,21 +2053,22 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
         {
-        //---> i56629 the iteration to convert the OOo bookmark (#bookmark)
-        // into PDF named destination, see section 8.2.1 in PDF 1.4 spec
-        // We need:
-        // 1. a name for the destination, formed from the standard OOo bookmark name
-        // 2. the destination, obtained from where the bookmark destination lies
-            const SwBookmarks& rBkmks = mrSh.GetDoc()->getBookmarks();
-            //iterate trhrough bookmarks
-            sal_uInt16 nBkmks = rBkmks.Count(), nCnt;
-            for(nCnt = 0; nCnt < nBkmks; nCnt++)
+            //---> i56629 the iteration to convert the OOo bookmark (#bookmark)
+            // into PDF named destination, see section 8.2.1 in PDF 1.4 spec
+            // We need:
+            // 1. a name for the destination, formed from the standard OOo bookmark name
+            // 2. the destination, obtained from where the bookmark destination lies
+            IDocumentMarkAccess* const pMarkAccess = mrSh.GetDoc()->getIDocumentMarkAccess();
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+                ppMark != pMarkAccess->getBookmarksEnd();
+                ppMark++)
             {
-//get the name
-                SwBookmark* pBkmk = rBkmks[ nCnt ];
+                //get the name
+                const ::sw::mark::IMark* pBkmk = ppMark->get();
                 mrSh.SwCrsrShell::ClearMark();
                 rtl::OUString sBkName = pBkmk->GetName();
-//jump to it
+
+                //jump to it
                 JumpToSwMark( &mrSh, sBkName );
 
                 // Destination Rectangle
@@ -2081,8 +2082,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     pPDFExtOutDevData->CreateNamedDest( sBkName, rDestRect.SVRect(), nDestPageNum );
             }
             mrSh.SwCrsrShell::ClearMark();
+            //<--- i56629
         }
-//<--- i56629
     }
     else
     {

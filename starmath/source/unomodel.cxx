@@ -78,7 +78,6 @@ using namespace ::com::sun::star::script;
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 
 ////////////////////////////////////////
 //
@@ -359,8 +358,8 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return (
-            rServiceName == C2U("com.sun.star.document.OfficeDocument"  ) ||
-            rServiceName == C2U("com.sun.star.formula.FormulaProperties")
+            rServiceName == A2OU("com.sun.star.document.OfficeDocument"  ) ||
+            rServiceName == A2OU("com.sun.star.formula.FormulaProperties")
            );
 }
 /*-- 20.01.04 11:21:00---------------------------------------------------
@@ -377,8 +376,8 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.document.OfficeDocument");
-    pArray[1] = C2U("com.sun.star.formula.FormulaProperties");
+    pArray[0] = A2OU("com.sun.star.document.OfficeDocument");
+    pArray[1] = A2OU("com.sun.star.formula.FormulaProperties");
     return aRet;
 }
 

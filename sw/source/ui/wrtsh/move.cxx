@@ -670,10 +670,10 @@ BOOL SwWrtShell::GotoPage(USHORT nPage, BOOL bRecord)
 
 
 
-BOOL SwWrtShell::GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart )
+BOOL SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, BOOL bSelect, BOOL bStart )
 {
     ShellMoveCrsr aTmp( this, bSelect );
-    return SwCrsrShell::GotoBookmark( nPos, bStart );
+    return SwCrsrShell::GotoMark( pMark, bStart );
 }
 
 

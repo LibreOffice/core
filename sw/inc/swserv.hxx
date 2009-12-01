@@ -31,8 +31,8 @@
 #define _SWSERV_HXX
 
 #include <sfx2/linksrc.hxx>
+#include <IMark.hxx>
 
-class SwBookmark;
 class SwSectionNode;
 class SwBaseLink;
 class SwTableNode;
@@ -46,7 +46,7 @@ class SwServerObject : public ::sfx2::SvLinkSource
 protected:
     enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } eType;
     union {
-        SwBookmark* pBkmk;
+        ::sw::mark::IMark* pBkmk;
         SwTableNode* pTblNd;
         SwSectionNode* pSectNd;
     } CNTNT_TYPE;
@@ -54,7 +54,7 @@ protected:
     SwServerObject();
 
 public:
-    SwServerObject( SwBookmark& rBookmark )
+    SwServerObject( ::sw::mark::IMark& rBookmark )
         : eType( BOOKMARK_SERVER )
     {
         CNTNT_TYPE.pBkmk = &rBookmark;
@@ -72,8 +72,8 @@ public:
     virtual ~SwServerObject();
 
     virtual BOOL GetData( ::com::sun::star::uno::Any & rData,
-                             const String & rMimeType,
-                             BOOL bSynchron = FALSE );
+                            const String & rMimeType,
+                            BOOL bSynchron = FALSE );
 
     BOOL SetData( const String & rMimeType,
                     const ::com::sun::star::uno::Any& rData );
@@ -83,7 +83,8 @@ public:
 
     BOOL IsLinkInServer( const SwBaseLink* ) const;
 
-    void SetNoServer() {  CNTNT_TYPE.pBkmk = 0, eType = NONE_SERVER; }
+    void SetNoServer();
+    void SetDdeBookmark( ::sw::mark::IMark& rBookmark);
 };
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED

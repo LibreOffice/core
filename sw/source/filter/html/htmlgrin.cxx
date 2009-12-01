@@ -75,34 +75,35 @@
 #include <ndtxt.hxx>
 #include <shellio.hxx>
 #include <poolfmt.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <ndgrf.hxx>
 #include <htmlnum.hxx>
 #include <swcss1.hxx>
 #include <swhtml.hxx>
 #include <numrule.hxx>
+#include <boost/shared_ptr.hpp>
 
 using namespace ::com::sun::star;
 
 
 HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
 {
-    { sHTML_AL_left,    text::HoriOrientation::LEFT       },
-    { sHTML_AL_right,   text::HoriOrientation::RIGHT      },
+    { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
+    { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
     { 0,                0               }
 };
 
 
 HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[] =
 {
-    { sHTML_VA_top,         text::VertOrientation::LINE_TOP       },
-    { sHTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },
-    { sHTML_VA_middle,      text::VertOrientation::CENTER         },
-    { sHTML_AL_center,      text::VertOrientation::CENTER         },
-    { sHTML_VA_absmiddle,   text::VertOrientation::LINE_CENTER    },
-    { sHTML_VA_bottom,      text::VertOrientation::TOP            },
-    { sHTML_VA_baseline,    text::VertOrientation::TOP            },
-    { sHTML_VA_absbottom,   text::VertOrientation::LINE_BOTTOM    },
+    { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::LINE_TOP       },
+    { OOO_STRING_SVTOOLS_HTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },
+    { OOO_STRING_SVTOOLS_HTML_VA_middle,      text::VertOrientation::CENTER         },
+    { OOO_STRING_SVTOOLS_HTML_AL_center,      text::VertOrientation::CENTER         },
+    { OOO_STRING_SVTOOLS_HTML_VA_absmiddle,   text::VertOrientation::LINE_CENTER    },
+    { OOO_STRING_SVTOOLS_HTML_VA_bottom,      text::VertOrientation::TOP            },
+    { OOO_STRING_SVTOOLS_HTML_VA_baseline,    text::VertOrientation::TOP            },
+    { OOO_STRING_SVTOOLS_HTML_VA_absbottom,   text::VertOrientation::LINE_BOTTOM    },
     { 0,                    0                   }
 };
 
@@ -1186,12 +1187,12 @@ ANCHOR_SETEVENT:
         ('s' == aStrippedClass.GetChar(0) || 'S' == aStrippedClass.GetChar(0)) &&
         ('d' == aStrippedClass.GetChar(1) || 'D' == aStrippedClass.GetChar(1)) )
     {
-        if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdendnote_anc ) )
+        if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc ) )
             bEnAnchor = TRUE;
-        else if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdfootnote_anc ) )
+        else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc ) )
             bFtnAnchor = TRUE;
-        else if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdendnote_sym ) ||
-                 aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdfootnote_sym ) )
+        else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym ) ||
+                 aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym ) )
             bFtnEnSymbol = TRUE;
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {
@@ -1285,9 +1286,9 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
     BOOL bHasMarks = FALSE;
     ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
-    // 1. Schritt: befinden sich noch Bookmarks m Attribut-Stack?
-    // Bookmarks werden hinten in den Stack geschrieben. Wir muessen
-    // also nur die letzte Bookmark betrachten
+    // first step: are there still bookmark in the attribute-stack?
+    // bookmarks are added to the end of the stack - thus we only have
+    // to check the last bookmark
     if( !bIgnoreStack )
     {
         _HTMLAttr* pAttr;
@@ -1305,13 +1306,15 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
 
     if( !bHasMarks )
     {
-        // 2. Schritt: Wenn wir keine Bookmark gefunden haben, schauen wir,
-        // ob schon eine gesetzt ist
-        const SwBookmarks& rBookmarks = pDoc->getBookmarks();
-        for( USHORT i=0; i<rBookmarks.Count(); i++ )
+        // second step: when we didnt find a bookmark, check if there is one
+        // set already
+        IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+        for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+            ppMark != pMarkAccess->getMarksEnd();
+            ppMark++)
         {
-            const SwBookmark* pBookmark = rBookmarks[i];
-            ULONG nBookNdIdx = pBookmark->GetBookmarkPos().nNode.GetIndex();
+            const ::sw::mark::IMark* pBookmark = ppMark->get();
+            ULONG nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
             if( nBookNdIdx==nNodeIdx )
             {
                 bHasMarks = TRUE;
@@ -1377,33 +1380,30 @@ void SwHTMLParser::StripTrailingPara()
 
             // jetz muessen wir noch eventuell vorhandene Bookmarks
             // verschieben
-            const SwBookmarks& rBookmarks = pDoc->getBookmarks();
-            for( i=0; i<rBookmarks.Count(); i++ )
+            IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+                ppMark != pMarkAccess->getMarksEnd();
+                ppMark++)
             {
-                SwBookmark* pBookmark = rBookmarks[i];
-                ULONG nBookNdIdx = pBookmark->GetBookmarkPos().nNode.GetIndex();
-                if( nBookNdIdx==nNodeIdx )
+                ::sw::mark::IMark* pMark = ppMark->get();
+                ULONG nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
+                if(nBookNdIdx==nNodeIdx)
                 {
-                    // --> OD 2007-09-27 #i81002# - refactoring
-                    // Do not directly manipulate member of <SwBookmark>
-//                    SwPosition &rBookmkPos =
-//                        (SwPosition&)pBookmark->GetBookmarkPos();
-                    // <--
-
-                    SwNodeIndex nNewNdIdx( pPam->GetPoint()->nNode );
-                    SwCntntNode* pNd = pDoc->GetNodes().GoPrevious( &nNewNdIdx );
-                    if( !pNd )
+                    SwNodeIndex nNewNdIdx(pPam->GetPoint()->nNode);
+                    SwCntntNode* pNd = pDoc->GetNodes().GoPrevious(&nNewNdIdx);
+                    if(!pNd)
                     {
-                        ASSERT( !this, "Hoppla, wo ist mein Vorgaenger-Node" );
+                        ASSERT(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
-
                     // --> OD 2007-09-27 #i81002# - refactoring
                     // Do not directly manipulate member of <SwBookmark>
-                    SwPosition aNewPos ( pBookmark->GetBookmarkPos() );
-                    aNewPos.nNode = nNewNdIdx;
-                    aNewPos.nContent.Assign( pNd, pNd->Len() );
-                    pBookmark->SetBookmarkPos( &aNewPos );
+                    {
+                        SwPosition aNewPos(*pNd);
+                        aNewPos.nContent.Assign(pNd, pNd->Len());
+                        const SwPaM aPaM(aNewPos);
+                        pMarkAccess->repositionMark(ppMark->get(), aPaM);
+                    }
                     // <--
                 }
                 else if( nBookNdIdx > nNodeIdx )

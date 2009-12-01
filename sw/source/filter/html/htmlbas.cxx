@@ -65,10 +65,10 @@ using namespace ::com::sun::star::container;
 
 static HTMLOutEvent __FAR_DATA aBodyEventTable[] =
 {
-    { sHTML_O_SDonload,     sHTML_O_onload,     SFX_EVENT_OPENDOC   },
-    { sHTML_O_SDonunload,   sHTML_O_onunload,   SFX_EVENT_PREPARECLOSEDOC   },
-    { sHTML_O_SDonfocus,    sHTML_O_onfocus,    SFX_EVENT_ACTIVATEDOC   },
-    { sHTML_O_SDonblur,     sHTML_O_onblur,     SFX_EVENT_DEACTIVATEDOC },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonload,       OOO_STRING_SVTOOLS_HTML_O_onload,       SFX_EVENT_OPENDOC   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonunload, OOO_STRING_SVTOOLS_HTML_O_onunload, SFX_EVENT_PREPARECLOSEDOC   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,  OOO_STRING_SVTOOLS_HTML_O_onfocus,  SFX_EVENT_ACTIVATEDOC   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,       OOO_STRING_SVTOOLS_HTML_O_onblur,       SFX_EVENT_DEACTIVATEDOC },
     { 0,                    0,                  0                   }
 };
 
@@ -208,22 +208,22 @@ void SwHTMLParser::AddScriptSource()
         xub_StrLen nPos = STRING_NOTFOUND;
         if( !aBasicLib.Len() )
         {
-            nPos = aToken.SearchAscii( sHTML_SB_library );
+            nPos = aToken.SearchAscii( OOO_STRING_SVTOOLS_HTML_SB_library );
             if( nPos != STRING_NOTFOUND )
             {
                 aBasicLib =
-                    aToken.Copy( nPos + sizeof(sHTML_SB_library) - 1 );
+                    aToken.Copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_library) - 1 );
                 aBasicLib.EraseLeadingChars().EraseTrailingChars();
             }
         }
 
         if( !aBasicModule.Len() && nPos==STRING_NOTFOUND )
         {
-            nPos = aToken.SearchAscii( sHTML_SB_module );
+            nPos = aToken.SearchAscii( OOO_STRING_SVTOOLS_HTML_SB_module );
             if( nPos != STRING_NOTFOUND )
             {
                 aBasicModule =
-                    aToken.Copy( nPos + sizeof(sHTML_SB_module) - 1 );
+                    aToken.Copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_module) - 1 );
                 aBasicModule.EraseLeadingChars().EraseTrailingChars();
             }
         }
@@ -312,13 +312,13 @@ void SwHTMLWriter::OutBasic()
             {
                 OutNewLine();
                 ByteString sOut( '<' );
-                sOut.Append( sHTML_meta );
+                sOut.Append( OOO_STRING_SVTOOLS_HTML_meta );
                 sOut.Append( ' ' );
-                sOut.Append( sHTML_O_httpequiv );
+                sOut.Append( OOO_STRING_SVTOOLS_HTML_O_httpequiv );
                   sOut.Append( "=\"" );
-                sOut.Append( sHTML_META_content_script_type );
+                sOut.Append( OOO_STRING_SVTOOLS_HTML_META_content_script_type );
                 sOut.Append( "\" " );
-                sOut.Append( sHTML_O_content );
+                sOut.Append( OOO_STRING_SVTOOLS_HTML_O_content );
                 sOut.Append( "=\"text/x-" );
                 Strm() << sOut.GetBuffer();
                 // Entities aren't welcome here

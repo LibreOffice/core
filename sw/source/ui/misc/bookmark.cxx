@@ -46,7 +46,7 @@
 #include "wrtsh.hxx"        //
 #include "cmdid.h"
 #include "bookmark.hxx"     // SwInsertBookmarkDlg
-#include "bookmrk.hxx"      //  SwBookmark
+#include "IMark.hxx"
 #include "bookmark.hrc"
 #include "misc.hrc"
 
@@ -121,7 +121,8 @@ void SwInsertBookmarkDlg::Apply()
     for (USHORT nCount = aBookmarkBox.GetRemovedCount(); nCount > 0; nCount--)
     {
         String sRemoved = aBookmarkBox.GetRemovedEntry( nCount -1 ).GetName();
-        rSh.DelBookmark( sRemoved );
+        IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+        pMarkAccess->deleteMark( pMarkAccess->findMark(sRemoved) );
         SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
         aReq.AppendItem( SfxStringItem( FN_DELETE_BOOKMARK, sRemoved ) );
         aReq.Done();
@@ -170,17 +171,17 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
     aDeleteBtn.SetClickHdl(LINK(this, SwInsertBookmarkDlg, DeleteHdl));
 
     // Combobox mit vorhandenen Bookmarks fuellen
-    USHORT nCount = rSh.GetBookmarkCnt(TRUE);
-
-    for( USHORT nId = 0; nId < nCount; nId++ )
+    IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+    USHORT nId = 0;
+    for( IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+        ppBookmark != pMarkAccess->getBookmarksEnd();
+        ppBookmark++)
     {
-        SwBookmark& rBkmk = rSh.GetBookmark( nId, TRUE );
-        aBookmarkBox.InsertEntry( SwBoxEntry( rBkmk.GetName(), nId ) );
+        if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
+            aBookmarkBox.InsertEntry( SwBoxEntry( ppBookmark->get()->GetName(), nId++ ) );
     }
-
     FreeResource();
     sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
-
 }
 
 /*------------------------------------------------------------------------

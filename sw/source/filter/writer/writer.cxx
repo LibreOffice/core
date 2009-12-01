@@ -46,10 +46,10 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <bookmrk.hxx>          // fuer SwBookmark ...
+#include <IMark.hxx>
 #include <numrule.hxx>
 #include <swerror.h>
-
+#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 
@@ -70,7 +70,7 @@ struct Writer_Impl
     ~Writer_Impl();
 
     void RemoveFontList( SwDoc& rDoc );
-    void InsertBkmk( const SwBookmark& rBkmk );
+    void InsertBkmk( const ::sw::mark::IMark& rBkmk );
 };
 
 Writer_Impl::Writer_Impl( const SwDoc& /*rDoc*/ )
@@ -102,12 +102,12 @@ void Writer_Impl::RemoveFontList( SwDoc& rDoc )
     }
 }
 
-void Writer_Impl::InsertBkmk( const SwBookmark& rBkmk )
+void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 {
     if( !pBkmkNodePos )
         pBkmkNodePos = new SwBookmarkNodeTable;
 
-    ULONG nNd = rBkmk.GetBookmarkPos().nNode.GetIndex();
+    ULONG nNd = rBkmk.GetMarkPos().nNode.GetIndex();
     SvPtrarr* pArr = pBkmkNodePos->Get( nNd );
     if( !pArr )
     {
@@ -118,9 +118,9 @@ void Writer_Impl::InsertBkmk( const SwBookmark& rBkmk )
     void* p = (void*)&rBkmk;
     pArr->Insert( p, pArr->Count() );
 
-    if( rBkmk.GetOtherBookmarkPos() && rBkmk.GetOtherBookmarkPos()->nNode != nNd )
+    if(rBkmk.IsExpanded() && rBkmk.GetOtherMarkPos().nNode != nNd)
     {
-        nNd = rBkmk.GetOtherBookmarkPos()->nNode.GetIndex();
+        nNd = rBkmk.GetOtherMarkPos().nNode.GetIndex();
         pArr = pBkmkNodePos->Get( nNd );
         if( !pArr )
         {
@@ -208,26 +208,17 @@ BOOL Writer::CopyNextPam( SwPaM ** ppPam )
 
 // suche die naechste Bookmark-Position aus der Bookmark-Tabelle
 
-USHORT Writer::FindPos_Bkmk( const SwPosition& rPos ) const
+sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 {
-    USHORT nRet = USHRT_MAX;
-    const SwBookmarks& rBkmks = pDoc->getBookmarks();
-
-    if( rBkmks.Count() )
-    {
-        SwBookmark aBkmk( rPos );
-        USHORT nPos;
-        if( rBkmks.Seek_Entry( &aBkmk, &nPos ))
-        {
-            // suche abwaerts nach weiteren Bookmarks auf der Cursor-Position
-            while( 0 < nPos &&
-                rBkmks[ nPos-1 ]->IsEqualPos( aBkmk ))
-                --nPos;
-        }
-        else if( nPos < rBkmks.Count() )
-            nRet = nPos;
-    }
-    return nRet;
+    const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    const IDocumentMarkAccess::const_iterator_t ppBkmk = ::std::lower_bound(
+        pMarkAccess->getMarksBegin(),
+        pMarkAccess->getMarksEnd(),
+        rPos,
+        ::boost::bind(&::sw::mark::IMark::StartsBefore, _1, _2)); // find the first Mark that does not start before
+    if(ppBkmk != pMarkAccess->getMarksEnd())
+        return ppBkmk - pMarkAccess->getMarksBegin();
+    return -1;
 }
 
 
@@ -542,19 +533,17 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
 // OtherPos of the bookmarks also inserted.
 void Writer::CreateBookmarkTbl()
 {
-    const SwBookmarks& rBkmks = pDoc->getBookmarks();
-    for( USHORT n = rBkmks.Count(); n; )
-    {
-        const SwBookmark& rBkmk = *rBkmks[ --n ];
-        if( rBkmk.IsBookMark() )
-            pImpl->InsertBkmk( rBkmk );
-    }
+    const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    for(IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getBookmarksBegin();
+        ppBkmk != pMarkAccess->getBookmarksEnd();
+        ++ppBkmk)
+            pImpl->InsertBkmk(**ppBkmk);
 }
 
 
 // search alle Bookmarks in the range and return it in the Array
-USHORT Writer::GetBookmarks( const SwCntntNode& rNd, xub_StrLen nStt,
-                             xub_StrLen nEnd, SvPtrarr& rArr )
+USHORT Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
+    xub_StrLen nEnd, SvPtrarr& rArr)
 {
     ASSERT( !rArr.Count(), "es sind noch Eintraege vorhanden" );
 
@@ -573,16 +562,16 @@ USHORT Writer::GetBookmarks( const SwCntntNode& rNd, xub_StrLen nStt,
             for( n = 0; n < pArr->Count(); ++n )
             {
                 void* p = (*pArr)[ n ];
-                const SwBookmark& rBkmk = *(SwBookmark*)p;
-                if( rBkmk.GetBookmarkPos().nNode == nNd &&
-                    (nCntnt = rBkmk.GetBookmarkPos().nContent.GetIndex() ) >= nStt &&
+                const ::sw::mark::IMark& rBkmk = *(::sw::mark::IMark *)p;
+                if( rBkmk.GetMarkPos().nNode == nNd &&
+                    (nCntnt = rBkmk.GetMarkPos().nContent.GetIndex() ) >= nStt &&
                     nCntnt < nEnd )
                 {
                     rArr.Insert( p, rArr.Count() );
                 }
-                else if( rBkmk.GetOtherBookmarkPos() && nNd ==
-                        rBkmk.GetOtherBookmarkPos()->nNode.GetIndex() && (nCntnt =
-                        rBkmk.GetOtherBookmarkPos()->nContent.GetIndex() ) >= nStt &&
+                else if( rBkmk.IsExpanded() && nNd ==
+                        rBkmk.GetOtherMarkPos().nNode.GetIndex() && (nCntnt =
+                        rBkmk.GetOtherMarkPos().nContent.GetIndex() ) >= nStt &&
                         nCntnt < nEnd )
                 {
                     rArr.Insert( p, rArr.Count() );

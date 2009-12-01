@@ -112,7 +112,7 @@ public:
     const SwFlyFrmFmt* pFlyFmt; // liegt der Node in einem FlyFrame,
                                         // ist das Format gesetzt, sonst 0
     const SwPageDesc* pAktPageDesc;     // aktuell gesetzter PageDesc.
-    USHORT nBkmkTabPos;             // akt. Position in der Bookmark-Tabelle
+    sal_Int32 nBkmkTabPos;              // akt. Position in der Bookmark-Tabelle
     USHORT nCurScript;                  // actual scripttype
     rtl_TextEncoding eDefaultEncoding;
     rtl_TextEncoding eCurrentEncoding;

@@ -35,6 +35,7 @@
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <svx/svxdlg.hxx>
 #include <vcl/syswin.hxx>
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
@@ -346,9 +347,13 @@ class SwAbstractDialogFactory
 public:
     static SwAbstractDialogFactory*     Create();
 
+    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
+                                                                        const SfxItemSet& rAttr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
+                                                                        sal_uInt32 nResId
+                                                                        ) = 0;
     virtual AbstractSwWordCountDialog* CreateSwWordCountDialog( Window* pWindow ) = 0;
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, int nResId) = 0; // add for SwInsertAbstractDlg
-    virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet, int nResId    ) = 0; // add for SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream, int nResId ) = 0;// add for SwAsciiFilterDlg
     virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) = 0;// add for SwInsertBookmarkDlg
@@ -394,15 +399,15 @@ public:
                                                             int nResId,
                                                             BOOL bSetAutoFmt = TRUE,
                                                             const SwTableAutoFmt* pSelFmt = 0 ) = 0;
-    virtual AbstractSfxSingleTabDialog * CreateSwBorderDlg ( Window* pParent, SfxItemSet& rSet, USHORT nType,int nResId ) = 0;//add for SwBorderDlg
-    virtual AbstractSfxSingleTabDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId ) = 0; //add for SwWrapDlg
+    virtual SfxAbstractDialog * CreateSwBorderDlg ( Window* pParent, SfxItemSet& rSet, USHORT nType, int nResId ) = 0;//add for SwBorderDlg
+    virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId ) = 0; //add for SwWrapDlg
 
     virtual VclAbstractDialog * CreateSwTableWidthDlg ( Window *pParent, SwTableFUNC &rFnc , int nResId ) = 0; //add for SwTableWidthDlg
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,
                                                         const SfxItemSet* pItemSet, SwWrtShell* pSh,int nResId ) = 0; //add for SwTableTabDlg
 
     virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ) = 0; //add for SwFldDlg
-    virtual AbstractSfxSingleTabDialog*  CreateSwFldEditDlg ( SwView& rVw, int nResId ) = 0; //add for SwFldEditDlg
+    virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ) = 0; //add for SwFldEditDlg
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg( Window* pParent, //add for SwRenameXNamedDlg
                                                                 STAR_REFERENCE( container::XNamed ) & xNamed,
                                                                 STAR_REFERENCE( container::XNameAccess ) & xNameAccess, int nResId ) = 0;

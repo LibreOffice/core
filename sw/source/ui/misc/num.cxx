@@ -50,7 +50,6 @@
 #include <svx/brshitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/impgrf.hxx>
-#include <svx/charmap.hxx>
 #include <svx/numitem.hxx>
 #include <swvset.hxx>
 #include <swmodule.hxx>

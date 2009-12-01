@@ -68,8 +68,6 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 struct AccessibleEventObject;
 }}}}
 
-#define css     com::sun::star
-
 //////////////////////////////////////////////////////////////////////
 //
 // classes and helper-classes used for accessibility in the graphic-window

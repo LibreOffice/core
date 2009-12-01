@@ -85,16 +85,16 @@ const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1  =
 
 static HTMLOptionEnum __FAR_DATA aHTMLMarqBehaviorTable[] =
 {
-    { sHTML_BEHAV_scroll,       SDRTEXTANI_SCROLL       },
-    { sHTML_BEHAV_alternate,    SDRTEXTANI_ALTERNATE    },
-    { sHTML_BEHAV_slide,        SDRTEXTANI_SLIDE        },
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,     SDRTEXTANI_SCROLL       },
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate,  SDRTEXTANI_ALTERNATE    },
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,      SDRTEXTANI_SLIDE        },
     { 0,                        0                       }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLMarqDirectionTable[] =
 {
-    { sHTML_AL_left,            SDRTEXTANI_LEFT         },
-    { sHTML_AL_right,           SDRTEXTANI_RIGHT        },
+    { OOO_STRING_SVTOOLS_HTML_AL_left,          SDRTEXTANI_LEFT         },
+    { OOO_STRING_SVTOOLS_HTML_AL_right,         SDRTEXTANI_RIGHT        },
     { 0,                        0                       }
 };
 
@@ -331,7 +331,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
             case HTML_O_LOOP:
                 if( pOption->GetString().
-                        EqualsIgnoreCaseAscii(sHTML_LOOP_infinite) )
+                        EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_LOOP_infinite) )
                 {
                     nCount = 0;
                 }
@@ -703,7 +703,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         return rWrt;
 
     ByteString sOut( '<' );
-    sOut += sHTML_marquee;
+    sOut += OOO_STRING_SVTOOLS_HTML_marquee;
 
     // Die Attribute des Objektd holen
     const SfxItemSet& rItemSet = pTextObj->GetMergedItemSet();
@@ -718,29 +718,29 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     const sal_Char *pStr = 0;
     switch( eAniKind )
     {
-    case SDRTEXTANI_SCROLL:     pStr = sHTML_BEHAV_scroll;      break;
-    case SDRTEXTANI_SLIDE:      pStr = sHTML_BEHAV_slide;       break;
-    case SDRTEXTANI_ALTERNATE:  pStr = sHTML_BEHAV_alternate;   break;
+    case SDRTEXTANI_SCROLL:     pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_scroll;        break;
+    case SDRTEXTANI_SLIDE:      pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_slide;     break;
+    case SDRTEXTANI_ALTERNATE:  pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_alternate; break;
     default:
         ;
     }
 
     if( pStr )
-        (((sOut += ' ') += sHTML_O_behavior) += '=') += pStr;
+        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_behavior) += '=') += pStr;
 
     // DIRECTION
     pStr = 0;
     SdrTextAniDirection eAniDir = pTextObj->GetTextAniDirection();
     switch( eAniDir )
     {
-    case SDRTEXTANI_LEFT:       pStr = sHTML_AL_left;       break;
-    case SDRTEXTANI_RIGHT:      pStr = sHTML_AL_right;      break;
+    case SDRTEXTANI_LEFT:       pStr = OOO_STRING_SVTOOLS_HTML_AL_left;     break;
+    case SDRTEXTANI_RIGHT:      pStr = OOO_STRING_SVTOOLS_HTML_AL_right;        break;
     default:
         ;
     }
 
     if( pStr )
-        (((sOut += ' ') += sHTML_O_direction) += '=') += pStr;
+        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_direction) += '=') += pStr;
 
     // LOOP
     sal_Int32 nCount =
@@ -748,14 +748,14 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                              .GetValue();
     if( 0==nCount )
         nCount = SDRTEXTANI_SLIDE==eAniKind ? 1 : -1;
-    (((sOut += ' ') += sHTML_O_loop) += '=')
+    (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_loop) += '=')
         += ByteString::CreateFromInt32( nCount );
 
     // SCROLLDELAY
     sal_uInt16 nDelay =
         ((const SdrTextAniDelayItem&)rItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
                                             .GetValue();
-    (((sOut += ' ') += sHTML_O_scrolldelay) += '=')
+    (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_scrolldelay) += '=')
         += ByteString::CreateFromInt32( nDelay );
 
     // SCROLLAMOUNT
@@ -773,7 +773,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                             MapMode(MAP_TWIP) ).Width());
     }
     if( nAmount )
-        (((sOut += ' ') += sHTML_O_scrollamount) += '=')
+        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_scrollamount) += '=')
             += ByteString::CreateFromInt32( nAmount );
 
     Size aTwipSz( pTextObj->GetLogicRect().GetSize() );
@@ -803,11 +803,11 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
             aPixelSz.Height() = 1;
 
         if( aPixelSz.Width() )
-            (((sOut += ' ') += sHTML_O_width) += '=')
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += '=')
                 += ByteString::CreateFromInt32( aPixelSz.Width() );
 
         if( aPixelSz.Height() )
-            (((sOut += ' ') += sHTML_O_height) += '=')
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += '=')
                 += ByteString::CreateFromInt32( aPixelSz.Height() );
     }
 
@@ -819,7 +819,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         const Color& rFillColor =
             ((const XFillColorItem&)rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();
 
-        ((sOut += ' ') += sHTML_O_bgcolor) += '=';
+        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_bgcolor) += '=';
         rWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor, rHTMLWrt.eDestEnc );
         sOut.Erase();
@@ -849,7 +849,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     HTMLOutFuncs::Out_String( rWrt.Strm(), aText,
                                 rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_marquee, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_marquee, sal_False );
 
     if( aEndTags.Len() )
         rWrt.Strm() << aEndTags.GetBuffer();

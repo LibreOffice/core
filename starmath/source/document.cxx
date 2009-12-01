@@ -33,84 +33,79 @@
 
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/uno/Any.h>
+
+#include <comphelper/accessibletexthelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/ustring.hxx>
-#include <ucbhelper/content.hxx>
-#include <sot/formats.hxx>
-#include <sot/storage.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/pathoptions.hxx>
-#ifndef _SO_CLSIDS_HXX //autogen
-#include <sot/clsids.hxx>
-#endif
-#include <sot/exchange.hxx>
-#include <vcl/msgbox.hxx>
-
-#include <vcl/mapunit.hxx>
-#include <vcl/mapmod.hxx>
-#include <comphelper/storagehelper.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/accessibletexthelper.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/undo.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/fstathelper.hxx>
-#include <svtools/transfer.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <svtools/sfxecode.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svtools/itempool.hxx>
-#include <svx/editeng.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/slstitm.hxx>
-#include <com/sun/star/uno/Any.h>
-#include <com/sun/star/lang/Locale.hpp>
-
-#ifndef STARMATH_HRC
-#include <starmath.hrc>
-#endif
-#include <document.hxx>
-#include <unomodel.hxx>
-#include <config.hxx>
-#include <symbol.hxx>
-#include <toolbox.hxx>
-#include <dialog.hxx>
-#include <action.hxx>
-#include <view.hxx>
-#include <utility.hxx>
-#include <format.hxx>
-#include <mathtype.hxx>
-#include <mathml.hxx>
-
-#include <smdll.hxx>
-
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sot/clsids.hxx>
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
+#include <sot/storage.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/fstathelper.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/itempool.hxx>
+#include <svtools/lingucfg.hxx>
+#include <svtools/linguprops.hxx>
+#include <svtools/pathoptions.hxx>
+#include <svtools/ptitem.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/slstitm.hxx>
+#include <svtools/smplhint.hxx>
+#include <svtools/stritem.hxx>
+#include <svtools/transfer.hxx>
+#include <svtools/undo.hxx>
+#include <svtools/urihelper.hxx>
+#include <svtools/whiter.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editstat.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/fhgtitem.hxx>
+#include <svx/fontitem.hxx>
+#include <svx/unolingu.hxx>
+#include <ucbhelper/content.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/mapunit.hxx>
+#include <vcl/msgbox.hxx>
+
+#include <document.hxx>
+#include <action.hxx>
+#include <config.hxx>
+#include <dialog.hxx>
+#include <format.hxx>
+#include <smdll.hxx>
+#include <starmath.hrc>
+#include <symbol.hxx>
+#include <toolbox.hxx>
+#include <unomodel.hxx>
+#include <utility.hxx>
+#include <view.hxx>
+#include "mathtype.hxx"
+#include "mathmlimport.hxx"
+#include "mathmlexport.hxx"
+
+
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
 
-#define A2OU(x)        rtl::OUString::createFromAscii( x )
 
 #define DOCUMENT_BUFFER_SIZE    (USHORT)32768
 
@@ -266,7 +261,7 @@ void SmDocShell::ArrangeFormula()
     if (IsFormulaArranged())
         return;
 
-    //! Nur für die Dauer der Existenz dieses Objekts sind am Drucker die
+    //! Nur fï¿½r die Dauer der Existenz dieses Objekts sind am Drucker die
     //! richtigen Einstellungen garantiert.
     SmPrinterAccess  aPrtAcc(*this);
 //  OutputDevice    *pOutDev = aPrtAcc.GetPrinter();
@@ -279,7 +274,7 @@ void SmDocShell::ArrangeFormula()
 #endif
     }
 
-    // falls nötig ein anderes OutputDevice holen für das formatiert wird
+    // falls nï¿½tig ein anderes OutputDevice holen fï¿½r das formatiert wird
     if (!pOutDev)
     {
         SmViewShell *pView = SmGetActiveView();
@@ -761,7 +756,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
             pTree = 0;
         }
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
-        SmXMLWrapper aEquation(xModel);
+        SmXMLImportWrapper aEquation(xModel);
         bSuccess = 0 == aEquation.Import(rMedium);
     }
     else
@@ -835,7 +830,7 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
         {
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
+            SmXMLImportWrapper aEquation(xModel);
             ULONG nError = aEquation.Import(rMedium);
             bRet = 0 == nError;
             SetError( nError );
@@ -870,7 +865,7 @@ BOOL SmDocShell::Save()
             ArrangeFormula();
 
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
-        SmXMLWrapper aEquation(xModel);
+        SmXMLExportWrapper aEquation(xModel);
         aEquation.SetFlat(sal_False);
         return aEquation.Export(*GetMedium());
     }
@@ -943,7 +938,7 @@ BOOL SmDocShell::SaveAs( SfxMedium& rMedium )
             ArrangeFormula();
 
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
-        SmXMLWrapper aEquation(xModel);
+        SmXMLExportWrapper aEquation(xModel);
         aEquation.SetFlat(sal_False);
         bRet = aEquation.Export(rMedium);
     }
@@ -967,14 +962,14 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
         if(rFltName.EqualsAscii( STAROFFICE_XML ))
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
+            SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(sal_False);
             bRet = aEquation.Export(rMedium);
         }
         else if(rFltName.EqualsAscii( MATHML_XML ))
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
+            SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(sal_True);
             bRet = aEquation.Export(rMedium);
         }

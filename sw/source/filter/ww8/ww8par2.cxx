@@ -2509,7 +2509,9 @@ void WW8TabDesc::CreateSwTable()
             //ability to set the margin.
             SvxLRSpaceItem aL( RES_LR_SPACE );
             // set right to original DxaLeft (i28656)
-            aL.SetLeft( !bIsBiDi ?  GetMinLeft() : pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft);
+            aL.SetLeft( !bIsBiDi ?
+                static_cast<long>(GetMinLeft()) :
+                static_cast<long>(pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft) );
             aItemSet.Put(aL);
         }
     }
@@ -3601,7 +3603,13 @@ void SwWW8ImplReader::StopTable()
     }
 
     bReadTable = true;
-    mpTableEndPaM.reset(new SwPaM(*pPaM));
+    // --> OD 2009-04-16 #i101116#
+    // Keep PaM on table end only for nested tables
+    if ( nInTable > 1 )
+    {
+        mpTableEndPaM.reset(new SwPaM(*pPaM));
+    }
+    // <--
 }
 
 // GetTableLeft() wird fuer absatzgebundene Grafikobjekte in Tabellen

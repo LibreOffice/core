@@ -406,15 +406,6 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
         m_aFlatParaList.insert( xRet );
     }
 
-    // in case that grammar checking will be finished we now have to reset
-    // the flag at the root frame that indicated grammar checking was still active.
-    if (!xRet.is() && mnType == text::TextMarkupType::PROOFREADING)
-    {
-        SwRootFrm *pRootFrm = mpDoc? mpDoc->GetRootFrm() : NULL;
-        if (pRootFrm)
-            pRootFrm->SetGrammarCheckActive( false );
-    }
-
     return xRet;
 }
 

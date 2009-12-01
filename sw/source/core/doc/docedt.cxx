@@ -50,7 +50,7 @@
 #include <fmtpdsc.hxx>
 #include <txtftn.hxx>
 #include <acorrect.hxx>     // Autokorrektur
-#include <bookmrk.hxx>      // fuer SwBookmark
+#include <IMark.hxx>        // fuer SwBookmark
 #include <cntfrm.hxx>           // fuers Spell
 #include <crsrsh.hxx>
 #include <doc.hxx>
@@ -165,7 +165,6 @@ struct _SaveRedline
 SV_DECL_PTRARR_DEL( _SaveRedlines, _SaveRedline*, 0, 4 )
 
 SV_IMPL_VARARR( _SaveFlyArr, _SaveFly )
-SV_IMPL_PTRARR( SaveBookmarks, SaveBookmark* )
 SV_IMPL_PTRARR( _SaveRedlines, _SaveRedline* )
 
 sal_Bool lcl_MayOverwrite( const SwTxtNode *pNode, const xub_StrLen nPos )
@@ -754,7 +753,7 @@ void SwDoc::DeleteSection( SwNode *pNode )
     // dann loesche mal alle Fly's, text::Bookmarks, ...
     DelFlyInRange( aSttIdx, aEndIdx );
     DeleteRedline( *pSttNd, true, USHRT_MAX );
-    _DelBookmarks( aSttIdx, aEndIdx );
+    _DelBookmarks(aSttIdx, aEndIdx);
 
     {
         // alle Crsr/StkCrsr/UnoCrsr aus dem Loeschbereich verschieben
@@ -1061,8 +1060,12 @@ bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         //          here without undo.
         BOOL bDoesUndo = DoesUndo();
         DoUndo( FALSE );
-        _DelBookmarks( pStt->nNode, pEnd->nNode, NULL,
-                       &pStt->nContent, &pEnd->nContent );
+        _DelBookmarks(
+            pStt->nNode,
+            pEnd->nNode,
+            NULL,
+            &pStt->nContent,
+            &pEnd->nContent);
         DoUndo( bDoesUndo );
     }
 
@@ -1137,9 +1140,13 @@ bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     // kopiere alle Bookmarks, die im Move Bereich stehen in ein
     // Array, das alle Angaben auf die Position als Offset speichert.
     // Die neue Zuordung erfolgt nach dem Moven.
-    SaveBookmarks aSaveBkmk;
-    _DelBookmarks( pStt->nNode, pEnd->nNode, &aSaveBkmk,
-                   &pStt->nContent, &pEnd->nContent );
+    ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
+    _DelBookmarks(
+        pStt->nNode,
+        pEnd->nNode,
+        &aSaveBkmks,
+        &pStt->nContent,
+        &pEnd->nContent);
 
     // falls durch die vorherigen Loeschungen (z.B. der Fussnoten) kein
     // Bereich mehr existiert, ist das immernoch ein gueltiger Move!
@@ -1241,9 +1248,14 @@ bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
     // setze jetzt wieder die text::Bookmarks in das Dokument
     *rPaM.GetMark() = *pSavePam->Start();
-    for( sal_uInt16 n = 0; n < aSaveBkmk.Count(); ++n )
-        aSaveBkmk[n]->SetInDoc( this, rPaM.GetMark()->nNode,
-                                    &rPaM.GetMark()->nContent );
+    for(
+        ::std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
+        pBkmk != aSaveBkmks.end();
+        ++pBkmk)
+        pBkmk->SetInDoc(
+            this,
+            rPaM.GetMark()->nNode,
+            &rPaM.GetMark()->nContent);
     *rPaM.GetPoint() = *pSavePam->End();
 
     // verschiebe die Flys an die neue Position
@@ -1320,8 +1332,8 @@ bool SwDoc::Move( SwNodeRange& rRange, SwNodeIndex& rPos, SwMoveFlags eMvFlags )
     // kopiere alle Bookmarks, die im Move Bereich stehen in ein
     // Array, das alle Angaben auf die Position als Offset speichert.
     // Die neue Zuordung erfolgt nach dem Moven.
-    SaveBookmarks aSaveBkmk;
-    _DelBookmarks( rRange.aStart, rRange.aEnd, &aSaveBkmk );
+    ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
+    _DelBookmarks(rRange.aStart, rRange.aEnd, &aSaveBkmks);
 
     // sicher die absatzgebundenen Flys, damit verschoben werden koennen.
     _SaveFlyArr aSaveFlyArr;
@@ -1354,8 +1366,11 @@ bool SwDoc::Move( SwNodeRange& rRange, SwNodeIndex& rPos, SwMoveFlags eMvFlags )
         _RestFlyInRange( aSaveFlyArr, aIdx, NULL );
 
     // setze jetzt wieder die text::Bookmarks in das Dokument
-    for( sal_uInt16 nCnt = 0; nCnt < aSaveBkmk.Count(); ++nCnt )
-        aSaveBkmk[nCnt]->SetInDoc( this, aIdx );
+    for(
+        ::std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
+        pBkmk != aSaveBkmks.end();
+        ++pBkmk)
+        pBkmk->SetInDoc(this, aIdx);
 
     if( aSavRedlInsPosArr.Count() )
     {
@@ -1723,10 +1738,14 @@ bool SwDoc::Delete( SwPaM & rPam )
         DeleteRedline( rPam, true, USHRT_MAX );
 
     // loesche und verschiebe erstmal alle "Fly's am Absatz", die in der
-    // SSelection liegen
-    DelFlyInRange( rPam.GetMark()->nNode, rPam.GetPoint()->nNode );
-    _DelBookmarks( pStt->nNode, pEnd->nNode, 0,
-                       &pStt->nContent, &pEnd->nContent );
+    // Selection liegen
+    DelFlyInRange(rPam.GetMark()->nNode, rPam.GetPoint()->nNode);
+    _DelBookmarks(
+        pStt->nNode,
+        pEnd->nNode,
+        NULL,
+        &pStt->nContent,
+        &pEnd->nContent);
 
     SwNodeIndex aSttIdx( pStt->nNode );
     SwCntntNode * pCNd = aSttIdx.GetNode().GetCntntNode();
@@ -2224,16 +2243,16 @@ bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
                 StartUndo(UNDO_EMPTY, NULL);
 
                 // Bug 68584 - if any Redline will change (split!) the node
-                String sNm; sNm = String::CreateFromInt32( (long)&aDelPam );
-                SwBookmark* pBkmk = makeBookmark( aDelPam, KeyCode(), sNm, sNm, UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
 
-        //JP 06.01.98: MUSS noch optimiert werden!!!
-        SetRedlineMode(
-               (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
+                //JP 06.01.98: MUSS noch optimiert werden!!!
+                SetRedlineMode(
+                    (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
 
-                *aDelPam.GetPoint() = pBkmk->GetBookmarkPos();
-                *aDelPam.GetMark() = *pBkmk->GetOtherBookmarkPos();
-                deleteBookmark( getBookmarks().GetPos( pBkmk ));
+                *aDelPam.GetPoint() = pBkmk->GetMarkPos();
+                if(pBkmk->IsExpanded())
+                    *aDelPam.GetMark() = pBkmk->GetOtherMarkPos();
+                getIDocumentMarkAccess()->deleteMark(pBkmk);
                 pStt = aDelPam.Start();
                 pTxtNd = pStt->nNode.GetNode().GetTxtNode();
                 nStt = pStt->nContent.GetIndex();
@@ -2306,8 +2325,7 @@ bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
                 EndUndo(UNDO_EMPTY, NULL);
 
                 // Bug 68584 - if any Redline will change (split!) the node
-                String sNm; sNm = String::CreateFromInt32( (long)&aDelPam );
-                SwBookmark* pBkmk = makeBookmark( aDelPam, KeyCode(), sNm, sNm, UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
 
                 SwIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( 0, 0 );
@@ -2318,9 +2336,10 @@ bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
 //JP 06.01.98: MUSS noch optimiert werden!!!
 SetRedlineMode( eOld );
 
-                *rPam.GetPoint() = pBkmk->GetBookmarkPos();
-                *rPam.GetMark() = *pBkmk->GetOtherBookmarkPos();
-                deleteBookmark( getBookmarks().GetPos( pBkmk ));
+                *rPam.GetPoint() = pBkmk->GetMarkPos();
+                if(pBkmk->IsExpanded())
+                    *rPam.GetMark() = pBkmk->GetOtherMarkPos();
+                getIDocumentMarkAccess()->deleteMark(pBkmk);
             }
             bJoinTxt = sal_False;
         }

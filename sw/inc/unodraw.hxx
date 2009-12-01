@@ -42,8 +42,10 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase4.hxx> // helper for implementations
 // --> OD 2004-07-22 #i31698#
 #include <cppuhelper/implbase6.hxx> // helper for implementations
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 // <--
 #include <svtools/itemprop.hxx>
@@ -83,11 +85,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw ();
 };
 
-/* -----------------09.12.98 08:57-------------------
- *
- * --------------------------------------------------*/
-typedef cppu::WeakAggImplHelper3
+typedef cppu::WeakAggImplHelper4
 <
+    ::com::sun::star::container::XEnumerationAccess,
     ::com::sun::star::drawing::XDrawPage,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::drawing::XShapeGrouper
@@ -101,6 +101,9 @@ class SwXDrawPage : public SwXDrawPageBaseClass
 public:
     SwXDrawPage(SwDoc* pDoc);
     ~SwXDrawPage();
+
+    //XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -162,8 +165,8 @@ class SwXShape : public SwXShapeBaseClass,
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
     // <--
 
-    SfxItemPropertySet          aPropSet;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*           m_pPropSet;
+    const SfxItemPropertyMapEntry*      m_pPropertyMapEntries;
     com::sun::star::uno::Sequence< sal_Int8 >* pImplementationId;
 
     SwShapeDescriptor_Impl*     pImpl;
@@ -315,6 +318,9 @@ public:
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 GetAggregationInterface() {return xShapeAgg;}
+
+    // helper
+    static void AddExistingShapeToFmt( SdrObject& _rObj );
 };
 /* -----------------------------31.05.01 09:54--------------------------------
 

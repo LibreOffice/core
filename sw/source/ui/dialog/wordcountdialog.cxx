@@ -41,6 +41,15 @@
 #include <layout/layout-pre.hxx>
 #include <wordcountdialog.hrc>
 
+#if ENABLE_LAYOUT
+#undef SW_RES
+#define SW_RES(x) #x
+#undef SfxModalDialog
+#define SfxModalDialog( parent, id ) Dialog( parent, "wordcount.xml", id )
+#define SW_WORDCOUNTDIALOG_HRC
+#include <helpid.h>
+#endif /* ENABLE_LAYOUT */
+
 /*-- 06.04.2004 16:05:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -67,6 +76,9 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent) :
 #pragma warning (default : 4355)
 #endif
 {
+#if ENABLE_LAYOUT
+    SetHelpId (HID_DLG_WORDCOUNT);
+#endif /* ENABLE_LAYOUT */
     FreeResource();
 }
 /*-- 06.04.2004 16:05:56---------------------------------------------------

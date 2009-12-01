@@ -98,11 +98,12 @@ class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 
 // add for SwAddrDlg, SwDropCapsDlg, SwBackgroundDlg SwNumFmtDlg  SwWrapDlg SwBorderDlg, SwFldEditDlg  begin
 class SfxSingleTabDialog;
-class AbstractSfxSingleTabDialog_Impl :public AbstractSfxSingleTabDialog
+class AbstractSfxDialog_Impl :public SfxAbstractDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl,SfxSingleTabDialog)
+    DECL_ABSTDLG_BASE(AbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
-
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
 };
 // add for SwAddrDlg,SwDropCapsDlg , SwBackgroundDlg  SwNumFmtDlg SwWrapDlg SwBorderDlg, SwFldEditDlg  end
 
@@ -430,9 +431,13 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 {
 
 public:
+    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
+                                                                        const SfxItemSet& rAttr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
+                                                                        sal_uInt32 nResId
+                                                                        );
     virtual AbstractSwWordCountDialog* CreateSwWordCountDialog(Window* pParent);
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg( Window* pParent,int nResId );
-    virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet,int nResId   );//add for  SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream, int nResId ); //add for SwAsciiFilterDlg
     virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId );//add for SwInsertBookmarkDlg
@@ -473,14 +478,14 @@ public:
                                                             int nResId,
                                                             BOOL bSetAutoFmt = TRUE,
                                                             const SwTableAutoFmt* pSelFmt = 0 );
-    virtual AbstractSfxSingleTabDialog * CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, USHORT nType,int nResId );//add for SwBorderDlg
+    virtual SfxAbstractDialog * CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, USHORT nType,int nResId );//add for SwBorderDlg
 
-    virtual AbstractSfxSingleTabDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId ); //add for SwWrapDlg
+    virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId ); //add for SwWrapDlg
     virtual VclAbstractDialog * CreateSwTableWidthDlg ( Window *pParent, SwTableFUNC &rFnc , int nResId ); //add for SwTableWidthDlg
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,
                                                         const SfxItemSet* pItemSet, SwWrtShell* pSh,int nResId ); //add for SwTableTabDlg
     virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ); //add for SwFldDlg
-    virtual AbstractSfxSingleTabDialog*  CreateSwFldEditDlg ( SwView& rVw, int nResId ); //add for SwFldEditDlg
+    virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ); //add for SwFldEditDlg
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg( Window* pParent, //add for SwRenameXNamedDlg
                                                                 STAR_REFERENCE( container::XNamed ) & xNamed,
                                                                 STAR_REFERENCE( container::XNameAccess ) & xNameAccess, int nResId );

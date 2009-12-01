@@ -43,37 +43,22 @@
 #include <svtools/zformat.hxx>
 #endif
 #include <svtools/eitem.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SVX_NUMINF_HXX //autogen
-
 #include <svx/numinf.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <svx/flagsdef.hxx>
 #include <svtools/itemset.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swtypes.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _NUMFMTLB_HXX
 #include <numfmtlb.hxx>
-#endif
-
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
-
 #include <unomid.h>
-
+#include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -452,7 +437,9 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aCoreSet, RC_DLG_SWNUMFMTDLG );
+        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
+            GetView()->GetViewFrame()->GetFrame()->GetFrameInterface(),
+            RC_DLG_SWNUMFMTDLG );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         if (RET_OK == pDlg->Execute())

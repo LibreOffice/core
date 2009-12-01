@@ -278,7 +278,7 @@ sal_Int64 SAL_CALL SwXTextSection::getSomething( const uno::Sequence< sal_Int8 >
 SwXTextSection::SwXTextSection(sal_Bool bWithFormat, sal_Bool bIndexHeader) :
 //        SwClient(pFmt),
         aLstnrCntnr( (text::XTextContent*)this),
-        aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_SECTION)),
+        m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_SECTION)),
         m_bIsDescriptor(!bWithFormat),
         m_bIndexHeader(bIndexHeader),
         pProps(bWithFormat ? 0 : new SwTextSectionProperties_Impl()),
@@ -569,7 +569,7 @@ void SwXTextSection::removeEventListener(const uno::Reference< lang::XEventListe
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXTextSection::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  aRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropSet->getPropertySetInfo();
     return aRef;
 }
 /* -----------------------------12.02.01 10:29--------------------------------
@@ -610,15 +610,15 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
         sal_Bool bLinkMode = sal_False;
         for(sal_Int16 nProperty = 0; nProperty < rPropertyNames.getLength(); nProperty++)
         {
-            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), pPropertyNames[nProperty]);
-            if(!pMap)
+            const SfxItemPropertySimpleEntry*   pEntry =
+                m_pPropSet->getPropertyMap()->getByName( pPropertyNames[nProperty] );
+            if(!pEntry)
                 throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
             else
             {
-                if ( pMap->nFlags & PropertyAttribute::READONLY)
+                if ( pEntry->nFlags & PropertyAttribute::READONLY)
                     throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
-                switch(pMap->nWID)
+                switch(pEntry->nWID)
                 {
                     case WID_SECT_CONDITION:
                     {
@@ -645,7 +645,7 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                                 pProps->sLinkFileName += sfx2::cTokenSeperator;
                                 pProps->bDDE = sal_True;
                             }
-                            pProps->sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,sfx2::cTokenSeperator,sTmp);
+                            pProps->sLinkFileName.SetToken(pEntry->nWID - WID_SECT_DDE_TYPE,sfx2::cTokenSeperator,sTmp);
                         }
                         else
                         {
@@ -656,7 +656,7 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                                 sLinkFileName += sfx2::cTokenSeperator;
                                 aSection.SetType(DDE_LINK_SECTION);
                             }
-                            sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,sfx2::cTokenSeperator, sTmp);
+                            sLinkFileName.SetToken(pEntry->nWID - WID_SECT_DDE_TYPE,sfx2::cTokenSeperator, sTmp);
                             aSection.SetLinkFileName(sLinkFileName);
                         }
                     }
@@ -793,56 +793,56 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                         {
                             const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
                             aItemSet.pItemSet = new SfxItemSet(*rOldAttrSet.GetPool(),
-                                                        pMap->nWID, pMap->nWID, 0);
+                                                        pEntry->nWID, pEntry->nWID, 0);
                             aItemSet.pItemSet->Put(rOldAttrSet);
-                            aPropSet.setPropertyValue(*pMap, pValues[nProperty], *aItemSet.pItemSet);
+                            m_pPropSet->setPropertyValue(*pEntry, pValues[nProperty], *aItemSet.pItemSet);
                         }
                         else
                         {
                             SfxPoolItem* pPutItem = 0;
-                            if(RES_COL == pMap->nWID)
+                            if(RES_COL == pEntry->nWID)
                             {
                                 if(!pProps->pColItem)
                                     pProps->pColItem = new SwFmtCol;
                                     pPutItem = pProps->pColItem;
                             }
-                            else if(RES_BACKGROUND == pMap->nWID)
+                            else if(RES_BACKGROUND == pEntry->nWID)
                             {
                                 if(!pProps->pBrushItem)
                                     pProps->pBrushItem = new SvxBrushItem(RES_BACKGROUND);
                                 pPutItem = pProps->pBrushItem;
                             }
-                            else if(RES_FTN_AT_TXTEND == pMap->nWID)
+                            else if(RES_FTN_AT_TXTEND == pEntry->nWID)
                             {
                                 if(!pProps->pFtnItem)
                                     pProps->pFtnItem = new SwFmtFtnAtTxtEnd;
                                 pPutItem = pProps->pFtnItem;
                             }
-                            else if(RES_END_AT_TXTEND == pMap->nWID)
+                            else if(RES_END_AT_TXTEND == pEntry->nWID)
                             {
                                 if(!pProps->pEndItem)
                                     pProps->pEndItem = new SwFmtEndAtTxtEnd;
                                 pPutItem = pProps->pEndItem;
                             }
-                            else if(RES_UNKNOWNATR_CONTAINER== pMap->nWID)
+                            else if(RES_UNKNOWNATR_CONTAINER== pEntry->nWID)
                             {
                                 if(!pProps->pXMLAttr)
                                     pProps->pXMLAttr= new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER );
                                 pPutItem = pProps->pXMLAttr;
                             }
-                            else if(RES_COLUMNBALANCE== pMap->nWID)
+                            else if(RES_COLUMNBALANCE== pEntry->nWID)
                             {
                                 if(!pProps->pNoBalanceItem)
                                     pProps->pNoBalanceItem= new SwFmtNoBalancedColumns( RES_COLUMNBALANCE );
                                 pPutItem = pProps->pNoBalanceItem;
                             }
-                            else if(RES_FRAMEDIR == pMap->nWID)
+                            else if(RES_FRAMEDIR == pEntry->nWID)
                             {
                                 if(!pProps->pFrameDirItem)
                                     pProps->pFrameDirItem = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
                                 pPutItem = pProps->pFrameDirItem;
                             }
-                            else if(RES_LR_SPACE == pMap->nWID)
+                            else if(RES_LR_SPACE == pEntry->nWID)
                             {
                                 // #109700#
                                 if(!pProps->pLRSpaceItem)
@@ -850,7 +850,7 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                                 pPutItem = pProps->pLRSpaceItem;
                             }
                             if(pPutItem)
-                                pPutItem->PutValue(pValues[nProperty], pMap->nMemberId);
+                                pPutItem->PutValue(pValues[nProperty], pEntry->nMemberId);
                         }
                 }
             }
@@ -946,11 +946,11 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         for(sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength(); nProperty++)
         {
-            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                aPropSet.getPropertyMap(), pPropertyNames[nProperty]);
-            if(pMap)
+            const SfxItemPropertySimpleEntry*   pEntry =
+                m_pPropSet->getPropertyMap()->getByName( pPropertyNames[nProperty]);
+            if(pEntry)
             {
-                switch(pMap->nWID)
+                switch(pEntry->nWID)
                 {
                     case WID_SECT_CONDITION:
                     {
@@ -973,7 +973,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                         {
                             sRet = pSect->GetLinkFileName();
                         }
-                        sRet = sRet.GetToken(pMap->nWID - WID_SECT_DDE_TYPE, sfx2::cTokenSeperator);
+                        sRet = sRet.GetToken(pEntry->nWID - WID_SECT_DDE_TYPE, sfx2::cTokenSeperator);
                         pRet[nProperty] <<= OUString(sRet);
                     }
                     break;
@@ -1084,7 +1084,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                     case  FN_UNO_ANCHOR_TYPES:
                     case  FN_UNO_TEXT_WRAP:
                     case  FN_UNO_ANCHOR_TYPE:
-                        SwXParagraph::getDefaultTextContentValue(pRet[nProperty], OUString(), pMap->nWID);
+                        SwXParagraph::getDefaultTextContentValue(pRet[nProperty], OUString(), pEntry->nWID);
                     break;
                     case FN_UNO_REDLINE_NODE_START:
                     case FN_UNO_REDLINE_NODE_END:
@@ -1092,7 +1092,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                         if(!pFmt)
                             break;      // lijian i73247
                         SwNode* pSectNode = pFmt->GetSectionNode();
-                        if(FN_UNO_REDLINE_NODE_END == pMap->nWID)
+                        if(FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                             pSectNode = pSectNode->EndOfSectionNode();
                         const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
                         for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
@@ -1118,54 +1118,54 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                     break;
                     default:
                         if(pFmt)
-                            pRet[nProperty] = aPropSet.getPropertyValue(*pMap, pFmt->GetAttrSet());
+                            m_pPropSet->getPropertyValue(*pEntry, pFmt->GetAttrSet(), pRet[nProperty]);
                         else
                         {
                             const SfxPoolItem* pQueryItem = 0;
-                            if(RES_COL == pMap->nWID)
+                            if(RES_COL == pEntry->nWID)
                             {
                                 if(!pProps->pColItem)
                                     pProps->pColItem = new SwFmtCol;
                                     pQueryItem = pProps->pColItem;
                             }
-                            else if(RES_BACKGROUND == pMap->nWID)
+                            else if(RES_BACKGROUND == pEntry->nWID)
                             {
                                 if(!pProps->pBrushItem)
                                     pProps->pBrushItem = new SvxBrushItem(RES_BACKGROUND);
                                 pQueryItem = pProps->pBrushItem;
                             }
-                            else if(RES_FTN_AT_TXTEND == pMap->nWID)
+                            else if(RES_FTN_AT_TXTEND == pEntry->nWID)
                             {
                                 if(!pProps->pFtnItem)
                                     pProps->pFtnItem = new SwFmtFtnAtTxtEnd;
                                 pQueryItem = pProps->pFtnItem;
                             }
-                            else if(RES_END_AT_TXTEND == pMap->nWID)
+                            else if(RES_END_AT_TXTEND == pEntry->nWID)
                             {
                                 if(!pProps->pEndItem)
                                     pProps->pEndItem = new SwFmtEndAtTxtEnd;
                                 pQueryItem = pProps->pEndItem;
                             }
-                            else if(RES_UNKNOWNATR_CONTAINER== pMap->nWID)
+                            else if(RES_UNKNOWNATR_CONTAINER== pEntry->nWID)
                             {
                                 if(!pProps->pXMLAttr)
                                     pProps->pXMLAttr= new SvXMLAttrContainerItem ;
                                 pQueryItem = pProps->pXMLAttr;
                             }
-                            else if(RES_COLUMNBALANCE== pMap->nWID)
+                            else if(RES_COLUMNBALANCE== pEntry->nWID)
                             {
                                 if(!pProps->pNoBalanceItem)
                                     pProps->pNoBalanceItem= new SwFmtNoBalancedColumns;
                                 pQueryItem = pProps->pNoBalanceItem;
                             }
-                            else if(RES_FRAMEDIR == pMap->nWID)
+                            else if(RES_FRAMEDIR == pEntry->nWID)
                             {
                                 if(!pProps->pFrameDirItem)
                                     pProps->pFrameDirItem = new SvxFrameDirectionItem(FRMDIR_ENVIRONMENT, RES_FRAMEDIR);
                                 pQueryItem = pProps->pFrameDirItem;
                             }
                             /* -> #109700# */
-                            else if(RES_LR_SPACE == pMap->nWID)
+                            else if(RES_LR_SPACE == pEntry->nWID)
                             {
                                 if(!pProps->pLRSpaceItem)
                                     pProps->pLRSpaceItem = new SvxLRSpaceItem( RES_LR_SPACE );
@@ -1173,7 +1173,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                             }
                             /* <- #109700# */
                             if(pQueryItem)
-                                pQueryItem->QueryValue(pRet[nProperty], pMap->nMemberId);
+                                pQueryItem->QueryValue(pRet[nProperty], pEntry->nMemberId);
                         }
                 }
             }
@@ -1307,11 +1307,11 @@ Sequence< PropertyState > SwXTextSection::getPropertyStates(
         for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
         {
             pStates[i] = PropertyState_DEFAULT_VALUE;
-            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                aPropSet.getPropertyMap(), pNames[i]);
-            if(!pMap)
+            const SfxItemPropertySimpleEntry*   pEntry =
+                m_pPropSet->getPropertyMap()->getByName( pNames[i]);
+            if(!pEntry)
                 throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case WID_SECT_CONDITION:
                 case WID_SECT_DDE_TYPE      :
@@ -1333,17 +1333,17 @@ Sequence< PropertyState > SwXTextSection::getPropertyStates(
                 break;
                 default:
                     if(pFmt)
-                        pStates[i] = aPropSet.getPropertyState(pNames[i], pFmt->GetAttrSet());
+                        pStates[i] = m_pPropSet->getPropertyState(pNames[i], pFmt->GetAttrSet());
                     else
                     {
-                        if(RES_COL == pMap->nWID)
+                        if(RES_COL == pEntry->nWID)
                         {
                             if(!pProps->pColItem)
                                 pStates[i] = PropertyState_DEFAULT_VALUE;
                             else
                                 pStates[i] = PropertyState_DIRECT_VALUE;
                         }
-                        else //if(RES_BACKGROUND == pMap->nWID)
+                        else //if(RES_BACKGROUND == pEntry->nWID)
                         {
                             if(!pProps->pBrushItem)
                                 pStates[i] = PropertyState_DEFAULT_VALUE;
@@ -1372,14 +1372,14 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
         SwSection* pSect = pFmt ? pFmt->GetSection() : 0;
         if(pFmt)
             aSection = *pSect;
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                aPropSet.getPropertyMap(), rPropertyName);
-        if(!pMap)
+        const SfxItemPropertySimpleEntry*   pEntry =
+                m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+        if(!pEntry)
             throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-        if ( pMap->nFlags & PropertyAttribute::READONLY)
+        if ( pEntry->nFlags & PropertyAttribute::READONLY)
             throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertyToDefault: property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         SfxItemSet* pNewAttrSet = 0;
-        switch(pMap->nWID)
+        switch(pEntry->nWID)
         {
             case WID_SECT_CONDITION:
             {
@@ -1431,20 +1431,20 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
             case  FN_UNO_ANCHOR_TYPE:
             break;
             default:
-                if(pMap->nWID <= SFX_WHICH_MAX)
+                if(pEntry->nWID <= SFX_WHICH_MAX)
                 {
                     if(pFmt)
                     {
                         const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
                         pNewAttrSet = new SfxItemSet(*rOldAttrSet.GetPool(),
-                                                    pMap->nWID, pMap->nWID, 0);
-                        pNewAttrSet->ClearItem(pMap->nWID);
+                                                    pEntry->nWID, pEntry->nWID, 0);
+                        pNewAttrSet->ClearItem(pEntry->nWID);
                     }
                     else
                     {
-                        if(RES_COL == pMap->nWID)
+                        if(RES_COL == pEntry->nWID)
                             DELETEZ(pProps->pColItem);
-                        else if(RES_BACKGROUND == pMap->nWID)
+                        else if(RES_BACKGROUND == pEntry->nWID)
                             DELETEZ(pProps->pBrushItem);
                     }
                 }
@@ -1483,12 +1483,12 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
     SwSectionFmt*   pFmt = GetFmt();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                            aPropSet.getPropertyMap(), rPropertyName);
-    if (!pMap)
+    const SfxItemPropertySimpleEntry*   pEntry =
+                m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    if (!pEntry)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case WID_SECT_CONDITION:
         case WID_SECT_DDE_TYPE      :
@@ -1520,15 +1520,15 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
         case  FN_UNO_ANCHOR_TYPES:
         case  FN_UNO_TEXT_WRAP:
         case  FN_UNO_ANCHOR_TYPE:
-            SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pMap->nWID);
+            SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pEntry->nWID);
         break;
         default:
-        if(pFmt && pMap->nWID <= SFX_WHICH_MAX)
+        if(pFmt && pEntry->nWID <= SFX_WHICH_MAX)
         {
             SwDoc* pDoc = pFmt->GetDoc();
             const SfxPoolItem& rDefItem =
-                pDoc->GetAttrPool().GetDefaultItem(pMap->nWID);
-            rDefItem.QueryValue(aRet, pMap->nMemberId);
+                pDoc->GetAttrPool().GetDefaultItem(pEntry->nWID);
+            rDefItem.QueryValue(aRet, pEntry->nMemberId);
         }
     }
     return aRet;

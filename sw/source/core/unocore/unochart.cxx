@@ -2032,7 +2032,7 @@ SwChartDataSequence::SwChartDataSequence(
     pDataProvider( &rProvider ),
     pTblCrsr( pTableCursor ),
     aCursorDepend( this, pTableCursor ),
-    pMap( aSwMapProvider.GetPropertyMap( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
+    _pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
 {
     bDisposed = sal_False;
 
@@ -2083,7 +2083,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     pDataProvider( rObj.pDataProvider ),
     pTblCrsr( rObj.pTblCrsr->Clone() ),
     aCursorDepend( this, pTblCrsr ),
-    pMap( rObj.pMap )
+    _pPropSet( rObj._pPropSet )
 {
     bDisposed = sal_False;
 
@@ -2398,7 +2398,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwChartDataSequence::getPrope
     if (bDisposed)
         throw lang::DisposedException();
 
-    static uno::Reference< beans::XPropertySetInfo > xRes = new SfxItemPropertySetInfo( pMap );
+    static uno::Reference< beans::XPropertySetInfo > xRes = _pPropSet->getPropertySetInfo();
     return xRes;
 }
 

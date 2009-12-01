@@ -207,8 +207,6 @@ public:
 
     BOOL            IsIgnoreSpacesRight() const;
     void            SetIgnoreSpacesRight( BOOL bVal );
-    BOOL            IsToolboxVisible() const;
-    void            SetToolboxVisible( BOOL bVal );
     BOOL            IsAutoRedraw() const;
     void            SetAutoRedraw( BOOL bVal );
     BOOL            IsShowFormulaCursor() const;
