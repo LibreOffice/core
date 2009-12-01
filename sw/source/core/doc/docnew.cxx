@@ -217,13 +217,13 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 SwDoc::SwDoc() :
     aNodes( this ),
     aUndoNodes( this ),
-    aAttrPool( this ),
-    pDfltFrmFmt( new SwFrmFmt( aAttrPool, sFrmFmtStr, 0 ) ),
-    pEmptyPageFmt( new SwFrmFmt( aAttrPool, sEmptyPageStr, pDfltFrmFmt ) ),
-    pColumnContFmt( new SwFrmFmt( aAttrPool, sColumnCntStr, pDfltFrmFmt ) ),
-    pDfltCharFmt( new SwCharFmt( aAttrPool, sCharFmtStr, 0 ) ),
-    pDfltTxtFmtColl( new SwTxtFmtColl( aAttrPool, sTxtCollStr ) ),
-    pDfltGrfFmtColl( new SwGrfFmtColl( aAttrPool, sGrfCollStr ) ),
+    mpAttrPool(new SwAttrPool(this)),
+    pDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
+    pEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, pDfltFrmFmt ) ),
+    pColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, pDfltFrmFmt ) ),
+    pDfltCharFmt( new SwCharFmt( GetAttrPool(), sCharFmtStr, 0 ) ),
+    pDfltTxtFmtColl( new SwTxtFmtColl( GetAttrPool(), sTxtCollStr ) ),
+    pDfltGrfFmtColl( new SwGrfFmtColl( GetAttrPool(), sGrfCollStr ) ),
     pFrmFmtTbl( new SwFrmFmts() ),
     pCharFmtTbl( new SwCharFmts() ),
     pSpzFrmFmtTbl( new SwSpzFrmFmts() ),
@@ -712,6 +712,7 @@ SwDoc::~SwDoc()
     delete pLayoutCache;
     delete pVirDev;
 
+    SfxItemPool::Free(mpAttrPool);
 }
 
 //---------------------------------------------------

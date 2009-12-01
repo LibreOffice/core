@@ -560,11 +560,14 @@ namespace sw
         */
         SwCharFmt* GetCharStyle(SwDoc &rDoc, const String& rName);
 
-        /** Sort sequence of Paragraph Styles by outline numbering level
+        /** Sort sequence of Paragraph Styles by assigned outline style list level
 
-            Sort ParaStyles in ascending order of outline level, e.g.  given
-            Normal/Heading2/Heading1 at their default outline levels of body
-            level/level 2/level 1 sorts them to Heading1/Heading2/Normal
+            Sort ParaStyles in ascending order of assigned outline style list level,
+            e.g.  given Normal/Heading1/Heading2/.../Heading10 at their default
+            assigned outline style list levels of body level/level 1/level 2/.../level 10
+
+            OD 2009-02-04 #i98791#
+            adjust the sorting algorithm due to introduced outline level attribute
 
             @param rStyles
             The ParaStyles to sort
@@ -572,7 +575,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        void SortByOutline(ParaStyles &rStyles);
+        void SortByAssignedOutlineStyleListLevel(ParaStyles &rStyles);
 
         /** Get the SfxPoolItems of a SfxItemSet
 

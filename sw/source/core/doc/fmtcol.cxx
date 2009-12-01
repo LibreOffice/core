@@ -683,9 +683,31 @@ int SwTxtFmtColl::GetAssignedOutlineStyleLevel() const
 
 void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
 {
-
     mbAssignedToOutlineStyle = true;
     SetAttrOutlineLevel(nAssignedListLevel+1);
+
+    // --> OD 2009-03-18 #i100277#
+    SwClientIter aIter( *this );
+    SwTxtFmtColl* pDerivedTxtFmtColl =
+                dynamic_cast<SwTxtFmtColl*>(aIter.First( TYPE( SwTxtFmtColl ) ));
+    while ( pDerivedTxtFmtColl != 0 )
+    {
+        if ( !pDerivedTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
+        {
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_DEFAULT )
+            {
+                SwNumRuleItem aItem(aEmptyStr);
+                pDerivedTxtFmtColl->SetFmtAttr( aItem );
+            }
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, FALSE ) == SFX_ITEM_DEFAULT )
+            {
+                pDerivedTxtFmtColl->SetAttrOutlineLevel( 0 );
+            }
+        }
+
+        pDerivedTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(aIter.Next());
+    }
+    // <--
 }
 
 void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle()

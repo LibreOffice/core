@@ -460,7 +460,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             };
 
             sal_uInt16 nRef = 0;
-            sal_uInt16 aSets[2];
+            sal_uInt16 aSets[2] = {0,0};
             switch( nCSS1Script )
             {
             case CSS1_OUTMODE_WESTERN:

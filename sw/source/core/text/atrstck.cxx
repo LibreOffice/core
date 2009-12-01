@@ -270,8 +270,11 @@ bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
     // attribute, instead we take the colors from the view options:
     //
     if ( pShell->GetWin() &&
-        (  ((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsVisitedLinks() ||
-          !((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsLinks() ) )
+        (
+          (((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsVisitedLinks()) ||
+          (!((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsLinks())
+        )
+       )
     {
         if ( pColor )
         {
@@ -749,7 +752,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                                           pDefaultArray[ nStackPos ];
 
             if( (mpShell && !mpShell->GetWin()) ||
-                pTmpItem && !static_cast<const SvxCharHiddenItem*>(pTmpItem)->GetValue() )
+                (pTmpItem && !static_cast<const SvxCharHiddenItem*>(pTmpItem)->GetValue()) )
             {
                 rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetLineStyle() );
                 rFnt.SetUnderColor( ((SvxUnderlineItem&)rItem).GetColor() );

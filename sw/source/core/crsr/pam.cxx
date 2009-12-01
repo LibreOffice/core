@@ -1154,3 +1154,8 @@ BOOL SwPaM::Overlap(const SwPaM & a, const SwPaM & b)
 {
     return !(*b.End() <= *a.Start() || *a.End() <= *b.End());
 }
+
+BOOL SwPaM::LessThan(const SwPaM & a, const SwPaM & b)
+{
+    return (*a.Start() < *b.Start()) || (*a.Start() == *b.Start() && *a.End() < *b.End());
+}

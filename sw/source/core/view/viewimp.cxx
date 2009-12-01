@@ -572,6 +572,27 @@ void SwViewImp::_InvalidateAccessibleParaTextSelection()
     } while ( pTmp != pVSh );
 }
 
+/** invalidate attributes for paragraphs
+
+    OD 2009-01-06 #i88069#
+
+    @author OD
+*/
+void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
+{
+    ViewShell* pVSh = GetShell();
+    ViewShell* pTmp = pVSh;
+    do
+    {
+        if ( pTmp->Imp()->IsAccessible() )
+        {
+            pTmp->Imp()->GetAccessibleMap().InvalidateAttr( rTxtFrm );
+        }
+
+        pTmp = (ViewShell *)pTmp->GetNext();
+    } while ( pTmp != pVSh );
+}
+
 // OD 15.01.2003 #103492# - method signature change due to new page preview functionality
 void SwViewImp::UpdateAccessiblePreview( const std::vector<PrevwPage*>& _rPrevwPages,
                                          const Fraction&  _rScale,

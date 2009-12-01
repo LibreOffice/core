@@ -644,6 +644,23 @@ void SwOLENode::CheckFileLink_Impl()
     }
 }
 
+// --> OD 2009-03-05 #i99665#
+bool SwOLENode::IsChart() const
+{
+    bool bIsChart( false );
+
+    const uno::Reference< embed::XEmbeddedObject > xEmbObj =
+                            const_cast<SwOLEObj&>(GetOLEObj()).GetOleRef();
+    if ( xEmbObj.is() )
+    {
+        SvGlobalName aClassID( xEmbObj->getClassID() );
+        bIsChart = SotExchange::IsChart( aClassID );
+    }
+
+    return bIsChart;
+}
+// <--
+
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pOLENd( 0 ),
     pListener( 0 ),

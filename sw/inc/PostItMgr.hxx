@@ -38,9 +38,11 @@
 #include <svx/outlobj.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
+#include <tools/debug.hxx>
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 class SwWrtShell;
 class SwDoc;

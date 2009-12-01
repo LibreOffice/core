@@ -143,14 +143,8 @@ void SwFldVarPage::Reset(const SfxItemSet& )
         for (short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
-
-#ifndef DDE_AVAILABLE
-            if (nTypeId != TYP_DDEFLD)
-#endif
-            {   // Nur unter WIN, WNT und OS/2 DDE-Fields
-                nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(i));
-                aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
-            }
+            nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(i));
+            aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
     else

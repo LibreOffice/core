@@ -149,6 +149,10 @@ public:
 
     void CheckFileLink_Impl();
 
+    // --> OD 2009-03-05 #i99665#
+    bool IsChart() const;
+    // <--
+
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     const String& GetChartTblName() const       { return sChartTblName; }
     void SetChartTblName( const String& rNm )   { sChartTblName = rNm; }

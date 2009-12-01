@@ -4004,11 +4004,13 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     }
 
     if (!rbCollExist)
+    {
         //pColl->SetOutlineLevel( nOutlineLevel );  //#outline level,removed by zhaojianwei
         if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
         else
             pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+    }
 
     return pColl;
 }

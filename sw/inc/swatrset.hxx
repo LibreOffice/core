@@ -162,6 +162,9 @@ class SwAttrPool : public SfxItemPool
 
 public:
     SwAttrPool( SwDoc* pDoc );
+protected:
+    virtual ~SwAttrPool();
+public:
 
           SwDoc* GetDoc()           { return pDoc; }
     const SwDoc* GetDoc() const     { return pDoc; }
