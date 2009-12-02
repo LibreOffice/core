@@ -7047,6 +7047,8 @@ BOOL SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
             aZCodec.Decompress( rBLIPStream, *pOut );
             aZCodec.EndCompression();
             pOut->Seek( STREAM_SEEK_TO_BEGIN );
+            pOut->SetResizeOffset( 0 ); // sj: #i102257# setting ResizeOffset of 0 prevents from seeking
+                                        // behind the stream end (allocating too much memory)
             pGrStream = pOut;
         }
 
@@ -8132,6 +8134,7 @@ void SvxMSDffManager::removeShapeId( SdrObject* pShape )
             maShapeIdContainer.erase( aIter );
             break;
         }
+        aIter++;
     }
 }
 

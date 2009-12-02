@@ -7660,7 +7660,7 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
     }
 }
 
-SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTableArry, SvxMSDffSolverContainer* pSolverContainer ) const
+SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTableArry, SvxMSDffSolverContainer* pSolverContainer )
 {
     SdrObject* pRet = pGroup;
     sal_uInt32 nRows = pTableArry[ 1 ];
@@ -7784,6 +7784,15 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 pTable->uno_unlock();
                 pTable->SetSnapRect( pGroup->GetSnapRect() );
                 pRet = pTable;
+
+                //Remove Objects from shape map
+                SdrObjListIter aIter( *pGroup, IM_DEEPWITHGROUPS );
+                while( aIter.IsMore() )
+                {
+                    SdrObject* pPartObj = aIter.Next();
+                    removeShapeId( pPartObj );
+                }
+
                 SdrObject::Free( pGroup );
             }
             catch( Exception& )
