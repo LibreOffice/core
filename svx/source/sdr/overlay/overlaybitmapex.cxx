@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -44,12 +45,19 @@ namespace sdr
     {
         drawinglayer::primitive2d::Primitive2DSequence OverlayBitmapEx::createOverlayObjectPrimitive2DSequence()
         {
-            const drawinglayer::primitive2d::Primitive2DReference aReference(
+            drawinglayer::primitive2d::Primitive2DReference aReference(
                 new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
                     getBitmapEx(),
                     getBasePosition(),
                     getCenterX(),
                     getCenterY()));
+
+            if(basegfx::fTools::more(mfAlpha, 0.0))
+            {
+                const drawinglayer::primitive2d::Primitive2DSequence aNewTransPrimitiveVector(&aReference, 1L);
+                aReference = drawinglayer::primitive2d::Primitive2DReference(
+                                new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(aNewTransPrimitiveVector, mfAlpha));
+            }
 
             return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
         }
@@ -57,11 +65,12 @@ namespace sdr
         OverlayBitmapEx::OverlayBitmapEx(
             const basegfx::B2DPoint& rBasePos,
             const BitmapEx& rBitmapEx,
-            sal_uInt16 nCenX, sal_uInt16 nCenY)
+            sal_uInt16 nCenX, sal_uInt16 nCenY, double fAlpha)
         :   OverlayObjectWithBasePosition(rBasePos, Color(COL_WHITE)),
             maBitmapEx(rBitmapEx),
             mnCenterX(nCenX),
-            mnCenterY(nCenY)
+            mnCenterY(nCenY),
+            mfAlpha(fAlpha)
         {
         }
 

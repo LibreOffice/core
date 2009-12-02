@@ -50,13 +50,16 @@ namespace sdr
             sal_uInt16                              mnCenterX;
             sal_uInt16                              mnCenterY;
 
+            // optional transparency
+            double mfAlpha;
+
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayBitmapEx(
                 const basegfx::B2DPoint& rBasePos,
                 const BitmapEx& rBitmapEx,
-                sal_uInt16 nCenX = 0, sal_uInt16 nCenY = 0);
+                sal_uInt16 nCenX = 0, sal_uInt16 nCenY = 0, double fAlpha = 0.0 );
             virtual ~OverlayBitmapEx();
 
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
