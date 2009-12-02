@@ -78,7 +78,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
-     $UPD, $WORK_STAMP, 
+     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
@@ -805,6 +805,7 @@ $SRC_ROOT =~ s/\/config_office//;
 $SRC_ROOT = PathFormat($SRC_ROOT);
 CheckPathExist( $SRC_ROOT );
 
+
 #-----------------------------------------------------------------------------------------------------
 # Copy top level makefile from config_office/ to $SRC_ROOT
 #-----------------------------------------------------------------------------------------------------
@@ -978,6 +979,12 @@ if ( $platform =~ m/darwin/ )
 $WORK_STAMP            = "@SOURCEVERSION@";
 # Location of the source.
 $SOLARSRC             = '$SRC_ROOT';
+
+# SOURCE_ROOT_DIR equals $SOLARSRC/..
+my @list1 = split( /\// , $SOLARSRC );
+pop @list1;
+$SOURCE_ROOT_DIR = join ( '/' , @list1 );
+
 #
 $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
@@ -1930,6 +1937,7 @@ if ($platform !~ m/cygwin|os2/) {
    }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
+ToFile( "SOURCE_ROOT_DIR",    $SOURCE_ROOT_DIR,    "e" );
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
