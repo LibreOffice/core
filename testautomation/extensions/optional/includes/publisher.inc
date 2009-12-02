@@ -39,6 +39,9 @@
 
 testcase tExtensionPublisher
 
+    warnlog( "#i106766# - Crash when cancelling extension update" )
+    goto endsub
+
     printlog( "Extension Manager and Release Notes" )
 
     if ( gISOLang <> "en-US" ) then
