@@ -4679,7 +4679,8 @@ if test "$_os" != "WINNT" -a "$_os" != "OS2" -a "$_os" != "Darwin"; then
          [#include <X11/Intrinsic.h>])
    else
        AC_MSG_RESULT([yes])
-       AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])])
+       AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])],
+         [#include <X11/Intrinsic.h>])
        AC_CHECK_LIB(Xaw, main, [],
            [AC_MSG_ERROR(Xaw library not found or functional)], [])
    fi

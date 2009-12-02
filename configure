@@ -16749,7 +16749,8 @@ done
 $as_echo "yes" >&6; }
        for ac_header in X11/Xaw/Label.h
 do :
-  ac_fn_c_check_header_mongrel "$LINENO" "X11/Xaw/Label.h" "ac_cv_header_X11_Xaw_Label_h" "$ac_includes_default"
+  ac_fn_c_check_header_compile "$LINENO" "X11/Xaw/Label.h" "ac_cv_header_X11_Xaw_Label_h" "#include <X11/Intrinsic.h>
+"
 if test "x$ac_cv_header_X11_Xaw_Label_h" = x""yes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_X11_XAW_LABEL_H 1
