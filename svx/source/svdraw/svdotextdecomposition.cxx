@@ -818,15 +818,16 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     {
         // cell text is formated neither like a text object nor like a object
         // text, so use a special setup here
+        // #i106214# To work with an unchangeable PaperSize (CellSize in
+        // this case) Set(Min|Max)AutoPaperSize and SetPaperSize have to be used
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
+        rOutliner.SetMinAutoPaperSize(aAnchorTextSize);
         rOutliner.SetPaperSize(aAnchorTextSize);
         rOutliner.SetUpdateMode(true);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
-        rOutliner.SetControlWord(nOriginalControlWord);
     }
     else
     {
-
         if((rSdrBlockTextPrimitive.getWordWrap() || IsTextFrame()) && !rSdrBlockTextPrimitive.getUnlimitedPage())
         {
             // #i103454# maximal paper size hor/ver needs to be limited to text
@@ -854,8 +855,9 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         rOutliner.SetPaperSize(aNullSize);
         rOutliner.SetUpdateMode(true);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
-        rOutliner.SetControlWord(nOriginalControlWord);
     }
+
+    rOutliner.SetControlWord(nOriginalControlWord);
 
     // now get back the layouted text size from outliner
     const Size aOutlinerTextSiz(rOutliner.GetPaperSize());
