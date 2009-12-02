@@ -60,6 +60,7 @@ class LayerTabBar;
 class Ruler;
 class SdUnoDrawView;
 class AnnotationManager;
+class ViewOverlayManager;
 
 #define CHECK_RANGE(nMin, nValue, nMax) ((nValue >= nMin) && (nValue <= nMax))
 
@@ -499,6 +500,7 @@ private:
     using ViewShell::Notify;
 
     ::std::auto_ptr< AnnotationManager > mpAnnotationManager;
+    ::std::auto_ptr< ViewOverlayManager > mpViewOverlayManager;
 };
 
 

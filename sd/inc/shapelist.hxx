@@ -79,6 +79,8 @@ namespace sd
         */
         bool hasMore() const;
 
+        const std::list< SdrObject* >& getList() const { return maShapeList; }
+
     private:
         virtual void ObjectInDestruction(const SdrObject& rObject);
 

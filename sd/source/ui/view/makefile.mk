@@ -113,7 +113,8 @@ SLOFILES =	\
         $(SLO)$/ViewShellManager.obj			\
         $(SLO)$/ViewShellHint.obj				\
         $(SLO)$/ViewTabBar.obj					\
-        $(SLO)$/WindowUpdater.obj
+        $(SLO)$/WindowUpdater.obj				\
+        $(SLO)$/ViewOverlayManager.obj
 
 
 

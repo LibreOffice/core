@@ -156,6 +156,18 @@ void SmartTag::CheckPossibilities()
 {
 }
 
+// --------------------------------------------------------------------
+
+void SmartTag::onMouseEnter(SmartHdl& rHdl)
+{
+}
+
+// --------------------------------------------------------------------
+
+void SmartTag::onMouseLeave()
+{
+}
+
 // ====================================================================
 
 SmartTagSet::SmartTagSet( View& rView )
@@ -175,6 +187,12 @@ void SmartTagSet::add( const SmartTagReference& xTag )
 {
     maSet.insert( xTag );
     mrView.InvalidateAllWin();
+
+    if( xTag == mxMouseOverTag )
+        mxMouseOverTag.clear();
+
+    if( xTag == mxSelectedTag )
+        mxSelectedTag.clear();
 }
 
 // --------------------------------------------------------------------
@@ -185,6 +203,12 @@ void SmartTagSet::remove( const SmartTagReference& xTag )
     if( aIter != maSet.end() )
         maSet.erase( aIter );
     mrView.InvalidateAllWin();
+
+    if( xTag == mxMouseOverTag )
+        mxMouseOverTag.clear();
+
+    if( xTag == mxSelectedTag )
+        mxSelectedTag.clear();
 }
 
 // --------------------------------------------------------------------
@@ -196,6 +220,8 @@ void SmartTagSet::Dispose()
     for( std::set< SmartTagReference >::iterator aIter( aSet.begin() ); aIter != aSet.end(); )
         (*aIter++)->Dispose();
     mrView.InvalidateAllWin();
+    mxMouseOverTag.clear();
+    mxSelectedTag.clear();
 }
 
 // --------------------------------------------------------------------
@@ -254,6 +280,35 @@ bool SmartTagSet::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     return false;
+}
+
+// --------------------------------------------------------------------
+
+void SmartTagSet::MouseMove(const MouseEvent& rMEvt)
+{
+    SmartTagReference xTag;
+
+    SmartHdl* pSmartHdl = 0;
+    if( !rMEvt.IsLeaveWindow() )
+    {
+        Point aMDPos( mrView.GetViewShell()->GetActiveWindow()->PixelToLogic( rMEvt.GetPosPixel() ) );
+        SdrHdl* pHdl = mrView.PickHandle(aMDPos);
+
+        pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
+        if( pSmartHdl )
+            xTag = pSmartHdl->getTag();
+    }
+
+    if( xTag != mxMouseOverTag )
+    {
+        if( mxMouseOverTag.is() )
+            mxMouseOverTag->onMouseLeave();
+
+        mxMouseOverTag = xTag;
+
+        if( mxMouseOverTag.is() )
+            mxMouseOverTag->onMouseEnter(*pSmartHdl);
+    }
 }
 
 // --------------------------------------------------------------------

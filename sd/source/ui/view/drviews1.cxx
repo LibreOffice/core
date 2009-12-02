@@ -71,6 +71,8 @@
 
 #include <svx/dialogs.hrc>
 
+#include "view/viewoverlaymanager.hxx"
+
 #include "glob.hrc"
 #include "app.hrc"
 #include "res_bmp.hrc"
@@ -295,6 +297,7 @@ void DrawViewShell::SetZoom( long nZoom )
     ViewShell::SetZoom( nZoom );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+    mpViewOverlayManager->onZoomChanged();
 }
 
 /*************************************************************************
@@ -308,6 +311,7 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
     ViewShell::SetZoomRect( rZoomRect );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+    mpViewOverlayManager->onZoomChanged();
 }
 
 /*************************************************************************

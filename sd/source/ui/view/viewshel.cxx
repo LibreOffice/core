@@ -579,6 +579,9 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
 void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
+    if( GetView() )
+        GetView()->getSmartTags().MouseMove( rMEvt );
+
     if (rMEvt.IsLeaveWindow())
     {
         if ( ! mpImpl->mpUpdateLockForMouse.expired())

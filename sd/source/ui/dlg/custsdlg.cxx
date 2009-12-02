@@ -45,7 +45,6 @@
 #include "sdpage.hxx"
 #include "cusshow.hxx"
 #include "app.hxx"
-#include "optsitem.hxx"
 #include <vcl/msgbox.hxx>
 
 
