@@ -137,7 +137,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
 {
     ::osl::ResettableMutexGuard guard( getMutex() );
     check();
-    t_string2weakref::const_iterator const iFind( m_bound.find( url ) );
+    t_string2ref::const_iterator const iFind( m_bound.find( url ) );
     if (iFind != m_bound.end()) {
         Reference<deployment::XPackage> xPackage( iFind->second );
         if (xPackage.is())
@@ -169,8 +169,8 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     }
 
     guard.reset();
-    ::std::pair< t_string2weakref::iterator, bool > insertion(
-        m_bound.insert( t_string2weakref::value_type( url, xNewPackage ) ) );
+    ::std::pair< t_string2ref::iterator, bool > insertion(
+        m_bound.insert( t_string2ref::value_type( url, xNewPackage ) ) );
     if (insertion.second)
     { // first insertion
         OSL_ASSERT( Reference<XInterface>(insertion.first->second)
