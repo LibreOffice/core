@@ -130,7 +130,7 @@ AC_ARG_ENABLE(evolution2,
 ],,)
 AC_ARG_WITH(system-stdlibs,
 [  --with-system-stdlibs   use libstdc++/libgcc_s already on system
-],,checkforprelink=yes)
+],,checkforstdlibproblems=yes)
 AC_ARG_WITH(system-mspack,
 [  --with-system-mspack    use libmspack already installed on system
 ],,)
@@ -2710,7 +2710,7 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\$stub' visibility.s; then
+         if $EGREP -q '@PLT|\$stub|\(PLT\)' visibility.s; then
              gccvisbroken=no;
          else 
              gccvisbroken=yes; 
@@ -2890,8 +2890,8 @@ if test "$SOLAR_JAVA" != ""; then
         _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
         _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
    
-        if test "$_jdk_ver" -lt 10600; then
-             AC_MSG_ERROR([IBM JDK is too old, you need at least 1.6])
+        if test "$_jdk_ver" -lt 10500; then
+             AC_MSG_ERROR([IBM JDK is too old, you need at least 1.5])
         fi
 
         AC_MSG_RESULT([checked (IBM JDK $_jdk)])
@@ -3582,10 +3582,16 @@ dnl ===================================================================
 dnl Check for prelinked libgcc_s.so.1
 dnl ===================================================================
 if test -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
-  if test -n "$checkforprelink" -a -f /etc/rpm/macros.prelink; then
-    with_system_stdlibs=yes
-    AC_MSG_WARN([prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override])
-    echo "prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+  if test -n "$checkforstdlibproblems"; then
+    if test -f /etc/rpm/macros.prelink; then
+      with_system_stdlibs=yes
+      AC_MSG_WARN([prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override])
+      echo "prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+    elif test "$GCC" = "yes" -a ! -e `$CC -print-file-name=libgcc_s.so.1`; then
+      with_system_stdlibs=yes
+      AC_MSG_WARN([platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override])
+      echo "platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+    fi
   fi
 fi
 

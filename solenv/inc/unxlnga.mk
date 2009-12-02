@@ -33,5 +33,5 @@
 
 .INCLUDE : unxlng.mk
 CFLAGS+=-DIA64
-CFLAGSCXX+=-fno-use-cxa-atexit
 DLLPOSTFIX=la
+BUILD64=1
