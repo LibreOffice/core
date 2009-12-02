@@ -106,6 +106,7 @@ class SC_DLLPUBLIC ScMatrix
     void ResetIsString();
     void DeleteIsString();
     void CreateMatrix( SCSIZE nC, SCSIZE nR);
+    void Clear();
 
     // pStr may be NULL, bFlag MUST NOT be 0
     void PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex );
@@ -177,6 +178,12 @@ public:
 
     /** Clone the matrix. */
     ScMatrix* Clone() const;
+
+    /**
+     * Resize the matrix to specified new dimension.  Note that this operation
+     * clears all stored values.
+     */
+    void Resize( SCSIZE nC, SCSIZE nR);
 
     /** Clone the matrix and extend it to the new size. nNewCols and nNewRows
         MUST be at least of the size of the original matrix. */
