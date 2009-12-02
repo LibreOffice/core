@@ -956,11 +956,43 @@ namespace dxcanvas
             {
                 if(hr != D3DERR_DEVICELOST)
                     return false;
-                hr = mpDevice->Reset(&mad3dpp);
-                if(SUCCEEDED(hr))
-                    return true;
-                if(hr == D3DERR_DEVICELOST)
-                    return true;
+
+                // interestingly enough, sometimes the Reset() below
+                // *still* causes DeviceLost errors. So, cycle until
+                // DX was kind enough to really reset the device...
+                do
+                {
+                    mpVertexBuffer.reset();
+                    hr = mpDevice->Reset(&mad3dpp);
+                    if(SUCCEEDED(hr))
+                    {
+                        IDirect3DVertexBuffer9 *pVB(NULL);
+                        DWORD aFVF(D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1);
+                        if( FAILED(mpDevice->CreateVertexBuffer(sizeof(dxvertex)*maNumVertices,
+                                                                D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY,
+                                                                aFVF,
+                                                                D3DPOOL_DEFAULT,
+                                                                &pVB,
+                                                                NULL)) )
+                        {
+                            throw lang::NoSupportException(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                     "Could not create DirectX device - out of memory!")),NULL);
+                        }
+                        mpVertexBuffer=COMReference<IDirect3DVertexBuffer9>(pVB);
+
+                        // retry after the restore
+                        if(SUCCEEDED(mpSwapChain->Present(&aRect,&aRect,NULL,NULL,0)))
+                            return true;
+                    }
+
+                    TimeValue aTimeout;
+                    aTimeout.Seconds=1;
+                    aTimeout.Nanosec=0;
+                    osl_waitThread(&aTimeout);
+                }
+                while(hr == D3DERR_DEVICELOST);
+
                 return false;
             }
 

@@ -479,6 +479,20 @@ public:
      */
     static const ::rtl::OUString& GetDesktopEnvironment();
 
+    /** Add a file to the system shells recent document list if there is any.
+          This function may have no effect under Unix because there is no
+          standard API among the different desktop managers.
+
+          @param rFileUrl
+                    The file url of the document.
+
+          @param rMimeType
+          The mime content type of the document specified by aFileUrl.
+          If an empty string will be provided "application/octet-stream"
+          will be used.
+    */
+    static void AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+
 private:
 
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
