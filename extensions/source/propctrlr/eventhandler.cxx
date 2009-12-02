@@ -55,7 +55,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
@@ -118,7 +118,7 @@ namespace pcr
     using ::com::sun::star::container::XNameContainer;
     using ::com::sun::star::awt::XTabControllerModel;
     using ::com::sun::star::form::XForm;
-    using ::com::sun::star::form::XFormController;
+    using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::beans::UnknownPropertyException;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::container::NoSuchElementException;
@@ -1155,7 +1155,7 @@ namespace pcr
                 m_aContext.createComponent( (const rtl::OUString&)SERVICE_FORMCONTROLLER ), UNO_QUERY_THROW );
             xController->setModel( xComponentAsTCModel );
 
-            xReturn = xController.get();
+            xReturn = xController;
         }
         else
         {
