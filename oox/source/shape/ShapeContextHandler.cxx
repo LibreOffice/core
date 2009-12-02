@@ -245,6 +245,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         {
             mpShape->addShape(*mxFilterBase, mpThemePtr, xShapes);
             xResult.set(mpShape->getXShape());
+            mxGraphicShapeContext.clear( );
         }
     }
 
