@@ -31,7 +31,7 @@
 #include "precompiled_extensions.hxx"
 
 #include "updatehdl.hxx"
-#include "extensio.hrc"
+#include "update.hrc"
 
 #include "osl/diagnose.h"
 #include "osl/thread.hxx"
