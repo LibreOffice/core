@@ -280,18 +280,6 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
         );
     };
-    //======================================================================
-    //= ReportDesigner
-    //======================================================================
-    class ReportDesigner : public DatabaseObjectView
-    {
-    public:
-        ReportDesigner(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
-        );
-    };
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
