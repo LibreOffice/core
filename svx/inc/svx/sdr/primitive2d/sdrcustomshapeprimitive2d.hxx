@@ -56,8 +56,13 @@ namespace drawinglayer
             // defines if SdrTextWordWrapItem was set at SdrObjCustomShape which means
             // that the text needs to be block formatted
             unsigned                                    mbWordWrap : 1;
+
             // #SJ# Allow text clipping against TextBox in special cases (used for SC)
             unsigned                                    mbForceTextClipToTextRange : 1;
+
+            // defines that the object contains/is a 3D AutoShape. Needed for
+            // making exceptions with shadow generation
+            unsigned                                    mb3DShape : 1;
 
         protected:
             // local decomposition.
@@ -69,7 +74,8 @@ namespace drawinglayer
                 const Primitive2DSequence& rSubPrimitives,
                 const basegfx::B2DHomMatrix& rTextBox,
                 bool bWordWrap,
-                bool bForceTextClipToTextRange);
+                bool bForceTextClipToTextRange,
+                bool b3DShape);
 
             // data access
             const attribute::SdrShadowTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }
@@ -77,6 +83,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getTextBox() const { return maTextBox; }
             bool getWordWrap() const { return mbWordWrap; }
             bool isForceTextClipToTextRange() const { return mbForceTextClipToTextRange; }
+             bool get3DShape() const { return mb3DShape; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
