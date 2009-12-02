@@ -655,10 +655,39 @@ class SwXBookmark
 
         const ::sw::mark::IMark* GetBookmark() const
             { return m_pRegisteredBookmark; }
-              ::sw::mark::IMark* GetBookmark()
+        ::sw::mark::IMark* GetBookmark()
             { return m_pRegisteredBookmark; }
         SwDoc* GetDoc()
             { return m_pDoc; }
+};
+
+
+class SwXFieldmarkParameters
+    : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameContainer>
+    , private SwClient
+{
+    public:
+        SwXFieldmarkParameters(::sw::mark::IFieldmark* const pFieldmark)
+        {
+            pFieldmark->Add(this);
+        }
+
+        // XNameContainer
+        virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeByName( const ::rtl::OUString& Name ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        // XNameReplace
+        virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        // XNameAccess
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+        // XElementAccess
+        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+        //SwClient
+        virtual void Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    private:
+        ::sw::mark::IFieldmark::parameter_map_t* getCoreParameters() throw (::com::sun::star::uno::RuntimeException);
 };
 
 typedef cppu::ImplInheritanceHelper1< SwXBookmark, ::com::sun::star::text::XFormField > SwXFieldmark_BASE;
@@ -672,12 +701,8 @@ class SwXFieldmark : public SwXFieldmark_BASE
 
         virtual void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
         virtual ::rtl::OUString SAL_CALL getFieldType(void)  throw( ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL setFieldType( const ::rtl::OUString& description ) throw (::com::sun::star::uno::RuntimeException);
-
-        virtual ::sal_Int16 SAL_CALL getParamCount(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getParamName(::sal_Int16 i)  throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::rtl::OUString SAL_CALL getParamValue(::sal_Int16 i)  throw( ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL addParam( const ::rtl::OUString& name, const ::rtl::OUString& value, ::sal_Bool replaceExisting ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setFieldType(const ::rtl::OUString& description ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getParameters(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 /*-----------------23.02.98 10:45-------------------

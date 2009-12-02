@@ -312,12 +312,12 @@ namespace sw { namespace mark
 
     void MarkManager::dumpFieldmarks( ) const
     {
-        const_iterator_t pIt = m_vFieldmarks.begin( );
-        for ( ; pIt != m_vFieldmarks.end( ); pIt++ )
+        const_iterator_t pIt = m_vFieldmarks.begin();
+        for (; pIt != m_vFieldmarks.end( ); pIt++)
         {
-            rtl::OUString str = ( *pIt )->toString( );
-            fprintf( stderr, "%s\n",
-                  rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
+            rtl::OUString str = (*pIt)->ToString();
+            OSL_TRACE("%s\n",
+                ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
 

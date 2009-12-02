@@ -364,39 +364,35 @@ namespace sw
             Position(const SwPosition &rPos);
             Position(const Position &rPos);
             operator SwPosition() const;
-        SwNodeIndex GetPtNode() { return maPtNode; };
-        xub_StrLen GetPtCntnt() { return mnPtCntnt; };
+            SwNodeIndex GetPtNode() { return maPtNode; };
+            xub_StrLen GetPtCntnt() { return mnPtCntnt; };
         };
     }
 }
 
 class FieldEntry
 {
-public:
-     typedef ::std::vector<sw::mark::IFieldmark::ParamPair_t> Params_t;
+    private:
+        ::rtl::OUString msBookmarkName;
+        ::rtl::OUString msMarkType;
+        ::sw::mark::IFieldmark::parameter_map_t maParams;
 
-private:
-    ::rtl::OUString msBookmarkName;
-    ::rtl::OUString msMarkType;
-    Params_t maParams;
+    public:
+        sw::hack::Position maStartPos;
+        sal_uInt16 mnFieldId;
+        FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
+        FieldEntry(const FieldEntry &rOther) throw();
+        FieldEntry &operator=(const FieldEntry &rOther) throw();
+        void Swap(FieldEntry &rOther) throw();
 
-public:
-    sw::hack::Position maStartPos;
-    sal_uInt16 mnFieldId;
-    FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
-    FieldEntry(const FieldEntry &rOther) throw();
-    FieldEntry &operator=(const FieldEntry &rOther) throw();
-    void Swap(FieldEntry &rOther) throw();
+        SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
+        xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
-    SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
-    xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
-
-    ::rtl::OUString GetBookmarkName();
-    ::rtl::OUString GetBookmarkType();
-    void SetBookmarkName(::rtl::OUString bookmarkName);
-    void SetBookmarkType(::rtl::OUString bookmarkType);
-    void AddParam(::rtl::OUString name, ::rtl::OUString value);
-    Params_t &getParams();
+        ::rtl::OUString GetBookmarkName();
+        ::rtl::OUString GetBookmarkType();
+        void SetBookmarkName(::rtl::OUString bookmarkName);
+        void SetBookmarkType(::rtl::OUString bookmarkType);
+        ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 
 

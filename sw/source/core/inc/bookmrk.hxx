@@ -36,6 +36,7 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <map>
 
 struct SwPosition;  // fwd Decl. wg. UI
 class SwDoc;
@@ -85,7 +86,7 @@ namespace sw { namespace mark
             virtual void ClearOtherMarkPos()
                 { m_pPos2.reset(); }
 
-            virtual rtl::OUString toString( ) const;
+            virtual rtl::OUString ToString( ) const;
 
             virtual void Swap()
             {
@@ -192,36 +193,33 @@ namespace sw { namespace mark
             Fieldmark(const SwPaM& rPaM);
 
             // getters
-            ::rtl::OUString GetFieldname() const
+            virtual ::rtl::OUString GetFieldname() const
                 { return m_aFieldname; }
-            ::rtl::OUString GetFieldHelptext() const
+            virtual ::rtl::OUString GetFieldHelptext() const
                 { return m_aFieldHelptext; }
 
-            void addParam( rtl::OUString rParamName,
-                           rtl::OUString rParamValue,
-                           bool bReplaceExisting = true );
-            void addParam( const char* paramName, int value );
-            void addParams(std::vector<ParamPair_t>& params);
-            int  getNumOfParams() const;
-            ParamPair_t getParam(int pos) const;
-            ParamPair_t getParam(const char *name, const char *defaultValue) const;
+            virtual IFieldmark::parameter_map_t* GetParameters()
+                { return &m_vParams; }
+
+            virtual const IFieldmark::parameter_map_t* GetParameters() const
+                { return &m_vParams; }
 
             // setters
-            void SetFieldname(const ::rtl::OUString& aFieldname)
+            virtual void SetFieldname(const ::rtl::OUString& aFieldname)
                 { m_aFieldname = aFieldname; }
-            void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
+            virtual void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
                 { m_aFieldHelptext = aFieldHelptext; }
-            void invalidate( );
 
-            virtual rtl::OUString toString( ) const;
+            virtual void Invalidate();
+            virtual rtl::OUString ToString() const;
         private:
             //int fftype; // Type: 0 = Text, 1 = Check Box, 2 = List
             //bool ffprot;
-
             ::rtl::OUString m_aFieldname;
             ::rtl::OUString m_aFieldHelptext;
+            IFieldmark::parameter_map_t m_vParams;
+
             static const ::rtl::OUString our_sNamePrefix;
-            std::vector<ParamPair_t> m_params;
     };
 
     class TextFieldmark

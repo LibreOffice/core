@@ -97,7 +97,7 @@
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>
-
+#include <comphelper/stlunosequence.hxx>
 #include <writerfilter/doctok/sprmids.hxx>
 
 #include "writerhelper.hxx"
@@ -3480,7 +3480,10 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if ( rFieldmark.GetFieldname().equalsAscii( ECMA_FORMDROPDOWN ) )
         type=2;
 
-    const String ffname = rFieldmark.getParam("name").second;
+    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pNameParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii("name"));
+    ::rtl::OUString ffname;
+    if(pNameParameter != rFieldmark.GetParameters()->end())
+        pNameParameter->second >>= ffname;
 
     ULONG nDataStt = pDataStrm->Tell();
     pChpPlc->AppendFkpEntry(Strm().Tell());
@@ -3506,21 +3509,30 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     };
 
     aFldHeader[4] |= (type & 0x03);
-    int ffres = 0; // rFieldmark.GetFFRes();
+    sal_Int32 ffres = 0; // rFieldmark.GetFFRes();
     if ( pAsCheckbox && pAsCheckbox->IsChecked() )
         ffres = 1;
     else if ( type == 2 )
-        ffres = rFieldmark.getParam( ECMA_FORMDROPDOWN_RESULT, "0" ).second.toInt32();
+    {
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN));
+        if(pResParameter != rFieldmark.GetParameters()->end())
+            pResParameter->second >>= ffres;
+        else
+            ffres = 0;
+    }
     aFldHeader[4] |= ( (ffres<<2) & 0x7C );
 
     std::vector< ::rtl::OUString > aListItems;
     if (type==2)
     {
         aFldHeader[5] |= 0x80; // ffhaslistbox
-        for ( int i = 0; i < rFieldmark.getNumOfParams() ; i++ )
+        const ::sw::mark::IFieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_LISTENTRY));
+        if(pListEntries != pParameters->end())
         {
-            if (rFieldmark.getParam(i).first.compareToAscii(ECMA_FORMDROPDOWN_LISTENTRY)==0)
-                aListItems.push_back(rFieldmark.getParam(i).second);
+            uno::Sequence< ::rtl::OUString > vListEntries;
+            pListEntries->second >>= vListEntries;
+            copy(::comphelper::stl_begin(vListEntries), ::comphelper::stl_end(vListEntries), back_inserter(aListItems));
         }
     }
 
@@ -3544,7 +3556,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     };
     int slen = sizeof( aFldData )
         + sizeof( aFldHeader )
-        + 2*ffname.Len() + 4
+        + 2*ffname.getLength() + 4
         + 2*ffdeftext.getLength() + 4
         + 2*ffformat.getLength() + 4
         + 2*ffhelptext.getLength() + 4

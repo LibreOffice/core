@@ -3620,10 +3620,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     pAnchorMarker->ChgHdl( pHdl );
                     if( aNew.X() || aNew.Y() )
                     {
-                         pAnchorMarker->SetPos( aNew );
-                         pAnchorMarker->SetLastPos( aDocPt );
-                         //OLMpSdrView->RefreshAllIAOManagers();
-                     }
+                        pAnchorMarker->SetPos( aNew );
+                        pAnchorMarker->SetLastPos( aDocPt );
+                        //OLMpSdrView->RefreshAllIAOManagers();
+                    }
                 }
                 else
                 {
@@ -4220,16 +4220,13 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     //SwDoc *pDoc=pDocSh->GetDoc();
                                     if (fieldBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
                                     {
-                                        bool isChecked = fieldBM->getParam( ECMA_FORMCHECKBOX_CHECKED ).second.compareToAscii("on") == 0;
-                                        isChecked = !isChecked; // swap it...
-                                        fieldBM->addParam(
-                                                rtl::OUString::createFromAscii( ECMA_FORMCHECKBOX_CHECKED ),
-                                                rtl::OUString::createFromAscii( isChecked?"on":"off" ) );
-                                        fieldBM->invalidate();
+                                        ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(fieldBM);
+                                        pCheckboxFm->SetChecked(!pCheckboxFm->IsChecked());
+                                        pCheckboxFm->Invalidate();
                                         rSh.InvalidateWindows( rView.GetVisArea() );
                                     } else if (fieldBM->GetFieldname().equalsAscii( ECMA_FORMDROPDOWN) ) {
                                         rView.ExecFieldPopup( aDocPt, fieldBM );
-                                        fieldBM->invalidate();
+                                        fieldBM->Invalidate();
                                         rSh.InvalidateWindows( rView.GetVisArea() );
                                     } else {
                                         // unknown type..

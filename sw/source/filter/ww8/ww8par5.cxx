@@ -701,7 +701,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         aFldPam, maFieldStack.back().GetBookmarkName(), ::rtl::OUString::createFromAscii(ECMA_FORMTEXT ) ) );
             ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=NULL) {
-            pFieldmark->addParams(maFieldStack.back().getParams());
+                const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
+                pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
             }
         }
         break;
@@ -717,7 +718,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeFieldBookmark(aFldPam, maFieldStack.back().GetBookmarkName(), maFieldStack.back().GetBookmarkType());
             ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=NULL) {
-            pFieldmark->addParams(maFieldStack.back().getParams());
+                const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
+                pFieldmark->GetParameters()->insert(pParameters.begin(), pParameters.end());
             }
         }
         break;
@@ -805,12 +807,8 @@ void FieldEntry::SetBookmarkType(::rtl::OUString bookmarkType)
     msMarkType=bookmarkType;
 }
 
-void FieldEntry::AddParam(::rtl::OUString name, ::rtl::OUString value)
-{
-    maParams.push_back( IFieldmark::ParamPair_t( name, value ) );
-}
 
-FieldEntry::Params_t &FieldEntry::getParams() {
+::sw::mark::IFieldmark::parameter_map_t& FieldEntry::getParameters() {
     return maParams;
 }
 

@@ -34,6 +34,7 @@
 #include <calbck.hxx>
 #include <pam.hxx>
 #include <boost/operators.hpp>
+#include <map>
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
@@ -80,8 +81,7 @@ namespace sw { namespace mark
             bool EndsAfter(const SwPosition& rPos) const
                 { return GetMarkEnd() > rPos; }
 
-            // Use for debugging purpose
-            virtual rtl::OUString toString( ) const = 0;
+            virtual rtl::OUString ToString( ) const =0;
     };
 
     class IBookmark
@@ -98,25 +98,17 @@ namespace sw { namespace mark
         : virtual public IMark
     {
         public:
-            typedef  std::pair< ::rtl::OUString, ::rtl::OUString > ParamPair_t;
-
+            typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any> parameter_map_t;
             //getters
             virtual ::rtl::OUString GetFieldname() const =0;
             virtual ::rtl::OUString GetFieldHelptext() const =0;
-
-            virtual void addParam( rtl::OUString rParamName,
-                    rtl::OUString rParamValue,
-                    bool bReplaceExisting = true ) = 0;
-            virtual void addParam( const char* paramName, int value ) = 0;
-            virtual void addParams( std::vector<ParamPair_t>& params ) = 0;
-            virtual int  getNumOfParams() const = 0;
-            virtual ParamPair_t getParam( int pos ) const = 0;
-            virtual ParamPair_t getParam( const char *name, const char *defaultValue = NULL ) const = 0;
+            virtual parameter_map_t* GetParameters() =0;
+            virtual const parameter_map_t* GetParameters() const =0;
 
             //setters
             virtual void SetFieldname(const ::rtl::OUString& rFieldname) =0;
             virtual void SetFieldHelptext(const ::rtl::OUString& rFieldHelptext) =0;
-            virtual void invalidate( ) = 0;
+            virtual void Invalidate() = 0;
     };
 
     class ICheckboxFieldmark

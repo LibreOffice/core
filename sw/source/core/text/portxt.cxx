@@ -354,7 +354,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     //   C2 break iterator does not found a possible line break at all:
     //      ==> line break
 
-      // case A: line not yet full
+    // case A: line not yet full
     if ( !bFull )
     {
         Width( aGuess.BreakWidth() );
@@ -660,7 +660,7 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
 
 long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
-     xub_StrLen nCnt = 0;
+    xub_StrLen nCnt = 0;
 
     if ( InExpGrp() )
     {
@@ -785,26 +785,26 @@ sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
 }
 
 namespace ecma {
-    static int getCurrentListIndex( IFieldmark* pBM,
-            ::rtl::OUString *currentText = NULL )
+    static sal_Int32 getCurrentListIndex( IFieldmark* pBM,
+            ::rtl::OUString* io_pCurrentText = NULL )
     {
-        int currentIndex = pBM->getParam( ECMA_FORMDROPDOWN_RESULT, "0" ).second.toInt32();
-        int idx = 0;
-        for( int i = 0; i < pBM->getNumOfParams(); i++ )
+        const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
+        sal_Int32 nCurrentIdx = 0;
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_RESULT));
+        if(pResult != pParameters->end())
+            pResult->second >>= nCurrentIdx;
+        if(io_pCurrentText)
         {
-            IFieldmark::ParamPair_t p = pBM->getParam( i );
-            if ( p.first.compareToAscii( ECMA_FORMDROPDOWN_LISTENTRY ) == 0 )
+            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_LISTENTRY));
+            if(pListEntries != pParameters->end())
             {
-                 if ( idx == currentIndex )
-                {
-                     if ( currentText!=NULL ) *currentText=p.second;
-                         break;
-                 }
-                else
-                     idx++;
+                uno::Sequence< ::rtl::OUString > vListEntries;
+                pListEntries->second >>= vListEntries;
+                if(nCurrentIdx < vListEntries.getLength())
+                    *io_pCurrentText = vListEntries[nCurrentIdx];
             }
         }
-        return idx;
+        return nCurrentIdx;
     }
 } /* ecma */
 
@@ -826,18 +826,19 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
     {
         if ( pBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
         { // a checkbox...
-            bool checked = pBM->getParam( ECMA_FORMCHECKBOX_CHECKED ).second.compareToAscii("on") == 0;
-            rInf.DrawCheckBox( *this , checked);
+            ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
+            bool checked = pCheckboxFm->IsChecked();
+            rInf.DrawCheckBox(*this, checked);
         }
         else if ( pBM->GetFieldname( ).equalsAscii(  ECMA_FORMDROPDOWN ) )
         { // a list...
-             rtl::OUString aTxt;
-             rInf.DrawViewOpt( *this, POR_FLD );
+            rtl::OUString aTxt;
+            rInf.DrawViewOpt( *this, POR_FLD );
             rInf.DrawText( aTxt, *this, 0, 0/*aTxt.getLength()*/, false );
         }
         else
         {
-             assert(0); // unknown type...
+            assert(0); // unknown type...
         }
     }
 }

@@ -981,12 +981,18 @@ public:
 
     assert(fieldBM!=NULL);
     if (fieldBM!=NULL) {
-        int items=fieldBM->getNumOfParams();
-        for(int i=0;i<items;i++) {
-        IFieldmark::ParamPair_t p=fieldBM->getParam(i);
-        if (p.first.compareToAscii(ECMA_FORMDROPDOWN_LISTENTRY)==0) {
-            aListBox.InsertEntry(p.second);
-        }
+        const IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
+        IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_LISTENTRY));
+        if(pListEntries != pParameters->end())
+        {
+            Sequence< ::rtl::OUString> vListEntries;
+            pListEntries->second >>= vListEntries;
+            for( ::rtl::OUString* pCurrent = vListEntries.getArray();
+                pCurrent != vListEntries.getArray() + vListEntries.getLength();
+                ++pCurrent)
+            {
+                aListBox.InsertEntry(*pCurrent);
+            }
         }
     }
     Size lbSize=aListBox.GetOptimalSize(WINDOWSIZE_PREFERRED);
@@ -1058,7 +1064,7 @@ BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
     /*short ret=*/aFldDlg.Execute();
     int selection=aFldDlg.getSelection();
     if (selection>=0) {
-        fieldBM->addParam(ECMA_FORMDROPDOWN_RESULT, selection);
+        (*fieldBM->GetParameters())[::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_RESULT)] = makeAny(selection);
     }
 
     pWrtShell->Pop( sal_False );

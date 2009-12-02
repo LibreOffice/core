@@ -61,6 +61,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/stlunosequence.hxx>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -99,6 +100,7 @@
 #include <xmloff/ecmaflds.hxx>
 
 #include <stdio.h>
+#include <algorithm>
 
 using namespace com::sun::star;
 using namespace sw::util;
@@ -183,8 +185,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     if (aBookmarkName.Len()>0) {
         maFieldStack.back().SetBookmarkName(aBookmarkName);
         maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ECMA_FORMTEXT));
-        maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
-        maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Name"), aFormula.sTitle);
+        maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Description")] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+        maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Name")] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
     }
     return FLD_TEXT;
     }
@@ -235,14 +237,12 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
                 rtl::OUString::createFromAscii( ECMA_FORMCHECKBOX ) ) );
         ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
         if (pFieldmark!=NULL) {
-            pFieldmark->addParam(
-                    rtl::OUString::createFromAscii(ECMA_FORMCHECKBOX_NAME),
-                    rtl::OUString( aFormula.sTitle ) );
-            pFieldmark->addParam(
-                    rtl::OUString::createFromAscii(ECMA_FORMCHECKBOX_HELPTEXT),                     aFormula.sToolTip);
-            pFieldmark->addParam(
-                    rtl::OUString::createFromAscii(ECMA_FORMCHECKBOX_CHECKED),
-                    ::rtl::OUString::createFromAscii(aFormula.nChecked!=0?"on":"off"));
+            IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+            ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
+            (*pParameters)[::rtl::OUString::createFromAscii(ECMA_FORMCHECKBOX_NAME)] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+            (*pParameters)[::rtl::OUString::createFromAscii(ECMA_FORMCHECKBOX_HELPTEXT)] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            if(pCheckboxFm)
+                pCheckboxFm->SetChecked(aFormula.nChecked);
             // set field data here...
         }
     }
@@ -313,13 +313,11 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
             ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != NULL )
             {
-                rtl::OUString sListEntry=rtl::OUString::createFromAscii( ECMA_FORMDROPDOWN_LISTENTRY );
-                std::vector<String>::iterator it = aFormula.maListEntries.begin();
-                for( ; it != aFormula.maListEntries.end(); it++ )
-                    pFieldmark->addParam(sListEntry, *it, false);
-
-                int nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
-                pFieldmark->addParam(ECMA_FORMDROPDOWN_RESULT, nIndex);
+                uno::Sequence< ::rtl::OUString > vListEntries(aFormula.maListEntries.size());
+                copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
+                (*pFieldmark->GetParameters())[::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_LISTENTRY)] = uno::makeAny(vListEntries);
+                sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
+                (*pFieldmark->GetParameters())[::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_RESULT)] = uno::makeAny(nIndex);
                 // set field data here...
             }
         }

@@ -353,90 +353,135 @@ void SwXBookmark::removeVetoableChangeListener(const OUString& /*PropertyName*/,
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 { }
 
+
+void SwXFieldmarkParameters::insertByName(const OUString& aName, const Any& aElement)
+    throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
+    if(pParameters->find(aName) != pParameters->end())
+        throw ElementExistException();
+    if(aElement.getValueType() != getElementType())
+        throw IllegalArgumentException();
+    (*pParameters)[aName] = aElement;
+}
+
+void SwXFieldmarkParameters::removeByName(const OUString& aName)
+    throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!getCoreParameters()->erase(aName))
+        throw NoSuchElementException();
+}
+
+void SwXFieldmarkParameters::replaceByName(const OUString& aName, const Any& aElement)
+    throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
+    IFieldmark::parameter_map_t::iterator pEntry = pParameters->find(aName);
+    if(pEntry == pParameters->end())
+        throw NoSuchElementException();
+    pEntry->second = aElement;
+}
+
+Any SwXFieldmarkParameters::getByName(const OUString& aName)
+    throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
+    IFieldmark::parameter_map_t::iterator pEntry = pParameters->find(aName);
+    if(pEntry == pParameters->end())
+        throw NoSuchElementException();
+    return makeAny(pEntry->second);
+}
+
+Sequence<OUString> SwXFieldmarkParameters::getElementNames()
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
+    Sequence<OUString> vResult(pParameters->size());
+    OUString* pOutEntry = vResult.getArray();
+    for(IFieldmark::parameter_map_t::iterator pEntry = pParameters->begin(); pEntry!=pParameters->end(); ++pEntry, ++pOutEntry)
+        *pOutEntry = pEntry->first;
+    return vResult;
+}
+
+::sal_Bool SwXFieldmarkParameters::hasByName(const OUString& aName)
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
+    return (pParameters->find(aName) != pParameters->end());
+}
+
+Type SwXFieldmarkParameters::getElementType()
+    throw (RuntimeException)
+{
+    return ::cppu::UnoType<OUString>::get();
+}
+
+::sal_Bool SwXFieldmarkParameters::hasElements()
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    return !getCoreParameters()->empty();
+}
+
+void SwXFieldmarkParameters::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+}
+
+
+IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
+    throw (RuntimeException)
+{
+    const IFieldmark* pFieldmark = dynamic_cast< const IFieldmark* >(GetRegisteredIn());
+    if(!pFieldmark)
+        throw RuntimeException();
+    return const_cast< IFieldmark* >(pFieldmark)->GetParameters();
+}
+
 SwXFieldmark::SwXFieldmark(bool _isReplacementObject, ::sw::mark::IMark* pBkm, SwDoc* pDc)
     : SwXFieldmark_BASE(pBkm, pDc)
     , isReplacementObject(_isReplacementObject)
 { }
 
 void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTextRange )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw(IllegalArgumentException, RuntimeException)
 {
     attachToRangeEx( xTextRange,
                      ( isReplacementObject ? IDocumentMarkAccess::CHECKBOX_FIELDMARK : IDocumentMarkAccess::TEXT_FIELDMARK ) );
 }
 
-::rtl::OUString SwXFieldmark::getFieldType( void )
-    throw( ::com::sun::star::uno::RuntimeException )
+::rtl::OUString SwXFieldmark::getFieldType(void)
+    throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex(  ) );
-    IMark* pMark = const_cast< IMark* >( GetBookmark( ) );
-    IFieldmark *pBkm = dynamic_cast< IFieldmark* > ( pMark );
-    if ( pBkm )
-        return pBkm->GetFieldname( );
-    else
-        throw uno::RuntimeException(  );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    const IFieldmark *pBkm = dynamic_cast<const IFieldmark*>(GetBookmark());
+    if(!pBkm)
+        throw RuntimeException();
+    return pBkm->GetFieldname();
 }
 
-void SwXFieldmark::setFieldType( const::rtl::OUString & fieldType )
-    throw( ::com::sun::star::uno::RuntimeException )
+void SwXFieldmark::setFieldType(const::rtl::OUString & fieldType)
+    throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex(  ) );
-    IMark* pMark = const_cast< IMark* >( GetBookmark( ) );
-    IFieldmark *pBkm = dynamic_cast< IFieldmark* >( pMark );
-    if ( pBkm )
-        pBkm->SetFieldname( fieldType );
-    else
-        throw uno::RuntimeException(  );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IFieldmark *pBkm = dynamic_cast<IFieldmark*>(GetBookmark());
+    if(!pBkm)
+        throw RuntimeException();
+    pBkm->SetFieldname(fieldType);
 }
 
-sal_Int16 SwXFieldmark::getParamCount(  )
-    throw( ::com::sun::star::uno::RuntimeException )
+Reference<XNameContainer> SwXFieldmark::getParameters()
+    throw (RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex(  ) );
-    IMark* pMark = const_cast< IMark* >( GetBookmark( ) );
-    IFieldmark *pBkm = dynamic_cast< IFieldmark* >( pMark );
-    if ( pBkm )
-        return pBkm->getNumOfParams(  );
-    else
-        throw uno::RuntimeException(  );
-}
-
-rtl::OUString SwXFieldmark::getParamName( sal_Int16 i )
-    throw( ::com::sun::star::uno::RuntimeException )
-{
-    vos::OGuard aGuard( Application::GetSolarMutex(  ) );
-    IMark* pMark = const_cast< IMark* >( GetBookmark( ) );
-    IFieldmark *pBkm = dynamic_cast< IFieldmark* >( pMark );
-    if ( pBkm )
-        return pBkm->getParam( i ).first;
-    else
-        throw uno::RuntimeException(  );
-}
-
-::rtl::OUString SwXFieldmark::getParamValue( ::sal_Int16 i )
-    throw( ::com::sun::star::uno::RuntimeException )
-{
-    vos::OGuard aGuard( Application::GetSolarMutex(  ) );
-    IMark* pMark = const_cast< IMark* >( GetBookmark( ) );
-    IFieldmark *pBkm = dynamic_cast< IFieldmark* >( pMark );
-    if ( pBkm )
-        return pBkm->getParam( i ).second;
-    else
-        throw uno::RuntimeException(  );
-}
-
-void SwXFieldmark::addParam( const ::rtl::OUString & name,
-                             const ::rtl::OUString & value,
-                             sal_Bool replaceExisting )
-    throw( ::com::sun::star::uno::RuntimeException )
-{
-    vos::OGuard aGuard( Application::GetSolarMutex(  ) );
-    IMark* pMark = const_cast< IMark* >( GetBookmark( ) );
-    IFieldmark *pBkm = dynamic_cast< IFieldmark* >( pMark );
-    if ( pBkm )
-        pBkm->addParam( const_cast< rtl::OUString& >( name ),
-                const_cast< rtl::OUString& >( value ),
-                replaceExisting );
-    else
-        throw uno::RuntimeException(  );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IFieldmark *pBkm = dynamic_cast<IFieldmark*>(GetBookmark());
+    if(!pBkm)
+        throw uno::RuntimeException();
+    return Reference<XNameContainer>(new SwXFieldmarkParameters(pBkm));
 }

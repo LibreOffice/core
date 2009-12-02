@@ -131,7 +131,7 @@ namespace sw { namespace mark
         //lcl_FixPosition(*m_pPos2);
     }
 
-    rtl::OUString MarkBase::toString( ) const
+    rtl::OUString MarkBase::ToString( ) const
     {
         rtl::OUStringBuffer buf;
         buf.appendAscii( "Mark: ( Name, [ Node1, Index1 ] ): ( " );
@@ -284,7 +284,7 @@ namespace sw { namespace mark
             SetOtherMarkPos(GetMarkPos());
     }
 
-    rtl::OUString Fieldmark::toString( ) const
+    rtl::OUString Fieldmark::ToString( ) const
     {
         rtl::OUStringBuffer buf;
         buf.appendAscii( "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " );
@@ -298,77 +298,7 @@ namespace sw { namespace mark
         return buf.makeStringAndClear( );
     }
 
-    void Fieldmark::addParam( ::rtl::OUString paramName,
-                              ::rtl::OUString paramValue,
-                              bool replaceExisting )
-    {
-        if ( replaceExisting )
-        {
-            bool replaced = false;
-            const int len = m_params.size(  );
-            for ( int i = 0; i < len; i++ )
-            {
-                if ( m_params[i].first.compareTo( paramName ) == 0 )
-                {
-                    m_params[i] = ParamPair_t( paramName, paramValue );
-                    replaced = true;
-                }
-            }
-            if ( !replaced )
-            {
-                m_params.push_back( ParamPair_t( paramName, paramValue ) );
-            }
-        }
-        else
-        {
-            m_params.push_back( ParamPair_t( paramName, paramValue ) );
-        }
-    }
-
-    void Fieldmark::addParam( const char *paramName, int value )
-    {
-        rtl::OUString sName = rtl::OUString::createFromAscii( paramName );
-        rtl::OUString sValue =::rtl::OUString::valueOf( ( sal_Int32 ) value );
-        addParam( sName, sValue );
-    }
-
-    void Fieldmark::addParams( std::vector < ParamPair_t > &params )
-    {
-        for ( std::vector < ParamPair_t >::iterator i = params.begin(  );
-              i != params.end(  ); i++ )
-        {
-            m_params.push_back( *i );
-        }
-    }
-
-    int Fieldmark::getNumOfParams(  ) const
-    {
-        return m_params.size(  );
-    }
-
-    Fieldmark::ParamPair_t Fieldmark::getParam( int pos ) const
-    {
-        return m_params[pos];
-    }
-
-    Fieldmark::ParamPair_t Fieldmark::getParam( const char *name,
-                                                const char *defaultValue ) const
-    {
-        for ( std::vector < ParamPair_t >::iterator i = const_cast< Fieldmark* >( this )->m_params.begin(  );
-              i != m_params.end(  ); i++ )
-        {
-            if ( i->first.compareToAscii( name ) == 0 )
-            {
-                return *i;
-            }
-        }
-        return ParamPair_t( rtl::OUString(  ),
-                            ( defaultValue ?
-                                rtl::OUString::createFromAscii( defaultValue ) :
-                                rtl::OUString(  ) ) );
-    }
-
-    void Fieldmark::invalidate( )
+    void Fieldmark::Invalidate( )
     {
         // @TODO: Does exist a better solution to trigger a format of the
         //        fieldmark portion? If yes, please use it.
