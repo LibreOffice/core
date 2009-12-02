@@ -84,22 +84,27 @@ struct UnresolvedListItem {
 
 typedef std::list< UnresolvedListItem > UnresolvedList;
 
-void parseXcsFile(rtl::OUString const & url, int layer, Data * data)
+void parseXcsFile(rtl::OUString const & url, int layer, Data * data,
+    Modifications * modifications)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
 {
+    OSL_ASSERT(modifications == 0); (void) modifications;
     OSL_VERIFY(
         rtl::Reference< ParseManager >(
             new ParseManager(url, new XcsParser(layer, data)))->parse());
 }
 
-void parseXcuFile(rtl::OUString const & url, int layer, Data * data)
+void parseXcuFile(
+    rtl::OUString const & url, int layer, Data * data,
+    Modifications * modifications)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
 {
     OSL_VERIFY(
         rtl::Reference< ParseManager >(
-            new ParseManager(url, new XcuParser(layer, data)))->parse());
+            new ParseManager(url, new XcuParser(layer, data, modifications)))->
+        parse());
 }
 
 rtl::OUString expand(rtl::OUString const & str) {
@@ -208,7 +213,7 @@ void Components::insertExtensionXcsFile(
     bool shared, rtl::OUString const & fileUri)
 {
     try {
-        parseXcsFile(fileUri, shared ? 9 : 13, &data_);
+        parseXcsFile(fileUri, shared ? 9 : 13, &data_, 0);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -220,10 +225,11 @@ void Components::insertExtensionXcsFile(
 }
 
 void Components::insertExtensionXcuFile(
-    bool shared, rtl::OUString const & fileUri)
+    bool shared, rtl::OUString const & fileUri, Modifications * modifications)
 {
+    OSL_ASSERT(modifications != 0);
     try {
-        parseXcuFile(fileUri, shared ? 10 : 14, &data_);
+        parseXcuFile(fileUri, shared ? 10 : 14, &data_, modifications);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -391,7 +397,7 @@ Components::~Components() {}
 
 void Components::parseFiles(
     int layer, rtl::OUString const & extension,
-    void (* parseFile)(rtl::OUString const &, int, Data *),
+    void (* parseFile)(rtl::OUString const &, int, Data *, Modifications *),
     rtl::OUString const & url, bool recursive)
 {
     osl::Directory dir(url);
@@ -441,7 +447,7 @@ void Components::parseFiles(
                 file.match(extension, file.getLength() - extension.getLength()))
             {
                 try {
-                    (*parseFile)(stat.getFileURL(), layer, &data_);
+                    (*parseFile)(stat.getFileURL(), layer, &data_, 0);
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -456,7 +462,8 @@ void Components::parseFiles(
 }
 
 void Components::parseFileList(
-    int layer, void (* parseFile)(rtl::OUString const &, int, Data *),
+    int layer,
+    void (* parseFile)(rtl::OUString const &, int, Data *, Modifications *),
     rtl::OUString const & urls, rtl::Bootstrap const & ini)
 {
     for (sal_Int32 i = 0;;) {
@@ -464,7 +471,7 @@ void Components::parseFileList(
         if (url.getLength() != 0) {
             ini.expandMacrosFrom(url); //TODO: detect failure
             try {
-                (*parseFile)(url, layer, &data_);
+                (*parseFile)(url, layer, &data_, 0);
             } catch (css::container::NoSuchElementException & e) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
@@ -623,7 +630,7 @@ rtl::OUString Components::getModificationFileUrl() const {
 
 void Components::parseModificationLayer() {
     try {
-        parseXcuFile(getModificationFileUrl(), Data::NO_LAYER, &data_);
+        parseXcuFile(getModificationFileUrl(), Data::NO_LAYER, &data_, 0);
     } catch (css::container::NoSuchElementException &) {
         OSL_TRACE(
             "configmgr user registrymodifications.xcu does not (yet) exist");

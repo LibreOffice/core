@@ -94,7 +94,9 @@ public:
 
     void insertExtensionXcsFile(bool shared, rtl::OUString const & fileUri);
 
-    void insertExtensionXcuFile(bool shared, rtl::OUString const & fileUri);
+    void insertExtensionXcuFile(
+        bool shared, rtl::OUString const & fileUri,
+        Modifications * modifications);
 
     com::sun::star::beans::Optional< com::sun::star::uno::Any >
     getExternalValue(rtl::OUString const & descriptor);
@@ -108,12 +110,12 @@ private:
 
     void parseFiles(
         int layer, rtl::OUString const & extension,
-        void (* parseFile)(rtl::OUString const &, int, Data *),
+        void (* parseFile)(rtl::OUString const &, int, Data *, Modifications *),
         rtl::OUString const & url, bool recursive);
 
     void parseFileList(
         int layer,
-        void (* parseFile)(rtl::OUString const &, int, Data *),
+        void (* parseFile)(rtl::OUString const &, int, Data *, Modifications *),
         rtl::OUString const & urls, rtl::Bootstrap const & ini);
 
     void parseXcdFiles(int layer, rtl::OUString const & url);
