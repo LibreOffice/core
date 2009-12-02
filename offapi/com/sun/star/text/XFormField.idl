@@ -1,25 +1,21 @@
- #ifndef __com_sun_star_text_XFormField_idl__
- #define __com_sun_star_text_XFormField_idl__
+#ifndef __com_sun_star_text_XFormField_idl__
+#define __com_sun_star_text_XFormField_idl__
 
- #ifndef __com_sun_star_uno_XInterface_idl__
- #include <com/sun/star/uno/XInterface.idl>
- #endif
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/container/XEnumerationAccess.idl>
 
- module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text {
 
-/** @deprecated
- */
- interface XFormField: com::sun::star::uno::XInterface
- {
-     string getFieldType();
-     void setFieldType([in] string fieldType);
+    /** @deprecated
+     */
+    interface XFormField : com::sun::star::uno::XInterface
+    {
+        string getFieldType();
+        void setFieldType([in] string fieldType);
+        com::sun::star::container::XNameContainer getParameters();
+    };
 
-     short getParamCount();
-     string getParamName([in] short i);
-     string getParamValue([in] short i);
-     void addParam([in] string name, [in] string value, [in] boolean replaceExisting);
- };
+}; }; }; };
 
- }; }; }; };
-
- #endif
+#endif
