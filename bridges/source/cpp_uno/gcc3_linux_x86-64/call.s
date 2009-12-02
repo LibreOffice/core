@@ -43,6 +43,9 @@ privateSnippetExecutor:
 	je	.Lfloat
 
 	movq	-144(%rbp), %rax		# Return value (int case)
+	movq	-136(%rbp), %rdx		# Return value (int case)
+	movq	-144(%rbp), %xmm0		# Return value (int case)
+	movq	-136(%rbp), %xmm1		# Return value (int case)
 	jmp	.Lfinish
 .Lfloat:
 	movlpd	-144(%rbp), %xmm0		# Return value (float/double case)
