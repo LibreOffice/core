@@ -95,11 +95,9 @@ bool ExcelToSc8::Read3DTabReference( UINT16 nIxti, SCTAB& rFirstTab, SCTAB& rLas
 }
 
 
-
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte past additional content after <nFormulaLen>
-ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, sal_Size nFormulaLen,
-                             const ConvertParam& rParam, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     BYTE                    nOp, nLen, nByte;
     UINT16                  nUINT16;
@@ -395,10 +393,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x20: // Array Constant                        [317 268]
                 aIn >> nByte >> nUINT16;
                 aIn.Ignore( 4 );
-                if (rParam.mbAllowArrays)
+                if( bAllowArrays )
                 {
-                    SCSIZE nC = nByte + 1;
-                    SCSIZE nR = nUINT16 + 1;
                     aStack << aPool.StoreMatrix();
                     aExtensions.push_back( EXTENSION_ARRAY );
                 }

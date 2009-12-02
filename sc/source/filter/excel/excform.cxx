@@ -136,7 +136,7 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
             bConvert = TRUE;
 
         if( bConvert )
-            eErr = pFormConv->Convert( pErgebnis, maStrm, nFormLen, ExcelToSc::ConvertParam(), FT_CellFormula);
+            eErr = pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
         ScFormulaCell*      pZelle = NULL;
 
@@ -201,8 +201,7 @@ void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte after the additional content (eg
 // inline arrays) following <nFormulaLen>
-ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, sal_Size nFormulaLen,
-                            const ConvertParam& rParam, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     BYTE            nOp, nLen, nByte;
@@ -473,7 +472,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x20: // Array Constant                        [317 268]
                 aIn >> nByte >> nUINT16;
                 aIn.Ignore( (meBiff == EXC_BIFF2) ? 3 : 4 );
-                if( rParam.mbAllowArrays )
+                if( bAllowArrays )
                 {
                     aStack << aPool.StoreMatrix();
                     aExtensions.push_back( EXTENSION_ARRAY );

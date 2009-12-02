@@ -178,9 +178,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         // --- name formula ---
         // JEG : double check this.  It is clearly false for normal names
         //  but some of the builtins (sheettitle?) might be able to handle arrays
-        ExcelConverterBase::ConvertParam aParam;
-        aParam.mbAllowArrays = false;
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, aParam, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, false, FT_RangeName );
 
         // --- auto or advanced filter ---
         if( (GetBiff() == EXC_BIFF8) && pTokArr && bBuiltIn )
@@ -208,9 +206,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     else if( nFmlaSize > 0 )
     {
         // regular defined name
-        ExcelConverterBase::ConvertParam aParam;
-        aParam.mbAllowArrays = true;
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, aParam, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, true, FT_RangeName );
     }
 
     // 4) *** create a defined name in the Calc document *** ------------------

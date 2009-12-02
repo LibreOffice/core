@@ -515,12 +515,9 @@ void ImportExcel::Array25( void )
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
 
-
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        ExcelConverterBase::ConvertParam aParam;
-        aParam.mbAllowArrays = true;
-        pFormConv->Convert( pErgebnis, maStrm, nFormLen, aParam, FT_CellFormula);
+        pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
         DBG_ASSERT( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
 
@@ -818,12 +815,11 @@ void ImportExcel::Shrfmla( void )
     const ScTokenArray* pErgebnis;
 
     pFormConv->Reset();
-    ExcelConverterBase::ConvertParam aParam;
-    aParam.mbAllowArrays = true;
-    pFormConv->Convert( pErgebnis, maStrm, nLenExpr, aParam, FT_SharedFormula );
+    pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
 
 
     DBG_ASSERT( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray ist NULL!" );
+
     pExcRoot->pShrfmlaBuff->Store( ScRange( static_cast<SCCOL>(nFirstCol),
                 static_cast<SCROW>(nFirstRow), GetCurrScTab(),
                 static_cast<SCCOL>(nLastCol), static_cast<SCROW>(nLastRow),
@@ -991,14 +987,10 @@ void ImportExcel::Array34( void )
     {
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
-        ExcelConverterBase::ConvertParam aParam;
-        aParam.mbAllowArrays = true;
-        aParam.mnArrayColSize = nLastCol - nFirstCol + 1;
-        aParam.mnArrayRowSize = nLastRow - nFirstRow + 1;
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert( pErgebnis, maStrm, nFormLen, aParam, FT_CellFormula);
+        pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
         DBG_ASSERT( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
 
