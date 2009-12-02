@@ -666,14 +666,9 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     {
                         if( !pHistory )
                             pHistory = new SwHistory;
-                        if( pAPos->nNode < pEnd->nNode &&
-                            ( ( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType ) ||
-                              ( pStt->nNode < pAPos->nNode || !pStt->nContent.GetIndex() ) ) )
+                        if (IsDestroyFrameAnchoredAtChar(
+                                *pAPos, *pStt, *pEnd, nDelCntntType))
                         {
-                            // Here we identified the objects to destroy:
-                            // - anchored between start and end of the selection
-                            // - anchored in start of the selection with "CheckNoContent"
-                            // - anchored in start of sel. and the selection start at pos 0
                             pHistory->Add( *pFmt, nChainInsPos );
                             n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
                         }
@@ -1388,3 +1383,20 @@ String DenoteSpecialCharacters(const String & rStr)
 
     return aResult;
 }
+
+bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
+        SwPosition const & rStart, SwPosition const & rEnd,
+        DelCntntType const nDelCntntType)
+{
+
+    // Here we identified the objects to destroy:
+    // - anchored between start and end of the selection
+    // - anchored in start of the selection with "CheckNoContent"
+    // - anchored in start of sel. and the selection start at pos 0
+    return  (rAnchorPos.nNode < rEnd.nNode)
+         && (   (nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType)
+            ||  (rStart.nNode < rAnchorPos.nNode)
+            ||  !rStart.nContent.GetIndex()
+            );
+}
+
