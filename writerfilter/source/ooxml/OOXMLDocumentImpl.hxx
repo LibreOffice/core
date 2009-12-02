@@ -53,6 +53,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Reference<frame::XModel> mxModel;
     uno::Reference<drawing::XDrawPage> mxDrawPage;
 
+    bool mbIsSubstream;
+
 protected:
     virtual void resolveFastSubStream(Stream & rStream,
                                       OOXMLStream::StreamType_t nType);
@@ -68,6 +70,8 @@ protected:
     getXNoteStream(OOXMLStream::StreamType_t nType,
                    const Id & rType,
                    const rtl::OUString & rNoteId);
+
+    void setIsSubstream( bool bSubstream ) { mbIsSubstream = bSubstream; };
 
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);

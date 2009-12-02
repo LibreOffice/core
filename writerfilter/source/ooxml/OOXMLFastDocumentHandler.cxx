@@ -225,4 +225,9 @@ void OOXMLFastDocumentHandler::setXNoteId(const ::rtl::OUString & rXNoteId)
     msXNoteId = rXNoteId;
 }
 
+void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )
+{
+    getContextHandler( )->getParserState( )->setInSectionGroup( bSubstream );
+}
+
 }}

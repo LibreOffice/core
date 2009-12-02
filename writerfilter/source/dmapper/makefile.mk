@@ -56,8 +56,7 @@ SLOFILES=           $(SLO)$/BorderHandler.obj \
                     $(SLO)$/DomainMapperTableManager.obj \
                     $(SLO)$/FontTable.obj   \
                     $(SLO)$/GraphicImport.obj  \
-                    $(SLO)$/LFOTable.obj    \
-                    $(SLO)$/ListTable.obj  \
+                    $(SLO)$/NumberingManager.obj  \
                     $(SLO)$/MeasureHandler.obj \
                     $(SLO)$/PropertyMap.obj  \
                     $(SLO)$/PropertyIds.obj  \

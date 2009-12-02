@@ -22048,18 +22048,13 @@
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_HdrFtrRef" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_HdrFtrRef_type"/>
       <attribute name="r:id" tokenid="ooxml:CT_HdrFtrRef_id"/>
-      <action name="end" action="endCharacterGroup"/>
-      <action name="end" action="endParagraphGroup"/>
       <action name="end" action="handleHdrFtr"/>
     </resource>
     <resource name="EG_HdrFtrReferences" resource="Properties">
       <element name="headerReference" tokenid="ooxml:EG_HdrFtrReferences_headerReference"/>
       <element name="footerReference" tokenid="ooxml:EG_HdrFtrReferences_footerReference"/>
     </resource>
-    <resource name="CT_HdrFtr" resource="Stream">
-      <action name="start" action="startSectionGroup"/>
-      <action name="end" action="endSectionGroup"/>
-    </resource>
+    <resource name="CT_HdrFtr" resource="Stream"/>
     <resource name="EG_SectPrContents" resource="Properties">
       <element name="bidi" tokenid="ooxml:EG_SectPrContents_bidi"/>
       <element name="cols" tokenid="ooxml:EG_SectPrContents_cols"/>

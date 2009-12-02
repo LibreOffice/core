@@ -755,6 +755,7 @@ void OOXMLFastContextHandler::setLastParagraphInSection()
 #endif
 
     mpParserState->setLastParagraphInSection(true);
+    mpStream->markLastParagraphInSection( );
 }
 
 void OOXMLFastContextHandler::newProperty

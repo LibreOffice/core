@@ -82,6 +82,7 @@
 
 #if DEBUG
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 #endif
 
 #include <map>
@@ -403,7 +404,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsPageBreakDeferred( false ),
         m_bIsInShape( false ),
         m_bShapeContextAdded( false ),
-        m_TableManager( eDocumentType == DOCUMENT_OOXML ),
+        m_pLastSectionContext( ),
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
@@ -411,8 +412,11 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( true ),
         m_bIsCustomFtnMark( false ),
-        m_bIsParaChange( false )
+        m_bIsParaChange( false ),
+        m_bParaChanged( false ),
+        m_bIsLastParaInSection( false )
 {
+    appendTableManager( );
     GetBodyText();
     uno::Reference< text::XTextAppend > xBodyTextAppend = uno::Reference< text::XTextAppend >( m_xBodyText, uno::UNO_QUERY );
     m_aTextAppendStack.push(xBodyTextAppend);
@@ -421,16 +425,18 @@ DomainMapper_Impl::DomainMapper_Impl(
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
     TableDataHandler_t::Pointer_t pTableHandler
         (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
-    m_TableManager.setHandler(pTableHandler);
+    getTableManager( ).setHandler(pTableHandler);
 
-    m_TableManager.startLevel();
+    getTableManager( ).startLevel();
 }
 /*-- 01.09.2006 10:22:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 DomainMapper_Impl::~DomainMapper_Impl()
 {
-    m_TableManager.endLevel();
+    RemoveLastParagraph( );
+    getTableManager( ).endLevel();
+    popTableManager( );
 }
 /*-------------------------------------------------------------------------
 
@@ -484,6 +490,28 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const ::rtl::OUString& rPro
         }
     }
 }
+
+void DomainMapper_Impl::RemoveLastParagraph( )
+{
+    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    try
+    {
+        uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
+        xCursor->gotoEnd(false);
+        xCursor->goLeft( 1, true );
+        xCursor->setString(::rtl::OUString());
+    }
+    catch( const uno::Exception& rEx)
+    {
+        (void)rEx;
+    }
+}
+
+void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
+{
+    m_bIsLastParaInSection = bIsLast;
+}
+
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -534,6 +562,15 @@ void DomainMapper_Impl::PushListProperties(PropertyMapPtr pListProperties)
 void    DomainMapper_Impl::PopProperties(ContextType eId)
 {
     OSL_ENSURE(!m_aPropertyStacks[eId].empty(), "section stack already empty");
+
+    if ( eId == CONTEXT_SECTION )
+    {
+#if DEBUG
+        clog << "Saving the last section context" << endl;
+#endif
+        m_pLastSectionContext = m_aPropertyStacks[eId].top( );
+    }
+
     m_aPropertyStacks[eId].pop();
     m_aContextStack.pop();
     if(!m_aContextStack.empty() && !m_aPropertyStacks[m_aContextStack.top()].empty())
@@ -668,7 +705,7 @@ void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
   -----------------------------------------------------------------------*/
 uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 {
-    uno::Sequence< style::TabStop > aRet( m_aCurrentTabStops.size() );
+    uno::Sequence< style::TabStop > aRet( sal_Int32( m_aCurrentTabStops.size() ) );
     style::TabStop* pArray = aRet.getArray();
     ::std::vector<DeletableTabStop>::const_iterator aIt = m_aCurrentTabStops.begin();
     ::std::vector<DeletableTabStop>::const_iterator aEndIt = m_aCurrentTabStops.end();
@@ -721,11 +758,11 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-ListTablePtr DomainMapper_Impl::GetListTable()
+ListsManager::Pointer DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
         m_pListTable.reset(
-            new ListTable( m_rDMapper, m_xTextFactory ));
+            new ListsManager( m_rDMapper, m_xTextFactory ));
     return m_pListTable;
 }
 
@@ -854,7 +891,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend >  xTextAppend = rAppendContext.xTextAppend;
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-    if(xTextAppend.is() && ! m_TableManager.isIgnore())
+    if(xTextAppend.is() && ! getTableManager( ).isIgnore())
     {
         try
         {
@@ -1056,9 +1093,21 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     aProperties[nLength].Value <<= aDrop;
                     aProperties[nLength].Name = rPropNameSupplier.GetName(PROP_DROP_CAP_FORMAT);
                 }
+#if DEBUG
+                sal_Int32 nLen = aProperties.getLength();
+                for ( sal_Int32 i = 0; i < nLen; i++ )
+                {
+                    uno::Any aValue = aProperties[i].Value;
+                    uno::Sequence< style::TabStop > aTabs;
+                    if ( aValue >>= aTabs )
+                    {
+                        fprintf( stderr, "Found tab stops\n" );
+                    }
+                }
+#endif
                 uno::Reference< text::XTextRange > xTextRange =
                     xTextAppend->finishParagraph( aProperties );
-                m_TableManager.handle(xTextRange);
+                getTableManager( ).handle(xTextRange);
 
                 // Set the anchor of the objects to the created paragraph
                 while ( m_aAnchoredStack.size( ) > 0 && !m_bIsInShape )
@@ -1084,6 +1133,15 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 xCur->goLeft( 1 , true );
                 uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                 CheckParaRedline( xParaEnd );
+
+                // Remove the last empty section paragraph if needed
+                if ( m_bIsLastParaInSection && !m_bParaChanged )
+                {
+                    RemoveLastParagraph( );
+                    m_bIsLastParaInSection = false;
+                }
+
+                m_bParaChanged = false;
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
@@ -1126,7 +1184,7 @@ util::DateTime lcl_DateStringToDateTime( const ::rtl::OUString& rDateTime )
 void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap )
 {
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    if(xTextAppend.is() && ! m_TableManager.isIgnore())
+    if(xTextAppend.is() && ! getTableManager( ).isIgnore())
     {
         try
         {
@@ -1134,8 +1192,9 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
                 xTextAppend->appendTextPortion
                 (rString, pPropertyMap->GetPropertyValues());
             CheckRedline( xTextRange );
+            m_bParaChanged = true;
 
-            //m_TableManager.handle(xTextRange);
+            //getTableManager( ).handle(xTextRange);
         }
         catch(const lang::IllegalArgumentException& rEx)
         {
@@ -1159,7 +1218,7 @@ void DomainMapper_Impl::appendTextContent(
 {
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
-    if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
+    if(xTextAppendAndConvert.is() && ! getTableManager( ).isIgnore())
     {
         try
         {
@@ -1326,18 +1385,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
 {
     //header and footer always have an empty paragraph at the end
     //this has to be removed
-    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    try
-    {
-        uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
-        xCursor->gotoEnd(false);
-        xCursor->goLeft( 1, true );
-        xCursor->setString(::rtl::OUString());
-    }
-    catch( const uno::Exception& rEx)
-    {
-        (void)rEx;
-    }
+    RemoveLastParagraph( );
     m_aTextAppendStack.pop();
 }
 /*-- 24.05.2007 14:22:28---------------------------------------------------

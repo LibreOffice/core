@@ -100,6 +100,8 @@ public:
 
     OOXMLParserState::Pointer_t getParserState() const;
 
+    void setIsSubstream( bool bSubstream );
+
 private:
     OOXMLFastDocumentHandler(OOXMLFastDocumentHandler &); // not defined
     void operator =(OOXMLFastDocumentHandler &); // not defined
