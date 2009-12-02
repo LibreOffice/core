@@ -607,7 +607,11 @@ testcase tCreateSubForms
        '/// set the sql string : select * from TT_Forms where id=:var1"
        printlog "set the sql string : select * from TT_Forms where id=:var1"
        TabDataForm.TypeKeys "<RETURN>" , true
-       TabDataForm.TypeKeys "select * from TT_Forms where id=:var1" , true
+       sleep(1)
+       Content.TypeKeys "select * from TT_Forms where id=:var1" , true
+       sleep(1)
+       TabDataForm.TypeKeys("<RETURN>")
+       sleep(1)
        '/// set link master field
        printlog "set link master field"
        TabDataForm.TypeKeys "<TAB>" , 11 , true
