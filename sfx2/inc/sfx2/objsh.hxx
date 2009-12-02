@@ -261,6 +261,7 @@ public:
                                 TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     /* Stampit disable/enable cancel button for print jobs
        default = true = enable! */
     void                        Stamp_SetPrintCancelState(sal_Bool bState);
@@ -889,6 +890,7 @@ public:
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
     SfxObjectShell*         GetObjectShell() const
                             { return pObjSh; }
+
 };
 
 #endif
