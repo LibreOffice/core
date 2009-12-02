@@ -34,14 +34,15 @@
 #include "fmgridif.hxx"
 #include "fmprop.hrc"
 #include "fmservs.hxx"
-#include "fmtools.hxx"
 #include "fmurl.hxx"
+#include "fmtools.hxx"
 #include "formcontrolfactory.hxx"
 #include "gridcell.hxx"
 #include "sdbdatacolumn.hxx"
 #include "svx/fmgridcl.hxx"
 #include "svx/svxids.hrc"
 
+/** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -52,6 +53,8 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
+/** === end UNO includes === **/
 
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -66,6 +69,7 @@
 
 using namespace ::svxform;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
@@ -1118,7 +1122,7 @@ namespace fmgridif
 {
     const ::rtl::OUString getDataModeIdentifier()
     {
-        static ::rtl::OUString s_sDataModeIdentifier = DATA_MODE;
+        static ::rtl::OUString s_sDataModeIdentifier = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
         return s_sDataModeIdentifier;
     }
 }
@@ -1390,8 +1394,8 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
 
     // don't use GetCurrentRow as this isn't affected by the above SeekRow
     // FS - 30.09.99 - 68644
-    DbGridRowRef aRow = pGrid->GetSeekRow();
-    DBG_ASSERT(aRow.Is(), "FmXGridPeer::queryFieldData : invalid current Row !");
+    DbGridRowRef xPaintRow = pGrid->GetPaintRow();
+    ENSURE_OR_THROW( xPaintRow.Is(), "invalid paint row" );
 
     // die Columns des Controls brauche ich fuer GetFieldText
     DbGridColumns aColumns = pGrid->GetColumns();
@@ -1413,39 +1417,40 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
         // FS - 30.09.99 - 68644
         pCol = aColumns.GetObject(nModelPos);
-        const DbGridRowRef xRow = pGrid->GetSeekRow();
-        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< ::com::sun::star::sdb::XColumn > ();
+        xFieldContent = xPaintRow->HasField( pCol->GetFieldPos() )
+                    ?   xPaintRow->GetField( pCol->GetFieldPos() ).getColumn()
+                    :   Reference< XColumn > ();
 
-        if (xFieldContent.is())
+        if ( !xFieldContent.is() )
+            continue;
+
+        if (bRequestedAsAny)
         {
-            if (bRequestedAsAny)
+            Reference< XPropertySet >  xFieldSet(xFieldContent, UNO_QUERY);
+            pReturnArray[i] = xFieldSet->getPropertyValue(FM_PROP_VALUE);
+        }
+        else
+        {
+            switch (xType.getTypeClass())
             {
-                Reference< XPropertySet >  xFieldSet(xFieldContent, UNO_QUERY);
-                pReturnArray[i] = xFieldSet->getPropertyValue(FM_PROP_VALUE);
-            }
-            else
-            {
-                switch (xType.getTypeClass())
+                // Strings werden direkt ueber das GetFieldText abgehandelt
+                case TypeClass_STRING           :
                 {
-                    // Strings werden direkt ueber das GetFieldText abgehandelt
-                    case TypeClass_STRING           :
-                    {
-                        String sText = aColumns.GetObject(nModelPos)->GetCellText(aRow, pGrid->getNumberFormatter());
-                        pReturnArray[i] <<= ::rtl::OUString(sText);
-                    }
-                    break;
-                    // alles andere wird an der DatabaseVariant erfragt
-                    case TypeClass_FLOAT            : pReturnArray[i] <<= xFieldContent->getFloat(); break;
-                    case TypeClass_DOUBLE       : pReturnArray[i] <<= xFieldContent->getDouble(); break;
-                    case TypeClass_SHORT            : pReturnArray[i] <<= (sal_Int16)xFieldContent->getShort(); break;
-                    case TypeClass_LONG         : pReturnArray[i] <<= (sal_Int32)xFieldContent->getLong(); break;
-                    case TypeClass_UNSIGNED_SHORT: pReturnArray[i] <<= (sal_uInt16)xFieldContent->getShort(); break;
-                    case TypeClass_UNSIGNED_LONG    : pReturnArray[i] <<= (sal_uInt32)xFieldContent->getLong(); break;
-                    case TypeClass_BOOLEAN      : ::comphelper::setBOOL(pReturnArray[i],xFieldContent->getBoolean()); break;
-                    default:
-                    {
-                        throw IllegalArgumentException();
-                    }
+                    String sText = aColumns.GetObject(nModelPos)->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
+                    pReturnArray[i] <<= ::rtl::OUString(sText);
+                }
+                break;
+                // alles andere wird an der DatabaseVariant erfragt
+                case TypeClass_FLOAT            : pReturnArray[i] <<= xFieldContent->getFloat(); break;
+                case TypeClass_DOUBLE           : pReturnArray[i] <<= xFieldContent->getDouble(); break;
+                case TypeClass_SHORT            : pReturnArray[i] <<= (sal_Int16)xFieldContent->getShort(); break;
+                case TypeClass_LONG             : pReturnArray[i] <<= (sal_Int32)xFieldContent->getLong(); break;
+                case TypeClass_UNSIGNED_SHORT   : pReturnArray[i] <<= (sal_uInt16)xFieldContent->getShort(); break;
+                case TypeClass_UNSIGNED_LONG    : pReturnArray[i] <<= (sal_uInt32)xFieldContent->getLong(); break;
+                case TypeClass_BOOLEAN          : ::comphelper::setBOOL(pReturnArray[i],xFieldContent->getBoolean()); break;
+                default:
+                {
+                    throw IllegalArgumentException();
                 }
             }
         }
@@ -1724,6 +1729,8 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 //------------------------------------------------------------------------------
 void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     FmGridControl* pGrid = static_cast< FmGridControl* >( GetWindow() );
 
     if (m_xColumns.is())
@@ -2457,7 +2464,7 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException
     m_aMode = Mode;
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
-    if (Mode == FILTER_MODE)
+    if ( Mode == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) ) )
         pGrid->SetFilterMode(sal_True);
     else
     {
@@ -2480,8 +2487,8 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException
     {
         aModes.realloc(2);
         ::rtl::OUString* pModes = aModes.getArray();
-        pModes[0] = DATA_MODE;
-        pModes[1] = FILTER_MODE;
+        pModes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
+        pModes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) );
     }
     return aModes;
 }

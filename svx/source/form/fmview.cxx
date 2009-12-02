@@ -61,7 +61,6 @@
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
 #include "fmpgeimp.hxx"
-#include "fmtools.hxx"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmprop.hrc"
@@ -626,7 +625,7 @@ void FmFormView::createControlLabelPair( OutputDevice* _pOutDev, sal_Int32 _nXOf
     );
 }
 // -----------------------------------------------------------------------------
-Reference< XFormController > FmFormView::GetFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
+Reference< runtime::XFormController > FmFormView::GetFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
 {
     return pImpl->getFormController( _rxForm, _rDevice );
 }

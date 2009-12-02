@@ -87,7 +87,7 @@ namespace svx
             @param  _sLocation
                 The location of the file.
         */
-        void insertNewEntry(const ::rtl::OUString& _sName,const ::rtl::OUString& _sLocation);
+        void insertNewEntry( const ::rtl::OUString& _sName,const ::rtl::OUString& _sLocation, const bool bReadOnly );
 
         /** opens the LinkDialog to create a register pair
             @param  _sOldName

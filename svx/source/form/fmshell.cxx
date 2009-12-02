@@ -32,7 +32,6 @@
 #include "precompiled_svx.hxx"
 #include "fmvwimp.hxx"
 #include <svx/fmshell.hxx>
-#include "fmtools.hxx"
 #include "fmservs.hxx"
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
@@ -685,7 +684,15 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
+            SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, nSlot, sal_False );
+            if ( !pShowItem )
+                GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
+            else
+            {
+                const sal_Bool bShow = pShowItem->GetValue();
+                GetViewShell()->GetViewFrame()->ShowChildWindow( nSlot, bShow );
+            }
+
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
@@ -827,7 +834,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                         bReopenNavigator = sal_True;
                     }
 
-                Reference< XFormController >  xController( GetImpl()->getActiveController() );
+                Reference< runtime::XFormController >  xController( GetImpl()->getActiveController() );
 
                 if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
                         // closing the window was denied, for instance because of a invalid criterion
@@ -857,6 +864,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             GetImpl()->startFiltering();
             rReq.Done();
+
+            // initially open the filter navigator, the whole form based filter is pretty useless without it
+            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
+            GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
+                &aIdentifierItem, NULL );
         }   break;
     }
 }
@@ -1400,7 +1412,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
 }
 
 //------------------------------------------------------------------------
-Reference< XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
+Reference< runtime::XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
 {
     const FmFormView* pFormView = dynamic_cast< const FmFormView* >( &_rView );
     if ( !pFormView )

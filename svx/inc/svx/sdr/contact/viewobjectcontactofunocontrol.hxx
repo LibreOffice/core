@@ -66,7 +66,6 @@ namespace sdr { namespace contact {
 
     public:
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
-
         /// determines whether an XControl already exists, and is currently visible
         bool    isControlVisible() const;
 
@@ -99,11 +98,19 @@ namespace sdr { namespace contact {
         */
         virtual void ActionChanged();
 
+        /** to be called when any aspect of the control which requires view updates changed
+        */
+        struct ImplAccess { friend class ViewObjectContactOfUnoControl_Impl; friend class ViewObjectContactOfUnoControl; private: ImplAccess() { } };
+        void onControlChangedOrModified( ImplAccess ) { impl_onControlChangedOrModified(); }
+
     protected:
         ~ViewObjectContactOfUnoControl();
 
         // support for Primitive2D
         virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+
+        /// to be called when any aspect of the control which requires view updates changed
+        void impl_onControlChangedOrModified();
 
     private:
         ViewObjectContactOfUnoControl();                                                  // never implemented
