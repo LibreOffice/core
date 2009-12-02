@@ -740,7 +740,7 @@ const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
     return ( const TokenId ) nElementAkt;
 }
 
-const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
+const TokenId TokenPool::StoreMatrix()
 {
     ScMatrix* pM;
 
@@ -753,8 +753,7 @@ const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
     pElement[ nElementAkt ] = nP_MatrixAkt;
     pType[ nElementAkt ] = T_Matrix;
 
-    pM = new ScMatrix( nC, nR );
-    pM->FillDouble( 0., 0,0, nC-1, nR-1 );
+    pM = new ScMatrix( 0, 0 );
     pM->IncRef( );
     ppP_Matrix[ nP_MatrixAkt ] = pM;
 

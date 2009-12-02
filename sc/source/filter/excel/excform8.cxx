@@ -397,15 +397,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aIn.Ignore( 4 );
                 if (rParam.mbAllowArrays)
                 {
-                    SCSIZE nC = rParam.mnArrayColSize;
-                    SCSIZE nR = rParam.mnArrayRowSize;
-                    if (!nC || !nR)
-                    {
-                        // Stored array size is invalid.  Get that from the formula.
-                        nC = nByte + 1;
-                        nR = nUINT16 + 1;
-                    }
-                    aStack << aPool.StoreMatrix(nC, nR);
+                    SCSIZE nC = nByte + 1;
+                    SCSIZE nR = nUINT16 + 1;
+                    aStack << aPool.StoreMatrix();
                     aExtensions.push_back( EXTENSION_ARRAY );
                 }
                 else
