@@ -53,6 +53,7 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/util/XSortable.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -204,7 +205,8 @@ class SwXText : public ::com::sun::star::lang::XTypeProvider,
                 public ::com::sun::star::text::XRelativeTextContentRemove,
                 public ::com::sun::star::beans::XPropertySet,
                 public ::com::sun::star::lang::XUnoTunnel,
-                public ::com::sun::star::text::XTextAppendAndConvert
+                public ::com::sun::star::text::XTextAppendAndConvert,
+                public ::com::sun::star::text::XTextCopy
 {
     SwDoc*                      pDoc;
     BOOL                        bObjectValid;
@@ -296,6 +298,8 @@ public:
        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& TableProperties
        ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
+    //XTextCopy
+    virtual void SAL_CALL copyText( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCopy >& xSource ) throw (::com::sun::star::uno::RuntimeException);
 
     //
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);

@@ -68,6 +68,7 @@
 
 #include <iostream>
 
+using namespace std;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -148,6 +149,7 @@ uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::R
     const uno::Type& rXTextConvert = ::getCppuType((uno::Reference< text::XTextConvert >*)0);
     const uno::Type& rXTextAppend = ::getCppuType((uno::Reference< text::XTextAppend >*)0);
     const uno::Type& rXTextAppendAndConvert = ::getCppuType((uno::Reference< text::XTextAppendAndConvert >*)0);
+    const uno::Type& rXTextCopy = ::getCppuType((uno::Reference< text::XTextCopy >*)0);
 
     uno::Any aRet;
     if(rType == rXTextType)
@@ -225,6 +227,11 @@ uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::R
         uno::Reference< XTextContentAppend > xRet = this;
         aRet.setValue(&xRet, rXTextContentAppend );
     }
+    else if(rType == rXTextCopy )
+    {
+        uno::Reference< XTextCopy > xRet = this;
+        aRet.setValue(&xRet, rXTextCopy );
+    }
     return aRet;
 }
 /* -----------------------------15.03.00 17:42--------------------------------
@@ -270,8 +277,8 @@ void SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
                     sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
         }
 
-        if(pRange && pRange->GetDoc()  == GetDoc() ||
-            pCursor && pCursor->GetDoc()  == GetDoc())
+        if( ( pRange && pRange->GetDoc()  == GetDoc() ) ||
+            ( pCursor && pCursor->GetDoc()  == GetDoc() ) )
         {
             const SwStartNode* pOwnStartNode = GetStartNode();
             if(pCursor)
@@ -1787,6 +1794,36 @@ bool lcl_SimilarPosition( sal_Int32 nPos1, sal_Int32 nPos2 )
     return abs( nPos1 - nPos2 ) < COL_POS_FUZZY;
 }
 
+void SwXText::copyText(
+    const uno::Reference< text::XTextCopy >& xSource )
+        throw ( uno::RuntimeException )
+{
+#if DEBUG
+    clog << "TODO - SwXText::copyText()" << endl;
+#endif
+    uno::Reference< lang::XUnoTunnel > xTTunnel( xSource, uno::UNO_QUERY_THROW );
+   SwXText* pText = 0;
+    pText = reinterpret_cast< SwXText* >(
+                   sal::static_int_cast< sal_IntPtr >( xTTunnel->getSomething( SwXText::getUnoTunnelId()) ));
+
+
+    uno::Reference< text::XText > xText( xSource, uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextCursor > xCursor = xText->createTextCursor( );
+    xCursor->gotoEnd( sal_True );
+
+    uno::Reference< lang::XUnoTunnel > xTunnel( xCursor, uno::UNO_QUERY_THROW );
+
+    OTextCursorHelper* pCursor = 0;
+    pCursor = reinterpret_cast< OTextCursorHelper* >(
+                   sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+    if ( pCursor )
+    {
+        SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
+        SwPosition rPos( rNdIndex );
+        pDoc->CopyRange( *pCursor->GetPaM( ), rPos, false );
+    }
+}
+
 uno::Reference< text::XTextTable > SwXText::convertToTable(
     const uno::Sequence< uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > > >& rTableRanges,
    const uno::Sequence< uno::Sequence< uno::Sequence< beans::PropertyValue > > >& rCellProperties,
@@ -2153,30 +2190,6 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
     {
         (void)rBounds;
     }
-
-
-        bool bIllegalException = false;
-        bool bRuntimeException = false;
-        ::rtl::OUString sMessage;
-        pDoc->StartUndo(UNDO_START, NULL);
-        pDoc->EndUndo(UNDO_START, NULL);
-        if( bIllegalException || bRuntimeException )
-        {
-            SwUndoIter aUndoIter( pFirstPaM.get(), UNDO_EMPTY );
-            pDoc->Undo(aUndoIter);
-            if(bIllegalException)
-            {
-                lang::IllegalArgumentException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
-            }
-            else //if(bRuntimeException)
-            {
-                uno::RuntimeException aEx;
-                aEx.Message = sMessage;
-                throw aEx;
-            }
-        }
     return xRet;
 }
 
