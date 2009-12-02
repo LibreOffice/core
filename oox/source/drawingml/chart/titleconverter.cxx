@@ -32,7 +32,6 @@
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
@@ -181,6 +180,10 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
             OSL_ENSURE( !mrModel.mxTextProp || !rText.mxTextBody, "TitleConverter::convertFromModel - multiple text properties" );
             ModelRef< TextBody > xTextProp = mrModel.mxTextProp.is() ? mrModel.mxTextProp : rText.mxTextBody;
             getFormatter().convertTextRotation( aPropSet, xTextProp, true );
+
+            // frame position
+            LayoutConverter aLayoutConv( *this, mrModel.mxLayout.getOrCreate() );
+            aLayoutConv.convertFromModel( aPropSet );
         }
         catch( Exception& )
         {
@@ -211,59 +214,56 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         PropertySet aPropSet( xLegend );
         aPropSet.setProperty( PROP_Show, true );
 
-        // legend position and expansion
+        // legend formatting
+        getFormatter().convertFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_LEGEND );
+
+        // predefined legend position and expansion
+        cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_CUSTOM;
+        cssc2::LegendExpansion eLegendExpand = cssc2::LegendExpansion_HIGH;
+        switch( mrModel.mnPosition )
+        {
+            case XML_l:
+                eLegendPos = cssc2::LegendPosition_LINE_START;
+                eLegendExpand = cssc2::LegendExpansion_HIGH;
+            break;
+            case XML_r:
+                eLegendPos = cssc2::LegendPosition_LINE_END;
+                eLegendExpand = cssc2::LegendExpansion_HIGH;
+            break;
+            case XML_t:
+                eLegendPos = cssc2::LegendPosition_PAGE_START;
+                eLegendExpand = cssc2::LegendExpansion_WIDE;
+            break;
+            case XML_b:
+                eLegendPos = cssc2::LegendPosition_PAGE_END;
+                eLegendExpand = cssc2::LegendExpansion_WIDE;
+            break;
+            case XML_tr:
+                eLegendPos = cssc2::LegendPosition_LINE_END; // top-right not supported
+                eLegendExpand = cssc2::LegendExpansion_HIGH;
+            break;
+        }
+
+        // manual positioning
         LayoutModel& rLayout = mrModel.mxLayout.getOrCreate();
         LayoutConverter aLayoutConv( *this, rLayout );
+        aLayoutConv.convertFromModel( aPropSet );
         Rectangle aLegendRect;
-        bool bManualLayout = aLayoutConv.calcAbsRectangle( aLegendRect );
-        if( bManualLayout )
+        if( aLayoutConv.calcAbsRectangle( aLegendRect ) )
         {
-            // relative position
-            cssc2::RelativePosition aRelPos;
-            aRelPos.Primary = getLimitedValue< double, double >( rLayout.mfX, 0.0, 1.0 );
-            aRelPos.Secondary = getLimitedValue< double, double >( rLayout.mfY, 0.0, 1.0 );
-            aRelPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
-            aPropSet.setProperty( PROP_AnchorPosition, cssc2::LegendPosition_CUSTOM );
-            aPropSet.setProperty( PROP_RelativePosition, aRelPos );
-
             // #i71697# it is not possible to set the size directly, do some magic here
-            cssc2::LegendExpansion eLegendExpand = cssc2::LegendExpansion_BALANCED;
             double fRatio = static_cast< double >( aLegendRect.Width ) / aLegendRect.Height;
             if( fRatio > 1.5 )
                 eLegendExpand = cssc2::LegendExpansion_WIDE;
             else if( fRatio < 0.75 )
                 eLegendExpand = cssc2::LegendExpansion_HIGH;
-            aPropSet.setProperty( PROP_Expansion, eLegendExpand );
-        }
-        else // automatic layout
-        {
-            cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_LINE_END;
-            cssc2::LegendExpansion eLegendExpand = cssc2::LegendExpansion_HIGH;
-            switch( mrModel.mnPosition )
-            {
-                case XML_l:
-                    eLegendPos = cssc2::LegendPosition_LINE_START;
-                    eLegendExpand = cssc2::LegendExpansion_HIGH;
-                break;
-                case XML_r:
-                    eLegendPos = cssc2::LegendPosition_LINE_END;
-                    eLegendExpand = cssc2::LegendExpansion_HIGH;
-                break;
-                case XML_t:
-                    eLegendPos = cssc2::LegendPosition_PAGE_START;
-                    eLegendExpand = cssc2::LegendExpansion_WIDE;
-                break;
-                case XML_b:
-                    eLegendPos = cssc2::LegendPosition_PAGE_END;
-                    eLegendExpand = cssc2::LegendExpansion_WIDE;
-                break;
-            }
-            aPropSet.setProperty( PROP_AnchorPosition, eLegendPos );
-            aPropSet.setProperty( PROP_Expansion, eLegendExpand );
+            else
+                eLegendExpand = cssc2::LegendExpansion_BALANCED;
         }
 
-        // legend formatting
-        getFormatter().convertFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_LEGEND );
+        // set position and expansion properties
+        aPropSet.setProperty( PROP_AnchorPosition, eLegendPos );
+        aPropSet.setProperty( PROP_Expansion, eLegendExpand );
     }
     catch( Exception& )
     {

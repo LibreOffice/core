@@ -122,7 +122,11 @@ public:
 
     /** Tries to calculate the absolute position and size from the contained
         OOXML layout model. Returns true, if returned rectangle is valid. */
-    bool                calcAbsRectangle( ::com::sun::star::awt::Rectangle& orRect );
+    bool                calcAbsRectangle( ::com::sun::star::awt::Rectangle& orRect ) const;
+
+    /** Tries to set the position from the contained OOXML layout model.
+        Returns true, if a manual position could be calculated. */
+    bool                convertFromModel( PropertySet& rPropSet );
 };
 
 // ============================================================================

@@ -35,6 +35,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#include "properties.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
 
@@ -48,6 +50,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::Size;
+using ::com::sun::star::chart2::RelativePosition;
 using ::com::sun::star::chart2::XChartDocument;
 using ::oox::core::XmlFilterBase;
 
@@ -224,7 +227,7 @@ LayoutConverter::~LayoutConverter()
 {
 }
 
-bool LayoutConverter::calcAbsRectangle( Rectangle& orRect )
+bool LayoutConverter::calcAbsRectangle( Rectangle& orRect ) const
 {
     if( !mrModel.mbAutoLayout )
     {
@@ -237,6 +240,20 @@ bool LayoutConverter::calcAbsRectangle( Rectangle& orRect )
             orRect.Height = lclCalcSize( orRect.Y, rChartSize.Height, mrModel.mfH, mrModel.mnHMode );
             return (orRect.Width > 0) && (orRect.Height > 0);
         }
+    }
+    return false;
+}
+
+bool LayoutConverter::convertFromModel( PropertySet& rPropSet )
+{
+    if( !mrModel.mbAutoLayout && (mrModel.mfX >= 0.0) && (mrModel.mfY >= 0.0) )
+    {
+        RelativePosition aPos;
+        aPos.Primary = getLimitedValue< double, double >( mrModel.mfX, 0.0, 1.0 );
+        aPos.Secondary = getLimitedValue< double, double >( mrModel.mfY, 0.0, 1.0 );
+        aPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
+        rPropSet.setProperty( PROP_RelativePosition, aPos );
+        return true;
     }
     return false;
 }
