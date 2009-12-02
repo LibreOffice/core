@@ -33,6 +33,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
@@ -59,7 +60,6 @@ using namespace ::xmloff::token;
 
 ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context) :
      m_xContext(context)
-    ,m_bOnlyOnce(true)
 {
 }
 // -----------------------------------------------------------------------------
@@ -122,6 +122,26 @@ void SAL_CALL ImportDocumentHandler::startDocument() throw (uno::RuntimeExceptio
 void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException, xml::sax::SAXException)
 {
     m_xDelegatee->endDocument();
+    uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
+    if ( xReceiver.is() )
+    {
+        xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
+        // this fills the chart again
+        uno::Sequence< beans::PropertyValue > aArgs( 4 );
+        aArgs[0] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+            uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[1] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[2] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[3] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+        xReceiver->setArguments( aArgs );
+    }
 }
 
 void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & _xAttrList) throw (uno::RuntimeException, xml::sax::SAXException)
@@ -254,16 +274,6 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
             }
         } // for(;pArgIter != pArgEnd;++pArgIter)
 
-        if ( m_bOnlyOnce )
-        {
-            try
-            {
-                m_xDatabaseDataProvider->createDataSource(m_aArguments);
-                m_bOnlyOnce = false;
-            }
-            catch(uno::Exception)
-            {}
-        } // if ( m_bOnlyOnce )
 
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         xNewAttribs = pList;

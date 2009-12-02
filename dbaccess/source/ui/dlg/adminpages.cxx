@@ -31,70 +31,31 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
-#include "dbu_dlg.hrc"
-#endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "dbu_dlg.hrc"
+#include "dbustrings.hrc"
+#include "dsitems.hxx"
+#include "dsselect.hxx"
+#include "localresaccess.hxx"
+#include "odbcconfig.hxx"
+#include "optionalboolitem.hxx"
 #include "sqlmessage.hxx"
-#endif
-#ifndef _SV_ACCEL_HXX
+
+#include <osl/file.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/stritem.hxx>
 #include <vcl/accel.hxx>
-#endif
+#include <vcl/button.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/field.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/msgbox.hxx>
+
 #include <algorithm>
 #include <stdlib.h>
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _DBAUI_DSSELECT_HXX_
-#include "dsselect.hxx"
-#endif
-#ifndef _DBAUI_ODBC_CONFIG_HXX_
-#include "odbcconfig.hxx"
-#endif
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
-#include "localresaccess.hxx"
-#endif
-#ifndef _SV_FIELD_HXX
-#include <vcl/field.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
-#include <vcl/edit.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-
-
 
 //.........................................................................
 namespace dbaui
@@ -256,7 +217,16 @@ namespace dbaui
             if ( _bRevertValue )
                 bValue = !bValue;
 
-            _rSet.Put( SfxBoolItem( _nID, bValue ) );
+            if ( _pCheckBox->IsTriStateEnabled() )
+            {
+                OptionalBoolItem aValue( _nID );
+                if ( _pCheckBox->GetState() != STATE_DONTKNOW )
+                    aValue.SetValue( bValue );
+                _rSet.Put( aValue );
+            }
+            else
+                _rSet.Put( SfxBoolItem( _nID, bValue ) );
+
             _bChangedSomething = sal_True;
         }
     }

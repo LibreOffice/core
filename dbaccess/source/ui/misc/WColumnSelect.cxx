@@ -140,6 +140,7 @@ void OWizColumnSelect::Reset()
 
     clearListBox(m_lbOrgColumnNames);
     clearListBox(m_lbNewColumnNames);
+    m_pParent->m_mNameMapping.clear();
 
     // insert the source columns in the left listbox
     const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();

@@ -31,58 +31,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#include "dsnItem.hxx"
-#ifndef _DBAUI_DBADMIN_HXX_
-#include "dbadmin.hxx"
-#endif
-#ifndef _DBAUI_DBADMIN_HRC_
-#include "dbadmin.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
-#include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _DBAUI_ADMINPAGES_HXX_
-#include "adminpages.hxx"
-#endif
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
-#include "localresaccess.hxx"
-#endif
-#ifndef _DBAUI_STRINGLISTITEM_HXX_
-#include "stringlistitem.hxx"
-#endif
-#ifndef _DBAUI_PROPERTYSETITEM_HXX_
-#include "propertysetitem.hxx"
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
-#endif
-#ifndef DBAUI_CONNECTIONPAGE_HXX
 #include "ConnectionPage.hxx"
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
-#include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_DBADMINIMPL_HXX_
 #include "DbAdminImpl.hxx"
-#endif
+#include "DriverSettings.hxx"
+#include "adminpages.hxx"
+#include "dbadmin.hrc"
+#include "dbadmin.hxx"
+#include "dbu_dlg.hrc"
+#include "dbustrings.hrc"
+#include "dsitems.hxx"
+#include "dsnItem.hxx"
+#include "localresaccess.hxx"
+#include "optionalboolitem.hxx"
+#include "propertysetitem.hxx"
+#include "stringlistitem.hxx"
+
+#include <svtools/eitem.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/stritem.hxx>
+#include <unotools/confignode.hxx>
+#include <vcl/msgbox.hxx>
 
 //.........................................................................
 namespace dbaui
@@ -449,8 +417,9 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_CHECK_REQUIRED_FIELDS, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_IGNORECURRENCY, sal_False);
     *pCounter++ = new SfxStringItem(DSID_CONN_SOCKET, String());
-    *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, sal_True); // must be the same as in ModelImpl.cxx
+    *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, sal_True);
     *pCounter++ = new SfxStringItem(DSID_NAMED_PIPE, String());
+    *pCounter++ = new OptionalBoolItem( DSID_PRIMARY_KEY_SUPPORT );
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
@@ -510,7 +479,8 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
         {0,0},
         {0,0},
         {0,0},
-        {0,0}, /* for Escape DateTime*/
+        {0,0},
+        {0,0},
         {0,0},
         {0,0}
     };

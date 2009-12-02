@@ -34,93 +34,41 @@
 #include "DbAdminImpl.hxx"
 #include "dsmeta.hxx"
 
-#ifndef _SFXPOOLITEM_HXX
-#include <svtools/poolitem.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _SVTOOLS_LOGINDLG_HXX_
-#include <svtools/logindlg.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#include <connectivity/DriversConfig.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
-#include <com/sun/star/sdbc/XDriver.hpp>
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_PROPERTYSETITEM_HXX_
-#include "propertysetitem.hxx"
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef DBAUI_ITEMSETHELPER_HXX
 #include "IItemSetHelper.hxx"
-#endif
-#ifndef _DBU_DLG_HRC_
-#include "dbu_dlg.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _VCL_STDTEXT_HXX
-#include <vcl/stdtext.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
-#include <vcl/waitobj.hxx>
-#endif
-#ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
-#include <typelib/typedescription.hxx>
-#endif
-
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _DBAUI_STRINGLISTITEM_HXX_
-#include "stringlistitem.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-#include <com/sun/star/frame/XStorable.hpp>
-#endif
+#include "dbu_dlg.hrc"
+#include "dbustrings.hrc"
+#include "dsitems.hxx"
 #include "dsnItem.hxx"
+#include "moduledbu.hxx"
+#include "optionalboolitem.hxx"
+#include "propertysetitem.hxx"
+#include "stringlistitem.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/XDriver.hpp>
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
+#include <connectivity/DriversConfig.hxx>
+#include <connectivity/dbexception.hxx>
+#include <osl/file.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/itempool.hxx>
+#include <svtools/logindlg.hxx>
+#include <svtools/poolitem.hxx>
+#include <svtools/stritem.hxx>
+#include <typelib/typedescription.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/waitobj.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -231,6 +179,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AS_BEFORE_CORRNAME, INFO_AS_BEFORE_CORRELATION_NAME ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CHECK_REQUIRED_FIELDS, INFO_FORMS_CHECK_REQUIRED_FIELDS ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ESCAPE_DATETIME, INFO_ESCAPE_DATETIME ) );
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PRIMARY_KEY_SUPPORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrimaryKeySupport" ) ) ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PARAMETERNAMESUBST, INFO_PARAMETERNAMESUBST));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_IGNOREDRIVER_PRIV, INFO_IGNOREDRIVER_PRIV));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_BOOLEANCOMPARISON, PROPERTY_BOOLEANCOMPARISONMODE));
@@ -909,14 +858,36 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
 {
     // translate the SfxPoolItem
     Any aValue;
-    if (_pItem->ISA(SfxStringItem))
-        aValue <<= ::rtl::OUString(PTR_CAST(SfxStringItem, _pItem)->GetValue().GetBuffer());
-    else if (_pItem->ISA(SfxBoolItem))
-        aValue <<= PTR_CAST(SfxBoolItem, _pItem)->GetValue();
-    else if (_pItem->ISA(SfxInt32Item))
-        aValue <<= PTR_CAST(SfxInt32Item, _pItem)->GetValue();
-    else if (_pItem->ISA(OStringListItem))
-        aValue <<= PTR_CAST(OStringListItem, _pItem)->getList();
+
+    const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, _pItem );
+    const SfxBoolItem* pBoolItem = PTR_CAST( SfxBoolItem, _pItem );
+    const OptionalBoolItem* pOptBoolItem = PTR_CAST( OptionalBoolItem, _pItem );
+    const SfxInt32Item* pInt32Item = PTR_CAST( SfxInt32Item, _pItem );
+    const OStringListItem* pStringListItem = PTR_CAST( OStringListItem, _pItem );
+
+    if ( pStringItem )
+    {
+        aValue <<= ::rtl::OUString( pStringItem->GetValue().GetBuffer() );
+    }
+    else if ( pBoolItem )
+    {
+        aValue <<= pBoolItem->GetValue();
+    }
+    else if ( pOptBoolItem )
+    {
+        if ( !pOptBoolItem->HasValue() )
+            aValue.clear();
+        else
+            aValue <<= (sal_Bool)pOptBoolItem->GetValue();
+    }
+    else if ( pInt32Item )
+    {
+        aValue <<= pInt32Item->GetValue();
+    }
+    else if ( pStringListItem )
+    {
+        aValue <<= pStringListItem->getList();
+    }
     else
     {
         DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported item type!");
@@ -957,15 +928,14 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
 //-------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue )
 {
-    USHORT nId = (USHORT)_nId;
-    switch (_rValue.getValueType().getTypeClass())
+    switch ( _rValue.getValueType().getTypeClass() )
     {
         case TypeClass_STRING:
-            if ( implCheckItemType( _rSet, nId, SfxStringItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, SfxStringItem::StaticType() ) )
             {
                 ::rtl::OUString sValue;
                 _rValue >>= sValue;
-                _rSet.Put(SfxStringItem(nId, sValue.getStr()));
+                _rSet.Put(SfxStringItem(_nId, sValue.getStr()));
             }
             else {
                 DBG_ERROR(
@@ -978,11 +948,24 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_BOOLEAN:
-            if ( implCheckItemType( _rSet, nId, SfxBoolItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, SfxBoolItem::StaticType() ) )
             {
                 sal_Bool bVal = sal_False;
                 _rValue >>= bVal;
-                _rSet.Put(SfxBoolItem(nId, bVal));
+                _rSet.Put(SfxBoolItem(_nId, bVal));
+            }
+            else if ( implCheckItemType( _rSet, _nId, OptionalBoolItem::StaticType() ) )
+            {
+                OptionalBoolItem aItem( _nId );
+                if ( _rValue.hasValue() )
+                {
+                    sal_Bool bValue = sal_False;
+                    _rValue >>= bValue;
+                    aItem.SetValue( bValue );
+                }
+                else
+                    aItem.ClearValue();
+                _rSet.Put( aItem );
             }
             else {
                 DBG_ERROR(
@@ -995,11 +978,11 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_LONG:
-            if ( implCheckItemType( _rSet, nId, SfxInt32Item::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, SfxInt32Item::StaticType() ) )
             {
                 sal_Int32 nValue = 0;
                 _rValue >>= nValue;
-                _rSet.Put( SfxInt32Item( nId, nValue ) );
+                _rSet.Put( SfxInt32Item( _nId, nValue ) );
             }
             else {
                 DBG_ERROR(
@@ -1012,7 +995,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_SEQUENCE:
-            if ( implCheckItemType( _rSet, nId, OStringListItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, OStringListItem::StaticType() ) )
             {
                 // determine the element type
                 TypeDescription aTD(_rValue.getValueType());
@@ -1027,7 +1010,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                     {
                         Sequence< ::rtl::OUString > aStringList;
                         _rValue >>= aStringList;
-                        _rSet.Put(OStringListItem(nId, aStringList));
+                        _rSet.Put(OStringListItem(_nId, aStringList));
                     }
                     break;
                     default:
@@ -1045,7 +1028,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_VOID:
-            _rSet.ClearItem(nId);
+            _rSet.ClearItem(_nId);
             break;
 
         default:

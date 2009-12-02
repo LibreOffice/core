@@ -56,6 +56,7 @@ SLOFILES=	\
         $(SLO)$/databasecontext.obj		\
         $(SLO)$/connection.obj			\
         $(SLO)$/datasource.obj			\
+        $(SLO)$/databaseregistrations.obj \
         $(SLO)$/intercept.obj			\
         $(SLO)$/myucp_datasupplier.obj	\
         $(SLO)$/myucp_resultset.obj		\

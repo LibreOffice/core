@@ -280,14 +280,16 @@ OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
     if ( aFind != rDefinition.end() )
     {
         aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener.getRef());
-        return new OTableColumnWrapper( aFind->second, aFind->second, sal_True );
+        return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
+    OSL_ENSURE( false, "OComponentDefinition::createColumn: is this a valid case?" );
+        // This here is the last place creating a OTableColumn, and somehow /me thinks it is not needed ...
     return new OTableColumn( _rName );
 }
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OComponentDefinition::createColumnDescriptor()
 {
-    return new OTableColumnDescriptor();
+    return new OTableColumnDescriptor( true );
 }
 // -----------------------------------------------------------------------------
 void OComponentDefinition::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
@@ -307,7 +309,7 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
     ::rtl::OUString sName;
     _rxSourceDescriptor->getPropertyValue( PROPERTY_NAME ) >>= sName;
 
-    Reference<XPropertySet> xColDesc = new OTableColumnDescriptor();
+    Reference<XPropertySet> xColDesc = new OTableColumnDescriptor( true );
     ::comphelper::copyProperties( _rxSourceDescriptor, xColDesc );
     getDefinition().insert( sName, xColDesc );
 

@@ -138,6 +138,7 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#include <connectivity/BlobHelper.hxx>
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #include "tablecontainer.hxx"
 #endif
@@ -814,7 +815,18 @@ void ORowSet::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
 // XRowUpdate
 void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    updateValue(columnIndex,ORowSetValue());
+    ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
+
+    ::osl::MutexGuard aGuard( *m_pMutex );
+    checkUpdateConditions(columnIndex);
+    checkUpdateIterator();
+
+    ::connectivity::ORowSetValue aOldValue(((*m_aCurrentRow)->get())[columnIndex]);
+    m_pCache->updateNull(columnIndex);
+    // we have to notify all listeners
+    ((*m_aCurrentRow)->get())[columnIndex].setNull();
+    firePropertyChange(columnIndex-1 ,aOldValue);
+    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
@@ -886,25 +898,23 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     checkUpdateConditions(columnIndex);
 
     checkUpdateIterator();
-    ::connectivity::ORowSetValue aOldValue;
-    if(((*m_aCurrentRow)->get())[columnIndex].getTypeKind() == DataType::BLOB)
-    {
-        m_pCache->updateBinaryStream(columnIndex,x,length);
-        aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
-        ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
-    }
-    else
+
+    //if(((*m_aCurrentRow)->get())[columnIndex].getTypeKind() == DataType::BLOB)
+    //{
+ //       ::connectivity::ORowSetValue aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
+    //  m_pCache->updateBinaryStream(columnIndex,x,length);
+    //  ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
+ //       ((*m_aCurrentRow)->get())[columnIndex].setTypeKind(DataType::BLOB);
+ //       firePropertyChange(columnIndex-1 ,aOldValue);
+    //    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
+    //}
+    //else
     {
         Sequence<sal_Int8> aSeq;
         if(x.is())
             x->readBytes(aSeq,length);
         updateValue(columnIndex,aSeq);
-        aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
-        ((*m_aCurrentRow)->get())[columnIndex] = aSeq;
     }
-
-    firePropertyChange(columnIndex-1 ,aOldValue);
-    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -1068,19 +1078,26 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
         m_pCache->updateRow(m_aCurrentRow.operator ->());
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
+        if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() )
+        {
+            m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
 
-        // notification order
-        // - column values
-        ORowSetBase::firePropertyChange(aOldValues);
+            // notification order
+            // - column values
+            ORowSetBase::firePropertyChange(aOldValues);
 
-        // - rowChanged
-        notifyAllListenersRowChanged(aGuard,aEvt);
+            // - rowChanged
+            notifyAllListenersRowChanged(aGuard,aEvt);
 
-        // - IsModified
-        if(!m_bModified)
-            fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
-        OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
+            // - IsModified
+            if(!m_bModified)
+                fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+            OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
+        }
+        else // the update went rong
+        {
+            ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_UPDATE_FAILED ), SQL_INVALID_CURSOR_POSITION, *this );
+        }
     }
 }
 // -------------------------------------------------------------------------
@@ -1092,20 +1109,15 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     checkCache();
 
     if ( m_bBeforeFirst || m_bAfterLast )
-        throwSQLException( "Cannot delete the before-first or after-last row.", SQL_INVALID_CURSOR_POSITION, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_BEFORE_AFTER ), SQL_INVALID_CURSOR_POSITION, *this );
     if ( m_bNew )
-        throwSQLException( "Cannot delete the insert-row.", SQL_INVALID_CURSOR_POSITION, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_INSERT_ROW ), SQL_INVALID_CURSOR_POSITION, *this );
     if  ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
-        throwSQLException( "Result set is read only.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_RESULT_IS_READONLY ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
     if ( ( m_pCache->m_nPrivileges & Privilege::DELETE ) != Privilege::DELETE )
-        throwSQLException( "DELETE privilege not available.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_PRIVILEGE ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
     if ( rowDeleted() )
-        throwSQLException( "Current row already deleted.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
 
     // this call position the cache indirect
     Any aBookmarkToDelete( m_aBookmark );
@@ -1269,8 +1281,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
     if ( ( m_pCache->m_nPrivileges & Privilege::INSERT ) != Privilege::INSERT )
-        throwSQLException( "No insert privileges", SQL_GENERAL_ERROR, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_INSERT_PRIVILEGE ), SQL_GENERAL_ERROR, *this );
 
     if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
@@ -1336,8 +1347,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
         // m_bModified should be true. Also, as soon as somebody calls moveToInsertRow,
         // our current row should not be deleted anymore. So, we should not have survived the above
         // check "if ( !m_pCache->m_bNew && !m_bModified )"
-        throwSQLException( "The current row is deleted.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
 
     if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
@@ -1481,14 +1491,19 @@ Reference< XRef > SAL_CALL ORowSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQ
     return Reference< XRef >();
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL ORowSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL ORowSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return Reference< XBlob >();
+    if ( m_pCache && isInsertRow() )
+    {
+        checkCache();
+        return new ::connectivity::BlobHelper(((*m_pCache->m_aInsertRow)->get())[m_nLastColumnIndex = columnIndex].getSequence());
+    }
+    return ORowSetBase::getBlob(columnIndex);
 }
 // -------------------------------------------------------------------------
-Reference< XClob > SAL_CALL ORowSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL ORowSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return Reference< XClob >();
+    return Reference< XClob >(getInsertValue(columnIndex).makeAny(),UNO_QUERY);
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ORowSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
@@ -1696,12 +1711,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
         m_xStatement = m_xActiveConnection->prepareStatement( sCommandToExecute );
         if ( !m_xStatement.is() )
         {
-            SQLException aError;
-            aError.Context = *this;
-            aError.SQLState = getStandardSQLState( SQL_GENERAL_ERROR );
-            aError.Message = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Internal error: no statement object provided by the database driver." ) );
-                // TODO: resource
-            throw aError;
+            ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INTERNAL_ERROR ), SQL_GENERAL_ERROR, *this );
         }
 
         Reference< XPropertySet > xStatementProps( m_xStatement, UNO_QUERY_THROW );
@@ -1971,15 +1981,17 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             for(sal_Int32 i=1; i <= nCount ;++i)
             {
                 ::rtl::OUString sName = xMeta->getColumnName(i);
+                ::rtl::OUString sColumnLabel = xMeta->getColumnLabel(i);
 
                 // retrieve the column number |i|
                 Reference<XPropertySet> xColumn;
                 {
                     sal_Bool bReFetchName = sal_False;
-                    if (m_xColumns->hasByName(sName))
+                    if (m_xColumns->hasByName(sColumnLabel))
+                        m_xColumns->getByName(sColumnLabel) >>= xColumn;
+                    if (!xColumn.is() && m_xColumns->hasByName(sName))
                         m_xColumns->getByName(sName) >>= xColumn;
-                    if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
-                        m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
+
                     // check if column already in the list we need another
                     if ( aAllColumns.find( xColumn ) != aAllColumns.end() )
                     {
@@ -2020,16 +2032,15 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                         aDescription,
                                                                         m_aCurrentRow);
                     aColumns->get().push_back(pColumn);
-                    if(!sName.getLength())
+                    if(!sColumnLabel.getLength())
                     {
                         if(xColumn.is())
-                            xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                            xColumn->getPropertyValue(PROPERTY_NAME) >>= sColumnLabel;
                         else
-                            sName = ::rtl::OUString::createFromAscii("Expression1");
-                        // TODO: resource
+                            sColumnLabel = DBACORE_RESSTRING( RID_STR_EXPRESSION1 );
                     }
-                    pColumn->setName(sName);
-                    aNames.push_back(sName);
+                    pColumn->setName(sColumnLabel);
+                    aNames.push_back(sColumnLabel);
                     m_aDataColumns.push_back(pColumn);
 
                     if ( xColumn.is() )
@@ -2440,8 +2451,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
     m_aActiveCommand = sCommand;
 
     if ( !m_aActiveCommand.getLength() )
-        throwSQLException( "No SQL command was provided.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_SQL_COMMAND ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
 
     return bDoEscapeProcessing;
 }
@@ -2743,21 +2753,17 @@ void ORowSet::checkUpdateIterator()
 void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
 {
     checkCache();
-    if ( columnIndex <= 0 )
-        throwSQLException( "Invalid column index", SQL_INVALID_DESCRIPTOR_INDEX, *this );
-        // TODO: resource
-    if ( rowDeleted() )
-        throwSQLException( "Current row is deleted", SQL_INVALID_CURSOR_POSITION, *this );
-        // TODO: resource
-    if ( m_aCurrentRow.isNull() )
-        throwSQLException( "Invalid cursor state", SQL_INVALID_CURSOR_STATE, *this );
+    if ( columnIndex <= 0 || sal_Int32((*m_aCurrentRow)->get().size()) <= columnIndex )
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_INDEX ), SQL_INVALID_DESCRIPTOR_INDEX, *this );
 
-    if ( sal_Int32((*m_aCurrentRow)->get().size()) <= columnIndex )
-        throwSQLException( "Invalid column index", SQL_INVALID_DESCRIPTOR_INDEX, *this );
-        // TODO: resource
+    if ( rowDeleted() )
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), SQL_INVALID_CURSOR_POSITION, *this );
+
+    if ( m_aCurrentRow.isNull() )
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_CURSOR_STATE ), SQL_INVALID_CURSOR_STATE, *this );
+
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
-        throwSQLException( "Result set is not writeable", SQL_GENERAL_ERROR, *this );
-        // TODO: resource
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_RESULT_IS_READONLY ), SQL_GENERAL_ERROR, *this );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
@@ -2838,7 +2844,8 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
             m_aDataColumns.push_back(pColumn);
 
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-            sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+            sal_Int32 nFormatKey = 0;
+            xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT) >>= nFormatKey;
             if(!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
                 nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));

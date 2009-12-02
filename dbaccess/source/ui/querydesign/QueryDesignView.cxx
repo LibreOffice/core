@@ -186,11 +186,6 @@ namespace
                                     sal_Bool bHaving,
                                     bool _bAddOrOnOneLine);
 
-    void fillFunctionInfo(          OQueryDesignView* _pView
-                                    ,const ::connectivity::OSQLParseNode* pNode
-                                    ,const ::rtl::OUString& sFunctionTerm
-                                    ,OTableFieldDescRef& aInfo);
-
     //------------------------------------------------------------------------------
     ::rtl::OUString quoteTableAlias(sal_Bool _bQuote, const ::rtl::OUString& _sAliasName, const ::rtl::OUString& _sQuote)
     {
@@ -369,6 +364,7 @@ namespace
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
+                case DataType::CLOB:
                     rNewValue = ::dbtools::quoteName(aQuote,rValue);
                     break;
                 case DataType::DECIMAL:
@@ -382,6 +378,7 @@ namespace
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
+                case DataType::BLOB:
                     rNewValue = rValue;
                     break;
                 case DataType::BIT:
@@ -1385,6 +1382,9 @@ namespace
 
             // first extract the inner joins conditions
             GetInnerJoinCriteria(_pView,pNodeTmp);
+            // now simplify again, join are checked in ComparisonPredicate
+            ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
+            pNodeTmp = pNode->getChild(1);
 
             // it could happen that pCondition is not more valid
             eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pNodeTmp, rLevel);
@@ -1395,7 +1395,7 @@ namespace
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
-                                    const sal_uInt16 nLevel,
+                                    sal_uInt16& nLevel,
                                     sal_Bool bHaving,
                                     bool bAddOrOnOneLine);
     //------------------------------------------------------------------------------
@@ -1432,7 +1432,11 @@ namespace
                 if ( SQL_ISRULE(pChild,search_condition) )
                     eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pChild,nLevel,bHaving,bAddOrOnOneLine);
                 else
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                {
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, nLevel,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                    if ( !bAddOrOnOneLine)
+                        nLevel++;
+                }
             }
         }
         else
@@ -1466,7 +1470,7 @@ namespace
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
-                                    const sal_uInt16 nLevel,
+                                    sal_uInt16& nLevel,
                                     sal_Bool bHaving,
                                     bool bAddOrOnOneLine)
     {
@@ -1480,10 +1484,18 @@ namespace
         // Runde Klammern
         if (SQL_ISRULE(pCondition,boolean_primary))
         {
-            sal_uInt16 nLevel2 = nLevel;
             // check if we have to put the or criteria on one line.
-            bool bMustAddOrOnOneLine = CheckOrCriteria(pCondition->getChild(1),NULL);
-            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,bMustAddOrOnOneLine );
+            const  ::connectivity::OSQLParseNode* pSearchCondition = pCondition->getChild(1);
+            bool bMustAddOrOnOneLine = CheckOrCriteria(pSearchCondition,NULL);
+            if ( SQL_ISRULE( pSearchCondition, search_condition) ) // we have a or
+            {
+                _pSelectionBrw->DuplicateConditionLevel( nLevel);
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(0), nLevel,bHaving,bMustAddOrOnOneLine );
+                ++nLevel;
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(2), nLevel,bHaving,bMustAddOrOnOneLine );
+            }
+            else
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition, nLevel,bHaving,bMustAddOrOnOneLine );
         }
         // Das erste Element ist (wieder) eine AND-Verknuepfung
         else if ( SQL_ISRULE(pCondition,boolean_term) )
@@ -1579,10 +1591,32 @@ namespace
                     _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
                 }
             }
+            else
+            {
+                // Funktions-Bedingung parsen
+                ::rtl::OUString sCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,1);
+                Reference< XConnection> xConnection = rController.getConnection();
+                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                    // the international doesn't matter I have a string
+                ::rtl::OUString sName;
+                pCondition->getChild(0)->parseNodeToPredicateStr(sName,
+                                                    xConnection,
+                                                    rController.getNumberFormatter(),
+                                                    aLocale,
+                                                    static_cast<sal_Char>(sDecimal.toChar()),
+                                                    &rController.getParser().getContext());
+
+                OTableFieldDescRef aDragLeft = new OTableFieldDesc();
+                aDragLeft->SetField(sName);
+                aDragLeft->SetFunctionType(FKT_OTHER);
+
+                if ( bHaving )
+                    aDragLeft->SetGroupBy(sal_True);
+                _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
+            }
         }
         else if( SQL_ISRULEOR2(pCondition,existence_test,unique_test) )
         {
-
             // Funktions-Bedingung parsen
             ::rtl::OUString aCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,0);
 
@@ -2223,35 +2257,6 @@ namespace
         return eErrorCode;
     }
     //------------------------------------------------------------------------------
-    void fillFunctionInfo(  OQueryDesignView* _pView
-                            ,const ::connectivity::OSQLParseNode* pNode
-                            ,const ::rtl::OUString& sFunctionTerm
-                            ,OTableFieldDescRef& aInfo)
-    {
-        // get the type out of the funtion name
-        OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
-        sal_Int32 nDataType = DataType::DOUBLE;
-        ::rtl::OUString sFieldName = sFunctionTerm;
-        OSQLParseNode* pFunctionName = pNode->getChild(0);
-        if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
-        {
-            if ( SQL_ISRULEOR2(pNode,length_exp,char_value_fct) )
-                pFunctionName = pFunctionName->getChild(0);
-
-            ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
-            if ( !sFunctionName.getLength() )
-                sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
-
-            nDataType = OSQLParser::getFunctionReturnType(
-                                sFunctionName
-                                ,&rController.getParser().getContext());
-        }
-        aInfo->SetDataType(nDataType);
-        aInfo->SetFieldType(TAB_NORMAL_FIELD);
-        aInfo->SetField(sFieldName);
-        aInfo->SetTabWindow(NULL);
-    }
-    //------------------------------------------------------------------------------
     SqlParseError InstallFields(OQueryDesignView* _pView,
                                 const ::connectivity::OSQLParseNode* pNode,
                                 OJoinTableView::OTableWindowMap* pTabList )
@@ -2259,7 +2264,7 @@ namespace
         if( pNode==0 || !SQL_ISRULE(pNode,select_statement))
             return eNoSelectStatement;
 
-        ::connectivity::OSQLParseNode* pParseTree = pNode->getChild(2);
+        ::connectivity::OSQLParseNode* pParseTree = pNode->getChild(2); // selection
         sal_Bool bFirstField = sal_True;    // bei der Initialisierung muß auf alle Faelle das erste Feld neu aktiviert werden
 
         SqlParseError eErrorCode = eOk;
@@ -2290,9 +2295,6 @@ namespace
 
                 if ( SQL_ISRULE(pColumnRef,derived_column) )
                 {
-                    if ( !xConnection.is() )
-                        break;
-
                     ::rtl::OUString aColumnAlias(rController.getParseIterator().getColumnAlias(pColumnRef)); // kann leer sein
                     pColumnRef = pColumnRef->getChild(0);
                     OTableFieldDescRef aInfo = new OTableFieldDesc();
@@ -2373,7 +2375,7 @@ namespace
                         }
                         else
                         {
-                            fillFunctionInfo(_pView,pColumnRef,aColumns,aInfo);
+                            _pView->fillFunctionInfo(pColumnRef,aColumns,aInfo);
                             aInfo->SetFieldAlias(aColumnAlias);
                         }
 
@@ -2494,7 +2496,7 @@ namespace
                                                             _pView->getLocale(),
                                                             static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
                                                             &rController.getParser().getContext());
-                        fillFunctionInfo(_pView,pArgument,sCondition,aDragLeft);
+                        _pView->fillFunctionInfo(pArgument,sCondition,aDragLeft);
                         aDragLeft->SetFunctionType(FKT_OTHER);
                         aDragLeft->SetOrderDir(eOrderDir);
                         aDragLeft->SetVisible(sal_False);
@@ -2526,7 +2528,7 @@ namespace
                             const ::connectivity::OSQLParseNode* pSelectRoot )
     {
         SqlParseError eErrorCode = eOk;
-        if (!pSelectRoot->getChild(3)->getChild(2)->isLeaf())
+        if (!pSelectRoot->getChild(3)->getChild(2)->isLeaf()) // opt_group_by_clause
         {
             OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
             ::connectivity::OSQLParseNode* pGroupBy = pSelectRoot->getChild(3)->getChild(2)->getChild(2);
@@ -2561,7 +2563,7 @@ namespace
                                                     &rController.getParser().getContext(),
                                                     sal_True,
                                                     sal_True); // quote is to true because we need quoted elements inside the function
-                        fillFunctionInfo(_pView,pArgument,sGroupByExpression,aDragInfo);
+                        _pView->fillFunctionInfo(pArgument,sGroupByExpression,aDragInfo);
                         aDragInfo->SetFunctionType(FKT_OTHER);
                         aDragInfo->SetGroupBy(sal_True);
                         aDragInfo->SetVisible(sal_False);
@@ -3284,5 +3286,33 @@ bool OQueryDesignView::initByParseIterator( ::dbtools::SQLExceptionInfo* _pError
         DBG_UNHANDLED_EXCEPTION();
     }
     return eErrorCode == eOk;
+}
+//------------------------------------------------------------------------------
+void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* pNode
+                                        ,const ::rtl::OUString& sFunctionTerm
+                                        ,OTableFieldDescRef& aInfo)
+{
+    // get the type out of the funtion name
+    OQueryController& rController = static_cast<OQueryController&>(getController());
+    sal_Int32 nDataType = DataType::DOUBLE;
+    ::rtl::OUString sFieldName = sFunctionTerm;
+    OSQLParseNode* pFunctionName = pNode->getChild(0);
+    if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
+    {
+        if ( SQL_ISRULEOR2(pNode,length_exp,char_value_fct) )
+            pFunctionName = pFunctionName->getChild(0);
+
+        ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
+        if ( !sFunctionName.getLength() )
+            sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
+
+        nDataType = OSQLParser::getFunctionReturnType(
+                            sFunctionName
+                            ,&rController.getParser().getContext());
+    }
+    aInfo->SetDataType(nDataType);
+    aInfo->SetFieldType(TAB_NORMAL_FIELD);
+    aInfo->SetField(sFieldName);
+    aInfo->SetTabWindow(NULL);
 }
 // -----------------------------------------------------------------------------
