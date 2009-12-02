@@ -518,52 +518,6 @@ RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath_Branded
     Value  = "<progpath>\program";
 End
 
-// Begin registry items for the MS Indexing server filter component
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
-// Better?: "OpenOffice.org Format Filter"
-// old:    Value = "opendocument.org Filter";
-    Value = "OpenDocument Format Filter";
-	Styles = ();
-End
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Value = "[BASISINSTALLLOCATION]program\ooofiltproxy.dll";
-End
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_ThreadingModel
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Name = "ThreadingModel";
-    Value = "Apartment";
-End
-
-RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
-//? Better: "OpenOffice.org Persistent Handler"
-// old:    Value = "opendocument.org Persistent Handler";
-    Value = "OpenDocument Format Persistent Handler";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsRegistered
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}";
-    Value = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
-End
-
-// End registry items for the MS Indexing server filter component
-
 // "OpenWith" Windows Registry keys for extensions supported by OOo
 
 // new oxt file extension for office extension packages
