@@ -78,6 +78,7 @@ SHL1IMPLIB= sci
 
 # dynamic libraries
 SHL1STDLIBS=       \
+        $(VBAHELPERLIB) \
     $(BASICLIB)	\
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
@@ -300,6 +301,7 @@ SHL9RPATH=OOO
 .ENDIF
 
 SHL9STDLIBS= \
+        $(VBAHELPERLIB) \
         $(CPPUHELPERLIB) \
         $(VCLLIB) \
         $(CPPULIB) \
@@ -315,6 +317,7 @@ SHL9STDLIBS= \
         $(ISCLIB) \
         $(VCLLIB) \
         $(TKLIB) \
+        $(SVXMSFILTERLIB)		\
         $(FORLIB)
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
