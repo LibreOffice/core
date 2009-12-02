@@ -132,6 +132,8 @@
 #define RID_FILTER_START            (RID_LIB_START+10200)
 #define RID_FILTER_END              (RID_LIB_START+10299)
 
+// do *NOT* add more ranges here, RID_LIB_END is (RID_LIB_START + 10000)
+
 #define RID_APP_START               20000
 #define RID_APP_END                 31999
 
@@ -143,12 +145,6 @@
 
 #define RID_SD_START                            (27000)
 #define RID_SD_END                              (27999)
-
-#define RID_Sa_START                            (28000)
-#define RID_Sa_END                              (28999)
-
-#define RID_Sb_START                            (29000)
-#define RID_Sb_END                              (29999)
 
 #define RID_OBJ_START               (30000)
 #define RID_OBJ_END                 (32767)
@@ -191,8 +187,7 @@
 #define HID_WIZARD_END              (HID_LIB_START+999)
 //please note: There is also HID_WIZARD2 below
 
-#define HID_EXTENSIONS_START        (HID_LIB_START+1000)
-#define HID_EXTENSIONS_END          (HID_LIB_START+1099)
+// FREE
 
 #define HID_CUI_START               (HID_LIB_START+1100)
 #define HID_CUI_END                 (HID_LIB_START+1699)
@@ -301,6 +296,10 @@
 
 #define HID_FORMULA_START           (HID_OBJ_START+2081)
 #define HID_FORMULA_END             (HID_OBJ_START+2280)
+
+#define HID_EXTENSIONS_START        (HID_OBJ_START+2281)
+#define HID_EXTENSIONS_END          (HID_OBJ_START+2800)
+
 
 #endif
 
