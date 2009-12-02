@@ -209,9 +209,10 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-    void registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl );
-    void revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl );
-    void databaseDocumentURLChange( const ::rtl::OUString& _rOldURL, const ::rtl::OUString& _rNewURL );
+    void registerPrivate(const ::rtl::OUString& _sName
+                        ,const ::rtl::Reference<ODatabaseModelImpl>& _pModelImpl);
+    void deregisterPrivate(const ::rtl::OUString& _sName);
+    void nameChangePrivate(const ::rtl::OUString& _sRegisteredName,const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
     void storeTransientProperties( ODatabaseModelImpl& _rModelImpl);
     void appendAtTerminateListener(const ODatabaseModelImpl& _rDataSourceModel);
     void removeFromTerminateListener(const ODatabaseModelImpl& _rDataSourceModel);
