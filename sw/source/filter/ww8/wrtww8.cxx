@@ -2664,19 +2664,24 @@ void WW8Export::WriteFkpPlcUsw()
         // Write SttbfAssoc
         WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
             (pDoc->getExternalData(::sw::STTBF_ASSOC).get());
-        ::std::vector<String> aStrings;
-
-        ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
-        ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
-        for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
-             aIt != aItEnd; aIt++)
+        // --> OD 2009-10-19 #i106057#
+        if ( pSttbfAssoc )
+        // <--
         {
-            String aStr(aIt->getStr());
-            aStrings.push_back(aStr);
-        }
+            ::std::vector<String> aStrings;
 
-        WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
-                           pFib->lcbSttbfAssoc);
+            ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
+            ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
+            for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
+                 aIt != aItEnd; aIt++)
+            {
+                String aStr(aIt->getStr());
+                aStrings.push_back(aStr);
+            }
+
+            WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
+                               pFib->lcbSttbfAssoc);
+        }
 
     }
     Strm().Seek( 0 );
@@ -2685,10 +2690,15 @@ void WW8Export::WriteFkpPlcUsw()
     ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
           (pDoc->getExternalData(::sw::FIB).get());
 
-    pFib->fReadOnlyRecommended =
-        pFibData->getReadOnlyRecommended() ? 1 : 0;
-    pFib->fWriteReservation =
-        pFibData->getWriteReservation() ? 1 : 0;
+    // --> OD 2009-10-19 #i106057#
+    if ( pFibData )
+    // <--
+    {
+        pFib->fReadOnlyRecommended =
+            pFibData->getReadOnlyRecommended() ? 1 : 0;
+        pFib->fWriteReservation =
+            pFibData->getWriteReservation() ? 1 : 0;
+    }
 
     pFib->Write( Strm() );  // FIB
 }
