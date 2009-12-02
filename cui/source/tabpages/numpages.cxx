@@ -372,18 +372,12 @@ int  SvxSingleNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 
 void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pItem;
-//  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
-    //im Draw gibt es das Item als WhichId, im Writer nur als SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, FALSE, &pItem);
-    if(eState != SFX_ITEM_SET)
-    {
-        nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
-    }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    nNumItemId = rSet.GetPool() ? rSet.GetPool()->GetWhich( SID_ATTR_NUMBERING_RULE ) : SID_ATTR_NUMBERING_RULE;
+
+    const SvxNumBulletItem& rItem = static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*rItem.GetNumRule());
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
@@ -564,17 +558,12 @@ int  SvxBulletPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 
 void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pItem;
-    //im Draw gibt es das Item als WhichId, im Writer nur als SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, FALSE, &pItem);
-    if(eState != SFX_ITEM_SET)
-    {
-        nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
-    }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    nNumItemId = rSet.GetPool() ? rSet.GetPool()->GetWhich( SID_ATTR_NUMBERING_RULE ) : SID_ATTR_NUMBERING_RULE;
+
+    const SvxNumBulletItem& rItem = static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*rItem.GetNumRule());
 
 //  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
 
@@ -794,17 +783,12 @@ int  SvxNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 
 void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pItem;
-    //im Draw gibt es das Item als WhichId, im Writer nur als SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, FALSE, &pItem);
-    if(eState != SFX_ITEM_SET)
-    {
-        nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
-    }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    nNumItemId = rSet.GetPool() ? rSet.GetPool()->GetWhich( SID_ATTR_NUMBERING_RULE ) : SID_ATTR_NUMBERING_RULE;
+
+    const SvxNumBulletItem& rItem = static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*rItem.GetNumRule());
 
 //  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
     if(!pActNum)
@@ -1099,17 +1083,12 @@ BOOL  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
 
 void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pItem;
-    //im Draw gibt es das Item als WhichId, im Writer nur als SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, FALSE, &pItem);
-    if(eState != SFX_ITEM_SET)
-    {
-        nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
-    }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    nNumItemId = rSet.GetPool() ? rSet.GetPool()->GetWhich( SID_ATTR_NUMBERING_RULE ) : SID_ATTR_NUMBERING_RULE;
+
+    const SvxNumBulletItem& rItem = static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*rItem.GetNumRule());
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
@@ -1531,17 +1510,12 @@ BOOL    SvxNumOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 --------------------------------------------------*/
 void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pItem;
-    //im Draw gibt es das Item als WhichId, im Writer nur als SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, FALSE, &pItem);
-    if(eState != SFX_ITEM_SET)
-    {
-        nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
-    }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    nNumItemId = rSet.GetPool() ? rSet.GetPool()->GetWhich( SID_ATTR_NUMBERING_RULE ) : SID_ATTR_NUMBERING_RULE;
+
+    const SvxNumBulletItem& rItem = static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*rItem.GetNumRule());
 
     // Ebenen einfuegen
     if(!aLevelLB.GetEntryCount())
@@ -1585,6 +1559,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     pPreviewWIN->SetNumRule(pActNum);
     aSameLevelCB.Check(pActNum->IsContinuousNumbering());
 
+    const SfxPoolItem* pItem = 0;
     //ColorListBox bei Bedarf fuellen
     if ( pActNum->IsFeatureSupported( NUM_BULLET_COLOR ) )
     {
@@ -3428,17 +3403,12 @@ BOOL SvxNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
 --------------------------------------------------*/
 void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pItem;
-    //im Draw gibt es das Item als WhichId, im Writer nur als SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, FALSE, &pItem);
-    if(eState != SFX_ITEM_SET)
-    {
-        nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, FALSE, &pItem);
-    }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    nNumItemId = rSet.GetPool() ? rSet.GetPool()->GetWhich( SID_ATTR_NUMBERING_RULE ) : SID_ATTR_NUMBERING_RULE;
+
+    const SvxNumBulletItem& rItem = static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, TRUE ) );
+
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*rItem.GetNumRule());
 
     // Ebenen einfuegen
     if(!aLevelLB.GetEntryCount())
