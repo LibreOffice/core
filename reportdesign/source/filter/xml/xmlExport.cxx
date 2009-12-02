@@ -1639,8 +1639,8 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 if ( sFunction.getLength() )
                 {
                     sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
-                    for(sal_Int32 i= 0; i < sizeof(pReplaceChars)/sizeof(pReplaceChars[0]);++i)
-                        sFunctionName = sFunctionName.replace(pReplaceChars[i],'_');
+                    for(sal_uInt32 j= 0; j < sizeof(pReplaceChars)/sizeof(pReplaceChars[0]);++j)
+                        sFunctionName = sFunctionName.replace(pReplaceChars[j],'_');
 
                     xFunction->setName(sFunctionName);
                     sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFunction;
