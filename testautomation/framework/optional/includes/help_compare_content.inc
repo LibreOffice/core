@@ -44,15 +44,6 @@ testcase tCompareHelpContent()
         goto endsub
     endif
 
-    '///<h1>Compare the help content in the Help-Viewer against a reference</h1>
-    '///<h2>help_compare_content::tCompareHelpContent</h2>
-    '///<ul>
-    '///+<li>Open the Help-Viewer</li>
-    '///+<li>Go to the Content-Page</li>
-    '///+<li>Read all entries in the Content-Treelist</li>
-    '///+<li>Close the Help</li>
-    '///+<li>Compare the list to a reference</li>
-    '///</ul>
     
     ' file related variables
     dim sFileOut as string

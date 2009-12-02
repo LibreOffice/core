@@ -39,8 +39,6 @@
 
 testcase tProtectedLibraries
 
-    '///<H1>Test protected libraries</H1>
-    '///<ul>
     
     const CLIB = "aaTestLib"
     const CPASSWORD = "SomePassword"
@@ -55,33 +53,26 @@ testcase tProtectedLibraries
     dim iCurrentLib as integer
     dim cMsg as string
     
-    '///+<li>Open the Basic Organizer</li>
     hOpenBasicOrganizerFromDoc()
     
-    '///+<li>Ensure the node "My Macros" is selected</li>
     printlog( "Select My Macros" )
     kontext "Makro"
     hSelectNode( MakroAus , 1 )
     
-    '///+<li>Click "Organizer..."</li>
     printlog( "Organize..." )
     Verwalten.click()
     
-    '///+<li>Select the libraries tab</li>
     hSelectBasicObjectOrganizerTab( 3 )
     
-    '///+<li>Click "New..."</li>
     printlog( "New..." )
     kontext "TabBibliotheken"
     Neu.click()
     
-    '///+<li>Name the libraray, click "OK"</li>
     printlog( "Name the Library" )
     kontext "NeueBibliothek"
     BibliotheksName.setText( CLIB )
     NeueBibliothek.ok()
     
-    '///+<li>Find the new library, select it</li>
     printlog( "Select the new library" )
     kontext "TabBibliotheken"
     for iCurrentLib = 1 to Bibliotheksliste.getItemCount()
@@ -91,37 +82,29 @@ testcase tProtectedLibraries
         endif
     next iCurrentLib
     
-    '///+<li>Click "Password..."</li>
     printlog( "Set Password" )
     kontext "TabBibliotheken"
     Passwort.click()
     
-    '///+<li>Give a password, confirm with "OK"</li>
     kontext "PasswdDLG"
     NewPassword.setText( CPASSWORD )
     Confirm.setText( CPASSWORD )
     PasswdDLG.ok()
     
-    '///+<li>Edit the protected library</li>
     printlog( "Edit the library" )
     kontext "TabBibliotheken"
     Bearbeiten.click()
     
-    '///+<li>Modify the macro</li>
     Kontext "BasicIDE"
     hInsertMacro( IMACRO )
     
-    '///+<li>Close the Basic-IDE</li>
     hCloseBasicIde()
     
-    '///+<li>Exit and restart the office</li>
     printlog( "Restart the application" )
     call ExitRestartTheOffice()
     
-    '///+<li>Open the Basic Organizer</li>
     hOpenBasicOrganizerFromDoc()
     
-    '///+<li>Find the protected library</li>
     printlog( "Select the protected library" )
     Kontext "Makro"
     hSelectNode( MakroAus , 1 )
@@ -129,7 +112,6 @@ testcase tProtectedLibraries
     hSelectNode( MakroAus , 2 )
     hExpandNode( MakroAus , 0 )
     
-    '///+<li>Enter the correct Password, click "OK"</li>
     printlog( "Enter correct Password" )
     kontext "PasswordDLG"
     Password.setText( CPASSWORD )
@@ -149,16 +131,13 @@ testcase tProtectedLibraries
         goto endsub
     endif
     
-    '///+<li>Expand the library, select the Module</li>
     Kontext "Makro"
     hSelectNode( MakroAus , 3 )
     
-    '///+<li>Open the Basic-IDE by clicking on "Edit"</li>
     printlog( "Edit Library" )
     Bearbeiten.click()
     ' warnlog( "#144701 Crash on edit of password protected module" )
     
-    '///+<li>Verify that the correct macro is displayed</li>
     printlog( "Check that the Macro is the correct one" )
     Kontext "BasicIDE"
     if ( BasicIDE.exists( 3 ) ) then
@@ -182,7 +161,6 @@ testcase tProtectedLibraries
         warnlog( "BasicIDE did not open within 3 seconds" )
     endif
     hDeleteLibrary( 1 , CLIB )
-    '///</ul>
 
 endcase
 

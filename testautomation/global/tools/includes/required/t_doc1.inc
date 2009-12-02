@@ -269,26 +269,6 @@ end sub
 '
 '-------------------------------------------------------------------------------
 '
-sub hCloseAndLooseDocument
-    '/// <i>hCloseAndLooseDocument</i>
-    '///+ Closes a (modified) document and the verify dialog will be answered
-    '///+ with yes. That means you want to loose format information or you want
-    '///+ to loose the document!
-    Dim sFehler$
-
-    try
-        FileClose
-    catch
-        Exceptlog
-        exit sub
-    endcatch
-    sleep (2)
-    Kontext
-    if Active.Exists(2) then Active.Yes
-end sub
-'
-'-------------------------------------------------------------------------------
-'
 sub gMouseClick ( X%, Y%, optional mb% )
     '/// gMouseClick ( x_Position, y-Position ) : make a mouseclick on the document (dependent on 'gApplication') ///'
     '/// default left mousebutton will be used otherwise you can optionally give the mousebutton to press
@@ -571,61 +551,4 @@ sub hTypeKeys ( OutputText , optional iLoop as Integer )
         wait 500
     next i
 end sub
-'
-'-------------------------------------------------------------------------------
-'
-function hOpenFileAndIgnoreMacroWarning (sDocName as string, optional IgnoreW) as Boolean
-    '/// Loading a (known) document with macro security warning.
-    '/// If the OPTIONAL parameter is used a PRINTLOG will be written into the result file otherwise a wrning.
-    Dim i as integer
-
-    'ConvertPath: Be sure that the path seperators has been set correctly (/ or \).
-    sDocName = ConvertPath(sDocName)
-
-    hOpenFileAndIgnoreMacroWarning = FALSE
-
-    if hFileExists(sDocName) = FALSE then
-        warnlog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: '" & sDocName & "' does not exists!"
-        'Setting the function to FALSE because file has not been found.
-        exit function
-    else
-        FileOpen
-        sleep (1)
-        Kontext "OeffnenDlg"
-        Dateiname.SetText sDocName
-        sleep (3)
-        Oeffnen.Click
-        sleep(2)
-        for i = 1 to 2
-            ' Since SRC680m?? we have TWO Security Warnings for
-            ' StarBasic and JavaScript; So this routine needs to
-            ' run twice.
-            Kontext "SecurityWarning"
-            if SecurityWarning.Exists(2) then
-                if IsMissing(IgnoreW) = FALSE then
-                    printLog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: Securitywarning dialog is visible."
-                else
-                    warnlog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: Securitywarning dialog is visible"
-                end if
-                SecurityWarning.OK
-            else
-                if i <> 2 then
-                    QAErrorLog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: No Security warning dialog occured! Document loading aborted."
-                    hOpenFileAndIgnoreMacroWarning = FALSE
-                    exit function
-                end if
-            end if
-        next i
-        Kontext "OeffnenDlg"
-        if OeffnenDlg.Exists(1) then
-            OeffnenDlg.Cancel
-            warnlog "global::tools::inc::t_doc1.inc::hOpenFileAndIgnoreMacroWarning: The 'FileOpen'-Dialog is open!"
-        else
-            ' After the external routine IsItLoaded has been run the return value of this function should be set to TRUE.
-            if IsItLoaded = TRUE then
-                hOpenFileAndIgnoreMacroWarning = TRUE
-            end if
-        end if
-    end if
-end function
 

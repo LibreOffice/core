@@ -39,31 +39,25 @@
 
 testcase tOOoView
 
-    '///Verify that all settings on the Tools/Options -> OpenOffice.org/View are saved
 
     dim sFile as string
 
-    '///<ul><li>Check if the defaults are correct</li>
     printlog "Check if the defaults are correct"
     sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_defaults.ref"
     call checkPage( sFile , false )
 
-    '///<li>Change all settings to something different to the default</li>
     printlog "Change all settings to something different to the default"
     sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_changed.ref"
     call changePage( sFile , true, 1 )
 
-    '///<li>Verify that all changes persist after a restart</li>
     printlog "Verify that all changes persist after a restart"
     sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_changed.ref"
     call checkPage( sFile , true, 1 )
 
-    '///<li>Re-apply the defaults to all controls and restart the application</li>
     printlog "Re-apply the defaults to all controls and restart the application"
     sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_defaults.ref"
     call changePage( sFile , false )
 
-    '///<li>Verify that all settings have indeed been reset to defaults</li></ul>
     printlog "Verify that all settings have indeed been reset to defaults"
     call checkPage( sFile , false )
 

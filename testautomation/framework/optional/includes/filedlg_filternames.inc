@@ -39,7 +39,6 @@
 
 testcase tVerifyFilterNames
 
-    '///<h3>Verify that all filters are listed in the filter listbox</h3>
     
     if ( gIsoLang <> "en-US" ) then
         qaerrorlog( "No testing for non-US languages" )
@@ -79,17 +78,13 @@ testcase tVerifyFilterNames
         cFileOut = hGetWorkPath() & cFile
     
     
-    '///<ul>
-    '///+<li>New document</li>
     hCreateDocument()
     
-    '///+<li>Open FileOpen</li>
     FileOpen
     Kontext "OeffnenDlg"
 
     if ( OeffnenDlg.exists( 1 ) ) then    
     
-        '///+<li>Get the number of items from the filterlist</li>    
         iFilterCount = DateiTyp.getItemCount()
         if ( iFilterCount > MAX_FILTERCOUNT ) then
             warnlog( "Too many filters in filterlist for this test to handle" )
@@ -98,10 +93,8 @@ testcase tVerifyFilterNames
         
         printlog( "Reading in " & iFilterCount & " filternames" )
 
-        '///+<li>Make the list compatible to listfunctions</li>    
         asFilterNames( 0 ) = iFilterCount
         
-        '///+<li>Collect the list of filternames (including all separators etc.</li>
         for iCurrentItem = 1 to iFilterCount         
         
             kontext "OeffnenDlg"
@@ -113,24 +106,20 @@ testcase tVerifyFilterNames
             
         next iCurrentItem
         
-        '///+<li>Close FileOpen dialog</li>
         OeffnenDlg.cancel()
         
-        '///+<li>Compare the current list against a reference</li>
         iErr = hManageComparisionList( cFileIn, cFileOut, asFilterNames() )    
 
     else
         warnlog( "File Open dialog not present." )
     endif
     
-    '///+<li>Cleanup: Close document</li>
     hDestroyDocument()
     
     if ( iErr <> 0 ) then
         warnlog( "Filterlist differs from reference, please review" )
     endif
     
-    '///</ul>
      
 endcase
 

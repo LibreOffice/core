@@ -39,75 +39,73 @@
 
 testcase tDeleteModulesAtRunningBasic
 
-    Dim i as Integer
-    Dim iSel as Integer
+    printlog( "Delete BASIC module while BASIC is running" )
+
     dim brc as boolean
+    const MAX_WAIT = 3000
+    
 
-    '///<h1>Work with macros - delete Modules while BASIC-IDE is running</h1>
-
-    '///<ul>
-    '///<li>open a new writer-doc</li>
-    printlog "open a new writer-doc"
+    printlog( "Open a new writer-doc" )
     gApplication = "WRITER"
 
     Call hNewDocument()
 
-    '///<li>create a new module for the new document (named TTModule)</li>
-    printlog "create a new module "
+    printlog( "Create a new module " )
     brc = hOpenBasicOrganizerFromDoc()
+    if ( not brc ) then
+        warnlog( "Unable to open BASIC organizer for the document" )
+        goto endsub
+    endif
+    
     brc = hCreateModuleForDoc()
-
-    '///<li>insert a short script (1. page)</li>
-    printlog "insert a short script (1. page)"
-
-    brc = hInsertMacro( 1 )
-
-    kontext "macrobar"
-    printlog "- Click button:  Step Procedure"
-    '///<li>activate "Step Procedure" on Toolbar</li>
-    ProcedureStep.Click
-    if ( WaitSlot( 3000 ) <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
+    if ( not brc ) then
+        warnlog( "Unable to create a basic module for the document" )
+        goto endsub
     endif
 
-    '///<li>check if disabled menu-items are shown and delete is not shown</li>
+    printlog( "Insert a short script (1. page)" )
+    brc = hInsertMacro( 1 )
+    if ( not brc ) then
+        warnlog( "Unable to create a basic module for the document" )
+        goto endsub
+    endif
+
+    kontext "macrobar"
+    printlog( "Click button:  Step Procedure" )
+    ProcedureStep.Click()
+    if ( WaitSlot( MAX_WAIT ) <> WSFinished ) then
+        warnlog( "Slot not finished, timeout reached" )
+    endif
 
     kontext "basicide"
-    printlog "check if disabled menu items are shown in context menu and 'delete' is not shown"
-    Tabbar.OpenContextMenu
+    printlog( "Check if disabled menu items are shown in context menu and 'delete' is not shown" )
+    Tabbar.OpenContextMenu()
 
     try
-
-        if hMenuItemGetCount = 5 then
-            warnlog "Disabled entries are shown in context menu on tab bar => bugID 101972"
+        if ( hMenuItemGetCount() = 5 ) then
+            warnlog( "#i101972# - Disabled entries are shown in context menu on tab bar" )
         end if
 
 
-        if hMenuItemGetCount = 3 then
-            warnlog "Delete is active in context menu for a running macro => BUG!"
+        if ( hMenuItemGetCount() = 3 ) then
+            warnlog( "Delete is active in context menu for a running macro => BUG!" )
         end if
 
     catch
-        warnlog "Unable to retrieve the number of menuitems"
+        warnlog( "Unable to retrieve the number of menuitems" )
     endcatch
 
-    hMenuClose
-    '///<li>stop the running script</li>
-    printlog "Stop the running script"
+    hMenuClose()
+    printlog( "Stop the running script" )
 
     kontext "macrobar"
-    BasicStop.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
+    BasicStop.Click()
+    if ( WaitSlot( MAX_WAIT ) <> WSFinished ) then
+        warnlog( "Slot not finished, timeout reached" )
     endif
 
-
-    '///<li>close the BasicIDE and the document</li>
-    printlog "close the documents"
     Call hCloseDocument()
     Call hCloseDocument()
-
-    '///</ul> 
 
 endcase
 

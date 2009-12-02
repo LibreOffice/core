@@ -49,9 +49,6 @@ private const LOGFILE = "user\temp\Feedback\Current.csv"
 
 testcase tUsageTracking1
 
-    ' Here we just check that the functionality is present - the API call in 
-    ' master.inc does only print a qaerrorlog. Here it is a bug.
-
     printlog( "Test case 1: Presence of the Usage Tracking featureset (API)" )
     
     if ( not gOOoImprovementIsEnabled ) then

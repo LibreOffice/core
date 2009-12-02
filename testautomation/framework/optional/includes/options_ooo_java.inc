@@ -40,12 +40,9 @@
 testcase tOOoJava
     dim bJavaState as boolean
 
-    '///Options test for Java settings
-    '///<ul>
     ToolsOptions
     hToolsOptions( "StarOffice", "Java" )
 
-    '///<li>Make sure Java is enabled. If it is not: Fix this</li>
     printlog( "Verify that Java is enabled and configured" )
     if ( usejava.isChecked() = false ) then
         warnlog( "Java should be enabled by default, checking and restarting" )
@@ -64,7 +61,6 @@ testcase tOOoJava
     sleep( 3 )
     
     ' There should be a java-runtime installed. If not -> leave test
-    '///<li>Make sure Java at least one Java runtime is installed</li>
     printlog( "Make sure at least one Java runtime is installed" )
     if ( javalist.getitemcount() = 0 ) then
         warnlog( "No java listed in listbox, the test will stop" )
@@ -76,7 +72,6 @@ testcase tOOoJava
     endif
     
     printlog( "Quickly test that all controls are active" )
-    '///<li>Verify that all controls are active</li></ul>
     if ( add.isEnabled() ) then
         printlog( "   'Add...' is enabled" )
     else

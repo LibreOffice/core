@@ -788,8 +788,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFunctionsCombineCharacter
-Warnlog "#i102752# - tFunctionsCombineCharacter outcommented due to bug."
-goto endsub
 
 	Dim sCombineCharacter as String
     Dim sTestFile as String

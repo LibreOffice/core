@@ -39,7 +39,6 @@
 
 testcase tFolder3
 
-   '///<h1>Level 1 test: Create folders with lower and upper cases in the local file system</h1>
    
    dim FULLPATH as string
        FULLPATH = gOfficePath + "user\work\"
@@ -50,31 +49,22 @@ testcase tFolder3
    dim FOLDERNAME_M as string
        FOLDERNAME_M = "AAaabbBB"
        
-   '///<ul>
 
-   '///+<li>Click &quot;FileOpen&quot;</li>
    FileOpen
    
-   '///+<li>Make sure we are in the local working directory, go there if necessary</li>
    printlog( " - change to working directory" )
    Kontext "OeffnenDlg"
    Dateiname.SetText( ConvertPath ( FULLPATH ))
    Oeffnen.Click()
    
-   '///+<li>Click on the &quot;New Folder&quot; icon, insert an uppercase foldername<br>
-   '///+ Verify on filesystem level that the name is indeed in uppercase</li>
    printlog( " - foldername with upper case characters only" )
    call CreateValidDirectory( FOLDERNAME_U )
    
-   '///+<li>Click on the &quot;New Folder&quot; icon, insert a mixed case foldername<br>
-   '///+ Verify on filesystem level that the name is indeed in mixed case</li>
    printlog( " - foldername with mixed case characters" )
    call CreateValidDirectory( FOLDERNAME_M )
    
-   '///+<li>Cancel FileOpen dialog</li>
    kontext "OeffnenDlg"
    OeffnenDlg.Cancel()
-   '///</ul>
    
 endcase
 
