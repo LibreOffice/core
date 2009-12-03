@@ -1160,9 +1160,6 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
 
     if (doRegisterPackage)
     {
-        if (isJavaTypelib)
-            that->addToUnoRc( java, url, xCmdEnv );
-
         if (! m_xRemoteContext.is()) {
             m_xRemoteContext.set(
                 that->getObject( url ), UNO_QUERY );
@@ -1180,7 +1177,12 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
             m_xRemoteContext->getServiceManager()->createInstanceWithContext(
                 OUSTR("com.sun.star.registry.ImplementationRegistration"),
                 m_xRemoteContext ), UNO_QUERY_THROW );
+
         xImplReg->registerImplementation( m_loader, url, xServicesRDB );
+        //only write to unorc if registration was successful.
+        //It may fail if there is no suitable java.
+        if (isJavaTypelib)
+            that->addToUnoRc( java, url, xCmdEnv );
 
         t_stringlist implNames;
         t_stringpairvec singletons;
