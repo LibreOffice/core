@@ -937,6 +937,29 @@ void Desktop::retrieveCrashReporterState()
     _bCrashReporterEnabled = bEnabled;
 }
 
+sal_Bool Desktop::isUIOnSessionShutdownAllowed()
+{
+    static const ::rtl::OUString CFG_PACKAGE_RECOVERY = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
+    static const ::rtl::OUString CFG_PATH_SESSION     = ::rtl::OUString::createFromAscii("SessionShutdown"                );
+    static const ::rtl::OUString CFG_ENTRY_UIENABLED  = ::rtl::OUString::createFromAscii("DocumentStoreUIEnabled"         );
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+
+    sal_Bool bResult = sal_False;
+    if ( xSMGR.is() )
+    {
+        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                    xSMGR,
+                                    CFG_PACKAGE_RECOVERY,
+                                    CFG_PATH_SESSION,
+                                    CFG_ENTRY_UIENABLED,
+                                    ::comphelper::ConfigurationHelper::E_READONLY);
+        aVal >>= bResult;
+    }
+
+    return bResult;
+}
+
 //-----------------------------------------------
 /** @short  check if crash reporter feature is enabled or
             disabled.
@@ -2458,7 +2481,15 @@ void Desktop::OpenClients()
         {
             xSessionListener = Reference< XInitialization >(::comphelper::getProcessServiceFactory()->createInstance(
                         OUString::createFromAscii("com.sun.star.frame.SessionListener")), UNO_QUERY_THROW);
-            xSessionListener->initialize(Sequence< Any >(0));
+
+            // specifies whether the UI-interaction on Session shutdown is allowed
+            sal_Bool bAllowUI = isUIOnSessionShutdownAllowed();
+            css::beans::NamedValue aProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowUserInteractionOnQuit" ) ),
+                                              css::uno::makeAny( bAllowUI ) );
+            css::uno::Sequence< css::uno::Any > aArgs( 1 );
+            aArgs[0] <<= aProperty;
+
+            xSessionListener->initialize( aArgs );
         }
         catch(const com::sun::star::uno::Exception& e)
         {
