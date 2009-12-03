@@ -2653,7 +2653,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
 
 void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
 {
-    const USHORT nPoints(rPoly.GetSize());
+    USHORT nPoints(rPoly.GetSize());
 
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
@@ -2698,6 +2698,15 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
     }
     else
     {
+        // #100127# the subdivision HAS to be done here since only a pointer
+        // to an array of points is given to the DrawPolyLine method, there is
+        // NO way to find out there that it's a curve.
+        if( aPoly.HasFlags() )
+        {
+            aPoly = ImplSubdivideBezier( aPoly );
+            nPoints = aPoly.GetSize();
+        }
+
         mpGraphics->DrawPolyLine(nPoints, (const SalPoint*)aPoly.GetConstPointAry(), this);
     }
 
