@@ -40,6 +40,8 @@
 
 #include <stdio.h>
 
+#include <sal/main.h>
+
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,7 +53,7 @@ using namespace com::sun::star::bridge;
 using namespace rtl;
 using namespace cppu;
 
-int main( )
+SAL_IMPLEMENT_MAIN()
 {
     // create the initial component context
     Reference< XComponentContext > rComponentContext =
