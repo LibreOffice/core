@@ -119,12 +119,6 @@ APP1STDLIBS =  \
     $(VOSLIB)
 
 
-.IF "$(GUI)" == "UNX"
-.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
-APP1STDLIBS+= -lXext 
-.ENDIF
-.ENDIF
-
 APP1DEPN= $(APP1RES) verinfo.rc
 
 .IF "$(GUI)" == "WNT"
