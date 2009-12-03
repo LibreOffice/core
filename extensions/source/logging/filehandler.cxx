@@ -328,7 +328,16 @@ namespace logging
     void SAL_CALL FileHandler::flush(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
-        // nothing to do, our ::osl::File implementation is not buffered
+        if(!m_pFile.get())
+        {
+            OSL_PRECOND(false, "FileHandler::flush: no file!");
+            return;
+        }
+        #if OSL_DEBUG_LEVEL > 0
+            ::osl::FileBase::RC res =
+        #endif
+                m_pFile->sync();
+        OSL_ENSURE(res == ::osl::FileBase::E_None, "FileHandler::flush: Could not sync logfile to filesystem.");
     }
 
     //--------------------------------------------------------------------

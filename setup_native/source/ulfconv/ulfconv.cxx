@@ -199,6 +199,8 @@ void read_encoding_table(char * file, EncodingMap& aEncodingMap)
             aEncodingMap.insert( EncodingMap::value_type(language, encoding->value) );
         }
     }
+
+    fclose(fp);
 }
 
 /************************************************************************
@@ -311,6 +313,7 @@ int main( int argc, char * const argv[] )
         ostream = fopen(outfile, "w");
         if ( ostream == NULL ) {
             fprintf(stderr, "ulfconv: %s : %s\n", outfile, strerror(errno));
+            fclose(istream);
             exit(2);
         }
     }
@@ -351,4 +354,7 @@ int main( int argc, char * const argv[] )
             fputs(buffer, ostream);
         }
     }
+
+    fclose(ostream);
+    fclose(istream);
 }
