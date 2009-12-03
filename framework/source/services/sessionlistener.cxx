@@ -316,7 +316,6 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
     throw (RuntimeException)
 {
     // do AutoSave as the first step
-    sal_Bool bDispatched = sal_False;
     ResetableGuard aGuard(m_aLock);
 
     if ( bInteractionGranted )
