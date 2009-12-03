@@ -2049,40 +2049,6 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                     pObj->NbcMove(aVec);
                 }
 
-                Rectangle aBoundRect = pObj->GetCurrentBoundRect();
-
-                if (!aBorderRect.IsInside(aBoundRect))
-                {
-                    /**********************************************************
-                    * Objekt liegt nicht vollstaendig innerhalb der Raender
-                    * -> Position korrigieren
-                    **********************************************************/
-                    Point aOldPos(aBoundRect.TopLeft());
-                    aNewPos = aOldPos;
-
-                    // Position links oben ggf. korrigieren
-                    aNewPos.X() = Max(aNewPos.X(), aBorderRect.Left());
-                    aNewPos.Y() = Max(aNewPos.Y(), aBorderRect.Top());
-                    aVec = Size(aNewPos.X() - aOldPos.X(), aNewPos.Y() - aOldPos.Y());
-
-                    if (aVec.Height() != 0 || aVec.Width() != 0)
-                    {
-                        pObj->NbcMove(aVec);
-                    }
-
-                    // Position rechts unten ggf. korrigieren
-                    aOldPos = aBoundRect.BottomRight();
-                    aNewPos = aOldPos;
-                    aNewPos.X() = Min(aNewPos.X(), aBorderRect.Right());
-                    aNewPos.Y() = Min(aNewPos.Y(), aBorderRect.Bottom());
-                    aVec = Size(aNewPos.X() - aOldPos.X(), aNewPos.Y() - aOldPos.Y());
-
-                    if (aVec.Height() != 0 || aVec.Width() != 0)
-                    {
-                        pObj->NbcMove(aVec);
-                    }
-                }
-
                 pObj->SetChanged();
                 pObj->BroadcastObjectChange();
             }
