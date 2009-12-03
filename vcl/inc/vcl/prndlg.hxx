@@ -60,6 +60,7 @@ namespace vcl
             Size                maOrigSize;
             VirtualDevice       maPageVDev;
             rtl::OUString       maReplacementString;
+            rtl::OUString       maToolTipString;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();
