@@ -966,13 +966,15 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
     if( nPointCount <= 0 )
         return true;
 
-    // reject strange requests
+    // reject requests that cannot be handled yet
     if( rLineWidths.getX() != rLineWidths.getY() )
         return false;
 
     // #i101491# Aqua does not support B2DLINEJOIN_NONE; return false to use
     // the fallback (own geometry preparation)
-    if(basegfx::B2DLINEJOIN_NONE == eLineJoin)
+    // #i104886# linejoin-mode and thus the above only applies to "fat" lines
+    if( (basegfx::B2DLINEJOIN_NONE == eLineJoin)
+    && (rLineWidths.getX() > 1.3) )
         return false;
 
     // setup line attributes

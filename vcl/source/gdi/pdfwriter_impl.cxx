@@ -41,7 +41,6 @@
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-#include <tools/urlobj.hxx> //for relative url
 #include <i18npool/mslangid.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
@@ -51,6 +50,7 @@
 #include <vcl/sallayout.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/fontsubset.hxx>
+#include <vcl/textlayout.hxx>
 #include <svsys.h>
 #include <vcl/salgdi.hxx>
 #include <vcl/svapp.hxx>
@@ -667,26 +667,29 @@ OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
     }
 
     OString aRet = aBuffer.makeStringAndClear();
-    std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aRet );
-
-    if( it != m_aFieldNameMap.end() ) // not unique
+    if( ! m_aContext.AllowDuplicateFieldNames )
     {
-        std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
-        OString aTry;
-        do
+        std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aRet );
+
+        if( it != m_aFieldNameMap.end() ) // not unique
         {
-            OStringBuffer aUnique( aRet.getLength() + 16 );
-            aUnique.append( aRet );
-            aUnique.append( '_' );
-            aUnique.append( it->second );
-            it->second++;
-            aTry = aUnique.makeStringAndClear();
-            check_it = m_aFieldNameMap.find( aTry );
-        } while( check_it != m_aFieldNameMap.end() );
-        aRet = aTry;
+            std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
+            OString aTry;
+            do
+            {
+                OStringBuffer aUnique( aRet.getLength() + 16 );
+                aUnique.append( aRet );
+                aUnique.append( '_' );
+                aUnique.append( it->second );
+                it->second++;
+                aTry = aUnique.makeStringAndClear();
+                check_it = m_aFieldNameMap.find( aTry );
+            } while( check_it != m_aFieldNameMap.end() );
+            aRet = aTry;
+        }
+        else
+            m_aFieldNameMap[ aRet ] = 2;
     }
-    else
-        m_aFieldNameMap[ aRet ] = 2;
     return aRet;
 }
 
@@ -7307,7 +7310,8 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
 
         if ( nTextHeight )
         {
-            nMaxTextWidth = m_pReferenceDevice->ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle );
+            ::vcl::DefaultTextLayout aLayout( *m_pReferenceDevice );
+            nMaxTextWidth = OutputDevice::ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
             nLines = (xub_StrLen)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )
@@ -8792,6 +8796,13 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     aLine.append( ' ' );
     appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aLine );
     aLine.append( " ]\n" );
+    if( ! rObject.m_pSoftMaskStream )
+    {
+        if( ! m_bIsPDF_A1 )
+        {
+            aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/K true>>\n" );
+        }
+    }
     /* #i42884# the PDF reference recommends that each Form XObject
     *  should have a resource dict; alas if that is the same object
     *  as the one of the page it triggers an endless recursion in

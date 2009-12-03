@@ -39,10 +39,12 @@
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/textlayout.hxx>
 
-
+#include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace vcl;
 
@@ -51,7 +53,7 @@ using namespace vcl;
 void Control::ImplInitControlData()
 {
     mbHasFocus      = FALSE;
-    mpLayoutData    = NULL;
+    mpControlData   = new ImplControlData;
 }
 
 // -----------------------------------------------------------------------
@@ -90,7 +92,7 @@ Control::Control( Window* pParent, const ResId& rResId ) :
 
 Control::~Control()
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    delete mpControlData, mpControlData = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -111,7 +113,7 @@ void Control::LoseFocus()
 
 void Control::Resize()
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
     Window::Resize();
 }
 
@@ -123,10 +125,31 @@ void Control::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
+void Control::CreateLayoutData() const
+{
+    DBG_ASSERT( !mpControlData->mpLayoutData, "Control::CreateLayoutData: should be called with non-existent layout data only!" );
+    mpControlData->mpLayoutData = new ::vcl::ControlLayoutData();
+}
+
+// -----------------------------------------------------------------------
+
+bool Control::HasLayoutData() const
+{
+    return mpControlData->mpLayoutData != NULL;
+}
+
+// -----------------------------------------------------------------------
+
+::vcl::ControlLayoutData* Control::GetLayoutData() const
+{
+    return mpControlData->mpLayoutData;
+}
+
+// -----------------------------------------------------------------------
+
 void Control::SetText( const String& rStr )
 {
-    delete mpLayoutData;
-    mpLayoutData = NULL;
+    ImplClearLayoutData();
     Window::SetText( rStr );
 }
 
@@ -142,9 +165,9 @@ Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
 
 Rectangle Control::GetCharacterBounds( long nIndex ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
 }
 
 // -----------------------------------------------------------------------
@@ -167,9 +190,9 @@ long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
 
 long Control::GetIndexForPoint( const Point& rPoint ) const
 {
-    if( ! mpLayoutData )
+    if( ! HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetIndexForPoint( rPoint ) : -1;
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetIndexForPoint( rPoint ) : -1;
 }
 
 // -----------------------------------------------------------------------
@@ -186,9 +209,9 @@ long ControlLayoutData::GetLineCount() const
 
 long Control::GetLineCount() const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetLineCount() : 0;
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineCount() : 0;
 }
 
 // -----------------------------------------------------------------------
@@ -220,9 +243,9 @@ Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
 
 Pair Control::GetLineStartEnd( long nLine ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
 // -----------------------------------------------------------------------
@@ -263,18 +286,18 @@ long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
 
 long Control::ToRelativeLineIndex( long nIndex ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
 }
 
 // -----------------------------------------------------------------------
 
 String Control::GetDisplayText() const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->m_aDisplayText : GetText();
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->m_aDisplayText : GetText();
 }
 
 // -----------------------------------------------------------------------
@@ -321,8 +344,7 @@ void Control::StateChanged( StateChangedType nStateChange )
         nStateChange == STATE_CHANGE_CONTROLFONT
         )
     {
-        delete mpLayoutData;
-        mpLayoutData = NULL;
+        ImplClearLayoutData();
     }
     Window::StateChanged( nStateChange );
 }
@@ -331,25 +353,25 @@ void Control::StateChanged( StateChangedType nStateChange )
 
 void Control::AppendLayoutData( const Control& rSubControl ) const
 {
-    if( ! rSubControl.mpLayoutData )
+    if( !rSubControl.HasLayoutData() )
         rSubControl.FillLayoutData();
-    if( ! rSubControl.mpLayoutData || ! rSubControl.mpLayoutData->m_aDisplayText.Len() )
+    if( !rSubControl.HasLayoutData() || !rSubControl.mpControlData->mpLayoutData->m_aDisplayText.Len() )
         return;
 
-    long nCurrentIndex = mpLayoutData->m_aDisplayText.Len();
-    mpLayoutData->m_aDisplayText.Append( rSubControl.mpLayoutData->m_aDisplayText );
-    int nLines = rSubControl.mpLayoutData->m_aLineIndices.size();
+    long nCurrentIndex = mpControlData->mpLayoutData->m_aDisplayText.Len();
+    mpControlData->mpLayoutData->m_aDisplayText.Append( rSubControl.mpControlData->mpLayoutData->m_aDisplayText );
+    int nLines = rSubControl.mpControlData->mpLayoutData->m_aLineIndices.size();
     int n;
-    mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
+    mpControlData->mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
     for( n = 1; n < nLines; n++ )
-        mpLayoutData->m_aLineIndices.push_back( rSubControl.mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
-    int nRectangles = rSubControl.mpLayoutData->m_aUnicodeBoundRects.size();
+        mpControlData->mpLayoutData->m_aLineIndices.push_back( rSubControl.mpControlData->mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
+    int nRectangles = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects.size();
         Rectangle aRel = const_cast<Control&>(rSubControl).GetWindowExtentsRelative( const_cast<Control*>(this) );
     for( n = 0; n < nRectangles; n++ )
     {
-        Rectangle aRect = rSubControl.mpLayoutData->m_aUnicodeBoundRects[n];
+        Rectangle aRect = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects[n];
         aRect.Move( aRel.Left(), aRel.Top() );
-        mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
+        mpControlData->mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
     }
 }
 
@@ -378,15 +400,15 @@ BOOL Control::ImplCallEventListenersAndHandler(  ULONG nEvent, const Link& rHand
 
 void Control::SetLayoutDataParent( const Control* pParent ) const
 {
-    if( mpLayoutData )
-        mpLayoutData->m_pParent = pParent;
+    if( HasLayoutData() )
+        mpControlData->mpLayoutData->m_pParent = pParent;
 }
 
 // -----------------------------------------------------------------
 
 void Control::ImplClearLayoutData() const
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    delete mpControlData->mpLayoutData, mpControlData->mpLayoutData = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -466,4 +488,103 @@ Size Control::GetOptimalSize(WindowSizeType eType) const
     default:
         return Size( LONG_MAX, LONG_MAX );
     }
+}
+
+// -----------------------------------------------------------------
+
+void Control::SetReferenceDevice( OutputDevice* _referenceDevice )
+{
+    if ( mpControlData->mpReferenceDevice == _referenceDevice )
+        return;
+
+    mpControlData->mpReferenceDevice = _referenceDevice;
+    Invalidate();
+}
+
+// -----------------------------------------------------------------
+
+OutputDevice* Control::GetReferenceDevice() const
+{
+    return mpControlData->mpReferenceDevice;
+}
+
+// -----------------------------------------------------------------
+
+const Font& Control::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetLabelFont();
+}
+
+// -----------------------------------------------------------------
+const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetLabelTextColor();
+}
+
+// -----------------------------------------------------------------
+void Control::ImplInitSettings( const BOOL _bFont, const BOOL _bForeground )
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    if ( _bFont )
+    {
+        Font aFont( GetCanonicalFont( rStyleSettings ) );
+        if ( IsControlFont() )
+            aFont.Merge( GetControlFont() );
+        SetZoomedPointFont( aFont );
+    }
+
+    if ( _bForeground || _bFont )
+    {
+        Color aColor;
+        if ( IsControlForeground() )
+            aColor = GetControlForeground();
+        else
+            aColor = GetCanonicalTextColor( rStyleSettings );
+        SetTextColor( aColor );
+        SetTextFillColor();
+    }
+}
+
+// -----------------------------------------------------------------
+
+void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const XubString& _rStr,
+    USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
+{
+#ifdef FS_DEBUG
+    if ( !_pVector )
+    {
+        static MetricVector aCharRects;
+        static String sDisplayText;
+        aCharRects.clear();
+        sDisplayText = String();
+        _pVector = &aCharRects;
+        _pDisplayText = &sDisplayText;
+    }
+#endif
+
+    if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
+    {
+        _io_rRect = _rTargetDevice.GetTextRect( _io_rRect, _rStr, _nStyle );
+        _rTargetDevice.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+    }
+    else
+    {
+        ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
+        _io_rRect = aRenderer.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+    }
+
+#ifdef FS_DEBUG
+    _rTargetDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+    _rTargetDevice.SetLineColor( COL_LIGHTRED );
+    _rTargetDevice.SetFillColor();
+    for (   MetricVector::const_iterator cr = _pVector->begin();
+            cr != _pVector->end();
+            ++cr
+        )
+    {
+        _rTargetDevice.DrawRect( *cr );
+    }
+    _rTargetDevice.Pop();
+#endif
 }
