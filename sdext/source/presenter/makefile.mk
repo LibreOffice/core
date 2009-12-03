@@ -131,12 +131,11 @@ FIND_XCU=registry/data
 FIND_XCU=$(MISC)$/$(EXTNAME)_in$/merge
 .ENDIF			# "$(WITH_LANG)"==""
 
-
 COMPONENT_FILES=																			\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/Jobs.xcu							\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu				\
-    $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   \
-   $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
+    $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   	\
+    $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
 
 #COMPONENT_MERGED_XCU= \
 #	$(FIND_XCU)$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
@@ -244,8 +243,11 @@ COMPONENT_MANIFEST= 							\
 COMPONENT_LIBRARY= 								\
     $(ZIP1DIR)$/$(TARGET).uno$(DLLPOST)
 
+PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
+
 COMPONENT_HELP= 								\
-    $(ZIP1DIR)$/help/component.txt
+    $(ZIP1DIR)$/help/component.txt				\
+    $(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
 
 ZIP1DEPS=					\
     $(PACKLICS) 			\
@@ -257,7 +259,6 @@ ZIP1DEPS=					\
     $(COMPONENT_HELP)
 #	$(COMPONENT_MERGED_XCU) \
 
-PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
 
 # --- Targets ----------------------------------
@@ -274,8 +275,13 @@ $(COMPONENT_MANIFEST) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
     +$(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
 
-$(COMPONENT_HELP) : help$/$$(@:f)
+$(ZIP1DIR)$/help$/component.txt : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(ZIP1DIR)$/help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp : help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp
+    @echo copying $@ to $<
+    $(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
 #$(COMPONENT_FILES) : $$(@:f)
