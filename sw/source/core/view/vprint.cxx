@@ -282,11 +282,11 @@ void SwRenderData::DeletePostItData()
 }
 
 
-void SwRenderData::ViewOptionAdjustStart( SwWrtShell& rSh )
+void SwRenderData::ViewOptionAdjustStart( SwWrtShell& rSh, const SwPrtOptions *pPrtOptions )
 {
     if (m_pViewOptionAdjust)
         delete m_pViewOptionAdjust;
-    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh );
+    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, pPrtOptions );
 }
 
 

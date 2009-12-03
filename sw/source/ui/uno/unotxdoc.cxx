@@ -2653,6 +2653,11 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 pWrtShell = pSwView->GetWrtShellPtr();
             }
 
+            // reformating the document for printing will show the changes in the view
+            // which is likely to produce many unwanted and not nice to view actions.
+            // We don't want that! Thus we disable updating of the view.
+            pWrtShell->StartAction();
+
             m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsSkipEmptyPages, bIsPDFExport );
@@ -2660,7 +2665,11 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             //SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (pView->IsA(aSwViewTypeId))
-                m_pRenderData->ViewOptionAdjustStart( *((SwView*)pView)->GetWrtShellPtr() );
+            {
+                // PDF export should not make use of the SwPrtOptions
+                const SwPrtOptions *pPrtOptions = bIsPDFExport? NULL : m_pRenderData->GetSwPrtOptions();
+                m_pRenderData->ViewOptionAdjustStart( *((SwView*)pView)->GetWrtShellPtr(), pPrtOptions );
+            }
 
             // since printing now also use the API for PDF export this option
             // should be set for printing as well ...
@@ -2677,6 +2686,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             pWrtShell->CalcPagesForPrint( pDoc->GetPageCount() );
 
             pWrtShell->SetPDFExportOption( sal_False );
+
+
+            // enable view again
+            pWrtShell->EndAction();
         }
 
         const sal_Int32 nPageCount = pDoc->GetPageCount();
@@ -3985,52 +3998,69 @@ void SwXDocumentPropertyHelper::onChange()
 
 /*****************************************************************************/
 
-SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwPrtOptions *pPrtOptions ) :
     m_pViewOption(0),
     m_rShell(rSh)
 {
     const SwViewOption* pCurrentViewOptions = m_rShell.GetViewOptions();
-    m_bSwitchOff_IsFldName = pCurrentViewOptions->IsFldName() && m_rShell.IsAnyFieldInDoc();
-    bool bApplyViewOptions = m_bSwitchOff_IsFldName;
-    //switch off painting of placeholder fields
-    m_bSwitchOff_PlaceHolderView = pCurrentViewOptions->IsShowPlaceHolderFields();
-    //switch off display of hidden characters if on and hidden characters are in use
-    m_bSwitchOff_HiddenChar = pCurrentViewOptions->IsShowHiddenChar() && m_rShell.GetDoc()->ContainsHiddenChars();
-    //switch off display of hidden paragraphs if on and hidden paragraphs are in use
-    m_bSwitchOff_HiddenParagraphs = pCurrentViewOptions->IsShowHiddenPara();
-    if(m_bSwitchOff_HiddenParagraphs)
+
+    const bool bContainsHiddenChars         = m_rShell.GetDoc()->ContainsHiddenChars();
+    const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType( RES_HIDDENTXTFLD );
+    const bool bContainsHiddenFields        = pFldType && pFldType->GetDepends();
+    pFldType = m_rShell.GetDoc()->GetSysFldType( RES_HIDDENPARAFLD );
+    const bool bContainsHiddenParagraphs    = pFldType && pFldType->GetDepends();
+    pFldType = m_rShell.GetDoc()->GetSysFldType( RES_JUMPEDITFLD );
+    const bool bContainsPlaceHolders        = pFldType && pFldType->GetDepends();
+
+    m_bSwitchOff_IsFldName = m_rShell.IsAnyFieldInDoc() && pCurrentViewOptions->IsFldName();
+
+    // for printing only (not PDF export) take print options into account
+    if (pPrtOptions)
     {
-        const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType(RES_HIDDENPARAFLD);
-        if(!pFldType || !pFldType->GetDepends())
-            m_bSwitchOff_HiddenParagraphs = false;
+        m_bToggle_PlaceHolderView   = bContainsPlaceHolders && pPrtOptions->bPrintTextPlaceholder != pCurrentViewOptions->IsShowPlaceHolderFields();
+        m_bToggle_HiddenChar        = bContainsHiddenChars && pPrtOptions->bPrintHiddenText != pCurrentViewOptions->IsShowHiddenChar( TRUE );
+        m_bToggle_HiddenField       = bContainsHiddenFields && pPrtOptions->bPrintHiddenText != pCurrentViewOptions->IsShowHiddenField();
+        m_bToggle_HiddenParagraphs  = bContainsHiddenParagraphs && pPrtOptions->bPrintHiddenText != pCurrentViewOptions->IsShowHiddenPara();
     }
-    m_bSwitchOff_IsShowHiddenField = pCurrentViewOptions->IsShowHiddenField();
-    if(m_bSwitchOff_IsShowHiddenField)
+    else
     {
-        const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType(RES_HIDDENTXTFLD);
-        if( !pFldType || !pFldType->GetDepends())
-            m_bSwitchOff_IsShowHiddenField = false;
+        //toggle painting of placeholder fields
+        m_bToggle_PlaceHolderView   = bContainsPlaceHolders && pCurrentViewOptions->IsShowPlaceHolderFields();
+        //toggle display of hidden characters if on and hidden characters are in use
+        m_bToggle_HiddenChar        = bContainsHiddenChars && pCurrentViewOptions->IsShowHiddenChar( FALSE );
+        //toggle display of hidden fields if on and hidden fields are in use
+        m_bToggle_HiddenField       = bContainsHiddenFields && pCurrentViewOptions->IsShowHiddenField();
+        //toggle display of hidden paragraphs if on and hidden paragraphs are in use
+        m_bToggle_HiddenParagraphs  = bContainsHiddenParagraphs && pCurrentViewOptions->IsShowHiddenPara();
     }
 
-    bApplyViewOptions |= m_bSwitchOff_PlaceHolderView;
-    bApplyViewOptions |= m_bSwitchOff_HiddenChar;
-    bApplyViewOptions |= m_bSwitchOff_HiddenParagraphs;
-    bApplyViewOptions |= m_bSwitchOff_IsShowHiddenField;
+    // bApplyViewOptions should only be true if necessary to avoid reformating if not required,
+    bool bApplyViewOptions = m_bSwitchOff_IsFldName;
+    bApplyViewOptions |= m_bToggle_PlaceHolderView;
+    bApplyViewOptions |= m_bToggle_HiddenChar;
+    bApplyViewOptions |= m_bToggle_HiddenField;
+    bApplyViewOptions |= m_bToggle_HiddenParagraphs;
     if(bApplyViewOptions)
     {
-        m_pViewOption = new SwViewOption(*m_rShell.GetViewOptions());
+        m_pViewOption = new SwViewOption( *pCurrentViewOptions );
+
+        // set flag to hint that everything should be formatted for printing,
+        // (needed at some places to print hidden text if that option is set in the dialog, etc.)
+        m_pViewOption->SetPrinting( TRUE );
+
         if(m_bSwitchOff_IsFldName)
             m_pViewOption->SetFldName(FALSE);
-        if(m_bSwitchOff_PlaceHolderView)
-            m_pViewOption->SetShowPlaceHolderFields(FALSE);
-        if(m_bSwitchOff_HiddenChar)
-            m_pViewOption->SetShowHiddenChar(FALSE);
-        if(m_bSwitchOff_HiddenParagraphs)
-            m_pViewOption->SetShowHiddenPara(FALSE);
-        if(m_bSwitchOff_IsShowHiddenField)
-            m_pViewOption->SetShowHiddenField(FALSE);
+        if(m_bToggle_PlaceHolderView)
+            m_pViewOption->SetShowPlaceHolderFields( !pCurrentViewOptions->IsShowPlaceHolderFields() );
+        if(m_bToggle_HiddenChar)
+            m_pViewOption->SetShowHiddenChar( !pCurrentViewOptions->IsShowHiddenChar( TRUE ) );
+        if(m_bToggle_HiddenField)
+            m_pViewOption->SetShowHiddenField( !pCurrentViewOptions->IsShowHiddenField() );
+        if(m_bToggle_HiddenParagraphs)
+            m_pViewOption->SetShowHiddenPara( !pCurrentViewOptions->IsShowHiddenPara() );
         SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
     }
+
 }
 
 
@@ -4038,18 +4068,21 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 {
     if(m_pViewOption)
     {
+        m_pViewOption->SetPrinting( FALSE );
+
+        const SwViewOption* pCurrentViewOptions = m_rShell.GetViewOptions();
         if(m_bSwitchOff_IsFldName)
             m_pViewOption->SetFldName(TRUE);
-        if(m_bSwitchOff_PlaceHolderView)
-            m_pViewOption->SetShowPlaceHolderFields(TRUE);
-        if(m_bSwitchOff_HiddenChar)
-            m_pViewOption->SetShowHiddenChar(TRUE);
-        if(m_bSwitchOff_HiddenParagraphs)
-            m_pViewOption->SetShowHiddenPara(TRUE);
-        if(m_bSwitchOff_IsShowHiddenField)
-            m_pViewOption->SetShowHiddenField(TRUE);
+        if(m_bToggle_HiddenChar)
+            m_pViewOption->SetShowHiddenChar( !pCurrentViewOptions->IsShowHiddenChar() );
+        if(m_bToggle_HiddenField)
+            m_pViewOption->SetShowHiddenField( !pCurrentViewOptions->IsShowHiddenField() );
+        if(m_bToggle_HiddenParagraphs)
+            m_pViewOption->SetShowHiddenPara( !pCurrentViewOptions->IsShowHiddenPara() );
+        if(m_bToggle_PlaceHolderView)
+            m_pViewOption->SetShowPlaceHolderFields( !pCurrentViewOptions->IsShowPlaceHolderFields() );
         SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
-        delete m_pViewOption;
+        delete m_pViewOption;  m_pViewOption = NULL;
     }
 }
 

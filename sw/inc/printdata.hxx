@@ -121,7 +121,7 @@ public:
     void DeletePostItData();
 
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
-    void ViewOptionAdjustStart( SwWrtShell& rSh );
+    void ViewOptionAdjustStart( SwWrtShell& rSh, const SwPrtOptions *pPrtOptions );
     void ViewOptionAdjustStop();
 
     bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }

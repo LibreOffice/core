@@ -591,21 +591,28 @@ public:
 /*-- 06.01.2004 15:08:34---------------------------------------------------
     The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
     the current ViewShell so that fields are not printed as commands and
-    hidden text and hidden characters are always invisible.
+    hidden characters are always invisible. Hidden text and place holders
+    should be printed according to the current print options.
     After printing the view options are restored
   -----------------------------------------------------------------------*/
 class SwViewOptionAdjust_Impl
 {
+    // options not available in the File/Print UI, should be turned off for
+    // printing and PDF export if they are enabled
     bool m_bSwitchOff_IsFldName;
-    bool m_bSwitchOff_PlaceHolderView;
-    bool m_bSwitchOff_HiddenChar;
-    bool m_bSwitchOff_HiddenParagraphs;
-    bool m_bSwitchOff_IsShowHiddenField;
+
+    // options available in the File/Print UI, should be turned of for PDF export
+    // and otherwise set (or not) according to
+    // pPrtOptions->bPrintHiddenText  and  pPrtOptions->bPrintTextPlaceholder
+    bool m_bToggle_HiddenChar;
+    bool m_bToggle_HiddenField;
+    bool m_bToggle_HiddenParagraphs;
+    bool m_bToggle_PlaceHolderView;
 
     SwViewOption* m_pViewOption;
     SwWrtShell& m_rShell;
 public:
-    SwViewOptionAdjust_Impl(SwWrtShell& rSh);
+    SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwPrtOptions *pPrtOptions );
     ~SwViewOptionAdjust_Impl();
 };
 
