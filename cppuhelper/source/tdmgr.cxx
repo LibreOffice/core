@@ -688,17 +688,17 @@ static void SAL_CALL typelib_callback(
             catch (container::NoSuchElementException & exc)
             {
                 (void) exc; // avoid warning about unused variable
-                OSL_ENSURE(
-                    0, OUStringToOString(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "typelibrary type not available: ") ) +
+                OSL_TRACE(
+                    "typelibrary type not available: %s",
+                    OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
             catch (Exception & exc)
             {
                 (void) exc; // avoid warning about unused variable
-                OSL_ENSURE(
-                    0, OUStringToOString(
+                OSL_TRACE(
+                    "%s",
+                    OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
         }
