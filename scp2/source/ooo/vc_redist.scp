@@ -31,27 +31,27 @@
 
 #if defined(WITH_VC_REDIST)
 
-WindowsCustomAction gid_Customaction_InstallRuntime
-	Name = "InstallRuntime";
-	Typ = "98";
-	Source = "SystemFolder";
-	Target = "[SourceDir]redist\vcredist_x86.exe /qb";
-	Inbinarytable = 0;
-    Styles = (NO_FILE);
-	Assignment1 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "ExecuteAction");
-	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "FileCost");
-End
+// WindowsCustomAction gid_Customaction_InstallRuntime
+//	Name = "InstallRuntime";
+//	Typ = "98";
+//	Source = "SystemFolder";
+//	Target = "[SourceDir]redist\vcredist_x86.exe /qb";
+//	Inbinarytable = 0;
+//    Styles = (NO_FILE);
+//	Assignment1 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "ExecuteAction");
+//	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "FileCost");
+// End
 
-WindowsCustomAction gid_Customaction_InstallRuntime_X64
-	Name = "InstallRuntimeX64";
-	Typ = "98";
-	Source = "SystemFolder";
-	Target = "[SourceDir]redist\vcredist_x64.exe /qb";
-	Inbinarytable = 0;
-    Styles = (NO_FILE);
-	Assignment1 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH And VersionNT64", "ExecuteAction");
-	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And VersionNT64", "FileCost");
-End
+// WindowsCustomAction gid_Customaction_InstallRuntime_X64
+//	Name = "InstallRuntimeX64";
+//	Typ = "98";
+//	Source = "SystemFolder";
+//	Target = "[SourceDir]redist\vcredist_x64.exe /qb";
+//	Inbinarytable = 0;
+//    Styles = (NO_FILE);
+//	Assignment1 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH And VersionNT64", "ExecuteAction");
+//	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And VersionNT64", "FileCost");
+// End
 
 ScpAction scp_Copy_vcredist_x86
   #if defined(BUILD_SPECIAL)
