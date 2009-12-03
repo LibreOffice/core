@@ -53,9 +53,19 @@ ULFDIR:=$(COMMONMISC)$/$(TARGET)
 .ELSE			# "$(WITH_LANG)"!=""
 ULFDIR:=.
 .ENDIF			# "$(WITH_LANG)"!=""
+
 # --- Targets ------------------------------------------------------
 
+.IF "$(BUILD_X64)"!=""
+$(RES)$/x64$/$(TARGET).res : $(RES)$/$(TARGET).res
+    -$(MKDIR) $(RES)$/x64
+    @@cp $< $@
+.ENDIF # "$(BUILD_X64)"!=""
+
+.INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
+.INCLUDE :	tg_wntx64.mk
+
 
 
 # Generate the native Windows resource file
