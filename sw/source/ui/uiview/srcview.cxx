@@ -717,6 +717,7 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 
 
         if(!bApi)
+        {
             if(bNotFoundMessage)
             {
                 InfoBox( 0, SW_RES(MSG_NOT_FOUND)).Execute();
@@ -728,6 +729,7 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
                 pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
                 StartSearchAndReplace( rSearchItem, FALSE, FALSE, TRUE );
             }
+        }
     }
     return nFound;
 }
