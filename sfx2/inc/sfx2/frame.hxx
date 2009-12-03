@@ -209,8 +209,6 @@ public:
 
     SAL_DLLPRIVATE static void InsertTopFrame_Impl( SfxFrame* pFrame );
     SAL_DLLPRIVATE static void RemoveTopFrame_Impl( SfxFrame* pFrame );
-    SAL_DLLPRIVATE void SetItemSet_Impl( const SfxItemSet* pSet );
-    SAL_DLLPRIVATE const SfxItemSet* GetItemSet_Impl();
     SAL_DLLPRIVATE void SetOwnsBindings_Impl( sal_Bool bSet );
     SAL_DLLPRIVATE sal_Bool OwnsBindings_Impl() const;
     SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
@@ -224,7 +222,7 @@ public:
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
     SAL_DLLPRIVATE void SetInPlace_Impl( sal_Bool );
 
-    SAL_DLLPRIVATE BOOL InsertDocument_Impl( SfxObjectShell& rDoc );
+    SAL_DLLPRIVATE BOOL InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& rSet );
     SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
     SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
     SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;

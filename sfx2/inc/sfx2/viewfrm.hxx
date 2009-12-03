@@ -152,14 +152,13 @@ protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 #ifndef _SFX_HXX
-    SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
     SAL_DLLPRIVATE void KillDispatcher_Impl();
 #endif
 
     virtual                 ~SfxViewFrame();
 
 public:
-                            SfxViewFrame( SfxFrame* pFrame, SfxObjectShell *pDoc = NULL, USHORT nViewId = 0 );
+                            SfxViewFrame( SfxFrame* pFrame, SfxObjectShell *pDoc = NULL );
 
                             TYPEINFO();
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
@@ -301,6 +300,8 @@ public:
     SAL_DLLPRIVATE void Exec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetExecute_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
+
+    SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
 //#endif
 private:
     SAL_DLLPRIVATE SfxViewShell* LoadNewView_Impl( const USHORT i_nNewViewNo, SfxViewShell* i_pOldShell );

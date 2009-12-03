@@ -71,7 +71,6 @@ public:
     sal_Bool                  bReleasingComponent : 1;
     sal_Bool                  bInPlace : 1;
     SfxFrame*                 pFrame;
-    const SfxItemSet*         pSet;
     SfxWorkWindow*            pWorkWin;
     SvBorder                  aBorder;
     // formerly SfxTopFrame
@@ -96,7 +95,6 @@ public:
         ,bReleasingComponent( sal_False )
         ,bInPlace( sal_False )
         ,pFrame( pAntiImplP )
-        ,pSet( 0 )
         ,pWorkWin( 0 )
         ,pExternalWindow( NULL )
         ,bHidden( false )

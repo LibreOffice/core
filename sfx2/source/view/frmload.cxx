@@ -327,8 +327,7 @@ sal_Bool SfxFrameLoader_Impl::impl_plugDocIntoFrame( const ::comphelper::NamedVa
 {
     SfxAllItemSet aSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, i_rDescriptor.getPropertyValues(), aSet );
-    i_rTargetFrame.SetItemSet_Impl( &aSet );
-    return i_rTargetFrame.InsertDocument_Impl( i_rDocument );
+    return i_rTargetFrame.InsertDocument_Impl( i_rDocument, aSet );
 }
 
 // --------------------------------------------------------------------------------------------------------------------

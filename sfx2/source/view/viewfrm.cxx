@@ -1448,8 +1448,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 SfxViewFrame::SfxViewFrame
 (
     SfxFrame*           pFrame,
-    SfxObjectShell*     pObjShell,
-    sal_uInt16          nViewId
+    SfxObjectShell*     pObjShell
 )
 
 /*  [Beschreibung]
@@ -1474,22 +1473,6 @@ SfxViewFrame::SfxViewFrame
     pImp->pWindow->SetSizePixel( pFrame->GetWindow().GetOutputSizePixel() );
     pFrame->SetOwnsBindings_Impl( sal_True );
     pFrame->CreateWorkWindow_Impl();
-
-    if ( GetFrame()->IsInPlace() )
-    {
-        LockAdjustPosSizePixel();
-    }
-
-    if ( pObjShell && !SwitchToViewShell_Impl( nViewId ) )
-    {
-        // TODO: better error handling? Under which conditions can this fail?
-        return;
-    }
-
-    if ( GetFrame()->IsInPlace() )
-    {
-        UnlockAdjustPosSizePixel();
-    }
 }
 
 //------------------------------------------------------------------------
@@ -2322,7 +2305,7 @@ void SfxViewFrame::ExecView_Impl
                     pFrameItem->GetValue() >>= xFrame;
                     SfxFrame* pFrame = SfxFrame::Create( xFrame );
                     pMed->GetItemSet()->ClearItem( SID_HIDDEN );
-                    pFrame->InsertDocument_Impl( *GetObjectShell() );
+                    pFrame->InsertDocument_Impl( *GetObjectShell(), *pMed->GetItemSet() );
                     if ( !bHidden )
                         xFrame->getContainerWindow()->setVisible( sal_True );
                 }

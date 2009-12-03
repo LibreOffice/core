@@ -314,7 +314,7 @@ SfxViewFrame* SfxFrame::InsertDocument( SfxObjectShell& rDoc, SfxFrame*& rpTarge
     {
         if ( bHidden )
             rDoc.PutItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
-        rpTargetFrame->InsertDocument_Impl( rDoc );
+        rpTargetFrame->InsertDocument_Impl( rDoc, *rDoc.GetMedium()->GetItemSet() );
         pViewFrame = rpTargetFrame->GetCurrentViewFrame();
     }
     else
@@ -758,16 +758,6 @@ void SfxFrame::SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< :
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
     if ( !rFrame.is() && GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetBindings().SetRecorder_Impl( xRecorder );
-}
-
-void SfxFrame::SetItemSet_Impl( const SfxItemSet* pSet )
-{
-    pImp->pSet = pSet;
-}
-
-const SfxItemSet* SfxFrame::GetItemSet_Impl()
-{
-    return pImp->pSet;
 }
 
 void SfxFrame::Appear()

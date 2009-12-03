@@ -484,12 +484,11 @@ SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, bool bHidden, 
         */
     }
 
-    pFrame->SetItemSet_Impl( pSet );
     if ( pDoc && pDoc != pFrame->GetCurrentDocument() )
     {
         if ( nViewId )
             pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-        pFrame->InsertDocument_Impl( *pDoc );
+        pFrame->InsertDocument_Impl( *pDoc, pSet ? *pSet : *pDoc->GetMedium()->GetItemSet() );
         if ( pWindow && !bHidden )
             pWindow->Show();
     }
@@ -515,12 +514,11 @@ SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, Window& rWindow, USHORT nViewI
     pFrame->SetFrameInterface_Impl( xFrame );
     pFrame->pImp->bHidden = bHidden;
 
-    pFrame->SetItemSet_Impl( pSet );
     if ( pDoc )
     {
         if ( nViewId )
             pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-        pFrame->InsertDocument_Impl( *pDoc );
+        pFrame->InsertDocument_Impl( *pDoc, pSet ? *pSet : *pDoc->GetMedium()->GetItemSet() );
     }
 
     return pFrame;
@@ -675,7 +673,7 @@ namespace
     bool lcl_getViewDataAndID( const Reference< XModel >& _rxDocument, Sequence< PropertyValue >& _o_viewData, USHORT& _o_viewId )
     {
         _o_viewData.realloc(0);
-        _o_viewId = -1;
+        _o_viewId = 0;
 
         Reference< XViewDataSupplier > xViewDataSupplier( _rxDocument, UNO_QUERY );
         Reference< XIndexAccess > xViewData;
@@ -701,7 +699,7 @@ namespace
     }
 }
 
-sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
+sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& rSet )
 /* [Beschreibung]
  */
 {
@@ -719,19 +717,14 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     OSL_PRECOND( GetCurrentDocument() == NULL,
         "SfxFrame::InsertDocument_Impl: re-using an Sfx(Top)Frame is not supported anymore!" );
 
-    const SfxItemSet* pSet = GetItemSet_Impl();
-    if ( !pSet )
-        pSet = rDoc.GetMedium()->GetItemSet();
-    SetItemSet_Impl( NULL );
-
-    SFX_ITEMSET_ARG( pSet, pAreaItem,   SfxRectangleItem,   SID_VIEW_POS_SIZE,  sal_False );    // position and size
-    SFX_ITEMSET_ARG( pSet, pViewIdItem, SfxUInt16Item,      SID_VIEW_ID,        sal_False );    // view ID
-    SFX_ITEMSET_ARG( pSet, pModeItem,   SfxUInt16Item,      SID_VIEW_ZOOM_MODE, sal_False );    // zoom
-    SFX_ITEMSET_ARG( pSet, pHidItem,    SfxBoolItem,        SID_HIDDEN,         sal_False );    // hidden
-    SFX_ITEMSET_ARG( pSet, pViewDataItem, SfxStringItem,    SID_USER_DATA,      sal_False );    // view data
-    SFX_ITEMSET_ARG( pSet, pEditItem,   SfxBoolItem,        SID_VIEWONLY,       sal_False );    // view only
-    SFX_ITEMSET_ARG( pSet, pPluginMode, SfxUInt16Item,      SID_PLUGIN_MODE,    sal_False );    // plugin (external inplace)
-    SFX_ITEMSET_ARG( pSet, pJumpItem,   SfxStringItem,      SID_JUMPMARK,       sal_False );    // jump (GotoBookmark)
+    SFX_ITEMSET_ARG( &rSet, pAreaItem,   SfxRectangleItem,   SID_VIEW_POS_SIZE,  sal_False );    // position and size
+    SFX_ITEMSET_ARG( &rSet, pViewIdItem, SfxUInt16Item,      SID_VIEW_ID,        sal_False );    // view ID
+    SFX_ITEMSET_ARG( &rSet, pModeItem,   SfxUInt16Item,      SID_VIEW_ZOOM_MODE, sal_False );    // zoom
+    SFX_ITEMSET_ARG( &rSet, pHidItem,    SfxBoolItem,        SID_HIDDEN,         sal_False );    // hidden
+    SFX_ITEMSET_ARG( &rSet, pViewDataItem, SfxStringItem,    SID_USER_DATA,      sal_False );    // view data
+    SFX_ITEMSET_ARG( &rSet, pEditItem,   SfxBoolItem,        SID_VIEWONLY,       sal_False );    // view only
+    SFX_ITEMSET_ARG( &rSet, pPluginMode, SfxUInt16Item,      SID_PLUGIN_MODE,    sal_False );    // plugin (external inplace)
+    SFX_ITEMSET_ARG( &rSet, pJumpItem,   SfxStringItem,      SID_JUMPMARK,       sal_False );    // jump (GotoBookmark)
 
     // hidden?
     OSL_PRECOND( !pImp->bHidden,
@@ -758,7 +751,6 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     // if no view-related data exists in the set, then obtain the view data from the model
     if ( !pJumpItem && !pViewDataItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
     {
-        nViewId = 0;
         if ( lcl_getViewDataAndID( rDoc.GetModel(), aUserData, nViewId ) )
         {
             SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
@@ -776,9 +768,9 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc )
     if ( nPluginMode && ( nPluginMode != 2 ) )
         SetInPlace_Impl( TRUE );
 
-    SfxViewFrame* pViewFrame = new SfxViewFrame( this, &rDoc, nViewId );
-    if ( !pViewFrame->GetViewShell() )
-    {
+    SfxViewFrame* pViewFrame = new SfxViewFrame( this, &rDoc );
+    if ( !pViewFrame->SwitchToViewShell_Impl( nViewId ) )
+    {   // TODO: better error handling? Under which conditions can this fail?
         OSL_ENSURE( false, "SfxFrame::InsertDocument_Impl: something went wrong while creating the SfxViewFrame!" );
         pViewFrame->DoClose();
         return sal_False;
