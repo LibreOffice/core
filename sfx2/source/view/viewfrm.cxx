@@ -82,6 +82,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/configurationhelper.hxx>
 
@@ -2019,7 +2020,7 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 
 //--------------------------------------------------------------------
 Reference< XController2 > SfxViewFrame::LoadDocument_Impl(
-        const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame, const Sequence< PropertyValue >& i_rArgs,
+        const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame, const Sequence< PropertyValue >& i_rViewFactoryArgs,
         const USHORT i_nViewId )
 {
     ENSURE_OR_THROW( i_rFrame.is(), "illegal frame" );
@@ -2033,7 +2034,7 @@ Reference< XController2 > SfxViewFrame::LoadDocument_Impl(
     // let the model create a new controller
     const Reference< XController2 > xController( xModel->createViewController(
         sViewName.makeStringAndClear(),
-        i_rArgs,
+        i_rViewFactoryArgs,
         i_rFrame
     ), UNO_SET_THROW );
 
@@ -2305,75 +2306,71 @@ void SfxViewFrame::ExecView_Impl
         case SID_NEWWINDOW:
         {
             // Hack. demnaechst virtuelle Funktion
-            if ( !GetViewShell()->NewWindowAllowed() && !GetObjectShell()->HasName() )
+            if ( !GetViewShell()->NewWindowAllowed() )
+            {
+                OSL_ENSURE( false, "You should have disabled the 'Window/New Window' slot!" );
                 return;
+            }
 
             // ViewData bei FrameSets rekursiv holen
             GetFrame()->GetViewData_Impl();
-            SfxMedium *pMed = GetObjectShell()->GetMedium();
+            SfxMedium* pMed = GetObjectShell()->GetMedium();
+
+            // obtain user data
             String aUserData;
             GetViewShell()->WriteUserData( aUserData, sal_True );
-            if ( !GetViewShell()->NewWindowAllowed() )
+            pMed->GetItemSet()->Put( SfxStringItem( SID_USER_DATA, aUserData ) );
+
+            // do not open the new window hidden
+            pMed->GetItemSet()->ClearItem( SID_HIDDEN );
+
+            // the view ID (optional arg. TODO: this is currently not supported in the slot definition ...)
+            SFX_REQUEST_ARG( rReq, pViewIdItem, SfxUInt16Item, SID_VIEW_ID, sal_False );
+            const USHORT nViewId = pViewIdItem ? pViewIdItem->GetValue() : GetCurViewId();
+
+            Reference < XFrame > xFrame;
+            // the frame (optional arg. TODO: this is currently not supported in the slot definition ...)
+            SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, sal_False );
+            if ( pFrameItem )
+                pFrameItem->GetValue() >>= xFrame;
+
+            bool bOwnFrame = false;
+            bool bSuccess = false;
+            try
             {
-                SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, sal_False );
-                SfxFrame *pFrame = NULL;
-                Reference < XFrame > xFrame;
-                if ( pFrameItem )
+                if ( !xFrame.is() )
                 {
-                    pFrameItem->GetValue() >>= xFrame;
-                    pFrame = SfxFrame::Create( xFrame );
+                    // if no frame was given, default-create one
+                    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                    Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+                    xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
+                    bOwnFrame = true;
                 }
-                else
-                    pFrame = SfxFrame::Create();
 
-                SfxAllItemSet aSet( SFX_APP()->GetPool() );
-                SFX_REQUEST_ARG( rReq, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
-                if ( pHiddenItem )
-                    aSet.Put( *pHiddenItem );
+                LoadDocument_Impl( *GetObjectShell(), xFrame, Sequence< PropertyValue >(), nViewId );
+                bSuccess = true;
 
-                SFX_ITEMSET_ARG( pMed->GetItemSet(), pRefererItem, SfxStringItem, SID_REFERER, sal_False );
-                SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private:user" ) );
-                if ( !pRefererItem )
-                    pRefererItem = &aReferer;
-
-                aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
-                aSet.Put( SfxStringItem( SID_USER_DATA, aUserData ) );
-                aSet.Put( SfxUInt16Item( SID_VIEW_ID, GetCurViewId() ) );
-                aSet.Put( *pRefererItem );
-                if( pMed->GetFilter() )
-                    aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName()) );
-                aSet.Put( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
-                if ( xFrame.is() )
-                    GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );
-                else
-                    GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
+                if ( bOwnFrame )
+                {
+                    // ensure the frame/windows is visible
+                    Reference< XWindow > xContainerWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
+                    xContainerWindow->setVisible( sal_True );
+                }
             }
-            else
+            catch( const Exception& )
             {
-                pMed->GetItemSet()->Put( SfxStringItem( SID_USER_DATA, aUserData ) );
+                DBG_UNHANDLED_EXCEPTION();
+            }
 
-                BOOL bHidden = FALSE;
-                SFX_REQUEST_ARG( rReq, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
-                if ( pHiddenItem )
-                    bHidden = pHiddenItem->GetValue();
-                SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, sal_False );
-                if ( pFrameItem )
+            if ( !bSuccess && bOwnFrame )
+            {
+                try
                 {
-                    Reference < XFrame > xFrame;
-                    pFrameItem->GetValue() >>= xFrame;
-                    SfxFrame* pFrame = SfxFrame::Create( xFrame );
-                    pMed->GetItemSet()->ClearItem( SID_HIDDEN );
-                    pFrame->InsertDocument_Impl( *GetObjectShell(), *pMed->GetItemSet() );
-                    if ( !bHidden )
-                        xFrame->getContainerWindow()->setVisible( sal_True );
+                    xFrame->dispose();
                 }
-                else
+                catch( const Exception& )
                 {
-                    SfxAllItemSet aSet( GetPool() );
-                    aSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, TRUE ) );
-                    SfxFrame* pFrame = SfxFrame::Create( GetObjectShell(), GetCurViewId(), bHidden, &aSet );
-                    if ( bHidden )
-                        pFrame->GetCurrentViewFrame()->LockObjectShell_Impl( TRUE );
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
 
@@ -2540,13 +2537,10 @@ void SfxViewFrame::StateView_Impl
 
                 case SID_NEWWINDOW:
                 {
-                    if ( !GetViewShell()->NewWindowAllowed() /* && !pDocSh->HasName() */ )
-                            rSet.DisableItem( nWhich );
-                    else
-                    {
-                        if (impl_maxOpenDocCountReached())
-                            rSet.DisableItem( nWhich );
-                    }
+                    if  (   !GetViewShell()->NewWindowAllowed()
+                        ||  impl_maxOpenDocCountReached()
+                        )
+                        rSet.DisableItem( nWhich );
                     break;
                 }
             }
@@ -3424,14 +3418,9 @@ void SfxViewFrame::UpdateDocument_Impl()
 
 SfxViewFrame* SfxViewFrame::CreateViewFrame( SfxObjectShell& rDoc, sal_uInt16 nViewId, sal_Bool bHidden )
 {
-    SfxItemSet *pSet = rDoc.GetMedium()->GetItemSet();
-    if ( nViewId )
-        pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-    if ( bHidden )
-        pSet->Put( SfxBoolItem( SID_HIDDEN, sal_True ) );
-
-    SfxFrame *pFrame = SfxFrame::Create( &rDoc, 0, bHidden );
-    return pFrame->GetCurrentViewFrame();
+    SfxFrame* pFrame = SfxFrame::Create( rDoc, nViewId, bHidden );
+    OSL_ENSURE( pFrame, "SfxViewFrame::CreateViewFrame: failed!" );
+    return pFrame ? pFrame->GetCurrentViewFrame() : NULL;
 }
 
 void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )

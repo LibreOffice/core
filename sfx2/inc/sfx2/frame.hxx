@@ -134,13 +134,13 @@ protected:
 //#endif
 
                         SfxFrame( );    // not implemented
-    SAL_DLLPRIVATE      SfxFrame( Window& i_rExternalWindow, bool bHidden );
+    SAL_DLLPRIVATE      SfxFrame( Window& i_rContainerWindow, bool bHidden );
 
 public:
                         TYPEINFO();
 
     static SfxFrame*    Create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
-    static SfxFrame*    Create( SfxObjectShell* pDoc = NULL, USHORT nViewId = NULL, bool bHidden = false, const SfxItemSet* pSet = NULL);
+    static SfxFrame*    Create( SfxObjectShell& rDoc, const USHORT nViewId, const bool bHidden );
     static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden );
 
     SvCompatWeakHdl*    GetHdl();

@@ -482,12 +482,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     bool bInitNewModel = bIsFactoryURL;
     if ( bIsFactoryURL )
     {
-        OSL_ENSURE( !aDescriptor.has( "Model" ), "SfxFrameLoader_Impl::load: sure you know what you're doing?" );
-        // Before the loader refactoring, the model would have won over the URL, that is, the model would have been
-        // loaded into a newly created frame. /me thinks this doesn't make sense at all, also, it made the code
-        // in this method more complex. So, the order was changed, now the factory URL wins over the Model.
-        // If somebody *rightfully* passes both of them, we might need to re-consider the behavior.
-
         const ::rtl::OUString sFactory = sURL.copy( sizeof( "private:factory/" ) -1 );
         // special handling for some weird factory URLs a la private:factory/swriter?slot=21053
         USHORT nSlotParam = impl_findSlotParam( sFactory );

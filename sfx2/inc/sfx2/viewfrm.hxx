@@ -312,7 +312,7 @@ private:
                         LoadDocument_Impl(
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rArgs,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rViewFactoryArgs,
                             const USHORT i_nViewId
                         );
 };

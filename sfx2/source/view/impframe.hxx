@@ -70,7 +70,7 @@ public:
     SfxWorkWindow*            pWorkWin;
     SvBorder                  aBorder;
     // formerly SfxTopFrame
-    Window*                   pExternalWindow;
+    Window*                   pExternalContainerWindow;
     bool                      bHidden;
     bool                      bLockResize;
     bool                      bMenuBarOn;
@@ -89,7 +89,7 @@ public:
         ,bInPlace( sal_False )
         ,pFrame( pAntiImplP )
         ,pWorkWin( 0 )
-        ,pExternalWindow( NULL )
+        ,pExternalContainerWindow( NULL )
         ,bHidden( false )
         ,bLockResize( false )
         ,bMenuBarOn( true )

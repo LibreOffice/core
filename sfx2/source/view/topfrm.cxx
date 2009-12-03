@@ -143,7 +143,7 @@ class SfxTopWindow_Impl : public Window
 public:
     SfxFrame*           pFrame;
 
-    SfxTopWindow_Impl( SfxFrame* pF, Window& i_rExternalWindow );
+    SfxTopWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow );
     ~SfxTopWindow_Impl( );
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
@@ -156,8 +156,8 @@ public:
     DECL_LINK(          CloserHdl, void* );
 };
 
-SfxTopWindow_Impl::SfxTopWindow_Impl( SfxFrame* pF, Window& i_rExternalWindow )
-        : Window( &i_rExternalWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
+SfxTopWindow_Impl::SfxTopWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow )
+        : Window( &i_rContainerWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
         , pFrame( pF )
 {
 }
@@ -354,29 +354,67 @@ static String _getTabString()
     return result;
 }
 
-SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, bool bHidden, const SfxItemSet* pSet )
+namespace
 {
-    Reference < XFrame > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    SfxFrame *pFrame = NULL;
-    BOOL bNewView = FALSE;
-    if ( pSet )
+    Reference< XFrame > lcl_findStartModuleFrame()
     {
-        SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_OPEN_NEW_VIEW, sal_False );
-        bNewView = pItem && pItem->GetValue();
-    }
+        try
+        {
+            Reference < XFramesSupplier > xSupplier( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
+            Reference < XIndexAccess > xContainer( xSupplier->getFrames(), UNO_QUERY_THROW );
 
-    if ( pDoc && !bHidden && !bNewView )
+            Reference< XModuleManager > xCheck( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.frame.ModuleManager" ) ), UNO_QUERY_THROW );
+
+            sal_Int32 nCount = xContainer->getCount();
+            for ( sal_Int32 i=0; i<nCount; ++i )
+            {
+                try
+                {
+                    Reference < XFrame > xFrame( xContainer->getByIndex(i), UNO_QUERY_THROW );
+                    ::rtl::OUString sModule = xCheck->identify( xFrame );
+                    if ( sModule.equalsAscii( "com.sun.star.frame.StartModule" ) )
+                        return xFrame;
+                }
+                catch( const UnknownModuleException& )
+                {
+                    // silence
+                }
+                catch(const Exception&)
+                {
+                    // re-throw, caught below
+                    throw;
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return NULL;
+    }
+}
+
+SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, const USHORT nViewId, const bool bHidden )
+{
+    if ( nViewId )
+        rDoc.GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
+    if ( bHidden )
+        rDoc.GetMedium()->GetItemSet()->Put( SfxBoolItem( SID_HIDDEN, sal_True ) );
+
+    Reference < XFrame > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    SfxFrame* pFrame = NULL;
+
+    if ( !bHidden )
     {
         URL aTargetURL;
-        aTargetURL.Complete = pDoc->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+        aTargetURL.Complete = rDoc.GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
 
         BOOL bIsBasic = FALSE;
         if ( !aTargetURL.Complete.getLength() )
         {
-            String sFactory = String::CreateFromAscii(pDoc->GetFactory().GetShortName());
-            bIsBasic = (sFactory.CompareIgnoreCaseToAscii("sbasic")==COMPARE_EQUAL);
-
-            if (!bIsBasic)
+            String sFactory = String::CreateFromAscii( rDoc.GetFactory().GetShortName() );
+            bIsBasic = ( sFactory.CompareIgnoreCaseToAscii("sbasic") == COMPARE_EQUAL );
+            if ( !bIsBasic )
             {
                 String aURL = String::CreateFromAscii("private:factory/");
                 aURL += sFactory;
@@ -384,47 +422,27 @@ SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, bool bHidden, 
             }
         }
 
-        if (bIsBasic)
+        if ( bIsBasic )
         {
-            Reference < XFramesSupplier > xSupplier( xDesktop, UNO_QUERY );
-            if (xSupplier.is())
-            {
-                Reference < XIndexAccess > xContainer(xSupplier->getFrames(), UNO_QUERY);
-                if (xContainer.is())
-                {
-                    Reference< ::com::sun::star::frame::XModuleManager > xCheck(::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager" )), UNO_QUERY);
-                    sal_Int32 nCount = xContainer->getCount();
-                    for (sal_Int32 i=0; i<nCount; ++i)
-                    {
-                        try
-                        {
-                            Reference < XFrame > xFrame;
-                            if (!(xContainer->getByIndex(i) >>= xFrame) || !xFrame.is())
-                                continue;
-                            ::rtl::OUString sModule = xCheck->identify(xFrame);
-                            if (sModule.equalsAscii("com.sun.star.frame.StartModule"))
-                            {
-                                pFrame = Create(xFrame);
-                                break;
-                            }
-                        }
-                        catch(const Exception&) {}
-                    }
-                }
-            }
+            // for the Basic IDE, we need to manually find the start module (if present), since the below code
+            // of dispatching the model into a "_default" frame will not work here.
+            // (TODO: Why doesn't it? If it would, we could spare the extra code here.)
+            Reference< XFrame > xFrame( lcl_findStartModuleFrame() );
+            if ( xFrame.is() )
+                pFrame = Create( xFrame );
         }
         else
         {
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
             xTrans->parseStrict( aTargetURL );
 
-            Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xDesktop, UNO_QUERY );
-            Reference < ::com::sun::star::frame::XDispatch > xDisp;
+            Reference < XDispatchProvider > xProv( xDesktop, UNO_QUERY );
+            Reference < XDispatch > xDisp;
             if ( xProv.is() )
             {
-                Sequence < ::com::sun::star::beans::PropertyValue > aSeq(1);
+                Sequence < PropertyValue > aSeq(1);
                 aSeq[0].Name = ::rtl::OUString::createFromAscii("Model");
-                aSeq[0].Value <<= pDoc->GetModel();
+                aSeq[0].Value <<= rDoc.GetModel();
                 ::rtl::OUString aTargetFrame( ::rtl::OUString::createFromAscii("_default") );
                 xDisp = xProv->queryDispatch( aTargetURL, aTargetFrame , 0 );
                 if ( xDisp.is() )
@@ -435,12 +453,15 @@ SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, bool bHidden, 
             for( USHORT nPos = rArr.Count(); nPos--; )
             {
                 SfxFrame *pF = rArr[ nPos ];
-                if ( pF->GetCurrentDocument() == pDoc )
+                if ( pF->GetCurrentDocument() == &rDoc )
                 {
                     pFrame = pF;
                     break;
                 }
             }
+            OSL_ENSURE( pFrame, "SfxFrame::Create: loading the doc via a dispatcher failed, it seems!" );
+            if ( pFrame )
+                return pFrame;
         }
     }
 
@@ -452,11 +473,9 @@ SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, bool bHidden, 
 
     pFrame->pImp->bHidden = bHidden;
     Window* pWindow = pFrame->GetTopWindow_Impl();
-    if ( pDoc && pDoc != pFrame->GetCurrentDocument() )
+    if ( &rDoc != pFrame->GetCurrentDocument() )
     {
-        if ( nViewId )
-            pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-        pFrame->InsertDocument_Impl( *pDoc, pSet ? *pSet : *pDoc->GetMedium()->GetItemSet() );
+        pFrame->InsertDocument_Impl( rDoc, *rDoc.GetMedium()->GetItemSet() );
         if ( pWindow && !bHidden )
             pWindow->Show();
     }
@@ -533,7 +552,7 @@ SfxFrame* SfxFrame::Create( Reference < XFrame > xFrame )
     return pFrame;
 }
 
-SfxFrame::SfxFrame( Window& i_rExternalWindow, bool i_bHidden )
+SfxFrame::SfxFrame( Window& i_rContainerWindow, bool i_bHidden )
     :pParentFrame( NULL )
     ,pChildArr( NULL )
     ,pImp( NULL )
@@ -543,9 +562,15 @@ SfxFrame::SfxFrame( Window& i_rExternalWindow, bool i_bHidden )
 
     pImp->bHidden = i_bHidden;
     InsertTopFrame_Impl( this );
-    pImp->pExternalWindow = &i_rExternalWindow;
+    pImp->pExternalContainerWindow = &i_rContainerWindow;
 
-    pWindow = new SfxTopWindow_Impl( this, i_rExternalWindow );
+    pWindow = new SfxTopWindow_Impl( this, i_rContainerWindow );
+
+    // always show pWindow, which is the ComponentWindow of the XFrame we live in
+    // nowadays, since SfxFrames can be created with an XFrame only, hiding or showing the complete XFrame
+    // is not done at level of the container window, not at SFX level. Thus, the component window can
+    // always be visible.
+    pWindow->Show();
 }
 
 void SfxFrame::SetPresentationMode( BOOL bSet )
@@ -579,8 +604,8 @@ SystemWindow* SfxFrame::GetSystemWindow() const
 
 SystemWindow* SfxFrame::GetTopWindow_Impl() const
 {
-    if ( pImp->pExternalWindow->IsSystemWindow() )
-        return (SystemWindow*) pImp->pExternalWindow;
+    if ( pImp->pExternalContainerWindow->IsSystemWindow() )
+        return (SystemWindow*) pImp->pExternalContainerWindow;
     else
         return NULL;
 }
@@ -642,10 +667,10 @@ BOOL SfxFrame::IsMenuBarOn_Impl() const
 
 void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
 {
-    Window *pWin = pImp->pExternalWindow;
+    Window *pWin = pImp->pExternalContainerWindow;
 
     // Groesse setzen
-    const Size aAppWindow( pImp->pExternalWindow->GetDesktopRectPixel().GetSize() );
+    const Size aAppWindow( pImp->pExternalContainerWindow->GetDesktopRectPixel().GetSize() );
     Point aPos( rWinArea.TopLeft() );
     Size aSz( rWinArea.GetSize() );
     if ( aSz.Width() && aSz.Height() )
