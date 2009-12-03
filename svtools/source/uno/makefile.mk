@@ -56,6 +56,7 @@ SLOFILES= \
             $(SLO)$/generictoolboxcontroller.obj \
             $(SLO)$/treecontrolpeer.obj \
             $(SLO)$/unocontroltablemodel.obj \
+            $(SLO)$/svtxgridcontrol.obj \
             $(SLO)$/registerservices.obj\
             $(SLO)$/contextmenuhelper.obj
 
