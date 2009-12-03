@@ -767,16 +767,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     try
                     {
-                        ::comphelper::NamedValueCollection aTransformLoadArgs( aLoadArgs );
-                        Reference< XModel > xDocument( xNewObj->GetModel(), UNO_SET_THROW );
-                        aTransformLoadArgs.put( "Model", xDocument );
-
                         while ( !aViewFrames.empty() )
                         {
-                            aTransformLoadArgs.put( "ViewId", aViewFrames.front().second );
-                            Reference< XComponentLoader > xLoader( aViewFrames.front().first, UNO_QUERY_THROW );
-                            xLoader->loadComponentFromURL( xDocument->getURL(), ::rtl::OUString::createFromAscii( "_self" ), 0,
-                                aTransformLoadArgs.getPropertyValues() );
+                            LoadViewIntoFrame_Impl( *xNewObj, aViewFrames.front().first, aLoadArgs, aViewFrames.front().second );
                             aViewFrames.pop_front();
                         }
                     }
@@ -2048,10 +2041,34 @@ Reference< XController2 > SfxViewFrame::LoadDocument_Impl(
 }
 
 //--------------------------------------------------------------------
-SfxViewShell* SfxViewFrame::LoadNewView_Impl( const USHORT i_nViewId, SfxViewShell* i_pOldShell )
+void SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
+                                           const Sequence< PropertyValue >& i_rLoadArgs, const USHORT i_nViewId )
+{
+    Reference< XModel > xDocument( i_rDoc.GetModel(), UNO_SET_THROW );
+
+    ::comphelper::NamedValueCollection aTransformLoadArgs( i_rLoadArgs.getLength() ? i_rLoadArgs : xDocument->getArgs() );
+    aTransformLoadArgs.put( "Model", xDocument );
+    aTransformLoadArgs.put( "ViewId", sal_Int16( i_nViewId ) );
+
+    ::rtl::OUString sURL( xDocument->getURL() );
+    if ( !sURL.getLength() )
+    {
+        ::rtl::OUStringBuffer aURLComposer;
+        aURLComposer.appendAscii( "private:factory/" );
+        aURLComposer.appendAscii( i_rDoc.GetFactory().GetShortName() );
+        sURL = aURLComposer.makeStringAndClear();
+    }
+
+    Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
+    xLoader->loadComponentFromURL( sURL, ::rtl::OUString::createFromAscii( "_self" ), 0,
+        aTransformLoadArgs.getPropertyValues() );
+}
+
+//--------------------------------------------------------------------
+SfxViewShell* SfxViewFrame::LoadNewSfxView_Impl( const USHORT i_nViewId, SfxViewShell* i_pOldShell )
 {
     ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
-    OSL_PRECOND( GetViewShell() == NULL, "SfxViewFrame::LoadNewView_Impl: not allowed to be called with an exsiting view shell!" );
+    OSL_PRECOND( GetViewShell() == NULL, "SfxViewFrame::LoadNewSfxView_Impl: not allowed to be called with an exsiting view shell!" );
 
     ::comphelper::NamedValueCollection aViewCreationArgs;
     if ( i_pOldShell != NULL )
@@ -2162,7 +2179,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
             // remove sub shells from Dispatcher before switching to new ViewShell
             PopShellAndSubShells_Impl( *pOldSh );
 
-            // reset view shell, that's a precondition for the LoadNewView_Impl below
+            // reset view shell, that's a precondition for the LoadNewSfxView_Impl below
             SetViewShell_Impl( NULL );
         }
 
@@ -2172,7 +2189,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         // create and load new ViewShell
         SfxObjectFactory& rDocFact = GetObjectShell()->GetFactory();
         const sal_uInt16 nViewId = ( bIsIndex || !nViewIdOrNo ) ? rDocFact.GetViewFactory( nViewIdOrNo ).GetOrdinal() : nViewIdOrNo;
-        SfxViewShell* pNewSh = LoadNewView_Impl( nViewId, pOldSh );
+        SfxViewShell* pNewSh = LoadNewSfxView_Impl( nViewId, pOldSh );
 
         // allow resize events to be processed
         UnlockAdjustPosSizePixel();
@@ -2341,12 +2358,12 @@ void SfxViewFrame::ExecView_Impl
                     bOwnFrame = true;
                 }
 
-                LoadDocument_Impl( *GetObjectShell(), xFrame, Sequence< PropertyValue >(), nViewId );
+                LoadViewIntoFrame_Impl( *GetObjectShell(), xFrame, Sequence< PropertyValue >(), nViewId );
                 bSuccess = true;
 
                 if ( bOwnFrame )
                 {
-                    // ensure the frame/windows is visible
+                    // ensure the frame/window is visible
                     Reference< XWindow > xContainerWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
                     xContainerWindow->setVisible( sal_True );
                 }
