@@ -41,6 +41,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -60,6 +61,7 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <vcl/menu.hxx>
 #include <svtools/rectitem.hxx>
 #include <svtools/intitem.hxx>
@@ -109,6 +111,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using ::com::sun::star::document::XViewDataSupplier;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::lang::XComponent;
+using ::com::sun::star::frame::XComponentLoader;
 
 //------------------------------------------------------------------------
 
@@ -447,44 +452,6 @@ SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, bool bHidden, 
 
     pFrame->pImp->bHidden = bHidden;
     Window* pWindow = pFrame->GetTopWindow_Impl();
-    if ( pWindow && pDoc )
-    {
-        ::rtl::OUString aDocServiceName( pDoc->GetFactory().GetDocumentServiceName() );
-        ::rtl::OUString aProductName;
-        ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;
-        String aTitle = pDoc->GetTitle( SFX_TITLE_DETECT );
-        aTitle += String::CreateFromAscii( " - " );
-        aTitle += String(aProductName);
-        aTitle += ' ';
-        aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifndef PRODUCT
-        ::rtl::OUString aDefault;
-        aTitle += DEFINE_CONST_UNICODE(" [");
-        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
-        aTitle += aVerId;
-        aTitle += ']';
-#endif
-
-        // append TAB string if available
-        aTitle += _getTabString();
-
-        /* AS_TITLE
-        pWindow->SetText( aTitle );
-        */
-
-        /* AS_ICON
-        if( pWindow->GetType() == WINDOW_WORKWINDOW )
-        {
-            SvtModuleOptions::EFactory eFactory;
-            if( SvtModuleOptions::ClassifyFactoryByName( aDocServiceName, eFactory ) )
-            {
-                WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
-                pWorkWindow->SetIcon( (sal_uInt16) SvtModuleOptions().GetFactoryIcon( eFactory ) );
-            }
-        }
-        */
-    }
-
     if ( pDoc && pDoc != pFrame->GetCurrentDocument() )
     {
         if ( nViewId )
@@ -497,29 +464,58 @@ SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, bool bHidden, 
     return pFrame;
 }
 
-SfxFrame* SfxFrame::Create( SfxObjectShell* pDoc, Window& rWindow, USHORT nViewId, bool bHidden, const SfxItemSet* pSet )
+SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden )
 {
-    Reference < ::com::sun::star::lang::XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
-    Reference < XFramesSupplier > xDesktop ( xFact->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XFrame > xFrame( xFact->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
+    SfxFrame* pFrame = NULL;
+    try
+    {
+        // create and initialize new top level frame for this window
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        Reference < XFramesSupplier > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+        Reference < XFrame > xFrame( aContext.createComponent( "com.sun.star.frame.Frame"), UNO_QUERY_THROW );
 
-    uno::Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY );
-    xFrame->initialize( xWin.get() );
-    if ( xDesktop.is() )
+        Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY_THROW );
+        xFrame->initialize( xWin.get() );
         xDesktop->getFrames()->append( xFrame );
 
-    if ( xWin.is() && xWin->isActive() )
-        xFrame->activate();
+        if ( xWin->isActive() )
+            xFrame->activate();
 
-    SfxFrame* pFrame = new SfxFrame( rWindow, false );
-    pFrame->SetFrameInterface_Impl( xFrame );
-    pFrame->pImp->bHidden = bHidden;
+        // create load arguments
+        Sequence< PropertyValue > aLoadArgs;
+        TransformItems( SID_OPENDOC, *rDoc.GetMedium()->GetItemSet(), aLoadArgs );
 
-    if ( pDoc )
-    {
+        ::comphelper::NamedValueCollection aArgs( aLoadArgs );
+        aArgs.put( "Model", rDoc.GetModel() );
+        aArgs.put( "Hidden", bHidden );
         if ( nViewId )
-            pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-        pFrame->InsertDocument_Impl( *pDoc, pSet ? *pSet : *pDoc->GetMedium()->GetItemSet() );
+            aArgs.put( "ViewId", nViewId );
+
+        aLoadArgs = aArgs.getPropertyValues();
+
+        // load the doc into that frame
+        Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
+        xLoader->loadComponentFromURL(
+            rDoc.GetModel()->getURL(),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
+            0,
+            aLoadArgs
+        );
+
+        for (   pFrame = SfxFrame::GetFirst();
+                pFrame;
+                pFrame = SfxFrame::GetNext( *pFrame )
+            )
+        {
+            if ( pFrame->GetFrameInterface() == xFrame )
+                break;
+        }
+
+        OSL_ENSURE( pFrame, "SfxFrame::Create: load succeeded, but no SfxFrame was created during this!" );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return pFrame;
@@ -728,9 +724,7 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     SFX_ITEMSET_ARG( &rSet, pJumpItem,   SfxStringItem,      SID_JUMPMARK,       sal_False );    // jump (GotoBookmark)
 
     // hidden?
-    OSL_PRECOND( !pImp->bHidden,
-        "SfxFrame::InsertDocument_Impl: quite unexpected ... the below logic might not work in all cases here ..." );
-    pImp->bHidden = pHidItem ? pHidItem->GetValue() : false;
+    pImp->bHidden = pHidItem ? pHidItem->GetValue() : pImp->bHidden;
 
     // plugin mode
     const USHORT nPluginMode = pPluginMode ? pPluginMode->GetValue() : 0;

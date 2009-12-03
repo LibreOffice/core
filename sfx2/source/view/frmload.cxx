@@ -470,9 +470,9 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     if ( !aDescriptor.has( "Referer" ) )
         aDescriptor.put( "Referer", ::rtl::OUString() );
 
-    // TODO: is this needed? finally, when loading is successfull, then ther should be no need for this item,
+    // TODO: is this needed? finally, when loading is successfull, then there should be no need for this item,
     // as the document can always obtain its frame. In particular, there might be situations where this frame
-    // is access, but already disposed: Imagine the user loading a document, opening a second view on it, and
+    // is accessed, but already disposed: Imagine the user loading a document, opening a second view on it, and
     // then closing the first view/frame.
     aDescriptor.put( "Frame", _rTargetFrame );
 
@@ -570,7 +570,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the given model" );
 
         // if the document is created hidden, prevent it being deleted until it is shown or disposed
-        impl_lockHiddenDocument( *xDoc, aDescriptor );
+        if ( !bExternalModel )
+            impl_lockHiddenDocument( *xDoc, aDescriptor );
             // TODO; if we wouldn't use a SfxObjectShellLock instance for xDoc, but a simple SfxObjectShellRef,
             // then this would not be necessary, /me thinks. That is, the *Lock classes inc/dec a "Lock" counter
             // (additional to the ref counter) in their ctor/dtor, and if the lock counter goes to 0, the

@@ -141,7 +141,7 @@ public:
 
     static SfxFrame*    Create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
     static SfxFrame*    Create( SfxObjectShell* pDoc = NULL, USHORT nViewId = NULL, bool bHidden = false, const SfxItemSet* pSet = NULL);
-    static SfxFrame*    Create( SfxObjectShell* pDoc, Window& rWindow, USHORT nViewId = 0, bool bHidden = false, const SfxItemSet* pSet = NULL );
+    static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden );
 
     SvCompatWeakHdl*    GetHdl();
     Window&             GetWindow() const;
