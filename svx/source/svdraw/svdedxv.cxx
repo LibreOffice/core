@@ -1163,7 +1163,7 @@ BOOL SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 #endif
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt))
         {
-            if( pMod && !pMod->IsChanged() )
+            if( pMod /* && !pMod->IsChanged() */ )
             {
                 if( pTextEditOutliner && pTextEditOutliner->IsModified() )
                     pMod->SetChanged( sal_True );

@@ -1063,6 +1063,44 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
     }
 }
 
+/** handle mouse over effects for handles */
+BOOL SdrMarkView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+{
+    const ULONG nHdlCount = aHdl.GetHdlCount();
+    if( nHdlCount )
+    {
+        SdrHdl* pMouseOverHdl = 0;
+        if( !rMEvt.IsLeaveWindow() && pWin )
+        {
+            Point aMDPos( pWin->PixelToLogic( rMEvt.GetPosPixel() ) );
+            pMouseOverHdl = PickHandle(aMDPos);
+        }
+
+        // notify last mouse over handle that he lost the mouse
+        for(ULONG nHdl = 0; nHdl < nHdlCount; nHdl++ )
+        {
+            SdrHdl* pCurrentHdl = GetHdl(nHdl);
+            if( pCurrentHdl->mbMouseOver )
+            {
+                if( pCurrentHdl != pMouseOverHdl )
+                {
+                    pCurrentHdl->mbMouseOver = false;
+                    pCurrentHdl->onMouseLeave();
+                }
+                break;
+            }
+        }
+
+        // notify current mouse over handle
+        if( pMouseOverHdl && !pMouseOverHdl->mbMouseOver )
+        {
+            pMouseOverHdl->mbMouseOver = true;
+            pMouseOverHdl->onMouseEnter();
+        }
+    }
+    return SdrSnapView::MouseMove(rMEvt, pWin);
+}
+
 void SdrMarkView::ForceRefToMarked()
 {
     switch(eDragMode)

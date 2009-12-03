@@ -31,14 +31,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
 #include <vcl/menu.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/image.hxx>
 
-#include "toolbarmenu.hxx"
+#include "svx/toolbarmenu.hxx"
 
 const int EXTRAITEMHEIGHT = 4;
 const int SEPARATOR_HEIGHT = 8;
+const int TITLE_ID = -1;
 
 class ToolbarMenuEntry
 {
@@ -556,7 +558,6 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                     aRect.Right() -= nFontHeight + nFontHeight/4;
                 }
                 DrawRect( aRect );
-                implPaint( p, bHighlight );
 
                 if( bHighlight && ((p->mpControl == NULL) || (p->mbHasText)) )
                 {
@@ -566,6 +567,9 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                     aRect.nRight -= 1;
                     DrawSelectionBackground( aRect, true, false, TRUE, TRUE );
                 }
+
+                implPaint( p, bHighlight );
+
 /*
                 if( bRestoreLineColor )
                     SetLineColor( oldLineColor );
@@ -628,7 +632,7 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
         for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
         {
             ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
-            if( pEntry )
+            if( pEntry && (pEntry->mnEntryId != TITLE_ID) )
             {
                 long nOldY = nY;
                 nY += pEntry->maSize.Height();
@@ -716,8 +720,8 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
             else
                 if( mnHighlightedEntry == -1 )
                     n = maEntryVector.size()-1;
-//                else
-//                    break;
+                else
+                    break;
         }
         else
         {
@@ -726,12 +730,12 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
             else
                 if( mnHighlightedEntry == -1 )
                     n = 0;
-//                else
-//                    break;
+                else
+                    break;
         }
 
         ToolbarMenuEntry* pData = maEntryVector[n];
-        if( pData )
+        if( pData && (pData->mnEntryId != TITLE_ID) )
         {
             implChangeHighlightEntry( n );
             return pData;
@@ -809,7 +813,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
         case KEY_RETURN:
         {
             ToolbarMenuEntry* pEntry = implGetEntry( mnHighlightedEntry );
-            if ( pEntry && pEntry->mbEnabled )
+            if ( pEntry && pEntry->mbEnabled && (pEntry->mnEntryId != TITLE_ID) )
             {
                 if( pEntry->mpControl )
                 {
@@ -908,8 +912,31 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
         {
             if( !pThisOnly || ( pEntry == pThisOnly ) )
             {
+                const bool bTitle = pEntry->mnEntryId == TITLE_ID;
+
                 if( pThisOnly && bHighlighted )
                     SetTextColor( rSettings.GetMenuHighlightTextColor() );
+                else
+                    SetTextColor( rSettings.GetMenuTextColor() );
+
+                if( bTitle )
+                {
+                    Rectangle aRect( aTopLeft, Size( aOutSz.Width(), pEntry->maSize.Height() ) );
+
+                    // fill the background
+                    Color aColor (rSettings.GetDialogColor());
+
+                    SetFillColor (aColor);
+                    SetLineColor ();
+                    DrawRect(aRect);
+
+                    // Erase the four corner pixels to make the rectangle appear rounded.
+                    SetLineColor( rSettings.GetMenuColor());
+                    DrawPixel( aRect.TopLeft());
+                    DrawPixel( Point(aRect.Right(), aRect.Top()));
+                    DrawPixel( Point(aRect.Left(), aRect.Bottom()));
+                    DrawPixel( Point(aRect.Right(), aRect.Bottom()));
+                }
 
                 long nTextOffsetY = ((pEntry->maSize.Height()-nFontHeight)/2);
 
@@ -971,9 +998,6 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                         aDecoView.DrawSymbol( aRect, eSymbol, GetTextColor(), nSymbolStyle );
                     }
                 }
-
-                if( pThisOnly && bHighlighted )
-                    SetTextColor( rSettings.GetMenuTextColor() );
             }
 
             aTopLeft.Y() += pEntry->maSize.Height();

@@ -966,7 +966,16 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:NotesMode" oor:op="replace">
+      <node oor:name=".uno:AssignLayout" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Slide Layout</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:NotesMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
 
                     <value xml:lang="en-US">Notes ~Page</value>

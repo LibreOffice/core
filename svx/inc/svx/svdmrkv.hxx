@@ -172,6 +172,7 @@ protected:
     virtual void SetMarkRects();                                             // Rects an den PageViews
     virtual void CheckMarked();                                              // MarkList nach Del und Lock Layer durchsuchen...
     virtual void AddDragModeHdl(SdrDragMode eMode);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt, Window* pWin);
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();

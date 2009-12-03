@@ -47,7 +47,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/frmdiritem.hxx>
-#include "toolbarmenu.hxx"
+#include "svx/toolbarmenu.hxx"
 
 #include "fontworkgallery.hxx"
 #include "fontworkgallery.hrc"

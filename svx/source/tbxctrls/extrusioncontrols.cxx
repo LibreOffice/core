@@ -56,7 +56,7 @@
 #include "extrusioncontrols.hxx"
 #include "extrusioncontrols.hrc"
 #include <svx/sdasitm.hxx>
-#include "toolbarmenu.hxx"
+#include "svx/toolbarmenu.hxx"
 #include "colorwindow.hxx"
 
 #include <svx/tbxcolorupdate.hxx>
@@ -132,7 +132,6 @@ void ExtrusionDirectionWindow::implInit()
     mpDirectionSet = new ValueSet( mpMenu, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     mpDirectionSet->SetHelpId( HID_VALUESET_EXTRUSION_DIRECTION );
 
-    mpDirectionSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
     mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet->SetColCount( 3 );
     mpDirectionSet->EnableFullItemMode( FALSE );
@@ -877,7 +876,6 @@ void ExtrusionLightingWindow::implInit()
     mpLightingSet = new ValueSet( mpMenu, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     mpLightingSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
-    mpLightingSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
     mpLightingSet->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
     mpLightingSet->SetColCount( 3 );
     mpLightingSet->EnableFullItemMode( FALSE );
