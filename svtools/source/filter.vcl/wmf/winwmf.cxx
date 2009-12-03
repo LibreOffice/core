@@ -32,6 +32,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "winmtf.hxx"
+#include <vcl/gdimtf.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <osl/endian.h>
@@ -831,81 +832,136 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                 pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                 break;
             }
-            if ( nRecSize >= 12 )   // minimal escape lenght
+            if ( nRecSize >= 4 )    // minimal escape lenght
             {
-                sal_uInt16  nMode, nLen, OO;
-                sal_uInt32  Magic, nCheck,nEsc;
+                sal_uInt16  nMode, nLen;
                 *pWMF >> nMode
-                      >> nLen
-                      >> OO
-                      >> Magic
-                      >> nCheck
-                      >> nEsc;
-                if ( ( nMode == W_MFCOMMENT ) && ( nLen >= 14 ) && ( OO == 0x4f4f ) && ( Magic == 0xa2c2a ) )
+                      >> nLen;
+                if ( ( nMode == W_MFCOMMENT ) && ( nLen >= 4 ) )
                 {
-                    sal_uInt32 nEscLen = nLen - 14;
-                    if ( nEscLen <= ( nRecSize * 2 ) )
+                    sal_uInt32 nNewMagic; // we have to read int32 for
+                    *pWMF >> nNewMagic;   // META_ESCAPE_ENHANCED_METAFILE CommentIdentifier
+
+                    if( nNewMagic == 0x2c2a4f4f &&  nLen >= 14 )
                     {
-#ifdef OSL_BIGENDIAN
-                        sal_uInt32 nTmp = SWAPLONG( nEsc );
-                        sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
-#else
-                        sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
-#endif
-                        sal_Int8* pData = NULL;
+                        sal_uInt16 nMagic2;
+                        *pWMF >> nMagic2;
+                        if( nMagic2 == 0x0a ) // 2nd half of magic
+                        {                     // continue with private escape
+                            sal_uInt32 nCheck, nEsc;
+                            *pWMF >> nCheck
+                                  >> nEsc;
 
-                        if ( ( static_cast< sal_uInt64 >( nEscLen ) + pWMF->Tell() ) > nMetaRecEndPos )
-                        {
-                            pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                            break;
-                        }
-                        if ( nEscLen > 0 )
-                        {
-                            pData = new sal_Int8[ nEscLen ];
-                            pWMF->Read( pData, nEscLen );
-                            nCheckSum = rtl_crc32( nCheckSum, pData, nEscLen );
-                        }
-                        if ( nCheck == nCheckSum )
-                        {
-                            switch( nEsc )
+                            sal_uInt32 nEscLen = nLen - 14;
+                            if ( nEscLen <= ( nRecSize * 2 ) )
                             {
-                                case PRIVATE_ESCAPE_UNICODE :
-                                {   // we will use text instead of polygons only if we have the correct font
-                                    if ( aVDev.IsFontAvailable( pOut->GetFont().GetName() ) )
-                                    {
-                                        Point  aPt;
-                                        String aString;
-                                        sal_uInt32  i, nStringLen, nDXCount;
-                                        sal_Int32* pDXAry = NULL;
-                                        SvMemoryStream aMemoryStream( nEscLen );
-                                        aMemoryStream.Write( pData, nEscLen );
-                                        aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
-                                        aMemoryStream >> aPt.X()
-                                                      >> aPt.Y()
-                                                      >> nStringLen;
+#ifdef OSL_BIGENDIAN
+                                sal_uInt32 nTmp = SWAPLONG( nEsc );
+                                sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
+#else
+                                sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
+#endif
+                                sal_Int8* pData = NULL;
 
-                                        if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
-                                        {
-                                            sal_Unicode* pBuf = aString.AllocBuffer( (xub_StrLen)nStringLen );
-                                            for ( i = 0; i < nStringLen; i++ )
-                                                aMemoryStream >> pBuf[ i ];
-                                            aMemoryStream >> nDXCount;
-                                            if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
-                                                nDXCount = 0;
-                                            if ( nDXCount )
-                                                pDXAry = new sal_Int32[ nDXCount ];
-                                            for  ( i = 0; i < nDXCount; i++ )
-                                                aMemoryStream >> pDXAry[ i ];
-                                            aMemoryStream >> nSkipActions;
-                                            pOut->DrawText( aPt, aString, pDXAry );
-                                            delete[] pDXAry;
+                                if ( ( static_cast< sal_uInt64 >( nEscLen ) + pWMF->Tell() ) > nMetaRecEndPos )
+                                {
+                                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                                    break;
+                                }
+                                if ( nEscLen > 0 )
+                                {
+                                    pData = new sal_Int8[ nEscLen ];
+                                    pWMF->Read( pData, nEscLen );
+                                    nCheckSum = rtl_crc32( nCheckSum, pData, nEscLen );
+                                }
+                                if ( nCheck == nCheckSum )
+                                {
+                                    switch( nEsc )
+                                    {
+                                        case PRIVATE_ESCAPE_UNICODE :
+                                        {   // we will use text instead of polygons only if we have the correct font
+                                            if ( aVDev.IsFontAvailable( pOut->GetFont().GetName() ) )
+                                            {
+                                                Point  aPt;
+                                                String aString;
+                                                sal_uInt32  i, nStringLen, nDXCount;
+                                                sal_Int32* pDXAry = NULL;
+                                                SvMemoryStream aMemoryStream( nEscLen );
+                                                aMemoryStream.Write( pData, nEscLen );
+                                                aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
+                                                aMemoryStream >> aPt.X()
+                                                              >> aPt.Y()
+                                                              >> nStringLen;
+
+                                                if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
+                                                {
+                                                    sal_Unicode* pBuf = aString.AllocBuffer( (xub_StrLen)nStringLen );
+                                                    for ( i = 0; i < nStringLen; i++ )
+                                                        aMemoryStream >> pBuf[ i ];
+                                                    aMemoryStream >> nDXCount;
+                                                    if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
+                                                        nDXCount = 0;
+                                                    if ( nDXCount )
+                                                        pDXAry = new sal_Int32[ nDXCount ];
+                                                    for  ( i = 0; i < nDXCount; i++ )
+                                                        aMemoryStream >> pDXAry[ i ];
+                                                    aMemoryStream >> nSkipActions;
+                                                    pOut->DrawText( aPt, aString, pDXAry );
+                                                    delete[] pDXAry;
+                                                }
+                                            }
                                         }
+                                        break;
                                     }
                                 }
-                                break;
+                                delete[] pData;
                             }
                         }
-                        delete[] pData;
+                    }
+                    else if ( nNewMagic == 0x43464D57 && nLen >= 34 && ( nLen + 10 <= nRecSize * 2 ))
+                    {
+                        sal_uInt32 nComType, nVersion, nFlags, nComRecCount,
+                                   nCurRecSize, nRemainingSize, nEMFTotalSize;
+                        sal_uInt16 nCheck;
+
+                        *pWMF >> nComType >> nVersion >> nCheck >> nFlags
+                              >> nComRecCount >> nCurRecSize
+                              >> nRemainingSize >> nEMFTotalSize; // the nRemainingSize is not mentioned in MSDN documentation
+                                                                  // but it seems to be required to read in data produced by OLE
+
+                        if( nComType == 0x01 && nVersion == 0x10000 && nComRecCount )
+                        {
+                            if( !nEMFRec )
+                            {   // first EMF comment
+                                nEMFRecCount    = nComRecCount;
+                                nEMFSize        = nEMFTotalSize;
+                                pEMFStream = new SvMemoryStream( nEMFSize );
+                            }
+                            else if( ( nEMFRecCount != nComRecCount ) || ( nEMFSize != nEMFTotalSize ) ) // add additional checks here
+                            {
+                                // total records should be the same as in previous comments
+                                nEMFRecCount = 0xFFFFFFFF;
+                                delete pEMFStream;
+                                pEMFStream = NULL;
+                            }
+                            nEMFRec++;
+
+                            if( pEMFStream && nCurRecSize + 34 > nLen )
+                            {
+                                nEMFRecCount = 0xFFFFFFFF;
+                                delete pEMFStream;
+                                pEMFStream = NULL;
+                            }
+
+                            if( pEMFStream )
+                            {
+                                sal_Int8* pBuf = new sal_Int8[ nCurRecSize ];
+                                sal_uInt32 nCount = pWMF->Read( pBuf, nCurRecSize );
+                                if( nCount == nCurRecSize )
+                                    pEMFStream->Write( pBuf, nCount );
+                                delete[] pBuf;
+                            }
+                        }
                     }
                 }
             }
@@ -1023,6 +1079,11 @@ void WMFReader::ReadWMF()
     nCurrentAction = 0;
     nUnicodeEscapeAction = 0;
 
+    pEMFStream      = NULL;
+    nEMFRecCount    = 0;
+    nEMFRec         = 0;
+    nEMFSize        = 0;
+
     pOut->SetMapMode( MM_ANISOTROPIC );
     pOut->SetWinOrg( Point() );
     pOut->SetWinExt( Size( 1, 1 ) );
@@ -1070,6 +1131,33 @@ void WMFReader::ReadWMF()
                     ReadRecordParams( nFunction );
                 else
                     nSkipActions--;
+
+                if( pEMFStream && nEMFRecCount == nEMFRec )
+                {
+                    GDIMetaFile aMeta;
+                    pEMFStream->Seek( 0 );
+                    EnhWMFReader* pEMFReader = new EnhWMFReader ( *pEMFStream, aMeta );
+                    BOOL bRead = pEMFReader->ReadEnhWMF();
+                    delete pEMFReader; // destroy first!!!
+
+                    if( bRead )
+                    {
+                       pOut->AddFromGDIMetaFile( aMeta );
+                       pOut->SetrclFrame( Rectangle(0, 0, aMeta.GetPrefSize().Width(), aMeta.GetPrefSize().Height() ));
+                       // we have successfully read the embedded EMF data
+                       // no need to process WMF data further
+                       break;
+                    }
+                    else
+                    {
+                        // something went wrong
+                        // continue with WMF, don't try this again
+                        delete pEMFStream;
+                        pEMFStream = NULL;
+                    }
+
+                }
+
                 nPos += nRecSize * 2;
                 if ( nPos <= nEndPos )
                     pWMF->Seek( nPos  );
@@ -1331,5 +1419,11 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
         bRet = sal_False;
     }
     return bRet;
+}
+
+WMFReader::~WMFReader()
+{
+    if( pEMFStream )
+        delete pEMFStream;
 }
 

@@ -2195,3 +2195,8 @@ void WinMtfOutput::Pop()
     }
 }
 
+void WinMtfOutput::AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile )
+{
+   rGDIMetaFile.Play( *mpGDIMetaFile, 0xFFFFFFFF );
+}
+
