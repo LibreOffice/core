@@ -32,10 +32,14 @@
 
 #include "configmgr/update.hxx"
 #include "osl/mutex.hxx"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
+#include "broadcaster.hxx"
 #include "components.hxx"
 #include "lock.hxx"
+#include "modifications.hxx"
+#include "rootaccess.hxx"
 
 namespace configmgr {
 
@@ -47,8 +51,16 @@ void insertExtensionXcsFile(bool shared, rtl::OUString const & fileUri) {
 }
 
 void insertExtensionXcuFile(bool shared, rtl::OUString const & fileUri) {
-    osl::MutexGuard g(lock);
-    Components::getSingleton().insertExtensionXcuFile(shared, fileUri);
+    Broadcaster bc;
+    {
+        osl::MutexGuard g(lock);
+        Modifications mods;
+        Components::getSingleton().insertExtensionXcuFile(
+            shared, fileUri, &mods);
+        Components::getSingleton().initGlobalBroadcaster(
+            mods, rtl::Reference< RootAccess >(), &bc);
+    }
+    bc.send();
 }
 
 }

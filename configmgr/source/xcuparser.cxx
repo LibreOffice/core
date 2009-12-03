@@ -67,8 +67,14 @@ namespace css = com::sun::star;
 
 }
 
-XcuParser::XcuParser(int layer, Data * data): valueParser_(layer), data_(data)
-{}
+XcuParser::XcuParser(int layer, Data * data, Modifications * modifications):
+    valueParser_(layer), data_(data), modifications_(modifications)
+{
+    if (layer == Data::NO_LAYER) {
+        OSL_ASSERT(modifications_ == 0);
+        modifications_ = &data_->modifications;
+    }
+}
 
 XcuParser::~XcuParser() {}
 
@@ -352,7 +358,7 @@ void XcuParser::handleComponentData(XmlReader & reader) {
         node->getFinalized());
     node->setFinalized(finalizedLayer);
     state_.push(State(node, finalizedLayer < valueParser_.getLayer()));
-    if (valueParser_.getLayer() == Data::NO_LAYER) {
+    if (modifications_ != 0) {
         OSL_ASSERT(modificationPath_.empty());
         modificationPath_.push_back(componentName_);
     }
@@ -393,7 +399,7 @@ void XcuParser::handleItem(XmlReader & reader) {
     }
     OSL_ASSERT(!modificationPath_.empty());
     componentName_ = modificationPath_.front();
-    if (valueParser_.getLayer() != Data::NO_LAYER) {
+    if (modifications_ == 0) {
         modificationPath_.clear();
     }
     state_.push(State(node, finalizedLayer < valueParser_.getLayer()));
@@ -564,9 +570,9 @@ void XcuParser::handleLocpropValue(
             valueParser_.separator_ = separator;
             valueParser_.start(locprop, name);
         }
-        if (!modificationPath_.empty()) {
+        if (modifications_ != 0) {
             modificationPath_.push_back(name);
-            data_->modifications.add(modificationPath_);
+            modifications_->add(modificationPath_);
             modificationPath_.pop_back();
         }
         break;
@@ -577,9 +583,9 @@ void XcuParser::handleLocpropValue(
             locprop->getMembers().erase(i);
         }
         state_.push(State());
-        if (!modificationPath_.empty()) {
+        if (modifications_ != 0) {
             modificationPath_.push_back(name);
-            data_->modifications.add(modificationPath_);
+            modifications_->add(modificationPath_);
             modificationPath_.pop_back();
         }
         break;
@@ -689,9 +695,9 @@ void XcuParser::handleUnknownGroupProp(
                 prop->setFinalized(valueParser_.getLayer());
             }
             state_.push(State(prop, name, state_.top().locked));
-            if (!modificationPath_.empty()) {
+            if (modifications_ != 0) {
                 modificationPath_.push_back(name);
-                data_->modifications.add(modificationPath_);
+                modifications_->add(modificationPath_);
             }
         }
         break;
@@ -739,9 +745,9 @@ void XcuParser::handlePlainGroupProp(
                 property,
                 (state_.top().locked ||
                  finalizedLayer < valueParser_.getLayer())));
-        if (!modificationPath_.empty()) {
+        if (modifications_ != 0) {
             modificationPath_.push_back(name);
-            data_->modifications.add(modificationPath_);
+            modifications_->add(modificationPath_);
         }
         break;
     case OPERATION_REMOVE:
@@ -756,9 +762,9 @@ void XcuParser::handlePlainGroupProp(
         }
         group->getMembers().erase(propertyIndex);
         state_.push(State()); // ignore children
-        if (!modificationPath_.empty()) {
+        if (modifications_ != 0) {
             modificationPath_.push_back(name);
-            data_->modifications.add(modificationPath_);
+            modifications_->add(modificationPath_);
             modificationPath_.pop_back();
         }
         break;
@@ -796,7 +802,7 @@ void XcuParser::handleLocalizedGroupProp(
                 property,
                 (state_.top().locked ||
                  finalizedLayer < valueParser_.getLayer())));
-        if (!modificationPath_.empty()) {
+        if (modifications_ != 0) {
             modificationPath_.push_back(name);
         }
         break;
@@ -812,9 +818,9 @@ void XcuParser::handleLocalizedGroupProp(
                     replacement, name,
                     (state_.top().locked ||
                      finalizedLayer < valueParser_.getLayer())));
-            if (!modificationPath_.empty()) {
+            if (modifications_ != 0) {
                 modificationPath_.push_back(name);
-                data_->modifications.add(modificationPath_);
+                modifications_->add(modificationPath_);
             }
         }
         break;
@@ -889,7 +895,7 @@ void XcuParser::handleGroupNode(
         State(
             child,
             state_.top().locked || finalizedLayer < valueParser_.getLayer()));
-    if (!modificationPath_.empty()) {
+    if (modifications_ != 0) {
         modificationPath_.push_back(name);
     }
 }
@@ -996,7 +1002,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
                     i->second,
                     (state_.top().locked ||
                      finalizedLayer < valueParser_.getLayer())));
-            if (!modificationPath_.empty()) {
+            if (modifications_ != 0) {
                 modificationPath_.push_back(name);
             }
         }
@@ -1010,9 +1016,9 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             member->setFinalized(finalizedLayer);
             member->setMandatory(mandatoryLayer);
             state_.push(State(member, name, false));
-            if (!modificationPath_.empty()) {
+            if (modifications_ != 0) {
                 modificationPath_.push_back(name);
-                data_->modifications.add(modificationPath_);
+                modifications_->add(modificationPath_);
             }
         }
         break;
@@ -1027,9 +1033,9 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
                 member->setFinalized(finalizedLayer);
                 member->setMandatory(mandatoryLayer);
                 state_.push(State(member, name, false));
-                if (!modificationPath_.empty()) {
+                if (modifications_ != 0) {
                     modificationPath_.push_back(name);
-                    data_->modifications.add(modificationPath_);
+                    modifications_->add(modificationPath_);
                 }
             }
         } else {
@@ -1038,7 +1044,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
                     i->second,
                     (state_.top().locked ||
                      finalizedLayer < valueParser_.getLayer())));
-            if (!modificationPath_.empty()) {
+            if (modifications_ != 0) {
                 modificationPath_.push_back(name);
             }
         }
@@ -1053,9 +1059,9 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             set->getMembers().erase(i);
         }
         state_.push(State());
-        if (!modificationPath_.empty()) {
+        if (modifications_ != 0) {
             modificationPath_.push_back(name);
-            data_->modifications.add(modificationPath_);
+            modifications_->add(modificationPath_);
             modificationPath_.pop_back();
         }
         break;

@@ -50,6 +50,7 @@ namespace configmgr {
 
 class GroupNode;
 class LocalizedPropertyNode;
+class Modifications;
 class PropertyNode;
 class SetNode;
 struct Data;
@@ -57,7 +58,7 @@ struct Span;
 
 class XcuParser: public Parser {
 public:
-    XcuParser(int layer, Data * data);
+    XcuParser(int layer, Data * data, Modifications * modifications);
 
 private:
     virtual ~XcuParser();
@@ -131,6 +132,7 @@ private:
 
     ValueParser valueParser_;
     Data * data_;
+    Modifications * modifications_;
     rtl::OUString componentName_;
     StateStack state_;
     Path modificationPath_;

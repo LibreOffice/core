@@ -4810,22 +4810,22 @@
 						<label>Accept with</label>
 					</info>
 					<constraints>
-						<enumeration oor:value="0x405">
+						<enumeration oor:value="1029"> <!-- 0x405 -->
 							<info>
 								<desc>KeyEnd</desc>
 							</info>
 						</enumeration>
-						<enumeration oor:value="0x500">
+						<enumeration oor:value="1280"> <!-- 0x500 -->
 							<info>
 								<desc>KeyReturn</desc>
 							</info>
 						</enumeration>
-						<enumeration oor:value="0x403">
+						<enumeration oor:value="1027"> <!-- 0x403 -->
 							<info>
 								<desc>KeyRight</desc>
 							</info>
 						</enumeration>
-						<enumeration oor:value="0x504">
+						<enumeration oor:value="1284"> <!-- 0x504 -->
 							<info>
 								<desc>KeySpace</desc>
 							</info>
