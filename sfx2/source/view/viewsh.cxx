@@ -1360,6 +1360,25 @@ SfxViewShell* SfxViewShell::Current()
 
 //--------------------------------------------------------------------
 
+SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
+{
+    if ( !i_rController.is() )
+        return NULL;
+
+    SfxViewShell* pViewShell = NULL;
+    for (   SfxViewShell* pViewShell = SfxViewShell::GetFirst( NULL, FALSE );
+            pViewShell;
+            pViewShell = SfxViewShell::GetNext( *pViewShell, NULL, FALSE )
+        )
+    {
+        if ( pViewShell->GetController() == i_rController )
+            return pViewShell;
+    }
+    return NULL;
+}
+
+//--------------------------------------------------------------------
+
 SdrView* SfxViewShell::GetDrawView() const
 
 /*  [Beschreibung]

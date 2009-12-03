@@ -66,7 +66,7 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
@@ -1328,12 +1328,15 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
             }
 
-            case SFX_HINT_DYING:
             case SFX_HINT_DEINITIALIZING:
-                // when the Object is being deleted, destroy the view too
                 GetFrame()->DoClose();
+                break;
+            case SFX_HINT_DYING:
+                // when the Object is being deleted, destroy the view too
                 if ( xObjSh.Is() )
                     ReleaseObjectShell_Impl();
+                else
+                    GetFrame()->DoClose();
                 break;
 
         }
@@ -2019,43 +2022,37 @@ SfxViewShell* SfxViewFrame::LoadNewView_Impl( const USHORT i_nNewViewNo, SfxView
     OSL_PRECOND( GetViewShell() == NULL, "SfxViewFrame::LoadNewView_Impl: not allowed to be called with an exsiting view shell!" );
     OSL_PRECOND( GetObjectShell() != NULL, "SfxViewFrame::LoadNewView_Impl: no document -> no loading!" );
 
-    // our UNO doc
-    const Reference < XModel > xModel( GetObjectShell()->GetModel(), UNO_QUERY_THROW );
+    const Reference < XFrame > xFrame( GetFrame()->GetFrameInterface() );
+    const Reference < XModel2 > xModel( GetObjectShell()->GetModel(), UNO_QUERY_THROW );
 
-    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    // >>> to be moved into a UNO view factory implementation
-    SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
+    const USHORT nViewId = GetObjectShell()->GetFactory().GetViewFactory( i_nNewViewNo ).GetOrdinal();
+    ::rtl::OUStringBuffer sViewName;
+    sViewName.appendAscii( "view" );
+    sViewName.append( sal_Int32( nViewId ) );
+        // TODO: extende the SfxViewFactory with support for speaking view names
+
+    // let the model create a new controller
+    ::comphelper::NamedValueCollection aViewCreationArgs;
+    if ( i_pOldShell != NULL )
+        aViewCreationArgs.put( "PreviousView", i_pOldShell->GetController() );
+
+    const Reference< XController2 > xController( xModel->createViewController(
+        sViewName.makeStringAndClear(),
+        aViewCreationArgs.getPropertyValues(),
+        xFrame
+    ) );
+    SfxViewShell* pViewShell = SfxViewShell::Get( xController.get() );
+    ENSURE_OR_THROW( pViewShell, "invalid controller returned by view factory" );
 
     // remember ViewID
-    pImp->nCurViewId = rDocumentFactory.GetViewFactory( i_nNewViewNo ).GetOrdinal();
-        // TODO: shouldn't this be done in success case only?
-
-    SfxViewFactory& rViewFactory = rDocumentFactory.GetViewFactory( i_nNewViewNo );
-
-    SfxViewShell* pViewShell = rViewFactory.CreateInstance( this, i_pOldShell );
-    ENSURE_OR_THROW( pViewShell, "invalid view shell provided by factory" );
-
-    // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
-    GetDispatcher()->SetDisableFlags( 0 );
-    SetViewShell_Impl( pViewShell );
-
-    // ensure a default controller, if the view shell did not provide an own implementation
-    if ( !pViewShell->GetController().is() )
-        pViewShell->SetController( new SfxBaseController( pViewShell ) );
-
-    // <<< to be moved into a UNO view factory implementation
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    pImp->nCurViewId = nViewId;
 
     // introduce model/view/controller to each other
-    Reference < XWindow > xWindow( GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY );
-    Reference < XFrame > xFrame( GetFrame()->GetFrameInterface() );
-    Reference < XController > xController( pViewShell->GetController() );
-
-    xController->attachModel( xModel );
-    xModel->connectController( xController );
-    xFrame->setComponent( xWindow, xController );
+    xController->attachModel( xModel.get() );
+    xModel->connectController( xController.get() );
+    xFrame->setComponent( xController->getComponentWindow(), xController.get() );
     xController->attachFrame( xFrame );
-    xModel->setCurrentController( xController );
+    xModel->setCurrentController( xController.get() );
 
     return pViewShell;
 }
@@ -2141,7 +2138,8 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     {
         // the SfxCode is not able to cope with exceptions thrown while creating views
         // the code will crash in the stack unwinding procedure, so we shouldn't let exceptions go through here
-        DBG_ERROR("Exception in SwitchToViewShell_Impl - urgent issue. Please contact development!");
+        DBG_UNHANDLED_EXCEPTION();
+        return sal_False;
     }
 
     DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );

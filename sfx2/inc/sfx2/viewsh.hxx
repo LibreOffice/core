@@ -180,6 +180,8 @@ public:
                                          const TypeId* pType = 0, BOOL bOnlyVisible = TRUE );
     static SfxViewShell*        Current();
 
+    static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
+
     // Ctoren/Dtoren Initialisierung
                                 TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)

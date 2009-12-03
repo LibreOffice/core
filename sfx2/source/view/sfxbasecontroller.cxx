@@ -56,6 +56,7 @@
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -113,6 +114,13 @@
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 
 using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::lang::DisposedException;
+using ::com::sun::star::awt::XWindow;
+using ::com::sun::star::frame::XController;
+using ::com::sun::star::frame::XDispatchProvider;
 namespace css = ::com::sun::star;
 
 struct GroupIDToCommandGroup
@@ -224,7 +232,7 @@ void reschedule()
 class SfxStatusIndicator : public ::cppu::WeakImplHelper2< ::com::sun::star::task::XStatusIndicator, ::com::sun::star::lang::XEventListener >
 {
 friend class SfxBaseController;
-    ::com::sun::star::uno::Reference < XCONTROLLER > xOwner;
+    ::com::sun::star::uno::Reference < XController > xOwner;
     ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator > xProgress;
     SfxWorkWindow*          pWorkWindow;
     sal_Int32               _nRange;
@@ -517,8 +525,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const EVENTOBJEC
 //________________________________________________________________________________________________________
 DBG_NAME(sfx2_SfxBaseController)
 SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
-    :   IMPL_SfxBaseController_MutexContainer   (                                                                       )
-    ,   m_pData                                 ( new IMPL_SfxBaseController_DataContainer( m_aMutex, pViewShell, this ))
+    :   m_pData ( new IMPL_SfxBaseController_DataContainer( m_aMutex, pViewShell, this ))
 {
     DBG_CTOR(sfx2_SfxBaseController,NULL);
     m_pData->m_pViewShell->SetController( this );
@@ -535,138 +542,40 @@ SfxBaseController::~SfxBaseController()
 }
 
 //________________________________________________________________________________________________________
-//  SfxBaseController -> XInterface
+//  SfxBaseController -> XController2
 //________________________________________________________________________________________________________
-ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RUNTIMEEXCEPTION )
+
+Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (RuntimeException)
 {
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !m_pData->m_pViewShell )
+        throw DisposedException();
 
-    // Ask for my own supported interfaces ...
-    ANY aReturn( ::cppu::queryInterface(    rType                                       ,
-                                               static_cast< XTYPEPROVIDER*      > ( this )  ,
-                                            static_cast< XCOMPONENT*       > ( this )  ,
-                                               static_cast< XCONTROLLER*        > ( this )  ,
-                                               static_cast< XCONTROLLERBORDER*      > ( this )  ,
-                                               static_cast< XUSERINPUTINTERCEPTION*     > ( this )  ,
-                                            static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
-                                            static_cast< XCONTEXTMENUINTERCEPTION* > ( this ) ,
-                                               static_cast< XDISPATCHPROVIDER*  > ( this ),
-                                               static_cast< XTITLE* > ( this ),
-                                               static_cast< XTITLECHANGEBROADCASTER*    > ( this ),
-                                            static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ) ) ;
+    return Reference< XWindow >( GetViewFrame_Impl()->GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY_THROW );
+}
 
-    // If searched interface supported by this class ...
-    if ( aReturn.hasValue() == sal_True )
-    {
-        // ... return this information.
-        return aReturn ;
-    }
-    else
-    {
-        // Else; ... ask baseclass for interfaces!
-        return OWeakObject::queryInterface( rType ) ;
-    }
+::rtl::OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !m_pData->m_pViewShell )
+        throw DisposedException();
+
+    ::rtl::OUStringBuffer sViewName;
+    sViewName.appendAscii( "view" );
+    sViewName.append( sal_Int32( GetViewFrame_Impl()->GetCurViewId() ) );
+    return sViewName.makeStringAndClear();
+}
+
+SfxViewFrame* SfxBaseController::GetViewFrame_Impl() const
+{
+    ENSURE_OR_THROW( m_pData->m_pViewShell, "not to be called without a view shell" );
+    SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame();
+    ENSURE_OR_THROW( pActFrame, "a view shell without a view frame is pretty pathological" );
+    return pActFrame;
 }
 
 //________________________________________________________________________________________________________
-//  SfxBaseController -> XInterface
-//________________________________________________________________________________________________________
-
-void SAL_CALL SfxBaseController::acquire() throw()
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    OWeakObject::acquire() ;
-}
-
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XInterface
-//________________________________________________________________________________________________________
-
-void SAL_CALL SfxBaseController::release() throw()
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    OWeakObject::release() ;
-}
-
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XTypeProvider
-//________________________________________________________________________________________________________
-
-SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTION )
-{
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTYPECOLLECTION* pTypeCollection = NULL ;
-
-    if ( pTypeCollection == NULL )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        MUTEXGUARD aGuard( MUTEX::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == NULL )
-        {
-            // Create a static typecollection ...
-            static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XCONTROLLERBORDER        >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XUSERINPUTINTERCEPTION   >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XTITLE   >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XTITLECHANGEBROADCASTER   >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER >*)NULL ) );
-            // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
-        }
-    }
-
-    return pTypeCollection->getTypes() ;
-}
-
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XTypeProvider
-//________________________________________________________________________________________________________
-
-SEQUENCE< sal_Int8 > SAL_CALL SfxBaseController::getImplementationId() throw( RUNTIMEEXCEPTION )
-{
-    // Create one Id for all instances of this class.
-    // Use ethernet address to do this! (sal_True)
-
-    // Optimize this method
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pID is NULL - for the second call pID is different from NULL!
-    static OIMPLEMENTATIONID* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        MUTEXGUARD aGuard( MUTEX::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pID == NULL )
-        {
-            // Create a new static ID ...
-            static OIMPLEMENTATIONID aID( sal_False ) ;
-            // ... and set his address to static pointer!
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
-}
-
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController
+//  SfxBaseController -> XController2 -> XController
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame ) throw( ::com::sun::star::uno::RuntimeException )
@@ -856,7 +765,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 if ( xFrame.is() )
                     xFrame->setName( sTargetFrameName );
 
-                REFERENCE < XDISPATCHPROVIDER > xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
+                Reference< XDispatchProvider > xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
                 if ( xProv.is() )
                     return xProv->queryDispatch( aURL, sTargetFrameName, ::com::sun::star::frame::FrameSearchFlag::SELF );
             }
@@ -1089,11 +998,11 @@ void SfxBaseController::BorderWidthsChanged_Impl()
 void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    REFERENCE < XCONTROLLER > xTmp( this );
+    Reference< XController > xTmp( this );
     m_pData->m_bDisposing = sal_True ;
 
     EVENTOBJECT aEventObject;
-    aEventObject.Source = (XCONTROLLER*)this ;
+    aEventObject.Source = *this ;
     m_pData->m_aListenerContainer.disposeAndClear( aEventObject ) ;
 
     if ( m_pData->m_pController && m_pData->m_pController->getFrame().is() )
@@ -1110,7 +1019,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
         if ( pFrame )
         {
             EVENTOBJECT aObject;
-            aObject.Source = (OWEAKOBJECT*)this ;
+            aObject.Source = *this ;
 
             SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
             SfxViewFrame *pView = SfxViewFrame::GetFirst(pDoc);

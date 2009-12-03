@@ -102,6 +102,8 @@
 //  includes of my own project
 //________________________________________________________________________________________________________
 
+#include <sfx2/sfxbasecontroller.hxx>
+#include "viewfac.hxx"
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <objshimp.hxx>
@@ -141,6 +143,11 @@ static const ::rtl::OUString SERVICENAME_DESKTOP = ::rtl::OUString::createFromAs
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::frame::XFrame;
+using ::com::sun::star::frame::XController;
+using ::com::sun::star::frame::XController2;
+using ::com::sun::star::lang::IllegalArgumentException;
 
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
@@ -3914,29 +3921,99 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL SfxBaseModel::getCo
 css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewControllerNames()
     throw (css::uno::RuntimeException)
 {
-    return css::uno::Sequence< ::rtl::OUString >();
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+
+    const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
+    const sal_Int32 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
+
+    Sequence< ::rtl::OUString > aViewNames( nViewFactoryCount );
+    for ( sal_Int32 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
+    {
+        ::rtl::OUStringBuffer aViewName;
+        aViewName.appendAscii( "view" );
+        aViewName.append( nViewNo );
+        aViewNames[nViewNo] = aViewName.makeStringAndClear();
+    }
+    return aViewNames;
 }
 
 //=============================================================================
 // css::frame::XModel2
-css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createDefaultViewController(const css::uno::Reference< css::frame::XFrame >& /*Frame*/)
+css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createDefaultViewController( const css::uno::Reference< css::frame::XFrame >& i_rFrame )
     throw (css::uno::RuntimeException         ,
            css::lang::IllegalArgumentException,
            css::uno::Exception                )
 {
-    return css::uno::Reference< css::frame::XController2 >();
+    return createViewController( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "view0" ) ), Sequence< PropertyValue >(), i_rFrame );
+        // TODO: extende the SfxViewFactory with support for speaking view names
 }
 
 //=============================================================================
 // css::frame::XModel2
-css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createViewController(const ::rtl::OUString&                                 /*ViewName*/,
-                                                                                           const css::uno::Sequence< css::beans::PropertyValue >& /*Arguments*/,
-                                                                                           const css::uno::Reference< css::frame::XFrame >&       /*Frame    */)
+css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
+        const ::rtl::OUString& i_rViewName, const Sequence< PropertyValue >& i_rArguments, const Reference< XFrame >& i_rFrame )
     throw (css::uno::RuntimeException         ,
            css::lang::IllegalArgumentException,
            css::uno::Exception                )
 {
-    return css::uno::Reference< css::frame::XController2 >();
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+
+    // number of view to create
+    if ( i_rViewName.indexOfAsciiL( "view", 4 ) != 0 )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+    const USHORT nViewId = (USHORT)i_rViewName.copy( 4 ).toInt32();
+
+    SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
+    sal_Int32 nViewNo = -1;
+    for ( nViewNo = 0; nViewNo < rDocumentFactory.GetViewFactoryCount(); ++nViewNo )
+        if ( rDocumentFactory.GetViewFactory( nViewNo ).GetOrdinal() == nViewId )
+            break;
+    if ( nViewNo >= rDocumentFactory.GetViewFactoryCount() )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
+    // determine previous shell (used in some special cases)
+    ::comphelper::NamedValueCollection aCreationArgs( i_rArguments );
+    Reference< XController > xPreviousController = aCreationArgs.getOrDefault( "PreviousView", Reference< XController >() );
+    SfxViewShell* pOldViewShell = SfxViewShell::Get( xPreviousController );
+    OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell != NULL ),
+        "SfxBaseModel::createViewController: invalid old controller!" );
+
+    // determine the ViewFrame belonging to the given XFrame
+    SfxViewFrame* pViewFrame = NULL;
+    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), FALSE );
+            pViewFrame;
+            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), FALSE )
+        )
+    {
+        if ( pViewFrame->GetFrame()->GetFrameInterface() == i_rFrame )
+            break;
+    }
+    if ( !pViewFrame )
+        // TODO: Effectively, this means that only our dedicated SFX-Loader can load documents into an arbitrary
+        // XFrame, since it will (directly or indirectly) create the Sfx(View)Frame which we need here.
+        // We should evaluate whether (after the re-factoring) it is possible/feasible to allow for an arbitrary
+        // XFrame here, by creating the necessary Sfx(View)Frame ourself. Finally, this is what a "view factory"
+        // is about ...
+        throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "invalid frame" ) ), *this, 3 );
+
+    // delegate to SFX' view factory
+    SfxViewFactory& rViewFactory = rDocumentFactory.GetViewFactory( nViewNo );
+    SfxViewShell* pViewShell = rViewFactory.CreateInstance( pViewFrame, pOldViewShell );
+    ENSURE_OR_THROW( pViewShell, "invalid view shell provided by factory" );
+
+    // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
+    pViewFrame->GetDispatcher()->SetDisableFlags( 0 );
+    pViewFrame->SetViewShell_Impl( pViewShell );
+
+    // ensure a default controller, if the view shell did not provide an own implementation
+    if ( !pViewShell->GetController().is() )
+        pViewShell->SetController( new SfxBaseController( pViewShell ) );
+
+    return Reference< XController2 >( pViewShell->GetController(), UNO_QUERY_THROW );
 }
 
 //=============================================================================

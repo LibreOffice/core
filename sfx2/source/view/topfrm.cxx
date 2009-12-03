@@ -792,7 +792,7 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     OSL_ENSURE( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT,
         "SfxFrame::InsertDocument_Impl: so this code wasn't dead?" );
         // Before CWS autorecovery, there was code which postponed setting the ViewData/Mark to a later time
-        // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since loads this method
+        // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since this method
         // here is never called before the load process finished.
     if ( pViewDataItem )
     {
