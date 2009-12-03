@@ -289,11 +289,18 @@ public:
                                   BaseType::getNumberOfKeyTimes() ) ) ) );
     }
 
+    using BaseType::isAutoReverse;
+
     virtual void performEnd()
     {
         // xxx todo: good guess
         if (mpAnim)
-            (*mpAnim)( getPresentationValue( maEndValue ) );
+        {
+            if (isAutoReverse())
+                (*mpAnim)( getPresentationValue( maStartValue ) );
+            else
+                (*mpAnim)( getPresentationValue( maEndValue ) );
+        }
     }
 
     /// Disposable:
