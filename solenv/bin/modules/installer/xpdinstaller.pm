@@ -31,6 +31,7 @@
 package installer::xpdinstaller;
 
 use Cwd;
+use HTML::Entities;
 use installer::converter;
 use installer::exiter;
 use installer::globals;
@@ -506,6 +507,7 @@ sub collect_lang_values
         if ( $write_line )
         {
             my $value = $module->{$key};
+            $value = HTML::Entities::encode($value);
             $value = replace_javaencoding_in_string($value);
             my $line = $indent . "<" . $saveentry . " lang=" . "\"" . $javalanguage . "\"" . ">" . $value . "<\/" . $saveentry . ">" . "\n";
             push(@{$xpdfile}, $line);
