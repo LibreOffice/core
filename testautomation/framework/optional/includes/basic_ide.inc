@@ -59,75 +59,37 @@ testcase tBasic_IDE_Toolbar_Module
 
     kontext "macrobar"
     printlog "- compile"
-    Compile.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( Compile )
 
     printlog "- Run Basic"
-    BasicRun.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( BasicRun )
 
     printlog "- Step Procedure"
-    ProcedureStep.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( ProcedureStep )
 
     printlog "- Stop Basic"
-    BasicStop.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( BasicStop )
 
     printlog "- Single Step"
-    SingleStep.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( SingleStep )
 
     printlog "- Step Back"
-    StepBack.Click()
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( StepBack )
 
     printlog "- Breakpoint => activate"
-    Breakpoint.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( Breakpoint )
 
 
     printlog "- Breakpoint => deactivate"
-    Breakpoint.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( Breakpoint )
 
     printlog "- Add Watch => deactivate"
-    AddWatch.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( AddWatch )
 
     printlog "- Find Paranthese"
 
     kontext "macrobar"
-    FindParanthese.Click()
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( FindParanthese )
 
     try
         Controls.TearOff()
@@ -161,11 +123,7 @@ testcase tBasic_IDE_Toolbar_Module
     kontext "macrobar"
     printlog "- Save Source Test "
 
-    SaveSourceTest.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( SaveSourceTest )
 
     kontext "speicherndlg"
     if ( SpeichernDlg.exists( 1 ) ) then
@@ -177,6 +135,7 @@ testcase tBasic_IDE_Toolbar_Module
 
     kontext "active"
     if ( Active.Exists( 1 ) ) then
+        printlog( "Closing Messagebox with <Yes>")
         Active.Yes()
     endif
 
@@ -347,4 +306,36 @@ testcase tBasic_IDE_Toolbar_Dialogs
 
 endcase
 
+'******************************************************************************'
 
+function hClickToolbarButton( oButton as object ) as boolean
+
+    const CFN = "hClickToolbarButton(): "
+
+    dim iTry as integer
+    dim brc as boolean : brc = false
+    
+    printlog( CFN & "Clicking button on toolbar: " & oButton.name() )
+    for iTry = 1 to 5
+    
+        try
+            oButton.click()
+            brc = true
+            exit for
+        catch
+            printlog( CFN & "Retrying..." )
+        endcatch
+        
+        if ( iTry = 5 ) then
+            exit for
+        endif
+        
+        wait( 500 )
+        
+    next iTry
+    
+    if ( WaitSlot( 2000 ) <> WSFinished ) then
+        warnlog( CFN & "Slot not finished within 1 second" )
+    endif
+
+end function
