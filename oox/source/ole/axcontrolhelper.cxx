@@ -93,8 +93,10 @@ AxControlHelper::~AxControlHelper()
 Reference< XForm > AxControlHelper::getControlForm() const
 {
     if( !mbHasFormQuerried )
+    {
+        mbHasFormQuerried = true;
         mxForm = createControlForm();   // virtual call
-    mbHasFormQuerried = true;
+    }
     return mxForm;
 }
 

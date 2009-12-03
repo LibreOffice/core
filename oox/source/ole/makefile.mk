@@ -45,6 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/axbinaryreader.obj		\
         $(SLO)$/axcontrol.obj			\
         $(SLO)$/axcontrolfragment.obj	\
         $(SLO)$/axcontrolhelper.obj		\
