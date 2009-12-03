@@ -27,7 +27,7 @@ $(foreach,i,$(SRC1FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -80,7 +80,7 @@ $(foreach,i,$(SRC2FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -133,7 +133,7 @@ $(foreach,i,$(SRC3FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -186,7 +186,7 @@ $(foreach,i,$(SRC4FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -239,7 +239,7 @@ $(foreach,i,$(SRC5FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -292,7 +292,7 @@ $(foreach,i,$(SRC6FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -345,7 +345,7 @@ $(foreach,i,$(SRC7FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -398,7 +398,7 @@ $(foreach,i,$(SRC8FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -451,7 +451,7 @@ $(foreach,i,$(SRC9FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
@@ -504,7 +504,7 @@ $(foreach,i,$(SRC10FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
     @echo "Making:   " $(@:f)
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)-$(MKDIRHIER) $(SOLARSRC)/$(PRJNAME)/common$(PROEXT)/misc/$(PRJNAME)
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
     $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
