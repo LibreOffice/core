@@ -1,32 +1,39 @@
-/*************************************************************************
+
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License. You can obtain
+ * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ * Sun designates this particular file as subject to the "Classpath" exception
+ * as provided by Sun in the GPL Version 2 section of the License file that
+ * accompanied this code.  If applicable, add the following below the License
+ * Header, with the fields enclosed by brackets [] replaced by your own
+ * identifying information: "Portions Copyrighted [year]
+ * [name of copyright owner]"
  *
- * $RCSfile: Registration.java,v $
- * $Revision: 1.3 $
+ * Contributor(s):
  *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
 
 package com.sun.star.servicetag;
 
@@ -42,8 +49,8 @@ import java.util.Set;
 import static com.sun.star.servicetag.RegistrationDocument.*;
 
 /**
- * A {@code RegistrationData} object is a container of one or more
- * {@link #getServiceTags service tags} that identify the
+ * A {@code RegistrationData} object is a container of one or more 
+ * {@link #getServiceTags service tags} that identify the 
  * components for product registration.
  * Each {@code RegistrationData} object has a {@link #getRegistrationURN
  * uniform resource name} (URN) as its identifier.
@@ -97,6 +104,11 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  *          <td>System serial number</td>
  *          <td> e.g. BEL078932</td>
  *       </tr>
+ *       <tr>
+ *          <td><tt>physmem</tt></td>
+ *          <td>Physical memory for the system (in MB)</td>
+ *          <td> e.g. 4096</td>
+ *       </tr>
  *       </table>
  *  </blockquote>
  * The <tt>hostname</tt> and <tt>osName</tt> element must have a non-empty value.
@@ -106,20 +118,20 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  * <a name="XMLSchema">
  * <b>Registration XML Schema</b></a>
  * <p>
- * A {@code RegistrationData} object can be {@link #loadFromXML loaded} from
- * and {@link #storeToXML stored} into an XML file in the format described
+ * A {@code RegistrationData} object can be {@link #loadFromXML loaded} from 
+ * and {@link #storeToXML stored} into an XML file in the format described 
  * by the
  * <a href="https://sn-tools.central.sun.com/twiki/pub/ServiceTags/RegistrationRelayService/product_registration.xsd">
- * registration data schema</a>.  The registration data schema is defined by the
+ * registration data schema</a>.  The registration data schema is defined by the 
  * Service Tags Technology.
  * <p>
  * Typically the registration data is constructed at installation time
  * and stored in an XML file for later service tag lookup or registration.
- *
+ * 
  * <p>
  * <b>Example Usage</b>
  * <p>
- * The examples below show how the {@code RegistrationData} can be
+ * The examples below show how the {@code RegistrationData} can be 
  * used for product registration.
  * Exception handling is not shown in these examples for clarity.
  * <ol>
@@ -134,22 +146,22 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  *   if (Registry.isSupported()) {
  *       Registry.getSystemRegistry().addServiceTag(st);
  *   }
- *
+ * 
  *   // add to the registration data
  *   RegistrationData registration  = new RegistrationData();
- *   registration.addServiceTag(st);
+ *   registration.addServiceTag(st); 
  * </pre></blockquote>
  * </li>
- * <li>At this point, the registration data is ready to
- * send to Sun Connection for registration. This example shows how to register
+ * <li>At this point, the registration data is ready to 
+ * send to Sun Connection for registration. This example shows how to register 
  * the JDK via the <i>Registration Relay Service</i>.
  * <p>
  * There are several registration services for Sun Connection. For example,
  * the <a href="https://sn-tools.central.sun.com/twiki/bin/view/ServiceTags/RegistrationRelayService">
  * Registration Relay Service</a> is a web application interface that
  * processes the registration data payload sent via HTTP post
- * and hosts the registration user interface for a specified
- * registration URL.  Refer to the
+ * and hosts the registration user interface for a specified 
+ * registration URL.  Refer to the 
  * Registration Relay Service Specification for details.
  * <p>
  * <blockquote><pre>
@@ -178,10 +190,10 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  *   registration.storeToXML(out);
  *   out.close();
  * </pre></blockquote>
- * </li>
- * <li>This example shows how to install service tags that are in the
+ * </li> 
+ * <li>This example shows how to install service tags that are in the 
  * registration data in the system service tag registry when determined
- * to be available.  The system service tag registry might not have existed
+ * to be available.  The system service tag registry might not have existed 
  * when the registration data was constructed.
  * <br>
  * <blockquote><pre>
@@ -194,11 +206,12 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  * </pre></blockquote>
  * </li>
  * </ol>
- *
+ * 
  * @see <a href="https://sunconnection.sun.com/inventory">Sun Connection Inventory Channel</a>
  */
 public class RegistrationData {
     private final Map<String, String> environment;
+    private final Map<String, String> cpuInfo;
     private final Map<String, ServiceTag> svcTagMap;
     private final String urn;
 
@@ -206,7 +219,7 @@ public class RegistrationData {
      * Creates a {@code RegistrationData} object with a generated
      * {@link #getRegistrationURN registration URN}.
      * The following keys in the {@link #getEnvironmentMap environment map}
-     * will be initialized for the configuration of the
+     * will be initialized for the configuration of the 
      * running system:
      * <blockquote>
      * <tt>hostname</tt>, <tt>osName</tt>,  <tt>osVersion</tt> and
@@ -217,17 +230,18 @@ public class RegistrationData {
     public RegistrationData() {
         this(Util.generateURN());
     }
-
+    
     // package private
     RegistrationData(String urn) {
         this.urn = urn;
-        this.environment = initEnvironment();
+        SystemEnvironment sysEnv = SystemEnvironment.getSystemEnvironment();
+        this.environment = initEnvironment(sysEnv);
+        this.cpuInfo = initCpuInfo(sysEnv);
         this.svcTagMap = new LinkedHashMap<String, ServiceTag>();
     }
-
-    private Map<String, String> initEnvironment() {
+    
+    private Map<String, String> initEnvironment(SystemEnvironment sysEnv) {
         Map<String, String> map = new LinkedHashMap<String, String>();
-        SystemEnvironment sysEnv = SystemEnvironment.getSystemEnvironment();
         map.put(ST_NODE_HOSTNAME, sysEnv.getHostname());
         map.put(ST_NODE_HOST_ID, sysEnv.getHostId());
         map.put(ST_NODE_OS_NAME, sysEnv.getOsName());
@@ -237,14 +251,25 @@ public class RegistrationData {
         map.put(ST_NODE_SYSTEM_MANUFACTURER, sysEnv.getSystemManufacturer());
         map.put(ST_NODE_CPU_MANUFACTURER, sysEnv.getCpuManufacturer());
         map.put(ST_NODE_SERIAL_NUMBER, sysEnv.getSerialNumber());
+        map.put(ST_NODE_PHYS_MEM, sysEnv.getPhysMem());
         return map;
-    }
+    }  
 
+    private Map<String, String> initCpuInfo(SystemEnvironment sysEnv) {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        map.put(ST_NODE_SOCKETS, sysEnv.getSockets());
+        map.put(ST_NODE_CORES, sysEnv.getCores());
+        map.put(ST_NODE_VIRT_CPUS, sysEnv.getVirtCpus());
+        map.put(ST_NODE_CPU_NAME, sysEnv.getCpuName());
+        map.put(ST_NODE_CLOCK_RATE, sysEnv.getClockRate());
+        return map;
+    }  
+    
     /**
      * Returns the uniform resource name of this registration data
      * in this format:
      * <tt>urn:st:&lt;32-char {@link java.util.UUID uuid}&gt;</tt>
-     *
+     * 
      * @return the URN of this registration data.
      */
     public String getRegistrationURN() {
@@ -257,21 +282,33 @@ public class RegistrationData {
      * in the environment map. Subsequent update to the environment
      * map via the {@link #setEnvironment setEnvironment} method will not be reflected
      * in the returned map.
-     *
-     * @return an environment map for this registration data.
+     * 
+     * @return an environment map for this registration data. 
      */
     public Map<String, String> getEnvironmentMap() {
         return new LinkedHashMap<String,String>(environment);
     }
 
     /**
-     * Sets an element of the specified {@code name} in the environment map
-     * with the given {@code value}.
+     * Returns a map containing the cpu information for this
+     * registration data.  Subsequent update to the cpu info
+     * map via the {@link #setCpuInfo setCpuInfo} method will not be reflected
+     * in the returned map.
      *
+     * @return a cpu info map for this registration data.
+     */
+    public Map<String, String> getCpuInfoMap() {
+        return new LinkedHashMap<String,String>(cpuInfo);
+    }
+
+    /**
+     * Sets an element of the specified {@code name} in the environment map 
+     * with the given {@code value}.
+     * 
      * @throws IllegalArgumentException if {@code name} is not a valid key
      * in the environment map, or {@code value} is not valid.
      */
-    public void setEnvironment(String name, String value) {
+    public void setEnvironment(String name, String value) {    
         if (name == null) {
             throw new NullPointerException("name is null");
         }
@@ -289,12 +326,34 @@ public class RegistrationData {
         } else {
             throw new IllegalArgumentException("\"" +
                  name + "\" is not an environment element.");
+        }   
+    }
+
+    /**
+     * Sets an element of the specified {@code name} in the cpu info map
+     * with the given {@code value}.
+     *
+     * @throws IllegalArgumentException if {@code name} is not a valid key
+     * in the cpu info map, or {@code value} is not valid.
+     */
+    public void setCpuInfo(String name, String value) {    
+        if (name == null) {
+            throw new NullPointerException("name is null");
         }
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        if (cpuInfo.containsKey(name)) {
+            cpuInfo.put(name, value);
+        } else {
+            throw new IllegalArgumentException("\"" +
+                 name + "\" is not an cpuinfo element.");
+        }   
     }
 
     /**
      * Returns all service tags in this registration data.
-     *
+     * 
      * @return  a {@link Set Set} of the service tags
      * in this registration data.
      */
@@ -303,23 +362,23 @@ public class RegistrationData {
     }
 
     /**
-     * Adds a service tag to this registration data.
+     * Adds a service tag to this registration data. 
      * If the given service tag has an empty <tt>instance_urn</tt>,
-     * this method will generate a URN and place it in the copy
-     * of the service tag in this registration data.
+     * this method will generate a URN and place it in the copy 
+     * of the service tag in this registration data. 
      * This method will return the {@code ServiceTag} object
      * added to this registration data.
-     *
+     * 
      * @param st {@code ServiceTag} object to be added.
      * @return a {@code ServiceTag} object added to this registration data.
-     *
-     * @throws IllegalArgumentException if
-     *   a service tag of the same {@link ServiceTag#getInstanceURN
+     * 
+     * @throws IllegalArgumentException if 
+     *   a service tag of the same {@link ServiceTag#getInstanceURN 
      *   <tt>instance_urn</tt>} already exists in the registry.
      */
     public synchronized ServiceTag addServiceTag(ServiceTag st) {
         ServiceTag svcTag = ServiceTag.newInstanceWithUrnTimestamp(st);
-
+        
         String instanceURN = svcTag.getInstanceURN();
         if (svcTagMap.containsKey(instanceURN)) {
             throw new IllegalArgumentException("Instance_urn = " + instanceURN +
@@ -346,14 +405,14 @@ public class RegistrationData {
     }
 
     /**
-     * Removes a service tag of the given <tt>instance_urn</tt> from this
+     * Removes a service tag of the given <tt>instance_urn</tt> from this 
      * registration data.
      *
-     * @param instanceURN the <tt>instance_urn</tt> of
+     * @param instanceURN the <tt>instance_urn</tt> of 
      * the service tag to be removed.
      *
      * @return the removed {@code ServiceTag} object;
-     * or {@code null} if the service tag does not exist in this
+     * or {@code null} if the service tag does not exist in this 
      * registration data.
      */
     public synchronized ServiceTag removeServiceTag(String instanceURN) {
@@ -369,15 +428,15 @@ public class RegistrationData {
     }
 
      /**
-     * Updates the <tt>product_defined_instance_id</tt> in the service tag
+     * Updates the <tt>product_defined_instance_id</tt> in the service tag 
      * of the given <tt>instance_urn</tt> in this registration data.
-     *
+     * 
      * @param instanceURN the <tt>instance_urn</tt> of the service tag to be updated.
      * @param productDefinedInstanceID the value of the
      * <tt>product_defined_instance_id</tt> to be set.
-     *
+     * 
      * @return the updated {@code ServiceTag} object;
-     * or {@code null} if the service tag does not exist in this
+     * or {@code null} if the service tag does not exist in this 
      * registration data.
      */
     public synchronized ServiceTag updateServiceTag(String instanceURN,
@@ -393,21 +452,21 @@ public class RegistrationData {
         svcTagMap.put(instanceURN, svcTag);
         return svcTag;
     }
-
+    
     /**
-     * Reads the registration data from the XML document on the
-     * specified input stream.  The XML document must be
+     * Reads the registration data from the XML document on the 
+     * specified input stream.  The XML document must be 
      * in the format described by the <a href="#XMLSchema">
      * registration data schema</a>.
      * The specified stream is closed after this method returns.
-     *
+     * 
      * @param in the input stream from which to read the XML document.
      * @return a {@code RegistrationData} object read from the input
      * stream.
-     *
-     * @throws IllegalArgumentException if the input stream
+     * 
+     * @throws IllegalArgumentException if the input stream 
      * contains an invalid registration data.
-     *
+     * 
      * @throws IOException if an error occurred when reading from the input stream.
      */
     public static RegistrationData loadFromXML(InputStream in) throws IOException {
@@ -417,15 +476,15 @@ public class RegistrationData {
             in.close();
         }
     }
-
+    
     /**
-     * Writes the registration data to the specified output stream
+     * Writes the registration data to the specified output stream 
      * in the format described by the <a href="#XMLSchema">
      * registration data schema</a> with "UTF-8" encoding.
      * The specified stream remains open after this method returns.
-     *
+     * 
      * @param os the output stream on which to write the XML document.
-     *
+     * 
      * @throws IOException if an error occurred when writing to the output stream.
      */
     public void storeToXML(OutputStream os) throws IOException {
@@ -433,7 +492,7 @@ public class RegistrationData {
         os.flush();
     }
 
-    /**
+    /** 
      * Returns a newly allocated byte array containing the registration
      * data in XML format.
      *
@@ -454,7 +513,7 @@ public class RegistrationData {
     /**
      * Returns a string representation of this registration data in XML
      * format.
-     *
+     * 
      * @return a string representation of this registration data in XML
      *         format.
      */
