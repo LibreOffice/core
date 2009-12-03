@@ -370,6 +370,9 @@ namespace sdr
                     OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, getOutputDevice());
                 }
 
+                // #i80730# removed: VCL hack for transparent child windows
+                // No longer needed, checked in DEV300 m54
+
                 // #i80730# restore visibility of VCL cursor
                 if(bCursorWasEnabled)
                 {
