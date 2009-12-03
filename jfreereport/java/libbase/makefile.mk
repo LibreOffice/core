@@ -33,16 +33,16 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=libbase
-VERSION=1.1.2
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
+.INCLUDE : $(PRJ)$/version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=$(TARGET)-$(VERSION)
+TARFILE_NAME=$(TARGET)-$(LIBBASE_VERSION)
 #TARFILE_ROOTDIR=$(TARGET)
 TARFILE_IS_FLAT=true
 
@@ -52,9 +52,9 @@ TARFILE_IS_FLAT=true
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(LIBBASE_VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(VERSION)" -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(LIBBASE_VERSION)" -f $(ANT_BUILDFILE) jar
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
@@ -68,7 +68,7 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(L10N_framework)"==""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)-$(VERSION).jar 
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(LIBBASE_VERSION).jar 
 
 # XCLASSPATH/CLASSPATH does not work and we only can give lib once. But
 # the build.xmls fortunately take *.jar out of lib so we can copy our
@@ -83,7 +83,7 @@ $(CLASSDIR)$/commons-logging.jar :
     $(COPY) $(COMMONS_LOGGING_JAR) $(CLASSDIR)$/commons-logging.jar
 .ENDIF
 
-$(CLASSDIR)$/$(TARGET)-$(VERSION).jar : $(CLASSDIR)$/commons-logging.jar $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(VERSION).jar $(CLASSDIR)$/$(TARGET)-$(VERSION).jar
+$(CLASSDIR)$/$(TARGET)-$(LIBBASE_VERSION).jar : $(CLASSDIR)$/commons-logging.jar $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(LIBBASE_VERSION).jar $(CLASSDIR)$/$(TARGET)-$(LIBBASE_VERSION).jar
 .ENDIF
 .ENDIF
