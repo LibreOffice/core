@@ -120,11 +120,20 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
     {
-        if( pPickObj->ISA( SdrGrafObj ) )
+        const bool bIsGraphic = pPickObj->ISA( SdrGrafObj );
+        if( bIsGraphic || pObj->IsEmptyPresObj() )
         {
-            // Das Objekt wird mit der Bitmap gefuellt
-            pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
-            pNewGrafObj->SetGraphic(rGraphic);
+            if( bIsGraphic )
+            {
+                // Das Objekt wird mit der Bitmap gefuellt
+                pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
+                pNewGrafObj->SetGraphic(rGraphic);
+            }
+            else
+            {
+                pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
+                pNewGrafObj->SetEmptyPresObj(TRUE);
+            }
 
             if ( pNewGrafObj->IsEmptyPresObj() )
             {
@@ -149,8 +158,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                     AddUndo( new sd::UndoObjectPresentationKind( *pPickObj ) );
                     AddUndo( new sd::UndoObjectPresentationKind( *pNewGrafObj ) );
                 }
-                pPage->RemovePresObj(pPickObj);
-                pPage->InsertPresObj(pNewGrafObj, PRESOBJ_GRAPHIC);
+                pPage->ReplacePresObj(pPickObj, pNewGrafObj, PRESOBJ_GRAPHIC);
 
                 if( !bUndo )
                 {

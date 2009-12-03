@@ -92,6 +92,7 @@
 #include "PaneChildWindows.hxx"
 
 #include "tmplctrl.hxx"
+#include "layoutctrl.hxx"
 
 /*************************************************************************
 |*
@@ -230,4 +231,5 @@ void SdDLL::RegisterControllers()
     SvxFrameLineColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
+    SdLayoutControl::RegisterControl( SID_ASSIGN_LAYOUT, pMod );
 }

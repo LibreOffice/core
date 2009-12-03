@@ -76,12 +76,6 @@ public:
     /** returns true if this smart tag is currently selected */
     bool isSelected() const;
 
-    /** is called once if the mouse enters this tag */
-    virtual void onMouseEnter(SmartHdl& rHdl);
-
-    /** is called once if the mouse leaves this tag */
-    virtual void onMouseLeave();
-
     ::sd::View& getView() const { return mrView; }
 
 protected:
@@ -146,8 +140,6 @@ public:
     /** returns true if the currently selected smart tag has
         a special context, returned in rContext. */
     bool getContext( SdrViewContext& rContext ) const;
-
-    void MouseMove(const MouseEvent& rMEvt);
 
     // support point editing
     BOOL HasMarkablePoints() const;

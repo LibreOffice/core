@@ -432,14 +432,26 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 || mePageKind==PK_NOTES
                 || (mePageKind==PK_HANDOUT && meEditMode==EM_MASTERPAGE))
             {
-                if ( mpDrawView->IsTextEdit() )
-                    mpDrawView->SdrEndTextEdit();
+                const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rReq.GetArg( ID_VAL_WHATPAGE, FALSE, TYPE(SfxUInt32Item) ) );
+                const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rReq.GetArg( ID_VAL_WHATLAYOUT, FALSE, TYPE(SfxUInt32Item) ) );
 
-                SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
-                SFX_REQUEST_ARG (rReq, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-                ::sd::ViewShell::mpImpl->AssignLayout (
-                    GetDoc()->GetSdPage((USHORT)pWhatPage->GetValue(), mePageKind),
-                    (AutoLayout)pWhatLayout->GetValue());
+                if( pWhatLayout )
+                {
+                    if ( mpDrawView->IsTextEdit() )
+                        mpDrawView->SdrEndTextEdit();
+
+                    USHORT nPage;
+                    if( pWhatPage )
+                    {
+                        nPage = pWhatPage->GetValue();
+                    }
+                    else
+                    {
+                        nPage = maTabControl.GetCurPageId() - 1;
+                    }
+
+                    ::sd::ViewShell::mpImpl->AssignLayout(GetDoc()->GetSdPage((USHORT)nPage, mePageKind),(AutoLayout)pWhatLayout->GetValue());
+                }
             }
             Cancel();
             rReq.Done ();

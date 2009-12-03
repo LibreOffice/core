@@ -147,34 +147,15 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
             if( mpViewShell && mpViewShell->ISA(DrawViewShell))
             {
                 sal_Int8    nAction = DND_ACTION_COPY;
-                SdrGrafObj* pEmptyGrafObj = NULL;
-
-                if ( mpView->AreObjectsMarked() )
-                {
-                    /**********************************************************
-                    * Is an empty graphic object available?
-                    **********************************************************/
-                    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
-                    if (rMarkList.GetMarkCount() == 1)
-                    {
-                        SdrMark* pMark = rMarkList.GetMark(0);
-                        SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                        if (pObj->GetObjInventor() == SdrInventor &&
-                            pObj->GetObjIdentifier() == OBJ_GRAF)
-                        {
-                            nAction = DND_ACTION_LINK;
-                            pEmptyGrafObj = (SdrGrafObj*) pObj;
-                        }
-                    }
-                }
+                SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
+                if( pPickObj )
+                    nAction = DND_ACTION_LINK;
 
                 Point aPos;
                 Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
                 aPos = aRect.Center();
                 aPos = mpWindow->PixelToLogic(aPos);
-                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pEmptyGrafObj, NULL);
+                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, NULL);
 
                 if(pGrafObj && aDlg.IsAsLink())
                 {

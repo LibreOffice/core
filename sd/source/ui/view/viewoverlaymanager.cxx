@@ -41,6 +41,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <vcl/help.hxx>
+
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
@@ -88,15 +90,6 @@ public:
     /** returns true if the SmartTag consumes this event. */
     virtual bool RequestHelp( const HelpEvent& rHEvt );
 
-    /** returns true if the SmartTag consumes this event. */
-    virtual bool Command( const CommandEvent& rCEvt );
-
-    /** is called once if the mouse enters this tag */
-    virtual void onMouseEnter(SmartHdl& rHdl);
-
-    /** is called once if the mouse leaves this tag */
-    virtual void onMouseLeave();
-
 protected:
     virtual void addCustomHandles( SdrHdlList& rHandlerList );
     virtual void disposing();
@@ -106,33 +99,36 @@ protected:
 private:
     ViewOverlayManager& mrManager;
     SdrObjectWeakRef    mxPlaceholderObj;
-    ImageButtonHdl*     mpSelectedHdl;
 };
 
 class ImageButtonHdl : public SmartHdl
 {
 public:
-    ImageButtonHdl( const SmartTagReference& xTag, const Image& rImage, const Point& rPnt );
+    ImageButtonHdl( const SmartTagReference& xTag, USHORT nSID, const Image& rImage, const Point& rPnt );
     virtual ~ImageButtonHdl();
     virtual void CreateB2dIAObject();
     virtual BOOL IsFocusHdl() const;
-    virtual Pointer GetSdrDragPointer() const;
+    virtual Pointer GetPointer() const;
     virtual bool isMarkable() const;
 
-    void select( bool bSelect );
+    virtual void onMouseEnter();
+    virtual void onMouseLeave();
+
+    USHORT getSlotId() const { return mnSID; }
+
 private:
     rtl::Reference< ChangePlaceholderTag > mxTag;
-    bool mbSelected;
     Image                           maImage;
+    USHORT mnSID;
 };
 
 // --------------------------------------------------------------------
 
-ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag, const Image& rImage, const Point& rPnt )
+ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag, USHORT nSID, const Image& rImage, const Point& rPnt )
 : SmartHdl( xTag, rPnt )
 , mxTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
-, mbSelected(false)
 , maImage( rImage )
+, mnSID( nSID )
 {
 }
 
@@ -140,19 +136,20 @@ ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag, const Image& rIma
 
 ImageButtonHdl::~ImageButtonHdl()
 {
-    if( mxTag.is() && (mxTag->mpSelectedHdl == this) )
-        mxTag->mpSelectedHdl = 0;
 }
 
 // --------------------------------------------------------------------
 
-void ImageButtonHdl::select( bool bSelect )
+void ImageButtonHdl::onMouseEnter()
 {
-    if( bSelect != mbSelected )
-    {
-        mbSelected = bSelect;
-        Touch();
-    }
+    Touch();
+}
+
+// --------------------------------------------------------------------
+
+void ImageButtonHdl::onMouseLeave()
+{
+    Touch();
 }
 
 // --------------------------------------------------------------------
@@ -171,7 +168,7 @@ void ImageButtonHdl::CreateB2dIAObject()
 
     BitmapEx aBitmapEx( maImage.GetBitmapEx() );
 
-    const double fAlpha = mbSelected ? 0.0 : 0.5;
+    const double fAlpha = isMouseOver() ? 0.0 : 0.6;
 
     if(pHdlList)
     {
@@ -207,7 +204,7 @@ void ImageButtonHdl::CreateB2dIAObject()
 
 BOOL ImageButtonHdl::IsFocusHdl() const
 {
-    return TRUE;
+    return false;
 }
 
 // --------------------------------------------------------------------
@@ -219,7 +216,7 @@ bool ImageButtonHdl::isMarkable() const
 
 // --------------------------------------------------------------------
 
-Pointer ImageButtonHdl::GetSdrDragPointer() const
+Pointer ImageButtonHdl::GetPointer() const
 {
     return Pointer( POINTER_ARROW );
 }
@@ -242,8 +239,18 @@ ChangePlaceholderTag::~ChangePlaceholderTag()
 // --------------------------------------------------------------------
 
 /** returns true if the ChangePlaceholderTag handled the event. */
-bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& /*rHdl*/ )
+bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
 {
+    USHORT nSID = static_cast< ImageButtonHdl& >(rHdl).getSlotId();
+
+    if( mxPlaceholderObj.get() )
+    {
+        SdrPageView* pPV = mrView.GetSdrPageView();
+        mrView.MarkObj(mxPlaceholderObj.get(), pPV, FALSE);
+    }
+
+    mrView.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( nSID, SFX_CALLMODE_ASYNCHRON);
+
     return false;
 }
 
@@ -269,45 +276,16 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
 }
 
 /** returns true if the SmartTag consumes this event. */
-bool ChangePlaceholderTag::RequestHelp( const HelpEvent& /*rHEvt*/ )
+bool ChangePlaceholderTag::RequestHelp( const HelpEvent& rHEvt )
 {
-   return false;
-}
+    Rectangle aItemRect( rHEvt.GetMousePosPixel(), Size(1,1) );
+    String aHelpText(RTL_CONSTASCII_USTRINGPARAM("I'm a help text"));
+    if( rHEvt.GetMode() == HELPMODE_BALLOON )
+        Help::ShowBalloon( static_cast< ::Window* >(mrView.GetFirstOutputDevice()), aItemRect.Center(), aItemRect, aHelpText);
+    else
+        Help::ShowQuickHelp( static_cast< ::Window* >(mrView.GetFirstOutputDevice()), aItemRect, aHelpText );
 
-/** returns true if the SmartTag consumes this event. */
-bool ChangePlaceholderTag::Command( const CommandEvent& rCEvt )
-{
-    return false;
-}
-
-/** is called once if the mouse enters this tag */
-void ChangePlaceholderTag::onMouseEnter(SmartHdl& rHdl)
-{
-    ImageButtonHdl* pHdl = dynamic_cast< ImageButtonHdl* >( &rHdl );
-    if( mpSelectedHdl != 0 )
-    {
-        if( mpSelectedHdl == pHdl )
-            return;
-
-        mpSelectedHdl->select(false);
-    }
-
-    mpSelectedHdl = pHdl;
-
-    if( mpSelectedHdl )
-    {
-        mpSelectedHdl->select( true );
-    }
-}
-
-/** is called once if the mouse leaves this tag */
-void ChangePlaceholderTag::onMouseLeave()
-{
-    if( mpSelectedHdl )
-    {
-        mpSelectedHdl->select( false );
-        mpSelectedHdl = 0;
-    }
+    return true;
 }
 
 // --------------------------------------------------------------------
@@ -362,7 +340,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
                 aImg = Image(b);
             }
 
-            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, aImg, aPoint );
+            ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, ViewOverlayManager::mnButtonSlots[i], aImg, aPoint );
             pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
             pHdl->SetPageView( mrView.GetSdrPageView() );
 
@@ -495,6 +473,8 @@ void ViewOverlayManager::UpdateTags()
 
 IMPL_LINK(ViewOverlayManager,UpdateTagsHdl, void *, EMPTYARG)
 {
+    OSL_TRACE("ViewOverlayManager::UpdateTagsHdl");
+
     mnUpdateTagsEvent  = 0;
     bool bChanges = DisposeTags();
     bChanges |= CreateTags();
@@ -519,10 +499,11 @@ bool ViewOverlayManager::CreateTags()
 
         for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
         {
-            if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) )
+            if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && !static_cast<SdrTextObj*>((*iter))->HasEditText() )
             {
                 rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *this, *mrBase.GetMainViewShell()->GetView(), *(*iter) ) );
                 maTagVector.push_back(xTag);
+                bChanges = true;
             }
         }
     }

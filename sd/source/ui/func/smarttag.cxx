@@ -156,18 +156,6 @@ void SmartTag::CheckPossibilities()
 {
 }
 
-// --------------------------------------------------------------------
-
-void SmartTag::onMouseEnter(SmartHdl& rHdl)
-{
-}
-
-// --------------------------------------------------------------------
-
-void SmartTag::onMouseLeave()
-{
-}
-
 // ====================================================================
 
 SmartTagSet::SmartTagSet( View& rView )
@@ -280,35 +268,6 @@ bool SmartTagSet::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     return false;
-}
-
-// --------------------------------------------------------------------
-
-void SmartTagSet::MouseMove(const MouseEvent& rMEvt)
-{
-    SmartTagReference xTag;
-
-    SmartHdl* pSmartHdl = 0;
-    if( !rMEvt.IsLeaveWindow() )
-    {
-        Point aMDPos( mrView.GetViewShell()->GetActiveWindow()->PixelToLogic( rMEvt.GetPosPixel() ) );
-        SdrHdl* pHdl = mrView.PickHandle(aMDPos);
-
-        pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
-        if( pSmartHdl )
-            xTag = pSmartHdl->getTag();
-    }
-
-    if( xTag != mxMouseOverTag )
-    {
-        if( mxMouseOverTag.is() )
-            mxMouseOverTag->onMouseLeave();
-
-        mxMouseOverTag = xTag;
-
-        if( mxMouseOverTag.is() )
-            mxMouseOverTag->onMouseEnter(*pSmartHdl);
-    }
 }
 
 // --------------------------------------------------------------------
