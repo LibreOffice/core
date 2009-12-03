@@ -41,9 +41,6 @@ private const IDOCS = 5
     
 testcase tBasicDocuments
 
-    warnlog( "#i90435# Untitled documents unnumbered in BASIC organizer" )
-    goto endsub
-
     const CFN = "tBasicDocuments::"
 
     dim brc as boolean
