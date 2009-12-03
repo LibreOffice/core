@@ -586,73 +586,68 @@ sal_uInt16 SfxObjectShell::PrepareClose
         // nur fuer in sichtbaren Fenstern dargestellte Dokumente fragen
     SfxViewFrame *pFrame = SfxObjectShell::Current() == this
         ? SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
-    while ( pFrame )
-        pFrame = SfxViewFrame::GetNext( *pFrame, this );
 
     sal_Bool bClose = sal_False;
-    if ( bUI && IsModified() )
+    if ( bUI && IsModified() && pFrame )
     {
-        if ( pFrame )
+        // minimierte restoren
+        SfxFrame* pTop = pFrame->GetTopFrame();
+        SfxViewFrame::SetViewFrame( pTop->GetCurrentViewFrame() );
+        pFrame->GetFrame()->Appear();
+
+        // fragen, ob gespeichert werden soll
+        short nRet = RET_YES;
+        //TODO/CLEANUP
+        //brauchen wir UI=2 noch?
+        //if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
         {
-            // minimierte restoren
-            SfxFrame* pTop = pFrame->GetTopFrame();
-            SfxViewFrame::SetViewFrame( pTop->GetCurrentViewFrame() );
-            pFrame->GetFrame()->Appear();
-
-            // fragen, ob gespeichert werden soll
-            short nRet = RET_YES;
-            //TODO/CLEANUP
-            //brauchen wir UI=2 noch?
-            //if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
+            //initiate help agent to inform about "print modifies the document"
+            SvtPrintWarningOptions aPrintOptions;
+            if (aPrintOptions.IsModifyDocumentOnPrintingAllowed() &&
+                HasName() && getDocProperties()->getPrintDate().Month > 0)
             {
-                //initiate help agent to inform about "print modifies the document"
-                SvtPrintWarningOptions aPrintOptions;
-                if (aPrintOptions.IsModifyDocumentOnPrintingAllowed() &&
-                    HasName() && getDocProperties()->getPrintDate().Month > 0)
-                {
-                    SfxHelp::OpenHelpAgent(pFirst->GetFrame(), HID_CLOSE_WARNING);
-                }
-                const Reference< XTitle > xTitle(pImp->xModel, UNO_QUERY_THROW);
-                const ::rtl::OUString     sTitle = xTitle->getTitle ();
-                nRet = ExecuteQuerySaveDocument(&pFrame->GetWindow(),sTitle);
+                SfxHelp::OpenHelpAgent(pFirst->GetFrame(), HID_CLOSE_WARNING);
             }
-            /*HACK for plugin::destroy()*/
+            const Reference< XTitle > xTitle(pImp->xModel, UNO_QUERY_THROW);
+            const ::rtl::OUString     sTitle = xTitle->getTitle ();
+            nRet = ExecuteQuerySaveDocument(&pFrame->GetWindow(),sTitle);
+        }
+        /*HACK for plugin::destroy()*/
 
-            if ( RET_YES == nRet )
+        if ( RET_YES == nRet )
+        {
+            // per Dispatcher speichern
+            const SfxPoolItem *pPoolItem;
+            if ( IsSaveVersionOnClose() )
             {
-                // per Dispatcher speichern
-                const SfxPoolItem *pPoolItem;
-                if ( IsSaveVersionOnClose() )
-                {
-                    SfxStringItem aItem( SID_DOCINFO_COMMENTS, String( SfxResId( STR_AUTOMATICVERSION ) ) );
-                    SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
-                    const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, 0 };
-                    pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
-                }
-                else
-                {
-                    SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
-                    const SfxPoolItem* ppArgs[] = { &aWarnItem, 0 };
-                    pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
-                }
-
-                if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
-                    return sal_False;
-                else
-                    bClose = sal_True;
-            }
-            else if ( RET_CANCEL == nRet )
-                // abgebrochen
-                return sal_False;
-            else if ( RET_NEWTASK == nRet )
-            {
-                return RET_NEWTASK;
+                SfxStringItem aItem( SID_DOCINFO_COMMENTS, String( SfxResId( STR_AUTOMATICVERSION ) ) );
+                SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
+                const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, 0 };
+                pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
             else
             {
-                // Bei Nein nicht noch Informationlost
-                bClose = sal_True;
+                SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
+                const SfxPoolItem* ppArgs[] = { &aWarnItem, 0 };
+                pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
+
+            if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
+                return sal_False;
+            else
+                bClose = sal_True;
+        }
+        else if ( RET_CANCEL == nRet )
+            // abgebrochen
+            return sal_False;
+        else if ( RET_NEWTASK == nRet )
+        {
+            return RET_NEWTASK;
+        }
+        else
+        {
+            // Bei Nein nicht noch Informationlost
+            bClose = sal_True;
         }
     }
 
