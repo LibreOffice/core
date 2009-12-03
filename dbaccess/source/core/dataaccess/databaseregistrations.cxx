@@ -270,12 +270,8 @@ namespace dbaccess
                 ++pName, ++pDisplayName
             )
         {
-            ::rtl::OUStringBuffer aNodePath;
-            aNodePath.append( *pName );
-            aNodePath.append( sal_Unicode( '/' ) );
-            aNodePath.append( getNameNodeName() );
-
-            OSL_VERIFY( m_aConfigurationRoot.getNodeValue( aNodePath.makeStringAndClear() ) >>= *pDisplayName );
+            ::utl::OConfigurationNode aRegistrationNode = m_aConfigurationRoot.openNode( *pName );
+            OSL_VERIFY( aRegistrationNode.getNodeValue( getNameNodeName() ) >>= *pDisplayName );
 
         }
 
