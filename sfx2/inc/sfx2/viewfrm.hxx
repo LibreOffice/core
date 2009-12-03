@@ -41,6 +41,7 @@
 #include <svtools/poolitem.hxx>
 #include <com/sun/star/frame/status/Verb.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 
 class SfxMacro;
 class SvBorder;
@@ -164,9 +165,8 @@ public:
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
 
     static void             SetViewFrame( SfxViewFrame* );
-    static SfxViewFrame*    CreateViewFrame( SfxObjectShell& rDoc,
-                                                 USHORT nViewId=0,
-                                                 BOOL bHidden=FALSE );
+    static SfxViewFrame*    CreateViewFrame( SfxObjectShell& rDoc, USHORT nViewId=0, BOOL bHidden = FALSE );
+    static SfxViewFrame*    Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId );
 
     static SfxViewFrame*    Current();
     static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
@@ -301,11 +301,20 @@ public:
     SAL_DLLPRIVATE void INetExecute_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
-    SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
+    SAL_DLLPRIVATE void SetCurViewId_Impl( const USHORT i_nID );
+
 //#endif
 private:
-    SAL_DLLPRIVATE SfxViewShell* LoadNewView_Impl( const USHORT i_nNewViewNo, SfxViewShell* i_pOldShell );
+    SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
+    SAL_DLLPRIVATE SfxViewShell* LoadNewView_Impl( const USHORT i_nViewId, SfxViewShell* i_pOldShell );
     SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >
+                        LoadDocument_Impl(
+                            const SfxObjectShell& i_rDoc,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rArgs,
+                            const USHORT i_nViewId
+                        );
 };
 
 //--------------------------------------------------------------------

@@ -200,6 +200,7 @@ class   SfxPrinter;
 class   SfxViewShell;
 class   SfxObjectShell                      ;
 class   SfxEventHint;
+class   SfxViewFrame;
 struct  IMPL_SfxBaseModel_DataContainer     ;   // impl. struct to hold member of class SfxBaseModel
 
 //________________________________________________________________________________________________________
@@ -1520,6 +1521,8 @@ private:
 
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XUntitledNumbers > impl_getUntitledHelper ();
+
+    SAL_DLLPRIVATE SfxViewFrame* FindOrCreateViewFrame_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame ) const;
 
 //________________________________________________________________________________________________________
 //  private variables and methods

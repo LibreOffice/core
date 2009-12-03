@@ -102,6 +102,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using ::com::sun::star::awt::XWindow;
+using ::com::sun::star::beans::PropertyValue;
 namespace css = ::com::sun::star;
 
 #ifndef GCC
@@ -2017,44 +2018,93 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 }
 
 //--------------------------------------------------------------------
-SfxViewShell* SfxViewFrame::LoadNewView_Impl( const USHORT i_nNewViewNo, SfxViewShell* i_pOldShell )
+Reference< XController2 > SfxViewFrame::LoadDocument_Impl(
+        const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame, const Sequence< PropertyValue >& i_rArgs,
+        const USHORT i_nViewId )
 {
-    OSL_PRECOND( GetViewShell() == NULL, "SfxViewFrame::LoadNewView_Impl: not allowed to be called with an exsiting view shell!" );
-    OSL_PRECOND( GetObjectShell() != NULL, "SfxViewFrame::LoadNewView_Impl: no document -> no loading!" );
+    ENSURE_OR_THROW( i_rFrame.is(), "illegal frame" );
+    const Reference < XModel2 > xModel( i_rDoc.GetModel(), UNO_QUERY_THROW );
 
-    const Reference < XFrame > xFrame( GetFrame()->GetFrameInterface() );
-    const Reference < XModel2 > xModel( GetObjectShell()->GetModel(), UNO_QUERY_THROW );
-
-    const USHORT nViewId = GetObjectShell()->GetFactory().GetViewFactory( i_nNewViewNo ).GetOrdinal();
     ::rtl::OUStringBuffer sViewName;
     sViewName.appendAscii( "view" );
-    sViewName.append( sal_Int32( nViewId ) );
-        // TODO: extende the SfxViewFactory with support for speaking view names
+    sViewName.append( sal_Int32( i_nViewId ) );
+        // TODO: extend the SfxViewFactory with support for speaking view names
 
     // let the model create a new controller
-    ::comphelper::NamedValueCollection aViewCreationArgs;
-    if ( i_pOldShell != NULL )
-        aViewCreationArgs.put( "PreviousView", i_pOldShell->GetController() );
-
     const Reference< XController2 > xController( xModel->createViewController(
         sViewName.makeStringAndClear(),
-        aViewCreationArgs.getPropertyValues(),
-        xFrame
-    ) );
-    SfxViewShell* pViewShell = SfxViewShell::Get( xController.get() );
-    ENSURE_OR_THROW( pViewShell, "invalid controller returned by view factory" );
-
-    // remember ViewID
-    pImp->nCurViewId = nViewId;
+        i_rArgs,
+        i_rFrame
+    ), UNO_SET_THROW );
 
     // introduce model/view/controller to each other
     xController->attachModel( xModel.get() );
     xModel->connectController( xController.get() );
-    xFrame->setComponent( xController->getComponentWindow(), xController.get() );
-    xController->attachFrame( xFrame );
+    i_rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachFrame( i_rFrame );
     xModel->setCurrentController( xController.get() );
 
+    return xController;
+}
+
+//--------------------------------------------------------------------
+SfxViewShell* SfxViewFrame::LoadNewView_Impl( const USHORT i_nViewId, SfxViewShell* i_pOldShell )
+{
+    ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
+    OSL_PRECOND( GetViewShell() == NULL, "SfxViewFrame::LoadNewView_Impl: not allowed to be called with an exsiting view shell!" );
+
+    ::comphelper::NamedValueCollection aViewCreationArgs;
+    if ( i_pOldShell != NULL )
+        aViewCreationArgs.put( "PreviousView", i_pOldShell->GetController() );
+
+    const Reference< XController2 > xController = LoadDocument_Impl(
+        *GetObjectShell(),
+        GetFrame()->GetFrameInterface(),
+        aViewCreationArgs.getPropertyValues(),
+        i_nViewId
+    );
+
+    SfxViewShell* pViewShell = SfxViewShell::Get( xController.get() );
+    ENSURE_OR_THROW( pViewShell, "invalid controller returned by view factory" );
     return pViewShell;
+}
+
+//--------------------------------------------------------------------
+
+SfxViewFrame* SfxViewFrame::Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId )
+{
+    bool bSuccess = false;
+    SfxViewFrame* pViewFrame = NULL;
+    try
+    {
+        Reference< XController2 > xController = LoadDocument_Impl(
+            i_rDoc, i_rFrame.GetFrameInterface(), Sequence< PropertyValue >(), i_nViewId );
+        ENSURE_OR_THROW( xController.is(), "invalid controller returned by LoadDocument_Impl" );
+            // this is expected to throw in case of a failure ...
+
+        if ( xController.is() )
+        {
+            for (   pViewFrame = SfxViewFrame::GetFirst( &i_rDoc, FALSE );
+                    pViewFrame;
+                    pViewFrame = SfxViewFrame::GetNext( *pViewFrame, &i_rDoc, FALSE )
+                )
+            {
+                if ( pViewFrame->GetViewShell()->GetController() == xController )
+                    break;
+            }
+            if ( !pViewFrame )
+            {
+                OSL_ENSURE( false, "SfxViewFrame::Create: wrong controller implementation!" );
+                Reference< XComponent > xComponent( xController, UNO_QUERY_THROW );
+                xComponent->dispose();
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return pViewFrame;
 }
 
 //--------------------------------------------------------------------
@@ -2099,13 +2149,9 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 {
     try
     {
-        ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
-
-        GetBindings().ENTERREGISTRATIONS();
-        LockAdjustPosSizePixel();
-
         // if we already have a view shell, remove it
         SfxViewShell* pOldSh = GetViewShell();
+        OSL_PRECOND( pOldSh, "SfxViewFrame::SwitchToViewShell_Impl: that's called *switch* (not for *initial-load*) for a reason" );
         if ( pOldSh )
         {
             // ask wether it can be closed
@@ -2120,10 +2166,13 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
             SetViewShell_Impl( NULL );
         }
 
+        GetBindings().ENTERREGISTRATIONS();
+        LockAdjustPosSizePixel();
+
         // create and load new ViewShell
         SfxObjectFactory& rDocFact = GetObjectShell()->GetFactory();
-        const sal_uInt16 nNewNo = ( bIsIndex || !nViewIdOrNo ) ? nViewIdOrNo : rDocFact.GetViewNo_Impl( nViewIdOrNo, 0 );
-        SfxViewShell* pNewSh = LoadNewView_Impl( nNewNo, pOldSh );
+        const sal_uInt16 nViewId = ( bIsIndex || !nViewIdOrNo ) ? rDocFact.GetViewFactory( nViewIdOrNo ).GetOrdinal() : nViewIdOrNo;
+        SfxViewShell* pNewSh = LoadNewView_Impl( nViewId, pOldSh );
 
         // allow resize events to be processed
         UnlockAdjustPosSizePixel();
@@ -2144,6 +2193,12 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
     DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );
     return sal_True;
+}
+
+//-------------------------------------------------------------------------
+void SfxViewFrame::SetCurViewId_Impl( const USHORT i_nID )
+{
+    pImp->nCurViewId = i_nID;
 }
 
 //-------------------------------------------------------------------------
@@ -2224,10 +2279,14 @@ void SfxViewFrame::ExecView_Impl
         case SID_VIEWSHELL:
         {
             const SfxPoolItem *pItem = 0;
-            if ( rReq.GetArgs() &&
-                SFX_ITEM_SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, sal_False, &pItem ) )
-                rReq.SetReturnValue( SfxBoolItem(0, SwitchToViewShell_Impl(
-                    (sal_uInt16)((const SfxUInt16Item*) pItem)->GetValue()) ));
+            if  (   rReq.GetArgs()
+                &&  SFX_ITEM_SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, sal_False, &pItem )
+                )
+            {
+                const sal_uInt16 nViewId = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
+                BOOL bSuccess = SwitchToViewShell_Impl( nViewId );
+                rReq.SetReturnValue( SfxBoolItem( 0, bSuccess ) );
+            }
             break;
         }
 
@@ -2237,8 +2296,9 @@ void SfxViewFrame::ExecView_Impl
         case SID_VIEWSHELL3:
         case SID_VIEWSHELL4:
         {
-            rReq.SetReturnValue( SfxBoolItem(0,
-                SwitchToViewShell_Impl( rReq.GetSlot() - SID_VIEWSHELL0, sal_True ) ) );
+            const sal_uInt16 nViewNo = rReq.GetSlot() - SID_VIEWSHELL0;
+            BOOL bSuccess = SwitchToViewShell_Impl( nViewNo, sal_True );
+            rReq.SetReturnValue( SfxBoolItem( 0, bSuccess ) );
             break;
         }
 

@@ -34,6 +34,7 @@
 #endif
 
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/viewfac.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -768,13 +769,11 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     if ( nPluginMode && ( nPluginMode != 2 ) )
         SetInPlace_Impl( TRUE );
 
-    SfxViewFrame* pViewFrame = new SfxViewFrame( this, &rDoc );
-    if ( !pViewFrame->SwitchToViewShell_Impl( nViewId ) )
-    {   // TODO: better error handling? Under which conditions can this fail?
-        OSL_ENSURE( false, "SfxFrame::InsertDocument_Impl: something went wrong while creating the SfxViewFrame!" );
-        pViewFrame->DoClose();
+    SfxViewFrame* pViewFrame = SfxViewFrame::Create( *this, rDoc, nViewId ? nViewId : rDoc.GetFactory().GetViewFactory( 0 ).GetOrdinal() );
+    OSL_ENSURE( pViewFrame, "SfxFrame::InsertDocument_Impl: something went wrong while creating the SfxViewFrame!" );
+    if ( !pViewFrame )
+        // TODO: better error handling? Under which conditions can this fail?
         return sal_False;
-    }
 
     if ( nPluginMode == 1 )
     {

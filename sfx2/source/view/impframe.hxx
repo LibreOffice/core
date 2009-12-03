@@ -56,14 +56,10 @@ class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase
 {
 public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
-    String                    aFrameIdName;
     sal_uInt32                nType;
-    sal_uInt32                nHistoryPos;
     SfxViewFrame*             pCurrentViewFrame;
     SfxFrameDescriptor*       pDescr;
-    sal_uInt16                nFrameId;
     sal_uInt16                nLocks;
-    sal_Bool                  bCloseOnUnlock : 1;
     sal_Bool                  bClosing : 1;
     sal_Bool                  bPrepClosing : 1;
     sal_Bool                  bInCancelTransfers : 1;
@@ -82,12 +78,9 @@ public:
     SfxFrame_Impl( SfxFrame* pAntiImplP )
         :SvCompatWeakBase( pAntiImplP )
         ,nType( 0L )
-        ,nHistoryPos( 0 )
         ,pCurrentViewFrame( NULL )
         ,pDescr( NULL )
-        ,nFrameId( 0 )
         ,nLocks( 0 )
-        ,bCloseOnUnlock( sal_False )
         ,bClosing(sal_False)
         ,bPrepClosing(sal_False)
         ,bInCancelTransfers( sal_False )

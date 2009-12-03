@@ -565,11 +565,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             // the latter.
         }
 
-        // create a frame
-        SfxFrame* pTargetFrame = SfxFrame::Create( _rTargetFrame );
-        ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
-        wFrame = pTargetFrame;
-
         // get the SfxObjectShell (still needed at the moment)
         SfxObjectShellLock xDoc = impl_findObjectShell( xModel );
         ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the given model" );
@@ -583,6 +578,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             // closing. However, a *Ref object wouldn't close, anyway. And in case of unsuccessfull loading, the
             // code at the very end of this method cares for closing the XModel, which should also close the
             // ObjectShell.
+
+        // create a frame
+        SfxFrame* pTargetFrame = SfxFrame::Create( _rTargetFrame );
+        ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
+        wFrame = pTargetFrame;
 
         // insert the document into the frame
         if ( !impl_plugDocIntoFrame( aDescriptor, *pTargetFrame, *xDoc ) )

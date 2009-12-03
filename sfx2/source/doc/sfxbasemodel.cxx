@@ -3947,7 +3947,46 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createDef
            css::uno::Exception                )
 {
     return createViewController( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "view0" ) ), Sequence< PropertyValue >(), i_rFrame );
-        // TODO: extende the SfxViewFactory with support for speaking view names
+        // TODO: extend the SfxViewFactory with support for speaking view names
+}
+
+//=============================================================================
+SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame ) const
+{
+    SfxViewFrame* pViewFrame = NULL;
+    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), FALSE );
+            pViewFrame;
+            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), FALSE )
+        )
+    {
+        if ( pViewFrame->GetFrame()->GetFrameInterface() == i_rFrame )
+            break;
+    }
+    if ( !pViewFrame )
+    {
+        // no view frame, yet, but perhaps a mere frame?
+        SfxFrame* pFrame = NULL;
+        for (   pFrame = SfxFrame::GetFirst();
+                pFrame;
+                pFrame = SfxFrame::GetNext( *pFrame )
+            )
+        {
+            if  (   ( pFrame->GetFrameInterface() == i_rFrame )
+                &&  ( pFrame->GetCurrentViewFrame() == NULL )
+                    // TODO: this condition is somewhat hacky, as it relies on the fact that this is (usually)
+                    // the SfxFrame which is, up the stack, within its InsertDocument_Impl call.
+                    // Before the refactoring is finally done, this is to be removed.
+                )
+                break;
+        }
+        if ( !pFrame )
+        {
+            pFrame = SfxFrame::Create( i_rFrame );
+            ENSURE_OR_THROW( pFrame, "no SfxFrame created for the XFrame" );
+        }
+        pViewFrame = new SfxViewFrame( pFrame, GetObjectShell() );
+    }
+    return pViewFrame;
 }
 
 //=============================================================================
@@ -3983,22 +4022,7 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
         "SfxBaseModel::createViewController: invalid old controller!" );
 
     // determine the ViewFrame belonging to the given XFrame
-    SfxViewFrame* pViewFrame = NULL;
-    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), FALSE );
-            pViewFrame;
-            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), FALSE )
-        )
-    {
-        if ( pViewFrame->GetFrame()->GetFrameInterface() == i_rFrame )
-            break;
-    }
-    if ( !pViewFrame )
-        // TODO: Effectively, this means that only our dedicated SFX-Loader can load documents into an arbitrary
-        // XFrame, since it will (directly or indirectly) create the Sfx(View)Frame which we need here.
-        // We should evaluate whether (after the re-factoring) it is possible/feasible to allow for an arbitrary
-        // XFrame here, by creating the necessary Sfx(View)Frame ourself. Finally, this is what a "view factory"
-        // is about ...
-        throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "invalid frame" ) ), *this, 3 );
+    SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame );
 
     // delegate to SFX' view factory
     SfxViewFactory& rViewFactory = rDocumentFactory.GetViewFactory( nViewNo );
@@ -4008,6 +4032,9 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
     pViewFrame->GetDispatcher()->SetDisableFlags( 0 );
     pViewFrame->SetViewShell_Impl( pViewShell );
+
+    // remember ViewID
+    pViewFrame->SetCurViewId_Impl( rViewFactory.GetOrdinal() );
 
     // ensure a default controller, if the view shell did not provide an own implementation
     if ( !pViewShell->GetController().is() )
