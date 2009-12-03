@@ -404,10 +404,7 @@ void SfxFrame::GetViewData_Impl()
         sal_Bool bReadOnly = pMed->GetOpenMode() == SFX_STREAM_READONLY;
         GetDescriptor()->SetReadOnly( bReadOnly );
 
-        String aUserData;
-        pViewFrame->GetViewShell()->WriteUserData( aUserData, sal_True );
         SfxItemSet *pSet = GetDescriptor()->GetArgs();
-        pSet->Put( SfxStringItem( SID_USER_DATA, aUserData ));
         sal_Bool bGetViewData = sal_False;
         if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SFX_ITEM_SET )
         {

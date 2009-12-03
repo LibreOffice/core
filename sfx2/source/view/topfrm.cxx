@@ -743,7 +743,6 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     SFX_ITEMSET_ARG( &rSet, pViewIdItem, SfxUInt16Item,      SID_VIEW_ID,        sal_False );    // view ID
     SFX_ITEMSET_ARG( &rSet, pModeItem,   SfxUInt16Item,      SID_VIEW_ZOOM_MODE, sal_False );    // zoom
     SFX_ITEMSET_ARG( &rSet, pHidItem,    SfxBoolItem,        SID_HIDDEN,         sal_False );    // hidden
-    SFX_ITEMSET_ARG( &rSet, pViewDataItem, SfxStringItem,    SID_USER_DATA,      sal_False );    // view data
     SFX_ITEMSET_ARG( &rSet, pEditItem,   SfxBoolItem,        SID_VIEWONLY,       sal_False );    // view only
     SFX_ITEMSET_ARG( &rSet, pPluginMode, SfxUInt16Item,      SID_PLUGIN_MODE,    sal_False );    // plugin (external inplace)
     SFX_ITEMSET_ARG( &rSet, pJumpItem,   SfxStringItem,      SID_JUMPMARK,       sal_False );    // jump (GotoBookmark)
@@ -769,16 +768,12 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     bool bReadUserData = false;
 
     // if no view-related data exists in the set, then obtain the view data from the model
-    if ( !pJumpItem && !pViewDataItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
+    if ( !pJumpItem && !pPluginMode && !pAreaItem && !pViewIdItem && !pModeItem )
     {
         if ( lcl_getViewDataAndID( rDoc.GetModel(), aUserData, nViewId ) )
         {
             SfxItemSet* pMediumSet = rDoc.GetMedium()->GetItemSet();
-
-            // clear the user data item in the medium - we'll use aUserData below
-            pMediumSet->ClearItem( SID_USER_DATA );
             pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-
             bClearPosSizeZoom = bReadUserData = true;
         }
     }
@@ -812,11 +807,7 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
         // Before CWS autorecovery, there was code which postponed setting the ViewData/Mark to a later time
         // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since this method
         // here is never called before the load process finished.
-    if ( pViewDataItem )
-    {
-        pViewFrame->GetViewShell()->ReadUserData( pViewDataItem->GetValue(), sal_True );
-    }
-    else if( pJumpItem )
+    if( pJumpItem )
     {
         pViewFrame->GetViewShell()->JumpToMark( pJumpItem->GetValue() );
     }

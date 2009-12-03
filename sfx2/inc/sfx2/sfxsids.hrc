@@ -582,7 +582,7 @@
 #define SID_VIEW_ZOOM_MODE                  (SID_SFX_START + 521)
 #define SID_VIEW_POS_SIZE                   (SID_SFX_START + 522)
 #define SID_VIEW_ID                         (SID_SFX_START + 523)
-#define SID_USER_DATA                       (SID_SFX_START + 524)
+    // FREE, was SID_USER_DATA
 #define SID_VIEW_DATA                       (SID_SFX_START + 1582)
 #define SID_SILENT                          (SID_SFX_START + 528)
 #define SID_HIDDEN                          (SID_SFX_START + 534)

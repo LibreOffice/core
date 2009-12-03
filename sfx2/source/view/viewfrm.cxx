@@ -609,7 +609,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     pNewSet = new SfxAllItemSet( *pMedium->GetItemSet() );
                     pNewSet->ClearItem( SID_VIEW_ID );
-                    pNewSet->ClearItem( SID_USER_DATA );
                     pNewSet->ClearItem( SID_STREAM );
                     pNewSet->ClearItem( SID_INPUTSTREAM );
                     pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pMedium->GetFilter()->GetName() ) );
@@ -2315,11 +2314,6 @@ void SfxViewFrame::ExecView_Impl
             // ViewData bei FrameSets rekursiv holen
             GetFrame()->GetViewData_Impl();
             SfxMedium* pMed = GetObjectShell()->GetMedium();
-
-            // obtain user data
-            String aUserData;
-            GetViewShell()->WriteUserData( aUserData, sal_True );
-            pMed->GetItemSet()->Put( SfxStringItem( SID_USER_DATA, aUserData ) );
 
             // do not open the new window hidden
             pMed->GetItemSet()->ClearItem( SID_HIDDEN );
