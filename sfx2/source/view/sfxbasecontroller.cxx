@@ -1370,6 +1370,10 @@ void SfxBaseController::ConnectSfxFrame_Impl( const bool i_bConnect )
 
         if ( SfxViewFrame::Current() == pActFrame )
             pActFrame->GetDispatcher()->Update_Impl( sal_True );
+
+        Window* pFrameWin = &pActFrame->GetWindow();
+        if ( pFrameWin != &pActFrame->GetFrame()->GetWindow() )
+            pFrameWin->Show();
     }
 
     // invalidate slot corresponding to the view shell
