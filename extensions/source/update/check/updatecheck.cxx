@@ -1528,6 +1528,8 @@ void UpdateCheck::showExtensionDialog()
 rtl::Reference<UpdateHandler>
 UpdateCheck::getUpdateHandler()
 {
+    osl::MutexGuard aGuard(m_aMutex);
+
     if( ! m_aUpdateHandler.is() )
         m_aUpdateHandler = new UpdateHandler(m_xContext, this);
 
