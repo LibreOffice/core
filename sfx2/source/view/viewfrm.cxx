@@ -769,7 +769,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         while ( !aViewFrames.empty() )
                         {
-                            LoadViewIntoFrame_Impl( *xNewObj, aViewFrames.front().first, aLoadArgs, aViewFrames.front().second );
+                            LoadViewIntoFrame_Impl( *xNewObj, aViewFrames.front().first, aLoadArgs, aViewFrames.front().second, false );
                             aViewFrames.pop_front();
                         }
                     }
@@ -2042,8 +2042,12 @@ Reference< XController2 > SfxViewFrame::LoadDocument_Impl(
 
 //--------------------------------------------------------------------
 SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
-                                                   const USHORT i_nViewId )
+                                                   const USHORT i_nViewId, const bool i_bHidden )
 {
+    OSL_PRECOND( !i_bHidden || !i_rFrame.is(),
+        "SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow: loading *hidden* into an *existing* frame is not supported!" );
+        // Care for this frame's visibility yourself, please
+
     Reference< XFrame > xFrame( i_rFrame );
     bool bOwnFrame = false;
     bool bSuccess = false;
@@ -2057,10 +2061,10 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
             bOwnFrame = true;
         }
 
-        LoadViewIntoFrame_Impl( i_rDoc, xFrame, Sequence< PropertyValue >(), i_nViewId );
+        LoadViewIntoFrame_Impl( i_rDoc, xFrame, Sequence< PropertyValue >(), i_nViewId, i_bHidden );
         bSuccess = true;
 
-        if ( bOwnFrame )
+        if ( bOwnFrame && !i_bHidden )
         {
             // ensure the frame/window is visible
             Reference< XWindow > xContainerWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
@@ -2092,13 +2096,17 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
 
 //--------------------------------------------------------------------
 void SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
-                                           const Sequence< PropertyValue >& i_rLoadArgs, const USHORT i_nViewId )
+                                           const Sequence< PropertyValue >& i_rLoadArgs, const USHORT i_nViewId,
+                                           const bool i_bHidden )
 {
     Reference< XModel > xDocument( i_rDoc.GetModel(), UNO_SET_THROW );
 
     ::comphelper::NamedValueCollection aTransformLoadArgs( i_rLoadArgs.getLength() ? i_rLoadArgs : xDocument->getArgs() );
     aTransformLoadArgs.put( "Model", xDocument );
-    aTransformLoadArgs.put( "ViewId", sal_Int16( i_nViewId ) );
+    if ( i_nViewId )
+        aTransformLoadArgs.put( "ViewId", sal_Int16( i_nViewId ) );
+    if ( i_bHidden )
+        aTransformLoadArgs.put( "Hidden", i_bHidden );
 
     ::rtl::OUString sURL( xDocument->getURL() );
     if ( !sURL.getLength() )
@@ -2138,13 +2146,20 @@ SfxViewShell* SfxViewFrame::LoadNewSfxView_Impl( const USHORT i_nViewId, SfxView
 
 //--------------------------------------------------------------------
 
+SfxViewFrame* SfxViewFrame::LoadHiddenDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId )
+{
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, Reference< XFrame >(), i_nViewId, true );
+}
+
+//--------------------------------------------------------------------
+
 SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const SfxFrame* i_pTargetFrame, const USHORT i_nViewId )
 {
     Reference< XFrame > xFrame;
     if ( i_pTargetFrame )
         xFrame = i_pTargetFrame->GetFrameInterface();
 
-    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, xFrame, i_nViewId );
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, xFrame, i_nViewId, false );
 }
 
 //--------------------------------------------------------------------
@@ -2440,7 +2455,7 @@ void SfxViewFrame::ExecView_Impl
             if ( pFrameItem )
                 pFrameItem->GetValue() >>= xFrame;
 
-            LoadViewIntoFrame_Impl_NoThrow( *GetObjectShell(), xFrame, nViewId );
+            LoadViewIntoFrame_Impl_NoThrow( *GetObjectShell(), xFrame, nViewId, false );
 
             rReq.Done();
             break;

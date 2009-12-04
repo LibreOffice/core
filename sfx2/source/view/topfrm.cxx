@@ -816,11 +816,12 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
         pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
     }
 
-    OSL_ENSURE( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT,
+    OSL_ENSURE( ( ( rDoc.Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) == SFX_LOADED_MAINDOCUMENT )
+            ||  ( pJumpItem == NULL ),
         "SfxFrame::InsertDocument_Impl: so this code wasn't dead?" );
-        // Before CWS autorecovery, there was code which postponed setting the ViewData/Mark to a later time
+        // Before CWS autorecovery, there was code which postponed jumping to the Mark to a later time
         // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since this method
-        // here is never called before the load process finished.
+        // here is never called before the load process finished. At least not with a jump item != NULL.
     if( pJumpItem )
     {
         pViewFrame->GetViewShell()->JumpToMark( pJumpItem->GetValue() );

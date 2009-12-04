@@ -291,12 +291,19 @@ sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlo
 void SfxFrameLoader_Impl::impl_lockHiddenDocument( SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor ) const
 {
     const sal_Bool bHidden = i_rDescriptor.getOrDefault( "Hidden", sal_False );
-    if ( bHidden )
-    {
-        i_rDocument.RestoreNoDelete();
-        i_rDocument.OwnerLock( TRUE );
-        i_rDocument.Get_Impl()->bHiddenLockedByAPI = TRUE;
-    }
+    if ( !bHidden )
+        return;
+
+    const SfxViewFrame* pExistingViewFrame = SfxViewFrame::GetFirst( &i_rDocument );
+    if ( pExistingViewFrame )
+        return;
+
+    // the document is to be loaded hidden, and it is not yet displayed in any other frame
+    // To prevent it from being closed when the loader returns, increase its OwnerLock
+    // (the OwnerLock is normally increased by every frame in which the document is displayed, and by this loader)
+    i_rDocument.RestoreNoDelete();
+    i_rDocument.OwnerLock( TRUE );
+    i_rDocument.Get_Impl()->bHiddenLockedByAPI = TRUE;
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -590,9 +597,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         SfxObjectShellLock xDoc = impl_findObjectShell( xModel );
         ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the given model" );
 
-        // if the document is created hidden, prevent it being deleted until it is shown or disposed
-        if ( !bExternalModel )
-            impl_lockHiddenDocument( *xDoc, aDescriptor );
+        // if the document is created hidden, prevent it from being deleted until it is shown or disposed
+        impl_lockHiddenDocument( *xDoc, aDescriptor );
             // TODO; if we wouldn't use a SfxObjectShellLock instance for xDoc, but a simple SfxObjectShellRef,
             // then this would not be necessary, /me thinks. That is, the *Lock classes inc/dec a "Lock" counter
             // (additional to the ref counter) in their ctor/dtor, and if the lock counter goes to 0, the

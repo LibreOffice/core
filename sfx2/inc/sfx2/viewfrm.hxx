@@ -168,6 +168,7 @@ public:
     static SfxViewFrame*    CreateViewFrame( SfxObjectShell& rDoc, USHORT nViewId=0, BOOL bHidden = FALSE );
     static SfxViewFrame*    Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId );
 
+    static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId );
     static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const SfxFrame* i_pTargetFrame, const USHORT i_nViewId = 0 );
     static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const USHORT i_nViewId = 0 );
 
@@ -350,7 +351,8 @@ private:
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rLoadArgs,
-                            const USHORT i_nViewId
+                            const USHORT i_nViewId,
+                            const bool i_bHidden
                         );
 
     /** loads the given existing document into the given frame
@@ -373,7 +375,8 @@ private:
     SAL_DLLPRIVATE static SfxViewFrame* LoadViewIntoFrame_Impl_NoThrow(
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
-                            const USHORT i_nViewId
+                            const USHORT i_nViewId,
+                            const bool i_bHidden
                         );
 };
 
