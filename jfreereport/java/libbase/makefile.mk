@@ -46,15 +46,15 @@ TARFILE_NAME=$(TARGET)-$(LIBBASE_VERSION)
 #TARFILE_ROOTDIR=$(TARGET)
 TARFILE_IS_FLAT=true
 
-# PATCH_FILES=$(PRJ)$/patches$/libbase.patch
-# CONVERTFILES=build.xml
+PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
+CONVERTFILES=common_build.xml
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(LIBBASE_VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dantcontrib.available="true" -Dbuild.id="10682" -Dproject.revision="$(LIBBASE_VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dproject.revision="$(LIBBASE_VERSION)" -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dantcontrib.available="true" -Dbuild.id="10682" -Dproject.revision="$(LIBBASE_VERSION)" -f $(ANT_BUILDFILE) jar
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
@@ -68,8 +68,13 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(L10N_framework)"==""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)-$(LIBBASE_VERSION).jar 
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(LIBBASE_VERSION).jar
 
+$(PACKAGE_DIR)$/$(TARGET).patch : 
+    @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
+    ( $(TYPE:s/+//) $(PRJ)$/patches$/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(LIBBASE_VERSION)/g' > $(PACKAGE_DIR)$/$(TARGET).patch )
+    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)$/so_converted_$(TARGET).dummy
+    
 # XCLASSPATH/CLASSPATH does not work and we only can give lib once. But
 # the build.xmls fortunately take *.jar out of lib so we can copy our
 # commons-logging.jar here - yes, even in the system-apache commons case.

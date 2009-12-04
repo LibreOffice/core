@@ -45,7 +45,6 @@ TARGET=liblayout
 .IF "$(L10N_framework)"==""
 TARFILE_NAME=$(TARGET)-$(LIBLAYOUT_VERSION)
 TARFILE_IS_FLAT=true
-# TARFILE_ROOTDIR=$(TARGET)
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 CONVERTFILES=build.xml
 
