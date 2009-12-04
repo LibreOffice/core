@@ -1061,7 +1061,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 else
                 {
                     // Neues Dokument erzeugen.
-                    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0 );
+                    SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, 0 );
                     SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
 
                     // Dokumenttitel setzen

@@ -960,7 +960,7 @@ void NewXForms( SfxRequest& rReq )
 
     // load document into frame
     SFX_REQUEST_ARG( rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
-    SfxViewFrame::LoadDocument( *xDocSh, pFrameItem );
+    SfxViewFrame::LoadDocumentIntoFrame( *xDocSh, pFrameItem );
 
     // set return value
     rReq.SetReturnValue( SfxVoidItem( rReq.GetSlot() ) );
