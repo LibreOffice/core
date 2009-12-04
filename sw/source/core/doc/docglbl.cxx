@@ -326,7 +326,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         pDoc->GetSpzFrmFmts()->Count() )
                     {
                         /* SfxViewFrame* pFrame = */
-                            SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+                            SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );
@@ -672,7 +672,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         pDoc->GetSpzFrmFmts()->Count() )
                     {
                         /* SfxViewFrame* pFrame = */
-                            SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+                            SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );
