@@ -1729,12 +1729,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpHex< sal_uInt16 >( "flags", "CHCHART3D-FLAGS" );
         break;
 
-        case BIFF_ID_CHTYPEGROUP:
-            dumpUnused( 16 );
-            dumpHex< sal_uInt16 >( "flags", "CHTYPEGROUP-FLAGS" );
-            if( eBiff >= BIFF5 ) dumpDec< sal_uInt16 >( "group-idx" );
-        break;
-
         case BIFF_ID_CHDATAFORMAT:
             dumpDec< sal_Int16 >( "point-idx", "CHDATAFORMAT-POINTIDX" );
             dumpDec< sal_Int16 >( "series-idx" );
@@ -1772,6 +1766,25 @@ void WorkbookStreamObject::implDumpRecordBody()
                 dumpUnused( 6 );
         break;
 
+        case BIFF_ID_CHFRCATEGORYPROPS:
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt16 >( "label-offset", "CONV-PERCENT" );
+            dumpDec< sal_uInt16 >( "alignment", "CHFRCATEGORYPROPS-ALIGN" );
+            dumpHex< sal_uInt16 >( "flags", "CHFRCATEGORYPROPS-FLAGS" );
+        break;
+
+        case BIFF_ID_CHFREXTPROPS:
+        {
+            dumpFrHeader( true, true );
+            dumpDec< sal_uInt32 >( "data-size" );
+            dumpDec< sal_uInt8 >( "version" );
+            dumpUnused( 1 );
+            dumpDec< sal_uInt16 >( "parent", "CHFREXTPROPS-PARENT" );
+            dumpChFrExtProps();
+            dumpUnused( 4 );
+        }
+        break;
+
         case BIFF_ID_CHFRINFO:
         {
             dumpFrHeader( true, false );
@@ -1788,6 +1801,45 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpFrHeader( true, true );
             dumpHex< sal_uInt16 >( "flags", "CHFRLABELPROPS-FLAGS" );
             dumpUniString( "separator", BIFF_STR_SMARTFLAGS );
+        break;
+
+        case BIFF_ID_CHFRLAYOUT:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt32 >( "checksum" );
+            dumpHex< sal_uInt16 >( "flags", "CHFRLAYOUT-FLAGS" );
+            dumpDec< sal_uInt16 >( "mode-x", "CHFRLAYOUT-MODE" );
+            dumpDec< sal_uInt16 >( "mode-y", "CHFRLAYOUT-MODE" );
+            dumpDec< sal_uInt16 >( "mode-w", "CHFRLAYOUT-MODE" );
+            dumpDec< sal_uInt16 >( "mode-h", "CHFRLAYOUT-MODE" );
+            dumpRect< double >( "position" );
+            dumpUnused( 2 );
+        break;
+
+        case BIFF_ID_CHFRPLOTAREALAYOUT:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt32 >( "checksum" );
+            dumpHex< sal_uInt16 >( "flags", "CHFRPLOTAREALAYOUT-FLAGS" );
+            dumpRect< sal_Int16 >( "position" );
+            dumpDec< sal_uInt16 >( "mode-x", "CHFRLAYOUT-MODE" );
+            dumpDec< sal_uInt16 >( "mode-y", "CHFRLAYOUT-MODE" );
+            dumpDec< sal_uInt16 >( "mode-w", "CHFRLAYOUT-MODE" );
+            dumpDec< sal_uInt16 >( "mode-h", "CHFRLAYOUT-MODE" );
+            dumpRect< double >( "position" );
+            dumpUnused( 2 );
+        break;
+
+        case BIFF_ID_CHFRSHAPEPROPS:
+            dumpFrHeader( true, true );
+            dumpDec< sal_uInt16 >( "context" );
+            dumpUnused( 2 );
+            dumpHex< sal_uInt32 >( "checksum" );
+            dumpDec< sal_uInt32 >( "xml-size" );
+        break;
+
+        case BIFF_ID_CHFRTEXTPROPS:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt32 >( "checksum" );
+            dumpDec< sal_uInt32 >( "xml-size" );
         break;
 
         case BIFF_ID_CHFRUNITPROPS:
@@ -1959,6 +2011,12 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpHex< sal_uInt16 >( "flags", "CHTICK-FLAGS" );
             if( eBiff == BIFF8 ) dumpColorIdx( "label-color-idx" );
             if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "label-rotation", "TEXTROTATION" );
+        break;
+
+        case BIFF_ID_CHTYPEGROUP:
+            dumpUnused( 16 );
+            dumpHex< sal_uInt16 >( "flags", "CHTYPEGROUP-FLAGS" );
+            if( eBiff >= BIFF5 ) dumpDec< sal_uInt16 >( "group-idx" );
         break;
 
         case BIFF_ID_CHVALUERANGE:
@@ -3651,6 +3709,56 @@ void WorkbookStreamObject::dumpObjRecPictFmla( sal_uInt16 nFmlaSize )
             writeEmptyItem( OOX_DUMP_ERRASCII( "pic-link-size" ) );
         dumpRemainingTo( nStrmEnd );
     }
+}
+
+void WorkbookStreamObject::dumpChFrExtProps()
+{
+    BiffInputStream& rStrm = getBiffStream();
+    bool bValid = true;
+    while( bValid && (rStrm.getRemaining() > 4) )
+    {
+        ChFrExtPropInfo aInfo = dumpChFrExtPropHeader();
+        IndentGuard aIndGuard( out() );
+        switch( aInfo.first )
+        {
+            case 0: // start
+            case 1: // end
+            break;
+            case 2: // bool
+                dumpBoolean( "value" );
+                dumpUnused( 1 );
+            break;
+            case 3: // double
+                dumpUnused( 4 );
+                dumpDec< double >( "value", aInfo.second );
+            break;
+            case 4: // int32
+                dumpDec< sal_Int32 >( "value", aInfo.second );
+            break;
+            case 5: // string
+                dumpUnicodeArray( "value", rStrm.readInt32() );
+            break;
+            case 6: // uint16
+                dumpDec< sal_uInt16 >( "value", aInfo.second );
+            break;
+            case 7: // blob
+                dumpBinary( "value", rStrm.readuInt32() );
+            break;
+            default:
+                bValid = false;
+        }
+    }
+}
+
+WorkbookStreamObject::ChFrExtPropInfo WorkbookStreamObject::dumpChFrExtPropHeader()
+{
+    MultiItemsGuard aMultiGuard( out() );
+    ChFrExtPropInfo aInfo;
+    aInfo.first = dumpDec< sal_uInt8 >( "datatype", "CHFREXTPROPS-TYPE" );
+    dumpUnused( 1 );
+    sal_uInt16 nTag = dumpDec< sal_uInt16 >( "tag", "CHFREXTPROPS-TAG" );
+    aInfo.second = cfg().getName( "CHFREXTPROPS-TAG-NAMELIST", nTag );
+    return aInfo;
 }
 
 // ============================================================================

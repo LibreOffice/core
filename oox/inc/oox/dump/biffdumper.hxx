@@ -450,6 +450,11 @@ private:
     void                dumpObjRecFmla( const String& rName, sal_uInt16 nFmlaSize );
     void                dumpObjRecPictFmla( sal_uInt16 nFmlaSize );
 
+    typedef ::std::pair< sal_uInt8, ::rtl::OUString > ChFrExtPropInfo;
+
+    void                dumpChFrExtProps();
+    ChFrExtPropInfo     dumpChFrExtPropHeader();
+
 private:
     NameListRef         mxColors;
     NameListRef         mxBorderStyles;
