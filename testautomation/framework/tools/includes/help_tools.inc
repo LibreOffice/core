@@ -100,14 +100,16 @@ function hCloseHelp() as boolean
 
     kontext "StarOfficeHelp"
     if ( StarOfficeHelp.exists() ) then
-        ''StarOfficeHelp.typeKeys( "<MOD1 F4>" )
+        
         hUseAsyncSlot( "FileClose")
-        if ( StarOfficeHelp.notExists( 3 ) ) then
-            printlog( CFN & "Help was closed")
-            hCloseHelp() = TRUE
-        else
+        StarOfficeHelp.notExists( 3 )
+        
+        if ( StarOfficeHelp.Exists() ) then
             printlog( CFN & "Help was not closed")
             hCloseHelp() = FALSE
+        else
+            printlog( CFN & "Help was closed")
+            hCloseHelp() = TRUE
         endif
     else
         printlog( CFN & "Help is not open, no action taken")
