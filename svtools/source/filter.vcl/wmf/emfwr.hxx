@@ -47,6 +47,7 @@ class EMFWriter
 private:
 
     VirtualDevice       maVDev;
+    MapMode             maDestMapMode;
     FilterConfigItem*   mpFilterConfigItem;
     SvStream*           mpStm;
     BOOL*               mpHandlesUsed;

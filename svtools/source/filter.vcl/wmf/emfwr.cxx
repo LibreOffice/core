@@ -162,6 +162,8 @@
 #define TA_RTLREADING                       256
 #define TA_MASK     (TA_BASELINE+TA_CENTER+TA_UPDATECP+TA_RTLREADING)
 
+#define MM_ANISOTROPIC                      8
+
 // -------------
 // - EMFWriter -
 // -------------
@@ -181,19 +183,37 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfig
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
     mpFilterConfigItem = pFilterConfigItem;
 
+    // don't work with pixel as destination map mode -> higher resolution preferrable
+    maDestMapMode.SetMapUnit( MAP_100TH_MM );
+
     const Size aMtfSizePix( maVDev.LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
     const Size aMtfSizeLog( maVDev.LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
 
     // seek over header
-    rOStm.SeekRel( 100 );
+    // use [MS-EMF 2.2.11] HeaderExtension2 Object, otherwise resulting EMF cannot be converted with GetWinMetaFileBits()
+    rOStm.SeekRel( 108 );
 
     // write initial values
-    ImplBeginRecord( WIN_EMR_SETWINDOWORGEX );
-    (*mpStm) << (INT32) 0 << (INT32) 0;
+
+    // set 100th mm map mode in EMF
+    ImplBeginRecord( WIN_EMR_SETMAPMODE );
+    (*mpStm) << (INT32) MM_ANISOTROPIC;
+    ImplEndRecord();
+
+    ImplBeginRecord( WIN_EMR_SETVIEWPORTEXTEX );
+    (*mpStm) << (INT32) maVDev.ImplGetDPIX() << (INT32) maVDev.ImplGetDPIY();
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETWINDOWEXTEX );
-    (*mpStm) << (INT32) aMtfSizePix.Width() << (INT32) aMtfSizePix.Height();
+    (*mpStm) << (INT32) 2540 << (INT32) 2540;
+    ImplEndRecord();
+
+    ImplBeginRecord( WIN_EMR_SETVIEWPORTORGEX );
+    (*mpStm) << (INT32) 0 << (INT32) 0;
+    ImplEndRecord();
+
+    ImplBeginRecord( WIN_EMR_SETWINDOWORGEX );
+    (*mpStm) << (INT32) 0 << (INT32) 0;
     ImplEndRecord();
 
     ImplWriteRasterOp( ROP_OVERPAINT );
@@ -207,7 +227,7 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfig
 
     ImplBeginRecord( WIN_EMR_EOF );
     (*mpStm)<< (sal_uInt32)0        // nPalEntries
-            << (sal_uInt32)0x16     // offPalEntries
+            << (sal_uInt32)0x10     // offPalEntries
             << (sal_uInt32)0x14;    // nSizeLast
     ImplEndRecord();
 
@@ -215,14 +235,15 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfig
     // write header
     const ULONG nEndPos = mpStm->Tell(); mpStm->Seek( nHeaderPos );
 
-    (*mpStm) << (UINT32) 0x00000001 << (UINT32) 100;
-    (*mpStm) << (INT32) 0 << (INT32) 0 << (INT32) ( aMtfSizePix.Width() - 1 ) << (INT32) ( aMtfSizePix.Height() - 1 );
-    (*mpStm) << (INT32) 0 << (INT32) 0 << (INT32) ( aMtfSizeLog.Width() - 1 ) << (INT32) ( aMtfSizeLog.Height() - 1 );
-    (*mpStm) << (UINT32) 0x464d4520 << (UINT32) 0x10000 << (UINT32) ( nEndPos - nHeaderPos );
-    (*mpStm) << (UINT32) mnRecordCount << (UINT16) ( mnHandleCount + 1 ) << (UINT16) 0 << (UINT32) 0 << (UINT32) 0 << (UINT32) 0;
-    (*mpStm) << (INT32) aMtfSizePix.Width() << (INT32) aMtfSizePix.Height();
-    (*mpStm) << (INT32) ( aMtfSizeLog.Width() / 100 ) << (INT32) ( aMtfSizeLog.Height() / 100 );
-    (*mpStm) << (UINT32) 0 << (UINT32) 0 << (UINT32) 0;
+    (*mpStm) << (UINT32) 0x00000001 << (UINT32) 108 //use [MS-EMF 2.2.11] HeaderExtension2 Object
+             << (INT32) 0 << (INT32) 0 << (INT32) ( aMtfSizePix.Width() - 1 ) << (INT32) ( aMtfSizePix.Height() - 1 )
+             << (INT32) 0 << (INT32) 0 << (INT32) ( aMtfSizeLog.Width() - 1 ) << (INT32) ( aMtfSizeLog.Height() - 1 )
+             << (UINT32) 0x464d4520 << (UINT32) 0x10000 << (UINT32) ( nEndPos - nHeaderPos )
+             << (UINT32) mnRecordCount << (UINT16) ( mnHandleCount + 1 ) << (UINT16) 0 << (UINT32) 0 << (UINT32) 0 << (UINT32) 0
+             << (INT32) aMtfSizePix.Width() << (INT32) aMtfSizePix.Height()
+             << (INT32) ( aMtfSizeLog.Width() / 100 ) << (INT32) ( aMtfSizeLog.Height() / 100 )
+             << (UINT32) 0 << (UINT32) 0 << (UINT32) 0
+             << (INT32) (  aMtfSizeLog.Width() * 10 ) << (INT32) ( aMtfSizeLog.Height() * 10 ); //use [MS-EMF 2.2.11] HeaderExtension2 Object
 
     mpStm->Seek( nEndPos );
     delete[] mpHandlesUsed;
@@ -520,35 +541,32 @@ void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
 
 void EMFWriter::ImplWriteExtent( long nExtent )
 {
-    const Size aSize( maVDev.LogicToPixel( Size( nExtent, nExtent ) ) );
-    (*mpStm) << (INT32) aSize.Width();
+    nExtent = maVDev.LogicToLogic( Size( nExtent, 0 ), maVDev.GetMapMode(), maDestMapMode ).Width();
+    (*mpStm) << (INT32) nExtent;
 }
 
 // -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWritePoint( const Point& rPoint )
 {
-    const Point aPoint( maVDev.LogicToPixel( rPoint ) );
-
-    (*mpStm) << (INT32) aPoint.X() << (INT32) aPoint.Y();
+    const Point aPoint( maVDev.LogicToLogic( rPoint, maVDev.GetMapMode(), maDestMapMode ));
+     (*mpStm) << (INT32) aPoint.X() << (INT32) aPoint.Y();
 }
 
 // -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWriteSize( const Size& rSize)
 {
-    const Size aSize( maVDev.LogicToPixel( rSize ) );
-
-    (*mpStm) << (INT32) aSize.Width() << (INT32) aSize.Height();
+    const Size aSize( maVDev.LogicToLogic( rSize, maVDev.GetMapMode(), maDestMapMode ));
+     (*mpStm) << (INT32) aSize.Width() << (INT32) aSize.Height();
 }
 
 // -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWriteRect( const Rectangle& rRect )
 {
-    const Rectangle aRect( maVDev.LogicToPixel( rRect ) );
-
-    (*mpStm) << aRect.Left() << aRect.Top() << aRect.Right() << aRect.Bottom();
+    const Rectangle aRect( maVDev.LogicToLogic ( rRect, maVDev.GetMapMode(), maDestMapMode ));
+     (*mpStm) << aRect.Left() << aRect.Top() << aRect.Right() << aRect.Bottom();
 }
 
 // -----------------------------------------------------------------------------
@@ -647,12 +665,20 @@ void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
         const Polygon& rPoly = rPolyPoly[ i ];
         while ( n < rPoly.GetSize() )
         {
-            sal_uInt16 nBezPoints = 0;
-            if ( n )
+            if( n == 0 )
             {
-                while ( ( ( nBezPoints + n + 2 ) < rPoly.GetSize() ) && ( rPoly.GetFlags( nBezPoints + n ) == POLY_CONTROL ) )
-                    nBezPoints += 3;
+                ImplBeginRecord( WIN_EMR_MOVETOEX );
+                ImplWritePoint( rPoly[ 0 ] );
+                ImplEndRecord();
+                n++;
+                continue;
             }
+
+            sal_uInt16 nBezPoints = 0;
+
+            while ( ( ( nBezPoints + n + 2 ) < rPoly.GetSize() ) && ( rPoly.GetFlags( nBezPoints + n ) == POLY_CONTROL ) )
+                nBezPoints += 3;
+
             if ( nBezPoints )
             {
                 ImplBeginRecord( WIN_EMR_POLYBEZIERTO );
@@ -672,20 +698,24 @@ void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
                 sal_uInt16 nPoints = 1;
                 while( ( nPoints + n ) < rPoly.GetSize() && ( rPoly.GetFlags( nPoints + n ) != POLY_CONTROL ) )
                     nPoints++;
-                ImplBeginRecord( WIN_EMR_MOVETOEX );
-                ImplWritePoint( rPoly[ n ] );
-                ImplEndRecord();
+
                 if ( nPoints > 1 )
                 {
                     ImplBeginRecord( WIN_EMR_POLYLINETO );
-                    Polygon aNewPoly( nPoints );
-                    aNewPoly[ 0 ] = rPoly[ n ];
-                    for ( o = 1; o < nPoints; o++ )
-                        aNewPoly[ o ] = rPoly[ n + o ];
+                    Polygon aNewPoly( nPoints + 1 );
+                    aNewPoly[ 0 ] = rPoly[ n - 1];
+                    for ( o = 1; o <= nPoints; o++ )
+                        aNewPoly[ o ] = rPoly[ n - 1 + o ];
                     ImplWriteRect( aNewPoly.GetBoundRect() );
-                    (*mpStm) << (sal_uInt32)( nPoints - 1 );
+                    (*mpStm) << (sal_uInt32)( nPoints );
                     for( o = 1; o < aNewPoly.GetSize(); o++ )
                         ImplWritePoint( aNewPoly[ o ] );
+                    ImplEndRecord();
+                }
+                else
+                {
+                    ImplBeginRecord( WIN_EMR_LINETO );
+                    ImplWritePoint( rPoly[ n ] );
                     ImplEndRecord();
                 }
                 n = n + nPoints;
@@ -700,6 +730,7 @@ void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
     ImplBeginRecord( WIN_EMR_ENDPATH );
     ImplEndRecord();
     ImplBeginRecord( bClosed ? WIN_EMR_FILLPATH : WIN_EMR_STROKEPATH );
+    ImplWriteRect( rPolyPoly.GetBoundRect() );
     ImplEndRecord();
 }
 
