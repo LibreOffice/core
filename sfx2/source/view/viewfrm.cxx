@@ -2153,7 +2153,14 @@ SfxViewFrame* SfxViewFrame::LoadHiddenDocument( SfxObjectShell& i_rDoc, const US
 
 //--------------------------------------------------------------------
 
-SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const SfxFrame* i_pTargetFrame, const USHORT i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId )
+{
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, Reference< XFrame >(), i_nViewId, false );
+}
+
+//--------------------------------------------------------------------
+
+SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrame* i_pTargetFrame, const USHORT i_nViewId )
 {
     Reference< XFrame > xFrame;
     if ( i_pTargetFrame )
@@ -2164,9 +2171,9 @@ SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const SfxFrame
 
 //--------------------------------------------------------------------
 
-SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const USHORT i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const USHORT i_nViewId )
 {
-    return LoadDocument( i_rDoc, i_pFrameItem ? i_pFrameItem->GetFrame() : NULL, i_nViewId );
+    return LoadDocumentIntoFrame( i_rDoc, i_pFrameItem ? i_pFrameItem->GetFrame() : NULL, i_nViewId );
 }
 
 //--------------------------------------------------------------------

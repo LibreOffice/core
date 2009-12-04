@@ -930,7 +930,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 try
                 {
                     // load the Basic IDE via direct access to the SFX frame loader. A generic loadComponentFromURL
-                    // (which could be done via SfxViewFrame::LoadDocument) is not feasible here, since the Basic IDE
+                    // (which could be done via SfxViewFrame::LoadDocumentIntoFrame) is not feasible here, since the Basic IDE
                     // does not really play nice with the framework's concept. For instance, it is a "singleton document",
                     // which conflicts, at the latest, with the framework's concept of loading into _blank frames.
                     // So, since we know that our frame loader can handle it, we skip the generic framework loader
