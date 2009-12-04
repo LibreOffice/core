@@ -429,7 +429,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, const USHORT nViewId, const bo
             // (TODO: Why doesn't it? If it would, we could spare the extra code here.)
             Reference< XFrame > xFrame( lcl_findStartModuleFrame() );
             if ( xFrame.is() )
-                pFrame = Create( xFrame );
+                pFrame = SfxFrame::Create( xFrame );
         }
         else
         {

@@ -247,10 +247,37 @@ namespace
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+SfxFrame* SfxFrameLoader_Impl::impl_getOrCreateEmptySfxFrame( const Reference< XFrame >& i_rFrame ) const
+{
+    for (   SfxFrame* pFrame = SfxFrame::GetFirst();
+            pFrame;
+            pFrame = SfxFrame::GetNext( *pFrame )
+         )
+    {
+        if ( pFrame->GetFrameInterface() == i_rFrame )
+        {
+            if  (   ( pFrame->GetCurrentViewFrame() != NULL )
+                ||  ( pFrame->GetCurrentDocument() != NULL )
+                )
+                // an empty SfxFrame was requested, so we can't use this instance.
+                // Note that it is perfectly letgitimate that during loading into an XFrame which already contains
+                // a document, there exist two SfxFrame instances bound to this XFrame - the old one, which will be
+                // destroyed later, and the new one, which we're going to create
+                continue;
+
+            return pFrame;
+        }
+    }
+
+    SfxFrame* pFrame = SfxFrame::Create( i_rFrame );
+    ENSURE_OR_THROW( pFrame, "could not create an SfxFrame" );
+    return pFrame;
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, const Reference< XFrame >& i_rxFrame )
 {
-    SfxFrame* pTargetFrame = SfxFrame::Create( i_rxFrame );
-    ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
+    SfxFrame* pTargetFrame = impl_getOrCreateEmptySfxFrame( i_rxFrame );
     SfxFrameWeak wFrame = pTargetFrame;
 
     SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
@@ -550,7 +577,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         else
         {
             // tell the doc its load args.
-            xModel->attachResource( aDescriptor.getOrDefault( "URL", ::rtl::OUString() ), aDescriptor.getPropertyValues() );
+            xModel->attachResource( xModel->getURL(), aDescriptor.getPropertyValues() );
 
             // TODO: not sure this is correct. The original, pre-refactoring code did it this way. However, I could
             // imagine scenarios where it is *not* correct to overrule the *existing* model args (XModel::getArgs)
@@ -575,8 +602,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             // ObjectShell.
 
         // create a frame
-        SfxFrame* pTargetFrame = SfxFrame::Create( _rTargetFrame );
-        ENSURE_OR_THROW( pTargetFrame, "could not create an SfxFrame" );
+        SfxFrame* pTargetFrame = impl_getOrCreateEmptySfxFrame( _rTargetFrame );
         wFrame = pTargetFrame;
 
         // insert the document into the frame

@@ -158,8 +158,6 @@ public:
     static SfxFrame*    GetFirst();
     static SfxFrame*    GetNext( SfxFrame& );
 
-    static SfxViewFrame*
-                        InsertDocument( SfxObjectShell& rDoc, SfxFrame*& rpTargetFrame, const USHORT nViewId = 0, const bool bHidden = false );
     const SfxPoolItem*  LoadDocumentSynchron( SfxItemSet& aSet );
 
     SfxBroadcaster&     GetBroadcaster() const;

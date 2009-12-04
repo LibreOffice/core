@@ -2041,6 +2041,56 @@ Reference< XController2 > SfxViewFrame::LoadDocument_Impl(
 }
 
 //--------------------------------------------------------------------
+SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
+                                                   const USHORT i_nViewId )
+{
+    Reference< XFrame > xFrame( i_rFrame );
+    bool bOwnFrame = false;
+    bool bSuccess = false;
+    try
+    {
+        if ( !xFrame.is() )
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+            xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
+            bOwnFrame = true;
+        }
+
+        LoadViewIntoFrame_Impl( i_rDoc, xFrame, Sequence< PropertyValue >(), i_nViewId );
+        bSuccess = true;
+
+        if ( bOwnFrame )
+        {
+            // ensure the frame/window is visible
+            Reference< XWindow > xContainerWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
+            xContainerWindow->setVisible( sal_True );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    if ( bSuccess )
+        return SfxViewFrame::Get( xFrame->getController(), &i_rDoc );
+
+    if ( bOwnFrame )
+    {
+        try
+        {
+            xFrame->dispose();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    return NULL;
+}
+
+//--------------------------------------------------------------------
 void SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
                                            const Sequence< PropertyValue >& i_rLoadArgs, const USHORT i_nViewId )
 {
@@ -2088,6 +2138,58 @@ SfxViewShell* SfxViewFrame::LoadNewSfxView_Impl( const USHORT i_nViewId, SfxView
 
 //--------------------------------------------------------------------
 
+SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const SfxFrame* i_pTargetFrame, const USHORT i_nViewId )
+{
+    Reference< XFrame > xFrame;
+    if ( i_pTargetFrame )
+        xFrame = i_pTargetFrame->GetFrameInterface();
+
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, xFrame, i_nViewId );
+}
+
+//--------------------------------------------------------------------
+
+SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const USHORT i_nViewId )
+{
+    return LoadDocument( i_rDoc, i_pFrameItem ? i_pFrameItem->GetFrame() : NULL, i_nViewId );
+}
+
+//--------------------------------------------------------------------
+
+SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, const SfxObjectShell* i_pDoc )
+{
+    if ( !i_rController.is() )
+        return NULL;
+
+    const SfxObjectShell* pDoc = i_pDoc;
+    if ( !pDoc )
+    {
+        Reference< XModel > xDocument( i_rController->getModel() );
+        for (   pDoc = SfxObjectShell::GetFirst( 0, false );
+                pDoc;
+                pDoc = SfxObjectShell::GetNext( *pDoc, 0, false )
+            )
+        {
+            if ( pDoc->GetModel() == xDocument )
+                break;
+        }
+    }
+
+    SfxViewFrame* pViewFrame = NULL;
+    for (   pViewFrame = SfxViewFrame::GetFirst( pDoc, FALSE );
+            pViewFrame;
+            pViewFrame = SfxViewFrame::GetNext( *pViewFrame, pDoc, FALSE )
+        )
+    {
+        if ( pViewFrame->GetViewShell()->GetController() == i_rController )
+            break;
+    }
+
+    return pViewFrame;
+}
+
+//--------------------------------------------------------------------
+
 SfxViewFrame* SfxViewFrame::Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId )
 {
     bool bSuccess = false;
@@ -2097,18 +2199,11 @@ SfxViewFrame* SfxViewFrame::Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, 
         Reference< XController2 > xController = LoadDocument_Impl(
             i_rDoc, i_rFrame.GetFrameInterface(), Sequence< PropertyValue >(), i_nViewId );
         ENSURE_OR_THROW( xController.is(), "invalid controller returned by LoadDocument_Impl" );
-            // this is expected to throw in case of a failure ...
+            // LoadDocument_Impl is expected to throw in case of a failure ...
 
         if ( xController.is() )
         {
-            for (   pViewFrame = SfxViewFrame::GetFirst( &i_rDoc, FALSE );
-                    pViewFrame;
-                    pViewFrame = SfxViewFrame::GetNext( *pViewFrame, &i_rDoc, FALSE )
-                )
-            {
-                if ( pViewFrame->GetViewShell()->GetController() == xController )
-                    break;
-            }
+            pViewFrame = SfxViewFrame::Get( xController.get(), &i_rDoc );
             if ( !pViewFrame )
             {
                 OSL_ENSURE( false, "SfxViewFrame::Create: wrong controller implementation!" );
@@ -2345,45 +2440,7 @@ void SfxViewFrame::ExecView_Impl
             if ( pFrameItem )
                 pFrameItem->GetValue() >>= xFrame;
 
-            bool bOwnFrame = false;
-            bool bSuccess = false;
-            try
-            {
-                if ( !xFrame.is() )
-                {
-                    // if no frame was given, default-create one
-                    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                    Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
-                    xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
-                    bOwnFrame = true;
-                }
-
-                LoadViewIntoFrame_Impl( *GetObjectShell(), xFrame, Sequence< PropertyValue >(), nViewId );
-                bSuccess = true;
-
-                if ( bOwnFrame )
-                {
-                    // ensure the frame/window is visible
-                    Reference< XWindow > xContainerWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
-                    xContainerWindow->setVisible( sal_True );
-                }
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-
-            if ( !bSuccess && bOwnFrame )
-            {
-                try
-                {
-                    xFrame->dispose();
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
-            }
+            LoadViewIntoFrame_Impl_NoThrow( *GetObjectShell(), xFrame, nViewId );
 
             rReq.Done();
             break;

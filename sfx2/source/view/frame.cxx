@@ -306,26 +306,6 @@ sal_uInt16 SfxFrame::GetChildFrameCount() const
     return pChildArr ? pChildArr->Count() : 0;
 }
 
-SfxViewFrame* SfxFrame::InsertDocument( SfxObjectShell& rDoc, SfxFrame*& rpTargetFrame, const USHORT nViewId, const bool bHidden )
-{
-    SfxViewFrame* pViewFrame = NULL;
-
-    if ( rpTargetFrame )
-    {
-        if ( bHidden )
-            rDoc.PutItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
-        rpTargetFrame->InsertDocument_Impl( rDoc, *rDoc.GetMedium()->GetItemSet() );
-        pViewFrame = rpTargetFrame->GetCurrentViewFrame();
-    }
-    else
-    {
-        pViewFrame = SfxViewFrame::CreateViewFrame( rDoc, nViewId, bHidden );
-        if( pViewFrame )
-            rpTargetFrame = pViewFrame->GetFrame();
-    }
-    return pViewFrame;
-}
-
 void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
 {
     if( !pImp->bInCancelTransfers )

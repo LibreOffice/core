@@ -168,10 +168,15 @@ public:
     static SfxViewFrame*    CreateViewFrame( SfxObjectShell& rDoc, USHORT nViewId=0, BOOL bHidden = FALSE );
     static SfxViewFrame*    Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId );
 
+    static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const SfxFrame* i_pTargetFrame, const USHORT i_nViewId = 0 );
+    static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const USHORT i_nViewId = 0 );
+
     static SfxViewFrame*    Current();
     static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
     static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
     static USHORT           Count();
+
+    static SfxViewFrame*    Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = NULL );
 
             void            DoActivate(BOOL bMDI, SfxViewFrame *pOld=NULL);
             void            DoDeactivate(BOOL bMDI, SfxViewFrame *pOld=NULL);
@@ -338,11 +343,36 @@ private:
             instead of being reset.
         @param i_nViewId
             the ID of the view to create
+        @throws Exception
+            if something goes wrong. The caller is responsible for handling this.
     */
     SAL_DLLPRIVATE static void LoadViewIntoFrame_Impl(
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rLoadArgs,
+                            const USHORT i_nViewId
+                        );
+
+    /** loads the given existing document into the given frame
+
+        This is done using the XComponentLoader interface of the frame, so the SFX document loader is invoked. Don't
+        use this method if you want to plug the document into the frame on SFX level only. In such a case, use
+        LoadNewSfxView_Impl instead.
+
+        If no frame is given, a blank top level frame is created.
+
+        If anything fails during the process, as much as possible is cleaned up.
+
+        @param i_rDoc
+            the document to load
+        @param i_rFrame
+            the frame to load the document into. Might be <NULL/>, in which case a new frame is created.
+        @param i_nViewId
+            the ID of the view to create
+    */
+    SAL_DLLPRIVATE static SfxViewFrame* LoadViewIntoFrame_Impl_NoThrow(
+                            const SfxObjectShell& i_rDoc,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                             const USHORT i_nViewId
                         );
 };

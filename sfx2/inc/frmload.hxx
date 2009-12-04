@@ -137,6 +137,10 @@ private:
                             const ::com::sun::star::uno::Any& i_rCaughtError,
                             const ::comphelper::NamedValueCollection& i_rDescriptor
                         ) const;
+
+    SfxFrame*           impl_getOrCreateEmptySfxFrame(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame
+                        ) const;
 };
 
 #endif
