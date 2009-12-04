@@ -958,16 +958,9 @@ void NewXForms( SfxRequest& rReq )
     // initialize XForms
     static_cast<SwDocShell*>( &xDocSh )->GetDoc()->initXForms( true );
 
-    // put document into frame
-    const SfxItemSet* pArgs = rReq.GetArgs();
-    DBG_ASSERT( pArgs, "no arguments in SfxRequest");
-    if( pArgs != NULL )
-    {
-        const SfxPoolItem* pFrameItem = NULL;
-        pArgs->GetItemState( SID_DOCFRAME, FALSE, &pFrameItem );
-        SfxFrame* pFrame = pFrameItem ? dynamic_cast< const SfxFrameItem& >( *pFrameItem ).GetFrame() : NULL;
-        SfxFrame::InsertDocument( *xDocSh, pFrame );
-    }
+    // load document into frame
+    SFX_REQUEST_ARG( rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
+    SfxViewFrame::LoadDocument( *xDocSh, pFrameItem );
 
     // set return value
     rReq.SetReturnValue( SfxVoidItem( rReq.GetSlot() ) );

@@ -237,14 +237,8 @@ static sal_uInt16 nBCTitleNo = 0;
             pDocSh->getIDocumentDeviceAccess()->setJobsetup(pPrt->GetJobSetup());
         }
 
-        const SfxItemSet *pArgs = rReq.GetArgs();
-        DBG_ASSERT( pArgs, "no arguments in SfxRequest");
-        const SfxPoolItem* pFrameItem = 0;
-        if(pArgs)
-            pArgs->GetItemState(SID_DOCFRAME, FALSE, &pFrameItem);
-
-        SfxFrame* pFrame = pFrameItem ? dynamic_cast< const SfxFrameItem& >( *pFrameItem ).GetFrame() : NULL;
-        SfxViewFrame* pViewFrame = SfxFrame::InsertDocument( *xDocSh, pFrame, 0, true );
+        SFX_REQUEST_ARG( rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
+        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocument( *xDocSh, pFrameItem );
 
         SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
