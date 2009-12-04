@@ -149,17 +149,17 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
             kontext "Active"
             if ( Active.exists( 1 ) ) then
                 if ( Active.getButtonCount() = 2 ) then
-                    printlog( CFN & "Probably the dreaded <File corrupted warning>" )
+                    printlog( CFN & "<Update links dialog> or <File corruption warning>" )
                     active.yes()
                     hFileWait( FALSE )
                     kontext "Active"
                     if ( Active.exists( 2 ) ) then
+                        warnlog( "#105670# - File corruption warning, the template is broken" )
                         qaerrorlog( CFN & "Trying to recover." )
                         Active.ok()
                         hHandleActivesOnLoad() = FALSE
                         exit function
                     endif
-                    warnlog( "#105670# - File corruption warning, the template is broken" )
                 endif
             endif
 
