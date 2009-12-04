@@ -125,7 +125,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         Reference<XComponentContext> m_xRemoteContext;
 
         enum reg {
-            REG_UNINIT, REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED
+            REG_UNINIT, REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED, REG_MAYBE_REGISTERED
         } m_registered;
 
         Reference<loader::XImplementationLoader> getComponentInfo(
@@ -1105,6 +1105,7 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
     if (m_registered == REG_UNINIT)
     {
         m_registered = REG_NOT_REGISTERED;
+        bool bAmbiguousComponentName = false;
         const Reference<registry::XSimpleRegistry> xRDB( getRDB_RO() );
         if (xRDB.is())
         {
@@ -1125,21 +1126,51 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
                     pImplNames[ pos ] + OUSTR("/UNO/LOCATION") );
                 const Reference<registry::XRegistryKey> xKey(
                     xRootKey->openKey(key) );
-                if (xKey.is() && xKey->isValid()) {
+                if (xKey.is() && xKey->isValid())
+                {
                     const OUString location( xKey->getAsciiValue() );
                     if (location.equalsIgnoreAsciiCase( getURL() ))
+                    {
                         break;
+                    }
+                    else
+                    {
+                        //try to match only the file name
+                        OUString thisUrl(getURL());
+                        OUString thisFileName(thisUrl.copy(thisUrl.lastIndexOf('/')));
+
+                        OUString locationFileName(location.copy(location.lastIndexOf('/')));
+                        if (locationFileName.equalsIgnoreAsciiCase(thisFileName))
+                            bAmbiguousComponentName = true;
+                    }
                 }
             }
             if (pos >= 0)
                 m_registered = REG_REGISTERED;
+            else if (bAmbiguousComponentName)
+                m_registered = REG_MAYBE_REGISTERED;
         }
     }
+
+    //Different extensions can use the same service implementations. Then the extensions
+    //which was installed last will overwrite the one from the other extension. That is
+    //the registry will contain the path (the location) of the library or jar of the
+    //second extension. In this case isRegistered called for the lib of the first extension
+    //would return "not registered". That would mean that during uninstallation
+    //XPackage::registerPackage is not called, because it just was not registered. This is,
+    //however, necessary for jar files. Registering and unregistering update
+    //uno_packages/cache/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc
+    //Therefore, we will return always "is ambiguous" if the path of this component cannot
+    //be found in the registry and if there is another path and both have the same file name (but
+    //the rest of the path is different).
+    //If the caller cannot precisely determine that this package was registered, then it must
+    //call registerPackage.
+    sal_Bool bAmbiguous = m_registered == REG_VOID // REG_VOID == we are in the progress of unregistration
+        || m_registered == REG_MAYBE_REGISTERED;
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>(
-            m_registered == REG_REGISTERED,
-            m_registered == REG_VOID /* IsAmbiguous */ ) );
+            m_registered == REG_REGISTERED, bAmbiguous) );
 }
 
 //______________________________________________________________________________
