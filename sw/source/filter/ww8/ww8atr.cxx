@@ -966,7 +966,7 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
             TableRowEnd( pTextNodeInfoInner->getDepth() );
 
             SVBT16 nSty;
-            ShortToSVBT16( m_rWW8Export.nStyleBeforeFly, nSty );
+            ShortToSVBT16( 0, nSty );
             m_rWW8Export.pO->Insert( (BYTE*)&nSty, 2, m_rWW8Export.pO->Count() );     // Style #
             TableInfoRow( pTextNodeInfoInner );
             m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
@@ -1559,7 +1559,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
         rShd = WW8_SHD();               // alles Nullen : transparent
     else
     {
-        rShd.SetFore( 8);
+        rShd.SetFore( 0);
         rShd.SetBack( TransCol( rCol ) );
         rShd.SetStyle( bWrtWW8, 0 );
     }

@@ -2370,37 +2370,45 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
     if ( m_rWW8Export.bWrtWW8 )
     {
+        sal_uInt32 aSprmIds[] = {NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow};
+
         sal_uInt8 nBoxes0 = rTabBoxes.Count();
         if (nBoxes0 > 21)
             nBoxes0 = 21;
 
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TCellShd );
-        m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10), m_rWW8Export.pO->Count() );
-
-        for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
+        for (sal_uInt32 m = 0; m < 2; m++)
         {
-            const SwTableBox * pBox1 = rTabBoxes[n];
-            const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
-            const SfxPoolItem * pI = NULL;
-            Color aColor;
+            m_rWW8Export.InsUInt16( aSprmIds[m] );
+            m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10),
+                                     m_rWW8Export.pO->Count() );
 
-            if ( SFX_ITEM_ON == pFrmFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
+            for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
             {
-                aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
+                const SwTableBox * pBox1 = rTabBoxes[n];
+                const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
+                const SfxPoolItem * pI = NULL;
+                Color aColor;
+
+                if ( SFX_ITEM_ON ==
+                     pFrmFmt->GetAttrSet().
+                     GetItemState( RES_BACKGROUND, false, &pI ) )
+                {
+                    aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
+                }
+                else
+                    aColor = COL_AUTO;
+
+                WW8SHDLong aSHD;
+                aSHD.setCvFore( 0xFF000000 );
+
+                sal_uInt32 nBgColor = aColor.GetColor();
+                if ( nBgColor == COL_AUTO )
+                    aSHD.setCvBack( 0xFF000000 );
+                else
+                    aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
+
+                aSHD.Write( m_rWW8Export );
             }
-            else
-                aColor = COL_AUTO;
-
-            WW8SHDLong aSHD;
-            aSHD.setCvFore( 0xFF000000 );
-
-            sal_uInt32 nBgColor = aColor.GetColor();
-            if ( nBgColor == COL_AUTO )
-                aSHD.setCvBack( 0xFF000000 );
-            else
-                aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
-
-            aSHD.Write( m_rWW8Export );
         }
     }
 }
@@ -2415,11 +2423,24 @@ void WW8Export::SectionBreaksAndFrames( const SwTxtNode& rNode )
         OutWW6FlyFrmsInCntnt( rNode );
 }
 
+#ifdef DEBUG
+struct SwNodeHash
+{
+    size_t operator()(SwNode * pNode) const { return reinterpret_cast<size_t>(pNode); }
+};
+
+typedef ::std::hash_set<SwNode *, SwNodeHash> SwNodeHashSet;
+typedef ::std::deque<SwNode *> SwNodeDeque;
+#endif
+
 void MSWordExportBase::WriteText()
 {
 #ifdef DEBUG
     ::std::clog << "<WriteText>" << ::std::endl;
-//    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
+    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
+
+    SwNodeHashSet aNodeSet;
+    SwNodeDeque aNodeDeque;
 #endif
 
     while( pCurPam->GetPoint()->nNode < pCurPam->GetMark()->nNode ||
@@ -2427,6 +2448,29 @@ void MSWordExportBase::WriteText()
              pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex() ) )
     {
         SwNode * pNd = pCurPam->GetNode();
+
+#ifdef DEBUG
+        if (aNodeSet.find(pNd) == aNodeSet.end())
+        {
+            aNodeSet.insert(pNd);
+            aNodeDeque.push_back(pNd);
+        }
+        else
+        {
+            ::std::clog << "<already-done><which>" << dbg_out(*pNd)
+                        << "</which><nodes>" << ::std::endl;
+
+            SwNodeDeque::const_iterator aEnd = aNodeDeque.end();
+
+            for (SwNodeDeque::const_iterator aIt = aNodeDeque.begin();
+                 aIt != aEnd; aIt++)
+            {
+                ::std::clog << dbg_out(**aIt) << ::std::endl;
+            }
+
+            ::std::clog << "</nodes></already-done>" << ::std::endl;
+        }
+#endif
 
         if ( pNd->IsTxtNode() )
             SectionBreaksAndFrames( *pNd->GetTxtNode() );
@@ -3600,6 +3644,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 #endif
         TableRowEnd(pNodeInfoInner->getDepth());
 
+        ShortToSVBT16(0, nStyle);
         m_rWW8Export.pO->Insert( (BYTE*)&nStyle, 2, m_rWW8Export.pO->Count() );     // Style #
         TableInfoRow(pNodeInfoInner);
         m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
