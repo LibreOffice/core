@@ -31,7 +31,6 @@
 package installer::xpdinstaller;
 
 use Cwd;
-use HTML::Entities;
 use installer::converter;
 use installer::exiter;
 use installer::globals;
@@ -450,6 +449,21 @@ sub get_forceintoupdate_value
 }
 
 ###################################################
+# Substituting all occurences of "<" by "&lt;"
+# and all occurences of ">" by "&gt;"
+###################################################
+
+sub replace_brackets_in_string
+{
+    my ( $string ) = @_;
+
+    if ( $string =~ /\</ ) { $string =~ s/\</\&lt\;/g; }
+    if ( $string =~ /\>/ ) { $string =~ s/\>/\&gt\;/g; }
+
+    return $string;
+}
+
+###################################################
 # Substituting all occurences of "\uUXYZ" by
 # "&#xUXYZ;", because the use xml saxparser does
 # not know anything about this encoding. Therfore
@@ -507,7 +521,7 @@ sub collect_lang_values
         if ( $write_line )
         {
             my $value = $module->{$key};
-            $value = HTML::Entities::encode($value);
+            $value = replace_brackets_in_string($value);
             $value = replace_javaencoding_in_string($value);
             my $line = $indent . "<" . $saveentry . " lang=" . "\"" . $javalanguage . "\"" . ">" . $value . "<\/" . $saveentry . ">" . "\n";
             push(@{$xpdfile}, $line);
