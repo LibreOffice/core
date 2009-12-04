@@ -140,6 +140,7 @@ public:
                         TYPEINFO();
 
     static SfxFrame*    Create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
+    static SfxFrame*    CreateBlank();
     static SfxFrame*    Create( SfxObjectShell& rDoc, const USHORT nViewId, const bool bHidden );
     static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden );
 

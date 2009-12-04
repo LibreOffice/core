@@ -98,6 +98,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "about.hxx"
+#include "frmload.hxx"
 #include "referers.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
@@ -822,6 +823,24 @@ namespace
         }
         return _pFallback;
     }
+
+    const ::rtl::OUString& lcl_getBasicIDEServiceName()
+    {
+        static const ::rtl::OUString s_sBasicName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.BasicIDE" ) );
+        return s_sBasicName;
+    }
+
+    SfxViewFrame* lcl_getBasicIDEViewFrame( SfxObjectShell* i_pBasicIDE )
+    {
+        SfxViewFrame* pView = SfxViewFrame::GetFirst( i_pBasicIDE );
+        while ( pView )
+        {
+            if ( pView->GetObjectShell()->GetFactory().GetDocumentServiceName() == lcl_getBasicIDEServiceName() )
+                break;
+            pView = SfxViewFrame::GetNext( *pView, i_pBasicIDE );
+        }
+        return pView;
+    }
 }
 
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
@@ -902,22 +921,40 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_BASICIDE_APPEAR:
         {
-            SfxViewFrame* pView = SfxViewFrame::GetFirst();
-            ::rtl::OUString aBasicName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.BasicIDE" ) );
-            while ( pView )
-            {
-                if ( pView->GetObjectShell()->GetFactory().GetDocumentServiceName() == aBasicName )
-                    break;
-                pView = SfxViewFrame::GetNext( *pView );
-            }
-
+            SfxViewFrame* pView = lcl_getBasicIDEViewFrame( NULL );
             if ( !pView )
             {
-                SfxObjectShell* pDocShell = SfxObjectShell::CreateObject( aBasicName );
-                pDocShell->DoInitNew( 0 );
-                pDocShell->SetModified( FALSE );
-                pView = SfxViewFrame::CreateViewFrame( *pDocShell, 0 );
-                pView->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC:1" ) ) );
+                SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( lcl_getBasicIDEServiceName() );
+                pBasicIDE->DoInitNew( 0 );
+                pBasicIDE->SetModified( FALSE );
+                try
+                {
+                    // load the Basic IDE via direct access to the SFX frame loader. A generic loadComponentFromURL
+                    // (which could be done via SfxViewFrame::LoadDocument) is not feasible here, since the Basic IDE
+                    // does not really play nice with the framework's concept. For instance, it is a "singleton document",
+                    // which conflicts, at the latest, with the framework's concept of loading into _blank frames.
+                    // So, since we know that our frame loader can handle it, we skip the generic framework loader
+                    // mechanism, and the type detection (which doesn't know about the Basic IDE).
+                    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                    Reference< XSynchronousFrameLoader > xLoader( aContext.createComponent(
+                        SfxFrameLoader_Impl::impl_getStaticImplementationName() ), UNO_QUERY_THROW );
+                    ::comphelper::NamedValueCollection aLoadArgs;
+                    aLoadArgs.put( "Model", pBasicIDE->GetModel() );
+                    aLoadArgs.put( "URL", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/sbasic" ) ) );
+
+                    SfxFrame* pFrame = SfxFrame::CreateBlank();
+                    ENSURE_OR_THROW( pFrame, "could not create a blank SfxFrame" );
+
+                    xLoader->load( aLoadArgs.getPropertyValues(), pFrame->GetFrameInterface() );
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+
+                pView = lcl_getBasicIDEViewFrame( pBasicIDE );
+                if ( pView )
+                    pView->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC:1" ) ) );
             }
 
             if ( pView )

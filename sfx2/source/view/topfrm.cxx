@@ -394,6 +394,23 @@ namespace
     }
 }
 
+SfxFrame* SfxFrame::CreateBlank()
+{
+    SfxFrame* pFrame = NULL;
+    try
+    {
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+        Reference < XFrame > xFrame = xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 );
+        pFrame = Create( xFrame );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return pFrame;
+}
+
 SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, const USHORT nViewId, const bool bHidden )
 {
     if ( nViewId )
@@ -466,10 +483,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, const USHORT nViewId, const bo
     }
 
     if ( !pFrame  )
-    {
-        Reference < XFrame > xFrame = xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 );
-        pFrame = Create( xFrame );
-    }
+        pFrame = SfxFrame::CreateBlank();
 
     pFrame->pImp->bHidden = bHidden;
     Window* pWindow = pFrame->GetTopWindow_Impl();
