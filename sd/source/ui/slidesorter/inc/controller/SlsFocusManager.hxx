@@ -87,8 +87,11 @@ public:
     void MoveFocus (FocusMoveDirection eDirection);
 
     /** Show the focus indicator of the current slide.
+        @param bScrollToFocus
+            When <TRUE/> (the default) then the view is scrolled so that the
+            focus rectangle lies inside its visible area.
     */
-    void ShowFocus (void);
+    void ShowFocus (const bool bScrollToFocus = true);
 
     /** Hide the focus indicator.
     */
@@ -215,8 +218,13 @@ private:
         made visible.
         @param pDescriptor
             When NULL is given then the call is ignored.
+        @param bScrollToFocus
+            When <TRUE/> (the default) then the view is scrolled so that the
+            focus rectangle lies inside its visible area.
     */
-    void ShowFocusIndicator (const model::SharedPageDescriptor& rpDescriptor);
+    void ShowFocusIndicator (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bScrollToFocus);
 
     /** Call all currently registered listeners that a focus change has
         happended.  The focus may be hidden or shown or moved from one page
