@@ -166,7 +166,6 @@ public:
 
     static void             SetViewFrame( SfxViewFrame* );
     static SfxViewFrame*    CreateViewFrame( SfxObjectShell& rDoc, USHORT nViewId=0, BOOL bHidden = FALSE );
-    static SfxViewFrame*    Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId );
 
     static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId );
     static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const SfxFrame* i_pTargetFrame, const USHORT i_nViewId = 0 );
@@ -308,6 +307,7 @@ public:
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void SetCurViewId_Impl( const USHORT i_nID );
+    SAL_DLLPRIVATE static SfxViewFrame* Create_Impl( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId );
 
 //#endif
 private:

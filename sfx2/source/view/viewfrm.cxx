@@ -2205,7 +2205,7 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
 
 //--------------------------------------------------------------------
 
-SfxViewFrame* SfxViewFrame::Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId )
+SfxViewFrame* SfxViewFrame::Create_Impl( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId )
 {
     bool bSuccess = false;
     SfxViewFrame* pViewFrame = NULL;
@@ -2221,7 +2221,7 @@ SfxViewFrame* SfxViewFrame::Create( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, 
             pViewFrame = SfxViewFrame::Get( xController.get(), &i_rDoc );
             if ( !pViewFrame )
             {
-                OSL_ENSURE( false, "SfxViewFrame::Create: wrong controller implementation!" );
+                OSL_ENSURE( false, "SfxViewFrame::Create_Impl: wrong controller implementation!" );
                 Reference< XComponent > xComponent( xController, UNO_QUERY_THROW );
                 xComponent->dispose();
             }

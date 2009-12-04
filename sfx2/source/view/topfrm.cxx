@@ -797,7 +797,7 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     if ( nPluginMode && ( nPluginMode != 2 ) )
         SetInPlace_Impl( TRUE );
 
-    SfxViewFrame* pViewFrame = SfxViewFrame::Create( *this, rDoc, nViewId ? nViewId : rDoc.GetFactory().GetViewFactory( 0 ).GetOrdinal() );
+    SfxViewFrame* pViewFrame = SfxViewFrame::Create_Impl( *this, rDoc, nViewId ? nViewId : rDoc.GetFactory().GetViewFactory( 0 ).GetOrdinal() );
     OSL_ENSURE( pViewFrame, "SfxFrame::InsertDocument_Impl: something went wrong while creating the SfxViewFrame!" );
     if ( !pViewFrame )
         // TODO: better error handling? Under which conditions can this fail?
