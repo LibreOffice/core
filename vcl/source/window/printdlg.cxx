@@ -697,12 +697,14 @@ void PrintDialog::OutputOptPage::setupLayout()
 
 void PrintDialog::OutputOptPage::readFromSettings()
 {
+    #if 0
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
 
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ) );
     maToFileBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
+    #endif
 }
 
 void PrintDialog::OutputOptPage::storeToSettings()
