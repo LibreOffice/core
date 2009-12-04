@@ -305,8 +305,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                 }
 
                 SFX_REQUEST_ARG( rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-                SfxFrame* pFrame = pFrmItem ? pFrmItem->GetFrame() : NULL;
-                SfxFrame::InsertDocument( *pDocSh, pFrame, ::sd::OUTLINE_FACTORY_ID );
+                SfxViewFrame::LoadDocument( *pDocSh, pFrmItem, ::sd::OUTLINE_FACTORY_ID );
 
                 ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
 
@@ -550,8 +549,9 @@ SfxFrame* SdModule::CreateFromTemplate( const String& rTemplatePath, SfxFrame* p
     }
     else if( pDocShell )
     {
-        pFrame = pTargetFrame;
-        SfxFrame::InsertDocument( *pDocShell, pFrame );
+        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocument( *pDocShell, pTargetFrame );
+        OSL_ENSURE( pViewFrame, "SdModule::CreateFromTemplate: no view frame - was the document really loaded?" );
+        pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
     }
 
     return pFrame;
@@ -680,9 +680,9 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     SfxObjectShell* pShell = xShell;
                     if( pShell )
                     {
-                        pFrame = pTargetFrame;
-                        pViewFrame = SfxFrame::InsertDocument( *pShell, pFrame );
+                        pViewFrame = SfxViewFrame::LoadDocument( *pShell, pTargetFrame );
                         DBG_ASSERT( pViewFrame, "no ViewFrame!!" );
+                        pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
 
                         if(bNewDocDirect && !bStartWithTemplate)
                         {
@@ -785,8 +785,9 @@ SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, SfxFrame* pTarge
             pDoc->StopWorkStartupDelay();
         }
 
-        pFrame = pTargetFrame;
-        SfxFrame::InsertDocument( *pNewDocSh, pFrame );
+        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocument( *pNewDocSh, pTargetFrame );
+        OSL_ENSURE( pViewFrame, "SdModule::CreateEmptyDocument: no view frame - was the document really loaded?" );
+        pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
     }
 
     return pFrame;
