@@ -940,7 +940,17 @@ sal_Bool SfxLibraryContainer::init_Impl(
     // #110009
 
     if( !bStorage && meInitMode == DEFAULT )
-        implScanExtensions();
+    {
+        try
+        {
+            implScanExtensions();
+        }
+        catch( uno::Exception& )
+        {
+            // TODO: error handling?
+            OSL_ASSERT( "Cannot access extensions!" );
+        }
+    }
 
     // #110009 Preload?
     {
