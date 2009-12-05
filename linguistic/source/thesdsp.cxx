@@ -136,7 +136,8 @@ Sequence< Reference< XMeaning > > SAL_CALL
         return aMeanings;
 
     // search for entry with that language
-    LangSvcEntries_Thes *pEntry = aSvcMap[ nLanguage ].get();
+    ThesSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
+    LangSvcEntries_Thes     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
     if (!pEntry)
     {
@@ -264,8 +265,9 @@ Sequence< OUString >
 
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    ThesaurusDispatcher         *pThis = (ThesaurusDispatcher *) this;
-    const LangSvcEntries_Thes  *pEntry = pThis->aSvcMap[ nLanguage ].get();
+    ThesaurusDispatcher             *pThis = (ThesaurusDispatcher *) this;
+    const ThesSvcByLangMap_t::iterator  aIt( pThis->aSvcMap.find( nLanguage ) );
+    const LangSvcEntries_Thes       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
     if (pEntry)
         aRes = pEntry->aSvcImplNames;
 

@@ -680,5 +680,12 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
 ..\uiconfig\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US\*.xml
 ..\uiconfig\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es\*.xml
 
+..\inc\svx\subtoolboxcontrol.hxx %_DEST%\inc%_EXT%\svx\subtoolboxcontrol.hxx
+..\inc\svx\svdtext.hxx %_DEST%\inc%_EXT%\svx\svdtext.hxx
+..\inc\svx\svdotable.hxx %_DEST%\inc%_EXT%\svx\svdotable.hxx
+..\inc\svx\selectioncontroller.hxx %_DEST%\inc%_EXT%\svx\selectioncontroller.hxx
+..\inc\svx\helperhittest3d.hxx %_DEST%\inc%_EXT%\svx\helperhittest3d.hxx
+..\inc\svx\optimprove.hxx %_DEST%\inc%_EXT%\svx\optimprove.hxx
+..\inc\svx\msvbahelper.hxx %_DEST%\inc%_EXT%\svx\msvbahelper.hxx
 
 ..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*

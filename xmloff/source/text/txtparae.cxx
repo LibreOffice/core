@@ -807,6 +807,11 @@ void XMLTextParagraphExport::exportListChange(
         }
     }
 
+    const bool bExportODF =
+                ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0;
+    const SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion =
+                                    GetExport().getDefaultVersion();
+
     // start a new list
     if ( rNextInfo.GetLevel() > 0 )
     {
@@ -829,10 +834,6 @@ void XMLTextParagraphExport::exportListChange(
 
         if ( nListLevelsToBeOpened > 0 )
         {
-            const bool bExportODF =
-                        ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0;
-            const SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion =
-                                            GetExport().getDefaultVersion();
             const ::rtl::OUString sListStyleName( rNextInfo.GetNumRulesName() );
             // Currently only the text documents support <ListId>.
             // Thus, for other document types <sListId> is empty.
@@ -1038,16 +1039,14 @@ void XMLTextParagraphExport::exportListChange(
         pListElements->Remove( pListElements->Count()-1 );
         delete pElem;
 
-        if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() )
+        // --> OD 2009-11-12 #i103745# - only for sub lists
+        if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() &&
+             rNextInfo.GetLevel() != 1 )
+        // <--
         {
             // start new sub list respectively list on same list level
             pElem = (*pListElements)[pListElements->Count()-1];
             GetExport().EndElement( *pElem, sal_True );
-            if ( rNextInfo.GetLevel() == 1 )
-            {
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                        GetExport().EncodeStyleName( rNextInfo.GetNumRulesName() ) );
-            }
             GetExport().IgnorableWhitespace();
             GetExport().StartElement( *pElem, sal_False );
         }
@@ -1059,8 +1058,18 @@ void XMLTextParagraphExport::exportListChange(
             OUStringBuffer aBuffer;
             aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                              aBuffer.makeStringAndClear() );
+                                      aBuffer.makeStringAndClear() );
         }
+        // --> OD 2009-11-12 #i103745# - handle restart without start value on list level 1
+        else if ( rNextInfo.IsRestart() && /*!rNextInfo.HasStartValue() &&*/
+                  rNextInfo.GetLevel() == 1 )
+        {
+            OUStringBuffer aBuffer;
+            aBuffer.append( (sal_Int32)rNextInfo.GetListLevelStartValue() );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
+                                      aBuffer.makeStringAndClear() );
+        }
+        // <--
         if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
              GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
         {

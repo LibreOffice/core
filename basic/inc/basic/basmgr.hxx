@@ -231,6 +231,8 @@ public:
     ::com::sun::star::uno::Any
                     SetGlobalUNOConstant( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rValue );
 
+    /** retrieves a global constant in the basic library, referring to some UNO object, returns true if a value is found ( value is in aOut ) false otherwise. */
+                    bool GetGlobalUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
     /** determines whether there are password-protected modules whose size exceedes the
         legacy module size
         @param _out_rModuleNames

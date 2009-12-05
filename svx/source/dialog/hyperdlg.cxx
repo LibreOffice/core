@@ -76,9 +76,11 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
     pWindow = mpDlg->GetWindow();
     ((MyStruct*)pImp)->bVisible = FALSE;
 
-    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
+    Window* pTopWindow = 0;
+    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
+            (0 != (pTopWindow = SFX_APP()->GetTopWindow())))
     {
-        Size aParentSize( SFX_APP()->GetTopWindow()->GetSizePixel() );
+        Size aParentSize( pTopWindow->GetSizePixel() );
         Size aDlgSize ( GetSizePixel () );
 
         if( aParentSize.Width() < pInfo->aPos.X() )
