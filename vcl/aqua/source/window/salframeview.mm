@@ -1332,11 +1332,32 @@ private:
     {
         mbNeedSpecialKeyHandle = true;
     }
+
+    // FIXME:
+    // #i106901#
+    // if we come here outside of mbInKeyInput, this is likely to be because
+    // of the keyboard viewer. For unknown reasons having no marked range
+    // in this case causes a crash. So we say we have a marked range anyway
+    // This is a hack, since it is not understood what a) causes that crash
+    // and b) why we should have a marked range at this point.
+    if( ! mbInKeyInput )
+        bHasMarkedText = YES;
+
     return bHasMarkedText;
 }
 
 - (NSRange)markedRange
 {
+    // FIXME:
+    // #i106901#
+    // if we come here outside of mbInKeyInput, this is likely to be because
+    // of the keyboard viewer. For unknown reasons having no marked range
+    // in this case causes a crash. So we say we have a marked range anyway
+    // This is a hack, since it is not understood what a) causes that crash
+    // and b) why we should have a marked range at this point.
+    if( ! mbInKeyInput )
+        return NSMakeRange( 0, 0 );
+    
     return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
 }
 

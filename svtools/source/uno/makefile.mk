@@ -58,7 +58,8 @@ SLOFILES= \
             $(SLO)$/unocontroltablemodel.obj \
             $(SLO)$/unoevent.obj \
             $(SLO)$/unoiface.obj \
-            $(SLO)$/unoimap.obj 
+            $(SLO)$/unoimap.obj \ 
+            $(SLO)$/svtxgridcontrol.obj 
 
 # --- Targets ------------------------------------------------------
 

@@ -111,6 +111,7 @@ class ImplWheelWindow;
 class SalTimer;
 class SalI18NImeStatus;
 class DockingManager;
+class VclEventListeners2;
 
 namespace vos { class OMutex; }
 namespace vos { class OCondition; }
@@ -137,7 +138,6 @@ struct ImplSVAppData
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMSF;
     String*                 mpMSFTempFileName;
-    AllSettings*            mpSettings;         // Application settings
     LocaleConfigurationListener* mpCfgListener;
     VclEventListeners*      mpEventListeners;   // listeners for vcl events (eg, extended toolkit)
     VclEventListeners*      mpKeyListeners;     // listeners for key events only (eg, extended toolkit)
@@ -153,19 +153,22 @@ struct ImplSVAppData
     ImplWheelWindow*        mpWheelWindow;      // WheelWindow
     ImplHotKey*             mpFirstHotKey;      // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;   // Event-Hooks
-    ULONG                   mnLastInputTime;    // GetLastInputTime()
-    USHORT                  mnDispatchLevel;    // DispatchLevel
-    USHORT                  mnModalMode;        // ModalMode Count
-    USHORT                  mnModalDialog;      // ModalDialog Count
-    USHORT                  mnAccessCount;      // AccessHdl Count
-    USHORT                  mnSysWinMode;       // Modus, wann SystemWindows erzeugt werden sollen
-    USHORT                  mnLayout;           // --- RTL-Flags --- currently not used, only for testing
-    short                   mnDialogScaleX;     // Scale X-Positions and sizes in Dialogs
-    BOOL                    mbInAppMain;        // is Application::Main() on stack
-    BOOL                    mbInAppExecute;     // is Application::Execute() on stack
-    BOOL                    mbAppQuit;          // is Application::Quit() called
-    BOOL                    mbSettingsInit;     // TRUE: Settings are init
-    BOOL                    mbDialogCancel;     // TRUE: Alle Dialog::Execute()-Aufrufe werden mit return FALSE sofort beendet
+    VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
+    ULONG                   mnLastInputTime;                // GetLastInputTime()
+    USHORT                  mnDispatchLevel;                // DispatchLevel
+    USHORT                  mnModalMode;                    // ModalMode Count
+    USHORT                  mnModalDialog;                  // ModalDialog Count
+    USHORT                  mnAccessCount;                  // AccessHdl Count
+    USHORT                  mnSysWinMode;                   // Modus, wann SystemWindows erzeugt werden sollen
+    USHORT                  mnLayout;                       // --- RTL-Flags --- currently not used, only for testing
+    short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
+    BOOL                    mbInAppMain;                    // is Application::Main() on stack
+    BOOL                    mbInAppExecute;                 // is Application::Execute() on stack
+    BOOL                    mbAppQuit;                      // is Application::Quit() called
+    BOOL                    mbSettingsInit;                 // TRUE: Settings are initialized
+    BOOL                    mbDialogCancel;                 // TRUE: Alle Dialog::Execute()-Aufrufe werden mit return FALSE sofort beendet
+    BOOL                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
+                                                            // essentially that makes it the same as Application::Reschedule
 
     /** Controls whether showing any IME status window is toggled on or off.
 
