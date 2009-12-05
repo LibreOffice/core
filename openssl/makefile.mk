@@ -50,7 +50,7 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8k
+OPENSSL_NAME=openssl-0.9.8l
 
 TARFILE_NAME=$(OPENSSL_NAME)
 
@@ -68,8 +68,8 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8k.map \
-        libssl_OOo_0_9_8k.map
+        libcrypto_OOo_0_9_8l.map \
+        libssl_OOo_0_9_8l.map
     .IF "$(CPU)" == "I"
         CONFIGURE_ACTION=Configure linux-elf
     .ELIF "$(BUILD64)" == "1"
@@ -84,8 +84,8 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES=opensslsol.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8k.map \
-        libssl_OOo_0_9_8k.map
+        libcrypto_OOo_0_9_8l.map \
+        libssl_OOo_0_9_8l.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
     # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
