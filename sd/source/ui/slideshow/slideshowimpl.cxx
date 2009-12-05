@@ -169,7 +169,9 @@ public:
     bool nextSlide();
     bool previousSlide();
 
-    void displayCurrentSlide( const Reference< XSlideShow >& xShow );
+    void displayCurrentSlide(
+        const Reference< XSlideShow >& xShow,
+        const bool bSkipAllMainSequenceEffects);
 
     sal_Int32 getNextSlideIndex() const;
     sal_Int32 getPreviousSlideIndex() const;
@@ -466,15 +468,17 @@ bool AnimationSlideController::previousSlide()
     return jumpToSlideIndex( getPreviousSlideIndex() );
 }
 
-void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow >& xShow )
+void AnimationSlideController::displayCurrentSlide(
+    const Reference< XSlideShow >& xShow,
+    const bool bSkipAllMainSequenceEffects)
 {
     const sal_Int32 nCurrentSlideNumber = getCurrentSlideNumber();
 
     if( xShow.is() && (nCurrentSlideNumber != -1 ) )
     {
-        Sequence< PropertyValue > aProperties;
         Reference< XDrawPage > xSlide;
         Reference< XAnimationNode > xAnimNode;
+        ::std::vector<PropertyValue> aProperties;
 
         const sal_Int32 nNextSlideNumber = getNextSlideNumber();
         if( getSlideAPI( nNextSlideNumber, xSlide, xAnimNode )  )
@@ -482,13 +486,40 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
             Sequence< Any > aValue(2);
             aValue[0] <<= xSlide;
             aValue[1] <<= xAnimNode;
-            aProperties.realloc(1);
-            aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Prefetch" ) );
-            aProperties[0].Value <<= aValue;
+            aProperties.push_back(
+                PropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Prefetch" ) ),
+                    -1,
+                    Any(aValue),
+                    PropertyState_DIRECT_VALUE));
+        }
+        if (bSkipAllMainSequenceEffects)
+        {
+            // Add one property that prevents the slide transition from being
+            // shown (to speed up the transition to the previous slide) and
+            // one to show all main sequence effects so that the user can
+            // continue to undo effects.
+            aProperties.push_back(
+                PropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("SkipAllMainSequenceEffects")),
+                    -1,
+                    Any(sal_True),
+                    PropertyState_DIRECT_VALUE));
+            aProperties.push_back(
+                PropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("SkipSlideTransition")),
+                    -1,
+                    Any(sal_True),
+                    PropertyState_DIRECT_VALUE));
         }
 
+        // Convert vector into uno Sequence.
+        Sequence< PropertyValue > aPropertySequence (aProperties.size());
+        for (int nIndex=0,nCount=aProperties.size();nIndex<nCount; ++nIndex)
+            aPropertySequence[nIndex] = aProperties[nIndex];
+
         if( getSlideAPI( nCurrentSlideNumber, xSlide, xAnimNode ) )
-            xShow->displaySlide( xSlide, xAnimNode, aProperties );
+            xShow->displaySlide( xSlide, xAnimNode, aPropertySequence );
     }
 }
 
@@ -729,6 +760,9 @@ void SAL_CALL SlideshowImpl::disposing()
     }
 
     setActiveXToolbarsVisible( sal_True );
+
+    Application::EnableNoYieldMode(false);
+    Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
 
     mbDisposed = true;
 }
@@ -1235,9 +1269,12 @@ void SAL_CALL SlideshowImpl::removeSlideShowListener( const Reference< XSlideSho
 
 // ---------------------------------------------------------
 
-void SlideshowImpl::slideEnded()
+void SlideshowImpl::slideEnded(const bool bReverse)
 {
-    gotoNextSlide();
+    if (bReverse)
+        gotoPreviousSlide(true);
+    else
+        gotoNextSlide();
 }
 
 // ---------------------------------------------------------
@@ -1387,14 +1424,14 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
 
 // ---------------------------------------------------------
 
-void SlideshowImpl::displayCurrentSlide()
+void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
 {
     stopSound();
     removeShapeEvents();
 
     if( mpSlideController.get() && mxShow.is() )
     {
-        mpSlideController->displayCurrentSlide( mxShow );
+        mpSlideController->displayCurrentSlide( mxShow, bSkipAllMainSequenceEffects );
         registerShapeEvents(mpSlideController->getCurrentSlideNumber());
         update();
 
@@ -1822,11 +1859,34 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 {
     mnUpdateEvent = 0;
 
+    return updateSlideShow();
+}
+
+
+
+
+IMPL_LINK( SlideshowImpl, PostYieldListener, void*, EMPTYARG )
+{
+    Application::EnableNoYieldMode(false);
+    Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
+    if (mbDisposed)
+        return 0;
+    return updateSlideShow();
+}
+
+
+
+
+sal_Int32 SlideshowImpl::updateSlideShow (void)
+{
     // doing some nMagic
     const rtl::Reference<SlideshowImpl> this_(this);
 
     Reference< XSlideShow > xShow( mxShow );
-    if( xShow.is() ) try
+    if ( ! xShow.is())
+        return 0;
+
+    try
     {
         // TODO(Q3): Evaluate under various systems and setups,
         // whether this is really necessary. Under WinXP and Matrox
@@ -1841,32 +1901,37 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
         if( !xShow->update(fUpdate) )
             fUpdate = -1.0;
 
-        if( mxShow.is() && ( fUpdate >= 0.0 ) )
+        if (mxShow.is() && (fUpdate >= 0.0))
         {
-/*
-            if( fUpdate < 0.25 )
+            if (::basegfx::fTools::equalZero(fUpdate))
             {
-                mnUpdateEvent = Application::PostUserEvent(LINK(this, SlideshowImpl, updateHdl));
+                // Use post yield listener for short update intervalls.
+                Application::EnableNoYieldMode(true);
+                Application::AddPostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
             }
             else
-*/
             {
                 // Avoid busy loop when the previous call to update()
-                // returns 0.  The minimum value is small enough to allow
-                // high frame rates.  Values larger than 0 are typically
-                // also larger then the small minimum value and thus are
-                // used to determine the frame rate.
-                const float MIN_UPDATE = 0.01f; // 10ms corresponds to 100 frames per second.
-                if( fUpdate < MIN_UPDATE )
-                    fUpdate = MIN_UPDATE;
-                else
-                {
-                    const float MAX_UPDATE = 4.0f; // do not wait longer than 4 seconds for next refresh, because dilbert said so
-                    if( fUpdate > MAX_UPDATE )
-                        fUpdate = MAX_UPDATE;
-                }
-                maUpdateTimer.SetTimeout(
-                    ::std::max( 1UL, static_cast<ULONG>(fUpdate * 1000.0) ) );
+                // returns a small positive number but not 0 (which is
+                // handled above).  Also, make sure that calls to update()
+                // have a minimum frequency.
+                // => Allow up to 60 frames per second.  Call at least once
+                // every 4 seconds.
+                const static sal_Int32 mnMaximumFrameCount (60);
+                const static double mnMinimumTimeout (1.0 / mnMaximumFrameCount);
+                const static double mnMaximumTimeout (4.0);
+                fUpdate = ::basegfx::clamp(fUpdate, mnMinimumTimeout, mnMaximumTimeout);
+
+                // Make sure that the maximum frame count has not been set
+                // too high (only then conversion to milliseconds and long
+                // integer may lead to zero value.)
+                OSL_ASSERT(static_cast<ULONG>(fUpdate * 1000.0) > 0);
+
+                Application::EnableNoYieldMode(false);
+                Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
+
+                // Use a timer for the asynchronous callback.
+                maUpdateTimer.SetTimeout(static_cast<ULONG>(fUpdate * 1000.0));
                 maUpdateTimer.Start();
             }
         }
@@ -1875,11 +1940,10 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
     {
         static_cast<void>(e);
         DBG_ERROR(
-            (OString("sd::SlideshowImpl::updateHdl(), "
-                     "exception caught: ") +
-             rtl::OUStringToOString(
-                 comphelper::anyToString( cppu::getCaughtException() ),
-                 RTL_TEXTENCODING_UTF8 )).getStr() );
+            (OString("sd::SlideshowImpl::updateSlideShow(), exception caught: ")
+                + rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 )).getStr() );
     }
     return 0;
 }
@@ -1968,11 +2032,17 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 break;
 
             case KEY_PAGEUP:
+                if(rKEvt.GetKeyCode().IsMod2())
+                {
+                    gotoPreviousSlide();
+                    break;
+                }
+                // warning, fall through!
             case KEY_LEFT:
             case KEY_UP:
             case KEY_P:
             case KEY_BACKSPACE:
-                gotoPreviousSlide();
+                gotoPreviousEffect();
                 break;
 
             case KEY_HOME:
@@ -2930,6 +3000,30 @@ void SAL_CALL SlideshowImpl::gotoNextEffect(  ) throw (RuntimeException)
 
 // --------------------------------------------------------------------
 
+void SAL_CALL SlideshowImpl::gotoPreviousEffect(  ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    if( mxShow.is() && mpSlideController.get() && mpShowWindow )
+    {
+        if( mbIsPaused )
+            resume();
+
+        const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
+        if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+        {
+            mpShowWindow->RestartShow();
+        }
+        else
+        {
+            mxShow->previousEffect();
+            update();
+        }
+    }
+}
+
+// --------------------------------------------------------------------
+
 void SAL_CALL SlideshowImpl::gotoFirstSlide(  ) throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -3050,6 +3144,11 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
 
 void SAL_CALL SlideshowImpl::gotoPreviousSlide(  ) throw (RuntimeException)
 {
+    gotoPreviousSlide(false);
+}
+
+void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
+{
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
     if( mxShow.is() && mpSlideController.get() ) try
@@ -3070,8 +3169,22 @@ void SAL_CALL SlideshowImpl::gotoPreviousSlide(  ) throw (RuntimeException)
         }
         else
         {
-            if( mpSlideController->previousSlide() )
-                displayCurrentSlide();
+            if( mpSlideController->previousSlide())
+                displayCurrentSlide(bSkipAllMainSequenceEffects);
+            else if (bSkipAllMainSequenceEffects)
+            {
+                // We could not go to the previous slide (probably because
+                // the current slide is already the first one).  We still
+                // have to call displayCurrentSlide because the calling
+                // slideshow can not determine whether there is a previous
+                // slide or not and has already prepared for a slide change.
+                // This slide change has to be completed now, even when
+                // changing to the same slide.
+                // Note that in this special case we do NOT pass
+                // bSkipAllMainSequenceEffects because we display the same
+                // slide as before and do not want to show all its effects.
+                displayCurrentSlide(false);
+            }
         }
     }
     catch( Exception& e )
@@ -3522,19 +3635,20 @@ void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun
 
 // ---------------------------------------------------------
 
-void SlideShowListenerProxy::slideEnded() throw (RuntimeException)
+void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeException)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if( maListeners.getLength() >= 0 )
-            maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideEnded ) );
+            maListeners.forEach<XSlideShowListener>(
+                boost::bind( &XSlideShowListener::slideEnded, _1, bReverse) );
     }
 
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         if( mxController.is() )
-            mxController->slideEnded();
+            mxController->slideEnded(bReverse);
     }
 }
 

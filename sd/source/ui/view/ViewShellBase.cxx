@@ -31,6 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/frame/UnknownModuleException.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #include "ViewShellBase.hxx"
 #include <algorithm>
 #include "EventMultiplexer.hxx"
@@ -94,6 +101,11 @@ using namespace sd;
 
 using ::sd::framework::FrameworkHelper;
 using ::rtl::OUString;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::container;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
 
 namespace {
 
@@ -1208,6 +1220,47 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
         mpImpl->mpCustomHandleManager.reset( new ::sd::CustomHandleManager(*const_cast< ViewShellBase* >(this)) );
 
     return *mpImpl->mpCustomHandleManager.get();
+}
+
+::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
+{
+    ::rtl::OUString aLabel;
+
+    if ( aCmdURL.getLength() > 0 ) try
+    {
+        Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+
+        Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager") ) ), UNO_QUERY_THROW );
+        Reference< XInterface > xIfac( GetMainViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY_THROW );
+
+        ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
+
+        if( aModuleIdentifier.getLength() > 0 )
+        {
+            Reference< XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.UICommandDescription" ) ) ), UNO_QUERY );
+            if( xNameAccess.is() )
+            {
+                Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
+                Sequence< PropertyValue > aPropSeq;
+                if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
+                {
+                    for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    {
+                        if( aPropSeq[i].Name.equalsAscii( "Name" ))
+                        {
+                            aPropSeq[i].Value >>= aLabel;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
+    return aLabel;
 }
 
 

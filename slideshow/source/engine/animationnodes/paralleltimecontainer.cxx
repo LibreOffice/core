@@ -53,7 +53,8 @@ void ParallelTimeContainer::activate_st()
     if (isDurationIndefinite() && maChildren.empty()) {
         // deactivate ASAP:
         scheduleDeactivationEvent(
-            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
+            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
+                       "ParallelTimeContainer::deactivate") );
     }
     else { // use default
         scheduleDeactivationEvent();
