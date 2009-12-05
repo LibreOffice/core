@@ -408,11 +408,10 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
 .ENDIF
     $(TOUCH) $@
 .IF "$(ENABLE_NSS_MODULE)"=="YES"
-        +$(foreach,dir,$(NSS_INCLUDE_LIST) $(RENAME:s/+//) $(INCLUDE_DIR)$/$(dir) \
-    $(INCLUDE_DIR)$/$(dir)_remove_me &&) \
-        echo >& $(NULLDEV)
-        $(foreach,dir,$(NSS_INCLUDE_LIST) rm -r -f $(INCLUDE_DIR)$/$(dir)_remove_me &&) \
-        echo >& $(NULLDEV)
+    +$(foreach,dir,$(NSS_INCLUDE_LIST) $(RENAME:s/+//) $(INCLUDE_DIR)$/$(dir) $(INCLUDE_DIR)$/$(dir)_remove_me &&) echo >& $(NULLDEV)
+    $(foreach,dir,$(NSS_INCLUDE_LIST) rm -rf $(INCLUDE_DIR)$/$(dir)_remove_me &&) echo >& $(NULLDEV)
+    -$(MKDIR)	$(OUT)$/inc.nss
+    cd $(OUT)$/inc.nss && $(foreach,dir,$(NSS_INCLUDE_LIST) $(GNUCOPY) -pRL $(SOLARINCDIR)$/mozilla/$(dir) . &&) echo >& $(NULLDEV)
 .ENDIF
 
 # On UNX the rules for so_moz_runtime_files copy files into the same directory
@@ -464,3 +463,6 @@ $(MISC)$/CREATETARBALL:	extract_mozab_files
 .ENDIF
     cd $(LB) && zip -r ..$/zipped$/$(MOZTARGET)lib.zip *
     cd $(INCCOM) && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
+.IF "$(ENABLE_NSS_MODULE)"=="YES"
+    cd $(OUT)$/inc.nss && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
+.ENDIF
