@@ -58,10 +58,10 @@ public:
     USHORT          Parse( const String&, ScDocument* = NULL,
                            USHORT nMask = SCA_VALID,
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                           char cDelimiter = 0 );
+                           sal_Unicode cDelimiter = 0 );
     void            Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                            char cDelimiter = 0 ) const;
+                            sal_Unicode cDelimiter = 0 ) const;
     void            Join( const ScRange&, BOOL bIsInList = FALSE );
     BOOL            UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,

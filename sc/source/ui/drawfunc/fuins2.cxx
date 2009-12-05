@@ -529,7 +529,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             ScRangeList aRanges;
             aMultiMark.FillRangeListWithMarks( &aRanges, FALSE );
             String aStr;
-            aRanges.Format( aStr, SCR_ABS_3D, pViewSh->GetViewData()->GetDocument() );
+            ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
+            aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
             aRangeString = aStr;
 
             // get "total" range for positioning
