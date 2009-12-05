@@ -98,6 +98,15 @@ public class TableCellLayoutController extends SectionLayoutController
         {
             return null;
         }
+        final Expression dc = element.getDisplayCondition();
+        if (dc != null)
+        {
+            final Object o = LayoutControllerUtil.evaluateExpression(getFlowController(), element, dc);
+            if (Boolean.FALSE.equals(o))
+            {
+                return null;
+            }
+        }
         return FormatValueUtility.computeDataFlag(element, getFlowController());
     }
 
