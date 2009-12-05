@@ -41,15 +41,23 @@ use Getopt::Long;
 use File::stat;
 use IO::Handle;
 
+use lib ("$ENV{SOLARENV}/bin/modules");
+use SourceConfig;
+
 #### globals #####
 
-my $err       = 0;
-my $srcdir    = '';
-my $solverdir = '';
-my $platform  = '';
-my $milestoneext = '';
-my $local_env = 0;
-my @exceptionmodlist = ("postprocess", "instset.*native"); # modules not yet delivered
+my $err              = 0;
+my $srcrootdir       = '';
+my $solverdir        = '';
+my $platform         = '';
+my $milestoneext     = '';
+my $local_env        = 0;
+my $source_config    = SourceConfig -> new();
+my @exceptionmodlist = (
+                        "postprocess",
+                        "instset.*native",
+                        "smoketest.*native"
+                       ); # modules not yet delivered
 
 #### main #####
 
@@ -72,7 +80,7 @@ sub get_globals
 
     # set global variables according to environnment
     $platform      = $ENV{INPATH};
-    $srcdir        = $ENV{SOLARSRC};
+    $srcrootdir    = $ENV{SOURCE_ROOT_DIR};
     $solverdir     = $ENV{SOLARVERSION};
     $milestoneext  = $ENV{UPDMINOREXT};
 
@@ -86,11 +94,11 @@ sub get_globals
     }
 
     #do some sanity checks
-    if ( ! ( $platform && $srcdir && $solverdir ) ) {
+    if ( ! ( $platform && $srcrootdir && $solverdir ) ) {
         die "Error: please set environment\n";
     }
-    if ( ! -d $srcdir ) {
-        die "Error: cannot find source directory '$srcdir'\n";
+    if ( ! -d $srcrootdir ) {
+        die "Error: cannot find source directory '$srcrootdir'\n";
     }
     if ( ! -d $solverdir ) {
         die "Error: cannot find solver directory '$solverdir'\n";
@@ -144,7 +152,6 @@ sub check
     my $error = 0;
     my %delivered;
     my $module;
-    my $islinked = 0;
     STDOUT->autoflush(1);
     # which module are we checking?
     if ( $listname =~ /\/([\w-]+?)\/deliver\.log$/o) {
@@ -153,27 +160,29 @@ sub check
         print "Error: cannot determine module name from \'$listname\'\n";
         return 1;
     }
+    # where do we have to look for modules?
+    my $repository = $source_config->get_module_repository($module);
+    my $path = $source_config->get_module_path($module);
     # is module physically accessible?
-    my $canread = is_moduledirectory( $srcdir . '/' . $module );
+    # there are valid use cases where we build against a prebuild solver whithout having
+    # all modules at disk
+    my $canread = is_moduledirectory( $path );
     if ( ! $canread ) {
         # do not bother about non existing modules in local environment
-        if ( $local_env ) {
-            # print STDERR "Warning: local environment, module '$module' not found. Skipping.\n";
-            return $error;
-        }
-        # on CWS modules not added can exist as links. For windows it may happen that these
-        # links cannot be resolved (when working with nfs mounts). This prevents checking,
-        # but is not an error.
-        if ( $ENV{CWS_WORK_STAMP} ) {
+        # or on childworkspaces
+        if (( $local_env ) || ( $ENV{CWS_WORK_STAMP} )) {
             # print STDERR "Warning: module '$module' not found. Skipping.\n";
             return $error;
         }
+        # in a master build it is considered an error to have deliver leftovers
+        # from non exising (removed) modules
         print "Error: module '$module' not found.\n";
         $error++;
         return $error;
     }
     if ( $canread == 2 ) {
         # module is linked and not built, no need for checking
+        # should not happen any more nowadays ...
         return $error;
     }
 
@@ -197,12 +206,8 @@ sub check
     # compare all delivered files with their origin
     # no strict 'diff' allowed here, as deliver may alter files (hedabu, strip, ...)
     foreach my $file ( sort keys %delivered ) {
-        my $ofile = "$srcdir/$file";
+        my $ofile = "$srcrootdir/$repository/$file";
         my $sfile = "$solverdir/$delivered{$file}";
-        # on CWS modules may exist as link only, named <module>.lnk
-        if ( $islinked ) {
-            $ofile =~ s/\/$module\//\/$module.lnk\//;
-        }
         if ( $milestoneext ) {
             # deliver log files do not contain milestone extension on solver
             $sfile =~ s/\/$platform\/(...)\//\/$platform\/$1$milestoneext\//;
@@ -210,6 +215,7 @@ sub check
         my $orgfile_stats = stat($ofile);
         next if ( -d _ );  # compare files, not directories
         my $delivered_stats = lstat($sfile);
+        next if ( -d _ );  # compare files, not directories
         if ( $^O !~ /^MSWin/ ) {
             # windows does not know about links.
             # Therefore lstat() is not a lstat, and the following check would break
@@ -263,13 +269,13 @@ sub check
 sub is_moduledirectory
 # Test whether we find a module having a d.lst file at a given path.
 # Return value: 1: path is valid directory
-#               2: path.lnk is a valid link
+#               2: path.link is a valid link
 #               0: module not found
 {
     my $dirname = shift;
     if ( -e "$dirname/prj/d.lst" ) {
         return 1;
-    } elsif ( -e "$dirname.lnk/prj/d.lst" ) {
+    } elsif ( -e "$dirname.link/prj/d.lst" ) {
         return 2
     } else {
         return 0;
@@ -281,7 +287,7 @@ sub usage
 {
     my $retval = shift;
     print STDERR "Usage: checkdeliver.pl [-h] [-p <platform>]\n";
-    print STDERR "Compares delivered files on solver with original ones on SRC_ROOT\n";
+    print STDERR "Compares delivered files on solver with original ones in build tree\n";
     print STDERR "Options:\n";
     print STDERR "    -h              print this usage message\n";
     print STDERR "    -p platform     specify platform\n";
