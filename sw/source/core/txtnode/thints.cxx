@@ -153,12 +153,14 @@ bool isOverlap(const xub_StrLen nStart1, const xub_StrLen nEnd1,
      || ((nStart1 < nStart2) && (nStart2 < nEnd1) && (nEnd1 < nEnd2)); // (2)
 }
 
+/// #i106930#: now asymmetric: empty hint1 is _not_ nested, but empty hint2 is
 static
 bool isNestedAny(const xub_StrLen nStart1, const xub_StrLen nEnd1,
                  const xub_StrLen nStart2, const xub_StrLen nEnd2)
 {
-    return (nStart1 == nStart2) // in this case ends do not matter
-        || ((nStart1 < nStart2) ? (nEnd1 >= nEnd2) : (nEnd1 <= nEnd2));
+    return ((nStart1 == nStart2) || (nEnd1 == nEnd2))
+        ? (nStart1 != nEnd1) // same start/end: nested except if hint1 empty
+        : ((nStart1 < nStart2) ? (nEnd1 >= nEnd2) : (nEnd1 <= nEnd2));
 }
 
 static

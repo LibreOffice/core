@@ -1941,6 +1941,7 @@ void SwPostItMgr::AssureStdModeAtShell()
         {
                 mpWrtShell->UnSelectFrm();
                 mpWrtShell->LeaveSelFrmMode();
+                mpWrtShell->GetView().LeaveDrawCreate();
                 mpWrtShell->EnterStdMode();
 
                 mpWrtShell->DrawSelChanged();
