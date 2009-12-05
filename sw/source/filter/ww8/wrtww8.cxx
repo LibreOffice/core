@@ -2372,48 +2372,26 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     if ( m_rWW8Export.bWrtWW8 )
     {
         sal_uInt32 aSprmIds[] = {NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow};
-
         sal_uInt8 nBoxes0 = rTabBoxes.Count();
         if (nBoxes0 > 21)
             nBoxes0 = 21;
 
-<<<<<<< local
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TCellShd );
-        m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10), m_rWW8Export.pO->Count() );
-
-        for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
-=======
         for (sal_uInt32 m = 0; m < 2; m++)
->>>>>>> other
         {
-<<<<<<< local
-            const SwTableBox * pBox1 = rTabBoxes[n];
-            const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
-            const SfxPoolItem * pI = NULL;
-            Color aColor;
-=======
             m_rWW8Export.InsUInt16( aSprmIds[m] );
             m_rWW8Export.pO->Insert( static_cast<BYTE>(nBoxes0 * 10),
                                      m_rWW8Export.pO->Count() );
->>>>>>> other
 
-<<<<<<< local
-            if ( SFX_ITEM_ON == pFrmFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
-=======
             for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
->>>>>>> other
             {
-<<<<<<< local
-                aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
-=======
                 const SwTableBox * pBox1 = rTabBoxes[n];
                 const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
                 const SfxPoolItem * pI = NULL;
                 Color aColor;
 
                 if ( SFX_ITEM_ON ==
-                     pFrmFmt->GetAttrSet().
-                     GetItemState( RES_BACKGROUND, false, &pI ) )
+                         pFrmFmt->GetAttrSet().
+                         GetItemState( RES_BACKGROUND, false, &pI ) )
                 {
                     aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
                 }
@@ -2430,24 +2408,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
                     aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
 
                 aSHD.Write( m_rWW8Export );
->>>>>>> other
             }
-<<<<<<< local
-            else
-                aColor = COL_AUTO;
-
-            WW8SHDLong aSHD;
-            aSHD.setCvFore( 0xFF000000 );
-
-            sal_uInt32 nBgColor = aColor.GetColor();
-            if ( nBgColor == COL_AUTO )
-                aSHD.setCvBack( 0xFF000000 );
-            else
-                aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
-
-            aSHD.Write( m_rWW8Export );
-=======
->>>>>>> other
         }
     }
 }
@@ -2752,7 +2713,6 @@ void WW8Export::WriteFkpPlcUsw()
         // <--
         {
             ::std::vector<String> aStrings;
-
             ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
             ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
             for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
@@ -2765,14 +2725,12 @@ void WW8Export::WriteFkpPlcUsw()
             WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
                                pFib->lcbSttbfAssoc);
         }
-
     }
     Strm().Seek( 0 );
 
     // Reclaim stored FIB data from document.
     ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
           (pDoc->getExternalData(::sw::FIB).get());
-
     // --> OD 2009-10-19 #i106057#
     if ( pFibData )
     // <--
@@ -2784,6 +2742,7 @@ void WW8Export::WriteFkpPlcUsw()
     }
 
     pFib->Write( Strm() );  // FIB
+
 }
 
 void WW8Export::StoreDoc1()
@@ -3695,10 +3654,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 #endif
         TableRowEnd(pNodeInfoInner->getDepth());
 
-<<<<<<< local
-=======
         ShortToSVBT16(0, nStyle);
->>>>>>> other
         m_rWW8Export.pO->Insert( (BYTE*)&nStyle, 2, m_rWW8Export.pO->Count() );     // Style #
         TableInfoRow(pNodeInfoInner);
         m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
