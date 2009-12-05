@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "helperdecl.hxx"
+#include <vbahelper/helperdecl.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/unwrapargs.hxx>
 
@@ -46,12 +46,13 @@
 #include "vbaworkbook.hxx"
 #include "vbawindows.hxx"
 #include "vbastyles.hxx"
-#include "vbahelper.hxx"
+#include "excelvbahelper.hxx"
 #include "vbapalette.hxx"
 #include <osl/file.hxx>
 #include <stdio.h>
 #include "vbanames.hxx"  // Amelia Wang
 #include "nameuno.hxx"
+#include "docoptio.hxx"
 
 // Much of the impl. for the equivalend UNO module is
 // sc/source/ui/unoobj/docuno.cxx, viewuno.cxx
@@ -64,7 +65,7 @@ class ActiveSheet : public ScVbaWorksheet
 protected:
     virtual uno::Reference< frame::XModel > getModel()
     {
-        return getCurrentDocument();
+        return getCurrentExcelDoc( mxContext );
     }
     virtual uno::Reference< sheet::XSpreadsheet > getSheet()
     {
@@ -192,7 +193,7 @@ ScVbaWorkbook::init()
     if ( !ColorData.getLength() )
         ResetColors();
 }
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext) :ScVbaWorkbook_BASE( xParent, xContext ), mxModel(NULL)
+ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext) :ScVbaWorkbook_BASE( xParent, xContext )
 {
     //#FIXME this persists the color data per office instance and
     // not per workbook instance, need to hook the data into XModel
@@ -203,58 +204,27 @@ ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface 
     init();
 }
 
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel ) : ScVbaWorkbook_BASE( xParent, xContext ),  mxModel( xModel )
+ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel ) : ScVbaWorkbook_BASE( xParent, xContext, xModel )
 {
     init();
 }
 
 ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) : ScVbaWorkbook_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ),  mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
+    uno::Reference< uno::XComponentContext> const & xContext ) : ScVbaWorkbook_BASE( args, xContext )
 
 {
     init();
 }
 
-::rtl::OUString
-ScVbaWorkbook::getName() throw (uno::RuntimeException)
-{
-    rtl::OUString sName = getModel()->getURL();
-    if ( sName.getLength() )
-    {
-
-        INetURLObject aURL( getModel()->getURL() );
-        ::osl::File::getSystemPathFromFileURL( aURL.GetLastName(), sName );
-    }
-    else
-    {
-        const static rtl::OUString sTitle( RTL_CONSTASCII_USTRINGPARAM("Title" ) );
-        // process "UntitledX - $(PRODUCTNAME)"
-        uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue(sTitle ) >>= sName;
-        sal_Int32 pos = 0;
-        sName = sName.getToken(0,' ',pos);
-    }
-    return sName;
-}
-::rtl::OUString
-ScVbaWorkbook::getPath() throw (uno::RuntimeException)
-{
-    INetURLObject aURL( getModel()->getURL() );
-    aURL.CutLastName();
-    return aURL.GetURLPath();
-}
-
-::rtl::OUString
-ScVbaWorkbook::getFullName() throw (uno::RuntimeException)
-{
-    INetURLObject aURL( getModel()->getURL() );
-    return aURL.GetURLPath();
-}
 uno::Reference< excel::XWorksheet >
 ScVbaWorkbook::getActiveSheet() throw (uno::RuntimeException)
 {
-    return new ActiveSheet( this, mxContext );
+    uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ) );
+    uno::Reference< sheet::XSpreadsheet > xSheet;
+    uno::Reference< sheet::XSpreadsheetView > xView( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    if ( xView.is() )
+        xSheet = xView->getActiveSheet();
+    return new ScVbaWorksheet( this, mxContext, xSheet, xModel );
 }
 uno::Any SAL_CALL
 ScVbaWorkbook::Sheets( const uno::Any& aIndex ) throw (uno::RuntimeException)
@@ -281,89 +251,17 @@ ScVbaWorkbook::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeException
 uno::Any SAL_CALL
 ScVbaWorkbook::Windows( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< XCollection >  xWindows = ScVbaWindows::Windows( mxContext );
+
+    uno::Reference< excel::XWindows >  xWindows( new ScVbaWindows( getParent(), mxContext ) );
     if ( aIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::Any( xWindows );
     return uno::Any( xWindows->Item( aIndex, uno::Any() ) );
 }
-void
-ScVbaWorkbook::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
-                      const uno::Any &rRouteArg ) throw (uno::RuntimeException)
+
+void SAL_CALL
+ScVbaWorkbook::Activate() throw (uno::RuntimeException)
 {
-    sal_Bool bSaveChanges = sal_False;
-    rtl::OUString aFileName;
-    sal_Bool bRouteWorkbook = sal_True;
-
-    rSaveArg >>= bSaveChanges;
-    sal_Bool bFileName =  ( rFileArg >>= aFileName );
-    rRouteArg >>= bRouteWorkbook;
-    uno::Reference< frame::XStorable > xStorable( getModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-
-    if( bSaveChanges )
-    {
-        if( xStorable->isReadonly() )
-        {
-            throw uno::RuntimeException(::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "Unable to save to a read only file ") ),
-                            uno::Reference< XInterface >() );
-        }
-        if( bFileName )
-            xStorable->storeAsURL( aFileName, uno::Sequence< beans::PropertyValue >(0) );
-        else
-            xStorable->store();
-    }
-    else
-        xModifiable->setModified( false );
-
-    uno::Reference< util::XCloseable > xCloseable( getModel(), uno::UNO_QUERY );
-
-    if( xCloseable.is() )
-        // use close(boolean DeliverOwnership)
-
-        // The boolean parameter DeliverOwnership tells objects vetoing the close process that they may
-        // assume ownership if they object the closure by throwing a CloseVetoException
-        // Here we give up ownership. To be on the safe side, catch possible veto exception anyway.
-        xCloseable->close(sal_True);
-    // If close is not supported by this model - try to dispose it.
-    // But if the model disagree with a reset request for the modify state
-    // we shouldn't do so. Otherwhise some strange things can happen.
-    else
-    {
-        uno::Reference< lang::XComponent > xDisposable ( getCurrentDocument(), uno::UNO_QUERY );
-        if ( xDisposable.is() )
-            xDisposable->dispose();
-    }
-}
-
-void
-ScVbaWorkbook::Protect( const uno::Any &aPassword ) throw (uno::RuntimeException)
-{
-    rtl::OUString rPassword;
-    uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
-    SC_VBA_FIXME(("Workbook::Protect stub"));
-    if(  aPassword >>= rPassword )
-        xProt->protect( rPassword );
-    else
-        xProt->protect( rtl::OUString() );
-}
-
-void
-ScVbaWorkbook::Unprotect( const uno::Any &aPassword ) throw (uno::RuntimeException)
-{
-    rtl::OUString rPassword;
-    uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
-    if( !getProtectStructure() )
-        throw uno::RuntimeException(::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM( "File is already unprotected" ) ),
-            uno::Reference< XInterface >() );
-    else
-    {
-        if( aPassword >>= rPassword )
-            xProt->unprotect( rPassword );
-        else
-            xProt->unprotect( rtl::OUString() );
-    }
+    VbaDocumentBase::Activate();
 }
 
 ::sal_Bool
@@ -373,26 +271,20 @@ ScVbaWorkbook::getProtectStructure() throw (uno::RuntimeException)
     return xProt->isProtected();
 }
 
-void
-ScVbaWorkbook::setSaved( sal_Bool bSave ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed() throw (uno::RuntimeException)
 {
-    uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-    xModifiable->setModified( bSave );
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
+    return pDoc->GetDocOptions().IsCalcAsShown();
 }
 
-sal_Bool
-ScVbaWorkbook::getSaved() throw (uno::RuntimeException)
+void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( sal_Bool _precisionAsDisplayed ) throw (uno::RuntimeException)
 {
-    uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-    return xModifiable->isModified();
-}
-
-void
-ScVbaWorkbook::Save() throw (uno::RuntimeException)
-{
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
-    uno::Reference< frame::XModel > xModel = getModel();
-    dispatchRequests(xModel,url);
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
+    ScDocOptions aOpt = pDoc->GetDocOptions();
+    aOpt.SetCalcAsShown( _precisionAsDisplayed );
+    pDoc->SetDocOptions( aOpt );
 }
 
 void
@@ -405,13 +297,6 @@ ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::Runtime
     storeProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
     storeProps[0].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MS Excel 97" ) );
     xStor->storeToURL( aURL, storeProps );
-}
-
-void
-ScVbaWorkbook::Activate() throw (uno::RuntimeException)
-{
-    uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
-    xFrame->activate();
 }
 
 css::uno::Any SAL_CALL
@@ -465,7 +350,7 @@ ScVbaWorkbook::getCodeName() throw (css::uno::RuntimeException)
 {
 #ifdef VBA_OOBUILD_HACK
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = getDocShell( xModel )->GetDocument();
+    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
     ScExtDocOptions* pExtOptions = pDoc->GetExtDocOptions();
     ScExtDocSettings pExtSettings = pExtOptions->GetDocSettings();
     ::rtl::OUString sGlobCodeName = pExtSettings.maGlobCodeName;
@@ -479,7 +364,7 @@ void SAL_CALL
 ScVbaWorkbook::setCodeName( const ::rtl::OUString& sGlobCodeName ) throw (css::uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = getDocShell( xModel )->GetDocument();
+    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
     ScExtDocOptions* pExtOptions = pDoc->GetExtDocOptions();
     ScExtDocSettings pExtSettings = pExtOptions->GetDocSettings();
     pExtSettings.maGlobCodeName = sGlobCodeName;

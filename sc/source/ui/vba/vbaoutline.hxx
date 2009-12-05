@@ -34,7 +34,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/excel/XOutline.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XOutline > ScVbaOutline_BASE;
 

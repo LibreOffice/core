@@ -152,7 +152,9 @@ public:
 namespace ooo
 {
     namespace vba {
+        namespace excel {
     class ScVbaCellRangeAccess;  // Vba Helper class
+    }
     }
 }
 
@@ -175,7 +177,7 @@ class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet
 {
     friend class ScTabViewObj;      // fuer select()
     friend class ScTableSheetObj;   // fuer createCursorByRange()
-     friend class ooo::vba::ScVbaCellRangeAccess;
+     friend class ooo::vba::excel::ScVbaCellRangeAccess;
 
 private:
     const SfxItemPropertySet* pPropSet;

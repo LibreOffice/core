@@ -244,7 +244,8 @@ ScModelObj::~ScModelObj()
 
 uno::Reference< uno::XAggregation> ScModelObj::GetFormatter()
 {
-    if ( !xNumberAgg.is() )
+    // pDocShell may be NULL if this is the base of a ScDocOptionsObj
+    if ( !xNumberAgg.is() && pDocShell )
     {
         // setDelegator veraendert den RefCount, darum eine Referenz selber halten
         // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)

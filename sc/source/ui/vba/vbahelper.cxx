@@ -826,3 +826,5 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangeObj* pRangeObj )
 
 } // openoffice
 } //org
+=======
+>>>>>>> other

@@ -597,66 +597,103 @@ void ScViewData::SetViewShell( ScTabViewShell* pViewSh )
         pView       = NULL;
     }
 }
-
-void ScViewData::SetZoomType( SvxZoomType eNew, BOOL bAll )
+void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
 {
-    if ( !bAll )
-        CreateSelectedTabData();    // if zoom is set for a table, it must be stored
+    std::vector< SCTAB >::iterator it_end = rvTabs.end();
+    for ( std::vector< SCTAB >::iterator it = rvTabs.begin(); it != it_end; ++it )
+        if ( !pTabData[*it] )
+            CreateTabData( *it );
+}
 
-    for ( SCTAB i = 0; i <= MAXTAB; i++ )
-        if ( pTabData[i] && ( bAll || aMarkData.GetTableSelect(i) ) )
+void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
+{
+    BOOL bAll = ( tabs.size() == 0 );
+
+    if ( !bAll ) // create associated table data
+        CreateTabData( tabs );
+
+    std::vector< SCTAB >::iterator it_end = tabs.end();
+    std::vector< SCTAB >::iterator it = tabs.begin();
+    for ( SCTAB i = ( bAll ? 0 : *it ); ( bAll ? i <= MAXTAB :  it != it_end  ); ++i , ++it )
+    {
+        if ( pTabData[i] )
             pTabData[i]->eZoomType = eNew;
+    }
 
     if ( bAll )
         eDefZoomType = eNew;
 }
 
-void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll )
+void ScViewData::SetZoomType( SvxZoomType eNew, BOOL bAll )
 {
-    if ( !bAll )
-        CreateSelectedTabData();    // if zoom is set for a table, it must be stored
+    std::vector< SCTAB > vTabs; // Empty for all tabs
+    if ( !bAll ) // get selected tabs
+    {
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB i=0; i<nTabCount; i++)
+        {
+            if ( aMarkData.GetTableSelect(i)  )
+                vTabs.push_back( i );
+        }
+    }
+    SetZoomType( eNew, vTabs );
+}
 
+void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs )
+{
+    BOOL bAll = ( tabs.size() == 0 );
+    if ( !bAll ) // create associated table data
+        CreateTabData( tabs );
     Fraction aFrac20( 1,5 );
     Fraction aFrac400( 4,1 );
 
     Fraction aValidX = rNewX;
-    if (aValidX<aFrac20) aValidX = aFrac20;
-    if (aValidX>aFrac400) aValidX = aFrac400;
+    if (aValidX<aFrac20)
+        aValidX = aFrac20;
+    if (aValidX>aFrac400)
+        aValidX = aFrac400;
 
     Fraction aValidY = rNewY;
-    if (aValidY<aFrac20) aValidY = aFrac20;
-    if (aValidY>aFrac400) aValidY = aFrac400;
+    if (aValidY<aFrac20)
+        aValidY = aFrac20;
+    if (aValidY>aFrac400)
+        aValidY = aFrac400;
 
-    if ( bPagebreak )
+    std::vector< SCTAB >::iterator it_end = tabs.end();
+    std::vector< SCTAB >::iterator it = tabs.begin();
+
+    for ( SCTAB i = ( bAll ? 0 : *it ); ( bAll ? i <= MAXTAB :  it != it_end  ); ++i , ++it )
     {
-        for ( SCTAB i = 0; i <= MAXTAB; i++ )
-            if ( pTabData[i] && ( bAll || aMarkData.GetTableSelect(i) ) )
+        if ( pTabData[i] )
+        {
+            if ( bPagebreak )
             {
                 pTabData[i]->aPageZoomX = aValidX;
                 pTabData[i]->aPageZoomY = aValidY;
             }
-        if ( bAll )
-        {
-            aDefPageZoomX = aValidX;
-            aDefPageZoomY = aValidY;
-        }
-    }
-    else
-    {
-        for ( SCTAB i = 0; i <= MAXTAB; i++ )
-            if ( pTabData[i] && ( bAll || aMarkData.GetTableSelect(i) ) )
+            else
             {
                 pTabData[i]->aZoomX = aValidX;
                 pTabData[i]->aZoomY = aValidY;
             }
-        if ( bAll )
-        {
-            aDefZoomX = aValidX;
-            aDefZoomY = aValidY;
         }
     }
-
     RefreshZoom();
+}
+
+void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll )
+{
+    std::vector< SCTAB > vTabs;
+    if ( !bAll ) // get selected tabs
+    {
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB i=0; i<nTabCount; i++)
+        {
+            if ( aMarkData.GetTableSelect(i)  )
+                vTabs.push_back( i );
+        }
+    }
+    SetZoom( rNewX, rNewY, vTabs );
 }
 
 void ScViewData::RefreshZoom()

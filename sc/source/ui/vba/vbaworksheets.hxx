@@ -36,9 +36,8 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <ooo/vba/XGlobals.hpp>
 
-#include "vbacollectionimpl.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
 
 class ScModelObj;
 
