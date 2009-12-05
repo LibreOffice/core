@@ -200,6 +200,10 @@ void UpdateHandler::setVisible( bool bVisible )
         if ( !mxUpdDlg.is() )
             createDialog();
 
+        // this should never happen, but if it happens we better return here
+        if ( !mxUpdDlg.is() )
+            return;
+
         updateState( meCurState );
 
         uno::Reference< awt::XWindow > xWindow( mxUpdDlg, uno::UNO_QUERY );
@@ -1032,6 +1036,12 @@ void UpdateHandler::showControls( short nControls )
 //--------------------------------------------------------------------
 void UpdateHandler::createDialog()
 {
+    if ( !mxContext.is() )
+    {
+        OSL_ASSERT( false );
+        return;
+    }
+
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
 
     if( xServiceManager.is() )
