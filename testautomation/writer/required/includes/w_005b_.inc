@@ -892,9 +892,16 @@ testcase tFormatAlignmentArea
     Call hNewDocument
 
     printlog " Paste a rectangle from draw via clipboard"
-    Call wZeichenobjektEinfuegen ( "Rechteck", 45, 30, 55, 45 )
-    sleep (1)
-    Call wObjektSelektieren ( 43, 25, 60, 50 )
+    if gPlatgroup = "unx" then
+        Call wZeichenobjektEinfuegen ( "Rechteck", 10, 30, 20, 45 )
+        sleep (1)
+        gMouseClick ( 15, 38 )
+    else
+        Call wZeichenobjektEinfuegen ( "Rechteck", 45, 30, 55, 45 )
+        sleep (1)
+        Call wObjektSelektieren ( 43, 25, 60, 50 )
+    endif
+
     Sleep 1
     try
         printlog " Format / Anchor / As Character"
@@ -1151,7 +1158,11 @@ testcase tFormatStyleEdit
         printlog " Insert a textobject from toolbar"
         Sleep 2
 
-        Call gMouseMove(50, 20, 70, 40)
+        if gPlatgroup = "unx" then
+            Call gMouseMove(10, 20, 30, 40)
+        else
+            Call gMouseMove(50, 20, 70, 40)
+        endif
         hUseAsyncSlot( "FormatStyleBold" )
 
         printlog " Format / Style / Bold"
@@ -1220,7 +1231,11 @@ testcase tFormatAlignmentEdit
     Textobjekt.Click
     printlog " Insert a textbox via 'Draw functions' toolbar"
 
-    Call gMouseMove(50, 20, 70, 40)
+    if gPlatgroup = "unx" then
+        Call gMouseMove(10, 20, 30, 40)
+    else
+        Call gMouseMove(50, 20, 70, 40)
+    endif
     printlog " Insert some text in document"
 
     Call wTypeKeys ("Ein Wort")
@@ -1259,7 +1274,11 @@ testcase tFormatLineSpacing
     Textobjekt.Click
     printlog " In a textbox via 'Draw Functions' toolbox"
 
-    Call gMouseMove(50, 20, 70, 40)
+    if gPlatgroup = "unx" then
+        Call gMouseMove(10, 20, 30, 40)
+    else
+        Call gMouseMove(50, 20, 70, 40)
+    endif
     Sleep 1
 
     printlog " Format / Spacing / Single line"
@@ -1300,7 +1319,11 @@ testcase tFormatParagraphEdit
     Textobjekt.Click
     printlog " In a textbox via 'Draw Functions' toolbox"
 
-    Call gMouseMove(50, 20, 70, 40)
+    if gPlatgroup = "unx" then
+        Call gMouseMove(10, 20, 30, 40)
+    else
+        Call gMouseMove(50, 20, 70, 40)
+    endif
 
     printlog " Format / Paragraph "
     hUseAsyncSlot( "FormatParagraph" )
