@@ -518,6 +518,7 @@ private:
     ImplDockingWindowWrapper*   mpDockingWin;
     BOOL                        mbHighlight;
     BOOL                        mbMoving;
+    bool                        mbTrackingEnabled;
     Point                       maDelta;
     Point                       maTearOffPosition;
     void                        ImplSetBorder();
@@ -550,6 +551,7 @@ ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper*
     mpDockingWin = pDockingWin;
     mbHighlight = FALSE;
     mbMoving = FALSE;
+    mbTrackingEnabled = FALSE;
 
     ImplSetBorder();
 }
@@ -736,7 +738,7 @@ void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
 
     if( !ToolBox::AlwaysLocked() )  // no tear off if locking is enabled
     {
-        if( rMEvt.IsLeft() && GetDragRect().IsInside( aMousePos ) )
+        if( mbTrackingEnabled && rMEvt.IsLeft() && GetDragRect().IsInside( aMousePos ) )
         {
             // start window move
             mbMoving = TRUE;
@@ -758,6 +760,7 @@ void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
 
 void ImplPopupFloatWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
+    mbTrackingEnabled = false;
     FloatingWindow::MouseButtonUp( rMEvt );
 }
 
@@ -772,6 +775,11 @@ void ImplPopupFloatWin::MouseButtonDown( const MouseEvent& rMEvt )
             ImplMirrorFramePos(aState.maPos);
         maTearOffPosition = GetWindow( WINDOW_BORDER )->GetPosPixel();
         maDelta = aState.maPos - maTearOffPosition;
+        mbTrackingEnabled = true;
+    }
+    else
+    {
+        mbTrackingEnabled = false;
     }
 }
 
