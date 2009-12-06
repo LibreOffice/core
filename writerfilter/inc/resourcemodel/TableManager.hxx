@@ -403,9 +403,6 @@ void TableManager<T, PropertiesPointer>::handle(const T & rHandle)
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::startLevel()
 {
-#if DEBUG
-    std::clog << "TableManager::startLevel()" << std::endl;
-#endif
     typename TableData<T, PropertiesPointer>::Pointer_t pTableData
         (new TableData<T, PropertiesPointer>(mTableDataStack.size()));
 
@@ -418,9 +415,6 @@ void TableManager<T, PropertiesPointer>::startLevel()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endLevel()
 {
-#if DEBUG
-    std::clog << "TableManager::endLevel()" << std::endl;
-#endif
     if (mpTableDataHandler.get() != NULL)
         resolveCurrentTable();
     mTableDataStack.pop();

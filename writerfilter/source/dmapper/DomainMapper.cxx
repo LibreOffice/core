@@ -4104,9 +4104,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     /* WRITERFILTERSTATUS: done: 0, planned: 4, spent: 0 */
     case NS_ooxml::LN_object:
     {
-#if DEBUG
-        clog << "DomainMapper: LN_object" << endl;
-#endif
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get( ) )
         {

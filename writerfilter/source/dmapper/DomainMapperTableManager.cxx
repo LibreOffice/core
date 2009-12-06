@@ -242,9 +242,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_gridSpan: //number of grid positions spanned by this cell
             {
-#if DEBUG
-                clog << "GridSpan: " << nIntValue << endl;
-#endif
                 //the cell width is determined by its position in the table grid
                 //it takes 'gridSpan' grid elements
                 IntVectorPtr pCurrentSpans = getCurrentSpans( );

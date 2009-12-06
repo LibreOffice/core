@@ -263,7 +263,6 @@ void DomainMapperTableHandler::endTable()
         }
         m_aTableProperties->Invalidate();
         sNames += ::rtl::OUString(' ');
-        clog << "Props: " << rtl::OUStringToOString( sNames, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
     }
 }
 #endif
@@ -520,10 +519,6 @@ void DomainMapperTableHandler::endTable()
                 pAllCellProps->insert( *aCellIterator );
                 aCellIterator->get( )->swap( *pAllCellProps.get( ) );
 
-#if DEBUG
-                clog << "Cell #" << nCell << ", Row #" << nRow << endl;
-#endif
-
                 lcl_computeCellBorders( pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow );
 
                 //now set the default left+right border distance TODO: there's an sprm containing the default distance!
@@ -641,7 +636,6 @@ void DomainMapperTableHandler::endTable()
         (void) nCellPropertiesProperties;
         ++nCellPropertiesProperties;
     }
-            clog << "Converting table" << endl;
 #endif
 
             uno::Reference<text::XTextTable> xTable = m_xText->convertToTable(*m_pTableSeq,

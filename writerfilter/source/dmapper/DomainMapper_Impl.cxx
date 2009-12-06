@@ -565,9 +565,6 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
 
     if ( eId == CONTEXT_SECTION )
     {
-#if DEBUG
-        clog << "Saving the last section context" << endl;
-#endif
         m_pLastSectionContext = m_aPropertyStacks[eId].top( );
     }
 
@@ -883,10 +880,6 @@ void lcl_AddRangeAndStyle(
 
 void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
-#if DEBUG
-    clog << "finishParagraph" << endl;
-#endif
-
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend >  xTextAppend = rAppendContext.xTextAppend;
@@ -1439,9 +1432,6 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
 {
     if ( pRedline.get( ) )
     {
-#if DEBUG
-        clog << "REDLINE: Writing redline: " << pRedline->m_nId << endl;
-#endif
         try
         {
             ::rtl::OUString sType;
@@ -1470,9 +1460,6 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
         }
         catch( const uno::Exception & rEx )
         {
-#if DEBUG
-            clog << "REDLINE: error - " << rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
-#endif
             ( void ) rEx;
             OSL_ENSURE( false, "Exception in makeRedline" );
         }
@@ -1557,9 +1544,6 @@ void DomainMapper_Impl::PopAnnotation()
 
 void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
 {
-#if DEBUG
-    clog << "PushShapeContext" << endl;
-#endif
     m_bIsInShape = true;
     try
     {
@@ -1596,10 +1580,6 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopShapeContext()
 {
-#if DEBUG
-        clog << "PopShapeContext" << endl;
-#endif
-
     if ( m_bShapeContextAdded )
     {
         m_aTextAppendStack.pop();
@@ -3683,16 +3663,10 @@ void DomainMapper_Impl::AddNewRedline(  )
     pNew->m_nToken = ooxml::OOXML_mod;
     if ( !m_bIsParaChange )
     {
-#if DEBUG
-    clog << "REDLINE: Adding a new redline to stack" << endl;
-#endif
         m_aRedlines.push_back( pNew );
     }
     else
     {
-#if DEBUG
-    clog << "REDLINE: Setting a new paragraph redline" << endl;
-#endif
         m_pParaRedline.swap( pNew );
     }
 }
@@ -3751,9 +3725,6 @@ void DomainMapper_Impl::RemoveCurrentRedline( )
 {
     if ( m_aRedlines.size( ) > 0 )
     {
-#if DEBUG
-        clog << "REDLINE: Removing back redline" << endl;
-#endif
         m_aRedlines.pop_back( );
     }
 }
@@ -3762,9 +3733,6 @@ void DomainMapper_Impl::ResetParaRedline( )
 {
     if ( m_pParaRedline.get( ) )
     {
-#if DEBUG
-        clog << "REDLINE: Cleaning the para redline" << endl;
-#endif
         RedlineParamsPtr pEmpty;
         m_pParaRedline.swap( pEmpty );
     }

@@ -502,9 +502,6 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 uno::UNO_QUERY_THROW );
 
             rtl::OUString sStyleName = GetStyleName( GetId( ) );
-#if DEBUG
-            fprintf( stderr, "Creating numbering style: %s\n", OUSTR_TO_C( sStyleName ) );
-#endif
 
             xStyles->insertByName( sStyleName, makeAny( xStyle ) );
 
