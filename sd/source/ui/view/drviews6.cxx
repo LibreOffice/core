@@ -73,6 +73,7 @@
 #include "AnimationChildWindow.hxx"
 #include "NavigatorChildWindow.hxx"
 #include "LayerDialogChildWindow.hxx"
+#include "layoutdialog.hxx"
 #include "sdresid.hxx"
 #include "fupoor.hxx"
 #include "fusldlg.hxx"
@@ -374,6 +375,11 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
     {
         USHORT nId = ::avmedia::MediaPlayer::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
+    }
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_LAYOUT_DIALOG_WIN ) )
+    {
+        USHORT nId = LayoutDialogChildWindow::GetChildWindowId();
+        rSet.Put( SfxBoolItem( SID_LAYOUT_DIALOG_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
 
@@ -767,6 +773,28 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             rReq.Ignore ();
         }
         break;
+
+        case SID_LAYOUT_DIALOG_WIN:
+        {
+            if ( rReq.GetArgs() )
+            {
+                GetViewFrame()->SetChildWindow(
+                    LayoutDialogChildWindow::GetChildWindowId(),
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_LAYOUT_DIALOG_WIN))).GetValue());
+            }
+            else
+            {
+                GetViewFrame()->ToggleChildWindow(
+                    LayoutDialogChildWindow::GetChildWindowId());
+            }
+
+            GetViewFrame()->GetBindings().Invalidate(SID_LAYOUT_DIALOG_WIN);
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
 
         case SID_DISPLAY_MASTER_BACKGROUND:
         case SID_DISPLAY_MASTER_OBJECTS:

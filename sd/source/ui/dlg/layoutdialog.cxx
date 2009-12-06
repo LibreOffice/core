@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: tmplctrl.cxx,v $
- *
- * $Revision: 1.3 $
+ * $RCSfile: LayerDialogContent.cxx,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,35 +31,38 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include "layoutdialog.hxx"
+#include <sfx2/dockwin.hxx>
+#include "app.hrc"
+#include <sfx2/app.hxx>
 
-#include <boost/scoped_ptr.hpp>
+// Instantiate the implementation of the docking window before files
+// are included that define ::sd::Window.  The ... macros are not really
+// namespace proof.
+namespace sd {
+SFX_IMPL_DOCKINGWINDOW(LayoutDialogChildWindow, SID_LAYOUT_DIALOG_WIN)
+}
 
-#include <vcl/menu.hxx>
-#include <vcl/status.hxx>
-#include <vcl/toolbox.hxx>
-
-#include <svtools/languageoptions.hxx>
-#include <svtools/style.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/miscopt.hxx>
-#include <svtools/valueset.hxx>
+#include <vcl/image.hxx>
 
 #include <sfx2/dispatch.hxx>
-#include <sfx2/dockwin.hxx>
+
+#include <svtools/languageoptions.hxx>
+#include <svtools/valueset.hxx>
 
 #include <svx/toolbarmenu.hxx>
 
-#include "sdresid.hxx"
-#include "res_bmp.hrc"
-#include "strings.hrc"
-#include "layoutctrl.hxx"
-#include "ViewShellBase.hxx"
-#include "drawdoc.hxx"
-#include "sdattr.hrc"
-#include "app.hrc"
+#include <com/sun/star/text/WritingMode.hpp>
+
+#include "layoutdialog.hrc"
 #include "glob.hrc"
+#include "strings.hrc"
+#include "res_bmp.hrc"
+#include "sdresid.hxx"
+#include "View.hxx"
+#include "drawdoc.hxx"
+#include "ViewShellBase.hxx"
+#include "DrawViewShell.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -68,97 +70,43 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-SFX_IMPL_TOOLBOX_CONTROL( SdLayoutControl, SfxVoidItem );
+namespace sd {
 
-#if 0
+///
 class SdLayoutDialogContent : public SfxDockingWindow
 {
-    using DockingWindow::StateChanged;
+public:
+    SdLayoutDialogContent( SfxBindings* pBindings, SfxChildWindow *pCW, ::Window* pParent, ViewShellBase& rBase);
+    virtual ~SdLayoutDialogContent();
 
-private:
-    ToolBox* mpToolBox;
-    ValueSet* mpLayoutSet;
-    AutoLayout meCurrentLayout;
-
-    /*boost::scoped_ptr<FixedText> mpTitle;
-    boost::scoped_ptr<FixedLine> mpSeperator;
-    boost::scoped_ptr<Menu> mpMenu;*/
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
-
-    bool        mbPopupMode;
+protected:
+    virtual void Resize (void);
 
     DECL_LINK( SelectHdl, void * );
 
-protected:
-    virtual void    PopupModeEnd();
-
-    /** This function is called when the window gets the focus.  It grabs
-        the focus to the line ends value set so that it can be controlled with
-        the keyboard.
-    */
-    virtual void GetFocus (void);
-
-public:
-    SdLayoutDialogContent( SfxBindings* pBindings, SfxChildWindow *pCW, ::Window* pParent,  const SdResId& rSdResId, ViewShellBase& rBase);
-    ~SdLayoutDialogContent();
-
-    virtual SfxDockingWindow* Clone() const;
-
-    virtual void        Paint( const Rectangle& rRect );
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+private:
+    boost::scoped_ptr<ToolbarMenu> mpToolbarMenu;
+    ValueSet* mpLayoutSet;
+    AutoLayout meCurrentLayout;
+    ViewShellBase& mrBase;
 };
-#endif
-// class SdLayoutControl ------------------------------------------
-
-SdLayoutControl::SdLayoutControl( USHORT _nSlotId, USHORT _nId, ToolBox& rTbx )
-: SfxToolBoxControl( _nSlotId, _nId, rTbx )
-{
-}
 
 // -----------------------------------------------------------------------
 
-SdLayoutControl::~SdLayoutControl()
+LayoutDialogChildWindow::LayoutDialogChildWindow(::Window* _pParent, USHORT nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo)
+: SfxChildWindow (_pParent, nId)
+{
+    ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame()));
+    SdLayoutDialogContent* pContent = new SdLayoutDialogContent (pBindings, this, _pParent, rBase);
+    pWindow = pContent;
+    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    pContent->Initialize(pInfo);
+}
+
+LayoutDialogChildWindow::~LayoutDialogChildWindow (void)
 {
 }
 
-// -----------------------------------------------------------------------
-
-void SdLayoutControl::Select( BOOL bMod1 )
-{
-    (void)bMod1;
-}
-
-// -----------------------------------------------------------------------
-
-void SdLayoutControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    SfxToolBoxControl::StateChanged( nSID, eState, pState );
-}
-
-SfxPopupWindowType SdLayoutControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
-// -----------------------------------------------------------------------
-
-SfxPopupWindow* SdLayoutControl::CreatePopupWindow()
-{
-    ToolBox& rTbx = GetToolBox();
-    SdLayoutDialogContent* pWin = new SdLayoutDialogContent( GetId(), m_xFrame, &rTbx );
-//  pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
-    pWin->EnableDocking(true);
-
-    Window::GetDockingManager()->StartPopupMode( &rTbx, pWin );
-//    SetPopupWindow( pWin );
-//  return pWin;
-    return 0;
-}
-
-#ifdef 0
 // -----------------------------------------------------------------------
 
 struct snewfoil_value_info
@@ -193,33 +141,12 @@ static snewfoil_value_info standard[] =
     {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-SfxPopupWindowType SdLayoutControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
 // -----------------------------------------------------------------------
 
-SfxPopupWindow* SdLayoutControl::CreatePopupWindow()
-{
-    ToolBox& rTbx = GetToolBox();
-    SdLayoutDialogContent* pWin = new SdLayoutDialogContent( GetId(), m_xFrame, &rTbx );
-//  pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
-    pWin->EnableDocking(true);
-
-    Window::GetDockingManager()->StartPopupMode( &rTbx, pWin );
-//    SetPopupWindow( pWin );
-//  return pWin;
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-SdLayoutDialogContent::SdLayoutDialogContent( USHORT nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
-: SfxDockingWindow( nId, rFrame, pParentWindow, WB_SYSTEMWINDOW )
-, mxFrame( rFrame )
-, mbPopupMode(true)
+SdLayoutDialogContent::SdLayoutDialogContent( SfxBindings* pInBindings, SfxChildWindow *pCW, Window* pParent, ViewShellBase& rBase)
+: SfxDockingWindow(pInBindings, pCW, pParent, SdResId( FLT_WIN_LAYOUT_DIALOG ))
 , meCurrentLayout( AUTOLAYOUT_NONE )
+, mrBase(rBase)
 {
 //  SetHelpId( HID_POPUP_LAYOUT );
 
@@ -274,19 +201,18 @@ SdLayoutDialogContent::SdLayoutDialogContent( USHORT nId, const ::com::sun::star
 
     mpToolbarMenu->Show();
 
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" )));
+//    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" )));
+
+    FreeResource();
 }
 
-SfxDockingWindow* SdLayoutDialogContent::Clone() const
+void SdLayoutDialogContent::Resize (void)
 {
-    return new SdLayoutDialogContent( GetId(), mxFrame );
+    SfxDockingWindow::Resize();
+    mpToolbarMenu->SetPosSizePixel( Point(0,0), GetSizePixel() );
 }
 
-void SdLayoutDialogContent::Paint( const Rectangle& rRect )
-{
-    SfxDockingWindow::Paint(rRect);
-}
-
+/*
 void SdLayoutDialogContent::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxDockingWindow::DataChanged( rDCEvt );
@@ -298,15 +224,11 @@ void SdLayoutDialogContent::DataChanged( const DataChangedEvent& rDCEvt )
         // todo switch images
     }
 }
+*/
 
 // -----------------------------------------------------------------------
 
-SdLayoutDialogContent::~SdLayoutDialogContent()
-{
-}
-
-// -----------------------------------------------------------------------
-
+/*
 void SdLayoutDialogContent::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( (nSID == SID_ASSIGN_LAYOUT) && (eState != SFX_ITEM_DISABLED) )
@@ -319,14 +241,15 @@ void SdLayoutDialogContent::StateChanged( USHORT nSID, SfxItemState eState, cons
         }
     }
 }
+*/
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SdLayoutDialogContent, SelectHdl, void *, pControl )
 {
+/*
     if ( IsInPopupMode() )
         EndPopupMode();
-
     AutoLayout eLayout = meCurrentLayout;
 
     if( pControl == mpLayoutSet )
@@ -339,27 +262,8 @@ IMPL_LINK( SdLayoutDialogContent, SelectHdl, void *, pControl )
     aArgs[0].Value <<= static_cast<sal_Int32>(eLayout);
 
     SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),  aCommand, aArgs );
-
+*/
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-void SdLayoutDialogContent::PopupModeEnd()
-{
-    if ( IsVisible() )
-        mbPopupMode = FALSE;
-    SfxDockingWindow::PopupModeEnd();
-}
-
-// -----------------------------------------------------------------------
-
-void SdLayoutDialogContent::GetFocus (void)
-{
-    SfxDockingWindow::GetFocus();
-    if( mpToolbarMenu )
-        mpToolbarMenu->GrabFocus();
-}
-#endif
-
-
+} // end of namespace sd
