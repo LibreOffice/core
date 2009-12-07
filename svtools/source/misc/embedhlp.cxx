@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: embedhlp.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,7 +188,6 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
             pObject->UpdateReplacementOnDemand();
         }
     }
-
 }
 
 void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
@@ -250,6 +248,9 @@ struct EmbeddedObjectRef_Impl
     sal_Int64                                   nViewAspect;
     BOOL                                        bIsLocked;
     sal_Bool                                    bNeedUpdate;
+
+    // #i104867#
+    sal_uInt32                                  mnGraphicVersion;
     awt::Size                                   aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
 };
 
@@ -262,6 +263,7 @@ void EmbeddedObjectRef::Construct_Impl()
     mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
     mpImp->bIsLocked = FALSE;
     mpImp->bNeedUpdate = sal_False;
+    mpImp->mnGraphicVersion = 0;
     mpImp->aDefaultSizeForChart_In_100TH_MM = awt::Size(8000,7000);
 }
 
@@ -297,12 +299,14 @@ EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj )
         mpImp->pGraphic = 0;
 
     mpImp->pHCGraphic = 0;
+    mpImp->mnGraphicVersion = 0;
 }
 
 EmbeddedObjectRef::~EmbeddedObjectRef()
 {
     delete mpImp->pGraphic;
-    if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
+    if ( mpImp->pHCGraphic )
+        DELETEZ( mpImp->pHCGraphic );
     Clear();
 }
 /*
@@ -453,10 +457,15 @@ void EmbeddedObjectRef::GetReplacement( BOOL bUpdate )
         DELETEZ( mpImp->pGraphic );
         mpImp->aMediaType = ::rtl::OUString();
         mpImp->pGraphic = new Graphic;
-        if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
+        if ( mpImp->pHCGraphic )
+            DELETEZ( mpImp->pHCGraphic );
+        mpImp->mnGraphicVersion++;
     }
     else if ( !mpImp->pGraphic )
+    {
         mpImp->pGraphic = new Graphic;
+        mpImp->mnGraphicVersion++;
+    }
     else
     {
         DBG_ERROR("No update, but replacement exists already!");
@@ -469,6 +478,7 @@ void EmbeddedObjectRef::GetReplacement( BOOL bUpdate )
         GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
         if( mpImp->pGraphic )
             pGF->ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+        mpImp->mnGraphicVersion++;
         delete pGraphicStream;
     }
 }
@@ -598,6 +608,7 @@ Graphic* EmbeddedObjectRef::GetHCGraphic() const
                         mpImp->pHCGraphic = pGraphic;
                     else
                         delete pGraphic;
+                    mpImp->mnGraphicVersion++;
                 }
 
                 delete pStream;
@@ -615,7 +626,9 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
         delete mpImp->pGraphic;
     mpImp->pGraphic = new Graphic();
     mpImp->aMediaType = rMediaType;
-    if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
+    if ( mpImp->pHCGraphic )
+        DELETEZ( mpImp->pHCGraphic );
+    mpImp->mnGraphicVersion++;
 
     SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( xInGrStream );
 
@@ -623,6 +636,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
     {
         GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
         pGF->ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+        mpImp->mnGraphicVersion++;
 
         if ( mpImp->pContainer )
         {
@@ -645,7 +659,9 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUStri
         delete mpImp->pGraphic;
     mpImp->pGraphic = new Graphic( rGraphic );
     mpImp->aMediaType = rMediaType;
-    if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
+    if ( mpImp->pHCGraphic )
+        DELETEZ( mpImp->pHCGraphic );
+    mpImp->mnGraphicVersion++;
 
     if ( mpImp->pContainer )
         SetGraphicToContainer( rGraphic, *mpImp->pContainer, mpImp->aPersistName, rMediaType );
@@ -880,7 +896,9 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
     DELETEZ( mpImp->pGraphic );
     mpImp->bNeedUpdate = sal_True;
-    if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
+    if ( mpImp->pHCGraphic )
+        DELETEZ( mpImp->pHCGraphic );
+    mpImp->mnGraphicVersion++;
 
     if( mpImp->pContainer )
     {
@@ -914,6 +932,12 @@ BOOL EmbeddedObjectRef::IsChart() const
     return sal_False;
 }
 
+// #i104867#
+sal_uInt32 EmbeddedObjectRef::getGraphicVersion() const
+{
+    return mpImp->mnGraphicVersion;
+}
+
 void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
 {
     //#i103460# charts do not necessaryly have an own size within ODF files,
@@ -928,4 +952,5 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
         xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );
 }
 
-}
+} // namespace svt
+
