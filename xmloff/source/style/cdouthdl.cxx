@@ -35,14 +35,8 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP
 #include <com/sun/star/awt/FontStrikeout.hpp>
-#endif
 #include <com/sun/star/uno/Any.hxx>
-
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include <xmloff/xmlelement.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

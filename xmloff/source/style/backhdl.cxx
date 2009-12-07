@@ -37,10 +37,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include <xmloff/xmlelement.hxx>
-#endif
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 

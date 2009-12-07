@@ -40,9 +40,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <vcl/vclenum.hxx>
 
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include <xmloff/xmlelement.hxx>
-#endif
 #include <tools/string.hxx>
 
 using ::rtl::OUString;
