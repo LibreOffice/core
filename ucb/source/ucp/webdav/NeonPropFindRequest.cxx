@@ -140,12 +140,9 @@ extern "C" int NPFR_propfind_iter( void* userdata,
             aValue = aValue.trim(); // #107358# remove leading/trailing spaces
             if ( aValue.getLength() )
             {
-                aValue = aValue.toAsciiLowerCase();
-                if ( ( aValue.compareTo(
-                         RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 ) ||
-                     ( aValue.compareTo(
-                         RTL_CONSTASCII_STRINGPARAM( "<dav:collection" ) ) == 0 )
-                )
+                aValue = stripDavNamespace( aValue ).toAsciiLowerCase();
+                if ( aValue.compareTo(
+                         RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
                 {
                     thePropertyValue.Value
                         <<= OUString::createFromAscii( "collection" );

@@ -1743,23 +1743,26 @@ bool NeonSession::removeExpiredLocktoken( const rtl::OUString & inURL,
                 if ( !containsLocktoken( aLocks, theLock->token ) )
                 {
                     // expired!
-
-                    OSL_TRACE( "NeonSession::removeExpiredLocktoken: Removing "
-                               " expired lock token for %s. token: %s",
-                               rtl::OUStringToOString( inURL,
-                                                       RTL_TEXTENCODING_UTF8 )
-                                   .getStr(),
-                               theLock->token );
-
-                    m_aNeonLockStore.removeLock( theLock );
-                    ne_lock_destroy( theLock );
-                    return true;
+                    break;
                 }
+
                 // still valid.
                 return false;
             }
             ++it;
         }
+
+        // No lockdiscovery prop in propfind result / locktoken not found
+        // in propfind result -> not locked
+        OSL_TRACE( "NeonSession::removeExpiredLocktoken: Removing "
+                   " expired lock token for %s. token: %s",
+                   rtl::OUStringToOString( inURL,
+                                           RTL_TEXTENCODING_UTF8 ).getStr(),
+                   theLock->token );
+
+        m_aNeonLockStore.removeLock( theLock );
+        ne_lock_destroy( theLock );
+        return true;
     }
     catch ( DAVException const & )
     {
@@ -1815,10 +1818,8 @@ void NeonSession::HandleError( int nError,
                 if ( removeExpiredLocktoken( makeAbsoluteURL( inPath ), rEnv ) )
                     throw DAVException( DAVException::DAV_LOCK_EXPIRED );
             }
-            else
-            {
-                 throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
-            }
+
+            throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
         }
         case NE_LOOKUP:       // Name lookup failed.
             throw DAVException( DAVException::DAV_HTTP_LOOKUP,

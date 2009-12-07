@@ -93,8 +93,7 @@ extern "C" int UCBDeadPropertyValue_startelement_callback(
     const char *name,
     const char ** )
 {
-    if ( ( name != 0 ) &&
-         ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
+    if ( name != 0 )
     {
         switch ( parent )
         {
@@ -187,7 +186,7 @@ static rtl::OUString encodeValue( const rtl::OUString & rValue )
     //       PROPPATCH:
     //       - Encoded property value: x&lt;z
     //       - UCBDeadPropertyValue::toXML result:
-    //          <ucbprop><type>string</type><value>x&lt;z</value></ucbprop>
+    //              <ucbprop><type>string</type><value>x&lt;z</value></ucbprop>
     //       PROPFIND:
     //       - parser replaces &lt; by > ==> error (not well formed)
 
@@ -361,7 +360,7 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 //////////////////////////////////////////////////////////////////////////
 // static
 bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
-                                            uno::Any & rOutData )
+                                          uno::Any & rOutData )
 {
     bool success = false;
 
@@ -450,7 +449,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
 //////////////////////////////////////////////////////////////////////////
 // static
 bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
-                                    rtl::OUString & rOutData )
+                                  rtl::OUString & rOutData )
 {
     // <ucbprop><type>the_type</type><value>the_value</value></ucbprop>
 
@@ -541,7 +540,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     // Encode value! It must not contain XML reserved chars!
     aStringValue = encodeValue( aStringValue );
 
-       rOutData =  aXMLPre;
+        rOutData =  aXMLPre;
     rOutData += aStringType;
     rOutData += aXMLMid;
     rOutData += aStringValue;
