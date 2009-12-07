@@ -376,6 +376,37 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         // #i75172# end DrawingLayer paint
                         DLPostPaint2(true);
                     }
+
+                    // --> OD 2009-12-03 #i107365#
+                    // Direct paint has been performed. Thus, take care of
+                    // transparent child windows.
+                    if ( GetWin() )
+                    {
+                        Window& rWindow = *(GetWin());
+                        if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
+                        {
+                            const Rectangle aRectanglePixel(rWindow.LogicToPixel(aRect.SVRect()));
+
+                            for ( sal_uInt16 a(0); a < rWindow.GetChildCount(); a++ )
+                            {
+                                Window* pCandidate = rWindow.GetChild(a);
+
+                                if ( pCandidate && pCandidate->IsPaintTransparent() )
+                                {
+                                    const Rectangle aCandidatePosSizePixel(
+                                                    pCandidate->GetPosPixel(),
+                                                    pCandidate->GetSizePixel());
+
+                                    if ( aCandidatePosSizePixel.IsOver(aRectanglePixel) )
+                                    {
+                                        pCandidate->Invalidate( INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
+                                        pCandidate->Update();
+                }
+                                }
+                            }
+                        }
+                    }
+                    // <--
                 }
 
                 delete pVout;
