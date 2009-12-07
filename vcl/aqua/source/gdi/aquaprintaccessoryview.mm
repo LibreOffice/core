@@ -102,7 +102,7 @@ class ControllerProperties
                           PrintAccessoryViewState* i_pState )
     : mpController( i_pController ),
       mnNextTag( 0 ),
-      mnLastPageCount( i_pController->getPageCountProtected() ),
+      mnLastPageCount( i_pController->getFilteredPageCount() ),
       mpState( i_pState ),
       mpOp( i_pOp ),
       mpAccessoryView( i_pAccessoryView ),
@@ -130,7 +130,7 @@ class ControllerProperties
         // TODO: refresh page count etc from mpController 
 
         // page range may have changed depending on options
-        sal_Int32 nPages = mpController->getPageCountProtected();
+        sal_Int32 nPages = mpController->getFilteredPageCount();
         #if OSL_DEBUG_LEVEL > 1
         if( nPages != mnLastPageCount )
             fprintf( stderr, "trouble: number of pages changed from %ld to %ld !\n", mnLastPageCount, nPages );
@@ -314,6 +314,9 @@ class ControllerProperties
             GDIMetaFile aMtf;
             PrinterController::PageSize aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
             VirtualDevice aDev;
+            // see salprn.cxx, currently we pretend to be a 720dpi device on printers
+            aDev.SetReferenceDevice( 720, 720 );
+            aDev.EnableOutput( TRUE );
             Size aLogicSize( aDev.PixelToLogic( aPixelSize, MapMode( MAP_100TH_MM ) ) );
             double fScaleX = double(aLogicSize.Width())/double(aPageSize.aSize.Width());
             double fScaleY = double(aLogicSize.Height())/double(aPageSize.aSize.Height());
