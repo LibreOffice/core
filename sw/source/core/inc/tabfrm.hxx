@@ -132,7 +132,7 @@ public:
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
-    virtual void Paint( const SwRect& ) const;
+    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     virtual void  CheckDirection( BOOL bVert );
 
     virtual void Cut();

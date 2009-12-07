@@ -944,7 +944,7 @@ StringArray STR_PRINTOPTUI
         < "Contents"; >;
         < "Page ba~ckground"; >;
         < "Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document."; >;
-        < "~Graphics and diagrams"; >;
+        < "~Pictures and objects"; >;
         < "Specifies whether the graphics of your text document are printed"; >;
         < "Hidden te~xt"; >;
         < "Enable this option to print text that is marked as hidden."; >;

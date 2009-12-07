@@ -404,7 +404,7 @@ SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
     // create a bool option for graphics
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
                                                   aLocalizedStrings.GetString( 5 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTablesGraphicsAndDiagrams" ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPicturesAndObjects" ) ),
                                                   sal_True );
     if (!bWeb)
     {
@@ -611,9 +611,11 @@ bool SwPrintUIOptions::IsPrintTables() const
     // take care of different property names for the option.
     // for compatibility the old name should win
 
-    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
-    bRes = getBoolValue( "PrintTables", bRes );
-    return bRes;
+//    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
+//    bRes = getBoolValue( "PrintTables", bRes );
+//    return bRes;
+    // for now it was decided that tables should always be printed
+    return true;
 }
 
 bool SwPrintUIOptions::IsPrintGraphics() const
@@ -621,7 +623,7 @@ bool SwPrintUIOptions::IsPrintGraphics() const
     // take care of different property names for the option.
     // for compatibility the old name should win
 
-    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
+    bool bRes = getBoolValue( "PrintPicturesAndObjects", sal_True );
     bRes = getBoolValue( "PrintGraphics", bRes );
     return bRes;
 }
@@ -631,7 +633,7 @@ bool SwPrintUIOptions::IsPrintDrawings() const
     // take care of different property names for the option.
     // for compatibility the old name should win
 
-    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
+    bool bRes = getBoolValue( "PrintPicturesAndObjects", sal_True );
     bRes = getBoolValue( "PrintDrawings", bRes );
     return bRes;
 }
@@ -1186,7 +1188,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                 rPrintData.GetRenderData().m_pPostItShell : pShell;
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
-        pStPage->GetUpper()->Paint( pStPage->Frm() );
+        pStPage->GetUpper()->Paint( pStPage->Frm(), &rPrintData );
 
         SwPaintQueue::Repaint();
     }  //Zus. Scope wg. CurShell!

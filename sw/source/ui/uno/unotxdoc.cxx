@@ -3998,7 +3998,9 @@ void SwXDocumentPropertyHelper::onChange()
 
 /*****************************************************************************/
 
-SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwPrtOptions *pPrtOptions ) :
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(
+    SwWrtShell& rSh,
+    const SwPrtOptions *pPrtOptions ) :
     m_pViewOption(0),
     m_rShell(rSh)
 {
