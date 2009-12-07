@@ -34,7 +34,7 @@
 #endif
 
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/viewfac.hxx>
+#include "viewfac.hxx"
 #include <sfx2/signaturestate.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

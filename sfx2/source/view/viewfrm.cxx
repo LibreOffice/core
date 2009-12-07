@@ -2214,7 +2214,6 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
 
 SfxViewFrame* SfxViewFrame::Create_Impl( SfxFrame& i_rFrame, SfxObjectShell& i_rDoc, const USHORT i_nViewId )
 {
-    bool bSuccess = false;
     SfxViewFrame* pViewFrame = NULL;
     try
     {
