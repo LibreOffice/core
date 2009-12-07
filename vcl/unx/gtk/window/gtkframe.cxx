@@ -1307,7 +1307,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             setMinMaxSize();
 
             // #i45160# switch to desktop where a dialog with parent will appear
-            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea )
+            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea && GTK_WIDGET_MAPPED(m_pParent->m_pWindow) )
                 getDisplay()->getWMAdaptor()->switchToWorkArea( m_pParent->m_nWorkArea );
 
             if( isFloatGrabWindow() &&
