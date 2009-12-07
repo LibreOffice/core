@@ -386,7 +386,9 @@ USHORT SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             long nTmpPrtHeight = (USHORT)aOutMet.GetAscent() + aOutMet.GetDescent();
             (void) nTmpPrtHeight;
-            ASSERT( nTmpPrtHeight == nPrtHeight, "GetTextHeight != Ascent + Descent" )
+            // #i106098#: do not compare with == here due to rounding error
+            ASSERT( abs(nTmpPrtHeight - nPrtHeight) < 3,
+                    "GetTextHeight != Ascent + Descent" );
 #endif
 
             ((OutputDevice&)rRefDev).SetFont( aOldFnt );
@@ -2424,8 +2426,12 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     const xub_StrLen nEnd = rInf.GetIdx() + rInf.GetLen();
 
     // skip character cells for complex scripts
-    if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
+    // --> OD 2009-10-14 #i105571# - skip also character cells for CJK
+    if ( rInf.GetFont() &&
+         ( SW_CTL == rInf.GetFont()->GetActual() ||
+           SW_CJK == rInf.GetFont()->GetActual() ) &&
          pBreakIt->GetBreakIter().is() )
+    // <--
     {
         aLang = rInf.GetFont()->GetLanguage();
         bSkipCell = sal_True;
