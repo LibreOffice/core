@@ -519,6 +519,8 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "20" );  // Linux ia64
 #elif defined LINUX && defined S390
     abGP.Append( "21" );  // Linux S390
+#elif defined LINUX && defined HPPA
+    abGP.Append( "22" );  // Linux PA-RISC
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
