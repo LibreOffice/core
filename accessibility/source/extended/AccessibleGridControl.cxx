@@ -86,7 +86,7 @@ AccessibleGridControl::AccessibleGridControl(
             IAccessibleTable& _rTable )
     : AccessibleGridControlBase( _rxParent, _rTable, TCTYPE_GRIDCONTROL )
 {
-    DBG_CTOR( AccessibleTableControl, NULL );
+//    DBG_CTOR( AccessibleTableControl, NULL );
     m_pImpl.reset( new AccessibleGridControl_Impl() );
     m_pImpl->m_aCreator = _rxCreator;
 }

@@ -77,7 +77,7 @@ namespace accessibility
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
     {
-        DBG_CTOR( svt_AccessibleGridControlCell, NULL );
+//      DBG_CTOR( svt_AccessibleGridControlCell, NULL );
         // set accessible name here, because for that we need the position of the cell
         // and so the base class isn't capable of doing this
         ::rtl::OUString aAccName;

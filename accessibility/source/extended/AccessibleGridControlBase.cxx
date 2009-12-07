@@ -81,7 +81,7 @@ AccessibleGridControlBase::AccessibleGridControlBase(
 
 AccessibleGridControlBase::~AccessibleGridControlBase()
 {
-    DBG_DTOR( AccessibleGridControlBase, NULL );
+//    DBG_DTOR( AccessibleGridControlBase, NULL );
 
     if( isAlive() )
     {
@@ -521,7 +521,7 @@ GridControlAccessibleElement::GridControlAccessibleElement( const Reference< XAc
                                                             AccessibleTableControlObjType  eObjType )
     :AccessibleGridControlBase( rxParent, rTable, eObjType )
 {
-    DBG_CTOR( GridControlAccessibleElement, NULL );
+//  DBG_CTOR( GridControlAccessibleElement, NULL );
 }
 
 // XInterface -----------------------------------------------------------------
@@ -540,7 +540,7 @@ Reference< XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccess
 // ----------------------------------------------------------------------------
 GridControlAccessibleElement::~GridControlAccessibleElement( )
 {
-    DBG_DTOR( GridControlAccessibleElement, NULL );
+//  DBG_DTOR( GridControlAccessibleElement, NULL );
 }
 
 // ============================================================================
