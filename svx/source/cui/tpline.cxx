@@ -299,7 +299,7 @@ void SvxLineTabPage::Construct()
 
 void SvxLineTabPage::FillListboxes()
 {
-//  aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+//  aCtlPreview.SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
     ResMgr& rMgr = DIALOG_MGR();
 

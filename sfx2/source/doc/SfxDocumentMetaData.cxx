@@ -79,6 +79,7 @@
 #include "comphelper/storagehelper.hxx"
 #include "comphelper/mediadescriptor.hxx"
 #include "comphelper/sequenceasvector.hxx"
+#include "comphelper/stlunosequence.hxx"
 #include "sot/storage.hxx"
 #include "sfx2/docfile.hxx"
 #include "sax/tools/converter.hxx"
@@ -322,7 +323,7 @@ private:
     /// standard meta data (multiple occurrences)
     std::map< ::rtl::OUString,
         std::vector<css::uno::Reference<css::xml::dom::XNode> > > m_metaList;
-    /// user-defined meta data (meta:user-defined)
+    /// user-defined meta data (meta:user-defined) @ATTENTION may be null!
     css::uno::Reference<css::beans::XPropertyContainer> m_xUserDefined;
     // now for some meta-data attributes; these are not updated directly in the
     // DOM because updates (detecting "empty" elements) would be quite messy
@@ -998,9 +999,12 @@ SfxDocumentMetaData::updateElement(const char *i_name,
 void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
 {
     createUserDefined();
-    css::uno::Reference<css::beans::XPropertySet> xPSet(m_xUserDefined,css::uno::UNO_QUERY_THROW);
-    std::pair<css::uno::Sequence< ::rtl::OUString>, AttrVector> udStringsAttrs = propsToStrings(xPSet);
-    (void) setMetaList("meta:user-defined", udStringsAttrs.first,&udStringsAttrs.second);
+    const css::uno::Reference<css::beans::XPropertySet> xPSet(m_xUserDefined,
+            css::uno::UNO_QUERY_THROW);
+    const std::pair<css::uno::Sequence< ::rtl::OUString>, AttrVector>
+        udStringsAttrs( propsToStrings(xPSet) );
+    (void) setMetaList("meta:user-defined", udStringsAttrs.first,
+            &udStringsAttrs.second);
 
     // update elements with attributes
     std::vector<std::pair<const char *, ::rtl::OUString> > attributes;
@@ -1217,15 +1221,13 @@ void SAL_CALL SfxDocumentMetaData::init(
 
     std::vector<css::uno::Reference<css::xml::dom::XNode> > & vec =
         m_metaList[::rtl::OUString::createFromAscii("meta:user-defined")];
-    // user-defined meta data: create PropertyBag which only accepts property
-    // values of allowed types
+    m_xUserDefined.clear(); // #i105826#: reset (may be re-initialization)
     if ( !vec.empty() )
     {
         createUserDefined();
     }
 
     // user-defined meta data: initialize PropertySet from DOM nodes
-
     for (std::vector<css::uno::Reference<css::xml::dom::XNode> >::iterator
             it = vec.begin(); it != vec.end(); ++it) {
         css::uno::Reference<css::xml::dom::XElement> xElem(*it,
@@ -1301,10 +1303,14 @@ void SAL_CALL SfxDocumentMetaData::init(
 ////////////////////////////////////////////////////////////////////////////
 
 SfxDocumentMetaData::SfxDocumentMetaData(
-        css::uno::Reference< css::uno::XComponentContext > const & context) :
-    BaseMutex(), SfxDocumentMetaData_Base(m_aMutex),
-    m_xContext(context), m_NotifyListeners(m_aMutex),
-    m_isInitialized(false), m_isModified(false)
+        css::uno::Reference< css::uno::XComponentContext > const & context)
+    : BaseMutex()
+    , SfxDocumentMetaData_Base(m_aMutex)
+    , m_xContext(context)
+    , m_NotifyListeners(m_aMutex)
+    , m_isInitialized(false)
+    , m_isModified(false)
+    , m_AutoloadSecs(0)
 {
     DBG_ASSERT(context.is(), "SfxDocumentMetaData: context is null");
     DBG_ASSERT(context->getServiceManager().is(),
@@ -2168,7 +2174,7 @@ void SAL_CALL SfxDocumentMetaData::setModified( ::sal_Bool bModified )
         ::osl::MutexGuard g(m_aMutex);
         checkInit();
         m_isModified = bModified;
-        if ( !bModified )
+        if ( !bModified && m_xUserDefined.is() )
         {
             xMB.set(m_xUserDefined, css::uno::UNO_QUERY);
             DBG_ASSERT(xMB.is(),
@@ -2241,6 +2247,8 @@ void SAL_CALL SfxDocumentMetaData::serialize(
 
 void SfxDocumentMetaData::createUserDefined()
 {
+    // user-defined meta data: create PropertyBag which only accepts property
+    // values of allowed types
     if ( !m_xUserDefined.is() )
     {
         css::uno::Sequence<css::uno::Type> types(10);
@@ -2258,29 +2266,37 @@ void SfxDocumentMetaData::createUserDefined()
         args[0] <<= css::beans::NamedValue(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowedTypes")),
             css::uno::makeAny(types));
-        // #i94175#:  ODF 1.1 allows empty user-defined property names!
-        args[1] <<= css::beans::NamedValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowEmptyPropertyName")),
+        // #i94175#:  ODF allows empty user-defined property names!
+        args[1] <<= css::beans::NamedValue( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("AllowEmptyPropertyName")),
             css::uno::makeAny(sal_True));
 
-        css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (m_xContext->getServiceManager());
+        const css::uno::Reference<css::lang::XMultiComponentFactory> xMsf(
+                m_xContext->getServiceManager());
         m_xUserDefined.set(
-            xMsf->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.PropertyBag")), m_xContext),
+            xMsf->createInstanceWithContext(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.beans.PropertyBag")), m_xContext),
             css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::lang::XInitialization> xInit(m_xUserDefined,
-            css::uno::UNO_QUERY);
+        const css::uno::Reference<css::lang::XInitialization> xInit(
+            m_xUserDefined, css::uno::UNO_QUERY);
         if (xInit.is()) {
             xInit->initialize(args);
         }
 
-        css::uno::Reference<css::util::XModifyBroadcaster> xMB(m_xUserDefined,css::uno::UNO_QUERY);
+        const css::uno::Reference<css::util::XModifyBroadcaster> xMB(
+            m_xUserDefined, css::uno::UNO_QUERY);
         if (xMB.is())
         {
-            css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > aListener = m_NotifyListeners.getElements();
-            const css::uno::Reference< css::uno::XInterface >* pIter = aListener.getConstArray();
-            const css::uno::Reference< css::uno::XInterface >* pEnd = pIter + aListener.getLength();
-            for(;pIter != pEnd;++pIter )
-                xMB->addModifyListener(css::uno::Reference< css::util::XModifyListener >(*pIter,css::uno::UNO_QUERY));
+            const css::uno::Sequence<css::uno::Reference<css::uno::XInterface> >
+                listeners(m_NotifyListeners.getElements());
+            for (css::uno::Reference< css::uno::XInterface > const * iter =
+                                ::comphelper::stl_begin(listeners);
+                        iter != ::comphelper::stl_end(listeners); ++iter) {
+                xMB->addModifyListener(
+                    css::uno::Reference< css::util::XModifyListener >(*iter,
+                        css::uno::UNO_QUERY));
+            }
         }
     }
 }
