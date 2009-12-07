@@ -2278,14 +2278,16 @@ Label_MaskStateMachine:
                     static const int kQuote     = (1 << 4);
                     // Past ' closing quote.
                     static const int kClose     = (1 << 5);
+                    // Encountered # file/sheet separator.
+                    static const int kFileSep   = (1 << 6);
                     // Past . sheet name separator.
-                    static const int kPast      = (1 << 6);
+                    static const int kPast      = (1 << 7);
                     // Marked name $$ follows sheet name separator, detected
                     // while we're still on the separator. Will be cleared when
                     // entering the name.
-                    static const int kMarkAhead = (1 << 7);
+                    static const int kMarkAhead = (1 << 8);
                     // In marked defined name.
-                    static const int kDefName   = (1 << 8);
+                    static const int kDefName   = (1 << 9);
 
                     bool bAddToSymbol = true;
                     if ((nMask & SC_COMPILER_C_ODF_RBRACKET) && !(nRefInName & kOpen))
@@ -2309,7 +2311,9 @@ Label_MaskStateMachine:
                     {
                         // Not in col/row yet.
 
-                        if ('$' == c && '$' == pSrc[0] && !(nRefInName & kOpen))
+                        if (SC_COMPILER_FILE_TAB_SEP == c && (nRefInName & kFileSep))
+                            nRefInName = 0;
+                        else if ('$' == c && '$' == pSrc[0] && !(nRefInName & kOpen))
                         {
                             nRefInName &= ~kMarkAhead;
                             if (!(nRefInName & kDefName))
@@ -2356,16 +2360,20 @@ Label_MaskStateMachine:
                             }
                             else
                             {
-                                if ('\'' == pSrc[0])
+                                switch (pSrc[0])
                                 {
-                                    // escapes embedded quote
-                                    nRefInName |= kQuote;
-                                }
-                                else
-                                {
-                                    // quote not followed by quote => close
-                                    nRefInName |= kClose;
-                                    nRefInName &= ~kOpen;
+                                    case '\'':
+                                        // escapes embedded quote
+                                        nRefInName |= kQuote;
+                                        break;
+                                    case SC_COMPILER_FILE_TAB_SEP:
+                                        // sheet name should follow
+                                        nRefInName |= kFileSep;
+                                        // fallthru
+                                    default:
+                                        // quote not followed by quote => close
+                                        nRefInName |= kClose;
+                                        nRefInName &= ~kOpen;
                                 }
                                 bAddToSymbol = !(nRefInName & kDefName);
                             }

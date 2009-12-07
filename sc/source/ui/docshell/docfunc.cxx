@@ -3079,6 +3079,9 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
         pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
     pDoc->UpdatePageBreaks( nTab );
 
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
+
     if (bColumn)
     {
         rDocShell.PostPaint( static_cast<SCCOL>(nPos)-1, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
@@ -3134,6 +3137,9 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
     else
         pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
     pDoc->UpdatePageBreaks( nTab );
+
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
 
     if (bColumn)
     {

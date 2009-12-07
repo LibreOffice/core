@@ -33,7 +33,9 @@
 
 #include "WrappedTextRotationProperty.hxx"
 #include "macros.hxx"
+#include <com/sun/star/beans/XPropertyState.hpp>
 
+using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 
@@ -43,13 +45,23 @@ namespace chart
 {
 //.............................................................................
 
-WrappedTextRotationProperty::WrappedTextRotationProperty()
+WrappedTextRotationProperty::WrappedTextRotationProperty( bool bDirectState )
     : ::chart::WrappedProperty( C2U( "TextRotation" ), C2U( "TextRotation" ) )
+    , m_bDirectState( bDirectState )
 {
 }
 WrappedTextRotationProperty::~WrappedTextRotationProperty()
 {
 }
+
+beans::PropertyState WrappedTextRotationProperty::getPropertyState( const uno::Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    if( m_bDirectState )
+        return beans::PropertyState_DIRECT_VALUE;
+    return WrappedProperty::getPropertyState( xInnerPropertyState );
+}
+
 Any WrappedTextRotationProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
     Any aRet;
