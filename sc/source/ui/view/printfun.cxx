@@ -1648,7 +1648,8 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     // test if all paint parts are hidden, then a paint is not necessary at all
     const Point aMMOffset(aOutputData.PrePrintDrawingLayer(nLogStX, nLogStY));
-    const bool bHideAllDrawingLayer(pDrawView && pDrawView->getHideOle() && pDrawView->getHideChart() && pDrawView->getHideDraw());
+    const bool bHideAllDrawingLayer( pDrawView && pDrawView->getHideOle() && pDrawView->getHideChart()
+            && pDrawView->getHideDraw() && pDrawView->getHideFormControl() );
 
     if(!bHideAllDrawingLayer)
     {
@@ -2129,6 +2130,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         pDrawView->setHideOle(!aTableParam.bObjects);
         pDrawView->setHideChart(!aTableParam.bCharts);
         pDrawView->setHideDraw(!aTableParam.bDrawings);
+        pDrawView->setHideFormControl(!aTableParam.bDrawings);
     }
 
     if ( pPrinter && bDoPrint )

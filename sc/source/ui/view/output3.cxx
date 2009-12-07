@@ -170,7 +170,8 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
 
         if(pLocalDrawView)
         {
-            bHideAllDrawingLayer = pLocalDrawView->getHideOle() && pLocalDrawView->getHideChart() && pLocalDrawView->getHideDraw();
+            bHideAllDrawingLayer = pLocalDrawView->getHideOle() && pLocalDrawView->getHideChart()
+                    && pLocalDrawView->getHideDraw() && pLocalDrawView->getHideFormControl();
         }
     }
 
