@@ -33,6 +33,10 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#if OSL_DEBUG_LEVEL > 0
+#   include <cstdio>
+#endif
+
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <rtl/math.hxx>

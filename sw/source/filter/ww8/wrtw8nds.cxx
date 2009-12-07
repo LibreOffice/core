@@ -38,6 +38,10 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#if OSL_DEBUG_LEVEL > 0
+#   include <cstdio>
+#endif
+
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/boxitem.hxx>
