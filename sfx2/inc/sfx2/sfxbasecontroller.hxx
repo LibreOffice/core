@@ -395,7 +395,13 @@ public:
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper ();
 //#endif
 private:
-    SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const bool i_bConnect );
+    enum ConnectSfxFrame
+    {
+        E_CONNECT,
+        E_DISCONNECT,
+        E_RECONNECT
+    };
+    SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect );
     SAL_DLLPRIVATE SfxViewFrame* GetViewFrame_Impl() const;
 
 //________________________________________________________________________________________________________

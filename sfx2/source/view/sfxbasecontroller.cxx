@@ -602,7 +602,7 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
 
         if ( m_pData->m_pViewShell )
         {
-            ConnectSfxFrame_Impl( true );
+            ConnectSfxFrame_Impl( E_CONNECT );
         }
     }
 }
@@ -663,7 +663,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
         BOOL bRet = bOther || pDocShell->PrepareClose();
         if ( bRet )
         {
-            ConnectSfxFrame_Impl( false );
+            ConnectSfxFrame_Impl( E_DISCONNECT );
             m_pData->m_bSuspendState = sal_True;
         }
 
@@ -676,7 +676,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
 
         if ( m_pData->m_pViewShell )
         {
-            ConnectSfxFrame_Impl( true );
+            ConnectSfxFrame_Impl( E_RECONNECT );
         }
 
         m_pData->m_bSuspendState = sal_False;
@@ -1255,23 +1255,30 @@ BOOL SfxBaseController::HasMouseClickListeners_Impl()
     return m_pData->m_aUserInputInterception.hasMouseClickListeners();
 }
 
-void SfxBaseController::ConnectSfxFrame_Impl( const bool i_bConnect )
+void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 {
     ENSURE_OR_THROW( m_pData->m_pViewShell, "not to be called without a view shell" );
     SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame();
     ENSURE_OR_THROW( pActFrame, "a view shell without a view frame is pretty pathological" );
 
-    // disable window and dispatcher
-    pActFrame->Enable( i_bConnect );
-    pActFrame->GetDispatcher()->Lock( !i_bConnect );
+    const bool bConnect = ( i_eConnect != E_DISCONNECT );
 
-    if ( i_bConnect )
+    // disable window and dispatcher
+    pActFrame->Enable( bConnect );
+    pActFrame->GetDispatcher()->Lock( !bConnect );
+
+    if ( bConnect )
     {
-        pActFrame->GetDispatcher()->Push( *m_pData->m_pViewShell );
-        if ( m_pData->m_pViewShell->GetSubShell() )
-            pActFrame->GetDispatcher()->Push( *m_pData->m_pViewShell->GetSubShell() );
-        m_pData->m_pViewShell->PushSubShells_Impl();
-        pActFrame->GetDispatcher()->Flush();
+        // upon DISCONNECT, we did *not* pop the shells from the stack (this is done elsewhere), so upon
+        // RECONNECT, we're not allowed to push them
+        if ( i_eConnect != E_RECONNECT )
+        {
+            pActFrame->GetDispatcher()->Push( *m_pData->m_pViewShell );
+            if ( m_pData->m_pViewShell->GetSubShell() )
+                pActFrame->GetDispatcher()->Push( *m_pData->m_pViewShell->GetSubShell() );
+            m_pData->m_pViewShell->PushSubShells_Impl();
+            pActFrame->GetDispatcher()->Flush();
+        }
 
         Window* pEditWin = m_pData->m_pViewShell->GetWindow();
         if ( pEditWin && m_pData->m_pViewShell->IsShowView_Impl() )
