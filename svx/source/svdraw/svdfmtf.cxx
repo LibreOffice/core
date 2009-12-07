@@ -710,8 +710,8 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     if (!aFnt.IsTransparent())
     {
         SfxItemSet aAttr(*pFillAttr->GetPool(),XATTR_FILL_FIRST,XATTR_FILL_LAST);
-        pFillAttr->Put(XFillStyleItem(XFILL_SOLID));
-        pFillAttr->Put(XFillColorItem(String(), aFnt.GetFillColor()));
+        aAttr.Put(XFillStyleItem(XFILL_SOLID));
+        aAttr.Put(XFillColorItem(String(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
     sal_uInt32 nWink = aFnt.GetOrientation();
