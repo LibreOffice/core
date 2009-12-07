@@ -2040,7 +2040,7 @@ if test "${with_system_stdlibs+set}" = set; then
   withval="$with_system_stdlibs"
 
 else
-  checkforprelink=yes
+  checkforstdlibproblems=yes
 fi;
 
 # Check whether --with-system-mspack or --without-system-mspack was given.
@@ -3758,19 +3758,19 @@ fi
 
 
 
-{ $as_echo "$as_me:$LINENO: checking which shell to use" >&5
-$as_echo_n "checking which shell to use... " >&6; }
+echo "$as_me:$LINENO: checking which shell to use" >&5
+echo $ECHO_N "checking which shell to use... $ECHO_C" >&6
 if test $_os = "WINNT"; then
       if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      { { $as_echo "$as_me:$LINENO: error: only \"tcsh\" or \"bash\" are supported options" >&5
-$as_echo "$as_me: error: only \"tcsh\" or \"bash\" are supported options" >&2;}
+      { { echo "$as_me:$LINENO: error: only \"tcsh\" or \"bash\" are supported options" >&5
+echo "$as_me: error: only \"tcsh\" or \"bash\" are supported options" >&2;}
    { (exit 1); exit 1; }; }
    fi
                      if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
-         { { $as_echo "$as_me:$LINENO: error: $AWK, awk, tar or gunzip is a cygwin symlink!
+         { { echo "$as_me:$LINENO: error: $AWK, awk, tar or gunzip is a cygwin symlink!
 Native windows programs cannot use cygwin symlinks. Remove the symbolic
 link, and copy the program to the name of the link." >&5
-$as_echo "$as_me: error: $AWK, awk, tar or gunzip is a cygwin symlink!
+echo "$as_me: error: $AWK, awk, tar or gunzip is a cygwin symlink!
 Native windows programs cannot use cygwin symlinks. Remove the symbolic
 link, and copy the program to the name of the link." >&2;}
    { (exit 1); exit 1; }; }
@@ -3793,32 +3793,32 @@ link, and copy the program to the name of the link." >&2;}
    fi
 elif test $_os = "OS2"; then
    if test "$with_use_shell" != "tcsh"; then
-      { { $as_echo "$as_me:$LINENO: error: only \"tcsh\" is supported options" >&5
-$as_echo "$as_me: error: only \"tcsh\" is supported options" >&2;}
+      { { echo "$as_me:$LINENO: error: only \"tcsh\" is supported options" >&5
+echo "$as_me: error: only \"tcsh\" is supported options" >&2;}
    { (exit 1); exit 1; }; }
    fi
 else
             if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
-      { { $as_echo "$as_me:$LINENO: error: only \"tcsh\" or \"bash\" are supported options" >&5
-$as_echo "$as_me: error: only \"tcsh\" or \"bash\" are supported options" >&2;}
+      { { echo "$as_me:$LINENO: error: only \"tcsh\" or \"bash\" are supported options" >&5
+echo "$as_me: error: only \"tcsh\" or \"bash\" are supported options" >&2;}
    { (exit 1); exit 1; }; }
    fi
 fi
 USE_SHELL="$with_use_shell"
-{ $as_echo "$as_me:$LINENO: result: $USE_SHELL" >&5
-$as_echo "$USE_SHELL" >&6; }
+echo "$as_me:$LINENO: result: $USE_SHELL" >&5
+echo "${ECHO_T}$USE_SHELL" >&6
 
 
 
 if test "$_os" = "WINNT" ; then
-   { $as_echo "$as_me:$LINENO: checking for cygwin gcc/g++" >&5
-$as_echo_n "checking for cygwin gcc/g++... " >&6; }
+   echo "$as_me:$LINENO: checking for cygwin gcc/g++" >&5
+echo $ECHO_N "checking for cygwin gcc/g++... $ECHO_C" >&6
    if which gcc > /dev/null && which g++ > /dev/null ; then
-      { $as_echo "$as_me:$LINENO: result: found" >&5
-$as_echo "found" >&6; }
+      echo "$as_me:$LINENO: result: found" >&5
+echo "${ECHO_T}found" >&6
    else
-      { { $as_echo "$as_me:$LINENO: error: cygwin gcc and g++ are needed, please install them." >&5
-$as_echo "$as_me: error: cygwin gcc and g++ are needed, please install them." >&2;}
+      { { echo "$as_me:$LINENO: error: cygwin gcc and g++ are needed, please install them." >&5
+echo "$as_me: error: cygwin gcc and g++ are needed, please install them." >&2;}
    { (exit 1); exit 1; }; }
    fi
 fi
@@ -10402,7 +10402,7 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\$stub' visibility.s; then
+         if $EGREP -q '@PLT|\$stub|\(PLT\)' visibility.s; then
              gccvisbroken=no;
          else
              gccvisbroken=yes;
@@ -10810,9 +10810,9 @@ echo "$as_me: error: No valid check available. Please check the block for your d
                 _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[-A-Za-z]*//`
         _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-        if test "$_jdk_ver" -lt 10600; then
-             { { echo "$as_me:$LINENO: error: IBM JDK is too old, you need at least 1.6" >&5
-echo "$as_me: error: IBM JDK is too old, you need at least 1.6" >&2;}
+        if test "$_jdk_ver" -lt 10500; then
+             { { echo "$as_me:$LINENO: error: IBM JDK is too old, you need at least 1.5" >&5
+echo "$as_me: error: IBM JDK is too old, you need at least 1.5" >&2;}
    { (exit 1); exit 1; }; }
         fi
 
@@ -12874,11 +12874,18 @@ fi
 
 
 if test -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
-  if test -n "$checkforprelink" -a -f /etc/rpm/macros.prelink; then
-    with_system_stdlibs=yes
-    { echo "$as_me:$LINENO: WARNING: prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&5
+  if test -n "$checkforstdlibproblems"; then
+    if test -f /etc/rpm/macros.prelink; then
+      with_system_stdlibs=yes
+      { echo "$as_me:$LINENO: WARNING: prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&5
 echo "$as_me: WARNING: prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&2;}
-    echo "prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+      echo "prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+    elif test "$GCC" = "yes" -a ! -e `$CC -print-file-name=libgcc_s.so.1`; then
+      with_system_stdlibs=yes
+      { echo "$as_me:$LINENO: WARNING: platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&5
+echo "$as_me: WARNING: platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&2;}
+      echo "platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
+    fi
   fi
 fi
 
@@ -24241,40 +24248,39 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
     ac_cv_path_UNZIP="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
 done
-IFS=$as_save_IFS
 
   ;;
 esac
 fi
 UNZIP=$ac_cv_path_UNZIP
-if test -n "$UNZIP"; then
-  { $as_echo "$as_me:$LINENO: result: $UNZIP" >&5
-$as_echo "$UNZIP" >&6; }
-else
-  { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-fi
 
+if test -n "$UNZIP"; then
+  echo "$as_me:$LINENO: result: $UNZIP" >&5
+echo "${ECHO_T}$UNZIP" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
 
     ZIP_HOME=`dirname "$ZIP"`
 fi
 if test -z "$ZIP" -o -z "$UNZIP"; then
-    { { $as_echo "$as_me:$LINENO: error: Zip/Unzip are required to build, please install or use --with-zip-home" >&5
-$as_echo "$as_me: error: Zip/Unzip are required to build, please install or use --with-zip-home" >&2;}
+    { { echo "$as_me:$LINENO: error: Zip/Unzip are required to build, please install or use --with-zip-home" >&5
+echo "$as_me: error: Zip/Unzip are required to build, please install or use --with-zip-home" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
 if test "$_os" = "WINNT"; then
     if test -n "`$ZIP -h | grep -i WinNT`" ; then
-{ { $as_echo "$as_me:$LINENO: error: $ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe." >&5
-$as_echo "$as_me: error: $ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe." >&2;}
+{ { echo "$as_me:$LINENO: error: $ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe." >&5
+echo "$as_me: error: $ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe." >&2;}
    { (exit 1); exit 1; }; }
     fi
 fi
