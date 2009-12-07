@@ -54,10 +54,10 @@ bool Treeconfig::getActiveRepositories( vector<string>& active_repos ){
     string partial;
 
     // if we are inside of a repository root then active it otherwise let the app handle the return!
-    unsigned int pos = pwd.find_first_of( source_root );
+    string::size_type pos = pwd.find_first_of( source_root );
     if( pos != string::npos && ( pos + source_root.length() +1 ) < pwd.length()){  // I am within SOURCE_ROOT_DIR
         partial = pwd.substr( pos + source_root.length() +1  , pwd.length());
-        unsigned int nextPart = partial.find_first_of( "/" );
+        string::size_type nextPart = partial.find_first_of( "/" );
         if( nextPart != string::npos )
             hasPath = true;
         else
