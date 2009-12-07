@@ -124,7 +124,7 @@ static typelib_TypeClass cpp2uno_call(
 
         int nUsedGPR = 0;
         int nUsedSSE = 0;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         bool bFitsRegisters =
 #endif
             x86_64::examine_argument( rParam.pTypeRef, false, nUsedGPR, nUsedSSE );
