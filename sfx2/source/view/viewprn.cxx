@@ -440,10 +440,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         return;
     }
 
-    int provokeCrash = 0;
-    int dummy = 1 / provokeCrash;
-    (void)dummy;
-
     const USHORT nId = rReq.GetSlot();
     switch( nId )
     {
