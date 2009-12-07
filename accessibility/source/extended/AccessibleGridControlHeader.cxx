@@ -69,7 +69,7 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
         ::svt::table::AccessibleTableControlObjType      eObjType):
         AccessibleGridControlTableBase( rxParent, rTable, eObjType )
 {
-    DBG_CTOR( AccessibleGridControlHeaderBar, NULL );
+//    DBG_CTOR( AccessibleGridControlHeaderBar, NULL );
 
     DBG_ASSERT( isRowBar() || isColumnBar(),
         "accessibility/extended/AccessibleGridControlHeaderBar - invalid object type" );
@@ -77,7 +77,7 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
 
 AccessibleGridControlHeader::~AccessibleGridControlHeader()
 {
-    DBG_DTOR( AccessibleGridControlHeader, NULL );
+//    DBG_DTOR( AccessibleGridControlHeader, NULL );
 }
 
 // XAccessibleContext ---------------------------------------------------------
