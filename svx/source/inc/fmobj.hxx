@@ -86,11 +86,13 @@ public:
 
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void ReformatText();
+    virtual void NbcReformatText();
 
     virtual SdrObject*  Clone() const;
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
     virtual void        operator= (const SdrObject& rObj);
+
+    virtual void SetModel(SdrModel* pNewModel);
 
     virtual void clonedFrom(const FmFormObj* _pSource);
 
@@ -124,6 +126,10 @@ private:
         its parent.
     */
     void    impl_isolateControlModel_nothrow();
+
+    /** forwards the reference device of our SdrModel to the control model
+    */
+    void    impl_checkRefDevice_nothrow( bool _force = false );
 };
 
 
