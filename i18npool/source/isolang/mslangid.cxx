@@ -154,13 +154,13 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
                 if (nConfiguredAsianFallback == LANGUAGE_SYSTEM)
                     nLang = LANGUAGE_CHINESE_SIMPLIFIED;
                 else
-                    nLang = nConfiguredComplexFallback;
+                    nLang = nConfiguredAsianFallback;
                 break;
             case ::com::sun::star::i18n::ScriptType::COMPLEX:
                 if (nConfiguredComplexFallback == LANGUAGE_SYSTEM)
                     nLang = LANGUAGE_HINDI;
                 else
-                    nLang = nConfiguredAsianFallback;
+                    nLang = nConfiguredComplexFallback;
                 break;
             default:
                 if (nConfiguredWesternFallback == LANGUAGE_SYSTEM)
