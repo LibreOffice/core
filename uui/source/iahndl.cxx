@@ -40,7 +40,7 @@
 #include "com/sun/star/beans/XPropertyAccess.hpp"
 #include "com/sun/star/configuration/backend/MergeRecoveryRequest.hpp"
 #include "com/sun/star/configuration/backend/StratumCreationException.hpp"
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/container/XContainerQuery.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
@@ -103,12 +103,11 @@
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyName.hpp"
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
-#include <com/sun/star/security/CertificateValidity.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-
+#include "com/sun/star/security/CertificateValidity.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
 
 #include "vos/mutex.hxx"
 #include "tools/rcid.h"
@@ -116,6 +115,7 @@
 #include "svtools/svtools.hrc"
 #include "svtools/httpcook.hxx"
 #include "svtools/sfxecode.hxx"
+#include "svtools/zforlist.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "comphelper/sequenceashashmap.hxx"
 #include "comphelper/documentconstants.hxx"
@@ -140,23 +140,7 @@
 #include "loginerr.hxx"
 #include "passwordcontainer.hxx"
 
-#include <comphelper/processfactory.hxx>
-#include <svtools/zforlist.hxx>
-using namespace com::sun;
-
-namespace csss = ::com::sun::star::security;
-
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::task::XInteractionContinuation;
-using ::com::sun::star::task::XInteractionAbort;
-using ::com::sun::star::task::XInteractionApprove;
-using ::com::sun::star::task::XInteractionAskLater;
-using ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest;
-
-
-#define CONFIG_INTERACTIONHANDLERS_KEY "/org.openoffice.ucb.InteractionHandler/InteractionHandlers"
+using namespace com::sun::star;
 
 namespace {
 
@@ -187,7 +171,8 @@ bool ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     const SAL_THROW(())
 {
     OSL_ENSURE(pString, "specification violation");
-    ResId aResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK), *m_pResMgr);
+    ResId aResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK),
+                 *m_pResMgr);
     aResId.SetRT(RSC_STRING);
     if (!IsAvailableRes(aResId))
         return false;
@@ -197,104 +182,79 @@ bool ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     return true;
 }
 
-void
-getContinuations(
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const & rContinuations,
-    star::uno::Reference< star::task::XInteractionApprove > * pApprove,
-    star::uno::Reference< star::task::XInteractionDisapprove > * pDisapprove,
-    star::uno::Reference< star::task::XInteractionRetry > * pRetry,
-    star::uno::Reference< star::task::XInteractionAbort > * pAbort,
-    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication > *
-        pSupplyAuthentication,
-    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication2 > *
-        pSupplyAuthentication2,
-    star::uno::Reference< star::task::XInteractionPassword > * pPassword,
-    star::uno::Reference< star::ucb::XInteractionSupplyName > *
-        pSupplyName,
-    star::uno::Reference< star::ucb::XInteractionReplaceExistingData > *
-    pReplaceExistingData)
-    SAL_THROW((star::uno::RuntimeException))
+template< class t1 >
+bool setContinuation(
+    uno::Reference< task::XInteractionContinuation > const & rContinuation,
+    uno::Reference< t1 > * pContinuation)
+{
+    if (pContinuation && !pContinuation->is())
+    {
+        pContinuation->set(rContinuation, uno::UNO_QUERY);
+        if (pContinuation->is())
+            return true;
+    }
+    return false;
+}
+
+template< class t1, class t2 >
+void getContinuations(
+    uno::Sequence< uno::Reference<
+        task::XInteractionContinuation > > const & rContinuations,
+    uno::Reference< t1 > * pContinuation1,
+    uno::Reference< t2 > * pContinuation2)
 {
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
     {
-        if (pApprove && !pApprove->is())
-        {
-            *pApprove
-                = star::uno::Reference< star::task::XInteractionApprove >(
-                      rContinuations[i], star::uno::UNO_QUERY);
-            if (pApprove->is())
-                continue;
-        }
-        if (pDisapprove && !pDisapprove->is())
-        {
-            *pDisapprove
-                = star::uno::Reference< star::task::XInteractionDisapprove >(
-                      rContinuations[i], star::uno::UNO_QUERY);
-            if (pDisapprove->is())
-                continue;
-        }
-        if (pRetry && !pRetry->is())
-        {
-            *pRetry = star::uno::Reference< star::task::XInteractionRetry >(
-                          rContinuations[i], star::uno::UNO_QUERY);
-            if (pRetry->is())
-                continue;
-        }
-        if (pAbort && !pAbort->is())
-        {
-            *pAbort = star::uno::Reference< star::task::XInteractionAbort >(
-                          rContinuations[i], star::uno::UNO_QUERY);
-            if (pAbort->is())
-                continue;
-        }
-        if (pSupplyAuthentication && !pSupplyAuthentication->is())
-        {
-            *pSupplyAuthentication
-                = star::uno::Reference<
-                          star::ucb::XInteractionSupplyAuthentication >(
-                      rContinuations[i], star::uno::UNO_QUERY);
-            if (pSupplyAuthentication->is())
-            {
-                // is it even a supplyauthentication2, which is derived from
-                // supplyauthentication?
-                if (pSupplyAuthentication2 && !pSupplyAuthentication2->is())
-                    *pSupplyAuthentication2
-                        = star::uno::Reference<
-                            star::ucb::XInteractionSupplyAuthentication2 >(
-                                rContinuations[i], star::uno::UNO_QUERY);
-                continue;
-            }
-        }
-        if (pPassword && !pPassword->is())
-        {
-            *pPassword
-                = star::uno::Reference< star::task::XInteractionPassword >(
-                    rContinuations[i], star::uno::UNO_QUERY);
-            if (pPassword->is())
-                continue;
-        }
-        if (pSupplyName && !pSupplyName->is())
-        {
-            *pSupplyName
-                = star::uno::Reference< star::ucb::XInteractionSupplyName >(
-                    rContinuations[i], star::uno::UNO_QUERY);
-            if (pSupplyName->is())
-                continue;
-        }
-        if (pReplaceExistingData && !pReplaceExistingData->is())
-        {
-            *pReplaceExistingData
-                = star::uno::Reference<
-                      star::ucb::XInteractionReplaceExistingData >(
-                    rContinuations[i], star::uno::UNO_QUERY);
-            if (pReplaceExistingData->is())
-                continue;
-        }
+        if (setContinuation(rContinuations[i], pContinuation1))
+            continue;
+        if (setContinuation(rContinuations[i], pContinuation2))
+            continue;
     }
 }
 
-::rtl::OUString replaceMessageWithArguments(
+template< class t1, class t2, class t3 >
+void getContinuations(
+    uno::Sequence< uno::Reference<
+        task::XInteractionContinuation > > const & rContinuations,
+    uno::Reference< t1 > * pContinuation1,
+    uno::Reference< t2 > * pContinuation2,
+    uno::Reference< t3 > * pContinuation3)
+{
+    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    {
+        if (setContinuation(rContinuations[i], pContinuation1))
+            continue;
+        if (setContinuation(rContinuations[i], pContinuation2))
+            continue;
+        if (setContinuation(rContinuations[i], pContinuation3))
+            continue;
+    }
+}
+
+template< class t1, class t2, class t3, class t4 >
+void getContinuations(
+    uno::Sequence< uno::Reference<
+        task::XInteractionContinuation > > const & rContinuations,
+    uno::Reference< t1 > * pContinuation1,
+    uno::Reference< t2 > * pContinuation2,
+    uno::Reference< t3 > * pContinuation3,
+    uno::Reference< t4 > * pContinuation4)
+{
+    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    {
+        if (setContinuation(rContinuations[i], pContinuation1))
+            continue;
+        if (setContinuation(rContinuations[i], pContinuation2))
+            continue;
+        if (setContinuation(rContinuations[i], pContinuation3))
+            continue;
+        if (setContinuation(rContinuations[i], pContinuation4))
+            continue;
+    }
+}
+
+::rtl::OUString
+replaceMessageWithArguments(
     ::rtl::OUString aMessage,
     std::vector< rtl::OUString > const & rArguments )
 {
@@ -331,17 +291,15 @@ getContinuations(
     return aMessage;
 }
 
-
 bool
-getStringRequestArgument(star::uno::Sequence< star::uno::Any > const &
-                 rArguments,
+getStringRequestArgument(uno::Sequence< uno::Any > const & rArguments,
                          rtl::OUString const & rKey,
                          rtl::OUString * pValue)
     SAL_THROW(())
 {
     for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
     {
-        star::beans::PropertyValue aProperty;
+        beans::PropertyValue aProperty;
         if ((rArguments[i] >>= aProperty) && aProperty.Name == rKey)
         {
             rtl::OUString aValue;
@@ -357,15 +315,14 @@ getStringRequestArgument(star::uno::Sequence< star::uno::Any > const &
 }
 
 bool
-getBoolRequestArgument(star::uno::Sequence< star::uno::Any > const &
-                           rArguments,
+getBoolRequestArgument(uno::Sequence< uno::Any > const & rArguments,
                        rtl::OUString const & rKey,
                        bool * pValue)
     SAL_THROW(())
 {
     for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
     {
-        star::beans::PropertyValue aProperty;
+        beans::PropertyValue aProperty;
         if ((rArguments[i] >>= aProperty) && aProperty.Name == rKey)
         {
             sal_Bool bValue = sal_Bool();
@@ -381,8 +338,7 @@ getBoolRequestArgument(star::uno::Sequence< star::uno::Any > const &
 }
 
 bool
-getResourceNameRequestArgument(star::uno::Sequence< star::uno::Any > const &
-                                   rArguments,
+getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
                                rtl::OUString * pValue)
     SAL_THROW(())
 {
@@ -403,9 +359,9 @@ getResourceNameRequestArgument(star::uno::Sequence< star::uno::Any > const &
     return true;
 }
 
-bool isInformationalErrorMessageRequest(
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const &
+bool
+isInformationalErrorMessageRequest(
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
             rContinuations)
 {
     // Only requests with a single continuation (user has no choice, request
@@ -415,13 +371,13 @@ bool isInformationalErrorMessageRequest(
 
     // user can only abort or approve, all other continuations are not
     // considered to be informational.
-    star::uno::Reference< star::task::XInteractionApprove > xApprove(
-        rContinuations[0], star::uno::UNO_QUERY);
+    uno::Reference< task::XInteractionApprove > xApprove(
+        rContinuations[0], uno::UNO_QUERY);
     if (xApprove.is())
         return true;
 
-    star::uno::Reference< star::task::XInteractionAbort > xAbort(
-        rContinuations[0], star::uno::UNO_QUERY);
+    uno::Reference< task::XInteractionAbort > xAbort(
+        rContinuations[0], uno::UNO_QUERY);
     if (xAbort.is())
         return true;
 
@@ -431,9 +387,8 @@ bool isInformationalErrorMessageRequest(
 } /* namespace */
 
 UUIInteractionHelper::UUIInteractionHelper(
-    star::uno::Reference< star::lang::XMultiServiceFactory > const &
-        rServiceFactory,
-    star::uno::Sequence< star::uno::Any > const & rArguments)
+    uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
+    uno::Sequence< uno::Any > const & rArguments)
     SAL_THROW(()):
         m_xServiceFactory(rServiceFactory),
         m_aProperties(rArguments)
@@ -441,8 +396,7 @@ UUIInteractionHelper::UUIInteractionHelper(
 }
 
 UUIInteractionHelper::UUIInteractionHelper(
-    star::uno::Reference< star::lang::XMultiServiceFactory > const &
-        rServiceFactory)
+    uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory)
     SAL_THROW(()):
         m_xServiceFactory(rServiceFactory)
 {
@@ -455,33 +409,34 @@ UUIInteractionHelper::~UUIInteractionHelper()
 class HandleData : public osl::Condition {
 public:
     HandleData(
-        star::uno::Reference< star::task::XInteractionRequest > const &
-        rRequest)
+        uno::Reference< task::XInteractionRequest > const & rRequest)
         : osl::Condition(),
           m_rRequest(rRequest),
           bHandled( false )
     {
     }
-    star::uno::Reference< star::task::XInteractionRequest > m_rRequest;
-    bool                                                    bHandled;
-    star::beans::Optional< rtl::OUString >                  m_aResult;
+    uno::Reference< task::XInteractionRequest > m_rRequest;
+    bool                                        bHandled;
+    beans::Optional< rtl::OUString >            m_aResult;
 };
 
-long UUIInteractionHelper::handlerequest(
-    void* pHandleData,void* pInteractionHelper)
+long
+UUIInteractionHelper::handlerequest(
+    void* pHandleData, void* pInteractionHelper)
 {
-    HandleData* pHND = (HandleData*) pHandleData;
-    UUIInteractionHelper* pUUI = (UUIInteractionHelper*) pInteractionHelper;
+    HandleData* pHND
+        = static_cast< HandleData * >(pHandleData);
+    UUIInteractionHelper* pUUI
+        = static_cast< UUIInteractionHelper * >(pInteractionHelper);
     pHND->bHandled = pUUI->handle_impl(pHND->m_rRequest);
     pHND->set();
     return 0;
 }
 
-
 bool
 UUIInteractionHelper::handleRequest(
-    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
-    throw (star::uno::RuntimeException)
+    uno::Reference< task::XInteractionRequest > const & rRequest)
+    SAL_THROW((uno::RuntimeException))
 {
     Application* pApp = 0;
     if(
@@ -505,7 +460,8 @@ UUIInteractionHelper::handleRequest(
         return handle_impl(rRequest);
 }
 
-long UUIInteractionHelper::getstringfromrequest(
+long
+UUIInteractionHelper::getstringfromrequest(
     void* pHandleData,void* pInteractionHelper)
 {
     HandleData* pHND = (HandleData*) pHandleData;
@@ -515,25 +471,25 @@ long UUIInteractionHelper::getstringfromrequest(
     return 0;
 }
 
-star::beans::Optional< rtl::OUString >
+beans::Optional< rtl::OUString >
 UUIInteractionHelper::getStringFromRequest_impl(
-    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
-    throw (star::uno::RuntimeException)
+    uno::Reference< task::XInteractionRequest > const & rRequest)
+    SAL_THROW((uno::RuntimeException))
 {
     bool bSuccess = false;
     rtl::OUString aMessage;
     handleMessageboxRequests(rRequest, true, bSuccess, aMessage);
 
     if (!bSuccess)
-    handleErrorHandlerRequests(rRequest, true, bSuccess, aMessage);
+        handleErrorHandlerRequests(rRequest, true, bSuccess, aMessage);
 
-    return star::beans::Optional< rtl::OUString >(bSuccess, aMessage);
+    return beans::Optional< rtl::OUString >(bSuccess, aMessage);
 }
 
-star::beans::Optional< rtl::OUString >
+beans::Optional< rtl::OUString >
 UUIInteractionHelper::getStringFromRequest(
-    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
-    throw (star::uno::RuntimeException)
+    uno::Reference< task::XInteractionRequest > const & rRequest)
+    SAL_THROW((uno::RuntimeException))
 {
     Application* pApp = 0;
     if(
@@ -557,20 +513,21 @@ UUIInteractionHelper::getStringFromRequest(
         return getStringFromRequest_impl(rRequest);
 }
 
-bool UUIInteractionHelper::handleMessageboxRequests(
-    star::uno::Reference< star::task::XInteractionRequest > const & rRequest,
+bool
+UUIInteractionHelper::handleMessageboxRequests(
+    uno::Reference< task::XInteractionRequest > const & rRequest,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     rtl::OUString & rErrorString)
 {
-    star::uno::Any aAnyRequest(rRequest->getRequest());
+    uno::Any aAnyRequest(rRequest->getRequest());
 
-    star::script::ModuleSizeExceededRequest aModSizeException;
+    script::ModuleSizeExceededRequest aModSizeException;
     if (aAnyRequest >>= aModSizeException )
     {
         ErrCode nErrorCode = ERRCODE_UUI_IO_MODULESIZEEXCEEDED;
         std::vector< rtl::OUString > aArguments;
-        star::uno::Sequence< rtl::OUString > sModules
+        uno::Sequence< rtl::OUString > sModules
             = aModSizeException.Names;
         if ( sModules.getLength() )
         {
@@ -584,7 +541,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
             }
             aArguments.push_back( aName );
         }
-        handleErrorRequest( star::task::InteractionClassification_WARNING,
+        handleErrorRequest( task::InteractionClassification_WARNING,
                             nErrorCode,
                             aArguments,
                             rRequest->getContinuations(),
@@ -594,7 +551,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::NameClashException aNCException;
+    ucb::NameClashException aNCException;
     if (aAnyRequest >>= aNCException)
     {
         ErrCode nErrorCode = ERRCODE_UUI_IO_TARGETALREADYEXISTS;
@@ -616,33 +573,30 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::UnsupportedNameClashException aUORequest;
+    ucb::UnsupportedNameClashException aUORequest;
     if (aAnyRequest >>= aUORequest)
     {
         ErrCode nErrorCode = ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE;
         std::vector< rtl::OUString > aArguments;
 
-        star::uno::Reference< star::task::XInteractionApprove > xApprove;
-        star::uno::Reference<
-            star::task::XInteractionDisapprove > xDisapprove;
-        getContinuations(
-            rRequest->getContinuations(),
-            &xApprove, &xDisapprove, 0, 0, 0, 0, 0, 0, 0);
+        uno::Reference< task::XInteractionApprove > xApprove;
+        uno::Reference< task::XInteractionDisapprove > xDisapprove;
+        getContinuations(rRequest->getContinuations(), &xApprove, &xDisapprove);
 
-        if( xApprove.is() && xDisapprove.is() )
+        if ( xApprove.is() && xDisapprove.is() )
         {
-        handleErrorRequest( star::task::InteractionClassification_QUERY,
-                            nErrorCode,
-                            aArguments,
-                            rRequest->getContinuations(),
-                            bObtainErrorStringOnly,
-                            bHasErrorString,
-                            rErrorString);
+            handleErrorRequest( task::InteractionClassification_QUERY,
+                                nErrorCode,
+                                aArguments,
+                                rRequest->getContinuations(),
+                                bObtainErrorStringOnly,
+                                bHasErrorString,
+                                rErrorString);
         }
         return true;
     }
 
-    star::document::BrokenPackageRequest aBrokenPackageRequest;
+    document::BrokenPackageRequest aBrokenPackageRequest;
     if (aAnyRequest >>= aBrokenPackageRequest)
     {
         std::vector< rtl::OUString > aArguments;
@@ -658,18 +612,18 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::InteractiveIOException aIoException;
+    ucb::InteractiveIOException aIoException;
     if (aAnyRequest >>= aIoException)
     {
-        star::uno::Sequence< star::uno::Any > aRequestArguments;
-        star::ucb::InteractiveAugmentedIOException aAugmentedIoException;
+        uno::Sequence< uno::Any > aRequestArguments;
+        ucb::InteractiveAugmentedIOException aAugmentedIoException;
         if (aAnyRequest >>= aAugmentedIoException)
             aRequestArguments = aAugmentedIoException.Arguments;
 
         ErrCode nErrorCode;
         std::vector< rtl::OUString > aArguments;
         static ErrCode const
-            aErrorCode[star::ucb::IOErrorCode_WRONG_VERSION + 1][2]
+            aErrorCode[ucb::IOErrorCode_WRONG_VERSION + 1][2]
             = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
                 { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
                 // ACCESS_DENIED
@@ -740,7 +694,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
                   ERRCODE_UUI_IO_WRONGVERSION } }; // WRONG_VERSION
         switch (aIoException.Code)
         {
-        case star::ucb::IOErrorCode_CANT_CREATE:
+        case ucb::IOErrorCode_CANT_CREATE:
             {
                 rtl::OUString aArgFolder;
                 if (getStringRequestArgument(
@@ -769,7 +723,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
                 break;
             }
 
-        case star::ucb::IOErrorCode_DEVICE_NOT_READY:
+        case ucb::IOErrorCode_DEVICE_NOT_READY:
             {
                 rtl::OUString aArgUri;
                 if (getResourceNameRequestArgument(aRequestArguments,
@@ -803,7 +757,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
                 break;
             }
 
-        case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
+        case ucb::IOErrorCode_DIFFERENT_DEVICES:
             {
                 rtl::OUString aArgVolume;
                 rtl::OUString aArgOtherVolume;
@@ -828,7 +782,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
                 break;
         }
 
-        case star::ucb::IOErrorCode_NOT_EXISTING:
+        case ucb::IOErrorCode_NOT_EXISTING:
             {
                 rtl::OUString aArgUri;
                 if (getResourceNameRequestArgument(aRequestArguments,
@@ -880,7 +834,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::InteractiveAppException aAppException;
+    ucb::InteractiveAppException aAppException;
     if (aAnyRequest >>= aAppException)
     {
         std::vector< rtl::OUString > aArguments;
@@ -894,17 +848,16 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::InteractiveNetworkException aNetworkException;
+    ucb::InteractiveNetworkException aNetworkException;
     if (aAnyRequest >>= aNetworkException)
     {
         ErrCode nErrorCode;
         std::vector< rtl::OUString > aArguments;
-        star::ucb::InteractiveNetworkOffLineException aOffLineException;
-        star::ucb::InteractiveNetworkResolveNameException
-            aResolveNameException;
-        star::ucb::InteractiveNetworkConnectException aConnectException;
-        star::ucb::InteractiveNetworkReadException aReadException;
-        star::ucb::InteractiveNetworkWriteException aWriteException;
+        ucb::InteractiveNetworkOffLineException aOffLineException;
+        ucb::InteractiveNetworkResolveNameException aResolveNameException;
+        ucb::InteractiveNetworkConnectException aConnectException;
+        ucb::InteractiveNetworkReadException aReadException;
+        ucb::InteractiveNetworkWriteException aWriteException;
         if (aAnyRequest >>= aOffLineException)
             nErrorCode = ERRCODE_INET_OFFLINE;
         else if (aAnyRequest >>= aResolveNameException)
@@ -940,7 +893,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::InteractiveCHAOSException aChaosException;
+    ucb::InteractiveCHAOSException aChaosException;
     if (aAnyRequest >>= aChaosException)
     {
         std::vector< rtl::OUString > aArguments;
@@ -963,7 +916,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::InteractiveWrongMediumException aWrongMediumException;
+    ucb::InteractiveWrongMediumException aWrongMediumException;
     if (aAnyRequest >>= aWrongMediumException)
     {
         sal_Int32 nMedium = 0;
@@ -980,7 +933,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::java::WrongJavaVersionException aWrongJavaVersionException;
+    java::WrongJavaVersionException aWrongJavaVersionException;
     if (aAnyRequest >>= aWrongJavaVersionException)
     {
         ErrCode nErrorCode;
@@ -1013,7 +966,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
             aArguments.push_back(aWrongJavaVersionException.
                                  LowestSupportedVersion);
         }
-        handleErrorRequest(star::task::InteractionClassification_ERROR,
+        handleErrorRequest(task::InteractionClassification_ERROR,
                            nErrorCode,
                            aArguments,
                            rRequest->getContinuations(),
@@ -1023,7 +976,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::sync2::BadPartnershipException aBadPartnershipException;
+    sync2::BadPartnershipException aBadPartnershipException;
     if (aAnyRequest >>= aBadPartnershipException)
     {
         ErrCode nErrorCode;
@@ -1035,7 +988,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
             nErrorCode = ERRCODE_UUI_BADPARTNERSHIP_NAME;
             aArguments.push_back(aBadPartnershipException.Partnership);
         }
-        handleErrorRequest(star::task::InteractionClassification_ERROR,
+        handleErrorRequest(task::InteractionClassification_ERROR,
                            nErrorCode,
                            aArguments,
                            rRequest->getContinuations(),
@@ -1045,7 +998,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::configuration::backend::MergeRecoveryRequest aMergeRecoveryRequest;
+    configuration::backend::MergeRecoveryRequest aMergeRecoveryRequest;
     if (aAnyRequest >>= aMergeRecoveryRequest)
     {
         ErrCode nErrorCode = aMergeRecoveryRequest.IsRemovalRequest
@@ -1055,7 +1008,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         std::vector< rtl::OUString > aArguments;
         aArguments.push_back(aMergeRecoveryRequest.ErrorLayerId);
 
-        handleErrorRequest(star::task::InteractionClassification_ERROR,
+        handleErrorRequest(task::InteractionClassification_ERROR,
                            nErrorCode,
                            aArguments,
                            rRequest->getContinuations(),
@@ -1065,7 +1018,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::configuration::backend::StratumCreationException
+    configuration::backend::StratumCreationException
         aStratumCreationException;
 
     if (aAnyRequest >>= aStratumCreationException)
@@ -1079,7 +1032,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         std::vector< rtl::OUString > aArguments;
         aArguments.push_back(aStratum);
 
-        handleErrorRequest(star::task::InteractionClassification_ERROR,
+        handleErrorRequest(task::InteractionClassification_ERROR,
                            nErrorCode,
                            aArguments,
                            rRequest->getContinuations(),
@@ -1089,14 +1042,14 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::xforms::InvalidDataOnSubmitException aInvalidDataOnSubmitException;
+    xforms::InvalidDataOnSubmitException aInvalidDataOnSubmitException;
     if (aAnyRequest >>= aInvalidDataOnSubmitException)
     {
         const ErrCode nErrorCode = ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA;
 
         std::vector< rtl::OUString > aArguments;
 
-        handleErrorRequest(star::task::InteractionClassification_QUERY,
+        handleErrorRequest(task::InteractionClassification_QUERY,
                            nErrorCode,
                            aArguments,
                            rRequest->getContinuations(),
@@ -1106,7 +1059,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::InteractiveLockingLockedException aLLException;
+    ucb::InteractiveLockingLockedException aLLException;
     if (aAnyRequest >>= aLLException)
     {
         ErrCode nErrorCode = aLLException.SelfOwned
@@ -1124,7 +1077,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::InteractiveLockingNotLockedException aLNLException;
+    ucb::InteractiveLockingNotLockedException aLNLException;
     if (aAnyRequest >>= aLNLException)
     {
         ErrCode nErrorCode = ERRCODE_UUI_LOCKING_NOT_LOCKED;
@@ -1141,7 +1094,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
         return true;
     }
 
-    star::ucb::InteractiveLockingLockExpiredException aLLEException;
+    ucb::InteractiveLockingLockExpiredException aLLEException;
     if (aAnyRequest >>= aLLEException)
     {
         ErrCode nErrorCode = ERRCODE_UUI_LOCKING_LOCK_EXPIRED;
@@ -1161,12 +1114,13 @@ bool UUIInteractionHelper::handleMessageboxRequests(
     return false;
 }
 
-bool UUIInteractionHelper::handleDialogRequests(
-    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
+bool
+UUIInteractionHelper::handleDialogRequests(
+    uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    star::uno::Any aAnyRequest(rRequest->getRequest());
+    uno::Any aAnyRequest(rRequest->getRequest());
 
-    star::ucb::URLAuthenticationRequest aURLAuthenticationRequest;
+    ucb::URLAuthenticationRequest aURLAuthenticationRequest;
     if (aAnyRequest >>= aURLAuthenticationRequest)
     {
         handleAuthenticationRequest(aURLAuthenticationRequest,
@@ -1175,7 +1129,7 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::ucb::AuthenticationRequest aAuthenticationRequest;
+    ucb::AuthenticationRequest aAuthenticationRequest;
     if (aAnyRequest >>= aAuthenticationRequest)
     {
         handleAuthenticationRequest(aAuthenticationRequest,
@@ -1184,16 +1138,16 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::ucb::CertificateValidationRequest aCertificateValidationRequest;
+    ucb::CertificateValidationRequest aCertificateValidationRequest;
     if (aAnyRequest >>= aCertificateValidationRequest)
     {
         handleCertificateValidationRequest(aCertificateValidationRequest,
-                                    rRequest->getContinuations());
+                                           rRequest->getContinuations());
         return true;
     }
 
 // @@@ Todo #i29340#: activate!
-//    star::ucb::NameClashResolveRequest aNameClashResolveRequest;
+//    ucb::NameClashResolveRequest aNameClashResolveRequest;
 //    if (aAnyRequest >>= aNameClashResolveRequest)
 //    {
 //        handleNameClashResolveRequest(aNameClashResolveRequest,
@@ -1201,7 +1155,7 @@ bool UUIInteractionHelper::handleDialogRequests(
 //        return;
 //    }
 
-    star::task::MasterPasswordRequest aMasterPasswordRequest;
+    task::MasterPasswordRequest aMasterPasswordRequest;
     if (aAnyRequest >>= aMasterPasswordRequest)
     {
         handleMasterPasswordRequest(aMasterPasswordRequest.Mode,
@@ -1209,7 +1163,7 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::task::DocumentPasswordRequest aDocumentPasswordRequest;
+    task::DocumentPasswordRequest aDocumentPasswordRequest;
     if (aAnyRequest >>= aDocumentPasswordRequest)
     {
         handlePasswordRequest(aDocumentPasswordRequest.Mode,
@@ -1218,16 +1172,16 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
+    task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
     if (aAnyRequest >>= aDocumentMSPasswordRequest)
     {
         handleMSPasswordRequest(aDocumentMSPasswordRequest.Mode,
-                              rRequest->getContinuations(),
-                              aDocumentMSPasswordRequest.Name);
+                                rRequest->getContinuations(),
+                                aDocumentMSPasswordRequest.Name);
         return true;
     }
 
-    star::task::PasswordRequest aPasswordRequest;
+    task::PasswordRequest aPasswordRequest;
     if (aAnyRequest >>= aPasswordRequest)
     {
         handlePasswordRequest(aPasswordRequest.Mode,
@@ -1235,7 +1189,7 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::ucb::HandleCookiesRequest aCookiesRequest;
+    ucb::HandleCookiesRequest aCookiesRequest;
     if (aAnyRequest >>= aCookiesRequest)
     {
         handleCookiesRequest(aCookiesRequest,
@@ -1243,7 +1197,7 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::document::NoSuchFilterRequest aNoSuchFilterRequest;
+    document::NoSuchFilterRequest aNoSuchFilterRequest;
     if (aAnyRequest >>= aNoSuchFilterRequest)
     {
         handleNoSuchFilterRequest(aNoSuchFilterRequest,
@@ -1251,7 +1205,7 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::document::AmbigousFilterRequest aAmbigousFilterRequest;
+    document::AmbigousFilterRequest aAmbigousFilterRequest;
     if (aAnyRequest >>= aAmbigousFilterRequest)
     {
         handleAmbigousFilterRequest(aAmbigousFilterRequest,
@@ -1259,7 +1213,7 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::document::FilterOptionsRequest aFilterOptionsRequest;
+    document::FilterOptionsRequest aFilterOptionsRequest;
     if (aAnyRequest >>= aFilterOptionsRequest)
     {
         handleFilterOptionsRequest(aFilterOptionsRequest,
@@ -1267,7 +1221,7 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::document::LockedDocumentRequest aLockedDocumentRequest;
+    document::LockedDocumentRequest aLockedDocumentRequest;
     if (aAnyRequest >>= aLockedDocumentRequest )
     {
         handleLockedDocumentRequest( aLockedDocumentRequest.DocumentURL,
@@ -1277,17 +1231,19 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::document::OwnLockOnDocumentRequest aOwnLockOnDocumentRequest;
+    document::OwnLockOnDocumentRequest aOwnLockOnDocumentRequest;
     if (aAnyRequest >>= aOwnLockOnDocumentRequest )
     {
         handleLockedDocumentRequest( aOwnLockOnDocumentRequest.DocumentURL,
                                      aOwnLockOnDocumentRequest.TimeInfo,
                                      rRequest->getContinuations(),
-                                     aOwnLockOnDocumentRequest.IsStoring ? UUI_DOC_OWN_SAVE_LOCK : UUI_DOC_OWN_LOAD_LOCK );
+                                     aOwnLockOnDocumentRequest.IsStoring
+                                         ? UUI_DOC_OWN_SAVE_LOCK
+                                         : UUI_DOC_OWN_LOAD_LOCK );
         return true;
     }
 
-    star::document::LockedOnSavingRequest aLockedOnSavingRequest;
+    document::LockedOnSavingRequest aLockedOnSavingRequest;
     if (aAnyRequest >>= aLockedOnSavingRequest )
     {
         handleLockedDocumentRequest( aLockedOnSavingRequest.DocumentURL,
@@ -1297,43 +1253,21 @@ bool UUIInteractionHelper::handleDialogRequests(
         return true;
     }
 
-    star::document::ChangedByOthersRequest aChangedByOthersRequest;
+    document::ChangedByOthersRequest aChangedByOthersRequest;
     if (aAnyRequest >>= aChangedByOthersRequest )
     {
         handleChangedByOthersRequest( rRequest->getContinuations() );
         return true;
     }
 
-    star::document::LockFileIgnoreRequest aLockFileIgnoreRequest;
+    document::LockFileIgnoreRequest aLockFileIgnoreRequest;
     if (aAnyRequest >>= aLockFileIgnoreRequest )
     {
         handleLockFileIgnoreRequest( rRequest->getContinuations() );
         return true;
     }
 
-    return false;
-}
-
-bool UUIInteractionHelper::handleErrorHandlerRequests(
-    star::uno::Reference< star::task::XInteractionRequest > const & rRequest,
-    bool bObtainErrorStringOnly,
-    bool & bHasErrorString,
-    rtl::OUString & rErrorString)
-{
-    star::uno::Any aAnyRequest(rRequest->getRequest());
-
-    star::task::ErrorCodeRequest aErrorCodeRequest;
-    if (aAnyRequest >>= aErrorCodeRequest)
-    {
-        handleGenericErrorRequest( aErrorCodeRequest.ErrCode,
-                                   rRequest->getContinuations(),
-                   bObtainErrorStringOnly,
-                   bHasErrorString,
-                   rErrorString);
-        return true;
-    }
-
-    star::task::DocumentMacroConfirmationRequest aMacroConfirmRequest;
+    task::DocumentMacroConfirmationRequest aMacroConfirmRequest;
     if (aAnyRequest >>= aMacroConfirmRequest)
     {
         handleMacroConfirmRequest(
@@ -1346,7 +1280,7 @@ bool UUIInteractionHelper::handleErrorHandlerRequests(
         return true;
     }
 
-    star::task::DocumentMacroConfirmationRequest2 aMacroConfirmRequest2;
+    task::DocumentMacroConfirmationRequest2 aMacroConfirmRequest2;
     if (aAnyRequest >>= aMacroConfirmRequest2)
     {
         handleMacroConfirmRequest(
@@ -1359,7 +1293,7 @@ bool UUIInteractionHelper::handleErrorHandlerRequests(
         return true;
     }
 
-    FutureDocumentVersionProductUpdateRequest aProductUpdateRequest;
+    task::FutureDocumentVersionProductUpdateRequest aProductUpdateRequest;
     if (aAnyRequest >>= aProductUpdateRequest)
     {
         handleFutureDocumentVersionUpdateRequest(
@@ -1369,14 +1303,37 @@ bool UUIInteractionHelper::handleErrorHandlerRequests(
         return true;
     }
 
-    star::task::ErrorCodeIOException aErrorCodeIOException;
+    return false;
+}
+
+bool
+UUIInteractionHelper::handleErrorHandlerRequests(
+    uno::Reference< task::XInteractionRequest > const & rRequest,
+    bool bObtainErrorStringOnly,
+    bool & bHasErrorString,
+    rtl::OUString & rErrorString)
+{
+    uno::Any aAnyRequest(rRequest->getRequest());
+
+    task::ErrorCodeRequest aErrorCodeRequest;
+    if (aAnyRequest >>= aErrorCodeRequest)
+    {
+        handleGenericErrorRequest( aErrorCodeRequest.ErrCode,
+                                   rRequest->getContinuations(),
+                                   bObtainErrorStringOnly,
+                                   bHasErrorString,
+                                   rErrorString);
+        return true;
+    }
+
+    task::ErrorCodeIOException aErrorCodeIOException;
     if (aAnyRequest >>= aErrorCodeIOException)
     {
         handleGenericErrorRequest( aErrorCodeIOException.ErrCode,
                                    rRequest->getContinuations(),
-                   bObtainErrorStringOnly,
-                   bHasErrorString,
-                   rErrorString);
+                                   bObtainErrorStringOnly,
+                                   bHasErrorString,
+                                   rErrorString);
         return true;
     }
 
@@ -1385,8 +1342,8 @@ bool UUIInteractionHelper::handleErrorHandlerRequests(
 
 bool
 UUIInteractionHelper::handle_impl(
-    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
-    throw (star::uno::RuntimeException)
+    uno::Reference< task::XInteractionRequest > const & rRequest)
+    SAL_THROW((uno::RuntimeException))
 {
     try
     {
@@ -1414,42 +1371,55 @@ UUIInteractionHelper::handle_impl(
                     // Use customized InteractionHandler from configuration
                     ////////////////////////////////////////////////////////////
                     InteractionHandlerDataList dataList;
+                    getInteractionHandlerList(dataList);
 
-                    GetInteractionHandlerList(dataList);
-
-                    InteractionHandlerDataList::const_iterator aEnd(dataList.end());
-                    for (InteractionHandlerDataList::const_iterator aIt(dataList.begin());
-                         aIt != aEnd; ++aIt)
+                    InteractionHandlerDataList::const_iterator aEnd(
+                        dataList.end());
+                    for (InteractionHandlerDataList::const_iterator aIt(
+                             dataList.begin());
+                         aIt != aEnd;
+                         ++aIt)
                     {
-                        Reference< uno::XInterface > xIfc =
-                            m_xServiceFactory->createInstance(aIt->ServiceName);
+                        uno::Reference< uno::XInterface > xIfc;
 
+                        try
+                        {
+                            xIfc = m_xServiceFactory->createInstance(
+                                aIt->ServiceName);
+                        }
+                        catch ( uno::Exception const & )
+                        {
+                        }
 
-                        Reference< com::sun::star::lang::XInitialization > xInitialization =
-                            Reference< com::sun::star::lang::XInitialization >( xIfc, UNO_QUERY );
+                        uno::Reference< lang::XInitialization >
+                            xInitialization( xIfc, uno::UNO_QUERY );
 
-                        OSL_ENSURE( xInitialization.is(), "Custom Interactionhandler does not implement mandatory interface XInitialization!" );
+                        OSL_ENSURE( xInitialization.is(),
+                                    "Custom Interactionhandler does not "
+                                    "implement mandatory interface "
+                                    "XInitialization!" );
                         if (xInitialization.is())
                         {
                             uno::Sequence< uno::Any > propertyValues(1);
-                            beans::PropertyValue    aProperty;
-                            
-                            aProperty.Name = rtl::OUString::createFromAscii( "Parent" );
+                            beans::PropertyValue aProperty;
+
+                            aProperty.Name
+                                = rtl::OUString::createFromAscii( "Parent" );
                             aProperty.Value <<= getParentXWindow();
                             propertyValues[ 0 ] <<= aProperty;
 
                             xInitialization->initialize(propertyValues);
                         }
 
-                        Reference< task::XInteractionHandler2 >
-                            xInteractionHandler( xIfc, UNO_QUERY );
+                        uno::Reference< task::XInteractionHandler2 >
+                            xIH( xIfc, uno::UNO_QUERY );
 
-                        OSL_ENSURE( xInteractionHandler.is(),
-                                    "Custom Interactionhandler does not implement "
-                                    "mandatory interface XInteractionHandler2!" );
-                        if (xInteractionHandler.is())
-                            if (xInteractionHandler->handleInteractionRequest(rRequest))
-                                return true;
+                        OSL_ENSURE( xIH.is(),
+                                    "Custom Interactionhandler does not "
+                                    "implement mandatory interface "
+                                    "XInteractionHandler2!" );
+                        if (xIH.is() && xIH->handleInteractionRequest(rRequest))
+                            return true;
                     }
                     return false;
                 }
@@ -1458,20 +1428,24 @@ UUIInteractionHelper::handle_impl(
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-            star::uno::Reference< star::uno::XInterface >());
+            uno::Reference< uno::XInterface >());
     }
     return true;
 }
 
-void UUIInteractionHelper::GetInteractionHandlerList(InteractionHandlerDataList &rdataList)
+void
+UUIInteractionHelper::getInteractionHandlerList(
+    InteractionHandlerDataList &rdataList)
 {
+    try
+    {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
-                m_xServiceFactory->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                uno::UNO_QUERY );
+            m_xServiceFactory->createInstance(
+                rtl::OUString::createFromAscii(
+                    "com.sun.star.configuration.ConfigurationProvider" ) ),
+            uno::UNO_QUERY );
 
         if ( !xConfigProv.is() )
         {
@@ -1481,7 +1455,8 @@ void UUIInteractionHelper::GetInteractionHandlerList(InteractionHandlerDataList 
         }
 
         rtl::OUStringBuffer aFullPath;
-        aFullPath.appendAscii( CONFIG_INTERACTIONHANDLERS_KEY );
+        aFullPath.appendAscii(
+            "/org.openoffice.ucb.InteractionHandler/InteractionHandlers" );
 
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
@@ -1504,8 +1479,7 @@ void UUIInteractionHelper::GetInteractionHandlerList(InteractionHandlerDataList 
         }
 
         uno::Reference< container::XNameAccess > xNameAccess(
-                                            xInterface, uno::UNO_QUERY );
-
+            xInterface, uno::UNO_QUERY );
         if ( !xNameAccess.is() )
         {
             OSL_ENSURE( false,
@@ -1570,28 +1544,37 @@ void UUIInteractionHelper::GetInteractionHandlerList(InteractionHandlerDataList 
                 }
             }
         }
+    }
+    catch ( uno::Exception const & )
+    {
+        OSL_ENSURE( false, "GetInteractionHandlerList - Caught Exception!" );
+    }
 }
 
-Window * UUIInteractionHelper::getParentProperty() SAL_THROW(())
+Window *
+UUIInteractionHelper::getParentProperty()
+    SAL_THROW(())
 {
-    star::uno::Reference< star::awt::XWindow > xWindow = getParentXWindow();
+    uno::Reference< awt::XWindow > xWindow = getParentXWindow();
     if ( xWindow.is() )
         return VCLUnoHelper::GetWindow(xWindow);
 
     return 0;
 }
 
-star::uno::Reference< ::com::sun::star::awt::XWindow>  UUIInteractionHelper::getParentXWindow() SAL_THROW(())
+uno::Reference< awt::XWindow>
+UUIInteractionHelper::getParentXWindow()
+    SAL_THROW(())
 {
     osl::MutexGuard aGuard(m_aPropertyMutex);
     for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
     {
-        star::beans::PropertyValue aProperty;
+        beans::PropertyValue aProperty;
         if ((m_aProperties[i] >>= aProperty)
             && aProperty.
                    Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Parent")))
         {
-            star::uno::Reference< star::awt::XWindow > xWindow;
+            uno::Reference< awt::XWindow > xWindow;
             aProperty.Value >>= xWindow;
             return xWindow;
         }
@@ -1599,12 +1582,13 @@ star::uno::Reference< ::com::sun::star::awt::XWindow>  UUIInteractionHelper::get
     return 0;
 }
 
-rtl::OUString UUIInteractionHelper::getContextProperty() SAL_THROW(())
+rtl::OUString
+UUIInteractionHelper::getContextProperty() SAL_THROW(())
 {
     osl::MutexGuard aGuard(m_aPropertyMutex);
     for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
     {
-        star::beans::PropertyValue aProperty;
+        beans::PropertyValue aProperty;
         if ((m_aProperties[i] >>= aProperty)
             && aProperty.
                    Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Context")))
@@ -1617,57 +1601,58 @@ rtl::OUString UUIInteractionHelper::getContextProperty() SAL_THROW(())
     return rtl::OUString();
 }
 
-String GetContentPart( const String& _rRawString )
+String
+GetContentPart( const String& _rRawString )
 {
-        // search over some parts to find a string
-        //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
-        static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
-        String sPart;
-        int i = 0;
-        while ( aIDs[i] )
+    // search over some parts to find a string
+    //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
+    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
+    String sPart;
+    int i = 0;
+    while ( aIDs[i] )
+    {
+        String sPartId = String::CreateFromAscii( aIDs[i++] );
+        xub_StrLen nContStart = _rRawString.Search( sPartId );
+        if ( nContStart != STRING_NOTFOUND )
         {
-            String sPartId = String::CreateFromAscii( aIDs[i++] );
-            xub_StrLen nContStart = _rRawString.Search( sPartId );
-            if ( nContStart != STRING_NOTFOUND )
-            {
-                nContStart = nContStart + sPartId.Len();
-                //++nContStart;                   // now it's start of content, directly after Id // delete By CP
-                xub_StrLen nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
-                sPart = String( _rRawString, nContStart, nContEnd - nContStart );
-                break;
-            }
+            nContStart = nContStart + sPartId.Len();
+            xub_StrLen nContEnd
+                = _rRawString.Search( sal_Unicode( ',' ), nContStart );
+            sPart = String( _rRawString, nContStart, nContEnd - nContStart );
+            break;
         }
-
-        return sPart;
+    }
+    return sPart;
 }
 
-
-sal_Bool UUIInteractionHelper::executeUnknownAuthDialog( const cssu::Reference< dcss::security::XCertificate >& rXCert)
-    SAL_THROW((star::uno::RuntimeException))
+sal_Bool
+UUIInteractionHelper::executeUnknownAuthDialog(
+    const uno::Reference< security::XCertificate >& rXCert)
+    SAL_THROW((uno::RuntimeException))
 {
     try
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< UnknownAuthDialog >
-            xDialog(new UnknownAuthDialog( getParentProperty(),
-                                           rXCert,
-                                           m_xServiceFactory,
-                                           xManager.get()));
+        std::auto_ptr< ResMgr > xManager(
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< UnknownAuthDialog > xDialog(
+            new UnknownAuthDialog( getParentProperty(),
+                                   rXCert,
+                                   m_xServiceFactory,
+                                   xManager.get()));
 
         // Get correct ressource string
         rtl::OUString aMessage;
 
         std::vector< rtl::OUString > aArguments;
-        aArguments.push_back( GetContentPart( rXCert.get()->getSubjectName()) );
-        //aArguments.push_back( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")) );
+        aArguments.push_back( GetContentPart( rXCert->getSubjectName()) );
 
         if (xManager.get())
         {
             ResId aResId(RID_UUI_ERRHDL, *xManager.get());
-            if (ErrorResource(aResId).getString(ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, &aMessage))
+            if (ErrorResource(aResId).getString(
+                    ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, &aMessage))
             {
                 aMessage = replaceMessageWithArguments( aMessage, aArguments );
                 xDialog->setDescriptionText( aMessage );
@@ -1678,17 +1663,15 @@ sal_Bool UUIInteractionHelper::executeUnknownAuthDialog( const cssu::Reference< 
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  star::uno::Reference< star::uno::XInterface >());
+                  uno::Reference< uno::XInterface >());
     }
 }
 
 rtl::OUString
-UUIInteractionHelper::getLocalizedDatTimeStr( ::com::sun::star::util::DateTime aDateTime )
+UUIInteractionHelper::getLocalizedDatTimeStr( util::DateTime aDateTime )
 {
-
-
     rtl::OUString aDateTimeStr;
     Date  aDate;
     Time  aTime;
@@ -1697,38 +1680,44 @@ UUIInteractionHelper::getLocalizedDatTimeStr( ::com::sun::star::util::DateTime a
     aTime = Time( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds );
 
     LanguageType eUILang = Application::GetSettings().GetUILanguage();
-    SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), eUILang );
+    SvNumberFormatter *pNumberFormatter
+        = new SvNumberFormatter( m_xServiceFactory, eUILang );
     String      aTmpStr;
     Color*      pColor = NULL;
     Date*       pNullDate = pNumberFormatter->GetNullDate();
-    sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eUILang );
+    sal_uInt32  nFormat
+        = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eUILang );
 
-    pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aTmpStr, &pColor );
+    pNumberFormatter->GetOutputString(
+        aDate - *pNullDate, nFormat, aTmpStr, &pColor );
     aDateTimeStr = aTmpStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
 
     nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );
-    pNumberFormatter->GetOutputString( aTime.GetTimeInDays(), nFormat, aTmpStr, &pColor );
+    pNumberFormatter->GetOutputString(
+        aTime.GetTimeInDays(), nFormat, aTmpStr, &pColor );
     aDateTimeStr += aTmpStr;
 
     return aDateTimeStr;
 }
 
-sal_Bool UUIInteractionHelper::executeSSLWarnDialog( const cssu::Reference< dcss::security::XCertificate >& rXCert,
-                                                     sal_Int32 const & failure,
-                                                     const rtl::OUString & hostName )
-    SAL_THROW((star::uno::RuntimeException))
+sal_Bool
+UUIInteractionHelper::executeSSLWarnDialog(
+    const uno::Reference< security::XCertificate >& rXCert,
+    sal_Int32 const & failure,
+    const rtl::OUString & hostName )
+    SAL_THROW((uno::RuntimeException))
 {
     try
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< SSLWarnDialog >
-            xDialog(new SSLWarnDialog( getParentProperty(),
-                                           rXCert,
-                                           m_xServiceFactory,
-                                           xManager.get()));
+        std::auto_ptr< ResMgr > xManager(
+           ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< SSLWarnDialog > xDialog(
+           new SSLWarnDialog( getParentProperty(),
+                              rXCert,
+                              m_xServiceFactory,
+                              xManager.get()));
 
         // Get correct ressource string
         rtl::OUString aMessage_1;
@@ -1738,51 +1727,54 @@ sal_Bool UUIInteractionHelper::executeSSLWarnDialog( const cssu::Reference< dcss
         {
             case SSLWARN_TYPE_DOMAINMISMATCH:
                 aArguments_1.push_back( hostName );
-                aArguments_1.push_back( GetContentPart( rXCert.get()->getSubjectName()) );
+                aArguments_1.push_back(
+                    GetContentPart( rXCert->getSubjectName()) );
                 aArguments_1.push_back( hostName );
                 break;
             case SSLWARN_TYPE_EXPIRED:
-                aArguments_1.push_back( GetContentPart( rXCert.get()->getSubjectName()) );
-                aArguments_1.push_back( getLocalizedDatTimeStr( rXCert.get()->getNotValidAfter() ) );
-                aArguments_1.push_back( getLocalizedDatTimeStr( rXCert.get()->getNotValidAfter() ) );
+                aArguments_1.push_back(
+                    GetContentPart( rXCert->getSubjectName()) );
+                aArguments_1.push_back(
+                    getLocalizedDatTimeStr( rXCert->getNotValidAfter() ) );
+                aArguments_1.push_back(
+                    getLocalizedDatTimeStr( rXCert->getNotValidAfter() ) );
                 break;
             case SSLWARN_TYPE_INVALID:
                 break;
         }
 
-
-
-        //aArguments.push_back( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")) );
-
         if (xManager.get())
         {
             ResId aResId(RID_UUI_ERRHDL, *xManager.get());
-            if (ErrorResource(aResId).getString( ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + DESCRIPTION_1, &aMessage_1))
+            if (ErrorResource(aResId).getString(
+                    ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + DESCRIPTION_1,
+                    &aMessage_1))
             {
-                aMessage_1 = replaceMessageWithArguments( aMessage_1, aArguments_1 );
+                aMessage_1
+                    = replaceMessageWithArguments( aMessage_1, aArguments_1 );
                 xDialog->setDescription1Text( aMessage_1 );
             }
 
             rtl::OUString aTitle;
-            ErrorResource(aResId).getString( ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, &aTitle);
+            ErrorResource(aResId).getString(
+                ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, &aTitle);
             xDialog->SetText( aTitle );
         }
-
-
 
         return static_cast<sal_Bool> (xDialog->Execute());
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  star::uno::Reference< star::uno::XInterface >());
+                  uno::Reference< uno::XInterface >());
     }
 }
 
-void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
-                                               rtl::OUString const & rRealm)
-    SAL_THROW((star::uno::RuntimeException))
+void
+UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
+                                         rtl::OUString const & rRealm)
+    SAL_THROW((uno::RuntimeException))
 {
     try
     {
@@ -1810,15 +1802,15 @@ void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        UniString aRealm(rRealm); // Forte compiler needs it spelled out...
-        std::auto_ptr< LoginDialog >
-            xDialog(new LoginDialog(getParentProperty(),
-                                    nFlags,
-                                    rInfo.GetServer(),
-                                    &aRealm,
-                                    xManager.get()));
+        std::auto_ptr< ResMgr > xManager(
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        UniString aRealm(rRealm);
+        std::auto_ptr< LoginDialog > xDialog(
+            new LoginDialog(getParentProperty(),
+                            nFlags,
+                            rInfo.GetServer(),
+                            &aRealm,
+                            xManager.get()));
         if (rInfo.GetErrorText().Len() != 0)
             xDialog->SetErrorText(rInfo.GetErrorText());
         xDialog->SetName(rInfo.GetUserName());
@@ -1839,7 +1831,8 @@ void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
         }
 
         if ( bCanUseSysCreds )
-            xDialog->SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
+            xDialog->SetUseSystemCredentials(
+                rInfo.GetIsUseSystemCredentials() );
 
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                                                        ERRCODE_BUTTON_CANCEL);
@@ -1853,54 +1846,51 @@ void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  star::uno::Reference< star::uno::XInterface >());
+                  uno::Reference< uno::XInterface >());
     }
 }
 
 void
 UUIInteractionHelper::executeMasterPasswordDialog(
     LoginErrorInfo & rInfo,
-    star::task::PasswordRequestMode nMode)
-        SAL_THROW((star::uno::RuntimeException))
+    task::PasswordRequestMode nMode)
+        SAL_THROW((uno::RuntimeException))
 {
     rtl::OString aMaster;
     try
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-    if( nMode == star::task::PasswordRequestMode_PASSWORD_CREATE )
-    {
-            std::auto_ptr< MasterPasswordCreateDialog >
-                    xDialog(new MasterPasswordCreateDialog(
-                            getParentProperty(), xManager.get()));
+        std::auto_ptr< ResMgr > xManager(
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
+        {
+            std::auto_ptr< MasterPasswordCreateDialog > xDialog(
+                new MasterPasswordCreateDialog(
+                    getParentProperty(), xManager.get()));
             rInfo.SetResult(xDialog->Execute()
-                == RET_OK ? ERRCODE_BUTTON_OK
-                          : ERRCODE_BUTTON_CANCEL);
-            aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
-                         RTL_TEXTENCODING_UTF8);
-    }
-    else
-    {
-            std::auto_ptr< MasterPasswordDialog >
-                    xDialog(new MasterPasswordDialog(
-                            getParentProperty(), nMode, xManager.get()));
+                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
+            aMaster = rtl::OUStringToOString(
+                xDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8);
+        }
+        else
+        {
+            std::auto_ptr< MasterPasswordDialog > xDialog(
+                new MasterPasswordDialog(
+                    getParentProperty(), nMode, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
-                == RET_OK ? ERRCODE_BUTTON_OK
-                                          : ERRCODE_BUTTON_CANCEL);
-            aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
-                         RTL_TEXTENCODING_UTF8);
-    }
-
+                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
+            aMaster = rtl::OUStringToOString(
+                xDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8);
+        }
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  star::uno::Reference< star::uno::XInterface >());
+                  uno::Reference< uno::XInterface >());
     }
 
     sal_uInt8 aKey[RTL_DIGEST_LENGTH_MD5];
@@ -1925,126 +1915,124 @@ UUIInteractionHelper::executeMasterPasswordDialog(
 void
 UUIInteractionHelper::executePasswordDialog(
     LoginErrorInfo & rInfo,
-    star::task::PasswordRequestMode nMode,
+    task::PasswordRequestMode nMode,
     ::rtl::OUString aDocName)
-       SAL_THROW((star::uno::RuntimeException))
+       SAL_THROW((uno::RuntimeException))
 {
     try
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-    if( nMode == star::task::PasswordRequestMode_PASSWORD_CREATE )
-    {
-        std::auto_ptr< PasswordCreateDialog >
-        xDialog(new PasswordCreateDialog(
-                            getParentProperty(), xManager.get()));
+        std::auto_ptr< ResMgr > xManager(
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
+        {
+            std::auto_ptr< PasswordCreateDialog > xDialog(
+                new PasswordCreateDialog( getParentProperty(), xManager.get()));
 
-        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                ERRCODE_BUTTON_CANCEL);
-        rInfo.SetPassword( xDialog->GetPassword() );
-    }
-    else
-    {
-        std::auto_ptr< PasswordDialog >
-        xDialog(new PasswordDialog(
-                            getParentProperty(), nMode, xManager.get(), aDocName ));
+            rInfo.SetResult(xDialog->Execute()
+                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
+            rInfo.SetPassword( xDialog->GetPassword() );
+        }
+        else
+        {
+            std::auto_ptr< PasswordDialog > xDialog(
+                new PasswordDialog(
+                    getParentProperty(), nMode, xManager.get(), aDocName ));
 
-        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                ERRCODE_BUTTON_CANCEL);
-        rInfo.SetPassword( xDialog->GetPassword() );
-    }
+            rInfo.SetResult(xDialog->Execute()
+                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
+            rInfo.SetPassword( xDialog->GetPassword() );
+        }
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-            star::uno::Reference< star::uno::XInterface>());
+            uno::Reference< uno::XInterface>());
     }
 }
 
 void
 UUIInteractionHelper::executeMSPasswordDialog(
     LoginErrorInfo & rInfo,
-    star::task::PasswordRequestMode nMode,
+    task::PasswordRequestMode nMode,
     ::rtl::OUString aDocName)
-       SAL_THROW((star::uno::RuntimeException))
+       SAL_THROW((uno::RuntimeException))
 {
     try
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-    if( nMode == star::task::PasswordRequestMode_PASSWORD_CREATE )
-    {
-        std::auto_ptr< PasswordCreateDialog >
-        xDialog(new PasswordCreateDialog(
-                            getParentProperty(), xManager.get(), true));
+        std::auto_ptr< ResMgr > xManager(
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
+        {
+            std::auto_ptr< PasswordCreateDialog > xDialog(
+                new PasswordCreateDialog(
+                    getParentProperty(), xManager.get(), true));
 
-        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                ERRCODE_BUTTON_CANCEL);
-        rInfo.SetPassword( xDialog->GetPassword() );
-    }
-    else
-    {
-        std::auto_ptr< PasswordDialog >
-        xDialog(new PasswordDialog(
-                            getParentProperty(), nMode, xManager.get(), aDocName ));
+            rInfo.SetResult(xDialog->Execute()
+                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
+            rInfo.SetPassword( xDialog->GetPassword() );
+        }
+        else
+        {
+            std::auto_ptr< PasswordDialog > xDialog(
+                new PasswordDialog(
+                    getParentProperty(), nMode, xManager.get(), aDocName ));
 
-        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                ERRCODE_BUTTON_CANCEL);
-        rInfo.SetPassword( xDialog->GetPassword() );
-    }
+            rInfo.SetResult(xDialog->Execute()
+                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
+            rInfo.SetPassword( xDialog->GetPassword() );
+        }
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-            star::uno::Reference< star::uno::XInterface>());
+            uno::Reference< uno::XInterface>());
     }
 }
 
 void
 UUIInteractionHelper::executeCookieDialog(CntHTTPCookieRequest & rRequest)
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
     try
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< CookiesDialog >
-            xDialog(new CookiesDialog(
-            getParentProperty(), &rRequest, xManager.get()));
+        std::auto_ptr< ResMgr > xManager(
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< CookiesDialog > xDialog(
+            new CookiesDialog(getParentProperty(), &rRequest, xManager.get()));
         xDialog->Execute();
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  star::uno::Reference< star::uno::XInterface>());
+                  uno::Reference< uno::XInterface>());
     }
 }
 
-void UUIInteractionHelper::executeFilterDialog(
+void
+UUIInteractionHelper::executeFilterDialog(
     rtl::OUString       const & rURL    ,
     uui::FilterNameList const & rFilters,
     rtl::OUString             & rFilter )
-       SAL_THROW((star::uno::RuntimeException))
+       SAL_THROW((uno::RuntimeException))
 {
     try
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< ResMgr > xManager(
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
 
-        std::auto_ptr< uui::FilterDialog >
-            xDialog(new uui::FilterDialog(getParentProperty(),
-                                     xManager.get()));
+        std::auto_ptr< uui::FilterDialog > xDialog(
+            new uui::FilterDialog(getParentProperty(), xManager.get()));
 
         xDialog->SetURL(rURL);
         xDialog->ChangeFilters(&rFilters);
@@ -2057,21 +2045,20 @@ void UUIInteractionHelper::executeFilterDialog(
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-        star::uno::Reference< star::uno::XInterface >());
+        throw uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+            uno::Reference< uno::XInterface >());
     }
 }
 
 USHORT
 UUIInteractionHelper::executeErrorDialog(
-    star::task::InteractionClassification eClassification,
+    task::InteractionClassification eClassification,
     rtl::OUString const & rContext,
     rtl::OUString const & rMessage,
     WinBits nButtonMask)
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     rtl::OUStringBuffer aText(rContext);
@@ -2085,46 +2072,46 @@ UUIInteractionHelper::executeErrorDialog(
     {
         switch (eClassification)
         {
-        case star::task::InteractionClassification_ERROR:
-        xBox.reset(new ErrorBox(getParentProperty(),
-                    nButtonMask,
-                                    aText.makeStringAndClear()));
-        break;
-
-        case star::task::InteractionClassification_WARNING:
-        xBox.reset(new WarningBox(getParentProperty(),
-                                      nButtonMask,
-                      aText.makeStringAndClear()));
-        break;
-
-        case star::task::InteractionClassification_INFO:
-        if ((nButtonMask & 0x01F00000) == WB_DEF_OK)
-                    //TODO! missing win bit button mask define (want to ignore
-                    // any default button settings)...
-                xBox.reset(new InfoBox(getParentProperty(),
-                                       aText.makeStringAndClear()));
-        else
+        case task::InteractionClassification_ERROR:
             xBox.reset(new ErrorBox(getParentProperty(),
-                        nButtonMask,
-                        aText.makeStringAndClear()));
+                                    nButtonMask,
+                                    aText.makeStringAndClear()));
             break;
 
-        case star::task::InteractionClassification_QUERY:
-        xBox.reset(new QueryBox(getParentProperty(),
-                    nButtonMask,
-                    aText.makeStringAndClear()));
-        break;
+        case task::InteractionClassification_WARNING:
+            xBox.reset(new WarningBox(getParentProperty(),
+                                      nButtonMask,
+                                      aText.makeStringAndClear()));
+            break;
+
+        case task::InteractionClassification_INFO:
+            if ((nButtonMask & 0x01F00000) == WB_DEF_OK)
+                //TODO! missing win bit button mask define (want to ignore
+                // any default button settings)...
+                xBox.reset(new InfoBox(getParentProperty(),
+                                       aText.makeStringAndClear()));
+            else
+                xBox.reset(new ErrorBox(getParentProperty(),
+                                        nButtonMask,
+                                        aText.makeStringAndClear()));
+            break;
+
+        case task::InteractionClassification_QUERY:
+            xBox.reset(new QueryBox(getParentProperty(),
+                                    nButtonMask,
+                                    aText.makeStringAndClear()));
+            break;
 
         default:
-        OSL_ASSERT(false);
-        break;
-    }
+            OSL_ASSERT(false);
+            break;
+        }
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-        star::uno::Reference< star::uno::XInterface >());
+        throw uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+            uno::Reference< uno::XInterface >());
     }
 
     USHORT aResult = xBox->Execute();
@@ -2155,9 +2142,8 @@ UUIInteractionHelper::executeMessageBox(
     rtl::OUString const & rTitle,
     rtl::OUString const & rMessage,
     WinBits nButtonMask )
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     MessBox xBox( getParentProperty(), nButtonMask, rTitle, rMessage );
@@ -2185,55 +2171,51 @@ UUIInteractionHelper::executeMessageBox(
     return aResult;
 }
 
-star::uno::Reference< star::task::XInteractionHandler >
+uno::Reference< task::XInteractionHandler >
 UUIInteractionHelper::getInteractionHandler() const
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionHandler > xIH;
+    uno::Reference< task::XInteractionHandler > xIH;
     try
     {
-        xIH = star::uno::Reference< star::task::XInteractionHandler >(
-                m_xServiceFactory->createInstanceWithArguments(
+        xIH.set(m_xServiceFactory->createInstanceWithArguments(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "com.sun.star.task.InteractionHandler")),
                     m_aProperties),
-                star::uno::UNO_QUERY);
+                uno::UNO_QUERY);
     }
-    catch (star::uno::Exception const &)
+    catch (uno::Exception const &)
     {}
 
     if (!xIH.is())
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
             rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "unable to instanciate Interaction Handler service")),
-            star::uno::Reference< star::uno::XInterface >());
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "unable to instanciate Interaction Handler service")),
+            uno::Reference< uno::XInterface >());
     return xIH;
 }
 
 void
 UUIInteractionHelper::handleAuthenticationRequest(
-    star::ucb::AuthenticationRequest const & rRequest,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-    rContinuations,
-    const rtl::OUString & rURL)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    star::uno::Reference< star::task::XInteractionRetry > xRetry;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
-        xSupplyAuthentication;
-    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication2 >
-        xSupplyAuthentication2;
-    getContinuations(
+    ucb::AuthenticationRequest const & rRequest,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
-        0, 0, &xRetry, &xAbort,
-        &xSupplyAuthentication, &xSupplyAuthentication2, 0, 0, 0);
+    const rtl::OUString & rURL)
+    SAL_THROW((uno::RuntimeException))
+{
+    uno::Reference< task::XInteractionRetry > xRetry;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< ucb::XInteractionSupplyAuthentication >
+        xSupplyAuthentication;
+    uno::Reference< ucb::XInteractionSupplyAuthentication2 >
+        xSupplyAuthentication2;
+    getContinuations(rContinuations, &xRetry, &xAbort, &xSupplyAuthentication);
+    if (xSupplyAuthentication.is())
+        xSupplyAuthentication2.set(xSupplyAuthentication, uno::UNO_QUERY);
 
-    star::uno::Reference< star::task::XInteractionHandler > xIH(
-        getInteractionHandler());
+    uno::Reference< task::XInteractionHandler > xIH(getInteractionHandler());
 
     //////////////////////////
     // First, try to obatin credentials from password container service.
@@ -2253,13 +2235,13 @@ UUIInteractionHelper::handleAuthenticationRequest(
     bool bRememberPersistent;
     if (xSupplyAuthentication.is())
     {
-        star::ucb::RememberAuthentication eDefault;
-        star::uno::Sequence< star::ucb::RememberAuthentication >
+        ucb::RememberAuthentication eDefault;
+        uno::Sequence< ucb::RememberAuthentication >
             aModes(xSupplyAuthentication->getRememberPasswordModes(eDefault));
-        bRemember = eDefault != star::ucb::RememberAuthentication_NO;
+        bRemember = eDefault != ucb::RememberAuthentication_NO;
         bRememberPersistent = false;
         for (sal_Int32 i = 0; i < aModes.getLength(); ++i)
-            if (aModes[i] == star::ucb::RememberAuthentication_PERSISTENT)
+            if (aModes[i] == ucb::RememberAuthentication_PERSISTENT)
             {
                 bRememberPersistent = true;
                 break;
@@ -2319,10 +2301,10 @@ UUIInteractionHelper::handleAuthenticationRequest(
             xSupplyAuthentication->
                 setRememberPassword(
                     aInfo.GetIsSavePassword() ?
-                    bRememberPersistent ?
-                    star::ucb::RememberAuthentication_PERSISTENT :
-                    star::ucb::RememberAuthentication_SESSION :
-                    star::ucb::RememberAuthentication_NO);
+                       bRememberPersistent ?
+                       ucb::RememberAuthentication_PERSISTENT :
+                           ucb::RememberAuthentication_SESSION :
+                               ucb::RememberAuthentication_NO);
             if (rRequest.HasRealm)
             {
                 if (xSupplyAuthentication->canSetRealm())
@@ -2358,7 +2340,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
         {
             if (aInfo.GetIsSavePassword())
             {
-                star::uno::Sequence< rtl::OUString >
+                uno::Sequence< rtl::OUString >
                     aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
                 aPassList[0] = aInfo.GetPassword();
                 if (aInfo.GetAccount().Len() != 0)
@@ -2387,50 +2369,47 @@ UUIInteractionHelper::handleAuthenticationRequest(
 }
 
 sal_Bool
-UUIInteractionHelper::isDomainMatch( rtl::OUString hostName, rtl::OUString certHostName)
+UUIInteractionHelper::isDomainMatch(
+    rtl::OUString hostName, rtl::OUString certHostName)
 {
     if (hostName.equalsIgnoreAsciiCase( certHostName ))
         return sal_True;
 
-
-
-    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) && hostName.getLength() >= certHostName.getLength()  )
+    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
+              hostName.getLength() >= certHostName.getLength()  )
     {
         rtl::OUString cmpStr = certHostName.copy( 1 );
 
-        if ( hostName.matchIgnoreAsciiCase( cmpStr, hostName.getLength( ) -  cmpStr.getLength()) )
+        if ( hostName.matchIgnoreAsciiCase(
+                 cmpStr, hostName.getLength() - cmpStr.getLength()) )
             return sal_True;
-
     }
 
     return sal_False;
 }
 
-
 void
 UUIInteractionHelper::handleCertificateValidationRequest(
-    star::ucb::CertificateValidationRequest const & rRequest,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-    rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
+    ucb::CertificateValidationRequest const & rRequest,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionHandler > xIH = getInteractionHandler();
+    uno::Reference< task::XInteractionHandler > xIH( getInteractionHandler() );
 
-    star::uno::Reference< star::task::XInteractionApprove > xApprove;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-
-    getContinuations(
-        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0, 0);
+    uno::Reference< task::XInteractionApprove > xApprove;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    getContinuations(rContinuations, &xApprove, &xAbort);
 
     sal_Int32 failures = rRequest.CertificateValidity;
-
     sal_Bool trustCert = sal_True;
 
-
-    if ( ((failures & csss::CertificateValidity::UNTRUSTED) == csss::CertificateValidity::UNTRUSTED ) ||
-         ((failures & csss::CertificateValidity::ISSUER_UNTRUSTED) == csss::CertificateValidity::ISSUER_UNTRUSTED) ||
-         ((failures & csss::CertificateValidity::ROOT_UNTRUSTED) == csss::CertificateValidity::ROOT_UNTRUSTED) )
+    if ( ((failures & security::CertificateValidity::UNTRUSTED)
+             == security::CertificateValidity::UNTRUSTED ) ||
+         ((failures & security::CertificateValidity::ISSUER_UNTRUSTED)
+             == security::CertificateValidity::ISSUER_UNTRUSTED) ||
+         ((failures & security::CertificateValidity::ROOT_UNTRUSTED)
+             == security::CertificateValidity::ROOT_UNTRUSTED) )
     {
         if ( executeUnknownAuthDialog( rRequest.Certificate ) )
             trustCert = sal_True;
@@ -2438,32 +2417,47 @@ UUIInteractionHelper::handleCertificateValidationRequest(
             trustCert = sal_False;
     }
 
-    if ( (!isDomainMatch( rRequest.HostName, GetContentPart( rRequest.Certificate.get()->getSubjectName()) )) &&
-          trustCert  )
+    if ( (!isDomainMatch(
+              rRequest.HostName,
+              GetContentPart(
+                  rRequest.Certificate->getSubjectName()) )) &&
+          trustCert )
     {
-        if ( executeSSLWarnDialog( rRequest.Certificate, SSLWARN_TYPE_DOMAINMISMATCH, rRequest.HostName ) )
+        if ( executeSSLWarnDialog( rRequest.Certificate,
+                                   SSLWARN_TYPE_DOMAINMISMATCH,
+                                   rRequest.HostName ) )
             trustCert = sal_True;
         else
             trustCert = sal_False;
     }
 
-    if ( (((failures & csss::CertificateValidity::TIME_INVALID) == csss::CertificateValidity::TIME_INVALID) ||
-         ((failures & csss::CertificateValidity::NOT_TIME_NESTED) == csss::CertificateValidity::NOT_TIME_NESTED)) &&
-           trustCert )
+    if ( (((failures & security::CertificateValidity::TIME_INVALID)
+              == security::CertificateValidity::TIME_INVALID) ||
+          ((failures & security::CertificateValidity::NOT_TIME_NESTED)
+              == security::CertificateValidity::NOT_TIME_NESTED)) &&
+         trustCert )
     {
-        if ( executeSSLWarnDialog( rRequest.Certificate, SSLWARN_TYPE_EXPIRED, rRequest.HostName ) )
+        if ( executeSSLWarnDialog( rRequest.Certificate,
+                                   SSLWARN_TYPE_EXPIRED,
+                                   rRequest.HostName ) )
             trustCert = sal_True;
         else
             trustCert = sal_False;
     }
 
-    if ( (((failures & csss::CertificateValidity::REVOKED) == csss::CertificateValidity::REVOKED) ||
-         ((failures & csss::CertificateValidity::SIGNATURE_INVALID) == csss::CertificateValidity::SIGNATURE_INVALID) ||
-         ((failures & csss::CertificateValidity::EXTENSION_INVALID) == csss::CertificateValidity::EXTENSION_INVALID) ||
-         ((failures & csss::CertificateValidity::INVALID) == csss::CertificateValidity::INVALID)) &&
-           trustCert )
+    if ( (((failures & security::CertificateValidity::REVOKED)
+              == security::CertificateValidity::REVOKED) ||
+          ((failures & security::CertificateValidity::SIGNATURE_INVALID)
+              == security::CertificateValidity::SIGNATURE_INVALID) ||
+          ((failures & security::CertificateValidity::EXTENSION_INVALID)
+              == security::CertificateValidity::EXTENSION_INVALID) ||
+          ((failures & security::CertificateValidity::INVALID)
+              == security::CertificateValidity::INVALID)) &&
+         trustCert )
     {
-        if ( executeSSLWarnDialog( rRequest.Certificate, SSLWARN_TYPE_INVALID, rRequest.HostName ) )
+        if ( executeSSLWarnDialog( rRequest.Certificate,
+                                   SSLWARN_TYPE_INVALID,
+                                   rRequest.HostName ) )
             trustCert = sal_True;
         else
             trustCert = sal_False;
@@ -2472,27 +2466,13 @@ UUIInteractionHelper::handleCertificateValidationRequest(
     if ( trustCert )
     {
         if (xApprove.is())
-        xApprove->select();
-    } else
-    {
-        if (xAbort.is())
-        xAbort->select();
-    }
-
-    /*
-
-    switch (executeMessageBox( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialog1")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dummy dialog")), WB_YES_NO | WB_DEF_YES ))
-    {
-    case ERRCODE_BUTTON_YES:
-        if (xApprove.is())
             xApprove->select();
-        break;
-    default:
+    }
+    else
+    {
         if (xAbort.is())
             xAbort->select();
-        break;
     }
-    */
 }
 
 namespace {
@@ -2527,10 +2507,10 @@ executeSimpleNameClashResolveDialog(
 
 void
 UUIInteractionHelper::handleNameClashResolveRequest(
-    star::ucb::NameClashResolveRequest const & rRequest,
-    star::uno::Sequence< star::uno::Reference<
-    star::task::XInteractionContinuation > > const & rContinuations)
-  SAL_THROW((star::uno::RuntimeException))
+    ucb::NameClashResolveRequest const & rRequest,
+    uno::Sequence< uno::Reference<
+        task::XInteractionContinuation > > const & rContinuations)
+  SAL_THROW((uno::RuntimeException))
 {
     OSL_ENSURE(
         rRequest.TargetFolderURL.getLength() > 0,
@@ -2540,15 +2520,11 @@ UUIInteractionHelper::handleNameClashResolveRequest(
         rRequest.ClashingName.getLength() > 0,
         "NameClashResolveRequest must not contain empty ClashingName" );
 
-    star::uno::Reference< star::task::XInteractionAbort >
-        xAbort;
-    star::uno::Reference< star::ucb::XInteractionSupplyName >
-        xSupplyName;
-    star::uno::Reference< star::ucb::XInteractionReplaceExistingData >
-        xReplaceExistingData;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< ucb::XInteractionSupplyName > xSupplyName;
+    uno::Reference< ucb::XInteractionReplaceExistingData > xReplaceExistingData;
     getContinuations(
-        rContinuations,
-        0, 0, 0, &xAbort, 0, 0, 0, &xSupplyName, &xReplaceExistingData);
+        rContinuations, &xAbort, &xSupplyName, &xReplaceExistingData);
 
     OSL_ENSURE( xAbort.is(),
         "NameClashResolveRequest must contain Abort continuation" );
@@ -2597,19 +2573,16 @@ UUIInteractionHelper::handleNameClashResolveRequest(
 
 void
 UUIInteractionHelper::handleMasterPasswordRequest(
-    star::task::PasswordRequestMode nMode,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
+    task::PasswordRequestMode nMode,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionRetry > xRetry;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
+    uno::Reference< task::XInteractionRetry > xRetry;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
-    getContinuations(
-        rContinuations,
-        0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0, 0, 0, 0);
+    getContinuations(rContinuations, &xRetry, &xAbort, &xSupplyAuthentication);
     LoginErrorInfo aInfo;
 
     // in case of master password a hash code is returned
@@ -2620,39 +2593,36 @@ UUIInteractionHelper::handleMasterPasswordRequest(
     case ERRCODE_BUTTON_OK:
         if (xSupplyAuthentication.is())
         {
-        if (xSupplyAuthentication->canSetPassword())
-            xSupplyAuthentication->setPassword(aInfo.GetPassword());
-        xSupplyAuthentication->select();
+            if (xSupplyAuthentication->canSetPassword())
+                xSupplyAuthentication->setPassword(aInfo.GetPassword());
+            xSupplyAuthentication->select();
         }
         break;
 
     case ERRCODE_BUTTON_RETRY:
         if (xRetry.is())
-        xRetry->select();
+            xRetry->select();
         break;
 
     default:
         if (xAbort.is())
-        xAbort->select();
+            xAbort->select();
         break;
     }
 }
 
 void
 UUIInteractionHelper::handlePasswordRequest(
-    star::task::PasswordRequestMode nMode,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
+    task::PasswordRequestMode nMode,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     ::rtl::OUString aDocumentName )
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionRetry > xRetry;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference< star::task::XInteractionPassword >
-        xPassword;
-    getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, 0, 0, &xPassword, 0, 0);
+    uno::Reference< task::XInteractionRetry > xRetry;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< task::XInteractionPassword > xPassword;
+    getContinuations(rContinuations, &xRetry, &xAbort, &xPassword);
     LoginErrorInfo aInfo;
 
     executePasswordDialog(aInfo, nMode, aDocumentName);
@@ -2662,14 +2632,14 @@ UUIInteractionHelper::handlePasswordRequest(
     case ERRCODE_BUTTON_OK:
         if (xPassword.is())
         {
-        xPassword->setPassword(aInfo.GetPassword());
-        xPassword->select();
+            xPassword->setPassword(aInfo.GetPassword());
+            xPassword->select();
         }
         break;
 
     case ERRCODE_BUTTON_RETRY:
         if (xRetry.is())
-        xRetry->select();
+            xRetry->select();
         break;
 
     default:
@@ -2681,19 +2651,16 @@ UUIInteractionHelper::handlePasswordRequest(
 
 void
 UUIInteractionHelper::handleMSPasswordRequest(
-    star::task::PasswordRequestMode nMode,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
+    task::PasswordRequestMode nMode,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     ::rtl::OUString aDocumentName )
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionRetry > xRetry;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference< star::task::XInteractionPassword >
-        xPassword;
-    getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, 0, 0, &xPassword, 0, 0);
+    uno::Reference< task::XInteractionRetry > xRetry;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< task::XInteractionPassword > xPassword;
+    getContinuations(rContinuations, &xRetry, &xAbort, &xPassword);
     LoginErrorInfo aInfo;
 
     executeMSPasswordDialog(aInfo, nMode, aDocumentName);
@@ -2703,14 +2670,14 @@ UUIInteractionHelper::handleMSPasswordRequest(
     case ERRCODE_BUTTON_OK:
         if (xPassword.is())
         {
-        xPassword->setPassword(aInfo.GetPassword());
-        xPassword->select();
+            xPassword->setPassword(aInfo.GetPassword());
+            xPassword->select();
         }
         break;
 
     case ERRCODE_BUTTON_RETRY:
         if (xRetry.is())
-        xRetry->select();
+            xRetry->select();
         break;
 
     default:
@@ -2722,109 +2689,107 @@ UUIInteractionHelper::handleMSPasswordRequest(
 
 void
 UUIInteractionHelper::handleCookiesRequest(
-    star::ucb::HandleCookiesRequest const & rRequest,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
+    ucb::HandleCookiesRequest const & rRequest,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
     CookieList aCookies;
     for (sal_Int32 i = 0; i < rRequest.Cookies.getLength(); ++i)
     {
-    try
-    {
-        std::auto_ptr< CntHTTPCookie > xCookie(new CntHTTPCookie);
-        xCookie->m_aName = UniString(rRequest.Cookies[i].Name);
-        xCookie->m_aValue = UniString(rRequest.Cookies[i].Value);
-        xCookie->m_aDomain = UniString(rRequest.Cookies[i].Domain);
-        xCookie->m_aPath = UniString(rRequest.Cookies[i].Path);
-        xCookie->m_aExpires
-            = DateTime(Date(rRequest.Cookies[i].Expires.Day,
-                    rRequest.Cookies[i].Expires.Month,
-                    rRequest.Cookies[i].Expires.Year),
-                   Time(rRequest.Cookies[i].Expires.Hours,
-                    rRequest.Cookies[i].Expires.Minutes,
-                    rRequest.Cookies[i].Expires.Seconds,
-                    rRequest.Cookies[i].Expires.
-                    HundredthSeconds));
-        xCookie->m_nFlags
-            = rRequest.Cookies[i].Secure ? CNTHTTP_COOKIE_FLAG_SECURE : 0;
-        switch (rRequest.Cookies[i].Policy)
+        try
         {
-            case star::ucb::CookiePolicy_CONFIRM:
-            xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
-            break;
+            std::auto_ptr< CntHTTPCookie > xCookie(new CntHTTPCookie);
+            xCookie->m_aName = UniString(rRequest.Cookies[i].Name);
+            xCookie->m_aValue = UniString(rRequest.Cookies[i].Value);
+            xCookie->m_aDomain = UniString(rRequest.Cookies[i].Domain);
+            xCookie->m_aPath = UniString(rRequest.Cookies[i].Path);
+            xCookie->m_aExpires
+                = DateTime(Date(rRequest.Cookies[i].Expires.Day,
+                                rRequest.Cookies[i].Expires.Month,
+                                rRequest.Cookies[i].Expires.Year),
+                           Time(rRequest.Cookies[i].Expires.Hours,
+                                rRequest.Cookies[i].Expires.Minutes,
+                                rRequest.Cookies[i].Expires.Seconds,
+                                rRequest.Cookies[i].Expires.HundredthSeconds));
+            xCookie->m_nFlags
+                = rRequest.Cookies[i].Secure ? CNTHTTP_COOKIE_FLAG_SECURE : 0;
+            switch (rRequest.Cookies[i].Policy)
+            {
+            case ucb::CookiePolicy_CONFIRM:
+                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
+                break;
 
-            case star::ucb::CookiePolicy_ACCEPT:
-            xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_ACCEPTED;
-            break;
+            case ucb::CookiePolicy_ACCEPT:
+                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_ACCEPTED;
+                break;
 
-            case star::ucb::CookiePolicy_IGNORE:
-            xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_BANNED;
-            break;
+            case ucb::CookiePolicy_IGNORE:
+                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_BANNED;
+                break;
 
             default:
-            OSL_ASSERT(false);
-            break;
+                OSL_ASSERT(false);
+                break;
+            }
+            aCookies.Insert(xCookie.get(), LIST_APPEND);
+            xCookie.release();
         }
-        aCookies.Insert(xCookie.get(), LIST_APPEND);
-        xCookie.release();
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw star::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "out of memory")),
-            star::uno::Reference< star::uno::XInterface >());
-    }
+        catch (std::bad_alloc const &)
+        {
+            throw uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                  "out of memory")),
+                uno::Reference< uno::XInterface >());
+        }
     }
 
     CntHTTPCookieRequest
     aRequest(rRequest.URL,
                  aCookies,
-                 rRequest.Request == star::ucb::CookieRequest_RECEIVE ?
-         CNTHTTP_COOKIE_REQUEST_RECV :
-         CNTHTTP_COOKIE_REQUEST_SEND);
+                 rRequest.Request == ucb::CookieRequest_RECEIVE
+                     ? CNTHTTP_COOKIE_REQUEST_RECV
+                     : CNTHTTP_COOKIE_REQUEST_SEND);
     executeCookieDialog(aRequest);
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
     {
-        star::uno::Reference< star::ucb::XInteractionCookieHandling >
-            xCookieHandling(rContinuations[i], star::uno::UNO_QUERY);
+        uno::Reference< ucb::XInteractionCookieHandling >
+            xCookieHandling(rContinuations[i], uno::UNO_QUERY);
         if (xCookieHandling.is())
         {
             switch (aRequest.m_nRet)
             {
-        case CNTHTTP_COOKIE_POLICY_INTERACTIVE:
-            xCookieHandling->
-            setGeneralPolicy(star::ucb::CookiePolicy_CONFIRM);
-            break;
+            case CNTHTTP_COOKIE_POLICY_INTERACTIVE:
+                xCookieHandling->
+                    setGeneralPolicy(ucb::CookiePolicy_CONFIRM);
+                break;
 
-        case CNTHTTP_COOKIE_POLICY_ACCEPTED:
-            xCookieHandling->
-            setGeneralPolicy(star::ucb::CookiePolicy_ACCEPT);
-            break;
-
-        case CNTHTTP_COOKIE_POLICY_BANNED:
-            xCookieHandling->
-            setGeneralPolicy(star::ucb::CookiePolicy_IGNORE);
-            break;
-            }
-            for (sal_Int32 j = 0; j < rRequest.Cookies.getLength(); ++j)
-                if (rRequest.Cookies[j].Policy
-            == star::ucb::CookiePolicy_CONFIRM)
-                    switch (static_cast< CntHTTPCookie * >(aCookies.
-                               GetObject(j))->
-                m_nPolicy)
-                    {
             case CNTHTTP_COOKIE_POLICY_ACCEPTED:
                 xCookieHandling->
-                            setSpecificPolicy(rRequest.Cookies[j], true);
+                    setGeneralPolicy(ucb::CookiePolicy_ACCEPT);
                 break;
 
             case CNTHTTP_COOKIE_POLICY_BANNED:
                 xCookieHandling->
-                setSpecificPolicy(rRequest.Cookies[j], false);
+                    setGeneralPolicy(ucb::CookiePolicy_IGNORE);
                 break;
+            }
+            for (sal_Int32 j = 0; j < rRequest.Cookies.getLength(); ++j)
+                if (rRequest.Cookies[j].Policy
+                    == ucb::CookiePolicy_CONFIRM)
+                    switch (static_cast< CntHTTPCookie * >(aCookies.
+                                                           GetObject(j))->
+                            m_nPolicy)
+                    {
+                    case CNTHTTP_COOKIE_POLICY_ACCEPTED:
+                        xCookieHandling->
+                            setSpecificPolicy(rRequest.Cookies[j], true);
+                        break;
+
+                    case CNTHTTP_COOKIE_POLICY_BANNED:
+                        xCookieHandling->
+                            setSpecificPolicy(rRequest.Cookies[j], false);
+                        break;
                     }
             xCookieHandling->select();
             break;
@@ -2834,45 +2799,38 @@ UUIInteractionHelper::handleCookiesRequest(
 
 void
 UUIInteractionHelper::handleNoSuchFilterRequest(
-    star::document::NoSuchFilterRequest const & rRequest,
-    star::uno::Sequence<
-        star::uno::Reference< star::task::XInteractionContinuation > > const &
+    document::NoSuchFilterRequest const & rRequest,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
             rContinuations )
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference<
-    star::document::XInteractionFilterSelect > xFilterTransport;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< document::XInteractionFilterSelect > xFilterTransport;
+    getContinuations(rContinuations, &xAbort, &xFilterTransport);
 
-    sal_Int32 nCount = rContinuations.getLength();
-    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
-    {
-        if( ! xAbort.is() )
-            xAbort = star::uno::Reference< star::task::XInteractionAbort >(
-        rContinuations[nStep], star::uno::UNO_QUERY );
-
-        if( ! xFilterTransport.is() )
-            xFilterTransport = star::uno::Reference<
-        star::document::XInteractionFilterSelect >(
-            rContinuations[nStep], star::uno::UNO_QUERY );
-    }
-
-    // check neccessary ressources - if they doesn't exist - abort or
+    // check neccessary ressources - if they don't exist - abort or
     // break this operation
     if (!xAbort.is())
         return;
 
-    if (!xFilterTransport.is() || !m_xServiceFactory.is())
+    if (!xFilterTransport.is())
     {
         xAbort->select();
         return;
     }
 
-    star::uno::Reference< star::container::XContainerQuery >
-    xFilterContainer( m_xServiceFactory->createInstance(
-                  ::rtl::OUString::createFromAscii(
-                  "com.sun.star.document.FilterFactory") ),
-              star::uno::UNO_QUERY );
+    uno::Reference< container::XContainerQuery > xFilterContainer;
+    try
+    {
+        xFilterContainer.set( m_xServiceFactory->createInstance(
+                                  ::rtl::OUString::createFromAscii(
+                                      "com.sun.star.document.FilterFactory") ),
+                              uno::UNO_QUERY );
+    }
+    catch ( uno::Exception const & )
+    {
+    }
+
     if (!xFilterContainer.is())
     {
         xAbort->select();
@@ -2894,10 +2852,10 @@ UUIInteractionHelper::handleNoSuchFilterRequest(
     //            find his filter vry easy by his UIName ...)
     //          - We use "_query_all" here ... but we filter graphic filters
     //            out by using DocumentService property later!
-    star::uno::Reference< star::container::XEnumeration > xFilters
-    = xFilterContainer->createSubSetEnumerationByQuery(
-        ::rtl::OUString::createFromAscii(
-        "_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
+    uno::Reference< container::XEnumeration > xFilters
+        = xFilterContainer->createSubSetEnumerationByQuery(
+            ::rtl::OUString::createFromAscii(
+                "_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
     while (xFilters->hasMoreElements())
     {
         try
@@ -2906,26 +2864,23 @@ UUIInteractionHelper::handleNoSuchFilterRequest(
             uui::FilterNamePair             aPair;
 
             aPair.sInternal = lProps.getUnpackedValueOrDefault(
-        rtl::OUString::createFromAscii("Name"), ::rtl::OUString());
+                rtl::OUString::createFromAscii("Name"), ::rtl::OUString());
             aPair.sUI       = lProps.getUnpackedValueOrDefault(
-        rtl::OUString::createFromAscii("UIName"), ::rtl::OUString());
-            if (
-                (!aPair.sInternal.Len()) ||
-                (!aPair.sUI.Len()      )
-        )
+                 rtl::OUString::createFromAscii("UIName"), ::rtl::OUString());
+            if ( (!aPair.sInternal.Len()) || (!aPair.sUI.Len() ) )
             {
                continue;
             }
             lNames.push_back( aPair );
         }
-        catch(const star::uno::RuntimeException&)
-    {
-        throw;
-    }
-        catch(const star::uno::Exception&)
-    {
-        continue;
-    }
+        catch(const uno::RuntimeException&)
+        {
+            throw;
+        }
+        catch(const uno::Exception&)
+        {
+            continue;
+        }
     }
 
     // no list available for showing
@@ -2955,89 +2910,78 @@ UUIInteractionHelper::handleNoSuchFilterRequest(
 
 void
 UUIInteractionHelper::handleAmbigousFilterRequest(
-    star::document::AmbigousFilterRequest const & rRequest,
-    star::uno::Sequence<
-        star::uno::Reference<
-            star::task::XInteractionContinuation > > const & rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
+    document::AmbigousFilterRequest const & rRequest,
+    uno::Sequence<
+        uno::Reference<
+            task::XInteractionContinuation > > const & rContinuations)
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference<
-    star::document::XInteractionFilterSelect > xFilterTransport;
-
-    sal_Int32 nCount = rContinuations.getLength();
-    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
-    {
-        if( ! xAbort.is() )
-            xAbort = star::uno::Reference< star::task::XInteractionAbort >(
-        rContinuations[nStep], star::uno::UNO_QUERY );
-
-        if( ! xFilterTransport.is() )
-            xFilterTransport = star::uno::Reference<
-        star::document::XInteractionFilterSelect >(
-            rContinuations[nStep], star::uno::UNO_QUERY );
-    }
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< document::XInteractionFilterSelect > xFilterTransport;
+    getContinuations(rContinuations, &xAbort, &xFilterTransport);
 
     uui::FilterNameList lNames;
 
-    if( m_xServiceFactory.is() == sal_True )
+    uno::Reference< container::XNameContainer > xFilterContainer;
+    try
     {
-        star::uno::Reference< star::container::XNameContainer >
-        xFilterContainer( m_xServiceFactory->createInstance(
-                  ::rtl::OUString::createFromAscii(
-                      "com.sun.star.document.FilterFactory") ),
-                  star::uno::UNO_QUERY );
-        if( xFilterContainer.is() == sal_True )
+        xFilterContainer.set( m_xServiceFactory->createInstance(
+            ::rtl::OUString::createFromAscii(
+                "com.sun.star.document.FilterFactory") ),
+            uno::UNO_QUERY );
+    }
+    catch ( uno::Exception & )
+    {
+    }
+
+    if( xFilterContainer.is() )
+    {
+        uno::Any                              aPackedSet    ;
+        uno::Sequence< beans::PropertyValue > lProps        ;
+        sal_Int32                             nStep         ;
+        uui::FilterNamePair                   aPair         ;
+
+        try
         {
-            star::uno::Any                                    aPackedSet    ;
-            star::uno::Sequence< star::beans::PropertyValue > lProps        ;
-            sal_Int32                                         nStep         ;
-            uui::FilterNamePair                               aPair         ;
+            aPackedSet = xFilterContainer->getByName( rRequest.SelectedFilter );
+        }
+        catch(const container::NoSuchElementException&)
+        {
+            aPackedSet.clear();
+        }
+        aPackedSet >>= lProps;
+        for( nStep=0; nStep<lProps.getLength(); ++nStep )
+        {
+            if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
+            {
+                ::rtl::OUString sTemp;
+                lProps[nStep].Value >>= sTemp;
+                aPair.sUI       = sTemp;
+                aPair.sInternal = rRequest.SelectedFilter;
+                lNames.push_back( aPair );
+                break;
+            }
+        }
 
-            try
+        try
+        {
+            aPackedSet = xFilterContainer->getByName( rRequest.DetectedFilter );
+        }
+        catch(const container::NoSuchElementException&)
+        {
+            aPackedSet.clear();
+        }
+        aPackedSet >>= lProps;
+        for( nStep=0; nStep<lProps.getLength(); ++nStep )
+        {
+            if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
             {
-                aPackedSet
-            = xFilterContainer->getByName( rRequest.SelectedFilter );
-            }
-            catch(const ::com::sun::star::container::NoSuchElementException&)
-            {
-                aPackedSet.clear();
-            }
-            aPackedSet >>= lProps;
-            for( nStep=0; nStep<lProps.getLength(); ++nStep )
-            {
-                if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
-                {
-                    ::rtl::OUString sTemp;
-                    lProps[nStep].Value >>= sTemp;
-                    aPair.sUI       = sTemp;
-                    aPair.sInternal = rRequest.SelectedFilter;
-                    lNames.push_back( aPair );
-                    break;
-                }
-            }
-
-            try
-            {
-                aPackedSet
-            = xFilterContainer->getByName( rRequest.DetectedFilter );
-            }
-            catch(const ::com::sun::star::container::NoSuchElementException&)
-            {
-                aPackedSet.clear();
-            }
-            aPackedSet >>= lProps;
-            for( nStep=0; nStep<lProps.getLength(); ++nStep )
-            {
-                if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
-                {
-                    ::rtl::OUString sTemp;
-                    lProps[nStep].Value >>= sTemp;
-                    aPair.sUI       = sTemp;
-                    aPair.sInternal = rRequest.DetectedFilter;
-                    lNames.push_back( aPair );
-                    break;
-                }
+                ::rtl::OUString sTemp;
+                lProps[nStep].Value >>= sTemp;
+                aPair.sUI       = sTemp;
+                aPair.sInternal = rRequest.DetectedFilter;
+                lNames.push_back( aPair );
+                break;
             }
         }
     }
@@ -3067,124 +3011,103 @@ UUIInteractionHelper::handleAmbigousFilterRequest(
 void
 UUIInteractionHelper::handleGenericErrorRequest(
     sal_Int32 nErrorCode,
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const & rContinuations,
+    uno::Sequence< uno::Reference<
+        task::XInteractionContinuation > > const & rContinuations,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     rtl::OUString & rErrorString)
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
     if (bObtainErrorStringOnly)
     {
         bHasErrorString = isInformationalErrorMessageRequest(rContinuations);
         if (bHasErrorString)
-    {
-        String aErrorString;
-        ErrorHandler::GetErrorString(nErrorCode, aErrorString);
-        rErrorString = aErrorString;
-    }
-    }
-    else
-    {
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference< star::task::XInteractionApprove > xApprove;
-
-    sal_Int32 nCount = rContinuations.getLength();
-    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
-    {
-        if( ! xAbort.is() )
-        xAbort
-            = star::uno::Reference< star::task::XInteractionAbort >(
-            rContinuations[nStep], star::uno::UNO_QUERY );
-
-        if( ! xApprove.is() )
-        xApprove
-            = star::uno::Reference< star::task::XInteractionApprove >(
-            rContinuations[nStep], star::uno::UNO_QUERY );
-    }
-
-    // Note: It's important to convert the transported long to the
-    // required  unsigned long value. Otherwhise using as flag field
-    // can fail ...
-    ErrCode  nError   = (ErrCode)nErrorCode;
-    sal_Bool bWarning = !ERRCODE_TOERROR(nError);
-
-    if ( nError == ERRCODE_SFX_BROKENSIGNATURE
-     || nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
-    {
-        // the security warning need a special title
-        String aErrorString;
-        ErrorHandler::GetErrorString( nErrorCode, aErrorString );
-
-        std::auto_ptr< ResMgr >
-            xManager( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
-        ::rtl::OUString aTitle;
-
-        try
         {
-            star::uno::Any aProductNameAny =
-                ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
-                    ::utl::ConfigManager::PRODUCTNAME );
-            aProductNameAny >>= aTitle;
-        } catch( star::uno::Exception& )
-        {}
-
-        ::rtl::OUString aErrTitle = String( ResId( nError == ERRCODE_SFX_BROKENSIGNATURE ? STR_WARNING_BROKENSIGNATURE_TITLE : STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE, *xManager.get() ) );
-
-        if ( aTitle.getLength() && aErrTitle.getLength() )
-            aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
-         aTitle += aErrTitle;
-
-        executeMessageBox( aTitle, aErrorString, WB_OK );
-    }
-    else
-        ErrorHandler::HandleError(nErrorCode);
-
-    if (xApprove.is() && bWarning)
-        xApprove->select();
-    else if (xAbort.is())
-        xAbort->select();
-    }
-}
-
-namespace
-{
-    template< class INTERACTION_TYPE >
-    bool lcl_findContinuation( const Sequence< Reference< XInteractionContinuation > >& _rContinuations,
-        Reference< INTERACTION_TYPE >& _rContinuation )
-    {
-        const Reference< XInteractionContinuation >* pContinuation = _rContinuations.getConstArray();
-        const Reference< XInteractionContinuation >* pContinuationEnd = _rContinuations.getConstArray() + _rContinuations.getLength();
-        while ( pContinuation != pContinuationEnd )
-        {
-            if ( _rContinuation.set( *pContinuation++, UNO_QUERY ) )
-                return true;
+            String aErrorString;
+            ErrorHandler::GetErrorString(nErrorCode, aErrorString);
+            rErrorString = aErrorString;
         }
-        return false;
+    }
+    else
+    {
+        uno::Reference< task::XInteractionAbort > xAbort;
+        uno::Reference< task::XInteractionApprove > xApprove;
+        getContinuations(rContinuations, &xApprove, &xAbort);
+
+        // Note: It's important to convert the transported long to the
+        // required  unsigned long value. Otherwhise using as flag field
+        // can fail ...
+        ErrCode  nError   = (ErrCode)nErrorCode;
+        sal_Bool bWarning = !ERRCODE_TOERROR(nError);
+
+        if ( nError == ERRCODE_SFX_BROKENSIGNATURE
+             || nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
+        {
+            // the security warning box needs a special title
+            String aErrorString;
+            ErrorHandler::GetErrorString( nErrorCode, aErrorString );
+
+            std::auto_ptr< ResMgr > xManager(
+                ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+            ::rtl::OUString aTitle;
+
+            try
+            {
+                uno::Any aProductNameAny =
+                    ::utl::ConfigManager::GetConfigManager()
+                        ->GetDirectConfigProperty(
+                           ::utl::ConfigManager::PRODUCTNAME );
+                aProductNameAny >>= aTitle;
+            }
+            catch( uno::Exception& )
+            {
+            }
+
+            ::rtl::OUString aErrTitle
+                  = String( ResId( nError == ERRCODE_SFX_BROKENSIGNATURE
+                                       ? STR_WARNING_BROKENSIGNATURE_TITLE
+                                       : STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE,
+                                   *xManager.get() ) );
+
+            if ( aTitle.getLength() && aErrTitle.getLength() )
+                aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
+            aTitle += aErrTitle;
+
+            executeMessageBox( aTitle, aErrorString, WB_OK );
+        }
+        else
+            ErrorHandler::HandleError(nErrorCode);
+
+        if (xApprove.is() && bWarning)
+            xApprove->select();
+        else if (xAbort.is())
+            xAbort->select();
     }
 }
 
 void
 UUIInteractionHelper::handleMacroConfirmRequest(
     const ::rtl::OUString& aDocumentURL,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xZipStorage,
+    const uno::Reference< embed::XStorage >& xZipStorage,
     const ::rtl::OUString& aDocumentVersion,
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > aSignInfo,
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const & rContinuations
-)
-    SAL_THROW((star::uno::RuntimeException))
+    const uno::Sequence< security::DocumentSignatureInformation > aSignInfo,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations )
+    SAL_THROW((uno::RuntimeException))
 {
-    Reference< XInteractionAbort > xAbort; lcl_findContinuation( rContinuations, xAbort );
-    Reference< XInteractionApprove > xApprove; lcl_findContinuation( rContinuations, xApprove );
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< task::XInteractionApprove > xApprove;
+    getContinuations( rContinuations, &xApprove, &xAbort );
 
     bool bApprove = false;
 
-    std::auto_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+    std::auto_ptr< ResMgr > pResMgr(
+        ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
     if ( pResMgr.get() )
     {
         bool bShowSignatures = aSignInfo.getLength() > 0;
-        MacroWarning aWarning( getParentProperty(), bShowSignatures, *pResMgr.get() );
+        MacroWarning aWarning(
+            getParentProperty(), bShowSignatures, *pResMgr.get() );
 
         aWarning.SetDocumentURL( aDocumentURL );
         if ( aSignInfo.getLength() > 1 )
@@ -3207,176 +3130,175 @@ UUIInteractionHelper::handleMacroConfirmRequest(
 
 void
 UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
-    const FutureDocumentVersionProductUpdateRequest& _rRequest,
-    Sequence< Reference< XInteractionContinuation > > const & rContinuations
-)
-    SAL_THROW((star::uno::RuntimeException))
+    const task::FutureDocumentVersionProductUpdateRequest& _rRequest,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations )
+    SAL_THROW((uno::RuntimeException))
 {
-    Reference< XInteractionAbort > xAbort; lcl_findContinuation( rContinuations, xAbort );
-    Reference< XInteractionApprove > xApprove; lcl_findContinuation( rContinuations, xApprove );
-    Reference< XInteractionApprove > xAskLater; lcl_findContinuation( rContinuations, xAskLater );
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< task::XInteractionApprove > xApprove;
+    uno::Reference< task::XInteractionAskLater > xAskLater;
+    getContinuations( rContinuations, &xApprove, &xAbort, &xAskLater );
 
     short nResult = RET_CANCEL;
 
     static bool s_bDeferredToNextSession = false;
-        // TODO: this static variable is somewhat hacky. Formerly (before the dialog was moved from SFX2 to the
-        // interaction handler implementation), this was stored in SFX_APP()'s impl structure, in member
-        // bODFVersionWarningLater. Of course, we do not have access to it here.
-        //
-        // A proper solution which I would envision would be:
-        // - There's a central implementation (this one here) of css.task.InteractionHandler
-        // - There's a configuration which maps UNO names to service names
-        // - If the handler is confronted with a request, it tries to find the name of the UNO structure describing
-        //   the request in the said configuration.
-        //   - If an entry is found, then
-        //     - the respective service is instantiated
-        //     - the component is queried for css.task.XInteractionHandler, and the request is delegated
-        //   - if no entry is found, then the request is silenced (with calling the AbortContinuation, if possible)
-        // This way, the FutureDocumentVersionProductUpdateRequest could be handled in SFX (or any other
-        // suitable place), again, and we would only have one place where we remember the s_bDeferredToNextSession
-        // flag.
-        //
-        // The side effect (well, actually the more important effect) would be that we do not need to burden
-        // this central implementation with all interactions which are possible. Instead, separate parts of OOo
-        // can define/implement different requests. (for instance, everything which today is done in the
-        // css.sdb.InteractionHandler can then be routed through a "normal" interaction handler, where today we
-        // always need to tell people to instantiate the SDB-version of the handler, not the normal one.)
+    // TODO: this static variable is somewhat hacky. Formerly (before the dialog was moved from SFX2 to the
+    // interaction handler implementation), this was stored in SFX_APP()'s impl structure, in member
+    // bODFVersionWarningLater. Of course, we do not have access to it here.
+    //
+    // A proper solution which I would envision would be:
+    // - There's a central implementation (this one here) of css.task.InteractionHandler
+    // - There's a configuration which maps UNO names to service names
+    // - If the handler is confronted with a request, it tries to find the name of the UNO structure describing
+    //   the request in the said configuration.
+    //   - If an entry is found, then
+    //     - the respective service is instantiated
+    //     - the component is queried for css.task.XInteractionHandler, and the request is delegated
+    //   - if no entry is found, then the request is silenced (with calling the AbortContinuation, if possible)
+    // This way, the FutureDocumentVersionProductUpdateRequest could be handled in SFX (or any other
+    // suitable place), again, and we would only have one place where we remember the s_bDeferredToNextSession
+    // flag.
+    //
+    // The side effect (well, actually the more important effect) would be that we do not need to burden
+    // this central implementation with all interactions which are possible. Instead, separate parts of OOo
+    // can define/implement different requests. (for instance, everything which today is done in the
+    // css.sdb.InteractionHandler can then be routed through a "normal" interaction handler, where today we
+    // always need to tell people to instantiate the SDB-version of the handler, not the normal one.)
 
     if ( !s_bDeferredToNextSession )
     {
-        std::auto_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+        std::auto_ptr< ResMgr > pResMgr(
+            ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
         if ( pResMgr.get() )
         {
-            ::uui::NewerVersionWarningDialog aDialog( getParentProperty(), _rRequest.DocumentODFVersion, *pResMgr.get() );
+            ::uui::NewerVersionWarningDialog aDialog(
+                getParentProperty(),
+                _rRequest.DocumentODFVersion,
+                *pResMgr.get() );
             nResult = aDialog.Execute();
         }
     }
 
     switch ( nResult )
     {
-    case RET_OK:        if ( xApprove.is() )    xApprove->select();     break;
-    case RET_CANCEL:    if ( xAbort.is() )      xAbort->select();       break;
-    case RET_ASK_LATER: if ( xAskLater.is() )   xAskLater->select();    s_bDeferredToNextSession = true;    break;
+    case RET_OK:
+        if ( xApprove.is() )
+            xApprove->select();
+        break;
+    case RET_CANCEL:
+        if ( xAbort.is() )
+            xAbort->select();
+        break;
+    case RET_ASK_LATER:
+        if ( xAskLater.is() )
+            xAskLater->select();
+        s_bDeferredToNextSession = true;
+        break;
     default:
-        OSL_ENSURE( false, "UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest: unexpected dialog return value!" );
+        OSL_ENSURE( false,
+            "UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest: "
+                    "unexpected dialog return value!" );
         break;
     }
 }
 
 void
 UUIInteractionHelper::handleFilterOptionsRequest(
-    star::document::FilterOptionsRequest const & rRequest,
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const & rContinuations)
-    SAL_THROW((com::sun::star::uno::RuntimeException))
+    document::FilterOptionsRequest const & rRequest,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference<
-    star::document::XInteractionFilterOptions > xFilterOptions;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< document::XInteractionFilterOptions > xFilterOptions;
+    getContinuations(rContinuations, &xAbort, &xFilterOptions);
 
-    sal_Int32 nCount = rContinuations.getLength();
-    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+    uno::Reference< container::XNameAccess > xFilterCFG;
+    try
     {
-        if( ! xAbort.is() )
-            xAbort = star::uno::Reference< star::task::XInteractionAbort >(
-        rContinuations[nStep], star::uno::UNO_QUERY );
-
-        if( ! xFilterOptions.is() )
-            xFilterOptions = star::uno::Reference<
-        star::document::XInteractionFilterOptions >(
-            rContinuations[nStep], star::uno::UNO_QUERY );
+        xFilterCFG.set( m_xServiceFactory->createInstance(
+                            ::rtl::OUString::createFromAscii(
+                                "com.sun.star.document.FilterFactory" ) ),
+                        uno::UNO_QUERY );
     }
-
-    star::uno::Reference< star::container::XNameAccess > xFilterCFG;
-    if( m_xServiceFactory.is() )
+    catch ( uno::Exception const & )
     {
-    xFilterCFG = star::uno::Reference< star::container::XNameAccess >(
-        m_xServiceFactory->createInstance(
-        ::rtl::OUString::createFromAscii(
-            "com.sun.star.document.FilterFactory" ) ),
-        star::uno::UNO_QUERY );
     }
 
     if( xFilterCFG.is() && rRequest.rProperties.getLength() )
     {
-    try {
-        ::rtl::OUString aFilterName;
-        sal_Int32 nPropCount = rRequest.rProperties.getLength();
-        for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
+        try
         {
-        rtl::OUString tmp = rRequest.rProperties[ind].Name;
-        if( rRequest.rProperties[ind].Name.equals(
-            ::rtl::OUString::createFromAscii("FilterName")) )
-        {
-            rRequest.rProperties[ind].Value >>= aFilterName;
-            break;
-        }
-        }
-
-        star::uno::Sequence < star::beans::PropertyValue > aProps;
-        if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
-        {
-        sal_Int32 nPropertyCount = aProps.getLength();
-        for( sal_Int32 nProperty=0;
-             nProperty < nPropertyCount;
-             ++nProperty )
-            if( aProps[nProperty].Name.equals(
-                ::rtl::OUString::createFromAscii("UIComponent")) )
+            ::rtl::OUString aFilterName;
+            sal_Int32 nPropCount = rRequest.rProperties.getLength();
+            for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
             {
-            ::rtl::OUString aServiceName;
-            aProps[nProperty].Value >>= aServiceName;
-            if( aServiceName.getLength() )
-            {
-                star::uno::Reference<
-                star::ui::dialogs::XExecutableDialog >
-                xFilterDialog(
-                    m_xServiceFactory->createInstance(
-                    aServiceName ),
-                    star::uno::UNO_QUERY );
-                star::uno::Reference<
-                star::beans::XPropertyAccess >
-                xFilterProperties(
-                    xFilterDialog,
-                    star::uno::UNO_QUERY );
-
-                if( xFilterDialog.is() && xFilterProperties.is() )
+                rtl::OUString tmp = rRequest.rProperties[ind].Name;
+                if( rRequest.rProperties[ind].Name.equals(
+                        ::rtl::OUString::createFromAscii("FilterName")) )
                 {
-                star::uno::Reference<
-                    star::document::XImporter > xImporter(
-                    xFilterDialog,
-                    star::uno::UNO_QUERY );
-                if( xImporter.is() )
-                    xImporter->setTargetDocument(
-                    star::uno::Reference<
-                    star::lang::XComponent >(
-                        rRequest.rModel,
-                        star::uno::UNO_QUERY ) );
-
-                xFilterProperties->setPropertyValues(
-                    rRequest.rProperties );
-
-                if( xFilterDialog->execute() )
-                {
-                    xFilterOptions->setFilterOptions(
-                    xFilterProperties
-                        ->getPropertyValues() );
-                    xFilterOptions->select();
-                    return;
-
-                }
+                    rRequest.rProperties[ind].Value >>= aFilterName;
+                    break;
                 }
             }
-            break;
+
+            uno::Sequence < beans::PropertyValue > aProps;
+            if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
+            {
+                sal_Int32 nPropertyCount = aProps.getLength();
+                for( sal_Int32 nProperty=0;
+                     nProperty < nPropertyCount;
+                     ++nProperty )
+                    if( aProps[nProperty].Name.equals(
+                            ::rtl::OUString::createFromAscii("UIComponent")) )
+                    {
+                        ::rtl::OUString aServiceName;
+                        aProps[nProperty].Value >>= aServiceName;
+                        if( aServiceName.getLength() )
+                        {
+                            uno::Reference<
+                                ui::dialogs::XExecutableDialog > xFilterDialog(
+                                    m_xServiceFactory->createInstance(
+                                        aServiceName ),
+                                    uno::UNO_QUERY );
+                            uno::Reference< beans::XPropertyAccess >
+                                xFilterProperties( xFilterDialog,
+                                                   uno::UNO_QUERY );
+
+                            if( xFilterDialog.is() && xFilterProperties.is() )
+                            {
+                                uno::Reference<
+                                    document::XImporter > xImporter(
+                                        xFilterDialog, uno::UNO_QUERY );
+                                if( xImporter.is() )
+                                    xImporter->setTargetDocument(
+                                        uno::Reference< lang::XComponent >(
+                                            rRequest.rModel, uno::UNO_QUERY ) );
+
+                                xFilterProperties->setPropertyValues(
+                                    rRequest.rProperties );
+
+                                if( xFilterDialog->execute() )
+                                {
+                                    xFilterOptions->setFilterOptions(
+                                        xFilterProperties->getPropertyValues() );
+                                    xFilterOptions->select();
+                                    return;
+                                }
+                            }
+                        }
+                        break;
+                    }
             }
         }
-    }
-    catch( star::container::NoSuchElementException& )
-    {
-        // the filter name is unknown
-    }
-    catch( star::uno::Exception& )
-    {
-    }
+        catch( container::NoSuchElementException& )
+        {
+            // the filter name is unknown
+        }
+        catch( uno::Exception& )
+        {
+        }
     }
 
     xAbort->select();
@@ -3384,15 +3306,15 @@ UUIInteractionHelper::handleFilterOptionsRequest(
 
 void
 UUIInteractionHelper::handleErrorRequest(
-    star::task::InteractionClassification eClassification,
+    task::InteractionClassification eClassification,
     ErrCode nErrorCode,
     std::vector< rtl::OUString > const & rArguments,
-    star::uno::Sequence< star::uno::Reference<
-    star::task::XInteractionContinuation > > const & rContinuations,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     rtl::OUString & rErrorString)
-        SAL_THROW((star::uno::RuntimeException))
+        SAL_THROW((uno::RuntimeException))
 {
     rtl::OUString aMessage;
     {
@@ -3448,13 +3370,12 @@ UUIInteractionHelper::handleErrorRequest(
         // really useful, because a single error text may well make sense
         // both with only an OK button and with RETRY and CANCEL buttons.
 
-        star::uno::Reference< star::task::XInteractionApprove > xApprove;
-        star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
-        star::uno::Reference< star::task::XInteractionRetry > xRetry;
-        star::uno::Reference< star::task::XInteractionAbort > xAbort;
+        uno::Reference< task::XInteractionApprove > xApprove;
+        uno::Reference< task::XInteractionDisapprove > xDisapprove;
+        uno::Reference< task::XInteractionRetry > xRetry;
+        uno::Reference< task::XInteractionAbort > xAbort;
         getContinuations(
-            rContinuations,
-            &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0, 0, 0, 0);
+            rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort);
 
         // The following mapping uses the bit mask
         //     Approve = 8,
@@ -3560,19 +3481,17 @@ UUIInteractionHelper::handleErrorRequest(
 void
 UUIInteractionHelper::handleBrokenPackageRequest(
     std::vector< rtl::OUString > const & rArguments,
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const &
-            rContinuations,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     rtl::OUString & rErrorString)
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionApprove > xApprove;
-    star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    getContinuations(
-        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0, 0, 0, 0);
+    uno::Reference< task::XInteractionApprove > xApprove;
+    uno::Reference< task::XInteractionDisapprove > xDisapprove;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    getContinuations(rContinuations, &xApprove, &xDisapprove, &xAbort);
 
     ErrCode nErrorCode;
     if( xApprove.is() && xDisapprove.is() )
@@ -3590,7 +3509,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
         std::auto_ptr< ResMgr > xManager(
-        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
             return;
 
@@ -3622,10 +3541,10 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         else
             return;
 
-        star::uno::Any aProductNameAny =
+        uno::Any aProductNameAny =
             ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
                 ::utl::ConfigManager::PRODUCTNAME );
-        star::uno::Any aProductVersionAny =
+        uno::Any aProductVersionAny =
             ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
                 ::utl::ConfigManager::PRODUCTVERSION );
         ::rtl::OUString aProductName, aProductVersion;
@@ -3667,17 +3586,15 @@ void
 UUIInteractionHelper::handleLockedDocumentRequest(
     const ::rtl::OUString& aDocumentURL,
     const ::rtl::OUString& aInfo,
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const &
-            rContinuations,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations,
     sal_uInt16 nMode )
-    SAL_THROW((star::uno::RuntimeException))
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionApprove > xApprove;
-    star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    getContinuations(
-        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0, 0, 0, 0);
+    uno::Reference< task::XInteractionApprove > xApprove;
+    uno::Reference< task::XInteractionDisapprove > xDisapprove;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    getContinuations(rContinuations, &xApprove, &xDisapprove, &xAbort);
 
     if ( !xApprove.is() || !xDisapprove.is() || !xAbort.is() )
         return;
@@ -3686,7 +3603,7 @@ UUIInteractionHelper::handleLockedDocumentRequest(
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
         std::auto_ptr< ResMgr > xManager(
-        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
             return;
 
@@ -3698,8 +3615,10 @@ UUIInteractionHelper::handleLockedDocumentRequest(
         if ( nMode == UUI_DOC_LOAD_LOCK )
         {
             aArguments.push_back( aInfo.getLength()
-                                ? aInfo
-                                : ::rtl::OUString( String( ResId( STR_UNKNOWNUSER, *xManager.get() ) ) ) );
+                                  ? aInfo
+                                  : ::rtl::OUString( String(
+                                        ResId( STR_UNKNOWNUSER,
+                                               *xManager.get() ) ) ) );
             aMessage = String( ResId( STR_OPENLOCKED_MSG, *xManager.get() ) );
             aMessage = replaceMessageWithArguments( aMessage, aArguments );
 
@@ -3710,23 +3629,33 @@ UUIInteractionHelper::handleLockedDocumentRequest(
         else if ( nMode == UUI_DOC_SAVE_LOCK )
         {
             aArguments.push_back( aInfo.getLength()
-                                ? aInfo
-                                : ::rtl::OUString( String( ResId( STR_UNKNOWNUSER, *xManager.get() ) ) ) );
+                                  ? aInfo
+                                  : ::rtl::OUString( String(
+                                        ResId( STR_UNKNOWNUSER,
+                                               *xManager.get() ) ) ) );
             aMessage = String( ResId( STR_TRYLATER_MSG, *xManager.get() ) );
             aMessage = replaceMessageWithArguments( aMessage, aArguments );
 
-            std::auto_ptr< TryLaterQueryBox > xDialog(new TryLaterQueryBox(
-                            getParentProperty(), xManager.get(), aMessage ) );
+            std::auto_ptr< TryLaterQueryBox > xDialog(
+                new TryLaterQueryBox(
+                    getParentProperty(), xManager.get(), aMessage ) );
             nResult = xDialog->Execute();
         }
-        else if ( nMode == UUI_DOC_OWN_LOAD_LOCK || nMode == UUI_DOC_OWN_SAVE_LOCK )
+        else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
+                  nMode == UUI_DOC_OWN_SAVE_LOCK )
         {
             aArguments.push_back( aInfo );
-            aMessage = String( ResId( nMode == UUI_DOC_OWN_SAVE_LOCK ? STR_ALREADYOPEN_SAVE_MSG : STR_ALREADYOPEN_MSG, *xManager.get() ) );
+            aMessage = String( ResId( nMode == UUI_DOC_OWN_SAVE_LOCK
+                                          ? STR_ALREADYOPEN_SAVE_MSG
+                                          : STR_ALREADYOPEN_MSG,
+                                      *xManager.get() ) );
             aMessage = replaceMessageWithArguments( aMessage, aArguments );
 
-            std::auto_ptr< AlreadyOpenQueryBox > xDialog(new AlreadyOpenQueryBox(
-                            getParentProperty(), xManager.get(), aMessage, nMode == UUI_DOC_OWN_SAVE_LOCK ) );
+            std::auto_ptr< AlreadyOpenQueryBox > xDialog(
+                new AlreadyOpenQueryBox( getParentProperty(),
+                                         xManager.get(),
+                                         aMessage,
+                                         nMode == UUI_DOC_OWN_SAVE_LOCK ) );
             nResult = xDialog->Execute();
         }
 
@@ -3739,23 +3668,21 @@ UUIInteractionHelper::handleLockedDocumentRequest(
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  star::uno::Reference< star::uno::XInterface >());
+                  uno::Reference< uno::XInterface >());
     }
 }
 
 void
 UUIInteractionHelper::handleChangedByOthersRequest(
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const &
-            rContinuations )
-    SAL_THROW((star::uno::RuntimeException))
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations )
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionApprove > xApprove;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    getContinuations(
-        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0, 0);
+    uno::Reference< task::XInteractionApprove > xApprove;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    getContinuations(rContinuations, &xApprove, &xAbort);
 
     if ( !xApprove.is() || !xAbort.is() )
         return;
@@ -3764,12 +3691,12 @@ UUIInteractionHelper::handleChangedByOthersRequest(
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
         std::auto_ptr< ResMgr > xManager(
-        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
             return;
 
-        std::auto_ptr< FileChangedQueryBox > xDialog(new FileChangedQueryBox(
-                            getParentProperty(), xManager.get() ) );
+        std::auto_ptr< FileChangedQueryBox > xDialog(
+            new FileChangedQueryBox( getParentProperty(), xManager.get() ) );
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_YES )
@@ -3779,23 +3706,21 @@ UUIInteractionHelper::handleChangedByOthersRequest(
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  star::uno::Reference< star::uno::XInterface >());
+                  uno::Reference< uno::XInterface >());
     }
 }
 
 void
 UUIInteractionHelper::handleLockFileIgnoreRequest(
-    star::uno::Sequence< star::uno::Reference<
-        star::task::XInteractionContinuation > > const &
-            rContinuations )
-    SAL_THROW((star::uno::RuntimeException))
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+        rContinuations )
+    SAL_THROW((uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionApprove > xApprove;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    getContinuations(
-        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0, 0);
+    uno::Reference< task::XInteractionApprove > xApprove;
+    uno::Reference< task::XInteractionAbort > xAbort;
+    getContinuations(rContinuations, &xApprove, &xAbort);
 
     if ( !xApprove.is() || !xAbort.is() )
         return;
@@ -3804,12 +3729,12 @@ UUIInteractionHelper::handleLockFileIgnoreRequest(
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
         std::auto_ptr< ResMgr > xManager(
-        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
             return;
 
-        std::auto_ptr< LockFailedQueryBox > xDialog(new LockFailedQueryBox(
-                            getParentProperty(), xManager.get() ) );
+        std::auto_ptr< LockFailedQueryBox > xDialog(
+            new LockFailedQueryBox( getParentProperty(), xManager.get() ) );
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_OK )
@@ -3819,10 +3744,8 @@ UUIInteractionHelper::handleLockFileIgnoreRequest(
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  star::uno::Reference< star::uno::XInterface >());
+                  uno::Reference< uno::XInterface >());
     }
 }
-
-
