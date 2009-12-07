@@ -51,16 +51,26 @@ SLOFILES =							\
 
 .INCLUDE :  target.mk
 
-$(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$/propertywords.inc $(INCCOM)$/properties.hxx :
+$(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$/propertywords.inc $(INCCOM)$/properties.hxx $(INCCOM)$/oox$/core$/namespaces.hxx :
     @@noop $(assign do_phony:=.PHONY)
 
 $(MISC)$/do_tokens $(do_phony) : tokens.txt gentoken.pl $(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx
-        $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(INCCOM)$/tokenwords.inc $(MISC)$/tokens.gperf && $(TOUCH) $@
+    $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(INCCOM)$/tokenwords.inc $(MISC)$/tokens.gperf && $(TOUCH) $@
+
+$(INCCOM)$/oox:
+    $(MKDIR) $(INCCOM)$/oox
+
+$(INCCOM)$/oox$/core: $(INCCOM)$/oox
+    $(MKDIR) $(INCCOM)$/oox$/core
+
+$(MISC)$/do_namespaces $(do_phony) : namespaces.txt gennamespaces.pl
+    $(MKDIRHIER) $(INCCOM)$/oox$/core
+    $(PERL) gennamespaces.pl namespaces.txt $(INCCOM)$/oox$/core$/namespaces.hxx && $(TOUCH) $@
 
 $(INCCOM)$/tokens.inc : $(MISC)$/tokens.gperf $(MISC)$/do_tokens
         $(AUGMENT_LIBRARY_PATH) gperf --compare-strncmp $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" | $(GREP) -v "^#line" >$(INCCOM)$/tokens.inc
 
-$(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.inc $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(MISC)$/do_tokens
+$(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.inc $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$/oox$/core$/namespaces.hxx $(MISC)$/do_tokens $(MISC)$/do_namespaces
 
 $(MISC)$/do_properties $(do_phony) : properties.txt genproperties.pl $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc
         $(PERL) genproperties.pl properties.txt $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc && $(TOUCH) $@

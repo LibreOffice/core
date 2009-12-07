@@ -267,6 +267,16 @@ void WW8StreamHandler::endCharacterGroup()
     output.addItem("</character-group>");
 }
 
+void WW8StreamHandler::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+{
+    output.addItem("<shape>");
+}
+
+void WW8StreamHandler::endShape( )
+{
+    output.addItem( "</shape>" );
+}
+
 void WW8StreamHandler::text(const sal_uInt8 * data, size_t len)
 {
     string tmpStr = "<text>";

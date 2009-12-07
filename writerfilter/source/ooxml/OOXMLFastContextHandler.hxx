@@ -558,6 +558,9 @@ protected:
 
 class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
 {
+private:
+    bool m_bShapeSent;
+
 public:
     explicit OOXMLFastContextHandlerShape
     (OOXMLFastContextHandler * pContext);
@@ -585,6 +588,9 @@ public:
     virtual void setToken(Token_t nToken);
 
     virtual ResourceEnum_t getResource() const { return SHAPE; }
+
+    void sendShape( Token_t Element );
+
 protected:
     typedef uno::Reference<XFastShapeContextHandler> ShapeContextRef;
     ShapeContextRef mrShapeContext;
@@ -649,6 +655,7 @@ public:
     virtual ResourceEnum_t getResource() const;
 
     void addNamespace(const Id & nId);
+    void addToken( Token_t Element );
 
     virtual void newProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
@@ -683,6 +690,7 @@ protected:
 private:
     uno::Reference<XFastContextHandler> mxContext;
     set<Id> mMyNamespaces;
+    set<Token_t> mMyTokens;
     OOXMLPropertySet::Pointer_t mpPropertySet;
 
     OOXMLFastContextHandler * getFastContextHandler() const;
