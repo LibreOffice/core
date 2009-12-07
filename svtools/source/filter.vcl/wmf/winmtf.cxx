@@ -1522,9 +1522,9 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
     aTmp.SetFillColor( maBkColor );
 
     if( mnBkMode == TRANSPARENT )
-        maFont.SetTransparent( sal_True );
+        aTmp.SetTransparent( sal_True );
     else
-        maFont.SetTransparent( sal_False );
+        aTmp.SetTransparent( sal_False );
 
     if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
         aTmp.SetAlign( ALIGN_BASELINE );
