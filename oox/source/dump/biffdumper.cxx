@@ -3207,7 +3207,7 @@ void WorkbookStreamObject::dumpXfExtProp()
                 for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && !in().isEof(); ++nStop )
                 {
                     writeEmptyItem( "#stop" );
-                    IndentGuard aIndGuard( out() );
+                    IndentGuard aIndGuard2( out() );
                     sal_uInt16 nColorType = dumpExtColorType< sal_uInt16 >();
                     dumpExtColorValue( nColorType );
                     dumpDec< double >( "stop-pos" );
