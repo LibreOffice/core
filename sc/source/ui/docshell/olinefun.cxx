@@ -137,6 +137,9 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
                                         pUndoTab, bColumns, TRUE ) );
         }
 
+        if (pDoc->IsStreamValid(nTab))
+            pDoc->SetStreamValid(nTab, FALSE);
+
         USHORT nParts = 0;              // Datenbereich nicht geaendert
         if ( bColumns )
             nParts |= PAINT_TOP;
@@ -199,6 +202,9 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
                                             nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
                                             pUndoTab, bColumns, FALSE ) );
             }
+
+            if (pDoc->IsStreamValid(nTab))
+                pDoc->SetStreamValid(nTab, FALSE);
 
             USHORT nParts = 0;              // Datenbereich nicht geaendert
             if ( bColumns )
@@ -264,6 +270,9 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi )
         pDoc->SetOutlineTable( nTab, NULL );
 
         pDoc->UpdatePageBreaks( nTab );
+
+        if (pDoc->IsStreamValid(nTab))
+            pDoc->SetStreamValid(nTab, FALSE);
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
                                     PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
@@ -332,6 +341,9 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
                                     nEndCol, nEndRow, nTab,
                                     pUndoDoc, pUndoTab ) );
     }
+
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
 
     rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
     rDocShell.SetDocumentModified();
