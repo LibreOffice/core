@@ -138,6 +138,7 @@ struct ImplSVAppData
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMSF;
     String*                 mpMSFTempFileName;
+    AllSettings*            mpSettings;         // Application settings
     LocaleConfigurationListener* mpCfgListener;
     VclEventListeners*      mpEventListeners;   // listeners for vcl events (eg, extended toolkit)
     VclEventListeners*      mpKeyListeners;     // listeners for key events only (eg, extended toolkit)
