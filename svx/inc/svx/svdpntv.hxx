@@ -214,10 +214,11 @@ protected:
     // is this a preview renderer?
     unsigned                    mbPreviewRenderer : 1;
 
-    // flags for calc for suppressing OLE, CHART or DRAW objects
+    // flags for calc and sw for suppressing OLE, CHART or DRAW objects
     unsigned                    mbHideOle : 1;
     unsigned                    mbHideChart : 1;
-    unsigned                    mbHideDraw : 1;
+    unsigned                    mbHideDraw : 1;             // hide draw objects other than form controls
+    unsigned                    mbHideFormControl : 1;      // hide form controls only
 
 public:
     // #114898#
@@ -431,13 +432,15 @@ public:
     sal_Bool IsPreviewRenderer() const { return (sal_Bool )mbPreviewRenderer; }
     void SetPreviewRenderer(bool bOn) { if((unsigned)bOn != mbPreviewRenderer) { mbPreviewRenderer=bOn; }}
 
-    // access methods for calc hide object modes
+    // access methods for calc and sw hide object modes
     bool getHideOle() const { return mbHideOle; }
     bool getHideChart() const { return mbHideChart; }
     bool getHideDraw() const { return mbHideDraw; }
+    bool getHideFormControl() const { return mbHideFormControl; }
     void setHideOle(bool bNew) { if(bNew != (bool)mbHideOle) mbHideOle = bNew; }
     void setHideChart(bool bNew) { if(bNew != (bool)mbHideChart) mbHideChart = bNew; }
     void setHideDraw(bool bNew) { if(bNew != (bool)mbHideDraw) mbHideDraw = bNew; }
+    void setHideFormControl(bool bNew) { if(bNew != (bool)mbHideFormControl) mbHideFormControl = bNew; }
 
     void SetGridCoarse(const Size& rSiz) { aGridBig=rSiz; }
     void SetGridFine(const Size& rSiz) { aGridFin=rSiz; if (aGridFin.Height()==0) aGridFin.Height()=aGridFin.Width(); if (bGridVisible) InvalidateAllWin(); } // #40479#
