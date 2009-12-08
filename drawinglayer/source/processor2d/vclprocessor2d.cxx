@@ -77,6 +77,7 @@
 // for test, can be removed again
 
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dtrapezoid.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -666,51 +667,70 @@ namespace drawinglayer
 
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
             aLocalPolyPolygon.transform(maCurrentTransformation);
-            mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
 
-            if(mnPolygonStrokePrimitive2D && getOptionsDrawinglayer().IsAntiAliasing())
+            static bool bCheckTrapezoidDecomposition(false);
+            static bool bShowOutlinesThere(false);
+            if(bCheckTrapezoidDecomposition)
             {
-                // when AA is on and this filled polygons are the result of stroked line geometry,
-                // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
-                mpOutputDevice->SetFillColor();
-                mpOutputDevice->SetLineColor(Color(aPolygonColor));
-                const sal_uInt32 nCount(aLocalPolyPolygon.count());
+                // clip against discrete ViewPort
+                const basegfx::B2DRange& rDiscreteViewport = getViewInformation2D().getDiscreteViewport();
+                aLocalPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(
+                    aLocalPolyPolygon, rDiscreteViewport, true, false);
 
-                for(sal_uInt32 a(0); a < nCount; a++)
+                if(aLocalPolyPolygon.count())
                 {
-                    mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
+                    // subdivide
+                    aLocalPolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(
+                        aLocalPolyPolygon, 0.5);
+
+                    // trapezoidize
+                    const basegfx::B2DTrapezoidVector aB2DTrapezoidVector(basegfx::tools::trapezoidSubdivide(
+                        aLocalPolyPolygon));
+
+                    const sal_uInt32 nCount(aB2DTrapezoidVector.size());
+
+                    if(nCount)
+                    {
+                        basegfx::BColor aInvPolygonColor(aPolygonColor);
+                        aInvPolygonColor.invert();
+
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            const basegfx::B2DPolygon aTempPolygon(aB2DTrapezoidVector[a].getB2DPolygon());
+
+                            if(bShowOutlinesThere)
+                            {
+                                mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                                mpOutputDevice->SetLineColor();
+                            }
+
+                            mpOutputDevice->DrawPolygon(aTempPolygon);
+
+                            if(bShowOutlinesThere)
+                            {
+                                mpOutputDevice->SetFillColor();
+                                mpOutputDevice->SetLineColor(Color(aInvPolygonColor));
+                                mpOutputDevice->DrawPolyLine(aTempPolygon, 0.0);
+                            }
+                        }
+                    }
                 }
             }
-
-            static bool bTestPolygonClipping(false);
-            if(bTestPolygonClipping)
+            else
             {
-                static bool bInside(true);
-                static bool bFilled(false);
-                static bool bLine(false);
+                mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
 
-                basegfx::B2DRange aRange(aLocalPolyPolygon.getB2DRange());
-                aRange.grow(aRange.getWidth() * -0.1);
-
-                if(bFilled)
+                if(mnPolygonStrokePrimitive2D && getOptionsDrawinglayer().IsAntiAliasing())
                 {
-                    basegfx::B2DPolyPolygon aFilledClipped(basegfx::tools::clipPolyPolygonOnRange(aLocalPolyPolygon, aRange, bInside, false));
-                    basegfx::BColor aRand(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0);
-                    mpOutputDevice->SetFillColor(Color(aRand));
-                    mpOutputDevice->SetLineColor();
-                    mpOutputDevice->DrawPolyPolygon(aFilledClipped);
-                }
-
-                if(bLine)
-                {
-                    basegfx::B2DPolyPolygon aLineClipped(basegfx::tools::clipPolyPolygonOnRange(aLocalPolyPolygon, aRange, bInside, true));
-                    basegfx::BColor aRand(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0);
+                    // when AA is on and this filled polygons are the result of stroked line geometry,
+                    // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
                     mpOutputDevice->SetFillColor();
-                    mpOutputDevice->SetLineColor(Color(aRand));
+                    mpOutputDevice->SetLineColor(Color(aPolygonColor));
+                    const sal_uInt32 nCount(aLocalPolyPolygon.count());
 
-                    for(sal_uInt32 a(0); a < aLineClipped.count(); a++)
+                    for(sal_uInt32 a(0); a < nCount; a++)
                     {
-                        mpOutputDevice->DrawPolyLine(aLineClipped.getB2DPolygon(a), 0.0);
+                        mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
                     }
                 }
             }
