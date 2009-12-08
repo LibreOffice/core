@@ -3,7 +3,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/container/XNameContainer.idl>
-#include <com/sun/star/container/XEnumerationAccess.idl>
 
 module com {  module sun {  module star {  module text {
 
