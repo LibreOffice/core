@@ -35,7 +35,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 #include <svx/globl3d.hxx>
 #include <svx/svxids.hrc>
