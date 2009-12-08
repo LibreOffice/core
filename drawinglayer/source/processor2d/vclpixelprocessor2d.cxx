@@ -218,6 +218,12 @@ namespace drawinglayer
                     }
                     break;
                 }
+                case PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D :
+                {
+                    // direct draw of bitmap
+                    RenderPolyPolygonBitmapPrimitive2D(static_cast< const primitive2d::PolyPolygonBitmapPrimitive2D& >(rCandidate));
+                    break;
+                }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
                     // direct draw of PolyPolygon with color
