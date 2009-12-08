@@ -893,6 +893,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
 
                 Window*  pParentTbxWindow( pImpl->pBox );
                 Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
+
                 ToolBox* pToolBar( 0 );
                 if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     pToolBar = (ToolBox *)pTbxWindow;
@@ -907,10 +908,10 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
                         aSize = pToolBar->CalcPopupWindowSizePixel();
                     }
                     pToolBar->SetSizePixel( aSize );
-
-                    // open subtoolbox in popup mode
-                    Window::GetDockingManager()->StartPopupMode( pImpl->pBox, pToolBar );
                 }
+
+                // open subtoolbox in popup mode
+                Window::GetDockingManager()->StartPopupMode( pImpl->pBox, pTbxWindow );
             }
         }
     }
