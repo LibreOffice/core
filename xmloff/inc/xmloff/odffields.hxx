@@ -31,38 +31,24 @@
  * Author: Florian Reuter <freuter@novell.com>
  * Copyright 2008 by Novell, Inc.
 */
-#ifndef _ECMAFLDS_HXX
-#define _ECMAFLDS_HXX
+#ifndef _ODFFIELDS_HXX
+#define _ODFFIELDS_HXX
 
 
-#define ECMA_FORMTEXT "ecma.office-open-xml.field.FORMTEXT"
-#define ECMA_FORMTEXT_NAME "name"
-#define ECMA_FORMTEXT_HELPTEXT "helpText"
-#define ECMA_FORMTEXT_STATUSTEXT "statusText"
-#define ECMA_FORMTEXT_DEFAULT "default"
-#define ECMA_FORMTEXT_FORMAT "format"
-#define ECMA_FORMTEXT_MAXLENGTH "maxLength"
-#define ECMA_FORMTEXT_TYPE "type"
+#define ODF_FORMTEXT "vnd.oasis.opendocument.field.FORMTEXT"
 
-#define ECMA_FORMCHECKBOX "ecma.office-open-xml.field.FORMCHECKBOX"
-#define ECMA_FORMCHECKBOX_NAME "name"
-#define ECMA_FORMCHECKBOX_HELPTEXT "helpText"
-#define ECMA_FORMCHECKBOX_STATUSTEXT "statusText"
-#define ECMA_FORMCHECKBOX_CHECKED "checked"
-#define ECMA_FORMCHECKBOX_DEFAULT "default"
-#define ECMA_FORMCHECKBOX_SIZE "size"
-#define ECMA_FORMCHECKBOX_SIZEAUTO "sizeAuto"
+#define ODF_FORMCHECKBOX "vnd.oasis.opendocument.field.FORMCHECKBOX"
+#define ODF_FORMCHECKBOX_NAME "name"
+#define ODF_FORMCHECKBOX_HELPTEXT "helpText"
 
+#define ODF_FORMDROPDOWN "vnd.oasis.opendocument.field.FORMDROPDOWN"
+#define ODF_FORMDROPDOWN_LISTENTRY "listEntry"
+#define ODF_FORMDROPDOWN_RESULT "result"
 
-#define ECMA_FORMDROPDOWN "ecma.office-open-xml.field.FORMDROPDOWN"
-#define ECMA_FORMDROPDOWN_DEFAULT "default"
-#define ECMA_FORMDROPDOWN_LISTENTRY "listEntry"
-#define ECMA_FORMDROPDOWN_RESULT "result"
+#define ODF_TOC "vnd.oasis.opendocument.field.TOC"
 
-#define ECMA_TOC "ecma.office-open-xml.field.TOC"
+#define ODF_HYPERLINK "vnd.oasis.opendocument.field.HYPERLINK"
 
-#define ECMA_HYPERLINK "ecma.office-open-xml.field.HYPERLINK"
+#define ODF_PAGEREF "vnd.oasis.opendocument.field.PAGEREF"
 
-#define ECMA_PAGEREF "ecma.office-open-xml.field.PAGEREF"
-
-#endif /*  _ECMAFLDS_HXX */
+#endif /*  _ODFFIELDS_HXX */
