@@ -636,10 +636,13 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                     // Calc document does not care about sheet index in print ranges
                     aRange.aStart.SetTab( nScTab );
                     aRange.aEnd.SetTab( nScTab );
+                    aRange.Justify();
                     aRangeList.Append( aRange );
                 }
-                GetAddressConverter().ValidateRangeList( aRangeList, true );
-                GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTAREA, aRangeList );
+                // create the NAME record (do not warn if ranges are shrunken)
+                GetAddressConverter().ValidateRangeList( aRangeList, false );
+                if( aRangeList.Count() > 0 )
+                    GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTAREA, aRangeList );
             }
 
             // *** 2) print titles *** ----------------------------------------
@@ -656,8 +659,9 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                     0, pRowRange->aStart.Row(), nScTab,
                     GetXclMaxPos().Col(), pRowRange->aEnd.Row(), nScTab ) );
             // create the NAME record
-            GetAddressConverter().ValidateRangeList( aTitleList, true );
-            GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTTITLES, aTitleList );
+            GetAddressConverter().ValidateRangeList( aTitleList, false );
+            if( aTitleList.Count() > 0 )
+                GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTTITLES, aTitleList );
 
             // *** 3) filter ranges *** ---------------------------------------
 
