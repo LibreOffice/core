@@ -110,6 +110,11 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
 //            }
 //        }
 //        break;
+        case NS_ooxml::LN_CT_Shd_themeFill:
+        case NS_ooxml::LN_CT_Shd_themeFillTint:
+        case NS_ooxml::LN_CT_Shd_themeFillShade:
+            // ignored
+            break;
         default:
             OSL_ENSURE( false, "unknown attribute");
     }

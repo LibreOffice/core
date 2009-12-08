@@ -42,28 +42,33 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=           $(SLO)$/BorderHandler.obj \
-                    $(SLO)$/CellColorHandler.obj \
-                    $(SLO)$/CellMarginHandler.obj \
-                    $(SLO)$/SectionColumnHandler.obj \
-                    $(SLO)$/ConversionHelper.obj \
-                    $(SLO)$/DomainMapper.obj \
-                    $(SLO)$/DomainMapper_Impl.obj \
-                    $(SLO)$/DomainMapperTableHandler.obj \
-                    $(SLO)$/DomainMapperTableManager.obj \
-                    $(SLO)$/FontTable.obj   \
-                    $(SLO)$/GraphicImport.obj  \
-                    $(SLO)$/LFOTable.obj    \
-                    $(SLO)$/ListTable.obj  \
-                    $(SLO)$/MeasureHandler.obj \
-                    $(SLO)$/PropertyMap.obj  \
-                    $(SLO)$/PropertyIds.obj  \
-                    $(SLO)$/StyleSheetTable.obj \
-                    $(SLO)$/TDefTableHandler.obj \
-                    $(SLO)$/SettingsTable.obj \
-                    $(SLO)$/ThemeTable.obj \
-                    $(SLO)$/ModelEventListener.obj\
-                    $(SLO)$/OLEHandler.obj
+SLOFILES= \
+    $(SLO)$/BorderHandler.obj \
+    $(SLO)$/CellColorHandler.obj \
+    $(SLO)$/CellMarginHandler.obj \
+    $(SLO)$/ConversionHelper.obj \
+    $(SLO)$/DomainMapper.obj \
+    $(SLO)$/DomainMapperTableHandler.obj \
+    $(SLO)$/DomainMapperTableManager.obj \
+    $(SLO)$/DomainMapper_Impl.obj \
+    $(SLO)$/FontTable.obj \
+    $(SLO)$/GraphicHelpers.obj \
+    $(SLO)$/GraphicImport.obj \
+    $(SLO)$/LFOTable.obj \
+    $(SLO)$/ListTable.obj \
+    $(SLO)$/MeasureHandler.obj \
+    $(SLO)$/ModelEventListener.obj \
+    $(SLO)$/OLEHandler.obj \
+    $(SLO)$/PageBordersHandler.obj \
+    $(SLO)$/PropertyIds.obj \
+    $(SLO)$/PropertyMap.obj \
+    $(SLO)$/SectionColumnHandler.obj \
+    $(SLO)$/SettingsTable.obj \
+    $(SLO)$/StyleSheetTable.obj \
+    $(SLO)$/TDefTableHandler.obj \
+    $(SLO)$/TablePropertiesHandler.obj \
+    $(SLO)$/TblStylePrHandler.obj \
+    $(SLO)$/ThemeTable.obj 
 
 # --- Targets ----------------------------------
 

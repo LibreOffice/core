@@ -316,8 +316,12 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_BITMAP :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")); break;
             case PROP_IS_DATE :   sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDate")); break;
             case PROP_TAB_STOP_DISTANCE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabStopDistance")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_CNF_STYLE  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CnfStyle")); break;
+            case PROP_INDENT_AT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IndentAt")); break;
+            case PROP_FIRST_LINE_INDENT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstLineIndent")); break;
+            case PROP_NUMBERING_STYLE_NAME  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")); break;
+            case PROP_LISTTAB_STOP_POSITION :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListtabStopPosition")); break;
+            case PROP_POSITION_AND_SPACE_MODE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionAndSpaceMode")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

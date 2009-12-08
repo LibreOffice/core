@@ -1,23 +1,24 @@
 <?xml version="1.0"?>
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">
-  <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="1"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="3"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="14"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="21"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="24"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="25"/>
-  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="31"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="32"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="33"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="60"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="61"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="62"/>
-  <namespace-alias name="http://sprm" alias="sprm" id="99"/>
+  <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="XML"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="RELATIONSHIPS"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="OFFICE"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="THEME"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="DOC_DRAWINGML"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="DRAWINGML"/>
+  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="VML"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="PICTURE"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="VML_DOC"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="DOC"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="MATH"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="SML"/>
+  <namespace-alias name="http://sprm" alias="sprm" id="SPRM"/>
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
   <token tokenid="ooxml:inputstream"/>
   <token tokenid="ooxml:trackchange"/>
   <token tokenid="ooxml:object"/>
+  <token tokenid="ooxml:tblStart"/>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
     <start name="theme"/>
     <start name="themeOverride"/>
@@ -6508,10 +6509,16 @@
           </element>
         </choice>
       </define>
+      <define name="CT_PositionOffset">
+        <ref name="ST_PositionOffset"/>
+      </define>
       <define name="ST_PositionOffset">
         <data type="int">
           <xs:documentation>Absolute Position Offset Value</xs:documentation>
         </data>
+      </define>
+      <define name="CT_AlignH">
+        <ref name="ST_AlignH"/>
       </define>
       <define name="ST_AlignH">
         <list>
@@ -6556,16 +6563,19 @@
       <define name="CT_PosH">
         <choice>
           <element name="align">
-            <ref name="ST_AlignH"/>
+            <ref name="CT_AlignH"/>
           </element>
           <element name="posOffset">
-            <ref name="ST_PositionOffset"/>
+            <ref name="CT_PositionOffset"/>
           </element>
         </choice>
         <attribute name="relativeFrom">
           <ref name="ST_RelFromH"/>
           <xs:documentation>Horizontal Position Relative Base</xs:documentation>
         </attribute>
+      </define>
+      <define name="CT_AlignV">
+        <ref name="ST_AlignV"/>
       </define>
       <define name="ST_AlignV">
         <list>
@@ -6610,10 +6620,10 @@
       <define name="CT_PosV">
         <choice>
           <element name="align">
-            <ref name="ST_AlignV"/>
+            <ref name="CT_AlignV"/>
           </element>
           <element name="posOffset">
-            <ref name="ST_PositionOffset"/>
+            <ref name="CT_PositionOffset"/>
           </element>
         </choice>
         <attribute name="relativeFrom">
@@ -6796,6 +6806,7 @@
       <element name="wrapTopAndBottom" tokenid="ooxml:EG_WrapType_wrapTopAndBottom"/>
     </resource>
     <resource name="ST_PositionOffset" resource="Integer" generated="yes"/>
+    <resource name="CT_PositionOffset" resource="IntegerValue"/>
     <resource name="ST_AlignH" resource="List" generated="yes">
       <value name="left" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_left">left</value>
       <value name="right" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_right">right</value>
@@ -6803,6 +6814,7 @@
       <value name="inside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_inside">inside</value>
       <value name="outside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_outside">outside</value>
     </resource>
+    <resource name="CT_AlignH" resource="ListValue"/>
     <resource name="ST_RelFromH" resource="List" generated="yes">
       <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_margin">margin</value>
       <value name="page" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_page">page</value>
@@ -6818,6 +6830,7 @@
       <element name="posOffset" tokenid="ooxml:CT_PosH_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosH_relativeFrom"/>
     </resource>
+    <resource name="CT_AlignV" resource="ListValue"/>
     <resource name="ST_AlignV" resource="List" generated="yes">
       <value name="top" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_top">top</value>
       <value name="bottom" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_bottom">bottom</value>
@@ -8329,8 +8342,6 @@
       <element name="nvPicPr" tokenid="ooxml:CT_Picture_nvPicPr"/>
       <element name="blipFill" tokenid="ooxml:CT_Picture_blipFill"/>
       <element name="spPr" tokenid="ooxml:CT_Picture_spPr"/>
-      <action name="start" action="mark" sendtokenid="ooxml:mark_shape" value="0"/>
-      <action name="end" action="mark" sendtokenid="ooxml:mark_shape" value="1"/>
     </resource>
     <resource name="pic" resource="Properties">
       <element name="pic" tokenid="ooxml:pic_pic"/>
@@ -15474,19 +15485,19 @@
         </group>
         <optional>
           <attribute name="zOrder">
-            <text/>
+            <ref name="ST_PageBorderZOrder"/>
             <xs:documentation>Z-Ordering of Page Border</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="display">
-            <text/>
+            <ref name="ST_PageBorderDisplay"/>
             <xs:documentation>Pages to Display Page Borders</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="offsetFrom">
-            <text/>
+            <ref name="ST_PageBorderOffset"/>
             <xs:documentation>Page Border Positioning</xs:documentation>
           </attribute>
         </optional>
@@ -16565,15 +16576,18 @@
           </element>
         </optional>
       </define>
+      <define name="CT_ParaTrackChange">
+        <ref name="CT_TrackChange"/>
+      </define>
       <define name="EG_ParaRPrTrackChanges">
         <optional>
           <element name="ins">
-            <ref name="CT_TrackChange"/>
+            <ref name="CT_ParaTrackChange"/>
           </element>
         </optional>
         <optional>
           <element name="del">
-            <ref name="CT_TrackChange"/>
+            <ref name="CT_ParaTrackChange"/>
           </element>
         </optional>
         <optional>
@@ -17552,7 +17566,7 @@
       </define>
       <define name="CT_Cnf">
         <attribute name="val">
-          <text/>
+          <ref name="ST_Cnf"/>
           <xs:documentation>Conditional Formatting Bit Mask</xs:documentation>
         </attribute>
       </define>
@@ -19869,16 +19883,16 @@
           </choice>
         </list>
       </define>
-      <define name="CT_TblStylePr">
+      <define name="CT_Style_tblStylePr">
         <group>
           <optional>
             <element name="pPr">
-              <ref name="CT_PPr"/>
+              <ref name="CT_PPrBase"/>
             </element>
           </optional>
           <optional>
             <element name="rPr">
-              <ref name="CT_RPr"/>
+              <ref name="EG_RPrBase"/>
             </element>
           </optional>
           <optional>
@@ -19888,19 +19902,28 @@
           </optional>
           <optional>
             <element name="trPr">
-              <ref name="CT_TrPr"/>
+              <ref name="CT_TrPrBase"/>
             </element>
           </optional>
           <optional>
             <element name="tcPr">
-              <ref name="CT_TcPr"/>
+              <ref name="CT_TcPrBase"/>
             </element>
           </optional>
         </group>
         <attribute name="type">
-          <text/>
+          <ref name="ST_TblStyleOverrideType"/>
           <xs:documentation>Table Style Conditional Formatting Type</xs:documentation>
         </attribute>
+      </define>
+      <define name="CT_Style_TblPr">
+        <ref name="CT_TblPrBase"/>
+      </define>
+      <define name="CT_Style_TrPr">
+        <ref name="CT_TrPrBase"/>
+      </define>
+      <define name="CT_Style_TcPr">
+        <ref name="CT_TcPrBase"/>
       </define>
       <define name="ST_StyleType">
         <list>
@@ -20001,12 +20024,12 @@
           </optional>
           <optional>
             <element name="pPr">
-              <ref name="CT_PPr"/>
+              <ref name="CT_PPrBase"/>
             </element>
           </optional>
           <optional>
             <element name="rPr">
-              <ref name="CT_RPr"/>
+              <ref name="EG_RPrBase"/>
             </element>
           </optional>
           <optional>
@@ -20016,17 +20039,17 @@
           </optional>
           <optional>
             <element name="trPr">
-              <ref name="CT_TrPr"/>
+              <ref name="CT_TrPrBase"/>
             </element>
           </optional>
           <optional>
             <element name="tcPr">
-              <ref name="CT_TcPr"/>
+              <ref name="CT_TcPrBase"/>
             </element>
           </optional>
           <zeroOrMore>
             <element name="tblStylePr">
-              <ref name="CT_TblStylePr"/>
+              <ref name="CT_Style_tblStylePr"/>
             </element>
           </zeroOrMore>
         </group>
@@ -21619,6 +21642,11 @@
       <attribute name="author" tokenid="ooxml:CT_TrackChange_author"/>
       <attribute name="date" tokenid="ooxml:CT_TrackChange_date"/>
     </resource>
+    <resource name="CT_ParaTrackChange" resource="Properties">
+      <action name="start" action="tokenproperty"/>
+      <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:paratrackchange"/>
+      <action name="start" action="clearProps"/>
+    </resource>
     <resource name="CT_CellMergeTrackChange" resource="Properties">
       <attribute name="vMerge" tokenid="ooxml:CT_CellMergeTrackChange_vMerge"/>
       <attribute name="vMergeOrig" tokenid="ooxml:CT_CellMergeTrackChange_vMergeOrig"/>
@@ -21683,6 +21711,7 @@
       <action name="start" action="tokenproperty"/>
       <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:trackchange"/>
       <action name="start" action="clearProps"/>
+      <action name="end" action="mark" sendtokenid="ooxml:endtrackchange"/>
     </resource>
     <resource name="CT_NumPr" resource="Properties">
       <kind name="paragraph"/>
@@ -21777,8 +21806,6 @@
     <resource name="CT_Picture" resource="Shape">
       <element name="movie" tokenid="ooxml:CT_Picture_movie"/>
       <element name="control" tokenid="ooxml:CT_Picture_control"/>
-      <action name="start" action="mark" sendtokenid="ooxml:mark_shape" value="0"/>
-      <action name="end" action="mark" sendtokenid="ooxml:mark_shape" value="1"/>
       <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:object"/>
       <action name="end" action="clearProps"/>
     </resource>
@@ -22253,6 +22280,8 @@
     <resource name="CT_RPrOriginal" resource="Properties"/>
     <resource name="CT_ParaRPrOriginal" resource="Properties"/>
     <resource name="CT_ParaRPr" resource="Properties">
+      <element name="ins" tokenid="ooxml:CT_ParaRPr_ins"/>
+      <element name="del" tokenid="ooxml:CT_ParaRPr_del"/>
       <element name="rPrChange" tokenid="ooxml:CT_ParaRPr_rPrChange"/>
     </resource>
     <resource name="ST_RubyAlign" resource="List" generated="yes">
@@ -22868,26 +22897,34 @@
       <element name="num" tokenid="ooxml:CT_Numbering_num"/>
       <element name="numIdMacAtCleanup" tokenid="ooxml:CT_Numbering_numIdMacAtCleanup"/>
     </resource>
-    <resource name="ST_TblStyleOverrideType" resource="List" generated="yes">
-      <value name="wholeTable" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_wholeTable">wholeTable</value>
-      <value name="firstRow" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_firstRow">firstRow</value>
-      <value name="lastRow" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_lastRow">lastRow</value>
-      <value name="firstCol" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_firstCol">firstCol</value>
-      <value name="lastCol" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_lastCol">lastCol</value>
-      <value name="band1Vert" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_band1Vert">band1Vert</value>
-      <value name="band2Vert" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_band2Vert">band2Vert</value>
-      <value name="band1Horz" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_band1Horz">band1Horz</value>
-      <value name="band2Horz" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_band2Horz">band2Horz</value>
-      <value name="neCell" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_neCell">neCell</value>
-      <value name="nwCell" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_nwCell">nwCell</value>
-      <value name="seCell" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_seCell">seCell</value>
-      <value name="swCell" tokenid="ooxml:Value_wordprocessingml_ST_TblStyleOverrideType_swCell">swCell</value>
+    <resource name="ST_TblStyleOverrideType" resource="List">
+      <value tokenid="1">wholeTable</value>
+      <value tokenid="2">firstRow</value>
+      <value tokenid="3">lastRow</value>
+      <value tokenid="4">firstCol</value>
+      <value tokenid="5">lastCol</value>
+      <value tokenid="6">band1Vert</value>
+      <value tokenid="7">band2Vert</value>
+      <value tokenid="8">band1Horz</value>
+      <value tokenid="9">band2Horz</value>
+      <value tokenid="10">neCell</value>
+      <value tokenid="11">nwCell</value>
+      <value tokenid="12">seCell</value>
+      <value tokenid="13">swCell</value>
     </resource>
     <resource name="ST_StyleType" resource="List">
       <value tokenid="1">paragraph</value>
       <value tokenid="2">character</value>
       <value tokenid="3">table</value>
       <value tokenid="4">numbering</value>
+    </resource>
+    <resource name="CT_Style_tblStylePr" resource="Properties">
+      <element name="pPr" tokenid="ooxml:CT_PPrBase"/>
+      <element name="rPr" tokenid="ooxml:EG_RPrBase"/>
+      <element name="tblPr" tokenid="ooxml:CT_TblPrBase"/>
+      <element name="trPr" tokenid="ooxml:CT_TrPrBase"/>
+      <element name="tcPr" tokenid="ooxml:CT_TcPrBase"/>
+      <attribute name="type" tokenid="ooxml:CT_TblStyleOverrideType"/>
     </resource>
     <resource name="CT_Style" resource="Properties">
       <element name="name" tokenid="ooxml:CT_Style_name"/>

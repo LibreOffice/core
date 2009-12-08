@@ -34,13 +34,14 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <map>
 
 namespace com{ namespace sun{ namespace star{
-        namespace lang{
-            class XMultiServiceFactory;
-            struct Locale;
-        }
+namespace lang{
+class XMultiServiceFactory;
+struct Locale;
+}
 }}}
 
 namespace writerfilter {
@@ -56,10 +57,10 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public Properties, public Table
 {
     SettingsTable_Impl *m_pImpl;
 
-public:
+ public:
     SettingsTable(  DomainMapper& rDMapper,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory
-                    );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory
+            );
     virtual ~SettingsTable();
 
     // Properties
@@ -71,6 +72,8 @@ public:
 
     //returns default TabStop in 1/100th mm
     int GetDefaultTabStop() const;
+
+    void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 
 };
 typedef boost::shared_ptr< SettingsTable >          SettingsTablePtr;

@@ -141,6 +141,20 @@ void StreamProtocol::info(const string & rInfo)
     m_pStream->info(rInfo);
 }
 
+void StreamProtocol::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape )
+{
+    m_pTagLogger->element("protocol-startShape");
+
+    m_pStream->startShape(xShape);
+}
+
+void StreamProtocol::endShape()
+{
+    m_pTagLogger->element("protocol-endShape");
+
+    m_pStream->endShape();
+}
+
 /*
     PropertiesProtocol
 */

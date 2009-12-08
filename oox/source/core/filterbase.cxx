@@ -600,7 +600,7 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
     {
         setMediaDescriptor( rMediaDescSeq );
         DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
-        if( aOpenedGuard.isValid() || !mxImpl->maFileUrl.getLength())
+        if( aOpenedGuard.isValid() || !mxImpl->maFileUrl.getLength() )
         {
             mxImpl->initializeFilter();
             switch( mxImpl->meDirection )

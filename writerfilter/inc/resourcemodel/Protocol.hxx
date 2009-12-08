@@ -58,6 +58,8 @@ public:
     virtual void substream(Id name,
                            writerfilter::Reference<Stream>::Pointer_t ref);
     virtual void info(const string & rInfo);
+    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual void endShape();
 };
 
 class PropertiesProtocol : public Properties
