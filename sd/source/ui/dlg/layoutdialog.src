@@ -44,5 +44,10 @@ DockingWindow FLT_WIN_LAYOUT_DIALOG
     Zoomable = TRUE ;
     Dockable = TRUE ;
     EnableResizing = TRUE ;
+
+    String STR_RESET_LAYOUT
+    {
+        Text[ en-US ] = "Reset Slide Layout";
+    };
 };
 

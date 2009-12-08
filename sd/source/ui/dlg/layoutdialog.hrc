@@ -29,3 +29,5 @@
  ************************************************************************/
 
 #define FLT_WIN_LAYOUT_DIALOG 795
+
+#define STR_RESET_LAYOUT 1

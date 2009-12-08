@@ -52,6 +52,7 @@
 
 #include <svx/toolbarmenu.hxx>
 
+#include "layoutdialog.hxx"
 #include "sdresid.hxx"
 #include "res_bmp.hrc"
 #include "strings.hrc"
@@ -116,6 +117,8 @@ public:
 SdLayoutControl::SdLayoutControl( USHORT _nSlotId, USHORT _nId, ToolBox& rTbx )
 : SfxToolBoxControl( _nSlotId, _nId, rTbx )
 {
+    rTbx.SetItemBits( _nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( _nId ) );
+    rTbx.Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -147,18 +150,29 @@ SfxPopupWindowType SdLayoutControl::GetPopupWindowType() const
 
 SfxPopupWindow* SdLayoutControl::CreatePopupWindow()
 {
-    ToolBox& rTbx = GetToolBox();
-    SdLayoutDialogContent* pWin = new SdLayoutDialogContent( GetId(), m_xFrame, &rTbx );
-//  pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
-    pWin->EnableDocking(true);
+    OUString sResourceName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/dockingwindow/" ) );
+    sResourceName += OUString::valueOf( static_cast<sal_Int32>(GetId()) );
+    createAndPositionSubToolBar( sResourceName );
+/*
+    SfxPopupWindow* pWin = 0;
 
-    Window::GetDockingManager()->StartPopupMode( &rTbx, pWin );
-//    SetPopupWindow( pWin );
-//  return pWin;
+    ToolBox& rTbx = GetToolBox();
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if( pViewFrame )
+    {
+        pWin = sd::LayoutDialogChildWindow::createChildWindow( *pViewFrame, &rTbx );
+        if( pWin )
+        {
+            pWin->EnableDocking(true);
+            Window::GetDockingManager()->StartPopupMode( &rTbx, pWin );
+        }
+     }
+    SetPopupWindow( pWin );
+    */
     return 0;
 }
 
-#ifdef 0
+#if 0
 // -----------------------------------------------------------------------
 
 struct snewfoil_value_info

@@ -33,6 +33,10 @@
 
 #include <sfx2/childwin.hxx>
 
+class SfxViewFrame;
+class ::Window;
+class SfxPopupWindow;
+
 namespace sd {
 
 class LayoutDialogChildWindow : public SfxChildWindow
@@ -42,6 +46,8 @@ public:
     virtual ~LayoutDialogChildWindow (void);
 
     SFX_DECL_CHILDWINDOW(LayerDialogChildWindow);
+
+    static SfxPopupWindow* createChildWindow(SfxViewFrame& rViewFrame, ::Window* pParent);
 };
 
 } // end of namespace sd

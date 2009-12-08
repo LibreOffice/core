@@ -101,6 +101,8 @@
 
 #include <strings.hrc>
 
+#include "layoutdialog.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -428,30 +430,35 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_ASSIGN_LAYOUT:
         {
-            if (mePageKind==PK_STANDARD
-                || mePageKind==PK_NOTES
-                || (mePageKind==PK_HANDOUT && meEditMode==EM_MASTERPAGE))
+            if (mePageKind==PK_STANDARD || mePageKind==PK_NOTES || (mePageKind==PK_HANDOUT && meEditMode==EM_MASTERPAGE))
             {
-                const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rReq.GetArg( ID_VAL_WHATPAGE, FALSE, TYPE(SfxUInt32Item) ) );
-                const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rReq.GetArg( ID_VAL_WHATLAYOUT, FALSE, TYPE(SfxUInt32Item) ) );
-
-                if( pWhatLayout )
+                if( rReq.GetArgs() )
                 {
-                    if ( mpDrawView->IsTextEdit() )
-                        mpDrawView->SdrEndTextEdit();
+                    const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rReq.GetArg( ID_VAL_WHATPAGE, FALSE, TYPE(SfxUInt32Item) ) );
+                    const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rReq.GetArg( ID_VAL_WHATLAYOUT, FALSE, TYPE(SfxUInt32Item) ) );
 
-                    USHORT nPage;
-                    if( pWhatPage )
+                    if( pWhatLayout )
                     {
-                        nPage = pWhatPage->GetValue();
-                    }
-                    else
-                    {
-                        nPage = maTabControl.GetCurPageId() - 1;
-                    }
+                        if ( mpDrawView->IsTextEdit() )
+                            mpDrawView->SdrEndTextEdit();
 
-                    ::sd::ViewShell::mpImpl->AssignLayout(GetDoc()->GetSdPage((USHORT)nPage, mePageKind),(AutoLayout)pWhatLayout->GetValue());
-                }
+                        USHORT nPage;
+                        if( pWhatPage )
+                        {
+                            nPage = pWhatPage->GetValue();
+                        }
+                        else
+                        {
+                            nPage = maTabControl.GetCurPageId() - 1;
+                        }
+
+                        ::sd::ViewShell::mpImpl->AssignLayout(GetDoc()->GetSdPage((USHORT)nPage, mePageKind),(AutoLayout)pWhatLayout->GetValue());
+                    }
+                 }
+                 else
+                 {
+                        GetViewFrame()->ToggleChildWindow( sd::LayoutDialogChildWindow::GetChildWindowId() );
+                 }
             }
             Cancel();
             rReq.Done ();

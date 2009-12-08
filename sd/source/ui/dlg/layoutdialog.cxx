@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <com/sun/star/frame/XFrame.hpp>
 #include "layoutdialog.hxx"
 #include <sfx2/dockwin.hxx>
 #include "app.hrc"
@@ -46,6 +47,8 @@ SFX_IMPL_DOCKINGWINDOW(LayoutDialogChildWindow, SID_LAYOUT_DIALOG_WIN)
 #include <vcl/image.hxx>
 
 #include <sfx2/dispatch.hxx>
+#include <sfx2/imagemgr.hxx>
+#include <sfx2/tbxctrl.hxx>
 
 #include <svtools/languageoptions.hxx>
 #include <svtools/valueset.hxx>
@@ -69,14 +72,15 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 
 namespace sd {
 
 ///
-class SdLayoutDialogContent : public SfxDockingWindow
+class SdLayoutDialogContent : public SfxPopupWindow
 {
 public:
-    SdLayoutDialogContent( SfxBindings* pBindings, SfxChildWindow *pCW, ::Window* pParent, ViewShellBase& rBase);
+    SdLayoutDialogContent( ViewShellBase& rBase, Window* pParent);
     virtual ~SdLayoutDialogContent();
 
 protected:
@@ -97,14 +101,26 @@ LayoutDialogChildWindow::LayoutDialogChildWindow(::Window* _pParent, USHORT nId,
 : SfxChildWindow (_pParent, nId)
 {
     ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame()));
-    SdLayoutDialogContent* pContent = new SdLayoutDialogContent (pBindings, this, _pParent, rBase);
+    SdLayoutDialogContent* pContent = new SdLayoutDialogContent (rBase, _pParent);
     pWindow = pContent;
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    pContent->Initialize(pInfo);
+//  pContent->Initialize(pInfo);
 }
 
 LayoutDialogChildWindow::~LayoutDialogChildWindow (void)
 {
+
+}
+
+SfxPopupWindow* LayoutDialogChildWindow::createChildWindow(SfxViewFrame& rViewFrame, ::Window* pParent)
+{
+    SfxPopupWindow* pWin = 0;
+    sd::ViewShellBase* pViewShellBase = sd::ViewShellBase::GetViewShellBase( &rViewFrame );
+    if( pViewShellBase )
+    {
+        pWin = new SdLayoutDialogContent( *pViewShellBase, pParent );
+    }
+    return pWin;
 }
 
 // -----------------------------------------------------------------------
@@ -143,11 +159,15 @@ static snewfoil_value_info standard[] =
 
 // -----------------------------------------------------------------------
 
-SdLayoutDialogContent::SdLayoutDialogContent( SfxBindings* pInBindings, SfxChildWindow *pCW, Window* pParent, ViewShellBase& rBase)
-: SfxDockingWindow(pInBindings, pCW, pParent, SdResId( FLT_WIN_LAYOUT_DIALOG ))
+SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, Window* pParent )
+: SfxPopupWindow(SID_ASSIGN_LAYOUT, rBase.GetFrame()->GetTopFrame()->GetFrameInterface(), pParent, SdResId( FLT_WIN_LAYOUT_DIALOG ))
 , meCurrentLayout( AUTOLAYOUT_NONE )
 , mrBase(rBase)
 {
+    String sResetSlideLayout( SdResId( STR_RESET_LAYOUT ) );
+
+    FreeResource();
+
 //  SetHelpId( HID_POPUP_LAYOUT );
 
     const Color aMenuColor( GetSettings().GetStyleSettings().GetMenuColor() );
@@ -194,7 +214,17 @@ SdLayoutDialogContent::SdLayoutDialogContent( SfxBindings* pInBindings, SfxChild
     mpToolbarMenu->appendEntry( -1, String( SdResId( STR_UNDO_MODIFY_PAGE ) ) );
     mpToolbarMenu->appendEntry( 0, mpLayoutSet );
     mpToolbarMenu->appendSeparator();
-    mpToolbarMenu->appendEntry( 1, String( RTL_CONSTASCII_USTRINGPARAM("Reset Slide Layout") ));
+
+    Reference< XFrame > xFrame( GetFrame(), UNO_QUERY );
+    if( xFrame.is() )
+    {
+        Image aImg( ::GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Undo") ), FALSE, FALSE ) );
+        mpToolbarMenu->appendEntry( 1, sResetSlideLayout, aImg);
+    }
+    else
+    {
+        mpToolbarMenu->appendEntry( 1, sResetSlideLayout);
+    }
 
     SetOutputSizePixel( mpToolbarMenu->getMenuSize() );
     mpToolbarMenu->SetOutputSizePixel( GetOutputSizePixel() );
@@ -202,13 +232,15 @@ SdLayoutDialogContent::SdLayoutDialogContent( SfxBindings* pInBindings, SfxChild
     mpToolbarMenu->Show();
 
 //    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" )));
+}
 
-    FreeResource();
+SdLayoutDialogContent::~SdLayoutDialogContent()
+{
 }
 
 void SdLayoutDialogContent::Resize (void)
 {
-    SfxDockingWindow::Resize();
+    SfxPopupWindow::Resize();
     mpToolbarMenu->SetPosSizePixel( Point(0,0), GetSizePixel() );
 }
 
@@ -247,21 +279,16 @@ void SdLayoutDialogContent::StateChanged( USHORT nSID, SfxItemState eState, cons
 
 IMPL_LINK( SdLayoutDialogContent, SelectHdl, void *, pControl )
 {
-/*
     if ( IsInPopupMode() )
         EndPopupMode();
+/*
     AutoLayout eLayout = meCurrentLayout;
 
     if( pControl == mpLayoutSet )
         eLayout = static_cast< AutoLayout >(mpLayoutSet->GetSelectItemId()-1);
 
-    const rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:AssignLayout" ));
-
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("WhatLayout") );
-    aArgs[0].Value <<= static_cast<sal_Int32>(eLayout);
-
-    SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),  aCommand, aArgs );
+    const SfxUInt32Item aItem(ID_VAL_WHATLAYOUT, eLayout);
+    GetBindings().GetDispatcher()->Execute(SID_ASSIGN_LAYOUT,SFX_CALLMODE_ASYNCHRON,&aItem,0);
 */
     return 0;
 }
