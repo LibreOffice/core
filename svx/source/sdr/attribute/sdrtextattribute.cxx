@@ -65,7 +65,8 @@ namespace drawinglayer
             bool bBlink,
             bool bScroll,
             bool bInEditMode,
-            bool bFixedCellHeight)
+            bool bFixedCellHeight,
+            bool bWrongSpell)
         :   mpSdrText(&rSdrText),
             maOutlinerParaObject(rOutlinerParaObject),
             mpSdrFormTextAttribute(0),
@@ -82,7 +83,8 @@ namespace drawinglayer
             mbBlink(bBlink),
             mbScroll(bScroll),
             mbInEditMode(bInEditMode),
-            mbFixedCellHeight(bFixedCellHeight)
+            mbFixedCellHeight(bFixedCellHeight),
+            mbWrongSpell(bWrongSpell)
         {
             if(XFT_NONE != eFormTextStyle)
             {
@@ -123,7 +125,8 @@ namespace drawinglayer
             mbBlink(rCandidate.isBlink()),
             mbScroll(rCandidate.isScroll()),
             mbInEditMode(rCandidate.isInEditMode()),
-            mbFixedCellHeight(rCandidate.isFixedCellHeight())
+            mbFixedCellHeight(rCandidate.isFixedCellHeight()),
+            mbWrongSpell(rCandidate.isWrongSpell())
         {
             if(rCandidate.getSdrFormTextAttribute())
             {
@@ -164,6 +167,7 @@ namespace drawinglayer
             mbScroll = rCandidate.isScroll();
             mbInEditMode = rCandidate.isInEditMode();
             mbFixedCellHeight = rCandidate.isFixedCellHeight();
+            mbWrongSpell = rCandidate.isWrongSpell();
 
             return *this;
         }
@@ -197,7 +201,8 @@ namespace drawinglayer
                 && isBlink() == rCandidate.isBlink()
                 && isScroll() == rCandidate.isScroll()
                 && isInEditMode() == rCandidate.isInEditMode()
-                && isFixedCellHeight() == rCandidate.isFixedCellHeight());
+                && isFixedCellHeight() == rCandidate.isFixedCellHeight()
+                && isWrongSpell() == rCandidate.isWrongSpell());
         }
 
         void SdrTextAttribute::getBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const

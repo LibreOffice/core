@@ -77,6 +77,9 @@
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sdtfchim.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/editstat.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -523,6 +526,10 @@ namespace drawinglayer
                 const SdrFitToSizeType eFit(rTextObj.GetFitToSize());
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
+                // #i107346#
+                const SdrOutliner& rDrawTextOutliner = rText.GetModel()->GetDrawOutliner(&rTextObj);
+                const bool bWrongSpell(rDrawTextOutliner.GetControlWord() & EE_CNTRL_ONLINESPELLING);
+
                 pRetval = new attribute::SdrTextAttribute(
                     rText,
                     aOutlinerParaObject,
@@ -539,7 +546,8 @@ namespace drawinglayer
                     SDRTEXTANI_BLINK == eAniKind,
                     SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind,
                     bInEditMode,
-                    ((const SdrTextFixedCellHeightItem&)rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+                    ((const SdrTextFixedCellHeightItem&)rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
+                    bWrongSpell);
             }
 
             return pRetval;
