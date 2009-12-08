@@ -64,6 +64,8 @@
 #include <osl/process.h>
 
 //CP : end
+#include <rtl/memory.h>
+
 #include "../diagnose.hxx"
 
 using namespace xmlsecurity;
@@ -995,7 +997,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     CERT_ENHKEY_USAGE   enhKeyUsage ;
     CERT_USAGE_MATCH    certUsage ;
     CERT_CHAIN_PARA     chainPara ;
-    SecureZeroMemory(&chainPara, sizeof(CERT_CHAIN_PARA));
+    rtl_zeroMemory(&chainPara, sizeof(CERT_CHAIN_PARA));
 
     //Prepare parameter for CertGetCertificateChain
     enhKeyUsage.cUsageIdentifier = 0 ;
