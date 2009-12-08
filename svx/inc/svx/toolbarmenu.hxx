@@ -34,6 +34,7 @@
 #include <vector>
 
 #include <vcl/ctrl.hxx>
+#include <vcl/menu.hxx>
 
 #include "svx/svxdllapi.h"
 
