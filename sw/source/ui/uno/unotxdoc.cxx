@@ -135,6 +135,8 @@
 
 #include <svtools/stylepool.hxx>
 #include <swatrset.hxx>
+#include <view.hxx>
+#include <srcview.hxx>
 
 //#include <com/sun/star/i18n/ScriptType.hpp>
 #include <svtools/langtab.hxx>
@@ -177,6 +179,25 @@ using ::osl::FileBase;
 /******************************************************************************
  *
  ******************************************************************************/
+
+extern bool lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
+
+SwPrintUIOptions * lcl_GetPrintUIOptions(
+    SwDocShell * pDocShell,
+    const SfxViewShell * pView )
+{
+    if (!pDocShell)
+        return NULL;
+
+    const BOOL bWebDoc      = NULL != dynamic_cast< const SwWebDocShell * >(pDocShell);
+    const bool bSwSrcView   = NULL != dynamic_cast< const SwSrcView * >(pView);
+    const SwView * pSwView = dynamic_cast< const SwView * >(pView);
+    const bool bHasSelection    = pSwView ? pSwView->HasSelection( sal_False ) : false;  // check for any selection, not just text selection
+    const bool bHasPostIts      = lcl_GetPostIts( pDocShell->GetDoc(), 0 );
+    return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts );
+}
+
+////////////////////////////////////////////////////////////
 
 
 SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
@@ -2614,10 +2635,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if (!bIsSwSrcView && !m_pRenderData)
         m_pRenderData = new SwRenderData;
     if (!m_pPrintUIOptions)
-    {
-        const BOOL bWebDoc = (0 != PTR_CAST(SwWebDocShell, pDocShell));
-        m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc, bIsSwSrcView );
-    }
+        m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
     const bool bIsSkipEmptyPages    = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
@@ -2753,11 +2771,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     // otherwise be provided here!
 //    if( ! m_pRenderData )
 //        m_pRenderData = new SwRenderData;
-    if( ! m_pPrintUIOptions )
-    {
-        const BOOL bWebDoc = (0 != PTR_CAST(SwWebDocShell, pDocShell));
-        m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc, bIsSwSrcView );
-    }
+    if (!m_pPrintUIOptions)
+        m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bPrintProspect    = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     const bool bIsSkipEmptyPages = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
@@ -2913,10 +2928,7 @@ void SAL_CALL SwXTextDocument::render(
     if (!bIsSwSrcView && !m_pRenderData)
         m_pRenderData = new SwRenderData;
     if (!m_pPrintUIOptions)
-    {
-        const BOOL bWebDoc = (0 != PTR_CAST(SwWebDocShell, pDocShell));
-        m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc, bIsSwSrcView );
-    }
+        m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     const bool bLastPage        = m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False );

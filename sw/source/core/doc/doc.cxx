@@ -1078,10 +1078,12 @@ USHORT _PostItFld::GetPageNo(
 }
 
 
-void lcl_GetPostIts(
+bool lcl_GetPostIts(
     IDocumentFieldsAccess* pIDFA,
-    _SetGetExpFlds& rSrtLst )
+    _SetGetExpFlds * pSrtLst )
 {
+    bool bHasPostIts = false;
+
     SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
     DBG_ASSERT( pFldType, "kein PostItType ? ");
 
@@ -1093,14 +1095,24 @@ void lcl_GetPostIts(
         const SwTxtFld* pTxtFld;
 
         for( pLast = aIter.First( TYPE(SwFmtFld)); pLast; pLast = aIter.Next() )
+        {
             if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
                 pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
-                SwNodeIndex aIdx( pTxtFld->GetTxtNode() );
-                _PostItFld* pNew = new _PostItFld( aIdx, pTxtFld );
-                rSrtLst.Insert( pNew );
+                bHasPostIts = true;
+                if (pSrtLst)
+                {
+                    SwNodeIndex aIdx( pTxtFld->GetTxtNode() );
+                    _PostItFld* pNew = new _PostItFld( aIdx, pTxtFld );
+                    pSrtLst->Insert( pNew );
+                }
+                else
+                    break;  // we just wanted to check for the existence of postits ...
             }
+        }
     }
+
+    return bHasPostIts;
 }
 
 

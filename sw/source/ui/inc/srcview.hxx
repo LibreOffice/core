@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 #ifndef _SRCVIEW_HXX
-#define _SRCIEW_HXX
+#define _SRCVIEW_HXX
 
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>

@@ -102,7 +102,7 @@
 #define JOBSET_ERR_ISSTARTET        2
 
 
-extern void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& rSrtLst );
+extern bool lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
 
 
 using namespace ::com::sun::star;
@@ -255,7 +255,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
 {
     DBG_ASSERT( !m_pPostItFields && !m_pPostItDoc && !m_pPostItShell, "some post-it data already exists" );
     m_pPostItFields = new _SetGetExpFlds;
-    lcl_GetPostIts( pDoc, *m_pPostItFields );
+    lcl_GetPostIts( pDoc, m_pPostItFields );
     m_pPostItDoc    = new SwDoc;
 
     //!! Disable spell and grammar checking in the temporary document.
@@ -357,7 +357,7 @@ void SwRenderData::MakeSwPrtOptions(
 
 /*****************************************************************************/
 
-SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
+SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView, bool bHasSelection, bool bHasPostIts ) :
     m_pLast( NULL )
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
@@ -466,19 +466,22 @@ SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
 
     // create a choice for the content to create
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
-    uno::Sequence< rtl::OUString > aChoices( 3 );
-    uno::Sequence< rtl::OUString > aHelpText( 3 );
+    uno::Sequence< rtl::OUString > aChoices( bHasSelection ? 3 : 2 );
+    uno::Sequence< rtl::OUString > aHelpText( bHasSelection ? 3 : 2 );
     aChoices[0] = aLocalizedStrings.GetString( 38 );
     aHelpText[0] = aLocalizedStrings.GetString( 39 );
     aChoices[1] = aLocalizedStrings.GetString( 40 );
     aHelpText[1] = aLocalizedStrings.GetString( 41 );
-    aChoices[2] = aLocalizedStrings.GetString( 42 );
-    aHelpText[2] = aLocalizedStrings.GetString( 43 );
+    if (bHasSelection)
+    {
+        aChoices[2] = aLocalizedStrings.GetString( 42 );
+        aHelpText[2] = aLocalizedStrings.GetString( 43 );
+    }
     m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
                                                          aHelpText,
                                                          aPrintRangeName,
                                                          aChoices,
-                                                         0 );
+                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */);
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
     m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
@@ -504,6 +507,7 @@ SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
     aHelpText[0] = aLocalizedStrings.GetString( 25 );
     aHelpText[1] = aLocalizedStrings.GetString( 25 );
     vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), 0, sal_False );
+    aAnnotOpt.mbEnabled = bHasPostIts;
     m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 26 ),
                                                     aHelpText,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintAnnotationMode" ) ),
@@ -830,16 +834,10 @@ void lcl_SetState( SfxProgress& rProgress, ULONG nPage, ULONG nMax,
 
 
 
-void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress )
+void ViewShell::CalcPagesForPrint( USHORT nMax )
 {
     SET_CURR_SHELL( this );
 
-    //Seitenweise durchformatieren, by the way kann die Statusleiste
-    //angetriggert werden, damit der Anwender sieht worauf er wartet.
-    //Damit der Vorgang moeglichst transparent gestaltet werden kann
-    //Versuchen wir mal eine Schaetzung.
-    SfxPrinter* pPrt = getIDocumentDeviceAccess()->getPrinter( false );
-    BOOL bPrtJob = pPrt ? pPrt->IsJobActive() : FALSE;
     SwRootFrm* pLayout = GetLayout();
     // ULONG nStatMax = pLayout->GetPageNum();
 
@@ -849,12 +847,6 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress )
     pLayout->StartAllAction();
     for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
     {
-        if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
-            break;
-
-        if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
-            break;
-
         pPage->Calc();
         SwRect aOldVis( VisArea() );
         aVisArea = pPage->Frm();
@@ -868,12 +860,8 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress )
 
         aVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
         Imp()->SetFirstVisPageInvalid();
-        SwPaintQueue::Repaint();
+//       SwPaintQueue::Repaint();
     }
-
-    if (pProgress)
-        aAction.SetProgress( NULL );
-
     pLayout->EndAllAction();
 }
 
@@ -1153,20 +1141,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         }
         DBG_ASSERT( pStPage, "failed to get start page" );
 
-#if 0   // applying view options and formatting the dcoument should now only be done in getRendererCount!
-        // benoetigte Seiten fuers Drucken formatieren
-        pShell->CalcPagesForPrint( (USHORT)nPage, 0 );
-
-        // Some field types, can require a valid layout
-        // (expression fields in tables). For these we do an UpdateFlds
-        // here after calculation of the pages.
-        // --> FME 2004-06-21 #i9684# For performance reasons, we do not update
-        //                            the fields during pdf export.
-        // #i56195# prevent update of fields (for mail merge)
-        if ( !bIsPDFExport && rPrintData.bUpdateFieldsInPrinting )
-            pShell->UpdateFlds(TRUE);
-        // <--
-#endif
+        //!! applying view options and formatting the dcoument should now only be done in getRendererCount!
 
         ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
                 rPrintData.GetRenderData().m_pPostItShell : pShell;

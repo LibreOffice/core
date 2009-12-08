@@ -131,25 +131,7 @@ void ViewShell::PrintProspect(
 
     aShell.PrepareForPrint( rPrintData );
 
-#if 0   // applying view options and formatting the dcoument should now only be done in getRendererCount!
-    // gibt es versteckte Absatzfelder, unnoetig wenn die Absaetze bereits
-    // ausgeblendet sind.
-    int bHiddenFlds = FALSE;
-    SwFieldType* pFldType = 0;
-    if ( GetViewOptions()->IsShowHiddenPara() )
-    {
-        pFldType = getIDocumentFieldsAccess()->GetSysFldType( RES_HIDDENPARAFLD );
-        bHiddenFlds = 0 != pFldType->GetDepends();
-        if( bHiddenFlds )
-        {
-            SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-            pFldType->Modify( &aHnt, 0);
-        }
-    }
-
-    // Seiten fuers Drucken formatieren
-    aShell.CalcPagesForPrint( nPageMax, 0 );
-#endif
+    //!! applying view options and formatting the dcoument should now only be done in getRendererCount!
 
     MapMode aMapMode( MAP_TWIP );
     Size aPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) );
@@ -271,14 +253,8 @@ void ViewShell::PrintProspect(
 
     SwPaintQueue::Repaint();
 
-#if 0   // applying view options and formatting the dcoument should now only be done in getRendererCount!
-    if( bHiddenFlds )
-    {
-        SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-        pFldType->Modify( &aHnt, 0);
-        CalcPagesForPrint( nPageMax );
-    }
-#endif
+    //!! applying/modifying view options and formatting the dcoument should now only be done in getRendererCount!
+
     pFntCache->Flush();
 
     // restore settings of OutputDevice (should be done always now since the

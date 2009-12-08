@@ -50,6 +50,7 @@ class OutputDevice;
 class SwViewOptionAdjust_Impl;
 class SwPrtOptions;
 class SwWrtShell;
+class SfxViewShell;
 
 
 ////////////////////////////////////////////////////////////
@@ -60,7 +61,7 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
     OutputDevice* m_pLast;
 
 public:
-    SwPrintUIOptions( bool bWeb, bool bSwSrcView );
+    SwPrintUIOptions( bool bWeb, bool bSwSrcView, bool bHasSelection, bool bHasPostIts );
     ~SwPrintUIOptions();
 
     bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
