@@ -125,7 +125,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         Reference<XComponentContext> m_xRemoteContext;
 
         enum reg {
-            REG_UNINIT, REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED
+            REG_UNINIT, REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED, REG_MAYBE_REGISTERED
         } m_registered;
 
         Reference<loader::XImplementationLoader> getComponentInfo(
@@ -146,6 +146,10 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             Reference<XCommandEnvironment> const & xCmdEnv );
 
         const Reference<registry::XSimpleRegistry> getRDB() const;
+
+        //Provides the read-only registry (e.g. not the one based on the duplicated
+        //rdb files
+        const Reference<registry::XSimpleRegistry> getRDB_RO() const;
 
     public:
         inline ComponentPackageImpl(
@@ -224,8 +228,21 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     OUString m_commonRDB;
     OUString m_nativeRDB;
+
+    //URLs of the read-only rdbs (e.g. not the ones of the duplicated files)
+    OUString m_commonRDB_RO;
+    OUString m_nativeRDB_RO;
+
+    //These rdbs are for writing new service entries. The rdb files are copies
+    //which are created when services are added or removed.
     Reference<registry::XSimpleRegistry> m_xCommonRDB;
     Reference<registry::XSimpleRegistry> m_xNativeRDB;
+
+    //These rdbs are created on the read-only rdbs which are already used
+    //by UNO since the startup of the current session.
+    Reference<registry::XSimpleRegistry> m_xCommonRDB_RO;
+    Reference<registry::XSimpleRegistry> m_xNativeRDB_RO;
+
 
     void unorc_verify_init( Reference<XCommandEnvironment> const & xCmdEnv );
     void unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv );
@@ -255,6 +272,9 @@ public:
 
     //Will be called from ComponentPackageImpl
     void initServiceRdbFiles();
+
+    //Creates the READ ONLY registries (m_xCommonRDB_RO,m_xNativeRDB_RO)
+    void initServiceRdbFiles_RO();
 };
 
 //______________________________________________________________________________
@@ -262,12 +282,12 @@ const Reference<registry::XSimpleRegistry>
 BackendImpl::ComponentPackageImpl::getRDB() const
 {
     BackendImpl * that = getMyBackend();
+
     //Late "initialization" of the services rdb files
     //This is to prevent problems when running several
     //instances of OOo with root rights in parallel. This
     //would otherwise cause problems when copying the rdbs.
-    //Now this code is only performed if isRegistered or processPackage
-    //is called.
+    //See  http://qa.openoffice.org/issues/show_bug.cgi?id=99257
     {
         const ::osl::MutexGuard guard( getMutex() );
         if (!that->bSwitchedRdbFiles)
@@ -276,12 +296,24 @@ BackendImpl::ComponentPackageImpl::getRDB() const
             that->initServiceRdbFiles();
         }
     }
-
     if (m_loader.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.SharedLibrary") ))
         return that->m_xNativeRDB;
     else
         return that->m_xCommonRDB;
+}
+
+//Returns the read only RDB.
+const Reference<registry::XSimpleRegistry>
+BackendImpl::ComponentPackageImpl::getRDB_RO() const
+{
+    BackendImpl * that = getMyBackend();
+
+    if (m_loader.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.SharedLibrary") ))
+        return that->m_xNativeRDB_RO;
+    else
+        return that->m_xCommonRDB_RO;
 }
 
 BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
@@ -345,20 +377,22 @@ void BackendImpl::disposing()
 void BackendImpl::initServiceRdbFiles()
 {
     const Reference<XCommandEnvironment> xCmdEnv;
-    if (! m_readOnly) {
+    if (! m_readOnly)
+    {
         ::ucbhelper::Content cacheDir( getCachePath(), xCmdEnv );
         ::ucbhelper::Content oldRDB;
         // switch common rdb:
-        if (m_commonRDB.getLength() > 0)
+        if (m_commonRDB_RO.getLength() > 0)
+        {
             create_ucb_content(
-            &oldRDB, makeURL( getCachePath(), m_commonRDB ),
-            xCmdEnv, false /* no throw */ );
-        m_commonRDB = m_commonRDB.equalsAsciiL(
+                &oldRDB, makeURL( getCachePath(), m_commonRDB_RO),
+                xCmdEnv, false /* no throw */ );
+        }
+        m_commonRDB = m_commonRDB_RO.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("common.rdb") )
-            ? OUSTR("common_.rdb") : OUSTR("common.rdb");
+             ? OUSTR("common_.rdb") : OUSTR("common.rdb");
         if (oldRDB.get().is())
         {
-
             if (! cacheDir.transferContent(
                 oldRDB, ::ucbhelper::InsertOperation_COPY,
                 m_commonRDB, NameClash::OVERWRITE ))
@@ -370,13 +404,15 @@ void BackendImpl::initServiceRdbFiles()
             oldRDB = ::ucbhelper::Content();
         }
         // switch native rdb:
-        if (m_nativeRDB.getLength() > 0)
+        if (m_nativeRDB_RO.getLength() > 0)
+        {
             create_ucb_content(
-            &oldRDB, makeURL( getCachePath(), m_nativeRDB ),
-            xCmdEnv, false /* no throw */ );
+                &oldRDB, makeURL(getCachePath(), m_nativeRDB_RO),
+                xCmdEnv, false /* no throw */ );
+        }
         const OUString plt_rdb( getPlatformString() + OUSTR(".rdb") );
         const OUString plt_rdb_( getPlatformString() + OUSTR("_.rdb") );
-        m_nativeRDB = m_nativeRDB.equals( plt_rdb ) ? plt_rdb_ : plt_rdb;
+        m_nativeRDB = m_nativeRDB_RO.equals( plt_rdb ) ? plt_rdb_ : plt_rdb;
         if (oldRDB.get().is())
         {
             if (! cacheDir.transferContent(
@@ -411,6 +447,37 @@ void BackendImpl::initServiceRdbFiles()
         m_xNativeRDB->open(
             makeURL( expandUnoRcUrl(getCachePath()), m_nativeRDB ),
             m_readOnly, !m_readOnly );
+    }
+}
+
+void BackendImpl::initServiceRdbFiles_RO()
+{
+    const Reference<XCommandEnvironment> xCmdEnv;
+
+    // common rdb for java, native rdb for shared lib components
+    if (m_commonRDB_RO.getLength() > 0)
+    {
+        m_xCommonRDB_RO.set(
+            m_xComponentContext->getServiceManager()
+            ->createInstanceWithContext(
+            OUSTR("com.sun.star.registry.SimpleRegistry"),
+            m_xComponentContext), UNO_QUERY_THROW);
+        m_xCommonRDB_RO->open(
+            makeURL(expandUnoRcUrl(getCachePath()), m_commonRDB_RO),
+            sal_True, //read-only
+            sal_True); // create data source if necessary
+    }
+    if (m_nativeRDB_RO.getLength() > 0)
+    {
+        m_xNativeRDB_RO.set(
+            m_xComponentContext->getServiceManager()
+            ->createInstanceWithContext(
+            OUSTR("com.sun.star.registry.SimpleRegistry"),
+            m_xComponentContext), UNO_QUERY_THROW);
+        m_xNativeRDB_RO->open(
+            makeURL(expandUnoRcUrl(getCachePath()), m_nativeRDB_RO),
+            sal_True, //read-only
+            sal_True); // create data source if necessary
     }
 }
 
@@ -492,7 +559,12 @@ BackendImpl::BackendImpl(
     }
     else
     {
+        //do this before initServiceRdbFiles_RO, because it determines
+        //m_commonRDB and m_nativeRDB
         unorc_verify_init( xCmdEnv );
+
+        initServiceRdbFiles_RO();
+
     }
 }
 
@@ -687,7 +759,7 @@ void BackendImpl::unorc_verify_init(
                 sal_Int32 start = sizeof ("UNO_SERVICES=?$ORIGIN/") - 1;
                 sal_Int32 sep = line.indexOf( ' ', start );
                 OSL_ASSERT( sep > 0 );
-                m_commonRDB = line.copy( start, sep - start );
+                m_commonRDB_RO = line.copy( start, sep - start );
             }
 
             // native rc:
@@ -697,7 +769,7 @@ void BackendImpl::unorc_verify_init(
                     xCmdEnv, false /* no throw */ )) {
                 if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
                               RTL_TEXTENCODING_UTF8 )) {
-                    m_nativeRDB = line.copy(
+                    m_nativeRDB_RO = line.copy(
                         sizeof ("UNO_SERVICES=?$ORIGIN/") - 1 );
                 }
             }
@@ -763,12 +835,19 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
         }
         buf.append(LF);
     }
-    if (m_commonRDB.getLength() > 0 || m_nativeRDB.getLength() > 0)
+
+    // If we duplicated the common or native rdb then we must use those urls
+    //otherwise we use those of the original files. That is, m_commonRDB_RO and
+    //m_nativeRDB_RO;
+    OUString sCommonRDB(m_commonRDB.getLength() > 0 ? m_commonRDB : m_commonRDB_RO);
+    OUString sNativeRDB(m_nativeRDB.getLength() > 0 ? m_nativeRDB : m_nativeRDB_RO);
+
+    if (sCommonRDB.getLength() > 0 || sNativeRDB.getLength() > 0)
     {
         buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
         buf.append( ::rtl::OUStringToOString(
-                        m_commonRDB, RTL_TEXTENCODING_ASCII_US ) );
-        if (m_nativeRDB.getLength() > 0)
+                        sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
+        if (sNativeRDB.getLength() > 0)
         {
             buf.append( RTL_CONSTASCII_STRINGPARAM(
                             " ${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}") );
@@ -778,7 +857,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
             ::rtl::OStringBuffer buf2;
             buf2.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
             buf2.append( ::rtl::OUStringToOString(
-                             m_nativeRDB, RTL_TEXTENCODING_ASCII_US ) );
+                             sNativeRDB, RTL_TEXTENCODING_ASCII_US ) );
             buf2.append(LF);
 
             const Reference<io::XInputStream> xData(
@@ -1026,7 +1105,8 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
     if (m_registered == REG_UNINIT)
     {
         m_registered = REG_NOT_REGISTERED;
-        const Reference<registry::XSimpleRegistry> xRDB( getRDB() );
+        bool bAmbiguousComponentName = false;
+        const Reference<registry::XSimpleRegistry> xRDB( getRDB_RO() );
         if (xRDB.is())
         {
             // lookup rdb for location URL:
@@ -1046,21 +1126,51 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
                     pImplNames[ pos ] + OUSTR("/UNO/LOCATION") );
                 const Reference<registry::XRegistryKey> xKey(
                     xRootKey->openKey(key) );
-                if (xKey.is() && xKey->isValid()) {
+                if (xKey.is() && xKey->isValid())
+                {
                     const OUString location( xKey->getAsciiValue() );
                     if (location.equalsIgnoreAsciiCase( getURL() ))
+                    {
                         break;
+                    }
+                    else
+                    {
+                        //try to match only the file name
+                        OUString thisUrl(getURL());
+                        OUString thisFileName(thisUrl.copy(thisUrl.lastIndexOf('/')));
+
+                        OUString locationFileName(location.copy(location.lastIndexOf('/')));
+                        if (locationFileName.equalsIgnoreAsciiCase(thisFileName))
+                            bAmbiguousComponentName = true;
+                    }
                 }
             }
             if (pos >= 0)
                 m_registered = REG_REGISTERED;
+            else if (bAmbiguousComponentName)
+                m_registered = REG_MAYBE_REGISTERED;
         }
     }
+
+    //Different extensions can use the same service implementations. Then the extensions
+    //which was installed last will overwrite the one from the other extension. That is
+    //the registry will contain the path (the location) of the library or jar of the
+    //second extension. In this case isRegistered called for the lib of the first extension
+    //would return "not registered". That would mean that during uninstallation
+    //XPackage::registerPackage is not called, because it just was not registered. This is,
+    //however, necessary for jar files. Registering and unregistering update
+    //uno_packages/cache/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc
+    //Therefore, we will return always "is ambiguous" if the path of this component cannot
+    //be found in the registry and if there is another path and both have the same file name (but
+    //the rest of the path is different).
+    //If the caller cannot precisely determine that this package was registered, then it must
+    //call registerPackage.
+    sal_Bool bAmbiguous = m_registered == REG_VOID // REG_VOID == we are in the progress of unregistration
+        || m_registered == REG_MAYBE_REGISTERED;
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>(
-            m_registered == REG_REGISTERED,
-            m_registered == REG_VOID /* IsAmbiguous */ ) );
+            m_registered == REG_REGISTERED, bAmbiguous) );
 }
 
 //______________________________________________________________________________
@@ -1071,6 +1181,8 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
+
+
     const bool java = m_loader.equalsAsciiL(
         RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.Java2") );
     const OUString url( getURL() );
@@ -1079,9 +1191,6 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
 
     if (doRegisterPackage)
     {
-        if (isJavaTypelib)
-            that->addToUnoRc( java, url, xCmdEnv );
-
         if (! m_xRemoteContext.is()) {
             m_xRemoteContext.set(
                 that->getObject( url ), UNO_QUERY );
@@ -1099,7 +1208,12 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
             m_xRemoteContext->getServiceManager()->createInstanceWithContext(
                 OUSTR("com.sun.star.registry.ImplementationRegistration"),
                 m_xRemoteContext ), UNO_QUERY_THROW );
+
         xImplReg->registerImplementation( m_loader, url, xServicesRDB );
+        //only write to unorc if registration was successful.
+        //It may fail if there is no suitable java.
+        if (isJavaTypelib)
+            that->addToUnoRc( java, url, xCmdEnv );
 
         t_stringlist implNames;
         t_stringpairvec singletons;
