@@ -62,9 +62,6 @@ INCPRE+=$(foreach,i,$(ATL_INCLUDE) -I$(i)) \
 .IF "$(PRODUCT)"!=""
 RC+=-DPRODUCT
 .ENDIF
-.IF "$(USE_STLP_DEBUG)"!=""
-CDEFS+=-D_DEBUG
-.ENDIF # "$(USE_STLP_DEBUG)"!=""
 
 RCFILES=\
         $(TARGET).rc
@@ -90,11 +87,7 @@ SHL1STDLIBS=\
 
 .IF "$(COM)"!="GCC"
 .IF "$(CCNUMVER)" > "001300000000"
-.IF "$(USE_STLP_DEBUG)" != ""
-    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
-.ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -116,9 +109,6 @@ SHL1RES=$(RES)$/$(TARGET).res
 
 .IF "$(BUILD_X64)"!=""
 # -------------------- x64 -----------------------
-.IF "$(USE_STLP_DEBUG)"!=""
-CDEFS_X64+=-D_DEBUG
-.ENDIF # "$(USE_STLP_DEBUG)"!=""
 
 CDEFS_X64+:=$(foreach,i,$(CDEFS) $(subst,-D_X86_=1,  $i))
 LIBTARGET_X64=NO
@@ -152,11 +142,7 @@ SHL1STDLIBS_X64+=\
 SHL1OBJS_X64=$(SLOFILES_X64)
 SHL1DEF_X64=$(TARGET).def
 
-.IF "$(USE_STLP_DEBUG)" != ""
-    SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atlsd.lib
-.ELSE
-    SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atls.lib
-.ENDIF
+SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atls.lib
 
 .ENDIF # "$(BUILD_X64)"!=""
 
