@@ -1679,7 +1679,11 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
             { ResultSetType::SCROLL_INSENSITIVE, ResultSetConcurrency::READ_ONLY },
             { ResultSetType::FORWARD_ONLY, ResultSetConcurrency::READ_ONLY }
         };
-        for ( sal_Int32 i=0; i<5; ++i )
+        sal_Int32 i=0;
+        if ( m_xActiveConnection->getMetaData()->isReadOnly() )
+            i = 2; // if the database is read-only we only should use read-only concurrency
+
+        for ( ; i<5; ++i )
         {
             nResultSetType = nCharacteristics[i][0];
             nResultSetConcurrency = nCharacteristics[i][1];
