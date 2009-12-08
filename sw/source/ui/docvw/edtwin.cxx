@@ -151,7 +151,7 @@
 
 #include <IMark.hxx>
 #include <doc.hxx>
-#include <xmloff/ecmaflds.hxx>
+#include <xmloff/odffields.hxx>
 
 #include "PostItMgr.hxx"
 #include "postit.hxx"
@@ -4218,13 +4218,13 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
                                     //SwDocShell* pDocSh = rView.GetDocShell();
                                     //SwDoc *pDoc=pDocSh->GetDoc();
-                                    if (fieldBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
+                                    if (fieldBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
                                     {
                                         ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(fieldBM);
                                         pCheckboxFm->SetChecked(!pCheckboxFm->IsChecked());
                                         pCheckboxFm->Invalidate();
                                         rSh.InvalidateWindows( rView.GetVisArea() );
-                                    } else if (fieldBM->GetFieldname().equalsAscii( ECMA_FORMDROPDOWN) ) {
+                                    } else if (fieldBM->GetFieldname().equalsAscii( ODF_FORMDROPDOWN) ) {
                                         rView.ExecFieldPopup( aDocPt, fieldBM );
                                         fieldBM->Invalidate();
                                         rSh.InvalidateWindows( rView.GetVisArea() );

@@ -41,7 +41,7 @@
 #include <dcontact.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <xmloff/ecmaflds.hxx>
+#include <xmloff/odffields.hxx>
 #include <editsh.hxx>
 #include <errhdl.hxx>
 #include <fmtanchr.hxx>

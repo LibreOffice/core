@@ -105,7 +105,7 @@
 #include "ww8attributeoutput.hxx"
 
 #include <IDocumentMarkAccess.hxx>
-#include <xmloff/ecmaflds.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -3468,16 +3468,16 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
 
-    ASSERT(rFieldmark.GetFieldname().equalsAscii( ECMA_FORMTEXT ) || rFieldmark.GetFieldname().equalsAscii( ECMA_FORMDROPDOWN ) || rFieldmark.GetFieldname().equalsAscii( ECMA_FORMCHECKBOX ), "Unknown field type!!!");
-    if ( ! ( rFieldmark.GetFieldname().equalsAscii( ECMA_FORMTEXT ) ||
-                rFieldmark.GetFieldname().equalsAscii( ECMA_FORMDROPDOWN ) ||
-                rFieldmark.GetFieldname().equalsAscii( ECMA_FORMCHECKBOX ) ) )
+    ASSERT(rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ), "Unknown field type!!!");
+    if ( ! ( rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) ||
+                rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) ||
+                rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ) ) )
         return;
 
     int type = 0; // TextFieldmark
     if ( pAsCheckbox )
         type = 1;
-    if ( rFieldmark.GetFieldname().equalsAscii( ECMA_FORMDROPDOWN ) )
+    if ( rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) )
         type=2;
 
     ::sw::mark::IFieldmark::parameter_map_t::const_iterator pNameParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii("name"));
@@ -3514,7 +3514,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffres = 1;
     else if ( type == 2 )
     {
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN));
         if(pResParameter != rFieldmark.GetParameters()->end())
             pResParameter->second >>= ffres;
         else
@@ -3527,7 +3527,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     {
         aFldHeader[5] |= 0x80; // ffhaslistbox
         const ::sw::mark::IFieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_LISTENTRY));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
         if(pListEntries != pParameters->end())
         {
             uno::Sequence< ::rtl::OUString > vListEntries;

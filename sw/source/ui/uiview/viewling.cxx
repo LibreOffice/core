@@ -115,7 +115,7 @@
 
 #include <unomid.h>
 #include <IMark.hxx>
-#include <xmloff/ecmaflds.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <memory>
 
@@ -982,7 +982,7 @@ public:
     assert(fieldBM!=NULL);
     if (fieldBM!=NULL) {
         const IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
-        IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_LISTENTRY));
+        IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
         if(pListEntries != pParameters->end())
         {
             Sequence< ::rtl::OUString> vListEntries;
@@ -1064,7 +1064,7 @@ BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
     /*short ret=*/aFldDlg.Execute();
     int selection=aFldDlg.getSelection();
     if (selection>=0) {
-        (*fieldBM->GetParameters())[::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_RESULT)] = makeAny(selection);
+        (*fieldBM->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT)] = makeAny(selection);
     }
 
     pWrtShell->Pop( sal_False );

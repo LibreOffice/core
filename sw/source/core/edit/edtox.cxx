@@ -61,7 +61,7 @@
 #include <statstr.hrc>
 #endif
 #include <bookmrk.hxx>
-#include <xmloff/ecmaflds.hxx>
+#include <xmloff/odffields.hxx>
 
 
 using namespace ::com::sun::star;

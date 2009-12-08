@@ -55,7 +55,7 @@
 #include <IMark.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
-#include <xmloff/ecmaflds.hxx>
+#include <xmloff/odffields.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
@@ -784,18 +784,18 @@ sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
     return ret;
 }
 
-namespace ecma {
+namespace {
     static sal_Int32 getCurrentListIndex( IFieldmark* pBM,
             ::rtl::OUString* io_pCurrentText = NULL )
     {
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
-        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_RESULT));
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT));
         if(pResult != pParameters->end())
             pResult->second >>= nCurrentIdx;
         if(io_pCurrentText)
         {
-            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ECMA_FORMDROPDOWN_LISTENTRY));
+            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
             if(pListEntries != pParameters->end())
             {
                 uno::Sequence< ::rtl::OUString > vListEntries;
@@ -806,7 +806,7 @@ namespace ecma {
         }
         return nCurrentIdx;
     }
-} /* ecma */
+}
 
 //FIXME Fieldbk
 void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
@@ -824,13 +824,13 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
 
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
+        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
         { // a checkbox...
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
             bool checked = pCheckboxFm->IsChecked();
             rInf.DrawCheckBox(*this, checked);
         }
-        else if ( pBM->GetFieldname( ).equalsAscii(  ECMA_FORMDROPDOWN ) )
+        else if ( pBM->GetFieldname( ).equalsAscii(  ODF_FORMDROPDOWN ) )
         { // a list...
             rtl::OUString aTxt;
             rInf.DrawViewOpt( *this, POR_FLD );
@@ -854,16 +854,16 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
     ASSERT( pBM != NULL, "Where is my form field bookmark???" );
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) )
+        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
         {
             Width( rInf.GetTxtHeight(  ) );
             Height( rInf.GetTxtHeight(  ) );
             SetAscent( rInf.GetAscent(  ) );
         }
-        else if ( pBM->GetFieldname( ).equalsAscii( ECMA_FORMDROPDOWN ) )
+        else if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) )
         {
             ::rtl::OUString aTxt;
-            ecma::getCurrentListIndex( pBM, &aTxt );
+            getCurrentListIndex( pBM, &aTxt );
             SwPosSize aPosSize = rInf.GetTxtSize( aTxt );
             Width( aPosSize.Width(  ) );
             Height( aPosSize.Height(  ) );

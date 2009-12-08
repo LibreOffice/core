@@ -116,17 +116,17 @@ using namespace nsFieldFlags;
 
 static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
     ASSERT(pFieldmark!=NULL, "where is my fieldmark???");
-    if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMTEXT ) ) {
+    if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) ) {
         return String::CreateFromAscii(" FORMTEXT ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMDROPDOWN ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ) {
         return String::CreateFromAscii(" FORMDROPDOWN ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) ) {
         return String::CreateFromAscii(" FORMCHECKBOX ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_TOC ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_TOC ) ) {
         return String::CreateFromAscii(" TOC ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_HYPERLINK ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) ) {
         return String::CreateFromAscii(" HYPERLINK ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_PAGEREF ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_PAGEREF ) ) {
         return String::CreateFromAscii(" PAGEREF ");
     } else {
         return pFieldmark->GetFieldname();
@@ -135,17 +135,17 @@ static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
 
 ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
     ASSERT(pFieldmark!=NULL, "where is my fieldmark???");
-    if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMTEXT ) ) {
+    if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) ) {
         return ww::eFORMTEXT;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMDROPDOWN ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ) {
         return ww::eFORMDROPDOWN;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) ) {
         return ww::eFORMCHECKBOX;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_TOC ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_TOC ) ) {
         return ww::eTOC;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_HYPERLINK ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) ) {
         return ww::eHYPERLINK;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_PAGEREF ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_PAGEREF ) ) {
         return ww::ePAGEREF;
     } else {
         return ww::eUNKNOWN;
@@ -1753,12 +1753,12 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                if ( pFieldmark->GetFieldname().equalsAscii( ECMA_FORMTEXT ) )
+                if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), lcl_getFieldCode( pFieldmark ), WRITEFIELD_START | WRITEFIELD_CMD_START );
-                if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMTEXT ) )
+                if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) )
                     WriteFormData( *pFieldmark );
-                else if ( pFieldmark->GetFieldname( ).equalsAscii( ECMA_HYPERLINK ) )
+                else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) )
                     WriteHyperlinkData( *pFieldmark );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
             }
@@ -1769,7 +1769,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
-                if ( pFieldmark->GetFieldname().equalsAscii( ECMA_FORMTEXT ) )
+                if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
             else if ( ch == CH_TXT_ATR_FORMELEMENT )
@@ -1778,18 +1778,18 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                bool isEcma = pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMDROPDOWN ) ||
-                    pFieldmark->GetFieldname( ).equalsAscii( ECMA_FORMCHECKBOX );
+                bool isDropdownOrCheckbox = pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ||
+                    pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX );
 
-                if ( isEcma )
+                if ( isDropdownOrCheckbox )
                     AppendBookmark( pFieldmark->GetName(), 0 );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ),
                         lcl_getFieldCode( pFieldmark ),
                         WRITEFIELD_START | WRITEFIELD_CMD_START );
-                if ( isEcma )
+                if ( isDropdownOrCheckbox )
                     WriteFormData( *pFieldmark );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
-                if ( isEcma )
+                if ( isDropdownOrCheckbox )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
             nLen -= static_cast< USHORT >( ofs );

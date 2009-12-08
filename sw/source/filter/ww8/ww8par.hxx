@@ -60,7 +60,7 @@
 #include "ww8glsy.hxx"
 #include "wrtww8.hxx"
 #include "../inc/msfilter.hxx"
-#include <xmloff/ecmaflds.hxx>
+#include <xmloff/odffields.hxx>
 #include <IMark.hxx>
 
 class SwDoc;
