@@ -600,19 +600,22 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
         sal_Bool        mbAttachToDependency;
         rtl::OUString   maGroupHint;
         sal_Bool        mbInternalOnly;
+        sal_Bool        mbEnabled;
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maAddProps;
 
         UIControlOptions( const rtl::OUString& i_rDependsOnName = rtl::OUString(),
                           sal_Int32 i_nDependsOnEntry = -1,
                           sal_Bool i_bAttachToDependency = sal_False,
                           const rtl::OUString& i_rGroupHint = rtl::OUString(),
-                          sal_Bool i_bInternalOnly = sal_False
+                          sal_Bool i_bInternalOnly = sal_False,
+                          sal_Bool i_bEnabled = sal_True
                          )
         : maDependsOnName( i_rDependsOnName )
         , mnDependsOnEntry( i_nDependsOnEntry )
         , mbAttachToDependency( i_bAttachToDependency )
         , maGroupHint( i_rGroupHint )
-        , mbInternalOnly( i_bInternalOnly ) {}
+        , mbInternalOnly( i_bInternalOnly )
+        , mbEnabled( i_bEnabled ) {}
     };
 
     // general control

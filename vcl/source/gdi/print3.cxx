@@ -1562,6 +1562,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         + i_rControlOptions.maAddProps.getLength()                      // additional props
         + (i_rControlOptions.maGroupHint.getLength() ? 1 : 0)           // grouping
         + (i_rControlOptions.mbInternalOnly ? 1 : 0)                    // internal hint
+        + (i_rControlOptions.mbEnabled ? 0 : 1)                         // enabled
         ;
     if( i_rControlOptions.maDependsOnName.getLength() )
     {
@@ -1615,6 +1616,11 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
     {
         aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InternalUIOnly" ) );
         aCtrl[nUsed++].Value <<= sal_True;
+    }
+    if( ! i_rControlOptions.mbEnabled )
+    {
+        aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) );
+        aCtrl[nUsed++].Value <<= sal_False;
     }
 
     sal_Int32 nAddProps = i_rControlOptions.maAddProps.getLength();
