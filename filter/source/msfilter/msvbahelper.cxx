@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #include "precompiled_filter.hxx"
-#include <svx/msvbahelper.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
