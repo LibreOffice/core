@@ -212,6 +212,9 @@ SCPDEFS+=-DISOLANG_MAJOR=$(ISOLANG_MAJOR)
 .IF "$(DISABLE_NEON)" == "TRUE"
 SCPDEFS+=-DDISABLE_NEON
 .ENDIF
+.IF "$(SYSTEM_NEON)" == "YES"
+SCPDEFS+=-DSYSTEM_NEON
+.ENDIF
 
 # if yes or unset (neon not used) -> do not install openssl library!
 .IF $(SYSTEM_OPENSSL) != "YES"
