@@ -27,10 +27,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* and also:
- * Author: Florian Reuter <freuter@novell.com>
+
+/*
  * Copyright 2008 by Novell, Inc.
-*/
+ */
+
 #ifndef _ODFFIELDS_HXX
 #define _ODFFIELDS_HXX
 
