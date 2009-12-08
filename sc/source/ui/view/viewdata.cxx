@@ -612,16 +612,26 @@ void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
 
-    std::vector< SCTAB >::iterator it_end = tabs.end();
-    std::vector< SCTAB >::iterator it = tabs.begin();
-    for ( SCTAB i = ( bAll ? 0 : *it ); ( bAll ? i <= MAXTAB :  it != it_end  ); ++i , ++it )
-    {
-        if ( pTabData[i] )
-            pTabData[i]->eZoomType = eNew;
-    }
-
     if ( bAll )
+    {
+        for ( SCTAB i = 0; i <= MAXTAB; ++i )
+        {
+            if ( pTabData[i] )
+                pTabData[i]->eZoomType = eNew;
+        }
         eDefZoomType = eNew;
+    }
+    else
+    {
+        std::vector< SCTAB >::iterator it_end = tabs.end();
+        std::vector< SCTAB >::iterator it = tabs.begin();
+        for ( ; it != it_end; ++it )
+        {
+            SCTAB i = *it;
+            if ( pTabData[i] )
+                pTabData[i]->eZoomType = eNew;
+        }
+    }
 }
 
 void ScViewData::SetZoomType( SvxZoomType eNew, BOOL bAll )
@@ -659,22 +669,54 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
     if (aValidY>aFrac400)
         aValidY = aFrac400;
 
-    std::vector< SCTAB >::iterator it_end = tabs.end();
-    std::vector< SCTAB >::iterator it = tabs.begin();
-
-    for ( SCTAB i = ( bAll ? 0 : *it ); ( bAll ? i <= MAXTAB :  it != it_end  ); ++i , ++it )
+    if ( bAll )
     {
-        if ( pTabData[i] )
+        for ( SCTAB i = 0; i <= MAXTAB; ++i )
         {
-            if ( bPagebreak )
+            if ( pTabData[i] )
             {
-                pTabData[i]->aPageZoomX = aValidX;
-                pTabData[i]->aPageZoomY = aValidY;
+                if ( bPagebreak )
+                {
+                    pTabData[i]->aPageZoomX = aValidX;
+                    pTabData[i]->aPageZoomY = aValidY;
+                }
+                else
+                {
+                    pTabData[i]->aZoomX = aValidX;
+                    pTabData[i]->aZoomY = aValidY;
+                }
             }
-            else
+        }
+        if ( bPagebreak )
+        {
+            aDefPageZoomX = aValidX;
+            aDefPageZoomY = aValidY;
+        }
+        else
+        {
+            aDefZoomX = aValidX;
+            aDefZoomY = aValidY;
+        }
+    }
+    else
+    {
+        std::vector< SCTAB >::iterator it_end = tabs.end();
+        std::vector< SCTAB >::iterator it = tabs.begin();
+        for ( ; it != it_end; ++it )
+        {
+            SCTAB i = *it;
+            if ( pTabData[i] )
             {
-                pTabData[i]->aZoomX = aValidX;
-                pTabData[i]->aZoomY = aValidY;
+                if ( bPagebreak )
+                {
+                    pTabData[i]->aPageZoomX = aValidX;
+                    pTabData[i]->aPageZoomY = aValidY;
+                }
+                else
+                {
+                    pTabData[i]->aZoomX = aValidX;
+                    pTabData[i]->aZoomY = aValidY;
+                }
             }
         }
     }
