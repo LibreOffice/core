@@ -39,7 +39,7 @@
 /** === end UNO includes === **/
 
 #include <dbaccess/singledoccontroller.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <connectivity/statementcomposer.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>

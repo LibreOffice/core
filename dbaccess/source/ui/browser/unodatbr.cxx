@@ -114,9 +114,9 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sot/storage.hxx>
-#include <svtools/filenotation.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/filenotation.hxx>
+#include <svl/intitem.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svx/algitem.hxx>
