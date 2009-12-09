@@ -37,7 +37,7 @@
 #include "vcl/event.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/i18nhelp.hxx"
-#include "vcl/fontcfg.hxx"
+#include "unotools/fontcfg.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/unohelp.hxx"
@@ -45,6 +45,7 @@
 #include "unotools/collatorwrapper.hxx"
 #include "unotools/configmgr.hxx"
 #include "unotools/confignode.hxx"
+#include <unotools/syslocaleoptions.hxx>
 
 #ifdef WNT
 #include "tools/prewin.h"
@@ -66,7 +67,6 @@ DBG_NAME( AllSettings )
                                  STYLE_OPTION_NOMNEMONICS)
 
 // =======================================================================
-
 ImplMachineData::ImplMachineData()
 {
     mnRefCount                  = 1;
@@ -549,7 +549,7 @@ void ImplStyleData::SetStandardStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( vcl::DefaultFontConfiguration::get()->getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
+    aStdFont.SetName( utl::DefaultFontConfiguration::get()->getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -1069,7 +1069,6 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
 ImplMiscData::ImplMiscData()
 {
     mnRefCount                  = 1;
-    mnTwoDigitYearStart         = 1930;
     mnEnableATT                 = sal::static_int_cast<USHORT>(~0U);
     mnDisablePrinting           = sal::static_int_cast<USHORT>(~0U);
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
@@ -1081,7 +1080,6 @@ ImplMiscData::ImplMiscData()
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 {
     mnRefCount                  = 1;
-    mnTwoDigitYearStart         = rData.mnTwoDigitYearStart;
     mnEnableATT                 = rData.mnEnableATT;
     mnDisablePrinting           = rData.mnDisablePrinting;
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
@@ -1155,8 +1153,7 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
     if ( mpData == rSet.mpData )
         return TRUE;
 
-    if ( (mpData->mnTwoDigitYearStart   == rSet.mpData->mnTwoDigitYearStart ) &&
-         (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
+    if ( (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
          (mpData->mnDisablePrinting     == rSet.mpData->mnDisablePrinting ) &&
          (mpData->mbEnableLocalizedDecimalSep == rSet.mpData->mbEnableLocalizedDecimalSep ) )
         return TRUE;
@@ -1513,28 +1510,20 @@ BOOL HelpSettings::operator ==( const HelpSettings& rSet ) const
 
 // =======================================================================
 
-static BOOL ImplCompareLocales( const ::com::sun::star::lang::Locale& L1, const ::com::sun::star::lang::Locale& L2 )
-{
-    return ( ( L1.Language == L2.Language ) &&
-             ( L1.Country == L2.Country ) &&
-             ( L1.Variant == L2.Variant ) );
-}
-
-// =======================================================================
-
 ImplAllSettingsData::ImplAllSettingsData()
 {
     mnRefCount                  = 1;
     mnSystemUpdate              = SETTINGS_ALLSETTINGS;
     mnWindowUpdate              = SETTINGS_ALLSETTINGS;
     meLanguage                  = LANGUAGE_SYSTEM;
-    meUILanguage                = LANGUAGE_SYSTEM;
+    meUILanguage                  = LANGUAGE_SYSTEM;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
     mpCollatorWrapper           = NULL;
     mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
+    maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
 
 // -----------------------------------------------------------------------
@@ -1546,15 +1535,12 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maMiscSettings( rData.maMiscSettings ),
     maNotificationSettings( rData.maNotificationSettings ),
     maHelpSettings( rData.maHelpSettings ),
-    maLocale( rData.maLocale ),
-    maUILocale( rData.maUILocale )
-
+    maLocale( rData.maLocale )
 {
     mnRefCount                  = 1;
     mnSystemUpdate              = rData.mnSystemUpdate;
     mnWindowUpdate              = rData.mnWindowUpdate;
     meLanguage                  = rData.meLanguage;
-    meUILanguage                = rData.meUILanguage;
     // Pointer couldn't shared and objects haven't a copy ctor
     // So we create the cache objects new, if the GetFunction is
     // called
@@ -1750,11 +1736,7 @@ ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
 
     if ( nFlags & SETTINGS_UILOCALE )
     {
-        if ( mpData->meUILanguage || rSet.mpData->meUILanguage )
-        {
-            SetUILanguage( rSet.mpData->meUILanguage );
-            nChangeFlags |= SETTINGS_UILOCALE;
-        }
+        // UILocale can't be changed
     }
 
     return nChangeFlags;
@@ -1793,9 +1775,6 @@ ULONG AllSettings::GetChangeFlags( const AllSettings& rSet ) const
     if ( mpData->meLanguage || rSet.mpData->meLanguage )
         nChangeFlags |= SETTINGS_LOCALE;
 
-    if ( mpData->meUILanguage || rSet.mpData->meUILanguage )
-        nChangeFlags |= SETTINGS_UILOCALE;
-
     return nChangeFlags;
 }
 
@@ -1817,18 +1796,13 @@ BOOL AllSettings::operator ==( const AllSettings& rSet ) const
          (mpData->maNotificationSettings    == rSet.mpData->maNotificationSettings) &&
          (mpData->maHelpSettings            == rSet.mpData->maHelpSettings)         &&
          (mpData->mnSystemUpdate            == rSet.mpData->mnSystemUpdate)         &&
+         (mpData->maLocale                  == rSet.mpData->maLocale)               &&
          (mpData->mnWindowUpdate            == rSet.mpData->mnWindowUpdate) )
     {
-        // special treatment for Locale, because maLocale is only
-        // initialized after first call of GetLocale().
-        ::com::sun::star::lang::Locale aEmptyLocale;
-        if ( ( ImplCompareLocales( mpData->maLocale, aEmptyLocale ) && ImplCompareLocales( rSet.mpData->maLocale, aEmptyLocale ) )
-            || ImplCompareLocales( GetLocale(), rSet.GetLocale() ) )
-        {
-            return TRUE;
-        }
+        return TRUE;
     }
-    return FALSE;
+    else
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1857,70 +1831,39 @@ void AllSettings::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 
 // -----------------------------------------------------------------------
 
-void AllSettings::SetUILocale( const ::com::sun::star::lang::Locale& rLocale )
+void AllSettings::SetUILocale( const ::com::sun::star::lang::Locale& )
 {
-    CopyData();
-
-    mpData->maUILocale = rLocale;
-
-    if ( !rLocale.Language.getLength() )
-        mpData->meUILanguage = LANGUAGE_SYSTEM;
-    else
-        mpData->meUILanguage = MsLangId::convertLocaleToLanguage( rLocale );
-    if ( mpData->mpUILocaleDataWrapper )
-    {
-        delete mpData->mpUILocaleDataWrapper;
-        mpData->mpUILocaleDataWrapper = NULL;
-    }
-    if ( mpData->mpUII18nHelper )
-    {
-        delete mpData->mpUII18nHelper;
-        mpData->mpUII18nHelper = NULL;
-    }
+    // there is only one UILocale per process
 }
 
 // -----------------------------------------------------------------------
 
 void AllSettings::SetLanguage( LanguageType eLang )
 {
-    CopyData();
-
-    mpData->meLanguage = eLang;
-
-    // Will be calculated in GetLocale()
-    mpData->maLocale = ::com::sun::star::lang::Locale();
-    if ( mpData->mpLocaleDataWrapper )
+    if ( eLang != mpData->meLanguage )
     {
-        delete mpData->mpLocaleDataWrapper;
-        mpData->mpLocaleDataWrapper = NULL;
-    }
-    if ( mpData->mpI18nHelper )
-    {
-        delete mpData->mpI18nHelper;
-        mpData->mpI18nHelper = NULL;
+        CopyData();
+
+        mpData->meLanguage = eLang;
+        MsLangId::convertLanguageToLocale( GetLanguage(), ((AllSettings*)this)->mpData->maLocale );
+        if ( mpData->mpLocaleDataWrapper )
+        {
+            delete mpData->mpLocaleDataWrapper;
+            mpData->mpLocaleDataWrapper = NULL;
+        }
+        if ( mpData->mpI18nHelper )
+        {
+            delete mpData->mpI18nHelper;
+            mpData->mpI18nHelper = NULL;
+        }
     }
 }
 
 // -----------------------------------------------------------------------
 
-void AllSettings::SetUILanguage( LanguageType eLang  )
+void AllSettings::SetUILanguage( LanguageType  )
 {
-    CopyData();
-
-    mpData->meUILanguage = eLang;
-
-    // Will be calculated in GetUILocale()
-    mpData->maUILocale = ::com::sun::star::lang::Locale();
-    if ( mpData->mpUILocaleDataWrapper )
-    {
-        delete mpData->mpUILocaleDataWrapper;
-        mpData->mpUILocaleDataWrapper = NULL;
-    }
-    if ( mpData->mpUII18nHelper )
-    {
-        delete mpData->mpUII18nHelper;
-        mpData->mpUII18nHelper = NULL;
-    }
+    // there is only one UILanguage per process
 }
 
 // -----------------------------------------------------------------------
@@ -1973,8 +1916,7 @@ BOOL AllSettings::GetLayoutRTL() const
 const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 {
     if ( !mpData->maLocale.Language.getLength() )
-        MsLangId::convertLanguageToLocale( GetLanguage(),
-                ((AllSettings*)this)->mpData->maLocale );
+        mpData->maLocale = mpData->maSysLocale.GetLocale();
 
     return mpData->maLocale;
 }
@@ -1983,9 +1925,9 @@ const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 
 const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 {
+    // the UILocale is never changed
     if ( !mpData->maUILocale.Language.getLength() )
-        MsLangId::convertLanguageToLocale( GetUILanguage(),
-                ((AllSettings*)this)->mpData->maUILocale );
+        mpData->maUILocale = mpData->maSysLocale.GetUILocale();
 
     return mpData->maUILocale;
 }
@@ -1994,8 +1936,9 @@ const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 
 LanguageType AllSettings::GetLanguage() const
 {
+    // meLanguage == LANGUAGE_SYSTEM means: use settings from SvtSysLocale
     if ( mpData->meLanguage == LANGUAGE_SYSTEM )
-        return MsLangId::getSystemLanguage();
+        return mpData->maSysLocale.GetLanguage();
 
     return mpData->meLanguage;
 }
@@ -2004,10 +1947,8 @@ LanguageType AllSettings::GetLanguage() const
 
 LanguageType AllSettings::GetUILanguage() const
 {
-    if ( mpData->meUILanguage == LANGUAGE_SYSTEM )
-        return MsLangId::getSystemUILanguage();
-
-    return mpData->meUILanguage;
+    // the UILanguage is never changed
+    return mpData->maSysLocale.GetUILanguage();
 }
 
 // -----------------------------------------------------------------------
@@ -2076,3 +2017,22 @@ const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
 }
 */
 
+void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
+{
+    AllSettings aAllSettings( Application::GetSettings() );
+    if ( nHint & SYSLOCALEOPTIONS_HINT_DECSEP )
+    {
+        MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
+        BOOL bIsDecSepAsLocale = aAllSettings.mpData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
+        if ( aMiscSettings.GetEnableLocalizedDecimalSep() != bIsDecSepAsLocale )
+        {
+            aMiscSettings.SetEnableLocalizedDecimalSep( bIsDecSepAsLocale );
+            aAllSettings.SetMiscSettings( aMiscSettings );
+        }
+    }
+
+    if ( (nHint & SYSLOCALEOPTIONS_HINT_LOCALE) )
+        aAllSettings.SetLocale( aAllSettings.mpData->maSysLocale.GetOptions().GetLocale() );
+
+    Application::SetSettings( aAllSettings );
+}

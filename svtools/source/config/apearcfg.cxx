@@ -31,11 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
-
 #include "apearcfg.hxx"
 #include "com/sun/star/uno/Any.hxx"
 
@@ -176,6 +171,11 @@ void  SvtTabAppearanceCfg::Commit()
     }
     PutProperties(rNames, aValues);
 }
+
+void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
 /*--------------------------------------------------------------------
      Beschreibung:
  --------------------------------------------------------------------*/
