@@ -69,11 +69,15 @@ StyleSheetEntry::StyleSheetEntry() :
         ,sBaseStyleIdentifier()
         ,sNextStyleIdentifier()
         ,pProperties(new StyleSheetPropertyMap)
-        {
+{
 #if OSL_DEBUG_LEVEL > 1
             nStyleTypeCode = STYLE_TYPE_PARA;
 #endif
-        }
+}
+
+StyleSheetEntry::~StyleSheetEntry()
+{
+}
 
 TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry, StyleSheetTable* pStyles ):
     StyleSheetEntry( ),
@@ -545,9 +549,10 @@ void StyleSheetTable::sprm(Sprm & rSprm)
                 // Add the properties to the table style
                 TblStyleType nType = pTblStylePrHandler->getType( );
                 PropertyMapPtr pProps = pTblStylePrHandler->getProperties( );
-                StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
-                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry*>( pEntry.get( ) );
-                pTableEntry->AddTblStylePr( nType, pProps );
+                StyleSheetEntry *  pEntry = m_pImpl->m_pCurrentEntry.get();
+                TableStyleSheetEntry * pTableEntry = dynamic_cast<TableStyleSheetEntry*>( pEntry );
+                if (pTableEntry != NULL)
+                    pTableEntry->AddTblStylePr( nType, pProps );
             }
             break;
         }

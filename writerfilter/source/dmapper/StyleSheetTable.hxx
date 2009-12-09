@@ -59,8 +59,9 @@ enum StyleType
 };
 
 struct StyleSheetTable_Impl;
-struct StyleSheetEntry
+class StyleSheetEntry
 {
+public:
     ::rtl::OUString sStyleIdentifierI;
     ::rtl::OUString sStyleIdentifierD;
     bool            bIsDefaultStyle;
@@ -74,6 +75,7 @@ struct StyleSheetEntry
     PropertyMapPtr  pProperties;
     ::rtl::OUString sConvertedStyleName;
     StyleSheetEntry();
+    virtual ~StyleSheetEntry();
 };
 
 typedef boost::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
@@ -141,7 +143,7 @@ public:
     PropertyMapPtr GetProperties( sal_Int32 nMask );
 
     TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
-    ~TableStyleSheetEntry( );
+    virtual ~TableStyleSheetEntry( );
 
 protected:
     PropertyMapPtr GetLocalPropertiesFromMask( sal_Int32 nMask );
