@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: stordata.hxx,v $
- * $Revision: 1.6 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -29,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORDATA_HXX_
-#define _STORE_STORDATA_HXX_ "$Revision: 1.6.8.2 $"
+#define _STORE_STORDATA_HXX_
 
 #include "sal/types.h"
 #include "sal/macros.h"
