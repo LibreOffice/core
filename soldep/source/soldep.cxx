@@ -516,7 +516,7 @@ ULONG SolDep::GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList)
 }
 
 /*****************************************************************************/
-ULONG SolDep::GetStartPrj(SolIdMapper* pIdMapper, ObjectList* pObjList)
+ULONG SolDep::GetStartPrj(SolIdMapper* , ObjectList* )
 /*****************************************************************************/
 {
 //  DBG_ASSERT( FALSE , "prjdep" );
@@ -942,9 +942,23 @@ BOOL SolDep::FindProject()
     if ( aFindProjectDlg.Execute() == RET_OK ) {
         msProject = aFindProjectDlg.GetProject();
         //now we have a project string
+
         pObjectWin = mpObjectList->GetPtrByName( msProject );
-        mpObjectList->ResetSelectedObject();
-        MarkObjects( pObjectWin );
+        if (pObjectWin)
+        {
+            mpObjectList->ResetSelectedObject();
+            MarkObjects( pObjectWin );
+        }
+        else
+        {
+            mpObjectList->ResetSelectedObject();
+            for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+            {
+               ObjectWin* pObjectWin = mpObjectList->GetObject( i );
+               if ( !pObjectWin->IsTop() )
+                    pObjectWin->SetViewMask(FALSE);
+            }
+        }
     }
     return FALSE;
 }

@@ -29,10 +29,10 @@
  ************************************************************************/
 
 #include "minormk.hxx"
+#include "prodmap.hxx"
 #include <appdef.hxx>
 #include <tools/fsys.hxx>
 #include <tools/geninfo.hxx>
-#include "prodmap.hxx"
 
 //
 // class MinorMk
