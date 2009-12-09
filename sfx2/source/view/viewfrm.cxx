@@ -1466,7 +1466,7 @@ SfxViewFrame::SfxViewFrame
     pFrame->SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
     Construct_Impl( pObjShell );
 
-    pImp->pWindow = new SfxTopViewWin_Impl( this, pFrame->GetWindow() );
+    pImp->pWindow = new SfxFrameViewWindow_Impl( this, pFrame->GetWindow() );
     pImp->pWindow->SetSizePixel( pFrame->GetWindow().GetOutputSizePixel() );
     pFrame->SetOwnsBindings_Impl( sal_True );
     pFrame->CreateWorkWindow_Impl();

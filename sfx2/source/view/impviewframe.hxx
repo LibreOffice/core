@@ -26,6 +26,11 @@
 #ifndef SFX2_IMPVIEWFRAME_HXX
 #define SFX2_IMPVIEWFRAME_HXX
 
+#include "sfx2/viewfrm.hxx"
+
+#include <svtools/asynclink.hxx>
+#include <vcl/window.hxx>
+
 struct SfxViewFrame_Impl
 {
     SvBorder            aBorder;
@@ -67,13 +72,13 @@ struct SfxViewFrame_Impl
                         }
 };
 
-class SfxTopViewWin_Impl : public Window
+class SfxFrameViewWindow_Impl : public Window
 {
     BOOL            bActive;
     SfxViewFrame*   pFrame;
 
 public:
-                        SfxTopViewWin_Impl( SfxViewFrame* p, Window& rParent, WinBits nBits=0 ) :
+                        SfxFrameViewWindow_Impl( SfxViewFrame* p, Window& rParent, WinBits nBits=0 ) :
                             Window( &rParent, nBits | WB_BORDER | WB_CLIPCHILDREN ),
                             bActive( FALSE ),
                             pFrame( p )

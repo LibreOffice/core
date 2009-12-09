@@ -117,7 +117,7 @@ struct SfxFramePickEntry_Impl;
 class SFX2_DLLPUBLIC SfxFrame
 {
     friend class SfxFrameIterator;
-    friend class SfxTopWindow_Impl;
+    friend class SfxFrameWindow_Impl;
 
 private:
     SfxFrame*           pParentFrame;
@@ -129,9 +129,7 @@ protected:
     sal_Bool            Close();
     virtual             ~SfxFrame();
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void RemoveChildFrame_Impl( SfxFrame* );
-//#endif
 
                         SfxFrame( );    // not implemented
     SAL_DLLPRIVATE      SfxFrame( Window& i_rContainerWindow, bool bHidden );

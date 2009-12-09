@@ -30,79 +30,41 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#ifndef GCC
-#endif
 
-#include <sfx2/viewfrm.hxx>
+#include "impframe.hxx"
+#include "objshimp.hxx"
+#include "sfxhelp.hxx"
 #include "viewfac.hxx"
-#include <sfx2/signaturestate.hxx>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
-#include <comphelper/namedvaluecollection.hxx>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/util/CloseVetoException.hpp>
-#ifndef _TOOLKIT_UNOHLP_HXX
-#include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _UNO_COM_SUN_STAR_AWT_POSSIZE_HPP_
-#include <com/sun/star/awt/PosSize.hpp>
-#endif
-#include <com/sun/star/container/XIndexAccess.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
+#include "workwin.hxx"
+
+#include "sfx2/app.hxx"
+#include "sfx2/bindings.hxx"
+#include "sfx2/dispatch.hxx"
+#include "sfx2/docfac.hxx"
+#include "sfx2/docfile.hxx"
+#include "sfx2/event.hxx"
+#include "sfx2/objface.hxx"
+#include "sfx2/request.hxx"
+
 #include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <vcl/menu.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/intitem.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
+
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svtools/eitem.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/itemset.hxx>
+#include <svtools/rectitem.hxx>
 #include <svtools/stritem.hxx>
-#include <svtools/asynclink.hxx>
-#include <svtools/sfxecode.hxx>
-#include <vcl/dialog.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <unotools/configmgr.hxx>
-#include <unotools/bootstrap.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <sfxresid.hxx>
-
-// wg. pTopFrames
-#include "appdata.hxx"
-#include <sfx2/app.hxx>
-#include <sfx2/sfx.hrc>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/objitem.hxx>
-#include <sfx2/objface.hxx>
-#include <sfx2/msg.hxx>
-#include "objshimp.hxx"
-#include "workwin.hxx"
-#include "sfxtypes.hxx"
-#include "splitwin.hxx"
-#include "arrdecl.hxx"
-#include "sfxhelp.hxx"
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/docfac.hxx>
-#include "statcach.hxx"
-#include <sfx2/event.hxx>
-#include "impframe.hxx"
-#include "impviewframe.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -117,34 +79,13 @@ using ::com::sun::star::frame::XComponentLoader;
 
 //------------------------------------------------------------------------
 
-#include <comphelper/sequenceashashmap.hxx>
-static ::rtl::OUString GetModuleName_Impl( const ::rtl::OUString& sDocService )
-{
-    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")), uno::UNO_QUERY );
-    ::rtl::OUString sVar;
-    if ( !xMM.is() )
-        return sVar;
-
-    try
-    {
-        ::comphelper::SequenceAsHashMap aAnalyzer( xMM->getByName(sDocService) );
-        sVar = aAnalyzer.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("ooSetupFactoryUIName"), ::rtl::OUString() );
-    }
-    catch( uno::Exception& )
-    {
-        sVar = ::rtl::OUString();
-    }
-
-    return sVar;
-}
-
-class SfxTopWindow_Impl : public Window
+class SfxFrameWindow_Impl : public Window
 {
 public:
     SfxFrame*           pFrame;
 
-    SfxTopWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow );
-    ~SfxTopWindow_Impl( );
+    SfxFrameWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow );
+    ~SfxFrameWindow_Impl( );
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
@@ -156,17 +97,17 @@ public:
     DECL_LINK(          CloserHdl, void* );
 };
 
-SfxTopWindow_Impl::SfxTopWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow )
+SfxFrameWindow_Impl::SfxFrameWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow )
         : Window( &i_rContainerWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
         , pFrame( pF )
 {
 }
 
-SfxTopWindow_Impl::~SfxTopWindow_Impl( )
+SfxFrameWindow_Impl::~SfxFrameWindow_Impl( )
 {
 }
 
-void SfxTopWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
+void SfxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
     SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
@@ -174,7 +115,7 @@ void SfxTopWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
         pWorkWin->DataChanged_Impl( rDCEvt );
 }
 
-long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
+long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 {
     if ( pFrame->IsClosing_Impl() || !pFrame->GetFrameInterface().is() )
         return sal_False;
@@ -228,7 +169,7 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
     return Window::Notify( rNEvt );
 }
 
-long SfxTopWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     USHORT nType = rNEvt.GetType();
     if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
@@ -262,19 +203,19 @@ long SfxTopWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return Window::PreNotify( rNEvt );
 }
 
-void SfxTopWindow_Impl::GetFocus()
+void SfxFrameWindow_Impl::GetFocus()
 {
     if ( pFrame && !pFrame->IsClosing_Impl() && pFrame->GetCurrentViewFrame() && pFrame->GetFrameInterface().is() )
         pFrame->GetCurrentViewFrame()->MakeActive_Impl( TRUE );
 }
 
-void SfxTopWindow_Impl::Resize()
+void SfxFrameWindow_Impl::Resize()
 {
     if ( IsReallyVisible() || IsReallyShown() || GetOutputSizePixel().Width() )
         DoResize();
 }
 
-void SfxTopWindow_Impl::StateChanged( StateChangedType nStateChange )
+void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
@@ -294,104 +235,10 @@ void SfxTopWindow_Impl::StateChanged( StateChangedType nStateChange )
     Window::StateChanged( nStateChange );
 }
 
-void SfxTopWindow_Impl::DoResize()
+void SfxFrameWindow_Impl::DoResize()
 {
     if ( !pFrame->pImp->bLockResize )
         pFrame->Resize();
-}
-
-//--------------------------------------------------------------------
-void SfxTopViewWin_Impl::StateChanged( StateChangedType nStateChange )
-{
-    if ( nStateChange == STATE_CHANGE_INITSHOW )
-    {
-        SfxObjectShell* pDoc = pFrame->GetObjectShell();
-        if ( pDoc && !pFrame->IsVisible_Impl() )
-            pFrame->Show();
-
-        pFrame->Resize();
-    }
-    else
-        Window::StateChanged( nStateChange );
-}
-
-void SfxTopViewWin_Impl::Resize()
-{
-    if ( IsReallyVisible() || IsReallyShown() || GetOutputSizePixel().Width() )
-        pFrame->Resize();
-}
-
-class SfxTopViewFrame_Impl
-{
-public:
-
-                        SfxTopViewFrame_Impl()
-                        {}
-};
-
-static String _getTabString()
-{
-    String result;
-
-    Reference < XMaterialHolder > xHolder(
-        ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.tab.tabreg") ), UNO_QUERY );
-    if (xHolder.is())
-    {
-        rtl::OUString aTabString;
-        Sequence< NamedValue > sMaterial;
-        if (xHolder->getMaterial() >>= sMaterial) {
-            for (int i=0; i < sMaterial.getLength(); i++) {
-                if ((sMaterial[i].Name.equalsAscii("title")) &&
-                    (sMaterial[i].Value >>= aTabString))
-                {
-                    result += ' ';
-                    result += String(aTabString);
-                }
-            }
-        }
-    }
-    return result;
-}
-
-namespace
-{
-    Reference< XFrame > lcl_findStartModuleFrame()
-    {
-        try
-        {
-            Reference < XFramesSupplier > xSupplier( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
-            Reference < XIndexAccess > xContainer( xSupplier->getFrames(), UNO_QUERY_THROW );
-
-            Reference< XModuleManager > xCheck( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.frame.ModuleManager" ) ), UNO_QUERY_THROW );
-
-            sal_Int32 nCount = xContainer->getCount();
-            for ( sal_Int32 i=0; i<nCount; ++i )
-            {
-                try
-                {
-                    Reference < XFrame > xFrame( xContainer->getByIndex(i), UNO_QUERY_THROW );
-                    ::rtl::OUString sModule = xCheck->identify( xFrame );
-                    if ( sModule.equalsAscii( "com.sun.star.frame.StartModule" ) )
-                        return xFrame;
-                }
-                catch( const UnknownModuleException& )
-                {
-                    // silence
-                }
-                catch(const Exception&)
-                {
-                    // re-throw, caught below
-                    throw;
-                }
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return NULL;
-    }
 }
 
 SfxFrame* SfxFrame::CreateBlank()
@@ -492,7 +339,7 @@ SfxFrame::SfxFrame( Window& i_rContainerWindow, bool i_bHidden )
     InsertTopFrame_Impl( this );
     pImp->pExternalContainerWindow = &i_rContainerWindow;
 
-    pWindow = new SfxTopWindow_Impl( this, i_rContainerWindow );
+    pWindow = new SfxFrameWindow_Impl( this, i_rContainerWindow );
 
     // always show pWindow, which is the ComponentWindow of the XFrame we live in
     // nowadays, since SfxFrames can be created with an XFrame only, hiding or showing the complete XFrame
@@ -554,7 +401,7 @@ void SfxFrame::LockResize_Impl( BOOL bLock )
     pImp->bLockResize = bLock;
 }
 
-IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, EMPTYARG )
+IMPL_LINK( SfxFrameWindow_Impl, CloserHdl, void*, EMPTYARG )
 {
     if ( pFrame && !pFrame->PrepareClose_Impl( TRUE ) )
         return 0L;
@@ -812,401 +659,3 @@ sal_Bool SfxFrame::InsertDocument_Impl( SfxObjectShell& rDoc, const SfxItemSet& 
     return GetCurrentDocument() == &rDoc;
 }
 
-
-//========================================================================
-
-long SfxViewFrameClose_Impl( void* /*pObj*/, void* pArg )
-{
-    ((SfxViewFrame*)pArg)->GetFrame()->DoClose();
-    return 0;
-}
-
-//--------------------------------------------------------------------
-String SfxViewFrame::UpdateTitle()
-
-/*  [Beschreibung]
-
-    Mit dieser Methode kann der SfxViewFrame gezwungen werden, sich sofort
-    den neuen Titel vom der <SfxObjectShell> zu besorgen.
-
-    [Anmerkung]
-
-    Dies ist z.B. dann notwendig, wenn man der SfxObjectShell als SfxListener
-    zuh"ort und dort auf den <SfxSimpleHint> SFX_HINT_TITLECHANGED reagieren
-    m"ochte, um dann die Titel seiner Views abzufragen. Diese Views (SfxTopViewFrames)
-    jedoch sind ebenfalls SfxListener und da die Reihenfolge der Benachrichtigung
-    nicht feststeht, mu\s deren Titel-Update vorab erzwungen werden.
-
-
-    [Beispiel]
-
-    void SwDocShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-    {
-        if ( rHint.IsA(TYPE(SfxSimpleHint)) )
-        {
-            switch( ( (SfxSimpleHint&) rHint ).GetId() )
-            {
-                case SFX_HINT_TITLECHANGED:
-                    for ( SfxViewFrame *pTop = SfxViewFrame::GetFirst( this );
-                          pTop;
-                          pTop = SfxViewFrame::GetNext( this );
-                    {
-                        pTop->UpdateTitle();
-                        ... pTop->GetName() ...
-                    }
-                    break;
-                ...
-            }
-        }
-    }
-*/
-
-{
-    DBG_CHKTHIS(SfxViewFrame, 0);
-
-    const SfxObjectFactory &rFact = GetObjectShell()->GetFactory();
-    pImp->aFactoryName = String::CreateFromAscii( rFact.GetShortName() );
-
-    SfxObjectShell *pObjSh = GetObjectShell();
-    if ( !pObjSh )
-        return String();
-
-//    if  ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-//        // kein UpdateTitle mit Embedded-ObjectShell
-//        return String();
-
-    const SfxMedium *pMedium = pObjSh->GetMedium();
-    String aURL;
-    GetFrame();  // -Wall required??
-    if ( pObjSh->HasName() )
-    {
-        INetURLObject aTmp( pMedium->GetName() );
-        aURL = aTmp.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-    }
-
-    if ( aURL != pImp->aActualURL )
-        // URL hat sich ge"andert
-        pImp->aActualURL = aURL;
-
-    // gibt es noch eine weitere View?
-    sal_uInt16 nViews=0;
-    for ( SfxViewFrame *pView= GetFirst(pObjSh);
-          pView && nViews<2;
-          pView = GetNext(*pView,pObjSh) )
-        if ( ( pView->GetFrameType() & SFXFRAME_HASTITLE ) &&
-             !IsDowning_Impl())
-            nViews++;
-
-    // Titel des Fensters
-    String aTitle;
-    if ( nViews == 2 || pImp->nDocViewNo > 1 )
-        // dann die Nummer dranh"angen
-        aTitle = pObjSh->UpdateTitle( NULL, pImp->nDocViewNo );
-    else
-        aTitle = pObjSh->UpdateTitle();
-
-    // Name des SbxObjects
-    String aSbxName = pObjSh->SfxShell::GetName();
-    if ( IsVisible_Impl() )
-    {
-        aSbxName += ':';
-        aSbxName += String::CreateFromInt32(pImp->nDocViewNo);
-    }
-
-    SetName( aSbxName );
-    pImp->aFrameTitle = aTitle;
-    GetBindings().Invalidate( SID_FRAMETITLE );
-    GetBindings().Invalidate( SID_CURRENT_URL );
-
-    ::rtl::OUString aProductName;
-    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;
-
-    aTitle += String::CreateFromAscii( " - " );
-    aTitle += String(aProductName);
-    aTitle += ' ';
-    ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
-    aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifndef PRODUCT
-    ::rtl::OUString aDefault;
-    aTitle += DEFINE_CONST_UNICODE(" [");
-    String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
-    aTitle += aVerId;
-    aTitle += ']';
-#endif
-
-    // append TAB string if available
-    aTitle += _getTabString();
-
-    GetBindings().Invalidate( SID_NEWDOCDIRECT );
-
-    /* AS_TITLE
-    Window* pWindow = GetFrame()->GetTopWindow_Impl();
-    if ( pWindow && pWindow->GetText() != aTitle )
-        pWindow->SetText( aTitle );
-    */
-    return aTitle;
-}
-
-void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
-{
-    // Wenn gerade die Shells ausgetauscht werden...
-    if ( !GetObjectShell() || !GetViewShell() )
-        return;
-
-    switch ( rReq.GetSlot() )
-    {
-        case SID_SHOWPOPUPS :
-        {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, FALSE);
-            BOOL bShow = pShowItem ? pShowItem->GetValue() : TRUE;
-            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, FALSE);
-            USHORT nId = pIdItem ? pIdItem->GetValue() : 0;
-
-            // ausfuehren
-            SfxWorkWindow *pWorkWin = GetFrame()->GetWorkWindow_Impl();
-            if ( bShow )
-            {
-                // Zuerst die Floats auch anzeigbar machen
-                pWorkWin->MakeChildsVisible_Impl( bShow );
-                GetDispatcher()->Update_Impl( TRUE );
-
-                // Dann anzeigen
-                GetBindings().HidePopups( !bShow );
-            }
-            else
-            {
-                // Alles hiden
-                SfxBindings *pBind = &GetBindings();
-                while ( pBind )
-                {
-                    pBind->HidePopupCtrls_Impl( !bShow );
-                    pBind = pBind->GetSubBindings_Impl();
-                }
-
-                pWorkWin->HidePopups_Impl( !bShow, TRUE, nId );
-                pWorkWin->MakeChildsVisible_Impl( bShow );
-            }
-
-            Invalidate( rReq.GetSlot() );
-            rReq.Done();
-            break;
-        }
-
-        case SID_ACTIVATE:
-        {
-            MakeActive_Impl( TRUE );
-            rReq.SetReturnValue( SfxObjectItem( 0, this ) );
-            break;
-        }
-
-        case SID_WIN_POSSIZE:
-            break;
-
-        case SID_NEWDOCDIRECT :
-        {
-            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, FALSE);
-            String aFactName;
-            if ( pFactoryItem )
-                aFactName = pFactoryItem->GetValue();
-            else if ( pImp->aFactoryName.Len() )
-                aFactName = pImp->aFactoryName;
-            else
-            {
-                DBG_ERROR("Missing argument!");
-                break;
-            }
-
-            SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
-            String aFact = String::CreateFromAscii("private:factory/");
-            aFact += aFactName;
-            aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
-            aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
-            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
-            SFX_APP()->ExecuteSlot( aReq );
-            const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
-            if ( pItem )
-                rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
-            break;
-        }
-
-        case SID_CLOSEWIN:
-        {
-            // disable CloseWin, if frame is not a task
-            Reference < XCloseable > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
-            if ( !xTask.is() )
-                break;
-
-            if ( GetViewShell()->PrepareClose() )
-            {
-                // weitere Views auf dasselbe Doc?
-                SfxObjectShell *pDocSh = GetObjectShell();
-                int bOther = sal_False;
-                for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
-                      !bOther && pFrame;
-                      pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh ) )
-                    bOther = (pFrame != this);
-
-                // Doc braucht nur gefragt zu werden, wenn keine weitere View
-                sal_Bool bClosed = sal_False;
-                sal_Bool bUI = TRUE;
-                if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
-                {
-                    if ( !bOther )
-                        pDocSh->SetModified( FALSE );
-                    rReq.Done(); // unbedingt vor Close() rufen!
-                    bClosed = sal_False;
-                    try
-                    {
-                        xTask->close(sal_True);
-                        bClosed = sal_True;
-                    }
-                    catch( CloseVetoException& )
-                    {
-                        bClosed = sal_False;
-                    }
-                }
-
-                rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bClosed ));
-            }
-            return;
-        }
-    }
-
-    rReq.Done();
-}
-
-void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
-{
-    SfxObjectShell *pDocSh = GetObjectShell();
-
-    if ( !pDocSh )
-        return;
-
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges, "Set ohne Bereich");
-    while ( *pRanges )
-    {
-        for ( sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich )
-        {
-            switch(nWhich)
-            {
-            case SID_NEWDOCDIRECT :
-            {
-                if ( pImp->aFactoryName.Len() )
-                {
-                    String aFact = String::CreateFromAscii("private:factory/");
-                    aFact += pImp->aFactoryName;
-                    rSet.Put( SfxStringItem( nWhich, aFact ) );
-                }
-                break;
-            }
-
-            case SID_NEWWINDOW:
-                rSet.DisableItem(nWhich);
-                break;
-
-            case SID_CLOSEWIN:
-            {
-                // disable CloseWin, if frame is not a task
-                Reference < XCloseable > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
-                if ( !xTask.is() )
-                    rSet.DisableItem(nWhich);
-                break;
-            }
-
-            case SID_SHOWPOPUPS :
-                break;
-
-            case SID_WIN_POSSIZE:
-            {
-                rSet.Put( SfxRectangleItem( nWhich, Rectangle(
-                        GetWindow().GetPosPixel(), GetWindow().GetSizePixel() ) ) );
-                break;
-            }
-
-            case SID_OBJECT:
-                if ( GetViewShell() && GetViewShell()->GetVerbs().getLength() && !GetObjectShell()->IsInPlaceActive() )
-                {
-                    uno::Any aAny;
-                    aAny <<= GetViewShell()->GetVerbs();
-                    rSet.Put( SfxUnoAnyItem( USHORT( SID_OBJECT ), aAny ) );
-                }
-                else
-                    rSet.DisableItem( SID_OBJECT );
-                break;
-
-            default:
-                DBG_ERROR( "invalid message-id" );
-            }
-        }
-        ++pRanges;
-    }
-}
-
-void SfxViewFrame::INetExecute_Impl( SfxRequest &rRequest )
-{
-    sal_uInt16 nSlotId = rRequest.GetSlot();
-    switch( nSlotId )
-    {
-        case SID_BROWSE_FORWARD:
-        case SID_BROWSE_BACKWARD:
-            OSL_ENSURE( false, "SfxViewFrame::INetExecute_Impl: SID_BROWSE_FORWARD/BACKWARD are dead!" );
-            break;
-        case SID_CREATELINK:
-        {
-/*! (pb) we need new implementation to create a link
-*/
-            break;
-        }
-        case SID_FOCUSURLBOX:
-        {
-            SfxStateCache *pCache = GetBindings().GetAnyStateCache_Impl( SID_OPENURL );
-            if( pCache )
-            {
-                SfxControllerItem* pCtrl = pCache->GetItemLink();
-                while( pCtrl )
-                {
-                    pCtrl->StateChanged( SID_FOCUSURLBOX, SFX_ITEM_UNKNOWN, 0 );
-                    pCtrl = pCtrl->GetItemLink();
-                }
-            }
-        }
-    }
-
-    // Recording
-    rRequest.Done();
-}
-
-void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
-{
-    rItemSet.DisableItem( SID_BROWSE_FORWARD );
-    rItemSet.DisableItem( SID_BROWSE_BACKWARD );
-
-    // Add/SaveToBookmark bei BASIC-IDE, QUERY-EDITOR etc. disablen
-    SfxObjectShell *pDocSh = GetObjectShell();
-    sal_Bool bPseudo = pDocSh && !( pDocSh->GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC );
-    sal_Bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
-    if ( !pDocSh || bPseudo || bEmbedded || !pDocSh->HasName() )
-        rItemSet.DisableItem( SID_CREATELINK );
-}
-
-void SfxViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
-{
-    GetViewShell()->SetZoomFactor( rZoomX, rZoomY );
-}
-
-void SfxViewFrame::Activate( sal_Bool bMDI )
-{
-    DBG_ASSERT(GetViewShell(), "Keine Shell");
-    if ( bMDI )
-        pImp->bActive = sal_True;
-//(mba): hier evtl. wie in Beanframe NotifyEvent ?!
-}
-
-void SfxViewFrame::Deactivate( sal_Bool bMDI )
-{
-    DBG_ASSERT(GetViewShell(), "Keine Shell");
-    if ( bMDI )
-        pImp->bActive = sal_False;
-//(mba): hier evtl. wie in Beanframe NotifyEvent ?!
-}
